@@ -2,41 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB3E5FFE82
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 11:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73125FFE85
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 11:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJPJuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 05:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
+        id S229670AbiJPJ5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 05:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJPJuh (ORCPT
+        with ESMTP id S229461AbiJPJ5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 05:50:37 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E94631211;
-        Sun, 16 Oct 2022 02:50:35 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0C6F91C0016; Sun, 16 Oct 2022 11:50:32 +0200 (CEST)
-Date:   Sun, 16 Oct 2022 11:50:31 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.10 0/4] 5.10.149-rc1 review
-Message-ID: <20221016095031.GA3626@duo.ucw.cz>
-References: <20221016064454.382206984@linuxfoundation.org>
+        Sun, 16 Oct 2022 05:57:03 -0400
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C3E2F01F;
+        Sun, 16 Oct 2022 02:57:01 -0700 (PDT)
+Message-ID: <4702a242-da55-f0c7-eab6-5329b8e400ae@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1665914219;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ef18EPzAic4GBpNWG/1BNCHp6UFgqRzkcSL4vP9cKiU=;
+        b=sPMcFEiXkc/obhlKGy59vy4Wbh+4jY4i22huho7nkbIFSxKe7SDWVCv+48/EjSowPKJrvS
+        k6jS1og4sEKnDMKph3UpMLeShvBqzOR5expc2BlVXC4rxx9hmQqayjAeZX5HyoweTxvZTY
+        TxkHziv6hNaWMCmMdcf963sPaI7iUIcOkP3YjPEJtSUNU9yMkPPpIkyP7I4w6kAyrvKoNF
+        7zlaRJkgYqECySKfwH+asqrDdqxDA9lfjeig+ssSMG/As0YN9pex7Z06szWpsnGutUBCo5
+        xZL7kR+zZwZ1ARok168O9Zd7bPMLAtcets9pMg5VBPVV0xOVrh+JS9AnX+6IBg==
+Date:   Sun, 16 Oct 2022 11:56:59 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="EeQfGwPcQSOJBaQU"
-Content-Disposition: inline
-In-Reply-To: <20221016064454.382206984@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 00/13] Add support for the Hardkernel ODROID-M1 board
+Content-Language: da-DK
+From:   Dan Johansen <strit@manjaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Dongjin Kim <tobetter@gmail.com>
+References: <20220930051246.391614-1-aurelien@aurel32.net>
+ <8e84786d-8ae9-0f51-3438-24fb340199c6@manjaro.org>
+ <Y0GA92rYss1Wslgr@aurel32.net> <Y0sAXpecR7AVSOBI@aurel32.net>
+ <b50af49c-7ef7-4377-7505-ef6163a12e4e@manjaro.org>
+Organization: Manjaro ARM
+In-Reply-To: <b50af49c-7ef7-4377-7505-ef6163a12e4e@manjaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=strit@manjaro.org smtp.mailfrom=strit@manjaro.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -44,86 +64,74 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---EeQfGwPcQSOJBaQU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Den 16.10.2022 kl. 11.35 skrev Dan Johansen:
+> Trying to apply the patchset, but patch 3 does not seem to apply on 
+> top of patch 2 for me.
+>
+> We do patch in other rk3568 boards, which is messing up the Makefile 
+> patching, so I needed to redo patch 2 to fit.
+>
+> So it might an error on my part.
 
-Hi!
+Yes. This was an error on my part. Not applying the other rk3568 board 
+patches we have, this does apply cleanly.
 
-> This is the start of the stable review cycle for the 5.10.149 release.
-> There are 4 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Tue, 18 Oct 2022 06:44:46 +0000.
-> Anything received after that time might be too late.
+Sorry for the noise/confusion on that. Will reply shortly with an answer 
+to the original question.
 
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
-
-> Pseudo-Shortlog of commits:
->=20
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->     Linux 5.10.149-rc1
->=20
-> Johannes Berg <johannes.berg@intel.com>
->     wifi: mac80211: fix MBSSID parsing use-after-free
->=20
-> Johannes Berg <johannes.berg@intel.com>
->     wifi: mac80211: don't parse mbssid in assoc response
->=20
-> Johannes Berg <johannes.berg@intel.com>
->     mac80211: mlme: find auth challenge directly
->=20
-> Sasha Levin <sashal@kernel.org>
->     Revert "fs: check FMODE_LSEEK to control internal pipe splicing"
-
-But I'm confused. Queue seems to contain different stuff, and I see
-these patches only in origin/linux-5.10.y.
-
-43e0669893b3a57024beab4348b1038cf7b98af8 (origin/queue/5.10) regulator: qco=
-m_rpm: Fix circular deferral regression
-50af1850d6adaccd414656e51e66aa2192f7786a hwmon: (gsc-hwmon) Call of_node_ge=
-t() before of_find_xxx API
-7c8b9726479b0ee1275969c6e7b66bf0f6f701eb ASoC: wcd934x: fix order of Slimbu=
-s unprepare/disable
-f010aef6ae5b81511f57f71175f2f46e98e22f42 ASoC: wcd9335: fix order of Slimbu=
-s unprepare/disable
-ee39e253def995ca56788c767aba109070cec058 platform/chrome: cros_ec_proto: Up=
-date version on GET_NEXT_EVENT failure
-daa9a833bc179da7a759b35f70e3bd594d5dab5a quota: Check next/prev free block =
-number after reading from quota file
-d76384203c14e0afef7730a2a3016aac60ca8a79 HID: multitouch: Add memory barrie=
-rs
-=2E.
-79994c46b1cb8efd35211d95dbdf79c21173b17a ALSA: rawmidi: Drop register_mutex=
- in snd_rawmidi_free()
-65cb91292340d565b98fa6f661cdb7465f4c9d67 ALSA: oss: Fix potential deadlock =
-at unregistration
-3783e64fee4a624f3ed1d7d6ae630890922edb7b (tag: v5.10.148) Linux 5.10.148
-
-Best regards,
-							Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---EeQfGwPcQSOJBaQU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY0vT5wAKCRAw5/Bqldv6
-8mikAJ9L3+814OLLMIz7phZidkOZTZZ2ZwCeM8PhMI1YRZyt6I/vudect+l5yDg=
-=oSNT
------END PGP SIGNATURE-----
-
---EeQfGwPcQSOJBaQU--
+>
+> Den 15.10.2022 kl. 20.47 skrev Aurelien Jarno:
+>> On 2022-10-08 15:53, Aurelien Jarno wrote:
+>>> On 2022-10-08 14:11, Dan Johansen wrote:
+>>>> Den 30.09.2022 kl. 07.12 skrev Aurelien Jarno:
+>>>>> On the ODROID forum, Dongjin Kim said he is not planning to submit 
+>>>>> a new
+>>>>> version of the patchset adding support for the Hardkernel ODROID-M1
+>>>>> board. I therefore decided to address the issues reported during the
+>>>>> initial review, and I also did some small fixes either because some
+>>>>> things changed in the meantime on the kernel side or because I 
+>>>>> noticed
+>>>>> some warning or issues when using the hardware.
+>>>>>
+>>>>> I continued writing some additional patches to complete the ODROID M1
+>>>>> DTS to almost fully support the hardware, the drivers being already
+>>>>> present in the kernel.
+>>>>>
+>>>>> This new version includes feedback from the linux-rockchip mailing 
+>>>>> list
+>>>>> and from the Odroid forum.
+>>>>>
+>>>>> Changes since v2:
+>>>>> * Renamed "Rockchip RK3568 Hardkernel ODROID-M1" into "Hardkernel 
+>>>>> Odroid
+>>>>>     M1" and fix the sorting.
+>>>>> * Fix sorting of arch/arm64/boot/dts/rockchip/Makefile
+>>>>> * Collected Acked-by and Tested-by
+>>>> Even though I added my Tested-by to this series, it seems I didn't 
+>>>> test it
+>>>> on eMMC.
+>>>>
+>>>> This fails to boot for me on eMMC, but works on SD card and NVMe.
+>>> Thanks for the feedback. I do not have an eMMC, so this the only part
+>>> from the patchset that I haven't been able to test.
+>>>
+>>> First of all, which version have you tested? The v2 includes fixes for
+>>> the eMMC, there was a conflict with the NOR flash. If the problem is
+>>> still there in the v2, could you please send the boot log or the error
+>>> message?
+>> Sorry I meant v3 above. Anyway in the meantime I have bought an eMMC,
+>> and I confirm that:
+>> - it does no work with the v2 due to a conflict with the NOR flash
+>>    driver
+>> - it does work with the v3
+>>
+>> Therefore can you please retry with the v3?
+>>
+>> Thanks
+>> Aurelien
+>>
+-- 
+Kind regards
+*Dan Johansen*
+Project lead of the *Manjaro ARM* project
+Manjaro-ARM <https://manjaro.org>
