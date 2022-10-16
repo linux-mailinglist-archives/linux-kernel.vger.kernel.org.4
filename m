@@ -2,209 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652205FFCBE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 02:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815FB5FFCC0
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 02:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiJPA3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 20:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S229744AbiJPAdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 20:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJPA3I (ORCPT
+        with ESMTP id S229554AbiJPAdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 20:29:08 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F73143179;
-        Sat, 15 Oct 2022 17:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=t47oUrif+UA0T1NKF9abjddYE5EHUomUAEaYUXkZDYI=; b=NRKYfrA0B3I6yEEaeIzfxxWUaj
-        rglmcQfLKace5rRMNLedjM3lS36+htWhe9K/FEjfpxEdAkBJmc8GIAaNWm5dr/LAUIJFoDPSzJIni
-        x4tu1N4N8/4bxS26fz01yaXnHmuICzDjwQx9r8796hDPV0b2uXnGW2abhnwEbO9GUcdtMbYvy3qEW
-        svETc2jdK4ZxTIhfKRK2oPWt8V2/HaRvuTVTsr/Z10ECrDZ9U0F0rMA4C/AW/b780UEzD9dCm+E0K
-        /2E6rVIcmfjRbxcgsLWr7z5H4SRlc3yqNfaeTXRvpfaJ8fyPcaSKVmCZKgjPRCqFb8NxP02YVAjh4
-        jRpkRgpQ==;
-Received: from c-67-160-137-253.hsd1.or.comcast.net ([67.160.137.253] helo=[10.0.0.152])
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ojrWA-000Hb5-Ec; Sun, 16 Oct 2022 00:28:38 +0000
-Message-ID: <9f3097cb-834d-4fcc-9d96-999ddeb4045e@infradead.org>
-Date:   Sat, 15 Oct 2022 17:28:35 -0700
+        Sat, 15 Oct 2022 20:33:20 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39DD3C171;
+        Sat, 15 Oct 2022 17:33:19 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id j6so3199159uaa.10;
+        Sat, 15 Oct 2022 17:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UDacUmmZ7HxWAj/1LVMZcfDqYikzx/CSXHqsj+KHPVE=;
+        b=ngQx/7ePtLMoj/u1KOM/dqo0atMEUjEQWawWTtHCT6VN2bFcek7EXbXZFZQiLA4lSh
+         UK6HQeUH6o12dNoQFp8kOIhjvrZmBVa8oksueWT8MzFJl2/C0wC4QYUrQchmsD1SfgzX
+         xxGcOy/scXwgw8VNwIoAeuXZPcs22g9QOUtIFRCrhjCuJ+cAm15IkBxF0FySWRU//s5B
+         8XHD5t8pBAVhhHba63OFBdA60X2TQ/6osZnmwpQhdQJc2ZlKgwvExTuoBJFNyNS8VAn3
+         QtLSrEUH0DUal3BSnN1wK3EhVqOBoFzTrPJ4iwYpA9G4qGmdmg6xVUZTnahpwIj31twS
+         yY4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UDacUmmZ7HxWAj/1LVMZcfDqYikzx/CSXHqsj+KHPVE=;
+        b=AUgyVCHyvjuRmqtqGDStbZUCK2VH6YoUWPCvgF8ZjIzI50+DQ9RdDd0lQVbHxui87q
+         W4aHr++D6rXm/qCH2FIhmKVauhPGibDngy/SXFHzo7mLWvYw+DAzR3JHQdA01rcvBXFo
+         HaEvL/UoaPEnlxbr2vEwk56xLC4cNb881Ojy3+c+dJ0aQngbXuW8fzqjEfNa45gHZJm+
+         6xD7jsgZypZQ1lmbBYDVr64AdgJZMyoYlz4gX57tFD0Q+sARTlMzTy1+3sn74rc4hI5w
+         BGo2ziVeV8y3DfFunHRYx5Un3q8MrnbSARxkxrOaoC6sMaQl5CdHD1yfXG+o8CcC0OOh
+         o3Gw==
+X-Gm-Message-State: ACrzQf0dRXcyo9S/DPd1LE/XpbpdUrhoFe4z1IUqbbmxVfJhXWpVVoJ4
+        tlhNrp075bfT66JxQ+SQhnBKolRdwmO37MY8hHFDhshGhuY=
+X-Google-Smtp-Source: AMsMyM6L5LAp9jpA9ZHMsAqdnhx23KnjFyO5ZXE49e98haLJAiJxt76TcNKcvPXVP8FDf8vJqnMaXPFtvV4agYjspgQ=
+X-Received: by 2002:ab0:6f93:0:b0:3d7:b9af:39d4 with SMTP id
+ f19-20020ab06f93000000b003d7b9af39d4mr1856092uav.84.1665880398635; Sat, 15
+ Oct 2022 17:33:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [syzbot] WARNING in c_start
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Yury Norov <yury.norov@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     syzbot <syzbot+d0fd2bf0dd6da72496dd@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        Andrew Jones <ajones@ventanamicro.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        caraitto@google.com, willemb@google.com, jonolson@google.com,
-        amritha.nambiar@intel.com, linux-kernel@vger.kernel.org
-References: <0000000000007647ec05eb05249c@google.com>
- <Y0nTd9HSnnt/KDap@zn.tnic>
- <2eaf1386-8ab0-bd65-acee-e29f1c5a6623@I-love.SAKURA.ne.jp>
- <Y0qfLyhSoTodAdxu@zn.tnic> <Y0sbwpRcipI564yp@yury-laptop>
- <23488f06-c4b4-8bd8-b0bc-85914ba4d1c6@I-love.SAKURA.ne.jp>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <23488f06-c4b4-8bd8-b0bc-85914ba4d1c6@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 15 Oct 2022 19:33:08 -0500
+Message-ID: <CAH2r5mu+WTsmhrmJpGWqj4Wn9J2TQnEaqZv+pHLsLd91g=8wdA@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Please pull the following changes since commit
+ac1e8c6c95bf805c699656046aef0a05205edfbd:
 
-On 10/15/22 17:24, Tetsuo Handa wrote:
-> On 2022/10/16 5:44, Yury Norov wrote:
->> Add people from other threads discussing this.
->>
->> On Sat, Oct 15, 2022 at 01:53:19PM +0200, Borislav Petkov wrote:
->>> On Sat, Oct 15, 2022 at 08:39:19PM +0900, Tetsuo Handa wrote:
->>>> That's an invalid command line. The correct syntax is:
->>>>
->>>> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>>
->>> The fix is not in Linus' tree yet.
->>>
->>>> Andrew Jones proposed a fix for x86 and riscv architectures [2]. But
->>>> other architectures have the same problem. And fixing all callers will
->>>> not be in time for this merge window.
->>>
->>> Why won't there be time? That's why the -rcs are for.
->>>
->>> Also, that thing fires only when CONFIG_DEBUG_PER_CPU_MAPS is enabled.
->>>
->>> So no, we will take Andrew's fixes for all arches in time for 6.1.
->>
->> Summarizing things:
->>
->> 1. cpumask_check() was introduced to make sure that the cpu number
->> passed into cpumask API belongs to a valid range. But the check is
->> broken for a very long time. And because of that there are a lot of
->> places where cpumask API is used wrongly.
->>
->> 2. Underlying bitmap functions handle that correctly - when user
->> passes out-of-range CPU index, the nr_cpu_ids is returned, and this is
->> what expected by client code. So if DEBUG_PER_CPU_MAPS config is off,
->> everything is working smoothly.
->>
->> 3. I fixed all warnings that I was aware at the time of submitting the
->> patch. 2 follow-up series are on review: "[PATCH v2 0/4] net: drop
->> netif_attrmask_next*()" and "[PATCH 0/9] lib/cpumask: simplify
->> cpumask_next_wrap()". Also, Andrew Jones, Alexander Gordeev and Guo Ren
->> proposed fixes for c_start() in arch code.
->>
->> 4. The code paths mentioned above are all known to me that violate
->> cpumask_check() rules. (Did I miss something?)
->>
->> With all that, I agree with Borislav. Unfortunately, syzcall didn't CC
->> me about this problem with c_start(). But I don't like the idea to revert
->> cpumask_check() fix. This way we'll never clean that mess. 
->>
->> If for some reason those warnings are unacceptable for -rcs (and like
->> Boris, I don't understand why), than instead of reverting commits, I'd
->> suggest moving cpumask sanity check from DEBUG_PER_CPU_MAPS under a new
->> config, say CONFIG_CPUMASK_DEBUG, which will be inactive until people will
->> fix their code. I can send a patch shortly, if we'll decide going this way.
->>
->> How people would even realize that they're doing something wrong if
->> they will not get warned about it?
-> 
-> I'm asking you not to use BUG_ON()/WARN_ON() etc. which breaks syzkaller.
-> Just printing messages (without "BUG:"/"WARNING:" string which also breaks
-> syzkaller) like below diff is sufficient for people to realize that they're
-> doing something wrong.
-> 
-> Again, please do revert "cpumask: fix checking valid cpu range" immediately.
-> 
->  include/linux/cpumask.h | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> index c2aa0aa26b45..31af2cc5f0c2 100644
-> --- a/include/linux/cpumask.h
-> +++ b/include/linux/cpumask.h
-> @@ -118,6 +118,18 @@ static __always_inline unsigned int cpumask_check(unsigned int cpu)
->  	return cpu;
->  }
->  
-> +/*
-> + * We want to avoid passing -1 as a valid cpu argument.
-> + * But we should not crash the kernel until all in-tree callers are fixed.
-> + */
+  Merge tag '6.1-rc-smb3-client-fixes-part1' of
+git://git.samba.org/sfrench/cifs-2.6 (2022-10-10 20:04:22 -0700)
 
-Why not say that any negative cpu argument is invalid?
-Or is it OK to pass -2 as the cpu arg?
+are available in the Git repository at:
 
-> +static __always_inline void report_negative_cpuid(void)
-> +{
-> +#ifdef CONFIG_DEBUG_PER_CPU_MAPS
-> +	pr_warn_once("FIXME: Passing -1 as CPU argument needs to be avoided.\n");
-> +	DO_ONCE_LITE(dump_stack);
-> +#endif /* CONFIG_DEBUG_PER_CPU_MAPS */
-> +}
-> +
->  /**
->   * cpumask_first - get the first cpu in a cpumask
->   * @srcp: the cpumask pointer
-> @@ -177,6 +189,8 @@ unsigned int cpumask_next(int n, const struct cpumask *srcp)
->  	/* -1 is a legal arg here. */
->  	if (n != -1)
->  		cpumask_check(n);
-> +	else
-> +		report_negative_cpuid();
->  	return find_next_bit(cpumask_bits(srcp), nr_cpumask_bits, n + 1);
->  }
->  
-> @@ -192,6 +206,8 @@ static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
->  	/* -1 is a legal arg here. */
->  	if (n != -1)
->  		cpumask_check(n);
-> +	else
-> +		report_negative_cpuid();
->  	return find_next_zero_bit(cpumask_bits(srcp), nr_cpumask_bits, n+1);
->  }
->  
-> @@ -234,6 +250,8 @@ unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
->  	/* -1 is a legal arg here. */
->  	if (n != -1)
->  		cpumask_check(n);
-> +	else
-> +		report_negative_cpuid();
->  	return find_next_and_bit(cpumask_bits(src1p), cpumask_bits(src2p),
->  		nr_cpumask_bits, n + 1);
->  }
-> @@ -265,6 +283,8 @@ unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int start, boo
->  	cpumask_check(start);
->  	if (n != -1)
->  		cpumask_check(n);
-> +	else
-> +		report_negative_cpuid();
->  
->  	/*
->  	 * Return the first available CPU when wrapping, or when starting before cpu0,
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc-smb3-client-fixes-part2
+
+for you to fetch changes up to e3e9463414f610e91528f2b920b8cb655f4bae33:
+
+  smb3: improve SMB3 change notification support (2022-10-15 10:05:53 -0500)
+
+----------------------------------------------------------------
+15 cifs/smb3 fixes including 2 for stable
+- fix a regression in guest mounts to old servers
+- improvements to directory leasing (caching directory entries safely
+beyond the root directory)
+- symlink improvement (reducing roundtrips needed to process symlinks)
+- an lseek fix (to problem where some dir entries could be skipped)
+- improved ioctl for returning more detailed information on directory
+change notifications
+- clarify multichannel interface query warning
+- cleanup fix (for better aligning buffers using ALIGN and round_up)
+- a compounding fix
+- fix some uninitialized variable bugs found by Coverity and the
+kernel test robot
+----------------------------------------------------------------
+Enzo Matsumiya (1):
+      cifs: use ALIGN() and round_up() macros
+
+Paulo Alcantara (5):
+      cifs: improve symlink handling for smb2+
+      cifs: fix uninitialised var in smb2_compound_op()
+      cifs: prevent copying past input buffer boundaries
+      cifs: fix static checker warning
+      cifs: fix double-fault crash during ntlmssp
+
+Ronnie Sahlberg (4):
+      cifs: fix skipping to incorrect offset in emit_cached_dirents
+      cifs: fix regression in very old smb1 mounts
+      cifs: enable caching of directories for which a lease is held
+      cifs: find and use the dentry for cached non-root directories also
+
+Steve French (5):
+      smb3: clarify multichannel warning
+      smb3: must initialize two ACL struct fields to zero
+      cifs: lease key is uninitialized in smb1 paths
+      cifs: lease key is uninitialized in two additional functions when smb1
+      smb3: improve SMB3 change notification support
+
+ fs/cifs/cached_dir.c | 469
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------------------------
+ fs/cifs/cached_dir.h |  20 ++--
+ fs/cifs/cifs_ioctl.h |   8 ++
+ fs/cifs/cifsfs.c     |   9 +-
+ fs/cifs/cifsglob.h   |  48 +++++++---
+ fs/cifs/cifsproto.h  |  13 ++-
+ fs/cifs/cifssmb.c    |   2 +-
+ fs/cifs/connect.c    |  22 +++--
+ fs/cifs/dir.c        |  32 +++----
+ fs/cifs/file.c       |  45 ++++-----
+ fs/cifs/inode.c      | 176 +++++++++++++++++++++--------------
+ fs/cifs/ioctl.c      |  25 ++++-
+ fs/cifs/link.c       | 107 +--------------------
+ fs/cifs/readdir.c    |  31 +++++--
+ fs/cifs/sess.c       |  34 +++----
+ fs/cifs/smb1ops.c    |  56 ++++++-----
+ fs/cifs/smb2file.c   | 127 ++++++++++++++++++++-----
+ fs/cifs/smb2inode.c  | 170 +++++++++++++++++----------------
+ fs/cifs/smb2misc.c   |   2 +-
+ fs/cifs/smb2ops.c    | 149 +++++++++++------------------
+ fs/cifs/smb2pdu.c    |  75 +++++++++------
+ fs/cifs/smb2pdu.h    |   3 +
+ fs/cifs/smb2proto.h  |  25 +++--
+ 23 files changed, 922 insertions(+), 726 deletions(-)
+
 
 -- 
-~Randy
+Thanks,
+
+Steve
