@@ -2,97 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123AE6000F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDDA6000FC
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiJPP5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 11:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S229819AbiJPP5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 11:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJPP44 (ORCPT
+        with ESMTP id S229562AbiJPP5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:56:56 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923162E691
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:56:54 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 137so7389749iou.9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vog1YlNccwd6IAjfOrBTBXzBPiMg9Fk15Ih5tIXeCPM=;
-        b=Bmcp+DBK743YLYdoRYyixSmm1u/4R/rZzgWtLrLJUv62esbyDG0t7aAdChhiGXIHjA
-         qWvI02ipG6j3q4foAbzKd8wZMIm4axWxcyqMXzZyCWE4RvfqRTmIgwDyIVFCkz7C7QdJ
-         bhwDkah2oLSYsD2gHnZCchEgPkPcPqXH36s80=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vog1YlNccwd6IAjfOrBTBXzBPiMg9Fk15Ih5tIXeCPM=;
-        b=MkyGEOO+kUyZ6zgIO+N9Tq83aSxHKlDP6eDB6ZOlruMMnHSh1KBOmWpqWNCuqeZIi9
-         hIGd/BZGbe4hsMijuzB3MouROlFuZwhtdM98FY/fHzfEHIpz+qQsyTqc9WhEsmdlimO9
-         +GR1GvwUC5niao6eMxAUf1YeonNJqQWTKcDLiWfq9hf+KEptXqIMCPjZP5+JvHZFy7MX
-         Okc/wirYEzFvJ2p2jHlAldQp/cbM/7lzqZLXE6akhR2FBgCFn23Y1x7j7Nj8JTCcN+Ui
-         u4QctxnISj7c0muWB2D3+v3X5cOlc6Mzud851vrRWntqdolo5rQ9xccjIc15NXZv3otZ
-         jdug==
-X-Gm-Message-State: ACrzQf3IyGSOtVGGKj/1+bxb+2nx/ygcUOmwse90+LkHp2kbNzDcFAqZ
-        ZjnlS9sst8ULFSdsPUqCyGrSV0tjZlbpmcmcHXSaOA==
-X-Google-Smtp-Source: AMsMyM4zacrwSvTvrpB9P6hhTEO7M4uX/F5mXLMcNbiV3edgHdvQWi/YJm4p0pSShibFP3f0BJ/EdIFm37YelG37elc=
-X-Received: by 2002:a02:a513:0:b0:363:b0dc:222b with SMTP id
- e19-20020a02a513000000b00363b0dc222bmr3318308jam.213.1665935813952; Sun, 16
- Oct 2022 08:56:53 -0700 (PDT)
+        Sun, 16 Oct 2022 11:57:38 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762002E9C4;
+        Sun, 16 Oct 2022 08:57:37 -0700 (PDT)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4Mr4Ww3Gvfz4xGp;
+        Mon, 17 Oct 2022 02:57:32 +1100 (AEDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mr4Wq65Brz4xGG;
+        Mon, 17 Oct 2022 02:57:27 +1100 (AEDT)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Subject: [PATCH] spi: aspeed: Fix window offset of CE1
+Date:   Sun, 16 Oct 2022 17:57:22 +0200
+Message-Id: <20221016155722.3520802-1-clg@kaod.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20221011180142.2742289-1-joel@joelfernandes.org>
- <20221011180142.2742289-2-joel@joelfernandes.org> <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
- <20221014144019.GB1108603@lothringen> <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQoRUJ=0_GJG6JunR58yASmehPanp14zbR3Y+KAGL1TDA@mail.gmail.com>
- <20221014154606.GJ4221@paulmck-ThinkPad-P17-Gen-1> <20221014204750.GA1119620@lothringen>
- <20221016151655.GA5600@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221016151655.GA5600@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 16 Oct 2022 11:56:42 -0400
-Message-ID: <CAEXW_YSHN=OWhSu3=Qr+SCeo+=HOHmj3=votKXPmTk0Us2SpdA@mail.gmail.com>
-Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        urezki@gmail.com, neeraj.iitr10@gmail.com, rostedt@goodmis.org,
-        youssefesmat@google.com, surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 11:16 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Fri, Oct 14, 2022 at 10:47:50PM +0200, Frederic Weisbecker wrote:
-> > On Fri, Oct 14, 2022 at 08:46:06AM -0700, Paul E. McKenney wrote:
-> > > On Fri, Oct 14, 2022 at 11:19:28AM -0400, Joel Fernandes wrote:
-> > > > I agree with the discussion, though if all CBs are in the bypass list,
-> > > > the patch will also save 2 jiffies.
-> > > >
-> > > > So just commit messages that need rework then? This one can be taken instead:
-> > > > https://lore.kernel.org/rcu/21ECDA9F-81B1-4D22-8B03-020FB5DADA4F@joelfernandes.org/T/#m14d21fbce23539a521693a4184b28ddc55d7d2c5
-> > >
-> > > This one looks plausible to me.
-> >
-> > With the following modified diff (passed 25 hours of TREE01):
->
-> Very good!
->
-> Could one of you (presumably Joel) please send v9?
->
-> Just to avoid me getting the wrong patch in the wrong place or similar.
-> Or mangling the required rebase following a pull (otherwise, as soon as I
-> create branches, Stephen Rothwell notes the lack of a committer signoff.)
+The offset value of the mapping window in the kernel structure is
+calculated using the value of the previous window offset. This doesn't
+reflect how the HW is configured and can lead to erroneous setting of
+the second flash device (CE1).
 
-Taking a break from raking leaves so doing it right now! Those leaves!
+Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com> 
+Fixes: e3228ed92893 ("spi: spi-mem: Convert Aspeed SMC driver to spi-mem")
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+---
+ drivers/spi/spi-aspeed-smc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- - Joel
+diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+index 33cefcf18392..b90571396a60 100644
+--- a/drivers/spi/spi-aspeed-smc.c
++++ b/drivers/spi/spi-aspeed-smc.c
+@@ -398,7 +398,7 @@ static void aspeed_spi_get_windows(struct aspeed_spi *aspi,
+ 		windows[cs].cs = cs;
+ 		windows[cs].size = data->segment_end(aspi, reg_val) -
+ 			data->segment_start(aspi, reg_val);
+-		windows[cs].offset = cs ? windows[cs - 1].offset + windows[cs - 1].size : 0;
++		windows[cs].offset = data->segment_start(aspi, reg_val) - aspi->ahb_base_phy;
+ 		dev_vdbg(aspi->dev, "CE%d offset=0x%.8x size=0x%x\n", cs,
+ 			 windows[cs].offset, windows[cs].size);
+ 	}
+-- 
+2.37.3
+
