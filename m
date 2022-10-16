@@ -2,67 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F11600145
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B7A600137
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiJPQYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 12:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
+        id S229894AbiJPQXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 12:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiJPQXz (ORCPT
+        with ESMTP id S229901AbiJPQXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 12:23:55 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1119A3ECD0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:43 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id m6so5404796qkm.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:43 -0700 (PDT)
+        Sun, 16 Oct 2022 12:23:34 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDB1399FE
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:31 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id a18so5435920qko.0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hZ9x4BtDFYUfED6r9s6odmQcYTViF4DPSlxHT+KcbOI=;
-        b=G8RD/qSKPtxPvy/bEl8swbr0PqqVAiFSkvohygiXh0Ahx4dGPQGb7L77Bo2KfBq4dK
-         9M63FYIMMRoR+tVGQPiXiWRSo7L6Idn4ui2khvMugG4yRA/G+URk0zwsMdofH/sHdTyw
-         2RcCmANQL7maNSO6o1Cqos0t0MOqYgAg3lIGE=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MX65gOaIT08XY4M5cn1g7cbmh/RnvIq8wli6SwXMtBg=;
+        b=p66SBm+jxcoSdZGKJv7ohAq+81+Wn8YhnMz8iueTmtobse4/DkXueovkEUAUaCkUu6
+         WVm/9HPU515u6TG0YAJiCNF1ofIRPqDK8Q9CyDVKliN69cgHRFabsOCxYaeuk4+rLYMz
+         Uh6IwFRMQQakirGwlhoxDQ8k5+w4YxLuaaHMs+zwPgBjDY5+lUr7nUiNuGJIgAyK7KSO
+         k9XhPBuImxFy62joLKYvUVC8icWt2L6w4AK/jqbKNg8a0V52eod7KTVCgYXp5rYKKWQ3
+         z/+kWcCPQg/y2JNutjffp7bFIhMhUNHM0GhPHh4vsLeRMaMCaF3eyGrcM+Qh0rztXVP2
+         q0rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hZ9x4BtDFYUfED6r9s6odmQcYTViF4DPSlxHT+KcbOI=;
-        b=54BcrWlPWJUpskyx+BgT+nki+PY+gIc4/WOSbtxusp0EZHwD70pYS7c8B8VF6yF02a
-         9DvxEVJ7udH43E2v3649RknzrllAM4V8+H+XV2wTHfYAZZ3DRcrnYRaXFU2SuydBUWVy
-         qpwol9S16QFpoDtyN/nDhFb/cq9szL5S/a1KPlZ1wJNZnmlYZ/o1JbZ/N8etEoBHhGPX
-         gyx4e9Eq9vS5VrcheIsUR/BHoiqPte+NctPY/Q5j/4MrBG0n5HKS+nU2oxgMkZhTLvUA
-         EkeFmgFLj6/jHwoejO4jfoj4q2wUgnU6GCqLPaxUbqfZ0b1qLEPaVBUIxPOqNBhATg48
-         P3vw==
-X-Gm-Message-State: ACrzQf376agGS7YlDFFmPkhBfXa0XYCXav2iRNo2RZSNUWz6LExN6IPj
-        bmtEhjUp3Ee7eLpa+VqlyyMdDvj6TsuGtQ==
-X-Google-Smtp-Source: AMsMyM4mRsA2rK//+1YZkwlguP3rCbg7PqFjEkNjWutSa+5lWv6iu3Rlav1rO+a6qZzxJltWjotqeg==
-X-Received: by 2002:a05:620a:d8c:b0:6a7:91a2:c827 with SMTP id q12-20020a05620a0d8c00b006a791a2c827mr4887021qkl.407.1665937422501;
-        Sun, 16 Oct 2022 09:23:42 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id x19-20020ac87ed3000000b003436103df40sm6001207qtj.8.2022.10.16.09.23.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 09:23:42 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org,
-        paulmck@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v9 13/13] rcu/debug: Add wake-up debugging for lazy callbacks
-Date:   Sun, 16 Oct 2022 16:23:05 +0000
-Message-Id: <20221016162305.2489629-14-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-In-Reply-To: <20221016162305.2489629-1-joel@joelfernandes.org>
-References: <20221016162305.2489629-1-joel@joelfernandes.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MX65gOaIT08XY4M5cn1g7cbmh/RnvIq8wli6SwXMtBg=;
+        b=0c0ocKUc7bLdzA7UP0p4kchtIkT4lPtG+RkVc2n2raUgQ7l5bq+wgv2NDRnYGHc23b
+         fHbIBF57TfqGid01wDZQFPDlpcYyaJmYfn4B/3TyIPeeJzBURajNfLlEdCFjh9nTL2h7
+         RJHVVmv43tMQdZjqvGhGdb5rRiMaajehQ79H7KYY4YWva9GUaU6wPhzN6QGdFIggJSpH
+         kQ58r1JBt4SLcHqO7g8JdmK27xQZOGVW2vQoZtPN1KQJHcojvEvH6F/b1dGjGN2G/c1Y
+         dUye7ktMTOBD4Qz3nzps867xWfGBknlHZ+pvy7Bj+YbvsODHq79LAG4YRaFj1Z0QXHGo
+         Yavg==
+X-Gm-Message-State: ACrzQf0nrUguqSmdZNSRaAvsvkJ3JS6lEHOZfUk82IrDTTNNWsrdTlJd
+        QoFLx+W8uIcclDcp5FOjglogTQ==
+X-Google-Smtp-Source: AMsMyM7Fe2XdLHMwVi3SxpUC+8uRYLyaZr1loOQzqOHB/PYzX8BlQ7wQ8d2rt0Y1ba72gdby5qnCjw==
+X-Received: by 2002:a37:2d04:0:b0:6e7:4f3f:140e with SMTP id t4-20020a372d04000000b006e74f3f140emr4930915qkh.187.1665937410874;
+        Sun, 16 Oct 2022 09:23:30 -0700 (PDT)
+Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
+        by smtp.gmail.com with ESMTPSA id bb33-20020a05622a1b2100b00399fe4aac3esm6042064qtb.50.2022.10.16.09.23.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 09:23:29 -0700 (PDT)
+Message-ID: <fe7a6720-1bf6-bc66-22d2-225cb6e575ff@linaro.org>
+Date:   Sun, 16 Oct 2022 12:23:28 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sc7180: align TLMM pin
+ configuration with DT schema
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221013184700.87260-1-krzysztof.kozlowski@linaro.org>
+ <20221013184700.87260-2-krzysztof.kozlowski@linaro.org>
+ <CAD=FV=VyrCA4jNkfVGwRw2Zf-sCwJe21dRHidtZnJyb73i_UrQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=VyrCA4jNkfVGwRw2Zf-sCwJe21dRHidtZnJyb73i_UrQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,243 +84,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds initial debugging for lazy callback: whether the
-callback does a wake up or not. We see that callbacks doing wake ups are
-usually associated with synchronous use cases (SCSI, rcu_sync,
-synchronize_rcu() etc).
+On 14/10/2022 13:50, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Oct 13, 2022 at 11:49 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+>> index eae22e6e97c1..37abe131951c 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> 
+> [ ... cut ... ]
+> 
+>>  &spi0 {
+>> -       pinctrl-0 = <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_cs_gpio>;
+>> +       pinctrl-0 = <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_spi>;
+>>         cs-gpios = <&tlmm 37 GPIO_ACTIVE_LOW>;
+>>  };
+> 
+> Something still looks wrong with the above. I would have expected:
+> 
+>   <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_spi>, <&qup_spi0_cs_gpio>;
 
-The code is not very intrusive as almost all the logic is in
-'lazy-debug.h' with just a few calls from tree.c
+Yes, you're right.
 
-In the future, we will add more functionalities such as ensuring
-callbacks execute in bounded time.
+> 
+> Specifically the old commit e440e30e26dd ("arm64: dts: qcom: sc7180:
+> Avoid glitching SPI CS at bootup on trogdor") only worked correctly
+> because "qup_spi0_cs_gpio_init_high" didn't specify a "function".
+> That meant it was guaranteed to _just_ set the GPIO output to be
+> high without changing the mux. Then later we'd change the mux and
+> the output would already be high and we'd have no glitch.
+> 
+> As I mentioned earlier, I didn't love that solution but I didn't
+> see a better way. Specifically, I don't think that the properties
+> within a device tree node are ordered. Thus with your new definition:
+> 
+>   qup_spi0_cs_gpio_init_high: qup-spi0-cs-gpio-init-high-state {
+>     pins = "gpio37";
+>     function = "gpio";
+>     output-high;
+>   };
+> 
+> Nothing tells the pinctrl subsystem whether it should apply the
+> 'output-high' before the 'function = "gpio"' or vice versa. From
+> my previous investigation it seemed to set the function first
+> and then the output to be high. Maybe that's because I happened
+> to list the function first, but I wouldn't have thought it was
+> legal to rely on the ordering of properties.
+> 
+> On the other hand, values within a property _are_ ordered. That
+> means that when we specify:
+> 
+>  <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_spi>, <&qup_spi0_cs_gpio>;
+> 
+> The pinctrl subsystem can see that we want "init_high" done first,
+> then the SPI pins setup, and then the GPIO setup.
+> 
+> I confirmed that with your patches applied that the EC was reporting
+> a glitch, though I haven't (yet) managed to reproduce the cros-ec
+> probe failure that we were seeing in the past.
+> 
+> Unfortunately, I then reverted your patches and the EC was _still_
+> glitching. :( It looks like things broke in commit b991f8c3622c ("pinctrl:
+> core: Handling pinmux and pinconf separately"). :( Sure enough,
+> reverting that patch fixes the glitching.
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- kernel/rcu/Kconfig      |   7 ++
- kernel/rcu/lazy-debug.h | 154 ++++++++++++++++++++++++++++++++++++++++
- kernel/rcu/tree.c       |   9 +++
- 3 files changed, 170 insertions(+)
- create mode 100644 kernel/rcu/lazy-debug.h
+Regardless of this issue, binding requiring a function does not allow to
+keep the pin in previous state. Your glitch-workaround was actually an
+use-case for such keep-old-function feature.
 
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index edd632e68497..08c06f739187 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -322,4 +322,11 @@ config RCU_LAZY
- 	  To save power, batch RCU callbacks and flush after delay, memory
- 	  pressure or callback list growing too big.
- 
-+config RCU_LAZY_DEBUG
-+	bool "RCU callback lazy invocation debugging"
-+	depends on RCU_LAZY
-+	default n
-+	help
-+	  Debugging to catch issues caused by delayed RCU callbacks.
-+
- endmenu # "RCU Subsystem"
-diff --git a/kernel/rcu/lazy-debug.h b/kernel/rcu/lazy-debug.h
-new file mode 100644
-index 000000000000..b8399b51d06a
---- /dev/null
-+++ b/kernel/rcu/lazy-debug.h
-@@ -0,0 +1,154 @@
-+#include <linux/string.h>
-+#include <linux/spinlock.h>
-+
-+#ifdef CONFIG_RCU_LAZY_DEBUG
-+#include <linux/preempt.h>
-+#include <trace/events/sched.h>
-+
-+static DEFINE_PER_CPU(bool, rcu_lazy_cb_exec) = false;
-+static DEFINE_PER_CPU(void *, rcu_lazy_ip) = NULL;
-+
-+static DEFINE_RAW_SPINLOCK(lazy_funcs_lock);
-+
-+#define FUNC_SIZE 1024
-+static unsigned long lazy_funcs[FUNC_SIZE];
-+static int nr_funcs;
-+
-+static void __find_func(unsigned long ip, int *B, int *E, int *N)
-+{
-+	unsigned long *p;
-+	int b, e, n;
-+
-+	b = n = 0;
-+	e = nr_funcs - 1;
-+
-+	while (b <= e) {
-+		n = (b + e) / 2;
-+		p = &lazy_funcs[n];
-+		if (ip > *p) {
-+			b = n + 1;
-+		} else if (ip < *p) {
-+			e = n - 1;
-+		} else
-+			break;
-+	}
-+
-+	*B = b;
-+	*E = e;
-+	*N = n;
-+
-+	return;
-+}
-+
-+static bool lazy_func_exists(void* ip_ptr)
-+{
-+	int b, e, n;
-+	unsigned long flags;
-+	unsigned long ip = (unsigned long)ip_ptr;
-+
-+	raw_spin_lock_irqsave(&lazy_funcs_lock, flags);
-+	__find_func(ip, &b, &e, &n);
-+	raw_spin_unlock_irqrestore(&lazy_funcs_lock, flags);
-+
-+	return b <= e;
-+}
-+
-+static int lazy_func_add(void* ip_ptr)
-+{
-+	int b, e, n;
-+	unsigned long flags;
-+	unsigned long ip = (unsigned long)ip_ptr;
-+
-+	raw_spin_lock_irqsave(&lazy_funcs_lock, flags);
-+	if (nr_funcs >= FUNC_SIZE) {
-+		raw_spin_unlock_irqrestore(&lazy_funcs_lock, flags);
-+		return -1;
-+	}
-+
-+	__find_func(ip, &b, &e, &n);
-+
-+	if (b > e) {
-+		if (n != nr_funcs)
-+			memmove(&lazy_funcs[n+1], &lazy_funcs[n],
-+				(sizeof(*lazy_funcs) * (nr_funcs - n)));
-+
-+		lazy_funcs[n] = ip;
-+		nr_funcs++;
-+	}
-+
-+	raw_spin_unlock_irqrestore(&lazy_funcs_lock, flags);
-+	return 0;
-+}
-+
-+static void rcu_set_lazy_context(void *ip_ptr)
-+{
-+	bool *flag = this_cpu_ptr(&rcu_lazy_cb_exec);
-+	*flag = lazy_func_exists(ip_ptr);
-+
-+	if (*flag) {
-+		*this_cpu_ptr(&rcu_lazy_ip) = ip_ptr;
-+	} else {
-+		*this_cpu_ptr(&rcu_lazy_ip) = NULL;
-+	}
-+}
-+
-+static void rcu_reset_lazy_context(void)
-+{
-+	bool *flag = this_cpu_ptr(&rcu_lazy_cb_exec);
-+	*flag = false;
-+}
-+
-+static bool rcu_is_lazy_context(void)
-+{
-+	return *(this_cpu_ptr(&rcu_lazy_cb_exec));
-+}
-+
-+static void
-+probe_waking(void *ignore, struct task_struct *p)
-+{
-+	// kworker wake ups don't appear to cause performance issues.
-+	// Ignore for now.
-+	if (!strncmp(p->comm, "kworker", 7))
-+		return;
-+
-+	if (WARN_ON(!in_nmi() && !in_hardirq() && rcu_is_lazy_context())) {
-+		pr_err("*****************************************************\n");
-+		pr_err("RCU: A wake up has been detected from a lazy callback!\n");
-+		pr_err("The callback name is: %ps\n", *this_cpu_ptr(&rcu_lazy_ip));
-+		pr_err("The task it woke up is: %s (%d)\n", p->comm, p->pid);
-+		pr_err("This could cause performance issues! Check the stack.\n");
-+		pr_err("*****************************************************\n");
-+	}
-+}
-+
-+static void rcu_lazy_debug_init(void)
-+{
-+	int ret;
-+	pr_info("RCU Lazy CB debugging is turned on, system may be slow.\n");
-+
-+	ret = register_trace_sched_waking(probe_waking, NULL);
-+	if (ret)
-+		pr_info("RCU: Lazy debug ched_waking probe could not be registered.");
-+}
-+
-+#else
-+
-+static int lazy_func_add(void* ip_ptr)
-+{
-+	return -1;
-+}
-+
-+
-+static void rcu_set_lazy_context(void *ip_ptr)
-+{
-+}
-+
-+static void rcu_reset_lazy_context(void)
-+{
-+}
-+
-+static void rcu_lazy_debug_init(void)
-+{
-+}
-+
-+#endif
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index f4b390f86865..2b2a8d84896d 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -67,6 +67,7 @@
- 
- #include "tree.h"
- #include "rcu.h"
-+#include "lazy-debug.h"
- 
- #ifdef MODULE_PARAM_PREFIX
- #undef MODULE_PARAM_PREFIX
-@@ -2245,7 +2246,10 @@ static void rcu_do_batch(struct rcu_data *rdp)
- 
- 		f = rhp->func;
- 		WRITE_ONCE(rhp->func, (rcu_callback_t)0L);
-+
-+		rcu_set_lazy_context(f);
- 		f(rhp);
-+		rcu_reset_lazy_context();
- 
- 		rcu_lock_release(&rcu_callback_map);
- 
-@@ -2770,6 +2774,10 @@ __call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
- 	}
- 
- 	check_cb_ovld(rdp);
-+
-+	if (lazy)
-+		lazy_func_add(func);
-+
- 	if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags, lazy))
- 		return; // Enqueued onto ->nocb_bypass, so just leave.
- 	// If no-CBs CPU gets here, rcu_nocb_try_bypass() acquired ->nocb_lock.
-@@ -4805,6 +4813,7 @@ void __init rcu_init(void)
- 	rcu_early_boot_tests();
- 
- 	kfree_rcu_batch_init();
-+	rcu_lazy_debug_init();
- 	rcu_bootup_announce();
- 	sanitize_kthread_prio();
- 	rcu_init_geometry();
--- 
-2.38.0.413.g74048e4d9e-goog
+Yet, I am not sure if we should keep such ability. The firmware could
+configure the pin to whatever. Firmware behavior could also change it
+making the OS behavior non-predictable.
+
+> 
+> OK, several hours later and I've come up with a proposed solution [1].
+> Assuming that solution lands, then I think the answer is:
+> 
+> a) Totally get rid of the '_init_high' entries.
+> b) trogdor should just specify:
+>    <&qup_spi0_spi>, <&qup_spi0_cs_gpio>;
+
+Yes.
+
+> 
+> [ ... cut ... ]
+> 
+>> +&qup_spi0_spi {
+>> +       drive-strength = <2>;
+>> +       bias-disable;
+>>  };
+>>
+>>  &qup_spi0_cs_gpio {
+>> -       pinconf {
+>> -               pins = "gpio34", "gpio35", "gpio36", "gpio37";
+>> -               drive-strength = <2>;
+>> -               bias-disable;
+>> -       };
+>> +       drive-strength = <2>;
+>> +       bias-disable;
+>> +};
+>> +
+>> +&qup_spi6_spi {
+>> +       drive-strength = <2>;
+>> +       bias-disable;
+>>  };
+>>
+>>  &qup_spi6_cs_gpio {
+>> -       pinconf {
+>> -               pins = "gpio59", "gpio60", "gpio61", "gpio62";
+>> -               drive-strength = <2>;
+>> -               bias-disable;
+>> -       };
+>> +       drive-strength = <2>;
+>> +       bias-disable;
+>> +};
+>> +
+>> +&qup_spi10_spi {
+>> +       drive-strength = <2>;
+>> +       bias-disable;
+>>  };
+>>
+>>  &qup_spi10_cs_gpio {
+>> -       pinconf {
+>> -               pins = "gpio86", "gpio87", "gpio88", "gpio89";
+>> -               drive-strength = <2>;
+>> -               bias-disable;
+>> -       };
+>> +       drive-strength = <2>;
+>> +       bias-disable;
+>>  };
+> 
+> Mostly addressed by the above, but it should be noted that in your
+> patch you were specifying settings in the trogdor.dtsi file for
+> "qup_spi#_cs_gpio" but then never using it (it used the _init_high
+> versions).
+> 
+> [1] https://lore.kernel.org/r/20221014103217.1.I656bb2c976ed626e5d37294eb252c1cf3be769dc@changeid
+
+Best regards,
+Krzysztof
 
