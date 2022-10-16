@@ -2,114 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC16660027E
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC0D60027F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiJPRgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 13:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S229874AbiJPRmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 13:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiJPRga (ORCPT
+        with ESMTP id S229747AbiJPRmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 13:36:30 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC05B4152B
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:36:28 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id de14so6284378qvb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:36:28 -0700 (PDT)
+        Sun, 16 Oct 2022 13:42:06 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D3531FAD
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:42:05 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bv10so15102673wrb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=33yORBvP8CyROZDGO3XsviIiyoyghI9p2jQ7nrsYpb0=;
-        b=vX4xk5pz42QKRJCls5ByhGA2iaXQPvuj1jjpnKX6lGa/PPSKPmuGuI5rkG2RcezTuz
-         UxoJ86ntFosaMdxRFnec3Zv9TQV1GcnHhUqNQ/uTCA67JjMDlLdoCOmgWfb38VRhDMAo
-         3njgwLbq1hQqBMH1ECqqm2mskKyJKp9hkxFh9eqdD5ZNa6K+dNjlwEt4lh7uXxeAo0sf
-         Bw26fHoP9jgEkIfCmRNDFF04f06zwxZKnFZH7FGuXVLMtu+vZByu/rg9Sy3TPFRka08M
-         PKtDKfH6Z2SY1TiVJojJj/8eDJjk21fG/zNWnVncDxUwL1y7bg38u3Doyii1cVpmQm0N
-         /LZg==
+        bh=eBoyZFJd/AMWfSTDdNDFLh542tiq7KT1lMhtwEfLBl4=;
+        b=cyxXVAEqs04ujc9hmfAVf30HVL/pCnILfipPspTFlkQBjzFFQhNOx+3Hsnzv8IBT5Q
+         mKEvizN9ZqA35pVXIw+GnMESFPCSiwgqiFLfLgeFQnvtyFNuAjpc5GCL4mrlNm6layTT
+         tfKBWW0JurCzaM0BbS5VuSKwloE83tjuPMpK4CwXtoV1MMeTgVT1ms7B1Pvn5ROcOGB2
+         SkafGbGxB2jHqrTZaiTeYenHuoz4h7csoYTfWJxsVMuLmwu3efBD4YWun6Q0xYkebQe2
+         ZGrPENmNa2okAP3iFZNF+4OO8IfxofZNsEwgG4ir3pkbao1kcw9L0KinBv55MTRKeKK+
+         /hUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=33yORBvP8CyROZDGO3XsviIiyoyghI9p2jQ7nrsYpb0=;
-        b=tyu2s1HLxR16OmNCHiBwkZNw+rR7+LW3f1Ms8s1Yv92cmcIp+4uw0+Opk2Xuy2f/ex
-         fxI28fD6S1F1Jz0ve1YcoR3Okjt2J6jEKe9aGd/wLmDBCS7GI1bbwayvNpn57QTA8Ya+
-         pDmiW7v8uy0+g3aCwApprDhzbaiRe4TvSzRxwroUcWGkGKpJKW+d5pRL0K4L1px8R4D0
-         yTtrIIgdGtYSFhTCIiodgeDvnvpKZQaeW4wljjK4zo1VLs6QxQUwmRBmkgPPxb7hDyA/
-         Rn834aTJZy7FXGVBIKW6kXxTiBDSWrXfqp5gHYXw3CuRoxNL50mDZDid6vS7JbOekkJE
-         at3w==
-X-Gm-Message-State: ACrzQf1jRyTR3mqlNwMtTLETBUXRlWxTsD9lU3efNB8kuxegPovc+xB4
-        3RK7PmPpZz4WVExP780d0fGfNQ==
-X-Google-Smtp-Source: AMsMyM4MPWCtFWj364OqCk4Za8oFnohWBlCXHg9o98iEqt4JY41nuGriJ+NdhbHOSISDSCx6gVuUaA==
-X-Received: by 2002:a05:6214:501e:b0:4b3:d08f:b58c with SMTP id jo30-20020a056214501e00b004b3d08fb58cmr5901540qvb.90.1665941788178;
-        Sun, 16 Oct 2022 10:36:28 -0700 (PDT)
-Received: from krzk-bin.hsd1.pa.comcast.net ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id u14-20020a05620a0c4e00b006cfc4744589sm7640259qki.128.2022.10.16.10.36.26
+        bh=eBoyZFJd/AMWfSTDdNDFLh542tiq7KT1lMhtwEfLBl4=;
+        b=uGbQvETC+WMsE+d+t/Pm/zTv694fmzEx44BJ49hAIrsEubHdZ7N/AHR2vjesOsE5Uq
+         kCSM6dNOaRdlc9R4YmclO4j/IDd11YtaKaTldoEl4VWGEVezEskJqyCQKnLeSb9PyNDF
+         6X1KcEFXmiOZ7sdbgXvnF0duGEAuPRrpmRRp+gi402wMROLNAMPiJm0jwn2r/LfkUdWQ
+         CdCbZ4NsBO87Omypt+NYXnLiVnU78c+jfQzzsyU4CZuzmFzLfGZpTYGF/KMS1s/ZrmeL
+         XsIJ09e9SfG0Rwag1qLmKToQ214eK2nrVQYnGCSmhbp4zcbdqITYWw7uwHSV5+vm8pC2
+         91Uw==
+X-Gm-Message-State: ACrzQf0y36uDeLc60x+mjaQ+CSiu0SR4gEzeQPlDCM+j7pcuA+eIXcHF
+        v05YFe01v18YdrZVPErmQek=
+X-Google-Smtp-Source: AMsMyM6FtrFrf3Ic4dkdXt5cwMkRyUmfIFJPYxWdF1OUS04XhPgPbujAr60TrkylIRaojiJMB3TjZw==
+X-Received: by 2002:a05:6000:1689:b0:22e:2c03:36e7 with SMTP id y9-20020a056000168900b0022e2c0336e7mr4464896wrd.252.1665942124233;
+        Sun, 16 Oct 2022 10:42:04 -0700 (PDT)
+Received: from localhost.localdomain (host-95-250-231-122.retail.telecomitalia.it. [95.250.231.122])
+        by smtp.gmail.com with ESMTPSA id p14-20020a05600c468e00b003c6f3e5ba42sm2820940wmo.46.2022.10.16.10.42.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 10:36:27 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: pinctrl: qcom: drop minItems equal to maxItems
-Date:   Sun, 16 Oct 2022 13:36:25 -0400
-Message-Id: <20221016173625.53769-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Oct 2022 10:42:03 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>, Jack Xiao <Jack.Xiao@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [RESEND PATCH] drm/amd/amdgpu: Replace kmap() with kmap_local_page()
+Date:   Sun, 16 Oct 2022 19:41:58 +0200
+Message-Id: <20221016174158.16638-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If minItems are missing, they are implicitly equal to maxItems.
-Dropping redundant minItems simplifies a bit the binding.
+kmap() is being deprecated in favor of kmap_local_page().
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+There are two main problems with kmap(): (1) It comes with an overhead as
+mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
+
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and are still valid.
+
+Since its use in amdgpu/amdgpu_ttm.c is safe, it should be preferred.
+
+Therefore, replace kmap() with kmap_local_page() in amdgpu/amdgpu_ttm.c.
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Acked-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- .../bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml          | 1 -
- Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml  | 1 -
- 2 files changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml
-index 8270debd4f25..f7ec8a4f664f 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml
-@@ -23,7 +23,6 @@ properties:
-     type: boolean
+I'm resending because I suspect that this patch might have been lost. In
+the meantime I added an "Acked-by" tag from Christian K.. Obviviously,
+there are no further changes in the code.
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 3b4c19412625..c11657b5915f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -2301,9 +2301,9 @@ static ssize_t amdgpu_iomem_read(struct file *f, char __user *buf,
+ 		if (p->mapping != adev->mman.bdev.dev_mapping)
+ 			return -EPERM;
  
-   reg:
--    minItems: 2
-     maxItems: 2
+-		ptr = kmap(p);
++		ptr = kmap_local_page(p);
+ 		r = copy_to_user(buf, ptr + off, bytes);
+-		kunmap(p);
++		kunmap_local(ptr);
+ 		if (r)
+ 			return -EFAULT;
  
-   gpio-controller: true
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-index 51bae1d3f150..164f24db8b2b 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-@@ -18,7 +18,6 @@ properties:
-     const: qcom,sm6115-tlmm
+@@ -2352,9 +2352,9 @@ static ssize_t amdgpu_iomem_write(struct file *f, const char __user *buf,
+ 		if (p->mapping != adev->mman.bdev.dev_mapping)
+ 			return -EPERM;
  
-   reg:
--    minItems: 3
-     maxItems: 3
+-		ptr = kmap(p);
++		ptr = kmap_local_page(p);
+ 		r = copy_from_user(ptr + off, buf, bytes);
+-		kunmap(p);
++		kunmap_local(ptr);
+ 		if (r)
+ 			return -EFAULT;
  
-   reg-names:
 -- 
-2.34.1
+2.37.1
 
