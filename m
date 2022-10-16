@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565DA600131
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB620600133
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiJPQVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 12:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S229886AbiJPQWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 12:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiJPQVT (ORCPT
+        with ESMTP id S229847AbiJPQW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 12:21:19 -0400
+        Sun, 16 Oct 2022 12:22:26 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9880C19030
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:21:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF9C19030;
+        Sun, 16 Oct 2022 09:22:25 -0700 (PDT)
 Received: from martin by viti.kaiser.cx with local (Exim 4.89)
         (envelope-from <martin@viti.kaiser.cx>)
-        id 1ok6O0-0008P2-Tq; Sun, 16 Oct 2022 18:21:12 +0200
-Date:   Sun, 16 Oct 2022 18:21:12 +0200
+        id 1ok6P7-0008Qc-Q0; Sun, 16 Oct 2022 18:22:21 +0200
+Date:   Sun, 16 Oct 2022 18:22:21 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
-To:     Pavel Skripkin <paskripkin@gmail.com>
+To:     Michael Straube <straube.linux@gmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/10] staging: r8188eu: fix status updates in SwLedOff
-Message-ID: <20221016162112.g4bk3anzudq5qn7e@viti.kaiser.cx>
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 01/10] staging: r8188eu: fix led register settings
+Message-ID: <20221016162221.lgqzc3ug6es3r2ze@viti.kaiser.cx>
 References: <20221015151115.232095-1-martin@kaiser.cx>
- <20221015151115.232095-4-martin@kaiser.cx>
- <7d72c804-265e-b515-78a7-976deaa06310@gmail.com>
+ <20221015151115.232095-2-martin@kaiser.cx>
+ <c8c03bd1-9fa4-fc79-d4fe-727753e1df2c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7d72c804-265e-b515-78a7-976deaa06310@gmail.com>
+In-Reply-To: <c8c03bd1-9fa4-fc79-d4fe-727753e1df2c@gmail.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: Martin Kaiser <martin@viti.kaiser.cx>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -45,55 +46,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+Hi Michael,
 
-Thus wrote Pavel Skripkin (paskripkin@gmail.com):
+Thus wrote Michael Straube (straube.linux@gmail.com):
 
-> Hi Martin,
+> On 10/15/22 17:11, Martin Kaiser wrote:
+> > Using an InterTech DMG-02 dongle, the led remains on when the system goes
+> > into standby mode. After wakeup, it's no longer possible to control the
+> > led.
 
-> Martin Kaiser <martin@kaiser.cx> says:
-> > Update bLedOn only if we could update the REG_LEDCFG2 register.
+> > It turned out that the register settings to enable or disable the led were
+> > not correct. They worked for some dongles like the Edimax V2 but not for
+> > others like the InterTech DMG-02.
 
+> > This patch fixes the register settings. Bit 3 in the led_cfg2 register
+> > controls the led status, bit 5 must always be set to be able to control
+> > the led, bit 6 has no influence on the led. Setting the mac_pinmux_cfg
+> > register is not necessary.
+
+> > These settings were tested with Edimax V2 and InterTech DMG-02.
+
+> > Cc: stable@vger.kernel.org
+> > Fixes: 8cd574e6af54 ("staging: r8188eu: introduce new hal dir for RTL8188eu driver")
+> > Suggested-by: Michael Straube <straube.linux@gmail.com>
 > > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 > > ---
-> >   drivers/staging/r8188eu/core/rtw_led.c | 7 ++++---
-> >   1 file changed, 4 insertions(+), 3 deletions(-)
+> >   drivers/staging/r8188eu/core/rtw_led.c | 25 ++-----------------------
+> >   1 file changed, 2 insertions(+), 23 deletions(-)
 
 > > diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-> > index 4f1cad890cae..38433296d327 100644
+> > index 2527c252c3e9..5b214488571b 100644
 > > --- a/drivers/staging/r8188eu/core/rtw_led.c
 > > +++ b/drivers/staging/r8188eu/core/rtw_led.c
-> > @@ -43,10 +43,11 @@ static void SwLedOn(struct adapter *padapter, struct led_priv *pLed)
+> > @@ -31,40 +31,19 @@ static void ResetLedStatus(struct led_priv *pLed)
+> >   static void SwLedOn(struct adapter *padapter, struct led_priv *pLed)
+> >   {
+> > -	u8	LedCfg;
+> > -	int res;
+> > -
+> >   	if (padapter->bDriverStopped)
+> >   		return;
+> > -	res = rtw_read8(padapter, REG_LEDCFG2, &LedCfg);
+> > -	if (res)
+> > -		return;
+> > -
+> > -	rtw_write8(padapter, REG_LEDCFG2, (LedCfg & 0xf0) | BIT(5) | BIT(6)); /*  SW control led0 on. */
+> > +	rtw_write8(padapter, REG_LEDCFG2, BIT(5)); /*  SW control led0 on. */
+> >   	pLed->bLedOn = true;
+> >   }
 > >   static void SwLedOff(struct adapter *padapter, struct led_priv *pLed)
 > >   {
+> > -	u8	LedCfg;
+> > -	int res;
+> > -
 > >   	if (padapter->bDriverStopped)
+> >   		goto exit;
+> > -	res = rtw_read8(padapter, REG_LEDCFG2, &LedCfg);/* 0x4E */
+> > -	if (res)
 > > -		goto exit;
-> > +		return;
-> > +
-> > +	if (rtw_write8(padapter, REG_LEDCFG2, BIT(5) | BIT(3)) != _SUCCESS)
-> > +		return;
-> > -	rtw_write8(padapter, REG_LEDCFG2, BIT(5) | BIT(3));
-> > -exit:
+> > -
+> > -	LedCfg &= 0x90; /*  Set to software control. */
+> > -	rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3)));
+> > -	res = rtw_read8(padapter, REG_MAC_PINMUX_CFG, &LedCfg);
+> > -	if (res)
+> > -		goto exit;
+> > -
+> > -	LedCfg &= 0xFE;
+> > -	rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);
+> > +	rtw_write8(padapter, REG_LEDCFG2, BIT(5) | BIT(3));
+> >   exit:
 > >   	pLed->bLedOn = false;
 > >   }
 
-> If we don't always update the state then, I think, it's better to inform the
-> callers about it
+> I tested this also with a TP-Link TL-WN725N now and it works fine.
 
-> I guess, this won't happen often, but you are changing semantic of the
-> function
+> Tested-by: Michael Straube <straube.linux@gmail.com> # InterTech DMG-02,
+> TP-Link TL-WN725N
 
-Changing the state without changing the led feels like a bug to me. It's
-done only for SwLedOff, nor for SwLedOn.
-
-We could add a return value and inform the caller that we could not
-change the led register.
-
-How would callers of SwLedOn or SwLedLOff handle such errors? blink_work
-looks at bLedOn and calls either SwLedOn or SwLedOff. If bLedOn is not
-updated and the led is not changed, the next run of the worker will
-retry. This does already happen with the current code, a return value of
-SwLedOn/Off would not help here.
+thanks for testing with yet another device! Good to hear that the
+settings work there as well.
 
 Best regards,
 Martin
