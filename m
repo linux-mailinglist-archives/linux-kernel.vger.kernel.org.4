@@ -2,144 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7845FFF38
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 14:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5139C5FFF3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 14:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJPMhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 08:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S229679AbiJPMm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 08:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiJPMhp (ORCPT
+        with ESMTP id S229643AbiJPMm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 08:37:45 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2084.outbound.protection.outlook.com [40.92.98.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160BF36DC9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 05:37:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uud50/3g0yiBR1vN8igjogIINwxVHhVByR3vAMfJzqWPdGzKCwh32tKS3LM+KOXK+HMJ1Obmyl2K0P9o2iw8ykQ2qynCwjuw7zW/onSsViQladNlGBxhVOdnLGQZBekEiFvzotG9ahCWsg8Qg0e0ZBG4JmqN1ShToPpJyOY6Bf7mmCi2bUmfkMGQgqtXbnygbf/1LK9hl8OpzJEeUXzdcNVjRfm4sv6y5zJCKmz17Y5hUYwud918JHIiG8aFJ4FPLsDD5lo/nqtUZ/j5vY0/nq6u/WCpvY0WPsKz2r6hXq0kpmVccWHvu4c2CrxHCOriFYh9ndJdiy8PrzAp0Hy5dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WK7gp5/Aa/+dSRRDiVrvrlJIjgTrN7AtJ42tWhg73Oc=;
- b=IQNGMv/iheVpKycsoXStkYO7HD2IZ6IwwTvdlpdRF0jvtBsaZvCznagC+8UCtxDumk+Xijk068w6LTvMGHX1XWUk64zMvBD6/+JE0YUVARD+QmmP+4CUn/YZ9t5PTNffPMZexYhy45EvI61uw4T00QVI08AD1YmI2rFQDs+eVvubQeaHPasDZ/OeJ8V+PBJUcCfJaDz+wL8R+5CXNhL9F/fIKzca76c4ux254DYqkWalbAfO2NsZKduiRmqrh8701cD/6HGucJpjKP2eELWQ8cE+KkfGn6YYVfEMI477JsLhm397e/2qLnBP830UleSpp42nsDuZkOULRXlxNwmgaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WK7gp5/Aa/+dSRRDiVrvrlJIjgTrN7AtJ42tWhg73Oc=;
- b=Yq/ONTiVRQD5t3j85umKjNN0BCIgaXaeAMSeMDV3iHGbHFdSYlJQx6f/uiRY4klHF/eUuymTQQciI6Rps4zVcfa+swccZoyoL5Di2KyRZez7ia3pkO4vrZt95Aj9knUMC96TNcR/PbGFGhauK+99oD5Cy8D663bZeukbpauJJotmojOOPKhSUY5eN4r6+VOPCiDz+mzgvz8oSArop1btSRNB+LN4jZ4feLbathlEFBs9GQiobC5pNapPX7/9GgIKALY2iNlLtdi/3zabXOFKU/QVcFH0IA38l9ec/QLlmrAybcGrRZHjz8j6Onygkcj3NUhVvOh8AO11TmdwoLsdQQ==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by OS3P286MB1995.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1a2::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Sun, 16 Oct
- 2022 12:37:38 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::4722:62da:4861:9d73]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::4722:62da:4861:9d73%3]) with mapi id 15.20.5723.032; Sun, 16 Oct 2022
- 12:37:38 +0000
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     xiang@kernel.org, chao@kernel.org
-Cc:     huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Dawei Li <set_pte_at@outlook.com>
-Subject: [PATCH] erofs: protect s_inodes with s_inode_list_lock
-Date:   Sun, 16 Oct 2022 20:37:27 +0800
-Message-ID: <TYCP286MB23237A9993E0FFCFE5C2BDBECA269@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [PbdqvwTyeoR3jwn62LfPi26ITmOTXWFk]
-X-ClientProxiedBy: TYAPR04CA0013.apcprd04.prod.outlook.com
- (2603:1096:404:15::25) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20221016123727.968140-1-set_pte_at@outlook.com>
+        Sun, 16 Oct 2022 08:42:26 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A5A1E3D9
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 05:42:24 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id n6-20020a056e021ba600b002fc99858e34so7338193ili.14
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 05:42:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KkKDrpHneMqOyeP+pW8+VRoR0qreDPkmug6S/L8Ngnc=;
+        b=n9xhHhPwsZp8CmA++oGRoyia7sKvs3Y0m9YFgV17GjLrJ6sjn9voTG/+3sOOtvpVWD
+         SuRTIofasBz2eQL3CfmUz6iaY0YvQXaCkqRAuNrFB+JH1iXwgelhlbn8AMZXhVT0x4qM
+         paJwWiwhSBppVg1xiJHSvze3hDsF7spHONukBVPE2IEyF+iagkibOWyNU+S8G0y/lKsI
+         CC6HPSH7ZVtAIYe9XFXuSWkMaEl4BRjtJ0lXqaIkb3+xvBSKGG8R7dRsiOlho1O0MNsO
+         +EGvhXONQyZftY5S5OR28SLuwZyAXXsDqsKA3C+ibZIFfZON9L76THs7FoP0UVLm7GgS
+         uleA==
+X-Gm-Message-State: ACrzQf0ClIT503/lURjbtZtIng+t6aY+FUNPNSuxx7/U3Ubn9umXZ5Tn
+        MMQYeU9p3lq7Svxg6hERa/0iFyvpvx8HPrqLOszhFsnX8xYt
+X-Google-Smtp-Source: AMsMyM7cabzJFO6XiTQbLn+NV6lymyPMDowSLqGXWb7mXK2AGdioaCKiMK26dv8hJ3ebTq62y6OOBUVy9XKCSGukI7I7c8lpI7DX
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|OS3P286MB1995:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3fe8c52a-684a-4826-27e4-08daaf733582
-X-MS-Exchange-SLBlob-MailProps: rYPt1fhvLTUem4+YyY73AHtcx1Y7uWZY7h8dTY5gRgdLwDc/DfIlDBdyAyhkMh2RyyrUK3oItCkCUNAecS6PDZlRSCADoGgzPK/D8AphLX/CM8c7qtsHUK/7m24ivIwMOKmF/eDZWvt0TtS9YhgbbntMGvTuSCHCxNdcnJlkRBP8BWHVbmVKLtg5V+RwIAjQUUEAYVUmExqtzcwumcWik5rmK47FXWgNy+wBVUUtgEBL+Bc1jMC7Rk3vNSL7PFy3o5ohPrBb+RrwtpAyCqaAUNlCH3hXRMJ3hI0IjupFctZBF7/vSYHyCrf/izUlYEIdz60IcD3zeHueEG3eRK9UMqhUIYXjwUGNBoW7/aH6aeFxrOkBbCojCCsTN/6y9ViOlX8FSupfp5HSCjKuNFaDc+GC+GoBwA4C8EvxtUjDyxYv/Z2tI08glIPPA1vVBYMDRBR9B+wb70pmbL7lgeX0qmnUcdklS/a1oPbBRiReIjd+lpOTY4YoO3CwhtbMa+uvAd9lYFtjX/Gwubzv+onKbWCvCKr8AuGsvIbK5gOdKu4PYsouipWRdefk0omgxfw4gYXVgKrVfWcTP9/Vv2hjfhtmU6JcboRddSieVYshR7a8o0atfFkFRcYNMnK2XYW7cCjwaCKFtywfRH9InJDmyAmwe/WZecVpOeG0PXzVBZVnZ9XZQZYEXeVSbLpq1al0A162iltt8RvkcG5Jdjfd4g==
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: edA3GGXdf9DbAUizvnHZRSKOFN0KcoWJ1PPVSUtCuJb8/zJpQdYANJaXeVp6ZSjsAOrMZ8XPTuO3oIC2oq3aJ/lO+fC2ZGK5q8siwxS1sGFac/6sv0N+nne/oXEbVzpygK7GvRfTFupoznsWookwY5FUHPVxlfWDZhi8U3rSYiicUrdR+OwP1YawTihSOXW3mhjoJ8hoAbLhbxxhIj0CQ40qCY0+ccRx/7wt+qMnGn8vBLVBo2L0GhFsQtqs+191YyDl3oRm4QvmYMeME8zCrydwUK8BjpAvuzUY4wokMWB7xYI4zGlH78c299UnkiK3yyilQuKFcRjjhF/z3pp5BhPX2WYZOJOcPXZY0CoG9QPwYKDINJC/Ic9x9FH/oGU5mq9UUcOkMfzA+LgEzfjfEtg8+jV2fPUsLWazBX3PcE+2E1U72R4mciw+N+6j58LaI95dLJd6ZJw/uHcc+WC9WkXUIUKJeonTSeRnQMLkfbjCf3SiHpj/LKEm7bxvX3IpQ8UWeOp/WqVt+bxJEhh0LbDKXB+4NoVdpLKbgl0Wv2ScG/crloAYmXRF57ep+oncEFU31prn6sK0w9m3AR0/WG5kLDurmcp6v6PPpfXZ492gAR/5d/FRPNWlpK56VR1YkZkIqfg105iy0ArBQcBB2XAQ79olVc9vgnUoGDIY3gZVx0deihvnZPZHmJ3eR3tj
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AkUkBAqEhjYXSaWyqxx7QLzdSxsjKUGG8DuKxZEuKU2nyxrxFTotZCSRCNYQ?=
- =?us-ascii?Q?bBScwQJVNgM2je91KACn/JPLJNF+06rX9fAtxNFsYuMJAvPOBztTuVvRqqaU?=
- =?us-ascii?Q?16vxNDVaUhl85IuDA6zNEo7mbT1SM0sGMst3uRVjphD03KrB3ZcVJuwv8rTQ?=
- =?us-ascii?Q?yvKrN0p8fYHxEOOn5fg8Nr9myThN2oa88yhkGpM/NlWWrst7CYk4/xisgqhx?=
- =?us-ascii?Q?0lIvvFIWnz0uQIBYRD7AHs6nDblYCXnkfrwcvO7vPK4CaHn71gQsZv2KjuC1?=
- =?us-ascii?Q?L3VH6fp3AMAsPmi413JnA2LyO+kQ/VAaFZU1Qky6Ap7LFaU1SspEhqBBSpCv?=
- =?us-ascii?Q?SoXoZ9bkcTWgLGNBhlHKEHoFAMw0lsFJQALhjExjGQBxooHTNGQgArOBl8m4?=
- =?us-ascii?Q?DB/WhDyV7tXI6oV3p6K+ggetmSPLYFN2xbuIBuyoD1eDGMGbvrwIeBxNkf2k?=
- =?us-ascii?Q?L/JHl1q6ph3Qhli378bjv7omwhj/4tImzQycN43tzzT7Hr6JGKPHcPVCfva2?=
- =?us-ascii?Q?GYIEMg3aERgmUkU+/Zsbityd8cEeZLKu3oQBF9OD1yjS3WgSHJKAEqz2wNH6?=
- =?us-ascii?Q?waNAixUtyjSh4x+WXzRPi5/VgRgsvwGIt57bSEuPKUgHAOrR2fJOoYQWB0jj?=
- =?us-ascii?Q?d4et2hiz8S8z3McecWWiib5413oqpnol9P3XjGfQREvSgQ36+CSoyTOAF0A0?=
- =?us-ascii?Q?rj6bTaPnmthCIaJMdispL12VeevPI4C17vDQFpJzxWGwt2mjyhLx5aS3ltyx?=
- =?us-ascii?Q?tx9mKt/T6SZFPELgzxa+10UpEjhleNyRfRWrVqtv/6N3r/Xm53Eb3FwQNmKj?=
- =?us-ascii?Q?0wj4w7yg01GCMJKuG+zCrZ1o00qyBHkIj3fwKpu/0NzqSAKdykT/ijEg6hdK?=
- =?us-ascii?Q?U6zxvbWUqeDv8mNolDBvpcdPBCcQL08rlfVjxv4OxIXSLnUQI6xPT+mpJpU6?=
- =?us-ascii?Q?ZZEyFyXb/8cpbFm+6WyoKQfhY3dLfwVsdQMkmsDEaLjsueGQug8xepIyk/qA?=
- =?us-ascii?Q?J7Hj2xm8lumRC3zmzfWLo6/ZtdLOpvdi368/2SZkzx0bUolq6pwyTt5v7GVH?=
- =?us-ascii?Q?8VYZTWKauZmugQGxwwIf8Y9ddltGwFi7qVn11xhgqUVg69uM4mCJi5vvBfLN?=
- =?us-ascii?Q?1/Lxn13vK+h8cvP6s+INz/zMlMzzxJvExWpJVzjdnmTUk5U4Knx/M+Tg/I1g?=
- =?us-ascii?Q?n1DJIZVNmUWlfgocq9wnn8FXKJswSH5SxlrGYdH+yMLVTKK9OJ2z/Opmb4Qj?=
- =?us-ascii?Q?F6rVUrV8iDZ1fSVBYECk1yNbNoE328xH/jiWukEexA=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3fe8c52a-684a-4826-27e4-08daaf733582
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2022 12:37:38.2042
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB1995
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1563:b0:2fb:6601:80d9 with SMTP id
+ k3-20020a056e02156300b002fb660180d9mr2857122ilu.71.1665924144050; Sun, 16 Oct
+ 2022 05:42:24 -0700 (PDT)
+Date:   Sun, 16 Oct 2022 05:42:24 -0700
+In-Reply-To: <20221016110248.708-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d437a305eb263003@google.com>
+Subject: Re: [syzbot] INFO: rcu detected stall in batadv_nc_worker (3)
+From:   syzbot <syzbot+69904c3b4a09e8fa2e1b@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s_inodes is superblock-specific resource, which should be
-protected by sb's specific lock s_inode_list_lock.
+Hello,
 
-base-commit: 8436c4a57bd147b0bd2943ab499bb8368981b9e1
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Signed-off-by: Dawei Li <set_pte_at@outlook.com>
----
- fs/erofs/fscache.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4084 } 2677 jiffies s: 2541 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index 998cd26a1b3b..bbf5268440df 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -589,15 +589,18 @@ struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
- 	struct erofs_domain *domain = EROFS_SB(sb)->domain;
- 	struct super_block *psb = erofs_pseudo_mnt->mnt_sb;
- 
--	mutex_lock(&erofs_domain_cookies_lock);
-+	spin_lock(&psb->s_inode_list_lock);
- 	list_for_each_entry(inode, &psb->s_inodes, i_sb_list) {
- 		ctx = inode->i_private;
- 		if (!ctx || ctx->domain != domain || strcmp(ctx->name, name))
- 			continue;
- 		igrab(inode);
--		mutex_unlock(&erofs_domain_cookies_lock);
-+		spin_unlock(&psb->s_inode_list_lock);
- 		return ctx;
- 	}
-+	spin_unlock(&psb->s_inode_list_lock);
-+
-+	mutex_lock(&erofs_domain_cookies_lock);
- 	ctx = erofs_fscache_domain_init_cookie(sb, name, need_inode);
- 	mutex_unlock(&erofs_domain_cookies_lock);
- 	return ctx;
--- 
-2.25.1
+
+Tested on:
+
+commit:         55be6084 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=12c5ccb4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
+dashboard link: https://syzkaller.appspot.com/bug?extid=69904c3b4a09e8fa2e1b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=131f08aa880000
 
