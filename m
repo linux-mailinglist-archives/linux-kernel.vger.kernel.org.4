@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5C7601466
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE95601469
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJQRMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S229971AbiJQRMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiJQRM3 (ORCPT
+        with ESMTP id S229738AbiJQRMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:12:29 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DA167059;
-        Mon, 17 Oct 2022 10:12:28 -0700 (PDT)
+        Mon, 17 Oct 2022 13:12:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD1A696F7;
+        Mon, 17 Oct 2022 10:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1666026749; x=1697562749;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eEL0Wkgz2QTB6hPhPIAefByf4yM70/tBp3XIDpf3g4Y=;
-  b=Mw+WegJSWyGn9/wX52ebCAgKuATaxnBjIJdONaBZ/GHuCQn8iMS4nIR+
-   maJYJgMu4ad+gzAVU+VPBKXZGd1xxIhE4ZGt5c3VyUdws/JTVSPwvp2v8
-   sxDx7LOOQfEeMdr0DgMtX9KGkRNloV8SBqmIRQvZ3JG3zs6DDUYVhOxoa
-   SJi9sKYDL3yNIzsxS6zDMFdV2LYZkequ+DDSTOD865fKptzodgucHW1xZ
-   UGK9U2QgMhwOGwGLxfBNFAiY917OrwFsapw0Rqap33o0Tqip87hcnU4g2
-   q+2KUiEnSN4VZ8iT2HYwddU+Hp/B0Gv1K+orqWZb2rYWk9Lwdlzlte51d
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hWe3aaoOgf+xq5Pq0douiTL3qv6/yUoCMHsfExvmaKw=;
+  b=AKLR/u5jqtntQ8BCQJr/+MbgSZ236t3OxVV/ZJJDgoxCsa3ZiXHQLbOw
+   T5shub33VMi1sSQnL2yuSJHPC/sMeXHWuH28sc8LSEmca0oMHbYm8vQCU
+   Pt6tQmHySyVZZRyXDkJFPPkXz9cSRq+JuoaG0ExokCvQ4b/CbNApSuKKz
+   05oXDZQ3VXa111EkUrYvFY4r+8DHr9ga1XPYtCvWGBfqY+8ij9Dl6KPLb
+   b/hzuzeHj7U1GfZQPZCsX0F6yHvEHT/eDvoaUNsj/CbAGWSaEcY2SQMH9
+   zbt9Im2Zb6CgS0g5iWU0ci4sAe5goV4FL/0sAdzHPN6ylVTvRXcirAIEx
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="367886364"
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="305849453"
 X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="367886364"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:12:28 -0700
+   d="scan'208";a="305849453"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:12:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="733239970"
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="957417116"
 X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="733239970"
+   d="scan'208";a="957417116"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Oct 2022 10:12:26 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 17 Oct 2022 10:12:27 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6542426D; Mon, 17 Oct 2022 20:12:47 +0300 (EEST)
+        id E7641291; Mon, 17 Oct 2022 20:12:48 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
@@ -49,14 +49,16 @@ Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 1/6] spi: pxa2xx: Simplify with devm_platform_get_and_ioremap_resource()
-Date:   Mon, 17 Oct 2022 20:12:38 +0300
-Message-Id: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/6] spi: pxa2xx: Respect Intel SSP type given by a property
+Date:   Mon, 17 Oct 2022 20:12:39 +0300
+Message-Id: <20221017171243.57078-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
+References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +66,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
-
-No functional changes.
+Allow to set the Intel SSP type by reading the property.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi-pxa2xx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/spi/spi-pxa2xx.c   | 6 ++++++
+ include/linux/pxa2xx_ssp.h | 1 +
+ 2 files changed, 7 insertions(+)
 
 diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 2bf21c2e7a52..03ed6d4a14cd 100644
+index 03ed6d4a14cd..857732a54ca7 100644
 --- a/drivers/spi/spi-pxa2xx.c
 +++ b/drivers/spi/spi-pxa2xx.c
-@@ -1482,8 +1482,7 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
+@@ -1460,6 +1460,7 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct pci_dev *pcidev = dev_is_pci(parent) ? to_pci_dev(parent) : NULL;
+ 	const struct pci_device_id *pcidev_id = NULL;
++	u32 value = SSP_UNDEFINED;
+ 	enum pxa_ssp_type type;
+ 	const void *match;
+ 	int status;
+@@ -1468,9 +1469,14 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
+ 	if (pcidev)
+ 		pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match, pcidev);
  
- 	ssp = &pdata->ssp;
++	/* Always try to read property */
++	device_property_read_u32(&pdev->dev, "intel,spi-pxa2xx-type", &value);
++
+ 	match = device_get_match_data(&pdev->dev);
+ 	if (match)
+ 		type = (enum pxa_ssp_type)match;
++	else if (value > SSP_UNDEFINED && value < SSP_MAX)
++		type = (enum pxa_ssp_type)value;
+ 	else if (pcidev_id)
+ 		type = (enum pxa_ssp_type)pcidev_id->driver_data;
+ 	else
+diff --git a/include/linux/pxa2xx_ssp.h b/include/linux/pxa2xx_ssp.h
+index a3fec2de512f..cd1973e6ac4b 100644
+--- a/include/linux/pxa2xx_ssp.h
++++ b/include/linux/pxa2xx_ssp.h
+@@ -229,6 +229,7 @@ enum pxa_ssp_type {
+ 	LPSS_SPT_SSP,
+ 	LPSS_BXT_SSP,
+ 	LPSS_CNL_SSP,
++	SSP_MAX
+ };
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	ssp->mmio_base = devm_ioremap_resource(&pdev->dev, res);
-+	ssp->mmio_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(ssp->mmio_base))
- 		return ERR_CAST(ssp->mmio_base);
- 
+ struct ssp_device {
 -- 
 2.35.1
 
