@@ -2,136 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B363C601645
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E052A601647
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJQS2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S230301AbiJQS3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiJQS2d (ORCPT
+        with ESMTP id S230273AbiJQS25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:28:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A8474CE6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:28:32 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1okUqZ-0003ke-2z; Mon, 17 Oct 2022 20:28:19 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1okUqV-0027zM-Pr; Mon, 17 Oct 2022 20:28:15 +0200
-Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1okUqU-008Jaa-JN; Mon, 17 Oct 2022 20:28:14 +0200
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Archit Taneja <architt@codeaurora.org>
-Cc:     kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm: bridge: adv7511: use dev_err_probe in probe function
-Date:   Mon, 17 Oct 2022 20:28:09 +0200
-Message-Id: <20221017182810.1981638-1-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Mon, 17 Oct 2022 14:28:57 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E29F748E3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:28:57 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1321a1e94b3so14248389fac.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=garS2H7hrtCQgK+3svjO+YNXLY2IJ6zIG7NN3iNx5P0=;
+        b=FeT1M+Qd/AoRCTrToYB7hJdUTfTTHiVUYZhKijeJahSM0R08gh0hRomyuwFINfwEeo
+         xJ2/UXU0xXlOF2dWc2tRkQuWW5V7u8gzUueG/IBZJaIR5/7Hy1kQt6Y9jdfdgJ6hj+G5
+         5AdVpN9NGV1YcMjtQ2KBkop+ynLBu9+CQsOR2YHW6PdNhGrWtqQTCokLbhGcfxIPJCPC
+         +/2eWRhsy8lINhXd/FUPT4huKY8iBQzb97CIGoFyvFH7e3rEskHm6QhOkGOjn/GlVWcg
+         LL5sOtHIOm5K23xNy0ksEJLfCn1rDN2LH5ITRMJJpDcUEkFfrsB3fTBIRJO+Nkp3c61h
+         LH/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=garS2H7hrtCQgK+3svjO+YNXLY2IJ6zIG7NN3iNx5P0=;
+        b=svpuOIQjYHmwvdr/7vsiqbba5tZrWgOpoTaeyIGrZoIovLb60WngC4/xcJjFJeBWa0
+         EwOhS08IImRXhTPPNFJj4tkv0ULbjvYOqtk/A/nxkZY4gy4x0YNiCZuayWCTChHt3xtf
+         wGDA/mxbM+rHA6vL8ykIo9JeOMdkytIQ4ctWn09jl1VhvyAEnWOazTZLOuxGEG5VjUdB
+         wAXj9RT/Szj5ok7fABPKjiUsVelPmTBfQTwyy8H2VkFMBbVMaw8O9n4ZvIgdAY1+EMVa
+         zMJ9gje34L0oBKrTl3g0xaV30tdqK3/aXsYfyNWZvBMtGo05qiwGAZQCtA3ADFFR7Ix7
+         OzBQ==
+X-Gm-Message-State: ACrzQf1pY48QNaeyHvY96xwXQ7B1Yrs8TXTAKTh4M9AJvVlPPhmNYg0Z
+        6q+BKUNzsOndEAk0Q8G0ZlQ=
+X-Google-Smtp-Source: AMsMyM7HAzSiVBoNXsEJBL4cUJSrWCREmwBnaySyn1XwbBr7+08F3TOF6/e6nPvsdMfLLFnpyv2crw==
+X-Received: by 2002:a05:6870:fb8f:b0:132:8c58:39eb with SMTP id kv15-20020a056870fb8f00b001328c5839ebmr16467413oab.88.1666031336196;
+        Mon, 17 Oct 2022 11:28:56 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v81-20020aca6154000000b0034fc91dbd7bsm4550961oib.58.2022.10.17.11.28.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 11:28:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7e5e4c7d-07f4-6ccd-6796-cd6f021f222e@roeck-us.net>
+Date:   Mon, 17 Oct 2022 11:28:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Hector Martin <marcan@marcan.st>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
+ <20221017123434.GA1062543@roeck-us.net>
+ <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: Linux 6.1-rc1
+In-Reply-To: <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-adv7511 probe may need to be attempted multiple times before no
--EPROBE_DEFER is returned. Currently, every such probe results in
-an error message:
+On 10/17/22 10:39, Linus Torvalds wrote:
+> On Mon, Oct 17, 2022 at 5:35 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Build results:
+>>          total: 152 pass: 152 fail: 0
+>> Qemu test results:
+>>          total: 490 pass: 420 fail: 70
+> 
+> Strange. You claim zero build failures, but then:
+> 
+>> Build failures
+>>
+>> Building riscv:defconfig ... failed
+> 
+> so I think your stats may be wrong somehow ;)
+> 
 
-[    4.534229] adv7511 1-003d: failed to find dsi host
-[    4.580288] adv7511 1-003d: failed to find dsi host
+Puzzled ... the logs show that the builds for riscv[32/64] succeeded
+with no error, but a manual build test still shows the failure.
 
-This is misleading, as there is no error and probe deferral is normal
-behavior. Fix this by using dev_err_probe that will suppress
--EPROBE_DEFER errors. While at it, we touch all dev_err in the probe
-path. This makes the code more concise and included the error code
-everywhere to aid user in debugging.
+Ah .... the build fails with gcc 11.3.0 / binutils 2.38, but passes
+with gcc 11.3.0 / binutils 2.39. I had switched my builders to the
+latter last night to fix a problem with powerpc builds. At the same time,
+the manual test I just ran still used binutils 2.38.
 
-Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+That is interesting; I didn't expect that the binutils version would
+make a difference, but apparently it does. Comparing defconfig:
+
+10c10
+< CONFIG_AS_VERSION=23900
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c |  6 ++----
- drivers/gpu/drm/bridge/adv7511/adv7533.c     | 18 ++++++------------
- 2 files changed, 8 insertions(+), 16 deletions(-)
+ > CONFIG_AS_VERSION=23800
+12c12
+< CONFIG_LD_VERSION=23900
+---
+ > CONFIG_LD_VERSION=23800
+260d259
+< CONFIG_RISCV_DMA_NONCOHERENT=y
+297,298d295
+< CONFIG_CC_HAS_ZICBOM=y
+< CONFIG_RISCV_ISA_ZICBOM=y
+4134,4137d4130
+< CONFIG_ARCH_HAS_SETUP_DMA_OPS=y
+< CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE=y
+< CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU=y
+< CONFIG_ARCH_HAS_DMA_PREP_COHERENT=y
+4140,4142d4132
+< CONFIG_DMA_NONCOHERENT_MMAP=y
+< CONFIG_DMA_COHERENT_POOL=y
+< CONFIG_DMA_DIRECT_REMAP=y
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 1c37779b434a..4148b6d6f151 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -1229,10 +1229,8 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
- 		return ret;
- 
- 	ret = adv7511_init_regulators(adv7511);
--	if (ret) {
--		dev_err(dev, "failed to init regulators\n");
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to init regulators\n");
- 
- 	/*
- 	 * The power down GPIO is optional. If present, toggle it from active to
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm/bridge/adv7511/adv7533.c
-index ef6270806d1d..b32b796c25fb 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
-@@ -148,16 +148,12 @@ int adv7533_attach_dsi(struct adv7511 *adv)
- 						 };
- 
- 	host = of_find_mipi_dsi_host_by_node(adv->host_node);
--	if (!host) {
--		dev_err(dev, "failed to find dsi host\n");
--		return -EPROBE_DEFER;
--	}
-+	if (!host)
-+		return dev_err_probe(dev, -EPROBE_DEFER, "failed to find dsi host\n");
- 
- 	dsi = devm_mipi_dsi_device_register_full(dev, host, &info);
--	if (IS_ERR(dsi)) {
--		dev_err(dev, "failed to create dsi device\n");
--		return PTR_ERR(dsi);
--	}
-+	if (IS_ERR(dsi))
-+		return dev_err_probe(dev, PTR_ERR(dsi), "failed to create dsi device\n");
- 
- 	adv->dsi = dsi;
- 
-@@ -167,10 +163,8 @@ int adv7533_attach_dsi(struct adv7511 *adv)
- 			  MIPI_DSI_MODE_NO_EOT_PACKET | MIPI_DSI_MODE_VIDEO_HSE;
- 
- 	ret = devm_mipi_dsi_attach(dev, dsi);
--	if (ret < 0) {
--		dev_err(dev, "failed to attach dsi to host\n");
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to attach dsi to host\n");
- 
- 	return 0;
- }
--- 
-2.30.2
+The build failure is only seen with CONFIG_RISCV_ISA_ZICBOM=n,
+or in other words with binutils 2.38 or earlier.
+
+>> mips, sparc64
+>> -------------
+>>
+>> All big endian mips tests fail to reset after boot. The problem is
+>> caused by commit 72a95859728a ("mfd: syscon: Remove repetition of the
+>> regmap_get_val_endian()").
+> 
+> Bah. I had already archived that whole thread as "sorted out", but
+> yeah, the revert clearly never made it to me for rc1.
+> 
+
+Yes, I saw a note along that line. The original reboot failure affected
+sparc64 boot tests as well, which is gone now. Maybe some other fix for
+the mips problem is in the works ?
+
+> But it should be in the regmap queue (Lee/Andy?), so it is hopefully
+> just a temporary thing.
+> 
+> In fact, it looks like all the failures have known fixes. So here's
+> hoping that your list will be a whole lot cleaner by rc2.
+> 
+Hopefully yes.
+
+Thanks,
+Guenter
 
