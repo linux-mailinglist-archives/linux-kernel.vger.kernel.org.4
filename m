@@ -2,362 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91CB600B32
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E00600B44
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiJQJoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
+        id S231448AbiJQJpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiJQJoL (ORCPT
+        with ESMTP id S229776AbiJQJpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:44:11 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDF33BC53;
-        Mon, 17 Oct 2022 02:44:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DLUjjA46VCFHypOuasZEj0EQLaoDm85pNkoz9RL7w0TaNs+44wIsmkmqr+emvS77qv/MykGEhaJbiYlWNeoURR340807i7YwlV7mGEQyPQa1t3JOLeuJ+aYVeKwuAj21vpiQVE+kXXrqGlNrXSpfcj8Pre7bjNn7vE/784VZ9j5/qZcyyKU19QXQ040Df7mBjucY10YCDNNj/U8b+rLz2E1rGiYFtHNzzAbu8j/Riv+E67wJ40sVMSbVAmaRxZRLGzB4ogkFlfwEmYbM2Jb9oHoexhBzOAh233i0cKlFL2GBUaDagBV+a+1VcdjHzBkWwfIQ5iRB4IpYJsyYkGpYzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+VfD79jXLB2SCjW57HevwLxyu/ZTAjF4ErNxEd0JVrM=;
- b=izWths9ggbmniMr2W23QEPy3FaviE26qoQ/1gRLlQfYjUlNJvhEjNUDLQBBdBUIUaapkI2XZts+rqUjEYSvNNban6bs1Qyz2mua2OfYskEEnZdfnR04LR9laI8qrEOczrCki7D71+HYOxnAY0wNpfPppwioxnndzpb3zF5UBt1cYjVnR6Ko/Hj/LE2wabpn3tPDOPYfcTWscPCPx15/ks66WTCLInzkaReantT+MrQjVIha3j5qHW7gHvLUJprGENHp1cJZt0jkfNhLriSQDJiIKrZ2o5Xj28nKQ9GpyhGiAF2iTBJdywkOlt06MBtqafUO80yRpBEu5jx+s4oNrAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+VfD79jXLB2SCjW57HevwLxyu/ZTAjF4ErNxEd0JVrM=;
- b=3m/ZCEHP5uy22zUNZNCAlQUqFc283XFvnJlue8/0WQa8cfuEbSiXraCalhkdZfgBwEj3dmgCSQSgdWPi7yzfrfRZpvaC/hTskJoqQ9hcKkDbiXQXWeMWzbYpAg0hxhQoara7fRW+gAxz2qd6H+XxF+iZO04R+5HPu71dFIFxLmA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- MN0PR12MB5761.namprd12.prod.outlook.com (2603:10b6:208:374::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.20; Mon, 17 Oct 2022 09:44:06 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::739e:43cb:7ff0:9b08]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::739e:43cb:7ff0:9b08%7]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 09:44:06 +0000
-Date:   Mon, 17 Oct 2022 17:43:44 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH V2 1/9] ACPI: CPPC: Add AMD pstate energy
- performance preference cppc control
-Message-ID: <Y00j0FjodH5+yawN@amd.com>
-References: <20221010162248.348141-1-Perry.Yuan@amd.com>
- <20221010162248.348141-2-Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010162248.348141-2-Perry.Yuan@amd.com>
-X-ClientProxiedBy: TYCP286CA0149.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:31b::12) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        Mon, 17 Oct 2022 05:45:36 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C917B4F38D
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:45:30 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id u10so17619077wrq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=O+n1ShhbA3PkDMv6oI8//0dSStEO0rpZ1E2GZxrwNJ8=;
+        b=HzCBvEHKjBcVmbQFOvVkERzzPABe7O7NENhDfrw0HMRw6qyH06kygUDFtLeJyHm2Aq
+         QF1IQIiIZ3FXmdMUKUreeqV8oX4IJ4TGTvWOTxtuazqx8oqMWpjIdO97IVlcULLhwewT
+         k1prn+CrKXDt7xI9vPmBoru4G3jgBsJG0v0NCYX/XAGh7OCNUw4IVpncfcVhKohVVlMH
+         IBX+m4vqdjXEQ0Frt/bG+Zv1rUZpf5qHDS+xXWT0WcF6MRv6HABab0u7E+2a3Cn7GnM4
+         yaBDa+tv2183b0NJkoX2CEQgRB1brnBeOyxWDJGu3JmxODXPkHXnkT26aORgZVVlZy1+
+         12LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O+n1ShhbA3PkDMv6oI8//0dSStEO0rpZ1E2GZxrwNJ8=;
+        b=YRsOZJPpfavPPScqhcT6Tz9LeXCuvl76TLxLTUjYDhNRWjyn1hOz67HhKzqtlIu0Ly
+         AjhVi92zwRejuFX1DcyEpkPbRlBcVhK3sgThsImN0Xet1EWBtPPt9L0FCFYLWHzfaHge
+         vy+8oNC69UxKK7CzlAgcJkotBWJZ7ykFPCRwoeFjMW4Khi1LpDTbSaw/LTtNZrHOLfwM
+         m7fPu7K/NicFkja9dvJLnBEPBsq/IxyKK7XJ1rjU74zjjkxeFFgXPhfaPJ4OeWFnzWVN
+         HnfslJEKUXxUP1Xfq8zULS2LFO2HeOc6FxRu9oBrbwCr4MywB1WM3L99zMJ/NCylH0ET
+         aAdw==
+X-Gm-Message-State: ACrzQf3GR3Qg0uSAbO3zTO5dIJzRbGqpXTMBHfF5kWSMx+ZJNlv+HWW5
+        vzWidc6sXxlRSgX5gLc3z7d8PA==
+X-Google-Smtp-Source: AMsMyM7YAZPUOp3/N4bb1ClCSRlKmQTiZXyMsVlV7C8McCl56kkVkE6PGiXgXZnx+PnQ8yoCFcTByA==
+X-Received: by 2002:a5d:408e:0:b0:22e:650a:ec4b with SMTP id o14-20020a5d408e000000b0022e650aec4bmr5866330wrp.212.1665999929194;
+        Mon, 17 Oct 2022 02:45:29 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id d12-20020adfa40c000000b0022ca921dc67sm7824305wra.88.2022.10.17.02.45.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 02:45:28 -0700 (PDT)
+Subject: [PATCH v3 00/11] arm: qcom: mdm9615: first round of bindings and DT fixes
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|MN0PR12MB5761:EE_
-X-MS-Office365-Filtering-Correlation-Id: 461d5577-531c-4e64-f8d1-08dab02421e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v2FWObo5UpkrhKEnP1GppxZAWwSnVFYal5RXJGQC7J3vMmW7VjMC0au2eezKJNRwwcVsDUFpYM2/wq5NRNPLfMrQMepURd2WP7cjXQNsAFNXwGr0Sqqa7G1TXfEhuzsluqih1O9X+NzeQ+RBQUm3EtgLvvWYBTuylFMltwXLAN1EyySNbEjUVu4EDc6nFyEU60ABbLDgA4UaZgIQpC/7O/PkXgKu39dYgFIVwJgHX6uF6APvK8Li99yl08tH4m3/FBrvTRuv2B4/o2TeM7Ye/mkaU1ONlRnv9XAxynb2Yca93t36vGgHGWxxxQSVAk/LGTq3hgglgOVXSczZMlxZ2x38tpMk0SwQz4QPp37PiOzHIGM5S1Qab63YB4Wdm+ux/FCcKnSpTC6VPaRYJgwtsOlMUS4PrEUxxUi1jYhSLz7DKhntMqcc12FLLRt1aO6VMBFo0D0QyW5or8q+tHXJYyr2HlwBhLCYCEw2FI0Ovqt7u7MTEMAgH+WMfDuY7stPFlD3VMp59wZlcH1rBYY2fqdyb0suzELmWcUyUzonmJgEgtFnhT88tVjgmiMbpdiUw1oxDBPauP+qft6MWkhatgR87h9+Mt47jR50SkDdqOyB+VNDtgtB1N8lc1HbprJey/LoreAXnIt2EH3007JErpUW07/El0lwkIwlqyK6tSwe/eCb+c4RxgvOlS/Jd7pDoAZQPxe9AvgFoxE8CgMxrxsbR6uFpkvt+DTqM88ChGcD4uI9dhwBPRhAL7ownxJ9jHMgkUHL0TEDoXDqnoAh73Q9AvFiRVkP75pyhz8bTLwtax8Mo2e59BnvIdOP4fIE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(376002)(366004)(346002)(451199015)(36756003)(6486002)(86362001)(5660300002)(37006003)(2906002)(38100700002)(186003)(2616005)(83380400001)(6506007)(316002)(26005)(478600001)(6512007)(54906003)(6636002)(66946007)(66556008)(66476007)(41300700001)(6862004)(4326008)(8936002)(6666004)(8676002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VQh1mqouEG1ObCBJ9dPPKG6Vezwb1vsW3eQjIOtsHUJ4nDXWqXeJj8GUbRA3?=
- =?us-ascii?Q?uiyMNVqtM4BQ/+C0B4BHHFjwjVVlYE3+NkGERc9ohhwi6JI1859H5AUUQ96T?=
- =?us-ascii?Q?ATT3Z9uOJJz7ha8mjdHIyf9d7FOH2X0FzfyK1Bj6986STrjMOB/TXR7IuOms?=
- =?us-ascii?Q?tL6QGpKdOjN/cd+rtjJsew5cFNrdavFTCzAXXnBvuC/7fEr9z5oYlztJ9xQ0?=
- =?us-ascii?Q?cNQ6lYJL5psw/kJIat2TgypCpxIR/D5qB5j7xSldXR+sNAnmwfD0YJdgcPbt?=
- =?us-ascii?Q?73e8X5rjHpYv60tjg/5cOX9twuAy8BX+tPMIzVbNAFnj1AHlyuXQOS/IXe62?=
- =?us-ascii?Q?6Bo/zws9ptIm48rjSa6KhOaINmaFT7DgWhOvTvozS+ONktMDHGtzw1utDkGZ?=
- =?us-ascii?Q?GUBelXs1ZXFbCcbStRl2EfCOv0c8DiIfRLTYnotxOGivrFNLxNYra+q5/jG8?=
- =?us-ascii?Q?eCRCEPoZZkGUsfgRUXCpbL8N/N3mlqwF/0ChHJLjAbaymlhDetYufM9zbXie?=
- =?us-ascii?Q?jzjf1DsD/iJocLRGBF4vmzkOLMswuwdW/dpAsxSZyE7YbzGB8Svq4df7QBZx?=
- =?us-ascii?Q?OXWde3m0QgJcs9j+oCM2XVDC/xtKJ/O/wFIqLYQ3KCyU6IlkoArRtu+OmgKp?=
- =?us-ascii?Q?bjT/7Dg8clxGNGoNyu85+Tx/e8eKgn6inCkTjyHXZGyhsb8UmiePqF8H/2bp?=
- =?us-ascii?Q?UXCpq9TcCiFjttQDsstgsHz4b7S2OOp+CI8JVOE6D9FhikzW/wuHVT34u3lu?=
- =?us-ascii?Q?SWea9y1yag90u4CuaOUH4WkgcWA9BA0uIY4G+bzIQnTSjej1N+jkJxXabWr8?=
- =?us-ascii?Q?di1q6qAbVzDPMxxApkPYWgVFMgEe2RzK+Z4kCfUpxrBcbKzYHFGzG0jzEmCA?=
- =?us-ascii?Q?ITS7KxBXpYGXWnH8LU5vgxlVeN7tJ6A4gO8NJo2zWFbUmmzizjm4GxV5XH+u?=
- =?us-ascii?Q?Xziv5qFLW9fAxNlQxB5dX5K1Y44nQswR4oHFY373dTG9DAziEAfA4FA7kdp+?=
- =?us-ascii?Q?Dtd7ZUiesiSCfujcYFic7j88ONfe7nyI2tSOMPmv86GwcQ6AF1MgdGqP2RMs?=
- =?us-ascii?Q?IYH9A+WjIbtt9RAl7whj+etL8+5IJwYmPhpvgX6qWzT0D3O9YJ1Y7gBPcAtG?=
- =?us-ascii?Q?dPigCZIR6VwpxptVo81aWrTp6xOLYb9QvqAL8X3LEp4dGxuQngiQd2KBiW1d?=
- =?us-ascii?Q?8dFVTvBwGNY9+pRPVbCJI9DaMXKA5RjTYbkkjRMHc/S4R8otTLJLj5NqDRik?=
- =?us-ascii?Q?7DGaFHKKYNzF41o+IF5JXmD+FbY7k67CV9wpyE322awAZbZ4C3oyFaa+ifng?=
- =?us-ascii?Q?OZEe3vKSxd6Ivy9TvVNqD8g+9kFFIiAdOzvvlV2vL5X/6BrkMifOwTnGKlQi?=
- =?us-ascii?Q?2AFkb1d8KpiJ0rgPL/5McxKC/TuULNtg6D881smpTxsCY8ugR5nSEF4RfHAP?=
- =?us-ascii?Q?BgFkd4rzwWGWUAwmdsSgsJvp1t0gXuIPGcXCcnEAVJJUhTZWx8qUcdatCOzx?=
- =?us-ascii?Q?gnq3rNKZqCiIM4bsqVI8Ck9JSRplrAiWtZhvTMHFwAl4X1P4vvmef7t/drna?=
- =?us-ascii?Q?mM4NkkSqRgLyJtuh5QdPCqAh6mSXrJ34mKGvi+Nw?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 461d5577-531c-4e64-f8d1-08dab02421e4
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 09:44:06.2655
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dqt6a65iki7JzzFZlwc8fvhFhMMtCL376tid5aN01kTqOwwobE3YHYytCJlRC82VWTlCRsZdK5vZ9Djlo9nXrw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5761
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIADUkTWMC/43NTQrDIBAF4KsE152iJtGkq96jdOHPJAqJgqbSEnL3SnddtavhPXjf7CRj8pjJpd
+ lJwuKzj6GG9tQQ41SYEbytmXDKOR35AKtdR8F6sBtk43BVMPknZhDCdpYao6WRpK61ygg6qWBc3YfH
+ stTS+bzF9Pp8K6ye22+4MKCgBYpWSTsxHK6LDyrFc0wzuVe08D8hXqFBThp1p5D27Rd0HMcbg3sd4A 0BAAA=
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Mon, 17 Oct 2022 11:45:25 +0200
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-rtc@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-input@vger.kernel.org
+X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:22:40AM +0800, Yuan, Perry wrote:
-> Add the EPP(Energy Performance Preference) support for the
-> AMD SoCs without the dedicated CPPC MSR, those SoCs need to add this
-> cppc acpi functions to update EPP values and desired perf value.
-> 
+This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
 
-The energy performance preference register is actually defined by ACPI, so
-it's not the AMD specific stuff. It's correct to define a general function
-in cppc_acpi lib not only for AMD processors. We won't need to mention "AMD
-P-State" energy performance preference whatever it is implemented with MSR
-or SystemMemory in the subject and commit message here.
+This first round focuses on trivial changes, the remaining work will
+mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
 
-> In order to get EPP worked, cppc_get_epp_caps() will query EPP preference
-> value and cppc_set_epp_perf() will set EPP new value.
-> Before the EPP works, pstate driver will use cppc_set_auto_epp() to
-> enable EPP function from firmware firstly.
-> 
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  drivers/acpi/cppc_acpi.c | 128 ++++++++++++++++++++++++++++++++++++++-
->  include/acpi/cppc_acpi.h |  17 ++++++
->  2 files changed, 144 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 093675b1a1ff..b0e7817cb97f 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1365,6 +1365,132 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
->  }
->  EXPORT_SYMBOL_GPL(cppc_get_perf_ctrs);
->  
-> +/**
-> + * cppc_get_epp_caps - Get the energy preference register value.
-> + * @cpunum: CPU from which to get epp preference level.
-> + * @perf_caps: Return address.
-> + *
-> + * Return: 0 for success, -EIO otherwise.
-> + */
-> +int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
-> +{
-> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
-> +	struct cpc_register_resource *energy_perf_reg;
-> +	u64 energy_perf;
-> +
-> +	if (!cpc_desc) {
-> +		pr_warn("No CPC descriptor for CPU:%d\n", cpunum);
-> +		return -ENODEV;
-> +	}
-> +
-> +	energy_perf_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
-> +
-> +	if (!CPC_SUPPORTED(energy_perf_reg))
-> +		pr_warn("energy perf reg update is unsupported!\n");
-> +
-> +	if (CPC_IN_PCC(energy_perf_reg)) {
-> +		int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
-> +		struct cppc_pcc_data *pcc_ss_data = NULL;
-> +		int ret = 0;
-> +
-> +		if (pcc_ss_id < 0)
-> +			return -EIO;
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Lee Jones <lee@kernel.org>
+To: Satya Priya <quic_c_skakit@quicinc.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Alessandro Zummo <a.zummo@towertech.it>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: linux-input@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Dependencies: None
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v3:
+- Rebased on v6.1-rc1
+- patch 1: Added reviewed-by tag
+- patch 2: Fixes typo in commit msg and added precision about why MIT was selected
+- patch 3: Added reviewed-by tag
+- patch 4: None
+- patch 5: Drop second example node
+- patch 6: Drop Andy, fix interrupts desc and fix example indentation
+- patch 7: Fix commit msg wrap & add reviewed-by tag
+- patch 8: Reword commit msg & add reviewed-by tag
+- patch 9: Reword commit msg & add reviewed-by tag
+- patch 10: None
+- patch 11: Added reviewed-by tag
+- Link to v2: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org
 
-Should be -ENODEV. That means no subspace.
+Changes in v2:
+- patch 1: switch to move from swir.txt to qcom.yaml
+- patch 2: use MIT licence instead of X11 licence
+- patch 3: move reg after compatible
+- patch 4: added Krzysztof's review
+- patch 5: split into 5 changes:
+  - document qcom,pm8921 as fallback of qcom,pm8018
+  - convert qcom,pm8921-pwrkey to dt-schema
+  - document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+  - drop unused PM8018 compatible
+  - drop unused pm8018 RTC compatible
+- patch 6: None
+- patch 7: Reworded commit log based on Dmitry's wording on similar patches
+- Link to v1: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org
 
-> +
-> +		pcc_ss_data = pcc_data[pcc_ss_id];
-> +
-> +		down_write(&pcc_ss_data->pcc_lock);
-> +
-> +		if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0) {
-> +			cpc_read(cpunum, energy_perf_reg, &energy_perf);
-> +			perf_caps->energy_perf = energy_perf;
-> +		} else {
-> +			ret = -EIO;
-> +		}
-> +
-> +		up_write(&pcc_ss_data->pcc_lock);
-> +
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_get_epp_caps);
-> +
-> +int cppc_set_auto_epp(int cpu, bool enable)
-> +{
-> +	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
-> +	struct cpc_register_resource *auto_sel_reg;
-> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +	struct cppc_pcc_data *pcc_ss_data = NULL;
-> +	int ret = -EINVAL;
-> +
-> +	if (!cpc_desc) {
-> +		pr_warn("No CPC descriptor for CPU:%d\n", cpu);
-> +		return -EINVAL;
-> +	}
-> +
-> +	auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
-> +
-> +	if (CPC_IN_PCC(auto_sel_reg)) {
-> +		if (pcc_ss_id < 0)
-> +			return -EIO;
+---
+Neil Armstrong (11):
+      dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board documentation to qcom.yaml
+      arm: dts: qcom: mdm9615*: add SPDX-License-Identifier
+      arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
+      arm: dts: qcom: mdm9615: remove invalid spi-max-frequency gsbi3_spi node
+      dt-bindings: mfd: qcom-pm8xxx: document qcom,pm8921 as fallback of qcom,pm8018
+      dt-bindings: input: qcom,pm8921-pwrkey: convert to dt-schema
+      dt-bindings: rtc: qcom-pm8xxx: document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+      mfd: qcom-pm8xxx: drop unused PM8018 compatible
+      rtc: pm8xxx: drop unused pm8018 compatible
+      arm: dts: qcom: mdm9615: remove invalid interrupt-names from pl18x mmc nodes
+      arm: dts: qcom: mdm9615: remove useless amba subnode
 
-The same comment with above, should be -ENODEV.
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   6 +
+ Documentation/devicetree/bindings/arm/swir.txt     |  12 --
+ .../bindings/input/qcom,pm8921-pwrkey.yaml         |  75 +++++++++++++
+ .../bindings/input/qcom,pm8xxx-pwrkey.txt          |  46 --------
+ .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  33 +++++-
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |  16 ++-
+ .../boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  39 +------
+ arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         |  39 +------
+ arch/arm/boot/dts/qcom-mdm9615.dtsi                | 121 +++++++--------------
+ drivers/mfd/qcom-pm8xxx.c                          |   1 -
+ drivers/rtc/rtc-pm8xxx.c                           |   1 -
+ 11 files changed, 159 insertions(+), 230 deletions(-)
+---
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+change-id: 20220928-mdm9615-dt-schema-fixes-66d4d0ccb7c7
 
-> +
-> +		ret = cpc_write(cpu, auto_sel_reg, enable);
-> +		if (ret)
-> +			return ret;
-> +
-> +		pcc_ss_data = pcc_data[pcc_ss_id];
-> +
-> +		down_write(&pcc_ss_data->pcc_lock);
-> +		/* after writing CPC, transfer the ownership of PCC to platform */
-> +		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
-> +		up_write(&pcc_ss_data->pcc_lock);
-> +		return ret;
-> +	}
-> +
-> +	return cpc_write(cpu, auto_sel_reg, enable);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_set_auto_epp);
-> +
-> +/*
-> + * Set Energy Performance Preference Register value through
-> + * Performance Controls Interface
-> + */
-> +int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
-> +{
-> +	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
-> +	struct cpc_register_resource *epp_set_reg;
-> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +	struct cppc_pcc_data *pcc_ss_data = NULL;
-> +	int ret = -EINVAL;
-> +
-> +	if (!cpc_desc) {
-> +		pr_warn("No CPC descriptor for CPU:%d\n", cpu);
-> +		return -EINVAL;
-> +	}
-> +
-> +	epp_set_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
-> +
-> +	if (CPC_IN_PCC(epp_set_reg)) {
-> +		if (pcc_ss_id < 0)
-> +			return -EIO;
-
-The same comment with above, should be -ENODEV.
-
-> +
-> +		ret = cpc_write(cpu, epp_set_reg, perf_ctrls->energy_perf);
-> +		if (ret)
-> +			return ret;
-> +
-> +		pcc_ss_data = pcc_data[pcc_ss_id];
-> +
-> +		down_write(&pcc_ss_data->pcc_lock);
-> +		/* after writing CPC, transfer the ownership of PCC to platform */
-> +		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
-> +		up_write(&pcc_ss_data->pcc_lock);
-> +	}
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_set_epp_perf);
-> +
-
-Most of cppc_set_auto_epp and cppc_set_epp_perf implementations are
-duplicated. Could you use one general function?
-
->  /**
->   * cppc_set_enable - Set to enable CPPC on the processor by writing the
->   * Continuous Performance Control package EnableRegister field.
-> @@ -1400,7 +1526,7 @@ int cppc_set_enable(int cpu, bool enable)
->  		pcc_ss_data = pcc_data[pcc_ss_id];
->  
->  		down_write(&pcc_ss_data->pcc_lock);
-> -		/* after writing CPC, transfer the ownership of PCC to platfrom */
-> +		/* after writing CPC, transfer the ownership of PCC to platform */
-
-There is no change with this line.
-
-Thanks,
-Ray
-
->  		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
->  		up_write(&pcc_ss_data->pcc_lock);
->  		return ret;
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index c5614444031f..10d91aeedaca 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -108,12 +108,14 @@ struct cppc_perf_caps {
->  	u32 lowest_nonlinear_perf;
->  	u32 lowest_freq;
->  	u32 nominal_freq;
-> +	u32 energy_perf;
->  };
->  
->  struct cppc_perf_ctrls {
->  	u32 max_perf;
->  	u32 min_perf;
->  	u32 desired_perf;
-> +	u32 energy_perf;
->  };
->  
->  struct cppc_perf_fb_ctrs {
-> @@ -149,6 +151,9 @@ extern bool cpc_ffh_supported(void);
->  extern bool cpc_supported_by_cpu(void);
->  extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
->  extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
-> +extern int cppc_set_auto_epp(int cpu, bool enable);
-> +extern int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps);
-> +extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  #else /* !CONFIG_ACPI_CPPC_LIB */
->  static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
->  {
-> @@ -202,6 +207,18 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
->  {
->  	return -ENOTSUPP;
->  }
-> +static inline int cppc_set_auto_epp(int cpu, bool enable)
-> +{
-> +	return -ENOTSUPP;
-> +}
-> +static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
-> +{
-> +	return -ENOTSUPP;
-> +}
-> +static inline int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
-> +{
-> +	return -ENOTSUPP;
-> +}
->  #endif /* !CONFIG_ACPI_CPPC_LIB */
->  
->  #endif /* _CPPC_ACPI_H*/
-> -- 
-> 2.34.1
-> 
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
