@@ -2,90 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB113601708
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5477E601711
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJQTKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
+        id S230041AbiJQTL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiJQTKn (ORCPT
+        with ESMTP id S229770AbiJQTLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:10:43 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB2A1A058
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:10:42 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-12c8312131fso14374762fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0HtQQEU1KD07cnfV5sqhhl7NC1nD6JeKl8vlD6X5bc=;
-        b=J5ckQwk5f17OF8pQt66AjQUgpx2SA9UelXEToqmgB+xmj7dg9P51ytv03oHrB8CyF5
-         om0Q4KyUA14FQdFQpQ5+QiixeEV9pRRqN6t8OEr2bQHy+g43sDQwDNlQydb8ecf7aKok
-         Mx4mSFKJN76E2vQop4KHqjsZG6lxMdK8ekteI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s0HtQQEU1KD07cnfV5sqhhl7NC1nD6JeKl8vlD6X5bc=;
-        b=PVlfeIvmCo/BYpom6IjX9SKJVoZXhFujLlRyuc4EKghN6Ow9pnen0Pz/WBHnVc5kue
-         edt4Jzs6hMhgaDc1gypvSeywz8tguwZKkvIE0unbP0w7/mKhfh7GLZsYvl2/Dap7JLkp
-         YdvQkjl18xD2iWYjaiT8WTPvVF2d+q0qAXjH6w0SMkLTX4w9bUUs4VaKAzAj4Lq8Bc1o
-         HckEUuYNMnun9aS8xMQ6YoIss0P1gNYBw/URl5peuDsNfZ8D0NK9roS6LFBKNw6JyUd+
-         fOTGu0r3f+J4P/MtOTSR84H+drLJ4eKMaTS+a/m+PbSWlNRZKfnOLaGdO9GV5OYRfp/r
-         Eejw==
-X-Gm-Message-State: ACrzQf1XKByM0FLmVBnaNuDK25NFZvzEH4QojVETj3kq/dwYEGx0Hk5y
-        IGAYc9lcWpIVpy74QqgDQ9eM5O2ZP8QY62qYBEE5Q52B8k1YnQ==
-X-Google-Smtp-Source: AMsMyM7+SdOqBsDFuP6CDB2suF4jvA2csSIGb3xEPcNuj632CabHd6uGTXp96mMnVQYSqA0jiNYZWNpB7FENzjBkqEM=
-X-Received: by 2002:a17:90a:b903:b0:20d:a36b:6791 with SMTP id
- p3-20020a17090ab90300b0020da36b6791mr27474441pjr.26.1666033830692; Mon, 17
- Oct 2022 12:10:30 -0700 (PDT)
+        Mon, 17 Oct 2022 15:11:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0177646211;
+        Mon, 17 Oct 2022 12:11:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C854B81A1F;
+        Mon, 17 Oct 2022 19:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7908C43142;
+        Mon, 17 Oct 2022 19:11:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666033875;
+        bh=tO7/kt0swniWp6AN8F5z4QekxmdDOMH5ltqVkHH8tJQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o/rAfKpVRQvkY3TxYYC97bnbwI9hpdDb/iUiHBlpFgAvqY3ktJXvK4QDW/iszFXNA
+         z8euNNs93j5391o4Xh1LDCQWBqn3Mgdc5UtBDeQSFTAGawJr2NKn+Ybwqlr2hL9C5C
+         IJpcJELO9fc3zVGBHiFmD9tO+k9sFP2QAdwC/0C8vdePiqWH838SQruYhu/vWa+QZ7
+         og2rYaiaZW9ZXvQn7QESbCx2cwiNoKwi3vwKWcclIcQAtpmasMS0kpL9gNwtX1weSW
+         t+/23CST3fuf5anYDcV1sBBYwzHT10QOTCogC4qUybk6rwfVdEo7hZZWuxkTaFRgMU
+         YrcB3hm6qCSzw==
+Received: by mail-lj1-f180.google.com with SMTP id a25so15211585ljk.0;
+        Mon, 17 Oct 2022 12:11:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1Hqf/YPAiUJ+O+jnpLORxiWvHBNqhgfJdXDTNSnTgLu7iKehD3
+        lWUz+S/9luq7CJPSmdKx8td4wLtpxhxGzKqw6zg=
+X-Google-Smtp-Source: AMsMyM6ReGmue1UrWjjx0gRLm2Y/eII3tEd7FI1SW56Gj77wGe+3iLjgGtHDtB46XCNVCBN2nHO/rcVJ1y9163LIpaY=
+X-Received: by 2002:a05:651c:4d0:b0:26f:cd9b:419f with SMTP id
+ e16-20020a05651c04d000b0026fcd9b419fmr4342897lji.415.1666033873850; Mon, 17
+ Oct 2022 12:11:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
- <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net> <YzG51Jyd5zhvygtK@arm.com>
- <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N> <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
- <YzR5WSLux4mmFIXg@FVFF77S0Q05N> <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
- <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
- <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com> <20221005110707.55bd9354@gandalf.local.home>
- <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
- <20221005113019.18aeda76@gandalf.local.home> <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
- <20221006122922.53802a5c@gandalf.local.home> <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
- <20221017144949.2b9dcdc5@gandalf.local.home>
-In-Reply-To: <20221017144949.2b9dcdc5@gandalf.local.home>
-From:   Florent Revest <revest@chromium.org>
-Date:   Mon, 17 Oct 2022 21:10:19 +0200
-Message-ID: <CABRcYmJ7bg+HKWG4cbXH=T6iiWXWKGZZy8rXRhAFNPNz507yHg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Xu Kuohai <xukuohai@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Xu Kuohai <xukuohai@huaweicloud.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
+References: <20221006234138.1835739-1-keescook@chromium.org>
+ <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com> <202210171100.5BAC4A5CC8@keescook>
+ <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com> <798f0911-5c54-ebe0-9d44-64bec0c96a72@igalia.com>
+In-Reply-To: <798f0911-5c54-ebe0-9d44-64bec0c96a72@igalia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 17 Oct 2022 21:11:02 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGxNP+hnN5yo9Pb_kQC+tcDn+9d30h5QNAUm3JYgoGiwQ@mail.gmail.com>
+Message-ID: <CAMj1kXGxNP+hnN5yo9Pb_kQC+tcDn+9d30h5QNAUm3JYgoGiwQ@mail.gmail.com>
+Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,64 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uhuh, apologies for my perf report formatting! I'll try to figure it
-out for next time, meanwhile you can find it better formatted here
-https://paste.debian.net/1257405/
+On Mon, 17 Oct 2022 at 20:23, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
+>
+> On 17/10/2022 15:14, Ard Biesheuvel wrote:
+> > [...]
+> >
+> > So at that point, I wondered what the point is of all this complexity.
+> > Do we really need 6 different algorithms to compress a couple of K of
+> > ASCII text on a code path that is ice cold by definition? Wouldn't it
+> > be better to drop the crypto API altogether here, and just use GZIP
+> > via the library interface?
+>
+> Skipping all the interesting and more complex parts, I'd just want to
+> consider zstd maybe?
 
-On Mon, Oct 17, 2022 at 8:49 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Mon, 17 Oct 2022 19:55:06 +0200
-> Florent Revest <revest@chromium.org> wrote:
->
-> > Note that I can't really make sense of the perf report with indirect
-> > calls. it always reports it spent 12% of the time in
-> > rethook_trampoline_handler but I verified with both a WARN in that
-> > function and a breakpoint with a debugger, this function does *not*
-> > get called when running this "bench trig-fentry" benchmark. Also it
-> > wouldn't make sense for fprobe_handler to call it so I'm quite
-> > confused why perf would report this call and such a long time spent
-> > there. Anyone know what I could be missing here ?
->
-> The trace shows __bpf_prog_exit, which I'm guessing is tracing the end of
-> the function. Right?
+I just made the point that it doesn't matter. So on the one hand, I
+don't have any objections to ZSTD per se. But I do wonder if it is the
+best choice when it comes to code size etc. Perhaps one of the
+compression algorithms is guaranteed to be compiled in anyway?
 
-Actually no, this function is called to end the context of a BPF
-program execution. Here it is called at the end of the fentry program
-(so still before the traced function). I hope the pastebin helps
-clarify this!
-
-> In which case I believe it must call rethook_trampoline_handler:
+> Quite fast and efficient - it's what we're using by
+> default on Steam Deck.
 >
->  -> fprobe_handler() /* Which could use some "unlikely()" to move disabled
->                         paths out of the hot path */
+> I'm not sure what is the gzip library interface - you mean skipping the
+> scomp/legacy comp interface, and make use directly of gzip?
 >
->        /* And also calls rethook_try_get () which does a cmpxchg! */
->
->         -> ret_hook()
->                 -> arch_rethook_prepare()
->                         Sets regs->lr = arch_rethook_trampoline
->
-> On return of the function, it jumps to arch_rethook_trampoline()
->
->   -> arch_rethook_trampoline()
->         -> arch_rethook_trampoline_callback()
->                 -> rethook_trampoline_handler()
 
-This is indeed what happens when an fexit program is also attached.
-But when running "bench trig-fentry", only an fentry program is
-attached so bpf_fprobe_entry returns a non-zero value and fprobe
-doesn't call rethook_hook.
-
-Also, in this situation arch_rethook_trampoline is called by the
-traced function's return but in the perf report, iiuc, it shows up as
-being called from fprobe_handler and that should never happen. I
-wonder if this is some sort of stack unwinding artifact during the
-perf record?
-
-> So I do not know how it wouldn't trigger the WARNING or breakpoint if you
-> added it there.
-
-By the way, the WARNING does trigger if I also attach an fexit program
-(then rethook_hook is called). But I made sure we skip the whole
-rethook logic if no fexit program is attached so bench trig-fentry
-should not go through rethook_trampoline_handler.
+zlib_deflate() and friends.
