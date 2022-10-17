@@ -2,93 +2,717 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A41D600C5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE25600C61
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiJQKZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S230222AbiJQK0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiJQKZK (ORCPT
+        with ESMTP id S229508AbiJQK0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:25:10 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ACD543D8;
-        Mon, 17 Oct 2022 03:25:06 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 054EA1C0016; Mon, 17 Oct 2022 12:25:04 +0200 (CEST)
-Date:   Mon, 17 Oct 2022 12:25:03 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Nathan Huckleberry <nhuck@google.com>,
-        Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, ndesaulniers@google.com,
-        mkl@pengutronix.de, thomas.lendacky@amd.com, khalasa@piap.pl,
-        wsa+renesas@sang-engineering.com, netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.9 11/16] net: korina: Fix return type of
- korina_send_packet
-Message-ID: <20221017102503.GA15612@duo.ucw.cz>
-References: <20221009222713.1220394-1-sashal@kernel.org>
- <20221009222713.1220394-11-sashal@kernel.org>
+        Mon, 17 Oct 2022 06:26:15 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20771AD99;
+        Mon, 17 Oct 2022 03:26:07 -0700 (PDT)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6D8A4E0002;
+        Mon, 17 Oct 2022 10:26:04 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de
+Cc:     foss+kernel@0leil.net, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: [PATCH v2 1/2] =?utf-8?q?arm64:=20dts:=20rockchip:=20add=20PX30-=C2=B5Q7?= =?utf-8?q?=20(Ringneck)=20SoM=20with=20Haikou=20baseboard?=
+Date:   Mon, 17 Oct 2022 12:25:24 +0200
+Message-Id: <20220930-upstream-ringneck-v2-1-6671694b6934@theobroma-systems.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220930-upstream-ringneck-v2-0-6671694b6934@theobroma-systems.com>
+References: <20220930-upstream-ringneck-v2-0-6671694b6934@theobroma-systems.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="wac7ysb48OaltWcw"
-Content-Disposition: inline
-In-Reply-To: <20221009222713.1220394-11-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
---wac7ysb48OaltWcw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The PX30-uQ7 (Ringneck) SoM is a µQseven-compatible (40mmx70mm, MXM-230
+connector) system-on-module from Theobroma Systems[1], featuring the
+Rockchip PX30.
 
-Hi!
+It provides the following feature set:
+ * up to 4GB DDR4
+ * up to 128GB on-module eMMC (with 8-bit 1.8V interface)
+ * SD card (on a baseboard) via edge connector
+ * Fast Ethernet with on-module TI DP83825I PHY
+ * MIPI-DSI/LVDS
+ * MIPI-CSI
+ * USB
+   - 1x USB 2.0 dual-role
+   - 3x USB 2.0 host
+ * on-module STM32 Cortex-M0 companion controller, implementing:
+   - low-power RTC functionality (ISL1208 emulation)
+   - fan controller (AMC6821 emulation)
+   - USB<->CAN bridge controller
+ * on-module Espressif ESP32 for Bluetooth + 2.4GHz WiFi
+ * on-module NXP SE05x Secure Element
 
-> From: Nathan Huckleberry <nhuck@google.com>
->=20
-> [ Upstream commit 106c67ce46f3c82dd276e983668a91d6ed631173 ]
->=20
-> The ndo_start_xmit field in net_device_ops is expected to be of type
-> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev=
-).
->=20
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
->=20
-> The return type of korina_send_packet should be changed from int to
-> netdev_tx_t.
+[1] https://www.theobroma-systems.com/som-product/px30-%C2%B5q7/
 
-Patches 4-6, 9-11: I see this is nice cleanup for mainline, but ... do
-we have CFI in 4.9 tree? This mismatch does not and can not cause any
-problems there, right?
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
+ arch/arm64/boot/dts/rockchip/Makefile              |   1 +
+ .../boot/dts/rockchip/px30-ringneck-haikou.dts     | 232 +++++++++++++
+ arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi    | 382 +++++++++++++++++++++
+ 3 files changed, 615 insertions(+)
 
-Best regards,
-								Pavel
---
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+index ef79a672804a1..1e3b9d7c1a8bb 100644
+--- a/arch/arm64/boot/dts/rockchip/Makefile
++++ b/arch/arm64/boot/dts/rockchip/Makefile
+@@ -3,6 +3,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-engicam-px30-core-ctouch2.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-engicam-px30-core-ctouch2-of10.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-engicam-px30-core-edimm2.2.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-ringneck-haikou.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-rock-pi-s.dtb
+diff --git a/arch/arm64/boot/dts/rockchip/px30-ringneck-haikou.dts b/arch/arm64/boot/dts/rockchip/px30-ringneck-haikou.dts
+new file mode 100644
+index 0000000000000..08a3ad3e7ae92
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/px30-ringneck-haikou.dts
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2022 Theobroma Systems Design und Consulting GmbH
++ */
++
++/dts-v1/;
++#include "px30-ringneck.dtsi"
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
++
++/ {
++	model = "Theobroma Systems PX30-uQ7 SoM on Haikou devkit";
++	compatible = "tsd,px30-ringneck-haikou", "rockchip,px30";
++
++	aliases {
++		mmc2 = &sdmmc;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-0 = <&haikou_keys_pin>;
++		pinctrl-names = "default";
++
++		button-batlow-n {
++			label = "BATLOW#";
++			linux,code = <KEY_BATTERY>;
++			gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
++		};
++
++		button-slp-btn-n {
++			label = "SLP_BTN#";
++			linux,code = <KEY_SLEEP>;
++			gpios = <&gpio1 RK_PB7 GPIO_ACTIVE_LOW>;
++		};
++
++		button-wake-n {
++			label = "WAKE#";
++			linux,code = <KEY_WAKEUP>;
++			gpios = <&gpio1 RK_PB6 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++
++		switch-lid-btn-n {
++			label = "LID_BTN#";
++			linux,code = <SW_LID>;
++			linux,input-type = <EV_SW>;
++			gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	leds {
++		pinctrl-0 = <&module_led_pin>, <&sd_card_led_pin>;
++
++		sd_card_led: led-1 {
++			gpios = <&gpio3 RK_PB3 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "mmc2";
++			function = LED_FUNCTION_SD;
++			color = <LED_COLOR_ID_BLUE>;
++		};
++	};
++
++	i2s0-sound {
++		compatible = "simple-audio-card";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,name = "Haikou,I2S-codec";
++		simple-audio-card,mclk-fs = <512>;
++
++		simple-audio-card,codec {
++			clocks = <&sgtl5000_clk>;
++			sound-dai = <&sgtl5000>;
++		};
++
++		simple-audio-card,cpu {
++			bitclock-master;
++			frame-master;
++			sound-dai = <&i2s0_8ch>;
++		};
++	};
++
++	sgtl5000_clk: sgtl5000-oscillator {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency  = <24576000>;
++	};
++
++	dc_12v: dc-12v-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "dc_12v";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++	};
++
++	vcc3v3_baseboard: vcc3v3-baseboard-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc3v3_baseboard";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&dc_12v>;
++	};
++
++	vcc5v0_baseboard: vcc5v0-baseboard-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_baseboard";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&dc_12v>;
++	};
++
++	vdda_codec: vdda-codec-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vdda_codec";
++		regulator-boot-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc5v0_baseboard>;
++	};
++
++	vddd_codec: vddd-codec-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vddd_codec";
++		regulator-boot-on;
++		regulator-min-microvolt = <1600000>;
++		regulator-max-microvolt = <1600000>;
++		vin-supply = <&vcc5v0_baseboard>;
++	};
++};
++
++&i2c2 {
++	status = "okay";
++	clock-frequency = <400000>;
++
++	sgtl5000: codec@a {
++		compatible = "fsl,sgtl5000";
++		reg = <0x0a>;
++		clocks = <&sgtl5000_clk>;
++		#sound-dai-cells = <0>;
++		VDDA-supply = <&vdda_codec>;
++		VDDIO-supply = <&vcc3v3_baseboard>;
++		VDDD-supply = <&vddd_codec>;
++	};
++};
++
++&i2c3 {
++	eeprom@50 {
++		reg = <0x50>;
++		compatible = "atmel,24c01";
++		pagesize = <8>;
++		size = <128>;
++		vcc-supply = <&vcc3v3_baseboard>;
++	};
++};
++
++&i2s0_8ch {
++	status = "okay";
++};
++
++&gmac {
++	status = "okay";
++};
++
++&pinctrl {
++	haikou {
++		haikou_keys_pin: haikou-keys-pin {
++			rockchip,pins =
++			  /* WAKE# */
++			  <1 RK_PB6 RK_FUNC_GPIO &pcfg_pull_up>,
++			  /* SLP_BTN# */
++			  <1 RK_PB7 RK_FUNC_GPIO &pcfg_pull_up>,
++			  /* LID_BTN */
++			  <3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
++			  /* BATLOW# */
++			  <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
++			  /* BIOS_DISABLE# */
++			  <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
++	leds {
++		sd_card_led_pin: sd-card-led-pin {
++			rockchip,pins =
++			  <3 RK_PB3 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++};
++
++&pwm0 {
++	status = "okay";
++};
++
++&sdmmc {
++	sd-uhs-sdr12;
++	sd-uhs-sdr25;
++	sd-uhs-sdr50;
++	bus-width = <4>;
++	cap-mmc-highspeed;
++	cap-sd-highspeed;
++	cd-gpios = <&gpio0 RK_PA3 GPIO_ACTIVE_LOW>;
++	disable-wp;
++	vmmc-supply = <&vcc3v3_baseboard>;
++	status = "okay";
++};
++
++&spi1 {
++	status = "okay";
++};
++
++&u2phy_otg {
++	status = "okay";
++};
++
++&uart0 {
++	status = "okay";
++};
++
++&uart5 {
++	pinctrl-0 = <&uart5_xfer>;
++	status = "okay";
++};
++
++&usb20_otg {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi b/arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi
+new file mode 100644
+index 0000000000000..12397755830bd
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi
+@@ -0,0 +1,382 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2022 Theobroma Systems Design und Consulting GmbH
++ */
++
++/dts-v1/;
++#include "px30.dtsi"
++#include <dt-bindings/leds/common.h>
++
++/ {
++	aliases {
++		mmc0 = &emmc;
++		mmc1 = &sdio;
++		rtc0 = &rtc_twi;
++		rtc1 = &rk809;
++	};
++
++	emmc_pwrseq: emmc-pwrseq {
++		compatible = "mmc-pwrseq-emmc";
++		pinctrl-0 = <&emmc_reset>;
++		pinctrl-names = "default";
++		reset-gpios = <&gpio1 RK_PB3 GPIO_ACTIVE_HIGH>;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&module_led_pin>;
++		status = "okay";
++
++		module_led: led-0 {
++			gpios = <&gpio1 RK_PB0 GPIO_ACTIVE_HIGH>;
++			function = LED_FUNCTION_HEARTBEAT;
++			linux,default-trigger = "heartbeat";
++			color = <LED_COLOR_ID_AMBER>;
++		};
++	};
++
++	vcc5v0_sys: vccsys-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	};
++};
++
++&cpu0 {
++	cpu-supply = <&vdd_arm>;
++};
++
++&cpu1 {
++	cpu-supply = <&vdd_arm>;
++};
++
++&cpu2 {
++	cpu-supply = <&vdd_arm>;
++};
++
++&cpu3 {
++	cpu-supply = <&vdd_arm>;
++};
++
++&emmc {
++	bus-width = <8>;
++	cap-mmc-highspeed;
++	mmc-hs200-1_8v;
++	supports-emmc;
++	mmc-pwrseq = <&emmc_pwrseq>;
++	non-removable;
++	vmmc-supply = <&vcc_3v3>;
++	vqmmc-supply = <&vcc_emmc>;
++
++	status = "okay";
++};
++
++/* On-module TI DP83825I PHY but no connector, enable in carrierboard */
++&gmac {
++	snps,reset-gpio = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>;
++	snps,reset-active-low;
++	snps,reset-delays-us = <0 50000 50000>;
++	phy-supply = <&vcc_3v3>;
++	clock_in_out = "output";
++};
++
++&gpio2 {
++	/*
++	 * The Qseven BIOS_DISABLE signal on the PX30-µQ7 keeps the on-module
++	 * eMMC powered-down initially (in fact it keeps the reset signal
++	 * asserted). BIOS_DISABLE_OVERRIDE pin allows to re-enable eMMC after
++	 * the SPL has been booted from SD Card.
++	 */
++	bios-disable-override-hog {
++		gpios = <RK_PB5 GPIO_ACTIVE_LOW>;
++		output-high;
++		line-name = "bios_disable_override";
++		gpio-hog;
++	};
++
++	/*
++	 * The BIOS_DISABLE hog is a feedback pin for the actual status of the
++	 * signal, ignoring the BIOS_DISABLE_OVERRIDE logic. This usually
++	 * represents the state of a switch on the baseboard.
++	 */
++	bios-disable-n-hog {
++		gpios = <RK_PC2 GPIO_ACTIVE_LOW>;
++		line-name = "bios_disable";
++		input;
++		gpio-hog;
++	};
++};
++
++&gpu {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	rk809: pmic@20 {
++		compatible = "rockchip,rk809";
++		reg = <0x20>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
++		pinctrl-0 = <&pmic_int>;
++		pinctrl-names = "default";
++		#clock-cells = <0>;
++		clock-output-names = "xin32k";
++		rockchip,system-power-controller;
++		wakeup-source;
++
++		vcc1-supply = <&vcc5v0_sys>;
++		vcc2-supply = <&vcc5v0_sys>;
++		vcc3-supply = <&vcc5v0_sys>;
++		vcc4-supply = <&vcc5v0_sys>;
++		vcc5-supply = <&vcc_3v3>;
++		vcc6-supply = <&vcc_3v3>;
++		vcc7-supply = <&vcc_3v3>;
++		vcc9-supply = <&vcc5v0_sys>;
++
++		regulators {
++			vdd_log: DCDC_REG1 {
++				regulator-name = "vdd_log";
++				regulator-min-microvolt = <950000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-ramp-delay = <6001>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <950000>;
++				};
++			};
++
++			vdd_arm: DCDC_REG2 {
++				regulator-name = "vdd_arm";
++				regulator-min-microvolt = <950000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-ramp-delay = <6001>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++					regulator-suspend-microvolt = <950000>;
++				};
++			};
++
++			vcc_ddr: DCDC_REG3 {
++				regulator-name = "vcc_ddr";
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++			};
++
++			vcc_3v0_1v8: vcc_emmc: DCDC_REG4 {
++				regulator-name = "vcc_3v0_1v8";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3000000>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3000000>;
++				};
++			};
++
++			vcc_3v3: DCDC_REG5 {
++				regulator-name = "vcc_3v3";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3300000>;
++				};
++			};
++
++			vcc_1v8: LDO_REG2 {
++				regulator-name = "vcc_1v8";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++
++			vcc_1v0: LDO_REG3 {
++				regulator-name = "vcc_1v0";
++				regulator-min-microvolt = <1000000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1000000>;
++				};
++			};
++
++			vccio_sd: LDO_REG5 {
++				regulator-name = "vccio_sd";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3300000>;
++				};
++			};
++
++			vcc_lcd: LDO_REG7 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1000000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-name = "vcc_lcd";
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++					regulator-suspend-microvolt = <1000000>;
++				};
++			};
++
++			vcc_1v8_lcd: LDO_REG8 {
++				regulator-name = "vcc_1v8_lcd";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++
++			vcca_1v8: LDO_REG9 {
++				regulator-name = "vcca_1v8";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++				regulator-boot-on;
++
++				regulator-state-mem {
++					regulator-off-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++		};
++	};
++};
++
++&i2c1 {
++	status = "okay";
++
++	/* SE05x is limited to Fast Mode */
++	clock-frequency = <400000>;
++
++	fan: fan@18 {
++		compatible = "ti,amc6821";
++		reg = <0x18>;
++		#cooling-cells = <2>;
++	};
++
++	rtc_twi: rtc@6f {
++		compatible = "isil,isl1208";
++		reg = <0x6f>;
++	};
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&i2s0_8ch {
++	rockchip,trcm-sync-tx-only;
++
++	pinctrl-0 = <&i2s0_8ch_sclktx &i2s0_8ch_lrcktx
++		     &i2s0_8ch_sdo0 &i2s0_8ch_sdi0>;
++};
++
++&io_domains {
++	vccio1-supply = <&vcc_3v3>;
++	vccio2-supply = <&vccio_sd>;
++	vccio3-supply = <&vcc_3v3>;
++	vccio4-supply = <&vcc_3v3>;
++	vccio5-supply = <&vcc_3v3>;
++	vccio6-supply = <&vcc_emmc>;
++	vccio-oscgpi-supply = <&vcc_3v3>;
++
++	status = "okay";
++};
++
++&pinctrl {
++	emmc {
++		emmc_reset: emmc-reset {
++			rockchip,pins = <1 RK_PB3 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	leds {
++		module_led_pin: module-led-pin {
++			rockchip,pins = <1 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	pmic {
++		pmic_int: pmic-int {
++			rockchip,pins =
++				<0 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++};
++
++&saradc {
++	vref-supply = <&vcc_1v8>;
++	status = "okay";
++};
++
++&sdmmc {
++	vqmmc-supply = <&vccio_sd>;
++};
++
++&tsadc {
++	status = "okay";
++};
++
++&u2phy {
++	status = "okay";
++};
++
++&u2phy_host {
++	status = "okay";
++};
++
++/* Mule UCAN */
++&usb_host0_ehci {
++	status = "okay";
++};
++
++&usb_host0_ohci {
++	status = "okay";
++};
++
++&wdt {
++	status = "okay";
++};
 
-
---wac7ysb48OaltWcw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY00tfwAKCRAw5/Bqldv6
-8mtRAJ94X1njpj6/XfCoNQNa5Y6rpMWa7gCfemw2E8vG+r/YzUn0hGYsaq3HTqA=
-=iw2O
------END PGP SIGNATURE-----
-
---wac7ysb48OaltWcw--
+-- 
+b4 0.10.1
