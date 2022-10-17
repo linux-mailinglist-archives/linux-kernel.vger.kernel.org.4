@@ -2,281 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97195600BC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90D8600BC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiJQJ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S231583AbiJQJ6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiJQJ6u (ORCPT
+        with ESMTP id S231514AbiJQJ62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:58:50 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E3E5D709;
-        Mon, 17 Oct 2022 02:58:46 -0700 (PDT)
-X-UUID: 7fed56010da44bb0a6c2d84ef687af6f-20221017
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=XnXmSygOmRiR/cJ+1yzj2cNgqZVXjArj5R+iOu/seyE=;
-        b=U1ShO4K+tvhivTqdDduVOaA1FwG/w/57LduTXIa0u0DZ/f3sdZqEXQMQ4F3xaUAL2N18/qV5YSpRY7shOvJOIGQ6rgC7kxNji4jWXtbIREpNrHMjnEslhfRwCXUAMAUEP0iBgzLzQlq5c82zk2/kzzwI9/JUgxDYgaK5FVi/AYo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:4632b373-b53a-4053-bc26-f56936bc0003,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:0c6605a4-ebb2-41a8-a87c-97702aaf2e20,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7fed56010da44bb0a6c2d84ef687af6f-20221017
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 229668657; Mon, 17 Oct 2022 17:58:40 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 17 Oct 2022 17:58:39 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 17 Oct 2022 17:58:37 +0800
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Biao Huang" <biao.huang@mediatek.com>, <macpaul.lin@mediatek.com>
-Subject: [PATCH] arm64: dts: mt8195: Add Ethernet controller
-Date:   Mon, 17 Oct 2022 17:58:34 +0800
-Message-ID: <20221017095834.7675-1-biao.huang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Oct 2022 05:58:28 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0E25D700;
+        Mon, 17 Oct 2022 02:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666000706; x=1697536706;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=zxbYmgJ1tFJXZUq2wDDYpxgs+/4K8DC3Ye2JTdPk2dI=;
+  b=kgmcE0tZPcS2PXV7vpHunmlGC1cwB9/0X9xfZ4z9ojlX6h6xWpOuw4jx
+   DpsELBkKSt+hU7DEfPuOKWdbTzmQeLuzNHLOdqPQ2lP4ezEJGtaXXrb2Y
+   fZguvN7K8Q7/XSOebEG53I8pGBeWO7CPmta4uVs8o8hFq1xSpnypwmOJo
+   5shE6JRSH5kl8mciQBzHsi6x3adALvU4F5MBImKpiuyv5QrAC0CQNozNU
+   kqULGOuigWG4QqIyHSaHb3DMPNwHQhboK5MSpExK/WMcfz4oKcr49o8SS
+   Le3tjjQ4HehYWSxSXiSKQhwadcwUmQ/Ja21eeWmhMFNExD8uweh70tA9I
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="285480892"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="285480892"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 02:58:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="630627154"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="630627154"
+Received: from cgarnier-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.44.27])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 02:58:23 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Inki Dae <inki.dae@samsung.com>, hongao <hongao@uniontech.com>,
+        jy0922.shim@samsung.com, sw0312.kim@samsung.com,
+        kyungmin.park@samsung.com, airlied@linux.ie, daniel@ffwll.ch,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com
+Cc:     linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/exynos: replace drm_detect_hdmi_monitor() with
+ drm_display_info.is_hdmi
+In-Reply-To: <4e8d94c9-7dc0-039f-7d67-36f6c099ab75@samsung.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <CGME20220616072357epcas1p4921f90a2fe077e360688e0df00a5dde8@epcas1p4.samsung.com>
+ <20220616072233.8302-1-hongao@uniontech.com>
+ <4e8d94c9-7dc0-039f-7d67-36f6c099ab75@samsung.com>
+Date:   Mon, 17 Oct 2022 12:59:03 +0300
+Message-ID: <871qr6srdk.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Ethernet controller node for mt8195.
+On Fri, 24 Jun 2022, Inki Dae <inki.dae@samsung.com> wrote:
+> 22. 6. 16. 16:22=EC=97=90 hongao =EC=9D=B4(=EA=B0=80) =EC=93=B4 =EA=B8=80:
+>> Once EDID is parsed, the monitor HDMI support information is available
+>> through drm_display_info.is_hdmi.
+>>=20
+>> This driver calls drm_detect_hdmi_monitor() to receive the same
+>> information, which is less efficient.
+>>=20
+>> Avoid calling drm_detect_hdmi_monitor() and use drm_display_info.is_hdmi
+>> instead.
+>>=20
+>
+> Applied.
 
-Signed-off-by: Biao Huang <biao.huang@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88 ++++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 87 +++++++++++++++++++
- 2 files changed, 175 insertions(+)
+Sorry, but this is broken. The commit message contains the clue: "Once
+EDID is parsed". drm_get_edid() does not parse the EDID, you need to
+call drm_connector_update_edid_property() first.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-index 4fbd99eb496a..02e04f82a4ae 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-@@ -258,6 +258,72 @@ &mt6359_vsram_others_ldo_reg {
- };
- 
- &pio {
-+	eth_default: eth_default {
-+		txd_pins {
-+			pinmux = <PINMUX_GPIO77__FUNC_GBE_TXD3>,
-+				 <PINMUX_GPIO78__FUNC_GBE_TXD2>,
-+				 <PINMUX_GPIO79__FUNC_GBE_TXD1>,
-+				 <PINMUX_GPIO80__FUNC_GBE_TXD0>;
-+			drive-strength = <MTK_DRIVE_8mA>;
-+		};
-+		cc_pins {
-+			pinmux = <PINMUX_GPIO85__FUNC_GBE_TXC>,
-+				 <PINMUX_GPIO88__FUNC_GBE_TXEN>,
-+				 <PINMUX_GPIO87__FUNC_GBE_RXDV>,
-+				 <PINMUX_GPIO86__FUNC_GBE_RXC>;
-+			drive-strength = <MTK_DRIVE_8mA>;
-+		};
-+		rxd_pins {
-+			pinmux = <PINMUX_GPIO81__FUNC_GBE_RXD3>,
-+				 <PINMUX_GPIO82__FUNC_GBE_RXD2>,
-+				 <PINMUX_GPIO83__FUNC_GBE_RXD1>,
-+				 <PINMUX_GPIO84__FUNC_GBE_RXD0>;
-+		};
-+		mdio_pins {
-+			pinmux = <PINMUX_GPIO89__FUNC_GBE_MDC>,
-+				 <PINMUX_GPIO90__FUNC_GBE_MDIO>;
-+			input-enable;
-+		};
-+		power_pins {
-+			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-+				 <PINMUX_GPIO92__FUNC_GPIO92>;
-+			output-high;
-+		};
-+	};
-+
-+	eth_sleep: eth_sleep {
-+		txd_pins {
-+			pinmux = <PINMUX_GPIO77__FUNC_GPIO77>,
-+				 <PINMUX_GPIO78__FUNC_GPIO78>,
-+				 <PINMUX_GPIO79__FUNC_GPIO79>,
-+				 <PINMUX_GPIO80__FUNC_GPIO80>;
-+		};
-+		cc_pins {
-+			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>,
-+				 <PINMUX_GPIO88__FUNC_GPIO88>,
-+				 <PINMUX_GPIO87__FUNC_GPIO87>,
-+				 <PINMUX_GPIO86__FUNC_GPIO86>;
-+		};
-+		rxd_pins {
-+			pinmux = <PINMUX_GPIO81__FUNC_GPIO81>,
-+				 <PINMUX_GPIO82__FUNC_GPIO82>,
-+				 <PINMUX_GPIO83__FUNC_GPIO83>,
-+				 <PINMUX_GPIO84__FUNC_GPIO84>;
-+		};
-+		mdio_pins {
-+			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>,
-+				 <PINMUX_GPIO90__FUNC_GPIO90>;
-+			input-disable;
-+			bias-disable;
-+		};
-+		power_pins {
-+			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-+				 <PINMUX_GPIO92__FUNC_GPIO92>;
-+			input-disable;
-+			bias-disable;
-+		};
-+	};
-+
- 	gpio_keys_pins: gpio-keys-pins {
- 		pins {
- 			pinmux = <PINMUX_GPIO106__FUNC_GPIO106>;
-@@ -434,6 +500,28 @@ &xhci0 {
- 	status = "okay";
- };
- 
-+&eth {
-+	phy-mode ="rgmii-rxid";
-+	phy-handle = <&eth_phy0>;
-+	snps,reset-gpio = <&pio 93 GPIO_ACTIVE_HIGH>;
-+	snps,reset-delays-us = <0 10000 10000>;
-+	mediatek,tx-delay-ps = <2030>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&eth_default>;
-+	pinctrl-1 = <&eth_sleep>;
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		eth_phy0: eth_phy0@1 {
-+			compatible = "ethernet-phy-id001c.c916";
-+			reg = <0x1>;
-+		};
-+	};
-+};
-+
- &xhci1 {
- 	vusb33-supply = <&mt6359_vusb_ldo_reg>;
- 	status = "okay";
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 905d1a90b406..aa1fcc3b9cb6 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -1042,6 +1042,93 @@ spis1: spi@1101e000 {
- 			status = "disabled";
- 		};
- 
-+		stmmac_axi_setup: stmmac-axi-config {
-+			snps,wr_osr_lmt = <0x7>;
-+			snps,rd_osr_lmt = <0x7>;
-+			snps,blen = <0 0 0 0 16 8 4>;
-+		};
-+
-+		mtl_rx_setup: rx-queues-config {
-+			snps,rx-queues-to-use = <4>;
-+			snps,rx-sched-sp;
-+			queue0 {
-+				snps,dcb-algorithm;
-+				snps,map-to-dma-channel = <0x0>;
-+			};
-+			queue1 {
-+				snps,dcb-algorithm;
-+				snps,map-to-dma-channel = <0x0>;
-+			};
-+			queue2 {
-+				snps,dcb-algorithm;
-+				snps,map-to-dma-channel = <0x0>;
-+			};
-+			queue3 {
-+				snps,dcb-algorithm;
-+				snps,map-to-dma-channel = <0x0>;
-+			};
-+		};
-+
-+		mtl_tx_setup: tx-queues-config {
-+			snps,tx-queues-to-use = <4>;
-+			snps,tx-sched-wrr;
-+			queue0 {
-+				snps,weight = <0x10>;
-+				snps,dcb-algorithm;
-+				snps,priority = <0x0>;
-+			};
-+			queue1 {
-+				snps,weight = <0x11>;
-+				snps,dcb-algorithm;
-+				snps,priority = <0x1>;
-+			};
-+			queue2 {
-+				snps,weight = <0x12>;
-+				snps,dcb-algorithm;
-+				snps,priority = <0x2>;
-+			};
-+			queue3 {
-+				snps,weight = <0x13>;
-+				snps,dcb-algorithm;
-+				snps,priority = <0x3>;
-+			};
-+		};
-+
-+		eth: ethernet@11021000 {
-+			compatible = "mediatek,mt8195-gmac", "snps,dwmac-5.10a";
-+			reg = <0 0x11021000 0 0x4000>;
-+			interrupts = <GIC_SPI 716 IRQ_TYPE_LEVEL_HIGH 0>;
-+			interrupt-names = "macirq";
-+			mac-address = [00 55 7b b5 7d f7];
-+			clock-names = "axi",
-+				      "apb",
-+				      "mac_cg",
-+				      "mac_main",
-+				      "ptp_ref",
-+				      "rmii_internal";
-+			clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
-+				 <&pericfg_ao CLK_PERI_AO_ETHERNET_BUS>,
-+				 <&pericfg_ao CLK_PERI_AO_ETHERNET_MAC>,
-+				 <&topckgen CLK_TOP_SNPS_ETH_250M>,
-+				 <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
-+				 <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
-+			assigned-clocks = <&topckgen CLK_TOP_SNPS_ETH_250M>,
-+					  <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
-+					  <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_ETHPLL_D2>,
-+						 <&topckgen CLK_TOP_ETHPLL_D8>,
-+						 <&topckgen CLK_TOP_ETHPLL_D10>;
-+			power-domains = <&spm MT8195_POWER_DOMAIN_ETHER>;
-+			mediatek,pericfg = <&infracfg_ao>;
-+			snps,axi-config = <&stmmac_axi_setup>;
-+			snps,mtl-rx-config = <&mtl_rx_setup>;
-+			snps,mtl-tx-config = <&mtl_tx_setup>;
-+			snps,txpbl = <16>;
-+			snps,rxpbl = <16>;
-+			snps,clk-csr = <0>;
-+			status = "disabled";
-+		};
-+
- 		xhci0: usb@11200000 {
- 			compatible = "mediatek,mt8195-xhci",
- 				     "mediatek,mtk-xhci";
--- 
-2.25.1
+This is what I posted some time ago [1] but apparently was working on a
+different baseline.
 
+BR,
+Jani.
+
+
+[1] https://patchwork.freedesktop.org/patch/msgid/f21588dcb93bdb6cf76724506=
+063bdfcdb0a6bb4.1662036058.git.jani.nikula@intel.com
+
+
+>
+> Thanks,
+> Inki Dae
+>
+>> Signed-off-by: hongao <hongao@uniontech.com>
+>> ---
+>>  drivers/gpu/drm/exynos/exynos_hdmi.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/drivers/gpu/drm/exynos/exynos_hdmi.c b/drivers/gpu/drm/exyn=
+os/exynos_hdmi.c
+>> index 7655142a4651..17e9f5efbcfc 100644
+>> --- a/drivers/gpu/drm/exynos/exynos_hdmi.c
+>> +++ b/drivers/gpu/drm/exynos/exynos_hdmi.c
+>> @@ -893,7 +893,7 @@ static int hdmi_get_modes(struct drm_connector *conn=
+ector)
+>>  	if (!edid)
+>>  		return -ENODEV;
+>>=20=20
+>> -	hdata->dvi_mode =3D !drm_detect_hdmi_monitor(edid);
+>> +	hdata->dvi_mode =3D !connector->display_info.is_hdmi;
+>>  	DRM_DEV_DEBUG_KMS(hdata->dev, "%s : width[%d] x height[%d]\n",
+>>  			  (hdata->dvi_mode ? "dvi monitor" : "hdmi monitor"),
+>>  			  edid->width_cm, edid->height_cm);
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
