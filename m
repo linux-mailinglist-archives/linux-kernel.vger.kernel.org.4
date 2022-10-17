@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221B060077D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A36600782
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJQHPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
+        id S229721AbiJQHRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiJQHPa (ORCPT
+        with ESMTP id S229845AbiJQHRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:15:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB94010541
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665990926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iPJ0zMzH+/+WqE+Q9hXMqr+6tdiNkx5DCmG8+/nVPjA=;
-        b=PpVQNCUfenkyJKX1EWLMzbY7PmoCvMPw8b4dKomzk430mHmsNFcMGC9u+X3MQRqMjUiMr+
-        6Wd0yjMDZHqmkx0749w9xEDHg8SAd3XZFMYjx4HFQmh28KG2cAdhr1uF5kdcxYmGfc2sZW
-        t/6VpNX+oh0d2Kv/x+ZgdvrjatEuaDE=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-267-HoumJp6vMkOUHxsDvQ2T3A-1; Mon, 17 Oct 2022 03:15:25 -0400
-X-MC-Unique: HoumJp6vMkOUHxsDvQ2T3A-1
-Received: by mail-ot1-f69.google.com with SMTP id z22-20020a05683020d600b00661bd353d87so4645516otq.16
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:15:25 -0700 (PDT)
+        Mon, 17 Oct 2022 03:17:38 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B901E28E34
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:17:37 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id sc25so22746642ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aTbbFD+gjgbQXX2LBmI+E75ORM8YiSCeM7mZ239f43Y=;
+        b=lQBlwYnkb/uHR9h9ekdJK9DprRvCAtDRMxD4XHdgh/+LheFX5ZiQJeowxeHY1jqtu5
+         Zgo6DCs432kETKpjRbyjSsyxMxfK1+d3EXbz80G2/A2vZihCygUJrgQ4Ag0reQ9Pn6dm
+         iZb04PG0kJ6DRHMwJhjE6g4KN+X3b6Cx5cBT4sHGoNpvAp/2Y1CM/p1pm4e2s1F7W0IX
+         kVtiPbUqOoL+NVsZdbKwav58q/Zjo3MaOB9nhEwlYExZ2omR+m3q2aM4RMNVGC/Z1JK+
+         Cj32qzEMvKPW0HtmnT3bV4nYdTi+/mqy4QhZ8n0WGAbaNgG1Y/zTvsTgEBfORoumBRTK
+         4Qzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iPJ0zMzH+/+WqE+Q9hXMqr+6tdiNkx5DCmG8+/nVPjA=;
-        b=OBEQSkeZS8UcO7Y9o0LOkI/yGM0vFYR6Ay3EhDdAoEAiaYuH1EsFWbnUNeTz5n42fK
-         NbdwstTSE1q419loY0NCHQFcOJXpDphPC53nRcCc6sznYjbLE01DSyajh3kBk62J0P7T
-         6ELGkCPMc1kIouBJr1Cs/f2xA+Av3sUeWVcJn1Druh88UAvQEYUZq6g8UkdcsC7CMMmO
-         xZxgb95tGLwhybMZon7skOh55I/vWjoDBS+F2DAw9RAcGDlJz1xRb/NQQSUKLq3dB8tv
-         KqDA8D3SasNbXdQSD8i/nygoYngC4jBVCAblUsEd39Hw36FJi9r4MOxBxbuWgogrspiV
-         ugxA==
-X-Gm-Message-State: ACrzQf2vBWeeR76j27JBYE0g8tT2XAJC/gUMjuEMBNI4sB2Cio2wd8hN
-        GVZdoGxHxNdC6YQ2JDFqeSjErk/esiOO84rn/G5LQdzDqAfbj8PnQUXSDXWlsdbf3cZJe8nNDlH
-        Gv+Ej6dx2HiTVdgu+WsGOLuP0kVoTP1MbOvw3dDwI
-X-Received: by 2002:a9d:7dcf:0:b0:661:dc25:ba0 with SMTP id k15-20020a9d7dcf000000b00661dc250ba0mr4363912otn.201.1665990924506;
-        Mon, 17 Oct 2022 00:15:24 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6PRVlb4SMRZS+7oWQMjNwL9+//CGJE+DrIL1IAik9PhPKTnJpbrhNsRHBWEsjTXVM1VPXKWZW9Hq3yWLjAgaI=
-X-Received: by 2002:a9d:7dcf:0:b0:661:dc25:ba0 with SMTP id
- k15-20020a9d7dcf000000b00661dc250ba0mr4363898otn.201.1665990924270; Mon, 17
- Oct 2022 00:15:24 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aTbbFD+gjgbQXX2LBmI+E75ORM8YiSCeM7mZ239f43Y=;
+        b=nCzn51Aj3YGpkwn8AwiCNW4V+HVnbx0xG1QOr0Es9oNRagcznHFPRyPKf4NJcJy8BV
+         CHr2Za+OcKwheH4wvEQuf0tPn8OmWVYerOFD+cUSsvIPpUmCoEjYO8n52UgZAA+Wtvzw
+         YWUKxKQBbc0/iuUhld5TS681FJs71pj3fs78ZPiPD22Ix12OHB4GSVK68/nhTAxUosGj
+         9Dayb+9jHbAAk4XKMRizoQCOod57+G8JmN5G8j/tKNbY15pda6k/B56DRaQCGsAdXBZU
+         ePQLdDUKHhT74UOddLHGgLo4OIyexPG1ACMDAwUs0DVxOiJ/sjCjFfMHd3yhUjZIq1Fp
+         Q5jQ==
+X-Gm-Message-State: ACrzQf126d4QnvCC0aJErE8i79mgybwuYRFr0Quc+G1tmAvthwBzpr9W
+        GuKeZtxlx52vTHWmYBSVURI=
+X-Google-Smtp-Source: AMsMyM7xEckB6MUGEv7KdcQvLp4KeKB6N/zcQyks1ZYNFmuz0+oN/wOyuz5R+2UjePwVD9cmhA3Vyw==
+X-Received: by 2002:a17:907:d22:b0:78e:2788:51ae with SMTP id gn34-20020a1709070d2200b0078e278851aemr7297386ejc.689.1665991056156;
+        Mon, 17 Oct 2022 00:17:36 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id a16-20020a170906191000b0078ae49ad169sm5766054eje.91.2022.10.17.00.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 00:17:35 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Tom Rini <trini@konsulko.com>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] nvmem: u-boot-env: add Broadcom format support
+Date:   Mon, 17 Oct 2022 09:17:22 +0200
+Message-Id: <20221017071722.32731-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220905045341.66191-1-jasowang@redhat.com> <20220905031405-mutt-send-email-mst@kernel.org>
- <CACGkMEtjQ0Jfok-gcRW+kuinsua2X0TscyTNfBJoXHny0Yob+g@mail.gmail.com>
- <056ba905a2579903a372258383afdf6579767ad0.camel@redhat.com>
- <CACGkMEuiDqqOEKUWRN9LvQKv8Jz4mi3aSZMwbhUsJkZp=C-0RQ@mail.gmail.com>
- <c9180ac41b00543e3531a343afae8f5bdca64d8d.camel@redhat.com>
- <20220907034407-mutt-send-email-mst@kernel.org> <d32101bb-783f-dbd1-545a-be291c27cb63@redhat.com>
- <20220908011858-mutt-send-email-mst@kernel.org> <c8cd9a2e-3480-6ca5-96fa-4b5bd2c1174a@redhat.com>
- <20221009160520-mutt-send-email-mst@kernel.org> <CACGkMEscu+mUBff1JUW4QxkyV33MwRP7VPSZ2-OXp5=pJaHC6Q@mail.gmail.com>
-In-Reply-To: <CACGkMEscu+mUBff1JUW4QxkyV33MwRP7VPSZ2-OXp5=pJaHC6Q@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 17 Oct 2022 15:15:12 +0800
-Message-ID: <CACGkMEurGrbj6E5xzLN_uAe9bhFaYtrUu-4fqNP=aumiQi9bzQ@mail.gmail.com>
-Subject: Re: [PATCH net] virtio-net: add cond_resched() to the command waiting loop
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        davem <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,128 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:19 AM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Tue, Oct 11, 2022 at 1:11 AM Michael S. Tsirkin <mst@redhat.com> wrote=
-:
-> >
-> > On Sun, Oct 09, 2022 at 01:58:53PM +0800, Jason Wang wrote:
-> > >
-> > > =E5=9C=A8 2022/9/8 13:19, Michael S. Tsirkin =E5=86=99=E9=81=93:
-> > > > On Thu, Sep 08, 2022 at 10:21:45AM +0800, Jason Wang wrote:
-> > > > > =E5=9C=A8 2022/9/7 15:46, Michael S. Tsirkin =E5=86=99=E9=81=93:
-> > > > > > On Wed, Sep 07, 2022 at 09:07:20AM +0200, Paolo Abeni wrote:
-> > > > > > > On Wed, 2022-09-07 at 10:09 +0800, Jason Wang wrote:
-> > > > > > > > On Tue, Sep 6, 2022 at 6:56 PM Paolo Abeni <pabeni@redhat.c=
-om> wrote:
-> > > > > > > > > On Mon, 2022-09-05 at 15:49 +0800, Jason Wang wrote:
-> > > > > > > > > > On Mon, Sep 5, 2022 at 3:15 PM Michael S. Tsirkin <mst@=
-redhat.com> wrote:
-> > > > > > > > > > > On Mon, Sep 05, 2022 at 12:53:41PM +0800, Jason Wang =
-wrote:
-> > > > > > > > > > > > Adding cond_resched() to the command waiting loop f=
-or a better
-> > > > > > > > > > > > co-operation with the scheduler. This allows to giv=
-e CPU a breath to
-> > > > > > > > > > > > run other task(workqueue) instead of busy looping w=
-hen preemption is
-> > > > > > > > > > > > not allowed.
-> > > > > > > > > > > >
-> > > > > > > > > > > > What's more important. This is a must for some vDPA=
- parent to work
-> > > > > > > > > > > > since control virtqueue is emulated via a workqueue=
- for those parents.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Fixes: bda324fd037a ("vdpasim: control virtqueue su=
-pport")
-> > > > > > > > > > > That's a weird commit to fix. so it fixes the simulat=
-or?
-> > > > > > > > > > Yes, since the simulator is using a workqueue to handle=
- control virtueue.
-> > > > > > > > > Uhmm... touching a driver for a simulator's sake looks a =
-little weird.
-> > > > > > > > Simulator is not the only one that is using a workqueue (bu=
-t should be
-> > > > > > > > the first).
-> > > > > > > >
-> > > > > > > > I can see  that the mlx5 vDPA driver is using a workqueue a=
-s well (see
-> > > > > > > > mlx5_vdpa_kick_vq()).
-> > > > > > > >
-> > > > > > > > And in the case of VDUSE, it needs to wait for the response=
- from the
-> > > > > > > > userspace, this means cond_resched() is probably a must for=
- the case
-> > > > > > > > like UP.
-> > > > > > > >
-> > > > > > > > > Additionally, if the bug is vdpasim, I think it's better =
-to try to
-> > > > > > > > > solve it there, if possible.
-> > > > > > > > >
-> > > > > > > > > Looking at vdpasim_net_work() and vdpasim_blk_work() it l=
-ooks like
-> > > > > > > > > neither needs a process context, so perhaps you could rew=
-ork it to run
-> > > > > > > > > the work_fn() directly from vdpasim_kick_vq(), at least f=
-or the control
-> > > > > > > > > virtqueue?
-> > > > > > > > It's possible (but require some rework on the simulator cor=
-e). But
-> > > > > > > > considering we have other similar use cases, it looks bette=
-r to solve
-> > > > > > > > it in the virtio-net driver.
-> > > > > > > I see.
-> > > > > > >
-> > > > > > > > Additionally, this may have better behaviour when using for=
- the buggy
-> > > > > > > > hardware (e.g the control virtqueue takes too long to respo=
-nd). We may
-> > > > > > > > consider switching to use interrupt/sleep in the future (bu=
-t not
-> > > > > > > > suitable for -net).
-> > > > > > > Agreed. Possibly a timeout could be useful, too.
-> > > > > > >
-> > > > > > > Cheers,
-> > > > > > >
-> > > > > > > Paolo
-> > > > > > Hmm timeouts are kind of arbitrary.
-> > > > > > regular drivers basically derive them from hardware
-> > > > > > behaviour but with a generic driver like virtio it's harder.
-> > > > > > I guess we could add timeout as a config field, have
-> > > > > > device make a promise to the driver.
-> > > > > >
-> > > > > > Making the wait interruptible seems more reasonable.
-> > > > >
-> > > > > Yes, but I think we still need this patch for -net and -stable.
-> > > > >
-> > > > > Thanks
-> > > > I was referring to Paolo's idea of having a timeout.
-> > >
-> > >
-> > > Ok, I think we're fine with this patch. Any chance to merge this or d=
-o I
-> > > need to resend?
-> > >
-> > > Thanks
-> >
-> > Last question: do we want cpu_relax here now? Or is cond_resched
-> > sufficient?
->
-> (Have answered in another thread)
->
-> I think we need cpu_relax() since there could be no high priority task
-> in the current cpu so we still need to relax.
->
-> Thanks
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Michael, does this answer make sense? If yes, would you like to ack the pat=
-ch?
+Broadcom uses U-Boot for a lot of their bcmbca familiy chipsets. They
+decided to store U-Boot environment data inside U-Boot partition and to
+use a custom header (with "uEnv" magic and env data length).
 
-Thanks
+Add support for Broadcom's specific binding and their custom format.
 
->
-> >
-> > >
-> > > >
-> >
+Ref: c34f9f5499278 ("dt-bindings: nvmem: u-boot,env: add Broadcom's variant binding")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ drivers/nvmem/u-boot-env.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
+index 8e72d1bbd649..049330660fd7 100644
+--- a/drivers/nvmem/u-boot-env.c
++++ b/drivers/nvmem/u-boot-env.c
+@@ -16,6 +16,7 @@
+ enum u_boot_env_format {
+ 	U_BOOT_FORMAT_SINGLE,
+ 	U_BOOT_FORMAT_REDUNDANT,
++	U_BOOT_FORMAT_BROADCOM,
+ };
+ 
+ struct u_boot_env {
+@@ -40,6 +41,13 @@ struct u_boot_env_image_redundant {
+ 	uint8_t data[];
+ } __packed;
+ 
++struct u_boot_env_image_broadcom {
++	__le32 magic;
++	__le32 len;
++	__le32 crc32;
++	uint8_t data[0];
++} __packed;
++
+ static int u_boot_env_read(void *context, unsigned int offset, void *val,
+ 			   size_t bytes)
+ {
+@@ -138,6 +146,11 @@ static int u_boot_env_parse(struct u_boot_env *priv)
+ 		crc32_data_offset = offsetof(struct u_boot_env_image_redundant, mark);
+ 		data_offset = offsetof(struct u_boot_env_image_redundant, data);
+ 		break;
++	case U_BOOT_FORMAT_BROADCOM:
++		crc32_offset = offsetof(struct u_boot_env_image_broadcom, crc32);
++		crc32_data_offset = offsetof(struct u_boot_env_image_broadcom, data);
++		data_offset = offsetof(struct u_boot_env_image_broadcom, data);
++		break;
+ 	}
+ 	crc32 = le32_to_cpu(*(__le32 *)(buf + crc32_offset));
+ 	crc32_data_len = priv->mtd->size - crc32_data_offset;
+@@ -202,6 +215,7 @@ static const struct of_device_id u_boot_env_of_match_table[] = {
+ 	{ .compatible = "u-boot,env", .data = (void *)U_BOOT_FORMAT_SINGLE, },
+ 	{ .compatible = "u-boot,env-redundant-bool", .data = (void *)U_BOOT_FORMAT_REDUNDANT, },
+ 	{ .compatible = "u-boot,env-redundant-count", .data = (void *)U_BOOT_FORMAT_REDUNDANT, },
++	{ .compatible = "brcm,env", .data = (void *)U_BOOT_FORMAT_BROADCOM, },
+ 	{},
+ };
+ 
+-- 
+2.34.1
 
