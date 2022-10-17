@@ -2,54 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4CB60055D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF30600549
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiJQCoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 22:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S231207AbiJQCmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 22:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiJQCoL (ORCPT
+        with ESMTP id S231203AbiJQCmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 22:44:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63A4684A;
-        Sun, 16 Oct 2022 19:44:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 943F460EEB;
-        Mon, 17 Oct 2022 02:44:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239C7C43470;
-        Mon, 17 Oct 2022 02:44:03 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V11 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Mon, 17 Oct 2022 10:40:27 +0800
-Message-Id: <20221017024027.2389370-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221017024027.2389370-1-chenhuacai@loongson.cn>
-References: <20221017024027.2389370-1-chenhuacai@loongson.cn>
+        Sun, 16 Oct 2022 22:42:07 -0400
+Received: from domac.alu.hr (domac.alu.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE29246201
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 19:42:05 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 2038E604EC;
+        Mon, 17 Oct 2022 04:42:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665974523; bh=erSoy5SaBxVryCw8k7y6X6+A9fdXZfKrQRCn6TGYkqY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RgbBVm6eDpp5rMKOtWHuxBna08qipqb2iWMVaAZv2ND9DiuLpEtNcbTB8hlwQrHzS
+         cRrlkSK9LIxT+URrw5dG/eTFKNi6Qbk0gbqIIeMHtaXY50zj/5us/5NqtR5/zxJWQs
+         JGuU94335VrizUMuK0rpNclxgrygtc3el2qxgfIt/IG9y/azsNv62AIdtGHAJHFM+A
+         1eie9s9loxsHsutq9JmHsAy2TE4seyAIKrF5S15DEE56KvyUL3DuvEqzMoQ0GVqJF2
+         UOoDkIkfArR3ojrM36Hil9Q4uObo9M1ww1SAhXfrrYwQboATjmhepRrN+E1sMCgF18
+         eGYMvBlB5DdPA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oGZEn_Q9rtPw; Mon, 17 Oct 2022 04:42:00 +0200 (CEST)
+Received: from [192.168.0.12] (unknown [188.252.197.215])
+        by domac.alu.hr (Postfix) with ESMTPSA id EDDF2604E6;
+        Mon, 17 Oct 2022 04:41:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665974520; bh=erSoy5SaBxVryCw8k7y6X6+A9fdXZfKrQRCn6TGYkqY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mWhy+4Xzd0dfseSPrSu9wyKxv/v6b1mMSkd4CU9+TjqKBT4+9UQ8h9CHFKXYQB0gp
+         ms0rLOZzbmGHWvbivEVJMCXoqfl0ffE/MXYxp+enDzwFamI67yHEjPWAlhaKw0XpIT
+         CfMItZiEaBXJU0IEko1hKUXOGMgu8G+1SMQmWBmaZoM9tPIcoC7CQn4juR6NWxswrZ
+         p/X8Ix+dPWCm3AFf+hKeuwkrkUF6FERoTLFZO/SKczcBy33lxb/btqSsAVvqWLOmc2
+         IYD3tKTH1Kk47pgg9fsYzuTuhLpiBxzQSMknESDwIVSuH7YvCRGEHs0yD1HJRXW5Zi
+         tkwspAacyPqZw==
+Message-ID: <b7aefbcb-0038-d044-a1ea-64ad5b4d8888@alu.unizg.hr>
+Date:   Mon, 17 Oct 2022 04:41:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
+ 6.0.0-rc3 through 6.0.0-rc7
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        regressions@leemhuis.info
+Cc:     linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
+        regressions@lists.linux.dev, srw@sladewatkins.net,
+        phillip.lougher@gmail.com
+References: <8702a833-e66c-e63a-bfc8-1007174c5b3d@leemhuis.info>
+ <20221015205936.5735-1-phillip@squashfs.org.uk>
+ <ff2b901d-9491-c886-5330-a244101978ab@alu.unizg.hr>
+ <b71f4e2d-23bb-3eb4-3928-fe66c4357e5b@squashfs.org.uk>
+ <beba6259-6049-4f5b-6e54-a9c1faba0d5f@squashfs.org.uk>
+ <32ee551f-5642-4efb-02a0-500e7c92be5f@gmail.com>
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <32ee551f-5642-4efb-02a0-500e7c92be5f@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,82 +76,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
+On 17. 10. 2022. 04:03, Bagas Sanjaya wrote:
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+> On 10/17/22 03:19, Phillip Lougher wrote:
+>> On 16/10/2022 20:55, Phillip Lougher wrote:
+>>> Tracking down bugs of this sort is always a process of elimination,
+>>> and gathering information to pinpoint the exact circumstances of why
+>>> it is triggering.
+>>>
+>>> Next step is to download the exact snap(s) where the problems are occurring, as this may provide some insights.
+>>>
+>>> I don't run Ubuntu, and I don't use snaps.  Can you provide the
+>>> download link(s) of the snap(s) that cause problems?  If there's
+>>> any firefox snaps that don't cause problems those will be useful
+>>> too.
+>>>
+>> It appears there's a searchable "Snap Store" https://snapcraft.io,
+>> but, it doesn't give any download links to the actual snaps which
+>> is rather annoying.
+>>
+>> Does anyone know how to get the download link?  I have not run
+>> Ubuntu for over 14 years and have absolutely no wish to do so
+>> now either.
+> You need to have snapd installed, unfortunately.
+>
+> You can start the testing with hello-world snap, which can be installed
+> with `snap install hello-world`. Then run the snap with `snap run
+> hello-world`. After that, reboot and repeat until the regression
+> occurs.
+>
+> You can also try other snaps. For GUI applications, try krita, gimp,
+> gitkraken, and libreoffice. For server applications, try spinning up
+> containers with lxd or store data with nextcloud.
+>
+> My guess is that the problem is in snapd when trying to execute
+> snaps, hence all snaps are affected.
 
-To avoid the following build error on LoongArch we should include linux/
-static_key.h in page-flags.h.
+I can only report that bug persisted in 6.1-rc1 with the latest 
+Phillip's squashfs patch.
 
-In file included from ./include/linux/mmzone.h:22,
-from ./include/linux/gfp.h:6,
-from ./include/linux/mm.h:7,
-from arch/loongarch/kernel/asm-offsets.c:9:
-./include/linux/page-flags.h:208:1: warning: data definition has no
-type or storage class
-208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-./include/linux/page-flags.h:209:26: warning: parameter names (without
-types) in function declaration
-209 | hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-./include/linux/page-flags.h:213:16: error: implicit declaration of
-function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:213:36: error:
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-use in this function); did you mean
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-./include/linux/page-flags.h:213:36: note: each undeclared identifier
-is reported only once for each function it appears in
-./include/linux/page-flags.h:214:37: error:
-'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-214 | &hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| hugetlb_optimize_vmemmap_enabled
+Have a nice day.
 
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
+Mirsad
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 6f7fa0c0ca08..0a6ef613124c 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -52,6 +52,7 @@ config LOONGARCH
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 0b0ae5084e60..1aafdc73e399 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 -- 
-2.31.1
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
