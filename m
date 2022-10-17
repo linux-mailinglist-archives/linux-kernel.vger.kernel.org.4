@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231FD600BD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0676600BD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiJQKCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S230448AbiJQKCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiJQKB6 (ORCPT
+        with ESMTP id S231203AbiJQKCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:01:58 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC0743E7A;
-        Mon, 17 Oct 2022 03:01:57 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MrXZx6jBLzHvsn;
-        Mon, 17 Oct 2022 18:01:45 +0800 (CST)
+        Mon, 17 Oct 2022 06:02:11 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2892AE2C;
+        Mon, 17 Oct 2022 03:02:09 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MrXXL2bxrzJn6p;
+        Mon, 17 Oct 2022 17:59:30 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 18:01:33 +0800
+ 15.1.2375.31; Mon, 17 Oct 2022 18:01:34 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 18:01:32 +0800
+ 15.1.2375.31; Mon, 17 Oct 2022 18:01:33 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     "Paul E . McKenney" <paulmck@kernel.org>,
         Frederic Weisbecker <frederic@kernel.org>,
@@ -37,9 +37,9 @@ To:     "Paul E . McKenney" <paulmck@kernel.org>,
         Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/3] sched: Add helper kstat_cpu_softirqs_sum()
-Date:   Mon, 17 Oct 2022 18:01:06 +0800
-Message-ID: <20221017100108.2063-2-thunder.leizhen@huawei.com>
+Subject: [PATCH 2/3] sched: Add helper nr_context_switches_cpu()
+Date:   Mon, 17 Oct 2022 18:01:07 +0800
+Message-ID: <20221017100108.2063-3-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20221017100108.2063-1-thunder.leizhen@huawei.com>
 References: <20221017100108.2063-1-thunder.leizhen@huawei.com>
@@ -58,36 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to kstat_cpu_irqs_sum(), it counts the sum of all software
-interrupts on a specified CPU.
+Returns the number of context switches on the specified CPU, which can be
+used to diagnose rcu stall.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- include/linux/kernel_stat.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ include/linux/kernel_stat.h | 1 +
+ kernel/sched/core.c         | 5 +++++
+ 2 files changed, 6 insertions(+)
 
 diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
-index ddb5a358fd829f4..61d427c1962bf1c 100644
+index 61d427c1962bf1c..ac4f9302b559c9d 100644
 --- a/include/linux/kernel_stat.h
 +++ b/include/linux/kernel_stat.h
-@@ -67,6 +67,17 @@ static inline unsigned int kstat_softirqs_cpu(unsigned int irq, int cpu)
-        return kstat_cpu(cpu).softirqs[irq];
- }
+@@ -52,6 +52,7 @@ DECLARE_PER_CPU(struct kernel_cpustat, kernel_cpustat);
+ #define kstat_cpu(cpu) per_cpu(kstat, cpu)
+ #define kcpustat_cpu(cpu) per_cpu(kernel_cpustat, cpu)
  
-+static inline unsigned int kstat_cpu_softirqs_sum(int cpu)
++extern unsigned long long nr_context_switches_cpu(int cpu);
+ extern unsigned long long nr_context_switches(void);
+ 
+ extern unsigned int kstat_irqs_cpu(unsigned int irq, int cpu);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 5800b0623ff3068..a0d19f67f2046d9 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5229,6 +5229,11 @@ bool single_task_running(void)
+ }
+ EXPORT_SYMBOL(single_task_running);
+ 
++unsigned long long nr_context_switches_cpu(int cpu)
 +{
-+	int i;
-+	unsigned int sum = 0;
-+
-+	for (i = 0; i < NR_SOFTIRQS; i++)
-+		sum += kstat_softirqs_cpu(i, cpu);
-+
-+	return sum;
++	return cpu_rq(cpu)->nr_switches;
 +}
 +
- /*
-  * Number of interrupts per specific IRQ source, since bootup
-  */
+ unsigned long long nr_context_switches(void)
+ {
+ 	int i;
 -- 
 2.25.1
 
