@@ -2,47 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A1360049D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 02:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B1A6004A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 03:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJQA5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 20:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S229990AbiJQBAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 21:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJQA5Q (ORCPT
+        with ESMTP id S229886AbiJQBAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 20:57:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD783EA55
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 17:57:12 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MrJPJ5TM6zVj2d;
-        Mon, 17 Oct 2022 08:52:36 +0800 (CST)
-Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 17 Oct
- 2022 08:57:10 +0800
-Subject: ping// Re: [PATCH v5 0/2] squashfs: Add the mount parameter
- "threads="
-To:     <linux-kernel@vger.kernel.org>, <phillip@squashfs.org.uk>
-CC:     <wangle6@huawei.com>, <yi.zhang@huawei.com>,
-        <zhongjubin@huawei.com>, <chenjianguo3@huawei.com>
-References: <20220916083604.33408-1-nixiaoming@huawei.com>
- <20220930091406.50869-1-nixiaoming@huawei.com>
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-Message-ID: <910e5533-4abc-85f1-6bfc-4d776f8bed7b@huawei.com>
-Date:   Mon, 17 Oct 2022 08:57:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0.1
+        Sun, 16 Oct 2022 21:00:19 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB898FAF0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:00:17 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id r19so6910966qtx.6
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QqyNP0rk1a5dyKzMXLrktYgPBfFzcz/Grlk5GABzwuA=;
+        b=FgZ7SzmXaofeCzubIB0q8LhO+QvOY2ZDnUr84pd3Sbi/CYgekID5pFTHfuxQLVZI8R
+         kB4DNQOvnIyF+78IkyKhmIe8XAJOWrOk33SwiJMXUE8usYXMj++5ffXdaehwP8BgFHth
+         tOWCgr1V3Y4ZOGYueFQDrVd4tKBZGfnqLb6sauN3VAkIhsERznmBkd0SPj8rtPaMP1yi
+         0IRp6o8MdlsKD5/NGGdIDGJbNkCvwxMU8J6Fqrh7DtIlwbpkdsTyASZWvo8U6rHBTTvI
+         9qwV4mPVmP51EgyibZBTOri0FzBUt/frREO29j+jSsHYQdt754UbzbkQw9s3GpBuABiF
+         mbCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QqyNP0rk1a5dyKzMXLrktYgPBfFzcz/Grlk5GABzwuA=;
+        b=fUbVF05bjND2rebudcVWXO954hfkMi5K8UtKKSbYT7u7WrfGD5CHo69dAqiNyXKw0h
+         aTfzZxidO36ctS9c2EnB4/FGuvUvbIgAjJwwpBGjEVs6i3GT5CfaPpFvyjPsMYf1eMmB
+         scfzhD5Ee+jHDQ1aCXintT8FDHyF9qYBFpj34rX3nd0bxX5FMRmMtF7yeIgKsQRwWMbL
+         bf5FtQ0KAVD+QcjNKBqnGrzz5yhcmgsw6CMB6baJNJYiLPa/deancigkWPvgmFYydIj/
+         +O1fmJKKJ2i6myYBx2AVQ2aHwJiTIow1IXE3jKLqnSdenLh2g1gstf7ZCLHRyqUe3ZQR
+         xIyA==
+X-Gm-Message-State: ACrzQf3BUhDMe6185WBLmQCxI1oJqGrd3NUu/GBpiKu7Ri+zWfZM6ZS/
+        hTyZlmI1wB1OK0z9a6aFrt7sJg==
+X-Google-Smtp-Source: AMsMyM7ScFx2l6l+XhU8l+SU8mYkGkxtKI0WUNcEwqTGC/mT54llVp2PDO9rYrVrIl0JdEA0HVAsNg==
+X-Received: by 2002:ac8:5f08:0:b0:35c:cbe5:4b83 with SMTP id x8-20020ac85f08000000b0035ccbe54b83mr7114191qta.218.1665968416877;
+        Sun, 16 Oct 2022 18:00:16 -0700 (PDT)
+Received: from ?IPV6:2601:42:0:3450:bb7d:1aa4:bef8:ec27? ([2601:42:0:3450:bb7d:1aa4:bef8:ec27])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05620a240300b006cfc01b4461sm8299700qkn.118.2022.10.16.18.00.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 18:00:15 -0700 (PDT)
+Message-ID: <365c0b94-c619-3790-c23a-5582631dd208@linaro.org>
+Date:   Sun, 16 Oct 2022 21:00:13 -0400
 MIME-Version: 1.0
-In-Reply-To: <20220930091406.50869-1-nixiaoming@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.83]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 3/4] dt-bindings: clock: Add Ingenic JZ4755 CGU header
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20221016150110.3020451-1-lis8215@gmail.com>
+ <20221016150110.3020451-4-lis8215@gmail.com>
+ <c2accc8b-f4eb-47ca-333f-eeb98da6a363@linaro.org>
+ <CAKNVLfZ8qi4MS6ineF4M5xnSmHW+=P5mdgifmr74g4kOSK2wGA@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAKNVLfZ8qi4MS6ineF4M5xnSmHW+=P5mdgifmr74g4kOSK2wGA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,55 +83,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping
+On 16/10/2022 14:21, Siarhei Volkau wrote:
+> вс, 16 окт. 2022 г. в 18:32, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org>:
+> 
+>> Why did you choose 2.0+?
+> 
+> It's the first time that I need to choose a license, so it's a bit
+> confusing what
+> side effects they have, especially in that particular case.
+> 
+> What do you recommend?
 
-On 2022/9/30 17:14, Xiaoming Ni wrote:
-> Currently, Squashfs supports multiple decompressor parallel modes. However, this
-> mode can be configured only during kernel building and does not support flexible
-> selection during runtime.
-> 
-> In the current patch set, the mount parameter "threads=" is added to allow users
-> to select the parallel decompressor mode and configure the number of decompressors
-> when mounting a file system.
-> 
-> "threads=<single|multi|percpu|1|2|3|...>"
-> The upper limit is num_online_cpus() * 2.
-> 
-> v5: fix a low-level mistake in patching:
->    fs/squashfs/super.c:492:7: warning: "CONFIG_SQUASHFS_DECOMP_MULTI" is
->    not defined, evaluates to 0 [-Wundef]
-> 
-> v4: https://lore.kernel.org/lkml/20220916083604.33408-1-nixiaoming@huawei.com/
->   Based on Philip Lougher's suggestion, make the following updates:
->   1. Use static modifiers to avoid changing symbol names.
->   2. Fixed some formatting issues
-> 
-> v3: https://lore.kernel.org/lkml/20220902094855.22666-1-nixiaoming@huawei.com/
->    Based on Philip Lougher's suggestion, make the following updates:
->    1. The default configuration is the same as that before the patch installation.
->    2. Compile the three decompression modes when the new configuration is enabled.
->    3. "threads=1" supports only the SQUASHFS_DECOMP_SINGLE mode.
-> 
-> v2: https://lore.kernel.org/lkml/20220816010052.15764-1-nixiaoming@huawei.com/
->    fix warning: sparse: incorrect type in initializer (different address spaces)
->    Reported-by: kernel test robot <lkp@intel.com>
-> 
-> v1: https://lore.kernel.org/lkml/20220815031100.75243-1-nixiaoming@huawei.com/
-> 
-> Xiaoming Ni (2):
->    squashfs: add the mount parameter theads=<single|multi|percpu>
->    squashfs: Allows users to configure the number of  decompression
->      threads
-> 
->   fs/squashfs/Kconfig                     | 51 ++++++++++++++++--
->   fs/squashfs/block.c                     |  2 +-
->   fs/squashfs/decompressor.c              |  2 +-
->   fs/squashfs/decompressor_multi.c        | 20 ++++---
->   fs/squashfs/decompressor_multi_percpu.c | 23 +++++---
->   fs/squashfs/decompressor_single.c       | 15 ++++--
->   fs/squashfs/squashfs.h                  | 23 ++++++--
->   fs/squashfs/squashfs_fs_sb.h            |  4 +-
->   fs/squashfs/super.c                     | 93 +++++++++++++++++++++++++++++++--
->   9 files changed, 199 insertions(+), 34 deletions(-)
-> 
+Choice was fine, just not common so I was just wondering. You can keep
+it but usually we choose what the checkpatch is asking for - so GPL-2.0
+(only )or BSD-2-clause.
+
+Best regards,
+Krzysztof
 
