@@ -2,78 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0AF601608
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0A360160C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiJQSLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S229867AbiJQSOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiJQSLI (ORCPT
+        with ESMTP id S229794AbiJQSOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:11:08 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170AE6D9E9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:11:03 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h12so11741954pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wk/AfKxmKFFMFtDOBSmyqEUOU7F5xvb3yjHU7rI31n4=;
-        b=aIwed63klUDo4ZfnVYo5sFh2Wh9Cyo0Wi7mucCNbpPn+JH2k43Rp/Z8N8K9lf7ujVP
-         io8FvnbDY9GHHeAs7p9DDW7PmTsDVyNZcakall+CN5pHextcQxGmP1YY/SIzQ4yZY1K1
-         WQcSquaAKvf1om/K6J20YizK63oKDrlaZTL38=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wk/AfKxmKFFMFtDOBSmyqEUOU7F5xvb3yjHU7rI31n4=;
-        b=AqVqReLlaOSpX5jfMsXs/unxHRpMX39HqG5d5mMNG+m5LHrRBrxhfGUSySCEvgrYaT
-         CsQPCbmCIa40lCC09dDn9TjFSnuu2MAPOs0V1t/tRuDTwFfcvS/ZCKpQBK9HqTQbCfNA
-         fFMhDCGC5ziLzehrt1Ff0FvJGww/5ovUBhN5P/tyT5ordQaO7po3m5OERmyX/XCAXj7f
-         q7wF4Dr8cauG50vEIBnoKm/4yUve1sj0ASmABwV0xOnpGxG2ryX8oZcyOzSCi0z7g/PN
-         bMPUWhQVxPgqXwMOEjaXlz1x3yi+JRijiVZ7R0AwiZwLbcuUNADfWCYoR0hPYM6ENUk3
-         ANOQ==
-X-Gm-Message-State: ACrzQf1UklyCwazc0sBfodoJFSz3VV0eXDsEvkoFCO7OwhFngqBB51F8
-        n/Z6YYhNoFs14Kkb/Afx/4TF+A==
-X-Google-Smtp-Source: AMsMyM7+VVMBV+Yo7/YZZ4yIOQlr/fUEzxuXTxelzcdrHHW0YYgHQNR/3QsalaLB2/Y7RM/OwQi9Nw==
-X-Received: by 2002:a17:90b:f02:b0:20a:9965:eeee with SMTP id br2-20020a17090b0f0200b0020a9965eeeemr14825583pjb.182.1666030262802;
-        Mon, 17 Oct 2022 11:11:02 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902c65100b00177faf558b5sm6897713pls.250.2022.10.17.11.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:11:02 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 11:11:01 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/9] integrity: Prepare for having "ima" and "evm"
- available in "integrity" LSM
-Message-ID: <202210171101.2E96A7D557@keescook>
-References: <20221013222702.never.990-kees@kernel.org>
- <20221013223654.659758-1-keescook@chromium.org>
- <08a8b202-69b4-e154-28f5-337a898acf61@digikod.net>
- <202210141050.A8DF7D10@keescook>
- <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
+        Mon, 17 Oct 2022 14:14:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D0695A2;
+        Mon, 17 Oct 2022 11:14:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12E66611F0;
+        Mon, 17 Oct 2022 18:14:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D20C433C1;
+        Mon, 17 Oct 2022 18:14:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666030467;
+        bh=Z7Uwug6k5qEwWDN4mEOJmsmTE37uy3yD2SlcrHBOjfo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JhbKcd8nBgltA2cUxf6NC8Sd1Lkj61y8yc7blRAS5/r2etietj/cYYde5jgRzzHMc
+         yZA8SacFxyO6z8aSp+Atm5UFshdSmFv8RQghZn6jvijtR45T6jFFVRGhAhUEv6dCl1
+         sW5v06KtI/bSSCB1U7fV75UOUOLHMAi1RSODePWj6rK3GcfHp4lhfv85ddjv+tS2JB
+         9h9NuwjM4rhgaOpvos94L3I4iK46U+5CGOiCBXLJ1+pRO495oVfSGf0VDJNPq7qFfO
+         lPH1B5uQubHSTFkgyMdAfnR+0BZW525Nx8Y1gfe8edTnxUkJFHva+o7NSIS3txXgMd
+         49cvX5hC90T4w==
+Received: by mail-lf1-f48.google.com with SMTP id bu25so18848292lfb.3;
+        Mon, 17 Oct 2022 11:14:27 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1qHsh7hZDZUHLLEzne7CAA+hoZ6CqviWyJx5v6HhNUOy0QPxc5
+        dt7ZFUADka+OvDSYo63/Y6UEKGkXP/KFDezeauM=
+X-Google-Smtp-Source: AMsMyM4/H3HQax1mbJP34lo4x+Pmo9RUHwIASnn6faiAlgbBz7yBzStFDye5LFJLAze7tVEr2i5XVPWAuQlEKIIufjk=
+X-Received: by 2002:a19:c20b:0:b0:4a2:40e5:78b1 with SMTP id
+ l11-20020a19c20b000000b004a240e578b1mr4345794lfc.228.1666030465499; Mon, 17
+ Oct 2022 11:14:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20221006234138.1835739-1-keescook@chromium.org>
+ <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com> <202210171100.5BAC4A5CC8@keescook>
+In-Reply-To: <202210171100.5BAC4A5CC8@keescook>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 17 Oct 2022 20:14:14 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
+Message-ID: <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
+Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,47 +65,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:26:44AM +0200, Mickaël Salaün wrote:
-> 
-> On 14/10/2022 19:59, Kees Cook wrote:
-> > On Fri, Oct 14, 2022 at 04:40:01PM +0200, Mickaël Salaün wrote:
-> > > This is not backward compatible
-> > 
-> > Why? Nothing will be running LSM hooks until init finishes, at which
-> > point the integrity inode cache will be allocated. And ima and evm don't
-> > start up until lateinit.
-> > 
-> > > , but can easily be fixed thanks to
-> > > DEFINE_LSM().order
-> > 
-> > That forces the LSM to be enabled, which may not be desired?
-> 
-> This is not backward compatible because currently IMA is enabled
-> independently of the "lsm=" cmdline, which means that for all installed
-> systems using IMA and also with a custom "lsm=" cmdline, updating the kernel
-> with this patch will (silently) disable IMA. Using ".order =
-> LSM_ORDER_FIRST," should keep this behavior.
-> 
-> BTW, I think we should set such order (but maybe rename it) for LSMs that do
-> nothing unless configured (e.g. Yama, Landlock).
+On Mon, 17 Oct 2022 at 20:01, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Oct 17, 2022 at 01:26:12PM -0300, Guilherme G. Piccoli wrote:
+> > On 06/10/2022 20:41, Kees Cook wrote:
+> > > From: Ard Biesheuvel <ardb@kernel.org>
+> > >
+> > > The crypto 'compress' interface is deprecated, so before adding new
+> > > features, migrate to the acomp interface. Note that we are only using
+> > > synchronous implementations of acomp, so we don't have to deal with
+> > > asynchronous completion.
+>
+> Ard, given your observation about all the per-cpu memory allocation,
+> should pstore still go ahead with this conversion?
+>
 
-Ah yeah, good point. the .enabled stuff will need to be correctly wired
-up. Anyway, it's a good starting point for the conversion, so I'm hoping
-it can be carried forward by someone who is not me. :) (Hint hint to the
-integrity folks...)
+Well, the reason for doing this conversion was so that we could move
+the 'worst case buffer size' logic into the individual drivers, as
+Herbert would't allow that for legacy comp.
 
-> > > Side node: I proposed an alternative to that but it was Nacked:
-> > > https://lore.kernel.org/all/20210222150608.808146-1-mic@digikod.net/
-> > 
-> > Yeah, for the reasons pointed out -- that can't work. The point is to
-> > not have The Default LSM. I do think Casey's NAK was rather prickly,
-> > though. ;)
-> 
-> I don't agree, there is no "the default LSM", and this new behavior is under
-> an LSM_AUTO configuration option.
+But as we found, we don't really care about the theoretical worst case
+of an input that is incompressible - we can just pass the uncompressed
+size as the upper bound, and if the crypto fails, we just store the
+data uncompressed (which never happens in the first place with ASCII
+text)
 
-The "config it twice" aspect of the current situation is suboptimal,
-yes. Let me go comment on the old thread...
+So once we use the same size for input and output, I was curious
+whether we could encrypt in place, and get rid of the big_oops_buf.
+And the answer is 'yes', precisely because we have this horrid per-CPU
+allocation which serves as a bounce buffer. And this is not specific
+to acomp, the old comp algorithms get wrapped in scomps which receive
+the same treatment.
 
--- 
-Kees Cook
+So at that point, I wondered what the point is of all this complexity.
+Do we really need 6 different algorithms to compress a couple of K of
+ASCII text on a code path that is ice cold by definition? Wouldn't it
+be better to drop the crypto API altogether here, and just use GZIP
+via the library interface?
