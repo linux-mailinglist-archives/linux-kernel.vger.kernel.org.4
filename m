@@ -2,597 +2,396 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43E96009CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523426009D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiJQJBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S230454AbiJQJCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiJQJBq (ORCPT
+        with ESMTP id S230459AbiJQJCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:01:46 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDC636793
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:01:32 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id j4so16535412lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:01:32 -0700 (PDT)
+        Mon, 17 Oct 2022 05:02:30 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289632A94E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:02:23 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z97so15042768ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAeq0YiAQ31sBroOVReanPa2M5+V0IiNuQ6QjrdIdr4=;
-        b=hWgmdxHL2OYvJuFVJOLb2QXSqK/8wTURi2jUl3cBh1QogPIM2fglXgeGhKwITm8fVI
-         hbkyrJqMiPt8hakcGNXyFp97EBq5SaOcMvlspdOXoexiJYkHIAouvi20fcmoLToC30MO
-         yjPmMyuyLP07kSZI3DA6EZcP6sTp6+3PyERTrCdI3H75Fp6x4YO2dbIGgLVavadJveLd
-         nqf01ZZR8wphvd8uw3BsW0IDT/soqakajbqLCiK4Xc3rQUERveH3uXiBPFvy+MTyeHr/
-         L3jIr3EzPPR7pR1lnK3+B5sadR2L4KvCY5YJaYDiSGDfWjGY/Y89HDZmlBorhoOW84J2
-         0JiQ==
+        d=linbit-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fyIBpa3bTnnDtimMMPiGhNnHhdO52yLRUstRRKbUhJ8=;
+        b=ulhGiN4soXuS5KmM1YMAwKIR2KnB6r9pKDhy82pAiji2oXQUh+U96txIRe9mA3KEoQ
+         1Tm937rUAGAJZxZfL6MjnOzmAhNHmHWk5A14B/P9YhZAyOoLVRvpM5nGyTDTBq4KHiww
+         AGYYTbqNDsZxtKjK8tR9QUSDl8uvguMlbJi49etNg7TA2cviNq4rnp5O9E7feplg5ks0
+         lDJIi9bp7OPLGAHIn2GdkQHpRtwPBAWTATLWBjBBKQw+lr4munHlTBENv4KQtR62HKAL
+         JE9A7SsE6XEkqcKcXJrFpcAuc2t5QvgWSEix9CYfv8wD40nWytHfnPfRym8Ma4fEEsbZ
+         arew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QAeq0YiAQ31sBroOVReanPa2M5+V0IiNuQ6QjrdIdr4=;
-        b=Cit8T+Z+Qazq7eHIo16iVxuhVlFiEogrjsDyuIZZxY9IRVS7YDb0YoGeY1xGsNyupt
-         1Fni8p0gCYG1TkTXz8LomVzYJ6LiH7OiR1ZCQbcISPnU4p0SzPEDNZBfa5pxvquh6ayF
-         BZILS3n9XH33DQcf02ERHffaf130T2xUXQzHUqkc3FEqGQgw3WEUAw5vhLVjik3LxHtW
-         B3i0uD6zVyk8FoPnicGZ7cjsdAyKnPCVnrrZ229jkWaRBcfEYtgBvvGRJ518zm73nczT
-         Veorajwz/aQRGa8XFJmZX6IzzEBakUj4E5wtwGTFlMAR0KHx9EUhz9klX1Nhf8XeuSo0
-         8vCQ==
-X-Gm-Message-State: ACrzQf1V/c+QkkizODCtJeU9NQhoI/nS0r99hm7S6rnWGx3clAvB8Lg7
-        RlaHJBWteK6PJzorlYcC1gZjQ+x2qddkZM434GTZsg==
-X-Google-Smtp-Source: AMsMyM7INawjsUggbLDaim/E1DCVyEYULmGcS8Ke7SR12ZnEakeKg0Iz27TpkOAYFvkwTTGypNqysjKk0YiP11/PpzM=
-X-Received: by 2002:a05:6512:31c4:b0:4a2:696e:4302 with SMTP id
- j4-20020a05651231c400b004a2696e4302mr3960245lfe.478.1665997288782; Mon, 17
- Oct 2022 02:01:28 -0700 (PDT)
+        bh=fyIBpa3bTnnDtimMMPiGhNnHhdO52yLRUstRRKbUhJ8=;
+        b=U//ATcaExOfMnAj0NR+PXuDkHm9jWWfr1JPEOuIm44JyoNzHQa/ZigkELqgN5O+B9a
+         5BXO/LMFo7sAL6ICvoIi65TaFM7I37Nl3U9UVicsDq+rmS/w6AKiA+qae56gI/Jh+riK
+         nn2l186C4AD7fc30UKTTV2ErqUVjzHaWcJX3rotThP5sLpJv/Nh67UT/cd5uOqiBIfWi
+         OZy4W4YkduitoR62OsbHFke2/qDhpRq4foG9s8x42d+zJuclC/KlDZ603WIQRrqqG139
+         Q+ep+glzpFGfRE5OSmtfZ+l3XaS2RxsnGWBHRxbkK+M2SGA/f92MxhRRVe3mIbgiJJjc
+         kzUg==
+X-Gm-Message-State: ACrzQf3I3ueLhIUXdhVALMU76QTgFZU98Mq0ubLmbVIKa9FxlOEA5kKU
+        RZ0/upArFRB4tikZgnZcTzwxig==
+X-Google-Smtp-Source: AMsMyM6XwaK3rqfreGiuadZXYAW13YPPLgydIyI948aduyZ5oPqDccCE+WwkDCzjwHLXMW5RLQTCog==
+X-Received: by 2002:a05:6402:e9d:b0:443:7833:3d7b with SMTP id h29-20020a0564020e9d00b0044378333d7bmr9043547eda.151.1665997341270;
+        Mon, 17 Oct 2022 02:02:21 -0700 (PDT)
+Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
+        by smtp.gmail.com with ESMTPSA id sd42-20020a1709076e2a00b0076ff600bf2csm5768092ejc.63.2022.10.17.02.02.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 02:02:20 -0700 (PDT)
+From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Joel Colledge <joel.colledge@linbit.com>
+Subject: [PATCH] drbd: Store op in drbd_peer_request
+Date:   Mon, 17 Oct 2022 11:01:54 +0200
+Message-Id: <20221017090154.15696-1-christoph.boehmwalder@linbit.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <1665998435-199946-1-git-send-email-john.garry@huawei.com> <1665998435-199946-7-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1665998435-199946-7-git-send-email-john.garry@huawei.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Mon, 17 Oct 2022 11:01:17 +0200
-Message-ID: <CAMGffEka0dzrCwyFdDCTK0GnOnWfSUuvZZBA9gW1jV4NWKc40w@mail.gmail.com>
-Subject: Re: [PATCH v6 6/8] scsi: pm8001: Use sas_ata_device_link_abort() to
- handle NCQ errors
-To:     John Garry <john.garry@huawei.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        jinpu.wang@ionos.com, damien.lemoal@opensource.wdc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, yangxingui@huawei.com, niklas.cassel@wdc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 10:50 AM John Garry <john.garry@huawei.com> wrote:
->
-> In commit c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes") the
-> driver had support added to handle NCQ errors but much of what is done
-> in this handling is duplicated from the libata EH.
->
-> In that named commit we handle in 2x main steps:
-> a. Issue read log ext10 to examine and clear the errors
-> b. Issue SATA_ABORT all command
->
-> Indeed, in libata EH, we do similar to above:
-> a. ata_do_eh() -> ata_eh_autopsy() -> ata_eh_link_autopsy() ->
->    ata_eh_analyze_ncq_error() -> ata_eh_read_log_10h()
-> b. ata_do_eh() -> ata_eh_recover() which will issue a device soft reset
->    or hard reset
->
-> Since there is so much duplication, use sas_ata_device_link_abort() which
-> will abort all pending IOs and kick of ATA EH which will do the steps,
-> above.
->
-> However we will not follow the advisory to send the SATA_ABORT all command
-> after the autopsy in read log ext10. Indeed, in libsas EH, we already send
-> a per-task SATA_ABORT command, and this is prior to the ATA EH kicking in
-> and issuing the read log ext10 in the recovery process. I judge that this
-> is ok as the SATA_ABORT command does not actually send any protocol on the
-> link to abort IO on the other side, so would not change any state on the
-> disk (for the read log ext10 command).
->
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Tested-by: Niklas Cassel <niklas.cassel@wdc.com> # pm80xx
-Reuse ata helper is nice.
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-> ---
->  drivers/scsi/pm8001/pm8001_hwi.c | 171 +++----------------------------
->  drivers/scsi/pm8001/pm8001_sas.c |   6 --
->  drivers/scsi/pm8001/pm8001_sas.h |   5 -
->  drivers/scsi/pm8001/pm80xx_hwi.c | 163 ++---------------------------
->  4 files changed, 19 insertions(+), 326 deletions(-)
->
-> diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-> index c0adc3a9d196..ec1a9ab61814 100644
-> --- a/drivers/scsi/pm8001/pm8001_hwi.c
-> +++ b/drivers/scsi/pm8001/pm8001_hwi.c
-> @@ -1724,7 +1724,14 @@ void pm8001_work_fn(struct work_struct *work)
->                                 pm8001_free_dev(pm8001_dev);
->                         }
->                 }
-> -       }       break;
-> +       }
-> +       break;
-> +       case IO_XFER_ERROR_ABORTED_NCQ_MODE:
-> +       {
-> +               dev = pm8001_dev->sas_device;
-> +               sas_ata_device_link_abort(dev, false);
-> +       }
-> +       break;
->         }
->         kfree(pw);
->  }
-> @@ -1748,110 +1755,6 @@ int pm8001_handle_event(struct pm8001_hba_info *pm8001_ha, void *data,
->         return ret;
->  }
->
-> -static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
-> -               struct pm8001_device *pm8001_ha_dev)
-> -{
-> -       struct pm8001_ccb_info *ccb;
-> -       struct sas_task *task;
-> -       struct task_abort_req task_abort;
-> -       u32 opc = OPC_INB_SATA_ABORT;
-> -       int ret;
-> -
-> -       pm8001_ha_dev->id |= NCQ_ABORT_ALL_FLAG;
-> -       pm8001_ha_dev->id &= ~NCQ_READ_LOG_FLAG;
-> -
-> -       task = sas_alloc_slow_task(GFP_ATOMIC);
-> -       if (!task) {
-> -               pm8001_dbg(pm8001_ha, FAIL, "cannot allocate task\n");
-> -               return;
-> -       }
-> -
-> -       task->task_done = pm8001_task_done;
-> -
-> -       ccb = pm8001_ccb_alloc(pm8001_ha, pm8001_ha_dev, task);
-> -       if (!ccb) {
-> -               sas_free_task(task);
-> -               return;
-> -       }
-> -
-> -       memset(&task_abort, 0, sizeof(task_abort));
-> -       task_abort.abort_all = cpu_to_le32(1);
-> -       task_abort.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
-> -       task_abort.tag = cpu_to_le32(ccb->ccb_tag);
-> -
-> -       ret = pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &task_abort,
-> -                                  sizeof(task_abort), 0);
-> -       if (ret) {
-> -               sas_free_task(task);
-> -               pm8001_ccb_free(pm8001_ha, ccb);
-> -       }
-> -}
-> -
-> -static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
-> -               struct pm8001_device *pm8001_ha_dev)
-> -{
-> -       struct sata_start_req sata_cmd;
-> -       int res;
-> -       struct pm8001_ccb_info *ccb;
-> -       struct sas_task *task = NULL;
-> -       struct host_to_dev_fis fis;
-> -       struct domain_device *dev;
-> -       u32 opc = OPC_INB_SATA_HOST_OPSTART;
-> -
-> -       task = sas_alloc_slow_task(GFP_ATOMIC);
-> -       if (!task) {
-> -               pm8001_dbg(pm8001_ha, FAIL, "cannot allocate task !!!\n");
-> -               return;
-> -       }
-> -       task->task_done = pm8001_task_done;
-> -
-> -       /*
-> -        * Allocate domain device by ourselves as libsas is not going to
-> -        * provide any.
-> -        */
-> -       dev = kzalloc(sizeof(struct domain_device), GFP_ATOMIC);
-> -       if (!dev) {
-> -               sas_free_task(task);
-> -               pm8001_dbg(pm8001_ha, FAIL,
-> -                          "Domain device cannot be allocated\n");
-> -               return;
-> -       }
-> -       task->dev = dev;
-> -       task->dev->lldd_dev = pm8001_ha_dev;
-> -
-> -       ccb = pm8001_ccb_alloc(pm8001_ha, pm8001_ha_dev, task);
-> -       if (!ccb) {
-> -               sas_free_task(task);
-> -               kfree(dev);
-> -               return;
-> -       }
-> -
-> -       pm8001_ha_dev->id |= NCQ_READ_LOG_FLAG;
-> -       pm8001_ha_dev->id |= NCQ_2ND_RLE_FLAG;
-> -
-> -       /* construct read log FIS */
-> -       memset(&fis, 0, sizeof(struct host_to_dev_fis));
-> -       fis.fis_type = 0x27;
-> -       fis.flags = 0x80;
-> -       fis.command = ATA_CMD_READ_LOG_EXT;
-> -       fis.lbal = 0x10;
-> -       fis.sector_count = 0x1;
-> -
-> -       memset(&sata_cmd, 0, sizeof(sata_cmd));
-> -       sata_cmd.tag = cpu_to_le32(ccb->ccb_tag);
-> -       sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
-> -       sata_cmd.ncqtag_atap_dir_m = cpu_to_le32((0x1 << 7) | (0x5 << 9));
-> -       memcpy(&sata_cmd.sata_fis, &fis, sizeof(struct host_to_dev_fis));
-> -
-> -       res = pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &sata_cmd,
-> -                                  sizeof(sata_cmd), 0);
-> -       if (res) {
-> -               sas_free_task(task);
-> -               pm8001_ccb_free(pm8001_ha, ccb);
-> -               kfree(dev);
-> -       }
-> -}
-> -
->  /**
->   * mpi_ssp_completion- process the event that FW response to the SSP request.
->   * @pm8001_ha: our hba card information
-> @@ -2301,8 +2204,7 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->                 return;
->         }
->
-> -       if ((pm8001_dev && !(pm8001_dev->id & NCQ_READ_LOG_FLAG))
-> -               && unlikely(!t || !t->lldd_task || !t->dev)) {
-> +       if (pm8001_dev && unlikely(!t || !t->lldd_task || !t->dev)) {
->                 pm8001_dbg(pm8001_ha, FAIL, "task or dev null\n");
->                 return;
->         }
-> @@ -2360,15 +2262,6 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
->                 if (param == 0) {
->                         ts->resp = SAS_TASK_COMPLETE;
->                         ts->stat = SAS_SAM_STAT_GOOD;
-> -                       /* check if response is for SEND READ LOG */
-> -                       if (pm8001_dev &&
-> -                           (pm8001_dev->id & NCQ_READ_LOG_FLAG)) {
-> -                               pm8001_send_abort_all(pm8001_ha, pm8001_dev);
-> -                               /* Free the tag */
-> -                               pm8001_tag_free(pm8001_ha, tag);
-> -                               sas_free_task(t);
-> -                               return;
-> -                       }
->                 } else {
->                         u8 len;
->                         ts->resp = SAS_TASK_COMPLETE;
-> @@ -2666,9 +2559,10 @@ static void mpi_sata_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
->         if (event == IO_XFER_ERROR_ABORTED_NCQ_MODE) {
->                 /* find device using device id */
->                 pm8001_dev = pm8001_find_dev(pm8001_ha, dev_id);
-> -               /* send read log extension */
->                 if (pm8001_dev)
-> -                       pm8001_send_read_log(pm8001_ha, pm8001_dev);
-> +                       pm8001_handle_event(pm8001_ha,
-> +                               pm8001_dev,
-> +                               IO_XFER_ERROR_ABORTED_NCQ_MODE);
->                 return;
->         }
->
-> @@ -3649,12 +3543,7 @@ int pm8001_mpi_task_abort_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
->         pm8001_ccb_task_free(pm8001_ha, ccb);
->         mb();
->
-> -       if (pm8001_dev->id & NCQ_ABORT_ALL_FLAG) {
-> -               sas_free_task(t);
-> -               pm8001_dev->id &= ~NCQ_ABORT_ALL_FLAG;
-> -       } else {
-> -               t->task_done(t);
-> -       }
-> +       t->task_done(t);
->
->         return 0;
->  }
-> @@ -4206,7 +4095,6 @@ static int pm8001_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
->         u64 phys_addr;
->         u32 ATAP = 0x0;
->         u32 dir;
-> -       unsigned long flags;
->         u32  opc = OPC_INB_SATA_HOST_OPSTART;
->
->         memset(&sata_cmd, 0, sizeof(sata_cmd));
-> @@ -4261,39 +4149,6 @@ static int pm8001_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
->                 sata_cmd.esgl = 0;
->         }
->
-> -       /* Check for read log for failed drive and return */
-> -       if (sata_cmd.sata_fis.command == 0x2f) {
-> -               if (((pm8001_ha_dev->id & NCQ_READ_LOG_FLAG) ||
-> -                       (pm8001_ha_dev->id & NCQ_ABORT_ALL_FLAG) ||
-> -                       (pm8001_ha_dev->id & NCQ_2ND_RLE_FLAG))) {
-> -                       struct task_status_struct *ts;
-> -
-> -                       pm8001_ha_dev->id &= 0xDFFFFFFF;
-> -                       ts = &task->task_status;
-> -
-> -                       spin_lock_irqsave(&task->task_state_lock, flags);
-> -                       ts->resp = SAS_TASK_COMPLETE;
-> -                       ts->stat = SAS_SAM_STAT_GOOD;
-> -                       task->task_state_flags &= ~SAS_TASK_STATE_PENDING;
-> -                       task->task_state_flags |= SAS_TASK_STATE_DONE;
-> -                       if (unlikely((task->task_state_flags &
-> -                                       SAS_TASK_STATE_ABORTED))) {
-> -                               spin_unlock_irqrestore(&task->task_state_lock,
-> -                                                       flags);
-> -                               pm8001_dbg(pm8001_ha, FAIL,
-> -                                          "task 0x%p resp 0x%x  stat 0x%x but aborted by upper layer\n",
-> -                                          task, ts->resp,
-> -                                          ts->stat);
-> -                               pm8001_ccb_task_free(pm8001_ha, ccb);
-> -                       } else {
-> -                               spin_unlock_irqrestore(&task->task_state_lock,
-> -                                                       flags);
-> -                               pm8001_ccb_task_free_done(pm8001_ha, ccb);
-> -                               return 0;
-> -                       }
-> -               }
-> -       }
-> -
->         return pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &sata_cmd,
->                                     sizeof(sata_cmd), 0);
->  }
-> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-> index d5ec29f69be3..2d84ae95a1f9 100644
-> --- a/drivers/scsi/pm8001/pm8001_sas.c
-> +++ b/drivers/scsi/pm8001/pm8001_sas.c
-> @@ -687,12 +687,6 @@ int pm8001_dev_found(struct domain_device *dev)
->         return pm8001_dev_found_notify(dev);
->  }
->
-> -void pm8001_task_done(struct sas_task *task)
-> -{
-> -       del_timer(&task->slow_task->timer);
-> -       complete(&task->slow_task->completion);
-> -}
-> -
->  #define PM8001_TASK_TIMEOUT 20
->
->  /**
-> diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
-> index b08f52673889..16a753d5e8a7 100644
-> --- a/drivers/scsi/pm8001/pm8001_sas.h
-> +++ b/drivers/scsi/pm8001/pm8001_sas.h
-> @@ -579,10 +579,6 @@ struct pm8001_fw_image_header {
->  #define FLASH_UPDATE_DNLD_NOT_SUPPORTED                0x10
->  #define FLASH_UPDATE_DISABLED                  0x11
->
-> -#define        NCQ_READ_LOG_FLAG                       0x80000000
-> -#define        NCQ_ABORT_ALL_FLAG                      0x40000000
-> -#define        NCQ_2ND_RLE_FLAG                        0x20000000
-> -
->  /* Device states */
->  #define DS_OPERATIONAL                         0x01
->  #define DS_PORT_IN_RESET                       0x02
-> @@ -709,7 +705,6 @@ int pm8001_mpi_fw_flash_update_resp(struct pm8001_hba_info *pm8001_ha,
->  int pm8001_mpi_general_event(struct pm8001_hba_info *pm8001_ha, void *piomb);
->  int pm8001_mpi_task_abort_resp(struct pm8001_hba_info *pm8001_ha, void *piomb);
->  struct sas_task *pm8001_alloc_task(void);
-> -void pm8001_task_done(struct sas_task *task);
->  void pm8001_free_task(struct sas_task *task);
->  void pm8001_tag_free(struct pm8001_hba_info *pm8001_ha, u32 tag);
->  struct pm8001_device *pm8001_find_dev(struct pm8001_hba_info *pm8001_ha,
-> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-> index dd0e06983cd3..4484c498bcb6 100644
-> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> @@ -1778,113 +1778,6 @@ pm80xx_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
->         pm80xx_chip_intx_interrupt_disable(pm8001_ha);
->  }
->
-> -static void pm80xx_send_abort_all(struct pm8001_hba_info *pm8001_ha,
-> -               struct pm8001_device *pm8001_ha_dev)
-> -{
-> -       struct pm8001_ccb_info *ccb;
-> -       struct sas_task *task;
-> -       struct task_abort_req task_abort;
-> -       u32 opc = OPC_INB_SATA_ABORT;
-> -       int ret;
-> -
-> -       pm8001_ha_dev->id |= NCQ_ABORT_ALL_FLAG;
-> -       pm8001_ha_dev->id &= ~NCQ_READ_LOG_FLAG;
-> -
-> -       task = sas_alloc_slow_task(GFP_ATOMIC);
-> -       if (!task) {
-> -               pm8001_dbg(pm8001_ha, FAIL, "cannot allocate task\n");
-> -               return;
-> -       }
-> -       task->task_done = pm8001_task_done;
-> -
-> -       ccb = pm8001_ccb_alloc(pm8001_ha, pm8001_ha_dev, task);
-> -       if (!ccb) {
-> -               sas_free_task(task);
-> -               return;
-> -       }
-> -
-> -       memset(&task_abort, 0, sizeof(task_abort));
-> -       task_abort.abort_all = cpu_to_le32(1);
-> -       task_abort.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
-> -       task_abort.tag = cpu_to_le32(ccb->ccb_tag);
-> -
-> -       ret = pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &task_abort,
-> -                                  sizeof(task_abort), 0);
-> -       pm8001_dbg(pm8001_ha, FAIL, "Executing abort task end\n");
-> -       if (ret) {
-> -               sas_free_task(task);
-> -               pm8001_ccb_free(pm8001_ha, ccb);
-> -       }
-> -}
-> -
-> -static void pm80xx_send_read_log(struct pm8001_hba_info *pm8001_ha,
-> -               struct pm8001_device *pm8001_ha_dev)
-> -{
-> -       struct sata_start_req sata_cmd;
-> -       int res;
-> -       struct pm8001_ccb_info *ccb;
-> -       struct sas_task *task = NULL;
-> -       struct host_to_dev_fis fis;
-> -       struct domain_device *dev;
-> -       u32 opc = OPC_INB_SATA_HOST_OPSTART;
-> -
-> -       task = sas_alloc_slow_task(GFP_ATOMIC);
-> -       if (!task) {
-> -               pm8001_dbg(pm8001_ha, FAIL, "cannot allocate task !!!\n");
-> -               return;
-> -       }
-> -       task->task_done = pm8001_task_done;
-> -
-> -       /*
-> -        * Allocate domain device by ourselves as libsas is not going to
-> -        * provide any.
-> -        */
-> -       dev = kzalloc(sizeof(struct domain_device), GFP_ATOMIC);
-> -       if (!dev) {
-> -               sas_free_task(task);
-> -               pm8001_dbg(pm8001_ha, FAIL,
-> -                          "Domain device cannot be allocated\n");
-> -               return;
-> -       }
-> -
-> -       task->dev = dev;
-> -       task->dev->lldd_dev = pm8001_ha_dev;
-> -
-> -       ccb = pm8001_ccb_alloc(pm8001_ha, pm8001_ha_dev, task);
-> -       if (!ccb) {
-> -               sas_free_task(task);
-> -               kfree(dev);
-> -               return;
-> -       }
-> -
-> -       pm8001_ha_dev->id |= NCQ_READ_LOG_FLAG;
-> -       pm8001_ha_dev->id |= NCQ_2ND_RLE_FLAG;
-> -
-> -       memset(&sata_cmd, 0, sizeof(sata_cmd));
-> -
-> -       /* construct read log FIS */
-> -       memset(&fis, 0, sizeof(struct host_to_dev_fis));
-> -       fis.fis_type = 0x27;
-> -       fis.flags = 0x80;
-> -       fis.command = ATA_CMD_READ_LOG_EXT;
-> -       fis.lbal = 0x10;
-> -       fis.sector_count = 0x1;
-> -
-> -       sata_cmd.tag = cpu_to_le32(ccb->ccb_tag);
-> -       sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
-> -       sata_cmd.ncqtag_atap_dir_m_dad = cpu_to_le32(((0x1 << 7) | (0x5 << 9)));
-> -       memcpy(&sata_cmd.sata_fis, &fis, sizeof(struct host_to_dev_fis));
-> -
-> -       res = pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &sata_cmd,
-> -                                  sizeof(sata_cmd), 0);
-> -       pm8001_dbg(pm8001_ha, FAIL, "Executing read log end\n");
-> -       if (res) {
-> -               sas_free_task(task);
-> -               pm8001_ccb_free(pm8001_ha, ccb);
-> -               kfree(dev);
-> -       }
-> -}
-> -
->  /**
->   * mpi_ssp_completion - process the event that FW response to the SSP request.
->   * @pm8001_ha: our hba card information
-> @@ -2402,11 +2295,9 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha,
->                 return;
->         }
->
-> -       if ((pm8001_dev && !(pm8001_dev->id & NCQ_READ_LOG_FLAG))
-> -               && unlikely(!t || !t->lldd_task || !t->dev)) {
-> -               pm8001_dbg(pm8001_ha, FAIL, "task or dev null\n");
-> +
-> +       if (pm8001_dev && unlikely(!t->lldd_task || !t->dev))
->                 return;
-> -       }
->
->         ts = &t->task_status;
->
-> @@ -2463,15 +2354,6 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha,
->                 if (param == 0) {
->                         ts->resp = SAS_TASK_COMPLETE;
->                         ts->stat = SAS_SAM_STAT_GOOD;
-> -                       /* check if response is for SEND READ LOG */
-> -                       if (pm8001_dev &&
-> -                           (pm8001_dev->id & NCQ_READ_LOG_FLAG)) {
-> -                               pm80xx_send_abort_all(pm8001_ha, pm8001_dev);
-> -                               /* Free the tag */
-> -                               pm8001_tag_free(pm8001_ha, tag);
-> -                               sas_free_task(t);
-> -                               return;
-> -                       }
->                 } else {
->                         u8 len;
->                         ts->resp = SAS_TASK_COMPLETE;
-> @@ -2806,9 +2688,11 @@ static void mpi_sata_event(struct pm8001_hba_info *pm8001_ha,
->         if (event == IO_XFER_ERROR_ABORTED_NCQ_MODE) {
->                 /* find device using device id */
->                 pm8001_dev = pm8001_find_dev(pm8001_ha, dev_id);
-> -               /* send read log extension */
-> +               /* send read log extension by aborting the link - libata does what we want */
->                 if (pm8001_dev)
-> -                       pm80xx_send_read_log(pm8001_ha, pm8001_dev);
-> +                       pm8001_handle_event(pm8001_ha,
-> +                               pm8001_dev,
-> +                               IO_XFER_ERROR_ABORTED_NCQ_MODE);
->                 return;
->         }
->
-> @@ -4556,7 +4440,6 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
->         u32 end_addr_high, end_addr_low;
->         u32 ATAP = 0x0;
->         u32 dir;
-> -       unsigned long flags;
->         u32 opc = OPC_INB_SATA_HOST_OPSTART;
->         memset(&sata_cmd, 0, sizeof(sata_cmd));
->
-> @@ -4735,40 +4618,6 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
->                                      (task->ata_task.atapi_packet[15] << 24)));
->         }
->
-> -       /* Check for read log for failed drive and return */
-> -       if (sata_cmd.sata_fis.command == 0x2f) {
-> -               if (pm8001_ha_dev && ((pm8001_ha_dev->id & NCQ_READ_LOG_FLAG) ||
-> -                       (pm8001_ha_dev->id & NCQ_ABORT_ALL_FLAG) ||
-> -                       (pm8001_ha_dev->id & NCQ_2ND_RLE_FLAG))) {
-> -                       struct task_status_struct *ts;
-> -
-> -                       pm8001_ha_dev->id &= 0xDFFFFFFF;
-> -                       ts = &task->task_status;
-> -
-> -                       spin_lock_irqsave(&task->task_state_lock, flags);
-> -                       ts->resp = SAS_TASK_COMPLETE;
-> -                       ts->stat = SAS_SAM_STAT_GOOD;
-> -                       task->task_state_flags &= ~SAS_TASK_STATE_PENDING;
-> -                       task->task_state_flags |= SAS_TASK_STATE_DONE;
-> -                       if (unlikely((task->task_state_flags &
-> -                                       SAS_TASK_STATE_ABORTED))) {
-> -                               spin_unlock_irqrestore(&task->task_state_lock,
-> -                                                       flags);
-> -                               pm8001_dbg(pm8001_ha, FAIL,
-> -                                          "task 0x%p resp 0x%x  stat 0x%x but aborted by upper layer\n",
-> -                                          task, ts->resp,
-> -                                          ts->stat);
-> -                               pm8001_ccb_task_free(pm8001_ha, ccb);
-> -                               return 0;
-> -                       } else {
-> -                               spin_unlock_irqrestore(&task->task_state_lock,
-> -                                                       flags);
-> -                               pm8001_ccb_task_free_done(pm8001_ha, ccb);
-> -                               atomic_dec(&pm8001_ha_dev->running_req);
-> -                               return 0;
-> -                       }
-> -               }
-> -       }
->         trace_pm80xx_request_issue(pm8001_ha->id,
->                                 ccb->device ? ccb->device->attached_phy : PM8001_MAX_PHYS,
->                                 ccb->ccb_tag, opc,
-> --
-> 2.35.3
->
+(Sort of) cherry-picked from the out-of-tree drbd9 branch. Original
+commit message by Joel Colledge:
+
+    This simplifies drbd_submit_peer_request by removing most of the
+    arguments. It also makes the treatment of the op better aligned with
+    that in struct bio.
+
+    Determine fault_type dynamically using information which is already
+    available instead of passing it in as a parameter.
+
+Note: The opf in receive_rs_deallocated was changed from
+REQ_OP_WRITE_ZEROES to REQ_OP_DISCARD. This was required in the
+out-of-tree module, and does not matter in-tree. The opf is ignored
+anyway in drbd_submit_peer_request, since the discard/zero-out is
+decided by the EE_TRIM flag.
+
+Signed-off-by: Joel Colledge <joel.colledge@linbit.com>
+Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+---
+ drivers/block/drbd/drbd_int.h      |  8 ++-
+ drivers/block/drbd/drbd_receiver.c | 81 +++++++++++++++++-------------
+ drivers/block/drbd/drbd_worker.c   |  4 +-
+ 3 files changed, 53 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
+index 4d661282ff41..0f8e3b94a635 100644
+--- a/drivers/block/drbd/drbd_int.h
++++ b/drivers/block/drbd/drbd_int.h
+@@ -395,6 +395,7 @@ struct drbd_peer_request {
+ 	struct drbd_peer_device *peer_device;
+ 	struct drbd_epoch *epoch; /* for writes */
+ 	struct page *pages;
++	unsigned int opf; /* to be used as bi_opf */
+ 	atomic_t pending_bios;
+ 	struct drbd_interval i;
+ 	/* see comments on ee flag bits below */
+@@ -406,6 +407,10 @@ struct drbd_peer_request {
+ 	};
+ };
+ 
++/* Equivalent to bio_op and req_op. */
++#define peer_req_op(peer_req) \
++       ((peer_req)->opf & REQ_OP_MASK)
++
+ /* ee flag bits.
+  * While corresponding bios are in flight, the only modification will be
+  * set_bit WAS_ERROR, which has to be atomic.
+@@ -1545,8 +1550,7 @@ extern void drbd_send_acks_wf(struct work_struct *ws);
+ extern bool drbd_rs_c_min_rate_throttle(struct drbd_device *device);
+ extern bool drbd_rs_should_slow_down(struct drbd_device *device, sector_t sector,
+ 		bool throttle_if_app_is_waiting);
+-extern int drbd_submit_peer_request(struct drbd_device *,
+-				    struct drbd_peer_request *, blk_opf_t, int);
++extern int drbd_submit_peer_request(struct drbd_peer_request *);
+ extern int drbd_free_peer_reqs(struct drbd_device *, struct list_head *);
+ extern struct drbd_peer_request *drbd_alloc_peer_req(struct drbd_peer_device *, u64,
+ 						     sector_t, unsigned int,
+diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
+index c897c4572036..41cf706a5e7a 100644
+--- a/drivers/block/drbd/drbd_receiver.c
++++ b/drivers/block/drbd/drbd_receiver.c
+@@ -1603,9 +1603,19 @@ static void drbd_issue_peer_discard_or_zero_out(struct drbd_device *device, stru
+ 	drbd_endio_write_sec_final(peer_req);
+ }
+ 
++static int peer_request_fault_type(struct drbd_peer_request *peer_req)
++{
++	if (peer_req_op(peer_req) == REQ_OP_READ) {
++		return peer_req->flags & EE_APPLICATION ?
++			DRBD_FAULT_DT_RD : DRBD_FAULT_RS_RD;
++	} else {
++		return peer_req->flags & EE_APPLICATION ?
++			DRBD_FAULT_DT_WR : DRBD_FAULT_RS_WR;
++	}
++}
++
+ /**
+  * drbd_submit_peer_request()
+- * @device:	DRBD device.
+  * @peer_req:	peer request
+  *
+  * May spread the pages to multiple bios,
+@@ -1619,10 +1629,9 @@ static void drbd_issue_peer_discard_or_zero_out(struct drbd_device *device, stru
+  *  on certain Xen deployments.
+  */
+ /* TODO allocate from our own bio_set. */
+-int drbd_submit_peer_request(struct drbd_device *device,
+-			     struct drbd_peer_request *peer_req,
+-			     const blk_opf_t opf, const int fault_type)
++int drbd_submit_peer_request(struct drbd_peer_request *peer_req)
+ {
++	struct drbd_device *device = peer_req->peer_device->device;
+ 	struct bio *bios = NULL;
+ 	struct bio *bio;
+ 	struct page *page = peer_req->pages;
+@@ -1667,7 +1676,18 @@ int drbd_submit_peer_request(struct drbd_device *device,
+ 	 * generated bio, but a bio allocated on behalf of the peer.
+ 	 */
+ next_bio:
+-	bio = bio_alloc(device->ldev->backing_bdev, nr_pages, opf, GFP_NOIO);
++	/* _DISCARD, _WRITE_ZEROES handled above.
++	 * REQ_OP_FLUSH (empty flush) not expected,
++	 * should have been mapped to a "drbd protocol barrier".
++	 * REQ_OP_SECURE_ERASE: I don't see how we could ever support that.
++	 */
++	if (!(peer_req_op(peer_req) == REQ_OP_WRITE ||
++				peer_req_op(peer_req) == REQ_OP_READ)) {
++		drbd_err(device, "Invalid bio op received: 0x%x\n", peer_req->opf);
++		return -EINVAL;
++	}
++
++	bio = bio_alloc(device->ldev->backing_bdev, nr_pages, peer_req->opf, GFP_NOIO);
+ 	/* > peer_req->i.sector, unless this is the first bio */
+ 	bio->bi_iter.bi_sector = sector;
+ 	bio->bi_private = peer_req;
+@@ -1697,7 +1717,7 @@ int drbd_submit_peer_request(struct drbd_device *device,
+ 		bios = bios->bi_next;
+ 		bio->bi_next = NULL;
+ 
+-		drbd_submit_bio_noacct(device, fault_type, bio);
++		drbd_submit_bio_noacct(device, peer_request_fault_type(peer_req), bio);
+ 	} while (bios);
+ 	return 0;
+ }
+@@ -2051,6 +2071,7 @@ static int recv_resync_read(struct drbd_peer_device *peer_device, sector_t secto
+ 	 * respective _drbd_clear_done_ee */
+ 
+ 	peer_req->w.cb = e_end_resync_block;
++	peer_req->opf = REQ_OP_WRITE;
+ 	peer_req->submit_jif = jiffies;
+ 
+ 	spin_lock_irq(&device->resource->req_lock);
+@@ -2058,8 +2079,7 @@ static int recv_resync_read(struct drbd_peer_device *peer_device, sector_t secto
+ 	spin_unlock_irq(&device->resource->req_lock);
+ 
+ 	atomic_add(pi->size >> 9, &device->rs_sect_ev);
+-	if (drbd_submit_peer_request(device, peer_req, REQ_OP_WRITE,
+-				     DRBD_FAULT_RS_WR) == 0)
++	if (drbd_submit_peer_request(peer_req) == 0)
+ 		return 0;
+ 
+ 	/* don't care for the reason here */
+@@ -2375,16 +2395,6 @@ static int wait_for_and_update_peer_seq(struct drbd_peer_device *peer_device, co
+ 	return ret;
+ }
+ 
+-/* see also bio_flags_to_wire()
+- * DRBD_REQ_*, because we need to semantically map the flags to data packet
+- * flags and back. We may replicate to other kernel versions. */
+-static blk_opf_t wire_flags_to_bio_flags(u32 dpf)
+-{
+-	return  (dpf & DP_RW_SYNC ? REQ_SYNC : 0) |
+-		(dpf & DP_FUA ? REQ_FUA : 0) |
+-		(dpf & DP_FLUSH ? REQ_PREFLUSH : 0);
+-}
+-
+ static enum req_op wire_flags_to_bio_op(u32 dpf)
+ {
+ 	if (dpf & DP_ZEROES)
+@@ -2395,6 +2405,15 @@ static enum req_op wire_flags_to_bio_op(u32 dpf)
+ 		return REQ_OP_WRITE;
+ }
+ 
++/* see also bio_flags_to_wire() */
++static unsigned long wire_flags_to_bio(struct drbd_connection *connection, u32 dpf)
++{
++	unsigned long opf = wire_flags_to_bio_op(dpf) |
++		(dpf & DP_RW_SYNC ? REQ_SYNC : 0) |
++		(dpf & DP_FUA ? REQ_FUA : 0) |
++		(dpf & DP_FLUSH ? REQ_PREFLUSH : 0);
++}
++
+ static void fail_postponed_requests(struct drbd_device *device, sector_t sector,
+ 				    unsigned int size)
+ {
+@@ -2538,8 +2557,6 @@ static int receive_Data(struct drbd_connection *connection, struct packet_info *
+ 	struct drbd_peer_request *peer_req;
+ 	struct p_data *p = pi->data;
+ 	u32 peer_seq = be32_to_cpu(p->seq_num);
+-	enum req_op op;
+-	blk_opf_t op_flags;
+ 	u32 dp_flags;
+ 	int err, tp;
+ 
+@@ -2578,11 +2595,10 @@ static int receive_Data(struct drbd_connection *connection, struct packet_info *
+ 	peer_req->flags |= EE_APPLICATION;
+ 
+ 	dp_flags = be32_to_cpu(p->dp_flags);
+-	op = wire_flags_to_bio_op(dp_flags);
+-	op_flags = wire_flags_to_bio_flags(dp_flags);
++	peer_req->opf = wire_flags_to_bio(connection, dp_flags);
+ 	if (pi->cmd == P_TRIM) {
+ 		D_ASSERT(peer_device, peer_req->i.size > 0);
+-		D_ASSERT(peer_device, op == REQ_OP_DISCARD);
++		D_ASSERT(peer_device, peer_req_op(peer_req) == REQ_OP_DISCARD);
+ 		D_ASSERT(peer_device, peer_req->pages == NULL);
+ 		/* need to play safe: an older DRBD sender
+ 		 * may mean zero-out while sending P_TRIM. */
+@@ -2590,7 +2606,7 @@ static int receive_Data(struct drbd_connection *connection, struct packet_info *
+ 			peer_req->flags |= EE_ZEROOUT;
+ 	} else if (pi->cmd == P_ZEROES) {
+ 		D_ASSERT(peer_device, peer_req->i.size > 0);
+-		D_ASSERT(peer_device, op == REQ_OP_WRITE_ZEROES);
++		D_ASSERT(peer_device, peer_req_op(peer_req) == REQ_OP_WRITE_ZEROES);
+ 		D_ASSERT(peer_device, peer_req->pages == NULL);
+ 		/* Do (not) pass down BLKDEV_ZERO_NOUNMAP? */
+ 		if (dp_flags & DP_DISCARD)
+@@ -2677,8 +2693,7 @@ static int receive_Data(struct drbd_connection *connection, struct packet_info *
+ 		peer_req->flags |= EE_CALL_AL_COMPLETE_IO;
+ 	}
+ 
+-	err = drbd_submit_peer_request(device, peer_req, op | op_flags,
+-				       DRBD_FAULT_DT_WR);
++	err = drbd_submit_peer_request(peer_req);
+ 	if (!err)
+ 		return 0;
+ 
+@@ -2789,7 +2804,6 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
+ 	struct drbd_peer_request *peer_req;
+ 	struct digest_info *di = NULL;
+ 	int size, verb;
+-	unsigned int fault_type;
+ 	struct p_block_req *p =	pi->data;
+ 
+ 	peer_device = conn_peer_device(connection, pi->vnr);
+@@ -2849,11 +2863,11 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
+ 		put_ldev(device);
+ 		return -ENOMEM;
+ 	}
++	peer_req->opf = REQ_OP_READ;
+ 
+ 	switch (pi->cmd) {
+ 	case P_DATA_REQUEST:
+ 		peer_req->w.cb = w_e_end_data_req;
+-		fault_type = DRBD_FAULT_DT_RD;
+ 		/* application IO, don't drbd_rs_begin_io */
+ 		peer_req->flags |= EE_APPLICATION;
+ 		goto submit;
+@@ -2867,14 +2881,12 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
+ 		fallthrough;
+ 	case P_RS_DATA_REQUEST:
+ 		peer_req->w.cb = w_e_end_rsdata_req;
+-		fault_type = DRBD_FAULT_RS_RD;
+ 		/* used in the sector offset progress display */
+ 		device->bm_resync_fo = BM_SECT_TO_BIT(sector);
+ 		break;
+ 
+ 	case P_OV_REPLY:
+ 	case P_CSUM_RS_REQUEST:
+-		fault_type = DRBD_FAULT_RS_RD;
+ 		di = kmalloc(sizeof(*di) + pi->size, GFP_NOIO);
+ 		if (!di)
+ 			goto out_free_e;
+@@ -2923,7 +2935,6 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
+ 					(unsigned long long)sector);
+ 		}
+ 		peer_req->w.cb = w_e_end_ov_req;
+-		fault_type = DRBD_FAULT_RS_RD;
+ 		break;
+ 
+ 	default:
+@@ -2975,8 +2986,7 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
+ submit:
+ 	update_receiver_timing_details(connection, drbd_submit_peer_request);
+ 	inc_unacked(device);
+-	if (drbd_submit_peer_request(device, peer_req, REQ_OP_READ,
+-				     fault_type) == 0)
++	if (drbd_submit_peer_request(peer_req) == 0)
+ 		return 0;
+ 
+ 	/* don't care for the reason here */
+@@ -4947,7 +4957,6 @@ static int receive_rs_deallocated(struct drbd_connection *connection, struct pac
+ 
+ 	if (get_ldev(device)) {
+ 		struct drbd_peer_request *peer_req;
+-		const enum req_op op = REQ_OP_WRITE_ZEROES;
+ 
+ 		peer_req = drbd_alloc_peer_req(peer_device, ID_SYNCER, sector,
+ 					       size, 0, GFP_NOIO);
+@@ -4957,6 +4966,7 @@ static int receive_rs_deallocated(struct drbd_connection *connection, struct pac
+ 		}
+ 
+ 		peer_req->w.cb = e_end_resync_block;
++		peer_req->opf = REQ_OP_DISCARD;
+ 		peer_req->submit_jif = jiffies;
+ 		peer_req->flags |= EE_TRIM;
+ 
+@@ -4965,8 +4975,7 @@ static int receive_rs_deallocated(struct drbd_connection *connection, struct pac
+ 		spin_unlock_irq(&device->resource->req_lock);
+ 
+ 		atomic_add(pi->size >> 9, &device->rs_sect_ev);
+-		err = drbd_submit_peer_request(device, peer_req, op,
+-					       DRBD_FAULT_RS_WR);
++		err = drbd_submit_peer_request(peer_req);
+ 
+ 		if (err) {
+ 			spin_lock_irq(&device->resource->req_lock);
+diff --git a/drivers/block/drbd/drbd_worker.c b/drivers/block/drbd/drbd_worker.c
+index 0bb1a900c2d5..c69beefc9d5c 100644
+--- a/drivers/block/drbd/drbd_worker.c
++++ b/drivers/block/drbd/drbd_worker.c
+@@ -400,13 +400,13 @@ static int read_for_csum(struct drbd_peer_device *peer_device, sector_t sector,
+ 		goto defer;
+ 
+ 	peer_req->w.cb = w_e_send_csum;
++	peer_req->opf = REQ_OP_READ;
+ 	spin_lock_irq(&device->resource->req_lock);
+ 	list_add_tail(&peer_req->w.list, &device->read_ee);
+ 	spin_unlock_irq(&device->resource->req_lock);
+ 
+ 	atomic_add(size >> 9, &device->rs_sect_ev);
+-	if (drbd_submit_peer_request(device, peer_req, REQ_OP_READ,
+-				     DRBD_FAULT_RS_RD) == 0)
++	if (drbd_submit_peer_request(peer_req) == 0)
+ 		return 0;
+ 
+ 	/* If it failed because of ENOMEM, retry should help.  If it failed
+-- 
+2.37.3
+
