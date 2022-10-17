@@ -2,136 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DB3600DF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7276600E00
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiJQLnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 07:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S229769AbiJQLpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 07:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiJQLnP (ORCPT
+        with ESMTP id S230102AbiJQLo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 07:43:15 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2070.outbound.protection.outlook.com [40.107.113.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D43BB7D3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 04:43:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YJT5vKyJHouQSheVLhQyE3Zk4A3wSxxIflX8GG7kcKhesd1oh33niFs3xQbnPw0ggZUa+zFUutjvGzyA6f2b69jubWXt8EXOsKu8AmSuh4zYvmnoYyUBbrtXv3xThp/Cher3ZDP1UWtJ/7WyNCCGZkd4FgOiQkMHjRJ3GIyo3dY0Ei7b2gVKYBsIt/XWEtm4gt81zGeEgZZkw0bLsgQ5uN+gnE6kOMJlUeYgUnOlOeNA+tKmi3GFuYS5TvOIySCbp7tFo/mC2knKg4OptP5N7YbwV/GlN03Wa97uQlKw8aH5MGIzIkmDr+yYBWfbLUve/3nAe++frEsqTlpLwdgSIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZpM02pQR/3rEjnKVPn8N0cuR7N9UV3yl2AGBd93zYy4=;
- b=nyMDwhEdOIYlU5UcWEmnTHL8cbVRdM5c5UpLmRUEXQ406fv4q09G8UlSjrbb6N/BH4WjubXrIs3DMkE++MI1waa4FmNMmLZlO6Pw0IjHrcVj4Di3Iadrrc0w3yOC1chn+gglKQiEkFLiRvzWd4lDQeFXIOHEIv0B5bsJ9pjI0bPhJ0gUONN3dweV0jVqr9uaeTVfBviyfUryX+ddouPPXj5AF/35XWk5LrihGe5EGqKrU/W9SuHFNpXt+japzx9bl51zNkGnKLe83jrwBQbh7CY1G6M1XSlAeuTVWqPQQr88UAIWtPBJkhPnwGSz45DgQs7qiSgZ0r0aORQ6gUbaJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZpM02pQR/3rEjnKVPn8N0cuR7N9UV3yl2AGBd93zYy4=;
- b=SZqbuUXe/o92y/x89t63bTGfL/Gr3S5pgTgAjpelFOXqXeqcjBnQ+eUFbp4PKy4vfDVZUjJ0Hir08DMsYx6Hmb9y/a/tU51CL3kaACBlDg7sJZHXgmLgA8wkH/D5ewnwWRPu3ARiyduOVafHq0v1GXOYw6U0lqdqLaMVbbNFk7M=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYCPR01MB5744.jpnprd01.prod.outlook.com (2603:1096:400:45::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.31; Mon, 17 Oct
- 2022 11:43:11 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::9f34:8082:cd2f:589c]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::9f34:8082:cd2f:589c%8]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 11:43:11 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 4/4] mm/hwpoison: introduce per-memory_block hwpoison
- counter
-Thread-Topic: [PATCH v6 4/4] mm/hwpoison: introduce per-memory_block hwpoison
- counter
-Thread-Index: AQHY4D2+Yt0j6jGli0auvFA3GIs+t64SesiA
-Date:   Mon, 17 Oct 2022 11:43:11 +0000
-Message-ID: <20221017114311.GA3679212@hori.linux.bs1.fc.nec.co.jp>
-References: <20221007010706.2916472-1-naoya.horiguchi@linux.dev>
- <20221007010706.2916472-5-naoya.horiguchi@linux.dev>
- <3a6e403d-15d1-f419-698a-b1c825f59472@huawei.com>
-In-Reply-To: <3a6e403d-15d1-f419-698a-b1c825f59472@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TYCPR01MB5744:EE_
-x-ms-office365-filtering-correlation-id: 81498ed7-a326-46be-8392-08dab034c51c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vK0CR8BffZDcSyOfMoCCaneiT+/2bI34J274zdFbVTGz6XcWsvQaGSEjUiTRwnJ6v1xOmA1IUO0+lkEVKPXhMNq9jyWYnSBiawJ+AvgUMvXV0NzAh2zp8h+m6zt8HrDDh2arZlf6g1bFBpAku9MPY7QQfN1TD6v7BRxFKf1IqD3nADCXmHk9yE4dyENMPJxXiCqNifrcCzknILRY35uUIiTctp0kFfv8yh51K6CJWmAjcZH9xIIS+AUnnqwT4t97CsfueVDgjzNbfKjesq39qCj4653GnC3mF18uBSleaEruNRDLpSltr0J3T588kFiXCQroyc9uwTAjJoeUh7ktF6IgqI1goecIw5CmAD0keplKytQO0QvxSFS7QSYC7pVvSOefzmWpg4AXRkZgr0wjo3Li3mbmfU6PEhRWf/YFq3Ta5sU+hOIjSP5OF+KX0s03x8n/Kd3OXlrMqRaQDE/XWBalUGlhzrQdo0ZnZjZpz2QcDZ29jNOXA7Jpds+f8HtxkAgUm2/N3Jha6GqX0l6Z0x0qB9HHhlvNCkdouzJy9SMrBS40LSuG1/zhBnLL6tXgNwMdzCTAU0G5hfbtmoVF8RFddBhTh60sDswo2WcGwCOh+yrYcB8FmlTlrk9b9N4IJ4VqRACvKnTrsHS/yOC2IqxEVFRb1LRKGotGwfmTgWv2sY1OJFsDkLwsbN+TYfabQakma9tNprigYHYFUx4L/9XKYTdKPHALe5qrtTZIVVB67OtBXEwijJN0ndWCIxqZKAmaQ13nUuE/C+z1hFNzEg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(376002)(366004)(346002)(451199015)(85182001)(33656002)(122000001)(86362001)(5660300002)(7416002)(2906002)(82960400001)(38100700002)(1076003)(186003)(83380400001)(38070700005)(26005)(55236004)(6506007)(53546011)(316002)(478600001)(6512007)(9686003)(54906003)(6916009)(6486002)(71200400001)(66946007)(76116006)(66556008)(66476007)(66446008)(41300700001)(4326008)(8936002)(64756008)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Mm5OVUtOdU5PZzN2cS80NWpJWG0vbHdmbWY1RjFBVVZqMDIvNE9lekNUNkhU?=
- =?utf-8?B?dnNlTitCV2Z3WDR1ZGI0emVMNC9xait6WkhWUlZTY2xtNUtXaGNhUjl6NDRQ?=
- =?utf-8?B?V1oxTTczMWUxbWtvcWFEN3E0NEVIQm1MNVp0eGFwMElLSHF2a0JOTjJOYkRl?=
- =?utf-8?B?NFJXWFBuaXl0ZWRyYk9ZTUtMMUJVV04xdlNiZGd0cWhSL3l0RUl2ZU9JekJM?=
- =?utf-8?B?WmJhbWloYnJieFRQc3BwT1dXYmhZOFZmcENjUlp5aDd2RUJGdGRjSG5uZUtT?=
- =?utf-8?B?UmpBTmxPT1pVOFVUdk9wTGhkRDRhVWF3UFBqRllzb3VjZWExSXQrRnFqaXc0?=
- =?utf-8?B?RVFJd2R1N201Mld2aExGQy9idU1aWXJRSWNoeUZQSnlkeC90WmJUNkI5ajM4?=
- =?utf-8?B?MEtkcW0rNXBBbFpwL25nMnl3WmxOWnB5M0d0aVF2Qi9EYzlha3puWGxqOSt1?=
- =?utf-8?B?dDVqMU5KdFpqNnRwcVRsYmh1dk1VdFNzR09qQ0EzVHZ5VTY5ZTZ4MHFzWDJK?=
- =?utf-8?B?SU1sMzRhL256WEhDU3Z0UjRwS3NHR3gvYVFSUm40bDhoODhRVGVQU2NMYytE?=
- =?utf-8?B?Rk9aLzBhOWFNSFBHVmxFaGI1akNUOTFkQW8zQm0rMVVjMUF3T3MvNXlEOEwy?=
- =?utf-8?B?YXFDeHFvazJONmNMZ0g4UVdadXlNa0FUOXdEY3BvQk8vcVpOamtIVndBVjNL?=
- =?utf-8?B?QUVBYkZqSTJuaEZOWk9ka2QxMXNsOFpJYlRsRlpKQ0tmQk41YUw5UVNUbWh2?=
- =?utf-8?B?dmV5RXdaZi9seWsxOUJ3eG1HVGVsMDdSWG1nak4zRndSeTNLZ3o5allIakFD?=
- =?utf-8?B?OVZUamhkcysrZW5TT0NmZjR6SWpSYWlJREF4a0k2TXFpMUY5eE8wQU5yMC9Y?=
- =?utf-8?B?TFhMZWpDOFoxQmRFZmtRZGJoVTVCWlFwUmdtQldKMmFJemVicnIra3d2bEVR?=
- =?utf-8?B?SWc4ay8ya1JVaDNwSG90d09HNUp6eG1aY1FpVkp6VmxzRFhDK3hYcHNaTnBG?=
- =?utf-8?B?U1VENXZIV3FBOTllMzZNQit6VnBEUUJ6bXYwQTlqS0M2bXBLbkRuWHFITmUv?=
- =?utf-8?B?Y1Jvb0FrY0tKRExENVk3VEFaREUzK04rM3loM29KWVg3L0ZNTGFwN2xBMlBY?=
- =?utf-8?B?R0JwYkZDSHlQV0hCR2dSbzBUVlhrb20vRWhkZ1MvL1pwNnlSeWVtcE9RQmE0?=
- =?utf-8?B?elpHV05Cc2Z0bE1UUm9XYVc0LzNuL016b2FjMTlFb09aeWxLS2pyc0NFNG1R?=
- =?utf-8?B?ZzBpUS9Cak9aMmJPTlJ6bzloaXVvSVBUcE4rUUk4U3dqOEpiMkNnZDZOeXFr?=
- =?utf-8?B?bmIzRVNMem1HWURrRmYzZkhzQ0ZrNEUvVnFKNnZ1NEQ0U3JTNGVoZkNMek1n?=
- =?utf-8?B?SFdFbHo4akU0WlhVTVB2VlRzblJhd3ZvelovTklqY2MvRk4xa0VOVm5SMjNa?=
- =?utf-8?B?c0MvQTFpaW83WTVYdE5yRXhQUnhqRlRYa0Z4RUUvNDNTVjBOV1VpTW1ESi9t?=
- =?utf-8?B?d2tsazJHbyt0RkJ5U1B1OUNmY0plb2hISWhKVzNGTnFQbFN6d2FySnM4QlpC?=
- =?utf-8?B?a3JmUUJpTHFkTzkxTXcvbE5LUWlwQ3dZU0svQmxCakhvRTBhSUM0Rk5OakNo?=
- =?utf-8?B?SGQzTG9QT1F6Yk16aDE1MmFSa1JqTUtianJmUGVFZzRvU2RMTWswck94Q3lC?=
- =?utf-8?B?d0ZJZXd1NStPVUxkZnlrNVVETUFyeXVzL1p3a2wrVExrVnFyRDNmU28yY2Rq?=
- =?utf-8?B?UUdvRGdjdlV6czhKTXpnSTdHZlpmM3VaYnR0NUFPWmJvcHk4N1FqbDhtYnJV?=
- =?utf-8?B?RkdBbE9YNkZDZnhLU2lvYWNJbU1sMTFHTjlBM05VcEpWNUFBanBiZkhDNXFs?=
- =?utf-8?B?VkdaVWw1cHNvdmFkYmkyWjQ4Vm5kcGhNWjVVVXRycUUwaWIwdlJna01STHRF?=
- =?utf-8?B?ZTB3VmRLL1AxU2xrbG1vQjNTNFNvZk1SR0VnT1QyNmlnR2pNSnZ0LytYc1hm?=
- =?utf-8?B?citmZzFKc1JzOG5Cb2o1a205aEZvdjBHa0EyZWgwTm9Nd3JJaFV0WjZPT2M0?=
- =?utf-8?B?UDdDeFBJMkYzNmRGMkw1N3IzbDA1Qzgzb0Vkai9lMzVGQVFEWThKQzlPWWFM?=
- =?utf-8?B?WEx5dnNrUnFEdS80amVjWkxDdHArUEMxZVBMNkNadzhJSVZtR2VwOGltenIz?=
- =?utf-8?B?UEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3E9CB45762D2814D84DC2192D8208DA5@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 17 Oct 2022 07:44:58 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF46226573;
+        Mon, 17 Oct 2022 04:44:56 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id g85so5185423vkf.10;
+        Mon, 17 Oct 2022 04:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QbxqZ4AHlFECMTl1lIRRR7lorfpvpayAlobI+bZV+W8=;
+        b=aHU3okzNxlozGQQjhVhJ4T5AL+hGheQAvWYexiYrAwvMuz48sXLRRuORtuVOPp2Je+
+         kRGn2z4wjumzWc5pfxfmyIUNXzjHTJPbZ8VSBV2B4K1TUlmXvJbrQJgQDdOX7O2dSUCw
+         1LfsSlVTnUY4uqFbn2zyUNsUTCXEs1AomGbaK92htSS09WyTIswZTtE2xuDmUxm562tN
+         7OLdqG9e5dafrTkmlLiznvhCTdU4Om87MPQCoa79FqsNznqjsN1+TvNlrzGp8miJ9lx0
+         mef1DaYoNhnOpydEBsb1TJzEOOKb41Ket9CBT1s/J1EEvjfzCMCO5GITgW+kL8GD+av8
+         YzGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QbxqZ4AHlFECMTl1lIRRR7lorfpvpayAlobI+bZV+W8=;
+        b=IXEOOn0vvkO4Z8t9+17vx8ASNJPG0XD0RFwpTk9ABC+4nU1t4dRw3hAru2ijzjRhCr
+         hE6im+pxMyZnn0i87enTzDPmwatx9OD1MpBHSghl7JKN3xkd706CyrZ9UOn/kX/RU+YO
+         Yl4w2OC7jqdv3/Fk8T3Fxczwj+AZbPw8l7bPwkbej+hRtxPeo0m1BkXKTCkN532NeCAj
+         36/HpeWWpDB+Ics9NI3tGHXaRU+6aeghYW7opG7qNQ8UQWo+j37dJLQW7SqOdy532tkz
+         5rQs56ZVj3jUVr9R8dKlBUFeuB+VlzShOBm4eK+90npTI6B9wqCrSLJA20VcCLoSJBSl
+         l+fw==
+X-Gm-Message-State: ACrzQf1+1xRoBZK9znSDpXnquOdUcgswV5JmaNDU4CuWljNUV9HAS6f6
+        Ol0J7u5J1F9roy6G2X0pLQ99PvojfsZ6PG1lMsg=
+X-Google-Smtp-Source: AMsMyM773i9go4n7nuEzuU4x+IlCB/6Z0sQwob60RLKsrRAlzb1Q5VzNE39dzuqEMBvbc561hhZeXFzZaVMvSpVO0pM=
+X-Received: by 2002:a1f:1eca:0:b0:3ab:b4a6:bec2 with SMTP id
+ e193-20020a1f1eca000000b003abb4a6bec2mr3919335vke.25.1666007095701; Mon, 17
+ Oct 2022 04:44:55 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81498ed7-a326-46be-8392-08dab034c51c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2022 11:43:11.7646
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9Aso948bJl2yWdz2JkPvaI8zU35jwdOuSwyc8xC1AuyM/vED+3gB1GBXxUgWGqyLOS9nUYGbReycd+ERRekIhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5744
+References: <20221013222719.277923-1-stephen.s.brennan@oracle.com>
+ <CAOQ4uxiXU72-cxbpqdv_5BC4VdjGx5V79zycfD3_tPSWixtT3w@mail.gmail.com> <87o7ua519v.fsf@oracle.com>
+In-Reply-To: <87o7ua519v.fsf@oracle.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 17 Oct 2022 14:44:44 +0300
+Message-ID: <CAOQ4uxiamB8zfr=XTrnKA9BB4=B-DtwOim=xcYNc+vcW=WXv9Q@mail.gmail.com>
+Subject: Re: [RFC] fsnotify: allow sleepable child dentry flag update
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,36 +68,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0LCBPY3QgMTUsIDIwMjIgYXQgMTA6Mjg6MDBBTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
-ZToNCj4gT24gMjAyMi8xMC83IDk6MDcsIE5hb3lhIEhvcmlndWNoaSB3cm90ZToNCi4uLg0KPiA+
-IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L21lbW9yeS5oIGIvaW5jbHVkZS9saW51eC9tZW1v
-cnkuaA0KPiA+IGluZGV4IGFhNjE5NDY0YTFkZi4uYWQ4Y2Q5YmIzMjM5IDEwMDY0NA0KPiA+IC0t
-LSBhL2luY2x1ZGUvbGludXgvbWVtb3J5LmgNCj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L21lbW9y
-eS5oDQo+ID4gQEAgLTg1LDYgKzg1LDkgQEAgc3RydWN0IG1lbW9yeV9ibG9jayB7DQo+ID4gIAl1
-bnNpZ25lZCBsb25nIG5yX3ZtZW1tYXBfcGFnZXM7DQo+ID4gIAlzdHJ1Y3QgbWVtb3J5X2dyb3Vw
-ICpncm91cDsJLyogZ3JvdXAgKGlmIGFueSkgZm9yIHRoaXMgYmxvY2sgKi8NCj4gPiAgCXN0cnVj
-dCBsaXN0X2hlYWQgZ3JvdXBfbmV4dDsJLyogbmV4dCBibG9jayBpbnNpZGUgbWVtb3J5IGdyb3Vw
-ICovDQo+ID4gKyNpZiBkZWZpbmVkKENPTkZJR19NRU1PUllfRkFJTFVSRSkgJiYgZGVmaW5lZChD
-T05GSUdfTUVNT1JZX0hPVFBMVUcpDQo+ID4gKwlhdG9taWNfbG9uZ190IG5yX2h3cG9pc29uOw0K
-PiA+ICsjZW5kaWYNCj4gPiAgfTsNCj4gPiAgDQo+ID4gIGludCBhcmNoX2dldF9tZW1vcnlfcGh5
-c19kZXZpY2UodW5zaWduZWQgbG9uZyBzdGFydF9wZm4pOw0KPiA+IGRpZmYgLS1naXQgYS9pbmNs
-dWRlL2xpbnV4L21tLmggYi9pbmNsdWRlL2xpbnV4L21tLmgNCj4gPiBpbmRleCAxNzExOWRiZjhm
-YWQuLmY4MDI2OWU5MDc3MiAxMDA2NDQNCj4gPiAtLS0gYS9pbmNsdWRlL2xpbnV4L21tLmgNCj4g
-PiArKysgYi9pbmNsdWRlL2xpbnV4L21tLmgNCj4gPiBAQCAtMzI4MCw2ICszMjgwLDcgQEAgZXh0
-ZXJuIGludCBzb2Z0X29mZmxpbmVfcGFnZSh1bnNpZ25lZCBsb25nIHBmbiwgaW50IGZsYWdzKTsN
-Cj4gPiAgZXh0ZXJuIGludCBfX2dldF9odWdlX3BhZ2VfZm9yX2h3cG9pc29uKHVuc2lnbmVkIGxv
-bmcgcGZuLCBpbnQgZmxhZ3MsDQo+ID4gIAkJCQkJYm9vbCAqbWlncmF0YWJsZV9jbGVhcmVkKTsN
-Cj4gPiAgZXh0ZXJuIHZvaWQgbnVtX3BvaXNvbmVkX3BhZ2VzX2luYyh1bnNpZ25lZCBsb25nIHBm
-bik7DQo+ID4gK2V4dGVybiB2b2lkIG51bV9wb2lzb25lZF9wYWdlc19zdWIodW5zaWduZWQgbG9u
-ZyBwZm4sIGxvbmcgaSk7DQo+IA0KPiBUaGUgcHJvdG90eXBlIG9mIHRoaXMgZnVuY3Rpb24gaXM6
-ICppbmxpbmUqIHZvaWQgbnVtX3BvaXNvbmVkX3BhZ2VzX3N1Yih1bnNpZ25lZCBsb25nIHBmbiwg
-bG9uZyBpKS4NCj4gVGhlIGNvbWJpbmF0aW9uIG9mIGlubGluZSBhbmQgZXh0ZXJuIGxvb2tzIHdl
-aXJkIHRvIG1lLiBJcyB0aGlzIGEgY29tbW9uIHVzZSBjYXNlPw0KDQpObywgaXQgc2VlbXMgbm90
-LiAgSSBjYW4gZmluZCBhIGZldyBwbGFjZSBvZiBzdWNoIGEgY29taW5hdGlvbiBsaWtlIHRhc2tf
-Y3VycigpDQphbmQgcmFpc2Vfc29mdGlycV9pcnFvZmYoKSwgYnV0IGFzIGxvbmcgYXMgSSB1bmRl
-cnN0YW5kLCB0aGVyZSdzIGxpdHRsZSBtZWFuaW5nDQooc2hvd2luZyBleHBsaWNpdGx5IGJ1dCBy
-ZWR1bmRhbnQpIHRvIGFkZCBleHRlcm4ga2V5d29yZCB0byBmdW5jdGlvbnMgaW4gc2hhcmVkDQpo
-ZWFkZXIgZmlsZXMuIFNvIEkgdGhpbmsgb2YgZHJvcHBpbmcgdGhlIGV4dGVybiBrZXl3b3JkLg0K
-DQo+IA0KPiBBbnl3YXksIHRoaXMgcGF0Y2ggbG9va3MgZ29vZCB0byBtZS4gVGhhbmtzLg0KPiBS
-ZXZpZXdlZC1ieTogTWlhb2hlIExpbiA8bGlubWlhb2hlQGh1YXdlaS5jb20+DQoNClRoYW5rIHlv
-dS4NCg0KLSBOYW95YSBIb3JpZ3VjaGk=
+On Mon, Oct 17, 2022 at 10:59 AM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+>
+> Amir Goldstein <amir73il@gmail.com> writes:
+> > On Fri, Oct 14, 2022 at 1:27 AM Stephen Brennan
+> > <stephen.s.brennan@oracle.com> wrote:
+> >>
+> >> Hi Jan, Amir, Al - this is a quite ugly patch but I want to discuss the idea
+> >> behind it, to see whether we can find something workable. I apologize for the
+> >> length of text here, but I think it's necessary to give full context and ideas.
+> >>
+> >
+> > Hi Stephen!
+> >
+> >> For background, on machines with lots of memory and weird workloads,
+> >> __fsnotify_update_child_dentry_flags() has been a real thorn in our side. It
+> >> grabs a couple spinlocks and iterates over the whole d_subdirs list. If that
+> >> list is long, this can take a while. The list can be long due to lots of
+> >> negative dentries (which can easily number in the hundreds of millions if you
+> >> have a process that's relatively frequently looking up nonexisting files). But
+> >> the list can also be long due to *positive* dentries. I've seen directories with
+> >> ~7 million positive dentry children falling victim to this function before (XFS
+> >> allows lots of files per dir)! Positive dentries take longer to process in this
+> >> function (since they're actually locked and written to), so you don't need as
+> >> many for them to be a problem.
+> >>
+> >> Anyway, if you have a huge d_subdirs list, then you can have problems with soft
+> >> lockups. From my measurements with ftrace, 100 million negative dentries means
+> >> that the function takes about 6 seconds to complete (varies wildly by CPU and
+> >> kernel config/version). That's bad, but it can get *much worse*. Imagine that
+> >> there are many frequently accessed files in such a directory, and you have an
+> >> inotify watch. As soon as that watch is removed, the last fsnotify connector
+> >> goes away, and i_fsnotify_mask becomes 0. System calls accessing dentries still
+> >> see DCACHE_FSNOTIFY_PARENT_WATCHED, so they fall into __fsnotify_parent and will
+> >> try to update the dentry flags. In my experience, a thundering herd of CPUs race
+> >> to __fsnotify_update_child_dentry_flags(). The winner begins updating and the
+> >> rest spin waiting for the parent inode's i_lock. Many CPUs make it to that
+> >> point, and they *all* will proceed to iterate through d_subdirs, regardless of
+> >> how long the list is, even though only the first CPU needed to do it. So now
+> >> your 6 second spin gets multiplied by 5-10. And since the directory is
+> >> frequently accessed, all the dget/dputs from other CPUs will all spin for this
+> >> long time. This amounts to a nearly unusable system.
+> >>
+> >> Previously I've tried to generally limit or manage the number of negative
+> >> dentries in the dcache, which as a general problem is very difficult to get
+> >> concensus on. I've also tried the patches to reorder dentries in d_subdirs so
+> >> negative dentries are at the end, which has some difficult issues interacting
+> >> with d_walk. Neither of those ideas would help for a directory full of positive
+> >> dentries either.
+> >>
+> >> So I have two more narrowly scoped strategies to improve the situation. Both are
+> >> included in the hacky, awful patch below.
+> >>
+> >> First, is to let __fsnotify_update_child_dentry_flags() sleep. This means nobody
+> >> is holding the spinlock for several seconds at a time. We can actually achieve
+> >> this via a cursor, the same way that simple_readdir() is implemented. I think
+> >> this might require moving the declaration of d_alloc_cursor() and maybe
+> >> exporting it. I had to #include fs/internal.h which is not ok.
+> >>
+> >> On its own, that actually makes problems worse, because it allows several tasks
+> >> to update at the same time, and they're constantly locking/unlocking, which
+> >> makes contention worse.
+> >>
+> >> So second is to add an inode flag saying that
+> >> __fsnotify_update_child_dentry_flags() is already in progress. This prevents
+> >> concurrent execution, and it allows the caller to skip updating since they know
+> >> it's being handled, so it eliminates the thundering herd problem.
+> >>
+> >> The patch works great! It eliminates the chances of soft lockups and makes the
+> >> system responsive under those weird loads. But now, I know I've added a new
+> >> issue. Updating dentry flags is no longer atomic, and we've lost the guarantee
+> >
+> > Just between us ;) the update of the inode event mask is not atomic anyway,
+> > because the test for 'parent_watched' and fsnotify_inode_watches_children()
+> > in __fsnotify_parent() are done without any memory access synchronization.
+> >
+> > IOW, the only guarantee for users is that *sometime* after adding events
+> > to a mark mask, events will start being delivered and *sometime* after
+> > removing events from a mark mask, events will stop being delivered.
+> > Some events may have implicit memory barriers that make event delivery
+> > more deterministic, but others may not.
+>
+> I did wonder about whether it was truly atomic even without the
+> sleeping... the sleeping just makes matters much worse. But without the
+> sleeping, I feel like it wouldn't take much memory synchronization.
+> The dentry flags modification is protected by a spinlock, I assume we
+> would just need a memory barrier to pair with the unlock?
+>
+
+Haha "just" cannot be used here :)
+Yes, some sort of memory barrier is missing.
+The trick is not hurting performance in the common fast path
+where the event subscription mask has not been changed.
+
+This is especially true considering that all applications to date
+did just fine without atomic semantics for updating mark masks.
+Some applications may have been living in blissful ignorance ...
+
+> (But then again, I really need to read and then reread the memory model
+> document, and think about it when it's not late for me.)
+>
+> > This may not be considered an issue for asynchronous events, but actually,
+> > for permission events, I would like to fix that.
+> > To understand my motivations you can look at:
+> > https://github.com/amir73il/fsnotify-utils/wiki/Hierarchical-Storage-Management-API#Evicting_file_content
+>
+> I'll take a deeper look in (my) morning! It definitely helps for me to
+> better understand use cases since I really don't know much beyond
+> inotify.
+>
+
+Don't stress yourself over this doc, it's a WIP, but it describes
+a system where the atomic update of mark masks would be
+important for correctness.
+
+The document does provide a method of working around
+the atomic mask update requirement (making sure that
+sb event mask includes the needed event), which should be
+good enough for the described use case.
+
+> >> that after fsnotify_recalc_mask(), child dentries are all flagged when
+> >> necessary. It's possible that after __fsnotify_update_child_dentry_flags() will
+> >> skip executing since it sees it's already happening, and inotify_add_watch()
+> >> would return without the watch being fully ready.
+> >>
+> >> I think the approach can still be salvaged, we just need a way to resolve this.
+> >> EG a wait queue or mutex in the connector would allow us to preserve the
+> >> guarantee that the child dentries are flagged when necessary. But I know that's
+> >> a big addition, so I wanted to get some feedback from you as the maintainers. Is
+> >> the strategy here stupid? Am I missing an easier option?
+> >
+> > I think you may be missing an easier option.
+> >
+> > The call to __fsnotify_update_child_dentry_flags() in
+> > __fsnotify_parent() is a very aggressive optimization
+> > and I think it may be an overkill, and a footgun, according
+> > to your analysis.
+>
+> Agreed!
+>
+> > If only called from the context of fsnotify_recalc_mask()
+> > (i.e. update mark mask), __fsnotify_update_child_dentry_flags()
+> > can take the dir inode_lock() to synchronize.
+> >
+> > I don't think that the dir inode spin lock needs to be held
+> > at all during children iteration.
+>
+> Definitely a sleeping lock is better than the spin lock. And if we did
+> something like that, it would be worth keeping a little bit of state in
+> the connector to keep track of whether the dentry flags are set or not.
+> This way, if several marks are added in a row, you don't repeatedly
+> iterate over the children to do the same operation over and over again.
+>
+> No matter what, we have to hold the parent dentry's spinlock, and that's
+> expensive. So if we can make the update happen only when it would
+> actually enable or disable the flags, that's worth a few bits of state.
+>
+
+As Jan wrote, this state already exists in i_fsnotify_mask.
+fsnotify_recalc_mask() is very capable of knowing when the
+state described by fsnotify_inode_watches_children() is
+going to change.
+
+> > I think that d_find_any_alias() should be used to obtain
+> > the alias with elevated refcount instead of the awkward
+> > d_u.d_alias iteration loop.
+>
+> D'oh! Much better idea :)
+> Do you think the BUG_ON would still be worthwhile?
+>
+
+Which BUG_ON()?
+In general no, if there are ever more multiple aliases for
+a directory inode, updating dentry flags would be the last
+of our problems.
+
+
+> > In the context of __fsnotify_parent(), I think the optimization
+> > should stick with updating the flags for the specific child dentry
+> > that had the false positive parent_watched indication,
+> > leaving the rest of
+>
+> > WOULD that address the performance issues of your workload?
+>
+> I think synchronizing the __fsnotify_update_child_dentry_flags() with a
+> mutex and getting rid of the call from __fsnotify_parent() would go a
+> *huge* way (maybe 80%?) towards resolving the performance issues we've
+> seen. To be clear, I'm representing not one single workload, but a few
+> different customer workloads which center around this area.
+>
+> There are some extreme cases I've seen, where the dentry list is so
+> huge, that even iterating over it once with the parent dentry spinlock
+> held is enough to trigger softlockups - no need for several calls to
+> __fsnotify_update_child_dentry_flags() queueing up as described in the
+> original mail. So ideally, I'd love to try make *something* work with
+> the cursor idea as well. But I think the two ideas can be separated
+> easily, and I can discuss with Al further about if cursors can be
+> salvaged at all.
+>
+
+Assuming that you take the dir inode_lock() in
+__fsnotify_update_child_dentry_flags(), then I *think* that children
+dentries cannot be added to dcache and children dentries cannot
+turn from positive to negative and vice versa.
+
+Probably the only thing that can change d_subdirs is children dentries
+being evicted from dcache(?), so I *think* that once in N children
+if you can dget(child), drop alias->d_lock, cond_resched(),
+and then continue d_subdirs iteration from child->d_child.
+
+Thanks,
+Amir.
