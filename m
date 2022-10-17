@@ -2,100 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F81600BF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CFB600C6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiJQKFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S230252AbiJQK3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiJQKE6 (ORCPT
+        with ESMTP id S230264AbiJQK3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:04:58 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CE61EEE8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:04:50 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id p14so10636578pfq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:04:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RuPi2kJWnTKaT4aVfokzpN9MYv+IdW9MQr50PHecKpc=;
-        b=YqrS+attN7r6MY97eZcauP2HvFXu4WYJG9YWeF68qJKfCeX4QvaDqnSIf7HRVaCGBu
-         dyfX63Th9wv9ekjiN4sNRwIFAJOIH8V4CW4DoGjI3E7NrGgyqpxqX+Gb5LVgxMrT5iph
-         kp6diM4a3u4zvnIh9+qT9M+bISfNBPi8ilhCdN3gfZRoX92oalbeY8NOo61j4icEA/LU
-         TUl+caQH8o+IfOQx/Gr6iJFRzWFJPl+UVKH7dEsC69z1Fe5CI6CfnwEUnXtLFS62gjmj
-         I6WvoOaJkOq2dj2Tj2qjCVWcvVNYoBZLQd7VkGTI0YotieAGsHB8qRroUGsYyI6JNS3Q
-         9Lrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RuPi2kJWnTKaT4aVfokzpN9MYv+IdW9MQr50PHecKpc=;
-        b=65VFBUC3qg+GRhN9diKHEPQbKR0k+a4ZM8I7eCnfjpjRwU1ycrejG4pYqxC2VgF94v
-         ctuTrmprKOh9pX2Ch0zU4CKf2PCM5+OoD0pQ12ud8udMuGl6yFw7f4L4pu1wjWUHiYuX
-         p9bJO6NCmkC8pmPqxNb2aeAF6XJwnWaeTlSzrhhyGEeuYBD99lzb026Yr/3k9uhckILT
-         z5WeIwC1GuQ8AKFjrfHjeNSnPtZDBdjNQiNzJ6MaRS+xgOxYOXXrSbvOyoruLCHVLwdf
-         o1z/M7sa+ZY7gs3a5XWkcn9QTm+U6ekV5yWBeuJPLk57+cuKp7/a44EJwbb1OAO1qXZ5
-         RRRQ==
-X-Gm-Message-State: ACrzQf3mE0ivnv/fyLzF1Ed8c6cib1BqrA0639QpcEfDKu7YeqwsmyPB
-        Ef7cfiLn4hsvBn7t2ySOT6Q=
-X-Google-Smtp-Source: AMsMyM7eZofAjeHWzJ94vO88RDrBbxJwmqGvA2+l5nKX+AFUaM4MF83Mofo0oOBLql0h1YnbJ4S/fg==
-X-Received: by 2002:a63:5658:0:b0:43c:dac:9e24 with SMTP id g24-20020a635658000000b0043c0dac9e24mr9915160pgm.562.1666001089618;
-        Mon, 17 Oct 2022 03:04:49 -0700 (PDT)
-Received: from localhost.localdomain (124244014158.ctinets.com. [124.244.14.158])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b0017f7b6e970esm6248454plg.146.2022.10.17.03.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 03:04:49 -0700 (PDT)
-From:   Hoi Pok Wu <wuhoipok@gmail.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     Hoi Pok Wu <wuhoipok@gmail.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        syzbot+035a381ea1afb63f098d@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: [PATCH] fs: f2fs: fix kernel discard_thread NULL dereference
-Date:   Mon, 17 Oct 2022 18:04:37 +0800
-Message-Id: <20221017100437.618363-1-wuhoipok@gmail.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 17 Oct 2022 06:29:41 -0400
+X-Greylist: delayed 1437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Oct 2022 03:29:36 PDT
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71331275E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=NtlWxSFlkUfOWvwSUOQxnoJng0FmqJM3IVrX24ANV/8=; b=V7pnX
+        H3XCFQbdYhfmw+8oofqjmtlvN+To7zXkSMxPyRXSKoCWpVdbnAKJvOQmUpWwth9ICQnMVWTtIOpoJ
+        6DvRZLhqp1oemBmKqVwTKSEPcF1xo6b4oOMiwA4Sv/Hb/SKkOIU68GiYjHOC3IK4oWTVIb6LgbUWN
+        gKM50C4tr//olB22rqvhedxMSUwSo2ojVdXDXsPk5HYP3jvjQ8t63UfNBX1ypCeEaWx7hmj0K9xO6
+        kJ92mVtGedkvAcdy4x5Qwfnag/RqO7T1LAcMGF8ByrsfxNk1XIw6KR2T2v/CRRVNMWFy9vH5K6Ma7
+        ACvc5yhtUwG4MlgnihlPEynA47liQ==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1okMzp-0004Dm-N6;
+        Mon, 17 Oct 2022 11:05:23 +0100
+Date:   Mon, 17 Oct 2022 11:05:16 +0100
+From:   John Keeping <john@metanate.com>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [BUG] [PATCH] drm/rockchip: use generic fbdev setup
+Message-ID: <Y00o3M7SKAB/w9sW@donbot>
+References: <20211029115014.264084-1-john@metanate.com>
+ <d814394b-86c3-beb1-ddd4-04c65004f138@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d814394b-86c3-beb1-ddd4-04c65004f138@gmail.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,URIBL_DBL_SPAM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer discard_thread is pointing to nowhere, using IS_ERR prevents the
-situation. IS_ERR also seen being used throughout the file.
+Hi Johan,
 
-Link: https://syzkaller.appspot.com/bug?id=9499bc6574cea5940e48199c2fd0732d9b11e5e1
-Reported-by: syzbot+035a381ea1afb63f098d@syzkaller.appspotmail.com
-Signed-off-by: Hoi Pok Wu <wuhoipok@gmail.com>
----
- fs/f2fs/segment.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Mon, Oct 17, 2022 at 10:11:32AM +0200, Johan Jonker wrote:
+> Your patch contribution causes a kernel panic on MK808 with Rockchip rk3066a SoC.
+> Would you like to contribute to fix this issue?
+> The assumtion that drm_fbdev_generic_setup() does what rockchip_drm_fbdev_init did is not true!
+> A revert makes it work again.
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index acf3d3fa4363..79978b7206b5 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -1634,7 +1634,8 @@ void f2fs_stop_discard_thread(struct f2fs_sb_info *sbi)
- 		struct task_struct *discard_thread = dcc->f2fs_issue_discard;
- 
- 		dcc->f2fs_issue_discard = NULL;
--		kthread_stop(discard_thread);
-+		if (!IS_ERR(discard_thread))
-+			kthread_stop(discard_thread);
- 	}
- }
- 
--- 
-2.38.0
+It looks like there are 3 different ways to end up with -ENOMEM here,
+can you track down whether you're hitting one of the cases in
+rockchip_gem_prime_vmap() or if it's the iosys_map_is_null case in
+drm_gem_vmap()?
 
+I guess the memory usage increases slightly using the generic code and
+RK3066 has less memory available.
+
+> ======
+> 
+> [    7.975906] ------------[ cut here ]------------
+> [    7.975929] WARNING: CPU: 0 PID: 35 at drivers/gpu/drm/drm_fb_helper.c:471 drm_fb_helper_damage_work+0x138/0x3b4
+> [    7.976044] rockchip-drm display-subsystem: Damage blitter failed: ret=-12
+> [    7.976064] Modules linked in:
+> [    7.976090] CPU: 0 PID: 35 Comm: kworker/0:4 Not tainted 6.0.0-next-20221013 #1
+> [    7.976126] Hardware name: Rockchip (Device Tree)
+> [    7.976145] Workqueue: events drm_fb_helper_damage_work
+> [    7.976196] Backtrace: 
+> [    7.976214]  dump_backtrace from show_stack+0x20/0x24
+> [    7.976276]  r7:000001d7 r6:00000009 r5:c0b2bc78 r4:60000013
+> [    7.976289]  show_stack from dump_stack_lvl+0x48/0x54
+> [    7.976357]  dump_stack_lvl from dump_stack+0x18/0x1c
+> [    7.976426]  r5:c0586054 r4:c0b63750
+> [    7.976436]  dump_stack from __warn+0xdc/0x154
+> [    7.976525]  __warn from warn_slowpath_fmt+0xa4/0xd8
+> [    7.976588]  r7:000001d7 r6:c0b63750 r5:c1004ec8 r4:c0b639ec
+> [    7.976598]  warn_slowpath_fmt from drm_fb_helper_damage_work+0x138/0x3b4
+> [    7.976670]  r9:ef7cf105 r8:c15dfc00 r7:fffffff4 r6:c200a590 r5:c1004ec8 r4:c200a594
+> [    7.976681]  drm_fb_helper_damage_work from process_one_work+0x230/0x518
+> [    7.976761]  r10:c110d140 r9:ef7cf105 r8:00000000 r7:ef7cf100 r6:ef7cbf00 r5:c200f300
+> [    7.976775]  r4:c200a594
+> [    7.976785]  process_one_work from worker_thread+0x54/0x554
+> [    7.976841]  r10:ef7cbf00 r9:00000008 r8:c1003d40 r7:ef7cbf1c r6:c200f318 r5:ef7cbf00
+> [    7.976855]  r4:c200f300
+> [    7.976864]  worker_thread from kthread+0xe8/0x104
+> [    7.976948]  r10:f0929e84 r9:c200ea40 r8:c169aa80 r7:c200f300 r6:c01419e4 r5:00000000
+> [    7.976962]  r4:c200e800
+> [    7.976971]  kthread from ret_from_fork+0x14/0x2c
+> [    7.977026] Exception stack(0xf092dfb0 to 0xf092dff8)
+> [    7.977052] dfa0:                                     00000000 00000000 00000000 00000000
+> [    7.977078] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> [    7.977100] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [    7.977128]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c01491a8
+> [    7.977144]  r4:c200e800 r3:00000001
+> [    7.977155] ---[ end trace 0000000000000000 ]---
+> 
+> On 10/29/21 13:50, John Keeping wrote:
+> > The Rockchip fbdev code does not add anything compared to
+> > drm_fbdev_generic_setup(); the one custom function for .fb_mmap does the
+> > same thing as gem_prime_mmap which is called by the helper.
+> > 
+> > Signed-off-by: John Keeping <john@metanate.com>
+> > ---
+> >  drivers/gpu/drm/rockchip/Makefile             |   1 -
+> >  drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |  10 +-
+> >  drivers/gpu/drm/rockchip/rockchip_drm_drv.h   |   2 -
+> >  drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c | 164 ------------------
+> >  drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h |  24 ---
+> >  5 files changed, 2 insertions(+), 199 deletions(-)
+> >  delete mode 100644 drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
+> >  delete mode 100644 drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
+> > 
+> > diff --git a/drivers/gpu/drm/rockchip/Makefile b/drivers/gpu/drm/rockchip/Makefile
+> > index 17a9e7eb2130..1a56f696558c 100644
+> > --- a/drivers/gpu/drm/rockchip/Makefile
+> > +++ b/drivers/gpu/drm/rockchip/Makefile
+> > @@ -5,7 +5,6 @@
+> >  
+> >  rockchipdrm-y := rockchip_drm_drv.o rockchip_drm_fb.o \
+> >  		rockchip_drm_gem.o rockchip_drm_vop.o rockchip_vop_reg.o
+> > -rockchipdrm-$(CONFIG_DRM_FBDEV_EMULATION) += rockchip_drm_fbdev.o
+> >  
+> >  rockchipdrm-$(CONFIG_ROCKCHIP_ANALOGIX_DP) += analogix_dp-rockchip.o
+> >  rockchipdrm-$(CONFIG_ROCKCHIP_CDN_DP) += cdn-dp-core.o cdn-dp-reg.o
+> > diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+> > index 69c699459dce..20d81ae69828 100644
+> > --- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+> > +++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+> > @@ -26,7 +26,6 @@
+> >  
+> >  #include "rockchip_drm_drv.h"
+> >  #include "rockchip_drm_fb.h"
+> > -#include "rockchip_drm_fbdev.h"
+> >  #include "rockchip_drm_gem.h"
+> >  
+> >  #define DRIVER_NAME	"rockchip"
+> > @@ -159,10 +158,6 @@ static int rockchip_drm_bind(struct device *dev)
+> >  
+> >  	drm_mode_config_reset(drm_dev);
+> >  
+> > -	ret = rockchip_drm_fbdev_init(drm_dev);
+> > -	if (ret)
+> > -		goto err_unbind_all;
+> > -
+> >  	/* init kms poll for handling hpd */
+> >  	drm_kms_helper_poll_init(drm_dev);
+> >  
+> > @@ -170,10 +165,11 @@ static int rockchip_drm_bind(struct device *dev)
+> >  	if (ret)
+> >  		goto err_kms_helper_poll_fini;
+> >  
+> > +	drm_fbdev_generic_setup(drm_dev, 32);
+> > +
+> >  	return 0;
+> >  err_kms_helper_poll_fini:
+> >  	drm_kms_helper_poll_fini(drm_dev);
+> > -	rockchip_drm_fbdev_fini(drm_dev);
+> >  err_unbind_all:
+> >  	component_unbind_all(dev, drm_dev);
+> >  err_iommu_cleanup:
+> > @@ -189,7 +185,6 @@ static void rockchip_drm_unbind(struct device *dev)
+> >  
+> >  	drm_dev_unregister(drm_dev);
+> >  
+> > -	rockchip_drm_fbdev_fini(drm_dev);
+> >  	drm_kms_helper_poll_fini(drm_dev);
+> >  
+> >  	drm_atomic_helper_shutdown(drm_dev);
+> > @@ -203,7 +198,6 @@ DEFINE_DRM_GEM_FOPS(rockchip_drm_driver_fops);
+> >  
+> >  static const struct drm_driver rockchip_drm_driver = {
+> >  	.driver_features	= DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
+> > -	.lastclose		= drm_fb_helper_lastclose,
+> >  	.dumb_create		= rockchip_gem_dumb_create,
+> >  	.prime_handle_to_fd	= drm_gem_prime_handle_to_fd,
+> >  	.prime_fd_to_handle	= drm_gem_prime_fd_to_handle,
+> > diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
+> > index aa0909e8edf9..143a48330f84 100644
+> > --- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
+> > +++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
+> > @@ -43,8 +43,6 @@ struct rockchip_crtc_state {
+> >   * @mm_lock: protect drm_mm on multi-threads.
+> >   */
+> >  struct rockchip_drm_private {
+> > -	struct drm_fb_helper fbdev_helper;
+> > -	struct drm_gem_object *fbdev_bo;
+> >  	struct iommu_domain *domain;
+> >  	struct mutex mm_lock;
+> >  	struct drm_mm mm;
+> > diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c b/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
+> > deleted file mode 100644
+> > index d8418dd39d0e..000000000000
+> > --- a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
+> > +++ /dev/null
+> > @@ -1,164 +0,0 @@
+> > -// SPDX-License-Identifier: GPL-2.0-only
+> > -/*
+> > - * Copyright (C) Fuzhou Rockchip Electronics Co.Ltd
+> > - * Author:Mark Yao <mark.yao@rock-chips.com>
+> > - */
+> > -
+> > -#include <drm/drm.h>
+> > -#include <drm/drm_fb_helper.h>
+> > -#include <drm/drm_fourcc.h>
+> > -#include <drm/drm_prime.h>
+> > -#include <drm/drm_probe_helper.h>
+> > -
+> > -#include "rockchip_drm_drv.h"
+> > -#include "rockchip_drm_gem.h"
+> > -#include "rockchip_drm_fb.h"
+> > -#include "rockchip_drm_fbdev.h"
+> > -
+> > -#define PREFERRED_BPP		32
+> > -#define to_drm_private(x) \
+> > -		container_of(x, struct rockchip_drm_private, fbdev_helper)
+> > -
+> > -static int rockchip_fbdev_mmap(struct fb_info *info,
+> > -			       struct vm_area_struct *vma)
+> > -{
+> > -	struct drm_fb_helper *helper = info->par;
+> > -	struct rockchip_drm_private *private = to_drm_private(helper);
+> > -
+> > -	return drm_gem_prime_mmap(private->fbdev_bo, vma);
+> > -}
+> > -
+> > -static const struct fb_ops rockchip_drm_fbdev_ops = {
+> > -	.owner		= THIS_MODULE,
+> > -	DRM_FB_HELPER_DEFAULT_OPS,
+> > -	.fb_mmap	= rockchip_fbdev_mmap,
+> > -	.fb_fillrect	= drm_fb_helper_cfb_fillrect,
+> > -	.fb_copyarea	= drm_fb_helper_cfb_copyarea,
+> > -	.fb_imageblit	= drm_fb_helper_cfb_imageblit,
+> > -};
+> > -
+> > -static int rockchip_drm_fbdev_create(struct drm_fb_helper *helper,
+> > -				     struct drm_fb_helper_surface_size *sizes)
+> > -{
+> > -	struct rockchip_drm_private *private = to_drm_private(helper);
+> > -	struct drm_mode_fb_cmd2 mode_cmd = { 0 };
+> > -	struct drm_device *dev = helper->dev;
+> > -	struct rockchip_gem_object *rk_obj;
+> > -	struct drm_framebuffer *fb;
+> > -	unsigned int bytes_per_pixel;
+> > -	unsigned long offset;
+> > -	struct fb_info *fbi;
+> > -	size_t size;
+> > -	int ret;
+> > -
+> > -	bytes_per_pixel = DIV_ROUND_UP(sizes->surface_bpp, 8);
+> > -
+> > -	mode_cmd.width = sizes->surface_width;
+> > -	mode_cmd.height = sizes->surface_height;
+> > -	mode_cmd.pitches[0] = sizes->surface_width * bytes_per_pixel;
+> > -	mode_cmd.pixel_format = drm_mode_legacy_fb_format(sizes->surface_bpp,
+> > -		sizes->surface_depth);
+> > -
+> > -	size = mode_cmd.pitches[0] * mode_cmd.height;
+> > -
+> > -	rk_obj = rockchip_gem_create_object(dev, size, true);
+> > -	if (IS_ERR(rk_obj))
+> > -		return -ENOMEM;
+> > -
+> > -	private->fbdev_bo = &rk_obj->base;
+> > -
+> > -	fbi = drm_fb_helper_alloc_fbi(helper);
+> > -	if (IS_ERR(fbi)) {
+> > -		DRM_DEV_ERROR(dev->dev, "Failed to create framebuffer info.\n");
+> > -		ret = PTR_ERR(fbi);
+> > -		goto out;
+> > -	}
+> > -
+> > -	helper->fb = rockchip_drm_framebuffer_init(dev, &mode_cmd,
+> > -						   private->fbdev_bo);
+> > -	if (IS_ERR(helper->fb)) {
+> > -		DRM_DEV_ERROR(dev->dev,
+> > -			      "Failed to allocate DRM framebuffer.\n");
+> > -		ret = PTR_ERR(helper->fb);
+> > -		goto out;
+> > -	}
+> > -
+> > -	fbi->fbops = &rockchip_drm_fbdev_ops;
+> > -
+> > -	fb = helper->fb;
+> > -	drm_fb_helper_fill_info(fbi, helper, sizes);
+> > -
+> > -	offset = fbi->var.xoffset * bytes_per_pixel;
+> > -	offset += fbi->var.yoffset * fb->pitches[0];
+> > -
+> > -	dev->mode_config.fb_base = 0;
+> > -	fbi->screen_base = rk_obj->kvaddr + offset;
+> > -	fbi->screen_size = rk_obj->base.size;
+> > -	fbi->fix.smem_len = rk_obj->base.size;
+> > -
+> > -	DRM_DEBUG_KMS("FB [%dx%d]-%d kvaddr=%p offset=%ld size=%zu\n",
+> > -		      fb->width, fb->height, fb->format->depth,
+> > -		      rk_obj->kvaddr,
+> > -		      offset, size);
+> > -
+> > -	return 0;
+> > -
+> > -out:
+> > -	rockchip_gem_free_object(&rk_obj->base);
+> > -	return ret;
+> > -}
+> > -
+> > -static const struct drm_fb_helper_funcs rockchip_drm_fb_helper_funcs = {
+> > -	.fb_probe = rockchip_drm_fbdev_create,
+> > -};
+> > -
+> > -int rockchip_drm_fbdev_init(struct drm_device *dev)
+> > -{
+> > -	struct rockchip_drm_private *private = dev->dev_private;
+> > -	struct drm_fb_helper *helper;
+> > -	int ret;
+> > -
+> > -	if (!dev->mode_config.num_crtc || !dev->mode_config.num_connector)
+> > -		return -EINVAL;
+> > -
+> > -	helper = &private->fbdev_helper;
+> > -
+> > -	drm_fb_helper_prepare(dev, helper, &rockchip_drm_fb_helper_funcs);
+> > -
+> > -	ret = drm_fb_helper_init(dev, helper);
+> > -	if (ret < 0) {
+> > -		DRM_DEV_ERROR(dev->dev,
+> > -			      "Failed to initialize drm fb helper - %d.\n",
+> > -			      ret);
+> > -		return ret;
+> > -	}
+> > -
+> > -	ret = drm_fb_helper_initial_config(helper, PREFERRED_BPP);
+> > -	if (ret < 0) {
+> > -		DRM_DEV_ERROR(dev->dev,
+> > -			      "Failed to set initial hw config - %d.\n",
+> > -			      ret);
+> > -		goto err_drm_fb_helper_fini;
+> > -	}
+> > -
+> > -	return 0;
+> > -
+> > -err_drm_fb_helper_fini:
+> > -	drm_fb_helper_fini(helper);
+> > -	return ret;
+> > -}
+> > -
+> > -void rockchip_drm_fbdev_fini(struct drm_device *dev)
+> > -{
+> > -	struct rockchip_drm_private *private = dev->dev_private;
+> > -	struct drm_fb_helper *helper;
+> > -
+> > -	helper = &private->fbdev_helper;
+> > -
+> > -	drm_fb_helper_unregister_fbi(helper);
+> > -
+> > -	if (helper->fb)
+> > -		drm_framebuffer_put(helper->fb);
+> > -
+> > -	drm_fb_helper_fini(helper);
+> > -}
+> > diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h b/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
+> > deleted file mode 100644
+> > index 5fb7ac2371a8..000000000000
+> > --- a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
+> > +++ /dev/null
+> > @@ -1,24 +0,0 @@
+> > -/* SPDX-License-Identifier: GPL-2.0-only */
+> > -/*
+> > - * Copyright (C) Fuzhou Rockchip Electronics Co.Ltd
+> > - * Author:Mark Yao <mark.yao@rock-chips.com>
+> > - */
+> > -
+> > -#ifndef _ROCKCHIP_DRM_FBDEV_H
+> > -#define _ROCKCHIP_DRM_FBDEV_H
+> > -
+> > -#ifdef CONFIG_DRM_FBDEV_EMULATION
+> > -int rockchip_drm_fbdev_init(struct drm_device *dev);
+> > -void rockchip_drm_fbdev_fini(struct drm_device *dev);
+> > -#else
+> > -static inline int rockchip_drm_fbdev_init(struct drm_device *dev)
+> > -{
+> > -	return 0;
+> > -}
+> > -
+> > -static inline void rockchip_drm_fbdev_fini(struct drm_device *dev)
+> > -{
+> > -}
+> > -#endif
+> > -
+> > -#endif /* _ROCKCHIP_DRM_FBDEV_H */
+> 
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
