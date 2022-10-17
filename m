@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2B86011CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F15A6011BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiJQOzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S231230AbiJQOyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbiJQOyB (ORCPT
+        with ESMTP id S230320AbiJQOx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:54:01 -0400
+        Mon, 17 Oct 2022 10:53:58 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CD2691A8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1589691AC;
         Mon, 17 Oct 2022 07:53:45 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:53:36 -0000
+Date:   Mon, 17 Oct 2022 14:53:37 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018417;
+        s=2020; t=1666018418;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1rbeIB8LitiEsAb/IgJkIxwr56dTJtOb8kqOCz0x2uk=;
-        b=mFEXRUebwB0ceuQ8qbbEG6P86tI7rAGvb1nTJwNiKdnMD2DHpQpjdZ0gNFiHru6Gwa9otq
-        nFuL0EpqmloSqJOlHp6wFl/zS55X65XwVaDJwZObl5p6CL6pRM6qcyNNNVIx3VoGHYoPpQ
-        XadnJW3KrC9GU5RQWo6F84l+fCqqE8NNupK+wDi3Yf6F8HPxMZwus91S7hVHvhjf3xql8i
-        cAjmKMdgwzdULuBp0okZLjIPKl2BPSO0lGNmx7YbHdlpJ0+H3UrNc6Fdw4sa48XSJD1gTM
-        c55QFMx2/xX+D67CEyUnBXrlwo2jGksoA4h0RNY3CPfVQhxRc2l6/bbc+lGVbg==
+        bh=fV1/l0X11YiOIK2ib0RRC0WGOOh6xbDnMI8H9/XHTz4=;
+        b=VaW8qTDnK0LmcEguYPGUfOjyOmKWUvSm0Tkg5rpTPv0+kxxTyn1zUVrPGSkOi/5h9866lm
+        GLSoaf8jjsubxjnwlKkL9TFV9kY312BMBCfTgyTPD7SooySeOs5Fvp+aHxkI0dKzOUjj10
+        JKBka4GEA+crbWVyeU0x5sQ2jVpRRQz6oteah6LUMqOl1JhVYP4CgTDONO6/WScFYN5Y5v
+        Mlk5tKpN77RBabZYP8cxpYuiijFoQMB20ru4j6/KJ6XagJ9dXsH16A/OgxQicjQ+W/0Ef0
+        5SgeUdwZ/73QlnZmnzDvdXTWVhCkQWfY1LEuJvT/Medy7AxjjxUmqSrC7BQFWg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018417;
+        s=2020e; t=1666018418;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1rbeIB8LitiEsAb/IgJkIxwr56dTJtOb8kqOCz0x2uk=;
-        b=dLINRy4T0JG/DJrkQuY3IcoXkIPVWp9tBssgWEzWthATzXSTkarB6xLqsvePtuSQrP9qm1
-        YLsrJevnj/oknRCg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=fV1/l0X11YiOIK2ib0RRC0WGOOh6xbDnMI8H9/XHTz4=;
+        b=2N33ZBtZpASKvE5Fhs6wJxTLP2QqlDGM08rd6APJPIUAU/3Sd/LS8Ngoqyyej/KmdU9zUO
+        Wekn831hBwLLzzDg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] static_call: Add call depth tracking support
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+Subject: [tip: x86/core] x86/calldepth: Add ret/call counting for debug
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111148.306100465@infradead.org>
-References: <20220915111148.306100465@infradead.org>
+In-Reply-To: <20220915111148.204285506@infradead.org>
+References: <20220915111148.204285506@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601841630.401.8138685499148178070.tip-bot2@tip-bot2>
+Message-ID: <166601841738.401.8846324922900036711.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,169 +66,200 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     7825451fa4dc04660f1f53d236e4302161d0ebd1
-Gitweb:        https://git.kernel.org/tip/7825451fa4dc04660f1f53d236e4302161d0ebd1
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 15 Sep 2022 13:11:31 +02:00
+Commit-ID:     f5c1bb2afe93396d41c5cbdcb909b08a75b8dde4
+Gitweb:        https://git.kernel.org/tip/f5c1bb2afe93396d41c5cbdcb909b08a75b8dde4
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 15 Sep 2022 13:11:30 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 17 Oct 2022 16:41:16 +02:00
 
-static_call: Add call depth tracking support
+x86/calldepth: Add ret/call counting for debug
 
-When indirect calls are switched to direct calls then it has to be ensured
-that the call target is not the function, but the call thunk when call
-depth tracking is enabled. But static calls are available before call
-thunks have been set up.
+Add a debuigfs mechanism to validate the accounting, e.g. vs. call/ret
+balance and to gather statistics about the stuffing to call ratio.
 
-Ensure a second run through the static call patching code after call thunks
-have been created. When call thunks are not enabled this has no side
-effects.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111148.306100465@infradead.org
+Link: https://lore.kernel.org/r/20220915111148.204285506@infradead.org
 ---
- arch/x86/include/asm/alternative.h |  5 +++++
- arch/x86/kernel/callthunks.c       | 18 ++++++++++++++++++
- arch/x86/kernel/static_call.c      |  1 +
- include/linux/static_call.h        |  2 ++
- kernel/static_call_inline.c        | 23 ++++++++++++++++++-----
- 5 files changed, 44 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/nospec-branch.h | 36 ++++++++++++++++--
+ arch/x86/kernel/callthunks.c         | 53 +++++++++++++++++++++++++++-
+ arch/x86/lib/retpoline.S             |  7 +++-
+ 3 files changed, 91 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index 4c416b2..07ac257 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -91,11 +91,16 @@ struct callthunk_sites {
- extern void callthunks_patch_builtin_calls(void);
- extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
- 					  struct module *mod);
-+extern void *callthunks_translate_call_dest(void *dest);
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 06ba7ca..4771147 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -57,6 +57,22 @@
+ #define RET_DEPTH_INIT_FROM_CALL	0xfc00000000000000ULL
+ #define RET_DEPTH_CREDIT		0xffffffffffffffffULL
+ 
++#ifdef CONFIG_CALL_THUNKS_DEBUG
++# define CALL_THUNKS_DEBUG_INC_CALLS				\
++	incq	%gs:__x86_call_count;
++# define CALL_THUNKS_DEBUG_INC_RETS				\
++	incq	%gs:__x86_ret_count;
++# define CALL_THUNKS_DEBUG_INC_STUFFS				\
++	incq	%gs:__x86_stuffs_count;
++# define CALL_THUNKS_DEBUG_INC_CTXSW				\
++	incq	%gs:__x86_ctxsw_count;
++#else
++# define CALL_THUNKS_DEBUG_INC_CALLS
++# define CALL_THUNKS_DEBUG_INC_RETS
++# define CALL_THUNKS_DEBUG_INC_STUFFS
++# define CALL_THUNKS_DEBUG_INC_CTXSW
++#endif
++
+ #if defined(CONFIG_CALL_DEPTH_TRACKING) && !defined(COMPILE_OFFSETS)
+ 
+ #include <asm/asm-offsets.h>
+@@ -75,18 +91,23 @@
+ #define RESET_CALL_DEPTH_FROM_CALL				\
+ 	mov	$0xfc, %rax;					\
+ 	shl	$56, %rax;					\
+-	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);
++	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);	\
++	CALL_THUNKS_DEBUG_INC_CALLS
+ 
+ #define INCREMENT_CALL_DEPTH					\
+-	sarq	$5, %gs:pcpu_hot + X86_call_depth;
++	sarq	$5, %gs:pcpu_hot + X86_call_depth;		\
++	CALL_THUNKS_DEBUG_INC_CALLS
+ 
+ #define ASM_INCREMENT_CALL_DEPTH				\
+-	sarq	$5, PER_CPU_VAR(pcpu_hot + X86_call_depth);
++	sarq	$5, PER_CPU_VAR(pcpu_hot + X86_call_depth);	\
++	CALL_THUNKS_DEBUG_INC_CALLS
+ 
  #else
- static __always_inline void callthunks_patch_builtin_calls(void) {}
- static __always_inline void
- callthunks_patch_module_calls(struct callthunk_sites *sites,
- 			      struct module *mod) {}
-+static __always_inline void *callthunks_translate_call_dest(void *dest)
-+{
-+	return dest;
-+}
+ #define CREDIT_CALL_DEPTH
++#define ASM_CREDIT_CALL_DEPTH
+ #define RESET_CALL_DEPTH
+ #define INCREMENT_CALL_DEPTH
++#define ASM_INCREMENT_CALL_DEPTH
+ #define RESET_CALL_DEPTH_FROM_CALL
  #endif
  
- #ifdef CONFIG_SMP
+@@ -137,7 +158,8 @@
+ 	jnz	771b;					\
+ 	/* barrier for jnz misprediction */		\
+ 	lfence;						\
+-	ASM_CREDIT_CALL_DEPTH
++	ASM_CREDIT_CALL_DEPTH				\
++	CALL_THUNKS_DEBUG_INC_CTXSW
+ #else
+ /*
+  * i386 doesn't unconditionally have LFENCE, as such it can't
+@@ -321,6 +343,12 @@ static inline void x86_set_skl_return_thunk(void)
+ {
+ 	x86_return_thunk = &__x86_return_skl;
+ }
++#ifdef CONFIG_CALL_THUNKS_DEBUG
++DECLARE_PER_CPU(u64, __x86_call_count);
++DECLARE_PER_CPU(u64, __x86_ret_count);
++DECLARE_PER_CPU(u64, __x86_stuffs_count);
++DECLARE_PER_CPU(u64, __x86_ctxsw_count);
++#endif
+ #else
+ static inline void x86_set_skl_return_thunk(void) {}
+ #endif
 diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-index dfe7fff..0710036 100644
+index 01f6f6b..dfe7fff 100644
 --- a/arch/x86/kernel/callthunks.c
 +++ b/arch/x86/kernel/callthunks.c
-@@ -6,6 +6,7 @@
+@@ -2,6 +2,7 @@
+ 
+ #define pr_fmt(fmt) "callthunks: " fmt
+ 
++#include <linux/debugfs.h>
  #include <linux/kallsyms.h>
  #include <linux/memory.h>
  #include <linux/moduleloader.h>
-+#include <linux/static_call.h>
+@@ -35,6 +36,15 @@ static int __init debug_thunks(char *str)
+ }
+ __setup("debug-callthunks", debug_thunks);
  
- #include <asm/alternative.h>
- #include <asm/asm-offsets.h>
-@@ -271,10 +272,27 @@ void __init callthunks_patch_builtin_calls(void)
- 	pr_info("Setting up call depth tracking\n");
- 	mutex_lock(&text_mutex);
- 	callthunks_setup(&cs, &builtin_coretext);
-+	static_call_force_reinit();
- 	thunks_initialized = true;
++#ifdef CONFIG_CALL_THUNKS_DEBUG
++DEFINE_PER_CPU(u64, __x86_call_count);
++DEFINE_PER_CPU(u64, __x86_ret_count);
++DEFINE_PER_CPU(u64, __x86_stuffs_count);
++DEFINE_PER_CPU(u64, __x86_ctxsw_count);
++EXPORT_SYMBOL_GPL(__x86_ctxsw_count);
++EXPORT_SYMBOL_GPL(__x86_call_count);
++#endif
++
+ extern s32 __call_sites[], __call_sites_end[];
+ 
+ struct thunk_desc {
+@@ -283,3 +293,46 @@ void noinline callthunks_patch_module_calls(struct callthunk_sites *cs,
  	mutex_unlock(&text_mutex);
  }
- 
-+void *callthunks_translate_call_dest(void *dest)
+ #endif /* CONFIG_MODULES */
++
++#if defined(CONFIG_CALL_THUNKS_DEBUG) && defined(CONFIG_DEBUG_FS)
++static int callthunks_debug_show(struct seq_file *m, void *p)
 +{
-+	void *target;
++	unsigned long cpu = (unsigned long)m->private;
 +
-+	lockdep_assert_held(&text_mutex);
-+
-+	if (!thunks_initialized || skip_addr(dest))
-+		return dest;
-+
-+	if (!is_coretext(NULL, dest))
-+		return dest;
-+
-+	target = patch_dest(dest, false);
-+	return target ? : dest;
++	seq_printf(m, "C: %16llu R: %16llu S: %16llu X: %16llu\n,",
++		   per_cpu(__x86_call_count, cpu),
++		   per_cpu(__x86_ret_count, cpu),
++		   per_cpu(__x86_stuffs_count, cpu),
++		   per_cpu(__x86_ctxsw_count, cpu));
++	return 0;
 +}
 +
- #ifdef CONFIG_MODULES
- void noinline callthunks_patch_module_calls(struct callthunk_sites *cs,
- 					    struct module *mod)
-diff --git a/arch/x86/kernel/static_call.c b/arch/x86/kernel/static_call.c
-index 5d3844a..2ebc338 100644
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -34,6 +34,7 @@ static void __ref __static_call_transform(void *insn, enum insn_type type,
- 
- 	switch (type) {
- 	case CALL:
-+		func = callthunks_translate_call_dest(func);
- 		code = text_gen_insn(CALL_INSN_OPCODE, insn, func);
- 		if (func == &__static_call_return0) {
- 			emulate = code;
-diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index df53bed..141e6b1 100644
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -162,6 +162,8 @@ extern void arch_static_call_transform(void *site, void *tramp, void *func, bool
- 
- extern int __init static_call_init(void);
- 
-+extern void static_call_force_reinit(void);
-+
- struct static_call_mod {
- 	struct static_call_mod *next;
- 	struct module *mod; /* for vmlinux, mod == NULL */
-diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
-index dc5665b..639397b 100644
---- a/kernel/static_call_inline.c
-+++ b/kernel/static_call_inline.c
-@@ -15,7 +15,18 @@ extern struct static_call_site __start_static_call_sites[],
- extern struct static_call_tramp_key __start_static_call_tramp_key[],
- 				    __stop_static_call_tramp_key[];
- 
--static bool static_call_initialized;
-+static int static_call_initialized;
-+
-+/*
-+ * Must be called before early_initcall() to be effective.
-+ */
-+void static_call_force_reinit(void)
++static int callthunks_debug_open(struct inode *inode, struct file *file)
 +{
-+	if (WARN_ON_ONCE(!static_call_initialized))
-+		return;
-+
-+	static_call_initialized++;
++	return single_open(file, callthunks_debug_show, inode->i_private);
 +}
- 
- /* mutex to protect key modules/sites */
- static DEFINE_MUTEX(static_call_mutex);
-@@ -475,7 +486,8 @@ int __init static_call_init(void)
- {
- 	int ret;
- 
--	if (static_call_initialized)
-+	/* See static_call_force_reinit(). */
-+	if (static_call_initialized == 1)
- 		return 0;
- 
- 	cpus_read_lock();
-@@ -490,11 +502,12 @@ int __init static_call_init(void)
- 		BUG();
- 	}
- 
--	static_call_initialized = true;
--
- #ifdef CONFIG_MODULES
--	register_module_notifier(&static_call_module_nb);
-+	if (!static_call_initialized)
-+		register_module_notifier(&static_call_module_nb);
- #endif
 +
-+	static_call_initialized = 1;
- 	return 0;
- }
- early_initcall(static_call_init);
++static const struct file_operations dfs_ops = {
++	.open		= callthunks_debug_open,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
++static int __init callthunks_debugfs_init(void)
++{
++	struct dentry *dir;
++	unsigned long cpu;
++
++	dir = debugfs_create_dir("callthunks", NULL);
++	for_each_possible_cpu(cpu) {
++		void *arg = (void *)cpu;
++		char name [10];
++
++		sprintf(name, "cpu%lu", cpu);
++		debugfs_create_file(name, 0644, dir, arg, &dfs_ops);
++	}
++	return 0;
++}
++__initcall(callthunks_debugfs_init);
++#endif
+diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
+index e002060..5f61c65 100644
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -203,13 +203,18 @@ EXPORT_SYMBOL(__x86_return_thunk)
+ 	.align 64
+ SYM_FUNC_START(__x86_return_skl)
+ 	ANNOTATE_NOENDBR
+-	/* Keep the hotpath in a 16byte I-fetch */
++	/*
++	 * Keep the hotpath in a 16byte I-fetch for the non-debug
++	 * case.
++	 */
++	CALL_THUNKS_DEBUG_INC_RETS
+ 	shlq	$5, PER_CPU_VAR(pcpu_hot + X86_call_depth)
+ 	jz	1f
+ 	ANNOTATE_UNRET_SAFE
+ 	ret
+ 	int3
+ 1:
++	CALL_THUNKS_DEBUG_INC_STUFFS
+ 	.rept	16
+ 	ANNOTATE_INTRA_FUNCTION_CALL
+ 	call	2f
