@@ -2,71 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B333760110E
+	by mail.lfdr.de (Postfix) with ESMTP id DA6A260110F
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiJQOXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+        id S230127AbiJQOXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiJQOXZ (ORCPT
+        with ESMTP id S230454AbiJQOXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:23:25 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9796765552;
-        Mon, 17 Oct 2022 07:23:21 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1666016591tv8rwp4e
-Received: from localhost.localdomain ( [182.148.15.91])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 17 Oct 2022 22:23:04 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: F7g8sXqc8jLzsKJQOSoefmgIf+AB2IWispWu68gD4oysOX21IN0naGvyiCmM5
-        6776pyBdH/FLzpNlB3RApAuwFXjhv56S+PJMEre8y7AoIsJgW4NMeNPLxYt/7eiq9M8gOKu
-        QojMYI0txjtzNVRytXEy6g5/++MfT1vHmT3cGVY219vapgiK+1pgSjilMFMDNuRPNz4xTzL
-        8KaXJHmY4An8VBPYl0Ox2GZB2T/hY6kJrhFeaag4oAOUo4O3UBCNXzkBhEOseLMEFJ9LCNR
-        vH1rZSh/wu0aMGkEYU/nHvOf2AiZjmvnRWpfK5jGEvjIxxV/nOXseFhEu0EMlzytJQJ5w7B
-        L5nFUKyo225B0vry8FmHEYj057igy/L6u0APc5CCH72p4cly1/dNg0Hitwogw==
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] bpf: Fix double word in comments
-Date:   Mon, 17 Oct 2022 10:23:03 -0400
-Message-Id: <20221017142303.8299-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 17 Oct 2022 10:23:44 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542A565278;
+        Mon, 17 Oct 2022 07:23:43 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r8-20020a1c4408000000b003c47d5fd475so12818381wma.3;
+        Mon, 17 Oct 2022 07:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LqqfVLOxILFk0qEHZSQ0cmR9EC3sGib5qPhxAGrH5s4=;
+        b=Mv04zLaeTr9p+iTUMg17u98X5TuNK1AMn+THpruMtXd09FdJuv5TUgpqieSS4ZTuWs
+         UBrBK1hJfX8OkRrjHB+w6Dqqi6IF5tLPd8XzgoqkGer5E3FVfnR+Y5LpW69hxdwBBYSN
+         QbV2jdxT8p8R6dBoIc66FtEnLfmqjvR66pmwit8CVMVQ4pjKDmX88AcfGXl89ouUNA9n
+         iriLXwP/pAQ++dlNwiLoLEpP97RnIMu80UGv4slNXk9E+qmtWf65JPbdZ5HBDcIKVNW1
+         XAfVsrYopWvmHHxLsC08+s0qM8vijF8o1nCRWwMpUviq/bfHOISPCrdI/MSvhN0f0on8
+         ow3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LqqfVLOxILFk0qEHZSQ0cmR9EC3sGib5qPhxAGrH5s4=;
+        b=Vxtf7cShBko8ESV4NsvyiQsCk3SO6G/6jBszWc7UZTw3wE1otTZl5refQZQmyL/aRT
+         K0m5Qy8sZp2VdwfMEiYU5BUuXSVuILWtWJTJhpdGblOUNTMqEZiAJ3X0mq3HuSf5cHCv
+         ZcYfO9cd/WkOGYh2CyeS3N/glIL5YAutLr9kxKPTzgNwdbm4R3I5JdDUlY80uvfsmFsn
+         NIiCS87o33gtc0m43M8XRCL+BJ0ujD6+YfyuGPRsU7La1GLOpnT5IKETDfJ2UuXr7VlW
+         MYU3DbrOx8bfJ2J0TiFpmZuH9KOdoEq5JziSAqGR3BaRLJ/Gi0YmlHdgBD4cf7GF6Oq/
+         xG2Q==
+X-Gm-Message-State: ACrzQf1Hk9+jErh35vscEnzUzPsQFv2b5Wpw2+36nmwry5bXU/d1OolB
+        8J7b61StFJ2Q7/KASV2EbQ+xTGTEkp8=
+X-Google-Smtp-Source: AMsMyM4e3KIFDAkZ3q9/pGzSQzj+usjA3UMxVF0fVYZNl7X2g8zBP7DgNwAazss6E6xQrcD+a807DQ==
+X-Received: by 2002:a7b:c3c4:0:b0:3c4:785a:36d7 with SMTP id t4-20020a7bc3c4000000b003c4785a36d7mr19941334wmj.138.1666016621738;
+        Mon, 17 Oct 2022 07:23:41 -0700 (PDT)
+Received: from chgm-pc-linux.. (089144219037.atnat0028.highway.a1.net. [89.144.219.37])
+        by smtp.gmail.com with ESMTPSA id y3-20020a7bcd83000000b003b492753826sm10151613wmj.43.2022.10.17.07.23.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 07:23:40 -0700 (PDT)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Christian GMEINER <Christian.GMEINER@bachmann.info>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: Add Bachmann electronic GmbH vendor ID
+Date:   Mon, 17 Oct 2022 16:23:37 +0200
+Message-Id: <20221017142338.1445199-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the repeated word "by" in comments.
+From: Christian GMEINER <Christian.GMEINER@bachmann.info>
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+Signed-off-by: Christian GMEINER <Christian.GMEINER@bachmann.info>
 ---
- samples/bpf/hbm_edt_kern.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/pci_ids.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/samples/bpf/hbm_edt_kern.c b/samples/bpf/hbm_edt_kern.c
-index a65b677acdb0..6294f1d716c0 100644
---- a/samples/bpf/hbm_edt_kern.c
-+++ b/samples/bpf/hbm_edt_kern.c
-@@ -35,7 +35,7 @@
-  *
-  * If the credit is below the drop threshold, the packet is dropped. If it
-  * is a TCP packet, then it also calls tcp_cwr since packets dropped by
-- * by a cgroup skb BPF program do not automatically trigger a call to
-+ * a cgroup skb BPF program do not automatically trigger a call to
-  * tcp_cwr in the current kernel code.
-  *
-  * This BPF program actually uses 2 drop thresholds, one threshold
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index b362d90eb9b0..b93a52977d85 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -166,6 +166,8 @@
+ 
+ #define PCI_VENDOR_ID_UBIQUITI		0x0777
+ 
++#define PCI_VENDOR_ID_BACHMANN_ELECTRONIC 0x0bae
++
+ #define PCI_VENDOR_ID_BERKOM			0x0871
+ #define PCI_DEVICE_ID_BERKOM_A1T		0xffa1
+ #define PCI_DEVICE_ID_BERKOM_T_CONCEPT		0xffa2
 -- 
-2.35.1
+2.37.3
 
