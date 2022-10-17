@@ -2,361 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08179600722
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 08:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FAE60071D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 08:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiJQG46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 02:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S229760AbiJQG4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 02:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiJQG4W (ORCPT
+        with ESMTP id S230202AbiJQG4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 02:56:22 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5C921E0A
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 23:56:08 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3576c47f204so102689347b3.2
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 23:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwXkiJpyXszOYeaS5kG3VAZ2YoiwGwYHcpmiHrFrcts=;
-        b=roDFn8omU7wnmMudjnSUOiAGszxw+QGhON7IWQRPOaHfdtnPmUE8nNQhQxmOg0DEf8
-         bQm3KSB/rQ9xd4jdPxHbckgm8C6oUTKZjbgWoBtEu+BE7S3sB/LslVQ5gUFlPWCe02ZK
-         JueN75mvsRblKc7vyLybbNFSNlAtbBsIuqRrbcASeRsjdUMPfLJIAIDvgzAWu1VJsezM
-         77oOUX5k1N8dhzj1/Y0xDW4UGCqQsQabUwUvXEoQqnIQUCsaAFFvRsU2sLIo+RTMuZ/s
-         3sWRmcFpijCHYJTsDSZ+HbydBmZ+T+XXgFil8Bb9mTof+j4+6YT0E9hq5MB45mftQR2u
-         j0AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mwXkiJpyXszOYeaS5kG3VAZ2YoiwGwYHcpmiHrFrcts=;
-        b=xzTF4s9bu1sTvg+alNUQ4eW5dlUSS3ALq8wKHuUCljgymNA2VMs5UiGVNnNn7Gfnkr
-         f0yHFTtNGAIbgWwqK/boNjyV3LW3HvIPjyiI3/xo1NZQcD+CNKCNZnIaKql7bjcSHaVq
-         4jVQdRfyIA853N9xS7yoXVp9UPJi4ljP/RBcoTzbtBVpXijBfm3cUdgfANID4Dtcfv39
-         6OUaDDLo8mPpOlu/KgyWPYvXmYrmJrVsuUI7yECn25dfdm2LHklnGzPtFzcew/Y+wL+C
-         +ZepUH0IJjrZ5XN87SST2gnJS7QR8xoWV7lxUtDnhH18sI74vzOeHSEyW53uYiOdZ/OW
-         wWdw==
-X-Gm-Message-State: ACrzQf3gN1W0mIIeM40nlnRnDtdXVdhmGkYHHuaEbnOf8vWCIKo42nPq
-        W4hFvwi8AwW/G4I1ZcsHfR2zloBjcKrnEok0
-X-Google-Smtp-Source: AMsMyM4Ng4pCcCrVTiu96rzWmaxFC5Di/VjnWfc6zxEpsP7MFY97oiAeeQ/WR982LUEM8D0pmlaoMUiVZDcvDYRe
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a25:9d0a:0:b0:6bc:2641:19d4 with SMTP
- id i10-20020a259d0a000000b006bc264119d4mr7781133ybp.388.1665989767169; Sun,
- 16 Oct 2022 23:56:07 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 06:54:53 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221017065452.2250273-1-sadiyakazi@google.com>
-Subject: [PATCH v3] Documentation: Kunit: Update architecture.rst for minor fixes
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net, bagasdotme@gmail.com
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 02:56:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BA257BD5;
+        Sun, 16 Oct 2022 23:55:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A53F60F31;
+        Mon, 17 Oct 2022 06:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1097C433D7;
+        Mon, 17 Oct 2022 06:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665989719;
+        bh=PNnJGOyQxGlF6kxJP9vN4ecaF/KlHCOIeam3mAgZbNE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a3kxCqOZfArXCq6cer8xlXYc+oB2CcUQ71hSXKx4Osyc5icd+QXlsO4ZfjN7R/Zou
+         yyfuY9PGYzZkuVlRYAy2PtPB+QmmxFsdRUFnaYo2XehR3DEzxddcOv1dH3DrINlz3G
+         ZoRKWSEj+havq+Ohwxz/o5worCL8zUwy17vLKUY7S2ih0tcvQ5/Hn7+sDLv0i7iHhw
+         sG6PgMzZy28BLPgnmDrcDZlzwLaeeFzUb9C/eMTMH+qKvsrAkBOFkBcmPRJz0VwOmF
+         2nlx5b3sgXM7a4DmLlVhzZ3oIrs7PKA3vWDBaj1rJd1S9Jg3gWpyF2aps71l9ekWJh
+         fMab9kAqwjTBA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1okK1l-0005CX-2V; Mon, 17 Oct 2022 08:55:09 +0200
+Date:   Mon, 17 Oct 2022 08:55:09 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/20] phy: qcom-qmp-combo: clean up status polling
+Message-ID: <Y0z8TWt/AA4Oh9ww@hovoldconsulting.com>
+References: <20221012084846.24003-1-johan+linaro@kernel.org>
+ <20221012085002.24099-1-johan+linaro@kernel.org>
+ <20221012085002.24099-8-johan+linaro@kernel.org>
+ <ca4eef6a-dedd-1823-9525-67d695ac3e58@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca4eef6a-dedd-1823-9525-67d695ac3e58@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updated the architecture.rst page with the following changes:
--Add missing article _the_ across the document.
--Reword content across for style and standard.
--Update all occurrences of Command Line to Command-line
- across the document.
--Correct grammatical issues, for example,
- added _it_wherever missing.
--Update all occurrences of =E2=80=9Cvia" to either use
- =E2=80=9Cthrough=E2=80=9D or =E2=80=9Cusing=E2=80=9D.
--Update the text preceding the external links and pushed the full
- link to a new line for better readability.
--Reword content under the config command to make it more clear and concise.
+On Thu, Oct 13, 2022 at 12:14:17AM +0300, Dmitry Baryshkov wrote:
+> On 12/10/2022 11:49, Johan Hovold wrote:
+> > Clean up the PHY status polling by dropping the configuration mask which
+> > is no longer needed since the QMP driver split.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> 
+> This comes in expectation that 4.20 / 5.20 PHYs will be limited to PCIe. 
+> I'd add this to the commit message.
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
----
+I don't think that's needed. The commit message is correct as it stands,
+and the fact that we may need to change code in case we add support for
+new devices that may need it is quite natural.
 
-Thank you Bagas for your detailed comments.=20
-I think the current commit message does convey the right message as it is n=
-ot a complete rewrite, hence retained it.=20
-Also since we talk about the two parts of the architecture, I have retained=
- the it as 'kunit_tool (Command-line Test Harness)' instead of 'Running Tes=
-ts Options'.
+Also note that the vendor drivers (5.4) only have such a provision for
+PCIe PHYs and not for the combo and USB PHY drivers.
 
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20221013080545.1552573-1-sadiyakazi=
-@google.com/
--Updated the link descriptions as per Bagas=E2=80=99s feedback
--Reworded content talking about options to run tests and added links as per=
- Bagas=E2=80=99s feedback
+> With that fixed:
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Best Regards,
-Sadiya Kazi
----
- .../dev-tools/kunit/architecture.rst          | 118 +++++++++---------
- 1 file changed, 60 insertions(+), 58 deletions(-)
-
-diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation=
-/dev-tools/kunit/architecture.rst
-index 8efe792bdcb9..52b1a30c9f89 100644
---- a/Documentation/dev-tools/kunit/architecture.rst
-+++ b/Documentation/dev-tools/kunit/architecture.rst
-@@ -4,16 +4,17 @@
- KUnit Architecture
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--The KUnit architecture can be divided into two parts:
-+The KUnit architecture is divided into two parts:
-=20
- - `In-Kernel Testing Framework`_
--- `kunit_tool (Command Line Test Harness)`_
-+- `kunit_tool (Command-line Test Harness)`_
-=20
- In-Kernel Testing Framework
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-=20
- The kernel testing library supports KUnit tests written in C using
--KUnit. KUnit tests are kernel code. KUnit does several things:
-+KUnit. These KUnit tests are kernel code. KUnit performs the following
-+tasks:
-=20
- - Organizes tests
- - Reports test results
-@@ -22,19 +23,17 @@ KUnit. KUnit tests are kernel code. KUnit does several =
-things:
- Test Cases
- ----------
-=20
--The fundamental unit in KUnit is the test case. The KUnit test cases are
--grouped into KUnit suites. A KUnit test case is a function with type
--signature ``void (*)(struct kunit *test)``.
--These test case functions are wrapped in a struct called
--struct kunit_case.
-+The test case is the fundamental unit in KUnit. KUnit test cases are organ=
-ised
-+into suites. A KUnit test case is a function with type signature
-+``void (*)(struct kunit *test)``. These test case functions are wrapped in=
- a
-+struct called struct kunit_case.
-=20
- .. note:
- 	``generate_params`` is optional for non-parameterized tests.
-=20
--Each KUnit test case gets a ``struct kunit`` context
--object passed to it that tracks a running test. The KUnit assertion
--macros and other KUnit utilities use the ``struct kunit`` context
--object. As an exception, there are two fields:
-+Each KUnit test case receives a ``struct kunit`` context object that track=
-s a
-+running test. The KUnit assertion macros and other KUnit utilities use the
-+``struct kunit`` context object. As an exception, there are two fields:
-=20
- - ``->priv``: The setup functions can use it to store arbitrary test
-   user data.
-@@ -75,14 +74,15 @@ with the KUnit test framework.
- Executor
- --------
-=20
--The KUnit executor can list and run built-in KUnit tests on boot.
-+The KUnit executor can list and run built-in KUnit tests on boot
- The Test suites are stored in a linker section
--called ``.kunit_test_suites``. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/in=
-clude/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
-+called ``.kunit_test_suites``. For the code, see ``KUNIT_TABLE()`` macro
-+definition in
-+`include/asm-generic/vmlinux.lds.h <https://git.kernel.org/pub/scm/linux/k=
-ernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=3Dv6.=
-0#n950>`_.
- The linker section consists of an array of pointers to
- ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
--macro. To run all tests compiled into the kernel, the KUnit executor
--iterates over the linker section array.
-+macro. The KUnit executor iterates over the linker section array in order =
-to
-+run all the tests that are compiled into the kernel.
-=20
- .. kernel-figure:: kunit_suitememorydiagram.svg
- 	:alt:	KUnit Suite Memory
-@@ -90,17 +90,18 @@ iterates over the linker section array.
- 	KUnit Suite Memory Diagram
-=20
- On the kernel boot, the KUnit executor uses the start and end addresses
--of this section to iterate over and run all tests. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/executor.c
--
-+of this section to iterate over and run all tests. For the implementation =
-of the
-+executor, see
-+`lib/kunit/executor.c <https://git.kernel.org/pub/scm/linux/kernel/git/tor=
-valds/linux.git/tree/lib/kunit/executor.c>`_.
- When built as a module, the ``kunit_test_suites()`` macro defines a
- ``module_init()`` function, which runs all the tests in the compilation
- unit instead of utilizing the executor.
-=20
- In KUnit tests, some error classes do not affect other tests
- or parts of the kernel, each KUnit case executes in a separate thread
--context. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/try-catch.c?h=3Dv5.15#n58
-+context. For the implememtation details, see ``kunit_try_catch_run()`` fun=
-ction
-+code in
-+`lib/kunit/try-catch.c <https://git.kernel.org/pub/scm/linux/kernel/git/to=
-rvalds/linux.git/tree/lib/kunit/try-catch.c?h=3Dv5.15#n58>`_.
-=20
- Assertion Macros
- ----------------
-@@ -111,37 +112,36 @@ All expectations/assertions are formatted as:
-=20
- - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
-   expectation.
-+  In the event of a failure, the testing flow differs as follows:
-=20
--	- For an expectation, if the check fails, marks the test as failed
--	  and logs the failure.
-+	- For expectations, the test is marked as failed and the failure is logge=
-d.
-=20
--	- An assertion, on failure, causes the test case to terminate
--	  immediately.
-+	- Failing assertions, on the other hand, result in the test case being
-+	  terminated immediately.
-=20
--		- Assertions call function:
-+		- Assertions call the function:
- 		  ``void __noreturn kunit_abort(struct kunit *)``.
-=20
--		- ``kunit_abort`` calls function:
-+		- ``kunit_abort`` calls the function:
- 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_ca=
-tch)``.
-=20
--		- ``kunit_try_catch_throw`` calls function:
-+		- ``kunit_try_catch_throw`` calls the function:
- 		  ``void kthread_complete_and_exit(struct completion *, long) __noreturn=
-;``
- 		  and terminates the special thread context.
-=20
- - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
--  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied prop=
-erties are
-+  has the boolean value "true"), ``EQ`` (two supplied properties are
-   equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
--  contain an =E2=80=9Cerr=E2=80=9D value).
-+  contain an "err" value).
-=20
- - ``[_MSG]`` prints a custom message on failure.
-=20
- Test Result Reporting
- ---------------------
--KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
--https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14=
--specification.md.
--KTAP (yet to be standardized format) works with KUnit and Kselftest.
--The KUnit executor prints KTAP results to dmesg, and debugfs
--(if configured).
-+KUnit prints the test results in KTAP format. KTAP is based on TAP14, see
-+Documentation/dev-tools/ktap.rst.
-+KTAP works with KUnit and Kselftest. The KUnit executor prints KTAP result=
-s to
-+dmesg, and debugfs (if configured).
-=20
- Parameterized Tests
- -------------------
-@@ -150,33 +150,35 @@ Each KUnit parameterized test is associated with a co=
-llection of
- parameters. The test is invoked multiple times, once for each parameter
- value and the parameter is stored in the ``param_value`` field.
- The test case includes a KUNIT_CASE_PARAM() macro that accepts a
--generator function.
--The generator function is passed the previous parameter and returns the ne=
-xt
--parameter. It also provides a macro to generate common-case generators bas=
-ed on
--arrays.
-+generator function. The generator function is passed the previous paramete=
-r
-+and returns the next parameter. It also includes a macro for generating
-+array-based common-case generators.
-=20
--kunit_tool (Command Line Test Harness)
-+kunit_tool (Command-line Test Harness)
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
--that can be used to configure, build, exec, parse and run (runs other
--commands in order) test results. You can either run KUnit tests using
--kunit_tool or can include KUnit in kernel and parse manually.
-+``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.py=
-``. It
-+is used to configure, build, execute, parse test results and run all of th=
-e
-+previous commands in correct order (i.e., configure, build, execute and pa=
-rse).
-+You have two options for running KUnit tests: either build the kernel with=
- KUnit
-+enabled and manually parse the results (see
-+Documentation/dev-tools/kunit/run_manual.rst) or use ``kunit_tool``
-+(see Documentation/dev-tools/kunit/run_wrapper.rst).
-=20
- - ``configure`` command generates the kernel ``.config`` from a
-   ``.kunitconfig`` file (and any architecture-specific options).
--  For some architectures, additional config options are specified in the
--  ``qemu_config`` Python script
--  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
-+  The Python scripts available in ``qemu_configs`` folder
-+  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
-+  additional configuration options for specific architectures.
-   It parses both the existing ``.config`` and the ``.kunitconfig`` files
--  and ensures that ``.config`` is a superset of ``.kunitconfig``.
--  If this is not the case, it will combine the two and run
--  ``make olddefconfig`` to regenerate the ``.config`` file. It then
--  verifies that ``.config`` is now a superset. This checks if all
--  Kconfig dependencies are correctly specified in ``.kunitconfig``.
--  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
--  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
--  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
-+  to ensure that ``.config`` is a superset of ``.kunitconfig``.
-+  If not, it will combine the two and run ``make olddefconfig`` to regener=
-ate
-+  the ``.config`` file. It then checks to see if ``.config`` has become a =
-superset.
-+  This verifies that all the Kconfig dependencies are correctly specified =
-in the
-+  file ``.kunitconfig``. The ``kunit_config.py`` script contains the code =
-for parsing
-+  Kconfigs. The code which runs ``make olddefconfig`` is part of the
-+  ``kunit_kernel.py`` script. You can invoke this command through:
-+  ``./tools/testing/kunit/kunit.py config`` and
-   generate a ``.config`` file.
- - ``build`` runs ``make`` on the kernel tree with required options
-   (depends on the architecture and some options, for example: build_dir)
-@@ -184,8 +186,8 @@ kunit_tool or can include KUnit in kernel and parse man=
-ually.
-   To build a KUnit kernel from the current ``.config``, you can use the
-   ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
- - ``exec`` command executes kernel results either directly (using
--  User-mode Linux configuration), or via an emulator such
--  as QEMU. It reads results from the log via standard
-+  User-mode Linux configuration), or through an emulator such
-+  as QEMU. It reads results from the log using standard
-   output (stdout), and passes them to ``parse`` to be parsed.
-   If you already have built a kernel with built-in KUnit tests,
-   you can run the kernel and display the test results with the ``exec``
---=20
-2.38.0.413.g74048e4d9e-goog
-
+Johan
