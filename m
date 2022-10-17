@@ -2,228 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161B0600C3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E6D600C49
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiJQKWY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Oct 2022 06:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S229919AbiJQKXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiJQKWV (ORCPT
+        with ESMTP id S229779AbiJQKXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:22:21 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD2F5FDFE;
-        Mon, 17 Oct 2022 03:22:16 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MrY0b1p84z6H72S;
-        Mon, 17 Oct 2022 18:20:31 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Mon, 17 Oct 2022 12:22:11 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 17 Oct
- 2022 11:22:12 +0100
-Date:   Mon, 17 Oct 2022 11:22:10 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-CC:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        "Jonathan Cameron" <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH 2/3] dt-bindings: iio: temperature: ltc2983: support
- more parts
-Message-ID: <20221017112210.00002c17@huawei.com>
-In-Reply-To: <8d8c6138-7c8b-d3cb-d741-dc20eb489f45@gmail.com>
-References: <20221014123724.1401011-1-demonsingur@gmail.com>
-        <20221014123724.1401011-3-demonsingur@gmail.com>
-        <20221014163718.00000042@huawei.com>
-        <8d8c6138-7c8b-d3cb-d741-dc20eb489f45@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 17 Oct 2022 06:23:14 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62655FDE4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:23:11 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bu30so17724036wrb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=2tBc5BJTUK0yJeikdsN9lehq8jKJ6hu9VScPZU4a2kI=;
+        b=bdMMl9zH0j03ibTEKy/zCqWIwlETzDUo9ooO5EvQAFnx3iYPS7HdIgwALI5bam0aqB
+         oQigPd/nYpgC6M+zBK7std6ZLqh0IMHxfvfD3xsD8Cy2AwY2f+OeiAenUJkm/q/GT4T4
+         9yN6Z/Cx1MEG2N27/Y0mUbcE9WEOk0KOHAyCSIpPeg/4Oukpt4Qs73+o1e0nPKbL8f4w
+         r0wIsQog9ltsUwx9mWhTTYcW1cfalMKdBDX57UH1jyb3eE8HlCNB/au0hlw5J8p17nvd
+         YcWDoD85oh0zwnWHDofdDICQbN3JmeekfkKGVLMdXfjQalQNGM1e51Yb0yD2RSJAeWGu
+         pivw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2tBc5BJTUK0yJeikdsN9lehq8jKJ6hu9VScPZU4a2kI=;
+        b=x81MBb7zFKY0VMVdm3Y5jL/8e2SVEt/EWA6csj0lYgpZ8ov1EoGLzhWHXJ5cU8Dv9V
+         veKdHbLCj+aK2IWijlbouSC8m/d8HTPuSNMy6oSWI5vaYqro21kjVeFCDbl6AaFq+xRZ
+         Noh5YzGiy8bhaoK1vC57ux5JGIcHOD86kIOAS6tbbT8oW/5rTW5UEULtkhWPwT3RwRbN
+         +LuU03ln+nzFT9DDCtrShR+rl8ct4co10ecJYLxXyjKWhdFj+SLqDpyIULt0Lxe8LuQi
+         Vq3AnDukM5as2BLNRkOu36Bg8pOc5Ud43RvP3nbMl54UGyYGti8tzdFJaIdU80gBjwyY
+         OP2Q==
+X-Gm-Message-State: ACrzQf1YH/ibZMKlYNkJeQ0p1H8e2bn+2C5Ph6Cu9i1cFEtxSgY61/Rw
+        YPyEPkwdn/tB/aaUJu2Ml0JNKw==
+X-Google-Smtp-Source: AMsMyM4Z0GGBbYxrURvlW1Ga67cbnXc5JvAoUjdO9dpW/aCtJK2zoDhG4xwgBxeVvDxyl5t3Z0wVAg==
+X-Received: by 2002:adf:9dd0:0:b0:22c:d6cc:b387 with SMTP id q16-20020adf9dd0000000b0022cd6ccb387mr6109316wre.353.1666002190182;
+        Mon, 17 Oct 2022 03:23:10 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b003b4fe03c881sm15590707wmq.48.2022.10.17.03.23.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 03:23:09 -0700 (PDT)
+Subject: [PATCH v2 0/5] arm: qcom: mdm9615: second round of bindings and DT fixes
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAAgtTWMC/4WNQQqDMBBFryKz7pRJrNJ21XuULsaY6kBMZGIFEe/e0At09Xkf3v87ZK/iM9yrHd
+ SvkiXFAvZUgRs5Dh6lLwyWrDVEDU79dGtNg7NEt2jAjaeApn43zlz50tcMRe04e+yUoxuLHD8hlHKU
+ vCTdflerKfH8s7oaJCTXOaLWW67pESSypnPSAV7HcXwBdEbIaL4AAAA=
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Mon, 17 Oct 2022 12:23:04 +0200
+Message-Id: <20221005-mdm9615-pinctrl-yaml-v2-0-639fe67a04be@linaro.org>
+To:     Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        devicetree@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 10:01:03 +0300
-Cosmin Tanislav <demonsingur@gmail.com> wrote:
+This is a second round of bindings & DT fixes for the MDM9615 platform.
 
-> On 10/14/22 18:37, Jonathan Cameron wrote:
-> > On Fri, 14 Oct 2022 15:37:23 +0300
-> > Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> >   
-> >> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> >>
-> >> Add support for the following parts:
-> >>   * LTC2984
-> >>   * LTC2986
-> >>   * LTM2985
-> >>
-> >> The LTC2984 is a variant of the LTC2983 with EEPROM.
-> >> The LTC2986 is a variant of the LTC2983 with only 10 channels,
-> >> EEPROM and support for active analog temperature sensors.  
-> > 
-> > If they 'work' but with fewer features, perhaps a fallback
-> > compatible?
-> >   
-> 
-> 10 channels vs 20 channels. Using ltc2983 compatible as fallback
-> would allow you to have 10 non-functional channels specified in the
-> dts.
+This second round focuses on less trivial changes like pinctrl & regulators bindings,
+the remaining work will mainly be fixing the qcom,kpss-timer/qcom,msm-timer situation and
+add bindings for qcom,lcc-mdm9615, qcom,kpss-gcc & swir,mangoh-iotport-spi.
 
-Ah. That one probably doesn't make sense then.  The 2984?
+Dependencies:
+- patch 1-2, 4-5: None
+- patch 3: bindings dependency on 20221005-mdm9615-sx1509q-yaml-v2-0-a4a5b8eecc7b@linaro.org
 
-> 
-> >> The LTM2985 is software-compatible with the LTC2986.  
-> > 
-> > Fallback compatible?
-> >   
-> >>
-> >> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> >> ---
-> >>   .../bindings/iio/temperature/adi,ltc2983.yaml | 63 +++++++++++++++++--
-> >>   1 file changed, 59 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-> >> index 722781aa4697..c33ab524fb64 100644
-> >> --- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-> >> +++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-> >> @@ -4,19 +4,27 @@
-> >>   $id: http://devicetree.org/schemas/iio/temperature/adi,ltc2983.yaml#
-> >>   $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>   
-> >> -title: Analog Devices LTC2983 Multi-sensor Temperature system
-> >> +title: Analog Devices LTC2983, LTC2986, LTM2985 Multi-sensor Temperature system
-> >>   
-> >>   maintainers:
-> >>     - Nuno Sá <nuno.sa@analog.com>
-> >>   
-> >>   description: |
-> >> -  Analog Devices LTC2983 Multi-Sensor Digital Temperature Measurement System
-> >> +  Analog Devices LTC2983, LTC2984, LTC2986, LTM2985 Multi-Sensor Digital
-> >> +  Temperature Measurement Systems
-> >> +
-> >>     https://www.analog.com/media/en/technical-documentation/data-sheets/2983fc.pdf
-> >> +  https://www.analog.com/media/en/technical-documentation/data-sheets/2984fb.pdf
-> >> +  https://www.analog.com/media/en/technical-documentation/data-sheets/29861fa.pdf
-> >> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ltm2985.pdf
-> >>   
-> >>   properties:
-> >>     compatible:
-> >>       enum:
-> >>         - adi,ltc2983
-> >> +      - adi,ltc2984
-> >> +      - adi,ltc2986
-> >> +      - adi,ltm2985
-> >>   
-> >>     reg:
-> >>       maxItems: 1
-> >> @@ -26,7 +34,7 @@ properties:
-> >>   
-> >>     adi,mux-delay-config-us:
-> >>       description:
-> >> -      The LTC2983 performs 2 or 3 internal conversion cycles per temperature
-> >> +      The device performs 2 or 3 internal conversion cycles per temperature  
-> > 
-> > Definitely a lesson here in avoiding device names in the descriptions!
-> >   
-> >>         result. Each conversion cycle is performed with different excitation and
-> >>         input multiplexer configurations. Prior to each conversion, these
-> >>         excitation circuits and input switch configurations are changed and an
-> >> @@ -145,7 +153,7 @@ patternProperties:
-> >>         adi,three-conversion-cycles:
-> >>           description:
-> >>             Boolean property which set's three conversion cycles removing
-> >> -          parasitic resistance effects between the LTC2983 and the diode.
-> >> +          parasitic resistance effects between the device and the diode.
-> >>           type: boolean
-> >>   
-> >>         adi,average-on:
-> >> @@ -353,6 +361,41 @@ patternProperties:
-> >>           description: Boolean property which set's the adc as single-ended.
-> >>           type: boolean
-> >>   
-> >> +  "^temp@":
-> >> +    type: object
-> >> +    description:
-> >> +      Represents a channel which is being used as an active analog temperature
-> >> +      sensor.
-> >> +
-> >> +    properties:
-> >> +      adi,sensor-type:
-> >> +        description:
-> >> +          Identifies the sensor as an active analog temperature sensor.
-> >> +        $ref: /schemas/types.yaml#/definitions/uint32
-> >> +        const: 31  
-> > 
-> > Ah. This is a bit odd as it's fixed for the channel type.  However there
-> > is precedence in this binding so fair enough.
-> >   
-> 
-> I think it
-> 
-> >> +
-> >> +      adi,single-ended:
-> >> +        description: Boolean property which sets the sensor as single-ended.
-> >> +        type: boolean
-> >> +
-> >> +      adi,custom-temp:
-> >> +        description:
-> >> +          This is a table, where each entry should be a pair of
-> >> +          voltage(mv)-temperature(K). The entries must be given in nv and uK
-> >> +          so that, the original values must be multiplied by 1000000. For
-> >> +          more details look at table 71 and 72.
-> >> +          Note should be signed, but dtc doesn't currently maintain the
-> >> +          sign.
-> >> +        $ref: /schemas/types.yaml#/definitions/uint64-matrix
-> >> +        minItems: 3
-> >> +        maxItems: 64
-> >> +        items:
-> >> +          minItems: 2
-> >> +          maxItems: 2
-> >> +
-> >> +    required:
-> >> +      - adi,custom-temp
-> >> +
-> >>     "^rsense@":
-> >>       type: object
-> >>       description:
-> >> @@ -382,6 +425,18 @@ required:
-> >>     - reg
-> >>     - interrupts
-> >>   
-> >> +allOf:
-> >> +  - if:
-> >> +      properties:
-> >> +        compatible:
-> >> +          contains:
-> >> +            enum:
-> >> +              - adi,ltc2983
-> >> +              - adi,ltc2984
-> >> +    then:
-> >> +      patternProperties:
-> >> +        "^temp@": false
-> >> +
-> >>   additionalProperties: false
-> >>   
-> >>   examples:  
-> >   
+To: Bjorn Andersson <andersson@kernel.org>
+To: Andy Gross <agross@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Lee Jones <lee@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-gpio@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
+---
+Changes in v2:
+- Rebased on v6.1-rc1
+- Patch 1: Fixed bindings and aligned with Krysztof's series
+- Patch 2: Rewrote patch title and added reviewed-by tag
+- Patch 3: Added reviewed-by tag
+- Patch 4: Moved to end, added support for (regulators|-regulators) sudnode
+- Patch 5: Fixed schema description and added missing unevaluatedProperties in patternProperties
+- Patch 6: Dropped & squashed with patch 4
+- Link to v1: https://lore.kernel.org/r/20221005-mdm9615-pinctrl-yaml-v1-0-0cbc006e2a30@linaro.org
+
+---
+Neil Armstrong (5):
+      dt-bindings: pinctrl: convert qcom,mdm9615-pinctrl.txt to dt-schema
+      arm: dts: qcom: mdm9615: align pinctrl subnodes with dt-schema bindings
+      arm: dts: qcom: mdm9615: wp8548-mangoh-green: fix sx150xq node names and probe-reset property
+      dt-bindings: regulators: convert non-smd RPM Regulators bindings to dt-schema
+      dt-bindings: soc: qcom: convert non-smd RPM bindings to dt-schema
+
+ Documentation/devicetree/bindings/mfd/qcom-rpm.txt | 283 ---------------------
+ .../bindings/pinctrl/qcom,mdm9615-pinctrl.txt      | 161 ------------
+ .../bindings/pinctrl/qcom,mdm9615-pinctrl.yaml     | 120 +++++++++
+ .../bindings/regulator/qcom,ipc-rpm-regulator.yaml | 127 +++++++++
+ .../devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml |  99 +++++++
+ .../boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  20 +-
+ arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         |  22 +-
+ 7 files changed, 367 insertions(+), 465 deletions(-)
+---
+base-commit: 19d64985796125c5e3820c3db995c5df6d13d6dc
+change-id: 20221005-mdm9615-pinctrl-yaml-13f5c18a4d3a
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
