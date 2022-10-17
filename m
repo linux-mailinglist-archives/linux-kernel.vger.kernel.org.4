@@ -2,98 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380CD6010CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3375260114F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiJQOKk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Oct 2022 10:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S230446AbiJQOkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiJQOKh (ORCPT
+        with ESMTP id S229981AbiJQOkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:10:37 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3254F1A6;
-        Mon, 17 Oct 2022 07:10:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id C252561F0A8B;
-        Mon, 17 Oct 2022 16:10:30 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 7Bqt5iK7Mhen; Mon, 17 Oct 2022 16:10:30 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 2CC3A62EFE89;
-        Mon, 17 Oct 2022 16:10:30 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id eGcU3lunn7ZX; Mon, 17 Oct 2022 16:10:30 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id CC4CA61F0A8B;
-        Mon, 17 Oct 2022 16:10:29 +0200 (CEST)
-Date:   Mon, 17 Oct 2022 16:10:29 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        linux-um <linux-um@lists.infradead.org>,
-        kexec <kexec@lists.infradead.org>, bhe <bhe@redhat.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-hyperv <linux-hyperv@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, x86 <x86@kernel.org>,
-        kernel-dev <kernel-dev@igalia.com>, kernel <kernel@gpiccoli.net>,
-        halves <halves@canonical.com>,
-        fabiomirmar <fabiomirmar@gmail.com>,
-        alejandro j jimenez <alejandro.j.jimenez@oracle.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, bp <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        d hatayama <d.hatayama@jp.fujitsu.com>,
-        dave hansen <dave.hansen@linux.intel.com>,
-        dyoung <dyoung@redhat.com>, feng tang <feng.tang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley <mikelley@microsoft.com>,
-        hidehiro kawai ez <hidehiro.kawai.ez@hitachi.com>,
-        jgross <jgross@suse.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        mhiramat <mhiramat@kernel.org>, mingo <mingo@redhat.com>,
-        paulmck <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        senozhatsky <senozhatsky@chromium.org>,
-        stern <stern@rowland.harvard.edu>, tglx <tglx@linutronix.de>,
-        vgoyal <vgoyal@redhat.com>, vkuznets <vkuznets@redhat.com>,
-        will <will@kernel.org>, xuqiang36 <xuqiang36@huawei.com>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>
-Message-ID: <422015181.40644.1666015829599.JavaMail.zimbra@nod.at>
-In-Reply-To: <280ce0ae-5a50-626f-930f-2661a109fa36@igalia.com>
-References: <20220819221731.480795-1-gpiccoli@igalia.com> <20220819221731.480795-5-gpiccoli@igalia.com> <1f464f3d-6668-9e05-bcb7-1b419b5373e1@igalia.com> <2087154222.237106.1663535981252.JavaMail.zimbra@nod.at> <280ce0ae-5a50-626f-930f-2661a109fa36@igalia.com>
-Subject: Re: [PATCH V3 04/11] um: Improve panic notifiers consistency and
- ordering
+        Mon, 17 Oct 2022 10:40:36 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0DD5AA28
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666017620; bh=hrVvHrfFWX/zUmEet33OGmsTs22YqEFCpVEbOT2941k=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=jotFTq2ZV+19JyoHeQwjKH1zmvp3uekpxmVHkwDtO92sKudzUMcXgIsjgP/EeiK3R
+         lO5RvAHDNSUQ/raVeUFlp+1pfVX50UHMLJYOTxsDvkQPESgjcOyyMCEKVLSKCBrO72
+         lbnxjnXGBT+3yj4Pnuatlz5cIv9xj+W+qzx7cYhM=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via [213.182.55.206]
+        Mon, 17 Oct 2022 16:40:20 +0200 (CEST)
+X-EA-Auth: KqMRjCz+u0MP0lsX8Hn5F7H1pAy0qTp7ksZUbQgADB2c/8l6MoAXejKcYm5NdGYkcbU56dZXSn2L1DghDG8ILV7OToZ8e6Am
+Date:   Mon, 17 Oct 2022 19:40:46 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH 2/4] staging: r8188eu: reformat long computation lines
+Message-ID: <Y01iZjkZuIPgcfz4@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666011479.git.drv@mailo.com>
+ <2dd27eff9aab5ffe31e61086c0584982794507cf.1666011479.git.drv@mailo.com>
+ <Y01iLXp20G0FSJFG@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: Improve panic notifiers consistency and ordering
-Thread-Index: kqQk2RczEaY2s6Uahti6roceJKzQkQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y01iLXp20G0FSJFG@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-> Hi Richard / Johannes, is there any news on this one?
-> Thanks in advance,
+On Mon, Oct 17, 2022 at 04:09:49PM +0200, Greg KH wrote:
+> On Mon, Oct 17, 2022 at 06:52:50PM +0530, Deepak R Varma wrote:
+> > Reformat long running computation instructions to improve code readability.
+> > Address following checkpatch script complaints:
+> > 	CHECK: line length of 171 exceeds 100 columns
+> > 	CHECK: line length of 113 exceeds 100 columns
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >  drivers/staging/r8188eu/core/rtw_br_ext.c | 20 +++++++++++++-------
+> >  1 file changed, 13 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> > index 79daf8f269d6..427da7e8ba4c 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> > @@ -211,8 +211,10 @@ static int __nat25_network_hash(unsigned char *network_addr)
+> >  	} else if (network_addr[0] == NAT25_IPX) {
+> >  		unsigned long x;
+> >
+> > -		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
+> > -			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10];
+> > +		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^
+>
+> Why not go out to [4] here and then you are one line shorter?
 
-It's upstream:
-git.kernel.org/linus/758dfdb9185cf94160f20e85bbe05583e3cd4ff4
+Thank you for the feedback.
+Arranging 4 on a line still made the line extend 90+ columns. It appeared wide
+to me. Stacking three in one line made it look better.
+I will resend the patch with 4 in line and let you suggest if that is
+acceptable.
 
-Thanks,
-//richard
+Thank you,
+./drv
+
+>
+> > +		    network_addr[4] ^ network_addr[5] ^ network_addr[6] ^
+> > +		    network_addr[7] ^ network_addr[8] ^ network_addr[9] ^
+> > +		    network_addr[10];
+> >
+> >  		return x & (NAT25_HASH_SIZE - 1);
+> >  	} else if (network_addr[0] == NAT25_APPLE) {
+> > @@ -224,16 +226,20 @@ static int __nat25_network_hash(unsigned char *network_addr)
+> >  	} else if (network_addr[0] == NAT25_PPPOE) {
+> >  		unsigned long x;
+> >
+> > -		x = network_addr[0] ^ network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^ network_addr[6] ^ network_addr[7] ^ network_addr[8];
+> > +		x = network_addr[0] ^ network_addr[1] ^ network_addr[2] ^
+> > +		    network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
+>
+> Same here
+>
+>
+> > +		    network_addr[6] ^ network_addr[7] ^ network_addr[8];
+> >
+> >  		return x & (NAT25_HASH_SIZE - 1);
+> >  	} else if (network_addr[0] == NAT25_IPV6) {
+> >  		unsigned long x;
+> >
+> > -		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
+> > -			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10] ^
+> > -			network_addr[11] ^ network_addr[12] ^ network_addr[13] ^ network_addr[14] ^ network_addr[15] ^
+> > -			network_addr[16];
+> > +		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^
+> > +		    network_addr[4] ^ network_addr[5] ^ network_addr[6] ^
+> > +		    network_addr[7] ^ network_addr[8] ^ network_addr[9] ^
+> > +		    network_addr[10] ^ network_addr[11] ^ network_addr[12] ^
+> > +		    network_addr[13] ^ network_addr[14] ^ network_addr[15] ^
+> > +		    network_addr[16];
+>
+> And here.
+>
+> thanks,
+>
+> greg k-h
+>
+
+
