@@ -2,84 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B052601737
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8502660173C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiJQTTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S230367AbiJQTUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiJQTTc (ORCPT
+        with ESMTP id S230339AbiJQTTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:19:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E210E6172;
-        Mon, 17 Oct 2022 12:19:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66F0161202;
-        Mon, 17 Oct 2022 19:19:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9B9C433C1;
-        Mon, 17 Oct 2022 19:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666034369;
-        bh=Qr818kc1xI8X7W0RLObQ/uwj/M89QgsXdWjiM4pDHzQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RYSrfixV7H4m8Bq9qKrOvE5+I10CcI1GmMEGUCZP3wdLcmijp9XkwxL+5DnslgW5x
-         Rp/uJCAiFqp/f5aVODOXEu9RXvXk8wl5jQMBroBXMxmIPW/DXSfywCX24g1mgOWuG9
-         s94/yqeqz6oItVb3SqdztNfTbGXJrRn/nqXrJ45z9tnGhIaDaHWK/xNJTg3D1UDEIa
-         JY03M2nxymtIhdbs1j1rwFxJtRMkGqn3proUNXjBI2raT89OVINb70LG2+7bjixnzV
-         /K+g4gv1TpGb7tpP1wWa9F11cu5leYpW5VNJTcEy15ua7MrtTp6oCaWSaZ02NS/5xL
-         ZJRsJqhWgWerQ==
-Date:   Mon, 17 Oct 2022 12:19:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jerry.Ray@microchip.com
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        krzysztof.kozlowski@linaro.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [net-next][PATCH v4] dt-bindings: dsa: Add lan9303 yaml
-Message-ID: <20221017121928.36b582c3@kernel.org>
-In-Reply-To: <20221017191311.mxkjfz75pgzbcwcz@skbuf>
-References: <20221003164624.4823-1-jerry.ray@microchip.com>
-        <20221003164624.4823-1-jerry.ray@microchip.com>
-        <20221008225628.pslsnwilrpvg3xdf@skbuf>
-        <e49eb069-c66b-532c-0e8e-43575304187b@linaro.org>
-        <20221009222257.f3fcl7mw3hdtp4p2@skbuf>
-        <551ca020-d4bb-94bf-7091-755506d76f58@linaro.org>
-        <20221010102914.ut364d57sjhnb3lj@skbuf>
-        <MWHPR11MB16938D7BA12C1632FF675C0AEF299@MWHPR11MB1693.namprd11.prod.outlook.com>
-        <20221017191311.mxkjfz75pgzbcwcz@skbuf>
+        Mon, 17 Oct 2022 15:19:50 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8DB1EAF3;
+        Mon, 17 Oct 2022 12:19:47 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id pq16so11866170pjb.2;
+        Mon, 17 Oct 2022 12:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GuVE9fVTM4eodOC6sJzSFmeJV1Sl1qeoc+ZDwqd1NBE=;
+        b=BCGp6HTFj0dBO16cFsAUMbAwB2kXgReySlKd4UqcPoEtEkQ+5o6yMLwSSFX5WtOhyi
+         Xtc+Av44Tqb1YzvKSoUzktfSJg9VIeW1eyqVkC7+UrvOiNsWN6dpYgh7py6iuerj0wqa
+         pbAih0x388OQVu3PthnVkvKnK+4+GxnecWIZTS2QdWvLe48MrIk/dTmZn29tZf6s8rig
+         zoy+hWeCUXeH4+MC8skFIDdrJ02hZf0DfnB4tHdXCC7wmVRIY9lIRycagcni+4s1mBlR
+         04dgT4vKkejZu/Bb0N/W8nWEIxFvu2RawXWqhN0dXVlKKWsYHYSQIxLRP+LI3tok0eYT
+         27AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GuVE9fVTM4eodOC6sJzSFmeJV1Sl1qeoc+ZDwqd1NBE=;
+        b=cFbVOaMKaVD5ye44aHLPqF0o4TchdneB8t1UoAgi7TLawxj1KORvWLSM6IwnQl5YI8
+         9uWcrDfBiyVOWbN7B4xGccJTZ7CiIg15cPzQJPQQiml9LR3CVZes4snsleKXlfdALpif
+         pZS1UvYzri3PE1relv6vcz322aoJ3+jGge1Kai2wh972D0NbX5PsoVQo9eKr2c9ODxFm
+         exqWayY8SqxJBbl95PaCN4rYciNAG93D6EwNJLt5VbJ9QNREVouFzQEMpYd8y+jZx+gr
+         QlVE8ccs0b/70mmQ58WF5Xlu2CCEL7/d7XfrfZ4iMbg4KkQPypnlJB4Oik778qayGUk4
+         WJhA==
+X-Gm-Message-State: ACrzQf37oCAGoHWu5dQ17gMDvuaOR40J+LArwGzwf3fJNDf2YjiH6pm5
+        Cvv8eFf1mFhxq5wV3DW1x9Jv3juJF4FVPw==
+X-Google-Smtp-Source: AMsMyM7073GR1pbP1Mtfl3zE7AM9vl9nzjP4ozn+3Jbt9DBHDexqdbpwPazCugEpdYW9o3rrMXDTXg==
+X-Received: by 2002:a17:902:9308:b0:182:b2ba:755 with SMTP id bc8-20020a170902930800b00182b2ba0755mr13479172plb.107.1666034387177;
+        Mon, 17 Oct 2022 12:19:47 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id t2-20020a170902e1c200b001807922f43bsm6927713pla.158.2022.10.17.12.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 12:19:46 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 17 Oct 2022 09:19:45 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/8] blk-iocost: Get ioc_now inside weight_updated
+Message-ID: <Y02q0Us+WZmQU3zO@slm.duckdns.org>
+References: <20221017020011.25016-1-shikemeng@huawei.com>
+ <20221017020011.25016-9-shikemeng@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017020011.25016-9-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 22:13:11 +0300 Vladimir Oltean wrote:
-> The portion I highlighted of the change you're making includes your name
-> into the output of $(./scripts/get_maintainer.pl drivers/net/dsa/lan9303-core.c).
-> In other words, you're voluntarily subscribing to the responsibility of
-> being a maintainer for the driver, getting emails from other developers,
-> reviewing patches. Furthermore, you also maintain the code in the stable
-> trees, hence your name also gets propagated there so people who use
-> those kernels can report problems to you.
+On Mon, Oct 17, 2022 at 10:00:11AM +0800, Kemeng Shi wrote:
+> The ioc_now parameter of weight_updated is only needed if we need call
+> propagate_weights. Move ioc_now inside weight_updated to remove
+> unnecessary get of ioc_now from outside of weight_updated.
 > 
-> The MAINTAINERS entry for lan9303 needs to go to the "net" tree, from
-> where it can be backported. This covers the driver + schema files as
-> they currently are. The change of the .txt to the .yaml schema then
-> comes on top of that (and on "net-next").
+> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 
-And FWIW net gets merged into net-next every Thu so (compared to how
-long this patch had been in review) it won't be a large delay to wait
-for the MAINTAINERS patch to propagate.
+Ditto. I don't think this improves anything meaningful.
+
+Thanks.
+
+-- 
+tejun
