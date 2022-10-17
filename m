@@ -2,172 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE10B60157A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731B960157C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiJQRep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S230211AbiJQRex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiJQRei (ORCPT
+        with ESMTP id S229972AbiJQRer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:34:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEBD6575;
-        Mon, 17 Oct 2022 10:34:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9F6EB81331;
-        Mon, 17 Oct 2022 17:34:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515B9C433D6;
-        Mon, 17 Oct 2022 17:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666028064;
-        bh=FDw24rOSiOpR/AA8bVEZXihOsH9mEP441rpoEYpcJFQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=AslKcmmirEJ+FkEFGQta8P959CSzZlZ4kKPpTVCQw28Tm0uIXNNixmfWnvg43/C++
-         NHbUWzMbMXj8Lb58Z+IDCEGTSnc5rcvFLUyBkwQmRTKKdloimm2uce2WGUBpu8vMUr
-         RhGDg5namuKA9EOnzkuS8MIgDMZS2f2/AR08+YVD2g8iDwg927T/1dseMdJfhRt1V+
-         XI/ILMYbfsdX/vW+nW/tP3xs7gMkBGFLuFMGfpukfrWUsv5I95eZRWUyAcwk/5ElCz
-         s37+CkVU0DHwsQkMq6xmxgGq8qRsz80Ecd0l9g2NhnQOQ+EbStiNDpjAPoPydknKwy
-         QwULAXUT8jgGw==
-Date:   Mon, 17 Oct 2022 12:34:22 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH v3 2/2] PCI: qcom: Add support for modular builds
-Message-ID: <20221017173422.GA3715509@bhelgaas>
+        Mon, 17 Oct 2022 13:34:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6111176;
+        Mon, 17 Oct 2022 10:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666028073; x=1697564073;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eAb8YxBfSFdDfJx0JCc9f+Nak1n7XNSg7jL/KIJ9xxY=;
+  b=DA/X24CZc8ZhrWvWYawqEqVDL+sCrniAct5NlGjXjzSoby9gpX0+Vhhh
+   Yc6VFK+ZerST25HlfbtAeORyTPwaWqPHCz6O9Jsw7SIa67zU1HGjKN9EK
+   kbrb/xP8Ti+UPTeSGNp2BwUwB+p+EpvvW2B6b/1W6ubWO9zJr+yVnwU9J
+   /KHttr9CrB06voaigERrqQPC9CWiGY+YPwz/lwHi9pDN9UdnmMH2m7i1m
+   Dpx+iqNmNxBfWq9AFaGxWWCacxvx47gET1rDlxPgTwrlqC/8I376KgNbN
+   GE6oLRTDpM2DRmZl3QkP1sb4+cthO8i5VvvnqHQ0+FWXs31WrM0JKOBay
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="370064270"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="370064270"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:34:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="753713646"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="753713646"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 17 Oct 2022 10:34:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1okU0S-008wZJ-1V;
+        Mon, 17 Oct 2022 20:34:28 +0300
+Date:   Mon, 17 Oct 2022 20:34:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 2/6] spi: pxa2xx: Respect Intel SSP type given by a
+ property
+Message-ID: <Y02SJNTxrLMjpZfG@smile.fi.intel.com>
+References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
+ <20221017171243.57078-2-andriy.shevchenko@linux.intel.com>
+ <Y02OMNAFrKLWUtiO@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221017114705.8277-3-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y02OMNAFrKLWUtiO@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 01:47:05PM +0200, Johan Hovold wrote:
-> Allow the Qualcomm PCIe controller driver to be built as a module, which
-> is useful for multi-platform kernels as well as during development.
-
-There are two different goals here, and there's no real reason to
-bundle them together:
-
-  1) Make qcom a loadable module.  This is a hard requirement so
-     multi-platform kernels don't need to build in all drivers
-     statically.
-
-  2) Make qcom unloadable.  This is a high want, possibly even a
-     requirement for developers, but is not really a big issue for
-     users.
-
-There are different changes required: 1) requires the Kconfig change;
-2) requires .remove() to be implemented.  Since there's no requirement
-that these be done together, let's split them into separate patches.
-
-Then we can make sure that at least 1) gets done, and if for any
-reason 2) isn't safe or breaks something, we can at least bisect and
-if necessary revert it without losing 1).
-
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/pci/controller/dwc/Kconfig     |  2 +-
->  drivers/pci/controller/dwc/pcie-qcom.c | 26 +++++++++++++++++++++++---
->  2 files changed, 24 insertions(+), 4 deletions(-)
+On Mon, Oct 17, 2022 at 06:17:36PM +0100, Mark Brown wrote:
+> On Mon, Oct 17, 2022 at 08:12:39PM +0300, Andy Shevchenko wrote:
 > 
-> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-> index 62ce3abf0f19..230f56d1a268 100644
-> --- a/drivers/pci/controller/dwc/Kconfig
-> +++ b/drivers/pci/controller/dwc/Kconfig
-> @@ -168,7 +168,7 @@ config PCI_HISI
->  	  Hip05 and Hip06 SoCs
->  
->  config PCIE_QCOM
-> -	bool "Qualcomm PCIe controller"
-> +	tristate "Qualcomm PCIe controller"
->  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 417be4d225ed..699172c22ed4 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -17,7 +17,7 @@
->  #include <linux/io.h>
->  #include <linux/iopoll.h>
->  #include <linux/kernel.h>
-> -#include <linux/init.h>
-> +#include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/of_gpio.h>
->  #include <linux/pci.h>
-> @@ -1820,6 +1820,21 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +static int qcom_pcie_remove(struct platform_device *pdev)
-> +{
-> +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
-> +	struct device *dev = &pdev->dev;
-> +
-> +	dw_pcie_host_deinit(&pcie->pci->pp);
-> +
-> +	phy_exit(pcie->phy);
-> +
-> +	pm_runtime_put_sync(dev);
-> +	pm_runtime_disable(dev);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct of_device_id qcom_pcie_match[] = {
->  	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
->  	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-> @@ -1841,6 +1856,7 @@ static const struct of_device_id qcom_pcie_match[] = {
->  	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &cfg_1_9_0 },
->  	{ }
->  };
-> +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
->  
->  static void qcom_fixup_class(struct pci_dev *dev)
->  {
-> @@ -1856,10 +1872,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
->  
->  static struct platform_driver qcom_pcie_driver = {
->  	.probe = qcom_pcie_probe,
-> +	.remove = qcom_pcie_remove,
->  	.driver = {
->  		.name = "qcom-pcie",
-> -		.suppress_bind_attrs = true,
->  		.of_match_table = qcom_pcie_match,
->  	},
->  };
-> -builtin_platform_driver(qcom_pcie_driver);
-> +module_platform_driver(qcom_pcie_driver);
-> +
-> +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
-> +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.37.3
+> > Allow to set the Intel SSP type by reading the property.
 > 
+> > +	/* Always try to read property */
+> > +	device_property_read_u32(&pdev->dev, "intel,spi-pxa2xx-type", &value);
+> 
+> What is the advantage of pushing this into firmware?
+
+To distinguish better what the controller generation is there.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
