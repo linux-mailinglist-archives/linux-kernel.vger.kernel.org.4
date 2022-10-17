@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D503601162
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7278A601164
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiJQOpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S230465AbiJQOpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiJQOpc (ORCPT
+        with ESMTP id S230258AbiJQOpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:45:32 -0400
+        Mon, 17 Oct 2022 10:45:34 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3A42F65E;
-        Mon, 17 Oct 2022 07:45:30 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:45:27 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A67361D9B;
+        Mon, 17 Oct 2022 07:45:31 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 14:45:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666017929;
+        s=2020; t=1666017930;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F9QpAqs6GyUJEi3LXVbk4btEPF2HufReWPHZpghC9FY=;
-        b=WCxycd4DgNHnbQFpQWAhIxkbwZsNCWJ/C29nq17PHPxihtOAREqI28Uij/A13ypQnMjQjz
-        PjC/hcrNFuSl07WqiG7kMjgSLU2q0rxRhfdRSu/uYj7csk+uJaRO5/8KBC+NQ2P3n10gUZ
-        gjKaSlBnxB47JDXnObnKC1eueZzSMaVNJftXV9gtxX2DT/SX/IStKSQK+s2KD8lJvnZLED
-        l4pUW+Pqwmua0M/JvImxuZnqvviaR0pRXBi+OnNnUeoFTivMl4Y3Ea/vssbzqFyrgRygWU
-        ZJ3Nk4gDV2GMc8HxGzOOyoWqMzqeh/vv0Jr28KB3ZcGoZ+RRJ20X4H42bHzi9Q==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=uvcx57h5A+S8TkJg1UEv+CS1pKio/Ap2AHm5cKeJlzg=;
+        b=aERMe4euaYA7IDmwrfTJ1eWc9v6Gh42OQ1A3YKzo4y+EK9ozWXRFzMKGeQX4EbcDn8Z22D
+        WFASv8DTC1S5Y4kHnFFTSA/6mz4I6cGJsV8kf317U/I9zdIcGOpmIqgbJn9IrGBNXk06o6
+        mYPZUKdlxyAypmZS2pyOv8dJc9Y3sb7+LD5qOOi75APEfLSijVAsodZMog9l73ss52NsLl
+        AggXreJcAUtIuNJiqIe4JFMRi3dHMKwPnV3VqXblTQUnXXP653tZKFF8V+rdM1uG0kPcmu
+        oCItzTPeNooxonscBBwJYVeEPFQTiBZTO/PdTYDXw6giLj2BDekAUuYW1dFU4g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666017929;
+        s=2020e; t=1666017930;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F9QpAqs6GyUJEi3LXVbk4btEPF2HufReWPHZpghC9FY=;
-        b=YNc+pHLGOPHw6egVEbDMffAEHjmNuIc75GsP74HsaSvqE9eMspoy+1MIlDZp39zSDwObiO
-        0LFHrC+wlgMC+xBw==
-From:   "tip-bot2 for Sumanth Korikkar" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=uvcx57h5A+S8TkJg1UEv+CS1pKio/Ap2AHm5cKeJlzg=;
+        b=b579OZE/eaac4fmLlw/tiES8hx0NFrm7mPF4eLDJ3tNbcOibl6Zqz+iz7Fi1caBwmMMuLw
+        J3Vas7IDSMRG4bAg==
+From:   "tip-bot2 for Marco Elver" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] bpf: Fix sample_flags for bpf_perf_event_output
-Cc:     Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>, x86@kernel.org,
+Subject: [tip: perf/urgent] selftests/perf_events: Add a SIGTRAP stress test
+ with disables
+Cc:     Marco Elver <elver@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221007081327.1047552-1-sumanthk@linux.ibm.com>
-References: <20221007081327.1047552-1-sumanthk@linux.ibm.com>
 MIME-Version: 1.0
-Message-ID: <166601792750.401.18306154915385335790.tip-bot2@tip-bot2>
+Message-ID: <166601792897.401.15340985095187381369.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,50 +61,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     21da7472a040420f2dc624ffec70291a72c5d6a6
-Gitweb:        https://git.kernel.org/tip/21da7472a040420f2dc624ffec70291a72c5d6a6
-Author:        Sumanth Korikkar <sumanthk@linux.ibm.com>
-AuthorDate:    Fri, 07 Oct 2022 10:13:27 +02:00
+Commit-ID:     23488ec66867f7e673b694623a951fb583e464a7
+Gitweb:        https://git.kernel.org/tip/23488ec66867f7e673b694623a951fb583e464a7
+Author:        Marco Elver <elver@google.com>
+AuthorDate:    Tue, 11 Oct 2022 14:45:35 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 17 Oct 2022 16:32:06 +02:00
 
-bpf: Fix sample_flags for bpf_perf_event_output
+selftests/perf_events: Add a SIGTRAP stress test with disables
 
-* Raw data is also filled by bpf_perf_event_output.
-* Add sample_flags to indicate raw data.
-* This eliminates the segfaults as shown below:
-  Run ./samples/bpf/trace_output
-  BUG pid 9 cookie 1001000000004 sized 4
-  BUG pid 9 cookie 1001000000004 sized 4
-  BUG pid 9 cookie 1001000000004 sized 4
-  Segmentation fault (core dumped)
+Add a SIGTRAP stress test that exercises repeatedly enabling/disabling
+an event while it concurrently keeps firing.
 
-Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Signed-off-by: Marco Elver <elver@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Link: https://lkml.kernel.org/r/20221007081327.1047552-1-sumanthk@linux.ibm.com
+Link: https://lore.kernel.org/all/Y0E3uG7jOywn7vy3@elver.google.com/
 ---
- kernel/trace/bpf_trace.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/perf_events/sigtrap_threads.c | 35 +++++++++-
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 49fb9ec..1ed0896 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -687,6 +687,7 @@ BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,
+diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c b/tools/testing/selftests/perf_events/sigtrap_threads.c
+index 6d849dc..d1d8483 100644
+--- a/tools/testing/selftests/perf_events/sigtrap_threads.c
++++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
+@@ -62,6 +62,8 @@ static struct perf_event_attr make_event_attr(bool enabled, volatile void *addr,
+ 		.remove_on_exec = 1, /* Required by sigtrap. */
+ 		.sigtrap	= 1, /* Request synchronous SIGTRAP on event. */
+ 		.sig_data	= TEST_SIG_DATA(addr, id),
++		.exclude_kernel = 1, /* To allow */
++		.exclude_hv     = 1, /* running as !root */
+ 	};
+ 	return attr;
+ }
+@@ -93,9 +95,13 @@ static void *test_thread(void *arg)
  
- 	perf_sample_data_init(sd, 0, 0);
- 	sd->raw = &raw;
-+	sd->sample_flags |= PERF_SAMPLE_RAW;
+ 	__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
+ 	iter = ctx.iterate_on; /* read */
+-	for (i = 0; i < iter - 1; i++) {
+-		__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
+-		ctx.iterate_on = iter; /* idempotent write */
++	if (iter >= 0) {
++		for (i = 0; i < iter - 1; i++) {
++			__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
++			ctx.iterate_on = iter; /* idempotent write */
++		}
++	} else {
++		while (ctx.iterate_on);
+ 	}
  
- 	err = __bpf_perf_event_output(regs, map, flags, sd);
+ 	return NULL;
+@@ -208,4 +214,27 @@ TEST_F(sigtrap_threads, signal_stress)
+ 	EXPECT_EQ(ctx.first_siginfo.si_perf_data, TEST_SIG_DATA(&ctx.iterate_on, 0));
+ }
  
-@@ -745,6 +746,7 @@ u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
- 	perf_fetch_caller_regs(regs);
- 	perf_sample_data_init(sd, 0, 0);
- 	sd->raw = &raw;
-+	sd->sample_flags |= PERF_SAMPLE_RAW;
- 
- 	ret = __bpf_perf_event_output(regs, map, flags, sd);
- out:
++TEST_F(sigtrap_threads, signal_stress_with_disable)
++{
++	const int target_count = NUM_THREADS * 3000;
++	int i;
++
++	ctx.iterate_on = -1;
++
++	EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_ENABLE, 0), 0);
++	pthread_barrier_wait(&self->barrier);
++	while (__atomic_load_n(&ctx.signal_count, __ATOMIC_RELAXED) < target_count) {
++		EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_DISABLE, 0), 0);
++		EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_ENABLE, 0), 0);
++	}
++	ctx.iterate_on = 0;
++	for (i = 0; i < NUM_THREADS; i++)
++		ASSERT_EQ(pthread_join(self->threads[i], NULL), 0);
++	EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_DISABLE, 0), 0);
++
++	EXPECT_EQ(ctx.first_siginfo.si_addr, &ctx.iterate_on);
++	EXPECT_EQ(ctx.first_siginfo.si_perf_type, PERF_TYPE_BREAKPOINT);
++	EXPECT_EQ(ctx.first_siginfo.si_perf_data, TEST_SIG_DATA(&ctx.iterate_on, 0));
++}
++
+ TEST_HARNESS_MAIN
