@@ -2,179 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAD6600525
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD63600535
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiJQCQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 22:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S230177AbiJQCXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 22:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiJQCPm (ORCPT
+        with ESMTP id S230166AbiJQCXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 22:15:42 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C5113DEF
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 19:15:41 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id u2-20020a056e021a4200b002f9ecfa353cso8164281ilv.20
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 19:15:40 -0700 (PDT)
+        Sun, 16 Oct 2022 22:23:10 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CBC4448F
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 19:23:07 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id t25so5889390qkm.2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 19:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rgvzfTo10fUh6wL0Be86sWN8sYva4oru+ZVyiKWp+7o=;
+        b=bJfwht3rs+702qTg88rThp0SVceTHUIu8QoBQUe98sLXZ/TAcNBy80z76iyqgro1cm
+         avnocQr6OftIjGrc5MT18zQKIQ8UNeIS8Ex/vaNAxit025upC/utdcKezqe/xH/MD8IW
+         9wcVzV97GcGFbwHry3wbdIjt3YKipTh8HxNDs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DGa85eDs4HDf0btlqFpHUgSWnf8N3groGUn+7nSJ2UY=;
-        b=WgpU2ilrAaDlKZeRwGEmllrrrFN239h6F5L6vXFIDJeJQC0VsnB/ZBYWyNp2MDP+si
-         2s+BVSQ7fg+AU5sTEbKIeE02GDAH0VGioi0yB7+/ZorbXIqh1Oarv8K6COTdNt+gG3S8
-         bjQz6vd4Ls8iKTNvc1BVpLINOxVwwGrtRN0GnB4/vHIWaZsVBrN/GEI8mqJ/U4LS9iIL
-         +ALYMZr0TdNRgVi5u6JC5qhE75bRrl1KZhvFt/sqEe48fYWVuyABOenJT4ryqpXLG5w3
-         utm/u7OTmwrg1uuN3015Z4LfQU1vdxCudPJAl3RxYB9i3jMs+E/Fb4GHzR3qjDd6a/S/
-         rYVw==
-X-Gm-Message-State: ACrzQf0TOMa+FchRKU4krMCS7PtJ9s8kOmqQGn05e4NYAeKGb4gsOXIS
-        irYC9HB04g3lV7F9yGYu0yHmLcNkSEhtPApGnu8Ay82P4vBJ
-X-Google-Smtp-Source: AMsMyM7TF7QkPiCerp1TQlI7M7+sQnISW1eS7yUz86L4kMv9kLD4axumPp3b21eNue1WQLDTw1mZnfxzJlIez3kIDOo1AUSzaVvG
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rgvzfTo10fUh6wL0Be86sWN8sYva4oru+ZVyiKWp+7o=;
+        b=o6GiNs2Ujc75ZsprI/zgOcn0GxxOpeCKAWV7oq6kgGkpnzaj7g8rmQFsPPXV0Ji6pN
+         BsCSE1Aqa+cHltQBFdUe5cFR6HQDBtArQrAnTs23qAezEtEqGPnh+tBRZmYU/R1cwfUZ
+         Lbaq7OXCuQztH0YWhJ0ri3yStXJ0H7aJa5dSMritZyCQ9o9j2jalqYFpkoADeFMvp008
+         UWtg2ZzuOYIMTuQT9xmQhW45sEiMOB+QHez6ga6LzQRlPC5Ya7odNkCRYs2Lr7NwSqhb
+         2ND/t+YDwPgI9ew0f0Km08/974IE1Ooh2cwyJ4e/ijlV8RqujlA9t0g83BCgNpUq95zs
+         BlXg==
+X-Gm-Message-State: ACrzQf1004muadjxCEKca+lCu6DqIB2TMyZP7xuQBUL4RW3t0KmLTxAh
+        GhkX93XT9DHTvPYEKs/vsj/LrQ==
+X-Google-Smtp-Source: AMsMyM6QsYzM0328aIAcELidgvLZlM6ZbJs6rGiVe2Rmyo0+aoan5RxpfFbPPe56XwOa00ubfTqbAQ==
+X-Received: by 2002:a37:e205:0:b0:6ee:834:1a1b with SMTP id g5-20020a37e205000000b006ee08341a1bmr6052061qki.342.1665973386420;
+        Sun, 16 Oct 2022 19:23:06 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id b26-20020ac8679a000000b00393c2067ca6sm6847097qtp.16.2022.10.16.19.23.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 19:23:06 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 02:23:05 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Connor O'Brien <connoro@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        John Stultz <jstultz@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: Re: [RFC PATCH 00/11] Reviving the Proxy Execution Series
+Message-ID: <Y0y8iURTSAv7ZspC@google.com>
+References: <20221003214501.2050087-1-connoro@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12b1:b0:2fc:cc40:6c2 with SMTP id
- f17-20020a056e0212b100b002fccc4006c2mr3921051ilr.187.1665972940289; Sun, 16
- Oct 2022 19:15:40 -0700 (PDT)
-Date:   Sun, 16 Oct 2022 19:15:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004fc10b05eb318d60@google.com>
-Subject: [syzbot] upstream boot error: WARNING in __netif_set_xps_queue
-From:   syzbot <syzbot+9abe5ecc348676215427@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003214501.2050087-1-connoro@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Oct 03, 2022 at 09:44:50PM +0000, Connor O'Brien wrote:
+> Proxy execution is an approach to implementing priority inheritance
+> based on distinguishing between a task's scheduler context (information
+> required in order to make scheduling decisions about when the task gets
+> to run, such as its scheduler class and priority) and its execution
+> context (information required to actually run the task, such as CPU
+> affinity). With proxy execution enabled, a task p1 that blocks on a
+> mutex remains on the runqueue, but its "blocked" status and the mutex on
+> which it blocks are recorded. If p1 is selected to run while still
+> blocked, the lock owner p2 can run "on its behalf", inheriting p1's
+> scheduler context. Execution context is not inherited, meaning that
+> e.g. the CPUs where p2 can run are still determined by its own affinity
+> and not p1's.
+> 
+> In practice a number of more complicated situations can arise: the mutex
+> owner might itself be blocked on another mutex, or it could be sleeping,
+> running on a different CPU, in the process of migrating between CPUs,
+> etc. Details on handling these various cases can be found in patch 7/11
+> ("sched: Add proxy execution"), particularly in the implementation of
+> proxy() and accompanying comments.
+> 
+> Past discussions of proxy execution have often focused on the benefits
+> for deadline scheduling. Current interest for Android is based more on
+> desire for a broad solution to priority inversion on kernel mutexes,
+> including among CFS tasks. One notable scenario arises when cpu cgroups
+> are used to throttle less important background tasks. Priority inversion
+> can occur when an "important" unthrottled task blocks on a mutex held by
+> an "unimportant" task whose CPU time is constrained using cpu
+> shares. The result is higher worst case latencies for the unthrottled
+> task.[0] Testing by John Stultz with a simple reproducer [1] showed
+> promising results for this case, with proxy execution appearing to
+> eliminate the large latency spikes associated with priority
+> inversion.[2]
+> 
+> Proxy execution has been discussed over the past few years at several
+> conferences[3][4][5], but (as far as I'm aware) patches implementing the
+> concept have not been discussed on the list since Juri Lelli's RFC in
+> 2018.[6] This series is an updated version of that patchset, seeking to
+> incorporate subsequent work by Juri[7], Valentin Schneider[8] and Peter
+> Zijlstra along with some new fixes.
+> 
+> Testing so far has focused on stability, mostly via mutex locktorture
+> with some tweaks to more quickly trigger proxy execution bugs. These
+> locktorture changes are included at the end of the series for
+> reference. The current series survives runs of >72 hours on QEMU without
+> crashes, deadlocks, etc. Testing on Pixel 6 with the android-mainline
+> kernel [9] yields similar results. In both cases, testing used >2 CPUs
+> and CONFIG_FAIR_GROUP_SCHED=y, a configuration Valentin Schneider
+> reported[10] showed stability problems with earlier versions of the
+> series.
+> 
+> That said, these are definitely still a work in progress, with some
+> known remaining issues (e.g. warnings while booting on Pixel 6,
+> suspicious looking min/max vruntime numbers) and likely others I haven't
+> found yet. I've done my best to eliminate checks and code paths made
+> redundant by new fixes but some probably remain. There's no attempt yet
+> to handle core scheduling. Performance testing so far has been limited
+> to the aforementioned priority inversion reproducer. The hope in sharing
+> now is to revive the discussion on proxy execution and get some early
+> input for continuing to revise & refine the patches.
 
-syzbot found the following issue on:
+I ran a test to check CFS time sharing. The accounting on top is confusing,
+but ftrace confirms the proxying happening.
 
-HEAD commit:    9abf2313adc1 Linux 6.1-rc1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14e70244880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
-dashboard link: https://syzkaller.appspot.com/bug?extid=9abe5ecc348676215427
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Task A - pid 122
+Task B - pid 123
+Task C - pid 121
+Task D - pid 124
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1f92e2492e87/disk-9abf2313.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e1f5038aaa4b/vmlinux-9abf2313.xz
+Here D and B just spin all the time. C is lock owner (in-kernel mutex) and
+spins all the time, while A blocks on the same in-kernel mutex and remains
+blocked.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9abe5ecc348676215427@syzkaller.appspotmail.com
+Then I did "top -H" while the test was running which gives below output.
+The first column is PID, and the third-last column is CPU percentage.
 
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-N_HDLC line discipline registered with maxframe=4096
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-Console: switching to colour frame buffer device 128x48
-platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
-usbcore: registered new interface driver udl
-brd: module loaded
-loop: module loaded
-zram: Added device: zram0
-null_blk: disk nullb0 created
-null_blk: module loaded
-Guest personality initialized and is inactive
-VMCI host device registered (name=vmci, major=10, minor=119)
-Initialized host personality
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-nfcsim 0.2 initialized
-usbcore: registered new interface driver port100
-usbcore: registered new interface driver nfcmrvl
-Loading iSCSI transport class v2.0-870.
-scsi host0: Virtio SCSI HBA
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-slram: not enough parameters.
-ftl_cs: FTL header not found.
-wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-MACsec IEEE 802.1AE
-tun: Universal TUN/TAP device driver, 1.6
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 netif_attrmask_next_and include/linux/netdevice.h:3689 [inline]
-WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 __netif_set_xps_queue+0xc00/0x2120 net/core/dev.c:2592
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-RIP: 0010:netif_attrmask_next_and include/linux/netdevice.h:3689 [inline]
-RIP: 0010:__netif_set_xps_queue+0xc00/0x2120 net/core/dev.c:2592
-Code: f9 c6 05 f3 cb d9 05 01 48 c7 c7 30 fe b8 8b be 2e 0a 00 00 48 c7 c2 20 a6 b8 8b e8 0a 1e 30 f9 e9 a2 f9 ff ff e8 30 69 50 f9 <0f> 0b e9 1c f8 ff ff 89 f9 80 e1 07 80 c1 03 38 c1 0f 8c d3 fe ff
-RSP: 0000:ffffc90000067490 EFLAGS: 00010293
-RAX: ffffffff88393690 RBX: 0000000000000000 RCX: ffff888140158000
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000002
-RBP: ffff888020fd4b00 R08: ffffffff88392ea5 R09: 0000000000000000
-R10: fffff5200000ce18 R11: 1ffff9200000ce16 R12: ffff888020fd4b80
-R13: ffff888020fd4a00 R14: 0000000000000002 R15: 0000000000000002
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- virtnet_set_affinity+0x56e/0x730 drivers/net/virtio_net.c:2308
- init_vqs+0x107c/0x11d0 drivers/net/virtio_net.c:3581
- virtnet_probe+0x19db/0x32a0 drivers/net/virtio_net.c:3884
- virtio_dev_probe+0x8ca/0xb60 drivers/virtio/virtio.c:305
- call_driver_probe+0x96/0x250
- really_probe+0x24c/0x9f0 drivers/base/dd.c:639
- __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:778
- driver_probe_device+0x50/0x240 drivers/base/dd.c:808
- __driver_attach+0x364/0x5b0 drivers/base/dd.c:1190
- bus_for_each_dev+0x188/0x1f0 drivers/base/bus.c:301
- bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
- driver_register+0x2e9/0x3e0 drivers/base/driver.c:246
- virtio_net_driver_init+0x8e/0xcb drivers/net/virtio_net.c:4090
- do_one_initcall+0xbd/0x2b0 init/main.c:1303
- do_initcall_level+0x168/0x218 init/main.c:1376
- do_initcalls+0x4b/0x8c init/main.c:1392
- kernel_init_freeable+0x471/0x61d init/main.c:1631
- kernel_init+0x19/0x2b0 init/main.c:1519
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+Without PE:
+  121 root      20   0   99496   4   0 R  33.6   0.0   0:02.76 t  (task C)
+  123 root      20   0   99496   4   0 R  33.2   0.0   0:02.75 t  (task B)
+  124 root      20   0   99496   4   0 R  33.2   0.0   0:02.75 t  (task D)
+
+With PE:
+  PID
+  122 root      20   0   99496   4   0 D  25.3   0.0   0:22.21 t  (task A)
+  121 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (task C)
+  123 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (task B)
+  124 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (task D)
+
+With PE, I was expecting 2 threads with 25% and 1 thread with 50%. Instead I
+get 4 threads with 25% in the top. Ftrace confirms that the D-state task is
+in fact not running and proxying to the owner task so everything seems
+working correctly, but the accounting seems confusing, as in, it is confusing
+to see the D-state task task taking 25% CPU when it is obviously "sleeping".
+
+Yeah, yeah, I know D is proxying for C (while being in the uninterruptible
+sleep state), so may be it is OK then, but I did want to bring this up :-)
+
+thanks,
+
+ - Joel
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> [0] https://raw.githubusercontent.com/johnstultz-work/priority-inversion-demo/main/results/charts/6.0-rc7-throttling-starvation.png
+> [1] https://github.com/johnstultz-work/priority-inversion-demo
+> [2] https://raw.githubusercontent.com/johnstultz-work/priority-inversion-demo/main/results/charts/6.0-rc7-vanilla-vs-proxy.png
+> [3] https://lpc.events/event/2/contributions/62/
+> [4] https://lwn.net/Articles/793502/
+> [5] https://lwn.net/Articles/820575/
+> [6] https://lore.kernel.org/lkml/20181009092434.26221-1-juri.lelli@redhat.com/
+> [7] https://github.com/jlelli/linux/tree/experimental/deadline/proxy-rfc-v2
+> [8] https://gitlab.arm.com/linux-arm/linux-vs/-/tree/mainline/sched/proxy-rfc-v3/
+> [9] https://source.android.com/docs/core/architecture/kernel/android-common
+> [10] https://lpc.events/event/7/contributions/758/attachments/585/1036/lpc20-proxy.pdf#page=4
+> 
+> Connor O'Brien (2):
+>   torture: support randomized shuffling for proxy exec testing
+>   locktorture: support nested mutexes
+> 
+> Juri Lelli (3):
+>   locking/mutex: make mutex::wait_lock irq safe
+>   kernel/locking: Expose mutex_owner()
+>   sched: Fixup task CPUs for potential proxies.
+> 
+> Peter Zijlstra (4):
+>   locking/ww_mutex: Remove wakeups from under mutex::wait_lock
+>   locking/mutex: Rework task_struct::blocked_on
+>   sched: Split scheduler execution context
+>   sched: Add proxy execution
+> 
+> Valentin Schneider (2):
+>   kernel/locking: Add p->blocked_on wrapper
+>   sched/rt: Fix proxy/current (push,pull)ability
+> 
+>  include/linux/mutex.h        |   2 +
+>  include/linux/sched.h        |  15 +-
+>  include/linux/ww_mutex.h     |   3 +
+>  init/Kconfig                 |   7 +
+>  init/init_task.c             |   1 +
+>  kernel/Kconfig.locks         |   2 +-
+>  kernel/fork.c                |   6 +-
+>  kernel/locking/locktorture.c |  20 +-
+>  kernel/locking/mutex-debug.c |   9 +-
+>  kernel/locking/mutex.c       | 109 +++++-
+>  kernel/locking/ww_mutex.h    |  31 +-
+>  kernel/sched/core.c          | 679 +++++++++++++++++++++++++++++++++--
+>  kernel/sched/deadline.c      |  37 +-
+>  kernel/sched/fair.c          |  33 +-
+>  kernel/sched/rt.c            |  63 ++--
+>  kernel/sched/sched.h         |  42 ++-
+>  kernel/torture.c             |  10 +-
+>  17 files changed, 955 insertions(+), 114 deletions(-)
+> 
+> -- 
+> 2.38.0.rc1.362.ged0d419d3c-goog
+> 
