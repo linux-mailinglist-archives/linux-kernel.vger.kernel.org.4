@@ -2,159 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F80600BCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C7C600BD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiJQKAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S230428AbiJQKCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiJQKAS (ORCPT
+        with ESMTP id S230495AbiJQKCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:00:18 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3342BB12
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:00:14 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 128so10020919pga.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ePppwLt74DC17JINfUdq6ewo+ZOCDgPxBEotdIjpxzA=;
-        b=Pznod0+OlFAyAl5hAqI+jlkkU/ZBSOnS+JMGGJfh/SEvsibrXGTR9F5IZn01jbWw4Y
-         ALzLuPu2RwziBUKwMKBr2UMMWB3xoN3qlgOpspRHsSLWWM4BLcyRi3WGM4qeTIlkn1gK
-         T9H4qNR7rIZ03evY2tV+JtwI/1ECZxySJCTk/DwgkIm8hmTCk9QrpVbRHcR9hR86m7sw
-         xUq2/zwwKb6fAiAnNZVr2mHoitgkZYXKeANksUY0y7coiHKSnBUIDmnsSmUEWPpcg5ip
-         /9nOy19mqIX/KdcacIC/9aNk56b0Gvs9LwgedSS+siKOIZqUYWo/8eNNLMgE5ZWjqTby
-         oRQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ePppwLt74DC17JINfUdq6ewo+ZOCDgPxBEotdIjpxzA=;
-        b=YOjeJzNmscqB5TLqPQr3JOdIHVDg3ABr+J2l9w1P8Oo1hJEaMwHfBksPXJrKdTMonC
-         +K9A7IuUV0OW8YV+Q98hZ3jfUtcBpob3nJ5p7PVpv8VGj2/GLaPPYb7DSPpaL+ui/E07
-         H1RBqVngRCkx855g3+c5p0wVhOJEupJW+F6/lZ0VObqQctQYfT2t1l0utrn0Nsce21kv
-         GMV9QlgRcPh6z0yo1Jxss9YihPmIXF4eAj8FAyITsj7m0KPxiRwS41QBszIRlwGAmfJx
-         qmuXlMdctNM9jpnVHkDg1OAMYQHFcNsLCLjSLWdxTnRazbGXhh/0RoglaZTSNFwVRQxQ
-         AWzg==
-X-Gm-Message-State: ACrzQf1bC6Eb2QKMGeVT+ZpFNZhZxgCm0NRdUi4wm6uxef0FRIlcMyed
-        TGLNkEqvSRZJXyxpYrl3iJeH02vF8GGoZVGi4IgrSw==
-X-Google-Smtp-Source: AMsMyM61at4bEZhvaPH428j8qUSJp4507BHO65b98Rw1OxZWJISyAn81PnFbbiQ5nxYYzPcOCG7jOmcfSrXYqkKvPEY=
-X-Received: by 2002:a65:4c46:0:b0:460:f598:d038 with SMTP id
- l6-20020a654c46000000b00460f598d038mr10254368pgr.99.1666000813404; Mon, 17
- Oct 2022 03:00:13 -0700 (PDT)
+        Mon, 17 Oct 2022 06:02:06 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8DA5E649;
+        Mon, 17 Oct 2022 03:02:03 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MrXTr1NJQzmVdV;
+        Mon, 17 Oct 2022 17:57:20 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 17 Oct 2022 18:01:32 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 17 Oct 2022 18:01:32 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 0/3] rcu: Add RCU stall diagnosis information
+Date:   Mon, 17 Oct 2022 18:01:05 +0800
+Message-ID: <20221017100108.2063-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-4-vannapurve@google.com> <Yz80XAg74KGdSqco@google.com>
- <CAGtprH_XSCXZDroGUnL3H1CwcsbH_A_NDn8B4P2xfpSYGqKmqw@mail.gmail.com> <Y0mu1FKugNQG5T8K@google.com>
-In-Reply-To: <Y0mu1FKugNQG5T8K@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 17 Oct 2022 15:30:02 +0530
-Message-ID: <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
-Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
- pool gpa
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 12:17 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Oct 14, 2022, Vishal Annapurve wrote:
-> > On Fri, Oct 7, 2022 at 1:32 AM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Fri, Aug 19, 2022, Vishal Annapurve wrote:
-> > > > Add a helper to query guest physical address for ucall pool
-> > > > so that guest can mark the page as accessed shared or private.
-> > > >
-> > > > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> > > > ---
-> > >
-> > > This should be handled by the SEV series[*].  Can you provide feedback on that
-> > > series if having a generic way to map the ucall address as shared won't work?
-> > >
-> > > [*] https://lore.kernel.org/all/20220829171021.701198-1-pgonda@google.com
-> >
-> > Based on the SEV series you referred to, selftests are capable of
-> > accessing ucall pool memory by having encryption bit cleared (as set
-> > by guest pagetables) as allowed by generic API vm_vaddr_alloc_shared.
-> > This change is needed in the context of fd based private memory where
-> > guest (specifically non-confidential/sev guests) code in the selftests
-> > will have to explicitly indicate that ucall pool address range will be
-> > accessed by guest as shared.
->
-> Ah, right, the conversion needs an explicit hypercall, which gets downright
-> annoying because auto-converting shared pages would effectivfely require injecting
-> code into the start of every guest.
->
-Ack.
+In some extreme cases, such as the I/O pressure test, the CPU usage may
+be 100%, causing RCU stall. In this case, the printed information about
+current is not useful. Displays the number and usage of hard interrupts,
+soft interrupts, and context switches that are generated within half of
+the CPU stall timeout, can help us make a general judgment. In other
+cases, we can preliminarily determine whether an infinite loop occurs
+when local_irq, local_bh or preempt is disabled.
 
-> Ha!  I think we got too fancy.  This is purely for testing UPM, not any kind of
-> trust model, i.e. there's no need for KVM to treat userspace as untrusted.  Rather
-> than jump through hoops just to let the guest dictate private vs. shared, simply
-> "trust" userspace when determining whether a page should be mapped private.  Then
-> the selftests can invoke the repurposed KVM_MEMORY_ENCRYPT_(UN)REG_REGION ioctls
-> as appropriate when allocating/remapping guest private memory.
->
-> E.g. on top of UPM v8, I think the test hook boils down to:
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index d68944f07b4b..d42d0e6bdd8c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4279,6 +4279,9 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->
->         fault->gfn = fault->addr >> PAGE_SHIFT;
->         fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
-> +       fault->is_private = IS_ENABLED(CONFIG_KVM_PRIVATE_MEM_TESTING) &&
-> +                           kvm_slot_can_be_private(fault->slot) &&
-> +                           kvm_mem_is_private(vcpu->kvm, fault->gfn);
->
->         if (page_fault_handle_page_track(vcpu, fault))
->                 return RET_PF_EMULATE;
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 8ffd4607c7d8..0dc5d0bf647c 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1653,7 +1653,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
->
->  bool __weak kvm_arch_has_private_mem(struct kvm *kvm)
->  {
-> -       return false;
-> +       return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM_TESTING);
->  }
->
->  static int check_memory_region_flags(struct kvm *kvm,
+Zhen Lei (3):
+  sched: Add helper kstat_cpu_softirqs_sum()
+  sched: Add helper nr_context_switches_cpu()
+  rcu: Add RCU stall diagnosis information
 
-This is much sleeker and will avoid hacking KVM for testing. Only
-caveat here is that these tests will not be able to exercise implicit
-conversion path if we go this route.
+ include/linux/kernel_stat.h | 12 +++++++++++
+ kernel/rcu/tree.h           | 11 ++++++++++
+ kernel/rcu/tree_stall.h     | 40 +++++++++++++++++++++++++++++++++++++
+ kernel/sched/core.c         |  5 +++++
+ 4 files changed, 68 insertions(+)
+
+-- 
+2.25.1
+
