@@ -2,152 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2008601B22
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D57E601B24
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiJQVPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S230175AbiJQVQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiJQVOv (ORCPT
+        with ESMTP id S229874AbiJQVQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:14:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8791D306;
-        Mon, 17 Oct 2022 14:14:48 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.24.131.113])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 17 Oct 2022 17:16:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F405B87B;
+        Mon, 17 Oct 2022 14:16:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CC7E5660229A;
-        Mon, 17 Oct 2022 22:14:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666041286;
-        bh=6GOLhrGgwzzH00fPL4O2mqsIa2iWSLJ77uzRHsOFl1M=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=JTij1qwJSLzBeIh9AbGxEE9TNM+2LfslXZn1Jn6rJvwuL2AwhYURIRPVwSoxp6N5y
-         l5AZ4qDyXQM0y9SSVocWKPee1K82qfmr/+6aZ5HS5H+FukhdmRDQyv8Z66HEjia51z
-         fRbizNOGffkXtqXIduVTbxMZ2MKLhUyIKXDrd6Hkrj8ED8XsYjVPRutVs1zfLnVpHi
-         pIAwJIux1mhqRcGY0wDN7lMRuPi7aY5QFdbK2SIlmr7X6x85RxVN4rkkh0DMK+/Qud
-         tB7HLipYUCajr8lqssz+Xnz0pqZSlVZDcnj3hoUwOMo6gFKUP58+LJSy0t6Mb5kxwr
-         Puc9RH4ggpV6w==
-Message-ID: <fd259c32-6a9d-7ab5-2172-3f2fe947ebfe@collabora.com>
-Date:   Tue, 18 Oct 2022 00:14:42 +0300
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32EF8B81ACB;
+        Mon, 17 Oct 2022 21:16:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C36C433C1;
+        Mon, 17 Oct 2022 21:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666041408;
+        bh=M0iIpq0yjJ7zG7PlxsMHDRIbhItXcsqY5S0vGXphA2c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LQhA4D9k7KCzHwZUUSby19364lcxZGcLwcPQzSEiogLZN4lv9wec/stComXpFDLla
+         ukgPYqkHoWrDE3M0c4ld+Sbae3RFTi5Gdu6UY2cIyBwcb0mwMiRPmZLXqcj0/fEKN0
+         K1pMLhBZKAUYMsQgH9J1nU83bp7KwR7qK6KjILJh/R5exT7DTi2L4t+Te1VEdzSlvF
+         bS/AzEVVFwEbRTfKsJw3OWq4wysY5j2TvFEJZlI+z7zug0EB9ExJomKjCxuTbCXylM
+         AOQ/KpUdwV4cIhf+12ygZCGOKHnN452Is37PK3BI/2+autqbAlJaznI2F1xJkUoe9P
+         zNW7F2yMgfLog==
+Received: by mail-lj1-f182.google.com with SMTP id h8so15539808lja.11;
+        Mon, 17 Oct 2022 14:16:48 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1/Zjjg1CSkLOG1J3pEzjJvKxXE9B9lwvEpe4NEVdfroT2Pe7Uy
+        b8yqgslOz5srdSHwvz/wK0KjJzwY66w0JK2tpZg=
+X-Google-Smtp-Source: AMsMyM5VuYZ3IgUUsvx2pTq54fRq2fx58wePUctP/yy1Vdza3cpMd8Iclx8R8OKYyyq2h7CY/4xtn5iX9ehtVqpOuiw=
+X-Received: by 2002:a05:651c:1590:b0:26c:4311:9b84 with SMTP id
+ h16-20020a05651c159000b0026c43119b84mr5048121ljq.152.1666041406979; Mon, 17
+ Oct 2022 14:16:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3 0/3] Enable initial support for StarFive VisionFive V1
- SBC
-Content-Language: en-US
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michael Zhu <michael.zhu@starfivetech.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20220908142914.359777-1-cristian.ciocaltea@collabora.com>
- <c5169131-486e-9808-ba48-b7abe1be6a99@collabora.com> <YzwCWDN4NyIQ8a46@wendy>
- <b1139318-b87e-b257-28ba-e2b0c7596053@collabora.com>
-In-Reply-To: <b1139318-b87e-b257-28ba-e2b0c7596053@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221006234138.1835739-1-keescook@chromium.org>
+ <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com> <202210171100.5BAC4A5CC8@keescook>
+ <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
+ <202210171227.35ED875219@keescook> <CAMj1kXEJQ8gh-iXZNL8bNcmV=JCmKHNp5BnhYthhSOyR5h79_g@mail.gmail.com>
+ <202210171237.DF5D4A3FD7@keescook> <CAMj1kXGmsJNg7En-55aRF+ApicPD_Opkh8Jw+oTorSOSO+cfuw@mail.gmail.com>
+ <202210171307.32A5D9C07@keescook> <CAMj1kXHced1khwsrHqMUmECh_7irYOckFd+Sx3z9KSmsL7tPxw@mail.gmail.com>
+ <202210171333.309A3D9@keescook> <CAMj1kXHTxc2PM1mz3pm-UEcmch9YG5QKF+JKAUNe9b+1L0OnfA@mail.gmail.com>
+ <cb44c124-c940-6f5f-d195-bdf133008ba1@igalia.com>
+In-Reply-To: <cb44c124-c940-6f5f-d195-bdf133008ba1@igalia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 17 Oct 2022 23:16:35 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGA=kBdahDTuFDPzZKf5bbvxH2Ns7Ows+5D-PAx8rwP2w@mail.gmail.com>
+Message-ID: <CAMj1kXGA=kBdahDTuFDPzZKf5bbvxH2Ns7Ows+5D-PAx8rwP2w@mail.gmail.com>
+Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 13:15, Cristian Ciocaltea wrote:
-> On 10/4/22 12:52, Conor Dooley wrote:
->> On Mon, Oct 03, 2022 at 02:06:32PM +0300, Cristian Ciocaltea wrote:
->>> Please let me know if there is anything else missing in order to get 
->>> this
->>> queued for merging.
->>
->> Hey Cristian,
->>
->> LinusW has applied a conflicting change for 6.1 as he renamed the
->> pinctrl header that you have moved from one file to another in this
->> patch [0]. Could you rebase once that lands upstream please?
-> 
-> Hi Conor,
-> 
-> Sure, I will rebase as soon as rc1 is out.
+On Mon, 17 Oct 2022 at 23:10, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
+>
+> On 17/10/2022 18:01, Ard Biesheuvel wrote:
+> > [...]
+> >
+> > In summary, we're better off sticking with the legacy comp interface,
+> > but unfortunately, due to the way that has been plumbed into the
+> > scomp/acomp with scatterlists version, that doesn't really help us get
+> > rid of the memory overhead.
+> >
+>
+> Out of curiosity, do you have a number here, like X kilobytes per active
+> CPU?
 
-I have submitted v4:
+2x128 KB per CPU, which makes 128  KB also the maximum input/output
+size per request when using this interface. (SCOMP_SCRATCH_SIZE)
 
-https://lore.kernel.org/all/20221017210542.979051-1-cristian.ciocaltea@collabora.com/
-
-> Thanks,
-> Cristian
-> 
->>
->> Thanks,
->> Conor.
->>
->> 0 - 
->> https://lore.kernel.org/linux-riscv/CACRpkdZmmMjVwpHxkJP+Ui0XJgrdZx8kpVybifbwkRB1_uMhAg@mail.gmail.com/
->>
->>>
->>> Thanks,
->>> Cristian
->>>
->>> On 9/8/22 17:29, Cristian Ciocaltea wrote:
->>>> The StarFive VisionFive V1 SBC [1] is similar with the already 
->>>> supported
->>>> BeagleV Starlight Beta board, both being based on the StarFive 
->>>> JH7100 SoC.
->>>>
->>>> In addition to documenting the necessary compatibles, this patch series
->>>> moves most of the content from jh7100-beaglev-starlight.dts to a new 
->>>> file
->>>> jh7100-common.dtsi, to be shared between the two boards.
->>>>
->>>> No other changes are required in order to successfully boot the board.
->>>>
->>>> [1] https://github.com/starfive-tech/VisionFive
->>>>
->>>> Changes in v3:
->>>>    - Added Reviewed-by tag from Krzysztof in patch 1/3
->>>>    - Optimized patch 2/3 by enabling copy detection on "git 
->>>> format-patch",
->>>>      as indicated by Krzysztof
->>>>
->>>> Changes in v2:
->>>>    - Simplified documentation by using 'enum' instead of 'const' in
->>>>      patch 1/3, according to Conor's review
->>>>    - Added Reviewed-by tags from Conor
->>>>
->>>> Cristian Ciocaltea (3):
->>>>     dt-bindings: riscv: starfive: Add StarFive VisionFive V1 board
->>>>     riscv: dts: starfive: Add common DT for JH7100 based boards
->>>>     riscv: dts: starfive: Add StarFive VisionFive V1 device tree
->>>>
->>>>    .../devicetree/bindings/riscv/starfive.yaml   |   4 +-
->>>>    arch/riscv/boot/dts/starfive/Makefile         |   2 +-
->>>>    .../dts/starfive/jh7100-beaglev-starlight.dts | 153 
->>>> +-----------------
->>>>    ...aglev-starlight.dts => jh7100-common.dtsi} |   3 -
->>>>    .../jh7100-starfive-visionfive-v1.dts         |  20 +++
->>>>    5 files changed, 25 insertions(+), 157 deletions(-)
->>>>    copy arch/riscv/boot/dts/starfive/{jh7100-beaglev-starlight.dts 
->>>> => jh7100-common.dtsi} (96%)
->>>>    create mode 100644 
->>>> arch/riscv/boot/dts/starfive/jh7100-starfive-visionfive-v1.dts
->>>>
->>>
->>> _______________________________________________
->>> linux-riscv mailing list
->>> linux-riscv@lists.infradead.org
->>> http://lists.infradead.org/mailman/listinfo/linux-riscv
->>>
+On my 32x4 CPU workstation, this amounts to 32 MB permanently locked
+up for nothing when the pstore driver is loaded (with compression
+enabled)
