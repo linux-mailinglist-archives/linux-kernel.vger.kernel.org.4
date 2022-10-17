@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277BF600ADF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D66E600B0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiJQJd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S231159AbiJQJih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiJQJdV (ORCPT
+        with ESMTP id S230315AbiJQJi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:33:21 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FBB5AA1C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665999184; x=1697535184;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7DWIlBvRBPlI7C3mshKcaEtH4mYWv0nITpy5+EZ8lew=;
-  b=AFAu9yFKR+W+9Ub/PyHTDF3LQvZxFE451L5OmLOUmEIaRlsXl5IOb1T0
-   e+aLuZ/InWvpWHAaRqbwwkDJXoIzPICHdfYs+Qw0zI6yhiBXVX3aTq4F+
-   kNqvWzkqtxxuesIjr2VGzPDjJrFaLEUnZ2RgkcCrDxiPahz5cNUSpEDoP
-   ZReu8PubTpojKbW4wI5C9BdDVsa37BPmXAPgverJo41z0lnLZSw0PRmc9
-   B36sIo2Rj92vpm/D/fxxBAcU9F13Dwq0RrZRoBgEkzxMivQNcM+ufvlJT
-   oJXiGIxLwAcFlTxkulnxUt34afzqI36YriKvlcROs8oDnk30kPfW0TSsc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="305741669"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="305741669"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 02:33:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="717431351"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="717431351"
-Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.132])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Oct 2022 02:33:00 -0700
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: [PATCH v3] x86/hyperv: Replace kmap() with kmap_local_page()
-Date:   Mon, 17 Oct 2022 17:37:26 +0800
-Message-Id: <20221017093726.2070674-11-zhao1.liu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
-References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
+        Mon, 17 Oct 2022 05:38:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73610B49
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665999494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k0+ObVJxjYz4R+98id/22xus1zUL9oOsaqVo4TwLi2Q=;
+        b=XyEcxn3t4IGCDO2GajbgL7h/vKvLo6gBWq5cFpMZ4iJlBC/gEoj0lM2i/Z9rj/Sw6EAlCW
+        saYUqd68Byqy1PzR7QcyDBHnvelUXDnjWpIT87FRZ6ZRHbXK/K9sOyMMLTkispTopnYbqt
+        DKWtm/NGoTXRNrJlNwzdYBt2PNR3tuQ=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-402-a0xwzdScMqu9zUG99k7GOQ-1; Mon, 17 Oct 2022 05:38:11 -0400
+X-MC-Unique: a0xwzdScMqu9zUG99k7GOQ-1
+Received: by mail-qk1-f198.google.com with SMTP id i11-20020a05620a404b00b006eeb0791c1aso9150595qko.10
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:38:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k0+ObVJxjYz4R+98id/22xus1zUL9oOsaqVo4TwLi2Q=;
+        b=2FzX8/sj87x+B7MsKHRSNxvVrjgH/OF25Z1ohDjxfsoaueCvSAphYdM77yVIWD0EQ4
+         zBrdD2UENGSHvWw9/dhOgi1LbRZSn9SlC5o24kW8RKWNupAyeSvtBz4F4E7VeML3CCSC
+         CScrwv4pLB7w74Lo1bbc1xqqrPtfnbqm5R5knTwAPIYxA7Swn/VnnOuhR+EPmxBlMdlZ
+         jmb/vf4Uaepk3c+OW45bAUD0CMiuQUxx33cefYhEstkoDiAeBBR8lj/QBh1mj2JLO8Jl
+         rCPo04X0xH8sdLx09ItlrGJxS7hsSPQfb/596N6Z0is3nr0mf1Ae5O2GX7PMwBcNHwO2
+         HrTA==
+X-Gm-Message-State: ACrzQf39ikm73YcIsEkZxYZU4ku4ZX1XhcT6ehBIXI5JNIrcPAUtGNbD
+        nJu9B9GmTP1CFBuOAAuY5CRi1yXLuotZWobhCEC48+DCLojlBK4tKOHoNa8k6airqm1wnVEgUZc
+        ZayMjsn2IvU9Ygb5L+MbmZOR5
+X-Received: by 2002:ac8:5a45:0:b0:39b:ef52:ac1d with SMTP id o5-20020ac85a45000000b0039bef52ac1dmr8003341qta.419.1665999489951;
+        Mon, 17 Oct 2022 02:38:09 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6CTUfAw+X1zZrOOrrHIDQ+ebHrvDwt6nhTQ3OFGV6cY8bEykWerO8WeOdYfwyKCkJEGbp/jg==
+X-Received: by 2002:ac8:5a45:0:b0:39b:ef52:ac1d with SMTP id o5-20020ac85a45000000b0039bef52ac1dmr8003336qta.419.1665999489757;
+        Mon, 17 Oct 2022 02:38:09 -0700 (PDT)
+Received: from vschneid.remote.csb ([149.71.65.94])
+        by smtp.gmail.com with ESMTPSA id t200-20020a3746d1000000b006cbcdc6efedsm8788935qka.41.2022.10.17.02.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 02:38:09 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Douglas RAILLARD <douglas.raillard@arm.com>
+Subject: Re: [PATCH] tracing: Add __cpumask to denote a trace event field
+ that is a cpumask_t
+In-Reply-To: <20221015071416.00369347@rorschach.local.home>
+References: <20221014080456.1d32b989@rorschach.local.home>
+ <xhsmh8rlixqvu.mognet@vschneid.remote.csb>
+ <20221015071416.00369347@rorschach.local.home>
+Date:   Mon, 17 Oct 2022 10:38:07 +0100
+Message-ID: <xhsmh5ygiyem8.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhao Liu <zhao1.liu@intel.com>
+On 15/10/22 07:14, Steven Rostedt wrote:
+> On Fri, 14 Oct 2022 18:21:41 +0100
+> Valentin Schneider <vschneid@redhat.com> wrote:
+>> 
+>> Thanks for spinning this out so quickly! I gave it a test against my IPI
+>> tracepoints, it's working OK with one (expected) change:
+>
+> No problem. It was my "While traveling I pick what I want to work on" project ;-)
+>
+>> 
+>>   [ipi:ipi_send_cpumask] function __get_cpumask not defined
+>>   CPU 0 is empty
+>>   CPU 1 is empty
+>>   CPU 3 is empty
+>>   cpus=4
+>>             echo-173   [002]    11.859745: ipi_send_cpumask:     [FAILED TO PARSE] cpumask=ARRAY[02, 00, 00, 00, 00, 00, 00, 00] callsite=0xffffffff81121013
+>> 
+>> so libtraceevent is going to need updating - I'm happy to do that (if you
+>> haven't done it already!)
+>
+> I have not done that. I'm happy to take a patch from you.
+>
 
-kmap() is being deprecated in favor of kmap_local_page()[1].
+I'll go do that and try to mess around the pretty-print output as well.
 
-There are two main problems with kmap(): (1) It comes with an overhead as mapping space is restricted and protected by a global lock for synchronization and (2) it also requires global TLB invalidation when the kmap's pool wraps and it might block when the mapping space is fully utilized until a slot becomes available.
-
-With kmap_local_page() the mappings are per thread, CPU local, can take page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore, the tasks can be preempted and, when they are scheduled to run again, the kernel virtual addresses are restored and are still valid.
-
-Since its use in hyperv/hv_init.c is safe, it should be preferred.
-
-Therefore, replace kmap() with kmap_local_page() in hyperv/hv_init.c.
-
-[1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
-
----
-Suggested by credits.
-        Ira: Referred to his task documentation and review comments.
-        Fabio: Stole some of his boiler plate commit message.
-
----
-Changelog:
-v2:
-- Fix wrong incoming parameters in kunmap_local();
-- Add Fabio as suggester since I quoted his commit message.
-
----
- arch/x86/hyperv/hv_init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 3de6d8b53367..72fe46eb183f 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -459,13 +459,13 @@ void __init hyperv_init(void)
-                wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-
-                pg = vmalloc_to_page(hv_hypercall_pg);
--               dst = kmap(pg);
-+               dst = kmap_local_page(pg);
-                src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
-                                MEMREMAP_WB);
-                BUG_ON(!(src && dst));
-                memcpy(dst, src, HV_HYP_PAGE_SIZE);
-                memunmap(src);
--               kunmap(pg);
-+               kunmap_local(dst);
-        } else {
-                hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
-                wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
---
-2.34.1
+>> 
+>> Lastly, given all cpumasks have a (usable) size of nr_cpumask_bits, we can
+>> factor out the size argument, see below. Regardless:
+>
+> Seems reasonable. I can fold that into my patch and if you reply back
+> with your signed-off-by tag, I'll include you as co-author.
+>
 
