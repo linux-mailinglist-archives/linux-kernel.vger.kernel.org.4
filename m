@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B98600680
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 07:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BBA600681
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 07:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiJQF6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 01:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S230145AbiJQF6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 01:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiJQF56 (ORCPT
+        with ESMTP id S230116AbiJQF6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 01:57:58 -0400
+        Mon, 17 Oct 2022 01:58:09 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3DDE56001;
-        Sun, 16 Oct 2022 22:57:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C1A62113E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9F9E56031;
         Sun, 16 Oct 2022 22:58:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44ED71042;
+        Sun, 16 Oct 2022 22:58:08 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.42.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6834B3F7D8;
-        Sun, 16 Oct 2022 22:57:51 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 27FC73F7D8;
+        Sun, 16 Oct 2022 22:57:56 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
@@ -32,9 +32,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Suzuki Poulose <suzuki.poulose@arm.com>,
         Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH V4 2/7] arm64/perf: Update struct arm_pmu for BRBE
-Date:   Mon, 17 Oct 2022 11:27:08 +0530
-Message-Id: <20221017055713.451092-3-anshuman.khandual@arm.com>
+Subject: [PATCH V4 3/7] arm64/perf: Update struct pmu_hw_events for BRBE
+Date:   Mon, 17 Oct 2022 11:27:09 +0530
+Message-Id: <20221017055713.451092-4-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221017055713.451092-1-anshuman.khandual@arm.com>
 References: <20221017055713.451092-1-anshuman.khandual@arm.com>
@@ -48,127 +48,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although BRBE is an armv8 speciifc HW feature, abstracting out its various
-function callbacks at the struct arm_pmu level is preferred, as it cleaner
-, easier to follow and maintain.
-
-Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
-might not fit seamlessly, when tried to be embedded via existing arm_pmu
-helpers in the armv8 implementation.
-
-Updates the struct arm_pmu to include all required helpers that will drive
-BRBE functionality for a given PMU implementation. These are the following.
-
-- brbe_filter	: Convert perf event filters into BRBE HW filters
-- brbe_probe	: Probe BRBE HW and capture its attributes
-- brbe_enable	: Enable BRBE HW with a given config
-- brbe_disable	: Disable BRBE HW
-- brbe_read	: Read BRBE buffer for captured branch records
-- brbe_reset	: Reset BRBE buffer
-- brbe_supported: Whether BRBE is supported or not
-
-A BRBE driver implementation needs to provide these functionalities.
+A single perf event instance BRBE related contexts and data will be tracked
+in struct pmu_hw_events. Hence update the structure to accommodate required
+details related to BRBE.
 
 Cc: Will Deacon <will@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-perf-users@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/arm64/kernel/perf_event.c | 36 ++++++++++++++++++++++++++++++++++
- include/linux/perf/arm_pmu.h   | 21 ++++++++++++++++++++
- 2 files changed, 57 insertions(+)
+ drivers/perf/arm_pmu.c       |  1 +
+ include/linux/perf/arm_pmu.h | 27 +++++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index 7b0643fe2f13..c97377e28288 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -1025,6 +1025,35 @@ static int armv8pmu_filter_match(struct perf_event *event)
- 	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
- }
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 3f07df5a7e95..5048a500441e 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -905,6 +905,7 @@ static struct arm_pmu *__armpmu_alloc(gfp_t flags)
  
-+static void armv8pmu_brbe_filter(struct pmu_hw_events *hw_event, struct perf_event *event)
-+{
-+}
-+
-+static void armv8pmu_brbe_enable(struct pmu_hw_events *hw_event)
-+{
-+}
-+
-+static void armv8pmu_brbe_disable(struct pmu_hw_events *hw_event)
-+{
-+}
-+
-+static void armv8pmu_brbe_read(struct pmu_hw_events *hw_event, struct perf_event *event)
-+{
-+}
-+
-+static void armv8pmu_brbe_probe(struct pmu_hw_events *hw_event)
-+{
-+}
-+
-+static void armv8pmu_brbe_reset(struct pmu_hw_events *hw_event)
-+{
-+}
-+
-+static bool armv8pmu_brbe_supported(struct perf_event *event)
-+{
-+	return false;
-+}
-+
- static void armv8pmu_reset(void *info)
- {
- 	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
-@@ -1257,6 +1286,13 @@ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
+ 		events = per_cpu_ptr(pmu->hw_events, cpu);
+ 		raw_spin_lock_init(&events->pmu_lock);
++		events->branches = kmalloc(sizeof(struct brbe_records), flags);
+ 		events->percpu_pmu = pmu;
+ 	}
  
- 	cpu_pmu->pmu.event_idx		= armv8pmu_user_event_idx;
- 
-+	cpu_pmu->brbe_filter		= armv8pmu_brbe_filter;
-+	cpu_pmu->brbe_enable		= armv8pmu_brbe_enable;
-+	cpu_pmu->brbe_disable		= armv8pmu_brbe_disable;
-+	cpu_pmu->brbe_read		= armv8pmu_brbe_read;
-+	cpu_pmu->brbe_probe		= armv8pmu_brbe_probe;
-+	cpu_pmu->brbe_reset		= armv8pmu_brbe_reset;
-+	cpu_pmu->brbe_supported		= armv8pmu_brbe_supported;
- 	cpu_pmu->name			= name;
- 	cpu_pmu->map_event		= map_event;
- 	cpu_pmu->attr_groups[ARMPMU_ATTR_GROUP_EVENTS] = events ?
 diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 0356cb6a215d..67a6d59786f2 100644
+index 67a6d59786f2..bda0d9984a98 100644
 --- a/include/linux/perf/arm_pmu.h
 +++ b/include/linux/perf/arm_pmu.h
-@@ -101,6 +101,27 @@ struct arm_pmu {
- 	void		(*reset)(void *);
- 	int		(*map_event)(struct perf_event *event);
- 	int		(*filter_match)(struct perf_event *event);
+@@ -44,6 +44,16 @@ static_assert((PERF_EVENT_FLAG_ARCH & ARMPMU_EVT_47BIT) == ARMPMU_EVT_47BIT);
+ 	},								\
+ }
+ 
++/*
++ * Maximum branch records in BRBE
++ */
++#define BRBE_MAX_ENTRIES 64
 +
-+	/* Convert perf event filters into BRBE HW filters */
-+	void		(*brbe_filter)(struct pmu_hw_events *hw_events, struct perf_event *event);
++struct brbe_records {
++	struct perf_branch_stack	brbe_stack;
++	struct perf_branch_entry	brbe_entries[BRBE_MAX_ENTRIES];
++};
 +
-+	/* Probe BRBE HW and capture its attributes */
-+	void		(*brbe_probe)(struct pmu_hw_events *hw_events);
+ /* The events for a given PMU register set. */
+ struct pmu_hw_events {
+ 	/*
+@@ -70,6 +80,23 @@ struct pmu_hw_events {
+ 	struct arm_pmu		*percpu_pmu;
+ 
+ 	int irq;
 +
-+	/* Enable BRBE HW with a given config */
-+	void		(*brbe_enable)(struct pmu_hw_events *hw_events);
++	/* Detected BRBE attributes */
++	bool				brbe_v1p1;
++	int				brbe_cc;
++	int				brbe_nr;
++	int				brbe_format;
 +
-+	/* Disable BRBE HW */
-+	void		(*brbe_disable)(struct pmu_hw_events *hw_events);
++	/* Evaluated BRBE configuration */
++	u64				brbfcr;
++	u64				brbcr;
 +
-+	/* Process BRBE buffer for captured branch records */
-+	void		(*brbe_read)(struct pmu_hw_events *hw_events, struct perf_event *event);
++	/* Tracked BRBE context */
++	unsigned int			brbe_users;
++	void				*brbe_context;
 +
-+	/* Reset BRBE buffer */
-+	void		(*brbe_reset)(struct pmu_hw_events *hw_events);
-+
-+	/* Check whether BRBE is supported */
-+	bool		(*brbe_supported)(struct perf_event *event);
- 	int		num_events;
- 	bool		secure_access; /* 32-bit ARM only */
- #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
++	/* Captured BRBE buffer - copied as is into perf_sample_data */
++	struct brbe_records		*branches;
+ };
+ 
+ enum armpmu_attr_groups {
 -- 
 2.25.1
 
