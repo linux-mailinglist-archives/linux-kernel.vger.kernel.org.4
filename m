@@ -2,97 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8F260075F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9406160076D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJQHKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S230101AbiJQHMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiJQHKg (ORCPT
+        with ESMTP id S230194AbiJQHMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:10:36 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666E31C93E;
-        Mon, 17 Oct 2022 00:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=VzQrMMvzjPHT9RHQrUI87UWNSeZiKrWFFhJbruuzBRU=;
-  b=isnKd3o5Oec+fN+nd4RCeiAMAC4g2e8wgL3ryaYwPEd5IBJjYoHuLcYz
-   TMi9yHjFz558ZU32ZV3yXZ/r7ozIAuO6WtTnvDA+UA6A6k0m3Nkl4YM3L
-   wA9+uzxeBMLLi8UkruoRPiC6l9tcCd61gqsBk5JNZd3qt6kjng2wLM806
-   U=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,190,1661810400"; 
-   d="scan'208";a="65427058"
-Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 09:10:16 +0200
-Date:   Mon, 17 Oct 2022 09:10:15 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Deepak R Varma <drv@mailo.com>
-cc:     outreachy@lists.linux.dev, lars@metafoo.de,
-        Michael.Hennerich@analog.com, jic23@kernel.org,
-        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH] staging: iio: frequency: ad9834: merge unnecessary split
- lines
-In-Reply-To: <Y0z2/qFe3kW96MTs@debian-BULLSEYE-live-builder-AMD64>
-Message-ID: <alpine.DEB.2.22.394.2210170909430.2965@hadrien>
-References: <Y0z2/qFe3kW96MTs@debian-BULLSEYE-live-builder-AMD64>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 17 Oct 2022 03:12:30 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B8F4AD6C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:12:27 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 13215320025E;
+        Mon, 17 Oct 2022 03:12:24 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 17 Oct 2022 03:12:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665990743; x=1666077143; bh=V8eZeviXGL
+        1+uINoLCcYBas9La4PrZ6COoSZQFiUw6U=; b=gF/szDUmOCYaOJsLcF0gV9YwiE
+        RejMOa/YEn5grDKnOf41ezS6IAKEe/RL2NPZRpXq2vxK2/kKNhDQAe+6y8CsezF5
+        4fBXGau5SXE8dbSy835I7yBtCe6kaLNtvYUa3FjtKliF6EnxYDIeQuotZ7GvsaMW
+        PqF7YunGiI9fPSGh7SXafMNYO1d2WSYF3u34EhLk0TNVgulOFu0JkDiFvwzkRTZ8
+        SJqN1i4jY946BI8kdUqDxehdd6qwvEHJeem+zLWZ2s/mQKCpGBDXoBp8DCrZtryz
+        X6w+o+UGCDja+pSOiDN6txX8PcumVHlBXANKbaJCjlrS0z/dhs4Mz7osCJ6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665990743; x=1666077143; bh=V8eZeviXGL1+uINoLCcYBas9La4P
+        rZ6COoSZQFiUw6U=; b=D7I0ggmGlkV1vClLcb8pSO9TaKx7tjfEN6Qvf7HgLEEC
+        ZrL5xiWg7GFA6nHdjgsYQ0cKhU4eniGycXXZOpO0hSV/tdohkUQxsRL3p8G9x+Mb
+        +P1fdN+n7SUY/Mfk+IenaIrOBktLjuxE/6UNl4Q9+8lhdH27+6iBFlHlVJgnr3Kg
+        BWFPPdWjc2d/3Gok1L+suV+wSGC8DEK5mgwGplNrJd9U3HpCHcd2xkRb3uIPfdp5
+        4jlvsEvS1cZZPtTFC+QPKPa4s6xmM1aTFD872iEQxLRmuREI1rOFM/zOMLyx9ZZx
+        KGVgR9Q6d071sjmAtBuPIA5F100REkTqMKyy+Jwj7w==
+X-ME-Sender: <xms:VwBNY5JKV85VuGcJBtQ-q5J7jZdhGyHSivIOgl1Llv7qFTuo7yNG-Q>
+    <xme:VwBNY1IIuOpWzGpyI_91O-kiid8ke-e_5X0JRkl2hzVydz8KOxWnOV14C-Z3NRfR9
+    7ufvHLfuJmIub7EzxM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekkedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:VwBNYxuPzQYCle2hKVW3u3kssMsSmO405AQZjck6Op8R0-FVsi7THA>
+    <xmx:VwBNY6ac3y_ctLrLk-OowoTCcNbK9HPPUAvgqLzKLg3Z0aUwYYxH5w>
+    <xmx:VwBNYwabPuKvQrVB1nL1Ej86rLi0eEVkp-X5y4vLq5qt65YN7t7Oow>
+    <xmx:VwBNY1N4VEjbqqK9fyXcSM4tLJ_13q0ZaDp3iUS5Tx23ozV7CX69Lw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2FD9AB60086; Mon, 17 Oct 2022 03:12:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <506fe4e5-a203-48e6-84a6-f70133be15dd@app.fastmail.com>
+In-Reply-To: <20221016133418.2122777-1-chenhuacai@loongson.cn>
+References: <20221016133418.2122777-1-chenhuacai@loongson.cn>
+Date:   Mon, 17 Oct 2022 09:12:02 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>, guoren <guoren@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Add unaligned access support
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Oct 16, 2022, at 3:34 PM, Huacai Chen wrote:
+> Loongson-2 series (Loongson-2K500, Loongson-2K1000) don't support
+> unaligned access in hardware, while Loongson-3 series (Loongson-3A5000,
+> Loongson-3C5000) are configurable whether support unaligned access in
+> hardware. This patch add unaligned access emulation for those LoongArch
+> processors without hardware support.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
+What does the Loongarch ELF ABI say about this? On most architectures,
+C compilers are not allowed to produce unaligned accesses for standard
+compliant source code, the only way you'd get this is when casting
+a an unaligned (e.g. char*) pointer to another type with higher alignment
+requirement.
 
-On Mon, 17 Oct 2022, Deepak R Varma wrote:
+> +/* sysctl hooks */
+> +int unaligned_enabled __read_mostly = 1;	/* Enabled by default */
+> +int no_unaligned_warning __read_mostly = 1;	/* Only 1 warning by default */
 
-> Improve code readability by merging unnecessary split lines that are
-> well within the code-style guidelines post merge.
->
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+The comment says 'sysctl', the implementation has a debugfs interface.
 
-Acked-by: Julia Lawall <julia.lawall@inria.fr>
+> +#ifdef CONFIG_DEBUG_FS
+> +static int __init debugfs_unaligned(void)
+> +{
+> +	struct dentry *d;
+> +
+> +	d = debugfs_create_dir("loongarch", NULL);
+> +	if (!d)
+> +		return -ENOMEM;
+> +
+> +	debugfs_create_u32("unaligned_instructions_user",
+> +				S_IRUGO, d, &unaligned_instructions_user);
+> +	debugfs_create_u32("unaligned_instructions_kernel",
+> +				S_IRUGO, d, &unaligned_instructions_kernel);
+> +
+> +	return 0;
+> +}
+> +arch_initcall(debugfs_unaligned);
+> +#endif
 
-> ---
->  drivers/staging/iio/frequency/ad9834.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/staging/iio/frequency/ad9834.c b/drivers/staging/iio/frequency/ad9834.c
-> index 2b4267a87e65..285df0e489a6 100644
-> --- a/drivers/staging/iio/frequency/ad9834.c
-> +++ b/drivers/staging/iio/frequency/ad9834.c
-> @@ -331,11 +331,9 @@ static IIO_DEV_ATTR_PHASE(0, 1, 0200, NULL, ad9834_write, AD9834_REG_PHASE1);
->  static IIO_DEV_ATTR_PHASESYMBOL(0, 0200, NULL, ad9834_write, AD9834_PSEL);
->  static IIO_CONST_ATTR_PHASE_SCALE(0, "0.0015339808"); /* 2PI/2^12 rad*/
->
-> -static IIO_DEV_ATTR_PINCONTROL_EN(0, 0200, NULL,
-> -	ad9834_write, AD9834_PIN_SW);
-> +static IIO_DEV_ATTR_PINCONTROL_EN(0, 0200, NULL, ad9834_write, AD9834_PIN_SW);
->  static IIO_DEV_ATTR_OUT_ENABLE(0, 0200, NULL, ad9834_write, AD9834_RESET);
-> -static IIO_DEV_ATTR_OUTY_ENABLE(0, 1, 0200, NULL,
-> -	ad9834_write, AD9834_OPBITEN);
-> +static IIO_DEV_ATTR_OUTY_ENABLE(0, 1, 0200, NULL, ad9834_write, AD9834_OPBITEN);
->  static IIO_DEV_ATTR_OUT_WAVETYPE(0, 0, ad9834_store_wavetype, 0);
->  static IIO_DEV_ATTR_OUT_WAVETYPE(0, 1, ad9834_store_wavetype, 1);
->
-> --
-> 2.30.2
->
->
->
->
->
+The debugfs interface does not sound like a good way to do this.
+Overall, my feeling is that for a new architecture we should not
+introduce this at all but instead provide a way to diagnose and
+fix user space, since we do not have to keep compatibility with
+broken binaries that worked in the past.
+
+If the ELF ABI actually allows compilers to produce unaligned
+accesses for correct code, there should at least be a more generic
+way of enabling this that follows what other architectures do.
+We are already somewhat inconsistent there between architectures,
+but I don't think anything else uses debugfs here.
+
+     Arnd
