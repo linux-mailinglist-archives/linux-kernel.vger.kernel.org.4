@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFFD600881
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949D060087B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiJQINy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S230260AbiJQINq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJQINk (ORCPT
+        with ESMTP id S230050AbiJQINi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:13:40 -0400
+        Mon, 17 Oct 2022 04:13:38 -0400
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8245C360
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48B35C372
         for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:13:36 -0700 (PDT)
 Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MrV4h2cfnz1P7SM;
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MrV4h2sCDz1P7YB;
         Mon, 17 Oct 2022 16:08:52 +0800 (CST)
 Received: from huawei.com (10.44.134.232) by dggpeml500024.china.huawei.com
  (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
@@ -27,9 +27,9 @@ To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <wangkefeng.wang@huawei.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <yeyunfeng@huawei.com>
-Subject: [PATCH 1/5] arm64: mm: Define asid_bitmap structure for pinned_asid
-Date:   Mon, 17 Oct 2022 16:12:54 +0800
-Message-ID: <20221017081258.3678830-2-yeyunfeng@huawei.com>
+Subject: [PATCH 2/5] arm64: mm: Extract the processing of asid_generation
+Date:   Mon, 17 Oct 2022 16:12:55 +0800
+Message-ID: <20221017081258.3678830-3-yeyunfeng@huawei.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20221017081258.3678830-1-yeyunfeng@huawei.com>
 References: <20221017081258.3678830-1-yeyunfeng@huawei.com>
@@ -50,133 +50,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yunfeng Ye <yeyunfeng@huawei.com>
 
-It is clearer to use the asid_bitmap structure for pinned_sid, and we
-will use it for isolated asid later.
+To prepare for supporting ASID isolation feature, extract the processing
+of asid_generation. it is convenient to modify the asid_generation
+centrally.
 
-No functional change.
+By the way, It is clearer to put flush_generation() into flush_context().
 
 Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
 ---
- arch/arm64/mm/context.c | 38 +++++++++++++++++++++-----------------
- 1 file changed, 21 insertions(+), 17 deletions(-)
+ arch/arm64/mm/context.c | 39 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 32 insertions(+), 7 deletions(-)
 
 diff --git a/arch/arm64/mm/context.c b/arch/arm64/mm/context.c
-index e1e0dca01839..8549b5f30352 100644
+index 8549b5f30352..380c7b05c36b 100644
 --- a/arch/arm64/mm/context.c
 +++ b/arch/arm64/mm/context.c
-@@ -17,6 +17,12 @@
- #include <asm/smp.h>
- #include <asm/tlbflush.h>
+@@ -102,14 +102,40 @@ static void set_reserved_asid_bits(void)
+ 		bitmap_clear(asid_map, 0, NUM_USER_ASIDS);
+ }
  
-+struct asid_bitmap {
-+	unsigned long *map;
-+	unsigned long nr;
-+	unsigned long max;
-+};
+-#define asid_gen_match(asid) \
+-	(!(((asid) ^ atomic64_read(&asid_generation)) >> asid_bits))
++static void asid_generation_init(void)
++{
++	atomic64_set(&asid_generation, ASID_FIRST_VERSION);
++}
 +
- static u32 asid_bits;
- static DEFINE_RAW_SPINLOCK(cpu_asid_lock);
++static void flush_generation(void)
++{
++	/* We're out of ASIDs, so increment the global generation count */
++	atomic64_add_return_relaxed(ASID_FIRST_VERSION,
++					&asid_generation);
++}
++
++static inline u64 asid_read_generation(void)
++{
++	return atomic64_read(&asid_generation);
++}
++
++static inline bool asid_match(u64 asid, u64 genid)
++{
++	return (!(((asid) ^ (genid)) >> asid_bits));
++}
++
++static inline bool asid_gen_match(u64 asid)
++{
++	return asid_match(asid, asid_read_generation());
++}
  
-@@ -27,9 +33,7 @@ static DEFINE_PER_CPU(atomic64_t, active_asids);
- static DEFINE_PER_CPU(u64, reserved_asids);
- static cpumask_t tlb_flush_pending;
- 
--static unsigned long max_pinned_asids;
--static unsigned long nr_pinned_asids;
--static unsigned long *pinned_asid_map;
-+static struct asid_bitmap pinned_asid;
- 
- #define ASID_MASK		(~GENMASK(asid_bits - 1, 0))
- #define ASID_FIRST_VERSION	(1UL << asid_bits)
-@@ -90,8 +94,8 @@ static void set_kpti_asid_bits(unsigned long *map)
- 
- static void set_reserved_asid_bits(void)
+ static void flush_context(void)
  {
--	if (pinned_asid_map)
--		bitmap_copy(asid_map, pinned_asid_map, NUM_USER_ASIDS);
-+	if (pinned_asid.map)
-+		bitmap_copy(asid_map, pinned_asid.map, NUM_USER_ASIDS);
- 	else if (arm64_kernel_unmapped_at_el0())
- 		set_kpti_asid_bits(asid_map);
- 	else
-@@ -275,7 +279,7 @@ unsigned long arm64_mm_context_get(struct mm_struct *mm)
- 	unsigned long flags;
+ 	int i;
  	u64 asid;
  
--	if (!pinned_asid_map)
-+	if (!pinned_asid.map)
- 		return 0;
++	flush_generation();
++
+ 	/* Update the list of reserved ASIDs and the ASID bitmap. */
+ 	set_reserved_asid_bits();
  
- 	raw_spin_lock_irqsave(&cpu_asid_lock, flags);
-@@ -285,7 +289,7 @@ unsigned long arm64_mm_context_get(struct mm_struct *mm)
- 	if (refcount_inc_not_zero(&mm->context.pinned))
- 		goto out_unlock;
- 
--	if (nr_pinned_asids >= max_pinned_asids) {
-+	if (pinned_asid.nr >= pinned_asid.max) {
- 		asid = 0;
- 		goto out_unlock;
- 	}
-@@ -299,8 +303,8 @@ unsigned long arm64_mm_context_get(struct mm_struct *mm)
- 		atomic64_set(&mm->context.id, asid);
- 	}
- 
--	nr_pinned_asids++;
--	__set_bit(ctxid2asid(asid), pinned_asid_map);
-+	pinned_asid.nr++;
-+	__set_bit(ctxid2asid(asid), pinned_asid.map);
- 	refcount_set(&mm->context.pinned, 1);
- 
- out_unlock:
-@@ -321,14 +325,14 @@ void arm64_mm_context_put(struct mm_struct *mm)
- 	unsigned long flags;
+@@ -163,7 +189,7 @@ static u64 new_context(struct mm_struct *mm)
+ {
+ 	static u32 cur_idx = 1;
  	u64 asid = atomic64_read(&mm->context.id);
+-	u64 generation = atomic64_read(&asid_generation);
++	u64 generation = asid_read_generation();
  
--	if (!pinned_asid_map)
-+	if (!pinned_asid.map)
- 		return;
+ 	if (asid != 0) {
+ 		u64 newasid = asid2ctxid(ctxid2asid(asid), generation);
+@@ -202,14 +228,12 @@ static u64 new_context(struct mm_struct *mm)
+ 	if (asid != NUM_USER_ASIDS)
+ 		goto set_asid;
  
- 	raw_spin_lock_irqsave(&cpu_asid_lock, flags);
+-	/* We're out of ASIDs, so increment the global generation count */
+-	generation = atomic64_add_return_relaxed(ASID_FIRST_VERSION,
+-						 &asid_generation);
+ 	flush_context();
  
- 	if (refcount_dec_and_test(&mm->context.pinned)) {
--		__clear_bit(ctxid2asid(asid), pinned_asid_map);
--		nr_pinned_asids--;
-+		__clear_bit(ctxid2asid(asid), pinned_asid.map);
-+		pinned_asid.nr--;
- 	}
+ 	/* We have more ASIDs than CPUs, so this will always succeed */
+ 	asid = find_next_zero_bit(asid_map, NUM_USER_ASIDS, 1);
  
- 	raw_spin_unlock_irqrestore(&cpu_asid_lock, flags);
-@@ -377,8 +381,8 @@ static int asids_update_limit(void)
- 
- 	if (arm64_kernel_unmapped_at_el0()) {
- 		num_available_asids /= 2;
--		if (pinned_asid_map)
--			set_kpti_asid_bits(pinned_asid_map);
-+		if (pinned_asid.map)
-+			set_kpti_asid_bits(pinned_asid.map);
- 	}
- 	/*
- 	 * Expect allocation after rollover to fail if we don't have at least
-@@ -393,7 +397,7 @@ static int asids_update_limit(void)
- 	 * even if all CPUs have a reserved ASID and the maximum number of ASIDs
- 	 * are pinned, there still is at least one empty slot in the ASID map.
- 	 */
--	max_pinned_asids = num_available_asids - num_possible_cpus() - 2;
-+	pinned_asid.max = num_available_asids - num_possible_cpus() - 2;
- 	return 0;
- }
- arch_initcall(asids_update_limit);
-@@ -407,8 +411,8 @@ static int asids_init(void)
++	generation = asid_read_generation();
+ set_asid:
+ 	__set_bit(asid, asid_map);
+ 	cur_idx = asid;
+@@ -405,7 +429,8 @@ arch_initcall(asids_update_limit);
+ static int asids_init(void)
+ {
+ 	asid_bits = get_cpu_asid_bits();
+-	atomic64_set(&asid_generation, ASID_FIRST_VERSION);
++	asid_generation_init();
++
+ 	asid_map = bitmap_zalloc(NUM_USER_ASIDS, GFP_KERNEL);
+ 	if (!asid_map)
  		panic("Failed to allocate bitmap for %lu ASIDs\n",
- 		      NUM_USER_ASIDS);
- 
--	pinned_asid_map = bitmap_zalloc(NUM_USER_ASIDS, GFP_KERNEL);
--	nr_pinned_asids = 0;
-+	pinned_asid.map = bitmap_zalloc(NUM_USER_ASIDS, GFP_KERNEL);
-+	pinned_asid.nr = 0;
- 
- 	/*
- 	 * We cannot call set_reserved_asid_bits() here because CPU
 -- 
 2.27.0
 
