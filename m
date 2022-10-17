@@ -2,153 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E783601A69
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90367601A6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiJQUhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S231669AbiJQUhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiJQUhO (ORCPT
+        with ESMTP id S231482AbiJQUhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:37:14 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB3E77562
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:35:35 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id cl1so11937042pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VqvUf2xdjiicSbriZ9K2T7GcJiVH52G2DFhyVh/IZSg=;
-        b=Cj9hnG32oSA6o2hcfmZrGjkHVKkoRUXLmA7PubtCDzmLEa1NV71tx7DgrmF3/wlr0y
-         O7Y/QyhbUJ1oTnM0Ba7p0vnpInYcptoOUd3uzXKzixIi2D6jVyJZ8Or1jyT9bvB3/2Lh
-         m5uuw1fKu6gCA3ditVAp8NhFC7p5jzL5I/sayUn17Sqii0JToTHceImiZP0PyyHYfyW4
-         dZPmWJMwVB/EPH8nGWvktlM9LRvJbJWtAGlQFzmQDcvZPhVhs0UfHKogD/2+V94UwKGL
-         Kp1M813eGfqjryASC2aKCClls2Zr2J4G0Huq4E4jYkLSp2JAZzDbWSeP9HbrQfQchBqr
-         c3dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VqvUf2xdjiicSbriZ9K2T7GcJiVH52G2DFhyVh/IZSg=;
-        b=PvIPT98MuoW5JY1ubs6FBRV9r4JmmjbvQX7/0ibdZSiuPVQTENAUim1WX3hFMUsPiz
-         xT6Y8PEisOKkdwRn7mcY0gV7mr8j6wHPnb73t9bZ0sUx5jawgKBH/mgCnRHEOA04M2AW
-         Ou9IewGYySBk3eVKFJu1f/UjS2D21IscnokzE3lOOS8mh9KnLpHLU5HCC4eGu58KYTAA
-         6lzhA0/cMHau1ZaXFiBIISUbPsNe3vyWj9lBMUDJrYUpkriIS572QTIalvDEHDCN7RSZ
-         fkxpV19SbxKDfLh24MzunjQAUgXfjZS9vuxlLtqL6xqqR64PloRaYS4SkzfMno8v85I0
-         aq9w==
-X-Gm-Message-State: ACrzQf2bayBm+tEa+C1Oqt9Q+5r1wsLV6SJ698vpcF9Dv01+PS8ot8bA
-        RxBOxC9B0tE2ojnUodPfC00pwQ==
-X-Google-Smtp-Source: AMsMyM59XXgkVKwJn5MmsbHzfLVkLI3fCWW8bGwPshMlZbYTcUf8Q8/jjT2TNbLhZ0HI+d9OWuv3qg==
-X-Received: by 2002:a17:902:b589:b0:17f:5756:b3f9 with SMTP id a9-20020a170902b58900b0017f5756b3f9mr13605653pls.14.1666038879052;
-        Mon, 17 Oct 2022 13:34:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a11-20020a634d0b000000b0040caab35e5bsm6505021pgb.89.2022.10.17.13.34.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 13:34:38 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 20:34:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
-        andrew.jones@linux.dev
-Subject: Re: [V4 6/8] KVM: selftests: add library for creating/interacting
- with SEV guests
-Message-ID: <Y028WrU3pmEQqWDq@google.com>
-References: <20220829171021.701198-1-pgonda@google.com>
- <20220829171021.701198-7-pgonda@google.com>
- <Yz8dpB5+RFjEhA3n@google.com>
- <CAMkAt6oZQc4jqF7FOXOKkpbP3c4NXxPumVVjX9gXwPCh-zbtYg@mail.gmail.com>
- <Y02ZLFcDQbX6lP9z@google.com>
- <CAMkAt6q0g5Ua=PwLXa2oA4zCQUaHuEQ3pTXycD61HU6-dtQ5Gg@mail.gmail.com>
+        Mon, 17 Oct 2022 16:37:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADDF80BD3;
+        Mon, 17 Oct 2022 13:35:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 855B2B81AD3;
+        Mon, 17 Oct 2022 20:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA7ABC433C1;
+        Mon, 17 Oct 2022 20:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666038898;
+        bh=pr4++4yUHbZlDDwyrw3c+RvKoKW1WA0ngYLG9iMMutk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MrHVh88PjdMGfdAOf5Bim7C4ijNzrtPm7Ai19A9NZ+q3r08LrdzKnGZIHGSWUZ230
+         JsgVFUnWvvdkLZ2hgnlSu4x4Vajj1lL9ePVl4HW5uXncvlIWwrXZRsSUUn1uLoA5qo
+         /4wfQsL6kFxU1uTRKUxiHVuYgJsH4w+6r5EQ9poI7hqrnEyIPVjjKRXt+jwH1IxgKu
+         vYKtsG3xBrG1jbUGqEynnfgCQVzS9hCVB6PuaK5Q6u4ngJJTagu93SGDSPs++s2TQp
+         TA99IJzxIqAStR8Wd+x+3kUb+vgRShV/+7BvZ5v5OMKIzUJDR5iFg2Ouajlhqzhx1W
+         Bivv/zPi927Pg==
+Date:   Mon, 17 Oct 2022 15:34:48 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH 3/6][next] ipw2x00: Remove unnecessary cast to iw_handler in
+ ipw_wx_handlers
+Message-ID: <421a4b4673da8fb610850f674d0994ad46bc1ed6.1666038048.git.gustavoars@kernel.org>
+References: <cover.1666038048.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMkAt6q0g5Ua=PwLXa2oA4zCQUaHuEQ3pTXycD61HU6-dtQ5Gg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1666038048.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022, Peter Gonda wrote:
-> On Mon, Oct 17, 2022 at 12:04 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, Oct 17, 2022, Peter Gonda wrote:
-> > > This refactor sounds good, working on this with a few changes.
-> > >
-> > > Instead of kvm_init_vm_address_properties() as you suggested I've added this:
-> > >
-> > > @@ -272,6 +275,8 @@ struct kvm_vm *____vm_create(enum vm_guest_mode
-> > >  mode, uint64_t nr_pages)
-> > >                 vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
-> > >  #endif
-> > >
-> > > +       kvm_init_vm_arch(vm);
-> >
-> > Why?  I'm not necessarily opposed to adding kvm_init_vm_arch(), but since x86
-> > "needs" a dedicated hook to unpack the mode, why not piggyback that one?
-> >
-> 
-> Well I since I need to do more than just
-> kvm_init_vm_address_properties() I thought the more generic name would
-> be better. We need to allocate kvm_vm_arch, find the c-bit, and call
-> KVM_SEV_INIT. I can put it back in that switch case if thats better,
-> thoughts?
-> 
-> > > +
-> > >         vm_open(vm);
-> > >
-> > >         /* Limit to VA-bit canonical virtual addresses. */
-> > >
-> > > And I need to put kvm_arch_vm_post_create() after the vCPUs are
-> > > created because the ordering we need is: KVM_SEV_INIT -> Create vCPUS
-> > > -> KVM_SEV_LAUNCH_FINISH.
-> >
-> > Hrm, that's annoying.  Please don't use kvm_arch_vm_post_create() as the name,
-> > that's a better fit for what Vishal is doing since the "vm_post_create()" implies
-> > that it's called for "all" VM creation paths, where "all" means "everything
-> > except barebones VMs".  E.g. in Vishal's series, kvm_arch_vm_post_create() can
-> > be used to drop the vm_create_irqchip() call in common code.  In your case, IIUC
-> > the hook will be invoked from __vm_create_with_vcpus().
-> >
-> > I'm a little hesitant to have an arch hook for this case since it can't be
-> > all-or-nothing (again, ignoring barebones VMs).  If a "finalize" arch hook is added,
-> > then arguably tests that do __vm_create() and manually add vCPUs should call the
-> > arch hook, i.e. we'd be adding maintenance burden to tests that in all likelihood
-> > don't care about SEV and never will.
-> >
-> > It's somewhat unfortunate, but dedicated vm_sev_create_with_one_vcpu() and
-> > and vm_sev_create_with_vcpus() wrappers is probably the least awful solution.
-> 
-> Make sense. I think we can go back to your suggestion of
-> kvm_init_vm_address_properties() above since we can now do all the
-> KVM_SEV_* stuff. I think this means we don't need to add
-> VM_MODE_PXXV48_4K_SEV since we can set up the c-bit from inside of
-> vm_sev_create_*(), thoughts?
+Previous patches have removed the rest of the casts to iw_handler in
+ipw_wx_handlers array definition, and with that multiple
+-Wcast-function-type-strict warnings have been fixed.
 
-Configuring the C-bit inside vm_sev_create_*() won't work (at least not well).
-The C-bit needs to be known before kvm_vm_elf_load(), i.e. can't be handled after
-__vm_create(), and needs to be tracked inside the VM, i.e. can't be handled before
-__vm_create().
+Remove the one cast to iw_handler remaining, which was not removed in
+previous patches because there was no -Wcast-function-type-strict warning
+associated with it.
 
-The proposed kvm_init_vm_address_properties() seems like the best fit since the
-C-bit (and TDX's S-bit) is stolen from GPA space, i.e. directly affects the other
-values computed in that path.
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/wireless/intel/ipw2x00/ipw2200.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As for the kvm_vm_arch allocation ugliness, when we talked off-list I didn't
-consider the need to allocate in kvm_init_vm_address_properties().  That's quite
-gross, especially since the pointer will be larger than the thing being allocated.
+diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2200.c b/drivers/net/wireless/intel/ipw2x00/ipw2200.c
+index 5b483de18c81..3158f91b18d5 100644
+--- a/drivers/net/wireless/intel/ipw2x00/ipw2200.c
++++ b/drivers/net/wireless/intel/ipw2x00/ipw2200.c
+@@ -9870,7 +9870,7 @@ static int ipw_wx_sw_reset(struct net_device *dev,
+ 
+ /* Rebase the WE IOCTLs to zero for the handler array */
+ static iw_handler ipw_wx_handlers[] = {
+-	IW_HANDLER(SIOCGIWNAME, (iw_handler)cfg80211_wext_giwname),
++	IW_HANDLER(SIOCGIWNAME, cfg80211_wext_giwname),
+ 	IW_HANDLER(SIOCSIWFREQ, ipw_wx_set_freq),
+ 	IW_HANDLER(SIOCGIWFREQ, ipw_wx_get_freq),
+ 	IW_HANDLER(SIOCSIWMODE, ipw_wx_set_mode),
+-- 
+2.34.1
 
-With that in mind, adding .../include/<arch>/kvm_util.h so that "struct kvm_vm_arch"
-can be defined and referenced directly doesn't seem so bad.  Having to stub in the
-struct for the other architectures is annoying, but not the end of the world.
