@@ -2,145 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE16F6015E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356126015EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiJQSEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
+        id S230499AbiJQSE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiJQSEf (ORCPT
+        with ESMTP id S230496AbiJQSEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:04:35 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E6613F67
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:04:33 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id l6so11133639pgu.7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=drU3O/+nGrdgy6WMvD6hVrTFvRlUohf8Zzl84rmZ2yQ=;
-        b=HXDzvzxUEPXF8gRIh1ZWqTSePTIzEruLotn0oKCLBkUbTNT01bZzUDXGcPHZ7smqbA
-         JzbhVdVMZdS4ku0TM9KOqVdl5fBf2nU3XvGlf2GPjGSa1iVeXa4qcnCg7FQmArF2F1jY
-         M0AiKOMuBlrmxZWgeB93M2gJn3itRtzlzZPhegmxIsgafHged2ZW33vomJf+hhB7/JUr
-         UCIiBHNKc/cOWuj4BksIRLREcwpmLYEbP9OxuslD09Z+3UZOh7CdwOn3htaTg08N2AbY
-         8Hr8VtX/K0Jb2b9ohvHEvN4b82ZOiV7LFN7k/Tj7IC7i7OYCi1VmpIlUQ9l7AgCLfw7L
-         Uq4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=drU3O/+nGrdgy6WMvD6hVrTFvRlUohf8Zzl84rmZ2yQ=;
-        b=ZvH1OGnklh+m+D4yyToYiHhbWwtUQqya2g9DY3/F+LxZ9e6Cu0Tii8U2WvO3aP+cMc
-         8e7iZlKvty3q7UKarQ4GY1vHbXreNWUvv9kM5hfUL5btgT1/78zcUG8bnpwM8W10majL
-         dJS4hoaewFt52XaO723Cr78PWMUTj+1s5MLusQqFfGDjNnBhwqEFo+poVME+1xJqTGiu
-         2Q8Sa92bc4y8usmfSOGuneAopxZwwk6I2IQYS/0Sp681IGaPG6cvE9vvIV32l1ATHbPM
-         ytrkW37gus4M81gcwXu3FDhp/2hjJDmn1BfMwI++pKmF4ae6dCXK0zJJiyBevx0HWX2Z
-         avow==
-X-Gm-Message-State: ACrzQf3S98ddfIQ3WFCWbQxabBswIFi/o9RUbk2Sl68TUgGJxbHsrAZ2
-        kM4U67DfL1Kpo5L/QXYqWQUrPQ==
-X-Google-Smtp-Source: AMsMyM6sO+LOU09ZXjof0uEuD7P3wpQStynULcyl6LgTFLXcVsWYXWq8MBmKYePZBrMNXMTOfiCISA==
-X-Received: by 2002:a05:6a00:21c8:b0:52b:ffc0:15e7 with SMTP id t8-20020a056a0021c800b0052bffc015e7mr13710910pfj.29.1666029872934;
-        Mon, 17 Oct 2022 11:04:32 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h9-20020a656389000000b00458a0649474sm6414850pgv.11.2022.10.17.11.04.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:04:32 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 18:04:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
-        andrew.jones@linux.dev
-Subject: Re: [V4 6/8] KVM: selftests: add library for creating/interacting
- with SEV guests
-Message-ID: <Y02ZLFcDQbX6lP9z@google.com>
-References: <20220829171021.701198-1-pgonda@google.com>
- <20220829171021.701198-7-pgonda@google.com>
- <Yz8dpB5+RFjEhA3n@google.com>
- <CAMkAt6oZQc4jqF7FOXOKkpbP3c4NXxPumVVjX9gXwPCh-zbtYg@mail.gmail.com>
+        Mon, 17 Oct 2022 14:04:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD5F22B09;
+        Mon, 17 Oct 2022 11:04:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79DD8B819D9;
+        Mon, 17 Oct 2022 18:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA75C433D6;
+        Mon, 17 Oct 2022 18:04:49 +0000 (UTC)
+Date:   Mon, 17 Oct 2022 14:05:13 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tracing: Update MAINTAINERS file for new patchwork and
+ mailing list
+Message-ID: <20221017140513.14b9ce2e@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMkAt6oZQc4jqF7FOXOKkpbP3c4NXxPumVVjX9gXwPCh-zbtYg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022, Peter Gonda wrote:
-> On Thu, Oct 6, 2022 at 12:25 PM Sean Christopherson <seanjc@google.com> wrote:
-> > And with that, I believe sev_vm_create() can go away entirely and the SEV encryption
-> > stuff can be handled via a new vm_guest_mode.  ____vm_create() already has a gross
-> > __x86_64__ hook that we can tweak, e.g.
-> >
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index 54b8d8825f5d..2d6cbca2c01a 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -238,9 +238,10 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
-> >         case VM_MODE_P36V47_16K:
-> >                 vm->pgtable_levels = 3;
-> >                 break;
-> > +       case VM_MODE_PXXV48_4K_SEV:
-> >         case VM_MODE_PXXV48_4K:
-> >  #ifdef __x86_64__
-> > -               kvm_get_cpu_address_width(&vm->pa_bits, &vm->va_bits);
-> > +               kvm_init_vm_address_properties(vm);
-> >                 /*
-> >                  * Ignore KVM support for 5-level paging (vm->va_bits == 57),
-> >                  * it doesn't take effect unless a CR4.LA57 is set, which it
-> >
-> > Then kvm_init_vm_address_properties() can pivot on vm->mode to deal with SEV
-> > specific stuff.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-...
+The tracing subsystem now has its own mailing list (although patches
+should also be sent to LKML) as well as a new patchwork entry for kernel
+related tracing patches.
 
-> This refactor sounds good, working on this with a few changes.
-> 
-> Instead of kvm_init_vm_address_properties() as you suggested I've added this:
-> 
-> @@ -272,6 +275,8 @@ struct kvm_vm *____vm_create(enum vm_guest_mode
->  mode, uint64_t nr_pages)
->                 vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
->  #endif
-> 
-> +       kvm_init_vm_arch(vm);
+Update the MAINTAINERS file to reflect the changes.
 
-Why?  I'm not necessarily opposed to adding kvm_init_vm_arch(), but since x86
-"needs" a dedicated hook to unpack the mode, why not piggyback that one?
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> +
->         vm_open(vm);
-> 
->         /* Limit to VA-bit canonical virtual addresses. */
-> 
-> And I need to put kvm_arch_vm_post_create() after the vCPUs are
-> created because the ordering we need is: KVM_SEV_INIT -> Create vCPUS
-> -> KVM_SEV_LAUNCH_FINISH.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d95f5d3b4d37..6293cb4e46a1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8415,6 +8415,9 @@ FUNCTION HOOKS (FTRACE)
+ M:	Steven Rostedt <rostedt@goodmis.org>
+ M:	Masami Hiramatsu <mhiramat@kernel.org>
+ R:	Mark Rutland <mark.rutland@arm.com>
++L:	linux-kernel@vger.kernel.org
++L:	linux-trace-kernel@vger.kernel.org
++Q:	https://patchwork.kernel.org/project/linux-trace-kernel/list/
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+ F:	Documentation/trace/ftrace*
+@@ -11392,6 +11395,9 @@ M:	Naveen N. Rao <naveen.n.rao@linux.ibm.com>
+ M:	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+ M:	"David S. Miller" <davem@davemloft.net>
+ M:	Masami Hiramatsu <mhiramat@kernel.org>
++L:	linux-kernel@vger.kernel.org
++L:	linux-trace-kernel@vger.kernel.org
++Q:	https://patchwork.kernel.org/project/linux-trace-kernel/list/
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+ F:	Documentation/trace/kprobes.rst
+@@ -20628,6 +20634,9 @@ F:	drivers/char/tpm/
+ TRACING
+ M:	Steven Rostedt <rostedt@goodmis.org>
+ M:	Masami Hiramatsu <mhiramat@kernel.org>
++L:	linux-kernel@vger.kernel.org
++L:	linux-trace-kernel@vger.kernel.org
++Q:	https://patchwork.kernel.org/project/linux-trace-kernel/list/
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+ F:	Documentation/trace/*
+-- 
+2.35.1
 
-Hrm, that's annoying.  Please don't use kvm_arch_vm_post_create() as the name,
-that's a better fit for what Vishal is doing since the "vm_post_create()" implies
-that it's called for "all" VM creation paths, where "all" means "everything
-except barebones VMs".  E.g. in Vishal's series, kvm_arch_vm_post_create() can
-be used to drop the vm_create_irqchip() call in common code.  In your case, IIUC
-the hook will be invoked from __vm_create_with_vcpus().
-
-I'm a little hesitant to have an arch hook for this case since it can't be
-all-or-nothing (again, ignoring barebones VMs).  If a "finalize" arch hook is added,
-then arguably tests that do __vm_create() and manually add vCPUs should call the
-arch hook, i.e. we'd be adding maintenance burden to tests that in all likelihood
-don't care about SEV and never will.
-
-It's somewhat unfortunate, but dedicated vm_sev_create_with_one_vcpu() and
-and vm_sev_create_with_vcpus() wrappers is probably the least awful solution.
