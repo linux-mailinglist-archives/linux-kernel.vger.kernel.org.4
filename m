@@ -2,136 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A873601681
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4921601685
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiJQSk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S230021AbiJQSmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiJQSkX (ORCPT
+        with ESMTP id S229796AbiJQSmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:40:23 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68788733C2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:40:21 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 29HIdeAM1523530
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 17 Oct 2022 11:39:40 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 29HIdeAM1523530
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022100601; t=1666031982;
-        bh=ayWKj5OxbMwLJRpGCYUSRaH2lEGi5P4bc0Ya3yQKFtg=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=INPdfgatmwg8qvs2Gg+KQrvuaYhulauPFLqUQrSJgqhSYYuLzbkWhu/MRfMtbjM4+
-         2I/Y1jHScAMfRk+JeBe+jufSEkkoPGAQfs8wgxn1fL9rtg6oenc4zdix7vIKBLMr5X
-         6PAHD9AZZvt5GqMJuC08UeytQlvcGkVTeYfIuGAjUfqfUhauLrTigexCQS4eMdCE+J
-         OLrViVV8uz6kg0qExhgft0mYpky44ONixmNbLcRKLxTOuUdCI3avsnTA/oSa4Qlt2R
-         CpSZ5uv+I2GdPfwiLyjYXrjtxPyvDb0hMMNnAVHR+zTFX5cPRAgjgfVBXLuixoysv/
-         jUDJsguTGIXRg==
-Date:   Mon, 17 Oct 2022 11:39:40 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "'Xin Li'" <xin3.li@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "brgerst@gmail.com" <brgerst@gmail.com>,
-        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>
-Subject: RE: [PATCH v3 3/6] x86/gsseg: make asm_load_gs_index() take an u16
-User-Agent: K-9 Mail for Android
-In-Reply-To: <bdf3f750103f4b64a697191d1edb8ad0@AcuMS.aculab.com>
-References: <20221013200134.1487-1-xin3.li@intel.com> <20221013200134.1487-4-xin3.li@intel.com> <86f60a8edf0e458c86cd84970364cfa2@AcuMS.aculab.com> <1FCB6543-A666-4423-986B-4CDA1B4DD016@zytor.com> <bdf3f750103f4b64a697191d1edb8ad0@AcuMS.aculab.com>
-Message-ID: <B75B19B9-1560-4002-9E76-D7C4D605EFB0@zytor.com>
+        Mon, 17 Oct 2022 14:42:35 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA9F733CB;
+        Mon, 17 Oct 2022 11:42:34 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id n130so13103473oia.6;
+        Mon, 17 Oct 2022 11:42:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nZ+TOy+i0aYFJ/iFf9DtC13NpbD7/U7juh/tS5gbMQI=;
+        b=nvQXgeE4P5RCjLpzj/MWLJJXfigI6KvTW887n/rJcA+AJHE6fHpnHLSLFFQeYyitba
+         Xlh4t91r9TKU3CfkgOlJ2K74oxGmjXQB3Ddt+0GJrnjA1ZEHlMtUMXrW/u63jqpoLo0m
+         1tCGKCTiZfUYh9uz9LfFlOyEIo259kAcI9w5P7ljttVAZ09QNcNK5dFVjyVsJzUHlBNt
+         2DjxOQhHm/urKZqL304+j/lCfUd1+7DWgVMzpG+1VNgUMOD4WPqKrZkscpkDZiJQkQhd
+         23/f1ea4A4e9NXoNsWFXoAUA8r+7L69j0qn265Xjii4AmTfbnKNuKIJhIH4F+GcAvQ7Z
+         lAHw==
+X-Gm-Message-State: ACrzQf0RkYvq4GiNT8uCl/wUnOGUAzN/j8k0uDO5/IkBQBYE9L6e32CG
+        LukZk/gZD7kpwG/EFGLeow==
+X-Google-Smtp-Source: AMsMyM69rBChqI2DHVCnodCENYuzVOrePDGda8YjhYza7SKgmCrl6bqqncNYE/8cx13f9zABeJZ+sg==
+X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id f18-20020a05680814d200b00354c733abd3mr5818411oiw.96.1666032153700;
+        Mon, 17 Oct 2022 11:42:33 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bk15-20020a0568081a0f00b003546cb60859sm4707864oib.14.2022.10.17.11.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 11:42:33 -0700 (PDT)
+Received: (nullmailer pid 2263866 invoked by uid 1000);
+        Mon, 17 Oct 2022 18:42:33 -0000
+Date:   Mon, 17 Oct 2022 13:42:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: mediatek-gen3: Add iommu and
+ power-domain support
+Message-ID: <20221017184233.GA2260080-robh@kernel.org>
+References: <20221017070858.13902-1-tinghan.shen@mediatek.com>
+ <20221017070858.13902-2-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017070858.13902-2-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 17, 2022 12:49:41 AM PDT, David Laight <David=2ELaight@ACULAB=2E=
-COM> wrote:
->From: H=2E Peter Anvin
->> Sent: 15 October 2022 03:41
->>=20
->> On October 14, 2022 5:28:25 AM PDT, David Laight <David=2ELaight@ACULAB=
-=2ECOM> wrote:
->> >From: Xin Li
->> >> Sent: 13 October 2022 21:02
->> >>
->> >> From: "H=2E Peter Anvin (Intel)" <hpa@zytor=2Ecom>
->> >>
->> >> Let gcc know that only the low 16 bits of load_gs_index() argument
->> >> actually matter=2E It might allow it to create slightly better
->> >> code=2E However, do not propagate this into the prototypes of functi=
-ons
->> >> that end up being paravirtualized, to avoid unnecessary changes=2E
->> >
->> >Using u16 will almost always make the code worse=2E
->> >At some point the value has to be masked and/or extended
->> >to ensure an out of range value doesn't appear in
->> >a register=2E
->> >
->> >	David
->>=20
->> Is that a general statement or are you actually invoking it in this cas=
-e?
->> This is about it being a narrowing input, *removing* such constraints=
-=2E
->
->It is a general statement=2E
->You suggested you might get better code=2E
->If fact you'll probably get worse code=2E
->It might not matter here, but =2E=2E=2E
->
->Most modern calling conventions use cpu register to pass arguments
->and results=2E
->So the compiler is required to ensure that u16 values are in range
->in either the caller or called code (or both)=2E
->Just because the domain of a value is small doesn't mean that
->the best type isn't 'int' or 'unsigned int'=2E
->
->Additionally (except on x86) any arithmetic on sub-32bit values
->requires additional instructions to mask the result=2E
->
->Even on x86-64 if you index an array with an 'int' the compiler
->has to generate code to sign extend the value to 64 bits=2E
->You get better code for 'signed long' or unsigned types=2E
->This is probably true for all 64bit architectures=2E
->
->Since (most) cpu have both sign extending an zero extending
->loads from memory, it can make sense to use u8 and u16 to
->reduce the size of structures=2E
->But for function arguments and function locals it almost
->always makes the code worse=2E
->
->	David
->
->-
->Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
->Registration No: 1397386 (Wales)
->
+On Mon, Oct 17, 2022 at 03:08:56PM +0800, Tinghan Shen wrote:
+> From: Jianjun Wang <jianjun.wang@mediatek.com>
+> 
+> Add iommu and power-domain support, and add examples for MT8195, which
+> has two PCIe ports with different clocks and phys.
 
-Ok=2E You are plain incorrect in this case for two reasons:
+Is that really a big enough difference to add a whole other example 
+when we have a dts file with it too? I don't think so, and we certainly 
+don't need to show all instances either.
 
-1=2E The x86-64 calling convention makes it up to the receiver (callee for=
- arguments, caller for returns) to do such masking of values=2E
-
-2=2E The consumer of the values here does not need any masking or extensio=
-ns=2E
-
-So this is simply telling the compiler what the programmer knows=2E
+Rob
