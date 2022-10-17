@@ -2,100 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47532601099
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32A060109B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiJQN5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S230079AbiJQN5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiJQN5T (ORCPT
+        with ESMTP id S229940AbiJQN5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:57:19 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F98541BE
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=3CTsJGe8bY+pItCw50sxDPAN3XWBgWvK9oJXOucHAFs=;
-  b=A/FsqbGEadvZ1Eb67IUcQh0wB2/etHEDRdXTFlPvkfEvdSxdZnxqbSBd
-   /UJJl76usnPX9lLzoZHc/OfmkNCRlZegijgQIr+dZ74VoiDy/mpf+xOAG
-   0I7Sc0vphFdsmJUvuM81u2zQb22ZUu8QCBSIH4M8a5w8uVFdu75BA7u9b
-   U=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,191,1661810400"; 
-   d="scan'208";a="65537852"
-Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 15:57:17 +0200
-Date:   Mon, 17 Oct 2022 15:57:16 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Deepak R Varma <drv@mailo.com>
-cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: Re: [PATCH 3/4] staging: r8188eu: remove {} for single statement
- blocks
-In-Reply-To: <478d652b9f467d47685c1af72a876f34dd92710f.1666011479.git.drv@mailo.com>
-Message-ID: <alpine.DEB.2.22.394.2210171556290.16433@hadrien>
-References: <cover.1666011479.git.drv@mailo.com> <478d652b9f467d47685c1af72a876f34dd92710f.1666011479.git.drv@mailo.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 17 Oct 2022 09:57:24 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C87543C6;
+        Mon, 17 Oct 2022 06:57:22 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1okQcI-0004Li-5Q; Mon, 17 Oct 2022 15:57:18 +0200
+Message-ID: <f0412b37-fac0-c3f5-9877-0460a027e109@leemhuis.info>
+Date:   Mon, 17 Oct 2022 15:57:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US, de-DE
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+In-Reply-To: <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1666015042;d5375fe7;
+X-HE-SMSGID: 1okQcI-0004Li-5Q
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04.10.22 19:53, Konstantin Ryabitsev wrote:
+> On Thu, Sep 29, 2022 at 01:19:24PM +0200, Thorsten Leemhuis wrote:
+>> TLDR: Core Linux kernel developers are unhappy with the state of
+>> bugzilla.kernel.org; to improve things I plan to change a few important
+>> aspects of its configuration, unless somebody comes up with better ideas
+>> to tackle current problems: (1) Create a catch-all product making it
+>> totally obvious to submitters that likely nobody will look into the
+>> ticket. (2) Remove or hide all products & components where the subsystem
+>> didn't fully commit to look into newly submitted reports. (3) Change the
+>> text on the front page to make it clear that most kernel bug reports
+>> need to be sent by mail.
 
+So, merge window is over. To avoid any doubt, I'd now like to get a
+clarification what the outcome of this discussion actually is.
 
-On Mon, 17 Oct 2022, Deepak R Varma wrote:
+FWIW, as most of you likely know, lwn.net has a write-up of this thread:
+https://lwn.net/Articles/910740/
 
-> As per the Linux kernel coding-style guidelines, there is no need to
-> use {} for single statement blocks. Address following checkpatch script
-> complaint:
-> 	WARNING: braces {} are not necessary for single statement blocks
+> Here's my counter-plan, which builds on top of yours.
 
-It's nice to say something like "Problem identified using checkpatch".
-But putting the verbatim checkpatch message that says what you just said
-doesn't seem necessary.
+Is this the agreed on path forward by silent agreement? And if so: who
+will actually shepherd this? I just wonder, as it sounded to me that
+Konstantin would be happy to take care of the bot-related stuff, but
+leave the rest to somebody else.
 
-julia
+Or do we have two proposals on the table that are kind of deadlocked so
+that nothing will happen until the next maintainers summit, where things
+like this are usually discussed and a way forward agreed on? Then the
+ugly situation with bugzilla.kernel.org would continue for afaics at
+least 11 more months, which I'd call "unfortunate". :-/
 
->
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_br_ext.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> index 427da7e8ba4c..290affe50d0b 100644
-> --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-> +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> @@ -655,9 +655,8 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
->  	hash = __nat25_network_hash(network_addr);
->  	db = priv->nethash[hash];
->  	while (db) {
-> -		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN)) {
-> +		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN))
->  			return (void *)db;
-> -		}
->
->  		db = db->next_hash;
->  	}
-> --
-> 2.30.2
->
->
->
->
->
+Ciao, Thorsten
+
+> 1. Create a Kernel/Kernel product that acts as a starting point for all bug
+>    submissions.
+> 2. Create and maintain a mapping from MAINTAINER subsystem entries to
+>    Product/Component categories in Bugzilla (the scheme to be established).
+> 3. Establish and maintain a team of designated triage people who are willing
+>    to look at incoming bugs to either:
+> 
+>    a. quick-close them as non-actionable (tainted kernel, distro kernel, spam)
+>    b. obtain missing information from the submitter as necessary
+>    c. figure out the correct component to assign, to the best of their ability
+>    d. set a "triaged" flag
+> 
+> 4. a backend monitoring bot will track all bug changes and, when it sees a bug
+>    get the "triaged" state, it will:
+> 
+>    a. create a useful bug summary from all bug comments
+>    b. figure out who to notify based on the mapping (see #2 above)
+>    c. send out the email to everyone identified
+> 
+> 5. the same backend monitoring bot will track responses and update the bug
+>    comments as needed; any comments added via the bugzilla site will be
+>    similarly sent out as follow-up messages.
+> 
+> 6. the bot can also monitor commits and other discussions via lore.kernel.org
+>    and automatically add comments/links when it sees the bug mentioned
+>    elsewhere.
+> 
+> I'm happy to take care of everything bot-related (apparently, programming bots
+> is what I do now -- I just wish it was the cool and glamorous kind).
+> 
+> As I have stated multiple times, the hard part will be keeping a team of
+> people who are willing to do the bug triage work, but maybe we can start with
+> Greg KH using his intern funds to hire someone (assuming he's not already
+> using these funds for someone to help him with all the other tasks).
+> 
+> Does that sound like a plan for everyone?
+> 
+> -K
