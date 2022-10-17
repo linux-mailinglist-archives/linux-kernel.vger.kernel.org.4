@@ -2,124 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A71060163B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532DC60163E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiJQS0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S230399AbiJQS07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiJQS0x (ORCPT
+        with ESMTP id S230304AbiJQS0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:26:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6D574CE6;
+        Mon, 17 Oct 2022 14:26:54 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BD474CE6;
+        Mon, 17 Oct 2022 11:26:53 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so2755953ooi.5;
+        Mon, 17 Oct 2022 11:26:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=14x/M1tKZwx1cpScI/Zn9umGF7nknJ0iPBkHXl0p60w=;
+        b=7wpMGAuxXsPn25YuNGrtZ3sAIgRIs+/YMxs4yEM4jxwxANNFxPtv2oezL2EABBiqbp
+         7Eg3qS4W/M+Oflco5puM2LewRCuo1eW/h7MNSWFbrOzO5IsROFw1d5+SIM27H7ilkAv1
+         fUIZY/rHN6kI/g1NXyH9KN5wsgeMI9vpy8V8evlkhfQ7+9umgz37IAb9LEOff3R10o6b
+         2R3WC1wtcKH7VCHFoTSTZHm7nLjdm9NMsKrFazjM5Vt/QwLLV3/WhzCwp/0J3tKnjoxH
+         FkKqE3UUR5NAWeD1PQq6gVBkO3KG+DkgYpDqxAUp6ROYKFBO/SNMLfuSuqiodr6kqoT4
+         4VcQ==
+X-Gm-Message-State: ACrzQf3IcXZ9Y+c5ezB/S6rI5hSlaGVUw4eF00P6EEDey7QHp+NGeC5Q
+        yqa8RC07zW4TKgVCFvcwIyu1n1btOA==
+X-Google-Smtp-Source: AMsMyM4CG65ULQoMsmj7Stme8+7rka/kGz7dJ4wC47I7Ms/prM1SAEmqglGIHsHsjKKzmkj+TXJmxA==
+X-Received: by 2002:a4a:d31a:0:b0:47e:70a5:7eed with SMTP id g26-20020a4ad31a000000b0047e70a57eedmr4773127oos.16.1666031212900;
         Mon, 17 Oct 2022 11:26:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A844AB819FA;
-        Mon, 17 Oct 2022 18:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BCDC433C1;
-        Mon, 17 Oct 2022 18:26:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666031209;
-        bh=1fRKVnmiM1x9FUiqzmh5+HsRy4dUfT6dd5kHN8AI6kI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zgs/T2HtU86tZLbGvtfJ/hTY1PMW34bO3QyqQbU5BuPMVfzZgwDUy66COu9nC7tOl
-         gD6bubDK9kF2/OKDVwMw4K2ymrspBLbtlC3uc+f5EtPtdqFzFAkag8fMDHYlnV3ilX
-         usmGNnfcjc/6ecITc/jYoQV5Kv36euaKKB6cWq+nXE2iLx8IA9/2h03/f6J+6G4umu
-         RpNXslAKOK2d8J8p+j37Q0JsTdROWjUlUZm9J9VFHHumkgbkb0xlRovnROMqSJLRu0
-         Ulj1RclYhwnv74PTW0nDYDhN1j7micCFzHQSLUWzbrDdo5c/n6uOkNJ+l2DT+nLZU9
-         3cXSq2lVgFcJw==
-Date:   Mon, 17 Oct 2022 11:26:47 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "H.Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org
-Subject: Re: upgrade the orphan section warning to a hard link error
-Message-ID: <Y02eZ6A/vlj8+B/c@dev-arch.thelio-3990X>
-References: <BN6PR1101MB216105D169D482FC8C539059A8269@BN6PR1101MB2161.namprd11.prod.outlook.com>
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i34-20020a056870892200b0013320d9d9casm5148668oao.44.2022.10.17.11.26.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 11:26:52 -0700 (PDT)
+Received: (nullmailer pid 2246065 invoked by uid 1000);
+        Mon, 17 Oct 2022 18:26:53 -0000
+Date:   Mon, 17 Oct 2022 13:26:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?Q?Micha=C5=82?= Grzelak <mig@semihalf.com>
+Cc:     robh+dt@kernel.org, edumazet@google.com, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, upstream@semihalf.com,
+        devicetree@vger.kernel.org, davem@davemloft.net, pabeni@redhat.com,
+        mw@semihalf.com, kuba@kernel.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: net: marvell,pp2: convert to
+ json-schema
+Message-ID: <166603121217.2246011.825778809609571162.robh@kernel.org>
+References: <20221014213254.30950-1-mig@semihalf.com>
+ <20221014213254.30950-2-mig@semihalf.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BN6PR1101MB216105D169D482FC8C539059A8269@BN6PR1101MB2161.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221014213254.30950-2-mig@semihalf.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
-
-On Sun, Oct 16, 2022 at 06:28:27AM +0000, Li, Xin3 wrote:
-> Arch maintainers,
+On Fri, 14 Oct 2022 23:32:52 +0200, Michał Grzelak wrote:
+> Convert the marvell,pp2 bindings from text to proper schema.
 > 
-> We plan to upgrade the orphan section warning to a hard link error on x86.
-> And I found the most recent related commit 59612b24f78a0
-> ("kbuild: Hoist '--orphan-handling' into Kconfig") from by Nathan Chancellor
-> has the following statement in the help section:
->  
-> +config ARCH_WANT_LD_ORPHAN_WARN
-> +       bool
-> +       help
-> +         An arch should select this symbol once all linker sections are explicitly
-> +         included, size-asserted, or discarded in the linker scripts. This is
-> +         important because we never want expected sections to be placed heuristically
-> +         by the linker, since the locations of such sections can change between linker
-> +         versions.
-> +
+> Move 'marvell,system-controller' and 'dma-coherent' properties from
+> port up to the controller node, to match what is actually done in DT.
+> 
+> Rename all subnodes to match "^(ethernet-)?port@[0-2]$" and deprecate
+> port-id in favour of 'reg'.
+> 
+> Signed-off-by: Michał Grzelak <mig@semihalf.com>
+> ---
+>  .../devicetree/bindings/net/marvell,pp2.yaml  | 305 ++++++++++++++++++
+>  .../devicetree/bindings/net/marvell-pp2.txt   | 141 --------
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 306 insertions(+), 142 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/marvell,pp2.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/marvell-pp2.txt
+> 
 
-+ Kees, who did the heavy lifting to enable '--orphan-handling=warn' for
-arm64 and x86, and the ClangBuiltLinux and linux-kbuild mailing lists.
-Unfortunately, for some reason, I do not see the original posting on
-lore but I left the full message intact for further discussion.
-
-> It looks to me that it actually suggests a link error rather than a warning,
-> so the question is, should we do the upgrade on all architectures with
-> the orphan section warning?
-
-It might be interesting to turn orphan sections into an error if
-CONFIG_WERROR is set. Perhaps something like the following (FYI, not
-even compile tested)?
-
-diff --git a/Makefile b/Makefile
-index 0837445110fc..485f47fc2c07 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1119,7 +1119,7 @@ endif
- # We never want expected sections to be placed heuristically by the
- # linker. All sections should be explicitly named in the linker script.
- ifdef CONFIG_LD_ORPHAN_WARN
--LDFLAGS_vmlinux += --orphan-handling=warn
-+LDFLAGS_vmlinux += --orphan-handling=$(if $(CONFIG_WERROR),error,warn)
- endif
- 
- # Align the bit size of userspace programs with the kernel
-
-Outright turning the warning into an error with no escape hatch might be
-too aggressive, as we have had these warnings triggered by new compiler
-generated sections, such as in commit 848378812e40 ("vmlinux.lds.h:
-Handle clang's module.{c,d}tor sections"). Unconditionally breaking the
-build in these situations is unfortunate but the warnings do need to be
-dealt with so I think having it error by default with the ability to
-opt-out is probably worth doing. I do not have a strong opinion though.
-
-> BTW, the following architectures enable orphan section warning,
-> arm/arm64/hexagon/loongarch/mips/	powerpc/x86,
-> while all other architectures just ignore it.
-
-Right, every architecture should eventually select
-CONFIG_ARCH_WANT_LD_ORPHAN_WARN so that they get this warning as well.
-It is just making architecture maintainers aware of it so they can look
-into it.
-
-Cheers,
-Nathan
+Reviewed-by: Rob Herring <robh@kernel.org>
