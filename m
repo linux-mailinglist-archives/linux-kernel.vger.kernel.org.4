@@ -2,159 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D3C6012FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C081601300
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiJQPv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 11:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S230247AbiJQPw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 11:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbiJQPvR (ORCPT
+        with ESMTP id S229506AbiJQPwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:51:17 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663466D852
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:51:07 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id s30so16698921eds.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:51:06 -0700 (PDT)
+        Mon, 17 Oct 2022 11:52:54 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9392966874;
+        Mon, 17 Oct 2022 08:52:51 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id r14so18205795lfm.2;
+        Mon, 17 Oct 2022 08:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZBmPZBk5dJIk9+JXoplzt5ARwx47oHaU28k3ADgsDIk=;
-        b=Fq+h0CI3Y+K6BCz/QF2YliAkuE/anP1CfaiPSoQbygz4mBqBWNGWcprD+LBSliNVXa
-         Alxeb4nR1Ps8ggwnnf20JrLvp5M5qEkI0bdaCJ00S6T0f4kZkVdsWwykVg6LK1hxjw2t
-         FNUdYt2vTR+5hn7I2AJNyOn7B+U2bPlP8mPRrUUDSB702+Nb/JLJ6ERQXKi2O24CzPIC
-         8xxjjUN3um+O+1kj7lkeOWg8aq6rNctWi9Mebm5eipZ0hlXOVVX9/g14luRb4jfCIGmj
-         5OWt1pccYPSCQxTf+XGptDLfk15P2DfhkKQYtmmdfu5ij8CrnPYGaoj0mVXcT4p+QAFt
-         mDYQ==
+        bh=xwn9lDC6qeLpckKuqyKYPC8KqluzBnCmAuCKvK4EiN8=;
+        b=TxDVu2SvdVGSD0Eqblix56bCl3aJ8/0KnuvUdesjmnKa9wxMv9qDqAeE5FZYTumwAu
+         Yb8eyMv9jz9ZVd9MzbnFPWMnVbfUFCiSCIJzTKoTUCNhYxfsA2bQEiLqYpL9dqsrCMIh
+         BCRFAKLklF7ALLKU6sOJQHpHQYMzlERpNhgQgRTPi4FLsDdC/4bN9WVuctJqAE9zzeSJ
+         fzTv5PgBNBlBj1wU1oOFQ4o0ywyfJGIp4QIP7aAfwDqxM6OrKMj06PuZ2SdEYywpbrIp
+         wwg4UL4FXsgj01RFPtJhsS94UvQBB48J1AlCsl9HVF7V/h2tF9O5+j9afpAS27o1rJxR
+         EXTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZBmPZBk5dJIk9+JXoplzt5ARwx47oHaU28k3ADgsDIk=;
-        b=ZWlM8q3x4Z74mK1R4JFKRMnUBhhjPCkttj5I3SNYZCzVnPO7CnfpHcXJSVHi3JUhsF
-         d+hM+gb6CKUDC9FEqwqX6YOkXRbqrdb91+bCE+fUrn0tSvjMOFKQ+fSBJZ5BKtb8ullG
-         qp6tz6QdoxLPQ0AbOoUqRfxVSO5wXCSxs8A9VhTSkLdw1OzMVftEWfIZA9cClVrK/YMp
-         HQ+gp3by24LpruiVEaPiCoZXtguhcdU8cnW4oZBC52Tw8tlX/cljZUlAX4h0P3Nx+nkK
-         Y1HcpBTzb65B3ZjKndyhBmfYYemipS4caRb736XuE3AQR0Km3aPNfkkOHopZZ57vTzAj
-         dCKA==
-X-Gm-Message-State: ACrzQf3fJdyJtQ04ec7NZ1xQ1Q95NVVbakBkpHn2u7AXDpLmnmsPB+kD
-        HXBVrTdkEriw9S9xkacIPE+AGw==
-X-Google-Smtp-Source: AMsMyM6hlf2tGA0s/Jrbgp21kZrQbJQsjTf9l7shXpqgUTI31fdS5nFiXIRGJyVgsf9z3sB7ZVVkFg==
-X-Received: by 2002:a05:6402:557:b0:458:7488:8958 with SMTP id i23-20020a056402055700b0045874888958mr10722940edx.242.1666021865316;
-        Mon, 17 Oct 2022 08:51:05 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906219100b0078dce9984afsm6296346eju.220.2022.10.17.08.51.04
+        bh=xwn9lDC6qeLpckKuqyKYPC8KqluzBnCmAuCKvK4EiN8=;
+        b=xgpoHPp911isgNxiT/Hzar3wnUDELL6U1cA8cFfnFPjqF0KkbWCKxP1+kacMp9NhYN
+         g6LwEldpHMwbRdJ3vOBm9obXUDMDga+mhEDbJu5qOoQQwDFc+M0QlLwpggyRJpzJElZ6
+         GPUdtDtG94qPFouEL/i1+cOYosCq/OTXDdmZ9M/6Hnkm3qyuT9ueSmxwW1YBVi0yiegY
+         ne22iLuV7lvwSMxGlou9OryivbKdEvLvQoRb4x9ecUtKDSSvo8mmenL9iezb3fF7ELhs
+         IXYe2dH50Ve6OwOEpQQrHtymWOhIeuUrPnsFLfJWXcnnqBnYq1849iMch9YDG7NfWpdJ
+         YdJw==
+X-Gm-Message-State: ACrzQf2aONZ5pE1s+u1HpVFAn0XCTiDTWkKWdJwtcRBWQppcIt1920C5
+        3ILm456fP0NWVyMRwby6Vak=
+X-Google-Smtp-Source: AMsMyM4c62yxCuiYr9QR5J6H8Zs0A56qFxHUrUwBdUC8cax9F+RqMVpaVQbP2D4fczz9WMM5GBeSGQ==
+X-Received: by 2002:ac2:514e:0:b0:4a2:34a4:2d9b with SMTP id q14-20020ac2514e000000b004a234a42d9bmr4501195lfd.166.1666021969636;
+        Mon, 17 Oct 2022 08:52:49 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id i25-20020a196d19000000b004a1e7216131sm1473532lfc.116.2022.10.17.08.52.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 08:51:04 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 17:51:03 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>,
-        Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] (attempt to) Fix RISC-V toolchain extension support
- detection
-Message-ID: <20221017155103.4dt5uzmnlbtibqcn@kamzik>
-References: <20221006173520.1785507-1-conor@kernel.org>
+        Mon, 17 Oct 2022 08:52:49 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 18:52:46 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        regressions@lists.linux.dev,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>
+Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006
+ tag
+Message-ID: <20221017155246.zxal2cfehjgaajcu@mobilestation>
+References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
+ <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
+ <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
+ <CADYN=9L8tt2T-8O+u5NSMSUOkZDvEggnvzxH6aMmd5Rn9yDeuw@mail.gmail.com>
+ <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com>
+ <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
+ <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com>
+ <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
+ <20221014140633.mlypet7skkxvt453@mobilestation>
+ <CADYN=9LrKHRNMON3GA4piDvWeSWTASQ1u2=D30rXFdvo1L18bg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221006173520.1785507-1-conor@kernel.org>
+In-Reply-To: <CADYN=9LrKHRNMON3GA4piDvWeSWTASQ1u2=D30rXFdvo1L18bg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 06:35:19PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Hey,
-> This came up due to a report from Kevin @ kernel-ci, who had been
-> running a mixed configuration of GNU binutils and clang. Their compiler
-> was relatively recent & supports Zicbom but binutils @ 2.35.2 did not.
-> 
-> Our current checks for extension support only cover the compiler, but it
-> appears to me that we need to check both the compiler & linker support
-> in case of "pot-luck" configurations that mix different versions of
-> LD,AS,CC etc.
-> 
-> Linker support does not seem possible to actually check, since the ISA
-> string is emitted into the object files - so I put in version checks for
-> that. The checks have gotten a bit ugly since 32 & 64 bit support need
-> to be checked independently but ahh well.
-> 
-> As I was going, I fell into the trap of there being duplicated checks
-> for CC support in both the Makefile and Kconfig, so as part of renaming
-> the Kconfig symbol to TOOLCHAIN_HAS_FOO, I dropped the extra checks in
-> the Makefile. This has the added advantage of the TOOLCHAIN_HAS_FOO
-> symbol for Zihintpause appearing in .config.
-> 
-> I pushed out a version of this that specificly checked for assember
-> support for LKP to test & it looked /okay/ - but I did some more testing
-> today and realised that this is redudant & have since dropped the as
-> check.
-> 
-> I tested locally with a fair few different combinations, to try and
-> cover each of AS, LD, CC missing support for the extension.
-> 
-> The one that I am left wondering about is Zicsr/Zifencei. Our Makefile
-> has:
-> 
-> > # Newer binutils versions default to ISA spec version 20191213 which moves some
-> > # instructions from the I extension to the Zicsr and Zifencei extensions.
-> > toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
-> > riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-> 
-> I'd like to also move that one to Kconfig rather than the Makefile so
-> that, again, it shows up in .config etc. But as Zicsr/Zifencei do not
-> appear to be emitted into the object files it's not a fix and can be a
-> follow-on patch if my approach here is not entirely off-the-wall.
-> 
-> I am not 100% on the LD/LLD versions that I picked, I went off of a
-> `git branch -a --contains` of the first commits I found that with
-> mention of the extension. Please scream if I got it wrong, I'm not
-> overly familar with where to find this sort of info for the toolchains.
-> 
-> Thanks,
-> Conor.
-> 
-> Conor Dooley (2):
->   riscv: fix detection of toolchain Zicbom support
->   riscv: fix detection of toolchain Zihintpause support
-> 
->  arch/riscv/Kconfig                      | 17 +++++++++++++----
->  arch/riscv/Makefile                     |  6 ++----
->  arch/riscv/include/asm/vdso/processor.h |  2 +-
->  3 files changed, 16 insertions(+), 9 deletions(-)
-> 
-> -- 
-> 2.37.3
+On Mon, Oct 17, 2022 at 09:43:24AM +0200, Anders Roxell wrote:
+> On Fri, 14 Oct 2022 at 16:06, Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> >
+> > On Fri, Oct 14, 2022 at 11:22:38AM +0200, Anders Roxell wrote:
+> > > On Fri, 14 Oct 2022 at 09:53, Damien Le Moal
+> > > <damien.lemoal@opensource.wdc.com> wrote:
+> > > >
+> > > > On 10/14/22 16:31, Arnd Bergmann wrote:
+> > > > > On Fri, Oct 14, 2022, at 2:22 AM, Damien Le Moal wrote:
+> > > > >> On 10/14/22 07:07, Anders Roxell wrote:
+> > > > >> [...]
+> > > > >>>> 8)
+> > > > >>>>> If reverting these patches restores the eSATA port on this board, then you need
+> > > > >>>>> to fix the defconfig for that board.
+> > > > >>>>
+> > > > >>>> OTOH,
+> > > > >>>> Anders, enabled the new config CONFIG_AHCI_DWC=y  and tried but the
+> > > > >>>> device failed to boot.
+> > > > >>>
+> > > > >>> I thought it would work with enabling CONFIG_AHCI_DWC=y, but it didn't...
+> > > > >>
+> > > > >> As mentioned in my previous reply to Naresh, this is a new driver added in
+> > > > >> 6.1. Your board was working before so this should not be the driver needed
+> > > > >> for it.
+> > > > >>
+> > > > >>> However, reverting patch 33629d35090f ("ata: ahci: Add DWC AHCI SATA
+> > > > >>> controller support")
+> > > > >>> from next-20221013 was a success, kernel booted  and the 'mkfs.ext4' cmd was
+> > > > >>> successful.
+> > > > >>
+> > > > >> Which is very strange... There is only one hunk in that commit that could
+> > > > >> be considered suspicious:
+> > > > >>
+> > > > >> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+> > > > >> index 9b56490ecbc3..8f5572a9f8f1 100644
+> > > > >> --- a/drivers/ata/ahci_platform.c
+> > > > >> +++ b/drivers/ata/ahci_platform.c
+> > > > >> @@ -80,9 +80,7 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
+> > > > >>  static const struct of_device_id ahci_of_match[] = {
+> > > > >>         { .compatible = "generic-ahci", },
+> > > > >>         /* Keep the following compatibles for device tree compatibility */
+> > > > >> -       { .compatible = "snps,spear-ahci", },
+> > > > >>         { .compatible = "ibm,476gtr-ahci", },
+> > > > >> -       { .compatible = "snps,dwc-ahci", },
+> > > > >>         { .compatible = "hisilicon,hisi-ahci", },
+> > > > >>         { .compatible = "cavium,octeon-7130-ahci", },
+> > > > >>         { /* sentinel */ }
+> > > > >>
+> > > > >> Is your board using one of these compatible string ?
+> > > > >
+> > > > > The x15 uses "snps,dwc-ahci". I would expect it to detect the device
+> > > > > with the new driver if that is loaded, but it's possible that the
+> > > > > driver does not work on all versions of the dwc-ahci hardware.
+> > > > >
+> > > > > Anders, can you provide the boot log from a boot with the new driver
+> > > > > built in? There should be some messages from dwc-ahci about finding
+> > > > > the device, but then not ultimately working.
+> > > > >
+> > > > > Depending on which way it goes wrong, the safest fallback for 6.1 is
+> > > > > probably to move the "snps,spear-ahci" and "snps,dwc-ahci" compatible
+> > > > > strings back into the old driver, and leave the new one only for
+> > > > > the "baikal,bt1-ahci" implementation of it, until it has been
+> > > > > successfully verified on TI am5/dra7, spear13xx and exynos.
+> > > >
+> > > > OK. So a fix patch until further tests/debug is completed would be this:
+> > > >
+> > > > diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
+> > > > index 8fb66860db31..7a0cbab00843 100644
+> > > > --- a/drivers/ata/ahci_dwc.c
+> > > > +++ b/drivers/ata/ahci_dwc.c
+> > > > @@ -469,8 +469,6 @@ static struct ahci_dwc_plat_data ahci_bt1_plat = {
+> > > >  };
+> > > >
+> > > >  static const struct of_device_id ahci_dwc_of_match[] = {
+> > > > -       { .compatible = "snps,dwc-ahci", &ahci_dwc_plat },
+> > > > -       { .compatible = "snps,spear-ahci", &ahci_dwc_plat },
+> > > >         { .compatible = "baikal,bt1-ahci", &ahci_bt1_plat },
+> > > >         {},
+> > > >  };
+> > > > diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+> > > > index 8f5572a9f8f1..9b56490ecbc3 100644
+> > > > --- a/drivers/ata/ahci_platform.c
+> > > > +++ b/drivers/ata/ahci_platform.c
+> > > > @@ -80,7 +80,9 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
+> > > >  static const struct of_device_id ahci_of_match[] = {
+> > > >         { .compatible = "generic-ahci", },
+> > > >         /* Keep the following compatibles for device tree compatibility */
+> > > > +       { .compatible = "snps,spear-ahci", },
+> > > >         { .compatible = "ibm,476gtr-ahci", },
+> > > > +       { .compatible = "snps,dwc-ahci", },
+> > > >         { .compatible = "hisilicon,hisi-ahci", },
+> > > >         { .compatible = "cavium,octeon-7130-ahci", },
+> > > >         { /* sentinel */ }
+> > > >
+> > > > Anders, Naresh,
+> > > >
+> > > > Can you try this ?
+> > >
+> >
+> > > Tested this patch on todays linux-next tag: next-20221014 without enabling
+> > > CONFIG_AHCI_DWC and it worked as expected when booting [1].
+> > > On the other hand I also tried a build/boot with CONFIG_AHCI_DWC enabled
+> > > and it worked as expected to boot [2].
+> >
+> > Expected result. The DWC driver will probe the device on our platform
+> > only while your platform falls back to using the generic driver.
+> > Anders, in order understand the root cause of the problem could you please
+> > 1. upload the bogus boot log.
 >
+ 
+> This [1] is the bogus boot log.
+> 
+> > 2. try what I suggested here
+> > Link: https://lore.kernel.org/linux-ide/20221014133623.l6w4o7onoyhv2q34@mobilestation/
+> > and if the system fails to boot at some point upload the boot log.
+> 
+> Only doing this:
+> 
+> --- a/drivers/ata/ahci_dwc.c
+> +++ b/drivers/ata/ahci_dwc.c
+> @@ -316,12 +316,13 @@ static int ahci_dwc_init_host(struct
+> ahci_host_priv *hpriv)
+>   if (rc)
+>   goto err_disable_resources;
+>   }
+> -
+> +/*
+>   ahci_dwc_check_cap(hpriv);
+> 
+>   ahci_dwc_init_timer(hpriv);
+> 
+>   rc = ahci_dwc_init_dmacr(hpriv);
+> +*/
+>   if (rc)
+>   goto err_clear_platform;
+> 
+> and enable CONFIG_AHCI_DWC made the mkfs to detect the SATA drive [2].
 
-This looks good to me, so
+Judging by what is in [1] and [2] I have much doubt that [1] was
+executed with the CONFIG_AHCI_DWC config enabled because the boot log has
+nothing about the ahci-dwc driver probe failure or none of the logs
+messages seen in [2] (see every line with the ahci-dwc word in it).
 
-For the series
+1. If you had the device probe procedure failed at some point you
+would have got a line like this:
+< ahci-dwc: probe of 4a140000.sata failed with error -errno
+But there is no such line in [1]. There is literally nothing
+AHCI/SATA/SCSI/DWC AHCI/ahci-dwc/etc in it.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+2. If you had the DW AHCI device probe at least performed, then the next
+calls-chain would have been executed:
+ahci_dwc_probe()
++-> ahci_dwc_get_resources()
+    +-> ahci_platform_get_resources()
+        +-> ...
+        +-> devm_regulator_get(...)
+        +-> ...
+which would have caused the next log messages:
+< [] ahci-dwc 4a140000.sata: supply ahci not found, using dummy regulator
+< [] ahci-dwc 4a140000.sata: supply phy not found, using dummy regulator
+< [] ahci-dwc 4a140000.sata: supply target not found, using dummy regulator
+You do have these lines in [2] but missing them in [1]. Should you
+have any errors in ahci_dwc_probe() detected before that you would
+have an error printed as I noted in 1.
 
-However, we could also drop the compiler and linker checking if we
-converted our use of cbo.* to the insn-def.h framework (I think Heiko once
-mentioned looking at doing that, but I'm not sure.) I'm looking at adding
-Zicboz support right now and for starters I've duplicated and modified
-these checks. But, I think I'll look into defining the instruction type
-needed for cbo.* and using insn-def instead.
+3. Should the problem was in the commented out code lines you would
+have at least got the messages above printed to the log [1] because
+the commented out code is executed after the resources request
+procedure (see the ahci_dwc_init_host() method is called after
+ahci_dwc_get_resources()).
 
-Thanks,
-drew
+4. Finally the commented out code doesn't really do any actions which
+could have caused the device probe to silently halt.
+
+All of that makes me thinking that the DW AHCI SATA wasn't even probed
+in [1] which most likely means that either the driver config was
+omitted there or the device was disabled. So could you please re-start
+the system like in [2] but uncomment the lines above?
+
+* Please make sure the Damien's fix
+https://www.spinics.net/lists/arm-kernel/msg1017920.html
+isn't applied on the kernel [2].
+
+[1] https://lkft.validation.linaro.org/scheduler/job/5634743#L2580
+[2] https://lkft.validation.linaro.org/scheduler/job/5679278#L2617
+
+-Sergey
+
+> 
+> Cheers,
+> Anders
+> [1] https://lkft.validation.linaro.org/scheduler/job/5634743#L2580
+> [2] https://lkft.validation.linaro.org/scheduler/job/5679278#L2617
