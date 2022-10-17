@@ -2,249 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E230C601576
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE10B60157A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiJQRd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S229453AbiJQRep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiJQRdk (ORCPT
+        with ESMTP id S230212AbiJQRei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:33:40 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE6E1C432
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:33:38 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id i3so11703291pfc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VIkU7sOMlV3fHaINlwJ0KYw7btBtSLgw5mO+qXWoUOw=;
-        b=Jmm7D6cRS6zPAgzomDFIyMJ+afNQc/L35rXtWrVxIPB0xDkGpo/668/Qb6CTzR8Mva
-         Aaz6+IsQYV+dHpvRGVptFXcOCjR6wvfgHUaTCD/RLlNfbNy+lzEzvS4QI31Bwzo5R8z7
-         r82nxp5MGpoWJBmk4hS6s0XWt7CQjHB0fjVD3G7Bs+RRndEmKVK/hY10sRG5dWuEPnhF
-         dW+XfNlc4+OJbMcx7CbXOJmfRiyR8SoQxSEE9g2dXvmOLXI5diciaP0ed3hrULJC3feW
-         vF21rTT9wpE7sPLKC4X4UITtaAyeZjNIqJ64Ulnj66EOWCEea2oCOG5hJqHeZkeB5dQt
-         RtCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VIkU7sOMlV3fHaINlwJ0KYw7btBtSLgw5mO+qXWoUOw=;
-        b=laOC9iBTK+hC3XFRzaCrILZg8SOXUIgf60/gDR2jhKEs1/zOj7zJ3xlLp0cAu+e+Lr
-         epoiHCOORsCjPsAR0XQpANfEc2ldiUZcCTXJhdqHQUsFViQOoo98fkElOM/sMkMOAo1L
-         IsVXyXDdE7ODDFA76c9TLu6Dgyv5MBmLFzDc8ITSr7/IY8C0FrT1qHky6TSosw8mWcXY
-         TqpetNDK9qCFbuBEZ0+MMjxfaedphg6wBYbspgkXJnXZZU5HRlM4/biC+TcU1ub2jgNz
-         vHR0BBaeg8WJdnct1iKeleEn/jmJaZQG5ldB7bbV+3qLE/qKMfYTEvahrxYX7eKIoh8m
-         datw==
-X-Gm-Message-State: ACrzQf0jy29OEazclfRyQ+d+rNNFbjdgVCrerQtInkCYFrpfmaP7iATt
-        RKZUv+r7u5RAjBZlsRQ43RQOyw==
-X-Google-Smtp-Source: AMsMyM5jyy2WbvbjPaz7HjAuqsssAiAvwynoMnTFyb4G8cBccuREHHhkw139+BtRk/gDYP8/CXZJWA==
-X-Received: by 2002:a63:1609:0:b0:45c:7c1c:4e7d with SMTP id w9-20020a631609000000b0045c7c1c4e7dmr11482387pgl.265.1666028018299;
-        Mon, 17 Oct 2022 10:33:38 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b00177fb862a87sm6985701plg.20.2022.10.17.10.33.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 10:33:37 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 11:33:35 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V7 6/7] remoteproc: imx_rproc: request mbox channel later
-Message-ID: <20221017173335.GA121862@p14s>
-References: <20221014031037.1070424-1-peng.fan@oss.nxp.com>
- <20221014031037.1070424-7-peng.fan@oss.nxp.com>
- <20221014174903.GA4125124@p14s>
- <DU0PR04MB94179580E85C888CDAA8EAA788299@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        Mon, 17 Oct 2022 13:34:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEBD6575;
+        Mon, 17 Oct 2022 10:34:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9F6EB81331;
+        Mon, 17 Oct 2022 17:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515B9C433D6;
+        Mon, 17 Oct 2022 17:34:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666028064;
+        bh=FDw24rOSiOpR/AA8bVEZXihOsH9mEP441rpoEYpcJFQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=AslKcmmirEJ+FkEFGQta8P959CSzZlZ4kKPpTVCQw28Tm0uIXNNixmfWnvg43/C++
+         NHbUWzMbMXj8Lb58Z+IDCEGTSnc5rcvFLUyBkwQmRTKKdloimm2uce2WGUBpu8vMUr
+         RhGDg5namuKA9EOnzkuS8MIgDMZS2f2/AR08+YVD2g8iDwg927T/1dseMdJfhRt1V+
+         XI/ILMYbfsdX/vW+nW/tP3xs7gMkBGFLuFMGfpukfrWUsv5I95eZRWUyAcwk/5ElCz
+         s37+CkVU0DHwsQkMq6xmxgGq8qRsz80Ecd0l9g2NhnQOQ+EbStiNDpjAPoPydknKwy
+         QwULAXUT8jgGw==
+Date:   Mon, 17 Oct 2022 12:34:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH v3 2/2] PCI: qcom: Add support for modular builds
+Message-ID: <20221017173422.GA3715509@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DU0PR04MB94179580E85C888CDAA8EAA788299@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221017114705.8277-3-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 03:13:16AM +0000, Peng Fan wrote:
-> Hi Mathieu,
-> 
-> > Subject: Re: [PATCH V7 6/7] remoteproc: imx_rproc: request mbox channel
-> > later
-> > 
-> > On Fri, Oct 14, 2022 at 11:10:36AM +0800, Peng Fan (OSS) wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > It is possible that when remote processor crash, the communication
-> > > channel will be broken with garbage value in mailbox, such as when
-> > > Linux is issuing a message through mailbox, remote processor crashes,
-> > > we need free & rebuild the mailbox channels to make sure no garbage
-> > > value in mailbox channels.
-> > >
-> > > So move the request/free to start/stop for managing remote procesosr
-> > > in Linux, move to attach/detach for remote processor is out of control
-> > > of Linux.
-> > >
-> > > Previous, we just request mbox when attach for CM4 boot early before
-> > > Linux, but if mbox defer probe, remoteproc core will do resource
-> > > cleanup and corrupt resource table for later probe.
-> > >
-> > > So move request mbox ealier and still keep mbox request when attach
-> > > for self recovery case, but keep a check when request/free mbox.
-> > >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > >  drivers/remoteproc/imx_rproc.c | 39
-> > > ++++++++++++++++++++++++++++++++--
-> > >  1 file changed, 37 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/remoteproc/imx_rproc.c
-> > > b/drivers/remoteproc/imx_rproc.c index 917e6db39572..1183de84a4c0
-> > > 100644
-> > > --- a/drivers/remoteproc/imx_rproc.c
-> > > +++ b/drivers/remoteproc/imx_rproc.c
-> > > @@ -84,6 +84,8 @@ struct imx_rproc_mem {
-> > >  #define ATT_CORE_MASK   0xffff
-> > >  #define ATT_CORE(I)     BIT((I))
-> > >
-> > > +static int imx_rproc_xtr_mbox_init(struct rproc *rproc); static void
-> > > +imx_rproc_free_mbox(struct rproc *rproc);
-> > >  static int imx_rproc_detach_pd(struct rproc *rproc);
-> > >
-> > >  struct imx_rproc {
-> > > @@ -357,6 +359,10 @@ static int imx_rproc_start(struct rproc *rproc)
-> > >  	struct arm_smccc_res res;
-> > >  	int ret;
-> > >
-> > > +	ret = imx_rproc_xtr_mbox_init(rproc);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > >  	switch (dcfg->method) {
-> > >  	case IMX_RPROC_MMIO:
-> > >  		ret = regmap_update_bits(priv->regmap, dcfg->src_reg,
-> > > dcfg->src_mask, @@ -407,6 +413,8 @@ static int imx_rproc_stop(struct
-> > > rproc *rproc)
-> > >
-> > >  	if (ret)
-> > >  		dev_err(dev, "Failed to stop remote core\n");
-> > > +	else
-> > > +		imx_rproc_free_mbox(rproc);
-> > >
-> > >  	return ret;
-> > >  }
-> > > @@ -592,6 +600,22 @@ static void imx_rproc_kick(struct rproc *rproc,
-> > > int vqid)
-> > >
-> > >  static int imx_rproc_attach(struct rproc *rproc)  {
-> > > +	return imx_rproc_xtr_mbox_init(rproc); }
-> > > +
-> > > +static int imx_rproc_detach(struct rproc *rproc) {
-> > > +	struct imx_rproc *priv = rproc->priv;
-> > > +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> > > +
-> > > +	if (dcfg->method != IMX_RPROC_SCU_API)
-> > > +		return -EOPNOTSUPP;
-> > > +
-> > > +	if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
-> > > +		return -EOPNOTSUPP;
-> > > +
-> > > +	imx_rproc_free_mbox(rproc);
-> > > +
-> > >  	return 0;
-> > >  }
-> > >
-> > > @@ -610,6 +634,7 @@ static struct resource_table
-> > > *imx_rproc_get_loaded_rsc_table(struct rproc *rproc  static const struct
-> > rproc_ops imx_rproc_ops = {
-> > >  	.prepare	= imx_rproc_prepare,
-> > >  	.attach		= imx_rproc_attach,
-> > > +	.detach		= imx_rproc_detach,
-> > >  	.start		= imx_rproc_start,
-> > >  	.stop		= imx_rproc_stop,
-> > >  	.kick		= imx_rproc_kick,
-> > > @@ -720,6 +745,9 @@ static int imx_rproc_xtr_mbox_init(struct rproc
-> > *rproc)
-> > >  	struct device *dev = priv->dev;
-> > >  	struct mbox_client *cl;
-> > >
-> > > +	if (priv->tx_ch && priv->rx_ch)
-> > > +		return 0;
-> > > +
-> > 
-> > You did exactly the same things as in V6.  I asked you why this is needed and
-> > all you did is point me to the code in _probe(), which I can read on my own.
-> > 
-> 
-> Sorry for not wrote down clear.
-> 
-> > Again - why is this needed when we know it will be done in start() and
-> > attach()?
-> 
-> start() and attach() not able to handle mbox defer probe. So I add
+On Mon, Oct 17, 2022 at 01:47:05PM +0200, Johan Hovold wrote:
+> Allow the Qualcomm PCIe controller driver to be built as a module, which
+> is useful for multi-platform kernels as well as during development.
 
-We are finally at the heart of the problem.  I had to go look at the
-implementation of imx_rproc_xtr_mbox_init() to understand that it can return
--EPROBE_DEFER.  Had there been a comment in the code to highlight _why_ the if()
-condition is needed, I would have understood right away and all this waste of
-time avoided.
+There are two different goals here, and there's no real reason to
+bundle them together:
 
-> the mbox requesting in probe to handle mbox defer probe, and add
-> a check when requesting mbox channel in start/attach. During first
-> time attach/start remote core, the imx_rproc_xtr_mbox_init just
-> return, because channel requested in probe flow. 
+  1) Make qcom a loadable module.  This is a hard requirement so
+     multi-platform kernels don't need to build in all drivers
+     statically.
+
+  2) Make qcom unloadable.  This is a high want, possibly even a
+     requirement for developers, but is not really a big issue for
+     users.
+
+There are different changes required: 1) requires the Kconfig change;
+2) requires .remove() to be implemented.  Since there's no requirement
+that these be done together, let's split them into separate patches.
+
+Then we can make sure that at least 1) gets done, and if for any
+reason 2) isn't safe or breaks something, we can at least bisect and
+if necessary revert it without losing 1).
+
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/pci/controller/dwc/Kconfig     |  2 +-
+>  drivers/pci/controller/dwc/pcie-qcom.c | 26 +++++++++++++++++++++++---
+>  2 files changed, 24 insertions(+), 4 deletions(-)
 > 
-> Since mbox requested in probe, why still add it in start() and attach()?
-> It is to support runtime stop and start(M4 is under control of Linux),
-> to support runtime detach(only for i.MX8QM/QXP attach recovery,
-> m4 out of control from linux) and attach.
+> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+> index 62ce3abf0f19..230f56d1a268 100644
+> --- a/drivers/pci/controller/dwc/Kconfig
+> +++ b/drivers/pci/controller/dwc/Kconfig
+> @@ -168,7 +168,7 @@ config PCI_HISI
+>  	  Hip05 and Hip06 SoCs
+>  
+>  config PCIE_QCOM
+> -	bool "Qualcomm PCIe controller"
+> +	tristate "Qualcomm PCIe controller"
+>  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
+>  	depends on PCI_MSI_IRQ_DOMAIN
+>  	select PCIE_DW_HOST
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 417be4d225ed..699172c22ed4 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -17,7 +17,7 @@
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/init.h>
+> +#include <linux/module.h>
+>  #include <linux/of_device.h>
+>  #include <linux/of_gpio.h>
+>  #include <linux/pci.h>
+> @@ -1820,6 +1820,21 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int qcom_pcie_remove(struct platform_device *pdev)
+> +{
+> +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
+> +	struct device *dev = &pdev->dev;
+> +
+> +	dw_pcie_host_deinit(&pcie->pci->pp);
+> +
+> +	phy_exit(pcie->phy);
+> +
+> +	pm_runtime_put_sync(dev);
+> +	pm_runtime_disable(dev);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+>  	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+> @@ -1841,6 +1856,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &cfg_1_9_0 },
+>  	{ }
+>  };
+> +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
+>  
+>  static void qcom_fixup_class(struct pci_dev *dev)
+>  {
+> @@ -1856,10 +1872,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+>  
+>  static struct platform_driver qcom_pcie_driver = {
+>  	.probe = qcom_pcie_probe,
+> +	.remove = qcom_pcie_remove,
+>  	.driver = {
+>  		.name = "qcom-pcie",
+> -		.suppress_bind_attrs = true,
+>  		.of_match_table = qcom_pcie_match,
+>  	},
+>  };
+> -builtin_platform_driver(qcom_pcie_driver);
+> +module_platform_driver(qcom_pcie_driver);
+> +
+> +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
+> +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.37.3
 > 
-> Thanks,
-> Peng.
-> > 
-> > 
-> > >  	if (!of_get_property(dev->of_node, "mbox-names", NULL))
-> > >  		return 0;
-> > >
-> > > @@ -749,8 +777,15 @@ static void imx_rproc_free_mbox(struct rproc
-> > > *rproc)  {
-> > >  	struct imx_rproc *priv = rproc->priv;
-> > >
-> > > -	mbox_free_channel(priv->tx_ch);
-> > > -	mbox_free_channel(priv->rx_ch);
-> > > +	if (priv->tx_ch) {
-> > > +		mbox_free_channel(priv->tx_ch);
-> > > +		priv->tx_ch = NULL;
-> > > +	}
-> > > +
-> > > +	if (priv->rx_ch) {
-> > > +		mbox_free_channel(priv->rx_ch);
-> > > +		priv->rx_ch = NULL;
-> > > +	}
-> > >  }
-> > >
-> > >  static void imx_rproc_put_scu(struct rproc *rproc)
-> > > --
-> > > 2.37.1
-> > >
