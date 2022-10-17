@@ -2,134 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F243D601058
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F323960105A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiJQNh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S229966AbiJQNhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJQNhX (ORCPT
+        with ESMTP id S229889AbiJQNhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:37:23 -0400
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C6F638F2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:37:21 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 13:37:11 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1666013838; x=1666273038;
-        bh=O8U0/rSJcp6Znld+LgNmARLp2ZlKY3y+428lcdHw/Ck=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=FP9YI0LpS3NtMj7aU54Mch6ZnaBxrpwwrUPWiZeYoMw0G3T3yqCAT/tciY5CEYWi7
-         rYyKgglMC+Jhl0jZMYKR6qHzuoUuah1oeWr7SZ+x39iKu8jJPoV5diyyp+FCOa4pQN
-         TKuVBN2XwYw1mVYNNGfa5hDUCz9MQcLtLOx8yApg=
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     phone-devel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        linux-arm-msm@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        dri-devel@lists.freedesktop.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Daniel Vetter <daniel@ffwll.ch>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>,
-        linux-kernel@vger.kernel.org, Newbyte <newbie13xd@gmail.com>
-Subject: Re: [Freedreno] [PATCH v3 06/10] drm/msm/dsi: Migrate to drm_dsc_compute_rc_parameters()
-Message-ID: <0642a664-3eed-21b7-a417-c6c607908f51@connolly.tech>
-In-Reply-To: <20221017085944.2r24uqg73irmziqm@SoMainline.org>
-References: <20221009184824.457416-1-marijn.suijten@somainline.org> <20221009185058.460688-1-marijn.suijten@somainline.org> <5c178d7e-5022-f5e5-791d-d3800114b42b@quicinc.com> <20221013093646.c65mbjc6oekd7gha@SoMainline.org> <32af4444-9c88-eb0f-eda7-24fa0418aff6@quicinc.com> <20221017085944.2r24uqg73irmziqm@SoMainline.org>
-Feedback-ID: 10753939:user:proton
+        Mon, 17 Oct 2022 09:37:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C996386F;
+        Mon, 17 Oct 2022 06:37:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30E4BB81698;
+        Mon, 17 Oct 2022 13:37:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF916C433D7;
+        Mon, 17 Oct 2022 13:37:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666013858;
+        bh=7PaZ/qmnm7lCaEZHPQ5A551meqALQvJy4m7yAHdja7Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=heBrGh3SKIXqZWcnOgGZtyb1rvAbSqnmVnyPwj3ECFIiF+mtG2SFRdrvU+3+23+d3
+         AsK8XWkWCovKNjfQqwSIl7Ac0/aQvJk9ZVbM3mXDwW2eWtQ/FOBxFKzbe2qybMCbUZ
+         aO/Y1/MqKqocqq6fdHNZEQmfrdXlGxx05MMIPtcwq+kSZXUJ5iM3aczgmiPAvQBcGt
+         C5qwpFLOpdO+xehTXKIHs36S1yln2R5dekQS4wYrPksv6BAIr8yAOv1WNZ9R/xfLi1
+         WuzyZz5+dXFPV/f7Tgel405ESJdMzvEDbaft/R1PZQVSzkwIm7n7S63ookDzG2EyTz
+         j+ThNDNzGaJcQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 707065C08EC; Mon, 17 Oct 2022 06:37:38 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 06:37:38 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        frederic@kernel.org
+Subject: Re: [PATCH v9 00/13] rcu: call_rcu() power improvements
+Message-ID: <20221017133738.GE5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221016162305.2489629-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221016162305.2489629-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Oct 16, 2022 at 04:22:52PM +0000, Joel Fernandes (Google) wrote:
+> v9 version of RCU lazy patches based on rcu/next branch.
+>  Only change since v8 is this discussion:
+>  https://lore.kernel.org/rcu/20221011180142.2742289-1-joel@joelfernandes.org/T/#m8eff15110477f3430b3b02561b66f7b0d34a73b0
+> 
+> To facilitate easier merge, I dropped tracing and other patches and just
+> implemented the new changes. I will post the tracing patches later along with
+> rcutop as I need to add new tracepoints that Frederic suggested.
+> 
+> Main recent changes:
+> 1. rcu_barrier() wake up only for lazy bypass list.
+> 2. Make all call_rcu() default-lazy and add call_rcu_flush() API.
+> 3. Take care of some callers using call_rcu_flush() API.
+> 4. Several refactorings suggested by Paul/Frederic.
+> 5. New call_rcu() to call_rcu_flush() conversions by Joel/Vlad/Paul.
+> 
+> I am seeing good performance and power with these patches on real ChromeOS x86
+> asymmetric hardware.
+> 
+> Earlier cover letter with lots of details is here:
+> https://lore.kernel.org/all/20220901221720.1105021-1-joel@joelfernandes.org/
+> 
+> List of recent changes:
+>     
+>     [ Frederic Weisbec: Program the lazy timer only if WAKE_NOT, since other
+>       deferral levels wake much earlier so for those it is not needed. ]
+>     
+>     [ Frederic Weisbec: Use flush flags to keep bypass API code clean. ]
+>     
+>     [ Frederic Weisbec: Make rcu_barrier() wake up only if main list empty. ]
+>     
+>     [ Frederic Weisbec: Remove extra 'else if' branch in rcu_nocb_try_bypass(). ]
+>     
+>     [ Joel: Fix issue where I was not resetting lazy_len after moving it to rdp ]
+>     
+>     [ Paul/Thomas/Joel: Make call_rcu() default lazy so users don't mess up. ]
+>     
+>     [ Paul/Frederic : Cosmetic changes, split out wakeup of nocb thread. ]
+>     
+>     [ Vlad/Joel : More call_rcu -> flush conversions ]
+> 
+>     [ debug code for detecting "wake" in kernel's call_rcu() callbacks. ]
+> 
+> The following 2 scripts can be used to check if any callbacks in the kernel are
+> doing a wake up (it is best effort and may miss some things, but we found
+> issues using it)
+> 
+> 1. Script to search for call_rcu() references and dump the callback list to a file:
+> #!/bin/bash
+> 
+> rm func-list
+> touch func-list
+> 
+> for f in $(find . \( -name "*.c" -o -name "*.h" \) | grep -v rcu); do
+> 
+> 	funcs=$(perl -0777 -ne 'while(m/call_rcu\([&]?.+,\s?(.+)\).*;/g){print "$1\n";}' $f)
+> 
+> 	if [ "x$funcs" != "x" ]; then
+> 		for func in $funcs; do
+> 			echo "$f $func" >> func-list
+> 			echo "$f $func"
+> 		done
+> 	fi
+> 
+> done
+> 
+> cat func-list | sort | uniq | tee func-list-sorted
+> 
+> 2. Script to search "wake" after callback references:
+> 
+> #!/bin/bash
+> 
+> while read fl; do
+> 	file=$(echo $fl | cut -d " " -f1)
+> 	func=$(echo $fl | cut -d " " -f2)
+> 
+> 	grep -A 30 $func $file | grep wake > /dev/null
+> 
+> 	if [ $? -eq 0 ]; then
+> 		echo "keyword wake found after function reference $func in $file"
+> 		echo "Output:"
+> 		grep -A 30 $func $file 
+> 		echo "==========================================================="
+> 	fi
+> done < func-list-sorted
 
+Very good, thank you all!
 
-On 17/10/2022 09:59, Marijn Suijten wrote:
-> On 2022-10-13 09:02:44, Abhinav Kumar wrote:
->> On 10/13/2022 2:36 AM, Marijn Suijten wrote:
->>> On 2022-10-12 16:03:06, Abhinav Kumar wrote:
->>>> [..]
->>>> But I would like to hold back this change till Vinod clarifies because
->>>> Vinod had mentioned that with drm_dsc_compute_rc_parameters() he was
->>>> seeing a mismatch in the computation of two values.
->>>>
->>>> slice_bpg_offset and the final_offset.
->>>
->>> Unsurprisingly so because final_offset, and slice_bpg_offset through
->>> initial_offset depend directly on bits_per_pixel.  The main takeaway of
->>> this series is that Vinod was interpreting this field as integer instea=
-d
->>> of containing 4 fractional bits.  If he updates his the panel driver [1=
-]
->>> to set bits_per_pixel =3D 8 << 4 instead of just 8 to account for this,
->>> the values should check out once again.
->>>
->>> [1]: https://git.linaro.org/people/vinod.koul/kernel.git/commit/?h=3Dto=
-pic/pixel3_5.18-rc1&id=3D1d7d98ad564f1ec69e7525e07418918d90f247a1
->>>
->>> Once Vinod (or someone else in the posession of a Pixel 3) confirms
->>> this, I can respin this series and more explicitly explain why the FIXM=
-E
->>> was put in place, instead of being resolved outright?
->>>
->>> - Marijn
->>
->> Makes perfect sense to me.
->>
->> Will just wait for Vinod's tested-by.
->
-> Unfortunately Vinod doesn't have access to this device anymore, but
-> Caleb recently sent the support series including display driver for
-> Pixel 3 and is picking up the testing.  User "Newbyte" from #linux-msm
-> promised to test on the LG G7 to have even more input samples.
+I have pulled these in for further review and testing.
 
-Hi,
+I am holding off on the last one ("rcu/debug: Add wake-up debugging for
+lazy callbacks") for the immediate future, but let's see how it goes.
 
-I'm hoping to pick the Pixel 3 stuff back up at some point, but right now t=
-here
-seem to be quite a few issues outside of DSC which make testing it a bit of=
- a pain.
+							Thanx, Paul
 
-I gave Marijn's series [1] a go but wasn't able to get anything usable out =
-of the
-panel, however I doubt this is a DSC issue as I've always needed some hacks=
- to
-get the panel working - I've never had any success with it without skipping=
- both
-the initial panel reset and sending the PPS payload.
-
-I think if Marijn has managed to initialise a panel properly then the lack =
-of
-Pixel 3 for validation shouldn't be a blocker to merge these fixes.
-
-[1]:
-https://lore.kernel.org/linux-arm-msm/20221009184824.457416-1-marijn.suijte=
-n@somainline.org/
-
->
-> - Marijn
-
---
-Kind Regards,
-Caleb
-
+> Frederic Weisbecker (1):
+> rcu: Fix missing nocb gp wake on rcu_barrier()
+> 
+> Joel Fernandes (Google) (9):
+> rcu: Make call_rcu() lazy to save power
+> rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
+> rcuscale: Add laziness and kfree tests
+> percpu-refcount: Use call_rcu_flush() for atomic switch
+> rcu/sync: Use call_rcu_flush() instead of call_rcu
+> rcu/rcuscale: Use call_rcu_flush() for async reader test
+> rcu/rcutorture: Use call_rcu_flush() where needed
+> rxrpc: Use call_rcu_flush() instead of call_rcu()
+> rcu/debug: Add wake-up debugging for lazy callbacks
+> 
+> Uladzislau Rezki (2):
+> scsi/scsi_error: Use call_rcu_flush() instead of call_rcu()
+> workqueue: Make queue_rcu_work() use call_rcu_flush()
+> 
+> Vineeth Pillai (1):
+> rcu: shrinker for lazy rcu
+> 
+> drivers/scsi/scsi_error.c |   2 +-
+> include/linux/rcupdate.h  |   7 ++
+> kernel/rcu/Kconfig        |  15 +++
+> kernel/rcu/lazy-debug.h   | 154 +++++++++++++++++++++++++++
+> kernel/rcu/rcu.h          |   8 ++
+> kernel/rcu/rcuscale.c     |  70 +++++++++++-
+> kernel/rcu/rcutorture.c   |  16 +--
+> kernel/rcu/sync.c         |   2 +-
+> kernel/rcu/tiny.c         |   2 +-
+> kernel/rcu/tree.c         | 149 ++++++++++++++++++--------
+> kernel/rcu/tree.h         |  12 ++-
+> kernel/rcu/tree_exp.h     |   2 +-
+> kernel/rcu/tree_nocb.h    | 217 ++++++++++++++++++++++++++++++++------
+> kernel/workqueue.c        |   2 +-
+> lib/percpu-refcount.c     |   3 +-
+> net/rxrpc/conn_object.c   |   2 +-
+> 16 files changed, 565 insertions(+), 98 deletions(-)
+> create mode 100644 kernel/rcu/lazy-debug.h
+> 
+> --
+> 2.38.0.413.g74048e4d9e-goog
+> 
