@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFF76017ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050B26017F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiJQTnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S231150AbiJQTpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiJQTnu (ORCPT
+        with ESMTP id S230452AbiJQTos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:43:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED33F6C13F;
-        Mon, 17 Oct 2022 12:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eMB2pSDfV1bvP74oVN4aFjBLP7duahTznx7nvBtIcM4=; b=EmLMG3n6bQLAwe5nnRsLuJ4ZBS
-        cjHOQcsxuhlbPqT0a3g5qKJtSobZMizB4tJnZEuAoh8ZE5XdFetLn8HpSeXwIvWe3qhwOaPqONtAt
-        96/FVt8rbsIJTPaK4ebs73/f7bGN3D8q0l5dqqPUQIXrRLMhVkXDm14+xDGb/3ls4aBSB80WQShhb
-        v729KoAFrHiSm5OTzznGNoomhcnGdYS0DCAgXSMLkGs8hf68yZMkxSh2jzaj1ZLTvS6Fd5V+n96k0
-        LHaXY1tU9GF7kVFi+Sdy3uNzK3dlBai/XDQK/VRqvsyXh/R/0oQH4yryDspeZMg0msyUmVB23yxKN
-        n7pbe8Tw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1okW1a-00A5Lc-LA; Mon, 17 Oct 2022 19:43:46 +0000
-Date:   Mon, 17 Oct 2022 20:43:46 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Vishal Moola <vishal.moola@gmail.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] filemap: find_lock_entries() now updates start
- offset
-Message-ID: <Y02wcnTOMH+KnnML@casper.infradead.org>
-References: <20221017161800.2003-1-vishal.moola@gmail.com>
- <20221017161800.2003-2-vishal.moola@gmail.com>
- <Y02JTOtYEbAyo+zu@casper.infradead.org>
- <CAOzc2py24=NBFX6mWZ9s0eRH-rU87n-mYsVK=TW_jtx646z_qQ@mail.gmail.com>
+        Mon, 17 Oct 2022 15:44:48 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F6820F47;
+        Mon, 17 Oct 2022 12:44:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=O7qw3tGrLhskWKqbDCfDfj+wLqZODYlP78Q0++P/SY4=; b=TwFc2lNnhsCPfze3XDnolPfw0x
+        Em7u7nbQ/xvyEJY9yBCSew8/yfgmkwT0AsD3QSPQ7fRLYYzDJjj72B4/Iv6Ysg3OHHAQvSeOiG8iF
+        taht/B1RHJCtMUs8X8Zk/p3EwGMIQEJuk0zQRaNF/79G/YFTxtzmaMfa+1woSaxoRzvKnSZTkrk/o
+        ZczRubAttKxxstE16oxU9S1cIxvz53zw8hLZi53Jla21zuFW+p14OQx2fvbSPk6LVqG0k7IhmwmzN
+        Aff99TVmWkm/N0YkxaWGntlzxziZH92hMXRsgdAFeP3ZW0VCKvrbR/WmFB20Pt0k3I0gbNGbk2txi
+        wEgIF6ug==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1okW26-000ZvB-0V; Mon, 17 Oct 2022 21:44:17 +0200
+Message-ID: <5d2c0413-b19b-eb0b-d1a2-0e0429cccd8e@igalia.com>
+Date:   Mon, 17 Oct 2022 16:43:53 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOzc2py24=NBFX6mWZ9s0eRH-rU87n-mYsVK=TW_jtx646z_qQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 01/11] ARM: Disable FIQs (but not IRQs) on CPUs
+ shutdown paths
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>, will@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>, arnd@arndb.de,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        kexec@lists.infradead.org, pmladek@suse.com, bhe@redhat.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        bp@alien8.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        xuqiang36@huawei.com
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-2-gpiccoli@igalia.com>
+ <a25cb242-7c85-867c-8a61-f3119458dcdb@igalia.com>
+ <8e30b99e-70ed-7d5a-ea1f-3b0fadb644bc@igalia.com>
+ <Y01j/3qKUvj346AH@shell.armlinux.org.uk>
+ <aea7dad7-987d-43ad-3abc-815ede97a127@igalia.com>
+ <Y02VGh+eDLMyi/Aj@shell.armlinux.org.uk>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Y02VGh+eDLMyi/Aj@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 12:37:48PM -0700, Vishal Moola wrote:
-> On Mon, Oct 17, 2022 at 9:56 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Mon, Oct 17, 2022 at 09:17:59AM -0700, Vishal Moola (Oracle) wrote:
-> > > +++ b/mm/shmem.c
-> > > @@ -932,21 +932,18 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
-> > >
-> > >       folio_batch_init(&fbatch);
-> > >       index = start;
-> > > -     while (index < end && find_lock_entries(mapping, index, end - 1,
-> > > +     while (index < end && find_lock_entries(mapping, &index, end - 1,
-> >
-> > Sorry for not spotting this in earlier revisions, but this is wrong.
-> > Before, find_lock_entries() would go up to (end - 1) and then the
-> > index++ at the end of the loop would increment index to "end", causing
-> > the loop to terminate.  Now we don't increment index any more, so the
-> > condition is wrong.
+On 17/10/2022 14:47, Russell King (Oracle) wrote:
+> On Mon, Oct 17, 2022 at 11:50:05AM -0300, Guilherme G. Piccoli wrote:
+>> On 17/10/2022 11:17, Russell King (Oracle) wrote:
+>>> [...]
+>>>> Monthly ping - let me know if there's something I should improve in
+>>>> order this fix is considered!
+>>>
+>>> Patches don't get applied unless they end up in the patch system.
+>>> Thanks.
+>>>
+>>
+>> Thanks Russell! Can you show me some documentation on how should I send
+>> the patches to this patch system? My understanding based in the
+>> MAINTAINERS file is that we should send the arm32 patches to you + arm ML.
 > 
-> The condition is correct. Index maintains the exact same behavior.
-> If a find_lock_entries() finds a folio, index is set to be directly after
-> the last page in that folio, or simply incrementing for a value entry.
-> The only time index is not changed at all is when find_lock_entries()
-> finds no folios, which is the same as the original behavior as well.
+> Look below in my signature --.
+>                              |
+> 			     v
 
-Uh, right.  I had the wrong idea in my head that index wouldn't increase
-past end-1, but of course it can.
 
-> > I suggest just removing the 'index < end" half of the condition.
-> 
-> I hadn't thought about it earlier but this index < end check seems
-> unnecessary anyways. If index > end then find_lock_entries()
-> shouldn't find any folios which would cause the loop to terminate.
-> 
-> I could send an updated version getting rid of the "index < end"
-> condition as well if you would like?
+Thank you! It seems I was able to submit it properly now:
+https://www.armlinux.org.uk/developer/patches/viewpatch.php?id=9257/1
 
-Something to consider is that if end is 0 then end-1 is -1, which is
-effectively infinity, and we'll do the wrong thing?  So maybe just
-leave it alone, and go with v3 as-is?
+Cheers,
+
+
+Guilherme
