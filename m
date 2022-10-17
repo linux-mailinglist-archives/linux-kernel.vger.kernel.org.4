@@ -2,318 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A5E60071C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 08:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08179600722
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 08:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJQG4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 02:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S229897AbiJQG46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 02:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiJQG4Q (ORCPT
+        with ESMTP id S230154AbiJQG4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 02:56:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E38A57896
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 23:55:51 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29H5L8pj001597;
-        Mon, 17 Oct 2022 06:54:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=W307ZMgjpJWrwvfrbiwXMexvBy+E75TxBf5gCogIVsw=;
- b=d11bKYWw2fo/YrPKyVA8FmZFrpAFiPTkHN+RgNyNHdsEXXiWtQZ11u0PwOd7vINaOXs+
- nLKHT3dQHMEQ0ek2HY1B9QZZToEGDwKXuraNOC4gaA5JT7LY+9Q4d0a1ktY390hYmEWp
- eTYuTWlTcLMT59K+7EqubCtiUP30n1Ns2LaWmz/8bFo9SwV/2j4MUrb1n4m8iPN+48xh
- LIzqAUspbgqvd96xdIs2n5x4qrP4C0+a0ysGx3aFoH3ChfEmq5G7JyvWV/Uu0trHwqj8
- l38qqZl2S8V5TnwUVK9NzjJ+ALIuws+ZPuMIswtZ+xuF+cfTPNuoKWv6hC8L1gadiWNn uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86g5pcfd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Oct 2022 06:54:50 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29H6NXP6032001;
-        Mon, 17 Oct 2022 06:54:49 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86g5pcer-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Oct 2022 06:54:49 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29H6oq0S024265;
-        Mon, 17 Oct 2022 06:54:47 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3k7mg8sve8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Oct 2022 06:54:47 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29H6sjOx64487830
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Oct 2022 06:54:45 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2FBAFA4055;
-        Mon, 17 Oct 2022 06:54:45 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D302A4040;
-        Mon, 17 Oct 2022 06:54:40 +0000 (GMT)
-Received: from [9.43.94.119] (unknown [9.43.94.119])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 17 Oct 2022 06:54:40 +0000 (GMT)
-Message-ID: <b3608266-f9f7-367a-1aed-3e5ace74d011@linux.ibm.com>
-Date:   Mon, 17 Oct 2022 12:24:39 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
-Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220909210509.6286-1-eric.devolder@oracle.com>
- <20220909210509.6286-8-eric.devolder@oracle.com>
- <78100f92-afd7-52b6-d5e5-17eb2de72a9a@linux.ibm.com>
- <46e0908c-a753-bec1-68bf-a58a89798056@oracle.com>
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <46e0908c-a753-bec1-68bf-a58a89798056@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: beBD2Q5DQhVRKh1jbWJO78MQeCWld_76
-X-Proofpoint-ORIG-GUID: G9I1OKB4NUKQ64wZ5lYa-jDhC1EFTbqs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-17_06,2022-10-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1011
- mlxlogscore=999 bulkscore=0 impostorscore=0 phishscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210170038
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 02:56:22 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5C921E0A
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 23:56:08 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3576c47f204so102689347b3.2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 23:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mwXkiJpyXszOYeaS5kG3VAZ2YoiwGwYHcpmiHrFrcts=;
+        b=roDFn8omU7wnmMudjnSUOiAGszxw+QGhON7IWQRPOaHfdtnPmUE8nNQhQxmOg0DEf8
+         bQm3KSB/rQ9xd4jdPxHbckgm8C6oUTKZjbgWoBtEu+BE7S3sB/LslVQ5gUFlPWCe02ZK
+         JueN75mvsRblKc7vyLybbNFSNlAtbBsIuqRrbcASeRsjdUMPfLJIAIDvgzAWu1VJsezM
+         77oOUX5k1N8dhzj1/Y0xDW4UGCqQsQabUwUvXEoQqnIQUCsaAFFvRsU2sLIo+RTMuZ/s
+         3sWRmcFpijCHYJTsDSZ+HbydBmZ+T+XXgFil8Bb9mTof+j4+6YT0E9hq5MB45mftQR2u
+         j0AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mwXkiJpyXszOYeaS5kG3VAZ2YoiwGwYHcpmiHrFrcts=;
+        b=xzTF4s9bu1sTvg+alNUQ4eW5dlUSS3ALq8wKHuUCljgymNA2VMs5UiGVNnNn7Gfnkr
+         f0yHFTtNGAIbgWwqK/boNjyV3LW3HvIPjyiI3/xo1NZQcD+CNKCNZnIaKql7bjcSHaVq
+         4jVQdRfyIA853N9xS7yoXVp9UPJi4ljP/RBcoTzbtBVpXijBfm3cUdgfANID4Dtcfv39
+         6OUaDDLo8mPpOlu/KgyWPYvXmYrmJrVsuUI7yECn25dfdm2LHklnGzPtFzcew/Y+wL+C
+         +ZepUH0IJjrZ5XN87SST2gnJS7QR8xoWV7lxUtDnhH18sI74vzOeHSEyW53uYiOdZ/OW
+         wWdw==
+X-Gm-Message-State: ACrzQf3gN1W0mIIeM40nlnRnDtdXVdhmGkYHHuaEbnOf8vWCIKo42nPq
+        W4hFvwi8AwW/G4I1ZcsHfR2zloBjcKrnEok0
+X-Google-Smtp-Source: AMsMyM4Ng4pCcCrVTiu96rzWmaxFC5Di/VjnWfc6zxEpsP7MFY97oiAeeQ/WR982LUEM8D0pmlaoMUiVZDcvDYRe
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a25:9d0a:0:b0:6bc:2641:19d4 with SMTP
+ id i10-20020a259d0a000000b006bc264119d4mr7781133ybp.388.1665989767169; Sun,
+ 16 Oct 2022 23:56:07 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 06:54:53 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Message-ID: <20221017065452.2250273-1-sadiyakazi@google.com>
+Subject: [PATCH v3] Documentation: Kunit: Update architecture.rst for minor fixes
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net, bagasdotme@gmail.com
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Updated the architecture.rst page with the following changes:
+-Add missing article _the_ across the document.
+-Reword content across for style and standard.
+-Update all occurrences of Command Line to Command-line
+ across the document.
+-Correct grammatical issues, for example,
+ added _it_wherever missing.
+-Update all occurrences of =E2=80=9Cvia" to either use
+ =E2=80=9Cthrough=E2=80=9D or =E2=80=9Cusing=E2=80=9D.
+-Update the text preceding the external links and pushed the full
+ link to a new line for better readability.
+-Reword content under the config command to make it more clear and concise.
 
-On 08/10/22 01:03, Eric DeVolder wrote:
->
->
-> On 9/19/22 02:06, Sourabh Jain wrote:
->>
->> On 10/09/22 02:35, Eric DeVolder wrote:
->>> For x86_64, when CPU or memory is hot un/plugged, the crash
->>> elfcorehdr, which describes the CPUs and memory in the system,
->>> must also be updated.
->>>
->>> When loading the crash kernel via kexec_load or kexec_file_load,
->>> the elfcorehdr is identified at run time in
->>> crash_core:handle_hotplug_event().
->>>
->>> To update the elfcorehdr for x86_64, a new elfcorehdr must be
->>> generated from the available CPUs and memory. The new elfcorehdr
->>> is prepared into a buffer, and then installed over the top of
->>> the existing elfcorehdr.
->>>
->>> In the patch 'kexec: exclude elfcorehdr from the segment digest'
->>> the need to update purgatory due to the change in elfcorehdr was
->>> eliminated.  As a result, no changes to purgatory or boot_params
->>> (as the elfcorehdr= kernel command line parameter pointer
->>> remains unchanged and correct) are needed, just elfcorehdr.
->>>
->>> To accommodate a growing number of resources via hotplug, the
->>> elfcorehdr segment must be sufficiently large enough to accommodate
->>> changes, see the CRASH_MAX_MEMORY_RANGES configure item.
->>>
->>> With this change, crash hotplug for kexec_file_load syscall
->>> is supported. The kexec_load is also supported, but also
->>> requires a corresponding change to userspace kexec-tools.
->>>
->>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
->>> Acked-by: Baoquan He <bhe@redhat.com>
->>> ---
->>>   arch/x86/Kconfig             |  11 ++++
->>>   arch/x86/include/asm/kexec.h |  20 +++++++
->>>   arch/x86/kernel/crash.c      | 102 
->>> +++++++++++++++++++++++++++++++++++
->>>   3 files changed, 133 insertions(+)
->>>
->>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->>> index f9920f1341c8..cdfc9b2fdf98 100644
->>> --- a/arch/x86/Kconfig
->>> +++ b/arch/x86/Kconfig
->>> @@ -2056,6 +2056,17 @@ config CRASH_DUMP
->>>         (CONFIG_RELOCATABLE=y).
->>>         For more details see Documentation/admin-guide/kdump/kdump.rst
->>> +config CRASH_MAX_MEMORY_RANGES
->>> +    depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || 
->>> MEMORY_HOTPLUG)
->>> +    int
->>> +    default 32768
->>> +    help
->>> +      For the kexec_file_load path, specify the maximum number of
->>> +      memory regions, eg. as represented by the 'System RAM' entries
->>> +      in /proc/iomem, that the elfcorehdr buffer/segment can 
->>> accommodate.
->>> +      This value is combined with NR_CPUS and multiplied by Elf64_Phdr
->>> +      size to determine the final buffer size.
->>> +
->>>   config KEXEC_JUMP
->>>       bool "kexec jump"
->>>       depends on KEXEC && HIBERNATION
->>> diff --git a/arch/x86/include/asm/kexec.h 
->>> b/arch/x86/include/asm/kexec.h
->>> index a3760ca796aa..432073385b2d 100644
->>> --- a/arch/x86/include/asm/kexec.h
->>> +++ b/arch/x86/include/asm/kexec.h
->>> @@ -212,6 +212,26 @@ typedef void crash_vmclear_fn(void);
->>>   extern crash_vmclear_fn __rcu *crash_vmclear_loaded_vmcss;
->>>   extern void kdump_nmi_shootdown_cpus(void);
->>> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size);
->>> +#define arch_map_crash_pages arch_map_crash_pages
->>> +
->>> +void arch_unmap_crash_pages(void **ptr);
->>> +#define arch_unmap_crash_pages arch_unmap_crash_pages
->>> +
->>> +void arch_crash_handle_hotplug_event(struct kimage *image,
->>> +        unsigned int hp_action);
->>> +#define arch_crash_handle_hotplug_event 
->>> arch_crash_handle_hotplug_event
->>> +
->>> +#ifdef CONFIG_HOTPLUG_CPU
->>> +static inline int crash_hotplug_cpu_support(void) { return 1; }
->>> +#define crash_hotplug_cpu_support crash_hotplug_cpu_support
->>> +#endif
->>> +
->>> +#ifdef CONFIG_MEMORY_HOTPLUG
->>> +static inline int crash_hotplug_memory_support(void) { return 1; }
->>> +#define crash_hotplug_memory_support crash_hotplug_memory_support
->>> +#endif
->>> +
->>>   #endif /* __ASSEMBLY__ */
->>>   #endif /* _ASM_X86_KEXEC_H */
->>> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
->>> index 9ceb93c176a6..8fc7d678ac72 100644
->>> --- a/arch/x86/kernel/crash.c
->>> +++ b/arch/x86/kernel/crash.c
->>> @@ -25,6 +25,7 @@
->>>   #include <linux/slab.h>
->>>   #include <linux/vmalloc.h>
->>>   #include <linux/memblock.h>
->>> +#include <linux/highmem.h>
->>>   #include <asm/processor.h>
->>>   #include <asm/hardirq.h>
->>> @@ -397,7 +398,18 @@ int crash_load_segments(struct kimage *image)
->>>       image->elf_headers = kbuf.buffer;
->>>       image->elf_headers_sz = kbuf.bufsz;
->>> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
->>> +    /* Ensure elfcorehdr segment large enough for hotplug changes */
->>> +    kbuf.memsz =
->>> +        (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) *
->>> +            sizeof(Elf64_Phdr);
->>> +    /* Mark as usable to crash kernel, else crash kernel fails on 
->>> boot */
->>> +    image->elf_headers_sz = kbuf.memsz;
->>> +    image->elfcorehdr_index = image->nr_segments;
->>> +    image->elfcorehdr_index_valid = true;
->>> +#else
->>>       kbuf.memsz = kbuf.bufsz;
->>> +#endif
->>>       kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
->>>       kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
->>>       ret = kexec_add_buffer(&kbuf);
->>> @@ -412,3 +424,93 @@ int crash_load_segments(struct kimage *image)
->>>       return ret;
->>>   }
->>>   #endif /* CONFIG_KEXEC_FILE */
->>> +
->>> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
->>> +/*
->>> + * NOTE: The addresses and sizes passed to this routine have
->>> + * already been fully aligned on page boundaries. There is no
->>> + * need for massaging the address or size.
->>> + */
->>> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
->>> +{
->>> +    void *ptr = NULL;
->>> +
->>> +    if (size > 0) {
->>> +        struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
->>> +
->>> +        ptr = kmap_local_page(page);
->>> +    }
->>> +
->>> +    return ptr;
->>> +}
->>> +
->>> +void arch_unmap_crash_pages(void **ptr)
->>> +{
->>> +    if (ptr) {
->>> +        if (*ptr)
->>> +            kunmap_local(*ptr);
->>> +        *ptr = NULL;
->>> +    }
->>> +}
->>> +
->>> +/**
->>> + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr 
->>> changes
->>> + * @image: the active struct kimage
->>> + * @hp_action: the hot un/plug action being handled
->>> + *
->>> + * To accurately reflect hot un/plug changes, the new elfcorehdr
->>> + * is prepared in a kernel buffer, and then it is written on top
->>> + * of the existing/old elfcorehdr.
->>> + */
->>> +void arch_crash_handle_hotplug_event(struct kimage *image,
->>> +    unsigned int hp_action)
->>> +{
->>> +    struct kexec_segment *ksegment;
->>> +    unsigned char *ptr = NULL;
->>> +    unsigned long elfsz = 0;
->>> +    void *elfbuf = NULL;
->>> +    unsigned long mem, memsz;
->>> +
->>> +    /*
->>> +     * Elfcorehdr_index_valid checked in 
->>> crash_core:handle_hotplug_event()
->>> +     */
->>> +    ksegment = &image->segment[image->elfcorehdr_index];
->>> +    mem = ksegment->mem;
->>> +    memsz = ksegment->memsz;
->>> +
->>> +    /*
->>> +     * Create the new elfcorehdr reflecting the changes to CPU and/or
->>> +     * memory resources.
->>> +     */
->>> +    if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
->>> +        pr_err("crash hp: unable to prepare elfcore headers");
->>> +        goto out;
->>
->> On PowerPC, while preparing the elf core header the memblock 
->> structure is used to prepare program header for memory regions of 
->> elfcorehdr. Since the above arch specific hotplug handler gets 
->> invoked when memory is marked offline (MEM_OFFLINE) which is before 
->> memblock structure gets updated so on PowerPC the above handler may 
->> not work for memory hotplug case.
->>
->> Just wondering which data structure is used to get the list of memory 
->> regions while preparing program header for memory regions of 
->> elfcorehdr on other architectures?
->>
->> Thanks,
->> Sourabh Jain
->
-> I think your request to report the memory block address in comments of 
-> patch 3/7 "crash: add generic infrastructure" cover this scenario now.
-Yes, the asked changes will make easy for PowerPC to recreate elfcorehdr.
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
 
-Thanks,
-Sourabh Jain
+Thank you Bagas for your detailed comments.=20
+I think the current commit message does convey the right message as it is n=
+ot a complete rewrite, hence retained it.=20
+Also since we talk about the two parts of the architecture, I have retained=
+ the it as 'kunit_tool (Command-line Test Harness)' instead of 'Running Tes=
+ts Options'.
+
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20221013080545.1552573-1-sadiyakazi=
+@google.com/
+-Updated the link descriptions as per Bagas=E2=80=99s feedback
+-Reworded content talking about options to run tests and added links as per=
+ Bagas=E2=80=99s feedback
+
+Best Regards,
+Sadiya Kazi
+---
+ .../dev-tools/kunit/architecture.rst          | 118 +++++++++---------
+ 1 file changed, 60 insertions(+), 58 deletions(-)
+
+diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation=
+/dev-tools/kunit/architecture.rst
+index 8efe792bdcb9..52b1a30c9f89 100644
+--- a/Documentation/dev-tools/kunit/architecture.rst
++++ b/Documentation/dev-tools/kunit/architecture.rst
+@@ -4,16 +4,17 @@
+ KUnit Architecture
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The KUnit architecture can be divided into two parts:
++The KUnit architecture is divided into two parts:
+=20
+ - `In-Kernel Testing Framework`_
+-- `kunit_tool (Command Line Test Harness)`_
++- `kunit_tool (Command-line Test Harness)`_
+=20
+ In-Kernel Testing Framework
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+=20
+ The kernel testing library supports KUnit tests written in C using
+-KUnit. KUnit tests are kernel code. KUnit does several things:
++KUnit. These KUnit tests are kernel code. KUnit performs the following
++tasks:
+=20
+ - Organizes tests
+ - Reports test results
+@@ -22,19 +23,17 @@ KUnit. KUnit tests are kernel code. KUnit does several =
+things:
+ Test Cases
+ ----------
+=20
+-The fundamental unit in KUnit is the test case. The KUnit test cases are
+-grouped into KUnit suites. A KUnit test case is a function with type
+-signature ``void (*)(struct kunit *test)``.
+-These test case functions are wrapped in a struct called
+-struct kunit_case.
++The test case is the fundamental unit in KUnit. KUnit test cases are organ=
+ised
++into suites. A KUnit test case is a function with type signature
++``void (*)(struct kunit *test)``. These test case functions are wrapped in=
+ a
++struct called struct kunit_case.
+=20
+ .. note:
+ 	``generate_params`` is optional for non-parameterized tests.
+=20
+-Each KUnit test case gets a ``struct kunit`` context
+-object passed to it that tracks a running test. The KUnit assertion
+-macros and other KUnit utilities use the ``struct kunit`` context
+-object. As an exception, there are two fields:
++Each KUnit test case receives a ``struct kunit`` context object that track=
+s a
++running test. The KUnit assertion macros and other KUnit utilities use the
++``struct kunit`` context object. As an exception, there are two fields:
+=20
+ - ``->priv``: The setup functions can use it to store arbitrary test
+   user data.
+@@ -75,14 +74,15 @@ with the KUnit test framework.
+ Executor
+ --------
+=20
+-The KUnit executor can list and run built-in KUnit tests on boot.
++The KUnit executor can list and run built-in KUnit tests on boot
+ The Test suites are stored in a linker section
+-called ``.kunit_test_suites``. For code, see:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/in=
+clude/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
++called ``.kunit_test_suites``. For the code, see ``KUNIT_TABLE()`` macro
++definition in
++`include/asm-generic/vmlinux.lds.h <https://git.kernel.org/pub/scm/linux/k=
+ernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=3Dv6.=
+0#n950>`_.
+ The linker section consists of an array of pointers to
+ ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
+-macro. To run all tests compiled into the kernel, the KUnit executor
+-iterates over the linker section array.
++macro. The KUnit executor iterates over the linker section array in order =
+to
++run all the tests that are compiled into the kernel.
+=20
+ .. kernel-figure:: kunit_suitememorydiagram.svg
+ 	:alt:	KUnit Suite Memory
+@@ -90,17 +90,18 @@ iterates over the linker section array.
+ 	KUnit Suite Memory Diagram
+=20
+ On the kernel boot, the KUnit executor uses the start and end addresses
+-of this section to iterate over and run all tests. For code, see:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
+b/kunit/executor.c
+-
++of this section to iterate over and run all tests. For the implementation =
+of the
++executor, see
++`lib/kunit/executor.c <https://git.kernel.org/pub/scm/linux/kernel/git/tor=
+valds/linux.git/tree/lib/kunit/executor.c>`_.
+ When built as a module, the ``kunit_test_suites()`` macro defines a
+ ``module_init()`` function, which runs all the tests in the compilation
+ unit instead of utilizing the executor.
+=20
+ In KUnit tests, some error classes do not affect other tests
+ or parts of the kernel, each KUnit case executes in a separate thread
+-context. For code, see:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
+b/kunit/try-catch.c?h=3Dv5.15#n58
++context. For the implememtation details, see ``kunit_try_catch_run()`` fun=
+ction
++code in
++`lib/kunit/try-catch.c <https://git.kernel.org/pub/scm/linux/kernel/git/to=
+rvalds/linux.git/tree/lib/kunit/try-catch.c?h=3Dv5.15#n58>`_.
+=20
+ Assertion Macros
+ ----------------
+@@ -111,37 +112,36 @@ All expectations/assertions are formatted as:
+=20
+ - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
+   expectation.
++  In the event of a failure, the testing flow differs as follows:
+=20
+-	- For an expectation, if the check fails, marks the test as failed
+-	  and logs the failure.
++	- For expectations, the test is marked as failed and the failure is logge=
+d.
+=20
+-	- An assertion, on failure, causes the test case to terminate
+-	  immediately.
++	- Failing assertions, on the other hand, result in the test case being
++	  terminated immediately.
+=20
+-		- Assertions call function:
++		- Assertions call the function:
+ 		  ``void __noreturn kunit_abort(struct kunit *)``.
+=20
+-		- ``kunit_abort`` calls function:
++		- ``kunit_abort`` calls the function:
+ 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_ca=
+tch)``.
+=20
+-		- ``kunit_try_catch_throw`` calls function:
++		- ``kunit_try_catch_throw`` calls the function:
+ 		  ``void kthread_complete_and_exit(struct completion *, long) __noreturn=
+;``
+ 		  and terminates the special thread context.
+=20
+ - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
+-  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied prop=
+erties are
++  has the boolean value "true"), ``EQ`` (two supplied properties are
+   equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
+-  contain an =E2=80=9Cerr=E2=80=9D value).
++  contain an "err" value).
+=20
+ - ``[_MSG]`` prints a custom message on failure.
+=20
+ Test Result Reporting
+ ---------------------
+-KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
+-https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14=
+-specification.md.
+-KTAP (yet to be standardized format) works with KUnit and Kselftest.
+-The KUnit executor prints KTAP results to dmesg, and debugfs
+-(if configured).
++KUnit prints the test results in KTAP format. KTAP is based on TAP14, see
++Documentation/dev-tools/ktap.rst.
++KTAP works with KUnit and Kselftest. The KUnit executor prints KTAP result=
+s to
++dmesg, and debugfs (if configured).
+=20
+ Parameterized Tests
+ -------------------
+@@ -150,33 +150,35 @@ Each KUnit parameterized test is associated with a co=
+llection of
+ parameters. The test is invoked multiple times, once for each parameter
+ value and the parameter is stored in the ``param_value`` field.
+ The test case includes a KUNIT_CASE_PARAM() macro that accepts a
+-generator function.
+-The generator function is passed the previous parameter and returns the ne=
+xt
+-parameter. It also provides a macro to generate common-case generators bas=
+ed on
+-arrays.
++generator function. The generator function is passed the previous paramete=
+r
++and returns the next parameter. It also includes a macro for generating
++array-based common-case generators.
+=20
+-kunit_tool (Command Line Test Harness)
++kunit_tool (Command-line Test Harness)
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
+-that can be used to configure, build, exec, parse and run (runs other
+-commands in order) test results. You can either run KUnit tests using
+-kunit_tool or can include KUnit in kernel and parse manually.
++``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.py=
+``. It
++is used to configure, build, execute, parse test results and run all of th=
+e
++previous commands in correct order (i.e., configure, build, execute and pa=
+rse).
++You have two options for running KUnit tests: either build the kernel with=
+ KUnit
++enabled and manually parse the results (see
++Documentation/dev-tools/kunit/run_manual.rst) or use ``kunit_tool``
++(see Documentation/dev-tools/kunit/run_wrapper.rst).
+=20
+ - ``configure`` command generates the kernel ``.config`` from a
+   ``.kunitconfig`` file (and any architecture-specific options).
+-  For some architectures, additional config options are specified in the
+-  ``qemu_config`` Python script
+-  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
++  The Python scripts available in ``qemu_configs`` folder
++  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
++  additional configuration options for specific architectures.
+   It parses both the existing ``.config`` and the ``.kunitconfig`` files
+-  and ensures that ``.config`` is a superset of ``.kunitconfig``.
+-  If this is not the case, it will combine the two and run
+-  ``make olddefconfig`` to regenerate the ``.config`` file. It then
+-  verifies that ``.config`` is now a superset. This checks if all
+-  Kconfig dependencies are correctly specified in ``.kunitconfig``.
+-  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
+-  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
+-  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
++  to ensure that ``.config`` is a superset of ``.kunitconfig``.
++  If not, it will combine the two and run ``make olddefconfig`` to regener=
+ate
++  the ``.config`` file. It then checks to see if ``.config`` has become a =
+superset.
++  This verifies that all the Kconfig dependencies are correctly specified =
+in the
++  file ``.kunitconfig``. The ``kunit_config.py`` script contains the code =
+for parsing
++  Kconfigs. The code which runs ``make olddefconfig`` is part of the
++  ``kunit_kernel.py`` script. You can invoke this command through:
++  ``./tools/testing/kunit/kunit.py config`` and
+   generate a ``.config`` file.
+ - ``build`` runs ``make`` on the kernel tree with required options
+   (depends on the architecture and some options, for example: build_dir)
+@@ -184,8 +186,8 @@ kunit_tool or can include KUnit in kernel and parse man=
+ually.
+   To build a KUnit kernel from the current ``.config``, you can use the
+   ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
+ - ``exec`` command executes kernel results either directly (using
+-  User-mode Linux configuration), or via an emulator such
+-  as QEMU. It reads results from the log via standard
++  User-mode Linux configuration), or through an emulator such
++  as QEMU. It reads results from the log using standard
+   output (stdout), and passes them to ``parse`` to be parsed.
+   If you already have built a kernel with built-in KUnit tests,
+   you can run the kernel and display the test results with the ``exec``
+--=20
+2.38.0.413.g74048e4d9e-goog
+
