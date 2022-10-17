@@ -2,60 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FB16007AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399A16007B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiJQH0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S230232AbiJQH02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiJQH0O (ORCPT
+        with ESMTP id S230231AbiJQH0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:26:14 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB19DF1F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:26:13 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4877668D05; Mon, 17 Oct 2022 09:26:08 +0200 (CEST)
-Date:   Mon, 17 Oct 2022 09:26:07 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, x86@kernel.org, peterz@infradead.org,
-        hch@lst.de, kernel-team@fb.com, rick.p.edgecombe@intel.com,
-        dave.hansen@intel.com, urezki@gmail.com
-Subject: Re: [RFC v2 0/4] vmalloc_exec for modules and BPF programs
-Message-ID: <20221017072607.GA30977@lst.de>
-References: <20221007234315.2877365-1-song@kernel.org>
+        Mon, 17 Oct 2022 03:26:25 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731615A3F2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:26:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id u21so14721812edi.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3AShFYsitghTbnIyrMsfWrl8lnbvZv+qNsyw3iHZCMA=;
+        b=KqIY9rAQqeIOd56ST1972cUNpPXCyorscPr7T04Hp+F48MCVQePvDf0nolaB0QMWHs
+         0azWgOh5G96gEZPIFtqIWaaZKZVzcrqkeni0gsY/FWB6vG0MXEz4nXjs8x00EnJCy1x9
+         lAdxaGLNXbY3vMWUNIF/7ADfwhgnpPbvx7fKfMzhn1ZRj51NiFxIkiKjco5QeDg2LOUM
+         DyquyX0+oW4uIo8O5jCZUIZ5Yl0QmzpvrwQ4DGS9ufHC7yWPidthP/RW/5KNTBUouigB
+         vJrDYIJlv4iI+kf1vWA+kv/VWUDa/DN8bmYij1D9TYkt2D5ei3BdDiCTTlXWbE/cM4f7
+         p18Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3AShFYsitghTbnIyrMsfWrl8lnbvZv+qNsyw3iHZCMA=;
+        b=3zqBONJk7qLYGVM/LBpbdLqXbNiELPD4rTHVqiPNSsyNVT+xPENARN0GyF4lJZQ6UD
+         HjweuWxiNd+eS9vztp5aLkPa8j0CqkNbPypvLaoL6gu29HSCDAy/1/2D+Tf4CT1MNR+W
+         xboUcXvWx4AgCa7t+t2RJlfxQQlqq4ETM8IHZtif5EH8c93+S6IjXochGY+l8PZtKIPM
+         IyRNquVDm+Apej+keS736mYHRdBVCJpZMvHD3ZaqjWZA3AMWx47Nxs9LATDTMzUUhGhZ
+         67IPlSdsnH/jZLuLn0uBRj4l2L+9xqq6kC573SWI0qG2sFkt3oNVxNSACq55Un3pFyeS
+         W/tA==
+X-Gm-Message-State: ACrzQf03DR9aRg5FEMEVozFOk+KtTFtxuWDSTfJ+PedC0ahRl2Hg3Cn0
+        8JvlriIzeYAto01naSkBdOOP44fC4o2SCROUPBnOCg==
+X-Google-Smtp-Source: AMsMyM5gbWhSDqqqPHexjLAdyKKwd8cORrpaVtporiBlFjTkUcSPRQZzEne28z+gUaBpSo9hOMRqT3EvrQ+6+fUBAQs=
+X-Received: by 2002:a05:6402:2989:b0:44e:90d0:b9ff with SMTP id
+ eq9-20020a056402298900b0044e90d0b9ffmr8963701edb.110.1665991581839; Mon, 17
+ Oct 2022 00:26:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221007234315.2877365-1-song@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221016064454.382206984@linuxfoundation.org>
+In-Reply-To: <20221016064454.382206984@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 17 Oct 2022 12:56:10 +0530
+Message-ID: <CA+G9fYvtuumt+EapAwHia8ZSiK0oyadpSMiRrrmQO79n6Tw3qg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 0/4] 5.10.149-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 04:43:11PM -0700, Song Liu wrote:
-> Changes RFC v1 => RFC v2:
-> 1. Major rewrite of the logic of vmalloc_exec and vfree_exec. They now
->    work fine with BPF programs (patch 1, 2, 4). But module side (patch 3)
->    still need some work.
+On Sun, 16 Oct 2022 at 12:15, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.149 release.
+> There are 4 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Tue, 18 Oct 2022 06:44:46 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.149-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Can you please move the changelog under the description of WTF the
-series actually does like the normal kernel process?  Explaining the
-changes from a previous version before you even describe what the series
-does is completely incoherent.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> This set is a prototype that allows dynamic kernel text (modules, bpf
-> programs, various trampolines, etc.) to share huge pages. The idea is
-> similar to Peter's suggestion in [1]. Please refer to each patch for
-> more detais.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Well, nothing explains what the method is to avoid having memory
-that is mapped writable and executable at the same time, which really
-could use some explanation here (and in the main patch as well).
+## Build
+* kernel: 5.10.149-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: ac0fb49345eeba8af1ef393f8921b7fbe4e3f99f
+* git describe: v5.10.148-5-gac0fb49345ee
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.148-5-gac0fb49345ee
+
+## No Test Regressions (compared to v5.10.147-55-g4ff6e9bba3ff)
+
+## No Metric Regressions (compared to v5.10.147-55-g4ff6e9bba3ff)
+
+## No Test Fixes (compared to v5.10.147-55-g4ff6e9bba3ff)
+
+## No Metric Fixes (compared to v5.10.147-55-g4ff6e9bba3ff)
+
+
+## Test result summary
+total: 108684, pass: 93951, fail: 1340, skip: 13134, xfail: 259
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 333 total, 333 passed, 0 failed
+* arm64: 65 total, 63 passed, 2 failed
+* i386: 55 total, 53 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 55 passed, 5 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 24 total, 24 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 58 total, 56 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
