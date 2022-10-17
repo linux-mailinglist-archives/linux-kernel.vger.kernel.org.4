@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D21600665
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 07:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82FB60066A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 07:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiJQFkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 01:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S229929AbiJQFri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 01:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiJQFkN (ORCPT
+        with ESMTP id S229608AbiJQFrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 01:40:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3324220F69
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 22:40:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E67E8B80F01
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:39:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2935C433C1;
-        Mon, 17 Oct 2022 05:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665985198;
-        bh=nQpWioaLzb9aE0GIgK/k8NqWcTPKAfl43vnaIeeoDMc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s1HpwzKE/xsQo7cMEJ6fEdiB832lOrdVg6ELOrZkNydo6oyFJ5v+VeZP1Y9ffM2eJ
-         cohE0ieJ3VbJh0ojTi3IZOuS5V5/DPIEO7FLKgJlVLErUbEiVNgyMiNtQ48jDMyqEX
-         JmrMagTxPKni0+1QXvrkBqMwTu6QDrx0EoekLDa2KSRtw3Pdg7qTnDP/qEGe9BfhC3
-         pQrm/UFlnpYqJV2oOdil7uTv7mVKOqxRcIoLwo5nbY1nwOb54MTE+K5GpvDT/OHgZT
-         iL1XM6NxtDRsV6f1PAtiPWe1RfjdS1VepUwibuMqLwyr5spVayeQO6NCSoFanZFIJx
-         FeLa0HLk/gZWw==
-Date:   Mon, 17 Oct 2022 11:09:54 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
- registers before USB 3.0 power on
-Message-ID: <Y0zqqvs91ByWcH4K@matsya>
-References: <20220920121154.30115-1-pali@kernel.org>
- <20220921050300.riwyofdncxscrwe3@shindev>
- <20220921080557.jdg5wywpa5qxcyo2@pali>
- <Yy6uaaZUbZsBSqrw@matsya>
- <20220924083127.oht57ivvsr4obrjr@pali>
- <20220930234541.hsf6ryketcdukpia@pali>
- <Y0OrZ8d4GBC0Cp8q@matsya>
+        Mon, 17 Oct 2022 01:47:36 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192E94E199;
+        Sun, 16 Oct 2022 22:47:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VSIKI1E_1665985636;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VSIKI1E_1665985636)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Oct 2022 13:47:30 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     marcel@holtmann.org
+Cc:     johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] Bluetooth: Use kzalloc instead of kmalloc/memset
+Date:   Mon, 17 Oct 2022 13:47:13 +0800
+Message-Id: <20221017054713.7507-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y0OrZ8d4GBC0Cp8q@matsya>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-10-22, 10:49, Vinod Koul wrote:
-> On 01-10-22, 01:45, Pali Rohár wrote:
-> > On Saturday 24 September 2022 10:31:27 Pali Rohár wrote:
+Use kzalloc rather than duplicating its implementation, which makes code
+simple and easy to understand.
 
-> > 
-> > Vinod, could you describe a bit more what is needed to update? Because
-> > this patch fixes regression - USB 3.0 support on Turris Mox board.
-> 
-> Sorry to have missed this...
-> 
-> Somehow I misunderstood that the USB 3.0 was not working and log needs
-> update... I will apply this once merge window closes
+./net/bluetooth/hci_conn.c:2038:6-13: WARNING: kzalloc should be used for cp, instead of kmalloc/memset.
 
-Applied now, thanks
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2406
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ net/bluetooth/hci_conn.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+index 5d6ee5075642..495de21d52cd 100644
+--- a/net/bluetooth/hci_conn.c
++++ b/net/bluetooth/hci_conn.c
+@@ -2035,13 +2035,12 @@ int hci_pa_create_sync(struct hci_dev *hdev, bdaddr_t *dst, __u8 dst_type,
+ 	if (hci_dev_test_and_set_flag(hdev, HCI_PA_SYNC))
+ 		return -EBUSY;
+ 
+-	cp = kmalloc(sizeof(*cp), GFP_KERNEL);
++	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
+ 	if (!cp) {
+ 		hci_dev_clear_flag(hdev, HCI_PA_SYNC);
+ 		return -ENOMEM;
+ 	}
+ 
+-	memset(cp, 0, sizeof(*cp));
+ 	cp->sid = sid;
+ 	cp->addr_type = dst_type;
+ 	bacpy(&cp->addr, dst);
 -- 
-~Vinod
+2.20.1.7.g153144c
+
