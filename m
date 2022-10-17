@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A773A60169D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB416016AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiJQStj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S230153AbiJQSwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiJQStf (ORCPT
+        with ESMTP id S230425AbiJQSwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:49:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5142411A17;
-        Mon, 17 Oct 2022 11:49:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 555D3B81A07;
-        Mon, 17 Oct 2022 18:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17616C433C1;
-        Mon, 17 Oct 2022 18:49:25 +0000 (UTC)
-Date:   Mon, 17 Oct 2022 14:49:49 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Florent Revest <revest@chromium.org>
-Cc:     Xu Kuohai <xukuohai@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Xu Kuohai <xukuohai@huaweicloud.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
-Message-ID: <20221017144949.2b9dcdc5@gandalf.local.home>
-In-Reply-To: <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
-        <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net>
-        <YzG51Jyd5zhvygtK@arm.com>
-        <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
-        <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
-        <YzR5WSLux4mmFIXg@FVFF77S0Q05N>
-        <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
-        <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
-        <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com>
-        <20221005110707.55bd9354@gandalf.local.home>
-        <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
-        <20221005113019.18aeda76@gandalf.local.home>
-        <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
-        <20221006122922.53802a5c@gandalf.local.home>
-        <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 17 Oct 2022 14:52:45 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37E174E30
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:52:42 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id bh7-20020a05600c3d0700b003c6fb3b2052so1518561wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hOoiBfvvEGTlYBAxhGaLbe7mxHQExNNX83XB8bqvt8I=;
+        b=pwRo7rJzq3f8d3BGRMSPdqYtplO1ESVt3D0D31INKks9R9upem0eRkw7t+yC0eCI5V
+         ZMC6RVwzOh44gYyRppmfiAhXb5IGGOMRXqpKIB6FZAuv+84xKKjfvpGWJguAUwiuioXz
+         cnNuaGmjliO+cMx3VVKVf8iAxM7v1Qfzj1emgCkSHD+oZqPCxUENIYu08hRBdfRO/r0E
+         KaUSgjdWWPF1eWC0EwZdAQBWyVw/WP3kClDh88iOzmy2hVMa51i1czRd+eJvmm5ZBDY5
+         XZAHOGB9v000dtfj0REfD8ktVSR5pUmrdc1leHsp9dG1cLQ1I7bAoiKHomChOQiPjvoF
+         g/9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hOoiBfvvEGTlYBAxhGaLbe7mxHQExNNX83XB8bqvt8I=;
+        b=C571h2X7MugqBfjGD70BPDLZBrNkkJtJKtkhlFrA9iWVGo8Y+7tEpVsjaqimazxPjz
+         bN3+quN7Rjl7pPa4KigYlMk3QO/bMHYgdOCbO9lKwUDQxKD4lewI9589HjF4RArMWk2e
+         BehOSfIKJmimD1fWugGIgdzccH1DJvRqU/0RmcAEDpaOeEwVmRyagbdm5P14ZxJSgyTH
+         ZS9AqOtgw7sBh3NdCzod35bMKgnOGMFFOZWDOCBDVcMIHMgjaMTgw+++P3GW6uPSAuhX
+         RFYVUuAIwyYnceoWlZGnKnw0HKnr5wBs6AuSoHlhN4EZFv0ewW1yO7uxi8/JvCTdlgzS
+         IZxQ==
+X-Gm-Message-State: ACrzQf0fw41YnTn1gshVsa24/PBa3goxV1AGctXLNEkuk7oiSLZS1E44
+        aoJ9rcB5cQ4rTavMx0MCBsfgvg==
+X-Google-Smtp-Source: AMsMyM68QFNLV/+5iOzmHpml1GxyAE1eFnYnlUdYK7u8n8ovdpKO7WV6G7FUEjBQxnCzt+pqFMLwXA==
+X-Received: by 2002:a05:600c:5024:b0:3c6:e25f:64be with SMTP id n36-20020a05600c502400b003c6e25f64bemr15319936wmr.55.1666032761246;
+        Mon, 17 Oct 2022 11:52:41 -0700 (PDT)
+Received: from localhost.localdomain (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
+        by smtp.gmail.com with ESMTPSA id e14-20020a5d65ce000000b0022abcc1e3cesm9040501wrw.116.2022.10.17.11.52.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 11:52:40 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     caleb.connolly@linaro.org
+Cc:     Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH v2] dt-bindings: mfd: qcom,spmi-pmic: document rradc node
+Date:   Mon, 17 Oct 2022 19:51:05 +0100
+Message-Id: <20221017185105.2279129-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 19:55:06 +0200
-Florent Revest <revest@chromium.org> wrote:
+Document the rradc node name, like adc-tm it's only used on a few
+platforms, so differentiate it from the standard adc node.
 
-> Note that I can't really make sense of the perf report with indirect
-> calls. it always reports it spent 12% of the time in
-> rethook_trampoline_handler but I verified with both a WARN in that
-> function and a breakpoint with a debugger, this function does *not*
-> get called when running this "bench trig-fentry" benchmark. Also it
-> wouldn't make sense for fprobe_handler to call it so I'm quite
-> confused why perf would report this call and such a long time spent
-> there. Anyone know what I could be missing here ?
+Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+---
 
-The trace shows __bpf_prog_exit, which I'm guessing is tracing the end of
-the function. Right?
+V1: https://lore.kernel.org/linux-arm-msm/20221016175757.1911016-1-caleb.connolly@linaro.org/
+Changes since v1:
+ * Add a new node instead of using the adc@ node
+ * no longer depend on Luca's patch
+---
+ Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-In which case I believe it must call rethook_trampoline_handler:
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+index 65cbc6dee545..631141f99bce 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -101,6 +101,10 @@ patternProperties:
+     type: object
+     $ref: /schemas/thermal/qcom-spmi-adc-tm5.yaml#
+ 
++  "^rradc@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/iio/adc/qcom,spmi-rradc.yaml#
++
+   "^audio-codec@[0-9a-f]+$":
+     type: object
+     additionalProperties: true # FIXME qcom,pm8916-wcd-analog-codec binding not converted yet
+-- 
+2.38.0
 
- -> fprobe_handler() /* Which could use some "unlikely()" to move disabled
-                        paths out of the hot path */
-
-       /* And also calls rethook_try_get () which does a cmpxchg! */
-
-	-> ret_hook()
-		-> arch_rethook_prepare()
-			Sets regs->lr = arch_rethook_trampoline
-
-On return of the function, it jumps to arch_rethook_trampoline()
-
-  -> arch_rethook_trampoline()
-	-> arch_rethook_trampoline_callback()
-		-> rethook_trampoline_handler()
-
-So I do not know how it wouldn't trigger the WARNING or breakpoint if you
-added it there.
-
--- Steve
