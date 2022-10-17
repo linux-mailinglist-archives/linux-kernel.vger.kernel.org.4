@@ -2,154 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BF4600C78
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69943600C70
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiJQKcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S230261AbiJQKbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiJQKcC (ORCPT
+        with ESMTP id S229663AbiJQKbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:32:02 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D526052D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:31:57 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id be13so1171826lfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5nozSFDmTVpu8GTMuUa17TgcVMpawH1V5x78PIRZetg=;
-        b=SDSplUZ2VPkr2D1rPark9w6rINsj4QsGj8mIaHHj3cG7qqYj2xeg5bRcHWiAiCGNxn
-         GsUn6i3U2OjLAFYiVGFUliiR7Eg727DK3wDSXfnbZMZbfbIZ31+HdQCxkX49ygkx2h2T
-         JvvJpr3zkIRAU4V1EE328YM6hb7KitEqUGTlUdtUSKdTXZdHKruA7oQebxjBvB7yCdng
-         14amkvXgB/TlF3oG6EUoWuZ8TnSYQkSfag7jNPXgHEtx3NHXccP4GhcHXIeI1JTCLuLR
-         Ff1yL/Q300jH2Amjcw85DuxVyH90T6VnZoMTJKObTmi2YSvh5JYckhqKh2RO00z96P+I
-         iG8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5nozSFDmTVpu8GTMuUa17TgcVMpawH1V5x78PIRZetg=;
-        b=CiJqy/DhUMxxswLuZpRwk09VW/qLeBPjkUin2RekPO+jeujZ40u6XDfPxGtq8AixGe
-         fnxLm/gJj/xWEl4na3+867Zw3EpiJE3QlZXargKpBcU9y0ONPtkzRH+qaKo4ZYcTeb6z
-         OF8cRC6aPxiOP/wWo8q7pL+NLtxs/Fx86VHn4NlHehhtv8OQB5yk2xd8T4xD+9eW9mZc
-         ZNbqJw2K+J3/5yivP9b/iz8c90B7TnSfo3pkqZ5QnWYew2awLNRnl3PyX8VHrcolvxjT
-         5le5wQU2N00K4Y5eaegn5giFsnk67ghSzBSfD5bL1+92xox1TPLRBxu79SUXeXAt3LvX
-         SseA==
-X-Gm-Message-State: ACrzQf1c47Y0MzFhSuwXqGbuXyTU/viHPsTeDaj6zU1XZGkNqUVQSa4V
-        Ewo8QiQdVg1HzWPgoj7CXSI3dKssEMO/upmcBv92kQ==
-X-Google-Smtp-Source: AMsMyM5QQdeoCZqf4USHrTYZuLKFaoT483vufBzxBArWmR3pEEZFNUg/KtF5cabXdDzXtcRyF9bfuHIHJTBpaJKALKA=
-X-Received: by 2002:a05:6512:4cb:b0:4a2:25b6:9e73 with SMTP id
- w11-20020a05651204cb00b004a225b69e73mr3967251lfq.30.1666002715568; Mon, 17
- Oct 2022 03:31:55 -0700 (PDT)
+        Mon, 17 Oct 2022 06:31:38 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CB1C90C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4stdZmnnjzcJfTIv6rX9y4Ktpwm0v2vziI9Ogexmn4M=; b=JTuh8gNnaSkR+5LHWdYqs3GbB1
+        ZHTKRsHYL2Hwd506N3u16pSrtZpDVzxuSO7U0YcYZMN/CHexTltSaNhqyFAtGAJCPUV4V0b8nZ3J0
+        MGXR+vIMKn64zMJYCMljgm7u5lRp0nf7NBcZ7zr7aV2s+jSrsEZgQCKC0dPn+Yw66geVhRH6bVeZc
+        Gzdem6BNhYGvtZbsJI4bfYo5I/grPpluNd1h9zuwTo/xoj/QGbegYU3yW4i4KSEBhxB/sXpqu4h6p
+        9gJSysyAKSm1TQM1nSWpbf0JEhuGpMy0U86hC40/GYjpCPhyMJLKilWX9SIAKnUzU7Om4NhJmBb0J
+        K0jnVmWA==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:60899 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1okNPD-0001a2-7h; Mon, 17 Oct 2022 12:31:35 +0200
+Message-ID: <81936381-ae37-8c84-4681-9eff19f653b5@tronnes.org>
+Date:   Mon, 17 Oct 2022 12:31:31 +0200
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
- <Yyi+l3+p9lbBAC4M@google.com> <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
- <20220926142330.GC2658254@chaop.bj.intel.com> <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
- <YzN9gYn1uwHopthW@google.com> <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
- <20221013133457.GA3263142@chaop.bj.intel.com>
-In-Reply-To: <20221013133457.GA3263142@chaop.bj.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 17 Oct 2022 11:31:19 +0100
-Message-ID: <CA+EHjTzZ2zsm7Ru_OKCZg9FCYESgZsmB=7ScKRh6ZN4=4OZ3gw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v5 20/22] drm/vc4: vec: Convert to the new TV mode
+ property
+To:     kfyatek+publicgit@gmail.com, Maxime Ripard <maxime@cerno.tech>,
+        Karol Herbst <kherbst@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Emma Anholt <emma@anholt.net>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v5-20-d841cc64fe4b@cerno.tech>
+ <c1949248-fb40-682c-492e-bafbd915cee3@gmail.com>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <c1949248-fb40-682c-492e-bafbd915cee3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-> >
-> > Actually, for pKVM, there is no need for the guest memory to be
-> > GUP'able at all if we use the new inaccessible_get_pfn().
->
-> If pKVM can use inaccessible_get_pfn() to get pfn and can avoid GUP (I
-> think that is the major concern?), do you see any other gap from
-> existing API?
 
-Actually for this part no, there aren't any gaps and
-inaccessible_get_pfn() is sufficient.
+Den 16.10.2022 20.52, skrev Mateusz Kwiatkowski:
+> Hi Maxime,
+> 
+>>  static int vc4_vec_connector_get_modes(struct drm_connector *connector)
+>>  {
+>> -	struct drm_connector_state *state = connector->state;
+>>  	struct drm_display_mode *mode;
+>>  
+>> -	mode = drm_mode_duplicate(connector->dev,
+>> -				  vc4_vec_tv_modes[state->tv.legacy_mode].mode);
+>> +	mode = drm_mode_analog_ntsc_480i(connector->dev);
+>>  	if (!mode) {
+>>  		DRM_ERROR("Failed to create a new display mode\n");
+>>  		return -ENOMEM;
+>>  	}
+>>  
+>> +	mode->type |= DRM_MODE_TYPE_PREFERRED;
+>>  	drm_mode_probed_add(connector, mode);
+>>  
+>> -	return 1;
+>> +	mode = drm_mode_analog_pal_576i(connector->dev);
+>> +	if (!mode) {
+>> +		DRM_ERROR("Failed to create a new display mode\n");
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	drm_mode_probed_add(connector, mode);
+>> +
+>> +	return 2;
+>> +}
+> 
+> Referencing those previous discussions:
+> - https://lore.kernel.org/dri-devel/0255f7c6-0484-6456-350d-cf24f3fee5d6@tronnes.org/
+> - https://lore.kernel.org/dri-devel/c8f8015a-75da-afa8-ca7f-b2b134cacd16@gmail.com/
+> 
+> Unconditionally setting the 480i mode as DRM_MODE_TYPE_PREFERRED causes Xorg
+> (at least on current Raspberry Pi OS) to display garbage when
+> video=Composite1:PAL is specified on the command line, so I'm afraid this won't
+> do.
+> 
+> As I see it, there are three viable solutions for this issue:
+> 
+> a) Somehow query the video= command line option from this function, and set
+>    DRM_MODE_TYPE_PREFERRED appropriately. This would break the abstraction
+>    provided by global DRM code, but should work fine.
+> 
+> b) Modify drm_helper_probe_add_cmdline_mode() so that it sets
+>    DRM_MODE_TYPE_PREFERRED in addition to DRM_MODE_TYPE_USERDEF. This seems
+>    pretty robust, but affects the entire DRM subsystem, which may break
+>    userspace in different ways.
+> 
+>    - Maybe this could be mitigated by adding some additional conditions, e.g.
+>      setting the PREFERRED flag only if no modes are already flagged as such
+>      and/or only if the cmdline mode is a named one (~= analog TV mode)
+> 
+> c) Forcing userspace (Xorg / Raspberry Pi OS) to get fixed and honor the USERDEF
+>    flag.
+> 
+> Either way, hardcoding 480i as PREFERRED does not seem right.
+> 
 
-> > This of
-> > course goes back to what I'd mentioned before in v7; it seems that
-> > representing the memslot memory as a file descriptor should be
-> > orthogonal to whether the memory is shared or private, rather than a
-> > private_fd for private memory and the userspace_addr for shared
-> > memory. The host can then map or unmap the shared/private memory using
-> > the fd, which allows it more freedom in even choosing to unmap shared
-> > memory when not needed, for example.
->
-> Using both private_fd and userspace_addr is only needed in TDX and other
-> confidential computing scenarios, pKVM may only use private_fd if the fd
-> can also be mmaped as a whole to userspace as Sean suggested.
+My solution for this is to look at tv.mode to know which mode to mark as
+preferred. Maxime didn't like this since it changes things behind
+userspace's back. I don't see how that can cause any problems for userspace.
 
-That does work in practice, for now at least, and is what I do in my
-current port. However, the naming and how the API is defined as
-implied by the name and the documentation. By calling the field
-private_fd, it does imply that it should not be mapped, which is also
-what api.rst says in PATCH v8 5/8. My worry is that in that case pKVM
-would be mis/ab-using this interface, and that future changes could
-cause unforeseen issues for pKVM.
+If userspace uses atomic and sets tv_mode, it has to know which mode to
+use before hand, so it doesn't look at the preferreded flag.
 
-Maybe renaming this to something like "guest_fp", and specifying in
-the documentation that it can be restricted, e.g., instead of "the
-content of the private memory is invisible to userspace" something
-along the lines of  "the content of the guest memory may be restricted
-to userspace".
+If it uses legacy and sets tv_mode, it can end up with a stale preferred
+flag, but no worse than not having the flag or that ntsc is always
+preferred.
 
-What do you think?
+If it doesn't change tv_mode, there's no problem, the preferred flag
+doesn't change.
 
-Cheers,
-/fuad
-
->
-> Thanks,
-> Chao
-> >
-> > Cheers,
-> > /fuad
+Noralf.
