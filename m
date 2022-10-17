@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768A4601729
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B769E60172A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiJQTPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S230258AbiJQTQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiJQTPm (ORCPT
+        with ESMTP id S230209AbiJQTQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:15:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3640C3DBC4;
-        Mon, 17 Oct 2022 12:15:42 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n7so11685315plp.1;
-        Mon, 17 Oct 2022 12:15:42 -0700 (PDT)
+        Mon, 17 Oct 2022 15:16:07 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683AF72FE3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:16:06 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id y10so9326316wma.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:16:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jYQqkn4Z7pKMP3VJb1HX2oe2GpNgJO0E7bDKNOoYtIE=;
-        b=TPN7z+1mH6FaSYcRjIy1CQQSIt5z8vj1Tle8p8G6umvRw+WQOFyYd8mYhw/EcxgIsF
-         vgisJtlzCmLBDI0+8V+/gRYV9fC0WzT7lsz6LYUvbvR+F72s4LGohEmCW4VAzviotxc8
-         6VYSHMhzMRJNMi7NHCg36Dj5UtfiTDkpt95xuV18Ak7aIjDzMHSsCe+xJWA6Q2wqLp4o
-         fxMHLwTBfcsY6fF9PE9SEmZrqoKFlxCL0GGQT/QIgM0Z8AZseEU/YrOO+jICs6b4qz9m
-         TwfKBv9JC6cQPTkYOSMTRwZKSVL280JKetKKJqv/gWOuBouMXDAlxOejxGe9qwtx3m7H
-         FDaw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rsSRW+G2rxl1qTZ7eXeAY8au2TKGPXJ9C9uJXfGontk=;
+        b=f58qD0Y01+sBzs963EIbITJY88tl2KpclgURVg6w1N/urjJY33b/Oke7Rt+Zw9sZmZ
+         1ePeHXmYHS5g/HvxDh3xrgvXl6ASCAkQClaYXnrH+zkpa5LpX7Uy0PEFKF6G9Hvh+bOR
+         TmF2Ny01azJchxKXlbCMA30u89Bf0J4P8Oi6awyklYBgissIA3VueOwscksAl9Y6foEd
+         M3HoYUt0tDLZ0GCkLB03yyHm8AHIRM4zoGTOF8GvaEMLgps2+xjGbm4ZpmZ5/pKnwCMN
+         4bXZqCT5wJOZifO6OukbnvggvsSFpzwuS/eT7gYFGUBg1jFMrtULhPGlwIcN1nLVGDaA
+         xSCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jYQqkn4Z7pKMP3VJb1HX2oe2GpNgJO0E7bDKNOoYtIE=;
-        b=dZCJ4xob+KJ1YoSm/uxlI6DO7bBiAb5jap06CUey8N7h0ct3es8QFTUAYRV3zjACCj
-         Ypxit6of0ucSh355Lzf9bFY8LfZbrm6YAmzq/RjS68LjeSUWxWPBmyf+6fF9WrtYi7zU
-         AlkOu2mQhXnDoE/NwfJyG97qoWglitoCBcWw0qP3UW34jRDy2NCLh10uEWApOoN1yUjd
-         GNzSLhcQ13fzMBtK8QKZLogbOi6mow2tlB2tL18H6HoqVEwTHgNL+L4Wr2n4EchyftvH
-         mkXBundc50RZ4hVUc8qn5SLSQrltLoA8ZPcowWBCZYNOAt6piKOlnnhfqkWdHIe2zCzY
-         W+6w==
-X-Gm-Message-State: ACrzQf0VKyDN1WFOwGk1ZkF4pDrm71womdUKFwF/RMEkRO2FJb/YR8sv
-        YgsqkRMJ7XfQGpA4C469nNODH5OvNlfCoQ==
-X-Google-Smtp-Source: AMsMyM7zwjDrT1QdJLHBEh0N/xEdJto3b07NPFrCmaAcVvUQZNzbAmlidfRdShChWxs4WVtlbGhzkw==
-X-Received: by 2002:a17:90a:6e09:b0:20d:86b2:4c54 with SMTP id b9-20020a17090a6e0900b0020d86b24c54mr15267460pjk.73.1666034141597;
-        Mon, 17 Oct 2022 12:15:41 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b00176b0dec886sm6978459pln.58.2022.10.17.12.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 12:15:41 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 17 Oct 2022 09:15:39 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] blk-iocost: Avoid to call current_hweight_max if
- iocg->inuse == iocg->active
-Message-ID: <Y02p23KdUZfkYyzI@slm.duckdns.org>
-References: <20221017020011.25016-1-shikemeng@huawei.com>
- <20221017020011.25016-7-shikemeng@huawei.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rsSRW+G2rxl1qTZ7eXeAY8au2TKGPXJ9C9uJXfGontk=;
+        b=j+3WpHSVf043Z5LGFiqlpU1UZQIlCvcdf4k3ixWnvKDH0MiJCAtRb1SyaIbiM63nYy
+         qPPoDf87UXplI4389AnxDvYhLxiWSNhWgEm7in4XoLYK/hU4kLXauZrlDCu2nzPCDssf
+         XAlXG0qCBXZDjz6x3JPftEvvIqntwts62t799Vg+pkxqB1ClC74KLTs2C8JJhCs9tOrB
+         0jBHVCuKTVZEqDFxnZiFO6rN5EShZglSUE+ke0jsYHX4FDc6ZHHvOn0QFPc5ZwpHDkqO
+         lYzdr8WSUEUBNTsosUOJ1RVO8nl7DVf3ffotpFZMYD+RyDF/DWx8wYuE5D4DVBih4RTY
+         C+aA==
+X-Gm-Message-State: ACrzQf3JTqsHoVBWenlIUj1xl2NLcCSR4A6RmyNqs/hngiOVdHMynuFl
+        SNSBodgyYMgv1Pl/zpVg6Qs=
+X-Google-Smtp-Source: AMsMyM50ofQo1mrK+27tOaJQEscKROZJs4JZN2aX9HQe33XcbJRJyVdg/gk9ywf+TgT6EZs33L70bg==
+X-Received: by 2002:a05:600c:490f:b0:3c6:2c21:97f6 with SMTP id f15-20020a05600c490f00b003c62c2197f6mr20028931wmp.177.1666034164909;
+        Mon, 17 Oct 2022 12:16:04 -0700 (PDT)
+Received: from [192.168.2.4] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id o36-20020a05600c512400b003c6edc05159sm9177519wms.1.2022.10.17.12.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 12:16:04 -0700 (PDT)
+Message-ID: <8d884b80-ea5d-6c91-fef0-a093affb3247@gmail.com>
+Date:   Mon, 17 Oct 2022 21:16:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017020011.25016-7-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [BUG] [PATCH] drm/rockchip: use generic fbdev setup
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Heiko Stuebner <heiko@sntech.de>, dri-devel@lists.freedesktop.org,
+        Sandy Huang <hjc@rock-chips.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <20211029115014.264084-1-john@metanate.com>
+ <d814394b-86c3-beb1-ddd4-04c65004f138@gmail.com> <Y00o3M7SKAB/w9sW@donbot>
+ <2220890.jZfb76A358@phil> <c4bf7723-b3b8-0955-5ba3-e4d05bdc835a@gmail.com>
+ <Y02mRUuecw2C1i+h@donbot>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <Y02mRUuecw2C1i+h@donbot>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 10:00:09AM +0800, Kemeng Shi wrote:
-> The old_hwi is already max hweight_inuse if iocg->inuse == iocg->active.
-> Remove unnecessary calculation.
+
+
+On 10/17/22 21:00, John Keeping wrote:
+> On Mon, Oct 17, 2022 at 08:30:23PM +0200, Johan Jonker wrote:
+>>
+>>
+>> On 10/17/22 13:29, Heiko Stuebner wrote:
+>>> Am Montag, 17. Oktober 2022, 12:05:16 CEST schrieb John Keeping:
+>>>> Hi Johan,
+>>>>
+>>>> On Mon, Oct 17, 2022 at 10:11:32AM +0200, Johan Jonker wrote:
+>>>>> Your patch contribution causes a kernel panic on MK808 with Rockchip rk3066a SoC.
+>>>>> Would you like to contribute to fix this issue?
+>>>>> The assumtion that drm_fbdev_generic_setup() does what rockchip_drm_fbdev_init did is not true!
+>>>>> A revert makes it work again.
+>>>>
+>>
+>>>> It looks like there are 3 different ways to end up with -ENOMEM here,
+>>>> can you track down whether you're hitting one of the cases in
+>>>> rockchip_gem_prime_vmap() or if it's the iosys_map_is_null case in
+>>>> drm_gem_vmap()?
+>>
+>> It looks like it comes from rockchip_gem_prime_vmap() second return (2).
+>>
+>>
+>> 	if (rk_obj->dma_attrs & DMA_ATTR_NO_KERNEL_MAPPING) {
+>>
+>> ////////////////
+>>
+>> 		printk("FBDEV rockchip_gem_prime_vmap 2");
+>>
+>> ////////////////
+>> 		return -ENOMEM;
+>> 	}
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
-> ---
->  block/blk-iocost.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Ah-ha, Heiko was right that this is because the no-iommu path is broken
+> as a result of switching to the generic fbdev code.
 > 
-> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-> index 96c1571a8a1d..fa90f471dfdc 100644
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
-> @@ -2299,7 +2299,10 @@ static void ioc_timer_fn(struct timer_list *timer)
->  			 * Determine the donation amount.
->  			 */
->  			current_hweight(iocg, &hwa, &old_hwi);
-> -			hwm = current_hweight_max(iocg);
-> +			if (iocg->inuse == iocg->active)
-> +				hwm = old_hwi;
-> +			else
-> +				hwm = current_hweight_max(iocg);
+> This patch should fix it, but I wonder if Thomas has any ideas about a
+> better way to handle this since it feels a bit hacky to special-case the
+> fb_helper inside the GEM code:
 
-I don't think this is correct. The intermediate nodes might be donating.
-This also isn't a meaningful optimization given that it's in the cold
-periodic timer path. I'd much rather keep the code simpler unless the
-performance benfeit can be clearly demonstrated.
+The penguin is back on screen. Thanks!
 
-Thanks.
-
--- 
-tejun
+> 
+> -- >8 --
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_gem.c b/drivers/gpu/drm/rockchip/rockchip_drm_gem.c
+> index 614e97aaac80..da8a69953706 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_gem.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_gem.c
+> @@ -364,9 +364,12 @@ rockchip_gem_create_with_handle(struct drm_file *file_priv,
+>  {
+>  	struct rockchip_gem_object *rk_obj;
+>  	struct drm_gem_object *obj;
+> +	bool is_framebuffer;
+>  	int ret;
+>  
+> -	rk_obj = rockchip_gem_create_object(drm, size, false);
+> +	is_framebuffer = drm->fb_helper && file_priv == drm->fb_helper->client.file;
+> +
+> +	rk_obj = rockchip_gem_create_object(drm, size, is_framebuffer);
+>  	if (IS_ERR(rk_obj))
+>  		return ERR_CAST(rk_obj);
+> -- 8< -- 
