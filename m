@@ -2,153 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAC76016E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6786016EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiJQTF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S230162AbiJQTJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiJQTFv (ORCPT
+        with ESMTP id S230030AbiJQTJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:05:51 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB55658B43
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:05:48 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id r22so15125097ljn.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:05:48 -0700 (PDT)
+        Mon, 17 Oct 2022 15:09:02 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168DF72ECC;
+        Mon, 17 Oct 2022 12:09:02 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id n18-20020a17090ade9200b0020b0012097cso40215pjv.0;
+        Mon, 17 Oct 2022 12:09:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpLbF7MUjfgdwKeolFrKwUGGJvkFHEynVfhNRIRYzO0=;
-        b=cTXJI0UBOdBxXG2IHW1rqIDOvBkglMHN1TS3v9u/Mg6E19sNCf3CHq90Ltlb8bjRuV
-         uwZxsI3QP9DlzIDrz8Ff7f9zknZmBhB2m3pkIj381yHasQYOvkpoqdJncN9JKC2twFC8
-         ShVufGPOkpE2dB+4eCyihCzXtxWBY+X/y95BOpw7uAHWW2nmY6ScgSdvp0Pxz6khfbyi
-         YxhW1XKkSTezSkUawIx5/j0VpvJshXk6TJGUrtcsbKTwNFF6pKmyHcosQZh7T9atBa+E
-         fdb7oqoR8tN6oS+MAKpeLCi//GJfCoW515YxPGh6OzLSq2gny6eetjefpyJ4o3QbBEiq
-         9V6Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bx7n35j6Slc9c7K9PZOEInk30eMtyZFgLAsHKA2uWBA=;
+        b=UGvR8YyioSnMVWr+ZXpvBpTUR6XZsUDSY+zgyWuOEX3PL5p+LtCNKvGEpi6HVzY6A6
+         f4M47zqvgOdYhgY09TlUk3qCId4LO0y1Lp7/1eBcGTsbxzfCFEa1qb40Yw4rcU9wdkgI
+         vFu94Ayp2JY/m6M7/l2WtjuwE8Fx2NDlU+hncczFoeJhTPwdB96Kb99CMMpQs/k28HZX
+         MQkd5bwb4naWhMXIxzb459HvV/Wf0eAq2yYVtVVYXw/NcAcOpKtOMhbE+7c16Yxv51DL
+         uiml69ztXu65gWYuCsGVXNBRo2s7+31wJtoz+eMCivdxwHS5IYI9HOuLBeQahmCZVqH0
+         9gKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tpLbF7MUjfgdwKeolFrKwUGGJvkFHEynVfhNRIRYzO0=;
-        b=e+bBBa8b2CSAEakIjQz6auXJgs5M6Y0DIixaGNS7gBKq0sALDSQ6oCRtWXXfxYW9VJ
-         W4WPW3qpYSDk1gnz1eukMNHbL06bXya0OWDDxBK/WMFNrctEalJ81RlVgaA5LhcP+VLD
-         ZTflFsl56ErLmrqZOAYVgMQhf7stHfknSkkvx5dImtcJVFjOZ0YEjmYMix65AXRc0LCM
-         4t0PnKhxJaK0aS7rkIsbSTzuscQFZZqhrstEhbgjlZn4B8YnTLCWwVq7dSZY+Aa6s2cm
-         lIqzELYCCOIl1HbpmFE58HJoKlFZDs8pB1llSzNpp1Q/w9EGbvBhye6r6YHAsCM+BAME
-         UiKw==
-X-Gm-Message-State: ACrzQf0sqpIRN0nr45MSjZDEIVLYiqGc+sZgKuUvFy51+FcQtzJl5/hE
-        R6Mbi4XWlt5mOF0WAMJkpsc5zSGxzppZsvSPHl8Niw==
-X-Google-Smtp-Source: AMsMyM4AkQi9c7U3RtdWYwjcZCizC5KFrocAewLyWt0H2WuNks4/hroyUpSgGTZ2Szy1PxqSxcVc8+OpiywAfS+j4K8=
-X-Received: by 2002:a05:651c:20d:b0:26f:bc4c:f957 with SMTP id
- y13-20020a05651c020d00b0026fbc4cf957mr4763341ljn.199.1666033547017; Mon, 17
- Oct 2022 12:05:47 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bx7n35j6Slc9c7K9PZOEInk30eMtyZFgLAsHKA2uWBA=;
+        b=8I/Sp7DQ64P3aAvpZDczgc1MloSvbSN9ldZ/3SGLZPXwYTviPPqCmcgZ4W76B6DKzS
+         a7XOuJye2+cfEGRjjBK8Kp4VTbGgXKRpfvP7MHc+GzIJM5GIJ0A7W/kTQFvtinKkQN02
+         NDTUKjnGSYmx2o0v7xOtneqGniAqR/SszTM0vrj15S4yZc3etnHu5WldDq2bqRQW/3bA
+         BYiFnqO0sPw4CaeYZnGHtxqbOyTstIy2Nmt/xM4d8OiTXnNQQnvphp0D1prUMrNQgCK/
+         srI2cdtjCmixHsgM3Fb7a3KkaNNIz3OYhghI5f/DTgMBWO8lICWebFqx9tPFEm0KIoNO
+         dgMg==
+X-Gm-Message-State: ACrzQf1FnwSpsjF+EdOY/NOXz3D/3cFz9L6wk4G1A4khiN1NMg3oas4c
+        fd7KlyyP1Hk2svwjkyhFmCs=
+X-Google-Smtp-Source: AMsMyM7aOAMF7/oKbs5BWocJ2BIvChHfsMUvfaWw+p/GNLb/RhN4RpTeSpV+UOsuC9R5h+3nIC0G4g==
+X-Received: by 2002:a17:903:1003:b0:181:6c26:1114 with SMTP id a3-20020a170903100300b001816c261114mr13469897plb.75.1666033741410;
+        Mon, 17 Oct 2022 12:09:01 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id x185-20020a6263c2000000b00562a526cd2esm7374202pfb.55.2022.10.17.12.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 12:09:01 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 17 Oct 2022 09:08:59 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] blk-iocost: Remove vrate member in struct ioc_now
+Message-ID: <Y02oS3f8yTw1r0VC@slm.duckdns.org>
+References: <20221017020011.25016-1-shikemeng@huawei.com>
+ <20221017020011.25016-5-shikemeng@huawei.com>
 MIME-Version: 1.0
-References: <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com> <Yyi+l3+p9lbBAC4M@google.com>
- <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
- <20220926142330.GC2658254@chaop.bj.intel.com> <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
- <YzN9gYn1uwHopthW@google.com> <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
- <20221013133457.GA3263142@chaop.bj.intel.com> <CA+EHjTzZ2zsm7Ru_OKCZg9FCYESgZsmB=7ScKRh6ZN4=4OZ3gw@mail.gmail.com>
- <20221017145856.GB3417432@chaop.bj.intel.com>
-In-Reply-To: <20221017145856.GB3417432@chaop.bj.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 17 Oct 2022 20:05:10 +0100
-Message-ID: <CA+EHjTyiU230am0cuWc7xBBirGocPWGmyqCskhTytA10xpigYQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017020011.25016-5-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Oct 17, 2022 at 10:00:07AM +0800, Kemeng Shi wrote:
+> If we trace vtime_base_rate instead of vtime_rate, there is nowhere to
+> access now->vrate except function ioc_now using now->vrate locally.
+  ^
+  which accesses ("to access" doesn't mean the same thing here)
 
-> > > Using both private_fd and userspace_addr is only needed in TDX and other
-> > > confidential computing scenarios, pKVM may only use private_fd if the fd
-> > > can also be mmaped as a whole to userspace as Sean suggested.
-> >
-> > That does work in practice, for now at least, and is what I do in my
-> > current port. However, the naming and how the API is defined as
-> > implied by the name and the documentation. By calling the field
-> > private_fd, it does imply that it should not be mapped, which is also
-> > what api.rst says in PATCH v8 5/8. My worry is that in that case pKVM
-> > would be mis/ab-using this interface, and that future changes could
-> > cause unforeseen issues for pKVM.
->
-> That is fairly enough. We can change the naming and the documents.
->
-> >
-> > Maybe renaming this to something like "guest_fp", and specifying in
-> > the documentation that it can be restricted, e.g., instead of "the
-> > content of the private memory is invisible to userspace" something
-> > along the lines of  "the content of the guest memory may be restricted
-> > to userspace".
->
-> Some other candidates in my mind:
-> - restricted_fd: to pair with the mm side restricted_memfd
-> - protected_fd: as Sean suggested before
-> - fd: how it's explained relies on the memslot.flag.
+> Just clean it.
+       ^
+       remove
 
-All these sound good, since they all capture the potential use cases.
-Restricted might be the most logical choice if that's going to also
-become the name for the mem_fd.
+> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 
-Thanks,
-/fuad
+With the above description updates,
 
-> Thanks,
-> Chao
-> >
-> > What do you think?
-> >
-> > Cheers,
-> > /fuad
-> >
-> > >
-> > > Thanks,
-> > > Chao
-> > > >
-> > > > Cheers,
-> > > > /fuad
+Acked-by: Tejun Heo <tj@kernel.org>
+
+Thanks.
+
+-- 
+tejun
