@@ -2,142 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F245C600FD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E25601030
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiJQNEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S229911AbiJQN1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiJQNDf (ORCPT
+        with ESMTP id S229751AbiJQN13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:03:35 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2054.outbound.protection.outlook.com [40.107.93.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0278A5FF69;
-        Mon, 17 Oct 2022 06:03:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BMQMyR3YLcdCNJlgVxW5F2BB3OC9XntI5DVo14ZMocR2OAE/GzOZiCX8DX9pu5gb5byJGMYVjEl/mUnLPLl3L+qZP8n4DpfU8upve2FQN7aVJzWojkYy/ej3LKKh3hWucDhfLW9E5aEd/J9rAtsFKhYVgnzbHezSKKttpiZxveRNCbgl6X88937OvAMx1IX04Rs7iMdKm6by+6fFB6/Sp99nJPOgfOxl2OIotoxqjQkDzXT4c/5BWFQINtYRLZA5csU53wl9G2g+XzVGDGf7QGcy3a0imxozqBox5mtR5CPtE0modzdWad85FwLRaUAZYPw1cl2YkhpB5HDDWtCy0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BYuSInCvIAfCQ55JjQ6IWp5t2y7biL17oocUTqgL/3g=;
- b=BWStdwJI0S+IB3pgBd99tD6wzmFO4FtrPHxHugUVvMQWDGHEpCEFC5X0gDEUQ9eLyS507F7w39JoL43aQOrBDedS04pG8ExPUBtIZaq9U0Eb4ehTP4BLTk7Q685N6R2oG/ALq6PJezyOopQs2zg23u6a/2ljVRtVcN8ewdjhfcqotIWJBGvjdrXchzBaZE8OA41CujEevw2+dm2OJ7KQJY8/2T9HSVZnV3Ai+wH4ihqBMpsmKIw4Hy/pV/cQ5Lo5bsqAA1Y2vdXQcn+rqmGyhdYVBE1V7uUdmjIltau6c++bZAI0+qv169VWnae0fXxtLH1WSDN5PhF8sjpFqP8AVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BYuSInCvIAfCQ55JjQ6IWp5t2y7biL17oocUTqgL/3g=;
- b=YG/+C/DnvlIYagtqH3x9fY25nc4BJotaQ0jfoqg5fbKfEvvYy3KNR0exBN8rZf+0CuNU/Sku8RSca5Nv8Mvb+jc6lyOhSxr2G7nvTUOtIutI9UC42fuUbNGvvvnGhhhMGb40Bya8QSGdHS3uEy9g+NvK/vtaIGdvkgc1LXVPi2Q=
-Received: from BN9PR03CA0440.namprd03.prod.outlook.com (2603:10b6:408:113::25)
- by SN7PR12MB7022.namprd12.prod.outlook.com (2603:10b6:806:261::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
- 2022 13:03:20 +0000
-Received: from BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:113:cafe::6c) by BN9PR03CA0440.outlook.office365.com
- (2603:10b6:408:113::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32 via Frontend
- Transport; Mon, 17 Oct 2022 13:03:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT055.mail.protection.outlook.com (10.13.177.62) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5723.20 via Frontend Transport; Mon, 17 Oct 2022 13:03:19 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 17 Oct
- 2022 08:03:18 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 17 Oct
- 2022 06:03:17 -0700
-Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
- Transport; Mon, 17 Oct 2022 08:03:15 -0500
-From:   Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <saikrishna12468@gmail.com>, <git@amd.com>,
-        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2 2/2] Revert "dt-bindings: pinctrl-zynqmp: Add output-enable configuration"
-Date:   Mon, 17 Oct 2022 18:33:03 +0530
-Message-ID: <20221017130303.21746-3-sai.krishna.potthuri@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221017130303.21746-1-sai.krishna.potthuri@amd.com>
-References: <20221017130303.21746-1-sai.krishna.potthuri@amd.com>
+        Mon, 17 Oct 2022 09:27:29 -0400
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D545E56D;
+        Mon, 17 Oct 2022 06:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=MdtINtRvkg7xkh9fmGLAQq8wLHecOzt4ylQEzbIqL8g=; b=R1QoctUeuHEaXEmVIdYlEBm6bg
+        bLePYFMZGzPcEQYYXJFotrqM6WD80+HJdFE6f1/1QMlYS2arHCSlIXh+uAfuNonHVLgmOi3vhUZuB
+        jrlfnMU/QtqIqy7HBWoP8fH6fMDsfb8EpSXkH4nhIK451MoqO4/TurP9a29D0WxBXr/6t3B3gjChk
+        jew0guT50o7cNZ621x5hWL/vc+lzDEYlVN8iTg3Zx1ZrQOokl03ZJ73Mw4rFNcb2nb1c/QOEF7Yv7
+        qroKUdpzHXgcV7CVxslcgKMQB4foKS4dyJ1hjK+phq+AqsO5AjArziYHNVQVkjYJJbxDQwnAtuK6m
+        WqfT5wJQ==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1okPnk-0007DL-6P; Mon, 17 Oct 2022 15:05:04 +0200
+Received: from [2001:a61:2a91:5601:9e5c:8eff:fe01:8578]
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1okPnf-000O4x-89; Mon, 17 Oct 2022 15:04:59 +0200
+Message-ID: <12fe1b84-1981-bf56-9323-b7f5b698c196@metafoo.de>
+Date:   Mon, 17 Oct 2022 15:04:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT055:EE_|SN7PR12MB7022:EE_
-X-MS-Office365-Filtering-Correlation-Id: d51f0c87-5e3f-4c10-4fb4-08dab03ff6ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YSWjF7LWkKO4kCkwUTB4WMwCq5aeuVH+MK2zyZMFK2G83A/QOD+KcH0Rx6Ofiwlphbu8cc7hpy+vTXunvmJhYYyIqHgWldw/n2y5xEU5IOs1ArUV6TCwnedvcXibxOA4CubVJSiyLjqOavENHy/nBHUt1NlgO1oeutNWoYFC5gBOpAy1RIdQw0cqoTLz/QeGs8yV93HsQjqjcE/EscdeMdNdklcRjtkneLPgY/WjXg1hdyYtrYsKiib4JWJjqi+e92y21l6jer0B1nMjpxl7QXc8mptiZenQT8zSIEAdDb3JwY3huymTf0zIqpIYYWdj51nMYrZXlWBZi2zNSWjRmNQRe+hpGm41XBt957a0QtBRxAC4vHMyNRsyHOGXpV1/kRNiA/3OsUfmo43fQD1F2sFq87Qg9dDNxHFjo6CtMQrp640osRMv+QCGQOV4AH/rnS78Eavb7r8R+g2U4XGtDcyIV5Ancvv5JmEWhZgm+//T3CMDn5mhc+GqFJITvFKNDZaFnPFKRbAtSdptuIRPzmGzCib+jpiTl+Gs2rOPiNk4YFHntwKRvUxFLEJVqT6TaKjpN/4h2E0CdkzSJ7dza4G5JJAjaat/h9qr8RErawqPwO1r3FbvL7AyRhzCPSdp7T0fnFDVuA5hWCd3eNmu+3VUV/aIACkrr7vM9bdpv2qwkz+gWaosIKK1SsvcCWN2widQYkJfJ616uSrI2PsWu+dqh3LIhMxUx4ieNBXPetKDjqcEOmbsiU/OmPi9PLwpDr6GtnzTo6nXUlSs/Hoi5EYNPnCr8c0fbSECPDvVGD8dbRWMRW6RBoGvxs+TPv2a
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(376002)(346002)(451199015)(40470700004)(46966006)(36840700001)(82310400005)(40460700003)(478600001)(5660300002)(8936002)(8676002)(41300700001)(70206006)(70586007)(54906003)(110136005)(4326008)(40480700001)(316002)(36860700001)(103116003)(2906002)(83380400001)(86362001)(356005)(47076005)(426003)(36756003)(82740400003)(81166007)(26005)(1076003)(336012)(2616005)(186003)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 13:03:19.6178
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d51f0c87-5e3f-4c10-4fb4-08dab03ff6ce
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7022
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 03/10] net: Replace spi->chip_select references to
+ spi->chip_select[0]
+Content-Language: en-US
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+        broonie@kernel.org, sanju.mehta@amd.com,
+        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
+        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        narmstrong@baylibre.com, khilman@baylibre.com,
+        matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        krzysztof.kozlowski@linaro.org, andi@etezian.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, jic23@kernel.org, tudor.ambarus@microchip.com,
+        pratyush@kernel.org
+Cc:     git@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, Michael.Hennerich@analog.com,
+        linux-iio@vger.kernel.org, michael@walle.cc, akumarma@amd.com,
+        amitrkcian2002@gmail.com
+References: <20221017121249.19061-1-amit.kumar-mahapatra@amd.com>
+ <20221017121249.19061-4-amit.kumar-mahapatra@amd.com>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <20221017121249.19061-4-amit.kumar-mahapatra@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26692/Mon Oct 17 09:58:17 2022)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 133ad0d9af99bdca90705dadd8d31c20bfc9919f.
+On 10/17/22 14:12, Amit Kumar Mahapatra wrote:
+> For adding multi CS support & to prevent any existing driver from
+> breaking, replaced all spi->chip_select references to spi->chip_select[0].
 
-On systems with older PMUFW (Xilinx ZynqMP Platform Management Firmware)
-using these pinctrl properties can cause system hang because there is
-missing feature autodetection.
-When this feature is implemented, support for these two properties should
-bring back.
+But the tree is broken, isn't it? You introduce make chipselect an array 
+in one of the earlier patches and then change drivers one by one in 
+separate patches.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
----
- .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 4 ----
- 1 file changed, 4 deletions(-)
+How about adding a inline helper function spi_chipselect(struct 
+spi_device *spi, unsigned int idx). Update all drivers to use that 
+function and then once there are no drivers left that directly reference 
+the chipselect field you can introduce multi-chipselect support and 
+update the helper function.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-index 1e2b9b627b12..2722dc7bb03d 100644
---- a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-@@ -274,10 +274,6 @@ patternProperties:
-           slew-rate:
-             enum: [0, 1]
- 
--          output-enable:
--            description:
--              This will internally disable the tri-state for MIO pins.
--
-           drive-strength:
-             description:
-               Selects the drive strength for MIO pins, in mA.
--- 
-2.17.1
+>
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
+>   drivers/net/ethernet/asix/ax88796c_main.c      | 2 +-
+>   drivers/net/ethernet/davicom/dm9051.c          | 2 +-
+>   drivers/net/ieee802154/ca8210.c                | 2 +-
+>   drivers/net/wan/slic_ds26522.c                 | 2 +-
+>   drivers/net/wireless/marvell/libertas/if_spi.c | 2 +-
+>   5 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/asix/ax88796c_main.c b/drivers/net/ethernet/asix/ax88796c_main.c
+> index 6ba5b024a7be..65586ff24dfb 100644
+> --- a/drivers/net/ethernet/asix/ax88796c_main.c
+> +++ b/drivers/net/ethernet/asix/ax88796c_main.c
+> @@ -1006,7 +1006,7 @@ static int ax88796c_probe(struct spi_device *spi)
+>   	ax_local->mdiobus->parent = &spi->dev;
+>   
+>   	snprintf(ax_local->mdiobus->id, MII_BUS_ID_SIZE,
+> -		 "ax88796c-%s.%u", dev_name(&spi->dev), spi->chip_select);
+> +		 "ax88796c-%s.%u", dev_name(&spi->dev), spi->chip_select[0]);
+>   
+>   	ret = devm_mdiobus_register(&spi->dev, ax_local->mdiobus);
+>   	if (ret < 0) {
+> diff --git a/drivers/net/ethernet/davicom/dm9051.c b/drivers/net/ethernet/davicom/dm9051.c
+> index a523ddda7609..835674ad6ceb 100644
+> --- a/drivers/net/ethernet/davicom/dm9051.c
+> +++ b/drivers/net/ethernet/davicom/dm9051.c
+> @@ -1121,7 +1121,7 @@ static int dm9051_mdio_register(struct board_info *db)
+>   	db->mdiobus->phy_mask = (u32)~BIT(1);
+>   	db->mdiobus->parent = &spi->dev;
+>   	snprintf(db->mdiobus->id, MII_BUS_ID_SIZE,
+> -		 "dm9051-%s.%u", dev_name(&spi->dev), spi->chip_select);
+> +		 "dm9051-%s.%u", dev_name(&spi->dev), spi->chip_select[0]);
+>   
+>   	ret = devm_mdiobus_register(&spi->dev, db->mdiobus);
+>   	if (ret)
+> diff --git a/drivers/net/ieee802154/ca8210.c b/drivers/net/ieee802154/ca8210.c
+> index 42c0b451088d..f0ccf1cd79f4 100644
+> --- a/drivers/net/ieee802154/ca8210.c
+> +++ b/drivers/net/ieee802154/ca8210.c
+> @@ -2967,7 +2967,7 @@ static int ca8210_test_interface_init(struct ca8210_priv *priv)
+>   		sizeof(node_name),
+>   		"ca8210@%d_%d",
+>   		priv->spi->master->bus_num,
+> -		priv->spi->chip_select
+> +		priv->spi->chip_select[0]
+>   	);
+>   
+>   	test->ca8210_dfs_spi_int = debugfs_create_file(
+> diff --git a/drivers/net/wan/slic_ds26522.c b/drivers/net/wan/slic_ds26522.c
+> index 6063552cea9b..eb053a76fe52 100644
+> --- a/drivers/net/wan/slic_ds26522.c
+> +++ b/drivers/net/wan/slic_ds26522.c
+> @@ -211,7 +211,7 @@ static int slic_ds26522_probe(struct spi_device *spi)
+>   
+>   	ret = slic_ds26522_init_configure(spi);
+>   	if (ret == 0)
+> -		pr_info("DS26522 cs%d configured\n", spi->chip_select);
+> +		pr_info("DS26522 cs%d configured\n", spi->chip_select[0]);
+>   
+>   	return ret;
+>   }
+> diff --git a/drivers/net/wireless/marvell/libertas/if_spi.c b/drivers/net/wireless/marvell/libertas/if_spi.c
+> index ff1c7ec8c450..074d6c1f0c2c 100644
+> --- a/drivers/net/wireless/marvell/libertas/if_spi.c
+> +++ b/drivers/net/wireless/marvell/libertas/if_spi.c
+> @@ -1051,7 +1051,7 @@ static int if_spi_init_card(struct if_spi_card *card)
+>   				"spi->max_speed_hz=%d\n",
+>   				card->card_id, card->card_rev,
+>   				card->spi->master->bus_num,
+> -				card->spi->chip_select,
+> +				card->spi->chip_select[0],
+>   				card->spi->max_speed_hz);
+>   		err = if_spi_prog_helper_firmware(card, helper);
+>   		if (err)
+
 
