@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D18E601AC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8975601AC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJQUzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S230473AbiJQUz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiJQUzk (ORCPT
+        with ESMTP id S230404AbiJQUzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:55:40 -0400
-Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246546E8BA;
-        Mon, 17 Oct 2022 13:55:31 -0700 (PDT)
+        Mon, 17 Oct 2022 16:55:41 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9767577E83;
+        Mon, 17 Oct 2022 13:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1666040130; i=@motorola.com;
-        bh=n8k50yaYBoXsDKl3qy5CXt9sKetRc8UVBOWgkeQ1R/I=;
+        s=Selector; t=1666040132; i=@motorola.com;
+        bh=jaIOs9fk+1VScGcZnnxQOBf6SfBAGDU0JdmzRh0R7V4=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Transfer-Encoding;
-        b=XC5YVEW0U9fgYsvdQqz7J5LuB3fhXt03kGy4yYqrUbjI3RX11CIguVS+EZ+InfUSS
-         qaUY538yOBlLwgFvFjD+MYcX4xcPF8UgA4gEJZSUcQl1XMSkXebf0ynxT0X+5NYxVP
-         DlEMGAqukXlXc0wa9tPtOyEmNPUyddHckdAzLx2XLaXEv+aEmdmAxVlkRDQ3sarV4t
-         ZZG6CEz6L7dH7TQ+T+dWIxFU/ZccBvXgFk+iPvYifS+4xHo7vpZuqggOFt4W7zQ4E4
-         EoXkeEHuuoWU46i0K3ibHFmi+0DGuSB9uKT4j9UxPNqmkwnFpphWnLrxaokbTku7jy
-         tvC33YprjUNpg==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrKIsWRWlGSWpSXmKPExsWS8eKJqK7TQd9
-  kg6cdTBbH2p6wWzw50M5o0btsD5tF8+L1bBadE5ewWyxsW8JicXnXHDaLRctamS22tF1hsvjx
-  p4/ZYsHGR4wWqxYcYHfg8ZjdMZPVY9OqTjaP/XPXsHss7pvM6tH/18Bjy/7PjB6fN8kFsEexZ
-  uYl5VcksGZs733FXnCfq2L3tx/MDYyLOLsYuTiEBKYySdz6M5kNwlnLJPHg3FfWLkZODjYBNY
-  kFr1cxg9giArISh6/8ZgYpYhZoYJH4sPEJC0hCWMBXYsuJe2wgNouAqsSnWUfYQWxeAUuJ67O
-  ugzVLCMhL7D94Fsjm4OAUsJLYMFUdJCwEVLL5wBZWiHJBiZMzIUYyA5U3b53NPIGRdxaS1Cwk
-  qQWMTKsYzYpTi8pSi3QNzfWSijLTM0pyEzNz9BKrdBP1Sot1UxOLS3SN9BLLi/VSi4v1iitzk
-  3NS9PJSSzYxAmMgpcj97w7Gvcv+6B1ilORgUhLl7ZjhmyzEl5SfUpmRWJwRX1Sak1p8iFGGg0
-  NJgvfnDqCcYFFqempFWmYOMB5h0hIcPEoivJ3bgNK8xQWJucWZ6RCpU4y6HJ37uw4wC7Hk5ee
-  lSonz/tgHVCQAUpRRmgc3ApYaLjHKSgnzMjIwMAjxFKQW5WaWoMq/YhTnYFQS5r2/H2gKT2Ze
-  CdymV0BHMAEdkbHfC+SIkkSElFQDk4i466Kq60VGr56kzg3ZG/Bl+z23DXNmiL1VXe4j2J7MX
-  xnDGbPg9R/5ZTrRprPXt2f+PHr7fzaDfiJPdcIZVQdp//3H7+go7FwWuKTwcDKzaN/UwLvxn0
-  rPVE7PW/xO4eya3MPdv4sT5iZ0O2wpmrlobYx6wdnUz+ZRVvsudvvOtbjk3bN16k2Ts2LPjKV
-  uZzfZPoywdWpomc/v5V0RYVOwh9HkptDFaffKV/1aED7dyjCbjW3XObVVWmY80Zf4jm3LW/Zn
-  c+DnrM/aiedF9cwrsjr2Pj4i8/h4Oedfv7nK9ROj7x4LUY7eptv5S10kdccR03jr7bMXm+RF8
-  SQql1UaetbLTV3kWTNT3yVaiaU4I9FQi7moOBEAMRQ0l4gDAAA=
+        b=YnN7GTPKMzYCrtFCLa+vnZNyGa8wYL+GRS9aUdlh/f+/VBTkDvORcFaImevdNwfAq
+         WVYA3xGNgnEiQ3GTxUhayP9+iAbGXwbOgrSrB+QTZNK+OQyCuSq9oiTwPYLuDSAS9j
+         Aj9R/QtRLxL+4yXMqoBZEniEkRmuh2qYZqEAv5r3XSQRhLE3RYz8YfJKhBUw7DDtWg
+         0lwm19jiVcOyv3P3BAF+evbrraBa2IgprjoShMtEmM+Blj76hknxR2oQ7UqS4dju3s
+         zosTwLGUvq5nqixBJlE774e6r34946Wk4jv8SFSGXzob000Xnu+ZCPd+nLBHExAd+A
+         Moun16z8P07MA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAIsWRWlGSWpSXmKPExsUyYU+Di67zQd9
+  kg1n7LS2OtT1ht3hyoJ3RonfZHjaL5sXr2Sw6Jy5ht1jYtoTF4vKuOWwWi5a1MltsabvCZPHj
+  Tx+zxaoFB9gduD1md8xk9di0qpPNY//cNewei/sms3r0/zXw2LL/M6PH501yAexRrJl5SfkVC
+  awZF3/PZCw4blCx7MYR9gbGZ5pdjFwcQgJTmCRmP2lnh3DWMknM6+hk7GLk5GATUJNY8HoVM4
+  gtIiArcfjKb2aQImaB58wS03beYgJJCAsESDxq+wRWxCKgKvHs5jQWEJtXwFLiyMJvYHEJAXm
+  J/QfPAtkcHJwCVhIbpqqDhIWASjYf2MIKUS4ocXLmE7BWZqDy5q2zmScw8s5CkpqFJLWAkWkV
+  o1lxalFZapGukYFeUlFmekZJbmJmjl5ilW6iXmmxbmpicYmukV5iebFeanGxXnFlbnJOil5ea
+  skmRmDgpxQ5WO5gnLjsj94hRkkOJiVR3o4ZvslCfEn5KZUZicUZ8UWlOanFhxhlODiUJHh/7g
+  DKCRalpqdWpGXmAKMQJi3BwaMkwtu5DSjNW1yQmFucmQ6ROsWoy9G5v+sAsxBLXn5eqpQ4749
+  9QEUCIEUZpXlwI2AJ4RKjrJQwLyMDA4MQT0FqUW5mCar8K0ZxDkYlYd77+4Gm8GTmlcBtegV0
+  BBPQERn7vUCOKElESEk1MEkeOflseZmOQr3q9rPeS5nE7hUk3+v57FXw8voF3e8zlj+T+aGj0
+  tXTF2ZlKiixWNg71M9b3emQnIN+wsTnfsdOnSs133CE9fuVt48Wl51+U1zZPuPgz4X7WQ/vjh
+  YMTXSNcIq5nbI29s5BYYfbaorBeW6sP/w68mRWd9fb7bBPmpsWcGOnhEB2SLnz96j8w7reYTL
+  pOwzC4he+ChGM+cYX/LH9UFAhqzTf3y37JnYekZ/faBQf+m+t5bENy5+oixw4IB1+dWuJxwum
+  wpM+Zw/906vZUr+nzCt5+scnChf0N+ed7W9L4itapGC6RHbbnNRpB+1D5eLve3pEBuTaL9tTc
+  Li6IF5rjfpkZ9sQJZbijERDLeai4kQAWZeUOoMDAAA=
 X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-19.tower-715.messagelabs.com!1666040129!105306!1
-X-Originating-IP: [104.232.228.21]
+X-Msg-Ref: server-8.tower-635.messagelabs.com!1666040131!17541!1
+X-Originating-IP: [144.188.128.68]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
+X-StarScan-Version: 9.100.1; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 12036 invoked from network); 17 Oct 2022 20:55:30 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-19.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Oct 2022 20:55:30 -0000
+Received: (qmail 729 invoked from network); 17 Oct 2022 20:55:31 -0000
+Received: from unknown (HELO ilclpfpp02.lenovo.com) (144.188.128.68)
+  by server-8.tower-635.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 17 Oct 2022 20:55:31 -0000
 Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Mrq5F4mHwzhSZf;
-        Mon, 17 Oct 2022 20:55:29 +0000 (UTC)
+        by ilclpfpp02.lenovo.com (Postfix) with ESMTPS id 4Mrq5H3V4RzfBb2;
+        Mon, 17 Oct 2022 20:55:31 +0000 (UTC)
 Received: from p1g3.mot.com (unknown [100.64.172.121])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: w36195)
-        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Mrq5F2cJtzbpxx;
-        Mon, 17 Oct 2022 20:55:29 +0000 (UTC)
+        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Mrq5H3GPhzbpxx;
+        Mon, 17 Oct 2022 20:55:31 +0000 (UTC)
 From:   Dan Vacura <w36195@motorola.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jeff Vanhoof <qjv001@motorola.com>, stable@vger.kernel.org,
+        Jeff Vanhoof <qjv001@motorola.com>,
         Dan Vacura <w36195@motorola.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -76,9 +76,9 @@ Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
         Michael Grzeschik <m.grzeschik@pengutronix.de>,
         Paul Elder <paul.elder@ideasonboard.com>,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v3 4/6] usb: gadget: uvc: fix sg handling during video encode
-Date:   Mon, 17 Oct 2022 15:54:42 -0500
-Message-Id: <20221017205446.523796-5-w36195@motorola.com>
+Subject: [PATCH v3 5/6] usb: gadget: uvc: make interrupt skip logic configurable
+Date:   Mon, 17 Oct 2022 15:54:43 -0500
+Message-Id: <20221017205446.523796-6-w36195@motorola.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221017205446.523796-1-w36195@motorola.com>
 References: <20221017205446.523796-1-w36195@motorola.com>
@@ -94,42 +94,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Vanhoof <qjv001@motorola.com>
+Some UDC hw may not support skipping interrupts, but still support the
+request. Allow the interrupt frequency to be configurable to the user.
 
-In uvc_video_encode_isoc_sg, the uvc_request's sg list is
-incorrectly being populated leading to corrupt video being
-received by the remote end. When building the sg list the
-usage of buf->sg's 'dma_length' field is not correct and
-instead its 'length' field should be used.
-
-Fixes: e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Jeff Vanhoof <qjv001@motorola.com>
 Signed-off-by: Dan Vacura <w36195@motorola.com>
 ---
-V1 -> V3:
+V1 -> V2:
 - no change, new patch in series
+V2 -> V3:
+- default to baseline value of 4, fix storing the initial value
 
- drivers/usb/gadget/function/uvc_video.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
+ Documentation/usb/gadget-testing.rst              | 2 ++
+ drivers/usb/gadget/function/f_uvc.c               | 3 +++
+ drivers/usb/gadget/function/u_uvc.h               | 1 +
+ drivers/usb/gadget/function/uvc.h                 | 2 ++
+ drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
+ drivers/usb/gadget/function/uvc_queue.c           | 6 ++++++
+ drivers/usb/gadget/function/uvc_video.c           | 3 ++-
+ 8 files changed, 19 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+index 611b23e6488d..5dfaa3f7f6a4 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+@@ -8,6 +8,7 @@ Description:	UVC function directory
+ 		streaming_maxpacket	1..1023 (fs), 1..3072 (hs/ss)
+ 		streaming_interval	1..16
+ 		function_name		string [32]
++		req_int_skip_div	unsigned int
+ 		===================	=============================
+ 
+ What:		/config/usb-gadget/gadget/functions/uvc.name/control
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index 2278c9ffb74a..f9b5a09be1f4 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -794,6 +794,8 @@ The uvc function provides these attributes in its function directory:
+ 			    sending or receiving when this configuration is
+ 			    selected
+ 	function_name       name of the interface
++	req_int_skip_div    divisor of total requests to aid in calculating
++			    interrupt frequency, 0 indicates all interrupt
+ 	=================== ================================================
+ 
+ There are also "control" and "streaming" subdirectories, each of which contain
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e196e06181e..e40ca26b9c55 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -655,6 +655,8 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 		cpu_to_le16(max_packet_size * max_packet_mult *
+ 			    (opts->streaming_maxburst + 1));
+ 
++	uvc->config_skip_int_div = opts->req_int_skip_div;
++
+ 	/* Allocate endpoints. */
+ 	ep = usb_ep_autoconfig(cdev->gadget, &uvc_control_ep);
+ 	if (!ep) {
+@@ -872,6 +874,7 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+ 
+ 	opts->streaming_interval = 1;
+ 	opts->streaming_maxpacket = 1024;
++	opts->req_int_skip_div = 4;
+ 	snprintf(opts->function_name, sizeof(opts->function_name), "UVC Camera");
+ 
+ 	ret = uvcg_attach_configfs(opts);
+diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
+index 24b8681b0d6f..6f73bd5638ed 100644
+--- a/drivers/usb/gadget/function/u_uvc.h
++++ b/drivers/usb/gadget/function/u_uvc.h
+@@ -24,6 +24,7 @@ struct f_uvc_opts {
+ 	unsigned int					streaming_interval;
+ 	unsigned int					streaming_maxpacket;
+ 	unsigned int					streaming_maxburst;
++	unsigned int					req_int_skip_div;
+ 
+ 	unsigned int					control_interface;
+ 	unsigned int					streaming_interface;
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 40226b1f7e14..29f9477c92cc 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -107,6 +107,7 @@ struct uvc_video {
+ 	spinlock_t req_lock;
+ 
+ 	unsigned int req_int_count;
++	unsigned int req_int_skip_div;
+ 
+ 	void (*encode) (struct usb_request *req, struct uvc_video *video,
+ 			struct uvc_buffer *buf);
+@@ -155,6 +156,7 @@ struct uvc_device {
+ 	/* Events */
+ 	unsigned int event_length;
+ 	unsigned int event_setup_out : 1;
++	unsigned int config_skip_int_div;
+ };
+ 
+ static inline struct uvc_device *to_uvc(struct usb_function *f)
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 4303a3283ba0..419e926ab57e 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -2350,6 +2350,7 @@ UVC_ATTR(f_uvc_opts_, cname, cname)
+ UVCG_OPTS_ATTR(streaming_interval, streaming_interval, 16);
+ UVCG_OPTS_ATTR(streaming_maxpacket, streaming_maxpacket, 3072);
+ UVCG_OPTS_ATTR(streaming_maxburst, streaming_maxburst, 15);
++UVCG_OPTS_ATTR(req_int_skip_div, req_int_skip_div, UINT_MAX);
+ 
+ #undef UVCG_OPTS_ATTR
+ 
+@@ -2399,6 +2400,7 @@ static struct configfs_attribute *uvc_attrs[] = {
+ 	&f_uvc_opts_attr_streaming_interval,
+ 	&f_uvc_opts_attr_streaming_maxpacket,
+ 	&f_uvc_opts_attr_streaming_maxburst,
++	&f_uvc_opts_attr_req_int_skip_div,
+ 	&f_uvc_opts_string_attr_function_name,
+ 	NULL,
+ };
+diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
+index 0aa3d7e1f3cc..02559906a55a 100644
+--- a/drivers/usb/gadget/function/uvc_queue.c
++++ b/drivers/usb/gadget/function/uvc_queue.c
+@@ -63,6 +63,12 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+ 	 */
+ 	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
+ 	nreq = clamp(nreq, 4U, 64U);
++	if (0 == video->uvc->config_skip_int_div) {
++		video->req_int_skip_div = nreq;
++	} else {
++		video->req_int_skip_div = min_t(unsigned int, nreq,
++				video->uvc->config_skip_int_div);
++	}
+ 	video->uvc_num_requests = nreq;
+ 
+ 	return 0;
 diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index dd54841b0b3e..7d4508a83d5d 100644
+index 7d4508a83d5d..9ff02691b6a4 100644
 --- a/drivers/usb/gadget/function/uvc_video.c
 +++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -157,10 +157,10 @@ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
- 	sg = sg_next(sg);
- 
- 	for_each_sg(sg, iter, ureq->sgt.nents - 1, i) {
--		if (!len || !buf->sg || !sg_dma_len(buf->sg))
-+		if (!len || !buf->sg || !buf->sg->length)
- 			break;
- 
--		sg_left = sg_dma_len(buf->sg) - buf->offset;
-+		sg_left = buf->sg->length - buf->offset;
- 		part = min_t(unsigned int, len, sg_left);
- 
- 		sg_set_page(iter, sg_page(buf->sg), part, buf->offset);
+@@ -423,7 +423,8 @@ static void uvcg_video_pump(struct work_struct *work)
+ 		if (list_empty(&video->req_free) ||
+ 		    buf->state == UVC_BUF_STATE_DONE ||
+ 		    !(video->req_int_count %
+-		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
++		       DIV_ROUND_UP(video->uvc_num_requests,
++			       video->req_int_skip_div))) {
+ 			video->req_int_count = 0;
+ 			req->no_interrupt = 0;
+ 		} else {
 -- 
 2.34.1
 
