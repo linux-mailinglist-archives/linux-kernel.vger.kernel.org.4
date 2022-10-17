@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DB160058C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 05:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B41E600594
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 05:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiJQDGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 23:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S231897AbiJQDH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 23:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbiJQDGI (ORCPT
+        with ESMTP id S231852AbiJQDG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 23:06:08 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2534AD6C;
-        Sun, 16 Oct 2022 20:06:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VSGQCyZ_1665975958;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VSGQCyZ_1665975958)
+        Sun, 16 Oct 2022 23:06:57 -0400
+Received: from out0-150.mail.aliyun.com (out0-150.mail.aliyun.com [140.205.0.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F54B4BA;
+        Sun, 16 Oct 2022 20:06:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047202;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---.PeP-vlI_1665975970;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.PeP-vlI_1665975970)
           by smtp.aliyun-inc.com;
-          Mon, 17 Oct 2022 11:06:03 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     marcel@holtmann.org
-Cc:     johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] net: bluetooth: Use kzalloc instead of kmalloc/memset
-Date:   Mon, 17 Oct 2022 11:04:21 +0800
-Message-Id: <20221017030421.69108-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+          Mon, 17 Oct 2022 11:06:11 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Peter Xu <peterx@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] KVM: x86: Reduce refcount if single_open() fails in kvm_mmu_rmaps_stat_open()
+Date:   Mon, 17 Oct 2022 11:06:09 +0800
+Message-Id: <5ddb7c97d2f1edbd000020aa842b0619374e6951.1665975828.git.houwenlong.hwl@antgroup.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use kzalloc rather than duplicating its implementation, which makes code
-simple and easy to understand.
+Refcount is increased before calling single_open() in
+kvm_mmu_rmaps_stat_open(), If single_open() fails, refcount should be
+restored, otherwise the vm couldn't be destroyed.
 
-./net/bluetooth/hci_conn.c:2038:6-13: WARNING: kzalloc should be used for cp, instead of kmalloc/memset.
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2406
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Fixes: 3bcd0662d66fd ("KVM: X86: Introduce mmu_rmaps_stat per-vm debugfs file")
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
 ---
- net/bluetooth/hci_conn.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/kvm/debugfs.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
-index 5d6ee5075642..495de21d52cd 100644
---- a/net/bluetooth/hci_conn.c
-+++ b/net/bluetooth/hci_conn.c
-@@ -2035,13 +2035,12 @@ int hci_pa_create_sync(struct hci_dev *hdev, bdaddr_t *dst, __u8 dst_type,
- 	if (hci_dev_test_and_set_flag(hdev, HCI_PA_SYNC))
- 		return -EBUSY;
+diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
+index cfed36aba2f7..e6efd0821c59 100644
+--- a/arch/x86/kvm/debugfs.c
++++ b/arch/x86/kvm/debugfs.c
+@@ -157,12 +157,17 @@ static int kvm_mmu_rmaps_stat_show(struct seq_file *m, void *v)
  
--	cp = kmalloc(sizeof(*cp), GFP_KERNEL);
-+	cp = kzalloc(sizeof(*cp), GFP_KERNEL);
- 	if (!cp) {
- 		hci_dev_clear_flag(hdev, HCI_PA_SYNC);
- 		return -ENOMEM;
- 	}
+ static int kvm_mmu_rmaps_stat_open(struct inode *inode, struct file *file)
+ {
++	int ret;
+ 	struct kvm *kvm = inode->i_private;
  
--	memset(cp, 0, sizeof(*cp));
- 	cp->sid = sid;
- 	cp->addr_type = dst_type;
- 	bacpy(&cp->addr, dst);
+ 	if (!kvm_get_kvm_safe(kvm))
+ 		return -ENOENT;
+ 
+-	return single_open(file, kvm_mmu_rmaps_stat_show, kvm);
++	ret = single_open(file, kvm_mmu_rmaps_stat_show, kvm);
++	if (ret)
++		kvm_put_kvm(kvm);
++
++	return ret;
+ }
+ 
+ static int kvm_mmu_rmaps_stat_release(struct inode *inode, struct file *file)
 -- 
-2.20.1.7.g153144c
+2.31.1
 
