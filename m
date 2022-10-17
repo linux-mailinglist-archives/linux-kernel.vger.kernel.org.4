@@ -2,98 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F1F601C20
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3AE601C25
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiJQWN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 18:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
+        id S229780AbiJQWOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 18:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiJQWNW (ORCPT
+        with ESMTP id S230179AbiJQWOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 18:13:22 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61BC6CF40
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:13:21 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id f22so8663489qto.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DCtI7HpnKLN2RHhMH5+l4CbBXx3g+mkMW6UlFy261fc=;
-        b=OU4mKJkhQCZAztADc9v2BTa0rsCpsIXIlNR3wCJIZkUIDHULMp1dwTknBBBWSkC9q5
-         cBZ8pe2cNB+AC4WHIFxuV9WIrakeq8p/CLez4o2i6ccGCQubRQlKLHhyRHSzpb1a6+mD
-         vsK9AY6fnB7xAZtta8Ieln4FcZoFmbQHg2nOCymLMHPKnYYru00nJDvtsORnFkYUvNdE
-         vAS33zc2FIi3nJuLJh4AShyroCJuQcTWXajFsppR1xa58Cgqo9pmmCmmki4vlw0MT3nW
-         qOY1H0Lkjc8+/sHDni+DD62uIuJArQtiHaMEERkGuwrZKdQPSs5TF4rO+OoG3VUtFiS2
-         Ve7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DCtI7HpnKLN2RHhMH5+l4CbBXx3g+mkMW6UlFy261fc=;
-        b=TZGkz3j+SRHFz1B/Dgl+JMsO9ok2E1fT6l2NoNEWq8AxOpuCyeWapjn96g1agcA/Rc
-         8WTwXZuJt0bpn4fh9tfaRa2CKUP8Yd2+/883+L2HrS1jOXUZl5LbFr1e+7AiBfJEx0Be
-         yVS47G8PBSkoeOtWKX3vFOcS9Xy6g5/jTct5bsauWSl1NTP8tv+AKDengvwaPqEldp83
-         nRVVC1ktR9ucg9B3xf5CHe/orraCp2seHf4EfIpiD28N4ruB4e1g93fz6jc7F3ZMvNmp
-         VxEvIRZ4UlBCOKPwFApD+W2bxsnSXSBpgoIg5529y2Ck5jBhwoiobZiYjAfL2L1ts36i
-         Vvgw==
-X-Gm-Message-State: ACrzQf0R57Sq+/dVViGz2VByAcKWjVEoExzONtu3vFRSVy/IifyrbfDr
-        fDY8Wcuu8xX/1ImE2ZTMf46YwQ==
-X-Google-Smtp-Source: AMsMyM5uytjViQrc7YdL7vZ5CO/vsYMTKrcInnLQzLGkBb0PTDgbeiNlLGhIVvhcU93+cxYzHxP/dw==
-X-Received: by 2002:ac8:5813:0:b0:39c:d5f0:f1e1 with SMTP id g19-20020ac85813000000b0039cd5f0f1e1mr10645396qtg.453.1666044800983;
-        Mon, 17 Oct 2022 15:13:20 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id g19-20020ae9e113000000b006ce3cffa2c8sm735933qkm.43.2022.10.17.15.13.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 15:13:20 -0700 (PDT)
-Message-ID: <158acf1d-de37-936b-3dc4-40f62f227af2@linaro.org>
-Date:   Mon, 17 Oct 2022 18:13:18 -0400
+        Mon, 17 Oct 2022 18:14:45 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F5D11A223;
+        Mon, 17 Oct 2022 15:14:42 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au [49.181.106.210])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id E29F0110211B;
+        Tue, 18 Oct 2022 09:14:35 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1okYNV-003Do8-W5; Tue, 18 Oct 2022 09:14:34 +1100
+Date:   Tue, 18 Oct 2022 09:14:33 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, bfields@fieldses.org,
+        brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org, Jeff Layton <jlayton@redhat.com>
+Subject: Re: [RFC PATCH v7 9/9] vfs: expose STATX_VERSION to userland
+Message-ID: <20221017221433.GT3600936@dread.disaster.area>
+References: <20221017105709.10830-1-jlayton@kernel.org>
+ <20221017105709.10830-10-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 3/5] arm: dts: qcom: mdm9615: wp8548-mangoh-green: fix
- sx150xq node names and probe-reset property
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221005-mdm9615-pinctrl-yaml-v2-0-639fe67a04be@linaro.org>
- <20221005-mdm9615-pinctrl-yaml-v2-3-639fe67a04be@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v2-3-639fe67a04be@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017105709.10830-10-jlayton@kernel.org>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=634dd3d0
+        a=j6JUzzrSC7wlfFge/rmVbg==:117 a=j6JUzzrSC7wlfFge/rmVbg==:17
+        a=kj9zAlcOel0A:10 a=Qawa6l4ZSaYA:10 a=20KFwNOVAAAA:8 a=VwQbUJbxAAAA:8
+        a=7-415B0cAAAA:8 a=-cKyABg0kL-CqEoa6E0A:9 a=CjuIK1q_8ugA:10
+        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 06:23, Neil Armstrong wrote:
-> Fix the sx150xq node names to pinctrl and use the right probe-reset property.
+On Mon, Oct 17, 2022 at 06:57:09AM -0400, Jeff Layton wrote:
+> From: Jeff Layton <jlayton@redhat.com>
 > 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Claim one of the spare fields in struct statx to hold a 64-bit inode
+> version attribute. When userland requests STATX_VERSION, copy the
+> value from the kstat struct there, and stop masking off
+> STATX_ATTR_VERSION_MONOTONIC.
 
+Can we please make the name more sepcific than "version"? It's way
+too generic and - we already have userspace facing "version" fields
+for inodes that refer to the on-disk format version exposed in
+various UAPIs. It's common for UAPI structures used for file
+operations to have a "version" field that refers to the *UAPI
+structure version* rather than file metadata or data being retrieved
+from the file in question.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The need for an explanatory comment like this:
 
-Best regards,
-Krzysztof
+> +	__u64	stx_version; /* Inode change attribute */
 
+demonstrates it is badly named. If you want it known as an inode
+change attribute, then don't name the variable "version". In
+reality, it really needs to be an opaque cookie, not something
+applications need to decode directly to make sense of.
+
+> Update the test-statx sample program to output the change attr and
+> MountId.
+> 
+> Reviewed-by: NeilBrown <neilb@suse.de>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/stat.c                 | 12 +++---------
+>  include/linux/stat.h      |  9 ---------
+>  include/uapi/linux/stat.h |  6 ++++--
+>  samples/vfs/test-statx.c  |  8 ++++++--
+>  4 files changed, 13 insertions(+), 22 deletions(-)
+> 
+> Posting this as an RFC as we're still trying to sort out what semantics
+> we want to present to userland. In particular, this patch leaves the
+> problem of crash resilience in to userland applications on filesystems
+> that don't report as MONOTONIC.
+
+Firstly, if userspace wants to use the change attribute, they are
+going to have to detect crashes themselves anyway because no fs in
+the kernel can set the MONOTONIC flag right now and it may be years
+before kernels/filesystems actually support it in production
+systems.
+
+But more fundamentally, I think this monotonic increase guarantee is
+completely broken by the presence of snapshots and snapshot
+rollbacks. If you change something, then a while later decide it
+broke (e.g. a production system upgrade went awry) and you roll back
+the filesystem to the pre-upgrade snapshot, then all the change
+counters and m/ctimes are guaranteed to go backwards because they
+will revert to the snapshot values. Maybe the filesystem can bump
+some internal counter for the snapshot when the revert happens, but
+until that is implemented, filesystems that support snapshots and
+rollback can't assert MONOTONIC.
+
+And that's worse for other filesystems, because if you put them on
+dm-thinp and roll them back, they are completely unaware of the fact
+that a rollback happened and there's *nothing* the filesystem can do
+about this. Indeed, snapshots are suppose to be done on clean
+filesystems so snapshot images don't require journal recovery, so
+any crash detection put in the filesystem recovery code to guarantee
+MONOTONIC behaviour will be soundly defeated by such block device
+snapshot rollbacks.
+
+Hence I think MONOTONIC is completely unworkable for most existing
+filesystems because snapshots and rollbacks completely break the
+underlying assumption MONOTONIC relies on: that filesystem
+modifications always move forwards in both the time and modification
+order dimensions....
+
+This means that monotonicity is probably not acheivable by any
+existing filesystem and so should not ever be mentioned in the UAPI.
+I think userspace semantics can be simplified down to "if the change
+cookie does not match exactly, caches are invalid" combined with
+"applications are responsible for detecting temporal discontiguities
+in filesystem presentation at start up (e.g. after a crash, unclean
+shutdown, restoration from backup, snapshot rollback, etc) for
+persistent cache invalidation purposes"....
+
+> Trond is of the opinion that monotonicity is a hard requirement, and
+> that we should not allow filesystems that can't provide that quality to
+> report STATX_VERSION at all.  His rationale is that one of the main uses
+> for this is for backup applications, and for those a counter that could
+> go backward is worse than useless.
+
+From the perspective of a backup program doing incremental backups,
+an inode with a change counter that has a different value to the
+current backup inventory means the file contains different
+information than what the current backup inventory holds. Again,
+snapshots, rollbacks, etc.
+
+Therefore, regardless of whether the change counter has gone
+forwards or backwards, the backup program needs to back up this
+current version of the file in this backup because it is different
+to the inventory copy.  Hence if the backup program fails to back it
+up, it will not be creating an exact backup of the user's data at
+the point in time the backup is run...
+
+Hence I don't see that MONOTONIC is a requirement for backup
+programs - they really do have to be able to handle filesystems that
+have modifications that move backwards in time as well as forwards...
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
