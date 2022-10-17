@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE186011B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B6A6011C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiJQOy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S231246AbiJQOy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiJQOxz (ORCPT
+        with ESMTP id S230501AbiJQOx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:53:55 -0400
+        Mon, 17 Oct 2022 10:53:59 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1159691A9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31FB691AE;
         Mon, 17 Oct 2022 07:53:45 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:53:34 -0000
+Date:   Mon, 17 Oct 2022 14:53:35 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018415;
+        s=2020; t=1666018416;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xQECrAMC1mfEGRDJTJK97EsmoNkBaVxGk/vgONIWcqE=;
-        b=tdO0OdMCDXm6jLkvyuDjv2CvTnze2zfI1PJljEGYbJPZSqD2ZgXXKIrRQgzbwnpi6TJN/r
-        n5gak0YbLK3MOT1drvS2M0sTTrRM4De8BKU8cX+lw5QQF4ESHNhRcEkojZb23gLp0vc6Jx
-        oX7qAQA2FXUeFAMQVWzQ3Z+UXVEfvijC8FU10Dtg698qV+PutfFP35l2FVPXkXxQ4hJsft
-        +U0bvL1rrYuqYOW22dBd5M5w7/lqJXugu5FhLMqcJbPnR+UfjzSaL5OeluHgCQeedFCQ6W
-        +jyIASHxgbFJFEpw8lYd5TduCEblu3DXyJxPH9VyV9vELnEvWTGn7Vm6kL1R0Q==
+        bh=hAE92Gv2CqWdn0m33OE2fyomeYucTas60k68ZJws/sI=;
+        b=zw36FngqttvDsfoiXLMGfdKUV4OGrc50S263ajOcnJOPr8Y6aUBeQ50eQRojAj19s9r3uT
+        8eXGA+8CFgpRav+jH1+o8dN3aA7vMLur3eCYCsdEjb/UiuZ+6xSPiEU7w2yVG/GqyCJrRi
+        fw6+5D/FfpEFrbFw7h5huYFc95bEWFvELfDDed+BQubAmHaCPBipquEOd7yCb1rhffUTIC
+        dBIuKFfasulcPfTg0XUtnd+FSA49wIj9Q1vKf4JCN3JUl0QVZ8+GQgunzu+5PgG/u1PC+6
+        85Fp23fY2sZrxsY5rOl0LKLSnXHswdc1FBBm9rghbuAMSzIkRb1gwThU8tFrjg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018415;
+        s=2020e; t=1666018416;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xQECrAMC1mfEGRDJTJK97EsmoNkBaVxGk/vgONIWcqE=;
-        b=1C2WmxlHCifztflfdYpDfxmNCwidwt3TK3q4gjI69gCqXsh2dNYxoGTo5yooVbXZvdeR9U
-        xwyDy72xocfn3oCw==
+        bh=hAE92Gv2CqWdn0m33OE2fyomeYucTas60k68ZJws/sI=;
+        b=O+27T1Ds6h/Pc/kdE33ZL3li2immt/ZBXqoj1/nzxtVUQWzhetD7U6nNtXNKw5eVmiIZuH
+        QBT+il93+uQewyDg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/orc: Make it callthunk aware
+Subject: [tip: x86/core] kallsyms: Take callthunks into account
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111148.511637628@infradead.org>
-References: <20220915111148.511637628@infradead.org>
+In-Reply-To: <20220915111148.409656012@infradead.org>
+References: <20220915111148.409656012@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601841409.401.11334103297583920367.tip-bot2@tip-bot2>
+Message-ID: <166601841516.401.9118798161796361063.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,111 +66,133 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     396e0b8e09e86440c2119d12c2101110d3cd5bf9
-Gitweb:        https://git.kernel.org/tip/396e0b8e09e86440c2119d12c2101110d3cd5bf9
+Commit-ID:     f1389181622a08d6f1c71407a64df36b809d632b
+Gitweb:        https://git.kernel.org/tip/f1389181622a08d6f1c71407a64df36b809d632b
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 15 Sep 2022 13:11:33 +02:00
+AuthorDate:    Thu, 15 Sep 2022 13:11:32 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 17 Oct 2022 16:41:17 +02:00
 
-x86/orc: Make it callthunk aware
+kallsyms: Take callthunks into account
 
-Callthunks addresses on the stack would confuse the ORC unwinder. Handle
-them correctly and tell ORC to proceed further down the stack.
+Since the pre-symbol function padding is an integral part of the
+symbol make kallsyms report it as part of the symbol by reporting it
+as sym-x instead of prev_sym+y.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111148.511637628@infradead.org
+Link: https://lore.kernel.org/r/20220915111148.409656012@infradead.org
 ---
- arch/x86/include/asm/alternative.h |  5 +++++
- arch/x86/kernel/callthunks.c       | 13 +++++++++++++
- arch/x86/kernel/unwind_orc.c       | 21 ++++++++++++++++++++-
- 3 files changed, 38 insertions(+), 1 deletion(-)
+ kernel/kallsyms.c | 45 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 40 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index 07ac257..4b8cd25 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -92,6 +92,7 @@ extern void callthunks_patch_builtin_calls(void);
- extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
- 					  struct module *mod);
- extern void *callthunks_translate_call_dest(void *dest);
-+extern bool is_callthunk(void *addr);
- #else
- static __always_inline void callthunks_patch_builtin_calls(void) {}
- static __always_inline void
-@@ -101,6 +102,10 @@ static __always_inline void *callthunks_translate_call_dest(void *dest)
- {
- 	return dest;
- }
-+static __always_inline bool is_callthunk(void *addr)
-+{
-+	return false;
-+}
- #endif
- 
- #ifdef CONFIG_SMP
-diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-index 0710036..7f97881 100644
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -293,6 +293,19 @@ void *callthunks_translate_call_dest(void *dest)
- 	return target ? : dest;
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 60c20f3..cc244c0 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -293,6 +293,12 @@ static unsigned long get_symbol_pos(unsigned long addr,
+ 	return low;
  }
  
-+bool is_callthunk(void *addr)
-+{
-+	unsigned int tmpl_size = SKL_TMPL_SIZE;
-+	void *tmpl = skl_call_thunk_template;
-+	unsigned long dest;
-+
-+	dest = roundup((unsigned long)addr, CONFIG_FUNCTION_ALIGNMENT);
-+	if (!thunks_initialized || skip_addr((void *)dest))
-+		return false;
-+
-+	return !bcmp((void *)(dest - tmpl_size), tmpl, tmpl_size);
-+}
-+
- #ifdef CONFIG_MODULES
- void noinline callthunks_patch_module_calls(struct callthunk_sites *cs,
- 					    struct module *mod)
-diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-index 0ea57da..cfac2b5 100644
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -136,6 +136,21 @@ static struct orc_entry null_orc_entry = {
- 	.type = UNWIND_HINT_TYPE_CALL
- };
- 
-+#ifdef CONFIG_CALL_THUNKS
-+static struct orc_entry *orc_callthunk_find(unsigned long ip)
-+{
-+	if (!is_callthunk((void *)ip))
-+		return NULL;
-+
-+	return &null_orc_entry;
-+}
++#ifdef CONFIG_FUNCTION_PADDING_BYTES
++#define PADDING_BYTES	CONFIG_FUNCTION_PADDING_BYTES
 +#else
-+static struct orc_entry *orc_callthunk_find(unsigned long ip)
-+{
-+	return NULL;
-+}
++#define PADDING_BYTES	0
 +#endif
 +
- /* Fake frame pointer entry -- used as a fallback for generated code */
- static struct orc_entry orc_fp_entry = {
- 	.type		= UNWIND_HINT_TYPE_CALL,
-@@ -189,7 +204,11 @@ static struct orc_entry *orc_find(unsigned long ip)
- 	if (orc)
- 		return orc;
- 
--	return orc_ftrace_find(ip);
-+	orc =  orc_ftrace_find(ip);
-+	if (orc)
-+		return orc;
+ /*
+  * Lookup an address but don't bother to find any names.
+  */
+@@ -300,13 +306,25 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
+ 				unsigned long *offset)
+ {
+ 	char namebuf[KSYM_NAME_LEN];
++	int ret;
 +
-+	return orc_callthunk_find(ip);
++	addr += PADDING_BYTES;
+ 
+ 	if (is_ksym_addr(addr)) {
+ 		get_symbol_pos(addr, symbolsize, offset);
+-		return 1;
++		ret = 1;
++		goto found;
++	}
++
++	ret = !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf);
++	if (!ret) {
++		ret = !!__bpf_address_lookup(addr, symbolsize,
++					     offset, namebuf);
+ 	}
+-	return !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf) ||
+-	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
++found:
++	if (ret && offset)
++		*offset -= PADDING_BYTES;
++	return ret;
  }
  
- #ifdef CONFIG_MODULES
+ static const char *kallsyms_lookup_buildid(unsigned long addr,
+@@ -319,6 +337,8 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
+ 	namebuf[KSYM_NAME_LEN - 1] = 0;
+ 	namebuf[0] = 0;
+ 
++	addr += PADDING_BYTES;
++
+ 	if (is_ksym_addr(addr)) {
+ 		unsigned long pos;
+ 
+@@ -348,6 +368,8 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
+ 
+ found:
+ 	cleanup_symbol_name(namebuf);
++	if (ret && offset)
++		*offset -= PADDING_BYTES;
+ 	return ret;
+ }
+ 
+@@ -374,6 +396,8 @@ int lookup_symbol_name(unsigned long addr, char *symname)
+ 	symname[0] = '\0';
+ 	symname[KSYM_NAME_LEN - 1] = '\0';
+ 
++	addr += PADDING_BYTES;
++
+ 	if (is_ksym_addr(addr)) {
+ 		unsigned long pos;
+ 
+@@ -401,6 +425,8 @@ int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
+ 	name[0] = '\0';
+ 	name[KSYM_NAME_LEN - 1] = '\0';
+ 
++	addr += PADDING_BYTES;
++
+ 	if (is_ksym_addr(addr)) {
+ 		unsigned long pos;
+ 
+@@ -417,6 +443,8 @@ int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
+ 		return res;
+ 
+ found:
++	if (offset)
++		*offset -= PADDING_BYTES;
+ 	cleanup_symbol_name(name);
+ 	return 0;
+ }
+@@ -442,8 +470,15 @@ static int __sprint_symbol(char *buffer, unsigned long address,
+ 	len = strlen(buffer);
+ 	offset -= symbol_offset;
+ 
+-	if (add_offset)
+-		len += sprintf(buffer + len, "+%#lx/%#lx", offset, size);
++	if (add_offset) {
++		char s = '+';
++
++		if ((long)offset < 0) {
++			s = '-';
++			offset = 0UL - offset;
++		}
++		len += sprintf(buffer + len, "%c%#lx/%#lx", s, offset, size);
++	}
+ 
+ 	if (modname) {
+ 		len += sprintf(buffer + len, " [%s", modname);
