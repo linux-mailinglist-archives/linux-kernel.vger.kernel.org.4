@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48437601B2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000B4601B36
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJQVVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S229597AbiJQVXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiJQVVK (ORCPT
+        with ESMTP id S230342AbiJQVXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:21:10 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE9E2871B;
-        Mon, 17 Oct 2022 14:21:09 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id l22so17872797edj.5;
-        Mon, 17 Oct 2022 14:21:09 -0700 (PDT)
+        Mon, 17 Oct 2022 17:23:32 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D398A7B78A;
+        Mon, 17 Oct 2022 14:23:26 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id i65so10262774ioa.0;
+        Mon, 17 Oct 2022 14:23:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NhknbbZU+DsEhwdrosFkJMRfKCF+WMIkDITeVElhgnk=;
-        b=AzHn0H0UW8cxjO5EMQz/kYk4xHt9LF45+mpX4d/B5VSS4YlSEK3gUhvCg7K/KBg+4C
-         AAhaSTDrLjUSmhCTI4K8wnGu/XYRsgVtvwuuDzQAH4pJHgBr/hNoYXBJXSs52iLzhHp/
-         M3iZ8iwjp3MSgcLbvni7NSf0EfGPzQiA0zaIMyLhZwTh5LDmuNDsf53FySV9+XEmg4O1
-         ILhqyx56wXSyw4DAFUDx5KyzKTMBx7jFbwJcbUKWQyNeR8pNXJNs3+gkJlnyNa9I6quZ
-         Sy2WMI++o85z1Xk3nc7Cx4T3sHhvB+vNcDGxe6UXJarHy4aygXzd5CfcEhqBOAa+4EYe
-         UKnw==
+        bh=XYQG9L0WOG7E+TXZGOh2Lmubn0+AsR6A7Ea6syLqUyQ=;
+        b=DDlea4psan6fGakfEvw2MIaDr32zNEN1/S7GTqmmx5IJ88UF1kXdO0ErhCoCmhohb8
+         /Nf95Dm3Qg6qP0LzP9Dlr9M0eEH9SJtjHFUUgD7JuOz9gOkMXnFSfT2rt59RBap+fuBM
+         SPuwfeDTOD1Cg2JiuxxHgl8e/spOD1wCYCY0vlC1NS1glv/SIc9QA4LccI1nUQKAiajd
+         guZae4U7oc5BlDNALXgIw9mM5Qt8tUoXGRmb58g39geLK8kmEEncxoXUyT0keXZS8fYj
+         589jiJ1IdyptqXBsS1KXe3KSMQJySJjTvdPCelNIcvi5YmC+HDcGeF0kHhnbPbSD4Jqn
+         7XoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NhknbbZU+DsEhwdrosFkJMRfKCF+WMIkDITeVElhgnk=;
-        b=CQ9zpKa2967XwqpsZ7JA59avpjG4lI2D+v2X12hhVUUnNHDofmdT9NhPc2DHMUrfZe
-         Am9KaXK7h6Fg6Lvv0jQ0apMXhdQ2H7UE1PfwzEpntGLdDuwjKBWmPmno7PRknnCm26zW
-         z77ZaKFQ50vAA53SJbUS31WM+tBTgb+VnQbzjEkgYwJTuPDkn8dgD/fPd6EqevSuRwTn
-         0zSz9Uj3g2TjJ6XyMsibbVef0Kp0GyHX0Va84hGRB+C3N7lvPpvwc1jYrFXqPZMHq5yQ
-         ssSHCfPqGogEIrElqq+daUhjb2hCSItkRpjSW2A6652AK4geZz07xB+oLwRlMpQcmtXN
-         5gGQ==
-X-Gm-Message-State: ACrzQf19waerHzGVQcvNTgrxoHRiFeeZzfDba09FYn00XDdgfcdNBC5P
-        4dKqo9/04pDaY8BjyLwG9aUnlxMHp/tYz9Wj3/A=
-X-Google-Smtp-Source: AMsMyM61LIQXEqtwOrXlFojdXpZhyDs8urEYKA9+80uWCkaOTOykb4sqV4V6B1dlr/Tt2G1T7quaFQMvXyXvZ9BUeH0=
-X-Received: by 2002:a05:6402:2402:b0:45c:a1ce:94d8 with SMTP id
- t2-20020a056402240200b0045ca1ce94d8mr11816746eda.50.1666041667506; Mon, 17
- Oct 2022 14:21:07 -0700 (PDT)
+        bh=XYQG9L0WOG7E+TXZGOh2Lmubn0+AsR6A7Ea6syLqUyQ=;
+        b=g3tknXjBlI3Vn1MrcxrY01pkwv82FWb9gfX6NVcC8s2gWUQByB47kgxdZFMK/IRvGF
+         08KhQ/opJNorzj4f37HFTNJ+ZF5bJ8raROdUmau0TWkw8XJz+jTucvOtWtXCH+XpGcyv
+         gXILephCUT3xKeKQn1tbu06aHWdRJsvLvj6vAIKcJgeMaxDunNB5lOexDfxibw3LsOKH
+         CaK6Iw6Rio1l8omX4yImwf57btfWYLKScglPszj4XlNjm/AHnW9LRHOisz92kRkMhRnA
+         Ai1Vd51lFZ7DuOU69nrGcWIyQe3MZuEXvpb3x++WjRWlMX6Ns7AcDzdazyNEMZHidXlQ
+         PiSw==
+X-Gm-Message-State: ACrzQf3InO9Mf2IOF6Tb9lXg9ZhDhJ2rpup+DtV2zAhoA/PAkO+qPGDl
+        jx+FFhYXrI0jMu1QpzopMkI=
+X-Google-Smtp-Source: AMsMyM7r9cJXj6CSb2SdazjR8bFX3mMN7uTdF0rMCmxCh+sRQmvRjB67Z7AnPymhZsVGubQX0y6xdA==
+X-Received: by 2002:a05:6638:3e06:b0:363:fd8c:7d3c with SMTP id co6-20020a0566383e0600b00363fd8c7d3cmr6659333jab.266.1666041805466;
+        Mon, 17 Oct 2022 14:23:25 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00::4a89])
+        by smtp.gmail.com with UTF8SMTPSA id g191-20020a025bc8000000b0035672327fe5sm338763jab.149.2022.10.17.14.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 14:23:24 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Richard Acayan <mailingradian@gmail.com>,
+        Melody Olvera <quic_molvera@quicinc.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 2/5] dmaengine: qcom: gpi: document preferred SM6350 binding
+Date:   Mon, 17 Oct 2022 17:23:20 -0400
+Message-Id: <20221017212320.4960-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221015140447.55221-3-krzysztof.kozlowski@linaro.org>
+References: <20221015140447.55221-1-krzysztof.kozlowski@linaro.org> <20221015140447.55221-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
- <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
- <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com> <20221006021204.hz7iteao65dgsev6@synopsys.com>
- <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com> <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
- <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com> <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
- <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com> <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
- <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
- <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com> <CAHQ1cqGSXoUTopwvrQtLww5M0Tf=6F505ziLn+wGHhW_8-JhFQ@mail.gmail.com>
- <113fe314-0f5c-f53f-db78-c93bd4515260@gmail.com> <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
- <bec17559-286c-b006-476f-3c26ae38e70d@gmail.com> <CAHQ1cqFqKv+J1=Qg5_sDUeKQ=64aSiGJq0pPH+OqEieZDM1Mfg@mail.gmail.com>
- <887510d7-b732-2b0e-e177-615de59cfaf8@gmail.com>
-In-Reply-To: <887510d7-b732-2b0e-e177-615de59cfaf8@gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Mon, 17 Oct 2022 14:20:55 -0700
-Message-ID: <CAHQ1cqFNjy7ddSot5zDekLvnqHpz5xJP+Fi6vnh+6JwVeozjcA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-To:     Ferry Toth <fntoth@gmail.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -85,255 +80,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 1:59 PM Ferry Toth <fntoth@gmail.com> wrote:
->
->
-> Op 15-10-2022 om 21:54 schreef Andrey Smirnov:
-> > On Thu, Oct 13, 2022 at 12:35 PM Ferry Toth <fntoth@gmail.com> wrote:
-> >> <SNIP>
-> >>> My end goal here is to find a way to test vanilla v6.0 with the two
-> >>> patches reverted on your end. I thought that during my testing I saw
-> >>> tusb1210 print those timeout messages during its probe and that
-> >>> disabling the driver worked to break the loop, but I went back to
-> >>> double check and it doesn't work so scratch that idea. Configuring
-> >>> extcon as a built-in breaks host functionality with or without patche=
-s
-> >>> on my end, so I'm not sure it could be a path.
-> >>>
-> >>> I won't have time to try things with
-> >>> 0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch unti=
-l
-> >>> the weekend, meanwhile can you give this diff a try with vanilla (no
-> >>> reverts) v6.0:
-> >>>
-> > OK, got a chance to try things with that patch. Both v6.0 and v6.0
-> > with my patches reverted work the same, my Kingston DataTraveller USB
-> > stick enumerates and works as expected.
-> >
-> Iow you don't need the patch at all to get usb to work. There has got to
-> be a difference in our configs.
->
+> Devices with ee offset of 0x10000 should rather bind with SM6350
+> compatible, so the list will not unnecessarily grow for compatible
+> devices.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/dma/qcom/gpi.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+> index f8e19e6e6117..061add832295 100644
+> --- a/drivers/dma/qcom/gpi.c
+> +++ b/drivers/dma/qcom/gpi.c
+> @@ -2286,13 +2286,14 @@ static int gpi_probe(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id gpi_of_match[] = {
+> -	{ .compatible = "qcom,sc7280-gpi-dma", .data = (void *)0x10000 },
+>  	{ .compatible = "qcom,sdm845-gpi-dma", .data = (void *)0x0 },
+>  	{ .compatible = "qcom,sm6350-gpi-dma", .data = (void *)0x10000 },
+>  	/*
+> -	 * Deprecated, devices with ee_offset = 0 should use sdm845-gpi-dma as
+> -	 * fallback and not need their own entries here.
 
-My patch? Yeah, it should have zero effect on anything.
-!DWC3_VER_IS_PRIOR(DWC3, 330A) is false for Merrifield, so the logical
-change from my patch is a no-op. It's a pure coincidence that it
-resolved the probe loop that
-0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch is
-for.
+This comment is from the dependency series [1]. Why would we need to add it just
+to remove it here? I was not notified that the dependency was applied anywhere
+(except as a base for other series) so it's not set in stone. Let's just drop
+the original patch that this comment originates from to prevent needlessly
+adding and removing the same lines at once.
 
-> Did you have a chance to look at mine (here:
-> https://drive.google.com/file/d/1aKJWMqiAXnReeLCvxshzjKwGxIWQ7eJk/view?us=
-p=3Dsharing)
->
-> Else, send me yours.
->
+[1] https://lore.kernel.org/linux-arm-msm/20221007213640.85469-4-mailingradian@gmail.com/
 
-I've been using your config in all of the testing.
-
-> >>> modified   drivers/phy/ti/phy-tusb1210.c
-> >>> @@ -127,6 +127,7 @@ static int tusb1210_set_mode(struct phy *phy, enu=
-m
-> >>> phy_mode mode, int submode)
-> >>>     u8 reg;
-> >>>
-> >>>     ret =3D tusb1210_ulpi_read(tusb, ULPI_OTG_CTRL, &reg);
-> >>> + WARN_ON(ret < 0);
-> >>>     if (ret < 0)
-> >>>     return ret;
-> >>>
-> >>> @@ -152,7 +153,10 @@ static int tusb1210_set_mode(struct phy *phy,
-> >>> enum phy_mode mode, int submode)
-> >>>     }
-> >>>
-> >>>     tusb->otg_ctrl =3D reg;
-> >>> - return tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
-> >>> + ret =3D tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
-> >>> + WARN_ON(ret < 0);
-> >>> + return ret;
-> >>> +
-> >>>    }
-> >>>
-> >>>    #ifdef CONFIG_POWER_SUPPLY
-> >>>
-> >>> ? I'm curious to see if there's masked errors on your end since dwc3
-> >>> driver doesn't check for those.
-> >> root@yuna:~# dmesg | grep -i -E 'warn|assert|error|tusb|dwc3'
-> >> 8250_mid: probe of 0000:00:04.0 failed with error -16
-> >> platform regulatory.0: Direct firmware load for regulatory.db failed
-> >> with error -2
-> >> brcmfmac mmc2:0001:1: Direct firmware load for
-> >> brcm/brcmfmac43340-sdio.Intel Corporation-Merrifield.bin failed with
-> >> error -2
-> >> sof-audio-pci-intel-tng 0000:00:0d.0: error: I/O region is too small.
-> >> sof-audio-pci-intel-tng 0000:00:0d.0: error: failed to probe DSP -19
-> >>
-> >>
-> >>>> This is done through configfs only when the switch is set to device =
-mode.
-> >>> Sure, but can it be disabled? We are looking for unknown variables, s=
-o
-> >>> excluding this would be a reasonable thing to do.
-> >> It's not enabled until I flip the switch to device mode.
-> > OK to cut this back and forth short, I think it'd be easier to just
-> > ask you to run what I run. Here's vanilla v6.0 bzImage and initrd
-> > (built with your config + CONFIG_PHY_TUSB1210=3Dy) I tested with
->
-> What do you mean by this? My config is with
->
-> CONFIG_GENERIC_PHY=3Dy
-> CONFIG_PHY_TUSB1210=3Dy
->
-
-$ cat config-6.0.0-edison-acpi-standard | grep 1210
-# CONFIG_PHY_TUSB1210 is not set
-$ md5sum config-6.0.0-edison-acpi-standard
-3c989c708302c1f9e73c6113e71aed9d  config-6.0.0-edison-acpi-standard
-
-I had to manually enable it, that's what I meant by my comment.
-
-> > https://drive.google.com/drive/folders/1H28AL1coPPZ2kLTYskDuDdWo-oE7DRP=
-H?usp=3Dsharing
-> > let's see how it behaves on your setup. There's also the U-Boot binary
->
-> Ok, it's getting weirder and weirder. The following is with my U-Boot
-> and your kernel/initrd
->
-> 1) I placed them in /boot which is on my btrfs partition on the emmc (my
-> U-Boot has btrfs enabled)
->
-> Linux kernel version 6.0.0-edison-acpi-standard
-> (andreysm@neptunefw-builder) #8 SMP PREEMPT_DYNAMIC Sat Oct 15 18:47:19
-> UTC 2022
-> Building boot_params at 0x00090000
-> Loading bzImage at address 100000 (12064480 bytes)
-> Initial RAM disk at linear address 0x06000000, size 25165824 bytes
-> Kernel command line: "quiet root=3D/dev/mmcblk0p8
-> rootflags=3Dsubvol=3D@,compress=3Dlzo rootfstype=3Dbtrfs console=3DttyS2,=
-115200n8
-> earlyprintk=3DttyS2,115200n8,keep loglevel=3D4 systemd.unit=3Dmulti-user.=
-target"
-> Kernel loaded at 00100000, setup_base=3D00090000
->
-
-You shouldn't be using root from you storage since:
-  a) the initrd I uploaded is self-containing, it doesn't need anything els=
-e
-  b) your local data is another variable we don't want to introduce
-
-just "rootfstype=3Dramfs" should be enough for this and
-
- root=3D/dev/mmcblk0p8 rootflags=3Dsubvol=3D@,compress=3Dlzo rootfstype=3Db=
-trfs
-
-should be dropped.
-
-> Usb drive is not detected regardless booting with stick plugged or
-> plugging later on.
->
-> # lsusb
-> Bus 001 Device 001: ID 1d6b:0002
-> Bus 002 Device 001: ID 1d6b:0003
->
-> No TUSB1210 probed
->
-> # dmesg | grep dwc3
-> #
->
-> 2) I placed them in my vfat rescue partition
->
-> Linux kernel version 6.0.0-edison-acpi-standard
-> (andreysm@neptunefw-builder) #8 SMP PREEMPT_DYNAMIC Sat Oct 15 18:47:19
-> UTC 2022
-> Building boot_params at 0x00090000
-> Loading bzImage at address 100000 (12064480 bytes)
-> Initial RAM disk at linear address 0x06000000, size 25165824 bytes
-> Kernel command line: "debugshell=3D0 tty1 console=3DttyS2,115200n8
-> root=3D/dev/mmcblk0p7 rootfstype=3Dvfat systemd.unit=3Dmulti-user.target"
-> Kernel loaded at 00100000, setup_base=3D00090000
->
-> Usb drive is detected.
-
-Yep, that's exactly my point about extra variables. So it looks like
-something in your root btrfs partition is triggering this issue. I
-don't really know the contents of your root file system, so don't
-really have any suggestions there. Maybe old kernel modules are
-getting picked up? Or something else is interfering =C2=AF\_(=E3=83=84)_/=
-=C2=AF
-
->
-> # lsusb
-> Bus 001 Device 001: ID 1d6b:0002
-> Bus 001 Device 002: ID 125f:312b
-> Bus 002 Device 001: ID 1d6b:0003
->
-> TUSB1210 probed
->
-> # dmesg | grep dwc3
-> [    8.605845] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer reset
-> [    8.605876] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
-> [    8.605927] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO
-> lookup
-> [    8.605941] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer reset found
-> [    8.605956] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer cs
-> [    8.605970] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
-> [    8.606011] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO
-> lookup
-> [    8.606024] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer cs found
-> [    8.669317] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to
-> reg 0x80
->
-> ## note: options debugshell, root and rootfstype are normally handled by
-> a script in my initrd, so I guess here noop.
->
-> > I use in that folder in case you want to give it a try.
-> >
-> > Now on Merrifield dwc3_get_extcon() doesn't do anything but call
-> > extcon_get_extcon_dev() which doesn't touch any hardware or interact
-> > with other drivers, so assuming
-> >
-> >> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
-> >> dwc3_core_init - .. - dwc3_core_init_mode (not working)
-> >>
-> >> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. - dwc3_core_init=
- -
-> >> .. - dwc3_core_init_mode (no change)
-> >>
-> >> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. - dwc3_get_extcon=
- -
-> >> dwc3_core_init_mode (works)
-> > still holds(did you double check that with vanilla v6.0?) the only
-> I didn't check
-> > difference that I can see is execution timings. It seems to me it's
-> > either an extra delay added by execution of  extcon_get_extcon_dev()
-> > (unlikely) or multiple partial probes that include dwc3_core_init()
-> > that change things. You can try to check the latter by adding an
-> > artificial probe deferral point after dwc3_core_init(). Something like
-> > (didn't test this):
-> >
-> > modified   drivers/usb/dwc3/core.c
-> > @@ -1860,6 +1860,10 @@ static int dwc3_probe(struct platform_device *pd=
-ev)
-> >    goto err3;
-> >
-> >    ret =3D dwc3_core_init(dwc);
-> > + static int deferral_counter =3D 0;
-> > + if (deferral_counter++ < 9) /* I counted 9 deferrals in my testing */
-> > + ret =3D -EPROBE_DEFER;
-> > +
-> >    if (ret) {
-> >    dev_err_probe(dev, ret, "failed to initialize core\n");
-> >    goto err4;
->
-> Not sure how you wanted this tested. So I assume on vanilla booting from
-> btrfs on eemc. It crashes but maybe the trace is usefull. After crash it
-> continues but no USB appears at all.
->
-
-I think you'll have to experiment with that code placement to emulate
-a deferred probe for the old location of "get extcon".  I'd focus on
-figuring out the root filesystem variable first before trying to get
-this to work.
-
-To be explicit, at this point I don't think the revert is really
-warranted. I'm also happy to reply/help you with suggestions, but you
-are going to have to start driving this.
+> +	 * Do not grow the list for compatible devices. Instead use
+> +	 * qcom,sdm845-gpi-dma (for ee_offset = 0x0) or qcom,sm6350-gpi-dma
+> +	 * (for ee_offset = 0x10000).
+>  	 */
+> +	{ .compatible = "qcom,sc7280-gpi-dma", .data = (void *)0x10000 },
+>  	{ .compatible = "qcom,sm8150-gpi-dma", .data = (void *)0x0 },
+>  	{ .compatible = "qcom,sm8250-gpi-dma", .data = (void *)0x0 },
+>  	{ .compatible = "qcom,sm8350-gpi-dma", .data = (void *)0x10000 },
+> -- 
+> 2.34.1
+> 
