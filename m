@@ -2,114 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB85601CA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D03601CA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiJQWwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 18:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S230370AbiJQWwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 18:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiJQWwM (ORCPT
+        with ESMTP id S230404AbiJQWwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 18:52:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA957F25A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666047130;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BWe/EjtyWVO+y3GfQQyNMelxnpZ9v4boUm/j1qFurps=;
-        b=KfCK5HB0tlZcnLs9mbo2C0maeT71rtyhSMgzWFOnMwv9YBtCNKW98iBPiLhfv1moQWKBAb
-        1tfu8g5hFzgCGg1qQI/KdJn3nxyGTO3sfd8MYX0cFYc/rQSqQeqP/0n1941Qviapd9Fj1V
-        1zIORPNFcJ6oz3VpW5G8NoXVXPguf6A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-591-4flLiffaMOGRRY96vvlOcA-1; Mon, 17 Oct 2022 18:52:06 -0400
-X-MC-Unique: 4flLiffaMOGRRY96vvlOcA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9F5D185A79C;
-        Mon, 17 Oct 2022 22:51:58 +0000 (UTC)
-Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1DBCA14657C0;
-        Mon, 17 Oct 2022 22:51:34 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 5/6] KVM: selftests: memslot_perf_test: Consolidate memory
- sizes
-To:     Sean Christopherson <seanjc@google.com>,
-        "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ajones@ventanamicro.com, pbonzini@redhat.com, maz@kernel.org,
-        shuah@kernel.org, oliver.upton@linux.dev, peterx@redhat.com,
-        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20221014071914.227134-1-gshan@redhat.com>
- <20221014071914.227134-6-gshan@redhat.com>
- <cebafa0d-a2dc-c3f7-64c8-2637a254e3d0@maciej.szmigiero.name>
- <Y03ScGUUCA1KwlLF@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <9781c88f-06f9-4d17-8fa6-3cd82a739ccb@redhat.com>
-Date:   Tue, 18 Oct 2022 06:51:31 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 17 Oct 2022 18:52:33 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389A07FE57;
+        Mon, 17 Oct 2022 15:52:27 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so6670427otb.8;
+        Mon, 17 Oct 2022 15:52:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QRJoqnnHfPYF70HwaPKC83vtJLiHPm0ZMTpeh7dtiHY=;
+        b=XhTFu3oVARRuPGU3bEU3XH2PPjlxBJEyej5fMcVku+L8wjNDt7mip/OxdmpUFIjSzf
+         uZDfE6rF/3S58RynzygbncDus3ZMwDB/ewIFRiD/Tqlq8sDroIQIZnfAvoUzQsyi4gHx
+         w60v1kSEmIRK0IOy9Y4ybvFW9HD83ws0fB8CNuoEjEQGT7E3CHUi8wFYWRsASvqvPbwL
+         BOqMR+wshCDPNgRlft1xlT0Rg71DSToEcF3zTxVWGIKjUS78DrzDSYOjxkb8ylwemw2u
+         tpm82U9BYRxc8FKaNonDV4TtQ2B4v3xirLbEJ/oDgbunRNqIUw4NESDhCw9O/wkRRL5R
+         svkA==
+X-Gm-Message-State: ACrzQf0Gdnf6fb6tkwQC/+3WFWAmJtmEB9lUoW3qDe5r9/vS71hpnvkk
+        1jIhjpfoKhrJXfzRrJCOniqLYm9PXf+dw8El2T4=
+X-Google-Smtp-Source: AMsMyM6ZQ75kDRg2wESIMT38btq05r8LYemY/H2JuhcfwIZ+VbFsATdCZJeG0neEU+fTK6+5bOrOSFB0uMc4yqWag0o=
+X-Received: by 2002:a9d:6848:0:b0:661:a608:cbc3 with SMTP id
+ c8-20020a9d6848000000b00661a608cbc3mr12787oto.206.1666047146432; Mon, 17 Oct
+ 2022 15:52:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Y03ScGUUCA1KwlLF@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221007081327.1047552-1-sumanthk@linux.ibm.com> <20221017192744.1403-1-sj@kernel.org>
+In-Reply-To: <20221017192744.1403-1-sj@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 17 Oct 2022 15:52:15 -0700
+Message-ID: <CAM9d7cj1cvg6JUp33qxew59qz1_4hEu8noa-E3oO9DXFHabGaw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Sumanth Korikkar <sumanthk@linux.ibm.com>, olsajiri@gmail.com,
+        bpf@vger.kernel.org, gor@linux.ibm.com, hca@linux.ibm.com,
+        iii@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-tip-commits@vger.kernel.org, peterz@infradead.org,
+        svens@linux.ibm.com, tip-bot2@linutronix.de, tmricht@linux.ibm.com,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 6:08 AM, Sean Christopherson wrote:
-> On Mon, Oct 17, 2022, Maciej S. Szmigiero wrote:
->>> +#define MEM_EXTRA_SIZE		0x10000
->>
->> Also, an expression like "(64 << 10)" is more readable than a "1"
->> with a tail of zeroes (it's easy to add one zero too many or be one
->> zero short).
-> 
-> +1 to not open coding raw numbers.
-> 
-> I think it's high time KVM selftests add #defines for the common sizes, e.g. SIZE_4KB,
-> 16KB, 64K, 2MB, 1GB, etc...
-> 
-> Alternatively (or in addition), just #define 1KB, 1MB, 1GB, and 1TB, and then do
-> math off of those.
-> 
+Hi SeongJae,
 
-Ok. I will have one separate patch to define those sizes in kvm_util_base.h,
-right after '#define NSEC_PER_SEC 1000000000L'. Sean, could you let me know
-if it looks good to you?
+On Mon, Oct 17, 2022 at 12:27 PM SeongJae Park <sj@kernel.org> wrote:
+>
+> Hello,
+>
+>
+> The commit that this patch is fixing[1] also causes yet another segfault for
+> 'perf-script' of tracepoint records.  For example:
+>
+>     $ sudo timeout 3 perf record -e exceptions:page_fault_user
+>     [ perf record: Woken up 1 times to write data ]
+>     [ perf record: Captured and wrote 0.228 MB perf.data (74 samples) ]
+>     $ sudo perf script
+>     Segmentation fault
+>
+> Reverting this patch and the original bug commit[1] fixes the issue.  I haven't
+> deep dive yet because I'm not familiar with this area.  Anybody has any idea
+> about this?
+>
+> [1] 838d9bb62d13 ("perf: Use sample_flags for raw_data")
 
-     #define KB         (1UL << 10)
-     #define MB         (1UL << 20)
-     #define GB         (1UL << 30)
-     #define TB         (1UL << 40)
+Sorry for the trouble.  I think you also need to apply the below:
 
-     /* Base page and huge page size */
-     #define SIZE_4KB   (  4 * KB)
-     #define SIZE_16KB  ( 16 * KB)
-     #define SIZE_64KB  ( 64 * KB)
-     #define SIZE_2MB   (  2 * MB)
-     #define SIZE_32MB  ( 32 * MB)
-     #define SIZE_512MB (512 * MB)
-     #define SIZE_1GB   (  1 * GB)
-     #define SIZE_16GB  ( 16 * GB)
+https://lore.kernel.org/r/20221012143857.48198-1-james.clark@arm.com
 
 Thanks,
-Gavin
+Namhyung
 
+>
+> On Fri, 7 Oct 2022 10:13:27 +0200 Sumanth Korikkar <sumanthk@linux.ibm.com> wrote:
+>
+> > * Raw data is also filled by bpf_perf_event_output.
+> > * Add sample_flags to indicate raw data.
+> > * This eliminates the segfaults as shown below:
+> >   Run ./samples/bpf/trace_output
+> >   BUG pid 9 cookie 1001000000004 sized 4
+> >   BUG pid 9 cookie 1001000000004 sized 4
+> >   BUG pid 9 cookie 1001000000004 sized 4
+> >   Segmentation fault (core dumped)
+> >
+> > Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+> > Acked-by: Namhyung Kim <namhyung@kernel.org>
+> > Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+> > ---
+> >  kernel/trace/bpf_trace.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 49fb9ec8366d..1ed08967fb97 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -687,6 +687,7 @@ BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,
+> >
+> >       perf_sample_data_init(sd, 0, 0);
+> >       sd->raw = &raw;
+> > +     sd->sample_flags |= PERF_SAMPLE_RAW;
+> >
+> >       err = __bpf_perf_event_output(regs, map, flags, sd);
+> >
+> > @@ -745,6 +746,7 @@ u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
+> >       perf_fetch_caller_regs(regs);
+> >       perf_sample_data_init(sd, 0, 0);
+> >       sd->raw = &raw;
+> > +     sd->sample_flags |= PERF_SAMPLE_RAW;
+> >
+> >       ret = __bpf_perf_event_output(regs, map, flags, sd);
+> >  out:
+> > --
+> > 2.36.1
