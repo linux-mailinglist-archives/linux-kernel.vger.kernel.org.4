@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8121A601112
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DE8601118
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJQOYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S229909AbiJQO2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJQOYQ (ORCPT
+        with ESMTP id S229738AbiJQO2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:24:16 -0400
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4892750075;
-        Mon, 17 Oct 2022 07:24:16 -0700 (PDT)
-Received: by mail-pg1-f173.google.com with SMTP id r18so10561747pgr.12;
-        Mon, 17 Oct 2022 07:24:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YOWQPj7s2AYnh0bbb2ZlObjp2FI+P4uR59L0NFrNxN0=;
-        b=mJ2wsM2dXyJGtA+pMLH768i/R5ISfLq51rSmBWEcPydL03jrj8ZsGzk6XRSzFOLWCw
-         4K5rz5MGxXIQNavkpL7I1s7+H51g3bXTWUmJ1imo+wPIIXmDrutpO49Zvyl96yfQUgFS
-         r103oBHMiVtjcYMsKn48jxeLmsXA3qp5jr093mpdql8IOR0E/k1+TDvwTXJkElN04LdY
-         uYIQRy2MYGZtO4U1nUsnoqAHT8T+t8PH71/4ACX+YLICh+rYdb+p0HLl8t9TgGkdobf7
-         S2I39O4n6IxURQYt6lUuGmz0foZzniUCElrAtwzcYO+DWnyXLgl1aC3WzsvzfBzX7ODa
-         KdXg==
-X-Gm-Message-State: ACrzQf2YXIkdRTDY2T2rEvFa3wynTElq3oxQK7ZmwTsf2XR1/4KzFFfJ
-        iFHDKw18TSpSZybvwjEFnEU=
-X-Google-Smtp-Source: AMsMyM62BMZRM35vb/QAjC2I1HUzBMIGyJUnIvmlJ1E+yrG33DpbWVg6wUxyM6L4BDJDEh0x8YTnWA==
-X-Received: by 2002:a63:ed07:0:b0:442:87:3a38 with SMTP id d7-20020a63ed07000000b0044200873a38mr11146726pgi.216.1666016655753;
-        Mon, 17 Oct 2022 07:24:15 -0700 (PDT)
-Received: from [192.168.50.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170903228e00b00176e8f85147sm6721330plh.83.2022.10.17.07.24.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 07:24:14 -0700 (PDT)
-Message-ID: <8377d820-c22a-0405-a693-7872cd1961a4@acm.org>
-Date:   Mon, 17 Oct 2022 07:24:13 -0700
+        Mon, 17 Oct 2022 10:28:01 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Oct 2022 07:27:59 PDT
+Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A9E6581A;
+        Mon, 17 Oct 2022 07:27:59 -0700 (PDT)
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 17 Oct
+ 2022 17:26:54 +0300
+Received: from KANASHIN1.fintech.ru (10.0.253.125) by Ex16-01.fintech.ru
+ (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 17 Oct
+ 2022 17:26:53 +0300
+From:   Natalia Petrova <n.petrova@fintech.ru>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+CC:     Natalia Petrova <n.petrova@fintech.ru>,
+        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ldv-project@linuxtesting.org>,
+        "Alexey Khoroshilov" <khoroshilov@ispras.ru>
+Subject: [PATCH] rdmavt: avoid NULL pointer dereference in rvt_qp_exit()
+Date:   Mon, 17 Oct 2022 17:26:52 +0300
+Message-ID: <20221017142652.13906-1-n.petrova@fintech.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] scsi: ufs: core: Fix typo for register name in comments
-Content-Language: en-US
-To:     keosung.park@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20221017095815epcms2p110e3421b99bb9a937620b4d065d0ed12@epcms2p1>
- <20221017095815epcms2p110e3421b99bb9a937620b4d065d0ed12@epcms2p1>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221017095815epcms2p110e3421b99bb9a937620b4d065d0ed12@epcms2p1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.253.125]
+X-ClientProxiedBy: Ex16-01.fintech.ru (10.0.10.18) To Ex16-01.fintech.ru
+ (10.0.10.18)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/22 02:58, Keoseong Park wrote:
-> Change "UTRMLCLR" to "UTMRLCLR".
-> The meaning is "UTP Task Management Request List CLear Register"
+rvt_qp_exit() checks 'rdi->qp_dev' for NULL, but the pointer is
+dereferenced before that in rvt_free_all_qps().
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Fixes: f92e48718889 ("IB/rdmavt: Reset all QPs when the device is shut
+down")
+Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ drivers/infiniband/sw/rdmavt/qp.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
+index 3acab569fbb9..06e755975f61 100644
+--- a/drivers/infiniband/sw/rdmavt/qp.c
++++ b/drivers/infiniband/sw/rdmavt/qp.c
+@@ -459,13 +459,16 @@ static unsigned rvt_free_all_qps(struct rvt_dev_info *rdi)
+  */
+ void rvt_qp_exit(struct rvt_dev_info *rdi)
+ {
+-	u32 qps_inuse = rvt_free_all_qps(rdi);
++	u32 qps_inuse = 0;
++
++	if (!rdi->qp_dev)
++		return;
++
++	qps_inuse = rvt_free_all_qps(rdi);
+ 
+ 	if (qps_inuse)
+ 		rvt_pr_err(rdi, "QP memory leak! %u still in use\n",
+ 			   qps_inuse);
+-	if (!rdi->qp_dev)
+-		return;
+ 
+ 	kfree(rdi->qp_dev->qp_table);
+ 	free_qpn_table(&rdi->qp_dev->qpn_table);
+-- 
+2.34.1
+
