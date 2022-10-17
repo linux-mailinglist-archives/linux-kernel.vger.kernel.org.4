@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AB260133F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF2601343
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiJQQQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 12:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S230491AbiJQQRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 12:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiJQQQi (ORCPT
+        with ESMTP id S229669AbiJQQRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 12:16:38 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67516D867
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:16:36 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id h18so6070596ilh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:16:36 -0700 (PDT)
+        Mon, 17 Oct 2022 12:17:02 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF96C112;
+        Mon, 17 Oct 2022 09:17:01 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id s20so18265655lfi.11;
+        Mon, 17 Oct 2022 09:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WFrtH1nIceWDWjecFJq4RLnBMDwSO0i+CWv3MNMfQg4=;
-        b=jEv4jAYG5jOPL6GizracGgpmxqZQyzsHZgcpzsug0NOrifCD7ynawGMq1j/8U+khSs
-         IK6jqHG48I6xqj4p86ARYxnTkNWTeMD544onM0Tmh+B7yVzP6LqBvd+t8LWpVAz2u03h
-         gwzqmfrQRgOYbcZ//HNPJ0SFSO0UloTO5p/ZgM13oPHxq/Ox9E1wvs93dwVnJYZMa0pK
-         YyDLUWK6fjoMEYua124lgY+pDR/qn4tKgUomX2WOiYZG+sXkhcQsVfD+Eepqq+/MwBHE
-         eKF4pgsWvIYQql6EgCgIJtbBadLWyZnUWPEiQGHvvRYL0FKJxLy3MQ4DJrMdqlb82DvR
-         qFYw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rak2jXyVCxsu9w36iXtNJY2CyxL6z5W907r16DRdiwI=;
+        b=qj3B3/oU2nQdqq2/EcGkEys8V2zPRYKApYztZr1sDPMYN5/CrNBtG7eB/6Ji3jIBBZ
+         gIwmtUxbvubxV6rNRe66HkTwWZHR/5tGnjaB4VssHYmLTanlCxnY+c2+D14TEexwHjfs
+         oqP1Z56YT0KnmfPy/0V2VoRxK4ljmlWedjGvrg/DQVrbKRMX8UPqSJzUfFqWls1Cwzuh
+         2ICcU7flL1ktzlxt+Pn3BgCrK93edMP4Z0xs/de9TkUZqQg5nrKxRrPyuIudn93F0ilU
+         xr7gvfQ/0CgO3WwdLQ0wXuaDMJCtOp9nATXbbwxWuoH0omfnDm2D7ko6sOp5bettvNO4
+         LhWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WFrtH1nIceWDWjecFJq4RLnBMDwSO0i+CWv3MNMfQg4=;
-        b=2sqQhMyDvbwHs6aFGzvnGPmD/mhDO1NkN8ivJfSAYDz/nWSqsL3uyvcXxLsnOiW8iT
-         rIp8/XZUVDERRQ39c72lq9NNlJXuZu3Yc+fpbG9wr09WivHmBwqAAzeP57VTYeAltqdL
-         DGmaLJlF/MHFd74gkxG3N50ge3RMTVd/r3zbExtYkqd5YfC2AwBqEQynjYdqrxcKRi90
-         aaiIKD/RhIY0N4j7RM37Inh+vSv2VO3wr8El42esrDHijjBB3UgruwmqD1ELqoCpZ9jK
-         uqVUb3kpVCxA/PybrIRjT/2RhaX7b/qaO4ySVA0HsU1lXHKN69zKA5+kKEcTXlwvCTCW
-         Cmuw==
-X-Gm-Message-State: ACrzQf2wTby8mXmMnYXOrFdFNJjxRdQwkp2U9WBiYgg2kv2zV/9IBTBQ
-        Go3sdOAoQlPT4lAA/CH3Zia1FuPv2LXEOl7iW6Zikg==
-X-Google-Smtp-Source: AMsMyM6D6ZH23UH1DDhYJy7DKaiHnY8WMVH8bWKCG92JRizQyoSfHpBC/EBhk/nhFNQJo/Ae2+BoF7KVbaMOZd8wlgk=
-X-Received: by 2002:a92:cc0b:0:b0:2f9:f3a9:c3e7 with SMTP id
- s11-20020a92cc0b000000b002f9f3a9c3e7mr4724220ilp.253.1666023395616; Mon, 17
- Oct 2022 09:16:35 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rak2jXyVCxsu9w36iXtNJY2CyxL6z5W907r16DRdiwI=;
+        b=MFvQyhnn9Ya3y4OOqxRhGS/r25e35YtV9cuZ6ReEAjhmLXd7R6/t6tS8RynQF7r8Js
+         5QF2cni+I8hoVtWRT1hMWStAHqwsDVj4cDzA/1rbTloM4e6m0WmVSQwaozmKHnH1G5aW
+         7pHL5AbA9KGOMZ9arZVtwZ7OqEIR0QBSvkeO19nrf+fltIsNsQxHBQWqt8nYgk8uexgg
+         o1L/NkKoQ8Ml+BfIH1tFQHBA1yLdhfCXj4ctMuOQLF+SwUd2nn4zVmiUQ+YYhOE7j3BD
+         TG0WyGcmAIYBzfuXuWNzVDPi0RvvrteB0tHaKu5DVRYv6ehaaFPBJatOax/OftOwLXoU
+         wgnQ==
+X-Gm-Message-State: ACrzQf1iVXHEYeeY95bjV0Oe8/jBBhB4znvZO2YeCCqOf1O/6XmdgmTl
+        qUoeBB0BgzVAozP2ovZvgmA=
+X-Google-Smtp-Source: AMsMyM7rH16sORrYUdovJN8ltutGjWM1TqM0J/X0Vt6B0RjtC0AlAtQyoO0LT81uFeRNEmMZRtvaYQ==
+X-Received: by 2002:a05:6512:3247:b0:4a2:8dc4:3889 with SMTP id c7-20020a056512324700b004a28dc43889mr3983880lfr.410.1666023419345;
+        Mon, 17 Oct 2022 09:16:59 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id w6-20020a05651204c600b0049ae3ed42e8sm1482468lfq.180.2022.10.17.09.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 09:16:58 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 19:16:56 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] nvme-hwmon: Kmalloc the NVME SMART log buffer
+Message-ID: <20221017161656.hzmsgqpuvqpmriqs@mobilestation>
+References: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
+ <20220929224648.8997-3-Sergey.Semin@baikalelectronics.ru>
+ <20221017071832.GB30661@lst.de>
 MIME-Version: 1.0
-References: <00000000000068cb2905eb214e9a@google.com>
-In-Reply-To: <00000000000068cb2905eb214e9a@google.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 17 Oct 2022 09:16:24 -0700
-Message-ID: <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in btf_type_id_size
-To:     syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017071832.GB30661@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,82 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 11:52 PM syzbot
-<syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
-> git tree:       bpf
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
->
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946 btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> Modules linked in:
-> CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
-> RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
-> RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
-> R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
-> R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
-> FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
->  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
->  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
->  btf_parse kernel/bpf/btf.c:5026 [inline]
->  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
->  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
->  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
->  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
->  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f0fbae41c69
-> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
-> RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
-> RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
-> R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
+Hello Christoph
 
-Will be addressed by
-https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
+On Mon, Oct 17, 2022 at 09:18:32AM +0200, Christoph Hellwig wrote:
+> Thanks,
+> 
+> applied to nvme-6.1.
 
+Please note the applied patch doesn't comply with the Keith' notes
+Link: https://lore.kernel.org/linux-nvme/YzxueNRODpry8L0%2F@kbusch-mbp.dhcp.thefacebook.com/
+Meanwhile without patch #1 (having only the accepted by you patch
+applied) the NVME hwmon init now seems contradicting: it ignores one
+kmalloc failure (returns zero) but fails on another one (returns
+-ENOMEM). I asked you to have a look at the patches #1 and #2 of the
+series
+Link: https://lore.kernel.org/linux-nvme/20221007100134.faaekmuqyd5vy34m@mobilestation/
+and give your opinion whether the re-spin was required: take the
+Keith' notes or keep the patches as is. Could you please clarify the
+situation?
 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+-Sergey
