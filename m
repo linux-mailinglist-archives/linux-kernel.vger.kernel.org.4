@@ -2,146 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3300160076C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA4260076F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiJQHMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S230198AbiJQHNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJQHMS (ORCPT
+        with ESMTP id S230137AbiJQHNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:12:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BFFCC5;
-        Mon, 17 Oct 2022 00:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665990737; x=1697526737;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x6PiYaEhI9CWQtceoPEo/iuzEQmzk58Ipq2FJvB4zG8=;
-  b=jUKKVqMFOxCqhnVk5ka9sAo+6nUlN4r5vCOSWAkxMscf3d2rs0jnfjWi
-   Rc/kQHLpRTDKANMPZR6uCavG6lFf8obLGCsn5Rsm32qdtq4F9xVYZh1Rg
-   21UfAxBrQE30wfoAxQRLBVX/ISTdHpuQIPZDNooZipqJ5fbluIMLZd8NV
-   BRx5fDZGk70cmbFLLF75xqRpdWGavV9YiZrQrHMhQk8c3xrOBHPLuk1pt
-   KJFrCS+Gbhs8NX5ChjvJpDldcVU7JnvgHIaxccZMmLq2VBl3Tz2WWzr/U
-   T8gVwzvOWgMaQzHbI+9Eupncp5+a9lEw2Wj939BbzVqXhjDy5H+MD1smy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="369917627"
-X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
-   d="scan'208";a="369917627"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 00:12:16 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="630581889"
-X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
-   d="scan'208";a="630581889"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 00:12:13 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id E8E10202D5;
-        Mon, 17 Oct 2022 10:12:10 +0300 (EEST)
-Date:   Mon, 17 Oct 2022 07:12:10 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 4/5] media: i2c: ov5645: Return zero for s_stream(0)
-Message-ID: <Y00ASntfSkMsWTN0@paasikivi.fi.intel.com>
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221014183459.181567-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y0pSYfw+VDxXv85b@pendragon.ideasonboard.com>
- <Y0snkMEp9WqGtzom@paasikivi.fi.intel.com>
- <Y0tA4cZBdwCOkaOs@pendragon.ideasonboard.com>
- <Y0xnXM+Iw5OkdKj6@paasikivi.fi.intel.com>
- <Y0xxlTP53dwx8VD+@pendragon.ideasonboard.com>
+        Mon, 17 Oct 2022 03:13:01 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0640629805
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:12:59 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bj12so22711473ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KJrhH2F7uJON+OIrH6fgwC/AeouFBzeMMasW8/7uZkY=;
+        b=yFwPWDfXBF+DZOjXQFyL6BB1l4+ZCzLKZPU662WgdCabSuTUSj8Zlv1k2oJzrB5nwz
+         B0vltkzzngx8sge/O1mvs2Adb4aMwtbTT5Ok91i/c0kteI4/gUGyG+k+sknGHOCugE3Y
+         pPJWodW2bT47rPlPKoaHH+W8gFVmTgRM7PBSjZb2sD9QKyhl1rk2ad5rh2ypVq4J+puY
+         HNMf89LLqqtJ0dcswjlC9fdZkxG0IP4hM+ZHKMVhv4Qu62tfEXPKIhBDp8lk5+Y5IXZc
+         9x6Tt5XIXGbiheu/ik1MSqtPybGWNJILyrbiOslru15klunb+2544Jje1z7Ja9X0woZ6
+         2rlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KJrhH2F7uJON+OIrH6fgwC/AeouFBzeMMasW8/7uZkY=;
+        b=azJIrWcfLRlvt4f1uu9e0a+wA2x133IaWw+cc+m95mgrfGEBaFVlsC05zvEgT7U3zj
+         DzggFX6XDkUvxcTNDjpCut6NiRPwLc2D1OlBRqVWEJYCdIVq9Z/axPKv6Gj1hRRniyus
+         1YCH+1o7oAEyrHHZmEdB9du/LWqivHxuQyAYI+EmLaLqsnxU2cl/d+gr6lvPBxIs5wfu
+         anLxWt4kyHImQX2vf8pRGTqhdLjsW+MTdDIB6sABPrhv3O41N6QrMCxh2ukJ6Qo6f0gN
+         dCw5Z1TEhrETrqsPKYWrTpdfBpwj0io5c4s84jdPuoEtJvhml+WoKizw9UED5LaMIFES
+         nEUw==
+X-Gm-Message-State: ACrzQf0g6oLaWpWw/5uK1y+OdKd2GpoFRLwEw44P3SD+Yqlrug1pFvYo
+        s5vld+oi+qvXyJkXPvdNDHWHce1gh1Mt2W05mtofWA==
+X-Google-Smtp-Source: AMsMyM7Rkee63nSg/2gdS0CS50T5Pl/67pcZ46Df4oNkssUPC67LGf1C197OZieBViQcm5Z3p64H7Vb6FylDNF6sujA=
+X-Received: by 2002:a17:906:da86:b0:740:7120:c6e6 with SMTP id
+ xh6-20020a170906da8600b007407120c6e6mr7405132ejb.44.1665990777297; Mon, 17
+ Oct 2022 00:12:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0xxlTP53dwx8VD+@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221016064454.327821011@linuxfoundation.org>
+In-Reply-To: <20221016064454.327821011@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 17 Oct 2022 12:42:45 +0530
+Message-ID: <CA+G9fYvH0rYGRX5BUq3Ut+Yk6t+xd-exZdS5CC8E_yhpo9ibFw@mail.gmail.com>
+Subject: Re: [PATCH 5.4 0/4] 5.4.219-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 12:03:17AM +0300, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> On Sun, Oct 16, 2022 at 08:19:40PM +0000, Sakari Ailus wrote:
-> > On Sun, Oct 16, 2022 at 02:23:13AM +0300, Laurent Pinchart wrote:
-> > > On Sat, Oct 15, 2022 at 09:35:12PM +0000, Sakari Ailus wrote:
-> > > > On Sat, Oct 15, 2022 at 09:25:37AM +0300, Laurent Pinchart wrote:
-> > > > > On Fri, Oct 14, 2022 at 07:34:58PM +0100, Prabhakar wrote:
-> > > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > > 
-> > > > > > Always return zero while stopping the stream as the caller will ignore the
-> > > > > > return value.
-> > > > > > 
-> > > > > > This patch drops checking the return value of ov5645_write_reg() and
-> > > > > > continues further in the code path while stopping stream. The user anyway
-> > > > > > gets an error message in case ov5645_write_reg() fails.
-> > > > > 
-> > > > > Continuing all the way to pm_runtime_put() is fine, but I don't think
-> > > > > the function should return 0. It's not up to the driver to decide if a
-> > > > > failure would be useful to signal to the caller or not.
-> > > > 
-> > > > If the function returns an error when disabling streaming, what is the
-> > > > expected power state of the device after this?
-> > > 
-> > > That's up to us to decide :-)
-> > > 
-> > > > The contract between the caller and the callee is that the state is not
-> > > > changed if there is an error.
-> > > 
-> > > For most APIs, but that's not universal.
-> > > 
-> > > > This is a special case as very few callers
-> > > > check the return value for streamoff operation and those that do generally
-> > > > just print something. I've never seen a caller trying to prevent streaming
-> > > > off in this case, for instance.
-> > > 
-> > > I think the stream off call should proceed and try to power off the
-> > > device even if an error occurs along the way, i.e. it shouldn't return
-> > > upon the first detected error.
-> > > 
-> > > > Of course we could document that streaming off always counts as succeeded
-> > > > (e.g. decreasing device's runtime PM usage_count) while it could return an
-> > > > informational error code. But I wonder if anyone would ever benefit from
-> > > > that somehow. :-)
-> > > 
-> > > I think it could be useful to propagate errors up to inform the user
-> > > that something wrong happened. That would involve fixing lots of drivers
-> > > along the call chain though, so there's no urgency for the ov5645 to do
-> > > so, but isn't it better to propagate the error code instead of hiding
-> > > the issue ?
-> > 
-> > I also don't think hiding the issue would be the best thing to do, but that
-> > wouldn't likely be a big problem either.
-> > 
-> > How about printing a warning in the wrapper while returning zero to the
-> > original caller? This would keep the API intact while still leaving a trace
-> > on something failing. Of course the driver is also free to print whatever
-> > messages it likes.
-> 
-> While I think error propagation could be more useful in the long run,
-> printing a message in the wrapper is a good idea. I like centralized
-> error handling, it has a tendency to go wrong when left to individual
-> drivers.
+On Sun, 16 Oct 2022 at 12:16, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.219 release.
+> There are 4 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Tue, 18 Oct 2022 06:44:46 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.219-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I can send a patch...
 
--- 
-Sakari Ailus
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.4.219-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 5a1de46f7e7462992a5dd980fe8d06ea57b4ad17
+* git describe: v5.4.218-5-g5a1de46f7e74
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.218-5-g5a1de46f7e74
+
+## No Test Regressions (compared to v5.4.217-39-g34b618a713e7)
+
+## No Metric Regressions (compared to v5.4.217-39-g34b618a713e7)
+
+## No Test Fixes (compared to v5.4.217-39-g34b618a713e7)
+
+## No Metric Fixes (compared to v5.4.217-39-g34b618a713e7)
+
+## Test result summary
+total: 99448, pass: 84788, fail: 1219, skip: 12965, xfail: 476
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 334 total, 334 passed, 0 failed
+* arm64: 64 total, 59 passed, 5 failed
+* i386: 31 total, 29 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 63 passed, 0 failed
+* riscv: 27 total, 26 passed, 1 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 57 total, 55 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
