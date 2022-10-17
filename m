@@ -2,365 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F720600776
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC8860074E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJQHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        id S230139AbiJQHIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbiJQHNf (ORCPT
+        with ESMTP id S230155AbiJQHIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:13:35 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD552C134
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:13:32 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id w11-20020a170902e88b00b001855276704aso1179474plg.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8uo76CIDBaq7HIm/FGI7bEiznO623Zlw58MY8o8i1jQ=;
-        b=JOhG279Pgn76eErTmzecyOat6CvlRRfOLfbJzUkkXMa/roQOzgt6ns7XrcuH5idfxW
-         Pz1VMHhCQ82Bk1MOzgkgCq65CQhqsUPjDlRB4IfvXHe+Pf61lNHwmoUFPym38IUhqT41
-         Td9KgFef1Ig7p6fkSWsV3cWREoPD4LPNEj8CRkHxf2eAEADc+gBjTk8c9mwAS2YjOdDt
-         124eD6Rqsgb8eo7fVr8DwhOMPAhctQkWTPvoDR1gX5sN42kYQisUDdjLg0E8zzhrzneX
-         BWKo06Dj9afzfMy82tSyezGO5aTtV/ZENhXV/Yu9tkHwaAWGR4qS46wPJDoNO709lWNt
-         L8Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8uo76CIDBaq7HIm/FGI7bEiznO623Zlw58MY8o8i1jQ=;
-        b=O5oytgBo9m7+XGDq+QIykKNKq4+XlEVEYJKk5e+qSd3XUKjDGUSya+PDIO9BSlC5Oz
-         z11SL+d4sBcNh3l2VMl4Oc7E9ZurHmuu55J97c/XU5yf//RNgVxQ0GgIm4WfohCAz0Em
-         LwIwo57FiDEhm6VquC+vHZBYKGlzHHgyMpiJl3xq/Edsk4UfCzj+n2xK07HfzhCxnjrl
-         9Tn7tJaeabG8y6dRQwqaVZTqpt+NKWDThvL2EmND8IYx2PFaCRk9Jq3j4YICeIADnmpj
-         hGl2KD67vLjdOJCv+NizAFUKyjM9i7Xn/5IILmCO/AHzU8Aq1anU/TfFWl9zKV0Kjs3V
-         dg9A==
-X-Gm-Message-State: ACrzQf2VY7+QG1DL+vGrvUrSMsyQnBIz6G8DxIWPdXeF8hVA7YBq0h1b
-        BBzGYcB+dsGK/kGHRcGn9c/NUJdXRYk8zbhD
-X-Google-Smtp-Source: AMsMyM4qvaqmCe2PiBBHuDGNVCli3vsunB7By1Giq0UKro2EvojwlPjuBMpj6cem2jROOWXYG/YkrUA+Qbm4+gNQ
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a17:90a:5408:b0:20a:d6b1:a2a7 with SMTP
- id z8-20020a17090a540800b0020ad6b1a2a7mr1237191pjh.2.1665990811200; Mon, 17
- Oct 2022 00:13:31 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 07:08:21 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221017070820.2253501-1-sadiyakazi@google.com>
-Subject: [PATCH v3] Documentation: Kunit: Update architecture.rst for minor fixes
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net, bagasdotme@gmail.com
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 03:08:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51BE222B1;
+        Mon, 17 Oct 2022 00:08:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 971B8B80F6F;
+        Mon, 17 Oct 2022 07:08:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78F8C433D6;
+        Mon, 17 Oct 2022 07:08:31 +0000 (UTC)
+Message-ID: <11db8299-cb75-dd97-11bd-3f269a8434cf@xs4all.nl>
+Date:   Mon, 17 Oct 2022 09:08:30 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [V17,0/15] Enable jpeg enc & dec multi-hardwares for MT8195
+Content-Language: en-US
+To:     "kyrie.wu" <kyrie.wu@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com, wenst@chromium.org
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
+References: <20220929090817.24272-1-irui.wang@mediatek.com>
+ <81fb2973c0376c988cf2f6550da24b533e341092.camel@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <81fb2973c0376c988cf2f6550da24b533e341092.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updated the architecture.rst page with the following changes:
--Add missing article _the_ across the document.
--Reword content across for style and standard.
--Update all occurrences of Command Line to Command-line
- across the document.
--Correct grammatical issues, for example,
- added _it_wherever missing.
--Update all occurrences of =E2=80=9Cvia" to either use
- =E2=80=9Cthrough=E2=80=9D or =E2=80=9Cusing=E2=80=9D.
--Update the text preceding the external links and pushed the full
- link to a new line for better readability.
--Reword content under the config command to make it more clear and concise.
+Hi Irui,
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
----
-Please Note: The link in the change log in my previous email was broken as =
-it got
-mixed with the next line. I have resent the email.
+On 10/14/22 11:26, kyrie.wu wrote:
+> On Thu, 2022-09-29 at 17:08 +0800, Irui Wang wrote:
+>> From: kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
+> 
+> Dear Hans,
+> 
+> Do you have any comments about the series patches?
 
-Thank you Bagas for your detailed comments.=20
-I think the current commit message does convey the right message as it is n=
-ot a complete rewrite, hence retained it.=20
-Also since we talk about the two parts of the architecture, I have retained=
- the it as 'kunit_tool (Command-line Test Harness)' instead of 'Running Tes=
-ts Options'.
+None :-)
 
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20221013080545.1552573-1-sadiyakazi=
-@google.com/
+It's all in this pull request:
 
--Updated the link descriptions as per Bagas=E2=80=99s feedback
--Reworded content talking about options to run tests and added links as per=
- Bagas=E2=80=99s feedback
+https://patchwork.linuxtv.org/project/linux-media/patch/50618425-5159-4077-3d3b-6938c86ca474@xs4all.nl/
 
-Best Regards,
-Sadiya Kazi
----
- .../dev-tools/kunit/architecture.rst          | 118 +++++++++---------
- 1 file changed, 60 insertions(+), 58 deletions(-)
+Now that rc1 has been released by Linus I expect this PR to be merged by the end of this week
+(depending on Mauro's schedule).
 
-diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation=
-/dev-tools/kunit/architecture.rst
-index 8efe792bdcb9..52b1a30c9f89 100644
---- a/Documentation/dev-tools/kunit/architecture.rst
-+++ b/Documentation/dev-tools/kunit/architecture.rst
-@@ -4,16 +4,17 @@
- KUnit Architecture
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--The KUnit architecture can be divided into two parts:
-+The KUnit architecture is divided into two parts:
-=20
- - `In-Kernel Testing Framework`_
--- `kunit_tool (Command Line Test Harness)`_
-+- `kunit_tool (Command-line Test Harness)`_
-=20
- In-Kernel Testing Framework
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-=20
- The kernel testing library supports KUnit tests written in C using
--KUnit. KUnit tests are kernel code. KUnit does several things:
-+KUnit. These KUnit tests are kernel code. KUnit performs the following
-+tasks:
-=20
- - Organizes tests
- - Reports test results
-@@ -22,19 +23,17 @@ KUnit. KUnit tests are kernel code. KUnit does several =
-things:
- Test Cases
- ----------
-=20
--The fundamental unit in KUnit is the test case. The KUnit test cases are
--grouped into KUnit suites. A KUnit test case is a function with type
--signature ``void (*)(struct kunit *test)``.
--These test case functions are wrapped in a struct called
--struct kunit_case.
-+The test case is the fundamental unit in KUnit. KUnit test cases are organ=
-ised
-+into suites. A KUnit test case is a function with type signature
-+``void (*)(struct kunit *test)``. These test case functions are wrapped in=
- a
-+struct called struct kunit_case.
-=20
- .. note:
- 	``generate_params`` is optional for non-parameterized tests.
-=20
--Each KUnit test case gets a ``struct kunit`` context
--object passed to it that tracks a running test. The KUnit assertion
--macros and other KUnit utilities use the ``struct kunit`` context
--object. As an exception, there are two fields:
-+Each KUnit test case receives a ``struct kunit`` context object that track=
-s a
-+running test. The KUnit assertion macros and other KUnit utilities use the
-+``struct kunit`` context object. As an exception, there are two fields:
-=20
- - ``->priv``: The setup functions can use it to store arbitrary test
-   user data.
-@@ -75,14 +74,15 @@ with the KUnit test framework.
- Executor
- --------
-=20
--The KUnit executor can list and run built-in KUnit tests on boot.
-+The KUnit executor can list and run built-in KUnit tests on boot
- The Test suites are stored in a linker section
--called ``.kunit_test_suites``. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/in=
-clude/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
-+called ``.kunit_test_suites``. For the code, see ``KUNIT_TABLE()`` macro
-+definition in
-+`include/asm-generic/vmlinux.lds.h <https://git.kernel.org/pub/scm/linux/k=
-ernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=3Dv6.=
-0#n950>`_.
- The linker section consists of an array of pointers to
- ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
--macro. To run all tests compiled into the kernel, the KUnit executor
--iterates over the linker section array.
-+macro. The KUnit executor iterates over the linker section array in order =
-to
-+run all the tests that are compiled into the kernel.
-=20
- .. kernel-figure:: kunit_suitememorydiagram.svg
- 	:alt:	KUnit Suite Memory
-@@ -90,17 +90,18 @@ iterates over the linker section array.
- 	KUnit Suite Memory Diagram
-=20
- On the kernel boot, the KUnit executor uses the start and end addresses
--of this section to iterate over and run all tests. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/executor.c
--
-+of this section to iterate over and run all tests. For the implementation =
-of the
-+executor, see
-+`lib/kunit/executor.c <https://git.kernel.org/pub/scm/linux/kernel/git/tor=
-valds/linux.git/tree/lib/kunit/executor.c>`_.
- When built as a module, the ``kunit_test_suites()`` macro defines a
- ``module_init()`` function, which runs all the tests in the compilation
- unit instead of utilizing the executor.
-=20
- In KUnit tests, some error classes do not affect other tests
- or parts of the kernel, each KUnit case executes in a separate thread
--context. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/try-catch.c?h=3Dv5.15#n58
-+context. For the implememtation details, see ``kunit_try_catch_run()`` fun=
-ction
-+code in
-+`lib/kunit/try-catch.c <https://git.kernel.org/pub/scm/linux/kernel/git/to=
-rvalds/linux.git/tree/lib/kunit/try-catch.c?h=3Dv5.15#n58>`_.
-=20
- Assertion Macros
- ----------------
-@@ -111,37 +112,36 @@ All expectations/assertions are formatted as:
-=20
- - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
-   expectation.
-+  In the event of a failure, the testing flow differs as follows:
-=20
--	- For an expectation, if the check fails, marks the test as failed
--	  and logs the failure.
-+	- For expectations, the test is marked as failed and the failure is logge=
-d.
-=20
--	- An assertion, on failure, causes the test case to terminate
--	  immediately.
-+	- Failing assertions, on the other hand, result in the test case being
-+	  terminated immediately.
-=20
--		- Assertions call function:
-+		- Assertions call the function:
- 		  ``void __noreturn kunit_abort(struct kunit *)``.
-=20
--		- ``kunit_abort`` calls function:
-+		- ``kunit_abort`` calls the function:
- 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_ca=
-tch)``.
-=20
--		- ``kunit_try_catch_throw`` calls function:
-+		- ``kunit_try_catch_throw`` calls the function:
- 		  ``void kthread_complete_and_exit(struct completion *, long) __noreturn=
-;``
- 		  and terminates the special thread context.
-=20
- - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
--  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied prop=
-erties are
-+  has the boolean value "true"), ``EQ`` (two supplied properties are
-   equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
--  contain an =E2=80=9Cerr=E2=80=9D value).
-+  contain an "err" value).
-=20
- - ``[_MSG]`` prints a custom message on failure.
-=20
- Test Result Reporting
- ---------------------
--KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
--https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14=
--specification.md.
--KTAP (yet to be standardized format) works with KUnit and Kselftest.
--The KUnit executor prints KTAP results to dmesg, and debugfs
--(if configured).
-+KUnit prints the test results in KTAP format. KTAP is based on TAP14, see
-+Documentation/dev-tools/ktap.rst.
-+KTAP works with KUnit and Kselftest. The KUnit executor prints KTAP result=
-s to
-+dmesg, and debugfs (if configured).
-=20
- Parameterized Tests
- -------------------
-@@ -150,33 +150,35 @@ Each KUnit parameterized test is associated with a co=
-llection of
- parameters. The test is invoked multiple times, once for each parameter
- value and the parameter is stored in the ``param_value`` field.
- The test case includes a KUNIT_CASE_PARAM() macro that accepts a
--generator function.
--The generator function is passed the previous parameter and returns the ne=
-xt
--parameter. It also provides a macro to generate common-case generators bas=
-ed on
--arrays.
-+generator function. The generator function is passed the previous paramete=
-r
-+and returns the next parameter. It also includes a macro for generating
-+array-based common-case generators.
-=20
--kunit_tool (Command Line Test Harness)
-+kunit_tool (Command-line Test Harness)
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
--that can be used to configure, build, exec, parse and run (runs other
--commands in order) test results. You can either run KUnit tests using
--kunit_tool or can include KUnit in kernel and parse manually.
-+``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.py=
-``. It
-+is used to configure, build, execute, parse test results and run all of th=
-e
-+previous commands in correct order (i.e., configure, build, execute and pa=
-rse).
-+You have two options for running KUnit tests: either build the kernel with=
- KUnit
-+enabled and manually parse the results (see
-+Documentation/dev-tools/kunit/run_manual.rst) or use ``kunit_tool``
-+(see Documentation/dev-tools/kunit/run_wrapper.rst).
-=20
- - ``configure`` command generates the kernel ``.config`` from a
-   ``.kunitconfig`` file (and any architecture-specific options).
--  For some architectures, additional config options are specified in the
--  ``qemu_config`` Python script
--  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
-+  The Python scripts available in ``qemu_configs`` folder
-+  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
-+  additional configuration options for specific architectures.
-   It parses both the existing ``.config`` and the ``.kunitconfig`` files
--  and ensures that ``.config`` is a superset of ``.kunitconfig``.
--  If this is not the case, it will combine the two and run
--  ``make olddefconfig`` to regenerate the ``.config`` file. It then
--  verifies that ``.config`` is now a superset. This checks if all
--  Kconfig dependencies are correctly specified in ``.kunitconfig``.
--  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
--  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
--  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
-+  to ensure that ``.config`` is a superset of ``.kunitconfig``.
-+  If not, it will combine the two and run ``make olddefconfig`` to regener=
-ate
-+  the ``.config`` file. It then checks to see if ``.config`` has become a =
-superset.
-+  This verifies that all the Kconfig dependencies are correctly specified =
-in the
-+  file ``.kunitconfig``. The ``kunit_config.py`` script contains the code =
-for parsing
-+  Kconfigs. The code which runs ``make olddefconfig`` is part of the
-+  ``kunit_kernel.py`` script. You can invoke this command through:
-+  ``./tools/testing/kunit/kunit.py config`` and
-   generate a ``.config`` file.
- - ``build`` runs ``make`` on the kernel tree with required options
-   (depends on the architecture and some options, for example: build_dir)
-@@ -184,8 +186,8 @@ kunit_tool or can include KUnit in kernel and parse man=
-ually.
-   To build a KUnit kernel from the current ``.config``, you can use the
-   ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
- - ``exec`` command executes kernel results either directly (using
--  User-mode Linux configuration), or via an emulator such
--  as QEMU. It reads results from the log via standard
-+  User-mode Linux configuration), or through an emulator such
-+  as QEMU. It reads results from the log using standard
-   output (stdout), and passes them to ``parse`` to be parsed.
-   If you already have built a kernel with built-in KUnit tests,
-   you can run the kernel and display the test results with the ``exec``
---=20
-2.38.0.413.g74048e4d9e-goog
+Regards,
 
+	Hans
+
+> 
+> Thanks.
+> 
+> Regards,
+> Kyrie.
+>>
+>> This series adds support for multi hardwares jpeg enc & dec,
+>> by first adding use of_platform_populate to manage each hardware
+>> information:interrupt, clock, register bases and power.
+>> Secondly add jpeg enc & dec work queue to deal with the encoding
+>> or decoding requests of multi-hardwares at the same time.
+>> Lastly, add output picture reorder function interface to
+>> eliminate the out of order images.
+>>
+>> This series has been tested with MT8195 Gstreamer.
+>> Encoding and decoding worked for this chip.
+>>
+>> Patches 1 Adds jpeg encoder dt-bindings for mt8195
+>>
+>> Patches 2 jpeg encoder builds two module for using Multi-HW,
+>> export some functions to make them visible by other modules.
+>>
+>> Patches 3 use devm_of_platform_populate to manage multi-hardware.
+>>
+>> Patch 4 add jpeg encoding timeout function to judge hardware timeout.
+>>
+>> Patch 5 add encoding work queue to deal with multi-hardware encoding
+>> at the same time.
+>>
+>> Patch 6 add output picture reorder function to jpgenc order images.
+>>
+>> Patch 7 add stop cmd function to deal with jpgenc EOS operation.
+>>
+>> Patch 8 Adds jpeg decoder dt-bindings for mt8195
+>>
+>> Patches 9 jpeg decoder builds three module for using Multi-HW,
+>> export some functions to make them visible by other modules.
+>>
+>> Patch 10 use of_platform_populate to manage multi-hardware.
+>>
+>> Patch 11 add jpeg decoding timeout function to judge hardware
+>> timeout.
+>>
+>> Patch 12 add decoding work queue to deal with multi-hardware decoding
+>> at the same time.
+>>
+>> Patch 13 add output picture reorder function to jpgdec order images.
+>>
+>> Patch 14 refactor jpegdec func interface for HW working.
+>>
+>> Patch 15 add stop cmd function to deal with jpgdec EOS operation.
+>>
+>> ---
+>> This series patches dependent on:
+>> media_stage tree:
+>> [1]
+>>
+> https://git.linuxtv.org/media_stage.git/commit/?id=b3627647f9ea7473d10fb08a95fd7c4133a17ca4
+>>
+>> patch1 new jpegdec dt-bindings included files
+>> [2] MM IOMMU binding:
+>>
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20220217113453.13658-2-yong.wu@mediatek.com/
+>>
+>> [3] MT8195 power domain:
+>>
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
+>>
+>> Changes compared with v16:
+>> - some modifications for patch v16's review comments.
+>>
+>> Changes compared with v15:
+>> - some modifications for patch v15's review comments.
+>>
+>> Changes compared with v14:
+>> - some modifications for patch v14's review comments.
+>>
+>> Changes compared with v13:
+>> - some modifications for patch v13's review comments.
+>> - fix kernel robot check errors.
+>> - fix kernel-doc check warns.
+>> - fix sparse check warns.
+>> - combine jpeg encoder series with decoder series into
+>>   one single series.
+>>
+>> Changes compared with v12:
+>> - some modifications for patch v12's review comments.
+>>
+>> Changes compared with v11:
+>> - some modifications for patch v11's review comments.
+>> - fix yaml file check errors.
+>>
+>> Changes compared with v10:
+>> - some modifications for patch v10's review comments.
+>> - fix Gstreamer test errors.
+>>
+>> Changes compared with v9:
+>> - some modifications for patch v9's review comments.
+>>
+>> Changes compared with v8:
+>> - some modifications for patch v8's review comments.
+>> - add stop cmd function.
+>>
+>> Changes compared with v7:
+>> - some modifications for patch v6's review comments.
+>>
+>> Changes compared with v6:
+>> - new yaml file for mt8195 jpeg encoder.
+>> - some modifications for patch v5's review comments.
+>>
+>> Changes compared with v5:
+>> - use of_platform_populate to replace component framework to
+>>   manage multi-hardware in patch 2.
+>>
+>> Changes compared with v4:
+>> - No change compaered with v4
+>>
+>> Changes compared with v3:
+>> - Structure patches for consistency, non-backward
+>>   compatible and do not break any existing functionality
+>>
+>> Changes compared with v2:
+>> - Split the last two patches into several patches
+>>   to enhance readability
+>> - Correct some syntax errors
+>> - Explain why the component framework is used
+>>
+>> Changes compared with v1:
+>> - Add jpeg encoder dt-bindings for MT8195
+>> - Use component framework to manage jpegenc HW
+>> - Add jpegenc output pic reorder function interface
+>>
+>> kyrie wu (15):
+>>   dt-bindings: mediatek: Add mediatek, mt8195-jpgenc compatible
+>>   mtk-jpegenc: export jpeg encoder functions
+>>   mtk-jpegenc: support jpegenc multi-hardware
+>>   mtk-jpegenc: add jpegenc timeout func interface
+>>   mtk-jpegenc: add jpeg encode worker interface
+>>   mtk-jpegenc: add output pic reorder interface
+>>   mtk-jpegenc: add stop cmd interface for jpgenc
+>>   dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
+>>   media: mtk-jpegdec: export jpeg decoder functions
+>>   media: mtk-jpegdec: support jpegdec multi-hardware
+>>   media: mtk-jpegdec: add jpegdec timeout func interface
+>>   media: mtk-jpegdec: add jpeg decode worker interface
+>>   media: mtk-jpegdec: add output pic reorder interface
+>>   media: mtk-jpegdec: refactor jpegdec func interface
+>>   mtk-jpegdec: add stop cmd interface for jpgdec
+>>
+>>  .../media/mediatek,mt8195-jpegdec.yaml        | 168 ++++++
+>>  .../media/mediatek,mt8195-jpegenc.yaml        | 147 ++++++
+>>  drivers/media/platform/mediatek/jpeg/Makefile |  14 +-
+>>  .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 490
+>> ++++++++++++++++--
+>>  .../platform/mediatek/jpeg/mtk_jpeg_core.h    | 169 +++++-
+>>  .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 315 ++++++++++-
+>>  .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |   6 +-
+>>  .../platform/mediatek/jpeg/mtk_jpeg_dec_reg.h |   1 +
+>>  .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 255 +++++++++
+>>  9 files changed, 1482 insertions(+), 83 deletions(-)
+>>  create mode 100644
+>> Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+>>  create mode 100644
+>> Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+>>
+> 
