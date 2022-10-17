@@ -2,137 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E278A60082A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0463160082B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiJQHzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S230123AbiJQHzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiJQHzJ (ORCPT
+        with ESMTP id S230024AbiJQHzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:55:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286964C60A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665993308; x=1697529308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vtjlkeu8sKMQz9IdE+hQRGUqr0x2eN33wJszlyvmDS0=;
-  b=OcdPqTYI+19qwK339mulO754HL+XHjgHRhHuke8hp8QPCO/QP1lStK/Z
-   bahfjBXvGZUIW1kJOnzH/8wsf1uynmWPrwJzqnnsUgHR9JDxYjfmGmMHC
-   KBNZv9pnzX5qGi2hHOFyJvhOLKuQtbPXKuSrPofFrQxUOGWcytlP7Hc+g
-   /+QNYUYIYpvZ/eknkOtXc91MWWZ5eaMrZG/ejEz0jmmtVMqNAvZwc03SW
-   lF8Q/DpbVwk7XEIYeTDSO3Ryi3PQSYKWiapjuj62Fnik+nGtVqeqkGfJZ
-   RPK5+nnjBIxD3HewgKuZMNcahwXlyPa9wmIsTS+PdUqUgoaL5Lo4UITe/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="367757284"
-X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
-   d="scan'208";a="367757284"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 00:54:56 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="770676008"
-X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
-   d="scan'208";a="770676008"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 00:54:55 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id EA6B920310;
-        Mon, 17 Oct 2022 10:54:52 +0300 (EEST)
-Date:   Mon, 17 Oct 2022 07:54:52 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2] driver core: allow kobj_to_dev() to take a const
- pointer
-Message-ID: <Y00KTAobXJ0/Jgv3@paasikivi.fi.intel.com>
-References: <20221016104126.1259809-1-gregkh@linuxfoundation.org>
+        Mon, 17 Oct 2022 03:55:36 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408DE53D34
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:55:36 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id j17-20020a5d93d1000000b006bcdc6b49cbso4049909ioo.22
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:55:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LybfEo/Roi1WEbT75rYrCV7d1BsMH3weiJW7j1IZqds=;
+        b=s2NQUPhqBd99I2ROKPDHn2PXcXXWg+DATVT2FDWWOdzUjny0MzWMEGwnoSTqIngLNT
+         hWMfBfLdgfwaPurqjf08InHXIS3xwbfd6rG3jlQneSBHlKBT1WhDs8bPYrMNH0E44KQy
+         Q/pAElyasooMrfYZxCZYBsESK++eecF7KBiiQrVur/AYgv94xA7I84Jtn9EAD5oJu8CR
+         mpk+yqAn0lDWmNWoIDwig8PT3y7O5p1LMQmH1wPLbCuy5F901yC34cNJ9n/xZy+iHQK9
+         F4xm2i+pAuhVHwzrGK5e5mWYyZeQcQJLqZ1hS3Sm5OL3s8Pk7KC58OoR1P8gAvRLO4dh
+         eTyg==
+X-Gm-Message-State: ACrzQf0qJi1gS9snI4ZpFSWv8srXi4nf8W++MH2eCnbiTKaKj1ghT28Q
+        csi/WubEfIrRTXK8bxmVI5JH4VXngIoJT3kkhdF10jOpWsK5
+X-Google-Smtp-Source: AMsMyM5Z3edcvaaDmVKjK33q8v3PvwDh9SOWPTanWtmNPKIBRi99dPNR24Xb54YSZgjvrn6IjZQqPsKDwuUqSwR4fXvALZ2z1rQY
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221016104126.1259809-1-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4304:b0:343:5953:5fc8 with SMTP id
+ bt4-20020a056638430400b0034359535fc8mr4711928jab.123.1665993335651; Mon, 17
+ Oct 2022 00:55:35 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 00:55:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f841fb05eb364ce6@google.com>
+Subject: [syzbot] UBSAN: array-index-out-of-bounds in txCommit
+From:   syzbot <syzbot+0558d19c373e44da3c18@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hello,
 
-On Sun, Oct 16, 2022 at 12:41:26PM +0200, Greg Kroah-Hartman wrote:
-> If a const * to a kobject is passed to kobj_to_dev(), we want to return
-> back a const * to a device as the driver core shouldn't be modifying a
-> constant structure.  But when dealing with container_of() the pointer
-> const attribute is cast away, so we need to manually handle this by
-> determining the type of the pointer passed in to know the type of the
-> pointer to pass out.
+syzbot found the following issue on:
 
-Alternatively container_of() could be fixed, but that will likely produce
-lots of warnings currently.
+HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15d11444880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+dashboard link: https://syzkaller.appspot.com/bug?extid=0558d19c373e44da3c18
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> 
-> Luckily _Generic can do this type of magic, and as the kernel now
-> supports C11 it is availble to us to handle this type of build-time type
-> detection.
-> 
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> v2 - use _Generic() to make this type safe as pointed out by Sakari
-> 
->  include/linux/device.h | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 424b55df0272..023ea50b1916 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -680,11 +680,27 @@ struct device_link {
->  	bool supplier_preactivated; /* Owned by consumer probe. */
->  };
->  
-> -static inline struct device *kobj_to_dev(struct kobject *kobj)
-> +static inline struct device *__kobj_to_dev(struct kobject *kobj)
->  {
->  	return container_of(kobj, struct device, kobj);
->  }
->  
-> +static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
-> +{
-> +	return container_of(kobj, const struct device, kobj);
-> +}
-> +
-> +/*
-> + * container_of() will happily take a const * and spit back a non-const * as it
-> + * is just doing pointer math.  But we want to be a bit more careful in the
-> + * driver code, so manually force any const * of a kobject to also be a const *
-> + * to a device.
-> + */
+Unfortunately, I don't have any reproducer for this issue yet.
 
-container_of() documentation has (probably?) never warned about this.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
 
-Wouldn't such a comment be more appropriate there? Albeit it wouldn't be
-needed if container_of() were fixed.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0558d19c373e44da3c18@syzkaller.appspotmail.com
 
-> +#define kobj_to_dev(kobj)					\
-> +	_Generic((kobj),					\
-> +		 const struct kobject *: __kobj_to_dev_const,	\
-> +		 struct kobject *: __kobj_to_dev)(kobj)
-> +
->  /**
->   * device_iommu_mapped - Returns true when the device DMA is translated
->   *			 by an IOMMU
+================================================================================
+UBSAN: array-index-out-of-bounds in fs/jfs/jfs_txnmgr.c:1738:5
+index 18 is out of range for type 'xad_t [18]'
+CPU: 1 PID: 11903 Comm: syz-executor.3 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
+ xtLog fs/jfs/jfs_txnmgr.c:1738 [inline]
+ txLog fs/jfs/jfs_txnmgr.c:1391 [inline]
+ txCommit+0x3fb5/0x6d40 fs/jfs/jfs_txnmgr.c:1259
+ jfs_commit_inode+0x342/0x5a0 fs/jfs/inode.c:108
+ extAlloc+0xc93/0xff0 fs/jfs/jfs_extent.c:172
+ jfs_get_block+0x342/0xce0 fs/jfs/inode.c:248
+ get_more_blocks fs/direct-io.c:665 [inline]
+ do_direct_IO fs/direct-io.c:953 [inline]
+ __blockdev_direct_IO+0x17e7/0x3c90 fs/direct-io.c:1266
+ blockdev_direct_IO include/linux/fs.h:3204 [inline]
+ jfs_direct_IO+0xf6/0x1e0 fs/jfs/inode.c:336
+ generic_file_direct_write+0x294/0x610 mm/filemap.c:3669
+ __generic_file_write_iter+0x1c4/0x400 mm/filemap.c:3829
+ generic_file_write_iter+0xab/0x310 mm/filemap.c:3905
+ do_iter_write+0x6c2/0xc20 fs/read_write.c:861
+ iter_file_splice_write+0x7fc/0xfc0 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
+ splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
+ do_splice_direct+0x279/0x3d0 fs/splice.c:974
+ do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb2a168b5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb2a05bc168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007fb2a17ac120 RCX: 00007fb2a168b5a9
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: 0000000000000003
+RBP: 00007fb2a16e6580 R08: 0000000000000000 R09: 0000000000000000
+R10: 000080001d00c0d0 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd4c0de95f R14: 00007fb2a05bc300 R15: 0000000000022000
+ </TASK>
 
--- 
-Kind regards,
 
-Sakari Ailus
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
