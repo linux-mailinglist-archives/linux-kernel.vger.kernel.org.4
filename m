@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA22D60121F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBEA60122C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiJQO66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S231579AbiJQO70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiJQO5c (ORCPT
+        with ESMTP id S230329AbiJQO6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:57:32 -0400
+        Mon, 17 Oct 2022 10:58:08 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5B568885;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA786AA21;
         Mon, 17 Oct 2022 07:55:06 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:54:27 -0000
+Date:   Mon, 17 Oct 2022 14:54:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018469;
+        s=2020; t=1666018470;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OTvjpn0KgxNDsUjGGkGy4CVh9hhBuLzsShC+ZJJI72s=;
-        b=ZuUbGX3ey9eh0jBsFcA2kdL30QHF9+gx2ErowuXokFcOl55hCFV2jiq5nIeH/Eex+qIU+z
-        82UvcM/XGrI4oy8viPD8cuwyJW/wPSLGZRz5MMEg0CIZkQOgObWsKdCX8ZZg4tmEjxllY8
-        Hpv2VJ2WZj4pzHSVY5P+lBhPBponHHhQMUK+01SODfyYuEHGqezH2vmPh1bkTAI27c1OQ5
-        +t5S1iZFDWEkUnCer0VQd2mcwtGU+4vj+Upr1L5j2eLy/60FmEri507fWmhZOGI1WutY29
-        7S06+AtZakNC8KUisQ24cc2IUTioJRErY6Zo1/1kDQpd65L9WAALtehtrs+B1Q==
+        bh=lDH4lNeSn29fzW6aKL9NU3cvnqKlx9WGVr28ecp1CVM=;
+        b=3exDKmZAKyEaAecJ4NprepM5WdnvWxg/rSEiQdMBq+cUWKKR7kxMdiVgX4XJT8yz9GHnvW
+        FfcPcIJ2bQQjJ8NWKxbZGxPo9nOjWooAm/ui4T3kGzT05oiJI6bmyxxSGfFLUs8i15Kz4m
+        D9u4RIJtckACkNpbe/E7PdjLljrLsv5105AEiIgsljK2NnZykKOj8HjTBO0EkzgmWiDu2P
+        18/hNDr1n/BCpSXWmA9kv99rx6dZawNV3CH/lmVwUowycVlzJ4neelx5PJQEM7QmBt+Nch
+        oWOTlsIni3kJRKyCdIrD9w/WpqqN6ohs8OiU14Kquljl9cA0dbuThSwPSA+8CA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018469;
+        s=2020e; t=1666018470;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OTvjpn0KgxNDsUjGGkGy4CVh9hhBuLzsShC+ZJJI72s=;
-        b=Dt+G7S7eDmQAVkBZBs/EHpf9iUowfCZrLbdlc392Rw5FYqOMd/+wh1yh22GDeTkY7fXkWw
-        mqARFQmuWUOCrzBw==
+        bh=lDH4lNeSn29fzW6aKL9NU3cvnqKlx9WGVr28ecp1CVM=;
+        b=OdbA8SzTYy07dZMw09UxLrYKjL+Gnvb+b5HsWvQVmHHR80sbjxfVYnkJ3cOnng63oOgWJB
+        x6+d345z6/0Y6cAg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/modules: Set VM_FLUSH_RESET_PERMS in module_alloc()
+Subject: [tip: x86/core] x86/cpu: Re-enable stackprotector
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111143.406703869@infradead.org>
-References: <20220915111143.406703869@infradead.org>
+In-Reply-To: <20220915111143.303010511@infradead.org>
+References: <20220915111143.303010511@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601846783.401.2287915526289128493.tip-bot2@tip-bot2>
+Message-ID: <166601846890.401.14873709384624392317.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,70 +66,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     4c4eb3ecc91f4fee6d6bf7cfbc1e21f2e38d19ff
-Gitweb:        https://git.kernel.org/tip/4c4eb3ecc91f4fee6d6bf7cfbc1e21f2e38d19ff
+Commit-ID:     2cb15faaedeb67f52f2ddc32b5ca152acfc422c2
+Gitweb:        https://git.kernel.org/tip/2cb15faaedeb67f52f2ddc32b5ca152acfc422c2
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 15 Sep 2022 13:10:44 +02:00
+AuthorDate:    Thu, 15 Sep 2022 13:10:43 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 17 Oct 2022 16:40:57 +02:00
+CommitterDate: Mon, 17 Oct 2022 16:40:56 +02:00
 
-x86/modules: Set VM_FLUSH_RESET_PERMS in module_alloc()
+x86/cpu: Re-enable stackprotector
 
-Instead of resetting permissions all over the place when freeing module
-memory tell the vmalloc code to do so. Avoids the exercise for the next
-upcoming user.
+Commit 5416c2663517 ("x86: make sure load_percpu_segment has no
+stackprotector") disabled the stackprotector for cpu/common.c because of
+load_percpu_segment(). Back then the boot stack canary was initialized very
+early in start_kernel(). Switching the per CPU area by loading the GDT
+caused the stackprotector to fail with paravirt enabled kernels as the
+GSBASE was not updated yet. In hindsight a wrong change because it would
+have been sufficient to ensure that the canary is the same in both per CPU
+areas.
+
+Commit d55535232c3d ("random: move rand_initialize() earlier") moved the
+stack canary initialization to a later point in the init sequence. As a
+consequence the per CPU stack canary is 0 when switching the per CPU areas,
+so there is no requirement anymore to exclude this file.
+
+Add a comment to load_percpu_segment().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111143.406703869@infradead.org
+Link: https://lore.kernel.org/r/20220915111143.303010511@infradead.org
 ---
- arch/x86/kernel/ftrace.c       |  2 --
- arch/x86/kernel/kprobes/core.c |  1 -
- arch/x86/kernel/module.c       |  9 +++++----
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ arch/x86/kernel/cpu/Makefile | 3 ---
+ arch/x86/kernel/cpu/common.c | 3 +++
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index bd16500..00eac45 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -413,8 +413,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	/* ALLOC_TRAMP flags lets us know we created it */
- 	ops->flags |= FTRACE_OPS_FL_ALLOC_TRAMP;
+diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
+index f10a921..d7e3cea 100644
+--- a/arch/x86/kernel/cpu/Makefile
++++ b/arch/x86/kernel/cpu/Makefile
+@@ -17,9 +17,6 @@ KMSAN_SANITIZE_common.o := n
+ # As above, instrumenting secondary CPU boot code causes boot hangs.
+ KCSAN_SANITIZE_common.o := n
  
--	set_vm_flush_reset_perms(trampoline);
+-# Make sure load_percpu_segment has no stackprotector
+-CFLAGS_common.o		:= -fno-stack-protector
 -
- 	if (likely(system_state != SYSTEM_BOOTING))
- 		set_memory_ro((unsigned long)trampoline, npages);
- 	set_memory_x((unsigned long)trampoline, npages);
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index eb8bc82..01b8d95 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -414,7 +414,6 @@ void *alloc_insn_page(void)
- 	if (!page)
- 		return NULL;
- 
--	set_vm_flush_reset_perms(page);
- 	/*
- 	 * First make the page read-only, and only then make it executable to
- 	 * prevent it from being W+X in between.
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index c032edc..43f0112 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -74,10 +74,11 @@ void *module_alloc(unsigned long size)
- 		return NULL;
- 
- 	p = __vmalloc_node_range(size, MODULE_ALIGN,
--				    MODULES_VADDR + get_module_load_offset(),
--				    MODULES_END, gfp_mask,
--				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
--				    __builtin_return_address(0));
-+				 MODULES_VADDR + get_module_load_offset(),
-+				 MODULES_END, gfp_mask, PAGE_KERNEL,
-+				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
-+				 NUMA_NO_NODE, __builtin_return_address(0));
-+
- 	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
- 		vfree(p);
- 		return NULL;
+ obj-y			:= cacheinfo.o scattered.o topology.o
+ obj-y			+= common.o
+ obj-y			+= rdrand.o
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index f51928d..8e87318 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -752,6 +752,9 @@ void __init switch_gdt_and_percpu_base(int cpu)
+ 	 * early mapping is still valid. That means the GSBASE update will
+ 	 * lose any prior per CPU data which was not copied over in
+ 	 * setup_per_cpu_areas().
++	 *
++	 * This works even with stackprotector enabled because the
++	 * per CPU stack canary is 0 in both per CPU areas.
+ 	 */
+ 	wrmsrl(MSR_GS_BASE, cpu_kernelmode_gs_base(cpu));
+ #else
