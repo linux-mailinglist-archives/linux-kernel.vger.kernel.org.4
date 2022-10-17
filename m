@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEF7601075
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727E9601074
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiJQNrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S230012AbiJQNrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiJQNrg (ORCPT
+        with ESMTP id S229956AbiJQNrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Oct 2022 09:47:36 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4434852FD9;
-        Mon, 17 Oct 2022 06:47:34 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 13:47:31 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433AC58DD7;
+        Mon, 17 Oct 2022 06:47:35 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 13:47:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666014452;
+        s=2020; t=1666014453;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N3GpTfY3y5qdlAiQiJDXMLWXE9wY2GvyezsXxcK3s5I=;
-        b=wMmHLSJetIHsJ8irzObZ3AgopznAlw8RAl/kmGgfAaLQVi8gWDiYtxDUT1ab0YoXgTNqSb
-        cUZ1lGjcYGMc4i1sEFZZLhD6cEMe++P0wk8DZk7DAbKC5kOujybscK3yMHsmmNo7trc5Su
-        WwbdMhv9zx6ii4FA8yAm7PEzEFgOhwtrxig7Dk1yUKjNjKOhsmIbfz6YhXaIKm6bxI19rn
-        /ui63Booxm3I0aiq45eEOqMr0Xzcwo6JXRSL62fLAHOqt+6ytx1TSq3ziWkcHqw+S2YoFe
-        xZ91Eo1O+cOy58Dm6CLNfYrDb2aoT9WwkvGWQSCfqdkBS8DtZ/0dcyI2UkTAgA==
+        bh=RYRgwFQgQpDYP5WecjoI1bYhBCL6RdxmeiLAElFhWwY=;
+        b=u7WleTcURbWvLQy7LWzgcd8+NqDyStSfsOUENOo9jiBro87pyyfm9obL092LSBswvrZzUW
+        ecpArw43LdKd542EooWeLRfj9aY6QP2d81yUifrtbJ4Spfz2P4AelTV7LNw0iGqyhrT7ie
+        JIYVvoAHqiKzWoQLYa4Mi03nD4bn95wrXlfV+v591IKKeBVoaRdYpvPi/08zeXiD3Ms+Dq
+        MDe5KOWNcmdgXQWmjJFhwA7FNjO7YqvuJ7p5wtIcCxbu0LtPdS2FoyhK/aTy7AHYMbms2P
+        v/dwmxQAiCpPo5bjQZTh86omZAVYHbyvFz/SrLuZK9SNW/XwEKC90pxBZ3fYiA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666014452;
+        s=2020e; t=1666014453;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N3GpTfY3y5qdlAiQiJDXMLWXE9wY2GvyezsXxcK3s5I=;
-        b=ScmnGY8OVfjvKVhOlrpxTCfnLRU6HF8vrFQpvKmQYT0e8Rs7YpyeBC/tEpChttj13TYde3
-        lMCD2CPSWaTjBxCw==
+        bh=RYRgwFQgQpDYP5WecjoI1bYhBCL6RdxmeiLAElFhWwY=;
+        b=syq4pA0mfazDEMp5le6CZeJxDOcIP5nKqScoiImN5ec//N+Cxtkyg4cBG7sSdcKRV+t0hO
+        XNMvQ7RVODzcIuCg==
 From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/fpu: Fix the init_fpstate size check with the
- actual size
+Subject: [tip: x86/urgent] x86/fpu: Configure init_fpstate attributes orderly
 Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220824191223.1248-3-chang.seok.bae@intel.com>
-References: <20220824191223.1248-3-chang.seok.bae@intel.com>
+        Thomas Gleixner <tglx@linutronix.de>, neelnatu@google.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220824191223.1248-2-chang.seok.bae@intel.com>
+References: <20220824191223.1248-2-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-Message-ID: <166601445140.401.5905202379513336433.tip-bot2@tip-bot2>
+Message-ID: <166601445264.401.13144053597878691608.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,80 +66,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     d3e021adac7c51a26d9ede167c789fcc1b878467
-Gitweb:        https://git.kernel.org/tip/d3e021adac7c51a26d9ede167c789fcc1b878467
+Commit-ID:     c32d7cab57e3a77af8ecc17cde7a5761a26483b8
+Gitweb:        https://git.kernel.org/tip/c32d7cab57e3a77af8ecc17cde7a5761a26483b8
 Author:        Chang S. Bae <chang.seok.bae@intel.com>
-AuthorDate:    Wed, 24 Aug 2022 12:12:22 -07:00
+AuthorDate:    Wed, 24 Aug 2022 12:12:21 -07:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 17 Oct 2022 15:44:25 +02:00
 
-x86/fpu: Fix the init_fpstate size check with the actual size
+x86/fpu: Configure init_fpstate attributes orderly
 
-The init_fpstate buffer is statically allocated. Thus, the sanity test was
-established to check whether the pre-allocated buffer is enough for the
-calculated size or not.
+The init_fpstate setup code is spread out and out of order. The init image
+is recorded before its scoped features and the buffer size are determined.
 
-The currently measured size is not strictly relevant. Fix to validate the
-calculated init_fpstate size with the pre-allocated area.
+Determine the scope of init_fpstate components and its size before
+recording the init state. Also move the relevant code together.
 
-Also, replace the sanity check function with open code for clarity. The
-abstraction itself and the function naming do not tend to represent simply
-what it does.
-
-Fixes: 2ae996e0c1a3 ("x86/fpu: Calculate the default sizes independently")
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220824191223.1248-3-chang.seok.bae@intel.com
+Acked-by: neelnatu@google.com
+Link: https://lore.kernel.org/r/20220824191223.1248-2-chang.seok.bae@intel.com
 
 ---
- arch/x86/kernel/fpu/xstate.c | 24 ++++++------------------
- 1 file changed, 6 insertions(+), 18 deletions(-)
+ arch/x86/kernel/fpu/init.c   | 8 --------
+ arch/x86/kernel/fpu/xstate.c | 6 +++++-
+ 2 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index f0ce106..f5ef786 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -678,20 +678,6 @@ static unsigned int __init get_xsave_size_user(void)
- 	return ebx;
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 621f4b6..8946f89 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -210,13 +210,6 @@ static void __init fpu__init_system_xstate_size_legacy(void)
+ 	fpstate_reset(&current->thread.fpu);
  }
  
--/*
-- * Will the runtime-enumerated 'xstate_size' fit in the init
-- * task's statically-allocated buffer?
-- */
--static bool __init is_supported_xstate_size(unsigned int test_xstate_size)
+-static void __init fpu__init_init_fpstate(void)
 -{
--	if (test_xstate_size <= sizeof(init_fpstate.regs))
--		return true;
--
--	pr_warn("x86/fpu: xstate buffer too small (%zu < %d), disabling xsave\n",
--			sizeof(init_fpstate.regs), test_xstate_size);
--	return false;
+-	/* Bring init_fpstate size and features up to date */
+-	init_fpstate.size		= fpu_kernel_cfg.max_size;
+-	init_fpstate.xfeatures		= fpu_kernel_cfg.max_features;
 -}
 -
- static int __init init_xstate_size(void)
- {
- 	/* Recompute the context size for enabled features: */
-@@ -717,10 +703,6 @@ static int __init init_xstate_size(void)
- 	kernel_default_size =
- 		xstate_calculate_size(fpu_kernel_cfg.default_features, compacted);
+ /*
+  * Called on the boot CPU once per system bootup, to set up the initial
+  * FPU state that is later cloned into all processes:
+@@ -236,5 +229,4 @@ void __init fpu__init_system(struct cpuinfo_x86 *c)
+ 	fpu__init_system_xstate_size_legacy();
+ 	fpu__init_system_xstate(fpu_kernel_cfg.max_size);
+ 	fpu__init_task_struct_size();
+-	fpu__init_init_fpstate();
+ }
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index c834015..f0ce106 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -360,7 +360,7 @@ static void __init setup_init_fpu_buf(void)
  
--	/* Ensure we have the space to store all default enabled features. */
--	if (!is_supported_xstate_size(kernel_default_size))
--		return -EINVAL;
--
- 	if (!paranoid_xstate_size_valid(kernel_size))
- 		return -EINVAL;
+ 	print_xstate_features();
  
-@@ -879,6 +861,12 @@ void __init fpu__init_system_xstate(unsigned int legacy_size)
- 	init_fpstate.size		= fpu_kernel_cfg.max_size;
- 	init_fpstate.xfeatures		= fpu_kernel_cfg.max_features;
+-	xstate_init_xcomp_bv(&init_fpstate.regs.xsave, fpu_kernel_cfg.max_features);
++	xstate_init_xcomp_bv(&init_fpstate.regs.xsave, init_fpstate.xfeatures);
  
-+	if (init_fpstate.size > sizeof(init_fpstate.regs)) {
-+		pr_warn("x86/fpu: init_fpstate buffer too small (%zu < %d), disabling XSAVE\n",
-+			sizeof(init_fpstate.regs), init_fpstate.size);
-+		goto out_disable;
-+	}
+ 	/*
+ 	 * Init all the features state with header.xfeatures being 0x0
+@@ -875,6 +875,10 @@ void __init fpu__init_system_xstate(unsigned int legacy_size)
+ 	update_regset_xstate_info(fpu_user_cfg.max_size,
+ 				  fpu_user_cfg.max_features);
+ 
++	/* Bring init_fpstate size and features up to date */
++	init_fpstate.size		= fpu_kernel_cfg.max_size;
++	init_fpstate.xfeatures		= fpu_kernel_cfg.max_features;
 +
  	setup_init_fpu_buf();
  
