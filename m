@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3F86008E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D359D6008FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiJQImf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
+        id S229997AbiJQIoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiJQImd (ORCPT
+        with ESMTP id S230158AbiJQIoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:42:33 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7074E2AC45
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:42:32 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id k2so23261584ejr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L0+ooTDUWCVf4fTxwoa2iE5Cp8+DUn+KX9+M86VZbeI=;
-        b=B501c7ncvCls66K+7a7cmbz7vc3qr0riRN1ZBHiwUfIfcE9GNmI4guswKcdJbSKoge
-         Jn4oSn4A/BfeqoGyro25wD/wuA04OT2gapxSvEx0TifR7Wfwt6TSWKuStnosxabplMnE
-         f8a8ucSgc+E5EM2tpb9NbOlObvGxY7eWmVZs3CW/etvTKLqkl0LSvMT9QztQhzsH7Sat
-         uJQyoTf61aSNlv9K47akELwNRitGtj7Zi+xbJnR6UP/DFaQRbQmzbBAWL17qJdcDiI/Q
-         J15yH7F69GqIiQUi55/HpKjceDsfz+ZQCeJKI68KPnUXWTe2fBvxfNapCUprry6D64LP
-         3GQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L0+ooTDUWCVf4fTxwoa2iE5Cp8+DUn+KX9+M86VZbeI=;
-        b=BCBW37rwtd8U54RqhV8Ttm32F4r4JSycFrADGR9TWt03WDCoeaU/VAJGwMcc9QHY70
-         kZ/rqnK8d7ul9jmUiYLcTocYOSV/9DwfFYAqpWZHdb7lS6ahAAV/5Rjl/EwwvXzgpSv7
-         2deSuBgBFC7Ad6Dsr/YMG9dvwsiiv+3wEWU2ptjgwVHCvXuvPx6atWcLurKYxLEbpHZX
-         +NOEe+nTNsg+3937CK/HnAMnD1Ft3ZhmENmocLzFkK8s6vYYXOnG5IveUIVDzUZI+AqV
-         zh5gzY1guy4sYFrI9jNSaNSL4gxVwmvTIcE+uWGstCytzdDdlv6Vu/m/RsTyMWckhwoL
-         vHLA==
-X-Gm-Message-State: ACrzQf3nwJgFTbLPfiJTo/KPAjhzl4/+bNodUdel7SQFddA6KJck+Bbh
-        vcaeP/RA5izFfk0CXIzmXrQZ2rIbZxTU5nMeeUCWUARiLr8=
-X-Google-Smtp-Source: AMsMyM7VRpm6/n9klzXCC6uewapqa1SXg1oG/i3La9N59gDH2LSWlbD9jRko8dhJwq815Kx98FgpKWbYjhsRR3Wd2Vw=
-X-Received: by 2002:a17:907:a06b:b0:78d:d25f:b726 with SMTP id
- ia11-20020a170907a06b00b0078dd25fb726mr7809602ejc.203.1665996151064; Mon, 17
- Oct 2022 01:42:31 -0700 (PDT)
+        Mon, 17 Oct 2022 04:44:16 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDED2D1E1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VSLCgh6_1665996241;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VSLCgh6_1665996241)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Oct 2022 16:44:11 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     hjc@rock-chips.com
+Cc:     heiko@sntech.de, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] drm/rockchip: dsi: Remove the unused function dsi_update_bits()
+Date:   Mon, 17 Oct 2022 16:43:30 +0800
+Message-Id: <20221017084330.94117-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20221005133337.19245-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221005133337.19245-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 17 Oct 2022 10:42:19 +0200
-Message-ID: <CACRpkdY3PVWqh6GAf4To6YsEEhz3KBktSuTX-qrXrO72wbMZAQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: actions: make irq_chip immutable
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 3:33 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+The function dsi_update_bits() is defined in the dw-mipi-dsi-rockchip.c
+file, but not called elsewhere, so delete this unused function.
 
-> Since recently, the kernel is nagging about mutable irq_chips:
->
->    "not an immutable chip, please consider fixing it!"
->
-> Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
-> helper functions and call the appropriate gpiolib functions.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c:367:20: warning: unused function 'dsi_update_bits'.
 
-No response from maintainers for 12 days so patch applied
-for next, let's see what happens.
+https://bugzilla.openanolis.cn/show_bug.cgi?id=2414
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
+index bf6948125b84..313231d886d2 100644
+--- a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
++++ b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
+@@ -364,12 +364,6 @@ static inline u32 dsi_read(struct dw_mipi_dsi_rockchip *dsi, u32 reg)
+ 	return readl(dsi->base + reg);
+ }
+ 
+-static inline void dsi_update_bits(struct dw_mipi_dsi_rockchip *dsi, u32 reg,
+-				   u32 mask, u32 val)
+-{
+-	dsi_write(dsi, reg, (dsi_read(dsi, reg) & ~mask) | val);
+-}
+-
+ static void dw_mipi_dsi_phy_write(struct dw_mipi_dsi_rockchip *dsi,
+ 				  u8 test_code,
+ 				  u8 test_data)
+-- 
+2.20.1.7.g153144c
+
