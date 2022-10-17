@@ -2,136 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3677601274
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A8F60128F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiJQPJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 11:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S231152AbiJQPOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 11:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbiJQPIv (ORCPT
+        with ESMTP id S230314AbiJQPOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:08:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C4F6B66D;
-        Mon, 17 Oct 2022 08:08:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48E19B818F3;
-        Mon, 17 Oct 2022 15:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C1AC433D6;
-        Mon, 17 Oct 2022 15:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666019284;
-        bh=oiF4vdLS02EOCCj4hUcovK01LgXQJHuTmhDNEmbXky8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=P9mZAWlajuxDhtRYmgVnQqxBaL2uHlR2KfSLKiWnP+Jc6tuC2e4Bh301QJmBSfW33
-         mi30HDmw2psgWnIxXucj1E6hMLNHA4GT2VSbmCAkIaWAS0r44eWPWZLw8kLlhpiqIH
-         sNR+CQsYY5S8WG6m1O0JnPk6NyCLTnZEDyKLx5KJeL055yvHYiK9AMydSDd42ucIB5
-         tBYAdxvrAGOI/sYtvn67Apt4mzTGOS0pSfSMMDqAroVIZdCTqnIWrgGy6hxrh3+Fxy
-         rKX1MavsMpAXLzJIm8kxNtX5UO6+LxKy7LxcfWUnbUFmMu2+2uwfasW2zvc4BTnVHQ
-         gwD3ksZY2NKxg==
-Date:   Mon, 17 Oct 2022 10:08:02 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Christian GMEINER <Christian.GMEINER@bachmann.info>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: Add Bachmann electronic GmbH vendor ID
-Message-ID: <20221017150802.GA3701588@bhelgaas>
+        Mon, 17 Oct 2022 11:14:40 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE3611828
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:14:36 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-131dda37dddso13659146fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0k/V94Hup9eBfg7SuZ2cCUb+ul85Fg6mc4OEJdv/0o=;
+        b=IEovFP95JMex4zXL1DQ0svc0+EUKLExxkV+mGn9ZeW8ZmD+uPQk3KCWXdbi6usPiQQ
+         hJwGqTiC0WcrQpvRXgjpclgnewXMVIWQC9bfvtBE0PDRO7d5LODnBzg+KwjT29k5T/zA
+         H3r1ZtTOh0iNS9fKJJ+VBpDOsuFTFPfa1lwh4TnCoXFR1JdCRQ6q6fAr44drW9gYwaQW
+         Gjr9QGr/M2/fJJjfzl+Jn9SECz7IxlODUjQKiuajPnSrDJ1BUJv0bu51QElJzP1Zjaok
+         Jgd+8lx0onVelr7PUXSRnVy1cbGdOZT8S/giqPPaIHa6AN114Kum2v80fKztL5tqbVFM
+         1UMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C0k/V94Hup9eBfg7SuZ2cCUb+ul85Fg6mc4OEJdv/0o=;
+        b=VM13A2hM/9i5HBZEDAFF3kW1Cdpo/06b+lqDML05FQqFeShPLDODkXHK2wjfBNBsai
+         Xwkbkx9CBB6cu2OmM3bueqkvR8nYU+NDm8OeVQCp4rj+7rPbDX1fMCW9MQ3SH3vaPn7J
+         9MLK6hvgpUFXd0rwsK1fXAaTDAY3d3CAM5ofqk2qU7ZRoazqfraRd5QiPdJJIrWcYI/D
+         KPHTKKObeLaWRhNKA4o6IWVNK1V58yARqsuRcRggRBd5QoGRY+Yvgr+Svym+LApw0w/j
+         J3ic9l0fCZYSNd1qA9NliTRncn+Vay8I+ok4IR4nNQz9yuQHFOmgruz4uRiFn9a6mHY0
+         prnw==
+X-Gm-Message-State: ACrzQf1osrcrb33ycglUt+ddUp7Uits46uSfaimxbUtYD0ZR9kPxkZT7
+        dAg7Ycro4bcEMdApBsPjxUA4U0UcE3SNPDtZqf+4D08r
+X-Google-Smtp-Source: AMsMyM4pTI888ntuHyVZaruicFUJcVFq9AyzsZI2hRj+fKOygSc1PA8aUQ27gw/7RbbP5lHotTjyLcWG9kyjTxWFX6k=
+X-Received: by 2002:a05:6870:a7a4:b0:136:7c39:979e with SMTP id
+ x36-20020a056870a7a400b001367c39979emr6111763oao.96.1666019675897; Mon, 17
+ Oct 2022 08:14:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017142338.1445199-1-christian.gmeiner@gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017090352.117843-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20221017090352.117843-1-jiapeng.chong@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 17 Oct 2022 11:14:24 -0400
+Message-ID: <CADnq5_PFgg=JhCzii=798zXmfjtatCWhWbYuMhDBctkmW6cY8g@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Remove the unused function amdgpu_ucode_print_imu_hdr()
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 04:23:37PM +0200, Christian Gmeiner wrote:
-> From: Christian GMEINER <Christian.GMEINER@bachmann.info>
-> 
-> Signed-off-by: Christian GMEINER <Christian.GMEINER@bachmann.info>
+On Mon, Oct 17, 2022 at 5:04 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> The function amdgpu_ucode_print_imu_hdr() is defined in the amdgpu_ucode.c
+> file, but not called elsewhere, so delete this unused function.
+>
+> drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c:129:6: warning: no previous prototype for function 'amdgpu_ucode_print_imu_hdr'.
+>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2416
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-I tweaked it to shorten the name in the style of other entries and
-sort it by numeric ID.
-
-I assume there's a driver that will use this definition.  If so, you
-might want to post this patch (including my ack) along with the driver
-so they get merged together.  But let me know if you need me to take
-it directly.
-
-Also it will be helpful if you can add the item to the PCI ID database
-here: https://pci-ids.ucw.cz/read/PC?restrict=0, which will let lspci
-identify devices with this Vendor ID.
-
-Bjorn
-
-
-commit 2fa819fdbb2b ("PCI: Add Bachmann electronic GmbH vendor ID")
-Author: Christian GMEINER <Christian.GMEINER@bachmann.info>
-Date:   Mon Oct 17 16:23:37 2022 +0200
-
-    PCI: Add Bachmann electronic GmbH vendor ID
-    
-    Link: https://lore.kernel.org/r/20221017142338.1445199-1-christian.gmeiner@gmail.com
-    Signed-off-by: Christian GMEINER <Christian.GMEINER@bachmann.info>
-    Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index b362d90eb9b0..4cc0e9ecd398 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -2,7 +2,7 @@
- /*
-  *	PCI Class, Vendor and Device IDs
-  *
-- *	Please keep sorted.
-+ *	Please keep sorted by numeric ID.
-  *
-  *	Do not add new entries to this file unless the definitions
-  *	are shared between multiple drivers.
-@@ -153,7 +153,7 @@
- 
- #define PCI_CLASS_OTHERS		0xff
- 
--/* Vendors and devices.  Sort key: vendor first, device next. */
-+/* Vendors and devices.  Numeric sort key: vendor first, device next. */
- #define PCI_VENDOR_ID_PCI_SIG		0x0001
- 
- #define PCI_VENDOR_ID_LOONGSON		0x0014
-@@ -172,6 +172,8 @@
- #define PCI_DEVICE_ID_BERKOM_A4T		0xffa4
- #define PCI_DEVICE_ID_BERKOM_SCITEL_QUADRO	0xffa8
- 
-+#define PCI_VENDOR_ID_BACHMANN		0x0bae
-+
- #define PCI_VENDOR_ID_COMPAQ		0x0e11
- #define PCI_DEVICE_ID_COMPAQ_TOKENRING	0x0508
- #define PCI_DEVICE_ID_COMPAQ_TACHYON	0xa0fc
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 
 > ---
->  include/linux/pci_ids.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index b362d90eb9b0..b93a52977d85 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -166,6 +166,8 @@
->  
->  #define PCI_VENDOR_ID_UBIQUITI		0x0777
->  
-> +#define PCI_VENDOR_ID_BACHMANN_ELECTRONIC 0x0bae
-> +
->  #define PCI_VENDOR_ID_BERKOM			0x0871
->  #define PCI_DEVICE_ID_BERKOM_A1T		0xffa1
->  #define PCI_DEVICE_ID_BERKOM_T_CONCEPT		0xffa2
-> -- 
-> 2.37.3
-> 
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c | 13 -------------
+>  1 file changed, 13 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> index dd0bc649a57d..148cc2d475c5 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
+> @@ -126,19 +126,6 @@ void amdgpu_ucode_print_gfx_hdr(const struct common_firmware_header *hdr)
+>         }
+>  }
+>
+> -void amdgpu_ucode_print_imu_hdr(const struct common_firmware_header *hdr)
+> -{
+> -       uint16_t version_major = le16_to_cpu(hdr->header_version_major);
+> -       uint16_t version_minor = le16_to_cpu(hdr->header_version_minor);
+> -
+> -       DRM_DEBUG("IMU\n");
+> -       amdgpu_ucode_print_common_hdr(hdr);
+> -
+> -       if (version_major != 1) {
+> -               DRM_ERROR("Unknown GFX ucode version: %u.%u\n", version_major, version_minor);
+> -       }
+> -}
+> -
+>  void amdgpu_ucode_print_rlc_hdr(const struct common_firmware_header *hdr)
+>  {
+>         uint16_t version_major = le16_to_cpu(hdr->header_version_major);
+> --
+> 2.20.1.7.g153144c
+>
