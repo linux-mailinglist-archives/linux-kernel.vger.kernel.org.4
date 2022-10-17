@@ -2,122 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE835601930
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C27660193A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiJQUQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
+        id S230107AbiJQUSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiJQUQT (ORCPT
+        with ESMTP id S231315AbiJQURw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:16:19 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF13D13F1C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:15:28 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id o22so7400060qkl.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:15:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3hFR/JKuZ224C1tzOZjwuzfHyBFmtfdzMfvcxSPRjbQ=;
-        b=VE7guqGIMqTuXk335bohHdtRCqXAbmWg+6R4hdeueCxnywSVbiaUbTt3HiU0yZd98T
-         aYU5U+Ou88iOou8HVpEB9gzROMfdf1JkSJJBSv9p1+/ZX9sJcZV7XvG/7oSflTjTWxQj
-         KR07CkK5BHfsc/1TXEsBCeo4WrJNEImWo1byP8IwTGQx3w6WO5Yo7IXLlCE6Ct2LUhHM
-         R/HGLlUpNUmA849i8BnYbN+q24XSbogzIGps2H6yn2gT7KoxcSxvTEoh6gmN/dlbWAUa
-         svyCF5cmNx4J2QJ2kWZJb8wn3vLJKhU1FQWlFIwhtZwTvhujuts7Ev/I7PwJKOBe/QwI
-         9fmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3hFR/JKuZ224C1tzOZjwuzfHyBFmtfdzMfvcxSPRjbQ=;
-        b=hZEagJUmHtQ46HaCx84J6jj2IyTxCAlr0FUqawoGWeeJ7wHff8on9YlAjbGPc2N6dR
-         gAilofPRSiJnmlvu893eqI/G727j00ivlI5Sg4A9fsgJRu5D/gn+kg+goVjMCp9UpbbY
-         6lzf4Q+R7xEc1Aeks17uBdXW1I66wgp5lUnRXnLBhROblhKsw+UhM3k2Uc8fa5TNJZ9U
-         egRnTFnwJzeV1CkmSO1FoJOKGSGerChzcyIAqTkmubi/VtVP990UMWLNR+WxUf1/9BNK
-         YFzXVPuEW0nq3JmwXCkFjbShzfa8UBpcEtnRfSpuyqMxeOQ9XYUk+TjzqkXXQ+3YtkHd
-         ppjA==
-X-Gm-Message-State: ACrzQf1NLDdaq9wwKMhmqFyYWXZ3TP1JiUqLMamBWdoOuAPWx9zPPreW
-        swlpL8RZczM3TFspAwKRr4kpPg==
-X-Google-Smtp-Source: AMsMyM6hKTj8N78SpstCP8ItrkFlrR+UIDFZexsd8+/YfceyQ65yGg4jBiZVbiTxImsak4+Kij5bxA==
-X-Received: by 2002:ae9:ea03:0:b0:6e0:ca9c:e795 with SMTP id f3-20020ae9ea03000000b006e0ca9ce795mr8923285qkg.168.1666037681995;
-        Mon, 17 Oct 2022 13:14:41 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id u24-20020a37ab18000000b006bb83c2be40sm556712qke.59.2022.10.17.13.14.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 13:14:41 -0700 (PDT)
-Message-ID: <279324eb-fc1f-4d1a-b1c2-d8cf64809e1f@linaro.org>
-Date:   Mon, 17 Oct 2022 16:14:39 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3] arm64: dts: qcom: pmi8998: add rradc node
-Content-Language: en-US
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
+        Mon, 17 Oct 2022 16:17:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF84317A88;
+        Mon, 17 Oct 2022 13:17:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58BEB113E;
+        Mon, 17 Oct 2022 13:17:10 -0700 (PDT)
+Received: from bogus (unknown [10.57.36.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CF8F3F67D;
+        Mon, 17 Oct 2022 13:17:00 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 21:16:54 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-References: <20221017190902.2282899-1-caleb.connolly@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221017190902.2282899-1-caleb.connolly@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Revert "arm64: dts: qcom: sm8250: Add cpuidle states"
+Message-ID: <20221017201654.u7x5vrjsad653kma@bogus>
+References: <20221017164005.2622934-1-amit.pundir@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017164005.2622934-1-amit.pundir@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 15:09, Caleb Connolly wrote:
-> Add a DT node for the Round Robin ADC found in the PMI8998 PMIC.
+On Mon, Oct 17, 2022 at 10:10:05PM +0530, Amit Pundir wrote:
+> This reverts commit 32bc936d732171d48c9c8f96c4fa25ac3ed7e1c7.
 > 
-> The RRADC reports PMIC die and skin temperatures, as well as
-> battery/charger thermals. It also reports USB and DC charger voltage and
-> current measurements.
+> This patch was part of a patch series to add APSS RSC to
+> Cluster power domain
+> https://patchwork.kernel.org/project/linux-pm/cover/1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com/
+> but the rest of the patches in this series got NACKed and didn't land.
 > 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> These cpuidle states made RB5 (sm8250) highly unstable and I run into
+> following crash every now and then:
+> 
+> [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
+> [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
+> [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
+> 
+> I reported this breakage earlier this year as well:
+> https://lore.kernel.org/all/CAMi1Hd2Sngya_2m2odkjq4fdV8OiiXsFMEX1bb807cWMC7H-sg@mail.gmail.com/
+> I can confirm that if I cherry-pick the rest of the patches from the
+> series then I can't reproduce this crash, but I'm not sure when the rest
+> of the patches are going to land though.
+> 
+> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
 > ---
-> This patch introduces a new dtbs_check warning which will be fixed by
-> https://lore.kernel.org/linux-arm-msm/20221017185105.2279129-1-caleb.connolly@linaro.org/
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi | 105 ---------------------------
+>  1 file changed, 105 deletions(-)
 > 
-> V2: https://lore.kernel.org/linux-arm-msm/20221017185609.2280067-1-caleb.connolly@linaro.org/
-> Changes since v2:
->  * Remove 'status = "okay";'
-> 
-> V1:
-> https://lore.kernel.org/linux-arm-msm/20221016180330.1912214-1-caleb.connolly@linaro.org/
-> Changes since v1:
->  * Change node name from adc@ to rradc@, see linked patch
->  * Enable the RRADC by default, rather than per-device 
-> ---
->  arch/arm64/boot/dts/qcom/pmi8998.dtsi | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pmi8998.dtsi b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-> index 6d3d212560c1..08c9ec2cafa6 100644
-> --- a/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-> @@ -18,6 +18,12 @@ pmi8998_gpio: gpios@c000 {
->  			interrupt-controller;
->  			#interrupt-cells = <2>;
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index a5b62cadb129..a2c15da1a450 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -101,8 +101,6 @@ CPU0: cpu@0 {
+>  			capacity-dmips-mhz = <448>;
+>  			dynamic-power-coefficient = <205>;
+>  			next-level-cache = <&L2_0>;
+> -			power-domains = <&CPU_PD0>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			operating-points-v2 = <&cpu0_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -125,8 +123,6 @@ CPU1: cpu@100 {
+>  			capacity-dmips-mhz = <448>;
+>  			dynamic-power-coefficient = <205>;
+>  			next-level-cache = <&L2_100>;
+> -			power-domains = <&CPU_PD1>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			operating-points-v2 = <&cpu0_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -146,8 +142,6 @@ CPU2: cpu@200 {
+>  			capacity-dmips-mhz = <448>;
+>  			dynamic-power-coefficient = <205>;
+>  			next-level-cache = <&L2_200>;
+> -			power-domains = <&CPU_PD2>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			operating-points-v2 = <&cpu0_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -167,8 +161,6 @@ CPU3: cpu@300 {
+>  			capacity-dmips-mhz = <448>;
+>  			dynamic-power-coefficient = <205>;
+>  			next-level-cache = <&L2_300>;
+> -			power-domains = <&CPU_PD3>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+>  			operating-points-v2 = <&cpu0_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -188,8 +180,6 @@ CPU4: cpu@400 {
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <379>;
+>  			next-level-cache = <&L2_400>;
+> -			power-domains = <&CPU_PD4>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			operating-points-v2 = <&cpu4_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -209,8 +199,6 @@ CPU5: cpu@500 {
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <379>;
+>  			next-level-cache = <&L2_500>;
+> -			power-domains = <&CPU_PD5>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			operating-points-v2 = <&cpu4_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -231,8 +219,6 @@ CPU6: cpu@600 {
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <379>;
+>  			next-level-cache = <&L2_600>;
+> -			power-domains = <&CPU_PD6>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 1>;
+>  			operating-points-v2 = <&cpu4_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -252,8 +238,6 @@ CPU7: cpu@700 {
+>  			capacity-dmips-mhz = <1024>;
+>  			dynamic-power-coefficient = <444>;
+>  			next-level-cache = <&L2_700>;
+> -			power-domains = <&CPU_PD7>;
+> -			power-domain-names = "psci";
+>  			qcom,freq-domain = <&cpufreq_hw 2>;
+>  			operating-points-v2 = <&cpu7_opp_table>;
+>  			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -300,42 +284,6 @@ core7 {
+>  				};
+>  			};
 >  		};
-> +
-> +		pmi8998_rradc: rradc@4500 {
+> -
+> -		idle-states {
+> -			entry-method = "psci";
+> -
+> -			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
+> -				compatible = "arm,idle-state";
+> -				idle-state-name = "silver-rail-power-collapse";
+> -				arm,psci-suspend-param = <0x40000004>;
+> -				entry-latency-us = <360>;
+> -				exit-latency-us = <531>;
+> -				min-residency-us = <3934>;
+> -				local-timer-stop;
 
-No, generic node names so adc. Please do not send DTS patches separate
-from the bindings.
+If this is temporary fix for some broke firmware or setup, I suggest to
+just add status = "disabled" for these states. Also worth checking if keeping
+the cpu states is okay and only cluster state is the issue or everything
+needs to be disabled. That way it would avoid the churn when re-enabling it.
 
-Best regards,
-Krzysztof
-
+-- 
+Regards,
+Sudeep
