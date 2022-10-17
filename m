@@ -2,140 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9AC601033
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C538460103A
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiJQN1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S229833AbiJQN3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiJQN1i (ORCPT
+        with ESMTP id S229673AbiJQN3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:27:38 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D72D631D8;
-        Mon, 17 Oct 2022 06:27:36 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
-        t=1666013255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XT97/4ianI21dvpEGBZUSrkd+v0AEJCqTHZ0j4rZrRE=;
-        b=AbtJiFNm1eCMnjmcmIdRcfMOy384xBxDlZ5YNpOkfb9P5ZhTJX1rrnjn/egQvFwOQ5oadR
-        3cEgAZVgwEZ2QDjv/lUxGpT3paqEatsUNNB8sCVk5d6Jh2UknkR7sI+0Crg8tOslRt4r4e
-        SCMpviQCGJXKEbyACempE+XvzQGEQDKIHhu5UycExtOrWNf6vcUJu7WLDFaltV6HM6XBih
-        8/nYf13ZBNkXWzaeWOhSpC5ouDnqfLzgc45XO7fUDJleQWH5q71cWUwUwNsZBqSCsTSjUg
-        L00YZRJgltLmzYgYxdr1q/Y800cwG1qKE7LI8J52PWQDG1oyJinq0s/hkHaMEw==
-From:   Rui Li <me@lirui.org>
-To:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Mon, 17 Oct 2022 09:29:50 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D1A1A3BB
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666013389; x=1697549389;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EEHjGPSGt+4bmtkff7+Q3rjKMcvh7S09g7DA8Sh/8KE=;
+  b=fM6PivgX7XKDe1Tq9u9xM4qstFw8DPMkxJQ+7B5HTnH1ZgU82LJq1xKV
+   EknanaLf6oORQZzb0sYgm97czSd0N6HyA+cs1lk8sNpntnBBCLWUMBnIL
+   MaCaNRfDnEfSQYuOVfhe3ne0r5Fe5icHVLFcKN5Bys67A9RQCVc4DvUqW
+   dsKoRnAJo/vEo6chO1SnHo6sK2lIAyH6wUJ4Rw02kyYXmxu3TB+yDyL/A
+   dujKsJ2XieMqCtXwO06tJ8JiU3GmJmCTr/hxw4lCPXinitAfbUQEEVU+z
+   vBSDHQ4+tNQWLwyXEhBEOws6WdwdCW9SyDiJjQfxwB+DiDtvrvm2q5blx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="285521025"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="285521025"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 06:29:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="691357639"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="691357639"
+Received: from feng-clx.sh.intel.com ([10.238.200.228])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Oct 2022 06:29:45 -0700
+From:   Feng Tang <feng.tang@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Rui Li <me@lirui.org>
-Subject: [RESEND PATCH 2/2] docs/zh_CN: Add userspace-api/index Chinese translation
-Date:   Mon, 17 Oct 2022 21:27:05 +0800
-Message-Id: <455e3da0b5b07058d2b7d09c74388b4789ccc877.1666009558.git.me@lirui.org>
-In-Reply-To: <cover.1666009558.git.me@lirui.org>
-References: <cover.1666009558.git.me@lirui.org>
+Cc:     rui.zhang@intel.com, tim.c.chen@intel.com, liaoyu15@huawei.com,
+        Feng Tang <feng.tang@intel.com>
+Subject: [RFC PATCH] x86/tsc: use topology_max_packages() in tsc watchdog check
+Date:   Mon, 17 Oct 2022 21:29:42 +0800
+Message-Id: <20221017132942.1646934-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Translate userspace-api/index.rst into Chinese, add it into
-zh_CN/index.rst.
+Commit b50db7095fe0 ("x86/tsc: Disable clocksource watchdog for TSC
+on qualified platorms") was introduced to solve problem that
+sometimes TSC clocksource is wrongly judged as unstable by watchdog
+like 'jiffies', HPET, etc.
 
-Signed-off-by: Rui Li <me@lirui.org>
+In it, the hardware socket number is a key factor for judging
+whether to disable the watchdog for TSC, and 'nr_online_nodes' was
+chosen as an estimation due to it is needed in early boot phase
+before registering 'tsc-early' clocksource, where all none-boot
+CPUs are not brought up yet.
+
+In recent patch review, Dave Hansen pointed out there are many
+cases that 'nr_online_nodes' could have issue, like:
+* numa emulation (numa=fake=4 etc.)
+* numa=off
+* platforms with CPU+DRAM nodes, CPU-less HBM nodes, CPU-less
+  persistent memory nodes.
+
+Peter Zijlstra suggested to use logical package ids, but it is
+only usable after smp_init() and all CPUs are initialized.
+
+One solution is to skip the watchdog for 'tsc-early' clocksource,
+and move the check after smp_init(), while before 'tsc'
+clocksoure is registered, where topology_max_packages() could
+be used as a much more accurate socket number.
+
+Signed-off-by: Feng Tang <feng.tang@intel.com>
 ---
- Documentation/translations/zh_CN/index.rst    |  2 +-
- .../zh_CN/userspace-api/index.rst             | 50 +++++++++++++++++++
- 2 files changed, 51 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/userspace-api/index.rst
+ arch/x86/kernel/tsc.c | 42 ++++++++++++++++--------------------------
+ 1 file changed, 16 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
-index ec99ef5fe990..272414971ce9 100644
---- a/Documentation/translations/zh_CN/index.rst
-+++ b/Documentation/translations/zh_CN/index.rst
-@@ -90,12 +90,12 @@ TODOList:
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index cafacb2e58cc..8dc7a0aeaf4d 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1131,8 +1131,7 @@ static struct clocksource clocksource_tsc_early = {
+ 	.uncertainty_margin	= 32 * NSEC_PER_MSEC,
+ 	.read			= read_tsc,
+ 	.mask			= CLOCKSOURCE_MASK(64),
+-	.flags			= CLOCK_SOURCE_IS_CONTINUOUS |
+-				  CLOCK_SOURCE_MUST_VERIFY,
++	.flags			= CLOCK_SOURCE_IS_CONTINUOUS,
+ 	.vdso_clock_mode	= VDSO_CLOCKMODE_TSC,
+ 	.enable			= tsc_cs_enable,
+ 	.resume			= tsc_resume,
+@@ -1180,12 +1179,6 @@ void mark_tsc_unstable(char *reason)
  
-    admin-guide/index
-    admin-guide/reporting-issues.rst
-+   userspace-api/index
+ EXPORT_SYMBOL_GPL(mark_tsc_unstable);
  
- TODOList:
+-static void __init tsc_disable_clocksource_watchdog(void)
+-{
+-	clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+-	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+-}
+-
+ static void __init check_system_tsc_reliable(void)
+ {
+ #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
+@@ -1202,23 +1195,6 @@ static void __init check_system_tsc_reliable(void)
+ #endif
+ 	if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
+ 		tsc_clocksource_reliable = 1;
+-
+-	/*
+-	 * Disable the clocksource watchdog when the system has:
+-	 *  - TSC running at constant frequency
+-	 *  - TSC which does not stop in C-States
+-	 *  - the TSC_ADJUST register which allows to detect even minimal
+-	 *    modifications
+-	 *  - not more than two sockets. As the number of sockets cannot be
+-	 *    evaluated at the early boot stage where this has to be
+-	 *    invoked, check the number of online memory nodes as a
+-	 *    fallback solution which is an reasonable estimate.
+-	 */
+-	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+-	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+-	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
+-	    nr_online_nodes <= 2)
+-		tsc_disable_clocksource_watchdog();
+ }
  
- * 内核构建系统 <kbuild/index>
- * 用户空间工具 <tools/index>
--* userspace-api/index
+ /*
+@@ -1413,6 +1389,20 @@ static int __init init_tsc_clocksource(void)
+ 	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
+ 		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
  
- 也可参考独立于内核文档的 `Linux 手册页 <https://www.kernel.org/doc/man-pages/>`_ 。
++	/*
++	 * Disable the clocksource watchdog when the system has:
++	 *  - TSC running at constant frequency
++	 *  - TSC which does not stop in C-States
++	 *  - the TSC_ADJUST register which allows to detect even minimal
++	 *    modifications
++	 *  - not more than two sockets.
++	 */
++	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
++	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
++	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
++	    topology_max_packages() <= 2)
++		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
++
+ 	/*
+ 	 * When TSC frequency is known (retrieved via MSR or CPUID), we skip
+ 	 * the refined calibration and directly register it as a clocksource.
+@@ -1547,7 +1537,7 @@ void __init tsc_init(void)
+ 	}
  
-diff --git a/Documentation/translations/zh_CN/userspace-api/index.rst b/Documentation/translations/zh_CN/userspace-api/index.rst
-new file mode 100644
-index 000000000000..4f5bc5530ebd
---- /dev/null
-+++ b/Documentation/translations/zh_CN/userspace-api/index.rst
-@@ -0,0 +1,50 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/userspace-api/index.rst
-+
-+:翻译:
-+
-+ 李睿 Rui Li <me@lirui.org>
-+
-+=====================================
-+Linux 内核用户空间API指南
-+=====================================
-+
-+.. _man-pages: https://www.kernel.org/doc/man-pages/
-+
-+尽管许多用户空间API的文档被记录在别处（特别是在 man-pages_ 项目中），有关用户
-+空间的部分信息仍然可以在代码树中被找到。这个手册意在成为这些信息聚集的地方。
-+
-+.. class:: toc-title
-+
-+	   目录
-+
-+.. toctree::
-+   :maxdepth: 2
-+
-+   ebpf/index
-+
-+TODOList:
-+
-+* no_new_privs
-+* seccomp_filter
-+* landlock
-+* unshare
-+* spec_ctrl
-+* accelerators/ocxl
-+* ebpf/index
-+* ioctl/index
-+* iommu
-+* media/index
-+* netlink/index
-+* sysfs-platform_profile
-+* vduse
-+* futex2
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
-\ No newline at end of file
+ 	if (tsc_clocksource_reliable || no_tsc_watchdog)
+-		tsc_disable_clocksource_watchdog();
++		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+ 
+ 	clocksource_register_khz(&clocksource_tsc_early, tsc_khz);
+ 	detect_art();
 -- 
-2.30.2
+2.34.1
 
