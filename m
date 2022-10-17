@@ -2,195 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F323960105A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0B5601066
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJQNhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S229900AbiJQNnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiJQNhn (ORCPT
+        with ESMTP id S229592AbiJQNnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:37:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C996386F;
-        Mon, 17 Oct 2022 06:37:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30E4BB81698;
-        Mon, 17 Oct 2022 13:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF916C433D7;
-        Mon, 17 Oct 2022 13:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666013858;
-        bh=7PaZ/qmnm7lCaEZHPQ5A551meqALQvJy4m7yAHdja7Q=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=heBrGh3SKIXqZWcnOgGZtyb1rvAbSqnmVnyPwj3ECFIiF+mtG2SFRdrvU+3+23+d3
-         AsK8XWkWCovKNjfQqwSIl7Ac0/aQvJk9ZVbM3mXDwW2eWtQ/FOBxFKzbe2qybMCbUZ
-         aO/Y1/MqKqocqq6fdHNZEQmfrdXlGxx05MMIPtcwq+kSZXUJ5iM3aczgmiPAvQBcGt
-         C5qwpFLOpdO+xehTXKIHs36S1yln2R5dekQS4wYrPksv6BAIr8yAOv1WNZ9R/xfLi1
-         WuzyZz5+dXFPV/f7Tgel405ESJdMzvEDbaft/R1PZQVSzkwIm7n7S63ookDzG2EyTz
-         j+ThNDNzGaJcQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 707065C08EC; Mon, 17 Oct 2022 06:37:38 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 06:37:38 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        frederic@kernel.org
-Subject: Re: [PATCH v9 00/13] rcu: call_rcu() power improvements
-Message-ID: <20221017133738.GE5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221016162305.2489629-1-joel@joelfernandes.org>
+        Mon, 17 Oct 2022 09:43:06 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03903F02F;
+        Mon, 17 Oct 2022 06:43:06 -0700 (PDT)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MrdQk0yWQz67j7Z;
+        Mon, 17 Oct 2022 21:39:58 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 17 Oct 2022 15:43:03 +0200
+Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 17 Oct
+ 2022 14:43:03 +0100
+Date:   Mon, 17 Oct 2022 14:43:02 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/4] cxl/region: Add trigger_poison_list sysfs
+ attribute
+Message-ID: <20221017144302.0000521c@huawei.com>
+In-Reply-To: <b5e7787816326854b736c922f7fcf195fba71338.1665606782.git.alison.schofield@intel.com>
+References: <cover.1665606782.git.alison.schofield@intel.com>
+        <b5e7787816326854b736c922f7fcf195fba71338.1665606782.git.alison.schofield@intel.com>
+Organization: Huawei Technologies R&D (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221016162305.2489629-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 04:22:52PM +0000, Joel Fernandes (Google) wrote:
-> v9 version of RCU lazy patches based on rcu/next branch.
->  Only change since v8 is this discussion:
->  https://lore.kernel.org/rcu/20221011180142.2742289-1-joel@joelfernandes.org/T/#m8eff15110477f3430b3b02561b66f7b0d34a73b0
-> 
-> To facilitate easier merge, I dropped tracing and other patches and just
-> implemented the new changes. I will post the tracing patches later along with
-> rcutop as I need to add new tracepoints that Frederic suggested.
-> 
-> Main recent changes:
-> 1. rcu_barrier() wake up only for lazy bypass list.
-> 2. Make all call_rcu() default-lazy and add call_rcu_flush() API.
-> 3. Take care of some callers using call_rcu_flush() API.
-> 4. Several refactorings suggested by Paul/Frederic.
-> 5. New call_rcu() to call_rcu_flush() conversions by Joel/Vlad/Paul.
-> 
-> I am seeing good performance and power with these patches on real ChromeOS x86
-> asymmetric hardware.
-> 
-> Earlier cover letter with lots of details is here:
-> https://lore.kernel.org/all/20220901221720.1105021-1-joel@joelfernandes.org/
-> 
-> List of recent changes:
->     
->     [ Frederic Weisbec: Program the lazy timer only if WAKE_NOT, since other
->       deferral levels wake much earlier so for those it is not needed. ]
->     
->     [ Frederic Weisbec: Use flush flags to keep bypass API code clean. ]
->     
->     [ Frederic Weisbec: Make rcu_barrier() wake up only if main list empty. ]
->     
->     [ Frederic Weisbec: Remove extra 'else if' branch in rcu_nocb_try_bypass(). ]
->     
->     [ Joel: Fix issue where I was not resetting lazy_len after moving it to rdp ]
->     
->     [ Paul/Thomas/Joel: Make call_rcu() default lazy so users don't mess up. ]
->     
->     [ Paul/Frederic : Cosmetic changes, split out wakeup of nocb thread. ]
->     
->     [ Vlad/Joel : More call_rcu -> flush conversions ]
-> 
->     [ debug code for detecting "wake" in kernel's call_rcu() callbacks. ]
-> 
-> The following 2 scripts can be used to check if any callbacks in the kernel are
-> doing a wake up (it is best effort and may miss some things, but we found
-> issues using it)
-> 
-> 1. Script to search for call_rcu() references and dump the callback list to a file:
-> #!/bin/bash
-> 
-> rm func-list
-> touch func-list
-> 
-> for f in $(find . \( -name "*.c" -o -name "*.h" \) | grep -v rcu); do
-> 
-> 	funcs=$(perl -0777 -ne 'while(m/call_rcu\([&]?.+,\s?(.+)\).*;/g){print "$1\n";}' $f)
-> 
-> 	if [ "x$funcs" != "x" ]; then
-> 		for func in $funcs; do
-> 			echo "$f $func" >> func-list
-> 			echo "$f $func"
-> 		done
-> 	fi
-> 
-> done
-> 
-> cat func-list | sort | uniq | tee func-list-sorted
-> 
-> 2. Script to search "wake" after callback references:
-> 
-> #!/bin/bash
-> 
-> while read fl; do
-> 	file=$(echo $fl | cut -d " " -f1)
-> 	func=$(echo $fl | cut -d " " -f2)
-> 
-> 	grep -A 30 $func $file | grep wake > /dev/null
-> 
-> 	if [ $? -eq 0 ]; then
-> 		echo "keyword wake found after function reference $func in $file"
-> 		echo "Output:"
-> 		grep -A 30 $func $file 
-> 		echo "==========================================================="
-> 	fi
-> done < func-list-sorted
+On Wed, 12 Oct 2022 14:28:20 -0700
+alison.schofield@intel.com wrote:
 
-Very good, thank you all!
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> When a boolean 'true' is written to this attribute the region driver
+> retrieves the poison list for the capacity each device contributes
+> to this region. The list includes addresses that are poisoned, or
+> would result in poison if accessed, and the source of the poison.
+> The retrieved errors are logged as kernel trace events with the
+> label 'cxl_poison'.
+> 
+> Devices not supporting the poison list capability are ignored.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 
-I have pulled these in for further review and testing.
+Hi Alison,
 
-I am holding off on the last one ("rcu/debug: Add wake-up debugging for
-lazy callbacks") for the immediate future, but let's see how it goes.
+For some reason I don't have cxl_dpa_resource().
+Should that be cxl_dpa_resource_start()?
 
-							Thanx, Paul
+Looks like it got renamed in
+cxl/hdm: Add support for allocating DPA to an endpoint decoder
+cf880423b6a0599499c1f83542cab0b75daa29ba
 
-> Frederic Weisbecker (1):
-> rcu: Fix missing nocb gp wake on rcu_barrier()
-> 
-> Joel Fernandes (Google) (9):
-> rcu: Make call_rcu() lazy to save power
-> rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
-> rcuscale: Add laziness and kfree tests
-> percpu-refcount: Use call_rcu_flush() for atomic switch
-> rcu/sync: Use call_rcu_flush() instead of call_rcu
-> rcu/rcuscale: Use call_rcu_flush() for async reader test
-> rcu/rcutorture: Use call_rcu_flush() where needed
-> rxrpc: Use call_rcu_flush() instead of call_rcu()
-> rcu/debug: Add wake-up debugging for lazy callbacks
-> 
-> Uladzislau Rezki (2):
-> scsi/scsi_error: Use call_rcu_flush() instead of call_rcu()
-> workqueue: Make queue_rcu_work() use call_rcu_flush()
-> 
-> Vineeth Pillai (1):
-> rcu: shrinker for lazy rcu
-> 
-> drivers/scsi/scsi_error.c |   2 +-
-> include/linux/rcupdate.h  |   7 ++
-> kernel/rcu/Kconfig        |  15 +++
-> kernel/rcu/lazy-debug.h   | 154 +++++++++++++++++++++++++++
-> kernel/rcu/rcu.h          |   8 ++
-> kernel/rcu/rcuscale.c     |  70 +++++++++++-
-> kernel/rcu/rcutorture.c   |  16 +--
-> kernel/rcu/sync.c         |   2 +-
-> kernel/rcu/tiny.c         |   2 +-
-> kernel/rcu/tree.c         | 149 ++++++++++++++++++--------
-> kernel/rcu/tree.h         |  12 ++-
-> kernel/rcu/tree_exp.h     |   2 +-
-> kernel/rcu/tree_nocb.h    | 217 ++++++++++++++++++++++++++++++++------
-> kernel/workqueue.c        |   2 +-
-> lib/percpu-refcount.c     |   3 +-
-> net/rxrpc/conn_object.c   |   2 +-
-> 16 files changed, 565 insertions(+), 98 deletions(-)
-> create mode 100644 kernel/rcu/lazy-debug.h
-> 
-> --
-> 2.38.0.413.g74048e4d9e-goog
-> 
+Jonathan
+
+> +static ssize_t trigger_poison_list_store(struct device *dev,
+> +					 struct device_attribute *attr,
+> +					 const char *buf, size_t len)
+> +{
+> +	struct cxl_region *cxlr = to_cxl_region(dev);
+> +	struct cxl_region_params *p = &cxlr->params;
+> +	struct cxl_endpoint_decoder *cxled;
+> +	struct cxl_memdev *cxlmd;
+> +	u64 offset, length;
+> +	int rc, i;
+> +	bool tmp;
+> +
+> +	if (kstrtobool(buf, &tmp))
+> +		return -EINVAL;
+> +
+> +	for (i = 0; i <  p->nr_targets; i++) {
+> +		cxled = p->targets[i];
+> +		cxlmd = cxled_to_memdev(cxled);
+> +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
+> +			      cxlmd->cxlds->enabled_cmds))
+> +			continue;
+> +		offset = cxl_dpa_resource(cxled);
+> +		length = cxl_dpa_size(cxled);
+> +		rc = cxl_mem_get_poison(cxlmd, offset, length,
+> +					dev_name(&cxlr->dev));
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	return len;
+> +}
+> +static DEVICE_ATTR_WO(trigger_poison_list);
