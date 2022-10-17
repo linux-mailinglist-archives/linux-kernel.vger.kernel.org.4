@@ -2,44 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C17E600D99
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C72600D9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiJQLTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 07:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S230060AbiJQLU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 07:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiJQLTL (ORCPT
+        with ESMTP id S229930AbiJQLU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 07:19:11 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6375F22B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 04:19:10 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1okO9F-0003cK-6C; Mon, 17 Oct 2022 13:19:09 +0200
-Message-ID: <241af90a-4cec-9266-8fb0-3c69f9880b52@leemhuis.info>
-Date:   Mon, 17 Oct 2022 13:19:08 +0200
+        Mon, 17 Oct 2022 07:20:27 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AE41788D;
+        Mon, 17 Oct 2022 04:20:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id q9so24244833ejd.0;
+        Mon, 17 Oct 2022 04:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j9t/qNpTv9ITKXNmBoaXQjDh/SDRGL5ElwdwTk6muWw=;
+        b=LQ1HCRx4f33bI6jQrqSGmqqAM4gla6eNep3FmMyulePrS9NOk0NNirMtl9NTjXf2qh
+         +gI3SDKkLaV85ptTk1WzlgxFp6VF6XSz2QR7y8JHyx9tMLI7GyEuPdYU5OYutAruE9bL
+         gMVpT/LMw/LmmB3KGPcy1/8RG70IuIYCmujXF5CInEB3ZauYdc29c+/1YXbaiDX5Cq1d
+         TfExOnlm8qGOZgHmqZslFmOzEFmOshqUp0t5NxHS2W+ddN1+IE9FvgjvUVx/G5Ohi60Y
+         o9F5sJBko74D9b+I0g02xlHwW/gUZ0UCRQ5seW11yEpjwHpKo4P+a/N3EULjlJjAontE
+         iC2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j9t/qNpTv9ITKXNmBoaXQjDh/SDRGL5ElwdwTk6muWw=;
+        b=1GdKT1tH+ClJQE+5+Z46uPfwGmR5jLH8xJSHlXjd8/h85dB7RCq2mQqoKJWFY9AHp+
+         Zx9Rzwb9PuXsE/p1cAJG6lY2LAokbn36HfVNYoy/ltoNI8yVcjJdIlnVfjM8IOwlWh51
+         8czRwE7xoCX2nHenqWQX4YexrdRyrEzZBdWpoDzpD9tZMdk3qiNte9Zpj/XD/9c/sGz3
+         KNGro9+5kv6l7321o6TyldmzsW3KEqm+A3nv4PNuqASib7W8DPSXnSObMq8SVcGOKfoI
+         Qr65ntk6t0VNqQTOYnBZ+PVxEtiwsz8xyd13zxhD6ehSVASg4qjIks93XtgFnU8dA4N4
+         dBUQ==
+X-Gm-Message-State: ACrzQf2Mw7DdMTyswhpdCY2iZ5DDMvrSXWFmvm3gX5Ow7AdWRIfP3sLT
+        KHpfaTlxfoH3Dys0duY1ZFE=
+X-Google-Smtp-Source: AMsMyM7Oc9daSe0mUSiKWp3t0WQbxw7e/0TFnbVatKH0B/PSBZ0zJPvXpDOiRoiEOFR1G1c8e21Ffw==
+X-Received: by 2002:a17:907:8a1c:b0:78d:ef44:7759 with SMTP id sc28-20020a1709078a1c00b0078def447759mr8404473ejc.441.1666005620904;
+        Mon, 17 Oct 2022 04:20:20 -0700 (PDT)
+Received: from arch.localdomain ([111.119.183.53])
+        by smtp.gmail.com with ESMTPSA id ku16-20020a170907789000b0078cb06c2ef9sm6043391ejc.8.2022.10.17.04.20.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 04:20:19 -0700 (PDT)
+From:   Mushahid Hussain <mushi.shar@gmail.com>
+To:     corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mushahid Hussain <mushi.shar@gmail.com>
+Subject: [PATCH] Documentation: Fix spelling mistake in hacking.rst
+Date:   Mon, 17 Oct 2022 16:20:26 +0500
+Message-Id: <20221017112026.88324-1-mushi.shar@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [Intel-gfx] alderlake crashes (random memory corruption?) with
- 6.0 i915 / ucode related
-Content-Language: en-US, de-DE
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <355dde1c-91e3-13b5-c8e8-75c9b9779b4f@redhat.com>
- <87a65usvgq.fsf@intel.com> <877d0ysv1e.fsf@intel.com>
- <717fb4ab-5225-884f-37f9-2032c265824e@redhat.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <717fb4ab-5225-884f-37f9-2032c265824e@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1666005550;ea53a1e5;
-X-HE-SMSGID: 1okO9F-0003cK-6C
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,46 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CCing the regression mailing list, as it should be in the loop for all
-regressions, as explained here:
-https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+Fix `botton half locks` to `bottom half locks`.
 
-On 17.10.22 12:48, Hans de Goede wrote:
-> On 10/17/22 10:39, Jani Nikula wrote:
->> On Mon, 17 Oct 2022, Jani Nikula <jani.nikula@linux.intel.com> wrote:
->>> On Thu, 13 Oct 2022, Hans de Goede <hdegoede@redhat.com> wrote:
->>>> With 6.0 the following WARN triggers:
->>>> drivers/gpu/drm/i915/display/intel_bios.c:477:
->>>>
->>>>         drm_WARN(&i915->drm, min_size == 0,
->>>>                  "Block %d min_size is zero\n", section_id);
->>>
->>> What's the value of section_id that gets printed?
->>
->> I'm guessing this is [1] fixed by commit d3a7051841f0 ("drm/i915/bios:
->> Use hardcoded fp_timing size for generating LFP data pointers") in
->> v6.1-rc1.
->>
->> I don't think this is the root cause for your issues, but I wonder if
->> you could try v6.1-rc1 or drm-tip and see if we've fixed the other stuff
->> already too?
-> 
-> 6.1-rc1 indeed does not trigger the drm_WARN and for now (couple of
-> reboots, running for 5 minutes now) it seems stable. 6.0.0 usually
-> crashed during boot (but not always).
-> 
-> Do you think it would be worthwhile to try 6.0.0 with d3a7051841f0 ?
-> 
-> Any other commits which I can try before I go down the bisect route ?
-> 
-> (I'm assuming this will also affect other users, so we really need
-> to fix this for 6.0.x
+Signed-off-by: Mushahid Hussain <mushi.shar@gmail.com>
+---
+ Documentation/kernel-hacking/hacking.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-+1
+diff --git a/Documentation/kernel-hacking/hacking.rst b/Documentation/kernel-hacking/hacking.rst
+index 9a1f020c8449..1717348a4404 100644
+--- a/Documentation/kernel-hacking/hacking.rst
++++ b/Documentation/kernel-hacking/hacking.rst
+@@ -120,7 +120,7 @@ You can tell you are in a softirq (or tasklet) using the
+ .. warning::
+ 
+     Beware that this will return a false positive if a
+-    :ref:`botton half lock <local_bh_disable>` is held.
++    :ref:`bottom half lock <local_bh_disable>` is held.
+ 
+ Some Basic Rules
+ ================
+-- 
+2.38.0
 
-> before it starts hitting Arch + Fedora users)
-
-FWIW, I heard both openSUSE Tumbleweed and Arch switched to 6.0.y in the
-past few days already.
-
-Ciao, Thorsten
