@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4921601685
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F7160168B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiJQSmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        id S230046AbiJQSoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJQSmf (ORCPT
+        with ESMTP id S229911AbiJQSoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:42:35 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA9F733CB;
-        Mon, 17 Oct 2022 11:42:34 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id n130so13103473oia.6;
-        Mon, 17 Oct 2022 11:42:34 -0700 (PDT)
+        Mon, 17 Oct 2022 14:44:15 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7941C2;
+        Mon, 17 Oct 2022 11:44:14 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so11804083pjb.2;
+        Mon, 17 Oct 2022 11:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4EDculVdfuod3LvB+YZ/9tyRLowaSjT/EMGrKWwqWrs=;
+        b=Ag3jTmTkmqxi6rRrA6Rj3jQtI2WHV93lD7AVOheEsJ6CeVPutPpaNZOqSsCGMTVRNo
+         ACyP8mowy4wm/T2YjeECJC5RcZo6Kdk1kfBjH0VT7GzKFyHXz4UXtBQihW3Zf5kqol5W
+         31IJpOKADtfRGIu9vpvwf2OCJSTzH2uTsAWOIjCFCsrL1d/RqPeZqwWXPNk2629NXEJD
+         2Ni3vOpt38/XBG7OwNoZ2XYwqUes1TZ81nkMUMT4oZ0T2/uvdGbTUbk59mHtBVXoWqks
+         DwegG5xkm0qlGJjxkeWwHKXZi0Gg1lhm+x5ITOrG0ICZ8hP9Xy7onvZ5gVz310ouRj79
+         YQzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nZ+TOy+i0aYFJ/iFf9DtC13NpbD7/U7juh/tS5gbMQI=;
-        b=nvQXgeE4P5RCjLpzj/MWLJJXfigI6KvTW887n/rJcA+AJHE6fHpnHLSLFFQeYyitba
-         Xlh4t91r9TKU3CfkgOlJ2K74oxGmjXQB3Ddt+0GJrnjA1ZEHlMtUMXrW/u63jqpoLo0m
-         1tCGKCTiZfUYh9uz9LfFlOyEIo259kAcI9w5P7ljttVAZ09QNcNK5dFVjyVsJzUHlBNt
-         2DjxOQhHm/urKZqL304+j/lCfUd1+7DWgVMzpG+1VNgUMOD4WPqKrZkscpkDZiJQkQhd
-         23/f1ea4A4e9NXoNsWFXoAUA8r+7L69j0qn265Xjii4AmTfbnKNuKIJhIH4F+GcAvQ7Z
-         lAHw==
-X-Gm-Message-State: ACrzQf0RkYvq4GiNT8uCl/wUnOGUAzN/j8k0uDO5/IkBQBYE9L6e32CG
-        LukZk/gZD7kpwG/EFGLeow==
-X-Google-Smtp-Source: AMsMyM69rBChqI2DHVCnodCENYuzVOrePDGda8YjhYza7SKgmCrl6bqqncNYE/8cx13f9zABeJZ+sg==
-X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id f18-20020a05680814d200b00354c733abd3mr5818411oiw.96.1666032153700;
-        Mon, 17 Oct 2022 11:42:33 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bk15-20020a0568081a0f00b003546cb60859sm4707864oib.14.2022.10.17.11.42.32
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4EDculVdfuod3LvB+YZ/9tyRLowaSjT/EMGrKWwqWrs=;
+        b=w5L57yAnzQRsNhqRPcDA98stA5h9SmENNzLRcGaPLzWvsFG6XAahxvXIGHK8xXh6hw
+         h7XQRdliqW1hT4ydZchG8Va4G1grKiIYW1ylldx12U4ryeCN1CFlS4FvfJGKzu9MVh8k
+         0UZVcEJn0THD2APHLuR7tFcQ57AE+etkoISrq0Om0/mWECVyvUg8nnCyAVlEcXfZxHdj
+         edgwFMk9p/TZRnI4UN58+TUJNeExZQkMzlIyko+VyutqaXdBDeASJ6HbkWF+oCeGDm11
+         okeNwERHlX7XaKT5sAGuKN0oSi483lAW1ZPGzdBs9FCRstO1I+RpXbxsxkqlbb7EI7S0
+         +fww==
+X-Gm-Message-State: ACrzQf3pU0BHel1SlNkAmhFBP3LEc3Of3T24t8xx4P9kYrvI+PXNf+yf
+        Wnd8ezuSEEX2fxULMMTidsY51KiQGYM=
+X-Google-Smtp-Source: AMsMyM4zkDy5DAtUIXjtxrTG1iendeglHLWEa4bgd2iGMur+37H7ncHWGU8DpqO7zqzP74e6PB9S3A==
+X-Received: by 2002:a17:90b:33c3:b0:20a:ebc3:6514 with SMTP id lk3-20020a17090b33c300b0020aebc36514mr34401275pjb.147.1666032253704;
+        Mon, 17 Oct 2022 11:44:13 -0700 (PDT)
+Received: from localhost ([115.117.107.100])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090311cc00b001801aec1f6bsm7011337plh.141.2022.10.17.11.44.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:42:33 -0700 (PDT)
-Received: (nullmailer pid 2263866 invoked by uid 1000);
-        Mon, 17 Oct 2022 18:42:33 -0000
-Date:   Mon, 17 Oct 2022 13:42:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: mediatek-gen3: Add iommu and
- power-domain support
-Message-ID: <20221017184233.GA2260080-robh@kernel.org>
-References: <20221017070858.13902-1-tinghan.shen@mediatek.com>
- <20221017070858.13902-2-tinghan.shen@mediatek.com>
+        Mon, 17 Oct 2022 11:44:13 -0700 (PDT)
+From:   Manank Patel <pmanank200502@gmail.com>
+To:     rafael@kernel.org
+Cc:     lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manank Patel <pmanank200502@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH v2] "ACPI: PCC: Fix unintentional integer overflow"
+Date:   Tue, 18 Oct 2022 00:13:39 +0530
+Message-Id: <20221017184338.64152-1-pmanank200502@gmail.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221017182035.3g67uudttl6k5gag@bogus>
+References: <20221017182035.3g67uudttl6k5gag@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017070858.13902-2-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 03:08:56PM +0800, Tinghan Shen wrote:
-> From: Jianjun Wang <jianjun.wang@mediatek.com>
-> 
-> Add iommu and power-domain support, and add examples for MT8195, which
-> has two PCIe ports with different clocks and phys.
+Fixed unintentional u32 overflow by changing PCC_CMD_WAIT_RETRIES_NUM to 500ULL
 
-Is that really a big enough difference to add a whole other example 
-when we have a dts file with it too? I don't think so, and we certainly 
-don't need to show all instances either.
+Fixes: 91cefefb6991 ("ACPI: PCC: replace wait_for_completion()")
 
-Rob
+Signed-off-by: Manank Patel <pmanank200502@gmail.com>
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+
+---
+Thank you so much @sudeep for your clarifications!
+
+Changelog:
+v1->v2:
+        Change the macro itself to ULL instead of typecasting in the
+        code
+
+ drivers/acpi/acpi_pcc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
+index ee4ce5ba1fb2..3e252be047b8 100644
+--- a/drivers/acpi/acpi_pcc.c
++++ b/drivers/acpi/acpi_pcc.c
+@@ -27,7 +27,7 @@
+  * Arbitrary retries in case the remote processor is slow to respond
+  * to PCC commands
+  */
+-#define PCC_CMD_WAIT_RETRIES_NUM	500
++#define PCC_CMD_WAIT_RETRIES_NUM	500ULL
+ 
+ struct pcc_data {
+ 	struct pcc_mbox_chan *pcc_chan;
+-- 
+2.38.0
+
