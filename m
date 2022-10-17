@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0130D60131F
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAA9601320
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiJQQC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 12:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        id S231241AbiJQQC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 12:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiJQQCo (ORCPT
+        with ESMTP id S229896AbiJQQCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 12:02:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD3C6DAD0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:42 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id d26so25978875ejc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:42 -0700 (PDT)
+        Mon, 17 Oct 2022 12:02:45 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141A46B64B
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:43 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id g27so16706181edf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=V8PGF12HowaED9GsfrGSUOr+T+BR5MJRz00gwWuwNBY=;
-        b=FwjCcmT197rmgh5QI5e3OYcSXGX0J/38zjdy+NQLWYvd36DTytm0a9xBb/IVvrvF0m
-         NeTlftucGk9bI3HSKTXMixH7YlHMB7m/qnAKI+1GzsSdwrrMfD5uVgsEABz9UJ3YKBXF
-         diMaxcKQucmoyB8BbBfaSPCvum3Hk6iPW34T2KUZpguWuKRUVCqpjUhaEuIoPME22BTK
-         uStcrtd21fD5JEXPENWctXC9cYfaidqN8WOdR5ymvUnmYEBfa98t6dq7oL3aGIpJjgxx
-         kSTrDAAJ29nzE08s3MhU+S2C9r/NHfqyHauqVyH3qssZwy8VkCEZj/nIInk/D9vANe+m
-         TgiQ==
+        b=PuSyLUliSWcCdVU4u7qHBbywoFiv8OcPvJLS/1g7R6MQWRqgwi9ab6h3UNMAdzJ3r2
+         LE2uVd4tU/Ubdl3myCXCO7PeGNs0vZnHReXivgvRK4Bze4KVRzOvfA4IOQeK3rrfgt5D
+         BhZZPORrFgoF7oDSHAYM4kvWeAMUBuIE+njxY7T2eKBV5QjqdSWPU6xjQMAcWilw4HNE
+         XUcV9qbf13+VHz9QpAEi8xk9Rd7hA1twg3bjLCnisbFN1Gk9+o5TNA3+jq20D4ikP/W0
+         5loQEp4hEFdhDBNpIjn7WEtAFSZD2gDZlrfK4iHK+ND1y29bST762akZlqLlK6Zjd8v2
+         gFZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=V8PGF12HowaED9GsfrGSUOr+T+BR5MJRz00gwWuwNBY=;
-        b=eA/D3+GpPFNJItmpOV2zfoiTv1RrNlw5rnk5mCqANrHSgrX68Qq9F9tNGiKetf1mwj
-         Fy+RTpJHydCfQ97gFVeiuwwlEOwHHbgy9hz11dYTCJFVbat/qYwS8iL50buSi5P67m/l
-         4H279fBUkMgf6UNnS296KKjn/bzE55AUHvJYWB+/pz0zgTIe6Q1R3LRog2q/Wxb4DVP0
-         Yk/W27jgArnsw5CobgBjf4VYP9G2wQnfBAP3cNF9dVypf5xB5yfPKGINNpgX98Y/OzUm
-         GxuUdv1xfbFHQIrAGDTg8OiFUILXoqHxq8FY4AnNy1Sh3l54iKHx/y2KGtr83zLqeDJ4
-         dCyw==
-X-Gm-Message-State: ACrzQf2xl6CnjAzSM31eM3VrwYafqH9nN1mJNWqsTjNF5azOsl7r4Y7C
-        Eb4l847CZlxWQ6uStYQOWKs=
-X-Google-Smtp-Source: AMsMyM7mQD7IJcK53cEQL1/Z+YHex7sxuqWGp8otU30wY2tEfaxu2LL184YVDQk0dPc0p6SpQLXgjg==
-X-Received: by 2002:a17:906:d54d:b0:78e:2fbf:ca2a with SMTP id cr13-20020a170906d54d00b0078e2fbfca2amr9476322ejc.488.1666022561205;
-        Mon, 17 Oct 2022 09:02:41 -0700 (PDT)
+        b=0ydvQxqmDP9pGzDFGNZKNZn1lvzMDesjorfG87BHQIyIge15Udz7YPSDWQwX7MFk7n
+         devx7wIscoDD93gVFFb703ugbr4Vpacgdx9xDIYx+pjciykbsTxEgfw/QWsIXbtwhYSw
+         p5p6s4xhBbzYoL3yF0AWhdbdX7FmyFzr7AvC9gB4IYZbPHDcIzfFsYAhdRS794LYy63j
+         3gewocabqzmRLWBupUDeUNUHewvbZ6jNx1KF5yjVxoILr4FXruGIOGEd5vTXPdasGDtu
+         iN5LpetieM5TuhdgTLns2vnuupCgY/BvTlZNwL7/N2DGvWeb7TsAZt0T8FQe2FuSLNj+
+         FDow==
+X-Gm-Message-State: ACrzQf1bAvbmpcOIwe93px4E9NmVJ9A/QBFAYm7XY6DOWfRINdbFmNo5
+        WVupWbExZKQSSILxvPD38A4=
+X-Google-Smtp-Source: AMsMyM5J6EvtgyhKOpb9oGBdRpl3SDQY9wi4qJB+ZFoj5u0QAiVRfFyH462ZJNpLtpsrBwVY0Rj1CQ==
+X-Received: by 2002:a05:6402:35d6:b0:45d:a52f:2d30 with SMTP id z22-20020a05640235d600b0045da52f2d30mr3601725edc.4.1666022562308;
+        Mon, 17 Oct 2022 09:02:42 -0700 (PDT)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.40
+        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 09:02:40 -0700 (PDT)
+        Mon, 17 Oct 2022 09:02:41 -0700 (PDT)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
@@ -58,9 +58,9 @@ Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Uladzislau Rezki <urezki@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: [PATCH 3/7] mm: vmap: Add a free_vmap_area_noflush trace event
-Date:   Mon, 17 Oct 2022 18:02:28 +0200
-Message-Id: <20221017160233.16582-5-urezki@gmail.com>
+Subject: [PATCH 3/7] mm: vmap: Add free_vmap_area_noflush trace event
+Date:   Mon, 17 Oct 2022 18:02:29 +0200
+Message-Id: <20221017160233.16582-6-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221017160233.16582-1-urezki@gmail.com>
 References: <20221017160233.16582-1-urezki@gmail.com>
