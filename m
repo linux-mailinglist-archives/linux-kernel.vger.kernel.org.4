@@ -2,96 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35FB600F9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 14:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9BC600FA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiJQM7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 08:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S230242AbiJQNAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiJQM7Q (ORCPT
+        with ESMTP id S230455AbiJQNAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 08:59:16 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315A031EC0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:59:15 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id s3so7578113qtn.12
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:59:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kYUtPYFB9C+7Trxy7xCpZPLfeVdftlC1KSkxlxw2jX0=;
-        b=NdTQbneosiTpu8ImkaaC27AeSynZKrIelftKMwCvTC16S27Mu0KbgVcqUzmCZHCC8A
-         ljuW8mtqNNgAyBbS/RN8FQRqIamAqVGX71lmjEGbHtD8rb8HV4VqzVuGZbOjoaEGSGL3
-         qaOZMJUQlEuc/9xVf7OqJe7F7oqPS13YrUU8FmIdkC5ddZFeogopd4fa2e+fcYYF75xv
-         tS0rrB7O8kHLrPgZiqEbQq5nK0EEJy3N3w9eDUyOtn3tnmg9Z3jIPBYvr77ElFOFZ1vq
-         aNa+HOZRQisygVsDW1UEMI49vU2FjlAmHCuLUMyHfaMrV84v6UZVQpBPTVAg9DvkfCr8
-         TCVQ==
-X-Gm-Message-State: ACrzQf1c3G0WAfAYWb1Q67OWO/0E/k1Qpe5jhNqYACArTu+Hov0UdWl0
-        T3kIO15SQwIJm0b7DjqIKAwSUhv+Syz2qA==
-X-Google-Smtp-Source: AMsMyM4Ydaymp+9kcqk1SckSr2n6B4otEn8ct03NTwzz0lL6z8zW/bz6BO5j+fTTwusE2v4EeYoCwA==
-X-Received: by 2002:ac8:5b10:0:b0:39c:d63a:d88 with SMTP id m16-20020ac85b10000000b0039cd63a0d88mr8480274qtw.682.1666011554207;
-        Mon, 17 Oct 2022 05:59:14 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id t4-20020a05622a01c400b00397e97baa96sm8049482qtw.0.2022.10.17.05.59.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 05:59:13 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id f205so2000878yba.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:59:13 -0700 (PDT)
-X-Received: by 2002:a25:687:0:b0:6c2:2b0c:26e with SMTP id 129-20020a250687000000b006c22b0c026emr9082996ybg.202.1666011553081;
- Mon, 17 Oct 2022 05:59:13 -0700 (PDT)
+        Mon, 17 Oct 2022 09:00:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B98402F7;
+        Mon, 17 Oct 2022 06:00:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6C7EA20628;
+        Mon, 17 Oct 2022 13:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666011622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9MB8IK99devSsbVKuCFsHUWmVzyz2mqfU8Y26jvqzv4=;
+        b=zhssMzsy/2w3OsoMr5WAqLlA15XAps4taHC3oW1kGemgiv5Of9mor6m5UgiloYUrq2u49x
+        uDXT5zpFbYy9NZ0ASsOtsb+1Qs6LN7GNt7HIVECX8kRRRI3VZDkM5TDsZSFVpj/QXQNNwK
+        yanlAR/KhCIc2KkUwCruBQ0yKEZ+4Kg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666011622;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9MB8IK99devSsbVKuCFsHUWmVzyz2mqfU8Y26jvqzv4=;
+        b=kbo9YyUMH19Ty6ZeoQYYH6O8OBIIOCUsNjK8YY66kGueMJBtfGm21E2ES6nlbGbqGWxjnN
+        LDRgm2Xy/RcUW8Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D189713ABE;
+        Mon, 17 Oct 2022 13:00:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QVZuMuVRTWOhRgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 17 Oct 2022 13:00:21 +0000
+Message-ID: <de680280-f6b1-9337-2ae4-4b2faf2b823b@suse.cz>
+Date:   Mon, 17 Oct 2022 15:00:21 +0200
 MIME-Version: 1.0
-References: <3225ba4cfe558d9380155e75385954dd21d4e7eb.1665909132.git.geert@linux-m68k.org>
- <Y00+N/2eE+GSrQqh@sirena.org.uk>
-In-Reply-To: <Y00+N/2eE+GSrQqh@sirena.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Oct 2022 14:59:01 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU-yGhWMBF9zUXaHmU4rhkdZiHktDLXb=9bK2bYqaDhyQ@mail.gmail.com>
-Message-ID: <CAMuHMdU-yGhWMBF9zUXaHmU4rhkdZiHktDLXb=9bK2bYqaDhyQ@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: codecs: tlv320adc3xxx: Wrap adc3xxx_i2c_remove() in __exit_p()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ricard Wanderlof <ricardw@axis.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On 9/15/22 16:29, Chao Peng wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> KVM can use memfd-provided memory for guest memory. For normal userspace
+> accessible memory, KVM userspace (e.g. QEMU) mmaps the memfd into its
+> virtual address space and then tells KVM to use the virtual address to
+> setup the mapping in the secondary page table (e.g. EPT).
+> 
+> With confidential computing technologies like Intel TDX, the
+> memfd-provided memory may be encrypted with special key for special
+> software domain (e.g. KVM guest) and is not expected to be directly
+> accessed by userspace. Precisely, userspace access to such encrypted
+> memory may lead to host crash so it should be prevented.
+> 
+> This patch introduces userspace inaccessible memfd (created with
+> MFD_INACCESSIBLE). Its memory is inaccessible from userspace through
+> ordinary MMU access (e.g. read/write/mmap) but can be accessed via
+> in-kernel interface so KVM can directly interact with core-mm without
+> the need to map the memory into KVM userspace.
+> 
+> It provides semantics required for KVM guest private(encrypted) memory
+> support that a file descriptor with this flag set is going to be used as
+> the source of guest memory in confidential computing environments such
+> as Intel TDX/AMD SEV.
+> 
+> KVM userspace is still in charge of the lifecycle of the memfd. It
+> should pass the opened fd to KVM. KVM uses the kernel APIs newly added
+> in this patch to obtain the physical memory address and then populate
+> the secondary page table entries.
+> 
+> The userspace inaccessible memfd can be fallocate-ed and hole-punched
+> from userspace. When hole-punching happens, KVM can get notified through
+> inaccessible_notifier it then gets chance to remove any mapped entries
+> of the range in the secondary page tables.
+> 
+> The userspace inaccessible memfd itself is implemented as a shim layer
+> on top of real memory file systems like tmpfs/hugetlbfs but this patch
+> only implemented tmpfs. The allocated memory is currently marked as
+> unmovable and unevictable, this is required for current confidential
+> usage. But in future this might be changed.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
 
-On Mon, Oct 17, 2022 at 1:36 PM Mark Brown <broonie@kernel.org> wrote:
-> On Sun, Oct 16, 2022 at 10:33:50AM +0200, Geert Uytterhoeven wrote:
-> > If CONFIG_SND_SOC_TLV320ADC3XXX=y:
-> >
-> >     `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
-> >
-> > Fix this by wrapping the adc3xxx_i2c_remove() pointer in __exit_p().
->
-> Why does this driver need this but most others don't?
+...
 
-Because most drivers don't annotate .remove() functions with __exit?
-An alternative would be to drop the __exit annotation, at the expense
-of a slightly larger kernel in the built-in case.
+> +static long inaccessible_fallocate(struct file *file, int mode,
+> +				   loff_t offset, loff_t len)
+> +{
+> +	struct inaccessible_data *data = file->f_mapping->private_data;
+> +	struct file *memfd = data->memfd;
+> +	int ret;
+> +
+> +	if (mode & FALLOC_FL_PUNCH_HOLE) {
+> +		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+> +			return -EINVAL;
+> +	}
+> +
+> +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
+> +	inaccessible_notifier_invalidate(data, offset, offset + len);
 
-Gr{oetje,eeting}s,
+Wonder if invalidate should precede the actual hole punch, otherwise we open
+a window where the page tables point to memory no longer valid?
 
-                        Geert
+> +	return ret;
+> +}
+> +
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+...
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +
+> +static struct file_system_type inaccessible_fs = {
+> +	.owner		= THIS_MODULE,
+> +	.name		= "[inaccessible]",
+
+Dunno where exactly is this name visible, but shouldn't it better be
+"[memfd:inaccessible]"?
+
+> +	.init_fs_context = inaccessible_init_fs_context,
+> +	.kill_sb	= kill_anon_super,
+> +};
+> +
+
