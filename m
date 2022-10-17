@@ -2,47 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6C0601084
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A3560101C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiJQNvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S229453AbiJQNWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJQNvn (ORCPT
+        with ESMTP id S229821AbiJQNWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:51:43 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F0B1A22D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666014681; bh=e7y/gdua3ODmWXy8ucHEJ3MMPJKxvCInX0sfWBDTsBU=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=kv8U8J2EYFeETXUtCVtX9QJO7t5CIrtKcYVOCrpV5girWUBPY+b0bl/WD2gtKJdYQ
-         r2kVoy+f9at0y5WggrJcWt6g2pKZEsztQMnH/iGM9hEtN4Sq0rWEjccDBvBPqAy2mA
-         nBqTUQmTmb0f4w/IEinV20+uRGnA4tU0yQIdX2l8=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via [213.182.55.206]
-        Mon, 17 Oct 2022 15:51:21 +0200 (CEST)
-X-EA-Auth: 8gBJYp27seKAA26961w94jVTWg9S9IRxIiKmQ/HC1YIX0Zfwe4zMLhba3Wr+Re6bEwg+vO5wx28p8G6UUiL2fBB0u1tKfaiJ
-Date:   Mon, 17 Oct 2022 18:51:47 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: [PATCH 1/4] staging: r8188eu: use Linux kernel variable naming
- convention
-Message-ID: <3088d91e9d279d4515cd086ae969f33a7c061652.1666011479.git.drv@mailo.com>
-References: <cover.1666011479.git.drv@mailo.com>
+        Mon, 17 Oct 2022 09:22:42 -0400
+Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD0F5BC1A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:22:41 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 51160604F3;
+        Mon, 17 Oct 2022 15:22:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1666012959; bh=7tDUxNQPZ96lKji4K0afOdf/2mnb+fkiVpxcHgObl4o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ySI6H/SK7VG7/Tob5Crf9x31Lu2iGV9JrdpTx7W7QoCwfi7tnq2xiD4J6bhXZeXNm
+         8HpQkBwf936a+md+j/A+4IRkt8j7KVCRWQe0GqKQef/kDY+e3amcZzXJm7T5ofSS71
+         0bliKvSdpOmqqhELQJX69HdtEC7lbE5iBB5MOwfPo+RW0pyo23HTwNP/Dnw4wIIqKI
+         eps+HR6gdOfR4lgCaZ+LL9vZMQdCIYDG6f5Y+LW3mK+/MMRZuu3En6aZpinWq0vMs7
+         /FaRL7qSS3wFYeB8DX4dC3FNZKe3KHLaPMH28Tx+CH5RD/xm89vdfsCiL76ZlbEfir
+         hnW6htU/XROOA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id OMospN1Vpizk; Mon, 17 Oct 2022 15:22:36 +0200 (CEST)
+Received: from [161.53.83.51] (pc-mtodorov.grf.hr [161.53.83.51])
+        by domac.alu.hr (Postfix) with ESMTPSA id 49C06604EF;
+        Mon, 17 Oct 2022 15:22:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1666012956; bh=7tDUxNQPZ96lKji4K0afOdf/2mnb+fkiVpxcHgObl4o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pc1SeahiGKraLSiku/Vjhw9LcU/lKoXJKswCg6PV3AEclXVmBAsGXsAwBtt+XdfWV
+         gsVCltyfctAEXHErhCUwTKDw+sPYnQcmjELv4gN0Vhxhvw4g8tQZHrI7eFKA+KbJgp
+         /8T/OQ4PslvDp0BFrkDijYAJ4ZjiaVUPkKo+MzD8Rr9+w9259CfPgAbHoNMtDaXqqQ
+         GcEgMKp1QPodv7tv+N4gTTPVFLmRXZBRY90BQJCgvy4rrUp+Ui868dE2Byyluruk0/
+         MdSl9l3UdVWImDMcYeyHaEEK9skiVC2QvzL7w37fpLxQ6PD9Xr8TzGWRhQP7MorQD5
+         XRbfARWSEM9eQ==
+Message-ID: <cdf16572-1206-50b8-1ffe-48746cde00a4@alu.unizg.hr>
+Date:   Mon, 17 Oct 2022 15:22:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1666011479.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
+ 6.0.0-rc3 through 6.0.0-rc7
+Content-Language: en-US
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        regressions@leemhuis.info
+Cc:     bagasdotme@gmail.com, linux-kernel@vger.kernel.org,
+        marcmiltenberger@gmail.com, regressions@lists.linux.dev,
+        srw@sladewatkins.net, phillip.lougher@gmail.com
+References: <8702a833-e66c-e63a-bfc8-1007174c5b3d@leemhuis.info>
+ <20221015205936.5735-1-phillip@squashfs.org.uk>
+ <ff2b901d-9491-c886-5330-a244101978ab@alu.unizg.hr>
+ <b71f4e2d-23bb-3eb4-3928-fe66c4357e5b@squashfs.org.uk>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <b71f4e2d-23bb-3eb4-3928-fe66c4357e5b@squashfs.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,272 +73,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Follow Linux Kernel coding style variable naming convention instead of using
-camelCase style. Address following checkpatch script complaints:
-	CHECK: Avoid CamelCase: <tagLen>
-	CHECK: Avoid CamelCase: <tagType>
-	CHECK: Avoid CamelCase: <networkAddr>
-	CHECK: Avoid CamelCase: <ipAddr>
-	CHECK: Avoid CamelCase: <macAddr>
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/r8188eu/core/rtw_br_ext.c | 112 +++++++++++-----------
- 1 file changed, 56 insertions(+), 56 deletions(-)
+On 16.10.2022. 21:55, Phillip Lougher wrote:
+> On 16/10/2022 16:55, Mirsad Goran Todorovac wrote:
+>> On 15. 10. 2022. 22:59, Phillip Lougher wrote:
+>
+> Tracking down bugs of this sort is always a process of elimination,
+> and gathering information to pinpoint the exact circumstances of why
+> it is triggering.
+>
+> Next step is to download the exact snap(s) where the problems are 
+> occurring, as this may provide some insights.
+>
+> I don't run Ubuntu, and I don't use snaps.  Can you provide the
+> download link(s) of the snap(s) that cause problems?  If there's
+> any firefox snaps that don't cause problems those will be useful
+> too.
+>
+> You don't mention if there's any errors present in "dmesg" when
+> this happens, and so I'm assuming there aren't any?
+>
+> Phillip
 
-diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index 4c5f30792a46..79daf8f269d6 100644
---- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -50,17 +50,17 @@
- static unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
- {
- 	unsigned char *cur_ptr, *start_ptr;
--	unsigned short tagLen, tagType;
-+	unsigned short tag_len, tag_type;
+Snaps are originated in Ubuntu, and they heavily rely on snapd, and 
+squashfs for decompressing executables.
+Naturally, this also affects Linux Mint as Ubuntu's fork.
 
- 	start_ptr = (unsigned char *)ph->tag;
- 	cur_ptr = (unsigned char *)ph->tag;
- 	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
- 		/*  prevent un-alignment access */
--		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
--		tagLen  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
--		if (tagType == type)
-+		tag_type = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
-+		tag_len  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
-+		if (tag_type == type)
- 			return cur_ptr;
--		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
-+		cur_ptr = cur_ptr + TAG_HDR_LEN + tag_len;
- 	}
- 	return NULL;
- }
-@@ -111,32 +111,32 @@ static int  __nat25_has_expired(struct nat25_network_db_entry *fdb)
- 	return 0;
- }
+Those two comprise a large share of the Linux distros, and Firefox is 
+exclusively distributed in snaps.
 
--static void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
--				unsigned int *ipAddr)
-+static void __nat25_generate_ipv4_network_addr(unsigned char *network_addr,
-+				unsigned int *ip_addr)
- {
--	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
-+	memset(network_addr, 0, MAX_NETWORK_ADDR_LEN);
+There is no way to install Firefox without snapd and squashfs, so the 
+distros are lobotomised from the point of
+the Firefox users.
 
--	networkAddr[0] = NAT25_IPV4;
--	memcpy(networkAddr + 7, (unsigned char *)ipAddr, 4);
-+	network_addr[0] = NAT25_IPV4;
-+	memcpy(network_addr + 7, (unsigned char *)ip_addr, 4);
- }
+You should basically do what is described here: 
+https://snapcraft.io/install/firefox/centos
 
--static void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
-+static void __nat25_generate_pppoe_network_addr(unsigned char *network_addr,
- 				unsigned char *ac_mac, __be16 *sid)
- {
--	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
-+	memset(network_addr, 0, MAX_NETWORK_ADDR_LEN);
+and probably obvious to you: https://forums.centos.org/viewtopic.php?t=71485
 
--	networkAddr[0] = NAT25_PPPOE;
--	memcpy(networkAddr + 1, (unsigned char *)sid, 2);
--	memcpy(networkAddr + 3, (unsigned char *)ac_mac, 6);
-+	network_addr[0] = NAT25_PPPOE;
-+	memcpy(network_addr + 1, (unsigned char *)sid, 2);
-+	memcpy(network_addr + 3, (unsigned char *)ac_mac, 6);
- }
+then it's easy:
 
--static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
--				unsigned int *ipAddr)
-+static  void __nat25_generate_ipv6_network_addr(unsigned char *network_addr,
-+				unsigned int *ip_addr)
- {
--	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
-+	memset(network_addr, 0, MAX_NETWORK_ADDR_LEN);
+# snap install firefox
 
--	networkAddr[0] = NAT25_IPV6;
--	memcpy(networkAddr + 1, (unsigned char *)ipAddr, 16);
-+	network_addr[0] = NAT25_IPV6;
-+	memcpy(network_addr + 1, (unsigned char *)ip_addr, 16);
- }
+it will install from the latest release.
 
- static unsigned char *scan_tlv(unsigned char *data, int len, unsigned char tag, unsigned char len8b)
-@@ -200,40 +200,40 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
- 	return 0;
- }
+Thank you.
 
--static int __nat25_network_hash(unsigned char *networkAddr)
-+static int __nat25_network_hash(unsigned char *network_addr)
- {
--	if (networkAddr[0] == NAT25_IPV4) {
-+	if (network_addr[0] == NAT25_IPV4) {
- 		unsigned long x;
-
--		x = networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
-+		x = network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_IPX) {
-+	} else if (network_addr[0] == NAT25_IPX) {
- 		unsigned long x;
-
--		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^
--			networkAddr[6] ^ networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
-+		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
-+			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_APPLE) {
-+	} else if (network_addr[0] == NAT25_APPLE) {
- 		unsigned long x;
-
--		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3];
-+		x = network_addr[1] ^ network_addr[2] ^ network_addr[3];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_PPPOE) {
-+	} else if (network_addr[0] == NAT25_PPPOE) {
- 		unsigned long x;
-
--		x = networkAddr[0] ^ networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^ networkAddr[6] ^ networkAddr[7] ^ networkAddr[8];
-+		x = network_addr[0] ^ network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^ network_addr[6] ^ network_addr[7] ^ network_addr[8];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_IPV6) {
-+	} else if (network_addr[0] == NAT25_IPV6) {
- 		unsigned long x;
-
--		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^
--			networkAddr[6] ^ networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10] ^
--			networkAddr[11] ^ networkAddr[12] ^ networkAddr[13] ^ networkAddr[14] ^ networkAddr[15] ^
--			networkAddr[16];
-+		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
-+			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10] ^
-+			network_addr[11] ^ network_addr[12] ^ network_addr[13] ^ network_addr[14] ^ network_addr[15] ^
-+			network_addr[16];
-
- 		return x & (NAT25_HASH_SIZE - 1);
- 	} else {
-@@ -241,7 +241,7 @@ static int __nat25_network_hash(unsigned char *networkAddr)
- 		int i;
-
- 		for (i = 0; i < MAX_NETWORK_ADDR_LEN; i++)
--			x ^= networkAddr[i];
-+			x ^= network_addr[i];
-
- 		return x & (NAT25_HASH_SIZE - 1);
- 	}
-@@ -269,17 +269,17 @@ static void __network_hash_unlink(struct nat25_network_db_entry *ent)
- }
-
- static void __nat25_db_network_insert(struct adapter *priv,
--				unsigned char *macAddr, unsigned char *networkAddr)
-+				unsigned char *mac_addr, unsigned char *network_addr)
- {
- 	struct nat25_network_db_entry *db;
- 	int hash;
-
- 	spin_lock_bh(&priv->br_ext_lock);
--	hash = __nat25_network_hash(networkAddr);
-+	hash = __nat25_network_hash(network_addr);
- 	db = priv->nethash[hash];
- 	while (db) {
--		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
--			memcpy(db->macAddr, macAddr, ETH_ALEN);
-+		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN)) {
-+			memcpy(db->macAddr, mac_addr, ETH_ALEN);
- 			db->ageing_timer = jiffies;
- 			spin_unlock_bh(&priv->br_ext_lock);
- 			return;
-@@ -291,8 +291,8 @@ static void __nat25_db_network_insert(struct adapter *priv,
- 		spin_unlock_bh(&priv->br_ext_lock);
- 		return;
- 	}
--	memcpy(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN);
--	memcpy(db->macAddr, macAddr, ETH_ALEN);
-+	memcpy(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN);
-+	memcpy(db->macAddr, mac_addr, ETH_ALEN);
- 	atomic_set(&db->use_count, 1);
- 	db->ageing_timer = jiffies;
-
-@@ -366,7 +366,7 @@ void nat25_db_expire(struct adapter *priv)
- int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- {
- 	unsigned short protocol;
--	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
-+	unsigned char network_addr[MAX_NETWORK_ADDR_LEN];
- 	unsigned int tmp;
-
- 	if (!skb)
-@@ -395,9 +395,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 			if (iph->saddr == 0)
- 				return 0;
- 			tmp = be32_to_cpu(iph->saddr);
--			__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
-+			__nat25_generate_ipv4_network_addr(network_addr, &tmp);
- 			/* record source IP address and , source mac address into db */
--			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
- 			return 0;
- 		default:
- 			return -1;
-@@ -421,8 +421,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 			memcpy(arp_ptr, GET_MY_HWADDR(priv), ETH_ALEN);
- 			arp_ptr += arp->ar_hln;
- 			sender = (unsigned int *)arp_ptr;
--			__nat25_generate_ipv4_network_addr(networkAddr, sender);
--			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+			__nat25_generate_ipv4_network_addr(network_addr, sender);
-+			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
- 			return 0;
- 		default:
- 			return -1;
-@@ -495,9 +495,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 					return -1;
- 				}
- 			} else {	/*  session phase */
--				__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &ph->sid);
-+				__nat25_generate_pppoe_network_addr(network_addr, skb->data, &ph->sid);
-
--				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
-
- 				if (!priv->ethBrExtInfo.addPPPoETag &&
- 				    priv->pppoe_connection_in_progress &&
-@@ -548,8 +548,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 			return -1;
- 		case NAT25_INSERT:
- 			if (memcmp(&iph->saddr, "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0", 16)) {
--				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->saddr);
--				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+				__nat25_generate_ipv6_network_addr(network_addr, (unsigned int *)&iph->saddr);
-+				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
-
- 				if (iph->nexthdr == IPPROTO_ICMPV6 &&
- 						skb->len > (ETH_HLEN +  sizeof(*iph) + 4)) {
-@@ -639,17 +639,17 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
- 	}
- }
-
--void *scdb_findEntry(struct adapter *priv, unsigned char *ipAddr)
-+void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
- {
--	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
-+	unsigned char network_addr[MAX_NETWORK_ADDR_LEN];
- 	struct nat25_network_db_entry *db;
- 	int hash;
-
--	__nat25_generate_ipv4_network_addr(networkAddr, (unsigned int *)ipAddr);
--	hash = __nat25_network_hash(networkAddr);
-+	__nat25_generate_ipv4_network_addr(network_addr, (unsigned int *)ip_addr);
-+	hash = __nat25_network_hash(network_addr);
- 	db = priv->nethash[hash];
- 	while (db) {
--		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
-+		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN)) {
- 			return (void *)db;
- 		}
-
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
 --
-2.30.2
-
-
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
