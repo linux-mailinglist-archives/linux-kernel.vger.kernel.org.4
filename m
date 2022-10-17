@@ -2,77 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D2C600654
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 07:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B512600659
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 07:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiJQFbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 01:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S230017AbiJQFes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 01:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiJQFbP (ORCPT
+        with ESMTP id S229608AbiJQFeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 01:31:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ADC49B6E;
-        Sun, 16 Oct 2022 22:31:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11CDF60F2E;
-        Mon, 17 Oct 2022 05:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CECC433C1;
-        Mon, 17 Oct 2022 05:31:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665984674;
-        bh=sO6545pDBaPqu6+Mn2bqfpIFfvQunPyQ2gJKDlsGsHg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bcrpWc6UvaFIr0BqUGoRxVCl4HW9/4t/oBBmVM4NudRKzTkgrb6Rud5WWZ+4GfpQI
-         0V+hbxhKq74nxlOiWocNjeuwd3nPDiV66FH+mQZtgOgF3VXbB3DPgTth//buaQdgb6
-         49x/i+X7ZGk4BUGklMS2ExE1IgU8rLplTH1qC2lGS55hoQR6Z3eKJy6EHi+YaL/MU0
-         zVZ6jTMJxVFiJhlgksweBOqAYyp9vD61C6iqr77+eBLim+B93MR8SHW0uoTxWV10N8
-         LVJBkrpjz6SxHae/OzG1uoHWX3O2oPTk3MZwJZERriaN1pssWpNB6h4fOjmNBlD22Z
-         bfP9WJPrC8jLw==
-Date:   Mon, 17 Oct 2022 11:01:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     a.fatoum@pengutronix.de, p.zabel@pengutronix.de,
-        l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, shawnguo@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH RESEND v12 0/4] Add the iMX8MP PCIe support
-Message-ID: <Y0zonrL8JFDQwW3o@matsya>
-References: <1665625622-20551-1-git-send-email-hongxing.zhu@nxp.com>
+        Mon, 17 Oct 2022 01:34:44 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FE12317C;
+        Sun, 16 Oct 2022 22:34:43 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bu25so15883957lfb.3;
+        Sun, 16 Oct 2022 22:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FbGjBODuQ2aXd0SxGNOvscm2oLYVXviHbbZBm/YkLLI=;
+        b=WmlvmBDXm0Zg0nD0h/VDt7tmRL2ZZOsHNGNIlOFNuMXPEktuQyJaKBT+JrFnE9jZVc
+         UkdCK3V/YQzAazPVDvs5CAdWbLq+4SfjipHveGsms9K6YK849CLDfEhz7tBRC6i7zK/Q
+         m1v/5IIv7rdDoMXbcOqVKSXg+QCPIZbZAbL1GX8NFiYk30DiWqS/Z+U/XGBeTt9adgye
+         MJ2Op4VqgbhyRCvVBcQ/tfgeeBB3p1Z7X3lawXI2yOxNnApPbUSjbFnI4PILBrPy6H3/
+         K5k7d50pri3imhOk55WvjUQzhXFHXOTvULrERTOrv02/Qb/XvJaIoVKy86HZQeSdRIQb
+         Yumg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FbGjBODuQ2aXd0SxGNOvscm2oLYVXviHbbZBm/YkLLI=;
+        b=z22xgjpARX1O0SmVTuavB2q4WI/oRuBN8BAuzh0HinA/wySxUihQKx5htToCX7iVx7
+         2CfPvRxkkydWtovdRbrIKsy3pjinbw1qZnj8mVtmPTNQMpWGi9xN1ypcLvYiGCDG1n/e
+         s7nIWKRvSAp4jWF7wDekYfXfGcXKbuDCgwSnMbw1XwKWHDLa3AHNSa4ZOocY7+jNcZLr
+         r1g9ahcxj4Ffrfir0FXiLc183/6pFPl+KBPttyRfEm7fszwuue9IlhpIyL/yidKiWniP
+         XSVYON42AtqgECNlabckVveXaM0lWqKwCIGQBF+iOB99YSuHZTPrKlfsfZ3eitOtLqO/
+         +sTg==
+X-Gm-Message-State: ACrzQf0IzgRx9d/49ovDDieaEqTlYahnF+/+cJ7zBdE5DdioYeA7FP1c
+        mU6hRPwSeUgdNZW0E/Le162E2J1bFg/SpnwTIfd17r2ohsU=
+X-Google-Smtp-Source: AMsMyM5g7nhgl+u9DmZEBWIvXoHJssCFJkbsMC88BnPI1GPO4J70FVEDMb6R5M8MpukkxBkTs10c9ojlKokmOGe2Lxo=
+X-Received: by 2002:a05:6512:224d:b0:4a2:7710:9b8b with SMTP id
+ i13-20020a056512224d00b004a277109b8bmr3109060lfu.128.1665984881754; Sun, 16
+ Oct 2022 22:34:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1665625622-20551-1-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com> <Y0lSChlclGPkwTeA@casper.infradead.org>
+In-Reply-To: <Y0lSChlclGPkwTeA@casper.infradead.org>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Mon, 17 Oct 2022 13:34:13 +0800
+Message-ID: <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com, baocong.liu@unisoc.com,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-10-22, 09:46, Richard Zhu wrote:
-> Re-base to the pci-v6.1-changes of pci/next branch. 
-> Update the cover-letter, and re-send the v12 patch-set.
-> This series adds the i.MX8MP PCIe support and tested on i.MX8MP
-> EVK board when one PCIe NVME device is used.
-> 
-> - i.MX8MP PCIe has reversed initial PERST bit value refer to i.MX8MQ/i.MX8MM.
->   Add the PHY PERST explicitly for i.MX8MP PCIe PHY.
-> - Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
->   And share as much as possible codes with i.MX8MM PCIe PHY.
-> - Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
->   driver.
+On Fri, Oct 14, 2022 at 8:12 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Fri, Oct 14, 2022 at 01:30:48PM +0800, zhaoyang.huang wrote:
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
+> > superblock's inode list. The direct reason is zombie page keeps staying on the
+> > xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
+> > and supposed could be an xa update without synchronize_rcu etc. I would like to
+> > suggest skip this page to break the live lock as a workaround.
+>
+> No, the underlying bug should be fixed.
+>
+> >       if (!folio || xa_is_value(folio))
+> >               return folio;
+> >
+> > -     if (!folio_try_get_rcu(folio))
+> > +     if (!folio_try_get_rcu(folio)) {
+> > +             xas_advance(xas, folio->index + folio_nr_pages(folio) - 1);
+> >               goto reset;
+> > +     }
+>
+> You can't do this anyway.  To call folio_nr_pages() and to look at
+> folio->index, you must have a refcount on the page, and this is the
+> path where we failed to get the refcount.
+OK, could I move the xas like below?
 
-Applied, thanks
-
--- 
-~Vinod
++     if (!folio_try_get_rcu(folio)) {
++             xas_next_offset(xas);
+              goto reset;
++     }
