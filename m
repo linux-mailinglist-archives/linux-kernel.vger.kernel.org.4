@@ -2,202 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9FA601448
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9019060144F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiJQRGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S229627AbiJQRIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJQRGe (ORCPT
+        with ESMTP id S229817AbiJQRIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:06:34 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120083.outbound.protection.outlook.com [40.107.12.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E464DF3C;
-        Mon, 17 Oct 2022 10:06:32 -0700 (PDT)
+        Mon, 17 Oct 2022 13:08:14 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A5771704;
+        Mon, 17 Oct 2022 10:08:10 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AeR/vk+aAgU8fe5U3PDUU9vnwiD0+PWtduSUMiYMmh80oxzTogfRdfhh4cjfxd/jAf0B1ueeMzr1sGAB9cKHgQdNTZ4Bp1laqUYRrctnd/NCyPufpmx41uuY9rWjOR4Kk8Xonk3s1Xu81kFpP7VIfwRhWrMWxy8n3EodOzdW7woMaIE2EDGxdXUmc0/Kan+wfzzgbGb3FSfvh7wlMKSWmXrxuRpq75icWZpy7wKIkCdJeb6H+hWgcQc3B9uEvpTyY+s9wq6gt6rQnNHBKMY7Iw8J06Uuz7oF7yWNFnj/I08ym6YmS6CHcYJ03oE50Fp4C2xglBdSVrx6n1BobM1TQA==
+ b=K3lQqmj7QWPZFiYPJsIwi3pFDmdN1/nZqrHCCXsoXyVqPlVavEBBM/2mH7ZLNScdcMNxyvJxJxRBPn6BTfMDh8no2tuT9ju/bnj+IRsDAvybk/h9QyvLmYqLOpBc+0cSe4ZaPI8BswQPEkB22iTdd8Cjnfc8kDNF0LqKaNTWLPEH/MyYxYdfKdCblK4Qp9wVi6r/x1jueO0iveN7m6CsLuGvyh7crDY03md73ucFFJvCrJipXF24tVTkrJL//jcre5zxs1vwKUnlJx3WsU57yXIQvOxVvkNZmPTh5Rg+BrTlb8QlFhfOGQu9V7CWXZIvwnARQu0cICdoCzOgkq/vcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tsy4Wyc6I/Mb9vnFNdj3kb3FipyGVXEHyo0UuCT/ZM4=;
- b=EDp9zln3DtvTnyUyMyJWP3LG8MdYZoOVTen0n/PdrmguCVOJkY9PN49Qyb/PS080s7iQAzVr072IW+2jZu6O/CchjItN3X3FwffNsP8j907ZmLNa0sqpeUzvm+GrxyGttYyr32w0p4aM4ND3N2FTkw+6UmUdzc/3Qgu5fBrbkFxvguY503v4F1d9KjZdwoIfY8tKPgxzdTTNyShY0u/3A2JrX73adllQVS9etJaieQJ1sN8TYSn7QuFvpK05H+YpJZkYjq0F8jWo9zg8LPg827oJNGL4mrciW38OIK8cYkrY6t6MET4scN13sKGq6yO+/k3THB9xPR3BewiBAWI3uQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
+ bh=LCj1lfz8Y4RUSNFMuxUNQCaa1l8ltEjk1bkUKWUNQ98=;
+ b=ZlcZ43Lc5MoYX61wey5fezDsBFOV9W3psXxfscbRQ3TkMtiRJt5XetpFSkpYaOrdE6ZnZaWjWwhd3rris6vKfAu9AtBikXjSPy73AeMfonS/eQTBRQW5sy2KLITGoMAxruzE1Ls2/oTjnT9rZVwakN72TqAL3d+/gf8frIoMfTV3aqpVrpqr0j3lp95VOg0eSIrtaTzuzw2QeaSQ1jdDgF6EfkGQA5ffCHOGlbf+a5hywi4lzP1uQA6lvLBFMcyrDu6MFHhpr64r2/zk61Y4nfTLpqNsNfMcXjSDajaXNZ6mjg8/lhVbKmuE4t9BgunqONLu721FD0h56o+AMlsLaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=infradead.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tsy4Wyc6I/Mb9vnFNdj3kb3FipyGVXEHyo0UuCT/ZM4=;
- b=otTsWqp4NWUAg9VcK3aS6TZ7GmXIDx/YIwt4rA+rHfmPLnmde9lwtUF47rlyZJzsQz1u43OsUaUrcScVsViZH/7flMdmmT13QeZJ7hB215JruOwr18Z8j0BUMEM2euUHI09VFXBKlz7+1KT+2JoPjk/ZeGFlHlONWiFVysLChRRky0uo4vuEfSqWilwdGPDG5HYHw5wNtf5gZwGs7+Sh8EJbdAhnpeq+tmurMVtxm9I6D3mPQ2S6bXlY5At1Cx+xmqQFj6vbigk0xw0BwjkozI734fqyyUhTm4CTyYIunePmME+M+vzKrnQdcmbskEmis0xcsNEVCjVhccMpYlGUFQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3185.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3a::9) with
+ bh=LCj1lfz8Y4RUSNFMuxUNQCaa1l8ltEjk1bkUKWUNQ98=;
+ b=I6DERwXgFdtHm10Pplf6lgBi6jr5KxOgEK/CFejHbHQ6wIo+RRY87YAPX97NM2DkjTToe0C8bq5Z5IxGD6Ir64A9tvXvWhejl9TvQbo8Ybc0DOYNgy7q/oia1iGQgoyVQQM8KJOVxm5z6/2fs7h0QlWmhPchTj+DCdwbawDZUVuHF3wjxAjgZeVoqxjjNciJErMNnpWXhfAiOIIu9qGgOLo2Ak735pwRhLduzRQQMF1FbpUQSc37HnHcNbxW3Q8ie9ovY8Ia1j0Yv6s9YHfxVbathm/Ev9rBAxxA65mZkMPHIgOp/nJ1XiYGbI7f6cyUTTPKEC1ONRHfdB3YZTj9Zw==
+Received: from BN0PR03CA0001.namprd03.prod.outlook.com (2603:10b6:408:e6::6)
+ by PH7PR12MB5593.namprd12.prod.outlook.com (2603:10b6:510:133::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Mon, 17 Oct
- 2022 17:06:29 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c854:380d:c901:45af]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c854:380d:c901:45af%6]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 17:06:29 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Baoquan He <bhe@redhat.com>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
-        "David.Laight@aculab.com" <David.Laight@aculab.com>,
-        "shorne@gmail.com" <shorne@gmail.com>
-Subject: Re: [RFC PATCH 0/8] mm: ioremap: Convert architectures to take
- GENERIC_IOREMAP way (Alternative)
-Thread-Topic: [RFC PATCH 0/8] mm: ioremap: Convert architectures to take
- GENERIC_IOREMAP way (Alternative)
-Thread-Index: AQHY3iLNYhDB80P9PUWaKHoLqXb2p64RxQgAgAEUPQA=
-Date:   Mon, 17 Oct 2022 17:06:29 +0000
-Message-ID: <fd7aa861-a85a-cc6d-df62-6e5e9a1b3149@csgroup.eu>
-References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
- <Y0yj0IDBVOFwCFuv@MiWiFi-R3L-srv>
-In-Reply-To: <Y0yj0IDBVOFwCFuv@MiWiFi-R3L-srv>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB3185:EE_
-x-ms-office365-filtering-correlation-id: 7aa920d6-b5d1-4256-082b-08dab061ef31
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /5NE2Xb54OxjJfQg2rcseOqbTvT5FHObwwV4YECKnae01yeBBXCvZCbujvPoOwnrh9fnUiuzfIDOr8jzTLBg5IEMpHjvqc8JbILYJc4X5Ic1J6D9zIyoNLrbgRwKzMygtBuGTmlr63HzhG1wLUpGRSualeiTTsdgomdK6vyb3Q+MyyF1TsWhkH/OkLf7SQudBOqmmlDVFNtJbjACvMVGU/OvGNYy04rF6p8kZv5Dw5mdHGERXWa8PvEvlf/tjydvJNr14g/ybtjhry8CsrqSgzAL+uL1tMXSaf8CBTYMOFZ07cM4vg+7sDnHkae8FTgDQKAmxvDThIcqrcj02FfL8fHA66W65NrFz6CHEzCHGRUjavWe7Epcxe1Uy42vdwGH81VEPK+g4N/rAIqnXJvVvZdAzpr6GJ9c9FBF7PLeYaxwkzvWIo4GDg/XA+oB86VKYP1RehTB5gCRkwVfhgB7GgFPreFg7KjGRhgGn3HmpZLU0b+02EM4A9Z6gH6SxksiniOlv/mfXQOYAogOkVnIt2FIUTJor3jlaZUDfN+rxzT5Q9G+Lw2Qa7r1ehod/Uq+LXzwQuqP/0j4VzmqG1lCaIqqJuzsq5oGH54k4+HlrtPLfK1p/vgAm40F7gT/rHHKdw9rQ9Cb/F7QcciSZ2X6UshYbHy0VruYg8OK/n0SnYWTOUOUhf1d/w4KvqGluV8+aFFMdaw1x4dlXQOIrz3glMb3U0c6ubsXZwEb9em+5bcNmNsY8KP0H6YwdB2+pnHCWVVJMd6a9Mutb9IkCoAFrQeA3CLs8fYtIttjnc18QgDIUiKfSp5Ix3McBvfWsPz6gH6S0ZW/+flLCa9RBo07KsBpi3nXMOrUPQWBx/1gi3ZXyQQ0A+2NsQPBc4gfJtO9
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(366004)(136003)(346002)(451199015)(122000001)(38070700005)(31696002)(86362001)(41300700001)(36756003)(64756008)(6512007)(26005)(6506007)(8676002)(4326008)(66446008)(6916009)(66946007)(5660300002)(7416002)(44832011)(66476007)(8936002)(66556008)(91956017)(966005)(6486002)(71200400001)(478600001)(76116006)(316002)(54906003)(38100700002)(186003)(83380400001)(2616005)(2906002)(66574015)(31686004)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VGNXQS9xekFMTXlxbW5ta292b09JVTBiY2xVWW9TVDdGSXRPWUhaYWNLU3R1?=
- =?utf-8?B?UG44TE9vRUx0V1cxdEk2dGdJVXovc3Z4V3czb3RkdWJFR2VFZzJ0MnZVeDJs?=
- =?utf-8?B?SFZVWTlrT1J0dkdQSnNtUTBHRnMzTWUyZkUrYjg4RFo1QVdTUTlvcG9jWkN5?=
- =?utf-8?B?OG8zTFBoMUlJODFYb3p0WTV3NVdPMzhleXRoVm5ubWVUbkpXQ05HNk1BTzZ2?=
- =?utf-8?B?NlV6T1pMdjFGYjRqNElqT080ZlE1ZFJyQlZpeENiREdUWTdhL0JLMENUV3lq?=
- =?utf-8?B?R2h2UlZmdmU3MldOa0NFTUxVV0hMZXVVKzloRHJYaVFJWHhDUHBmWUx4eFhm?=
- =?utf-8?B?T1FLUzhiTm5KRm05Vjhqd0p0MnRLbGRVMXVYNnQrQjB5UHBOdThsOUo5Nmlq?=
- =?utf-8?B?MEY3Q0NadW1tZTMrajVrVHBrMjFEZUd5Q1lKa2l3bHFXZWh2M08wUkoxRVYx?=
- =?utf-8?B?dW9QNTVYdjh5U0F3MDduYXRvK1RhcVRmWFUvK1p1NEswdmlaMUVGcE1vV1Uw?=
- =?utf-8?B?aDhONm5hQ3drSHlJYm56RjFjdFZrSnBHYjVLSlpLOG5QeWFwN1FFZnhvc2R2?=
- =?utf-8?B?L1RTSFp3NmVSNGR0cXg4ajB2d043VWFoSTFTOTN0ZXZxODdFRkpIRU5iSTZF?=
- =?utf-8?B?eFMzN0dZdkJ6V1hSN2M5RFcvMFVGRVpXcVUzV0pNTDhCVU5xYjdSUXBZQ0VF?=
- =?utf-8?B?QmFmS2pkTkNGV0pzQksyVG5NVkl3TXVxdUtVbU1QMmlmbmcveENzaStPVGlH?=
- =?utf-8?B?SzZGR0lESEc3Qms3Y1JENmgyUDdSeDhCTkliYnlOalN1RVFXdUlHdG4vSHVN?=
- =?utf-8?B?c1V5VmhZT2d1d2hOWTA3S3E3VjZjd0t4WVVxR29oNWxVYVRiU240WEdTd3Js?=
- =?utf-8?B?WXVpcTdWSHJFcldrN1lsbFNGWkxKcWJBNWtOMDlTWDE1YWpNc29HVG50YWYv?=
- =?utf-8?B?M0x0TUFtcVduTUVQL3JxajdkWnAxd05jMFVXa3dydUp0UzVETE9EYUgzbEVo?=
- =?utf-8?B?bGhuS2VhNGNLOVQrY3RxQ0RqOVh1N2xvREdNU0o1VTh3OTFQdFdaZzZFWlZq?=
- =?utf-8?B?empJYXZKcVJJT0FHWEpJZU9jREpBKzl0MnN3bzFVK3oyaFVkc05kbjdrcSt2?=
- =?utf-8?B?VEdYNHFDcFl1a0w5YjZ5K0lmVkNIRStyYkVJeHgrQ1NxSXIrdmN6NitwbVVu?=
- =?utf-8?B?RzQ0V2pzUGlOZFl1cGFlYmQ5V3BHTk55NXhMMXExSnRZVkM2V29ocTRhSk4r?=
- =?utf-8?B?Nmw3MEhicy9uRjlIdnNZVkR2bjltWTh4MGdrWTcyc0xrTTdDMjZPVEsxWXgz?=
- =?utf-8?B?OXprVlFVbWtvMGRNRmJPbkk3V2xidkMvZjdpV2FGTlRSYUpVeHRjSWd1aCtw?=
- =?utf-8?B?MGZUY0gvZUFnM1RabXVuaHROTFB6cHZUTXkzOTZYcytMMWxGeGlYbm9IazJE?=
- =?utf-8?B?bHNKa3ZVK3BLMTBaYXZLNXdsS2RmdlQ5dzZrekZsZGVIa2JGK1lPMHg2S2Vx?=
- =?utf-8?B?MDEzTlF4eHZjZXF5K01peDduVFZSRHd4dDdjYlEzNnRpU1p2T0t3c243NlhT?=
- =?utf-8?B?TlZLSUYxbGkzQ2oxRHpRa2tQS1hSMlBEZFhqcGRoSDJYWjdQRnowcmJMYnY0?=
- =?utf-8?B?bVFtaHpYMmJvTytQeXZBYkJOdjA1OUhrR0dmbFRhZTRjcDFFenFhU2xsT2pI?=
- =?utf-8?B?dmVMVHJJR3pKUUlnVW5OY3UxVzJvNmliTHZRd0IweW5aU1NrclRidWlZTTRh?=
- =?utf-8?B?ZmphbGZWc0Y1bkI1MlFwS0hFQWhQbSt0SVh0ajYzc2VzbEFZTGNEckR5V2xK?=
- =?utf-8?B?d3ZKd25jaUR2SGRKcG5nNytOZEc0K2lzME5HMnB0MHBxd1MvU3gyZXhUOHV2?=
- =?utf-8?B?cThmdHpHdG50MDU5ZG4vbUZ4UzBlOWFNT2ZiUkJrUGZzSDhLS1JpZnAvKzZW?=
- =?utf-8?B?ZDdMSHpoOWdEMnVySysrLys4RjY0bCt2K1hCSEdkUjg3cDdIaXljSFBFYkI3?=
- =?utf-8?B?NXpFNWkzWmdpc3NkL2YxNkNYNXZLT2wwL0R0R0ZEdFRxS2tXQmdmMG50WUY1?=
- =?utf-8?B?dzJWWlZaSVFEQnQ1NzZCalVKd3Q4c2k4MEtzczlGWk9STkZBVFdacE0wRU16?=
- =?utf-8?B?Qyt6RXZMblh6YWJUZUdiOGorTkptYjFsZ2hZaHY4UVdMNlQxYWc0eE1LdWV4?=
- =?utf-8?Q?qv2lkryb5XrCE5I5ybw3Kq4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C27F4511B790904B8ED0A15780F14EBE@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Mon, 17 Oct
+ 2022 17:08:07 +0000
+Received: from BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e6:cafe::91) by BN0PR03CA0001.outlook.office365.com
+ (2603:10b6:408:e6::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.31 via Frontend
+ Transport; Mon, 17 Oct 2022 17:08:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT004.mail.protection.outlook.com (10.13.176.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Mon, 17 Oct 2022 17:08:07 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 17 Oct
+ 2022 10:07:42 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 17 Oct
+ 2022 10:07:41 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.29 via Frontend Transport; Mon, 17 Oct
+ 2022 10:07:40 -0700
+From:   Liming Sun <limings@nvidia.com>
+To:     David Thompson <davthompson@nvidia.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        Darren Hart <dvhart@infradead.org>
+CC:     Liming Sun <limings@nvidia.com>, <linux-kernel@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH v1 1/1] platform/mellanox: Add BlueField-3 support in the tmfifo driver
+Date:   Mon, 17 Oct 2022 13:07:38 -0400
+Message-ID: <33bfcba9d1ad5a52ae9a63e817167b9ee3f0123a.1666024788.git.limings@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7aa920d6-b5d1-4256-082b-08dab061ef31
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2022 17:06:29.7318
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT004:EE_|PH7PR12MB5593:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d1ce5ad-2218-4f8e-6f60-08dab0622972
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XchQpoDxzEphVOR50lLD1cS94JCe19NyUDTwj6c6hNWbHk4fv6RwTTToUbpLSgGBjiDk5kxORWOjm4t5xM21UwmChTvCUg7zOvu4F+nFr+G4CpWMsUeRgTkZGJ8OJys3y+yjfvdzL7jFyVzGYKVQ6pedTYLiqGLrrEISoIMNR/kmNJgItH4hDCuWxzIdx+QVYUXDKtovuV3EJYJtQmYa0rNyATkUGgNBARWZqRXuPS6Q0QosTJD5/uQp+mIf/GJHNKfzJKeqPTE9EhLOEsJhgYcYXfKg2T2IJw7KFWZ6sUTu4OPZEGb2hciTCXnK4RHfZk2M2LGINNWTnHJ5gCrA9v1SBxRewFBS0sO3KcLEuPrZbx4/fNfoPtHMgRCdjq9MVFQOb5fG0YELq6cdeMp42dVRo+AW4j43e5AJd9711I9WTJ+EmdLL0MFk22umrlF91Hn6BLtOoGn9Iyz6bvs4lN7YRIKL73sb/tqQjUiUdqCF/gtGJfPxERf28Uec4AFKf+QtST1liDthNe0U3fns1gLA6nphwT02Iz26Ey+99GXsMo2qzu22Kj/3hRIUxJ+ytX0dgxl0oWMEjz6HZ8HWPKO7BcF1wEC1W1iiFo1S5LSdmt575LGm6IE6bxXpCG5xU0YggCWy8VE5yLvqDcti5PxJj0pYTkCOlFjCNYlEf/KDfIRROg+ivX/Cb4IPXfcVnjmwnyx6Lm1LeiqWwIynr/5lZBCwoOyvjB4uy+aScPggkcOxTqxGinknQd9hWXQEN9NDA/w0HItdNhGFqaEVFg==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199015)(40470700004)(46966006)(36840700001)(26005)(41300700001)(40460700003)(107886003)(186003)(2616005)(336012)(478600001)(82310400005)(36756003)(2906002)(7696005)(86362001)(8936002)(5660300002)(82740400003)(36860700001)(110136005)(54906003)(316002)(40480700001)(47076005)(426003)(8676002)(4326008)(83380400001)(70586007)(356005)(7636003)(70206006);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 17:08:07.2651
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QuItDCDsHg+GjchaB7FlcQIsdWnqQL/dC2DPfFuvJwDDJFSTRz0hNIztJxQwEqeW9OhvJd4URouw8HdgwK+w51jbW7qmts4lYBeZHM1+mww=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3185
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d1ce5ad-2218-4f8e-6f60-08dab0622972
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5593
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQmFvcXVhbiwNCg0KTGUgMTcvMTAvMjAyMiDDoCAwMjozNywgQmFvcXVhbiBIZSBhIMOpY3Jp
-dMKgOg0KPiBIaSBDaHJpc3RvcGhlLA0KPiANCj4gT24gMTAvMTIvMjIgYXQgMTI6MDlwbSwgQ2hy
-aXN0b3BoZSBMZXJveSB3cm90ZToNCj4+IEZyb206DQo+Pg0KPj4gQXMgcHJvcG9zZWQgaW4gdGhl
-IGRpc2N1c3Npb24gcmVsYXRlZCB0byB5b3VyIHNlcmllcywgaGVyZSBjb21lcyBhbg0KPj4gZXhl
-bXBsZSBvZiBob3cgaXQgY291bGQgYmUuDQo+Pg0KPj4gSSBoYXZlIHRha2VuIGl0IGludG8gQVJD
-IGFuZCBJQTY0IGFyY2hpdGVjdHVyZXMgYXMgYW4gZXhlbXBsZS4gVGhpcyBpcw0KPj4gdW50ZXN0
-ZWQsIGV2ZW4gbm90IGNvbXBpbGVkLCBpdCBpcyBqdXN0IHRvIGlsbHVzdHJhdGVkIG15IG1lYW5p
-bmcgaW4gdGhlDQo+PiBkaXNjdXNzaW9uLg0KPj4NCj4+IEkgYWxzbyBhZGRlZCBhIHBhdGNoIGZv
-ciBwb3dlcnBjIGFyY2hpdGVjdHVyZSwgdGhhdCBvbmUgaW4gdGVzdGVkIHdpdGgNCj4+IGJvdGgg
-cG1hYzMyX2RlZmNvbmZpZyBhbmQgcHBjNjRfbGVfZGVmY29uZmlnLg0KPj4NCj4+ICBGcm9tIG15
-IHBvaW50IG9mIHZpZXcsIHRoaXMgZGlmZmVyZW50IGFwcHJvYWNoIHByb3ZpZGUgbGVzcyBjaHVy
-biBhbmQNCj4+IGxlc3MgaW50ZWxsZWN0dWFsIGRpc3R1cmJhbmNlIHRoYW4gdGhlIHdheSB5b3Ug
-ZG8gaXQuDQo+IA0KPiBZZXMsIEkgYWdyZWUsIGFuZCBhZG1pcmUgeW91ciBpbnNpc3RlbmNlIG9u
-IHRoZSB0aGluZyB5b3UgdGhpbmsgcmlnaHQgb3INCj4gYmV0dGVyLiBMZWFybiBmcm9tIHlvdS4N
-Cj4gDQo+IFdoZW4geW91IHN1Z2dlc3RlZCB0aGlzIGluIG15IHYyIHBvc3QsIEkgbWFkZSBhIGRy
-YWZ0IHBhdGNoIGF0IGJlbG93IGxpbmsNCj4gYWNjb3JkaW5nIHRvIHlvdXIgc3VnZ2VzdGlvbiB0
-byByZXF1ZXN0IHBlb3BsZSB0byByZXZpZXcuIFdoYXQgd29ycmllZA0KPiBtZSBpcyB0aGF0IEkg
-YW0gbm90IHN1cmUgaXQncyBpZ25vcmVkIG9yIGRpc2xpa2VkIGFmdGVyIG9uZSB3ZWVrIG9mDQo+
-IHdhaXRpbmcuDQo+IA0KPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvWXd0TkQlMkZMOHhE
-K1ZpTjNyQE1pV2lGaS1SM0wtc3J2LyNyZWxhdGVkDQo+IA0KPiBVcCB0byBub3csIHNlZW1zIHBl
-b3BsZSBkb24ndCBvcHBvc2UgdGhpcyBnZW5lcmljX2lvcmVtYXBfcHJvdCgpIHdheSwgd2UNCj4g
-Y2FuIHRha2UgaXQuIFNvIHdoYXQncyB5b3VyIHBsYW4/IFlvdSB3YW50IG1lIHRvIGNvbnRpbnVl
-IHdpdGggeW91cg0KPiBwYXRjaGVzIHdyYXBwZWQgaW4sIG9yIEkgY2FuIGxlYXZlIGl0IHRvIHlv
-dSBpZiB5b3Ugd2FudCB0byB0YWtlIG92ZXI/DQoNCkkgZG9uJ3QgcGxhbiB0byBzdGVhbCB5b3Vy
-IHdvcmsuIElmIHlvdSBmZWVsIGNvbmZvcnRhYmxlIHdpdGggbXkgDQpwcm9wb3NhbCwgZmVlbCBm
-cmVlIHRvIGNvbnRpbnVlIHdpdGggaXQgYW5kIGFtcGxpZnkgaXQuIFlvdSBoYXZlIGRvbmUgDQpt
-b3N0IG9mIHRoZSBqb2IsIHlvdSBoYXZlIGEgY2xlYXIgdmlldyBvZiBhbGwgc3VidGlsaXRpZXMg
-aW4gdGhlIA0KZGlmZmVyZW50IGFyY2hpdGVjdHVyZXMsIHNvIHBsZWFzZSBjb250aW51ZSwgSSBk
-b24ndCBwbGFuIHRvIHRha2Ugb3ZlciANCnRoZSBnb29kIHdvcmsgeW91J3ZlIGRvbmUgdW50aWwg
-bm93Lg0KDQpUaGUgb25seSBwdXJwb3NlIG9mIG15IHNlcmllcyB3YXMgdG8gaWxsdXN0cmF0ZSBt
-eSBjb21tZW50cyBhbmQgY29udmluY2UgDQpteXNlbGYgaXQgd2FzIGEgcG9zc2libGUgd2F5LCBu
-b3RoaW5nIG1vcmUuDQoNClRoYW5rcw0KQ2hyaXN0b3BoZQ0KDQo+IA0KPiBUaGFua3MNCj4gQmFv
-cXVhbg0KPiANCj4+DQo+PiBCYW9xdWFuIEhlICg1KToNCj4+ICAgIGhleGFnb246IG1tOiBDb252
-ZXJ0IHRvIEdFTkVSSUNfSU9SRU1BUA0KPj4gICAgb3BlbnJpc2M6IG1tOiByZW1vdmUgdW5uZWVk
-ZWQgZWFybHkgaW9yZW1hcCBjb2RlDQo+PiAgICBtbTogaW9yZW1hcDogYWxsb3cgQVJDSCB0byBo
-YXZlIGl0cyBvd24gaW9yZW1hcCBkZWZpbml0aW9uDQo+PiAgICBhcmM6IG1tOiBDb252ZXJ0IHRv
-IEdFTkVSSUNfSU9SRU1BUA0KPj4gICAgaWE2NDogbW06IENvbnZlcnQgdG8gR0VORVJJQ19JT1JF
-TUFQDQo+Pg0KPj4gQ2hyaXN0b3BoZSBMZXJveSAoMyk6DQo+PiAgICBtbS9pb3JlbWFwOiBEZWZp
-bmUgZ2VuZXJpY19pb3JlbWFwX3Byb3QoKSBhbmQgZ2VuZXJpY19pb3VubWFwKCkNCj4+ICAgIG1t
-L2lvcmVtYXA6IENvbnNpZGVyIElPUkVNQVAgc3BhY2UgaW4gZ2VuZXJpYyBpb3JlbWFwDQo+PiAg
-ICBwb3dlcnBjOiBtbTogQ29udmVydCB0byBHRU5FUklDX0lPUkVNQVANCj4+DQo+PiAgIGFyY2gv
-YXJjL0tjb25maWcgICAgICAgICAgICAgIHwgIDEgKw0KPj4gICBhcmNoL2FyYy9pbmNsdWRlL2Fz
-bS9pby5oICAgICB8ICA3ICsrKy0tLQ0KPj4gICBhcmNoL2FyYy9tbS9pb3JlbWFwLmMgICAgICAg
-ICB8IDQ2ICsrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+PiAgIGFyY2gvaGV4
-YWdvbi9LY29uZmlnICAgICAgICAgIHwgIDEgKw0KPj4gICBhcmNoL2hleGFnb24vaW5jbHVkZS9h
-c20vaW8uaCB8ICA5ICsrKysrLS0NCj4+ICAgYXJjaC9oZXhhZ29uL21tL2lvcmVtYXAuYyAgICAg
-fCA0NCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+ICAgYXJjaC9pYTY0L0tj
-b25maWcgICAgICAgICAgICAgfCAgMSArDQo+PiAgIGFyY2gvaWE2NC9pbmNsdWRlL2FzbS9pby5o
-ICAgIHwgMTEgKysrKysrLS0tDQo+PiAgIGFyY2gvaWE2NC9tbS9pb3JlbWFwLmMgICAgICAgIHwg
-NDUgKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPj4gICBhcmNoL29wZW5yaXNj
-L21tL2lvcmVtYXAuYyAgICB8IDIyICsrKystLS0tLS0tLS0tLS0tDQo+PiAgIGFyY2gvcG93ZXJw
-Yy9LY29uZmlnICAgICAgICAgIHwgIDEgKw0KPj4gICBhcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20v
-aW8uaCB8IDExICsrKysrKy0tLQ0KPj4gICBhcmNoL3Bvd2VycGMvbW0vaW9yZW1hcC5jICAgICB8
-IDI2ICstLS0tLS0tLS0tLS0tLS0tLS0tDQo+PiAgIGFyY2gvcG93ZXJwYy9tbS9pb3JlbWFwXzMy
-LmMgIHwgMjUgKysrKysrKystLS0tLS0tLS0tLQ0KPj4gICBhcmNoL3Bvd2VycGMvbW0vaW9yZW1h
-cF82NC5jICB8IDIyICsrKysrKystLS0tLS0tLS0tDQo+PiAgIGluY2x1ZGUvYXNtLWdlbmVyaWMv
-aW8uaCAgICAgIHwgIDcgKysrKysrDQo+PiAgIG1tL2lvcmVtYXAuYyAgICAgICAgICAgICAgICAg
-IHwgMzMgKysrKysrKysrKysrKysrKysrKy0tLS0tLQ0KPj4gICAxNyBmaWxlcyBjaGFuZ2VkLCA5
-OCBpbnNlcnRpb25zKCspLCAyMTQgZGVsZXRpb25zKC0pDQo+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0
-NCBhcmNoL2hleGFnb24vbW0vaW9yZW1hcC5jDQo+Pg0KPj4gLS0gDQo+PiAyLjM3LjENCj4+DQo+
-IA==
+BlueField-3 uses the same control registers in tmfifo access but
+at different addresses. This commit replaces the offset reference
+with pointers, and set up these pointers in the probe functions
+accordingly.
+
+Signed-off-by: Liming Sun <limings@nvidia.com>
+Reviewed-by: David Thompson <davthompson@nvidia.com>
+Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/platform/mellanox/mlxbf-tmfifo-regs.h | 10 +++
+ drivers/platform/mellanox/mlxbf-tmfifo.c      | 86 ++++++++++++++-----
+ 2 files changed, 74 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/platform/mellanox/mlxbf-tmfifo-regs.h b/drivers/platform/mellanox/mlxbf-tmfifo-regs.h
+index e4f0d2eda714..44fb8c5b1484 100644
+--- a/drivers/platform/mellanox/mlxbf-tmfifo-regs.h
++++ b/drivers/platform/mellanox/mlxbf-tmfifo-regs.h
+@@ -60,4 +60,14 @@
+ #define MLXBF_TMFIFO_RX_CTL__MAX_ENTRIES_RMASK		GENMASK_ULL(8, 0)
+ #define MLXBF_TMFIFO_RX_CTL__MAX_ENTRIES_MASK		GENMASK_ULL(40, 32)
+ 
++/* BF3 register offsets within resource 0. */
++#define MLXBF_TMFIFO_RX_DATA_BF3	0x0000
++#define MLXBF_TMFIFO_TX_DATA_BF3	0x1000
++
++/* BF3 register offsets within resource 1. */
++#define MLXBF_TMFIFO_RX_STS_BF3		0x0000
++#define MLXBF_TMFIFO_RX_CTL_BF3		0x0008
++#define MLXBF_TMFIFO_TX_STS_BF3		0x0100
++#define MLXBF_TMFIFO_TX_CTL_BF3		0x0108
++
+ #endif /* !defined(__MLXBF_TMFIFO_REGS_H__) */
+diff --git a/drivers/platform/mellanox/mlxbf-tmfifo.c b/drivers/platform/mellanox/mlxbf-tmfifo.c
+index 1ae3c56b66b0..91a077c35b8b 100644
+--- a/drivers/platform/mellanox/mlxbf-tmfifo.c
++++ b/drivers/platform/mellanox/mlxbf-tmfifo.c
+@@ -47,6 +47,9 @@
+ /* Message with data needs at least two words (for header & data). */
+ #define MLXBF_TMFIFO_DATA_MIN_WORDS		2
+ 
++/* ACPI UID for BlueField-3. */
++#define TMFIFO_BF3_UID				1
++
+ struct mlxbf_tmfifo;
+ 
+ /**
+@@ -136,12 +139,26 @@ struct mlxbf_tmfifo_irq_info {
+ 	int index;
+ };
+ 
++/**
++ * mlxbf_tmfifo_io - Structure of the TmFifo IO resource (for both rx & tx)
++ * @ctl: control register offset (TMFIFO_RX_CTL / TMFIFO_TX_CTL)
++ * @sts: status register offset (TMFIFO_RX_STS / TMFIFO_TX_STS)
++ * @data: data register offset (TMFIFO_RX_DATA / TMFIFO_TX_DATA)
++ */
++struct mlxbf_tmfifo_io {
++	void __iomem *ctl;
++	void __iomem *sts;
++	void __iomem *data;
++};
++
+ /**
+  * mlxbf_tmfifo - Structure of the TmFifo
+  * @vdev: array of the virtual devices running over the TmFifo
+  * @lock: lock to protect the TmFifo access
+- * @rx_base: mapped register base address for the Rx FIFO
+- * @tx_base: mapped register base address for the Tx FIFO
++ * @res0: mapped resource block 0
++ * @res1: mapped resource block 1
++ * @rx: rx io resource
++ * @tx: tx io resource
+  * @rx_fifo_size: number of entries of the Rx FIFO
+  * @tx_fifo_size: number of entries of the Tx FIFO
+  * @pend_events: pending bits for deferred events
+@@ -155,8 +172,10 @@ struct mlxbf_tmfifo_irq_info {
+ struct mlxbf_tmfifo {
+ 	struct mlxbf_tmfifo_vdev *vdev[MLXBF_TMFIFO_VDEV_MAX];
+ 	struct mutex lock;		/* TmFifo lock */
+-	void __iomem *rx_base;
+-	void __iomem *tx_base;
++	void __iomem *res0;
++	void __iomem *res1;
++	struct mlxbf_tmfifo_io rx;
++	struct mlxbf_tmfifo_io tx;
+ 	int rx_fifo_size;
+ 	int tx_fifo_size;
+ 	unsigned long pend_events;
+@@ -472,7 +491,7 @@ static int mlxbf_tmfifo_get_rx_avail(struct mlxbf_tmfifo *fifo)
+ {
+ 	u64 sts;
+ 
+-	sts = readq(fifo->rx_base + MLXBF_TMFIFO_RX_STS);
++	sts = readq(fifo->rx.sts);
+ 	return FIELD_GET(MLXBF_TMFIFO_RX_STS__COUNT_MASK, sts);
+ }
+ 
+@@ -489,7 +508,7 @@ static int mlxbf_tmfifo_get_tx_avail(struct mlxbf_tmfifo *fifo, int vdev_id)
+ 	else
+ 		tx_reserve = 1;
+ 
+-	sts = readq(fifo->tx_base + MLXBF_TMFIFO_TX_STS);
++	sts = readq(fifo->tx.sts);
+ 	count = FIELD_GET(MLXBF_TMFIFO_TX_STS__COUNT_MASK, sts);
+ 	return fifo->tx_fifo_size - tx_reserve - count;
+ }
+@@ -525,7 +544,7 @@ static void mlxbf_tmfifo_console_tx(struct mlxbf_tmfifo *fifo, int avail)
+ 	/* Write header. */
+ 	hdr.type = VIRTIO_ID_CONSOLE;
+ 	hdr.len = htons(size);
+-	writeq(*(u64 *)&hdr, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
++	writeq(*(u64 *)&hdr, fifo->tx.data);
+ 
+ 	/* Use spin-lock to protect the 'cons->tx_buf'. */
+ 	spin_lock_irqsave(&fifo->spin_lock[0], flags);
+@@ -542,7 +561,7 @@ static void mlxbf_tmfifo_console_tx(struct mlxbf_tmfifo *fifo, int avail)
+ 			memcpy((u8 *)&data + seg, cons->tx_buf.buf,
+ 			       sizeof(u64) - seg);
+ 		}
+-		writeq(data, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
++		writeq(data, fifo->tx.data);
+ 
+ 		if (size >= sizeof(u64)) {
+ 			cons->tx_buf.tail = (cons->tx_buf.tail + sizeof(u64)) %
+@@ -573,7 +592,7 @@ static void mlxbf_tmfifo_rxtx_word(struct mlxbf_tmfifo_vring *vring,
+ 
+ 	/* Read a word from FIFO for Rx. */
+ 	if (is_rx)
+-		data = readq(fifo->rx_base + MLXBF_TMFIFO_RX_DATA);
++		data = readq(fifo->rx.data);
+ 
+ 	if (vring->cur_len + sizeof(u64) <= len) {
+ 		/* The whole word. */
+@@ -595,7 +614,7 @@ static void mlxbf_tmfifo_rxtx_word(struct mlxbf_tmfifo_vring *vring,
+ 
+ 	/* Write the word into FIFO for Tx. */
+ 	if (!is_rx)
+-		writeq(data, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
++		writeq(data, fifo->tx.data);
+ }
+ 
+ /*
+@@ -617,7 +636,7 @@ static void mlxbf_tmfifo_rxtx_header(struct mlxbf_tmfifo_vring *vring,
+ 	/* Read/Write packet header. */
+ 	if (is_rx) {
+ 		/* Drain one word from the FIFO. */
+-		*(u64 *)&hdr = readq(fifo->rx_base + MLXBF_TMFIFO_RX_DATA);
++		*(u64 *)&hdr = readq(fifo->rx.data);
+ 
+ 		/* Skip the length 0 packets (keepalive). */
+ 		if (hdr.len == 0)
+@@ -661,7 +680,7 @@ static void mlxbf_tmfifo_rxtx_header(struct mlxbf_tmfifo_vring *vring,
+ 		hdr.type = (vring->vdev_id == VIRTIO_ID_NET) ?
+ 			    VIRTIO_ID_NET : VIRTIO_ID_CONSOLE;
+ 		hdr.len = htons(vring->pkt_len - hdr_len);
+-		writeq(*(u64 *)&hdr, fifo->tx_base + MLXBF_TMFIFO_TX_DATA);
++		writeq(*(u64 *)&hdr, fifo->tx.data);
+ 	}
+ 
+ 	vring->cur_len = hdr_len;
+@@ -1157,7 +1176,7 @@ static void mlxbf_tmfifo_set_threshold(struct mlxbf_tmfifo *fifo)
+ 	u64 ctl;
+ 
+ 	/* Get Tx FIFO size and set the low/high watermark. */
+-	ctl = readq(fifo->tx_base + MLXBF_TMFIFO_TX_CTL);
++	ctl = readq(fifo->tx.ctl);
+ 	fifo->tx_fifo_size =
+ 		FIELD_GET(MLXBF_TMFIFO_TX_CTL__MAX_ENTRIES_MASK, ctl);
+ 	ctl = (ctl & ~MLXBF_TMFIFO_TX_CTL__LWM_MASK) |
+@@ -1166,17 +1185,17 @@ static void mlxbf_tmfifo_set_threshold(struct mlxbf_tmfifo *fifo)
+ 	ctl = (ctl & ~MLXBF_TMFIFO_TX_CTL__HWM_MASK) |
+ 		FIELD_PREP(MLXBF_TMFIFO_TX_CTL__HWM_MASK,
+ 			   fifo->tx_fifo_size - 1);
+-	writeq(ctl, fifo->tx_base + MLXBF_TMFIFO_TX_CTL);
++	writeq(ctl, fifo->tx.ctl);
+ 
+ 	/* Get Rx FIFO size and set the low/high watermark. */
+-	ctl = readq(fifo->rx_base + MLXBF_TMFIFO_RX_CTL);
++	ctl = readq(fifo->rx.ctl);
+ 	fifo->rx_fifo_size =
+ 		FIELD_GET(MLXBF_TMFIFO_RX_CTL__MAX_ENTRIES_MASK, ctl);
+ 	ctl = (ctl & ~MLXBF_TMFIFO_RX_CTL__LWM_MASK) |
+ 		FIELD_PREP(MLXBF_TMFIFO_RX_CTL__LWM_MASK, 0);
+ 	ctl = (ctl & ~MLXBF_TMFIFO_RX_CTL__HWM_MASK) |
+ 		FIELD_PREP(MLXBF_TMFIFO_RX_CTL__HWM_MASK, 1);
+-	writeq(ctl, fifo->rx_base + MLXBF_TMFIFO_RX_CTL);
++	writeq(ctl, fifo->rx.ctl);
+ }
+ 
+ static void mlxbf_tmfifo_cleanup(struct mlxbf_tmfifo *fifo)
+@@ -1197,8 +1216,15 @@ static int mlxbf_tmfifo_probe(struct platform_device *pdev)
+ 	struct virtio_net_config net_config;
+ 	struct device *dev = &pdev->dev;
+ 	struct mlxbf_tmfifo *fifo;
++	u64 dev_id;
+ 	int i, rc;
+ 
++	rc = acpi_dev_uid_to_integer(ACPI_COMPANION(dev), &dev_id);
++	if (rc) {
++		dev_err(dev, "Cannot retrieve UID\n");
++		return rc;
++	}
++
+ 	fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
+ 	if (!fifo)
+ 		return -ENOMEM;
+@@ -1209,14 +1235,30 @@ static int mlxbf_tmfifo_probe(struct platform_device *pdev)
+ 	mutex_init(&fifo->lock);
+ 
+ 	/* Get the resource of the Rx FIFO. */
+-	fifo->rx_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(fifo->rx_base))
+-		return PTR_ERR(fifo->rx_base);
++	fifo->res0 = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(fifo->res0))
++		return PTR_ERR(fifo->res0);
+ 
+ 	/* Get the resource of the Tx FIFO. */
+-	fifo->tx_base = devm_platform_ioremap_resource(pdev, 1);
+-	if (IS_ERR(fifo->tx_base))
+-		return PTR_ERR(fifo->tx_base);
++	fifo->res1 = devm_platform_ioremap_resource(pdev, 1);
++	if (IS_ERR(fifo->res1))
++		return PTR_ERR(fifo->res1);
++
++	if (dev_id == TMFIFO_BF3_UID) {
++		fifo->rx.ctl = fifo->res1 + MLXBF_TMFIFO_RX_CTL_BF3;
++		fifo->rx.sts = fifo->res1 + MLXBF_TMFIFO_RX_STS_BF3;
++		fifo->rx.data = fifo->res0 + MLXBF_TMFIFO_RX_DATA_BF3;
++		fifo->tx.ctl = fifo->res1 + MLXBF_TMFIFO_TX_CTL_BF3;
++		fifo->tx.sts = fifo->res1 + MLXBF_TMFIFO_TX_STS_BF3;
++		fifo->tx.data = fifo->res0 + MLXBF_TMFIFO_TX_DATA_BF3;
++	} else {
++		fifo->rx.ctl = fifo->res0 + MLXBF_TMFIFO_RX_CTL;
++		fifo->rx.sts = fifo->res0 + MLXBF_TMFIFO_RX_STS;
++		fifo->rx.data = fifo->res0 + MLXBF_TMFIFO_RX_DATA;
++		fifo->tx.ctl = fifo->res1 + MLXBF_TMFIFO_TX_CTL;
++		fifo->tx.sts = fifo->res1 + MLXBF_TMFIFO_TX_STS;
++		fifo->tx.data = fifo->res1 + MLXBF_TMFIFO_TX_DATA;
++	}
+ 
+ 	platform_set_drvdata(pdev, fifo);
+ 
+-- 
+2.30.1
+
