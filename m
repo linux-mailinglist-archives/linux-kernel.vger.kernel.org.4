@@ -2,95 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681B86014B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0224C6014B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiJQRXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S230158AbiJQRX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiJQRXR (ORCPT
+        with ESMTP id S229885AbiJQRXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:23:17 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5AC71986
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:23:15 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id bb5so8115320qtb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:23:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+SEO6vfxiud9noRziv9aQrD1AXg6nct4mTi/PkkKZhU=;
-        b=TevJIWxJKIujgIiWUkwjTCBogHB6CQC5h2eJkmXP/IYKYG8r3uAm1K+3RIq8ww2yPy
-         mIXdAErNaWHHEqLmpFDqiC8aSieuZ4b3MmV6ia5yeZ4q0jIhJB4Kjs4e7hRZN72d1oBv
-         6xf6PWfS8p5iy7vJorxHgQ6TYG11QysB8xvs4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+SEO6vfxiud9noRziv9aQrD1AXg6nct4mTi/PkkKZhU=;
-        b=fo5hK4FdEGLFED6LtVm+/b1ju1aoZzMqtsqcRWemMtO6O2AN7v+JgXCcRmD4ffgli7
-         xM8c8k0rE7cWxuLi9XZxipWkUiyByEFbkzfxLLlm4iW2vqx5f47hUo9q9+ukTT9XsQvd
-         KAxKYpp8+xPVpmoVTMIv279aB+aiBzLRGf0r5WSfZ9KwlzniAUujMxnJG7KwDqs2NisM
-         kBjEVfEpiVjh7lYRfMpscBHfLMaBhh6JALfffRTK6w/tTkx8jXtJ3ksoslcUmf+9n3kO
-         fqFzIJldfANm0nEPG/IpUyERH2WRTG8BHWGkX+Pw1A6e92fBOJ98wsxoUxlmbe+P3HO9
-         Mt9w==
-X-Gm-Message-State: ACrzQf1czh5VagXf34N36XlAzDselyzBzEfViGbZNVtRb8Ih5dzg6E/m
-        YaAcAqOH3jcMaBhXEbdRU1C87LyCLNa2oj4N
-X-Google-Smtp-Source: AMsMyM7tKcqXRVG615kYKZw/FjMVPXwlubu6N3sqHuS8oE9ZlprUKkYEhrFQAiPrVWZKkmVVC/139g==
-X-Received: by 2002:a05:622a:a:b0:35d:4dba:eda1 with SMTP id x10-20020a05622a000a00b0035d4dbaeda1mr9636950qtw.43.1666027394196;
-        Mon, 17 Oct 2022 10:23:14 -0700 (PDT)
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com. [209.85.160.180])
-        by smtp.gmail.com with ESMTPSA id ff13-20020a05622a4d8d00b00397e97baa96sm297710qtb.0.2022.10.17.10.23.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 10:23:11 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id r19so8136776qtx.6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:23:11 -0700 (PDT)
-X-Received: by 2002:a05:622a:58d:b0:39c:d5e3:2346 with SMTP id
- c13-20020a05622a058d00b0039cd5e32346mr9579593qtb.227.1666027390840; Mon, 17
- Oct 2022 10:23:10 -0700 (PDT)
+        Mon, 17 Oct 2022 13:23:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770D372691;
+        Mon, 17 Oct 2022 10:23:52 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 17:23:48 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666027430;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=BRbMTu/36L2Znt2BCUjwdunc4EtSPmpdclSxtyKDgoc=;
+        b=ipRSlwGW40HtQiuEQoUCmySPMEXDHyrGNjyilH5XvDMO0nodkwRIKGeIweXiqVAeJqepU6
+        InQm8RHG7Hn3WS/MlfJ9wbJVcjF1jpgPtgf6S33qNolMuXQtljC5B5MTigqUuPA7u8Bc/h
+        taD4aahfDNOS6iFYWo+Oy0xoiT64Gx05td5ZhLawCyHUAYgQj+DchUCvqL+7AhxfpBS5pC
+        HRfB2WCVVL4PfTjeSh7VZw6aS2s/NH6T1ukhdLcu5CKIfVlEo3QBSH4b5OEhi64SWO7KcV
+        Jc0QWhlE0MVFIu4+nBi+xGhBAUgI5e7ihBpblQjMn/gYlDq3+hiiMHqSD95WdA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666027430;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=BRbMTu/36L2Znt2BCUjwdunc4EtSPmpdclSxtyKDgoc=;
+        b=4136tujQu3bAAxUkQGOFDVzNSRW6cGIWd8jF6hPW5IrOKkRhcTEijw8shFHkL+NmGRbeJs
+        Kuv9PLg/4Wjr39Bw==
+From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/Kconfig: Drop check for -mabi=ms for CONFIG_EFI_STUB
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-References: <20220926220134.2633692-1-khazhy@google.com> <fff022da-72f2-0fdb-e792-8d75069441cc@opensource.wdc.com>
- <CACGdZYKh4TXSaAAzJa13xsMH=tFzb4dYrPzOS3HHLLU8K-362g@mail.gmail.com>
- <7e3a521e-acf7-c3a8-a29b-c51874862344@opensource.wdc.com> <CACGdZYKvTLd0g2yBuFX+++XeSa6aapuAwOM7e63zhKgdKFEGEw@mail.gmail.com>
- <Y0PHsxmsWHFYiLPK@infradead.org>
-In-Reply-To: <Y0PHsxmsWHFYiLPK@infradead.org>
-From:   Khazhy Kumykov <khazhy@chromium.org>
-Date:   Mon, 17 Oct 2022 10:22:59 -0700
-X-Gmail-Original-Message-ID: <CACGdZYKcpHG_bWew_K78CgwDYMQAGfXX+QU4-9PNoV1j2E1a0g@mail.gmail.com>
-Message-ID: <CACGdZYKcpHG_bWew_K78CgwDYMQAGfXX+QU4-9PNoV1j2E1a0g@mail.gmail.com>
-Subject: Re: [PATCH] block: allow specifying default iosched in config
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <166602742896.401.9259475718093994169.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 12:20 AM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Tue, Oct 04, 2022 at 04:15:20PM -0700, Khazhy Kumykov wrote:
-> > The kernel already picks and hardcodes a default scheduler, my
-> > thinking is: why not let folks choose? This was allowed in the old
-> > block layer since 2005.
->
-> You can choose it using CONFIG_CMDLINE.  We can't add a config option
-> for every bloody default as that simply does not scale.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Are you referring to elevator=? It looks like that needs to be
-re-wired for blk-mq, but seems like a reasonable solution. I'll send a
-new patch out.
+Commit-ID:     33806e7cb8d50379f55c3e8f335e91e1b359dc7b
+Gitweb:        https://git.kernel.org/tip/33806e7cb8d50379f55c3e8f335e91e1b359dc7b
+Author:        Nathan Chancellor <nathan@kernel.org>
+AuthorDate:    Thu, 29 Sep 2022 08:20:10 -07:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 17 Oct 2022 19:11:16 +02:00
 
-Thanks,
-Khazhy
+x86/Kconfig: Drop check for -mabi=ms for CONFIG_EFI_STUB
+
+A recent change in LLVM made CONFIG_EFI_STUB unselectable because it no
+longer pretends to support -mabi=ms, breaking the dependency in
+Kconfig. Lack of CONFIG_EFI_STUB can prevent kernels from booting via
+EFI in certain circumstances.
+
+This check was added by
+
+  8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
+
+to ensure that __attribute__((ms_abi)) was available, as -mabi=ms is
+not actually used in any cflags.
+
+According to the GCC documentation, this attribute has been supported
+since GCC 4.4.7. The kernel currently requires GCC 5.1 so this check is
+not necessary; even when that change landed in 5.6, the kernel required
+GCC 4.9 so it was unnecessary then as well.
+
+Clang supports __attribute__((ms_abi)) for all versions that are
+supported for building the kernel so no additional check is needed.
+Remove the 'depends on' line altogether to allow CONFIG_EFI_STUB to be
+selected when CONFIG_EFI is enabled, regardless of compiler.
+
+Fixes: 8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://github.com/llvm/llvm-project/commit/d1ad006a8f64bdc17f618deffa9e7c91d82c444d
+---
+ arch/x86/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 6d1879e..67745ce 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1973,7 +1973,6 @@ config EFI
+ config EFI_STUB
+ 	bool "EFI stub support"
+ 	depends on EFI
+-	depends on $(cc-option,-mabi=ms) || X86_32
+ 	select RELOCATABLE
+ 	help
+ 	  This kernel feature allows a bzImage to be loaded directly
