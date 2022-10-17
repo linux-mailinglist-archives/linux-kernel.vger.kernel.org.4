@@ -2,400 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C47600B3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655AB600B08
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiJQJpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S230245AbiJQJht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiJQJpB (ORCPT
+        with ESMTP id S230157AbiJQJhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:45:01 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A385A275EB;
-        Mon, 17 Oct 2022 02:44:59 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id f23so10272745plr.6;
-        Mon, 17 Oct 2022 02:44:59 -0700 (PDT)
+        Mon, 17 Oct 2022 05:37:40 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F109E5C9CE;
+        Mon, 17 Oct 2022 02:37:31 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id x13so6238360qkg.11;
+        Mon, 17 Oct 2022 02:37:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cqiAlzCu1M7hbptqd9bs/f6Fb99fEGoTcNv+wTuLZE4=;
-        b=JPaKRjVIVXbCqHtVJ/N1q8seetDSOka/ZyXmWq8HGRbBDRlqx9bh8YOH7q8LCGXzwC
-         JPD4ykDLUcVrc7bhxmvMaURds5xYRmaoC3vWyblSz/Wj6HjUvUUW7RFfY03M1va+iyr/
-         ID9KoGr1sEIj5XpMUfNbSQnU+qlYiOW5plwbjTOWgGfSWfd7eN/dgz8NTr7p+3tx8RzG
-         bIsJmFwPooq07jZwZeqa8QIG8NJ7y3Sg8Jw6BzACa1uUi+TuNwx3xUGYBZB/bOI8SjQ7
-         QZRd4KwJZ29wXE4of3TosJ1S3lJ0msTZdfid+IvKKdGrGzIM2PuAVa84ctErgX52Yo46
-         Mj7A==
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=N3bkZamI0hi6hpaZyb2y3x0Y+G3pNP3ABy8QhyBtLdc=;
+        b=b/ny7Y57z2JGyKhT6o0TS8o0YiCYqrQr7viaEUoVLFR0Wx1evWzrF6tXp5DE+S6kON
+         lCrpT3vUrz9188ZUOTvFHJjBuaO06pmCnWSfVcwzdU00fSvZSc48Lhapdn06LYLdRc19
+         FnnLGsHW17ilt6FDbBX+RqW18xBXZL+rgbZ1ANt4nJu5rjlGHMjilOVeSDPBn75ea9AZ
+         cGPMZkxZRVZb4Z6mfrkY9Vl6b1ncVHaTF8hLJk61qepAZ1B5a8RsOZ5Tzu3yeUrJ2IT1
+         SdZ1wGoKpARnA7KWn/TdehWVCiUPcp/X9GZQCfMGv4w0aY7bdQ3/W5Fw8gsQhIAcLYYH
+         OE7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cqiAlzCu1M7hbptqd9bs/f6Fb99fEGoTcNv+wTuLZE4=;
-        b=1l38rH0/p35E3pFqgEvWUMYcNAP9iu6r4xK3KKZ971uEfznTEj4T2oy7nMVkYrp9eo
-         OuAAUnbF4ZehgW+gvYzv8Z+DmxHqXaqmLzAdRgJZPnGaw4rOKPSFp0QR/av5TnPzuB0R
-         rCgUVe+FSlDEsijZ3RBQl7rhyONMK/52HO3q9VKKPMiKWnpAbIDqS0QIA1frSWMeoZWT
-         o4z6HwkvnrTJDGUOW4Th+sJC2xw6FP67ptcoLm1sOZ4mF8pM9SFK5fsPHPDJw811QbIQ
-         cHLH6Cg8mZJrXQHmHP6GDZ3PmEl3ZowiL0IbAMHSAH2gnLa5I20ult+IRqggzVZrL9Gu
-         ZElg==
-X-Gm-Message-State: ACrzQf3AAVuCTR8fL3Sg6mxE36zSFldzcm/YF7AAsCl8xDLYBDebVJ1M
-        LxDRcv+mTDKyjH7FOGA8zlg=
-X-Google-Smtp-Source: AMsMyM5K9ZTucg9g7sM+aexaLUQAQRQ4+CZMokPrWXks/084Z00OzBeO7xQ3BIC1Tt45xB4xKa99Zw==
-X-Received: by 2002:a17:90a:2849:b0:20a:f3ff:c983 with SMTP id p9-20020a17090a284900b0020af3ffc983mr12893902pjf.198.1665999898978;
-        Mon, 17 Oct 2022 02:44:58 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-30.three.co.id. [180.214.232.30])
-        by smtp.gmail.com with ESMTPSA id nh12-20020a17090b364c00b0020dda04df79sm1367693pjb.44.2022.10.17.02.44.57
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N3bkZamI0hi6hpaZyb2y3x0Y+G3pNP3ABy8QhyBtLdc=;
+        b=R+Mf/5dC8neh9OheN9Gs83C4jMTBBr/tNDQZOUwLxmck4dRj7r2eiBb2G4kZH7VhJc
+         ROX7IOL80ZiMHR5Zqtdg0NykxEa601/Je1NpY6Fpx0n5CB4+LxPXExJ+9wsAr0qVXTmT
+         vPacdbwcADMd816mREKlG/7G7mrsMe4MFP2uJN4km9ayQT77rQghIjE7KUSgWosdBJo4
+         6nwgPHrs3o9gP6wjap6ZbJKAeFhOQsMB+03TzuZWIVbW0K/Gsw0NkpgU4rJE6dDbRQ9L
+         9ZqsGxhmbzPiUXlaLSHIOmaLnIKFQsJgRtTBf/jm3B0XOviGR68LQjb1RQIqg0k9GoQv
+         kheQ==
+X-Gm-Message-State: ACrzQf2WNlr4o7VNGYbCYciBtcdb4CFOsQKx+oU3xnCCiMM7MPXX5uXG
+        wEVlcd4FqhZCJDTAkP96YHQ=
+X-Google-Smtp-Source: AMsMyM6/Po+9PDBX5JS/6KSZoLPQ4MAOC5I0bpy9JDx8uCprXiw0wojeHAn4irnFEy+SDbgCzgei5w==
+X-Received: by 2002:a05:620a:458c:b0:6ee:8d8e:6673 with SMTP id bp12-20020a05620a458c00b006ee8d8e6673mr6740748qkb.327.1665999450072;
+        Mon, 17 Oct 2022 02:37:30 -0700 (PDT)
+Received: from p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de (p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de. [2003:f6:ef03:6f00:5de6:a4d0:d791:ed01])
+        by smtp.gmail.com with ESMTPSA id t26-20020a37ea1a000000b006b5cc25535fsm9041379qkj.99.2022.10.17.02.37.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 02:44:58 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id C2D56103E64; Mon, 17 Oct 2022 16:38:35 +0700 (WIB)
-Date:   Mon, 17 Oct 2022 16:38:35 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Sadiya Kazi <sadiyakazi@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] Documentation: Kunit: Update architecture.rst for
- minor fixes
-Message-ID: <Y00im2gq9/c5NzVt@debian.me>
-References: <20221017070820.2253501-1-sadiyakazi@google.com>
+        Mon, 17 Oct 2022 02:37:29 -0700 (PDT)
+Message-ID: <f003f3ffa86fbeae6898c23638a4b0e1228a8657.camel@gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: iio: temperature: ltc2983: support
+ more parts
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Date:   Mon, 17 Oct 2022 11:38:51 +0200
+In-Reply-To: <28c88be7-a416-3612-3e13-5346a6e92565@linaro.org>
+References: <20221014123724.1401011-1-demonsingur@gmail.com>
+         <20221014123724.1401011-3-demonsingur@gmail.com>
+         <28c88be7-a416-3612-3e13-5346a6e92565@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4yZrwh7LMvg4p5Xk"
-Content-Disposition: inline
-In-Reply-To: <20221017070820.2253501-1-sadiyakazi@google.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
---4yZrwh7LMvg4p5Xk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As I wrote the original bindings, let me reply to some of your
+points...
 
-On Mon, Oct 17, 2022 at 07:08:21AM +0000, Sadiya Kazi wrote:
-> Updated the architecture.rst page with the following changes:
-> -Add missing article _the_ across the document.
-> -Reword content across for style and standard.
-> -Update all occurrences of Command Line to Command-line
->  across the document.
-> -Correct grammatical issues, for example,
->  added _it_wherever missing.
-> -Update all occurrences of =E2=80=9Cvia" to either use
->  =E2=80=9Cthrough=E2=80=9D or =E2=80=9Cusing=E2=80=9D.
-> -Update the text preceding the external links and pushed the full
->  link to a new line for better readability.
-> -Reword content under the config command to make it more clear and concis=
-e.
+On Sun, 2022-10-16 at 21:59 -0400, Krzysztof Kozlowski wrote:
+> On 14/10/2022 08:37, Cosmin Tanislav wrote:
+> > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> >=20
+> > Add support for the following parts:
+> > =C2=A0* LTC2984
+> > =C2=A0* LTC2986
+> > =C2=A0* LTM2985
+> >=20
+> > The LTC2984 is a variant of the LTC2983 with EEPROM.
+> > The LTC2986 is a variant of the LTC2983 with only 10 channels,
+> > EEPROM and support for active analog temperature sensors.
+> > The LTM2985 is software-compatible with the LTC2986.
+> >=20
+> > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > ---
+> > =C2=A0.../bindings/iio/temperature/adi,ltc2983.yaml | 63
+> > +++++++++++++++++--
+> > =C2=A01 file changed, 59 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git
+> > a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
+> > l
+> > b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
+> > l
+> > index 722781aa4697..c33ab524fb64 100644
+> > ---
+> > a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
+> > l
+> > @@ -4,19 +4,27 @@
+> > =C2=A0$id:
+> > http://devicetree.org/schemas/iio/temperature/adi,ltc2983.yaml#
+> > =C2=A0$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > =C2=A0
+> > -title: Analog Devices LTC2983 Multi-sensor Temperature system
+> > +title: Analog Devices LTC2983, LTC2986, LTM2985 Multi-sensor
+> > Temperature system
+> > =C2=A0
+> > =C2=A0maintainers:
+> > =C2=A0=C2=A0 - Nuno S=C3=A1 <nuno.sa@analog.com>
+> > =C2=A0
+> > =C2=A0description: |
+> > -=C2=A0 Analog Devices LTC2983 Multi-Sensor Digital Temperature
+> > Measurement System
+> > +=C2=A0 Analog Devices LTC2983, LTC2984, LTC2986, LTM2985 Multi-Sensor
+> > Digital
+> > +=C2=A0 Temperature Measurement Systems
+> > +
+> > =C2=A0=C2=A0
+> > https://www.analog.com/media/en/technical-documentation/data-sheets/298=
+3fc.pdf
+> > +=C2=A0
+> > https://www.analog.com/media/en/technical-documentation/data-sheets/298=
+4fb.pdf
+> > +=C2=A0
+> > https://www.analog.com/media/en/technical-documentation/data-sheets/298=
+61fa.pdf
+> > +=C2=A0
+> > https://www.analog.com/media/en/technical-documentation/data-sheets/ltm=
+2985.pdf
+> > =C2=A0
+> > =C2=A0properties:
+> > =C2=A0=C2=A0 compatible:
+> > =C2=A0=C2=A0=C2=A0=C2=A0 enum:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,ltc2983
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,ltc2984
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,ltc2986
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,ltm2985
+> > =C2=A0
+> > =C2=A0=C2=A0 reg:
+> > =C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 1
+> > @@ -26,7 +34,7 @@ properties:
+> > =C2=A0
+> > =C2=A0=C2=A0 adi,mux-delay-config-us:
+> > =C2=A0=C2=A0=C2=A0=C2=A0 description:
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The LTC2983 performs 2 or 3 internal co=
+nversion cycles per
+> > temperature
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The device performs 2 or 3 internal con=
+version cycles per
+> > temperature
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 result. Each conversion cycle is p=
+erformed with different
+> > excitation and
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 input multiplexer configurations. =
+Prior to each conversion,
+> > these
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 excitation circuits and input swit=
+ch configurations are
+> > changed and an
+> > @@ -145,7 +153,7 @@ patternProperties:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,three-conversion-cycles:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Boolean pr=
+operty which set's three conversion cycles
+> > removing
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 parasitic resis=
+tance effects between the LTC2983 and the
+> > diode.
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 parasitic resis=
+tance effects between the device and the
+> > diode.
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 type: boolean
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,average-on:
+> > @@ -353,6 +361,41 @@ patternProperties:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description: Boolean p=
+roperty which set's the adc as
+> > single-ended.
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 type: boolean
+> > =C2=A0
+> > +=C2=A0 "^temp@":
 >=20
-> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-> ---
-> Please Note: The link in the change log in my previous email was broken a=
-s it got
-> mixed with the next line. I have resent the email.
+> There is already a property for thermocouple. Isn't a thermocouple a
+> temperature sensor? IOW, why new property is needed?
 >=20
-> Thank you Bagas for your detailed comments.=20
-> I think the current commit message does convey the right message as it is=
- not a complete rewrite, hence retained it.=20
-> Also since we talk about the two parts of the architecture, I have retain=
-ed the it as 'kunit_tool (Command-line Test Harness)' instead of 'Running T=
-ests Options'.
+
+Well, most of the patternProps in this bindings are temperature
+sensors... It's just that the device(s) support different types of
+them. 'adi,sensor-type' is used to identify each sensor (as this
+translates in different configurations being written in the device
+channels).
+
+> > +=C2=A0=C2=A0=C2=A0 type: object
+> > +=C2=A0=C2=A0=C2=A0 description:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Represents a channel which is being use=
+d as an active analog
+> > temperature
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sensor.
+> > +
+> > +=C2=A0=C2=A0=C2=A0 properties:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,sensor-type:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Identifies the =
+sensor as an active analog temperature
+> > sensor.
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/=
+definitions/uint32
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: 31
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,single-ended:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description: Boolean proper=
+ty which sets the sensor as
+> > single-ended.
 >=20
-> Changes since v2:
-> https://lore.kernel.org/linux-kselftest/20221013080545.1552573-1-sadiyaka=
-zi@google.com/
+> Drop "Boolean property which sets" - it's obvious from the type.
 >=20
-> -Updated the link descriptions as per Bagas=E2=80=99s feedback
-> -Reworded content talking about options to run tests and added links as p=
-er Bagas=E2=80=99s feedback
 >=20
-> Best Regards,
-> Sadiya Kazi
-> ---
->  .../dev-tools/kunit/architecture.rst          | 118 +++++++++---------
->  1 file changed, 60 insertions(+), 58 deletions(-)
 >=20
-> diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentati=
-on/dev-tools/kunit/architecture.rst
-> index 8efe792bdcb9..52b1a30c9f89 100644
-> --- a/Documentation/dev-tools/kunit/architecture.rst
-> +++ b/Documentation/dev-tools/kunit/architecture.rst
-> @@ -4,16 +4,17 @@
->  KUnit Architecture
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> -The KUnit architecture can be divided into two parts:
-> +The KUnit architecture is divided into two parts:
-> =20
->  - `In-Kernel Testing Framework`_
-> -- `kunit_tool (Command Line Test Harness)`_
-> +- `kunit_tool (Command-line Test Harness)`_
-> =20
->  In-Kernel Testing Framework
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> =20
->  The kernel testing library supports KUnit tests written in C using
-> -KUnit. KUnit tests are kernel code. KUnit does several things:
-> +KUnit. These KUnit tests are kernel code. KUnit performs the following
-> +tasks:
-> =20
->  - Organizes tests
->  - Reports test results
-> @@ -22,19 +23,17 @@ KUnit. KUnit tests are kernel code. KUnit does severa=
-l things:
->  Test Cases
->  ----------
-> =20
-> -The fundamental unit in KUnit is the test case. The KUnit test cases are
-> -grouped into KUnit suites. A KUnit test case is a function with type
-> -signature ``void (*)(struct kunit *test)``.
-> -These test case functions are wrapped in a struct called
-> -struct kunit_case.
-> +The test case is the fundamental unit in KUnit. KUnit test cases are org=
-anised
-> +into suites. A KUnit test case is a function with type signature
-> +``void (*)(struct kunit *test)``. These test case functions are wrapped =
-in a
-> +struct called struct kunit_case.
-> =20
->  .. note:
->  	``generate_params`` is optional for non-parameterized tests.
-> =20
-> -Each KUnit test case gets a ``struct kunit`` context
-> -object passed to it that tracks a running test. The KUnit assertion
-> -macros and other KUnit utilities use the ``struct kunit`` context
-> -object. As an exception, there are two fields:
-> +Each KUnit test case receives a ``struct kunit`` context object that tra=
-cks a
-> +running test. The KUnit assertion macros and other KUnit utilities use t=
-he
-> +``struct kunit`` context object. As an exception, there are two fields:
-> =20
->  - ``->priv``: The setup functions can use it to store arbitrary test
->    user data.
-> @@ -75,14 +74,15 @@ with the KUnit test framework.
->  Executor
->  --------
-> =20
-> -The KUnit executor can list and run built-in KUnit tests on boot.
-> +The KUnit executor can list and run built-in KUnit tests on boot
->  The Test suites are stored in a linker section
-> -called ``.kunit_test_suites``. For code, see:
-> -https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-include/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
-> +called ``.kunit_test_suites``. For the code, see ``KUNIT_TABLE()`` macro
-> +definition in
-> +`include/asm-generic/vmlinux.lds.h <https://git.kernel.org/pub/scm/linux=
-/kernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=3Dv=
-6.0#n950>`_.
->  The linker section consists of an array of pointers to
->  ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
-> -macro. To run all tests compiled into the kernel, the KUnit executor
-> -iterates over the linker section array.
-> +macro. The KUnit executor iterates over the linker section array in orde=
-r to
-> +run all the tests that are compiled into the kernel.
-> =20
->  .. kernel-figure:: kunit_suitememorydiagram.svg
->  	:alt:	KUnit Suite Memory
-> @@ -90,17 +90,18 @@ iterates over the linker section array.
->  	KUnit Suite Memory Diagram
-> =20
->  On the kernel boot, the KUnit executor uses the start and end addresses
-> -of this section to iterate over and run all tests. For code, see:
-> -https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-lib/kunit/executor.c
-> -
-> +of this section to iterate over and run all tests. For the implementatio=
-n of the
-> +executor, see
-> +`lib/kunit/executor.c <https://git.kernel.org/pub/scm/linux/kernel/git/t=
-orvalds/linux.git/tree/lib/kunit/executor.c>`_.
->  When built as a module, the ``kunit_test_suites()`` macro defines a
->  ``module_init()`` function, which runs all the tests in the compilation
->  unit instead of utilizing the executor.
-> =20
->  In KUnit tests, some error classes do not affect other tests
->  or parts of the kernel, each KUnit case executes in a separate thread
-> -context. For code, see:
-> -https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-lib/kunit/try-catch.c?h=3Dv5.15#n58
-> +context. For the implememtation details, see ``kunit_try_catch_run()`` f=
-unction
-> +code in
-> +`lib/kunit/try-catch.c <https://git.kernel.org/pub/scm/linux/kernel/git/=
-torvalds/linux.git/tree/lib/kunit/try-catch.c?h=3Dv5.15#n58>`_.
-> =20
->  Assertion Macros
->  ----------------
-> @@ -111,37 +112,36 @@ All expectations/assertions are formatted as:
-> =20
->  - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
->    expectation.
-> +  In the event of a failure, the testing flow differs as follows:
-> =20
-> -	- For an expectation, if the check fails, marks the test as failed
-> -	  and logs the failure.
-> +	- For expectations, the test is marked as failed and the failure is log=
-ged.
-> =20
-> -	- An assertion, on failure, causes the test case to terminate
-> -	  immediately.
-> +	- Failing assertions, on the other hand, result in the test case being
-> +	  terminated immediately.
-> =20
-> -		- Assertions call function:
-> +		- Assertions call the function:
->  		  ``void __noreturn kunit_abort(struct kunit *)``.
-> =20
-> -		- ``kunit_abort`` calls function:
-> +		- ``kunit_abort`` calls the function:
->  		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_=
-catch)``.
-> =20
-> -		- ``kunit_try_catch_throw`` calls function:
-> +		- ``kunit_try_catch_throw`` calls the function:
->  		  ``void kthread_complete_and_exit(struct completion *, long) __noretu=
-rn;``
->  		  and terminates the special thread context.
-> =20
->  - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
-> -  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied pr=
-operties are
-> +  has the boolean value "true"), ``EQ`` (two supplied properties are
->    equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
-> -  contain an =E2=80=9Cerr=E2=80=9D value).
-> +  contain an "err" value).
-> =20
->  - ``[_MSG]`` prints a custom message on failure.
-> =20
->  Test Result Reporting
->  ---------------------
-> -KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
-> -https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-=
-14-specification.md.
-> -KTAP (yet to be standardized format) works with KUnit and Kselftest.
-> -The KUnit executor prints KTAP results to dmesg, and debugfs
-> -(if configured).
-> +KUnit prints the test results in KTAP format. KTAP is based on TAP14, see
-> +Documentation/dev-tools/ktap.rst.
-> +KTAP works with KUnit and Kselftest. The KUnit executor prints KTAP resu=
-lts to
-> +dmesg, and debugfs (if configured).
-> =20
->  Parameterized Tests
->  -------------------
-> @@ -150,33 +150,35 @@ Each KUnit parameterized test is associated with a =
-collection of
->  parameters. The test is invoked multiple times, once for each parameter
->  value and the parameter is stored in the ``param_value`` field.
->  The test case includes a KUNIT_CASE_PARAM() macro that accepts a
-> -generator function.
-> -The generator function is passed the previous parameter and returns the =
-next
-> -parameter. It also provides a macro to generate common-case generators b=
-ased on
-> -arrays.
-> +generator function. The generator function is passed the previous parame=
-ter
-> +and returns the next parameter. It also includes a macro for generating
-> +array-based common-case generators.
-> =20
-> -kunit_tool (Command Line Test Harness)
-> +kunit_tool (Command-line Test Harness)
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> -kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
-> -that can be used to configure, build, exec, parse and run (runs other
-> -commands in order) test results. You can either run KUnit tests using
-> -kunit_tool or can include KUnit in kernel and parse manually.
-> +``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.=
-py``. It
-> +is used to configure, build, execute, parse test results and run all of =
-the
-> +previous commands in correct order (i.e., configure, build, execute and =
-parse).
-> +You have two options for running KUnit tests: either build the kernel wi=
-th KUnit
-> +enabled and manually parse the results (see
-> +Documentation/dev-tools/kunit/run_manual.rst) or use ``kunit_tool``
-> +(see Documentation/dev-tools/kunit/run_wrapper.rst).
-> =20
->  - ``configure`` command generates the kernel ``.config`` from a
->    ``.kunitconfig`` file (and any architecture-specific options).
-> -  For some architectures, additional config options are specified in the
-> -  ``qemu_config`` Python script
-> -  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
-> +  The Python scripts available in ``qemu_configs`` folder
-> +  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
-> +  additional configuration options for specific architectures.
->    It parses both the existing ``.config`` and the ``.kunitconfig`` files
-> -  and ensures that ``.config`` is a superset of ``.kunitconfig``.
-> -  If this is not the case, it will combine the two and run
-> -  ``make olddefconfig`` to regenerate the ``.config`` file. It then
-> -  verifies that ``.config`` is now a superset. This checks if all
-> -  Kconfig dependencies are correctly specified in ``.kunitconfig``.
-> -  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
-> -  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
-> -  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
-> +  to ensure that ``.config`` is a superset of ``.kunitconfig``.
-> +  If not, it will combine the two and run ``make olddefconfig`` to regen=
-erate
-> +  the ``.config`` file. It then checks to see if ``.config`` has become =
-a superset.
-> +  This verifies that all the Kconfig dependencies are correctly specifie=
-d in the
-> +  file ``.kunitconfig``. The ``kunit_config.py`` script contains the cod=
-e for parsing
-> +  Kconfigs. The code which runs ``make olddefconfig`` is part of the
-> +  ``kunit_kernel.py`` script. You can invoke this command through:
-> +  ``./tools/testing/kunit/kunit.py config`` and
->    generate a ``.config`` file.
->  - ``build`` runs ``make`` on the kernel tree with required options
->    (depends on the architecture and some options, for example: build_dir)
-> @@ -184,8 +186,8 @@ kunit_tool or can include KUnit in kernel and parse m=
-anually.
->    To build a KUnit kernel from the current ``.config``, you can use the
->    ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
->  - ``exec`` command executes kernel results either directly (using
-> -  User-mode Linux configuration), or via an emulator such
-> -  as QEMU. It reads results from the log via standard
-> +  User-mode Linux configuration), or through an emulator such
-> +  as QEMU. It reads results from the log using standard
->    output (stdout), and passes them to ``parse`` to be parsed.
->    If you already have built a kernel with built-in KUnit tests,
->    you can run the kernel and display the test results with the ``exec``
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 type: boolean
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,custom-temp:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 This is a table=
+, where each entry should be a pair of
+>=20
+> "This is a table" - obvious from the type.
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 voltage(mv)-tem=
+perature(K). The entries must be given in
+> > nv and uK
+>=20
+> mv-K or nv-uK? Confusing...
 
-Seems like you ignore my requested changes from v1 and v2 review (code
-location link and redundant kunit_tool summary), hence NAK until you
-have addressed them.
+Yeah, a bit. In Cosmin defense, I think he's just keeping the same
+"style" as the rest of the properties...
 
-Thanks.
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 so that, the or=
+iginal values must be multiplied by
+> > 1000000. For
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 more details lo=
+ok at table 71 and 72.
+>=20
+> There is no table 71 in the bindings... It seems you pasted it from
+> somewhere.
 
---=20
-An old man doll... just what I always wanted! - Clara
+I'm fairly sure this refers to the datasheet. I see now that this can
+be confusing (again this kind of references are being (ab)used in the
+rest of the file).
 
---4yZrwh7LMvg4p5Xk
-Content-Type: application/pgp-signature; name="signature.asc"
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Note should be =
+signed, but dtc doesn't currently
+> > maintain the
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sign.
+>=20
+> What do you mean? "Maintain" as allow or keep when building FDT?=C2=A0
+> What's
+> the problem of using negative numbers here and why it should be part
+> of
+> bindings?
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/=
+definitions/uint64-matrix
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 minItems: 3
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 64
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 minItems: 2
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 2
+>=20
+> Instead describe the items with "description" (and maybe constraints)
+> like here:
+>=20
+> https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bi=
+ndings/iio/adc/st,stm32-adc.yaml#L278
+>=20
 
------BEGIN PGP SIGNATURE-----
+Neat... My only comment (which probably applies to my previous ones) is
+that the rest of the properties are already in this "style". So maybe,
+follow up patches with small clean-ups would be more appropriate?
+>=20
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY00ilgAKCRD2uYlJVVFO
-oz8QAQDop9z/KFT1Sk9UFEslUOjnen6I4kq7NlvfpCBGExyZkgD/YuH4CV2VW3I5
-/KZrRArluL1YMiFFOcxsEBadcag4FAc=
-=Zjvf
------END PGP SIGNATURE-----
 
---4yZrwh7LMvg4p5Xk--
+- Nuno S=C3=A1
