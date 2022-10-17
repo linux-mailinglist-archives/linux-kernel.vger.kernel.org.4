@@ -2,119 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76797601703
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2342D601705
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiJQTJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
+        id S229867AbiJQTKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiJQTJn (ORCPT
+        with ESMTP id S229838AbiJQTKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:09:43 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661AD186C0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:09:41 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so12982551wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:09:41 -0700 (PDT)
+        Mon, 17 Oct 2022 15:10:04 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780A74DB2A;
+        Mon, 17 Oct 2022 12:10:02 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so11835704pjo.4;
+        Mon, 17 Oct 2022 12:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JQwvrZM0NdshJK8bg4tJ/wU/2YDF+xO/AxCNgwM//+A=;
-        b=t4r0XCUanikK7kDAe0IyQZratPozV7OLPNFeESUFTmq+VlGygZdidlfnTRXLYCAOcP
-         V45bWJL+6UgMnJL1vzIzftPEUWzMQ1MfrJGQSoZsRAKjGhAVXErLu/xbJu1ALDLwAU74
-         wSwZUc9hdZjMaNbzXAtZkxWgk13XGzwLTQYg/wVk2vkaNWbypW5GIOIVt+dYYjN7CsCo
-         ARl/8QXFu/PWLHv9nJli7RVksqUUX4mu9PfbnhxK9ZJufQ9Uru6kbv0vWL1NI3hk8/D/
-         QdkYjXNvzynVEGiPZ0sZcxLJcKTlnlcsBdyClp/I65BlskQp/WMFKjV/9VfgnB57bM3f
-         lv5g==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UXrfwd7gNNvp6Yt0u4EpnteM52pQoIrwendRXuTj8qA=;
+        b=Gqwr/qM5+4KYPFkY8CojJXd7D+89eVRg2YLwqL8DjIi3ZuNtRJzHGHJ7KNq/36CeVv
+         bPUInVg0M5GTiPmYCniBiN2XmXcv/380eB7YqB6rAF2JjDbt5/O+Hb5VDrgicRL13OyE
+         YHOS5C9K+vKjUq0f+qNY42yz2rm93XViAVhNuP49PLPu0p96/NCMllFLu5BkP33DoBdO
+         cYx7a4GcWYTRts3fzJm1WG6E3wkfLWw0q9yL1WnNMc8HgavnaqKswnNWgXeaMQke594j
+         QCJWMZKxNFhawpOmZy6ahjRoQPeCfSfjpXeJ3LL4ESqJf+DaUw7/tDm3uIlpQOPAIVRS
+         bASw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JQwvrZM0NdshJK8bg4tJ/wU/2YDF+xO/AxCNgwM//+A=;
-        b=HIU0X+PCubtvOcWGLn6DNfE2nvmQ8EBKfr1V2omCbu5aFVTjow2OMF7T/6C/BgqDyV
-         E5v3S7khpqerfdx4wsSSFoeL0ReUepSqC5yZjfkCMrrmwYK6VKS49U+0KsyEzP/1Ii3Q
-         ayePQy0hBoxvFkqL1Wx32VJ9IKHpvEwiM066HFIHC0knCGURXVRbwXZ1WCF88AtQbhqD
-         0WbLIpEX69c8HoAX1q8D3guVA7JxMBheOXtOXPhHcBVKf0sEPXWecZVO8zCzzPFSFZfp
-         NzPOyIhduWWgrHW2hae1v3xz4IMqfFdfd47+NIHkMilLbtrMz1ZLm47UZnpdDdEBDsKq
-         5wbg==
-X-Gm-Message-State: ACrzQf3WZhKs5HbHcSs8OpWl2nu6ZcJFUIYK/lqh6/hRHlF/ztRzHZkj
-        OrYyHcTTaDw9gKkbPDDzuyqdSA==
-X-Google-Smtp-Source: AMsMyM61UUbxtQgNyb/ViwXfWuIo3K+CVJYqgyg3v5VLQT+AXiidWyPuJ3ee3VCx5bUct0zo+pCSKw==
-X-Received: by 2002:a05:600c:2754:b0:3c6:aba7:5c93 with SMTP id 20-20020a05600c275400b003c6aba75c93mr8154776wmw.177.1666033779901;
-        Mon, 17 Oct 2022 12:09:39 -0700 (PDT)
-Received: from localhost.localdomain (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
-        by smtp.gmail.com with ESMTPSA id c25-20020a7bc019000000b003c6b874a0dfsm13830232wmb.14.2022.10.17.12.09.39
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UXrfwd7gNNvp6Yt0u4EpnteM52pQoIrwendRXuTj8qA=;
+        b=C4X2xyRpUBAhFXGLNWQmfaO5wpN0DQXxXG4O3cNFM0GVOekWQcAJlh/pWCI6YjYflp
+         Z9ET/gv7XUDeD7olwiuH/1IgD+3NdbVrpTwKzJFS1etJoJlpf6vLrhLQIb/b6g6zi3L8
+         0pEcxQnllFUGPSt8y8NO5nmtEUt0NDHMIYPOQ23sRA3Cx2pRVM+3hy2/osH8pHvT+QQb
+         EyLNwByHJH/nWBKLwQJHS8nzOns1Km8hvdji4AqIKYYk7KW8XIfC4EqvwwmUygWIE1jo
+         Bpi/ykGRsnEpSdny/uNysOTPbuD3zfBEZeX+f19WnLInlxE6NXRFcRVyLt5O7M+OAweU
+         g4/A==
+X-Gm-Message-State: ACrzQf2rKSVbEdl8cZWAsbQADGODiEovcyaqK/Ze6gTlfsXwreblps/P
+        8g1SGT2+ZI4qhL+i3dZ7E3k=
+X-Google-Smtp-Source: AMsMyM4DTGBEwZH1kzFjjyuQypER81cfpdxfRrvj/nuz3d3N43HZoEzdyeAVB6hHSP5Q/tdg9MMS9g==
+X-Received: by 2002:a17:903:245:b0:178:e0ba:e507 with SMTP id j5-20020a170903024500b00178e0bae507mr13698271plh.115.1666033801850;
+        Mon, 17 Oct 2022 12:10:01 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 21-20020a631855000000b00462ae17a1c4sm6479293pgy.33.2022.10.17.12.10.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 12:09:39 -0700 (PDT)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     caleb.connolly@linaro.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v3] arm64: dts: qcom: pmi8998: add rradc node
-Date:   Mon, 17 Oct 2022 20:09:02 +0100
-Message-Id: <20221017190902.2282899-1-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.38.0
+        Mon, 17 Oct 2022 12:10:01 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 17 Oct 2022 09:10:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] blk-iocost: Correct comment in blk_iocost_init
+Message-ID: <Y02oiFyRJiFm13cL@slm.duckdns.org>
+References: <20221017020011.25016-1-shikemeng@huawei.com>
+ <20221017020011.25016-6-shikemeng@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017020011.25016-6-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a DT node for the Round Robin ADC found in the PMI8998 PMIC.
+On Mon, Oct 17, 2022 at 10:00:08AM +0800, Kemeng Shi wrote:
+> There is no iocg_pd_init function. The pd_alloc_fn function pointer of
+> iocost policy is set with ioc_pd_init. Just correct it.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 
-The RRADC reports PMIC die and skin temperatures, as well as
-battery/charger thermals. It also reports USB and DC charger voltage and
-current measurements.
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
----
-This patch introduces a new dtbs_check warning which will be fixed by
-https://lore.kernel.org/linux-arm-msm/20221017185105.2279129-1-caleb.connolly@linaro.org/
+Thanks.
 
-V2: https://lore.kernel.org/linux-arm-msm/20221017185609.2280067-1-caleb.connolly@linaro.org/
-Changes since v2:
- * Remove 'status = "okay";'
-
-V1:
-https://lore.kernel.org/linux-arm-msm/20221016180330.1912214-1-caleb.connolly@linaro.org/
-Changes since v1:
- * Change node name from adc@ to rradc@, see linked patch
- * Enable the RRADC by default, rather than per-device 
----
- arch/arm64/boot/dts/qcom/pmi8998.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/pmi8998.dtsi b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-index 6d3d212560c1..08c9ec2cafa6 100644
---- a/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
-@@ -18,6 +18,12 @@ pmi8998_gpio: gpios@c000 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 		};
-+
-+		pmi8998_rradc: rradc@4500 {
-+			compatible = "qcom,pmi8998-rradc";
-+			reg = <0x4500>;
-+			#io-channel-cells = <1>;
-+		};
- 	};
- 
- 	pmi8998_lsid1: pmic@3 {
 -- 
-2.38.0
-
+tejun
