@@ -2,104 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3966015FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1841E601605
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiJQSI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S229988AbiJQSLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiJQSIy (ORCPT
+        with ESMTP id S229794AbiJQSK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:08:54 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E438874B9A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:08:52 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so14989500pjq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:08:52 -0700 (PDT)
+        Mon, 17 Oct 2022 14:10:58 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4080E7287A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:10:57 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y191so11843772pfb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:10:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L9A07l58gYnh7KAA0iXhOrnBqUc773E6KyrOSccVOeI=;
-        b=VEW8NrH9pYWqGDvIZkdrS5zE1KyrBYrxMV/OFT8xI++Zos03GTAy4kuS4+FYASo15T
-         vM0kH4ym0hozzgAK5k3fiBmg1i7avcGAUw2qzOK2sD4Bys1dpmBa9MV9D5SmkzFHqgxr
-         Qo/AT+amKP5u7jpv49MWo8TrOSib/79/eBpB6rxAcSr9fGeYmBsTH0dJ/TYKFuIag2Tv
-         73VGvVPZrNSrJgTRvomtlRITXBj/voR6b4QUthdiYg+3bejNxmdeSACLiPOFHnuYEUAB
-         lchGF110Oo6fwO+VAqhIYulZdloa+ZKOw7IPEx7WHRSwI2ujMBy0UFAJHxjzwTsOg0rd
-         AEbQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=moxKXe7U1ebuMzqu7/cZGChet+W4gvv+t8NNPuSo720=;
+        b=XY0kF2gzGSA1+uw3SMLARMefKSvfWCXE8ZiDDlepUNu99ZYVA3r/SBHgaqYw3Mg0ts
+         v5stIB0KkLpixzZIq7wotGiIooIZkdJ8os3Fog1avvzZlUAHZaNIPp44b0Ma2DRd6E++
+         TyZIIfFeO8+Tqs0V4KuNtdAU9PthXqnfCmA+lyzivuajvfgb97uVydZ+AVHmCD2yOLpC
+         gAQAcItx1SOLPMykU+flvQoS3Ft0ss4HNZk+qcFVra96Itv7jZhD2LH8zN0DiHmm0yOC
+         XrC6zoYfYSUqhFZdU8oL8HrKtop75wK1NnnfegOnIROCE9xQ0jvhr8TmOgNg8aBhHiwi
+         1raQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L9A07l58gYnh7KAA0iXhOrnBqUc773E6KyrOSccVOeI=;
-        b=INt3IVTofC/6lkWSYwR+S0WyVcGFaz09iLZb9Uav+zn/uIemvl3xywU0edB0pVMy5h
-         YTpY9E+vAmLEbmWAwkEGlg3/5L99fBSS5l+UN64puhUiGdpMw7vK9JfqMUYKuyNDuQTD
-         saOEYDGt/XTHET1xxV1Kazrg21fOEQ0THH6G8uDx87lub8LOXDldtD82XN6/weH4Ov7O
-         YxyWXWCpDQc0V00p9IueqTF/Bb4kxiWkkkm8sb7LuLm3D38Th4lV6tMt+T7JPxwA+IIf
-         rQhQiI9/7LHG/1+3ieBvDa5EO0yfRXQ0CuO8O4S8jI4edkrH62cg+Sf6xvM5JoIxJBXm
-         AcLg==
-X-Gm-Message-State: ACrzQf3zxhyw65yran+vYEDu9+KNLQYDWOEKmFwnkU7/jlZcAftlBvvf
-        RgK/6B2cEKqMq+qDN7k4d7OUPpi8vQ3QqA==
-X-Google-Smtp-Source: AMsMyM5/2r1LHGQfBAhdn0WDF+kLf6ME/hYhjaFUfzyQ8DsiO0ibgWcC8AAcfRM1UTz/1uTAvXZbOQ==
-X-Received: by 2002:a17:902:b286:b0:17f:9db0:2334 with SMTP id u6-20020a170902b28600b0017f9db02334mr12977811plr.131.1666030132316;
-        Mon, 17 Oct 2022 11:08:52 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n12-20020a17090a2bcc00b00208c58d5a0esm9999071pje.40.2022.10.17.11.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:08:51 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 18:08:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com
-Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
- pool gpa
-Message-ID: <Y02aLxlCKWwN62I5@google.com>
-References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-4-vannapurve@google.com>
- <Yz80XAg74KGdSqco@google.com>
- <CAGtprH_XSCXZDroGUnL3H1CwcsbH_A_NDn8B4P2xfpSYGqKmqw@mail.gmail.com>
- <Y0mu1FKugNQG5T8K@google.com>
- <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=moxKXe7U1ebuMzqu7/cZGChet+W4gvv+t8NNPuSo720=;
+        b=vZOut5+wV0kXoRovt2C9XH3TlfBA4TIa1vQD5vMpEdv7B2HQFDNzwnHQPYvOST02yO
+         MuJ2ryDbbXw1B90f+K5Y/10665Nnhk/oLPnimhqEdZ+cTlhxEy7gGVu0iSi5mL3CUWhk
+         Qre3+AgwDyDcBlT1fc43EAQ7BHtArERHmUCu3MCOYamDgxoz8a3/zy4pWmFW5L9WGXJD
+         UKOh1l68jbjGGpNxda1y7q8N7A72jwpj1MC5RMTcN5R0aKvznaN9oNsQS8Qgq49jnap4
+         If/aBdQpDOC1PbxTOqysZ4P9gghBuavlRPfbBpOZvSOz+qIOhrUl8I4z/Qc681yo2m9Z
+         3Krw==
+X-Gm-Message-State: ACrzQf3ljNN1pUIOo5iaJQX9ATxnOcbOLeORn7IRUKdxs/nsEeYNqWWb
+        KclrdRYmzySckJqS6Mn2PyC/Rg==
+X-Google-Smtp-Source: AMsMyM57hkAdLilgEOnNj8HB9ePsvlL/RYriF/tFJYYUFcy9FcGFY4mlR4OXBdTCbRTwUrsYVAWftw==
+X-Received: by 2002:a63:5a5e:0:b0:434:b739:206f with SMTP id k30-20020a635a5e000000b00434b739206fmr11694182pgm.82.1666030256660;
+        Mon, 17 Oct 2022 11:10:56 -0700 (PDT)
+Received: from [192.168.4.201] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b001830ed575c3sm6900180plh.117.2022.10.17.11.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 11:10:56 -0700 (PDT)
+Message-ID: <b8319bd7-ff28-5c79-a024-de8a21acedba@kernel.dk>
+Date:   Mon, 17 Oct 2022 11:10:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH cgroup/for-6.1-fixes] blkcg: Update MAINTAINERS entry
+To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+References: <Y02aBVTCSggxKWXT@slm.duckdns.org>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y02aBVTCSggxKWXT@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022, Vishal Annapurve wrote:
-> This is much sleeker and will avoid hacking KVM for testing. Only
-> caveat here is that these tests will not be able to exercise implicit
-> conversion path if we go this route.
+On 10/17/22 11:08 AM, Tejun Heo wrote:
+> Josef wrote iolatency and iocost is missing from the files list. Let's add
+> Josef as a maintainer and add blk-iocost.c to the files list.
 
-Yeah, I think that's a perfectly fine tradeoff.  Implicit conversion isn't strictly
-a UPM feature, e.g. if TDX and SNP "architecturally" disallowed implicit conversions,
-then KVM wouldn't need to support implicit conversions at all, i.e. that testing can
-be punted to SNP and/or TDX selftests.
+Acked-by: Jens Axboe <axboe@kernel.dk>
+
+-- 
+Jens Axboe
+
+
