@@ -2,160 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985916016BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398566016C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiJQS5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S230003AbiJQS7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiJQS5c (ORCPT
+        with ESMTP id S229739AbiJQS7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:57:32 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA2E754AE;
-        Mon, 17 Oct 2022 11:57:31 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-134072c15c1so14349921fac.2;
-        Mon, 17 Oct 2022 11:57:31 -0700 (PDT)
+        Mon, 17 Oct 2022 14:59:03 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0425A753BE;
+        Mon, 17 Oct 2022 11:59:03 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id g130so13144415oia.13;
+        Mon, 17 Oct 2022 11:59:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yhi01nIKMu8oS63Us1m9T4vtO8yAbuN6/vPxNd3xC04=;
-        b=Zh5B6ZViLeAtu7JJ7aZYHQqghCUrS29QLD9jB6hc286jDTc5gNqGK/CRu0jtOkFgKs
-         hlFXTRck4FrXaRcVKt7tW6+U26COll4eN3Gu+d26tJIB4ijYcPQvmJTguzYeCFlIINpZ
-         9RBPHEL+XY4EU/At81Fhl4JLlZLhgq4xL0jQTgvqxQBaN6UhfZ0e/bz6Z2arn/ETzXpo
-         8diArGkLuZ1VlR6km4VVc+MXeq68rdIyicUOeZeP1moyRTnQ7NUuIhTCElbKG3E0Tw8d
-         H4frCInSwPa5BRk6HrEYylAUT2gDSXP4fln+uE2FuWzQa3OUF33bcB9g9+iM7rHpHquO
-         L4IQ==
-X-Gm-Message-State: ACrzQf37Yc/exKDQ8BSWGKdV17nqTVPayWe6fzETCTRW2grFgPu9Z9wT
-        CdVLjkaHTDhG6k2SydTJjw==
-X-Google-Smtp-Source: AMsMyM6hd4KpSHEGg5rpmw44Oeh0ybM1WiVTBmJIC/qj0uwN3RJKLDIGEfvrnaZYCvC5RjxH/lV8IQ==
-X-Received: by 2002:a05:6870:c8a2:b0:136:5491:8f08 with SMTP id er34-20020a056870c8a200b0013654918f08mr15781649oab.225.1666033050385;
-        Mon, 17 Oct 2022 11:57:30 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/vV32roC8QGzARBYQiz3s/fUjLlQrlAPOTqGTgJcRG4=;
+        b=d1+yBoxs/xuM+ZIIbuSKyliYF8meQFOcpMd7axTtcV4+zfzUalszC9xSOA+tsieeaE
+         PgTFXdtX1AU6/Zq7lNgajV/TT8BMTEnm6YvJa5e/b5hlOOrj6SJC1Y4S/R4A0kZSSp+2
+         Y1sXpSXQhIov8DDQqS8GoxUs0APPxnS+dLHoQ9HbpD/FGTK/2Y76vKVv0Ps0ymoumsfT
+         WiGVur5jNvkUvyLpi/g5C/dtxOE1wQCRLFuG+/C2F+VSHm46qQmXnWY/MDE7vEgADacN
+         1p2d3YQpvfHuQMzo/zhr5rG9E93epfK9wTL9ZNLc9kPscxeYNP9aqnV6OKwd9acmd6sA
+         u/1A==
+X-Gm-Message-State: ACrzQf2jkQACdj2zc5AeiS+fj7LCvzh4OscCWUeyVn9DT01PnNXtwbBG
+        kabBHLt3MRgQCuo0OrphTA==
+X-Google-Smtp-Source: AMsMyM6m6CDm9Jv8erVCI2tz7eaLMcp3RE9hGAbUtR1C5H5Cl07JUE9GjF1ijTBqyJVp9cwZ6N0spA==
+X-Received: by 2002:a05:6808:11c7:b0:345:7251:7276 with SMTP id p7-20020a05680811c700b0034572517276mr5615625oiv.5.1666033142273;
+        Mon, 17 Oct 2022 11:59:02 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t4-20020a4a8244000000b004805c328971sm4500369oog.42.2022.10.17.11.57.29
+        by smtp.gmail.com with ESMTPSA id e18-20020a9d6e12000000b00661b46cc26bsm5028071otr.9.2022.10.17.11.59.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:57:30 -0700 (PDT)
-Received: (nullmailer pid 2279555 invoked by uid 1000);
-        Mon, 17 Oct 2022 18:57:30 -0000
-Date:   Mon, 17 Oct 2022 13:57:30 -0500
+        Mon, 17 Oct 2022 11:59:01 -0700 (PDT)
+Received: (nullmailer pid 2281284 invoked by uid 1000);
+        Mon, 17 Oct 2022 18:59:02 -0000
+Date:   Mon, 17 Oct 2022 13:59:02 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Naresh Solanki <naresh.solanki@9elements.com>
-Subject: Re: [PATCH linux v2 2/3] spi: aspeed: Handle custom decoding ranges
-Message-ID: <20221017185730.GB2264550-robh@kernel.org>
-References: <20221017091624.130227-1-clg@kaod.org>
- <20221017091624.130227-3-clg@kaod.org>
+        linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-rtc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 05/11] dt-bindings: mfd: qcom-pm8xxx: document
+ qcom,pm8921 as fallback of qcom,pm8018
+Message-ID: <166603314201.2281230.8294091560079145147.robh@kernel.org>
+References: <20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v3-5-531da552c354@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221017091624.130227-3-clg@kaod.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v3-5-531da552c354@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:16:23AM +0200, Cédric Le Goater wrote:
-> The "ranges" property predefines settings for the decoding ranges of
-> each CS. If found in the DT, the driver applies the settings at probe
-> time. The default behavior is to set the decoding range of each CS
-> using the flash device size when the spi slave is setup.
+On Mon, 17 Oct 2022 11:45:30 +0200, Neil Armstrong wrote:
+> The PM8018 is used as compatible with PM8921 on the MDM9615, document this situation,
+> and an example section to validate this change.
 > 
-> Cc: Naresh Solanki <naresh.solanki@9elements.com>
-> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  drivers/spi/spi-aspeed-smc.c | 65 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 64 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       | 33 ++++++++++++++++++----
+>  1 file changed, 28 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> index b90571396a60..75e1d08bbd00 100644
-> --- a/drivers/spi/spi-aspeed-smc.c
-> +++ b/drivers/spi/spi-aspeed-smc.c
-> @@ -96,6 +96,7 @@ struct aspeed_spi {
->  	u32			 ahb_base_phy;
->  	u32			 ahb_window_size;
->  	struct device		*dev;
-> +	bool                     fixed_windows;
->  
->  	struct clk		*clk;
->  	u32			 clk_freq;
-> @@ -382,6 +383,7 @@ static const char *aspeed_spi_get_name(struct spi_mem *mem)
->  
->  struct aspeed_spi_window {
->  	u32 cs;
-> +	u32 reg;
->  	u32 offset;
->  	u32 size;
->  };
-> @@ -396,6 +398,7 @@ static void aspeed_spi_get_windows(struct aspeed_spi *aspi,
->  	for (cs = 0; cs < aspi->data->max_cs; cs++) {
->  		reg_val = readl(aspi->regs + CE0_SEGMENT_ADDR_REG + cs * 4);
->  		windows[cs].cs = cs;
-> +		windows[cs].reg = reg_val;
->  		windows[cs].size = data->segment_end(aspi, reg_val) -
->  			data->segment_start(aspi, reg_val);
->  		windows[cs].offset = data->segment_start(aspi, reg_val) - aspi->ahb_base_phy;
-> @@ -572,7 +575,8 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
->  	if (op->data.dir != SPI_MEM_DATA_IN)
->  		return -EOPNOTSUPP;
->  
-> -	aspeed_spi_chip_adjust_window(chip, desc->info.offset, desc->info.length);
-> +	if (!aspi->fixed_windows)
-> +		aspeed_spi_chip_adjust_window(chip, desc->info.offset, desc->info.length);
->  
->  	if (desc->info.length > chip->ahb_window_size)
->  		dev_warn(aspi->dev, "CE%d window (%dMB) too small for mapping",
-> @@ -712,6 +716,61 @@ static void aspeed_spi_enable(struct aspeed_spi *aspi, bool enable)
->  		aspeed_spi_chip_enable(aspi, cs, enable);
->  }
->  
-> +static int aspeed_spi_chip_read_ranges(struct device_node *node, struct aspeed_spi *aspi)
-> +{
-> +	const char *range_prop = "ranges";
-> +	struct property *prop;
-> +	struct aspeed_spi_window ranges[ASPEED_SPI_MAX_NUM_CS];
-> +	int prop_size;
-> +	int count;
-> +	int ret;
-> +	int i;
-> +
-> +	prop = of_find_property(node, range_prop, &prop_size);
-> +	if (!prop)
-> +		return 0;
 
-Parsing common properties yourself is generally a bad sign.
-
-> +
-> +	count = prop_size / sizeof(*ranges);
-> +	if (count > aspi->data->max_cs) {
-> +		dev_err(aspi->dev, "invalid '%s' property %d\n", range_prop, count);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (count < aspi->data->max_cs)
-> +		dev_dbg(aspi->dev, "'%s' property does not cover all CE\n",
-> +			range_prop);
-> +
-> +	ret = of_property_read_u32_array(node, range_prop, (u32 *)ranges, count * 4);
-
-You've just gotten it horribly wrong because you ignored #size-cells and 
-#address-cells.
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
