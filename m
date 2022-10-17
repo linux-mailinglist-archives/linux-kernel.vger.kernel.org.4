@@ -2,106 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CC9601C31
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43697601C36
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiJQWRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 18:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S230027AbiJQWRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 18:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJQWRA (ORCPT
+        with ESMTP id S229984AbiJQWRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 18:17:00 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE83FD37
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:16:57 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id z18so8255005qvn.6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:16:57 -0700 (PDT)
+        Mon, 17 Oct 2022 18:17:52 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6156C6C96D
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:17:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id gf8so12219117pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:17:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r3644dTc+xjbxoWj65g6Y7XO7ILLSKyb7UOk2axF9K8=;
-        b=mNfTQl74nV8DrNWtE/kV/FjKtcTOx6hrdQgoCRRNhjEy+/o7gccT28ch4Z6gwumO6Z
-         rjT5u/CbfympIrBze62SNAjaUbJofWeLhc1UXVsJleU78pdEopxE7ZXvEQRMnvIBVDQn
-         wPnfR44pg0hE6XDb7uBOXR7RMv8Id9iIX2ZPt2Tairl90JvJ0A3ZGGMNql9/LA/j35tZ
-         Zk0hk4wqzQViuB4Xlk3ra4vo4EcwhFZ/vNUbMSZq1X2nmpGfuJGJKYTH0YGdW552jUcE
-         VeWQBzZitfeviiamdddZ1kLYq4syn5ED2ASn/+5TwF1R9WEl6UfUNblT8jV3xUQSjlpb
-         MIqw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TrR1U1OdGGBTNU+L/j5+q/HQQR5gcpgDZtfvTOOBt0M=;
+        b=Pa9UF6Hi2q1b744+/zFgnMjVA7j2pgI5ymLqfYIjscYUAYCF5ZXYRaOr8OH7B7Xd9F
+         /HznXiV0rMC5mH6t0PX9UTIUMnvfTMra5P8j8/Err3N0tWueZMfcGzGtxNdF72RRSt7o
+         NHpkNbOoj5ABhkcBEje6If6JGJVChr/yUqpTjUi6oHUQYtvQcn2Qq0A0mMJRwm7jwCpU
+         txbpSRtq6Deb3lMYIB2V2HXjwUD/dBV3FD8oYF4YSQczKnAO+mdCYqOZu/+92E+l+c3z
+         qnP5v2XAfcbbMH4rprLDtpkgxOqarwr2vDP6sOEKWp3p6bnA4ZtbMgRsXFz+JSka9OPZ
+         iKaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r3644dTc+xjbxoWj65g6Y7XO7ILLSKyb7UOk2axF9K8=;
-        b=Z60VQCrU85Qrc+cmJleip4s0LZ7zvgeCoV451y8O6f1+hDzCksda/29mu8PPRO/JfA
-         UO24t+xY9ZuhIclsaTaNjQxx0FXElzVxAw6AvZ2ivvmOz++297o5KNh6ejJiv+G8c6q8
-         6a5hwvsDE+s+GznYzDriuUUkyTuKGQ1hjIsy0WQxHX6Lymz8GScy9MJZFGah5gVMcZxa
-         Jo8Ey3Jwa8yXnojBK3+jex6bXkUUIosHJr2PV7gp39IhDDVRHbp5B/vEoEPVw1ib/mZl
-         u9xlNGjY1R6IodTWL2aAyEvLvrftjW8r2UfSm6hnpuyUg02LbvpOx/7yiw2G0+2XbZ9P
-         86Xw==
-X-Gm-Message-State: ACrzQf3xqSFzk+VgFr02l5zwP65KU8kmWwynBkRHYUovkY+PT8MLQlye
-        q5AUUlJcqIhZoIQ/czL7kCycLQ==
-X-Google-Smtp-Source: AMsMyM4CNOpDBG9+P8Moi+VDJvnMwS7CB1bTaxx1UF16HMWKglFBszmtA4MFoHKybPaYMLLXvpEI5A==
-X-Received: by 2002:ad4:4eec:0:b0:4b1:9859:b74b with SMTP id dv12-20020ad44eec000000b004b19859b74bmr9952835qvb.102.1666045016795;
-        Mon, 17 Oct 2022 15:16:56 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05620a0f0b00b006ecfb2c86d3sm796673qkl.130.2022.10.17.15.16.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 15:16:56 -0700 (PDT)
-Message-ID: <df73124c-f06b-2762-4ea3-8fbeb48148ad@linaro.org>
-Date:   Mon, 17 Oct 2022 18:16:55 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TrR1U1OdGGBTNU+L/j5+q/HQQR5gcpgDZtfvTOOBt0M=;
+        b=Unob49Lr6+7FsKg4vBa9leMZxp9FgDsuM/S4kYWHDmZl0h8iLuoeygUNMTpz3kZLLq
+         aZBo1rdxDFORP1LHSlZiMTazJ1jroEbKYj+vtpWrzjyEjB7QPI0OxquaAncTXZfga5jV
+         fq80mjFdbGE4gdanmlDidS/hnE8o5MtlW7IY6/NCOEHRrXcMn/K0rB9KBpPiWVUYXVl8
+         Sb3beutF86f/lfbxc7N676Q6aN56nSJCW0DJo3GJZvbc0IfDEdDe7STm01gasozrQcIV
+         x+BfExNt8C3aFdCV4Ko6HYK1UJ8eg/B1x+IdYJFJFDSe/WL8a8Hq1lXk/CNGWESoYPyq
+         PSKQ==
+X-Gm-Message-State: ACrzQf2oJRMteSwbngA84ulrR9vu/bFr8abWAA0TAq1TE1cM2xFQBB3s
+        leN3m2hC9/5c342M81LiRhchKQ==
+X-Google-Smtp-Source: AMsMyM5sOws5M1E82UjbITIFno8w/HG4mdjtUwGqdWDsxnzcg+d5uvozuCFcCUl9QhNTIh10tM+Etg==
+X-Received: by 2002:a17:903:1c2:b0:185:47ce:f4d2 with SMTP id e2-20020a17090301c200b0018547cef4d2mr14097565plh.101.1666045069741;
+        Mon, 17 Oct 2022 15:17:49 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p13-20020a17090a74cd00b0020ad46d277bsm9992889pjl.42.2022.10.17.15.17.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 15:17:49 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 22:17:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 5/8] KVM: Register/unregister the guest private memory
+ regions
+Message-ID: <Y03UiYYioV+FQIpx@google.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-6-chao.p.peng@linux.intel.com>
+ <CA+EHjTxukqBfaN6D+rPOiX83zkGknHEQ16J0k6GQSdL_-e9C6g@mail.gmail.com>
+ <20221012023516.GA3218049@chaop.bj.intel.com>
+ <CA+EHjTyGyGL+ox81=jdtoHERtHPV=P7wJub=3j7chdijyq-AgA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
- to dt-schema
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTyGyGL+ox81=jdtoHERtHPV=P7wJub=3j7chdijyq-AgA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 05:45, Neil Armstrong wrote:
-> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
-> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
+On Mon, Oct 17, 2022, Fuad Tabba wrote:
+> Hi,
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/input/qcom,pm8921-pwrkey.yaml         | 75 ++++++++++++++++++++++
->  .../bindings/input/qcom,pm8xxx-pwrkey.txt          | 46 -------------
->  2 files changed, 75 insertions(+), 46 deletions(-)
+> > > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > > > +#define KVM_MEM_ATTR_SHARED    0x0001
+> > > > +static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+> > > > +                                    bool is_private)
+> > > > +{
+> > >
+> > > I wonder if this ioctl should be implemented as an arch-specific
+> > > ioctl. In this patch it performs some actions that pKVM might not need
+> > > or might want to do differently.
+> >
+> > I think it's doable. We can provide the mem_attr_array kind thing in
+> > common code and let arch code decide to use it or not. Currently
+> > mem_attr_array is defined in the struct kvm, if those bytes are
+> > unnecessary for pKVM it can even be moved to arch definition, but that
+> > also loses the potential code sharing for confidential usages in other
+> > non-architectures, e.g. if ARM also supports such usage. Or it can be
+> > provided through a different CONFIG_ instead of
+> > CONFIG_HAVE_KVM_PRIVATE_MEM.
+> 
+> This sounds good. Thank you.
 
-Thanks for the changes.
+I like the idea of a separate Kconfig, e.g. CONFIG_KVM_GENERIC_PRIVATE_MEM or
+something.  I highly doubt there will be any non-x86 users for multiple years,
+if ever, but it would allow testing the private memory stuff on ARM (and any other
+non-x86 arch) without needing full pKVM support and with only minor KVM
+modifications, e.g. the x86 support[*] to test UPM without TDX is shaping up to be
+trivial.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+[*] https://lore.kernel.org/all/Y0mu1FKugNQG5T8K@google.com
