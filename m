@@ -2,191 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB33160159A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EF760159B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiJQRoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
+        id S229913AbiJQRoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiJQRn7 (ORCPT
+        with ESMTP id S229762AbiJQRoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:43:59 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C82673C06
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:43:53 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-356a9048111so115760157b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7tL4iHZcgAfm6m4eFT/wRjkCDpO+CYTn3CGNj+Lr9Y=;
-        b=sLc6qaMJaV75H51YmYYklched11hNG97Vf7CWqm9TMz70wa4lYR11PkBTz6szJHx6g
-         nNpzkz+p24x3hoIecPMfm1k+T78wjuTr20yrUmAZN27HN14Z2diougn222pAAqBhH+Uf
-         CApDD0YMg2+givSUalGe8kN9PebKaW8zhWp7ut5ESe4DKnilCvhZxryJWQsNlfcD+sz/
-         znRiFsG5loUuw666847sKfm1rTVLv4eAwD4AyBRdF2IXtK4u9OlhvI7y/j5fofw0dKvl
-         r56tzc9KCq87WXSnsJtYqGN96FABCs5NE8bvxDOzjeZjmpx364k1AF8owr5Fp+JT5LM+
-         wpjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7tL4iHZcgAfm6m4eFT/wRjkCDpO+CYTn3CGNj+Lr9Y=;
-        b=ypqK7s/rdiihhGDtj6A194se/jfNfaPYplyGdyFYU2HQH1rBdE8rp3Hn3k7M7e97un
-         TcDR23FB0pKss/JSL0ww3bUZ3FMTS8D5hrBefMmgcUEMVQSNOhac0+W//xtearVH4zEl
-         f83C1syWyxa9jpqgQar42VMxhPgJUUfmGLJ+MPK4py0dxljYIeFeEwq1QI4VHeXBNCxL
-         BdHZeoX3gVfncEqkjH+YkuwPgCBJjvznmfCQTV52QybH3Z3NRS3A8Aaeip43bAc7a2Ex
-         J/aGdRogglm+KtMA5Vqa/Uwmgo5Lw4BmLNKlgpsZYVC8mjdBSwq+ZZzjXiL9wasICsqT
-         KyuQ==
-X-Gm-Message-State: ACrzQf3+A1GplPbBndp3P99q4O5NzMNuUqTow3kjrcg9RqHp8ttKMb09
-        /QpLt6ORNZXHMdmXpPVun5vEMOI=
-X-Google-Smtp-Source: AMsMyM7nVUa8XHJpaKrYavgobpehZ9R1wZ1J9WTOC/gBX26M5PyLNUfpn/Tj1UQ0NDs7nq9C5s125NQ=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a81:1908:0:b0:33c:7394:9ee1 with SMTP id
- 8-20020a811908000000b0033c73949ee1mr10321282ywz.408.1666028632833; Mon, 17
- Oct 2022 10:43:52 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 10:43:51 -0700
-In-Reply-To: <CANp29Y5ZsUQ64iizRVQiuunGceH_gGTQbLrKRDZWYuSHRdazLQ@mail.gmail.com>
-Mime-Version: 1.0
-References: <00000000000068cb2905eb214e9a@google.com> <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
- <CANp29Y5ZsUQ64iizRVQiuunGceH_gGTQbLrKRDZWYuSHRdazLQ@mail.gmail.com>
-Message-ID: <Y02UV5XnsWo+Zd7q@google.com>
-Subject: Re: [syzbot] WARNING in btf_type_id_size
-From:   sdf@google.com
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 13:44:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7BC73913;
+        Mon, 17 Oct 2022 10:43:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCD42611EC;
+        Mon, 17 Oct 2022 17:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E83FC433D7;
+        Mon, 17 Oct 2022 17:43:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666028634;
+        bh=mlm9IawCUv6HCW+CtDSEE4DUxF4ycNCkp5t/60ov5ks=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rH6gqJ7gGnfHcA9f4RJyFi6GUm6w35nBRIbgq6Z59k3kPJWB/wacn25YApmKmSAtM
+         8i1NMsjU2TifnnkwPZ00/lt4UVfn4mDfFt+mlSKZN5iiXKlIx5OhkCuXBP0H/uB75s
+         W/q83Cet8180jYfhiH1dDdmNfwE/LIKOb+du7H/Eq/4iXl3STcK75Xk2b0H1qVGGqv
+         fW6tgFvKZeegeEbQcHwGxIyTFVKn2B3pQt7eVAT4Mh0qgdLtJErV5+d9CKvqU3oBLc
+         oxxfS2VreNkzuzAH9/78EuYXOO040WwQ+YkHULYILrt3mDbCF8d5y6e9hDCCAFMDtk
+         aYOfiOnxnCwoQ==
+Date:   Mon, 17 Oct 2022 18:44:19 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, lee.jones@linaro.org, sre@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org, lars@metafoo.de,
+        andy.shevchenko@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+        michael@walle.cc, samuel@sholland.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/13] Add support for AXP192 PMIC
+Message-ID: <20221017184419.62d365c1@jic23-huawei>
+In-Reply-To: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
+References: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17, Aleksandr Nogikh wrote:
-> Let's tell the bot about the fix
+On Mon, 17 Oct 2022 00:43:22 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-> #syz fix: bpf: prevent decl_tag from being referenced in func_proto
+> This series adds support for the AXP192 PMIC to the AXP20x MFD driver
+> framework, including support for regulators, ADCs, and AC/USB/battery
+> power supplies.
+> 
+> v6 is a resend of v5 from July -- the patches haven't changed at all
+> but I've rebased them on the latest git master branch.
 
-Thx! Wasn't sure syzkaller would accept that until the fix is actually
-pulled in.
+Hi Aidan,
 
-> On Mon, Oct 17, 2022 at 9:16 AM 'Stanislav Fomichev' via
-> syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
-> >
-> > On Sat, Oct 15, 2022 at 11:52 PM syzbot
-> > <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of  
-> git://git.kernel...
-> > > git tree:       bpf
-> > > console+strace:  
-> https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
-> > > kernel config:   
-> https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
-> > > dashboard link:  
-> https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU  
-> Binutils for Debian) 2.35.2
-> > > syz repro:       
-> https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
-> > > C reproducer:    
-> https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
-> > >
-> > > Downloadable assets:
-> > > disk image:  
-> https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
-> > > vmlinux:  
-> https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the  
-> commit:
-> > > Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946  
-> btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> > > Modules linked in:
-> > > CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted  
-> 6.0.0-syzkaller-02734-g0326074ff465 #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine,  
-> BIOS Google 09/22/2022
-> > > RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> > > Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d  
-> 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45  
-> 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
-> > > RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
-> > > RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> > > RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
-> > > RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
-> > > R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
-> > > R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
-> > > FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000)  
-> knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
-> > >  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
-> > >  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
-> > >  btf_parse kernel/bpf/btf.c:5026 [inline]
-> > >  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
-> > >  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
-> > >  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
-> > >  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
-> > >  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
-> > >  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > RIP: 0033:0x7f0fbae41c69
-> > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48  
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01  
-> f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> > > RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
-> > > RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
-> > > RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
-> > > R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
-> > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > >  </TASK>
-> >
-> > Will be addressed by
-> >  
-> https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
-> >
-> >
-> > > ---
-> > > This report is generated by a bot. It may contain errors.
-> > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > >
-> > > syzbot will keep track of this issue. See:
-> > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > syzbot can test patches for this issue, for details see:
-> > > https://goo.gl/tpsmEJ#testing-patches
-> >
-> > --
-> > You received this message because you are subscribed to the Google  
-> Groups "syzkaller-bugs" group.
-> > To unsubscribe from this group and stop receiving emails from it, send  
-> an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit  
-> https://groups.google.com/d/msgid/syzkaller-bugs/CAKH8qBu%2BoT%2BBF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w%40mail.gmail.com.
+Lee has recently expressed that he keen to take as much of these sorts
+of series as possible via the various subsystem trees.
+
+As such, it is useful to call out in the cover letter of such a series
+if this can be done.  For example, patch 9 (last IIO one) can't be
+applied without defines in patch 6 (I think).  Thus I'm assuming Lee
+will do an immutable branch with at least those patches on it.
+
+Perhaps worth expressing if that is also the case for the power
+and regulator subsystem patches?
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Aidan MacDonald (13):
+>   dt-bindings: mfd: add bindings for AXP192 MFD device
+>   dt-bindings: iio: adc: axp209: Add AXP192 compatible
+>   dt-bindings: power: supply: axp20x: Add AXP192 compatible
+>   dt-bindings: power: axp20x-battery: Add AXP192 compatible
+>   mfd: axp20x: Add support for AXP192
+>   regulator: axp20x: Add support for AXP192
+>   iio: adc: axp20x_adc: Minor code cleanups
+>   iio: adc: axp20x_adc: Replace adc_en2 flag with adc_en2_mask field
+>   iio: adc: axp20x_adc: Add support for AXP192
+>   power: supply: axp20x_usb_power: Add support for AXP192
+>   power: axp20x_battery: Add constant charge current table
+>   power: axp20x_battery: Support battery status without fuel gauge
+>   power: axp20x_battery: Add support for AXP192
+> 
+>  .../bindings/iio/adc/x-powers,axp209-adc.yaml |  18 +
+>  .../bindings/mfd/x-powers,axp152.yaml         |   1 +
+>  .../x-powers,axp20x-battery-power-supply.yaml |   1 +
+>  .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
+>  drivers/iio/adc/axp20x_adc.c                  | 356 ++++++++++++++++--
+>  drivers/mfd/axp20x-i2c.c                      |   2 +
+>  drivers/mfd/axp20x.c                          | 141 +++++++
+>  drivers/power/supply/axp20x_battery.c         | 142 ++++++-
+>  drivers/power/supply/axp20x_usb_power.c       |  84 ++++-
+>  drivers/regulator/axp20x-regulator.c          | 100 ++++-
+>  include/linux/mfd/axp20x.h                    |  84 +++++
+>  11 files changed, 856 insertions(+), 74 deletions(-)
+> 
+
