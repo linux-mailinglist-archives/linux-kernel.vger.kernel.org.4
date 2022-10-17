@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68E0601582
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A96C601583
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiJQRgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S230189AbiJQRh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiJQRgD (ORCPT
+        with ESMTP id S229797AbiJQRhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:36:03 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8706D54C;
-        Mon, 17 Oct 2022 10:36:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666028162; x=1697564162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/uKydgYhq3g5ftCl7FE1BcNYAbz9De0+pyZNa+RAaXk=;
-  b=FPnmt2qvwZwiX+VmdCDd52Fwn93hnZ+9HtZp1i44Kl8LxsxpWdkRWrI9
-   +p1mmKoAqqJgDFlOaXtS9xfaoct5djSEHjMJVSYw4vcdpiiJnBwb3IGVS
-   hLhJdRzgX9EHI+RSIvhN0oFgmnBJ7p/7iQfEaSVkGnrn//Sc1yt9XPRFz
-   lTbGMoflrdB88DXMDILjBgDhLS6smf/izsxwEAzaIVILC48RKEWhMzGId
-   AvxbHVQVm+NKo8+oEBg972fnV1r0XGVaPW0VjG+mpUH14UGnhGQGc93R1
-   06E28SSXn/FE/UI6FHktiNJlHrNV5VENZTKS7CxVScuWCV+thl/8ZohZJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="307527670"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="307527670"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:36:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="717577923"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="717577923"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Oct 2022 10:35:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1okU1u-008wcS-0J;
-        Mon, 17 Oct 2022 20:35:58 +0300
-Date:   Mon, 17 Oct 2022 20:35:57 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 6/6] spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
-Message-ID: <Y02SfXLJNNFAdPSR@smile.fi.intel.com>
-References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
- <20221017171243.57078-6-andriy.shevchenko@linux.intel.com>
- <Y02OuQVTxqm5mRtK@sirena.org.uk>
+        Mon, 17 Oct 2022 13:37:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECE56DAC5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:37:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FE88611EC
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:37:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951A5C43470;
+        Mon, 17 Oct 2022 17:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666028243;
+        bh=P21fPjXscYNZmWN0U3OwwfkLHI/4cWb2JN/05W4DDF0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=spiNhj3I7KQAHvGoOluT5cn9yHVDmqFXmE6bzbCS9580fKsZEGi/+Kf1MtC/JTjWW
+         RLLHVTuyGaZ9LCAA++262dxzhAIA5BbLL+66RUEJc7C6YazDWkmijVm81gEbwQ9KhW
+         kYh5jDp1mqtwW/8k6k88Dmn86+trxGAugds8i2WPmqb2obtMvSCXVmX4j/ZlGqK7n4
+         Rkqk6G6e31j7utGeGBhyslFVnsguAbTJMIFamos4muaQQAAguRfTonSkw6U6N87oib
+         16NU0tuSct27DuKcLT+HdoXdNceDFSZsvgLUhQTnQxXDNeqUbhVBZSmwCVK/2NX0LG
+         Oc72zqkXvd4VA==
+Date:   Mon, 17 Oct 2022 18:37:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     joel@jms.id.au, jk@ozlabs.org, alistair@popple.id.au,
+        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org
+Subject: Re: [PATCH 0/5] fsi: Add regmap and refactor sbefifo
+Message-ID: <Y02SztthO39FYIeu@sirena.org.uk>
+References: <20221014220540.55570-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="87y+PZY6GlQmpbhu"
 Content-Disposition: inline
-In-Reply-To: <Y02OuQVTxqm5mRtK@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221014220540.55570-1-eajames@linux.ibm.com>
+X-Cookie: Real Users hate Real Programmers.
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 06:19:53PM +0100, Mark Brown wrote:
-> On Mon, Oct 17, 2022 at 08:12:43PM +0300, Andy Shevchenko wrote:
-> 
-> > Cleaning up the driver to use pm_ptr() macro instead of ifdeffery
-> > that makes it simpler and allows the compiler to remove those functions
-> > if built without CONFIG_PM and CONFIG_PM_SLEEP support.
-> 
-> Are you sure this works cleanly and doesn't suffer from similar problems
-> to of_match_ptr() when PM is disabled, leaving some unreferenced statics?
 
-Yes, this is the trick with PTR_IF() behind it, which is not used by OF code.
+--87y+PZY6GlQmpbhu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Fri, Oct 14, 2022 at 05:05:35PM -0500, Eddie James wrote:
+> The SBEFIFO hardware can now be attached over a new I2C endpoint
+> interface called the I2C Responder (I2CR). In order to use the
+> existing SBEFIFO driver, add regmap drivers for both FSI busses
+> and the I2CR. Then, refactor the SBEFIFO and OCC drivers to clean
+> up and use the new regmap drivers.
 
+Is there any great reason to provide support in the regmap core for this
+rather than just implementing in drivers/fsi?  AFAICT this is just
+ending up as an implementation detail of shared code in drivers/fsi and
+won't have any external users?
 
+--87y+PZY6GlQmpbhu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNNks0ACgkQJNaLcl1U
+h9Duzgf/fupDXVRfwEFVbuPavfOcttUn/fRBk4JS/3Loa9jnKNweZJL+ygH0T5MF
+wNH3E30mUifUbcJ8TuUnnQqn8NWNjPkMGod/Nj2tTyjjyMFoZ+7dfYZFbLWlFhW/
+M2htzpN6nkARptmS/HbgOsm3fbxiok7/1BrsXLgHxYmp4Rev0SBGTySFfgMyN8o2
+01eLgDtc4A/rDZGQIp7fzmMX5ITwuaTjN0Wuk1y3EBCcnyiIFBqPgdyy8yt+b9ID
+LLPIa9u4jdZjIjHL0Lbqi03+/HggHDX3gQ6OMnZGMa7E5CYncn7BXgE9vbPDGAjl
+t1mrjvrf+oYExkodMrClNXiQBKsTQw==
+=2ZRA
+-----END PGP SIGNATURE-----
+
+--87y+PZY6GlQmpbhu--
