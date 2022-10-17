@@ -2,186 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172026007C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75F76007C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiJQHhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S229916AbiJQHix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiJQHhn (ORCPT
+        with ESMTP id S229898AbiJQHiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:37:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A35A3DE
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:37:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D32E1B80F52
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 734B6C433D7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665992249;
-        bh=+5A1av+6MnMOMcMrSEXVxrOm6Gs3Za7niSjGLgaRaoA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aTKhrFZRJllPH5LJZnPbhwVrb3NyyPV16YWHpco4uplbVb77Q9b9SmBLy60I8AqqK
-         f23O7tGvxDEbgxqlB1bi3Wa4y4nYDonf0git3ImYxxf7Y2Tbj+SKcf0ht70dlu9zcU
-         8G+7hVyPV41SQIhM6jfv6Er3PnY3yWLky7TMyhC8kRUnicow4486zgyn0VKZzdgClu
-         XOP+FDw2gHpRnqj/yhraIfcOz3b7zmUsBeaIlivlxfo/VECXZw+yAzJQOtyuZNoO1W
-         o8rQV8W3lNN4LauJqlV03TXM6MEEZMCNvDhKGDxOr2NzD8SKINKdIr3Y+yEmf7s8j1
-         a9zgPdjx+mFzA==
-Received: by mail-ed1-f51.google.com with SMTP id m16so14784936edc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:37:29 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0G01//r6XZNTgaGli7cE/w0O6mqaj35FWQPRnlivVtMeN+8stZ
-        Ls8BhRREnv0m3rD+kYNoN3yl92bTcvQvBu7tEDg=
-X-Google-Smtp-Source: AMsMyM4f4vwixo4JyVz7ksqp1i8sB0ECUqnrO8JC8nLqKPuUwCS+N5Ao4ZAhXJh/30TDBqiHpEZl8nUhVbn7kjxV/8A=
-X-Received: by 2002:aa7:d4d9:0:b0:45c:7eae:d8d8 with SMTP id
- t25-20020aa7d4d9000000b0045c7eaed8d8mr9113622edr.254.1665992247623; Mon, 17
- Oct 2022 00:37:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221017022330.2383060-1-chenhuacai@loongson.cn> <67d9acd0-692f-95d4-2c92-4e43e1d0100c@loongson.cn>
-In-Reply-To: <67d9acd0-692f-95d4-2c92-4e43e1d0100c@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 17 Oct 2022 15:37:15 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H54TeCwuUu+pGyGUDgy3_k1eCA1hX56-ZrTuk2_WRiFxQ@mail.gmail.com>
-Message-ID: <CAAhV-H54TeCwuUu+pGyGUDgy3_k1eCA1hX56-ZrTuk2_WRiFxQ@mail.gmail.com>
-Subject: Re: [PATCH V2] LoongArch: Add unaligned access support
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Mon, 17 Oct 2022 03:38:50 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210215A3EE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:38:49 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 0BC38320090B;
+        Mon, 17 Oct 2022 03:38:47 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 17 Oct 2022 03:38:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665992327; x=1666078727; bh=zbjFXoy9ah
+        NSpk7XfIRFOe6vIEM/swg042Zyz7dwIhc=; b=STyWlc5pFOLM4Fqu7Qsbcu8XpO
+        J3iw3DP6idXN3jEIXxRbe2lS2MhA0LHDX7HzN404PTmEYKnnW5YSQ+itreGF6msA
+        H9zX+uSuDrTS7BuwStw52gcIQ1aOg0Zsxn0yqTndNey7OMTFgg65uC2BH/huMNpE
+        DgiTfEa6T8NKAiLejxDmVx6EOW5GkweiJbbf6oOPJfJnTZgZaBAOLq6Myu+6rjeE
+        MXVFnhOawO/WLvWNd3Df1U6FNkMwNymB8grdyj42ywWvkRA64dYTl3zkkxBczGSq
+        k7F8AZFfNLLyCPHFPbxEpK+1h/fByXivj1thkhwY5WAgFcPh5JuFkTGL58Ug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665992327; x=1666078727; bh=zbjFXoy9ahNSpk7XfIRFOe6vIEM/
+        swg042Zyz7dwIhc=; b=Qd6SvW9zmWEnD4/tbkg1fmUUJbeyZ0+wxvnl7RFFJRu0
+        sP/AEYdF9tHwSpnjtSj/gyHmGfPMnJxWlZDlkVCRp4ZDw2MR/ldfG9P7+RMK96Of
+        pL8Kg0ApG2Sr9PdNLI1kvFYzOU0iyAKpzS/oSTvwc97Ss+9RsJP9hbnxm42GBS3c
+        U4Cnb/mhjTkthnKQ4f6YvQ0VkRqCN54SjhiSeObeLftGVAbqJH2kGUeNeDQ2Hbsa
+        YWGpxKCyjbjQEuJSWIJ1hVEtO8L1csy28O1+u4D5Prg36O4fsmLHGyvzLZJ5tX5b
+        wbpviAYIXyLU/xISPCuthPIGjlFGimzY7oarEg5Aqw==
+X-ME-Sender: <xms:hgZNY9aljrTYGbBmXrU8RwloaMEYsC68mdoRygmLxF6_pZawXO4gIg>
+    <xme:hgZNY0b8-Ma-UOtakjC9p3DwOeuS7OaBESd9A84WLCBXjUY2qwkxQvp1_rSZ0yS9f
+    1UgEGm0ptJpjVTESi0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekkedguddvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:hgZNY_-lkqYQgEuc66qA-YU1ROc6sJQ3oL2SQQrhleivXTn1JQb3aA>
+    <xmx:hgZNY7ozixs8t7140FcbwDRoP5Sf6OVsBRr-RZ_ts6jhKekj6OVslQ>
+    <xmx:hgZNY4rmeQLBW_4O68jS0Sjw0RmbomLKXLRpFOxGRwdkm3Wb3jp71A>
+    <xmx:hwZNY5cs6QU8SMXIQH-gJamvoY7exltZ_lWEh8WZIvflqSIeNzPJAQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B9A7DB60086; Mon, 17 Oct 2022 03:38:46 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <b97afda4-143c-46d2-a6af-dd6a700472ec@app.fastmail.com>
+In-Reply-To: <CAAhV-H7UJDgtY4NfF7-5+TbNEbec7XOpvS87H=fPad4KK0KLaw@mail.gmail.com>
+References: <20221016133418.2122777-1-chenhuacai@loongson.cn>
+ <506fe4e5-a203-48e6-84a6-f70133be15dd@app.fastmail.com>
+ <CAAhV-H7UJDgtY4NfF7-5+TbNEbec7XOpvS87H=fPad4KK0KLaw@mail.gmail.com>
+Date:   Mon, 17 Oct 2022 09:38:26 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     "Huacai Chen" <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>, guoren <guoren@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] LoongArch: Add unaligned access support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jinyang,
+On Mon, Oct 17, 2022, at 9:31 AM, Huacai Chen wrote:
+> Hi, Arnd,
+>
+> On Mon, Oct 17, 2022 at 3:12 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Sun, Oct 16, 2022, at 3:34 PM, Huacai Chen wrote:
+>> > Loongson-2 series (Loongson-2K500, Loongson-2K1000) don't support
+>> > unaligned access in hardware, while Loongson-3 series (Loongson-3A5000,
+>> > Loongson-3C5000) are configurable whether support unaligned access in
+>> > hardware. This patch add unaligned access emulation for those LoongArch
+>> > processors without hardware support.
+>> >
+>> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>>
+>> What does the Loongarch ELF ABI say about this? On most architectures,
+>> C compilers are not allowed to produce unaligned accesses for standard
+>> compliant source code, the only way you'd get this is when casting
+>> a an unaligned (e.g. char*) pointer to another type with higher alignment
+>> requirement.
+> Some unaligned accesses are observed from the kernel network stack, it
+> seems related to whether the packet aligns to IP header or MAC header.
 
-On Mon, Oct 17, 2022 at 12:22 PM Jinyang He <hejinyang@loongson.cn> wrote:
->
-> Hi, Huacai,
->
->
-> On 2022/10/17 =E4=B8=8A=E5=8D=8810:23, Huacai Chen wrote:
-> > [...]
-> > +     default:
-> > +             panic("unexpected fd '%d'", fd);
-> Due to the optimization of gcc, the panic() is unused actually and leave
-> the symbol 'read/write_fpr' in vmlinux. Maybe we can use unreachable() an=
-d
->
-> always_inline.
-Seems impossible, I have tried __always_inline() and BUILD_BUG(), then
-BUILD_BUG() is triggered, because the reg-number is not a compile time
-constant.
+This is usually a bug in the device driver. It's a fairly common bug
+since the network driver has to ensure the alignment is correct, but
+it's usually fixable, and fixing it results in better performance on
+machines that support unaligned access as well.
 
->
-> > [...]
-> > +
-> > +fault:
-> > +     /* roll back jump/branch */
-> > +     regs->csr_era =3D origpc;
-> > +     regs->regs[1] =3D origra;
->
-> I'm not sure where the csr_era and regs[1] was damaged...
-Yes, seems not be damaged.
+Which driver did you observe this with?
 
->
-> > [...]
-> >
-> > +/*
-> > + * unsigned long unaligned_read(void *addr, void *value, unsigned long=
- n, bool sign)
-> > + *
-> > + * a0: addr
-> > + * a1: value
-> > + * a2: n
-> > + * a3: sign
-> > + */
-> > +SYM_FUNC_START(unaligned_read)
-> > +     beqz    a2, 5f
-> > +
-> > +     li.w    t1, 8
-> IMHO we can avoid the constant reg t1.
-OK, thanks.
+> And, gcc has a -mstrict-align parameter, if without this, there are
+> unaligned instructions.
 
-> > +     li.w    t2, 0
-> > +
-> > +     addi.d  t0, a2, -1
-> > +     mul.d   t1, t0, t1
-> > +     add.d   a0, a0, t0
-> > +
-> > +     beq     a3, zero, 2f
-> beqz
-OK, thanks.
+Does this default to strict or non-strict mode? Usually gcc does not
+allow to turn this off on architectures that have no hardware support
+for unaligned access.
 
-> > +1:   ld.b    t3, a0, 0
-> > +     b       3f
-> > +
-> > +2:   ld.bu   t3, a0, 0
-> > +3:   sll.d   t3, t3, t1
-> > +     or      t2, t2, t3
-> > +     addi.d  t1, t1, -8
-> > +     addi.d  a0, a0, -1
-> > +     addi.d  a2, a2, -1
-> > +     bgt     a2, zero, 2b
-> bgtz
-> > +4:   st.d    t2, a1, 0
-> > +
-> > +     move    a0, a2
-> > +     jr      ra
-> > +
-> > +5:   li.w    a0, -EFAULT
-> > +     jr      ra
-> > +
-> > +     fixup_ex 1, 6, 1
-> > +     fixup_ex 2, 6, 0
-> > +     fixup_ex 4, 6, 0
-> > +SYM_FUNC_END(unaligned_read)
-> > +
-> > +/*
-> > + * unsigned long unaligned_write(void *addr, unsigned long value, unsi=
-gned long n)
-> > + *
-> > + * a0: addr
-> > + * a1: value
-> > + * a2: n
-> > + */
-> > +SYM_FUNC_START(unaligned_write)
-> > +     beqz    a2, 3f
-> > +
-> > +     li.w    t0, 0
-> > +1:   srl.d   t1, a1, t0
-> > +2:   st.b    t1, a0, 0
-> > +     addi.d  t0, t0, 8
-> > +     addi.d  a2, a2, -1
-> > +     addi.d  a0, a0, 1
-> > +     bgt     a2, zero, 1b
-> bgtz
-OK, thanks.
+>> > +/* sysctl hooks */
+>> > +int unaligned_enabled __read_mostly = 1;     /* Enabled by default */
+>> > +int no_unaligned_warning __read_mostly = 1;  /* Only 1 warning by default */
+>>
+>> The comment says 'sysctl', the implementation has a debugfs interface.
+> Originally "enabled", "warning" and "counters" are all debugfs
+> interfaces, then you told me to use sysctl. Now in this version
+> "enabled" and "warning" are converted to sysctl, but there are no
+> existing "counters" sysctl.
 
-> > +
-> > +     move    a0, a2
-> > +     jr      ra
-> > +
-> > +3:   li.w    a0, -EFAULT
-> > +     jr      ra
-> > +
-> > +     fixup_ex 2, 4, 1
-> > +SYM_FUNC_END(unaligned_write)
->
-> Thanks,
->
-> Jinyang
->
+I don't see the sysctl interface in the patch, what am I missing?
+
+      Arnd
