@@ -2,215 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E7C600EC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 14:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F887600EEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 14:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiJQMPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 08:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        id S230163AbiJQMQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 08:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiJQMPN (ORCPT
+        with ESMTP id S230387AbiJQMQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 08:15:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1001F27CC4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:14:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FDC66110F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:14:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E03C433D6;
-        Mon, 17 Oct 2022 12:14:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666008890;
-        bh=jIjZUXmNnSsrYzF+LkNo9322ZJPJnyhB/ZCFQbJbGB4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=C6W9mLuHghjwnyFNKsx3ixYVagjJ8SFMNim6fd1zDvI4VyjU/QISsin8RUm9kKDtR
-         TAOYd3BFjyWJMaCtrXOc2pYRGH8163aa1RGoEELp6mEVm2FaDOC8hsjwZchg7Eb4OG
-         KcgK24q+xExqO+Vwi2wbnonlqZKfoH78E6SD496HYzoKjS7HYCjY4wG/RxuJ/R69W7
-         iTxmQMyASseHs9hwQaUxQQ437Av5gs/ia2KnWag3gzftx8TnT/LHkjp2u7XLESE5VN
-         OitX39znGOCB57+p+7pmrMAA5GzfNtWZ6zHI1ggVg9J+VNZnQ6MOrghT7kwjZ1HjZy
-         psfLlC3VyClhA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 57F41403B6; Mon, 17 Oct 2022 09:14:47 -0300 (-03)
-Date:   Mon, 17 Oct 2022 09:14:47 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: [PATCH 1/1 FYI] tools headers UAPI: Sync powerpc syscall tables with
- the kernel sources
-Message-ID: <Y01HN2DGkWz8tC/J@kernel.org>
+        Mon, 17 Oct 2022 08:16:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0942C5F7C7;
+        Mon, 17 Oct 2022 05:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666008972; x=1697544972;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=uFcYUnvzlxFjwIdcINvXB3Xlr7FvW5/0qcQpjBQOg6A=;
+  b=BtWuh28OVuoqujWFtmN3Aaj1EBeNXGiniivlELGTxg+lmOL7GTzErRgI
+   YEKDqE8qBYk+SHX6XGPoFVAoTQZbk1czajU6oRhUP3WdKXCClYZ15xdKN
+   7ERlei4AjZhNtHsSd4uzy6uZIAbWTGDieB2IT/84tnX4fd751wZv9s3l1
+   Sa2Y+ByVlMuJ/a6M68g2SsC1EnvETZQ3dAkNzJWgxe4qDtBSeRhB/3Wlm
+   ZSpNdy0aQ1kWysh7E48elo9x3bQNaU6Az16YxMU22DRS2MzwVNB7dzvqp
+   7No4gfaxN6qZYf8FCqsVQEyTYGfYAxL2wq5repMJQaJ9144EHztyaLycr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="304522109"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="304522109"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 05:15:55 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="659329582"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="659329582"
+Received: from ohoehne-mobl4.ger.corp.intel.com ([10.251.213.173])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 05:15:53 -0700
+Date:   Mon, 17 Oct 2022 15:15:50 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: 8250_omap: remove wait loop from Errata i202
+ workaround
+In-Reply-To: <Y00bmec4hvWxtnB5@linutronix.de>
+Message-ID: <c91216ec-c7e7-df7b-463-ec17c76b7bc2@linux.intel.com>
+References: <20221013112339.2540767-1-matthias.schiffer@ew.tq-group.com> <ea90b0ba-61bf-e56e-5120-9771122838cf@linux.intel.com> <Y00bmec4hvWxtnB5@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-2074611745-1665999067=:5493"
+Content-ID: <b867c7f5-9697-77c8-5411-c17c257debe@linux.intel.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-- Arnaldo
+--8323329-2074611745-1665999067=:5493
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <53c25a32-29f2-3144-5a56-f83eba10af72@linux.intel.com>
 
-Full explanation:
+On Mon, 17 Oct 2022, Sebastian Andrzej Siewior wrote:
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+> On 2022-10-17 11:12:41 [+0300], Ilpo Järvinen wrote:
+> > On Thu, 13 Oct 2022, Matthias Schiffer wrote:
+> > 
+> > > We were occasionally seeing the "Errata i202: timedout" on an AM335x
+> > > board when repeatedly opening and closing a UART connected to an active
+> > > sender. As new input may arrive at any time, it is possible to miss the
+> > > "RX FIFO empty" condition, forcing the loop to wait until it times out.
+> > 
+> > I can see this problem could occur and why your patch fixes it.
+> > 
+> > > Nothing in the i202 Advisory states that such a wait is even necessary;
+> > > other FIFO clear functions like serial8250_clear_fifos() do not wait
+> > > either. For this reason, it seems safe to remove the wait, fixing the
+> > > mentioned issue.
+> > 
+> > Checking the commit that added this driver and the loop along with it, 
+> > there was no information why it would be needed there either.
+> 
+> I don't remember all the details but I do remember that I never hit it.
+> The idea back then was to document what appears the problem and then
+> once there is a reproducer address it _or_ when there is another problem
+> check if it aligns with the output here (so that _this_ problem's origin
+> could be this). This was part of address all known chip erratas and
+> copied from omap-serial at the time so that the 8250 does not miss
+> anything.
+> Looking closer, this is still part of the omap-serial driver and it was
+> introduced in commit
+>    0003450964357 ("omap2/3/4: serial: errata i202: fix for MDR1 access")
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+I found that one too but it doesn't give any explanation for it either.
+In fact, the wait for empty is mysteriously missing from the itemized
+description of the workaround in the commit message.
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
+> If someone found a way to trigger this output which is unrelated to the
+> expected cause then this is clearly not helping nor intended.
+> 
+> I would prefer to keep the loop and replace the disturbing output with a
+> comment describing _why_ the FIFO might remain non-empty after a flush.
+> 
+> In worst cases that loop causes a delay of less than 0.5ms while setting
+> a baud rate so I doubt that this is causing a real problem.
+> 
+> Either way I would like to see Tony's ACK before this is getting removed
+> as suggested in this patch.
 
-E.g.:
+Thanks for chimming in.
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
+I went to do some lore searching and came across this thread (it should 
+be added with Link: tag the patch regardless of its final form):
+  https://lore.kernel.org/linux-omap/4BBF61FE.3060807@ti.com/
 
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
 
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick the changes in these csets:
-
-  e237506238352f3b ("powerpc/32: fix syscall wrappers with 64-bit arguments of unaligned register-pairs")
-
-That doesn't cause any changes in the perf tools.
-
-As a reminder, this table is used in tools perf to allow features such as:
-
-  [root@five ~]# perf trace -e set_mempolicy_home_node
-  ^C[root@five ~]#
-  [root@five ~]# perf trace -v -e set_mempolicy_home_node
-  Using CPUID AuthenticAMD-25-21-0
-  event qualifier tracepoint filter: (common_pid != 253729 && common_pid != 3585) && (id == 450)
-  mmap size 528384B
-  ^C[root@five ~]
-  [root@five ~]# perf trace -v -e set*  --max-events 5
-  Using CPUID AuthenticAMD-25-21-0
-  event qualifier tracepoint filter: (common_pid != 253734 && common_pid != 3585) && (id == 38 || id == 54 || id == 105 || id == 106 || id == 109 || id == 112 || id == 113 || id == 114 || id == 116 || id == 117 || id == 119 || id == 122 || id == 123 || id == 141 || id == 160 || id == 164 || id == 170 || id == 171 || id == 188 || id == 205 || id == 218 || id == 238 || id == 273 || id == 308 || id == 450)
-  mmap size 528384B
-       0.000 ( 0.008 ms): bash/253735 setpgid(pid: 253735 (bash), pgid: 253735 (bash))      = 0
-    6849.011 ( 0.008 ms): bash/16046 setpgid(pid: 253736 (bash), pgid: 253736 (bash))       = 0
-    6849.080 ( 0.005 ms): bash/253736 setpgid(pid: 253736 (bash), pgid: 253736 (bash))      = 0
-    7437.718 ( 0.009 ms): gnome-shell/253737 set_robust_list(head: 0x7f34b527e920, len: 24) = 0
-   13445.986 ( 0.010 ms): bash/16046 setpgid(pid: 253738 (bash), pgid: 253738 (bash))       = 0
-  [root@five ~]#
-
-That is the filter expression attached to the raw_syscalls:sys_{enter,exit}
-tracepoints.
-
-  $ find tools/perf/arch/ -name "syscall*tbl" | xargs grep -w set_mempolicy_home_node
-  tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl:450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-  tools/perf/arch/powerpc/entry/syscalls/syscall.tbl:450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
-  tools/perf/arch/s390/entry/syscalls/syscall.tbl:450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
-  tools/perf/arch/x86/entry/syscalls/syscall_64.tbl:450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
-  $
-
-  $ grep -w set_mempolicy_home_node /tmp/build/perf/arch/x86/include/generated/asm/syscalls_64.c
-	[450] = "set_mempolicy_home_node",
-  $
-
-This addresses these perf build warnings:
-
-  Warning: Kernel ABI header at 'tools/include/uapi/asm-generic/unistd.h' differs from latest version at 'include/uapi/asm-generic/unistd.h'
-  diff -u tools/include/uapi/asm-generic/unistd.h include/uapi/asm-generic/unistd.h
-  Warning: Kernel ABI header at 'tools/perf/arch/x86/entry/syscalls/syscall_64.tbl' differs from latest version at 'arch/x86/entry/syscalls/syscall_64.tbl'
-  diff -u tools/perf/arch/x86/entry/syscalls/syscall_64.tbl arch/x86/entry/syscalls/syscall_64.tbl
-  Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/syscall.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/syscall.tbl'
-  diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
-  Warning: Kernel ABI header at 'tools/perf/arch/s390/entry/syscalls/syscall.tbl' differs from latest version at 'arch/s390/kernel/syscalls/syscall.tbl'
-  diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
-  Warning: Kernel ABI header at 'tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl' differs from latest version at 'arch/mips/kernel/syscalls/syscall_n64.tbl'
-  diff -u tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Link: http://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- .../perf/arch/powerpc/entry/syscalls/syscall.tbl | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-index 2bca64f96164af9d..e9e0df4f9a61a494 100644
---- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-+++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
-@@ -228,8 +228,10 @@
- 176	64	rt_sigtimedwait			sys_rt_sigtimedwait
- 177	nospu 	rt_sigqueueinfo			sys_rt_sigqueueinfo		compat_sys_rt_sigqueueinfo
- 178	nospu 	rt_sigsuspend			sys_rt_sigsuspend		compat_sys_rt_sigsuspend
--179	common	pread64				sys_pread64			compat_sys_ppc_pread64
--180	common	pwrite64			sys_pwrite64			compat_sys_ppc_pwrite64
-+179	32	pread64				sys_ppc_pread64			compat_sys_ppc_pread64
-+179	64	pread64				sys_pread64
-+180	32	pwrite64			sys_ppc_pwrite64		compat_sys_ppc_pwrite64
-+180	64	pwrite64			sys_pwrite64
- 181	common	chown				sys_chown
- 182	common	getcwd				sys_getcwd
- 183	common	capget				sys_capget
-@@ -242,10 +244,11 @@
- 188	common 	putpmsg				sys_ni_syscall
- 189	nospu	vfork				sys_vfork
- 190	common	ugetrlimit			sys_getrlimit			compat_sys_getrlimit
--191	common	readahead			sys_readahead			compat_sys_ppc_readahead
-+191	32	readahead			sys_ppc_readahead		compat_sys_ppc_readahead
-+191	64	readahead			sys_readahead
- 192	32	mmap2				sys_mmap2			compat_sys_mmap2
--193	32	truncate64			sys_truncate64			compat_sys_ppc_truncate64
--194	32	ftruncate64			sys_ftruncate64			compat_sys_ppc_ftruncate64
-+193	32	truncate64			sys_ppc_truncate64		compat_sys_ppc_truncate64
-+194	32	ftruncate64			sys_ppc_ftruncate64		compat_sys_ppc_ftruncate64
- 195	32	stat64				sys_stat64
- 196	32	lstat64				sys_lstat64
- 197	32	fstat64				sys_fstat64
-@@ -288,7 +291,8 @@
- 230	common	io_submit			sys_io_submit			compat_sys_io_submit
- 231	common	io_cancel			sys_io_cancel
- 232	nospu	set_tid_address			sys_set_tid_address
--233	common	fadvise64			sys_fadvise64			compat_sys_ppc32_fadvise64
-+233	32	fadvise64			sys_ppc32_fadvise64		compat_sys_ppc32_fadvise64
-+233	64	fadvise64			sys_fadvise64
- 234	nospu	exit_group			sys_exit_group
- 235	nospu	lookup_dcookie			sys_lookup_dcookie		compat_sys_lookup_dcookie
- 236	common	epoll_create			sys_epoll_create
 -- 
-2.37.3
-
+ i.
+--8323329-2074611745-1665999067=:5493--
