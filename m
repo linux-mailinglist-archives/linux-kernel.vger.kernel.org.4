@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC6D601910
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1631B601919
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiJQUMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S231339AbiJQUMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiJQULl (ORCPT
+        with ESMTP id S230428AbiJQUL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:11:41 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1005F7C1C8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:10:48 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id m6so7398309qkm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:10:48 -0700 (PDT)
+        Mon, 17 Oct 2022 16:11:57 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6097C75A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:10:56 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id hh9so8448692qtb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ya6LAWLtRvqptDBCQ8DGih3wiij3R/MTT1Zh02VMOsA=;
-        b=JyxIybLBqYhYiLzUV1JMmLdM+x55cQn0UDuG1o77mOPkQrxGuc6I3FqKZeSf9X2hs/
-         CwlcIQsUdijKpd9TTF07+BSxHcyFVe3PoMCim8qZgVDI2RiQdWpW/7WxS0qeqMX3sXPN
-         gFnvFE80TlmvTXC6cviNUST1kjYkvBJz2hgnl/6g/hInv6pk2oApwsUhIWAbhCyu3xag
-         87j95GVU7uu/sbJTKvStNfW1nkQ3EMEiRH8qbps2JKKQbp38NhR+WK29LfNaG/wanYvC
-         p+Sv49abQYSgc97dPXy9/Kdui+8ELR9eqrofqSSp2sJhbM6gB8L6ZY1qUnuozU9Ct9bu
-         bGqw==
+        bh=Uy2CqhbAs+lw5/HwT2HDKC/bvqHfWj6CLYVAmg5gg2w=;
+        b=RB3jVkumYiI0YxuvBZFxKvBld8pKOcnxY+kHN55fw5lSaKlsUbb17FBKZrAFXmvRlM
+         L7Af6QEZDGdtPZnuhIrMDm45DpaMV18z3X5C3GJKshXc2Ag74XZK4NeHAtwrkNVBnZzc
+         Rl+YYXGePobRHyyobS1ajNatNUyIRJ/BAB0nyc6Nnf1jOfQpiHUkPzol8//2i2D1F8b9
+         iBb5RwMui2fp1ufsB1XgTc6SgWs5i0NkntUa7vP+cgdub2mrHKReGK2VJK+5KLBl5h5s
+         O3knoEaqu+uRVS4TLNRVArqw7tbHfG/Ftr4PUsCqSmDYAB6bNp0yQESRJ1HdBd5p8e7t
+         oOUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ya6LAWLtRvqptDBCQ8DGih3wiij3R/MTT1Zh02VMOsA=;
-        b=emkHzCGInSU0vsrkgzu49i9by0XiKaKwJcyEUQuzwc5cnEJjun/eL+SFjQwfh7IeN3
-         JOIkreKJN4qFmKSbgIOejwEjmvTsACcEo3S9+tSNLpDTxqW9Yi6b0ASDxb1w9y+wXeGX
-         JhZKgFO9idKJcjhTl3TC0H/mf8GXcIP/eG8myBs0ypZGywPoEWQfmk48lTB6vns/BXjf
-         ZM943zHLRUsB3KIR3tk+hzfdfF7ZMMPuH6lGmCJtGSPmyznBU0x1A6mJHVKPo2ChdZSo
-         zU2UgVSdpfOSxydw1wvVRoZbAh7T1p4Yh6YobJ/kdazDMIJ5tpO4slmEzw6sGBFfC7Cn
-         mcug==
-X-Gm-Message-State: ACrzQf3yRN6hfL9+lWP1OOOtzZ92Tu5lITnWqI0QSJr7ckNvjCECN6CU
-        rdwNVyAClfD0yDyMVGvRRI9V5g==
-X-Google-Smtp-Source: AMsMyM4VDAEeETLoRqdKOReEFDlCs1xsXromKeNjZxNb82sXSSTfoBNG/FKn8ENwm2OjBkg97YfgRg==
-X-Received: by 2002:a05:620a:458e:b0:6ee:cd9a:212c with SMTP id bp14-20020a05620a458e00b006eecd9a212cmr9127798qkb.775.1666037371439;
-        Mon, 17 Oct 2022 13:09:31 -0700 (PDT)
+        bh=Uy2CqhbAs+lw5/HwT2HDKC/bvqHfWj6CLYVAmg5gg2w=;
+        b=GF76/38khEbM0xeXi7GCLAbNl6CwwNi3w6r0e0mw7N0PMgg6xgMrh8NbR8o5BPWwlX
+         qB2ODS2VLyUag3wuL2v46ycnAbsgGVGcNzfFhrujGMKdRQlJGsF1FDMLW2esgWyTqSxX
+         XlMARjz/gkZ0DL8Hba7sDOmEMMj/5tFvbEhemZP2ceWcVbjtN8JYsMDK+/GBvh5uFS6B
+         /MduQckRCowkJI8q+IigOq0qUyXWkRUvkftY+Jk0jKGESdMWEC1NwklyZ+SisKukqYtL
+         GW3bdMERBVBpYWcb8ACUY6xUcGE3JMm3lojnTIRCP8upacZc3Aqtg8oZFB0m40nIvo2O
+         Y0LA==
+X-Gm-Message-State: ACrzQf2tVzLGedpUyLDfmZU8r+7R70MW205RYb6UFCXaTXbZluBWcuCh
+        5LiuIVzYLpEgjScuRpOHdb3Jxg==
+X-Google-Smtp-Source: AMsMyM5Ig0elKD4YWbaJXabso5ujjQjkVcHrqOJWLmltOn2/YjaSD4tApU754nRE12Xx6V4KDqk2HQ==
+X-Received: by 2002:a05:622a:18a:b0:39a:ffaf:6c9d with SMTP id s10-20020a05622a018a00b0039affaf6c9dmr10010578qtw.253.1666037373621;
+        Mon, 17 Oct 2022 13:09:33 -0700 (PDT)
 Received: from localhost.localdomain (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id m13-20020a05620a24cd00b006ce76811a07sm536793qkn.75.2022.10.17.13.09.29
+        by smtp.gmail.com with ESMTPSA id m13-20020a05620a24cd00b006ce76811a07sm536793qkn.75.2022.10.17.13.09.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 13:09:30 -0700 (PDT)
+        Mon, 17 Oct 2022 13:09:32 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawn.guo@linaro.org>,
         Andy Gross <agross@kernel.org>, linux-gpio@vger.kernel.org,
@@ -64,12 +64,12 @@ To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawn.guo@linaro.org>,
         devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Rob Herring <robh@kernel.org>
-Subject: Re: (subset) [PATCH v5 31/34] dt-bindings: pinctrl: qcom,sdx65: fix matching pin config
-Date:   Mon, 17 Oct 2022 16:08:12 -0400
-Message-Id: <166603728603.4991.3891583761325602602.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v5 32/34] dt-bindings: pinctrl: qcom,sdx65: use common TLMM schema
+Date:   Mon, 17 Oct 2022 16:08:13 -0400
+Message-Id: <166603728603.4991.11238879558058682062.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221016170035.35014-32-krzysztof.kozlowski@linaro.org>
-References: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org> <20221016170035.35014-32-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221016170035.35014-33-krzysztof.kozlowski@linaro.org>
+References: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org> <20221016170035.35014-33-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -83,18 +83,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Oct 2022 13:00:32 -0400, Krzysztof Kozlowski wrote:
-> The TLMM pin controller follows generic pin-controller bindings, so
-> should have subnodes with '-state' and '-pins'.  Otherwise the subnodes
-> (level one and two) are not properly matched.  This method also unifies
-> the bindings with other Qualcomm TLMM and LPASS pinctrl bindings.
+On Sun, 16 Oct 2022 13:00:33 -0400, Krzysztof Kozlowski wrote:
+> Reference common Qualcomm TLMM pin controller schema, to bring common
+> properties, other pinctrl schemas and additional checks, like function
+> required only for GPIOs.
 > 
 > 
 
 Applied, thanks!
 
-[31/34] dt-bindings: pinctrl: qcom,sdx65: fix matching pin config
-        https://git.kernel.org/krzk/linux-dt/c/c535fe66f4a5df69c57faca1fc04a6c1b50240b9
+[32/34] dt-bindings: pinctrl: qcom,sdx65: use common TLMM schema
+        https://git.kernel.org/krzk/linux-dt/c/7947f01598418c999be7a5cf0371221bdacd1721
 
 Best regards,
 -- 
