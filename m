@@ -2,118 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970EE6010EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE420601115
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiJQOSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S230021AbiJQOZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiJQOSK (ORCPT
+        with ESMTP id S229738AbiJQOZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:18:10 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0489642E6;
-        Mon, 17 Oct 2022 07:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JVIzeJt+PlF/c5BSNaEmK8JcIYkmC1OpG1XWAf8y8no=; b=RDZeg9BZ0P6y6R4831DxobziKN
-        LLGI3W2nkrICpJLXV9Js/l6fbnvtmou0Y0GFk+yjjWcg0vhpjVH5uwDI0m8V9jeo7Ytf7KPnILE6y
-        kh75vsYOhceAEM9Yk3FDAqzBSKbAnSSugDw/3hRkoQto+cA6f2hN8D6tJqXCbLKDXB5ysCnmo5zBb
-        uvTzBMozd1Y7N1TdjeyqTXy9D6q0rB0MrNRIH9o6pfqUr+axBIqDVRdaQ727OqmoHCa1PbbtwN1Bo
-        NgMmxxYqz7Z08BeLZTjI0/uRlFZIb7kuPUPkqTr7Ab9/9lcHKvOHSE50UAgNW+gLsB93QyoPo+D9m
-        i3RcbRkA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34754)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1okQw4-0003LE-Va; Mon, 17 Oct 2022 15:17:45 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1okQvv-00009b-5k; Mon, 17 Oct 2022 15:17:35 +0100
-Date:   Mon, 17 Oct 2022 15:17:35 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, will@kernel.org,
-        Mark Rutland <mark.rutland@arm.com>, arnd@arndb.de,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kexec@lists.infradead.org, pmladek@suse.com, bhe@redhat.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        bp@alien8.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        xuqiang36@huawei.com
-Subject: Re: [PATCH V3 01/11] ARM: Disable FIQs (but not IRQs) on CPUs
- shutdown paths
-Message-ID: <Y01j/3qKUvj346AH@shell.armlinux.org.uk>
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-2-gpiccoli@igalia.com>
- <a25cb242-7c85-867c-8a61-f3119458dcdb@igalia.com>
- <8e30b99e-70ed-7d5a-ea1f-3b0fadb644bc@igalia.com>
+        Mon, 17 Oct 2022 10:25:57 -0400
+X-Greylist: delayed 448 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Oct 2022 07:25:54 PDT
+Received: from smtp-out-01.comm2000.it (smtp-out-01.comm2000.it [212.97.32.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC092FFE8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:25:54 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-01.comm2000.it (Postfix) with ESMTPSA id 9411F842856;
+        Mon, 17 Oct 2022 16:18:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1666016303;
+        bh=byyLB/Q5qvbB+V//B3T1ZZ9p8aVBtWPiYb30AEr4b8g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=RqRaZ3o+OwIT+M71Wbow17+TaQ461unqVxyG4gdfGeCVdjpX5lLpWUVroiT99vedz
+         1uBFP/QkCZms1+0DvnyQlXZozedH37I8UUUICG/53fi1J9Fg1mwjCjGEL+ZsJz9zzo
+         gOEZ+/gNWZrVEyhxFdG0RVnTDPH9C3nyZn7RUkPAZECEtuMBuDNH5t4wmlBDOFngCI
+         9RJt8sjdcRH/grUltkW2n2QXVJfjwvwpsyW5lgECBNgZtKH/qrJqVsDsP/DHuH4TO7
+         bFO6jF2+NWubmYpQfjPPmOIQmLK6kEy15LJw6317MQaNH3BSe7YIpRpYtJjFxHMZWk
+         JJPgWsSuTp2Zg==
+Date:   Mon, 17 Oct 2022 16:18:13 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        David Airlie <airlied@linux.ie>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        linux-kernel@vger.kernel.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Subject: Re: [PATCH v1] drm/panel: simple: set bpc field for logic
+ technologies displays
+Message-ID: <Y01kJbZjkwo1A8l1@francesco-nb.int.toradex.com>
+References: <20220831141622.39605-1-francesco.dolcini@toradex.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8e30b99e-70ed-7d5a-ea1f-3b0fadb644bc@igalia.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220831141622.39605-1-francesco.dolcini@toradex.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:00:46AM -0300, Guilherme G. Piccoli wrote:
-> On 18/09/2022 10:58, Guilherme G. Piccoli wrote:
-> > On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
-> >> Currently the regular CPU shutdown path for ARM disables IRQs/FIQs
-> >> in the secondary CPUs - smp_send_stop() calls ipi_cpu_stop(), which
-> >> is responsible for that. IRQs are architecturally masked when we
-> >> take an interrupt, but FIQs are high priority than IRQs, hence they
-> >> aren't masked. With that said, it makes sense to disable FIQs here,
-> >> but there's no need for (re-)disabling IRQs.
-> >>
-> >> More than that: there is an alternative path for disabling CPUs,
-> >> in the form of function crash_smp_send_stop(), which is used for
-> >> kexec/panic path. This function relies on a SMP call that also
-> >> triggers a busy-wait loop [at machine_crash_nonpanic_core()], but
-> >> without disabling FIQs. This might lead to odd scenarios, like
-> >> early interrupts in the boot of kexec'd kernel or even interrupts
-> >> in secondary "disabled" CPUs while the main one still works in the
-> >> panic path and assumes all secondary CPUs are (really!) off.
-> >>
-> >> So, let's disable FIQs in both paths and *not* disable IRQs a second
-> >> time, since they are already masked in both paths by the architecture.
-> >> This way, we keep both CPU quiesce paths consistent and safe.
-> >>
-> >> Cc: Marc Zyngier <maz@kernel.org>
-> >> Cc: Michael Kelley <mikelley@microsoft.com>
-> >> Cc: Russell King <linux@armlinux.org.uk>
-> >> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> >>
+On Wed, Aug 31, 2022 at 04:16:22PM +0200, Francesco Dolcini wrote:
+> From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
 > 
-> Monthly ping - let me know if there's something I should improve in
-> order this fix is considered!
+> In case bpc is not set for a panel it then throws a WARN(). Add bpc to
+> the panels logictechno_lt170410_2whc and logictechno_lt161010_2nh.
+> 
+> Fixes: 5728fe7fa539 ("drm/panel: simple: add display timings for logic technologies displays")
 
-Patches don't get applied unless they end up in the patch system.
-Thanks.
+Hello,
+just a gently ping on this. It applies cleanly on v6.1-rc1, anything I
+should do?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Francesco
+
