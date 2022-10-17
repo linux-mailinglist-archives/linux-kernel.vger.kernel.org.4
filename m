@@ -2,114 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BB66004C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 03:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7413F6004C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 03:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJQBMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 21:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        id S230016AbiJQBOR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 16 Oct 2022 21:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiJQBMS (ORCPT
+        with ESMTP id S229805AbiJQBOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 21:12:18 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363F62C676
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:12:17 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id d13so5826669qko.5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LIpkj7PNl3x4kd8kCMZjcXTrj9dYxfRdONvhgTcQd9U=;
-        b=NC9hMtO2yqx/uCHBnCPDIp/mwn6t9/xFP7apUMLbDuBpcc99gPP4KidJF7b/vpqXhy
-         rfHR7rh/cL1tvcAWAGNmaTFwHZdsSE63FTkKL0pWZNnqqzKb+kmV6qKt2tRiZE90sACz
-         4r131b2FGolg1iEtduVKU2cs4XCPFl3xfYTQltSk/sbeo5NQhT85NT9oxsH/DwkdtsPO
-         W+XLMSEcSzD6VGk+98Yba+Mn/1ohZNZigzzLzr4rwg8lo9hwa+7+HP9dzrgKE6WodEzM
-         aT92uioX9qByiZtCmXGpavskDagmnQdc4Brw2x0ersfFFxj89S2Ul+PMqTxJxKwFAPyT
-         PIMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LIpkj7PNl3x4kd8kCMZjcXTrj9dYxfRdONvhgTcQd9U=;
-        b=VGW2banr2YxmLWTfvS7pA9XhM8bqXiXlUQ2H7AC16xXUfGSHAELiZUa0EGyCotixe4
-         XN6FiDCYe6hyTW2ucjEW4ZN9VTnoaiTKABkWy7CviDXZReznLU6LxPH6dWvuoEEENW8z
-         ZRf17Ki3mWIG8WzlZY6nABc8P6WkJLNkjsJbbThAs0aR2f6D6wYZjbweoArZ+E1I8CQD
-         hFjRRDVJR0dygIB7S3sbJFLJ5YfUTSCe1YQn8farpzfbZ1muKKoICjs2WRvDYt4lZMZo
-         ZhNjPia7u4sNoe/wMfx7FtfkOM/TBuEvuYuHZokp1SQnpLZ7ZKnJ1HJAbtCLSzyfqeR7
-         gEJg==
-X-Gm-Message-State: ACrzQf2VzJLos4MlxBvRIkc5hZeMTpS7f9xiqV9uHfSwBL74zqe9sWrs
-        /QknklAaoukvOPWpFjcVb7Fh1Q==
-X-Google-Smtp-Source: AMsMyM4CiqXRkIRY/bHzhCVZzgzRQn8WphHd/0BNguFkJvwgOV6mHbNcwt+Rhwe2XuwrutSNQRdnvw==
-X-Received: by 2002:a05:620a:12fb:b0:6ee:79f2:3716 with SMTP id f27-20020a05620a12fb00b006ee79f23716mr5969617qkl.348.1665969136380;
-        Sun, 16 Oct 2022 18:12:16 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:bb7d:1aa4:bef8:ec27? ([2601:42:0:3450:bb7d:1aa4:bef8:ec27])
-        by smtp.gmail.com with ESMTPSA id l4-20020a37f904000000b006ced5d3f921sm8069960qkj.52.2022.10.16.18.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 18:12:15 -0700 (PDT)
-Message-ID: <bf4db82c-aaba-0fc4-ed6c-4945193a4e92@linaro.org>
-Date:   Sun, 16 Oct 2022 21:12:14 -0400
+        Sun, 16 Oct 2022 21:14:14 -0400
+Received: from ipmail05.adl3.internode.on.net (ipmail05.adl3.internode.on.net [150.101.137.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C7B42C130
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:14:10 -0700 (PDT)
+X-SMTP-MATCH: 1
+IronPort-Data: =?us-ascii?q?A9a23=3AEDGTE6rlybu8v7krUJvkXjruTPVeBmIFZBIvg?=
+ =?us-ascii?q?KrLsJaIsI4StFCztgarIBmDbqmMZGukLop1Pdjj80JX6JOAyoQwHgQ//CE2F?=
+ =?us-ascii?q?34R9JeUCdqTIxz8Y3POc8eTHR865JpANIOQd85uEHWGqk31G7Ww9nMUOYOgH?=
+ =?us-ascii?q?+qkUrSYUsxSqa6IcMqS4P5as7ZRbrNA2LBVPSvd4bsenOWHULOV82Yc3lM8s?=
+ =?us-ascii?q?8pvmjs21BjBkGtwUmgFWBx+lAS2e0/5rX4oDfrZw3PQGuG4FwMhLgrJ5OnRE?=
+ =?us-ascii?q?mjxp3/BBj45+4sXfHHmQpaKVeSPokkPAffk2l4a4HUHuko5HKNaMBsIzWzQx?=
+ =?us-ascii?q?pYgoDlOncXYpQMBN7fQmPkHFRxRCTp+FaxA5LLdJ3+zvIqUyQvAfmeEL/BGU?=
+ =?us-ascii?q?BtqY9REpbkuaY1J3aZDdmhlggq4r+u32ra6R+VEicEqLc2tN4Qa0llLzSvYF?=
+ =?us-ascii?q?uonSJaFYKLH495X9D41ioZFGvO2T+MDdDx3dh3eYhsJAl4RBZ8kp+qsmHD6W?=
+ =?us-ascii?q?zRdpBSeoq9fy0HXwRx41rTgKpz5d8GBRchPtk+dqiTN+GGRKh0TMt2SzXyb/?=
+ =?us-ascii?q?26wi/Xnky3kXIZUH73Q3vJwgRify3IeDDUSVECnur+3kEOzV99EKFAT4mwpt?=
+ =?us-ascii?q?6da3EiqSMTtGh61uniJujYCVNdKVe438geAzuzT+QnxLnQDVCBIbNA9nMs3Q?=
+ =?us-ascii?q?yE6k1GOgtXlDCBut7vTTmiSnop4BxumYX1QdDdEPTtdGFNDu8259dl1302UF?=
+ =?us-ascii?q?cI4Rfbz08mqTAn6xyTT9H1mw+0H5SIQ//z9pAyYxWv1/96YJjPZLz7/BgqNh?=
+ =?us-ascii?q?j6Vrqb8D2Bw1WXm0A=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A6+ptRqOfeBwZYcBcTs2jsMiBIKoaSvp037?=
+ =?us-ascii?q?Eqv3ocdfUzSL39qynOpoV/6faasl0ssR0b8+xofZPgfZq+z+8W3WByB8bAYO?=
+ =?us-ascii?q?COggLBEGgh1+vfKlbbdBEWmNQx6U4tScZDNOE=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2DKAQCyq0xjAAlvkwENTR4BAQsSDEA?=
+ =?us-ascii?q?JhkSEToJijjQDiy6FP44qCwFTBAEBhQUChG0mOBMBAgQVAQEGAQEBAQEHBBA?=
+ =?us-ascii?q?BOVKFOwaGdgEBAQEDI1YQCw0HAQMCAiYCAiE2Bg4Fgn2CbgOpe3qBMhpnhyk?=
+ =?us-ascii?q?NaIFlgREsgWaFIIRvFIQqN4FVRIEUAScPDYJnPoIgggIBAQMdJgaDKziCLgS?=
+ =?us-ascii?q?DepBegh6DZzgDGSsdQAMLOzQDFQMUAwUhBwMZDyMNDQQWBwwDAwUlAwICGwc?=
+ =?us-ascii?q?CAgMCBhMFAgJNNAgECAQrJA8FAgcvBQQvAh4EBQYRCAIWAgYEBAQEFQIQCAI?=
+ =?us-ascii?q?IJhcHExgbGQEFWQ4JIRwOGg0FBhMDIG8FCjgPKC9pKxwbB4EMKigVAwQEAwI?=
+ =?us-ascii?q?GEwMgAg0pMRQEKRMPLQcjcQkCAyJlBQMDBCgsAwlAByUkPAdYOgEEAwIQIjw?=
+ =?us-ascii?q?GAwkDAiRXdS8RFQUDDRclCAU3GwQIPAIFBlISAgoRAxIPBidID0o+ORYGJ0U?=
+ =?us-ascii?q?BNg8OnFQsASUNAQQPUihEGzAIIwpACBcwKQseDwWSBg8HI44og0aKEJJUOjQ?=
+ =?us-ascii?q?Hg2OBRAYMmGWGCi6DdoxRhksDGItshG2BCZRAglYgkQmQYg0RBw0MDQIMC4Z?=
+ =?us-ascii?q?+gX4zGi5vAYI8UYUeiTYWjkFiAjkCBgEKAQEDCYZMgT2Bal0BAQ?=
+Received: from unknown (HELO [127.0.0.1]) ([1.147.111.9])
+  by ipmail05.adl3.internode.on.net with ESMTP; 17 Oct 2022 11:44:06 +1030
+Date:   Mon, 17 Oct 2022 11:43:53 +1030
+From:   Arthur Marsh <arthur.marsh@internode.on.net>
+To:     Dave Airlie <airlied@gmail.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>
+CC:     daniel.vetter@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
+Subject: Re: [git pull] drm fixes for 6.1-rc1
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAPM=9txsBf5HJ97tAMOQ8PdiPciK-zqngERUm7hGJO8Zyyqb+w@mail.gmail.com>
+References: <CAPM=9ty3DGWa8vnfumgSrpSgWnixWjikb6C0Zk_5bW+deKLVQw@mail.gmail.com> <20221016080833.5503-1-user@am64> <CAPM=9txsBf5HJ97tAMOQ8PdiPciK-zqngERUm7hGJO8Zyyqb+w@mail.gmail.com>
+Message-ID: <C98B32CF-86B0-438D-BC8D-10FA255B3B4F@internode.on.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 1/3] arm64: dts: qcom: sdm845: commonize bluetooth UART
- pinmux
-Content-Language: en-US
-To:     Caleb Connolly <caleb@connolly.tech>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-References: <20221016172944.1892206-1-kc@postmarketos.org>
- <20221016172944.1892206-2-kc@postmarketos.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221016172944.1892206-2-kc@postmarketos.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/10/2022 13:29, Caleb Connolly wrote:
-> From: Caleb Connolly <caleb@connolly.tech>
-> 
-> The 4-pin configuration for UART6 is used for all or almost all SDM845
-> devices with built in Bluetooth. Move the pinmux configuration to
-> sdm845.dtsi in preparation to be removed from individual devices in
-> future patches.
-> 
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+Thanks Dave, I reverted patch 312b4dc11d4f74bfe03ea25ffe04c1f2fdd13cb9 against 6.1-rc1 and the resulting kernel loaded amdgpu fine on my pc with Cape Verde GPU.
 
-(...)
+Regards,
 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index f0e286715d1b..55de40bea684 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -2971,6 +2971,28 @@ pinmux {
->  				};
->  			};
->  
-> +			qup_uart6_4pin: qup-uart6-4pin-state {
-> +
+Arthur. 
 
-No need for blank line here.
+On 17 October 2022 8:14:18 am ACDT, Dave Airlie <airlied@gmail.com> wrote:
+>On Sun, 16 Oct 2022 at 18:09, Arthur Marsh
+><arthur.marsh@internode.on.net> wrote:
+>>
+>> From: Arthur Marsh <arthur.marsh@internode.on.net>
+>>
+>> Hi, the "drm fixes for 6.1-rc1" commit caused the amdgpu module to fail
+>> with my Cape Verde radeonsi card.
+>>
+>> I haven't been able to bisect the problem to an individual commit, but
+>> attach a dmesg extract below.
+>>
+>> I'm happy to supply any other configuration information and test patches.
+>>
+>
+>Can you try reverting: it's the only think I can spot that might
+>affect a card that old since most changes in that request were for
+>display hw you don't have.
+>
+>ommit 312b4dc11d4f74bfe03ea25ffe04c1f2fdd13cb9
+>Author: Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>
+>Date:   Tue Oct 4 07:33:39 2022 -0700
+>
+>    drm/amdgpu: Fix VRAM BO swap issue
+>
+>    DRM buddy manager allocates the contiguous memory requests in
+>    a single block or multiple blocks. So for the ttm move operation
+>    (incase of low vram memory) we should consider all the blocks to
+>    compute the total memory size which compared with the struct
+>    ttm_resource num_pages in order to verify that the blocks are
+>    contiguous for the eviction process.
+>
+>    v2: Added a Fixes tag
+>    v3: Rewrite the code to save a bit of calculations and
+>        variables (Christian)
+>
+>    Fixes: c9cad937c0c5 ("drm/amdgpu: add drm buddy support to amdgpu")
+>    Signed-off-by: Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>
+>    Reviewed-by: Christian König <christian.koenig@amd.com>
+>    Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+>
+>
+>Thanks,
+>Dave.
+>
+>> Arthur.
+>>
+>>  Linux version 6.0.0+ (root@am64) (gcc-12 (Debian 12.2.0-5) 12.2.0, GNU ld (GNU Binutils for Debian) 2.39) #5179 SMP PREEMPT_DYNAMIC Fri Oct 14 17:00:40 ACDT 2022
+>>  Command line: BOOT_IMAGE=/vmlinuz-6.0.0+ root=UUID=39706f53-7c27-4310-b22a-36c7b042d1a1 ro single amdgpu.audio=1 amdgpu.si_support=1 radeon.si_support=0 page_owner=on amdgpu.gpu_recovery=1
+>> ...
+>>
+>>  [drm] amdgpu kernel modesetting enabled.
+>>  amdgpu 0000:01:00.0: vgaarb: deactivate vga console
+>>  Console: switching to colour dummy device 80x25
+>>  [drm] initializing kernel modesetting (VERDE 0x1002:0x682B 0x1458:0x22CA 0x87).
+>>  [drm] register mmio base: 0xFE8C0000
+>>  [drm] register mmio size: 262144
+>>  [drm] add ip block number 0 <si_common>
+>>  [drm] add ip block number 1 <gmc_v6_0>
+>>  [drm] add ip block number 2 <si_ih>
+>>  [drm] add ip block number 3 <gfx_v6_0>
+>>  [drm] add ip block number 4 <si_dma>
+>>  [drm] add ip block number 5 <si_dpm>
+>>  [drm] add ip block number 6 <dce_v6_0>
+>>  [drm] add ip block number 7 <uvd_v3_1>
+>>  [drm] BIOS signature incorrect 5b 7
+>>  resource sanity check: requesting [mem 0x000c0000-0x000dffff], which spans more than PCI Bus 0000:00 [mem 0x000d0000-0x000dffff window]
+>>  caller pci_map_rom+0x68/0x1b0 mapping multiple BARs
+>>  amdgpu 0000:01:00.0: No more image in the PCI ROM
+>>  amdgpu 0000:01:00.0: amdgpu: Fetched VBIOS from ROM BAR
+>>  amdgpu: ATOM BIOS: xxx-xxx-xxx
+>>  amdgpu 0000:01:00.0: amdgpu: Trusted Memory Zone (TMZ) feature not supported
+>>  amdgpu 0000:01:00.0: amdgpu: PCIE atomic ops is not supported
+>>  [drm] PCIE gen 2 link speeds already enabled
+>>  [drm] vm size is 64 GB, 2 levels, block size is 10-bit, fragment size is 9-bit
+>>  RTL8211B Gigabit Ethernet r8169-0-300:00: attached PHY driver (mii_bus:phy_addr=r8169-0-300:00, irq=MAC)
+>>  r8169 0000:03:00.0 eth0: Link is Down
+>>  amdgpu 0000:01:00.0: amdgpu: VRAM: 2048M 0x000000F400000000 - 0x000000F47FFFFFFF (2048M used)
+>>  amdgpu 0000:01:00.0: amdgpu: GART: 1024M 0x000000FF00000000 - 0x000000FF3FFFFFFF
+>>  [drm] Detected VRAM RAM=2048M, BAR=256M
+>>  [drm] RAM width 128bits DDR3
+>>  [drm] amdgpu: 2048M of VRAM memory ready
+>>  [drm] amdgpu: 3979M of GTT memory ready.
+>>  [drm] GART: num cpu pages 262144, num gpu pages 262144
+>>  amdgpu 0000:01:00.0: amdgpu: PCIE GART of 1024M enabled (table at 0x000000F400A00000).
+>>  [drm] Internal thermal controller with fan control
+>>  [drm] amdgpu: dpm initialized
+>>  [drm] AMDGPU Display Connectors
+>>  [drm] Connector 0:
+>>  [drm]   HDMI-A-1
+>>  [drm]   HPD1
+>>  [drm]   DDC: 0x194c 0x194c 0x194d 0x194d 0x194e 0x194e 0x194f 0x194f
+>>  [drm]   Encoders:
+>>  [drm]     DFP1: INTERNAL_UNIPHY
+>>  [drm] Connector 1:
+>>  [drm]   DVI-D-1
+>>  [drm]   HPD2
+>>  [drm]   DDC: 0x1950 0x1950 0x1951 0x1951 0x1952 0x1952 0x1953 0x1953
+>>  [drm]   Encoders:
+>>  [drm]     DFP2: INTERNAL_UNIPHY
+>>  [drm] Connector 2:
+>>  [drm]   VGA-1
+>>  [drm]   DDC: 0x1970 0x1970 0x1971 0x1971 0x1972 0x1972 0x1973 0x1973
+>>  [drm]   Encoders:
+>>  [drm]     CRT1: INTERNAL_KLDSCP_DAC1
+>>  [drm] Found UVD firmware Version: 64.0 Family ID: 13
+>>  amdgpu: Move buffer fallback to memcpy unavailable
+>>  [drm:amdgpu_device_init.cold [amdgpu]] *ERROR* sw_init of IP block <uvd_v3_1> failed -19
+>>  amdgpu 0000:01:00.0: amdgpu: amdgpu_device_ip_init failed
+>>  amdgpu 0000:01:00.0: amdgpu: Fatal error during GPU init
+>>  amdgpu 0000:01:00.0: amdgpu: amdgpu: finishing device.
+>>  BUG: kernel NULL pointer dereference, address: 0000000000000090
+>>  #PF: supervisor write access in kernel mode
+>>  #PF: error_code(0x0002) - not-present page
+>>  PGD 0 P4D 0
+>>  Oops: 0002 [#1] PREEMPT SMP NOPTI
+>>  CPU: 3 PID: 447 Comm: udevd Not tainted 6.0.0+ #5179
+>>  Hardware name: System manufacturer System Product Name/M3A78 PRO, BIOS 1701    01/27/2011
+>>  RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
+>>  Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc cc cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 0f <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 99 8e
+>>  RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
+>>  RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
+>>  RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
+>>  RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
+>>  R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
+>>  R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
+>>  FS:  00007fd81fcd9840(0000) GS:ffff99bb67cc0000(0000) knlGS:0000000000000000
+>>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>  CR2: 0000000000000090 CR3: 0000000111822000 CR4: 00000000000006e0
+>>  Call Trace:
+>>   <TASK>
+>>   amdgpu_fence_driver_sw_fini+0xc2/0xd0 [amdgpu]
+>>   amdgpu_device_fini_sw+0x17/0x3c0 [amdgpu]
+>>   amdgpu_driver_release_kms+0x12/0x30 [amdgpu]
+>>   devm_drm_dev_init_release+0x4a/0x70 [drm]
+>>   release_nodes+0x40/0xb0
+>>   devres_release_all+0x89/0xc0
+>>   device_unbind_cleanup+0xe/0x70
+>>   really_probe+0x245/0x3a0
+>>   ? pm_runtime_barrier+0x61/0xb0
+>>   __driver_probe_device+0x78/0x170
+>>   driver_probe_device+0x2d/0xb0
+>>   __driver_attach+0xdc/0x1d0
+>>   ? __device_attach_driver+0x100/0x100
+>>   bus_for_each_dev+0x69/0xa0
+>>   bus_add_driver+0x1d4/0x230
+>>   ? _raw_spin_unlock+0x15/0x40
+>>   driver_register+0x89/0xe0
+>>   ? 0xffffffffc0c3b000
+>>   do_one_initcall+0x44/0x200
+>>   ? __kmem_cache_alloc_node+0x90/0x360
+>>   ? kmalloc_trace+0x38/0xc0
+>>   do_init_module+0x4a/0x1e0
+>>   __do_sys_finit_module+0xb5/0x130
+>>   do_syscall_64+0x3a/0x90
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>  RIP: 0033:0x7fd81ff5b1b9
+>>  Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 1c 0d 00 f7 d8 64 89 01 48
+>>  RSP: 002b:00007ffc5b37cbb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+>>  RAX: ffffffffffffffda RBX: 000055e5f2f6a140 RCX: 00007fd81ff5b1b9
+>>  RDX: 0000000000000000 RSI: 000055e5f2f67e30 RDI: 0000000000000017
+>>  RBP: 000055e5f2f67e30 R08: 0000000000000000 R09: 000055e5f2f46700
+>>  R10: 0000000000000017 R11: 0000000000000246 R12: 0000000000020000
+>>  R13: 0000000000000000 R14: 000055e5f2f65b00 R15: 0000000000000024
+>>   </TASK>
+>>  Modules linked in: amdgpu(+) snd_emu10k1_synth snd_emux_synth snd_seq_midi_emul snd_seq_virmidi snd_seq_midi snd_seq_midi_event snd_seq wmi_bmof snd_emu10k1 edac_mce_amd gpu_sched drm_buddy video kvm_amd drm_ttm_helper ttm snd_util_mem drm_display_helper snd_ac97_codec ccp drm_kms_helper snd_hda_codec_hdmi rng_core ac97_bus snd_rawmidi snd_hda_intel snd_intel_dspcfg snd_hda_codec snd_hda_core snd_seq_device drm kvm snd_hwdep snd_pcm_oss snd_mixer_oss evdev serio_raw snd_pcm irqbypass i2c_algo_bit fb_sys_fops syscopyarea sysfillrect emu10k1_gp pcspkr gameport k10temp snd_timer sysimgblt snd acpi_cpufreq wmi soundcore button sp5100_tco asus_atk0110 ext4 crc16 mbcache jbd2 btrfs blake2b_generic xor raid6_pq zstd_compress libcrc32c crc32c_generic uas usb_storage sg sd_mod hid_generic t10_pi usbhid hid sr_mod cdrom crc64_rocksoft crc64 ata_generic ahci pata_atiixp libahci ohci_pci firewire_ohci libata firewire_core crc_itu_t xhci_pci scsi_mod ohci_hcd r8169 ehci_pci xhci_hcd
+>>   realtek ehci_hcd mdio_devres i2c_piix4 scsi_common usbcore libphy usb_common
+>>  CR2: 0000000000000090
+>>  ---[ end trace 0000000000000000 ]---
+>>  RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
+>>  Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc cc cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 0f <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 99 8e
+>>  RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
+>>  RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
+>>  RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
+>>  RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
+>>  R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
+>>  R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
+>>  FS:  00007fd81fcd9840(0000) GS:ffff99bb67cc0000(0000) knlGS:0000000000000000
+>>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>  CR2: 0000000000000090 CR3: 0000000111822000 CR4: 00000000000006e0
+>>  note: udevd[447] exited with preempt_count 1
+>>  udevd[433]: worker [447] terminated by signal 9 (Killed)
+>>  udevd[433]: worker [447] failed while handling '/devices/pci0000:00/0000:00:02.0/0000:01:00.0'
+>>  r8169 0000:03:00.0 eth0: Link is Up - 1Gbps/Full - flow control off
+>>  IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+>>  Adding 4194300k swap on /dev/sda4.  Priority:-2 extents:1 across:4194300k FS
+>>  EXT4-fs (sda5): re-mounted. Quota mode: none.
+>>  lp: driver loaded but no devices found
+>>  ppdev: user-space parallel port driver
+>>  it87: Found IT8716F chip at 0xe80, revision 3
+>>  ACPI Warning: SystemIO range 0x0000000000000E85-0x0000000000000E86 conflicts with OpRegion 0x0000000000000E85-0x0000000000000E86 (\_SB.PCI0.SBRG.ASOC.HWRE) (20220331/utaddress-204)
+>>  ACPI: OSL: Resource conflict; ACPI support missing from driver?
+>>  BUG: unable to handle page fault for address: 00000000000065c0
+>>  #PF: supervisor read access in kernel mode
+>>  #PF: error_code(0x0000) - not-present page
+>>  PGD 0 P4D 0
+>>  Oops: 0000 [#2] PREEMPT SMP NOPTI
+>>  CPU: 2 PID: 55 Comm: kworker/2:1 Tainted: G      D            6.0.0+ #5179
+>>  Hardware name: System manufacturer System Product Name/M3A78 PRO, BIOS 1701    01/27/2011
+>>  Workqueue: events output_poll_execute [drm_kms_helper]
+>>  RIP: 0010:amdgpu_device_rreg.part.0+0x39/0x100 [amdgpu]
+>>  Code: 6c 24 08 48 89 fb 4c 89 64 24 10 44 8d 24 b5 00 00 00 00 4c 3b a7 88 08 00 00 89 f5 73 70 83 e2 02 74 2f 4c 03 a3 90 08 00 00 <45> 8b 24 24 48 8b 43 08 0f b7 70 3e 66 90 44 89 e0 48 8b 1c 24 48
+>>  RSP: 0018:ffffbeb3c0717c48 EFLAGS: 00010206
+>>  RAX: 0000000000000000 RBX: ffff99bae8260000 RCX: 0000000000000000
+>>  RDX: 0000000000000000 RSI: 0000000000001970 RDI: ffff99bae8260000
+>>  RBP: 0000000000001970 R08: ffffbeb3c0717e08 R09: 0000000000000000
+>>  R10: 0000000000000018 R11: fefefefefefefeff R12: 00000000000065c0
+>>  R13: ffffbeb3c0717d70 R14: 0000000000000000 R15: 000000010005e340
+>>  FS:  0000000000000000(0000) GS:ffff99bb67c80000(0000) knlGS:0000000000000000
+>>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>  CR2: 00000000000065c0 CR3: 000000008980a000 CR4: 00000000000006e0
+>>  Call Trace:
+>>   <TASK>
+>>   amdgpu_i2c_pre_xfer+0x163/0x180 [amdgpu]
+>>   bit_xfer+0x36/0x530 [i2c_algo_bit]
+>>   __i2c_transfer+0x185/0x550
+>>   i2c_transfer+0xa2/0x110
+>>   amdgpu_display_ddc_probe+0xbd/0x100 [amdgpu]
+>>   amdgpu_connector_vga_detect+0x8e/0x200 [amdgpu]
+>>   drm_helper_probe_detect_ctx+0x7b/0xd0 [drm_kms_helper]
+>>   output_poll_execute+0x152/0x220 [drm_kms_helper]
+>>   process_one_work+0x1ae/0x370
+>>   worker_thread+0x4d/0x3b0
+>>   ? rescuer_thread+0x380/0x380
+>>   kthread+0xe3/0x110
+>>   ? kthread_complete_and_exit+0x20/0x20
+>>   ret_from_fork+0x22/0x30
+>>   </TASK>
+>>  Modules linked in: max6650 hwmon_vid parport_pc ppdev lp parport amdgpu(+) snd_emu10k1_synth snd_emux_synth snd_seq_midi_emul snd_seq_virmidi snd_seq_midi snd_seq_midi_event snd_seq wmi_bmof snd_emu10k1 edac_mce_amd gpu_sched drm_buddy video kvm_amd drm_ttm_helper ttm snd_util_mem drm_display_helper snd_ac97_codec ccp drm_kms_helper snd_hda_codec_hdmi rng_core ac97_bus snd_rawmidi snd_hda_intel snd_intel_dspcfg snd_hda_codec snd_hda_core snd_seq_device drm kvm snd_hwdep snd_pcm_oss snd_mixer_oss evdev serio_raw snd_pcm irqbypass i2c_algo_bit fb_sys_fops syscopyarea sysfillrect emu10k1_gp pcspkr gameport k10temp snd_timer sysimgblt snd acpi_cpufreq wmi soundcore button sp5100_tco asus_atk0110 ext4 crc16 mbcache jbd2 btrfs blake2b_generic xor raid6_pq zstd_compress libcrc32c crc32c_generic uas usb_storage sg sd_mod hid_generic t10_pi usbhid hid sr_mod cdrom crc64_rocksoft crc64 ata_generic ahci pata_atiixp libahci ohci_pci firewire_ohci libata firewire_core crc_itu_t xhci_pci
+>>   scsi_mod ohci_hcd r8169 ehci_pci xhci_hcd realtek ehci_hcd mdio_devres i2c_piix4 scsi_common usbcore libphy usb_common
+>>  CR2: 00000000000065c0
+>>  ---[ end trace 0000000000000000 ]---
+>>  RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
+>>  Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc cc cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 0f <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 99 8e
+>>  RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
+>>  RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
+>>  RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
+>>  RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
+>>  R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
+>>  R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
+>>  FS:  0000000000000000(0000) GS:ffff99bb67c80000(0000) knlGS:0000000000000000
+>>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>  CR2: 00000000000065c0 CR3: 000000008980a000 CR4: 00000000000006e0
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
