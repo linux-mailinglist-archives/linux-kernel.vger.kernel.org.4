@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC96600BA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DEC600BAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiJQJz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
+        id S231305AbiJQJ5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiJQJzW (ORCPT
+        with ESMTP id S229660AbiJQJ5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:55:22 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5D91901D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:55:20 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id l22so15229663edj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:55:20 -0700 (PDT)
+        Mon, 17 Oct 2022 05:57:03 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9859F275F4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:57:02 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r13so17610010wrj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:57:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=30EAH+XQfO06e4I2eO6QbmQTxUyBtzeSnBO6VcUGovU=;
-        b=A+vzie+Aa0ZqBEvoKjH3Iyik7guSk3Hj87QY6tGOEcp8B9mjzR84xnOzZ6pXK1uFbH
-         RTI9LdnRwuSZma670NiYkz5gFoTzRsXYWUeEXlhu720/PJMQJ4k4fOajgt+qxITMCk9k
-         1fGz1t443zQ+k/7aQjSePoy7ZSwOBEmh0YLzHK9rTTcwfuxMQbHaj9wHgk1kpPCo/g20
-         4/0uctMBA976F8NyYCgPXXxweCYTulLkesiJ61KpeWAuIEokXJEmuHwrvkFOhLEOS0Nf
-         HCoFqgN1nlmMDrsGPNCx1+uvj2Lbd0KY99hl3tFOat2AYYElRHMTNy8IyMXUHqtBhopq
-         eM6A==
+        bh=98IO7v4xe6xTRSMVmEU9y8rCEMPnvS4WCx1Z1aI89l0=;
+        b=X8rGc/bfS17IEWrbeqU6BDUWLSP0QJsGnetoIaACMKO3KrZZeIH14r+vk0yvwUux1w
+         XxI0FwnhDHZlc7P2mU1QHOY7J7ixf1I6vMdVZTXFk1Pjq0kxpeH4GH6o+6B9vxzBrKCI
+         IcKNX26a15LhYiZTL2jwLp+3chgnQp/GyZCC5IddBhNM9zihPopt+9PJLsQihaQpzKQ8
+         Q1iSz7Tsp/IGeCf4oOnDm1yeYi/1fU3w6nU2rbTC0j0PMrdQ6P3amUgISMr/hrXKfJR9
+         abbqrOO1GRLVvnLXeRFANZz+ENUz9ArzKH0Yqq0N5bXddsCYcpkDEvk9BAK6u1HKCS/K
+         BpwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=30EAH+XQfO06e4I2eO6QbmQTxUyBtzeSnBO6VcUGovU=;
-        b=dpHqnkyL999pFv/m313tA0vfZJ+5IV/RVCobDl5wtA0JEIVuQHp4i/oK52n+mYfSW4
-         bDRBjrZsUlyGr4kOIopJBKIC5DhhP8zdJrYys21ffJIZj0ZSVEU9QOLkByx8zu8rk5PU
-         iMQS7cUD0R1b3J23U8pSwSW6J0qLLazuZbPAOLmzpTDjO/0OsS+G9gtU1tfZdzRq4r5s
-         oqcaGf6x3Lwp1boVGpwoOG0g2dfChnqK7N0YuB/nNBOSr4//xYTyWMVdulqQm0zJQCfv
-         jygGNVe2wNLMzkGpekc7CwTEu8oGwitAkafmuXuzMa5847oqM1NhjUJOIyS1WqcpVRWo
-         +apA==
-X-Gm-Message-State: ACrzQf1no5XgGfhV+dify71lNwYlvoEZVilQbvh+fxnd1Tr4ng6jE+47
-        r0DLbT3qmJ33ihb/vnksQZ32uzbCapcd8rHkcXt936Y+DDs=
-X-Google-Smtp-Source: AMsMyM6CVAqN3RuuHWsXYQ9UticrO6eK4VOYvsDHtH6SLWpkaSBuVLEAPy6VWCl0UwB6PuOYrp/2Qb96Jj6NNhv8VYE=
-X-Received: by 2002:a05:6402:2694:b0:45c:a035:34bc with SMTP id
- w20-20020a056402269400b0045ca03534bcmr9347063edd.158.1666000518591; Mon, 17
- Oct 2022 02:55:18 -0700 (PDT)
+        bh=98IO7v4xe6xTRSMVmEU9y8rCEMPnvS4WCx1Z1aI89l0=;
+        b=voBW0hqTCGiin4MBfbWU4M1tt4Y1kUOnc8A2wGBsr5zEHmbPlWjDpUe8O2NKXcmfno
+         aJ5PT7x910IvcUVz6+595P2miVoFfCwCOgMIxjGR81drf4Y36iT7VRRj5E9MnlYAm85x
+         SwlyzHT1j7QmFQ+Dz/qDbWmIP6Ix4cLYCINPgw761UPjrqupZajdcrkNce+BtnJ/B4G2
+         XTNqvnzfZ+oT65cuKJcRu0O95noHtmkxAI7k/gA4oun3wzwSipizfaIw5WSkdaS4Zc/h
+         sV9Zr852mv1at2TSSXWxC1jO2sMLvJVAdkIKcIsdP9tbFoxmkEyTdeYcGNU1A6vApSwA
+         vQ6w==
+X-Gm-Message-State: ACrzQf2342hCOdl2DA6i5wHaY2SQKZDmjxuuZRkptd5DSCX1I0/H+1mp
+        veB0cON1oVjzu8/j6C/aV0zjIZ1i7/PxsXb4cdDxsII+1fY=
+X-Google-Smtp-Source: AMsMyM4bkoes3awa7pSmHgcDYadIFtXhLIf56hwmM6LoX2tPsA/sqRrULDZ+14SgjJXNDSgjr89adq5Wa0Jkh5+XvbQ=
+X-Received: by 2002:a17:906:5d04:b0:77f:ca9f:33d1 with SMTP id
+ g4-20020a1709065d0400b0077fca9f33d1mr8065569ejt.526.1666000610608; Mon, 17
+ Oct 2022 02:56:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010125221.28275-1-andriy.shevchenko@linux.intel.com> <20221010125221.28275-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010125221.28275-2-andriy.shevchenko@linux.intel.com>
+References: <20221008164807.113590-1-linux@fw-web.de> <CACRpkdYNZGJaVN0eRZPmkmWr=it7xZtAPM=qV0EyQWUZgZ68hQ@mail.gmail.com>
+ <CAGXv+5FNQmx4Mxm2fTkWBazX7B_LzGuTY3cQK5f_yO4cE5c8mA@mail.gmail.com>
+In-Reply-To: <CAGXv+5FNQmx4Mxm2fTkWBazX7B_LzGuTY3cQK5f_yO4cE5c8mA@mail.gmail.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 17 Oct 2022 11:55:07 +0200
-Message-ID: <CACRpkdan+xdcEdXz96Hm2dYWtQdEEqFGQazMYK1_9nonSCsnJw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] pinctrl: cy8c95x0: Implement ->gpio_request_enable()
- and ->gpio_set_direction()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 17 Oct 2022 11:56:39 +0200
+Message-ID: <CACRpkdYk4HPUTg3UxAZPkydUHeYtMkOVRGR-Zozrh5=VxfFcZQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: mediatek: allow configuring uart rx/tx and
+ rts/cts separately
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Sean Wang <sean.wang@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -67,19 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 2:52 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-
-> Without ->gpio_request_enable() and ->gpio_set_direction()
-> callbacks it's not possible to mux GPIO via standard GPIO
-> interfaces (like `gpioget` or `gpioset` tools in user space).
+On Mon, Oct 17, 2022 at 11:49 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
+> On Mon, Oct 17, 2022 at 5:42 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> >
+> > On Sat, Oct 8, 2022 at 6:48 PM Frank Wunderlich <linux@fw-web.de> wrote:
+> >
+> > > From: Sam Shih <sam.shih@mediatek.com>
+> > >
+> > > Some mt7986 boards use uart rts/cts pins as gpio,
+> > > This patch allows to change rts/cts to gpio mode, but keep
+> > > rx/tx as UART function.
+> > >
+> > > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > > Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+> >
+> > No response from maintainers for a week and patch makes sense
+> > so patch applied for next!
 >
-> Implement those functions to fill the above mentioned gap.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Could we add "mt7986" to the patch subject? Otherwise it could be taken
+> to be updating all the SoCs.
 
-Patch applied, it looked a bit scary but I realize you probably
-have tested it on the hardware and made sure it works.
+OK I fixed it!
 
 Yours,
 Linus Walleij
