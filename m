@@ -2,339 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA18600AAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3C8600B38
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiJQJ2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
+        id S231414AbiJQJpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiJQJ2C (ORCPT
+        with ESMTP id S230366AbiJQJpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:28:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E8B58DEF;
-        Mon, 17 Oct 2022 02:27:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 060F060FE5;
-        Mon, 17 Oct 2022 09:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 613B4C433C1;
-        Mon, 17 Oct 2022 09:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665998851;
-        bh=tsjHF/ZW38t4aO0UmlYwxV09JTSHo1oGEGHw3AMx5xg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CTAAfVq6VZiLxSTJoLnt66JMAMq+4aPo/YJB0z5MRMy3olTWcxhRIIZ1PDi801UaP
-         SVnDHPPjtlhT2EIEfKpi/viEzp66QCDLvi3rdqOj2P/ASJ2n+WUCBYBrtj0B8ZXNr3
-         gTFQgblalrWo1eiq37b4t8wlXSyemakt8XInDPB0RNjGeS+lVg9Q2mWl+hsFpm1rGq
-         eUj8R/2tHKBZMic3H+uw8AyeK9Iy7Pv4Z/IkaMrFeWFfVKEoc+WLeACygLZuCbRz3Y
-         DeeXxvdJGwx3NXgTLrw+OLLLlcyX/VLLPvpiyx49rDpTSiqac+f6NpRTVA41N2076Q
-         c20gDleluWr2Q==
-Received: by mail-lf1-f46.google.com with SMTP id o12so8097346lfq.9;
-        Mon, 17 Oct 2022 02:27:31 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1CiD4PFCAycz2Iao6fr2ZU9tVowE+MteRW/Gy2XDfrDIDUfp89
-        w5kcFI4zHuyGi0YBkjwtC3FrGDxHaQ22kBiu97Q=
-X-Google-Smtp-Source: AMsMyM4gNARDWEb4YnDBpRg3rWLb0SlDoLy9Utl2gMjjLg4VUnwoQUoNQZbywHEDs/RA8BzuZH1RLJeVwtzm/3lR+QE=
-X-Received: by 2002:a05:6512:3119:b0:4a2:d749:ff82 with SMTP id
- n25-20020a056512311900b004a2d749ff82mr3858788lfb.637.1665998849373; Mon, 17
- Oct 2022 02:27:29 -0700 (PDT)
+        Mon, 17 Oct 2022 05:45:01 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C75D275D4;
+        Mon, 17 Oct 2022 02:44:59 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 129so9979012pgc.5;
+        Mon, 17 Oct 2022 02:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X6w1PAaUTCjPukGI0vOQ+R/3atXqjV5uO6exD9p/X6Y=;
+        b=XoJMbly4B0saJm8NDptnA8WAcCvDISv6V1tu5Uq2PyfezORvoT5eZAMSRnFicyfFEa
+         +KuoQ6Je6IhleHFxTy4R15hlsp/KVLeipZsHasv6AsMns8nfmLzVVqV1uZqZhwANhIPX
+         22xBytCuPjVnViGmUPBD6H4LafjzUBsXh7+APjNjqEzYmY25NWSdqRR9Lm837rS2VNst
+         g5OKC9MDH5/GRB5R5NbWzF5faOGLQcP6JkcvqyNAGsauI4/8m7UezJtTiff6EDwIFx4K
+         fYuY+iG7mNte3KrCjCnVMwg2z5XHCQ6rW1sIEgkiuzbd0fu+VKQawYT1ATE+TcRKFm36
+         Rrtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X6w1PAaUTCjPukGI0vOQ+R/3atXqjV5uO6exD9p/X6Y=;
+        b=7uKrvl7Q1WvzpheH3XFibU76hYf94y/olVkYLmqSnembDHuzNfiHIduI24abfnJFfc
+         wNnGa5aSbrzzkx5KkPBfOTyIhOrbK0FboLdMOcxg0wLBdwceul1ixl27ZkLKt/IAkw0t
+         WejxUCO0lj4omNUn2mVqqs+MQTBe4HjffIfpY891arK/GpWE/OlrrSmWleDbwXdq26q3
+         L32jn3N3kUw8Qhqw3LvYEhx5laVacEbCapoS3H5IZKuSlB+KE7GZMQKlvuqYob6NaPRK
+         M80gKE8GpYYZuuceYYW+RLUsgwClJjIGNZg+/eLvrVOfMpGa+0slE5E9BhSbEUe1RrlN
+         u99g==
+X-Gm-Message-State: ACrzQf2ORhEHYpdANIOtXyfmGxHxgUJNM6rrcD47NlomC1h6xViClLYy
+        GjEL89p8Sr+LeIFQxp3XXJY=
+X-Google-Smtp-Source: AMsMyM5BXk/q1P6qGLg/Z74zMGlJFMN8GlQri0Kne+PjFcGu4ypvQ3aEdW6meCz5SXtVhhOXI/JozQ==
+X-Received: by 2002:a63:1521:0:b0:43c:9566:7a6a with SMTP id v33-20020a631521000000b0043c95667a6amr9971910pgl.339.1665999898521;
+        Mon, 17 Oct 2022 02:44:58 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-30.three.co.id. [180.214.232.30])
+        by smtp.gmail.com with ESMTPSA id t25-20020aa79479000000b0056126b79072sm6615433pfq.21.2022.10.17.02.44.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 02:44:58 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id DB0851017B5; Mon, 17 Oct 2022 16:27:24 +0700 (WIB)
+Date:   Mon, 17 Oct 2022 16:27:24 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Sadiya Kazi <sadiyakazi@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] Documentation: Kunit: Update architecture.rst for
+ minor fixes
+Message-ID: <Y00f/OHxTJXH2vYc@debian.me>
+References: <20221017065452.2250273-1-sadiyakazi@google.com>
 MIME-Version: 1.0
-References: <20221010023559.69655-1-justin.he@arm.com> <20221010023559.69655-7-justin.he@arm.com>
- <Y0VGkUxpqiIzIFzB@zn.tnic> <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y0WBklS1XpB5as+m@zn.tnic> <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y0gUpoaUBKw/jjaD@zn.tnic> <CAMj1kXGtTRaKCKJnsJ9XcRus+H16mO3TGsz+TFJLraOyvfciCA@mail.gmail.com>
- <DBBPR08MB453845A7A15596F6FE96DBC9F7249@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <CAMj1kXHrP_P79ObKPFFgpN-X7gN+zaN1vKbsQZTJGvm=Uoav3g@mail.gmail.com>
- <Y0l8AeQCrMLYW6g3@hirez.programming.kicks-ass.net> <CAMj1kXENTJVZU27PYqwWGod4ESkTxgJ8+2vdqWjR5DVRSbNGDg@mail.gmail.com>
- <DBBPR08MB4538066E9C43FCF2983C8B60F7299@DBBPR08MB4538.eurprd08.prod.outlook.com>
-In-Reply-To: <DBBPR08MB4538066E9C43FCF2983C8B60F7299@DBBPR08MB4538.eurprd08.prod.outlook.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 17 Oct 2022 11:27:17 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFNEtGYBefwcSLvs8XokyiZXDypC9mCgZhCkbVkS09Jog@mail.gmail.com>
-Message-ID: <CAMj1kXFNEtGYBefwcSLvs8XokyiZXDypC9mCgZhCkbVkS09Jog@mail.gmail.com>
-Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-To:     Justin He <Justin.He@arm.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Len Brown <lenb@kernel.org>,
-        James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EY4KXZ7eqD8LDJOn"
+Content-Disposition: inline
+In-Reply-To: <20221017065452.2250273-1-sadiyakazi@google.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Justin,
 
-On Mon, 17 Oct 2022 at 10:47, Justin He <Justin.He@arm.com> wrote:
->
-> Hi Ard
->
-> > -----Original Message-----
-> > Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-> >
-> > On Fri, 14 Oct 2022 at 17:11, Peter Zijlstra <peterz@infradead.org> wro=
-te:
-> > >
-> > > On Fri, Oct 14, 2022 at 04:31:37PM +0200, Ard Biesheuvel wrote:
-> > > > +       if (slot !=3D -1) {
-> > > > +               /*
-> > > > +                * Use release semantics to ensure that
-> > ghes_estatus_cached()
-> > > > +                * running on another CPU will see the updated cach=
-e
-> > fields if
-> > > > +                * it can see the new value of the pointer.
-> > > > +                */
-> > > > +               victim =3D xchg_release(ghes_estatus_caches + slot,
-> > > > +
-> > RCU_INITIALIZER(new_cache));
-> > > > +
-> > > > +               /*
-> > > > +                * At this point, victim may point to a cached item
-> > different
-> > > > +                * from the one based on which we selected the slot=
-.
-> > Instead of
-> > > > +                * going to the loop again to pick another slot, le=
-t's
-> > just
-> > > > +                * drop the other item anyway: this may cause a fal=
-se
-> > cache
-> > > > +                * miss later on, but that won't cause any problems=
-.
-> > > > +                */
-> > > > +               if (victim) {
-> > > > +                       call_rcu(&rcu_dereference(victim)->rcu,
-> > > > +                                ghes_estatus_cache_rcu_free);
-> > >                 }
-> > >
-> > > I think you can use unrcu_pointer() here instead, there should not be
-> > > a data dependency since the ->rcu member itself should be otherwise
-> > > unused (and if it were, we wouldn't care about its previous content a=
-nyway).
-> > >
-> > > But only Alpha cares about that distinction anyway, so *shrug*.
-> > >
-> >
-> > Ah yeah good point - and we are not actually dereferencing the pointer =
-at all
-> > here, just adding an offset to get at the address of the rcu member.
-> >
-> > So we can take this block out of the rcu_read_lock() section as well.
-> >
-> >
-> > > While I much like the xchg() variant; I still don't really fancy the
-> > > verbage the sparse nonsense makes us do.
-> > >
-> > >                 victim =3D xchg_release(&ghes_estatus_caches[slot],
-> > new_cache);
-> > >                 if (victim)
-> > >                         call_rcu(&victim->rcu,
-> > > ghes_estatus_cache_rcu_free);
-> > >
-> > > is much nicer code.
-> > >
-> > > Over all; I'd simply ignore sparse (I often do).
-> > >
-> >
-> > No disagreement there.
->
-> What do you think of the updated patch:
->
-> apei/ghes: Use xchg() for updating new cache slot instead of
->  cmpxchg()
->
-> From: Ard Biesheuvel <ardb@kernel.org>
->
-> ghes_estatus_cache_add() selects a slot, and either succeeds in
-> replacing its contents with a pointer to a new cached item, or it just
-> gives up and frees the new item again, without attempting to select
-> another slot even if one might be available.
->
-> Since only inserting new items is needed, the race can only cause a failu=
-re
-> if the selected slot was updated with another new item concurrently,
-> which means that it is arbitrary which of those two items gets
-> dropped. This means the cmpxchg() and the special case are not necessary,
-> and hence just drop the existing item unconditionally. Note that this
-> does not result in loss of error events, it simply means we might
-> cause a false cache miss, and report the same event one additional
-> time in quick succession even if the cache should have prevented that.
->
+--EY4KXZ7eqD8LDJOn
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please add a line here
-
-Co-developed-by: Jia He <justin.he@arm.com>
-
-> Signed-off-by: Jia He <justin.he@arm.com>
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+On Mon, Oct 17, 2022 at 06:54:53AM +0000, Sadiya Kazi wrote:
+> Updated the architecture.rst page with the following changes:
+> -Add missing article _the_ across the document.
+> -Reword content across for style and standard.
+> -Update all occurrences of Command Line to Command-line
+>  across the document.
+> -Correct grammatical issues, for example,
+>  added _it_wherever missing.
+> -Update all occurrences of =E2=80=9Cvia" to either use
+>  =E2=80=9Cthrough=E2=80=9D or =E2=80=9Cusing=E2=80=9D.
+> -Update the text preceding the external links and pushed the full
+>  link to a new line for better readability.
+> -Reword content under the config command to make it more clear and concis=
+e.
+>=20
+> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
 > ---
-> [Justin]: I removed __rcu annotation of victim, removed the RCU_INITIALIZ=
-ER
-> cast and added the unptr for xchg.
->
-> drivers/acpi/apei/ghes.c | 44 ++++++++++++++++++++--------------------
->  1 file changed, 22 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 27c72b175e4b..5fc8a135450b 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -150,7 +150,7 @@ struct ghes_vendor_record_entry {
->  static struct gen_pool *ghes_estatus_pool;
->  static unsigned long ghes_estatus_pool_size_request;
->
-> -static struct ghes_estatus_cache *ghes_estatus_caches[GHES_ESTATUS_CACHE=
-S_SIZE];
-> +static struct ghes_estatus_cache __rcu *ghes_estatus_caches[GHES_ESTATUS=
-_CACHES_SIZE];
->  static atomic_t ghes_estatus_cache_alloced;
->
->  static int ghes_panic_timeout __read_mostly =3D 30;
-> @@ -785,31 +785,26 @@ static struct ghes_estatus_cache *ghes_estatus_cach=
-e_alloc(
->         return cache;
->  }
->
-> -static void ghes_estatus_cache_free(struct ghes_estatus_cache *cache)
-> +static void ghes_estatus_cache_rcu_free(struct rcu_head *head)
->  {
-> +       struct ghes_estatus_cache *cache;
->         u32 len;
->
-> +       cache =3D container_of(head, struct ghes_estatus_cache, rcu);
->         len =3D cper_estatus_len(GHES_ESTATUS_FROM_CACHE(cache));
->         len =3D GHES_ESTATUS_CACHE_LEN(len);
->         gen_pool_free(ghes_estatus_pool, (unsigned long)cache, len);
->         atomic_dec(&ghes_estatus_cache_alloced);
->  }
->
-> -static void ghes_estatus_cache_rcu_free(struct rcu_head *head)
-> -{
-> -       struct ghes_estatus_cache *cache;
-> -
-> -       cache =3D container_of(head, struct ghes_estatus_cache, rcu);
-> -       ghes_estatus_cache_free(cache);
-> -}
-> -
->  static void ghes_estatus_cache_add(
->         struct acpi_hest_generic *generic,
->         struct acpi_hest_generic_status *estatus)
->  {
->         int i, slot =3D -1, count;
->         unsigned long long now, duration, period, max_period =3D 0;
-> -       struct ghes_estatus_cache *cache, *slot_cache =3D NULL, *new_cach=
-e;
-> +       struct ghes_estatus_cache *cache, *new_cache;
-> +       struct ghes_estatus_cache *victim;
->
->         new_cache =3D ghes_estatus_cache_alloc(generic, estatus);
->         if (new_cache =3D=3D NULL)
-> @@ -820,13 +815,11 @@ static void ghes_estatus_cache_add(
->                 cache =3D rcu_dereference(ghes_estatus_caches[i]);
->                 if (cache =3D=3D NULL) {
->                         slot =3D i;
-> -                       slot_cache =3D NULL;
->                         break;
->                 }
->                 duration =3D now - cache->time_in;
->                 if (duration >=3D GHES_ESTATUS_IN_CACHE_MAX_NSEC) {
->                         slot =3D i;
-> -                       slot_cache =3D cache;
->                         break;
->                 }
->                 count =3D atomic_read(&cache->count);
-> @@ -835,17 +828,24 @@ static void ghes_estatus_cache_add(
->                 if (period > max_period) {
->                         max_period =3D period;
->                         slot =3D i;
-> -                       slot_cache =3D cache;
->                 }
->         }
-> -       /* new_cache must be put into array after its contents are writte=
-n */
-> -       smp_wmb();
-> -       if (slot !=3D -1 && cmpxchg(ghes_estatus_caches + slot,
-> -                                 slot_cache, new_cache) =3D=3D slot_cach=
-e) {
-> -               if (slot_cache)
-> -                       call_rcu(&slot_cache->rcu, ghes_estatus_cache_rcu=
-_free);
-> -       } else
-> -               ghes_estatus_cache_free(new_cache);
-> +       if (slot !=3D -1) {
-> +               /*
-> +                * Use release semantics to ensure that ghes_estatus_cach=
-ed()
-> +                * running on another CPU will see the updated cache fiel=
-ds if
-> +                * it can see the new value of the pointer.
-
-Please move the comment back where it was. 'At this point' is now
-ambiguous because victim has not been assigned yet.
-
-> +                * At this point, victim may point to a cached item diffe=
-rent
-> +                * from the one based on which we selected the slot. Inst=
-ead of
-> +                * going to the loop again to pick another slot, let's ju=
-st
-> +                * drop the other item anyway: this may cause a false cac=
+>=20
+> Thank you Bagas for your detailed comments.=20
+> I think the current commit message does convey the right message as it is=
+ not a complete rewrite, hence retained it.=20
+> Also since we talk about the two parts of the architecture, I have retain=
+ed the it as 'kunit_tool (Command-line Test Harness)' instead of 'Running T=
+ests Options'.
+>=20
+> Changes since v2:
+> https://lore.kernel.org/linux-kselftest/20221013080545.1552573-1-sadiyaka=
+zi@google.com/
+> -Updated the link descriptions as per Bagas=E2=80=99s feedback
+> -Reworded content talking about options to run tests and added links as p=
+er Bagas=E2=80=99s feedback
+>=20
+> Best Regards,
+> Sadiya Kazi
+> ---
+>  .../dev-tools/kunit/architecture.rst          | 118 +++++++++---------
+>  1 file changed, 60 insertions(+), 58 deletions(-)
+>=20
+> diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentati=
+on/dev-tools/kunit/architecture.rst
+> index 8efe792bdcb9..52b1a30c9f89 100644
+> --- a/Documentation/dev-tools/kunit/architecture.rst
+> +++ b/Documentation/dev-tools/kunit/architecture.rst
+> @@ -4,16 +4,17 @@
+>  KUnit Architecture
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+> -The KUnit architecture can be divided into two parts:
+> +The KUnit architecture is divided into two parts:
+> =20
+>  - `In-Kernel Testing Framework`_
+> -- `kunit_tool (Command Line Test Harness)`_
+> +- `kunit_tool (Command-line Test Harness)`_
+> =20
+>  In-Kernel Testing Framework
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> =20
+>  The kernel testing library supports KUnit tests written in C using
+> -KUnit. KUnit tests are kernel code. KUnit does several things:
+> +KUnit. These KUnit tests are kernel code. KUnit performs the following
+> +tasks:
+> =20
+>  - Organizes tests
+>  - Reports test results
+> @@ -22,19 +23,17 @@ KUnit. KUnit tests are kernel code. KUnit does severa=
+l things:
+>  Test Cases
+>  ----------
+> =20
+> -The fundamental unit in KUnit is the test case. The KUnit test cases are
+> -grouped into KUnit suites. A KUnit test case is a function with type
+> -signature ``void (*)(struct kunit *test)``.
+> -These test case functions are wrapped in a struct called
+> -struct kunit_case.
+> +The test case is the fundamental unit in KUnit. KUnit test cases are org=
+anised
+> +into suites. A KUnit test case is a function with type signature
+> +``void (*)(struct kunit *test)``. These test case functions are wrapped =
+in a
+> +struct called struct kunit_case.
+> =20
+>  .. note:
+>  	``generate_params`` is optional for non-parameterized tests.
+> =20
+> -Each KUnit test case gets a ``struct kunit`` context
+> -object passed to it that tracks a running test. The KUnit assertion
+> -macros and other KUnit utilities use the ``struct kunit`` context
+> -object. As an exception, there are two fields:
+> +Each KUnit test case receives a ``struct kunit`` context object that tra=
+cks a
+> +running test. The KUnit assertion macros and other KUnit utilities use t=
 he
-> +                * miss later on, but that won't cause any problems.
-> +                */
-> +               victim =3D unrcu_pointer(xchg_release(&ghes_estatus_cache=
-s[slot],
-> +                                       new_cache));
+> +``struct kunit`` context object. As an exception, there are two fields:
+> =20
+>  - ``->priv``: The setup functions can use it to store arbitrary test
+>    user data.
+> @@ -75,14 +74,15 @@ with the KUnit test framework.
+>  Executor
+>  --------
+> =20
+> -The KUnit executor can list and run built-in KUnit tests on boot.
+> +The KUnit executor can list and run built-in KUnit tests on boot
+>  The Test suites are stored in a linker section
+> -called ``.kunit_test_suites``. For code, see:
+> -https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+include/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
+> +called ``.kunit_test_suites``. For the code, see ``KUNIT_TABLE()`` macro
+> +definition in
+> +`include/asm-generic/vmlinux.lds.h <https://git.kernel.org/pub/scm/linux=
+/kernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=3Dv=
+6.0#n950>`_.
+>  The linker section consists of an array of pointers to
+>  ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
+> -macro. To run all tests compiled into the kernel, the KUnit executor
+> -iterates over the linker section array.
+> +macro. The KUnit executor iterates over the linker section array in orde=
+r to
+> +run all the tests that are compiled into the kernel.
+> =20
+>  .. kernel-figure:: kunit_suitememorydiagram.svg
+>  	:alt:	KUnit Suite Memory
+> @@ -90,17 +90,18 @@ iterates over the linker section array.
+>  	KUnit Suite Memory Diagram
+> =20
+>  On the kernel boot, the KUnit executor uses the start and end addresses
+> -of this section to iterate over and run all tests. For code, see:
+> -https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+lib/kunit/executor.c
+> -
+> +of this section to iterate over and run all tests. For the implementatio=
+n of the
+> +executor, see
+> +`lib/kunit/executor.c <https://git.kernel.org/pub/scm/linux/kernel/git/t=
+orvalds/linux.git/tree/lib/kunit/executor.c>`_.
+>  When built as a module, the ``kunit_test_suites()`` macro defines a
+>  ``module_init()`` function, which runs all the tests in the compilation
+>  unit instead of utilizing the executor.
+> =20
+>  In KUnit tests, some error classes do not affect other tests
+>  or parts of the kernel, each KUnit case executes in a separate thread
+> -context. For code, see:
+> -https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+lib/kunit/try-catch.c?h=3Dv5.15#n58
+> +context. For the implememtation details, see ``kunit_try_catch_run()`` f=
+unction
+> +code in
+> +`lib/kunit/try-catch.c <https://git.kernel.org/pub/scm/linux/kernel/git/=
+torvalds/linux.git/tree/lib/kunit/try-catch.c?h=3Dv5.15#n58>`_.
+> =20
+>  Assertion Macros
+>  ----------------
+> @@ -111,37 +112,36 @@ All expectations/assertions are formatted as:
+> =20
+>  - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
+>    expectation.
+> +  In the event of a failure, the testing flow differs as follows:
+> =20
+> -	- For an expectation, if the check fails, marks the test as failed
+> -	  and logs the failure.
+> +	- For expectations, the test is marked as failed and the failure is log=
+ged.
+> =20
+> -	- An assertion, on failure, causes the test case to terminate
+> -	  immediately.
+> +	- Failing assertions, on the other hand, result in the test case being
+> +	  terminated immediately.
+> =20
+> -		- Assertions call function:
+> +		- Assertions call the function:
+>  		  ``void __noreturn kunit_abort(struct kunit *)``.
+> =20
+> -		- ``kunit_abort`` calls function:
+> +		- ``kunit_abort`` calls the function:
+>  		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_=
+catch)``.
+> =20
+> -		- ``kunit_try_catch_throw`` calls function:
+> +		- ``kunit_try_catch_throw`` calls the function:
+>  		  ``void kthread_complete_and_exit(struct completion *, long) __noretu=
+rn;``
+>  		  and terminates the special thread context.
+> =20
+>  - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
+> -  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied pr=
+operties are
+> +  has the boolean value "true"), ``EQ`` (two supplied properties are
+>    equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
+> -  contain an =E2=80=9Cerr=E2=80=9D value).
+> +  contain an "err" value).
+> =20
+>  - ``[_MSG]`` prints a custom message on failure.
+> =20
+>  Test Result Reporting
+>  ---------------------
+> -KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
+> -https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-=
+14-specification.md.
+> -KTAP (yet to be standardized format) works with KUnit and Kselftest.
+> -The KUnit executor prints KTAP results to dmesg, and debugfs
+> -(if configured).
+> +KUnit prints the test results in KTAP format. KTAP is based on TAP14, see
+> +Documentation/dev-tools/ktap.rst.
+> +KTAP works with KUnit and Kselftest. The KUnit executor prints KTAP resu=
+lts to
+> +dmesg, and debugfs (if configured).
+> =20
+>  Parameterized Tests
+>  -------------------
+> @@ -150,33 +150,35 @@ Each KUnit parameterized test is associated with a =
+collection of
+>  parameters. The test is invoked multiple times, once for each parameter
+>  value and the parameter is stored in the ``param_value`` field.
+>  The test case includes a KUNIT_CASE_PARAM() macro that accepts a
+> -generator function.
+> -The generator function is passed the previous parameter and returns the =
+next
+> -parameter. It also provides a macro to generate common-case generators b=
+ased on
+> -arrays.
+> +generator function. The generator function is passed the previous parame=
+ter
+> +and returns the next parameter. It also includes a macro for generating
+> +array-based common-case generators.
+> =20
+> -kunit_tool (Command Line Test Harness)
+> +kunit_tool (Command-line Test Harness)
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+> -kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
+> -that can be used to configure, build, exec, parse and run (runs other
+> -commands in order) test results. You can either run KUnit tests using
+> -kunit_tool or can include KUnit in kernel and parse manually.
+> +``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.=
+py``. It
+> +is used to configure, build, execute, parse test results and run all of =
+the
+> +previous commands in correct order (i.e., configure, build, execute and =
+parse).
+> +You have two options for running KUnit tests: either build the kernel wi=
+th KUnit
+> +enabled and manually parse the results (see
+> +Documentation/dev-tools/kunit/run_manual.rst) or use ``kunit_tool``
+> +(see Documentation/dev-tools/kunit/run_wrapper.rst).
+> =20
+>  - ``configure`` command generates the kernel ``.config`` from a
+>    ``.kunitconfig`` file (and any architecture-specific options).
+> -  For some architectures, additional config options are specified in the
+> -  ``qemu_config`` Python script
+> -  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
+> +  The Python scripts available in ``qemu_configs`` folder
+> +  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
+> +  additional configuration options for specific architectures.
+>    It parses both the existing ``.config`` and the ``.kunitconfig`` files
+> -  and ensures that ``.config`` is a superset of ``.kunitconfig``.
+> -  If this is not the case, it will combine the two and run
+> -  ``make olddefconfig`` to regenerate the ``.config`` file. It then
+> -  verifies that ``.config`` is now a superset. This checks if all
+> -  Kconfig dependencies are correctly specified in ``.kunitconfig``.
+> -  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
+> -  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
+> -  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
+> +  to ensure that ``.config`` is a superset of ``.kunitconfig``.
+> +  If not, it will combine the two and run ``make olddefconfig`` to regen=
+erate
+> +  the ``.config`` file. It then checks to see if ``.config`` has become =
+a superset.
+> +  This verifies that all the Kconfig dependencies are correctly specifie=
+d in the
+> +  file ``.kunitconfig``. The ``kunit_config.py`` script contains the cod=
+e for parsing
+> +  Kconfigs. The code which runs ``make olddefconfig`` is part of the
+> +  ``kunit_kernel.py`` script. You can invoke this command through:
+> +  ``./tools/testing/kunit/kunit.py config`` and
+>    generate a ``.config`` file.
+>  - ``build`` runs ``make`` on the kernel tree with required options
+>    (depends on the architecture and some options, for example: build_dir)
+> @@ -184,8 +186,8 @@ kunit_tool or can include KUnit in kernel and parse m=
+anually.
+>    To build a KUnit kernel from the current ``.config``, you can use the
+>    ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
+>  - ``exec`` command executes kernel results either directly (using
+> -  User-mode Linux configuration), or via an emulator such
+> -  as QEMU. It reads results from the log via standard
+> +  User-mode Linux configuration), or through an emulator such
+> +  as QEMU. It reads results from the log using standard
+>    output (stdout), and passes them to ``parse`` to be parsed.
+>    If you already have built a kernel with built-in KUnit tests,
+>    you can run the kernel and display the test results with the ``exec``
 
-Doesn't this still trigger the sparse warning on x86?
+Seems like you're ignoring my review suggestions from both v1 and v2
+(code locations and redundant kunit_tool summary), hence NAK until you addr=
+ess
+them.
 
-> +               if (victim)
-> +                       call_rcu(&victim->rcu, ghes_estatus_cache_rcu_fre=
-e);
+Thanks.
 
-I think it is better to add back the __rcu annotation to 'victim', and
-change this line to
+--=20
+An old man doll... just what I always wanted! - Clara
 
-call_rcu(&unrcu_pointer(victim)->rcu, ghes_estatus_cache_rcu_free);
+--EY4KXZ7eqD8LDJOn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +       }
->         rcu_read_unlock();
+-----BEGIN PGP SIGNATURE-----
 
-This can now be moved before the if()
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY00f9AAKCRD2uYlJVVFO
+owc1AQDWTYT2DMbm74SVnn8XCVjnQ8vz+q1vXx8amO9uf1kZyAEAh0XlxHs8C+NM
+I0A9yvFsnyC+ZtSGiOcqwnj63TPohwY=
+=mNlc
+-----END PGP SIGNATURE-----
 
->  }
->
-> IMPORTANT NOTICE: The contents of this email and any attachments are conf=
-idential and may also be privileged. If you are not the intended recipient,=
- please notify the sender immediately and do not disclose the contents to a=
-ny other person, use it for any purpose, or store or copy the information i=
-n any medium. Thank you.
-
-Please get rid of this footer.
+--EY4KXZ7eqD8LDJOn--
