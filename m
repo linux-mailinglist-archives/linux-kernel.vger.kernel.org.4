@@ -2,185 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D84D601DAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 01:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050D3601DB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 01:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiJQXiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 19:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S229801AbiJQXiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 19:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJQXiK (ORCPT
+        with ESMTP id S230280AbiJQXiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 19:38:10 -0400
-X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Oct 2022 16:38:07 PDT
-Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A5558050F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 16:38:06 -0700 (PDT)
-Received: from localhost.localdomain ([146.241.87.206])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id kZfJoHtVXJpY4kZfJoMX3o; Tue, 18 Oct 2022 01:37:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1666049823; bh=+OQAKoYv7OiuITTsmVZiFS/2M0iuzzB5uuDxcJkXXgI=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=bUwxpBrurlQyUR5ls45YsLQoMzDT8C9/GiWvONMGEjAi19/DBuVq243MR53ypulYl
-         IH/b3lGfM5D5z1UJ3Ek2gcgoO/bSYzEuyd5mtcmEQiegZMNusd9L+NNnsmJNX22L3q
-         FkkYh4BS/ihkYsyDLkadWF/3aq7dfurgJp4yOyXlDhi1jYK2EklFsgG8M68xtq6P3/
-         5B8Iq4v/0v4fol+5j9xbhoWicSGwhc/R7Ck+6Pj8nUG0lOS6q+NMQPxXn7A9Ad8p50
-         mq2EvrKVhi1+oB5wzsArJslj27JtC1sdV/zJ23hdsUU0Sjdifip1Mwo3n1zBVTl/nM
-         xe0RNKxSZZmLw==
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>
-Subject: [PATCH] ARM: mm: fix no-MMU ZERO_PAGE() implementation
-Date:   Tue, 18 Oct 2022 01:37:00 +0200
-Message-Id: <20221017233700.84918-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 17 Oct 2022 19:38:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008F8857D4;
+        Mon, 17 Oct 2022 16:38:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E165612DC;
+        Mon, 17 Oct 2022 23:38:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C676DC433C1;
+        Mon, 17 Oct 2022 23:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666049892;
+        bh=MlBnouHryaZbiw/93+me4ojj1DJ4whBS7dUdANGIhOU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ds4uccgRrpkr/UI3TrihXNnk4oluADnAMxef1aeu0RK+x8oeBp7saNgL73nidKfWf
+         zeCaKLbvMIYeQbwbAwrmYivo+qu9bpoUsIY7aXJKvb7AXe70civYScJJpzml32/pGo
+         qe8QHicr9T9QvrqCDdLV6UHJ6uDc9dp2agf50WZwQEGRYgrvfkO5EmIRIlPZK8oDCm
+         1fBHB9UhRfEXwgoeZNbB1slzhVj8SnXb52hTdu53jNWrfHzML4lmriYTdr6WeCg2Pj
+         bViRTE8ys2wXmXa04ajb5EC423TsCWglNfszCVN6u89jqyx7gI97eU+0nP4z0HTMkD
+         tj/AJae0GwGtg==
+From:   SeongJae Park <sj@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     sj@kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, namhyung@kernel.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH] perf: Fix missing raw data on tracepoint events
+Date:   Mon, 17 Oct 2022 23:38:09 +0000
+Message-Id: <20221017233809.1476-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221012143857.48198-1-james.clark@arm.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfEesJnfYhGVfzJwrpi2WrccOoQLk7qp7dxIosvDTgNTHuD+L/Kgzbkpqd5IzkRrqzYNkCaCxHsGSoGNJBk/6hCXucsuTWi1skZxo2vJ2oPXyWgrir0Dc
- WSG2BDgQRCTBN3fISBsiKdgBXLrKGfZL8BvLcoY1DCli3bD3X4YOgh0xNnuWOlxBZZ+UI5vYWrk/vQkIy1MjU4r9NL2P3zARME3m7jk1ZKUijybkhhAVOU6r
- IKu98Y6Ui8ByU+5a3DA22aTL9J5YfLdorcXL/Ef0irNtMNXrGVKwYfuLS1MZPQLyYe4CtnfkWBFPtq5GyNyOaNpd+wF1ILw98TgmEAJhgyebqBH2KL1Ad6Mv
- JDM3AuMzmChqAj4em51r15cfjGCGXrEAnbyRTENfxX0XFkAwr3xMouc4rbRgHya9z+H17oqI2G2nta7f3ybPP+WLN/TGioTA1lxsgKHpoxWHfl4ai+UALEIx
- h+iN2PkHoXKPdCD6yAlWNL/JF0cfG1eFndeljNJyUL4NgDbanjiBNn6C3Tia8AilFEDttK2spTNGMRf96iMSgmpPI8PBwZF1DRMPZjjHksQjG3nFprJyg3ge
- r1Q=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually in no-MMU SoCs(i.e. i.MXRT) ZERO_PAGE(vaddr) expands to
-```
-virt_to_page(0)
-```
-that in order expands to:
-```
-pfn_to_page(virt_to_pfn(0))
-```
-and then virt_to_pfn(0) to:
-```
-#define virt_to_pfn(0) \
-	((((unsigned long)(0) - PAGE_OFFSET) >> PAGE_SHIFT) + \
-	 PHYS_PFN_OFFSET)
-```
-where PAGE_OFFSET and PHYS_PFN_OFFSET are the DRAM offset(0x80000000) and
-PAGE_SHIFT is 12. This way we obtain 16MB(0x01000000) summed to the base of
-DRAM(0x80000000).
-When ZERO_PAGE(0) is then used, for example in bio_add_page(), the page
-gets an address that is out of DRAM bounds.
-So instead of using fake virtual page 0 let's allocate a dedicated
-zero_page during paging_init() and assign it to a global 'struct page *
-empty_zero_page' the same way mmu.c does. Then let's move ZERO_PAGE()
-definition to the top of pgtable.h to be in common between mmu.c and
-nommu.c.
+On Wed, 12 Oct 2022 15:38:57 +0100 James Clark <james.clark@arm.com> wrote:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- arch/arm/include/asm/pgtable-nommu.h |  6 ------
- arch/arm/include/asm/pgtable.h       | 16 +++++++++-------
- arch/arm/mm/nommu.c                  | 19 +++++++++++++++++++
- 3 files changed, 28 insertions(+), 13 deletions(-)
+> Since commit 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+> raw data is not being output on tracepoints due to the PERF_SAMPLE_RAW
+> field not being set. Fix this by setting it for tracepoint events.
 
-diff --git a/arch/arm/include/asm/pgtable-nommu.h b/arch/arm/include/asm/pgtable-nommu.h
-index d16aba48fa0a..090011394477 100644
---- a/arch/arm/include/asm/pgtable-nommu.h
-+++ b/arch/arm/include/asm/pgtable-nommu.h
-@@ -44,12 +44,6 @@
- 
- typedef pte_t *pte_addr_t;
- 
--/*
-- * ZERO_PAGE is a global shared page that is always zero: used
-- * for zero-mapped memory areas etc..
-- */
--#define ZERO_PAGE(vaddr)	(virt_to_page(0))
--
- /*
-  * Mark the prot value as uncacheable and unbufferable.
-  */
-diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-index 78a532068fec..ef48a55e9af8 100644
---- a/arch/arm/include/asm/pgtable.h
-+++ b/arch/arm/include/asm/pgtable.h
-@@ -10,6 +10,15 @@
- #include <linux/const.h>
- #include <asm/proc-fns.h>
- 
-+#ifndef __ASSEMBLY__
-+/*
-+ * ZERO_PAGE is a global shared page that is always zero: used
-+ * for zero-mapped memory areas etc..
-+ */
-+extern struct page *empty_zero_page;
-+#define ZERO_PAGE(vaddr)	(empty_zero_page)
-+#endif
-+
- #ifndef CONFIG_MMU
- 
- #include <asm-generic/pgtable-nopud.h>
-@@ -139,13 +148,6 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-  */
- 
- #ifndef __ASSEMBLY__
--/*
-- * ZERO_PAGE is a global shared page that is always zero: used
-- * for zero-mapped memory areas etc..
-- */
--extern struct page *empty_zero_page;
--#define ZERO_PAGE(vaddr)	(empty_zero_page)
--
- 
- extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
- 
-diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
-index c42debaded95..c1494a4dee25 100644
---- a/arch/arm/mm/nommu.c
-+++ b/arch/arm/mm/nommu.c
-@@ -26,6 +26,13 @@
- 
- unsigned long vectors_base;
- 
-+/*
-+ * empty_zero_page is a special page that is used for
-+ * zero-initialized data and COW.
-+ */
-+struct page *empty_zero_page;
-+EXPORT_SYMBOL(empty_zero_page);
-+
- #ifdef CONFIG_ARM_MPU
- struct mpu_rgn_info mpu_rgn_info;
- #endif
-@@ -148,9 +155,21 @@ void __init adjust_lowmem_bounds(void)
-  */
- void __init paging_init(const struct machine_desc *mdesc)
- {
-+	void *zero_page;
-+
- 	early_trap_init((void *)vectors_base);
- 	mpu_setup();
-+
-+	/* allocate the zero page. */
-+	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-+	if (!zero_page)
-+		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-+		      __func__, PAGE_SIZE, PAGE_SIZE);
-+
- 	bootmem_init();
-+
-+	empty_zero_page = virt_to_page(zero_page);
-+	flush_dcache_page(empty_zero_page);
- }
- 
- /*
--- 
-2.34.1
+I was also getting similar issue[1], and confirmed that this fixes it.  Thank
+you for the fix!  Also, thank you for pointing me to this patch, Namhyung!
 
+> 
+> This fixes the following test failure:
+> 
+>   perf test "sched_switch" -vvv
+> 
+>    35: Track with sched_switch
+>   --- start ---
+>   test child forked, pid 1828
+>   ...
+>   Using CPUID 0x00000000410fd400
+>   sched_switch: cpu: 2 prev_tid -14687 next_tid 0
+>   sched_switch: cpu: 2 prev_tid -14687 next_tid 0
+>   Missing sched_switch events
+>   4613 events recorded
+>   test child finished with -1
+>   ---- end ----
+>   Track with sched_switch: FAILED!
+> 
+> Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: James Clark <james.clark@arm.com>
+
+Tested-by: SeongJae Park <sj@kernel.org>
+
+
+[1] https://lore.kernel.org/bpf/20221017192744.1403-1-sj@kernel.org/
+
+Thanks,
+SJ
+
+> ---
+>  kernel/events/core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index b981b879bcd8..824c23830272 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -9759,6 +9759,7 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
+>  
+>  	perf_sample_data_init(&data, 0, 0);
+>  	data.raw = &raw;
+> +	data.sample_flags |= PERF_SAMPLE_RAW;
+>  
+>  	perf_trace_buf_update(record, event_type);
+>  
+> -- 
+> 2.28.0
