@@ -2,199 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D7E6007F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91E5600801
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiJQHnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S230250AbiJQHrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiJQHnf (ORCPT
+        with ESMTP id S229770AbiJQHrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:43:35 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC805AC6D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:43:33 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id j8-20020a056e02154800b002fc89e9ebeeso8506284ilu.16
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:43:33 -0700 (PDT)
+        Mon, 17 Oct 2022 03:47:06 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9D4193ED;
+        Mon, 17 Oct 2022 00:47:05 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id b2so10042477plc.7;
+        Mon, 17 Oct 2022 00:47:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=trKg4e+84RTL7802i/2COWxZYFL5an0MughGIKzB3gg=;
+        b=Is2mRJ7WSElkiPaw7WGMnu+OPee+ZjTYdAH4JarFZZh1AxUymwfPScZLlDfCz5dGuy
+         26qCclC9g8JIZm/9bx09Qpi+2oc+RbGD6VMaw6L929D21P3l8NHSNAfTk5iyU9YjiVyg
+         9I4QgP0ovmueLtZ16Zdc2R5qMxewrGwAss1j4d3LN6vq+x4l8paLAFvE5xrf69kriikl
+         ThodotI7uheTcjnF4p+QwkKeduT47F6OI9JI3+jg4IrQH9x3RSOCB//O5MTQHLzM21Ta
+         ZRq6/Vh3aNXb5/wkotpwkO4xPDuTrCxDrbLwFcIG8yucLOifuDv/XAAvtgU/FYFGVvoH
+         xLRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UfK1+fv3Ya5Q5MNSmq1YC4ie1AyJ3S/K2IZh9i7n/u0=;
-        b=pZW5RogcZZS6m453K2Wr5UM1JsOPck5HQlAtTiOMGaJnwUxeCWuwFrSr1l4VHvQleG
-         4AAL70xKT5zrtwjFBFqNW/vDzEUNCbox0T5Brv5qAIp6MrkYaYscPQ5P9k32YvZnaJMi
-         1nNTzR900YIr+qrDQnDkXskprx232LqV1QAJJHwdRaJE+hgg6fg7iois3MNkNZwiosgV
-         SjiC90k3baVSWnfa/3rLdUlxKdfeS/PvGhcuml9xe5FwAKFrHJSzD9Wql/AXZYl5w2UV
-         KdsEaQ1Z3/0R6pIh3q83FnlrkSa+Jqo6UJh6NllCv/1Nn/lc0J47iJqP/eGCFikHCyP0
-         3jpQ==
-X-Gm-Message-State: ACrzQf2Ie5mV5bgpDTSt3Osl+ERx2hqMsA45O8WEyWDhvznq9wYEsSzI
-        /SL6l/qimRSOXENgaTuFiSkVHtS4IZsaldjEft4phWdYhuhz
-X-Google-Smtp-Source: AMsMyM5DwIhNIsr790vF1a/B0/aBUlOhdTpCpEuKwM62eewHdsfW2tD2wpPmFiUNBY0fAHrrQz5XDDU6mUMb3R/HUHElt4CiYuQY
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=trKg4e+84RTL7802i/2COWxZYFL5an0MughGIKzB3gg=;
+        b=ooMCf+70Nac0QIsSaOZP5AuAkPCTEKW5zg6yh6NzpGqR8Qn+bnBOgUaqpipW5JWN1S
+         r0Nlm7z4d45p/ofyBkDxzUN9iOlqB9/tVqNlsWFDh5BC+e/cVHCxAFyAe3aMWM26mDB4
+         5jKJQgJu53QgRqihgOqnxTb9ep00JG0dfmdWvaDbc77Mnn0KxTreOXe7ekLTES7el9U8
+         WX8ed8KSCG3+CqfDX4Ysh5ejmQMRw3ZtiYB+jp3nxBJBp6MJUWc0ju+fiLU5JMsvieov
+         UNS6UyaxpUX+QFjDdlyZ9NTEzaycPHchvOtcwtxXz287hCkFyh69s1yyyoivKoH/bFfj
+         PXyg==
+X-Gm-Message-State: ACrzQf0CqQ5B7XhnAXSFPdcNaHvLD7mxyDCeWvEMLrkQdKppBOJrUUA8
+        3ct3UQnPXOSbDZv1NeQGxw0=
+X-Google-Smtp-Source: AMsMyM6FsMPVoOIGj/GIWy3kAd5GCtJpbj51sd6eQQHcKxTz9sAYFb6w7o8+2MgwT3QJ7GDaMYOgHA==
+X-Received: by 2002:a17:90b:1b51:b0:20d:8594:bd5f with SMTP id nv17-20020a17090b1b5100b0020d8594bd5fmr31118093pjb.125.1665992824904;
+        Mon, 17 Oct 2022 00:47:04 -0700 (PDT)
+Received: from localhost ([159.226.94.113])
+        by smtp.gmail.com with ESMTPSA id i6-20020a17090332c600b001806f4fbf25sm5945229plr.182.2022.10.17.00.47.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 00:47:04 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     syzbot+8f819e36e01022991cfa@syzkaller.appspotmail.com,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, 18801353760@163.com,
+        yin31149@gmail.com,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        netdev@vger.kernel.org
+Subject: [PATCH] Bluetooth: L2CAP: Fix memory leak in vhci_write
+Date:   Mon, 17 Oct 2022 15:44:32 +0800
+Message-Id: <20221017074432.12177-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4113:b0:363:f47e:7efd with SMTP id
- ay19-20020a056638411300b00363f47e7efdmr4996107jab.264.1665992613336; Mon, 17
- Oct 2022 00:43:33 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 00:43:33 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ea9fef05eb3621b6@google.com>
-Subject: [syzbot] possible deadlock in attr_data_get_block
-From:   syzbot <syzbot+36bb70085ef6edc2ebb9@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Syzkaller reports a memory leak as follows:
+====================================
+BUG: memory leak
+unreferenced object 0xffff88810d81ac00 (size 240):
+  [...]
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff838733d9>] __alloc_skb+0x1f9/0x270 net/core/skbuff.c:418
+    [<ffffffff833f742f>] alloc_skb include/linux/skbuff.h:1257 [inline]
+    [<ffffffff833f742f>] bt_skb_alloc include/net/bluetooth/bluetooth.h:469 [inline]
+    [<ffffffff833f742f>] vhci_get_user drivers/bluetooth/hci_vhci.c:391 [inline]
+    [<ffffffff833f742f>] vhci_write+0x5f/0x230 drivers/bluetooth/hci_vhci.c:511
+    [<ffffffff815e398d>] call_write_iter include/linux/fs.h:2192 [inline]
+    [<ffffffff815e398d>] new_sync_write fs/read_write.c:491 [inline]
+    [<ffffffff815e398d>] vfs_write+0x42d/0x540 fs/read_write.c:578
+    [<ffffffff815e3cdd>] ksys_write+0x9d/0x160 fs/read_write.c:631
+    [<ffffffff845e0645>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845e0645>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+====================================
 
-syzbot found the following issue on:
+HCI core will uses hci_rx_work() to process frame, which is queued to
+the hdev->rx_q tail in hci_recv_frame() by HCI driver.
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ce2a7c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=36bb70085ef6edc2ebb9
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+Yet the problem is that, HCI core does not free the skb after handling
+ACL data packets. To be more specific, when start fragment does not
+contain the L2CAP length, HCI core just reads possible bytes and
+finishes frame process in l2cap_recv_acldata(), without freeing the skb,
+which triggers the above memory leak.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This patch solves it by releasing the relative skb, after processing the
+above case in l2cap_recv_acldata()
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+36bb70085ef6edc2ebb9@syzkaller.appspotmail.com
-
-ntfs3: loop4: Different NTFS' sector size (1024) and media sector size (512)
-ntfs3: loop4: Mark volume as dirty due to NTFS errors
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
-------------------------------------------------------
-syz-executor.4/15497 is trying to acquire lock:
-ffff000116476948 (&ni->file.run_lock#3){++++}-{3:3}, at: attr_data_get_block+0x84/0xa54 fs/ntfs3/attrib.c:899
-
-but task is already holding lock:
-ffff0000c7543ad8 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_killable include/linux/mmap_lock.h:87 [inline]
-ffff0000c7543ad8 (&mm->mmap_lock){++++}-{3:3}, at: vm_mmap_pgoff+0xa0/0x1d0 mm/util.c:550
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&mm->mmap_lock){++++}-{3:3}:
-       __might_fault+0x7c/0xb4 mm/memory.c:5577
-       _copy_to_user include/linux/uaccess.h:134 [inline]
-       copy_to_user include/linux/uaccess.h:160 [inline]
-       fiemap_fill_next_extent+0xc4/0x1f8 fs/ioctl.c:144
-       ni_fiemap+0x4cc/0x620 fs/ntfs3/frecord.c:2051
-       ntfs_fiemap+0x9c/0xdc fs/ntfs3/file.c:1245
-       ioctl_fiemap fs/ioctl.c:219 [inline]
-       do_vfs_ioctl+0x10f0/0x16a4 fs/ioctl.c:810
-       __do_sys_ioctl fs/ioctl.c:868 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __arm64_sys_ioctl+0x98/0x140 fs/ioctl.c:856
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
--> #0 (&ni->file.run_lock#3){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1499
-       attr_data_get_block+0x84/0xa54 fs/ntfs3/attrib.c:899
-       ntfs_file_mmap+0x1d0/0x2e4 fs/ntfs3/file.c:387
-       call_mmap include/linux/fs.h:2192 [inline]
-       mmap_region+0x7fc/0xc14 mm/mmap.c:1752
-       do_mmap+0x644/0x97c mm/mmap.c:1540
-       vm_mmap_pgoff+0xe8/0x1d0 mm/util.c:552
-       ksys_mmap_pgoff+0x1cc/0x278 mm/mmap.c:1586
-       __do_sys_mmap arch/arm64/kernel/sys.c:28 [inline]
-       __se_sys_mmap arch/arm64/kernel/sys.c:21 [inline]
-       __arm64_sys_mmap+0x58/0x6c arch/arm64/kernel/sys.c:21
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&mm->mmap_lock);
-                               lock(&ni->file.run_lock#3);
-                               lock(&mm->mmap_lock);
-  lock(&ni->file.run_lock#3);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.4/15497:
- #0: ffff0000c7543ad8 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_killable include/linux/mmap_lock.h:87 [inline]
- #0: ffff0000c7543ad8 (&mm->mmap_lock){++++}-{3:3}, at: vm_mmap_pgoff+0xa0/0x1d0 mm/util.c:550
-
-stack backtrace:
-CPU: 0 PID: 15497 Comm: syz-executor.4 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2053
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- down_read+0x5c/0x78 kernel/locking/rwsem.c:1499
- attr_data_get_block+0x84/0xa54 fs/ntfs3/attrib.c:899
- ntfs_file_mmap+0x1d0/0x2e4 fs/ntfs3/file.c:387
- call_mmap include/linux/fs.h:2192 [inline]
- mmap_region+0x7fc/0xc14 mm/mmap.c:1752
- do_mmap+0x644/0x97c mm/mmap.c:1540
- vm_mmap_pgoff+0xe8/0x1d0 mm/util.c:552
- ksys_mmap_pgoff+0x1cc/0x278 mm/mmap.c:1586
- __do_sys_mmap arch/arm64/kernel/sys.c:28 [inline]
- __se_sys_mmap arch/arm64/kernel/sys.c:21 [inline]
- __arm64_sys_mmap+0x58/0x6c arch/arm64/kernel/sys.c:21
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
-
+Fixes: 4d7ea8ee90e4 ("Bluetooth: L2CAP: Fix handling fragmented length")
+Link: https://lore.kernel.org/all/0000000000000d0b1905e6aaef64@google.com/
+Reported-and-tested-by: syzbot+8f819e36e01022991cfa@syzkaller.appspotmail.com
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ net/bluetooth/l2cap_core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 1f34b82ca0ec..e0a00854c02e 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -8426,9 +8426,8 @@ void l2cap_recv_acldata(struct hci_conn *hcon, struct sk_buff *skb, u16 flags)
+ 		 * expected length.
+ 		 */
+ 		if (skb->len < L2CAP_LEN_SIZE) {
+-			if (l2cap_recv_frag(conn, skb, conn->mtu) < 0)
+-				goto drop;
+-			return;
++			l2cap_recv_frag(conn, skb, conn->mtu);
++			goto drop;
+ 		}
+ 
+ 		len = get_unaligned_le16(skb->data) + L2CAP_HDR_SIZE;
+@@ -8472,7 +8471,7 @@ void l2cap_recv_acldata(struct hci_conn *hcon, struct sk_buff *skb, u16 flags)
+ 
+ 			/* Header still could not be read just continue */
+ 			if (conn->rx_skb->len < L2CAP_LEN_SIZE)
+-				return;
++				goto drop;
+ 		}
+ 
+ 		if (skb->len > conn->rx_len) {
+-- 
+2.25.1
+
