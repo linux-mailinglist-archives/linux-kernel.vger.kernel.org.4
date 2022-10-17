@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E65601101
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A6360110B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiJQOVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S229817AbiJQOXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiJQOVg (ORCPT
+        with ESMTP id S230368AbiJQOXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:21:36 -0400
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4807E65552;
-        Mon, 17 Oct 2022 07:21:21 -0700 (PDT)
-Received: by mail-pl1-f170.google.com with SMTP id n7so10929802plp.1;
-        Mon, 17 Oct 2022 07:21:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4+et8DVjdGtj9pAekaQfUhzpxmN1x20MAblXLkd9fQ=;
-        b=Pw7MPNjmxi4f8rYcRPfL7MR3uKUf9bkbx9mo/a+VNbkWuefHv6QwJ2UwI/H3/tlRjk
-         YlROZLDZty3F9vMdr/lRJxBJSEZWDz6mf4XDEVdK+1NPz1+n+42DBJSYdiFe4bbtJwVH
-         k3jCaW2miZg8957tAspjyovKZNQE4nKjgqO8r83vuv6zDAjeJtzlmi79dDCQPRgeV2OL
-         Y0zzDuy4s4teuwlgy91rm4BLA4XYNQPLmkpfVMdhNjpYE1edLTYjyYq3SmUBfbdrHcof
-         ePLeSkq0MMY5hD0ZMOqTANYQ+m2sU3aDCXOwjLGZVJqGye8FZGqCCrUF3jvs9pyzlBhP
-         VDsQ==
-X-Gm-Message-State: ACrzQf3cgHML/2SOsnnwAYVbaEMKuf8aSfg5EHQI79LqmBlXL0wXek/m
-        MeGc6iyyaxMnl1657bCHd4c=
-X-Google-Smtp-Source: AMsMyM71X6toiNV7CayUNw5AJaFWlt3fZ267WW/Gm6SATjATxRzWHo2jOywylxZ2wNB6Qz8lyXmIAg==
-X-Received: by 2002:a17:90b:1d0e:b0:20d:a61f:84b1 with SMTP id on14-20020a17090b1d0e00b0020da61f84b1mr25721757pjb.172.1666016480628;
-        Mon, 17 Oct 2022 07:21:20 -0700 (PDT)
-Received: from [192.168.50.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id cc11-20020a17090af10b00b0020dc318a43esm5192538pjb.25.2022.10.17.07.21.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 07:21:19 -0700 (PDT)
-Message-ID: <f2baa3b4-81c9-a6d8-0c26-3e695dad5d10@acm.org>
-Date:   Mon, 17 Oct 2022 07:21:17 -0700
+        Mon, 17 Oct 2022 10:23:20 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A5E65655;
+        Mon, 17 Oct 2022 07:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9xfL6/k7u4koaszP9KMyOY8wVCMBnHlZFYRYE37DwZY=; b=o281kDXC1NHE1O1sCc6sXM9LPE
+        mLG85YE4HpDt2UDR1cx42oNsH8/nYPAlzUVkWE51DdULUUsrQhU39HNcA/p+K+w576wxw35/ljBCA
+        oAJ5D+M2I6R1f0OeoZFz1dc/37unXROytiAdKajzm9uTEpMvan310AjwwrKiCLsisNyaiX/JKFC0T
+        O7J4aiHOU+KPie0YpoMEzCG1excULa3xLark3GU9tNNF7PBwRs4w4WjVHhJRczPkDFbOngJVd2Cva
+        FhHI1pO3mpjqcXkn6Xt/aoyELWmIiKVa0sntcXfg1c92No4PQRjZBQH4GSPR52zDjWtBPw2dsx5mC
+        yL6oJufQ==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1okR18-000PGI-VK; Mon, 17 Oct 2022 16:22:58 +0200
+Message-ID: <5178691f-3a43-9f19-dcd0-98d3a104afa3@igalia.com>
+Date:   Mon, 17 Oct 2022 11:22:35 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] null_blk: allow teardown on request timeout
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 04/11] um: Improve panic notifiers consistency and
+ ordering
 Content-Language: en-US
-To:     Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        johannes.thumshirn@wdc.com, ming.lei@redhat.com,
-        shinichiro.kawasaki@wdc.com, vincent.fu@samsung.com,
-        yukuai3@huawei.com
-References: <20221016052006.11126-1-kch@nvidia.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221016052006.11126-1-kch@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     Richard Weinberger <richard@nod.at>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        linux-um <linux-um@lists.infradead.org>,
+        kexec <kexec@lists.infradead.org>, bhe <bhe@redhat.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hyperv <linux-hyperv@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, x86 <x86@kernel.org>,
+        kernel-dev <kernel-dev@igalia.com>, kernel <kernel@gpiccoli.net>,
+        halves <halves@canonical.com>,
+        fabiomirmar <fabiomirmar@gmail.com>,
+        alejandro j jimenez <alejandro.j.jimenez@oracle.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, bp <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        d hatayama <d.hatayama@jp.fujitsu.com>,
+        dave hansen <dave.hansen@linux.intel.com>,
+        dyoung <dyoung@redhat.com>, feng tang <feng.tang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley <mikelley@microsoft.com>,
+        hidehiro kawai ez <hidehiro.kawai.ez@hitachi.com>,
+        jgross <jgross@suse.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        mhiramat <mhiramat@kernel.org>, mingo <mingo@redhat.com>,
+        paulmck <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        senozhatsky <senozhatsky@chromium.org>,
+        stern <stern@rowland.harvard.edu>, tglx <tglx@linutronix.de>,
+        vgoyal <vgoyal@redhat.com>, vkuznets <vkuznets@redhat.com>,
+        will <will@kernel.org>, xuqiang36 <xuqiang36@huawei.com>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-5-gpiccoli@igalia.com>
+ <1f464f3d-6668-9e05-bcb7-1b419b5373e1@igalia.com>
+ <2087154222.237106.1663535981252.JavaMail.zimbra@nod.at>
+ <280ce0ae-5a50-626f-930f-2661a109fa36@igalia.com>
+ <422015181.40644.1666015829599.JavaMail.zimbra@nod.at>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <422015181.40644.1666015829599.JavaMail.zimbra@nod.at>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/15/22 22:20, Chaitanya Kulkarni wrote:
-> In current timeout implementation null_blk just completes the request
-> with error=BLK_STS_TIMEOUT without doing any cleanup, hence device
-> cleanup code including handling inflight requests on timeout and
-> teardown is never exercised.
+On 17/10/2022 11:10, Richard Weinberger wrote:
+> ----- Ursprüngliche Mail -----
+>> Von: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+>> Hi Richard / Johannes, is there any news on this one?
+>> Thanks in advance,
+> 
+> It's upstream:
+> git.kernel.org/linus/758dfdb9185cf94160f20e85bbe05583e3cd4ff4
+> 
+> Thanks,
+> //richard
 
-Hi Chaitanya,
+Wow, thanks! I am sorry, I didn't notice.
+Cheers,
 
-How about removing that code instead of adding a mechanism for 
-triggering it?
 
-> Add a module parameter rq_abort_limit to allow null_blk perform device
-> cleanup when time out occurs. The non zero value of this parameter
-> allows user to set the number of timeouts to occur before triggering
-> cleanup/teardown work.
-
-As Ming Lei wrote, there are no other block drivers that destroy 
-themselves if a certain number of timeouts occur. It seems weird to me 
-to trigger self-removal from inside a timeout handler.
-
-Thanks,
-
-Bart.
+Guilherme
