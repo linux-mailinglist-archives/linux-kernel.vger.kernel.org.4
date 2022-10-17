@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20EB601323
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0828C601324
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiJQQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 12:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S230441AbiJQQDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 12:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiJQQCt (ORCPT
+        with ESMTP id S230493AbiJQQCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Oct 2022 12:02:49 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DA66D843
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA00E6DF9E
         for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:46 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id sc25so25944601ejc.12
+Received: by mail-ed1-x52e.google.com with SMTP id g27so16706486edf.11
         for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AFb/7zwjqK5CQviz80hJ2NborTj9HM/1n8g5QJGdbSg=;
-        b=YiYXWC+QyyMRmUFikBr8oB0Y1Dv5Ak0+JU9eRaISPncrUtmk74un588/6vLUW20FX2
-         lcsMHUj1ia8PYSlFC9HVKa8LYI5/Yh0TjGpkQyJZZ4YS0bm/QH6Rv2CFRjtHZBT3b3pT
-         0+BPG/BTVuhoW6zArG3Q9DVL9nBrJkcTvqqVQu/jOMiJKoe+vM3ZZ6pcDUDpv1pb0fcM
-         4tAtotDnjQBySPAXfmWgfyTTefQF78FTuW3MoxUtYOQjsfkM6atHxIjLRfvQcYVxkVuy
-         ova4Mkw2DwcL0fxYGdC/Heno/OPCahBGre0elnEAC15yZWG8R1irKhQOqHbNR3mi0PHl
-         r5gw==
+        bh=cOp5dHui2KUwGT+5eQKWENO5yt6uGWyvR1ThU0hKA/E=;
+        b=Ulbrgh28jEV/lGImNotOj9dffdC1RexllUrzQaQtpYYjk7xh8ATZSDn4NWtmsJt0ZG
+         L73QhepRAssyp6RC7D07MffAXYOQ6aVWvUSjuDRzoGZSj02VYDKPTjCzkh6i18nN1S79
+         L7QpRUyawMxDKpBZE+EZFq3gbtIJy/09N7IDTzjQj2ssVDNX/Nns6sjjKpp9rVm6Ld2K
+         1ja0NXBtDjJNNqwGmxe6jNfJEnMmWUlNqfeHUYC7EfwYpiDF4cIBdRfRcDorDeV0E9ee
+         zyhN1bEHhf2HFW9uBFX3HsvtRnw/GtNW3pfTPt+hsL1MermAd/NKWCbLu6XTMiSysmW4
+         gPdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AFb/7zwjqK5CQviz80hJ2NborTj9HM/1n8g5QJGdbSg=;
-        b=45IK+4mZnM0bcNbIA45u7fict2h6lGLw88Cc9l6mDUkNbDOAv0Rx9R6it5kTF7NGWB
-         zxg8kSwL/48nSJ5t/cS22kqhaQjWuSc0ERqwEWovVyWaWvYXyghrX/D9xdxRD/YdMXSd
-         3UbtmxLYFYvubbyVBzI3JZAQ+wu5vjgkFcQFZ8NLQOdJ5Q8FDjPOM6AWqNPNZlAjxvz+
-         IQZQo/dAO66y3o+iVXDcHLeFoWTesODTjWvWJqNmst2QR8VGPxXHImFKC2dirEIHOAm5
-         eZ3c+Ko7na7FqZ+kAsPBR375b6ZeujmD5dIliYN9q9tUzUFSoQEofxrzwxPwhHMH4hgT
-         RFog==
-X-Gm-Message-State: ACrzQf0CYHkCjlLX5cDGcwWO+YIgnBbz925qEnns10IfqN0EtJ9NVIZT
-        9rjJqGk8OxLRBN4n8CnoTh8=
-X-Google-Smtp-Source: AMsMyM53rJaLhk4GwF6LlPSoomVfcARTFPfJm/NqfYLKgstdDAxVM5szNB2fF2xkAFkG5XJVLI5fRQ==
-X-Received: by 2002:a17:907:3f94:b0:78d:9d2f:3002 with SMTP id hr20-20020a1709073f9400b0078d9d2f3002mr9099892ejc.40.1666022565358;
-        Mon, 17 Oct 2022 09:02:45 -0700 (PDT)
+        bh=cOp5dHui2KUwGT+5eQKWENO5yt6uGWyvR1ThU0hKA/E=;
+        b=7wzy6RjjTgH+ZZRtfScQllr8WUMVYGgeJQ0c/dFztKQnR/S8Gf5q3gt2e/srB2aKNY
+         kfSNnsP5zjqDQxGaQN9KqU25ZCRQb07cX8hFtULHEXXOpVMgSFs6uK0ho6mcTufSJsbE
+         0y9FyCSvC2a57mIz/Dsr9LFQ6vGl4BWVmuyiRltQ9fCoA71O6UMhs9j8bp/acJQI90UQ
+         Vo99/TnFLVi3AfrTGitTCDqBNfFdC30dhgYxAHmDag4/Nh3U2G1DUQqGR/Xq+egbadNK
+         rw2ZWbmRg1uED0LeBV5ZHT2KoDCvcC7Os8mqHJcveZZU7+p9dpUwAnl11XdkB8nS3qvQ
+         bGgQ==
+X-Gm-Message-State: ACrzQf2Tx6pj4fC1Ot+XaGxD77aIxu+2xLs3lTKTu/RRNtoFK0VX2WUN
+        P1/XpiNg87Oxdu1eOCJQLUs=
+X-Google-Smtp-Source: AMsMyM6daThHHLSBrhl7j4Z6yU0za+Zqoyp1UULFUGi/BMDqzG/RFwI65BX/Rd+wyTS6JUWQcB6ACQ==
+X-Received: by 2002:a50:fe0a:0:b0:458:dce8:2b6b with SMTP id f10-20020a50fe0a000000b00458dce82b6bmr10732740edt.84.1666022566397;
+        Mon, 17 Oct 2022 09:02:46 -0700 (PDT)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.44
+        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 09:02:44 -0700 (PDT)
+        Mon, 17 Oct 2022 09:02:45 -0700 (PDT)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
@@ -59,9 +59,9 @@ Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
         Uladzislau Rezki <urezki@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
         Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 6/7] mm/vmalloc: Use a trace_free_vmap_area_noflush event
-Date:   Mon, 17 Oct 2022 18:02:32 +0200
-Message-Id: <20221017160233.16582-9-urezki@gmail.com>
+Subject: [PATCH 7/7] vmalloc: Add reviewers for vmalloc code
+Date:   Mon, 17 Oct 2022 18:02:33 +0200
+Message-Id: <20221017160233.16582-10-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221017160233.16582-1-urezki@gmail.com>
 References: <20221017160233.16582-1-urezki@gmail.com>
@@ -77,43 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is for a debug purpose and is called when a vmap area
-gets freed. This event gives some indication about:
-- a start address of released area;
-- a current number of outstanding pages;
-- a maximum number of allowed outstanding pages.
+Add myself and Christoph Hellwig as reviewers for vmalloc.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- mm/vmalloc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ MAINTAINERS | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 912abcd6e8b4..df4fd6674ced 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1822,6 +1822,8 @@ static void drain_vmap_area_work(struct work_struct *work)
-  */
- static void free_vmap_area_noflush(struct vmap_area *va)
- {
-+	unsigned long nr_lazy_max = lazy_max_pages();
-+	unsigned long va_start = va->va_start;
- 	unsigned long nr_lazy;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 568ad7c5eeb6..a6f4e11755e6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13289,10 +13289,20 @@ F:	include/linux/memory_hotplug.h
+ F:	include/linux/mm.h
+ F:	include/linux/mmzone.h
+ F:	include/linux/pagewalk.h
+-F:	include/linux/vmalloc.h
+ F:	mm/
+ F:	tools/testing/selftests/vm/
  
- 	spin_lock(&vmap_area_lock);
-@@ -1839,8 +1841,10 @@ static void free_vmap_area_noflush(struct vmap_area *va)
- 		&purge_vmap_area_root, &purge_vmap_area_list);
- 	spin_unlock(&purge_vmap_area_lock);
- 
-+	trace_free_vmap_area_noflush(va_start, nr_lazy, nr_lazy_max);
++VMALLOC
++M:	Andrew Morton <akpm@linux-foundation.org>
++R:	Uladzislau Rezki <urezki@gmail.com>
++R:	Christoph Hellwig <hch@infradead.org>
++L:	linux-mm@kvack.org
++S:	Maintained
++W:	http://www.linux-mm.org
++T:	git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
++F:	mm/vmalloc.c
++F:	include/linux/vmalloc.h
 +
- 	/* After this point, we may free va at any time */
--	if (unlikely(nr_lazy > lazy_max_pages()))
-+	if (unlikely(nr_lazy > nr_lazy_max))
- 		schedule_work(&drain_vmap_work);
- }
- 
+ MEMORY HOT(UN)PLUG
+ M:	David Hildenbrand <david@redhat.com>
+ M:	Oscar Salvador <osalvador@suse.de>
 -- 
 2.30.2
 
