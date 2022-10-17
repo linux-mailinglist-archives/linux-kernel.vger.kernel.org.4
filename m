@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DEB6010BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20266010C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiJQOFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S230234AbiJQOGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJQOFo (ORCPT
+        with ESMTP id S229939AbiJQOG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:05:44 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4231F642E5;
-        Mon, 17 Oct 2022 07:05:41 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 63C8933E5B;
-        Mon, 17 Oct 2022 14:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666015539; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc;
-        bh=4RoB3f0vV4gaiUdmvAQjE8R89ohmE3TBwvo8Cf6CUMw=;
-        b=q55ootJXzdR2lPOdq1dB9ZSp7j6b15mg3Lw8s3RAZ+DwJxUIeS5YYR21u3+nnKVDgzw370
-        +CTo0c7tGuamLaUM/O6/t/N4wVFUPh4c19XTlNupX99hIIGfAx9hJwnAb8MCJUXfC5A4RB
-        RhvnXxt9rc2gjmxxMwhF/YAjgG6Zsc0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666015539;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc;
-        bh=4RoB3f0vV4gaiUdmvAQjE8R89ohmE3TBwvo8Cf6CUMw=;
-        b=Pk4p2wYEQA+ZbvQ/zK2DQi5R3rbXOCC2ktHOsJKq17zGUDlBxj7ubmmF/+Z3rov/oQmS3g
-        Po+DIOOg8qibVZCQ==
-Received: from lion.mk-sys.cz (unknown [10.163.29.118])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 557A22C141;
-        Mon, 17 Oct 2022 14:05:39 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id CC46F6043B; Mon, 17 Oct 2022 16:05:33 +0200 (CEST)
-From:   Michal Kubecek <mkubecek@suse.cz>
-Subject: [PATCH] scsi: mpi3mr: add explicit dependency on
- CONFIG_SCSI_SAS_ATTRS
-To:     mpi3mr-linuxdrv.pdl@broadcom.com,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <20221017140533.CC46F6043B@lion.mk-sys.cz>
-Date:   Mon, 17 Oct 2022 16:05:33 +0200 (CEST)
+        Mon, 17 Oct 2022 10:06:28 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5611A25C51;
+        Mon, 17 Oct 2022 07:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=nnNaPHsK6FwMseLsC5mx5u23AVdFa4nC/67pGYTx9iw=; b=VnO3i3W9PnC25b/uABFAWH4zD9
+        IddvmWj5M3YARUxvtiYJK9qOj9HsnaTXguCNUswoIDWihuxqgA0z7Td2FjR78uWHBvcy+a7MouxzO
+        1ugt/DYFA1Lgg4Qfzki6NpD8qJbKPgg0OYXn1Jee7JsOdT3DPkQOl31y6AESAsFkdH5I40wha5BPs
+        /BZtAPyrnYLzNk5NXdWpCnb0ZcB2xcASRfSNL/vA50luXoXH2aFpANFoii+++U5P/OCWXal++FJva
+        NVxuR2YBT6IE5QidG5q30Mj/tkJnoKBETl2z1fasjEJLkbmLG+AjZLtpC7qOGEXBxs/bsk8YLuC0z
+        EnRJofeg==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1okQkz-000OT3-Sj; Mon, 17 Oct 2022 16:06:17 +0200
+Message-ID: <1df38599-ace7-5673-4cbd-7861de385d79@igalia.com>
+Date:   Mon, 17 Oct 2022 11:05:53 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump is
+ loaded
+Content-Language: en-US
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        linux-edac@vger.kernel.org, bp@alien8.de
+Cc:     kexec@lists.infradead.org, bhe@redhat.com, pmladek@suse.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, xuqiang36@huawei.com
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-9-gpiccoli@igalia.com>
+ <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
+In-Reply-To: <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting with commit 42fc9fee116f ("scsi: mpi3mr: Add helper functions to
-manage device's port"), kernel configured with CONFIG_SCSI_MPI3MR=m and
-CONFIG_SCSI_SAS_ATTRS=n fails to build because modpost cannot find symbols
-used in mpi3mr_transport.c:
+On 18/09/2022 11:10, Guilherme G. Piccoli wrote:
+> On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+>> The altera_edac panic notifier performs some data collection with
+>> regards errors detected; such code relies in the regmap layer to
+>> perform reads/writes, so the code is abstracted and there is some
+>> risk level to execute that, since the panic path runs in atomic
+>> context, with interrupts/preemption and secondary CPUs disabled.
+>>
+>> Users want the information collected in this panic notifier though,
+>> so in order to balance the risk/benefit, let's skip the altera panic
+>> notifier if kdump is loaded. While at it, remove a useless header
+>> and encompass a macro inside the sole ifdef block it is used.
+>>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: Petr Mladek <pmladek@suse.com>
+>> Cc: Tony Luck <tony.luck@intel.com>
+>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+>> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+>>
+>> ---
+>>
+>> V3:
+>> - added the ack tag from Dinh - thanks!
+>> - had a good discussion with Boris about that in V2 [0],
+>> hopefully we can continue and reach a consensus in this V3.
+>> [0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
+>>
+>> V2:
+>> - new patch, based on the discussion in [1].
+>> [1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
+>>
+>> [...]
+> 
+> Hi Dinh, Tony, Boris - sorry for the ping.
 
-  ERROR: modpost: "sas_port_alloc_num" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
-  ERROR: modpost: "sas_remove_host" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
-  ERROR: modpost: "sas_phy_alloc" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
-  ERROR: modpost: "sas_phy_free" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
-  ...
+Hey folks, apologies for the new ping.
 
-Add an explicit dependency of CONFIG_SCSI_MPI3MR on CONFIG_SCSI_SAS_ATTRS
-to prevent inconsistent configs.
+Is there anything to improve here maybe? Reviews / opinions are very
+appreciated!
+Cheers,
 
-Fixes: 42fc9fee116f ("scsi: mpi3mr: Add helper functions to manage device's port")
-Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
----
- drivers/scsi/mpi3mr/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpi3mr/Kconfig b/drivers/scsi/mpi3mr/Kconfig
-index 8997531940c2..8ada8e8d25ac 100644
---- a/drivers/scsi/mpi3mr/Kconfig
-+++ b/drivers/scsi/mpi3mr/Kconfig
-@@ -2,7 +2,7 @@
- 
- config SCSI_MPI3MR
- 	tristate "Broadcom MPI3 Storage Controller Device Driver"
--	depends on PCI && SCSI
-+	depends on PCI && SCSI && SCSI_SAS_ATTRS
- 	select BLK_DEV_BSGLIB
- 	help
- 	MPI3 based Storage & RAID Controllers Driver.
--- 
-2.38.0
-
+Guilherme
