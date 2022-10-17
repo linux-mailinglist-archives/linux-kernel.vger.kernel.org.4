@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF726015DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01426015E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbiJQSCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S230457AbiJQSDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiJQSCH (ORCPT
+        with ESMTP id S230451AbiJQSDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:02:07 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDC863FFB;
-        Mon, 17 Oct 2022 11:02:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666029727; x=1697565727;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uYk0ndVVX1m8lJ1xXsSeXQNj8KaTwzcRPHZ/Ix74hRI=;
-  b=E5m/LTt/fXJnxQw6AcJzqFSxieiae+4ti1cl+kURbO+E6jw8/jwC3RA/
-   JE+o1MYoqvrpzaiZoDV8K2GeAZQkD1Dz0rFdHRmmLESqsF8rCfKe6WzrR
-   XGrAOfWBMdcQN2WLy5iH9TtHSZNMXix3VtlhbcHp820wlP2PgcpKFzr7u
-   aS2LgewQfJPxgw7+V4+VDckT3uv/kSnktlT2VeLqzcqxmtytOIjveFyL6
-   mWja1ez7GAqVUA0N0Z8thDWWmgm7FuHaNS9WGHLmYg5IR5oZwxhimJq+t
-   RZTc87ojqBzcUQwB2Nwu4fBbAVjfH/F1t4DlYRJOJat5G5Cl1upSkRheR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="367901327"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="367901327"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 11:01:56 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="770855596"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="770855596"
-Received: from lingyaom-mobl.amr.corp.intel.com (HELO aschofie-mobl2) ([10.255.230.132])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 11:01:55 -0700
-Date:   Mon, 17 Oct 2022 11:01:53 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] cxl/region: Add trigger_poison_list sysfs
- attribute
-Message-ID: <Y02YkXawtM4IK7wL@aschofie-mobl2>
-References: <cover.1665606782.git.alison.schofield@intel.com>
- <b5e7787816326854b736c922f7fcf195fba71338.1665606782.git.alison.schofield@intel.com>
- <20221017144302.0000521c@huawei.com>
+        Mon, 17 Oct 2022 14:03:30 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B310C66A7F
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:03:28 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id n73so9733130iod.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DbgezvXKLgiem3+4EeydQ6CeJxJLx0Dqes/r2HXH/XY=;
+        b=aPFgSok91eIpFeBS0hHQvmTHA5hLH2akEb7Nib5Vh43rS2QBdXj8tm+lqTU2EI+3Hc
+         bo6wPOBxdtOs3qR/eEH4ylQ7tc2l516gI7GB9id710873m2GiHLNCG9udiwWfTbUdGoj
+         yCJMyPhtV4b+Qu1BgQoBc0fXGRXbw7jREmLgI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DbgezvXKLgiem3+4EeydQ6CeJxJLx0Dqes/r2HXH/XY=;
+        b=zy0HmOSQqvgUI6vmrCSkXwoDs/Wg7ZGcz7sOTFBKPLDXhH1xGYew5Wsu/nKvPTo5A/
+         oQSYCRKpghrJZX7866Aj1zHqANUPSkSW21+a6XPCaQ2StI9og/yTk4xdn/hwEyY+hcjj
+         6/n7p0Dbo3MY7M++tZrgoBan6CQJdIe3+Jow5mwCRKI8dUfWBwic9rtJmKofHq2sLJmT
+         mmDnyVXENfNff3aWdvRkvQsrnNDToFdsUx2shrKrPgoeOIOLRbiDpQgwG3c0HHUZTuu7
+         cIt2crldfqlcaSxaPqXtqfdhVvlcbLeocaNNNEfLraPHNo3INop1/3CotaqOenPoE1AY
+         TDdQ==
+X-Gm-Message-State: ACrzQf0ajr+6/F6rUK8jMarSM+ly0lPafb2DcsY/Qj83h53c0J+lDL2K
+        6rOvFEjPFYa7vqzWH+cmkOGebg==
+X-Google-Smtp-Source: AMsMyM67qRCW1VJvDsINCOInZu391P8W99lxkNG2u9r2m+xWJQ26OIOAVHKJibKrw4HCNwR8aqNzqQ==
+X-Received: by 2002:a05:6602:27c1:b0:6a4:cd04:e392 with SMTP id l1-20020a05660227c100b006a4cd04e392mr4908142ios.23.1666029808025;
+        Mon, 17 Oct 2022 11:03:28 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id w18-20020a02b0d2000000b00363b7cec211sm159711jah.135.2022.10.17.11.03.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 11:03:27 -0700 (PDT)
+Message-ID: <7471a614-f063-3ca2-4bd8-2ee7eb8a0745@linuxfoundation.org>
+Date:   Mon, 17 Oct 2022 12:03:25 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017144302.0000521c@huawei.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5.4 0/4] 5.4.219-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221016064454.327821011@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221016064454.327821011@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 02:43:02PM +0100, Jonathan Cameron wrote:
-> On Wed, 12 Oct 2022 14:28:20 -0700
-> alison.schofield@intel.com wrote:
+On 10/16/22 00:46, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.219 release.
+> There are 4 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > When a boolean 'true' is written to this attribute the region driver
-> > retrieves the poison list for the capacity each device contributes
-> > to this region. The list includes addresses that are poisoned, or
-> > would result in poison if accessed, and the source of the poison.
-> > The retrieved errors are logged as kernel trace events with the
-> > label 'cxl_poison'.
-> > 
-> > Devices not supporting the poison list capability are ignored.
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Responses should be made by Tue, 18 Oct 2022 06:44:46 +0000.
+> Anything received after that time might be too late.
 > 
-> Hi Alison,
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.219-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> For some reason I don't have cxl_dpa_resource().
-> Should that be cxl_dpa_resource_start()?
+> thanks,
+> 
+> greg k-h
+> 
 
-Yes.
-> 
-> Looks like it got renamed in
-> cxl/hdm: Add support for allocating DPA to an endpoint decoder
-> cf880423b6a0599499c1f83542cab0b75daa29ba
+Compiled and booted on my test system. No dmesg regressions.
 
-Looks like it got renamed during the patches review. Not worth
-unravelling now. I will rebase in next version.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Sorry about that and thanks!
-Alison
-
-> 
-> Jonathan
-> 
-> > +static ssize_t trigger_poison_list_store(struct device *dev,
-> > +					 struct device_attribute *attr,
-> > +					 const char *buf, size_t len)
-> > +{
-> > +	struct cxl_region *cxlr = to_cxl_region(dev);
-> > +	struct cxl_region_params *p = &cxlr->params;
-> > +	struct cxl_endpoint_decoder *cxled;
-> > +	struct cxl_memdev *cxlmd;
-> > +	u64 offset, length;
-> > +	int rc, i;
-> > +	bool tmp;
-> > +
-> > +	if (kstrtobool(buf, &tmp))
-> > +		return -EINVAL;
-> > +
-> > +	for (i = 0; i <  p->nr_targets; i++) {
-> > +		cxled = p->targets[i];
-> > +		cxlmd = cxled_to_memdev(cxled);
-> > +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-> > +			      cxlmd->cxlds->enabled_cmds))
-> > +			continue;
-> > +		offset = cxl_dpa_resource(cxled);
-> > +		length = cxl_dpa_size(cxled);
-> > +		rc = cxl_mem_get_poison(cxlmd, offset, length,
-> > +					dev_name(&cxlr->dev));
-> > +		if (rc)
-> > +			return rc;
-> > +	}
-> > +	return len;
-> > +}
-> > +static DEVICE_ATTR_WO(trigger_poison_list);
+thanks,
+-- Shuah
