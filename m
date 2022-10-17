@@ -2,94 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F9D601C13
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3005601C1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiJQWI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 18:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
+        id S230153AbiJQWMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 18:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiJQWIx (ORCPT
+        with ESMTP id S230148AbiJQWMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 18:08:53 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022337696A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:08:53 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id cl1so12131066pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:08:52 -0700 (PDT)
+        Mon, 17 Oct 2022 18:12:33 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC976CF40
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:12:31 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id z30so7584690qkz.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/4DPPSX+8EYQafccV5qoWyCAmySO2GlahoEOcD6yiE=;
-        b=Yr6JLfOIBxsKsz9I81OiNXnHbvZe5DM4pgR+uEoYH9sosgPO2rEO9K4G+qgZcbCE0U
-         dTjnOvWDqDSlsJfMdwq3OtHjSYCYd3/LLgOEG5kyfW2xJhshGpV8I3QhStzNjmwrCJ0A
-         gYEc6qcNjEDJoOlg83VOzJm1C9FvslOZE52zCPRKmR5jIRODorBIp1kj6JrSJJzQZqQE
-         I+X0qBQoHjnWHd6E2mDIrvtlcei3hjswxq7xnKtwkiV7YL4gFTCpNIkofc842YMEeDRj
-         eOpmxZRx843MuJ2S2rHWvSqj1+3EhvznOxSzyBMMZpc+HrJVthRanCFpAx6bGuHwJ/YG
-         7DFA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1OJf4F+JKFppB/W0S0nhFbRnIAx64pBVeYTRLpixwyE=;
+        b=vX8e52AS+9MDUc9S8uNK4Q0XQGHn9O4xlkEdlvHntcs+g2y4f70q49YdgSGtiFoFM3
+         lJC6cZI3uOD/EtcwCjVl2b9OoCpxTGNR5RfDUxxA1vRMw9dtMaxyxF0jX3PuHXaoP6Jv
+         zu3SxnPesLcdlfBy55n+vZUhizHwOiDGBagH3yMBFxbS7hvVoMZRmR5EyGBxVDN/K95Z
+         lshiQdabI3kle6iu6uMJlhvVv5f8Y3SwIaY5gmocf0oUeS9054pkpkgaed64hT/gP4jO
+         /kj0NfTQ6Gu1elluEP6rsVIIAv176mh8jIF8DeHJcmba+TSpCu/I8C9kPrzdjUghCx3a
+         Oeag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E/4DPPSX+8EYQafccV5qoWyCAmySO2GlahoEOcD6yiE=;
-        b=cW2ZVH4Lb2Kiii/hhHU3hHDaP1c2PaSwD1fCG53jjn1nOVEJxGIWe3eYej0UhVSWS4
-         vEcVZBAz3Kpfe2OrVEdxrwM/PryLgMYTkOPt7I4PQaOpcboCjmgbludP7tMYwv/04+Nc
-         HjS8CfbG6O9/ynlXZqud6XB3rg2B6NuGboaS1h8IFSVOzaWXGJDQ9TeoIKdavHBu8se2
-         FhZpnZPaPjj9M+LBOMK6x6KL4eSceysnjg4UJLGy7WLIfic+kRcYxBpHvAA6YMQguR61
-         nOYSsdxApPXQAwIrJmSDM9XMs11xdcBPlCtQp8LJmQmGDkuYBy+nk20eoQD81rb8JDcZ
-         OU/A==
-X-Gm-Message-State: ACrzQf0D2bS/7DCDtGYbgvhAXZFFkfFmtYbzzumESrosa0Zz1pieR+Qr
-        EOCy7wu3qI8+znpoIeq3j3SqIg==
-X-Google-Smtp-Source: AMsMyM7OKbGy+gHYEZBmAhjYnTpH7SayEGMvYLH1S8U7VKh6K5NkPUXY+1ryx2Vy+ZsIUIHEmiPNNw==
-X-Received: by 2002:a17:903:2347:b0:181:33f0:f64e with SMTP id c7-20020a170903234700b0018133f0f64emr14442474plh.106.1666044532381;
-        Mon, 17 Oct 2022 15:08:52 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y17-20020a17090a8b1100b0020936894e76sm6659955pjn.10.2022.10.17.15.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 15:08:51 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 22:08:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ajones@ventanamicro.com,
-        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
-        oliver.upton@linux.dev, peterx@redhat.com, ricarkol@google.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-Subject: Re: [PATCH 5/6] KVM: selftests: memslot_perf_test: Consolidate
- memory sizes
-Message-ID: <Y03ScGUUCA1KwlLF@google.com>
-References: <20221014071914.227134-1-gshan@redhat.com>
- <20221014071914.227134-6-gshan@redhat.com>
- <cebafa0d-a2dc-c3f7-64c8-2637a254e3d0@maciej.szmigiero.name>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1OJf4F+JKFppB/W0S0nhFbRnIAx64pBVeYTRLpixwyE=;
+        b=TxCLJk00gv9BVdQz3vNmGOHxMAwwePn2yXQCg/atBxJxYFE/X8p97GZoe1e+2OU7bk
+         VSMpg9kFc2PrzJvhHvA+Ro5eYwFeRn/61FYquSVjoiMP0caYXSV8tkVk5FZ93Q2FprmD
+         sxkja1/BpgXKDt0y7yXRIkbojL4iYT0MUGsz1eTBkib+R3S/M1FZVm8T8frzAGNmCqQf
+         bumbPS2HZLH3kCCwEuLH7VVKgGA9QLmLsSrodSMgu058hGOBECpt/FUGcNOEJ6IKMEeD
+         /PwYpgv3jv3dHgUfjqRTHADz2sKJqg/t9g7bUYNZEaw5jv9A11VaDaF7WnEjumzLbFlG
+         KXcg==
+X-Gm-Message-State: ACrzQf0hs/IoFfY6D5QhtG4VXyzog/6FsO13+XI7HMV/OUAKLV8C1lLV
+        ROXPzJ/fJXP3uhGHl62FoJqpaQ==
+X-Google-Smtp-Source: AMsMyM4GKqAMJAAvwwgEdE6t9HOW5Z4eFfI2/AeOZaIj9u0+aquUf93vI+CcZOvQas4C2sEkS22rCQ==
+X-Received: by 2002:a05:620a:1293:b0:6ee:dfb8:d448 with SMTP id w19-20020a05620a129300b006eedfb8d448mr6588764qki.510.1666044750690;
+        Mon, 17 Oct 2022 15:12:30 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id r17-20020ac87951000000b0039cb9ef50b5sm672321qtt.26.2022.10.17.15.12.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 15:12:29 -0700 (PDT)
+Message-ID: <6d9df544-b99e-4d62-53d1-1f3290d31a19@linaro.org>
+Date:   Mon, 17 Oct 2022 18:12:22 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cebafa0d-a2dc-c3f7-64c8-2637a254e3d0@maciej.szmigiero.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 2/5] dmaengine: qcom: gpi: document preferred SM6350
+ binding
+Content-Language: en-US
+To:     Richard Acayan <mailingradian@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Melody Olvera <quic_molvera@quicinc.org>
+References: <20221015140447.55221-1-krzysztof.kozlowski@linaro.org>
+ <20221015140447.55221-3-krzysztof.kozlowski@linaro.org>
+ <20221017212320.4960-1-mailingradian@gmail.com>
+ <801c902d-4e1a-6ddc-e050-afdc2514e687@linaro.org>
+ <20221017220004.6234-1-mailingradian@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221017220004.6234-1-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022, Maciej S. Szmigiero wrote:
-> > +#define MEM_EXTRA_SIZE		0x10000
->
-> Also, an expression like "(64 << 10)" is more readable than a "1"
-> with a tail of zeroes (it's easy to add one zero too many or be one
-> zero short).
+On 17/10/2022 18:00, Richard Acayan wrote:
+>> On 17/10/2022 17:23, Richard Acayan wrote:
+>>>> Devices with ee offset of 0x10000 should rather bind with SM6350
+>>>> compatible, so the list will not unnecessarily grow for compatible
+>>>> devices.
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> ---
+>>>>  drivers/dma/qcom/gpi.c | 7 ++++---
+>>>>  1 file changed, 4 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+>>>> index f8e19e6e6117..061add832295 100644
+>>>> --- a/drivers/dma/qcom/gpi.c
+>>>> +++ b/drivers/dma/qcom/gpi.c
+>>>> @@ -2286,13 +2286,14 @@ static int gpi_probe(struct platform_device *pdev)
+>>>>  }
+>>>>  
+>>>>  static const struct of_device_id gpi_of_match[] = {
+>>>> -	{ .compatible = "qcom,sc7280-gpi-dma", .data = (void *)0x10000 },
+>>>>  	{ .compatible = "qcom,sdm845-gpi-dma", .data = (void *)0x0 },
+>>>>  	{ .compatible = "qcom,sm6350-gpi-dma", .data = (void *)0x10000 },
+>>>>  	/*
+>>>> -	 * Deprecated, devices with ee_offset = 0 should use sdm845-gpi-dma as
+>>>> -	 * fallback and not need their own entries here.
+>>>
+>>> This comment is from the dependency series [1]. Why would we need to add it just
+>>> to remove it here? I was not notified that the dependency was applied anywhere
+>>> (except as a base for other series) so it's not set in stone. Let's just drop
+>>> the original patch that this comment originates from to prevent needlessly
+>>> adding and removing the same lines at once.
+>>
+>> I don't remove the comment, I re-phrase it to be better suited for final
+>> code.
+> 
+> Yes, I didn't word that exactly right. I still think the patch that adds this is
+> now useless if it's just going to be replaced. Do you think I should keep the
+> patch that this comment originates from, even though we already know exactly how
+> its substantial contents will be replaced?
+> 
+> We can't modify history and drop commits on kernel trees, but I can still send
+> a v6 series that drops the original comment.
 
-+1 to not open coding raw numbers.
+Sure. You can make it then:
 
-I think it's high time KVM selftests add #defines for the common sizes, e.g. SIZE_4KB,
-16KB, 64K, 2MB, 1GB, etc...
+	 * Do not grow the list for compatible devices. Instead use
+	 * qcom,sdm845-gpi-dma (for ee_offset = 0x0).
 
-Alternatively (or in addition), just #define 1KB, 1MB, 1GB, and 1TB, and then do
-math off of those.
+And my patch will just change one line.
+
+We can also keep it like:
+
+	 * Do not grow the list for compatible devices. Instead use
+	 * proper fallback compatibles.
+
+Best regards,
+Krzysztof
+
