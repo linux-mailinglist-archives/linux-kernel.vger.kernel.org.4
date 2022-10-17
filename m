@@ -2,172 +2,420 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6A3600865
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF1D600867
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiJQILb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S230206AbiJQILo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiJQILZ (ORCPT
+        with ESMTP id S230208AbiJQILk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:11:25 -0400
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2052.outbound.protection.outlook.com [40.107.249.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36785B53A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:11:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OjTzgPxtCQ/qKc+Xju+PLZHvJ3JU58Vy+4qP0Ui5pf/9/KY8LGPUu1OudXSPZ5f0ze9g0so4ap62M18SVn7oCJbRpYRN1JWkPhkGunO/jXpR3cEvOBT7rTo6azPtKuU7aJeS7QRiBUTtCtPdz/Yk5mUhJBI+89oPmd76LU5Nb0IGprhXbqNdV5zZ+/A7JV2pADey4xTKFUUR+Jg5EeoeOHenxLlMiBHX59LTEXOILLWJ3WfOeakwxm+Em0MpqvzNVK/BFHEyrPTIue/GXCsX/8asQLez/FgDfsGXaBrHeeybye8x9F9EzA94q9hlWXh0robe6f04kqqnURB0hV3v/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z0dRIsWBMet+7IHjXFEvZshov0850SM1LeuFS1O+Tgs=;
- b=AzjBsGhSEIoACHp8zv07cViY8HGJdVJQpltJfhRd7/NUIlZYQDH/yVXcyn0yj90Qz7g89ajeVgU3B+if12hokKMV+dcRwk594HJLlIPD4BEFY5NFlZYFqqZmH5eZnRIPF5586qi4c8FQMlQ/xUqgDfHtkWDRMPOLFOvOolRmo256XOeuFH2XDJPOoRsQvfTTe1XiqQTpYYme3AUXXgGZ8sbkAVDVxqa+3WRrW3kUit2cOoL57CX6lHdP/H2c7szv44HQ0xXn2iO54f2cNA9L/vKC0ZfiSBY2VjzZlCw6niEijHo17UeWMUfIe937f5oOyGO9whiq3AJvqcCa1qf/6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z0dRIsWBMet+7IHjXFEvZshov0850SM1LeuFS1O+Tgs=;
- b=BMNaFIN4lld0gSx9omfnUTTR+SWNG3d4nDp61vXZnwqSbalDHb2PXbRCgYAeioeL81RiJfHdgJulM4ozjiOmv/wEnPAhDkqgS23K3VzOYXJK973MoFk0WC4X9Jyo0KTM5aQ2TevBs4eWARYuezu5MjIt4vaD6HyFHYLv3WKOsQU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DB8PR04MB7180.eurprd04.prod.outlook.com (2603:10a6:10:12c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.28; Mon, 17 Oct
- 2022 08:11:21 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::a5ff:3d28:4bbc:e1ed]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::a5ff:3d28:4bbc:e1ed%6]) with mapi id 15.20.5723.032; Mon, 17 Oct 2022
- 08:11:21 +0000
-Message-ID: <5a2e060b-5e97-a1b2-f910-655483b69800@oss.nxp.com>
-Date:   Mon, 17 Oct 2022 16:11:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH v3] soc: imx: imx8m-blk-ctrl: Defer probe if 'bus' genpd
- is not yet ready
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220919121302.597993-1-benjamin.gaignard@collabora.com>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <20220919121302.597993-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0003.apcprd04.prod.outlook.com
- (2603:1096:4:197::23) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Mon, 17 Oct 2022 04:11:40 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CC45B53A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:11:36 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id fy4so23077724ejc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wCERGaQn7sjZRAiLYlbvnzUIl4AHNnyqwlHd1RuDioQ=;
+        b=ebfNfbg/W10vicSUwq/67IqLltrFq1THY9oomsXeJO97fnwNAsdl4FFdJCRp1cKnc6
+         MTFCjv6GfMHxKRfCH/aqq3cVI0hLxjTm6RlbWrHkUrT/z9HAnMKEj0P8XXLFqJi+xZ4y
+         mcf6dr0FHBuSsl38QsL9Bc7hGSoOXP3T8grkoGVU68raeWup7lihhD6dALHo7nnlCZFd
+         pCz1is7qCsrmY2SnVEK8QEw6czKEgIoEWOeW8gFfQFgudP45VWNOuPD8EYrERYGKbMo2
+         kHGL6xnWDOTC2+waLJQK9EeiPM9dbGj5BoNYJQ+yAgkcm7YNVMYfNGxtyInBsTzKGK89
+         6VgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wCERGaQn7sjZRAiLYlbvnzUIl4AHNnyqwlHd1RuDioQ=;
+        b=RZd5gHgJ16t/4ZuA8oIvhbuKaX4IjdEXBVIh6/QSQTxVmho2GHbL9t7z3v8b/WlpAA
+         rg2tFAd858CFp+fa6vrqdu85kglUIja6cSvGxKPmN/RkLDzGWSx8x8j4p3iXak0Hwnsc
+         QgFEkMXR0iG3XSJSWECeBMVf0ajMdLgVeEyCXioWeKbHHIO/XwTPYGJ+9sB79uIz/j9q
+         jVv+Yj7ek9aYTiMbiy6YFOipl6/nJOpnolPGfi54nJHYNZk1Azn+d+4r56ujEhrBbc4/
+         d/IZTkYiSNznrcextcKDpvg5t5sA8VAOiW/3OtIddH7vuQrew8jom1i66Wy4TNrXNsFg
+         TENw==
+X-Gm-Message-State: ACrzQf3UPwlYByvc43d98GIg7GGTdfJNpZsOaltujYnktX1zKjSSysPT
+        61Z6VClh9ChQkdBD+aZ8noc=
+X-Google-Smtp-Source: AMsMyM5AU5ACskMOANt1L8uAK5ExW1d8iSUY6sFW50PairYWGw76mhWyDDrr0+oi+gGLvSWfm0wXKQ==
+X-Received: by 2002:a17:906:ee8e:b0:730:3646:d178 with SMTP id wt14-20020a170906ee8e00b007303646d178mr7754318ejb.426.1665994294538;
+        Mon, 17 Oct 2022 01:11:34 -0700 (PDT)
+Received: from [192.168.2.4] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id r17-20020a170906351100b0078d4962a46bsm5649926eja.190.2022.10.17.01.11.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 01:11:34 -0700 (PDT)
+Message-ID: <d814394b-86c3-beb1-ddd4-04c65004f138@gmail.com>
+Date:   Mon, 17 Oct 2022 10:11:32 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DB8PR04MB7180:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7d1a0c17-a25d-43a9-7687-08dab0172cbf
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kYwFs5jeqHezeOuEsVpayxMJa0Y11JTZ2Uv5ktiQPDGZnHFX+4Aj6GYPnW4SzZSxHyRvKIWaqSsiRTPV6CRQyeI/gSEVeoDn5ybytOXJRaUlLlTYWD905pyCGda8ydVDW0NvxA8uPoLwbF1z1CCJK0B0wNqF8olpSXzcA41vMcWAtn7b77nXh0G3bD9DC+urbAj3aednukzwnhWMaoOFI7QAkBBsIfqAQQyyLZE20liPbxoA9aTADmkbz1RC5uw1qgwPLzNgf3t022qc7VVEQksQVouvVss+854AncLabiBhFYwyo8toxtkotapo2sg8AHdKrZaRI19uAuzR7b4nQLOaHu0afkNrYjtq8qNUEg1nWJUhmwISllir27s3vg/js1DxDFTZWHIcXewQ+1QBL+a+5Vr4vQHj4M4hga3LDk/B9jafXQCtS7xeOjD/tqGVXCj9OXi+NcXDcFcyZEOEn4f0Ija40Lv8uFmJ8LZR2K3i+EzoOY9VqA2IM2kHFVIFupLgOn4PrnfXC71Jq30tL4WIe7Y4ApZzT0Dhh+UUTAV8D968JKo9ZGqNha+bww/SZFV3+xYuZfsgjj/NfEeXlIeCiyNuNfR2+yi7jKYJID77K1ZHcnM09I2sYH84TueWfhGGB2qtomvzgXeqb8qlIQ7SxlhaTlLE12sofjMjry8xTPxjm9VfKDpz1N5qe4bGV+39X5lTTewlP6gFpRVIzIcVRmh/9fRSiDUeLL8+5dw2wVflcCSXWLSq2ovgtb/XbqT9KnQk+ttS6H+E0t5EJoyIbQjatpx0VzY9HuJVcJJzyNl7qIZEGIysmEPujJ2i6hjV7dTOUCSlmt3vgGCLILX4fkblFouzMofHc4KTDpM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(136003)(366004)(39860400002)(451199015)(31686004)(38350700002)(6486002)(478600001)(38100700002)(8936002)(6512007)(83380400001)(31696002)(316002)(6666004)(41300700001)(53546011)(52116002)(6506007)(4326008)(2906002)(186003)(2616005)(26005)(66476007)(66556008)(66946007)(86362001)(8676002)(5660300002)(44832011)(32563001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWJOckx6cDJHRkM5blVkbFNnbDhJejUyUXBWV1QzbVlXQlFVajhUeklQY0Ns?=
- =?utf-8?B?STVzSy9XOGtCaE9RMEY3MW5Cd2NsUGJ4RlhLditGTEUrQit1NTlvOTY0TUxR?=
- =?utf-8?B?cGN3akkrV2kydG9rZVlONEtYSWFEWU5RenFpZ1RGQzBobXdneWd3c2hibjNV?=
- =?utf-8?B?QVkzR2xKa3RUZkpvcXNRNUMxYzNjTzRjWmdOM2NYUmhQWXRqODV0YUpKUHNZ?=
- =?utf-8?B?QVJPdjVuQkxBY3JaZ2VyMEhKU0VWRVQwb2orMFZtaGM2STJuUjJjRTRQWlYr?=
- =?utf-8?B?RzA0b3QvVFBMdTNEbVk5SjBTeUE2RWZXVUNOQzRtbml1SGw2SnlORHdUUzRY?=
- =?utf-8?B?VFl5T20weHV1M3VLWGkzQklWUVBlVHJvS25yWHl0WEJtNDhOUU81aWRGWXU3?=
- =?utf-8?B?QjZSRWRSQ2NsNStISzgwYnQzelBob0t5VTAwYWZmRkcweFFsZ0Q3SmpJSHZN?=
- =?utf-8?B?T3BsaXRwaEkwbkRJWmlLeDUyQldaUkZ4NmdXYzhxL3Z0NWVpa0szS2xucVNz?=
- =?utf-8?B?UVltRy9UbUNGUEEyOUF6M1dIV1RWNXduWFRsc2RLandkWk1hYUk5eDUvczZ3?=
- =?utf-8?B?YXQvRStiT3Y5dXVyTTFpcXVGMUNFNFRRVE1hUHFyTGQ3Z01LbE9FdmJaenlN?=
- =?utf-8?B?KzB2YUJJdTdodGVtQXpVL1BQMHpNeWJleVcxMWNmdWpYakJZSnBoT2FKQytH?=
- =?utf-8?B?bXZ6YStkNnJTWEtzd295QTYwY1V6MllsMVpZWWIyWlpCU0RpbEphTTcrSllo?=
- =?utf-8?B?UDJvRTNxamNqV1FvS282c1lUeTFFazc4SlR6V2IySjhob05BbmRvTGNCanZu?=
- =?utf-8?B?UkN2QituVjEvL3dWQU9FbEZPcTQwN1N6YUw4ZkN6RlE2VjFLK2F5SExhcnRn?=
- =?utf-8?B?MWZQUXM0czk5dU5TY0RQd3NMZ2ZDRnFJd0V6ZjJsQStUY0VzMkNqTlRSbVdp?=
- =?utf-8?B?Rmd2dlBOSno3RHlxcHdvejZ5c0dTVnFrM0xVcFAzc2JSeTZUdk5BaTBCT3Y2?=
- =?utf-8?B?NkpFUzRnck14TjhDalQwWEVxU1JvbzFFL25MK3prU3hobm5Pd1Z0Skg2Z2hp?=
- =?utf-8?B?d3YvUHNwZUpUNzdtQlpqM1lpOXpsd015KzhPd3Y0OWFCeTNYNFNZa28yUy84?=
- =?utf-8?B?cHZRQ1hDa3Q5RDJYdzQ1cmF3dG1GSjRoK3V1bi9MK2tWTGxsVjFja3VuOTJN?=
- =?utf-8?B?Nm9CNmpmVjZoRzdZZ2hNNHJ3ZWhRTUpDTjl5OWtTeGpCL01ZdHVnOHA4Y3pm?=
- =?utf-8?B?V2IzZGZTQTJkRXVnWG84MFoxSjR1bEczd0FCZlA4M0ZYcFliN2dwQUxVSklN?=
- =?utf-8?B?UUdCR1g2bVhDU1FVb1hRYTlmNlV2TVYxNVRydHNHMnJiV29IVlQwdmZnRCs5?=
- =?utf-8?B?azVTcWdlM0MraHRyQTMvWFZoMjJUTlgyNzRXaUlPMXM2cFpjSHp5dXNKSlVY?=
- =?utf-8?B?b0NCL1o5MUR4WG56cnVEdFhsWXpxWlJ1MkhXeUdYaFMxU0xUM1FQSVBicUFx?=
- =?utf-8?B?NEdMUjhhemR0dGZCZXYybGhRZ3BhZzV2eHZNSi9hNjFiekQ5Qkg1MWZFOW1z?=
- =?utf-8?B?ZUw4dUx6SUp0QWRENUd1TVI5b0dER2duTzI3ZWNqcjRFSUtFZ1VGd3VQd1pT?=
- =?utf-8?B?QzZkNUxKcDlJWGY2LzIrTnRFd1B0TTN5U2xBdndUMlFXdzdMSGVtNDZ0aTBt?=
- =?utf-8?B?elVvUEpJeFRBL29Ob2xUc3o1Zk1LcjFwZmZrRFE0Y0dTeGE4ZkdPZnVBbWdP?=
- =?utf-8?B?QzN3ZXdMZTkwNGpjdmFzaFMzcTRXRXYzWi83bkZWU3JjSmViUzRoY21EMERN?=
- =?utf-8?B?d3NYSWR4S2J2V0d1MHZCWC82R0czaU5keEtES1FhRER2QnIwRjFKd0FxZzhx?=
- =?utf-8?B?cmlJZzN0STl1NGp2TFFkUzBDNlMxelJUKzJjM2x4cndueXAzaDdmMXVOdmtM?=
- =?utf-8?B?dkQyMnZIb3dLNmdUczMvVncrYUQxejdENjJZZjFLQ0xSa0JUQ1FNT0JpbURX?=
- =?utf-8?B?djdlcHdQdHViVXh0OVhKSWoxL0ZZNXIxVnNzQ1NzOHc3VG9tTUtwdmQ2MktK?=
- =?utf-8?B?Njc0UHp4U0FXWWxkanVOOHFQNk0rcDRqZ0lKZXBnc09Xdlhhb1BXOTdsZSs4?=
- =?utf-8?Q?3VStKRL4aGwed2BL9B0Pyat3A?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d1a0c17-a25d-43a9-7687-08dab0172cbf
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 08:11:21.0810
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R0IEQD/PlH5hHv05P2IEN0TcKzzZq/25/m0tW0RmC1f8PDyiIGq5tJP1z4bP+i3OfZ0XOjSqT+h0WzzC1K42VA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7180
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: [BUG] [PATCH] drm/rockchip: use generic fbdev setup
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>, dri-devel@lists.freedesktop.org
+Cc:     Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <20211029115014.264084-1-john@metanate.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20211029115014.264084-1-john@metanate.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi John,
 
+Your patch contribution causes a kernel panic on MK808 with Rockchip rk3066a SoC.
+Would you like to contribute to fix this issue?
+The assumtion that drm_fbdev_generic_setup() does what rockchip_drm_fbdev_init did is not true!
+A revert makes it work again.
 
-On 9/19/2022 8:13 PM, Benjamin Gaignard wrote:
-> Depending of the boot sequence 'bus' genpd could be probed after imx8m-blk-ctrl
-> which led driver probe to fail. Change the returned error to allow
-> to defer the probe in this case.
+Johan
+
+======
+
+[    7.975906] ------------[ cut here ]------------
+[    7.975929] WARNING: CPU: 0 PID: 35 at drivers/gpu/drm/drm_fb_helper.c:471 drm_fb_helper_damage_work+0x138/0x3b4
+[    7.976044] rockchip-drm display-subsystem: Damage blitter failed: ret=-12
+[    7.976064] Modules linked in:
+[    7.976090] CPU: 0 PID: 35 Comm: kworker/0:4 Not tainted 6.0.0-next-20221013 #1
+[    7.976126] Hardware name: Rockchip (Device Tree)
+[    7.976145] Workqueue: events drm_fb_helper_damage_work
+[    7.976196] Backtrace: 
+[    7.976214]  dump_backtrace from show_stack+0x20/0x24
+[    7.976276]  r7:000001d7 r6:00000009 r5:c0b2bc78 r4:60000013
+[    7.976289]  show_stack from dump_stack_lvl+0x48/0x54
+[    7.976357]  dump_stack_lvl from dump_stack+0x18/0x1c
+[    7.976426]  r5:c0586054 r4:c0b63750
+[    7.976436]  dump_stack from __warn+0xdc/0x154
+[    7.976525]  __warn from warn_slowpath_fmt+0xa4/0xd8
+[    7.976588]  r7:000001d7 r6:c0b63750 r5:c1004ec8 r4:c0b639ec
+[    7.976598]  warn_slowpath_fmt from drm_fb_helper_damage_work+0x138/0x3b4
+[    7.976670]  r9:ef7cf105 r8:c15dfc00 r7:fffffff4 r6:c200a590 r5:c1004ec8 r4:c200a594
+[    7.976681]  drm_fb_helper_damage_work from process_one_work+0x230/0x518
+[    7.976761]  r10:c110d140 r9:ef7cf105 r8:00000000 r7:ef7cf100 r6:ef7cbf00 r5:c200f300
+[    7.976775]  r4:c200a594
+[    7.976785]  process_one_work from worker_thread+0x54/0x554
+[    7.976841]  r10:ef7cbf00 r9:00000008 r8:c1003d40 r7:ef7cbf1c r6:c200f318 r5:ef7cbf00
+[    7.976855]  r4:c200f300
+[    7.976864]  worker_thread from kthread+0xe8/0x104
+[    7.976948]  r10:f0929e84 r9:c200ea40 r8:c169aa80 r7:c200f300 r6:c01419e4 r5:00000000
+[    7.976962]  r4:c200e800
+[    7.976971]  kthread from ret_from_fork+0x14/0x2c
+[    7.977026] Exception stack(0xf092dfb0 to 0xf092dff8)
+[    7.977052] dfa0:                                     00000000 00000000 00000000 00000000
+[    7.977078] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[    7.977100] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[    7.977128]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c01491a8
+[    7.977144]  r4:c200e800 r3:00000001
+[    7.977155] ---[ end trace 0000000000000000 ]---
+
+On 10/29/21 13:50, John Keeping wrote:
+> The Rockchip fbdev code does not add anything compared to
+> drm_fbdev_generic_setup(); the one custom function for .fb_mmap does the
+> same thing as gem_prime_mmap which is called by the helper.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Signed-off-by: John Keeping <john@metanate.com>
 > ---
-> v3:
-> - only return -EPROBE_DEFER if 'bus' device hasn't be found.
+>  drivers/gpu/drm/rockchip/Makefile             |   1 -
+>  drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |  10 +-
+>  drivers/gpu/drm/rockchip/rockchip_drm_drv.h   |   2 -
+>  drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c | 164 ------------------
+>  drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h |  24 ---
+>  5 files changed, 2 insertions(+), 199 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
+>  delete mode 100644 drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
 > 
-> v2:
-> - keep dev_err_probe only change the return value.
-> 
->   drivers/soc/imx/imx8m-blk-ctrl.c | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-> index dff7529268e4..1c195e9e8895 100644
-> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
-> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-> @@ -214,9 +214,14 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->   		return -ENOMEM;
->   
->   	bc->bus_power_dev = genpd_dev_pm_attach_by_name(dev, "bus");
-> -	if (IS_ERR(bc->bus_power_dev))
-> -		return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
-> -				     "failed to attach power domain \"bus\"\n");
-> +	if (IS_ERR(bc->bus_power_dev)) {
-> +		if (PTR_ERR(bc->bus_power_dev) == -ENODEV)
-> +			return dev_err_probe(dev, -EPROBE_DEFER,
-> +					     "failed to attach power domain \"bus\"\n");
-> +		else
-> +			return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
-> +					     "failed to attach power domain \"bus\"\n");
-> +	}
->   
->   	for (i = 0; i < bc_data->num_domains; i++) {
->   		const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
-
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> diff --git a/drivers/gpu/drm/rockchip/Makefile b/drivers/gpu/drm/rockchip/Makefile
+> index 17a9e7eb2130..1a56f696558c 100644
+> --- a/drivers/gpu/drm/rockchip/Makefile
+> +++ b/drivers/gpu/drm/rockchip/Makefile
+> @@ -5,7 +5,6 @@
+>  
+>  rockchipdrm-y := rockchip_drm_drv.o rockchip_drm_fb.o \
+>  		rockchip_drm_gem.o rockchip_drm_vop.o rockchip_vop_reg.o
+> -rockchipdrm-$(CONFIG_DRM_FBDEV_EMULATION) += rockchip_drm_fbdev.o
+>  
+>  rockchipdrm-$(CONFIG_ROCKCHIP_ANALOGIX_DP) += analogix_dp-rockchip.o
+>  rockchipdrm-$(CONFIG_ROCKCHIP_CDN_DP) += cdn-dp-core.o cdn-dp-reg.o
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+> index 69c699459dce..20d81ae69828 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+> @@ -26,7 +26,6 @@
+>  
+>  #include "rockchip_drm_drv.h"
+>  #include "rockchip_drm_fb.h"
+> -#include "rockchip_drm_fbdev.h"
+>  #include "rockchip_drm_gem.h"
+>  
+>  #define DRIVER_NAME	"rockchip"
+> @@ -159,10 +158,6 @@ static int rockchip_drm_bind(struct device *dev)
+>  
+>  	drm_mode_config_reset(drm_dev);
+>  
+> -	ret = rockchip_drm_fbdev_init(drm_dev);
+> -	if (ret)
+> -		goto err_unbind_all;
+> -
+>  	/* init kms poll for handling hpd */
+>  	drm_kms_helper_poll_init(drm_dev);
+>  
+> @@ -170,10 +165,11 @@ static int rockchip_drm_bind(struct device *dev)
+>  	if (ret)
+>  		goto err_kms_helper_poll_fini;
+>  
+> +	drm_fbdev_generic_setup(drm_dev, 32);
+> +
+>  	return 0;
+>  err_kms_helper_poll_fini:
+>  	drm_kms_helper_poll_fini(drm_dev);
+> -	rockchip_drm_fbdev_fini(drm_dev);
+>  err_unbind_all:
+>  	component_unbind_all(dev, drm_dev);
+>  err_iommu_cleanup:
+> @@ -189,7 +185,6 @@ static void rockchip_drm_unbind(struct device *dev)
+>  
+>  	drm_dev_unregister(drm_dev);
+>  
+> -	rockchip_drm_fbdev_fini(drm_dev);
+>  	drm_kms_helper_poll_fini(drm_dev);
+>  
+>  	drm_atomic_helper_shutdown(drm_dev);
+> @@ -203,7 +198,6 @@ DEFINE_DRM_GEM_FOPS(rockchip_drm_driver_fops);
+>  
+>  static const struct drm_driver rockchip_drm_driver = {
+>  	.driver_features	= DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
+> -	.lastclose		= drm_fb_helper_lastclose,
+>  	.dumb_create		= rockchip_gem_dumb_create,
+>  	.prime_handle_to_fd	= drm_gem_prime_handle_to_fd,
+>  	.prime_fd_to_handle	= drm_gem_prime_fd_to_handle,
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
+> index aa0909e8edf9..143a48330f84 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
+> @@ -43,8 +43,6 @@ struct rockchip_crtc_state {
+>   * @mm_lock: protect drm_mm on multi-threads.
+>   */
+>  struct rockchip_drm_private {
+> -	struct drm_fb_helper fbdev_helper;
+> -	struct drm_gem_object *fbdev_bo;
+>  	struct iommu_domain *domain;
+>  	struct mutex mm_lock;
+>  	struct drm_mm mm;
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c b/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
+> deleted file mode 100644
+> index d8418dd39d0e..000000000000
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
+> +++ /dev/null
+> @@ -1,164 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -/*
+> - * Copyright (C) Fuzhou Rockchip Electronics Co.Ltd
+> - * Author:Mark Yao <mark.yao@rock-chips.com>
+> - */
+> -
+> -#include <drm/drm.h>
+> -#include <drm/drm_fb_helper.h>
+> -#include <drm/drm_fourcc.h>
+> -#include <drm/drm_prime.h>
+> -#include <drm/drm_probe_helper.h>
+> -
+> -#include "rockchip_drm_drv.h"
+> -#include "rockchip_drm_gem.h"
+> -#include "rockchip_drm_fb.h"
+> -#include "rockchip_drm_fbdev.h"
+> -
+> -#define PREFERRED_BPP		32
+> -#define to_drm_private(x) \
+> -		container_of(x, struct rockchip_drm_private, fbdev_helper)
+> -
+> -static int rockchip_fbdev_mmap(struct fb_info *info,
+> -			       struct vm_area_struct *vma)
+> -{
+> -	struct drm_fb_helper *helper = info->par;
+> -	struct rockchip_drm_private *private = to_drm_private(helper);
+> -
+> -	return drm_gem_prime_mmap(private->fbdev_bo, vma);
+> -}
+> -
+> -static const struct fb_ops rockchip_drm_fbdev_ops = {
+> -	.owner		= THIS_MODULE,
+> -	DRM_FB_HELPER_DEFAULT_OPS,
+> -	.fb_mmap	= rockchip_fbdev_mmap,
+> -	.fb_fillrect	= drm_fb_helper_cfb_fillrect,
+> -	.fb_copyarea	= drm_fb_helper_cfb_copyarea,
+> -	.fb_imageblit	= drm_fb_helper_cfb_imageblit,
+> -};
+> -
+> -static int rockchip_drm_fbdev_create(struct drm_fb_helper *helper,
+> -				     struct drm_fb_helper_surface_size *sizes)
+> -{
+> -	struct rockchip_drm_private *private = to_drm_private(helper);
+> -	struct drm_mode_fb_cmd2 mode_cmd = { 0 };
+> -	struct drm_device *dev = helper->dev;
+> -	struct rockchip_gem_object *rk_obj;
+> -	struct drm_framebuffer *fb;
+> -	unsigned int bytes_per_pixel;
+> -	unsigned long offset;
+> -	struct fb_info *fbi;
+> -	size_t size;
+> -	int ret;
+> -
+> -	bytes_per_pixel = DIV_ROUND_UP(sizes->surface_bpp, 8);
+> -
+> -	mode_cmd.width = sizes->surface_width;
+> -	mode_cmd.height = sizes->surface_height;
+> -	mode_cmd.pitches[0] = sizes->surface_width * bytes_per_pixel;
+> -	mode_cmd.pixel_format = drm_mode_legacy_fb_format(sizes->surface_bpp,
+> -		sizes->surface_depth);
+> -
+> -	size = mode_cmd.pitches[0] * mode_cmd.height;
+> -
+> -	rk_obj = rockchip_gem_create_object(dev, size, true);
+> -	if (IS_ERR(rk_obj))
+> -		return -ENOMEM;
+> -
+> -	private->fbdev_bo = &rk_obj->base;
+> -
+> -	fbi = drm_fb_helper_alloc_fbi(helper);
+> -	if (IS_ERR(fbi)) {
+> -		DRM_DEV_ERROR(dev->dev, "Failed to create framebuffer info.\n");
+> -		ret = PTR_ERR(fbi);
+> -		goto out;
+> -	}
+> -
+> -	helper->fb = rockchip_drm_framebuffer_init(dev, &mode_cmd,
+> -						   private->fbdev_bo);
+> -	if (IS_ERR(helper->fb)) {
+> -		DRM_DEV_ERROR(dev->dev,
+> -			      "Failed to allocate DRM framebuffer.\n");
+> -		ret = PTR_ERR(helper->fb);
+> -		goto out;
+> -	}
+> -
+> -	fbi->fbops = &rockchip_drm_fbdev_ops;
+> -
+> -	fb = helper->fb;
+> -	drm_fb_helper_fill_info(fbi, helper, sizes);
+> -
+> -	offset = fbi->var.xoffset * bytes_per_pixel;
+> -	offset += fbi->var.yoffset * fb->pitches[0];
+> -
+> -	dev->mode_config.fb_base = 0;
+> -	fbi->screen_base = rk_obj->kvaddr + offset;
+> -	fbi->screen_size = rk_obj->base.size;
+> -	fbi->fix.smem_len = rk_obj->base.size;
+> -
+> -	DRM_DEBUG_KMS("FB [%dx%d]-%d kvaddr=%p offset=%ld size=%zu\n",
+> -		      fb->width, fb->height, fb->format->depth,
+> -		      rk_obj->kvaddr,
+> -		      offset, size);
+> -
+> -	return 0;
+> -
+> -out:
+> -	rockchip_gem_free_object(&rk_obj->base);
+> -	return ret;
+> -}
+> -
+> -static const struct drm_fb_helper_funcs rockchip_drm_fb_helper_funcs = {
+> -	.fb_probe = rockchip_drm_fbdev_create,
+> -};
+> -
+> -int rockchip_drm_fbdev_init(struct drm_device *dev)
+> -{
+> -	struct rockchip_drm_private *private = dev->dev_private;
+> -	struct drm_fb_helper *helper;
+> -	int ret;
+> -
+> -	if (!dev->mode_config.num_crtc || !dev->mode_config.num_connector)
+> -		return -EINVAL;
+> -
+> -	helper = &private->fbdev_helper;
+> -
+> -	drm_fb_helper_prepare(dev, helper, &rockchip_drm_fb_helper_funcs);
+> -
+> -	ret = drm_fb_helper_init(dev, helper);
+> -	if (ret < 0) {
+> -		DRM_DEV_ERROR(dev->dev,
+> -			      "Failed to initialize drm fb helper - %d.\n",
+> -			      ret);
+> -		return ret;
+> -	}
+> -
+> -	ret = drm_fb_helper_initial_config(helper, PREFERRED_BPP);
+> -	if (ret < 0) {
+> -		DRM_DEV_ERROR(dev->dev,
+> -			      "Failed to set initial hw config - %d.\n",
+> -			      ret);
+> -		goto err_drm_fb_helper_fini;
+> -	}
+> -
+> -	return 0;
+> -
+> -err_drm_fb_helper_fini:
+> -	drm_fb_helper_fini(helper);
+> -	return ret;
+> -}
+> -
+> -void rockchip_drm_fbdev_fini(struct drm_device *dev)
+> -{
+> -	struct rockchip_drm_private *private = dev->dev_private;
+> -	struct drm_fb_helper *helper;
+> -
+> -	helper = &private->fbdev_helper;
+> -
+> -	drm_fb_helper_unregister_fbi(helper);
+> -
+> -	if (helper->fb)
+> -		drm_framebuffer_put(helper->fb);
+> -
+> -	drm_fb_helper_fini(helper);
+> -}
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h b/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
+> deleted file mode 100644
+> index 5fb7ac2371a8..000000000000
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
+> +++ /dev/null
+> @@ -1,24 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/*
+> - * Copyright (C) Fuzhou Rockchip Electronics Co.Ltd
+> - * Author:Mark Yao <mark.yao@rock-chips.com>
+> - */
+> -
+> -#ifndef _ROCKCHIP_DRM_FBDEV_H
+> -#define _ROCKCHIP_DRM_FBDEV_H
+> -
+> -#ifdef CONFIG_DRM_FBDEV_EMULATION
+> -int rockchip_drm_fbdev_init(struct drm_device *dev);
+> -void rockchip_drm_fbdev_fini(struct drm_device *dev);
+> -#else
+> -static inline int rockchip_drm_fbdev_init(struct drm_device *dev)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline void rockchip_drm_fbdev_fini(struct drm_device *dev)
+> -{
+> -}
+> -#endif
+> -
+> -#endif /* _ROCKCHIP_DRM_FBDEV_H */
