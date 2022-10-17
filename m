@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17016008FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07C9600901
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiJQIo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S229896AbiJQIpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJQIoP (ORCPT
+        with ESMTP id S230212AbiJQIox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:44:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E72BB26
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665996252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A0G/s7FFc6fRx4eiRxxpQWaSRa2q0znsD4DR8qga7U0=;
-        b=jUjGxM2ae/bzeUJQ5AGCHUPbIyxORIFMXzuLEXVsNzCYeOTcyYtNsrCauziswp5560oLUY
-        aVTPQTJL8hVEDnvnNl9IIvYpMFuf8eXQ1zUGvjmVc9PEQRZCxn9j+jnPxa/aMa7o4ngJ6y
-        tfNvYJi7SxuKD/vAU1pfuIfw07jPvLQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-99-aS48CcZ1NVeQAbXW71In6Q-1; Mon, 17 Oct 2022 04:44:10 -0400
-X-MC-Unique: aS48CcZ1NVeQAbXW71In6Q-1
-Received: by mail-wm1-f72.google.com with SMTP id l1-20020a7bc341000000b003bfe1273d6cso5241823wmj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:10 -0700 (PDT)
+        Mon, 17 Oct 2022 04:44:53 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F232D1E2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:47 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ot12so23313147ejb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/OVv+puCl+RQRM9zhQGR8lncVSVca+QHB0gRflBJ//Q=;
+        b=i/rUSlQBenPAyfceTiwTGO+jhdjLwzrRYlVwYw9Rw4gSXj4SgptNYbRAkgt3e7Twzn
+         FcBl0AvjmtZHC33jiqgiWFpc5YQiKnu5BBtnjcxxPlO8+CkujRDNrTq31P74HCBz8agp
+         5u/1chNeuJ1JSJm5mWB/xgZbA2RjdUdxvrKt0UiW7ft14ZS7BeILfawp+UCQvpDy0bX/
+         ee4rRi3tISwq9VvSDU/ig1zVdyCF7jshH6jXQQiIx9Fj4R3lIJ7qZWnubzSBWGgkZVZX
+         FNXCy/JiRbt5XwfHlDAdajqHfEtw68g17TmzUm8YY/GRTEpwSlr5dqgAGzD89SIqBzh2
+         7PGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A0G/s7FFc6fRx4eiRxxpQWaSRa2q0znsD4DR8qga7U0=;
-        b=7puVGRvmREh3ZeCdnGdXcM5yGflE/E0kGbR79OWoW5P3w3uhiV9kyyvsbnWNpLn361
-         MsuXZt6OJvM15PE9m3fj++XXcigfBWIG5RpRqDzMENjwOo2c2A2EXGtup6umofkIyXVC
-         Ert9ueqdpqSiTZfVu6vsUiyNOEqaI1jDrUAVsRfCL1uYR5xCI6ycwmeQZlvmtychV8z9
-         StWZupple168iawyfv0ZoArjXmTMg397gJYmPgFg3BrelwBlgENti7eHOkl90OXvEljD
-         Ll2a8C23cJZkAGBYbKzCKMJjc29mOW9HhNxa4EdFPq5PBns3tETPGwUsOLJczDA5SKrH
-         1Y6A==
-X-Gm-Message-State: ACrzQf1Ha+hfpDKkOPOyh4z99JUAfKO/aysDm0RDh+H3Qw2/vY/Gmw6L
-        eIBnkFtvjUe9nP8qArGJNpJdr10vWSsaWlQxgzqPOJyyE3inKpFc062Q9MMHz6VUyCfvtsWqui0
-        kQO3E4aPIaf2bbgYsZvz7v6kY
-X-Received: by 2002:a5d:4a4e:0:b0:22e:64a6:7a52 with SMTP id v14-20020a5d4a4e000000b0022e64a67a52mr5472547wrs.333.1665996249427;
-        Mon, 17 Oct 2022 01:44:09 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM61xdkOYp/u8H5U4i9P8jb5eYC8/ZeaBJJSV+HbkCVx665ScinUC4TK7sZT/C3i79ODpATzSA==
-X-Received: by 2002:a5d:4a4e:0:b0:22e:64a6:7a52 with SMTP id v14-20020a5d4a4e000000b0022e64a67a52mr5472528wrs.333.1665996249163;
-        Mon, 17 Oct 2022 01:44:09 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:2300:e5ce:21ba:1d93:4323? (p200300cbc7072300e5ce21ba1d934323.dip0.t-ipconnect.de. [2003:cb:c707:2300:e5ce:21ba:1d93:4323])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003a2f2bb72d5sm20496939wmp.45.2022.10.17.01.44.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 01:44:08 -0700 (PDT)
-Message-ID: <2aaf2c3a-6e49-abb9-b9c8-19ce87404982@redhat.com>
-Date:   Mon, 17 Oct 2022 10:44:07 +0200
+        bh=/OVv+puCl+RQRM9zhQGR8lncVSVca+QHB0gRflBJ//Q=;
+        b=vQmHOItZuCxOdLSOeQZJaf1wFnAiLeRYfB2jjTIYMxBEvpa4Vet2H7dFc/jObHGAmw
+         f8ETYTN5Y/tSoldexK/7o0z2awe546wmpR0t4otMnfIcRVVqCUuAgVmHq+HvF/mZkHbO
+         S/gXp6E+c8L4w8r4Iyr7Ba5DQkh20uExehkD3JNRPDVQje7wwoknUxITlKLGZuY8YwzB
+         b1XKmAgm1mN5EVONIEUAadZsmiFbxsrw06d+fjPPJxEnj9Pv0upuk/dikOUQye57hURC
+         r8GvebE34d9HmDNxjrnofZTbaOgFMyhhmz6OIB4OTeQdccF/t2vg7InSWZF2I4kp2U4U
+         S2tQ==
+X-Gm-Message-State: ACrzQf3Pnm6SQD8k9I+7LrojWFXjwaC7GSC9R1mwQAoYqcnIV65YS9/u
+        5C9vMcwBtcBJZzoxuikpP33gF8wj788Pa3vXFwdteRgEzVU=
+X-Google-Smtp-Source: AMsMyM49b5U7oAouHD2U0NEtNBrMwVZryMS2GdwJ8IX6bhaC6lAzqvCxAyiBmjd0NxrhR38RYKHh9ezr0bAAXY1w1pA=
+X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
+ dd6-20020a1709069b8600b0073d72cf72afmr7661722ejc.440.1665996284981; Mon, 17
+ Oct 2022 01:44:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] mm: hugetlb: support get/set_policy for hugetlb_vm_ops
-Content-Language: en-US
-To:     Albert Huang <huangjie.albert@bytedance.com>,
-        songmuchun@bytedance.com
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20221012081526.73067-1-huangjie.albert@bytedance.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221012081526.73067-1-huangjie.albert@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220925021258.1492905-1-yangyingliang@huawei.com>
+ <CACRpkdZijkQAT84mfP06SgxBjHmrqSbWwctBBA0pvb_1xYzGvA@mail.gmail.com>
+ <CACRpkda6kCL-FbEdfu9msXH6xnLn9fLC-q6hcm=e_H_AT_uVEQ@mail.gmail.com> <ddd58293-0b5b-3c34-c396-0a635444410d@huawei.com>
+In-Reply-To: <ddd58293-0b5b-3c34-c396-0a635444410d@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 17 Oct 2022 10:44:33 +0200
+Message-ID: <CACRpkdafE7Nrv0YwC2z8PWcUxRUyAjXnoTPsPPLAug-g18XBXw@mail.gmail.com>
+Subject: Re: [PATCH -next v3] pinctrl: ocelot: add missing destroy_workqueue()
+ in error path in ocelot_pinctrl_probe()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, horatiu.vultur@microchip.com,
+        andy.shevchenko@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.10.22 10:15, Albert Huang wrote:
-> From: "huangjie.albert" <huangjie.albert@bytedance.com>
-> 
-> implement these two functions so that we can set the mempolicy to
-> the inode of the hugetlb file. This ensures that the mempolicy of
-> all processes sharing this huge page file is consistent.
-> 
-> In some scenarios where huge pages are shared:
-> if we need to limit the memory usage of vm within node0, so I set qemu's
-> mempilciy bind to node0, but if there is a process (such as virtiofsd)
-> shared memory with the vm, in this case. If the page fault is triggered
-> by virtiofsd, the allocated memory may go to node1 which  depends on
-> virtiofsd.
-> 
+On Thu, Oct 6, 2022 at 7:54 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
+> On 2022/10/5 3:57, Linus Walleij wrote:
+> > On Tue, Oct 4, 2022 at 1:46 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> >> On Sun, Sep 25, 2022 at 4:06 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
+> >>
+> >>> Using devm_add_action_or_reset() to make workqueue device-managed, so it can be
+> >>> destroy whenever the driver is unbound.
+> >>>
+> >>> Fixes: c297561bc98a ("pinctrl: ocelot: Fix interrupt controller")
+> >>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> >>> ---
+> >>> v3:
+> >>>    Using devm_add_action_or_reset().
+> >> Patch applied, after deleting the hunks removing .remove because
+> >> that was already gone upstream.
+> > Ah, the patch introducing that is in the MFD tree is it not?
+> >
+> > Either ask Lee to apply it or wait until -rc1 it's no big deal
+> > anyway. Remind me in two weeks.
+>
+> It's OK.
+>
+> Thanks,
+> Yang
 
-Any VM that uses hugetlb should be preallocating memory. For example, 
-this is the expected default under QEMU when using huge pages.
+I rebased my development on v6.1-rc1 now and applied this patch!
 
-Once preallocation does the right thing regarding NUMA policy, there is 
-no need to worry about it in other sub-processes.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Yours,
+Linus Walleij
