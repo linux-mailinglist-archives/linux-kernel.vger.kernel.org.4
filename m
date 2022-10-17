@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A205D600927
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703D5600A59
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiJQIu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S230238AbiJQJVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiJQIui (ORCPT
+        with ESMTP id S231217AbiJQJVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:50:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D097317420;
-        Mon, 17 Oct 2022 01:50:33 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MrVzd5bQKz6HJYL;
-        Mon, 17 Oct 2022 16:49:33 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+        Mon, 17 Oct 2022 05:21:14 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F40252B8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:20:50 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MrWZ23v40z1P7Vh;
+        Mon, 17 Oct 2022 17:15:54 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 10:50:31 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ 15.1.2375.31; Mon, 17 Oct 2022 17:20:35 +0800
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 09:50:29 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <niklas.cassel@wdc.com>, "John Garry" <john.garry@huawei.com>
-Subject: [PATCH v6 7/8] scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
+ 15.1.2375.31; Mon, 17 Oct 2022 17:20:34 +0800
+Subject: Re: [Linuxarm] [PATCH 1/2] hisi_acc_vfio_pci: Add debugfs to
+ migration driver
+To:     John Garry <john.garry@huawei.com>, <alex.williamson@redhat.com>,
+        <jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>
+CC:     <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>
+References: <20221014025757.39415-1-liulongfang@huawei.com>
+ <20221014025757.39415-2-liulongfang@huawei.com>
+ <42d12308-4777-47a7-a1ae-50dfada050cf@huawei.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <7c041671-71bf-d558-d47a-70296fe5c30e@huawei.com>
 Date:   Mon, 17 Oct 2022 17:20:34 +0800
-Message-ID: <1665998435-199946-8-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1665998435-199946-1-git-send-email-john.garry@huawei.com>
-References: <1665998435-199946-1-git-send-email-john.garry@huawei.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
+In-Reply-To: <42d12308-4777-47a7-a1ae-50dfada050cf@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,77 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have no users outside libsas any longer, so make sas_alloc_task(),
-sas_alloc_slow_task(), and sas_free_task() private.
+On 2022/10/14 17:20, John Garry wrote:
+> On 14/10/2022 03:57, Longfang Liu wrote:
+>> +static void hisi_acc_vf_debugfs_init(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>> +{
+>> +    struct pci_dev *vf_pdev = hisi_acc_vdev->vf_dev;
+>> +    struct device *dev = &vf_pdev->dev;
+>> +    int ret;
+>> +
+>> +    if (!atomic_read(&hisi_acc_root_ref))
+>> +        hisi_acc_debugfs_root = debugfs_create_dir("hisi_vfio_acc", NULL);
+>> +    atomic_inc(&hisi_acc_root_ref);
+>> +
+> 
+> This looks totally racy, such that I wonder why even bother using an atomic for hisi_acc_root_ref.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
-Tested-by: Niklas Cassel <niklas.cassel@wdc.com> # pm80xx
----
- drivers/scsi/libsas/sas_init.c     | 3 ---
- drivers/scsi/libsas/sas_internal.h | 4 ++++
- include/scsi/libsas.h              | 4 ----
- 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index e4f77072a58d..f2c05ebeb72f 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -35,7 +35,6 @@ struct sas_task *sas_alloc_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_task);
- 
- struct sas_task *sas_alloc_slow_task(gfp_t flags)
- {
-@@ -56,7 +55,6 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_slow_task);
- 
- void sas_free_task(struct sas_task *task)
- {
-@@ -65,7 +63,6 @@ void sas_free_task(struct sas_task *task)
- 		kmem_cache_free(sas_task_cache, task);
- 	}
- }
--EXPORT_SYMBOL_GPL(sas_free_task);
- 
- /*------------ SAS addr hash -----------*/
- void sas_hash_addr(u8 *hashed, const u8 *sas_addr)
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 8d0ad3abc7b5..b54bcf3c9a9d 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -52,6 +52,10 @@ void sas_unregister_phys(struct sas_ha_struct *sas_ha);
- struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
- void sas_free_event(struct asd_sas_event *event);
- 
-+struct sas_task *sas_alloc_task(gfp_t flags);
-+struct sas_task *sas_alloc_slow_task(gfp_t flags);
-+void sas_free_task(struct sas_task *task);
-+
- int  sas_register_ports(struct sas_ha_struct *sas_ha);
- void sas_unregister_ports(struct sas_ha_struct *sas_ha);
- 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 2dbead74a2af..f86b56bf7833 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -639,10 +639,6 @@ struct sas_task_slow {
- #define SAS_TASK_STATE_ABORTED      4
- #define SAS_TASK_NEED_DEV_RESET     8
- 
--extern struct sas_task *sas_alloc_task(gfp_t flags);
--extern struct sas_task *sas_alloc_slow_task(gfp_t flags);
--extern void sas_free_task(struct sas_task *task);
--
- static inline bool sas_is_internal_abort(struct sas_task *task)
- {
- 	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
--- 
-2.35.3
+When enabling VF, it is possible for multiple VMs to enable VF at the same time. The atomic variable
+is used to ensure that only one "hisi_vfio_acc" is created. When other VFs are enabled,
+it will not be created again, but will be used directly.
 
+ Indeed, why is hisi_acc_debugfs_root not created in the driver module init?
+>
+Because the normal function of VF is to perform encryption and decryption services, the live migration
+function is an auxiliary function, which no need to be used in scenarios where only encryption and
+decryption services are performed.
+
+During module init, it can register ops(hisi_acc_vfio_pci_ops) that only perform encryption and
+decryption services, and can also register with live migration function ops(hisi_acc_vfio_pci_migrn_ops),
+and this debugfs only needs to register it when the the ops is hisi_acc_vfio_pci_migrn_ops.
+
+> Thanks,
+> John
+> .
+> 
