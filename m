@@ -2,428 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48EC6015D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD656015D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiJQRze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S230260AbiJQR6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiJQRza (ORCPT
+        with ESMTP id S229520AbiJQR6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:55:30 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C295F4A128
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:55:28 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id fw14so11658868pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:55:28 -0700 (PDT)
+        Mon, 17 Oct 2022 13:58:32 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E5161D96;
+        Mon, 17 Oct 2022 10:58:31 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id bh13so11124682pgb.4;
+        Mon, 17 Oct 2022 10:58:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q3fm/7a4yLfUklOddcmPkporjRQwAL4fkiKoLfD+veQ=;
-        b=einIZs2L/xpipozxplCD+82a6mBtDIlZE4JEUQEeydD3gD0ePeZJIS5t6dMhQShjj0
-         vcf1hQEWR9Sv+mzu7ICXK/XUmOdWSXI7U16WtAJz9BM8l0F51UdGPOHRu/7sg7y5LB9l
-         C7cIuiKDB55TT/9yOGCFKm0DPhlI337rH1KxE=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XeKUR+Ic7TUkYH6vGnV3fuwa2YAfRUGUap65mjX2bIY=;
+        b=dHb/yAW8qCnmR3JHQz9IMnHr3ZXBJzqzORUlGlIhSix9QXQV7XUf+Jhjgi0HecrIkp
+         wcJ6RXOEGEoWSe+puoBC77GS8PekmjpB64vannhPqzpG9WEXd0D+q0NVxBHHUFdZsyvP
+         eSuEh9CEXPxNl8721pWgrNJs84B1OLAfN1U7MVguuieZO6W/nB/FHw/B0mJeXA8euOfC
+         KeXah39qz+ZaPV3gqIq6PL9NYUP3Hvn0JfllXC77RFMDMoJNi0aNUr4rQevAykWqDV4a
+         k2+yZ5vlwk6zEWIr2rxHrG8Tf667SW/4h6zjfGUjSJea8iJbihAJwZE1MODCEBe5yk4P
+         lr6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q3fm/7a4yLfUklOddcmPkporjRQwAL4fkiKoLfD+veQ=;
-        b=Sg3fqayIN7Q51Kr+Wae5YA0p1sosz5Embrf0Xp3QAM3/tubO1sgtUO77BkJDA5/5gU
-         yKMjf6xNI97qFPXmoTbazR4X9LSLr6HcSGE8nqiK2RWPLWCaeDdGdbVTH+G0O/jk41mL
-         cBSulkl2AId34hBQFPbjg0tcMGYNTBS5o6v+AvQkhHwz0cBtCpIghgwEYP5f7CaYJieq
-         qxpqdc3p47SRPRW2m1iFsbAhmfv9n5BYsBBZ0+peKswTwzGMOT/QtlghFgOn94BYosjK
-         B4RazF0gEQou02ltY+W/KIWoywTAJfu1l427eCzCgN8i09x/Jw0l2suxlL7dQ2YuBSOj
-         Qc4g==
-X-Gm-Message-State: ACrzQf3Hd8uwjxBcHyHbiicj4aIKjLVfdaJeKUNJPMvOZ74lUauo+lX9
-        wB6OyAr+CDO0P7IlZtrTZEWFW18VYb6XSCECZz3HzgbIo+ZtLw==
-X-Google-Smtp-Source: AMsMyM6pj2Bi92gGbQ10Cd1lMeK13jVOFYe7Dxedj9RSGQrJb9QbCcEMrMmuGhSEd8Sspf7V9o/MXTnl+pJgJMGnVc4=
-X-Received: by 2002:a17:903:454:b0:184:dc78:563d with SMTP id
- iw20-20020a170903045400b00184dc78563dmr12950608plb.41.1666029317846; Mon, 17
- Oct 2022 10:55:17 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XeKUR+Ic7TUkYH6vGnV3fuwa2YAfRUGUap65mjX2bIY=;
+        b=mp7Sjf8Ih23IDx/Fjd0WzTz4+esZQ2/nCh1ZnYNxrbo8AjaVAT1aHs68c1pj6AxaL9
+         1miusGW8OccXzvJDGH0Ya3Wbv0DYli0aaDg4BK3Eccq/dUguen5CUWUr+m8nl2YMgVZN
+         4g/qnUpGspjcvgDw9rP3XcYRpleSWFAokaHqEwWlNGwdhOG79aSEwuFxvVNG3FpOY9Av
+         pRIcXgeQ/lP5BsrDC4M3Ve0cQLilxU5wWWRdDW2vwVtx8HWqgfBLpMA/Fm1pKifQ4s90
+         K/j14qlW6YXIPXOOqFoerHNJ9CgU15ePthawdqFTJDcqEesYmz4XX/yyuUyhdnrFYUOA
+         LqCQ==
+X-Gm-Message-State: ACrzQf1C+7pcUfJI/tEnm2ZEpW6AijGiUilFtcOf2E9V6swsfbtJey5r
+        UBanAh8G15fG3ugsFVqoZpo=
+X-Google-Smtp-Source: AMsMyM6O/eHDc2cFH8FuN5f5YwYBetwCaCLwv0bTljbF9TCOzsgl9UCIjpasZmTuPdc6ayIdV/45/w==
+X-Received: by 2002:a63:8bc9:0:b0:45f:afa8:e686 with SMTP id j192-20020a638bc9000000b0045fafa8e686mr11677365pge.219.1666029510647;
+        Mon, 17 Oct 2022 10:58:30 -0700 (PDT)
+Received: from biggie.. ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902cec500b00178a8f4d4f2sm6886480plg.74.2022.10.17.10.58.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 10:58:29 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
+        gautammenghani201@gmail.com, guang.zeng@intel.com
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/kvm: Avoid for loop initialization using vcpu->id in xapic_state_test
+Date:   Mon, 17 Oct 2022 23:28:19 +0530
+Message-Id: <20221017175819.12672-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
- <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net> <YzG51Jyd5zhvygtK@arm.com>
- <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N> <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
- <YzR5WSLux4mmFIXg@FVFF77S0Q05N> <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
- <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
- <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com> <20221005110707.55bd9354@gandalf.local.home>
- <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
- <20221005113019.18aeda76@gandalf.local.home> <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
- <20221006122922.53802a5c@gandalf.local.home>
-In-Reply-To: <20221006122922.53802a5c@gandalf.local.home>
-From:   Florent Revest <revest@chromium.org>
-Date:   Mon, 17 Oct 2022 19:55:06 +0200
-Message-ID: <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Xu Kuohai <xukuohai@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Xu Kuohai <xukuohai@huaweicloud.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 6:29 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 6 Oct 2022 18:19:12 +0200
-> Florent Revest <revest@chromium.org> wrote:
->
-> > Sure, we can give this a try, I'll work on a macro that generates the
-> > 7 callbacks and we can check how much that helps. My belief right now
-> > is that ftrace's iteration over all ops on arm64 is where we lose most
-> > time but now that we have numbers it's pretty easy to check hypothesis
-> > :)
->
-> Ah, I forgot that's what Mark's code is doing. But yes, that needs to be
-> fixed first. I forget that arm64 doesn't have the dedicated trampolines y=
-et.
->
-> So, let's hold off until that is complete.
->
-> -- Steve
+In the test_icr() function in xapic_state_test, one of the for loops is
+initialized with vcpu->id. Fix this assumption that vcpu->id is 0 so
+that IPIs are correctly sent to non-existent vCPUs [1].
 
-Mark finished an implementation of his per-callsite-ops and min-args
-branches (meaning that we can now skip the expensive ftrace's saving
-of all registers and iteration over all ops if only one is attached)
-- https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=3Da=
-rm64-ftrace-call-ops-20221017
+[1] https://lore.kernel.org/kvm/YyoZr9rXSSMEtdh5@google.com/
 
-And Masami wrote similar patches to what I had originally done to
-fprobe in my branch:
-- https://github.com/mhiramat/linux/commits/kprobes/fprobe-update
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+changes in v2:
+1. move the lore link above signed off tag
 
-So I could rebase my previous "bpf on fprobe" branch on top of these:
-(as before, it's just good enough for benchmarking and to give a
-general sense of the idea, not for a thorough code review):
-- https://github.com/FlorentRevest/linux/commits/fprobe-min-args-3
+ tools/testing/selftests/kvm/x86_64/xapic_state_test.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-And I could run the benchmarks against my rpi4. I have different
-baseline numbers as Xu so I ran everything again and tried to keep the
-format the same. "indirect call" refers to my branch I just linked and
-"direct call" refers to the series this is a reply to (Xu's work)
+diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+index 6f7a5ef66718..d7d37dae3eeb 100644
+--- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+@@ -114,7 +114,9 @@ static void test_icr(struct xapic_vcpu *x)
+ 	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
+ 	 */
+ 	icr = APIC_INT_ASSERT | 0xff;
+-	for (i = vcpu->id + 1; i < 0xff; i++) {
++	for (i = 0; i < 0xff; i++) {
++		if (i == vcpu->id)
++			continue;
+ 		for (j = 0; j < 8; j++)
+ 			__test_icr(x, i << (32 + 24) | icr | (j << 8));
+ 	}
+-- 
+2.34.1
 
-1. test with dd
-
-1.1 when no bpf prog attached to vfs_write
-
-# dd if=3D/dev/zero of=3D/dev/null count=3D1000000
-1000000+0 records in
-1000000+0 records out
-512000000 bytes (512 MB, 488 MiB) copied, 3.94315 s, 130 MB/s
-
-
-1.2 attach bpf prog with kprobe, bpftrace -e kprobe:vfs_write {}
-
-# dd if=3D/dev/zero of=3D/dev/null count=3D1000000
-1000000+0 records in
-1000000+0 records out
-512000000 bytes (512 MB, 488 MiB) copied, 5.80493 s, 88.2 MB/s
-
-
-1.3 attach bpf prog with with direct call, bpftrace -e kfunc:vfs_write {}
-
-# dd if=3D/dev/zero of=3D/dev/null count=3D1000000
-1000000+0 records in
-1000000+0 records out
-512000000 bytes (512 MB, 488 MiB) copied, 4.18579 s, 122 MB/s
-
-
-1.4 attach bpf prog with with indirect call, bpftrace -e kfunc:vfs_write {}
-
-# dd if=3D/dev/zero of=3D/dev/null count=3D1000000
-1000000+0 records in
-1000000+0 records out
-512000000 bytes (512 MB, 488 MiB) copied, 4.92616 s, 104 MB/s
-
-
-2. test with bpf/bench
-
-2.1 bench trig-base
-Iter   0 ( 86.518us): hits    0.700M/s (  0.700M/prod), drops
-0.000M/s, total operations    0.700M/s
-Iter   1 (-26.352us): hits    0.701M/s (  0.701M/prod), drops
-0.000M/s, total operations    0.701M/s
-Iter   2 (  1.092us): hits    0.701M/s (  0.701M/prod), drops
-0.000M/s, total operations    0.701M/s
-Iter   3 ( -1.890us): hits    0.701M/s (  0.701M/prod), drops
-0.000M/s, total operations    0.701M/s
-Iter   4 ( -2.315us): hits    0.701M/s (  0.701M/prod), drops
-0.000M/s, total operations    0.701M/s
-Iter   5 (  4.184us): hits    0.701M/s (  0.701M/prod), drops
-0.000M/s, total operations    0.701M/s
-Iter   6 ( -3.241us): hits    0.701M/s (  0.701M/prod), drops
-0.000M/s, total operations    0.701M/s
-Summary: hits    0.701 =C2=B1 0.000M/s (  0.701M/prod), drops    0.000 =C2=
-=B1
-0.000M/s, total operations    0.701 =C2=B1 0.000M/s
-
-2.2 bench trig-kprobe
-Iter   0 ( 96.833us): hits    0.290M/s (  0.290M/prod), drops
-0.000M/s, total operations    0.290M/s
-Iter   1 (-20.834us): hits    0.291M/s (  0.291M/prod), drops
-0.000M/s, total operations    0.291M/s
-Iter   2 ( -2.426us): hits    0.291M/s (  0.291M/prod), drops
-0.000M/s, total operations    0.291M/s
-Iter   3 ( 22.332us): hits    0.292M/s (  0.292M/prod), drops
-0.000M/s, total operations    0.292M/s
-Iter   4 (-18.204us): hits    0.292M/s (  0.292M/prod), drops
-0.000M/s, total operations    0.292M/s
-Iter   5 (  5.370us): hits    0.292M/s (  0.292M/prod), drops
-0.000M/s, total operations    0.292M/s
-Iter   6 ( -7.853us): hits    0.290M/s (  0.290M/prod), drops
-0.000M/s, total operations    0.290M/s
-Summary: hits    0.291 =C2=B1 0.001M/s (  0.291M/prod), drops    0.000 =C2=
-=B1
-0.000M/s, total operations    0.291 =C2=B1 0.001M/s
-
-2.3 bench trig-fentry, with direct call
-Iter   0 ( 86.481us): hits    0.530M/s (  0.530M/prod), drops
-0.000M/s, total operations    0.530M/s
-Iter   1 (-12.593us): hits    0.536M/s (  0.536M/prod), drops
-0.000M/s, total operations    0.536M/s
-Iter   2 ( -5.760us): hits    0.532M/s (  0.532M/prod), drops
-0.000M/s, total operations    0.532M/s
-Iter   3 (  1.629us): hits    0.532M/s (  0.532M/prod), drops
-0.000M/s, total operations    0.532M/s
-Iter   4 ( -1.945us): hits    0.533M/s (  0.533M/prod), drops
-0.000M/s, total operations    0.533M/s
-Iter   5 ( -1.297us): hits    0.532M/s (  0.532M/prod), drops
-0.000M/s, total operations    0.532M/s
-Iter   6 (  0.444us): hits    0.535M/s (  0.535M/prod), drops
-0.000M/s, total operations    0.535M/s
-Summary: hits    0.533 =C2=B1 0.002M/s (  0.533M/prod), drops    0.000 =C2=
-=B1
-0.000M/s, total operations    0.533 =C2=B1 0.002M/s
-
-2.3 bench trig-fentry, with indirect call
-Iter   0 ( 84.463us): hits    0.404M/s (  0.404M/prod), drops
-0.000M/s, total operations    0.404M/s
-Iter   1 (-16.260us): hits    0.405M/s (  0.405M/prod), drops
-0.000M/s, total operations    0.405M/s
-Iter   2 ( -1.038us): hits    0.405M/s (  0.405M/prod), drops
-0.000M/s, total operations    0.405M/s
-Iter   3 ( -3.797us): hits    0.405M/s (  0.405M/prod), drops
-0.000M/s, total operations    0.405M/s
-Iter   4 ( -0.537us): hits    0.402M/s (  0.402M/prod), drops
-0.000M/s, total operations    0.402M/s
-Iter   5 (  3.536us): hits    0.403M/s (  0.403M/prod), drops
-0.000M/s, total operations    0.403M/s
-Iter   6 ( 12.203us): hits    0.404M/s (  0.404M/prod), drops
-0.000M/s, total operations    0.404M/s
-Summary: hits    0.404 =C2=B1 0.001M/s (  0.404M/prod), drops    0.000 =C2=
-=B1
-0.000M/s, total operations    0.404 =C2=B1 0.001M/s
-
-
-3. perf report of bench trig-fentry
-
-3.1 with direct call
-
-    98.67%     0.27%  bench    bench
-        [.] trigger_producer
-            |
-             --98.40%--trigger_producer
-                       |
-                       |--96.63%--syscall
-                       |          |
-                       |           --71.90%--el0t_64_sync
-                       |                     el0t_64_sync_handler
-                       |                     el0_svc
-                       |                     do_el0_svc
-                       |                     |
-                       |                     |--70.94%--el0_svc_common
-                       |                     |          |
-                       |                     |
-|--29.55%--invoke_syscall
-                       |                     |          |          |
-                       |                     |          |
-|--26.23%--__arm64_sys_getpgid
-                       |                     |          |          |
-       |
-                       |                     |          |          |
-       |--18.88%--bpf_trampoline_6442462665_0
-                       |                     |          |          |
-       |          |
-                       |                     |          |          |
-       |          |--6.85%--__bpf_prog_enter
-                       |                     |          |          |
-       |          |          |
-                       |                     |          |          |
-       |          |           --2.68%--migrate_disable
-                       |                     |          |          |
-       |          |
-                       |                     |          |          |
-       |          |--5.28%--__bpf_prog_exit
-                       |                     |          |          |
-       |          |          |
-                       |                     |          |          |
-       |          |           --1.29%--migrate_enable
-                       |                     |          |          |
-       |          |
-                       |                     |          |          |
-       |
-|--3.96%--bpf_prog_21856463590f61f1_bench_trigger_fentry
-                       |                     |          |          |
-       |          |
-                       |                     |          |          |
-       |           --0.61%--__rcu_read_lock
-                       |                     |          |          |
-       |
-                       |                     |          |          |
-        --4.42%--find_task_by_vpid
-                       |                     |          |          |
-                  |
-                       |                     |          |          |
-                  |--2.53%--radix_tree_lookup
-                       |                     |          |          |
-                  |
-                       |                     |          |          |
-                   --0.61%--idr_find
-                       |                     |          |          |
-                       |                     |          |
---0.81%--pid_vnr
-                       |                     |          |
-                       |                     |
---0.53%--__arm64_sys_getpgid
-                       |                     |
-                       |                      --0.95%--invoke_syscall
-                       |
-                        --0.99%--syscall@plt
-
-
-3.2 with indirect call
-
-    98.68%     0.20%  bench    bench
-        [.] trigger_producer
-            |
-             --98.48%--trigger_producer
-                       |
-                        --97.47%--syscall
-                                  |
-                                   --76.11%--el0t_64_sync
-                                             el0t_64_sync_handler
-                                             el0_svc
-                                             do_el0_svc
-                                             |
-                                             |--75.52%--el0_svc_common
-                                             |          |
-                                             |
-|--46.35%--invoke_syscall
-                                             |          |          |
-                                             |          |
---44.06%--__arm64_sys_getpgid
-                                             |          |
-       |
-                                             |          |
-       |--35.40%--ftrace_caller
-                                             |          |
-       |          |
-                                             |          |
-       |           --34.04%--fprobe_handler
-                                             |          |
-       |                     |
-                                             |          |
-       |                     |--15.61%--bpf_fprobe_entry
-                                             |          |
-       |                     |          |
-                                             |          |
-       |                     |          |--3.79%--__bpf_prog_enter
-                                             |          |
-       |                     |          |          |
-                                             |          |
-       |                     |          |
---0.80%--migrate_disable
-                                             |          |
-       |                     |          |
-                                             |          |
-       |                     |          |--3.74%--__bpf_prog_exit
-                                             |          |
-       |                     |          |          |
-                                             |          |
-       |                     |          |
---0.77%--migrate_enable
-                                             |          |
-       |                     |          |
-                                             |          |
-       |                     |
---2.65%--bpf_prog_21856463590f61f1_bench_trigger_fentry
-                                             |          |
-       |                     |
-                                             |          |
-       |                     |--12.65%--rethook_trampoline_handler
-                                             |          |
-       |                     |
-                                             |          |
-       |                     |--1.70%--rethook_try_get
-                                             |          |
-       |                     |          |
-                                             |          |
-       |                     |           --1.48%--rcu_is_watching
-                                             |          |
-       |                     |
-                                             |          |
-       |                     |--1.46%--freelist_try_get
-                                             |          |
-       |                     |
-                                             |          |
-       |                      --0.65%--rethook_recycle
-                                             |          |
-       |
-                                             |          |
-        --6.36%--find_task_by_vpid
-                                             |          |
-                  |
-                                             |          |
-                  |--3.64%--radix_tree_lookup
-                                             |          |
-                  |
-                                             |          |
-                   --1.74%--idr_find
-                                             |          |
-                                             |           --1.05%--ftrace_ca=
-ller
-                                             |
-                                              --0.59%--invoke_syscall
-
-This looks slightly better than before but it is actually still a
-pretty significant performance hit compared to direct calls.
-
-Note that I can't really make sense of the perf report with indirect
-calls. it always reports it spent 12% of the time in
-rethook_trampoline_handler but I verified with both a WARN in that
-function and a breakpoint with a debugger, this function does *not*
-get called when running this "bench trig-fentry" benchmark. Also it
-wouldn't make sense for fprobe_handler to call it so I'm quite
-confused why perf would report this call and such a long time spent
-there. Anyone know what I could be missing here ?
