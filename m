@@ -2,76 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F4A6012AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813C06012B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiJQPZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 11:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S230047AbiJQP0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 11:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiJQPZU (ORCPT
+        with ESMTP id S230135AbiJQP0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:25:20 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB2531EFC
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:25:15 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j16so19014464wrh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VZYVsksDtqwMhKI9pLO96NsNwXlR/Zc6fECSUWcfYvM=;
-        b=loV8pcQ0VH7CSJZBQKJNUBD5gUGjphK138G2Vr0pUFl2hnQjhDNQsmcxOUMHVjZdNS
-         kp6rLFoXEEZlMKcL018jlO+y3l2Mrp4Jhboi4EwUkUsib0YhBEusEvf31v2voSd90j+x
-         RYCnGy22RpUw88J+/P4j1A3vSyzTwga/FtH7lyNU6PFMxuzP0uh72hQArEJhDcPYUk75
-         g/QrFG7tmLmllRJWp+2XmsxP1vTIZnVcRfYFlA2ohe9A9yslYIZj8ov0iOUjBcQBm2Fk
-         s3j+P9ur4/2ZezPhxzHUzydUoBxp+6dkJf7E9SAzCDI90tNzZBsNH759pk976J2xfQlq
-         Tvzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VZYVsksDtqwMhKI9pLO96NsNwXlR/Zc6fECSUWcfYvM=;
-        b=kM1v+PksuyE9ZBafZDD8W+I618L1/QKcCkIHoIu6pz87n1h9XYkF5R2rRMdMzcW/nh
-         bi1g+fSUkbJfW+bZy86N/iRtNhPZ1viP7knP3As64oTYYN0MMPXb4BD2B14+xJZIlUaa
-         8uQ42I1aG8QAplby/5BA9oSYMwjPB1gT70G//iVe3Fxqh573w63pFjP4oLmvVkJO7G+6
-         Fm7y7lnSWMoec5RaGlWA+jXHFOw8/Tyna0SIY6nxOtvhmsl6IAMT/nhn24NkEi2MletW
-         CQsi5ge7whbFY4jfOgymg6G1naFDCkNrJbEqgjDrDh90GCTa6Zix6JlxdN4iDCroeQXI
-         ElfA==
-X-Gm-Message-State: ACrzQf235KFAxyYSl61uYzAfgrTWCyH5imJgx3Io6V1hE9/TKbAKtjL1
-        9LePXmjtJh3C6yanT4zh3Gldng==
-X-Google-Smtp-Source: AMsMyM77wWshVlky9KSI5+U5hfTIhi0l0mEFqE4J649NfP0lv0covsJc7zie3crYcrA5ylJ0MK860A==
-X-Received: by 2002:adf:fc10:0:b0:22e:55e5:9bb5 with SMTP id i16-20020adffc10000000b0022e55e59bb5mr6540090wrr.112.1666020313851;
-        Mon, 17 Oct 2022 08:25:13 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id g2-20020a05600c000200b003c5571c27a1sm12894977wmc.32.2022.10.17.08.25.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 08:25:13 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mon, 17 Oct 2022 11:26:08 -0400
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D0159709
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:26:02 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:bdc5:2f22:6678:ef3])
+        by andre.telenet-ops.be with bizsmtp
+        id Z3Rx2800j0MC6vi013RxB9; Mon, 17 Oct 2022 17:26:00 +0200
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1okS00-0002Vj-S9; Mon, 17 Oct 2022 17:25:52 +0200
+Date:   Mon, 17 Oct 2022 17:25:52 +0200 (CEST)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     linux-kernel@vger.kernel.org
+cc:     D Scott Phillips <scott@os.amperecomputing.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Andrew Jones <ajones@ventanamicro.com>,
         linux-arm-kernel@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>
-In-Reply-To: <20221012185234.never.936-kees@kernel.org>
-References: <20221012185234.never.936-kees@kernel.org>
-Subject: Re: [PATCH] firmware: meson_sm: Fix memcpy vs iomem type warnings
-Message-Id: <166602031304.3572695.12870664862275915316.b4-ty@linaro.org>
-Date:   Mon, 17 Oct 2022 17:25:13 +0200
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-um@lists.infradead.org, linux-rdma@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
+        sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: Build regressions/improvements in v6.1-rc1
+In-Reply-To: <20221017145157.1866351-1-geert@linux-m68k.org>
+Message-ID: <alpine.DEB.2.22.394.2210171653540.9136@ramsan.of.borg>
+References: <20221017145157.1866351-1-geert@linux-m68k.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,58 +50,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 17 Oct 2022, Geert Uytterhoeven wrote:
+> Below is the list of build error/warning regressions/improvements in
+> v6.1-rc1[1] compared to v6.0[2].
+>
+> Summarized:
+>  - build errors: +25/-13
 
-On Wed, 12 Oct 2022 11:53:16 -0700, Kees Cook wrote:
-> Use memcpy_{toio,fromio}() instead of memcpy(). Silences warnings from
-> Sparse:
-> 
-> drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 1 (different address spaces)
-> drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
-> drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
-> drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 2 (different address spaces)
-> drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
-> drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
-> drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-> drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-> drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-> drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> drivers/firmware/meson/meson_sm.c:206:9:    expected void *
-> drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> 
-> [...]
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9abf2313adc1ca1b6180c508c25f22f9395cc780/ (all 149 configs)
+> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4fe89d07dcc2804c8b562f6c7896a45643d34b2f/ (135 out of 149 configs)
+>
+>
+> *** ERRORS ***
+>
+> 25 error regressions:
+>  + /kisskb/src/arch/arm64/include/asm/cputype.h: error: initializer element is not constant:  => 44:2
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.2/drivers)
+arm64-gcc5/arm64-allmodconfig (arch/arm64/kernel/proton-pack.c:872)
 
-[1/1] firmware: meson_sm: Fix memcpy vs iomem type warnings
-      https://git.kernel.org/amlogic/c/7dc69c7d073e6004a281db8f7f15cf6ebf702ea0
+>  + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer:  => 94:18
+>  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]:  => 1934:1
+>  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function):  => 149:37
+>  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor':  => 149:22
+>  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]:  => 150:1
+>  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
+>  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
+>  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
 
-These changes has been applied on the intermediate git tree [1].
+um-x86_64/um-all{mod,yes}config
 
-The v6.2/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
+>  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: error: array subscript is above array bounds [-Werror=array-bounds]:  => 531:55
 
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
+arm64-gcc5/arm64-allmodconfig
+mipsel-gcc5/mips-allmodconfig
+powerpc-gcc5/powerpc-all{mod,yes}config
+powerpc-gcc5/ppc32_allmodconfig
+powerpc-gcc5/ppc64_book3e_allmodconfig
+powerpc-gcc5/ppc64le_allmodconfig
+sparc64-gcc5/sparc64-allmodconfig
 
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
+>  + error: modpost: "ebus_dma_enable" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>  + error: modpost: "ebus_dma_irq_enable" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>  + error: modpost: "ebus_dma_prepare" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>  + error: modpost: "ebus_dma_register" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>  + error: modpost: "ebus_dma_request" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>  + error: modpost: "ebus_dma_residue" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>  + error: modpost: "ebus_dma_unregister" [drivers/parport/parport_pc.ko] undefined!:  => N/A
+>  + error: modpost: "ns87303_lock" [drivers/parport/parport_pc.ko] undefined!:  => N/A
 
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
+sparc64-gcc5/sparc-allmodconfig
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>  + error: modpost: "riscv_cbom_block_size" [arch/riscv/kvm/kvm.ko] undefined!:  => N/A
 
--- 
-Neil
+riscv-gcc11/riscv-defconfig
+riscv-gcc11/rv32_defconfig
+
+>  + {standard input}: Error: branch to a symbol in another ISA mode: 1339 => 2616, 2621
+
+mips-gcc11/micro32r2_defconfig
+mips-gcc11/micro32r2el_defconfig
+
+>  + {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field:  => 2286
+>  + {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field :  => 2302
+>  + {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field :  => 2213
+>  + {standard input}: Error: pcrel too far:  => 2247, 2261, 2232, 2231, 2262, 2216, 2204, 2248, 2274, 2293, 2217, 2206, 2221, 2229, 2209, 2249, 2259, 2215
+>  + {standard input}: Error: unknown pseudo-op: `.l':  => 2305
+
+sh4-gcc11/sh-all{mod,yes}config (ICE in drivers/net/pcs/pcs-xpcs.o)
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
