@@ -2,130 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2039600743
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808AF600749
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiJQHHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S230008AbiJQHIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiJQHHf (ORCPT
+        with ESMTP id S229763AbiJQHIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:07:35 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2067.outbound.protection.outlook.com [40.107.220.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596C6222B1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:07:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MBsrTkrf+0q1z9ZXOP3NjIRJ2xuyMENbpyZqxdrh/TzHwkInW+5boN10XULljPoQUyA4MoojtvfoaMpoYkLcNu0tGO//Ze0K07gSZ1VFj4hUu6j4hEZF9UNoYDouIyZabfzRkP5mfMqBnIW6rDsymR8dt5PXjrby6W8XGIIyT5iFcPfAn6ERGlT2xniggjOcnnv1LRocmH54Il9/Y85fgeY2Iilmb3QH0zSHjXd+nGeDyLArUg4Ny1sgIg3DSNHSzmnE2UaSuV6fgGv9gdJHGgGnJy3ZG7cyPZ/nqd2CMA5kXjisVXwEHTwSafShjUd5yGCLLUR8DSdkwTC7e+kD3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zDiwxKLIN21TZn2jvbzYICT5WjT702tEp8JEf4Scuek=;
- b=LUZHx2ws6IJJckn85dUwoVv6ORVpZwTaMOTOhDQ6p3EAYx0MB20lnMrkafQZ79RUgl7HImD3DZd2uKsdZt7mESxqwYEUsGOjl7CBI3baezqvwL2QJ4O/hu+MO0OBgF/P7sFBPHDvcxt+kKmQ9VTfdYF7H6yyKaSku59BJrW5gIKSqCNiM+FYnLUo9P5xdHuJ9dn44GxWMm1SHgJiXS227sKepkCztvax7Bjuz5WzJ8tXWjGZq5Z2Sdu8ljb+rLWqcHB99mUqjD0lazrBEqQWHjUMY9htw/lyOGmaT2TKsPlrJnhlO6PlMKxexSM6t7CxUSNPh6fotV43w8i1YexA+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zDiwxKLIN21TZn2jvbzYICT5WjT702tEp8JEf4Scuek=;
- b=U5wGPPLyMTawM+R40K81kurvqxtqPzYOxHPVaj5pnOsgOJvkRaHwp8ZDEv844B1oX+97cpZx7Qb8jISaJe55rrb2vRGhxN1Qsde5edMrODvj320/UyVpKeGIuZ+Gc4meEi35eTSUn8NqNDlis8g9Ak1sC+HFWff0G3DrujxyDfQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by PH8PR12MB6964.namprd12.prod.outlook.com (2603:10b6:510:1bf::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Mon, 17 Oct
- 2022 07:07:16 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::805b:58b6:1f27:d644]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::805b:58b6:1f27:d644%6]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 07:07:16 +0000
-Message-ID: <67e2904a-4b80-5173-2d8f-6a3d1f702fbb@amd.com>
-Date:   Mon, 17 Oct 2022 09:07:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [git pull] drm fixes for 6.1-rc1
-Content-Language: en-US
-To:     Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>,
-        Arthur Marsh <arthur.marsh@internode.on.net>,
-        Dave Airlie <airlied@gmail.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     daniel.vetter@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
-References: <CAPM=9ty3DGWa8vnfumgSrpSgWnixWjikb6C0Zk_5bW+deKLVQw@mail.gmail.com>
- <20221016080833.5503-1-user@am64>
- <CAPM=9txsBf5HJ97tAMOQ8PdiPciK-zqngERUm7hGJO8Zyyqb+w@mail.gmail.com>
- <C98B32CF-86B0-438D-BC8D-10FA255B3B4F@internode.on.net>
- <7c645fa8-bf29-4b30-bdc5-e61e6bb09927@amd.com>
- <f0110d36-a9c2-c1b9-b193-32da4f98a975@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <f0110d36-a9c2-c1b9-b193-32da4f98a975@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0007.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::12) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 17 Oct 2022 03:08:12 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3EB2E6AC;
+        Mon, 17 Oct 2022 00:08:09 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so22688287ejb.13;
+        Mon, 17 Oct 2022 00:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qs14ysy+q1KUN7l6jyTJj1EYiV5ayfoc/slof2Oqsn4=;
+        b=B/akBzlEyd5+dndi5xqfwVl1LcCUr24kFHb4n5BnDXqbaMwuHa8UnNQ0jeQLrksaq3
+         qEIWNIfeRzxYoIamdCmbJuT0/mMkYBRU3E04eabmH6M1vm7e5AETPQZSS0z1YVT2m2kC
+         qiZ/yPxPF9Xj43tcAtsuA34Me6dKixX28w5x4Nn/JTyK6Le+nLO0AT9apcEIa4kXeLLP
+         Y0jW0330g4iWqI2aOpGZ9gahGFLBwVcDWE3NUm3T7LZyRntvRpC+rnTBKpIWBpg33hEV
+         VIpWsp4bjgxj1F/dEv3vaN27YxPs7/piL6kWAkxrgNaSc9VZQKWkEAr26qmwvSvczFk2
+         1QWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qs14ysy+q1KUN7l6jyTJj1EYiV5ayfoc/slof2Oqsn4=;
+        b=p65RVL9PIRfYOyfLw1kkEcfHToIVI4iACqxmGFsO1sXBsjcCA8GnNI0ViaG2KWL/ks
+         /bUH4Rf++ZBEFonMkvy3LF3I+Uj+dpkR9hw5Ag7GosqciwFhlElf2DN3PsFvXxHnBdRN
+         ObS/8CBdmgiY6ENrjFSQ2rUg3jPhg5UqTA14pOgJOK1UNp01P5bVx74ZuIuHrqWS/r1o
+         C0Ov+++AR+JzRGScqxVV5rqNoxao9yfPJMkhPJs0/l5U5ynYWCHFKGtXy8oIK+2NVMPT
+         SyOscy0jKi3jxk2oxFQryMcTrESED/VO9BHJZXs97eyWa28/k9Xy8ZI7zhot7c0r2ZG0
+         utTg==
+X-Gm-Message-State: ACrzQf3Jsd5K0PNEeYpOba6+ba1PzB2a0PZzl6pflj33L0fPUV1OkPM7
+        j8Wvmk67CfV/xCx7fk+OTug=
+X-Google-Smtp-Source: AMsMyM78vTFxn/LWzQXx6XUJ0qt6b1lUfMc6PR3xIXMoAv7SA34odEyscKdRbaq6gFblRxGDdxlX6Q==
+X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id ww3-20020a170907084300b0073a5b0e8352mr7585614ejb.438.1665990487991;
+        Mon, 17 Oct 2022 00:08:07 -0700 (PDT)
+Received: from [192.168.0.182] ([188.24.15.51])
+        by smtp.gmail.com with ESMTPSA id lb23-20020a170907785700b0077205dd15basm5645854ejc.66.2022.10.17.00.08.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 00:08:07 -0700 (PDT)
+Message-ID: <3c4c9d0d-a542-bd54-a8d0-589bb4e6ea49@gmail.com>
+Date:   Mon, 17 Oct 2022 10:08:10 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH8PR12MB6964:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59dcba0f-aa0c-44c5-8746-08dab00e3951
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X+N3ENjNN0C42ISWLdeJoIM7NnWxvnZ7NppBdr++luzbVhxiVJvrbshrg8iE5H1ZYS7rc6Ld2h/YhhB+XFnPQK0L7Yt3WKGCwJxqj+6DjlWjxbUMZgHlq6Ijzq2zX/oCWvrXq9ZkuZ7QlcD3BJSuRNoPModfiyTFuwtL/XCOdmILRULL3XQbmyc1PTg1wYR1gOe1OC6QQjEHvJbTY0ZS4aGwsHbgMHCowpxTtgrNbtfUckr2tcSK/ZANTO5E9uxHhzu7CnkSTrpmYpDV+4GPicUKz2O3KdxQkyaTYxiF7UaZlhusr5NsCeq2Y/UnZr/uwxk383rr71jlmjCm4Nm6q6Yr2U5++ev/Ud3WPuLMw9bbKx3WKuW7gTb9LxPRYrD8Id36l6L3BWHtvUKoFIJFWeWY39LgdjIr0dArxd1a4AsffaghdpUck5qXqch8kJ90Vbl5ncvu92lEXGL/1YsZduVuvxMfBpO9Hv5vwtGL4b18n1T7rTGJ9vAvb1wPxMNMD1T25SQ3/2VvnjVyWMq3npvBmzwkNZAcDNzcXIW5gHoBG+49FLiQdJldFfOhG+50porlZ2TgeSde8xMEpvd8FuAP1h/HViVuXW3b8Bk7v6BWYPusu8yqGEN0EVz8A+93xYm+sTmT3WVVAF27s+k7fSHDNnOHtVd5Wh072iCSH6oKxfQohl9dJ/Rvl0j+KBtgJgCGVDZbYY3D2tbqG0qbyt8X6rg+1zHffz6JEyHsHDTith8Lzhb9sYo8Kxcwx6YLWkDGhTgGtZNMdohD80yKXiVNkMRp/jfmkTMUxV09g1s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199015)(36756003)(31686004)(86362001)(31696002)(2906002)(5660300002)(30864003)(38100700002)(186003)(2616005)(83380400001)(66574015)(6506007)(53546011)(316002)(19627235002)(478600001)(6512007)(6636002)(6486002)(66946007)(66476007)(66556008)(45080400002)(110136005)(8936002)(41300700001)(4326008)(6666004)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M1U4MWZ2dzlsbjV4d0NSNEhLdy9kYStBRWV4dVplOWg0S3NLa0tQaWRYeUNx?=
- =?utf-8?B?eE9MTXZpNFNUVXQ5SlZiZG0wUnNKYytGZlRnV3V0aTVlamhUb3RoOUY2aXI4?=
- =?utf-8?B?QklOL1Z1cngxY202YXlyM0o3MHd4dWZ3aStZMWdQMkl0T2Z5Z0xmK3dOUHlz?=
- =?utf-8?B?RFZoOS9LNzNDczVwS2EyUEpVNno4dzZETDU3U2JWUU4rdFIvZjgzR3pDYk9E?=
- =?utf-8?B?NmZvKzd1WWY4SXVXa1FheThxYWQ2ZUxBTjBibG1sUy9IRGZVUVFvNXVJSS9O?=
- =?utf-8?B?RFhnMHlYUUZ3MGF3S2dxZjBOSzREVU1wazBBdDRENmF5dGcxTkhRWTB4dXh3?=
- =?utf-8?B?U0RXK0NkbkFhSVp3eG1WWW1vcEozM0NZOGI5NGxST3Viam82azZEdVpJUENI?=
- =?utf-8?B?TEUwWW5WM2NPcDV4cDVucy9IQ0hLcUM2VHJYZERDWks0SUUzZmJwUHdCbGcz?=
- =?utf-8?B?SklZeDJnd1BtZ0kvbzRaaFp1RTNkcEoxcnA4TFVxYTZydWpRcWFROG5jczhv?=
- =?utf-8?B?OEVWOWRmS0hHelgwYlJhTlB3S0QyOExhcXU2K3ZEdldFendzZnRsZ0FGUVFX?=
- =?utf-8?B?NkFMS3ZsREdtMGViOWZ5K1dhbnErb1VraGM5d3RzK1UxaUJvYzZqUi9tZzBv?=
- =?utf-8?B?TWRpMjhsUzY4V1BMN1FxdVJQTWg1QVlKZlVQek9LajJpYWZGVndrVnBFUyta?=
- =?utf-8?B?VjFNaWorZERCVjY1bVFiaVRDNFZXdXoxdUFhcEx6VnFiTXBiZEVpN3c3WVhL?=
- =?utf-8?B?OGlBVFgyTHROVENHekRtVTRsV0lqWnBoeUNjODczNDE2cjd5MTJ0VUFEd3M4?=
- =?utf-8?B?Y0FBRE4wV1RqYVdYRFQ0TkJKVGVQaG5wZDJYRU9JYjFMZ1M2eUExa21zMGdQ?=
- =?utf-8?B?MHNKZzgxcVBmbVlqbzZSOTBSUU1kY0FndXdKa2hyV0xyVTFKTFRqTGZZckVF?=
- =?utf-8?B?dlB2dXlqSzJtZUxoTXZBUEFsTTliUGpDa3ArckM0Mk9uVVpFUGo0cFlzN0xH?=
- =?utf-8?B?dnFrSVg5cGdEeitRWXJLTTIzcWFYdGwvdGtzaE9UM1p5UFZjbGRqZGtteSti?=
- =?utf-8?B?bUluMlB4cDF2OW1ENUVGSytQYitXSUdPMzEvalVYd2Q1dStXeHZycTlTcTI1?=
- =?utf-8?B?a011WjI3RDJDYWhmeEUxdmVMMzRnU0lheFM5bWpTdGJpVGdMR3BvVWxuaERq?=
- =?utf-8?B?bjZPWlVjYWZLVi82WXlEdkZJK2w4QkhvN1VyZndCblZUR2lQb0tETUIwOHdl?=
- =?utf-8?B?bW11V3V1dW9WRHpSWTI2TUFObFAwM0RMM09MT1FYd2hKdFBOYW9UTUtZSmta?=
- =?utf-8?B?MEpTRVpQWm1ndjA5bC9rZ1RLbzhOaGphY0lPaHc2RVI4dE1zeExCeExWVmxN?=
- =?utf-8?B?NnBGczRWY2lEc0VsdGo4QUJyaVZPOVJrL0hVam9DQUp5bmphdSt4V25Sa2xV?=
- =?utf-8?B?bDFoeHRCSC9Lc0gvWW8zZ2M4Mnl6VC9NTjdUMFNHODllNWRGOHlkSDRuWnlm?=
- =?utf-8?B?ZWVQSWlmNEllWHJmWTZxRzhpb0FJQkJLU0NIUFdRU3JoT25FSWtMalVqV2Np?=
- =?utf-8?B?aWdNc1k0WHVwOVR5ZDNwaFRvV2ZPeW5GYTY1K25ETlprMG1NVklhVTltUXNM?=
- =?utf-8?B?YjhLSWlzdy9aZzdNdFlXYlVySjN3TVJlZXZuL3VnNlZSLy82WmkrY1lLTlMw?=
- =?utf-8?B?MDRpMzlGaDRSdmRaOTdYT2NlWjZVSndhaEZPdncrRENmMzV6WHNPYmd4SWVG?=
- =?utf-8?B?WWxSNy9nUlVMRUgrTzZvMUYvWnhVS3loSEs5cGhzeVhPOEEvOUJQQXZwOFBr?=
- =?utf-8?B?clltaS9Xd2I4dUs4UllRckZpcS96ZDcreUE1dDdEZVVSY0FZcnBPK3g0UlBG?=
- =?utf-8?B?NFRWeWQzbFNGUlBhUFlZdlBTSnRzMytCZ0x1b1RXUVZob3lJUWRDSEFqMERT?=
- =?utf-8?B?VzFHQ2syNHlUQzNhL3czZUUxZGhZYU5OSTlPMkZnWVhNUXBzWithd3pDS1dB?=
- =?utf-8?B?bEhFMmFjTmxLNGt6aDEyZnN1b1VvMXZabStSdFFLZ3ZZRUdVTGxRTlR3T044?=
- =?utf-8?B?SjRJZjhwdEV1OWRHV1pKSk5HbEhHaUZaU2o2QnVqL0t4czNNYUg2SXJLeDJY?=
- =?utf-8?B?eC9IZzJMMzNEVldLbU4wZytnQXo2L3dJZ0F3T2RKSmZINFdlZDYrRERuTzNq?=
- =?utf-8?Q?CATNQ7vMG35lho/dsJopqfpg4IocsAG6gEy/i8SpEDwm?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59dcba0f-aa0c-44c5-8746-08dab00e3951
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 07:07:16.6521
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tm2G4lBQgIyEwpGRHzg00NoFKn50gB6T0NU5gCkpiBfWam9XeSOixHA/A03WVkeJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6964
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v9 2/2] iio: adc: ad4130: add AD4130 driver
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20221006140737.12396-1-cosmin.tanislav@analog.com>
+ <20221006140737.12396-3-cosmin.tanislav@analog.com>
+ <20221009183122.0de740e0@jic23-huawei>
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+In-Reply-To: <20221009183122.0de740e0@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,369 +81,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun,
 
-the hw generation doesn't matter. This error message here:
 
-amdgpu: Move buffer fallback to memcpy unavailable
-
-indicates that the detection of linear buffers still doesn't work as 
-expected or that we have a bug somewhere else.
-
-Maybe the limiting when SDMA moves are not available isn't working 
-correctly?
-
-Regards,
-Christian.
-
-Am 17.10.22 um 08:54 schrieb Arunpravin Paneer Selvam:
-> Hi Arthur,
->
-> Is this old radeon card?
->
-> Thanks,
-> Arun
->
-> On 10/17/2022 11:50 AM, Christian König wrote:
->> Arun please take a look into this ASAP.
+On 10/9/22 20:31, Jonathan Cameron wrote:
+> On Thu,  6 Oct 2022 17:07:37 +0300
+> Cosmin Tanislav <demonsingur@gmail.com> wrote:
+> 
+>> AD4130-8 is an ultra-low power, high precision, measurement solution for
+>> low bandwidth battery operated applications.
 >>
->> Thanks,
->> Christian.
+>> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
+>> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
+>> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
+>> selectable filter options, smart sequencer, sensor biasing and excitation
+>> options, diagnostics, and a FIFO buffer.
 >>
->> Am 17.10.22 um 03:13 schrieb Arthur Marsh:
->>> Thanks Dave, I reverted patch 
->>> 312b4dc11d4f74bfe03ea25ffe04c1f2fdd13cb9 against 6.1-rc1 and the 
->>> resulting kernel loaded amdgpu fine on my pc with Cape Verde GPU.
->>>
->>> Regards,
->>>
->>> Arthur.
->>>
->>> On 17 October 2022 8:14:18 am ACDT, Dave Airlie <airlied@gmail.com> 
->>> wrote:
->>>> On Sun, 16 Oct 2022 at 18:09, Arthur Marsh
->>>> <arthur.marsh@internode.on.net> wrote:
->>>>> From: Arthur Marsh <arthur.marsh@internode.on.net>
->>>>>
->>>>> Hi, the "drm fixes for 6.1-rc1" commit caused the amdgpu module to 
->>>>> fail
->>>>> with my Cape Verde radeonsi card.
->>>>>
->>>>> I haven't been able to bisect the problem to an individual commit, 
->>>>> but
->>>>> attach a dmesg extract below.
->>>>>
->>>>> I'm happy to supply any other configuration information and test 
->>>>> patches.
->>>>>
->>>> Can you try reverting: it's the only think I can spot that might
->>>> affect a card that old since most changes in that request were for
->>>> display hw you don't have.
->>>>
->>>> ommit 312b4dc11d4f74bfe03ea25ffe04c1f2fdd13cb9
->>>> Author: Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>
->>>> Date:   Tue Oct 4 07:33:39 2022 -0700
->>>>
->>>>     drm/amdgpu: Fix VRAM BO swap issue
->>>>
->>>>     DRM buddy manager allocates the contiguous memory requests in
->>>>     a single block or multiple blocks. So for the ttm move operation
->>>>     (incase of low vram memory) we should consider all the blocks to
->>>>     compute the total memory size which compared with the struct
->>>>     ttm_resource num_pages in order to verify that the blocks are
->>>>     contiguous for the eviction process.
->>>>
->>>>     v2: Added a Fixes tag
->>>>     v3: Rewrite the code to save a bit of calculations and
->>>>         variables (Christian)
->>>>
->>>>     Fixes: c9cad937c0c5 ("drm/amdgpu: add drm buddy support to 
->>>> amdgpu")
->>>>     Signed-off-by: Arunpravin Paneer Selvam 
->>>> <Arunpravin.PaneerSelvam@amd.com>
->>>>     Reviewed-by: Christian König <christian.koenig@amd.com>
->>>>     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->>>>
->>>>
->>>> Thanks,
->>>> Dave.
->>>>
->>>>> Arthur.
->>>>>
->>>>>   Linux version 6.0.0+ (root@am64) (gcc-12 (Debian 12.2.0-5) 
->>>>> 12.2.0, GNU ld (GNU Binutils for Debian) 2.39) #5179 SMP 
->>>>> PREEMPT_DYNAMIC Fri Oct 14 17:00:40 ACDT 2022
->>>>>   Command line: BOOT_IMAGE=/vmlinuz-6.0.0+ 
->>>>> root=UUID=39706f53-7c27-4310-b22a-36c7b042d1a1 ro single 
->>>>> amdgpu.audio=1 amdgpu.si_support=1 radeon.si_support=0 
->>>>> page_owner=on amdgpu.gpu_recovery=1
->>>>> ...
->>>>>
->>>>>   [drm] amdgpu kernel modesetting enabled.
->>>>>   amdgpu 0000:01:00.0: vgaarb: deactivate vga console
->>>>>   Console: switching to colour dummy device 80x25
->>>>>   [drm] initializing kernel modesetting (VERDE 0x1002:0x682B 
->>>>> 0x1458:0x22CA 0x87).
->>>>>   [drm] register mmio base: 0xFE8C0000
->>>>>   [drm] register mmio size: 262144
->>>>>   [drm] add ip block number 0 <si_common>
->>>>>   [drm] add ip block number 1 <gmc_v6_0>
->>>>>   [drm] add ip block number 2 <si_ih>
->>>>>   [drm] add ip block number 3 <gfx_v6_0>
->>>>>   [drm] add ip block number 4 <si_dma>
->>>>>   [drm] add ip block number 5 <si_dpm>
->>>>>   [drm] add ip block number 6 <dce_v6_0>
->>>>>   [drm] add ip block number 7 <uvd_v3_1>
->>>>>   [drm] BIOS signature incorrect 5b 7
->>>>>   resource sanity check: requesting [mem 0x000c0000-0x000dffff], 
->>>>> which spans more than PCI Bus 0000:00 [mem 0x000d0000-0x000dffff 
->>>>> window]
->>>>>   caller pci_map_rom+0x68/0x1b0 mapping multiple BARs
->>>>>   amdgpu 0000:01:00.0: No more image in the PCI ROM
->>>>>   amdgpu 0000:01:00.0: amdgpu: Fetched VBIOS from ROM BAR
->>>>>   amdgpu: ATOM BIOS: xxx-xxx-xxx
->>>>>   amdgpu 0000:01:00.0: amdgpu: Trusted Memory Zone (TMZ) feature 
->>>>> not supported
->>>>>   amdgpu 0000:01:00.0: amdgpu: PCIE atomic ops is not supported
->>>>>   [drm] PCIE gen 2 link speeds already enabled
->>>>>   [drm] vm size is 64 GB, 2 levels, block size is 10-bit, fragment 
->>>>> size is 9-bit
->>>>>   RTL8211B Gigabit Ethernet r8169-0-300:00: attached PHY driver 
->>>>> (mii_bus:phy_addr=r8169-0-300:00, irq=MAC)
->>>>>   r8169 0000:03:00.0 eth0: Link is Down
->>>>>   amdgpu 0000:01:00.0: amdgpu: VRAM: 2048M 0x000000F400000000 - 
->>>>> 0x000000F47FFFFFFF (2048M used)
->>>>>   amdgpu 0000:01:00.0: amdgpu: GART: 1024M 0x000000FF00000000 - 
->>>>> 0x000000FF3FFFFFFF
->>>>>   [drm] Detected VRAM RAM=2048M, BAR=256M
->>>>>   [drm] RAM width 128bits DDR3
->>>>>   [drm] amdgpu: 2048M of VRAM memory ready
->>>>>   [drm] amdgpu: 3979M of GTT memory ready.
->>>>>   [drm] GART: num cpu pages 262144, num gpu pages 262144
->>>>>   amdgpu 0000:01:00.0: amdgpu: PCIE GART of 1024M enabled (table 
->>>>> at 0x000000F400A00000).
->>>>>   [drm] Internal thermal controller with fan control
->>>>>   [drm] amdgpu: dpm initialized
->>>>>   [drm] AMDGPU Display Connectors
->>>>>   [drm] Connector 0:
->>>>>   [drm]   HDMI-A-1
->>>>>   [drm]   HPD1
->>>>>   [drm]   DDC: 0x194c 0x194c 0x194d 0x194d 0x194e 0x194e 0x194f 
->>>>> 0x194f
->>>>>   [drm]   Encoders:
->>>>>   [drm]     DFP1: INTERNAL_UNIPHY
->>>>>   [drm] Connector 1:
->>>>>   [drm]   DVI-D-1
->>>>>   [drm]   HPD2
->>>>>   [drm]   DDC: 0x1950 0x1950 0x1951 0x1951 0x1952 0x1952 0x1953 
->>>>> 0x1953
->>>>>   [drm]   Encoders:
->>>>>   [drm]     DFP2: INTERNAL_UNIPHY
->>>>>   [drm] Connector 2:
->>>>>   [drm]   VGA-1
->>>>>   [drm]   DDC: 0x1970 0x1970 0x1971 0x1971 0x1972 0x1972 0x1973 
->>>>> 0x1973
->>>>>   [drm]   Encoders:
->>>>>   [drm]     CRT1: INTERNAL_KLDSCP_DAC1
->>>>>   [drm] Found UVD firmware Version: 64.0 Family ID: 13
->>>>>   amdgpu: Move buffer fallback to memcpy unavailable
->>>>>   [drm:amdgpu_device_init.cold [amdgpu]] *ERROR* sw_init of IP 
->>>>> block <uvd_v3_1> failed -19
->>>>>   amdgpu 0000:01:00.0: amdgpu: amdgpu_device_ip_init failed
->>>>>   amdgpu 0000:01:00.0: amdgpu: Fatal error during GPU init
->>>>>   amdgpu 0000:01:00.0: amdgpu: amdgpu: finishing device.
->>>>>   BUG: kernel NULL pointer dereference, address: 0000000000000090
->>>>>   #PF: supervisor write access in kernel mode
->>>>>   #PF: error_code(0x0002) - not-present page
->>>>>   PGD 0 P4D 0
->>>>>   Oops: 0002 [#1] PREEMPT SMP NOPTI
->>>>>   CPU: 3 PID: 447 Comm: udevd Not tainted 6.0.0+ #5179
->>>>>   Hardware name: System manufacturer System Product Name/M3A78 
->>>>> PRO, BIOS 1701    01/27/2011
->>>>>   RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
->>>>>   Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc 
->>>>> cc cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 
->>>>> 0f <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 
->>>>> 99 8e
->>>>>   RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
->>>>>   RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
->>>>>   RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
->>>>>   RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
->>>>>   R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
->>>>>   R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
->>>>>   FS:  00007fd81fcd9840(0000) GS:ffff99bb67cc0000(0000) 
->>>>> knlGS:0000000000000000
->>>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>   CR2: 0000000000000090 CR3: 0000000111822000 CR4: 00000000000006e0
->>>>>   Call Trace:
->>>>>    <TASK>
->>>>>    amdgpu_fence_driver_sw_fini+0xc2/0xd0 [amdgpu]
->>>>>    amdgpu_device_fini_sw+0x17/0x3c0 [amdgpu]
->>>>>    amdgpu_driver_release_kms+0x12/0x30 [amdgpu]
->>>>>    devm_drm_dev_init_release+0x4a/0x70 [drm]
->>>>>    release_nodes+0x40/0xb0
->>>>>    devres_release_all+0x89/0xc0
->>>>>    device_unbind_cleanup+0xe/0x70
->>>>>    really_probe+0x245/0x3a0
->>>>>    ? pm_runtime_barrier+0x61/0xb0
->>>>>    __driver_probe_device+0x78/0x170
->>>>>    driver_probe_device+0x2d/0xb0
->>>>>    __driver_attach+0xdc/0x1d0
->>>>>    ? __device_attach_driver+0x100/0x100
->>>>>    bus_for_each_dev+0x69/0xa0
->>>>>    bus_add_driver+0x1d4/0x230
->>>>>    ? _raw_spin_unlock+0x15/0x40
->>>>>    driver_register+0x89/0xe0
->>>>>    ? 0xffffffffc0c3b000
->>>>>    do_one_initcall+0x44/0x200
->>>>>    ? __kmem_cache_alloc_node+0x90/0x360
->>>>>    ? kmalloc_trace+0x38/0xc0
->>>>>    do_init_module+0x4a/0x1e0
->>>>>    __do_sys_finit_module+0xb5/0x130
->>>>>    do_syscall_64+0x3a/0x90
->>>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>>>   RIP: 0033:0x7fd81ff5b1b9
->>>>>   Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 48 89 
->>>>> f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 
->>>>> 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 1c 0d 00 f7 d8 64 89 
->>>>> 01 48
->>>>>   RSP: 002b:00007ffc5b37cbb8 EFLAGS: 00000246 ORIG_RAX: 
->>>>> 0000000000000139
->>>>>   RAX: ffffffffffffffda RBX: 000055e5f2f6a140 RCX: 00007fd81ff5b1b9
->>>>>   RDX: 0000000000000000 RSI: 000055e5f2f67e30 RDI: 0000000000000017
->>>>>   RBP: 000055e5f2f67e30 R08: 0000000000000000 R09: 000055e5f2f46700
->>>>>   R10: 0000000000000017 R11: 0000000000000246 R12: 0000000000020000
->>>>>   R13: 0000000000000000 R14: 000055e5f2f65b00 R15: 0000000000000024
->>>>>    </TASK>
->>>>>   Modules linked in: amdgpu(+) snd_emu10k1_synth snd_emux_synth 
->>>>> snd_seq_midi_emul snd_seq_virmidi snd_seq_midi snd_seq_midi_event 
->>>>> snd_seq wmi_bmof snd_emu10k1 edac_mce_amd gpu_sched drm_buddy 
->>>>> video kvm_amd drm_ttm_helper ttm snd_util_mem drm_display_helper 
->>>>> snd_ac97_codec ccp drm_kms_helper snd_hda_codec_hdmi rng_core 
->>>>> ac97_bus snd_rawmidi snd_hda_intel snd_intel_dspcfg snd_hda_codec 
->>>>> snd_hda_core snd_seq_device drm kvm snd_hwdep snd_pcm_oss 
->>>>> snd_mixer_oss evdev serio_raw snd_pcm irqbypass i2c_algo_bit 
->>>>> fb_sys_fops syscopyarea sysfillrect emu10k1_gp pcspkr gameport 
->>>>> k10temp snd_timer sysimgblt snd acpi_cpufreq wmi soundcore button 
->>>>> sp5100_tco asus_atk0110 ext4 crc16 mbcache jbd2 btrfs 
->>>>> blake2b_generic xor raid6_pq zstd_compress libcrc32c 
->>>>> crc32c_generic uas usb_storage sg sd_mod hid_generic t10_pi usbhid 
->>>>> hid sr_mod cdrom crc64_rocksoft crc64 ata_generic ahci pata_atiixp 
->>>>> libahci ohci_pci firewire_ohci libata firewire_core crc_itu_t 
->>>>> xhci_pci scsi_mod ohci_hcd r8169 ehci_pci xhci_hcd
->>>>>    realtek ehci_hcd mdio_devres i2c_piix4 scsi_common usbcore 
->>>>> libphy usb_common
->>>>>   CR2: 0000000000000090
->>>>>   ---[ end trace 0000000000000000 ]---
->>>>>   RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
->>>>>   Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc 
->>>>> cc cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 
->>>>> 0f <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 
->>>>> 99 8e
->>>>>   RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
->>>>>   RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
->>>>>   RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
->>>>>   RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
->>>>>   R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
->>>>>   R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
->>>>>   FS:  00007fd81fcd9840(0000) GS:ffff99bb67cc0000(0000) 
->>>>> knlGS:0000000000000000
->>>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>   CR2: 0000000000000090 CR3: 0000000111822000 CR4: 00000000000006e0
->>>>>   note: udevd[447] exited with preempt_count 1
->>>>>   udevd[433]: worker [447] terminated by signal 9 (Killed)
->>>>>   udevd[433]: worker [447] failed while handling 
->>>>> '/devices/pci0000:00/0000:00:02.0/0000:01:00.0'
->>>>>   r8169 0000:03:00.0 eth0: Link is Up - 1Gbps/Full - flow control off
->>>>>   IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
->>>>>   Adding 4194300k swap on /dev/sda4.  Priority:-2 extents:1 
->>>>> across:4194300k FS
->>>>>   EXT4-fs (sda5): re-mounted. Quota mode: none.
->>>>>   lp: driver loaded but no devices found
->>>>>   ppdev: user-space parallel port driver
->>>>>   it87: Found IT8716F chip at 0xe80, revision 3
->>>>>   ACPI Warning: SystemIO range 
->>>>> 0x0000000000000E85-0x0000000000000E86 conflicts with OpRegion 
->>>>> 0x0000000000000E85-0x0000000000000E86 (\_SB.PCI0.SBRG.ASOC.HWRE) 
->>>>> (20220331/utaddress-204)
->>>>>   ACPI: OSL: Resource conflict; ACPI support missing from driver?
->>>>>   BUG: unable to handle page fault for address: 00000000000065c0
->>>>>   #PF: supervisor read access in kernel mode
->>>>>   #PF: error_code(0x0000) - not-present page
->>>>>   PGD 0 P4D 0
->>>>>   Oops: 0000 [#2] PREEMPT SMP NOPTI
->>>>>   CPU: 2 PID: 55 Comm: kworker/2:1 Tainted: G D 6.0.0+ #5179
->>>>>   Hardware name: System manufacturer System Product Name/M3A78 
->>>>> PRO, BIOS 1701    01/27/2011
->>>>>   Workqueue: events output_poll_execute [drm_kms_helper]
->>>>>   RIP: 0010:amdgpu_device_rreg.part.0+0x39/0x100 [amdgpu]
->>>>>   Code: 6c 24 08 48 89 fb 4c 89 64 24 10 44 8d 24 b5 00 00 00 00 
->>>>> 4c 3b a7 88 08 00 00 89 f5 73 70 83 e2 02 74 2f 4c 03 a3 90 08 00 
->>>>> 00 <45> 8b 24 24 48 8b 43 08 0f b7 70 3e 66 90 44 89 e0 48 8b 1c 
->>>>> 24 48
->>>>>   RSP: 0018:ffffbeb3c0717c48 EFLAGS: 00010206
->>>>>   RAX: 0000000000000000 RBX: ffff99bae8260000 RCX: 0000000000000000
->>>>>   RDX: 0000000000000000 RSI: 0000000000001970 RDI: ffff99bae8260000
->>>>>   RBP: 0000000000001970 R08: ffffbeb3c0717e08 R09: 0000000000000000
->>>>>   R10: 0000000000000018 R11: fefefefefefefeff R12: 00000000000065c0
->>>>>   R13: ffffbeb3c0717d70 R14: 0000000000000000 R15: 000000010005e340
->>>>>   FS:  0000000000000000(0000) GS:ffff99bb67c80000(0000) 
->>>>> knlGS:0000000000000000
->>>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>   CR2: 00000000000065c0 CR3: 000000008980a000 CR4: 00000000000006e0
->>>>>   Call Trace:
->>>>>    <TASK>
->>>>>    amdgpu_i2c_pre_xfer+0x163/0x180 [amdgpu]
->>>>>    bit_xfer+0x36/0x530 [i2c_algo_bit]
->>>>>    __i2c_transfer+0x185/0x550
->>>>>    i2c_transfer+0xa2/0x110
->>>>>    amdgpu_display_ddc_probe+0xbd/0x100 [amdgpu]
->>>>>    amdgpu_connector_vga_detect+0x8e/0x200 [amdgpu]
->>>>>    drm_helper_probe_detect_ctx+0x7b/0xd0 [drm_kms_helper]
->>>>>    output_poll_execute+0x152/0x220 [drm_kms_helper]
->>>>>    process_one_work+0x1ae/0x370
->>>>>    worker_thread+0x4d/0x3b0
->>>>>    ? rescuer_thread+0x380/0x380
->>>>>    kthread+0xe3/0x110
->>>>>    ? kthread_complete_and_exit+0x20/0x20
->>>>>    ret_from_fork+0x22/0x30
->>>>>    </TASK>
->>>>>   Modules linked in: max6650 hwmon_vid parport_pc ppdev lp parport 
->>>>> amdgpu(+) snd_emu10k1_synth snd_emux_synth snd_seq_midi_emul 
->>>>> snd_seq_virmidi snd_seq_midi snd_seq_midi_event snd_seq wmi_bmof 
->>>>> snd_emu10k1 edac_mce_amd gpu_sched drm_buddy video kvm_amd 
->>>>> drm_ttm_helper ttm snd_util_mem drm_display_helper snd_ac97_codec 
->>>>> ccp drm_kms_helper snd_hda_codec_hdmi rng_core ac97_bus 
->>>>> snd_rawmidi snd_hda_intel snd_intel_dspcfg snd_hda_codec 
->>>>> snd_hda_core snd_seq_device drm kvm snd_hwdep snd_pcm_oss 
->>>>> snd_mixer_oss evdev serio_raw snd_pcm irqbypass i2c_algo_bit 
->>>>> fb_sys_fops syscopyarea sysfillrect emu10k1_gp pcspkr gameport 
->>>>> k10temp snd_timer sysimgblt snd acpi_cpufreq wmi soundcore button 
->>>>> sp5100_tco asus_atk0110 ext4 crc16 mbcache jbd2 btrfs 
->>>>> blake2b_generic xor raid6_pq zstd_compress libcrc32c 
->>>>> crc32c_generic uas usb_storage sg sd_mod hid_generic t10_pi usbhid 
->>>>> hid sr_mod cdrom crc64_rocksoft crc64 ata_generic ahci pata_atiixp 
->>>>> libahci ohci_pci firewire_ohci libata firewire_core crc_itu_t 
->>>>> xhci_pci
->>>>>    scsi_mod ohci_hcd r8169 ehci_pci xhci_hcd realtek ehci_hcd 
->>>>> mdio_devres i2c_piix4 scsi_common usbcore libphy usb_common
->>>>>   CR2: 00000000000065c0
->>>>>   ---[ end trace 0000000000000000 ]---
->>>>>   RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
->>>>>   Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc 
->>>>> cc cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 
->>>>> 0f <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 
->>>>> 99 8e
->>>>>   RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
->>>>>   RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
->>>>>   RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
->>>>>   RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
->>>>>   R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
->>>>>   R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
->>>>>   FS:  0000000000000000(0000) GS:ffff99bb67c80000(0000) 
->>>>> knlGS:0000000000000000
->>>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>   CR2: 00000000000065c0 CR3: 000000008980a000 CR4: 00000000000006e0
->>
->
+>> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Hi Cosmin,
+> 
+> I've cropped down (mostly) to the clock changes.
+> A few minor things in there + this looks like it would suffer from the issue
+> with IIO_CONST_ATTR() not being handled correctly for buffer attributes.
+> 
+> Jonathan
+> 
+> 
+> 
+>> +static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
+>> +static IIO_CONST_ATTR(hwfifo_watermark_max, __stringify(AD4130_FIFO_SIZE));
+> 
+> These look like they'd suffer from same problem
+> https://lore.kernel.org/all/cover.1664782676.git.mazziesaccount@gmail.com/
+> tackles.  Short term fix is don't use IIO_CONST_ATTR for buffer attributes.
+> 
 
+Right, this only works downstream.
+
+Should I switch to IIO_STATIC_CONST_DEVICE_ATTR?
+
+> 
+>> +static IIO_DEVICE_ATTR_RO(hwfifo_watermark, 0);
+>> +static IIO_DEVICE_ATTR_RO(hwfifo_enabled, 0);
+>> +
+>> +static const struct attribute *ad4130_fifo_attributes[] = {
+>> +	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
+>> +	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
+>> +	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
+>> +	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
+>> +	NULL
+>> +};
+> 
+> 
+>> +static void ad4130_clk_disable_unprepare(void *clk)
+>> +{
+>> +	clk_disable_unprepare(clk);
+>> +}
+>> +
+>> +static int ad4130_set_mclk_sel(struct ad4130_state *st,
+>> +			       enum ad4130_mclk_sel mclk_sel)
+>> +{
+>> +	return regmap_update_bits(st->regmap, AD4130_ADC_CONTROL_REG,
+>> +				 AD4130_ADC_CONTROL_MCLK_SEL_MASK,
+>> +				 FIELD_PREP(AD4130_ADC_CONTROL_MCLK_SEL_MASK,
+>> +					    mclk_sel));
+>> +}
+>> +
+>> +static unsigned long ad4130_int_clk_recalc_rate(struct clk_hw *hw,
+>> +						unsigned long parent_rate)
+>> +{
+>> +	return AD4130_MCLK_FREQ_76_8KHZ;
+>> +}
+>> +
+>> +static int ad4130_int_clk_is_enabled(struct clk_hw *hw)
+>> +{
+>> +	struct ad4130_state *st = container_of(hw, struct ad4130_state, int_clk_hw);
+>> +
+>> +	return st->mclk_sel == AD4130_MCLK_76_8KHZ_OUT;
+>> +}
+>> +
+>> +static int ad4130_int_clk_prepare(struct clk_hw *hw)
+>> +{
+>> +	struct ad4130_state *st = container_of(hw, struct ad4130_state, int_clk_hw);
+>> +	int ret;
+>> +
+>> +	ret = ad4130_set_mclk_sel(st, AD4130_MCLK_76_8KHZ_OUT);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	st->mclk_sel = AD4130_MCLK_76_8KHZ_OUT;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void ad4130_int_clk_unprepare(struct clk_hw *hw)
+>> +{
+>> +	struct ad4130_state *st = container_of(hw, struct ad4130_state, int_clk_hw);
+>> +	int ret;
+>> +
+>> +	ret = ad4130_set_mclk_sel(st, AD4130_MCLK_76_8KHZ);
+>> +	if (ret)
+>> +		return;
+>> +
+>> +	st->mclk_sel = AD4130_MCLK_76_8KHZ;
+>> +}
+>> +
+>> +static const struct clk_ops ad4130_int_clk_ops = {
+>> +	.recalc_rate = ad4130_int_clk_recalc_rate,
+>> +	.is_enabled = ad4130_int_clk_is_enabled,
+>> +	.prepare = ad4130_int_clk_prepare,
+>> +	.unprepare = ad4130_int_clk_unprepare,
+>> +};
+>> +
+>> +static int ad4130_setup_int_clk(struct ad4130_state *st)
+>> +{
+>> +	struct device *dev = &st->spi->dev;
+>> +	struct device_node *of_node = dev->of_node;
+> 
+> Hmm. There goes our careful use of generic firmware properties.
+> I guess there still isn't much we can do about that for clks
+> so at least it's contained to this one function.
+> 
+> Also is this code safe to of_node == NULL?
+> 
+
+No, I guess it is not. I'll fix it.
+Should I just
+if (!of_node) return 0;
+?
+
+>> +	struct clk_init_data init;
+>> +	const char *clk_name;
+>> +	struct clk *clk;
+>> +
+>> +	if (st->int_pin_sel == AD4130_INT_PIN_CLK ||
+>> +	    st->mclk_sel != AD4130_MCLK_76_8KHZ)
+>> +		return 0;
+>> +
+>> +	clk_name = of_node->name;
+>> +	of_property_read_string(of_node, "clock-output-names", &clk_name);
+> 
+> Probably want to check success of that read before using it.
+> I'd also expect that these to be optional + doesn't he dt binding need
+> updating to add this stuff?
+> 
+
+It does need updating, sorry.
+of_node->name is the default clk_name, if clock-output-names is present
+then the of_property_read_string() result will be used instead. If not,
+there's no trouble, and we don't care about the return value since we
+have the default clk_name assigned just above.
+I can also switch to device_property_read_string() here to minimize the
+damage from using OF.
+
+> 
+>> +
+>> +	init.name = clk_name;
+>> +	init.ops = &ad4130_int_clk_ops;
+>> +
+>> +	st->int_clk_hw.init = &init;
+>> +	clk = devm_clk_register(dev, &st->int_clk_hw);
+>> +	if (IS_ERR(clk))
+>> +		return PTR_ERR(clk);
+>> +
+>> +	return of_clk_add_provider(of_node, of_clk_src_simple_get, clk);
+>> +}
+>> +
