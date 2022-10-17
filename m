@@ -2,199 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9384160164C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A986B60164F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiJQSaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S230505AbiJQSaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiJQSaV (ORCPT
+        with ESMTP id S230463AbiJQSaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:30:21 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7F20F72
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:16 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id 3so12385100vsh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:16 -0700 (PDT)
+        Mon, 17 Oct 2022 14:30:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAA96919F
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:27 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id q19so17285930edd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DXU81cQcPsCJLCV+A2vr1+j7uPP+PNe41H9VCxRnhMQ=;
-        b=cx2LxuZ48C+MUnXJPZyd4WuzGanbZCWLlqZEcit5FftjC6xno++aG8MH9PDvAsUUSZ
-         rmLFTWxZ7FHQZZZy70/qWTZ46+bNpX3NyFKCeD9lIx4/kPNEO2qTrd77sJIoaJ8dkYDI
-         o7IYMoNmlgES8l3e7IkYdanLaYMPBOr9Tw76x0NeZopzOsPfdP/KtRMrs0u8ZI0zl/iv
-         jeRSLOvCCCMyWP6SsQP9z/A54CtQgSLFAY8b+7wcGNFqOIH3q3wdbiCKtXvCbIwq11zO
-         Wjz+h0o4ay1fMleegtoBUxCyyULgYzByPQJRX/BcNAKj8dryCo/V0Ut21HjJYfU2Tdma
-         rlmg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1ygTaFM2xbm4f+3CnWyuW6YhAYiSOprMyGPvCYkz/T4=;
+        b=bcwiVIzGS1AnE11FxBrC4EJI4yYIXpkDDvkXNjOzLBOrdPpftEdG/bk1MmdY7yaumu
+         bWJxNRX1dAceXkrG0vUNchvTHH0sYHv7SEZ2IxlUVbAYeo2h4h+5N80qnvb5Q52i+R7y
+         NAdH8FgsQ1Diyv2AYEdi5cu0+xioeo6M/nsUCPx6UqIh0aoWwb5UVQBv57KG+7zZUQe+
+         wOSPUzlKQAcKw9VLG+DoxnJI3Z53He7V8zzEOJw+IHiTaDBp5yY6XmCAGHN6T6XyjSyz
+         TDWPqnb03lh1ftWgeXwnMWw4NdDLDvfNABAVUJgtmgKFy5UbeiZHUpqrtmvikAe4o3Yt
+         EQhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DXU81cQcPsCJLCV+A2vr1+j7uPP+PNe41H9VCxRnhMQ=;
-        b=wXrHrOJKLNjaJia0azOktIyM2zYA4OpBQLi36OjKHsJKmkfJXazjU110LNC4B8kg5g
-         KPSO8oO83+xs/MLk/LikgPhVAbAsJG0WqRYtGI2OD3Qm+UNOTe6CwItDfq9KPBplfuuU
-         DPfZjqUez+Sa5U228mWQwz9D4FZ6Oxjk/uGWdt5Q6ltd21DgfbuVqzUvz9vlQOXj5qGL
-         MYL20+TcTI3s3YFwdp8nvzxy4DLKgGabuinI6qSqqWiDiDNO7u5Q0aySRE0w5oF1QgO0
-         sEri/wM/sQHmWk6if1ruO0Pjteq2XJ3b5tsLXkd/w8taJlFLmLgsSd7iUiZbMUiCf6Sd
-         yR7g==
-X-Gm-Message-State: ACrzQf1NWR/6G2/R3PcZFVSdGrDPd5OoEVJnRlbSnJ5u0GSIDiaC2A74
-        rbk8pEnAyFzEsS60Jzo/0FdbX3B1H4U2EaXskjL+NA==
-X-Google-Smtp-Source: AMsMyM4p9p0QSnPBV1gkTca9Wg26fAHTdzB5s48QOa9jPxquDOSsim86CoYwsXoOqK1CJmm9ZL0dMMJMQDF8TfvR9Vo=
-X-Received: by 2002:a67:e8d0:0:b0:3a9:765b:38fe with SMTP id
- y16-20020a67e8d0000000b003a9765b38femr124089vsn.51.1666031415362; Mon, 17 Oct
- 2022 11:30:15 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ygTaFM2xbm4f+3CnWyuW6YhAYiSOprMyGPvCYkz/T4=;
+        b=iXUg5Ibt3YUsoNm/TZa+3V1FR8aQcZ/7DASHy65c5FDTEaBFV6dW/cfGFDlqukNKlD
+         GIN3zXRamI5465DjMZihbKI4U3UucEebIqwvd2hBZ+Az/W0syoiTRuocUxtlw0RRgqUn
+         Uq+/MTiu3P5y1H/a4dpwDeB5PcPBzHCnDv4vjsNeH61bYirlU1COOD37PPm7LEQcoZ8W
+         SfJxOHcHHHiRA1eUm3adZL79f8Km/81FO9+2mvi/4qf1k7oMKVIX52ScHjZV0ZxcOetU
+         NroPdqaOAbjaI/ukGviqb6jxq30m6/K5jSiNq3/XD7Un8ZqPPFEALk6oz2N6LPvrVtZy
+         xnKw==
+X-Gm-Message-State: ACrzQf1ZSI9ftQqQ4jUA/mhB2GcOsXElK7+Lcphb617zhUKWfDLb81t5
+        vYyhtR5U1AsmPm/G4IAXo0g=
+X-Google-Smtp-Source: AMsMyM5sbV5SFly/AwumCvNfkgH6wggl0rXYmoTZ/ws/1/9UFfhTbgh5LuL4LohxUTpqs4A7xUl2Hw==
+X-Received: by 2002:aa7:cd4f:0:b0:458:6077:c3ac with SMTP id v15-20020aa7cd4f000000b004586077c3acmr11616385edw.32.1666031424966;
+        Mon, 17 Oct 2022 11:30:24 -0700 (PDT)
+Received: from [192.168.2.4] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id b22-20020a170906d11600b0078d2d5b90f4sm6481422ejz.32.2022.10.17.11.30.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 11:30:24 -0700 (PDT)
+Message-ID: <c4bf7723-b3b8-0955-5ba3-e4d05bdc835a@gmail.com>
+Date:   Mon, 17 Oct 2022 20:30:23 +0200
 MIME-Version: 1.0
-References: <00000000000068cb2905eb214e9a@google.com> <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
- <CANp29Y5ZsUQ64iizRVQiuunGceH_gGTQbLrKRDZWYuSHRdazLQ@mail.gmail.com> <Y02UV5XnsWo+Zd7q@google.com>
-In-Reply-To: <Y02UV5XnsWo+Zd7q@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 17 Oct 2022 11:30:04 -0700
-Message-ID: <CANp29Y4x8fGchAsEaZyb4U_Doi-VBuoNkP+Pq90Eorzj7fotdg@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in btf_type_id_size
-To:     sdf@google.com
-Cc:     syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [BUG] [PATCH] drm/rockchip: use generic fbdev setup
+To:     Heiko Stuebner <heiko@sntech.de>, John Keeping <john@metanate.com>
+Cc:     dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <20211029115014.264084-1-john@metanate.com>
+ <d814394b-86c3-beb1-ddd4-04c65004f138@gmail.com> <Y00o3M7SKAB/w9sW@donbot>
+ <2220890.jZfb76A358@phil>
+Content-Language: en-US
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <2220890.jZfb76A358@phil>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 10:43 AM <sdf@google.com> wrote:
->
-> On 10/17, Aleksandr Nogikh wrote:
-> > Let's tell the bot about the fix
->
-> > #syz fix: bpf: prevent decl_tag from being referenced in func_proto
->
-> Thx! Wasn't sure syzkaller would accept that until the fix is actually
-> pulled in.
 
-No, that's not strictly necessary :) syzbot accepts fix commit titles
-at any moment and then just waits until the commit reaches all
-branches it fuzzes.
 
->
-> > On Mon, Oct 17, 2022 at 9:16 AM 'Stanislav Fomichev' via
-> > syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
-> > >
-> > > On Sat, Oct 15, 2022 at 11:52 PM syzbot
-> > > <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of
-> > git://git.kernel...
-> > > > git tree:       bpf
-> > > > console+strace:
-> > https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
-> > > > kernel config:
-> > https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
-> > > > dashboard link:
-> > https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
-> > Binutils for Debian) 2.35.2
-> > > > syz repro:
-> > https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
-> > > > C reproducer:
-> > https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
-> > > >
-> > > > Downloadable assets:
-> > > > disk image:
-> > https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
-> > > > vmlinux:
-> > https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the
-> > commit:
-> > > > Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
-> > > >
-> > > > ------------[ cut here ]------------
-> > > > WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946
-> > btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> > > > Modules linked in:
-> > > > CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted
-> > 6.0.0-syzkaller-02734-g0326074ff465 #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine,
-> > BIOS Google 09/22/2022
-> > > > RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> > > > Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d
-> > 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45
-> > 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
-> > > > RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
-> > > > RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> > > > RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
-> > > > RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
-> > > > R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
-> > > > R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
-> > > > FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000)
-> > knlGS:0000000000000000
-> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
-> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
-> > > >  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
-> > > >  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
-> > > >  btf_parse kernel/bpf/btf.c:5026 [inline]
-> > > >  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
-> > > >  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
-> > > >  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
-> > > >  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
-> > > >  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
-> > > >  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
-> > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > > RIP: 0033:0x7f0fbae41c69
-> > > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48
-> > 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-> > f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> > > > RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> > > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
-> > > > RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
-> > > > RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
-> > > > R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
-> > > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > > >  </TASK>
-> > >
-> > > Will be addressed by
-> > >
-> > https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
-> > >
-> > >
-> > > > ---
-> > > > This report is generated by a bot. It may contain errors.
-> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > > >
-> > > > syzbot will keep track of this issue. See:
-> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > > syzbot can test patches for this issue, for details see:
-> > > > https://goo.gl/tpsmEJ#testing-patches
-> > >
-> > > --
-> > > You received this message because you are subscribed to the Google
-> > Groups "syzkaller-bugs" group.
-> > > To unsubscribe from this group and stop receiving emails from it, send
-> > an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > > To view this discussion on the web visit
-> > https://groups.google.com/d/msgid/syzkaller-bugs/CAKH8qBu%2BoT%2BBF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w%40mail.gmail.com.
+On 10/17/22 13:29, Heiko Stuebner wrote:
+> Am Montag, 17. Oktober 2022, 12:05:16 CEST schrieb John Keeping:
+>> Hi Johan,
+>>
+>> On Mon, Oct 17, 2022 at 10:11:32AM +0200, Johan Jonker wrote:
+>>> Your patch contribution causes a kernel panic on MK808 with Rockchip rk3066a SoC.
+>>> Would you like to contribute to fix this issue?
+>>> The assumtion that drm_fbdev_generic_setup() does what rockchip_drm_fbdev_init did is not true!
+>>> A revert makes it work again.
+>>
+
+>> It looks like there are 3 different ways to end up with -ENOMEM here,
+>> can you track down whether you're hitting one of the cases in
+>> rockchip_gem_prime_vmap() or if it's the iosys_map_is_null case in
+>> drm_gem_vmap()?
+
+It looks like it comes from rockchip_gem_prime_vmap() second return (2).
+
+====
+
+
+
+int rockchip_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map)
+{
+	struct rockchip_gem_object *rk_obj = to_rockchip_obj(obj);
+
+	if (rk_obj->pages) {
+		void *vaddr = vmap(rk_obj->pages, rk_obj->num_pages, VM_MAP,
+				  pgprot_writecombine(PAGE_KERNEL));
+		if (!vaddr) {
+			printk("FBDEV rockchip_gem_prime_vmap 1");
+			return -ENOMEM;
+		}
+		iosys_map_set_vaddr(map, vaddr);
+		return 0;
+	}
+
+	if (rk_obj->dma_attrs & DMA_ATTR_NO_KERNEL_MAPPING) {
+
+////////////////
+
+		printk("FBDEV rockchip_gem_prime_vmap 2");
+
+////////////////
+		return -ENOMEM;
+	}
+	iosys_map_set_vaddr(map, rk_obj->kvaddr);
+
+	return 0;
+}
+
+====
+
+[    7.678392] [drm:drm_client_modeset_probe] connector 39 enabled? yes
+[    7.678435] [drm:drm_client_modeset_probe] Not using firmware configuration
+[    7.678465] [drm:drm_client_modeset_probe] looking for cmdline mode on connector 39
+[    7.678494] [drm:drm_client_modeset_probe] looking for preferred mode on connector 39 0
+[    7.678521] [drm:drm_client_modeset_probe] found mode 1920x1080
+[    7.678545] [drm:drm_client_modeset_probe] picking CRTCs for 1920x1080 config
+[    7.678585] [drm:drm_client_modeset_probe] desired mode 1920x1080 set on crtc 35 (0,0)
+[    7.801673] Console: switching to colour frame buffer device 240x67
+
+
+[    7.811047] FBDEV rockchip_gem_prime_vmap 2
+
+
+[    7.811071] ------------[ cut here ]------------
+[    7.811084] WARNING: CPU: 0 PID: 35 at drivers/gpu/drm/drm_fb_helper.c:471 drm_fb_helper_damage_work+0x138/0x3b4
+[    7.811198] rockchip-drm display-subsystem: Damage blitter failed: ret=-12
+[    7.811219] Modules linked in:
+[    7.811244] CPU: 0 PID: 35 Comm: kworker/0:4 Not tainted 6.0.0-next-20221013+ #46
+[    7.811281] Hardware name: Rockchip (Device Tree)
+[    7.811300] Workqueue: events drm_fb_helper_damage_work
+[    7.811352] Backtrace: 
+[    7.811370]  dump_backtrace from show_stack+0x20/0x24
+[    7.811431]  r7:000001d7 r6:00000009 r5:c0b2bc60 r4:60000013
+[    7.811444]  show_stack from dump_stack_lvl+0x48/0x54
+[    7.811512]  dump_stack_lvl from dump_stack+0x18/0x1c
+[    7.811580]  r5:c0586064 r4:c0b6374c
+[    7.811590]  dump_stack from __warn+0xdc/0x154
+[    7.811677]  __warn from warn_slowpath_fmt+0xa4/0xd8
+[    7.811740]  r7:000001d7 r6:c0b6374c r5:c1004ec8 r4:c0b639e8
+[    7.811750]  warn_slowpath_fmt from drm_fb_helper_damage_work+0x138/0x3b4
+[    7.811821]  r9:ef7cf105 r8:c15dfc00 r7:fffffff4 r6:c200b490 r5:c1004ec8 r4:c200b494
+[    7.811833]  drm_fb_helper_damage_work from process_one_work+0x230/0x518
+[    7.811912]  r10:c110d140 r9:ef7cf105 r8:00000000 r7:ef7cf100 r6:ef7cbf00 r5:c200e300
+[    7.811927]  r4:c200b494
+[    7.811936]  process_one_work from worker_thread+0x54/0x554
+[    7.811991]  r10:ef7cbf00 r9:00000008 r8:c1003d40 r7:ef7cbf1c r6:c200e318 r5:ef7cbf00
+[    7.812006]  r4:c200e300
+[    7.812015]  worker_thread from kthread+0xe8/0x104
+[    7.812100]  r10:f0929e84 r9:c200da00 r8:c169aa80 r7:c200e300 r6:c01419e4 r5:00000000
+[    7.812114]  r4:c200d780
+[    7.812124]  kthread from ret_from_fork+0x14/0x2c
+[    7.812178] Exception stack(0xf092dfb0 to 0xf092dff8)
+[    7.812205] dfa0:                                     00000000 00000000 00000000 00000000
+[    7.812232] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[    7.812255] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[    7.812282]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c01491a8
+[    7.812299]  r4:c200d780 r3:00000001
+[    7.812309] ---[ end trace 0000000000000000 ]---
+[    7.812336] FBDEV rockchip_gem_prime_vmap 2
+[    7.889795] FBDEV rockchip_gem_prime_vmap 2
+[    7.890418] FBDEV rockchip_gem_prime_vmap 2
+[    7.899447] FBDEV rockchip_gem_prime_vmap 2
+[    7.905252] FBDEV rockchip_gem_prime_vmap 2
+
+>>
+>> I guess the memory usage increases slightly using the generic code and
+>> RK3066 has less memory available.
+> 
+> also rk3066 and rk3188 do not have an iommu, so rely
+> on cma allocations.
+> 
+> 
+> Heiko
+> 
+> 
