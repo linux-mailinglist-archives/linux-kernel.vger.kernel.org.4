@@ -2,103 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D465A601942
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FD6601928
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiJQUUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
+        id S231347AbiJQUPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiJQUUH (ORCPT
+        with ESMTP id S231416AbiJQUPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:20:07 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A1D1838F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:20:05 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id l3so6031376ilg.13
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:20:05 -0700 (PDT)
+        Mon, 17 Oct 2022 16:15:12 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC2412D17;
+        Mon, 17 Oct 2022 13:14:35 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id j7so14578544ybb.8;
+        Mon, 17 Oct 2022 13:14:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRhYRpu0dqcQqekWtrDSxx4wp7OV63THRnBbHmneQ6c=;
-        b=JOcKnnsMgsvnDqvKq8PYNhfupjvgGBGw3g+v847kkpzYhIUEQXqIKJfFkxr1v9j55T
-         7K0yIgTzhaTsmlQ4XC6RigOPPWH97io+/ZUu2Qbs7gca1D7xan6Y4DanT/hlz4pkBtYX
-         m1CkBiewUM/YBQO0SdHRMlCrk6WoLuQ8lGT4w=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LaEEWFnklwaZAjd5Tk8/ac4k/IUjI6Kq8GFYJsjy+3o=;
+        b=cQql2FbReTJUOdpvKV9ihGFnEpOtSC1OaajXoy2CU5jiealiv3+VmpDo1tqX9jUD1z
+         IYg4VAAEf3lM/rN0D24izsaat2VIi7sRFIbDYo+QxBv5OEUgynY6XgXnTe3v8jL1StHh
+         PSJpzq33GrbxKAnBBlvPHiAfBPtuWzcP0s5hJHlW4Myga3dtXY9UTXb4ZCfAIXNHSauw
+         +qDoHN0hKjv2mht0lW6spmiuyKv2Ve0TPteX4LsD/MEermqUUsRwrEsqdy1NBuGizFib
+         z++ZG9/61uYHsGdjbwS5BXaQaUnYpzwnIT5vd5y22y1D4llCU7w1TdOs2bMmB6Mp6P/G
+         UccA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YRhYRpu0dqcQqekWtrDSxx4wp7OV63THRnBbHmneQ6c=;
-        b=DJIWv3kEA/ruuFfmsVQAuR/rRv6kvNpUUXnZk9RO3x0ZFAyDbZqXc0VV8V5073AM4V
-         o7RA7YYRwIXX1a0pNsTsScQI2UBfOV63sVr3rVvY0wNHM1VW61UOplPMD/9kI9EX6DdP
-         CS7WQjmfas55wylL1BfaFmRVbR3HFsqUTPo1pcYd4l4GjbhyFE3Ut1QgDtAN6QJ3xe5F
-         JMlPYWf5VitJY84t5aYmRI8Af5Fb5X4Zb+IzshULojJacO9FA7O/UTOnco+EQv9Ypx0B
-         4cNiLnH0a4jI7gmHlLAg4MwfGzjLo7omCKGPEhFhVqxPpa+Bnl0WzSuI9vSgYuIb/v8k
-         JmhQ==
-X-Gm-Message-State: ACrzQf2sNOmxz8JFqHsLKYBQRPCFHQAZDpkZEW/vqps6EOTQyh2OAf1V
-        74FCYUiBhhokex0ZoOm+NSDeOGR2Tvq/sg==
-X-Google-Smtp-Source: AMsMyM6a7CHPqvMR2O2WUbQyA5wKqbTmwfHTLJSaaEwQMqUlWpn7DpLoZ+m3j6KoKDuQItOiGt0JOA==
-X-Received: by 2002:a63:2a81:0:b0:43c:5fa6:1546 with SMTP id q123-20020a632a81000000b0043c5fa61546mr11977034pgq.43.1666037485318;
-        Mon, 17 Oct 2022 13:11:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a188-20020a624dc5000000b005629d8a3204sm7673993pfb.99.2022.10.17.13.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 13:11:24 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 13:11:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
-Message-ID: <202210171307.32A5D9C07@keescook>
-References: <20221006234138.1835739-1-keescook@chromium.org>
- <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com>
- <202210171100.5BAC4A5CC8@keescook>
- <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
- <202210171227.35ED875219@keescook>
- <CAMj1kXEJQ8gh-iXZNL8bNcmV=JCmKHNp5BnhYthhSOyR5h79_g@mail.gmail.com>
- <202210171237.DF5D4A3FD7@keescook>
- <CAMj1kXGmsJNg7En-55aRF+ApicPD_Opkh8Jw+oTorSOSO+cfuw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LaEEWFnklwaZAjd5Tk8/ac4k/IUjI6Kq8GFYJsjy+3o=;
+        b=LOiNRKyFmhmvbDc90lsRhQk0g0BFyo2NS/O1Z1zKEklUYgYbypX3wTxQeQtQOdktG+
+         9QFp9Set1xLvb+9jX3ARHLpsRkiVyZr+E0YArHy/X6xAFKNdtnXNk/B3xw1T7y9PUbUo
+         vpGfE6ctTCpHFcljPR3JGxFzVf2wmnvf+Rv9AqaX15YwN66PjmrZQM2N1uT1+kQZ9aDC
+         4LEE6GrhkpdWG8KgC8fD3AeUZUsPSHcNYH/AVPDHI+KV1uBUv4fb9QkVuWwNUvqFX9UL
+         JEcT6jp5PNaoVGpWJnWPSJeT8N6h+NphyvHopkwld4cXIGdEQ981mxg+QYePNZbKUSsX
+         /mBw==
+X-Gm-Message-State: ACrzQf0y6YcYR5QIhBog+RkNkR3cgkzjPrKGN09RhzIOz/4sFAojH0Mv
+        CXyv+JqgRLFsX6zKrlv+DEHT0PiNP3DGAOMGTkw=
+X-Google-Smtp-Source: AMsMyM4AHqC2gUZLCsyYa10ZgMYS/rjlu/1xXDPPG9Sfdbx8BHkdeg5leOvnug17ihKOiBbCGtiNTA5vYh/F5synjSY=
+X-Received: by 2002:a25:4fc1:0:b0:6bc:c570:f99e with SMTP id
+ d184-20020a254fc1000000b006bcc570f99emr10733540ybb.58.1666037584709; Mon, 17
+ Oct 2022 13:13:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGmsJNg7En-55aRF+ApicPD_Opkh8Jw+oTorSOSO+cfuw@mail.gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221017161800.2003-1-vishal.moola@gmail.com> <20221017161800.2003-2-vishal.moola@gmail.com>
+ <Y02JTOtYEbAyo+zu@casper.infradead.org> <CAOzc2py24=NBFX6mWZ9s0eRH-rU87n-mYsVK=TW_jtx646z_qQ@mail.gmail.com>
+ <Y02wcnTOMH+KnnML@casper.infradead.org>
+In-Reply-To: <Y02wcnTOMH+KnnML@casper.infradead.org>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 17 Oct 2022 13:12:53 -0700
+Message-ID: <CAOzc2pze8XFUE_h-bLzO-P7i6sKc7RF0vnFF+Tjuw7KU=X4hOg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] filemap: find_lock_entries() now updates start offset
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, hughd@google.com,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 09:45:08PM +0200, Ard Biesheuvel wrote:
-> On Mon, 17 Oct 2022 at 21:40, Kees Cook <keescook@chromium.org> wrote:
-> > Okay, so strictly speaking, eliminating the per-CPU allocation is an
-> > improvement. Keeping scomp and doing in-place compression will let
-> > pstore use "any" compressions method.
-> 
-> I'm not following the point you are making here.
+On Mon, Oct 17, 2022 at 12:43 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Oct 17, 2022 at 12:37:48PM -0700, Vishal Moola wrote:
+> > On Mon, Oct 17, 2022 at 9:56 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Mon, Oct 17, 2022 at 09:17:59AM -0700, Vishal Moola (Oracle) wrote:
+> > > > +++ b/mm/shmem.c
+> > > > @@ -932,21 +932,18 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
+> > > >
+> > > >       folio_batch_init(&fbatch);
+> > > >       index = start;
+> > > > -     while (index < end && find_lock_entries(mapping, index, end - 1,
+> > > > +     while (index < end && find_lock_entries(mapping, &index, end - 1,
+> > >
+> > > Sorry for not spotting this in earlier revisions, but this is wrong.
+> > > Before, find_lock_entries() would go up to (end - 1) and then the
+> > > index++ at the end of the loop would increment index to "end", causing
+> > > the loop to terminate.  Now we don't increment index any more, so the
+> > > condition is wrong.
+> >
+> > The condition is correct. Index maintains the exact same behavior.
+> > If a find_lock_entries() finds a folio, index is set to be directly after
+> > the last page in that folio, or simply incrementing for a value entry.
+> > The only time index is not changed at all is when find_lock_entries()
+> > finds no folios, which is the same as the original behavior as well.
+>
+> Uh, right.  I had the wrong idea in my head that index wouldn't increase
+> past end-1, but of course it can.
+>
+> > > I suggest just removing the 'index < end" half of the condition.
+> >
+> > I hadn't thought about it earlier but this index < end check seems
+> > unnecessary anyways. If index > end then find_lock_entries()
+> > shouldn't find any folios which would cause the loop to terminate.
+> >
+> > I could send an updated version getting rid of the "index < end"
+> > condition as well if you would like?
+>
+> Something to consider is that if end is 0 then end-1 is -1, which is
+> effectively infinity, and we'll do the wrong thing?  So maybe just
+> leave it alone, and go with v3 as-is?
 
-Sorry, I mean to say that if I leave scomp in pstore, nothing is "worse"
-(i.e. the per-cpu allocation is present in both scomp and acomp). i.e.
-no regression either way, but if we switch to a distinct library call,
-it's an improvement on the memory utilization front.
+Yeah in that case find_lock_entries() would definitely do the
+wrong thing. I was thinking the "end-1" could be replaced with
+"end" as well as removing the "index < end". But that would
+change the behavior of the function(s) to now deal with
+end inclusive rather than exclusive which may or may not
+be problematic. Considering that I don't see any compelling
+reason to eliminate the "index < end" condition.
 
-> > Is there a crypto API that does _not_ preallocate the per-CPU stuff?
-> > Because, as you say, it's a huge amount of memory on the bigger
-> > systems...
-> 
-> The library interface for each of the respective algorithms.
-
-Where is the crypto API for just using the library interfaces, so I
-don't have to be tied to a specific algo?
-
--- 
-Kees Cook
+I say we go with v3 as-is if there are no problems.
