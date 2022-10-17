@@ -2,297 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A33A60186B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E04D60186E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiJQUAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S231194AbiJQUAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiJQUAY (ORCPT
+        with ESMTP id S230137AbiJQUA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:00:24 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70082.outbound.protection.outlook.com [40.107.7.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2B13C174;
-        Mon, 17 Oct 2022 13:00:04 -0700 (PDT)
+        Mon, 17 Oct 2022 16:00:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E8F733D8;
+        Mon, 17 Oct 2022 13:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666036820; x=1697572820;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=kfn3jgVPglakM8RmZkOsEzMdefxXW1ZEd4K7qCBGaMU=;
+  b=hmrKFpdFk7la90SI4XlzDUvQurklkd9WpjzU90s3o3mdoz7sgn73ZDtQ
+   XAppV9jEEyTY9CGWLxIffOdYZWSfKGckbhCXR6kj/xc9yLwEReROoKhF0
+   2q1WELX+Vnp/F213tR8xv+dt92kfSONwg0T3pRc43Lg4Lz7tU1rwMOLtN
+   xP+WGrQBBRejxEkCnjOheYYSReyNZBD9/V6kYOKluBGBhXYT9ZGs0Wuid
+   k7GclCsx/Oh98JPEN7zXNKAEBmASf06ZaSZXwVtNajxAOTa4ZPaxVP9Uv
+   ubVlGSDw7xyRsGnulKhMLmZ384r+8LhzdxIPEkOF/WSlQoilZrbI4Gcb5
+   A==;
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="179201418"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Oct 2022 13:00:18 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 17 Oct 2022 13:00:16 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Mon, 17 Oct 2022 13:00:16 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JGG5Od2fT7PmmRZraoRKUepHrzEqd3AltTwpu4LCU9cJKb1NlsgXkOHbLjRlk1QleRyW/kY2yCygzAVObruMmNi0qxXdMkPjEw/tf1TgsT0g1sBuGQMLmW78ZjaHWuQXuBtqP58ZEq+1nsfJzQt71LfziAZR8LiRn48eRPhP7KO98XqtC83RLtOOTKC8gKc/9mNCtW6j1NfwnxOFr1bScQE9G5tSz9hNzr+uOJQ6RrhOeWz4qmXLoIBpr0vXPqvkzJe1YH50HgPHBiW2qK+8GZmSTN+Nf5cjtRg0BglMGpJDDpQNoixsM7T2wc6XyFiOv7URTjnwScQ3tsZY8Waj5w==
+ b=nQlhByQ6jLSjlbblkKrwzq/UbTn2A2mKO1dIylm9kk0qWRV6V5MqMlNWAbBIPhYS4qR4aw3o4zNf+lSbWZNvg9W5si+LIvlmygshTYhHX6xnhzQmwtRQ+QEJEJyHEYvbAZodb6kGaWgCpwSnRuQfeSsC6q/9xg08jnB67XZq03UZcfeAVuySCqqGNW8lRDrILCjKunCzfuWJbkAv4EEoTqN2wWk0+KonPutxI1OjjDiWq9cj8l2CUgFk2yMR2TINBIRyUXvrrqLbajKeFgf2ITa0P10coCLISjobiuNvouKbGx0XiTg5/TCb3mgYyshvaDCMN8SPk5xgK4uXb9ehsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+PQlbMBcopB+Qt8GA7nfG5QNctYXIRvKY+5yGIJZlYw=;
- b=FJ7NYMMefbl5Np5MzwFIBgxxrXQhynnFE1FNdVZ0O8bBcq3uB3Wyie6Xgjw/zyd8dENz83TjnxL1anmpRMKjYVz0Vc9WdTQGOm2YrWmTMKFbPU38S6nI3ZOcvQokO0+71rkVnLJKQOx+qrOsww2THOafAv/SF2vUV0qI3j+Xjur/H8ylSnxLmG8vMN8X7n3YEfMILyMNduG1pNjjny02IHk4Uj3uNhCIEaaf0DgNEdNIY3VSxpa7uhv68UVZ8ndeFCR09asWxRBrK5st9HcbwnCr9Gd39+OHi+ILPa4kRh/+kY90YUvC2yMjOmrPYA4XNL6RiJlX7g2vWCi4b9XkYw==
+ bh=cpLzFLoMI2h0FBknmLZK4rLR3yh7QwkOwHEuPmd4h0I=;
+ b=jvu51QOJVDdYLWuyxFqU9MnOzqegHcU8YTEkz6UA3j3FDfsY+TPPDg6GYTMgAdjp/W+rwkBjQ9F96uHKdVZBt1P2JkgAIhBvDz8dn11AxkmAtvP97kTUXnAuEhNwX5/D9B5xQFBVhtxZ4eDw6S/nUlyEsHo0u8G+QY0C1IsAsmHnKPXQU+pu1jFJrPchmEJaFyzYYMrAlmuZep+rdQyKy+OG9bobawCQqwZyWOiIFOCOEFbr3+j938n5Is2q1x3yV756F6+r80qaw2sVESC5ya6L4UJk9k9WP2oQGaMpA7eyzhs5vTM9t0QgKU36W1d/HPEdvAOQvtRE0LJkZ+eswQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+PQlbMBcopB+Qt8GA7nfG5QNctYXIRvKY+5yGIJZlYw=;
- b=J4WfJ4egu89uOvQX67eiOuJID0du1MbDP4zb3T2TYrl31pBWuKuDd+9yFSKsu4q28vF3nfr/2L5jbzjqqHQGvsCwtvpkxQ5fHZXalFVshGTFPWUOe+TX/rL9hPJ2JKOLm7n5wdb/JsgXY8tRP6JJO5Lw4HUHQc921nj26lgEvoM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com (2603:10a6:150:22::11)
- by AS8PR04MB7847.eurprd04.prod.outlook.com (2603:10a6:20b:2ad::22) with
+ bh=cpLzFLoMI2h0FBknmLZK4rLR3yh7QwkOwHEuPmd4h0I=;
+ b=umAgquV+C5TMZsjmAkb3hnSwosNKcVX20hzLsfw/x1by2pZyL5WuDmZpJDM7CdNXE+PW1q5iSKueyaDfrqyZBWwWNbCsSllolaCkAx9mAc1XZFnKXs8LJqh6/wTEinZf7u1FEOphyagJ7pAuOj6VrYtxGZRDhZnexpZeO6wzSfM=
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com (2603:10b6:300:2b::21)
+ by BN9PR11MB5465.namprd11.prod.outlook.com (2603:10b6:408:11e::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Mon, 17 Oct
- 2022 20:00:00 +0000
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::306c:ec79:32a4:afab]) by GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::306c:ec79:32a4:afab%9]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 20:00:00 +0000
-Date:   Mon, 17 Oct 2022 14:59:52 -0500
-From:   "han.xu" <han.xu@nxp.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] mtd: core: introduce of support for dynamic
- partitions
-Message-ID: <20221017195820.ve6c3zj2civkswm6@umbrella>
-References: <20220606151417.19227-1-ansuelsmth@gmail.com>
- <20220606151417.19227-4-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606151417.19227-4-ansuelsmth@gmail.com>
-X-ClientProxiedBy: SJ0PR03CA0082.namprd03.prod.outlook.com
- (2603:10b6:a03:331::27) To GV1PR04MB9071.eurprd04.prod.outlook.com
- (2603:10a6:150:22::11)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Mon, 17 Oct
+ 2022 20:00:14 +0000
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::6599:7b75:c033:afcd]) by MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::6599:7b75:c033:afcd%12]) with mapi id 15.20.5723.033; Mon, 17 Oct
+ 2022 20:00:13 +0000
+From:   <Jerry.Ray@microchip.com>
+To:     <olteanv@gmail.com>
+CC:     <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: RE: [net-next][PATCH v4] dt-bindings: dsa: Add lan9303 yaml
+Thread-Topic: [net-next][PATCH v4] dt-bindings: dsa: Add lan9303 yaml
+Thread-Index: AQHY10fB8CyYFFC0ckOeRLuaLwivma4FI+pagA3zA6A=
+Date:   Mon, 17 Oct 2022 20:00:13 +0000
+Message-ID: <MWHPR11MB1693771FDBEFA284B490DF71EF299@MWHPR11MB1693.namprd11.prod.outlook.com>
+References: <20221003164624.4823-1-jerry.ray@microchip.com>
+ <20221003164624.4823-1-jerry.ray@microchip.com>
+ <20221008225628.pslsnwilrpvg3xdf@skbuf>
+In-Reply-To: <20221008225628.pslsnwilrpvg3xdf@skbuf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1693:EE_|BN9PR11MB5465:EE_
+x-ms-office365-filtering-correlation-id: 2f6ed1a2-3d34-4f33-e1f5-08dab07a346b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: t4RtlaEDy4lwHN+jeE/uExJ8WDpNNAq8uQBhyZFBiBKXLQ/6RS/9SBhkWlATs6hpZgmTPy1gvNBRQKeIjume0Q2pIvK2RcFqwMMM+RVNzkBEXLLGxSGjzOQ8bdWJz8uW11IDpjCzlPwfvwcdTBzBPymLVyHeOfrabhwLa7lF6fV1sTFbcqiOKCPbj2zzgwmiK9keAhC7mLISyEinkfifMG4Zt0ar6HM/zGk8z+2Q/XzLWY4UpMM38zhYE1TQ/w0b3wP58RB0wj/DWc6y40zRryW0MIDPLhLhVaXN84gpCUUGK5sLGKJNO36u/rfrS1qSqCvvgWKE9twFN6FH2Ub2V79hh/gFuUxPGhIB/+aQblwW7gvnW3eTZJAUDs9bT8c8kFCsCLu4nR0mUz8P84kFZbedV1Wy27qPW/l4N17LndrcBg9ix5dBGz0kJKSJIKbV0RNJyNPtcPl3mrL1VQtiPKSQIuw8R+IVDPaGLTVNhUVuNWBfMVkB+1xv183f7c+fmyDsl2HJz//+JPsiWF/OAHOKzWYwVDGbZfEBspyz3NOxgNaleOGIE6lvIUDWJtjjzwvBl+4uXeEf0ULwuiBxxiGJ45o9zHlvu7YDY0Sd/7+oUGfGH2bbdvos6+93LfrKXwmGDOids99OoA3JbQphW7U5aP4JqovMAJmHgFI5mbtUtQxjYOG+ix7niuB/eI4wRKSK5o6YO5Jm1iQDjOkqUoCL3KDlKwmsePOfNyj7qCoK3J7EABJKHOTHr/xHrrtKoMV+YaItLJ5ZnJRpSj4WYg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1693.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199015)(6916009)(186003)(38070700005)(26005)(86362001)(122000001)(5660300002)(7416002)(38100700002)(2906002)(52536014)(41300700001)(8936002)(4326008)(55016003)(8676002)(64756008)(478600001)(9686003)(6506007)(7696005)(316002)(66556008)(66946007)(76116006)(66476007)(66446008)(54906003)(71200400001)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0dVBGhno+L1H8p0Hq6sPdLKbK3yg0F3ZDf9S159O8gC2gYTiFr9JDoI3hUV1?=
+ =?us-ascii?Q?OmbVYVZBKoC44Yz5QdDpE4TQIOLvcKCRRhkMir8a4Bqie/5IcpjP98cqcDtj?=
+ =?us-ascii?Q?GZXIbLOFi/U3Dp+ZAqU0UaNvUDKaajwyUqy+cg6GAlL4LEAcqNMmZAnaGPjm?=
+ =?us-ascii?Q?jCJ2MXO1bFvGHkdViPFnsct8KIDfNqnMdwsEgfPOJUlhfmbsJeEI10aXNdae?=
+ =?us-ascii?Q?rBY87k8SNDd0PcDr+Xoh3EhxqF7LtmOxaGYSCbCOWcKiXV7QN8vS9q5q0dQO?=
+ =?us-ascii?Q?2SYkRSyJm+/N7yZUxI8al1mkCaDnoTq3h1B2bZJFfSGzIheq/z63Dr19Bu9l?=
+ =?us-ascii?Q?RhJraM126gp1mBAQ4ruu/1i5IyC5ChglHGWSG2BYeHo64RCfbXpkLN7c7/68?=
+ =?us-ascii?Q?SNv4gJfYEVIvo03SAzEvFKEZm2M6QicFD6PT6S99YKcvy+p2w5Am/g6BMxL5?=
+ =?us-ascii?Q?fN5RgItiE9XzFEJ81Cu5R0eG0VHCFL4Svhmgs6g/XA4EpG6O3mHgP3qtHB+h?=
+ =?us-ascii?Q?dFCnSF6eR1xRrTfCBHpvdGwmcvbjbOF23ghwSgt5AjcQfsYDZttjWBi6Um9x?=
+ =?us-ascii?Q?HplP4jUNmjojGAoljqN/N97A/cWSu55tXg9Gjz1p7nKafLBB3afSJhtsyECs?=
+ =?us-ascii?Q?hpzC9YeVNkEMNcJLG5HcKEjJHXW1hpB+8NzC8mgbKlmqmps6IcDj/8sVg8JK?=
+ =?us-ascii?Q?SKyXfAhV6sjKq0jLLKQznYW2WAEZ35D1UkZqtPPXrc299fn8tt1/FUxfx4LI?=
+ =?us-ascii?Q?FiF1OyfbuDt9u3DQ4UgvDmC+wpWjDPIYBZGV5va759RIC1gm78QiPlcs6VWh?=
+ =?us-ascii?Q?y0rPh8XrVYNLhVYSHuDDKOk0lO+riAebFfP5k4BPTfgAb86QWEdavVU3eAl8?=
+ =?us-ascii?Q?M63htq6D1R3T6Iq8Iqs/bp7096ZBKSh04vRRDH0OysfoI8lpyK+27mSS3pw8?=
+ =?us-ascii?Q?H1Bn5pnywx8VXsKjilKU2Zw3U9A1CUMLlEE1amS2hNF/UKgA8izNblaQcULj?=
+ =?us-ascii?Q?oZOwsdWpTl6EcsgDmSaYpSk+H7myiMBalk4puKA7XJYBB8k+iG5FlTIbIdSm?=
+ =?us-ascii?Q?C1w2pJHYv4GiE4isPJaia9DQ0rdxGbvx088BN/LDm8lCkpEZ081UxjsdA3gp?=
+ =?us-ascii?Q?5bU0WAjxuDTLqxKfZrVW3HiJ7FAjlgIJFXrayjJ7gUlDcjHr7BX126immYLg?=
+ =?us-ascii?Q?grm+t64ZHGSgHqdlxIFvf/trDvyLQz8VVFSab5Tgt2odhWoM/ZbqbYCUztXo?=
+ =?us-ascii?Q?UjosA5kUVAenBSMUWeX82XUnd88UFf5JqdzCGalcfaKWwqoEzdTKKBD1+JGi?=
+ =?us-ascii?Q?PsRYPw0+zrJJKTMSUeADZzpEbWjtdXZLk8lUot81TN62zpN/4hJTdLYhxgxW?=
+ =?us-ascii?Q?6pKk6pOUmDEOrwFDNsdSOXeBH5RLqXNhZyO6KzlQ5Y4hTbU5KDeP+E2IC9Aw?=
+ =?us-ascii?Q?PLT4JePabpujDtSIvJlaD3NtV05VPbvdRgij4Mr/JX9etQuM3N0AAnIb8gca?=
+ =?us-ascii?Q?ulFyNT+0aY7AoMATLrgzRYYXCYbiWabTAXYW5d7LsZds++wfe2tba5XUMGZr?=
+ =?us-ascii?Q?x++Qqe7D8C+/LXjs6X59u9L+dZbMZa0dkQJ4C9ti?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV1PR04MB9071:EE_|AS8PR04MB7847:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21ea957d-a720-40d1-29d4-08dab07a2bbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K53AcWz77WKYQunr4/GSIEGYcUaCw48G5JtnmhTkfvY+kUDGtfm3FSeqZPOUdv5qogBibPAzmEyFV9z69/f61zla8gDhpEoUqXlUSpzM/sl+8/fDy4upXYGvl8axcJOwMekOQ+pllc3nUZpSnn3QJfeewoSlcnTJBsidiPdzGVbyI3VuvOz3qv5IVqRYqNHrCGfJECcjh6oM83TN9mzWAr0pHNC1beoqLAHt+8UWJEGIU9aues63AWuYim7Laa7dk3yapAoKVwSP7gXHtfnloBvcAQiHJJG6WiKOt6e4KLumN/DlDNm4Im2ld5xzkRrenrPDySor0zv6qmdJoCeIA9AYsPhu67C5m7GO51FU6N26rVv9hTwaAd+3N0GsIjwmd40bkW3dTS2MfzErhqiFjLEBhD11W1BZ9tBjRbZE2115XQ39k8sgOjM15YT+boSpbvMvf5+1tsosBv+clPPiVwWjF1jVdX/r8Vv0rHQJ3Y216SG89UDASxoznfJxYOGa0JNvaQx3MuZVz+Zf+YNg5tzFhiWs5LoIyrEWLWyyfiCMliwINrf25ZUSzgNiuie8k0UZtAppWigw0ixsleqZbqCjJ6DmkHzBzASg17CUlObHJ8BBFIj5ZXKgKmOTqKKtfkqb2MeHnU2blzlvgybq/ls8yZAPYycql3ITeV5ySwDYwTqJ6Ecqt87y9kx9UxV3qNGKGiAdCRKQ+BUJDTM3nf6liQagQ1giW4Y/cwQQj0rR8xS5RFv6bspVRmGmx/31zfTw34hzrZOygguHqOLGGmWoCxws4t5z808k0G3ereI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9071.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(136003)(376002)(366004)(346002)(396003)(39860400002)(451199015)(33716001)(86362001)(38100700002)(83380400001)(6666004)(38350700002)(66946007)(66476007)(316002)(6916009)(54906003)(8676002)(7416002)(66556008)(5660300002)(966005)(6486002)(2906002)(186003)(1076003)(8936002)(6506007)(45080400002)(4326008)(478600001)(9686003)(26005)(41300700001)(52116002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7yMvYP+4kbow2eLctgxpK2DuLS64fN6ZpnRNXcenZYnCIldDYZD2uULcpU8s?=
- =?us-ascii?Q?us3ZGb5uRZxzOkz2dkPh/0E3slW/LfZ6CHjhQy+gcqvTh48Os56HFcFXS1Cs?=
- =?us-ascii?Q?F7J6pKKhU7vxodCLYcnBlw+X/GYt9saCKMJm4t0e1IY9aETQ4eU5lv6ikpC1?=
- =?us-ascii?Q?XnN9ZRNhoLg7D5Jn91kByRuIeKz/Aab5qVDNO5prUPKWXDOqVLS4VqvEjryg?=
- =?us-ascii?Q?iCK8kIm13AjkpFQ5VDVBlQg4H32w4Lid3pAjjbUcBVZnmRu16KgIADDbgTJF?=
- =?us-ascii?Q?kIBxZnAcQScZZ7DRnsXRamHoxuhbw/C/xqPp7c1eQhjoAETcZlJj885hs35M?=
- =?us-ascii?Q?V0nAsF3OV3nI9jRVHQixm17FnksflZ1aY5TQi3KRMiSBMhW1ZxJHaCvLLKcI?=
- =?us-ascii?Q?GSa+eA/LTO7HbxzZjaAHGTj6bjMk35JQRo2FrDh0Axeg9yNk5o2ftkI3DQpC?=
- =?us-ascii?Q?yrBB+B/qZjr8XNAcUU6C1RgHERU3S34kLJq8MjAc6xeeT0BSlv34i+yrCm3h?=
- =?us-ascii?Q?tQj6p8dEFeqlBKelaSs9Eo6riZKfSRq787z/HCBJhb+Oe6S40YOzAtQCnQQ6?=
- =?us-ascii?Q?iMzIlFbP3jNdmoAQw63/mwJGevYwdtwuxqU9LXP7+kwu/NaHQISkFMhRCgXV?=
- =?us-ascii?Q?4+mjIuBNlbaWg+kXgHR6KZobXu3MPFAWKzhmDGGIveMz3nD+KBCJHx/lbYmE?=
- =?us-ascii?Q?HvXaxOUu+kLr81F062UJvpSU2knhjCOMziUw6hY7RkKD/vl5bh0NMTevQvKH?=
- =?us-ascii?Q?9it+oKTA+sVBW3GzhcUXAxMrhfNXayzRnvi3yOjMyKhPyBYItH4b/c5eYiHn?=
- =?us-ascii?Q?uFwRIu0dIOx2aiECE2mfwYKxsKEGagm9FQOfsLTWzHqxYf/vE6jaV8xC84Z/?=
- =?us-ascii?Q?Qq/+H/ImKZhcjkbmQyc6AaHbn7ERYE68qEf8Dgudp45qMwHGb/xvQZ47mUKl?=
- =?us-ascii?Q?+ja2rcO0qMmvBx9kbbbcDXLFbEz1mbgYZJEOxmNDXyGvKs/Bx+kNOLDi4p+v?=
- =?us-ascii?Q?CCA6N4zfJ0axmln7HwxpkgBc6IHse9RAjPpOUKV8t5apsnCV0drhpC4m6KjJ?=
- =?us-ascii?Q?ealbjTLNidlO+JeQ7UVCm6lL9juKISQ+y3ES787aJol3LAJD8MH6LpaBZRh0?=
- =?us-ascii?Q?Nesu3Ldbsk7ahpN+QwrGyF/hSeSjkWq9IUs4nTscrb0/6bQFnli9mHcYrJvz?=
- =?us-ascii?Q?EhH8yt+LxmexSAKNYEBD+68S0Rrbh3UltXzPxuC6aD7k0z8giUR6aNjsVgcH?=
- =?us-ascii?Q?nXKBAyh9Gld2iZgu5GeJxZa5bXQGD6RsTGkQ3VLJ6Nxoo3Ih7foWN336TJ9R?=
- =?us-ascii?Q?8k1AOpTwC7Xjg/e8oHv4wDqBCBN0qU2O1B6DOexrKLajgLqg1DzGpyUYkmqk?=
- =?us-ascii?Q?hERT3MnNQVY+18s2bs8anxO+ioamIjRbhOR/zQX91wMHRtm3Ujn4yokJ17Ss?=
- =?us-ascii?Q?m7WGjjiLu275kZKRdcBZJe4RhYZbvJD4nsLetpqccTDWjsfkH3u/Iy+QBPc0?=
- =?us-ascii?Q?l5oQKTHpQnCrwBqFWmVpR9QKCe+DVHmjPIcGDIpf2B/+01Ypm/+vw31C4Gla?=
- =?us-ascii?Q?03jZkmsViECB4hwN9K0=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21ea957d-a720-40d1-29d4-08dab07a2bbe
-X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9071.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 20:00:00.0070
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1693.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f6ed1a2-3d34-4f33-e1f5-08dab07a346b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2022 20:00:13.8174
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v0XC6fMwjw4BnHsTeSnLjcnhJ8VGxzz4MH3jYp3+va4rb7CSq3+OnwpX236wKcGV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7847
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ABDzmCVW3ADurlXLcvIXwGXmH6gljnQv/a8WCA2ITuG8vCu2KyuBFHy/LsmZsNPPM0bwisoHBnTxr0TkpXnG0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5465
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/06 05:14PM, Ansuel Smith wrote:
-> We have many parser that register mtd partitions at runtime. One example
-> is the cmdlinepart or the smem-part parser where the compatible is defined
-> in the dts and the partitions gets detected and registered by the
-> parser. This is problematic for the NVMEM subsystem that requires an OF node
-> to detect NVMEM cells.
-> 
-> To fix this problem, introduce an additional logic that will try to
-> assign an OF node to the MTD if declared.
-> 
-> On MTD addition, it will be checked if the MTD has an OF node and if
-> not declared will check if a partition with the same label is
-> declared in DTS. If an exact match is found, the partition dynamically
-> allocated by the parser will have a connected OF node.
-> 
-> The NVMEM subsystem will detect the OF node and register any NVMEM cells
-> declared statically in the DTS.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/mtd/mtdcore.c | 49 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
-> 
-> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-> index 7731796024e0..807194efb580 100644
-> --- a/drivers/mtd/mtdcore.c
-> +++ b/drivers/mtd/mtdcore.c
-> @@ -546,6 +546,54 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
->  	return 0;
->  }
->  
-> +static void mtd_check_of_node(struct mtd_info *mtd)
-> +{
-> +	struct device_node *partitions, *parent_dn, *mtd_dn = NULL;
-> +	struct mtd_info *parent;
-> +	const char *mtd_name;
-> +	bool found = false;
-> +	int plen;
-> +
-> +	/* Check if MTD already has a device node */
-> +	if (dev_of_node(&mtd->dev))
-> +		return;
-> +
-> +	/* Check if a partitions node exist */
-> +	parent = mtd->parent;
-> +	parent_dn = dev_of_node(&parent->dev);
-> +	if (!parent_dn)
-> +		return;
-> +
-> +	partitions = of_get_child_by_name(parent_dn, "partitions");
-> +	if (!partitions)
-> +		goto exit_parent;
-> +
-> +	/* Search if a partition is defined with the same name */
-> +	for_each_child_of_node(partitions, mtd_dn) {
-> +		/* Skip partition with no label */
-> +		mtd_name = of_get_property(mtd_dn, "label", &plen);
-> +		if (!mtd_name)
-> +			continue;
-> +
-> +		if (!strncmp(mtd->name, mtd_name, plen)) {
-> +			found = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (!found)
-> +		goto exit_partitions;
-> +
-> +	/* Set of_node only for nvmem */
-> +	if (of_device_is_compatible(mtd_dn, "nvmem-cells"))
-> +		mtd_set_of_node(mtd, mtd_dn);
-> +
-> +exit_partitions:
-> +	of_node_put(partitions);
-> +exit_parent:
-> +	of_node_put(parent_dn);
-> +}
-> +
->  /**
->   *	add_mtd_device - register an MTD device
->   *	@mtd: pointer to new MTD device info structure
-> @@ -651,6 +699,7 @@ int add_mtd_device(struct mtd_info *mtd)
->  	mtd->dev.devt = MTD_DEVT(i);
->  	dev_set_name(&mtd->dev, "mtd%d", i);
->  	dev_set_drvdata(&mtd->dev, mtd);
-> +	mtd_check_of_node(mtd);
->  	of_node_get(mtd_get_of_node(mtd));
->  	error = device_register(&mtd->dev);
->  	if (error)
+>> ---
+>> v3->v4:
+>>  - Addressed v3 community feedback
+>
+>More specifically?
+>
 
-NXP GPMI NAND controller with 6 cmdline partitions meets refcount underflow
-with this patch. The of_node_put(parent_dn) doesn't work with cmdline parser and
-causes the issue.
+- Old lan9303.txt file is totally removed rather than containing text that
+  redirects the user to the microchip,lan9303.yaml source file.
+- Drop "Tree Bindings" from title
+- Drop quotes from dsa.yaml reference line.
+- Modified the compatible second enum to include a second string.
+(( I now realize this is not what was being asked for and have made
+  it a single enum with 4 items, removing the oneOf. ))
+- Drop "gpio specifier for a" in reset-gpois description
+- added a default: property to the reset-duration item and set it to 200.
+- Drop "0" from the ethernet name.  Split the MDIO and I2C examples into
+  two so that the number is no longer needed.
+- Placed the reg property to be directly following the compatible string
+  in the mdio node.
 
-[    1.078910] 6 cmdlinepart partitions found on MTD device gpmi-nand
-[    1.085116] Creating 6 MTD partitions on "gpmi-nand":
-[    1.090181] 0x000000000000-0x000008000000 : "nandboot"
-[    1.096952] 0x000008000000-0x000009000000 : "nandfit"
-[    1.103547] 0x000009000000-0x00000b000000 : "nandkernel"
-[    1.110317] 0x00000b000000-0x00000c000000 : "nanddtb"
-[    1.115525] ------------[ cut here ]------------
-[    1.120141] refcount_t: addition on 0; use-after-free.
-[    1.125328] WARNING: CPU: 0 PID: 1 at lib/refcount.c:25 refcount_warn_saturate+0xdc/0x148
-[    1.133528] Modules linked in:
-[    1.136589] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc7-next-20220930-04543-g8cf3f7
-[    1.146342] Hardware name: Freescale i.MX8DXL DDR3L EVK (DT)
-[    1.151999] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    1.158965] pc : refcount_warn_saturate+0xdc/0x148
-[    1.163760] lr : refcount_warn_saturate+0xdc/0x148
-[    1.168556] sp : ffff800009ddb080
-[    1.171866] x29: ffff800009ddb080 x28: ffff800009ddb35a x27: 0000000000000002
-[    1.179015] x26: ffff8000098b06ad x25: ffffffffffffffff x24: ffff0a00ffffff05
-[    1.186165] x23: ffff00001fdf6470 x22: ffff800009ddb367 x21: 0000000000000000
-[    1.193314] x20: ffff00001fdfebe8 x19: ffff00001fdfec50 x18: ffffffffffffffff
-[    1.200464] x17: 0000000000000000 x16: 0000000000000118 x15: 0000000000000004
-[    1.207614] x14: 0000000000000fff x13: ffff800009bca248 x12: 0000000000000003
-[    1.214764] x11: 00000000ffffefff x10: c0000000ffffefff x9 : 4762cb2ccb52de00
-[    1.221914] x8 : 4762cb2ccb52de00 x7 : 205d313431303231 x6 : 312e31202020205b
-[    1.229063] x5 : ffff800009d55c1f x4 : 0000000000000001 x3 : 0000000000000000
-[    1.236213] x2 : 0000000000000000 x1 : ffff800009954be6 x0 : 000000000000002a
-[    1.243365] Call trace:
-[    1.245806]  refcount_warn_saturate+0xdc/0x148
-[    1.250253]  kobject_get+0x98/0x9c
-[    1.253658]  of_node_get+0x20/0x34
-[    1.257072]  of_fwnode_get+0x3c/0x54
-[    1.260652]  fwnode_get_nth_parent+0xd8/0xf4
-[    1.264926]  fwnode_full_name_string+0x3c/0xb4
-[    1.269373]  device_node_string+0x498/0x5b4
-[    1.273561]  pointer+0x41c/0x5d0
-[    1.276793]  vsnprintf+0x4d8/0x694
-[    1.280198]  vprintk_store+0x164/0x528
-[    1.283951]  vprintk_emit+0x98/0x164
-[    1.287530]  vprintk_default+0x44/0x6c
-[    1.291284]  vprintk+0xf0/0x134
-[    1.294428]  _printk+0x54/0x7c
-[    1.297486]  of_node_release+0xe8/0x128
-[    1.301326]  kobject_put+0x98/0xfc
-[    1.304732]  of_node_put+0x1c/0x28
-[    1.308137]  add_mtd_device+0x484/0x6d4
-[    1.311977]  add_mtd_partitions+0xf0/0x1d0
-[    1.316078]  parse_mtd_partitions+0x45c/0x518
-[    1.320439]  mtd_device_parse_register+0xb0/0x274
-[    1.325147]  gpmi_nand_probe+0x51c/0x650
-[    1.329074]  platform_probe+0xa8/0xd0
-[    1.332740]  really_probe+0x130/0x334
-[    1.336406]  __driver_probe_device+0xb4/0xe0
-[    1.340681]  driver_probe_device+0x3c/0x1f8
-[    1.344869]  __driver_attach+0xdc/0x1a4
-[    1.348708]  bus_for_each_dev+0x80/0xcc
-[    1.352548]  driver_attach+0x24/0x30
-[    1.356127]  bus_add_driver+0x108/0x1f4
-[    1.359967]  driver_register+0x78/0x114
-[    1.363807]  __platform_driver_register+0x24/0x30
-[    1.368515]  gpmi_nand_driver_init+0x1c/0x28
-[    1.372798]  do_one_initcall+0xbc/0x238
-[    1.376638]  do_initcall_level+0x94/0xb4
-[    1.380565]  do_initcalls+0x54/0x94
-[    1.384058]  do_basic_setup+0x1c/0x28
-[    1.387724]  kernel_init_freeable+0x110/0x188
-[    1.392084]  kernel_init+0x20/0x1a0
-[    1.395578]  ret_from_fork+0x10/0x20
-[    1.399157] ---[ end trace 0000000000000000 ]---
-[    1.403782] ------------[ cut here ]------------
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +
+>> +    // Ethernet switch connected via mdio to the host
+>> +    ethernet {
+>> +        #address-cells =3D <1>;
+>> +        #size-cells =3D <0>;
+>> +        phy-handle =3D <&lan9303switch>;
+>> +        phy-mode =3D "rmii";
+>> +        fixed-link {
+>> +            speed =3D <100>;
+>> +            full-duplex;
+>> +        };
+>
+>I see the phy-handle to the switch is inherited from the .txt dt-binding,
+>but I don't understand it. The switch is an mdio_device, not a phy_device,
+>so what will this do?
+>
+>Also, any reasonable host driver will error out if it finds a phy-handle
+>and a fixed-link in its OF node. So one of phy-handle or fixed-link must
+>be dropped, they are bogus.
+>
+>Even better, just stick to the mdio node as root and drop the DSA master
+>OF node, like other DSA dt-binding examples do. You can have dangling
+>phandles, so "ethernet =3D <&ethernet>" below is not an issue.
+>
 
+I can remove the phy-handle, but I'm trying to establish the link between
+this ethernet port and port0 (the CPU port) of the lan9303.  The lan9303
+acts as the phy for this ethernet port and I want to force the speed and
+duplex of the link to be 100 / full-duplex.
 
-> -- 
-> 2.36.1
-> 
-> 
-> ______________________________________________________
-> Linux MTD discussion mailing list
-> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+>> +        mdio {
+>> +            #address-cells =3D <1>;
+>> +            #size-cells =3D <0>;
+>> +            lan9303switch: switch@0 {
+>> +                compatible =3D "smsc,lan9303-mdio";
+>> +                reg =3D <0>;
+>> +                dsa,member =3D <0 0>;
+>
+>Redundant, please remove.
+>
+
+Okay.  I can remove the "dsa,member =3D <0,0>;" line.
+
+>> +                ethernet-ports {
+>> +                    #address-cells =3D <1>;
+>> +                    #size-cells =3D <0>;
+>> +                        port@0 {
+>> +                            reg =3D <0>;
+>> +                            phy-mode =3D "rmii";
+>
+>FWIW, RMII has a MAC mode and a PHY mode. Two RMII interfaces connected
+>in MAC mode to one another don't work. You'll have problems if you also
+>have an RMII PHY connected to one of the xMII ports, and you describe
+>phy-mode =3D "rmii" for both. There exists a "rev-rmii" phy-mode to denote
+>an RMII interface working in PHY mode. Wonder if you should be using
+>that here.
+>
+
+"rev-rmii" does make more sense.  And yes, in this configuration the rmii
+port of the lan9303 is acting as the PHY end.
+
+>> +                            ethernet =3D <&ethernet>;
+>> +                            fixed-link {
+>> +                                speed =3D <100>;
+>> +                                full-duplex;
+>> +                            };
+>> +                        };
+>> +                        port@1 {
+>> +                            reg =3D <1>;
+>> +                            max-speed =3D <100>;
+>> +                            label =3D "lan1";
+>> +                        };
+>> +                        port@2 {
+>> +                            reg =3D <2>;
+>> +                            max-speed =3D <100>;
+>> +                            label =3D "lan2";
+>> +                        };
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +
+>> +    // Ethernet switch connected via i2c to the host
+>> +    ethernet {
+>> +        #address-cells =3D <1>;
+>> +        #size-cells =3D <0>;
+>> +        phy-mode =3D "rmii";
+>> +            speed =3D <100>;
+>> +        fixed-link {
+>> +            full-duplex;
+>> +        };
+>> +    };
+>
+>No need for this node.
+>
+
+Without this, what does the port0 entry below have to point to?
+How do you establish the device tree linkage between the ethenet
+MAC and the rev-rmii PHY it connects to?
+
+>> +
+>> +    i2c {
+>> +        #address-cells =3D <1>;
+>> +        #size-cells =3D <0>;
+>> +        lan9303: switch@1a {
+>> +            compatible =3D "smsc,lan9303-i2c";
+>> +            reg =3D <0x1a>;
+>> +            ethernet-ports {
+>> +                #address-cells =3D <1>;
+>> +                #size-cells =3D <0>;
+>> +                port@0 {
+>> +                    reg =3D <0>;
+>> +                    phy-mode =3D "rmii";
+>> +                    ethernet =3D <&ethernet>;
+>> +                    fixed-link {
+>> +                        speed =3D <100>;
+>> +                        full-duplex;
+>> +                    };
+>> +                };
+>> +                port@1 {
+>> +                    reg =3D <1>;
+>> +                    max-speed =3D <100>;
+>> +                    label =3D "lan1";
+>> +                };
+>> +                port@2 {
+>> +                    reg =3D <2>;
+>> +                    max-speed =3D <100>;
+>> +                    label =3D "lan2";
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 5d58b55c5ae5..89055ff2838a 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -13386,6 +13386,14 @@ L:   netdev@vger.kernel.org
+>>  S:   Maintained
+>>  F:   drivers/net/ethernet/microchip/lan743x_*
+>>
+>> +MICROCHIP LAN9303/LAN9354 ETHERNET SWITCH DRIVER
+>> +M:   Jerry Ray <jerry.ray@microchip.com>
+>> +M:   UNGLinuxDriver@microchip.com
+>> +L:   netdev@vger.kernel.org
+>> +S:   Maintained
+>> +F:   Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
+>> +F:   drivers/net/dsa/lan9303*
+>> +
+>
+>Separate patch please? Changes to the MAINTAINERS file get applied to
+>the "net" tree.
+>
+>>  MICROCHIP LAN966X ETHERNET DRIVER
+>>  M:   Horatiu Vultur <horatiu.vultur@microchip.com>
+>>  M:   UNGLinuxDriver@microchip.com
+>> --
+>> 2.25.1
+>>
+>
+
+Regards,
+Jerry.
