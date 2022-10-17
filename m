@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874C46007CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2956007D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiJQHjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S230159AbiJQHkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiJQHjA (ORCPT
+        with ESMTP id S230241AbiJQHkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:39:00 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1C35A89D;
-        Mon, 17 Oct 2022 00:38:56 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29H7cbBG109981;
-        Mon, 17 Oct 2022 02:38:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1665992317;
-        bh=Pk+UEjoRsY3xQuFSEm9AvyFiq8RjjDxydn/Swb0yV7U=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=XY/loqNFT4igBwPXj2W9qOXEVkgEOTXXUQGlatlHpoUPpO0ygm008oB6Ou0vT7kC9
-         sG3s4IoayFpDQwu71nPBrc3665U/v2fbnG+goSoaYOjxo+lyuOL2DVZOY0YWR+Hgks
-         KYzHL2UkFEVwtD1dqUs9bpnJXK0SFqViQBMiCqUY=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29H7cbBe100077
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Oct 2022 02:38:37 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 17
- Oct 2022 02:38:36 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 17 Oct 2022 02:38:36 -0500
-Received: from [10.250.232.228] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29H7cYOC045523;
-        Mon, 17 Oct 2022 02:38:35 -0500
-Message-ID: <aed3cf8e-62d2-febe-8de9-24cec1eeafaf@ti.com>
-Date:   Mon, 17 Oct 2022 13:08:33 +0530
+        Mon, 17 Oct 2022 03:40:05 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DBB20BF8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:39:53 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so9362643wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2xULmL9toOM8goswSRi9Z/PganGhK1BnJ45pxOOozJ0=;
+        b=u23cLIE8delL0pdutyQe6kJnksOAOK+A2YkMQPq4/gjWhjCp7jI/X+7EdAHQ7InRqY
+         ozhOTzcaqG1q12Vwa92mgN/N0VUOWas3OjXJ8FgZbAAdv6+oKsthHeeWZipnaucI/XO8
+         r3wbRpMj6sXD1s2qK0pTYPE2xAl5rG5BXDESx+Ko8yS4wl9iU/SK07C6BV7EZJowkUyv
+         ytGRRnYNB24J8t2JXpeud/fcenA12ur49JDgmfmypQ1TT05pVUMqQ3gWPqu3ripzT9OI
+         P/VLwV7aOLLYPfUUK17FW9VzdIbATUOy4ZqK/1Kut+9QcawjH/XAq8lKdE5nhBt4xC2d
+         Z2Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2xULmL9toOM8goswSRi9Z/PganGhK1BnJ45pxOOozJ0=;
+        b=Z2pn4D41VDZsVs32KIbms/Q4lIEx6pi6yjFoK03/ANyd339EnZT1DaGbpxnQq+1h07
+         EG9xvYRHBbMS+uvq4H95bJdY/NLjNuQnSuqTQwJ7hjFyh6Wemc5KBTjx0onGi9uL3sWe
+         0K5jWr1u9SJbVvKG2FdlE1lu6I2pXid9IIFGpJuq+vlYos5s1Bpq3nfcaWMwQrz8FPG7
+         LFnFwjCHsWxKV2FFiW4gA928qU28Ya4HJT1AnwOqkI8qMNt80V9UHj92v/EGKW6ouWss
+         xpMfObOYrqc6zdfNxUdhGrEFdUupbVFhgleblNZjsnLb7zpjNAl9IbjCD/3Me/yM/nmh
+         5KEw==
+X-Gm-Message-State: ACrzQf3oqlJ8K+LPr9ckJgOuTGn4TqfkTxkBT3CmEFYYX625VQKd8hBK
+        TlsSLBoiVbKotFb8AVLY5n/sU7eIavkX4g==
+X-Google-Smtp-Source: AMsMyM4y0wAj3Yf6zsIoEbhqs2P7MFNeDZzZWw64Y65KCdYW+ICqrNZ9qRBEAVa9mO4GiMoYqPG9IA==
+X-Received: by 2002:a05:600c:2f08:b0:3c6:befc:9778 with SMTP id r8-20020a05600c2f0800b003c6befc9778mr6257607wmn.101.1665992391800;
+        Mon, 17 Oct 2022 00:39:51 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9? ([2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9])
+        by smtp.googlemail.com with ESMTPSA id d20-20020a05600c34d400b003b4de550e34sm9537531wmq.40.2022.10.17.00.39.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 00:39:51 -0700 (PDT)
+Message-ID: <7c4a9b4a-d84c-33f1-eade-6ba445c917e4@linaro.org>
+Date:   Mon, 17 Oct 2022 09:39:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Subject: Re: [PATCH] thermal: k3_j72xx_bandgap: Fix the debug print message
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <amitk@kernel.org>
-CC:     <bb@ti.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
+To:     "J, KEERTHY" <j-keerthy@ti.com>, rui.zhang@intel.com,
+        amitk@kernel.org
+Cc:     bb@ti.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20221010034126.3550-1-j-keerthy@ti.com>
  <a1eaa937-dcfe-52d0-954b-3aaecedc1aa6@linaro.org>
-From:   "J, KEERTHY" <j-keerthy@ti.com>
-In-Reply-To: <a1eaa937-dcfe-52d0-954b-3aaecedc1aa6@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <aed3cf8e-62d2-febe-8de9-24cec1eeafaf@ti.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <aed3cf8e-62d2-febe-8de9-24cec1eeafaf@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/17/2022 1:02 PM, Daniel Lezcano wrote:
-> On 10/10/2022 05:41, Keerthy wrote:
->> The debug print message to check the workaround applicability is 
->> inverted.
->> Fix the same.
+On 17/10/2022 09:38, J, KEERTHY wrote:
+> 
+> 
+> On 10/17/2022 1:02 PM, Daniel Lezcano wrote:
+>> On 10/10/2022 05:41, Keerthy wrote:
+>>> The debug print message to check the workaround applicability is 
+>>> inverted.
+>>> Fix the same.
+>>>
+>>> Fixes: ffcb2fc86eb7 ("thermal: k3_j72xx_bandgap: Add the bandgap 
+>>> driver support")
+>>> Reported-by: Bryan Brattlof <bb@ti.com>
+>>> Signed-off-by: Keerthy <j-keerthy@ti.com>
+>>> ---
 >>
->> Fixes: ffcb2fc86eb7 ("thermal: k3_j72xx_bandgap: Add the bandgap 
->> driver support")
->> Reported-by: Bryan Brattlof <bb@ti.com>
->> Signed-off-by: Keerthy <j-keerthy@ti.com>
->> ---
+>> Applied, thanks
+>>
+>> BTW, Kheerty, if you have time is it possible to convert the 
+>> k3_bandgap.c with the pre-computed factors like the 
+>> k3_j72xx_bandgap.c, so both can be merged ?
 > 
-> Applied, thanks
-> 
-> BTW, Kheerty, if you have time is it possible to convert the 
-> k3_bandgap.c with the pre-computed factors like the k3_j72xx_bandgap.c, 
-> so both can be merged ?
+> Okay. I will try that out in a couple of weeks time.
 
-Okay. I will try that out in a couple of weeks time.
+Great, thanks!
 
-Thanks,
-Keerthy
 
-> 
-> 
-> 
-> 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
