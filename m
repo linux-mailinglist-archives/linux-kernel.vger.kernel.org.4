@@ -2,391 +2,748 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0026007D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0506007DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiJQHjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
+        id S230018AbiJQHlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiJQHjd (ORCPT
+        with ESMTP id S229726AbiJQHlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:39:33 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2064.outbound.protection.outlook.com [40.107.22.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBB7FDD;
-        Mon, 17 Oct 2022 00:39:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O8+75v/OVN3cGNeZOqAs6dbCP+gmMNBmglEYOUFf7U5W42EkFr+mO6SDjqIkpj7/YBYUUK5Pept3yCN2KI+/4Qpohy30ibiWr2NeQVoV0gMOT94R0PJrUkjvJSL8GHWjZcBW/R8zXi/y2ohikLP7XO0+v/CWlvCHBflBT00jtzVjdotOfGT2dH53hz8zvT2zDY0aXZHKoVHDzmJuJ2fqd32rqNJ0JqHA8YUVQVy1WAeFgPGGEvxTNmxWZGrD9DCfGzsajVsFQZEBHNVd1lofbbPKIP+bJIC8VsbMnbaJzkHwdTGV2C/aTOBNryNCkpDdpyzE3ySwqrEzHmQqDZ3qyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nJDEDv1VRRd0eGjIGre7g6bjvhDBPv81iXX5yZ29A5s=;
- b=bhobrGP+P/MIZt235g/1VGrNZtq+J9KC0OtYKe5yHy2PEIX1Blr0k9SaC9H+FU8pC9++dPUGjjZ3JNdro8fl8htxPepLbXC0o096cvTYqRQnh9Ej7JNNSffZC0wumwbxsnwj7c5BBWqXOICgnWzJ2L4fiPHf6WzcFNMdTCa3oV8L99Y77NugspraCUEhzqIv2vQOEAVcVPKQmGo2xvmYgtbclljbYq4fG2SUsmYvPbdYqTezBikMftsIv+Wg/0bE1uI+6yW2xuYmXxnD/7DMQgbl8wfW4w+GzKzRfMMGYjAbMRne04sOjLcAlMTiEBZ6P45K0TO5vBGwffeIYQ9K7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nJDEDv1VRRd0eGjIGre7g6bjvhDBPv81iXX5yZ29A5s=;
- b=gj0rl7lp5fimUJfQFV7XEqRGbb9HK25acieChsr80Uavaca5FlwoRIYOdmTuCwyu20zYC5P3Wcco9TQmdgAxf9IgrxnwUqeOcX1L0fI+ZNK/XQDOGZs3ajIDlz39XQy0Dlm9nbCfTVe5uLG1bM1CVpvroXVBRpjvMIYMf9dWNAc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AS8PR04MB8296.eurprd04.prod.outlook.com (2603:10a6:20b:3f2::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
- 2022 07:39:29 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::181b:75f7:dbc8:b4bc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::181b:75f7:dbc8:b4bc%6]) with mapi id 15.20.5723.032; Mon, 17 Oct 2022
- 07:39:29 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, saravanak@google.com,
-        gregkh@linuxfoundation.org, geert+renesas@glider.be,
-        krzysztof.kozlowski@linaro.org, robh@kernel.org
-Subject: [PATCH v4 RESEND 2/2] dt-bindings: bus: Add Freescale i.MX8qxp pixel link MSI bus binding
-Date:   Mon, 17 Oct 2022 15:40:39 +0800
-Message-Id: <20221017074039.4181843-3-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221017074039.4181843-1-victor.liu@nxp.com>
-References: <20221017074039.4181843-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0043.apcprd02.prod.outlook.com
- (2603:1096:4:196::12) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Mon, 17 Oct 2022 03:41:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529741DA77
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:41:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78602B80F3B
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05810C433B5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:41:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665992461;
+        bh=6psI7Uuy63l2q83agFWnQEdaNuSCJ61eWj8VDGEcmnI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Vb2vND59pky9r8kfG9oJLWoRpE0EbRYIqyZL6+DvQ0KtlvFu6Y2EetNaPCMjelXyb
+         xVOgdZ9wHFBLJE8bkXar//kyuA81B055cq/v4QI4Tmh91gyYJ30pV5MCkgx0V1PM1L
+         RJ84vaFRt2u0gRwDdwj/eFZa3vvWiSjEcGfMNz7rPicGHSlPWztSYJIcRYXq8FCMxS
+         +hP2oRkpaibAeajr8e5Zj0T2k6KbGnk5nJCzE/I0FJH8xkn8I4ZdqyOobdH7wefeEl
+         wHST6OeT85qzb702JsgGuKqICpjCczpvvswd91/hnsI0UciJQzZwSjsTx9REejw2Aj
+         Ju3I3l7SkpzKQ==
+Received: by mail-ed1-f46.google.com with SMTP id m16so14795996edc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:41:00 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2KmFbzRF/DVHMvtFxYcEfpHO+29f5OiBQCIh306AhAmynAGiko
+        +bZlBPm3vnH/fcHqitqZlIB2BYTMPUhs3USCgUo=
+X-Google-Smtp-Source: AMsMyM5yhhFsamaceCzS+wSLWXv6jjv4GP7P9VXCurxtTluTHiwN7Tte2WgN8VPX+PswxRYsOgB1/NaNOPq1gjmv8rY=
+X-Received: by 2002:a05:6402:27d4:b0:45d:a69e:336d with SMTP id
+ c20-20020a05640227d400b0045da69e336dmr1706932ede.298.1665992459054; Mon, 17
+ Oct 2022 00:40:59 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AS8PR04MB8296:EE_
-X-MS-Office365-Filtering-Correlation-Id: 49754669-1f02-4a7d-3ab1-08dab012b984
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bni484sZjUulPlT6X3B1jzbdyh9bd3omS9KsFhUQwPZ0uIyVlhuJljtu44UUIgvRCyRrq9efIuBFMo5rjrB8KnSSu4JfvCUyqwvMrXUIoQpxf2mjhrz03nFaKcr9mgTg3vBr7PoYObZW4OUxak7akdWAjO7TkPqKIuFNJc95b+QKG+mI25RuSUh0XR+6cD7sWRmlLQfu7EBpT6YlWeuNtnOerqD9mgahpKhY65xodiCrmSs01lIV4sZ3I91v1t2l6Kw4ne2EvyaixT3pw/oilF51lHLQwLMCPJT/zmo/eDX1XMAmfMBNr2jMFqT0G+EfWV1VyAqnvJVFAgIOrNnR4U2ramwUAKhLOHoUcb89Rzk1nBHQ0TfveRWbkjpmLkuqTrzvWZs/lelyfXxDCbHDCoHCkHpOGpUAQqCoZPBpB6/6WLAQ/5xoyTOYSgfbbzBpELHDKe/wIEu740/yCV4i138+KZJVL+NiCcKJcz2tnmKUV4yGri3J+9nr9kkQCByGxBYoX7t0x0TPcoColRRXDZPl0SaMFvbm3fV7X1/dk0Pv09YKpJMtm+WH4Jsy5XDOEUJ9PQ0ku5wjkqiJRNaSaEKCpObWA/Ta6R6iuKkCIP/ONaygxF2ap+GjT4wcmUr+Ar2yvTEI4JLywUSqVJ0hcmwbEeHHfWI+LnJT/Ufyt7MwoEUqoXKSQSfpHgeId4/ZC4TiF9qzGCwXmIjRAbFiqjnUx6Y8JV0Z1GDl4VcXRVzwhipnRpZXaZAdf+EpcyDRxet64I8VsE6K09CIfGA1T8nNrH8ZSaaFxi9wfbDbYJ0bkku6FwjoJpewe7r7n30xWwFJlONae/kiuKF48t4/Lw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(451199015)(4326008)(8676002)(6666004)(66476007)(66556008)(66946007)(83380400001)(52116002)(6506007)(36756003)(86362001)(41300700001)(5660300002)(26005)(6512007)(8936002)(7416002)(316002)(2616005)(2906002)(38100700002)(1076003)(186003)(38350700002)(966005)(6486002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vQmj7R1nU3nKnGQE3PFAskt7t2Vg3Umrx8PE816gd/w7Wv9BBbo7vzuz9YO9?=
- =?us-ascii?Q?L1GIYR52y5vgFsKeAXu7ky4EvAuZdrnDf6SD1qCAOnACAO9JSFqQBzB24nl3?=
- =?us-ascii?Q?Zo/6qNjXXnVuKgNf2KJ2lc3YY+YpF9dJXzp31wDSxzcwqFmyo/xkaZRmBcG+?=
- =?us-ascii?Q?XtM1uxLw30hWRnw9OmziIhf19Ha7naMaHX4iF17hX8PfGmTQq4XDfVYRv19M?=
- =?us-ascii?Q?azmmBfMKdNneb0F0wrRfpyqaZVCcgjVA7aq65wP3reGwYQrZKz5cAdZy0lqF?=
- =?us-ascii?Q?2SxyUf6nmgQ0JzBdy7ZjiIvfsfqFQLzgZGTqKZM322aEhRzgd8W1ZP3L5bTq?=
- =?us-ascii?Q?2gGjoBWY28W3EDsCfEFUrmpAACbGEcP2CAhHpAvmBegkj+wRFwt/rw+L3mOD?=
- =?us-ascii?Q?wNwLo61d7piXgi8u5FcUepu2pt+o/rp1HOBpo2BoctL3ZZyW9Aldc5+OxfO/?=
- =?us-ascii?Q?L5vn9wpJ1AJUoqwbGQVFcg/umjrSxOoUlWwaW4FXnHrvh1fXUfaMo9h5Pn7d?=
- =?us-ascii?Q?LkCQ2u1ToEXiV7yViIFeDoPZhU1CLS4oPp8BHw5P3VrCIACrfeTWnDOzfqpH?=
- =?us-ascii?Q?lb+r85XGuVLJEr1f7kdBqBQMmPVTGn14s+xJ9zVgnMNIH5KFVeUoIYJXqyb9?=
- =?us-ascii?Q?ll2vmqxgIWs3z7rFMiuBJmcydQaZM2Dr55ozIV9x8uTSCEOw21LvJRLP/giT?=
- =?us-ascii?Q?2PqxwuR1IosciiZnL0s6TlxWgTFdsOhkPfBgcOFfdGlgMl3ArkHFh++PDbNx?=
- =?us-ascii?Q?Ed8/CEvmRBF3kV6F7PTg80Dej3Xmbptsags/i9pGUsoK7SqOq04UdQPgh6Iu?=
- =?us-ascii?Q?OAgbfHxBY+Stup2H4ivzeEI9ICHFEHohPY6PP5bxKpnlXT+4m+tE7BoBVLqw?=
- =?us-ascii?Q?2RztN7atCfwSsdkIl9tEcZ+x8L2pVLR+BntUPY/N/TlmafZ1ZlV9iJz94evt?=
- =?us-ascii?Q?bFklevNUHUHRASO4tX5nM4dz8+yqBfCBQoVw6+5k5R1842bmnOzsVGmA+ULA?=
- =?us-ascii?Q?L7z86qcAHSMZPq2QoHZm9Ns37LYeE44H+1OZJZE57J/MvV9w+XFX4NJ5E2p8?=
- =?us-ascii?Q?oP1LK9GPiw7MQjcZLubLHOwMQm48H6GYh/mR7gzdUm15qoo5wQexs4QJ7tJx?=
- =?us-ascii?Q?4Psmy9+9cHX74TJomEU3TwaBnsEXahrfS96H/ZVb5INxeYu/HYJqhCTp8nPL?=
- =?us-ascii?Q?24x/fh+FFMyecs5IZF4FbcfqwJXzduYnlhRtU2UXyk1ZYmZhhNrwqs0mwuSl?=
- =?us-ascii?Q?pDiMmMgYiJ6SRyKPrHSQtlU4UaUBiH5zMT6UnfJSyLwy4YEpPPQU2nwo2lBc?=
- =?us-ascii?Q?arWLYNfUW5vzM8S81J9weiBdiNZ2MpCaANeP4jonpCODEFHAyNxEbgvz1ZUq?=
- =?us-ascii?Q?fDtJkcEr0OPACfLizweNgRcxlQwuyXrX5+xBZ5NDGeripzw8e/hKDnPFP62c?=
- =?us-ascii?Q?veUs3Wj8sxnwb4OUprOasc/8RUbOqKnxTx+fCsvgvNIQ0xWh4BZb2zlrGEkS?=
- =?us-ascii?Q?GzwRKRX8zYh+f3U8uTrT8qFQb38zkY+8Br/zZcE3H5IkLAzoC6/z/hVU/+j1?=
- =?us-ascii?Q?iImzAO45pYudMYrXCp1rMVsWdlBfQ4CO67I7SDpt?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 49754669-1f02-4a7d-3ab1-08dab012b984
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 07:39:29.7977
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q7zTplxcey6Y0SJbvDiUvvU4efq7PDfg9PFjZ8HDsLJO4uGjuraFxJ79p7TxFrU7IA0aRIW2+swg6/h7CW6Flg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8296
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221017022330.2383060-1-chenhuacai@loongson.cn> <49881dc3-1b74-2895-af45-651e91c4f49c@xen0n.name>
+In-Reply-To: <49881dc3-1b74-2895-af45-651e91c4f49c@xen0n.name>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 17 Oct 2022 15:40:46 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7Ld+fE8m+iZo_0quq5BKGeNsJHdLLW=cEtwL5Z=xeFCQ@mail.gmail.com>
+Message-ID: <CAAhV-H7Ld+fE8m+iZo_0quq5BKGeNsJHdLLW=cEtwL5Z=xeFCQ@mail.gmail.com>
+Subject: Re: [PATCH V2] LoongArch: Add unaligned access support
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Freescale i.MX8qxp pixel link MSI bus is a simple memory-mapped bus.
-It is used to access peripherals in i.MX8qm/qxp imaging, LVDS, MIPI
-DSI and HDMI TX subsystems, like I2C controller, PWM controller,
-MIPI DSI controller and Control and Status Registers (CSR) module.
+Hi, Xuerui,
 
-Reference simple-pm-bus bindings and add Freescale i.MX8qxp pixel
-link MSI bus specific bindings.
+On Mon, Oct 17, 2022 at 2:07 PM WANG Xuerui <kernel@xen0n.name> wrote:
+>
+> On 2022/10/17 10:23, Huacai Chen wrote:
+> > Loongson-2 series (Loongson-2K500, Loongson-2K1000) don't support
+> > unaligned access in hardware, while Loongson-3 series (Loongson-3A5000,
+> > Loongson-3C5000) are configurable whether support unaligned access in
+> > hardware. This patch add unaligned access emulation for those LoongArch
+> > processors without hardware support.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> > V2: Simplify READ_FPR and WRITE_FPR.
+> >
+> >   arch/loongarch/Kconfig            |   2 +
+> >   arch/loongarch/include/asm/inst.h |  14 ++
+> >   arch/loongarch/kernel/Makefile    |   3 +-
+> >   arch/loongarch/kernel/traps.c     |  27 ++
+> >   arch/loongarch/kernel/unaligned.c | 393 ++++++++++++++++++++++++++++++
+> >   arch/loongarch/lib/Makefile       |   2 +-
+> >   arch/loongarch/lib/unaligned.S    |  93 +++++++
+> >   7 files changed, 532 insertions(+), 2 deletions(-)
+> >   create mode 100644 arch/loongarch/kernel/unaligned.c
+> >   create mode 100644 arch/loongarch/lib/unaligned.S
+>
+> Please also update Documentation/admin-guide/sysctl/kernel.rst to
+> mention loongarch in the respective sysctls' documentation. (Grep for
+> ARCH_UNALIGN to see.)
+OK, thanks.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
-v3->v4:
-* Add child nodes in the example MSI bus node of the MSI bus dt-binding. (Krzysztof)
-* Resend v4 to imply this patch is based on v6.0-rc1 so that there are not any
-  dependencies. (Rob)
-* Resend v4 based on v6.1-rc1. (Greg)
-* Add Rob's R-b tag.
+>
+> >
+> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > index 0a6ef613124c..a8dc58e8162a 100644
+> > --- a/arch/loongarch/Kconfig
+> > +++ b/arch/loongarch/Kconfig
+> > @@ -122,6 +122,8 @@ config LOONGARCH
+> >       select RTC_LIB
+> >       select SMP
+> >       select SPARSE_IRQ
+> > +     select SYSCTL_ARCH_UNALIGN_ALLOW
+> > +     select SYSCTL_ARCH_UNALIGN_NO_WARN
+> >       select SYSCTL_EXCEPTION_TRACE
+> >       select SWIOTLB
+> >       select TRACE_IRQFLAGS_SUPPORT
+> > diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+> > index fce1843ceebb..e96b5345f389 100644
+> > --- a/arch/loongarch/include/asm/inst.h
+> > +++ b/arch/loongarch/include/asm/inst.h
+> > @@ -76,6 +76,10 @@ enum reg2i12_op {
+> >       ldbu_op         = 0xa8,
+> >       ldhu_op         = 0xa9,
+> >       ldwu_op         = 0xaa,
+> > +     flds_op         = 0xac,
+> > +     fsts_op         = 0xad,
+> > +     fldd_op         = 0xae,
+> > +     fstd_op         = 0xaf,
+> >   };
+> >
+> >   enum reg2i14_op {
+> > @@ -146,6 +150,10 @@ enum reg3_op {
+> >       ldxbu_op        = 0x7040,
+> >       ldxhu_op        = 0x7048,
+> >       ldxwu_op        = 0x7050,
+> > +     fldxs_op        = 0x7060,
+> > +     fldxd_op        = 0x7068,
+> > +     fstxs_op        = 0x7070,
+> > +     fstxd_op        = 0x7078,
+> >       amswapw_op      = 0x70c0,
+> >       amswapd_op      = 0x70c1,
+> >       amaddw_op       = 0x70c2,
+> > @@ -566,4 +574,10 @@ static inline void emit_##NAME(union loongarch_instruction *insn,        \
+> >
+> >   DEF_EMIT_REG3SA2_FORMAT(alsld, alsld_op)
+> >
+> > +struct pt_regs;
+> > +
+> > +unsigned long unaligned_read(void *addr, void *value, unsigned long n, bool sign);
+> > +unsigned long unaligned_write(void *addr, unsigned long value, unsigned long n);
+> > +void emulate_load_store_insn(struct pt_regs *regs, void __user *addr, unsigned int *pc);
+> > +
+> >   #endif /* _ASM_INST_H */
+> > diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> > index 42be564278fa..2ad2555b53ea 100644
+> > --- a/arch/loongarch/kernel/Makefile
+> > +++ b/arch/loongarch/kernel/Makefile
+> > @@ -7,7 +7,8 @@ extra-y               := vmlinux.lds
+> >
+> >   obj-y               += head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+> >                  traps.o irq.o idle.o process.o dma.o mem.o io.o reset.o switch.o \
+> > -                elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o
+> > +                elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o \
+> > +                unaligned.o
+> >
+> >   obj-$(CONFIG_ACPI)          += acpi.o
+> >   obj-$(CONFIG_EFI)           += efi.o
+> > diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> > index 1a4dce84ebc6..7ea62faeeadb 100644
+> > --- a/arch/loongarch/kernel/traps.c
+> > +++ b/arch/loongarch/kernel/traps.c
+> > @@ -368,13 +368,40 @@ asmlinkage void noinstr do_ade(struct pt_regs *regs)
+> >       irqentry_exit(regs, state);
+> >   }
+> >
+> > +/* sysctl hooks */
+> > +int unaligned_enabled __read_mostly = 1;     /* Enabled by default */
+> > +int no_unaligned_warning __read_mostly = 1;  /* Only 1 warning by default */
+> > +
+> >   asmlinkage void noinstr do_ale(struct pt_regs *regs)
+> >   {
+> > +     unsigned int *pc;
+> >       irqentry_state_t state = irqentry_enter(regs);
+> >
+> > +     perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, regs->csr_badvaddr);
+> > +
+> > +     /*
+> > +      * Did we catch a fault trying to load an instruction?
+> > +      */
+> > +     if (regs->csr_badvaddr == regs->csr_era)
+> > +             goto sigbus;
+> > +     if (user_mode(regs) && !test_thread_flag(TIF_FIXADE))
+> > +             goto sigbus;
+> > +     if (!unaligned_enabled)
+> > +             goto sigbus;
+> > +     if (!no_unaligned_warning)
+> > +             show_registers(regs);
+> > +
+> > +     pc = (unsigned int *)exception_era(regs);
+> > +
+> > +     emulate_load_store_insn(regs, (void __user *)regs->csr_badvaddr, pc);
+> > +
+> > +     goto out;
+> > +
+> > +sigbus:
+> >       die_if_kernel("Kernel ale access", regs);
+> >       force_sig_fault(SIGBUS, BUS_ADRALN, (void __user *)regs->csr_badvaddr);
+> >
+> > +out:
+> >       irqentry_exit(regs, state);
+> >   }
+> >
+> > diff --git a/arch/loongarch/kernel/unaligned.c b/arch/loongarch/kernel/unaligned.c
+> > new file mode 100644
+> > index 000000000000..f367424b762a
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/unaligned.c
+> > @@ -0,0 +1,393 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Handle unaligned accesses by emulation.
+> > + *
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+>
+> MIPS heritage too?
+>
+> > + *
+> > + */
+> > +#include <linux/mm.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/signal.h>
+> > +#include <linux/debugfs.h>
+> > +#include <linux/perf_event.h>
+> > +
+> > +#include <asm/asm.h>
+> > +#include <asm/branch.h>
+> > +#include <asm/fpu.h>
+> > +#include <asm/inst.h>
+> > +
+> > +#include "access-helper.h"
+> > +
+> > +#ifdef CONFIG_DEBUG_FS
+> > +static u32 unaligned_instructions_user;
+> > +static u32 unaligned_instructions_kernel;
+> > +#endif
+> > +
+> > +static inline unsigned long read_fpr(unsigned int fd)
+> > +{
+> > +#define READ_FPR(fd, __value)                \
+> > +     __asm__ __volatile__("movfr2gr.d %0, $f"#fd"\n\t" : "=r"(__value));
+> > +
+> > +     unsigned long __value;
+> > +
+> > +     switch (fd) {
+> > +     case 0:
+> > +             READ_FPR(0, __value);
+> > +             break;
+> > +     case 1:
+> > +             READ_FPR(1, __value);
+> > +             break;
+> > +     case 2:
+> > +             READ_FPR(2, __value);
+> > +             break;
+> > +     case 3:
+> > +             READ_FPR(3, __value);
+> > +             break;
+> > +     case 4:
+> > +             READ_FPR(4, __value);
+> > +             break;
+> > +     case 5:
+> > +             READ_FPR(5, __value);
+> > +             break;
+> > +     case 6:
+> > +             READ_FPR(6, __value);
+> > +             break;
+> > +     case 7:
+> > +             READ_FPR(7, __value);
+> > +             break;
+> > +     case 8:
+> > +             READ_FPR(8, __value);
+> > +             break;
+> > +     case 9:
+> > +             READ_FPR(9, __value);
+> > +             break;
+> > +     case 10:
+> > +             READ_FPR(10, __value);
+> > +             break;
+> > +     case 11:
+> > +             READ_FPR(11, __value);
+> > +             break;
+> > +     case 12:
+> > +             READ_FPR(12, __value);
+> > +             break;
+> > +     case 13:
+> > +             READ_FPR(13, __value);
+> > +             break;
+> > +     case 14:
+> > +             READ_FPR(14, __value);
+> > +             break;
+> > +     case 15:
+> > +             READ_FPR(15, __value);
+> > +             break;
+> > +     case 16:
+> > +             READ_FPR(16, __value);
+> > +             break;
+> > +     case 17:
+> > +             READ_FPR(17, __value);
+> > +             break;
+> > +     case 18:
+> > +             READ_FPR(18, __value);
+> > +             break;
+> > +     case 19:
+> > +             READ_FPR(19, __value);
+> > +             break;
+> > +     case 20:
+> > +             READ_FPR(20, __value);
+> > +             break;
+> > +     case 21:
+> > +             READ_FPR(21, __value);
+> > +             break;
+> > +     case 22:
+> > +             READ_FPR(22, __value);
+> > +             break;
+> > +     case 23:
+> > +             READ_FPR(23, __value);
+> > +             break;
+> > +     case 24:
+> > +             READ_FPR(24, __value);
+> > +             break;
+> > +     case 25:
+> > +             READ_FPR(25, __value);
+> > +             break;
+> > +     case 26:
+> > +             READ_FPR(26, __value);
+> > +             break;
+> > +     case 27:
+> > +             READ_FPR(27, __value);
+> > +             break;
+> > +     case 28:
+> > +             READ_FPR(28, __value);
+> > +             break;
+> > +     case 29:
+> > +             READ_FPR(29, __value);
+> > +             break;
+> > +     case 30:
+> > +             READ_FPR(30, __value);
+> > +             break;
+> > +     case 31:
+> > +             READ_FPR(31, __value);
+> > +             break;
+> > +     default:
+> > +             panic("unexpected fd '%d'", fd);
+>
+> So this is a bit misleading, I was thinking of file descriptors when I
+> was reading Feiyang's review comments... maybe something as simple as
+> "idx", "num" or "regno" will do?
+OK, idx is better.
 
-v2->v3:
-* Add a pattern property to allow child nodes. (Rob)
+>
+> > +     }
+> > +#undef READ_FPR
+> > +     return __value;
+> > +}
+> > +
+> > +static inline void write_fpr(unsigned int fd, unsigned long value)
+> > +{
+> > +#define WRITE_FPR(fd, value)         \
+> > +     __asm__ __volatile__("movgr2fr.d $f"#fd", %0\n\t" :: "r"(value));
+> > +
+> > +     switch (fd) {
+> > +     case 0:
+> > +             WRITE_FPR(0, value);
+> > +             break;
+> > +     case 1:
+> > +             WRITE_FPR(1, value);
+> > +             break;
+> > +     case 2:
+> > +             WRITE_FPR(2, value);
+> > +             break;
+> > +     case 3:
+> > +             WRITE_FPR(3, value);
+> > +             break;
+> > +     case 4:
+> > +             WRITE_FPR(4, value);
+> > +             break;
+> > +     case 5:
+> > +             WRITE_FPR(5, value);
+> > +             break;
+> > +     case 6:
+> > +             WRITE_FPR(6, value);
+> > +             break;
+> > +     case 7:
+> > +             WRITE_FPR(7, value);
+> > +             break;
+> > +     case 8:
+> > +             WRITE_FPR(8, value);
+> > +             break;
+> > +     case 9:
+> > +             WRITE_FPR(9, value);
+> > +             break;
+> > +     case 10:
+> > +             WRITE_FPR(10, value);
+> > +             break;
+> > +     case 11:
+> > +             WRITE_FPR(11, value);
+> > +             break;
+> > +     case 12:
+> > +             WRITE_FPR(12, value);
+> > +             break;
+> > +     case 13:
+> > +             WRITE_FPR(13, value);
+> > +             break;
+> > +     case 14:
+> > +             WRITE_FPR(14, value);
+> > +             break;
+> > +     case 15:
+> > +             WRITE_FPR(15, value);
+> > +             break;
+> > +     case 16:
+> > +             WRITE_FPR(16, value);
+> > +             break;
+> > +     case 17:
+> > +             WRITE_FPR(17, value);
+> > +             break;
+> > +     case 18:
+> > +             WRITE_FPR(18, value);
+> > +             break;
+> > +     case 19:
+> > +             WRITE_FPR(19, value);
+> > +             break;
+> > +     case 20:
+> > +             WRITE_FPR(20, value);
+> > +             break;
+> > +     case 21:
+> > +             WRITE_FPR(21, value);
+> > +             break;
+> > +     case 22:
+> > +             WRITE_FPR(22, value);
+> > +             break;
+> > +     case 23:
+> > +             WRITE_FPR(23, value);
+> > +             break;
+> > +     case 24:
+> > +             WRITE_FPR(24, value);
+> > +             break;
+> > +     case 25:
+> > +             WRITE_FPR(25, value);
+> > +             break;
+> > +     case 26:
+> > +             WRITE_FPR(26, value);
+> > +             break;
+> > +     case 27:
+> > +             WRITE_FPR(27, value);
+> > +             break;
+> > +     case 28:
+> > +             WRITE_FPR(28, value);
+> > +             break;
+> > +     case 29:
+> > +             WRITE_FPR(29, value);
+> > +             break;
+> > +     case 30:
+> > +             WRITE_FPR(30, value);
+> > +             break;
+> > +     case 31:
+> > +             WRITE_FPR(31, value);
+> > +             break;
+> > +     default:
+> > +             panic("unexpected fd '%d'", fd);
+> > +     }
+> > +#undef WRITE_FPR
+> > +}
+> > +
+> > +void emulate_load_store_insn(struct pt_regs *regs, void __user *addr, unsigned int *pc)
+> > +{
+> > +     bool user = user_mode(regs);
+> > +     unsigned int res;
+> > +     unsigned long origpc;
+> > +     unsigned long origra;
+> > +     unsigned long value = 0;
+> > +     union loongarch_instruction insn;
+> > +
+> > +     origpc = (unsigned long)pc;
+> > +     origra = regs->regs[1];
+> > +
+> > +     perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS, 1, regs, 0);
+> > +
+> > +     /*
+> > +      * This load never faults.
+> > +      */
+> > +     __get_inst(&insn.word, pc, user);
+> > +     if (user && !access_ok(addr, 8))
+> > +             goto sigbus;
+> > +
+> > +     if (insn.reg2i12_format.opcode == ldd_op ||
+> > +             insn.reg2i14_format.opcode == ldptrd_op ||
+> > +             insn.reg3_format.opcode == ldxd_op) {
+> > +             res = unaligned_read(addr, &value, 8, 1);
+> > +             if (res)
+> > +                     goto fault;
+> > +             regs->regs[insn.reg2i12_format.rd] = value;
+> > +     } else if (insn.reg2i12_format.opcode == ldw_op ||
+> > +             insn.reg2i14_format.opcode == ldptrw_op ||
+> > +             insn.reg3_format.opcode == ldxw_op) {
+> > +             res = unaligned_read(addr, &value, 4, 1);
+> > +             if (res)
+> > +                     goto fault;
+> > +             regs->regs[insn.reg2i12_format.rd] = value;
+> > +     } else if (insn.reg2i12_format.opcode == ldwu_op ||
+> > +             insn.reg3_format.opcode == ldxwu_op) {
+> > +             res = unaligned_read(addr, &value, 4, 0);
+> > +             if (res)
+> > +                     goto fault;
+> > +             regs->regs[insn.reg2i12_format.rd] = value;
+> > +     } else if (insn.reg2i12_format.opcode == ldh_op ||
+> > +             insn.reg3_format.opcode == ldxh_op) {
+> > +             res = unaligned_read(addr, &value, 2, 1);
+> > +             if (res)
+> > +                     goto fault;
+> > +             regs->regs[insn.reg2i12_format.rd] = value;
+> > +     } else if (insn.reg2i12_format.opcode == ldhu_op ||
+> > +             insn.reg3_format.opcode == ldxhu_op) {
+> > +             res = unaligned_read(addr, &value, 2, 0);
+> > +             if (res)
+> > +                     goto fault;
+> > +             regs->regs[insn.reg2i12_format.rd] = value;
+> > +     } else if (insn.reg2i12_format.opcode == std_op ||
+> > +             insn.reg2i14_format.opcode == stptrd_op ||
+> > +             insn.reg3_format.opcode == stxd_op) {
+> > +             value = regs->regs[insn.reg2i12_format.rd];
+> > +             res = unaligned_write(addr, value, 8);
+> > +             if (res)
+> > +                     goto fault;
+> > +     } else if (insn.reg2i12_format.opcode == stw_op ||
+> > +             insn.reg2i14_format.opcode == stptrw_op ||
+> > +             insn.reg3_format.opcode == stxw_op) {
+> > +             value = regs->regs[insn.reg2i12_format.rd];
+> > +             res = unaligned_write(addr, value, 4);
+> > +             if (res)
+> > +                     goto fault;
+> > +     } else if (insn.reg2i12_format.opcode == sth_op ||
+> > +             insn.reg3_format.opcode == stxh_op) {
+> > +             value = regs->regs[insn.reg2i12_format.rd];
+> > +             res = unaligned_write(addr, value, 2);
+> > +             if (res)
+> > +                     goto fault;
+> > +     } else if (insn.reg2i12_format.opcode == fldd_op ||
+> > +             insn.reg3_format.opcode == fldxd_op) {
+> > +             res = unaligned_read(addr, &value, 8, 1);
+> > +             if (res)
+> > +                     goto fault;
+> > +             write_fpr(insn.reg2i12_format.rd, value);
+> > +     } else if (insn.reg2i12_format.opcode == flds_op ||
+> > +             insn.reg3_format.opcode == fldxs_op) {
+> > +             res = unaligned_read(addr, &value, 4, 1);
+> > +             if (res)
+> > +                     goto fault;
+> > +             write_fpr(insn.reg2i12_format.rd, value);
+> > +     } else if (insn.reg2i12_format.opcode == fstd_op ||
+> > +             insn.reg3_format.opcode == fstxd_op) {
+> > +             value = read_fpr(insn.reg2i12_format.rd);
+> > +             res = unaligned_write(addr, value, 8);
+> > +             if (res)
+> > +                     goto fault;
+> > +     } else if (insn.reg2i12_format.opcode == fsts_op ||
+> > +             insn.reg3_format.opcode == fstxs_op) {
+> > +             value = read_fpr(insn.reg2i12_format.rd);
+> > +             res = unaligned_write(addr, value, 4);
+> > +             if (res)
+> > +                     goto fault;
+> > +     } else
+> > +             goto sigbus;
+> > +
+> > +
+> > +#ifdef CONFIG_DEBUG_FS
+> > +     if (user)
+> > +             unaligned_instructions_user++;
+> > +     else
+> > +             unaligned_instructions_kernel++;
+> > +#endif
+> > +
+> > +     compute_return_era(regs);
+> > +     return;
+> > +
+> > +fault:
+> > +     /* roll back jump/branch */
+> > +     regs->csr_era = origpc;
+> > +     regs->regs[1] = origra;
+> > +     /* Did we have an exception handler installed? */
+> > +     if (fixup_exception(regs))
+> > +             return;
+> > +
+> > +     die_if_kernel("Unhandled kernel unaligned access", regs);
+> > +     force_sig(SIGSEGV);
+> > +
+> > +     return;
+> > +
+> > +sigbus:
+> > +     die_if_kernel("Unhandled kernel unaligned access", regs);
+> > +     force_sig(SIGBUS);
+> > +
+> > +     return;
+> > +}
+> > +
+> > +#ifdef CONFIG_DEBUG_FS
+> > +static int __init debugfs_unaligned(void)
+> > +{
+> > +     struct dentry *d;
+> > +
+> > +     d = debugfs_create_dir("loongarch", NULL);
+> > +     if (!d)
+> > +             return -ENOMEM;
+> > +
+> > +     debugfs_create_u32("unaligned_instructions_user",
+> > +                             S_IRUGO, d, &unaligned_instructions_user);
+> > +     debugfs_create_u32("unaligned_instructions_kernel",
+> > +                             S_IRUGO, d, &unaligned_instructions_kernel);
+> > +
+> > +     return 0;
+> > +}
+> > +arch_initcall(debugfs_unaligned);
+> > +#endif
+> > diff --git a/arch/loongarch/lib/Makefile b/arch/loongarch/lib/Makefile
+> > index e36635fccb69..867895530340 100644
+> > --- a/arch/loongarch/lib/Makefile
+> > +++ b/arch/loongarch/lib/Makefile
+> > @@ -3,4 +3,4 @@
+> >   # Makefile for LoongArch-specific library files.
+> >   #
+> >
+> > -lib-y        += delay.o clear_user.o copy_user.o dump_tlb.o
+> > +lib-y        += delay.o clear_user.o copy_user.o dump_tlb.o unaligned.o
+> > diff --git a/arch/loongarch/lib/unaligned.S b/arch/loongarch/lib/unaligned.S
+> > new file mode 100644
+> > index 000000000000..03210cb5a18d
+> > --- /dev/null
+> > +++ b/arch/loongarch/lib/unaligned.S
+> > @@ -0,0 +1,93 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#include <linux/linkage.h>
+> > +
+> > +#include <asm/asm.h>
+> > +#include <asm/asmmacro.h>
+> > +#include <asm/errno.h>
+> > +#include <asm/export.h>
+> > +#include <asm/regdef.h>
+> > +
+> > +.macro fixup_ex from, to, fix
+> > +.if \fix
+> > +     .section .fixup, "ax"
+> > +\to: li.w    a0, -EFAULT
+> > +     jr      ra
+> > +     .previous
+> > +.endif
+> > +     .section __ex_table, "a"
+> > +     PTR     \from\()b, \to\()b
+> > +     .previous
+> > +.endm
+> > +
+> > +/*
+> > + * unsigned long unaligned_read(void *addr, void *value, unsigned long n, bool sign)
+> > + *
+> > + * a0: addr
+> > + * a1: value
+> > + * a2: n
+> > + * a3: sign
+> > + */
+> > +SYM_FUNC_START(unaligned_read)
+> > +     beqz    a2, 5f
+> > +
+> > +     li.w    t1, 8
+> > +     li.w    t2, 0
+> > +
+> > +     addi.d  t0, a2, -1
+> > +     mul.d   t1, t0, t1
+>
+> Remove the `t1 = 8` above, then `slli.d t1, t0, 3` here would be enough
+> and one cycle is saved.
+OK, thanks.
 
-v1->v2:
-Address Krzysztof's comments:
-* Add a select to explicitly select the MSI bus dt-binding.
-* List 'simple-pm-bus' explicitly as one item of compatible strings.
-* Require compatible and reg properties.
-* Put reg property just after compatible property in example.
-
- .../bus/fsl,imx8qxp-pixel-link-msi-bus.yaml   | 232 ++++++++++++++++++
- 1 file changed, 232 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
-
-diff --git a/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
-new file mode 100644
-index 000000000000..b568d0ce438d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
-@@ -0,0 +1,232 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale i.MX8qxp Pixel Link Medium Speed Interconnect (MSI) Bus
-+
-+maintainers:
-+  - Liu Ying <victor.liu@nxp.com>
-+
-+description: |
-+  i.MX8qxp pixel link MSI bus is used to control settings of PHYs, I/Os
-+  sitting together with the PHYs.  It is not the same as the MSI bus coming
-+  from i.MX8 System Controller Unit (SCU) which is used to control power,
-+  clock and reset through the i.MX8 Distributed Slave System Controller (DSC).
-+
-+  i.MX8qxp pixel link MSI bus is a simple memory-mapped bus. Two input clocks,
-+  that is, MSI clock and AHB clock, need to be enabled so that peripherals
-+  connected to the bus can be accessed. Also, the bus is part of a power
-+  domain. The power domain needs to be enabled before the peripherals can
-+  be accessed.
-+
-+  Peripherals in i.MX8qm/qxp imaging, LVDS, MIPI DSI and HDMI TX subsystems,
-+  like I2C controller, PWM controller, MIPI DSI controller and Control and
-+  Status Registers (CSR) module, are accessed through the bus.
-+
-+  The i.MX System Controller Firmware (SCFW) owns and uses the i.MX8qm/qxp
-+  pixel link MSI bus controller and does not allow SCFW user to control it.
-+  So, the controller's registers cannot be accessed by SCFW user. Hence,
-+  the interrupts generated by the controller don't make any sense from SCFW
-+  user's point of view.
-+
-+allOf:
-+  - $ref: simple-pm-bus.yaml#
-+
-+# We need a select here so we don't match all nodes with 'simple-pm-bus'.
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - fsl,imx8qxp-display-pixel-link-msi-bus
-+          - fsl,imx8qm-display-pixel-link-msi-bus
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - fsl,imx8qxp-display-pixel-link-msi-bus
-+          - fsl,imx8qm-display-pixel-link-msi-bus
-+      - const: simple-pm-bus
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: master gated clock from system
-+      - description: AHB clock
-+
-+  clock-names:
-+    items:
-+      - const: msi
-+      - const: ahb
-+
-+patternProperties:
-+  "^.*@[0-9a-f]+$":
-+    description: Devices attached to the bus
-+    type: object
-+    properties:
-+      reg:
-+        maxItems: 1
-+
-+    required:
-+      - reg
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - power-domains
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx8-lpcg.h>
-+    #include <dt-bindings/firmware/imx/rsrc.h>
-+    bus@56200000 {
-+        compatible = "fsl,imx8qxp-display-pixel-link-msi-bus", "simple-pm-bus";
-+        reg = <0x56200000 0x20000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        interrupt-parent = <&dc0_irqsteer>;
-+        interrupts = <320>;
-+        ranges;
-+        clocks = <&dc0_disp_ctrl_link_mst0_lpcg IMX_LPCG_CLK_4>,
-+                 <&dc0_disp_ctrl_link_mst0_lpcg IMX_LPCG_CLK_4>;
-+        clock-names = "msi", "ahb";
-+        power-domains = <&pd IMX_SC_R_DC_0>;
-+
-+        syscon@56221000 {
-+            compatible = "fsl,imx8qxp-mipi-lvds-csr", "syscon", "simple-mfd";
-+            reg = <0x56221000 0x1000>;
-+            clocks = <&mipi_lvds_0_di_mipi_lvds_regs_lpcg IMX_LPCG_CLK_4>;
-+            clock-names = "ipg";
-+
-+            pxl2dpi {
-+                compatible = "fsl,imx8qxp-pxl2dpi";
-+                fsl,sc-resource = <IMX_SC_R_MIPI_0>;
-+                power-domains = <&pd IMX_SC_R_MIPI_0>;
-+
-+                ports {
-+                    #address-cells = <1>;
-+                    #size-cells = <0>;
-+
-+                    port@0 {
-+                        #address-cells = <1>;
-+                        #size-cells = <0>;
-+                        reg = <0>;
-+
-+                        mipi_lvds_0_pxl2dpi_dc0_pixel_link0: endpoint@0 {
-+                            reg = <0>;
-+                            remote-endpoint = <&dc0_pixel_link0_mipi_lvds_0_pxl2dpi>;
-+                        };
-+
-+                        mipi_lvds_0_pxl2dpi_dc0_pixel_link1: endpoint@1 {
-+                            reg = <1>;
-+                            remote-endpoint = <&dc0_pixel_link1_mipi_lvds_0_pxl2dpi>;
-+                        };
-+                    };
-+
-+                    port@1 {
-+                        #address-cells = <1>;
-+                        #size-cells = <0>;
-+                        reg = <1>;
-+
-+                        mipi_lvds_0_pxl2dpi_mipi_lvds_0_ldb_ch0: endpoint@0 {
-+                            reg = <0>;
-+                            remote-endpoint = <&mipi_lvds_0_ldb_ch0_mipi_lvds_0_pxl2dpi>;
-+                        };
-+
-+                        mipi_lvds_0_pxl2dpi_mipi_lvds_0_ldb_ch1: endpoint@1 {
-+                            reg = <1>;
-+                            remote-endpoint = <&mipi_lvds_0_ldb_ch1_mipi_lvds_0_pxl2dpi>;
-+                        };
-+                    };
-+                };
-+            };
-+
-+            ldb {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                compatible = "fsl,imx8qxp-ldb";
-+                clocks = <&clk IMX_SC_R_LVDS_0 IMX_SC_PM_CLK_MISC2>,
-+                         <&clk IMX_SC_R_LVDS_0 IMX_SC_PM_CLK_BYPASS>;
-+                clock-names = "pixel", "bypass";
-+                power-domains = <&pd IMX_SC_R_LVDS_0>;
-+
-+                channel@0 {
-+                    #address-cells = <1>;
-+                    #size-cells = <0>;
-+                    reg = <0>;
-+                    phys = <&mipi_lvds_0_phy>;
-+                    phy-names = "lvds_phy";
-+
-+                    port@0 {
-+                        reg = <0>;
-+
-+                        mipi_lvds_0_ldb_ch0_mipi_lvds_0_pxl2dpi: endpoint {
-+                            remote-endpoint = <&mipi_lvds_0_pxl2dpi_mipi_lvds_0_ldb_ch0>;
-+                        };
-+                    };
-+
-+                    port@1 {
-+                        reg = <1>;
-+
-+                        /* ... */
-+                    };
-+                };
-+
-+                channel@1 {
-+                    #address-cells = <1>;
-+                    #size-cells = <0>;
-+                    reg = <1>;
-+                    phys = <&mipi_lvds_0_phy>;
-+                    phy-names = "lvds_phy";
-+
-+                    port@0 {
-+                        reg = <0>;
-+
-+                        mipi_lvds_0_ldb_ch1_mipi_lvds_0_pxl2dpi: endpoint {
-+                            remote-endpoint = <&mipi_lvds_0_pxl2dpi_mipi_lvds_0_ldb_ch1>;
-+                        };
-+                    };
-+
-+                    port@1 {
-+                        reg = <1>;
-+
-+                        /* ... */
-+                    };
-+                };
-+            };
-+        };
-+
-+        clock-controller@56223004 {
-+            compatible = "fsl,imx8qxp-lpcg";
-+            reg = <0x56223004 0x4>;
-+            #clock-cells = <1>;
-+            clocks = <&mipi_lvds_0_ipg_clk>;
-+            clock-indices = <IMX_LPCG_CLK_4>;
-+            clock-output-names = "mipi_lvds_0_di_mipi_lvds_regs_lpcg_ipg_clk";
-+            power-domains = <&pd IMX_SC_R_MIPI_0>;
-+        };
-+
-+        phy@56228300 {
-+            compatible = "fsl,imx8qxp-mipi-dphy";
-+            reg = <0x56228300 0x100>;
-+            clocks = <&clk IMX_SC_R_LVDS_0 IMX_SC_PM_CLK_PHY>;
-+            clock-names = "phy_ref";
-+            #phy-cells = <0>;
-+            fsl,syscon = <&mipi_lvds_0_csr>;
-+            power-domains = <&pd IMX_SC_R_MIPI_0>;
-+        };
-+    };
--- 
-2.37.1
-
+Huacai
+>
+> > +     add.d   a0, a0, t0
+> > +
+> > +     beq     a3, zero, 2f
+>
+> beqz
+>
+> > +1:   ld.b    t3, a0, 0
+> > +     b       3f
+> > +
+> > +2:   ld.bu   t3, a0, 0
+> > +3:   sll.d   t3, t3, t1
+> > +     or      t2, t2, t3
+> > +     addi.d  t1, t1, -8 > +  addi.d  a0, a0, -1
+> > +     addi.d  a2, a2, -1
+> > +     bgt     a2, zero, 2b
+>
+> bgtz
+>
+> > +4:   st.d    t2, a1, 0
+> > +
+> > +     move    a0, a2
+> > +     jr      ra
+> > +
+> > +5:   li.w    a0, -EFAULT
+> > +     jr      ra
+> > +
+> > +     fixup_ex 1, 6, 1
+> > +     fixup_ex 2, 6, 0
+> > +     fixup_ex 4, 6, 0
+> > +SYM_FUNC_END(unaligned_read)
+> > +
+> > +/*
+> > + * unsigned long unaligned_write(void *addr, unsigned long value, unsigned long n)
+> > + *
+> > + * a0: addr
+> > + * a1: value
+> > + * a2: n
+> > + */
+> > +SYM_FUNC_START(unaligned_write)
+> > +     beqz    a2, 3f
+> > +
+> > +     li.w    t0, 0
+> > +1:   srl.d   t1, a1, t0
+> > +2:   st.b    t1, a0, 0
+> > +     addi.d  t0, t0, 8
+> > +     addi.d  a2, a2, -1
+> > +     addi.d  a0, a0, 1
+> > +     bgt     a2, zero, 1b
+>
+> bgtz
+>
+> > +
+> > +     move    a0, a2
+> > +     jr      ra
+> > +
+> > +3:   li.w    a0, -EFAULT
+> > +     jr      ra
+> > +
+> > +     fixup_ex 2, 4, 1
+> > +SYM_FUNC_END(unaligned_write)
+>
+> --
+> WANG "xen0n" Xuerui
+>
+> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+>
+>
