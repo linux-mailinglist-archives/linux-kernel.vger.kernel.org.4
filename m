@@ -2,142 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F50600F50
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 14:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E32600F52
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 14:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiJQMjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 08:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S229874AbiJQMlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 08:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJQMjJ (ORCPT
+        with ESMTP id S229562AbiJQMk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 08:39:09 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5511B793;
-        Mon, 17 Oct 2022 05:39:08 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A1D2341EA7;
-        Mon, 17 Oct 2022 12:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1666010345; bh=BKhVOrgoZ2ys1+3AyuhmxIKrpqUiYWfceV4pZCQN++M=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=JlFkb41oCJANAqSSHTz1e1vrPoItfndKMP/qkmVLuCZqKZiKER4AIw0fQC1ap+GW6
-         0zqVPKFHkIYejoUWpMpSQDTmNgpb7QiajLevccF0GtUSTcrcVg4a2e69PPG9dJ/3B9
-         dKAR1MdBjnU+s30Q3DZQFFwt+/JCLPxuD/u3YY6apr9yArBmUhQKfxlQbHgVkipt97
-         337BUFaCUybrpewaNIsBRUOQlqGteXD9AHreQloS9TVrClaYMSzX21kETSQj6x8pQo
-         iduuX7jAqwNcvldsEtfpGDZbklsVk7xiFajQdZ7yrrJjrz0Og5e2xQCjBF51+MTaPw
-         31PDU+GMdh7HA==
-Message-ID: <3eb9cc12-db75-8042-4106-fa6521c684a7@marcan.st>
-Date:   Mon, 17 Oct 2022 21:38:59 +0900
+        Mon, 17 Oct 2022 08:40:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1234C2D1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:40:56 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29HArf3W027013;
+        Mon, 17 Oct 2022 12:40:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=4m7dzX8yPlsHt8XOOX5vaqqomTo4uUCKgHjCA3Qa9lE=;
+ b=sS8/A6kpwOf6ai86W+G5jgOA9ZXU26yHZJt0hnCkd1gtfFRvNT8fH2Zz4mE3lj6YvXFE
+ C1CyD4S1B6EFdctjyydEYS9FuROXOanaYNJ8UcoE1Ki0+DEwZIRCl9+uu0gA5fAFvLYa
+ CCbZcosiB+GMcXh6NinebWEiglctlgEO0t17jz5OfmGexz4VkpRRAnj92S2C5oKmJrk7
+ 0QAxNkghBzgPOYQ5JxatUJCapb09e3Vvd7AYIxuWjxpPU0dWJn0YdKrJ8rbQEMMi5f/m
+ wR5cfTdMie5Wi8YyX836/IURg3LVCCG8p09kIKr6b+lNYhhQb3EGNsJd4T4OyHfNt340 XQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86sjs3f3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 12:40:36 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29HBpljs012796;
+        Mon, 17 Oct 2022 12:40:35 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86sjs3e0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 12:40:35 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29HCZ23M024623;
+        Mon, 17 Oct 2022 12:40:32 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3k7mg930bv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 12:40:32 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29HCeUI54915792
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Oct 2022 12:40:30 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D66C11C050;
+        Mon, 17 Oct 2022 12:40:30 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2F4711C04C;
+        Mon, 17 Oct 2022 12:40:29 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.81.76])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 17 Oct 2022 12:40:29 +0000 (GMT)
+Date:   Mon, 17 Oct 2022 14:40:28 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Connor O'Brien" <connoro@google.com>,
+        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
+        John Kacur <jkacur@redhat.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Chris Redpath <chris.redpath@arm.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>
+Subject: Re: [PATCH RFC v4 2/3] sched: Avoid placing RT threads on cores
+ handling long softirqs
+Message-ID: <Y01NPB4sa8Z98ntK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20221003232033.3404802-1-jstultz@google.com>
+ <20221003232033.3404802-3-jstultz@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Ian Lin <ian.lin@infineon.com>, alep@cypress.com
-Cc:     brcm80211-dev-list@broadcom.com, brcm80211-dev-list@cypress.com,
-        franky.lin@broadcom.com, hante.meuleman@broadcom.com,
-        kvalo@kernel.org, Double.Lo@infineon.com,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Asahi Linux <asahi@lists.linux.dev>
-References: <20220922104140.11889-1-ian.lin@infineon.com>
- <20220922104140.11889-3-ian.lin@infineon.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2 2/4] brcmfmac: Support 89459 pcie
-In-Reply-To: <20220922104140.11889-3-ian.lin@infineon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003232033.3404802-3-jstultz@google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ip4SiZGkVfD96mbB_iThYA6lAHPmLWsH
+X-Proofpoint-GUID: qYTDIWWWQQx3TwkzzBMZJVRmKMUQ7XOf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-17_09,2022-10-17_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210170072
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Oct 03, 2022 at 11:20:32PM +0000, John Stultz wrote:
+> From: Connor O'Brien <connoro@google.com>
 
-On 22/09/2022 19.41, Ian Lin wrote:
-> From: Alexander Prutskov <alep@cypress.com>
-> 
-> Adds support of 89459 chip pcie device and save restore support.
-> 
-> Signed-off-by: Alexander Prutskov <alep@cypress.com>
-> Signed-off-by: Joseph chuang <jiac@cypress.com>
-> Signed-off-by: Chi-Hsien Lin <chi-hsien.lin@cypress.com>
-> Signed-off-by: Ian Lin <ian.lin@infineon.com>
+Hi John, Connor,
+
+I took a cursory look and have couple of hopefully meaningful
+comments, but mostly - questions.
+
 [...]
 
-Can you explain how the CYW89459 is related to the BCM4355 family? I
-have a patch [1] to add support for the BCM4355 variant present in some
-Apple laptops which I was hoping to submit again for 6.2, and this patch
-conflicts with it.
-
-[1] https://lore.kernel.org/lkml/20220104072658.69756-19-marcan@marcan.st/
-
->  BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
->  BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
->  BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
-> +BRCMF_FW_DEF(4355, "brcmfmac89459-pcie");
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index 55f39c8f4203..3c628db807c8 100644
+> --- a/kernel/sched/rt.c
+> +++ b/kernel/sched/rt.c
+> @@ -1599,6 +1599,44 @@ static void yield_task_rt(struct rq *rq)
+>  #ifdef CONFIG_SMP
+>  static int find_lowest_rq(struct task_struct *task);
 >  
->  /* firmware config files */
->  MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
-> @@ -90,6 +91,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->  	BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
->  	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
->  	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* revision ID 3 */
-> +	BRCMF_FW_ENTRY(CY_CC_89459_CHIP_ID, 0xFFFFFFFF, 4355),
->  };
+> +#ifdef CONFIG_RT_SOFTIRQ_OPTIMIZATION
+> +#define __use_softirq_opt 1
+> +/*
+> + * Return whether the given cpu is currently non-preemptible
+> + * while handling a potentially long softirq, or if the current
+> + * task is likely to block preemptions soon because it is a
+> + * ksoftirq thread that is handling slow softirq.
 
-Is the CYW89459 just a rebrand of the BCM4355, or just a subset? If it
-is a rebrand, it's okay if we call our Apple firmware
-brcmfmac89459-pcie* (note that we use per-board firmware names, so it
-wouldn't conflict with a generic one). However, if CYW89459 only refers
-to specific variants, I think the firmware should be named after the
-overall bcm4355 family.
+What is slow softirqs in this context compared to long?
 
-I'm guessing you intend to ship firmware for this. Would that firmware
-work for all 4355 variants, or only the CYW one? If only the CYW one, is
-it possible to differentiate between them based on PCI revision ID? Note
-that our 4355 has revision ID 12, and Apple specifically calls it 4355C1
-(different chip revisions have different firmware builds, which is why I
-named our firmware brcmfmac4355c1-pcie). If the CYW variant uses other
-revision IDs that do not overlap, maybe we should have different
-firmware entries for them with different masks.
+> + */
+> +static bool cpu_busy_with_softirqs(int cpu)
+> +{
+> +	u32 softirqs = per_cpu(active_softirqs, cpu) |
+> +		       __cpu_softirq_pending(cpu);
+> +	struct task_struct *cpu_ksoftirqd = per_cpu(ksoftirqd, cpu);
+> +	struct task_struct *curr;
+> +	struct rq *rq = cpu_rq(cpu);
+> +	int ret;
+> +
+> +	rcu_read_lock();
+> +	curr = READ_ONCE(rq->curr); /* unlocked access */
 
+select_task_rq_rt() takes the lock and reads curr already,
+before calling this funciton. I think there is a way to
+decompose it in a better way.
+
+> +	ret = (softirqs & LONG_SOFTIRQ_MASK) &&
+> +		 (curr == cpu_ksoftirqd ||
+
+EOL is extra.
+
+> +		  preempt_count() & SOFTIRQ_MASK);
+
+Could you please clarify this whole check in more detail?
+
+What is the point in checking if a remote CPU is handling
+a "long" softirq while the local one is handling any softirq?
+
+> +	rcu_read_unlock();
+
+Why ret needs to be calculated under the lock?
+
+> +	return ret;
+> +}
+> +#else
+> +#define __use_softirq_opt 0
+> +static bool cpu_busy_with_softirqs(int cpu)
+> +{
+> +	return false;
+> +}
+> +#endif /* CONFIG_RT_SOFTIRQ_OPTIMIZATION */
+> +
+> +static bool rt_task_fits_cpu(struct task_struct *p, int cpu)
+
+To me, the new name is unfortunate, since it strips a notion
+of the reason. Instead, "CPU un/fits, because of capacity" it
+reads as "CPU un/fits, because of ..." what?
+
+> +{
+> +	return !cpu_busy_with_softirqs(cpu) && rt_task_fits_capacity(p, cpu);
+
+I guess the order needs to be swapped, as rt_task_fits_capacity()
+is rather "quick" while cpu_busy_with_softirqs() is rather "slow".
+
+> +}
+> +
+>  static int
+>  select_task_rq_rt(struct task_struct *p, int cpu, int flags)
+>  {
+> @@ -1894,14 +1934,17 @@ static int find_lowest_rq(struct task_struct *task)
+>  		return -1; /* No other targets possible */
 >  
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> index 1003f123ec25..f4939cf62767 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> @@ -56,6 +56,7 @@
->  #define CY_CC_43012_CHIP_ID		43012
->  #define CY_CC_43439_CHIP_ID		43439
->  #define CY_CC_43752_CHIP_ID		43752
-> +#define CY_CC_89459_CHIP_ID		0x4355
+>  	/*
+> -	 * If we're on asym system ensure we consider the different capacities
+> -	 * of the CPUs when searching for the lowest_mask.
+> +	 * If we're using the softirq optimization or if we are
+> +	 * on asym system, ensure we consider the softirq processing
+> +	 * or different capacities of the CPUs when searching for the
+> +	 * lowest_mask.
+>  	 */
+> -	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+> +	if (__use_softirq_opt ||
 
-This seems suspicious. If the chip ID is 4355 and applies to non-Cypress
-products, unlike the other constants in this list, this constant should
-probably be named after BCM4355, not the Cypress part number.
+Why use __use_softirq_opt and not IS_ENABLED(CONFIG_RT_SOFTIRQ_OPTIMIZATION)?
 
+> +	    static_branch_unlikely(&sched_asym_cpucapacity)) {
 >  
->  /* USB Device IDs */
->  #define BRCM_USB_43143_DEVICE_ID	0xbd1e
-> @@ -90,7 +91,8 @@
->  #define BRCM_PCIE_4366_5G_DEVICE_ID	0x43c5
->  #define BRCM_PCIE_4371_DEVICE_ID	0x440d
->  #define BRCM_PCIE_4378_DEVICE_ID	0x4425
-> -
-> +#define CY_PCIE_89459_DEVICE_ID         0x4415
-> +#define CY_PCIE_89459_RAW_DEVICE_ID     0x4355
+>  		ret = cpupri_find_fitness(&task_rq(task)->rd->cpupri,
+>  					  task, lowest_mask,
+> -					  rt_task_fits_capacity);
+> +					  rt_task_fits_cpu);
+>  	} else {
+>  
+>  		ret = cpupri_find(&task_rq(task)->rd->cpupri,
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index c8a6913c067d..35ee79dd8786 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -60,6 +60,13 @@ static struct softirq_action softirq_vec[NR_SOFTIRQS] __cacheline_aligned_in_smp
+>  
+>  DEFINE_PER_CPU(struct task_struct *, ksoftirqd);
+>  
+> +/*
+> + * active_softirqs -- per cpu, a mask of softirqs that are being handled,
+> + * with the expectation that approximate answers are acceptable and therefore
+> + * no synchronization.
+> + */
+> +DEFINE_PER_CPU(u32, active_softirqs);
 
-Note that the PCI device ID for our 4355 is 0x43dc. Other sources call
-this "BCM4355 D11AC", which is distinct from 0x4355 ("BCM43237 D11N")
-and 0x4415 ("BCM43596 D11AC").
+I guess all active_softirqs uses need to be coupled with
+IS_ENABLED(CONFIG_RT_SOFTIRQ_OPTIMIZATION) check.
 
-- Hector
+>  const char * const softirq_to_name[NR_SOFTIRQS] = {
+>  	"HI", "TIMER", "NET_TX", "NET_RX", "BLOCK", "IRQ_POLL",
+>  	"TASKLET", "SCHED", "HRTIMER", "RCU"
+> @@ -551,6 +558,7 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
+>  restart:
+>  	/* Reset the pending bitmask before enabling irqs */
+>  	set_softirq_pending(0);
+> +	__this_cpu_write(active_softirqs, pending);
+>  
+>  	local_irq_enable();
+>  
+> @@ -580,6 +588,7 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
+>  		pending >>= softirq_bit;
+>  	}
+>  
+> +	__this_cpu_write(active_softirqs, 0);
+>  	if (!IS_ENABLED(CONFIG_PREEMPT_RT) &&
+>  	    __this_cpu_read(ksoftirqd) == current)
+>  		rcu_softirq_qs();
+
+Thanks!
