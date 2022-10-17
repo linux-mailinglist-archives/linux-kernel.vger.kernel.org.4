@@ -2,125 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF9660047B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 02:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1B6600482
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 02:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiJQARK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 20:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S229905AbiJQAUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 20:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJQARI (ORCPT
+        with ESMTP id S229972AbiJQAUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 20:17:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15B12A252
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 17:17:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56E7EB80D5C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0CCC4347C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665965825;
-        bh=RmH0Em+mUEQfgXRh5FfsxTgViYVAlp+3YdZ6yupU9AY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hY3Ay9re6wdH1Vw2gLbE0W4v1pf1uPrkPKH8HCPj6S0td4xlVrxGDhrYl0ZCxP20d
-         ESdaITopMB68ljfsqMtJs3BmOzpQ6BKbG9hZE4cNZY7ZVtrokQUuTh/HGYUY8hPTvY
-         JuqCvTlLVCihZeZdUqwXrs0410UbhOM5ZGKHiuy0knh6VwkKT7fyig/KJ3+dJmPkdu
-         Z/bxYn6V4MCMPRjVWMKmeVp0yaaVHlpR6QzrOZ7ByaqZH+pcneV5OZUhp7iowxIM+l
-         K+9vn8S6uEddDK6a+sO/U4kNE2aqeF5CZME/6uuP3rfwatuuRdmgwJd5+9LyxPlM2F
-         UCYNcL+HLnx6Q==
-Received: by mail-ed1-f52.google.com with SMTP id a67so13801139edf.12
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 17:17:04 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1cswvR7yDlXfxqul3+2DHTScr+M1G/nBxojhL7gLVKfcM/XMSF
-        SODOocpxC0EpQPfACEJMeeC4qRazUq+EiE+uamY=
-X-Google-Smtp-Source: AMsMyM690iXp/F0qjSxqImW5oshNJm8xdDlg8EMypwugxmntB95iNOzT0EMVK3o4wDffhWCUjYB7br0thiPEizrBa2w=
-X-Received: by 2002:aa7:d4d9:0:b0:45c:7eae:d8d8 with SMTP id
- t25-20020aa7d4d9000000b0045c7eaed8d8mr7975846edr.254.1665965823238; Sun, 16
- Oct 2022 17:17:03 -0700 (PDT)
+        Sun, 16 Oct 2022 20:20:36 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EDA13D1D;
+        Sun, 16 Oct 2022 17:20:35 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id p24-20020a9d6958000000b00661c528849eso4952264oto.9;
+        Sun, 16 Oct 2022 17:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kvM+3fJBdQWLpyLziSUQTeFnCrd9UUj5XCixO7Xv7s=;
+        b=LahTpg9McgDs5JgGUv6uM1FVm+iHYG2rMm+XoOo/EjDguWm4Y2DbRLdtrV4e0/+LQv
+         DaqD+3fk9msZ95byEkERKCbxwSRYiD/+phrr+et/scXyXdD2KUnSBKSAd/nHzw0yg3VM
+         niYib1vsAh+iSH/5eHHEszQmHuusUuhIL6OnOotY0pq+DIvJLTpJp4eSnNfUGNbrOMWj
+         YeuyK6Yk63fXboAvwgSDpwWgb10FZrspMAtiD3IuVdl9EdUXR5NNymoj0CjPi+TFygD4
+         KQTZo4PNE27ZbTFPIQFELcvBRQuoFIP5vsaMEGxROvJ/pKnvx08uSeJLGXZaHcek/9Mk
+         wouQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9kvM+3fJBdQWLpyLziSUQTeFnCrd9UUj5XCixO7Xv7s=;
+        b=12t+zI4SCZPSHjUZaA9bifjxmyF1ePfbRk++f+LgZyJ14ImNaThQNwqGeHzqjuf8z7
+         Jabud5lMEo6+yzt+Di1bXKvBx88xrLsPe83yImGikGan4+zHS1UHPAFA7LfxdCoA8kW5
+         ntQ8i364vxya6b9LAps55OEY/ezGttn6nQX9Z9oGBwaQFnXnkDhR0XiGVYcOD8qTE7yr
+         +7V9CUzyy5fnocPCUzYKZ5TEb9GTE+xWjCZ8cp7X5ETm1XPqyDurHf8wQNkgRZW7KheO
+         mxTzMBJ60A2NQzx3vhQBJ7zLtQPZ06lMRJVRMqvuoJtejy/HKbpdNIKvACEbx5IdxbQ8
+         qnJQ==
+X-Gm-Message-State: ACrzQf27uwYO61D8ZLelShcWlkmz4VGjm1siIXNhcPE71ZeOC5LBeNqC
+        TFNo1jeVbKG3HXBvO5fj6K8=
+X-Google-Smtp-Source: AMsMyM49bfbewVsg57/0mjRK5pHKRVhj1LRLI5kkSirPLIlfxbFFs+MweNQxxmib3f1EfxuF2GX1Sg==
+X-Received: by 2002:a05:6830:1343:b0:661:9598:6786 with SMTP id r3-20020a056830134300b0066195986786mr3804864otq.354.1665966034556;
+        Sun, 16 Oct 2022 17:20:34 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m67-20020aca3f46000000b00350743ac8eesm3761627oia.41.2022.10.16.17.20.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 17:20:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <686b46bc-5986-abe5-8717-4c57d58d6581@roeck-us.net>
+Date:   Sun, 16 Oct 2022 17:20:31 -0700
 MIME-Version: 1.0
-References: <20221016133418.2122777-1-chenhuacai@loongson.cn> <c1b674a37a1a04f9c84df1e9a227db68bf78e922.camel@xry111.site>
-In-Reply-To: <c1b674a37a1a04f9c84df1e9a227db68bf78e922.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 17 Oct 2022 08:16:53 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4vGt4MTXCyiSnn7cQFrxR-amLC4nKe7-EcLyT8G-Ciqg@mail.gmail.com>
-Message-ID: <CAAhV-H4vGt4MTXCyiSnn7cQFrxR-amLC4nKe7-EcLyT8G-Ciqg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add unaligned access support
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] ARM: dts: armada-xp: add interrupts for watchdog
+Content-Language: en-US
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+References: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
+ <20220211003257.2037332-2-chris.packham@alliedtelesis.co.nz>
+ <87o839jw4p.fsf@BL-laptop>
+ <0308a842-efcb-d4a0-f17c-2b0bf12c9dfb@alliedtelesis.co.nz>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <0308a842-efcb-d4a0-f17c-2b0bf12c9dfb@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao,
+On 10/16/22 15:39, Chris Packham wrote:
+> Hi Gregory,
+> 
+> On 15/02/22 04:39, Gregory CLEMENT wrote:
+>> Hello Chris,
+>>
+>>> The first interrupt is for the regular watchdog timeout. Normally the
+>>> RSTOUT line will trigger a reset before this interrupt fires but on
+>>> systems with a non-standard reset it may still trigger.
+>>>
+>>> The second interrupt is for a timer1 which is used as a pre-timeout for
+>>> the watchdog.
+>>>
+>>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>> Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>>
+>> To keep bisectability this patch should be merged after the driver
+>> patch.
+>>
+>> Thanks,
+>>
+>> Gregory
+> 
+> The driver changes were merged a while back. Looks like your intention
+> was for this to go in via the watchdog tree but that never happened.
+> Could you take it through your tree now? Probably won't be until 6.2 now
+> but that's fine.
+> 
 
-On Sun, Oct 16, 2022 at 11:05 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> On Sun, 2022-10-16 at 21:34 +0800, Huacai Chen wrote:
->
-> > Loongson-2 series (Loongson-2K500, Loongson-2K1000)
->
-> "2K1000LA"? "2K1000" is puzzling because of a name conflict with the
-> MIPS-based model.
-Technically this is correct, both MIPS-based and LoongArch-based
-Loongson-2K1000 have no hardware support.
+We don't take any actual devicetree changes. Those need to be pushed through
+architecture/platform trees. Anything else would create never ending conflicts
+(and I strongly suspect that various maintainers would complain).
 
->
-> /* snip */
->
-> > +static inline unsigned long read_fpr(unsigned int fd)
-> > +{
-> > +#define READ_FPR(fd, __value)          \
-> > +{                                      \
->
-> Unnecessary curly brace pair.
-OK,thanks.
+Guenter
 
->
-> > +       __asm__ __volatile__(           \
-> > +       "movfr2gr.d\t%0, $f%1\n\t"      \
-> > +       : "=r"(__value) : "i"(fd));     \
-> > +}
->
-> I'm not sure if this is a correct use of "i" constraint.  Maybe we
-> should just concatenate the string?
-OK, thanks.
-
-Huacai
->
-> "movfr2gr.d\t%0, $f" #fd "\n\t"
->
-> > +
-> > +       unsigned long __value;
-> > +
-> > +       switch (fd) {
->
-> I don't like this "very long" switch statement, but it seems we have no
-> way to make it better...
->
-> > +       case 0:
-> > +               READ_FPR(0, __value);
-> > +               break;
-> > +       case 1:
-> > +               READ_FPR(1, __value);
-> > +               break;
-> > +       case 2:
-> > +               READ_FPR(2, __value);
-> > +               break;
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
