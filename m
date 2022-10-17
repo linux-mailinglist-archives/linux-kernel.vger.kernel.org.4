@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF48C601563
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C4F601569
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiJQRai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S231150AbiJQRbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiJQRaV (ORCPT
+        with ESMTP id S231139AbiJQRay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:30:21 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D863973332;
-        Mon, 17 Oct 2022 10:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666027817; x=1697563817;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=YZZqcz+hTM5irvObor60il2HCgMD8ArpMwlnBmFroRU=;
-  b=D9RBU1xpDlzpeAXNHGwTLJ98VliD23dni+dXtutnv1CNqEoUuvjQ5KX0
-   MR8v+LZ4IehnVAtEnzN64zqnkK0ni61onOEQPsc18cyC3sWqCytAal3Ez
-   yNhLNOoeCtIUcGABnsQDfOvd5tXar+Wf9ImLR7cVTC+FQwOivs0JhEvKh
-   56d8XzqQjCQnZlQw7OXHAWfppEEnJdlMBiVqqD15/212/YAc99UFgGpUV
-   0zI7QGhY7r5sDOk3GfrdcVCJgKMq21NoFX3JvSrcnwtED3Ejl0EPzw6sd
-   lxNFItHP1CqTmReqGH2daxMRFk7yRVcSZ6ZtMhShnhvono5qLzyAYl+jb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="307524295"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="307524295"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:27:15 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="717574487"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="717574487"
-Received: from ohoehne-mobl4.ger.corp.intel.com ([10.251.213.173])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:27:13 -0700
-Date:   Mon, 17 Oct 2022 20:27:10 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v1 1/1] serial: 8250_core: Use str_enabled_disabled()
- helper
-In-Reply-To: <20221017171633.65275-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <2755edbb-7fe2-fbad-f67b-1a2679ef4b3@linux.intel.com>
-References: <20221017171633.65275-1-andriy.shevchenko@linux.intel.com>
+        Mon, 17 Oct 2022 13:30:54 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF466553;
+        Mon, 17 Oct 2022 10:30:40 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id q11so6172701ilj.10;
+        Mon, 17 Oct 2022 10:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/8q4ui2I0PbkckThln1KL8S7Gv3bNjUbhV3T4UKkFUc=;
+        b=LWQhQijW/K3QGTtSbzZcPYA000ASjJ1kn+xVcuG8p9zwsP53ifcj9jWnJ+S/JIIb5n
+         MscYqdmx/56bCG9Lya7D9ZHNdRKg97dKEkxXYCS6ljMupabbP8nr3e7vyLTCfZFG5I01
+         77YlPFIyARGCSnU6HrpwYpT3eh1WD9plur8N01+VK5fYIO7k3N9rhRpNq3tvXdgZDKm4
+         H+svTlfD/f4ONxoRNOWK5anXeGD8u/uJWL7s6I8+AU61DPqH0Ela/mlkU9jfr5xbcfk9
+         iulIzAhImVHe+Hu+xbti8GNqlpiAqEMYM5bpAae/wwVbucnmOoZqFN4dxUQFvXbUwF+d
+         QnQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/8q4ui2I0PbkckThln1KL8S7Gv3bNjUbhV3T4UKkFUc=;
+        b=PTmRQmwztklPSngdsmTnDzf6dMN53vLsS/tIL16+qlqA4yW7u3d1LZjDnsx74HCiJX
+         MzzIM8En80+3YdYUzrJMsUZ7V+CBlhaNbPREhqYyT0cGmXUPHCdrqYy+8/py09Vn7BPD
+         d6YK8ORBKdrqUMAS6WT6EQ6KczKM1hlSkGtMWHSpH8vK625nsU37PdAPBo/z++AyVa7a
+         gwmoyJJBNj2ydkKE4hfHXyy8fFVg8BddDJp4/df5turkOjBw9NubR1DOHtFJGbFKecnt
+         4GakYA9xDU2vSgQy/GaX91Hz++CCM/YljyykPVXwsgCZQTW4B+wHGk5RyhF/6GBT8IZ0
+         dA1w==
+X-Gm-Message-State: ACrzQf04iiEDEGLPPLPNnJpFpKSQ++AbSXSZ8h0I5DAWZ290csVrBrAD
+        d12uw/jxGBeGTntik7zrIH6QYdg083aGTqqZHtY=
+X-Google-Smtp-Source: AMsMyM4CrTJ6ZDzgjAcivdZiwngBUcCRna8HIl3nfrbF+OemFiWRHT+jPO25/qV6JOQykn/PXkrq60j+ldVtvrx/LGg=
+X-Received: by 2002:a05:6e02:13ca:b0:2fa:3064:2a81 with SMTP id
+ v10-20020a056e0213ca00b002fa30642a81mr5123803ilj.19.1666027778867; Mon, 17
+ Oct 2022 10:29:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2129481153-1666027634=:5493"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221016151256.3021729-1-lis8215@gmail.com> <20221016151256.3021729-3-lis8215@gmail.com>
+ <895WJR.03DS0G5N9R0V1@crapouillou.net>
+In-Reply-To: <895WJR.03DS0G5N9R0V1@crapouillou.net>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Mon, 17 Oct 2022 20:29:27 +0300
+Message-ID: <CAKNVLfY87P6jTG8g5L_S84MUXCfL1Z0GLgAdZqD4K6h6ubJb-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dmaengine: JZ4780: Add support for the JZ4755.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+=D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:34, Paul Cercue=
+il <paul@crapouillou.net>:
+> Can you verify that?
+>
+> It should be pretty simple, if it has the bug you'll see I/O errors on
+> the SD card.
 
---8323329-2129481153-1666027634=:5493
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+Well, the result is ambiguous:
 
-On Mon, 17 Oct 2022, Andy Shevchenko wrote:
+Without that 'broken' flag: mmc works poorly, but becomes more or less
+stable when MMC clock downs to 6MHz (90% boots without errors).
+On the 12MHz MMC clock the issue doesn't appear in 50-70% cases.
+On the 24MHz MMC clock the device never boots up.
 
-> Use str_enabled_disabled() helper instead of open coding the same.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/tty/serial/8250/8250_core.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-> index 94fbf0add2ce..80a2fc2fbd4d 100644
-> --- a/drivers/tty/serial/8250/8250_core.c
-> +++ b/drivers/tty/serial/8250/8250_core.c
-> @@ -32,6 +32,7 @@
->  #include <linux/nmi.h>
->  #include <linux/mutex.h>
->  #include <linux/slab.h>
-> +#include <linux/string_helpers.h>
->  #include <linux/uaccess.h>
->  #include <linux/io.h>
->  #ifdef CONFIG_SPARC
-> @@ -1175,8 +1176,8 @@ static int __init serial8250_init(void)
->  
->  	serial8250_isa_init_ports();
->  
-> -	pr_info("Serial: 8250/16550 driver, %d ports, IRQ sharing %sabled\n",
-> -		nr_uarts, share_irqs ? "en" : "dis");
-> +	pr_info("Serial: 8250/16550 driver, %d ports, IRQ sharing %s\n",
-> +		nr_uarts, str_enabled_disabled(share_irqs));
->  
->  #ifdef CONFIG_SPARC
->  	ret = sunserial_register_minors(&serial8250_reg, UART_NR);
-> 
+However with the flag: MMC works stable on 24MHz MMC clock
+(boot issue observed only once), but if I increase MMC clock speed even
+a bit the problem appears oftenly ( >70% of cases).
 
-Looks ok.
+So, that flag definitely helps a lot, but the nature of the problem might b=
+e
+different.
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-
--- 
- i.
-
---8323329-2129481153-1666027634=:5493--
+BR,
+Siarhei
