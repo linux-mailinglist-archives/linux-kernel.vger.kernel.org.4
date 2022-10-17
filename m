@@ -2,136 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CF1601055
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F243D601058
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiJQNfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S229900AbiJQNh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJQNfv (ORCPT
+        with ESMTP id S229832AbiJQNhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:35:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3460B7C1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666013750; x=1697549750;
-  h=from:to:subject:in-reply-to:references:date:message-id:
-   mime-version;
-  bh=v7jjpT/TsnfTena0roBzKZdAI2vqN1rpegjWRfwsKyw=;
-  b=HK9JgUGYVY3nTcxJtLj4GtJLvBVo6K3PtcmlLe6MK/IdkrYIeb70aqo4
-   isWM1iooiRX+fFQwVz+MPfH6pDenR86/llpDo8+gUC6FmgjKwvknSy4BM
-   5HSFCBOyaPo6It7l1iumRIQfWK0xUc6IfxHCqb3fTqplcffGxsdMLRlSL
-   1eb63+SRZP4UgjMBylVD30jB/sgAlHT2Gvsp6IFEymXAGa3f8fnYugd5G
-   E9oSlAfAQLUfH9qo6IKxFwSBEjzWtHjx/U5m0i2QYFpO4+ZqoFVHH8kCL
-   yBSzngbURih3JOgVn6rKg0f469YzC50qwXWkTEUSMtz1Re/IgnYJVZxlb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="303412261"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="303412261"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 06:35:28 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="873466667"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="873466667"
-Received: from mikkelan-mobl.ger.corp.intel.com (HELO localhost) ([10.252.51.11])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 06:35:26 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [Intel-gfx] alderlake crashes (random memory corruption?) with
- 6.0 i915 / ucode related
-In-Reply-To: <fac9a564-edff-db25-20d4-7146ae2a7dc8@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <355dde1c-91e3-13b5-c8e8-75c9b9779b4f@redhat.com>
- <87a65usvgq.fsf@intel.com> <877d0ysv1e.fsf@intel.com>
- <717fb4ab-5225-884f-37f9-2032c265824e@redhat.com>
- <241af90a-4cec-9266-8fb0-3c69f9880b52@leemhuis.info>
- <fac9a564-edff-db25-20d4-7146ae2a7dc8@redhat.com>
-Date:   Mon, 17 Oct 2022 16:35:24 +0300
-Message-ID: <87tu42indv.fsf@intel.com>
+        Mon, 17 Oct 2022 09:37:23 -0400
+Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C6F638F2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:37:21 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 13:37:11 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1666013838; x=1666273038;
+        bh=O8U0/rSJcp6Znld+LgNmARLp2ZlKY3y+428lcdHw/Ck=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=FP9YI0LpS3NtMj7aU54Mch6ZnaBxrpwwrUPWiZeYoMw0G3T3yqCAT/tciY5CEYWi7
+         rYyKgglMC+Jhl0jZMYKR6qHzuoUuah1oeWr7SZ+x39iKu8jJPoV5diyyp+FCOa4pQN
+         TKuVBN2XwYw1mVYNNGfa5hDUCz9MQcLtLOx8yApg=
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     phone-devel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        dri-devel@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Daniel Vetter <daniel@ffwll.ch>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>,
+        linux-kernel@vger.kernel.org, Newbyte <newbie13xd@gmail.com>
+Subject: Re: [Freedreno] [PATCH v3 06/10] drm/msm/dsi: Migrate to drm_dsc_compute_rc_parameters()
+Message-ID: <0642a664-3eed-21b7-a417-c6c607908f51@connolly.tech>
+In-Reply-To: <20221017085944.2r24uqg73irmziqm@SoMainline.org>
+References: <20221009184824.457416-1-marijn.suijten@somainline.org> <20221009185058.460688-1-marijn.suijten@somainline.org> <5c178d7e-5022-f5e5-791d-d3800114b42b@quicinc.com> <20221013093646.c65mbjc6oekd7gha@SoMainline.org> <32af4444-9c88-eb0f-eda7-24fa0418aff6@quicinc.com> <20221017085944.2r24uqg73irmziqm@SoMainline.org>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022, Hans de Goede <hdegoede@redhat.com> wrote:
-> Hi,
->
-> On 10/17/22 13:19, Thorsten Leemhuis wrote:
->> CCing the regression mailing list, as it should be in the loop for all
->> regressions, as explained here:
->> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
->
-> Yes sorry about that I meant to Cc the regressions list, not you personally,
-> but the auto-completion picked the wrong address-book entry
-> (and I did not notice this).
->
->> On 17.10.22 12:48, Hans de Goede wrote:
->>> On 10/17/22 10:39, Jani Nikula wrote:
->>>> On Mon, 17 Oct 2022, Jani Nikula <jani.nikula@linux.intel.com> wrote:
->>>>> On Thu, 13 Oct 2022, Hans de Goede <hdegoede@redhat.com> wrote:
->>>>>> With 6.0 the following WARN triggers:
->>>>>> drivers/gpu/drm/i915/display/intel_bios.c:477:
->>>>>>
->>>>>>         drm_WARN(&i915->drm, min_size == 0,
->>>>>>                  "Block %d min_size is zero\n", section_id);
->>>>>
->>>>> What's the value of section_id that gets printed?
+
+
+On 17/10/2022 09:59, Marijn Suijten wrote:
+> On 2022-10-13 09:02:44, Abhinav Kumar wrote:
+>> On 10/13/2022 2:36 AM, Marijn Suijten wrote:
+>>> On 2022-10-12 16:03:06, Abhinav Kumar wrote:
+>>>> [..]
+>>>> But I would like to hold back this change till Vinod clarifies because
+>>>> Vinod had mentioned that with drm_dsc_compute_rc_parameters() he was
+>>>> seeing a mismatch in the computation of two values.
 >>>>
->>>> I'm guessing this is [1] fixed by commit d3a7051841f0 ("drm/i915/bios:
->>>> Use hardcoded fp_timing size for generating LFP data pointers") in
->>>> v6.1-rc1.
->>>>
->>>> I don't think this is the root cause for your issues, but I wonder if
->>>> you could try v6.1-rc1 or drm-tip and see if we've fixed the other stuff
->>>> already too?
+>>>> slice_bpg_offset and the final_offset.
 >>>
->>> 6.1-rc1 indeed does not trigger the drm_WARN and for now (couple of
->>> reboots, running for 5 minutes now) it seems stable. 6.0.0 usually
->>> crashed during boot (but not always).
+>>> Unsurprisingly so because final_offset, and slice_bpg_offset through
+>>> initial_offset depend directly on bits_per_pixel.  The main takeaway of
+>>> this series is that Vinod was interpreting this field as integer instea=
+d
+>>> of containing 4 fractional bits.  If he updates his the panel driver [1=
+]
+>>> to set bits_per_pixel =3D 8 << 4 instead of just 8 to account for this,
+>>> the values should check out once again.
 >>>
->>> Do you think it would be worthwhile to try 6.0.0 with d3a7051841f0 ?
+>>> [1]: https://git.linaro.org/people/vinod.koul/kernel.git/commit/?h=3Dto=
+pic/pixel3_5.18-rc1&id=3D1d7d98ad564f1ec69e7525e07418918d90f247a1
+>>>
+>>> Once Vinod (or someone else in the posession of a Pixel 3) confirms
+>>> this, I can respin this series and more explicitly explain why the FIXM=
+E
+>>> was put in place, instead of being resolved outright?
+>>>
+>>> - Marijn
+>>
+>> Makes perfect sense to me.
+>>
+>> Will just wait for Vinod's tested-by.
 >
-> So I have been trying 6.0.0 with d3a7051841f0 doing a whole bunch of
-> reboots + general use and that seems stable, then I reverted it and
-> the very first boot of the kernel with that broke again, so I'm
-> pretty sure that d3a7051841f0 fixes things.
+> Unfortunately Vinod doesn't have access to this device anymore, but
+> Caleb recently sent the support series including display driver for
+> Pixel 3 and is picking up the testing.  User "Newbyte" from #linux-msm
+> promised to test on the LG G7 to have even more input samples.
+
+Hi,
+
+I'm hoping to pick the Pixel 3 stuff back up at some point, but right now t=
+here
+seem to be quite a few issues outside of DSC which make testing it a bit of=
+ a pain.
+
+I gave Marijn's series [1] a go but wasn't able to get anything usable out =
+of the
+panel, however I doubt this is a DSC issue as I've always needed some hacks=
+ to
+get the panel working - I've never had any success with it without skipping=
+ both
+the initial panel reset and sending the PPS payload.
+
+I think if Marijn has managed to initialise a panel properly then the lack =
+of
+Pixel 3 for validation shouldn't be a blocker to merge these fixes.
+
+[1]:
+https://lore.kernel.org/linux-arm-msm/20221009184824.457416-1-marijn.suijte=
+n@somainline.org/
+
 >
-> So d3a7051841f0 seems to do more then just fix the WARN().
+> - Marijn
 
-Wow, so I guess we do screw up the parsing royally then. :o
+--
+Kind Regards,
+Caleb
 
-> So lets try to get d3a7051841f0 added to the official stable series
-> ASAP (I just noticed that Mark Pearson from Lenovo has already added it
-> to Fedora's 6.0.2 build.
-
-I think I'd also pick d3a7051841f0^ i.e. both commits:
-
-d3a7051841f0 ("drm/i915/bios: Use hardcoded fp_timing size for generating LFP data pointers")
-4e78d6023c15 ("drm/i915/bios: Validate fp_timing terminator presence")
-
-for stable.
-
-BR,
-Jani.
-
-
->
-> Regards,
->
-> Hans
->
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
