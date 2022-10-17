@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9999E60154C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E226014AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiJQR1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S229935AbiJQRWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiJQR0d (ORCPT
+        with ESMTP id S229747AbiJQRWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:26:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9246561D97;
-        Mon, 17 Oct 2022 10:25:49 -0700 (PDT)
-Received: from dimapc.. (109-252-119-114.nat.spd-mgts.ru [109.252.119.114])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED1536602389;
-        Mon, 17 Oct 2022 18:25:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666027522;
-        bh=slRsrx8jd5qqbp6acBFvPPDjrd/mCjdHRIup7TQFD18=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hOccsgzaEh3rdMESZPZR5rULMUeDBpxVACSlIxLMhXR05HQ8dwANMcFtVPSldPRYV
-         jsKZ1H4HrLIjpNsMEt0DjMUD6YR7GPUj2UMWLxwE95EtuuwT1PXiZhuEHhctsq0jEQ
-         hLDsnwmeCK5PaKpDaTl7VtDHd6oPep12PHvf1n7XRu2hYU+YqqE6TNHfdiy9ybHQlK
-         zpavElnB/hMtNPMd/6dDXWDf3kWjLDf9D5f3F8bz9xai+TxkNrILVWXMq8JLmihYMm
-         QGjMcBx5l1kkJdhpQGzIV+zRpK3oHs60xRnu8yH6nMdkFVcNHd1TkJn//9GGCACbEr
-         9Lnr6dcjrvw3Q==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Ruhl Michael J <michael.j.ruhl@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v7 18/21] dma-buf: Move dma_buf_mmap() to dynamic locking specification
-Date:   Mon, 17 Oct 2022 20:22:26 +0300
-Message-Id: <20221017172229.42269-19-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221017172229.42269-1-dmitry.osipenko@collabora.com>
-References: <20221017172229.42269-1-dmitry.osipenko@collabora.com>
+        Mon, 17 Oct 2022 13:22:33 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AB071714
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:22:32 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id z18so7807861qvn.6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VQlsXPG+b/ivmTTpsGhpnAcJEtCBNzn8M5P3pvqQhSs=;
+        b=dX5kUxlKjD7RhLO2sY7XEDAry/0JjXW+PYd8LJNyx6uFUBbEmjgG9ImOa5jTXzU4Jb
+         W+Sy9+SEaBoObXZAWCSTIpbzXKODnyoYtWOW3O8/SK49D/uxYr0EhNGKN0c6G1bVivNd
+         Wv4XGV75oHWfJbCYZwgzi7woEKN+yshKzzbbheqUflYj3s/Yty1s1WJnHWuJ6Rw9/j8K
+         5taPt9RC9WhefbAO4L6Mgo3WfJyRtmJyIdCLPPRCr3EQpiRdi6JOlYQ52Q0lmiX8MXMo
+         RWCNP3rtM7K0cXzdlGGB3745l2iJj+NwpCSkdfEjMEpQMPXnWUOyahUS458NOGo5pGoH
+         lO2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQlsXPG+b/ivmTTpsGhpnAcJEtCBNzn8M5P3pvqQhSs=;
+        b=h04L5zIrIf6+O/ScCWpMzo9mjrWlcVWUaUnVQHj39C1BN6yYSUZq/D8l/rZVOPW48N
+         OWctQp578MxhGmiXgKH0d1u8Rq+mnimCrGcbHcwYR5CTVD8tJ2lODPx/eQ8aQrhoPYo9
+         bxeUJLx3SERk1WERhYP8ihWYMDPuKKwjQ8HQDpyaPwLFkUYhbjj5n96GqO1LSedkdXqf
+         j5mGXYXMpTiAmYQu3djRqEdtEErA0a0uHKnWW3wh4EO7ojcQPe5DFYQnqdolS7oTxDiC
+         4laf5gvZI7+5YptRpffCb0qFR4FFYqF2pUHsb+nHoz6TiWt8X0ho+oQ6CewYMzuMFXeq
+         EaJw==
+X-Gm-Message-State: ACrzQf19rN4ZnJdAYja7gUGYB1v+yjo5R0FcWREXyvl2x3JSCvkbZTYL
+        ZJ2vtaKSn141DNSAvnYO3qnn3g==
+X-Google-Smtp-Source: AMsMyM7F9zGFYDYD754st0ujJyV3rD1idxlFxOrrfeWDYWev/I49SdrGpCJUI2tnB/ugL8hZ8uw5iw==
+X-Received: by 2002:a05:6214:21ab:b0:4b4:6dc:b94e with SMTP id t11-20020a05621421ab00b004b406dcb94emr8980096qvc.107.1666027351200;
+        Mon, 17 Oct 2022 10:22:31 -0700 (PDT)
+Received: from [10.101.5.247] ([148.59.24.28])
+        by smtp.gmail.com with ESMTPSA id dm54-20020a05620a1d7600b006eeb185c209sm244330qkb.50.2022.10.17.10.22.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 10:22:30 -0700 (PDT)
+Message-ID: <73651055-2a1b-75b9-3483-b180afa6f7bd@linaro.org>
+Date:   Mon, 17 Oct 2022 13:22:27 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 1/5] arm64: dts: qcom: pmi8998: add rradc node
+Content-Language: en-US
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+References: <20221016180330.1912214-1-caleb.connolly@linaro.org>
+ <20221016180330.1912214-2-caleb.connolly@linaro.org>
+ <5929051d-d2be-5b51-0cf9-294affa51df2@linaro.org>
+ <1f6d8eb9-8e6e-a201-50c6-a9fa6f25b3d6@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1f6d8eb9-8e6e-a201-50c6-a9fa6f25b3d6@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move dma_buf_mmap() function to the dynamic locking specification by
-taking the reservation lock. Neither of the today's drivers take the
-reservation lock within the mmap() callback, hence it's safe to enforce
-the locking.
+On 17/10/2022 11:29, Caleb Connolly wrote:
 
-Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
-Acked-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/dma-buf/dma-buf.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+>>> +		pmi8998_rradc: adc@4500 {
+>>> +			compatible = "qcom,pmi8998-rradc";
+>>> +			reg = <0x4500>;
+>>> +			#io-channel-cells = <1>;
+>>> +
+>>> +			status = "disabled";
+>>
+>> Why disabling it? It does not need any external/board resources, so
+>> maybe it should be just like other adcs - enabled by default? What does
+>> it measure? What is its input?
+> 
+> The RRADC mostly reports values which only make sense on mobile devices, battery 
+> ID and temperature, USB and DC input voltage/current as well as a (duplicate?) 
+> die temperature of the PMIC - I guess closer to the SMB/FG block.
+> 
+> When I last tested the DC input readings didn't work on db845c, as it just 
+> produces the 4.2v you'd get from a battery.
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index f54c649f922a..f149b384f4dd 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -1390,6 +1390,8 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_end_cpu_access, DMA_BUF);
- int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
- 		 unsigned long pgoff)
- {
-+	int ret;
-+
- 	if (WARN_ON(!dmabuf || !vma))
- 		return -EINVAL;
- 
-@@ -1410,7 +1412,11 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
- 	vma_set_file(vma, dmabuf->file);
- 	vma->vm_pgoff = pgoff;
- 
--	return dmabuf->ops->mmap(dmabuf, vma);
-+	dma_resv_lock(dmabuf->resv, NULL);
-+	ret = dmabuf->ops->mmap(dmabuf, vma);
-+	dma_resv_unlock(dmabuf->resv);
-+
-+	return ret;
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, DMA_BUF);
- 
--- 
-2.37.3
+If it is connected to some line - e.g. to the battery - then it is
+operational and there is no reason to disable it.
+
+
+Best regards,
+Krzysztof
 
