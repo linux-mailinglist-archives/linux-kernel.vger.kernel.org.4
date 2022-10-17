@@ -2,124 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90D8600BC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F80600BCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiJQJ6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S230193AbiJQKAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiJQJ62 (ORCPT
+        with ESMTP id S230015AbiJQKAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:58:28 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0E25D700;
-        Mon, 17 Oct 2022 02:58:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666000706; x=1697536706;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=zxbYmgJ1tFJXZUq2wDDYpxgs+/4K8DC3Ye2JTdPk2dI=;
-  b=kgmcE0tZPcS2PXV7vpHunmlGC1cwB9/0X9xfZ4z9ojlX6h6xWpOuw4jx
-   DpsELBkKSt+hU7DEfPuOKWdbTzmQeLuzNHLOdqPQ2lP4ezEJGtaXXrb2Y
-   fZguvN7K8Q7/XSOebEG53I8pGBeWO7CPmta4uVs8o8hFq1xSpnypwmOJo
-   5shE6JRSH5kl8mciQBzHsi6x3adALvU4F5MBImKpiuyv5QrAC0CQNozNU
-   kqULGOuigWG4QqIyHSaHb3DMPNwHQhboK5MSpExK/WMcfz4oKcr49o8SS
-   Le3tjjQ4HehYWSxSXiSKQhwadcwUmQ/Ja21eeWmhMFNExD8uweh70tA9I
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="285480892"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="285480892"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 02:58:26 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="630627154"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="630627154"
-Received: from cgarnier-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.44.27])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 02:58:23 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Inki Dae <inki.dae@samsung.com>, hongao <hongao@uniontech.com>,
-        jy0922.shim@samsung.com, sw0312.kim@samsung.com,
-        kyungmin.park@samsung.com, airlied@linux.ie, daniel@ffwll.ch,
-        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com
-Cc:     linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/exynos: replace drm_detect_hdmi_monitor() with
- drm_display_info.is_hdmi
-In-Reply-To: <4e8d94c9-7dc0-039f-7d67-36f6c099ab75@samsung.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <CGME20220616072357epcas1p4921f90a2fe077e360688e0df00a5dde8@epcas1p4.samsung.com>
- <20220616072233.8302-1-hongao@uniontech.com>
- <4e8d94c9-7dc0-039f-7d67-36f6c099ab75@samsung.com>
-Date:   Mon, 17 Oct 2022 12:59:03 +0300
-Message-ID: <871qr6srdk.fsf@intel.com>
+        Mon, 17 Oct 2022 06:00:18 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3342BB12
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:00:14 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 128so10020919pga.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ePppwLt74DC17JINfUdq6ewo+ZOCDgPxBEotdIjpxzA=;
+        b=Pznod0+OlFAyAl5hAqI+jlkkU/ZBSOnS+JMGGJfh/SEvsibrXGTR9F5IZn01jbWw4Y
+         ALzLuPu2RwziBUKwMKBr2UMMWB3xoN3qlgOpspRHsSLWWM4BLcyRi3WGM4qeTIlkn1gK
+         T9H4qNR7rIZ03evY2tV+JtwI/1ECZxySJCTk/DwgkIm8hmTCk9QrpVbRHcR9hR86m7sw
+         xUq2/zwwKb6fAiAnNZVr2mHoitgkZYXKeANksUY0y7coiHKSnBUIDmnsSmUEWPpcg5ip
+         /9nOy19mqIX/KdcacIC/9aNk56b0Gvs9LwgedSS+siKOIZqUYWo/8eNNLMgE5ZWjqTby
+         oRQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ePppwLt74DC17JINfUdq6ewo+ZOCDgPxBEotdIjpxzA=;
+        b=YOjeJzNmscqB5TLqPQr3JOdIHVDg3ABr+J2l9w1P8Oo1hJEaMwHfBksPXJrKdTMonC
+         +K9A7IuUV0OW8YV+Q98hZ3jfUtcBpob3nJ5p7PVpv8VGj2/GLaPPYb7DSPpaL+ui/E07
+         H1RBqVngRCkx855g3+c5p0wVhOJEupJW+F6/lZ0VObqQctQYfT2t1l0utrn0Nsce21kv
+         GMV9QlgRcPh6z0yo1Jxss9YihPmIXF4eAj8FAyITsj7m0KPxiRwS41QBszIRlwGAmfJx
+         qmuXlMdctNM9jpnVHkDg1OAMYQHFcNsLCLjSLWdxTnRazbGXhh/0RoglaZTSNFwVRQxQ
+         AWzg==
+X-Gm-Message-State: ACrzQf1bC6Eb2QKMGeVT+ZpFNZhZxgCm0NRdUi4wm6uxef0FRIlcMyed
+        TGLNkEqvSRZJXyxpYrl3iJeH02vF8GGoZVGi4IgrSw==
+X-Google-Smtp-Source: AMsMyM61at4bEZhvaPH428j8qUSJp4507BHO65b98Rw1OxZWJISyAn81PnFbbiQ5nxYYzPcOCG7jOmcfSrXYqkKvPEY=
+X-Received: by 2002:a65:4c46:0:b0:460:f598:d038 with SMTP id
+ l6-20020a654c46000000b00460f598d038mr10254368pgr.99.1666000813404; Mon, 17
+ Oct 2022 03:00:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-4-vannapurve@google.com> <Yz80XAg74KGdSqco@google.com>
+ <CAGtprH_XSCXZDroGUnL3H1CwcsbH_A_NDn8B4P2xfpSYGqKmqw@mail.gmail.com> <Y0mu1FKugNQG5T8K@google.com>
+In-Reply-To: <Y0mu1FKugNQG5T8K@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Mon, 17 Oct 2022 15:30:02 +0530
+Message-ID: <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
+Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
+ pool gpa
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022, Inki Dae <inki.dae@samsung.com> wrote:
-> 22. 6. 16. 16:22=EC=97=90 hongao =EC=9D=B4(=EA=B0=80) =EC=93=B4 =EA=B8=80:
->> Once EDID is parsed, the monitor HDMI support information is available
->> through drm_display_info.is_hdmi.
->>=20
->> This driver calls drm_detect_hdmi_monitor() to receive the same
->> information, which is less efficient.
->>=20
->> Avoid calling drm_detect_hdmi_monitor() and use drm_display_info.is_hdmi
->> instead.
->>=20
+On Sat, Oct 15, 2022 at 12:17 AM Sean Christopherson <seanjc@google.com> wrote:
 >
-> Applied.
-
-Sorry, but this is broken. The commit message contains the clue: "Once
-EDID is parsed". drm_get_edid() does not parse the EDID, you need to
-call drm_connector_update_edid_property() first.
-
-This is what I posted some time ago [1] but apparently was working on a
-different baseline.
-
-BR,
-Jani.
-
-
-[1] https://patchwork.freedesktop.org/patch/msgid/f21588dcb93bdb6cf76724506=
-063bdfcdb0a6bb4.1662036058.git.jani.nikula@intel.com
-
-
+> On Fri, Oct 14, 2022, Vishal Annapurve wrote:
+> > On Fri, Oct 7, 2022 at 1:32 AM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > On Fri, Aug 19, 2022, Vishal Annapurve wrote:
+> > > > Add a helper to query guest physical address for ucall pool
+> > > > so that guest can mark the page as accessed shared or private.
+> > > >
+> > > > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > > > ---
+> > >
+> > > This should be handled by the SEV series[*].  Can you provide feedback on that
+> > > series if having a generic way to map the ucall address as shared won't work?
+> > >
+> > > [*] https://lore.kernel.org/all/20220829171021.701198-1-pgonda@google.com
+> >
+> > Based on the SEV series you referred to, selftests are capable of
+> > accessing ucall pool memory by having encryption bit cleared (as set
+> > by guest pagetables) as allowed by generic API vm_vaddr_alloc_shared.
+> > This change is needed in the context of fd based private memory where
+> > guest (specifically non-confidential/sev guests) code in the selftests
+> > will have to explicitly indicate that ucall pool address range will be
+> > accessed by guest as shared.
 >
-> Thanks,
-> Inki Dae
+> Ah, right, the conversion needs an explicit hypercall, which gets downright
+> annoying because auto-converting shared pages would effectivfely require injecting
+> code into the start of every guest.
 >
->> Signed-off-by: hongao <hongao@uniontech.com>
->> ---
->>  drivers/gpu/drm/exynos/exynos_hdmi.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/gpu/drm/exynos/exynos_hdmi.c b/drivers/gpu/drm/exyn=
-os/exynos_hdmi.c
->> index 7655142a4651..17e9f5efbcfc 100644
->> --- a/drivers/gpu/drm/exynos/exynos_hdmi.c
->> +++ b/drivers/gpu/drm/exynos/exynos_hdmi.c
->> @@ -893,7 +893,7 @@ static int hdmi_get_modes(struct drm_connector *conn=
-ector)
->>  	if (!edid)
->>  		return -ENODEV;
->>=20=20
->> -	hdata->dvi_mode =3D !drm_detect_hdmi_monitor(edid);
->> +	hdata->dvi_mode =3D !connector->display_info.is_hdmi;
->>  	DRM_DEV_DEBUG_KMS(hdata->dev, "%s : width[%d] x height[%d]\n",
->>  			  (hdata->dvi_mode ? "dvi monitor" : "hdmi monitor"),
->>  			  edid->width_cm, edid->height_cm);
+Ack.
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+> Ha!  I think we got too fancy.  This is purely for testing UPM, not any kind of
+> trust model, i.e. there's no need for KVM to treat userspace as untrusted.  Rather
+> than jump through hoops just to let the guest dictate private vs. shared, simply
+> "trust" userspace when determining whether a page should be mapped private.  Then
+> the selftests can invoke the repurposed KVM_MEMORY_ENCRYPT_(UN)REG_REGION ioctls
+> as appropriate when allocating/remapping guest private memory.
+>
+> E.g. on top of UPM v8, I think the test hook boils down to:
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index d68944f07b4b..d42d0e6bdd8c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4279,6 +4279,9 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>
+>         fault->gfn = fault->addr >> PAGE_SHIFT;
+>         fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
+> +       fault->is_private = IS_ENABLED(CONFIG_KVM_PRIVATE_MEM_TESTING) &&
+> +                           kvm_slot_can_be_private(fault->slot) &&
+> +                           kvm_mem_is_private(vcpu->kvm, fault->gfn);
+>
+>         if (page_fault_handle_page_track(vcpu, fault))
+>                 return RET_PF_EMULATE;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 8ffd4607c7d8..0dc5d0bf647c 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1653,7 +1653,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
+>
+>  bool __weak kvm_arch_has_private_mem(struct kvm *kvm)
+>  {
+> -       return false;
+> +       return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM_TESTING);
+>  }
+>
+>  static int check_memory_region_flags(struct kvm *kvm,
+
+This is much sleeker and will avoid hacking KVM for testing. Only
+caveat here is that these tests will not be able to exercise implicit
+conversion path if we go this route.
