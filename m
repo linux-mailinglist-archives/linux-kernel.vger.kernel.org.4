@@ -2,140 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9406160076D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3300160076C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiJQHMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S230092AbiJQHMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiJQHMa (ORCPT
+        with ESMTP id S229597AbiJQHMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:12:30 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B8F4AD6C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:12:27 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 13215320025E;
-        Mon, 17 Oct 2022 03:12:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 17 Oct 2022 03:12:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665990743; x=1666077143; bh=V8eZeviXGL
-        1+uINoLCcYBas9La4PrZ6COoSZQFiUw6U=; b=gF/szDUmOCYaOJsLcF0gV9YwiE
-        RejMOa/YEn5grDKnOf41ezS6IAKEe/RL2NPZRpXq2vxK2/kKNhDQAe+6y8CsezF5
-        4fBXGau5SXE8dbSy835I7yBtCe6kaLNtvYUa3FjtKliF6EnxYDIeQuotZ7GvsaMW
-        PqF7YunGiI9fPSGh7SXafMNYO1d2WSYF3u34EhLk0TNVgulOFu0JkDiFvwzkRTZ8
-        SJqN1i4jY946BI8kdUqDxehdd6qwvEHJeem+zLWZ2s/mQKCpGBDXoBp8DCrZtryz
-        X6w+o+UGCDja+pSOiDN6txX8PcumVHlBXANKbaJCjlrS0z/dhs4Mz7osCJ6Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665990743; x=1666077143; bh=V8eZeviXGL1+uINoLCcYBas9La4P
-        rZ6COoSZQFiUw6U=; b=D7I0ggmGlkV1vClLcb8pSO9TaKx7tjfEN6Qvf7HgLEEC
-        ZrL5xiWg7GFA6nHdjgsYQ0cKhU4eniGycXXZOpO0hSV/tdohkUQxsRL3p8G9x+Mb
-        +P1fdN+n7SUY/Mfk+IenaIrOBktLjuxE/6UNl4Q9+8lhdH27+6iBFlHlVJgnr3Kg
-        BWFPPdWjc2d/3Gok1L+suV+wSGC8DEK5mgwGplNrJd9U3HpCHcd2xkRb3uIPfdp5
-        4jlvsEvS1cZZPtTFC+QPKPa4s6xmM1aTFD872iEQxLRmuREI1rOFM/zOMLyx9ZZx
-        KGVgR9Q6d071sjmAtBuPIA5F100REkTqMKyy+Jwj7w==
-X-ME-Sender: <xms:VwBNY5JKV85VuGcJBtQ-q5J7jZdhGyHSivIOgl1Llv7qFTuo7yNG-Q>
-    <xme:VwBNY1IIuOpWzGpyI_91O-kiid8ke-e_5X0JRkl2hzVydz8KOxWnOV14C-Z3NRfR9
-    7ufvHLfuJmIub7EzxM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekkedguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:VwBNYxuPzQYCle2hKVW3u3kssMsSmO405AQZjck6Op8R0-FVsi7THA>
-    <xmx:VwBNY6ac3y_ctLrLk-OowoTCcNbK9HPPUAvgqLzKLg3Z0aUwYYxH5w>
-    <xmx:VwBNYwabPuKvQrVB1nL1Ej86rLi0eEVkp-X5y4vLq5qt65YN7t7Oow>
-    <xmx:VwBNY1N4VEjbqqK9fyXcSM4tLJ_13q0ZaDp3iUS5Tx23ozV7CX69Lw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2FD9AB60086; Mon, 17 Oct 2022 03:12:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <506fe4e5-a203-48e6-84a6-f70133be15dd@app.fastmail.com>
-In-Reply-To: <20221016133418.2122777-1-chenhuacai@loongson.cn>
-References: <20221016133418.2122777-1-chenhuacai@loongson.cn>
-Date:   Mon, 17 Oct 2022 09:12:02 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Huacai Chen" <chenhuacai@loongson.cn>,
-        "Huacai Chen" <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, "Xuefeng Li" <lixuefeng@loongson.cn>,
-        "Tiezhu Yang" <yangtiezhu@loongson.cn>, guoren <guoren@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Add unaligned access support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 03:12:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BFFCC5;
+        Mon, 17 Oct 2022 00:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665990737; x=1697526737;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x6PiYaEhI9CWQtceoPEo/iuzEQmzk58Ipq2FJvB4zG8=;
+  b=jUKKVqMFOxCqhnVk5ka9sAo+6nUlN4r5vCOSWAkxMscf3d2rs0jnfjWi
+   Rc/kQHLpRTDKANMPZR6uCavG6lFf8obLGCsn5Rsm32qdtq4F9xVYZh1Rg
+   21UfAxBrQE30wfoAxQRLBVX/ISTdHpuQIPZDNooZipqJ5fbluIMLZd8NV
+   BRx5fDZGk70cmbFLLF75xqRpdWGavV9YiZrQrHMhQk8c3xrOBHPLuk1pt
+   KJFrCS+Gbhs8NX5ChjvJpDldcVU7JnvgHIaxccZMmLq2VBl3Tz2WWzr/U
+   T8gVwzvOWgMaQzHbI+9Eupncp5+a9lEw2Wj939BbzVqXhjDy5H+MD1smy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="369917627"
+X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
+   d="scan'208";a="369917627"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 00:12:16 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="630581889"
+X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
+   d="scan'208";a="630581889"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 00:12:13 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id E8E10202D5;
+        Mon, 17 Oct 2022 10:12:10 +0300 (EEST)
+Date:   Mon, 17 Oct 2022 07:12:10 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 4/5] media: i2c: ov5645: Return zero for s_stream(0)
+Message-ID: <Y00ASntfSkMsWTN0@paasikivi.fi.intel.com>
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221014183459.181567-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y0pSYfw+VDxXv85b@pendragon.ideasonboard.com>
+ <Y0snkMEp9WqGtzom@paasikivi.fi.intel.com>
+ <Y0tA4cZBdwCOkaOs@pendragon.ideasonboard.com>
+ <Y0xnXM+Iw5OkdKj6@paasikivi.fi.intel.com>
+ <Y0xxlTP53dwx8VD+@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0xxlTP53dwx8VD+@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022, at 3:34 PM, Huacai Chen wrote:
-> Loongson-2 series (Loongson-2K500, Loongson-2K1000) don't support
-> unaligned access in hardware, while Loongson-3 series (Loongson-3A5000,
-> Loongson-3C5000) are configurable whether support unaligned access in
-> hardware. This patch add unaligned access emulation for those LoongArch
-> processors without hardware support.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+On Mon, Oct 17, 2022 at 12:03:17AM +0300, Laurent Pinchart wrote:
+> Hi Sakari,
+> 
+> On Sun, Oct 16, 2022 at 08:19:40PM +0000, Sakari Ailus wrote:
+> > On Sun, Oct 16, 2022 at 02:23:13AM +0300, Laurent Pinchart wrote:
+> > > On Sat, Oct 15, 2022 at 09:35:12PM +0000, Sakari Ailus wrote:
+> > > > On Sat, Oct 15, 2022 at 09:25:37AM +0300, Laurent Pinchart wrote:
+> > > > > On Fri, Oct 14, 2022 at 07:34:58PM +0100, Prabhakar wrote:
+> > > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > > 
+> > > > > > Always return zero while stopping the stream as the caller will ignore the
+> > > > > > return value.
+> > > > > > 
+> > > > > > This patch drops checking the return value of ov5645_write_reg() and
+> > > > > > continues further in the code path while stopping stream. The user anyway
+> > > > > > gets an error message in case ov5645_write_reg() fails.
+> > > > > 
+> > > > > Continuing all the way to pm_runtime_put() is fine, but I don't think
+> > > > > the function should return 0. It's not up to the driver to decide if a
+> > > > > failure would be useful to signal to the caller or not.
+> > > > 
+> > > > If the function returns an error when disabling streaming, what is the
+> > > > expected power state of the device after this?
+> > > 
+> > > That's up to us to decide :-)
+> > > 
+> > > > The contract between the caller and the callee is that the state is not
+> > > > changed if there is an error.
+> > > 
+> > > For most APIs, but that's not universal.
+> > > 
+> > > > This is a special case as very few callers
+> > > > check the return value for streamoff operation and those that do generally
+> > > > just print something. I've never seen a caller trying to prevent streaming
+> > > > off in this case, for instance.
+> > > 
+> > > I think the stream off call should proceed and try to power off the
+> > > device even if an error occurs along the way, i.e. it shouldn't return
+> > > upon the first detected error.
+> > > 
+> > > > Of course we could document that streaming off always counts as succeeded
+> > > > (e.g. decreasing device's runtime PM usage_count) while it could return an
+> > > > informational error code. But I wonder if anyone would ever benefit from
+> > > > that somehow. :-)
+> > > 
+> > > I think it could be useful to propagate errors up to inform the user
+> > > that something wrong happened. That would involve fixing lots of drivers
+> > > along the call chain though, so there's no urgency for the ov5645 to do
+> > > so, but isn't it better to propagate the error code instead of hiding
+> > > the issue ?
+> > 
+> > I also don't think hiding the issue would be the best thing to do, but that
+> > wouldn't likely be a big problem either.
+> > 
+> > How about printing a warning in the wrapper while returning zero to the
+> > original caller? This would keep the API intact while still leaving a trace
+> > on something failing. Of course the driver is also free to print whatever
+> > messages it likes.
+> 
+> While I think error propagation could be more useful in the long run,
+> printing a message in the wrapper is a good idea. I like centralized
+> error handling, it has a tendency to go wrong when left to individual
+> drivers.
 
-What does the Loongarch ELF ABI say about this? On most architectures,
-C compilers are not allowed to produce unaligned accesses for standard
-compliant source code, the only way you'd get this is when casting
-a an unaligned (e.g. char*) pointer to another type with higher alignment
-requirement.
+I can send a patch...
 
-> +/* sysctl hooks */
-> +int unaligned_enabled __read_mostly = 1;	/* Enabled by default */
-> +int no_unaligned_warning __read_mostly = 1;	/* Only 1 warning by default */
-
-The comment says 'sysctl', the implementation has a debugfs interface.
-
-> +#ifdef CONFIG_DEBUG_FS
-> +static int __init debugfs_unaligned(void)
-> +{
-> +	struct dentry *d;
-> +
-> +	d = debugfs_create_dir("loongarch", NULL);
-> +	if (!d)
-> +		return -ENOMEM;
-> +
-> +	debugfs_create_u32("unaligned_instructions_user",
-> +				S_IRUGO, d, &unaligned_instructions_user);
-> +	debugfs_create_u32("unaligned_instructions_kernel",
-> +				S_IRUGO, d, &unaligned_instructions_kernel);
-> +
-> +	return 0;
-> +}
-> +arch_initcall(debugfs_unaligned);
-> +#endif
-
-The debugfs interface does not sound like a good way to do this.
-Overall, my feeling is that for a new architecture we should not
-introduce this at all but instead provide a way to diagnose and
-fix user space, since we do not have to keep compatibility with
-broken binaries that worked in the past.
-
-If the ELF ABI actually allows compilers to produce unaligned
-accesses for correct code, there should at least be a more generic
-way of enabling this that follows what other architectures do.
-We are already somewhat inconsistent there between architectures,
-but I don't think anything else uses debugfs here.
-
-     Arnd
+-- 
+Sakari Ailus
