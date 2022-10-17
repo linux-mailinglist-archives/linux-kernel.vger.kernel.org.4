@@ -2,251 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A166005DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 05:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260786005E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 05:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbiJQD5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 23:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S232922AbiJQD7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 23:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiJQD5t (ORCPT
+        with ESMTP id S232948AbiJQD7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 23:57:49 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFFA52DDE
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 20:57:48 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id j188so10889612oih.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 20:57:48 -0700 (PDT)
+        Sun, 16 Oct 2022 23:59:05 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B396252E7B;
+        Sun, 16 Oct 2022 20:59:02 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id h2so2308579plb.2;
+        Sun, 16 Oct 2022 20:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J2ulezN6n3fW4gIR3MRedZj9xrarrQsVwftkxYuRwq0=;
-        b=IrfIKt+5y/gs6W6ELxgNmFqmXXCX21BkPpZpsiinawkTYbBOqTr8cuBU2GqSLwKgKH
-         nEl7Cd4hWozyq4p65tSBUnR29k9HD0aLGtWQatQs68vp+OS5UI2sQAvQYxyUEaRiFW7X
-         YjFgUEJzhsqE3iOS7LZzHNzEmRldSQvBbtXyI=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9+dJRZHtMZrBF2k4ygt78sADQgSCT7KtNURPkxATzpo=;
+        b=qfrgYWvrlPzatnb5TGzg5W+X2FMqkoAqpOYBEchdi466319hyjZoDJkPVCeI/FOEYD
+         zbURNU+S1ldG1b0YisBTT1xWIqRz0+EKXvoJCANg3dNQBbgntQQvtkN3hEWePO9r6TcI
+         72Y+lbQlVrF1wLH3eQlMxeaZOXH7HEtviU438Hg8nJDFVDJ3WQdanorUdwBbL3ttdD1J
+         4SBMwpxYvS7ocdyTusoi9MI3P8s16pRUOMLBWcTlDKfLyBboVWuucFn90q2hGWJvvxVh
+         WgIh8v8VeebuMVAyL/pKIqwNvsl+Hi4pyAMtttmJx2IO4H1zbPG0R1m8C2iKz+cjeXAi
+         LtIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J2ulezN6n3fW4gIR3MRedZj9xrarrQsVwftkxYuRwq0=;
-        b=oF9Ep3klIrQSQ5EuU03JZQyylN3CBB0a7mdbQMj8Dy4dCYC4HTr8japMHaLYd71vpS
-         YeB1k6Y+M07yWnia11T4s1+/0bkYkT+ZKguQeuI9qNGh92q3cPvY8QCuLDi9df9/GNy2
-         O5E+RuQ6Yprg3wdiqv3YiFrBGw1BerrgcuHc9/IOVx1w3VKtNiHlTaaauUTiIjws29lk
-         2pSNC1THA2VF+xz6rWk3eDunNA59iQIM/US3o/su3ci3W/MgXllZm7FWIIMbLJOCV3s4
-         IiY/VAjaSGz7lDmBc2ByFBbJxp/DfhYF0KL8XZLRHT3iHMAjkAYebliE/blOcpvpMIdB
-         CUZQ==
-X-Gm-Message-State: ACrzQf1hqK6Z/+akjMl6OdX4hn3ndkUYbkiOE+iYaDUNHNaj7d9gV/ne
-        dxjOVDvXK/6zVu803eErgdNw9AojdswHDg==
-X-Google-Smtp-Source: AMsMyM7vddG6dOUiDylAVSCIKgAkDA56A+COZS0XgOWAeI6xldp2N43JIycYvHh7kxOXsmMR4rHQOQ==
-X-Received: by 2002:a17:90b:1a88:b0:20d:8df0:ac63 with SMTP id ng8-20020a17090b1a8800b0020d8df0ac63mr27792670pjb.206.1665979057231;
-        Sun, 16 Oct 2022 20:57:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q9-20020a638c49000000b0041cd5ddde6fsm5303878pgn.76.2022.10.16.20.57.35
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9+dJRZHtMZrBF2k4ygt78sADQgSCT7KtNURPkxATzpo=;
+        b=SU08CdDkP6oPfygDB8E0Sg31j2UNQ3oZbx38L44I2ls01kRSVDFahW0WFlGRrnjFny
+         pOZ8XHBwMJKiQgat9bywSIlvKx6pjArmT5R8GPOYxtB1SX7NjFB/nqYXflf/6MXTEhdV
+         rlHz98wJt8nn6xhEE8i8HybNo3ZheEmIVUsCZcdjWR7kZLj+p10CNCn12M2McyiIdMZ7
+         lj3oTmp20UrPA+AF1xSD+Ki/zHIxe68rsBXuowpciSeHivmLiiF4evYBpUBIdxW7iGOA
+         NfU5QOsFp+Re7rc7I4KdtMbMS9cHiEtrQzC+ZaE9b6I5M4RvWUVmrh0mLakHMnGac+Aw
+         SI0w==
+X-Gm-Message-State: ACrzQf1KQJSLOwkAJLGwzkAbn6eha7RzbvbXgWYvXZGqpL+L+Kj1KGRX
+        PVKlHINkC6NCb7NChEDNpIw=
+X-Google-Smtp-Source: AMsMyM6ZybR8hSwG5qeWXOFOn322S7xxmxSta81fA9f1KmB6x1a95yrfIgcmGB1YDRGzLldaiReN6g==
+X-Received: by 2002:a17:90a:5781:b0:20a:9962:bb4a with SMTP id g1-20020a17090a578100b0020a9962bb4amr30145442pji.185.1665979141630;
+        Sun, 16 Oct 2022 20:59:01 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-89.three.co.id. [180.214.233.89])
+        by smtp.gmail.com with ESMTPSA id om15-20020a17090b3a8f00b0020087d7e778sm8653196pjb.37.2022.10.16.20.58.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 20:57:36 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Akira Yokosawa <akiyks@gmail.com>, linux-doc@vger.kernel.org,
-        linux-hardening@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] overflow: Fix kern-doc markup for functions
-Date:   Sun, 16 Oct 2022 20:57:32 -0700
-Message-Id: <20221017035732.1968394-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 16 Oct 2022 20:58:59 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id DA9711018D1; Mon, 17 Oct 2022 10:58:55 +0700 (WIB)
+Date:   Mon, 17 Oct 2022 10:58:55 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Dave Jones <davej@codemonkey.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Scott Mayhew <smayhew@redhat.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: 6.1rc1: NFS memcpy warning on mount
+Message-ID: <Y0zS/5WLi2q4Ua2U@debian.me>
+References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
+ <Y0zEzZwhOxTDcBTB@codemonkey.org.uk>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6343; h=from:subject; bh=7HZx7BtD5Vm36kdgMSNdrMiBfAsCzfUGxVyegNLLZ9E=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTNKsNIHA2/VImzICGTlQN0giQB5nJcAk3AuFTsUZ jSgIQZKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0zSrAAKCRCJcvTf3G3AJtZIEA CGY/xs8MySMZNcXSPPFAcGiSWNGjSC4m00Deka94ljVZ0wj7SL7P55rmlOEvabeNtbEKG9cK8L8NlA tFY2D6NRbSI6q30yET9Co3+y/9GrrOUppYfW0d11iYlTjPV2Hcuf9BvDiGroirtZq5eeK267YcjRRu wF1TNFaPE2vekP/18x7yLmm3E3/+Wl+I/qDkxKluL2sOZTB1N8tqs0aJ0wbwW/uPM+NwwvfF3sSBdS 4JtCAhZXpFLHEB1Nc7O/vlqghx0ZfNDJfSNSfle42ifAlnrvBUtUB9ZfTMmvYGX68tamoxVWQJ1kTq QJBdi4jWOmyJbI92hGKMaYNs4tVYZNhcvdCVDF+3+w9FzrW+drjHAdHkzPlHTribuO7D4FyEO2pvLj 4PO3E0YNgXLk7Bq7PTB01jHakert4fcaOBhhIXYZwGtf/FVjFAoHWNdYUE3tcJXkPAOu1JeIiwutJO vSppgCtj/G+EwrKXDEWm1F4b4gpTKnQuzgietpXlhKXalf30+A820Fupum6UU1Bl62Slm+0iCZoABT kQ7KY22yuVGKNw+7ckahNs/f9sfEXyQAWpBsN4R1hP0UJonSQQa4U/4qn1HjISVC7/lpvz8mtxg+sG r5Ahm4AChbxjvlNazRn+XBh4LtXCMkG1UJRgGsabG8AT1/CMrKMghRB8rbLA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qzQ8gnePq5OPTXGG"
+Content-Disposition: inline
+In-Reply-To: <Y0zEzZwhOxTDcBTB@codemonkey.org.uk>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the kern-doc markings for several of the overflow helpers and move
-their location into the core kernel API documentation, where it belongs
-(it's not driver-specific).
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Akira Yokosawa <akiyks@gmail.com>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- Documentation/core-api/kernel-api.rst |  6 +++++
- Documentation/driver-api/basics.rst   |  3 ---
- include/linux/overflow.h              | 38 +++++++++++----------------
- 3 files changed, 22 insertions(+), 25 deletions(-)
+--qzQ8gnePq5OPTXGG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
-index 0793c400d4b0..06f4ab122697 100644
---- a/Documentation/core-api/kernel-api.rst
-+++ b/Documentation/core-api/kernel-api.rst
-@@ -118,6 +118,12 @@ Text Searching
- CRC and Math Functions in Linux
- ===============================
- 
-+Arithmetic Overflow Checking
-+----------------------------
-+
-+.. kernel-doc:: include/linux/overflow.h
-+   :internal:
-+
- CRC Functions
- -------------
- 
-diff --git a/Documentation/driver-api/basics.rst b/Documentation/driver-api/basics.rst
-index 3e2dae954898..4b4d8e28d3be 100644
---- a/Documentation/driver-api/basics.rst
-+++ b/Documentation/driver-api/basics.rst
-@@ -107,9 +107,6 @@ Kernel utility functions
- .. kernel-doc:: kernel/panic.c
-    :export:
- 
--.. kernel-doc:: include/linux/overflow.h
--   :internal:
--
- Device Resource Management
- --------------------------
- 
-diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-index 19dfdd74835e..1d3be1a2204c 100644
---- a/include/linux/overflow.h
-+++ b/include/linux/overflow.h
-@@ -51,8 +51,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- 	return unlikely(overflow);
- }
- 
--/** check_add_overflow() - Calculate addition with overflow checking
-- *
-+/**
-+ * check_add_overflow() - Calculate addition with overflow checking
-  * @a: first addend
-  * @b: second addend
-  * @d: pointer to store sum
-@@ -66,8 +66,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- #define check_add_overflow(a, b, d)	\
- 	__must_check_overflow(__builtin_add_overflow(a, b, d))
- 
--/** check_sub_overflow() - Calculate subtraction with overflow checking
-- *
-+/**
-+ * check_sub_overflow() - Calculate subtraction with overflow checking
-  * @a: minuend; value to subtract from
-  * @b: subtrahend; value to subtract from @a
-  * @d: pointer to store difference
-@@ -81,8 +81,8 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- #define check_sub_overflow(a, b, d)	\
- 	__must_check_overflow(__builtin_sub_overflow(a, b, d))
- 
--/** check_mul_overflow() - Calculate multiplication with overflow checking
-- *
-+/**
-+ * check_mul_overflow() - Calculate multiplication with overflow checking
-  * @a: first factor
-  * @b: second factor
-  * @d: pointer to store product
-@@ -96,23 +96,24 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- #define check_mul_overflow(a, b, d)	\
- 	__must_check_overflow(__builtin_mul_overflow(a, b, d))
- 
--/** check_shl_overflow() - Calculate a left-shifted value and check overflow
-- *
-+/**
-+ * check_shl_overflow() - Calculate a left-shifted value and check overflow
-  * @a: Value to be shifted
-  * @s: How many bits left to shift
-  * @d: Pointer to where to store the result
-  *
-  * Computes *@d = (@a << @s)
-  *
-- * Returns true if '*d' cannot hold the result or when 'a << s' doesn't
-+ * Returns true if '*@d' cannot hold the result or when '@a << @s' doesn't
-  * make sense. Example conditions:
-- * - 'a << s' causes bits to be lost when stored in *d.
-- * - 's' is garbage (e.g. negative) or so large that the result of
-- *   'a << s' is guaranteed to be 0.
-- * - 'a' is negative.
-- * - 'a << s' sets the sign bit, if any, in '*d'.
-  *
-- * '*d' will hold the results of the attempted shift, but is not
-+ * - '@a << @s' causes bits to be lost when stored in *@d.
-+ * - '@s' is garbage (e.g. negative) or so large that the result of
-+ *   '@a << @s' is guaranteed to be 0.
-+ * - '@a' is negative.
-+ * - '@a << @s' sets the sign bit, if any, in '*@d'.
-+ *
-+ * '*@d' will hold the results of the attempted shift, but is not
-  * considered "safe for use" if true is returned.
-  */
- #define check_shl_overflow(a, s, d) __must_check_overflow(({		\
-@@ -129,7 +130,6 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- 
- /**
-  * size_mul() - Calculate size_t multiplication with saturation at SIZE_MAX
-- *
-  * @factor1: first factor
-  * @factor2: second factor
-  *
-@@ -149,7 +149,6 @@ static inline size_t __must_check size_mul(size_t factor1, size_t factor2)
- 
- /**
-  * size_add() - Calculate size_t addition with saturation at SIZE_MAX
-- *
-  * @addend1: first addend
-  * @addend2: second addend
-  *
-@@ -169,7 +168,6 @@ static inline size_t __must_check size_add(size_t addend1, size_t addend2)
- 
- /**
-  * size_sub() - Calculate size_t subtraction with saturation at SIZE_MAX
-- *
-  * @minuend: value to subtract from
-  * @subtrahend: value to subtract from @minuend
-  *
-@@ -192,7 +190,6 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
- 
- /**
-  * array_size() - Calculate size of 2-dimensional array.
-- *
-  * @a: dimension one
-  * @b: dimension two
-  *
-@@ -205,7 +202,6 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
- 
- /**
-  * array3_size() - Calculate size of 3-dimensional array.
-- *
-  * @a: dimension one
-  * @b: dimension two
-  * @c: dimension three
-@@ -220,7 +216,6 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
- /**
-  * flex_array_size() - Calculate size of a flexible array member
-  *                     within an enclosing structure.
-- *
-  * @p: Pointer to the structure.
-  * @member: Name of the flexible array member.
-  * @count: Number of elements in the array.
-@@ -237,7 +232,6 @@ static inline size_t __must_check size_sub(size_t minuend, size_t subtrahend)
- 
- /**
-  * struct_size() - Calculate size of structure with trailing flexible array.
-- *
-  * @p: Pointer to the structure.
-  * @member: Name of the array member.
-  * @count: Number of elements in the array.
--- 
-2.34.1
+On Sun, Oct 16, 2022 at 10:58:21PM -0400, Dave Jones wrote:
+> Started getting this during mount on a 6.1rc1 kernel..
+> not sure which mount it's complaining about, but they're all v3 tcp
+> mounts on that machine.
+>=20
+> [   19.617475] memcpy: detected field-spanning write (size 28) of single =
+field "request.sap" at fs/nfs/super.c:857 (size 18446744073709551615)
+> [   19.617504] WARNING: CPU: 3 PID: 1300 at fs/nfs/super.c:857 nfs_reques=
+t_mount.constprop.0.isra.0+0x1c0/0x1f0
+> [   19.617528] CPU: 3 PID: 1300 Comm: mount.nfs Not tainted 6.1.0-rc1-bac=
+kup+ #1
+> [   19.617553] RIP: 0010:nfs_request_mount.constprop.0.isra.0+0x1c0/0x1f0
+> [   19.617566] Code: 16 81 01 00 75 9b 48 c7 c1 ff ff ff ff 48 c7 c2 a8 a=
+8 82 ab 4c 89 e6 c6 05 36 16 81 01 01 48 c7 c7 a8 3a 81 ab e8 61 1d 9a 00 <=
+0f> 0b 48 8b 3c 24 e9 6c ff ff ff c7 83 20 01 00 00 01 00 00 00 b8
+> [   19.617593] RSP: 0018:ffffc900027fbd48 EFLAGS: 00010286
+> [   19.617604] RAX: 0000000000000000 RBX: ffff8881208d5000 RCX: ffff88842=
+fadb7a8
+> [   19.617617] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff88842=
+fadb7a0
+> [   19.617629] RBP: ffff8881208d5130 R08: 0000000000000000 R09: ffffffffa=
+ba5c540
+> [   19.617641] R10: 0000000000000001 R11: 0000000000000001 R12: 000000000=
+000001c
+> [   19.617653] R13: 0000000000000001 R14: ffffc900027fbef0 R15: ffff88810=
+0b3bea0
+> [   19.617665] FS:  00007ff793dd6840(0000) GS:ffff88842fac0000(0000) knlG=
+S:0000000000000000
+> [   19.617679] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   19.617690] CR2: 0000564a1a747468 CR3: 00000001106fb003 CR4: 000000000=
+01706e0
+> [   19.617703] Call Trace:
+> [   19.617709]  <TASK>
+> [   19.617716]  nfs_try_get_tree+0xa1/0x220
+> [   19.617725]  ? get_nfs_version+0x63/0x130
+> [   19.617736]  vfs_get_tree+0x1d/0x90
+> [   19.617746]  ? capable+0x2f/0x50
+> [   19.617755]  path_mount+0x75c/0xb00
+> [   19.617766]  __x64_sys_mount+0x19a/0x200
+> [   19.617775]  do_syscall_64+0x35/0x80
+> [   19.617785]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> [   19.617796] RIP: 0033:0x7ff7941ac6ea
+> [   19.617805] Code: 48 8b 0d a9 17 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 6=
+6 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <=
+48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 17 0d 00 f7 d8 64 89 01 48
+> [   19.617832] RSP: 002b:00007ffd02ae4ce8 EFLAGS: 00000246 ORIG_RAX: 0000=
+0000000000a5
+> [   19.617846] RAX: ffffffffffffffda RBX: 00007ffd02ae4e70 RCX: 00007ff79=
+41ac6ea
+> [   19.617858] RDX: 0000564a1a73fb60 RSI: 0000564a1a73fb80 RDI: 0000564a1=
+a741890
+> [   19.617870] RBP: 00007ff793dd67b8 R08: 0000564a1a73f480 R09: 0000564a1=
+a73f480
+> [   19.617882] R10: 0000000000000000 R11: 0000000000000246 R12: 000000000=
+0000000
+> [   19.617894] R13: 00007ffd02ae4dd0 R14: 0000564a1a7474e0 R15: 0000564a1=
+a7436b0
+> [   19.617907]  </TASK>
+> [   19.617913] irq event stamp: 8757
+> [   19.617920] hardirqs last  enabled at (8769): [<ffffffffaa1397c2>] __u=
+p_console_sem+0x52/0x60
+> [   19.617937] hardirqs last disabled at (8780): [<ffffffffaa1397a7>] __u=
+p_console_sem+0x37/0x60
+> [   19.617952] softirqs last  enabled at (8180): [<ffffffffaabf547a>] sk_=
+common_release+0x5a/0xe0
+> [   19.617969] softirqs last disabled at (8178): [<ffffffffaabf5456>] sk_=
+common_release+0x36/0xe0
+> [   19.617984] ---[ end trace 0000000000000000 ]---
+>=20
 
+Hmm, the blamed line in the warning is introduced by 38465f5d1af932 ("NFS:
+rename nfs_fs_context pointer arg in a few functions"). Cc: the commit
+author. Also Cc: Kees for authoring the patch [1] that have fixed
+similar warning.
+
+Also, does v6.0 have this warning? If so, you need to bisect in the range
+of v6.0..v6.1-rc1.
+
+Thanks.
+
+[1]: https://lore.kernel.org/lkml/20221011065243.583650-1-keescook@chromium=
+=2Eorg/
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--qzQ8gnePq5OPTXGG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0zS+gAKCRD2uYlJVVFO
+o1BoAPwOan526SnMjUySVrl/LUWJInIvbkQQoiZ42n6U5peSrgEAsc5oHBdEsmTo
+sfSQc74rHrGuBrkh5/R3O9dBzOIhLA8=
+=a1Sh
+-----END PGP SIGNATURE-----
+
+--qzQ8gnePq5OPTXGG--
