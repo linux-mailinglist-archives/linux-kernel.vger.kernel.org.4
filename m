@@ -2,137 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F7860157E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA7760157F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiJQRfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S230416AbiJQRfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiJQRfN (ORCPT
+        with ESMTP id S229968AbiJQRfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:35:13 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516D8220D5;
-        Mon, 17 Oct 2022 10:35:03 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1okU0m-0001Ml-UB; Mon, 17 Oct 2022 19:34:48 +0200
-Message-ID: <fb3926da-a683-2811-71a4-31fe36a9cb50@maciej.szmigiero.name>
-Date:   Mon, 17 Oct 2022 19:34:42 +0200
+        Mon, 17 Oct 2022 13:35:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFC757BD7;
+        Mon, 17 Oct 2022 10:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666028122; x=1697564122;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IRXn6DtoMsdNcDLaHy1tDtZ6Q8cgyt8khp6TmWhX7QY=;
+  b=Vzb/PuqnxmpL2tqYzo/aH0p4LOuWydZCS86Cm/tF2UsEuiSoi+2IAGd1
+   EQIctYI+QTFf08iSjprD5qHMNilElRcWf5D+LfbN5lu5GEOZH+iyAzMeQ
+   MiFeo9hDRSM4U14jyatXHtjfk0AyoEQguf0oIxeifjnbECs5qXeNT8Roh
+   df3avd33b114yqjBIzOCkwreAT09Coq2P/iWU2acQ1/nByAlh1Gun0RSH
+   JRvqVxRQrmHKScjdJGVkceK/YJPvjsHD82CY6vVvEdBRdnwDiNaM6g9sG
+   9zGimyo8S9qdcrug8BPiHXsIxadOfQC+Su28+xt3HVNoFkqhHYOelQhId
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="289162918"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="289162918"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:35:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="691448303"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="691448303"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Oct 2022 10:35:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1okU1F-008wba-0m;
+        Mon, 17 Oct 2022 20:35:17 +0300
+Date:   Mon, 17 Oct 2022 20:35:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
+Message-ID: <Y02SVH04iiu7Rj+8@smile.fi.intel.com>
+References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
+ <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
+ <Y02ObkYoUQlY9oG/@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, pl-PL
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ajones@ventanamicro.com, pbonzini@redhat.com, maz@kernel.org,
-        shuah@kernel.org, oliver.upton@linux.dev, seanjc@google.com,
-        peterx@redhat.com, ricarkol@google.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-References: <20221014071914.227134-1-gshan@redhat.com>
- <20221014071914.227134-4-gshan@redhat.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH 3/6] KVM: selftests: memslot_perf_test: Probe memory slots
- for once
-In-Reply-To: <20221014071914.227134-4-gshan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y02ObkYoUQlY9oG/@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.10.2022 09:19, Gavin Shan wrote:
-> prepare_vm() is called in every iteration and run. The allowed memory
-> slots (KVM_CAP_NR_MEMSLOTS) are probed for multiple times. It's not
-> free and unnecessary.
+On Mon, Oct 17, 2022 at 06:18:38PM +0100, Mark Brown wrote:
+> On Mon, Oct 17, 2022 at 08:12:40PM +0300, Andy Shevchenko wrote:
 > 
-> Move the probing logic for the allowed memory slots to parse_args()
-> for once, which is upper layer of prepare_vm().
+> > Since the PCI enumerated devices provide a property with SSP type,
+> > there is no more necessity to bear the copy of the ID table here.
+> > Remove it for good.
 > 
-> No functional change intended.
-> 
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->   .../testing/selftests/kvm/memslot_perf_test.c | 29 ++++++++++---------
->   1 file changed, 16 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
-> index dcb492b3f27b..d5aa9148f96f 100644
-> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
-> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
-> @@ -245,27 +245,17 @@ static bool prepare_vm(struct vm_data *data, int nslots, uint64_t *maxslots,
->   		       void *guest_code, uint64_t mempages,
->   		       struct timespec *slot_runtime)
->   {
-> -	uint32_t max_mem_slots;
->   	uint64_t rempages;
->   	uint64_t guest_addr;
->   	uint32_t slot;
->   	struct timespec tstart;
->   	struct sync_area *sync;
->   
-> -	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-> -	TEST_ASSERT(max_mem_slots > 1,
-> -		    "KVM_CAP_NR_MEMSLOTS should be greater than 1");
-> -	TEST_ASSERT(nslots > 1 || nslots == -1,
-> -		    "Slot count cap should be greater than 1");
-> -	if (nslots != -1)
-> -		max_mem_slots = min(max_mem_slots, (uint32_t)nslots);
-> -	pr_info_v("Allowed number of memory slots: %"PRIu32"\n", max_mem_slots);
-> -
->   	TEST_ASSERT(mempages > 1,
->   		    "Can't test without any memory");
->   
->   	data->npages = mempages;
-> -	data->nslots = max_mem_slots - 1;
-> +	data->nslots = nslots;
->   	data->pages_per_slot = mempages / data->nslots;
->   	if (!data->pages_per_slot) {
->   		*maxslots = mempages + 1;
-> @@ -885,8 +875,8 @@ static bool parse_args(int argc, char *argv[],
->   			break;
->   		case 's':
->   			targs->nslots = atoi(optarg);
-> -			if (targs->nslots <= 0 && targs->nslots != -1) {
-> -				pr_info("Slot count cap has to be positive or -1 for no cap\n");
-> +			if (targs->nslots <= 1 && targs->nslots != -1) {
-> +				pr_info("Slot count cap must be larger than 1 or -1 for no cap\n");
->   				return false;
->   			}
->   			break;
-> @@ -932,6 +922,19 @@ static bool parse_args(int argc, char *argv[],
->   		return false;
->   	}
->   
-> +	/* Memory slot 0 is reserved */
-> +	if (targs->nslots == -1) {
-> +		targs->nslots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS) - 1;
-> +		if (targs->nslots < 1) {
-> +			pr_info("KVM_CAP_NR_MEMSLOTS should be greater than 1\n");
-> +			return false;
-> +		}
-> +	} else {
-> +		targs->nslots--;
-> +	}
-> +
-> +	pr_info_v("Number of memory slots: %d\n", targs->nslots);
-> +
+> They do?  How?  Are you sure that this is true for all existing devices?
 
-Can't see any capping of the command line provided slot count to
-KVM_CAP_NR_MEMSLOTS value, like the old code did.
+Currently the board code assures that the property is always there for all
+existing devices.
 
->   	return true;
->   }
->   
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks,
-Maciej
 
