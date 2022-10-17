@@ -2,168 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FB260168E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2A7601697
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJQSqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S230153AbiJQSrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiJQSqF (ORCPT
+        with ESMTP id S230371AbiJQSq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:46:05 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B276CD39;
-        Mon, 17 Oct 2022 11:46:04 -0700 (PDT)
+        Mon, 17 Oct 2022 14:46:59 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0FA75390;
+        Mon, 17 Oct 2022 11:46:54 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id a13so17415671edj.0;
+        Mon, 17 Oct 2022 11:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666032365; x=1697568365;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y7P4CUTJ+HKkeBiHLXxdrw9k3ZvgWZpB7DAeZdKoH/Y=;
-  b=TVeLWI6qqgRJOy0q6/BCOp0Zb0/NrXDyVubCMig/pnn9AtF5SbeU4Kxl
-   rwSIn5sYynj1mowrMehOFy6F93Rno+INExvu/R/iv7Nbt01FsGxBsouTE
-   jzGxu290YQNtFs12++f3kjscvcLUiohTFJmPP6HjV7+vZErLukCUcdhGl
-   E=;
-X-IronPort-AV: E=Sophos;i="5.95,192,1661817600"; 
-   d="scan'208";a="141055391"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 18:46:05 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id D9A7045CC1;
-        Mon, 17 Oct 2022 18:46:03 +0000 (UTC)
-Received: from EX19D020UWC004.ant.amazon.com (10.13.138.149) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 17 Oct 2022 18:45:56 +0000
-Received: from f02f4b0103c5.ant.amazon.com (10.43.162.35) by
- EX19D020UWC004.ant.amazon.com (10.13.138.149) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.15; Mon, 17 Oct 2022 18:45:55 +0000
-From:   Alexander Graf <graf@amazon.com>
-To:     <kvm@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Andrew Randrianasulu" <randrianasulu@gmail.com>,
-        Thomas Huth <thuth@redhat.com>
-Subject: [PATCH 3/3] KVM: x86: Add compat handler for KVM_X86_SET_MSR_FILTER
-Date:   Mon, 17 Oct 2022 20:45:41 +0200
-Message-ID: <20221017184541.2658-4-graf@amazon.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20221017184541.2658-1-graf@amazon.com>
-References: <20221017184541.2658-1-graf@amazon.com>
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xOnduGdWwNX1YfeZsOAvcXCZLPvcfJ2PqKkkX8Fx7O4=;
+        b=NMkdJwU2X/H+STTyDxMpUL1FQFYwoN+XheRebuwN3COa2JW/UEuI5jOS1BIwEgypnV
+         ciEz60dWdsSLJOO0r8DALjo880+eW6td2yueBqrIGJs1qm5EuKV3/a5/jyPSRcGjAVYP
+         sJREphuL3EwNzUuyoZtGXAtGZA6SQ0ULbvW1cCEOQ+PsCOLRw/P8VINZGhynBJuY17qW
+         oL82A35ian9mlu6o+3zYMsTh5o/v1wd+x2JM+UKyMPCEVOAChjL4AQVMcUOy/Mn8WGiu
+         Mau+v6d0TRGTSikAzuzX/8bxKqcn+NNIjjGsN4KtwpP1/PNjdGoSB2jtPN1mqzWvVmyO
+         OHWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xOnduGdWwNX1YfeZsOAvcXCZLPvcfJ2PqKkkX8Fx7O4=;
+        b=LqXW7PtqWVzVYh4OaGwkrj/ojSZXZbrbs3pq2KJsl39pZvcZZMB2FwuKYyQzkLK00+
+         /uyfxAtS0n8DOGkapZUzfh3NjXlumErxkWMPo4ngH0jRzex2Oy8b4JXVSk5/1ASAKzDB
+         twwJJ1HYGLVm9wuabhJ1tulAbKlbQ739/oinhHmuv+NzmDERRvHXBnNSxlrgpil7nGpW
+         x7bzTzoTMcTn2muDRWZe1i+fRejE3naHNwsOX8gPMZ+jo1ze6zMcSMDze+6GIpwSLsiy
+         YGW6noj1x0QDpSrpaXOOYFar2PIQtL4orK1M+aNPU0L2uBVbXhLO5OALQIjZIbOssMLI
+         fz0A==
+X-Gm-Message-State: ACrzQf0JmgYmNuHKpZM4usOvQK0CJgWVaUX3jrwqD1L3kc4MkQWATLKp
+        Q1nMtmODwSg6IS/sXw9vvWY=
+X-Google-Smtp-Source: AMsMyM5ZAyJ5V+XIL0BwajqkqHOZh1Zrq/87LpgSUyRWGilqq4El/ypNBkUxveL7Ze4gbsLPs7vn4g==
+X-Received: by 2002:a05:6402:1394:b0:456:97cd:e9d4 with SMTP id b20-20020a056402139400b0045697cde9d4mr12055900edv.174.1666032412435;
+        Mon, 17 Oct 2022 11:46:52 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id kv2-20020a17090778c200b0077e6be40e4asm6567982ejc.175.2022.10.17.11.46.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 11:46:51 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 21:46:49 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk,
+        Tristram.Ha@microchip.com, richardcochran@gmail.com
+Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support
+ for LAN937x switch
+Message-ID: <20221017184649.meh7snyhvuepan25@skbuf>
+References: <20221014152857.32645-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.43.162.35]
-X-ClientProxiedBy: EX13D25UWB003.ant.amazon.com (10.43.161.33) To
- EX19D020UWC004.ant.amazon.com (10.13.138.149)
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014152857.32645-1-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The KVM_X86_SET_MSR_FILTER ioctls contains a pointer in the passed in
-struct which means it has a different struct size depending on whether
-it gets called from 32bit or 64bit code.
+On Fri, Oct 14, 2022 at 08:58:51PM +0530, Arun Ramadoss wrote:
+> The LAN937x switch has capable for supporting IEEE 1588 PTP protocol. This
+> patch series add gPTP profile support and tested using the ptp4l application.
+> LAN937x has the same PTP register set similar to KSZ9563, hence the
+> implementation has been made common for the ksz switches. But the testing is
+> done only for lan937x switch.
 
-This patch introduces compat code that converts from the 32bit struct to
-its 64bit counterpart which then gets used going forward internally.
-With this applied, 32bit QEMU can successfully set MSR bitmaps when
-running on 64bit kernels.
-
-Reported-by: Andrew Randrianasulu <randrianasulu@gmail.com>
-Fixes: 1a155254ff937 ("KVM: x86: Introduce MSR filtering")
-Signed-off-by: Alexander Graf <graf@amazon.com>
----
- arch/x86/kvm/x86.c | 56 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 19f060ce577f..20b5d25ba265 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -6446,6 +6446,62 @@ static int kvm_vm_ioctl_set_msr_filter(struct kvm *kvm,
- 	return 0;
- }
- 
-+#ifdef CONFIG_KVM_COMPAT
-+/* for KVM_X86_SET_MSR_FILTER */
-+struct kvm_msr_filter_range_compat {
-+	__u32 flags;
-+	__u32 nmsrs;
-+	__u32 base;
-+	__u32 bitmap;
-+};
-+
-+struct kvm_msr_filter_compat {
-+	__u32 flags;
-+	struct kvm_msr_filter_range_compat ranges[KVM_MSR_FILTER_MAX_RANGES];
-+};
-+
-+#define KVM_X86_SET_MSR_FILTER_COMPAT _IOW(KVMIO, 0xc6, struct kvm_msr_filter_compat)
-+
-+long kvm_arch_vm_compat_ioctl(struct file *filp, unsigned int ioctl,
-+			      unsigned long arg)
-+{
-+	void __user *argp = (void __user *)arg;
-+	struct kvm *kvm = filp->private_data;
-+	long r = -ENOTTY;
-+
-+	switch (ioctl) {
-+	case KVM_X86_SET_MSR_FILTER_COMPAT: {
-+		struct kvm_msr_filter __user *user_msr_filter = argp;
-+		struct kvm_msr_filter_compat filter_compat;
-+		struct kvm_msr_filter filter;
-+		int i;
-+
-+		if (copy_from_user(&filter_compat, user_msr_filter,
-+				   sizeof(filter_compat)))
-+			return -EFAULT;
-+
-+		filter.flags = filter_compat.flags;
-+		for (i = 0; i < ARRAY_SIZE(filter.ranges); i++) {
-+			struct kvm_msr_filter_range_compat *cr;
-+
-+			cr = &filter_compat.ranges[i];
-+			filter.ranges[i] = (struct kvm_msr_filter_range) {
-+				.flags = cr->flags,
-+				.nmsrs = cr->nmsrs,
-+				.base = cr->base,
-+				.bitmap = (__u8 *)(ulong)cr->bitmap,
-+			};
-+		}
-+
-+		r = kvm_vm_ioctl_set_msr_filter(kvm, &filter);
-+		break;
-+	}
-+	}
-+
-+	return r;
-+}
-+#endif
-+
- #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
- static int kvm_arch_suspend_notifier(struct kvm *kvm)
- {
--- 
-2.37.1
-
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+Unrelated to the proposed implementation. What user space stack do you
+use for gPTP bridging?
