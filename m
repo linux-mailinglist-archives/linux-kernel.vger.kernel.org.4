@@ -2,98 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C763560191C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2B8601944
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiJQUM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
+        id S230131AbiJQUUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiJQUMV (ORCPT
+        with ESMTP id S229908AbiJQUUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:12:21 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EF17C77D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:11:07 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id r19so8465865qtx.6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ELxpcD2V+g7AlHzgweIXKsiOGdQ0NM+0PGHARpqHIJQ=;
-        b=IG3+ISqWsGrvdC0HG4ACkT7zwnV7WUQJ7DXbhl8U1ByEm1bW/ZpXeMUC/FL9Koi3d/
-         KQro/3PTelzTw3gD25xbUYvfUFgw1PHgwZnn3C0WElYSFaMJcG3qtlWA7oXFABwfQeAu
-         z0Bm9EL2q/qmGPBl7CRM2javk5Maru/OncvkESjCGt9OXCWNisHeCOwFiAL3P1c+yO1B
-         6VuhxGDXql6WfWiaY+Ihraf1yNdEjOItqKAK0KrMJ4iaUiLy/olREkMc1VbkrVZIOt56
-         802M2VpFGTE5IimbQ0zkoYIq6YWm392tWpHavyWYBkKMDkdNCDDDb7PZe6Afb3buja0C
-         UoBA==
+        Mon, 17 Oct 2022 16:20:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF0875CCA
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:20:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666038012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tFELe6aznTe/GTRkqn1WfamvdAxLX3z1de1HiNewbYI=;
+        b=XyGIywttvLDsasO1dQ5XNwhtU0hEpgKNGtbGzRAflwrpdGMLVqBMUHWdKmJPBrUQzs5z/X
+        qAk8UjEQqDhR1eNt/9v2gVcS03FW7/YIjKOtc1aUI1k8Ljov3MEs0g5KQZXvR9S8siK7Os
+        Ut84Z41KADnJgLENqBMo5JZ5o8IH/XI=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-110--zcHNj_SM6iUc9PIZF3Drg-1; Mon, 17 Oct 2022 16:09:52 -0400
+X-MC-Unique: -zcHNj_SM6iUc9PIZF3Drg-1
+Received: by mail-ed1-f69.google.com with SMTP id b13-20020a056402350d00b0045d0fe2004eso8368277edd.18
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:09:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ELxpcD2V+g7AlHzgweIXKsiOGdQ0NM+0PGHARpqHIJQ=;
-        b=AB+7L/qjvUpAQwhmoMexzXqH57+d9pTO7gLlORXPcC17NsDLmBNV52I57rghO9/qGG
-         ncufLdU6DsLjrXkmzDt0H6F5xOA+DQglcUR+REU6iXluWsU6qQgH6h+w1qcnBhDgziWA
-         /+IiyGAtPEWFnXVNYgyJWoKU+J+j2kSs7/yt7cig9Nr7ygzFJKNhoeLLOrPS8sGU9QS0
-         +vhA0Rt4reXfxthLGIHojUFSuSxem8JwgpW2SLt25IeVQX/jmRUKCAYvWZ3cICMxXehc
-         60dbUpwXNx/1dBi+0Aj2oKN4RmQ4oZo1bv+Wr1YjwCBxNmhH16G1jbfTb7x00ga5sjEo
-         Bazw==
-X-Gm-Message-State: ACrzQf0F8a4M/FunNa9zf5yZ+2syNUDj5fWr59C63Te5pmjyClnSnLTg
-        C7uF1zzA1vIZL2gt570EJ6Fo7A==
-X-Google-Smtp-Source: AMsMyM6/gKFkOxhR4PwyjS5XF9FXDHztUy8cKizy0hC+ka4MezIUXhA2NEd5EWUYjH1yCWhIyp8NtA==
-X-Received: by 2002:ac8:5f12:0:b0:39c:d2ff:13aa with SMTP id x18-20020ac85f12000000b0039cd2ff13aamr9949770qta.193.1666037378538;
-        Mon, 17 Oct 2022 13:09:38 -0700 (PDT)
-Received: from localhost.localdomain (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id m13-20020a05620a24cd00b006ce76811a07sm536793qkn.75.2022.10.17.13.09.36
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tFELe6aznTe/GTRkqn1WfamvdAxLX3z1de1HiNewbYI=;
+        b=k2ixZnuI/E+rSAXT0sAEdigNjwUkQNIGzOZuSYCkE0KibS9Ggj+1E+rTf7I0KKhWCO
+         VowgWQAK+QHmiEESwQJmShWMWDxrrl2upxh9fKWgy6cDMnerEqHUWtxVvuFYNmHQHYEN
+         ED35lHbI8J9x+YkE3FAgDXxh9jnUT+hGxLxDbfOHijMGnfQgQBpoKHkcAoFNT7wiqX/M
+         ZPoRgrsLLFYQx5Gnr6w6PTBLDdzx+zSrl0eq/hgzezjIDpWA0Wd28Ranj2/WMtyGDLm8
+         HoRf19gGDavv2rDk1EN0S4ZGI+UW/LHag8cHgpWbh1kREoQBOHv2IS2azsKigdG4Mvs1
+         02iw==
+X-Gm-Message-State: ACrzQf1oLTm+sMb3obHD0yxZ/rwV9fJLXoSuGGt8dNPSGKmmu0rCWZcv
+        0TXxev7QE3cUHpTSlsnrANfZsK0muYbnZsrRN2OLxMZ4Be52anHLSTuazzbUzpsTa86f0sDvLiw
+        9Hljy7L3Zy58pZtCTU/xmyocM
+X-Received: by 2002:a17:906:3852:b0:78d:b3d2:97a9 with SMTP id w18-20020a170906385200b0078db3d297a9mr9642357ejc.565.1666037390743;
+        Mon, 17 Oct 2022 13:09:50 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6Q6w0Yd3Ly3IvBoaGPiiCRRxkBu07y2HUssk6yJS+lWQ7Ff2UU9VnF10nTdkEX3BV7i7IJcA==
+X-Received: by 2002:a17:906:3852:b0:78d:b3d2:97a9 with SMTP id w18-20020a170906385200b0078db3d297a9mr9642339ejc.565.1666037390474;
+        Mon, 17 Oct 2022 13:09:50 -0700 (PDT)
+Received: from redhat.com ([2.54.172.104])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa7d512000000b0044657ecfbb5sm7794413edq.13.2022.10.17.13.09.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 13:09:37 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawn.guo@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>
-Subject: Re: (subset) [PATCH v5 34/34] dt-bindings: pinctrl: qcom,sc8280xp: fix indentation in example (remaining piece)
-Date:   Mon, 17 Oct 2022 16:08:15 -0400
-Message-Id: <166603728603.4991.8364006823893676349.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221016170035.35014-35-krzysztof.kozlowski@linaro.org>
-References: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org> <20221016170035.35014-35-krzysztof.kozlowski@linaro.org>
+        Mon, 17 Oct 2022 13:09:49 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 16:09:46 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, gautam.dawar@xilinx.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] virtio-net: add cond_resched() to the command
+ waiting loop
+Message-ID: <20221017160724-mutt-send-email-mst@kernel.org>
+References: <20220905045341.66191-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905045341.66191-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Oct 2022 13:00:35 -0400, Krzysztof Kozlowski wrote:
-> Bindings example should be indented with 4-spaces.  Previous adjustment
-> missefd one spot.
+On Mon, Sep 05, 2022 at 12:53:41PM +0800, Jason Wang wrote:
+> Adding cond_resched() to the command waiting loop for a better
+> co-operation with the scheduler. This allows to give CPU a breath to
+> run other task(workqueue) instead of busy looping when preemption is
+> not allowed.
 > 
+> What's more important. This is a must for some vDPA parent to work
+> since control virtqueue is emulated via a workqueue for those parents.
 > 
+> Fixes: bda324fd037a ("vdpasim: control virtqueue support")
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
-Applied, thanks!
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-[34/34] dt-bindings: pinctrl: qcom,sc8280xp: fix indentation in example (remaining piece)
-        https://git.kernel.org/krzk/linux-dt/c/0eaaf138fff0b61ff28707502fdea9bdbade3958
+> ---
+>  drivers/net/virtio_net.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index ece00b84e3a7..169368365d6a 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -2000,8 +2000,10 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
+>  	 * into the hypervisor, so the request should be handled immediately.
+>  	 */
+>  	while (!virtqueue_get_buf(vi->cvq, &tmp) &&
+> -	       !virtqueue_is_broken(vi->cvq))
+> +	       !virtqueue_is_broken(vi->cvq)) {
+> +		cond_resched();
+>  		cpu_relax();
+> +	}
+>  
+>  	return vi->ctrl->status == VIRTIO_NET_OK;
+>  }
+> -- 
+> 2.25.1
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
