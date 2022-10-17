@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC62600986
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E07B600993
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiJQI5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S230389AbiJQI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiJQI44 (ORCPT
+        with ESMTP id S230375AbiJQI54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:56:56 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AAC27172
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:56:51 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id u21so15018203edi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:56:51 -0700 (PDT)
+        Mon, 17 Oct 2022 04:57:56 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD6C2BB18
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:57:53 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a26so23336217ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:57:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
         bh=683v4hUy0SmafI83To+Isl3SKfGOBhxnh8RoSe2BfVE=;
-        b=Qv6q8FWLtueHdd8V7+1ydYsFYZEEJpWavnxcBT7D5eWhQItA1/pVYccISbJFICMSkr
-         Ey3TbxDRm9PfKYS4JmGflA/lpJIrLC38NdXvtV9vC2uiARu6HbiwOaeUGshIc/MABNa8
-         iNRkxG6CAitkZXfK3EBPH0GPp9IUKLoi93vr8Qzhug5C9h9fTgikj/rU7ycMw3UELcZI
-         SVpiBRV4ckNiul+QC7IBmCWqxEcaYjPqjNgLxIT732CKswGqjuVZqI94LQYwNync9INI
-         KcYAHFuQHjoZ8bwkDPJN/fr3Cs0cqXeq4t5oCj9+Z09FuoB3p3Vj0At/JENf/LIAikzH
-         Ubfw==
+        b=t3+amSVGDFAxRbolB49Ma9U6k9IIKhxDwAwyJUkTM3Li0PafxLZLXAW0NCm1nt3as1
+         N84+c+fPTLYB396bAl4/Q0w48uzDDqbLzehPyMBFM1Tp3a7LrIsxevlXc6BrscV+lOfq
+         mGJ3EW5/EeQu7kupGXI95MFitBtE3U0fWugPttQLchXJ+CX+jzVQP7cWoQFnr4RoD6gf
+         /aRgyHO6kVKTo3b840dYVddB4NeyVZKc5wR3ojjuItP2a5dz7lXcnTh1SpVRk9gntYNH
+         Gk9gvPVT1XVoXT4ho5ATtKaTXv1ddOuBPp3yPHFaekZ0rOkS6BaG1XZCPh3lnr6Q6wEH
+         dkkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=683v4hUy0SmafI83To+Isl3SKfGOBhxnh8RoSe2BfVE=;
-        b=MIfSNeyQP7QgBITc11SpXQvPNvDTZtfjb4COL3tRMs9DiGlehfsaHICSDkAWLQslsw
-         3dXnJafGYy6Ofn/abgJRK7pC4yLW1ArlfbSvO3bbcHwO9CZ3o5J47gnpSwsfJPEeUCn9
-         6t7S4qfCJadAKbWjCIE4yHq01dI/Z/Rnl+wwlhB5uBxWhwBoA7v0uFB3cV3UvQk28LGa
-         qMRYPUrlfMPI7yh8c7h+EWWwuV6dFy0XILKf0HyEHI9VQEOQdvpQhULWq/GJSZFDOljR
-         AgJyz5nUzXCNg8i5bYn6Iw/bol1ezkA7sCDrAOlzlA8p5QS2MuDvk4oTIvjpUYAP9zQQ
-         /zfA==
-X-Gm-Message-State: ACrzQf2/vjIN5gGTOE7ZFGKjMAPLEFZu0+0pExilOrsjeFX43VQkeNDZ
-        P7fnbpbM+p5JnDyeKqv6weDOuJbJPXuF6eS95E6qcVckfrM=
-X-Google-Smtp-Source: AMsMyM54Es/rcRwZ3d5m5p40C0eL91BNOKnYNSaIiRiDdnSBs8EPAVZPWnDFbd89WM1r3BkjvyLcetoBa+sYeNXylYg=
-X-Received: by 2002:a17:906:5d04:b0:77f:ca9f:33d1 with SMTP id
- g4-20020a1709065d0400b0077fca9f33d1mr7894989ejt.526.1665996999142; Mon, 17
- Oct 2022 01:56:39 -0700 (PDT)
+        b=I2WIrFbgBZgXdmFE/dt0t7JmfVDsa8+kzctGO6QTQEqzqh9o3MOnRPg9IuOUcqiuhg
+         aIe+uURhBTqR79+2ipV5OG0wMkHDvIeNfcqKL8vJyzwssaxSNj0wAj75947JpIZ5V5No
+         d3H5yYOSt9jf/+nhU3k7msNEnktySx0ylRgaPHT0GV3CAGNcIZ01f7WtsmlTRJQc/lYi
+         8NyA/4NN4sJTBLhXl1QgkLGwPiWieU8VAkndRzB7MCN8non1SNiqNxiqJjtFTU5wmvDJ
+         bO2dRrQRJCHQjSobFRN7D3s/A2vn1mUSimo3vs6VVOjVwyEBiDCWlXCuyLWh7zNrku/Y
+         V2mQ==
+X-Gm-Message-State: ACrzQf2qL0a15jRPBlDFjnrqaTp5kLU15OR647svWp93iXTylJVhqr8/
+        nJNL3r2M2MthUaSlczwfjFtosPsOA6wp+v+dYPV8/A==
+X-Google-Smtp-Source: AMsMyM7EnJZWawlqbK2hCUNnkoxsNghTgy0VPziEZIqZHqcD50fAvXotg3KWEk8WTOVELGE1o/67a6uUcG2NxUWD/Yc=
+X-Received: by 2002:a17:907:16aa:b0:6fe:91d5:18d2 with SMTP id
+ hc42-20020a17090716aa00b006fe91d518d2mr4740704ejc.190.1665997072207; Mon, 17
+ Oct 2022 01:57:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-7-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010201453.77401-7-andriy.shevchenko@linux.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-8-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010201453.77401-8-andriy.shevchenko@linux.intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 17 Oct 2022 10:56:27 +0200
-Message-ID: <CACRpkdYsJtLT=D6OsJURG9Kj1c3A5x=LmUO_jNLkY=AsqPK5Ng@mail.gmail.com>
-Subject: Re: [PATCH v2 06/36] pinctrl: at91: Add missed header(s)
+Date:   Mon, 17 Oct 2022 10:57:41 +0200
+Message-ID: <CACRpkdbuUZugMYmO_9D3AhL7C=NCU65EF1MCmYauQ=zc2yvydg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/36] pinctrl: axp209: Add missed header(s)
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
         Kent Gibson <warthog618@gmail.com>,
