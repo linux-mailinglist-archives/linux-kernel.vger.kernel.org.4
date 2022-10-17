@@ -2,142 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6955C6008B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3CA6008B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiJQIb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S230231AbiJQIbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiJQIbT (ORCPT
+        with ESMTP id S229870AbiJQIbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:31:19 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AD02099C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:31:17 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id j4so16430565lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8KsRspEgB/gOfpXeMit48jsmBa9u2K7sMr+wCGZ90pU=;
-        b=iXrGdd8Ce/D/Ym1P/AKmDjhkCRodIz0sVHqhCXCbzz/70S2w/xiwhFMs2ZE6LzAOaY
-         kerpA8DKLp8h2EYJv/OamQ96cNwCdVwhlMsEt2I/Fx1TXldfIxx8y8EdnjfTih1j5QQY
-         mcontV8hQeGs5ML1x0iwjYx4oVH0ravWrBbKL8nhqpsejuYizWkrN/Z0xocIgE9V/nqA
-         /ibMQ5BBiN6XVdPz/bWMDfcoSg3yAyVOTjHlVwPDjsYICQVyEKqxZha6l63hzWMq89fQ
-         ikDz03AXZbI54WZYRpIVuo0JGyUqwrFqZ1lSI9F+0vgKA6aqXG/1CN3roD6DwyasNLJq
-         0f1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8KsRspEgB/gOfpXeMit48jsmBa9u2K7sMr+wCGZ90pU=;
-        b=psiofHLa5LyxiGdh56lOqdckPpacydP4mq6cYPcvs1yaEoxPPsxKDOAOw07bF3CW2p
-         Pa2+wGgDSytUNWdgYDrB6XsQpsmPCk60vHhXZtgMoXYUl6NtJPeZsKxakGcch8qGBUMo
-         AunBGoh7pjFf3ylBr/045vTBXt0RPx4ceMcHqwc9DZhkI2zGRhx6CgQmch346oKrJhP3
-         UrW7+zLs9ftDCyGuPtu4LUmwreQZYND7o3w3+WG6Gvu+EusUU+LriB86RE9/gvJ6nuaQ
-         GVd+Jhtn82a1cB+hMYIHnEuOrBUcmbusMbbaH7uzMFQM2nAycr0NGnM2OkdlRMGuUfrr
-         Edyg==
-X-Gm-Message-State: ACrzQf1pyh8zCMEUo7KGjFWC7yShTMKmX5v0bu84GfFgDmrnhhg1J+DR
-        xUbQ11xT/ifOnd5op1AnJSB5TPSBMV1NIh9DEK1/0g==
-X-Google-Smtp-Source: AMsMyM4vtxZKfG1BBKlWVvUdtQPv/C1LzAh0hWbLTBbJjcAgFk5XHPxnZIEqc8SnpuZmZ0z0x8oPZB51ly6T8M4BxPI=
-X-Received: by 2002:a05:6512:358c:b0:4a2:9c55:c63c with SMTP id
- m12-20020a056512358c00b004a29c55c63cmr3765865lfr.598.1665995475449; Mon, 17
- Oct 2022 01:31:15 -0700 (PDT)
+        Mon, 17 Oct 2022 04:31:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B29FBC91;
+        Mon, 17 Oct 2022 01:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1665995497; x=1697531497;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6Ba4r7Z2zK0pHmIj2H/qZpv6Aa24ieH3Lrajx9mOXQg=;
+  b=MWcfOR9LEsdng6KDekXyA3YgZC/TMFUGNmTTWMENnVTXT6SJ8olPiOdY
+   Z8uanYyVZxdgMVYNSTf6eKA2qTUWdwmlaVjZ/Fy9aXJPAGsNXb+sQiyqR
+   fsBVIIHSxwiIDuwLS3fY6drAlRDKEf7Pb2dXDRwk1hq4DiJXyfLy2NisR
+   V8NyMWfTzYVMCpxmPMWcEDEm2ux5RND50KoQCZ8rA3NHv0GZ4cAtrwmqw
+   ANduqqT8W8I50gjHnFMZkoOgOxCDawIo3X7FpV1EIa7PFKJK30/VuGt3+
+   6fPDy2/ZDuQA+Shsw/blVhrrCGQ7LqPjyLB3pWmgQ1SEVryxFsQBe2TR4
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="182474316"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Oct 2022 01:31:36 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 17 Oct 2022 01:31:35 -0700
+Received: from virtualbox.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 17 Oct 2022 01:31:32 -0700
+From:   Mihai Sain <mihai.sain@microchip.com>
+To:     <robh+dt@kernel.org>, <eugen.hristev@microchip.com>,
+        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Mihai Sain <mihai.sain@microchip.com>
+Subject: [PATCH] ARM: dts: at91: sama7g5: fix signal name of pin PB2
+Date:   Mon, 17 Oct 2022 11:31:19 +0300
+Message-ID: <20221017083119.1643-1-mihai.sain@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20221014084837.1787196-1-hrkanabar@gmail.com> <20221014091503.GA13389@twin.jikos.cz>
-In-Reply-To: <20221014091503.GA13389@twin.jikos.cz>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 17 Oct 2022 10:31:03 +0200
-Message-ID: <CACT4Y+as3SA6C_QFLSeb5JYY30O1oGAh-FVMLCS2NrNahycSoQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/7] fs: Debug config option to disable filesystem
- checksum verification for fuzzing
-To:     dsterba@suse.cz
-Cc:     Hrutvik Kanabar <hrkanabar@gmail.com>,
-        Hrutvik Kanabar <hrutvik@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        kasan-dev@googlegroups.com,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        "Darrick J . Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        linux-ntfs-dev@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 at 11:15, David Sterba <dsterba@suse.cz> wrote:
->
-> On Fri, Oct 14, 2022 at 08:48:30AM +0000, Hrutvik Kanabar wrote:
-> > From: Hrutvik Kanabar <hrutvik@google.com>
-> >
-> > Fuzzing is a proven technique to discover exploitable bugs in the Linux
-> > kernel. But fuzzing filesystems is tricky: highly structured disk images
-> > use redundant checksums to verify data integrity. Therefore,
-> > randomly-mutated images are quickly rejected as corrupt, testing only
-> > error-handling code effectively.
-> >
-> > The Janus [1] and Hydra [2] projects probe filesystem code deeply by
-> > correcting checksums after mutation. But their ad-hoc
-> > checksum-correcting code supports only a few filesystems, and it is
-> > difficult to support new ones - requiring significant duplication of
-> > filesystem logic which must also be kept in sync with upstream changes.
-> > Corrected checksums cannot be guaranteed to be valid, and reusing this
-> > code across different fuzzing frameworks is non-trivial.
-> >
-> > Instead, this RFC suggests a config option:
-> > `DISABLE_FS_CSUM_VERIFICATION`. When it is enabled, all filesystems
-> > should bypass redundant checksum verification, proceeding as if
-> > checksums are valid. Setting of checksums should be unaffected. Mutated
-> > images will no longer be rejected due to invalid checksums, allowing
-> > testing of deeper code paths. Though some filesystems implement their
-> > own flags to disable some checksums, this option should instead disable
-> > all checksums for all filesystems uniformly. Critically, any bugs found
-> > remain reproducible on production systems: redundant checksums in
-> > mutated images can be fixed up to satisfy verification.
-> >
-> > The patches below suggest a potential implementation for a few
-> > filesystems, though we may have missed some checksums. The option
-> > requires `DEBUG_KERNEL` and is not intended for production systems.
-> >
-> > The first user of the option would be syzbot. We ran preliminary local
-> > syzkaller tests to compare behaviour with and without these patches.
-> > With the patches, we found a 19% increase in coverage, as well as many
-> > new crash types and increases in the total number of crashes:
->
-> I think the build-time option inflexible, but I see the point when
-> you're testing several filesystems that it's one place to set up the
-> environment. Alternatively I suggest to add sysfs knob available in
-> debuging builds to enable/disable checksum verification per filesystem.
+The signal name of pin PB2 with function F is FLEXCOM11_IO1
+as it is defined in the datasheet.
 
-Hi David,
+Fixes: 7540629e2fc7 ("ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek")
+Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
+---
+ arch/arm/boot/dts/sama7g5-pinfunc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What usage scenarios do you have in mind for runtime changing of this option?
-I see this option intended only for very narrow use cases which
-require a specially built kernel in a number of other ways (lots of
-which are not tunable at runtime, e.g. debugging configs).
+diff --git a/arch/arm/boot/dts/sama7g5-pinfunc.h b/arch/arm/boot/dts/sama7g5-pinfunc.h
+index 4eb30445d205..6e87f0d4b8fc 100644
+--- a/arch/arm/boot/dts/sama7g5-pinfunc.h
++++ b/arch/arm/boot/dts/sama7g5-pinfunc.h
+@@ -261,7 +261,7 @@
+ #define PIN_PB2__FLEXCOM6_IO0		PINMUX_PIN(PIN_PB2, 2, 1)
+ #define PIN_PB2__ADTRG			PINMUX_PIN(PIN_PB2, 3, 1)
+ #define PIN_PB2__A20			PINMUX_PIN(PIN_PB2, 4, 1)
+-#define PIN_PB2__FLEXCOM11_IO0		PINMUX_PIN(PIN_PB2, 6, 3)
++#define PIN_PB2__FLEXCOM11_IO1		PINMUX_PIN(PIN_PB2, 6, 3)
+ #define PIN_PB3				35
+ #define PIN_PB3__GPIO			PINMUX_PIN(PIN_PB3, 0, 0)
+ #define PIN_PB3__RF1			PINMUX_PIN(PIN_PB3, 1, 1)
+-- 
+2.38.0
 
-> As this may not fit to other filesystems I don't suggest to do that for
-> all but I am willing to do that for btrfs, with eventual extension to
-> the config option you propose. The increased fuzzing coverage would be
-> good to have.
