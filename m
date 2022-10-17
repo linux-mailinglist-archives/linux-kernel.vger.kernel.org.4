@@ -2,178 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB75E601334
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F14A601336
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiJQQLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 12:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        id S230307AbiJQQNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 12:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbiJQQLK (ORCPT
+        with ESMTP id S230214AbiJQQNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 12:11:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7EC6CF69
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666023068; x=1697559068;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=NRcJICLgMWoilnoACvZuQ0ZUzOd3Rj6Wga0f5g390AI=;
-  b=bsfldBRD4LrQLyTvQsPw2GSomxnYK38MZtfYYEAJeozBIWCEOXlY8x3l
-   aWjzBB7RCbdNnrNmT7RV9t3cSTQDoT249k15H9A2JJkP9OrMt+y921CNW
-   1Wn4cCO5bY1gYe56M+AMK/petloXqEaDE6qccrNm81vOBBjCssWOdqyrC
-   bB3dpHEYm3uhA9JcpbqVoXBCSg0JV6I9ItApFf7uikcLddwI2fCAc4S9X
-   JgFlwHOM5/kLcILeROTkJ/2zt6BEbnv0ATZPRzSCEIgnA8hM/qMve85M9
-   3o8ABvDrSH3/v9xq5JXdGxeddl1IPLrK9R17gX0Ur0vmGFO0W/kmlvbjo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="289138696"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="289138696"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 09:09:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="957392845"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="957392845"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Oct 2022 09:09:26 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 09:09:26 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 17 Oct 2022 09:09:26 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.42) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 17 Oct 2022 09:09:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F+BYp660h5CYTq9qw9M5KyEFbI4/7M7wr7x7duTDkjE+8+NzelNbtSMs2eU1e9U2t6vBS3a5flH6KoBjsxeuvktAfpGd5OK9KtKKgZy3X79KjXONw1C0Ov1Hiy/b0ax9c27bQL5TeKsK06ewpL0JQjZHtK8zWfR4kI1vfyFGU+1StyaXpQZiReQtDeePVCcr4GrZUGBHxzUxI6RJaiIHJEXuftFv6G2m6qZjTcBvg99xS/dMF3V/pU88qqNhD1xmvOorpksGOSEpxvzqxcYEwwm5m3/7ohHenYKbiaHglB1imeGwk3CJBLx+3dy9n5Sw35FS/jLosywotxKddx2mKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NRcJICLgMWoilnoACvZuQ0ZUzOd3Rj6Wga0f5g390AI=;
- b=ZZshCxASktouGHPi+VLN+Jvy9S3cpWhh09ecEl+o4tIa0z8m4VALnvch5Tx2RNmWNgjHz/UJrgFK3rPNho+a0SWNisgSDeexLGYirTOfxG4vHATx0nME0d1vifK9AL4YWpsXAGrKl+AmTpxddAbBRCyYbKeHmeIlpz8HqaOpwgEFaihYsxV2VnZOI7159ZNqhEajscLbUqxJuuBw4WxeNMGHBH7IJ/zR/8V6vsra7rmvxJVAt+71ySaMVk05qhrRd/cxKXjAhr/WmZzrsitKnE1rWHJQcyCRitfmwa+ADYBNGHtctm3Re7HYFwBWzZZeobB9AHJlppZsnVa4DRq69A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by DM4PR11MB5328.namprd11.prod.outlook.com (2603:10b6:5:393::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Mon, 17 Oct
- 2022 16:09:23 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60%6]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 16:09:23 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] RAS: Fix the trace_show() function to output
- trace_count
-Thread-Topic: [PATCH v2] RAS: Fix the trace_show() function to output
- trace_count
-Thread-Index: AQHY2PM6AmYOaHxNDkqKd6ET2h/8964SdqsAgABbLtA=
-Date:   Mon, 17 Oct 2022 16:09:23 +0000
-Message-ID: <SJ1PR11MB60835DDCB1F3EBC8B6DFA2F7FC299@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <Yz3KI5qY70rvJV63@zn.tnic>
- <20221005194644.311204-1-tony.luck@intel.com> <Y00wIFEN9h9YPGe1@zn.tnic>
-In-Reply-To: <Y00wIFEN9h9YPGe1@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|DM4PR11MB5328:EE_
-x-ms-office365-filtering-correlation-id: 3163da42-b573-4693-a951-08dab059f534
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SR04XQd+L/Pv+f46tXQAxqTp8ICAWOrirUfWapvUIjjT9A/n2YAhGeltqOMrguaqQ6SP8cl5iEkW5u7TQdTLWQf/KpOj6zxLAKcykL+p9eU1Fz+MSO+Y1DSvJiNhJ2sknFC1AREee7+8TdMcwJZLy+7dluU8S6r/bkti2PXI4rRjJ/IaxVhj4OHR4V68AvsiD3o8wu4+PIVicfIkeYQUOkW9MWli0eB4QourPq50JrI1f6gwZpa2AhvWn+y/0Ui+/wl9YB/wgtrsCqQiX8JrNtOpEcvkpEehN1LRmLk7GiaQKzfLC3gtvx7lUjJuv70tIM3Vln+hiOFLq9u4PFvSL4h64Db0AtuLelg/tMXBvH9ACFGlT2lxwA1bPnlIv+oFIgBW3psaMfJsi1KQYDslfYbW6dv9G+yxG4djXVxRIEKNNZIkR45OYNYDBTWR0VYsqjoLRIp9+sUT/x4TNYPFj1Cps0viJ4jnVE4NSGoRj+tYFFZ0EcDHyyuE8wH0nRyYvWWyN9ayzqUzGuahyBm9QtVro7Osr285fyOYO5NfmaV1c+NzWjDVn9ZnzbU29am3ZaLP80NiWX6GNPiQanFpuDlKjrFG9hEKKfXlhNkXx9IiWhTFDWZhV/U8A+/kMrf+HmTxtlGEmV5YPNglk+rhDjfIRqlQts3SRhCsj/QBuO/4C3URhyDPFDQs0Xxp6JXG6rzNxdpiXuyB9mC0mfefp0VysIUH0i4saaIDKMLJL6jBGZziOTRvmMdFKRA9kmMVlKT/CK0oqZBI92zZcnZlVg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(396003)(366004)(136003)(346002)(451199015)(54906003)(6916009)(316002)(186003)(7696005)(6506007)(4744005)(52536014)(8936002)(26005)(9686003)(41300700001)(5660300002)(66476007)(66446008)(64756008)(8676002)(4326008)(66556008)(66946007)(33656002)(76116006)(38100700002)(82960400001)(2906002)(38070700005)(71200400001)(86362001)(478600001)(55016003)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QktqVWZDUTcrMkVISXJzY3lSbEpRdW4vemw0cnlpWGhHZDUzQjRXZjJJWjlK?=
- =?utf-8?B?akV0V1p5N3pteXV1eWMvTFdxK2tEQ2hueXZabzBsRkQ0U3BEL0lORWdMRjhx?=
- =?utf-8?B?UmpKdSt0dUtwOFoxb2toWUpWS0NMdVpMYWZFaVd5eUJFMXhISE9heGNQUUpZ?=
- =?utf-8?B?Q3kyeHV4NnRhdnNEYkc4bXpBOXBzUEVXcmY0NnBGNWxxUXBDTFh4KzZnTzhv?=
- =?utf-8?B?ZVZSSVIxTTNQeGMrZ0JFVmxZaTAzVmRvYlBGR1EzeCtxV2QveEtPeGNwM241?=
- =?utf-8?B?UUI3bjhQOElPQkxnMGJzRU9GU2g1d1NBRnhRaERqTEZpaERzc1BHa1oyMGxm?=
- =?utf-8?B?NEtXNzRiYVZCbm5rYnZ6dmJ5TlJqUVY5cVkwSWVOWTR6MktsQW8rVVU5SUdN?=
- =?utf-8?B?amNmTU1UWTBSUjRwRklCQVY1YUZCYTc0MlV1YnkyZThDZ1NFTHpDMGdETG42?=
- =?utf-8?B?VnA0b3pZQUJ2WUVhM2t6ek11SWJqVG9kYnI3S1I3YnE5Ni8wV1ZXdFBKSEVl?=
- =?utf-8?B?bDFDWkNQcmU1NjAwMDFIK1FFQzVOMDFyaFdySEcxZ3V4OHBodGkySkdld3Bo?=
- =?utf-8?B?SmhMbENlZWdQM3F5cUNZUEwvVFYxaStvUVJyZHpXdGxJN05TNFcrR2w1NDAr?=
- =?utf-8?B?dmtuazNBZVFWa3p0a3lvQjIwTzJZZkl0K1hBbCtWODZRMHFUc1prY1pFMEJy?=
- =?utf-8?B?OWw1SUovbDlobnZSdFZPQzkxdDJwQmVOM0VpKzJDSnkwL1J1c2pTcUxuZndi?=
- =?utf-8?B?QjNLc0w3L0I5cmlNODNBZnZueEUzdWQ2ak9aMnd4NFVyOHJ4bmI5djJZWjBi?=
- =?utf-8?B?ajlxN21MR3ZkV3pKNXNDT1o5RHhHRjliZS9sczJHSG03QjRGbzEyNXdHOHQ5?=
- =?utf-8?B?bG92dmpwNG4yVzN5TlpneStXVHpnWndvcjBGYlRqRDViak8rajZ0YVE4MjB3?=
- =?utf-8?B?dkM5TDRQektGTjlSVHp3MHJwaktWeFJ0VVRiQTVqMDZwRzIrZ1plRlNHMHBP?=
- =?utf-8?B?aHMvdVZwYlRhS1BUTjBwOHZwMGQzbjMyWW5QMVhSZmordUtuTkc0NUpJSkJU?=
- =?utf-8?B?NkZWMmpNZUg0cnQwNXQzRHJJUnhlRFVrdmlINnUzN01udk44QlZqdGI2RjBl?=
- =?utf-8?B?M1l3dE5iYUZ5UTc4NjNUMXNuaG83ekxlZWFZV0xxZTllaHdiVXFsUWsrbjZk?=
- =?utf-8?B?SzV1WWNSTlloVkxQOEhpMjFOcTdRWnFrc3B2WXZ2K2ZycUc1OGh3WXhZZ0pn?=
- =?utf-8?B?eGt1MXN3Yk5mSjRRa0hXdEY1RVhDMSs4c1hiUEQ3cE5JRSt3Qm5HWFdKRXdk?=
- =?utf-8?B?bkc5NUUxaXRCUGIzZzRBK2NpVENYZ29xOHZML29SZG9KVFd1R2QxcG4raVBI?=
- =?utf-8?B?TnNwRHJyV29mNjljMC91Lzh4MFhQSHRqenNRZno5WHVRVFhpQSs1Qmp4Tjhv?=
- =?utf-8?B?MU0vR2tDN09KeHlDVEhhb3orVjNCYXhIbDFNWkhva29Pek1xOUkweHR6NXdr?=
- =?utf-8?B?REY0ZS96cDF0L0daRnFmYjRwQUlZOEtLc1pJM1R6b244aUxUMlFpK3d3cDlo?=
- =?utf-8?B?eWI0dEZhb2NmS3ZQVTdHNVBRbERCT0puZDJ4bXVZR3YzUXlKOGF5c3RyQkJq?=
- =?utf-8?B?OURzVGhla0lybithVHR2ZWx3aGROUjE5WGFTRVN3QzlteUE3ZTUzQnAwSGhw?=
- =?utf-8?B?dFBaVGZmVWZtY3UybzdnRTNiazlka1NWaFBZbDJmN2RDRzhadC9VQXJtNG5K?=
- =?utf-8?B?Vm8xY0ZCZThMWFFTa2ozRjlFV09PdytDMGRKNVR1dkltYmlZNk9mNzdUN1B1?=
- =?utf-8?B?V3FITVI5QzRvRXhQNUMwSlNodXpzMStmTzVITXZ3V0xKRVE5Q0wxYkErbHJR?=
- =?utf-8?B?OWc0ajZsejRVdURIOHN4ZVU5NmUwZFlpbEw3YXk0VTFpQnhOMnpmR1d1Z2Ev?=
- =?utf-8?B?L2FxM0JEay9wNG16cVl5VlQxZk4yL0FUMkl1cCt1NFQwNEpRZGlyblF2ZGtO?=
- =?utf-8?B?MU0vbERSVlZId3BiTWVXeGRyYnEyMFFLZnN6VTkwSXQwcS9CdUJiT2NGOHIz?=
- =?utf-8?B?U0tBd25SMHRWNXBGaWV0c2hwZS9nUnQ1KzRMNHh1VGJoSTFER25MSjlsV25G?=
- =?utf-8?Q?Af4o=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 17 Oct 2022 12:13:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4408665E9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666023182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w3MjgZY56TNNT3faRBhD5MLvauHt/RA4LASMGl9cUeo=;
+        b=OyvLRbS8cI/H55kK/0FqSRUATkKzutabQ5fDgIPOeeGjAYE+8A4kki0G9mFkLMI5OAbdMS
+        gI/Stbl/vn1cOsmoMwoRppbYwRMNbjiJKmkKNDGJAvCeMiXK2yXdyUTWOyjrDhnRxUz4j7
+        G+sapJ9jZG73PG4EdkPfBFYefEplrPY=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-349-xI_nA7VePMOUnlZdzmijqw-1; Mon, 17 Oct 2022 12:13:00 -0400
+X-MC-Unique: xI_nA7VePMOUnlZdzmijqw-1
+Received: by mail-qk1-f199.google.com with SMTP id n13-20020a05620a294d00b006cf933c40feso10073433qkp.20
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:13:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3MjgZY56TNNT3faRBhD5MLvauHt/RA4LASMGl9cUeo=;
+        b=7i0qMCQYDPIYFfAkKwyH7kQ7ZD36qsAY/TI0PLzOg4TIKFSS+RqWY2ALO1L90zYVUu
+         LntLORRPLLsurJYxjQBh2oOAwqjdGtS1FzNSJ5mGGS4uqopxFx+EOUDSTr/VGlZ+qEuU
+         FJiGnnJiwn+7+CemKiBH2YEeTjxFA3hp6qFI56zu+oY6/q4GjXc6fYkqQ4sfOOOk9GLP
+         vSqvLOAIAEuNlCH8+TtiXa1kHJYAaQx2ZUocLLzg0ADhRkbW3sqpsff78sfs/QBgjxWr
+         fpBuQy0+CYEzTl7BVJb1OZiuXPxbGR01voBLj5DbpoA4v8RXFUNo48ifGp6aMJKv5ObN
+         RWhw==
+X-Gm-Message-State: ACrzQf3am7tIwhM8HzCxzhVKK7A7xIRnQZ9L6qqMAmjD/IXgLWQBEqo1
+        doq3l/CUi/54WoFtylF5EU0U5bSJrPUtQBAI1U69PvbadUVVNyX44sDVlCLvMHhcUBtHF1Gv+EI
+        5WoLrwtOzwVYsk8Hs+LdOLwBf
+X-Received: by 2002:a0c:b30f:0:b0:4b1:9058:7a85 with SMTP id s15-20020a0cb30f000000b004b190587a85mr8983472qve.25.1666023178723;
+        Mon, 17 Oct 2022 09:12:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4MBNc9xKvFP3xB7Y9O9w4a7WWlUf5kf1smvYrr5wvB0DZJeTNorh+uqlxmtEIaVchSWe11og==
+X-Received: by 2002:a0c:b30f:0:b0:4b1:9058:7a85 with SMTP id s15-20020a0cb30f000000b004b190587a85mr8983451qve.25.1666023178452;
+        Mon, 17 Oct 2022 09:12:58 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id m21-20020ac866d5000000b0039cbd3e4ed1sm157514qtp.6.2022.10.17.09.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 09:12:57 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 12:13:00 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>
+Subject: Re: Panic/lockup in z3fold_zpool_free
+Message-ID: <Y01/DOMdAJQPDaxZ@bfoster>
+References: <6f834faddf927b6fa5a8edd8adfde63c@natalenko.name>
+ <YyxJAObMV8tFVLkM@bfoster>
+ <2650562.mvXUDI8C0e@natalenko.name>
+ <2650550.mvXUDI8C0e@natalenko.name>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3163da42-b573-4693-a951-08dab059f534
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2022 16:09:23.8637
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z421qcegjaUaR/Bfihp3cuVpwSnmNqPxYMSfX83y+VW0scUMe7XYUI+K5tcpYD4HvqMvInojopVdzQiJwQrWzQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5328
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2650550.mvXUDI8C0e@natalenko.name>
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBTdGlsbCBtaXNsZWFkaW5nOg0KPg0KPiAkIGNhdCAvc3lzL2tlcm5lbC9kZWJ1Zy9yYXMvZGFl
-bW9uX2FjdGl2ZQ0KPiAxDQoNCkFncmVlZC4gSXQgbmVlZHMgdXNlciB0byBpbnRlcnByZXQgdGhl
-IGFuc3dlci4gVGhlIGZpbGVuYW1lIHdvdWxkIGxlYWQNCnRoZW0gdG8gdGhpbmsgIjEiIG1lYW5z
-IHRoZSBkYWVtb24gaXMgYWN0aXZlLCBidXQgaXRzIGFjdHVhbGx5IGp1c3QgYSBjb3VudA0Kb2Yg
-aG93IG1hbnkgdGltZXMgdGhlIGZpbGUgaXMgY29uY3VycmVudGx5IG9wZW4gKHdoaWNoIGluY2x1
-ZGVzIHRoZQ0KImNhdCIgcHJvY2VzcyByZWFkaW5nIHRoZSBmaWxlKS4NCg0KDQo+IEkgZG9uJ3Qg
-a25vdywgbWF5YmUgd2Ugc2hvdWxkIHRlYWNoIFJBUyBkYWVtb25zIHRvIC0+d3JpdGUoKSBpbnRv
-IHRoYXQNCj4gZmlsZSB0aGVpciBuYW1lIGFuZCBQSUQgc28gdGhhdCB0aGUgdHJhY2VfY291bnQg
-Y291bnRzICpvbmx5KiB0aGUgUkFTDQo+IGRhZW1vbnMgbm90IGFueSByZWFkZXIuLi4NCg0KU2hv
-dWxkIGhhdmUgdGhvdWdodCBvZiB0aGlzIGVhcmxpZXIgLi4uIGNoYW5naW5nIHVzZXIgc3BhY2Ug
-c2VtYW50aWNzDQppcyBoYXJkLiBFdmVuIHdpdGggb25seSBvbmUgdXNlciwgdGhlcmUgaXMgYSBs
-b25nIHRyYW5zaXRpb24gcGVyaW9kIHdoZXJlDQpuZXcga2VybmVscyBhcmUgcnVubmluZyB3aXRo
-IG9sZCByYXNkYWVtb24gYW5kIHZpY2UgdmVyc2EuDQoNCkhvdyBhYm91dDoNCg0KCXNlcV9wcmlu
-dGYobSwgIiVkXG4iLCBhdG9taWNfcmVhZCgmdHJhY2VfY291bnQpIC0gMSk7DQoNCndpdGggYSBj
-b21tZW50IHRoYXQgdXNlcnMgcmVhZGluZyB0aGUgZmlsZSBvbmx5IHdhbnQgdG8ga25vdyBpZiBh
-bnlvbmUNCmVsc2UgaGFzIGl0IG9wZW4/DQoNCi1Ub255DQoNCg0K
+On Thu, Oct 06, 2022 at 05:52:52PM +0200, Oleksandr Natalenko wrote:
+> Hello.
+> 
+> On pátek 23. září 2022 10:33:14 CEST Oleksandr Natalenko wrote:
+> > On čtvrtek 22. září 2022 13:37:36 CEST Brian Foster wrote:
+> > > On Thu, Sep 22, 2022 at 08:53:09AM +0200, Oleksandr Natalenko wrote:
+> > > > Since 5.19 series, zswap went unstable for me under memory pressure, and
+> > > > occasionally I get the following:
+> > > > 
+> > > > ```
+> > > > watchdog: BUG: soft lockup - CPU#0 stuck for 10195s! [mariadbd:478]
+> > > > Modules linked in: netconsole joydev mousedev intel_agp psmouse pcspkr
+> > > > intel_gtt cfg80211 cirrus i2c_piix4 tun rfkill mac_hid nft_ct tcp_bbr2
+> > > > nft_chain_nat nf_tables nfnetlink nf_nat nf_conntrack nf_defrag_ipv6
+> > > > nf_defrag_ipv4 fuse qemu_fw_cfg ip_tables x_tables xfs libcrc32c
+> > > > crc32c_generic dm_crypt cbc encrypted_keys trusted asn1_encoder tee tpm
+> > > > rng_core dm_mod crct10dif_pclmul crc32_pclmul crc32c_intel
+> > > > ghash_clmulni_intel virtio_net aesni_intel serio_raw net_failover
+> > > > ata_generic virtio_balloon failover pata_acpi crypto_simd virtio_blk atkbd
+> > > > libps2 vivaldi_fmap virtio_pci cryptd virtio_pci_legacy_dev ata_piix
+> > > > virtio_pci_modern_dev i8042 floppy serio usbhid
+> > > > Unloaded tainted modules: intel_cstate():1 intel_uncore():1 pcc_cpufreq():1
+> > > > acpi_cpufreq():1
+> > > > CPU: 0 PID: 478 Comm: mariadbd Tainted: G             L    5.19.0-pf5 #1
+> > > > 12baccda8e49539e158b9dd97cbda6c7317d73af
+> > > > Hardware name: Red Hat KVM, BIOS 1.11.0-2.el7 04/01/2014
+> > > > RIP: 0010:z3fold_zpool_free+0x4c/0x5e0
+> > > > Code: 7c 24 08 48 89 04 24 0f 85 e0 00 00 00 48 89 f5 41 bd 00 00 00 80 48
+> > > > 83 e5 c0 48 83 c5 28 eb 0a 48 89 df e8 b6 8d 9f 00 f3 90 <48> 89 ef e8 bc 8b
+> > > > 9f 00 4d 8b 34 24 49 81 e6 00 f0 ff ff 49 8d 5e
+> > > > RSP: 0000:ffffbeadc0e87b68 EFLAGS: 00000202
+> > > > RAX: 0000000000000030 RBX: ffff99ac73d2c010 RCX: ffff99ac4e4ba380
+> > > > RDX: 0000665340000000 RSI: ffffe3b540000000 RDI: ffff99ac73d2c010
+> > > > RBP: ffff99ac55ef3a68 R08: ffff99ac422f0bf0 R09: 000000000000c60b
+> > > > R10: ffffffffffffffc0 R11: 0000000000000000 R12: ffff99ac55ef3a50
+> > > > R13: 0000000080000000 R14: ffff99ac73d2c000 R15: ffff99acf3d2c000
+> > > > FS:  00007f587fcd66c0(0000) GS:ffff99ac7ec00000(0000) knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: 00007f587ce8bec8 CR3: 0000000005b48006 CR4: 00000000000206f0
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  zswap_free_entry+0xb5/0x110
+> > > >  zswap_frontswap_invalidate_page+0x72/0xa0
+> > > >  __frontswap_invalidate_page+0x3a/0x60
+> > > >  swap_range_free+0xb5/0xd0
+> > > >  swapcache_free_entries+0x16e/0x2e0
+> > > >  free_swap_slot+0xb4/0xc0
+> > > >  put_swap_page+0x259/0x420
+> > > >  delete_from_swap_cache+0x63/0xb0
+> > > >  try_to_free_swap+0x1b5/0x2a0
+> > > >  do_swap_page+0x24c/0xb80
+> > > >  __handle_mm_fault+0xa59/0xf70
+> > > >  handle_mm_fault+0x100/0x2f0
+> > > >  do_user_addr_fault+0x1c7/0x6a0
+> > > >  exc_page_fault+0x74/0x170
+> > > >  asm_exc_page_fault+0x26/0x30
+> > > > RIP: 0033:0x556e96280428
+> > > > Code: a0 03 00 00 67 e8 28 64 ff ff 48 8b 83 b0 00 00 00 48 8b 0d da 18 72
+> > > > 00 48 8b 10 66 48 0f 6e c1 48 85 d2 74 27 0f 1f 44 00 00 <48> c7 82 98 00 00
+> > > > 00 00 00 00 00 48 8b 10 48 83 c0 08 f2 0f 11 82
+> > > > RSP: 002b:00007f587fcd3980 EFLAGS: 00010206
+> > > > RAX: 00007f587d028468 RBX: 00007f587cb1a818 RCX: 3ff0000000000000
+> > > > RDX: 00007f587ce8be30 RSI: 0000000000000000 RDI: 00007f587cedd030
+> > > > RBP: 00007f587fcd39c0 R08: 0000000000000016 R09: 0000000000000000
+> > > > R10: 0000000000000008 R11: 0000556e970961a0 R12: 00007f587d1f17b8
+> > > > R13: 00007f5883595598 R14: 00007f587d1f17a8 R15: 00007f587cb1a928
+> > > >  </TASK>
+> > > > ```
+> > > > 
+> > > > This happens on the latest v5.19.10 kernel as well.
+> > > > 
+> > > > Sometimes it's not a soft lockup but GPF, although the stack trace is the
+> > > > same. So, to me it looks like a memory corruption, UAF, double free or
+> > > > something like that.
+> > > > 
+> > > > Have you got any idea regarding what's going on?
+> > > > 
+> > > 
+> > > It might be unrelated, but this looks somewhat similar to a problem I
+> > > hit recently that is caused by swap entry data stored in page->private
+> > > being clobbered when splitting a huge page. That problem was introduced
+> > > in v5.19, so that potentially lines up as well.
+> > > 
+> > > More details in the links below. [1] includes a VM_BUG_ON() splat with
+> > > DEBUG_VM enabled, but the problem originally manifested as a soft lockup
+> > > without the debug checks enabled. [2] includes a properly formatted
+> > > patch. Any chance you could give that a try?
+> > 
+> > Thanks for your reply.
+> > 
+> > I'll give it a try. The only problem is that for me the issue is not reproducible at will, it can take 1 day, or it can take 2 weeks before the panic is hit.
+> > 
+> > > [1] https://lore.kernel.org/linux-mm/YxDyZLfBdFHK1Y1P@bfoster/
+> > > [2] https://lore.kernel.org/linux-mm/20220906190602.1626037-1-bfoster@redhat.com/
+> 
+> So far, I haven't reproduced this issue with your patch. I haven't run the machine sufficiently long, just under a week, so this is rather to let you know that I haven't abandoned testing.
+> 
+
+Thanks for the update. Is this still going well, or reached a point
+where you typically see the problem? I can still reproduce the original
+problem so I may have to ping the patch again..
+
+Brian
+
+> Thanks.
+> 
+> 
+> -- 
+> Oleksandr Natalenko (post-factum)
+> 
+> 
+
