@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B575060090E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32EB600914
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJQIsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S229965AbiJQIta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiJQIr7 (ORCPT
+        with ESMTP id S229891AbiJQIt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:47:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400593B5;
-        Mon, 17 Oct 2022 01:47:56 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 08:47:52 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1665996474;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=brmrf89Lx2rRV1luJ1gwH3jh8Ci8GhQebbeeW1wEE3o=;
-        b=w7hpCpFEuAi35TemtvwsyYP7hCi77zJlQ1EwkthMky7Wp3u8fYRCpp1hPu2pnYZVj2x+dz
-        ZStGSCFwdFsk9bj9WvTurSaIAVPdnrZu2wHmJGcpostRaJ3WvLhVqzg8JV/xK/8uWX6EdL
-        cyMh06zsSD85FqaQs9jcYPn26mJhf0sng2tn4dSHDboKs+JU4np1pevN63uo8vj6uoKF9D
-        Mx8G12j6Xn+kcMNgX0qdwu+wRJiTYsKwKFdpDhB3IJhltNGJsWAsWmLWmNhHXW+u6nusex
-        RvbJLni5rjJVijx3RpAkk101Gk5wPwzT0HXA8iswElwKZMm84W0Kw6yEykebGQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1665996474;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=brmrf89Lx2rRV1luJ1gwH3jh8Ci8GhQebbeeW1wEE3o=;
-        b=j/1qMFsjafLX73jczsctAJ6VMo8M0C+DZF7KCxE2v98qwxBbICSBxFrlTcoczUOjjhgLav
-        W82gKmCFG/fpIsCA==
-From:   "tip-bot2 for Ahmad Fatoum" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] Documentation/x86/boot: Peserve type_of_loader=13 for barebox
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221002125752.3400831-1-a.fatoum@pengutronix.de>
-References: <20221002125752.3400831-1-a.fatoum@pengutronix.de>
+        Mon, 17 Oct 2022 04:49:27 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1911210E0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:49:25 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id w18so23250339ejq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ur8IA2XfFVehJVfyvGio3wT5RKRTtvQ2gh4yATlbsSM=;
+        b=KCaBRtPpKTFX3TBBPIF9EPb+x0r7QBcde9BI9jtKFbGUjnrjcjcKGhQh4cz27bFZJY
+         elnTNWnvdoxzGxwXNJoIqdIREab9X5NRjizO6pSlnJMRBiA6+vBICFNnEuwt6FNOkqj7
+         fqrQKLfxw/CZIhJykdJsc6J/BFIkeB/QfGb12gXZB5+UPoENWrDctTdDdR+59xHPhhhj
+         N98FTKm4pwrhDPgPXFCaryZAVR8WNiA1gZt+pFLKfSMK5nkvs6vmh+z3vW+NnuslXwaw
+         4w4UkJGn/tpuUP2ROzw0LOKidK5vF20TZnS7TLFJHZbyOeDG3cpFkdxDWWNLstLFWCE+
+         ICqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ur8IA2XfFVehJVfyvGio3wT5RKRTtvQ2gh4yATlbsSM=;
+        b=TfxQfZ/h/QRk6B2yvk4KJDyBSK3TYF0cJTV+uW+j6zlOPmGPHhE3/TQ4nYTg2DHmIT
+         krnXtTPx1l1WeLq0wrXebBixKl4So2GITjLTCPpAyBHn2ip0LYMonBFD0/r4g0ZARiLA
+         Afso24engu7kydwcFgo9JmWGqBrp4ZxJ+cz9e2tUbokjkkIa2dbKqTT0D4G9E8adT9Vm
+         DYIVU1G+2OKCBshvgHfnW4sCsnubrE6YPDDe8Y3b8zGje5spMAGhZomol6wawS93GOXB
+         sdc/EL4kN1Vgnz8ONJbt7ftDfoRFb553lrHOF0LD/iZei6uducgnEkXdt577uirMhRLS
+         A80Q==
+X-Gm-Message-State: ACrzQf324ijeUbbSSV3OMDTrcTLEcFNGjapTjjvTV8/gSc6pBeICkfWC
+        bz/IZblTZr1sOykkW+OykdEEQLD7wdA+63InmR8mlw==
+X-Google-Smtp-Source: AMsMyM6ksJr/GI0QTpcwrX9CLuUnwMNfW/GaLo39RZHmA/3d/gkSvPfkSMhXEgpy1QK71T9pH58UsLBF/mxC+G+Yr0g=
+X-Received: by 2002:a17:907:7606:b0:78e:61d:757e with SMTP id
+ jx6-20020a170907760600b0078e061d757emr7375630ejc.690.1665996563649; Mon, 17
+ Oct 2022 01:49:23 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166599647272.401.15990841004146726447.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221005145746.172138-1-m.zatovic1@gmail.com> <20221005145746.172138-2-m.zatovic1@gmail.com>
+In-Reply-To: <20221005145746.172138-2-m.zatovic1@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 17 Oct 2022 10:49:12 +0200
+Message-ID: <CACRpkdaxYcyEauFotzei8J0VOVksQH9Mm-AdF1aFU0BXjd4t4A@mail.gmail.com>
+Subject: Re: [RFCv2 PATCH 2/4] bus: add Wiegand bus driver
+To:     =?UTF-8?B?TWFydGluIFphxaVvdmnEjQ==?= <m.zatovic1@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, gregkh@linuxfoundation.org,
+        jeffrey.l.hugo@gmail.com, andersson@kernel.org,
+        Michael.Srba@seznam.cz, saravanak@google.com, mani@kernel.org,
+        hemantk@codeaurora.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+On Wed, Oct 5, 2022 at 4:58 PM Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail.c=
+om> wrote:
 
-Commit-ID:     f0a8dec99a55aee896a1e6739ecf737f4524094a
-Gitweb:        https://git.kernel.org/tip/f0a8dec99a55aee896a1e6739ecf737f4524094a
-Author:        Ahmad Fatoum <a.fatoum@pengutronix.de>
-AuthorDate:    Sun, 02 Oct 2022 14:57:53 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 17 Oct 2022 10:11:09 +02:00
+> The Wiegand bus driver spawns devices and matches them with
+> drivers.
+>
+> Signed-off-by: Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail.com>
 
-Documentation/x86/boot: Peserve type_of_loader=13 for barebox
+Overall this is a vast improvement over the first patches!
 
-barebox[1], a bootloader for mostly ARM and MIPS embedded systems, can
-also be built as EFI payload for x86[2] to provide redundant power-fail
-safe, watchdog-supervised boot up.
+I might not have time to look closer right now, but I see you got
+a lot of comments from Krzysztof et al so you have some stuff to
+work on.
 
-Since its v2015.09.0 release, it has been booting Linux on x86 with
-type_of_loader=0xff[3]. Reserve 13, the next free id, so that can be
-used instead in the future.
+Looking forward to the first non-RFC patch series!
 
-[1]: https://www.barebox.org/
-[2]: https://www.barebox.org/doc/latest/boards/efi.html
-[3]: https://elixir.bootlin.com/barebox/v2022.09.0/source/common/efi/payload/image.c#L217
-
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221002125752.3400831-1-a.fatoum@pengutronix.de
----
- Documentation/x86/boot.rst | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/x86/boot.rst b/Documentation/x86/boot.rst
-index 894a198..240d084 100644
---- a/Documentation/x86/boot.rst
-+++ b/Documentation/x86/boot.rst
-@@ -455,6 +455,7 @@ Protocol:	2.00+
- 	11 Minimal Linux Bootloader
- 	   <http://sebastian-plotz.blogspot.de>
- 	12 OVMF UEFI virtualization stack
-+	13 barebox
- 	== =======================================
- 
-   Please contact <hpa@zytor.com> if you need a bootloader ID value assigned.
+Yours,
+Linus Walleij
