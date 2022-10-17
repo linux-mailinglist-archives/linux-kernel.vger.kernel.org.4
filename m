@@ -2,104 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177146007BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2466007C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiJQH1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S229913AbiJQHb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiJQH1j (ORCPT
+        with ESMTP id S229562AbiJQHb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:27:39 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5535A816
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:27:37 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id bv10so17096747wrb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vleqX4azqijmPtKs5ZJjm57oFDFAlglFXOly3nJ4WoI=;
-        b=D6Z+Xd+vG2yWDAUdKhIIBIp9MjbgQVORKD1Hup0Yx14lvdra4RSWNwJK1MgBFyN7Pa
-         KxseAC778j9+eoe1qktBfhMUMOGHy+Y6sTbeMYQHKSGEL36smoScPNAem3xj8aSjW9iy
-         I4r0C9NyDiJAyQeB/CHiPls45MEvgM+Jpnct72d6VJoEP+jVj4mGa+aKhIWQZ/a4VOR/
-         eHYyTSfbrvuS7vjgAjnTdwd01W8bmLk6wUE5wh+ps4GR49WAe3Kjdf90jtg4onIwGc2B
-         MUgXXHTPbnPEbmWXaWDj25qMvwzUT3+GJK+q5qdtQji2k+QESKiqWz6rQzpJOGRoJZh1
-         b22Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vleqX4azqijmPtKs5ZJjm57oFDFAlglFXOly3nJ4WoI=;
-        b=BF58VlzCkdvQLr/kY26YGWmGJdGAWKRhtSkYKimBGtfulsyD4W9u0Z0i+bpTZj2d5S
-         Pfzfdi9JH/IAQ5SYH2IiUF9zsDsFl/FM7NE0lXLBgLjET6Ubhyj+DEi1gNK9T8SXkZJa
-         ODMhClVaw1/Zy91O9QQIE39UppMl8wYP+qbk5SlnTwjAE20X4MD6WExTB+rTd6NYiwkZ
-         PvefPuJDB7Qv+yMG29cqzyzzMHMG7BdSe40Du7k5eneVgNXNstSm5Q8yCDUexr8Uvaod
-         9oD/W9Wr2kzf2h/QNLER6xLNemLe7+c0Ibd/GrgzFDeWwg+hYbLvnKMeLNFxcGJVzrGx
-         DhVg==
-X-Gm-Message-State: ACrzQf0M2yLwIL1n1VjG9jLpjmEPPTHC0fMvzJiIq9zFXicY9NZaZXs+
-        o8qXDRVL6JHaGEGW26SXr3CKDZ5QfPSMHQ==
-X-Google-Smtp-Source: AMsMyM4SgJVOEGYl64n0Y+aPrzaEGfXHbsqGnyd0lMEGXvrEDGgS5/4llcPr+AJEUmKVghIVLMWVnA==
-X-Received: by 2002:a5d:5689:0:b0:231:bcaa:3125 with SMTP id f9-20020a5d5689000000b00231bcaa3125mr5621885wrv.431.1665991655278;
-        Mon, 17 Oct 2022 00:27:35 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9? ([2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9])
-        by smtp.googlemail.com with ESMTPSA id n4-20020adf8b04000000b00231893bfdc7sm8135601wra.2.2022.10.17.00.27.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 00:27:34 -0700 (PDT)
-Message-ID: <f0bf36da-9467-c905-c5bc-1e232ba9c8a8@linaro.org>
-Date:   Mon, 17 Oct 2022 09:27:33 +0200
+        Mon, 17 Oct 2022 03:31:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF72476F1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:31:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6B6060F52
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:31:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E590C433C1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665991884;
+        bh=hKK4/H1xnGnV6JxVAIIfP0R9btqgiUqTtFuk9VPdO8E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ck3VaG1NdTRMSdr2v5CcWO6zxNXIIh1+2Aa3rTdhNc+3PLQ136Ci/0fHodVnMocy9
+         NHSvoM9w48TU9qX6soyvS94XMDj1ubVkzxzhM/PxqI1UCFn8gAVWYgF/4l7O/1iYpu
+         B02THw4bY93TCQoeOtoV0CoRmn2kKRv1SF58YkqGLc6XvMH6Y78Q7O8fX1NBLyyRok
+         kyYapdqwmDlo3IlkxGFP+Ce31YJ1yiREqtiNlAXcuf85CgATMmWdAGxCt/a6zVZeL+
+         5f7JUeIAUKAuJ1ZR2V65BfWt6cgZ8E6LyawZ/BeK5LQLk7Jth7mm/pfpNToUM97OmV
+         dthvs6Uvn8dZA==
+Received: by mail-ej1-f48.google.com with SMTP id k2so22889773ejr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:31:24 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3+ydAXF7On+7YE7DcufmEZUHW+80/9t1QFKhCsfGI3ze0UPCc3
+        68Y6sxH8CkZ0TFIu1/xHznpeyxZSJVrzfAhCP6I=
+X-Google-Smtp-Source: AMsMyM5uXcEgj0EkeSiQJyHwibP1MhffT/OjqW+8fBpIebeUP1sjp32hftQo9ac5mB7iWHvgF/PTgNZ7eFunhp4S5IQ=
+X-Received: by 2002:a17:907:a044:b0:78d:b569:b891 with SMTP id
+ gz4-20020a170907a04400b0078db569b891mr7378357ejc.224.1665991882427; Mon, 17
+ Oct 2022 00:31:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: thermal: Convert generic-adc-thermal to DT
- schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+References: <20221016133418.2122777-1-chenhuacai@loongson.cn> <506fe4e5-a203-48e6-84a6-f70133be15dd@app.fastmail.com>
+In-Reply-To: <506fe4e5-a203-48e6-84a6-f70133be15dd@app.fastmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 17 Oct 2022 15:31:09 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7UJDgtY4NfF7-5+TbNEbec7XOpvS87H=fPad4KK0KLaw@mail.gmail.com>
+Message-ID: <CAAhV-H7UJDgtY4NfF7-5+TbNEbec7XOpvS87H=fPad4KK0KLaw@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Add unaligned access support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        guoren <guoren@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-kernel@vger.kernel.org
-References: <20221011175235.3191509-1-robh@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221011175235.3191509-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 19:52, Rob Herring wrote:
-> Convert the 'generic-adc-thermal' binding to DT schema format.
-> 
-> The binding said '#thermal-sensor-cells' should be 1, but all in tree
-> users are 0 and 1 doesn't make sense for a single channel.
-> 
-> Drop the example's related providers and consumers of the
-> 'generic-adc-thermal' node as the convention is to not have those in
-> the examples.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+Hi, Arnd,
 
-Applied, thanks
+On Mon, Oct 17, 2022 at 3:12 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sun, Oct 16, 2022, at 3:34 PM, Huacai Chen wrote:
+> > Loongson-2 series (Loongson-2K500, Loongson-2K1000) don't support
+> > unaligned access in hardware, while Loongson-3 series (Loongson-3A5000,
+> > Loongson-3C5000) are configurable whether support unaligned access in
+> > hardware. This patch add unaligned access emulation for those LoongArch
+> > processors without hardware support.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>
+> What does the Loongarch ELF ABI say about this? On most architectures,
+> C compilers are not allowed to produce unaligned accesses for standard
+> compliant source code, the only way you'd get this is when casting
+> a an unaligned (e.g. char*) pointer to another type with higher alignment
+> requirement.
+Some unaligned accesses are observed from the kernel network stack, it
+seems related to whether the packet aligns to IP header or MAC header.
+And, gcc has a -mstrict-align parameter, if without this, there are
+unaligned instructions.
 
+>
+> > +/* sysctl hooks */
+> > +int unaligned_enabled __read_mostly = 1;     /* Enabled by default */
+> > +int no_unaligned_warning __read_mostly = 1;  /* Only 1 warning by default */
+>
+> The comment says 'sysctl', the implementation has a debugfs interface.
+Originally "enabled", "warning" and "counters" are all debugfs
+interfaces, then you told me to use sysctl. Now in this version
+"enabled" and "warning" are converted to sysctl, but there are no
+existing "counters" sysctl.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Huacai
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>
+> > +#ifdef CONFIG_DEBUG_FS
+> > +static int __init debugfs_unaligned(void)
+> > +{
+> > +     struct dentry *d;
+> > +
+> > +     d = debugfs_create_dir("loongarch", NULL);
+> > +     if (!d)
+> > +             return -ENOMEM;
+> > +
+> > +     debugfs_create_u32("unaligned_instructions_user",
+> > +                             S_IRUGO, d, &unaligned_instructions_user);
+> > +     debugfs_create_u32("unaligned_instructions_kernel",
+> > +                             S_IRUGO, d, &unaligned_instructions_kernel);
+> > +
+> > +     return 0;
+> > +}
+> > +arch_initcall(debugfs_unaligned);
+> > +#endif
+>
+> The debugfs interface does not sound like a good way to do this.
+> Overall, my feeling is that for a new architecture we should not
+> introduce this at all but instead provide a way to diagnose and
+> fix user space, since we do not have to keep compatibility with
+> broken binaries that worked in the past.
+>
+> If the ELF ABI actually allows compilers to produce unaligned
+> accesses for correct code, there should at least be a more generic
+> way of enabling this that follows what other architectures do.
+> We are already somewhat inconsistent there between architectures,
+> but I don't think anything else uses debugfs here.
+>
+>      Arnd
