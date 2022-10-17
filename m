@@ -2,143 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960576016CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC006016D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiJQTA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S229850AbiJQTBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiJQTAz (ORCPT
+        with ESMTP id S229801AbiJQTBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:00:55 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E22F733D9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:00:51 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id b145so14425260yba.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zrBdXCGWEkZBYVNoEyJxyq+fpdRwHofZyOq3MApTRzA=;
-        b=Qy4aW4IxLYuY4fhWzWgC8zbtTgnr9crlSLX3+OQ1Kq6xvzSVGoddw6q1fLdnxi9v+r
-         l5QsSant8Lk6tQeAUEOFeAWieCVxDqxVQ9h4ZUiVI7aCc1DdSYi0ZwTw48yzciNQaR8f
-         /sQzaWGLFIlu4BtBlkSIBl5dSK3G2nxivNW3s=
+        Mon, 17 Oct 2022 15:01:30 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF4E75CE9;
+        Mon, 17 Oct 2022 12:01:27 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id j188so13170118oih.4;
+        Mon, 17 Oct 2022 12:01:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zrBdXCGWEkZBYVNoEyJxyq+fpdRwHofZyOq3MApTRzA=;
-        b=Zxz2LSLlk2WZZcieu9+18etfF/DMcwoCrrs+mYazo4qkSoYjbBApbyRwth9/jhJ9AM
-         2FgwKvaQirZyN/U2BJ2olNRVFj9ba+3yQCxlKg88AvuYZ3nbNDdncNVdNozAl8DvcegN
-         iCBXxv9OJE9DLWmv4OD18ayVv25Z27/iM8CVqj1XMhtPI4dAAYbaNit3Er5tW95pcl59
-         II75zZU1F5S74amWpz1SoVKeqCfpSVsikpm37NzuCRKWogI5PTUOixysUZKkD1tJS3uc
-         STOXiSIu2aOfpDBSELR9A7Nm5GNNfoKaFzybAYnsJFf1E9vpygxjKhIfvETy3VwiuswN
-         Aheg==
-X-Gm-Message-State: ACrzQf3rPlDzwqTtpXPxIs+/ogBwR5hka5pARpj8k+J1u0AkgGBJe+cu
-        TksPJvUYztDClyB1MlSkezcTWRVgpsqUAOf1FP/K3cfDEIk=
-X-Google-Smtp-Source: AMsMyM79bnBB8gY4Dcf0aEdZ+FcBVkoXwioB96WQVpiWNzhKeJBhgpT/SnlEB1he/lsT6oRwki9hFHl837MAQ0P10iA=
-X-Received: by 2002:a25:9207:0:b0:6c0:b858:d601 with SMTP id
- b7-20020a259207000000b006c0b858d601mr11297743ybo.459.1666033250500; Mon, 17
- Oct 2022 12:00:50 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ya5zQpirRV5VCRWYgpeGtu1wg4yHdKjk73OV+sKS9k=;
+        b=uperkPoUb75n6jgxVp8oQhP3XytA03h1Nc2wLxTjLG1OVR0pBRCUzq9CTPW31DTqI8
+         2AR33vTBOHPv5IfHOAmnIV82bplCEJLuP7wkNQcNBSbz7AyvhPU2TG+aUFMvVCJwEOAw
+         UZppRAyaLu9uXyW0CQWGDeOomMEcqzOgYd3IteCkmlH/yN4teP+rSwhwOFhONCOSlDfI
+         kSW4KxxVAKH80Vd/5Z5bEAMI0p+qXTiq2vBpIKO3z3QeO35oZzUG0Y6lQVmr0wHwTrcO
+         /n0sE10UYAjFbbAVqMPrz8BOYrtQy1G8bZKIJZ2ja3esE6t0m+JN9fIbGBMubaxiGhs8
+         oWug==
+X-Gm-Message-State: ACrzQf1FWuvANFsrmfneGEHs4Z3KiJ2cEVSchYWAnTYU+jpIFbTlWYNU
+        DxsMeXi6RWkz7smj8aOAlg==
+X-Google-Smtp-Source: AMsMyM4Aayqqo2DYURBYBzD94O+UlrAb3dm5pzADmv5cziN28DNd+CgXomsJGHtq631vJSS8FzfT8A==
+X-Received: by 2002:a05:6808:159b:b0:354:5def:1593 with SMTP id t27-20020a056808159b00b003545def1593mr5611896oiw.140.1666033286499;
+        Mon, 17 Oct 2022 12:01:26 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bj21-20020a056808199500b0035485b54caesm4703971oib.28.2022.10.17.12.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 12:01:26 -0700 (PDT)
+Received: (nullmailer pid 2283860 invoked by uid 1000);
+        Mon, 17 Oct 2022 19:01:26 -0000
+Date:   Mon, 17 Oct 2022 14:01:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v3 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
+ to dt-schema
+Message-ID: <20221017190126.GA2281409-robh@kernel.org>
+References: <20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
 MIME-Version: 1.0
-References: <20220922224027.59266-1-ivan@cloudflare.com>
-In-Reply-To: <20220922224027.59266-1-ivan@cloudflare.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Mon, 17 Oct 2022 12:00:39 -0700
-Message-ID: <CABWYdi2so7xn860asjr=n9reoFm90X0kGLm7eH_bnYYw8MKg3w@mail.gmail.com>
-Subject: Re: [PATCH v2] proc: report open files as size in stat() for /proc/pid/fd
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        David Laight <David.Laight@aculab.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Mike Rapoport <rppt@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 3:40 PM Ivan Babrou <ivan@cloudflare.com> wrote:
->
-> Many monitoring tools include open file count as a metric. Currently
-> the only way to get this number is to enumerate the files in /proc/pid/fd.
->
-> The problem with the current approach is that it does many things people
-> generally don't care about when they need one number for a metric.
-> In our tests for cadvisor, which reports open file counts per cgroup,
-> we observed that reading the number of open files is slow. Out of 35.23%
-> of CPU time spent in `proc_readfd_common`, we see 29.43% spent in
-> `proc_fill_cache`, which is responsible for filling dentry info.
-> Some of this extra time is spinlock contention, but it's a contention
-> for the lock we don't want to take to begin with.
->
-> We considered putting the number of open files in /proc/pid/status.
-> Unfortunately, counting the number of fds involves iterating the open_files
-> bitmap, which has a linear complexity in proportion with the number
-> of open files (bitmap slots really, but it's close). We don't want
-> to make /proc/pid/status any slower, so instead we put this info
-> in /proc/pid/fd as a size member of the stat syscall result.
-> Previously the reported number was zero, so there's very little
-> risk of breaking anything, while still providing a somewhat logical
-> way to count the open files with a fallback if it's zero.
->
-> RFC for this patch included iterating open fds under RCU. Thanks
-> to Frank Hofmann for the suggestion to use the bitmap instead.
->
-> Previously:
->
-> ```
-> $ sudo stat /proc/1/fd | head -n2
->   File: /proc/1/fd
->   Size: 0               Blocks: 0          IO Block: 1024   directory
-> ```
->
-> With this patch:
->
-> ```
-> $ sudo stat /proc/1/fd | head -n2
->   File: /proc/1/fd
->   Size: 65              Blocks: 0          IO Block: 1024   directory
-> ```
->
-> Correctness check:
->
-> ```
-> $ sudo ls /proc/1/fd | wc -l
-> 65
-> ```
->
-> I added the docs for /proc/<pid>/fd while I'm at it.
->
-> Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
->
+On Mon, Oct 17, 2022 at 11:45:31AM +0200, Neil Armstrong wrote:
+> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
+> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
-> v2: Added missing rcu_read_lock() / rcu_read_unlock(),
->     task_lock() / task_unlock() and put_task_struct().
-> ---
->  Documentation/filesystems/proc.rst | 17 ++++++++++++
->  fs/proc/fd.c                       | 44 ++++++++++++++++++++++++++++++
->  2 files changed, 61 insertions(+)
+>  .../bindings/input/qcom,pm8921-pwrkey.yaml         | 75 ++++++++++++++++++++++
+>  .../bindings/input/qcom,pm8xxx-pwrkey.txt          | 46 -------------
+>  2 files changed, 75 insertions(+), 46 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml b/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml
+> new file mode 100644
+> index 000000000000..9591f77aa22a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml
+> @@ -0,0 +1,75 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/qcom,pm8921-pwrkey.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PM8921 PMIC Power Key
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +
+> +allOf:
+> +  - $ref: input.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - qcom,pm8921-pwrkey
+> +          - qcom,pm8058-pwrkey
+> +      - items:
+> +          - enum:
+> +              - qcom,pm8018-pwrkey
+> +          - const: qcom,pm8921-pwrkey
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: key release
+> +      - description: key press
+> +
+> +  debounce:
+> +    description: |
+> +          Time in microseconds that key must be pressed or
+> +          released for state change interrupt to trigger.
 
-Now that Linux 6.1-rc1 is out, should this patch be looked at for
-inclusion? I see that the net-next tree has opened, not sure if the
-same rules apply here.
+Don't need '|' and use standard indentation of 2 chars.
 
-We've been running the v2 version of this patch in production
-successfully for some time now.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pull-up:
+> +    description: |
+> +           Presence of this property indicates that the KPDPWR_N
+> +           pin should be configured for pull up.
+
+Ditto.
+
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
