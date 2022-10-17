@@ -2,55 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786A3601C0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A1F601C0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJQWFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 18:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S230119AbiJQWIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 18:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiJQWFw (ORCPT
+        with ESMTP id S229770AbiJQWIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 18:05:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA60D7269C;
-        Mon, 17 Oct 2022 15:05:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MrrfH4Jy9z4xGm;
-        Tue, 18 Oct 2022 09:05:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666044344;
-        bh=EPhBXfS+bFT0iossjSTvhCbbZ9sAlv5VbZmlGq7HH/g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BKmqcFdarvAn9alD/3LlGWl4uOfgj23jEJcwWNU8Y0oPdWVwspPgCC9NffDevm9LJ
-         k6ebiHR8Gse0INnL5tSpQUj/MbYxR/Eg7MMIJaobB6jt2zwxuu5yzUuviuA43cUZWr
-         QQr8wNOr6bDbsMXF4Exmhzmfp8aDuK3K0N4loFJtRYECLRzOs/mKPbQ33WaIe0HPnN
-         i6VbTv+WST4CO0wKHKERm0z6I3AWAomCUSuBK+I13OOaH3ovUFl7T8gcUITjOgIRUJ
-         dcEo11ZjXfOza/FaHInY3Ac8srWY10lSUvKw2hbvTO2zDscBHHNnVSgOI1rQruTGxh
-         B3W3nGnx1LF/w==
-Date:   Tue, 18 Oct 2022 09:05:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>
-Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
-Message-ID: <20221018090541.74bff3e2@canb.auug.org.au>
+        Mon, 17 Oct 2022 18:08:13 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320657696A;
+        Mon, 17 Oct 2022 15:08:12 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bv10so20654177wrb.4;
+        Mon, 17 Oct 2022 15:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=93riG9uu1J1WTisFoALpPiFgWUkyaVzYtCZ43mZ5yrg=;
+        b=W1Ju2EFTJ2FGU2nPR7Z1V+8TcZq1Ap4M3E0lHq6CeBWtHnpy9A1bb9Vvb3dwfdM+Zs
+         3AQcMDIvxGr0lAcpBxmAPpewJYFWAn9wV2kUJaTY81ySCT6jFrZql6F1ErIq7VDx2/pS
+         Bdnc2PYpk+CoZTaOEeOdYY2k+LUh5WqME+9K9BQ42JnuJVedtLB+4J8engvQudegm0Oa
+         LbB21AaF2p0dmAm3LM4hwnApeW47fsibZVmOzuKJA03BJp8ZpanpcOazZFYVkt2oaXm5
+         doLPsmqdlDqow28TweCY9IkLeDht1lLsmp2K4lHqtigAPZAPzIizT4l3aYiwNyXKJM8K
+         ab3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=93riG9uu1J1WTisFoALpPiFgWUkyaVzYtCZ43mZ5yrg=;
+        b=OE0Kpn56EMZY6sPyqRIE/tG8OniWkpMn+wfbs16aVk1fg29hlTtlAqzUadm9uPEpbz
+         nGl3nfZC2C7HH9nqcJYkF7dckCUSr291qIIUsUFELe9av9Oq8s3Ppji28Q+kBzGlS3uP
+         CDQiZwsjjBYmDyh9RLWlu64v8r1YVXUsO62wRw4GJz6oDNGW/G79SqpE4B8lreuGpTw2
+         Ud5HB0ZYHFuy7Pqz25yBVM1JagrH+jtPuNIYfWKH7/LQeGtCvUZ4s5F9GQwEhShlsNhR
+         sohjcG+Vs/nI1A5HAGWgOq3/72ABsJCOJOOrvr9HB0NaJV6UcR+Wp1FBaNiAQ5D8W24C
+         55rg==
+X-Gm-Message-State: ACrzQf16gDs01XHujdVal/ozeeJsUtw6x0WOYtNnH8C2vAYlNEGLNu+P
+        DhhYW9giADdCcABswSbRXwA=
+X-Google-Smtp-Source: AMsMyM76liUy6+AG1ZVa7Bt9T4aylrBn/uEOHcjsY92xLWmGtL+0dn9b630t2UvUF6obEzAXi9OkUw==
+X-Received: by 2002:a05:6000:168f:b0:22e:4c3:de09 with SMTP id y15-20020a056000168f00b0022e04c3de09mr7259250wrd.40.1666044490528;
+        Mon, 17 Oct 2022 15:08:10 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bd21-20020a05600c1f1500b003b95ed78275sm11754504wmb.20.2022.10.17.15.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 15:08:10 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] esp6: remove redundant variable err
+Date:   Mon, 17 Oct 2022 23:08:09 +0100
+Message-Id: <20221017220809.864495-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fz0I3tpa+572v0s.XfWnKH8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,82 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fz0I3tpa+572v0s.XfWnKH8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Variable err is being assigned a value that is not read, the assignment
+is redundant and so is the variable. Remove it.
 
-Hi all,
+Cleans up clang scan warning:
+net/ipv6/esp6_offload.c:64:7: warning: Although the value stored to 'err'
+is used in the enclosing expression, the value is never actually read
+from 'err' [deadcode.DeadStores]
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ net/ipv6/esp6_offload.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-  drivers/gpu/drm/i915/i915_driver.c
+diff --git a/net/ipv6/esp6_offload.c b/net/ipv6/esp6_offload.c
+index 79d43548279c..97edf461bc72 100644
+--- a/net/ipv6/esp6_offload.c
++++ b/net/ipv6/esp6_offload.c
+@@ -56,12 +56,11 @@ static struct sk_buff *esp6_gro_receive(struct list_head *head,
+ 	__be32 seq;
+ 	__be32 spi;
+ 	int nhoff;
+-	int err;
+ 
+ 	if (!pskb_pull(skb, offset))
+ 		return NULL;
+ 
+-	if ((err = xfrm_parse_spi(skb, IPPROTO_ESP, &spi, &seq)) != 0)
++	if (xfrm_parse_spi(skb, IPPROTO_ESP, &spi, &seq) != 0)
+ 		goto out;
+ 
+ 	xo = xfrm_offload(skb);
+-- 
+2.37.3
 
-between commit:
-
-  1c66a12ab431 ("drm/i915: Handle each GT on init/release and suspend/resum=
-e")
-
-from Linus' tree and commit:
-
-  3703060d17b0 ("drm/i915/display: remove drm_device aliases")
-
-from the drm-intel tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/i915/i915_driver.c
-index c459eb362c47,e7b2ebc6b88d..000000000000
---- a/drivers/gpu/drm/i915/i915_driver.c
-+++ b/drivers/gpu/drm/i915/i915_driver.c
-@@@ -337,10 -324,11 +337,11 @@@ static int i915_driver_early_probe(stru
-  	if (i915_inject_probe_failure(dev_priv))
-  		return -ENODEV;
- =20
-- 	intel_device_info_subplatform_init(dev_priv);
-+ 	intel_device_info_runtime_init_early(dev_priv);
-+=20
-  	intel_step_init(dev_priv);
- =20
- -	intel_uncore_mmio_debug_init_early(&dev_priv->mmio_debug);
- +	intel_uncore_mmio_debug_init_early(dev_priv);
- =20
-  	spin_lock_init(&dev_priv->irq_lock);
-  	spin_lock_init(&dev_priv->gpu_error.lock);
-@@@ -738,10 -716,6 +739,9 @@@ static void i915_driver_hw_remove(struc
-   */
-  static void i915_driver_register(struct drm_i915_private *dev_priv)
-  {
-- 	struct drm_device *dev =3D &dev_priv->drm;
- +	struct intel_gt *gt;
- +	unsigned int i;
- +
-  	i915_gem_driver_register(dev_priv);
-  	i915_pmu_register(dev_priv);
- =20
-
---Sig_/fz0I3tpa+572v0s.XfWnKH8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNN0bUACgkQAVBC80lX
-0GwZswf9Ex70u3pOOY+Xt1dR5Q1NHc7MvwRTTfQB0LBv0FeHcWUYzyYGeX0GDZx9
-Dy3Tzg20hypsU31r0I/Vtgb0k1Op3ejTuyhtqunilsvP6nEYlfWGlTmQNfUtVKHi
-I8mgsje/YJY1AlNwWRE5vOSJYkwABuWRHjs1ooESN5gcoDRVreL2cU3dVz3oGgij
-f2gGjG/JstVJHUZ52RTz5RIJl3w+BG8NX1Yv/pRWYRDGE6yEGSUIgRWryUogEnZh
-QGeVPFswVnd1g2UDh0lc7h80SuxaCZDr/ZbAtH7zvfuu1eFk9wYRuerphunHBou5
-oWhkP+R4nScB03Jv/h+n6qn6+dLHMA==
-=5X0x
------END PGP SIGNATURE-----
-
---Sig_/fz0I3tpa+572v0s.XfWnKH8--
