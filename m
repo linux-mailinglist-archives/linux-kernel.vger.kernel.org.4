@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1B3601AB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1918C601ACF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiJQUza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S230190AbiJQU5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiJQUzZ (ORCPT
+        with ESMTP id S229904AbiJQU52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:55:25 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEC876776;
-        Mon, 17 Oct 2022 13:55:23 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8813B5C01E6;
-        Mon, 17 Oct 2022 16:55:22 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 17 Oct 2022 16:55:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666040122; x=1666126522; bh=+qBFyhMlkS
-        abrrW/8a05Q/4iICjjOB6IvZsreneX9MQ=; b=bNvOlCVpzRp/2uZGEkvUxBx7iZ
-        eU50zC56oAzMKdyPfOBkLM1ONdt0j2ao2ctXZBwDgrG5kS+YZnGDz+Nm+6FCONnO
-        l8lXigm+EqRajvY0YYIRZVofgboZUr6aSdo1zhf7DT1M3Vo7mRQqjgfgi8vSN3Pi
-        Wiy1fIcG5tnzQcKgsocVEB86f7jVVgIslrGkwh8hGZ+WYypHKNdNPjPtLpG/V89g
-        oGBI+uuOzdgfhFPFGJhDWnxFNZQjLRCePyhvzw/QhaLpNpOeKgAzpTnnkB5eDWa0
-        57JhIWRQINgPxXglDvx2i9RHMWLWBZfxl0oX1iIVu3LlnBKbFWPsu5Ah6yIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666040122; x=1666126522; bh=+qBFyhMlkSabrrW/8a05Q/4iICjj
-        OB6IvZsreneX9MQ=; b=U6QVu6Zbk9rUuWnTFnnUiT/EfY+n7O+4l3ylSeogS9Lr
-        fZ83IbXktouJ41DegoPQ4HU2G8gJt0NgywqKX2hqaGqSHdzSvQUbJbvT1mt6rsfR
-        jMGDzxfVpt0KvsZ+3PAktkbuuYHmz/D3UCBaU2cRxSYbLMOpJGAKwljhilLusUGv
-        f8B53D9i8+z73IJZjMayu6pB3jsWNcJJxG7JhYriAoWXOIAatCjTw73vbuzTxtA8
-        jjCoFn9plBxcYTnQHPQbQa/loEy6+0DJSBo1YDl07rEYNKZCrSKW0o8DDajIO0L8
-        UU2OeDtOyahFz8emUhXFLUuKZBdn0C3ZH5tvhbzmSQ==
-X-ME-Sender: <xms:OsFNYxTomr2z_mRWZej7qAJhFWOKtF0_BOBMJ5T3_w67u77KOzrN7g>
-    <xme:OsFNY6zk3Hny_4690zfcAy90Nh-Rp4E9PIpU_c52ZpoKl13Pz3ZLBZ4jfEWAbShoH
-    JKUaEt9BTBauq352sE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekledgudehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffegffdutddvhefffeeltefhjeejgedvleffjeeigeeuteelvdettddulefg
-    udfgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:OsFNY209cEacU_GyxsjM3yqKiq8MvmUktNw-s0okZt-sIBSv2KvyuQ>
-    <xmx:OsFNY5CBWUDagNmN9tSFrLcPVKf44iT07MEM32klWEiDUSilbb26hQ>
-    <xmx:OsFNY6hOh12A8ZSw9KHcxhSpyHepGe6KnHoN_7X-RJoCZ4RXVfEucA>
-    <xmx:OsFNYxQXrni2pYQ1nilqQl2vvqBSqydOVCTBRazaMQ3VO7FEu6zmng>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2B047B60086; Mon, 17 Oct 2022 16:55:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
-In-Reply-To: <20221010101331.29942-1-parav@nvidia.com>
-References: <20221010101331.29942-1-parav@nvidia.com>
-Date:   Mon, 17 Oct 2022 22:55:00 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Parav Pandit" <parav@nvidia.com>, bagasdotme@gmail.com,
-        "Alan Stern" <stern@rowland.harvard.edu>, parri.andrea@gmail.com,
-        "Will Deacon" <will@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>, boqun.feng@gmail.com,
-        "Nicholas Piggin" <npiggin@gmail.com>, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Akira Yokosawa" <akiyks@gmail.com>, dlustig@nvidia.com,
-        "Joel Fernandes" <joel@joelfernandes.org>,
-        "Jonathan Corbet" <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation for writel()
- example
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 16:57:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B676C975
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666040168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rXBr8UhWuzG7Q4pIpETTeqSZZu42yOXUn7p5mhYwxm8=;
+        b=JBXLmD8Eu+0KVIZsZmDaW0tTbOI0wXZOS+cj68eqEEuFMebuaj5B5T99jHpzMhyLEIrc1G
+        x5uILyvdcRDTt55YPW+eq7gOgpV74BHCy4qk31I4lheE6F+JwVtmdw2e/KXsuZ/WzVTPmV
+        XPmN6ElUvqbP2Oy59E0Nk6G+P5WwBIw=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-611-P_PX8oQ5P8ybhk2sAA8YzA-1; Mon, 17 Oct 2022 16:56:06 -0400
+X-MC-Unique: P_PX8oQ5P8ybhk2sAA8YzA-1
+Received: by mail-oo1-f70.google.com with SMTP id f11-20020a4a920b000000b00476997f3fa8so5260285ooh.20
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:56:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rXBr8UhWuzG7Q4pIpETTeqSZZu42yOXUn7p5mhYwxm8=;
+        b=QqLOgXxb1Hbn3kQU0Cl9NC4+Ls9YlCqXUPz9+a9fAB6M6a/E+cst9YeVB6wLg/uVC1
+         ySFYQAE0D4shNvf6iBpDvJCfmx418zW4upstPV9Z6irbygjVjSBwToYuDV+D93sJAkho
+         edUcZp1lSBxmoqq8rZZJo+TmrcAC/cd6JB/XjIruU7RYHGFsy6YZM8+Leamg6fOd9Q36
+         z4rK/glHS13XiX1kcdpmUACXKO1AxuAIFwYqsd4LkeWI9VRrrYmK0wLo5UJAKE6taztI
+         aT9Qe/dfrWB6zNpYQoy7bXwA5ILr4MD4KGokCRUfwZ4r7384Rh6v/s/GwnUe8O4kLsZN
+         /Tew==
+X-Gm-Message-State: ACrzQf2Kz/ld8hxSeG4NkpBtcy8F3NzUda7Fc9iniAaz8gnTVXoPIwhw
+        wtZ0zs7kok/95gQPS17ravrSjhfu7FzWYLTSQD3cNGzszKLDEG/6mtOdzr7GBSvs8AcvHxKaDdd
+        3eYTar8mtQJEDRIBW9QAJfZul
+X-Received: by 2002:a05:6870:3312:b0:131:d614:d7b8 with SMTP id x18-20020a056870331200b00131d614d7b8mr16913107oae.109.1666040165761;
+        Mon, 17 Oct 2022 13:56:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6kn5zJ/G+rLyKXP84xesKef8MMWV9UcGhZY7xZ8fRhA955xwbWgCGpBsraXbtRBmBpTQBrgA==
+X-Received: by 2002:a05:6870:3312:b0:131:d614:d7b8 with SMTP id x18-20020a056870331200b00131d614d7b8mr16913095oae.109.1666040165584;
+        Mon, 17 Oct 2022 13:56:05 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id er33-20020a056870c8a100b0011e37fb5493sm5365635oab.30.2022.10.17.13.56.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 13:56:05 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 15:56:02 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] arm64: dts: qcom: sc8280xp: fix USB1 PHY RX1
+ registers
+Message-ID: <20221017205602.wc6upnbkhr3ujdhf@halaney-x13s>
+References: <20220919094454.1574-1-johan+linaro@kernel.org>
+ <20220919094454.1574-3-johan+linaro@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919094454.1574-3-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022, at 12:13 PM, Parav Pandit wrote:
-> The cited commit describes that when using writel(), explcit wmb()
-> is not needed. wmb() is an expensive barrier. writel() uses the needed
-> platform specific barrier instead of expensive wmb().
->
-> Hence update the example to be more accurate that matches the current
-> implementation.
->
-> commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. 
-> MMIO ordering example")
->
-> Signed-off-by: Parav Pandit <parav@nvidia.com>
+On Mon, Sep 19, 2022 at 11:44:52AM +0200, Johan Hovold wrote:
+> The USB1 SS PHY node had the RX1 register block (0x600) replaced with
+> RX2 (0xc00).
+> 
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-I have no objections, though I still don't see a real need to change
-the wording here.
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index e8905445ca19..9667eb1b7c61 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1242,7 +1242,7 @@ usb_1_qmpphy: phy-wrapper@8904000 {
+>  
+>  			usb_1_ssphy: usb3-phy@8903400 {
+>  				reg = <0 0x08903400 0 0x100>,
+> -				      <0 0x08903c00 0 0x3ec>,
+> +				      <0 0x08903600 0 0x3ec>,
+>  				      <0 0x08904400 0 0x1f0>,
+>  				      <0 0x08903a00 0 0x100>,
+>  				      <0 0x08903c00 0 0x3ec>,
+> -- 
+> 2.35.1
+> 
+
