@@ -2,119 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535FC6015E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE16F6015E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbiJQSDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S230494AbiJQSEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiJQSDh (ORCPT
+        with ESMTP id S230486AbiJQSEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:03:37 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825A863FFB;
-        Mon, 17 Oct 2022 11:03:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=FU3Btm3EGBwXY4LS7OhQ2d8cTy/b/4HQKovRbcKBjos=; b=YSx/KHgYLgMvLP92fQqt+LbqTm
-        oqJ27ciBM3x8dNSImEPv5MwHeucHHzZZe7/+jmm0N1XwRvo1WGd7UadkAKUl2GHLHWACgps45uxkB
-        NcOse+D8Zoz0Fuz+EfvKX+cno4JILAqGZ62QebfEkIyf+O5spjYCCaYGX9aqCd1p/znDN2Blfd1Tv
-        SoRK94PsA31EzF6d9pWdnkePt8rAXi7OQVF6uEBNlD4OBdVdknSqHOosA/R1jD/LcRcBIIKtkPGc8
-        0mOstPbsyC1TNSEtWqyrsHVa4lZP1GZbop3aBW0o6o4cZpOpQnurDKjgDM5NZXSv6U937D6GC8L8O
-        7nal5D+PuliyNChsjus11wi+Yh/EZxqDHaZD3JDQXBNC9UL/Bc/lTPUsWyEePPg5Qvw+WZRVHy9Nb
-        z2VHF+nib+ZYXZWujt4jjDReaPrrC3TF0LyzoumgcZbx0eTzqEBtW0pNzWiZHJ8Z6/6cQQz2iAyMt
-        W1DczxcPrWz3HvPRGmdVHTu8CAGW5+GA1hXQ/MPtNebBXjMtMv76t2S9oXwShlb4bUci313YjKafz
-        e/YrkqHNXaxXSRjnnJKVEBElnIY88BXfLuP03KZIdlQHrmmNZoUUXyazvJbMw1nHU4SEbXvvn1awb
-        62as9NgYYlckuc68u4ruBqlGIua/uN9yjO3Ywj17I=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Nikolay Kichukov <nikolay@oldum.net>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Greg Kurz <groug@kaod.org>,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>
-Subject: Re: [PATCH v6 11/11] net/9p: allocate appropriate reduced message buffers
-Date:   Mon, 17 Oct 2022 20:03:28 +0200
-Message-ID: <4858768.YlS1rbApJJ@silver>
-In-Reply-To: <Y02Kz2xuntFrKXhV@nvidia.com>
-References: <cover.1657920926.git.linux_oss@crudebyte.com>
- <3f51590535dc96ed0a165b8218c57639cfa5c36c.1657920926.git.linux_oss@crudebyte.com>
- <Y02Kz2xuntFrKXhV@nvidia.com>
+        Mon, 17 Oct 2022 14:04:35 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E6613F67
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:04:33 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id l6so11133639pgu.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=drU3O/+nGrdgy6WMvD6hVrTFvRlUohf8Zzl84rmZ2yQ=;
+        b=HXDzvzxUEPXF8gRIh1ZWqTSePTIzEruLotn0oKCLBkUbTNT01bZzUDXGcPHZ7smqbA
+         JzbhVdVMZdS4ku0TM9KOqVdl5fBf2nU3XvGlf2GPjGSa1iVeXa4qcnCg7FQmArF2F1jY
+         M0AiKOMuBlrmxZWgeB93M2gJn3itRtzlzZPhegmxIsgafHged2ZW33vomJf+hhB7/JUr
+         UCIiBHNKc/cOWuj4BksIRLREcwpmLYEbP9OxuslD09Z+3UZOh7CdwOn3htaTg08N2AbY
+         8Hr8VtX/K0Jb2b9ohvHEvN4b82ZOiV7LFN7k/Tj7IC7i7OYCi1VmpIlUQ9l7AgCLfw7L
+         Uq4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=drU3O/+nGrdgy6WMvD6hVrTFvRlUohf8Zzl84rmZ2yQ=;
+        b=ZvH1OGnklh+m+D4yyToYiHhbWwtUQqya2g9DY3/F+LxZ9e6Cu0Tii8U2WvO3aP+cMc
+         8e7iZlKvty3q7UKarQ4GY1vHbXreNWUvv9kM5hfUL5btgT1/78zcUG8bnpwM8W10majL
+         dJS4hoaewFt52XaO723Cr78PWMUTj+1s5MLusQqFfGDjNnBhwqEFo+poVME+1xJqTGiu
+         2Q8Sa92bc4y8usmfSOGuneAopxZwwk6I2IQYS/0Sp681IGaPG6cvE9vvIV32l1ATHbPM
+         ytrkW37gus4M81gcwXu3FDhp/2hjJDmn1BfMwI++pKmF4ae6dCXK0zJJiyBevx0HWX2Z
+         avow==
+X-Gm-Message-State: ACrzQf3S98ddfIQ3WFCWbQxabBswIFi/o9RUbk2Sl68TUgGJxbHsrAZ2
+        kM4U67DfL1Kpo5L/QXYqWQUrPQ==
+X-Google-Smtp-Source: AMsMyM6sO+LOU09ZXjof0uEuD7P3wpQStynULcyl6LgTFLXcVsWYXWq8MBmKYePZBrMNXMTOfiCISA==
+X-Received: by 2002:a05:6a00:21c8:b0:52b:ffc0:15e7 with SMTP id t8-20020a056a0021c800b0052bffc015e7mr13710910pfj.29.1666029872934;
+        Mon, 17 Oct 2022 11:04:32 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h9-20020a656389000000b00458a0649474sm6414850pgv.11.2022.10.17.11.04.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 11:04:32 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 18:04:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
+        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
+        andrew.jones@linux.dev
+Subject: Re: [V4 6/8] KVM: selftests: add library for creating/interacting
+ with SEV guests
+Message-ID: <Y02ZLFcDQbX6lP9z@google.com>
+References: <20220829171021.701198-1-pgonda@google.com>
+ <20220829171021.701198-7-pgonda@google.com>
+ <Yz8dpB5+RFjEhA3n@google.com>
+ <CAMkAt6oZQc4jqF7FOXOKkpbP3c4NXxPumVVjX9gXwPCh-zbtYg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMkAt6oZQc4jqF7FOXOKkpbP3c4NXxPumVVjX9gXwPCh-zbtYg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, October 17, 2022 7:03:11 PM CEST Jason Gunthorpe wrote:
-> On Fri, Jul 15, 2022 at 11:33:56PM +0200, Christian Schoenebeck wrote:
-> > So far 'msize' was simply used for all 9p message types, which is far
-> > too much and slowed down performance tremendously with large values
-> > for user configurable 'msize' option.
-> > 
-> > Let's stop this waste by using the new p9_msg_buf_size() function for
-> > allocating more appropriate, smaller buffers according to what is
-> > actually sent over the wire.
-> > 
-> > Only exception: RDMA transport is currently excluded from this message
-> > size optimization - for its response buffers that is - as RDMA transport
-> > would not cope with it, due to its response buffers being pulled from a
-> > shared pool. [1]
-> > 
-> > Link: https://lore.kernel.org/all/Ys3jjg52EIyITPua@codewreck.org/ [1]
-> > Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-> > ---
-> > 
-> >  net/9p/client.c | 42 +++++++++++++++++++++++++++++++++++-------
-> >  1 file changed, 35 insertions(+), 7 deletions(-)
-> 
-> It took me a while to sort out, but for any others - this patch is
-> incompatible with qemu 5.0. It starts working again after this qemu
-> patch:
-> 
-> commit cf45183b718f02b1369e18c795dc51bc1821245d
-> Author: Stefano Stabellini <stefano.stabellini@xilinx.com>
-> Date:   Thu May 21 12:26:25 2020 -0700
-> 
->     Revert "9p: init_in_iov_from_pdu can truncate the size"
-> 
->     This reverts commit 16724a173049ac29c7b5ade741da93a0f46edff7.
->     It causes https://bugs.launchpad.net/bugs/1877688.
-> 
->     Signed-off-by: Stefano Stabellini <stefano.stabellini@xilinx.com>
->     Reviewed-by: Christian Schoenebeck <qemu_oss@crudebyte.com>
->     Message-Id: <20200521192627.15259-1-sstabellini@kernel.org>
->     Signed-off-by: Greg Kurz <groug@kaod.org>
-> 
-> It causes something like this:
-> 
-> # modprobe ib_cm
-> qemu-system-x86_64: VirtFS reply type 117 needs 17 bytes, buffer has 17,
-> less than minimum
+On Mon, Oct 17, 2022, Peter Gonda wrote:
+> On Thu, Oct 6, 2022 at 12:25 PM Sean Christopherson <seanjc@google.com> wrote:
+> > And with that, I believe sev_vm_create() can go away entirely and the SEV encryption
+> > stuff can be handled via a new vm_guest_mode.  ____vm_create() already has a gross
+> > __x86_64__ hook that we can tweak, e.g.
+> >
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > index 54b8d8825f5d..2d6cbca2c01a 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -238,9 +238,10 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
+> >         case VM_MODE_P36V47_16K:
+> >                 vm->pgtable_levels = 3;
+> >                 break;
+> > +       case VM_MODE_PXXV48_4K_SEV:
+> >         case VM_MODE_PXXV48_4K:
+> >  #ifdef __x86_64__
+> > -               kvm_get_cpu_address_width(&vm->pa_bits, &vm->va_bits);
+> > +               kvm_init_vm_address_properties(vm);
+> >                 /*
+> >                  * Ignore KVM support for 5-level paging (vm->va_bits == 57),
+> >                  * it doesn't take effect unless a CR4.LA57 is set, which it
+> >
+> > Then kvm_init_vm_address_properties() can pivot on vm->mode to deal with SEV
+> > specific stuff.
 
-9p server in QEMU 5.0 was broken by mentioned, reverted QEMU patch, and it was 
-already fixed in stable release 5.0.1.
+...
 
-It is not that recent kernel patch is breaking behaviour, but it triggers that 
-(short-lived) QEMU bug more reliably, as 9p client is now using smaller 
-messages more often. But even without this kernel patch, you would still get a 
-QEMU hang with short I/O. So it is not a good idea to continue using that 
-particular, old QEMU version, please update at least to QEMU 5.0.1.
+> This refactor sounds good, working on this with a few changes.
+> 
+> Instead of kvm_init_vm_address_properties() as you suggested I've added this:
+> 
+> @@ -272,6 +275,8 @@ struct kvm_vm *____vm_create(enum vm_guest_mode
+>  mode, uint64_t nr_pages)
+>                 vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
+>  #endif
+> 
+> +       kvm_init_vm_arch(vm);
 
-Best regards,
-Christian Schoenebeck
+Why?  I'm not necessarily opposed to adding kvm_init_vm_arch(), but since x86
+"needs" a dedicated hook to unpack the mode, why not piggyback that one?
 
+> +
+>         vm_open(vm);
+> 
+>         /* Limit to VA-bit canonical virtual addresses. */
+> 
+> And I need to put kvm_arch_vm_post_create() after the vCPUs are
+> created because the ordering we need is: KVM_SEV_INIT -> Create vCPUS
+> -> KVM_SEV_LAUNCH_FINISH.
 
+Hrm, that's annoying.  Please don't use kvm_arch_vm_post_create() as the name,
+that's a better fit for what Vishal is doing since the "vm_post_create()" implies
+that it's called for "all" VM creation paths, where "all" means "everything
+except barebones VMs".  E.g. in Vishal's series, kvm_arch_vm_post_create() can
+be used to drop the vm_create_irqchip() call in common code.  In your case, IIUC
+the hook will be invoked from __vm_create_with_vcpus().
+
+I'm a little hesitant to have an arch hook for this case since it can't be
+all-or-nothing (again, ignoring barebones VMs).  If a "finalize" arch hook is added,
+then arguably tests that do __vm_create() and manually add vCPUs should call the
+arch hook, i.e. we'd be adding maintenance burden to tests that in all likelihood
+don't care about SEV and never will.
+
+It's somewhat unfortunate, but dedicated vm_sev_create_with_one_vcpu() and
+and vm_sev_create_with_vcpus() wrappers is probably the least awful solution.
