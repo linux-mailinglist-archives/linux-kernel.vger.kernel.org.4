@@ -2,309 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDB1601255
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38F76011B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiJQPCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 11:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S230339AbiJQOyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiJQPBs (ORCPT
+        with ESMTP id S230352AbiJQOxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:01:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC6B6716F;
-        Mon, 17 Oct 2022 08:00:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 319E1611C2;
-        Mon, 17 Oct 2022 14:54:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC93C4FF6D;
-        Mon, 17 Oct 2022 14:54:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666018479;
-        bh=pZz6W3qt7Z8aEc7Y/CcnxS3JGIvgJnfxnWaHsyB+7Gc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iH+wRhiUgQsjsi4Uhr89CzpCoEvI9zFToio6dgMifkedqs/9Z+iCpGVPjulWTpoU6
-         cGoXdEf7y5+H8hpqQtvofmXvQr+a5xOlrVZuCE1phYLkqyUoXc8BY0onINlZOzmCZY
-         DpYiWwG29IcXUTuq4oWGQj7d/sYpbV+w6liFwXNK9pbGA8VPfvGXthh81SDGJmgcu2
-         9U/BFKtI9KFYLu9fhIbkNvMgmsVDU6OXLGaYhq+4LPYFtnlk6rYSVRdGiqoR/m8z84
-         qfMhJUSgVZPDda1WzPmLC00RdTUcklIzKoJIPopjmAtuiaU8qh30HD+c3h2uVFK6si
-         1OcvTlSg9bI1w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1okRVd-0005mc-P1; Mon, 17 Oct 2022 16:54:29 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 15/15] phy: qcom-qmp-pcie: add support for sc8280xp 4-lane PHYs
-Date:   Mon, 17 Oct 2022 16:53:28 +0200
-Message-Id: <20221017145328.22090-16-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221017145328.22090-1-johan+linaro@kernel.org>
-References: <20221017145328.22090-1-johan+linaro@kernel.org>
+        Mon, 17 Oct 2022 10:53:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7401968898;
+        Mon, 17 Oct 2022 07:53:32 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 14:53:28 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666018410;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZruSc3Kfq+CYiRFjzBS2291CgL3iuGM3Epn6RFXv1ZU=;
+        b=EtevFTpWdhgRrpZTJUIzSBs/J7IuT0U+1Ef5M2FhvOWc1G8KaW8MUnt0h/AVUqrY2l0x9w
+        6JTlYe06sxuaB6sktk3eDXPEtiLnUV5YU4ppzb+uMgHnQoiLwnIjU+N+FU9ta9RA3ZeF+3
+        ThVolQD0JRbj023LKFbjQG/4odrbqAe070Av2DQOeg/juTNCMunrmG4GJudijneegaq2Ra
+        Jr/lsPWiWWqd4nkO1JDOjDne1/sOQO1ALcfKNxJXbmJuVnyrGegUdE9DjSGstb/Ofsgx5U
+        ZTXBI0aciu3YZH/KkdSG9Wu0E7G/3MIr8/zjZm5xxl7SXLKvlqpH4a889d66rw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666018410;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZruSc3Kfq+CYiRFjzBS2291CgL3iuGM3Epn6RFXv1ZU=;
+        b=JHaLEc+4nSZCGo3V/6mL1qHoKPEVj7D+oJBeLDzXSZRtTr/z4WIB6ot8ECclRJtVkILQhP
+        nzpr7cRjybzjm+BA==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/core] x86/retbleed: Add call depth tracking mitigation
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220915111149.029587352@infradead.org>
+References: <20220915111149.029587352@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166601840880.401.15353726051870422822.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PCIe2 and PCIe3 controllers and PHYs on SC8280XP can be used in
-4-lane mode or as separate controllers and PHYs in 2-lane mode (e.g. as
-PCIe2A and PCIe2B).
+The following commit has been merged into the x86/core branch of tip:
 
-Add support for fetching the 4-lane configuration from the TCSR and
-programming the lane registers of the second port when in 4-lane mode.
+Commit-ID:     d82a0345cf218f5050f5ad913e1ae6c579105731
+Gitweb:        https://git.kernel.org/tip/d82a0345cf218f5050f5ad913e1ae6c579105731
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 15 Sep 2022 13:11:38 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Mon, 17 Oct 2022 16:41:20 +02:00
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+x86/retbleed: Add call depth tracking mitigation
+
+The fully secure mitigation for RSB underflow on Intel SKL CPUs is IBRS,
+which inflicts up to 30% penalty for pathological syscall heavy work loads.
+
+Software based call depth tracking and RSB refill is not perfect, but
+reduces the attack surface massively. The penalty for the pathological case
+is about 8% which is still annoying but definitely more palatable than IBRS.
+
+Add a retbleed=stuff command line option to enable the call depth tracking
+and software refill of the RSB.
+
+This gives admins a choice. IBeeRS are safe and cause headaches, call depth
+tracking is considered to be s(t)ufficiently safe.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220915111149.029587352@infradead.org
 ---
- drivers/phy/qualcomm/Kconfig             |   1 +
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 118 +++++++++++++++++++++++
- 2 files changed, 119 insertions(+)
+ arch/x86/kernel/cpu/bugs.c | 32 ++++++++++++++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-index 5c98850f5a36..eb9ddc685b38 100644
---- a/drivers/phy/qualcomm/Kconfig
-+++ b/drivers/phy/qualcomm/Kconfig
-@@ -54,6 +54,7 @@ config PHY_QCOM_QMP
- 	tristate "Qualcomm QMP PHY Driver"
- 	depends on OF && COMMON_CLK && (ARCH_QCOM || COMPILE_TEST)
- 	select GENERIC_PHY
-+	select MFD_SYSCON
- 	help
- 	  Enable this to support the QMP PHY transceiver that is used
- 	  with controllers such as PCIe, UFS, and USB on Qualcomm chips.
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index ea5228bd9ecc..e5bce4810bb5 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -10,6 +10,7 @@
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-@@ -17,6 +18,7 @@
- #include <linux/phy/pcie.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
-+#include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
-@@ -886,6 +888,10 @@ static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x2_pcie_rc_serdes_tbl[] =
- 	QMP_PHY_INIT_CFG(QSERDES_V5_COM_BIAS_EN_CLKBUFLR_EN, 0x14),
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index da7c361..e6c23ea 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -787,6 +787,7 @@ enum retbleed_mitigation {
+ 	RETBLEED_MITIGATION_IBPB,
+ 	RETBLEED_MITIGATION_IBRS,
+ 	RETBLEED_MITIGATION_EIBRS,
++	RETBLEED_MITIGATION_STUFF,
  };
  
-+static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x4_pcie_serdes_4ln_tbl[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V5_COM_BIAS_EN_CLKBUFLR_EN, 0x1c),
-+};
-+
- static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x1_pcie_tx_tbl[] = {
- 	QMP_PHY_INIT_CFG(QSERDES_V5_TX_PI_QEC_CTRL, 0x20),
- 	QMP_PHY_INIT_CFG(QSERDES_V5_TX_LANE_MODE_1, 0x75),
-@@ -1491,6 +1497,9 @@ struct qmp_phy_cfg {
- 	const struct qmp_phy_cfg_tables *tables_rc;
- 	const struct qmp_phy_cfg_tables *tables_ep;
- 
-+	const struct qmp_phy_init_tbl *serdes_4ln_tbl;
-+	int serdes_4ln_num;
-+
- 	/* clock ids to be requested */
- 	const char * const *clk_list;
- 	int num_clks;
-@@ -1518,6 +1527,7 @@ struct qmp_pcie {
- 	struct device *dev;
- 
- 	const struct qmp_phy_cfg *cfg;
-+	bool tcsr_4ln_config;
- 
- 	void __iomem *serdes;
- 	void __iomem *pcs;
-@@ -1527,6 +1537,8 @@ struct qmp_pcie {
- 	void __iomem *tx2;
- 	void __iomem *rx2;
- 
-+	void __iomem *port_b;
-+
- 	struct clk *pipe_clk;
- 	struct clk *pipediv2_clk;
- 	struct clk_bulk_data *clks;
-@@ -1932,6 +1944,44 @@ static const struct qmp_phy_cfg sc8280xp_qmp_gen3x2_pciephy_cfg = {
- 	.phy_status		= PHYSTATUS,
+ enum retbleed_mitigation_cmd {
+@@ -794,6 +795,7 @@ enum retbleed_mitigation_cmd {
+ 	RETBLEED_CMD_AUTO,
+ 	RETBLEED_CMD_UNRET,
+ 	RETBLEED_CMD_IBPB,
++	RETBLEED_CMD_STUFF,
  };
  
-+static const struct qmp_phy_cfg sc8280xp_qmp_gen3x4_pciephy_cfg = {
-+	.lanes			= 4,
-+
-+	.offsets		= &qmp_pcie_offsets_v5,
-+
-+	.tables = {
-+		.serdes		= sc8280xp_qmp_pcie_serdes_tbl,
-+		.serdes_num	= ARRAY_SIZE(sc8280xp_qmp_pcie_serdes_tbl),
-+		.tx		= sc8280xp_qmp_gen3x2_pcie_tx_tbl,
-+		.tx_num		= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_tx_tbl),
-+		.rx		= sc8280xp_qmp_gen3x2_pcie_rx_tbl,
-+		.rx_num		= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_rx_tbl),
-+		.pcs		= sc8280xp_qmp_gen3x2_pcie_pcs_tbl,
-+		.pcs_num	= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_pcs_tbl),
-+		.pcs_misc	= sc8280xp_qmp_gen3x2_pcie_pcs_misc_tbl,
-+		.pcs_misc_num	= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_pcs_misc_tbl),
-+	},
-+
-+	.tables_rc = &(const struct qmp_phy_cfg_tables) {
-+		.serdes		= sc8280xp_qmp_gen3x2_pcie_rc_serdes_tbl,
-+		.serdes_num	= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_rc_serdes_tbl),
-+	},
-+
-+	.serdes_4ln_tbl		= sc8280xp_qmp_gen3x4_pcie_serdes_4ln_tbl,
-+	.serdes_4ln_num		= ARRAY_SIZE(sc8280xp_qmp_gen3x4_pcie_serdes_4ln_tbl),
-+
-+	.clk_list		= sc8280xp_pciephy_clk_l,
-+	.num_clks		= ARRAY_SIZE(sc8280xp_pciephy_clk_l),
-+	.reset_list		= sdm845_pciephy_reset_l,
-+	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= sm8250_pcie_regs_layout,
-+
-+	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-+	.phy_status		= PHYSTATUS,
-+};
-+
- static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
- 	.lanes			= 2,
+ static const char * const retbleed_strings[] = {
+@@ -802,6 +804,7 @@ static const char * const retbleed_strings[] = {
+ 	[RETBLEED_MITIGATION_IBPB]	= "Mitigation: IBPB",
+ 	[RETBLEED_MITIGATION_IBRS]	= "Mitigation: IBRS",
+ 	[RETBLEED_MITIGATION_EIBRS]	= "Mitigation: Enhanced IBRS",
++	[RETBLEED_MITIGATION_STUFF]	= "Mitigation: Stuffing",
+ };
  
-@@ -2054,6 +2104,24 @@ static void qmp_pcie_configure(void __iomem *base,
- 	qmp_pcie_configure_lane(base, tbl, num, 0xff);
- }
+ static enum retbleed_mitigation retbleed_mitigation __ro_after_init =
+@@ -831,6 +834,8 @@ static int __init retbleed_parse_cmdline(char *str)
+ 			retbleed_cmd = RETBLEED_CMD_UNRET;
+ 		} else if (!strcmp(str, "ibpb")) {
+ 			retbleed_cmd = RETBLEED_CMD_IBPB;
++		} else if (!strcmp(str, "stuff")) {
++			retbleed_cmd = RETBLEED_CMD_STUFF;
+ 		} else if (!strcmp(str, "nosmt")) {
+ 			retbleed_nosmt = true;
+ 		} else {
+@@ -879,6 +884,21 @@ static void __init retbleed_select_mitigation(void)
+ 		}
+ 		break;
  
-+static void qmp_pcie_init_port_b(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
-+{
-+	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	const struct qmp_pcie_offsets *offs = cfg->offsets;
-+	void __iomem *tx3, *rx3, *tx4, *rx4;
++	case RETBLEED_CMD_STUFF:
++		if (IS_ENABLED(CONFIG_CALL_DEPTH_TRACKING) &&
++		    spectre_v2_enabled == SPECTRE_V2_RETPOLINE) {
++			retbleed_mitigation = RETBLEED_MITIGATION_STUFF;
 +
-+	tx3 = qmp->port_b + offs->tx;
-+	rx3 = qmp->port_b + offs->rx;
-+	tx4 = qmp->port_b + offs->tx2;
-+	rx4 = qmp->port_b + offs->rx2;
++		} else {
++			if (IS_ENABLED(CONFIG_CALL_DEPTH_TRACKING))
++				pr_err("WARNING: retbleed=stuff depends on spectre_v2=retpoline\n");
++			else
++				pr_err("WARNING: kernel not compiled with CALL_DEPTH_TRACKING.\n");
 +
-+	qmp_pcie_configure_lane(tx3, tbls->tx, tbls->tx_num, 1);
-+	qmp_pcie_configure_lane(rx3, tbls->rx, tbls->rx_num, 1);
++			goto do_cmd_auto;
++		}
++		break;
 +
-+	qmp_pcie_configure_lane(tx4, tbls->tx, tbls->tx_num, 2);
-+	qmp_pcie_configure_lane(rx4, tbls->rx, tbls->rx_num, 2);
-+}
-+
- static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
- {
- 	const struct qmp_phy_cfg *cfg = qmp->cfg;
-@@ -2080,6 +2148,11 @@ static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_c
+ do_cmd_auto:
+ 	case RETBLEED_CMD_AUTO:
+ 	default:
+@@ -916,6 +936,12 @@ do_cmd_auto:
+ 		mitigate_smt = true;
+ 		break;
  
- 	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
- 	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
++	case RETBLEED_MITIGATION_STUFF:
++		setup_force_cpu_cap(X86_FEATURE_RETHUNK);
++		setup_force_cpu_cap(X86_FEATURE_CALL_DEPTH);
++		x86_set_skl_return_thunk();
++		break;
 +
-+	if (cfg->lanes >= 4 && qmp->tcsr_4ln_config) {
-+		qmp_pcie_configure(serdes, cfg->serdes_4ln_tbl, cfg->serdes_4ln_num);
-+		qmp_pcie_init_port_b(qmp, tbls);
-+	}
- }
+ 	default:
+ 		break;
+ 	}
+@@ -926,7 +952,7 @@ do_cmd_auto:
  
- static int qmp_pcie_init(struct phy *phy)
-@@ -2477,6 +2550,37 @@ static int qmp_pcie_parse_dt_legacy(struct qmp_pcie *qmp, struct device_node *np
- 	return 0;
- }
- 
-+static int qmp_pcie_get_4ln_config(struct qmp_pcie *qmp)
-+{
-+	struct regmap *tcsr;
-+	unsigned int args[2];
-+	int ret;
-+
-+	tcsr = syscon_regmap_lookup_by_phandle_args(qmp->dev->of_node,
-+						    "qcom,4ln-config-sel",
-+						    ARRAY_SIZE(args), args);
-+	if (IS_ERR(tcsr)) {
-+		ret = PTR_ERR(tcsr);
-+		if (ret == -ENOENT)
-+			return 0;
-+
-+		dev_err(qmp->dev, "failed to lookup syscon: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_test_bits(tcsr, args[0], BIT(args[1]));
-+	if (ret < 0) {
-+		dev_err(qmp->dev, "failed to read tcsr: %d\n", ret);
-+		return ret;
-+	}
-+
-+	qmp->tcsr_4ln_config = ret;
-+
-+	dev_dbg(qmp->dev, "4ln_config_sel = %d\n", qmp->tcsr_4ln_config);
-+
-+	return 0;
-+}
-+
- static int qmp_pcie_parse_dt(struct qmp_pcie *qmp)
- {
- 	struct platform_device *pdev = to_platform_device(qmp->dev);
-@@ -2484,10 +2588,15 @@ static int qmp_pcie_parse_dt(struct qmp_pcie *qmp)
- 	const struct qmp_pcie_offsets *offs = cfg->offsets;
- 	struct device *dev = qmp->dev;
- 	void __iomem *base;
-+	int ret;
- 
- 	if (!offs)
- 		return -EINVAL;
- 
-+	ret = qmp_pcie_get_4ln_config(qmp);
-+	if (ret)
-+		return ret;
-+
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
-@@ -2503,6 +2612,12 @@ static int qmp_pcie_parse_dt(struct qmp_pcie *qmp)
- 		qmp->rx2 = base + offs->rx2;
+ 	/*
+ 	 * Let IBRS trump all on Intel without affecting the effects of the
+-	 * retbleed= cmdline option.
++	 * retbleed= cmdline option except for call depth based stuffing
+ 	 */
+ 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL) {
+ 		switch (spectre_v2_enabled) {
+@@ -939,7 +965,8 @@ do_cmd_auto:
+ 			retbleed_mitigation = RETBLEED_MITIGATION_EIBRS;
+ 			break;
+ 		default:
+-			pr_err(RETBLEED_INTEL_MSG);
++			if (retbleed_mitigation != RETBLEED_MITIGATION_STUFF)
++				pr_err(RETBLEED_INTEL_MSG);
+ 		}
  	}
  
-+	if (qmp->cfg->lanes >= 4 && qmp->tcsr_4ln_config) {
-+		qmp->port_b = devm_platform_ioremap_resource(pdev, 1);
-+		if (IS_ERR(qmp->port_b))
-+			return PTR_ERR(qmp->port_b);
-+	}
-+
- 	qmp->pipe_clk = devm_clk_get(dev, "pipe");
- 	if (IS_ERR(qmp->pipe_clk)) {
- 		return dev_err_probe(dev, PTR_ERR(qmp->pipe_clk),
-@@ -2610,6 +2725,9 @@ static const struct of_device_id qmp_pcie_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,sc8280xp-qmp-gen3x2-pcie-phy",
- 		.data = &sc8280xp_qmp_gen3x2_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sc8280xp-qmp-gen3x4-pcie-phy",
-+		.data = &sc8280xp_qmp_gen3x4_pciephy_cfg,
- 	}, {
- 		.compatible = "qcom,sdm845-qhp-pcie-phy",
- 		.data = &sdm845_qhp_pciephy_cfg,
--- 
-2.37.3
-
+@@ -1413,6 +1440,7 @@ static void __init spectre_v2_select_mitigation(void)
+ 		if (IS_ENABLED(CONFIG_CPU_IBRS_ENTRY) &&
+ 		    boot_cpu_has_bug(X86_BUG_RETBLEED) &&
+ 		    retbleed_cmd != RETBLEED_CMD_OFF &&
++		    retbleed_cmd != RETBLEED_CMD_STUFF &&
+ 		    boot_cpu_has(X86_FEATURE_IBRS) &&
+ 		    boot_cpu_data.x86_vendor == X86_VENDOR_INTEL) {
+ 			mode = SPECTRE_V2_IBRS;
