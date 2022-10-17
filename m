@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2116017AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34F76017AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiJQTaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S231146AbiJQTaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiJQT3v (ORCPT
+        with ESMTP id S230407AbiJQT3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:29:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D506B79EE0;
-        Mon, 17 Oct 2022 12:28:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF0CF61218;
-        Mon, 17 Oct 2022 19:27:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F71C433C1;
-        Mon, 17 Oct 2022 19:27:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666034867;
-        bh=/sbWL9ZHe0D21fIQ7+2B+ATC4P6VpJMi25hzWD3qixc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lw3Oe2cbqI76PHfUenh39Na+3kNO1A0K441gFbTMVFGlGEiF0RpugA0jyceJUM8eP
-         IFll+tuAg2WL91pHS45pMdkaQtTR5SCEHDcHNyRNTQ4WtlR2KdhN/+0qiMdSq1KSCQ
-         F7o0xVJIdITYABlxbhY0nuYjN97dPKzFe7SHkJjfeh5mJaOtWBRpHyT7B4oQ4td68a
-         FwO0JSyYgdHh8mS6ZAXC/odq+oaGwqMgkR/5r8Sn6NvdpBDS5PHpQhcrECILXcMdvy
-         4ngscN6Pe59rYjEKZ2Pr0o94mDOjbhAMqXIEy86hBP7p8wfCkYYFPKcuXQEFBAz3z+
-         REME+e8RpHYiw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Sumanth Korikkar <sumanthk@linux.ibm.com>
-Cc:     olsajiri@gmail.com, bpf@vger.kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, iii@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-tip-commits@vger.kernel.org, namhyung@kernel.org,
-        peterz@infradead.org, svens@linux.ibm.com, tip-bot2@linutronix.de,
-        tmricht@linux.ibm.com, x86@kernel.org
-Subject: Re: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
-Date:   Mon, 17 Oct 2022 19:27:44 +0000
-Message-Id: <20221017192744.1403-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221007081327.1047552-1-sumanthk@linux.ibm.com>
-References: 
+        Mon, 17 Oct 2022 15:29:55 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DE4792D5;
+        Mon, 17 Oct 2022 12:28:15 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id y191so12028897pfb.2;
+        Mon, 17 Oct 2022 12:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UhUgipz8KQA+Nb0UJBop4f3vYMVn4vujHt2cKAuNWjk=;
+        b=FXTIoUQRDTwcJPRSIT4V4YAORAn7g67+EaCCufpJ5HCiBsglXCHJIHvn8qpnh3eWLK
+         LN3W2cri+i84pYn0SyqyDYWWs4ym6nJO7DNn8Da4N1Xm7hyjuWuCwdthD+6AApb+RhGi
+         uzyx1XzKU3VdtwbNwVfZogIP+YMZY7sBGx39vaeVoMkuuiLgVGIi3ZhtYG1CJWA2fdY2
+         nQGMDU0l9OcvQ9fImtGsDjaMnLyCkcmnQr814f7Yu/73EePmXURcj2WAPyWmAu4Smd8M
+         KMjJ39lHt6zyadqwQbLoWIERQGRDnPIcPoAcXEHN80jJHMX3QEvkdwTvPjQU99X1CGbv
+         Nxew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UhUgipz8KQA+Nb0UJBop4f3vYMVn4vujHt2cKAuNWjk=;
+        b=hjFrlUJFio4XRmIWMNo2ZX8332za9LHgHYuAkkef4Mmrwsu3AtINej0PmZOokWTeld
+         MtvCXGj/5whRqMtISQ4CZidrtFSqbNpcngGzUsoit2VzH32PBI+1wTzgrJEAUAANpZMy
+         3nWsW6NA6dL4an0yV+B+39gVLC8R82w276Rt2iX+UTUvhSfYmjRVAtEZ+ZTv8K4dLqLw
+         modN4K/OsyWJ0AsGIOH5avNg+UQWysuJ08F2+YvM7Hz2H+F3SkSUuqUq0NoI5m06iXlN
+         ESRbQFvN2ua9pCDw+NujJvI4dXiVE84vV9Zi7aybomzeCJbvPCdlZZIPtWKd8x8O9586
+         nv8Q==
+X-Gm-Message-State: ACrzQf35T+qfDyPACOmeOEPkttJgUyKDry2z5TI8nrpSHQS/pQAQQv6/
+        K2D+wY8dFJ4EnajdtAXhpGqi+Wmtfxx6WA==
+X-Google-Smtp-Source: AMsMyM5aiquUAAIoBCB5fNzPoIm2XhC1tJfx5tcAF0ZTinw5x7j04sw9qN+vcISH7dm/2VN2yvOjag==
+X-Received: by 2002:a62:84d1:0:b0:565:b27c:8140 with SMTP id k200-20020a6284d1000000b00565b27c8140mr14045379pfd.14.1666034891431;
+        Mon, 17 Oct 2022 12:28:11 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b00180a7ff78ccsm7001746plh.126.2022.10.17.12.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 12:28:11 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 17 Oct 2022 09:28:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [PATCH cgroup/for-6.1-fixes] blkcg: Update MAINTAINERS entry
+Message-ID: <Y02sydfDCLXnfZ37@slm.duckdns.org>
+References: <Y02aBVTCSggxKWXT@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y02aBVTCSggxKWXT@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-
-The commit that this patch is fixing[1] also causes yet another segfault for
-'perf-script' of tracepoint records.  For example:
-
-    $ sudo timeout 3 perf record -e exceptions:page_fault_user
-    [ perf record: Woken up 1 times to write data ]
-    [ perf record: Captured and wrote 0.228 MB perf.data (74 samples) ]
-    $ sudo perf script
-    Segmentation fault
-
-Reverting this patch and the original bug commit[1] fixes the issue.  I haven't
-deep dive yet because I'm not familiar with this area.  Anybody has any idea
-about this?
-
-[1] 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-
-
-Thanks,
-SJ
-
-On Fri, 7 Oct 2022 10:13:27 +0200 Sumanth Korikkar <sumanthk@linux.ibm.com> wrote:
-
-> * Raw data is also filled by bpf_perf_event_output.
-> * Add sample_flags to indicate raw data.
-> * This eliminates the segfaults as shown below:
->   Run ./samples/bpf/trace_output
->   BUG pid 9 cookie 1001000000004 sized 4
->   BUG pid 9 cookie 1001000000004 sized 4
->   BUG pid 9 cookie 1001000000004 sized 4
->   Segmentation fault (core dumped)
+On Mon, Oct 17, 2022 at 08:08:05AM -1000, Tejun Heo wrote:
+> Josef wrote iolatency and iocost is missing from the files list. Let's add
+> Josef as a maintainer and add blk-iocost.c to the files list.
 > 
-> Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> ---
->  kernel/trace/bpf_trace.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 49fb9ec8366d..1ed08967fb97 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -687,6 +687,7 @@ BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,
->  
->  	perf_sample_data_init(sd, 0, 0);
->  	sd->raw = &raw;
-> +	sd->sample_flags |= PERF_SAMPLE_RAW;
->  
->  	err = __bpf_perf_event_output(regs, map, flags, sd);
->  
-> @@ -745,6 +746,7 @@ u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
->  	perf_fetch_caller_regs(regs);
->  	perf_sample_data_init(sd, 0, 0);
->  	sd->raw = &raw;
-> +	sd->sample_flags |= PERF_SAMPLE_RAW;
->  
->  	ret = __bpf_perf_event_output(regs, map, flags, sd);
->  out:
-> -- 
-> 2.36.1
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+
+Applied to cgroup/for-6.1-fixes.
+
+Thanks.
+
+-- 
+tejun
