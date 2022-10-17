@@ -2,198 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209F060169B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A773A60169D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiJQStJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S230223AbiJQStj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJQStB (ORCPT
+        with ESMTP id S230229AbiJQStf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:49:01 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B98872B6A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:48:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FIXnszuzZUejGfWBLYJbdiKxFD9SYHkLvSbO/yUTPPhy4nn4OidRS/sqXy83OsnsOJ7UAoz93OqP28XxQq9irpC+GIrgfkNkIl8TvKrGPHpLexohy/BBwjvOdexGM0VEC/oHybjGL3CMSNMwIEqV0YHmr3A9qkClCWIG8YnUwU/diQdezZLqnkPKG09gHqa74scO+a5Q3lOHip1+5Y1ffON1e7pX2XoAt6m42juI9HU7ZxA1ZDCZqrYFDDY7RqVwwONh7Ya4pQmsN+gR/1LKFlSvibmWw4kmiJjeASdazkwLB2o1liZ/Q8tp3/pgLoOdBlTfylYdTrBlg6QOY++OIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ib1IyOHf/J5F0ZwutGvwRcwbkOXUJ0vSGdoR28iJbyw=;
- b=CbE4tMcG5R9k3+Jv+1oWCR5FKi8UE+D33UqvP4z3UtFHo/RDiznM8KunUs84HefrRyjFNBN7Xn17GV8XmGSnnBB4XLFLOxOuXeZ9nk9HlBzxM/Lwj+IEHbBeaq3zs9dJ2Jc6OrkMwCpbh52/NJxZnwVlQuGk/3NwLWYlzFctsz1kAecKyNj1DnCsvoMvTewn2bv8Sh82pH1/LCFoFcWmwKTGW1Wm5iuooT/TovFOVJ65bX3X04KmHXXWDH4+FM3regZjDjjlA4xiAqq5b4BPzqmT60RdP1X75/XkrUeaYUm7kU5H2P5HLbHnRjSqlKlOWCPilKTWB8rNpHueXbfvsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ib1IyOHf/J5F0ZwutGvwRcwbkOXUJ0vSGdoR28iJbyw=;
- b=Q2PQXK49XjwwSAwPLNhcMq4rf17ufuDaL5psacYzx0Hrly7E/LLjsUygzerzxcAYQesZDw0ZVIMikWHRRmlsOdzB+rQNjtMZ2vjnhWKkCSugca4n/Qplhq1Ti+0Tcrz0qMVxXqfV6QqwkVkyowSM9gAkwFYW5Myq1lwaGrPL0k0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by BY5PR12MB4951.namprd12.prod.outlook.com (2603:10b6:a03:1d2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Mon, 17 Oct
- 2022 18:48:55 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aef3:6aae:b904:e395]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aef3:6aae:b904:e395%6]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 18:48:55 +0000
-Message-ID: <2b472233-f432-f046-bef3-5152b18a2b79@amd.com>
-Date:   Mon, 17 Oct 2022 14:48:50 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v3] drm/amd/display: add an ASSERT() to irq service
- functions
-Content-Language: en-US
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        amd-gfx@lists.freedesktop.org
-Cc:     Stylon Wang <stylon.wang@amd.com>, Leo Li <sunpeng.li@amd.com>,
-        linux-kernel@vger.kernel.org, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Roman Li <roman.li@amd.com>, dri-devel@lists.freedesktop.org,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        David Airlie <airlied@linux.ie>, Alex Hung <alex.hung@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <20221017161322.95808-1-hamza.mahfooz@amd.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20221017161322.95808-1-hamza.mahfooz@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT1PR01CA0152.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2f::31) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Mon, 17 Oct 2022 14:49:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5142411A17;
+        Mon, 17 Oct 2022 11:49:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 555D3B81A07;
+        Mon, 17 Oct 2022 18:49:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17616C433C1;
+        Mon, 17 Oct 2022 18:49:25 +0000 (UTC)
+Date:   Mon, 17 Oct 2022 14:49:49 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Florent Revest <revest@chromium.org>
+Cc:     Xu Kuohai <xukuohai@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Xu Kuohai <xukuohai@huaweicloud.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
+Message-ID: <20221017144949.2b9dcdc5@gandalf.local.home>
+In-Reply-To: <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
+References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
+        <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net>
+        <YzG51Jyd5zhvygtK@arm.com>
+        <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
+        <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
+        <YzR5WSLux4mmFIXg@FVFF77S0Q05N>
+        <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
+        <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
+        <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com>
+        <20221005110707.55bd9354@gandalf.local.home>
+        <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
+        <20221005113019.18aeda76@gandalf.local.home>
+        <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
+        <20221006122922.53802a5c@gandalf.local.home>
+        <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|BY5PR12MB4951:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ba129a4-12a6-45d2-ab64-08dab0703df2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PEBZ9l4SyGYcjmjAK8bDQT5WVOOrWpXcTcqNS4LcBkumoBWmqyaNdE8a5hWLtQG3OTNsu0uS9mXO3hZvNWqO4xQlEmVr6xW1GPnmNT6LzT3YZc3Q8Pgdq4STP0me0b3Knhp0+c3PSXeVc8m89DyE5Em2XRKRCiMGOllxBOAi8bqrjGJqZwFuChzdpgo4AA5GzW7xIN6Q99WYKtMfCPQOv79Zt8aX+rVhs62CcDsVmYTDudFhFetaxExO6Vih2Kstmyn3y4UJUMoBjKg8D0O9Z8JZ+I54osSuWwX9kbrAQ9sOVs6d0qbeAcJfAfedU1NHF70lsi7WZN/KRtxM7la+wHLRmXDHR1eSjQK6kuqAJd9hk/vNrqYwVNrVSyzTH01yd52fpvbD2fttmJuwQKpLYFTtL6o2x2S0GRz2jOSTPjJRlZ1pxEm77ttP7TDJhWRWw0a1wefhhK0+hw5EDriXHKn+F/GWcBsHt6OFNUX64NNZ+tGiBheXofO+NirDKZ+eEMyjot15vZxKxx1phGxrTyxCZNKnZg02G4hB55+LULAaGDslRUvJ+m8pSu5LIZiRCjQS82dTO0NVtq63vfIkWs6l2fgrldBqKPKNkTW3HYG5vXHqDNkSwzC9ud+GO3vGv4TRAi8YYekplMemtkMhHaYnpGaDIWMe8+fjjUElH9QQxV9G4l9dtfGUv/GP6Mi8sUScoyRvr6LvD10eKU+fMmsg8t3MHdsZRSK1qxONwQaKN94Y2Etds7phWnUGYg9nrBk7AFTmsP+lzyT4TlM5gYHDCZ+uf4ML8HgJPwT3DL4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(451199015)(31686004)(44832011)(54906003)(5660300002)(8676002)(316002)(478600001)(6506007)(66476007)(41300700001)(53546011)(6512007)(26005)(186003)(4001150100001)(2906002)(6486002)(4326008)(66556008)(2616005)(8936002)(36756003)(83380400001)(6666004)(38100700002)(66946007)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UnFCYWQyeldYVFhNdTYyQzBBTmpzVlBWS2ZPd1o1QmoxdVVDSzhVb29Wa2FE?=
- =?utf-8?B?TExOOXc2U1FOWThRN1VqenlHMytDcU5QSk8xQnRoaXl2YTROektocU94aHU5?=
- =?utf-8?B?NExiajFRWlhrRDBqNFFDZkYrbGs3ZVdXdGpUQzV0eGhISmR5UHNMYmJEYWMv?=
- =?utf-8?B?V0lxaWlBY0IwWkhVdlFDOGxUL01ldXhGZ0pPSlo0VXVVemhtc2g0dzh4SlR6?=
- =?utf-8?B?b2xydXNQSmNrTHRaeXNTeXhJMzF1R014bXhSNURoOU40RVFmaTAxWkxYY3ZL?=
- =?utf-8?B?Y2Z5clJhcUUxeDJOSnV0bDV4WUZNWko3aVgyTGtRYm8wdGRMa1U3TjZRZVNJ?=
- =?utf-8?B?UDUrM21ZOEtjOVZQUjY3QmExcHFaWDh5TVJWOGxWNVV2cTZGdGJaYWFvaXhF?=
- =?utf-8?B?T3NENUVBY2Z6ZTJlQ2hEQ1ZuZm13Vjk0Y3o2UXFicHNhU21LVThkTm1VTkNh?=
- =?utf-8?B?eTk4b0IremVyaTBQUE5rVlhLL2MvdzhacCtTSUFXVGVrYnJqMm9XdGFKSi8x?=
- =?utf-8?B?bWRBejMvYmhuOVEwZXRQVktsSGxmQlBaVy8vVklMUTI0R0hBeW40c1ZOamZa?=
- =?utf-8?B?QzA3WWhLb2lZTmZTTGdTaG5Vdkx3MEZPT0dFT25OYUNFTW1uelNOUFMybEZB?=
- =?utf-8?B?SDMvc3ZhT241V3FoelBoT2J5R0JLcWE1UWFLcnRKMmxHRlM1WDhwNHAzTUU4?=
- =?utf-8?B?V3MxVGZ2T0w2M0xjV29VMXliRjhJeFZENE1BcGthMlhOenBBcWFZdmJzeHg2?=
- =?utf-8?B?RjEvSENnRkVTRDUwczJxbU42dWxsVXEvd0dLclg3S1B1OUxQVjdZTFhyQ1Z6?=
- =?utf-8?B?MzVrS0VGWGJhbXh4OG5IOHgxTW5RQU9MSkVwbERwMG9laG1iV2oxV1B0eWNH?=
- =?utf-8?B?MzVCa2ZmMElTK0ZtQzBXb3kvV2NJYVR6STdsL2NWTk9CT2xoODJLTXR6akpK?=
- =?utf-8?B?dkdiN2tubUNOd3hPaU1tckQ0NUw1VTdTSm96a05TQVFPL2xuMWpuRkY2L1lN?=
- =?utf-8?B?ckVCRWxSQW5CRDJTa3c1RWRYeDQ4UkNHSVpPU05CMDRML2p3KzIzempJM2xJ?=
- =?utf-8?B?VC9QekozOEwybHFKQXM1U2c5Q0ZCYk5zdlFNS2tjdUZqTW1nZ05pc2xVSFZC?=
- =?utf-8?B?S3lnSWh5YUxuK3dzVllmRERQQnU4U1ZxalRsSS8wNFlXN05ic3ZXOFRWYVNn?=
- =?utf-8?B?bHhxZXowd1dMYno2VDZST2RTVVR2TGJvL0ptZUVXc0ZvYTA1ZE5BeGhBYTMz?=
- =?utf-8?B?VmVJRURXTXpxdC9kakpGWHBkNUcyRVFvWmVHSlZqRm4ySkpMM0dTUTNvZGhG?=
- =?utf-8?B?WjB2NVh1WjdtQ0VJenVVUkRQS1pZN1p5UVdHalJzZUVwQnZyZTNlUUlnZEhh?=
- =?utf-8?B?b0tOZU1qWG5Rcy9ZUjE1Smpqc2xyTVlPT1krb1FJcTBIVUhWL202T1dvWjVS?=
- =?utf-8?B?TkI4a1A3TWdEaSt0eXdWL2dtaXFveHBsSysyaGpmUE56Mk5GYUM2Nlc0N3h2?=
- =?utf-8?B?UWd1NTAwTUw4emdnOFJpa0RMREdSSGkwUGFxOFA1L3ZuMVkraE1BSE1vUWxH?=
- =?utf-8?B?dFZHRXZpVWF1ckl5ckNnMU5xZ3A1eXZRVnovZ0xldElxMmNTNzRDTmlTNHpy?=
- =?utf-8?B?bEU5TXFPNmtoR2lRcXJjdnVleUREYkRLSGVhdEZQMThHREpLdkhoYkJqNEJ2?=
- =?utf-8?B?cDVrVm1yVysxbWhTc2xFTDg3SVh6T0JFelowRjZRWVFVZys3eEVhNHJrUkJ0?=
- =?utf-8?B?bXZzY3UwRnR5U2FkVDhOUkc3YkNWMXR4ZFVCMFdMZVViUU5hTmgvMEUzczlw?=
- =?utf-8?B?N3NLSnFOcitMU0J3VTVtYithRC9FZUkyRWY4YUgxdmhqZHBXZU5EaHkySmRQ?=
- =?utf-8?B?MWo5Z2xzK29rbXdKWmwrRDZsMHhPdGpJOWFzVnp5RHQ3T09SYlFWd2tTL2N4?=
- =?utf-8?B?a1Z3SzdOSHJtT0hOdHMwZ3VGWHkxaXlmUmVSYkIxZFFaRnIxZDJJSUpDVHdi?=
- =?utf-8?B?d3BsRWtZUVRuTmFybDN2elVMNytlNENHY2VEa0s1MzVCUG5EalhkVXh2RW93?=
- =?utf-8?B?NDJlZnlpd1MvSW8vMHpUSzYrVGxwWnMvMzlSSG14OUE2S25TMXo5OVU2SDFB?=
- =?utf-8?Q?Zfgb9Qdu7c7XJxfv7kjNVUbpq?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ba129a4-12a6-45d2-ab64-08dab0703df2
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 18:48:55.1297
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y/GtQlmCgsvJBFY+swiICUP1Vkj/oeDCLRvGWzVXgcKRfeUB8WyMV2woy7xytWaTq+MoaBFtPwTuEBmSzhJkFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4951
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-17 12:13, Hamza Mahfooz wrote:
-> Currently, if we encounter unimplemented functions, it is difficult to
-> tell what caused them just by looking at dmesg and that is compounded by
-> the fact that it is often hard to reproduce said issues, for instance we
-> have had reports of this condition being triggered when removing a
-> secondary display that is setup in mirror mode and is connected using
-> usb-c. So, to have access to more detailed debugging information, add an
-> ASSERT() to dal_irq_service_ack() and dal_irq_service_set() that only
-> triggers when we encounter an unimplemented function.
-> 
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+On Mon, 17 Oct 2022 19:55:06 +0200
+Florent Revest <revest@chromium.org> wrote:
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+> Note that I can't really make sense of the perf report with indirect
+> calls. it always reports it spent 12% of the time in
+> rethook_trampoline_handler but I verified with both a WARN in that
+> function and a breakpoint with a debugger, this function does *not*
+> get called when running this "bench trig-fentry" benchmark. Also it
+> wouldn't make sense for fprobe_handler to call it so I'm quite
+> confused why perf would report this call and such a long time spent
+> there. Anyone know what I could be missing here ?
 
-Harry
+The trace shows __bpf_prog_exit, which I'm guessing is tracing the end of
+the function. Right?
 
-> ---
-> v2: detail specific instance that I'm interested in and use ASSERT()
->     instead of WARN().
-> 
-> v3: move ASSERT()s inside the new if blocks.
-> ---
->  .../gpu/drm/amd/display/dc/irq/irq_service.c    | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-> index 7bad39bba86b..d100edaedbbb 100644
-> --- a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-> +++ b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-> @@ -112,8 +112,15 @@ bool dal_irq_service_set(
->  
->  	dal_irq_service_ack(irq_service, source);
->  
-> -	if (info->funcs && info->funcs->set)
-> +	if (info->funcs && info->funcs->set) {
-> +		if (info->funcs->set == dal_irq_service_dummy_set) {
-> +			DC_LOG_WARNING("%s: src: %d, st: %d\n", __func__,
-> +				       source, enable);
-> +			ASSERT(0);
-> +		}
-> +
->  		return info->funcs->set(irq_service, info, enable);
-> +	}
->  
->  	dal_irq_service_set_generic(irq_service, info, enable);
->  
-> @@ -146,8 +153,14 @@ bool dal_irq_service_ack(
->  		return false;
->  	}
->  
-> -	if (info->funcs && info->funcs->ack)
-> +	if (info->funcs && info->funcs->ack) {
-> +		if (info->funcs->ack == dal_irq_service_dummy_ack) {
-> +			DC_LOG_WARNING("%s: src: %d\n", __func__, source);
-> +			ASSERT(0);
-> +		}
-> +
->  		return info->funcs->ack(irq_service, info);
-> +	}
->  
->  	dal_irq_service_ack_generic(irq_service, info);
->  
+In which case I believe it must call rethook_trampoline_handler:
 
+ -> fprobe_handler() /* Which could use some "unlikely()" to move disabled
+                        paths out of the hot path */
+
+       /* And also calls rethook_try_get () which does a cmpxchg! */
+
+	-> ret_hook()
+		-> arch_rethook_prepare()
+			Sets regs->lr = arch_rethook_trampoline
+
+On return of the function, it jumps to arch_rethook_trampoline()
+
+  -> arch_rethook_trampoline()
+	-> arch_rethook_trampoline_callback()
+		-> rethook_trampoline_handler()
+
+So I do not know how it wouldn't trigger the WARNING or breakpoint if you
+added it there.
+
+-- Steve
