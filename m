@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F93600DAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F6A600DB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJQLYn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Oct 2022 07:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S229993AbiJQL1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 07:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiJQLYg (ORCPT
+        with ESMTP id S229815AbiJQL1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 07:24:36 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2723AF596
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 04:24:31 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-315-BqPzGUwBNCKi-Bbkr5fcZQ-1; Mon, 17 Oct 2022 12:24:28 +0100
-X-MC-Unique: BqPzGUwBNCKi-Bbkr5fcZQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 17 Oct
- 2022 12:24:26 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Mon, 17 Oct 2022 12:24:26 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: RE: [PATCH v2] driver core: allow kobj_to_dev() to take a const
- pointer
-Thread-Topic: [PATCH v2] driver core: allow kobj_to_dev() to take a const
- pointer
-Thread-Index: AQHY4f8XIXg/6yYeA0Sep9oqtEQttq4ScXHw
-Date:   Mon, 17 Oct 2022 11:24:26 +0000
-Message-ID: <b13c5bb641d64433a85c52f694a838e7@AcuMS.aculab.com>
-References: <20221016104126.1259809-1-gregkh@linuxfoundation.org>
- <Y00KTAobXJ0/Jgv3@paasikivi.fi.intel.com> <Y00Mfgymi+Xv6El3@kroah.com>
-In-Reply-To: <Y00Mfgymi+Xv6El3@kroah.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 17 Oct 2022 07:27:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBEC5F982;
+        Mon, 17 Oct 2022 04:27:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE09561068;
+        Mon, 17 Oct 2022 11:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F530C433C1;
+        Mon, 17 Oct 2022 11:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666006028;
+        bh=fDX3YKS2ZbQApo4ilsZMUNMy6l8gRgEh8LArIOkE5bI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jZzoTqrzZoHvlj+P2Pbmq6AxayBbUILIvPyxw8U/T4yT5pTU0l8EOn3yWtF0SI8X0
+         kRK+YLKWR1+DUbclH++zquLoTuYl7vmsR/WmDZHK+ehHXdo7tOlT3ZWCSySKzIKDpJ
+         Eni2whm0BwJkR/4PuuxDQj96MQpstxizW4Ocj1biaatEEn6WX7y0++hONXLon5DeEP
+         hSy0Obo7a/NDgw0CIDM9N5vsw81DuOHB8u+JS+fheuZGkTHzypp9LOlc2cHPJY/lHL
+         A96NH8JiuhMZdW5boGMmxoZQKcK0KAStcUDV/aO62Z/mI0yDTFKROJ8jtBDekj3QKj
+         Ls4YOqX0MjsjQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1okOGm-0000aX-RY; Mon, 17 Oct 2022 13:26:57 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        quic_vbadigan@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/2] PCI: qcom: Add basic interconnect support
+Date:   Mon, 17 Oct 2022 13:24:47 +0200
+Message-Id: <20221017112449.2146-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,38 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman
-> Sent: 17 October 2022 09:04
-> 
-> On Mon, Oct 17, 2022 at 07:54:52AM +0000, Sakari Ailus wrote:
-> > Hi Greg,
-> >
-> > On Sun, Oct 16, 2022 at 12:41:26PM +0200, Greg Kroah-Hartman wrote:
-> > > If a const * to a kobject is passed to kobj_to_dev(), we want to return
-> > > back a const * to a device as the driver core shouldn't be modifying a
-> > > constant structure.  But when dealing with container_of() the pointer
-> > > const attribute is cast away, so we need to manually handle this by
-> > > determining the type of the pointer passed in to know the type of the
-> > > pointer to pass out.
-> >
-> > Alternatively container_of() could be fixed, but that will likely produce
-> > lots of warnings currently.
-> 
-> Yeah, we can not do that because, as you found out, there's just too
-> many warnings that it would cause.  Let's work on the individual
-> subsystems to clean them all up first before worrying about the core
-> container_of() macro as that should fix the majority of the build
-> warnings.
+On Qualcomm platforms like SC8280XP and SA8540P interconnect bandwidth
+must be requested before enabling interconnect clocks.
 
-Is it possible to generate a fixed container_of() with a
-different name and then use that to clean up the subsystems?
-Then finally rename it back?
+Add basic support for managing an optional "pcie-mem" interconnect path
+by setting a low constraint before enabling clocks and updating it after
+the link is up.
 
-That you probably be a lot less churn.
+This is specifically needed to prevent a crash on SC8280XP/SA8540P when
+the interconnect constraints are enforced during boot.
 
-	David
+As support for these platforms was added in 6.1-rc1 it would be nice to
+have this merged as a fix for 6.1, but deferring for 6.2 works as well.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Johan
+
+
+Johan Hovold (2):
+  dt-bindings: PCI: qcom: Add SC8280XP/SA8540P interconnects
+  PCI: qcom: Add basic interconnect support
+
+ .../devicetree/bindings/pci/qcom,pcie.yaml    | 25 ++++++
+ drivers/pci/controller/dwc/pcie-qcom.c        | 76 +++++++++++++++++++
+ 2 files changed, 101 insertions(+)
+
+-- 
+2.37.3
 
