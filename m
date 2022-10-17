@@ -2,170 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B96600E1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E93600E4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiJQLtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 07:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S230378AbiJQL4c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Oct 2022 07:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiJQLsr (ORCPT
+        with ESMTP id S229955AbiJQL43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 07:48:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DD659258;
-        Mon, 17 Oct 2022 04:48:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43311B8104C;
-        Mon, 17 Oct 2022 11:48:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0096CC43470;
-        Mon, 17 Oct 2022 11:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666007312;
-        bh=HP4XeBwhzzfRODTCqrcEZm4j48kl6FVUtIqnjwkTnN8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NfnkRygm7zsT4l4iAjw5WX3EiM7mqytDFaPWBl1ZG0AaZksd+Jp/HxqEZgEUrbvcp
-         1tkFBfoYeG3VMtPfCiynvBAozoopMQMhx+mJX6dgzq0SnLHSYjEOPEdE2sp3xp6ECf
-         VAnxgcH9Ww577t+0Pe+3h92zYcvJIUSlaEDf4ehC6cBXB6tsu4Jp1mVfSs0Bj5NRGz
-         FJsWUtNKtauKjQr8Eyfv2M4l/L7OpBPwUImrC6kmHvPEFZYzCmF6TmgzgTcv4COGpB
-         uuenFRFpkEJHruTXwie0Ueexs5LSISOM82WFJNiGgN3P7nIXzYZEOJkoR00NI3r7SA
-         awfsoWODlKjvw==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1364357a691so12909591fac.7;
-        Mon, 17 Oct 2022 04:48:31 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1r+OanXUqsGgMB9xyAvOsqd/lSHSc1pu4CjVzN4rHGm/Bm36nI
-        HjJaKu3Xeo+glkRyyKQju3nV97bR2vh1vaumXvE=
-X-Google-Smtp-Source: AMsMyM71RbymNmpADSzXueK2qfrYw0uqs03kEAUw8sKggyNY4XvntT3f6u+bg/cYQljnPZUXaeAyj2r61Fij55Ihwrk=
-X-Received: by 2002:a05:6870:2052:b0:132:7b2:2fe6 with SMTP id
- l18-20020a056870205200b0013207b22fe6mr5417466oad.98.1666007311105; Mon, 17
- Oct 2022 04:48:31 -0700 (PDT)
+        Mon, 17 Oct 2022 07:56:29 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F5DBF59;
+        Mon, 17 Oct 2022 04:56:26 -0700 (PDT)
+Received: from p508fc122.dip0.t-ipconnect.de ([80.143.193.34] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1okOj5-0007qc-6s; Mon, 17 Oct 2022 13:56:11 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     =?utf-8?B?T25kxZllag==?= Jirman <megi@xff.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map and ranges
+Date:   Mon, 17 Oct 2022 13:56:10 +0200
+Message-ID: <4679102.Wku2Vz74k6@phil>
+In-Reply-To: <20221005220812.4psu6kckej63yo2z@core>
+References: <20221005085439.740992-1-megi@xff.cz> <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com> <20221005220812.4psu6kckej63yo2z@core>
 MIME-Version: 1.0
-References: <20221016153346.2794-1-bingjingc@synology.com>
-In-Reply-To: <20221016153346.2794-1-bingjingc@synology.com>
-From:   Filipe Manana <fdmanana@kernel.org>
-Date:   Mon, 17 Oct 2022 12:47:54 +0100
-X-Gmail-Original-Message-ID: <CAL3q7H6G8X73Bndwj5PF46Nn=E9U7VHJBjwKtFQnWDu=spTWPw@mail.gmail.com>
-Message-ID: <CAL3q7H6G8X73Bndwj5PF46Nn=E9U7VHJBjwKtFQnWDu=spTWPw@mail.gmail.com>
-Subject: Re: [PATCH] btrfs: send: fix send failure of a subcase of orphan inodes
-To:     bingjingc <bingjingc@synology.com>
-Cc:     josef@toxicpanda.com, dsterba@suse.com, clm@fb.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bxxxjxxg@gmail.com
+Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 4:34 PM bingjingc <bingjingc@synology.com> wrote:
->
-> From: BingJing Chang <bingjingc@synology.com>
->
-> Commit 9ed0a72e5b35 ("btrfs: send: fix failures when processing inodes with
-> no links") tries to fix all incremental send cases of orphan inodes the
-> send operation will meet. However, there's still a bug causing the corner
-> subcase fails with a ENOENT error.
->
-> Here's shortened steps of that subcase:
->
->   $ btrfs subvolume create vol
->   $ touch vol/foo
->
->   $ btrfs subvolume snapshot -r vol snap1
->   $ btrfs subvolume snapshot -r vol snap2
->
->   # Turn the second snapshot to RW mode and delete the file while
->   # holding an open file descriptor on it
->   $ btrfs property set snap2 ro false
->   $ exec 73<snap2/foo
->   $ rm snap2/foo
->
->   # Set the second snapshot back to RO mode and do an incremental send
->   # with an unusal reverse order
->   $ btrfs property set snap2 ro true
->   $ btrfs send -p snap2 snap1 > /dev/null
->   At subvol snap1
->   ERROR: send ioctl failed with -2: No such file or directory
->
-> It's subcase 3 of BTRFS_COMPARE_TREE_CHANGED in the commit 9ed0a72e5b35
-> ("btrfs: send: fix failures when processing inodes with no links"). And
-> it's not a common case. We still have not met it in the real world.
-> Theoretically, this case can happen in a batch cascading snapshot backup.
-> In cascading backups, the receive operation in the middle may cause orphan
-> inodes to appear because of the open file descriptors on the snapshot files
-> during receiving. And if we don't do the batch snapshot backups in their
-> creation order, then we can have an inode, which is an orphan in the parent
-> snapshot but refers to a file in the send snapshot. Since an orphan inode
-> has no paths, the send operation will fail with a ENOENT error if it
-> tries to generate a path for it.
->
-> In that patch, this subcase will be treated as an inode with a new
-> generation. However, when the routine tries to delete the old paths in
-> the parent snapshot, the function process_all_refs() doesn't check whether
-> there are paths recorded or not before it calls the function
-> process_recorded_refs(). And the function process_recorded_refs() try
-> to get the first path in the parent snapshot in the beginning. Since it has
-> no paths in the parent snapshot, the send operation fails.
->
-> To fix this, we can easily put a link count check to avoid entering the
-> deletion routine like what we do a link count check to avoid creating a
-> new one. Moreover, we can assume that the function process_all_refs()
-> can always collect references to process because we know it has a
-> positive link count.
->
-> Signed-off-by: BingJing Chang <bingjingc@synology.com>
+Hi,
 
-Looks good.
+Am Donnerstag, 6. Oktober 2022, 00:08:12 CEST schrieb Ondřej Jirman:
+> On Wed, Oct 05, 2022 at 07:42:54AM -0400, Peter Geis wrote:
+> > On Wed, Oct 5, 2022 at 4:54 AM Ondrej Jirman <megi@xff.cz> wrote:
+> > >
+> > 
+> > Good Morning,
+> > 
+> > > I have two Realtek PCIe wifi cards connected over the 4 port PCIe swtich
+> > > to Quartz64-A. The cards fail to work, when nvme SSD is connected at the
+> > > same time to the bridge. Without nvme connected, cards work fine. The
+> > > issue seems to be related to mixed use of devices which make use of I/O
+> > > ranges and memory ranges.
+> > >
+> > > This patch changes I/O, MEM and config mappings so that config and I/O
+> > > mappings use the 0xf4000000 outbound address space, and MEM range uses
+> > > the whole 0x300000000 outbound space.
+> > >
+> > > This is simialar to how BSP does the mappings.
+> > 
+> > This change was very recent in the BSP stuff (Jan 2022):
+> > https://github.com/rockchip-linux/kernel/commit/cfab7abefc4093daa379fbd90a1e7ac1a484332b
+> > A few other interesting changes there as well. They added a 32 bit
+> > window in the lower range and made the entire upper range a 64 bit
+> > relocatable (why?) and prefetchable window. They also set the viewport
+> > number to 8. The dt-binding says this is autodetected, but I wonder if
+> > the value is being detected correctly.
+> > 
+> > It looks like it is dependent in BSP on a backported change from mainline:
+> > https://github.com/rockchip-linux/kernel/commit/50a01d3c10a6212f66364575a3c8f66c07f41591
+> > 
+> > Can someone weigh in why the dw core has config in the reg node
+> > instead of ranges?
+> > 
+> > >
+> > > I changed num-ob-windows to value detected by the kernel so if for whatever
+> > > reason the kernel ever starts respecting this DT property, it would not
+> > > switch to sharing I/O and CFG spaces via a single iATU mapping for
+> > > no reason.
+> > 
+> > This worries me that this value may be being detected incorrectly,
+> > they set it to this for a reason. It's not unheard of for Rockchip to
+> > need to override what they encode in the silicon.
+> 
+> I just noticed that you may be thinking that BSP does some detection. It does
+> not. It just uses either value from DT or hardcoded value 2 in the code.
+> 
+> https://github.com/rockchip-linux/kernel/blob/develop-4.19/drivers/pci/controller/dwc/pcie-designware-host.c#L450
 
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
+@Peter or other people in the recipient list with more PCIe
+experience than me, can someone provide some more judgement
+on this topic?
 
-Please add a test case for fstests later if you can.
-Thanks!
+Thanks
+Heiko
 
-> ---
->  fs/btrfs/send.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
->
-> diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
-> index 4ef4167072b8..1568fa977ca1 100644
-> --- a/fs/btrfs/send.c
-> +++ b/fs/btrfs/send.c
-> @@ -6665,17 +6665,19 @@ static int changed_inode(struct send_ctx *sctx,
->                         /*
->                          * First, process the inode as if it was deleted.
->                          */
-> -                       sctx->cur_inode_gen = right_gen;
-> -                       sctx->cur_inode_new = false;
-> -                       sctx->cur_inode_deleted = true;
-> -                       sctx->cur_inode_size = btrfs_inode_size(
-> -                                       sctx->right_path->nodes[0], right_ii);
-> -                       sctx->cur_inode_mode = btrfs_inode_mode(
-> -                                       sctx->right_path->nodes[0], right_ii);
-> -                       ret = process_all_refs(sctx,
-> -                                       BTRFS_COMPARE_TREE_DELETED);
-> -                       if (ret < 0)
-> -                               goto out;
-> +                       if (old_nlinks > 0) {
-> +                               sctx->cur_inode_gen = right_gen;
-> +                               sctx->cur_inode_new = false;
-> +                               sctx->cur_inode_deleted = true;
-> +                               sctx->cur_inode_size = btrfs_inode_size(
-> +                                               sctx->right_path->nodes[0], right_ii);
-> +                               sctx->cur_inode_mode = btrfs_inode_mode(
-> +                                               sctx->right_path->nodes[0], right_ii);
-> +                               ret = process_all_refs(sctx,
-> +                                               BTRFS_COMPARE_TREE_DELETED);
-> +                               if (ret < 0)
-> +                                       goto out;
-> +                       }
->
->                         /*
->                          * Now process the inode as if it was new.
-> --
-> 2.37.1
->
+
+> > Very Respectfully,
+> > Peter Geis
+> > 
+> > >
+> > > This change to the regs/ranges makes the issue go away and both nvme and
+> > > wifi cards work when connected at the same time to the bridge. I tested
+> > > the nvme with large amount of reads/writes, both behind the PCIe bridge
+> > > and when directly connected to Quartz64-A board.
+> > >
+> > > Signed-off-by: Ondrej Jirman <megi@xff.cz>
+> > > ---
+> > > BSP for reference: https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L2370
+> > >
+> > > v2:
+> > > - change ranges to use 0x300000000 fully for MEM and make use of
+> > >   the 0xf4000000 outbound range for IO and config
+> > > - full retest with/without the switch
+> > > - if lscpi/dmesg is useful in the future for comparison, see:
+> > >   https://xff.cz/kernels/random/quartz64a-pcie/
+> > >
+> > > I used this script for the tests:
+> > >
+> > > #!/bin/bash
+> > >
+> > > OUT=/mnt/data
+> > > n=8
+> > >
+> > > test -f /tmp/test.dat || \
+> > >     dd if=/dev/urandom of=/tmp/test.dat bs=1M count=1024
+> > > md5sum /tmp/test.dat
+> > >
+> > > i=0
+> > > while test $i -lt $n
+> > > do
+> > >     dd if=/tmp/test.dat of=$OUT/test$i.dat bs=4M oflag=direct
+> > >
+> > >     i=$(($i+1))
+> > > done
+> > >
+> > > i=0
+> > > while test $i -lt $n
+> > > do
+> > >     dd if=$OUT/test$i.dat bs=4M iflag=direct | md5sum
+> > >
+> > >     i=$(($i+1))
+> > > done
+> > >
+> > >
+> > >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 9 +++++----
+> > >  1 file changed, 5 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > > index 319981c3e9f7..99fd9543fc6f 100644
+> > > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > > @@ -855,7 +855,8 @@ pcie2x1: pcie@fe260000 {
+> > >                 compatible = "rockchip,rk3568-pcie";
+> > >                 reg = <0x3 0xc0000000 0x0 0x00400000>,
+> > >                       <0x0 0xfe260000 0x0 0x00010000>,
+> > > -                     <0x3 0x3f000000 0x0 0x01000000>;
+> > > +                     <0x0 0xf4000000 0x0 0x01f00000>;
+> > > +
+> > >                 reg-names = "dbi", "apb", "config";
+> > >                 interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
+> > >                              <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
+> > > @@ -877,15 +878,15 @@ pcie2x1: pcie@fe260000 {
+> > >                                 <0 0 0 4 &pcie_intc 3>;
+> > >                 linux,pci-domain = <0>;
+> > >                 num-ib-windows = <6>;
+> > > -               num-ob-windows = <2>;
+> > > +               num-ob-windows = <8>;
+> > >                 max-link-speed = <2>;
+> > >                 msi-map = <0x0 &gic 0x0 0x1000>;
+> > >                 num-lanes = <1>;
+> > >                 phys = <&combphy2 PHY_TYPE_PCIE>;
+> > >                 phy-names = "pcie-phy";
+> > >                 power-domains = <&power RK3568_PD_PIPE>;
+> > > -               ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
+> > > -                         0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
+> > > +               ranges = <0x01000000 0x0 0x00000000 0x0 0xf5f00000 0x0 0x00100000
+> > > +                         0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
+> > >                 resets = <&cru SRST_PCIE20_POWERUP>;
+> > >                 reset-names = "pipe";
+> > >                 #address-cells = <3>;
+> > > --
+> > > 2.37.3
+> > >
+> 
+
+
+
+
