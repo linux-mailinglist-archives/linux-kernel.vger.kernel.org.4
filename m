@@ -2,420 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF1D600867
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D013E600869
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiJQILo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S230196AbiJQILz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiJQILk (ORCPT
+        with ESMTP id S230202AbiJQILr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:11:40 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CC45B53A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:11:36 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id fy4so23077724ejc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wCERGaQn7sjZRAiLYlbvnzUIl4AHNnyqwlHd1RuDioQ=;
-        b=ebfNfbg/W10vicSUwq/67IqLltrFq1THY9oomsXeJO97fnwNAsdl4FFdJCRp1cKnc6
-         MTFCjv6GfMHxKRfCH/aqq3cVI0hLxjTm6RlbWrHkUrT/z9HAnMKEj0P8XXLFqJi+xZ4y
-         mcf6dr0FHBuSsl38QsL9Bc7hGSoOXP3T8grkoGVU68raeWup7lihhD6dALHo7nnlCZFd
-         pCz1is7qCsrmY2SnVEK8QEw6czKEgIoEWOeW8gFfQFgudP45VWNOuPD8EYrERYGKbMo2
-         kHGL6xnWDOTC2+waLJQK9EeiPM9dbGj5BoNYJQ+yAgkcm7YNVMYfNGxtyInBsTzKGK89
-         6VgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wCERGaQn7sjZRAiLYlbvnzUIl4AHNnyqwlHd1RuDioQ=;
-        b=RZd5gHgJ16t/4ZuA8oIvhbuKaX4IjdEXBVIh6/QSQTxVmho2GHbL9t7z3v8b/WlpAA
-         rg2tFAd858CFp+fa6vrqdu85kglUIja6cSvGxKPmN/RkLDzGWSx8x8j4p3iXak0Hwnsc
-         QgFEkMXR0iG3XSJSWECeBMVf0ajMdLgVeEyCXioWeKbHHIO/XwTPYGJ+9sB79uIz/j9q
-         jVv+Yj7ek9aYTiMbiy6YFOipl6/nJOpnolPGfi54nJHYNZk1Azn+d+4r56ujEhrBbc4/
-         d/IZTkYiSNznrcextcKDpvg5t5sA8VAOiW/3OtIddH7vuQrew8jom1i66Wy4TNrXNsFg
-         TENw==
-X-Gm-Message-State: ACrzQf3UPwlYByvc43d98GIg7GGTdfJNpZsOaltujYnktX1zKjSSysPT
-        61Z6VClh9ChQkdBD+aZ8noc=
-X-Google-Smtp-Source: AMsMyM5AU5ACskMOANt1L8uAK5ExW1d8iSUY6sFW50PairYWGw76mhWyDDrr0+oi+gGLvSWfm0wXKQ==
-X-Received: by 2002:a17:906:ee8e:b0:730:3646:d178 with SMTP id wt14-20020a170906ee8e00b007303646d178mr7754318ejb.426.1665994294538;
-        Mon, 17 Oct 2022 01:11:34 -0700 (PDT)
-Received: from [192.168.2.4] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id r17-20020a170906351100b0078d4962a46bsm5649926eja.190.2022.10.17.01.11.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 01:11:34 -0700 (PDT)
-Message-ID: <d814394b-86c3-beb1-ddd4-04c65004f138@gmail.com>
-Date:   Mon, 17 Oct 2022 10:11:32 +0200
+        Mon, 17 Oct 2022 04:11:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C80A5C35A;
+        Mon, 17 Oct 2022 01:11:44 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 08:11:39 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1665994301;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0B0VaRzac7vXh2d5HLbe/0OjkxdZIGsAEaA8zxRe4y8=;
+        b=AnV4IBrYWpSBA2CtgVp++jymWpxYi/G7Kq9KwQq4OBzXp/nz9j+9hvZqcRBv1FClWHmokW
+        d/Gvo96w7mK/2sTg9/Z44gVlhSXMkzzCQGv1OZIEIR8hw2wl9WTxdenOcyoxFL0+C8pFod
+        QwvbXcnAwvmu4lLTjn2/AnApqsu+le6qGbo/2XzUDyhHcYL8iLEHOk0dHnwIURh3IyVcS3
+        srTnjtnei0clAOpgT81xsI2KRIVZvZ4b1WEXrMl9Cckr/TDK9Y972ks/Gt3o/GY8WqYvj4
+        6LelH2GFnPoq+1YdGjxgNC3ZX2PVvrWXfiTefYVyVj/4IKpWij9HG0Nkx8HnCg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1665994301;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0B0VaRzac7vXh2d5HLbe/0OjkxdZIGsAEaA8zxRe4y8=;
+        b=LGKEO8SYJdatJ3n3z/bVsZPiVSIsD/0XncWiMOZolFpL/dCg2EgCdUB1R/pn274rs81TZ4
+        j2zezpCJ0devimBg==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/bugs: Use sysfs_emit()
+Cc:     Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220809153419.10182-1-bp@alien8.de>
+References: <20220809153419.10182-1-bp@alien8.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: [BUG] [PATCH] drm/rockchip: use generic fbdev setup
-Content-Language: en-US
-To:     John Keeping <john@metanate.com>, dri-devel@lists.freedesktop.org
-Cc:     Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <20211029115014.264084-1-john@metanate.com>
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <20211029115014.264084-1-john@metanate.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <166599429932.401.11255860485338627979.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+The following commit has been merged into the x86/cpu branch of tip:
 
-Your patch contribution causes a kernel panic on MK808 with Rockchip rk3066a SoC.
-Would you like to contribute to fix this issue?
-The assumtion that drm_fbdev_generic_setup() does what rockchip_drm_fbdev_init did is not true!
-A revert makes it work again.
+Commit-ID:     1d30800c0c0ae1d086ffad2bdf0ba4403370f132
+Gitweb:        https://git.kernel.org/tip/1d30800c0c0ae1d086ffad2bdf0ba4403370f132
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Tue, 09 Aug 2022 17:32:02 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 17 Oct 2022 08:55:49 +02:00
 
-Johan
+x86/bugs: Use sysfs_emit()
 
-======
+Those mitigations are very talkative; use the printing helper which pays
+attention to the buffer size.
 
-[    7.975906] ------------[ cut here ]------------
-[    7.975929] WARNING: CPU: 0 PID: 35 at drivers/gpu/drm/drm_fb_helper.c:471 drm_fb_helper_damage_work+0x138/0x3b4
-[    7.976044] rockchip-drm display-subsystem: Damage blitter failed: ret=-12
-[    7.976064] Modules linked in:
-[    7.976090] CPU: 0 PID: 35 Comm: kworker/0:4 Not tainted 6.0.0-next-20221013 #1
-[    7.976126] Hardware name: Rockchip (Device Tree)
-[    7.976145] Workqueue: events drm_fb_helper_damage_work
-[    7.976196] Backtrace: 
-[    7.976214]  dump_backtrace from show_stack+0x20/0x24
-[    7.976276]  r7:000001d7 r6:00000009 r5:c0b2bc78 r4:60000013
-[    7.976289]  show_stack from dump_stack_lvl+0x48/0x54
-[    7.976357]  dump_stack_lvl from dump_stack+0x18/0x1c
-[    7.976426]  r5:c0586054 r4:c0b63750
-[    7.976436]  dump_stack from __warn+0xdc/0x154
-[    7.976525]  __warn from warn_slowpath_fmt+0xa4/0xd8
-[    7.976588]  r7:000001d7 r6:c0b63750 r5:c1004ec8 r4:c0b639ec
-[    7.976598]  warn_slowpath_fmt from drm_fb_helper_damage_work+0x138/0x3b4
-[    7.976670]  r9:ef7cf105 r8:c15dfc00 r7:fffffff4 r6:c200a590 r5:c1004ec8 r4:c200a594
-[    7.976681]  drm_fb_helper_damage_work from process_one_work+0x230/0x518
-[    7.976761]  r10:c110d140 r9:ef7cf105 r8:00000000 r7:ef7cf100 r6:ef7cbf00 r5:c200f300
-[    7.976775]  r4:c200a594
-[    7.976785]  process_one_work from worker_thread+0x54/0x554
-[    7.976841]  r10:ef7cbf00 r9:00000008 r8:c1003d40 r7:ef7cbf1c r6:c200f318 r5:ef7cbf00
-[    7.976855]  r4:c200f300
-[    7.976864]  worker_thread from kthread+0xe8/0x104
-[    7.976948]  r10:f0929e84 r9:c200ea40 r8:c169aa80 r7:c200f300 r6:c01419e4 r5:00000000
-[    7.976962]  r4:c200e800
-[    7.976971]  kthread from ret_from_fork+0x14/0x2c
-[    7.977026] Exception stack(0xf092dfb0 to 0xf092dff8)
-[    7.977052] dfa0:                                     00000000 00000000 00000000 00000000
-[    7.977078] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    7.977100] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    7.977128]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c01491a8
-[    7.977144]  r4:c200e800 r3:00000001
-[    7.977155] ---[ end trace 0000000000000000 ]---
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220809153419.10182-1-bp@alien8.de
+---
+ arch/x86/kernel/cpu/bugs.c | 103 +++++++++++++++++-------------------
+ 1 file changed, 51 insertions(+), 52 deletions(-)
 
-On 10/29/21 13:50, John Keeping wrote:
-> The Rockchip fbdev code does not add anything compared to
-> drm_fbdev_generic_setup(); the one custom function for .fb_mmap does the
-> same thing as gem_prime_mmap which is called by the helper.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  drivers/gpu/drm/rockchip/Makefile             |   1 -
->  drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |  10 +-
->  drivers/gpu/drm/rockchip/rockchip_drm_drv.h   |   2 -
->  drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c | 164 ------------------
->  drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h |  24 ---
->  5 files changed, 2 insertions(+), 199 deletions(-)
->  delete mode 100644 drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
->  delete mode 100644 drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
-> 
-> diff --git a/drivers/gpu/drm/rockchip/Makefile b/drivers/gpu/drm/rockchip/Makefile
-> index 17a9e7eb2130..1a56f696558c 100644
-> --- a/drivers/gpu/drm/rockchip/Makefile
-> +++ b/drivers/gpu/drm/rockchip/Makefile
-> @@ -5,7 +5,6 @@
->  
->  rockchipdrm-y := rockchip_drm_drv.o rockchip_drm_fb.o \
->  		rockchip_drm_gem.o rockchip_drm_vop.o rockchip_vop_reg.o
-> -rockchipdrm-$(CONFIG_DRM_FBDEV_EMULATION) += rockchip_drm_fbdev.o
->  
->  rockchipdrm-$(CONFIG_ROCKCHIP_ANALOGIX_DP) += analogix_dp-rockchip.o
->  rockchipdrm-$(CONFIG_ROCKCHIP_CDN_DP) += cdn-dp-core.o cdn-dp-reg.o
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-> index 69c699459dce..20d81ae69828 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-> @@ -26,7 +26,6 @@
->  
->  #include "rockchip_drm_drv.h"
->  #include "rockchip_drm_fb.h"
-> -#include "rockchip_drm_fbdev.h"
->  #include "rockchip_drm_gem.h"
->  
->  #define DRIVER_NAME	"rockchip"
-> @@ -159,10 +158,6 @@ static int rockchip_drm_bind(struct device *dev)
->  
->  	drm_mode_config_reset(drm_dev);
->  
-> -	ret = rockchip_drm_fbdev_init(drm_dev);
-> -	if (ret)
-> -		goto err_unbind_all;
-> -
->  	/* init kms poll for handling hpd */
->  	drm_kms_helper_poll_init(drm_dev);
->  
-> @@ -170,10 +165,11 @@ static int rockchip_drm_bind(struct device *dev)
->  	if (ret)
->  		goto err_kms_helper_poll_fini;
->  
-> +	drm_fbdev_generic_setup(drm_dev, 32);
-> +
->  	return 0;
->  err_kms_helper_poll_fini:
->  	drm_kms_helper_poll_fini(drm_dev);
-> -	rockchip_drm_fbdev_fini(drm_dev);
->  err_unbind_all:
->  	component_unbind_all(dev, drm_dev);
->  err_iommu_cleanup:
-> @@ -189,7 +185,6 @@ static void rockchip_drm_unbind(struct device *dev)
->  
->  	drm_dev_unregister(drm_dev);
->  
-> -	rockchip_drm_fbdev_fini(drm_dev);
->  	drm_kms_helper_poll_fini(drm_dev);
->  
->  	drm_atomic_helper_shutdown(drm_dev);
-> @@ -203,7 +198,6 @@ DEFINE_DRM_GEM_FOPS(rockchip_drm_driver_fops);
->  
->  static const struct drm_driver rockchip_drm_driver = {
->  	.driver_features	= DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
-> -	.lastclose		= drm_fb_helper_lastclose,
->  	.dumb_create		= rockchip_gem_dumb_create,
->  	.prime_handle_to_fd	= drm_gem_prime_handle_to_fd,
->  	.prime_fd_to_handle	= drm_gem_prime_fd_to_handle,
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
-> index aa0909e8edf9..143a48330f84 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
-> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
-> @@ -43,8 +43,6 @@ struct rockchip_crtc_state {
->   * @mm_lock: protect drm_mm on multi-threads.
->   */
->  struct rockchip_drm_private {
-> -	struct drm_fb_helper fbdev_helper;
-> -	struct drm_gem_object *fbdev_bo;
->  	struct iommu_domain *domain;
->  	struct mutex mm_lock;
->  	struct drm_mm mm;
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c b/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
-> deleted file mode 100644
-> index d8418dd39d0e..000000000000
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c
-> +++ /dev/null
-> @@ -1,164 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-only
-> -/*
-> - * Copyright (C) Fuzhou Rockchip Electronics Co.Ltd
-> - * Author:Mark Yao <mark.yao@rock-chips.com>
-> - */
-> -
-> -#include <drm/drm.h>
-> -#include <drm/drm_fb_helper.h>
-> -#include <drm/drm_fourcc.h>
-> -#include <drm/drm_prime.h>
-> -#include <drm/drm_probe_helper.h>
-> -
-> -#include "rockchip_drm_drv.h"
-> -#include "rockchip_drm_gem.h"
-> -#include "rockchip_drm_fb.h"
-> -#include "rockchip_drm_fbdev.h"
-> -
-> -#define PREFERRED_BPP		32
-> -#define to_drm_private(x) \
-> -		container_of(x, struct rockchip_drm_private, fbdev_helper)
-> -
-> -static int rockchip_fbdev_mmap(struct fb_info *info,
-> -			       struct vm_area_struct *vma)
-> -{
-> -	struct drm_fb_helper *helper = info->par;
-> -	struct rockchip_drm_private *private = to_drm_private(helper);
-> -
-> -	return drm_gem_prime_mmap(private->fbdev_bo, vma);
-> -}
-> -
-> -static const struct fb_ops rockchip_drm_fbdev_ops = {
-> -	.owner		= THIS_MODULE,
-> -	DRM_FB_HELPER_DEFAULT_OPS,
-> -	.fb_mmap	= rockchip_fbdev_mmap,
-> -	.fb_fillrect	= drm_fb_helper_cfb_fillrect,
-> -	.fb_copyarea	= drm_fb_helper_cfb_copyarea,
-> -	.fb_imageblit	= drm_fb_helper_cfb_imageblit,
-> -};
-> -
-> -static int rockchip_drm_fbdev_create(struct drm_fb_helper *helper,
-> -				     struct drm_fb_helper_surface_size *sizes)
-> -{
-> -	struct rockchip_drm_private *private = to_drm_private(helper);
-> -	struct drm_mode_fb_cmd2 mode_cmd = { 0 };
-> -	struct drm_device *dev = helper->dev;
-> -	struct rockchip_gem_object *rk_obj;
-> -	struct drm_framebuffer *fb;
-> -	unsigned int bytes_per_pixel;
-> -	unsigned long offset;
-> -	struct fb_info *fbi;
-> -	size_t size;
-> -	int ret;
-> -
-> -	bytes_per_pixel = DIV_ROUND_UP(sizes->surface_bpp, 8);
-> -
-> -	mode_cmd.width = sizes->surface_width;
-> -	mode_cmd.height = sizes->surface_height;
-> -	mode_cmd.pitches[0] = sizes->surface_width * bytes_per_pixel;
-> -	mode_cmd.pixel_format = drm_mode_legacy_fb_format(sizes->surface_bpp,
-> -		sizes->surface_depth);
-> -
-> -	size = mode_cmd.pitches[0] * mode_cmd.height;
-> -
-> -	rk_obj = rockchip_gem_create_object(dev, size, true);
-> -	if (IS_ERR(rk_obj))
-> -		return -ENOMEM;
-> -
-> -	private->fbdev_bo = &rk_obj->base;
-> -
-> -	fbi = drm_fb_helper_alloc_fbi(helper);
-> -	if (IS_ERR(fbi)) {
-> -		DRM_DEV_ERROR(dev->dev, "Failed to create framebuffer info.\n");
-> -		ret = PTR_ERR(fbi);
-> -		goto out;
-> -	}
-> -
-> -	helper->fb = rockchip_drm_framebuffer_init(dev, &mode_cmd,
-> -						   private->fbdev_bo);
-> -	if (IS_ERR(helper->fb)) {
-> -		DRM_DEV_ERROR(dev->dev,
-> -			      "Failed to allocate DRM framebuffer.\n");
-> -		ret = PTR_ERR(helper->fb);
-> -		goto out;
-> -	}
-> -
-> -	fbi->fbops = &rockchip_drm_fbdev_ops;
-> -
-> -	fb = helper->fb;
-> -	drm_fb_helper_fill_info(fbi, helper, sizes);
-> -
-> -	offset = fbi->var.xoffset * bytes_per_pixel;
-> -	offset += fbi->var.yoffset * fb->pitches[0];
-> -
-> -	dev->mode_config.fb_base = 0;
-> -	fbi->screen_base = rk_obj->kvaddr + offset;
-> -	fbi->screen_size = rk_obj->base.size;
-> -	fbi->fix.smem_len = rk_obj->base.size;
-> -
-> -	DRM_DEBUG_KMS("FB [%dx%d]-%d kvaddr=%p offset=%ld size=%zu\n",
-> -		      fb->width, fb->height, fb->format->depth,
-> -		      rk_obj->kvaddr,
-> -		      offset, size);
-> -
-> -	return 0;
-> -
-> -out:
-> -	rockchip_gem_free_object(&rk_obj->base);
-> -	return ret;
-> -}
-> -
-> -static const struct drm_fb_helper_funcs rockchip_drm_fb_helper_funcs = {
-> -	.fb_probe = rockchip_drm_fbdev_create,
-> -};
-> -
-> -int rockchip_drm_fbdev_init(struct drm_device *dev)
-> -{
-> -	struct rockchip_drm_private *private = dev->dev_private;
-> -	struct drm_fb_helper *helper;
-> -	int ret;
-> -
-> -	if (!dev->mode_config.num_crtc || !dev->mode_config.num_connector)
-> -		return -EINVAL;
-> -
-> -	helper = &private->fbdev_helper;
-> -
-> -	drm_fb_helper_prepare(dev, helper, &rockchip_drm_fb_helper_funcs);
-> -
-> -	ret = drm_fb_helper_init(dev, helper);
-> -	if (ret < 0) {
-> -		DRM_DEV_ERROR(dev->dev,
-> -			      "Failed to initialize drm fb helper - %d.\n",
-> -			      ret);
-> -		return ret;
-> -	}
-> -
-> -	ret = drm_fb_helper_initial_config(helper, PREFERRED_BPP);
-> -	if (ret < 0) {
-> -		DRM_DEV_ERROR(dev->dev,
-> -			      "Failed to set initial hw config - %d.\n",
-> -			      ret);
-> -		goto err_drm_fb_helper_fini;
-> -	}
-> -
-> -	return 0;
-> -
-> -err_drm_fb_helper_fini:
-> -	drm_fb_helper_fini(helper);
-> -	return ret;
-> -}
-> -
-> -void rockchip_drm_fbdev_fini(struct drm_device *dev)
-> -{
-> -	struct rockchip_drm_private *private = dev->dev_private;
-> -	struct drm_fb_helper *helper;
-> -
-> -	helper = &private->fbdev_helper;
-> -
-> -	drm_fb_helper_unregister_fbi(helper);
-> -
-> -	if (helper->fb)
-> -		drm_framebuffer_put(helper->fb);
-> -
-> -	drm_fb_helper_fini(helper);
-> -}
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h b/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
-> deleted file mode 100644
-> index 5fb7ac2371a8..000000000000
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_fbdev.h
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-only */
-> -/*
-> - * Copyright (C) Fuzhou Rockchip Electronics Co.Ltd
-> - * Author:Mark Yao <mark.yao@rock-chips.com>
-> - */
-> -
-> -#ifndef _ROCKCHIP_DRM_FBDEV_H
-> -#define _ROCKCHIP_DRM_FBDEV_H
-> -
-> -#ifdef CONFIG_DRM_FBDEV_EMULATION
-> -int rockchip_drm_fbdev_init(struct drm_device *dev);
-> -void rockchip_drm_fbdev_fini(struct drm_device *dev);
-> -#else
-> -static inline int rockchip_drm_fbdev_init(struct drm_device *dev)
-> -{
-> -	return 0;
-> -}
-> -
-> -static inline void rockchip_drm_fbdev_fini(struct drm_device *dev)
-> -{
-> -}
-> -#endif
-> -
-> -#endif /* _ROCKCHIP_DRM_FBDEV_H */
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index da7c361..e254f07 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -2206,74 +2206,74 @@ static const char * const l1tf_vmx_states[] = {
+ static ssize_t l1tf_show_state(char *buf)
+ {
+ 	if (l1tf_vmx_mitigation == VMENTER_L1D_FLUSH_AUTO)
+-		return sprintf(buf, "%s\n", L1TF_DEFAULT_MSG);
++		return sysfs_emit(buf, "%s\n", L1TF_DEFAULT_MSG);
+ 
+ 	if (l1tf_vmx_mitigation == VMENTER_L1D_FLUSH_EPT_DISABLED ||
+ 	    (l1tf_vmx_mitigation == VMENTER_L1D_FLUSH_NEVER &&
+ 	     sched_smt_active())) {
+-		return sprintf(buf, "%s; VMX: %s\n", L1TF_DEFAULT_MSG,
+-			       l1tf_vmx_states[l1tf_vmx_mitigation]);
++		return sysfs_emit(buf, "%s; VMX: %s\n", L1TF_DEFAULT_MSG,
++				  l1tf_vmx_states[l1tf_vmx_mitigation]);
+ 	}
+ 
+-	return sprintf(buf, "%s; VMX: %s, SMT %s\n", L1TF_DEFAULT_MSG,
+-		       l1tf_vmx_states[l1tf_vmx_mitigation],
+-		       sched_smt_active() ? "vulnerable" : "disabled");
++	return sysfs_emit(buf, "%s; VMX: %s, SMT %s\n", L1TF_DEFAULT_MSG,
++			  l1tf_vmx_states[l1tf_vmx_mitigation],
++			  sched_smt_active() ? "vulnerable" : "disabled");
+ }
+ 
+ static ssize_t itlb_multihit_show_state(char *buf)
+ {
+ 	if (!boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
+ 	    !boot_cpu_has(X86_FEATURE_VMX))
+-		return sprintf(buf, "KVM: Mitigation: VMX unsupported\n");
++		return sysfs_emit(buf, "KVM: Mitigation: VMX unsupported\n");
+ 	else if (!(cr4_read_shadow() & X86_CR4_VMXE))
+-		return sprintf(buf, "KVM: Mitigation: VMX disabled\n");
++		return sysfs_emit(buf, "KVM: Mitigation: VMX disabled\n");
+ 	else if (itlb_multihit_kvm_mitigation)
+-		return sprintf(buf, "KVM: Mitigation: Split huge pages\n");
++		return sysfs_emit(buf, "KVM: Mitigation: Split huge pages\n");
+ 	else
+-		return sprintf(buf, "KVM: Vulnerable\n");
++		return sysfs_emit(buf, "KVM: Vulnerable\n");
+ }
+ #else
+ static ssize_t l1tf_show_state(char *buf)
+ {
+-	return sprintf(buf, "%s\n", L1TF_DEFAULT_MSG);
++	return sysfs_emit(buf, "%s\n", L1TF_DEFAULT_MSG);
+ }
+ 
+ static ssize_t itlb_multihit_show_state(char *buf)
+ {
+-	return sprintf(buf, "Processor vulnerable\n");
++	return sysfs_emit(buf, "Processor vulnerable\n");
+ }
+ #endif
+ 
+ static ssize_t mds_show_state(char *buf)
+ {
+ 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
+-		return sprintf(buf, "%s; SMT Host state unknown\n",
+-			       mds_strings[mds_mitigation]);
++		return sysfs_emit(buf, "%s; SMT Host state unknown\n",
++				  mds_strings[mds_mitigation]);
+ 	}
+ 
+ 	if (boot_cpu_has(X86_BUG_MSBDS_ONLY)) {
+-		return sprintf(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
+-			       (mds_mitigation == MDS_MITIGATION_OFF ? "vulnerable" :
+-			        sched_smt_active() ? "mitigated" : "disabled"));
++		return sysfs_emit(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
++				  (mds_mitigation == MDS_MITIGATION_OFF ? "vulnerable" :
++				   sched_smt_active() ? "mitigated" : "disabled"));
+ 	}
+ 
+-	return sprintf(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
+-		       sched_smt_active() ? "vulnerable" : "disabled");
++	return sysfs_emit(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
++			  sched_smt_active() ? "vulnerable" : "disabled");
+ }
+ 
+ static ssize_t tsx_async_abort_show_state(char *buf)
+ {
+ 	if ((taa_mitigation == TAA_MITIGATION_TSX_DISABLED) ||
+ 	    (taa_mitigation == TAA_MITIGATION_OFF))
+-		return sprintf(buf, "%s\n", taa_strings[taa_mitigation]);
++		return sysfs_emit(buf, "%s\n", taa_strings[taa_mitigation]);
+ 
+ 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
+-		return sprintf(buf, "%s; SMT Host state unknown\n",
+-			       taa_strings[taa_mitigation]);
++		return sysfs_emit(buf, "%s; SMT Host state unknown\n",
++				  taa_strings[taa_mitigation]);
+ 	}
+ 
+-	return sprintf(buf, "%s; SMT %s\n", taa_strings[taa_mitigation],
+-		       sched_smt_active() ? "vulnerable" : "disabled");
++	return sysfs_emit(buf, "%s; SMT %s\n", taa_strings[taa_mitigation],
++			  sched_smt_active() ? "vulnerable" : "disabled");
+ }
+ 
+ static ssize_t mmio_stale_data_show_state(char *buf)
+@@ -2341,73 +2341,72 @@ static char *pbrsb_eibrs_state(void)
+ static ssize_t spectre_v2_show_state(char *buf)
+ {
+ 	if (spectre_v2_enabled == SPECTRE_V2_LFENCE)
+-		return sprintf(buf, "Vulnerable: LFENCE\n");
++		return sysfs_emit(buf, "Vulnerable: LFENCE\n");
+ 
+ 	if (spectre_v2_enabled == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
+-		return sprintf(buf, "Vulnerable: eIBRS with unprivileged eBPF\n");
++		return sysfs_emit(buf, "Vulnerable: eIBRS with unprivileged eBPF\n");
+ 
+ 	if (sched_smt_active() && unprivileged_ebpf_enabled() &&
+ 	    spectre_v2_enabled == SPECTRE_V2_EIBRS_LFENCE)
+-		return sprintf(buf, "Vulnerable: eIBRS+LFENCE with unprivileged eBPF and SMT\n");
++		return sysfs_emit(buf, "Vulnerable: eIBRS+LFENCE with unprivileged eBPF and SMT\n");
+ 
+-	return sprintf(buf, "%s%s%s%s%s%s%s\n",
+-		       spectre_v2_strings[spectre_v2_enabled],
+-		       ibpb_state(),
+-		       boot_cpu_has(X86_FEATURE_USE_IBRS_FW) ? ", IBRS_FW" : "",
+-		       stibp_state(),
+-		       boot_cpu_has(X86_FEATURE_RSB_CTXSW) ? ", RSB filling" : "",
+-		       pbrsb_eibrs_state(),
+-		       spectre_v2_module_string());
++	return sysfs_emit(buf, "%s%s%s%s%s%s%s\n",
++			  spectre_v2_strings[spectre_v2_enabled],
++			  ibpb_state(),
++			  boot_cpu_has(X86_FEATURE_USE_IBRS_FW) ? ", IBRS_FW" : "",
++			  stibp_state(),
++			  boot_cpu_has(X86_FEATURE_RSB_CTXSW) ? ", RSB filling" : "",
++			  pbrsb_eibrs_state(),
++			  spectre_v2_module_string());
+ }
+ 
+ static ssize_t srbds_show_state(char *buf)
+ {
+-	return sprintf(buf, "%s\n", srbds_strings[srbds_mitigation]);
++	return sysfs_emit(buf, "%s\n", srbds_strings[srbds_mitigation]);
+ }
+ 
+ static ssize_t retbleed_show_state(char *buf)
+ {
+ 	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
+ 	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
+-	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+-		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+-		    return sprintf(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
++		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
++		    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
++			return sysfs_emit(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
+ 
+-	    return sprintf(buf, "%s; SMT %s\n",
+-			   retbleed_strings[retbleed_mitigation],
+-			   !sched_smt_active() ? "disabled" :
+-			   spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT ||
+-			   spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT_PREFERRED ?
+-			   "enabled with STIBP protection" : "vulnerable");
++		return sysfs_emit(buf, "%s; SMT %s\n", retbleed_strings[retbleed_mitigation],
++				  !sched_smt_active() ? "disabled" :
++				  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT ||
++				  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT_PREFERRED ?
++				  "enabled with STIBP protection" : "vulnerable");
+ 	}
+ 
+-	return sprintf(buf, "%s\n", retbleed_strings[retbleed_mitigation]);
++	return sysfs_emit(buf, "%s\n", retbleed_strings[retbleed_mitigation]);
+ }
+ 
+ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr,
+ 			       char *buf, unsigned int bug)
+ {
+ 	if (!boot_cpu_has_bug(bug))
+-		return sprintf(buf, "Not affected\n");
++		return sysfs_emit(buf, "Not affected\n");
+ 
+ 	switch (bug) {
+ 	case X86_BUG_CPU_MELTDOWN:
+ 		if (boot_cpu_has(X86_FEATURE_PTI))
+-			return sprintf(buf, "Mitigation: PTI\n");
++			return sysfs_emit(buf, "Mitigation: PTI\n");
+ 
+ 		if (hypervisor_is_type(X86_HYPER_XEN_PV))
+-			return sprintf(buf, "Unknown (XEN PV detected, hypervisor mitigation required)\n");
++			return sysfs_emit(buf, "Unknown (XEN PV detected, hypervisor mitigation required)\n");
+ 
+ 		break;
+ 
+ 	case X86_BUG_SPECTRE_V1:
+-		return sprintf(buf, "%s\n", spectre_v1_strings[spectre_v1_mitigation]);
++		return sysfs_emit(buf, "%s\n", spectre_v1_strings[spectre_v1_mitigation]);
+ 
+ 	case X86_BUG_SPECTRE_V2:
+ 		return spectre_v2_show_state(buf);
+ 
+ 	case X86_BUG_SPEC_STORE_BYPASS:
+-		return sprintf(buf, "%s\n", ssb_strings[ssb_mode]);
++		return sysfs_emit(buf, "%s\n", ssb_strings[ssb_mode]);
+ 
+ 	case X86_BUG_L1TF:
+ 		if (boot_cpu_has(X86_FEATURE_L1TF_PTEINV))
+@@ -2437,7 +2436,7 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
+ 		break;
+ 	}
+ 
+-	return sprintf(buf, "Vulnerable\n");
++	return sysfs_emit(buf, "Vulnerable\n");
+ }
+ 
+ ssize_t cpu_show_meltdown(struct device *dev, struct device_attribute *attr, char *buf)
