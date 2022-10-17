@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B226010B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89FB6010BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiJQODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
+        id S230200AbiJQOEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiJQODr (ORCPT
+        with ESMTP id S229722AbiJQOEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:03:47 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC20212A81;
-        Mon, 17 Oct 2022 07:03:45 -0700 (PDT)
-Message-ID: <b75832fc-67bb-22b9-39b3-c0816b7ca254@lirui.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
-        t=1666015423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rwkjmSZHT/cg5CxEyPSYVXlGko/3a4QvL9viNdnNJH0=;
-        b=PyCqPJGa9PViula8mn24m3UZtNZkUYf+Iea8i3aTwyl24rULBErv/94hcD6uSM2KGKNix2
-        tMQHtpPd3wy3Ue3qCgTouMhKApRUVLmW9i7gQ70bLq3X504uVQpTBKikObwqp7gdtS/s2g
-        FIPd2TF+2AJsyH469mXwxGcGjkOI3tg5GjTDWX7nRHW8KqH3NCyQH5TgaN6N4e1O9UoOx/
-        nXOofTMfATTJ+DKEpoD4D+AwKj/Y4IjLs0KIHMI//j/cLCI6+dLF4jrEVy4A0O/r0blyOy
-        56/lMt5q2Cmk/mw1bRr8pn5iggVyiNEuEEfosWIYMsHwUWFPlL5owYOUeSa8AA==
-Date:   Mon, 17 Oct 2022 22:03:32 +0800
+        Mon, 17 Oct 2022 10:04:45 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9425BDF59;
+        Mon, 17 Oct 2022 07:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=GbXz7tq7NKssUrzdAXnhJuuFnjt3brcW7Q8fQGb47u4=; b=eM47RKzF0IQwdt7hI0PEPj+40X
+        caFLkkwVlwn5ckZgsjsUTCxLDHhGJF8xxp14yF4RilkN1gu3siZsXclb2GYrTdJi6w5EpqMz9tJQG
+        91MLbhlIuBF9QNbj1ALRdyF5i44Clj48UPwEWKotTmIC6yGv2ckeS/OmqatBQ47zIFNLyhX2J7mMh
+        GIg4UsmFp+0q1KpPCdUI3T2UhZsS/orgALxmq79TNa5b3g8tdfYwOcxoZcQjBVsXB78ZIOuUDdZwf
+        /yrRFzXCLpviiaNU480fL+nNnu9B8/HFEPFo3xYRcc/csY+e5PB7ZHSoCxG8kNtHOPWszDFqvfJHi
+        QazzIumQ==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1okQjQ-000ONG-2j; Mon, 17 Oct 2022 16:04:39 +0200
+Message-ID: <4fb9381a-72f3-4ef0-fca5-05f3a06c64f4@igalia.com>
+Date:   Mon, 17 Oct 2022 11:04:14 -0300
 MIME-Version: 1.0
-Subject: Re: [RESEND PATCH 0/2] docs/zh_CN: Add userspace-api/index and ebpf
- Chinese translation
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 07/11] notifiers: Add tracepoints to the notifiers
+ infrastructure
 Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1666009558.git.me@lirui.org> <87pmeqftfw.fsf@meer.lwn.net>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Rui Li <me@lirui.org>
-In-Reply-To: <87pmeqftfw.fsf@meer.lwn.net>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Arjan van de Ven <arjan@linux.intel.com>
+Cc:     pmladek@suse.com, bhe@redhat.com, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, xuqiang36@huawei.com,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        kexec@lists.infradead.org
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-8-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220819221731.480795-8-gpiccoli@igalia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,43 +75,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/17 21:52, Jonathan Corbet wrote:
-> Rui Li <me@lirui.org> writes:
->
->> Translate the following documents into Chinese:
->>
->> - Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
->> - Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
->> - Documentation/translations/zh_CN/userspace-api/index.rst
->>
->> Add userspace-api into the menu of zh_CN index.
->>
->> Rui Li (2):
->>   docs/zh_CN: Add userspace-api/ebpf Chinese translation
->>   docs/zh_CN: Add userspace-api/index Chinese translation
->>
->>  Documentation/translations/zh_CN/index.rst    |  2 +-
->>  .../zh_CN/userspace-api/ebpf/index.rst        | 22 ++++++++
->>  .../zh_CN/userspace-api/ebpf/syscall.rst      | 31 ++++++++++++
->>  .../zh_CN/userspace-api/index.rst             | 50 +++++++++++++++++++
->>  4 files changed, 104 insertions(+), 1 deletion(-)
->>  create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
->>  create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
->>  create mode 100644 Documentation/translations/zh_CN/userspace-api/index.rst
-> Why are you resending this patch set after one day?
->
-> jon
+On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+> Currently there is no way to show the callback names for registered,
+> unregistered or executed notifiers. This is very useful for debug
+> purposes, hence add this functionality here in the form of notifiers'
+> tracepoints, one per operation.
+> 
+> Cc: Arjan van de Ven <arjan@linux.intel.com>
+> Cc: Cong Wang <xiyou.wangcong@gmail.com>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Xiaoming Ni <nixiaoming@huawei.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> ---
+> 
+> V3:
+> - Yet another major change - thanks to Arjan's great suggestion,
+> refactored the code to make use of tracepoints instead of guarding
+> the output with a Kconfig debug setting.
+> 
+> V2:
+> - Major improvement thanks to the great idea from Xiaoming - changed
+> all the ksym wheel reinvention to printk %ps modifier;
+> 
+> - Instead of ifdefs, using IS_ENABLED() - thanks Steven.
+> 
+> - Removed an unlikely() hint on debug path.
+> 
 
-So sorry if disturbing. After sending the first patch set, a
-maintainer contacted me and pointed out my email server
-is incorrectly handling DKIM and Message-Id. That causes
-inconvenience for maintainers to review.
+Hi Arjan / all, apologies for the re-ping.
+Did you have a chance to take a look in this one, is there anything else
+I could improve?
 
-I changed my email service and hopefully the DKIM check
-and Message ID won't be wrong. I am not quite sure if I
-should resend or add PATCH v1 version.
+Thanks in advance,
 
-Sorry again if I disturbed anyone.
 
-Rui
-
+Guilherme
