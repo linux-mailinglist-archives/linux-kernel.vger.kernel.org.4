@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01426015E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535FC6015E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiJQSDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
+        id S230484AbiJQSDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiJQSDa (ORCPT
+        with ESMTP id S230126AbiJQSDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:03:30 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B310C66A7F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:03:28 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id n73so9733130iod.13
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:03:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DbgezvXKLgiem3+4EeydQ6CeJxJLx0Dqes/r2HXH/XY=;
-        b=aPFgSok91eIpFeBS0hHQvmTHA5hLH2akEb7Nib5Vh43rS2QBdXj8tm+lqTU2EI+3Hc
-         bo6wPOBxdtOs3qR/eEH4ylQ7tc2l516gI7GB9id710873m2GiHLNCG9udiwWfTbUdGoj
-         yCJMyPhtV4b+Qu1BgQoBc0fXGRXbw7jREmLgI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DbgezvXKLgiem3+4EeydQ6CeJxJLx0Dqes/r2HXH/XY=;
-        b=zy0HmOSQqvgUI6vmrCSkXwoDs/Wg7ZGcz7sOTFBKPLDXhH1xGYew5Wsu/nKvPTo5A/
-         oQSYCRKpghrJZX7866Aj1zHqANUPSkSW21+a6XPCaQ2StI9og/yTk4xdn/hwEyY+hcjj
-         6/n7p0Dbo3MY7M++tZrgoBan6CQJdIe3+Jow5mwCRKI8dUfWBwic9rtJmKofHq2sLJmT
-         mmDnyVXENfNff3aWdvRkvQsrnNDToFdsUx2shrKrPgoeOIOLRbiDpQgwG3c0HHUZTuu7
-         cIt2crldfqlcaSxaPqXtqfdhVvlcbLeocaNNNEfLraPHNo3INop1/3CotaqOenPoE1AY
-         TDdQ==
-X-Gm-Message-State: ACrzQf0ajr+6/F6rUK8jMarSM+ly0lPafb2DcsY/Qj83h53c0J+lDL2K
-        6rOvFEjPFYa7vqzWH+cmkOGebg==
-X-Google-Smtp-Source: AMsMyM67qRCW1VJvDsINCOInZu391P8W99lxkNG2u9r2m+xWJQ26OIOAVHKJibKrw4HCNwR8aqNzqQ==
-X-Received: by 2002:a05:6602:27c1:b0:6a4:cd04:e392 with SMTP id l1-20020a05660227c100b006a4cd04e392mr4908142ios.23.1666029808025;
-        Mon, 17 Oct 2022 11:03:28 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id w18-20020a02b0d2000000b00363b7cec211sm159711jah.135.2022.10.17.11.03.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 11:03:27 -0700 (PDT)
-Message-ID: <7471a614-f063-3ca2-4bd8-2ee7eb8a0745@linuxfoundation.org>
-Date:   Mon, 17 Oct 2022 12:03:25 -0600
+        Mon, 17 Oct 2022 14:03:37 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825A863FFB;
+        Mon, 17 Oct 2022 11:03:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=FU3Btm3EGBwXY4LS7OhQ2d8cTy/b/4HQKovRbcKBjos=; b=YSx/KHgYLgMvLP92fQqt+LbqTm
+        oqJ27ciBM3x8dNSImEPv5MwHeucHHzZZe7/+jmm0N1XwRvo1WGd7UadkAKUl2GHLHWACgps45uxkB
+        NcOse+D8Zoz0Fuz+EfvKX+cno4JILAqGZ62QebfEkIyf+O5spjYCCaYGX9aqCd1p/znDN2Blfd1Tv
+        SoRK94PsA31EzF6d9pWdnkePt8rAXi7OQVF6uEBNlD4OBdVdknSqHOosA/R1jD/LcRcBIIKtkPGc8
+        0mOstPbsyC1TNSEtWqyrsHVa4lZP1GZbop3aBW0o6o4cZpOpQnurDKjgDM5NZXSv6U937D6GC8L8O
+        7nal5D+PuliyNChsjus11wi+Yh/EZxqDHaZD3JDQXBNC9UL/Bc/lTPUsWyEePPg5Qvw+WZRVHy9Nb
+        z2VHF+nib+ZYXZWujt4jjDReaPrrC3TF0LyzoumgcZbx0eTzqEBtW0pNzWiZHJ8Z6/6cQQz2iAyMt
+        W1DczxcPrWz3HvPRGmdVHTu8CAGW5+GA1hXQ/MPtNebBXjMtMv76t2S9oXwShlb4bUci313YjKafz
+        e/YrkqHNXaxXSRjnnJKVEBElnIY88BXfLuP03KZIdlQHrmmNZoUUXyazvJbMw1nHU4SEbXvvn1awb
+        62as9NgYYlckuc68u4ruBqlGIua/uN9yjO3Ywj17I=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Greg Kurz <groug@kaod.org>,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>
+Subject: Re: [PATCH v6 11/11] net/9p: allocate appropriate reduced message buffers
+Date:   Mon, 17 Oct 2022 20:03:28 +0200
+Message-ID: <4858768.YlS1rbApJJ@silver>
+In-Reply-To: <Y02Kz2xuntFrKXhV@nvidia.com>
+References: <cover.1657920926.git.linux_oss@crudebyte.com>
+ <3f51590535dc96ed0a165b8218c57639cfa5c36c.1657920926.git.linux_oss@crudebyte.com>
+ <Y02Kz2xuntFrKXhV@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.4 0/4] 5.4.219-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221016064454.327821011@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221016064454.327821011@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/16/22 00:46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.219 release.
-> There are 4 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Monday, October 17, 2022 7:03:11 PM CEST Jason Gunthorpe wrote:
+> On Fri, Jul 15, 2022 at 11:33:56PM +0200, Christian Schoenebeck wrote:
+> > So far 'msize' was simply used for all 9p message types, which is far
+> > too much and slowed down performance tremendously with large values
+> > for user configurable 'msize' option.
+> > 
+> > Let's stop this waste by using the new p9_msg_buf_size() function for
+> > allocating more appropriate, smaller buffers according to what is
+> > actually sent over the wire.
+> > 
+> > Only exception: RDMA transport is currently excluded from this message
+> > size optimization - for its response buffers that is - as RDMA transport
+> > would not cope with it, due to its response buffers being pulled from a
+> > shared pool. [1]
+> > 
+> > Link: https://lore.kernel.org/all/Ys3jjg52EIyITPua@codewreck.org/ [1]
+> > Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> > ---
+> > 
+> >  net/9p/client.c | 42 +++++++++++++++++++++++++++++++++++-------
+> >  1 file changed, 35 insertions(+), 7 deletions(-)
 > 
-> Responses should be made by Tue, 18 Oct 2022 06:44:46 +0000.
-> Anything received after that time might be too late.
+> It took me a while to sort out, but for any others - this patch is
+> incompatible with qemu 5.0. It starts working again after this qemu
+> patch:
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.219-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> commit cf45183b718f02b1369e18c795dc51bc1821245d
+> Author: Stefano Stabellini <stefano.stabellini@xilinx.com>
+> Date:   Thu May 21 12:26:25 2020 -0700
 > 
-> thanks,
+>     Revert "9p: init_in_iov_from_pdu can truncate the size"
 > 
-> greg k-h
+>     This reverts commit 16724a173049ac29c7b5ade741da93a0f46edff7.
+>     It causes https://bugs.launchpad.net/bugs/1877688.
 > 
+>     Signed-off-by: Stefano Stabellini <stefano.stabellini@xilinx.com>
+>     Reviewed-by: Christian Schoenebeck <qemu_oss@crudebyte.com>
+>     Message-Id: <20200521192627.15259-1-sstabellini@kernel.org>
+>     Signed-off-by: Greg Kurz <groug@kaod.org>
+> 
+> It causes something like this:
+> 
+> # modprobe ib_cm
+> qemu-system-x86_64: VirtFS reply type 117 needs 17 bytes, buffer has 17,
+> less than minimum
 
-Compiled and booted on my test system. No dmesg regressions.
+9p server in QEMU 5.0 was broken by mentioned, reverted QEMU patch, and it was 
+already fixed in stable release 5.0.1.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+It is not that recent kernel patch is breaking behaviour, but it triggers that 
+(short-lived) QEMU bug more reliably, as 9p client is now using smaller 
+messages more often. But even without this kernel patch, you would still get a 
+QEMU hang with short I/O. So it is not a good idea to continue using that 
+particular, old QEMU version, please update at least to QEMU 5.0.1.
 
-thanks,
--- Shuah
+Best regards,
+Christian Schoenebeck
+
+
