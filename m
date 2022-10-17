@@ -2,170 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55868601723
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768A4601729
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiJQTNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S230187AbiJQTPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiJQTNu (ORCPT
+        with ESMTP id S230150AbiJQTPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:13:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498047644B;
-        Mon, 17 Oct 2022 12:13:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8655B818FD;
-        Mon, 17 Oct 2022 19:13:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BDBEC433D6;
-        Mon, 17 Oct 2022 19:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666034025;
-        bh=EcnCKu7ktjEeqc78rbCzwyn7s5ZWeiAoC38ZtHSoJ7M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UPlfsDe5pblGvt91DrLH5G2O3Ltc9kP6VBFDcjIipGh5Lpe/JWFd7yzQbpiBJ207z
-         ckQQ4VtO3XuPtncgb3UmKw71kw0Gx8ZqLlBjW8tUb+UwyOxYS5anc3e6lO2nq2vcea
-         SHnFhnYdP3xZsAlDzN1ClFhTjeNusI1gHuI4mbPvIXavE83btahlQqIh3zfU8b/WoX
-         DCM0uiq0Dm9wfxHhzoUKXt6d7r5BrGzwMlYmeqnnryL33tM+uM+IRLP8UhAoPvIThL
-         1tBXJ7+vYUFXcloFuB4WShZp5DKhlWdoNEU5rpb5iQ5bn0Pzb9N9Yf7soJBzzy1w0b
-         p7XRsa7zKMjhw==
-Date:   Mon, 17 Oct 2022 12:13:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     syzbot <syzbot+d551178aab6a783dc249@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        glider@google.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org,
-        bpf@vger.kernel.org
-Subject: Re: [syzbot] KMSAN: uninit-value in erspan_build_header
-Message-ID: <20221017121344.1258c0f1@kernel.org>
-In-Reply-To: <0000000000004438f605ead95255@google.com>
-References: <0000000000004438f605ead95255@google.com>
+        Mon, 17 Oct 2022 15:15:42 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3640C3DBC4;
+        Mon, 17 Oct 2022 12:15:42 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n7so11685315plp.1;
+        Mon, 17 Oct 2022 12:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jYQqkn4Z7pKMP3VJb1HX2oe2GpNgJO0E7bDKNOoYtIE=;
+        b=TPN7z+1mH6FaSYcRjIy1CQQSIt5z8vj1Tle8p8G6umvRw+WQOFyYd8mYhw/EcxgIsF
+         vgisJtlzCmLBDI0+8V+/gRYV9fC0WzT7lsz6LYUvbvR+F72s4LGohEmCW4VAzviotxc8
+         6VYSHMhzMRJNMi7NHCg36Dj5UtfiTDkpt95xuV18Ak7aIjDzMHSsCe+xJWA6Q2wqLp4o
+         fxMHLwTBfcsY6fF9PE9SEmZrqoKFlxCL0GGQT/QIgM0Z8AZseEU/YrOO+jICs6b4qz9m
+         TwfKBv9JC6cQPTkYOSMTRwZKSVL280JKetKKJqv/gWOuBouMXDAlxOejxGe9qwtx3m7H
+         FDaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jYQqkn4Z7pKMP3VJb1HX2oe2GpNgJO0E7bDKNOoYtIE=;
+        b=dZCJ4xob+KJ1YoSm/uxlI6DO7bBiAb5jap06CUey8N7h0ct3es8QFTUAYRV3zjACCj
+         Ypxit6of0ucSh355Lzf9bFY8LfZbrm6YAmzq/RjS68LjeSUWxWPBmyf+6fF9WrtYi7zU
+         AlkOu2mQhXnDoE/NwfJyG97qoWglitoCBcWw0qP3UW34jRDy2NCLh10uEWApOoN1yUjd
+         GNzSLhcQ13fzMBtK8QKZLogbOi6mow2tlB2tL18H6HoqVEwTHgNL+L4Wr2n4EchyftvH
+         mkXBundc50RZ4hVUc8qn5SLSQrltLoA8ZPcowWBCZYNOAt6piKOlnnhfqkWdHIe2zCzY
+         W+6w==
+X-Gm-Message-State: ACrzQf0VKyDN1WFOwGk1ZkF4pDrm71womdUKFwF/RMEkRO2FJb/YR8sv
+        YgsqkRMJ7XfQGpA4C469nNODH5OvNlfCoQ==
+X-Google-Smtp-Source: AMsMyM7zwjDrT1QdJLHBEh0N/xEdJto3b07NPFrCmaAcVvUQZNzbAmlidfRdShChWxs4WVtlbGhzkw==
+X-Received: by 2002:a17:90a:6e09:b0:20d:86b2:4c54 with SMTP id b9-20020a17090a6e0900b0020d86b24c54mr15267460pjk.73.1666034141597;
+        Mon, 17 Oct 2022 12:15:41 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b00176b0dec886sm6978459pln.58.2022.10.17.12.15.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 12:15:41 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 17 Oct 2022 09:15:39 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/8] blk-iocost: Avoid to call current_hweight_max if
+ iocg->inuse == iocg->active
+Message-ID: <Y02p23KdUZfkYyzI@slm.duckdns.org>
+References: <20221017020011.25016-1-shikemeng@huawei.com>
+ <20221017020011.25016-7-shikemeng@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017020011.25016-7-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC: bpf, looks like we have a packet with uninitialized payload
-generated by BPF_PROG_TEST_RUN?
-
-On Wed, 12 Oct 2022 09:59:52 -0700 syzbot wrote:
-> Hello,
+On Mon, Oct 17, 2022 at 10:00:09AM +0800, Kemeng Shi wrote:
+> The old_hwi is already max hweight_inuse if iocg->inuse == iocg->active.
+> Remove unnecessary calculation.
 > 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    968c2729e576 x86: kmsan: fix comment in kmsan_shadow.c
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=100cd00c880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=131312b26465c190
-> dashboard link: https://syzkaller.appspot.com/bug?extid=d551178aab6a783dc249
-> compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/c78ce21b953f/disk-968c2729.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/22868d826804/vmlinux-968c2729.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+d551178aab6a783dc249@syzkaller.appspotmail.com
-> 
-> =====================================================
-> BUG: KMSAN: uninit-value in erspan_build_header+0x16d/0x330 include/net/erspan.h:197
->  erspan_build_header+0x16d/0x330 include/net/erspan.h:197
->  erspan_xmit+0x11a2/0x1f00 net/ipv4/ip_gre.c:701
->  __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
->  netdev_start_xmit include/linux/netdevice.h:4833 [inline]
->  xmit_one+0x14e/0x5f0 net/core/dev.c:3590
->  dev_hard_start_xmit+0xe5/0x370 net/core/dev.c:3606
->  sch_direct_xmit+0x3f1/0xdb0 net/sched/sch_generic.c:342
->  __dev_xmit_skb+0xc22/0x1a30 net/core/dev.c:3817
->  __dev_queue_xmit+0x12cb/0x31f0 net/core/dev.c:4222
->  dev_queue_xmit include/linux/netdevice.h:3008 [inline]
->  __bpf_tx_skb net/core/filter.c:2115 [inline]
->  __bpf_redirect_common net/core/filter.c:2154 [inline]
->  __bpf_redirect+0x1293/0x13b0 net/core/filter.c:2161
->  ____bpf_clone_redirect net/core/filter.c:2430 [inline]
->  bpf_clone_redirect+0x324/0x470 net/core/filter.c:2402
->  ___bpf_prog_run+0x7ed/0xaee0 kernel/bpf/core.c:1813
->  __bpf_prog_run512+0xc2/0x110 kernel/bpf/core.c:2038
->  bpf_dispatcher_nop_func include/linux/bpf.h:903 [inline]
->  __bpf_prog_run include/linux/filter.h:594 [inline]
->  bpf_prog_run include/linux/filter.h:601 [inline]
->  bpf_test_run+0x592/0xd20 net/bpf/test_run.c:402
->  bpf_prog_test_run_skb+0x1625/0x20b0 net/bpf/test_run.c:1141
->  bpf_prog_test_run+0x6a0/0x730 kernel/bpf/syscall.c:3620
->  __sys_bpf+0x88d/0xe70 kernel/bpf/syscall.c:4971
->  __do_sys_bpf kernel/bpf/syscall.c:5057 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5055 [inline]
->  __ia32_sys_bpf+0x9c/0xe0 kernel/bpf/syscall.c:5055
->  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> 
-> Uninit was created at:
->  slab_post_alloc_hook mm/slab.h:732 [inline]
->  slab_alloc_node mm/slub.c:3258 [inline]
->  __kmalloc_node_track_caller+0x814/0x1250 mm/slub.c:4970
->  kmalloc_reserve net/core/skbuff.c:362 [inline]
->  pskb_expand_head+0x24a/0x1a80 net/core/skbuff.c:1729
->  __skb_cow include/linux/skbuff.h:3529 [inline]
->  skb_cow_head include/linux/skbuff.h:3563 [inline]
->  erspan_xmit+0xad2/0x1f00 net/ipv4/ip_gre.c:688
->  __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
->  netdev_start_xmit include/linux/netdevice.h:4833 [inline]
->  xmit_one+0x14e/0x5f0 net/core/dev.c:3590
->  dev_hard_start_xmit+0xe5/0x370 net/core/dev.c:3606
->  sch_direct_xmit+0x3f1/0xdb0 net/sched/sch_generic.c:342
->  __dev_xmit_skb+0xc22/0x1a30 net/core/dev.c:3817
->  __dev_queue_xmit+0x12cb/0x31f0 net/core/dev.c:4222
->  dev_queue_xmit include/linux/netdevice.h:3008 [inline]
->  __bpf_tx_skb net/core/filter.c:2115 [inline]
->  __bpf_redirect_common net/core/filter.c:2154 [inline]
->  __bpf_redirect+0x1293/0x13b0 net/core/filter.c:2161
->  ____bpf_clone_redirect net/core/filter.c:2430 [inline]
->  bpf_clone_redirect+0x324/0x470 net/core/filter.c:2402
->  ___bpf_prog_run+0x7ed/0xaee0 kernel/bpf/core.c:1813
->  __bpf_prog_run512+0xc2/0x110 kernel/bpf/core.c:2038
->  bpf_dispatcher_nop_func include/linux/bpf.h:903 [inline]
->  __bpf_prog_run include/linux/filter.h:594 [inline]
->  bpf_prog_run include/linux/filter.h:601 [inline]
->  bpf_test_run+0x592/0xd20 net/bpf/test_run.c:402
->  bpf_prog_test_run_skb+0x1625/0x20b0 net/bpf/test_run.c:1141
->  bpf_prog_test_run+0x6a0/0x730 kernel/bpf/syscall.c:3620
->  __sys_bpf+0x88d/0xe70 kernel/bpf/syscall.c:4971
->  __do_sys_bpf kernel/bpf/syscall.c:5057 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5055 [inline]
->  __ia32_sys_bpf+0x9c/0xe0 kernel/bpf/syscall.c:5055
->  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> 
-> CPU: 0 PID: 12499 Comm: syz-executor.1 Not tainted 6.0.0-rc5-syzkaller-48543-g968c2729e576 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> =====================================================
-> 
-> 
+> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>  block/blk-iocost.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> index 96c1571a8a1d..fa90f471dfdc 100644
+> --- a/block/blk-iocost.c
+> +++ b/block/blk-iocost.c
+> @@ -2299,7 +2299,10 @@ static void ioc_timer_fn(struct timer_list *timer)
+>  			 * Determine the donation amount.
+>  			 */
+>  			current_hweight(iocg, &hwa, &old_hwi);
+> -			hwm = current_hweight_max(iocg);
+> +			if (iocg->inuse == iocg->active)
+> +				hwm = old_hwi;
+> +			else
+> +				hwm = current_hweight_max(iocg);
 
+I don't think this is correct. The intermediate nodes might be donating.
+This also isn't a meaningful optimization given that it's in the cold
+periodic timer path. I'd much rather keep the code simpler unless the
+performance benfeit can be clearly demonstrated.
+
+Thanks.
+
+-- 
+tejun
