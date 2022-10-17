@@ -2,169 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9AB600AE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F52A600AEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJQJe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        id S231376AbiJQJft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbiJQJet (ORCPT
+        with ESMTP id S231329AbiJQJfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:34:49 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C171013D1B;
-        Mon, 17 Oct 2022 02:34:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TAgnlszN5bKhiZ8P6JU3QNFZQX5c0i0qOfnEnxgpw4YdAgErGwc970kqZYUNFQs7NAs64JQkFq5hu5xWO33FafGOmpl3ZlYNaqcgjDz6mmLKeky2o67YnXcnt6AhR69urAieIlCLHGxsfqn0kRNXpObm9h++ZCHZnz00p3dOSSGjaemrD8go6Xop0YTzhZ+dDj4zqXAD8aZ5gCvknwMHN82n8ILOINMCSt9gknk1EiswO9hB3V4cAhUaxe+26n1tafbmy+sh/QQRZBVawvrgXwFJsjXF0pghRm/3Y1zYW1nPAiPaIcyTMqBNybnxHoRrDkm9ttiB6q2V6C3VcXtbyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O3slT9n4TJMosgL2QDibjz7yhbX19zkvAS5TjtlhnEA=;
- b=DKNSGMrwxkuH/3Zw2tw3ZvyO+mFgIPUpdcY03gY0IdgjJHQqoA3wn6Jm635M4Ub5zWx8cS6cQDaOjyLYYbS5Nf58X6vxO02fH99zOAciq1pVTCktucpAYFkBv3ereaGfBs11F1/nMojcRDj/ClCQOAHBFfK+qeG6YM0vbuGVR48JcJtLd9QLsSo18yrGwzQMW7cQBDvvBBB0cWSlLWJsmkjIE/ojX4TNDfRDzXgiPED8GYKonQDB1l8xd5kjx5KXZpqxpP///LG6n+pCgFiD+7R5PMTzh01xdIj41VMJKTlWTclGhEAXcIy/vB3fixEIlonGGINtcGtT0mnHwH1CYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O3slT9n4TJMosgL2QDibjz7yhbX19zkvAS5TjtlhnEA=;
- b=lZk5wcN290tTLdsvyDRf6FJUs1l2D2kYGdhPfqVIQBN04aR8rEjBzqPd8N20gkYLGNIKUWfn99eiUsiZbnc5LUR/Fx9kcnyJHWG7Plc5u8oHs6teAtpTvr85YdnkM31S41toSVNIw6mRFAhLm/AQ3yPe6+EqQsMcsb9r+F8N4zs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by SJ0PR12MB6904.namprd12.prod.outlook.com (2603:10b6:a03:483::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
- 2022 09:33:58 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::fa1e:a29e:2f2c:43d1]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::fa1e:a29e:2f2c:43d1%7]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 09:33:58 +0000
-Message-ID: <3945912b-580b-d1bc-35f8-9debdffe9b15@amd.com>
-Date:   Mon, 17 Oct 2022 15:03:42 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2] perf: Rewrite core context handling
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, ndesaulniers@google.com,
-        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20221008062424.313-1-ravi.bangoria@amd.com>
- <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
- <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
- <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
- <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
- <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
- <Y0awHa8oS5yal5M9@hirez.programming.kicks-ass.net>
- <Y0cn1xazYpNmqhRo@hirez.programming.kicks-ass.net>
- <99caec5f-dcdf-70c6-8909-11552ce42a20@amd.com>
- <Y0fvpQEEl/tK6mJ5@hirez.programming.kicks-ass.net>
- <0df72f8e-1c17-2140-c841-5a75fb43db14@amd.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <0df72f8e-1c17-2140-c841-5a75fb43db14@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0101.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::7) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Mon, 17 Oct 2022 05:35:38 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1CD5A827;
+        Mon, 17 Oct 2022 02:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1665999277; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GeDt2s8rzg1Q+BLHuQW/3eUdGAnY4/eHL4oRJbtI0c8=;
+        b=dQijxU+88mqZJNTLpOfo0QEt+EnW/LPig0GNRnPdyX6Wlohjv8ynxuY6RjL547nHczZkHO
+        +u3iZMRRpPScwEy6aky42P5yXpB5tb4KdnKJQu9y2tRvabdMqRGhkxzAAzUV+pccoOLcRY
+        UV8jejG+FhroB99mdSOvR7YaJiZ8yEM=
+Date:   Mon, 17 Oct 2022 10:34:20 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 2/2] dmaengine: JZ4780: Add support for the JZ4755.
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <895WJR.03DS0G5N9R0V1@crapouillou.net>
+In-Reply-To: <20221016151256.3021729-3-lis8215@gmail.com>
+References: <20221016151256.3021729-1-lis8215@gmail.com>
+        <20221016151256.3021729-3-lis8215@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|SJ0PR12MB6904:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f5a9fa4-4d3a-4216-b185-08dab022b72f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YOm+Rao2MjGPzP8u4zaBX8vVTD52mbVCe/P1xwsHzL5cyFxB6xiKJe9+kHNxKPG7RaHXmMom+Z2xsfbYZuoz6DEXYDTKWoYOjbydMrnWyyYSWVTmbMG+BPUzMPcXiQcv690/lh6/Hm7RFr8iAkTcMaHfaOjv+IcRPtDbgaw4tzY696RPSrX9b5KcUj4K40ysRxVdvRufnFomIziAIjJ+ouFw9+KUwwoVIBBennHOUBHSHDcprDD7WHDmArtlZYk9a+bFP7/tr0U8nwWJzjBdbgScjF0xzF8iIu7lhV98+L4W7vWC5umyPyLur66vyJTtu0XyxmO0FRSklW4S7pqiZLewbXAoXtcLC8tcNFA4SKyQOrQ+SFAxchKyfv2VaN+Y8X20WLlW7uR78ewHpESxKZ5+G5e4UjqFFHrVpMVhoLbzoOh+wXTMdDtRNepuekTaszrCEMe0A4VjTSHJDO38sPHTDvgQz8h4NKLYKTnvPhaaWekFZE/IqVzqDT2keHRstEOsoiuKU6biMSC9eNCvdpWZ8WVUDPeUTKBzrIkGp+HT8MQ3dXOqUpQGvsU6HaifdfwGD6iqlJcbuuJ0/QrutL/XKIYZq9EqgulC4vM9PFZ+Kwy1fOCvrr4aSUcWDvI78XdkmY+h06A6k7Zo0XH3XDvaYRwOQzV6N87q30Os5UHtMrS4QqTUPRR7NYER9W+hosvPd2ULw9NELfp7rF1ZCNSYwII129aq5HniZ/SBDdVeQKWKqE+xS5/+0zBlZ5jhXRZBUljGW7XIO2IUAjjw0iOjyG6JwWXhe3JrRiEHTibkX/h3nfP0M+Lgj7nvZDX5RthqMNKY1UGGnfLBJ1r4hbu9tBr5iJdjiOmLo3E2RGD40e/I4BS3hbh8eT2P7MVC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(366004)(346002)(136003)(451199015)(41300700001)(26005)(6666004)(6512007)(2616005)(186003)(478600001)(44832011)(4744005)(2906002)(6506007)(36756003)(7416002)(53546011)(5660300002)(8936002)(31696002)(86362001)(38100700002)(316002)(6916009)(966005)(6486002)(8676002)(4326008)(66476007)(66946007)(66556008)(31686004)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y1ZDUUdlRGJ3L2F3a2kxMkhraG8yV2doV1VmcWlacy9ETGhLVnNnLzVUZ1N0?=
- =?utf-8?B?d05mV2RSak91V1dndUU2R3pIM09SY29WUk1YMDkrc1pHZmxZSFA0Y1VJWmhJ?=
- =?utf-8?B?YnBaOHBUZ214UXZxUHdJdVY4S2lZSUxRSnVLbU4vOHJQK3g0eGFEd2ZOelEw?=
- =?utf-8?B?S0tNUERQZm84UHJFTEQyWU9zR3g1RjVnbFRQM055aksyQ0hNbXIxNDg4a3VR?=
- =?utf-8?B?QTBxblUrc1kyTXNtb0xiVzBlZUZkVmhMdnI4M3dYMzRpZGF1WnZlZS9yK3pW?=
- =?utf-8?B?Z2JHTTQwd1NTSXFybUwwQ295eXJ2WlI5ZVd4VUt5ZG53QTFhKzdyNEI2L1BR?=
- =?utf-8?B?d2JWd0JKNzBObzFmODlSVXNxTVRpOUszOWhnM0VnRDFiK3h1ZERJaGJ6aE91?=
- =?utf-8?B?Y1FqN01rZk9uV2NNR0YxbEhMTTFDRGg3eFVSMFd5SWZ2dGpuNnlIL254UnRL?=
- =?utf-8?B?U2JQRzJ5ZTFjbDcrNHBBTEZPcDVaazdFOHNUVW5RTHQyd2tET3hBYUgxclF2?=
- =?utf-8?B?RkI1dWZjQWR6VzlpeHJETnNjc2FaTGk1ejcvQ2RsRi9pOWhyeTFXZkxSa2h3?=
- =?utf-8?B?MSt0U2FZWW55R3BSRDRSVEp5UVYzWlJDbGRFRzhoekNmVXFQQmlTbjJxUEVB?=
- =?utf-8?B?czZCaCtHUmtQYi96VWhwd2l5NnEwcWcvMFZET3FFbitST2hWNUJtSkJqd2Q1?=
- =?utf-8?B?dUVXbVpGbUlzSktDRTJZaUJjRkJ2NXlQTWdrWGJDdHBrZ05pRHJScGtRd2Fz?=
- =?utf-8?B?THdnLzJ3UXNkMlBSYm5TVzMwcXUzOGphYXJBWkFEWTFzS2V4dXFGS0V4R0I0?=
- =?utf-8?B?Mm1FTFBDOFNBSkVrWmZnRWZZdmhzeERFQjhMSWhzOXVyVGczU2svd2syWm03?=
- =?utf-8?B?YWo3OGNndFN2K3dhZ2JuTCtaNXMyVHpySXBaZ2xwUXVKaUhSa2NVSnUybVd3?=
- =?utf-8?B?MmRaZmpqeG9hNm9idEY3OGxkaU1mdXZFbHBMKzlNY1liVXlRN0Q3c0xkWFBk?=
- =?utf-8?B?WG9FRmg3RVJDT0RvWWl4UGNicHdkQlI0Mlp1aWtPRGhGblpwL1daVjMwQnll?=
- =?utf-8?B?OWhheHhKN2ZJK2hDdXd2M05mUlh1SzJjYXdwTnE4S3E2UGNSV0xxTTRxcDI4?=
- =?utf-8?B?V2V1Y2M0WklUa0dIcU9wNExFenV2SDE3Sit2c1R2VXFOUzVuNEhjVm13bEs0?=
- =?utf-8?B?d3hZMGRnQzhHWTlHQno4YkI3Q0lxTmxkUHArcksxaEV0QzQ1ZWxsKzJUa0Rx?=
- =?utf-8?B?K2hGSmpJOHkrcjZjOXdLVFVBZUdIYlFkNFdWYWNpeHZzbjZ2ZzJaRVZLOEdx?=
- =?utf-8?B?V0NJaTVmQjl5ZHhvQjE2cXV3V2VmdCtTTGRlekN2bVJMblpvSTl1NERIMk1W?=
- =?utf-8?B?UlRjb2lYOWt2Q3QxYVVoV2V0K0F0eHJKR2VvWGVCTnZxV294VHl1QmZqWWpE?=
- =?utf-8?B?VUFLcVkyR0RrVGVGd1laMGE4MUV6ZFMvM0VJejBOaUNKemUvcWhPVitHOTRi?=
- =?utf-8?B?RDhjcUU3b2V3SzNDTDNkbU1DVzRoTkdKc1hReWk5ZVQ0dUxDMjUzK1ZqWEdT?=
- =?utf-8?B?ZlVHT1ZhNjdjd090bWFHUTc5RGorTVNIczg4U2ZwTWMzblhHZlc0V2VLcWZz?=
- =?utf-8?B?dmFYTStTdXJIM2ZmQVlDVmdjVUpMd1JENllNNkREeExTZU03cEF2c2Y0VWg1?=
- =?utf-8?B?eFN2c2RIWSs2SHluNXFsTTdoVmszYWR1UlhSQXFISjRZNTZjTE9mRm1XOXk3?=
- =?utf-8?B?dkVhUXUreU1tenl2WjJmSkZsSVdYSU1iRk5RMkxlSE9WWWJlbVl0OEY3L0Zh?=
- =?utf-8?B?SWRuTnZLeHpJMTl1RkczZGZNbUd4eEFRdW5LdEwxODk5Z1FUVHhxNlQ4eEps?=
- =?utf-8?B?Skt4R0plYm0rV3NKK2RJekcrUWt3UzZPdW5NcmVuQlpnUkNPVDI3RmFFS29r?=
- =?utf-8?B?alFVMXhuRTJSdEJzZEFQaGoxcm1aM2ZmV05oM1Y2Z2FxWjhkSlFBc01WWXJo?=
- =?utf-8?B?Ymk4eHh1UDdCNWtSM1YrNWZlUDRQWDBJR1E5cVFUYlBGb1o0REZFNm5qckFF?=
- =?utf-8?B?VzhtODIvY0JiNGtBNk02L2lpUFBSd0hLSUQvVGZmbERGY1VtcjR6V2tkSGkv?=
- =?utf-8?Q?q2T7RXnQBpey3i4JO/auocKMs?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f5a9fa4-4d3a-4216-b185-08dab022b72f
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 09:33:57.9778
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nqrOadQ/ERuX0ziUPpBecZhIWcmUWB+xS7Z445zTnX/NnpM/JgQPlZkoxMlmh+XQXPCYT5i1/8WIjezTovvoFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6904
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-Oct-22 3:26 PM, Ravi Bangoria wrote:
-> On 13-Oct-22 4:29 PM, Peter Zijlstra wrote:
->> On Thu, Oct 13, 2022 at 03:37:23PM +0530, Ravi Bangoria wrote:
->>
->>>> -	refcount_t			refcount;
->>>> +	refcount_t			refcount; /* event <-> ctx */
->>>
->>> Ok. We need to remove all those // XXX get/put_ctx() from code
->>> which we added to make refcount a pmu_ctx <-> ctx.
->>
->> Them already gone :-) I've not yet fixed up the typoes, but current
->> version should be here:
->>
->>   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=perf/core
->>
->> Thanks!
-> 
-> I've been running perf-fuzzer on Xeon machine since yesterday and I don't see any
-> issue. Will do the same on my AMD machine as well over the weekend.
+Hi Siarhei,
 
-Only one WARN_ON() hit. Otherwise all good.
-https://lore.kernel.org/lkml/8d91528b-e830-6ad0-8a92-621ce9f944ca@amd.com
+Le dim., oct. 16 2022 at 18:12:56 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =E9crit :
+> The JZ4755 has 4 DMA channels per DMA unit, two idential DMA units.
+>=20
+> The JZ4755 has the similar DMA engine to JZ4725b, so I assume it has=20
+> the
+> same bug as JZ4725b, see commit a40c94be2336.
 
-Thanks,
-Ravi
+Can you verify that?
+
+It should be pretty simple, if it has the bug you'll see I/O errors on=20
+the SD card.
+
+Cheers,
+-Paul
+
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  drivers/dma/dma-jz4780.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
+> index 2a483802d..9c1a6e9a9 100644
+> --- a/drivers/dma/dma-jz4780.c
+> +++ b/drivers/dma/dma-jz4780.c
+> @@ -1038,6 +1038,13 @@ static const struct jz4780_dma_soc_data=20
+> jz4725b_dma_soc_data =3D {
+>  		 JZ_SOC_DATA_BREAK_LINKS,
+>  };
+>=20
+> +static const struct jz4780_dma_soc_data jz4755_dma_soc_data =3D {
+> +	.nb_channels =3D 4,
+> +	.transfer_ord_max =3D 5,
+> +	.flags =3D JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC |
+> +		 JZ_SOC_DATA_BREAK_LINKS,
+> +};
+> +
+>  static const struct jz4780_dma_soc_data jz4760_dma_soc_data =3D {
+>  	.nb_channels =3D 5,
+>  	.transfer_ord_max =3D 6,
+> @@ -1101,6 +1108,7 @@ static const struct jz4780_dma_soc_data=20
+> x1830_dma_soc_data =3D {
+>  static const struct of_device_id jz4780_dma_dt_match[] =3D {
+>  	{ .compatible =3D "ingenic,jz4740-dma", .data =3D &jz4740_dma_soc_data=20
+> },
+>  	{ .compatible =3D "ingenic,jz4725b-dma", .data =3D=20
+> &jz4725b_dma_soc_data },
+> +	{ .compatible =3D "ingenic,jz4755-dma", .data =3D &jz4755_dma_soc_data=20
+> },
+>  	{ .compatible =3D "ingenic,jz4760-dma", .data =3D &jz4760_dma_soc_data=20
+> },
+>  	{ .compatible =3D "ingenic,jz4760-mdma", .data =3D=20
+> &jz4760_mdma_soc_data },
+>  	{ .compatible =3D "ingenic,jz4760-bdma", .data =3D=20
+> &jz4760_bdma_soc_data },
+> --
+> 2.36.1
+>=20
+
+
