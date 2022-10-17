@@ -2,117 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0224C6014B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754B96014E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJQRX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
+        id S230263AbiJQRZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiJQRXx (ORCPT
+        with ESMTP id S230267AbiJQRYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:23:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770D372691;
-        Mon, 17 Oct 2022 10:23:52 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 17:23:48 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666027430;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+        Mon, 17 Oct 2022 13:24:37 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D4665CE;
+        Mon, 17 Oct 2022 10:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666027472; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=BRbMTu/36L2Znt2BCUjwdunc4EtSPmpdclSxtyKDgoc=;
-        b=ipRSlwGW40HtQiuEQoUCmySPMEXDHyrGNjyilH5XvDMO0nodkwRIKGeIweXiqVAeJqepU6
-        InQm8RHG7Hn3WS/MlfJ9wbJVcjF1jpgPtgf6S33qNolMuXQtljC5B5MTigqUuPA7u8Bc/h
-        taD4aahfDNOS6iFYWo+Oy0xoiT64Gx05td5ZhLawCyHUAYgQj+DchUCvqL+7AhxfpBS5pC
-        HRfB2WCVVL4PfTjeSh7VZw6aS2s/NH6T1ukhdLcu5CKIfVlEo3QBSH4b5OEhi64SWO7KcV
-        Jc0QWhlE0MVFIu4+nBi+xGhBAUgI5e7ihBpblQjMn/gYlDq3+hiiMHqSD95WdA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666027430;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=BRbMTu/36L2Znt2BCUjwdunc4EtSPmpdclSxtyKDgoc=;
-        b=4136tujQu3bAAxUkQGOFDVzNSRW6cGIWd8jF6hPW5IrOKkRhcTEijw8shFHkL+NmGRbeJs
-        Kuv9PLg/4Wjr39Bw==
-From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/Kconfig: Drop check for -mabi=ms for CONFIG_EFI_STUB
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q2LKFFdukj0Teo80d6xApjlkPmcHoDYGqshawhQ6Zp4=;
+        b=iamdcSxFgEwdT5Dd6NOiZ9hoaP/6qqx46nqgsRbZ84SwzSqeu69s+BZ4NZ+BKfwwJ9ja/k
+        oOaC/T7wZONdZpGf2331jSVlaUC+JhE+pfKNwBSccrGc0fMzPX4dEf+Ufh5oK8wZWUHPnf
+        tsyYtrCA+zggOaba6/A+8HQQZLoD0IM=
+Date:   Mon, 17 Oct 2022 18:24:22 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 4/4] clk: Add Ingenic JZ4755 CGU driver
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <M0RWJR.TI6Q9ATD37DF3@crapouillou.net>
+In-Reply-To: <CAKNVLfYEMwRC+4VuGcaENd1eTvbhWD9=uFDAhaz+1Fd8Aaqg_w@mail.gmail.com>
+References: <20221016150110.3020451-1-lis8215@gmail.com>
+        <20221016150110.3020451-5-lis8215@gmail.com>
+        <0S4WJR.4KB18PR21S9K1@crapouillou.net>
+        <CAKNVLfYEMwRC+4VuGcaENd1eTvbhWD9=uFDAhaz+1Fd8Aaqg_w@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <166602742896.401.9259475718093994169.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     33806e7cb8d50379f55c3e8f335e91e1b359dc7b
-Gitweb:        https://git.kernel.org/tip/33806e7cb8d50379f55c3e8f335e91e1b359dc7b
-Author:        Nathan Chancellor <nathan@kernel.org>
-AuthorDate:    Thu, 29 Sep 2022 08:20:10 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 17 Oct 2022 19:11:16 +02:00
 
-x86/Kconfig: Drop check for -mabi=ms for CONFIG_EFI_STUB
+Le lun., oct. 17 2022 at 20:10:56 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =C3=A9crit :
+> =D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:24, Paul Cerc=
+ueil=20
+> <paul@crapouillou.net>:
+>=20
+>>  > +     [JZ4755_CLK_AIC] =3D {
+>>  > +             "aic", CGU_CLK_GATE,
+>>  > +             .parents =3D { JZ4755_CLK_I2S, -1, -1, -1 },
+>>=20
+>>  Wrong parent here, should be JZ4755_CLK_EXT_HALF.
+>=20
+> I don't  agree, see Figure 20-13 in the JZ4755 PM.
 
-A recent change in LLVM made CONFIG_EFI_STUB unselectable because it no
-longer pretends to support -mabi=ms, breaking the dependency in
-Kconfig. Lack of CONFIG_EFI_STUB can prevent kernels from booting via
-EFI in certain circumstances.
+20-13 describes the I2S clock, no?
 
-This check was added by
+AIC clock's parent is EXT/2 according to the diagram in 8.2.2.
 
-  8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
+>>  Well it would be good to know...
+>=20
+> Indeed, I will try to figure it out.
 
-to ensure that __attribute__((ms_abi)) was available, as -mabi=ms is
-not actually used in any cflags.
+Cheers,
+-Paul
 
-According to the GCC documentation, this attribute has been supported
-since GCC 4.4.7. The kernel currently requires GCC 5.1 so this check is
-not necessary; even when that change landed in 5.6, the kernel required
-GCC 4.9 so it was unnecessary then as well.
 
-Clang supports __attribute__((ms_abi)) for all versions that are
-supported for building the kernel so no additional check is needed.
-Remove the 'depends on' line altogether to allow CONFIG_EFI_STUB to be
-selected when CONFIG_EFI is enabled, regardless of compiler.
-
-Fixes: 8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://github.com/llvm/llvm-project/commit/d1ad006a8f64bdc17f618deffa9e7c91d82c444d
----
- arch/x86/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 6d1879e..67745ce 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1973,7 +1973,6 @@ config EFI
- config EFI_STUB
- 	bool "EFI stub support"
- 	depends on EFI
--	depends on $(cc-option,-mabi=ms) || X86_32
- 	select RELOCATABLE
- 	help
- 	  This kernel feature allows a bzImage to be loaded directly
