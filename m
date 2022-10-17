@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BB1600539
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE83160053C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiJQC3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 22:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S230441AbiJQCeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 22:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiJQC3G (ORCPT
+        with ESMTP id S230423AbiJQCeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 22:29:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998D81A044
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 19:29:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D513B80E4A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE086C433D7;
-        Mon, 17 Oct 2022 02:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1665973743;
-        bh=jsK3qEANRyPmKldiqe7w+EnAwbL36O8N4IwTdPMdRJ0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gc5KnyyetB5mVmEtwZOa+ZpMS4OWiQa413XQbPSysavRW07fvPr8ZZMP4fF2dvzIT
-         CrJ+ic+eyoAs1DxGaxANoDZ9OFhG4X3tdPS/Q4umCXzUi6xwjR2JZLCFu+pebIUdok
-         uA1b0kCJvpC5TXe8cEG9dTgrr8ckLBeg5ioVarJY=
-Date:   Sun, 16 Oct 2022 19:29:02 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Joseph Qi <jiangqi903@gmail.com>
-Cc:     Gang He <ghe@suse.com>, linux-kernel@vger.kernel.org,
-        ocfs2-devel@oss.oracle.com
-Subject: Re: [Ocfs2-devel] [PATCH] ocfs2: reflink deadlock when clone file
- to the same directory simultaneously
-Message-Id: <20221016192902.4d7e70047ca5d04a2f585688@linux-foundation.org>
-In-Reply-To: <06a7f382-5eaa-9489-3c28-aa4bfb804327@gmail.com>
-References: <20210729110230.18983-1-ghe@suse.com>
-        <5821fd0f-2018-dc1b-a5c0-f948a7debff4@linux.alibaba.com>
-        <c7e1f0a7-e75c-d1e0-870d-dc480d070079@suse.com>
-        <71608a14-58f4-dba0-d695-fee65de89192@linux.alibaba.com>
-        <801438f5-655a-c708-aa25-343d54a2f11e@suse.com>
-        <86e3d724-3147-ccaa-998f-0f857c575f7e@linux.alibaba.com>
-        <a0a9710f-461a-99c8-92f6-a99bb11b3a4e@suse.com>
-        <4ba3b404-824b-90a3-ef43-9ab6510ee073@linux.alibaba.com>
-        <5a1af56c-3eab-5baf-62a3-1c98bac104ba@suse.com>
-        <db7119a5-f120-cebe-42a1-dc2f64db620d@suse.com>
-        <20221016162950.09db2b5f503ac87823cd1687@linux-foundation.org>
-        <06a7f382-5eaa-9489-3c28-aa4bfb804327@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Sun, 16 Oct 2022 22:34:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A222BF5
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 19:34:19 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MrLfX6v13zHvpG;
+        Mon, 17 Oct 2022 10:34:12 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 17 Oct 2022 10:34:05 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 17 Oct
+ 2022 10:34:04 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>
+Subject: [PATCH] kobject: fix possible memory leak in kset_create_and_add()
+Date:   Mon, 17 Oct 2022 10:33:27 +0800
+Message-ID: <20221017023327.1793893-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,21 +48,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 09:51:14 +0800 Joseph Qi <jiangqi903@gmail.com> wrote:
+If kset_register() fails in kset_create_and_add(), the name allocated
+in kset_create() will be leaked. To fix this by calling kset_put() so
+that the name will be freed in callback function kobject_cleanup() and
+kset will be freed in kset_release().
 
-> Hi Andrew,
-> 
-> On 10/17/22 7:29 AM, Andrew Morton via Ocfs2-devel wrote:
-> > On Thu, 26 Aug 2021 13:56:16 +0800 Gang He <ghe@suse.com> wrote:
-> > 
-> >> So, I will send a new patch to fix this deadlock problem via dlmglue layer.
-> >> For this patch, I want to change the patch comments as a reflink 
-> >> improvement patch.
-> > 
-> > Did this ever happen?  I've been sitting on this patch for ages.
-> > 
-> Looked back this thread, the root cause of deadlock seems to be the
-> asynchronous of fsdlm handling. So this is not a right fix.
-> While for the performance improvement, I need some test data as well.
+unreferenced object 0xffff888103cc8c08 (size 8):
+  comm "modprobe", pid 508, jiffies 4294915182 (age 120.020s)
+  hex dump (first 8 bytes):
+    62 79 5f 6e 61 6d 65 00                          by_name.
+  backtrace:
+    [<00000000572f97f9>] __kmalloc_track_caller+0x1ae/0x320
+    [<00000000a167a5cc>] kstrdup+0x3a/0x70
+    [<000000001cd0d05e>] kstrdup_const+0x68/0x80
+    [<00000000b9101e6d>] kvasprintf_const+0x10b/0x190
+    [<0000000088f2b8df>] kobject_set_name_vargs+0x56/0x150
+    [<000000003f8aca68>] kobject_set_name+0xab/0xe0
+    [<00000000249f7816>] kset_create_and_add+0x72/0x200
 
-OK, thanks, I dropped the patch.
+Fixes: b727c702896f ("kset: add kset_create_and_add function")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ lib/kobject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/kobject.c b/lib/kobject.c
+index a0b2dbfcfa23..f5e943c9027b 100644
+--- a/lib/kobject.c
++++ b/lib/kobject.c
+@@ -982,7 +982,7 @@ struct kset *kset_create_and_add(const char *name,
+ 		return NULL;
+ 	error = kset_register(kset);
+ 	if (error) {
+-		kfree(kset);
++		kset_put(kset);
+ 		return NULL;
+ 	}
+ 	return kset;
+-- 
+2.25.1
+
