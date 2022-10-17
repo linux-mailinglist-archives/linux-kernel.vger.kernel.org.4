@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89FB6010BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DEB6010BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiJQOEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S230201AbiJQOFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJQOEp (ORCPT
+        with ESMTP id S229939AbiJQOFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:04:45 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9425BDF59;
-        Mon, 17 Oct 2022 07:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GbXz7tq7NKssUrzdAXnhJuuFnjt3brcW7Q8fQGb47u4=; b=eM47RKzF0IQwdt7hI0PEPj+40X
-        caFLkkwVlwn5ckZgsjsUTCxLDHhGJF8xxp14yF4RilkN1gu3siZsXclb2GYrTdJi6w5EpqMz9tJQG
-        91MLbhlIuBF9QNbj1ALRdyF5i44Clj48UPwEWKotTmIC6yGv2ckeS/OmqatBQ47zIFNLyhX2J7mMh
-        GIg4UsmFp+0q1KpPCdUI3T2UhZsS/orgALxmq79TNa5b3g8tdfYwOcxoZcQjBVsXB78ZIOuUDdZwf
-        /yrRFzXCLpviiaNU480fL+nNnu9B8/HFEPFo3xYRcc/csY+e5PB7ZHSoCxG8kNtHOPWszDFqvfJHi
-        QazzIumQ==;
-Received: from [179.113.159.85] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1okQjQ-000ONG-2j; Mon, 17 Oct 2022 16:04:39 +0200
-Message-ID: <4fb9381a-72f3-4ef0-fca5-05f3a06c64f4@igalia.com>
-Date:   Mon, 17 Oct 2022 11:04:14 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH V3 07/11] notifiers: Add tracepoints to the notifiers
- infrastructure
-Content-Language: en-US
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Arjan van de Ven <arjan@linux.intel.com>
-Cc:     pmladek@suse.com, bhe@redhat.com, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, xuqiang36@huawei.com,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        kexec@lists.infradead.org
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-8-gpiccoli@igalia.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220819221731.480795-8-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Mon, 17 Oct 2022 10:05:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4231F642E5;
+        Mon, 17 Oct 2022 07:05:41 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 63C8933E5B;
+        Mon, 17 Oct 2022 14:05:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666015539; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc;
+        bh=4RoB3f0vV4gaiUdmvAQjE8R89ohmE3TBwvo8Cf6CUMw=;
+        b=q55ootJXzdR2lPOdq1dB9ZSp7j6b15mg3Lw8s3RAZ+DwJxUIeS5YYR21u3+nnKVDgzw370
+        +CTo0c7tGuamLaUM/O6/t/N4wVFUPh4c19XTlNupX99hIIGfAx9hJwnAb8MCJUXfC5A4RB
+        RhvnXxt9rc2gjmxxMwhF/YAjgG6Zsc0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666015539;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc;
+        bh=4RoB3f0vV4gaiUdmvAQjE8R89ohmE3TBwvo8Cf6CUMw=;
+        b=Pk4p2wYEQA+ZbvQ/zK2DQi5R3rbXOCC2ktHOsJKq17zGUDlBxj7ubmmF/+Z3rov/oQmS3g
+        Po+DIOOg8qibVZCQ==
+Received: from lion.mk-sys.cz (unknown [10.163.29.118])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 557A22C141;
+        Mon, 17 Oct 2022 14:05:39 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id CC46F6043B; Mon, 17 Oct 2022 16:05:33 +0200 (CEST)
+From:   Michal Kubecek <mkubecek@suse.cz>
+Subject: [PATCH] scsi: mpi3mr: add explicit dependency on
+ CONFIG_SCSI_SAS_ATTRS
+To:     mpi3mr-linuxdrv.pdl@broadcom.com,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20221017140533.CC46F6043B@lion.mk-sys.cz>
+Date:   Mon, 17 Oct 2022 16:05:33 +0200 (CEST)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
-> Currently there is no way to show the callback names for registered,
-> unregistered or executed notifiers. This is very useful for debug
-> purposes, hence add this functionality here in the form of notifiers'
-> tracepoints, one per operation.
-> 
-> Cc: Arjan van de Ven <arjan@linux.intel.com>
-> Cc: Cong Wang <xiyou.wangcong@gmail.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Xiaoming Ni <nixiaoming@huawei.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> ---
-> 
-> V3:
-> - Yet another major change - thanks to Arjan's great suggestion,
-> refactored the code to make use of tracepoints instead of guarding
-> the output with a Kconfig debug setting.
-> 
-> V2:
-> - Major improvement thanks to the great idea from Xiaoming - changed
-> all the ksym wheel reinvention to printk %ps modifier;
-> 
-> - Instead of ifdefs, using IS_ENABLED() - thanks Steven.
-> 
-> - Removed an unlikely() hint on debug path.
-> 
+Starting with commit 42fc9fee116f ("scsi: mpi3mr: Add helper functions to
+manage device's port"), kernel configured with CONFIG_SCSI_MPI3MR=m and
+CONFIG_SCSI_SAS_ATTRS=n fails to build because modpost cannot find symbols
+used in mpi3mr_transport.c:
 
-Hi Arjan / all, apologies for the re-ping.
-Did you have a chance to take a look in this one, is there anything else
-I could improve?
+  ERROR: modpost: "sas_port_alloc_num" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
+  ERROR: modpost: "sas_remove_host" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
+  ERROR: modpost: "sas_phy_alloc" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
+  ERROR: modpost: "sas_phy_free" [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
+  ...
 
-Thanks in advance,
+Add an explicit dependency of CONFIG_SCSI_MPI3MR on CONFIG_SCSI_SAS_ATTRS
+to prevent inconsistent configs.
 
+Fixes: 42fc9fee116f ("scsi: mpi3mr: Add helper functions to manage device's port")
+Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+---
+ drivers/scsi/mpi3mr/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Guilherme
+diff --git a/drivers/scsi/mpi3mr/Kconfig b/drivers/scsi/mpi3mr/Kconfig
+index 8997531940c2..8ada8e8d25ac 100644
+--- a/drivers/scsi/mpi3mr/Kconfig
++++ b/drivers/scsi/mpi3mr/Kconfig
+@@ -2,7 +2,7 @@
+ 
+ config SCSI_MPI3MR
+ 	tristate "Broadcom MPI3 Storage Controller Device Driver"
+-	depends on PCI && SCSI
++	depends on PCI && SCSI && SCSI_SAS_ATTRS
+ 	select BLK_DEV_BSGLIB
+ 	help
+ 	MPI3 based Storage & RAID Controllers Driver.
+-- 
+2.38.0
+
