@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C601660192C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE835601930
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiJQUQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
+        id S231236AbiJQUQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiJQUQJ (ORCPT
+        with ESMTP id S231207AbiJQUQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:16:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C172D4F193;
-        Mon, 17 Oct 2022 13:15:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A346125E;
-        Mon, 17 Oct 2022 20:14:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACE8C433D6;
-        Mon, 17 Oct 2022 20:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666037645;
-        bh=fv8LcVgLmvJ3fsy6a+z06fkZwSDK7CSRoZb3xPTfeO8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=F1bwEppZHzPyGGsS2pppvRC09r4ZMo7HWar1tH7wUXaByRZVRhx1ZCs4bEax7Y0pf
-         r7N8sNd5VQX5IB8M9rKKjMRS5qo4A8NiEZgzfiqzate+UE0GX3/bjk8tlZNMShdz/S
-         MJY6JABMRnP9vV3nRYtHmsLnQlDcVkCEYsfbQ3YKTRyp0Aa7tRXFOiXDKKrxZd6p+/
-         o0f+JKwHPDAWbtVKs7G534YaNPQnI8NThVrdljt2VjZGYZ9MrGxlxpQo4tLvwZPgbo
-         ZE/N8PMLbFwGw7KWltwgEAgGymp5zp4ykrgUt7LU//Y6dPxpWV0VZYVebjhTRW2GH7
-         eBIiCzD+EVGNA==
-Received: by mail-lf1-f52.google.com with SMTP id b2so19277515lfp.6;
-        Mon, 17 Oct 2022 13:14:05 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3qUcqim8dZKh5zxBnwS1F7KldX+RiO3Pa4ItcVGY4YB8SHTT1S
-        iWEkDQEYSftIha+gcKLWkbIg7qxObqxxv1ATIyU=
-X-Google-Smtp-Source: AMsMyM4fxm/vhiCKENBxbsUccQii5PYdkgAJ9zmEt4HisJJ+xMwA2uDfYLOSDI+xwYyc9izXrZkfd6Zp716BdC0NpU0=
-X-Received: by 2002:a05:6512:3119:b0:4a2:d749:ff82 with SMTP id
- n25-20020a056512311900b004a2d749ff82mr4790631lfb.637.1666037643562; Mon, 17
- Oct 2022 13:14:03 -0700 (PDT)
+        Mon, 17 Oct 2022 16:16:19 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF13D13F1C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:15:28 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id o22so7400060qkl.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3hFR/JKuZ224C1tzOZjwuzfHyBFmtfdzMfvcxSPRjbQ=;
+        b=VE7guqGIMqTuXk335bohHdtRCqXAbmWg+6R4hdeueCxnywSVbiaUbTt3HiU0yZd98T
+         aYU5U+Ou88iOou8HVpEB9gzROMfdf1JkSJJBSv9p1+/ZX9sJcZV7XvG/7oSflTjTWxQj
+         KR07CkK5BHfsc/1TXEsBCeo4WrJNEImWo1byP8IwTGQx3w6WO5Yo7IXLlCE6Ct2LUhHM
+         R/HGLlUpNUmA849i8BnYbN+q24XSbogzIGps2H6yn2gT7KoxcSxvTEoh6gmN/dlbWAUa
+         svyCF5cmNx4J2QJ2kWZJb8wn3vLJKhU1FQWlFIwhtZwTvhujuts7Ev/I7PwJKOBe/QwI
+         9fmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3hFR/JKuZ224C1tzOZjwuzfHyBFmtfdzMfvcxSPRjbQ=;
+        b=hZEagJUmHtQ46HaCx84J6jj2IyTxCAlr0FUqawoGWeeJ7wHff8on9YlAjbGPc2N6dR
+         gAilofPRSiJnmlvu893eqI/G727j00ivlI5Sg4A9fsgJRu5D/gn+kg+goVjMCp9UpbbY
+         6lzf4Q+R7xEc1Aeks17uBdXW1I66wgp5lUnRXnLBhROblhKsw+UhM3k2Uc8fa5TNJZ9U
+         egRnTFnwJzeV1CkmSO1FoJOKGSGerChzcyIAqTkmubi/VtVP990UMWLNR+WxUf1/9BNK
+         YFzXVPuEW0nq3JmwXCkFjbShzfa8UBpcEtnRfSpuyqMxeOQ9XYUk+TjzqkXXQ+3YtkHd
+         ppjA==
+X-Gm-Message-State: ACrzQf1NLDdaq9wwKMhmqFyYWXZ3TP1JiUqLMamBWdoOuAPWx9zPPreW
+        swlpL8RZczM3TFspAwKRr4kpPg==
+X-Google-Smtp-Source: AMsMyM6hKTj8N78SpstCP8ItrkFlrR+UIDFZexsd8+/YfceyQ65yGg4jBiZVbiTxImsak4+Kij5bxA==
+X-Received: by 2002:ae9:ea03:0:b0:6e0:ca9c:e795 with SMTP id f3-20020ae9ea03000000b006e0ca9ce795mr8923285qkg.168.1666037681995;
+        Mon, 17 Oct 2022 13:14:41 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id u24-20020a37ab18000000b006bb83c2be40sm556712qke.59.2022.10.17.13.14.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 13:14:41 -0700 (PDT)
+Message-ID: <279324eb-fc1f-4d1a-b1c2-d8cf64809e1f@linaro.org>
+Date:   Mon, 17 Oct 2022 16:14:39 -0400
 MIME-Version: 1.0
-References: <20221006234138.1835739-1-keescook@chromium.org>
- <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com> <202210171100.5BAC4A5CC8@keescook>
- <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
- <202210171227.35ED875219@keescook> <CAMj1kXEJQ8gh-iXZNL8bNcmV=JCmKHNp5BnhYthhSOyR5h79_g@mail.gmail.com>
- <202210171237.DF5D4A3FD7@keescook> <CAMj1kXGmsJNg7En-55aRF+ApicPD_Opkh8Jw+oTorSOSO+cfuw@mail.gmail.com>
- <202210171307.32A5D9C07@keescook>
-In-Reply-To: <202210171307.32A5D9C07@keescook>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 17 Oct 2022 22:13:52 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHced1khwsrHqMUmECh_7irYOckFd+Sx3z9KSmsL7tPxw@mail.gmail.com>
-Message-ID: <CAMj1kXHced1khwsrHqMUmECh_7irYOckFd+Sx3z9KSmsL7tPxw@mail.gmail.com>
-Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3] arm64: dts: qcom: pmi8998: add rradc node
+Content-Language: en-US
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+References: <20221017190902.2282899-1-caleb.connolly@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221017190902.2282899-1-caleb.connolly@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +79,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 at 22:11, Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Oct 17, 2022 at 09:45:08PM +0200, Ard Biesheuvel wrote:
-> > On Mon, 17 Oct 2022 at 21:40, Kees Cook <keescook@chromium.org> wrote:
-> > > Okay, so strictly speaking, eliminating the per-CPU allocation is an
-> > > improvement. Keeping scomp and doing in-place compression will let
-> > > pstore use "any" compressions method.
-> >
-> > I'm not following the point you are making here.
->
-> Sorry, I mean to say that if I leave scomp in pstore, nothing is "worse"
-> (i.e. the per-cpu allocation is present in both scomp and acomp). i.e.
-> no regression either way, but if we switch to a distinct library call,
-> it's an improvement on the memory utilization front.
->
-> > > Is there a crypto API that does _not_ preallocate the per-CPU stuff?
-> > > Because, as you say, it's a huge amount of memory on the bigger
-> > > systems...
-> >
-> > The library interface for each of the respective algorithms.
->
-> Where is the crypto API for just using the library interfaces, so I
-> don't have to be tied to a specific algo?
->
+On 17/10/2022 15:09, Caleb Connolly wrote:
+> Add a DT node for the Round Robin ADC found in the PMI8998 PMIC.
+> 
+> The RRADC reports PMIC die and skin temperatures, as well as
+> battery/charger thermals. It also reports USB and DC charger voltage and
+> current measurements.
+> 
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+> This patch introduces a new dtbs_check warning which will be fixed by
+> https://lore.kernel.org/linux-arm-msm/20221017185105.2279129-1-caleb.connolly@linaro.org/
+> 
+> V2: https://lore.kernel.org/linux-arm-msm/20221017185609.2280067-1-caleb.connolly@linaro.org/
+> Changes since v2:
+>  * Remove 'status = "okay";'
+> 
+> V1:
+> https://lore.kernel.org/linux-arm-msm/20221016180330.1912214-1-caleb.connolly@linaro.org/
+> Changes since v1:
+>  * Change node name from adc@ to rradc@, see linked patch
+>  * Enable the RRADC by default, rather than per-device 
+> ---
+>  arch/arm64/boot/dts/qcom/pmi8998.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/pmi8998.dtsi b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+> index 6d3d212560c1..08c9ec2cafa6 100644
+> --- a/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+> @@ -18,6 +18,12 @@ pmi8998_gpio: gpios@c000 {
+>  			interrupt-controller;
+>  			#interrupt-cells = <2>;
+>  		};
+> +
+> +		pmi8998_rradc: rradc@4500 {
 
-That doesn't exist, that is the point.
+No, generic node names so adc. Please do not send DTS patches separate
+from the bindings.
 
-But how does the algo matter when you are dealing with mere kilobytes
-of ASCII text?
+Best regards,
+Krzysztof
+
