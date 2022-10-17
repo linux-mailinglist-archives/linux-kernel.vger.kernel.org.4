@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E39601AE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4BB601AF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJQVFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S230499AbiJQVGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiJQVFr (ORCPT
+        with ESMTP id S231189AbiJQVGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:05:47 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA4CB86;
-        Mon, 17 Oct 2022 14:05:46 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id de14so8177223qvb.5;
-        Mon, 17 Oct 2022 14:05:46 -0700 (PDT)
+        Mon, 17 Oct 2022 17:06:34 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B327A79A59
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 14:06:23 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so10909380wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 14:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZIfFpGkauhTnKeNqdjUDkdgeHP4CsD1t9wtzFiEz+CU=;
-        b=UuDRoaumXWTrg9S3NA7ybnCHXcyLC/hJ3DMzxjh8IKOjFGe5Xb8zu7ExcjZZRqtR8Q
-         ORbj+pIQfO4VPD73ZN18AsNJBT1/Yz63PQ0o99x/OehaFWlLbdXSbS01Qfhn1b5hYm+i
-         83dCPbg/1W3S2yPnOZoAdJpA5BcGQj3uocIrpBNHG/LU4QsXTIRmj3CbWe4uuLigKptu
-         vGLv+wHijyLJKYnh2g110aLSM61nS59Meq2wqAlHcFcq2SNFA3xibZkBDYXTGv4Sjv0p
-         c4T9xVJ/pLsooS9jPLRk+jKk2OMwpX4Iu56mjBvxrFqhz466rCyMJeGUA5aOK94JiuVy
-         o5WA==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ny9S84ddMU/C3tkLJNxlEIFlBnKSkg7GhMCarBjMO4Q=;
+        b=QlTlQ0/Gn+KJSTCePByReUXYSh/U0B4FRFME4WIA6QXwUPH+oMXWtbKdMueJ2F9N8i
+         UFvPp5gZhswevOSeG/3xinkO/wBwalFH/8vdhqDu42/o9B6KqawED2AIA7kB0VVAmKFH
+         Sgw1bceGoRnG+C5wLhBaBWO9YI+FhEbwd8sKyn/TKWQKDioYUPdsWVTVcjEVSWLYj61j
+         yNDJaXQ57YW5v0iqXIAABEghuroeKbBQ/wFPppeCXsJY4ZBCVrtHdUTsRGAnTJpsaiaU
+         dxao9aDjAK9HuE2xwShYxiuxsVyQaxbWhsdwMpU4DJrqg70j+qLhTZkc3QS8efmsviwW
+         /sxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZIfFpGkauhTnKeNqdjUDkdgeHP4CsD1t9wtzFiEz+CU=;
-        b=FLL0LEc6aEemI7ypbKVK7N0mt+btUMy6SYXiqF3aEZBsC7oEgCYgRvazofRX0OetRq
-         3f+Wv0TdmLPbuEIkpdeeVYSIf7LZOVOTiLi4fpiMvitkZYcSRNr9raaVAXOGdLB+7FiB
-         PU7y+9a1IQYkwU9U1CfwYxz+KQiPgoodz8iO1NXC8HEpxGADFSJIHJFq3y9k6WS+tawb
-         g7Tk6qDvlsvu/yZDAF0snjLd5FY53jXvpI0RwimCDFQziggEaRR2NCMUv4bDD7lpKae7
-         SCEVhuScEjXyWDrcrlR8kTPiuu0pj7ns+iOaPFQ6J78dXBtukxDIGJBLVBZn+A0XTQZ/
-         fsQA==
-X-Gm-Message-State: ACrzQf2r/tflRzkiOR5YT8dNQ6omSNZC2gf0gXn5IbiJihOtA6ehRKKi
-        T3HgXw6yWopwRKPWYkXi2YY=
-X-Google-Smtp-Source: AMsMyM4wH5J2caEt2m0PMGuip+PiSZqV+n8bn35+4ItyjNaEpFF96V8nD/vWawF0cLl9aOc/gRcYXA==
-X-Received: by 2002:a05:6214:1c0c:b0:4b1:d2fe:7ad4 with SMTP id u12-20020a0562141c0c00b004b1d2fe7ad4mr9947091qvc.128.1666040745855;
-        Mon, 17 Oct 2022 14:05:45 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j5-20020ac874c5000000b0039ccd7a0e10sm553055qtr.62.2022.10.17.14.05.43
+        bh=Ny9S84ddMU/C3tkLJNxlEIFlBnKSkg7GhMCarBjMO4Q=;
+        b=sXxTlYHPOnul+UKVP5ft9y23WbHVIBcSnVeR9XxqV/M+XrDLIu8lmbGJOWHSI2J77w
+         j3doneor543C6nVMnX7I9yJhGl0S32PekjFnB7+bVgD3KQCCtaWZ6X7ovb0znp5A6BeE
+         Wnvdpk5Z3jMGk4ROUabsgNXh91h8bReR/KN9obrJxRaAoUCtN7/WzhkY02yF3rysR87x
+         tFnqE2ZCCtcIdByO/yXJ7qsVpdB25zY71zUk0+xuz1Iy1SnhwXe6HLLIpBIyTj1R0pt3
+         Pggkai5yNWct5e4KTfIIGynzGTCiI06jDiLVC2wHba+4ldOX9DewLqL1VE7s9Y2EhD4h
+         3kDg==
+X-Gm-Message-State: ACrzQf0VXUZprVgct9EggsUj6SmAkLm5BY+J7yleKeVcqSUvmKtKGeRW
+        pByD2uDHOSFaVYXoe/fPnyw=
+X-Google-Smtp-Source: AMsMyM4XdCoQpXejZXuEi4kxewPjDf//Qgwvgno6/Vza+YHole7Od6uFXjHHZOLzidb9HSq2V6ROww==
+X-Received: by 2002:a05:600c:4e51:b0:3c0:55e0:7719 with SMTP id e17-20020a05600c4e5100b003c055e07719mr8919840wmq.3.1666040781142;
+        Mon, 17 Oct 2022 14:06:21 -0700 (PDT)
+Received: from [192.168.1.104] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id h21-20020a05600c499500b003c4ecff4e25sm11058305wmp.9.2022.10.17.14.06.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 14:05:45 -0700 (PDT)
-Message-ID: <81528485-fa80-55ab-16ce-84de520f5262@gmail.com>
-Date:   Mon, 17 Oct 2022 14:05:42 -0700
+        Mon, 17 Oct 2022 14:06:20 -0700 (PDT)
+Message-ID: <da0daaa7-8e2c-103e-0261-8685739e297d@gmail.com>
+Date:   Mon, 17 Oct 2022 23:06:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] usb: bdc: change state when port disconnected
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Subject: Re: [PATCH v1 0/4] staging: r8188eu: trivial code cleanup patches
+To:     Deepak R Varma <drv@mailo.com>, outreachy@lists.linux.dev,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        paskripkin@gmail.com, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+References: <cover.1666021212.git.drv@mailo.com>
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>, justinpopo6@gmail.com
-Cc:     alcooperx@gmail.com, balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com
-References: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
- <Y0Gax8SUoq59hdoF@kroah.com> <f0706380-94f9-ed7d-1033-8da51aab6b01@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <f0706380-94f9-ed7d-1033-8da51aab6b01@gmail.com>
+In-Reply-To: <cover.1666021212.git.drv@mailo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,35 +77,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 07:58, Florian Fainelli wrote:
+On 10/17/22 17:56, Deepak R Varma wrote:
+> Address different kinds of checkpatch complains for the staging/r8188eu module.
+> The patches are required to be applied in sequence.
+> 
+> Changes in v1:
+>     1. Improve language / grammar for the patch descriptions
+>     2. Further improve code reformatting
+> 
+> Deepak R Varma (4):
+>    staging: r8188eu: use Linux kernel variable naming convention
+>    staging: r8188eu: reformat long computation lines
+>    staging: r8188eu: remove {} for single statement blocks
+>    staging: r8188eu: use htons macro instead of __constant_htons
+> 
+>   drivers/staging/r8188eu/core/rtw_br_ext.c | 122 +++++++++++-----------
+>   1 file changed, 62 insertions(+), 60 deletions(-)
+> 
+> --
+> 2.30.2
 > 
 > 
-> On 10/8/2022 8:44 AM, Greg KH wrote:
->> On Wed, Oct 05, 2022 at 12:13:55PM -0700, justinpopo6@gmail.com wrote:
->>> From: Justin Chen <justinpopo6@gmail.com>
->>>
->>> When port is connected and then disconnected, the state stays as
->>> configured. Which is incorrect as the port is no longer configured,
->>> but in a not attached state.
->>>
->>> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
->>> ---
->>>   drivers/usb/gadget/udc/bdc/bdc_udc.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>
->> What commit id does this fix?  Should it go to older kernels?  If so,
->> how far back?
 > 
-> This would be:
 > 
-> Fixes: efed421a94e6 ("usb: gadget: Add UDC driver for Broadcom USB3.0 
-> device controller IP BDC")
-> 
-> that issue was present since the driver was included in Linux with the 
-> commit above, we did not really consider it to be a serious enough bug, 
-> but I suppose it would not hurt to affix the said Fixes tag.
 
-Greg, are you picking up the patch as-is, or do you need Justin to 
-resusbmit with the Fixes: tag added?
--- 
-Florian
+I think this patch series should be v2 as the first one was a v1. The 
+next one should be the v3.
+
+Please do variable changes driver wide and not only limited to a file.
+Example:
+This line contains the old variable:
+void *scdb_findEntry(struct adapter *priv, unsigned char *ipAddr);
+
+But in this line you have already changed ip_addr.
+void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
+{
+	unsigned char network_addr[MAX_NETWORK_ADDR_LEN];
+	struct nat25_network_db_entry *db;
+	int hash;
+...
+
+
+Please change all networkAddr and not only some.
+
+Is it possible to changing __constant_htons as well in the entire driver?
+
+Driver can be applied and compiled.
+Tested device.
+
+Thanks
+
+Bye Philipp
+
+
