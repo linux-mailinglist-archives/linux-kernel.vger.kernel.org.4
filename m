@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542696011E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD73B6011DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiJQO4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S231388AbiJQO4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiJQOyX (ORCPT
+        with ESMTP id S231174AbiJQOyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:54:23 -0400
+        Mon, 17 Oct 2022 10:54:15 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A331691B1;
-        Mon, 17 Oct 2022 07:54:06 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:54:03 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A475E696C7;
+        Mon, 17 Oct 2022 07:54:07 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 14:54:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018444;
+        s=2020; t=1666018445;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=nbufag0Oxh8t4N22hMXgny4zYLzoPkeRtte1uCCr7E8=;
-        b=Z971YmX3OysIeFmTRjTtxJLSWz1C2ICWUHPqCBrDu9zCdqTJiLjiV/fyjX53gDweiWchLC
-        oERJ/bkuI82LTbC8rgyqhqF+REZfWLJmZKITxChLmJDsY0Nkphb2aUgbaQH0nSezk1LyZ/
-        6hDIKhDDy6wqfAnKEbjo+/0o2b7u+nYp5z17WcgJV0VIQkvRsKQyf2UplbIv81D8LuuZT6
-        ymZ5MLS9MMABEFSDl+XTo8w//49I6bLiNDFRZZKHwFB9b8liFoIxqa3OByzvDpXRiNtPIs
-        jSxAYJBSkkMZs5OD1O3l1/y9iDgkSqKTMKPAuM1iKAEhC2583kbsfWGcNNC+IQ==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jHQlVXUTl5Uvj2rpEUA7h6spp5oD8taVEACtfEok5pU=;
+        b=w5ZmrZJf+o5YGab7xXK2VLL1RssGlF5f3+lyXeOslHawe2iw8narTVSnvjaQ12epdPgF0o
+        4WrP2A3KbOJY6YSpmXFhLVSsyOX/8EvGiWKsAblBywe1ypwvPdmUYJMCUvL+EaMTf1hDw9
+        s15JYHciKJdR8LbvlO9YIvFuAp18YZGNcRUTc79JGq/oYov5kwAsLDzWj2ICHKRaHWyVkq
+        KgoAhwFVpIysZwthQ2E3Das7X20e/bLZgTcJnUzQrhQfi3aFIFRdzOlIlVzCXN+DjO9Lgn
+        4MXZ7/vzuLvEVYdByvOfvrDo0Gfatrw4SPvdZCO6C75Gt9AxiJjjvZ3e0qlQ+Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018444;
+        s=2020e; t=1666018445;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=nbufag0Oxh8t4N22hMXgny4zYLzoPkeRtte1uCCr7E8=;
-        b=5n9nRA3AYeqR4SXK0gniq+yXvw2lxONUc6RdCl9Ud8/2imxXbqk630oI+2eOU8UpuTLmON
-        5zOchXrr5+qsIHCw==
-From:   "tip-bot2 for Peter Zijlstra (Intel)" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jHQlVXUTl5Uvj2rpEUA7h6spp5oD8taVEACtfEok5pU=;
+        b=W1PuyEFT2sGDNdFmfqDimBYsGXnFgoG3n8W7PrG3I1RVSnN+VomGTwrAECkgT92aDROCUo
+        rlb0Hboe9ABWloAg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86: Fixup asm-offsets duplicate
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: x86/core] x86/softirq: Move softirq pending next to current task
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20220915111145.702133710@infradead.org>
+References: <20220915111145.702133710@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601844328.401.13651658545984215013.tip-bot2@tip-bot2>
+Message-ID: <166601844447.401.2279136685209842168.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,48 +66,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     5b71ac8a2a3185da34a6556e791b533b48183a41
-Gitweb:        https://git.kernel.org/tip/5b71ac8a2a3185da34a6556e791b533b48183a41
-Author:        Peter Zijlstra (Intel) <peterz@infradead.org>
-AuthorDate:    Mon, 17 Oct 2022 16:41:06 +02:00
+Commit-ID:     7fcecafebed90d03f35bec6e147fc0b5f6e1bc71
+Gitweb:        https://git.kernel.org/tip/7fcecafebed90d03f35bec6e147fc0b5f6e1bc71
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 15 Sep 2022 13:11:06 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 17 Oct 2022 16:41:06 +02:00
+CommitterDate: Mon, 17 Oct 2022 16:41:05 +02:00
 
-x86: Fixup asm-offsets duplicate
+x86/softirq: Move softirq pending next to current task
 
-It turns out that 'stack_canary_offset' is a variable name; shadowing
-that with a #define is ripe of fail when the asm-offsets.h header gets
-included. Rename the thing.
+Another hot variable which is strict per CPU and benefits from
+being in the same cache line.
 
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220915111145.702133710@infradead.org
 ---
- arch/x86/entry/entry_64.S        | 2 +-
- arch/x86/kernel/asm-offsets_64.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/current.h | 1 +
+ arch/x86/include/asm/hardirq.h | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 9249a45..5c578a7 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -252,7 +252,7 @@ SYM_FUNC_START(__switch_to_asm)
+diff --git a/arch/x86/include/asm/current.h b/arch/x86/include/asm/current.h
+index ac3090d..b89aba0 100644
+--- a/arch/x86/include/asm/current.h
++++ b/arch/x86/include/asm/current.h
+@@ -19,6 +19,7 @@ struct pcpu_hot {
+ 			int			cpu_number;
+ 			unsigned long		top_of_stack;
+ 			void			*hardirq_stack_ptr;
++			u16			softirq_pending;
+ #ifdef CONFIG_X86_64
+ 			bool			hardirq_stack_inuse;
+ #else
+diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardirq.h
+index 275e7fd..66837b8 100644
+--- a/arch/x86/include/asm/hardirq.h
++++ b/arch/x86/include/asm/hardirq.h
+@@ -3,9 +3,9 @@
+ #define _ASM_X86_HARDIRQ_H
  
- #ifdef CONFIG_STACKPROTECTOR
- 	movq	TASK_stack_canary(%rsi), %rbx
--	movq	%rbx, PER_CPU_VAR(fixed_percpu_data) + stack_canary_offset
-+	movq	%rbx, PER_CPU_VAR(fixed_percpu_data) + FIXED_stack_canary
+ #include <linux/threads.h>
++#include <asm/current.h>
+ 
+ typedef struct {
+-	u16	     __softirq_pending;
+ #if IS_ENABLED(CONFIG_KVM_INTEL)
+ 	u8	     kvm_cpu_l1tf_flush_l1d;
  #endif
+@@ -60,6 +60,7 @@ extern u64 arch_irq_stat_cpu(unsigned int cpu);
+ extern u64 arch_irq_stat(void);
+ #define arch_irq_stat		arch_irq_stat
  
- 	/*
-diff --git a/arch/x86/kernel/asm-offsets_64.c b/arch/x86/kernel/asm-offsets_64.c
-index 9b69821..bb65371 100644
---- a/arch/x86/kernel/asm-offsets_64.c
-+++ b/arch/x86/kernel/asm-offsets_64.c
-@@ -57,7 +57,7 @@ int main(void)
- 	BLANK();
++#define local_softirq_pending_ref       pcpu_hot.softirq_pending
  
- #ifdef CONFIG_STACKPROTECTOR
--	DEFINE(stack_canary_offset, offsetof(struct fixed_percpu_data, stack_canary));
-+	OFFSET(FIXED_stack_canary, fixed_percpu_data, stack_canary);
- 	BLANK();
- #endif
- 	return 0;
+ #if IS_ENABLED(CONFIG_KVM_INTEL)
+ static inline void kvm_set_cpu_l1tf_flush_l1d(void)
