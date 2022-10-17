@@ -2,249 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF26600C30
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCD0600C39
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiJQKUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S229912AbiJQKVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiJQKTz (ORCPT
+        with ESMTP id S229949AbiJQKVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:19:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B82BCD7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:19:52 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29H9ewKl003038;
-        Mon, 17 Oct 2022 10:19:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=dmZBp72BObwzux6XUcIUXsQzYtGpYSVgqAA7PqIgxqQ=;
- b=WSYA/P4QSTK1BCHWP00Nmo48pFmt2u2/M4hEmgEIThiJnMwHceiZwr2KgiCAjne56FlY
- VZAThC1lViSt9SFwBJyqyZ991rq6wbpErnVx0OKPTTsIPysrmvtDFtJ78/6/xcRAeUB7
- ZnOUe6GUAt0US8DNXYdTxwoH3LVKmapIR6Aio15HbsmLFpmQL70HkIudu0b4m0Qd6XRZ
- HBSb9e71iU+/BiUNgAbbDUPJkviq/wKdBU7+89QwCb3mZdcbkX5BelmtsXOA3odAjvDY
- gLjgqCpcAl90+4FEq7g7gFXT6MMxQySRYGoRAyc55a94wygBIH9ndSLzQrQQY/nk7oVy IQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86g5vedg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Oct 2022 10:19:47 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29HA74ux001742;
-        Mon, 17 Oct 2022 10:19:45 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k7mg92sd3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Oct 2022 10:19:45 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29HAJgJx328204
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Oct 2022 10:19:42 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA7BB11C050;
-        Mon, 17 Oct 2022 10:19:42 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9134211C052;
-        Mon, 17 Oct 2022 10:19:40 +0000 (GMT)
-Received: from li-NotSettable.ibm.com.com (unknown [9.43.71.171])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 17 Oct 2022 10:19:40 +0000 (GMT)
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Akanksha J N <akanksha@linux.vnet.ibm.com>
-Subject: [PATCH] selftests/ftrace: Add check for ping command for trigger tests
-Date:   Mon, 17 Oct 2022 15:49:27 +0530
-Message-Id: <20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 17 Oct 2022 06:21:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF11264A9;
+        Mon, 17 Oct 2022 03:21:10 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 10:21:06 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666002068;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7OFnb1CwwUjR9LEhTh6LTg09oHuQexdHt875Ki4GkPY=;
+        b=gvzSBLK8U9QLxl6UDIqJTPDdVWDxT/D/fcYRTy5s0qtomIoN1U+AvOhmHQQOwqTSHsLizz
+        woR+pqnofWq05Io/IZqQEdTauS4VAviLF+A1aqX/o1Y4ffeDRWPQccjWCDb2dDfvqkZBEH
+        FLiMmLbNhuXpToX0ZiB5KZDzsvEwqCCxhPgs4qvHNVPwbUDo+Gm60MK1GyCWK5M+JbKhj/
+        y0vTuEpaTxGO+YBm26VbdWGLAVQ6oKzIloJjNz6Jzo+S5isiL7V6itIAXle9nPRCyhJf7x
+        up6Vfgr65VB0B6NLuaJnkr3imb+FFEKnVzSDDA5NuY5vykOBIcl54CUxPQ07jw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666002068;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7OFnb1CwwUjR9LEhTh6LTg09oHuQexdHt875Ki4GkPY=;
+        b=CbLfT8i/MjaiO0SDqMw4lTJWjQSrnoBCvz+e6aWpZdT4CEcGPk0mbHz8EozA1EsVU+j13o
+        oq/TOG+6V4KvLABw==
+From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/paravirt] x86/paravirt: Remove clobber bitmask from
+ .parainstructions
+Cc:     Kees Cook <keescook@chromium.org>, Borislav Petkov <bp@suse.de>,
+        Juergen Gross <jgross@suse.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220903073706.3193746-1-keescook@chromium.org>
+References: <20220903073706.3193746-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: joe2s1_CkxAWn2U3P9EmzolNb7XBVr_H
-X-Proofpoint-ORIG-GUID: joe2s1_CkxAWn2U3P9EmzolNb7XBVr_H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-17_07,2022-10-17_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1011
- mlxlogscore=999 bulkscore=0 impostorscore=0 phishscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210170058
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166600206681.401.11468161497507618727.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All these tests depend on the ping command and will fail if it is not
-installed. Add an explicit check and mark the tests as unresolved if it
-isn't found.
+The following commit has been merged into the x86/paravirt branch of tip:
 
-Reported-by: Akanksha J N <akanksha@linux.vnet.ibm.com>
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Commit-ID:     00e8f7153bcdecc5c31e307c7c17fecf42308fc4
+Gitweb:        https://git.kernel.org/tip/00e8f7153bcdecc5c31e307c7c17fecf42308fc4
+Author:        Kees Cook <keescook@chromium.org>
+AuthorDate:    Sat, 03 Sep 2022 00:37:06 -07:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 17 Oct 2022 10:44:30 +02:00
+
+x86/paravirt: Remove clobber bitmask from .parainstructions
+
+The u16 "clobber" value is not used in .parainstructions since commit
+27876f3882fd ("x86/paravirt: Remove clobbers from struct paravirt_patch_site")
+
+Remove the u16 from the section macro, the argument from all macros, and
+all now-unused CLBR_* macros.
+
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Link: https://lore.kernel.org/r/20220903073706.3193746-1-keescook@chromium.org
 ---
- .../trigger/inter-event/trigger-field-variable-support.tc    | 5 +++++
- .../trigger/inter-event/trigger-inter-event-combined-hist.tc | 5 +++++
- .../trigger/inter-event/trigger-onchange-action-hist.tc      | 5 +++++
- .../trigger/inter-event/trigger-onmatch-action-hist.tc       | 5 +++++
- .../trigger/inter-event/trigger-onmatch-onmax-action-hist.tc | 5 +++++
- .../test.d/trigger/inter-event/trigger-onmax-action-hist.tc  | 5 +++++
- .../trigger/inter-event/trigger-snapshot-action-hist.tc      | 5 +++++
- .../trigger/inter-event/trigger-synthetic-event-dynstring.tc | 5 +++++
- .../test.d/trigger/inter-event/trigger-trace-action-hist.tc  | 5 +++++
- 9 files changed, 45 insertions(+)
+ arch/x86/include/asm/paravirt_types.h | 61 +++++---------------------
+ 1 file changed, 12 insertions(+), 49 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-index 41119e0440e960..b0969e6eed8375 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+index f3d6015..f72bf0f 100644
+--- a/arch/x86/include/asm/paravirt_types.h
++++ b/arch/x86/include/asm/paravirt_types.h
+@@ -2,37 +2,6 @@
+ #ifndef _ASM_X86_PARAVIRT_TYPES_H
+ #define _ASM_X86_PARAVIRT_TYPES_H
  
- echo "Test field variable support"
+-/* Bitmask of what can be clobbered: usually at least eax. */
+-#define CLBR_EAX  (1 << 0)
+-#define CLBR_ECX  (1 << 1)
+-#define CLBR_EDX  (1 << 2)
+-#define CLBR_EDI  (1 << 3)
+-
+-#ifdef CONFIG_X86_32
+-/* CLBR_ANY should match all regs platform has. For i386, that's just it */
+-#define CLBR_ANY  ((1 << 4) - 1)
+-
+-#define CLBR_ARG_REGS	(CLBR_EAX | CLBR_EDX | CLBR_ECX)
+-#define CLBR_RET_REG	(CLBR_EAX | CLBR_EDX)
+-#else
+-#define CLBR_RAX  CLBR_EAX
+-#define CLBR_RCX  CLBR_ECX
+-#define CLBR_RDX  CLBR_EDX
+-#define CLBR_RDI  CLBR_EDI
+-#define CLBR_RSI  (1 << 4)
+-#define CLBR_R8   (1 << 5)
+-#define CLBR_R9   (1 << 6)
+-#define CLBR_R10  (1 << 7)
+-#define CLBR_R11  (1 << 8)
+-
+-#define CLBR_ANY  ((1 << 9) - 1)
+-
+-#define CLBR_ARG_REGS	(CLBR_RDI | CLBR_RSI | CLBR_RDX | \
+-			 CLBR_RCX | CLBR_R8 | CLBR_R9)
+-#define CLBR_RET_REG	(CLBR_RAX)
+-
+-#endif /* X86_64 */
+-
+ #ifndef __ASSEMBLY__
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'wakeup_latency u64 lat; pid_t pid; int prio; char comm[16]' > synthetic_events
- echo 'hist:keys=comm:ts0=common_timestamp.usecs if comm=="ping"' > events/sched/sched_waking/trigger
- echo 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm) if next_comm=="ping"' > events/sched/sched_switch/trigger
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-index 9098f1e7433fd0..82875eab17f09f 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+ #include <asm/desc_defs.h>
+@@ -279,27 +248,23 @@ extern struct paravirt_patch_template pv_ops;
+ #define paravirt_type(op)				\
+ 	[paravirt_typenum] "i" (PARAVIRT_PATCH(op)),	\
+ 	[paravirt_opptr] "m" (pv_ops.op)
+-#define paravirt_clobber(clobber)		\
+-	[paravirt_clobber] "i" (clobber)
+-
+ /*
+  * Generate some code, and mark it as patchable by the
+  * apply_paravirt() alternate instruction patcher.
+  */
+-#define _paravirt_alt(insn_string, type, clobber)	\
++#define _paravirt_alt(insn_string, type)		\
+ 	"771:\n\t" insn_string "\n" "772:\n"		\
+ 	".pushsection .parainstructions,\"a\"\n"	\
+ 	_ASM_ALIGN "\n"					\
+ 	_ASM_PTR " 771b\n"				\
+ 	"  .byte " type "\n"				\
+ 	"  .byte 772b-771b\n"				\
+-	"  .short " clobber "\n"			\
+ 	_ASM_ALIGN "\n"					\
+ 	".popsection\n"
  
- echo "Test create synthetic event"
+ /* Generate patchable code, with the default asm parameters. */
+ #define paravirt_alt(insn_string)					\
+-	_paravirt_alt(insn_string, "%c[paravirt_typenum]", "%c[paravirt_clobber]")
++	_paravirt_alt(insn_string, "%c[paravirt_typenum]")
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'waking_latency  u64 lat pid_t pid' > synthetic_events
- if [ ! -d events/synthetic/waking_latency ]; then
-     fail "Failed to create waking_latency synthetic event"
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-index adaabb873ed4ab..84b3fb08cc1519 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+ /* Simple instruction patching code. */
+ #define NATIVE_LABEL(a,x,b) "\n\t.globl " a #x "_" #b "\n" a #x "_" #b ":\n\t"
+@@ -451,20 +416,19 @@ int paravirt_disable_iospace(void);
+ 	})
  
- echo "Test onchange action"
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> events/sched/sched_waking/trigger
+-#define ____PVOP_CALL(ret, op, clbr, call_clbr, extra_clbr, ...)	\
++#define ____PVOP_CALL(ret, op, call_clbr, extra_clbr, ...)	\
+ 	({								\
+ 		PVOP_CALL_ARGS;						\
+ 		PVOP_TEST_NULL(op);					\
+ 		asm volatile(paravirt_alt(PARAVIRT_CALL)		\
+ 			     : call_clbr, ASM_CALL_CONSTRAINT		\
+ 			     : paravirt_type(op),			\
+-			       paravirt_clobber(clbr),			\
+ 			       ##__VA_ARGS__				\
+ 			     : "memory", "cc" extra_clbr);		\
+ 		ret;							\
+ 	})
  
- ping $LOCALHOST -c 3
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
-index 20e39471052e9a..25866576b0bbe4 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+-#define ____PVOP_ALT_CALL(ret, op, alt, cond, clbr, call_clbr,		\
++#define ____PVOP_ALT_CALL(ret, op, alt, cond, call_clbr,		\
+ 			  extra_clbr, ...)				\
+ 	({								\
+ 		PVOP_CALL_ARGS;						\
+@@ -473,45 +437,44 @@ int paravirt_disable_iospace(void);
+ 					 alt, cond)			\
+ 			     : call_clbr, ASM_CALL_CONSTRAINT		\
+ 			     : paravirt_type(op),			\
+-			       paravirt_clobber(clbr),			\
+ 			       ##__VA_ARGS__				\
+ 			     : "memory", "cc" extra_clbr);		\
+ 		ret;							\
+ 	})
  
- echo "Test create synthetic event"
+ #define __PVOP_CALL(rettype, op, ...)					\
+-	____PVOP_CALL(PVOP_RETVAL(rettype), op, CLBR_ANY,		\
++	____PVOP_CALL(PVOP_RETVAL(rettype), op,				\
+ 		      PVOP_CALL_CLOBBERS, EXTRA_CLOBBERS, ##__VA_ARGS__)
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'wakeup_latency  u64 lat pid_t pid char comm[16]' > synthetic_events
- if [ ! -d events/synthetic/wakeup_latency ]; then
-     fail "Failed to create wakeup_latency synthetic event"
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
-index f4b03ab7c28714..3c4a4b11aa2421 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+ #define __PVOP_ALT_CALL(rettype, op, alt, cond, ...)			\
+-	____PVOP_ALT_CALL(PVOP_RETVAL(rettype), op, alt, cond, CLBR_ANY,\
++	____PVOP_ALT_CALL(PVOP_RETVAL(rettype), op, alt, cond,		\
+ 			  PVOP_CALL_CLOBBERS, EXTRA_CLOBBERS,		\
+ 			  ##__VA_ARGS__)
  
- echo "Test create synthetic event"
+ #define __PVOP_CALLEESAVE(rettype, op, ...)				\
+-	____PVOP_CALL(PVOP_RETVAL(rettype), op.func, CLBR_RET_REG,	\
++	____PVOP_CALL(PVOP_RETVAL(rettype), op.func,			\
+ 		      PVOP_CALLEE_CLOBBERS, , ##__VA_ARGS__)
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'wakeup_latency  u64 lat pid_t pid char comm[16]' > synthetic_events
- if [ ! -d events/synthetic/wakeup_latency ]; then
-     fail "Failed to create wakeup_latency synthetic event"
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
-index 71c9b5911c7067..908bb99cdc4ece 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+ #define __PVOP_ALT_CALLEESAVE(rettype, op, alt, cond, ...)		\
+ 	____PVOP_ALT_CALL(PVOP_RETVAL(rettype), op.func, alt, cond,	\
+-			  CLBR_RET_REG, PVOP_CALLEE_CLOBBERS, , ##__VA_ARGS__)
++			  PVOP_CALLEE_CLOBBERS, , ##__VA_ARGS__)
  
- echo "Test create synthetic event"
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'wakeup_latency  u64 lat pid_t pid char comm[16]' > synthetic_events
- if [ ! -d events/synthetic/wakeup_latency ]; then
-     fail "Failed to create wakeup_latency synthetic event"
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-index 67fa328b830f5f..ee06706ae51a2c 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+ #define __PVOP_VCALL(op, ...)						\
+-	(void)____PVOP_CALL(, op, CLBR_ANY, PVOP_VCALL_CLOBBERS,	\
++	(void)____PVOP_CALL(, op, PVOP_VCALL_CLOBBERS,			\
+ 		       VEXTRA_CLOBBERS, ##__VA_ARGS__)
  
- echo "Test snapshot action"
+ #define __PVOP_ALT_VCALL(op, alt, cond, ...)				\
+-	(void)____PVOP_ALT_CALL(, op, alt, cond, CLBR_ANY,		\
++	(void)____PVOP_ALT_CALL(, op, alt, cond,			\
+ 				PVOP_VCALL_CLOBBERS, VEXTRA_CLOBBERS,	\
+ 				##__VA_ARGS__)
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 1 > events/sched/enable
+ #define __PVOP_VCALLEESAVE(op, ...)					\
+-	(void)____PVOP_CALL(, op.func, CLBR_RET_REG,			\
++	(void)____PVOP_CALL(, op.func,					\
+ 			    PVOP_VCALLEE_CLOBBERS, , ##__VA_ARGS__)
  
- echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> events/sched/sched_waking/trigger
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
-index 3d65c856eca3e6..dc0fffbe3c1dd8 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
-@@ -10,6 +10,11 @@ fail() { #msg
+ #define __PVOP_ALT_VCALLEESAVE(op, alt, cond, ...)			\
+-	(void)____PVOP_ALT_CALL(, op.func, alt, cond, CLBR_RET_REG,	\
++	(void)____PVOP_ALT_CALL(, op.func, alt, cond,			\
+ 				PVOP_VCALLEE_CLOBBERS, , ##__VA_ARGS__)
  
- echo "Test create synthetic event"
  
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'ping_test_latency u64 lat; char filename[]' > synthetic_events
- if [ ! -d events/synthetic/ping_test_latency ]; then
-     fail "Failed to create ping_test_latency synthetic event"
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc
-index c126d2350a6d41..1a9f10826b9421 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc
-@@ -10,6 +10,11 @@ fail() { #msg
- 
- echo "Test create synthetic event"
- 
-+if ! which ping; then
-+    echo "ping is not found. This test requires ping command."
-+    exit_unresolved
-+fi
-+
- echo 'wakeup_latency  u64 lat pid_t pid char comm[16]' > synthetic_events
- if [ ! -d events/synthetic/wakeup_latency ]; then
-     fail "Failed to create wakeup_latency synthetic event"
-
-base-commit: 6c0f39e87b6ab1a3009e3a49d3e6f6db8dc756a8
--- 
-2.38.0
-
