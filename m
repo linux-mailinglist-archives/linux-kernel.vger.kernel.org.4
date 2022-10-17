@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7046016DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8466016E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiJQTDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S229793AbiJQTEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiJQTDg (ORCPT
+        with ESMTP id S229597AbiJQTEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:03:36 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110F675CE7;
-        Mon, 17 Oct 2022 12:03:36 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c24so11626514pls.9;
-        Mon, 17 Oct 2022 12:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f3BMycGNfRa5ROS0hbmq3Pvmc1mwuNEkWexZaQuhsaY=;
-        b=EP5PaR13gIQf5w4smA+LxCuJFo9ltpABPa3ZCotYT4UdiLCio2xHHBjYXr03B7U72A
-         VUx6o0vueDWECfyWlQXW4OjmVk+OkwH3u45yvEy28BKfCkejMolRx7tYGVelbGNj/lvv
-         EJcv1yMsh5VN43+kkwtNLFOX+/pV0toOgcnmr16N0/Kt5S0zU/eGFcmvioZ3JUv/Tat3
-         f+9tBPd/70lkcq8k2fxVUadND+SrxLyYtDVVPyuGNLymbEvwFX448uvbhbvop34rBVdX
-         Pp2vySckz58E+uhgkwOYgMQIt6BKJsrYk80we9LXTK7lt3QOGItp2w/jhez5l0L0rhVY
-         0PkQ==
+        Mon, 17 Oct 2022 15:04:39 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D812D28;
+        Mon, 17 Oct 2022 12:04:37 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id g10so13166526oif.10;
+        Mon, 17 Oct 2022 12:04:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f3BMycGNfRa5ROS0hbmq3Pvmc1mwuNEkWexZaQuhsaY=;
-        b=ax4rpIda49duLVFDoTyJ963rp1qJYhNZG4F9WccFJviD3l9iDWfUH7xBEmU/1SX+Lm
-         sAFLSj65fVjCAoXe+SxE3T+FiyPBwilF+vAGPemIMlbfclIUrRftPYg9mcaTgMjV5w/R
-         AI0TDRn5lCGyI5O0vP5IdzO4SVPtYngbre61KQw3bhamALU16awQyIAtC2hELgtJpy7A
-         cSqC9Fw1PNUUr2X8tH6MQfGwK05L0MDDJmi2TO9mw8eNwUMZmPDxZXhVYFmhqblTHSsD
-         SBwP14M/QwnRsUJfmei88F7McVIp050bC+C+cFuL5eW5L3zBklAQg1k6IZN/J0kpu9NL
-         aBBA==
-X-Gm-Message-State: ACrzQf0Rz7xi8CJgfGnlGk6VoUpFUZ6i2sW2nXvpt5gXGL3thdmJyIzf
-        osB3i1SydyPnl6BR8uCyMgjRICOIN+AW4A==
-X-Google-Smtp-Source: AMsMyM5O6qEy0m8EHNYSQ1nlSd0S263M3qfhYkt9MJpdVZ9ERQz7EXVIYD3bE9+BR+TOr6laAmB/IA==
-X-Received: by 2002:a17:90b:2241:b0:20d:b273:26af with SMTP id hk1-20020a17090b224100b0020db27326afmr14694780pjb.245.1666033415461;
-        Mon, 17 Oct 2022 12:03:35 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id u2-20020a17090341c200b0017f7bef8cfasm6971161ple.281.2022.10.17.12.03.34
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JOP2b9Nau8iEeSvyNn6E8PPEtGHiAXX+/w7I4SFcS4I=;
+        b=OduiD0zzbEOMnP2ZwdY4/guD8sC4rcIy/61h5b8yHSXBL+l4lF/ZRrybU4YCMz7A+f
+         DscnnV0ZyDP3zqp6wE88gUF2UeLaL3kZnJA68z7rafF1A9WYYJIwmhb3PLUMwVf30rOk
+         s6FKSpI7CY6a5WE56uNIdelcSbR6JpTlGCdbe7KHD+W4jFl3XsD9gWGwGEI8xer7xa9X
+         77DUJbsQvuOqVL/CQlfSF9ugBMDiC+RMGWq3HXdTduD1wUiTRTt0G7H/KVrTVq/Nfmvk
+         7xRJqRgulLFxZLak63y+dRjMGJVxrhKnvwrwt7t6UbYqLzJ4NYkztipO9AW5zk7oTVp2
+         B+jQ==
+X-Gm-Message-State: ACrzQf3J8GnapUK/Th95LitqKjVvV05S+NKsIhxHed38AYCO5ahT/3zT
+        CeZdmgQC58IqGbiwa0tMVQ==
+X-Google-Smtp-Source: AMsMyM7gUX9iEsWtrsviepRzM8t4rKYICHZWOu6v02gWK7pLfbAlZLF73bl7W7Fn55GknUxce5Z62w==
+X-Received: by 2002:aca:5808:0:b0:350:9790:7fe with SMTP id m8-20020aca5808000000b00350979007femr14498202oib.79.1666033476307;
+        Mon, 17 Oct 2022 12:04:36 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 94-20020a9d0de7000000b006619295af60sm5026981ots.70.2022.10.17.12.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 12:03:35 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 17 Oct 2022 09:03:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] blk-iocost: Trace vtime_base_rate instead of
- vtime_rate
-Message-ID: <Y02nBcwomc+9xZ+l@slm.duckdns.org>
-References: <20221017020011.25016-1-shikemeng@huawei.com>
- <20221017020011.25016-4-shikemeng@huawei.com>
+        Mon, 17 Oct 2022 12:04:35 -0700 (PDT)
+Received: (nullmailer pid 2292539 invoked by uid 1000);
+        Mon, 17 Oct 2022 19:04:36 -0000
+Date:   Mon, 17 Oct 2022 14:04:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-gpio@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: convert
+ qcom,mdm9615-pinctrl.txt to dt-schema
+Message-ID: <166603347554.2292483.5082356726414220368.robh@kernel.org>
+References: <20221005-mdm9615-pinctrl-yaml-v2-0-639fe67a04be@linaro.org>
+ <20221005-mdm9615-pinctrl-yaml-v2-1-639fe67a04be@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221017020011.25016-4-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v2-1-639fe67a04be@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 10:00:06AM +0800, Kemeng Shi wrote:
-> Since commit ac33e91e2daca ("blk-iocost: implement vtime loss
-> compensation") rename original vtime_base to vtime_base_rate
-> and current vtime_base is original vtime_base with compensation.
-              ^
-              vtime_rate
-
-There are multiple places with the same mistake. Can you please fix the
-patch description?
-
-> The current rate showed in tracepoint is mixed with vtime_base
-> and vtime_base_rate:
-> 1) In function ioc_adjust_base_vrate, the first trace_iocost_ioc_vrate_adj
-> shows vtime_base, the second trace_iocost_ioc_vrate_adj shows
-> vtime_base_rate.
-> 2) In function iocg_activate shows vtime_base by calling
-> TRACE_IOCG_PATH(iocg_activate...
-> 3) In function ioc_check_iocgs shows vtime_base by calling
-> TRACE_IOCG_PATH(iocg_idle...
+On Mon, 17 Oct 2022 12:23:05 +0200, Neil Armstrong wrote:
+> Convert the MDM9515 pinctrl bindings to dt-schema.
+> Keep the parsing of pin configuration subnodes consistent with other Qualcomm
+> schemas (children named with '-state' suffix, optional children with '-pins').
 > 
-> Trace vtime_base_rate instead of vtime_rate as:
-> 1) Before commit ac33e91e2daca ("blk-iocost: implement vtime loss
-> compensation"), the traced rate is without compensation, so still
-> show rate without compensation.
-> 2) The vtime_base_rate is more stable while vtime_rate heavily depends on
-> excess budeget on current period which may change abruptly in next period.
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,mdm9615-pinctrl.txt      | 161 ---------------------
+>  .../bindings/pinctrl/qcom,mdm9615-pinctrl.yaml     | 120 +++++++++++++++
+>  2 files changed, 120 insertions(+), 161 deletions(-)
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 
-Other than that,
-
-Acked-by: Tejun Heo <tj@kernel.org>
-
-Thanks.
-
--- 
-tejun
+Reviewed-by: Rob Herring <robh@kernel.org>
