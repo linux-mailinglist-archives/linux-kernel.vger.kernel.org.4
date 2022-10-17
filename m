@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6616601322
+	by mail.lfdr.de (Postfix) with ESMTP id F20EB601323
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiJQQDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 12:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
+        id S231340AbiJQQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 12:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiJQQCr (ORCPT
+        with ESMTP id S230490AbiJQQCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 12:02:47 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17456DF98
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:45 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id a67so16678499edf.12
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:45 -0700 (PDT)
+        Mon, 17 Oct 2022 12:02:49 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DA66D843
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:46 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id sc25so25944601ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bk+KWgdlkiB+MWNzeR3WbAzUisj6JegHIR27QQQBgyQ=;
-        b=omsUcwkM80T1HQfQByTwzQSSPIQo9VSPQ1minBRX8rzy6SbPGixUEBE2JXOujAa6uU
-         /e/HMGViiP2taAM5sQo+EcgsE05mL14PgOfQja08E1ZZdNtuNlSWGCVBR2sHIy3q2nI1
-         mphMO3QpS5U7jQxSpW7nPoESPS14DMXTB7PM5ynBKRIohJMyKbYkXh8Zu53N8j1wdBLT
-         cW/XTANXBAJ9V24Ds87XvC6xvHTgEu7+kwW0Ay3h1Iu/Vu0GstEKCWlkOr4X7rnBLNa2
-         WpLSDMa2+m+p3z846rzU4qw9mG4GOwP+XF5TrnV6HEeehFb/EWq17jyKIJHZm4aBU7wT
-         8S3Q==
+        bh=AFb/7zwjqK5CQviz80hJ2NborTj9HM/1n8g5QJGdbSg=;
+        b=YiYXWC+QyyMRmUFikBr8oB0Y1Dv5Ak0+JU9eRaISPncrUtmk74un588/6vLUW20FX2
+         lcsMHUj1ia8PYSlFC9HVKa8LYI5/Yh0TjGpkQyJZZ4YS0bm/QH6Rv2CFRjtHZBT3b3pT
+         0+BPG/BTVuhoW6zArG3Q9DVL9nBrJkcTvqqVQu/jOMiJKoe+vM3ZZ6pcDUDpv1pb0fcM
+         4tAtotDnjQBySPAXfmWgfyTTefQF78FTuW3MoxUtYOQjsfkM6atHxIjLRfvQcYVxkVuy
+         ova4Mkw2DwcL0fxYGdC/Heno/OPCahBGre0elnEAC15yZWG8R1irKhQOqHbNR3mi0PHl
+         r5gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bk+KWgdlkiB+MWNzeR3WbAzUisj6JegHIR27QQQBgyQ=;
-        b=vj/duOie5V1q7wtF1Vrcr/kAQVrHvcjSEzcpNm9KAYQb2T1Hnsn8O1MiFR5OXQDDL7
-         iXSGTMWmLv+kPtR0pbxoh3ns+c+cBF2w/GwOQWBUvjp0M9ClibFPuVoe1tz/ZDhpZnQv
-         Utzq/kQt72FcX03WxjEiUiM5Q8mAiNULRbegQ5mNTy+oXPGVAYZVItSX9XtlwOX++Hwg
-         4nIEmQ9Wfhkgeh7dsVGpMZ9stVKKmX6YC688ANC5s34kXJxb/PJowbxX1wawqVdXPa7Y
-         YymFAoFv9kKP3We+pdJCKtLHP+7BZy8uvuQNz5libLxYTGadSZGdJItU7m1vw+DZBAUp
-         0/bw==
-X-Gm-Message-State: ACrzQf0ReoPRBBcAisBWY3KehlZSBirP5L+FWzGQuxRC7F0634dVjT+8
-        8b0DQdiSP/D8O11RWhjhZwo=
-X-Google-Smtp-Source: AMsMyM5N8ZQLeNkoN0ubApdyoZVPYzXh3UKtjk6V1dRHUvCK+wRZxfEtOygHvSJU00j5uoC42C8N3g==
-X-Received: by 2002:aa7:d454:0:b0:459:9ae7:725b with SMTP id q20-20020aa7d454000000b004599ae7725bmr10881077edr.165.1666022564305;
-        Mon, 17 Oct 2022 09:02:44 -0700 (PDT)
+        bh=AFb/7zwjqK5CQviz80hJ2NborTj9HM/1n8g5QJGdbSg=;
+        b=45IK+4mZnM0bcNbIA45u7fict2h6lGLw88Cc9l6mDUkNbDOAv0Rx9R6it5kTF7NGWB
+         zxg8kSwL/48nSJ5t/cS22kqhaQjWuSc0ERqwEWovVyWaWvYXyghrX/D9xdxRD/YdMXSd
+         3UbtmxLYFYvubbyVBzI3JZAQ+wu5vjgkFcQFZ8NLQOdJ5Q8FDjPOM6AWqNPNZlAjxvz+
+         IQZQo/dAO66y3o+iVXDcHLeFoWTesODTjWvWJqNmst2QR8VGPxXHImFKC2dirEIHOAm5
+         eZ3c+Ko7na7FqZ+kAsPBR375b6ZeujmD5dIliYN9q9tUzUFSoQEofxrzwxPwhHMH4hgT
+         RFog==
+X-Gm-Message-State: ACrzQf0CYHkCjlLX5cDGcwWO+YIgnBbz925qEnns10IfqN0EtJ9NVIZT
+        9rjJqGk8OxLRBN4n8CnoTh8=
+X-Google-Smtp-Source: AMsMyM53rJaLhk4GwF6LlPSoomVfcARTFPfJm/NqfYLKgstdDAxVM5szNB2fF2xkAFkG5XJVLI5fRQ==
+X-Received: by 2002:a17:907:3f94:b0:78d:9d2f:3002 with SMTP id hr20-20020a1709073f9400b0078d9d2f3002mr9099892ejc.40.1666022565358;
+        Mon, 17 Oct 2022 09:02:45 -0700 (PDT)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.43
+        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 09:02:43 -0700 (PDT)
+        Mon, 17 Oct 2022 09:02:44 -0700 (PDT)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
@@ -59,9 +59,9 @@ Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
         Uladzislau Rezki <urezki@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
         Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 5/7] mm/vmalloc: Use a trace_purge_vmap_area_lazy event
-Date:   Mon, 17 Oct 2022 18:02:31 +0200
-Message-Id: <20221017160233.16582-8-urezki@gmail.com>
+Subject: [PATCH 6/7] mm/vmalloc: Use a trace_free_vmap_area_noflush event
+Date:   Mon, 17 Oct 2022 18:02:32 +0200
+Message-Id: <20221017160233.16582-9-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221017160233.16582-1-urezki@gmail.com>
 References: <20221017160233.16582-1-urezki@gmail.com>
@@ -77,57 +77,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is for debug purpose and is called when all outstanding
-areas are removed back to the vmap space. It gives some extra
-information about:
-- a start:end range where set of vmap ares were freed;
-- a number of purged areas which were backed off.
+It is for a debug purpose and is called when a vmap area
+gets freed. This event gives some indication about:
+- a start address of released area;
+- a current number of outstanding pages;
+- a maximum number of allowed outstanding pages.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- mm/vmalloc.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ mm/vmalloc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index f4397817ccd7..912abcd6e8b4 100644
+index 912abcd6e8b4..df4fd6674ced 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -1731,6 +1731,7 @@ static void purge_fragmented_blocks_allcpus(void);
- static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
+@@ -1822,6 +1822,8 @@ static void drain_vmap_area_work(struct work_struct *work)
+  */
+ static void free_vmap_area_noflush(struct vmap_area *va)
  {
- 	unsigned long resched_threshold;
-+	unsigned int num_purged_areas = 0;
- 	struct list_head local_purge_list;
- 	struct vmap_area *va, *n_va;
++	unsigned long nr_lazy_max = lazy_max_pages();
++	unsigned long va_start = va->va_start;
+ 	unsigned long nr_lazy;
  
-@@ -1742,7 +1743,7 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
+ 	spin_lock(&vmap_area_lock);
+@@ -1839,8 +1841,10 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+ 		&purge_vmap_area_root, &purge_vmap_area_list);
  	spin_unlock(&purge_vmap_area_lock);
  
- 	if (unlikely(list_empty(&local_purge_list)))
--		return false;
-+		goto out;
- 
- 	start = min(start,
- 		list_first_entry(&local_purge_list,
-@@ -1777,12 +1778,16 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
- 					      va->va_start, va->va_end);
- 
- 		atomic_long_sub(nr, &vmap_lazy_nr);
-+		num_purged_areas++;
- 
- 		if (atomic_long_read(&vmap_lazy_nr) < resched_threshold)
- 			cond_resched_lock(&free_vmap_area_lock);
- 	}
- 	spin_unlock(&free_vmap_area_lock);
--	return true;
++	trace_free_vmap_area_noflush(va_start, nr_lazy, nr_lazy_max);
 +
-+out:
-+	trace_purge_vmap_area_lazy(start, end, num_purged_areas);
-+	return num_purged_areas > 0 ? true:false;
+ 	/* After this point, we may free va at any time */
+-	if (unlikely(nr_lazy > lazy_max_pages()))
++	if (unlikely(nr_lazy > nr_lazy_max))
+ 		schedule_work(&drain_vmap_work);
  }
  
- /*
 -- 
 2.30.2
 
