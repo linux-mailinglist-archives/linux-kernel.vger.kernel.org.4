@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA41601083
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E20601089
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJQNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S230126AbiJQNxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiJQNvl (ORCPT
+        with ESMTP id S230102AbiJQNwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:51:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3081C125;
-        Mon, 17 Oct 2022 06:51:37 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 81BF73400A;
-        Mon, 17 Oct 2022 13:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666014696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wsWr+Ep+EK7rnuxntXQBk+r8nFSCsmWYWDo+ktsF+E8=;
-        b=A0yN/V4qtthZpmxpz2jrPEuoGvck4A9nlmJIVT00d+XsIa9YkV9RRAh7dlAU12gj57j/et
-        Ie33KUNQee6OtTH2SX9985b1hwXSlJiJLxOKuR2pGXuDPWzurg2TI0KvHPsnGY60+qold2
-        FyjQ9PvxSYI+6yHGT4vvpiojZPaiCT8=
-Received: from suse.cz (unknown [10.100.208.146])
+        Mon, 17 Oct 2022 09:52:53 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D121A232;
+        Mon, 17 Oct 2022 06:52:52 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6226D2C141;
-        Mon, 17 Oct 2022 13:51:36 +0000 (UTC)
-Date:   Mon, 17 Oct 2022 15:51:35 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     mcgrof@kernel.org, david@redhat.com, linux-modules@vger.kernel.org,
+        by ms.lwn.net (Postfix) with ESMTPSA id E045B60C;
+        Mon, 17 Oct 2022 13:52:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E045B60C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1666014772; bh=QSNmydHKDESmT1NqsfW/Jpi8LhtNWYPwSj/TqSdJ0wg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=qMi45jR0DW9fdkfib264+H/n/J1/ClsQ7/tqFeg5AU2UH9JMugeSj6UMmSeCbrvrK
+         Rkgrivvd4+8DkemcwIYPcwoZ3myzvu7eZ3geI5yUEE5WxCiuMKH9ZuASsX97bxgIXK
+         4om3gEEj0YV7h6HoRA+K8CUCKHlCo1glrbGvs+M4Yq+WJhQf0Et2r6wEkJVaA69YCZ
+         suK0GmG/BvR2XY6yOX85Nshr9t/i7SnE6EtSt67PcxBr6d7JhPJXePqHd/lAmESLm0
+         FRbbuaDUykbNKC4oIb7FzMjY4+/kbxzZFYoI8hLx+lGsIN1DgwMI9us0TmS2xWGMTp
+         iC230DtBVqptw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Rui Li <me@lirui.org>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
- module load requests
-Message-ID: <Y01d50Z2DK3f9V+Q@alley>
-References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-5-petr.pavlu@suse.com>
+Cc:     Rui Li <me@lirui.org>
+Subject: Re: [RESEND PATCH 0/2] docs/zh_CN: Add userspace-api/index and ebpf
+ Chinese translation
+In-Reply-To: <cover.1666009558.git.me@lirui.org>
+References: <cover.1666009558.git.me@lirui.org>
+Date:   Mon, 17 Oct 2022 07:52:51 -0600
+Message-ID: <87pmeqftfw.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221016123031.3963-5-petr.pavlu@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 2022-10-16 14:30:31, Petr Pavlu wrote:
-> Add two tests to check that loading the same module multiple times in
-> parallel results only in one real attempt to initialize it.
-> Synchronization of the loads is done by waiting 1000 ms in the init
+Rui Li <me@lirui.org> writes:
 
-I do not have a good experience with this kind of synchronization.
-It usually is not reliable. The test might be very slow especially when
-false positives are solved by prolonging the delay.
+> Translate the following documents into Chinese:
+>
+> - Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
+> - Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
+> - Documentation/translations/zh_CN/userspace-api/index.rst
+>
+> Add userspace-api into the menu of zh_CN index.
+>
+> Rui Li (2):
+>   docs/zh_CN: Add userspace-api/ebpf Chinese translation
+>   docs/zh_CN: Add userspace-api/index Chinese translation
+>
+>  Documentation/translations/zh_CN/index.rst    |  2 +-
+>  .../zh_CN/userspace-api/ebpf/index.rst        | 22 ++++++++
+>  .../zh_CN/userspace-api/ebpf/syscall.rst      | 31 ++++++++++++
+>  .../zh_CN/userspace-api/index.rst             | 50 +++++++++++++++++++
+>  4 files changed, 104 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
+>  create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
+>  create mode 100644 Documentation/translations/zh_CN/userspace-api/index.rst
 
-Alternative solution would be to have two modules:
+Why are you resending this patch set after one day?
 
-1st module would provide a counter, for example:
-
-int modB_load_cnt;
-module_param(modB_load_cnt, int, 0444);
-EXPORT_SYMBOL(modB_load_cnt);
-
-EXPORT_SYMBOL() should allow to directly increment the counter
-from the 2nd module.
-
-module_param() should make the value readable via
-/sys/module/modA/parameters/modB_load_cnt. It can be
-checked by kmod_sh.
-
-> function of a sample module kmod_test_0014. The tests measure time
-> needed to perform all inserts to verify that the loads get merged by the
-> module loader and are not serialized.
-> 
-> * Case 0014 checks a situation when the load is successful. It should
->   result in one insert returning 0 and remaining inserts returning
->   EEXIST.
-> * Case 0015 checks a situation when the load is failing because the
->   module init function returns ENODEV. It should result in one insert
->   returning this error code and remaining inserts returning EBUSY.
-> 
-> The tests use a simple init_module program to load kmod_test_0014.ko. It
-> enables to obtain directly a return code from the finit_module syscall.
-
-The tested scenarios look good.
-
-Best Regards,
-Petr
+jon
