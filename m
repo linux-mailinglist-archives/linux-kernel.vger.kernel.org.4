@@ -2,209 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF524600DB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49119600DBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 13:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiJQL1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 07:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S230105AbiJQL1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 07:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiJQL1M (ORCPT
+        with ESMTP id S230206AbiJQL1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 07:27:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD83F5FAEA;
-        Mon, 17 Oct 2022 04:27:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CCFBB815E5;
-        Mon, 17 Oct 2022 11:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26AC0C433D7;
-        Mon, 17 Oct 2022 11:27:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666006028;
-        bh=8oCvQhILcprioKQIETe9Rm5fLfUWYFFa5k6LkfL/rsc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YRwIMRbLQhImH2rLtvO7ByXy0VxZdQ2IH0/rbKdmMnepbGX9Ln0YtXde0FYxBp5mU
-         UKc/AxlzI6Z4lrpJ/XNmjGC3A/QmxUA0Rmd5afeY9LTiOdsLuh8tQNCMa5e82Fg25I
-         GNCY61i965ukYpeI0CGbQUxoMC2wNKnJiPqRTBe4lqCZIIH5hQQ+ZfOHQWcsIUrq5z
-         r8dzSgawocLM3Ad3eGHGJ/yqLj/JoAILzBpNn3RAfhtCakZb1LqGwC6xxa4x3Wqqz3
-         x3PVuXzdwPc5FUGD59L8Yx1WuqCW9RIsa37p9A7fbuq+M8DMbsPMYLll/PMz0lz83v
-         7SqWUaVdHoyJA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1okOGn-0000ab-OR; Mon, 17 Oct 2022 13:26:57 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        quic_vbadigan@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 2/2] PCI: qcom: Add basic interconnect support
-Date:   Mon, 17 Oct 2022 13:24:49 +0200
-Message-Id: <20221017112449.2146-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221017112449.2146-1-johan+linaro@kernel.org>
-References: <20221017112449.2146-1-johan+linaro@kernel.org>
+        Mon, 17 Oct 2022 07:27:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3EA5FAEA
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 04:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666006048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bGH9Zdddmn1G3Br6JkTmmzZUWrMZ3aJCiDnziiYbJRc=;
+        b=i1Lhm7CIWPkE0onnSmAc3oSCXZst8Hhqn/VWZ5mV/iEkKtZqAwyIkUsB2ID9mp4xFrEC4z
+        7fobY4UF+49HgizzwcXgUIl8o4AdxkX0+V+fzy4tUh4jvZL8IoUKyFoe1mSZLNTzKMJOd3
+        8JUE9lhnl19I4TUH//bGZO/g1ulnKog=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-103-q3YTq5nQNqCxprjulsTRWw-1; Mon, 17 Oct 2022 07:27:27 -0400
+X-MC-Unique: q3YTq5nQNqCxprjulsTRWw-1
+Received: by mail-wm1-f69.google.com with SMTP id r188-20020a1c44c5000000b003c3a87d8abdso3649503wma.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 04:27:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bGH9Zdddmn1G3Br6JkTmmzZUWrMZ3aJCiDnziiYbJRc=;
+        b=JSlYOD+RplfTO0a2+j92BRMZr7fr4TkYalPvA0IkKvAxSZssaHBL1RyRhRR6ykPEjG
+         4q4ew1RUH+h+5wRTRhhY0mgnZz96iNjV3uOuHbHyVgA5fQn5CmVl5sjoXPes1Pjsy2GF
+         0m/25RimcacFOWfPnQzy4AsyrF1Le/pTvcfI5kgcamSpdeX8PZ5Ffv6CT2ntA3fl1ra8
+         rAS3X7/wvMY/38cnFKLTGbW7yBoP64H9AmjfMhs4oPx91EXDG2EYva+ANzVg+Kt0+AYx
+         zy4OR1Pisl5W7/wV5hZIF1sdZQmp427fTQrOcsGBhhBlNXo1Frb/BhOYl6f8qo8+2A9x
+         Aqtg==
+X-Gm-Message-State: ACrzQf3z3nEutkfKY3YfGqXMxRsdveI/o5NB7z15dVA/X65ohsIwoiLR
+        v8bOdmkibnMAedY9PMh+jw5EewSL5IZE/wE5DVKKlXVCRn+On7TyyozmpGtlt4zIj+oGjR8u0/L
+        76BlA30ZSDpTOUseXN2KbaY6s
+X-Received: by 2002:adf:d842:0:b0:22e:33e2:f379 with SMTP id k2-20020adfd842000000b0022e33e2f379mr5758278wrl.23.1666006046482;
+        Mon, 17 Oct 2022 04:27:26 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4Kvz5id6HZOC9QTd4Wc7N8RB+Y9HN7WUbMZCORphKnB3Rk0JATW+xIueW/y00yJUTBR4GOgQ==
+X-Received: by 2002:adf:d842:0:b0:22e:33e2:f379 with SMTP id k2-20020adfd842000000b0022e33e2f379mr5758262wrl.23.1666006046160;
+        Mon, 17 Oct 2022 04:27:26 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70a:a00:37ed:519:6c33:4dc8? (p200300cbc70a0a0037ed05196c334dc8.dip0.t-ipconnect.de. [2003:cb:c70a:a00:37ed:519:6c33:4dc8])
+        by smtp.gmail.com with ESMTPSA id s16-20020a5d4250000000b0022e47b57735sm8105509wrr.97.2022.10.17.04.27.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 04:27:25 -0700 (PDT)
+Message-ID: <a83656e2-07b0-8a5f-40ae-077e23c4cd24@redhat.com>
+Date:   Mon, 17 Oct 2022 13:27:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org
+Cc:     arnd@arndb.de, jingshan@linux.alibaba.com, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <bc27af32b0418ed1138a1c3a41e46f54559025a5.1665991453.git.baolin.wang@linux.alibaba.com>
+ <6227ba4c-9455-9652-7434-7842b2b3edcb@redhat.com>
+ <8007f4fc-d2e6-7aae-7297-805326adce2a@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH] mm: Introduce new MADV_NOMOVABLE behavior
+In-Reply-To: <8007f4fc-d2e6-7aae-7297-805326adce2a@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Qualcomm platforms like SC8280XP and SA8540P interconnect bandwidth
-must be requested before enabling interconnect clocks.
+On 17.10.22 11:09, Baolin Wang wrote:
+> 
+> 
+> On 10/17/2022 4:41 PM, David Hildenbrand wrote:
+>> On 17.10.22 09:32, Baolin Wang wrote:
+>>> When creating a virtual machine, we will use memfd_create() to get
+>>> a file descriptor which can be used to create share memory mappings
+>>> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
+>>> flag to allocate physical pages for the virtual machine.
+>>>
+>>> When allocating physical pages for the guest, the host can fallback to
+>>> allocate some CMA pages for the guest when over half of the zone's free
+>>> memory is in the CMA area.
+>>>
+>>> In guest os, when the application wants to do some data transaction with
+>>> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
+>>> create IOMMU mappings for the DMA pages. However, when calling
+>>> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
+>>> failed to longterm-pin sometimes.
+>>>
+>>> After some invetigation, we found the pages used to do DMA mapping can
+>>> contain some CMA pages, and these CMA pages will cause a possible
+>>> failure of the longterm-pin, due to failed to migrate the CMA pages.
+>>> The reason of migration failure may be temporary reference count or
+>>> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
+>>> ioctl returns error, which makes the application failed to start.
+>>>
+>>> To fix this issue, this patch introduces a new madvise behavior, named
+>>> as MADV_NOMOVABLE, to avoid allocating CMA pages and movable pages if
+>>> the users want to do longterm-pin, which can remove the possible failure
+>>> of movable or CMA pages migration.
+>>
+>> Sorry to say, but that sounds like a hack to work around a kernel
+>> implementation detail (how often we retry to migrate pages).
+> 
+> IMO, in our case one migration failure will make our application failed
+> to start, which is not a trival problem. So mitigate the failure of
+> migration can be important in this case.
 
-Add basic support for managing an optional "pcie-mem" interconnect path
-by setting a low constraint before enabling clocks and updating it after
-the link is up.
+The right thing to do is to understand why these migrations fail and see 
+if we can improve the migration code.
 
-Note that it is not possible for a controller driver to set anything but
-a maximum peak bandwidth as expected average bandwidth will vary with
-use case and actual use (and power policy?). This very much remains an
-unresolved problem with the interconnect framework.
+> 
+>> If there are CMA/ZONE_MOVABLE issue, please fix them instead, and avoid
+>> leaking these details to user space.
+> 
+> Now we can not forbid the fallback to CMA allocation if there are enough
+> free CMA in the zone, right? So adding a hint to help to diable
+> ALLOC_CMA flag seems reasonable?
+> 
+> For CMA/ZONE_MOVABLE details, yes, not suitable to leak to user space.
+> so how about rename the madvise as MADV_PINNABLE, which means we will do
+> longterm-pin after allocation, and no CMA/ZONE_MOVABLE pages will be
+> allocated.
+> 
 
-Also note that no constraint is set for the SC8280XP/SA8540P "cpu-pcie"
-path for now as it is not clear what an appropriate constraint would be
-(and the system does not crash when left unspecified currently).
+I really don't think any of these new user-visible madv modes with 
+questionable semantics to workaround kernel implementation issues are a 
+good idea.
 
-Fixes: 70574511f3fc ("PCI: qcom: Add support for SC8280XP")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 76 ++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+Especially MADV_PINNABLE has a *very* misleading name.
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 7db94a22238d..0c13f976626f 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -12,6 +12,7 @@
- #include <linux/crc8.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/interconnect.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
-@@ -224,6 +225,7 @@ struct qcom_pcie {
- 	union qcom_pcie_resources res;
- 	struct phy *phy;
- 	struct gpio_desc *reset;
-+	struct icc_path *icc_mem;
- 	const struct qcom_pcie_cfg *cfg;
- };
- 
-@@ -1644,6 +1646,74 @@ static const struct dw_pcie_ops dw_pcie_ops = {
- 	.start_link = qcom_pcie_start_link,
- };
- 
-+static int qcom_pcie_icc_init(struct qcom_pcie *pcie)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+	int ret;
-+
-+	pcie->icc_mem = devm_of_icc_get(pci->dev, "pcie-mem");
-+	if (IS_ERR(pcie->icc_mem)) {
-+		ret = PTR_ERR(pcie->icc_mem);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Some Qualcomm platforms require interconnect bandwidth constraints
-+	 * to be set before enabling interconnect clocks.
-+	 *
-+	 * Set an initial peak bandwidth corresponding to single-lane Gen 1
-+	 * for the pcie-mem path.
-+	 */
-+	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
-+	if (ret) {
-+		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+	u32 offset, status, bw;
-+	int speed, width;
-+	int ret;
-+
-+	if (!pcie->icc_mem)
-+		return;
-+
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-+	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-+
-+	/* Only update constraints if link is up. */
-+	if (!(status & PCI_EXP_LNKSTA_DLLLA))
-+		return;
-+
-+	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
-+	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
-+
-+	switch (speed) {
-+	case 1:
-+		bw = MBps_to_icc(250);
-+		break;
-+	case 2:
-+		bw = MBps_to_icc(500);
-+		break;
-+	default:
-+	case 3:
-+		bw = MBps_to_icc(985);
-+		break;
-+	}
-+
-+	ret = icc_set_bw(pcie->icc_mem, 0, width * bw);
-+	if (ret) {
-+		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-+			ret);
-+	}
-+}
-+
- static int qcom_pcie_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -1704,6 +1774,10 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 		goto err_pm_runtime_put;
- 	}
- 
-+	ret = qcom_pcie_icc_init(pcie);
-+	if (ret)
-+		goto err_pm_runtime_put;
-+
- 	ret = pcie->cfg->ops->get_resources(pcie);
- 	if (ret)
- 		goto err_pm_runtime_put;
-@@ -1722,6 +1796,8 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 		goto err_phy_exit;
- 	}
- 
-+	qcom_pcie_icc_update(pcie);
-+
- 	return 0;
- 
- err_phy_exit:
+
+I understand that something like "MADV_MIGHT_PIN" *might* be helpful to 
+minimize page migration. But IMHO that could only be a pure 
+optimization, but wouldn't stop us from allocating (or migrating to) 
+CMA/ZONE_MOVABLE in the kernel on all code paths. It would be best 
+effort only.
+
+It's not user space decision how/where the kernel allocates memory. No 
+hacking around that.
+
+> Or do you have any good idea? Thanks.
+
+Investigate why migration of these pages fails and how we can improve 
+the code to make migration of these pages work more reliably.
+
+I am not completely against having a kernel parameter that would disable 
+allocating from CMA areas completely, even though it defeats the purpose 
+of CMA. But it wouldn't apply to ZONE_MOVABLE, so it would be just 
+another hackish approach.
+
+> 
+>> ALSO, with MAP_POPULATE as described by you this madvise flag doesn't
+>> make too much sense, because it will gets et after all memory already
+>> was allocated ...
+> 
+> This is not a problem I think, we can change to use MADV_POPULATE_XXX to
+> preallocate the physical pages after MADV_NOMOVABLE madvise.
+
+Yes, I know; I'm pointing out that your patch description is inconsistent.
+
 -- 
-2.37.3
+Thanks,
+
+David / dhildenb
 
