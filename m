@@ -2,222 +2,449 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAC46007F3
+	by mail.lfdr.de (Postfix) with ESMTP id 41B566007F2
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiJQHnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S230253AbiJQHnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiJQHnj (ORCPT
+        with ESMTP id S229508AbiJQHnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Oct 2022 03:43:39 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6125AC57
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD2F5AA1B
         for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:43:36 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 70so10230046pjo.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rPe4UeCT4utjHaWsW73z6gTqrta8SnxVBVme5GLMWDo=;
-        b=XURPRulyI7GBQkDYjbL29j6b7fNvlGFidOglpITLHCDt5F+d3TwghzPEurh5SVX0pV
-         tXVr/4xjzWfQXw7n8X4tX0YytM5fZGaPEYpYqsaqrG2nP8qOqL3ONC+f+W3OACBskxHG
-         5g4qTa3vYKROE/9I1BwZC1NwRKXPCawbTS/1WbyFCehUzGwOs2FH+QhyyS0CWxCY0YwD
-         6RZ8MjFhYpzQXWQoAQLPz/VpOQLLE3JJb/Hdd3+hpDS5d2oTq30np5PkY4+eobDN6Wle
-         Tn6aB5DmbXLPAZ5lnnNtn8qUUXw61kawSCiInP1KYMCwimZCcfmXiqeG2SViSys2AZOS
-         WO7g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665992614;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YGorBMUyq2qicOpifjibu1km97gdoW7yGmf9uIs85s0=;
+        b=cQNjvO5OZK0XGspIXBvJ5jvamVwenK+389cJEfmW5Cgmewipm4/W5t9R5XT4eCzPUPqfXH
+        LBtorru67Mvg49Frn5kkz7um/5riBOEkVZZvGQz1CRLJSNO+M6tDWL1OK4tz+Xi2h2+oLa
+        Z7cNN9ATYKuiz+cVzcTXXlr2++2f8fM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-644-VF_Sp23TN_aev1BcyPFJIw-1; Mon, 17 Oct 2022 03:43:32 -0400
+X-MC-Unique: VF_Sp23TN_aev1BcyPFJIw-1
+Received: by mail-wm1-f69.google.com with SMTP id c3-20020a7bc843000000b003b486fc6a40so5179096wml.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:43:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rPe4UeCT4utjHaWsW73z6gTqrta8SnxVBVme5GLMWDo=;
-        b=t6209EqFE8frJkQBkNfUmp0S6SdumvifZcBP5zvf7hVPL8StCcpaJP9cC/A120WGxE
-         Ycj5kUkZX/cVcdEvt49Y5OFf1ZeBktmeszSv56AHXkIGhFyF+0oO9jOBqfli3cxSYJn/
-         OQb7+NGTChzLCuVh1v6eBJFgPpoPdV4lBpbsUJPLAa6uCI3oXo2PB4mLMOY6n3kNgnfW
-         E/JZJ1uga+DiFyus16J8+LOc2GB766Fuljeix/GrKAOYArQ+k2Nq2IeKQptu22tAO2vF
-         HXyju877BC0y6A6V226+SDtE/7l/rBnpjOh+ZRBriQVghQPwohN50Pgtpef39n903y4J
-         8iuw==
-X-Gm-Message-State: ACrzQf2thtEPsvyVZiR01qyiBUPR69tnvLNOSZ707dgXFBHsxLEjXQqv
-        HRHpDDlvMemven2PaZlpJO8jlTfshSYIOlip2Tnq6w==
-X-Google-Smtp-Source: AMsMyM6zOiheEh4N7KSI0CXPvmDFJU1CBHXMIaYT5uIJkfwzlmGNQlwE0vxfa7DWYKMARCwt5PbD8BFew/kViQjETJQ=
-X-Received: by 2002:a17:90b:4f87:b0:20b:12e3:32ae with SMTP id
- qe7-20020a17090b4f8700b0020b12e332aemr12370517pjb.236.1665992614969; Mon, 17
- Oct 2022 00:43:34 -0700 (PDT)
+        bh=YGorBMUyq2qicOpifjibu1km97gdoW7yGmf9uIs85s0=;
+        b=iOR2JVQQGg/omkZ7TcKzIiw1US+ngLBkuIajMhoRFuMtrQepQaAMwIV1WBegdkr3Dg
+         tihtUpgjLh+rTol+95mCqM18Npcv3l7Ygz3t/kNyN6l1BkQ+MQftIbwyDLQoNNXS0xFR
+         yt9pt1nIrhuMNJnQemSIz35PiULPoOoV1htsXYQwP2jrJ9MhK2SAJf0aT2332bu9Vcit
+         2DZStGS2hDThPIF1+g+QIPlfMCypZeYZBOXRlIiu0hvbyc+0wmaAapoQwK1yxxam3QKK
+         v18lmHJ0d6gPeXT108lsU+TNxu8JAHPaLGoHPwaZRIxvy0n6OmB1ZRFEbwjz9wluFqPz
+         Q44w==
+X-Gm-Message-State: ACrzQf1BvHAdJP+TpFARV6NWojfHSRD4P8DJF3LIoEmu8c9FCk0TaevS
+        6rI+ujqgYUVSJjzLFXEKD/LDBOHjZmh7DKZ5Qtsqv7iL0d3w514SKK8kxgRSW5xdOEp6csL+wvM
+        KO39VpTg1g37J7O6HioaXhh0V
+X-Received: by 2002:a05:600c:3542:b0:3c6:e509:b051 with SMTP id i2-20020a05600c354200b003c6e509b051mr10388958wmq.142.1665992610330;
+        Mon, 17 Oct 2022 00:43:30 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM40MKMa6mE2IwoQYCqfPUwe5h5uKLHmv0VyTWyS1wUmbCh4Ft/L6gY4maf7rXiXacP/RZ8Zfg==
+X-Received: by 2002:a05:600c:3542:b0:3c6:e509:b051 with SMTP id i2-20020a05600c354200b003c6e509b051mr10388938wmq.142.1665992609939;
+        Mon, 17 Oct 2022 00:43:29 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:2300:e5ce:21ba:1d93:4323? (p200300cbc7072300e5ce21ba1d934323.dip0.t-ipconnect.de. [2003:cb:c707:2300:e5ce:21ba:1d93:4323])
+        by smtp.gmail.com with ESMTPSA id v1-20020adfedc1000000b00228daaa84aesm7767576wro.25.2022.10.17.00.43.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 00:43:29 -0700 (PDT)
+Message-ID: <d6e6abc4-84ae-0ddf-eb02-9f0537d4bed1@redhat.com>
+Date:   Mon, 17 Oct 2022 09:43:28 +0200
 MIME-Version: 1.0
-References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
- <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com> <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
- <CADYN=9L8tt2T-8O+u5NSMSUOkZDvEggnvzxH6aMmd5Rn9yDeuw@mail.gmail.com>
- <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com> <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
- <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com> <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
- <20221014140633.mlypet7skkxvt453@mobilestation>
-In-Reply-To: <20221014140633.mlypet7skkxvt453@mobilestation>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Mon, 17 Oct 2022 09:43:24 +0200
-Message-ID: <CADYN=9LrKHRNMON3GA4piDvWeSWTASQ1u2=D30rXFdvo1L18bg@mail.gmail.com>
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006 tag
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        regressions@lists.linux.dev,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     Petr Pavlu <petr.pavlu@suse.com>, mcgrof@kernel.org
+Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221016123031.3963-1-petr.pavlu@suse.com>
+ <20221016123031.3963-4-petr.pavlu@suse.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3 3/4] module: Merge same-name module load requests
+In-Reply-To: <20221016123031.3963-4-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 at 16:06, Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> On Fri, Oct 14, 2022 at 11:22:38AM +0200, Anders Roxell wrote:
-> > On Fri, 14 Oct 2022 at 09:53, Damien Le Moal
-> > <damien.lemoal@opensource.wdc.com> wrote:
-> > >
-> > > On 10/14/22 16:31, Arnd Bergmann wrote:
-> > > > On Fri, Oct 14, 2022, at 2:22 AM, Damien Le Moal wrote:
-> > > >> On 10/14/22 07:07, Anders Roxell wrote:
-> > > >> [...]
-> > > >>>> 8)
-> > > >>>>> If reverting these patches restores the eSATA port on this board, then you need
-> > > >>>>> to fix the defconfig for that board.
-> > > >>>>
-> > > >>>> OTOH,
-> > > >>>> Anders, enabled the new config CONFIG_AHCI_DWC=y  and tried but the
-> > > >>>> device failed to boot.
-> > > >>>
-> > > >>> I thought it would work with enabling CONFIG_AHCI_DWC=y, but it didn't...
-> > > >>
-> > > >> As mentioned in my previous reply to Naresh, this is a new driver added in
-> > > >> 6.1. Your board was working before so this should not be the driver needed
-> > > >> for it.
-> > > >>
-> > > >>> However, reverting patch 33629d35090f ("ata: ahci: Add DWC AHCI SATA
-> > > >>> controller support")
-> > > >>> from next-20221013 was a success, kernel booted  and the 'mkfs.ext4' cmd was
-> > > >>> successful.
-> > > >>
-> > > >> Which is very strange... There is only one hunk in that commit that could
-> > > >> be considered suspicious:
-> > > >>
-> > > >> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-> > > >> index 9b56490ecbc3..8f5572a9f8f1 100644
-> > > >> --- a/drivers/ata/ahci_platform.c
-> > > >> +++ b/drivers/ata/ahci_platform.c
-> > > >> @@ -80,9 +80,7 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
-> > > >>  static const struct of_device_id ahci_of_match[] = {
-> > > >>         { .compatible = "generic-ahci", },
-> > > >>         /* Keep the following compatibles for device tree compatibility */
-> > > >> -       { .compatible = "snps,spear-ahci", },
-> > > >>         { .compatible = "ibm,476gtr-ahci", },
-> > > >> -       { .compatible = "snps,dwc-ahci", },
-> > > >>         { .compatible = "hisilicon,hisi-ahci", },
-> > > >>         { .compatible = "cavium,octeon-7130-ahci", },
-> > > >>         { /* sentinel */ }
-> > > >>
-> > > >> Is your board using one of these compatible string ?
-> > > >
-> > > > The x15 uses "snps,dwc-ahci". I would expect it to detect the device
-> > > > with the new driver if that is loaded, but it's possible that the
-> > > > driver does not work on all versions of the dwc-ahci hardware.
-> > > >
-> > > > Anders, can you provide the boot log from a boot with the new driver
-> > > > built in? There should be some messages from dwc-ahci about finding
-> > > > the device, but then not ultimately working.
-> > > >
-> > > > Depending on which way it goes wrong, the safest fallback for 6.1 is
-> > > > probably to move the "snps,spear-ahci" and "snps,dwc-ahci" compatible
-> > > > strings back into the old driver, and leave the new one only for
-> > > > the "baikal,bt1-ahci" implementation of it, until it has been
-> > > > successfully verified on TI am5/dra7, spear13xx and exynos.
-> > >
-> > > OK. So a fix patch until further tests/debug is completed would be this:
-> > >
-> > > diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
-> > > index 8fb66860db31..7a0cbab00843 100644
-> > > --- a/drivers/ata/ahci_dwc.c
-> > > +++ b/drivers/ata/ahci_dwc.c
-> > > @@ -469,8 +469,6 @@ static struct ahci_dwc_plat_data ahci_bt1_plat = {
-> > >  };
-> > >
-> > >  static const struct of_device_id ahci_dwc_of_match[] = {
-> > > -       { .compatible = "snps,dwc-ahci", &ahci_dwc_plat },
-> > > -       { .compatible = "snps,spear-ahci", &ahci_dwc_plat },
-> > >         { .compatible = "baikal,bt1-ahci", &ahci_bt1_plat },
-> > >         {},
-> > >  };
-> > > diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-> > > index 8f5572a9f8f1..9b56490ecbc3 100644
-> > > --- a/drivers/ata/ahci_platform.c
-> > > +++ b/drivers/ata/ahci_platform.c
-> > > @@ -80,7 +80,9 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
-> > >  static const struct of_device_id ahci_of_match[] = {
-> > >         { .compatible = "generic-ahci", },
-> > >         /* Keep the following compatibles for device tree compatibility */
-> > > +       { .compatible = "snps,spear-ahci", },
-> > >         { .compatible = "ibm,476gtr-ahci", },
-> > > +       { .compatible = "snps,dwc-ahci", },
-> > >         { .compatible = "hisilicon,hisi-ahci", },
-> > >         { .compatible = "cavium,octeon-7130-ahci", },
-> > >         { /* sentinel */ }
-> > >
-> > > Anders, Naresh,
-> > >
-> > > Can you try this ?
-> >
->
-> > Tested this patch on todays linux-next tag: next-20221014 without enabling
-> > CONFIG_AHCI_DWC and it worked as expected when booting [1].
-> > On the other hand I also tried a build/boot with CONFIG_AHCI_DWC enabled
-> > and it worked as expected to boot [2].
->
-> Expected result. The DWC driver will probe the device on our platform
-> only while your platform falls back to using the generic driver.
-> Anders, in order understand the root cause of the problem could you please
-> 1. upload the bogus boot log.
+On 16.10.22 14:30, Petr Pavlu wrote:
+> During a system boot, it can happen that the kernel receives a burst of
+> requests to insert the same module but loading it eventually fails
+> during its init call. For instance, udev can make a request to insert
+> a frequency module for each individual CPU when another frequency module
+> is already loaded which causes the init function of the new module to
+> return an error.
+> 
+> The module loader currently serializes all such requests, with the
+> barrier in add_unformed_module(). This creates a lot of unnecessary work
+> and delays the boot. It can prevent udev from loading drivers for other
+> devices and might cause timeouts of services waiting on them and
+> subsequently a failed boot.
+> 
+> The mentioned serialization was introduced as a side-effect of commit
+> 6e6de3dee51a. The kernel before that merged some of same load requests
+> although it was more by accident and relied on specific timing. The
+> patch brings this behavior back in a more explicit form.
+> 
+> The logic is improved as follows:
+> * A check whether a module load matches an already loaded module is
+>    moved right after a module name is determined. -EEXIST continues to be
+>    returned if the module exists and is live, -EBUSY is returned if
+>    a same-name module is going.
 
-This [1] is the bogus boot log.
+Can you clarify why the EBUSY change is needed? Why not simply return 
+EEXIST?
 
-> 2. try what I suggested here
-> Link: https://lore.kernel.org/linux-ide/20221014133623.l6w4o7onoyhv2q34@mobilestation/
-> and if the system fails to boot at some point upload the boot log.
+If you have thread 0 loading the module and thread 1 unloading the 
+module concurrently, then it's pretty much unpredictable what the 
+outcome will be either way, no?
 
-Only doing this:
+Add a random sleep to thread 1 (such that the module is *not* going yet) 
+and the result will be EEXIST.
 
---- a/drivers/ata/ahci_dwc.c
-+++ b/drivers/ata/ahci_dwc.c
-@@ -316,12 +316,13 @@ static int ahci_dwc_init_host(struct
-ahci_host_priv *hpriv)
-  if (rc)
-  goto err_disable_resources;
-  }
--
-+/*
-  ahci_dwc_check_cap(hpriv);
+I suggest avoiding a EBUSY change unless there is real reason to do so.
 
-  ahci_dwc_init_timer(hpriv);
+User space that concurrently loads and unloads the same module is shaky 
+already, no?
 
-  rc = ahci_dwc_init_dmacr(hpriv);
-+*/
-  if (rc)
-  goto err_clear_platform;
+> * A new reference-counted shared_load_info structure is introduced to
+>    keep track of duplicate load requests. Two loads are considered
+>    equivalent if their module name matches. In case a load duplicates
+>    another running insert, the code waits for its completion and then
+>    returns -EEXIST or -EBUSY depending on whether it succeeded.
+> 
+> Moving the check for same-name module loads earlier has also a positive
+> effect on reducing memory pressure. For instance, David Hildenbrand and
+> Lin Liu reported [1] that when KASAN_INLINE is enabled (resulting in
+> large module size), with plenty of devices that udev wants to probe and
+> with plenty of CPUs that can carry out that probing concurrently, the
+> system can actually run out of module vmap space and trigger vmap
+> allocation errors. This is fixed by the patch too as it avoids duplicate
+> layout_and_allocate() work.
 
-and enable CONFIG_AHCI_DWC made the mkfs to detect the SATA drive [2].
+It might we reasonable to add the kernel messages here. Can you also add 
+the Reported-by?
 
-Cheers,
-Anders
-[1] https://lkft.validation.linaro.org/scheduler/job/5634743#L2580
-[2] https://lkft.validation.linaro.org/scheduler/job/5679278#L2617
+> 
+> [1] https://lore.kernel.org/all/20221013180518.217405-1-david@redhat.com/
+> 
+> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>   kernel/module/main.c | 217 ++++++++++++++++++++++++++++++-------------
+>   1 file changed, 155 insertions(+), 62 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 5288843ca40f..2228c0f725e7 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -66,11 +66,28 @@
+>    *    uses RCU list operations).
+>    * 2) module_use links,
+>    * 3) mod_tree.addr_min/mod_tree.addr_max,
+> - * 4) list of unloaded_tainted_modules.
+> + * 4) list of unloaded_tainted_modules,
+> + * 5) list of running_loads.
+>    */
+>   DEFINE_MUTEX(module_mutex);
+>   LIST_HEAD(modules);
+>   
+> +/* Shared information to track duplicate module loads. */
+> +struct shared_load_info {
+> +	char name[MODULE_NAME_LEN];
+> +	refcount_t refcnt;
+> +	struct list_head list;
+> +	struct completion done;
+> +	int err;
+> +};
+> +static LIST_HEAD(running_loads);
+> +
+> +/*
+> + * Waiting for a module load when the exact module name is not known, for
+> + * example, when resolving symbols from another modules.
+> + */
+> +static DECLARE_WAIT_QUEUE_HEAD(module_wq);
+> +
+>   /* Work queue for freeing init sections in success case */
+>   static void do_free_init(struct work_struct *w);
+>   static DECLARE_WORK(init_free_wq, do_free_init);
+> @@ -124,9 +141,6 @@ static void mod_update_bounds(struct module *mod)
+>   int modules_disabled;
+>   core_param(nomodule, modules_disabled, bint, 0);
+>   
+> -/* Waiting for a module to finish initializing? */
+> -static DECLARE_WAIT_QUEUE_HEAD(module_wq);
+> -
+>   static BLOCKING_NOTIFIER_HEAD(module_notify_list);
+>   
+>   int register_module_notifier(struct notifier_block *nb)
+> @@ -764,8 +778,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+>   	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
+>   
+>   	free_module(mod);
+> -	/* someone could wait for the module in add_unformed_module() */
+> -	wake_up_interruptible(&module_wq);
+>   	return 0;
+>   out:
+>   	mutex_unlock(&module_mutex);
+> @@ -2373,26 +2385,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
+>   	return module_finalize(info->hdr, info->sechdrs, mod);
+>   }
+>   
+> -/* Is this module of this name done loading?  No locks held. */
+> -static bool finished_loading(const char *name)
+> -{
+> -	struct module *mod;
+> -	bool ret;
+> -
+> -	/*
+> -	 * The module_mutex should not be a heavily contended lock;
+> -	 * if we get the occasional sleep here, we'll go an extra iteration
+> -	 * in the wait_event_interruptible(), which is harmless.
+> -	 */
+> -	sched_annotate_sleep();
+> -	mutex_lock(&module_mutex);
+> -	mod = find_module_all(name, strlen(name), true);
+> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+> -	mutex_unlock(&module_mutex);
+> -
+> -	return ret;
+> -}
+> -
+>   /* Call module constructors. */
+>   static void do_mod_ctors(struct module *mod)
+>   {
+> @@ -2523,7 +2515,6 @@ static noinline int do_init_module(struct module *mod)
+>   		schedule_work(&init_free_wq);
+>   
+>   	mutex_unlock(&module_mutex);
+> -	wake_up_interruptible(&module_wq);
+>   
+>   	return 0;
+>   
+> @@ -2539,7 +2530,6 @@ static noinline int do_init_module(struct module *mod)
+>   	klp_module_going(mod);
+>   	ftrace_release_mod(mod);
+>   	free_module(mod);
+> -	wake_up_interruptible(&module_wq);
+>   	return ret;
+>   }
+>   
+> @@ -2551,43 +2541,138 @@ static int may_init_module(void)
+>   	return 0;
+>   }
+>   
+> +static struct shared_load_info *
+> +shared_load_info_alloc(const struct load_info *info)
+> +{
+> +	struct shared_load_info *shared_info =
+> +		kzalloc(sizeof(*shared_info), GFP_KERNEL);
+> +	if (shared_info == NULL)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	strscpy(shared_info->name, info->name, sizeof(shared_info->name));
+> +	refcount_set(&shared_info->refcnt, 1);
+> +	INIT_LIST_HEAD(&shared_info->list);
+> +	init_completion(&shared_info->done);
+> +	return shared_info;
+> +}
+> +
+> +static void shared_load_info_get(struct shared_load_info *shared_info)
+> +{
+> +	refcount_inc(&shared_info->refcnt);
+> +}
+> +
+> +static void shared_load_info_put(struct shared_load_info *shared_info)
+> +{
+> +	if (refcount_dec_and_test(&shared_info->refcnt))
+> +		kfree(shared_info);
+> +}
+> +
+>   /*
+> - * We try to place it in the list now to make sure it's unique before
+> - * we dedicate too many resources.  In particular, temporary percpu
+> + * Check that a module load is unique and make it visible to others. The code
+> + * looks for parallel running inserts and already loaded modules. Two inserts
+> + * are considered equivalent if their module name matches. In case this load
+> + * duplicates another running insert, the code waits for its completion and
+> + * then returns -EEXIST or -EBUSY depending on whether it succeeded.
+> + *
+> + * Detecting early that a load is unique avoids dedicating too many cycles and
+> + * resources to bring up the module. In particular, it prevents temporary percpu
+>    * memory exhaustion.
+> + *
+> + * Merging same load requests then primarily helps during the boot process. It
+> + * can happen that the kernel receives a burst of requests to load the same
+> + * module (for example, a same module for each individual CPU) and loading it
+> + * eventually fails during its init call. Merging the requests allows that only
+> + * one full attempt to load the module is made.
+> + *
+> + * On a non-error return, it is guaranteed that this load is unique.
+>    */
+> -static int add_unformed_module(struct module *mod)
+> +static struct shared_load_info *add_running_load(const struct load_info *info)
+>   {
+> -	int err;
+>   	struct module *old;
+> +	struct shared_load_info *shared_info;
+>   
+> -	mod->state = MODULE_STATE_UNFORMED;
+> -
+> -again:
+>   	mutex_lock(&module_mutex);
+> -	old = find_module_all(mod->name, strlen(mod->name), true);
+> -	if (old != NULL) {
+> -		if (old->state != MODULE_STATE_LIVE) {
+> -			/* Wait in case it fails to load. */
+> +
+> +	/* Search if there is a running load of a module with the same name. */
+> +	list_for_each_entry(shared_info, &running_loads, list)
+> +		if (strcmp(shared_info->name, info->name) == 0) {
+> +			int err;
+> +
+> +			shared_load_info_get(shared_info);
+>   			mutex_unlock(&module_mutex);
+> -			err = wait_event_interruptible(module_wq,
+> -					       finished_loading(mod->name));
+> -			if (err)
+> -				goto out_unlocked;
+> -			goto again;
+> +
+> +			err = wait_for_completion_interruptible(
+> +				&shared_info->done);
+> +			/*
+> +			 * Return -EBUSY when the parallel load failed for any
+> +			 * reason. This load might end up another way but we are
+> +			 * not going to try.
+
+Why not? Usually "-EAGAIN" signals that user space should retry. But I 
+hope that we can avoid EBUSY altogether and simply retry here.
+
+I'd suggest shared_load_info_put()+retry.
+
+No need to optimize for corner cases (concurrent load failing so we 
+don't retry ourselves).
+
+> +			 */
+> +			if (!err)
+> +				err = shared_info->err ? -EBUSY : -EEXIST;
+> +			shared_load_info_put(shared_info);
+> +			shared_info = ERR_PTR(err);
+> +			goto out_unlocked;
+> +		}
+> +
+> +	/* Search if there is a live module with the given name already. */
+> +	old = find_module_all(info->name, strlen(info->name), true);
+> +	if (old != NULL) {
+> +		if (old->state == MODULE_STATE_LIVE) {
+> +			shared_info = ERR_PTR(-EEXIST);
+> +			goto out;
+>   		}
+> -		err = -EEXIST;
+> +
+> +		/*
+> +		 * Any active load always has its record in running_loads and so
+> +		 * would be found above. This applies independent whether such
+> +		 * a module is currently in MODULE_STATE_UNFORMED,
+> +		 * MODULE_STATE_COMING, or even in MODULE_STATE_GOING if its
+> +		 * initialization failed. It therefore means this must be an
+> +		 * older going module and the caller should try later once it is
+> +		 * gone.
+> +		 */
+> +		WARN_ON(old->state != MODULE_STATE_GOING);
+> +		shared_info = ERR_PTR(-EBUSY);
+
+As raised above, why not EEXIST? Concurrent loading+unloading is racy 
+either way.
+
+>   		goto out;
+>   	}
+> -	mod_update_bounds(mod);
+> -	list_add_rcu(&mod->list, &modules);
+> -	mod_tree_insert(mod);
+> -	err = 0;
+> +
+> +	/* The load is unique, make it visible to others. */
+> +	shared_info = shared_load_info_alloc(info);
+> +	if (IS_ERR(shared_info))
+> +		goto out;
+> +	list_add(&shared_info->list, &running_loads);
+>   
+>   out:
+>   	mutex_unlock(&module_mutex);
+>   out_unlocked:
+> -	return err;
+> +	return shared_info;
+> +}
+> +
+> +static void finalize_running_load(struct shared_load_info *shared_info, int err)
+
+s/finalize/release? It would be nice if the name could correspond to an 
+opposite action of "add_running_load".
+
+> +{
+> +	/* Inform other duplicate inserts that the load finished. */
+> +	mutex_lock(&module_mutex);
+> +	list_del(&shared_info->list);
+> +	shared_info->err = err;
+> +	mutex_unlock(&module_mutex);
+> +
+> +	complete_all(&shared_info->done);
+> +	shared_load_info_put(shared_info);
+> +
+> +	/* Tell other modules waiting on this one that it completed loading. */
+> +	wake_up_interruptible(&module_wq);
+> +}
+> +
+
+
+[...]
+
+>    sysfs_cleanup:
+>   	mod_sysfs_teardown(mod);
+> @@ -2880,15 +2973,15 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>   	/* Unlink carefully: kallsyms could be walking list. */
+>   	list_del_rcu(&mod->list);
+>   	mod_tree_remove(mod);
+> -	wake_up_interruptible(&module_wq);
+>   	/* Wait for RCU-sched synchronizing before releasing mod->list. */
+>   	synchronize_rcu();
+>   	mutex_unlock(&module_mutex);
+> - free_module:
+>   	/* Free lock-classes; relies on the preceding sync_rcu() */
+>   	lockdep_free_key_range(mod->data_layout.base, mod->data_layout.size);
+>   
+>   	module_deallocate(mod, info);
+> + free_shared:
+
+Ideally, the label matches what's actually being done. So maybe 
+"release_shared" if you go with "release_..."
+
+> +	finalize_running_load(shared_info, err);
+>    free_copy:
+>   	free_copy(info, flags);
+>   	return err;
+
+-- 
+Thanks,
+
+David / dhildenb
+
