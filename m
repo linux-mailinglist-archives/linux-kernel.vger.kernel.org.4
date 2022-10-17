@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ABC60115A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A4A6010D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiJQOnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S230175AbiJQONi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiJQOm6 (ORCPT
+        with ESMTP id S229848AbiJQONg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:42:58 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF35566A5D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666017758; bh=Wba2l4Kwed3G/6vyWzT3y3nHVxraG2sEVvdQ86jT6rY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=mbMel+jkBx+IkCbcpro63iOXUrg9YjL3NqhFFlOkpjN6zSdb6wqjGCuhQd2oGfI6u
-         tRRzPy0tWGbC7t4h7zdo2L3/1gg4VZjpjzSxAdE1+Zjc9+LOzKRhaAhT43aauOfjku
-         tsy0uCa60ilisCoMMIjjCYAQ+3dQ410FROEjIGF0=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via [213.182.55.206]
-        Mon, 17 Oct 2022 16:42:38 +0200 (CEST)
-X-EA-Auth: 59HAc1ReCgkEZhVAZP/yoTSANglxHpuna6Dpwz5K78DAYgEI0BFoRJ58jtSe2S9zMcJZzx2xum0Nl3Tbxy0SofnHetXzLqpT
-Date:   Mon, 17 Oct 2022 19:43:05 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: Re: [PATCH 3/4] staging: r8188eu: remove {} for single statement
- blocks
-Message-ID: <Y01i8U3g+7udq+Mg@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1666011479.git.drv@mailo.com>
- <478d652b9f467d47685c1af72a876f34dd92710f.1666011479.git.drv@mailo.com>
- <alpine.DEB.2.22.394.2210171556290.16433@hadrien>
+        Mon, 17 Oct 2022 10:13:36 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7305F12A;
+        Mon, 17 Oct 2022 07:13:36 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id D877C60C;
+        Mon, 17 Oct 2022 14:13:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D877C60C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1666016016; bh=YgPNMTma5N6dvd1itH4n52kI8dGg/Qktzp1L17N5tB8=;
+        h=From:To:Subject:In-Reply-To:References:Date:From;
+        b=J6n1Qs68GOVpwf7WyDr8M9rCnh/vvcws5Q51Sl2Iv8sN8AYYVwBeJwEBDSNlzn1QM
+         a6htDihddf/AwFjpWgj94GUHy3N4fEMcbQf/lFT295eyEm+6VA8HDMA2MJyNjPFRcH
+         75zc4dVlj+3ina0f2FOiNkRHx4ULG7gC/8859EE7echGz26OCnG4xgiiGiUB0B9MOy
+         wLIJQn9whmilttZ09zIuI2mAhuWhwBSoGyeA3ltP9SY4q5O8UebePoWJ7E1F24hG3P
+         oZQa2LxxFR1kztJmB7CiEtwUPuZkkLZO/yy0Fha/Ym8AMpJJKg46YZosTIubIFLmdd
+         oOzL39Cr3s01g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Rui Li <me@lirui.org>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 0/2] docs/zh_CN: Add userspace-api/index and ebpf
+ Chinese translation
+In-Reply-To: <b75832fc-67bb-22b9-39b3-c0816b7ca254@lirui.org>
+References: <cover.1666009558.git.me@lirui.org>
+ <87pmeqftfw.fsf@meer.lwn.net>
+ <b75832fc-67bb-22b9-39b3-c0816b7ca254@lirui.org>
+Date:   Mon, 17 Oct 2022 08:13:35 -0600
+Message-ID: <87h702fshc.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2210171556290.16433@hadrien>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -53,55 +53,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 03:57:16PM +0200, Julia Lawall wrote:
->
->
-> On Mon, 17 Oct 2022, Deepak R Varma wrote:
->
-> > As per the Linux kernel coding-style guidelines, there is no need to
-> > use {} for single statement blocks. Address following checkpatch script
-> > complaint:
-> > 	WARNING: braces {} are not necessary for single statement blocks
->
-> It's nice to say something like "Problem identified using checkpatch".
-> But putting the verbatim checkpatch message that says what you just said
-> doesn't seem necessary.
+Rui Li <me@lirui.org> writes:
 
-Understood. That sounds better. Thank you Julia. Will include your feedback in
-the next revision.
-
-./drv
-
+> So sorry if disturbing. After sending the first patch set, a
+> maintainer contacted me and pointed out my email server
+> is incorrectly handling DKIM and Message-Id. That causes
+> inconvenience for maintainers to review.
 >
-> julia
+> I changed my email service and hopefully the DKIM check
+> and Message ID won't be wrong. I am not quite sure if I
+> should resend or add PATCH v1 version.
 >
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >  drivers/staging/r8188eu/core/rtw_br_ext.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > index 427da7e8ba4c..290affe50d0b 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > @@ -655,9 +655,8 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
-> >  	hash = __nat25_network_hash(network_addr);
-> >  	db = priv->nethash[hash];
-> >  	while (db) {
-> > -		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN)) {
-> > +		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN))
-> >  			return (void *)db;
-> > -		}
-> >
-> >  		db = db->next_hash;
-> >  	}
-> > --
-> > 2.30.2
-> >
-> >
-> >
-> >
-> >
+> Sorry again if I disturbed anyone.
 
+No worries, I was mostly wondering.
 
+As a general rule, whenever you resend a patch series, it is good to add
+a note saying why so that others don't have to try to figure it out on
+their own.
+
+Thanks,
+
+jon
