@@ -2,97 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FD9601734
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16679601739
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiJQTSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
+        id S230418AbiJQTTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiJQTSP (ORCPT
+        with ESMTP id S230336AbiJQTTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:18:15 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2766F54E;
-        Mon, 17 Oct 2022 12:18:14 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso11885943pjk.1;
-        Mon, 17 Oct 2022 12:18:14 -0700 (PDT)
+        Mon, 17 Oct 2022 15:19:47 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F2013E36
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:19:40 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y8so11950456pfp.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:19:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U4Nk30ocrTukmioveUlnotlj+PapV0iR+FJEhpHiAp0=;
-        b=m4Hxgw0EsBEydaoNTLAp3+U5g8haDMBA2kQ7yoIV99yfRUfqqAvXBBmRCEacCSulSz
-         tpRIxa3v61fN2j00tFYbrNQlG1Q/yF+AUKRNlOTRN3yWthcp6w8to4PLAAKSQQf6z6Q+
-         WAM/PuP3jaEOcDB8weTVphcOJUz66b/+wkpUFKG+3Mr5tixrjZsSKm88S3X7TqOEvcae
-         pfOF5x7er8E/chPHlv73fBDgz6AaGRqzGfxqj0zMJ74TetIFga1Ft12D0J39xEnjCXYb
-         LRV89WdxQBQp3RB3IUiNVh8BoO3uWQEHQ754ZnNLJ68CLXh6wfqX/hcNnhhLNSimJn2d
-         8Fag==
+        bh=gAApYXxRSlYHmUzAYpnouM31FqnGx/GLsXZXGjgii3c=;
+        b=hU2Jw/WwCvDgac3p1KYfwXyW0I9wrOGHxfyUunyVwVUvMY+H6RNCXmhgMvqZQjL4fK
+         u0Jvq3KPFU4uTC0j2s6K0s32cw9UHBjVn+MzbYL2ltlE3bgVfU4yq8uksIH+JHeJ1nwG
+         dY72nDk62FiVziHRoZ9Gk45hfBkenTjm/UW9I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=U4Nk30ocrTukmioveUlnotlj+PapV0iR+FJEhpHiAp0=;
-        b=at4+os9w7gesuHxBRtKcv7lYTsLf79wBErM/xdMFl6+rjecXUvKhzQw7/7BpurbPZh
-         Dpz/f1KdesqhhTU54S4YFS6zn/zWp30wjKca96MsLaHIW5AC1RycuuB+d07i0SZzeovj
-         YIKNYBQ175pDkOwpp+tdbzzkIi+60pQNNguYr1P5K0Om6QeEn7Dvyg8PhVx6UBXnBqup
-         g5VE8yqe0KOGACSDGSOJf/zSWIBAV7JjIi9G2e5DjMGjYBHui1qxgY3fxic4ruXarB3d
-         X//cXGUatWEiJHnTat4SZTKkCNGWlvk07ysOV9ClAemkWQ9J2xk0D66hKMX5HtXkkkcB
-         n90g==
-X-Gm-Message-State: ACrzQf395RpbE2cORQMscryQB0hfIJ5SrFbPUNgbrgkkqNh0Khyoidqi
-        wZ2MC3P6zLgX1ySDn9LpTXI=
-X-Google-Smtp-Source: AMsMyM4Lps+cZQm/kHGrgJQFOEbfOrnNJi5HRvWLq2W6P1Yndg48fAfT8RemXaESF1dctKNQf7ZaXw==
-X-Received: by 2002:a17:903:22c1:b0:184:983f:11b2 with SMTP id y1-20020a17090322c100b00184983f11b2mr13764303plg.40.1666034294242;
-        Mon, 17 Oct 2022 12:18:14 -0700 (PDT)
-Received: from localhost ([115.117.107.100])
-        by smtp.gmail.com with ESMTPSA id x123-20020a626381000000b005613220346asm7416351pfb.205.2022.10.17.12.18.12
+        bh=gAApYXxRSlYHmUzAYpnouM31FqnGx/GLsXZXGjgii3c=;
+        b=Ccw1qKs7TyTTwvBgZZuLbSbEYpsbuakj7jmflK40IU3CoCUAqTbowI/QSJkY2qd0ZU
+         T5jlfEykhZfDmiwWCLYleEW3NOYEe8lUZ/+RBGCTEoja/oy4jVSS+mOflWH0T3ZKm2bI
+         P+9AvC3TpWfcqXGYgwCUCis8OIzfEdpU/yVY856KWFclRLNQXwsJCmNmwOtImeRlfxmW
+         eSk8MJO848QAt6d5TNNByE3wwBMkQ2kMqinGK81SBRjWq7okqBR6so8NOj8YxssazThG
+         hmOTLeLLnVfGXkCeAw+IwR7p0FZk43Kp1moPpWCvvmB5E1NOsQBa5m5rbSjQBbZlQ+S1
+         vHgA==
+X-Gm-Message-State: ACrzQf3T/OWgnMAxSA7neoHf1Wi6HipOiYKtr6VlWwpEV4dlpCDMRXdj
+        sYEG4X0otOiAVV8m/WJpa4nh2w==
+X-Google-Smtp-Source: AMsMyM4fFNt5FqXCKAqgfh46u9c+xfxYoLcVEQ/ABcHPcPS/0RHkfVQcB6lFFlZuIhQYjhu6w/itAg==
+X-Received: by 2002:a65:5a0b:0:b0:46b:158e:ad7c with SMTP id y11-20020a655a0b000000b0046b158ead7cmr12196753pgs.272.1666034378945;
+        Mon, 17 Oct 2022 12:19:38 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:5562:6ef6:c80b:1268])
+        by smtp.gmail.com with ESMTPSA id y2-20020a170902864200b001754cfb5e21sm6980225plt.96.2022.10.17.12.19.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 12:18:13 -0700 (PDT)
-From:   Manank Patel <pmanank200502@gmail.com>
-To:     sgoutham@marvell.com
-Cc:     gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manank Patel <pmanank200502@gmail.com>
-Subject: [PATCH] ethernet: marvell: octeontx2 Fix resource not freed after malloc
-Date:   Tue, 18 Oct 2022 00:47:44 +0530
-Message-Id: <20221017191743.75177-1-pmanank200502@gmail.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 17 Oct 2022 12:19:38 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Rock Chiu <rock.chiu@paradetech.corp-partner.google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jason Yen <jason.yen@paradetech.corp-partner.google.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/bridge: ps8640: Add back the 50 ms mystery delay after HPD
+Date:   Mon, 17 Oct 2022 12:18:51 -0700
+Message-Id: <20221017121813.1.I59700c745fbc31559a5d5c8e2a960279c751dbd5@changeid>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix rxsc not getting freed before going out of scope
+Back in commit 826cff3f7ebb ("drm/bridge: parade-ps8640: Enable
+runtime power management") we removed a mysterious 50 ms delay because
+"Parade's support [couldn't] explain what the delay [was] for".
 
-Fixes: c54ffc73601c ("octeontx2-pf: mcs: Introduce MACSEC hardware offloading")
+While I'm always a fan of removing mysterious delays, I suspect that
+we need this mysterious delay to avoid some problems.
 
-Signed-off-by: Manank Patel <pmanank200502@gmail.com>
+Specifically, what I found recently is that on sc7180-trogdor-homestar
+sometimes the AUX backlight wasn't initializing properly. Some
+debugging showed that the drm_dp_dpcd_read() function that the AUX
+backlight driver was calling was returning bogus data about 1% of the
+time when I booted up. This confused
+drm_panel_dp_aux_backlight(). From continued debugging:
+- If I retried the read then the read worked just fine.
+- If I added a loop to perform the same read that
+  drm_panel_dp_aux_backlight() was doing 30 times at bootup I could
+  see that some percentage of the time the first read would give bogus
+  data but all 29 additional reads would always be fine.
+- If I added a large delay _after_ powering on the panel but before
+  powering on PS8640 I could still reproduce the problem.
+- If I added a delay after PS8640 powered on then I couldn't reproduce
+  the problem.
+- I couldn't reproduce the problem on a board with the same panel but
+  the ti-sn65dsi86 bridge chip.
+
+To me, the above indicated that there was a problem with PS8640 and
+not the panel.
+
+I don't really have any insight into what's going on in the MCU, but
+my best guess is that when the MCU itself sees the HPD go high that it
+does some AUX transfers itself and this is confusing things.
+
+Let's go back and add back in the mysterious 50 ms delay. We only want
+to do this the first time we see HPD go high after booting the MCU,
+not every time we double-check HPD.
+
+With this, the backlight initializes reliably on homestar.
+
+Fixes: 826cff3f7ebb ("drm/bridge: parade-ps8640: Enable runtime power management")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
- drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-index 9809f551fc2e..c7b2ebb2c75b 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-@@ -870,6 +870,7 @@ static struct cn10k_mcs_rxsc *cn10k_mcs_create_rxsc(struct otx2_nic *pfvf)
- 	cn10k_mcs_free_rsrc(pfvf, MCS_RX, MCS_RSRC_TYPE_FLOWID,
- 			    rxsc->hw_flow_id, false);
- fail:
-+	kfree(rxsc);
- 	return ERR_PTR(ret);
+ drivers/gpu/drm/bridge/parade-ps8640.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+index 5be6562c2a19..6a614e54b383 100644
+--- a/drivers/gpu/drm/bridge/parade-ps8640.c
++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+@@ -105,6 +105,7 @@ struct ps8640 {
+ 	struct gpio_desc *gpio_powerdown;
+ 	struct device_link *link;
+ 	bool pre_enabled;
++	bool need_post_hpd_delay;
+ };
+ 
+ static const struct regmap_config ps8640_regmap_config[] = {
+@@ -173,14 +174,31 @@ static int _ps8640_wait_hpd_asserted(struct ps8640 *ps_bridge, unsigned long wai
+ {
+ 	struct regmap *map = ps_bridge->regmap[PAGE2_TOP_CNTL];
+ 	int status;
++	int ret;
+ 
+ 	/*
+ 	 * Apparently something about the firmware in the chip signals that
+ 	 * HPD goes high by reporting GPIO9 as high (even though HPD isn't
+ 	 * actually connected to GPIO9).
+ 	 */
+-	return regmap_read_poll_timeout(map, PAGE2_GPIO_H, status,
+-					status & PS_GPIO9, wait_us / 10, wait_us);
++	ret = regmap_read_poll_timeout(map, PAGE2_GPIO_H, status,
++				       status & PS_GPIO9, wait_us / 10, wait_us);
++
++	/*
++	 * The first time we see HPD go high after a reset we delay an extra
++	 * 50 ms. The best guess is that the MCU is doing "stuff" during this
++	 * time (maybe talking to the panel) and we don't want to interrupt it.
++	 *
++	 * No locking is done around "need_post_hpd_delay". If we're here we
++	 * know we're holding a PM Runtime reference and the only other place
++	 * that touches this is PM Runtime resume.
++	 */
++	if (!ret && ps_bridge->need_post_hpd_delay) {
++		ps_bridge->need_post_hpd_delay = false;
++		msleep(50);
++	}
++
++	return ret;
  }
  
+ static int ps8640_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us)
+@@ -388,6 +406,9 @@ static int __maybe_unused ps8640_resume(struct device *dev)
+ 	msleep(50);
+ 	gpiod_set_value(ps_bridge->gpio_reset, 0);
+ 
++	/* We just reset things, so we need a delay after the first HPD */
++	ps_bridge->need_post_hpd_delay = true;
++
+ 	/*
+ 	 * Mystery 200 ms delay for the "MCU to be ready". It's unclear if
+ 	 * this is truly necessary since the MCU will already signal that
 -- 
-2.38.0
+2.38.0.413.g74048e4d9e-goog
 
