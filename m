@@ -2,135 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD43601595
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7328B601491
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiJQRmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S230169AbiJQRRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiJQRml (ORCPT
+        with ESMTP id S230162AbiJQRRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:42:41 -0400
-X-Greylist: delayed 1506 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Oct 2022 10:42:39 PDT
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5E2F59E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:42:39 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 834729C073E;
-        Mon, 17 Oct 2022 13:17:32 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id zYB__H4skXMQ; Mon, 17 Oct 2022 13:17:31 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id C6C549C0792;
-        Mon, 17 Oct 2022 13:17:31 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com C6C549C0792
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-        t=1666027051; bh=+Luzp+iknKkqQ49XgkNP2jOmFoImMb0zKegv/sjKa54=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=HSoeX+FeokVumyCHYEkqYIkkcveLB7hluGAi65nWqARnw2TtTnckcaz13J4ibiDsP
-         2jLNaXf485QQaRPmNQUvGUa/InT0UGuGNzY7bXfb7YQT5vLONvmzWEji5DsYfJxkG9
-         Hyjtk8QtOEhe32SS5GpaH4wQrtp/uF4Tw/Vp/wTf525HwscLNKGdpIZYgb5SlW5yLm
-         7eOIiV56jpDDLzRM89dxRejMdJCey4178b7CASSQW3BLttXnxM+zDsqzd2AhtebPD1
-         EViRBjiZ7RR7JwVBDIA8hn+pqyKz76POb7ikz6qtggYiD+7W2AiL43nQI0l+9VrY1f
-         6HZKfpnQEcBgA==
-X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vMY64oYDEsFt; Mon, 17 Oct 2022 13:17:31 -0400 (EDT)
-Received: from barbarian.mtl.sfl (unknown [192.168.51.254])
-        by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 975FC9C073E;
-        Mon, 17 Oct 2022 13:17:31 -0400 (EDT)
-From:   Firas Ashkar <firas.ashkar@savoirfairelinux.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, trivial@kernel.org,
-        alex@digriz.org.uk,
-        Firas Ashkar <firas.ashkar@savoirfairelinux.com>
-Subject: [PATCH] ARM: orion5x: add new FPGA ID
-Date:   Mon, 17 Oct 2022 13:17:23 -0400
-Message-Id: <20221017171723.1639558-1-firas.ashkar@savoirfairelinux.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 17 Oct 2022 13:17:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BAB6E89D;
+        Mon, 17 Oct 2022 10:17:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2093DB819D1;
+        Mon, 17 Oct 2022 17:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D35C433C1;
+        Mon, 17 Oct 2022 17:17:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666027061;
+        bh=z2RQhpL9FUPteZDb0jA+7mnSGiEwMAvl6fHKoEXqwTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WKrRcCHj4UivOp2LFBqnN3mFHPhhcxJKMBcwVRosfy+VxCIx7OTjz9dH1IYufA4ly
+         jHzbhXigYKMxEKRnyyQEiGoidncXhwAxWs17OWJDuMt7zoFqZQ97+pZtcXOswnMUME
+         0SRhc8k6w3POjMA4qto5SNR0vT5Z6lYN49Iqs0Hz3Jrx/tPuw7oxvfkM1CmdPy9uz/
+         w3tmtSdo+d7nEssvvA/XqJGCUw/ALkMgE4A9dL2R1woOS0A7L4wo/ii0uaLT1RvgBf
+         tT6wgVp1WSrYOrqE48N0km7jd4KgrPTmU+2V4gsLnk6rjnNUdJpMNDmk5rQ3PFrabB
+         Tw8t655HVgKuQ==
+Date:   Mon, 17 Oct 2022 18:17:36 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 2/6] spi: pxa2xx: Respect Intel SSP type given by a
+ property
+Message-ID: <Y02OMNAFrKLWUtiO@sirena.org.uk>
+References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
+ <20221017171243.57078-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3ZJssUnveSht0LUP"
+Content-Disposition: inline
+In-Reply-To: <20221017171243.57078-2-andriy.shevchenko@linux.intel.com>
+X-Cookie: Real Users hate Real Programmers.
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add new EmbeddedTS FPGA revision id, suppressing related boot time warnin=
-g
-message.
 
-$ dmesg
-Booting Linux on physical CPU 0x0
-Linux version 6.1.0-rc1 (fashkar@barbarian) \
- (arm-buildroot-linux-gnueabi-gcc.br_real 10.3.0, \
- GNU ld (GNU Binutils) 2.36.1) #2 PREEMPT Mon Oct 17 12:04:27 EDT 2022
-CPU: Feroceon [41069260] revision 0 (ARMv5TEJ), cr=3Db005317f
-CPU: VIVT data cache, VIVT instruction cache
-Machine: Technologic Systems TS-78xx SBC
+--3ZJssUnveSht0LUP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-...
+On Mon, Oct 17, 2022 at 08:12:39PM +0300, Andy Shevchenko wrote:
 
-DMA: preallocated 256 KiB pool for atomic coherent allocations
-Orion ID: MV88F5182-A2. TCLK=3D166666667.
-initial MPP regs:
- 00000000
- 00000000
- 03ff0000
+> Allow to set the Intel SSP type by reading the property.
 
-  final MPP regs:
- 00000003
- 00000000
- 03ff0000
+> +	/* Always try to read property */
+> +	device_property_read_u32(&pdev->dev, "intel,spi-pxa2xx-type", &value);
+> +
 
-ts78xx_setup: FPGA magic=3D0x00b480, rev=3D0x0b
+What is the advantage of pushing this into firmware?
 
-...
-$
+--3ZJssUnveSht0LUP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Firas Ashkar <firas.ashkar@savoirfairelinux.com>
----
-:100644 100644 2f4fe3ca5c1a 466e2a4cd6f7 M	arch/arm/mach-orion5x/ts78xx-f=
-pga.h
-:100644 100644 af810e7ccd79 0f619b1bbc52 M	arch/arm/mach-orion5x/ts78xx-s=
-etup.c
- arch/arm/mach-orion5x/ts78xx-fpga.h  | 1 +
- arch/arm/mach-orion5x/ts78xx-setup.c | 1 +
- 2 files changed, 2 insertions(+)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/arch/arm/mach-orion5x/ts78xx-fpga.h b/arch/arm/mach-orion5x/=
-ts78xx-fpga.h
-index 2f4fe3ca5c1a..466e2a4cd6f7 100644
---- a/arch/arm/mach-orion5x/ts78xx-fpga.h
-+++ b/arch/arm/mach-orion5x/ts78xx-fpga.h
-@@ -17,6 +17,7 @@ enum fpga_ids {
- 	TS7800_REV_7	=3D FPGAID(TS7800_FPGA_MAGIC, 0x07),
- 	TS7800_REV_8	=3D FPGAID(TS7800_FPGA_MAGIC, 0x08),
- 	TS7800_REV_9	=3D FPGAID(TS7800_FPGA_MAGIC, 0x09),
-+	TS7800_REV_11	=3D FPGAID(TS7800_FPGA_MAGIC, 0x0b),
-=20
- 	/* Unaffordable & Expensive */
- 	UAE_DUMMY	=3D FPGAID(0xffffff, 0x01),
-diff --git a/arch/arm/mach-orion5x/ts78xx-setup.c b/arch/arm/mach-orion5x=
-/ts78xx-setup.c
-index af810e7ccd79..0f619b1bbc52 100644
---- a/arch/arm/mach-orion5x/ts78xx-setup.c
-+++ b/arch/arm/mach-orion5x/ts78xx-setup.c
-@@ -345,6 +345,7 @@ static void ts78xx_fpga_supports(void)
- 	case TS7800_REV_7:
- 	case TS7800_REV_8:
- 	case TS7800_REV_9:
-+	case TS7800_REV_11:
- 		ts78xx_fpga.supports.ts_rtc.present =3D 1;
- 		ts78xx_fpga.supports.ts_nand.present =3D 1;
- 		ts78xx_fpga.supports.ts_rng.present =3D 1;
---=20
-2.34.1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNNjjAACgkQJNaLcl1U
+h9CHyAf9G/nqfY9tao3dRp84AnqFvEDyGnkR4tSoQUTNVQSCg+pgUdyFRunHMLCF
++eoi9VXricKAhts2Mvdci3p74fsvrJZDyE9I78pDs6I/GMwlRvB21BqBtL2vJzjd
+bZaSoX/BFg2QjEUtwMGrXGmPsb/14JSUbPUomKgjT2gupxV/pcjj0TODmfjfIL/7
+uZm5Ocn2JvvfJmBso2XY0eDHck8e9hS9G3vqK+4lj2BNTSk8uob8/a8Ju1ZHfm8o
+yCtRVmf+3/kAf5cCzlAjDxwrsJ6MaRhv+eNzTRymvfoXcdLrVeAaO9b83lgBN5GU
+tQtq1w/TofHKffbrFvuM4ulg5dribw==
+=MOJU
+-----END PGP SIGNATURE-----
 
+--3ZJssUnveSht0LUP--
