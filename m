@@ -2,212 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1939601D9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 01:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EBA601D9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 01:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiJQXc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 19:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S229574AbiJQXfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 19:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiJQXcU (ORCPT
+        with ESMTP id S229675AbiJQXe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 19:32:20 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F1C6D869
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 16:32:17 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id o67so8338503qvo.13
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 16:32:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yLtsIxiPqpmlufHEr3FL/+eDmHdi/HXtrgOVQNh7x5s=;
-        b=O1LFATwRW+qysYzWw55T0+v3ZXbAocRpFEyR9njT/088eCFdg4uc+q8irwcTUTPgrs
-         45Zx82cICbWGjCgKf3cFCBHXalWRP4X8rPMX85JJ+U7ADI6fikXOAz53p6my+9qKQGed
-         UqubaA35gCyAn2nD2hFQvmyfIuELXyhGazekU0GHVN3ClHdx+d7uu0DQVh6qegHUCHEs
-         uz7JuIDpD8njhZiGFoFUEdjV/jCQNvbs/vtMJePakHl3An4dHhZVk/KWSxz49yOu+wLi
-         pZZ2sanqLS6oclHn1Fi8mKHqDqLDNmj8aQDR5njPlHMBYYpDjdyUNaXyoUj5KkaigHmu
-         hHzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLtsIxiPqpmlufHEr3FL/+eDmHdi/HXtrgOVQNh7x5s=;
-        b=Nhb9GQb3kZ4nM6D8opSqjSW7Mfwh9qOWJ/Tm9JMnnHjlC3KOO5N5vWg5drgpuusqvG
-         e+ND1v2xAAYE2H2mI0plGzbBxg6e3nsv1Po7EM8W124WNMpg2h5iS/ZY801S+L/nTrKj
-         esJcru1ZgJ+/rrc/SEnNjCPGHu4n1b9WS80T7kQoA1+nGUN3QpuAqXI4Zy5T8x/th52I
-         KWlc3W1mtu7bHtf+FD9TZxHQ/AyK3Mb7zKTFpGcitY/86zEl54zAng1uLZmDXiqS7HQe
-         ntzkzoW/39qTFZv7enLNbG6wbpe437pT8t1LB1MKlASIMd7xIX4Yw/E2prEjTOsJDaIR
-         YyKA==
-X-Gm-Message-State: ACrzQf2eMsB+znU6qgFAll49XcKmjKRoUiPtWA5bD0cmA/hiAlXxAdZC
-        YDz8+/9HfEarA4VrDl913s5NgA==
-X-Google-Smtp-Source: AMsMyM6Or4Kcvm4JcW7lopZeNHeHCxmCfd0V69+B1r5Ien71pZyJM5WyITILk4t7bf+HSswCUUsPUQ==
-X-Received: by 2002:a05:6214:5006:b0:4b4:9a51:f811 with SMTP id jo6-20020a056214500600b004b49a51f811mr1316qvb.44.1666049537022;
-        Mon, 17 Oct 2022 16:32:17 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id h24-20020ac85158000000b00304fe5247bfsm757014qtn.36.2022.10.17.16.32.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 16:32:16 -0700 (PDT)
-Message-ID: <7cea27d8-c3c6-4bc2-0072-1168c9c6a2f0@linaro.org>
-Date:   Mon, 17 Oct 2022 19:32:14 -0400
+        Mon, 17 Oct 2022 19:34:58 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9571AE65;
+        Mon, 17 Oct 2022 16:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666049696; x=1697585696;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q7gifIbAGnfqIQa317CCU6jq49uc6FOfKfZTEgyZZeU=;
+  b=LsY2c+aKpkkKu59h5v+OvIbzTb4BPtdKeHYG0B2fWQ1HXJSDQHonIjj+
+   fnFumz6entw4mi/pNTyLZwNJNc3bBQt050LXShLrfQcaGaYUKKIpwFHly
+   zsT8XC4WTbx14XTKXtpD6Q4AM+nGIAO+v1C8TSxEGcGt6yUNrwnccKfIZ
+   gLvvE33g1SfDzgxWG5v0VuBx90pNH294jBOFtOsnALvpn/olOMxM0KOQU
+   IUV/hOXHl9D0B0+6QawAzWx96Eosy4uhEFrnXJbVprTyMc1dhplEl57GH
+   jCG2iHgeeHaD9qD5iBeZyqZ11YYzYtN1XcY5dINtY3nRxwvQTaMOHsomo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="289240539"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="289240539"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 16:34:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="753811623"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="753811623"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 17 Oct 2022 16:34:54 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id B986717F; Tue, 18 Oct 2022 02:35:15 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [PATCH v1 1/1] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+Date:   Tue, 18 Oct 2022 02:35:10 +0300
+Message-Id: <20221017233510.53336-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/3] dt-bindings: iio: temperature: ltc2983: support more
- parts
-Content-Language: en-US
-To:     =?UTF-8?Q?Nuno_S=c3=a1?= <noname.nuno@gmail.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-References: <20221014123724.1401011-1-demonsingur@gmail.com>
- <20221014123724.1401011-3-demonsingur@gmail.com>
- <28c88be7-a416-3612-3e13-5346a6e92565@linaro.org>
- <f003f3ffa86fbeae6898c23638a4b0e1228a8657.camel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f003f3ffa86fbeae6898c23638a4b0e1228a8657.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 05:38, Nuno Sá wrote:
-> Hi Krzysztof,
-> 
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
 
-(...)
+If the extcon device exists, get the mode from the extcon device. If
+the controller is DRD and the driver is unable to determine the mode,
+only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
 
->>> @@ -353,6 +361,41 @@ patternProperties:
->>>          description: Boolean property which set's the adc as
->>> single-ended.
->>>          type: boolean
->>>  
->>> +  "^temp@":
->>
->> There is already a property for thermocouple. Isn't a thermocouple a
->> temperature sensor? IOW, why new property is needed?
->>
-> 
-> Well, most of the patternProps in this bindings are temperature
-> sensors... It's just that the device(s) support different types of
-> them. 'adi,sensor-type' is used to identify each sensor (as this
-> translates in different configurations being written in the device
-> channels).
+Reported-by: Steev Klimaszewski <steev@kali.org>
+Fixes: 7a84e7353e23 ("Revert "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"")
+Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/dwc3/core.c | 49 +++++++++++++++++++++++++++++++++++++++-
+ drivers/usb/dwc3/drd.c  | 50 -----------------------------------------
+ 2 files changed, 48 insertions(+), 51 deletions(-)
 
-Sure.
-
-> 
->>> +    type: object
->>> +    description:
->>> +      Represents a channel which is being used as an active analog
->>> temperature
->>> +      sensor.
->>> +
->>> +    properties:
->>> +      adi,sensor-type:
->>> +        description:
->>> +          Identifies the sensor as an active analog temperature
->>> sensor.
->>> +        $ref: /schemas/types.yaml#/definitions/uint32
->>> +        const: 31
->>> +
->>> +      adi,single-ended:
->>> +        description: Boolean property which sets the sensor as
->>> single-ended.
->>
->> Drop "Boolean property which sets" - it's obvious from the type.
->>
->>
->>
->>> +        type: boolean
->>> +
->>> +      adi,custom-temp:
->>> +        description:
->>> +          This is a table, where each entry should be a pair of
->>
->> "This is a table" - obvious from the type.
->>
->>> +          voltage(mv)-temperature(K). The entries must be given in
->>> nv and uK
->>
->> mv-K or nv-uK? Confusing...
-> 
-> Yeah, a bit. In Cosmin defense, I think he's just keeping the same
-> "style" as the rest of the properties...
-
-That's not the best approach for two reasons:
-1. The unit used by hardware matters less here, because bindings are
-used to write DTS. In many, many other cases there will be some
-translation (just take random voltage regulator bindings).
-
-2. What the driver is doing matters even less.
-
-So just describe here what is expected in DTS.
-
-> 
->>
->>> +          so that, the original values must be multiplied by
->>> 1000000. For
->>> +          more details look at table 71 and 72.
->>
->> There is no table 71 in the bindings... It seems you pasted it from
->> somewhere.
-> 
-> I'm fairly sure this refers to the datasheet. I see now that this can
-> be confusing (again this kind of references are being (ab)used in the
-> rest of the file).
-
-Yep, but there are now multiple datasheets, aren't there?
-
-> 
->>
->>> +          Note should be signed, but dtc doesn't currently
->>> maintain the
->>> +          sign.
->>
->> What do you mean? "Maintain" as allow or keep when building FDT? 
->> What's
->> the problem of using negative numbers here and why it should be part
->> of
->> bindings?
->>
->>> +        $ref: /schemas/types.yaml#/definitions/uint64-matrix
->>> +        minItems: 3
->>> +        maxItems: 64
->>> +        items:
->>> +          minItems: 2
->>> +          maxItems: 2
->>
->> Instead describe the items with "description" (and maybe constraints)
->> like here:
->>
->> https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml#L278
->>
-> 
-> Neat... My only comment (which probably applies to my previous ones) is
-> that the rest of the properties are already in this "style". So maybe,
-> follow up patches with small clean-ups would be more appropriate?
-
-Of course. It would be great if the file was improved before or after
-this one.
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index ea51624461b5..c0e7c76dc5c8 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -23,6 +23,7 @@
+ #include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/acpi.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
+@@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+ 		 * mode. If the controller supports DRD but the dr_mode is not
+ 		 * specified or set to OTG, then set the mode to peripheral.
+ 		 */
+-		if (mode == USB_DR_MODE_OTG &&
++		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+ 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+ 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+ 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
+@@ -1690,6 +1691,46 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 	}
+ }
+ 
++static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
++{
++	struct device *dev = dwc->dev;
++	struct device_node *np_phy;
++	struct extcon_dev *edev = NULL;
++	const char *name;
++
++	if (device_property_read_bool(dev, "extcon"))
++		return extcon_get_edev_by_phandle(dev, 0);
++
++	/*
++	 * Device tree platforms should get extcon via phandle.
++	 * On ACPI platforms, we get the name from a device property.
++	 * This device property is for kernel internal use only and
++	 * is expected to be set by the glue code.
++	 */
++	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
++		return extcon_get_extcon_dev(name);
++
++	/*
++	 * Try to get an extcon device from the USB PHY controller's "port"
++	 * node. Check if it has the "port" node first, to avoid printing the
++	 * error message from underlying code, as it's a valid case: extcon
++	 * device (and "port" node) may be missing in case of "usb-role-switch"
++	 * or OTG mode.
++	 */
++	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
++	if (of_graph_is_present(np_phy)) {
++		struct device_node *np_conn;
++
++		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
++		if (np_conn)
++			edev = extcon_find_edev_by_node(np_conn);
++		of_node_put(np_conn);
++	}
++	of_node_put(np_phy);
++
++	return edev;
++}
++
+ static int dwc3_probe(struct platform_device *pdev)
+ {
+ 	struct device		*dev = &pdev->dev;
+@@ -1840,6 +1881,12 @@ static int dwc3_probe(struct platform_device *pdev)
+ 		goto err2;
+ 	}
+ 
++	dwc->edev = dwc3_get_extcon(dwc);
++	if (IS_ERR(dwc->edev)) {
++		ret = dev_err_probe(dwc->dev, PTR_ERR(dwc->edev), "failed to get extcon\n");
++		goto err3;
++	}
++
+ 	ret = dwc3_get_dr_mode(dwc);
+ 	if (ret)
+ 		goto err3;
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 8cad9e7d3368..039bf241769a 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -8,7 +8,6 @@
+  */
+ 
+ #include <linux/extcon.h>
+-#include <linux/of_graph.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+@@ -439,51 +438,6 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
+ 	return NOTIFY_DONE;
+ }
+ 
+-static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+-{
+-	struct device *dev = dwc->dev;
+-	struct device_node *np_phy;
+-	struct extcon_dev *edev = NULL;
+-	const char *name;
+-
+-	if (device_property_read_bool(dev, "extcon"))
+-		return extcon_get_edev_by_phandle(dev, 0);
+-
+-	/*
+-	 * Device tree platforms should get extcon via phandle.
+-	 * On ACPI platforms, we get the name from a device property.
+-	 * This device property is for kernel internal use only and
+-	 * is expected to be set by the glue code.
+-	 */
+-	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+-		edev = extcon_get_extcon_dev(name);
+-		if (!edev)
+-			return ERR_PTR(-EPROBE_DEFER);
+-
+-		return edev;
+-	}
+-
+-	/*
+-	 * Try to get an extcon device from the USB PHY controller's "port"
+-	 * node. Check if it has the "port" node first, to avoid printing the
+-	 * error message from underlying code, as it's a valid case: extcon
+-	 * device (and "port" node) may be missing in case of "usb-role-switch"
+-	 * or OTG mode.
+-	 */
+-	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
+-	if (of_graph_is_present(np_phy)) {
+-		struct device_node *np_conn;
+-
+-		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
+-		if (np_conn)
+-			edev = extcon_find_edev_by_node(np_conn);
+-		of_node_put(np_conn);
+-	}
+-	of_node_put(np_phy);
+-
+-	return edev;
+-}
+-
+ #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
+ #define ROLE_SWITCH 1
+ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+@@ -588,10 +542,6 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ 	    device_property_read_bool(dwc->dev, "usb-role-switch"))
+ 		return dwc3_setup_role_switch(dwc);
+ 
+-	dwc->edev = dwc3_get_extcon(dwc);
+-	if (IS_ERR(dwc->edev))
+-		return PTR_ERR(dwc->edev);
+-
+ 	if (dwc->edev) {
+ 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+ 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+-- 
+2.35.1
 
