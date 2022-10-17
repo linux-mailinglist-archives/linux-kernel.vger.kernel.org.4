@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C266018D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AB06018DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 22:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiJQUKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 16:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S229984AbiJQUK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 16:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiJQUJs (ORCPT
+        with ESMTP id S229976AbiJQUJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 16:09:48 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9DA7AC2E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:09:08 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id l28so8458064qtv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:09:08 -0700 (PDT)
+        Mon, 17 Oct 2022 16:09:53 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB6B7B7AB
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:09:18 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id cr19so5192796qtb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ztJa1K860H5zPhNKhm+qSDjTU8mL8hngB9GKRKq9ZiI=;
-        b=GGBQ5HKudQ2QVMdw3Melp+rDiWm+BJhTQFlDcVCo1cckCufzclE/TrKHrrXHJ/DviK
-         v/rOJrhqB1lWkZvl01F44ZBnmxKzi+5bCnB9hGtRlm6ykPP4msFuVw9u4RbJn+7G7fUr
-         nuXwlB2P3Og3ykulffsovW5oUrN3ik2gANvB3whaysXHWcRQAHuwx8l4OtFjc5TaRk4U
-         XdbD5Jvdxww7nHMubU0kODsBZHUu0H3HkN8mk+I4ZkDIufi5Y8Mq/hNYSki+utrLDlsz
-         EO8JG4KlXDJaumW4tGB+d1coIhLyjTG9GrSiAc9szPnx1dGyhFhcasNY2OTMTB7F7E7t
-         4jmg==
+        bh=zWsuselkkTQS3JHAybj6XVKE0eCJVmiTsTfRwbK0YvE=;
+        b=S6wTTKSdrQO46SI+xTMuCluRgqE+qNf2iwKXyuID/bkBW2K3Mw6NIiSy4vF6Mpf5Nj
+         DG9PBVA+Z/N+3SpibbdmBisW/+ox9UMRbhMpqX15nbx0bIWjra0GF/UhGwL/j2LRzZg3
+         siTqozYXePJAF196mo30awuKFwdpqPyqlSvFH54GU7AEy6h9rm8XSdMxjt0lx3NmGxYb
+         M3ZFEVi/SDJAtBrf/7x/s2w08Iv9rtNME383OMPoWfePEL/+iF68XDRFQUO01FPm3cvT
+         oP8mC3uYz//9sShEi7di5bqsWVE1qXxjZj49x1h1SvnnYvBrb4i6ZXaFRvnT2kz3exLc
+         xT2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ztJa1K860H5zPhNKhm+qSDjTU8mL8hngB9GKRKq9ZiI=;
-        b=dGBz0aaX1sbuDmbdI17rsgXZYGaOb9PE2pfnA5uA5sIbs4zOOGrbg4t9mYZsCABw29
-         df36iz87i8nmShD+bDwfS/B0hEEI3u6jDZnZ4aDLlhozdhgubSqZiKf+GaLWLuoETDIB
-         ozZvMa4aFaESK5ENKOATAU5NpC9tgP5uk7g+biCCNFpjDDsxkmXbeM6rvdumKekVKxd1
-         UrYgQiZRi8aEd87V4obfvh8bEBxFM7Ev+38DQ5+WGz8fPjN89wcqbfnSaMn6j7UOUAQ0
-         rk8VHQbxzDMi7KF/Wp4roh3rqGFixh2bCatrhcUsnMGTYxluXuIspGwJ4c59q5+PpVfz
-         v4/w==
-X-Gm-Message-State: ACrzQf1HZp/Tgf5FCgXq89Q+mWAZgxce7U5HeD/rA2nEM2e5lQEe1ROs
-        Az+Mt0InASp7duhng3LGifDzPbkiIdIF7A==
-X-Google-Smtp-Source: AMsMyM5C3dsbEm1y2nizVk2cFJWYJKT3N7rdwmws54TWP5M7/G6rmNqlc0L3zzCJVJ8QyCZ3mk6V3Q==
-X-Received: by 2002:a05:622a:141:b0:38b:f43:60bf with SMTP id v1-20020a05622a014100b0038b0f4360bfmr10082513qtw.137.1666037341377;
-        Mon, 17 Oct 2022 13:09:01 -0700 (PDT)
+        bh=zWsuselkkTQS3JHAybj6XVKE0eCJVmiTsTfRwbK0YvE=;
+        b=TsyJi4AJ4J/jCiDBrbf+QQPC+k4EJHiZbkdZRKUtsHYFe0r8eGreOO77haF1pc/S99
+         cfhBLsyAXjYBYaDE60WK708uUB6Z4Y5BdVH8SjlnR15l+XuCmr8oqb6BJvJoedlNuNq3
+         gMcRDLpkmJal6SKQ/nF2iVQg+lqsdN6FPqbDHg50EXfnz1bvTN4YupGxMXtvQioHsWru
+         xjkasMYVYIvc7FSY9AwdQtft7o5g9x4Qki0VxyiSa3JdEqWuvWdElNx4jbhaZX1f3Sgd
+         lmUO+YSdbDopw6lc/2gnj/EFJrflwhJ1iewXWN3Rkrc7xrSo5jBSblj8jI+O8Ys3462E
+         dnKQ==
+X-Gm-Message-State: ACrzQf3ZjKBewyYvNJTig/tR2Gqy9C+/Xa836y2SM9bv8SxrbdiIAtXk
+        4flI8OTEK2bQvD4PqOZSeHMCoA==
+X-Google-Smtp-Source: AMsMyM49ZN/hlVWE+A3HqnvNqsYx4Dhc8t3EmLZXd0yJMnTBx/hn4PUAsvZhErIPTKVFYVKQkbVP0g==
+X-Received: by 2002:a05:622a:114:b0:39c:b7ec:345a with SMTP id u20-20020a05622a011400b0039cb7ec345amr10118083qtw.677.1666037343084;
+        Mon, 17 Oct 2022 13:09:03 -0700 (PDT)
 Received: from localhost.localdomain (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id m13-20020a05620a24cd00b006ce76811a07sm536793qkn.75.2022.10.17.13.08.58
+        by smtp.gmail.com with ESMTPSA id m13-20020a05620a24cd00b006ce76811a07sm536793qkn.75.2022.10.17.13.09.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 13:09:00 -0700 (PDT)
+        Mon, 17 Oct 2022 13:09:02 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-gpio@vger.kernel.org,
+To:     Andy Gross <agross@kernel.org>, Shawn Guo <shawn.guo@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         krishna Lanka <quic_vamslank@quicinc.com>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
@@ -64,12 +64,12 @@ To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Rob Herring <robh@kernel.org>
-Subject: Re: (subset) [PATCH v5 16/34] dt-bindings: pinctrl: qcom,msm8226: add functions and input-enable
-Date:   Mon, 17 Oct 2022 16:07:57 -0400
-Message-Id: <166603728601.4991.11883156782402115022.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v5 17/34] dt-bindings: pinctrl: qcom,msm8226: fix indentation in example
+Date:   Mon, 17 Oct 2022 16:07:58 -0400
+Message-Id: <166603728602.4991.7955884448708040070.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221016170035.35014-17-krzysztof.kozlowski@linaro.org>
-References: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org> <20221016170035.35014-17-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221016170035.35014-18-krzysztof.kozlowski@linaro.org>
+References: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org> <20221016170035.35014-18-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -83,20 +83,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Oct 2022 13:00:17 -0400, Krzysztof Kozlowski wrote:
-> The MSM8226 pinctrl driver supports input-enable, blsp_i2c4, blsp_uart4
-> and sdc3 functions and DTS already uses it:
+On Sun, 16 Oct 2022 13:00:18 -0400, Krzysztof Kozlowski wrote:
+> Bindings example should be indented with 4-spaces.
 > 
->   qcom-msm8226-samsung-s3ve3g.dtb: pinctrl@fd510000: 'blsp1-i2c1', 'blsp1-i2c2', 'blsp1-i2c3', 'blsp1-i2c4', 'blsp1-i2c5' ...
->   qcom-apq8026-lg-lenok.dtb: pinctrl@fd510000: touch-state: 'oneOf' conditional failed, one must be fixed:
->     'input-enable' does not match any of the regexes: 'pinctrl-[0-9]+'
 > 
-> [...]
 
 Applied, thanks!
 
-[16/34] dt-bindings: pinctrl: qcom,msm8226: add functions and input-enable
-        https://git.kernel.org/krzk/linux-dt/c/ca3a311c3a8db80ec3965d9ac02499f9536d3393
+[17/34] dt-bindings: pinctrl: qcom,msm8226: fix indentation in example
+        https://git.kernel.org/krzk/linux-dt/c/1780bac7c11c341f99ab10a83ede9e96464c5f91
 
 Best regards,
 -- 
