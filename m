@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2136011EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542696011E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiJQO43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S231418AbiJQO4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiJQOyP (ORCPT
+        with ESMTP id S230420AbiJQOyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:54:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44762691A5;
-        Mon, 17 Oct 2022 07:54:05 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:54:02 -0000
+        Mon, 17 Oct 2022 10:54:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A331691B1;
+        Mon, 17 Oct 2022 07:54:06 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 14:54:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018443;
+        s=2020; t=1666018444;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DuN0mXwWkXkPpbB55PqFQ+7RoejEE6nRQT+hjzfltP4=;
-        b=zkZwcE9gGOX7PbT3GwSVVM4TN2w/tFLQDSrelW/eujv4kbNICfCOcVG8D/5Om1Q71YoYbJ
-        aSPJt71sbft9YQ+niFXaMloW9rmWRuzqSruJlZ/akjV4rDquj4ZOZHK3URPlGA+EKn75vF
-        XDaX6cieJqvgzsD778nXzZWs9x0+k+rP9QWz49iLTa86HXefZ/CNF0zoGGMGWseAyocpLb
-        NoiM4VnCRb5MxbxFPE/NNfJm8tKem4cKSVW25hjFPbPurJrRb2GnIwwnYeOc4+HyiVmPUR
-        UnHaufphB+vA0DvkjMOwmydYZ3SBqC9uATy3M/jHkKI08sql8j9D7OyEa0RsGQ==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=nbufag0Oxh8t4N22hMXgny4zYLzoPkeRtte1uCCr7E8=;
+        b=Z971YmX3OysIeFmTRjTtxJLSWz1C2ICWUHPqCBrDu9zCdqTJiLjiV/fyjX53gDweiWchLC
+        oERJ/bkuI82LTbC8rgyqhqF+REZfWLJmZKITxChLmJDsY0Nkphb2aUgbaQH0nSezk1LyZ/
+        6hDIKhDDy6wqfAnKEbjo+/0o2b7u+nYp5z17WcgJV0VIQkvRsKQyf2UplbIv81D8LuuZT6
+        ymZ5MLS9MMABEFSDl+XTo8w//49I6bLiNDFRZZKHwFB9b8liFoIxqa3OByzvDpXRiNtPIs
+        jSxAYJBSkkMZs5OD1O3l1/y9iDgkSqKTMKPAuM1iKAEhC2583kbsfWGcNNC+IQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018443;
+        s=2020e; t=1666018444;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DuN0mXwWkXkPpbB55PqFQ+7RoejEE6nRQT+hjzfltP4=;
-        b=kQ5jW4dgw3aVNMAbukPFjwwLHGGY3znm4eokzM34s/wKjUfnhI3dAcARgkR1/Izhyfcu4o
-        DbUOZK3dQx1fNEBA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=nbufag0Oxh8t4N22hMXgny4zYLzoPkeRtte1uCCr7E8=;
+        b=5n9nRA3AYeqR4SXK0gniq+yXvw2lxONUc6RdCl9Ud8/2imxXbqk630oI+2eOU8UpuTLmON
+        5zOchXrr5+qsIHCw==
+From:   "tip-bot2 for Peter Zijlstra (Intel)" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Allow !PC relative relocations
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+Subject: [tip: x86/core] x86: Fixup asm-offsets duplicate
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111145.806607235@infradead.org>
-References: <20220915111145.806607235@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601844226.401.9535379202269375669.tip-bot2@tip-bot2>
+Message-ID: <166601844328.401.13651658545984215013.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,90 +59,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     61c6065ef7ec0447a280179d04b2d81c80c2f479
-Gitweb:        https://git.kernel.org/tip/61c6065ef7ec0447a280179d04b2d81c80c2f479
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 15 Sep 2022 13:11:07 +02:00
+Commit-ID:     5b71ac8a2a3185da34a6556e791b533b48183a41
+Gitweb:        https://git.kernel.org/tip/5b71ac8a2a3185da34a6556e791b533b48183a41
+Author:        Peter Zijlstra (Intel) <peterz@infradead.org>
+AuthorDate:    Mon, 17 Oct 2022 16:41:06 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 17 Oct 2022 16:41:06 +02:00
 
-objtool: Allow !PC relative relocations
+x86: Fixup asm-offsets duplicate
 
-Objtool doesn't currently much like per-cpu usage in alternatives:
-
-arch/x86/entry/entry_64.o: warning: objtool: .altinstr_replacement+0xf: unsupported relocation in alternatives section
-  f:   65 c7 04 25 00 00 00 00 00 00 00 80     movl   $0x80000000,%gs:0x0      13: R_X86_64_32S        __x86_call_depth
-
-Since the R_X86_64_32S relocation is location invariant (it's
-computation doesn't include P - the address of the location itself),
-it can be trivially allowed.
+It turns out that 'stack_canary_offset' is a variable name; shadowing
+that with a #define is ripe of fail when the asm-offsets.h header gets
+included. Rename the thing.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111145.806607235@infradead.org
 ---
- tools/objtool/arch/x86/decode.c      | 24 ++++++++++++++++++++++++
- tools/objtool/check.c                |  2 +-
- tools/objtool/include/objtool/arch.h |  2 ++
- 3 files changed, 27 insertions(+), 1 deletion(-)
+ arch/x86/entry/entry_64.S        | 2 +-
+ arch/x86/kernel/asm-offsets_64.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
-index 1c253b4..f094383 100644
---- a/tools/objtool/arch/x86/decode.c
-+++ b/tools/objtool/arch/x86/decode.c
-@@ -73,6 +73,30 @@ unsigned long arch_jump_destination(struct instruction *insn)
- 	return insn->offset + insn->len + insn->immediate;
- }
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 9249a45..5c578a7 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -252,7 +252,7 @@ SYM_FUNC_START(__switch_to_asm)
  
-+bool arch_pc_relative_reloc(struct reloc *reloc)
-+{
-+	/*
-+	 * All relocation types where P (the address of the target)
-+	 * is included in the computation.
-+	 */
-+	switch (reloc->type) {
-+	case R_X86_64_PC8:
-+	case R_X86_64_PC16:
-+	case R_X86_64_PC32:
-+	case R_X86_64_PC64:
-+
-+	case R_X86_64_PLT32:
-+	case R_X86_64_GOTPC32:
-+	case R_X86_64_GOTPCREL:
-+		return true;
-+
-+	default:
-+		break;
-+	}
-+
-+	return false;
-+}
-+
- #define ADD_OP(op) \
- 	if (!(op = calloc(1, sizeof(*op)))) \
- 		return -1; \
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 43ec14c..7174bba 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1645,7 +1645,7 @@ static int handle_group_alt(struct objtool_file *file,
- 		 * accordingly.
- 		 */
- 		alt_reloc = insn_reloc(file, insn);
--		if (alt_reloc &&
-+		if (alt_reloc && arch_pc_relative_reloc(alt_reloc) &&
- 		    !arch_support_alt_relocation(special_alt, insn, alt_reloc)) {
+ #ifdef CONFIG_STACKPROTECTOR
+ 	movq	TASK_stack_canary(%rsi), %rbx
+-	movq	%rbx, PER_CPU_VAR(fixed_percpu_data) + stack_canary_offset
++	movq	%rbx, PER_CPU_VAR(fixed_percpu_data) + FIXED_stack_canary
+ #endif
  
- 			WARN_FUNC("unsupported relocation in alternatives section",
-diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/objtool/arch.h
-index beb2f3a..fe2ea4b 100644
---- a/tools/objtool/include/objtool/arch.h
-+++ b/tools/objtool/include/objtool/arch.h
-@@ -93,4 +93,6 @@ bool arch_is_rethunk(struct symbol *sym);
+ 	/*
+diff --git a/arch/x86/kernel/asm-offsets_64.c b/arch/x86/kernel/asm-offsets_64.c
+index 9b69821..bb65371 100644
+--- a/arch/x86/kernel/asm-offsets_64.c
++++ b/arch/x86/kernel/asm-offsets_64.c
+@@ -57,7 +57,7 @@ int main(void)
+ 	BLANK();
  
- int arch_rewrite_retpolines(struct objtool_file *file);
- 
-+bool arch_pc_relative_reloc(struct reloc *reloc);
-+
- #endif /* _ARCH_H */
+ #ifdef CONFIG_STACKPROTECTOR
+-	DEFINE(stack_canary_offset, offsetof(struct fixed_percpu_data, stack_canary));
++	OFFSET(FIXED_stack_canary, fixed_percpu_data, stack_canary);
+ 	BLANK();
+ #endif
+ 	return 0;
