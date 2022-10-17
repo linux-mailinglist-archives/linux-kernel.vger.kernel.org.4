@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71E06012E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905746012F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJQPqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 11:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S229775AbiJQPtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 11:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJQPqN (ORCPT
+        with ESMTP id S230134AbiJQPtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:46:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEA0FD3F;
-        Mon, 17 Oct 2022 08:46:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 743E1B81913;
-        Mon, 17 Oct 2022 15:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D8FC4347C;
-        Mon, 17 Oct 2022 15:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666021570;
-        bh=9c9EEzyY7oUq22Pd8vm1w2MFf4GstXJ90YPs3mnWmLo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AYSVM4vwMV3llm4rCDTm0OzgGQO40L+/twQp/M5dsO8yIR6g3EMA4DmOdFaNGtODx
-         TTexZOultQS63kRoGHhk6Ck0nSF1crSdh6LzxIaqA/U3VQNifxlXcN+agm46PKxvnn
-         DBmVyT13PdRIopBEGqE0Ui1h6AX0IOePMK8W2L2p7j9zDAglKigPF8G6+qMpKCAtpO
-         WNT9PdO8COcagSErSVSLPJ5xYxfkqcwgXTILM1y39NRBM4IFwuF2SUsS0iJyFSfBjf
-         DDdXTImzmTsPjC5+4JOJeLJNwcM2BrJaWhZ+Ccbbz2UkC0pzTYJAThtC3yc/OMSr3p
-         W1vSeu37OAM7g==
-Received: by mail-lj1-f174.google.com with SMTP id r22so14431853ljn.10;
-        Mon, 17 Oct 2022 08:46:10 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1KKyt1AOR2ktHLdZLw50dly/KhO9c389yM2Sv551Av5Op3VOLh
-        aKs8LeLLNHJBzcoS3F2OOhw+wV+Cp0c+tp1WzzQ=
-X-Google-Smtp-Source: AMsMyM7peUSTpBSPbo/vvPo6cWQeSx8q4yW3epDEX81Vp1cXfv9UMJT4N9U2CYjhXT7rI/J+VTkiB62AR3KCHYaAbKU=
-X-Received: by 2002:a2e:b635:0:b0:26e:989e:438f with SMTP id
- s21-20020a2eb635000000b0026e989e438fmr3934831ljn.189.1666021568087; Mon, 17
- Oct 2022 08:46:08 -0700 (PDT)
+        Mon, 17 Oct 2022 11:49:16 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B765F659CF;
+        Mon, 17 Oct 2022 08:49:15 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id o22so6866306qkl.8;
+        Mon, 17 Oct 2022 08:49:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c1hr660YTne5HWG47TPibAhxpQ0b+WJkg6fuMvgqI+4=;
+        b=zdUsJqHJJcoFQvqffAq4sBuoSw/VJr03atjS33OHW2fSPB0F/iyZtm7RtxJA8SKPMX
+         tgIHX5miRYKzYFOJ+LsXsTMZKZlGmv50mMAiPwQvdhm5G29NRijTrTeM5E4moBZKT0D5
+         dH8f08NTQs6r9UM7v0k2S2yjxL6a+U1nQIT64jhLggvvVdoBZptY3pU2kuOWi1W2WxFS
+         Fe7TuB5AeQYF31w8KTKRGKLenS9MwAFeD3jXoOMpJg+tRkUyiHfVwLFnQJAyTmeGDbhM
+         FmsYko8AS+mCsjYQcsaI0RJLTi8Jx+7Bfd2ahSAnrPFwgm0ceBEtaWdwEic9V7+0uxq2
+         UiXQ==
+X-Gm-Message-State: ACrzQf0/C3QibntNtSr1fagqmhnh/vxD7c+rAyDEMt+gqssbNpFaQ99l
+        kAmuWPSsOqeUcky5GholY3Y4nqKkyQqtAQ==
+X-Google-Smtp-Source: AMsMyM44AuelNG1tg1KdSqSnF9F28nFZzaRzuNfze+Yx35BH5JoziwtFgDEXSzF5W+CCKSAG/yOqMg==
+X-Received: by 2002:a05:620a:b05:b0:6ee:cb0e:3c94 with SMTP id t5-20020a05620a0b0500b006eecb0e3c94mr8002708qkg.379.1666021754734;
+        Mon, 17 Oct 2022 08:49:14 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id m21-20020a05620a24d500b006bb82221013sm149076qkn.0.2022.10.17.08.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 08:49:13 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 81so13762198ybf.7;
+        Mon, 17 Oct 2022 08:49:13 -0700 (PDT)
+X-Received: by 2002:a25:687:0:b0:6c2:2b0c:26e with SMTP id 129-20020a250687000000b006c22b0c026emr9748099ybg.202.1666021753122;
+ Mon, 17 Oct 2022 08:49:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929152010.835906-1-nathan@kernel.org>
-In-Reply-To: <20220929152010.835906-1-nathan@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 17 Oct 2022 17:45:56 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFTXV8swyypu9j3rM4u1hO1wyb2atUJm32HB_X29sPBHQ@mail.gmail.com>
-Message-ID: <CAMj1kXFTXV8swyypu9j3rM4u1hO1wyb2atUJm32HB_X29sPBHQ@mail.gmail.com>
-Subject: Re: [PATCH] x86/Kconfig: Drop check for '-mabi=ms' for CONFIG_EFI_STUB
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        stable@vger.kernel.org
+References: <20220902215737.981341-1-sean.anderson@seco.com>
+ <20220902215737.981341-6-sean.anderson@seco.com> <CAMuHMdWqTtjuOvDo9qxgDVpm+RBGm7BEgpdqVRH1n_dLGoYLTA@mail.gmail.com>
+ <086a6f02-4495-510e-9fc5-64f95e7d55f6@seco.com>
+In-Reply-To: <086a6f02-4495-510e-9fc5-64f95e7d55f6@seco.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 17 Oct 2022 17:49:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW-E4ykVdCugCyJt7_uKZZHyc=jStiL7DOiq2RZr6GTvQ@mail.gmail.com>
+Message-ID: <CAMuHMdW-E4ykVdCugCyJt7_uKZZHyc=jStiL7DOiq2RZr6GTvQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 05/14] net: fman: Map the base address once
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Camelia Groza <camelia.groza@nxp.com>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sept 2022 at 17:20, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> A recent change in LLVM made CONFIG_EFI_STUB unselectable because it no
-> longer pretends to support '-mabi=ms', breaking the dependency in
-> Kconfig. Lack of CONFIG_EFI_STUB can prevent kernels from booting via
-> EFI in certain circumstances.
->
-> This check was added by commit 8f24f8c2fc82 ("efi/libstub: Annotate
-> firmware routines as __efiapi") to ensure that '__attribute__((ms_abi))'
-> was available, as '-mabi=ms' is not actually used in any cflags.
-> According to the GCC documentation, this attribute has been supported
-> since GCC 4.4.7. The kernel currently requires GCC 5.1 so this check is
-> not necessary; even when that change landed in 5.6, the kernel required
-> GCC 4.9 so it was unnecessary then as well.  Clang supports
-> '__attribute__((ms_abi))' for all versions that are supported for
-> building the kernel so no additional check is needed. Remove the
-> 'depends on' line altogether to allow CONFIG_EFI_STUB to be selected
-> when CONFIG_EFI is enabled, regardless of compiler.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1725
-> Link: https://gcc.gnu.org/onlinedocs/gcc-4.4.7/gcc/Function-Attributes.html
-> Link: https://github.com/llvm/llvm-project/commit/d1ad006a8f64bdc17f618deffa9e7c91d82c444d
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Sean,
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+On Mon, Oct 17, 2022 at 5:34 PM Sean Anderson <sean.anderson@seco.com> wrote:
+> On 10/17/22 11:15 AM, Geert Uytterhoeven wrote:
+> > On Sat, Sep 3, 2022 at 12:00 AM Sean Anderson <sean.anderson@seco.com> wrote:
+> >> We don't need to remap the base address from the resource twice (once in
+> >> mac_probe() and again in set_fman_mac_params()). We still need the
+> >> resource to get the end address, but we can use a single function call
+> >> to get both at once.
+> >>
+> >> While we're at it, use platform_get_mem_or_io and devm_request_resource
+> >> to map the resource. I think this is the more "correct" way to do things
+> >> here, since we use the pdev resource, instead of creating a new one.
+> >> It's still a bit tricky, since we need to ensure that the resource is a
+> >> child of the fman region when it gets requested.
+> >>
+> >> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> >> Acked-by: Camelia Groza <camelia.groza@nxp.com>
+> >
+> > Thanks for your patch, which is now commit 262f2b782e255b79
+> > ("net: fman: Map the base address once") in v6.1-rc1.
+> >
+> >> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c
+> >> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c
+> >> @@ -18,7 +18,7 @@ static ssize_t dpaa_eth_show_addr(struct device *dev,
+> >>
+> >>         if (mac_dev)
+> >>                 return sprintf(buf, "%llx",
+> >> -                               (unsigned long long)mac_dev->res->start);
+> >> +                               (unsigned long long)mac_dev->vaddr);
+> >
+> > On 32-bit:
+> >
+> >     warning: cast from pointer to integer of different size
+> > [-Wpointer-to-int-cast]
+> >
+> > Obviously you should cast to "uintptr_t" or "unsigned long" instead,
+> > and change the "%llx" to "%p" or "%lx"...
+>
+> Isn't there a %px for this purpose?
 
-I can take this as a EFI fix as well.
+Yes there is.  But if it makes sense to use that depends on the
+still to be answered questions at the bottom...
 
-> ---
->  arch/x86/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+> > However, taking a closer look:
+> >   1. The old code exposed a physical address to user space, the new
+> >      code exposes the mapped virtual address.
+> >      Is that change intentional?
 >
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f9920f1341c8..81012154d9ed 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1956,7 +1956,6 @@ config EFI
->  config EFI_STUB
->         bool "EFI stub support"
->         depends on EFI
-> -       depends on $(cc-option,-mabi=ms) || X86_32
->         select RELOCATABLE
->         help
->           This kernel feature allows a bzImage to be loaded directly
+> No, this is not intentional. So to make this backwards-compatible, I
+> suppose I need a virt_to_phys?
+
+I think virt_to_phys() will work only on real memory, not on MMIO,
+so you may need to reintroduce the resource again.
+
+> >   2. Virtual addresses are useless in user space.
+> >      Moreover, addresses printed by "%p" are obfuscated, as this is
+> >      considered a security issue. Likewise for working around this by
+> >      casting to an integer.
 >
-> base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
-> --
-> 2.37.3
+> Yes, you're right that this probably shouldn't be exposed to userspace.
 >
+> > What's the real purpose of dpaa_eth_show_addr()?
+>
+> I have no idea. This is a question for Madalin.
+>
+> > Perhaps it should be removed?
+>
+> That would be reasonable IMO.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
