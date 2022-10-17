@@ -2,125 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A1060162D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A6760162E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiJQSWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
+        id S230059AbiJQSXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJQSWo (ORCPT
+        with ESMTP id S229738AbiJQSXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:22:44 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F272263852
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:22:43 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d24so11539430pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6K0fLEBttx8lrk4TTwV2hs18H4QMB+rkLX1+fm4Wis=;
-        b=nxqUGdizsCANm/EpHpz5hqb4AimuiKiL4vxSxSv4+4wYsCrg3ZX2r+R0nalfLws+lo
-         hkpfcpbWLzwK3FjxPPyjYWRoo2eJlZVFqFfN1ttObKYlxV3X/0770D3G8e0NtmrnyM2h
-         NRRQp2E9X5Q+TL0/EC7JOM6GGtX+WIi/eFLLU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q6K0fLEBttx8lrk4TTwV2hs18H4QMB+rkLX1+fm4Wis=;
-        b=oqhKW/a08V2DnU/RERZyyU+nTQspDIyWooEjjcv/zp2gGYEBfClMnpg1Bms8d3nq+m
-         EpN4J9LAaXwukTd9HbVdd6R8p8RnGTKwtu4xt1VFmiZeNLecTj47uUsp0tz9XcApcUJE
-         jaLY4dqROswxMl4n86pE+XDetPib8CnKPiZ1/gQyuPR9xqQRzfeAjKWKToeeVznA/RTY
-         uPyxa6byc3LRb3svUfspAEe0BHqDdxSSo3hwkqoc5OasYp6Hd86mDIs10YSM6RcUwROQ
-         PYKzrmWH6myCj0z4z6JELhYfMMP1BZyMM+UsIPExL9GZ5DicEvKmr8ADj2S8+0xfc3Oo
-         LdsQ==
-X-Gm-Message-State: ACrzQf2pgRssImmzgPsPv2EMOHM/qicGu0kts1MsHn3MRT9/HAqkTeK3
-        aAzs0pPRVFC60hLhOWsk9RtObA==
-X-Google-Smtp-Source: AMsMyM7GLm+6wFeWIABSOhA4Ga3nzDh8hX5DBawB8jbrqm0QCqI77NSN0GrmXH8LNM2NUdHzY7+V7A==
-X-Received: by 2002:a17:903:2342:b0:181:bc30:b02f with SMTP id c2-20020a170903234200b00181bc30b02fmr12928368plh.30.1666030963439;
-        Mon, 17 Oct 2022 11:22:43 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:9d:2:f043:fb90:4576:538b])
-        by smtp.gmail.com with ESMTPSA id n18-20020a170903111200b001782a0d3eeasm7014597plh.115.2022.10.17.11.22.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:22:42 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     stable@vger.kernel.org
-Cc:     Sibi Sankar <sibis@codeaurora.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Evan Green <evgreen@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alex Elder <elder@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sc7180-trogdor: Fixup modem memory region
-Date:   Mon, 17 Oct 2022 11:22:41 -0700
-Message-Id: <20221017182241.1086545-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+        Mon, 17 Oct 2022 14:23:19 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A5074CD6;
+        Mon, 17 Oct 2022 11:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4sjMP/FaCWS6/v5Psiixs4qxgbGH/KhPN7NTx1p/cno=; b=WZ93flY+KU0E2pZufHWHm+W89T
+        s9xuK5kqwtWxM2+s6XYSdN2S0ucx3V9zguClaM8SPzT3gIu8hvIcrUehDCurxD7/nGoQVDkY5ANqf
+        Yt9SSets4ldeWBjviqX4Tizj18VgMGi/ulpR5L5++ldDu6s/667syAgRH+JjXf939w0k7WUuLBCAM
+        8m/eq3mcd4rNa6PIS1PG5vroiQ583SHriA1MdGJH1F+h0sxpCRV6i+P6UYxEATaadgwvYzZobyJps
+        V/3vN6Krf9i9Y2TX8Y9xRkj9LIGjp4RpaB0Zykw13RR1AheVKW8eZgTZ9KwRz4fSoRzz6sNlBFB57
+        9Q+RrSqg==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1okUlR-000XXG-TA; Mon, 17 Oct 2022 20:23:01 +0200
+Message-ID: <798f0911-5c54-ebe0-9d44-64bec0c96a72@igalia.com>
+Date:   Mon, 17 Oct 2022 15:22:48 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, Kees Cook <keescook@chromium.org>
+Cc:     Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221006234138.1835739-1-keescook@chromium.org>
+ <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com>
+ <202210171100.5BAC4A5CC8@keescook>
+ <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sibi Sankar <sibis@codeaurora.org>
+On 17/10/2022 15:14, Ard Biesheuvel wrote:
+> [...]
+> 
+> So at that point, I wondered what the point is of all this complexity.
+> Do we really need 6 different algorithms to compress a couple of K of
+> ASCII text on a code path that is ice cold by definition? Wouldn't it
+> be better to drop the crypto API altogether here, and just use GZIP
+> via the library interface?
 
-commit ef9a5d188d663753e73a3c8e8910ceab8e9305c4 upstream.
+Skipping all the interesting and more complex parts, I'd just want to
+consider zstd maybe? Quite fast and efficient - it's what we're using by
+default on Steam Deck.
 
-The modem firmware memory requirements vary between 32M/140M on
-no-lte/lte skus respectively, so fixup the modem memory region
-to reflect the requirements.
+I'm not sure what is the gzip library interface - you mean skipping the
+scomp/legacy comp interface, and make use directly of gzip?
 
-Reviewed-by: Evan Green <evgreen@chromium.org>
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-Link: https://lore.kernel.org/r/1602786476-27833-1-git-send-email-sibis@codeaurora.org
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Acked-by: Alex Elder <elder@linaro.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+Cheers,
 
-This fixes boot of the modem on trogdor boards with the DTS from 5.10.y
-stable tree. Without this patch I run into memory assignment errors and
-then the modem fails to boot.
 
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi | 4 ++++
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi         | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-index 44956e3165a1..469aad4e5948 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-@@ -9,6 +9,10 @@ &ap_sar_sensor {
- 	label = "proximity-wifi-lte";
- };
- 
-+&mpss_mem {
-+	reg = <0x0 0x86000000 0x0 0x8c00000>;
-+};
-+
- &remoteproc_mpss {
- 	firmware-name = "qcom/sc7180-trogdor/modem/mba.mbn",
- 			"qcom/sc7180-trogdor/modem/qdsp6sw.mbn";
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 5b2a616c6257..cb2c47f13a8a 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -39,7 +39,7 @@ atf_mem: memory@80b00000 {
- 		};
- 
- 		mpss_mem: memory@86000000 {
--			reg = <0x0 0x86000000 0x0 0x8c00000>;
-+			reg = <0x0 0x86000000 0x0 0x2000000>;
- 			no-map;
- 		};
- 
-
-base-commit: 014862eecf03f58066a957027dde73cbecdf4395
--- 
-https://chromeos.dev
-
+Guilherme
