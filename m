@@ -2,66 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7A960089A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED05260089E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiJQIRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S230046AbiJQIW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiJQIRd (ORCPT
+        with ESMTP id S229606AbiJQIWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:17:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D5826572
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665994649; x=1697530649;
-  h=message-id:date:mime-version:subject:to:references:cc:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Xwrds9D7DJmMRINmBlj40CklFAut4f2dqk22W3MhfaU=;
-  b=P6euhbqeCic6yFCocI0n9Itcy6WnObVvcrPV7PXBGVWqmDPKijykh0MF
-   d0+v4/koPMgiqDylhrIBKRioMeWZpG1vSGwou3L2BXtJ72VG2Yd/qS4CA
-   q78nQDk6cv8lASUicOVoWflKGjVAqCiR+1Xv4o6UsPt2UeRWENOqDXpM8
-   Xg60IuaTpB872Nfkl28tCNYT//6o3zcwz9KX2MuFHRKC+nmqVTOL1Z8I+
-   c7M5IIbQmCRsjSHo3VtHAPYgXUvYoPZZT/PHSqLh549pH3KvU0w6dEvkI
-   p5lJtQ0HmkynFX2sM28DvHEAJEZJAia/gpF90VoabSkbbxYpNYMSWQhKY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="286129864"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="286129864"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 01:17:27 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="770682384"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="770682384"
-Received: from ggeogheg-mobl.ger.corp.intel.com (HELO [10.213.233.137]) ([10.213.233.137])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 01:17:26 -0700
-Message-ID: <4cad6411-86af-dca5-09c7-92a4c5b5f7d3@linux.intel.com>
-Date:   Mon, 17 Oct 2022 09:17:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [Intel-gfx] alderlake crashes (random memory corruption?) with
- 6.0 i915 / ucode related
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Thorsten Leemhuis (regressions address)" <regressions@leemhuis.info>
-References: <355dde1c-91e3-13b5-c8e8-75c9b9779b4f@redhat.com>
- <e4f7b16e-5b6f-1b2c-5f88-fc4a129ae28f@redhat.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <e4f7b16e-5b6f-1b2c-5f88-fc4a129ae28f@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Mon, 17 Oct 2022 04:22:54 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C730A13CD9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:22:53 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 310883200319;
+        Mon, 17 Oct 2022 04:22:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 17 Oct 2022 04:22:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665994969; x=1666081369; bh=gyBfJa1eOL
+        n7mrcvT7v+17sbsp2akKfNFVudJCF/ZBE=; b=MJv7rbrdt1PWbIJ2Fo7Mj32t/V
+        AuPLKMzjPGcGAfh6wMh5+vutte/YuZ1fj0pYUA1loD+QNVNYGXw8wCUPrLwwYuBx
+        BqqKO0YnFE2gvrJ/rFjTsHz+6G0lq28iqmd+jxSAy+ciXgzx3fAGreInyHHu7HeB
+        oXZeGY64dWaH6bt/YjleGqKu278XL6MlBAh41/wSjPL6BsfTwCQa5UMWL0FY5rkU
+        M0kOQhLQtrdjZHa1hxBuHO5JJbXBBNVOYgmvAE+vgHEQKR0Gx5I/3GR0vLJXqVKT
+        iEtYuGFB/zgZo92ebxpTm9EEZiLAaWfKU1iR8ci2wNAD1SJh4OfmzPgXSAog==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665994969; x=1666081369; bh=gyBfJa1eOLn7mrcvT7v+17sbsp2a
+        kKfNFVudJCF/ZBE=; b=JRpCbL54IprxWQuNjJN5ghgSuX6t98ISDUu1VmTK+6u0
+        CBu/BLVAGUxfg5NM8FPZT16YOQlj0QvKpALcakln7gWJRjJhMHeknBUB3PaHG+VW
+        3dsijGZr7KgHfXoKO4l+Z/zNhJZEs3X4lI2wVU1r+mjrX6u59e/YonGvRKfQngbR
+        BCHLQhQCQRgVlU/m7/+h/5vi7F8ElBZmWu+rGftyhZeGWSIis7H+AcbSvfYsUUtJ
+        0hQafAinwYFwEqZJZyhzvDYVGDHnaYlb0fB1Jut+jcbzrHiEuKtrmDM3s4pk89yF
+        R/cn69RLJx29/N6fiS1YhnhXX/5JqBv+MWgrhzYOvw==
+X-ME-Sender: <xms:2BBNY-FcE1DnNhe9594NQV9outB-3tyBoRXUsFsppK9m0xouuYuLBw>
+    <xme:2BBNY_XNEoPDVElieO0suRRhtNZUSgP1wXgXY2Bo-BPQUAAhQiyHnpaVuqsQ5EjxH
+    uHSiy_ynstC9Jy6INs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekledgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:2BBNY4InSP8A4BJJGGEbRETk97NW_o6_P42WpP5ucLFhQC_rCiEJKA>
+    <xmx:2BBNY4EK8_FVtMvN4DebyDet5ZrgLZINrD4nqM5_5hNlvVUGuDV6xQ>
+    <xmx:2BBNY0UjGyknLWqhAdVeXFTupuGN0OnVgRGbgkwB1_NPpBAplBtKeg>
+    <xmx:2RBNY2K8BZ3fk0eWNADA4wcZX8E70pSvfSBAwZ_yRWnbvFF3L8CE0Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 771FFB60086; Mon, 17 Oct 2022 04:22:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <995e1d32-7818-4a44-9911-705dd1c62929@app.fastmail.com>
+In-Reply-To: <52ada3c4-f4f2-dc27-5899-d29e5952189d@xen0n.name>
+References: <20221016133418.2122777-1-chenhuacai@loongson.cn>
+ <506fe4e5-a203-48e6-84a6-f70133be15dd@app.fastmail.com>
+ <CAAhV-H7UJDgtY4NfF7-5+TbNEbec7XOpvS87H=fPad4KK0KLaw@mail.gmail.com>
+ <b97afda4-143c-46d2-a6af-dd6a700472ec@app.fastmail.com>
+ <52ada3c4-f4f2-dc27-5899-d29e5952189d@xen0n.name>
+Date:   Mon, 17 Oct 2022 10:22:00 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "WANG Xuerui" <kernel@xen0n.name>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     "Huacai Chen" <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>, guoren <guoren@kernel.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Add unaligned access support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,87 +91,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 17, 2022, at 10:05 AM, WANG Xuerui wrote:
+> On 2022/10/17 15:38, Arnd Bergmann wrote:
+>> On Mon, Oct 17, 2022, at 9:31 AM, Huacai Chen wrote:
+>>>>> +/* sysctl hooks */
+>>>>> +int unaligned_enabled __read_mostly = 1;     /* Enabled by default */
+>>>>> +int no_unaligned_warning __read_mostly = 1;  /* Only 1 warning by default */
+>>>>
+>>>> The comment says 'sysctl', the implementation has a debugfs interface.
+>>> Originally "enabled", "warning" and "counters" are all debugfs
+>>> interfaces, then you told me to use sysctl. Now in this version
+>>> "enabled" and "warning" are converted to sysctl, but there are no
+>>> existing "counters" sysctl.
+>> 
+>> I don't see the sysctl interface in the patch, what am I missing?
+>
+> FYI they are chosen by the Kconfig options and live in kernel/sysctl.c. 
 
+Got it, that's what I was looking for, I had completely forgotten
+about how we got here.
 
-+ Jani and Ville for the intel_bios.c warn - no idea if that is relevant.
+> And I believe the debugfs interface (the counters) is inspired by the 
+> original mips code. Pretty niche use case but can be handy at times...
 
-Hi,
+Right, I see what it does now, and I agree that this is not a problem.
+A tracepoint is probably an even better way to handle this flexibly,
+but since it's not a stable interface either way, this can be optimized
+later on.
 
-On 15/10/2022 15:25, Hans de Goede wrote:
-> Hi,
-> 
-> On 10/13/22 22:33, Hans de Goede wrote:
->> Hi All,
->>
->> Yesterday I got a new Lenovo ThinkPad X1 yoga gen 7 laptop, since I plan
->> to make this my new day to day laptop I have copied over the entire
->> rootfs, /home, etc. from my current laptop to avoid having to tweak
->> everything to my liking again.
->>
->> This meant I had an initramfs generated for the other laptop. Which should
->> be fine since both are Intel machines and the old 5.19.y initramfs-es
->> worked fine. But 6.0.0 crashed with what seems like random memory
->> corruption (list integrity checks failing) until I regenerated the initrd ...
->>
->> Comparing the old vs regenerated initrds showed no relevant differences,
->> which made me think this is a CPU ucode issue (which is pre-fixed
->> to the initrd for early microcode loading).
->>
->> After some tests I have the following obeservations with 6.0.0:
->>
->> 1. The least stable is the old initrd (so with the wrong
->> ucode prefixed) this crashes before ever reaching gdm.
->> I believe that this is caused by late microcode loading
->> kicking in in this case (I though that was being removed?)
->> and doing load microcode loading on the i7-1260P with its
->> mix of P + E cores seems to seriously mess things up.
->>
->> 2. Slightly more stable, lasting at least a few minutes
->> before crashing is using dis_ucode_ldr
->>
->> 3. Using nomodeset seems to stabilize things even with
->> the old initrd with the wrong microcode prefixed
->>
->> 4. 5.19, with an old initrd and with normal modesetting
->> enabled works fine, so in a way this is a 6.0.0 regression
->>
->> 5. Using 6.0 with the new initrd with the new microcode
->> seems mostly stable, although sometimes this seems to
->> hang very early during boot, esp. if a previous boot
->> crashed and I have not run this for a long time yet.
->>
->> 6. After crashes it seems to be necessary to powercycle
->> the machine to get things back in working condition.
->>
->>
->> With 6.0 the following WARN triggers:
->> drivers/gpu/drm/i915/display/intel_bios.c:477:
->>
->>          drm_WARN(&i915->drm, min_size == 0,
->>                   "Block %d min_size is zero\n", section_id);
->>
->> Since nomodeset helps this might be quite relevant, in 5.19.13
->> this does not happen, but I'm not sure if 5.19 has this check
->> at all.
->>
->>
->> There is a 2022/10/07 BIOS update which includes a CPU microcode
->> update available from Lenovo, I have not applied this yet in case
->> people want to investigate this further first.
-> 
-> A quick update on this, the microcode being in the initrd or not
-> seems to be a bit of a red herring. Yesterday the machine crashed
-> twice at boot with 6.0.0 with an initrd which did correctly have
-> the alderlake microcode cpio archive prefixed.
-> 
-> Where as with 5.19 it boots correctly everytime. I will try to
-> make some time to git bisect this sometime next week. I expect
-> this is an i915 issue though since 6.0.0 with nomodeset on
-> the cmdline does seem to boot successfully every time.
-
-Maybe try with KASAN to see if it catches something before random list 
-corruption starts happening?
-
-Regards,
-
-Tvrtko
+       Arnd
