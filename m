@@ -2,215 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0FC600563
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA9E600567
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiJQCq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 22:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S231348AbiJQCrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 22:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiJQCqZ (ORCPT
+        with ESMTP id S231340AbiJQCrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 22:46:25 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C6346DAF;
-        Sun, 16 Oct 2022 19:46:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IVgzIp91INvwyWxk1FjL98z/z80JkIkUcZ86NTAOomi8fx87gOtYfv3Po7THpAoHl9QfZRfRfjh/ZkvSxowWW2WAgb6plvS/tskVkkOWDL4i/ruQWEPsrdSaF9DridxG6bBz87v1WMd3HSWwADFVrKd+gHyfDv+rvJS9DCD1ESoMHKFOrDa+hCSXbPj2vT1vUcVPvFqJANze2FYyRijgrafl5XpFclWJ1Ya11tvYpnwD3gv5uqDhESCacN8hXNKHjb5nKOTGSJmSievq5zG/Qx6+grX9a2st3wuAiIQ74LyTIwZSPIOSwf77qy1qSxMpHdCsK/EuzkGoWgKNi9HZjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R+V+CLDdiwKzqyjbI9gKVVsyTCfoGJ2PCmvUc7Pcxsw=;
- b=AYEkfsDR2rHCFshYA+5OK9uPfpSRciL5LHDtX7T59pkKepfvtThMXghNHXkWsB2dHe5oPrz6PmRWK9uvP6DkAVn+YAvDx22YSkg2GqlpyD00CfW6pGZzwXOOh8uaW3oqhWtCBrniWbpfDzHMNCLSEDhoQ56ydQG/v/o08waUr2MfVavFj0wz7jkUiVnOkFGuVOUtxUm5cK7RwiYOdKQM5MttyRVlYSpk7o+6aFv/ACwAyuY/TD5QiNhfgwSlSFedFnowHwM/kx9VJh0BDZ8MaQM7V8qpTEOLSE3kwbnzxzRTaCBadGm5Lb+osb5agkCLkz9VXhseonOrC0uCZ8l+qQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R+V+CLDdiwKzqyjbI9gKVVsyTCfoGJ2PCmvUc7Pcxsw=;
- b=acFIW9Dkw0lTj09D1vGiKFy4v5+sUsA3Y5SDo6jTCGa1y/8Lw/oEqx0/6P4R2xiSoX/7F/Z1hbkrFJL6++Vd4lBJtTniKTD6x3KYFOhAZr6Yk6hahbJoK+OnpWQ8zXy2DMynZ2fT0XuaDDUXF+TBQWveZGw2gMUIdHAOHbuqG14kxbozewPNe47XN83/Wab5c/YLSRtQPAsn+VtW8NJSEPZD89aXKZMgTSGNKc2UPi+PlJlFKeFC99UbuAXWvQsHntED0HD+v30V6nUTDB4XgoRiNZ7ptmsXA2N7NUYWjGQBZOS94/VWcG+GaVGmJ4FvgzegVeJTKcgIP+6q6kO/VQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
- by DM6PR12MB5005.namprd12.prod.outlook.com (2603:10b6:5:1be::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
- 2022 02:46:21 +0000
-Received: from BN8PR12MB2900.namprd12.prod.outlook.com
- ([fe80::d9ae:c30e:ce3d:9cb3]) by BN8PR12MB2900.namprd12.prod.outlook.com
- ([fe80::d9ae:c30e:ce3d:9cb3%7]) with mapi id 15.20.5676.031; Mon, 17 Oct 2022
- 02:46:20 +0000
-Message-ID: <38c1d688-1488-3ecb-422e-fbc47106c144@nvidia.com>
-Date:   Mon, 17 Oct 2022 08:16:06 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V1 0/4] GPIO based PCIe Hot-Plug support
-Content-Language: en-US
-From:   Vidya Sagar <vidyas@nvidia.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>, lpieralisi@kernel.org,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>
-Cc:     Lukas Wunner <lukas@wunner.de>, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kw@linux.com, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        mani@kernel.org, Sergey.Semin@baikalelectronics.ru,
-        jszhang@kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
-References: <2a465222-342a-418b-95af-9948f6ce9065@linux.dev>
- <20221003180949.GA2104321@bhelgaas> <20221003182147.jp5gn2jpnf4gucdl@pali>
- <364fc93d-a4b5-59cb-c62a-8e3b32507523@nvidia.com>
- <9210e81f-15ee-6c54-bfbb-1188da48dd68@nvidia.com>
-In-Reply-To: <9210e81f-15ee-6c54-bfbb-1188da48dd68@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MAXP287CA0003.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a00:49::15) To BN8PR12MB2900.namprd12.prod.outlook.com
- (2603:10b6:408:69::18)
+        Sun, 16 Oct 2022 22:47:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2BB32A94;
+        Sun, 16 Oct 2022 19:47:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF1160EDE;
+        Mon, 17 Oct 2022 02:47:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510B6C43470;
+        Mon, 17 Oct 2022 02:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665974832;
+        bh=ypxAg+O7mH3i+8DecFdqTk3eEFBZSUQm3ax++cEOL0E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tmm11IuPP58CR7OL26Hyokf7S84NTRiNl0pnLEhhqgmr/wGVgFhjomA5tMMyinAOU
+         ujpgsaISg6xw6eu/k+lPaV0hH8wYlE6ikX9/1MZyN/mf+EsfVQlwg1+wMd8jBK2tD3
+         Rice8JnCXfJRUrFr3zvmgIbc2q3pOXxUSooMhMY06D01DgiOP3xRs5cX0EoMY2DiIc
+         siei2OxjIoD+L9LmoNy5pkTVnxhnaJV8OAm0p+5fU8VTPXfAalfdUlYkTKfe1ylCAk
+         cFU6PQeNrFwPIuKSYZX2mWwWSS4o5UcABIWOb+AJvT7F3TGpDPYT0DHwzO1BSix1CC
+         zu51YLFbLV8hw==
+Received: by mail-oo1-f54.google.com with SMTP id s1-20020a4a81c1000000b0047d5e28cdc0so2449187oog.12;
+        Sun, 16 Oct 2022 19:47:12 -0700 (PDT)
+X-Gm-Message-State: ACrzQf048yk+diViANch2y8ldg0qyZ0SgE/+oKWpe8F+y8ZQDXbRvsXU
+        xldBPYE4DEhV+kkRzXvRD68jVHN7BLl0kKKYTlU=
+X-Google-Smtp-Source: AMsMyM6aQL75voyyFEOZLq0dR0mBGdU9SmCnFtAbjZZiZP+F39r9LHAElMex+yP1f02AG56czAYtz0wa7y1cVzvPeDw=
+X-Received: by 2002:a4a:4f84:0:b0:480:8515:ff8d with SMTP id
+ c126-20020a4a4f84000000b004808515ff8dmr3375599oob.31.1665974831458; Sun, 16
+ Oct 2022 19:47:11 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2900:EE_|DM6PR12MB5005:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35a3ceeb-21cf-42a0-9ce5-08daafe9c573
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 95YT393WhaB02P8mE6axbp6z/+1sXepABrKJjWDZT0ZBV/yRUw/B6d23CXrCesUDel++v94NDGybx5mttF3xsSyI4zksRzw4ph6IXmPIN+6CpSGFOtD25OmYSB8vg6DnuSOBNmG7xhMy+S2YvrcMLd6jr0q5wLpI77pFvcgGr3IxOq0r2/o2blNzViOQKP3MHHnP3UjzFYceg7CAvut3B4+ZPP5WwEx+MQhtxj3KswIIKTzBB5aAuV5TTSovpHFv6UuwEjshjTlLDSvo3ZUB6qtS4y/+X9Zl8GCwh8kyJNqHJmAL6qQKDNv1FuuK6F3xCOY3ozJSjfVhK1SQuDoR+OhstK8fcUm+HNRxBcLQeXRKrLtnGr2VOEzE0wvGnBDgjWRR8B7VAr8Is+B6cmZIFQb7NG4gCTv7hPS6l+V4spgG8ZuiRCkuyku7BvYxZsJ8/mV/KLrage8fsDx8aOtz/VTPhamLVmXPvAVUZM8UFsBMt14YCiQLJLylW6pm4WOQN3twv6kZrB84PUYb7ayaNcI6Sx+2hZn4LK9Gm61SBEc4fdZ1ivGQMSrliqtwldhEkRSP9Ts3M5zf6oY6J1e40isyn1OZGV3B7ZHQVREMWuRBJJ+O2LR74nHL0QkF4GZKEpiU0qQ1GlKEOSkcim3iEimlTRxoPVMD3n7rprIAUDgBKhJ5guGlnv2nT1rC1lhBdFju1r4LxSYz2VSTC6wfbkCS/BrML85b73pKleCfFgXL/v2oe7s3i1Nz+xV3nZvwSr/LqRoi9dw3RzyH9eQna7y7pqlBch9i/frnuDwnLwQjqF5ZvZdHUGgVrOYK3wj98FWX1X/aaIwYSBaI6xx9CQ+LilXhypA9WxLGpAmBdESkkke6zh8H47RAiM6s2vWU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(376002)(39860400002)(346002)(451199015)(31696002)(36756003)(86362001)(31686004)(38100700002)(186003)(66574015)(2906002)(5660300002)(7416002)(6506007)(6666004)(26005)(53546011)(6512007)(2616005)(478600001)(83380400001)(6486002)(966005)(316002)(110136005)(54906003)(66476007)(66946007)(8676002)(4326008)(41300700001)(66556008)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d0VveWozTXRHKyt2b082aDVld1dhZ1JGM3lwanJGTldncnM2UHdhNlg1eFN3?=
- =?utf-8?B?ZDJKYllBR1pkdzhTd3VjNnZmTFdJRnpHRWZubE13WVVtZHZleUZoclFWZnlB?=
- =?utf-8?B?QkFLL1dPcVYxSThHTngzTUtLbW1jT1RtRUQvU2ZRZzlhNUNidGpYckdmNU5p?=
- =?utf-8?B?a2RSaTUramtaRFF3aVlHYmtGZXNYWnQ2OE11enZ0dkgydms3UFdHUjlJSkxa?=
- =?utf-8?B?clBYdVlzUDRxMWN5TjY3SG5neXFveWZ3SWF4OWpic0l1M2orNzZTUncxR1JR?=
- =?utf-8?B?VjBCamY3QXFrbTBFb1ZtVWxLcTJhZFUrb1RVRzZnNGtlYlZRWHpVMjNXaStk?=
- =?utf-8?B?b3IyU2p4U0d1NHF3M0hFWTBnTEsrY0tKYXl3TUkzTG9UN3FXNDkwbGgyUmxI?=
- =?utf-8?B?L0owYUVWRHNlNmhYa1JWN1ZOTjNZR1NYOThTdHNhWG9kTHVaMHdGb0w3WEJy?=
- =?utf-8?B?RjFMbmdsb29wd2NmRE9Cc2dqcVlIeEJUQXA5VE13Q2dXdU9PWWZvRmlIeTVH?=
- =?utf-8?B?WWlIM0llMVhBRGhGdkVBWUlLbStsS2x4OXl5K00yZUxmbjRETzVYRG5ZMnVv?=
- =?utf-8?B?OVBwZG5OMGRJMndmYUhYNDc0TlB1TGd2SFlwd1JnbDd1eVlvZ0E1VnBoVjdC?=
- =?utf-8?B?dzlITUhBV093RVBBc3VYdDg4ckI0ZHRFU0JDcjFMdmZYRENCZUVLQW1xUTJs?=
- =?utf-8?B?V1RONndSaWNZbmZuY2Y4S3U2UlpJMW9la3A1TEZsZ0cyMmtOMGxLN1l1OFNL?=
- =?utf-8?B?RVVRb0NFSWViUzZHV0xIZkJPbHpwNmpuMCt6VGtGNk1VZFJBWDR3bnVJTkEr?=
- =?utf-8?B?M2dmTjVacCtpNzF5ZmNTVHJhZHE3ekdnSG00Wkhka1JGdDczMmtNRDlRemtF?=
- =?utf-8?B?YlBZSXFlUnhvQ0hibnVGL3RMeHR0bDRZQnA0eG0xZHZoTUx3MTl4WFhMTFRt?=
- =?utf-8?B?eTVzQ3ltQWt4NTkwa3RXVXpXR3JDbFVWUXk5c2RlT0l3aTFJWm9FR2p1a1ZD?=
- =?utf-8?B?dFRteVhVTVByWUdwWU9ZNzU4aFpEdXZQV0t2OVRsY0NYVXd4TllYOWYramtP?=
- =?utf-8?B?YmlmS2RwNUwxUllSL3h4WkY0L3BHbXBkcm5WTUVLa2NndGtrU1FOc2swVTVw?=
- =?utf-8?B?dWZDRitPYUlkUHZHNExJVW15Ukt1MkZVck5XZ2t4S3dMcUt0WXFHSHYrY1c2?=
- =?utf-8?B?VTBoakRiSXQ4dFJ5WTdmRFlUQjYvd0cwTlJFbWkwby9Fa0pNOTRYTTB3TDZq?=
- =?utf-8?B?UktmcWorazk3bHNDTGx1WDZZUVQ4R1UvOTkxL3NZVzNGYnlXVHQzZGkrd0hR?=
- =?utf-8?B?czdRWTM1dTNvSWFxbXMvTDdETk5yeldmZjE0TzJpL3VUSXQvYzRsYkZ4dVFh?=
- =?utf-8?B?QTBHZzMxZXNhaTZCQVIwVDBkRDRWdmNYeWpZZmNveDhodzdBSjE4Z0tTcjMw?=
- =?utf-8?B?Tk1PTllaNDU2MGhGclhJeTZVaTFhZFBtbERrSlpJem9nMUFMd0c1Znl1NzNZ?=
- =?utf-8?B?aFdDSjU1K0tWb0d4Q1dtcnZyWkd4UXRRei90dzAyUEo0SFhMdnhlcy9tZEJj?=
- =?utf-8?B?YXpnL0swOCtjaHE3NHR1Um14YnVsQ1JxeWJkTnA4MG9OcmlCRUdqVEVRMFhZ?=
- =?utf-8?B?MkdtaktPMEdIUzNKNUp4TXE5cWt5amVmYVB1OC8vN2JkVDRGQ2x1Z3NZUS9k?=
- =?utf-8?B?OUVZTng0c3ZCRmYwaFBmVFBxOWVHR1JJQkR5bTV1bzlZN1NmSXVqMm9kd20y?=
- =?utf-8?B?MU5QaVJmSmx0VXJnT3MxQ0x2VjMwOElWUHdHckZoUlMxZitGb2hCeWxZSlZa?=
- =?utf-8?B?WVBCU3lGYjVPTjh6eEt1eXVHcFh6ekJhTFh3SFJrcExFWCtPeGFZcll2OXVJ?=
- =?utf-8?B?QTAxVG9uL0xxVER6a0pZZFVvZWpHRitvRTkwejNRU3lWQVVZMVY5WjZ1TXh5?=
- =?utf-8?B?YWM4MXg1S0dmY2g4UEpGNjExeUJFcXBTZVNYVlJ4eFQ0NzU4WnRqeXpadHYz?=
- =?utf-8?B?Zzg0NGJmM1JlM3hQZ1NLWFJPVHZrT1dDbEsyaDB5VkR5VjJpUjVoS0R1NitI?=
- =?utf-8?B?RXRydDZ5L3BjRTVKeTlQc3pWZ3AyZ214UENESEdXOWRWdlZpOG9NUWE3TGZR?=
- =?utf-8?Q?n+Ae3/Qb1LBE5Np1R/+EmsCyQ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35a3ceeb-21cf-42a0-9ce5-08daafe9c573
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 02:46:20.5494
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xj2Z03QXIFdCU+NybySApOfGU50swcpnOswAKhyfrPpSfPAtvHZ1j4IwVnmouhjQ/mFTGZfNaauWnGHDh72gDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5005
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221014030459.3272206-1-guoren@kernel.org> <20221014030459.3272206-3-guoren@kernel.org>
+ <1665971921.4555926-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1665971921.4555926-1-xuanzhuo@linux.alibaba.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 17 Oct 2022 10:46:59 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRYr4XyaHR14_h5tmHpdpnh5j75MeP2V6Au1p3qpABnDQ@mail.gmail.com>
+Message-ID: <CAJF2gTRYr4XyaHR14_h5tmHpdpnh5j75MeP2V6Au1p3qpABnDQ@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] net: Fixup virtnet_set_affinity() cause cpumask warning
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        andriy.shevchenko@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@rasmusvillemoes.dk, yury.norov@gmail.com,
+        caraitto@google.com, willemb@google.com, jonolson@google.com,
+        amritha.nambiar@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 10:00 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+>
+> On Thu, 13 Oct 2022 23:04:59 -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Don't pass nr_bits-1 as arg1 for cpumask_next_wrap, which would
+> > cause warning now 78e5a3399421 ("cpumask: fix checking valid
+> > cpu range").
+> >
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x5c/0x80
+> > Modules linked in:
+> > CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-11659-ge7e38f6cce55-dirty #328
+> > Hardware name: riscv-virtio,qemu (DT)
+> > epc : cpumask_next_wrap+0x5c/0x80
+> >  ra : virtnet_set_affinity+0x1ba/0x1fc
+> > epc : ffffffff808992ca ra : ffffffff805d84ca sp : ff60000002327a50
+> >  gp : ffffffff81602390 tp : ff600000023a0000 t0 : 5f74656e74726976
+> >  t1 : 0000000000000000 t2 : 735f74656e747269 s0 : ff60000002327a90
+> >  s1 : 0000000000000003 a0 : 0000000000000003 a1 : ffffffff816051c0
+> >  a2 : 0000000000000004 a3 : 0000000000000000 a4 : 0000000000000000
+> >  a5 : 0000000000000004 a6 : 0000000000000000 a7 : 0000000000000000
+> >  s2 : 0000000000000000 s3 : ffffffff816051c0 s4 : ffffffff8160224c
+> >  s5 : 0000000000000004 s6 : 0000000000000004 s7 : 0000000000000000
+> >  s8 : 0000000000000003 s9 : ffffffff810aa398 s10: ffffffff80e97d20
+> >  s11: 0000000000000004 t3 : ffffffff819acc97 t4 : ffffffff819acc97
+> >  t5 : ffffffff819acc98 t6 : ff60000002327878
+> > status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
+> > [<ffffffff805d84ca>] virtnet_set_affinity+0x1ba/0x1fc
+> > [<ffffffff805da7ac>] virtnet_probe+0x832/0xf1e
+> > [<ffffffff804fe61c>] virtio_dev_probe+0x164/0x2de
+> > [<ffffffff8054c4c4>] really_probe+0x82/0x224
+> > [<ffffffff8054c6c0>] __driver_probe_device+0x5a/0xaa
+> > [<ffffffff8054c73c>] driver_probe_device+0x2c/0xb8
+> > [<ffffffff8054cd66>] __driver_attach+0x76/0x108
+> > [<ffffffff8054a482>] bus_for_each_dev+0x52/0x9a
+> > [<ffffffff8054be8c>] driver_attach+0x1a/0x28
+> > [<ffffffff8054b996>] bus_add_driver+0x154/0x1c2
+> > [<ffffffff8054d592>] driver_register+0x52/0x108
+> > [<ffffffff804fe120>] register_virtio_driver+0x1c/0x2c
+> > [<ffffffff80a29142>] virtio_net_driver_init+0x7a/0xb0
+> > [<ffffffff80002854>] do_one_initcall+0x66/0x2e4
+> > [<ffffffff80a01222>] kernel_init_freeable+0x28a/0x304
+> > [<ffffffff808cb1be>] kernel_init+0x1e/0x110
+> > [<ffffffff80003c4e>] ret_from_exception+0x0/0x10
+> > ---[ end trace 0000000000000000 ]---
+> >
+> > Fixes: 2ca653d607ce ("virtio_net: Stripe queue affinities across cores.")
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  drivers/net/virtio_net.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 7106932c6f88..e4b56523b2b5 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -2300,6 +2300,8 @@ static void virtnet_set_affinity(struct virtnet_info *vi)
+> >
+> >               for (j = 0; j < group_size; j++) {
+> >                       cpumask_set_cpu(cpu, mask);
+> > +                     if (cpu == (nr_cpu_ids - 1))
+> > +                             break;
+>
+> The problem seems to be a problem with cpumask_next_wrap(), I'm not particularly
+> sure.
+>
+> But I think there is something wrong with your modification, which will cause
+> subsequent queues to be bound to (nr_cpu_ids - 1).
+Yes, it would lose cpu[nr_cpu_ids - 1]. We've moved to reverting the
+patch to fix problem:
+https://lore.kernel.org/all/20221015130548.3634468-1-guoren@kernel.org/
 
 
-On 10/10/2022 11:44 AM, Vidya Sagar wrote:
-> 
-> 
-> On 10/4/2022 9:34 AM, Vidya Sagar wrote:
->>
->>
->> On 10/3/2022 11:51 PM, Pali Rohár wrote:
->>> External email: Use caution opening links or attachments
->>>
->>>
->>> On Monday 03 October 2022 13:09:49 Bjorn Helgaas wrote:
->>>> On Sat, Oct 01, 2022 at 05:50:07PM -0600, Jonathan Derrick wrote:
->>>>> On 10/1/2022 10:20 AM, Pali Rohár wrote:
->>>>> ...
->>>>
->>>>>> Would not it better to rather synthesise PCIe Slot Capabilities 
->>>>>> support
->>>>>> in your PCIe Root Port device (e.g. via pci-bridge-emul.c) and 
->>>>>> then let
->>>>>> existing PCI hotplug code to take care for hotplugging? Because it
->>>>>> already implements all required stuff for re-scanning, registering 
->>>>>> and
->>>>>> unregistering PCIe devices for Root Ports with Slot Capabilities. 
->>>>>> And I
->>>>>> think that there is no need to have just another (GPIO based)
->>>>>> implementation of PCI hotplug.
->>>>>
->>>>> I did that a few years ago (rejected), but can attest to the 
->>>>> robustness of
->>>>> the pcie hotplug code on non-hotplug slots.
->>>>> https://lwn.net/Articles/811988/
->>>>
->>>> I think the thread is here:
->>>> https://lore.kernel.org/linux-pci/1581120007-5280-1-git-send-email-jonathan.derrick@intel.com/ 
->>>>
->>>> and I'm sorry that my response came across as "rejected".  I intended
->>>> it as "this is good ideas and good work and we should keep going".
->>>>
->>>> Bjorn
->>>
->>> Nice! So we have consensus that this is a good idea. Anyway, if you need
->>> help with designing something here, please let me know as I have good
->>> understanding of all (just two) consumers of pci-bridge-emul.c driver.
->>>
->>
->> Thanks all for your comments.
->>
->> I would like to hear from Bjorn / Lorenzo if the design of the current 
->> patch series is fine at a high level or I should explore emulating the 
->> root port's configuration space to fake slot config/control registers 
->> (which in turn depend on the hotplug GPIO interrupt & state to update 
->> Presence Detect related bits in Slot status register) and use the PCIe 
->> native Hot-plug framework itself to carry out with enabling the 
->> Hot-plug functionality?
-> 
-> Bjorn / Lorenzo,
-> Could you please take time to comment on the discussion happened here 
-> and the right approach to be followed?
+>
+> Thanks.
+>
+>
+> >                       cpu = cpumask_next_wrap(cpu, cpu_online_mask,
+> >                                               nr_cpu_ids, false);
+> >               }
+> > --
+> > 2.36.1
+> >
 
-I'm really sorry to bug you on this, but would like to hear your 
-comments on the approach to be taken. So, I would really like to hear 
-your take on this.
 
-Thanks,
-Vidya Sagar
 
-> 
-> Thanks,
-> Vidya Sagar
-> 
->>
->> Thanks,
->> Vidya Sagar
->>
->>
+-- 
+Best Regards
+ Guo Ren
