@@ -2,471 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91E860071A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 08:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A5E60071C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 08:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiJQG4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 02:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
+        id S229911AbiJQG4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 02:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiJQG4B (ORCPT
+        with ESMTP id S230189AbiJQG4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 02:56:01 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21981839D
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 23:55:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FCqLit54d27SXIVTH/cl1ztYHAEF32syyYw2X9eiLXYJh1s8J6PlRdx2AsdRv1gboVTzP4IGZYraSm9M+RlfaCuIVd4oHil1CW1DsFTIFgrGIoiR7tzPJKGmTsEmTtTD4n6Hrpr4cA8nc8Bf9sa+S+LKyIiDbYtv1127mvNBBZ6H3AexXMOmQg1iVrwYbxAPRJCK8bPqG6MLXVhdAuXYwuN8KRTS9kKPGwu/+as2/bs1N6rHRhz5Srnn5GrWdqgNMo/ccWttJFifncCbKl6KTvsfPRH2+cdreaFi8Ag+Q70uyWvKcSzt8kgyL7ZoIFfdA+9JgySQ8pg34m/Pc9Ww/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=17oR9ElJHCjYucX507l5LWYDZr1bYHsrk84j6EVMQEY=;
- b=AGw+XmjtH65j/7RoCjqgVEG8qLJ7WyIjNH4pVMNJ32YssCa5Gk6CEDE+kKJRAr0sFymy0GJh4yTAUwXLfFP1fSW6t/+vuGKKKomgKqV7D9m1tkxSa7UD0c7pNqpSFQcEGs6RSPm/mb6JdqkI/NgPsvuUu1nsOeKfIo/tDk2fGZEiBYdBNKvmKKhkNeOp0Va5Cpo8LEezA4o3OHjf0acP01C0fvT918n5bbpV69tORI/Wt8W3WfdkPQUgQf9xrnEwzWR7LeHjk0SWKdXnuNkfuvHHfxsxN6lvq4e1bnKc3ci4ZBdQKvF82N0vfSKdUjiZ1oWxne2Kp9sfeigojl/6PA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=17oR9ElJHCjYucX507l5LWYDZr1bYHsrk84j6EVMQEY=;
- b=bY8HQD7V/3RVJgv1mTKe/rxdm/5msbetRiF7CuiF5nth3darj3SpTe0vlawDZo0dmKN92IyVO4+UUzMI31K+vhO2H+9XfVoW6wXnMx+9Y58MUTlgTbOhAgnJd++q5ItawJ7tO/Z/zsyC8KRpRXZNgiMOmbJ+zk2tcvSh/6PqUC8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB4342.namprd12.prod.outlook.com (2603:10b6:208:264::7)
- by DM6PR12MB4057.namprd12.prod.outlook.com (2603:10b6:5:213::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
- 2022 06:54:51 +0000
-Received: from MN2PR12MB4342.namprd12.prod.outlook.com
- ([fe80::597:967e:d8b8:8fb9]) by MN2PR12MB4342.namprd12.prod.outlook.com
- ([fe80::597:967e:d8b8:8fb9%3]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 06:54:51 +0000
-Message-ID: <f0110d36-a9c2-c1b9-b193-32da4f98a975@amd.com>
+        Mon, 17 Oct 2022 02:56:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E38A57896
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 23:55:51 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29H5L8pj001597;
+        Mon, 17 Oct 2022 06:54:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=W307ZMgjpJWrwvfrbiwXMexvBy+E75TxBf5gCogIVsw=;
+ b=d11bKYWw2fo/YrPKyVA8FmZFrpAFiPTkHN+RgNyNHdsEXXiWtQZ11u0PwOd7vINaOXs+
+ nLKHT3dQHMEQ0ek2HY1B9QZZToEGDwKXuraNOC4gaA5JT7LY+9Q4d0a1ktY390hYmEWp
+ eTYuTWlTcLMT59K+7EqubCtiUP30n1Ns2LaWmz/8bFo9SwV/2j4MUrb1n4m8iPN+48xh
+ LIzqAUspbgqvd96xdIs2n5x4qrP4C0+a0ysGx3aFoH3ChfEmq5G7JyvWV/Uu0trHwqj8
+ l38qqZl2S8V5TnwUVK9NzjJ+ALIuws+ZPuMIswtZ+xuF+cfTPNuoKWv6hC8L1gadiWNn uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86g5pcfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 06:54:50 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29H6NXP6032001;
+        Mon, 17 Oct 2022 06:54:49 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86g5pcer-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 06:54:49 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29H6oq0S024265;
+        Mon, 17 Oct 2022 06:54:47 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3k7mg8sve8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 06:54:47 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29H6sjOx64487830
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Oct 2022 06:54:45 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2FBAFA4055;
+        Mon, 17 Oct 2022 06:54:45 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D302A4040;
+        Mon, 17 Oct 2022 06:54:40 +0000 (GMT)
+Received: from [9.43.94.119] (unknown [9.43.94.119])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 17 Oct 2022 06:54:40 +0000 (GMT)
+Message-ID: <b3608266-f9f7-367a-1aed-3e5ace74d011@linux.ibm.com>
 Date:   Mon, 17 Oct 2022 12:24:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [git pull] drm fixes for 6.1-rc1
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arthur Marsh <arthur.marsh@internode.on.net>,
-        Dave Airlie <airlied@gmail.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     daniel.vetter@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
-References: <CAPM=9ty3DGWa8vnfumgSrpSgWnixWjikb6C0Zk_5bW+deKLVQw@mail.gmail.com>
- <20221016080833.5503-1-user@am64>
- <CAPM=9txsBf5HJ97tAMOQ8PdiPciK-zqngERUm7hGJO8Zyyqb+w@mail.gmail.com>
- <C98B32CF-86B0-438D-BC8D-10FA255B3B4F@internode.on.net>
- <7c645fa8-bf29-4b30-bdc5-e61e6bb09927@amd.com>
-From:   Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>
-In-Reply-To: <7c645fa8-bf29-4b30-bdc5-e61e6bb09927@amd.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220909210509.6286-1-eric.devolder@oracle.com>
+ <20220909210509.6286-8-eric.devolder@oracle.com>
+ <78100f92-afd7-52b6-d5e5-17eb2de72a9a@linux.ibm.com>
+ <46e0908c-a753-bec1-68bf-a58a89798056@oracle.com>
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <46e0908c-a753-bec1-68bf-a58a89798056@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN3PR01CA0018.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::8) To MN2PR12MB4342.namprd12.prod.outlook.com
- (2603:10b6:208:264::7)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4342:EE_|DM6PR12MB4057:EE_
-X-MS-Office365-Filtering-Correlation-Id: 66255d3c-3518-48ef-7874-08dab00c7d34
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: myBt4XFXjvfHTwRIDHlIm9+Ph4SND7yIWbrC7CMybldLf9wPuvirf+qGQNJoTVkcgDiGpUfVZCJ44GYbaBjCueRhoE8qlNGJLRSu5DJeqV1FHbeYIFz1cHJrxdKOVRZRoJl4gluY0/nEnHZrZdsPbvu/L54IIbySg2x5RkulyhWCFfJ/mK1hQNNPrArNIQ2T2ACJfYrFa01wftaGECOGBAWQcXs7U1v8Y6jbaMIZ/3pOPjIEJFGcjSbrFC/yHZP1zmngxVSyLaXnX+94V6ZVgafj7yfBPgN6Hewy09OcW8NuVkKTzOc+yGYtwK4O02yHhMs2nNFSvCU/JtUKBXaG5QPSyxgE4uVRXvWuFQmtNpfCouRmJW+H5ng2G0TrbTKCErfUGDZ7IzPBjbOUISJizQ6TflsoTgYAQSVprZvr0O6M/W7doTkqSEBXGrd1aEHtNibVXuDd7hZPlanRvN6nYcjjFmoWq7EBc0YL3vOEu744o0kodH2BAa41xRTrmPhpJ4xKDo4nYJtl2r0v3q2nz6y7cMQBn3ZEQCpHtQ1GPMYqMvQYLzrMQYbFSn9VJPBwiKSAdP9d9FDqbdAUEkgLanwat2KPIrnigHoQAk0MdgX953pfI1iIgylPgTOmT3tC4tE5jY0dDtbtgLzFAFzXl5R7xZ7J7OAASspMRZIm1nzzWAvebc2Ft6GtJ65bULKN4mOmbEzaGpsd28muMcwG4R1RhGR6t+LPz+YH+U4IQu7bULC1ir/vxrJihxvXcZ/uNOZR6F7NgMaCzhZKvK6P7QhuKDweb9UE/4WXfwNS4p0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4342.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(136003)(366004)(39860400002)(451199015)(31686004)(45080400002)(6486002)(478600001)(38100700002)(8936002)(6512007)(110136005)(19627235002)(83380400001)(31696002)(316002)(6636002)(6666004)(41300700001)(53546011)(6506007)(36756003)(4326008)(2906002)(186003)(2616005)(26005)(66476007)(66556008)(66946007)(86362001)(8676002)(66574015)(30864003)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmIwTmphaWJIOUpoUTU1eUN0a2VQRjFCSEc2aXJRaTRPR3hoUFcyWWQxS1Rj?=
- =?utf-8?B?VEg0WDVuR1A5dkZJV2RpcTQ2ZXlZQ2dLWU1YSG9tdExPMXdsNmpXdVUxUWQ1?=
- =?utf-8?B?bElpUW5CM1pQc0JzZ3AweFYzNGp5amQ5eEh0cUk0YjQ5NzJ6U0hLNlJPeFlZ?=
- =?utf-8?B?WjFvWXlkcUdqYnBMZ0FDR2xzeERIZjUrSk55T0NUVjdKVk53dU01ZktVUExt?=
- =?utf-8?B?QVhIcHJYeXVXUHMyeTlzYWlncGxJU0ZTbFoyTVdxSzBDU3luNDRIMTN6VTNR?=
- =?utf-8?B?dHVJd0huaDBqUVZvdVpaTXhUR2xacnQzamN6VVZWMStBTjdDZW94bks4ZVZz?=
- =?utf-8?B?Y29nZnpFUEpKTGNTcjVRbmNLTXpEalZScnUrSExpMHF3YzY2MkE1TENmMHZj?=
- =?utf-8?B?bFp6SEFsZFlEdE9ac3BnbUdFQThqbER0dzlzaDdxQXhHemYwQUUweVJvalow?=
- =?utf-8?B?UGZ2a1JKYjg0OTJxZmJqR0RQN0xadmI4YzA1UGFUTlI3OS9JT0VzampIVnpJ?=
- =?utf-8?B?ZkpGRyt2WHRPemIxaEFoV0N3Q2pTQ1Q2NCswRnZqVDJWOFAwSDRBdnFVN2dT?=
- =?utf-8?B?YzIzajRzbGhZdzhnSDNoSVJMZXdIUkZSYTlZayszc3ZqRkVJRG5tU3gvMFUy?=
- =?utf-8?B?eDB2REh2UVhxazU1UUg3Z0NldDJJaUNhNWowRFZQTkpiaEFyMGZCWTFrUmZi?=
- =?utf-8?B?cm91VkZ5Ly83OEQ4RmNYWVNFMjdXQVZ1cFpqcVp2M2dadi9YL0gzc1dITUY2?=
- =?utf-8?B?VGY5VkNhMGY4ZFpyN3ZnNXJURFM3dDlqUTgwN3RYMDVyVUJiWXJjQ2NCOXRX?=
- =?utf-8?B?M2phUkIxcy9UNXMyeUlPanp0eE5RS2RLWDFyd3dQdjhXMWF0Wnd1amtRNHNn?=
- =?utf-8?B?a0R0NDNRU3pKZVkyVXZUc1U4UVpOeWFKTUVDclBLQ01ZZ1hPSlZEdmNKQUlB?=
- =?utf-8?B?Q3ZCQXVvL29EdkRaNllKdDlnZmxUSllIMkdLM2JQRklzL1RXT1BudUhpd1dT?=
- =?utf-8?B?akthWHZBTTNVdzdDaUovbUpsNmVPNHRndTkvUlR0QnQvSWpSWDRYeW05eitP?=
- =?utf-8?B?emNrbmxGUFdqeVA0Y25FeWlZaWtQN0VHaVFvQTBWd2pid2NyOGZHV25KcjB3?=
- =?utf-8?B?K09vdmdzM0JkTDkxcldHQ0JYTml0STZEblN5M1ZQWU84VzdleExld1hyb2F1?=
- =?utf-8?B?NVAyNE90TjNLZjVOVmdEWTJQcElxRUozSnVSWDJJQlV2c1RmOXNhVkdxZTNw?=
- =?utf-8?B?MzZzbFowTFZoUkx1SGowaVJJbHdCbG5oQzJadTJpd0RwMEdqRGRTcnVLb3Ri?=
- =?utf-8?B?MUhKaE5IdUN5bkV3emVjZTl6Z01xOGJhcEp0azdwQ3JBYTRiTUQwd05SVkR2?=
- =?utf-8?B?eEZsQzl0ajhQYzJINGNqVEVhNlJacVRSc1k4anZ1K09uZjZ0NWt0dTdRcWQ0?=
- =?utf-8?B?SkpJd21uVlZpeUZoc3RxKyswVDRrOGc0SGFDeS9telp6NlM2ZTFJeUNCTmNX?=
- =?utf-8?B?cFhqR2l0R28zcUNpeDlIR1NwQmJ3UHgzYkJNNVJMMEs5ZVExK01jUFV4L1Bi?=
- =?utf-8?B?bU4rMEJPeVNoOEozRUFIOWpvMTJ2ZU5BRmlkVnlnSFNQbW5XWlNyd3RseXA2?=
- =?utf-8?B?cER2Nmp0TzdnaXgySFdsVkJCVk82WWhRdHlaM0Rsd0J0elNzdG5SRXNhVC9R?=
- =?utf-8?B?V005SzR1MnNpNjdwWUErK2NObk1SNEVrVWprOGh2U3h1OG1XT0h4aVo5ZXFY?=
- =?utf-8?B?SFc2Wm0wdmJ2US8rdVlVTkNVaVRvcWxqTk1xemNTaHdlNmxsK2pKUHRka0Q0?=
- =?utf-8?B?L0R5L2hEN2NxS0ZtcHEzYWRKaWd6b1JyU0NtYjV0MDVVbTI1dlh0dit5TmhD?=
- =?utf-8?B?ZWZZRGFQdjNWdVpteDJjSTFCMW0ya1lZR25CS0g0c3F3K3dRMGVoczhVRzkz?=
- =?utf-8?B?MHFPbnBBMnFjNTd0R2xOQnRINWxjVTYwUXFBRUR3TWlxTDloTGZTTVFYUnN0?=
- =?utf-8?B?ZFM1WUFtVDQzcHRuMkFJb08vZCtqR21XS0JOMExhZ0dyb2hDU2diaFZOZmor?=
- =?utf-8?B?YTJFNFVIV2ZaSTcyek5aZFREMjlPWUdiYnZ3RFIzV1VXeUh3ajc0YTh2Wnhm?=
- =?utf-8?Q?ELT0ofq2IGZd+T9rJHMjYu1CX?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66255d3c-3518-48ef-7874-08dab00c7d34
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4342.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 06:54:51.4908
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VEW0+91U2BJd/OiNG7nBhHVdr0CvgHAYrhQh1kn/roONbukCWmi0XwUz5BTicLmTQqzSElVSKb9+RGjYq7rWnA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4057
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: beBD2Q5DQhVRKh1jbWJO78MQeCWld_76
+X-Proofpoint-ORIG-GUID: G9I1OKB4NUKQ64wZ5lYa-jDhC1EFTbqs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-17_06,2022-10-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1011
+ mlxlogscore=999 bulkscore=0 impostorscore=0 phishscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210170038
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arthur,
 
-Is this old radeon card?
+On 08/10/22 01:03, Eric DeVolder wrote:
+>
+>
+> On 9/19/22 02:06, Sourabh Jain wrote:
+>>
+>> On 10/09/22 02:35, Eric DeVolder wrote:
+>>> For x86_64, when CPU or memory is hot un/plugged, the crash
+>>> elfcorehdr, which describes the CPUs and memory in the system,
+>>> must also be updated.
+>>>
+>>> When loading the crash kernel via kexec_load or kexec_file_load,
+>>> the elfcorehdr is identified at run time in
+>>> crash_core:handle_hotplug_event().
+>>>
+>>> To update the elfcorehdr for x86_64, a new elfcorehdr must be
+>>> generated from the available CPUs and memory. The new elfcorehdr
+>>> is prepared into a buffer, and then installed over the top of
+>>> the existing elfcorehdr.
+>>>
+>>> In the patch 'kexec: exclude elfcorehdr from the segment digest'
+>>> the need to update purgatory due to the change in elfcorehdr was
+>>> eliminated.  As a result, no changes to purgatory or boot_params
+>>> (as the elfcorehdr= kernel command line parameter pointer
+>>> remains unchanged and correct) are needed, just elfcorehdr.
+>>>
+>>> To accommodate a growing number of resources via hotplug, the
+>>> elfcorehdr segment must be sufficiently large enough to accommodate
+>>> changes, see the CRASH_MAX_MEMORY_RANGES configure item.
+>>>
+>>> With this change, crash hotplug for kexec_file_load syscall
+>>> is supported. The kexec_load is also supported, but also
+>>> requires a corresponding change to userspace kexec-tools.
+>>>
+>>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>>> Acked-by: Baoquan He <bhe@redhat.com>
+>>> ---
+>>>   arch/x86/Kconfig             |  11 ++++
+>>>   arch/x86/include/asm/kexec.h |  20 +++++++
+>>>   arch/x86/kernel/crash.c      | 102 
+>>> +++++++++++++++++++++++++++++++++++
+>>>   3 files changed, 133 insertions(+)
+>>>
+>>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>>> index f9920f1341c8..cdfc9b2fdf98 100644
+>>> --- a/arch/x86/Kconfig
+>>> +++ b/arch/x86/Kconfig
+>>> @@ -2056,6 +2056,17 @@ config CRASH_DUMP
+>>>         (CONFIG_RELOCATABLE=y).
+>>>         For more details see Documentation/admin-guide/kdump/kdump.rst
+>>> +config CRASH_MAX_MEMORY_RANGES
+>>> +    depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || 
+>>> MEMORY_HOTPLUG)
+>>> +    int
+>>> +    default 32768
+>>> +    help
+>>> +      For the kexec_file_load path, specify the maximum number of
+>>> +      memory regions, eg. as represented by the 'System RAM' entries
+>>> +      in /proc/iomem, that the elfcorehdr buffer/segment can 
+>>> accommodate.
+>>> +      This value is combined with NR_CPUS and multiplied by Elf64_Phdr
+>>> +      size to determine the final buffer size.
+>>> +
+>>>   config KEXEC_JUMP
+>>>       bool "kexec jump"
+>>>       depends on KEXEC && HIBERNATION
+>>> diff --git a/arch/x86/include/asm/kexec.h 
+>>> b/arch/x86/include/asm/kexec.h
+>>> index a3760ca796aa..432073385b2d 100644
+>>> --- a/arch/x86/include/asm/kexec.h
+>>> +++ b/arch/x86/include/asm/kexec.h
+>>> @@ -212,6 +212,26 @@ typedef void crash_vmclear_fn(void);
+>>>   extern crash_vmclear_fn __rcu *crash_vmclear_loaded_vmcss;
+>>>   extern void kdump_nmi_shootdown_cpus(void);
+>>> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size);
+>>> +#define arch_map_crash_pages arch_map_crash_pages
+>>> +
+>>> +void arch_unmap_crash_pages(void **ptr);
+>>> +#define arch_unmap_crash_pages arch_unmap_crash_pages
+>>> +
+>>> +void arch_crash_handle_hotplug_event(struct kimage *image,
+>>> +        unsigned int hp_action);
+>>> +#define arch_crash_handle_hotplug_event 
+>>> arch_crash_handle_hotplug_event
+>>> +
+>>> +#ifdef CONFIG_HOTPLUG_CPU
+>>> +static inline int crash_hotplug_cpu_support(void) { return 1; }
+>>> +#define crash_hotplug_cpu_support crash_hotplug_cpu_support
+>>> +#endif
+>>> +
+>>> +#ifdef CONFIG_MEMORY_HOTPLUG
+>>> +static inline int crash_hotplug_memory_support(void) { return 1; }
+>>> +#define crash_hotplug_memory_support crash_hotplug_memory_support
+>>> +#endif
+>>> +
+>>>   #endif /* __ASSEMBLY__ */
+>>>   #endif /* _ASM_X86_KEXEC_H */
+>>> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+>>> index 9ceb93c176a6..8fc7d678ac72 100644
+>>> --- a/arch/x86/kernel/crash.c
+>>> +++ b/arch/x86/kernel/crash.c
+>>> @@ -25,6 +25,7 @@
+>>>   #include <linux/slab.h>
+>>>   #include <linux/vmalloc.h>
+>>>   #include <linux/memblock.h>
+>>> +#include <linux/highmem.h>
+>>>   #include <asm/processor.h>
+>>>   #include <asm/hardirq.h>
+>>> @@ -397,7 +398,18 @@ int crash_load_segments(struct kimage *image)
+>>>       image->elf_headers = kbuf.buffer;
+>>>       image->elf_headers_sz = kbuf.bufsz;
+>>> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+>>> +    /* Ensure elfcorehdr segment large enough for hotplug changes */
+>>> +    kbuf.memsz =
+>>> +        (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) *
+>>> +            sizeof(Elf64_Phdr);
+>>> +    /* Mark as usable to crash kernel, else crash kernel fails on 
+>>> boot */
+>>> +    image->elf_headers_sz = kbuf.memsz;
+>>> +    image->elfcorehdr_index = image->nr_segments;
+>>> +    image->elfcorehdr_index_valid = true;
+>>> +#else
+>>>       kbuf.memsz = kbuf.bufsz;
+>>> +#endif
+>>>       kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
+>>>       kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+>>>       ret = kexec_add_buffer(&kbuf);
+>>> @@ -412,3 +424,93 @@ int crash_load_segments(struct kimage *image)
+>>>       return ret;
+>>>   }
+>>>   #endif /* CONFIG_KEXEC_FILE */
+>>> +
+>>> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+>>> +/*
+>>> + * NOTE: The addresses and sizes passed to this routine have
+>>> + * already been fully aligned on page boundaries. There is no
+>>> + * need for massaging the address or size.
+>>> + */
+>>> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
+>>> +{
+>>> +    void *ptr = NULL;
+>>> +
+>>> +    if (size > 0) {
+>>> +        struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+>>> +
+>>> +        ptr = kmap_local_page(page);
+>>> +    }
+>>> +
+>>> +    return ptr;
+>>> +}
+>>> +
+>>> +void arch_unmap_crash_pages(void **ptr)
+>>> +{
+>>> +    if (ptr) {
+>>> +        if (*ptr)
+>>> +            kunmap_local(*ptr);
+>>> +        *ptr = NULL;
+>>> +    }
+>>> +}
+>>> +
+>>> +/**
+>>> + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr 
+>>> changes
+>>> + * @image: the active struct kimage
+>>> + * @hp_action: the hot un/plug action being handled
+>>> + *
+>>> + * To accurately reflect hot un/plug changes, the new elfcorehdr
+>>> + * is prepared in a kernel buffer, and then it is written on top
+>>> + * of the existing/old elfcorehdr.
+>>> + */
+>>> +void arch_crash_handle_hotplug_event(struct kimage *image,
+>>> +    unsigned int hp_action)
+>>> +{
+>>> +    struct kexec_segment *ksegment;
+>>> +    unsigned char *ptr = NULL;
+>>> +    unsigned long elfsz = 0;
+>>> +    void *elfbuf = NULL;
+>>> +    unsigned long mem, memsz;
+>>> +
+>>> +    /*
+>>> +     * Elfcorehdr_index_valid checked in 
+>>> crash_core:handle_hotplug_event()
+>>> +     */
+>>> +    ksegment = &image->segment[image->elfcorehdr_index];
+>>> +    mem = ksegment->mem;
+>>> +    memsz = ksegment->memsz;
+>>> +
+>>> +    /*
+>>> +     * Create the new elfcorehdr reflecting the changes to CPU and/or
+>>> +     * memory resources.
+>>> +     */
+>>> +    if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
+>>> +        pr_err("crash hp: unable to prepare elfcore headers");
+>>> +        goto out;
+>>
+>> On PowerPC, while preparing the elf core header the memblock 
+>> structure is used to prepare program header for memory regions of 
+>> elfcorehdr. Since the above arch specific hotplug handler gets 
+>> invoked when memory is marked offline (MEM_OFFLINE) which is before 
+>> memblock structure gets updated so on PowerPC the above handler may 
+>> not work for memory hotplug case.
+>>
+>> Just wondering which data structure is used to get the list of memory 
+>> regions while preparing program header for memory regions of 
+>> elfcorehdr on other architectures?
+>>
+>> Thanks,
+>> Sourabh Jain
+>
+> I think your request to report the memory block address in comments of 
+> patch 3/7 "crash: add generic infrastructure" cover this scenario now.
+Yes, the asked changes will make easy for PowerPC to recreate elfcorehdr.
 
 Thanks,
-Arun
-
-On 10/17/2022 11:50 AM, Christian König wrote:
-> Arun please take a look into this ASAP.
->
-> Thanks,
-> Christian.
->
-> Am 17.10.22 um 03:13 schrieb Arthur Marsh:
->> Thanks Dave, I reverted patch 
->> 312b4dc11d4f74bfe03ea25ffe04c1f2fdd13cb9 against 6.1-rc1 and the 
->> resulting kernel loaded amdgpu fine on my pc with Cape Verde GPU.
->>
->> Regards,
->>
->> Arthur.
->>
->> On 17 October 2022 8:14:18 am ACDT, Dave Airlie <airlied@gmail.com> 
->> wrote:
->>> On Sun, 16 Oct 2022 at 18:09, Arthur Marsh
->>> <arthur.marsh@internode.on.net> wrote:
->>>> From: Arthur Marsh <arthur.marsh@internode.on.net>
->>>>
->>>> Hi, the "drm fixes for 6.1-rc1" commit caused the amdgpu module to 
->>>> fail
->>>> with my Cape Verde radeonsi card.
->>>>
->>>> I haven't been able to bisect the problem to an individual commit, but
->>>> attach a dmesg extract below.
->>>>
->>>> I'm happy to supply any other configuration information and test 
->>>> patches.
->>>>
->>> Can you try reverting: it's the only think I can spot that might
->>> affect a card that old since most changes in that request were for
->>> display hw you don't have.
->>>
->>> ommit 312b4dc11d4f74bfe03ea25ffe04c1f2fdd13cb9
->>> Author: Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>
->>> Date:   Tue Oct 4 07:33:39 2022 -0700
->>>
->>>     drm/amdgpu: Fix VRAM BO swap issue
->>>
->>>     DRM buddy manager allocates the contiguous memory requests in
->>>     a single block or multiple blocks. So for the ttm move operation
->>>     (incase of low vram memory) we should consider all the blocks to
->>>     compute the total memory size which compared with the struct
->>>     ttm_resource num_pages in order to verify that the blocks are
->>>     contiguous for the eviction process.
->>>
->>>     v2: Added a Fixes tag
->>>     v3: Rewrite the code to save a bit of calculations and
->>>         variables (Christian)
->>>
->>>     Fixes: c9cad937c0c5 ("drm/amdgpu: add drm buddy support to amdgpu")
->>>     Signed-off-by: Arunpravin Paneer Selvam 
->>> <Arunpravin.PaneerSelvam@amd.com>
->>>     Reviewed-by: Christian König <christian.koenig@amd.com>
->>>     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->>>
->>>
->>> Thanks,
->>> Dave.
->>>
->>>> Arthur.
->>>>
->>>>   Linux version 6.0.0+ (root@am64) (gcc-12 (Debian 12.2.0-5) 
->>>> 12.2.0, GNU ld (GNU Binutils for Debian) 2.39) #5179 SMP 
->>>> PREEMPT_DYNAMIC Fri Oct 14 17:00:40 ACDT 2022
->>>>   Command line: BOOT_IMAGE=/vmlinuz-6.0.0+ 
->>>> root=UUID=39706f53-7c27-4310-b22a-36c7b042d1a1 ro single 
->>>> amdgpu.audio=1 amdgpu.si_support=1 radeon.si_support=0 
->>>> page_owner=on amdgpu.gpu_recovery=1
->>>> ...
->>>>
->>>>   [drm] amdgpu kernel modesetting enabled.
->>>>   amdgpu 0000:01:00.0: vgaarb: deactivate vga console
->>>>   Console: switching to colour dummy device 80x25
->>>>   [drm] initializing kernel modesetting (VERDE 0x1002:0x682B 
->>>> 0x1458:0x22CA 0x87).
->>>>   [drm] register mmio base: 0xFE8C0000
->>>>   [drm] register mmio size: 262144
->>>>   [drm] add ip block number 0 <si_common>
->>>>   [drm] add ip block number 1 <gmc_v6_0>
->>>>   [drm] add ip block number 2 <si_ih>
->>>>   [drm] add ip block number 3 <gfx_v6_0>
->>>>   [drm] add ip block number 4 <si_dma>
->>>>   [drm] add ip block number 5 <si_dpm>
->>>>   [drm] add ip block number 6 <dce_v6_0>
->>>>   [drm] add ip block number 7 <uvd_v3_1>
->>>>   [drm] BIOS signature incorrect 5b 7
->>>>   resource sanity check: requesting [mem 0x000c0000-0x000dffff], 
->>>> which spans more than PCI Bus 0000:00 [mem 0x000d0000-0x000dffff 
->>>> window]
->>>>   caller pci_map_rom+0x68/0x1b0 mapping multiple BARs
->>>>   amdgpu 0000:01:00.0: No more image in the PCI ROM
->>>>   amdgpu 0000:01:00.0: amdgpu: Fetched VBIOS from ROM BAR
->>>>   amdgpu: ATOM BIOS: xxx-xxx-xxx
->>>>   amdgpu 0000:01:00.0: amdgpu: Trusted Memory Zone (TMZ) feature 
->>>> not supported
->>>>   amdgpu 0000:01:00.0: amdgpu: PCIE atomic ops is not supported
->>>>   [drm] PCIE gen 2 link speeds already enabled
->>>>   [drm] vm size is 64 GB, 2 levels, block size is 10-bit, fragment 
->>>> size is 9-bit
->>>>   RTL8211B Gigabit Ethernet r8169-0-300:00: attached PHY driver 
->>>> (mii_bus:phy_addr=r8169-0-300:00, irq=MAC)
->>>>   r8169 0000:03:00.0 eth0: Link is Down
->>>>   amdgpu 0000:01:00.0: amdgpu: VRAM: 2048M 0x000000F400000000 - 
->>>> 0x000000F47FFFFFFF (2048M used)
->>>>   amdgpu 0000:01:00.0: amdgpu: GART: 1024M 0x000000FF00000000 - 
->>>> 0x000000FF3FFFFFFF
->>>>   [drm] Detected VRAM RAM=2048M, BAR=256M
->>>>   [drm] RAM width 128bits DDR3
->>>>   [drm] amdgpu: 2048M of VRAM memory ready
->>>>   [drm] amdgpu: 3979M of GTT memory ready.
->>>>   [drm] GART: num cpu pages 262144, num gpu pages 262144
->>>>   amdgpu 0000:01:00.0: amdgpu: PCIE GART of 1024M enabled (table at 
->>>> 0x000000F400A00000).
->>>>   [drm] Internal thermal controller with fan control
->>>>   [drm] amdgpu: dpm initialized
->>>>   [drm] AMDGPU Display Connectors
->>>>   [drm] Connector 0:
->>>>   [drm]   HDMI-A-1
->>>>   [drm]   HPD1
->>>>   [drm]   DDC: 0x194c 0x194c 0x194d 0x194d 0x194e 0x194e 0x194f 0x194f
->>>>   [drm]   Encoders:
->>>>   [drm]     DFP1: INTERNAL_UNIPHY
->>>>   [drm] Connector 1:
->>>>   [drm]   DVI-D-1
->>>>   [drm]   HPD2
->>>>   [drm]   DDC: 0x1950 0x1950 0x1951 0x1951 0x1952 0x1952 0x1953 0x1953
->>>>   [drm]   Encoders:
->>>>   [drm]     DFP2: INTERNAL_UNIPHY
->>>>   [drm] Connector 2:
->>>>   [drm]   VGA-1
->>>>   [drm]   DDC: 0x1970 0x1970 0x1971 0x1971 0x1972 0x1972 0x1973 0x1973
->>>>   [drm]   Encoders:
->>>>   [drm]     CRT1: INTERNAL_KLDSCP_DAC1
->>>>   [drm] Found UVD firmware Version: 64.0 Family ID: 13
->>>>   amdgpu: Move buffer fallback to memcpy unavailable
->>>>   [drm:amdgpu_device_init.cold [amdgpu]] *ERROR* sw_init of IP 
->>>> block <uvd_v3_1> failed -19
->>>>   amdgpu 0000:01:00.0: amdgpu: amdgpu_device_ip_init failed
->>>>   amdgpu 0000:01:00.0: amdgpu: Fatal error during GPU init
->>>>   amdgpu 0000:01:00.0: amdgpu: amdgpu: finishing device.
->>>>   BUG: kernel NULL pointer dereference, address: 0000000000000090
->>>>   #PF: supervisor write access in kernel mode
->>>>   #PF: error_code(0x0002) - not-present page
->>>>   PGD 0 P4D 0
->>>>   Oops: 0002 [#1] PREEMPT SMP NOPTI
->>>>   CPU: 3 PID: 447 Comm: udevd Not tainted 6.0.0+ #5179
->>>>   Hardware name: System manufacturer System Product Name/M3A78 PRO, 
->>>> BIOS 1701    01/27/2011
->>>>   RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
->>>>   Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc cc 
->>>> cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 0f 
->>>> <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 99 8e
->>>>   RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
->>>>   RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
->>>>   RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
->>>>   RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
->>>>   R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
->>>>   R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
->>>>   FS:  00007fd81fcd9840(0000) GS:ffff99bb67cc0000(0000) 
->>>> knlGS:0000000000000000
->>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>   CR2: 0000000000000090 CR3: 0000000111822000 CR4: 00000000000006e0
->>>>   Call Trace:
->>>>    <TASK>
->>>>    amdgpu_fence_driver_sw_fini+0xc2/0xd0 [amdgpu]
->>>>    amdgpu_device_fini_sw+0x17/0x3c0 [amdgpu]
->>>>    amdgpu_driver_release_kms+0x12/0x30 [amdgpu]
->>>>    devm_drm_dev_init_release+0x4a/0x70 [drm]
->>>>    release_nodes+0x40/0xb0
->>>>    devres_release_all+0x89/0xc0
->>>>    device_unbind_cleanup+0xe/0x70
->>>>    really_probe+0x245/0x3a0
->>>>    ? pm_runtime_barrier+0x61/0xb0
->>>>    __driver_probe_device+0x78/0x170
->>>>    driver_probe_device+0x2d/0xb0
->>>>    __driver_attach+0xdc/0x1d0
->>>>    ? __device_attach_driver+0x100/0x100
->>>>    bus_for_each_dev+0x69/0xa0
->>>>    bus_add_driver+0x1d4/0x230
->>>>    ? _raw_spin_unlock+0x15/0x40
->>>>    driver_register+0x89/0xe0
->>>>    ? 0xffffffffc0c3b000
->>>>    do_one_initcall+0x44/0x200
->>>>    ? __kmem_cache_alloc_node+0x90/0x360
->>>>    ? kmalloc_trace+0x38/0xc0
->>>>    do_init_module+0x4a/0x1e0
->>>>    __do_sys_finit_module+0xb5/0x130
->>>>    do_syscall_64+0x3a/0x90
->>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>>   RIP: 0033:0x7fd81ff5b1b9
->>>>   Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 48 89 f8 
->>>> 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 
->>>> <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 1c 0d 00 f7 d8 64 89 01 48
->>>>   RSP: 002b:00007ffc5b37cbb8 EFLAGS: 00000246 ORIG_RAX: 
->>>> 0000000000000139
->>>>   RAX: ffffffffffffffda RBX: 000055e5f2f6a140 RCX: 00007fd81ff5b1b9
->>>>   RDX: 0000000000000000 RSI: 000055e5f2f67e30 RDI: 0000000000000017
->>>>   RBP: 000055e5f2f67e30 R08: 0000000000000000 R09: 000055e5f2f46700
->>>>   R10: 0000000000000017 R11: 0000000000000246 R12: 0000000000020000
->>>>   R13: 0000000000000000 R14: 000055e5f2f65b00 R15: 0000000000000024
->>>>    </TASK>
->>>>   Modules linked in: amdgpu(+) snd_emu10k1_synth snd_emux_synth 
->>>> snd_seq_midi_emul snd_seq_virmidi snd_seq_midi snd_seq_midi_event 
->>>> snd_seq wmi_bmof snd_emu10k1 edac_mce_amd gpu_sched drm_buddy video 
->>>> kvm_amd drm_ttm_helper ttm snd_util_mem drm_display_helper 
->>>> snd_ac97_codec ccp drm_kms_helper snd_hda_codec_hdmi rng_core 
->>>> ac97_bus snd_rawmidi snd_hda_intel snd_intel_dspcfg snd_hda_codec 
->>>> snd_hda_core snd_seq_device drm kvm snd_hwdep snd_pcm_oss 
->>>> snd_mixer_oss evdev serio_raw snd_pcm irqbypass i2c_algo_bit 
->>>> fb_sys_fops syscopyarea sysfillrect emu10k1_gp pcspkr gameport 
->>>> k10temp snd_timer sysimgblt snd acpi_cpufreq wmi soundcore button 
->>>> sp5100_tco asus_atk0110 ext4 crc16 mbcache jbd2 btrfs 
->>>> blake2b_generic xor raid6_pq zstd_compress libcrc32c crc32c_generic 
->>>> uas usb_storage sg sd_mod hid_generic t10_pi usbhid hid sr_mod 
->>>> cdrom crc64_rocksoft crc64 ata_generic ahci pata_atiixp libahci 
->>>> ohci_pci firewire_ohci libata firewire_core crc_itu_t xhci_pci 
->>>> scsi_mod ohci_hcd r8169 ehci_pci xhci_hcd
->>>>    realtek ehci_hcd mdio_devres i2c_piix4 scsi_common usbcore 
->>>> libphy usb_common
->>>>   CR2: 0000000000000090
->>>>   ---[ end trace 0000000000000000 ]---
->>>>   RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
->>>>   Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc cc 
->>>> cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 0f 
->>>> <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 99 8e
->>>>   RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
->>>>   RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
->>>>   RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
->>>>   RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
->>>>   R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
->>>>   R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
->>>>   FS:  00007fd81fcd9840(0000) GS:ffff99bb67cc0000(0000) 
->>>> knlGS:0000000000000000
->>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>   CR2: 0000000000000090 CR3: 0000000111822000 CR4: 00000000000006e0
->>>>   note: udevd[447] exited with preempt_count 1
->>>>   udevd[433]: worker [447] terminated by signal 9 (Killed)
->>>>   udevd[433]: worker [447] failed while handling 
->>>> '/devices/pci0000:00/0000:00:02.0/0000:01:00.0'
->>>>   r8169 0000:03:00.0 eth0: Link is Up - 1Gbps/Full - flow control off
->>>>   IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
->>>>   Adding 4194300k swap on /dev/sda4.  Priority:-2 extents:1 
->>>> across:4194300k FS
->>>>   EXT4-fs (sda5): re-mounted. Quota mode: none.
->>>>   lp: driver loaded but no devices found
->>>>   ppdev: user-space parallel port driver
->>>>   it87: Found IT8716F chip at 0xe80, revision 3
->>>>   ACPI Warning: SystemIO range 
->>>> 0x0000000000000E85-0x0000000000000E86 conflicts with OpRegion 
->>>> 0x0000000000000E85-0x0000000000000E86 (\_SB.PCI0.SBRG.ASOC.HWRE) 
->>>> (20220331/utaddress-204)
->>>>   ACPI: OSL: Resource conflict; ACPI support missing from driver?
->>>>   BUG: unable to handle page fault for address: 00000000000065c0
->>>>   #PF: supervisor read access in kernel mode
->>>>   #PF: error_code(0x0000) - not-present page
->>>>   PGD 0 P4D 0
->>>>   Oops: 0000 [#2] PREEMPT SMP NOPTI
->>>>   CPU: 2 PID: 55 Comm: kworker/2:1 Tainted: G D            6.0.0+ 
->>>> #5179
->>>>   Hardware name: System manufacturer System Product Name/M3A78 PRO, 
->>>> BIOS 1701    01/27/2011
->>>>   Workqueue: events output_poll_execute [drm_kms_helper]
->>>>   RIP: 0010:amdgpu_device_rreg.part.0+0x39/0x100 [amdgpu]
->>>>   Code: 6c 24 08 48 89 fb 4c 89 64 24 10 44 8d 24 b5 00 00 00 00 4c 
->>>> 3b a7 88 08 00 00 89 f5 73 70 83 e2 02 74 2f 4c 03 a3 90 08 00 00 
->>>> <45> 8b 24 24 48 8b 43 08 0f b7 70 3e 66 90 44 89 e0 48 8b 1c 24 48
->>>>   RSP: 0018:ffffbeb3c0717c48 EFLAGS: 00010206
->>>>   RAX: 0000000000000000 RBX: ffff99bae8260000 RCX: 0000000000000000
->>>>   RDX: 0000000000000000 RSI: 0000000000001970 RDI: ffff99bae8260000
->>>>   RBP: 0000000000001970 R08: ffffbeb3c0717e08 R09: 0000000000000000
->>>>   R10: 0000000000000018 R11: fefefefefefefeff R12: 00000000000065c0
->>>>   R13: ffffbeb3c0717d70 R14: 0000000000000000 R15: 000000010005e340
->>>>   FS:  0000000000000000(0000) GS:ffff99bb67c80000(0000) 
->>>> knlGS:0000000000000000
->>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>   CR2: 00000000000065c0 CR3: 000000008980a000 CR4: 00000000000006e0
->>>>   Call Trace:
->>>>    <TASK>
->>>>    amdgpu_i2c_pre_xfer+0x163/0x180 [amdgpu]
->>>>    bit_xfer+0x36/0x530 [i2c_algo_bit]
->>>>    __i2c_transfer+0x185/0x550
->>>>    i2c_transfer+0xa2/0x110
->>>>    amdgpu_display_ddc_probe+0xbd/0x100 [amdgpu]
->>>>    amdgpu_connector_vga_detect+0x8e/0x200 [amdgpu]
->>>>    drm_helper_probe_detect_ctx+0x7b/0xd0 [drm_kms_helper]
->>>>    output_poll_execute+0x152/0x220 [drm_kms_helper]
->>>>    process_one_work+0x1ae/0x370
->>>>    worker_thread+0x4d/0x3b0
->>>>    ? rescuer_thread+0x380/0x380
->>>>    kthread+0xe3/0x110
->>>>    ? kthread_complete_and_exit+0x20/0x20
->>>>    ret_from_fork+0x22/0x30
->>>>    </TASK>
->>>>   Modules linked in: max6650 hwmon_vid parport_pc ppdev lp parport 
->>>> amdgpu(+) snd_emu10k1_synth snd_emux_synth snd_seq_midi_emul 
->>>> snd_seq_virmidi snd_seq_midi snd_seq_midi_event snd_seq wmi_bmof 
->>>> snd_emu10k1 edac_mce_amd gpu_sched drm_buddy video kvm_amd 
->>>> drm_ttm_helper ttm snd_util_mem drm_display_helper snd_ac97_codec 
->>>> ccp drm_kms_helper snd_hda_codec_hdmi rng_core ac97_bus snd_rawmidi 
->>>> snd_hda_intel snd_intel_dspcfg snd_hda_codec snd_hda_core 
->>>> snd_seq_device drm kvm snd_hwdep snd_pcm_oss snd_mixer_oss evdev 
->>>> serio_raw snd_pcm irqbypass i2c_algo_bit fb_sys_fops syscopyarea 
->>>> sysfillrect emu10k1_gp pcspkr gameport k10temp snd_timer sysimgblt 
->>>> snd acpi_cpufreq wmi soundcore button sp5100_tco asus_atk0110 ext4 
->>>> crc16 mbcache jbd2 btrfs blake2b_generic xor raid6_pq zstd_compress 
->>>> libcrc32c crc32c_generic uas usb_storage sg sd_mod hid_generic 
->>>> t10_pi usbhid hid sr_mod cdrom crc64_rocksoft crc64 ata_generic 
->>>> ahci pata_atiixp libahci ohci_pci firewire_ohci libata 
->>>> firewire_core crc_itu_t xhci_pci
->>>>    scsi_mod ohci_hcd r8169 ehci_pci xhci_hcd realtek ehci_hcd 
->>>> mdio_devres i2c_piix4 scsi_common usbcore libphy usb_common
->>>>   CR2: 00000000000065c0
->>>>   ---[ end trace 0000000000000000 ]---
->>>>   RIP: 0010:drm_sched_fini+0x80/0xa0 [gpu_sched]
->>>>   Code: 76 83 0e c4 c6 85 8c 01 00 00 00 5b 5d 41 5c 41 5d c3 cc cc 
->>>> cc cc 4c 8d 63 f0 4c 89 e7 e8 08 99 8e c4 48 8b 03 48 39 d8 74 0f 
->>>> <c6> 80 90 00 00 00 01 48 8b 00 48 39 d8 75 f1 4c 89 e7 e8 c9 99 8e
->>>>   RSP: 0018:ffffbeb3c06bfbb8 EFLAGS: 00010213
->>>>   RAX: 0000000000000000 RBX: ffff99bae8269a98 RCX: ffff99bab703afc0
->>>>   RDX: 0000000000000001 RSI: ffff99bab703afe8 RDI: 0000000000000000
->>>>   RBP: ffff99bae82699f0 R08: ffffffff85cd0bc2 R09: 0000000000000010
->>>>   R10: 0000000000000035 R11: ffff99bb594806c0 R12: ffff99bae8269a88
->>>>   R13: ffff99bae82699f8 R14: ffff99bae82665e8 R15: 0000000000000000
->>>>   FS:  0000000000000000(0000) GS:ffff99bb67c80000(0000) 
->>>> knlGS:0000000000000000
->>>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>   CR2: 00000000000065c0 CR3: 000000008980a000 CR4: 00000000000006e0
->
-
+Sourabh Jain
