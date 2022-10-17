@@ -2,136 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA8D60107E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA41601083
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiJQNuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S230103AbiJQNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiJQNuE (ORCPT
+        with ESMTP id S229822AbiJQNvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:50:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF72A1EC69
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:49:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 17 Oct 2022 09:51:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3081C125;
+        Mon, 17 Oct 2022 06:51:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 81BF73400A;
+        Mon, 17 Oct 2022 13:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666014696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wsWr+Ep+EK7rnuxntXQBk+r8nFSCsmWYWDo+ktsF+E8=;
+        b=A0yN/V4qtthZpmxpz2jrPEuoGvck4A9nlmJIVT00d+XsIa9YkV9RRAh7dlAU12gj57j/et
+        Ie33KUNQee6OtTH2SX9985b1hwXSlJiJLxOKuR2pGXuDPWzurg2TI0KvHPsnGY60+qold2
+        FyjQ9PvxSYI+6yHGT4vvpiojZPaiCT8=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E277261143
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDD5C433C1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 13:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666014596;
-        bh=cVbTBys4QY/+4OrJqqpY4vnMEBSGMFjEPQuoM2lpzek=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rutma+kRxkw7vk2KlS6yGAiGODDwXBzfJz4ZHhOcXQqqT4T+rYgJq8CJBcWd9VTrZ
-         rg/IawzhiiXlN1eWGQ+7Z3ZL28h/yUfl0U+TXYCTrrqh+/bbRIFHB6TeG0eoonDqj1
-         G3/9gu/3MEbiMoDWWUWqhUwt5X4H0zgwEVzw/AbibinItrI7XAl00vrxkyFGESYiJ0
-         dtf/0E67Hi1SNnKhxHGOUAokqIf6jFC/yNtZs5/o9mqXar1oIiZlKxlP66O0NJ7vSs
-         sqLGLAOFgDm9X+RY1tyU9RFtYLcMmL3kpjxs25yPUXGcH8jsgAKg0Lhq+PcC2TvkXl
-         htUFcsVqWeriQ==
-Received: by mail-lf1-f49.google.com with SMTP id g1so17587802lfu.12
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:49:56 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3ELzmGTlMHe57IhaEFseGuoOO+Wo9lRO8a7/pfUe9uLRUBLL1A
-        Hg+PiMhk00IMjYNHUaZdIWNw4nRCqf8PsyGNOOE=
-X-Google-Smtp-Source: AMsMyM62T0Lmer/YAVd8RGaILt9+Yt130QoT0nBCComifQ0MDL/NMeRs/SRysB4MaOfT/8HNfr3ESn7tYDzvNQMgc48=
-X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id
- bq14-20020a056512150e00b00492d9fd9bdfmr3823504lfb.583.1666014594327; Mon, 17
- Oct 2022 06:49:54 -0700 (PDT)
+        by relay2.suse.de (Postfix) with ESMTPS id 6226D2C141;
+        Mon, 17 Oct 2022 13:51:36 +0000 (UTC)
+Date:   Mon, 17 Oct 2022 15:51:35 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     mcgrof@kernel.org, david@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
+ module load requests
+Message-ID: <Y01d50Z2DK3f9V+Q@alley>
+References: <20221016123031.3963-1-petr.pavlu@suse.com>
+ <20221016123031.3963-5-petr.pavlu@suse.com>
 MIME-Version: 1.0
-References: <202210072120.V1O2SuKY-lkp@intel.com> <20221010175134.2671410-1-ndesaulniers@google.com>
-In-Reply-To: <20221010175134.2671410-1-ndesaulniers@google.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 17 Oct 2022 15:49:42 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFpBH-aOR47fONFdt3B_w7WkmveD2PcS4AbEE=ZqAHX+A@mail.gmail.com>
-Message-ID: <CAMj1kXFpBH-aOR47fONFdt3B_w7WkmveD2PcS4AbEE=ZqAHX+A@mail.gmail.com>
-Subject: Re: [PATCH] lib/xor: use r10 rather than r7 in xor_arm4regs_{2|3}
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221016123031.3963-5-petr.pavlu@suse.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 at 19:51, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> kbuild test robot reports:
-> In file included from crypto/xor.c:17:
-> ./arch/arm/include/asm/xor.h:61:3: error: write to reserved register 'R7'
->                 GET_BLOCK_4(p1);
->                 ^
-> ./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
->         __asm__("ldmia  %0, {%1, %2, %3, %4}" \
->                 ^
-> ./arch/arm/include/asm/xor.h:63:3: error: write to reserved register 'R7'
->                 PUT_BLOCK_4(p1);
->                 ^
-> ./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
->         __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
->                              ^
-> ./arch/arm/include/asm/xor.h:83:3: error: write to reserved register 'R7'
->                 GET_BLOCK_4(p1);
->                 ^
-> ./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
->         __asm__("ldmia  %0, {%1, %2, %3, %4}" \
->                 ^
-> ./arch/arm/include/asm/xor.h:86:3: error: write to reserved register 'R7'
->                 PUT_BLOCK_4(p1);
->                 ^
-> ./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
->         __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
->                              ^
-> Thumb2 uses r7 rather than r11 as the frame pointer. Let's use r10
-> rather than r7 for these temporaries.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1732
-> Link: https://lore.kernel.org/llvm/202210072120.V1O2SuKY-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+On Sun 2022-10-16 14:30:31, Petr Pavlu wrote:
+> Add two tests to check that loading the same module multiple times in
+> parallel results only in one real attempt to initialize it.
+> Synchronization of the loads is done by waiting 1000 ms in the init
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+I do not have a good experience with this kind of synchronization.
+It usually is not reliable. The test might be very slow especially when
+false positives are solved by prolonging the delay.
 
-> ---
->  arch/arm/include/asm/xor.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm/include/asm/xor.h b/arch/arm/include/asm/xor.h
-> index 669cad5194d3..934b549905f5 100644
-> --- a/arch/arm/include/asm/xor.h
-> +++ b/arch/arm/include/asm/xor.h
-> @@ -51,7 +51,7 @@ xor_arm4regs_2(unsigned long bytes, unsigned long * __restrict p1,
->         register unsigned int a1 __asm__("r4");
->         register unsigned int a2 __asm__("r5");
->         register unsigned int a3 __asm__("r6");
-> -       register unsigned int a4 __asm__("r7");
-> +       register unsigned int a4 __asm__("r10");
->         register unsigned int b1 __asm__("r8");
->         register unsigned int b2 __asm__("r9");
->         register unsigned int b3 __asm__("ip");
-> @@ -73,7 +73,7 @@ xor_arm4regs_3(unsigned long bytes, unsigned long * __restrict p1,
->         register unsigned int a1 __asm__("r4");
->         register unsigned int a2 __asm__("r5");
->         register unsigned int a3 __asm__("r6");
-> -       register unsigned int a4 __asm__("r7");
-> +       register unsigned int a4 __asm__("r10");
->         register unsigned int b1 __asm__("r8");
->         register unsigned int b2 __asm__("r9");
->         register unsigned int b3 __asm__("ip");
-> --
-> 2.38.0.rc2.412.g84df46c1b4-goog
->
+Alternative solution would be to have two modules:
+
+1st module would provide a counter, for example:
+
+int modB_load_cnt;
+module_param(modB_load_cnt, int, 0444);
+EXPORT_SYMBOL(modB_load_cnt);
+
+EXPORT_SYMBOL() should allow to directly increment the counter
+from the 2nd module.
+
+module_param() should make the value readable via
+/sys/module/modA/parameters/modB_load_cnt. It can be
+checked by kmod_sh.
+
+> function of a sample module kmod_test_0014. The tests measure time
+> needed to perform all inserts to verify that the loads get merged by the
+> module loader and are not serialized.
+> 
+> * Case 0014 checks a situation when the load is successful. It should
+>   result in one insert returning 0 and remaining inserts returning
+>   EEXIST.
+> * Case 0015 checks a situation when the load is failing because the
+>   module init function returns ENODEV. It should result in one insert
+>   returning this error code and remaining inserts returning EBUSY.
+> 
+> The tests use a simple init_module program to load kmod_test_0014.ko. It
+> enables to obtain directly a return code from the finit_module syscall.
+
+The tested scenarios look good.
+
+Best Regards,
+Petr
