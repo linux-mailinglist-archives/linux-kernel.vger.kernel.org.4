@@ -2,107 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19486008BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D454B6008C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiJQIck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S230338AbiJQId0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiJQIcg (ORCPT
+        with ESMTP id S230265AbiJQIdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:32:36 -0400
-Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29A84054A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:32:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 52DD4604F0;
-        Mon, 17 Oct 2022 10:32:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1665995550; bh=tx2zwgoCiDgmqkb74Wkp7XzquXj4ueJzAzOzUuGymiQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H9jqWMGf34gPJhzqT87lwGJpR03I8kqmiKwrBDctRsxsdKGMqeCMw9Cj+gn0mW5W8
-         GX7Mx6+3ITKMxeDfQaSDGvLbrpw+/PwoYXH0AFQ8PdrpEzZ0c3jzTKs3vyFEzSoHoo
-         mShPJKAHOTW5ADa24HZurqJSmuZNHSZ2fIguJOq2vhg22GMKamfoaYMJJbxkFMLSyv
-         aXys9fjsJsp4qrt/OW3JpRTi/Pmw2AX+r+C4S/sv8tg/pmYh0tI43Ki77PWAfOU3TS
-         YPq5CsnPeujRrRGUqJpuoZ7YR1yLtmD6Q5oZHKhCgDyhFL3tWj2+kC/pkSP658hBog
-         njqG/1spapYLw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FFPpFb9euCZK; Mon, 17 Oct 2022 10:32:28 +0200 (CEST)
-Received: from [161.53.83.51] (pc-mtodorov.grf.hr [161.53.83.51])
-        by domac.alu.hr (Postfix) with ESMTPSA id 7AE37604EF;
-        Mon, 17 Oct 2022 10:32:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1665995548; bh=tx2zwgoCiDgmqkb74Wkp7XzquXj4ueJzAzOzUuGymiQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZjknIjTcK6rJGADLYjt5VYLWpZy4uXvg14T5GRoluoGXuWuxIujpSGCOlLgvmOrHt
-         EXOrMtAMZjErXdlNRwg3FGif2oWAMFtZz6Lnpz/NA//QOQAdiEa2J0bdHwSJFzBUx3
-         sLnpHNRvZrctFWgPCnUckJvaOaQnGS3aML6s5Db4UDm4BRgIs/f/nb9tGPzoekOgJP
-         IemVL4EjGMIN0c2HLCUbpwi8nOal4hCS73NpE6BExKGPCtbGFW4JM9heppjZsrWhvN
-         3XuMCqItFPLD2E4iEz+Cm0yiqcynM8p+r6p6Xo1fgAh+YC6PLrzVrWECIGCMuTBw1D
-         jVjZKPF2zALBg==
-Message-ID: <147e8cb6-d99e-e53b-cfff-258bc957cf9e@alu.unizg.hr>
-Date:   Mon, 17 Oct 2022 10:32:27 +0200
+        Mon, 17 Oct 2022 04:33:04 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA5A402E3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:33:02 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id b18so13025165ljr.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=azrjkTSUa/x73/5WnmuPzRdP/HPez6bDQxOpksGkhRA=;
+        b=a/oDAz3xURgSlah+zDO2fzFzfvSFrEjmCsQ5CtmV5wpy8/L51Q77OK5k7mJq+LosYE
+         RDJCxvRoEXZS65qMQOnrKu6I9wkhUaPEiyHo/NWSrMkHLiva7vvcuRRaZ3Z2Q44s3sfl
+         EvRB3rWoOYqNbHfiOiSOLVn/sZa+2u6b7EbV7urnZXdD3prc0O/Ddpp0UNb8jMFdVh7H
+         mNPXpUp5rjHVCeF1JbMiorLWQ+P8IWxh+Ro0RWHT2VHqIjGWHAQ/gveZL6ep25X6ZAnZ
+         NBOvAMgMz/qIgTYTo0t2OtD4TIYyFuNUdp8KuqNGvdQuayInWZbNLoBWdlSiwE/zSHUc
+         HgRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=azrjkTSUa/x73/5WnmuPzRdP/HPez6bDQxOpksGkhRA=;
+        b=6OMuS281whwJ1VKNmi4z15nKctdCe6mOXY+KI69ifn+Hz11sBJ+LO9VTIDTvdyGKYS
+         awJSJf6E3RveqMHUXRxoBfsgWSJYHMs8IEMEszLe//kAYrV25wSXsit0MMoSQrfYi4aA
+         KAUiUpxdGCMnPNLGANDISo+MqgRsTsBqkdgQnC6z1KeGsssRBaH0LUOTuub+OlJw67c4
+         ZiI5bFMLHItwBhTPEw2Z4gVPgKxCj2+T1bgMdDFRzg76V4QCiSqIvRO4XO1jmKVKAe7b
+         lVJVAJAGcUX8YlPC2VmKu1BqNUAxQO6ac4PsHbntYmgF8lFAlGZ8g4xsXUd0uaeDCeZN
+         UTbQ==
+X-Gm-Message-State: ACrzQf0dSQ9kJUAqlTHrxjOIKJOS4oK94+mi3VtHO+76DPXxbuvhJQ73
+        aILCWwsrbWdDap+Cj4doZVHH1pjIYqrkGzcN0BZIAA==
+X-Google-Smtp-Source: AMsMyM5v5LDC0BBL5gYqehs/SqfSDyUe3Uxe1Ev3owdj68C4Qz8wqJvfTKXOJXJGGPXuN1JCNY46IEZom7aRnXaTplE=
+X-Received: by 2002:a2e:978e:0:b0:26e:8ad6:6d5b with SMTP id
+ y14-20020a2e978e000000b0026e8ad66d5bmr3880239lji.363.1665995580212; Mon, 17
+ Oct 2022 01:33:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
- 6.0.0-rc3 through 6.0.0-rc7
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        regressions@leemhuis.info
-Cc:     linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
-        regressions@lists.linux.dev, srw@sladewatkins.net,
-        phillip.lougher@gmail.com
-References: <8702a833-e66c-e63a-bfc8-1007174c5b3d@leemhuis.info>
- <20221015205936.5735-1-phillip@squashfs.org.uk>
- <ff2b901d-9491-c886-5330-a244101978ab@alu.unizg.hr>
- <b71f4e2d-23bb-3eb4-3928-fe66c4357e5b@squashfs.org.uk>
- <beba6259-6049-4f5b-6e54-a9c1faba0d5f@squashfs.org.uk>
- <32ee551f-5642-4efb-02a0-500e7c92be5f@gmail.com>
- <b7aefbcb-0038-d044-a1ea-64ad5b4d8888@alu.unizg.hr>
- <928b701c-b35f-a621-b32f-edf9d8bf6696@gmail.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <928b701c-b35f-a621-b32f-edf9d8bf6696@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221014084837.1787196-1-hrkanabar@gmail.com> <20221014084837.1787196-6-hrkanabar@gmail.com>
+ <Y0mD0LcNvu+QTlQ9@magnolia>
+In-Reply-To: <Y0mD0LcNvu+QTlQ9@magnolia>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 17 Oct 2022 10:32:48 +0200
+Message-ID: <CACT4Y+aNuRX52u5j1vKpJKru-riSktugDMtDKchR0NLCuvXOQg@mail.gmail.com>
+Subject: Re: [PATCH RFC 5/7] fs/xfs: support `DISABLE_FS_CSUM_VERIFICATION`
+ config option
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Hrutvik Kanabar <hrkanabar@gmail.com>,
+        Hrutvik Kanabar <hrutvik@google.com>,
+        Marco Elver <elver@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        kasan-dev@googlegroups.com,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        linux-ntfs-dev@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.10.2022. 6:15, Bagas Sanjaya wrote:
+On Fri, 14 Oct 2022 at 17:44, Darrick J. Wong <djwong@kernel.org> wrote:
+>
+> On Fri, Oct 14, 2022 at 08:48:35AM +0000, Hrutvik Kanabar wrote:
+> > From: Hrutvik Kanabar <hrutvik@google.com>
+> >
+> > When `DISABLE_FS_CSUM_VERIFICATION` is enabled, return truthy value for
+> > `xfs_verify_cksum`, which is the key function implementing checksum
+> > verification for XFS.
+> >
+> > Signed-off-by: Hrutvik Kanabar <hrutvik@google.com>
+>
+> NAK, we're not going to break XFS for the sake of automated fuzz tools.
 
-> On 10/17/22 09:41, Mirsad Goran Todorovac wrote:
->> I can only report that bug persisted in 6.1-rc1 with the latest Phillip's squashfs patch.
-> So the regression isn't solved yet with the patch, right?
+Hi Darrick,
 
-Apparently not, or not yet. The patch obviously solves some problems, 
-though.
+What do you mean by "break"? If this config is not enabled the
+behavior is not affected as far as I see.
 
-The pre-regression fs/squashfs/file.c has completely different version 
-of the squash readahead code than
-this introduced with the commit b09a7a036d2035b14636cd4c4c69518d73770f65.
-
-I could lament on this, but I am not clever enough to see what is wrong. :(
-
-Mirsad
-
--- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
---
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
+> You'll have to adapt your fuzzing tools to rewrite the block header
+> checksums, like the existing xfs fuzz testing framework does.  See
+> the xfs_db 'fuzz -d' command and the relevant fstests.
+>
+> --D
+>
+> > ---
+> >  fs/xfs/libxfs/xfs_cksum.h | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/fs/xfs/libxfs/xfs_cksum.h b/fs/xfs/libxfs/xfs_cksum.h
+> > index 999a290cfd72..ba55b1afa382 100644
+> > --- a/fs/xfs/libxfs/xfs_cksum.h
+> > +++ b/fs/xfs/libxfs/xfs_cksum.h
+> > @@ -76,7 +76,10 @@ xfs_verify_cksum(char *buffer, size_t length, unsigned long cksum_offset)
+> >  {
+> >       uint32_t crc = xfs_start_cksum_safe(buffer, length, cksum_offset);
+> >
+> > -     return *(__le32 *)(buffer + cksum_offset) == xfs_end_cksum(crc);
+> > +     if (IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION))
+> > +             return 1;
+> > +     else
+> > +             return *(__le32 *)(buffer + cksum_offset) == xfs_end_cksum(crc);
+> >  }
+> >
+> >  #endif /* _XFS_CKSUM_H */
+> > --
+> > 2.38.0.413.g74048e4d9e-goog
+> >
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/Y0mD0LcNvu%2BQTlQ9%40magnolia.
