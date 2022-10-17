@@ -2,168 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D514E600CF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F418F600CF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJQKzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S230015AbiJQKzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiJQKzS (ORCPT
+        with ESMTP id S229916AbiJQKzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:55:18 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565AB4F19C;
-        Mon, 17 Oct 2022 03:55:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZCo2GR0kJU+APIU46oC4+m99uOAb5/iGJDn0+E1pq1OHlDR/NttdJZgT9zcoOrRzWJ0ePxibUh3n/qY0VoHUw8gtD2R32Avz7giy+WSCsiu7mD26cWCpZUpNdHG/ck0arM+DTD2rm0sju8l74JpGM31FU+LI4INRojMHywFx/D3jOM02pzDMMi4u79Uc1haPKanS/Dg2Wyf2hzFRKy6E8ZpF6eEiRWQcJIGbvFEWVMeGINyIrUTU02GWWxO5jypfQj0ND0gqMMSnnKLkl5mUxsa1Dq9Y9GhPfI8DkGK/x9DraJM4JrwJWzKhn7lNL9joITclg1WUKibR1wMMBE0RUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FbbncPY6sM6KKBfHFLlk1RR4mo+iLS30Oq1mU/ZgwE0=;
- b=g636YNTl3qMQQVOmrldvBTshd/bZ7o6fp554K76xU/eEo0RMN8wNPNN33JUYNt3243Sfzu1yHbNIxtfI3SihE2gxBKdpo4VKnQBBwEUpBqrWhAwWC5MLQjr5SnRTVg+bcSl62OklWfkhuvYGS1PjHzH6+HZrUW2/SSk706kI+Qg6JROBgxEYEMdCLST/bQfayNxVNdIPRjZzbICsweXzWpnzQdkmP4+fFbaajBLwlZSh4pozM/vpbfwfDv6Vdq4zLHCjWH63q//VsYy5p5vXEIOY4XhT6m/ZvQClpll3piv5xR/oFGxroMEeC9Cy7MOKd9lee8yOq76D/7AYOKB+VA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FbbncPY6sM6KKBfHFLlk1RR4mo+iLS30Oq1mU/ZgwE0=;
- b=dsEFW9DJ0/9SSAeKEc19//KN552+GJ1TPnkV21U08OJC3GiUA1mLu2JhJgry4HGBnxjPsxC++2qjE4B1HSbiAVQ8lx/iCPc8fd5nWzl53AIeNCE5moFQ4eJyTM81+uHOgPaJwhgvngkad5w1cwlBP/UfnKzaUuEthAp92rLM9QI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- DS7PR12MB5909.namprd12.prod.outlook.com (2603:10b6:8:7a::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.33; Mon, 17 Oct 2022 10:55:10 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::739e:43cb:7ff0:9b08]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::739e:43cb:7ff0:9b08%7]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 10:55:10 +0000
-Date:   Mon, 17 Oct 2022 18:54:48 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH V2 6/9] cpufreq: amd_pstate: add AMD pstate EPP
- support for shared memory type processor
-Message-ID: <Y000eLQY/nKqiNFZ@amd.com>
-References: <20221010162248.348141-1-Perry.Yuan@amd.com>
- <20221010162248.348141-7-Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010162248.348141-7-Perry.Yuan@amd.com>
-X-ClientProxiedBy: TYAPR01CA0099.jpnprd01.prod.outlook.com
- (2603:1096:404:2a::15) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        Mon, 17 Oct 2022 06:55:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC145C374
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:55:39 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29H9xU3G015691;
+        Mon, 17 Oct 2022 10:55:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=tsqIIjV1OmHHpwIFajuWshLPaUIZLjoNIetQuBpgifw=;
+ b=Pe8rxRP6PsAJtiBi62M1aDDXSDajc3um+IsNIdDcyDMBm9OQTvbm5jX/fXURBf3h3nDj
+ PgJAVWc9G2RRxDfViVjN39/WfFjil+40n5qn56b81oyJ0M53Y7njjP9r9jiEisUobMTY
+ /Al4UfeqeIAIATF74sVl2T/xTE+yeWEux6SlzmczoMf0xKrjUXZPFJx9p6LWtoTo7797
+ u8YNJODSUjJ46XZy9hFMKympAi1e03EI0bOKXBn6bM81f/G+F0ro2O1+z/Qw3xckL5lO
+ z4hxoZmuvFK40pO2EgXKVVpjP/Tcbggj+h2kTcpBd/biJLl/yh8gRnf8kxCQ8fmdAtIC eQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86ntn8qn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 10:55:35 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29HArUFG013566;
+        Mon, 17 Oct 2022 10:55:32 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3k7m4ja6f6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Oct 2022 10:55:32 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29HAtUPX5898986
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Oct 2022 10:55:30 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 73EEC11C04C;
+        Mon, 17 Oct 2022 10:55:30 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C8E5311C04A;
+        Mon, 17 Oct 2022 10:55:28 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.71.171])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 17 Oct 2022 10:55:28 +0000 (GMT)
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Akanksha J N <akanksha@linux.vnet.ibm.com>
+Subject: [PATCH] selftests/ftrace: Limit number of lines processed in 'trace'
+Date:   Mon, 17 Oct 2022 16:25:02 +0530
+Message-Id: <20221017105502.307506-1-naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|DS7PR12MB5909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07f59069-2489-4720-03ed-08dab02e0f0b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0Q8GTOFCmnbC10ANcKN2oqmdsiHCwPKPaNJkebCNnJkJaRPQPznXmzfILxaheVoxuiwzYJQKleV/txr0gfJrnrSz7zwJDHDtiTU2NVaCeHv5htPRXE7EXUuTW4fTz6eA0ZVOzGsyk9vxu6CzzLH5UrM1WmL3S6PyMk8IthSPh4gW6iYrxiMwBOf/uxDL3FXlPHUxRPaSOgRLJZBTlmKqVEmKFKCI1zsVXV+1fTZ0IPvAgO3x6iv9Lq10rfMBKehOHaKyYuA+xI7yYBhdR9HWvcRx12DzygfqUPB7J0536HHlepVIn0hc4f0jCUZ3p67TVqlML8Kb+Je4gz20epS2dJxqqJGq4E1kUJcTSePRsr7L/4RuuaJu4AhpmHYim2B+d8lCTg1agBpucsKQtPtGWEPL1/jRlTt+afSGA2w5T2uOb787X2o1WmPgbuoLYQpVaYGFfz5uNYIIKL0URBb89fynudU0RA2hzq7DyDNZEVo3nSjBXUQB0oJ0AlmsK1KEulkwPkcqnkycYglkZf2GX8sPLcn6Ibe4rSLDxlSzRfhpFH1tKQK9XIG0fjq5ld5uib3mZc8nm/IPvqEY2cA/wBMuP71LMpLni2jjSleIvFTHnSwc6zNhKfuEc3R+mSQgFvUOIj5aCTiJBEs04/bEnRqMVg/VCV3+ISscoTnQgyQIfoNTlFuL4C1lt/kpNiHVwZB/lKjAddaqGurUSiJChQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199015)(316002)(6636002)(37006003)(54906003)(8936002)(6862004)(6512007)(26005)(186003)(2906002)(2616005)(5660300002)(86362001)(66946007)(66556008)(66476007)(8676002)(6666004)(41300700001)(4326008)(36756003)(6506007)(38100700002)(478600001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cakVetwUX/3aJsJGL8xMJs0GzokEpaozvOGLkeBFfMQiVdRfncLp+gB01UoM?=
- =?us-ascii?Q?4TGc5fHeDvKo6rOW5Fgi7xQnSFZrf+WbLPDFdFK+jcDmZ/YhoS3kJvgF1CAv?=
- =?us-ascii?Q?HKzyQKZJRkmAnmMYcw5SuqzFt3BezwJa+zlKJ49D2rg3YWQFHP7dMBkx+h3T?=
- =?us-ascii?Q?3ziG8ir7BAwsOcxIJJUb6mJKyBSFroobmQd9VUxoLbQGvWAuJ2dy1TK1Y2Pn?=
- =?us-ascii?Q?9YCsA/lMDMFxMwFB2UKFg9BP1MMUVTolDgLsrP8/LlXEe+jHx8l3hZEKZ9DU?=
- =?us-ascii?Q?2ySg/I/3fC35PWPvnkspyfMniqNXKQwKSoGNjobsOo5f/iMoEvMop/mmuw8U?=
- =?us-ascii?Q?HOihgEl8MyFrtXhyPtqpX6LoiUsteOiQZzmA0qVUAa9i79aOWiloTK4t4uej?=
- =?us-ascii?Q?cA4orGZ3JWr26MpZCkYNMgLYxn1Lr1BvH4C0IV+YXl3ciCYEN4mfyXEJxmM+?=
- =?us-ascii?Q?qa7xpFpj03N/NwSuHanj3mNQZuQYDM1hDWCRmCcu7eJ0vLF2S7UQl9agDmHQ?=
- =?us-ascii?Q?5MRPmuTTPlK8aTmlOaci/vj1802sIKSAiqveuTGRpavVrIv/HKg1C6Ok+jl2?=
- =?us-ascii?Q?pE4qfQNMm/+u7URmtGnK8qRc+AcEgl+4J7LYFAY3uZIa2gnQtnmXKgC97OwT?=
- =?us-ascii?Q?SWC43A8+ZV4LSJIBJgKYQmPMORliGvejPaZyfAvX8/FK3t5b7uRKbWY7HMv3?=
- =?us-ascii?Q?7w5CgoMwoq7XAkC+hiWw2IhKhV57VKkXip85kNyixpP1vluPVo56DPCrAjRV?=
- =?us-ascii?Q?ZnzSrV1BgJhba8bGjqvALqQoxKFCJIQiGg3W5BPfxBS8bA7qctMpsa96EvH8?=
- =?us-ascii?Q?g47/il+uHTVQ2hL71ERIOQJUzC1KaNg5TXTM/I3n/Pkf+63j1+KcdG39unD7?=
- =?us-ascii?Q?Et2krTQcuhBMcGkK1sxbkkmSzfaVhWKt/YSh1mRoHd0SAuYWpJnf/EC1QMfY?=
- =?us-ascii?Q?vBe5wiw4P/d6X5ujQccfYux7XEh29R1va5y4eh9uRgrSzfu3ZPX5RW1jljee?=
- =?us-ascii?Q?obhU96p+skCRIbAqbDCo3k+gGIj3Rw6TKIDC4IZFxticeukD3d5qX5aZMV5+?=
- =?us-ascii?Q?o8sEBEcPbhEm7Dcoaqa0DcKPymCiClStc4vtqyZf97V65nD8SWDIavizdSnb?=
- =?us-ascii?Q?iXhGqnJUKr0beOw17Xq7WrB/bq9R5JM4G1wJEWUvRt0gn6LW1baEPma3Xfoy?=
- =?us-ascii?Q?7G5+MsnJ3X4zB/7HYdI1taqYhr7aJDuZar3fAdhSrxnkKiWbrvszdwmwXzmR?=
- =?us-ascii?Q?SFGm0AydxuHpOV/IUXEmrAC1Nkk2R91xNyLfA/ePEcyNXaJlYi9BRuf64ewe?=
- =?us-ascii?Q?cJ9WxxXR1P6++KehCIxrBFes+5LY1RP/qaNkWGiwSaSm6niu22M0E46TkQcb?=
- =?us-ascii?Q?n7CckQFqbN3g7TdyAVlTR/fRItUnhGWW7zBRGEfU4SnaSMqKv/kxkazw4+fi?=
- =?us-ascii?Q?zOwfyWKanYlkySV/aZdeTIEECUtVwFtNKX+qo/03ywBRMYrM5imBvL45N/q6?=
- =?us-ascii?Q?vSLc1htlA3h4duvHDg5ug1QV8GWiyrhMGiH/ypENl/Aezx7BoSVz/DZYIJxM?=
- =?us-ascii?Q?FQU61DF+dJPpDyklTrnXSS/tCsxMO3p38OUNP72C?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07f59069-2489-4720-03ed-08dab02e0f0b
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 10:55:10.2616
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2PIGrMLOzV+Mhq729P8vhERAtUQPgFXLUU5M70THnBh9rNbLL4k2W1q9FInW+DdwnZvIfKeRfP+vqQYLTP8rAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5909
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6NBNg0sxzDXA3VLh_MgyaEh66dayaHvZ
+X-Proofpoint-GUID: 6NBNg0sxzDXA3VLh_MgyaEh66dayaHvZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-17_08,2022-10-17_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ priorityscore=1501 mlxlogscore=999 suspectscore=0 clxscore=1015 mlxscore=0
+ spamscore=0 adultscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210170061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:22:45AM +0800, Yuan, Perry wrote:
-> Add Energy Performance Preference support for AMD SOCs which do not
-> contain a designated MSR for CPPC support. A shared memory interface
-> is used for CPPC on these SOCs and the ACPI PCC channel is used to
-> enable EPP and reset the desired performance.
-> 
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 2d28f458589c..08f9e335f97c 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -135,12 +135,25 @@ static inline int pstate_enable(bool enable)
->  
->  static int cppc_enable(bool enable)
->  {
-> +	struct cppc_perf_ctrls perf_ctrls;
->  	int cpu, ret = 0;
->  
->  	for_each_present_cpu(cpu) {
->  		ret = cppc_set_enable(cpu, enable);
->  		if (ret)
->  			return ret;
-> +		if (epp) {
-> +			/* Enable autonomous mode for EPP */
-> +			ret = cppc_set_auto_epp(cpu, enable);
-> +			if (ret)
-> +				return ret;
-> +
-> +			/* Set desired perf as zero to allow EPP firmware control */
-> +			perf_ctrls.desired_perf = 0;
-> +			ret = cppc_set_perf(cpu, &perf_ctrls);
-> +			if (ret)
-> +				return ret;
-> +		}
+On very large machines, ftracetest can seem to hang or otherwise take a
+very long time to complete individual tests. This can be attributed to
+statements that try to process the entire contents of 'trace'.
 
-This patch only writes the desired_perf as 0 to enable the EPP function,
-but it cannot be an independent function or patch without the dependency of
-the next one (patch 7).
+Limit the number of lines processed from 'trace' to resolve this. Apart
+from the change in test.d/functions to add TRACENL, this commit is the
+result of running the below command (and fixing some whitespace errors):
+  grep -l -R 'cat trace |' -- ./tools/testing/selftests/ftrace/test.d/ | \
+	xargs -n 1 sed --in-place -e "s/cat trace |/head -\$\{TRACENL\} trace |/g"
 
-Thanks,
-Ray
+Reported-by: Akanksha J N <akanksha@linux.vnet.ibm.com>
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+---
+ .../testing/selftests/ftrace/test.d/event/event-enable.tc | 6 +++---
+ .../testing/selftests/ftrace/test.d/event/event-no-pid.tc | 4 ++--
+ tools/testing/selftests/ftrace/test.d/event/event-pid.tc  | 6 +++---
+ .../selftests/ftrace/test.d/event/subsystem-enable.tc     | 6 +++---
+ .../selftests/ftrace/test.d/event/toplevel-enable.tc      | 2 +-
+ .../selftests/ftrace/test.d/ftrace/fgraph-filter-stack.tc | 8 ++++----
+ .../selftests/ftrace/test.d/ftrace/fgraph-filter.tc       | 4 ++--
+ .../ftrace/test.d/ftrace/func-filter-notrace-pid.tc       | 8 ++++----
+ .../selftests/ftrace/test.d/ftrace/func-filter-pid.tc     | 8 ++++----
+ tools/testing/selftests/ftrace/test.d/functions           | 3 +++
+ .../selftests/ftrace/test.d/kprobe/kretprobe_args.tc      | 2 +-
+ 11 files changed, 30 insertions(+), 27 deletions(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/event/event-enable.tc b/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
+index cfe5bd2d426794..0a2d236cd94822 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/event-enable.tc
+@@ -18,7 +18,7 @@ echo 'sched:sched_switch' > set_event
+ 
+ yield
+ 
+-count=`cat trace | grep sched_switch | wc -l`
++count=`head -${TRACENL} trace | grep sched_switch | wc -l`
+ if [ $count -eq 0 ]; then
+     fail "sched_switch events are not recorded"
+ fi
+@@ -29,7 +29,7 @@ echo 1 > events/sched/sched_switch/enable
+ 
+ yield
+ 
+-count=`cat trace | grep sched_switch | wc -l`
++count=`head -${TRACENL} trace | grep sched_switch | wc -l`
+ if [ $count -eq 0 ]; then
+     fail "sched_switch events are not recorded"
+ fi
+@@ -40,7 +40,7 @@ echo 0 > events/sched/sched_switch/enable
+ 
+ yield
+ 
+-count=`cat trace | grep sched_switch | wc -l`
++count=`head -${TRACENL} trace | grep sched_switch | wc -l`
+ if [ $count -ne 0 ]; then
+     fail "sched_switch events should not be recorded"
+ fi
+diff --git a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+index 9933ed24f90124..711301a36b69b6 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+@@ -23,12 +23,12 @@ fail() { #msg
+ 
+ count_pid() {
+     pid=$@
+-    cat trace | grep -v '^#' | sed -e 's/[^-]*-\([0-9]*\).*/\1/' | grep $pid | wc -l
++    head -${TRACENL} trace | grep -v '^#' | sed -e 's/[^-]*-\([0-9]*\).*/\1/' | grep $pid | wc -l
+ }
+ 
+ count_no_pid() {
+     pid=$1
+-    cat trace | grep -v '^#' | sed -e 's/[^-]*-\([0-9]*\).*/\1/' | grep -v $pid | wc -l
++    head -${TRACENL} trace | grep -v '^#' | sed -e 's/[^-]*-\([0-9]*\).*/\1/' | grep -v $pid | wc -l
+ }
+ 
+ enable_system() {
+diff --git a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
+index 7f5f97dffdc3dd..8ecdc211ac0432 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/event-pid.tc
+@@ -23,7 +23,7 @@ echo 1 > events/sched/sched_switch/enable
+ 
+ yield
+ 
+-count=`cat trace | grep sched_switch | wc -l`
++count=`head -${TRACENL} trace | grep sched_switch | wc -l`
+ if [ $count -eq 0 ]; then
+     fail "sched_switch events are not recorded"
+ fi
+@@ -38,7 +38,7 @@ echo 'sched:sched_switch' > set_event
+ 
+ yield
+ 
+-count=`cat trace | grep sched_switch | grep -v "pid=$mypid" | wc -l`
++count=`head -${TRACENL} trace | grep sched_switch | grep -v "pid=$mypid" | wc -l`
+ if [ $count -ne 0 ]; then
+     fail "sched_switch events from other task are recorded"
+ fi
+@@ -51,7 +51,7 @@ echo 1 > events/sched/sched_switch/enable
+ 
+ yield
+ 
+-count=`cat trace | grep sched_switch | grep -v "pid=$mypid" | wc -l`
++count=`head -${TRACENL} trace | grep sched_switch | grep -v "pid=$mypid" | wc -l`
+ if [ $count -eq 0 ]; then
+     fail "sched_switch events from other task are not recorded"
+ fi
+diff --git a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+index b1ede624986676..d5a1faff71773c 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/subsystem-enable.tc
+@@ -18,7 +18,7 @@ echo 'sched:*' > set_event
+ 
+ yield
+ 
+-count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
++count=`head -${TRACENL} trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+ if [ $count -lt 3 ]; then
+     fail "at least fork, exec and exit events should be recorded"
+ fi
+@@ -29,7 +29,7 @@ echo 1 > events/sched/enable
+ 
+ yield
+ 
+-count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
++count=`head -${TRACENL} trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+ if [ $count -lt 3 ]; then
+     fail "at least fork, exec and exit events should be recorded"
+ fi
+@@ -40,7 +40,7 @@ echo 0 > events/sched/enable
+ 
+ yield
+ 
+-count=`cat trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
++count=`head -${TRACENL} trace | grep -v ^# | awk '{ print $5 }' | sort -u | wc -l`
+ if [ $count -ne 0 ]; then
+     fail "any of scheduler events should not be recorded"
+ fi
+diff --git a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
+index 93c10ea42a6868..1b7d4700a21b1e 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
+@@ -43,7 +43,7 @@ echo 0 > events/enable
+ 
+ yield
+ 
+-count=`cat trace | grep -v ^# | wc -l`
++count=`head -${TRACENL} trace | grep -v ^# | wc -l`
+ if [ $count -ne 0 ]; then
+     fail "any of events should not be recorded"
+ fi
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter-stack.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter-stack.tc
+index cf3ea42b12b09f..2861aaaec3908b 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter-stack.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter-stack.tc
+@@ -40,14 +40,14 @@ clear_trace
+ enable_tracing
+ sleep 1
+ 
+-count=`cat trace | grep '()' | grep -v schedule | wc -l`
++count=`head -${TRACENL} trace | grep '()' | grep -v schedule | wc -l`
+ 
+ if [ $count -ne 0 ]; then
+     fail "Graph filtering not working with stack tracer?"
+ fi
+ 
+ # Make sure we did find something
+-count=`cat trace | grep 'schedule()' | wc -l` 
++count=`head -${TRACENL} trace | grep 'schedule()' | wc -l`
+ if [ $count -eq 0 ]; then
+     fail "No schedule traces found?"
+ fi
+@@ -57,13 +57,13 @@ clear_trace
+ sleep 1
+ 
+ 
+-count=`cat trace | grep '()' | grep -v schedule | wc -l`
++count=`head -${TRACENL} trace | grep '()' | grep -v schedule | wc -l`
+ 
+ if [ $count -ne 0 ]; then
+     fail "Graph filtering not working after stack tracer disabled?"
+ fi
+ 
+-count=`cat trace | grep 'schedule()' | wc -l` 
++count=`head -${TRACENL} trace | grep 'schedule()' | wc -l`
+ if [ $count -eq 0 ]; then
+     fail "No schedule traces found?"
+ fi
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter.tc
+index b3ccdaec2a61ba..679eed983ef931 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-filter.tc
+@@ -26,13 +26,13 @@ enable_tracing
+ sleep 1
+ # search for functions (has "()" on the line), and make sure
+ # that only the schedule function was found
+-count=`cat trace | grep '()' | grep -v schedule | wc -l`
++count=`head -${TRACENL} trace | grep '()' | grep -v schedule | wc -l`
+ if [ $count -ne 0 ]; then
+     fail "Graph filtering not working by itself?"
+ fi
+ 
+ # Make sure we did find something
+-count=`cat trace | grep 'schedule()' | wc -l` 
++count=`head -${TRACENL} trace | grep 'schedule()' | wc -l`
+ if [ $count -eq 0 ]; then
+     fail "No schedule traces found?"
+ fi
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
+index 80541964b9270b..088ec11d87fa46 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
+@@ -52,8 +52,8 @@ do_test() {
+     enable_tracing
+     yield
+ 
+-    count_pid=`cat trace | grep -v ^# | grep $PID | wc -l`
+-    count_other=`cat trace | grep -v ^# | grep -v $PID | wc -l`
++    count_pid=`head -${TRACENL} trace | grep -v ^# | grep $PID | wc -l`
++    count_other=`head -${TRACENL} trace | grep -v ^# | grep -v $PID | wc -l`
+ 
+     # count_pid should be 0
+     if [ $count_pid -ne 0 -o $count_other -eq 0 ]; then
+@@ -78,8 +78,8 @@ do_test() {
+     enable_tracing
+     yield
+ 
+-    count_pid=`cat trace | grep -v ^# | grep $PID | wc -l`
+-    count_other=`cat trace | grep -v ^# | grep -v $PID | wc -l`
++    count_pid=`head -${TRACENL} trace | grep -v ^# | grep $PID | wc -l`
++    count_other=`head -${TRACENL} trace | grep -v ^# | grep -v $PID | wc -l`
+ 
+     # both should be zero
+     if [ $count_pid -ne 0 -o $count_other -ne 0 ]; then
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+index 2f7211254529ba..fed002ed262b1d 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+@@ -52,8 +52,8 @@ do_test() {
+     enable_tracing
+     yield
+ 
+-    count_pid=`cat trace | grep -v ^# | grep $PID | wc -l`
+-    count_other=`cat trace | grep -v ^# | grep -v $PID | wc -l`
++    count_pid=`head -${TRACENL} trace | grep -v ^# | grep $PID | wc -l`
++    count_other=`head -${TRACENL} trace | grep -v ^# | grep -v $PID | wc -l`
+ 
+     # count_other should be 0
+     if [ $count_pid -eq 0 -o $count_other -ne 0 ]; then
+@@ -73,8 +73,8 @@ do_test() {
+     enable_tracing
+     yield
+ 
+-    count_pid=`cat trace | grep -v ^# | grep $PID | wc -l`
+-    count_other=`cat trace | grep -v ^# | grep -v $PID | wc -l`
++    count_pid=`head -${TRACENL} trace | grep -v ^# | grep $PID | wc -l`
++    count_other=`head -${TRACENL} trace | grep -v ^# | grep -v $PID | wc -l`
+ 
+     # count_other should NOT be 0
+     if [ $count_pid -eq 0 -o $count_other -eq 0 ]; then
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 5f6cbec847fc99..6a9a794bde11f7 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -174,6 +174,9 @@ yield() {
+ FUNCTION_FORK=`(if grep '\bkernel_clone\b' /proc/kallsyms > /dev/null; then
+                 echo kernel_clone; else echo '_do_fork'; fi)`
+ 
++# TRACENL controls the number of lines processed from the 'trace' file
++TRACENL=3000
++
+ # Since probe event command may include backslash, explicitly use printf "%s"
+ # to NOT interpret it.
+ ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc
+index 197cc2afd4046b..804d6a6e3a99dd 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc
+@@ -11,7 +11,7 @@ test -d events/kprobes/testprobe2
+ echo 1 > events/kprobes/testprobe2/enable
+ ( echo "forked")
+ 
+-cat trace | grep testprobe2 | grep -q "<- $FUNCTION_FORK"
++head -${TRACENL} trace | grep testprobe2 | grep -q "<- $FUNCTION_FORK"
+ 
+ echo 0 > events/kprobes/testprobe2/enable
+ echo '-:testprobe2' >> kprobe_events
+
+base-commit: 6c0f39e87b6ab1a3009e3a49d3e6f6db8dc756a8
+-- 
+2.38.0
+
