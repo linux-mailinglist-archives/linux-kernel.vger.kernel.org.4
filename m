@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF2C600B92
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BC4600B8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiJQJuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S231475AbiJQJuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiJQJuO (ORCPT
+        with ESMTP id S231398AbiJQJuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:50:14 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C457929820
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:50:01 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id e22so4146590uar.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODsmbg7BkAQxQqFdr9mvdYHhSzuV8ymKABrXWhG3P/4=;
-        b=NHNdLlZ6k0TfGJkws9Sv+KJR26eBvLaMd2f9LZ3OfpxmaiO7ThqL2Jssn4aqmQBQei
-         9bT/OUH9ZlMXLMUtAqFb2xCm5EA5EJoy4u7nujATCTvH4gcp6Lji22oQO32xk2r9m0e0
-         ahktLMcfqtk0jzDCuCnQA9I0TLUr+fsCskXx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ODsmbg7BkAQxQqFdr9mvdYHhSzuV8ymKABrXWhG3P/4=;
-        b=TfYUlCMA4FZdj+8XqmLfolBbcbg/9aTSPr8rVOy8B3IKnWklOnTgfLN2hsIxYRnESo
-         Kk8ZoVqx3Huk047l0Dxqkg5+tyHUcenqaavJ+1TPvBDMa4kRomhpj9/DUWgiRezS3Yky
-         qwYCY3uKbMYH0nMsBvhQsOAKOokscVP6vd9iRoh3KpYwBcd4w7jH+UTAl5oW8iNB0ug7
-         rUUolrxm5RWDXZzcNVnSrZqbFKTLHUWs2bym4k78xQcABvZRr0ytYeR5gEGg4aRffze4
-         ODxx/QoAr0rNz+kqK83WmJIdGHD5S34rtiX5D7gmKmyi+8gP5uE0jUxnz6wK8M8vGvwb
-         mCZQ==
-X-Gm-Message-State: ACrzQf002xpJpRPamnpjN2+o5YCJjtQmv+KGzltz9hY7lNMnw2s04GCv
-        OqhmfehBaD0QHGePOIUnJXqpKfKTl1YvjLqLWAsFNw==
-X-Google-Smtp-Source: AMsMyM6F3rJpTxDDVrEGahK/LEkym9dPWVfJuS8iQS9gvSIlZxufJp9v5EIVgFbOEkOvFbdsxxmNhoqULjOJlqhCpwE=
-X-Received: by 2002:a9f:29a3:0:b0:3d6:4c6f:9d92 with SMTP id
- s32-20020a9f29a3000000b003d64c6f9d92mr3849868uas.43.1666000176425; Mon, 17
- Oct 2022 02:49:36 -0700 (PDT)
+        Mon, 17 Oct 2022 05:50:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB31526ACB;
+        Mon, 17 Oct 2022 02:50:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C422C60FF1;
+        Mon, 17 Oct 2022 09:49:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8012CC433C1;
+        Mon, 17 Oct 2022 09:49:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666000183;
+        bh=UwY1+57tskbawvtQwNEitDpdaL5Aj5k0Npjk4S4RzBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QRv42+9TRbdTsMmVJzw6A+nrBM3Fd0jStzkzoVy25IxWJwBnurudOz5kXzN0OoyB6
+         PBrl8DMNynMtCAeNkmC7OYZBv5mSXJUkxSoGyooHFHAZIfBR8nx6+EDDWINI5nS5fn
+         sNU6q3mJ316dXpI8q+NGeADsLSkr6lm9egAR57TBWAhPPAUFYz9ovSag6RkRZwnzZR
+         AK67MFHtZQfVLPNUFMFxKnuxN4wzketymA//YF0bP0Bo2Ux3yr84Dc/f3F59LO4m8x
+         kJYq4vr6LZWqJWcHYpkyP2aiWvwJ/3amNr77yj5l/h7zDSE86XezoSPREtnIYg06+j
+         gc7VD6Eeklz+A==
+Date:   Mon, 17 Oct 2022 10:49:38 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        broonie@kernel.org, linux-riscv@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] spi: microchip-core: Remove the unused function
+ mchp_corespi_enable()
+Message-ID: <Y00lMjEncoxwkNiJ@spud>
+References: <20221017092141.9789-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20221008164807.113590-1-linux@fw-web.de> <CACRpkdYNZGJaVN0eRZPmkmWr=it7xZtAPM=qV0EyQWUZgZ68hQ@mail.gmail.com>
-In-Reply-To: <CACRpkdYNZGJaVN0eRZPmkmWr=it7xZtAPM=qV0EyQWUZgZ68hQ@mail.gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 17 Oct 2022 17:49:25 +0800
-Message-ID: <CAGXv+5FNQmx4Mxm2fTkWBazX7B_LzGuTY3cQK5f_yO4cE5c8mA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: mediatek: allow configuring uart rx/tx and
- rts/cts separately
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Sean Wang <sean.wang@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017092141.9789-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 5:42 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Sat, Oct 8, 2022 at 6:48 PM Frank Wunderlich <linux@fw-web.de> wrote:
->
-> > From: Sam Shih <sam.shih@mediatek.com>
-> >
-> > Some mt7986 boards use uart rts/cts pins as gpio,
-> > This patch allows to change rts/cts to gpio mode, but keep
-> > rx/tx as UART function.
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > Signed-off-by: Sam Shih <sam.shih@mediatek.com>
->
-> No response from maintainers for a week and patch makes sense
-> so patch applied for next!
+On Mon, Oct 17, 2022 at 05:21:41PM +0800, Jiapeng Chong wrote:
+> The function mchp_corespi_enable() is defined in the spi-microchip-core.c
+> file, but not called elsewhere, so delete this unused function.
+> 
+> drivers/spi/spi-microchip-core.c:122:20: warning: unused function 'mchp_corespi_enable'.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2418
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/spi/spi-microchip-core.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+> index d352844c798c..aeaa1da88f39 100644
+> --- a/drivers/spi/spi-microchip-core.c
+> +++ b/drivers/spi/spi-microchip-core.c
+> @@ -119,15 +119,6 @@ static inline void mchp_corespi_write(struct mchp_corespi *spi, unsigned int reg
+>  	writel(val, spi->regs + reg);
+>  }
+>  
+> -static inline void mchp_corespi_enable(struct mchp_corespi *spi)
+> -{
+> -	u32 control = mchp_corespi_read(spi, REG_CONTROL);
+> -
+> -	control |= CONTROL_ENABLE;
+> -
+> -	mchp_corespi_write(spi, REG_CONTROL, control);
+> -}
 
-Could we add "mt7986" to the patch subject? Otherwise it could be taken
-to be updating all the SoCs.
+That's a bit silly... Thanks Jiapeng.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-ChenYu
-
-> Yours,
-> Linus Walleij
->
+> -
+>  static inline void mchp_corespi_disable(struct mchp_corespi *spi)
+>  {
+>  	u32 control = mchp_corespi_read(spi, REG_CONTROL);
+> -- 
+> 2.20.1.7.g153144c
+> 
