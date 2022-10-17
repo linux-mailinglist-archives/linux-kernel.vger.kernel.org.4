@@ -2,85 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37725601643
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B363C601645
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiJQS1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
+        id S229993AbiJQS2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiJQS11 (ORCPT
+        with ESMTP id S230023AbiJQS2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:27:27 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170BD74DEF
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:27:21 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id w3so8250461qtv.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zmaKaOskyDEP07VNlz3xmfh/tqhUu/L+2TquVBpNhZY=;
-        b=irazOzM4ASvlywgucqMF4REBu2/swLVa43rA8LaqSR7jySzDQIligyjApbjGDuRMnS
-         vQ9T4lVgXghfnASSDN1i8Xm5LuOSSmKrQeI+6Q3lSUMmcQ+S1ZMTwud4rwmdl2bKdUJb
-         5A06jqIl6l0Q2ioGWFm1rgsyyv4+WVSI4vYkLYIuU7cq4ky+UG4BGvxh1YPFxlUM/mIS
-         Aw95Uxl1xiMYZ1r6HA1cYcy6yLf9NSiyJC6i/20sgvkT64Wy2hfytLqNbB9lJrafEKAJ
-         uYrMCySQfhbY4F4nodfn5APsYFVG5AQ69EqSfJVLIC4k3huk52b7fymAHztEqux5yncf
-         8vfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zmaKaOskyDEP07VNlz3xmfh/tqhUu/L+2TquVBpNhZY=;
-        b=W8a1dLZ2DVmjTln0bTZOHgGe0QGTpj1cetuRPFd7ufOiG8b6viCQG6K1VZsi10O6Fr
-         MyXkSLfdv8JsGizkaLZlCbCG7TX+asvJY+zWI+ZqSCJUEVI40tiu+36NRajOZ/mLpVtK
-         f/9aoEZJ5taWh79jPAgwaxEWD4weybkgM8chhI42Uui7vV6Yr6bWAnP/jLWs1hI0Ytyi
-         lQKpsbniancLQ1EKCr1///QwgQaiEEUCz4nV5MWqdjPfF/JnaAaPaktAWmOJOoVCKjj4
-         3vzobLN3/Jmbh0uXzdoURK0m9d5NBX7Z8bCnVhm9tvOBhESxgwLtVm806+4NwBmZpIZa
-         S/Nw==
-X-Gm-Message-State: ACrzQf1MHadhz4bNSfsDkhY56O2CEAROoJYXUQd9xHu6PvOWlahstvZK
-        pBntSFIbezFlfnsqXQAo93he9w==
-X-Google-Smtp-Source: AMsMyM4igYNUwBf0hwVsh4teTfB3/xMYGqk+IWEEDwmgjOt9x5IrU4vFE39yv2doSWS5Ujoe43UXCA==
-X-Received: by 2002:a05:622a:209:b0:39c:d88f:20ed with SMTP id b9-20020a05622a020900b0039cd88f20edmr9863627qtx.131.1666031240047;
-        Mon, 17 Oct 2022 11:27:20 -0700 (PDT)
-Received: from localhost (cpe-174-109-170-245.nc.res.rr.com. [174.109.170.245])
-        by smtp.gmail.com with ESMTPSA id dt27-20020a05620a479b00b006b9c9b7db8bsm388323qkb.82.2022.10.17.11.27.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:27:19 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:27:18 -0400
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] block: Replace struct rq_depth with unsigned int in
- struct iolatency_grp
-Message-ID: <Y02ehhyqSSLIV5ZS@localhost.localdomain>
-References: <20220929074055.30080-1-shikemeng@huawei.com>
- <20220929074055.30080-4-shikemeng@huawei.com>
+        Mon, 17 Oct 2022 14:28:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A8474CE6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:28:32 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1okUqZ-0003ke-2z; Mon, 17 Oct 2022 20:28:19 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1okUqV-0027zM-Pr; Mon, 17 Oct 2022 20:28:15 +0200
+Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1okUqU-008Jaa-JN; Mon, 17 Oct 2022 20:28:14 +0200
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Archit Taneja <architt@codeaurora.org>
+Cc:     kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: bridge: adv7511: use dev_err_probe in probe function
+Date:   Mon, 17 Oct 2022 20:28:09 +0200
+Message-Id: <20221017182810.1981638-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929074055.30080-4-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:40:55PM +0800, Kemeng Shi wrote:
-> We only need a max queue depth for every iolatency to limit the inflight io
-> number. Replace struct rq_depth with unsigned int to simplfy "struct
-> iolatency_grp" and save memory.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
+adv7511 probe may need to be attempted multiple times before no
+-EPROBE_DEFER is returned. Currently, every such probe results in
+an error message:
 
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+[    4.534229] adv7511 1-003d: failed to find dsi host
+[    4.580288] adv7511 1-003d: failed to find dsi host
 
-Thanks,
+This is misleading, as there is no error and probe deferral is normal
+behavior. Fix this by using dev_err_probe that will suppress
+-EPROBE_DEFER errors. While at it, we touch all dev_err in the probe
+path. This makes the code more concise and included the error code
+everywhere to aid user in debugging.
 
-Josef
+Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c |  6 ++----
+ drivers/gpu/drm/bridge/adv7511/adv7533.c     | 18 ++++++------------
+ 2 files changed, 8 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index 1c37779b434a..4148b6d6f151 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -1229,10 +1229,8 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+ 		return ret;
+ 
+ 	ret = adv7511_init_regulators(adv7511);
+-	if (ret) {
+-		dev_err(dev, "failed to init regulators\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to init regulators\n");
+ 
+ 	/*
+ 	 * The power down GPIO is optional. If present, toggle it from active to
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+index ef6270806d1d..b32b796c25fb 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+@@ -148,16 +148,12 @@ int adv7533_attach_dsi(struct adv7511 *adv)
+ 						 };
+ 
+ 	host = of_find_mipi_dsi_host_by_node(adv->host_node);
+-	if (!host) {
+-		dev_err(dev, "failed to find dsi host\n");
+-		return -EPROBE_DEFER;
+-	}
++	if (!host)
++		return dev_err_probe(dev, -EPROBE_DEFER, "failed to find dsi host\n");
+ 
+ 	dsi = devm_mipi_dsi_device_register_full(dev, host, &info);
+-	if (IS_ERR(dsi)) {
+-		dev_err(dev, "failed to create dsi device\n");
+-		return PTR_ERR(dsi);
+-	}
++	if (IS_ERR(dsi))
++		return dev_err_probe(dev, PTR_ERR(dsi), "failed to create dsi device\n");
+ 
+ 	adv->dsi = dsi;
+ 
+@@ -167,10 +163,8 @@ int adv7533_attach_dsi(struct adv7511 *adv)
+ 			  MIPI_DSI_MODE_NO_EOT_PACKET | MIPI_DSI_MODE_VIDEO_HSE;
+ 
+ 	ret = devm_mipi_dsi_attach(dev, dsi);
+-	if (ret < 0) {
+-		dev_err(dev, "failed to attach dsi to host\n");
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "failed to attach dsi to host\n");
+ 
+ 	return 0;
+ }
+-- 
+2.30.2
+
