@@ -2,82 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00233601312
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BA7601313
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 17:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiJQP5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 11:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
+        id S230504AbiJQP5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 11:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiJQP5F (ORCPT
+        with ESMTP id S230096AbiJQP5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:57:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7642858DFE
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:57:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666022222;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DQ9BSUfDKoJUJ+YyUq4v3/jXsEiShgxTQU4ItDdSgGE=;
-        b=edb92rZ0c7o04VKukdiLfnFNszI+HiuPYRu+tnpI1gyZQ/Omj7s7HzbAP4vJIR2ishCubH
-        OT8XRl6o6d2BUWB3uROGuS0OePKKtZ40MMqpgyKhD7uF9WTJFS+GcwZlZubquxd6vXflnC
-        nX/sd6c+yvxOcqjZRNC8N6NaepYvqOs=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-662-yWwjxIHIOcyPLVGUVOUSTw-1; Mon, 17 Oct 2022 11:57:01 -0400
-X-MC-Unique: yWwjxIHIOcyPLVGUVOUSTw-1
-Received: by mail-qv1-f70.google.com with SMTP id y14-20020a0cf14e000000b004afb3c6984bso7124105qvl.21
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:57:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DQ9BSUfDKoJUJ+YyUq4v3/jXsEiShgxTQU4ItDdSgGE=;
-        b=S/CErVD3gqAapHu7T4a0Fm7GZHIiGWfjVUR5b14LFzixgOC0oSmGJDDBKPbO/NXUBf
-         1cnH7P4QYmuX1cvVWvk4zPwqD4APvIIY6I1NuXYHIDseRilxB8ICwd3y1+kQ7wUA4c43
-         Y0O4qHJeCOR2ldHQP3myl8GXE5bSi7Ri7JSqC/ngGcZgzjDLYmm5vDZU2rk6qu0TtZmb
-         qu9kw1azF1p4eXLjBnV696Fh0WVOe1BwJoElaLhQS9vczk2jA85CsOGiaMLjCX/7DEi1
-         4n9nTec16ZPJLHgbbsnDoMEXh+z8KovLHoA8ICdtLI+PbN4AB9ekS/nVCp5UvpywdB8v
-         K2yA==
-X-Gm-Message-State: ACrzQf04A0s5iCng7wDY3JWuifi42VHSp3gtl4idjgBcwbxWHuOR3woG
-        jQd/CrNRiTUESmBv7TQZXOAljfyqOXmqP75w378IjqyEJfT6cHI8JZsXsDjUDKJ9NXoflQSEVuA
-        D97jfziX/uBaRhwagFF0xOQNo
-X-Received: by 2002:a05:6214:2aaf:b0:4b1:d684:f724 with SMTP id js15-20020a0562142aaf00b004b1d684f724mr9133428qvb.97.1666022219844;
-        Mon, 17 Oct 2022 08:56:59 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4MXOXDAWK4nrAqUigIaANtf8VLQnL+iRuWPSVrKyXzwp36CNxsgKkJX8PxMceOAIliBF741A==
-X-Received: by 2002:a05:6214:2aaf:b0:4b1:d684:f724 with SMTP id js15-20020a0562142aaf00b004b1d684f724mr9133411qvb.97.1666022219641;
-        Mon, 17 Oct 2022 08:56:59 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id s9-20020a05620a0bc900b006cfc4744589sm57440qki.128.2022.10.17.08.56.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 08:56:59 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 08:56:57 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        dmaengine@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] dmaengine: idxd: Do not enable user type Work Queue
- without Shared Virtual Addressing
-Message-ID: <20221017155657.kpwvx5jicitoxbzp@cantor>
-References: <20221014222541.3912195-1-fenghua.yu@intel.com>
+        Mon, 17 Oct 2022 11:57:51 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB5258DFE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 08:57:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kl3MDRwTACBaC0dxH8DKHxkmKwzj0UFTXWI7Wc0wMaxTU9ejz8Y3D8mXb5wo9SXTwCa+8XhFurvl8xlTVoFSia3VjWhBluQq+0lMxlQpaVF00o6muWIwYVV+Xaowx2+ZG4RkDNFDRXYEOflNHHjpjr+2UNfG9RgOKum4z07ku6ak6C+R5FcODe7Joqr8UrqZpP0/SWRf+zKyJmxiv23aO1rvprft/FMF/gozKNVu2ak8yOjGva9lwQ6lIoobm4VJ2JHkq4NB+WJ12Cy0oHEvsJ/hYzMszMMxvn+XzqvBHG/PX6f2i7ie2NfJ17SivNUNu8Vch3IdHlOz6lUIe2We/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uQWijAdneR7nXrP7ZAHxs2XhN+f9b6KiRq2oQX0FGm0=;
+ b=aJoj7o+wj+VBX1iSFB4dWCh6zujcf1ofHz3ykRw92MlU96R5aDQ7W9/Hw2qncHlUW4PfjOnvlqlVz7qBCzZvL7n/sgrLTDPWKNOtILaG0udZwCStrA5XUUp01572emytDMFdPYPjFAiRX7KK28qcmRVf/y6XuENujdzOIkB/VTXhocteWGD64WjPwevouZnM72jjhv1+brTmGltC2ZRhwXVQ73YmaPDITLMFAEHs9zSR8Din8jaXu2mN7jvLWe6Zlsy+pf9A4uUWBy5PLzKc0/zCGmAdlQhJNG08GbYQHnR2pLnI8CdEK2nyYBaGDYlyNZGjN6yzxCBhiyY/lfpfbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uQWijAdneR7nXrP7ZAHxs2XhN+f9b6KiRq2oQX0FGm0=;
+ b=LUS2DzxMvmYjpIxpmwHBsnn03tabYzMwikH4nb3O+g52R4MTXEY/+DBJgHSFs3pXjx8u5psvQyHG9+pebUfjFcvutufWq/8BWApOLtRC+7+xTodzJcIBfQcpQ6CU+BzKqmRrNr2RMtvyK7R6YfjqhDID/Yiz3KHuJKJgKzy8TQw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by PH7PR12MB6563.namprd12.prod.outlook.com (2603:10b6:510:211::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
+ 2022 15:57:48 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395%6]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
+ 15:57:48 +0000
+Message-ID: <ea5d5e75-9c63-b4c4-40f1-dea42b121223@amd.com>
+Date:   Mon, 17 Oct 2022 11:57:43 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2] drm/amd/display: add an ASSERT() to irq service
+ functions
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Roman Li <roman.li@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Alan Liu <HaoPing.Liu@amd.com>, Alex Hung <alex.hung@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221017153836.65515-1-hamza.mahfooz@amd.com>
+Content-Language: en-US
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20221017153836.65515-1-hamza.mahfooz@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4PR01CA0018.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d1::26) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014222541.3912195-1-fenghua.yu@intel.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|PH7PR12MB6563:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee035020-ad1a-4f33-8d55-08dab058564c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vvCm75zFwNj9N0jgobWSAyX49Mm1HV8l3T4TqSueRHmz0Vj40pMrdekN6rIaJgvt3Aa9V6NRV8Ej5+PA1Roq2oqg2HYWh9UvAezW8e9hSYmrOkAqjetCQVudm8I/JhukpwcqUYC9mEwRxyXH4IWWJEwNNRCQ+XVg6u1veHYQQH9HRY4ukqZTWvT0CvulCeW1rVSS2BTNnXjlZdF6Lzt0iRGYMgf8GB9iTHqM/nrx7rb162+hUyZGQsL3GYemTew7b8cJvA5pd6Lou47v98cUSCnWsaLyS5b8eS+9R5lXmtUb55ZgJYadrXtb+uG8ZGXoX92/39rjKeZ4ahzAYo9hn9loG0uBGAui7uYh+3y5zdpaflDnSBilNoWJtBE2RbXn2RFVnImpm9f7/8XITPKaUiQ0KGr697w9VBRue2nOhot81+2sUW/QPY4LLtmfCeiUP/NiGo0KpicG18X4udJXtLydhC/oVG4YRZQf0R4O6KMjR5dQDGYNdPz7q3h6zLq1JymkpI4BMRVdQab2HxoqDMuXBOMjSa4ITqMFNzGxamFSODLGqCK0tgWiNSoMs2s0i+cv/BqFVhpJNaBqlwZ86NFUJ9difow4w8HmrgjZ3qYTWOEfW6OSAJz9G4fYsSUtCAi34PAXEtxDeUnIqtSNY0M8L28+D71RA6hr70jSDyQe3C2f0QpDBKE48eggc3y1ldmouXJTJhAfEXu/LDPIfzOBMUsyFxKnbD1WTWz/I/bBZLrBStYXL6l5lhDVm1hVvWMPWjNqOhqk4EXn4hEIMM0Ds/1GgyhlfHBgm7oZO50=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(366004)(136003)(376002)(451199015)(4001150100001)(2906002)(31686004)(41300700001)(36756003)(8676002)(4326008)(44832011)(316002)(66946007)(66476007)(5660300002)(6486002)(54906003)(478600001)(8936002)(66556008)(6666004)(86362001)(6506007)(31696002)(26005)(53546011)(186003)(83380400001)(2616005)(6512007)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0wvdXRwQ21hbkNmS3NYN1Uxeno3alloYzJndDlidURGZi93UFh6cS9MdnM1?=
+ =?utf-8?B?bXRkMVJHVitOWjBLMlNFMFplZ0l0VVRkSGpiUzhrdmlWTXNmMDZjNjBnZUVj?=
+ =?utf-8?B?WXFBMVJHOVdlaXlmeDUwdGcxR211Qks2Q3pXQ25YVm90ZExTd01kUlB1OFA5?=
+ =?utf-8?B?YkVjYXVGQXhtNE95VVhOZGFlaC9HWXYwUHZ0ckNlZ3BkY2RzcDh1S21wNnkx?=
+ =?utf-8?B?SGdabVFNNk9WcG5tTnZRLzBpd1RCaG5vejVTUVNGL2pxcnVweVlPSWp5LzVa?=
+ =?utf-8?B?L1RTZWVZSnhYN29adHIraXZuaGpUYk5pWlpEZkJWczVsM3FHU1lCWDQwUFdo?=
+ =?utf-8?B?enZuWFNITGtLTU53NkE4WjErRFZGSTVBZlduM3Rwbk1yT3JlSXE2dklXbFRF?=
+ =?utf-8?B?K21HNm5HS2hxYmxOSlhhbFU0Zkp4NWZxcUFZNCtkYWVJalVjLzRtSlYwZk85?=
+ =?utf-8?B?STNDSG0xeTkxSnVOMjZHNVFiUGNudzUzRmxuN0s4OXlQa3M1QVBNZ3EybUw0?=
+ =?utf-8?B?VFVCZGJJWUZZMm5xWmpwS3F1YVdmdVZNWTd6NHdSc0NUZWh4MWJoZDF1YkNy?=
+ =?utf-8?B?aCsyNmpVT1EvaS9tZ29RNnBYU3NyM2d6YmtkWFFScU9PUEV1YkRqdVRqcjEv?=
+ =?utf-8?B?TGVuLzdCWFhwMS9KcmFCbUNDODNRRmROSE1mSzZlYnpGTE9PdlExSTBXajdB?=
+ =?utf-8?B?OHh5dTdBdTR1c09LNzVxdVhKb3oxbktBYTFPQ1hxY2tXRnJpQm4rMnpITkw5?=
+ =?utf-8?B?VzdBM2o5QndXclhEeGdWempLV2xoUXdqelB5OS8yN0cvTmxtcG5HNFRCWU10?=
+ =?utf-8?B?NXN4SC9DRUcwVHc3Zjk4a3U5MWIxWEFpeEpQOEVGRCtReTZtRkdUVGR4RGhB?=
+ =?utf-8?B?NFBRY21DTXZiVzBzVUtobzI4amgwRERNUWFLZDk1dkpucWhxK2k0a0N5a3o4?=
+ =?utf-8?B?cHBxdU5MSXoxRGhzdkY4Tnk4SjkvaEZ1S0tES2dKMzlSdkNZY1NTczRxaVNX?=
+ =?utf-8?B?aEdKcG1Sc2MyeUhmUFg1cG5XNU5UcEJqTUk5L2crU1RRT0dxTHFZdCtKYjVE?=
+ =?utf-8?B?S01VSzRWTEZtNDZXZkhmSVM1cStWV1hsVHF3bFJyY2lKUmVVNWc1SG9QQ0F1?=
+ =?utf-8?B?OXdxYmNjZUVXb1N2OEg0aWpKZ0YxMXhWS0dBNDlMZHFBZU9vbml2T0JvZlpL?=
+ =?utf-8?B?TmxEVktwQlZZcE55WUhFZGRnQ3cvcXFXa01UMWx5cEgvUXBBaFJkdU9hK3Jz?=
+ =?utf-8?B?ZDBNUXlnUloxZ2gxMWNJaWNsdGZTekFVS0YxekpaWVNNcGZJZ29BU0lGbDRN?=
+ =?utf-8?B?bk9nTkxiS0E0ZHZqVndQajZaamJEcUJkUEorODlWekJkQ0RTWEtpTG5QUHJG?=
+ =?utf-8?B?VnN4RnZRM1lkUWtUWi9KRmRhaGwzdk1pNENBZE4zNTNIbnRzT1dPc041aDJv?=
+ =?utf-8?B?M0xUNWJVRVJQRTlab3ZTaTcxaGRWTWsxNS9ELzI1UzFaU3FTZ2Rra3ZIVk5L?=
+ =?utf-8?B?dHNqMkRhWC9qMUZnN1ZxMXExc1NxT0FGZ3VCT3YrNkFkYThweXlxcTBSaTF1?=
+ =?utf-8?B?YUZVWXhBN3Y3dGplSjdJU3VFUS9qNWxNbms0bjlpeEo2R2E4QkE0U0dRZzMx?=
+ =?utf-8?B?NXQ3bkVaVEd1WjgzbGpUM245Q0dKTGZXRm96UXRUd0RQM2IrSVRJVWJBL0Qv?=
+ =?utf-8?B?dnE5UmVnWEtTR0MzQ1E3SmRXaGVLNE5hOHRtRmY2WFgzay9nTVc4Z0pMaERB?=
+ =?utf-8?B?bTNSRU1zU3hiRG8rZHMyVVRHUDIrQ2JXZ3o5ZFNXQmVhSnlSWjBITG9QaFRQ?=
+ =?utf-8?B?QzArbHdwZitqQ2hQOStTWW5VUnZIZkRNM3Q3N1grbC9vL0wrVGorK3lCeXJN?=
+ =?utf-8?B?S0xNeHNvMlBoSm9PNU9qcUl2ZndIYWxtN29MWFc5YVBPZlE1VHdKWUVBZG0r?=
+ =?utf-8?B?eDhRYWNLbTh6NFFlQ2UxUmZLOGpLbENxQmVKQ0FtTEpvNXloMWkzaGhuZG1u?=
+ =?utf-8?B?MXhsbXhOYjlsdWdRa2RvQjRtemlIWC9ody9QMGl3MElkcVFCeld0OHdGK1Nr?=
+ =?utf-8?B?ekdlcDR1QUJMYk5xb2lLVHR5ZDZ0cDVTVXlrYVY0ZDdnaU9mY1NoVTdNSisx?=
+ =?utf-8?Q?bo5+8gnLMOacG2y4Mk7MOoGwv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee035020-ad1a-4f33-8d55-08dab058564c
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 15:57:47.9220
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fs79cwl3DoZMOmzQ1aI9YFSUBlmo3guLlsCLEZZlOeN7Dcya3uR3RUE311XDP7n/Udlzh6ljGk+Qs16FJ42LLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6563
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,83 +135,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 03:25:41PM -0700, Fenghua Yu wrote:
-> When the idxd_user_drv driver is bound to a Work Queue (WQ) device
-> without IOMMU or with IOMMU Passthrough without Shared Virtual
-> Addressing (SVA), the application gains direct access to physical
-> memory via the device by programming physical address to a submitted
-> descriptor. This allows direct userspace read and write access to
-> arbitrary physical memory. This is inconsistent with the security
-> goals of a good kernel API.
-> 
-> Unlike vfio_pci driver, the IDXD char device driver does not provide any
-> ways to pin user pages and translate the address from user VA to IOVA or
-> PA without IOMMU SVA. Therefore the application has no way to instruct the
-> device to perform DMA function. This makes the char device not usable for
-> normal application usage.
-> 
-> Since user type WQ without SVA cannot be used for normal application usage
-> and presents the security issue, bind idxd_user_drv driver and enable user
-> type WQ only when SVA is enabled (i.e. user PASID is enabled).
-> 
-> Fixes: 448c3de8ac83 ("dmaengine: idxd: create user driver for wq 'device'")
-> Cc: stable@vger.kernel.org
-> Suggested-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
+On 2022-10-17 11:38, Hamza Mahfooz wrote:
+> Currently, if we encounter unimplemented functions, it is difficult to
+> tell what caused them just by looking at dmesg and that is compounded by
+> the fact that it is often hard to reproduce said issues, for instance we
+> have had reports of this condition being triggered when removing a
+> secondary display that is setup in mirror mode and is connected using
+> usb-c. So, to have access to more detailed debugging information, add an
+> ASSERT() to dal_irq_service_ack() and dal_irq_service_set() that only
+> triggers when we encounter an unimplemented function.
+> 
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 > ---
-> v2:
-> - Update changlog per Dave Hansen's comments
+> v2: detail specific instance that I'm interested in and use ASSERT()
+>     instead of WARN().
+> ---
+>  .../gpu/drm/amd/display/dc/irq/irq_service.c    | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
 > 
->  drivers/dma/idxd/cdev.c   | 18 ++++++++++++++++++
->  include/uapi/linux/idxd.h |  1 +
->  2 files changed, 19 insertions(+)
-> 
-> diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
-> index c2808fd081d6..a9b96b18772f 100644
-> --- a/drivers/dma/idxd/cdev.c
-> +++ b/drivers/dma/idxd/cdev.c
-> @@ -312,6 +312,24 @@ static int idxd_user_drv_probe(struct idxd_dev *idxd_dev)
->  	if (idxd->state != IDXD_DEV_ENABLED)
->  		return -ENXIO;
+> diff --git a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
+> index 7bad39bba86b..3d6ab4fd25cb 100644
+> --- a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
+> +++ b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
+> @@ -112,8 +112,15 @@ bool dal_irq_service_set(
 >  
-> +	/*
-> +	 * User type WQ is enabled only when SVA is enabled for two reasons:
-> +	 *   - If no IOMMU or IOMMU Passthrough without SVA, userspace
-> +	 *     can directly access physical address through the WQ.
-> +	 *   - The IDXD cdev driver does not provide any ways to pin
-> +	 *     user pages and translate the address from user VA to IOVA or
-> +	 *     PA without IOMMU SVA. Therefore the application has no way
-> +	 *     to instruct the device to perform DMA function. This makes
-> +	 *     the cdev not usable for normal application usage.
-> +	 */
-> +	if (!device_user_pasid_enabled(idxd)) {
-> +		idxd->cmd_status = IDXD_SCMD_WQ_USER_NO_IOMMU;
-> +		dev_dbg(&idxd->pdev->dev,
-> +			"User type WQ cannot be enabled without SVA.\n");
+>  	dal_irq_service_ack(irq_service, source);
+>  
+> -	if (info->funcs && info->funcs->set)
+> +	if (info->funcs && info->funcs->set) {
+> +		if (info->funcs->set == dal_irq_service_dummy_set)
+> +			DC_LOG_WARNING("%s: src: %d, st: %d\n", __func__,
+> +				       source, enable);
 > +
-> +		return -EOPNOTSUPP;
+> +		ASSERT(info->funcs->set != dal_irq_service_dummy_set);
+
+I think you'll want the ASSERT inside the if block.
+
+Harry
+
+> +
+>  		return info->funcs->set(irq_service, info, enable);
 > +	}
-> +
->  	mutex_lock(&wq->wq_lock);
->  	wq->type = IDXD_WQT_USER;
->  	rc = drv_enable_wq(wq);
-> diff --git a/include/uapi/linux/idxd.h b/include/uapi/linux/idxd.h
-> index 095299c75828..2b9e7feba3f3 100644
-> --- a/include/uapi/linux/idxd.h
-> +++ b/include/uapi/linux/idxd.h
-> @@ -29,6 +29,7 @@ enum idxd_scmd_stat {
->  	IDXD_SCMD_WQ_NO_SIZE = 0x800e0000,
->  	IDXD_SCMD_WQ_NO_PRIV = 0x800f0000,
->  	IDXD_SCMD_WQ_IRQ_ERR = 0x80100000,
-> +	IDXD_SCMD_WQ_USER_NO_IOMMU = 0x80110000,
->  };
 >  
->  #define IDXD_SCMD_SOFTERR_MASK	0x80000000
-> -- 
-> 2.32.0
-> 
+>  	dal_irq_service_set_generic(irq_service, info, enable);
+>  
+> @@ -146,8 +153,14 @@ bool dal_irq_service_ack(
+>  		return false;
+>  	}
+>  
+> -	if (info->funcs && info->funcs->ack)
+> +	if (info->funcs && info->funcs->ack) {
+> +		if (info->funcs->ack == dal_irq_service_dummy_ack)
+> +			DC_LOG_WARNING("%s: src: %d\n", __func__, source);
+> +
+> +		ASSERT(info->funcs->ack != dal_irq_service_dummy_ack);
+> +
+>  		return info->funcs->ack(irq_service, info);
+> +	}
+>  
+>  	dal_irq_service_ack_generic(irq_service, info);
+>  
 
