@@ -2,150 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147B360106F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2700A601073
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJQNrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S229993AbiJQNrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJQNrN (ORCPT
+        with ESMTP id S229894AbiJQNrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:47:13 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B0652813
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:47:12 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id y80so9061881iof.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tp5Hh6O/9A3srRlAZuCsYvFyaZFl+pX5X5HoG/4ElAU=;
-        b=BkU5qF0dzUpUIC9KulmtP0BV02i/Hc+ZIukXmznU6DSFGPncHSk5xOwsfVBE12TSjy
-         BP2RcKTW68QFdfFkoEMiYIh45Lnr0sNlqCMJNSceCwDypaKdo22u9xFM3kexofmLH/zg
-         xq37h5vc/v60b2DbaTlJKTLBcbmcCkr0I1L40=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tp5Hh6O/9A3srRlAZuCsYvFyaZFl+pX5X5HoG/4ElAU=;
-        b=RoFP+1nq4mno02x40ZIhor95fWmcH/wqmKFcefJ2rhmJCWoxWhjVSS4NfaS+IgKR5+
-         B4+/S7y+lgBbPP9s9hafBAF7tmHN6F9NH9r6xXUT1ARDAcZ0qKZQbKXaOaVmra5MhDeV
-         YQ/2evzqvCnPTRQhR19RBsot9lzFLvhFeoeeUjuqpjBn4iL4QGBW8MZwgCLfthhKtFtD
-         nIuW/Q72gtFVKxdJI/vCQwTIHB8l1Nuwk5JAImagUzdkb11M7s7Tk7I9dBsJ35KTnbGb
-         LczqPv4rtBD4BSeYDG2WbH/Bcc5b01/Vvyu1P6DToLwPUC9CURvAzR6cBmFTNQ/NS7jq
-         sthA==
-X-Gm-Message-State: ACrzQf2fg0ruTHjXx4fTpN01NZ9C9muiIrgcwssw/9OrqbxvD3r7McRk
-        00FQ9seLvGXI5bonmuL+I3iB6zmFXqDUwx54x+2O+w==
-X-Google-Smtp-Source: AMsMyM47AVWwcAp7qkyKwstKtc+LVH7Vc9Mv6/Oad//okiRD3lriys+APzVwh5TYSft0aMfQYHPP0jnatDn0qJf/4EE=
-X-Received: by 2002:a05:6638:408b:b0:364:768:e8c2 with SMTP id
- m11-20020a056638408b00b003640768e8c2mr5433037jam.107.1666014431529; Mon, 17
- Oct 2022 06:47:11 -0700 (PDT)
+        Mon, 17 Oct 2022 09:47:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3415952825;
+        Mon, 17 Oct 2022 06:47:34 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 13:47:30 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666014451;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tqBa9Ui0a5BzY8tHtFFmljjsK0hmX5eiFPxQJ7f2bbc=;
+        b=LRNjp5ifONGe7zYMKC/22iEY1mmXz8lpRQbCXrx4lfR8KxaG/O71MzNH7kSDFTU874lx9n
+        LnKPROcNMoOCBjcnyCxhdePwiEInAp2kpyUbGrxI3y8lmyrEBAOkNCLkBSIzGoGJTSGky4
+        zDUMPeFuVnwwPxan8cPq3FSdZu15K+9anxZhvx2oR1PME2/kaIouepOlHcLdvkU1xBA25f
+        cW/wExufSMJWqYPQXMFhdulPJgPGr+ja/jPUe5BRzgRjxxdw5XuXkeB9fhT/r5c1PMQ8xF
+        0+uQPro8dMJRnlanetOo8x5H4tFosf2wBlbSrI5YHA7OQew87yH2tdOkkD+cAw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666014451;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tqBa9Ui0a5BzY8tHtFFmljjsK0hmX5eiFPxQJ7f2bbc=;
+        b=kJ2iDCSuCKuNl1CPwReaMyDg8XpthNf9ioNYKP7udbZaVZZRD7d4AEGrYAuPEqOCr12f2M
+        ZsjaqO3c99ji2XBw==
+From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/fpu: Exclude dynamic states from init_fpstate
+Cc:     Lin X Wang <lin.x.wang@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220824191223.1248-4-chang.seok.bae@intel.com>
+References: <20220824191223.1248-4-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-References: <20221016162305.2489629-1-joel@joelfernandes.org> <20221017133738.GE5600@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221017133738.GE5600@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 17 Oct 2022 09:47:00 -0400
-Message-ID: <CAEXW_YS8TkqX8acJESE54woR2adyiBOQq0ZRZKTLTqLGkkHPuQ@mail.gmail.com>
-Subject: Re: [PATCH v9 00/13] rcu: call_rcu() power improvements
-To:     paulmck@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        frederic@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166601445015.401.6980293789787013355.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 9:37 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Sun, Oct 16, 2022 at 04:22:52PM +0000, Joel Fernandes (Google) wrote:
-> > v9 version of RCU lazy patches based on rcu/next branch.
-> >  Only change since v8 is this discussion:
-> >  https://lore.kernel.org/rcu/20221011180142.2742289-1-joel@joelfernandes.org/T/#m8eff15110477f3430b3b02561b66f7b0d34a73b0
-> >
-> > To facilitate easier merge, I dropped tracing and other patches and just
-> > implemented the new changes. I will post the tracing patches later along with
-> > rcutop as I need to add new tracepoints that Frederic suggested.
-> >
-> > Main recent changes:
-> > 1. rcu_barrier() wake up only for lazy bypass list.
-> > 2. Make all call_rcu() default-lazy and add call_rcu_flush() API.
-> > 3. Take care of some callers using call_rcu_flush() API.
-> > 4. Several refactorings suggested by Paul/Frederic.
-> > 5. New call_rcu() to call_rcu_flush() conversions by Joel/Vlad/Paul.
-> >
-> > I am seeing good performance and power with these patches on real ChromeOS x86
-> > asymmetric hardware.
-> >
-> > Earlier cover letter with lots of details is here:
-> > https://lore.kernel.org/all/20220901221720.1105021-1-joel@joelfernandes.org/
-> >
-[...]
->
-> Very good, thank you all!
->
-> I have pulled these in for further review and testing.
->
-> I am holding off on the last one ("rcu/debug: Add wake-up debugging for
-> lazy callbacks") for the immediate future, but let's see how it goes.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Thanks! And nice timing with RCU just turning 20 years old ;-)
+Commit-ID:     a401f45e38754953c9d402f8b3bc965707eecc91
+Gitweb:        https://git.kernel.org/tip/a401f45e38754953c9d402f8b3bc965707eecc91
+Author:        Chang S. Bae <chang.seok.bae@intel.com>
+AuthorDate:    Wed, 24 Aug 2022 12:12:23 -07:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 17 Oct 2022 15:44:25 +02:00
 
- - Joel
+x86/fpu: Exclude dynamic states from init_fpstate
 
+== Background ==
 
+The XSTATE init code initializes all enabled and supported components.
+Then, the init states are saved in the init_fpstate buffer that is
+statically allocated in about one page.
 
+The AMX TILE_DATA state is large (8KB) but its init state is zero. And the
+feature comes only with the compacted format with these established
+dependencies: AMX->XFD->XSAVES. So this state is excludable from
+init_fpstate.
 
->
->                                                         Thanx, Paul
->
-> > Frederic Weisbecker (1):
-> > rcu: Fix missing nocb gp wake on rcu_barrier()
-> >
-> > Joel Fernandes (Google) (9):
-> > rcu: Make call_rcu() lazy to save power
-> > rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
-> > rcuscale: Add laziness and kfree tests
-> > percpu-refcount: Use call_rcu_flush() for atomic switch
-> > rcu/sync: Use call_rcu_flush() instead of call_rcu
-> > rcu/rcuscale: Use call_rcu_flush() for async reader test
-> > rcu/rcutorture: Use call_rcu_flush() where needed
-> > rxrpc: Use call_rcu_flush() instead of call_rcu()
-> > rcu/debug: Add wake-up debugging for lazy callbacks
-> >
-> > Uladzislau Rezki (2):
-> > scsi/scsi_error: Use call_rcu_flush() instead of call_rcu()
-> > workqueue: Make queue_rcu_work() use call_rcu_flush()
-> >
-> > Vineeth Pillai (1):
-> > rcu: shrinker for lazy rcu
-> >
-> > drivers/scsi/scsi_error.c |   2 +-
-> > include/linux/rcupdate.h  |   7 ++
-> > kernel/rcu/Kconfig        |  15 +++
-> > kernel/rcu/lazy-debug.h   | 154 +++++++++++++++++++++++++++
-> > kernel/rcu/rcu.h          |   8 ++
-> > kernel/rcu/rcuscale.c     |  70 +++++++++++-
-> > kernel/rcu/rcutorture.c   |  16 +--
-> > kernel/rcu/sync.c         |   2 +-
-> > kernel/rcu/tiny.c         |   2 +-
-> > kernel/rcu/tree.c         | 149 ++++++++++++++++++--------
-> > kernel/rcu/tree.h         |  12 ++-
-> > kernel/rcu/tree_exp.h     |   2 +-
-> > kernel/rcu/tree_nocb.h    | 217 ++++++++++++++++++++++++++++++++------
-> > kernel/workqueue.c        |   2 +-
-> > lib/percpu-refcount.c     |   3 +-
-> > net/rxrpc/conn_object.c   |   2 +-
-> > 16 files changed, 565 insertions(+), 98 deletions(-)
-> > create mode 100644 kernel/rcu/lazy-debug.h
-> >
-> > --
-> > 2.38.0.413.g74048e4d9e-goog
-> >
+== Problem ==
+
+But the buffer is formatted to include that large state. Then, this can be
+the cause of a noisy splat like the below.
+
+This came from XRSTORS for the task with init_fpstate in its XSAVE buffer.
+It is reproducible on AMX systems when the running kernel is built with
+CONFIG_DEBUG_PAGEALLOC=y and CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=y:
+
+ Bad FPU state detected at restore_fpregs_from_fpstate+0x57/0xd0, reinitializing FPU registers.
+ ...
+ RIP: 0010:restore_fpregs_from_fpstate+0x57/0xd0
+  ? restore_fpregs_from_fpstate+0x45/0xd0
+  switch_fpu_return+0x4e/0xe0
+  exit_to_user_mode_prepare+0x17b/0x1b0
+  syscall_exit_to_user_mode+0x29/0x40
+  do_syscall_64+0x67/0x80
+  ? do_syscall_64+0x67/0x80
+  ? exc_page_fault+0x86/0x180
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+== Solution ==
+
+Adjust init_fpstate to exclude dynamic states. XRSTORS from init_fpstate
+still initializes those states when their bits are set in the
+requested-feature bitmap.
+
+Fixes: 2308ee57d93d ("x86/fpu/amx: Enable the AMX feature in 64-bit mode")
+Reported-by: Lin X Wang <lin.x.wang@intel.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Lin X Wang <lin.x.wang@intel.com>
+Link: https://lore.kernel.org/r/20220824191223.1248-4-chang.seok.bae@intel.com
+
+---
+ arch/x86/kernel/fpu/xstate.c |  9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index f5ef786..e77cabf 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -857,9 +857,12 @@ void __init fpu__init_system_xstate(unsigned int legacy_size)
+ 	update_regset_xstate_info(fpu_user_cfg.max_size,
+ 				  fpu_user_cfg.max_features);
+ 
+-	/* Bring init_fpstate size and features up to date */
+-	init_fpstate.size		= fpu_kernel_cfg.max_size;
+-	init_fpstate.xfeatures		= fpu_kernel_cfg.max_features;
++	/*
++	 * init_fpstate excludes dynamic states as they are large but init
++	 * state is zero.
++	 */
++	init_fpstate.size		= fpu_kernel_cfg.default_size;
++	init_fpstate.xfeatures		= fpu_kernel_cfg.default_features;
+ 
+ 	if (init_fpstate.size > sizeof(init_fpstate.regs)) {
+ 		pr_warn("x86/fpu: init_fpstate buffer too small (%zu < %d), disabling XSAVE\n",
