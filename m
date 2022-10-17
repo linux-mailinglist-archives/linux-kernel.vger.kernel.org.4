@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D730E60131E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0130D60131F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiJQQCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 12:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S231220AbiJQQC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 12:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiJQQCo (ORCPT
+        with ESMTP id S230196AbiJQQCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Oct 2022 12:02:44 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F189B6D843
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:41 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id d26so25960138eje.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:41 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD3C6DAD0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:42 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id d26so25978875ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P/1RiMr1eJ0x+wK6LRLfk+CIs20GXMv9Cr5BUn6E+1A=;
-        b=qxhJaPRp0C1CnLCFp02667sEh3nTRwKHTgeeTplt+G+mCrIlcs4hRfjfzFmtSMKS5B
-         Ru4N2JJro5y1V+RBQElu0oUEWVc/iuDrkjsfJALvC3mui2/wFwWSeLu7KvUBCfH/QVbg
-         e+8R4DsIoDD8jTjBvGL5JrrxB3mBMXM44W9pyDU+0ZKXgZs+Nqf/IlXKv5FNtW10hkJU
-         LfLfrVSmU/MYA7xHhsFVYKKxpYoZ1y/v3S42Cpf0ciYRKHx9ghv8mTY1vcrxcBtXwOAx
-         FqKtwhN3Jb5kDDN/U2PNa8GEdiND3I3a3Z/2TiJGEaIYyTMIhX8Su0Jvy6wC2TQ8XPdd
-         SFbQ==
+        bh=V8PGF12HowaED9GsfrGSUOr+T+BR5MJRz00gwWuwNBY=;
+        b=FwjCcmT197rmgh5QI5e3OYcSXGX0J/38zjdy+NQLWYvd36DTytm0a9xBb/IVvrvF0m
+         NeTlftucGk9bI3HSKTXMixH7YlHMB7m/qnAKI+1GzsSdwrrMfD5uVgsEABz9UJ3YKBXF
+         diMaxcKQucmoyB8BbBfaSPCvum3Hk6iPW34T2KUZpguWuKRUVCqpjUhaEuIoPME22BTK
+         uStcrtd21fD5JEXPENWctXC9cYfaidqN8WOdR5ymvUnmYEBfa98t6dq7oL3aGIpJjgxx
+         kSTrDAAJ29nzE08s3MhU+S2C9r/NHfqyHauqVyH3qssZwy8VkCEZj/nIInk/D9vANe+m
+         TgiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P/1RiMr1eJ0x+wK6LRLfk+CIs20GXMv9Cr5BUn6E+1A=;
-        b=fpkfsEXOWxt8NnbqN21u8Wr9jBPB/4PdQk4izF8MDaH/RvzAetAjfOf9x73F5ReIX8
-         Z+2qWwOtygAgENZnysDRMhdmZq+JR+ZZCIEFdvjIYZ7d+BysbxtsLmqUrO56MVv2c8DD
-         ruY7hRm8Qx7gjyfJrhF0eFEP2WzpiMDsl+0kvHuaDcfScnmn2vfLwMhCzSLNWEp5rf7A
-         5LLM3LpIKAKHfBUjQKdGGMN+YVIasWak87qIyAq5cFgkQpXuAyxNmJiaPyEn0Hk2UQTa
-         BmV4K9kZXyWigWqSpuNaHipZjbfUivL51n3nqEvtzPriU8hEeApahNXMf+FIjy5kg+Yd
-         /uCw==
-X-Gm-Message-State: ACrzQf3JqHoOOgHWQw7lk98ZTwmpwLyiux/jb2sORyP0JiNlbcL/mrbh
-        lkTkS7BL0HdqQ0ZeS3kVnwU=
-X-Google-Smtp-Source: AMsMyM5oF/D+J68qyYf7OpinzoVRIca5njlKZiVt120+6mGZCZeIlXSoEubnaQQ/aKTMqvFacsOwCw==
-X-Received: by 2002:a17:906:ef8f:b0:78e:28e7:6c64 with SMTP id ze15-20020a170906ef8f00b0078e28e76c64mr9497023ejb.165.1666022560203;
-        Mon, 17 Oct 2022 09:02:40 -0700 (PDT)
+        bh=V8PGF12HowaED9GsfrGSUOr+T+BR5MJRz00gwWuwNBY=;
+        b=eA/D3+GpPFNJItmpOV2zfoiTv1RrNlw5rnk5mCqANrHSgrX68Qq9F9tNGiKetf1mwj
+         Fy+RTpJHydCfQ97gFVeiuwwlEOwHHbgy9hz11dYTCJFVbat/qYwS8iL50buSi5P67m/l
+         4H279fBUkMgf6UNnS296KKjn/bzE55AUHvJYWB+/pz0zgTIe6Q1R3LRog2q/Wxb4DVP0
+         Yk/W27jgArnsw5CobgBjf4VYP9G2wQnfBAP3cNF9dVypf5xB5yfPKGINNpgX98Y/OzUm
+         GxuUdv1xfbFHQIrAGDTg8OiFUILXoqHxq8FY4AnNy1Sh3l54iKHx/y2KGtr83zLqeDJ4
+         dCyw==
+X-Gm-Message-State: ACrzQf2xl6CnjAzSM31eM3VrwYafqH9nN1mJNWqsTjNF5azOsl7r4Y7C
+        Eb4l847CZlxWQ6uStYQOWKs=
+X-Google-Smtp-Source: AMsMyM7mQD7IJcK53cEQL1/Z+YHex7sxuqWGp8otU30wY2tEfaxu2LL184YVDQk0dPc0p6SpQLXgjg==
+X-Received: by 2002:a17:906:d54d:b0:78e:2fbf:ca2a with SMTP id cr13-20020a170906d54d00b0078e2fbfca2amr9476322ejc.488.1666022561205;
+        Mon, 17 Oct 2022 09:02:41 -0700 (PDT)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.38
+        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b0073d5948855asm6389629ejo.1.2022.10.17.09.02.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 09:02:39 -0700 (PDT)
+        Mon, 17 Oct 2022 09:02:40 -0700 (PDT)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
@@ -58,9 +58,9 @@ Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Uladzislau Rezki <urezki@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: [PATCH 2/7] mm: vmap: Add purge_vmap_area_lazy trace event
-Date:   Mon, 17 Oct 2022 18:02:27 +0200
-Message-Id: <20221017160233.16582-4-urezki@gmail.com>
+Subject: [PATCH 3/7] mm: vmap: Add a free_vmap_area_noflush trace event
+Date:   Mon, 17 Oct 2022 18:02:28 +0200
+Message-Id: <20221017160233.16582-5-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221017160233.16582-1-urezki@gmail.com>
 References: <20221017160233.16582-1-urezki@gmail.com>
@@ -76,54 +76,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is for debug purpose to track number of freed vmaps
-including a range it occurs on.
+This event is used in order to validate/debug a start address
+of freed VA, number of currently outstanding and maximum allowed
+areas.
 
 To: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- include/trace/events/vmap.h | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ include/trace/events/vmap.h | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
 diff --git a/include/trace/events/vmap.h b/include/trace/events/vmap.h
-index 504870d95a4e..2af2b84c6eb7 100644
+index 2af2b84c6eb7..5ba9bf58772a 100644
 --- a/include/trace/events/vmap.h
 +++ b/include/trace/events/vmap.h
-@@ -50,6 +50,39 @@ TRACE_EVENT(alloc_vmap_area,
- 		__entry->vstart, __entry->vend, __entry->failed)
+@@ -83,6 +83,40 @@ TRACE_EVENT(purge_vmap_area_lazy,
+ 		__entry->start, __entry->end, __entry->npurged)
  );
  
 +/**
-+ * purge_vmap_area_lazy - called when vmap areas were lazily freed
-+ * @start:		purging start address
-+ * @end:		purging end address
-+ * @npurged:	numbed of purged vmap areas
++ * free_vmap_area_noflush - called when a vmap area is freed
++ * @va_start:		a start address of VA
++ * @nr_lazy:		number of current lazy pages
++ * @nr_lazy_max:	number of maximum lazy pages
 + *
 + * This event is used for a debug purpose. It gives some
-+ * indication about start:end range and how many objects
-+ * are released.
++ * indication about a VA that is released, number of current
++ * outstanding areas and a maximum allowed threshold before
++ * dropping all of them.
 + */
-+TRACE_EVENT(purge_vmap_area_lazy,
++TRACE_EVENT(free_vmap_area_noflush,
 +
-+	TP_PROTO(unsigned long start, unsigned long end,
-+		unsigned int npurged),
++	TP_PROTO(unsigned long va_start, unsigned long nr_lazy,
++		unsigned long nr_lazy_max),
 +
-+	TP_ARGS(start, end, npurged),
++	TP_ARGS(va_start, nr_lazy, nr_lazy_max),
 +
 +	TP_STRUCT__entry(
-+		__field(unsigned long, start)
-+		__field(unsigned long, end)
-+		__field(unsigned int, npurged)
++		__field(unsigned long, va_start)
++		__field(unsigned long, nr_lazy)
++		__field(unsigned long, nr_lazy_max)
 +	),
 +
 +	TP_fast_assign(
-+		__entry->start = start;
-+		__entry->end = end;
-+		__entry->npurged = npurged;
++		__entry->va_start = va_start;
++		__entry->nr_lazy = nr_lazy;
++		__entry->nr_lazy_max = nr_lazy_max;
 +	),
 +
-+	TP_printk("start=0x%lx end=0x%lx num_purged=%u",
-+		__entry->start, __entry->end, __entry->npurged)
++	TP_printk("va_start=0x%lx nr_lazy=%lu nr_lazy_max=%lu",
++		__entry->va_start, __entry->nr_lazy, __entry->nr_lazy_max)
 +);
 +
  #endif /*  _TRACE_VMAP_H */
