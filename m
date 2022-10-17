@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FF46011C2
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAD66011C0
 	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiJQOyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S231241AbiJQOyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiJQOx7 (ORCPT
+        with ESMTP id S230519AbiJQOx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Oct 2022 10:53:59 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429D268CF9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AD8691B5;
         Mon, 17 Oct 2022 07:53:46 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:53:39 -0000
+Date:   Mon, 17 Oct 2022 14:53:40 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018420;
+        s=2020; t=1666018421;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8nYvTgfwwsWkVvSHe1CjhPKH3cfGxwCeg/eOBd74qts=;
-        b=BbKG4RfqcElMfSoQ4wC4d8mqG0cNDnEyDjeu7MvSBRluR4aICG3447n75UAYd7F8pfgsT4
-        EHX4Qb+7C0xgxVwTy2lE1OT64UF6z3WtqXFwqxEBhxua3ZLsnavv8k276NfEOKVSAnG5pW
-        0XSPrugrzLcvmcBepdN1PfldjzBSbh0Q0a3ghKCimr7XGZp0S42xR21ECsy7Stnu62+Zoy
-        jGoT6Nw27AfT0wUMP5hRUhw6wvNvsHjVPWvTCVHC9CIGyr4ZaWjp1adu1Fhopq8eMuKcLl
-        2xbkYy7s+MLrSKA+FlNhI0fNa+6GlpPdDoAvvQW3QT6iTFWTxHVVe2sgHtF1GA==
+        bh=E4FWDFPOwZNjy8/OWvtHQ5aasrhd5F2oLRdahjDP+L0=;
+        b=c6ryJB9N98ftFDvz2s4G9CtvoqAuyQH9hbVKXtu8c1PWxWIRGML1T6aOq1lcm2IfgTHC/M
+        M1RDD8S9TWvw0kMqR6tZ8mS6tYZl+a7+3+T/DjA4GcYCo+D0hojYf96ddFNJ74RnzH34zo
+        zy9xGZ/+tU53XYFtlnINY/+F6y/TmgkHRDk8PIPcjJ2TcXyVHQcr+cTJOeOUXdIn1ZNlrr
+        CdH9XHkQi3MivhMtB65gLg0dsFiT1HS4ztwbNZGLnTWfOd9Two3l004UtJ5RuFR+HXQmLd
+        CWJfNIayEfOyKtsOFBedqEJItoV95Q2vWMjdW3bEJUa29niuMPJ3p0zjgD+Czg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018420;
+        s=2020e; t=1666018421;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8nYvTgfwwsWkVvSHe1CjhPKH3cfGxwCeg/eOBd74qts=;
-        b=o47p/lDLKvFPpklzmAPAtoAVbRTOaKGl+fz/WjUhg67FT3YLM8XA2UTq3ddHG3YK1GSwUS
-        0Y0mF5rH66qV/JAw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=E4FWDFPOwZNjy8/OWvtHQ5aasrhd5F2oLRdahjDP+L0=;
+        b=M1y0qnqp7OnC2yNqo/4XKmk+7lvm5eZPLC8DBD10ZcP6bQU5YHF0IabM20hOjrKRwTSdU9
+        iLS4DW0eDBvvsODQ==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/retpoline: Add SKL retthunk retpolines
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+Subject: [tip: x86/core] x86/retbleed: Add SKL return thunk
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111147.996634749@infradead.org>
-References: <20220915111147.996634749@infradead.org>
+In-Reply-To: <20220915111147.890071690@infradead.org>
+References: <20220915111147.890071690@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601841951.401.10547986435032366895.tip-bot2@tip-bot2>
+Message-ID: <166601842059.401.10253467345297714460.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,280 +66,391 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     3b6c1747da48ff40ab746b0e860cffe83619f5c5
-Gitweb:        https://git.kernel.org/tip/3b6c1747da48ff40ab746b0e860cffe83619f5c5
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 15 Sep 2022 13:11:28 +02:00
+Commit-ID:     5d8213864ade86b48fc492584ea86d65a62f892e
+Gitweb:        https://git.kernel.org/tip/5d8213864ade86b48fc492584ea86d65a62f892e
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 15 Sep 2022 13:11:27 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 17 Oct 2022 16:41:15 +02:00
 
-x86/retpoline: Add SKL retthunk retpolines
+x86/retbleed: Add SKL return thunk
 
-Ensure that retpolines do the proper call accounting so that the return
-accounting works correctly.
+To address the Intel SKL RSB underflow issue in software it's required to
+do call depth tracking.
 
-Specifically; retpolines are used to replace both 'jmp *%reg' and
-'call *%reg', however these two cases do not have the same accounting
-requirements. Therefore split things up and provide two different
-retpoline arrays for SKL.
+Provide a return thunk for call depth tracking on Intel SKL CPUs.
 
-The 'jmp *%reg' case needs no accounting, the
-__x86_indirect_jump_thunk_array[] covers this. The retpoline is
-changed to not use the return thunk; it's a simple call;ret construct.
+The tracking does not use a counter. It uses uses arithmetic shift
+right on call entry and logical shift left on return.
 
-[ strictly speaking it should do:
-	andq $(~0x1f), PER_CPU_VAR(__x86_call_depth)
-  but we can argue this can be covered by the fuzz we already have
-  in the accounting depth (12) vs the RSB depth (16) ]
+The depth tracking variable is initialized to 0x8000.... when the call
+depth is zero. The arithmetic shift right sign extends the MSB and
+saturates after the 12th call. The shift count is 5 so the tracking covers
+12 nested calls. On return the variable is shifted left logically so it
+becomes zero again.
 
-The 'call *%reg' case does need accounting, the
-__x86_indirect_call_thunk_array[] covers this. Again, this retpoline
-avoids the use of the return-thunk, in this case to avoid double
-accounting.
+ CALL	 	   	RET
+ 0: 0x8000000000000000	0x0000000000000000
+ 1: 0xfc00000000000000	0xf000000000000000
+...
+11: 0xfffffffffffffff8	0xfffffffffffffc00
+12: 0xffffffffffffffff	0xffffffffffffffe0
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+After a return buffer fill the depth is credited 12 calls before the next
+stuffing has to take place.
+
+There is a inaccuracy for situations like this:
+
+   10 calls
+    5 returns
+    3 calls
+    4 returns
+    3 calls
+    ....
+
+The shift count might cause this to be off by one in either direction, but
+there is still a cushion vs. the RSB depth. The algorithm does not claim to
+be perfect, but it should obfuscate the problem enough to make exploitation
+extremly difficult.
+
+The theory behind this is:
+
+RSB is a stack with depth 16 which is filled on every call. On the return
+path speculation "pops" entries to speculate down the call chain. Once the
+speculative RSB is empty it switches to other predictors, e.g. the Branch
+History Buffer, which can be mistrained by user space and misguide the
+speculation path to a gadget.
+
+Call depth tracking is designed to break this speculation path by stuffing
+speculation trap calls into the RSB which are never getting a corresponding
+return executed. This stalls the prediction path until it gets resteered,
+
+The assumption is that stuffing at the 12th return is sufficient to break
+the speculation before it hits the underflow and the fallback to the other
+predictors. Testing confirms that it works. Johannes, one of the retbleed
+researchers. tried to attack this approach but failed.
+
+There is obviously no scientific proof that this will withstand future
+research progress, but all we can do right now is to speculate about it.
+
+The SAR/SHL usage was suggested by Andi Kleen.
+
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111147.996634749@infradead.org
+Link: https://lore.kernel.org/r/20220915111147.890071690@infradead.org
 ---
- arch/x86/include/asm/nospec-branch.h | 12 +++++-
- arch/x86/kernel/alternative.c        | 59 ++++++++++++++++++++--
- arch/x86/lib/retpoline.S             | 71 +++++++++++++++++++++++----
- arch/x86/net/bpf_jit_comp.c          |  5 +-
- 4 files changed, 135 insertions(+), 12 deletions(-)
+ arch/x86/entry/entry_64.S            |  10 +-
+ arch/x86/include/asm/current.h       |   3 +-
+ arch/x86/include/asm/nospec-branch.h | 121 ++++++++++++++++++++++++--
+ arch/x86/kernel/asm-offsets.c        |   3 +-
+ arch/x86/kvm/svm/vmenter.S           |   1 +-
+ arch/x86/lib/retpoline.S             |  31 +++++++-
+ 6 files changed, 159 insertions(+), 10 deletions(-)
 
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 4cc0125..15739a2 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -288,6 +288,7 @@ SYM_FUNC_END(__switch_to_asm)
+ SYM_CODE_START_NOALIGN(ret_from_fork)
+ 	UNWIND_HINT_EMPTY
+ 	ANNOTATE_NOENDBR // copy_thread
++	CALL_DEPTH_ACCOUNT
+ 	movq	%rax, %rdi
+ 	call	schedule_tail			/* rdi: 'prev' task parameter */
+ 
+@@ -332,7 +333,7 @@ SYM_CODE_START(xen_error_entry)
+ 	UNWIND_HINT_FUNC
+ 	PUSH_AND_CLEAR_REGS save_ret=1
+ 	ENCODE_FRAME_POINTER 8
+-	UNTRAIN_RET
++	UNTRAIN_RET_FROM_CALL
+ 	RET
+ SYM_CODE_END(xen_error_entry)
+ 
+@@ -977,7 +978,7 @@ SYM_CODE_START(paranoid_entry)
+ 	 * CR3 above, keep the old value in a callee saved register.
+ 	 */
+ 	IBRS_ENTER save_reg=%r15
+-	UNTRAIN_RET
++	UNTRAIN_RET_FROM_CALL
+ 
+ 	RET
+ SYM_CODE_END(paranoid_entry)
+@@ -1062,7 +1063,7 @@ SYM_CODE_START(error_entry)
+ 	/* We have user CR3.  Change to kernel CR3. */
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
+ 	IBRS_ENTER
+-	UNTRAIN_RET
++	UNTRAIN_RET_FROM_CALL
+ 
+ 	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
+ 	/* Put us onto the real thread stack. */
+@@ -1097,6 +1098,7 @@ SYM_CODE_START(error_entry)
+ 	 */
+ .Lerror_entry_done_lfence:
+ 	FENCE_SWAPGS_KERNEL_ENTRY
++	CALL_DEPTH_ACCOUNT
+ 	leaq	8(%rsp), %rax			/* return pt_regs pointer */
+ 	ANNOTATE_UNRET_END
+ 	RET
+@@ -1115,7 +1117,7 @@ SYM_CODE_START(error_entry)
+ 	FENCE_SWAPGS_USER_ENTRY
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
+ 	IBRS_ENTER
+-	UNTRAIN_RET
++	UNTRAIN_RET_FROM_CALL
+ 
+ 	/*
+ 	 * Pretend that the exception came from user mode: set up pt_regs
+diff --git a/arch/x86/include/asm/current.h b/arch/x86/include/asm/current.h
+index b89aba0..a1168e7 100644
+--- a/arch/x86/include/asm/current.h
++++ b/arch/x86/include/asm/current.h
+@@ -17,6 +17,9 @@ struct pcpu_hot {
+ 			struct task_struct	*current_task;
+ 			int			preempt_count;
+ 			int			cpu_number;
++#ifdef CONFIG_CALL_DEPTH_TRACKING
++			u64			call_depth;
++#endif
+ 			unsigned long		top_of_stack;
+ 			void			*hardirq_stack_ptr;
+ 			u16			softirq_pending;
 diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index d4be826..06ba7ca 100644
+index f10ca33..d4be826 100644
 --- a/arch/x86/include/asm/nospec-branch.h
 +++ b/arch/x86/include/asm/nospec-branch.h
-@@ -301,6 +301,8 @@
+@@ -12,8 +12,83 @@
+ #include <asm/msr-index.h>
+ #include <asm/unwind_hints.h>
+ #include <asm/percpu.h>
++#include <asm/current.h>
  
- typedef u8 retpoline_thunk_t[RETPOLINE_THUNK_SIZE];
- extern retpoline_thunk_t __x86_indirect_thunk_array[];
-+extern retpoline_thunk_t __x86_indirect_call_thunk_array[];
-+extern retpoline_thunk_t __x86_indirect_jump_thunk_array[];
- 
- extern void __x86_return_thunk(void);
- extern void zen_untrain_ret(void);
-@@ -330,6 +332,16 @@ static inline void x86_set_skl_return_thunk(void) {}
- #include <asm/GEN-for-each-reg.h>
- #undef GEN
- 
-+#define GEN(reg)						\
-+	extern retpoline_thunk_t __x86_indirect_call_thunk_ ## reg;
-+#include <asm/GEN-for-each-reg.h>
-+#undef GEN
+-#define RETPOLINE_THUNK_SIZE	32
++/*
++ * Call depth tracking for Intel SKL CPUs to address the RSB underflow
++ * issue in software.
++ *
++ * The tracking does not use a counter. It uses uses arithmetic shift
++ * right on call entry and logical shift left on return.
++ *
++ * The depth tracking variable is initialized to 0x8000.... when the call
++ * depth is zero. The arithmetic shift right sign extends the MSB and
++ * saturates after the 12th call. The shift count is 5 for both directions
++ * so the tracking covers 12 nested calls.
++ *
++ *  Call
++ *  0: 0x8000000000000000	0x0000000000000000
++ *  1: 0xfc00000000000000	0xf000000000000000
++ * ...
++ * 11: 0xfffffffffffffff8	0xfffffffffffffc00
++ * 12: 0xffffffffffffffff	0xffffffffffffffe0
++ *
++ * After a return buffer fill the depth is credited 12 calls before the
++ * next stuffing has to take place.
++ *
++ * There is a inaccuracy for situations like this:
++ *
++ *  10 calls
++ *   5 returns
++ *   3 calls
++ *   4 returns
++ *   3 calls
++ *   ....
++ *
++ * The shift count might cause this to be off by one in either direction,
++ * but there is still a cushion vs. the RSB depth. The algorithm does not
++ * claim to be perfect and it can be speculated around by the CPU, but it
++ * is considered that it obfuscates the problem enough to make exploitation
++ * extremly difficult.
++ */
++#define RET_DEPTH_SHIFT			5
++#define RSB_RET_STUFF_LOOPS		16
++#define RET_DEPTH_INIT			0x8000000000000000ULL
++#define RET_DEPTH_INIT_FROM_CALL	0xfc00000000000000ULL
++#define RET_DEPTH_CREDIT		0xffffffffffffffffULL
 +
-+#define GEN(reg)						\
-+	extern retpoline_thunk_t __x86_indirect_jump_thunk_ ## reg;
-+#include <asm/GEN-for-each-reg.h>
-+#undef GEN
++#if defined(CONFIG_CALL_DEPTH_TRACKING) && !defined(COMPILE_OFFSETS)
 +
- #ifdef CONFIG_X86_64
++#include <asm/asm-offsets.h>
++
++#define CREDIT_CALL_DEPTH					\
++	movq	$-1, PER_CPU_VAR(pcpu_hot + X86_call_depth);
++
++#define ASM_CREDIT_CALL_DEPTH					\
++	movq	$-1, PER_CPU_VAR(pcpu_hot + X86_call_depth);
++
++#define RESET_CALL_DEPTH					\
++	mov	$0x80, %rax;					\
++	shl	$56, %rax;					\
++	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);
++
++#define RESET_CALL_DEPTH_FROM_CALL				\
++	mov	$0xfc, %rax;					\
++	shl	$56, %rax;					\
++	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);
++
++#define INCREMENT_CALL_DEPTH					\
++	sarq	$5, %gs:pcpu_hot + X86_call_depth;
++
++#define ASM_INCREMENT_CALL_DEPTH				\
++	sarq	$5, PER_CPU_VAR(pcpu_hot + X86_call_depth);
++
++#else
++#define CREDIT_CALL_DEPTH
++#define RESET_CALL_DEPTH
++#define INCREMENT_CALL_DEPTH
++#define RESET_CALL_DEPTH_FROM_CALL
++#endif
  
  /*
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 04d1e3d..19221d7 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -377,6 +377,56 @@ static int emit_indirect(int op, int reg, u8 *bytes)
- 	return i;
- }
- 
-+static inline bool is_jcc32(struct insn *insn)
-+{
-+	/* Jcc.d32 second opcode byte is in the range: 0x80-0x8f */
-+	return insn->opcode.bytes[0] == 0x0f && (insn->opcode.bytes[1] & 0xf0) == 0x80;
-+}
-+
-+static int emit_call_track_retpoline(void *addr, struct insn *insn, int reg, u8 *bytes)
-+{
-+	u8 op = insn->opcode.bytes[0];
-+	int i = 0;
-+
-+	/*
-+	 * Clang does 'weird' Jcc __x86_indirect_thunk_r11 conditional
-+	 * tail-calls. Deal with them.
-+	 */
-+	if (is_jcc32(insn)) {
-+		bytes[i++] = op;
-+		op = insn->opcode.bytes[1];
-+		goto clang_jcc;
-+	}
-+
-+	if (insn->length == 6)
-+		bytes[i++] = 0x2e; /* CS-prefix */
-+
-+	switch (op) {
-+	case CALL_INSN_OPCODE:
-+		__text_gen_insn(bytes+i, op, addr+i,
-+				__x86_indirect_call_thunk_array[reg],
-+				CALL_INSN_SIZE);
-+		i += CALL_INSN_SIZE;
-+		break;
-+
-+	case JMP32_INSN_OPCODE:
-+clang_jcc:
-+		__text_gen_insn(bytes+i, op, addr+i,
-+				__x86_indirect_jump_thunk_array[reg],
-+				JMP32_INSN_SIZE);
-+		i += JMP32_INSN_SIZE;
-+		break;
-+
-+	default:
-+		WARN("%pS %px %*ph\n", addr, addr, 6, addr);
-+		return -1;
-+	}
-+
-+	WARN_ON_ONCE(i != insn->length);
-+
-+	return i;
-+}
-+
- /*
-  * Rewrite the compiler generated retpoline thunk calls.
-  *
-@@ -409,8 +459,12 @@ static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
- 	BUG_ON(reg == 4);
- 
- 	if (cpu_feature_enabled(X86_FEATURE_RETPOLINE) &&
--	    !cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE))
-+	    !cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
-+		if (cpu_feature_enabled(X86_FEATURE_CALL_DEPTH))
-+			return emit_call_track_retpoline(addr, insn, reg, bytes);
-+
- 		return -1;
-+	}
- 
- 	op = insn->opcode.bytes[0];
- 
-@@ -427,8 +481,7 @@ static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
- 	 *   [ NOP ]
- 	 * 1:
- 	 */
--	/* Jcc.d32 second opcode byte is in the range: 0x80-0x8f */
--	if (op == 0x0f && (insn->opcode.bytes[1] & 0xf0) == 0x80) {
-+	if (is_jcc32(insn)) {
- 		cc = insn->opcode.bytes[1] & 0xf;
- 		cc ^= 1; /* invert condition */
- 
-diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
-index 1e79ecc..e002060 100644
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -14,17 +14,18 @@
- 
- 	.section .text.__x86.indirect_thunk
- 
--.macro RETPOLINE reg
-+
-+.macro POLINE reg
- 	ANNOTATE_INTRA_FUNCTION_CALL
- 	call    .Ldo_rop_\@
--.Lspec_trap_\@:
--	UNWIND_HINT_EMPTY
--	pause
--	lfence
--	jmp .Lspec_trap_\@
-+	int3
- .Ldo_rop_\@:
- 	mov     %\reg, (%_ASM_SP)
- 	UNWIND_HINT_FUNC
-+.endm
-+
-+.macro RETPOLINE reg
-+	POLINE \reg
- 	RET
- .endm
- 
-@@ -54,7 +55,6 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
+  * Fill the CPU return stack buffer.
+@@ -32,6 +107,7 @@
+  * from C via asm(".include <asm/nospec-branch.h>") but let's not go there.
   */
  
- #define __EXPORT_THUNK(sym)	_ASM_NOKPROBE(sym); EXPORT_SYMBOL(sym)
--#define EXPORT_THUNK(reg)	__EXPORT_THUNK(__x86_indirect_thunk_ ## reg)
++#define RETPOLINE_THUNK_SIZE	32
+ #define RSB_CLEAR_LOOPS		32	/* To forcibly overwrite all entries */
  
- 	.align RETPOLINE_THUNK_SIZE
- SYM_CODE_START(__x86_indirect_thunk_array)
-@@ -66,10 +66,65 @@ SYM_CODE_START(__x86_indirect_thunk_array)
- 	.align RETPOLINE_THUNK_SIZE
- SYM_CODE_END(__x86_indirect_thunk_array)
+ /*
+@@ -60,7 +136,8 @@
+ 	dec	reg;					\
+ 	jnz	771b;					\
+ 	/* barrier for jnz misprediction */		\
+-	lfence;
++	lfence;						\
++	ASM_CREDIT_CALL_DEPTH
+ #else
+ /*
+  * i386 doesn't unconditionally have LFENCE, as such it can't
+@@ -185,11 +262,32 @@
+  * where we have a stack but before any RET instruction.
+  */
+ .macro UNTRAIN_RET
+-#if defined(CONFIG_CPU_UNRET_ENTRY) || defined(CONFIG_CPU_IBPB_ENTRY)
++#if defined(CONFIG_CPU_UNRET_ENTRY) || defined(CONFIG_CPU_IBPB_ENTRY) || \
++	defined(CONFIG_X86_FEATURE_CALL_DEPTH)
+ 	ANNOTATE_UNRET_END
+-	ALTERNATIVE_2 "",						\
+-	              CALL_ZEN_UNTRAIN_RET, X86_FEATURE_UNRET,		\
+-		      "call entry_ibpb", X86_FEATURE_ENTRY_IBPB
++	ALTERNATIVE_3 "",						\
++		      CALL_ZEN_UNTRAIN_RET, X86_FEATURE_UNRET,		\
++		      "call entry_ibpb", X86_FEATURE_ENTRY_IBPB,	\
++		      __stringify(RESET_CALL_DEPTH), X86_FEATURE_CALL_DEPTH
++#endif
++.endm
++
++.macro UNTRAIN_RET_FROM_CALL
++#if defined(CONFIG_CPU_UNRET_ENTRY) || defined(CONFIG_CPU_IBPB_ENTRY) || \
++	defined(CONFIG_X86_FEATURE_CALL_DEPTH)
++	ANNOTATE_UNRET_END
++	ALTERNATIVE_3 "",						\
++		      CALL_ZEN_UNTRAIN_RET, X86_FEATURE_UNRET,		\
++		      "call entry_ibpb", X86_FEATURE_ENTRY_IBPB,	\
++		      __stringify(RESET_CALL_DEPTH_FROM_CALL), X86_FEATURE_CALL_DEPTH
++#endif
++.endm
++
++
++.macro CALL_DEPTH_ACCOUNT
++#ifdef CONFIG_CALL_DEPTH_TRACKING
++	ALTERNATIVE "",							\
++		    __stringify(ASM_INCREMENT_CALL_DEPTH), X86_FEATURE_CALL_DEPTH
+ #endif
+ .endm
  
--#define GEN(reg) EXPORT_THUNK(reg)
-+#define GEN(reg) __EXPORT_THUNK(__x86_indirect_thunk_ ## reg)
-+#include <asm/GEN-for-each-reg.h>
-+#undef GEN
+@@ -214,6 +312,17 @@ extern void (*x86_return_thunk)(void);
+ #define x86_return_thunk	(&__x86_return_thunk)
+ #endif
+ 
++#ifdef CONFIG_CALL_DEPTH_TRACKING
++extern void __x86_return_skl(void);
++
++static inline void x86_set_skl_return_thunk(void)
++{
++	x86_return_thunk = &__x86_return_skl;
++}
++#else
++static inline void x86_set_skl_return_thunk(void) {}
++#endif
++
+ #ifdef CONFIG_RETPOLINE
+ 
+ #define GEN(reg) \
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index a982431..13afdbb 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -110,6 +110,9 @@ static void __used common(void)
+ 	OFFSET(TSS_sp2, tss_struct, x86_tss.sp2);
+ 
+ 	OFFSET(X86_top_of_stack, pcpu_hot, top_of_stack);
++#ifdef CONFIG_CALL_DEPTH_TRACKING
++	OFFSET(X86_call_depth, pcpu_hot, call_depth);
++#endif
+ 
+ 	if (IS_ENABLED(CONFIG_KVM_INTEL)) {
+ 		BLANK();
+diff --git a/arch/x86/kvm/svm/vmenter.S b/arch/x86/kvm/svm/vmenter.S
+index 723f853..09eacf1 100644
+--- a/arch/x86/kvm/svm/vmenter.S
++++ b/arch/x86/kvm/svm/vmenter.S
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #include <linux/linkage.h>
+ #include <asm/asm.h>
++#include <asm/asm-offsets.h>
+ #include <asm/bitsperlong.h>
+ #include <asm/kvm_vcpu_regs.h>
+ #include <asm/nospec-branch.h>
+diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
+index 073289a..1e79ecc 100644
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -5,9 +5,11 @@
+ #include <asm/dwarf2.h>
+ #include <asm/cpufeatures.h>
+ #include <asm/alternative.h>
++#include <asm/asm-offsets.h>
+ #include <asm/export.h>
+ #include <asm/nospec-branch.h>
+ #include <asm/unwind_hints.h>
++#include <asm/percpu.h>
+ #include <asm/frame.h>
+ 
+ 	.section .text.__x86.indirect_thunk
+@@ -140,3 +142,32 @@ __EXPORT_THUNK(zen_untrain_ret)
+ EXPORT_SYMBOL(__x86_return_thunk)
+ 
+ #endif /* CONFIG_RETHUNK */
 +
 +#ifdef CONFIG_CALL_DEPTH_TRACKING
-+.macro CALL_THUNK reg
-+	.align RETPOLINE_THUNK_SIZE
 +
-+SYM_INNER_LABEL(__x86_indirect_call_thunk_\reg, SYM_L_GLOBAL)
-+	UNWIND_HINT_EMPTY
++	.align 64
++SYM_FUNC_START(__x86_return_skl)
 +	ANNOTATE_NOENDBR
-+
-+	CALL_DEPTH_ACCOUNT
-+	POLINE \reg
++	/* Keep the hotpath in a 16byte I-fetch */
++	shlq	$5, PER_CPU_VAR(pcpu_hot + X86_call_depth)
++	jz	1f
 +	ANNOTATE_UNRET_SAFE
 +	ret
 +	int3
-+.endm
++1:
++	.rept	16
++	ANNOTATE_INTRA_FUNCTION_CALL
++	call	2f
++	int3
++2:
++	.endr
++	add	$(8*16), %rsp
 +
-+	.align RETPOLINE_THUNK_SIZE
-+SYM_CODE_START(__x86_indirect_call_thunk_array)
++	CREDIT_CALL_DEPTH
 +
-+#define GEN(reg) CALL_THUNK reg
- #include <asm/GEN-for-each-reg.h>
- #undef GEN
- 
-+	.align RETPOLINE_THUNK_SIZE
-+SYM_CODE_END(__x86_indirect_call_thunk_array)
-+
-+#define GEN(reg) __EXPORT_THUNK(__x86_indirect_call_thunk_ ## reg)
-+#include <asm/GEN-for-each-reg.h>
-+#undef GEN
-+
-+.macro JUMP_THUNK reg
-+	.align RETPOLINE_THUNK_SIZE
-+
-+SYM_INNER_LABEL(__x86_indirect_jump_thunk_\reg, SYM_L_GLOBAL)
-+	UNWIND_HINT_EMPTY
-+	ANNOTATE_NOENDBR
-+	POLINE \reg
 +	ANNOTATE_UNRET_SAFE
 +	ret
 +	int3
-+.endm
++SYM_FUNC_END(__x86_return_skl)
 +
-+	.align RETPOLINE_THUNK_SIZE
-+SYM_CODE_START(__x86_indirect_jump_thunk_array)
-+
-+#define GEN(reg) JUMP_THUNK reg
-+#include <asm/GEN-for-each-reg.h>
-+#undef GEN
-+
-+	.align RETPOLINE_THUNK_SIZE
-+SYM_CODE_END(__x86_indirect_jump_thunk_array)
-+
-+#define GEN(reg) __EXPORT_THUNK(__x86_indirect_jump_thunk_ ## reg)
-+#include <asm/GEN-for-each-reg.h>
-+#undef GEN
-+#endif
- /*
-  * This function name is magical and is used by -mfunction-return=thunk-extern
-  * for the compiler to generate JMPs to it.
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 0df391e..ad8cb7f 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -417,7 +417,10 @@ static void emit_indirect_jump(u8 **pprog, int reg, u8 *ip)
- 		EMIT2(0xFF, 0xE0 + reg);
- 	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
- 		OPTIMIZER_HIDE_VAR(reg);
--		emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
-+		if (cpu_feature_enabled(X86_FEATURE_CALL_DEPTH))
-+			emit_jump(&prog, &__x86_indirect_jump_thunk_array[reg], ip);
-+		else
-+			emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
- 	} else {
- 		EMIT2(0xFF, 0xE0 + reg);	/* jmp *%\reg */
- 		if (IS_ENABLED(CONFIG_RETPOLINE) || IS_ENABLED(CONFIG_SLS))
++#endif /* CONFIG_CALL_DEPTH_TRACKING */
