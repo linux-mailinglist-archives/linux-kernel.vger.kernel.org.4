@@ -2,191 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50912600BE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E82600BDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 12:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbiJQKD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 06:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
+        id S229956AbiJQKCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 06:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiJQKDR (ORCPT
+        with ESMTP id S230491AbiJQKCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 06:03:17 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68105E662
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:03:15 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id g28so10607017pfk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 03:03:15 -0700 (PDT)
+        Mon, 17 Oct 2022 06:02:49 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7914E5E66E;
+        Mon, 17 Oct 2022 03:02:42 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id t25so6281311qkm.2;
+        Mon, 17 Oct 2022 03:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8UaAzKyNq9nnRse/+cCAjXKMYZQLGLVwCydbfKuvY54=;
-        b=VrvnK+3ZAIN1ufgfpHItfJNANC6LgdnWBLQHxtEuLb3d/QY/jQsOlmkAnaHrqZQFdp
-         T01CIpbq34QT1DYa9+H26ykD1hvXuToNZiWwhoPn2R6uffGCuCmxeNNQ2NieeJeTgFnG
-         W9J6HeuQjI8eLQFBZ5S+JewdaeEBnrIi4Fh7B4G3eOgSVp1bnWq5656oMR6gfXKTJ7+U
-         eaBGZMoQbTPvfFTvLQWaP0RxBrfZ5W0Gjv0kdgGa7iC+3Lav++wgaHN0qYbzvrpLz1Os
-         3vfvzVbfLwsg5qiZh50Mo3cG9qL6MtaFFTctAoq16PlUNgVnDw2e/QvnTSMnvefhwYsn
-         R7xQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wSknhvKCk5o/x9TVU4GalEKfHnOaonV1t5oNy9vyfok=;
+        b=G/qIaYn3+KtKvU4aX0FC+DrmZaCntcukw4rZS59KG8ePbLndlLp0zisIM54/rq3Vud
+         Zof0QCUOVZoy4XNPsxVd85w39DekR5plIf2/TP4f8xW27Rkw39riiQEN5UMFT0JD77BQ
+         /yp/b0FouEcOIypF6DnV4l1s5yCb8hmBxm1bRavzEfmOzauV3Wck1ONW5glvKXx4IS9M
+         dT2CtcgiHr+4pxqTxYKE/oumU6plcxBR8TGF5I44QlElOyijEWxGikXsP2qX5jNrNIdR
+         Yyfn83vOzTRAPuI9w0NYUlVT9dcmj4sXipr2+Isgl+iPXGh3c2xqRB1j8P2gsNPhZGvS
+         Varw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8UaAzKyNq9nnRse/+cCAjXKMYZQLGLVwCydbfKuvY54=;
-        b=Hr10H+a8Xkl/YuVjioAHfuULnyhj9qnfZDBPV+Ir713fksfokM417tufuyOBriZKu/
-         sNr6kPxtfBNnaM0UGL36qAy8gwEyDQaxRl+918dtHgbrDcdHPL6WPn2uMvyW4v2yv8Rx
-         8nZXF5GTOsMQvm4xPFahyH9WAFDfLtQrjMJDu6WXeCYm4z7m2eO5TCZIdQXTLRVRjAKX
-         5VQGneepFs4CBnLMilTKyKGoYI2SRbxaY+yMQa9MOxXzD669AHoXtwh/4YmGwb9IMol9
-         pcqHMBmPjC+mUOqv5yxTRLVohOoWggDdsiJf1QaI/a9pNKLU2zaDxyI0Zv6R/O7fqSjA
-         XPHQ==
-X-Gm-Message-State: ACrzQf1SUJ5MdZ91GxqggjC4dPOR4G418xYqV7vSU6fsGshlrKcSDxgN
-        R5QTI1DkqsH0DuCxo7eiaFXnukspkvunDw==
-X-Google-Smtp-Source: AMsMyM6qZa2HnPhyKKOx8pZXzS74QOIoLa7aYXY+beudzq7U2papGMTBBB3rJGRMsd+XaW/aDQBZ/Q==
-X-Received: by 2002:a05:6a00:15c2:b0:565:bc96:1c75 with SMTP id o2-20020a056a0015c200b00565bc961c75mr11715950pfu.23.1666000995277;
-        Mon, 17 Oct 2022 03:03:15 -0700 (PDT)
-Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id i18-20020a056a00005200b00561b02e3118sm6662744pfk.106.2022.10.17.03.03.14
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wSknhvKCk5o/x9TVU4GalEKfHnOaonV1t5oNy9vyfok=;
+        b=0SW5EPRNQzooCEEVrzXyBXu5VDDKQ5XnRY/H4UIrf7vWNEY/XP1STmkQCUBdBpbzwC
+         bJF31C89ntnNeJbOc1Wwu6+gp6Fic3q9LA+PVU7KX7Gglfl4pn1ncFSBys4qZN+iYa79
+         Z5rxSZ2Ah8Gua5Torpf0pljF6YkPATLS55U5Dgmqhv57J/mneyDu9qbSijLfcT+F2hfG
+         4Go2dy1kKYJrm7l99JGorEUBK2tUtznrs8DN/8p2qve9/rlfjBrg8v6yvGeOAoTjcjwH
+         wl/IrLmIuQ1aKgAQafhgYEOtt39Aw6fu3CHOdU0I8H2V31rggun8RmX9K8uM0TWHjdY+
+         Qr4w==
+X-Gm-Message-State: ACrzQf2ZowwgvaFYLVDVWH38SehDYAWqRB63kRvbthU1LZo1D3I50FmV
+        iIfG3dC82iInaRmHnX5EHAo=
+X-Google-Smtp-Source: AMsMyM4s/zCsc0XAZzflO7hzuHB1nV0SwwdXmx2a7jjD4PzpLthggqUrBv7HFn1Vu201L3hLzmozmw==
+X-Received: by 2002:a05:620a:4306:b0:6d4:1a11:38ad with SMTP id u6-20020a05620a430600b006d41a1138admr6806068qko.422.1666000961201;
+        Mon, 17 Oct 2022 03:02:41 -0700 (PDT)
+Received: from p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de (p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de. [2003:f6:ef03:6f00:5de6:a4d0:d791:ed01])
+        by smtp.gmail.com with ESMTPSA id f14-20020ac8464e000000b0039ad65104fasm7264788qto.12.2022.10.17.03.02.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 03:03:14 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] thermal: sysfs: Reuse cdev->max_state
-Date:   Mon, 17 Oct 2022 15:33:02 +0530
-Message-Id: <56d3dcfd92206eea6164ed26e40ae307c5c5219d.1666000867.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1666000867.git.viresh.kumar@linaro.org>
-References: <cover.1666000867.git.viresh.kumar@linaro.org>
+        Mon, 17 Oct 2022 03:02:40 -0700 (PDT)
+Message-ID: <886e20eaf53870447f397bd5e7242cc0bdde3867.camel@gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: iio: temperature: ltc2983: support
+ more parts
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Date:   Mon, 17 Oct 2022 12:04:02 +0200
+In-Reply-To: <f003f3ffa86fbeae6898c23638a4b0e1228a8657.camel@gmail.com>
+References: <20221014123724.1401011-1-demonsingur@gmail.com>
+         <20221014123724.1401011-3-demonsingur@gmail.com>
+         <28c88be7-a416-3612-3e13-5346a6e92565@linaro.org>
+         <f003f3ffa86fbeae6898c23638a4b0e1228a8657.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the cooling device structure stores the max_state value, reuse
-it and drop max_states from struct cooling_dev_stats.
+On Mon, 2022-10-17 at 11:38 +0200, Nuno S=C3=A1 wrote:
+> Hi Krzysztof,
+>=20
+> As I wrote the original bindings, let me reply to some of your
+> points...
+>=20
+>=20
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/thermal/thermal_sysfs.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+Just realized now there were already some replies (forgot to 'lei up'
+before replying...)
 
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index bd7596125461..febf9e76c440 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -661,7 +661,6 @@ struct cooling_dev_stats {
- 	spinlock_t lock;
- 	unsigned int total_trans;
- 	unsigned long state;
--	unsigned long max_states;
- 	ktime_t last_time;
- 	ktime_t *time_in_state;
- 	unsigned int *trans_table;
-@@ -691,7 +690,7 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- 		goto unlock;
- 
- 	update_time_in_state(stats);
--	stats->trans_table[stats->state * stats->max_states + new_state]++;
-+	stats->trans_table[stats->state * (cdev->max_state + 1) + new_state]++;
- 	stats->state = new_state;
- 	stats->total_trans++;
- 
-@@ -725,7 +724,7 @@ time_in_state_ms_show(struct device *dev, struct device_attribute *attr,
- 	spin_lock(&stats->lock);
- 	update_time_in_state(stats);
- 
--	for (i = 0; i < stats->max_states; i++) {
-+	for (i = 0; i <= cdev->max_state; i++) {
- 		len += sprintf(buf + len, "state%u\t%llu\n", i,
- 			       ktime_to_ms(stats->time_in_state[i]));
- 	}
-@@ -740,7 +739,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
- {
- 	struct thermal_cooling_device *cdev = to_cooling_device(dev);
- 	struct cooling_dev_stats *stats = cdev->stats;
--	int i, states = stats->max_states;
-+	int i, states = cdev->max_state + 1;
- 
- 	spin_lock(&stats->lock);
- 
-@@ -749,7 +748,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
- 	memset(stats->trans_table, 0,
- 	       states * states * sizeof(*stats->trans_table));
- 
--	for (i = 0; i < stats->max_states; i++)
-+	for (i = 0; i < states; i++)
- 		stats->time_in_state[i] = ktime_set(0, 0);
- 
- 	spin_unlock(&stats->lock);
-@@ -767,7 +766,7 @@ static ssize_t trans_table_show(struct device *dev,
- 
- 	len += snprintf(buf + len, PAGE_SIZE - len, " From  :    To\n");
- 	len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
--	for (i = 0; i < stats->max_states; i++) {
-+	for (i = 0; i <= cdev->max_state; i++) {
- 		if (len >= PAGE_SIZE)
- 			break;
- 		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u  ", i);
-@@ -777,17 +776,17 @@ static ssize_t trans_table_show(struct device *dev,
- 
- 	len += snprintf(buf + len, PAGE_SIZE - len, "\n");
- 
--	for (i = 0; i < stats->max_states; i++) {
-+	for (i = 0; i <= cdev->max_state; i++) {
- 		if (len >= PAGE_SIZE)
- 			break;
- 
- 		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u:", i);
- 
--		for (j = 0; j < stats->max_states; j++) {
-+		for (j = 0; j <= cdev->max_state; j++) {
- 			if (len >= PAGE_SIZE)
- 				break;
- 			len += snprintf(buf + len, PAGE_SIZE - len, "%8u ",
--				stats->trans_table[i * stats->max_states + j]);
-+				stats->trans_table[i * (cdev->max_state + 1) + j]);
- 		}
- 		if (len >= PAGE_SIZE)
- 			break;
-@@ -823,14 +822,10 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
- {
- 	const struct attribute_group *stats_attr_group = NULL;
- 	struct cooling_dev_stats *stats;
--	unsigned long states;
-+	/* Total number of states is highest state + 1 */
-+	unsigned long states = cdev->max_state + 1;
- 	int var;
- 
--	if (cdev->ops->get_max_state(cdev, &states))
--		goto out;
--
--	states++; /* Total number of states is highest state + 1 */
--
- 	var = sizeof(*stats);
- 	var += sizeof(*stats->time_in_state) * states;
- 	var += sizeof(*stats->trans_table) * states * states;
-@@ -843,7 +838,6 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
- 	stats->trans_table = (unsigned int *)(stats->time_in_state + states);
- 	cdev->stats = stats;
- 	stats->last_time = ktime_get();
--	stats->max_states = states;
- 
- 	spin_lock_init(&stats->lock);
- 
--- 
-2.31.1.272.g89b43f80a514
-
+- Nuno S=C3=A1
