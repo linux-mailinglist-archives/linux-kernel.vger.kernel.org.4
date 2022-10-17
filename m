@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC17D6007C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172026007C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiJQHce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S230019AbiJQHhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiJQHcb (ORCPT
+        with ESMTP id S229833AbiJQHhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:32:31 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2555A825
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:32:30 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id n9so8082730wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OYqZK+X+7VfhbaYZefIoSgPrXW7TEIiQfQ+tjE4nhzk=;
-        b=gL2CgpENxhTdZN/Vp/P8v/E9XEi4u/3smkfJa/e3A3O3MEkHOccoDj5G2yk7jGyax0
-         5ktA7yQYK9bHcwx54e0ggnb6fIOmpyTeLkRBv9YEjQjhFVfIgQmXhf+OOrMCwSlEZSuY
-         aZyRXdaElHCs7ugZV5vM3OwGnqly8JwcXDBYpaI6ubM4YDyZld67bouNIrtl78w2VRS3
-         kJ697+7kZuQNfcNWMogjtM5ohqmYhU2lJtdNd6Sz9Uq9admH55OVs23t3UviAJey4I5a
-         WpyfhjkZj24lkm7C0k/6bRghCcer+8nlhpK6IM0DamRc5OaM28+4u0LFx+sNdxVUI0ag
-         0v6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OYqZK+X+7VfhbaYZefIoSgPrXW7TEIiQfQ+tjE4nhzk=;
-        b=S23rZV2wQ5AxiiC33qF2+N2LsINqg1zhoqreiJJ7kgs2oSkzHobjj1cE6V+w1OvLE8
-         0D6C7gPfpRabJM51hAwOdhtTp+9A+3cOCRbpwEodL3swfTsPeIY7h/jITd2k5Etf4+2d
-         SAXFGJ//5teyhMPD0uUgVz6nbcdT5F/BxEePuKook/K27N7ze1DvUP92oBUwLotH2Y4N
-         y1E/wadJitszpfQKzwDcQ7y0CV4e0YvfNs6k8fG5+uV2njMlj5skpMd/C4EAVUPKUliO
-         2703yd8RlCI2EqJ8nKwCFhkZd+PyXkk3y5xITc/E/7YDxK+ZUZO4l32Sbqny1XCNJ3E1
-         7lWQ==
-X-Gm-Message-State: ACrzQf2wGKLPVD93H2AY9KWOJJdHt+RGY8vwxifIbr0xjuszRdCGB3yJ
-        nv56+C2Bv/K1uTAWby4IZ8+mVQ==
-X-Google-Smtp-Source: AMsMyM6MqpLTz8nOC4oZ3Dvxr7F+0FYg/5vf5pL0CtCBmLRo39eVBK7qfmLPr/rGD1XlesqAU4UmyA==
-X-Received: by 2002:a05:600c:6885:b0:3c2:9da1:5034 with SMTP id fn5-20020a05600c688500b003c29da15034mr6319611wmb.38.1665991949097;
-        Mon, 17 Oct 2022 00:32:29 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9? ([2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9])
-        by smtp.googlemail.com with ESMTPSA id n4-20020adf8b04000000b00231893bfdc7sm8145027wra.2.2022.10.17.00.32.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 00:32:28 -0700 (PDT)
-Message-ID: <a1eaa937-dcfe-52d0-954b-3aaecedc1aa6@linaro.org>
-Date:   Mon, 17 Oct 2022 09:32:27 +0200
+        Mon, 17 Oct 2022 03:37:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A35A3DE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:37:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D32E1B80F52
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 734B6C433D7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665992249;
+        bh=+5A1av+6MnMOMcMrSEXVxrOm6Gs3Za7niSjGLgaRaoA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aTKhrFZRJllPH5LJZnPbhwVrb3NyyPV16YWHpco4uplbVb77Q9b9SmBLy60I8AqqK
+         f23O7tGvxDEbgxqlB1bi3Wa4y4nYDonf0git3ImYxxf7Y2Tbj+SKcf0ht70dlu9zcU
+         8G+7hVyPV41SQIhM6jfv6Er3PnY3yWLky7TMyhC8kRUnicow4486zgyn0VKZzdgClu
+         XOP+FDw2gHpRnqj/yhraIfcOz3b7zmUsBeaIlivlxfo/VECXZw+yAzJQOtyuZNoO1W
+         o8rQV8W3lNN4LauJqlV03TXM6MEEZMCNvDhKGDxOr2NzD8SKINKdIr3Y+yEmf7s8j1
+         a9zgPdjx+mFzA==
+Received: by mail-ed1-f51.google.com with SMTP id m16so14784936edc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:37:29 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0G01//r6XZNTgaGli7cE/w0O6mqaj35FWQPRnlivVtMeN+8stZ
+        Ls8BhRREnv0m3rD+kYNoN3yl92bTcvQvBu7tEDg=
+X-Google-Smtp-Source: AMsMyM4f4vwixo4JyVz7ksqp1i8sB0ECUqnrO8JC8nLqKPuUwCS+N5Ao4ZAhXJh/30TDBqiHpEZl8nUhVbn7kjxV/8A=
+X-Received: by 2002:aa7:d4d9:0:b0:45c:7eae:d8d8 with SMTP id
+ t25-20020aa7d4d9000000b0045c7eaed8d8mr9113622edr.254.1665992247623; Mon, 17
+ Oct 2022 00:37:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal: k3_j72xx_bandgap: Fix the debug print message
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, rui.zhang@intel.com, amitk@kernel.org
-Cc:     bb@ti.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221010034126.3550-1-j-keerthy@ti.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221010034126.3550-1-j-keerthy@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20221017022330.2383060-1-chenhuacai@loongson.cn> <67d9acd0-692f-95d4-2c92-4e43e1d0100c@loongson.cn>
+In-Reply-To: <67d9acd0-692f-95d4-2c92-4e43e1d0100c@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 17 Oct 2022 15:37:15 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H54TeCwuUu+pGyGUDgy3_k1eCA1hX56-ZrTuk2_WRiFxQ@mail.gmail.com>
+Message-ID: <CAAhV-H54TeCwuUu+pGyGUDgy3_k1eCA1hX56-ZrTuk2_WRiFxQ@mail.gmail.com>
+Subject: Re: [PATCH V2] LoongArch: Add unaligned access support
+To:     Jinyang He <hejinyang@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,27 +66,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/2022 05:41, Keerthy wrote:
-> The debug print message to check the workaround applicability is inverted.
-> Fix the same.
-> 
-> Fixes: ffcb2fc86eb7 ("thermal: k3_j72xx_bandgap: Add the bandgap driver support")
-> Reported-by: Bryan Brattlof <bb@ti.com>
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> ---
+Hi, Jinyang,
 
-Applied, thanks
+On Mon, Oct 17, 2022 at 12:22 PM Jinyang He <hejinyang@loongson.cn> wrote:
+>
+> Hi, Huacai,
+>
+>
+> On 2022/10/17 =E4=B8=8A=E5=8D=8810:23, Huacai Chen wrote:
+> > [...]
+> > +     default:
+> > +             panic("unexpected fd '%d'", fd);
+> Due to the optimization of gcc, the panic() is unused actually and leave
+> the symbol 'read/write_fpr' in vmlinux. Maybe we can use unreachable() an=
+d
+>
+> always_inline.
+Seems impossible, I have tried __always_inline() and BUILD_BUG(), then
+BUILD_BUG() is triggered, because the reg-number is not a compile time
+constant.
 
-BTW, Kheerty, if you have time is it possible to convert the 
-k3_bandgap.c with the pre-computed factors like the k3_j72xx_bandgap.c, 
-so both can be merged ?
+>
+> > [...]
+> > +
+> > +fault:
+> > +     /* roll back jump/branch */
+> > +     regs->csr_era =3D origpc;
+> > +     regs->regs[1] =3D origra;
+>
+> I'm not sure where the csr_era and regs[1] was damaged...
+Yes, seems not be damaged.
 
+>
+> > [...]
+> >
+> > +/*
+> > + * unsigned long unaligned_read(void *addr, void *value, unsigned long=
+ n, bool sign)
+> > + *
+> > + * a0: addr
+> > + * a1: value
+> > + * a2: n
+> > + * a3: sign
+> > + */
+> > +SYM_FUNC_START(unaligned_read)
+> > +     beqz    a2, 5f
+> > +
+> > +     li.w    t1, 8
+> IMHO we can avoid the constant reg t1.
+OK, thanks.
 
+> > +     li.w    t2, 0
+> > +
+> > +     addi.d  t0, a2, -1
+> > +     mul.d   t1, t0, t1
+> > +     add.d   a0, a0, t0
+> > +
+> > +     beq     a3, zero, 2f
+> beqz
+OK, thanks.
 
+> > +1:   ld.b    t3, a0, 0
+> > +     b       3f
+> > +
+> > +2:   ld.bu   t3, a0, 0
+> > +3:   sll.d   t3, t3, t1
+> > +     or      t2, t2, t3
+> > +     addi.d  t1, t1, -8
+> > +     addi.d  a0, a0, -1
+> > +     addi.d  a2, a2, -1
+> > +     bgt     a2, zero, 2b
+> bgtz
+> > +4:   st.d    t2, a1, 0
+> > +
+> > +     move    a0, a2
+> > +     jr      ra
+> > +
+> > +5:   li.w    a0, -EFAULT
+> > +     jr      ra
+> > +
+> > +     fixup_ex 1, 6, 1
+> > +     fixup_ex 2, 6, 0
+> > +     fixup_ex 4, 6, 0
+> > +SYM_FUNC_END(unaligned_read)
+> > +
+> > +/*
+> > + * unsigned long unaligned_write(void *addr, unsigned long value, unsi=
+gned long n)
+> > + *
+> > + * a0: addr
+> > + * a1: value
+> > + * a2: n
+> > + */
+> > +SYM_FUNC_START(unaligned_write)
+> > +     beqz    a2, 3f
+> > +
+> > +     li.w    t0, 0
+> > +1:   srl.d   t1, a1, t0
+> > +2:   st.b    t1, a0, 0
+> > +     addi.d  t0, t0, 8
+> > +     addi.d  a2, a2, -1
+> > +     addi.d  a0, a0, 1
+> > +     bgt     a2, zero, 1b
+> bgtz
+OK, thanks.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> > +
+> > +     move    a0, a2
+> > +     jr      ra
+> > +
+> > +3:   li.w    a0, -EFAULT
+> > +     jr      ra
+> > +
+> > +     fixup_ex 2, 4, 1
+> > +SYM_FUNC_END(unaligned_write)
+>
+> Thanks,
+>
+> Jinyang
+>
