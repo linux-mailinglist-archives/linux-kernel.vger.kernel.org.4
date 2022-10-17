@@ -2,201 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A986B60164F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF04601658
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiJQSaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S230037AbiJQSdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiJQSaa (ORCPT
+        with ESMTP id S229908AbiJQSdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:30:30 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAA96919F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:27 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id q19so17285930edd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ygTaFM2xbm4f+3CnWyuW6YhAYiSOprMyGPvCYkz/T4=;
-        b=bcwiVIzGS1AnE11FxBrC4EJI4yYIXpkDDvkXNjOzLBOrdPpftEdG/bk1MmdY7yaumu
-         bWJxNRX1dAceXkrG0vUNchvTHH0sYHv7SEZ2IxlUVbAYeo2h4h+5N80qnvb5Q52i+R7y
-         NAdH8FgsQ1Diyv2AYEdi5cu0+xioeo6M/nsUCPx6UqIh0aoWwb5UVQBv57KG+7zZUQe+
-         wOSPUzlKQAcKw9VLG+DoxnJI3Z53He7V8zzEOJw+IHiTaDBp5yY6XmCAGHN6T6XyjSyz
-         TDWPqnb03lh1ftWgeXwnMWw4NdDLDvfNABAVUJgtmgKFy5UbeiZHUpqrtmvikAe4o3Yt
-         EQhA==
+        Mon, 17 Oct 2022 14:33:05 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8419774E06;
+        Mon, 17 Oct 2022 11:33:04 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id w196so13066755oiw.8;
+        Mon, 17 Oct 2022 11:33:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ygTaFM2xbm4f+3CnWyuW6YhAYiSOprMyGPvCYkz/T4=;
-        b=iXUg5Ibt3YUsoNm/TZa+3V1FR8aQcZ/7DASHy65c5FDTEaBFV6dW/cfGFDlqukNKlD
-         GIN3zXRamI5465DjMZihbKI4U3UucEebIqwvd2hBZ+Az/W0syoiTRuocUxtlw0RRgqUn
-         Uq+/MTiu3P5y1H/a4dpwDeB5PcPBzHCnDv4vjsNeH61bYirlU1COOD37PPm7LEQcoZ8W
-         SfJxOHcHHHiRA1eUm3adZL79f8Km/81FO9+2mvi/4qf1k7oMKVIX52ScHjZV0ZxcOetU
-         NroPdqaOAbjaI/ukGviqb6jxq30m6/K5jSiNq3/XD7Un8ZqPPFEALk6oz2N6LPvrVtZy
-         xnKw==
-X-Gm-Message-State: ACrzQf1ZSI9ftQqQ4jUA/mhB2GcOsXElK7+Lcphb617zhUKWfDLb81t5
-        vYyhtR5U1AsmPm/G4IAXo0g=
-X-Google-Smtp-Source: AMsMyM5sbV5SFly/AwumCvNfkgH6wggl0rXYmoTZ/ws/1/9UFfhTbgh5LuL4LohxUTpqs4A7xUl2Hw==
-X-Received: by 2002:aa7:cd4f:0:b0:458:6077:c3ac with SMTP id v15-20020aa7cd4f000000b004586077c3acmr11616385edw.32.1666031424966;
-        Mon, 17 Oct 2022 11:30:24 -0700 (PDT)
-Received: from [192.168.2.4] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id b22-20020a170906d11600b0078d2d5b90f4sm6481422ejz.32.2022.10.17.11.30.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 11:30:24 -0700 (PDT)
-Message-ID: <c4bf7723-b3b8-0955-5ba3-e4d05bdc835a@gmail.com>
-Date:   Mon, 17 Oct 2022 20:30:23 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=49WpkNDVrip5fI/9/zV16EJNvnec5IuQPlP82K1xqzM=;
+        b=pgBYPpCVh2KfWlqI/x+Yjp/ljtbf8TGi5uRZ40ho1nT6CjCFZXE68hPtXKjqnt3PFT
+         kkoCJ+rkmELGhGyCGHTBWF4JN6fI0VKe2AM40QIQmub7z0u2sGKYWij5+0CmuzS1Yi17
+         A+kEaShjpjVfd5ieS9KkTcmReWI9+E2ERE9ilBzp3NyZiOehZBWDR5APb6bJI+HYy4Kx
+         hYWmwU0jFAuKQRwICUfA2FWp0QIGJS6nRlyl29k9Z4o2xXzzzj5W1MjdmYvibkpCpUBi
+         GnQ2KarTKL/8TGGkLLk4lJk7BfxQwzmPkuc8MroqF5bJw/CAS0G+teWo05LXOGAWVGEM
+         3BGQ==
+X-Gm-Message-State: ACrzQf2tZ8jazulz5wcem8PJ9+N4GCBkPJIuSGIq0upWdUAcjgcGfNyM
+        Fn5Qz0sSc7XFZJ4UP17BTw==
+X-Google-Smtp-Source: AMsMyM6wpiGBJ7Nr9Jr0ug/bqmYluBy4dI7rW6n3Mn9v3PbpUw14yNsxn+X7CkEsHTMFgFuOPfRd1Q==
+X-Received: by 2002:a05:6808:1301:b0:355:2687:a035 with SMTP id y1-20020a056808130100b003552687a035mr5339009oiv.162.1666031583729;
+        Mon, 17 Oct 2022 11:33:03 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x8-20020a056830408800b0065c2c46077dsm4972675ott.67.2022.10.17.11.33.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 11:33:03 -0700 (PDT)
+Received: (nullmailer pid 2253317 invoked by uid 1000);
+        Mon, 17 Oct 2022 18:33:03 -0000
+Date:   Mon, 17 Oct 2022 13:33:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Richard Acayan <mailingradian@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/5] dt-bindings: dma: qcom: gpi: use sm6350 fallback
+Message-ID: <166603158304.2253260.12930815520486063893.robh@kernel.org>
+References: <20221015140447.55221-1-krzysztof.kozlowski@linaro.org>
+ <20221015140447.55221-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [BUG] [PATCH] drm/rockchip: use generic fbdev setup
-To:     Heiko Stuebner <heiko@sntech.de>, John Keeping <john@metanate.com>
-Cc:     dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <20211029115014.264084-1-john@metanate.com>
- <d814394b-86c3-beb1-ddd4-04c65004f138@gmail.com> <Y00o3M7SKAB/w9sW@donbot>
- <2220890.jZfb76A358@phil>
-Content-Language: en-US
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <2220890.jZfb76A358@phil>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221015140447.55221-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/17/22 13:29, Heiko Stuebner wrote:
-> Am Montag, 17. Oktober 2022, 12:05:16 CEST schrieb John Keeping:
->> Hi Johan,
->>
->> On Mon, Oct 17, 2022 at 10:11:32AM +0200, Johan Jonker wrote:
->>> Your patch contribution causes a kernel panic on MK808 with Rockchip rk3066a SoC.
->>> Would you like to contribute to fix this issue?
->>> The assumtion that drm_fbdev_generic_setup() does what rockchip_drm_fbdev_init did is not true!
->>> A revert makes it work again.
->>
-
->> It looks like there are 3 different ways to end up with -ENOMEM here,
->> can you track down whether you're hitting one of the cases in
->> rockchip_gem_prime_vmap() or if it's the iosys_map_is_null case in
->> drm_gem_vmap()?
-
-It looks like it comes from rockchip_gem_prime_vmap() second return (2).
-
-====
-
-
-
-int rockchip_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map)
-{
-	struct rockchip_gem_object *rk_obj = to_rockchip_obj(obj);
-
-	if (rk_obj->pages) {
-		void *vaddr = vmap(rk_obj->pages, rk_obj->num_pages, VM_MAP,
-				  pgprot_writecombine(PAGE_KERNEL));
-		if (!vaddr) {
-			printk("FBDEV rockchip_gem_prime_vmap 1");
-			return -ENOMEM;
-		}
-		iosys_map_set_vaddr(map, vaddr);
-		return 0;
-	}
-
-	if (rk_obj->dma_attrs & DMA_ATTR_NO_KERNEL_MAPPING) {
-
-////////////////
-
-		printk("FBDEV rockchip_gem_prime_vmap 2");
-
-////////////////
-		return -ENOMEM;
-	}
-	iosys_map_set_vaddr(map, rk_obj->kvaddr);
-
-	return 0;
-}
-
-====
-
-[    7.678392] [drm:drm_client_modeset_probe] connector 39 enabled? yes
-[    7.678435] [drm:drm_client_modeset_probe] Not using firmware configuration
-[    7.678465] [drm:drm_client_modeset_probe] looking for cmdline mode on connector 39
-[    7.678494] [drm:drm_client_modeset_probe] looking for preferred mode on connector 39 0
-[    7.678521] [drm:drm_client_modeset_probe] found mode 1920x1080
-[    7.678545] [drm:drm_client_modeset_probe] picking CRTCs for 1920x1080 config
-[    7.678585] [drm:drm_client_modeset_probe] desired mode 1920x1080 set on crtc 35 (0,0)
-[    7.801673] Console: switching to colour frame buffer device 240x67
-
-
-[    7.811047] FBDEV rockchip_gem_prime_vmap 2
-
-
-[    7.811071] ------------[ cut here ]------------
-[    7.811084] WARNING: CPU: 0 PID: 35 at drivers/gpu/drm/drm_fb_helper.c:471 drm_fb_helper_damage_work+0x138/0x3b4
-[    7.811198] rockchip-drm display-subsystem: Damage blitter failed: ret=-12
-[    7.811219] Modules linked in:
-[    7.811244] CPU: 0 PID: 35 Comm: kworker/0:4 Not tainted 6.0.0-next-20221013+ #46
-[    7.811281] Hardware name: Rockchip (Device Tree)
-[    7.811300] Workqueue: events drm_fb_helper_damage_work
-[    7.811352] Backtrace: 
-[    7.811370]  dump_backtrace from show_stack+0x20/0x24
-[    7.811431]  r7:000001d7 r6:00000009 r5:c0b2bc60 r4:60000013
-[    7.811444]  show_stack from dump_stack_lvl+0x48/0x54
-[    7.811512]  dump_stack_lvl from dump_stack+0x18/0x1c
-[    7.811580]  r5:c0586064 r4:c0b6374c
-[    7.811590]  dump_stack from __warn+0xdc/0x154
-[    7.811677]  __warn from warn_slowpath_fmt+0xa4/0xd8
-[    7.811740]  r7:000001d7 r6:c0b6374c r5:c1004ec8 r4:c0b639e8
-[    7.811750]  warn_slowpath_fmt from drm_fb_helper_damage_work+0x138/0x3b4
-[    7.811821]  r9:ef7cf105 r8:c15dfc00 r7:fffffff4 r6:c200b490 r5:c1004ec8 r4:c200b494
-[    7.811833]  drm_fb_helper_damage_work from process_one_work+0x230/0x518
-[    7.811912]  r10:c110d140 r9:ef7cf105 r8:00000000 r7:ef7cf100 r6:ef7cbf00 r5:c200e300
-[    7.811927]  r4:c200b494
-[    7.811936]  process_one_work from worker_thread+0x54/0x554
-[    7.811991]  r10:ef7cbf00 r9:00000008 r8:c1003d40 r7:ef7cbf1c r6:c200e318 r5:ef7cbf00
-[    7.812006]  r4:c200e300
-[    7.812015]  worker_thread from kthread+0xe8/0x104
-[    7.812100]  r10:f0929e84 r9:c200da00 r8:c169aa80 r7:c200e300 r6:c01419e4 r5:00000000
-[    7.812114]  r4:c200d780
-[    7.812124]  kthread from ret_from_fork+0x14/0x2c
-[    7.812178] Exception stack(0xf092dfb0 to 0xf092dff8)
-[    7.812205] dfa0:                                     00000000 00000000 00000000 00000000
-[    7.812232] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    7.812255] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    7.812282]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c01491a8
-[    7.812299]  r4:c200d780 r3:00000001
-[    7.812309] ---[ end trace 0000000000000000 ]---
-[    7.812336] FBDEV rockchip_gem_prime_vmap 2
-[    7.889795] FBDEV rockchip_gem_prime_vmap 2
-[    7.890418] FBDEV rockchip_gem_prime_vmap 2
-[    7.899447] FBDEV rockchip_gem_prime_vmap 2
-[    7.905252] FBDEV rockchip_gem_prime_vmap 2
-
->>
->> I guess the memory usage increases slightly using the generic code and
->> RK3066 has less memory available.
+On Sat, 15 Oct 2022 10:04:43 -0400, Krzysztof Kozlowski wrote:
+> Several devices like SM6350, SM8150 and SC7280 are actually compatible,
+> so use one compatible fallback for all of them.
 > 
-> also rk3066 and rk3188 do not have an iommu, so rely
-> on cma allocations.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/dma/qcom,gpi.yaml | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> 
-> Heiko
-> 
-> 
+
+Acked-by: Rob Herring <robh@kernel.org>
