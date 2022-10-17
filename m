@@ -2,82 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A726004F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 03:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41EB6004F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 03:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiJQBvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 21:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S230012AbiJQBxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 21:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiJQBvU (ORCPT
+        with ESMTP id S229870AbiJQBx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 21:51:20 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73C83BC61
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:51:18 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id q9so9196525pgq.8
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O0u2/qB79DDSymMhjMNmMe7kf6mNO0BFvgwh+ZdNdWY=;
-        b=i29c64fcZ385P5gN/bC6pCEuW/uWOjN5BMPnSv425TTet9kAcW62+87LRLwptVNfSm
-         bL7KHV4KC8OvnT0u7OQ2flB6V4B90PANDqtW0kDul6OnfUOtbwQUn7eF1J7PMguHOMED
-         sYP4INZwaDGFeQ7idPAGnusGuhqiCJortJUIvJdDH+Ol9pOxw/l8d7qdBAiGRBdHrIpr
-         26CvZEYx59N2Pu8/Tp9G5Wn/6/9eq2FqYlzx4LqhBfxZwGyzO1TMrisTKuaLwERlLQxA
-         EErCBNGsG2ILHEJk6lW8WPKKm/gw/wGoOtMEi7NsPA4eJwNYhHojQxkhQYY9iZEHjb1X
-         Mtjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O0u2/qB79DDSymMhjMNmMe7kf6mNO0BFvgwh+ZdNdWY=;
-        b=pg410NAdwulOGVYWd9r/Jxe5jCbb+jzSX2azvQb1v+PH1E0tOEXFI4K/uu2/qIRXdp
-         dZGtL/LMGBZ1t0T0TkfyxsW8DJtUnNkmQQzM4dG3Olaofe6zv8FZOI2JS0SAVFcgPba0
-         GrX9tQwTX8Ss7F26vyoTlKbXbQBQR9NGOf483Zv5dmsQTAO3bWczQBv32hmBduQHo8c1
-         6nqObZ5LlG9awoNJQbDF6hwAMTyBFq3I8fJu+uJvVhy1k6Zst0SDyt94FY53CQXihRrq
-         V2hvwmZzERaoAWwN7Lc28syP2ZUbp2qI0tF8dMFiUkSj9EarBrt7psDXetZIrUfT2x72
-         hoMg==
-X-Gm-Message-State: ACrzQf1XABfZRaAxJfg2Xa0L1SSTwIo7jE3Jsyecw1l2nC5c76Quj4Ah
-        BKeneg27AakJx1OsQ64oJmhDcmEtjuY=
-X-Google-Smtp-Source: AMsMyM5vViC/nHuZEYX6WRA8n+EnpFuattZzIjESrObM8WLhJB5lqRBuOhsJkd46jBXsztGXBam/LQ==
-X-Received: by 2002:a63:d512:0:b0:46a:ff05:ce8c with SMTP id c18-20020a63d512000000b0046aff05ce8cmr8876870pgg.292.1665971478234;
-        Sun, 16 Oct 2022 18:51:18 -0700 (PDT)
-Received: from [30.221.129.18] ([47.246.101.50])
-        by smtp.gmail.com with ESMTPSA id u2-20020a17090341c200b0017f7bef8cfasm5327349ple.281.2022.10.16.18.51.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 18:51:17 -0700 (PDT)
-Message-ID: <06a7f382-5eaa-9489-3c28-aa4bfb804327@gmail.com>
-Date:   Mon, 17 Oct 2022 09:51:14 +0800
+        Sun, 16 Oct 2022 21:53:29 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C1A3BC61;
+        Sun, 16 Oct 2022 18:53:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MrKlS2mrBz4x1F;
+        Mon, 17 Oct 2022 12:53:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665971604;
+        bh=0OR0nXzD9x0ZroKDnzMD6TDy4+18UcnBQKFA5cUXOlQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ld7FQRoOjaf3zVFEMcZwFw05R/BRr7Rha9jSxpco5K/H0/bnreql+ZsEZ6NpjwT+/
+         zZTS8VR/ge49d2bEOrqCXNgnBiA6YmR7Q+dEMBhzGwCw3pBQGoLij+IL3Y4BFbR3TS
+         ff0D/jgh8d1GsE6VuvmmvIF06AAKSxAbA0uMesfRLGUAfdjCjSXJfi7sCeCqHQIdZC
+         YbbS6tdyarR9IihsQU9ksA0EzeSczf0pZh208ARuM70X5cS8tT5L8klJx1c7DFzMMx
+         ZX0U4R+gGyvnz0ySRwKEnKvxIdYv5MaDdOwzNc/cwXGaVYBIkXbBPfzJPNtGkXoTnw
+         X10CW7yT1o6gw==
+Date:   Mon, 17 Oct 2022 12:53:22 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: stats for 6.1-rc1 (was: Linux 6.1-rc1)
+Message-ID: <20221017125322.47702cc7@canb.auug.org.au>
+In-Reply-To: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
+References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.3
-Subject: Re: [Ocfs2-devel] [PATCH] ocfs2: reflink deadlock when clone file to
- the same directory simultaneously
-To:     Andrew Morton <akpm@linux-foundation.org>, Gang He <ghe@suse.com>
-Cc:     linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com
-References: <20210729110230.18983-1-ghe@suse.com>
- <5821fd0f-2018-dc1b-a5c0-f948a7debff4@linux.alibaba.com>
- <c7e1f0a7-e75c-d1e0-870d-dc480d070079@suse.com>
- <71608a14-58f4-dba0-d695-fee65de89192@linux.alibaba.com>
- <801438f5-655a-c708-aa25-343d54a2f11e@suse.com>
- <86e3d724-3147-ccaa-998f-0f857c575f7e@linux.alibaba.com>
- <a0a9710f-461a-99c8-92f6-a99bb11b3a4e@suse.com>
- <4ba3b404-824b-90a3-ef43-9ab6510ee073@linux.alibaba.com>
- <5a1af56c-3eab-5baf-62a3-1c98bac104ba@suse.com>
- <db7119a5-f120-cebe-42a1-dc2f64db620d@suse.com>
- <20221016162950.09db2b5f503ac87823cd1687@linux-foundation.org>
-Content-Language: en-US
-From:   Joseph Qi <jiangqi903@gmail.com>
-In-Reply-To: <20221016162950.09db2b5f503ac87823cd1687@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/splagLI+7UVs2V6W79xhZE3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,20 +52,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+--Sig_/splagLI+7UVs2V6W79xhZE3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 10/17/22 7:29 AM, Andrew Morton via Ocfs2-devel wrote:
-> On Thu, 26 Aug 2021 13:56:16 +0800 Gang He <ghe@suse.com> wrote:
-> 
->> So, I will send a new patch to fix this deadlock problem via dlmglue layer.
->> For this patch, I want to change the patch comments as a reflink 
->> improvement patch.
-> 
-> Did this ever happen?  I've been sitting on this patch for ages.
-> 
-Looked back this thread, the root cause of deadlock seems to be the
-asynchronous of fsdlm handling. So this is not a right fix.
-While for the performance improvement, I need some test data as well.
+Hi all,
 
-Thanks,
-Joseph
+As usual, the executive friendly graph is at
+http://neuling.org/linux-next-size.html :-)
+
+(No merge commits counted, next-20221004 was the first linux-next after
+the merge window opened.)
+
+Commits in v6.1-rc1 (relative to v6.0):            11537
+Commits in next-20221004:                          11354
+Commits with the same SHA1:                        10436
+Commits with the same patch_id:                      342 (1)
+Commits with the same subject line:                   20 (1)
+
+(1) not counting those in the lines above.
+
+So commits in -rc1 that were in next-20221004:     10798 93%
+
+Some breakdown of the list of extra commits (relative to next-20221004)
+in -rc1:
+
+Top ten first word of commit summary:
+
+    122 perf
+     98 drm
+     23 wifi
+     21 pci
+     21 dt-bindings
+     20 net
+     18 tracing
+     16 rtc
+     16 clk
+     16 alsa
+
+Top ten authors:
+
+     28 namhyung@kernel.org
+     23 irogers@google.com
+     21 adrian.hunter@intel.com
+     16 rostedt@goodmis.org
+     14 rodrigo.siqueira@amd.com
+     13 carsten.haitzler@arm.com
+     12 mani@kernel.org
+     11 conor.dooley@microchip.com
+      9 johannes.berg@intel.com
+      9 jason@zx2c4.com
+
+Top ten commiters:
+
+    124 acme@redhat.com
+     96 alexander.deucher@amd.com
+     33 stfrench@microsoft.com
+     32 palmer@rivosinc.com
+     30 kuba@kernel.org
+     29 rostedt@goodmis.org
+     22 davem@davemloft.net
+     20 akpm@linux-foundation.org
+     18 johannes.berg@intel.com
+     18 alexandre.belloni@bootlin.com
+
+There are also 556 commits in next-20221004 that didn't make it into
+v6.1-rc1.
+
+Top ten first word of commit summary:
+
+    163 media
+     47 apparmor
+     42 arm
+     30 thermal
+     28 fs
+     17 dt-bindings
+     16 scsi
+     15 drm
+     13 mm
+     11 soc
+
+Top ten authors:
+
+     41 hdegoede@redhat.com
+     40 john.johansen@canonical.com
+     36 willy@infradead.org
+     30 daniel.lezcano@linaro.org
+     22 paul.kocialkowski@bootlin.com
+     22 laurent.pinchart@ideasonboard.com
+     15 krzysztof.kozlowski@linaro.org
+     12 joel@jms.id.au
+     11 william.gray@linaro.org
+     11 tomi.valkeinen@ideasonboard.com
+
+Top ten commiters:
+
+    163 mchehab@kernel.org
+     47 john.johansen@canonical.com
+     42 willy@infradead.org
+     30 daniel.lezcano@linaro.org
+     23 joel@jms.id.au
+     22 almaz.alexandrovich@paragon-software.com
+     18 srinivas.kandagatla@linaro.org
+     18 akpm@linux-foundation.org
+     16 martin.petersen@oracle.com
+     15 william.gray@linaro.org
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/splagLI+7UVs2V6W79xhZE3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNMtZIACgkQAVBC80lX
+0Gwm8Qf/W/tZufRLDPsFu05LHCYG95fdMCHEV2KiWV28DoMBzMwwRThghY1DrFgN
+33dBb2TfJZUUlf10bboTfjqf9UjmbqU0XzIsLR/8ygBjJnyBkNupBJPQ7D9yDsmc
+7nIaRpf9znSe56xV0JnX3yF94T5aQPkT1fmYuRmn4GWR+v+BWAfmf4jAP2S9RdiD
+Nz+pvE2qY87ButFiby3RaVxWcPGsiqx9i8UeWa9RJoVkUL4FXFQbQt4/E0Sx/LTO
+CIbgOIHk+IixtjQgMnItUV0GS5VAYHVqTDo+eE2AzE6efaOfjUjeaK7pFleKZ6XP
+aUbUOqzTADRaxwXbmbI3SbTXfS/a3Q==
+=62VE
+-----END PGP SIGNATURE-----
+
+--Sig_/splagLI+7UVs2V6W79xhZE3--
