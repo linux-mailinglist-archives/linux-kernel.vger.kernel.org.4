@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592A8601665
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521DA601669
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiJQSe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
+        id S230463AbiJQSfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiJQSez (ORCPT
+        with ESMTP id S229973AbiJQSfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:34:55 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26314237CA;
-        Mon, 17 Oct 2022 11:34:54 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id o64so13064030oib.12;
-        Mon, 17 Oct 2022 11:34:54 -0700 (PDT)
+        Mon, 17 Oct 2022 14:35:43 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFCF6C942;
+        Mon, 17 Oct 2022 11:35:42 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so6303680otu.7;
+        Mon, 17 Oct 2022 11:35:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x4FmwvBqnJTncoPiKUPBPPBe171UWUDniXQaooeZxpw=;
-        b=cUtLFDCVPom9VJCBq9yxFHz+45hYXRfVxxbfwS4vTRR4L5jBfanW/xQGF97wjcilmF
-         J/EETbdnb0i4tY0juFXcW6wd3vO+pKfXF4hT/DW/e3kn+pC7uiQF7TuweGlThc/dLaVG
-         d0OyeiZtdmbUoXDXgerlAtsU9uGh/LF39J7yhOtjArpzVuzwBREVp5GEXO5sir///958
-         HFCnZU7jxUST22URv/usi6+BtI1ZGvKdbTl3rNEsWPCZZUWRSgKjv/msxuhIyZTeDOhO
-         1ma3NioE1JNyPhU6aqSoTYnl5cf1BMdpSPi2IMWg/5w1jpIj9U23BE4GeBFcyXc8lOV6
-         j6Xg==
-X-Gm-Message-State: ACrzQf1CUpRoZJovLX7AKSsQ26UW+EodKrNgUQuE5kMef/08k+wDkzlm
-        EWRAexqJvFLzjDaSJePu1fzd4SRQRA==
-X-Google-Smtp-Source: AMsMyM6zWSIgmd+I4omxIOYg2rHsSiGZaz0fVmjUISZiTCI2iq+9HRTI45XL5vYpiTUKkezyqPBipw==
-X-Received: by 2002:aca:240c:0:b0:355:41a7:d4dd with SMTP id n12-20020aca240c000000b0035541a7d4ddmr1197974oic.281.1666031693439;
-        Mon, 17 Oct 2022 11:34:53 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aOFeRgc8x0+ScO8vLGWZow6v2G5REBOQcbT+S+kaKbM=;
+        b=BI8jNRiVYBoKSDk1eW9VnkA+6UEvIMnQwx5FdIWMdjmxCQA3GWlr7ysU6zgl72kpia
+         hki9TXhS/8i+7NFQ9bQ1iQ3mIqnVo8IIrclUkVZkqWLAy8gW1/c2msy1iPQQokeltRd7
+         3REGCvsl/lmY8iMkPCtKsTfpUMMWyjefgA0UHnn7NxCfL85tjdnl253dRwAZxKNFVCA0
+         Q8ehwIb7MN3pp7/lRBcFvI7MOB3iDeT+ZXHpmQE1kEbD09r/1aEnv53F9eTDHB8elgCA
+         EWZXiDJ4cA0DfIwZtCP9Ot0iwNZMy7iq4vGzO0XrA1AWeOLHuD8bb7pTf6HpojyJilTc
+         P9iw==
+X-Gm-Message-State: ACrzQf3Py5J67aIID54sG29WDHu5/aj7z4JXaUtbL2K9N9/hlwPlVSNI
+        3Juxi3yGSolTUxdi+qxoXw==
+X-Google-Smtp-Source: AMsMyM67dYJeLL/IE6ygb43XYBBFNxbd3kYg7iYHm2CZ++WJg8fR+93mmKUh6kMD67+Rzq4Y4l4YDA==
+X-Received: by 2002:a05:6830:246b:b0:661:b802:41e4 with SMTP id x43-20020a056830246b00b00661b80241e4mr5605066otr.56.1666031741270;
+        Mon, 17 Oct 2022 11:35:41 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bv13-20020a0568300d8d00b006618eb616dbsm4977077otb.8.2022.10.17.11.34.52
+        by smtp.gmail.com with ESMTPSA id i9-20020aca2b09000000b00354b1edb60fsm4593995oik.32.2022.10.17.11.35.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:34:52 -0700 (PDT)
-Received: (nullmailer pid 2255311 invoked by uid 1000);
-        Mon, 17 Oct 2022 18:34:53 -0000
-Date:   Mon, 17 Oct 2022 13:34:53 -0500
+        Mon, 17 Oct 2022 11:35:40 -0700 (PDT)
+Received: (nullmailer pid 2256306 invoked by uid 1000);
+        Mon, 17 Oct 2022 18:35:41 -0000
+Date:   Mon, 17 Oct 2022 13:35:41 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: clock: Add Ingenic JZ4755 CGU header
-Message-ID: <20221017183453.GA2253413-robh@kernel.org>
-References: <20221016150110.3020451-1-lis8215@gmail.com>
- <20221016150110.3020451-4-lis8215@gmail.com>
- <c2accc8b-f4eb-47ca-333f-eeb98da6a363@linaro.org>
- <CAKNVLfZ8qi4MS6ineF4M5xnSmHW+=P5mdgifmr74g4kOSK2wGA@mail.gmail.com>
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom: drop minItems equal to
+ maxItems
+Message-ID: <166603174058.2256267.12966526494787404406.robh@kernel.org>
+References: <20221016173625.53769-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKNVLfZ8qi4MS6ineF4M5xnSmHW+=P5mdgifmr74g4kOSK2wGA@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+In-Reply-To: <20221016173625.53769-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 09:21:18PM +0300, Siarhei Volkau wrote:
-> вс, 16 окт. 2022 г. в 18:32, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org>:
+On Sun, 16 Oct 2022 13:36:25 -0400, Krzysztof Kozlowski wrote:
+> If minItems are missing, they are implicitly equal to maxItems.
+> Dropping redundant minItems simplifies a bit the binding.
 > 
-> > Why did you choose 2.0+?
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml          | 1 -
+>  Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml  | 1 -
+>  2 files changed, 2 deletions(-)
 > 
-> It's the first time that I need to choose a license, so it's a bit
-> confusing what
-> side effects they have, especially in that particular case.
-> 
-> What do you recommend?
 
-Are you fine with GPLv4, GPLv5? Considering they haven't been written, I 
-wouldn't be.
-
-Rob
+Acked-by: Rob Herring <robh@kernel.org>
