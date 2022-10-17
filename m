@@ -2,92 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C90A600B7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC22600B82
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbiJQJqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S231527AbiJQJrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiJQJqI (ORCPT
+        with ESMTP id S231524AbiJQJrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:46:08 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD485D723
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:45:59 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id f193so10014512pgc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:45:59 -0700 (PDT)
+        Mon, 17 Oct 2022 05:47:33 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D37C5E550
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:47:06 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bp15so16615895lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ij2MqIqqwZglpWFium1q/eiumGD0QHeuEcZL1dHqOdE=;
-        b=pBvbWdxZOLgKquczqWTjMaAuF7pefRJ8rKA9/4b59V64mTvs9utVBkaYKe8ofbJYFG
-         KRM4Zfiljs8EM+y4kMF7WEBK+DZF6LoYR1+2wk4VcQRJPssSDfXnO7j4iXaiEwD7hRVs
-         UmCXir9FJJGgq3kt6xwN32n0e6cI7UtRTFy9ZauZRukPOsfgJLkqt0fHtmMj2psvB17a
-         oEbe5wtg7vtkZ0v2KqjZp2rhsx1YX2cvb3RCtEixptztuT2aJaFjkb9FNZk31NLAsTfq
-         bcmxFzKk2BVNWNRENBNQi/wgEMjDf5PxX9lrKwvvRmMZxMtUfv73YBf96JXYP0buK7mF
-         LKMQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m28MxXGYXT4qGN7nik464yL/UhJ82SzVaHoLGkQoTpw=;
+        b=pSF9QYPlsSgNQPRR9XdOhQ9tHnI5i7mpZjMTTlvUq8/jBVi240La3CiktdZ9cpYnbg
+         3gzgPCO57wDjxjV7KwmmBFQaXqWqjRqzXTrCgvh8wcmDIVE8Auov0FvGOGYsRXNhpQuR
+         v0uxqa/yDBhbsp7XhTBM5WkFr41VnSeB1B2KgRUcNxVTYYngf4c2n+TJnNslKA3qbycQ
+         3Mg/Pn05b14TDYhsHc6vl/ddFRe80qxr2PLv4DhzicBjcB9Y4NURWiXK++bV44Pf+VSK
+         HuYAflUusNFJlXHC9YSfpGVok3c6YUgICIPANvYBQ/qXi+g9MokQq0B+0qEWWxPhKkC5
+         GQGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ij2MqIqqwZglpWFium1q/eiumGD0QHeuEcZL1dHqOdE=;
-        b=EYjgocwkAbSubUUppkx2OvsQTrqmDjWAN+20NKN4k2ha3kOUJ9EIIdu76a7cGcIb4y
-         /QOmTgniriNYDwCv0iyiwX0Sn0s3NObSSSsSsze7t83XgbUh+G0ipQcQhajTLangvZ93
-         jtt6YlQC/Q5R64qlfLo6QObPZ96oCSkgH30fZZpJ66mqjQUhZg3Kw1NQbF+DqQkOlIif
-         yZWQtMIgX955Q3z8Y34kfMJA/5S3jREDjrVaaUB5MWqaSTNR8DNz138GbwhlWqBUOES5
-         rMKXGT640ehW9V4m0tD++jKWZMEcpalBKApkioYxTLWZJXJANgJYpLWQYUR1Lrx9Ej2B
-         wjRg==
-X-Gm-Message-State: ACrzQf1jegPECRUcv5zrBBo1Teximu4X5Ssl8sD3t982DS5Zu0ZYJRP5
-        TPK2Jglca2nP6TYcuWx4zKI=
-X-Google-Smtp-Source: AMsMyM498YR1rvBNOFLBTZNic6vYa3YUPVxAysTyqkvq3/WIZ4AhK27rpEXDyRWxjrcXJeLONPnO9w==
-X-Received: by 2002:a63:6bc5:0:b0:460:bd9a:64b8 with SMTP id g188-20020a636bc5000000b00460bd9a64b8mr10164303pgc.257.1665999957727;
-        Mon, 17 Oct 2022 02:45:57 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-30.three.co.id. [180.214.232.30])
-        by smtp.gmail.com with ESMTPSA id jj19-20020a170903049300b0017f7819732dsm6181082plb.77.2022.10.17.02.45.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 02:45:57 -0700 (PDT)
-Message-ID: <c5980bcb-f345-ff2e-a29b-75e53a6b8708@gmail.com>
-Date:   Mon, 17 Oct 2022 16:45:49 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m28MxXGYXT4qGN7nik464yL/UhJ82SzVaHoLGkQoTpw=;
+        b=CzLCkY++u8GkWEufY2n94EzffbVwytWlRFSr/Jm+/J3k0LIOyhOhAZm+JtHTpfa6Pe
+         NWnczGAlzVLQZCRVlQs8M5Z2DqDysNkJZ+w7AliXECH6sMt9kPS2n6bXjjrPD+A/SEUU
+         9l4DXZcuqMpmqs/1MQvcsru8P5MvW3RUoUsMFYCAgl6MSRBERcdtHOWFQXk1EtXlSpkY
+         PtH2Vb46PUFwyzOK3f7bJ1k+Nkc8F05nUrAE3EYuY3dEyvdL48++lLh59eBw2ZsWWvrS
+         opeKz+XnTqJIPK/KLVX7GeCy/DuCV7Q+tuQEDfvF26DPCcOBLmXOTtAht5u0kZdc/SJX
+         1KnQ==
+X-Gm-Message-State: ACrzQf3Ux/6DRkvafZ3V9NMzhedUYDVvERjgjZeJU7eZ1LucsSA4Zaez
+        8103GvVxWeXiWXahm0v0WzQNOUuiaAMOYm+6etaeRq8s360=
+X-Google-Smtp-Source: AMsMyM4CGBR28SSkgO6sUfPaGHahhe5lagnYKp+a4Qpc5atANtQAtfZFWQQpanlTqBVMnG93twfz3+YjvG8BYu9pwjI=
+X-Received: by 2002:a17:906:5d04:b0:77f:ca9f:33d1 with SMTP id
+ g4-20020a1709065d0400b0077fca9f33d1mr8038485ejt.526.1666000007686; Mon, 17
+ Oct 2022 02:46:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
- 6.0.0-rc3 through 6.0.0-rc7
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Phillip Lougher <phillip@squashfs.org.uk>,
-        regressions@leemhuis.info, mirsad.todorovac@alu.unizg.hr
-Cc:     linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
-        regressions@lists.linux.dev, srw@sladewatkins.net
-References: <8702a833-e66c-e63a-bfc8-1007174c5b3d@leemhuis.info>
- <20221015205936.5735-1-phillip@squashfs.org.uk>
- <2d1ca80c-1023-9821-f401-43cff34cca86@gmail.com>
-Content-Language: en-US
-In-Reply-To: <2d1ca80c-1023-9821-f401-43cff34cca86@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221009181338.2896660-1-lis8215@gmail.com> <20221009181338.2896660-6-lis8215@gmail.com>
+In-Reply-To: <20221009181338.2896660-6-lis8215@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 17 Oct 2022 11:46:36 +0200
+Message-ID: <CACRpkdZL9qWPaoRhCt3h8m1it9DaoS3TJrxPHVOzGZWhL45PNw@mail.gmail.com>
+Subject: Re: [PATCH 5/8] pinctrl: ingenic: JZ4755 minor bug fixes
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/16/22 19:21, Bagas Sanjaya wrote:
-> 
-> No Verneed warnings so far. However, I need to test for a longer time
-> (a day) to check if any warnings are reported.
-> 
+On Sun, Oct 9, 2022 at 8:14 PM Siarhei Volkau <lis8215@gmail.com> wrote:
 
-The regression still occurs with this patch applied. Let's see if
-reverting the offending commit helps.
+> Fixes UART1 function bits and mmc groups typo.
+>
+> For pins 0x97,0x99 function 0 is designated to PWM3/PWM5
+> respectively, function is 1 designated to the UART1.
+>
+> Tested-by: Siarhei Volkau <lis8215@gmail.com>
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
 
--- 
-An old man doll... just what I always wanted! - Clara
+This patch applied for fixes.
 
+Yours,
+Linus Walleij
