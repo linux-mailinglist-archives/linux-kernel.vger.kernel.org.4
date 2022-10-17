@@ -2,106 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C409860133A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AB260133F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 18:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiJQQOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 12:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S230308AbiJQQQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 12:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiJQQOR (ORCPT
+        with ESMTP id S230135AbiJQQQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 12:14:17 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3406CF66
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:14:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XldIan6s6PAEbl9gskW7cX0cTpJi5bFpOYB6nBStPoaUbSK8vSO+kE43AuPreDWBmbuaOAQgQg60s0sb1YSSaHEoMB/jH3R5p/+T69hzhwSuj4JCjVBhKWkhD56PD3NLQXeyt+yX89l2Lt2wOZv4RFKT2CYydftcY9k6eIMP4Em/pylnJO8UcVkWuZNtMOX6N/jT0qk3hHJnW0TJMBNHTj106iKA2qhiN3JfRDv7HKnaneCeuE8PDrS0QydfNVATZWnFAG8yO04Z6ukydP6oPZkDfM2DEDku2eMu+AHxnIeURDsnXrc2NjzRCYWS1X+IOwNSXTXzHyr/3SOfz3KbxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ujfJIlq22G84VPkWfwNQ3i8i1u19Q82jUaBuh+exsCs=;
- b=UvjkfwoyG/+vrrfXROOW2mCJkXTZhkuVuDTQ+D5FERwpBEHdMpRhJD80GTcjWpYBso8AJZV8Zd43smqTLOAkrrYUxlxeA0DDZuMcDNrqFrtSAwFupd0eZ5HLPKB15PyqAM5kcrdFyn799Mlr77PLglR+Bn6zsX2OtGAurzbzxow++F2CzWyJ3nFd4QYmgInXAmHrwtkpD3uH1I3Sh0gd4zTKb+5FkgNh4t+YMzoGRWU436gLMJ4hyHCX1Dk2fbN6w9d19hQsROKFq4eleu27YgbziA3mq/1qjOzjVafhvvoKzbbMk7mQIaVDvFqI0V5ipv2+e0+ggbHAfEi0bpco3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ujfJIlq22G84VPkWfwNQ3i8i1u19Q82jUaBuh+exsCs=;
- b=Ly85MXmdurpEmEcODq0BbmO7gQ2/AAeSlGtDkCu9SZ0V4NxXVdHcM0QJMiJyne+5fJZsTkVxHR1j6eJw89qyq5SwTo0IiW3hr5QYSMmuMoGtaqV1ddbTmxNsqdcTo0t5PUH3kGaxYRIvbbxKsx+XHuQ8gz87Ils/JMW8huPqzBY=
-Received: from DM6PR03CA0034.namprd03.prod.outlook.com (2603:10b6:5:40::47) by
- MW4PR12MB6779.namprd12.prod.outlook.com (2603:10b6:303:20f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Mon, 17 Oct
- 2022 16:14:13 +0000
-Received: from DM6NAM11FT030.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:40:cafe::c7) by DM6PR03CA0034.outlook.office365.com
- (2603:10b6:5:40::47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.31 via Frontend
- Transport; Mon, 17 Oct 2022 16:14:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT030.mail.protection.outlook.com (10.13.172.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5723.20 via Frontend Transport; Mon, 17 Oct 2022 16:14:13 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 17 Oct
- 2022 11:14:10 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Roman Li <roman.li@amd.com>, Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        "Harry Wentland" <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Stylon Wang <stylon.wang@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] drm/amd/display: add an ASSERT() to irq service functions
-Date:   Mon, 17 Oct 2022 12:13:22 -0400
-Message-ID: <20221017161322.95808-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 17 Oct 2022 12:16:38 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67516D867
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:16:36 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id h18so6070596ilh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WFrtH1nIceWDWjecFJq4RLnBMDwSO0i+CWv3MNMfQg4=;
+        b=jEv4jAYG5jOPL6GizracGgpmxqZQyzsHZgcpzsug0NOrifCD7ynawGMq1j/8U+khSs
+         IK6jqHG48I6xqj4p86ARYxnTkNWTeMD544onM0Tmh+B7yVzP6LqBvd+t8LWpVAz2u03h
+         gwzqmfrQRgOYbcZ//HNPJ0SFSO0UloTO5p/ZgM13oPHxq/Ox9E1wvs93dwVnJYZMa0pK
+         YyDLUWK6fjoMEYua124lgY+pDR/qn4tKgUomX2WOiYZG+sXkhcQsVfD+Eepqq+/MwBHE
+         eKF4pgsWvIYQql6EgCgIJtbBadLWyZnUWPEiQGHvvRYL0FKJxLy3MQ4DJrMdqlb82DvR
+         qFYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WFrtH1nIceWDWjecFJq4RLnBMDwSO0i+CWv3MNMfQg4=;
+        b=2sqQhMyDvbwHs6aFGzvnGPmD/mhDO1NkN8ivJfSAYDz/nWSqsL3uyvcXxLsnOiW8iT
+         rIp8/XZUVDERRQ39c72lq9NNlJXuZu3Yc+fpbG9wr09WivHmBwqAAzeP57VTYeAltqdL
+         DGmaLJlF/MHFd74gkxG3N50ge3RMTVd/r3zbExtYkqd5YfC2AwBqEQynjYdqrxcKRi90
+         aaiIKD/RhIY0N4j7RM37Inh+vSv2VO3wr8El42esrDHijjBB3UgruwmqD1ELqoCpZ9jK
+         uqVUb3kpVCxA/PybrIRjT/2RhaX7b/qaO4ySVA0HsU1lXHKN69zKA5+kKEcTXlwvCTCW
+         Cmuw==
+X-Gm-Message-State: ACrzQf2wTby8mXmMnYXOrFdFNJjxRdQwkp2U9WBiYgg2kv2zV/9IBTBQ
+        Go3sdOAoQlPT4lAA/CH3Zia1FuPv2LXEOl7iW6Zikg==
+X-Google-Smtp-Source: AMsMyM6D6ZH23UH1DDhYJy7DKaiHnY8WMVH8bWKCG92JRizQyoSfHpBC/EBhk/nhFNQJo/Ae2+BoF7KVbaMOZd8wlgk=
+X-Received: by 2002:a92:cc0b:0:b0:2f9:f3a9:c3e7 with SMTP id
+ s11-20020a92cc0b000000b002f9f3a9c3e7mr4724220ilp.253.1666023395616; Mon, 17
+ Oct 2022 09:16:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT030:EE_|MW4PR12MB6779:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43cffad2-b170-449c-09e3-08dab05aa1ab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sqo4uldCXgFs1oi2wYAa5fscYiVrQ3wyR1tbvwYtq6EHYT2ScSJKUrUphIsf086HxYIkqm/olqHb0mjdxGmCUtkXV4NGeG6h+ar6P465wcAcYqmM6oOZKXJXgJqPZwjuVP+B/D4UR8g+AXEah2Nyhwxopa3vAd6TLDubeFNlliN6G4PS2UjeW+PUYadyZMyTGjYrmeCBuJlDcvhg67ot3ao43zxu2Gfrl7PPBR4DYaIA12Va7elRGyABcuQa03ALCL1mLaZlZ//GL9fFyulcvSe3QYKm3uAKmz09/WsCIf926jPu6yi/hhrl+sqwnautyHeCGXuwFwifidUJNjBbmjCCOnpWSWdpqs1WX2Rq2u/dvASRIJuOPD6+6YNos8L1qUgdNRsZtoc24aARQlCRV8XhvnfjNXXWu1bYtNdHp4jE2XYx2JZmN8DMBzY42mrLWST5cw8Cx6L22YppYaajSnGudScYxELm5V1XAlBo3e8uEr/RkwpiSRhgeZM8furtRfkAZ0kS4bdyFA2hIX5wZkLthcWjs5XG6MTOj/9PRPEzZvROplwzzy+9tyQHu7YsG109UFSoyIl14ui1R6jQ88SNb675k968cVwDAKaVC3fHdu9yulEN+wexN5B5PRu8+cixVaH5y+rbyyvn7AkkiXB7A/A0kstSOAYWYf2S6qqNESQ3U6DKGSpbR4liTz2m4bnsp2g0aKmUbRsDZwYeWuYye/heaWT6+HNM5GY8GMIVpG5K2EpzDKrRUTkD/3/AFZ5Y43+KqgjqKtYpko5bOClwULSBlAjH4oglJ88TleV3wv4Jyr44TsDj70rAuGmzhf8jD4gG5H2ueODvfzNe4A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199015)(46966006)(40470700004)(36840700001)(70586007)(70206006)(316002)(54906003)(478600001)(6916009)(8676002)(6666004)(4326008)(8936002)(2906002)(356005)(41300700001)(5660300002)(336012)(7696005)(1076003)(40460700003)(186003)(16526019)(26005)(36756003)(83380400001)(47076005)(81166007)(44832011)(82740400003)(36860700001)(2616005)(82310400005)(86362001)(40480700001)(426003)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 16:14:13.1451
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43cffad2-b170-449c-09e3-08dab05aa1ab
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT030.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6779
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <00000000000068cb2905eb214e9a@google.com>
+In-Reply-To: <00000000000068cb2905eb214e9a@google.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Mon, 17 Oct 2022 09:16:24 -0700
+Message-ID: <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in btf_type_id_size
+To:     syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, netdev@vger.kernel.org, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,62 +72,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, if we encounter unimplemented functions, it is difficult to
-tell what caused them just by looking at dmesg and that is compounded by
-the fact that it is often hard to reproduce said issues, for instance we
-have had reports of this condition being triggered when removing a
-secondary display that is setup in mirror mode and is connected using
-usb-c. So, to have access to more detailed debugging information, add an
-ASSERT() to dal_irq_service_ack() and dal_irq_service_set() that only
-triggers when we encounter an unimplemented function.
+On Sat, Oct 15, 2022 at 11:52 PM syzbot
+<syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
+> git tree:       bpf
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
+>
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946 btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+> Modules linked in:
+> CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+> Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
+> RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+> RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
+> RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
+> R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
+> R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
+> FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
+>  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
+>  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
+>  btf_parse kernel/bpf/btf.c:5026 [inline]
+>  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
+>  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
+>  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
+>  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
+>  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f0fbae41c69
+> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
+> RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
+> RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
+> R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
-v2: detail specific instance that I'm interested in and use ASSERT()
-    instead of WARN().
+Will be addressed by
+https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
 
-v3: move ASSERT()s inside the new if blocks.
----
- .../gpu/drm/amd/display/dc/irq/irq_service.c    | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-index 7bad39bba86b..d100edaedbbb 100644
---- a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-+++ b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-@@ -112,8 +112,15 @@ bool dal_irq_service_set(
- 
- 	dal_irq_service_ack(irq_service, source);
- 
--	if (info->funcs && info->funcs->set)
-+	if (info->funcs && info->funcs->set) {
-+		if (info->funcs->set == dal_irq_service_dummy_set) {
-+			DC_LOG_WARNING("%s: src: %d, st: %d\n", __func__,
-+				       source, enable);
-+			ASSERT(0);
-+		}
-+
- 		return info->funcs->set(irq_service, info, enable);
-+	}
- 
- 	dal_irq_service_set_generic(irq_service, info, enable);
- 
-@@ -146,8 +153,14 @@ bool dal_irq_service_ack(
- 		return false;
- 	}
- 
--	if (info->funcs && info->funcs->ack)
-+	if (info->funcs && info->funcs->ack) {
-+		if (info->funcs->ack == dal_irq_service_dummy_ack) {
-+			DC_LOG_WARNING("%s: src: %d\n", __func__, source);
-+			ASSERT(0);
-+		}
-+
- 		return info->funcs->ack(irq_service, info);
-+	}
- 
- 	dal_irq_service_ack_generic(irq_service, info);
- 
--- 
-2.38.0
-
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
