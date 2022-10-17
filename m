@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41F36004CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 03:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBC46004CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 03:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiJQBWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 21:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S230045AbiJQBWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 21:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiJQBWb (ORCPT
+        with ESMTP id S230034AbiJQBWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 21:22:31 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3215432BA4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:22:30 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id l28so6924593qtv.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:22:30 -0700 (PDT)
+        Sun, 16 Oct 2022 21:22:33 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0919D3FEC1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:22:32 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id h24so6587640qta.7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 18:22:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3xWtiKYiQtvHStnfbfcGKHJ9sfPtgzrNeWbpbXy8qJ0=;
-        b=lcoK6JfsyChYB9UMgN05QHgLqTH3ZHpA3/eaKycgyUHhMHIPct83Xp7tflPIQZRI5v
-         lJRPfYEQKlN1n0SJOeobF4Qb+W+3KupomlWZU6JhT26CFf8NCFeB6KOFqylVRGopAKDw
-         StIQBk7WPa0l8seqUevwl4emzDkg48qtwx18ZzMIeE2XDuu7KserilQ4cLGOzUQScDvh
-         kbQxptAjtU3D+tMol6AA29TBxT4bRkeQUxmrh797hfe5gDKxQf+jvY3Je/W2UVH0mBwv
-         +vzX7tNlNI5Yf80W8mARWcjqPXfwpGBt08exEsJrE9apkf2VJHpc8/iZyu917WQ4PkU5
-         mg7A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SJC/C2BLjnH4T9gw4OMMV2TeMJs+hTwat/hVDusDAwI=;
+        b=ipyeeN9HmExppd49QQffMvI0WlWTgWePaMt2GDoGEc6Vzy+JPwXDSYBlWP1aChF1IP
+         Cy0TxssbRu5xttvXZpTijx513z+McHDamhKgE3yg5vEu/S2hJ/8A7KQRhAsvR6HBt72d
+         DADSBnUBa+ow7VL4+6CaDjvcuRBPmElFZxyDokvRluJHYrsEgZR26pA8Wbt00CHmVgKz
+         EsW45Ex3wGiy3WTeAkRZ0SEAJcpOxKBslCb6WsIhhos6GY+eN//XhH9vVH7EcWRVRPu0
+         /tGSehd2XpVFiOMDc5UdgT4WCdQpWvU0pPNP6DhYMaHbC27kYzOEXoEwUrRQpFswDiSS
+         rNzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3xWtiKYiQtvHStnfbfcGKHJ9sfPtgzrNeWbpbXy8qJ0=;
-        b=cNO3xEV+h7Y7DRWvTAKhitnoAjnwbE6KbdSzbMj9/GpTmHzo9OPOhzx8umOVSlvq+6
-         QNbk7/fXEGJSR4XrBxwrpuAdpwH+tqZeXOPeO4P+jtH9lFGeUqhO+reJdnT5AyMm49nQ
-         Q6AD7HJ/3NM+0jnHTeIem+wQoKfuPPxGilRzotD/ggXOYHqnz93lrgBUgRiI4za2qLYB
-         e/4iEQR3tdTaS1M1NLp+l/MqyMc4bDtv3Pvi0jHl5aOZqsYTEymUaKXEVZaBf5k6GIzB
-         ut81/V3791wK0IIRPQMnGdSf4C5yqCSr8oU0dwnQkfqd03s9JqYoQYVpsYEA30rvrDWP
-         b81w==
-X-Gm-Message-State: ACrzQf041OcSjfmtxcSqibmMd5vUJgUbUzrWegeQG2xx36GHbP8TTXdC
-        9++klxvL94TepAuwYfcTJIWAtw==
-X-Google-Smtp-Source: AMsMyM4Ttu+R1FuB4CyyggzkDpgbWYP8ZKsBFMVGMrmXqPjiREQ02N3P9Tyu+fSZn4pE8fB5sYunDg==
-X-Received: by 2002:a05:622a:40f:b0:394:57eb:ced0 with SMTP id n15-20020a05622a040f00b0039457ebced0mr6907225qtx.225.1665969749316;
-        Sun, 16 Oct 2022 18:22:29 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SJC/C2BLjnH4T9gw4OMMV2TeMJs+hTwat/hVDusDAwI=;
+        b=xV7L7heqX47uGbTdkQ1jiZqYyWkwG7z8ePbCHhCaGAU2mH/eWd+Z4gYRDhHqlQwgUv
+         Dlb4A0yDd5i1VnZBa00JbWAad6PmgpfjL2TwFJ3wcKEokRfVTbonPJZBtgKS7cpOiJFX
+         3vRd8H2RzaXb/JrWTMrOSkUjl6Cc7S+xcHBmYFKUTMHoTwn2Tw8sOTkez7HMAs1Hjk+P
+         DldSttD73GDtWg8dY7h9gZHZKPoY1ZDSxMahN00S6aqvmxDBfZNO0jcMbnrNVtIkT2u8
+         D36AxPj4s+OOhp11ThoEIyphPgxg6g8jdcNqmobJwbTxmHsveCxYc06Ddtk9hIG6QnFU
+         VDCg==
+X-Gm-Message-State: ACrzQf3TQNqmFLhDjZHQJg4s+tbr1PaK0p+lKgLHQmUL3d4L8ocZMv0C
+        JCgCdUvLcHj7TDSXaCIbhdCaYg==
+X-Google-Smtp-Source: AMsMyM6VvUEdlZGLu/ikWeEMm9C17nlMpiXpCGvmQ1X3M5hDoSH8HcuAltSTtApZpEFwcFxRQ5RULg==
+X-Received: by 2002:ac8:5dce:0:b0:35b:a78d:cd24 with SMTP id e14-20020ac85dce000000b0035ba78dcd24mr7072235qtx.464.1665969751145;
+        Sun, 16 Oct 2022 18:22:31 -0700 (PDT)
 Received: from krzk-bin.hsd1.pa.comcast.net ([2601:42:0:3450:bb7d:1aa4:bef8:ec27])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac87fcd000000b0039a610a04b1sm7011349qtk.37.2022.10.16.18.22.27
+        by smtp.gmail.com with ESMTPSA id b13-20020ac87fcd000000b0039a610a04b1sm7011349qtk.37.2022.10.16.18.22.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 18:22:28 -0700 (PDT)
+        Sun, 16 Oct 2022 18:22:30 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,10 +60,12 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] dt-bindings: pinctrl: qcom,msm8974: convert to dtschema
-Date:   Sun, 16 Oct 2022 21:22:24 -0400
-Message-Id: <20221017012225.8579-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] ARM: dts: qcom: msm8974: align TLMM pin configuration with DT schema
+Date:   Sun, 16 Oct 2022 21:22:25 -0400
+Message-Id: <20221017012225.8579-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221017012225.8579-1-krzysztof.kozlowski@linaro.org>
+References: <20221017012225.8579-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,331 +77,693 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm MSM8974 pin controller bindings to DT schema.  Keep the
-parsing of pin configuration subnodes consistent with other Qualcomm
-schemas (children named with '-state' suffix, their children with
-'-pins').
+DT schema expects TLMM pin configuration nodes to be named with
+'-state' suffix and their optional children with '-pins' suffix.  All
+nodes for GPIOs must also define the function property.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/pinctrl/qcom,msm8974-pinctrl.txt | 121 ------------
- .../pinctrl/qcom,msm8974-pinctrl.yaml         | 179 ++++++++++++++++++
- 2 files changed, 179 insertions(+), 121 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.yaml
+ .../arm/boot/dts/qcom-apq8074-dragonboard.dts | 14 ++--
+ .../dts/qcom-msm8974-sony-xperia-rhine.dtsi   | 16 ++--
+ arch/arm/boot/dts/qcom-msm8974.dtsi           | 77 ++++++++++---------
+ .../dts/qcom-msm8974pro-fairphone-fp2.dts     | 20 ++---
+ .../boot/dts/qcom-msm8974pro-samsung-klte.dts | 36 ++++-----
+ ...-msm8974pro-sony-xperia-shinano-castor.dts | 31 ++++----
+ 6 files changed, 98 insertions(+), 96 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.txt
-deleted file mode 100644
-index 004056506679..000000000000
---- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.txt
-+++ /dev/null
-@@ -1,121 +0,0 @@
--Qualcomm MSM8974 TLMM block
--
--Required properties:
--- compatible: "qcom,msm8974-pinctrl"
--- reg: Should be the base address and length of the TLMM block.
--- interrupts: Should be the parent IRQ of the TLMM block.
--- interrupt-controller: Marks the device node as an interrupt controller.
--- #interrupt-cells: Should be two.
--- gpio-controller: Marks the device node as a GPIO controller.
--- #gpio-cells : Should be two.
--                The first cell is the gpio pin number and the
--                second cell is used for optional parameters.
--- gpio-ranges: see ../gpio/gpio.txt
--
--Optional properties:
--
--- gpio-reserved-ranges: see ../gpio/gpio.txt
--
--Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
--a general description of GPIO and interrupt bindings.
--
--Please refer to pinctrl-bindings.txt in this directory for details of the
--common pinctrl bindings used by client devices, including the meaning of the
--phrase "pin configuration node".
--
--Qualcomm's pin configuration nodes act as a container for an arbitrary number of
--subnodes. Each of these subnodes represents some desired configuration for a
--pin, a group, or a list of pins or groups. This configuration can include the
--mux function to select on those pin(s)/group(s), and various pin configuration
--parameters, such as pull-up, drive strength, etc.
--
--The name of each subnode is not important; all subnodes should be enumerated
--and processed purely based on their content.
--
--Each subnode only affects those parameters that are explicitly listed. In
--other words, a subnode that lists a mux function but no pin configuration
--parameters implies no information about any pin configuration parameters.
--Similarly, a pin subnode that describes a pullup parameter implies no
--information about e.g. the mux function.
--
--
--The following generic properties as defined in pinctrl-bindings.txt are valid
--to specify in a pin configuration subnode:
-- pins, function, bias-disable, bias-pull-down, bias-pull-up, drive-strength.
--
--Non-empty subnodes must specify the 'pins' property.
--Note that not all properties are valid for all pins.
--
--
--Valid values for pins are:
--  gpio0-gpio145
--    Supports mux, bias and drive-strength
--
--  sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd, sdc2_data
--    Supports bias and drive-strength
--
--  hsic_data, hsic_strobe
--    Supports only mux
--
--Valid values for function are:
--  cci_i2c0, cci_i2c1, uim1, uim2, uim_batt_alarm,
--  blsp_uim1, blsp_uart1, blsp_i2c1, blsp_spi1,
--  blsp_uim2, blsp_uart2, blsp_i2c2, blsp_spi2,
--  blsp_uim3, blsp_uart3, blsp_i2c3, blsp_spi3,
--  blsp_uim4, blsp_uart4, blsp_i2c4, blsp_spi4,
--  blsp_uim5, blsp_uart5, blsp_i2c5, blsp_spi5,
--  blsp_uim6, blsp_uart6, blsp_i2c6, blsp_spi6,
--  blsp_uim7, blsp_uart7, blsp_i2c7, blsp_spi7,
--  blsp_uim8, blsp_uart8, blsp_i2c8, blsp_spi8,
--  blsp_uim9, blsp_uart9, blsp_i2c9, blsp_spi9,
--  blsp_uim10, blsp_uart10, blsp_i2c10, blsp_spi10,
--  blsp_uim11, blsp_uart11, blsp_i2c11, blsp_spi11,
--  blsp_uim12, blsp_uart12, blsp_i2c12, blsp_spi12,
--  blsp_spi1_cs1, blsp_spi2_cs2, blsp_spi_cs3, blsp_spi2_cs1, blsp_spi2_cs2
--  blsp_spi2_cs3, blsp_spi10_cs1, blsp_spi10_cs2, blsp_spi10_cs3,
--  sdc3, sdc4, gcc_gp_clk1, gcc_gp_clk2, gcc_gp_clk3, cci_timer0, cci_timer1,
--  cci_timer2, cci_timer3, cci_async_in0, cci_async_in1, cci_async_in2,
--  cam_mckl0, cam_mclk1, cam_mclk2, cam_mclk3, mdp_vsync, hdmi_cec, hdmi_ddc,
--  hdmi_hpd, edp_hpd, gp_pdm0, gp_pdm1, gp_pdm2, gp_pdm3, gp0_clk, gp1_clk,
--  gp_mn, tsif1, tsif2, hsic, grfc, audio_ref_clk, qua_mi2s, pri_mi2s, spkr_mi2s,
--  ter_mi2s, sec_mi2s, bt, fm, wlan, slimbus, hsic_ctl, gpio
--
--  (Note that this is not yet the complete list of functions)
--
--
--
--Example:
--
--	msmgpio: pinctrl@fd510000 {
--		compatible = "qcom,msm8974-pinctrl";
--		reg = <0xfd510000 0x4000>;
--
--		gpio-controller;
--		#gpio-cells = <2>;
--		gpio-ranges = <&msmgpio 0 0 146>;
--		interrupt-controller;
--		#interrupt-cells = <2>;
--		interrupts = <0 208 0>;
--
--		pinctrl-names = "default";
--		pinctrl-0 = <&uart2_default>;
--
--		uart2_default: uart2_default {
--			mux {
--				pins = "gpio4", "gpio5";
--				function = "blsp_uart2";
--			};
--
--			tx {
--				pins = "gpio4";
--				drive-strength = <4>;
--				bias-disable;
--			};
--
--			rx {
--				pins = "gpio5";
--				drive-strength = <2>;
--				bias-pull-up;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.yaml
-new file mode 100644
-index 000000000000..9287cbbff711
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.yaml
-@@ -0,0 +1,179 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/qcom,msm8974-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm MSM8974 TLMM pin controller
-+
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  Top Level Mode Multiplexer pin controller in Qualcomm MSM8974 SoC.
-+
-+properties:
-+  compatible:
-+    const: qcom,msm8974-pinctrl
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts: true
-+  interrupt-controller: true
-+  "#interrupt-cells": true
-+  gpio-controller: true
-+  "#gpio-cells": true
-+  gpio-ranges: true
-+  wakeup-parent: true
-+
-+  gpio-reserved-ranges:
-+    minItems: 1
-+    maxItems: 73
-+
-+  gpio-line-names:
-+    maxItems: 146
-+
-+patternProperties:
-+  "-state$":
-+    oneOf:
-+      - $ref: "#/$defs/qcom-msm8974-tlmm-state"
-+      - patternProperties:
-+          "-pins$":
-+            $ref: "#/$defs/qcom-msm8974-tlmm-state"
-+        additionalProperties: false
-+
-+$defs:
-+  qcom-msm8974-tlmm-state:
-+    type: object
-+    description:
-+      Pinctrl node's client devices use subnodes for desired pin configuration.
-+      Client device subnodes use below standard properties.
-+    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-+
-+    properties:
-+      pins:
-+        description:
-+          List of gpio pins affected by the properties specified in this
-+          subnode.
-+        items:
-+          oneOf:
-+            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-3][0-9]|14[0-5])$"
-+            - enum: [ hsic_data, hsic_strobe, sdc1_clk, sdc1_cmd, sdc1_data,
-+                      sdc2_clk, sdc2_cmd, sdc2_data ]
-+        minItems: 1
-+        maxItems: 36
-+
-+      function:
-+        description:
-+          Specify the alternative function to be configured for the specified
-+          pins.
-+
-+        enum: [ gpio, cci_i2c0, cci_i2c1, uim1, uim2, uim_batt_alarm,
-+                blsp_uim1, blsp_uart1, blsp_i2c1, blsp_spi1, blsp_uim2,
-+                blsp_uart2, blsp_i2c2, blsp_spi2, blsp_uim3, blsp_uart3,
-+                blsp_i2c3, blsp_spi3, blsp_uim4, blsp_uart4, blsp_i2c4,
-+                blsp_spi4, blsp_uim5, blsp_uart5, blsp_i2c5, blsp_spi5,
-+                blsp_uim6, blsp_uart6, blsp_i2c6, blsp_spi6, blsp_uim7,
-+                blsp_uart7, blsp_i2c7, blsp_spi7, blsp_uim8, blsp_uart8,
-+                blsp_i2c8, blsp_spi8, blsp_uim9, blsp_uart9, blsp_i2c9,
-+                blsp_spi9, blsp_uim10, blsp_uart10, blsp_i2c10, blsp_spi10,
-+                blsp_uim11, blsp_uart11, blsp_i2c11, blsp_spi11, blsp_uim12,
-+                blsp_uart12, blsp_i2c12, blsp_spi12, blsp_spi1_cs1,
-+                blsp_spi2_cs2, blsp_spi_cs3, blsp_spi2_cs1, blsp_spi2_cs2
-+                blsp_spi2_cs3, blsp_spi10_cs1, blsp_spi10_cs2, blsp_spi10_cs3,
-+                sdc3, sdc4, gcc_gp_clk1, gcc_gp_clk2, gcc_gp_clk3, cci_timer0,
-+                cci_timer1, cci_timer2, cci_timer3, cci_async_in0,
-+                cci_async_in1, cci_async_in2, cam_mckl0, cam_mclk1, cam_mclk2,
-+                cam_mclk3, mdp_vsync, hdmi_cec, hdmi_ddc, hdmi_hpd, edp_hpd,
-+                gp_pdm0, gp_pdm1, gp_pdm2, gp_pdm3, gp0_clk, gp1_clk, gp_mn,
-+                tsif1, tsif2, hsic, grfc, audio_ref_clk, qua_mi2s, pri_mi2s,
-+                spkr_mi2s, ter_mi2s, sec_mi2s, bt, fm, wlan, slimbus, hsic_ctl ]
-+
-+      bias-pull-down: true
-+      bias-pull-up: true
-+      bias-disable: true
-+      drive-strength: true
-+      input-enable: true
-+      output-high: true
-+      output-low: true
-+
-+    required:
-+      - pins
-+
-+    allOf:
-+      - if:
-+          properties:
-+            pins:
-+              contains:
-+                enum:
-+                  - hsic_data
-+                  - hsic_strobe
-+          required:
-+            - pins
-+        then:
-+          properties:
-+            bias-pull-down: false
-+            bias-pull-up: false
-+            bias-disable: false
-+            drive-strength: false
-+            input-enable: false
-+            output-high: false
-+            output-low: false
-+
-+    additionalProperties: false
-+
-+allOf:
-+  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    tlmm: pinctrl@fd510000 {
-+        compatible = "qcom,msm8974-pinctrl";
-+        reg = <0xfd510000 0x4000>;
-+        gpio-controller;
-+        gpio-ranges = <&tlmm 0 0 146>;
-+        #gpio-cells = <2>;
-+        interrupt-controller;
-+        #interrupt-cells = <2>;
-+        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-+
-+        sdc1-off-state {
-+            clk-pins {
-+                pins = "sdc1_clk";
-+                bias-disable;
-+                drive-strength = <2>;
-+            };
-+
-+            cmd-pins {
-+                pins = "sdc1_cmd";
-+                bias-pull-up;
-+                drive-strength = <2>;
-+            };
-+
-+            data-pins {
-+                pins = "sdc1_data";
-+                bias-pull-up;
-+                drive-strength = <2>;
-+            };
-+        };
-+
-+        blsp2-uart1-sleep-state {
-+            pins = "gpio41", "gpio42", "gpio43", "gpio44";
-+            function = "gpio";
-+            drive-strength = <2>;
-+            bias-pull-down;
-+        };
-+
-+        hsic-state {
-+            pins = "hsic_data", "hsic_strobe";
-+        };
-+    };
+diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+index 91716298ec5e..dc04f315026d 100644
+--- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
++++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+@@ -272,34 +272,34 @@ &sdhc_2 {
+ };
+ 
+ &tlmm {
+-	sdc1_on: sdc1-on {
+-		clk {
++	sdc1_on: sdc1-on-state {
++		clk-pins {
+ 			pins = "sdc1_clk";
+ 			drive-strength = <16>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc1_cmd", "sdc1_data";
+ 			drive-strength = <10>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	sdc2_on: sdc2-on {
+-		clk {
++	sdc2_on: sdc2-on-state {
++		clk-pins {
+ 			pins = "sdc2_clk";
+ 			drive-strength = <10>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc2_cmd", "sdc2_data";
+ 			drive-strength = <6>;
+ 			bias-pull-up;
+ 		};
+ 
+-		cd {
++		cd-pins {
+ 			pins = "gpio62";
+ 			function = "gpio";
+ 			drive-strength = <2>;
+diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
+index 5a70683d9103..221a11e1d17d 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
+@@ -442,7 +442,7 @@ &smbb {
+ };
+ 
+ &tlmm {
+-	ts_int_pin: touch-int {
++	ts_int_pin: touch-int-state {
+ 		pins = "gpio61";
+ 		function = "gpio";
+ 		drive-strength = <2>;
+@@ -450,34 +450,34 @@ ts_int_pin: touch-int {
+ 		input-enable;
+ 	};
+ 
+-	sdc1_on: sdc1-on {
+-		clk {
++	sdc1_on: sdc1-on-state {
++		clk-pins {
+ 			pins = "sdc1_clk";
+ 			drive-strength = <16>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc1_cmd", "sdc1_data";
+ 			drive-strength = <10>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	sdc2_on: sdc-on {
+-		clk {
++	sdc2_on: sdc-on-state {
++		clk-pins {
+ 			pins = "sdc2_clk";
+ 			drive-strength = <10>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc2_cmd", "sdc2_data";
+ 			drive-strength = <6>;
+ 			bias-pull-up;
+ 		};
+ 
+-		cd {
++		cd-pins {
+ 			pins = "gpio62";
+ 			function = "gpio";
+ 			drive-strength = <2>;
+diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+index 7a9be0acf3f5..3b0072f13a97 100644
+--- a/arch/arm/boot/dts/qcom-msm8974.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+@@ -1253,61 +1253,62 @@ tlmm: pinctrl@fd510000 {
+ 			#interrupt-cells = <2>;
+ 			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+ 
+-			sdc1_off: sdc1-off {
+-				clk {
++			sdc1_off: sdc1-off-state {
++				clk-pins {
+ 					pins = "sdc1_clk";
+ 					bias-disable;
+ 					drive-strength = <2>;
+ 				};
+ 
+-				cmd {
++				cmd-pins {
+ 					pins = "sdc1_cmd";
+ 					bias-pull-up;
+ 					drive-strength = <2>;
+ 				};
+ 
+-				data {
++				data-pins {
+ 					pins = "sdc1_data";
+ 					bias-pull-up;
+ 					drive-strength = <2>;
+ 				};
+ 			};
+ 
+-			sdc2_off: sdc2-off {
+-				clk {
++			sdc2_off: sdc2-off-state {
++				clk-pins {
+ 					pins = "sdc2_clk";
+ 					bias-disable;
+ 					drive-strength = <2>;
+ 				};
+ 
+-				cmd {
++				cmd-pins {
+ 					pins = "sdc2_cmd";
+ 					bias-pull-up;
+ 					drive-strength = <2>;
+ 				};
+ 
+-				data {
++				data-pins {
+ 					pins = "sdc2_data";
+ 					bias-pull-up;
+ 					drive-strength = <2>;
+ 				};
+ 
+-				cd {
++				cd-pins {
+ 					pins = "gpio54";
++					function = "gpio";
+ 					bias-disable;
+ 					drive-strength = <2>;
+ 				};
+ 			};
+ 
+-			blsp1_uart2_default: blsp1-uart2-default {
+-				rx {
++			blsp1_uart2_default: blsp1-uart2-default-state {
++				rx-pins {
+ 					pins = "gpio5";
+ 					function = "blsp_uart2";
+ 					drive-strength = <2>;
+ 					bias-pull-up;
+ 				};
+ 
+-				tx {
++				tx-pins {
+ 					pins = "gpio4";
+ 					function = "blsp_uart2";
+ 					drive-strength = <4>;
+@@ -1315,15 +1316,15 @@ tx {
+ 				};
+ 			};
+ 
+-			blsp2_uart1_default: blsp2-uart1-default {
+-				tx-rts {
++			blsp2_uart1_default: blsp2-uart1-default-state {
++				tx-rts-pins {
+ 					pins = "gpio41", "gpio44";
+ 					function = "blsp_uart7";
+ 					drive-strength = <2>;
+ 					bias-disable;
+ 				};
+ 
+-				rx-cts {
++				rx-cts-pins {
+ 					pins = "gpio42", "gpio43";
+ 					function = "blsp_uart7";
+ 					drive-strength = <2>;
+@@ -1331,22 +1332,22 @@ rx-cts {
+ 				};
+ 			};
+ 
+-			blsp2_uart1_sleep: blsp2-uart1-sleep {
++			blsp2_uart1_sleep: blsp2-uart1-sleep-state {
+ 				pins = "gpio41", "gpio42", "gpio43", "gpio44";
+ 				function = "gpio";
+ 				drive-strength = <2>;
+ 				bias-pull-down;
+ 			};
+ 
+-			blsp2_uart4_default: blsp2-uart4-default {
+-				tx-rts {
++			blsp2_uart4_default: blsp2-uart4-default-state {
++				tx-rts-pins {
+ 					pins = "gpio53", "gpio56";
+ 					function = "blsp_uart10";
+ 					drive-strength = <2>;
+ 					bias-disable;
+ 				};
+ 
+-				rx-cts {
++				rx-cts-pins {
+ 					pins = "gpio54", "gpio55";
+ 					function = "blsp_uart10";
+ 					drive-strength = <2>;
+@@ -1354,42 +1355,42 @@ rx-cts {
+ 				};
+ 			};
+ 
+-			blsp1_i2c1_default: blsp1-i2c1-default {
++			blsp1_i2c1_default: blsp1-i2c1-default-state {
+ 				pins = "gpio2", "gpio3";
+ 				function = "blsp_i2c1";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+ 
+-			blsp1_i2c1_sleep: blsp1-i2c1-sleep {
++			blsp1_i2c1_sleep: blsp1-i2c1-sleep-state {
+ 				pins = "gpio2", "gpio3";
+ 				function = "blsp_i2c1";
+ 				drive-strength = <2>;
+ 				bias-pull-up;
+ 			};
+ 
+-			blsp1_i2c2_default: blsp1-i2c2-default {
++			blsp1_i2c2_default: blsp1-i2c2-default-state {
+ 				pins = "gpio6", "gpio7";
+ 				function = "blsp_i2c2";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+ 
+-			blsp1_i2c2_sleep: blsp1-i2c2-sleep {
++			blsp1_i2c2_sleep: blsp1-i2c2-sleep-state {
+ 				pins = "gpio6", "gpio7";
+ 				function = "blsp_i2c2";
+ 				drive-strength = <2>;
+ 				bias-pull-up;
+ 			};
+ 
+-			blsp1_i2c3_default: blsp1-i2c3-default {
++			blsp1_i2c3_default: blsp1-i2c3-default-state {
+ 				pins = "gpio10", "gpio11";
+ 				function = "blsp_i2c3";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+ 
+-			blsp1_i2c3_sleep: blsp1-i2c3-sleep {
++			blsp1_i2c3_sleep: blsp1-i2c3-sleep-state {
+ 				pins = "gpio10", "gpio11";
+ 				function = "blsp_i2c3";
+ 				drive-strength = <2>;
+@@ -1400,14 +1401,14 @@ blsp1_i2c3_sleep: blsp1-i2c3-sleep {
+ 
+ 			/* BLSP1_I2C5 info is missing */
+ 
+-			blsp1_i2c6_default: blsp1-i2c6-default {
++			blsp1_i2c6_default: blsp1-i2c6-default-state {
+ 				pins = "gpio29", "gpio30";
+ 				function = "blsp_i2c6";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+ 
+-			blsp1_i2c6_sleep: blsp1-i2c6-sleep {
++			blsp1_i2c6_sleep: blsp1-i2c6-sleep-state {
+ 				pins = "gpio29", "gpio30";
+ 				function = "blsp_i2c6";
+ 				drive-strength = <2>;
+@@ -1417,14 +1418,14 @@ blsp1_i2c6_sleep: blsp1-i2c6-sleep {
+ 
+ 			/* BLSP2_I2C1 info is missing */
+ 
+-			blsp2_i2c2_default: blsp2-i2c2-default {
++			blsp2_i2c2_default: blsp2-i2c2-default-state {
+ 				pins = "gpio47", "gpio48";
+ 				function = "blsp_i2c8";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+ 
+-			blsp2_i2c2_sleep: blsp2-i2c2-sleep {
++			blsp2_i2c2_sleep: blsp2-i2c2-sleep-state {
+ 				pins = "gpio47", "gpio48";
+ 				function = "blsp_i2c8";
+ 				drive-strength = <2>;
+@@ -1435,48 +1436,48 @@ blsp2_i2c2_sleep: blsp2-i2c2-sleep {
+ 
+ 			/* BLSP2_I2C4 info is missing */
+ 
+-			blsp2_i2c5_default: blsp2-i2c5-default {
++			blsp2_i2c5_default: blsp2-i2c5-default-state {
+ 				pins = "gpio83", "gpio84";
+ 				function = "blsp_i2c11";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+ 
+-			blsp2_i2c5_sleep: blsp2-i2c5-sleep {
++			blsp2_i2c5_sleep: blsp2-i2c5-sleep-state {
+ 				pins = "gpio83", "gpio84";
+ 				function = "blsp_i2c11";
+ 				drive-strength = <2>;
+ 				bias-pull-up;
+ 			};
+ 
+-			blsp2_i2c6_default: blsp2-i2c6-default {
++			blsp2_i2c6_default: blsp2-i2c6-default-state {
+ 				pins = "gpio87", "gpio88";
+ 				function = "blsp_i2c12";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+ 
+-			blsp2_i2c6_sleep: blsp2-i2c6-sleep {
++			blsp2_i2c6_sleep: blsp2-i2c6-sleep-state {
+ 				pins = "gpio87", "gpio88";
+ 				function = "blsp_i2c12";
+ 				drive-strength = <2>;
+ 				bias-pull-up;
+ 			};
+ 
+-			spi8_default: spi8_default {
+-				mosi {
++			spi8_default: spi8_default-state {
++				mosi-pins {
+ 					pins = "gpio45";
+ 					function = "blsp_spi8";
+ 				};
+-				miso {
++				miso-pins {
+ 					pins = "gpio46";
+ 					function = "blsp_spi8";
+ 				};
+-				cs {
++				cs-pins {
+ 					pins = "gpio47";
+ 					function = "blsp_spi8";
+ 				};
+-				clk {
++				clk-pins {
+ 					pins = "gpio48";
+ 					function = "blsp_spi8";
+ 				};
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+index ff6e0066768b..3e32685d8cf8 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
+@@ -408,36 +408,36 @@ &smbb {
+ };
+ 
+ &tlmm {
+-	sdc1_on: sdc1-on {
+-		clk {
++	sdc1_on: sdc1-on-state {
++		clk-pins {
+ 			pins = "sdc1_clk";
+ 			drive-strength = <16>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc1_cmd", "sdc1_data";
+ 			drive-strength = <10>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	sdc2_on: sdc2-on {
+-		clk {
++	sdc2_on: sdc2-on-state {
++		clk-pins {
+ 			pins = "sdc2_clk";
+ 			drive-strength = <10>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc2_cmd", "sdc2_data";
+ 			drive-strength = <6>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	wcnss_pin_a: wcnss-pin-active {
+-		wlan {
++	wcnss_pin_a: wcnss-pin-active-state {
++		wlan-pins {
+ 			pins =  "gpio36", "gpio37", "gpio38", "gpio39", "gpio40";
+ 			function = "wlan";
+ 
+@@ -445,7 +445,7 @@ wlan {
+ 			bias-pull-down;
+ 		};
+ 
+-		bt {
++		bt-pins {
+ 			pins = "gpio35", "gpio43", "gpio44";
+ 			function = "bt";
+ 
+@@ -453,7 +453,7 @@ bt {
+ 			bias-pull-down;
+ 		};
+ 
+-		fm {
++		fm-pins {
+ 			pins = "gpio41", "gpio42";
+ 			function = "fm";
+ 
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
+index 983e10c3d863..5bbdd5eb183b 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
+@@ -706,57 +706,57 @@ &sdhc_3 {
+ 
+ &tlmm {
+ 	/* This seems suspicious, but somebody with this device should look into it. */
+-	blsp2_uart2_pins_active: blsp2-uart2-pins-active {
++	blsp2_uart2_pins_active: blsp2-uart2-pins-active-state {
+ 		pins = "gpio45", "gpio46", "gpio47", "gpio48";
+ 		function = "blsp_uart8";
+ 		drive-strength = <8>;
+ 		bias-disable;
+ 	};
+ 
+-	blsp2_uart2_pins_sleep: blsp2-uart2-pins-sleep {
++	blsp2_uart2_pins_sleep: blsp2-uart2-pins-sleep-state {
+ 		pins = "gpio45", "gpio46", "gpio47", "gpio48";
+ 		function = "gpio";
+ 		drive-strength = <2>;
+ 		bias-pull-down;
+ 	};
+ 
+-	bt_pins: bt-pins {
+-		hostwake {
++	bt_pins: bt-pins-state {
++		hostwake-pins {
+ 			pins = "gpio75";
+ 			function = "gpio";
+ 			drive-strength = <16>;
+ 			input-enable;
+ 		};
+ 
+-		devwake {
++		devwake-pins {
+ 			pins = "gpio91";
+ 			function = "gpio";
+ 			drive-strength = <2>;
+ 		};
+ 	};
+ 
+-	sdc1_on: sdhc1-on {
+-		clk {
++	sdc1_on: sdhc1-on-state {
++		clk-pins {
+ 			pins = "sdc1_clk";
+ 			drive-strength = <4>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc1_cmd", "sdc1_data";
+ 			drive-strength = <4>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	sdc3_on: sdc3-on {
++	sdc3_on: sdc3-on-state {
+ 		pins = "gpio35", "gpio36", "gpio37", "gpio38", "gpio39", "gpio40";
+ 		function = "sdc3";
+ 		drive-strength = <8>;
+ 		bias-disable;
+ 	};
+ 
+-	sdhc3_cd_pin: sdc3-cd-on {
++	sdhc3_cd_pin: sdc3-cd-on-state {
+ 		pins = "gpio62";
+ 		function = "gpio";
+ 
+@@ -764,49 +764,49 @@ sdhc3_cd_pin: sdc3-cd-on {
+ 		bias-disable;
+ 	};
+ 
+-	sdc2_on: sdhc2-on {
+-		clk {
++	sdc2_on: sdhc2-on-state {
++		clk-pins {
+ 			pins = "sdc2_clk";
+ 			drive-strength = <6>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc2_cmd", "sdc2_data";
+ 			drive-strength = <6>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	i2c_touchkey_pins: i2c-touchkey {
++	i2c_touchkey_pins: i2c-touchkey-state {
+ 		pins = "gpio95", "gpio96";
+ 		function = "gpio";
+ 		input-enable;
+ 		bias-pull-up;
+ 	};
+ 
+-	i2c_led_gpioex_pins: i2c-led-gpioex {
++	i2c_led_gpioex_pins: i2c-led-gpioex-state {
+ 		pins = "gpio120", "gpio121";
+ 		function = "gpio";
+ 		input-enable;
+ 		bias-pull-down;
+ 	};
+ 
+-	gpioex_pin: gpioex {
++	gpioex_pin: gpioex-state {
+ 		pins = "gpio145";
+ 		function = "gpio";
+ 		bias-pull-up;
+ 		drive-strength = <2>;
+ 	};
+ 
+-	wifi_pin: wifi {
++	wifi_pin: wifi-state {
+ 		pins = "gpio92";
+ 		function = "gpio";
+ 		input-enable;
+ 		bias-pull-down;
+ 	};
+ 
+-	panel_te_pin: panel {
++	panel_te_pin: panel-state {
+ 		pins = "gpio12";
+ 		function = "mdp_vsync";
+ 		drive-strength = <2>;
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+index 3f45f5c5d37b..d446ac1f75ea 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+@@ -548,41 +548,42 @@ &smbb {
+ };
+ 
+ &tlmm {
+-	lcd_backlight_en_pin_a: lcd-backlight-vddio {
++	lcd_backlight_en_pin_a: lcd-backlight-vddio-state {
+ 		pins = "gpio69";
++		function = "gpio";
+ 		drive-strength = <10>;
+ 		output-low;
+ 		bias-disable;
+ 	};
+ 
+-	sdc1_on: sdc1-on {
+-		clk {
++	sdc1_on: sdc1-on-state {
++		clk-pins {
+ 			pins = "sdc1_clk";
+ 			drive-strength = <16>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc1_cmd", "sdc1_data";
+ 			drive-strength = <10>;
+ 			bias-pull-up;
+ 		};
+ 	};
+ 
+-	sdc2_on: sdc2-on {
+-		clk {
++	sdc2_on: sdc2-on-state {
++		clk-pins {
+ 			pins = "sdc2_clk";
+ 			drive-strength = <6>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd-data {
++		cmd-data-pins {
+ 			pins = "sdc2_cmd", "sdc2_data";
+ 			drive-strength = <6>;
+ 			bias-pull-up;
+ 		};
+ 
+-		cd {
++		cd-pins {
+ 			pins = "gpio62";
+ 			function = "gpio";
+ 			drive-strength = <2>;
+@@ -590,22 +591,22 @@ cd {
+ 		};
+ 	};
+ 
+-	sdc3_on: sdc3-on {
+-		clk {
++	sdc3_on: sdc3-on-state {
++		clk-pins {
+ 			pins = "gpio40";
+ 			function = "sdc3";
+ 			drive-strength = <10>;
+ 			bias-disable;
+ 		};
+ 
+-		cmd {
++		cmd-pins {
+ 			pins = "gpio39";
+ 			function = "sdc3";
+ 			drive-strength = <10>;
+ 			bias-pull-up;
+ 		};
+ 
+-		data {
++		data-pins {
+ 			pins = "gpio35", "gpio36", "gpio37", "gpio38";
+ 			function = "sdc3";
+ 			drive-strength = <10>;
+@@ -613,7 +614,7 @@ data {
+ 		};
+ 	};
+ 
+-	ts_int_pin: ts-int-pin {
++	ts_int_pin: ts-int-pin-state {
+ 		pins = "gpio86";
+ 		function = "gpio";
+ 		drive-strength = <2>;
+@@ -621,7 +622,7 @@ ts_int_pin: ts-int-pin {
+ 		input-enable;
+ 	};
+ 
+-	bt_host_wake_pin: bt-host-wake {
++	bt_host_wake_pin: bt-host-wake-state {
+ 		pins = "gpio95";
+ 		function = "gpio";
+ 		drive-strength = <2>;
+@@ -629,7 +630,7 @@ bt_host_wake_pin: bt-host-wake {
+ 		output-low;
+ 	};
+ 
+-	bt_dev_wake_pin: bt-dev-wake {
++	bt_dev_wake_pin: bt-dev-wake-state {
+ 		pins = "gpio96";
+ 		function = "gpio";
+ 		drive-strength = <2>;
 -- 
 2.34.1
 
