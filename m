@@ -2,115 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB08601B54
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CBE601B50
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiJQVc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S230377AbiJQVcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiJQVct (ORCPT
+        with ESMTP id S229780AbiJQVcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:32:49 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE07CB51;
-        Mon, 17 Oct 2022 14:32:37 -0700 (PDT)
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 29HLWJfp026370;
-        Tue, 18 Oct 2022 06:32:19 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 29HLWJfp026370
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1666042339;
-        bh=A9DSYIu9/NXOyiS7xPZNFkoZDUyi3jGg6FffSm1+/Ik=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=20WBYTHRNcs08BD6VQzUo4nIz/qgYmABFyn8DzsI30UO3dtmbWuFHc2X4Ru56w5mR
-         E84jos3l/7Af2bh6V7haADHjppjQ+EPJLK6I3ITvSE0TnWrg4X/bitEK3u/q4KM0pj
-         Xcjtz1qChkaLL8kxh1UMmy/zozyaCqSRWIcH6gScJT/A0VC875seTWFxSA6fAusRXj
-         XJmblp5+TZZRyktpqAEudZUFfnDJ7kbC9MWju9+lST7+lwa/t/xrasvqo7f9xaD0V7
-         JZliRy86cUkeQRNENQjYuQEbuPJ0djKBc3Y7ai4ISM947l0eHOC3lAFziObXRJCloC
-         r2mTObMbVTktQ==
-X-Nifty-SrcIP: [209.85.160.50]
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1370acb6588so14760101fac.9;
-        Mon, 17 Oct 2022 14:32:19 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0oKKYG9HRMtl+pJmSEH2z4e1gapCuX8kjt4hEb26wsKrn5SozR
-        qwhQ0zyV3grHx9Etm5br+x3RBtTIxEt47eWSw3g=
-X-Google-Smtp-Source: AMsMyM4ip6TZdj6uaGNj4mpwyAgawp0QupIF2/ySfBpkjMkP/PCXVQZQSRHQsSTLo5hKxyGYMfsR4VMeGX3Evt4KqvE=
-X-Received: by 2002:a05:6870:8a09:b0:132:554d:2f3d with SMTP id
- p9-20020a0568708a0900b00132554d2f3dmr16265337oaq.194.1666042338433; Mon, 17
- Oct 2022 14:32:18 -0700 (PDT)
+        Mon, 17 Oct 2022 17:32:12 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D428013F3B;
+        Mon, 17 Oct 2022 14:32:09 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1okXiN-0001oB-9u; Mon, 17 Oct 2022 23:32:03 +0200
+Message-ID: <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
+Date:   Mon, 17 Oct 2022 23:31:57 +0200
 MIME-Version: 1.0
-References: <20221017150113.334571-1-newbie13xd@gmail.com>
-In-Reply-To: <20221017150113.334571-1-newbie13xd@gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 18 Oct 2022 06:31:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARsUE4j7LNYsushQaXFBEcnhhXoNg9THh2wLrYoi2jp9Q@mail.gmail.com>
-Message-ID: <CAK7LNARsUE4j7LNYsushQaXFBEcnhhXoNg9THh2wLrYoi2jp9Q@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: use POSIX-compatible grep option
-To:     Stefan Hansson <newbie13xd@gmail.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US, pl-PL
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ajones@ventanamicro.com,
+        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com, peterx@redhat.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com,
+        kvmarm@lists.linux.dev
+References: <20221014071914.227134-1-gshan@redhat.com>
+ <20221014071914.227134-5-gshan@redhat.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
+ guest page size
+In-Reply-To: <20221014071914.227134-5-gshan@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 12:02 AM Stefan Hansson <newbie13xd@gmail.com> wrote:
->
-> --file is a GNU extension to grep which is not available in all
-> implementations (such as BusyBox). Use the -f option instead which is
-> eqvuialent according to the GNU grep manpage[1] and is present in
-> POSIX[2].
->
->  [1] https://www.gnu.org/software/grep/manual/grep.html
->  [2] https://pubs.opengroup.org/onlinepubs/9699919799/
-
-
-This link does not show the spec of grep.
-
-
-Did you mean this?
-
-https://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html
-
-
-
-
-Thanks.
-
-
-
-
-
->
-> Signed-off-by: Stefan Hansson <newbie13xd@gmail.com>
+On 14.10.2022 09:19, Gavin Shan wrote:
+> The test case is obviously broken on aarch64 because non-4KB guest
+> page size is supported. The guest page size on aarch64 could be 4KB,
+> 16KB or 64KB.
+> 
+> This supports variable guest page size, mostly for aarch64.
+> 
+>    - The host determines the guest page size when virtual machine is
+>      created. The value is also passed to guest through the synchronization
+>      area.
+> 
+>    - The number of guest pages are unknown until the virtual machine
+>      is to be created. So all the related macros are dropped. Instead,
+>      their values are dynamically calculated based on the guest page
+>      size.
+> 
+>    - The static checks on memory sizes and pages becomes dependent
+>      on guest page size, which is unknown until the virtual machine
+>      is about to be created. So all the static checks are converted
+>      to dynamic checks, done in check_memory_sizes().
+> 
+>    - As the address passed to madvise() should be aligned to host page,
+>      the size of page chunk is automatically selected, other than one
+>      page.
+> 
+>    - All other changes included in this patch are almost mechanical
+>      replacing '4096' with 'guest_page_size'.
+> 
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
 > ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index c690361b393f..3513a6db66a2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
->        cmd_ar_vmlinux.a = \
->         rm -f $@; \
->         $(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
-> -       $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
-> +       $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -Ff $(srctree)/scripts/head-object-list.txt)
->
->  targets += vmlinux.a
->  vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
-> --
-> 2.37.3
+>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
+>   1 file changed, 115 insertions(+), 76 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+> index d5aa9148f96f..d587bd952ff9 100644
+> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
+> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+> @@ -26,14 +26,11 @@
+>   #include <processor.h>
+>   
+>   #define MEM_SIZE		((512U << 20) + 4096)
+> -#define MEM_SIZE_PAGES		(MEM_SIZE / 4096)
+>   #define MEM_GPA		0x10000000UL
+>   #define MEM_AUX_GPA		MEM_GPA
+>   #define MEM_SYNC_GPA		MEM_AUX_GPA
+>   #define MEM_TEST_GPA		(MEM_AUX_GPA + 4096)
+>   #define MEM_TEST_SIZE		(MEM_SIZE - 4096)
+> -static_assert(MEM_SIZE % 4096 == 0, "invalid mem size");
+> -static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
+>   
+>   /*
+>    * 32 MiB is max size that gets well over 100 iterations on 509 slots.
+> @@ -42,29 +39,16 @@ static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
+>    * limited resolution).
+>    */
+>   #define MEM_SIZE_MAP		((32U << 20) + 4096)
+> -#define MEM_SIZE_MAP_PAGES	(MEM_SIZE_MAP / 4096)
+>   #define MEM_TEST_MAP_SIZE	(MEM_SIZE_MAP - 4096)
+> -#define MEM_TEST_MAP_SIZE_PAGES (MEM_TEST_MAP_SIZE / 4096)
+> -static_assert(MEM_SIZE_MAP % 4096 == 0, "invalid map test region size");
+> -static_assert(MEM_TEST_MAP_SIZE % 4096 == 0, "invalid map test region size");
+> -static_assert(MEM_TEST_MAP_SIZE_PAGES % 2 == 0, "invalid map test region size");
+> -static_assert(MEM_TEST_MAP_SIZE_PAGES > 2, "invalid map test region size");
+>   
+>   /*
+>    * 128 MiB is min size that fills 32k slots with at least one page in each
+>    * while at the same time gets 100+ iterations in such test
+> + *
+> + * 2 MiB chunk size like a typical huge page
+>    */
+>   #define MEM_TEST_UNMAP_SIZE		(128U << 20)
+> -#define MEM_TEST_UNMAP_SIZE_PAGES	(MEM_TEST_UNMAP_SIZE / 4096)
+> -/* 2 MiB chunk size like a typical huge page */
+> -#define MEM_TEST_UNMAP_CHUNK_PAGES	(2U << (20 - 12))
+> -static_assert(MEM_TEST_UNMAP_SIZE <= MEM_TEST_SIZE,
+> -	      "invalid unmap test region size");
+> -static_assert(MEM_TEST_UNMAP_SIZE % 4096 == 0,
+> -	      "invalid unmap test region size");
+> -static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+> -	      (2 * MEM_TEST_UNMAP_CHUNK_PAGES) == 0,
+> -	      "invalid unmap test region size");
+> +#define MEM_TEST_UNMAP_CHUNK_SIZE	(2U << 20)
+>   
+>   /*
+>    * For the move active test the middle of the test area is placed on
+> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+>    * for the total size of 25 pages.
+>    * Hence, the maximum size here is 50 pages.
+>    */
+> -#define MEM_TEST_MOVE_SIZE_PAGES	(50)
+> -#define MEM_TEST_MOVE_SIZE		(MEM_TEST_MOVE_SIZE_PAGES * 4096)
+> +#define MEM_TEST_MOVE_SIZE		0x32000
+
+The above number seems less readable than an explicit value of 50 pages.
+
+In addition to that, it's 50 pages only with 4k page size, so at least
+the comment above needs to be updated to reflect this fact.
+
+>   #define MEM_TEST_MOVE_GPA_DEST		(MEM_GPA + MEM_SIZE)
+>   static_assert(MEM_TEST_MOVE_SIZE <= MEM_TEST_SIZE,
+>   	      "invalid move test region size");
+(...)
+> @@ -242,33 +229,34 @@ static struct vm_data *alloc_vm(void)
+>   }
+>   
+>   static bool prepare_vm(struct vm_data *data, int nslots, uint64_t *maxslots,
+> -		       void *guest_code, uint64_t mempages,
+> +		       void *guest_code, uint64_t mem_size,
+>   		       struct timespec *slot_runtime)
+>   {
+> -	uint64_t rempages;
+> +	uint64_t mempages, rempages;
+>   	uint64_t guest_addr;
+> -	uint32_t slot;
+> +	uint32_t slot, guest_page_size;
+>   	struct timespec tstart;
+>   	struct sync_area *sync;
+>   
+> -	TEST_ASSERT(mempages > 1,
+> -		    "Can't test without any memory");
+> +	guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
+> +	mempages = mem_size / guest_page_size;
+> +
+> +	data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
+> +	ucall_init(data->vm, NULL);
 >
 
+TEST_ASSERT(data->vm->page_size == guest_page_size, "Invalid VM page size")
+here would catch the case if someone accidentally modifies
+__vm_create_with_one_vcpu() to use other page size than specified for
+VM_MODE_DEFAULT.
 
--- 
-Best Regards
-Masahiro Yamada
+>   	data->npages = mempages;
+> +	TEST_ASSERT(data->npages > 1, "Can't test without any memory");
+>   	data->nslots = nslots;
+> -	data->pages_per_slot = mempages / data->nslots;
+> +	data->pages_per_slot = data->npages / data->nslots;
+>   	if (!data->pages_per_slot) {
+> -		*maxslots = mempages + 1;
+> +		*maxslots = data->npages + 1;
+>   		return false;
+>   	}
+>   
+> -	rempages = mempages % data->nslots;
+> +	rempages = data->npages % data->nslots;
+>   	data->hva_slots = malloc(sizeof(*data->hva_slots) * data->nslots);
+>   	TEST_ASSERT(data->hva_slots, "malloc() fail");
+>   
+> -	data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
+> -	ucall_init(data->vm, NULL);
+> -
+>   	pr_info_v("Adding slots 1..%i, each slot with %"PRIu64" pages + %"PRIu64" extra pages last\n",
+>   		data->nslots, data->pages_per_slot, rempages);
+>   
+(...)
+> @@ -856,6 +863,35 @@ static void help(char *name, struct test_args *targs)
+>   		pr_info("%d: %s\n", ctr, tests[ctr].name);
+>   }
+>   
+> +static bool check_memory_sizes(void)
+> +{
+> +	uint32_t guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
+> +
+> +	if (MEM_SIZE % guest_page_size ||
+> +	    MEM_TEST_SIZE % guest_page_size) {
+> +		pr_info("invalid MEM_SIZE or MEM_TEST_SIZE\n");
+> +		return false;
+> +	}
+> +
+> +	if (MEM_SIZE_MAP % guest_page_size		||
+> +	    MEM_TEST_MAP_SIZE % guest_page_size		||
+> +	    (MEM_TEST_MAP_SIZE / guest_page_size) <= 2	||
+> +	    (MEM_TEST_MAP_SIZE / guest_page_size) % 2) {
+> +		pr_info("invalid MEM_SIZE_MAP or MEM_TEST_MAP_SIZE\n");
+> +		return false;
+> +	}
+> +
+> +	if (MEM_TEST_UNMAP_SIZE > MEM_TEST_SIZE		||
+> +	    MEM_TEST_UNMAP_SIZE % guest_page_size	||
+> +	    (MEM_TEST_UNMAP_SIZE / guest_page_size) %
+> +	    (MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size)) {
+
+This should be (MEM_TEST_UNMAP_SIZE / guest_page_size) % (2 * MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size))
+to match the old static_assert().
+
+Thanks,
+Maciej
+
