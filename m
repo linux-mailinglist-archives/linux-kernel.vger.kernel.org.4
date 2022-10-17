@@ -2,126 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C029A600BC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97195600BC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiJQJ6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S231259AbiJQJ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbiJQJ6Z (ORCPT
+        with ESMTP id S229895AbiJQJ6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:58:25 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D2650718
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:58:22 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221017095816epoutp036bcb622b8c2d56322008138aa20c247a~e0s6MH2Il2032220322epoutp03t
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 09:58:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221017095816epoutp036bcb622b8c2d56322008138aa20c247a~e0s6MH2Il2032220322epoutp03t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1666000696;
-        bh=WibRp7sZGBpviG504+PtLtKysfpSfKBHtaKxwIvQxv4=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=ant+w7v/HV97NCE2sxI50hEp0J6cwjI6mMQMKYebj5Vckoi237gAD7Mui2cdKvDW2
-         +qdRAoZ5rXQB+ZVCVeR2QUhXs7ozI83w820yQMyXHwCRmXBX37ieZ7lCJHGvn10uFj
-         ngM5YN9UXubam5uTfYnPTEOG8GR50rBhTlnmJeyI=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20221017095816epcas2p111a20eff63ae8467348ccbe9f6b90339~e0s5o-1N70896308963epcas2p1W;
-        Mon, 17 Oct 2022 09:58:16 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4MrXVv5nFsz4x9Q2; Mon, 17 Oct
-        2022 09:58:15 +0000 (GMT)
-X-AuditID: b6c32a47-ac5b870000002127-4a-634d2737e88f
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        30.41.08487.7372D436; Mon, 17 Oct 2022 18:58:15 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: core: Fix typo for register name in comments
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20221017095815epcms2p110e3421b99bb9a937620b4d065d0ed12@epcms2p1>
-Date:   Mon, 17 Oct 2022 18:58:15 +0900
-X-CMS-MailID: 20221017095815epcms2p110e3421b99bb9a937620b4d065d0ed12
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNJsWRmVeSWpSXmKPExsWy7bCmha65um+ywbZubYsH87axWbz8eZXN
-        4uDDThaLaR9+Mlu8PKRp8ej2M0aL3v6tbBaLbmxjsri8aw6bRff1HWwWy4//Y7JYuvUmowOP
-        x+Ur3h4TFh1g9Gg5uZ/F4/v6DjaPj09vsXj0bVnF6PF5k5xH+4FupgCOqGybjNTElNQihdS8
-        5PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKBjlRTKEnNKgUIBicXFSvp2
-        NkX5pSWpChn5xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGTcW/WUueMZa8fXO
-        HPYGxkcsXYycHBICJhI9rZ+Zuxi5OIQEdjBKLDy9ibWLkYODV0BQ4u8OYZAaYQEPiTMnXjGC
-        2EICShJdC7cyQ8QNJNZN3wNmswnoSUz5fYcRZI6IwG9middbFrBCLOCVmNH+FGqZtMT25VsZ
-        IWwNiR/LepkhbFGJm6vfssPY74/Nh6oRkWi9dxaqRlDiwc/dUHFJidYzW9kg7HyJJzf7oebX
-        SCzY/hkqri9xrWMjWJxXwFfiy8tWsPksAqoSZ+c1M4L8KCHgIvFjmjhImFlAXmL72znMIGFm
-        AU2J9bv0ISqUJY7cYoF5pGHjb3Z0NrMAn0TH4b9w8R3znjBB2GoSjxZsgQaCjMTFOeegHvGQ
-        +Dp5ItMERsVZiHCeheSGWQg3LGBkXsUollpQnJueWmxUYAyP2uT83E2M4FSr5b6DccbbD3qH
-        GJk4GA8xSnAwK4nwun3xSRbiTUmsrEotyo8vKs1JLT7EaAr0/ERmKdHkfGCyzyuJNzSxNDAx
-        MzM0NzI1MFcS5+2aoZUsJJCeWJKanZpakFoE08fEwSnVwLRX/JMuc2/pzY1CPGrik2frrX1r
-        93XNXNH3wdsO3Ll9XMu/t+rMspu6dxPPH6/5cqptB+sHtqLc9YXK3L09QlY3ekrTK5XfaB+1
-        WDzrtnnBkhp3m4Xzwgzmib/tYzQIWFd0W/LWzX5evniPG9dXHwtcoqBy/0DZrM/H/JZfdLD6
-        XuqluoqlOldW/mHTxJrqiTsXFR5g8Hxa/yegv3XTuTuL+z1FuywU1x1byP2yat8/1pimwM/L
-        pujMU3pxc4FI0dnSz7IPlJb+zNG+/bFV1WLSqQPsK9UuXt59PzhcsFzz5a6y6dyevyL3lKXq
-        bP5heKJw+8HJdbu+yj48MPG8kVhgTpTZ23fsy/7lcms0p15QYinOSDTUYi4qTgQAFz4oUj4E
-        AAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221017095815epcms2p110e3421b99bb9a937620b4d065d0ed12
-References: <CGME20221017095815epcms2p110e3421b99bb9a937620b4d065d0ed12@epcms2p1>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 05:58:50 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E3E5D709;
+        Mon, 17 Oct 2022 02:58:46 -0700 (PDT)
+X-UUID: 7fed56010da44bb0a6c2d84ef687af6f-20221017
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=XnXmSygOmRiR/cJ+1yzj2cNgqZVXjArj5R+iOu/seyE=;
+        b=U1ShO4K+tvhivTqdDduVOaA1FwG/w/57LduTXIa0u0DZ/f3sdZqEXQMQ4F3xaUAL2N18/qV5YSpRY7shOvJOIGQ6rgC7kxNji4jWXtbIREpNrHMjnEslhfRwCXUAMAUEP0iBgzLzQlq5c82zk2/kzzwI9/JUgxDYgaK5FVi/AYo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:4632b373-b53a-4053-bc26-f56936bc0003,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:0c6605a4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 7fed56010da44bb0a6c2d84ef687af6f-20221017
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 229668657; Mon, 17 Oct 2022 17:58:40 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 17 Oct 2022 17:58:39 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 17 Oct 2022 17:58:37 +0800
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Biao Huang" <biao.huang@mediatek.com>, <macpaul.lin@mediatek.com>
+Subject: [PATCH] arm64: dts: mt8195: Add Ethernet controller
+Date:   Mon, 17 Oct 2022 17:58:34 +0800
+Message-ID: <20221017095834.7675-1-biao.huang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change "UTRMLCLR" to "UTMRLCLR".
-The meaning is "UTP Task Management Request List CLear Register"
+Add Ethernet controller node for mt8195.
 
-Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+Signed-off-by: Biao Huang <biao.huang@mediatek.com>
 ---
- drivers/ufs/core/ufshcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88 ++++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 87 +++++++++++++++++++
+ 2 files changed, 175 insertions(+)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 7c15cbc737b4..9c5f100b488c 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -772,7 +772,7 @@ static inline void ufshcd_utrl_clear(struct ufs_hba *hba, u32 mask)
- }
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+index 4fbd99eb496a..02e04f82a4ae 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+@@ -258,6 +258,72 @@ &mt6359_vsram_others_ldo_reg {
+ };
  
- /**
-- * ufshcd_utmrl_clear - Clear a bit in UTRMLCLR register
-+ * ufshcd_utmrl_clear - Clear a bit in UTMRLCLR register
-  * @hba: per adapter instance
-  * @pos: position of the bit to be cleared
-  */
+ &pio {
++	eth_default: eth_default {
++		txd_pins {
++			pinmux = <PINMUX_GPIO77__FUNC_GBE_TXD3>,
++				 <PINMUX_GPIO78__FUNC_GBE_TXD2>,
++				 <PINMUX_GPIO79__FUNC_GBE_TXD1>,
++				 <PINMUX_GPIO80__FUNC_GBE_TXD0>;
++			drive-strength = <MTK_DRIVE_8mA>;
++		};
++		cc_pins {
++			pinmux = <PINMUX_GPIO85__FUNC_GBE_TXC>,
++				 <PINMUX_GPIO88__FUNC_GBE_TXEN>,
++				 <PINMUX_GPIO87__FUNC_GBE_RXDV>,
++				 <PINMUX_GPIO86__FUNC_GBE_RXC>;
++			drive-strength = <MTK_DRIVE_8mA>;
++		};
++		rxd_pins {
++			pinmux = <PINMUX_GPIO81__FUNC_GBE_RXD3>,
++				 <PINMUX_GPIO82__FUNC_GBE_RXD2>,
++				 <PINMUX_GPIO83__FUNC_GBE_RXD1>,
++				 <PINMUX_GPIO84__FUNC_GBE_RXD0>;
++		};
++		mdio_pins {
++			pinmux = <PINMUX_GPIO89__FUNC_GBE_MDC>,
++				 <PINMUX_GPIO90__FUNC_GBE_MDIO>;
++			input-enable;
++		};
++		power_pins {
++			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
++				 <PINMUX_GPIO92__FUNC_GPIO92>;
++			output-high;
++		};
++	};
++
++	eth_sleep: eth_sleep {
++		txd_pins {
++			pinmux = <PINMUX_GPIO77__FUNC_GPIO77>,
++				 <PINMUX_GPIO78__FUNC_GPIO78>,
++				 <PINMUX_GPIO79__FUNC_GPIO79>,
++				 <PINMUX_GPIO80__FUNC_GPIO80>;
++		};
++		cc_pins {
++			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>,
++				 <PINMUX_GPIO88__FUNC_GPIO88>,
++				 <PINMUX_GPIO87__FUNC_GPIO87>,
++				 <PINMUX_GPIO86__FUNC_GPIO86>;
++		};
++		rxd_pins {
++			pinmux = <PINMUX_GPIO81__FUNC_GPIO81>,
++				 <PINMUX_GPIO82__FUNC_GPIO82>,
++				 <PINMUX_GPIO83__FUNC_GPIO83>,
++				 <PINMUX_GPIO84__FUNC_GPIO84>;
++		};
++		mdio_pins {
++			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>,
++				 <PINMUX_GPIO90__FUNC_GPIO90>;
++			input-disable;
++			bias-disable;
++		};
++		power_pins {
++			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
++				 <PINMUX_GPIO92__FUNC_GPIO92>;
++			input-disable;
++			bias-disable;
++		};
++	};
++
+ 	gpio_keys_pins: gpio-keys-pins {
+ 		pins {
+ 			pinmux = <PINMUX_GPIO106__FUNC_GPIO106>;
+@@ -434,6 +500,28 @@ &xhci0 {
+ 	status = "okay";
+ };
+ 
++&eth {
++	phy-mode ="rgmii-rxid";
++	phy-handle = <&eth_phy0>;
++	snps,reset-gpio = <&pio 93 GPIO_ACTIVE_HIGH>;
++	snps,reset-delays-us = <0 10000 10000>;
++	mediatek,tx-delay-ps = <2030>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&eth_default>;
++	pinctrl-1 = <&eth_sleep>;
++	status = "okay";
++
++	mdio {
++		compatible = "snps,dwmac-mdio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		eth_phy0: eth_phy0@1 {
++			compatible = "ethernet-phy-id001c.c916";
++			reg = <0x1>;
++		};
++	};
++};
++
+ &xhci1 {
+ 	vusb33-supply = <&mt6359_vusb_ldo_reg>;
+ 	status = "okay";
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index 905d1a90b406..aa1fcc3b9cb6 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -1042,6 +1042,93 @@ spis1: spi@1101e000 {
+ 			status = "disabled";
+ 		};
+ 
++		stmmac_axi_setup: stmmac-axi-config {
++			snps,wr_osr_lmt = <0x7>;
++			snps,rd_osr_lmt = <0x7>;
++			snps,blen = <0 0 0 0 16 8 4>;
++		};
++
++		mtl_rx_setup: rx-queues-config {
++			snps,rx-queues-to-use = <4>;
++			snps,rx-sched-sp;
++			queue0 {
++				snps,dcb-algorithm;
++				snps,map-to-dma-channel = <0x0>;
++			};
++			queue1 {
++				snps,dcb-algorithm;
++				snps,map-to-dma-channel = <0x0>;
++			};
++			queue2 {
++				snps,dcb-algorithm;
++				snps,map-to-dma-channel = <0x0>;
++			};
++			queue3 {
++				snps,dcb-algorithm;
++				snps,map-to-dma-channel = <0x0>;
++			};
++		};
++
++		mtl_tx_setup: tx-queues-config {
++			snps,tx-queues-to-use = <4>;
++			snps,tx-sched-wrr;
++			queue0 {
++				snps,weight = <0x10>;
++				snps,dcb-algorithm;
++				snps,priority = <0x0>;
++			};
++			queue1 {
++				snps,weight = <0x11>;
++				snps,dcb-algorithm;
++				snps,priority = <0x1>;
++			};
++			queue2 {
++				snps,weight = <0x12>;
++				snps,dcb-algorithm;
++				snps,priority = <0x2>;
++			};
++			queue3 {
++				snps,weight = <0x13>;
++				snps,dcb-algorithm;
++				snps,priority = <0x3>;
++			};
++		};
++
++		eth: ethernet@11021000 {
++			compatible = "mediatek,mt8195-gmac", "snps,dwmac-5.10a";
++			reg = <0 0x11021000 0 0x4000>;
++			interrupts = <GIC_SPI 716 IRQ_TYPE_LEVEL_HIGH 0>;
++			interrupt-names = "macirq";
++			mac-address = [00 55 7b b5 7d f7];
++			clock-names = "axi",
++				      "apb",
++				      "mac_cg",
++				      "mac_main",
++				      "ptp_ref",
++				      "rmii_internal";
++			clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
++				 <&pericfg_ao CLK_PERI_AO_ETHERNET_BUS>,
++				 <&pericfg_ao CLK_PERI_AO_ETHERNET_MAC>,
++				 <&topckgen CLK_TOP_SNPS_ETH_250M>,
++				 <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
++				 <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
++			assigned-clocks = <&topckgen CLK_TOP_SNPS_ETH_250M>,
++					  <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
++					  <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
++			assigned-clock-parents = <&topckgen CLK_TOP_ETHPLL_D2>,
++						 <&topckgen CLK_TOP_ETHPLL_D8>,
++						 <&topckgen CLK_TOP_ETHPLL_D10>;
++			power-domains = <&spm MT8195_POWER_DOMAIN_ETHER>;
++			mediatek,pericfg = <&infracfg_ao>;
++			snps,axi-config = <&stmmac_axi_setup>;
++			snps,mtl-rx-config = <&mtl_rx_setup>;
++			snps,mtl-tx-config = <&mtl_tx_setup>;
++			snps,txpbl = <16>;
++			snps,rxpbl = <16>;
++			snps,clk-csr = <0>;
++			status = "disabled";
++		};
++
+ 		xhci0: usb@11200000 {
+ 			compatible = "mediatek,mt8195-xhci",
+ 				     "mediatek,mtk-xhci";
 -- 
-2.17.1
+2.25.1
 
