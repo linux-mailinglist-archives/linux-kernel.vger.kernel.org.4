@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024FB601DEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 01:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75761601DF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 01:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiJQX4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 19:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S231129AbiJQX42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 19:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiJQX4M (ORCPT
+        with ESMTP id S230185AbiJQX4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Oct 2022 19:56:12 -0400
 Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2810E7E013
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5814E7E301
         for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 16:56:07 -0700 (PDT)
 Received: from localhost.localdomain ([146.241.87.206])
         by Aruba Outgoing Smtp  with ESMTPSA
-        id kZxkoIDsHJpY4kZxloMdtZ; Tue, 18 Oct 2022 01:56:06 +0200
+        id kZxkoIDsHJpY4kZxmoMdtp; Tue, 18 Oct 2022 01:56:06 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1666050966; bh=V+admxQwpLfW/V/+bGSuXav4uFvMNNrftW6txCx6iRw=;
+        t=1666050966; bh=AwSDPioUx7F0h3hwMs9mvaexbpHNhz0n7qe0CuDHMuQ=;
         h=From:To:Subject:Date:MIME-Version;
-        b=CXmSTPNv+sjLLeHTr9MgSboyhUdNZGdxctm70YpIHOJRBp5UsPS8fORljpbDc7Qlf
-         H32XRZt4bOlaEhQV+7vXA0XiLLUB3/9alxoJ5+ZlicTDfTOieWcdZ6I1mZ4Dn7seQw
-         fBnwahbGeclMjcJg1IX0D+rPh5QasBzYsZ0ladmh7/YZ6gFMs/fvYIAucwKlGTfh/v
-         LLzU4bdCRXsPVnyF9WxHpUFDwYr8c8GtuH0DJB4Rf/pS8+XODy2KPIt18VYko00tvZ
-         Q2atlRNtE99P+PjjsmUAMlBw46Myzus5aBwHYJpMaGEilInsFB9FYNbVSzr5blDfQu
-         p2wJUP9TbeZ8Q==
+        b=eKrlNnf6iWMYVwdmA6Oru3LaEqzV7r9Rc0Mi2RoxobBH8odAp/6vs/34AOqgv/i1M
+         HIsJ5F05xtZRAxc1q88gKqSLnQHm6WGeLxUFB9PGNnpzbt20cM26YExINwiYB8Ibb/
+         AS+tR+WQRfdc8rCssOjke1ykTq/Gg1MAlr0J9f4A4Hzx0f8/ZahQ5FIq2KyDo7G6Sn
+         +x/kdjIXHeys/eVsqBWqm1HDrmuTX3e7chnKNH5ximcOPLMZNF5aQTY/SaLAmkHjwd
+         8OekqwMMRHQeasP7SpCPVFGMwpsxnFZCSw7FXTS0ahQll7Lq4xlz17JAS6zWWuxl0q
+         aY7aRL+QHo5GA==
 From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
 To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc:     Stephen Boyd <sboyd@kernel.org>, Haibo Chen <haibo.chen@nxp.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Giulio Benetti <giulio.benetti@benettiengineering.com>
-Subject: [PATCH 4/5] ARM: dts: imxrt1050: remove mmc max-frequency property
-Date:   Tue, 18 Oct 2022 01:56:01 +0200
-Message-Id: <20221017235602.86250-4-giulio.benetti@benettiengineering.com>
+Subject: [PATCH 5/5] ARM: dts: imx: prepend a 0 in the memory address to make it clear it's 32MB
+Date:   Tue, 18 Oct 2022 01:56:02 +0200
+Message-Id: <20221017235602.86250-5-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221017235602.86250-1-giulio.benetti@benettiengineering.com>
 References: <20221017235602.86250-1-giulio.benetti@benettiengineering.com>
@@ -58,28 +58,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to i.MXRT1050 Reference Manual usdhc supports up to 208Mhz clock
-so let's remove max-frequency property in the .dtsi base file and
-in case add that property in the board specific .dts file for a specific
-device connected to it.
-
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- arch/arm/boot/dts/imxrt1050.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/boot/dts/imxrt1050-evk.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
-index 114465e4dde6..0b44cc4ce6ad 100644
---- a/arch/arm/boot/dts/imxrt1050.dtsi
-+++ b/arch/arm/boot/dts/imxrt1050.dtsi
-@@ -93,7 +93,6 @@ usdhc1: mmc@402c0000 {
- 			bus-width = <4>;
- 			fsl,wp-controller;
- 			no-1-8-v;
--			max-frequency = <4000000>;
- 			fsl,tuning-start-tap = <20>;
- 			fsl,tuning-step = <2>;
- 			status = "disabled";
+diff --git a/arch/arm/boot/dts/imxrt1050-evk.dts b/arch/arm/boot/dts/imxrt1050-evk.dts
+index 1d339f48899f..3de392d014fe 100644
+--- a/arch/arm/boot/dts/imxrt1050-evk.dts
++++ b/arch/arm/boot/dts/imxrt1050-evk.dts
+@@ -28,7 +28,7 @@ aliases {
+ 
+ 	memory@80000000 {
+ 		device_type = "memory";
+-		reg = <0x80000000 0x2000000>;
++		reg = <0x80000000 0x02000000>;
+ 	};
+ 
+ 	panel {
 -- 
 2.34.1
 
