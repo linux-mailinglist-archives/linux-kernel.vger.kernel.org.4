@@ -2,69 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E72D601B00
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF6E601B03
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiJQVI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S230036AbiJQVI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiJQVIP (ORCPT
+        with ESMTP id S230401AbiJQVIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:08:15 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F9575FD6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 14:08:09 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id cu10-20020a056a00448a00b00562f2ff1058so6746100pfb.23
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 14:08:08 -0700 (PDT)
+        Mon, 17 Oct 2022 17:08:49 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0AA792C8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 14:08:48 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29HKd6xv021323;
+        Mon, 17 Oct 2022 21:08:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=rO3diyaSNb6O6hnlUO2fD+4bqyU4KlXOyPZ3iJ5ebzg=;
+ b=KXU/X8Jp+WSoogBSWNeOKSjEIye8TedX2cmENMP4Z1jcMcGHw3kRD5pilgHK3wgoMuLQ
+ i/5owD7mdWFYdcU7vzmkdKbxV4SPX+BoqeQWsJJeOh88VKmGQUn6GSItHQr/jnhKOT4G
+ 5d7bv+w3KCOImEC6i7O7a2Cb0uMVobVrnvdZytTt/eWX7mCrg3txHLkSmtKsul0JN9OW
+ NrCLgiItNU76IzBCByKpbRTlJVSIjvbY0kAlUPGC4WH0LgVJc6YU6Kcn1eHjc989KaDf
+ 4G7JZbd860IwhsBMUD/LEn/QajFUeRNqYH+CQiz84YjuyznNYY4KPGiBzGlUD0muQIao mg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7mtyw02h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Oct 2022 21:08:24 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29HJh533019242;
+        Mon, 17 Oct 2022 21:08:23 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3k8j0pq3ts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Oct 2022 21:08:23 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gz17xONYYN6MipmvECtjRgz/7pnb4LoXreenGznwxL9+S1ohap3RRMjShfchtrlUC3Miux8pNtTZyi3E+xDW00I7880BNPLZYDSxvZj4dfJdlTardGLC4ap/Dqaj7xA5V6o31Q5E0av+QnF01FK+kybnMOgyd5rm6tlTMrxxiTJDkd++g0AQJFpFJrwmXCytcVmGOkCvq+MymcDP2YMUvYFcIg2zb+sev90BJtH8cAUxYKNFX0aXn8eyv8t7uGa5xPYI5zNDVd1uV998Knlx3knogTCapba1ytl1GA+tTsQAf95rPDQV7h7H20zQHfzJmPPgEDWgVwp+3+wSOj9/Mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rO3diyaSNb6O6hnlUO2fD+4bqyU4KlXOyPZ3iJ5ebzg=;
+ b=ULaazeoS9aXj6mOdn0/Str1lmn50RVvTjmcM6DldEpmYg47HCTq4xaFQil4KJBpz5cVzJCEs6yqiRH2n2M+x/hGPNDBTjBB+a0IDcDa/FeXv7k8hU4ORWnBuxlTwXSTQmAAk5mnrTc5X57yyVhsFy78rjPp27FWRR8bklDvVyLVCsyczKCHkWh2C8SLQTOP03vUsegWAG30Qr9h2wZ5y0CAFrDSc+pjM+yKpvXoBKnGAg2/+Cl3Mt1luksEwnsJUJj7fFdIu3msRJo2H+OSYj886A+Cr6dOC1yqJHoJ+CbR/gTJzFCEjTDbDhE0mwjQp6hByJXHcWdqu4pMZLzST9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=46MPYDcSyFVz6GkTBNDhV/x3uqfsygrrwPwLQqkUp+w=;
-        b=jzPeBXpOTdnBBqSUUx+JsE7CbYRwJhXYYE8ercipoXpii37ZMHhrX9uxh1TCt/bhpA
-         p4diyFb1+ilOBUx9wd3BL4ND5dvCsY3p3L/+MOoQDUZl4cn9EEB0pICqDW/GlAZICXDE
-         c9hP+YebzW3cfrn2Df91htYo6q4dFJ4EBdqTThpL6BQexammj8BVByu2iNL4gVrwc3dO
-         fljjEGCbLk6Nq6Nh89klNTskGCrgbtmBWexrUdnnhoXxsjLzUvFJOCPa5IvxXqW3vK1O
-         j5z9RhpxbFCgR9ho4MsVfOOaFeFBDafphClmUJsPjRlYXPQ0Zx2LCHqF/AANW1mGHmeq
-         /Kdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=46MPYDcSyFVz6GkTBNDhV/x3uqfsygrrwPwLQqkUp+w=;
-        b=jAsZYOOCv59hBVUfR61yN+6Ue3vGEd/wwT8WrEhGiEUj0FmuRPlm4LdrpPEN8SsJ7G
-         6cQcI133J71hOfcJyzUfWRQ182tUs428CWu1k86NOJwDX6I5Fejwfuv4MLrpwtdmBGGc
-         ETWeG+ubnJQiKscwQsL/Ye0s8Z9Do4Y8SKCZJMEuLuvC0D342Yea5gjz36ZkmoycnYpq
-         i4Njt2pc6QjfZ083qHO7jb518iAx1YZppcvvKzhzB8vid0SEB7rhkpHTYiKnwEELce6v
-         bN0oJA4Pmc150xx+um/ADhX9RwuukCOtr6uL3hG8VxChyjg686QCVKEo9Ac0UA7hmaAa
-         Th3A==
-X-Gm-Message-State: ACrzQf1N+KCX2wbrHOCHR5gM3zequLWjzfSxCEP3/sHnVOoh32CNIk38
-        ZT+2VCUd0HILeqCBjVh5UnUYJNI=
-X-Google-Smtp-Source: AMsMyM4GSctGNx25wodoPDTxUtrfbkCUz9AV+iG7gC3eeINwAKdiuqLk7vzVQYNhat4w8MEasWHzz5M=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90b:2741:b0:20a:ebc3:6513 with SMTP id
- qi1-20020a17090b274100b0020aebc36513mr16120594pjb.29.1666040887804; Mon, 17
- Oct 2022 14:08:07 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:08:06 -0700
-In-Reply-To: <20221017121344.1258c0f1@kernel.org>
-Mime-Version: 1.0
-References: <0000000000004438f605ead95255@google.com> <20221017121344.1258c0f1@kernel.org>
-Message-ID: <Y03ENjT5V5ac6VVn@google.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in erspan_build_header
-From:   sdf@google.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     syzbot <syzbot+d551178aab6a783dc249@syzkaller.appspotmail.com>,
-        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        glider@google.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org,
-        bpf@vger.kernel.org, yuehaibing@huawei.com,
-        Lorenz Bauer <oss@lmb.io>
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rO3diyaSNb6O6hnlUO2fD+4bqyU4KlXOyPZ3iJ5ebzg=;
+ b=gTctDHFryYbrzUL6kdDxWOOUvrgxk7Op/GKcU4gS0VGphKZl3p9Z7W5PxCjPTH+G4XTYrPrOEFHebv8WyHiHG8x4mh23GRw/upR9EK+NZ+BBDT/iZqWz9cwQgt/23mMCJLie/ypQpjKJlVKdqru2DDPbDPr/ugW28f0AFJDSQAU=
+Received: from MW5PR10MB5738.namprd10.prod.outlook.com (2603:10b6:303:19b::14)
+ by CH0PR10MB5323.namprd10.prod.outlook.com (2603:10b6:610:c6::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Mon, 17 Oct
+ 2022 21:08:21 +0000
+Received: from MW5PR10MB5738.namprd10.prod.outlook.com
+ ([fe80::56fd:b251:fc9e:aee4]) by MW5PR10MB5738.namprd10.prod.outlook.com
+ ([fe80::56fd:b251:fc9e:aee4%3]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
+ 21:08:21 +0000
+Message-ID: <700ae03f-12d2-8c01-2e20-8db797b4d5ef@oracle.com>
+Date:   Mon, 17 Oct 2022 16:08:18 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] jfs: remove unused declarations for jfs
+Content-Language: en-US
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>, shaggy@kernel.org
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+References: <20220909065055.1154080-1-cuigaosheng1@huawei.com>
+From:   Dave Kleikamp <dave.kleikamp@oracle.com>
+In-Reply-To: <20220909065055.1154080-1-cuigaosheng1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR03CA0008.namprd03.prod.outlook.com
+ (2603:10b6:610:59::18) To MW5PR10MB5738.namprd10.prod.outlook.com
+ (2603:10b6:303:19b::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR10MB5738:EE_|CH0PR10MB5323:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35c8dadb-36c9-4db8-af99-08dab083b89a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DZ8M8M2M2rhqvYrFgdXP0EgfamIdT++UeJP3unyYipGaZ1rpJh/AwYCz/fiMbiy/y8c6M6kXuzCx/0+PzPeGA4pAF8Xkw1dB6caU8r2kREZ6KHvMDj1Ztpov0Y8vZK2Eso5KhcM4oAXo6q1nYMxlwjB68G8qI1sPvWcHsiZ7Qhb4Tadl6moE2NeZqPUp7rSgEn7jch05iX27Z1ERNaOPzJmnsZjWe3qcPji9JYTwWuIKp0uxhXLPcl7B9NjNd3bj+Hdk5k8WynMrjMGQPNQBh27WEYvVyEsxiiTi5rKfQQMfvRztXCo/q92KUzaowqkZMw5IIP6tohaA8XkAR2NyyHHsScoAi8UOdjDCUDFO4mvEwc8NaxqQ2wnz2mCpVqGUd8jyx+o3QNoFliFJYM1VPBB3zi5Q599yFb0Jl65A8mj/MQkNMHfB2GovFtGCMbrD5ZnZe5rIVN5nV6eAnI8SqbfoYCFq0T8tn9RGsNGgRPZ0r6D2lPy5bsN+j/fGTSUcpmq1Mcq9kZ8HYtcWnqmqQ1lUSDpQ+aVs4K/8ns27MYOJ0eWshr4bn3PlEoG+gA7OKa5WP4CdTkerOqQcNqmODuZzlE+VFVAjWrbfEu6RISnVO4ONc7VBrNNcHlML4iCwqRW7YUVo6e9Ve9PDUfdmyrHmpnBkVNPUg7v9OeTleaoJXddR43ywut/qbjDf7a82xG956vaUtYojfiBierX9/xhuIDbk5eeQsfD3iD/RoqD4HYDSDDI5US4CaXh09cH1C0xSkWmbGAbAB3L6ii7JOSL4U8Db5HQM2sOGVTrOK7E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR10MB5738.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(396003)(136003)(346002)(376002)(451199015)(66476007)(66946007)(8676002)(66556008)(4326008)(6666004)(2616005)(316002)(186003)(44832011)(2906002)(86362001)(83380400001)(31696002)(41300700001)(6506007)(36756003)(5660300002)(26005)(8936002)(31686004)(478600001)(6486002)(6512007)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnhVQnJPY3oxTDhJMXFYY0o0a0hzdVN0YklqZVdJQUNKUW1wbWNkempCMXI2?=
+ =?utf-8?B?M1NRRVpHMWREYWtjRktjd0F4S21vR2tEOWxoeXFqazJqOUMwZEZzR0Z0QUVV?=
+ =?utf-8?B?dnlHeVhIblRQenY1ZURES1FxMFE0dGZwRURMUDY5NmtWSGQzVVRvRW10UGFl?=
+ =?utf-8?B?U3ZlTkNuOGlRSjRHcER2WDh1S2RJaTFNZGxQVnhmT0VlaU03MXVuV1RyZUlO?=
+ =?utf-8?B?RTFnbTc3Q2RnZnVIZkRGSlo3RHowSUFnOHhWc2lROWFxVWJDUDFGaG9HK2JC?=
+ =?utf-8?B?SWY0MFpyaEM0akYzSXpPOFZiNVVZOEdUMmZmYTZmS2MxM3FsdWhWSmQrQk5m?=
+ =?utf-8?B?L1ZZdmVHQ2V5VlIyb0pZWUR3WWZZN0VLcU1VRGFpdXJITVY2OVZlNGdtb1dC?=
+ =?utf-8?B?c1l0RjJDM2liSkJ5VTBiZVFIb05HVWxyMjZ5b1RaUDdIenh5VDZ0UE1ycEpN?=
+ =?utf-8?B?NytEeVA5clZqalpneDNQUXBqWFIzNDByZXpQbi9ldEhnRnBtZXArVDFjK2kx?=
+ =?utf-8?B?Y3BvRDFyalJnNkVxZkNOM2pzMlh6TExZRy9yKzRPNkNRRlRsSGFOeUFGM1ZZ?=
+ =?utf-8?B?OS96SysrWTBGeUpZd0FFREM0ZjdkekRFOC9CTHFDSkNVSmFmQTJJd25WakVh?=
+ =?utf-8?B?NFBGZlRjektMUm8ycVJGcmVCQzZwQWRiYlF5UlRibE9tVWV1N1grUmRvVlk1?=
+ =?utf-8?B?ZVlKeGpQaHlhODJMSVYvWmtvZmdEME9naUdyWGt1enloU0hBY2tNaXYxdjNF?=
+ =?utf-8?B?QXExeG5ObzRFZzdJK2Q2M1hJMVdaK3M3VHViUForeG9pOGUxMHBxODRhNXpW?=
+ =?utf-8?B?bndMYmkwN3FKWGVDSm1ybVhNVGhNd0Zkczh0WlEvclJlVXlIaFZ3ZUVBSzl4?=
+ =?utf-8?B?VkNzNGZ3bXZCWlVuK1BaOWhlYnMvSlhKOFhCNG4wYmVLMDRJR3ZDV1MrRFl2?=
+ =?utf-8?B?KzJWRnM5WTlOQnI5Q01ObUlzYTRubzA2SC9FSEZKRjVCNVlEbWJHSlhMNEl1?=
+ =?utf-8?B?QVVTWVRpVVpQMnAyc0k4NnV5MDlzdXo0SjBPYVpZT0pYZExRdnIzS09xSHJa?=
+ =?utf-8?B?Rlg1Sm9wSjdwTUg3YWRCY0dkcjg4TllULzZVK0V3TVJQVENTNURHV3lhK0xF?=
+ =?utf-8?B?em10QWFYT2pFVGhpNzliTFZPaUZCUFhRY3F2cEdiKytoamp1UXc3TnlCRlpZ?=
+ =?utf-8?B?aHJCT0FhL0JrcStVTnhJTDdwZHhBalIvRk9HVy8reCtwb2VnR1dsRzBrTUo2?=
+ =?utf-8?B?VU1xTThTdDVpdmdicjQ1TlR1ZWgzaGdPMDhmUEtjRGJRRG9YQlNuUnVBQUIx?=
+ =?utf-8?B?YmJGUlFJMzlWL0kwOE5EOHllRW9KcG5RT0drZ0VqSHZWQWtWMFo2VldKRVFS?=
+ =?utf-8?B?MmFLaW1Hb0dHMSt3ZDdXRkt4TjhjS2lmalljelNLYjR0cnBmUnBpSWQ3WWdu?=
+ =?utf-8?B?WTVhcVd3SkFpSGVNTmtzWFVOUkxCREZucEk3K3hESUQyTWd4Y1NjKzFlMjhI?=
+ =?utf-8?B?UnQxMnFZeVd4TytFbnNBbXpWKzdxU1RCVUExdC9sQkM0WXgxNUZpK3RPRUZX?=
+ =?utf-8?B?SG5yWjNocmQ3MzRSeE9xbEJpVXVvUEk2azQrWUt4bC8rbDRCOTFZSlhwQlhj?=
+ =?utf-8?B?WVpnQUxoc3d1d3RveVlYODN5OTZGYzNXVGhpTVNOTFYyY0VpNnhOVHh6aFlS?=
+ =?utf-8?B?Z2V4WnExSGRLUWh4cGYxVHZGcndmanREcGw1NnhPNS9TS2VtcU55bnZqcGVp?=
+ =?utf-8?B?NDNXWHJmZWMyYmhqSEdlbElXVkZwNUNyY0dkVDdJdEwzYTUvclF3M2RVSmow?=
+ =?utf-8?B?Y0xZK0l2d1lLUE5GZGg4c1ZoZzhycGhFMDZtRzBvK3pUS1hzWGl5ck1Yc1F2?=
+ =?utf-8?B?ZTBmNGQxeElPM2h1TG40c3pKSk1GU2VhREdNZmQyNExmQW9mNll1RWpkYzBV?=
+ =?utf-8?B?UjZ0a3MreUk2R01tZ1cvNitaSUV6alEzTVllclViY2NHckdYRVQ2WkpYRkZs?=
+ =?utf-8?B?SVVzb04xNmJZdndwVGJhZGhZQXZyU2dpQnE5TzJwL2F6ZFdsVTMxdEJHN20r?=
+ =?utf-8?B?dDBoTW02U1JLZUtYdDM5M1BnZGxBWUhKYWZ6TDdTN0FPZFVEMTJWSmtSRmtZ?=
+ =?utf-8?B?clZZZHR2NmVPQXFWNVdQU2N3S0pyREtYUFJPVGZZbzEvOWhQRDMyektWbkRW?=
+ =?utf-8?B?bVE9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35c8dadb-36c9-4db8-af99-08dab083b89a
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR10MB5738.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 21:08:21.2414
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1+Ofl6Pkyestsots6WRtRifa7aW2JkGvraBjP0zHil1O/3Ck0Nnv37RPgIC96VcfqJM6r1WjLhY5CRptUQWph3khdUSOhlpWcmwepmmDhlk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5323
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-17_13,2022-10-17_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210170121
+X-Proofpoint-ORIG-GUID: 675wuKcpu_GlYnKE6uf6LH28rSOrzkAE
+X-Proofpoint-GUID: 675wuKcpu_GlYnKE6uf6LH28rSOrzkAE
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,135 +155,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17, Jakub Kicinski wrote:
-> CC: bpf, looks like we have a packet with uninitialized payload
-> generated by BPF_PROG_TEST_RUN?
+Applied.
 
-Sounds similar to [0] and [1].
+Thanks,
+Shaggy
 
-0:  
-https://lore.kernel.org/bpf/ce5d58a3-32ed-fa81-d490-ce854cfca927@huawei.com/T/#t
-1:  
-https://lore.kernel.org/bpf/CAKH8qBugSdWHP7mtNxrnLLR+56u_0OCx3xQOkJSV-+RUvDAeNg@mail.gmail.com/T/#t
-
-> On Wed, 12 Oct 2022 09:59:52 -0700 syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    968c2729e576 x86: kmsan: fix comment in kmsan_shadow.c
-> > git tree:       https://github.com/google/kmsan.git master
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=100cd00c880000
-> > kernel config:   
-> https://syzkaller.appspot.com/x/.config?x=131312b26465c190
-> > dashboard link:  
-> https://syzkaller.appspot.com/bug?extid=d551178aab6a783dc249
-> > compiler:       clang version 15.0.0  
-> (https://github.com/llvm/llvm-project.git  
-> 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for  
-> Debian) 2.35.2
-> > userspace arch: i386
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > Downloadable assets:
-> > disk image:  
-> https://storage.googleapis.com/syzbot-assets/c78ce21b953f/disk-968c2729.raw.xz
-> > vmlinux:  
-> https://storage.googleapis.com/syzbot-assets/22868d826804/vmlinux-968c2729.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the  
-> commit:
-> > Reported-by: syzbot+d551178aab6a783dc249@syzkaller.appspotmail.com
-> >
-> > =====================================================
-> > BUG: KMSAN: uninit-value in erspan_build_header+0x16d/0x330  
-> include/net/erspan.h:197
-> >  erspan_build_header+0x16d/0x330 include/net/erspan.h:197
-> >  erspan_xmit+0x11a2/0x1f00 net/ipv4/ip_gre.c:701
-> >  __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
-> >  netdev_start_xmit include/linux/netdevice.h:4833 [inline]
-> >  xmit_one+0x14e/0x5f0 net/core/dev.c:3590
-> >  dev_hard_start_xmit+0xe5/0x370 net/core/dev.c:3606
-> >  sch_direct_xmit+0x3f1/0xdb0 net/sched/sch_generic.c:342
-> >  __dev_xmit_skb+0xc22/0x1a30 net/core/dev.c:3817
-> >  __dev_queue_xmit+0x12cb/0x31f0 net/core/dev.c:4222
-> >  dev_queue_xmit include/linux/netdevice.h:3008 [inline]
-> >  __bpf_tx_skb net/core/filter.c:2115 [inline]
-> >  __bpf_redirect_common net/core/filter.c:2154 [inline]
-> >  __bpf_redirect+0x1293/0x13b0 net/core/filter.c:2161
-> >  ____bpf_clone_redirect net/core/filter.c:2430 [inline]
-> >  bpf_clone_redirect+0x324/0x470 net/core/filter.c:2402
-> >  ___bpf_prog_run+0x7ed/0xaee0 kernel/bpf/core.c:1813
-> >  __bpf_prog_run512+0xc2/0x110 kernel/bpf/core.c:2038
-> >  bpf_dispatcher_nop_func include/linux/bpf.h:903 [inline]
-> >  __bpf_prog_run include/linux/filter.h:594 [inline]
-> >  bpf_prog_run include/linux/filter.h:601 [inline]
-> >  bpf_test_run+0x592/0xd20 net/bpf/test_run.c:402
-> >  bpf_prog_test_run_skb+0x1625/0x20b0 net/bpf/test_run.c:1141
-> >  bpf_prog_test_run+0x6a0/0x730 kernel/bpf/syscall.c:3620
-> >  __sys_bpf+0x88d/0xe70 kernel/bpf/syscall.c:4971
-> >  __do_sys_bpf kernel/bpf/syscall.c:5057 [inline]
-> >  __se_sys_bpf kernel/bpf/syscall.c:5055 [inline]
-> >  __ia32_sys_bpf+0x9c/0xe0 kernel/bpf/syscall.c:5055
-> >  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-> >  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
-> >  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
-> >  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
-> >  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> >
-> > Uninit was created at:
-> >  slab_post_alloc_hook mm/slab.h:732 [inline]
-> >  slab_alloc_node mm/slub.c:3258 [inline]
-> >  __kmalloc_node_track_caller+0x814/0x1250 mm/slub.c:4970
-> >  kmalloc_reserve net/core/skbuff.c:362 [inline]
-> >  pskb_expand_head+0x24a/0x1a80 net/core/skbuff.c:1729
-> >  __skb_cow include/linux/skbuff.h:3529 [inline]
-> >  skb_cow_head include/linux/skbuff.h:3563 [inline]
-> >  erspan_xmit+0xad2/0x1f00 net/ipv4/ip_gre.c:688
-> >  __netdev_start_xmit include/linux/netdevice.h:4819 [inline]
-> >  netdev_start_xmit include/linux/netdevice.h:4833 [inline]
-> >  xmit_one+0x14e/0x5f0 net/core/dev.c:3590
-> >  dev_hard_start_xmit+0xe5/0x370 net/core/dev.c:3606
-> >  sch_direct_xmit+0x3f1/0xdb0 net/sched/sch_generic.c:342
-> >  __dev_xmit_skb+0xc22/0x1a30 net/core/dev.c:3817
-> >  __dev_queue_xmit+0x12cb/0x31f0 net/core/dev.c:4222
-> >  dev_queue_xmit include/linux/netdevice.h:3008 [inline]
-> >  __bpf_tx_skb net/core/filter.c:2115 [inline]
-> >  __bpf_redirect_common net/core/filter.c:2154 [inline]
-> >  __bpf_redirect+0x1293/0x13b0 net/core/filter.c:2161
-> >  ____bpf_clone_redirect net/core/filter.c:2430 [inline]
-> >  bpf_clone_redirect+0x324/0x470 net/core/filter.c:2402
-> >  ___bpf_prog_run+0x7ed/0xaee0 kernel/bpf/core.c:1813
-> >  __bpf_prog_run512+0xc2/0x110 kernel/bpf/core.c:2038
-> >  bpf_dispatcher_nop_func include/linux/bpf.h:903 [inline]
-> >  __bpf_prog_run include/linux/filter.h:594 [inline]
-> >  bpf_prog_run include/linux/filter.h:601 [inline]
-> >  bpf_test_run+0x592/0xd20 net/bpf/test_run.c:402
-> >  bpf_prog_test_run_skb+0x1625/0x20b0 net/bpf/test_run.c:1141
-> >  bpf_prog_test_run+0x6a0/0x730 kernel/bpf/syscall.c:3620
-> >  __sys_bpf+0x88d/0xe70 kernel/bpf/syscall.c:4971
-> >  __do_sys_bpf kernel/bpf/syscall.c:5057 [inline]
-> >  __se_sys_bpf kernel/bpf/syscall.c:5055 [inline]
-> >  __ia32_sys_bpf+0x9c/0xe0 kernel/bpf/syscall.c:5055
-> >  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-> >  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
-> >  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
-> >  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
-> >  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> >
-> > CPU: 0 PID: 12499 Comm: syz-executor.1 Not tainted  
-> 6.0.0-rc5-syzkaller-48543-g968c2729e576 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 09/22/2022
-> > =====================================================
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
+On 9/9/22 1:50AM, Gaosheng Cui wrote:
+> extRealloc(), xtRelocate(), xtDelete() and extFill() have been
+> removed since commit e471e5942c00 ("fs/jfs: Remove dead code"),
+> so remove them.
+> 
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>   fs/jfs/jfs_extent.h | 2 --
+>   fs/jfs/jfs_xtree.h  | 4 ----
+>   2 files changed, 6 deletions(-)
+> 
+> diff --git a/fs/jfs/jfs_extent.h b/fs/jfs/jfs_extent.h
+> index 1c984214e95e..a0ee4ccea66e 100644
+> --- a/fs/jfs/jfs_extent.h
+> +++ b/fs/jfs/jfs_extent.h
+> @@ -10,9 +10,7 @@
+>   	(addressPXD(&(JFS_IP(ip)->ixpxd)) + lengthPXD(&(JFS_IP(ip)->ixpxd)) - 1)
+>   
+>   extern int	extAlloc(struct inode *, s64, s64, xad_t *, bool);
+> -extern int	extFill(struct inode *, xad_t *);
+>   extern int	extHint(struct inode *, s64, xad_t *);
+> -extern int	extRealloc(struct inode *, s64, xad_t *, bool);
+>   extern int	extRecord(struct inode *, xad_t *);
+>   
+>   #endif	/* _H_JFS_EXTENT */
+> diff --git a/fs/jfs/jfs_xtree.h b/fs/jfs/jfs_xtree.h
+> index 142caafc73b1..ad7592191d76 100644
+> --- a/fs/jfs/jfs_xtree.h
+> +++ b/fs/jfs/jfs_xtree.h
+> @@ -96,12 +96,8 @@ extern int xtInsert(tid_t tid, struct inode *ip,
+>   extern int xtExtend(tid_t tid, struct inode *ip, s64 xoff, int xlen,
+>   		    int flag);
+>   extern int xtUpdate(tid_t tid, struct inode *ip, struct xad *nxad);
+> -extern int xtDelete(tid_t tid, struct inode *ip, s64 xoff, int xlen,
+> -		    int flag);
+>   extern s64 xtTruncate(tid_t tid, struct inode *ip, s64 newsize, int type);
+>   extern s64 xtTruncate_pmap(tid_t tid, struct inode *ip, s64 committed_size);
+> -extern int xtRelocate(tid_t tid, struct inode *ip,
+> -		      xad_t * oxad, s64 nxaddr, int xtype);
+>   extern int xtAppend(tid_t tid,
+>   		    struct inode *ip, int xflag, s64 xoff, int maxblocks,
+>   		    int *xlenp, s64 * xaddrp, int flag);
