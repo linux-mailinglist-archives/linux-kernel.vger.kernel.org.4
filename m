@@ -2,84 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1841E601605
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0AF601608
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiJQSLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S230149AbiJQSLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiJQSK6 (ORCPT
+        with ESMTP id S229978AbiJQSLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:10:58 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4080E7287A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:10:57 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y191so11843772pfb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:10:57 -0700 (PDT)
+        Mon, 17 Oct 2022 14:11:08 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170AE6D9E9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:11:03 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id h12so11741954pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:11:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=moxKXe7U1ebuMzqu7/cZGChet+W4gvv+t8NNPuSo720=;
-        b=XY0kF2gzGSA1+uw3SMLARMefKSvfWCXE8ZiDDlepUNu99ZYVA3r/SBHgaqYw3Mg0ts
-         v5stIB0KkLpixzZIq7wotGiIooIZkdJ8os3Fog1avvzZlUAHZaNIPp44b0Ma2DRd6E++
-         TyZIIfFeO8+Tqs0V4KuNtdAU9PthXqnfCmA+lyzivuajvfgb97uVydZ+AVHmCD2yOLpC
-         gAQAcItx1SOLPMykU+flvQoS3Ft0ss4HNZk+qcFVra96Itv7jZhD2LH8zN0DiHmm0yOC
-         XrC6zoYfYSUqhFZdU8oL8HrKtop75wK1NnnfegOnIROCE9xQ0jvhr8TmOgNg8aBhHiwi
-         1raQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wk/AfKxmKFFMFtDOBSmyqEUOU7F5xvb3yjHU7rI31n4=;
+        b=aIwed63klUDo4ZfnVYo5sFh2Wh9Cyo0Wi7mucCNbpPn+JH2k43Rp/Z8N8K9lf7ujVP
+         io8FvnbDY9GHHeAs7p9DDW7PmTsDVyNZcakall+CN5pHextcQxGmP1YY/SIzQ4yZY1K1
+         WQcSquaAKvf1om/K6J20YizK63oKDrlaZTL38=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=moxKXe7U1ebuMzqu7/cZGChet+W4gvv+t8NNPuSo720=;
-        b=vZOut5+wV0kXoRovt2C9XH3TlfBA4TIa1vQD5vMpEdv7B2HQFDNzwnHQPYvOST02yO
-         MuJ2ryDbbXw1B90f+K5Y/10665Nnhk/oLPnimhqEdZ+cTlhxEy7gGVu0iSi5mL3CUWhk
-         Qre3+AgwDyDcBlT1fc43EAQ7BHtArERHmUCu3MCOYamDgxoz8a3/zy4pWmFW5L9WGXJD
-         UKOh1l68jbjGGpNxda1y7q8N7A72jwpj1MC5RMTcN5R0aKvznaN9oNsQS8Qgq49jnap4
-         If/aBdQpDOC1PbxTOqysZ4P9gghBuavlRPfbBpOZvSOz+qIOhrUl8I4z/Qc681yo2m9Z
-         3Krw==
-X-Gm-Message-State: ACrzQf3ljNN1pUIOo5iaJQX9ATxnOcbOLeORn7IRUKdxs/nsEeYNqWWb
-        KclrdRYmzySckJqS6Mn2PyC/Rg==
-X-Google-Smtp-Source: AMsMyM57hkAdLilgEOnNj8HB9ePsvlL/RYriF/tFJYYUFcy9FcGFY4mlR4OXBdTCbRTwUrsYVAWftw==
-X-Received: by 2002:a63:5a5e:0:b0:434:b739:206f with SMTP id k30-20020a635a5e000000b00434b739206fmr11694182pgm.82.1666030256660;
-        Mon, 17 Oct 2022 11:10:56 -0700 (PDT)
-Received: from [192.168.4.201] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b001830ed575c3sm6900180plh.117.2022.10.17.11.10.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 11:10:56 -0700 (PDT)
-Message-ID: <b8319bd7-ff28-5c79-a024-de8a21acedba@kernel.dk>
-Date:   Mon, 17 Oct 2022 11:10:54 -0700
+        bh=wk/AfKxmKFFMFtDOBSmyqEUOU7F5xvb3yjHU7rI31n4=;
+        b=AqVqReLlaOSpX5jfMsXs/unxHRpMX39HqG5d5mMNG+m5LHrRBrxhfGUSySCEvgrYaT
+         CsQPCbmCIa40lCC09dDn9TjFSnuu2MAPOs0V1t/tRuDTwFfcvS/ZCKpQBK9HqTQbCfNA
+         fFMhDCGC5ziLzehrt1Ff0FvJGww/5ovUBhN5P/tyT5ordQaO7po3m5OERmyX/XCAXj7f
+         q7wF4Dr8cauG50vEIBnoKm/4yUve1sj0ASmABwV0xOnpGxG2ryX8oZcyOzSCi0z7g/PN
+         bMPUWhQVxPgqXwMOEjaXlz1x3yi+JRijiVZ7R0AwiZwLbcuUNADfWCYoR0hPYM6ENUk3
+         ANOQ==
+X-Gm-Message-State: ACrzQf1UklyCwazc0sBfodoJFSz3VV0eXDsEvkoFCO7OwhFngqBB51F8
+        n/Z6YYhNoFs14Kkb/Afx/4TF+A==
+X-Google-Smtp-Source: AMsMyM7+VVMBV+Yo7/YZZ4yIOQlr/fUEzxuXTxelzcdrHHW0YYgHQNR/3QsalaLB2/Y7RM/OwQi9Nw==
+X-Received: by 2002:a17:90b:f02:b0:20a:9965:eeee with SMTP id br2-20020a17090b0f0200b0020a9965eeeemr14825583pjb.182.1666030262802;
+        Mon, 17 Oct 2022 11:11:02 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902c65100b00177faf558b5sm6897713pls.250.2022.10.17.11.11.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 11:11:02 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 11:11:01 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/9] integrity: Prepare for having "ima" and "evm"
+ available in "integrity" LSM
+Message-ID: <202210171101.2E96A7D557@keescook>
+References: <20221013222702.never.990-kees@kernel.org>
+ <20221013223654.659758-1-keescook@chromium.org>
+ <08a8b202-69b4-e154-28f5-337a898acf61@digikod.net>
+ <202210141050.A8DF7D10@keescook>
+ <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH cgroup/for-6.1-fixes] blkcg: Update MAINTAINERS entry
-To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-References: <Y02aBVTCSggxKWXT@slm.duckdns.org>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y02aBVTCSggxKWXT@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/22 11:08 AM, Tejun Heo wrote:
-> Josef wrote iolatency and iocost is missing from the files list. Let's add
-> Josef as a maintainer and add blk-iocost.c to the files list.
+On Mon, Oct 17, 2022 at 11:26:44AM +0200, Mickaël Salaün wrote:
+> 
+> On 14/10/2022 19:59, Kees Cook wrote:
+> > On Fri, Oct 14, 2022 at 04:40:01PM +0200, Mickaël Salaün wrote:
+> > > This is not backward compatible
+> > 
+> > Why? Nothing will be running LSM hooks until init finishes, at which
+> > point the integrity inode cache will be allocated. And ima and evm don't
+> > start up until lateinit.
+> > 
+> > > , but can easily be fixed thanks to
+> > > DEFINE_LSM().order
+> > 
+> > That forces the LSM to be enabled, which may not be desired?
+> 
+> This is not backward compatible because currently IMA is enabled
+> independently of the "lsm=" cmdline, which means that for all installed
+> systems using IMA and also with a custom "lsm=" cmdline, updating the kernel
+> with this patch will (silently) disable IMA. Using ".order =
+> LSM_ORDER_FIRST," should keep this behavior.
+> 
+> BTW, I think we should set such order (but maybe rename it) for LSMs that do
+> nothing unless configured (e.g. Yama, Landlock).
 
-Acked-by: Jens Axboe <axboe@kernel.dk>
+Ah yeah, good point. the .enabled stuff will need to be correctly wired
+up. Anyway, it's a good starting point for the conversion, so I'm hoping
+it can be carried forward by someone who is not me. :) (Hint hint to the
+integrity folks...)
+
+> > > Side node: I proposed an alternative to that but it was Nacked:
+> > > https://lore.kernel.org/all/20210222150608.808146-1-mic@digikod.net/
+> > 
+> > Yeah, for the reasons pointed out -- that can't work. The point is to
+> > not have The Default LSM. I do think Casey's NAK was rather prickly,
+> > though. ;)
+> 
+> I don't agree, there is no "the default LSM", and this new behavior is under
+> an LSM_AUTO configuration option.
+
+The "config it twice" aspect of the current situation is suboptimal,
+yes. Let me go comment on the old thread...
 
 -- 
-Jens Axboe
-
-
+Kees Cook
