@@ -2,124 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000B4601B36
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BBB601B39
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJQVXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
+        id S230022AbiJQVZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiJQVXc (ORCPT
+        with ESMTP id S229793AbiJQVZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:23:32 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D398A7B78A;
-        Mon, 17 Oct 2022 14:23:26 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id i65so10262774ioa.0;
-        Mon, 17 Oct 2022 14:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XYQG9L0WOG7E+TXZGOh2Lmubn0+AsR6A7Ea6syLqUyQ=;
-        b=DDlea4psan6fGakfEvw2MIaDr32zNEN1/S7GTqmmx5IJ88UF1kXdO0ErhCoCmhohb8
-         /Nf95Dm3Qg6qP0LzP9Dlr9M0eEH9SJtjHFUUgD7JuOz9gOkMXnFSfT2rt59RBap+fuBM
-         SPuwfeDTOD1Cg2JiuxxHgl8e/spOD1wCYCY0vlC1NS1glv/SIc9QA4LccI1nUQKAiajd
-         guZae4U7oc5BlDNALXgIw9mM5Qt8tUoXGRmb58g39geLK8kmEEncxoXUyT0keXZS8fYj
-         589jiJ1IdyptqXBsS1KXe3KSMQJySJjTvdPCelNIcvi5YmC+HDcGeF0kHhnbPbSD4Jqn
-         7XoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XYQG9L0WOG7E+TXZGOh2Lmubn0+AsR6A7Ea6syLqUyQ=;
-        b=g3tknXjBlI3Vn1MrcxrY01pkwv82FWb9gfX6NVcC8s2gWUQByB47kgxdZFMK/IRvGF
-         08KhQ/opJNorzj4f37HFTNJ+ZF5bJ8raROdUmau0TWkw8XJz+jTucvOtWtXCH+XpGcyv
-         gXILephCUT3xKeKQn1tbu06aHWdRJsvLvj6vAIKcJgeMaxDunNB5lOexDfxibw3LsOKH
-         CaK6Iw6Rio1l8omX4yImwf57btfWYLKScglPszj4XlNjm/AHnW9LRHOisz92kRkMhRnA
-         Ai1Vd51lFZ7DuOU69nrGcWIyQe3MZuEXvpb3x++WjRWlMX6Ns7AcDzdazyNEMZHidXlQ
-         PiSw==
-X-Gm-Message-State: ACrzQf3InO9Mf2IOF6Tb9lXg9ZhDhJ2rpup+DtV2zAhoA/PAkO+qPGDl
-        jx+FFhYXrI0jMu1QpzopMkI=
-X-Google-Smtp-Source: AMsMyM7r9cJXj6CSb2SdazjR8bFX3mMN7uTdF0rMCmxCh+sRQmvRjB67Z7AnPymhZsVGubQX0y6xdA==
-X-Received: by 2002:a05:6638:3e06:b0:363:fd8c:7d3c with SMTP id co6-20020a0566383e0600b00363fd8c7d3cmr6659333jab.266.1666041805466;
-        Mon, 17 Oct 2022 14:23:25 -0700 (PDT)
-Received: from localhost ([2607:fea8:a2e2:2d00::4a89])
-        by smtp.gmail.com with UTF8SMTPSA id g191-20020a025bc8000000b0035672327fe5sm338763jab.149.2022.10.17.14.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 14:23:24 -0700 (PDT)
-From:   Richard Acayan <mailingradian@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Richard Acayan <mailingradian@gmail.com>,
-        Melody Olvera <quic_molvera@quicinc.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 2/5] dmaengine: qcom: gpi: document preferred SM6350 binding
-Date:   Mon, 17 Oct 2022 17:23:20 -0400
-Message-Id: <20221017212320.4960-1-mailingradian@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221015140447.55221-3-krzysztof.kozlowski@linaro.org>
-References: <20221015140447.55221-1-krzysztof.kozlowski@linaro.org> <20221015140447.55221-3-krzysztof.kozlowski@linaro.org>
+        Mon, 17 Oct 2022 17:25:29 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC95E7C1DB;
+        Mon, 17 Oct 2022 14:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SK2IIiJtqurXP7/5Xu549vObhZku8RTsovOn/ZfaVWE=; b=R08nc1umIGS0960uO2p317g4WR
+        WPhkVeDEP4DEx3+6Vgl1y8PZxF41bmD+OBUM9imOdzhnKpiYGuD9DUBu2RU7iUz9XD0DXYfpWs1Pu
+        UdeejJKQWC4F774Eyxzg02q87LDsgApCLM/fzCxBdDFphGojMjf3xy6L8qNeOeyDIM13noVWEwS6k
+        E+l3W3Xo8JNZvitXgZnGjlcQE0RxEIy/ZNGatbZN3qbQByUqXnXZpgbnj77cp1rKjZkkro0/jY6m9
+        MbspOETuqDIKANEz1nebJzASPvmDYQ77tPGYS4HMNIWgk7mRTj8Dbb0aQcku5dqKz+w9crbggaRR7
+        WIvzropw==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1okXbp-000cjZ-6i; Mon, 17 Oct 2022 23:25:17 +0200
+Message-ID: <dbcc136d-7993-884e-f1de-ac696ae4bd0f@igalia.com>
+Date:   Mon, 17 Oct 2022 18:25:01 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221006234138.1835739-1-keescook@chromium.org>
+ <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com>
+ <202210171100.5BAC4A5CC8@keescook>
+ <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com>
+ <202210171227.35ED875219@keescook>
+ <CAMj1kXEJQ8gh-iXZNL8bNcmV=JCmKHNp5BnhYthhSOyR5h79_g@mail.gmail.com>
+ <202210171237.DF5D4A3FD7@keescook>
+ <CAMj1kXGmsJNg7En-55aRF+ApicPD_Opkh8Jw+oTorSOSO+cfuw@mail.gmail.com>
+ <202210171307.32A5D9C07@keescook>
+ <CAMj1kXHced1khwsrHqMUmECh_7irYOckFd+Sx3z9KSmsL7tPxw@mail.gmail.com>
+ <202210171333.309A3D9@keescook>
+ <CAMj1kXHTxc2PM1mz3pm-UEcmch9YG5QKF+JKAUNe9b+1L0OnfA@mail.gmail.com>
+ <cb44c124-c940-6f5f-d195-bdf133008ba1@igalia.com>
+ <CAMj1kXGA=kBdahDTuFDPzZKf5bbvxH2Ns7Ows+5D-PAx8rwP2w@mail.gmail.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <CAMj1kXGA=kBdahDTuFDPzZKf5bbvxH2Ns7Ows+5D-PAx8rwP2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Devices with ee offset of 0x10000 should rather bind with SM6350
-> compatible, so the list will not unnecessarily grow for compatible
-> devices.
+On 17/10/2022 18:16, Ard Biesheuvel wrote:
+> On Mon, 17 Oct 2022 at 23:10, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
+>> [...]
+>> Out of curiosity, do you have a number here, like X kilobytes per active
+>> CPU?
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/dma/qcom/gpi.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> 2x128 KB per CPU, which makes 128  KB also the maximum input/output
+> size per request when using this interface. (SCOMP_SCRATCH_SIZE)
 > 
-> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
-> index f8e19e6e6117..061add832295 100644
-> --- a/drivers/dma/qcom/gpi.c
-> +++ b/drivers/dma/qcom/gpi.c
-> @@ -2286,13 +2286,14 @@ static int gpi_probe(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id gpi_of_match[] = {
-> -	{ .compatible = "qcom,sc7280-gpi-dma", .data = (void *)0x10000 },
->  	{ .compatible = "qcom,sdm845-gpi-dma", .data = (void *)0x0 },
->  	{ .compatible = "qcom,sm6350-gpi-dma", .data = (void *)0x10000 },
->  	/*
-> -	 * Deprecated, devices with ee_offset = 0 should use sdm845-gpi-dma as
-> -	 * fallback and not need their own entries here.
+> On my 32x4 CPU workstation, this amounts to 32 MB permanently locked
+> up for nothing when the pstore driver is loaded (with compression
+> enabled)
 
-This comment is from the dependency series [1]. Why would we need to add it just
-to remove it here? I was not notified that the dependency was applied anywhere
-(except as a base for other series) so it's not set in stone. Let's just drop
-the original patch that this comment originates from to prevent needlessly
-adding and removing the same lines at once.
+Thanks! This is really something...
 
-[1] https://lore.kernel.org/linux-arm-msm/20221007213640.85469-4-mailingradian@gmail.com/
-
-> +	 * Do not grow the list for compatible devices. Instead use
-> +	 * qcom,sdm845-gpi-dma (for ee_offset = 0x0) or qcom,sm6350-gpi-dma
-> +	 * (for ee_offset = 0x10000).
->  	 */
-> +	{ .compatible = "qcom,sc7280-gpi-dma", .data = (void *)0x10000 },
->  	{ .compatible = "qcom,sm8150-gpi-dma", .data = (void *)0x0 },
->  	{ .compatible = "qcom,sm8250-gpi-dma", .data = (void *)0x0 },
->  	{ .compatible = "qcom,sm8350-gpi-dma", .data = (void *)0x10000 },
-> -- 
-> 2.34.1
-> 
