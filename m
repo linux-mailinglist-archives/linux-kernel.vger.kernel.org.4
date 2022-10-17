@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9F760145D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC9F60145E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJQRLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S229982AbiJQRLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiJQRLJ (ORCPT
+        with ESMTP id S229592AbiJQRLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:11:09 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B936566A46;
-        Mon, 17 Oct 2022 10:11:08 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id q18so6132174ils.12;
-        Mon, 17 Oct 2022 10:11:08 -0700 (PDT)
+        Mon, 17 Oct 2022 13:11:42 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82CD2A428
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:11:41 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33dc888dc62so116087387b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:11:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2R50tDa31QheH9PegEd+bVdQ3X/I4pMIoJ98xHZVENU=;
-        b=gbhcWFmvoOoHlrSw7fwphKzkgX4hOti+XwRW5+LaeaV09djLDTNgfQKCLEOakbXiUh
-         6f502qo/Bl7lANxZjkoEIkS7L5KK6Qf5i/U6ptkvGFke7HF/tAEqYL+qYQHS7OYkEdyh
-         ltYiMuLS+7IfdQmAVOErtTPxsRart4tGjR/3CZXAMPJws1qPEmu3zgtiZLljDS3tgRJQ
-         5Z2QHUPebEzye+DfcfYK0s2UQQ7Cx/NhjjpcFlsOd+MXD1ugiTuHb4teeP9eyac+Ja3n
-         MN1WcJoWDF8NdJ7J40fHi/+l1sfti3ibT4DKferFq6osjrScVwcR2ySvdivCjJixyzRO
-         qxfw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZZNYuYnYhhKKqBDOIhr6XrGGyufP89bX5HYBhar9JwY=;
+        b=YbUppmjpRzqgtYxWUA5/kXQe7wLwR7bCxLD/Ud087xEgKvIJshznwYZ4ZySrPfiZqn
+         NxPSZ7EowQM/sHlFZOX2x2lSL6MGX0S70RowSh9F/i25a8yimUcordRjJY13eKpkNL7I
+         ZtpHVvEmKqv8c5yrrNFcuSnEls5TW5Y9H7zyF+A94n6o14llTh5SS9JFL70+NiikDYco
+         jwXio2ChZpCZWGy1nESgUyuRIgIj8CICzFRbEgGs/ELtb7VLKL75je0H0VGQQaCoCvSI
+         DYoah7Nm+WhHOWcY6X4AYZLkRLr3VhJTY0M92KhuyYW0+3/mptpvWZfVLX5MCDD95XUz
+         GJjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2R50tDa31QheH9PegEd+bVdQ3X/I4pMIoJ98xHZVENU=;
-        b=kYdynQVBm5Yha0A/2HWC6K82gYtvp9XZkZRSBsmbFouUm09r3Bfo+Z7+r69+atFo5A
-         VLYtMzsTqaq88KJaA9Pq0I9ymJhlNSLl+X9cVKDP0s5RVWb/VOhalb1EpfmtF0qYCFI4
-         YkbCxBPabbIbI+g2G9uzsuZupOEhOYm2IO6D01I1I6IBtJsWtSeOSXicenJ+Vg6atBBP
-         gArNicynLmSAGbUKhVbQq9ovThUR0kW0wk1i3sjlW3YsiVWu59uV+QE4pkX4uZ0h2klT
-         ebUWPUyD+hzh7a0kcwfITUfKy2rxXeUOokYllQ6w03I6mjCcd+H4xo4RWfSiD3xCeIF/
-         fIgA==
-X-Gm-Message-State: ACrzQf2LD03iRkgN6P/4hFeg+kNaCsonoQzNl/cdztNifmDCXIAtR8Px
-        EMjMzBz5CKrYGGFZo818dv9LaqjaV5SURuocFNk=
-X-Google-Smtp-Source: AMsMyM5/Jdn558aL2rhxtSZ2OiG2HQGSp5Yfh5ExHu+Z1RngoeO5tlE0YXRAp2g3o24MQ3WEV+KDly8jDeAa2vFPnAs=
-X-Received: by 2002:a05:6e02:20ea:b0:2fc:318b:a952 with SMTP id
- q10-20020a056e0220ea00b002fc318ba952mr5121906ilv.236.1666026668164; Mon, 17
- Oct 2022 10:11:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221016150110.3020451-1-lis8215@gmail.com> <20221016150110.3020451-5-lis8215@gmail.com>
- <0S4WJR.4KB18PR21S9K1@crapouillou.net>
-In-Reply-To: <0S4WJR.4KB18PR21S9K1@crapouillou.net>
-From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Mon, 17 Oct 2022 20:10:56 +0300
-Message-ID: <CAKNVLfYEMwRC+4VuGcaENd1eTvbhWD9=uFDAhaz+1Fd8Aaqg_w@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] clk: Add Ingenic JZ4755 CGU driver
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZNYuYnYhhKKqBDOIhr6XrGGyufP89bX5HYBhar9JwY=;
+        b=RFQnols8QPLkdo/FGG5fPtiqIGgy2YWBah00oEBmTbjAKxxMSu0/lUL8+hd2xTU1v0
+         16IAGhTw7ZAlfrUp0Ol4msP4M8azrx9YDMGDCqeyFatCrvU/NYNMdlTuqb1JBawuEuw9
+         CIADzaYxK+yV2wfKLR/Ss7yXTldpwH1Ujzp9tcIecLHQ/n2riBO6rDzQD44ZjOyYyllf
+         0oaRsuk7imZ9f7wPEn3XJt4kNfQVRJG/Tv0oU3meKy2O8+zx4PspB2Z/p1U79R29WZm2
+         4XTgyFsl0eEKtAyFzPDmx5JlHGnt5CzTHXKe88kl8+ppYDTKOAZmEuMPMTyY+Jdxz7qy
+         4/cQ==
+X-Gm-Message-State: ACrzQf3rqVdV7KW898afyBRKAAfhlA5RIODewqtUTrZ2VkYDYoCtSGpy
+        zmfkUjbyfffHSdp7BgGVmGXwLdwyJrrc
+X-Google-Smtp-Source: AMsMyM7YOldNijFyOMuXUwg2kVVAvEcwSoCVIPvkBVzy61RYTe1Jweys9WJQUIGmaqzg2pJsVOINFZyKfCXP
+X-Received: from sammler.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:43cd])
+ (user=sammler job=sendgmr) by 2002:a05:6902:1022:b0:6bf:eda0:f746 with SMTP
+ id x2-20020a056902102200b006bfeda0f746mr9381400ybt.368.1666026700542; Mon, 17
+ Oct 2022 10:11:40 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 17:11:18 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Message-ID: <20221017171118.1588820-1-sammler@google.com>
+Subject: [PATCH v1] virtio_pmem: populate numa information
+From:   Michael Sammler <sammler@google.com>
+To:     Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Michael Sammler <sammler@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,17 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:24, Paul Cercue=
-il <paul@crapouillou.net>:
+Compute the numa information for a virtio_pmem device from the memory
+range of the device. Previously, the target_node was always 0 since
+the ndr_desc.target_node field was never explicitly set. The code for
+computing the numa node is taken from cxl_pmem_region_probe in
+drivers/cxl/pmem.c.
 
-> > +     [JZ4755_CLK_AIC] =3D {
-> > +             "aic", CGU_CLK_GATE,
-> > +             .parents =3D { JZ4755_CLK_I2S, -1, -1, -1 },
->
-> Wrong parent here, should be JZ4755_CLK_EXT_HALF.
+Signed-off-by: Michael Sammler <sammler@google.com>
+---
+ drivers/nvdimm/virtio_pmem.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-I don't  agree, see Figure 20-13 in the JZ4755 PM.
+diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
+index 20da455d2ef6..a92eb172f0e7 100644
+--- a/drivers/nvdimm/virtio_pmem.c
++++ b/drivers/nvdimm/virtio_pmem.c
+@@ -32,7 +32,6 @@ static int init_vq(struct virtio_pmem *vpmem)
+ static int virtio_pmem_probe(struct virtio_device *vdev)
+ {
+ 	struct nd_region_desc ndr_desc = {};
+-	int nid = dev_to_node(&vdev->dev);
+ 	struct nd_region *nd_region;
+ 	struct virtio_pmem *vpmem;
+ 	struct resource res;
+@@ -79,7 +78,15 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
+ 	dev_set_drvdata(&vdev->dev, vpmem->nvdimm_bus);
 
-> Well it would be good to know...
-
-Indeed, I will try to figure it out.
+ 	ndr_desc.res = &res;
+-	ndr_desc.numa_node = nid;
++
++	ndr_desc.numa_node = memory_add_physaddr_to_nid(res.start);
++	ndr_desc.target_node = phys_to_target_node(res.start);
++	if (ndr_desc.target_node == NUMA_NO_NODE) {
++		ndr_desc.target_node = ndr_desc.numa_node;
++		dev_dbg(&vdev->dev, "changing target node from %d to %d",
++			NUMA_NO_NODE, ndr_desc.target_node);
++	}
++
+ 	ndr_desc.flush = async_pmem_flush;
+ 	ndr_desc.provider_data = vdev;
+ 	set_bit(ND_REGION_PAGEMAP, &ndr_desc.flags);
+--
+2.38.0.413.g74048e4d9e-goog
