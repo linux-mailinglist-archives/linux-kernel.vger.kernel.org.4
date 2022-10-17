@@ -2,99 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B053C6017BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5122F6017C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiJQTdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S230338AbiJQTeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiJQTdV (ORCPT
+        with ESMTP id S229921AbiJQTeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:33:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA103D93;
-        Mon, 17 Oct 2022 12:33:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 17 Oct 2022 15:34:10 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F0813F1A;
+        Mon, 17 Oct 2022 12:34:07 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e793329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e793:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 863ED61218;
-        Mon, 17 Oct 2022 19:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2E5C43470;
-        Mon, 17 Oct 2022 19:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666035199;
-        bh=kQAx6OW++zd8pER7ELrKKvtjZdOAbdTFngiOV+8G34g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=llC3W2pjNBdwi5MREeeCG+5YeQYxSZUkP74uDJCPUJWMwnXudTXQEICQXe7hFjBKZ
-         gYcSqIuT7BrzmwPU852eBxxhQzu/pvQt0D4WGhhusNzQoobKW0PP5alOhBX7f5W7qt
-         hes0bCyYsKWnSemNWnUtN5aF3577GrQStuQ9NmwC4xN58Ji6t92duKa9fvvbEcGYK+
-         jVowZSjyWxrDMGLXwxjxwjA+5LULRq/W5XQGvUWR3uygtno2P3W7oOeZ+OLdUNTUAZ
-         96Kb+eLihGhTdkoQE3Z/FijBSlNmwM69jBeFvzfyeqPPlnUoG4L+tGx5MjDuoRbfyz
-         /wXf6HMp35HVg==
-Received: by mail-lj1-f171.google.com with SMTP id by36so15244965ljb.4;
-        Mon, 17 Oct 2022 12:33:19 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3y+Pm9fistoP9xEkZLgXChkE2UbSmSokXyPhkpR3YLof+dPM53
-        iqMtSjISrNZkzw+kbAeDvhIAWaMdpUDOxzN04K4=
-X-Google-Smtp-Source: AMsMyM5zJeD6UmMgl7EE/qe8Ukfh7tws99HZZCYmK+3PX7I8FETFhmo5M2hWaTPyonuI50r5rNVgKK6/0kfUnu0+QsM=
-X-Received: by 2002:a05:651c:4d0:b0:26f:cd9b:419f with SMTP id
- e16-20020a05651c04d000b0026fcd9b419fmr4367081lji.415.1666035197952; Mon, 17
- Oct 2022 12:33:17 -0700 (PDT)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DD66C1EC0531;
+        Mon, 17 Oct 2022 21:34:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666035242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=A+SmiBJtXQInyL9q8CMvvRTfqz11s9Su0HRnFCAP13s=;
+        b=As/Dl4Uqbukr/M8bYV5G+unu8ttU5HPzu1In68Ztxl6Xsux90JCWMYQsLahcd1FdbGFV38
+        D457tUet2dDGlD4SvgQY8lPX5ya4SRNatFxvU2pw8T5B3x+QKVpHPGNeuHWKHoLD/dz30m
+        Emtw31b/EA0Y9iAHG7aqgozUYBp1Nz4=
+Date:   Mon, 17 Oct 2022 21:33:56 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
+ supervisor states
+Message-ID: <Y02uJDzi/sagFFHt@zn.tnic>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-6-rick.p.edgecombe@intel.com>
+ <Y0qBiSXdZepd7Is9@zn.tnic>
+ <ea4c2081fa1498386da52931cd19b8c495d5dc6b.camel@intel.com>
 MIME-Version: 1.0
-References: <20221006234138.1835739-1-keescook@chromium.org>
- <191ec24d-35d4-e4e5-85f7-d7301984e647@igalia.com> <202210171100.5BAC4A5CC8@keescook>
- <CAMj1kXHzrRTVcxb5+hgUPV3tjekPcDWzVf6cG_Mc9JJmYBz2Mw@mail.gmail.com> <202210171227.35ED875219@keescook>
-In-Reply-To: <202210171227.35ED875219@keescook>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 17 Oct 2022 21:33:06 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEJQ8gh-iXZNL8bNcmV=JCmKHNp5BnhYthhSOyR5h79_g@mail.gmail.com>
-Message-ID: <CAMj1kXEJQ8gh-iXZNL8bNcmV=JCmKHNp5BnhYthhSOyR5h79_g@mail.gmail.com>
-Subject: Re: [PATCH] pstore: migrate to crypto acomp interface (take 2)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ea4c2081fa1498386da52931cd19b8c495d5dc6b.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 at 21:29, Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Oct 17, 2022 at 08:14:14PM +0200, Ard Biesheuvel wrote:
-> > So once we use the same size for input and output, I was curious
-> > whether we could encrypt in place, and get rid of the big_oops_buf.
-> > And the answer is 'yes', precisely because we have this horrid per-CPU
-> > allocation which serves as a bounce buffer. And this is not specific
-> > to acomp, the old comp algorithms get wrapped in scomps which receive
-> > the same treatment.
->
-> Ah, in the sense that "in place" is actually happening in the per-cpu
-> allocation, and only if it succeeds does the input buffer get
-> overwritten?
->
+On Mon, Oct 17, 2022 at 06:57:13PM +0000, Edgecombe, Rick P wrote:
+> Hmm yea. Another reason the actual define is passed in is that the
+> macro want's to stringify the XFEATURE define in order to generate the 
+> message like this:
+> XFEATURE_YMM: struct is 123 bytes, cpu state is 456 bytes
+> 
+> The exact format of the message is probably not too critical though. If
+> instead it used xfeature_names[], it could be:
+> [AVX registers]: struct is 123 bytes, cpu state is 456 bytes
 
-Something like that IIRC.
+Bah, "registers", that made me look at the thing. Yeah, not sure if all
+those "registers" strings even matter there.
 
-> > So at that point, I wondered what the point is of all this complexity.
-> > Do we really need 6 different algorithms to compress a couple of K of
-> > ASCII text on a code path that is ice cold by definition? Wouldn't it
-> > be better to drop the crypto API altogether here, and just use GZIP
-> > via the library interface?
->
-> Well, my goal was to make the algo "pstore doesn't care". If someone
-> picks deflate, do they still get all the per-cpu allocations?
->
+[AVX]: struct is 123 bytes, cpu state is 456 bytes
 
-Not if you use the library interface directly.
+looks good enough to me too. But WTH do I know.
 
-The issue with the percpu buffers is that they are only kept if any
-scomp TFMs are active, but this is always the case for pstore, as you
-don't want to allocate it on the panic path.
+> The full block looks like (like you had):
+> switch (nr) {
+> case XFEATURE_YMM:	  return XCHECK_SZ(sz, nr, struct ymmh_struct);
+> case XFEATURE_BNDREGS:	  return XCHECK_SZ(sz, nr, struct
+> mpx_bndreg_state);
+> case XFEATURE_BNDCSR:	  return XCHECK_SZ(sz, nr, struct
+> mpx_bndcsr_state);
+> case XFEATURE_OPMASK:	  return XCHECK_SZ(sz, nr, struct
+> avx_512_opmask_state);
+> case XFEATURE_ZMM_Hi256:  return XCHECK_SZ(sz, nr, struct
+> avx_512_zmm_uppers_state);
+> case XFEATURE_Hi16_ZMM:	  return XCHECK_SZ(sz, nr, struct
+> avx_512_hi16_state);
+> case XFEATURE_PKRU: 	  return XCHECK_SZ(sz, nr, struct pkru_state);
+> case XFEATURE_PASID: 	  return XCHECK_SZ(sz, nr, struct
+> ia32_pasid_state);
+> case XFEATURE_XTILE_CFG:  return XCHECK_SZ(sz, nr, struct xtile_cfg);
+> case XFEATURE_CET_USER:	  return XCHECK_SZ(sz, nr, struct
+> cet_user_state);
+> case XFEATURE_XTILE_DATA: check_xtile_data_against_struct(sz); return
+> true;
+> default:
+> 	WARN_ONCE(1, "no structure for xstate: %d\n", nr);
+> 	XSTATE_WARN_ON(1);
+> 	return false;
+> }
+> 
+> I like how it fits the XFEATURE_XTILE_DATA check in with the rest.
+
+Yap, nice and straight-forward pattern. :)
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
