@@ -2,146 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83AF600B87
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93118600BAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbiJQJs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S229660AbiJQJ5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiJQJsR (ORCPT
+        with ESMTP id S231229AbiJQJ5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:48:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E36E5E30C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666000086; x=1697536086;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8avkb8niqXxOei1jYk0QQPKLA+dnwojk9iKaLNjUT+Y=;
-  b=Y/7k6SqYYPvxIoCbM6Oy51dsVYAEJdbKX/5PCJKBhCAiOA3KnAGDv3G9
-   DVG6p20M+aNMGYf5rSsze98c94iV9ICeelKtwzfBGXZ4H0ChdpGIqi6JA
-   OHiEV1CoqBwwS2KuMMJhKLA7nCaRQIiKOxCMw6AV38QyWZpkgYWraGAqx
-   5h/WwVmj5cfAaGz1prNpPaOTAkhgUh86Yh+GDLF7k5pg7Ib1ihcSoaI8C
-   PWwuHSMXZtWUbRodshMR6PN27PwtXnyM0cJl1FN8wFOl1rdsQ6eo/9h02
-   kWuVtiMhYNVuvgiPTbpvW3urSk6x2tApnJEjt7i4Dgs/Nmwk4wa9rcONc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="332286070"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="332286070"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 02:48:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="753576169"
-X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
-   d="scan'208";a="753576169"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by orsmga004.jf.intel.com with ESMTP; 17 Oct 2022 02:47:59 -0700
-Date:   Mon, 17 Oct 2022 17:53:34 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH v3] x86/hyperv: Replace kmap() with kmap_local_page()
-Message-ID: <Y00mHsbkoxRDtpJB@liuzhao-OptiPlex-7080>
-References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com>
- <20221017093726.2070674-11-zhao1.liu@linux.intel.com>
+        Mon, 17 Oct 2022 05:57:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1196150070
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:57:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MrXNN51ZZzVjWm;
+        Mon, 17 Oct 2022 17:52:36 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 17 Oct 2022 17:57:10 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 17 Oct 2022 17:57:10 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <linmq006@gmail.com>,
+        <chenzhongjin@huawei.com>
+Subject: [PATCH] firmware: dmi-sysfs: Fix null-ptr-deref in dmi_sysfs_register_handle
+Date:   Mon, 17 Oct 2022 17:53:42 +0800
+Message-ID: <20221017095342.2567-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017093726.2070674-11-zhao1.liu@linux.intel.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, please ignore the last hyperv patch, I made a mistake.
+KASAN reported a null-ptr-deref error:
 
-Zhao
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 1373 Comm: modprobe
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+RIP: 0010:dmi_sysfs_entry_release
+...
+Call Trace:
+ <TASK>
+ kobject_put
+ dmi_sysfs_register_handle (drivers/firmware/dmi-sysfs.c:540) dmi_sysfs
+ dmi_decode_table (drivers/firmware/dmi_scan.c:133)
+ dmi_walk (drivers/firmware/dmi_scan.c:1115)
+ dmi_sysfs_init (drivers/firmware/dmi-sysfs.c:149) dmi_sysfs
+ do_one_initcall (init/main.c:1296)
+ ...
+Kernel panic - not syncing: Fatal exception
+Kernel Offset: 0x4000000 from 0xffffffff81000000
+---[ end Kernel panic - not syncing: Fatal exception ]---
 
-On Mon, Oct 17, 2022 at 05:37:26PM +0800, Zhao Liu wrote:
-> Date: Mon, 17 Oct 2022 17:37:26 +0800
-> From: Zhao Liu <zhao1.liu@linux.intel.com>
-> Subject: [PATCH v3] x86/hyperv: Replace kmap() with kmap_local_page()
-> X-Mailer: git-send-email 2.34.1
-> 
-> From: Zhao Liu <zhao1.liu@intel.com>
-> 
-> kmap() is being deprecated in favor of kmap_local_page()[1].
-> 
-> There are two main problems with kmap(): (1) It comes with an overhead as mapping space is restricted and protected by a global lock for synchronization and (2) it also requires global TLB invalidation when the kmap's pool wraps and it might block when the mapping space is fully utilized until a slot becomes available.
-> 
-> With kmap_local_page() the mappings are per thread, CPU local, can take page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore, the tasks can be preempted and, when they are scheduled to run again, the kernel virtual addresses are restored and are still valid.
-> 
-> Since its use in hyperv/hv_init.c is safe, it should be preferred.
-> 
-> Therefore, replace kmap() with kmap_local_page() in hyperv/hv_init.c.
-> 
-> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
-> 
-> ---
-> Suggested by credits.
->         Ira: Referred to his task documentation and review comments.
->         Fabio: Stole some of his boiler plate commit message.
-> 
-> ---
-> Changelog:
-> v2:
-> - Fix wrong incoming parameters in kunmap_local();
-> - Add Fabio as suggester since I quoted his commit message.
-> 
-> ---
->  arch/x86/hyperv/hv_init.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 3de6d8b53367..72fe46eb183f 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -459,13 +459,13 @@ void __init hyperv_init(void)
->                 wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> 
->                 pg = vmalloc_to_page(hv_hypercall_pg);
-> -               dst = kmap(pg);
-> +               dst = kmap_local_page(pg);
->                 src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
->                                 MEMREMAP_WB);
->                 BUG_ON(!(src && dst));
->                 memcpy(dst, src, HV_HYP_PAGE_SIZE);
->                 memunmap(src);
-> -               kunmap(pg);
-> +               kunmap_local(dst);
->         } else {
->                 hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
->                 wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> --
-> 2.34.1
-> 
+It is because previous patch added kobject_put() to release the memory
+which will call  dmi_sysfs_entry_release() and list_del().
+
+However, list_add_tail(entry->list) is called after the error block,
+so the list_head is uninitialized and cannot be deleted.
+
+Because entry is allocated by kzalloc() so the list.prev is NULL in
+the error path. Check it in dmi_sysfs_entry_release() to avoid
+deleting uninitialized list_head.
+
+Fixes: 660ba678f999 ("firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle")
+
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ drivers/firmware/dmi-sysfs.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+index 66727ad3361b..f8815eeed00c 100644
+--- a/drivers/firmware/dmi-sysfs.c
++++ b/drivers/firmware/dmi-sysfs.c
+@@ -557,9 +557,12 @@ static void dmi_sysfs_entry_release(struct kobject *kobj)
+ {
+ 	struct dmi_sysfs_entry *entry = to_entry(kobj);
+ 
+-	spin_lock(&entry_list_lock);
+-	list_del(&entry->list);
+-	spin_unlock(&entry_list_lock);
++	if (entry->list.prev != NULL) {
++		spin_lock(&entry_list_lock);
++		list_del(&entry->list);
++		spin_unlock(&entry_list_lock);
++	}
++
+ 	kfree(entry);
+ }
+ 
+-- 
+2.17.1
+
