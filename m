@@ -2,145 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0848A600583
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 04:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23EA6005BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 05:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiJQC62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 22:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S231400AbiJQDXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 23:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiJQC60 (ORCPT
+        with ESMTP id S231579AbiJQDXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 22:58:26 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21C848E85;
-        Sun, 16 Oct 2022 19:58:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VSGBvZK_1665975500;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VSGBvZK_1665975500)
-          by smtp.aliyun-inc.com;
-          Mon, 17 Oct 2022 10:58:21 +0800
-Message-ID: <1665975482.5061383-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH V2 2/2] net: Fixup virtnet_set_affinity() cause cpumask warning
-Date:   Mon, 17 Oct 2022 10:58:02 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        andriy.shevchenko@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@rasmusvillemoes.dk, yury.norov@gmail.com,
-        caraitto@google.com, willemb@google.com, jonolson@google.com,
-        amritha.nambiar@intel.com
-References: <20221014030459.3272206-1-guoren@kernel.org>
- <20221014030459.3272206-3-guoren@kernel.org>
- <1665971921.4555926-1-xuanzhuo@linux.alibaba.com>
- <CAJF2gTRYr4XyaHR14_h5tmHpdpnh5j75MeP2V6Au1p3qpABnDQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTRYr4XyaHR14_h5tmHpdpnh5j75MeP2V6Au1p3qpABnDQ@mail.gmail.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 16 Oct 2022 23:23:31 -0400
+X-Greylist: delayed 1503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Oct 2022 20:23:29 PDT
+Received: from scorn.kernelslacker.org (scorn.kernelslacker.org [IPv6:2600:3c03:e000:2fb::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11AE4DB33
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 20:23:29 -0700 (PDT)
+Received: from [2601:196:4600:6634:ae9e:17ff:feb7:72ca] (helo=wopr.kernelslacker.org)
+        by scorn.kernelslacker.org with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <davej@codemonkey.org.uk>)
+        id 1okGKc-007coP-MK; Sun, 16 Oct 2022 22:58:22 -0400
+Received: by wopr.kernelslacker.org (Postfix, from userid 1026)
+        id 02DA056008D; Sun, 16 Oct 2022 22:58:21 -0400 (EDT)
+Date:   Sun, 16 Oct 2022 22:58:21 -0400
+From:   Dave Jones <davej@codemonkey.org.uk>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: 6.1rc1: NFS memcpy warning on mount
+Message-ID: <Y0zEzZwhOxTDcBTB@codemonkey.org.uk>
+Mail-Followup-To: Dave Jones <davej@codemonkey.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
+X-Spam-Note: SpamAssassin invocation failed
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 10:46:59 +0800, Guo Ren <guoren@kernel.org> wrote:
-> On Mon, Oct 17, 2022 at 10:00 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> >
-> > On Thu, 13 Oct 2022 23:04:59 -0400, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Don't pass nr_bits-1 as arg1 for cpumask_next_wrap, which would
-> > > cause warning now 78e5a3399421 ("cpumask: fix checking valid
-> > > cpu range").
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x5c/0x80
-> > > Modules linked in:
-> > > CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-11659-ge7e38f6cce55-dirty #328
-> > > Hardware name: riscv-virtio,qemu (DT)
-> > > epc : cpumask_next_wrap+0x5c/0x80
-> > >  ra : virtnet_set_affinity+0x1ba/0x1fc
-> > > epc : ffffffff808992ca ra : ffffffff805d84ca sp : ff60000002327a50
-> > >  gp : ffffffff81602390 tp : ff600000023a0000 t0 : 5f74656e74726976
-> > >  t1 : 0000000000000000 t2 : 735f74656e747269 s0 : ff60000002327a90
-> > >  s1 : 0000000000000003 a0 : 0000000000000003 a1 : ffffffff816051c0
-> > >  a2 : 0000000000000004 a3 : 0000000000000000 a4 : 0000000000000000
-> > >  a5 : 0000000000000004 a6 : 0000000000000000 a7 : 0000000000000000
-> > >  s2 : 0000000000000000 s3 : ffffffff816051c0 s4 : ffffffff8160224c
-> > >  s5 : 0000000000000004 s6 : 0000000000000004 s7 : 0000000000000000
-> > >  s8 : 0000000000000003 s9 : ffffffff810aa398 s10: ffffffff80e97d20
-> > >  s11: 0000000000000004 t3 : ffffffff819acc97 t4 : ffffffff819acc97
-> > >  t5 : ffffffff819acc98 t6 : ff60000002327878
-> > > status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-> > > [<ffffffff805d84ca>] virtnet_set_affinity+0x1ba/0x1fc
-> > > [<ffffffff805da7ac>] virtnet_probe+0x832/0xf1e
-> > > [<ffffffff804fe61c>] virtio_dev_probe+0x164/0x2de
-> > > [<ffffffff8054c4c4>] really_probe+0x82/0x224
-> > > [<ffffffff8054c6c0>] __driver_probe_device+0x5a/0xaa
-> > > [<ffffffff8054c73c>] driver_probe_device+0x2c/0xb8
-> > > [<ffffffff8054cd66>] __driver_attach+0x76/0x108
-> > > [<ffffffff8054a482>] bus_for_each_dev+0x52/0x9a
-> > > [<ffffffff8054be8c>] driver_attach+0x1a/0x28
-> > > [<ffffffff8054b996>] bus_add_driver+0x154/0x1c2
-> > > [<ffffffff8054d592>] driver_register+0x52/0x108
-> > > [<ffffffff804fe120>] register_virtio_driver+0x1c/0x2c
-> > > [<ffffffff80a29142>] virtio_net_driver_init+0x7a/0xb0
-> > > [<ffffffff80002854>] do_one_initcall+0x66/0x2e4
-> > > [<ffffffff80a01222>] kernel_init_freeable+0x28a/0x304
-> > > [<ffffffff808cb1be>] kernel_init+0x1e/0x110
-> > > [<ffffffff80003c4e>] ret_from_exception+0x0/0x10
-> > > ---[ end trace 0000000000000000 ]---
-> > >
-> > > Fixes: 2ca653d607ce ("virtio_net: Stripe queue affinities across cores.")
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >  drivers/net/virtio_net.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > index 7106932c6f88..e4b56523b2b5 100644
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > @@ -2300,6 +2300,8 @@ static void virtnet_set_affinity(struct virtnet_info *vi)
-> > >
-> > >               for (j = 0; j < group_size; j++) {
-> > >                       cpumask_set_cpu(cpu, mask);
-> > > +                     if (cpu == (nr_cpu_ids - 1))
-> > > +                             break;
-> >
-> > The problem seems to be a problem with cpumask_next_wrap(), I'm not particularly
-> > sure.
-> >
-> > But I think there is something wrong with your modification, which will cause
-> > subsequent queues to be bound to (nr_cpu_ids - 1).
-> Yes, it would lose cpu[nr_cpu_ids - 1]. We've moved to reverting the
-> patch to fix problem:
-> https://lore.kernel.org/all/20221015130548.3634468-1-guoren@kernel.org/
+Started getting this during mount on a 6.1rc1 kernel..
+not sure which mount it's complaining about, but they're all v3 tcp
+mounts on that machine.
 
-Great!!
+[   19.617475] memcpy: detected field-spanning write (size 28) of single field "request.sap" at fs/nfs/super.c:857 (size 18446744073709551615)
+[   19.617504] WARNING: CPU: 3 PID: 1300 at fs/nfs/super.c:857 nfs_request_mount.constprop.0.isra.0+0x1c0/0x1f0
+[   19.617528] CPU: 3 PID: 1300 Comm: mount.nfs Not tainted 6.1.0-rc1-backup+ #1
+[   19.617553] RIP: 0010:nfs_request_mount.constprop.0.isra.0+0x1c0/0x1f0
+[   19.617566] Code: 16 81 01 00 75 9b 48 c7 c1 ff ff ff ff 48 c7 c2 a8 a8 82 ab 4c 89 e6 c6 05 36 16 81 01 01 48 c7 c7 a8 3a 81 ab e8 61 1d 9a 00 <0f> 0b 48 8b 3c 24 e9 6c ff ff ff c7 83 20 01 00 00 01 00 00 00 b8
+[   19.617593] RSP: 0018:ffffc900027fbd48 EFLAGS: 00010286
+[   19.617604] RAX: 0000000000000000 RBX: ffff8881208d5000 RCX: ffff88842fadb7a8
+[   19.617617] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff88842fadb7a0
+[   19.617629] RBP: ffff8881208d5130 R08: 0000000000000000 R09: ffffffffaba5c540
+[   19.617641] R10: 0000000000000001 R11: 0000000000000001 R12: 000000000000001c
+[   19.617653] R13: 0000000000000001 R14: ffffc900027fbef0 R15: ffff888100b3bea0
+[   19.617665] FS:  00007ff793dd6840(0000) GS:ffff88842fac0000(0000) knlGS:0000000000000000
+[   19.617679] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   19.617690] CR2: 0000564a1a747468 CR3: 00000001106fb003 CR4: 00000000001706e0
+[   19.617703] Call Trace:
+[   19.617709]  <TASK>
+[   19.617716]  nfs_try_get_tree+0xa1/0x220
+[   19.617725]  ? get_nfs_version+0x63/0x130
+[   19.617736]  vfs_get_tree+0x1d/0x90
+[   19.617746]  ? capable+0x2f/0x50
+[   19.617755]  path_mount+0x75c/0xb00
+[   19.617766]  __x64_sys_mount+0x19a/0x200
+[   19.617775]  do_syscall_64+0x35/0x80
+[   19.617785]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[   19.617796] RIP: 0033:0x7ff7941ac6ea
+[   19.617805] Code: 48 8b 0d a9 17 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 17 0d 00 f7 d8 64 89 01 48
+[   19.617832] RSP: 002b:00007ffd02ae4ce8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+[   19.617846] RAX: ffffffffffffffda RBX: 00007ffd02ae4e70 RCX: 00007ff7941ac6ea
+[   19.617858] RDX: 0000564a1a73fb60 RSI: 0000564a1a73fb80 RDI: 0000564a1a741890
+[   19.617870] RBP: 00007ff793dd67b8 R08: 0000564a1a73f480 R09: 0000564a1a73f480
+[   19.617882] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[   19.617894] R13: 00007ffd02ae4dd0 R14: 0000564a1a7474e0 R15: 0000564a1a7436b0
+[   19.617907]  </TASK>
+[   19.617913] irq event stamp: 8757
+[   19.617920] hardirqs last  enabled at (8769): [<ffffffffaa1397c2>] __up_console_sem+0x52/0x60
+[   19.617937] hardirqs last disabled at (8780): [<ffffffffaa1397a7>] __up_console_sem+0x37/0x60
+[   19.617952] softirqs last  enabled at (8180): [<ffffffffaabf547a>] sk_common_release+0x5a/0xe0
+[   19.617969] softirqs last disabled at (8178): [<ffffffffaabf5456>] sk_common_release+0x36/0xe0
+[   19.617984] ---[ end trace 0000000000000000 ]---
 
-Thanks.
-
-
->
->
-> >
-> > Thanks.
-> >
-> >
-> > >                       cpu = cpumask_next_wrap(cpu, cpu_online_mask,
-> > >                                               nr_cpu_ids, false);
-> > >               }
-> > > --
-> > > 2.36.1
-> > >
->
->
->
-> --
-> Best Regards
->  Guo Ren
+	Dave
