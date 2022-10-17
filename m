@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E616009EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AC06009ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbiJQJI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S230443AbiJQJIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiJQJIp (ORCPT
+        with ESMTP id S230498AbiJQJIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:08:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5217DCC8;
-        Mon, 17 Oct 2022 02:08:44 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 11:08:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1665997722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3cvKWVDDXmSC/pi5fBn4+ZGRH5VYnyrxLgb7Uzgxnw=;
-        b=nf2GJcpJytL/HFwfwuN82XbcEzOosVAqnmQbT+Ti4SBMWOLv89ns9xs5skIC8ffgnkNwTW
-        XWJEnJkzFU6di9yby4JjM8SC4NAl9HveO149uSp+8Zwk5Kf/78x32SMPoizA6eem4tMP7u
-        9sd9i5WklPNxXGaAhQLSA1dHXyk/G1/xUfqMc70l6M9ZxjgcBEo9oqIZjRxgbTjnH89G1A
-        v0L+azazxFRfX+NZ9AGh/bNL4AwLSOHiyEKTmJzIFPjBDwEqI5cPeOZQme/JwvC7qqm1+R
-        zjMwAjknyBX/JXMy9jP1qvrHkwtB+xAPXJAOYlTtWpy1/XsccYZOOwaA+pzIWg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1665997722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3cvKWVDDXmSC/pi5fBn4+ZGRH5VYnyrxLgb7Uzgxnw=;
-        b=Yr3px8mYGxJLV1EKNFbqUB2b3sGLhUz+mXR7RE3LdlJEq1bIDVrI2qmGis6BspKYYa9vMd
-        yxzw1E8yz7q20cCQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] serial: 8250_omap: remove wait loop from Errata i202
- workaround
-Message-ID: <Y00bmec4hvWxtnB5@linutronix.de>
-References: <20221013112339.2540767-1-matthias.schiffer@ew.tq-group.com>
- <ea90b0ba-61bf-e56e-5120-9771122838cf@linux.intel.com>
+        Mon, 17 Oct 2022 05:08:39 -0400
+Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AD5CC8;
+        Mon, 17 Oct 2022 02:08:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VSLPJYu_1665997713;
+Received: from 30.97.48.54(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSLPJYu_1665997713)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Oct 2022 17:08:34 +0800
+Message-ID: <8007f4fc-d2e6-7aae-7297-805326adce2a@linux.alibaba.com>
+Date:   Mon, 17 Oct 2022 17:09:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <ea90b0ba-61bf-e56e-5120-9771122838cf@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH] mm: Introduce new MADV_NOMOVABLE behavior
+To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org
+Cc:     arnd@arndb.de, jingshan@linux.alibaba.com, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <bc27af32b0418ed1138a1c3a41e46f54559025a5.1665991453.git.baolin.wang@linux.alibaba.com>
+ <6227ba4c-9455-9652-7434-7842b2b3edcb@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <6227ba4c-9455-9652-7434-7842b2b3edcb@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-17 11:12:41 [+0300], Ilpo J=C3=A4rvinen wrote:
-> On Thu, 13 Oct 2022, Matthias Schiffer wrote:
->=20
-> > We were occasionally seeing the "Errata i202: timedout" on an AM335x
-> > board when repeatedly opening and closing a UART connected to an active
-> > sender. As new input may arrive at any time, it is possible to miss the
-> > "RX FIFO empty" condition, forcing the loop to wait until it times out.
->=20
-> I can see this problem could occur and why your patch fixes it.
->=20
-> > Nothing in the i202 Advisory states that such a wait is even necessary;
-> > other FIFO clear functions like serial8250_clear_fifos() do not wait
-> > either. For this reason, it seems safe to remove the wait, fixing the
-> > mentioned issue.
->=20
-> Checking the commit that added this driver and the loop along with it,=20
-> there was no information why it would be needed there either.
 
-I don't remember all the details but I do remember that I never hit it.
-The idea back then was to document what appears the problem and then
-once there is a reproducer address it _or_ when there is another problem
-check if it aligns with the output here (so that _this_ problem's origin
-could be this). This was part of address all known chip erratas and
-copied from omap-serial at the time so that the 8250 does not miss
-anything.
-Looking closer, this is still part of the omap-serial driver and it was
-introduced in commit
-   0003450964357 ("omap2/3/4: serial: errata i202: fix for MDR1 access")
 
-If someone found a way to trigger this output which is unrelated to the
-expected cause then this is clearly not helping nor intended.
+On 10/17/2022 4:41 PM, David Hildenbrand wrote:
+> On 17.10.22 09:32, Baolin Wang wrote:
+>> When creating a virtual machine, we will use memfd_create() to get
+>> a file descriptor which can be used to create share memory mappings
+>> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
+>> flag to allocate physical pages for the virtual machine.
+>>
+>> When allocating physical pages for the guest, the host can fallback to
+>> allocate some CMA pages for the guest when over half of the zone's free
+>> memory is in the CMA area.
+>>
+>> In guest os, when the application wants to do some data transaction with
+>> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
+>> create IOMMU mappings for the DMA pages. However, when calling
+>> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
+>> failed to longterm-pin sometimes.
+>>
+>> After some invetigation, we found the pages used to do DMA mapping can
+>> contain some CMA pages, and these CMA pages will cause a possible
+>> failure of the longterm-pin, due to failed to migrate the CMA pages.
+>> The reason of migration failure may be temporary reference count or
+>> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
+>> ioctl returns error, which makes the application failed to start.
+>>
+>> To fix this issue, this patch introduces a new madvise behavior, named
+>> as MADV_NOMOVABLE, to avoid allocating CMA pages and movable pages if
+>> the users want to do longterm-pin, which can remove the possible failure
+>> of movable or CMA pages migration.
+> 
+> Sorry to say, but that sounds like a hack to work around a kernel 
+> implementation detail (how often we retry to migrate pages).
 
-I would prefer to keep the loop and replace the disturbing output with a
-comment describing _why_ the FIFO might remain non-empty after a flush.
+IMO, in our case one migration failure will make our application failed 
+to start, which is not a trival problem. So mitigate the failure of 
+migration can be important in this case.
 
-In worst cases that loop causes a delay of less than 0.5ms while setting
-a baud rate so I doubt that this is causing a real problem.
+> If there are CMA/ZONE_MOVABLE issue, please fix them instead, and avoid 
+> leaking these details to user space.
 
-Either way I would like to see Tony's ACK before this is getting removed
-as suggested in this patch.
+Now we can not forbid the fallback to CMA allocation if there are enough 
+free CMA in the zone, right? So adding a hint to help to diable 
+ALLOC_CMA flag seems reasonable?
 
-> Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
->=20
-> Thanks.
+For CMA/ZONE_MOVABLE details, yes, not suitable to leak to user space. 
+so how about rename the madvise as MADV_PINNABLE, which means we will do 
+longterm-pin after allocation, and no CMA/ZONE_MOVABLE pages will be 
+allocated.
 
-Sebastian
+Or do you have any good idea? Thanks.
+
+
+> ALSO, with MAP_POPULATE as described by you this madvise flag doesn't 
+> make too much sense, because it will gets et after all memory already 
+> was allocated ...
+
+This is not a problem I think, we can change to use MADV_POPULATE_XXX to 
+preallocate the physical pages after MADV_NOMOVABLE madvise.
