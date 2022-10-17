@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068B3601795
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E689560179E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiJQT03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S231428AbiJQT1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiJQT0I (ORCPT
+        with ESMTP id S230447AbiJQT0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:26:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C54414D3F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 12:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666034757; x=1697570757;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3+6DO9VeA7V5TPow8roEb4hbTgWNZlyynBDjtIDpAx4=;
-  b=NjDIT2jjsmgl0S8NLBNKqwp7CfiZdnP2zXbMtV/EVBuE1FRwI6iyGOfE
-   x804kHbj6cPARYtiigoABXLPRaNXjHRmV+kxMyxKc3QM3W46yhe3INUB/
-   xc+BDFsMDcldD88rrUyNNs9cAzKSVXq2ImzSOEjHED5LpRy1jlN5QcPf4
-   8VHkIMrxIFPmHI8Wf40yzGpE/hIaDnaRHSDeC06lMFAWZxn5kQ7g7noey
-   CSbPGg3M/GkXp3qwEAhm+6IUqu1z99uze+MCG2KLPYamQaPVN0ShqWiPN
-   PATXNXyJqCmNjyyLImUUFwsoMzwEnjxrcDp+r7d9jNSLf4KN9EPl2z0AU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="285620003"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="285620003"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 12:25:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="753747752"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="753747752"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 17 Oct 2022 12:25:06 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1okVjU-0090T2-1J;
-        Mon, 17 Oct 2022 22:25:04 +0300
-Date:   Mon, 17 Oct 2022 22:25:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        linux@rasmusvillemoes.dk, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vsprintf: protect kernel from panic due to non-canonical
- pointer dereference
-Message-ID: <Y02sENwhtpsx5yhP@smile.fi.intel.com>
-References: <20221017191611.2577466-1-jane.chu@oracle.com>
+        Mon, 17 Oct 2022 15:26:20 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559CF47BBE;
+        Mon, 17 Oct 2022 12:26:08 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29HJPXpI121467;
+        Mon, 17 Oct 2022 14:25:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666034733;
+        bh=7jOUAMv92Rk7rkSCCELQ2bcifDnelzdjh7IDy43UWkc=;
+        h=From:To:CC:Subject:Date;
+        b=U7cc6Adj0DKGFQe8Fn+ej/0g/Ff5h1LnCUdPIy2ZvFfhcMSGAWIZMb0kq3vdYvYS5
+         kW/UaAXLBDaosDfsSuzKHy8NwOMhRe+tchZvdO2fA2eqrkUcH5toUCcm76tqmbqbVV
+         T5wtbTkcouuVw7+4NZmOzQJPDOtrl1Gu1kqNGX+s=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29HJPXaE026070
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Oct 2022 14:25:33 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 17
+ Oct 2022 14:25:33 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 17 Oct 2022 14:25:33 -0500
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29HJPWXH026106;
+        Mon, 17 Oct 2022 14:25:32 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Davis <afd@ti.com>
+Subject: [PATCH 00/10] AM64x Disable Incomplete DT Nodes
+Date:   Mon, 17 Oct 2022 14:25:22 -0500
+Message-ID: <20221017192532.23825-1-afd@ti.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017191611.2577466-1-jane.chu@oracle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 01:16:11PM -0600, Jane Chu wrote:
-> While debugging a separate issue, it was found that an invalid string
-> pointer could very well contain a non-canical address, such as
-> 0x7665645f63616465. In that case, this line of defense isn't enough
-> to protect the kernel from crashing due to general protection fault
-> 
-> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
->                 return "(efault)";
-> 
-> So instead, use kern_addr_valid() to validate the string pointer.
+Hello all,
 
-How did you check that value of the (invalid string) pointer?
+This series goes through the AM64x dtsi and disables the set of nodes
+that are not functional without additional board level information.
+This is usually pinmux data, but can also be inernal device resources.
 
+Only when the node is completed in the board file should the node be
+enabled. This helps prevents nodes that represent IP that are not
+pinned-out on a given board from being left enabled.
+
+This also reduces the effort needed to add a new board, one no longer
+needs to manually disable all the extra IP. For instance TI J784s4 has
+20(!) MCAN instances. It is much easier to enable the one you pin out,
+vs disabling the 19 that you did not.
+
+Thanks,
+Andrew
+
+Andrew Davis (10):
+  arm64: dts: ti: k3-am64: Enable UART nodes at the board level
+  arm64: dts: ti: k3-am64: Enable I2C nodes at the board level
+  arm64: dts: ti: k3-am64: Enable SPI nodes at the board level
+  arm64: dts: ti: k3-am64: Enable EPWM nodes at the board level
+  arm64: dts: ti: k3-am64: Enable ECAP nodes at the board level
+  arm64: dts: ti: k3-am64: Enable PCIe nodes at the board level
+  arm64: dts: ti: k3-am64: MDIO pinmux should belong to the MDIO node
+  arm64: dts: ti: k3-am64: Enable MDIO nodes at the board level
+  arm64: dts: ti: k3-am64: Enable MCAN nodes at the board level
+  arm64: dts: ti: k3-am64: Enable GPMC and ELM nodes at the board level
+
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi |  37 ++++++
+ arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi  |   6 +
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts  | 119 ++-----------------
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts   | 142 ++---------------------
+ 4 files changed, 63 insertions(+), 241 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.3
 
