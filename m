@@ -2,164 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F576005F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 06:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A90600601
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 06:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiJQEWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 00:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
+        id S229786AbiJQE0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 00:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJQEWK (ORCPT
+        with ESMTP id S229564AbiJQE0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 00:22:10 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 996024A123
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 21:22:08 -0700 (PDT)
-Received: from [10.136.12.12] (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx32tp2ExjT2cwAA--.33832S3;
-        Mon, 17 Oct 2022 12:22:02 +0800 (CST)
-Subject: Re: [PATCH V2] LoongArch: Add unaligned access support
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-References: <20221017022330.2383060-1-chenhuacai@loongson.cn>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <67d9acd0-692f-95d4-2c92-4e43e1d0100c@loongson.cn>
-Date:   Mon, 17 Oct 2022 12:22:00 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 17 Oct 2022 00:26:25 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A134CA29
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 21:26:24 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id m6so10047884pfb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 21:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VFSmEv2tRk40DzOwLx5rHuZRKNkvGuZ5/J8+Egszsec=;
+        b=OuOm7ZYilVJH+yXrueBOKP8N1xKMaZmarB4gJ/H+I0PmJBcMjVXIaTMyZVIH3NtWML
+         lbxwnuetpluELNvSYLK550cHKIDcpL6jkabxssVj2UjTKxEWAcZZ8qtdWWnnlHlKShq+
+         zEhftAcuOiMy8qiy1UDlZztIf2TqY+l37uL329rcqhU4p1yV6dbHcFHU2YdaIX008duz
+         8IHcDL96TIa9hWCsRobdgJANgaHMgRxlDZNHpkixsinGWM7tlZQViPsPbiQsRfUmgbII
+         YLAwyzwhDIvsG5MulUJhjn/BV5cDjw4gMzh/YROlpJ4BN9ug2B+37XKUnWvvzuknDxUJ
+         3OAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VFSmEv2tRk40DzOwLx5rHuZRKNkvGuZ5/J8+Egszsec=;
+        b=BwsWxrYob+eIzwCcBYKp7Naj4N4QcWLtiJzromCChpwvpbufbccopP3iiHnBirLB8q
+         oTQxBi+H5bzfXrLzD12sUeRv16rL5c4O+lcx+4v7wrDhp+oT+tACVxVItHfK8RBUqLDh
+         3/8h6w8HvDT8bhmMKA7CM30BKCLbU/9vQCmOD3R9TO3+D6C0+v6vOGeI2lvBRkUa15Fq
+         b6KLjLKbMXy+JlMjtUlCIqWq58dJMc7qniILiNYS7GKJ6KkLd2fp6+j6kUwiClszwZ4V
+         YOZiUdwyZlOzHT9nR3DuY2l0ri++uPOck51+B1mhvdpqSPhXcQEwVM+NDo3vQNwn6v4E
+         in2w==
+X-Gm-Message-State: ACrzQf3NmwcHP7isgIevXBavn/tRhWSV0nvHsTnG1DZd9rrrLiQaMLdG
+        H8vqq7oMw9/jupxqC66Ui4Z/Kg==
+X-Google-Smtp-Source: AMsMyM71a+Ug6iJ95KAjcgyZ0aYJkzGMGdKXdpmkfTFdL4zy5GwYwuVQTfWIArsfpLqmjo0T/UxbNw==
+X-Received: by 2002:a65:6bc1:0:b0:462:4a88:4fef with SMTP id e1-20020a656bc1000000b004624a884fefmr8941522pgw.282.1665980783496;
+        Sun, 16 Oct 2022 21:26:23 -0700 (PDT)
+Received: from [10.4.245.17] ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id b124-20020a62cf82000000b00562b752b38asm5990823pfg.145.2022.10.16.21.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 21:26:23 -0700 (PDT)
+Message-ID: <5ea4949e-3e8b-2ec0-bdcf-93e5744caee1@bytedance.com>
+Date:   Mon, 17 Oct 2022 12:26:13 +0800
 MIME-Version: 1.0
-In-Reply-To: <20221017022330.2383060-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [RFC PATCH 00/11] Reviving the Proxy Execution Series
 Content-Language: en-US
-X-CM-TRANSID: AQAAf8Bx32tp2ExjT2cwAA--.33832S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4UWw1fCw15Kr1kKFWfZrb_yoW8Wr4Upa
-        yrGa4DKa9FqryxZF1UJw1Dt34FgrnrJr9IkrsxJrZ8Zr18CFnavFyfur1xXrsxKr9rWF1Y
-        qa4aq3yfur4DKFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUU
-        U==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, John Stultz <jstultz@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+References: <d5d72856-417a-0fe7-4b1d-3e27c64c1a85@linux.dev>
+ <802E39EA-7444-4B33-AB95-594A600FE404@joelfernandes.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <802E39EA-7444-4B33-AB95-594A600FE404@joelfernandes.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Huacai,
+On 2022/10/17 11:56, Joel Fernandes wrote:
+> 
+> 
+>> On Oct 16, 2022, at 11:25 PM, Chengming Zhou <zhouchengming@bytedance.com> wrote:
+>>
+>> ﻿Hello,
+>>
+>>> On 2022/10/4 05:44, Connor O'Brien wrote:
+>>> Proxy execution is an approach to implementing priority inheritance
+>>> based on distinguishing between a task's scheduler context (information
+>>> required in order to make scheduling decisions about when the task gets
+>>> to run, such as its scheduler class and priority) and its execution
+>>> context (information required to actually run the task, such as CPU
+>>> affinity). With proxy execution enabled, a task p1 that blocks on a
+>>> mutex remains on the runqueue, but its "blocked" status and the mutex on
+>>> which it blocks are recorded. If p1 is selected to run while still
+>>> blocked, the lock owner p2 can run "on its behalf", inheriting p1's
+>>> scheduler context. Execution context is not inherited, meaning that
+>>> e.g. the CPUs where p2 can run are still determined by its own affinity
+>>> and not p1's.
+>>
+>> This is cool. We have a problem (others should have encountered it too) that
+>> priority inversion happened when the rwsem writer is waiting for many readers
+>> which held lock but are throttled by CFS bandwidth control. (In our use case,
+>> the rwsem is the mm_struct->mmap_sem)
+>>
+>> So I'm curious if this work can also solve this problem? If we don't dequeue
+>> the rwsem writer when it blocked on the rwsem, then CFS scheduler pick it to
+>> run, we can use blocked chain to find the readers to run?
+> 
+> That seems a lot harder and unsupported by current patch set AFAICS (my exposure to this work is about a week so take it with a grain of salt). You could have multiple readers so how would you choose which reader to proxy for (round robin?).  Also, you no longer have a chain but a tree of chains, with the leaves being each reader - so you have to track that somehow, then keep migrating the blocked tasks in the chain to each readers CPU. Possibly migrating a lot more than in the case of a single chain. Also it’s not clear if it will be beneficial as proxying for one reader does not mean you’re improving the situation if it is another reader that is in need of the boost.
+> 
 
+Thanks for your reply, it's indeed more complex than I think, and proxying for just one reader
+is also less efficient.
 
-On 2022/10/17 上午10:23, Huacai Chen wrote:
-> [...]
-> +	default:
-> +		panic("unexpected fd '%d'", fd);
-Due to the optimization of gcc, the panic() is unused actually and leave
-the symbol 'read/write_fpr' in vmlinux. Maybe we can use unreachable() and
+But this rwsem priority inversion problem hurts us so much that we are afraid to use
+CFS bandwidth control now. Imaging when 10 readers held mmap_sem then throttled for 20ms,
+the writer will have to wait for at least 200ms, which become worse if the writer held other lock.
 
-always_inline.
-
-> [...]
-> +
-> +fault:
-> +	/* roll back jump/branch */
-> +	regs->csr_era = origpc;
-> +	regs->regs[1] = origra;
-
-I'm not sure where the csr_era and regs[1] was damaged...
-
-> [...]
->
-> +/*
-> + * unsigned long unaligned_read(void *addr, void *value, unsigned long n, bool sign)
-> + *
-> + * a0: addr
-> + * a1: value
-> + * a2: n
-> + * a3: sign
-> + */
-> +SYM_FUNC_START(unaligned_read)
-> +	beqz	a2, 5f
-> +
-> +	li.w	t1, 8
-IMHO we can avoid the constant reg t1.
-> +	li.w	t2, 0
-> +
-> +	addi.d	t0, a2, -1
-> +	mul.d	t1, t0, t1
-> +	add.d 	a0, a0, t0
-> +
-> +	beq	a3, zero, 2f
-beqz
-> +1:	ld.b	t3, a0, 0
-> +	b	3f
-> +
-> +2:	ld.bu	t3, a0, 0
-> +3:	sll.d	t3, t3, t1
-> +	or	t2, t2, t3
-> +	addi.d	t1, t1, -8
-> +	addi.d	a0, a0, -1
-> +	addi.d	a2, a2, -1
-> +	bgt	a2, zero, 2b
-bgtz
-> +4:	st.d	t2, a1, 0
-> +
-> +	move	a0, a2
-> +	jr	ra
-> +
-> +5:	li.w    a0, -EFAULT
-> +	jr	ra
-> +
-> +	fixup_ex 1, 6, 1
-> +	fixup_ex 2, 6, 0
-> +	fixup_ex 4, 6, 0
-> +SYM_FUNC_END(unaligned_read)
-> +
-> +/*
-> + * unsigned long unaligned_write(void *addr, unsigned long value, unsigned long n)
-> + *
-> + * a0: addr
-> + * a1: value
-> + * a2: n
-> + */
-> +SYM_FUNC_START(unaligned_write)
-> +	beqz	a2, 3f
-> +
-> +	li.w	t0, 0
-> +1:	srl.d	t1, a1, t0
-> +2:	st.b	t1, a0, 0
-> +	addi.d	t0, t0, 8
-> +	addi.d	a2, a2, -1
-> +	addi.d	a0, a0, 1
-> +	bgt	a2, zero, 1b
-bgtz
-> +
-> +	move	a0, a2
-> +	jr	ra
-> +
-> +3:	li.w    a0, -EFAULT
-> +	jr	ra
-> +
-> +	fixup_ex 2, 4, 1
-> +SYM_FUNC_END(unaligned_write)
-
-Thanks,
-
-Jinyang
+Thanks.
 
