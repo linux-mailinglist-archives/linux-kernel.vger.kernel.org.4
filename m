@@ -2,296 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D013E600869
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A336260086B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiJQILz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S230128AbiJQIM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiJQILr (ORCPT
+        with ESMTP id S229707AbiJQIM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:11:47 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C80A5C35A;
-        Mon, 17 Oct 2022 01:11:44 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 08:11:39 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1665994301;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0B0VaRzac7vXh2d5HLbe/0OjkxdZIGsAEaA8zxRe4y8=;
-        b=AnV4IBrYWpSBA2CtgVp++jymWpxYi/G7Kq9KwQq4OBzXp/nz9j+9hvZqcRBv1FClWHmokW
-        d/Gvo96w7mK/2sTg9/Z44gVlhSXMkzzCQGv1OZIEIR8hw2wl9WTxdenOcyoxFL0+C8pFod
-        QwvbXcnAwvmu4lLTjn2/AnApqsu+le6qGbo/2XzUDyhHcYL8iLEHOk0dHnwIURh3IyVcS3
-        srTnjtnei0clAOpgT81xsI2KRIVZvZ4b1WEXrMl9Cckr/TDK9Y972ks/Gt3o/GY8WqYvj4
-        6LelH2GFnPoq+1YdGjxgNC3ZX2PVvrWXfiTefYVyVj/4IKpWij9HG0Nkx8HnCg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1665994301;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0B0VaRzac7vXh2d5HLbe/0OjkxdZIGsAEaA8zxRe4y8=;
-        b=LGKEO8SYJdatJ3n3z/bVsZPiVSIsD/0XncWiMOZolFpL/dCg2EgCdUB1R/pn274rs81TZ4
-        j2zezpCJ0devimBg==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/bugs: Use sysfs_emit()
-Cc:     Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220809153419.10182-1-bp@alien8.de>
-References: <20220809153419.10182-1-bp@alien8.de>
+        Mon, 17 Oct 2022 04:12:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51840578BD;
+        Mon, 17 Oct 2022 01:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665994375; x=1697530375;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=BuoukK197kIH67kqksqI1W+6GwLk5Xk8TkrWNPLTHIw=;
+  b=bFlME6oLuIj0f6AOitRD2Ry5u+4EXCrADxrkUt6PCbDmI+/rWcakca37
+   zfcbBc62QBumNwriLwIwYj+d6GPpE4sZu3xf3Ajo45w9Ah0xJFmEiUIL2
+   XWVpsihKxyc5dbfQK8fBU21SFrXqiFNdWZ3JO47pPb1B9kQYbu8f5dTUn
+   JGl5w/lvA2UZBbLYv/zjNuqYY08PZ+Uhk343M4N97QPrCc0mFoX3413UV
+   sj9CTYHzoxdRoBNRG8tfkvdRFCnWzkJDp8wVo959IZkeO//pTie7Nc5Yo
+   bCLzHTH2Rgd3ur1zkufG+O6hWzUcfwWcn9owi9WtGqaKNg1yxIhyAt+xa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="305727995"
+X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
+   d="scan'208";a="305727995"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 01:12:46 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="753552798"
+X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
+   d="scan'208";a="753552798"
+Received: from ohoehne-mobl4.ger.corp.intel.com ([10.251.213.173])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 01:12:43 -0700
+Date:   Mon, 17 Oct 2022 11:12:41 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: 8250_omap: remove wait loop from Errata i202
+ workaround
+In-Reply-To: <20221013112339.2540767-1-matthias.schiffer@ew.tq-group.com>
+Message-ID: <ea90b0ba-61bf-e56e-5120-9771122838cf@linux.intel.com>
+References: <20221013112339.2540767-1-matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-Message-ID: <166599429932.401.11255860485338627979.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1487723672-1665994365=:5493"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Commit-ID:     1d30800c0c0ae1d086ffad2bdf0ba4403370f132
-Gitweb:        https://git.kernel.org/tip/1d30800c0c0ae1d086ffad2bdf0ba4403370f132
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Tue, 09 Aug 2022 17:32:02 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 17 Oct 2022 08:55:49 +02:00
+--8323329-1487723672-1665994365=:5493
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-x86/bugs: Use sysfs_emit()
+On Thu, 13 Oct 2022, Matthias Schiffer wrote:
 
-Those mitigations are very talkative; use the printing helper which pays
-attention to the buffer size.
+> We were occasionally seeing the "Errata i202: timedout" on an AM335x
+> board when repeatedly opening and closing a UART connected to an active
+> sender. As new input may arrive at any time, it is possible to miss the
+> "RX FIFO empty" condition, forcing the loop to wait until it times out.
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220809153419.10182-1-bp@alien8.de
----
- arch/x86/kernel/cpu/bugs.c | 103 +++++++++++++++++-------------------
- 1 file changed, 51 insertions(+), 52 deletions(-)
+I can see this problem could occur and why your patch fixes it.
 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index da7c361..e254f07 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -2206,74 +2206,74 @@ static const char * const l1tf_vmx_states[] = {
- static ssize_t l1tf_show_state(char *buf)
- {
- 	if (l1tf_vmx_mitigation == VMENTER_L1D_FLUSH_AUTO)
--		return sprintf(buf, "%s\n", L1TF_DEFAULT_MSG);
-+		return sysfs_emit(buf, "%s\n", L1TF_DEFAULT_MSG);
- 
- 	if (l1tf_vmx_mitigation == VMENTER_L1D_FLUSH_EPT_DISABLED ||
- 	    (l1tf_vmx_mitigation == VMENTER_L1D_FLUSH_NEVER &&
- 	     sched_smt_active())) {
--		return sprintf(buf, "%s; VMX: %s\n", L1TF_DEFAULT_MSG,
--			       l1tf_vmx_states[l1tf_vmx_mitigation]);
-+		return sysfs_emit(buf, "%s; VMX: %s\n", L1TF_DEFAULT_MSG,
-+				  l1tf_vmx_states[l1tf_vmx_mitigation]);
- 	}
- 
--	return sprintf(buf, "%s; VMX: %s, SMT %s\n", L1TF_DEFAULT_MSG,
--		       l1tf_vmx_states[l1tf_vmx_mitigation],
--		       sched_smt_active() ? "vulnerable" : "disabled");
-+	return sysfs_emit(buf, "%s; VMX: %s, SMT %s\n", L1TF_DEFAULT_MSG,
-+			  l1tf_vmx_states[l1tf_vmx_mitigation],
-+			  sched_smt_active() ? "vulnerable" : "disabled");
- }
- 
- static ssize_t itlb_multihit_show_state(char *buf)
- {
- 	if (!boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
- 	    !boot_cpu_has(X86_FEATURE_VMX))
--		return sprintf(buf, "KVM: Mitigation: VMX unsupported\n");
-+		return sysfs_emit(buf, "KVM: Mitigation: VMX unsupported\n");
- 	else if (!(cr4_read_shadow() & X86_CR4_VMXE))
--		return sprintf(buf, "KVM: Mitigation: VMX disabled\n");
-+		return sysfs_emit(buf, "KVM: Mitigation: VMX disabled\n");
- 	else if (itlb_multihit_kvm_mitigation)
--		return sprintf(buf, "KVM: Mitigation: Split huge pages\n");
-+		return sysfs_emit(buf, "KVM: Mitigation: Split huge pages\n");
- 	else
--		return sprintf(buf, "KVM: Vulnerable\n");
-+		return sysfs_emit(buf, "KVM: Vulnerable\n");
- }
- #else
- static ssize_t l1tf_show_state(char *buf)
- {
--	return sprintf(buf, "%s\n", L1TF_DEFAULT_MSG);
-+	return sysfs_emit(buf, "%s\n", L1TF_DEFAULT_MSG);
- }
- 
- static ssize_t itlb_multihit_show_state(char *buf)
- {
--	return sprintf(buf, "Processor vulnerable\n");
-+	return sysfs_emit(buf, "Processor vulnerable\n");
- }
- #endif
- 
- static ssize_t mds_show_state(char *buf)
- {
- 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
--		return sprintf(buf, "%s; SMT Host state unknown\n",
--			       mds_strings[mds_mitigation]);
-+		return sysfs_emit(buf, "%s; SMT Host state unknown\n",
-+				  mds_strings[mds_mitigation]);
- 	}
- 
- 	if (boot_cpu_has(X86_BUG_MSBDS_ONLY)) {
--		return sprintf(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
--			       (mds_mitigation == MDS_MITIGATION_OFF ? "vulnerable" :
--			        sched_smt_active() ? "mitigated" : "disabled"));
-+		return sysfs_emit(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
-+				  (mds_mitigation == MDS_MITIGATION_OFF ? "vulnerable" :
-+				   sched_smt_active() ? "mitigated" : "disabled"));
- 	}
- 
--	return sprintf(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
--		       sched_smt_active() ? "vulnerable" : "disabled");
-+	return sysfs_emit(buf, "%s; SMT %s\n", mds_strings[mds_mitigation],
-+			  sched_smt_active() ? "vulnerable" : "disabled");
- }
- 
- static ssize_t tsx_async_abort_show_state(char *buf)
- {
- 	if ((taa_mitigation == TAA_MITIGATION_TSX_DISABLED) ||
- 	    (taa_mitigation == TAA_MITIGATION_OFF))
--		return sprintf(buf, "%s\n", taa_strings[taa_mitigation]);
-+		return sysfs_emit(buf, "%s\n", taa_strings[taa_mitigation]);
- 
- 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
--		return sprintf(buf, "%s; SMT Host state unknown\n",
--			       taa_strings[taa_mitigation]);
-+		return sysfs_emit(buf, "%s; SMT Host state unknown\n",
-+				  taa_strings[taa_mitigation]);
- 	}
- 
--	return sprintf(buf, "%s; SMT %s\n", taa_strings[taa_mitigation],
--		       sched_smt_active() ? "vulnerable" : "disabled");
-+	return sysfs_emit(buf, "%s; SMT %s\n", taa_strings[taa_mitigation],
-+			  sched_smt_active() ? "vulnerable" : "disabled");
- }
- 
- static ssize_t mmio_stale_data_show_state(char *buf)
-@@ -2341,73 +2341,72 @@ static char *pbrsb_eibrs_state(void)
- static ssize_t spectre_v2_show_state(char *buf)
- {
- 	if (spectre_v2_enabled == SPECTRE_V2_LFENCE)
--		return sprintf(buf, "Vulnerable: LFENCE\n");
-+		return sysfs_emit(buf, "Vulnerable: LFENCE\n");
- 
- 	if (spectre_v2_enabled == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
--		return sprintf(buf, "Vulnerable: eIBRS with unprivileged eBPF\n");
-+		return sysfs_emit(buf, "Vulnerable: eIBRS with unprivileged eBPF\n");
- 
- 	if (sched_smt_active() && unprivileged_ebpf_enabled() &&
- 	    spectre_v2_enabled == SPECTRE_V2_EIBRS_LFENCE)
--		return sprintf(buf, "Vulnerable: eIBRS+LFENCE with unprivileged eBPF and SMT\n");
-+		return sysfs_emit(buf, "Vulnerable: eIBRS+LFENCE with unprivileged eBPF and SMT\n");
- 
--	return sprintf(buf, "%s%s%s%s%s%s%s\n",
--		       spectre_v2_strings[spectre_v2_enabled],
--		       ibpb_state(),
--		       boot_cpu_has(X86_FEATURE_USE_IBRS_FW) ? ", IBRS_FW" : "",
--		       stibp_state(),
--		       boot_cpu_has(X86_FEATURE_RSB_CTXSW) ? ", RSB filling" : "",
--		       pbrsb_eibrs_state(),
--		       spectre_v2_module_string());
-+	return sysfs_emit(buf, "%s%s%s%s%s%s%s\n",
-+			  spectre_v2_strings[spectre_v2_enabled],
-+			  ibpb_state(),
-+			  boot_cpu_has(X86_FEATURE_USE_IBRS_FW) ? ", IBRS_FW" : "",
-+			  stibp_state(),
-+			  boot_cpu_has(X86_FEATURE_RSB_CTXSW) ? ", RSB filling" : "",
-+			  pbrsb_eibrs_state(),
-+			  spectre_v2_module_string());
- }
- 
- static ssize_t srbds_show_state(char *buf)
- {
--	return sprintf(buf, "%s\n", srbds_strings[srbds_mitigation]);
-+	return sysfs_emit(buf, "%s\n", srbds_strings[srbds_mitigation]);
- }
- 
- static ssize_t retbleed_show_state(char *buf)
- {
- 	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
- 	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
--	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
--		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
--		    return sprintf(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
-+		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
-+		    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
-+			return sysfs_emit(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
- 
--	    return sprintf(buf, "%s; SMT %s\n",
--			   retbleed_strings[retbleed_mitigation],
--			   !sched_smt_active() ? "disabled" :
--			   spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT ||
--			   spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT_PREFERRED ?
--			   "enabled with STIBP protection" : "vulnerable");
-+		return sysfs_emit(buf, "%s; SMT %s\n", retbleed_strings[retbleed_mitigation],
-+				  !sched_smt_active() ? "disabled" :
-+				  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT ||
-+				  spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT_PREFERRED ?
-+				  "enabled with STIBP protection" : "vulnerable");
- 	}
- 
--	return sprintf(buf, "%s\n", retbleed_strings[retbleed_mitigation]);
-+	return sysfs_emit(buf, "%s\n", retbleed_strings[retbleed_mitigation]);
- }
- 
- static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr,
- 			       char *buf, unsigned int bug)
- {
- 	if (!boot_cpu_has_bug(bug))
--		return sprintf(buf, "Not affected\n");
-+		return sysfs_emit(buf, "Not affected\n");
- 
- 	switch (bug) {
- 	case X86_BUG_CPU_MELTDOWN:
- 		if (boot_cpu_has(X86_FEATURE_PTI))
--			return sprintf(buf, "Mitigation: PTI\n");
-+			return sysfs_emit(buf, "Mitigation: PTI\n");
- 
- 		if (hypervisor_is_type(X86_HYPER_XEN_PV))
--			return sprintf(buf, "Unknown (XEN PV detected, hypervisor mitigation required)\n");
-+			return sysfs_emit(buf, "Unknown (XEN PV detected, hypervisor mitigation required)\n");
- 
- 		break;
- 
- 	case X86_BUG_SPECTRE_V1:
--		return sprintf(buf, "%s\n", spectre_v1_strings[spectre_v1_mitigation]);
-+		return sysfs_emit(buf, "%s\n", spectre_v1_strings[spectre_v1_mitigation]);
- 
- 	case X86_BUG_SPECTRE_V2:
- 		return spectre_v2_show_state(buf);
- 
- 	case X86_BUG_SPEC_STORE_BYPASS:
--		return sprintf(buf, "%s\n", ssb_strings[ssb_mode]);
-+		return sysfs_emit(buf, "%s\n", ssb_strings[ssb_mode]);
- 
- 	case X86_BUG_L1TF:
- 		if (boot_cpu_has(X86_FEATURE_L1TF_PTEINV))
-@@ -2437,7 +2436,7 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
- 		break;
- 	}
- 
--	return sprintf(buf, "Vulnerable\n");
-+	return sysfs_emit(buf, "Vulnerable\n");
- }
- 
- ssize_t cpu_show_meltdown(struct device *dev, struct device_attribute *attr, char *buf)
+> Nothing in the i202 Advisory states that such a wait is even necessary;
+> other FIFO clear functions like serial8250_clear_fifos() do not wait
+> either. For this reason, it seems safe to remove the wait, fixing the
+> mentioned issue.
+
+Checking the commit that added this driver and the loop along with it, 
+there was no information why it would be needed there either.
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+Thanks.
+
+-- 
+ i.
+
+
+> Fixes: 61929cf0169d ("tty: serial: Add 8250-core based omap driver")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+>  drivers/tty/serial/8250/8250_omap.c | 17 -----------------
+>  1 file changed, 17 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> index 41b8c6b27136..484f791617af 100644
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -193,27 +193,10 @@ static void omap8250_set_mctrl(struct uart_port *port, unsigned int mctrl)
+>  static void omap_8250_mdr1_errataset(struct uart_8250_port *up,
+>  				     struct omap8250_priv *priv)
+>  {
+> -	u8 timeout = 255;
+> -
+>  	serial_out(up, UART_OMAP_MDR1, priv->mdr1);
+>  	udelay(2);
+>  	serial_out(up, UART_FCR, up->fcr | UART_FCR_CLEAR_XMIT |
+>  			UART_FCR_CLEAR_RCVR);
+> -	/*
+> -	 * Wait for FIFO to empty: when empty, RX_FIFO_E bit is 0 and
+> -	 * TX_FIFO_E bit is 1.
+> -	 */
+> -	while (UART_LSR_THRE != (serial_in(up, UART_LSR) &
+> -				(UART_LSR_THRE | UART_LSR_DR))) {
+> -		timeout--;
+> -		if (!timeout) {
+> -			/* Should *never* happen. we warn and carry on */
+> -			dev_crit(up->port.dev, "Errata i202: timedout %x\n",
+> -				 serial_in(up, UART_LSR));
+> -			break;
+> -		}
+> -		udelay(1);
+> -	}
+>  }
+>  
+>  static void omap_8250_get_divisor(struct uart_port *port, unsigned int baud,
+> 
+
+--8323329-1487723672-1665994365=:5493--
