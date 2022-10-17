@@ -2,168 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCD960156E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E230C601576
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJQRcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S229833AbiJQRd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiJQRb6 (ORCPT
+        with ESMTP id S230377AbiJQRdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:31:58 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C03F691B4;
-        Mon, 17 Oct 2022 10:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1666027913;
-        bh=dxTu0Y7RDqrVuGXgQ+oQAQn11d1BWCaYnfG0wGWKGRI=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=A3sWe9zWq4Xst2DZGjucpJiCDvvDKyyE47dBVPbgQEeWI4L/0u889DKGqp8CCjzU9
-         pzRyFOrpGiFRTwwKAB9OgzA215Ub8LUYYuAOJIOmj5VBK6lKyQGYAdZzrDWtK+ylTr
-         RWNHun43Qq/obuSIXexBMTzxYpT/lPPoy18jBbGUCbPxw+VwALn+rh6sD4py0drwUQ
-         0L4CDgyNugQZq7oFmhCOD4b4HxS8YLodh5ggYKqqPNxeVF9j5qI77VZBBEozXhT3nL
-         oPEpk5TfM7Fz90c2GZGblc8AlOiFbtl/MzV6rpzxYN4gJwE+bm/vgFTq8uw9JyDjMI
-         8ah7PxMwxjmjA==
-Received: from [172.16.0.72] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MrkZK0799zTxj;
-        Mon, 17 Oct 2022 13:31:53 -0400 (EDT)
-Message-ID: <0a4a1a2c-964e-dcc6-948a-fd252962aaff@efficios.com>
-Date:   Mon, 17 Oct 2022 13:32:07 -0400
+        Mon, 17 Oct 2022 13:33:40 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE6E1C432
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:33:38 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id i3so11703291pfc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VIkU7sOMlV3fHaINlwJ0KYw7btBtSLgw5mO+qXWoUOw=;
+        b=Jmm7D6cRS6zPAgzomDFIyMJ+afNQc/L35rXtWrVxIPB0xDkGpo/668/Qb6CTzR8Mva
+         Aaz6+IsQYV+dHpvRGVptFXcOCjR6wvfgHUaTCD/RLlNfbNy+lzEzvS4QI31Bwzo5R8z7
+         r82nxp5MGpoWJBmk4hS6s0XWt7CQjHB0fjVD3G7Bs+RRndEmKVK/hY10sRG5dWuEPnhF
+         dW+XfNlc4+OJbMcx7CbXOJmfRiyR8SoQxSEE9g2dXvmOLXI5diciaP0ed3hrULJC3feW
+         vF21rTT9wpE7sPLKC4X4UITtaAyeZjNIqJ64Ulnj66EOWCEea2oCOG5hJqHeZkeB5dQt
+         RtCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VIkU7sOMlV3fHaINlwJ0KYw7btBtSLgw5mO+qXWoUOw=;
+        b=laOC9iBTK+hC3XFRzaCrILZg8SOXUIgf60/gDR2jhKEs1/zOj7zJ3xlLp0cAu+e+Lr
+         epoiHCOORsCjPsAR0XQpANfEc2ldiUZcCTXJhdqHQUsFViQOoo98fkElOM/sMkMOAo1L
+         IsVXyXDdE7ODDFA76c9TLu6Dgyv5MBmLFzDc8ITSr7/IY8C0FrT1qHky6TSosw8mWcXY
+         TqpetNDK9qCFbuBEZ0+MMjxfaedphg6wBYbspgkXJnXZZU5HRlM4/biC+TcU1ub2jgNz
+         vHR0BBaeg8WJdnct1iKeleEn/jmJaZQG5ldB7bbV+3qLE/qKMfYTEvahrxYX7eKIoh8m
+         datw==
+X-Gm-Message-State: ACrzQf0jy29OEazclfRyQ+d+rNNFbjdgVCrerQtInkCYFrpfmaP7iATt
+        RKZUv+r7u5RAjBZlsRQ43RQOyw==
+X-Google-Smtp-Source: AMsMyM5jyy2WbvbjPaz7HjAuqsssAiAvwynoMnTFyb4G8cBccuREHHhkw139+BtRk/gDYP8/CXZJWA==
+X-Received: by 2002:a63:1609:0:b0:45c:7c1c:4e7d with SMTP id w9-20020a631609000000b0045c7c1c4e7dmr11482387pgl.265.1666028018299;
+        Mon, 17 Oct 2022 10:33:38 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b00177fb862a87sm6985701plg.20.2022.10.17.10.33.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 10:33:37 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 11:33:35 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V7 6/7] remoteproc: imx_rproc: request mbox channel later
+Message-ID: <20221017173335.GA121862@p14s>
+References: <20221014031037.1070424-1-peng.fan@oss.nxp.com>
+ <20221014031037.1070424-7-peng.fan@oss.nxp.com>
+ <20221014174903.GA4125124@p14s>
+ <DU0PR04MB94179580E85C888CDAA8EAA788299@DU0PR04MB9417.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 01/25] rseq: Introduce feature size and alignment ELF
- auxiliary vector entries
-Content-Language: en-US
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        David.Laight@ACULAB.COM, carlos@redhat.com,
-        Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>
-References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
- <20220922105941.237830-2-mathieu.desnoyers@efficios.com>
- <877d1726kd.fsf@oldenburg.str.redhat.com>
- <d128fb7d-6b24-5caf-8e3a-99d55922cd95@efficios.com>
-In-Reply-To: <d128fb7d-6b24-5caf-8e3a-99d55922cd95@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU0PR04MB94179580E85C888CDAA8EAA788299@DU0PR04MB9417.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-17 12:09, Mathieu Desnoyers wrote:
-> On 2022-10-10 08:42, Florian Weimer wrote:
->> * Mathieu Desnoyers:
->>
->>> Export the rseq feature size supported by the kernel as well as the
->>> required allocation alignment for the rseq per-thread area to user-space
->>> through ELF auxiliary vector entries.
->>>
->>> This is part of the extensible rseq ABI.
->>>
->>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>> ---
->>>   fs/binfmt_elf.c             | 5 +++++
->>>   include/uapi/linux/auxvec.h | 2 ++
->>>   include/uapi/linux/rseq.h   | 5 +++++
->>>   3 files changed, 12 insertions(+)
->>>
->>> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
->>> index 63c7ebb0da89..04fca1e4cbd2 100644
->>> --- a/fs/binfmt_elf.c
->>> +++ b/fs/binfmt_elf.c
->>> @@ -46,6 +46,7 @@
->>>   #include <linux/cred.h>
->>>   #include <linux/dax.h>
->>>   #include <linux/uaccess.h>
->>> +#include <linux/rseq.h>
->>>   #include <asm/param.h>
->>>   #include <asm/page.h>
->>> @@ -288,6 +289,10 @@ create_elf_tables(struct linux_binprm *bprm, 
->>> const struct elfhdr *exec,
->>>       if (bprm->have_execfd) {
->>>           NEW_AUX_ENT(AT_EXECFD, bprm->execfd);
->>>       }
->>> +#ifdef CONFIG_RSEQ
->>> +    NEW_AUX_ENT(AT_RSEQ_FEATURE_SIZE, offsetof(struct rseq, end));
->>> +    NEW_AUX_ENT(AT_RSEQ_ALIGN, __alignof__(struct rseq));
->>> +#endif
->>>   #undef NEW_AUX_ENT
->>>       /* AT_NULL is zero; clear the rest too */
->>>       memset(elf_info, 0, (char *)mm->saved_auxv +
->>> diff --git a/include/uapi/linux/auxvec.h b/include/uapi/linux/auxvec.h
->>> index c7e502bf5a6f..6991c4b8ab18 100644
->>> --- a/include/uapi/linux/auxvec.h
->>> +++ b/include/uapi/linux/auxvec.h
->>> @@ -30,6 +30,8 @@
->>>                    * differ from AT_PLATFORM. */
->>>   #define AT_RANDOM 25    /* address of 16 random bytes */
->>>   #define AT_HWCAP2 26    /* extension of AT_HWCAP */
->>> +#define AT_RSEQ_FEATURE_SIZE    27    /* rseq supported feature size */
->>> +#define AT_RSEQ_ALIGN        28    /* rseq allocation alignment */
->>>   #define AT_EXECFN  31    /* filename of program */
->>
->> Do we need the alignment?  Or can we keep it perpetually at 32?  Or we
->> could steal some bits from AT_RSEQ_FEATURE_SIZE?  (Not the lower
->> bits—they aren't unused due to the way the feature size works.)
+On Mon, Oct 17, 2022 at 03:13:16AM +0000, Peng Fan wrote:
+> Hi Mathieu,
 > 
-> I cannot imagine a use-case that would require us to bump the alignment 
-> requirement over 32 bytes, so we may very well leave it at 32. But 
-> perhaps someone else has a better imagination than mine ?
+> > Subject: Re: [PATCH V7 6/7] remoteproc: imx_rproc: request mbox channel
+> > later
+> > 
+> > On Fri, Oct 14, 2022 at 11:10:36AM +0800, Peng Fan (OSS) wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > It is possible that when remote processor crash, the communication
+> > > channel will be broken with garbage value in mailbox, such as when
+> > > Linux is issuing a message through mailbox, remote processor crashes,
+> > > we need free & rebuild the mailbox channels to make sure no garbage
+> > > value in mailbox channels.
+> > >
+> > > So move the request/free to start/stop for managing remote procesosr
+> > > in Linux, move to attach/detach for remote processor is out of control
+> > > of Linux.
+> > >
+> > > Previous, we just request mbox when attach for CM4 boot early before
+> > > Linux, but if mbox defer probe, remoteproc core will do resource
+> > > cleanup and corrupt resource table for later probe.
+> > >
+> > > So move request mbox ealier and still keep mbox request when attach
+> > > for self recovery case, but keep a check when request/free mbox.
+> > >
+> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > ---
+> > >  drivers/remoteproc/imx_rproc.c | 39
+> > > ++++++++++++++++++++++++++++++++--
+> > >  1 file changed, 37 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/remoteproc/imx_rproc.c
+> > > b/drivers/remoteproc/imx_rproc.c index 917e6db39572..1183de84a4c0
+> > > 100644
+> > > --- a/drivers/remoteproc/imx_rproc.c
+> > > +++ b/drivers/remoteproc/imx_rproc.c
+> > > @@ -84,6 +84,8 @@ struct imx_rproc_mem {
+> > >  #define ATT_CORE_MASK   0xffff
+> > >  #define ATT_CORE(I)     BIT((I))
+> > >
+> > > +static int imx_rproc_xtr_mbox_init(struct rproc *rproc); static void
+> > > +imx_rproc_free_mbox(struct rproc *rproc);
+> > >  static int imx_rproc_detach_pd(struct rproc *rproc);
+> > >
+> > >  struct imx_rproc {
+> > > @@ -357,6 +359,10 @@ static int imx_rproc_start(struct rproc *rproc)
+> > >  	struct arm_smccc_res res;
+> > >  	int ret;
+> > >
+> > > +	ret = imx_rproc_xtr_mbox_init(rproc);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > >  	switch (dcfg->method) {
+> > >  	case IMX_RPROC_MMIO:
+> > >  		ret = regmap_update_bits(priv->regmap, dcfg->src_reg,
+> > > dcfg->src_mask, @@ -407,6 +413,8 @@ static int imx_rproc_stop(struct
+> > > rproc *rproc)
+> > >
+> > >  	if (ret)
+> > >  		dev_err(dev, "Failed to stop remote core\n");
+> > > +	else
+> > > +		imx_rproc_free_mbox(rproc);
+> > >
+> > >  	return ret;
+> > >  }
+> > > @@ -592,6 +600,22 @@ static void imx_rproc_kick(struct rproc *rproc,
+> > > int vqid)
+> > >
+> > >  static int imx_rproc_attach(struct rproc *rproc)  {
+> > > +	return imx_rproc_xtr_mbox_init(rproc); }
+> > > +
+> > > +static int imx_rproc_detach(struct rproc *rproc) {
+> > > +	struct imx_rproc *priv = rproc->priv;
+> > > +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
+> > > +
+> > > +	if (dcfg->method != IMX_RPROC_SCU_API)
+> > > +		return -EOPNOTSUPP;
+> > > +
+> > > +	if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
+> > > +		return -EOPNOTSUPP;
+> > > +
+> > > +	imx_rproc_free_mbox(rproc);
+> > > +
+> > >  	return 0;
+> > >  }
+> > >
+> > > @@ -610,6 +634,7 @@ static struct resource_table
+> > > *imx_rproc_get_loaded_rsc_table(struct rproc *rproc  static const struct
+> > rproc_ops imx_rproc_ops = {
+> > >  	.prepare	= imx_rproc_prepare,
+> > >  	.attach		= imx_rproc_attach,
+> > > +	.detach		= imx_rproc_detach,
+> > >  	.start		= imx_rproc_start,
+> > >  	.stop		= imx_rproc_stop,
+> > >  	.kick		= imx_rproc_kick,
+> > > @@ -720,6 +745,9 @@ static int imx_rproc_xtr_mbox_init(struct rproc
+> > *rproc)
+> > >  	struct device *dev = priv->dev;
+> > >  	struct mbox_client *cl;
+> > >
+> > > +	if (priv->tx_ch && priv->rx_ch)
+> > > +		return 0;
+> > > +
+> > 
+> > You did exactly the same things as in V6.  I asked you why this is needed and
+> > all you did is point me to the code in _probe(), which I can read on my own.
+> > 
+> 
+> Sorry for not wrote down clear.
+> 
+> > Again - why is this needed when we know it will be done in start() and
+> > attach()?
+> 
+> start() and attach() not able to handle mbox defer probe. So I add
 
-Actually, here is a scenario that warrants exposing the required alignment:
+We are finally at the heart of the problem.  I had to go look at the
+implementation of imx_rproc_xtr_mbox_init() to understand that it can return
+-EPROBE_DEFER.  Had there been a comment in the code to highlight _why_ the if()
+condition is needed, I would have understood right away and all this waste of
+time avoided.
 
-Note that struct rseq is *not* packed.
-
-If we extend struct rseq to a size that makes the compiler use an 
-alignment larger than 32 bytes in the future, and if the compiler uses 
-that larger alignment knowledge to issue instructions that require the 
-larger alignment, then it would be incorrect for user-space to allocate 
-the struct rseq on an alignment lower than the required alignment.
-
-Indeed, on rseq registration, we have the following check:
-
-if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq))
-[...]
-    return -EINVAL;
-
-Which would break if the size of struct rseq is large enough that the 
-alignment grows larger than 32 bytes.
-
-You mentioned we could steal some high bits from AT_RSEQ_FEATURE_SIZE to 
-put the alignment. What is the issue with exposing an explicit 
-AT_RSEQ_ALIGN ? It's just a auxv entry, so I don't see it as a huge 
-performance concern to access 2 entries rather than one.
-
-Thanks,
-
-Mathieu
-
+> the mbox requesting in probe to handle mbox defer probe, and add
+> a check when requesting mbox channel in start/attach. During first
+> time attach/start remote core, the imx_rproc_xtr_mbox_init just
+> return, because channel requested in probe flow. 
+> 
+> Since mbox requested in probe, why still add it in start() and attach()?
+> It is to support runtime stop and start(M4 is under control of Linux),
+> to support runtime detach(only for i.MX8QM/QXP attach recovery,
+> m4 out of control from linux) and attach.
 > 
 > Thanks,
-> 
-> Mathieu
-> 
->>
->> Thanks,
->> Florian
->>
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+> Peng.
+> > 
+> > 
+> > >  	if (!of_get_property(dev->of_node, "mbox-names", NULL))
+> > >  		return 0;
+> > >
+> > > @@ -749,8 +777,15 @@ static void imx_rproc_free_mbox(struct rproc
+> > > *rproc)  {
+> > >  	struct imx_rproc *priv = rproc->priv;
+> > >
+> > > -	mbox_free_channel(priv->tx_ch);
+> > > -	mbox_free_channel(priv->rx_ch);
+> > > +	if (priv->tx_ch) {
+> > > +		mbox_free_channel(priv->tx_ch);
+> > > +		priv->tx_ch = NULL;
+> > > +	}
+> > > +
+> > > +	if (priv->rx_ch) {
+> > > +		mbox_free_channel(priv->rx_ch);
+> > > +		priv->rx_ch = NULL;
+> > > +	}
+> > >  }
+> > >
+> > >  static void imx_rproc_put_scu(struct rproc *rproc)
+> > > --
+> > > 2.37.1
+> > >
