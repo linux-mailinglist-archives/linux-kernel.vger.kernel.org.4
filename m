@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7F86014A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37E56014A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiJQRSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S229954AbiJQRT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiJQRSq (ORCPT
+        with ESMTP id S230190AbiJQRT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:18:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA5371BE5;
-        Mon, 17 Oct 2022 10:18:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C824611D9;
-        Mon, 17 Oct 2022 17:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E48C433D7;
-        Mon, 17 Oct 2022 17:18:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666027123;
-        bh=krHlaJzPvLjQqfJuSv/OVHfYALtY3FAQJLdgKatZOm4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B7M2rYpWGeXCqLI4Opi4t6ajVMC2lKhzCAL0Vw3a3fdHhjhGlyLkcXVv0d3bFwi/F
-         W0PD3eF/AHvwFEjuzq7Qh9opmJHw5nQnjVTNCnxSe3UYiNZyZ6ibleqyoR7wUOmhbZ
-         jyOzIBf4Q5fb50wxyPsZEAnmvJj1LAaOJL4KDGKQjrSs/5lkpbDen2RcqAZrIZSxyi
-         ddZg5zWB6AmeBYl58MStmQFeiODN7MWKOvOihqHMf4+gUrMkuKLBeqyQuIPvcsBdo9
-         FmGyB7RPpPIruHQ1Jxrm5nhXcYCaBPsXwHrVnDYcUH89YQ4PbTF99gO+umGt1m6zQ5
-         kLOLhiLqQ1opg==
-Date:   Mon, 17 Oct 2022 18:18:38 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y02ObkYoUQlY9oG/@sirena.org.uk>
-References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
- <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
+        Mon, 17 Oct 2022 13:19:26 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF9AC4A;
+        Mon, 17 Oct 2022 10:19:21 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z97so17028545ede.8;
+        Mon, 17 Oct 2022 10:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMglibETToQb8dPBGbxr6FHH36nbwiMc9pZGdb7n6oM=;
+        b=oveX0QP/1N8fJTSTxdiHHnuTEpvHY3UoN5/Ttgaqtdr3V1PKGHIJ1p7mzauGSspEX5
+         U3MZwy2+ysRYw3K/b7UI3LJTG3uPNJ6EbrYkts/lmuU+DhcC6Sfx2u2kzdw74mj8a/ms
+         NCsDdLSxxR2CstXwWD+rq1uHqfdCufrm99Pg1owPBIANoOdiI63bgxmKmwEB4/uLPuoU
+         BLIdGM5QhWH0JlQmJLtKKOcWchP7n8fJBmItH+ijHhl6hDwuY2wG2kIcFdxXmHllda+c
+         AWsXB18A2C2i6kGBB4F78Cxf0oF07+++WAQzLbGPV8poYaKDun2+DIQaGYhx5claJrpY
+         Rc8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rMglibETToQb8dPBGbxr6FHH36nbwiMc9pZGdb7n6oM=;
+        b=KBbtuHo/bGSLF8+cn+kPXRF+A9t0Dg3AN9otGdsuUZrb5iAAxLiM+qLmAdQBPcIP10
+         n0bcfg5Nl/ZNqxK9nxFzT3hIYqY4UffROy5aLClwG19MUKSMqx4PQEy2XYJasiY+PXO/
+         80jro/zhZ/JZu13dirIiyrCqxkoKIozl5lelHXTAHqqWTrVwjZ55Gco/WhiEz8EqdShh
+         YsaZeqyqIvFuIKZ0Im9esS98SUaJ+KDrEGsZvCVf6BJD4bGAvUizVR5J4JH7c0GWISlI
+         DffB/1FyOxtSRnEzjGJ0ojZvjqvhkA6v4yQxWkC8wgTi9Dj9329gEsv9Em2Ln+j3pWTI
+         6LFA==
+X-Gm-Message-State: ACrzQf30Ha1/i0Jo0l0zZUyBtB/nYeJqIR3/ezwp6YuKyHts6fseWGKB
+        yPeyyoz/UwfZ17ftcdmxYYuP1UjQTOc=
+X-Google-Smtp-Source: AMsMyM7q5L8G70qX89ejUU9HnhYARrJxMRcNM7opEgbDiC+f1m6kauangYtrOL6XhA6NklFlg2uzgg==
+X-Received: by 2002:a05:6402:320e:b0:45c:ae50:dbca with SMTP id g14-20020a056402320e00b0045cae50dbcamr11321231eda.104.1666027160328;
+        Mon, 17 Oct 2022 10:19:20 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170906540700b0078d9cd0d2d6sm6564554ejo.11.2022.10.17.10.19.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 10:19:19 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 20:19:16 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk,
+        Tristram.Ha@microchip.com, richardcochran@gmail.com,
+        ceggers@arri.de, b.hutchman@gmail.com
+Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support
+ for LAN937x switch
+Message-ID: <20221017171916.oszpyxfnblezee6u@skbuf>
+References: <20221014152857.32645-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iarKEsYMc7Q7b1jP"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
-X-Cookie: Real Users hate Real Programmers.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221014152857.32645-1-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arun,
 
---iarKEsYMc7Q7b1jP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, Oct 14, 2022 at 08:58:51PM +0530, Arun Ramadoss wrote:
+> The LAN937x switch has capable for supporting IEEE 1588 PTP protocol. This
+> patch series add gPTP profile support and tested using the ptp4l application.
+> LAN937x has the same PTP register set similar to KSZ9563, hence the
+> implementation has been made common for the ksz switches. But the testing is
+> done only for lan937x switch.
 
-On Mon, Oct 17, 2022 at 08:12:40PM +0300, Andy Shevchenko wrote:
+Would it be possible to actually test these patches on KSZ9563?
 
-> Since the PCI enumerated devices provide a property with SSP type,
-> there is no more necessity to bear the copy of the ID table here.
-> Remove it for good.
+Christian Eggers tried to add PTP support for this switch a while ago,
+and he claims that two-step TX timestamping was de-featured for KSZ95xx
+due to hardware errata.
+https://patchwork.ozlabs.org/project/netdev/patch/20201019172435.4416-8-ceggers@arri.de/
 
-They do?  How?  Are you sure that this is true for all existing devices?
-
---iarKEsYMc7Q7b1jP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNNjm4ACgkQJNaLcl1U
-h9DbhAf5AcLRs0gT2Pw6dKgWb3AtBuOjEWr3JX9AmLoLe+FnXpaiWLLVf5gCwt8b
-kt87wygjh54g162FT99FD0khjx6suHEw/N3wCp6vw5H10AMG9qUALjNXubc0Ryfy
-IbXhPi+DiAeutRDzPTA0Le2lEZYzBIFR+1xXJkYwvax9kWbnTZ3+kQfLy/SwUM0t
-mnJyYrMjruDGWKJZ3ac9HA1qMswwsMfmnIDEzJxQNaRKm6JT+X5oHHa0c4SsGBpK
-bafBjJoQD89XC+XoZBWTlznzrQ+hYnLL8dYQkRuxbEUWH+IL2cwKznz8vma6qgN0
-E324AeijGqW54+nDFaVDT3Wn5qVnWA==
-=zGfN
------END PGP SIGNATURE-----
-
---iarKEsYMc7Q7b1jP--
+> 
+> Arun Ramadoss (6):
+>   net: dsa: microchip: adding the posix clock support
+>   net: dsa: microchip: Initial hardware time stamping support
+>   net: dsa: microchip: Manipulating absolute time using ptp hw clock
+>   net: dsa: microchip: enable the ptp interrupt for timestamping
+>   net: dsa: microchip: Adding the ptp packet reception logic
+>   net: dsa: microchip: add the transmission tstamp logic
+> 
+>  drivers/net/dsa/microchip/Kconfig       |  10 +
+>  drivers/net/dsa/microchip/Makefile      |   1 +
+>  drivers/net/dsa/microchip/ksz_common.c  |  43 +-
+>  drivers/net/dsa/microchip/ksz_common.h  |  31 +
+>  drivers/net/dsa/microchip/ksz_ptp.c     | 755 ++++++++++++++++++++++++
+>  drivers/net/dsa/microchip/ksz_ptp.h     |  84 +++
+>  drivers/net/dsa/microchip/ksz_ptp_reg.h |  68 +++
+>  include/linux/dsa/ksz_common.h          |  53 ++
+>  net/dsa/tag_ksz.c                       | 156 ++++-
+>  9 files changed, 1192 insertions(+), 9 deletions(-)
+>  create mode 100644 drivers/net/dsa/microchip/ksz_ptp.c
+>  create mode 100644 drivers/net/dsa/microchip/ksz_ptp.h
+>  create mode 100644 drivers/net/dsa/microchip/ksz_ptp_reg.h
+>  create mode 100644 include/linux/dsa/ksz_common.h
+> 
+> 
+> base-commit: 66ae04368efbe20eb8951c9a76158f99ce672f25
+> -- 
+> 2.36.1
+> 
