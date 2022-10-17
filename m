@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B3760115B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4056D60115D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiJQOnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
+        id S230152AbiJQOo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiJQOm7 (ORCPT
+        with ESMTP id S230378AbiJQOoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:42:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292A766A78
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:42:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 17 Oct 2022 10:44:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E2B1F60A;
+        Mon, 17 Oct 2022 07:44:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E03E933E2D;
+        Mon, 17 Oct 2022 14:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666017891; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+hCwp1KGuFl3/01j4y5Cf1ZkRiA3haQfv1blk7AuYxY=;
+        b=3KMQeJFy6O4qTKbRbrmbY+oWKEIcmkR3LrRt5Zs9AwLhqWCMHaygZ652jaw1aWBt9PskVQ
+        tPVeOo181rS78l4WY2vM/CBS2Q6ORnPKJNeeZwu8Ol4gyygH/pe+vjKIlsD4MK+pwF9cVe
+        d5HxHrjhmPwECMfP+hyjhMRZnpDawXw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666017891;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+hCwp1KGuFl3/01j4y5Cf1ZkRiA3haQfv1blk7AuYxY=;
+        b=Iff5kbgFOfo1IkDYeqdWc2kshLFStRHjvCGM4UQuRYZIhgWRbUJSRsdG19MGmpGRUljm+d
+        XYnefirgThv51FBw==
+Received: from lion.mk-sys.cz (unknown [10.163.29.118])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B70B2B818F6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 14:42:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5177C433D6;
-        Mon, 17 Oct 2022 14:42:48 +0000 (UTC)
-Date:   Mon, 17 Oct 2022 10:43:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Shuah Khan <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Akanksha J N <akanksha@linux.vnet.ibm.com>
-Subject: Re: [PATCH] selftests/ftrace: Add check for ping command for
- trigger tests
-Message-ID: <20221017104312.16af5467@gandalf.local.home>
-In-Reply-To: <20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com>
-References: <20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by relay2.suse.de (Postfix) with ESMTPS id D4E302C141;
+        Mon, 17 Oct 2022 14:44:51 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id BD1B66043B; Mon, 17 Oct 2022 16:44:51 +0200 (CEST)
+Date:   Mon, 17 Oct 2022 16:44:51 +0200
+From:   Michal Kubecek <mkubecek@suse.cz>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     mpi3mr-linuxdrv.pdl@broadcom.com,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: mpi3mr: add explicit dependency on
+ CONFIG_SCSI_SAS_ATTRS
+Message-ID: <20221017144451.tpqqilhpjgdcpgtu@lion.mk-sys.cz>
+References: <20221017140533.CC46F6043B@lion.mk-sys.cz>
+ <0c6f49e95cbb9e2de9501b11b1391a5fd7b132c1.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c6f49e95cbb9e2de9501b11b1391a5fd7b132c1.camel@HansenPartnership.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 15:49:27 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
-
-> All these tests depend on the ping command and will fail if it is not
-> installed. Add an explicit check and mark the tests as unresolved if it
-> isn't found.
+On Mon, Oct 17, 2022 at 10:13:58AM -0400, James Bottomley wrote:
+> On Mon, 2022-10-17 at 16:05 +0200, Michal Kubecek wrote:
+> > Starting with commit 42fc9fee116f ("scsi: mpi3mr: Add helper
+> > functions to
+> > manage device's port"), kernel configured with CONFIG_SCSI_MPI3MR=m
+> > and
+> > CONFIG_SCSI_SAS_ATTRS=n fails to build because modpost cannot find
+> > symbols
+> > used in mpi3mr_transport.c:
+> > 
+> >   ERROR: modpost: "sas_port_alloc_num"
+> > [drivers/scsi/mpi3mr/mpi3mr.ko] undefined!
+> >   ERROR: modpost: "sas_remove_host" [drivers/scsi/mpi3mr/mpi3mr.ko]
+> > undefined!
+> >   ERROR: modpost: "sas_phy_alloc" [drivers/scsi/mpi3mr/mpi3mr.ko]
+> > undefined!
+> >   ERROR: modpost: "sas_phy_free" [drivers/scsi/mpi3mr/mpi3mr.ko]
+> > undefined!
+> >   ...
+> > 
+> > Add an explicit dependency of CONFIG_SCSI_MPI3MR on
+> > CONFIG_SCSI_SAS_ATTRS
+> > to prevent inconsistent configs.
+> > 
+> > Fixes: 42fc9fee116f ("scsi: mpi3mr: Add helper functions to manage
+> > device's port")
+> > Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+> > ---
+> >  drivers/scsi/mpi3mr/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/scsi/mpi3mr/Kconfig
+> > b/drivers/scsi/mpi3mr/Kconfig
+> > index 8997531940c2..8ada8e8d25ac 100644
+> > --- a/drivers/scsi/mpi3mr/Kconfig
+> > +++ b/drivers/scsi/mpi3mr/Kconfig
+> > @@ -2,7 +2,7 @@
+> >  
+> >  config SCSI_MPI3MR
+> >  	tristate "Broadcom MPI3 Storage Controller Device Driver"
+> > -	depends on PCI && SCSI
+> > +	depends on PCI && SCSI && SCSI_SAS_ATTRS
 > 
-> Reported-by: Akanksha J N <akanksha@linux.vnet.ibm.com>
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> ---
->  .../trigger/inter-event/trigger-field-variable-support.tc    | 5 +++++
->  .../trigger/inter-event/trigger-inter-event-combined-hist.tc | 5 +++++
->  .../trigger/inter-event/trigger-onchange-action-hist.tc      | 5 +++++
->  .../trigger/inter-event/trigger-onmatch-action-hist.tc       | 5 +++++
->  .../trigger/inter-event/trigger-onmatch-onmax-action-hist.tc | 5 +++++
->  .../test.d/trigger/inter-event/trigger-onmax-action-hist.tc  | 5 +++++
->  .../trigger/inter-event/trigger-snapshot-action-hist.tc      | 5 +++++
->  .../trigger/inter-event/trigger-synthetic-event-dynstring.tc | 5 +++++
->  .../test.d/trigger/inter-event/trigger-trace-action-hist.tc  | 5 +++++
->  9 files changed, 45 insertions(+)
+> This should probably be select not depends.
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-> index 41119e0440e960..b0969e6eed8375 100644
-> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
-> @@ -10,6 +10,11 @@ fail() { #msg
->  
->  echo "Test field variable support"
->  
-> +if ! which ping; then
-> +    echo "ping is not found. This test requires ping command."
-> +    exit_unresolved
-> +fi
-> +
+> All transport attributes are designed to be selected.  The reason is to
+> avoid people having to figure out what attributes they have to set in
+> Kconfig before they see the HBAs they're interested in.
 
-This looks like something we should add to the "requires:" field and not
-add this type of logic in the test itself.
+OK, I'll send v2 with select in a moment.
 
-Something like this:
-
-diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-index 5f6cbec847fc..e13fe1d5bd6c 100644
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -144,7 +144,13 @@ check_requires() { # Check required files and tracers
-     for i in "$@" ; do
-         r=${i%:README}
-         t=${i%:tracer}
--        if [ $t != $i ]; then
-+        p=${i%:program}
-+        if [ $p != $i ]; then
-+            if ! which $p; then
-+                echo "Required program $p not installed."
-+                exit_unresolved
-+            fi
-+        elif [ $t != $i ]; then
-             if ! grep -wq $t available_tracers ; then
-                 echo "Required tracer $t is not configured."
-                 exit_unsupported
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-index 9098f1e7433f..f7447d800899 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
-@@ -1,7 +1,7 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # description: event trigger - test inter-event combined histogram trigger
--# requires: set_event synthetic_events events/sched/sched_process_fork/hist
-+# requires: set_event synthetic_events events/sched/sched_process_fork/hist ping:program
- 
- fail() { #msg
-     echo $1
-
-
-Then add the "ping:program" to the other tests required fields.
-
--- Steve
+Michal
