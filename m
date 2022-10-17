@@ -2,87 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E052A601647
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9384160164C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiJQS3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S230053AbiJQSaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiJQS25 (ORCPT
+        with ESMTP id S229748AbiJQSaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:28:57 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E29F748E3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:28:57 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1321a1e94b3so14248389fac.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:28:57 -0700 (PDT)
+        Mon, 17 Oct 2022 14:30:21 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7F20F72
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:16 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id 3so12385100vsh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:30:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=garS2H7hrtCQgK+3svjO+YNXLY2IJ6zIG7NN3iNx5P0=;
-        b=FeT1M+Qd/AoRCTrToYB7hJdUTfTTHiVUYZhKijeJahSM0R08gh0hRomyuwFINfwEeo
-         xJ2/UXU0xXlOF2dWc2tRkQuWW5V7u8gzUueG/IBZJaIR5/7Hy1kQt6Y9jdfdgJ6hj+G5
-         5AdVpN9NGV1YcMjtQ2KBkop+ynLBu9+CQsOR2YHW6PdNhGrWtqQTCokLbhGcfxIPJCPC
-         +/2eWRhsy8lINhXd/FUPT4huKY8iBQzb97CIGoFyvFH7e3rEskHm6QhOkGOjn/GlVWcg
-         LL5sOtHIOm5K23xNy0ksEJLfCn1rDN2LH5ITRMJJpDcUEkFfrsB3fTBIRJO+Nkp3c61h
-         LH/A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DXU81cQcPsCJLCV+A2vr1+j7uPP+PNe41H9VCxRnhMQ=;
+        b=cx2LxuZ48C+MUnXJPZyd4WuzGanbZCWLlqZEcit5FftjC6xno++aG8MH9PDvAsUUSZ
+         rmLFTWxZ7FHQZZZy70/qWTZ46+bNpX3NyFKCeD9lIx4/kPNEO2qTrd77sJIoaJ8dkYDI
+         o7IYMoNmlgES8l3e7IkYdanLaYMPBOr9Tw76x0NeZopzOsPfdP/KtRMrs0u8ZI0zl/iv
+         jeRSLOvCCCMyWP6SsQP9z/A54CtQgSLFAY8b+7wcGNFqOIH3q3wdbiCKtXvCbIwq11zO
+         Wjz+h0o4ay1fMleegtoBUxCyyULgYzByPQJRX/BcNAKj8dryCo/V0Ut21HjJYfU2Tdma
+         rlmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=garS2H7hrtCQgK+3svjO+YNXLY2IJ6zIG7NN3iNx5P0=;
-        b=svpuOIQjYHmwvdr/7vsiqbba5tZrWgOpoTaeyIGrZoIovLb60WngC4/xcJjFJeBWa0
-         EwOhS08IImRXhTPPNFJj4tkv0ULbjvYOqtk/A/nxkZY4gy4x0YNiCZuayWCTChHt3xtf
-         wGDA/mxbM+rHA6vL8ykIo9JeOMdkytIQ4ctWn09jl1VhvyAEnWOazTZLOuxGEG5VjUdB
-         wAXj9RT/Szj5ok7fABPKjiUsVelPmTBfQTwyy8H2VkFMBbVMaw8O9n4ZvIgdAY1+EMVa
-         zMJ9gje34L0oBKrTl3g0xaV30tdqK3/aXsYfyNWZvBMtGo05qiwGAZQCtA3ADFFR7Ix7
-         OzBQ==
-X-Gm-Message-State: ACrzQf1pY48QNaeyHvY96xwXQ7B1Yrs8TXTAKTh4M9AJvVlPPhmNYg0Z
-        6q+BKUNzsOndEAk0Q8G0ZlQ=
-X-Google-Smtp-Source: AMsMyM7HAzSiVBoNXsEJBL4cUJSrWCREmwBnaySyn1XwbBr7+08F3TOF6/e6nPvsdMfLLFnpyv2crw==
-X-Received: by 2002:a05:6870:fb8f:b0:132:8c58:39eb with SMTP id kv15-20020a056870fb8f00b001328c5839ebmr16467413oab.88.1666031336196;
-        Mon, 17 Oct 2022 11:28:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v81-20020aca6154000000b0034fc91dbd7bsm4550961oib.58.2022.10.17.11.28.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 11:28:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7e5e4c7d-07f4-6ccd-6796-cd6f021f222e@roeck-us.net>
-Date:   Mon, 17 Oct 2022 11:28:53 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DXU81cQcPsCJLCV+A2vr1+j7uPP+PNe41H9VCxRnhMQ=;
+        b=wXrHrOJKLNjaJia0azOktIyM2zYA4OpBQLi36OjKHsJKmkfJXazjU110LNC4B8kg5g
+         KPSO8oO83+xs/MLk/LikgPhVAbAsJG0WqRYtGI2OD3Qm+UNOTe6CwItDfq9KPBplfuuU
+         DPfZjqUez+Sa5U228mWQwz9D4FZ6Oxjk/uGWdt5Q6ltd21DgfbuVqzUvz9vlQOXj5qGL
+         MYL20+TcTI3s3YFwdp8nvzxy4DLKgGabuinI6qSqqWiDiDNO7u5Q0aySRE0w5oF1QgO0
+         sEri/wM/sQHmWk6if1ruO0Pjteq2XJ3b5tsLXkd/w8taJlFLmLgsSd7iUiZbMUiCf6Sd
+         yR7g==
+X-Gm-Message-State: ACrzQf1NWR/6G2/R3PcZFVSdGrDPd5OoEVJnRlbSnJ5u0GSIDiaC2A74
+        rbk8pEnAyFzEsS60Jzo/0FdbX3B1H4U2EaXskjL+NA==
+X-Google-Smtp-Source: AMsMyM4p9p0QSnPBV1gkTca9Wg26fAHTdzB5s48QOa9jPxquDOSsim86CoYwsXoOqK1CJmm9ZL0dMMJMQDF8TfvR9Vo=
+X-Received: by 2002:a67:e8d0:0:b0:3a9:765b:38fe with SMTP id
+ y16-20020a67e8d0000000b003a9765b38femr124089vsn.51.1666031415362; Mon, 17 Oct
+ 2022 11:30:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Hector Martin <marcan@marcan.st>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
- <20221017123434.GA1062543@roeck-us.net>
- <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Linux 6.1-rc1
-In-Reply-To: <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <00000000000068cb2905eb214e9a@google.com> <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
+ <CANp29Y5ZsUQ64iizRVQiuunGceH_gGTQbLrKRDZWYuSHRdazLQ@mail.gmail.com> <Y02UV5XnsWo+Zd7q@google.com>
+In-Reply-To: <Y02UV5XnsWo+Zd7q@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 17 Oct 2022 11:30:04 -0700
+Message-ID: <CANp29Y4x8fGchAsEaZyb4U_Doi-VBuoNkP+Pq90Eorzj7fotdg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in btf_type_id_size
+To:     sdf@google.com
+Cc:     syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, netdev@vger.kernel.org, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,83 +74,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/22 10:39, Linus Torvalds wrote:
-> On Mon, Oct 17, 2022 at 5:35 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> Build results:
->>          total: 152 pass: 152 fail: 0
->> Qemu test results:
->>          total: 490 pass: 420 fail: 70
-> 
-> Strange. You claim zero build failures, but then:
-> 
->> Build failures
->>
->> Building riscv:defconfig ... failed
-> 
-> so I think your stats may be wrong somehow ;)
-> 
+On Mon, Oct 17, 2022 at 10:43 AM <sdf@google.com> wrote:
+>
+> On 10/17, Aleksandr Nogikh wrote:
+> > Let's tell the bot about the fix
+>
+> > #syz fix: bpf: prevent decl_tag from being referenced in func_proto
+>
+> Thx! Wasn't sure syzkaller would accept that until the fix is actually
+> pulled in.
 
-Puzzled ... the logs show that the builds for riscv[32/64] succeeded
-with no error, but a manual build test still shows the failure.
+No, that's not strictly necessary :) syzbot accepts fix commit titles
+at any moment and then just waits until the commit reaches all
+branches it fuzzes.
 
-Ah .... the build fails with gcc 11.3.0 / binutils 2.38, but passes
-with gcc 11.3.0 / binutils 2.39. I had switched my builders to the
-latter last night to fix a problem with powerpc builds. At the same time,
-the manual test I just ran still used binutils 2.38.
-
-That is interesting; I didn't expect that the binutils version would
-make a difference, but apparently it does. Comparing defconfig:
-
-10c10
-< CONFIG_AS_VERSION=23900
----
- > CONFIG_AS_VERSION=23800
-12c12
-< CONFIG_LD_VERSION=23900
----
- > CONFIG_LD_VERSION=23800
-260d259
-< CONFIG_RISCV_DMA_NONCOHERENT=y
-297,298d295
-< CONFIG_CC_HAS_ZICBOM=y
-< CONFIG_RISCV_ISA_ZICBOM=y
-4134,4137d4130
-< CONFIG_ARCH_HAS_SETUP_DMA_OPS=y
-< CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE=y
-< CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU=y
-< CONFIG_ARCH_HAS_DMA_PREP_COHERENT=y
-4140,4142d4132
-< CONFIG_DMA_NONCOHERENT_MMAP=y
-< CONFIG_DMA_COHERENT_POOL=y
-< CONFIG_DMA_DIRECT_REMAP=y
-
-The build failure is only seen with CONFIG_RISCV_ISA_ZICBOM=n,
-or in other words with binutils 2.38 or earlier.
-
->> mips, sparc64
->> -------------
->>
->> All big endian mips tests fail to reset after boot. The problem is
->> caused by commit 72a95859728a ("mfd: syscon: Remove repetition of the
->> regmap_get_val_endian()").
-> 
-> Bah. I had already archived that whole thread as "sorted out", but
-> yeah, the revert clearly never made it to me for rc1.
-> 
-
-Yes, I saw a note along that line. The original reboot failure affected
-sparc64 boot tests as well, which is gone now. Maybe some other fix for
-the mips problem is in the works ?
-
-> But it should be in the regmap queue (Lee/Andy?), so it is hopefully
-> just a temporary thing.
-> 
-> In fact, it looks like all the failures have known fixes. So here's
-> hoping that your list will be a whole lot cleaner by rc2.
-> 
-Hopefully yes.
-
-Thanks,
-Guenter
-
+>
+> > On Mon, Oct 17, 2022 at 9:16 AM 'Stanislav Fomichev' via
+> > syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
+> > >
+> > > On Sat, Oct 15, 2022 at 11:52 PM syzbot
+> > > <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of
+> > git://git.kernel...
+> > > > git tree:       bpf
+> > > > console+strace:
+> > https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
+> > > > kernel config:
+> > https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
+> > > > dashboard link:
+> > https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
+> > Binutils for Debian) 2.35.2
+> > > > syz repro:
+> > https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
+> > > > C reproducer:
+> > https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
+> > > >
+> > > > Downloadable assets:
+> > > > disk image:
+> > https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
+> > > > vmlinux:
+> > https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the
+> > commit:
+> > > > Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
+> > > >
+> > > > ------------[ cut here ]------------
+> > > > WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946
+> > btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+> > > > Modules linked in:
+> > > > CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted
+> > 6.0.0-syzkaller-02734-g0326074ff465 #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine,
+> > BIOS Google 09/22/2022
+> > > > RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+> > > > Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d
+> > 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45
+> > 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
+> > > > RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
+> > > > RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+> > > > RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
+> > > > RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
+> > > > R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
+> > > > R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
+> > > > FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000)
+> > knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
+> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
+> > > >  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
+> > > >  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
+> > > >  btf_parse kernel/bpf/btf.c:5026 [inline]
+> > > >  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
+> > > >  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
+> > > >  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
+> > > >  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
+> > > >  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
+> > > >  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
+> > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > RIP: 0033:0x7f0fbae41c69
+> > > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48
+> > 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
+> > f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > > RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> > > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
+> > > > RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
+> > > > RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
+> > > > R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
+> > > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > > >  </TASK>
+> > >
+> > > Will be addressed by
+> > >
+> > https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
+> > >
+> > >
+> > > > ---
+> > > > This report is generated by a bot. It may contain errors.
+> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > > >
+> > > > syzbot will keep track of this issue. See:
+> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > > > syzbot can test patches for this issue, for details see:
+> > > > https://goo.gl/tpsmEJ#testing-patches
+> > >
+> > > --
+> > > You received this message because you are subscribed to the Google
+> > Groups "syzkaller-bugs" group.
+> > > To unsubscribe from this group and stop receiving emails from it, send
+> > an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> > > To view this discussion on the web visit
+> > https://groups.google.com/d/msgid/syzkaller-bugs/CAKH8qBu%2BoT%2BBF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w%40mail.gmail.com.
