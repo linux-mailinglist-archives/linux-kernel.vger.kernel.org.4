@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5DF600F38
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 14:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A713600F3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 14:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiJQMcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 08:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S230107AbiJQMdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 08:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiJQMcd (ORCPT
+        with ESMTP id S229669AbiJQMdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 08:32:33 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EFB4AD41
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:32:32 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id y1so10947631pfr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 05:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=h0pxyt/EKUK/MG4h+DBekx3KlQE3mxmmFg/7fznhJTI=;
-        b=SCgiftR9cblWOkQ3H14dm+Po7yBBMzZkgGcDfc2ct1IUJn4AG/PcN4+EoBcWuvW9RT
-         v3wuTMwpMPePXxDhCCGzIxTRnj1y5rGaZm+stjLF+iMqVEGhaiWWg1w9urzqa3fRE5pA
-         BjILXOXVc5wXPniPq1nmqlQhrJrR4lqDleBFBRR3yc2+onK0X7NWKC4M8I211Mm6DBSK
-         zLQdgFiULDOrDRZ+gOg6SYK5/7/Woj0q6rx6D09ftCWoZr8HgWH+UkQsiTKeXIoBM6I1
-         jaQudtyOQQBSZ5btGF525OGeHZODRC0Mtr+gvbeNV5m7kHRIituvzUy00qwpVfcwLVWm
-         hfWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h0pxyt/EKUK/MG4h+DBekx3KlQE3mxmmFg/7fznhJTI=;
-        b=6dyoJqlUEBKOqXu2lqXJyqYYv0f1YRTttNXlTkO9dD/yaXcfmgqYrZy+PqfK8obSWf
-         RRIXsr8bVbGKmDbcEf63blIF7Lp6V56srgBaTFnAdiOcXvUbPRig7ylogghJGI5ryqdz
-         /zCKFxgeexApqw7M553rUxpKfkXvPybvHmKqGNdKgvXS0dK8a/uJMQ2xikTLommB9/kS
-         6eUsdLSLuMkeW5qRZyWo3wcdUUWPAzC/BSM/D/y9+qyzV/2dKLMYwIUphj+y+iRGOIjN
-         IgglzCU+Gs/RYJbWUWi+kGv/pcsJLnHJif9KtsaFupP7mX2KwHBrgK02Yd3wLNDQBvRK
-         a+KA==
-X-Gm-Message-State: ACrzQf2+Mc4uLy8Gu5cfBFHKERJlt8DOZONE55E2c0ylopITSNnva72f
-        uL/qnCly8WN60Rp3df046Y+VK+FhpVg=
-X-Google-Smtp-Source: AMsMyM7HvJdx8QOn/eqVnmfTh5eLzM0viEj9FSk4U73Tb+3l+3qqzfm0PTXZan08EYGbWLP/Rk5ahg==
-X-Received: by 2002:a62:cf81:0:b0:566:e88d:5006 with SMTP id b123-20020a62cf81000000b00566e88d5006mr7380101pfg.86.1666009951931;
-        Mon, 17 Oct 2022 05:32:31 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-13.three.co.id. [180.214.233.13])
-        by smtp.gmail.com with ESMTPSA id r8-20020aa79628000000b0056699fcdf6bsm6158979pfg.84.2022.10.17.05.32.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 05:32:31 -0700 (PDT)
-Message-ID: <a1d46bd2-9603-f89a-ec85-ebcd25db8882@gmail.com>
-Date:   Mon, 17 Oct 2022 19:32:25 +0700
+        Mon, 17 Oct 2022 08:33:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961151006;
+        Mon, 17 Oct 2022 05:33:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3223761127;
+        Mon, 17 Oct 2022 12:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E426C433C1;
+        Mon, 17 Oct 2022 12:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666010016;
+        bh=xOhZ798gL/+y6nBCxEZb+QFOl8ru0dI5jW9R7qV3Dxg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HTaoaLiDl+L3yaW63mFw6G4kb6wRzQUh1cverewP9Figc0sjRoss5x6ryrfn8IUaT
+         fiZ1HFrKsVSvxLp4DpPQxNB0ZLJX+L/tsFc3vR18PdHoTsm6oayMhZVgdc5txiXuRj
+         uRLL1O3OQIG2t/murvbZHiVjTf18hO2z0UMx0oREK5TjVRIwnb9cp1ErYukH3VGqqe
+         ZGoUW4J7aAXeZep/aOcR+tykQ41DY2jO5D7Yg+C9AAP2GO7QJryxmNrndA9x648pbT
+         AdK6Z0wNtSe9b1WgoZokbZQ6fSZUzCfsNRDGF7RyDmE0Y8oBAQyVag1XOWrm/bjpI9
+         ZJKo0Sr0afX8w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4BA1F403B6; Mon, 17 Oct 2022 09:33:34 -0300 (-03)
+Date:   Mon, 17 Oct 2022 09:33:34 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH] perf: Fix "Track with sched_switch" test by not printing
+ warnings in quiet mode
+Message-ID: <Y01Lnh5DqGUPuibf@kernel.org>
+References: <20221012111025.30609-1-james.clark@arm.com>
+ <62f485df-4f5e-64a2-1294-6e162de25556@arm.com>
+ <CAM9d7cgNrZ6iwRQsGHWGLWCd7cJm+L6UOU9BiGGgTVPdJ0_GJQ@mail.gmail.com>
+ <e0b47b51-87f0-42db-4a76-b240bf07cd41@arm.com>
+ <CAM9d7cg+tTw5vTOycqRciQx8He-WLG0TSdcWa0tyzeu49DmgxA@mail.gmail.com>
+ <912a4d0a-51b3-591b-8c8f-f078216d5b35@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
- 6.0.0-rc3 through 6.0.0-rc7
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Phillip Lougher <phillip@squashfs.org.uk>,
-        regressions@leemhuis.info, mirsad.todorovac@alu.unizg.hr
-Cc:     linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
-        regressions@lists.linux.dev, srw@sladewatkins.net
-References: <8702a833-e66c-e63a-bfc8-1007174c5b3d@leemhuis.info>
- <20221015205936.5735-1-phillip@squashfs.org.uk>
- <2d1ca80c-1023-9821-f401-43cff34cca86@gmail.com>
- <c5980bcb-f345-ff2e-a29b-75e53a6b8708@gmail.com>
-Content-Language: en-US
-In-Reply-To: <c5980bcb-f345-ff2e-a29b-75e53a6b8708@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <912a4d0a-51b3-591b-8c8f-f078216d5b35@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/22 16:45, Bagas Sanjaya wrote:
-> On 10/16/22 19:21, Bagas Sanjaya wrote:
->>
->> No Verneed warnings so far. However, I need to test for a longer time
->> (a day) to check if any warnings are reported.
->>
+Em Fri, Oct 14, 2022 at 10:47:34AM +0100, James Clark escreveu:
+> On 13/10/2022 17:57, Namhyung Kim wrote:
+> > On Wed, Oct 12, 2022 at 10:12 AM James Clark <james.clark@arm.com> wrote:
+> >> On 12/10/2022 17:50, Namhyung Kim wrote:
+> >>> On Wed, Oct 12, 2022 at 4:13 AM James Clark <james.clark@arm.com> wrote:
+> >>>>> The test already supplies -q to run in quiet mode, so extend quiet mode
+> >>>>> to perf_stdio__warning() and also ui__warning() for consistency.
+> >>>
+> >>> I'm not sure if suppressing the warnings with -q is a good thing.
+> >>> Maybe we need to separate warning/debug messages from the output.
+> >>
+> >> I don't see the issue with warnings being suppressed in quiet mode as
+> >> long as errors are still printed. In other cases warnings have already
+> >> been suppressed by quiet mode and this site is the odd one out.
+> >>
+> >> What use case are you thinking of where someone explicitly adds -q but
+> >> wants to see non fatal warnings?
+> > 
+> > I don't have any specific use case.  If it's already suppressed in other
+> > cases, I'm fine with it.
+> > 
 > 
-> The regression still occurs with this patch applied. Let's see if
-> reverting the offending commit helps.
+> Actually I may have been mistaken. Seems like quiet is only used for
+> "extra info" type messages rather than warnings. Although the commit
+> message does say:
 > 
-Sorry for speaking late about my triggering cause.
+>   The -q/--quiet option is to suppress any message. Sometimes users just
+>   want to see the numbers and it can be used for that case.
+> 
+> With 'any' that I would take to include warnings as well. I could move
+> warnings to stderr, but this has a much greater chance of breaking
+> anyone's workflows that might be looking for warnings on stdout than
+> removing warnings when -q is provided.
+> 
+> Also if warnings are moved to stderr and quiet isn't used, there would
+> be no way to suppress warnings in the TUI which might actually be a
+> useful feature.
+> 
+> So I'm still leaning towards the original change, if you are ok with
+> that even though it's not done elsewhere?
 
-As the background, on my Debian 11 computer, I have lxd snap installed.
-I use lxd to channel my sysadmin side by spinning up containers and
-installing server applications there (LAMP, email, DNS).
+Namhyung? I tend to agree with James.
 
-Back to triggering cause. I can trigger the regression when the network
-connection drops (when Firefox shows connection problem page). Then
-I run `lxd list` to list container instances and I get the Verneed
-regression error.
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+- Arnaldo
