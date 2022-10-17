@@ -2,200 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAA060154D
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681B86014B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiJQR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S229901AbiJQRXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiJQR1Q (ORCPT
+        with ESMTP id S229794AbiJQRXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:27:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48B872874;
-        Mon, 17 Oct 2022 10:26:29 -0700 (PDT)
-Received: from dimapc.. (109-252-119-114.nat.spd-mgts.ru [109.252.119.114])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B86BE6602398;
-        Mon, 17 Oct 2022 18:25:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666027535;
-        bh=LM8pyDnEAHvGCBO40COCQKj+eYv59T5WxHH0XEhWAPY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RrsMn2jZzh78/FlU7g/l7zbMgNSgljQnsY0x9j4ExW6/C5fWb4wQVm01SV2+oFQVu
-         KpY5O0Yo8lQkpTHg9IiWi7tcyju0D4NndypX8sD8YCxRC4TUyfBYtV0t66IOiFkxJT
-         0D1l+NstBYOiidbyq7r//GZmtttaNuM8gqIsWFvn0JZN4+b+Zw+PE4ItodZK8HVCjn
-         nG13scnkt7OQ3Ei4xYnNq+0eD6S14dwsaYNjlGv3/7HEgl6S0EWsMy1Wq6OucSxs3Y
-         8zS0lTvTMy01Xq8FqP4gvg9GxFR1luOirzPEGr6Ui2md3yYPCGXnjn20/fz4OYT7a+
-         danuNuiGCWgYQ==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Ruhl Michael J <michael.j.ruhl@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v7 21/21] dma-buf: Remove obsoleted internal lock
-Date:   Mon, 17 Oct 2022 20:22:29 +0300
-Message-Id: <20221017172229.42269-22-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221017172229.42269-1-dmitry.osipenko@collabora.com>
-References: <20221017172229.42269-1-dmitry.osipenko@collabora.com>
+        Mon, 17 Oct 2022 13:23:17 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5AC71986
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:23:15 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id bb5so8115320qtb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+SEO6vfxiud9noRziv9aQrD1AXg6nct4mTi/PkkKZhU=;
+        b=TevJIWxJKIujgIiWUkwjTCBogHB6CQC5h2eJkmXP/IYKYG8r3uAm1K+3RIq8ww2yPy
+         mIXdAErNaWHHEqLmpFDqiC8aSieuZ4b3MmV6ia5yeZ4q0jIhJB4Kjs4e7hRZN72d1oBv
+         6xf6PWfS8p5iy7vJorxHgQ6TYG11QysB8xvs4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+SEO6vfxiud9noRziv9aQrD1AXg6nct4mTi/PkkKZhU=;
+        b=fo5hK4FdEGLFED6LtVm+/b1ju1aoZzMqtsqcRWemMtO6O2AN7v+JgXCcRmD4ffgli7
+         xM8c8k0rE7cWxuLi9XZxipWkUiyByEFbkzfxLLlm4iW2vqx5f47hUo9q9+ukTT9XsQvd
+         KAxKYpp8+xPVpmoVTMIv279aB+aiBzLRGf0r5WSfZ9KwlzniAUujMxnJG7KwDqs2NisM
+         kBjEVfEpiVjh7lYRfMpscBHfLMaBhh6JALfffRTK6w/tTkx8jXtJ3ksoslcUmf+9n3kO
+         fqFzIJldfANm0nEPG/IpUyERH2WRTG8BHWGkX+Pw1A6e92fBOJ98wsxoUxlmbe+P3HO9
+         Mt9w==
+X-Gm-Message-State: ACrzQf1czh5VagXf34N36XlAzDselyzBzEfViGbZNVtRb8Ih5dzg6E/m
+        YaAcAqOH3jcMaBhXEbdRU1C87LyCLNa2oj4N
+X-Google-Smtp-Source: AMsMyM7tKcqXRVG615kYKZw/FjMVPXwlubu6N3sqHuS8oE9ZlprUKkYEhrFQAiPrVWZKkmVVC/139g==
+X-Received: by 2002:a05:622a:a:b0:35d:4dba:eda1 with SMTP id x10-20020a05622a000a00b0035d4dbaeda1mr9636950qtw.43.1666027394196;
+        Mon, 17 Oct 2022 10:23:14 -0700 (PDT)
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com. [209.85.160.180])
+        by smtp.gmail.com with ESMTPSA id ff13-20020a05622a4d8d00b00397e97baa96sm297710qtb.0.2022.10.17.10.23.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 10:23:11 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id r19so8136776qtx.6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:23:11 -0700 (PDT)
+X-Received: by 2002:a05:622a:58d:b0:39c:d5e3:2346 with SMTP id
+ c13-20020a05622a058d00b0039cd5e32346mr9579593qtb.227.1666027390840; Mon, 17
+ Oct 2022 10:23:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926220134.2633692-1-khazhy@google.com> <fff022da-72f2-0fdb-e792-8d75069441cc@opensource.wdc.com>
+ <CACGdZYKh4TXSaAAzJa13xsMH=tFzb4dYrPzOS3HHLLU8K-362g@mail.gmail.com>
+ <7e3a521e-acf7-c3a8-a29b-c51874862344@opensource.wdc.com> <CACGdZYKvTLd0g2yBuFX+++XeSa6aapuAwOM7e63zhKgdKFEGEw@mail.gmail.com>
+ <Y0PHsxmsWHFYiLPK@infradead.org>
+In-Reply-To: <Y0PHsxmsWHFYiLPK@infradead.org>
+From:   Khazhy Kumykov <khazhy@chromium.org>
+Date:   Mon, 17 Oct 2022 10:22:59 -0700
+X-Gmail-Original-Message-ID: <CACGdZYKcpHG_bWew_K78CgwDYMQAGfXX+QU4-9PNoV1j2E1a0g@mail.gmail.com>
+Message-ID: <CACGdZYKcpHG_bWew_K78CgwDYMQAGfXX+QU4-9PNoV1j2E1a0g@mail.gmail.com>
+Subject: Re: [PATCH] block: allow specifying default iosched in config
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The internal dma-buf lock isn't needed anymore because the updated
-locking specification claims that dma-buf reservation must be locked
-by importers, and thus, the internal data is already protected by the
-reservation lock. Remove the obsoleted internal lock.
+On Mon, Oct 10, 2022 at 12:20 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Tue, Oct 04, 2022 at 04:15:20PM -0700, Khazhy Kumykov wrote:
+> > The kernel already picks and hardcodes a default scheduler, my
+> > thinking is: why not let folks choose? This was allowed in the old
+> > block layer since 2005.
+>
+> You can choose it using CONFIG_CMDLINE.  We can't add a config option
+> for every bloody default as that simply does not scale.
 
-Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
-Acked-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/dma-buf/dma-buf.c | 14 ++++----------
- include/linux/dma-buf.h   |  9 ---------
- 2 files changed, 4 insertions(+), 19 deletions(-)
+Are you referring to elevator=? It looks like that needs to be
+re-wired for blk-mq, but seems like a reasonable solution. I'll send a
+new patch out.
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index f1d968e5bac4..7663c4e784b6 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -657,7 +657,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 
- 	dmabuf->file = file;
- 
--	mutex_init(&dmabuf->lock);
- 	INIT_LIST_HEAD(&dmabuf->attachments);
- 
- 	mutex_lock(&db_list.lock);
-@@ -1503,7 +1502,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, DMA_BUF);
- int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
- {
- 	struct iosys_map ptr;
--	int ret = 0;
-+	int ret;
- 
- 	iosys_map_clear(map);
- 
-@@ -1515,28 +1514,25 @@ int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
- 	if (!dmabuf->ops->vmap)
- 		return -EINVAL;
- 
--	mutex_lock(&dmabuf->lock);
- 	if (dmabuf->vmapping_counter) {
- 		dmabuf->vmapping_counter++;
- 		BUG_ON(iosys_map_is_null(&dmabuf->vmap_ptr));
- 		*map = dmabuf->vmap_ptr;
--		goto out_unlock;
-+		return 0;
- 	}
- 
- 	BUG_ON(iosys_map_is_set(&dmabuf->vmap_ptr));
- 
- 	ret = dmabuf->ops->vmap(dmabuf, &ptr);
- 	if (WARN_ON_ONCE(ret))
--		goto out_unlock;
-+		return ret;
- 
- 	dmabuf->vmap_ptr = ptr;
- 	dmabuf->vmapping_counter = 1;
- 
- 	*map = dmabuf->vmap_ptr;
- 
--out_unlock:
--	mutex_unlock(&dmabuf->lock);
--	return ret;
-+	return 0;
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_vmap, DMA_BUF);
- 
-@@ -1583,13 +1579,11 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct iosys_map *map)
- 	BUG_ON(dmabuf->vmapping_counter == 0);
- 	BUG_ON(!iosys_map_is_equal(&dmabuf->vmap_ptr, map));
- 
--	mutex_lock(&dmabuf->lock);
- 	if (--dmabuf->vmapping_counter == 0) {
- 		if (dmabuf->ops->vunmap)
- 			dmabuf->ops->vunmap(dmabuf, map);
- 		iosys_map_clear(&dmabuf->vmap_ptr);
- 	}
--	mutex_unlock(&dmabuf->lock);
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap, DMA_BUF);
- 
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index f11b5bbc2f37..6fa8d4e29719 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -326,15 +326,6 @@ struct dma_buf {
- 	/** @ops: dma_buf_ops associated with this buffer object. */
- 	const struct dma_buf_ops *ops;
- 
--	/**
--	 * @lock:
--	 *
--	 * Used internally to serialize list manipulation, attach/detach and
--	 * vmap/unmap. Note that in many cases this is superseeded by
--	 * dma_resv_lock() on @resv.
--	 */
--	struct mutex lock;
--
- 	/**
- 	 * @vmapping_counter:
- 	 *
--- 
-2.37.3
-
+Thanks,
+Khazhy
