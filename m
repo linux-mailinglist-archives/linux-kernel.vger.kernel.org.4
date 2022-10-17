@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C676011DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B46E6011DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiJQOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S231342AbiJQOzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiJQOyO (ORCPT
+        with ESMTP id S230263AbiJQOyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:54:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861E469195;
-        Mon, 17 Oct 2022 07:54:00 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:53:52 -0000
+        Mon, 17 Oct 2022 10:54:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C1668CFA;
+        Mon, 17 Oct 2022 07:53:59 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 14:53:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018433;
+        s=2020; t=1666018434;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OoqosqZjO+xl23346bpYRdsj69+EyaQCFU3cT7aqMzI=;
-        b=kQ1BEjza5Qj40dsNSlpysvup91h7jeyhUFyfdrD6R3kG4aMYyMKO8oX9ge5yIIhcmFOEQd
-        9o+7qn4OvMsK22ArQNsPAVcmtBVxaz9GRnXUShb+nx/CqUS64SJy8Gw1NRR61joaG8isqg
-        93X3TXESuUh9M8JKz03A/+gEncaISEfwIWv6a8JBeNkOgqUBChgd52LL5AU7ZZs7ebgYs1
-        YtcghplUcBd0ksXauUoRSk05wSBu1l5nM4bTi1jP+TiPhXX9MyWElaaFIckDvPRCvbe/Tx
-        pxqZrTEoranbS8wnwmpoywUwbb3NMwQOYv0yO8P0htpalinoHGuCxW88w3OrFw==
+        bh=uQw/5TSKpLxhNJ8ePMNlo4lTG5ZNTsMbyrcfgVXfCLc=;
+        b=dP2xaqlApv5qMz9964ECeOM+PpiWWKuwJvY+X2ZLYor7emK2DkqIApI1uQFkQQoJl7PTEA
+        s+qt8356Tch1XX5z7kjdiPV+afHUzMc0eX/tVk9dlH7tzDWELrEuyPc5VNbS9jEI0xZg7z
+        f7NO3a8Ygr7MYK7AkDu/6Iqg28+QoBSq0U/a7lEJ+4rFyn8n9wopy7xZB+t7UIhbavb+6/
+        fqeacYpbkrzWq3l7PvCsWNQpPhGb4eDZehNQKXBv2D7V2FI6wFafTtRA0qDse0a9njuKir
+        dNaD5aQ9+htiRBG/D4PhV7y4jdqVoPvOPaNCOs+n6n7l0FZblNes5bfoNjSmOg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018433;
+        s=2020e; t=1666018434;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OoqosqZjO+xl23346bpYRdsj69+EyaQCFU3cT7aqMzI=;
-        b=XvZEbAvt1DWDagUXpayq6u5VxwpTbGndW2iWO6fyIqi8w+q0yO+YomUCDBDHxygD65VfGx
-        cmT098uGZlwDbkDA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+        bh=uQw/5TSKpLxhNJ8ePMNlo4lTG5ZNTsMbyrcfgVXfCLc=;
+        b=GsPYvQ707SlMzMllzxsqgf9GKuMTtt7+QNN+vdATi2+BSl4Ghi9teQMiStVLop+UC5UimV
+        tWuWeKgXI1q9d6Cw==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/putuser: Provide room for padding
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: x86/core] x86/entry: Make sync_regs() invocation a tail call
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111146.746429822@infradead.org>
-References: <20220915111146.746429822@infradead.org>
+In-Reply-To: <20220915111146.539578813@infradead.org>
+References: <20220915111146.539578813@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601843256.401.5392178087541775099.tip-bot2@tip-bot2>
+Message-ID: <166601843361.401.5567797360188596748.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,143 +66,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     cb855971d717a2dd752241f66fedad9dc178388c
-Gitweb:        https://git.kernel.org/tip/cb855971d717a2dd752241f66fedad9dc178388c
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 15 Sep 2022 13:11:16 +02:00
+Commit-ID:     ef79ed20e3ae9ee9ac2e0f3a4e12814893972e63
+Gitweb:        https://git.kernel.org/tip/ef79ed20e3ae9ee9ac2e0f3a4e12814893972e63
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Thu, 15 Sep 2022 13:11:14 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 17 Oct 2022 16:41:10 +02:00
+CommitterDate: Mon, 17 Oct 2022 16:41:09 +02:00
 
-x86/putuser: Provide room for padding
+x86/entry: Make sync_regs() invocation a tail call
 
+No point in having a call there. Spare the call/ret overhead.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111146.746429822@infradead.org
+Link: https://lore.kernel.org/r/20220915111146.539578813@infradead.org
 ---
- arch/x86/lib/putuser.S | 62 ++++++++++++++++++++++++++++++++---------
- 1 file changed, 49 insertions(+), 13 deletions(-)
+ arch/x86/entry/entry_64.S | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
-index b7dfd60..3212522 100644
---- a/arch/x86/lib/putuser.S
-+++ b/arch/x86/lib/putuser.S
-@@ -47,8 +47,6 @@ SYM_FUNC_START(__put_user_1)
- 	LOAD_TASK_SIZE_MINUS_N(0)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
--SYM_INNER_LABEL(__put_user_nocheck_1, SYM_L_GLOBAL)
--	ENDBR
- 	ASM_STAC
- 1:	movb %al,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -56,54 +54,87 @@ SYM_INNER_LABEL(__put_user_nocheck_1, SYM_L_GLOBAL)
- 	RET
- SYM_FUNC_END(__put_user_1)
- EXPORT_SYMBOL(__put_user_1)
-+
-+SYM_FUNC_START(__put_user_nocheck_1)
-+	ENDBR
-+	ASM_STAC
-+2:	movb %al,(%_ASM_CX)
-+	xor %ecx,%ecx
-+	ASM_CLAC
-+	RET
-+SYM_FUNC_END(__put_user_nocheck_1)
- EXPORT_SYMBOL(__put_user_nocheck_1)
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 5c578a7..b24b84b 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -1062,11 +1062,8 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	UNTRAIN_RET
  
- SYM_FUNC_START(__put_user_2)
- 	LOAD_TASK_SIZE_MINUS_N(1)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
--SYM_INNER_LABEL(__put_user_nocheck_2, SYM_L_GLOBAL)
--	ENDBR
- 	ASM_STAC
--2:	movw %ax,(%_ASM_CX)
-+3:	movw %ax,(%_ASM_CX)
- 	xor %ecx,%ecx
- 	ASM_CLAC
- 	RET
- SYM_FUNC_END(__put_user_2)
- EXPORT_SYMBOL(__put_user_2)
-+
-+SYM_FUNC_START(__put_user_nocheck_2)
-+	ENDBR
-+	ASM_STAC
-+4:	movw %ax,(%_ASM_CX)
-+	xor %ecx,%ecx
-+	ASM_CLAC
-+	RET
-+SYM_FUNC_END(__put_user_nocheck_2)
- EXPORT_SYMBOL(__put_user_nocheck_2)
+ 	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
+-.Lerror_entry_from_usermode_after_swapgs:
+-
+ 	/* Put us onto the real thread stack. */
+-	call	sync_regs
+-	RET
++	jmp	sync_regs
  
- SYM_FUNC_START(__put_user_4)
- 	LOAD_TASK_SIZE_MINUS_N(3)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
--SYM_INNER_LABEL(__put_user_nocheck_4, SYM_L_GLOBAL)
--	ENDBR
- 	ASM_STAC
--3:	movl %eax,(%_ASM_CX)
-+5:	movl %eax,(%_ASM_CX)
- 	xor %ecx,%ecx
- 	ASM_CLAC
- 	RET
- SYM_FUNC_END(__put_user_4)
- EXPORT_SYMBOL(__put_user_4)
-+
-+SYM_FUNC_START(__put_user_nocheck_4)
-+	ENDBR
-+	ASM_STAC
-+6:	movl %eax,(%_ASM_CX)
-+	xor %ecx,%ecx
-+	ASM_CLAC
-+	RET
-+SYM_FUNC_END(__put_user_nocheck_4)
- EXPORT_SYMBOL(__put_user_nocheck_4)
+ 	/*
+ 	 * There are two places in the kernel that can potentially fault with
+@@ -1124,7 +1121,7 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
+ 	call	fixup_bad_iret
+ 	mov	%rax, %rdi
+-	jmp	.Lerror_entry_from_usermode_after_swapgs
++	jmp	sync_regs
+ SYM_CODE_END(error_entry)
  
- SYM_FUNC_START(__put_user_8)
- 	LOAD_TASK_SIZE_MINUS_N(7)
- 	cmp %_ASM_BX,%_ASM_CX
- 	jae .Lbad_put_user
--SYM_INNER_LABEL(__put_user_nocheck_8, SYM_L_GLOBAL)
--	ENDBR
- 	ASM_STAC
--4:	mov %_ASM_AX,(%_ASM_CX)
-+7:	mov %_ASM_AX,(%_ASM_CX)
- #ifdef CONFIG_X86_32
--5:	movl %edx,4(%_ASM_CX)
-+8:	movl %edx,4(%_ASM_CX)
- #endif
- 	xor %ecx,%ecx
- 	ASM_CLAC
- 	RET
- SYM_FUNC_END(__put_user_8)
- EXPORT_SYMBOL(__put_user_8)
-+
-+SYM_FUNC_START(__put_user_nocheck_8)
-+	ENDBR
-+	ASM_STAC
-+9:	mov %_ASM_AX,(%_ASM_CX)
-+#ifdef CONFIG_X86_32
-+10:	movl %edx,4(%_ASM_CX)
-+#endif
-+	xor %ecx,%ecx
-+	ASM_CLAC
-+	RET
-+SYM_FUNC_END(__put_user_nocheck_8)
- EXPORT_SYMBOL(__put_user_nocheck_8)
- 
- SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
-@@ -117,6 +148,11 @@ SYM_CODE_END(.Lbad_put_user_clac)
- 	_ASM_EXTABLE_UA(2b, .Lbad_put_user_clac)
- 	_ASM_EXTABLE_UA(3b, .Lbad_put_user_clac)
- 	_ASM_EXTABLE_UA(4b, .Lbad_put_user_clac)
--#ifdef CONFIG_X86_32
- 	_ASM_EXTABLE_UA(5b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE_UA(6b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE_UA(7b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE_UA(9b, .Lbad_put_user_clac)
-+#ifdef CONFIG_X86_32
-+	_ASM_EXTABLE_UA(8b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE_UA(10b, .Lbad_put_user_clac)
- #endif
+ SYM_CODE_START_LOCAL(error_return)
