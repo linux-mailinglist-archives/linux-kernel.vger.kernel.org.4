@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788E0601797
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5C060178D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 21:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiJQT0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 15:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        id S230137AbiJQT0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 15:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiJQT0S (ORCPT
+        with ESMTP id S230406AbiJQT0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 15:26:18 -0400
+        Mon, 17 Oct 2022 15:26:16 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FDF2F39F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437F47437B;
         Mon, 17 Oct 2022 12:26:03 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29HJPZoa121472;
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29HJPZE0121476;
         Mon, 17 Oct 2022 14:25:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1666034735;
-        bh=OlZs8l4qQv5w44/U0ilvFxYS91AV1bcS98B4zdPUC44=;
+        bh=yWwa9flCSHI0XJGO/aILCKXmb9ns8dPHZT2Xl3FDT+s=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=vgJtKxSVvIWC28AwEY7qsODk5tCQS6p3I0pysFm9L/0HiUZFjpWFSXF7IBk170Tk3
-         q7+usP1eLFURsHVYV164bSB1VmIzJnQiIELS47RLg1afBiSs2fIn5AjcHWymoHjgaK
-         DkZG6KTlJON7s79zqVvtb3Ia7R7bMVZSz1BXYAd8=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29HJPYAQ120613
+        b=h7eQdVKYUFlkymsnGVm1gmg4sdtkrGOoAtgx8fOa3EaIVcayhx0k0DOtZiDVzuzjz
+         42UY9kyMFBx9wMrF754fWMSm+z271IvW/snuqOCoxzG/BTYMrkxbDaja2UluumWT1W
+         h8YkJgno9hNXDrAHaInQbhLok5Fl8HnzeMjY27x4=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29HJPZdG086709
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Oct 2022 14:25:34 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 17 Oct 2022 14:25:35 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 17
- Oct 2022 14:25:34 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2022 14:25:35 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 17 Oct 2022 14:25:34 -0500
+ Frontend Transport; Mon, 17 Oct 2022 14:25:35 -0500
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29HJPWXK026106;
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29HJPWXL026106;
         Mon, 17 Oct 2022 14:25:34 -0500
 From:   Andrew Davis <afd@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -48,9 +48,9 @@ To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Andrew Davis <afd@ti.com>
-Subject: [PATCH 03/10] arm64: dts: ti: k3-am64: Enable SPI nodes at the board level
-Date:   Mon, 17 Oct 2022 14:25:25 -0500
-Message-ID: <20221017192532.23825-4-afd@ti.com>
+Subject: [PATCH 04/10] arm64: dts: ti: k3-am64: Enable EPWM nodes at the board level
+Date:   Mon, 17 Oct 2022 14:25:26 -0500
+Message-ID: <20221017192532.23825-5-afd@ti.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221017192532.23825-1-afd@ti.com>
 References: <20221017192532.23825-1-afd@ti.com>
@@ -67,128 +67,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SPI nodes defined in the top-level AM64x SoC dtsi files are incomplete
+EPWM nodes defined in the top-level AM64x SoC dtsi files are incomplete
 and will not be functional unless they are extended with pinmux
 information.
 
 As the pinmux is only known at the board integration level, these
 nodes should only be enabled when provided with this information.
 
-Disable the SPI nodes in the dtsi files and only enable the ones that
+Disable the EPWM nodes in the dtsi files and only enable the ones that
 are actually pinned out on a given board.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 5 +++++
- arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi  | 2 ++
- arch/arm64/boot/dts/ti/k3-am642-evm.dts  | 9 +--------
- arch/arm64/boot/dts/ti/k3-am642-sk.dts   | 8 --------
- 4 files changed, 8 insertions(+), 16 deletions(-)
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi |  9 +++++
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts  | 36 -------------------
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts   | 44 ------------------------
+ 3 files changed, 9 insertions(+), 80 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-index fdcacf78f4a6..375078ca4fdd 100644
+index 375078ca4fdd..672575f44529 100644
 --- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
 +++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-@@ -370,6 +370,7 @@ main_spi0: spi@20100000 {
- 		clocks = <&k3_clks 141 0>;
- 		dmas = <&main_pktdma 0xc300 0>, <&main_pktdma 0x4300 0>;
- 		dma-names = "tx0", "rx0";
+@@ -898,6 +898,7 @@ epwm0: pwm@23000000 {
+ 		power-domains = <&k3_pds 86 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 0>, <&k3_clks 86 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi1: spi@20110000 {
-@@ -380,6 +381,7 @@ main_spi1: spi@20110000 {
- 		#size-cells = <0>;
- 		power-domains = <&k3_pds 142 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 142 0>;
+ 	epwm1: pwm@23010000 {
+@@ -907,6 +908,7 @@ epwm1: pwm@23010000 {
+ 		power-domains = <&k3_pds 87 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 1>, <&k3_clks 87 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi2: spi@20120000 {
-@@ -390,6 +392,7 @@ main_spi2: spi@20120000 {
- 		#size-cells = <0>;
- 		power-domains = <&k3_pds 143 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 143 0>;
+ 	epwm2: pwm@23020000 {
+@@ -916,6 +918,7 @@ epwm2: pwm@23020000 {
+ 		power-domains = <&k3_pds 88 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 2>, <&k3_clks 88 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi3: spi@20130000 {
-@@ -400,6 +403,7 @@ main_spi3: spi@20130000 {
- 		#size-cells = <0>;
- 		power-domains = <&k3_pds 144 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 144 0>;
+ 	epwm3: pwm@23030000 {
+@@ -925,6 +928,7 @@ epwm3: pwm@23030000 {
+ 		power-domains = <&k3_pds 89 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 3>, <&k3_clks 89 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi4: spi@20140000 {
-@@ -410,6 +414,7 @@ main_spi4: spi@20140000 {
- 		#size-cells = <0>;
- 		power-domains = <&k3_pds 145 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 145 0>;
+ 	epwm4: pwm@23040000 {
+@@ -934,6 +938,7 @@ epwm4: pwm@23040000 {
+ 		power-domains = <&k3_pds 90 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 4>, <&k3_clks 90 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_gpio_intr: interrupt-controller@a00000 {
-diff --git a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-index 5ce8ceb3779d..38ddf0b3b8a0 100644
---- a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-@@ -60,6 +60,7 @@ mcu_spi0: spi@4b00000 {
- 		#size-cells = <0>;
- 		power-domains = <&k3_pds 147 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 147 0>;
+ 	epwm5: pwm@23050000 {
+@@ -943,6 +948,7 @@ epwm5: pwm@23050000 {
+ 		power-domains = <&k3_pds 91 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 5>, <&k3_clks 91 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	mcu_spi1: spi@4b10000 {
-@@ -70,6 +71,7 @@ mcu_spi1: spi@4b10000 {
- 		#size-cells = <0>;
- 		power-domains = <&k3_pds 148 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 148 0>;
+ 	epwm6: pwm@23060000 {
+@@ -952,6 +958,7 @@ epwm6: pwm@23060000 {
+ 		power-domains = <&k3_pds 92 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 6>, <&k3_clks 92 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	mcu_gpio_intr: interrupt-controller@4210000 {
+ 	epwm7: pwm@23070000 {
+@@ -961,6 +968,7 @@ epwm7: pwm@23070000 {
+ 		power-domains = <&k3_pds 93 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 7>, <&k3_clks 93 0>;
+ 		clock-names = "tbclk", "fck";
++		status = "disabled";
+ 	};
+ 
+ 	epwm8: pwm@23080000 {
+@@ -970,6 +978,7 @@ epwm8: pwm@23080000 {
+ 		power-domains = <&k3_pds 94 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&epwm_tbclk 8>, <&k3_clks 94 0>;
+ 		clock-names = "tbclk", "fck";
++		status = "disabled";
+ 	};
+ 
+ 	ecap0: pwm@23100000 {
 diff --git a/arch/arm64/boot/dts/ti/k3-am642-evm.dts b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-index 3903e907244e..12d971c3bc3a 100644
+index 12d971c3bc3a..cef3afa10c39 100644
 --- a/arch/arm64/boot/dts/ti/k3-am642-evm.dts
 +++ b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-@@ -379,15 +379,8 @@ &mcu_gpio0 {
- 	status = "reserved";
+@@ -580,42 +580,6 @@ &ecap2 {
+ 	status = "disabled";
  };
  
--&mcu_spi0 {
+-&epwm0 {
 -	status = "disabled";
 -};
 -
--&mcu_spi1 {
+-&epwm1 {
 -	status = "disabled";
 -};
 -
- &main_spi0 {
-+	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_spi0_pins_default>;
- 	ti,pindir-d0-out-d1-in;
+-&epwm2 {
+-	status = "disabled";
+-};
+-
+-&epwm3 {
+-	status = "disabled";
+-};
+-
+-&epwm4 {
+-	status = "disabled";
+-};
+-
+-&epwm5 {
+-	status = "disabled";
+-};
+-
+-&epwm6 {
+-	status = "disabled";
+-};
+-
+-&epwm7 {
+-	status = "disabled";
+-};
+-
+-&epwm8 {
+-	status = "disabled";
+-};
+-
+ &icssg0_mdio {
+ 	status = "disabled";
+ };
 diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
-index 56763d839e05..1a116593a771 100644
+index 1a116593a771..51f4ae165c13 100644
 --- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
 +++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
-@@ -375,14 +375,6 @@ exp2: gpio@60 {
- 	};
+@@ -579,50 +579,6 @@ &ecap2 {
+ 	status = "disabled";
  };
  
--&mcu_spi0 {
+-&epwm0 {
 -	status = "disabled";
 -};
 -
--&mcu_spi1 {
+-&epwm1 {
 -	status = "disabled";
 -};
 -
- /* mcu_gpio0 is reserved for mcu firmware usage */
- &mcu_gpio0 {
- 	status = "reserved";
+-&epwm2 {
+-	status = "disabled";
+-};
+-
+-&epwm3 {
+-	status = "disabled";
+-};
+-
+-&epwm4 {
+-	/*
+-	 * EPWM4_A, EPWM4_B is available on Pin 32 and 33 on J4 (RPi hat)
+-	 * But RPi Hat will be used for other use cases, so marking epwm4 as disabled.
+-	 */
+-	status = "disabled";
+-};
+-
+-&epwm5 {
+-	/*
+-	 * EPWM5_A, EPWM5_B is available on Pin 29 and 31 on J4 (RPi hat)
+-	 * But RPi Hat will be used for other use cases, so marking epwm5 as disabled.
+-	 */
+-	status = "disabled";
+-};
+-
+-&epwm6 {
+-	status = "disabled";
+-};
+-
+-&epwm7 {
+-	status = "disabled";
+-};
+-
+-&epwm8 {
+-	status = "disabled";
+-};
+-
+ &icssg0_mdio {
+ 	status = "disabled";
+ };
 -- 
 2.37.3
 
