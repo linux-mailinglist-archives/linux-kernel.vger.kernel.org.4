@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F1A6007B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177146007BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 09:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiJQH1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 03:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S229833AbiJQH1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 03:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiJQH1Z (ORCPT
+        with ESMTP id S230235AbiJQH1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 03:27:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036C75A3DC
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665991644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cjWUtxQLwEV8jEI6Zuh3YSz4Df1i1QcpeTHLe3Byoa8=;
-        b=T23Qo/G26iKTBlUpfB6S09H8LPniPfw/Gzb6MthRJNw4CifDw9QgpASIsAyHnzawd30wuM
-        VdqrPk6pX3MLIxU2QnUER316yHFBMuqFEgAFSFo1oDo3LoiLJphumn5PT96ati+tDoCpui
-        ELRNSfplEuULwoTQvUB7pgBcjSnKkIk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-249-98YR5I4cPE6etIh_EVy6iQ-1; Mon, 17 Oct 2022 03:27:22 -0400
-X-MC-Unique: 98YR5I4cPE6etIh_EVy6iQ-1
-Received: by mail-wm1-f72.google.com with SMTP id n19-20020a7bcbd3000000b003c4a72334e7so5155236wmi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:27:22 -0700 (PDT)
+        Mon, 17 Oct 2022 03:27:39 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5535A816
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:27:37 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bv10so17096747wrb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 00:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vleqX4azqijmPtKs5ZJjm57oFDFAlglFXOly3nJ4WoI=;
+        b=D6Z+Xd+vG2yWDAUdKhIIBIp9MjbgQVORKD1Hup0Yx14lvdra4RSWNwJK1MgBFyN7Pa
+         KxseAC778j9+eoe1qktBfhMUMOGHy+Y6sTbeMYQHKSGEL36smoScPNAem3xj8aSjW9iy
+         I4r0C9NyDiJAyQeB/CHiPls45MEvgM+Jpnct72d6VJoEP+jVj4mGa+aKhIWQZ/a4VOR/
+         eHYyTSfbrvuS7vjgAjnTdwd01W8bmLk6wUE5wh+ps4GR49WAe3Kjdf90jtg4onIwGc2B
+         MUgXXHTPbnPEbmWXaWDj25qMvwzUT3+GJK+q5qdtQji2k+QESKiqWz6rQzpJOGRoJZh1
+         b22Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cjWUtxQLwEV8jEI6Zuh3YSz4Df1i1QcpeTHLe3Byoa8=;
-        b=533nyvFM2oUPY+z8OrS39d2wlKA8fb2ubd3dXShT73ParcGKQGa598uZvY6o1axLdJ
-         yTyFS4f3nh27rPXjy4N6Y1VRWYGQlWIo9+aZH5V8UGaBZ7ybDhQbUqWqzrE7/4LGHOGv
-         BCKa+3md+zh9H1G0Fvpy2rfFHHdkXpDQs2Q3dG8emZZJvRAUN0uc2VQio+vIqbZTpp2T
-         8euPw2fSNkZihj/gw/DB+DkvmHzFYMqLnf5WoVW2z6wV2r7eh/DlRXCsdVfXzpGkeUJi
-         FvuSe8EbAcl/sW9Ia8kctoLq00kt8F4SqRAr0QkHE8mTPki1re74kpug7GBQjvO5Cx8l
-         CFgw==
-X-Gm-Message-State: ACrzQf0i5kZHFBZ/+0daGLTK3t6tPYY67KjXxPOXcHAGZjNeJ1vtvnoW
-        UQUBXdsF7ocIxJGvs2+P2Uj34GSkRc/4CfF8DWybeHcDccV7E+Q05Kpupdeu11lIcWqzBGPCuRk
-        woHCyBV5f/6liACZBe62svqC6
-X-Received: by 2002:a05:600c:255:b0:3c6:e58d:354e with SMTP id 21-20020a05600c025500b003c6e58d354emr6243021wmj.168.1665991641220;
-        Mon, 17 Oct 2022 00:27:21 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5SwYLNo8rpwflySjZODiH6m0DdIanJn9se9sxjS30MEcWLnqg9kzlxEUK4f8asHCYjKCJq5w==
-X-Received: by 2002:a05:600c:255:b0:3c6:e58d:354e with SMTP id 21-20020a05600c025500b003c6e58d354emr6243008wmj.168.1665991640975;
-        Mon, 17 Oct 2022 00:27:20 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:2300:e5ce:21ba:1d93:4323? (p200300cbc7072300e5ce21ba1d934323.dip0.t-ipconnect.de. [2003:cb:c707:2300:e5ce:21ba:1d93:4323])
-        by smtp.gmail.com with ESMTPSA id w3-20020adfee43000000b0022add5a6fb1sm7702303wro.30.2022.10.17.00.27.20
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vleqX4azqijmPtKs5ZJjm57oFDFAlglFXOly3nJ4WoI=;
+        b=BF58VlzCkdvQLr/kY26YGWmGJdGAWKRhtSkYKimBGtfulsyD4W9u0Z0i+bpTZj2d5S
+         Pfzfdi9JH/IAQ5SYH2IiUF9zsDsFl/FM7NE0lXLBgLjET6Ubhyj+DEi1gNK9T8SXkZJa
+         ODMhClVaw1/Zy91O9QQIE39UppMl8wYP+qbk5SlnTwjAE20X4MD6WExTB+rTd6NYiwkZ
+         PvefPuJDB7Qv+yMG29cqzyzzMHMG7BdSe40Du7k5eneVgNXNstSm5Q8yCDUexr8Uvaod
+         9oD/W9Wr2kzf2h/QNLER6xLNemLe7+c0Ibd/GrgzFDeWwg+hYbLvnKMeLNFxcGJVzrGx
+         DhVg==
+X-Gm-Message-State: ACrzQf0M2yLwIL1n1VjG9jLpjmEPPTHC0fMvzJiIq9zFXicY9NZaZXs+
+        o8qXDRVL6JHaGEGW26SXr3CKDZ5QfPSMHQ==
+X-Google-Smtp-Source: AMsMyM4SgJVOEGYl64n0Y+aPrzaEGfXHbsqGnyd0lMEGXvrEDGgS5/4llcPr+AJEUmKVghIVLMWVnA==
+X-Received: by 2002:a5d:5689:0:b0:231:bcaa:3125 with SMTP id f9-20020a5d5689000000b00231bcaa3125mr5621885wrv.431.1665991655278;
+        Mon, 17 Oct 2022 00:27:35 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9? ([2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9])
+        by smtp.googlemail.com with ESMTPSA id n4-20020adf8b04000000b00231893bfdc7sm8135601wra.2.2022.10.17.00.27.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 00:27:20 -0700 (PDT)
-Message-ID: <4cc17c82-4f80-d0cc-acb9-c83f8ccf729c@redhat.com>
-Date:   Mon, 17 Oct 2022 09:27:19 +0200
+        Mon, 17 Oct 2022 00:27:34 -0700 (PDT)
+Message-ID: <f0bf36da-9467-c905-c5bc-1e232ba9c8a8@linaro.org>
+Date:   Mon, 17 Oct 2022 09:27:33 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3 2/4] module: Update a comment describing what is
- protected by module_mutex
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: thermal: Convert generic-adc-thermal to DT
+ schema
 Content-Language: en-US
-To:     Petr Pavlu <petr.pavlu@suse.com>, mcgrof@kernel.org
-Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
+To:     Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-3-petr.pavlu@suse.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221016123031.3963-3-petr.pavlu@suse.com>
+References: <20221011175235.3191509-1-robh@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221011175235.3191509-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.10.22 14:30, Petr Pavlu wrote:
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->   kernel/module/main.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
+On 11/10/2022 19:52, Rob Herring wrote:
+> Convert the 'generic-adc-thermal' binding to DT schema format.
 > 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index a12e177ea81f..5288843ca40f 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -62,10 +62,11 @@
->   
->   /*
->    * Mutex protects:
-> - * 1) List of modules (also safely readable with preempt_disable),
-> + * 1) list of modules (also safely readable with preempt_disable, delete and add
-> + *    uses RCU list operations).
->    * 2) module_use links,
-> - * 3) mod_tree.addr_min/mod_tree.addr_max.
-> - * (delete and add uses RCU list operations).
-> + * 3) mod_tree.addr_min/mod_tree.addr_max,
-> + * 4) list of unloaded_tainted_modules.
->    */
->   DEFINE_MUTEX(module_mutex);
->   LIST_HEAD(modules);
+> The binding said '#thermal-sensor-cells' should be 1, but all in tree
+> users are 0 and 1 doesn't make sense for a single channel.
+> 
+> Drop the example's related providers and consumers of the
+> 'generic-adc-thermal' node as the convention is to not have those in
+> the examples.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Applied, thanks
+
 
 -- 
-Thanks,
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-David / dhildenb
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
