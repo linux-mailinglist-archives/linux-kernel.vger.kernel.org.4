@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBEA60122C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AFC601223
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiJQO70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S231186AbiJQO7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiJQO6I (ORCPT
+        with ESMTP id S231500AbiJQO5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:58:08 -0400
+        Mon, 17 Oct 2022 10:57:40 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA786AA21;
-        Mon, 17 Oct 2022 07:55:06 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:54:28 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7ED6AA2B;
+        Mon, 17 Oct 2022 07:55:13 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 14:54:30 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018470;
+        s=2020; t=1666018471;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lDH4lNeSn29fzW6aKL9NU3cvnqKlx9WGVr28ecp1CVM=;
-        b=3exDKmZAKyEaAecJ4NprepM5WdnvWxg/rSEiQdMBq+cUWKKR7kxMdiVgX4XJT8yz9GHnvW
-        FfcPcIJ2bQQjJ8NWKxbZGxPo9nOjWooAm/ui4T3kGzT05oiJI6bmyxxSGfFLUs8i15Kz4m
-        D9u4RIJtckACkNpbe/E7PdjLljrLsv5105AEiIgsljK2NnZykKOj8HjTBO0EkzgmWiDu2P
-        18/hNDr1n/BCpSXWmA9kv99rx6dZawNV3CH/lmVwUowycVlzJ4neelx5PJQEM7QmBt+Nch
-        oWOTlsIni3kJRKyCdIrD9w/WpqqN6ohs8OiU14Kquljl9cA0dbuThSwPSA+8CA==
+        bh=vnO2N6nVw1TEhvVMCgRYZZ4/HKJ6EFn4IqxFiyN50cE=;
+        b=xFeFk6zqxHebP/dRZoAx57+M4tEXlHx0ypuH6gpess1lW1YgTvs2Q2JsEjb5PAHu9aobq1
+        UvfkZZpSS6sc5xyJcPyRttWakaqBPBpHxAlToFVT7RnW5skqWBrVyl3olHr+B8BVUc5mXk
+        04vIQnjvswaxtOLxoh5MIuvnidUP1M3FHDT+IC4GuAuYsdJbs9eEzZJVWuzXPpJ8eG63kL
+        TKz5dTqKLw8CY4Q9GUKscbWLZdvf+caJJbIy1mzz+vE6fgs4++lc6A5MZ8ipoPkj04D0K6
+        8JHj4mGnXyVzZjB5bX0o+TIgxoRWr2WEUaiwCoBiGjlE/EBN77QV8XEq71Pbeg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018470;
+        s=2020e; t=1666018471;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lDH4lNeSn29fzW6aKL9NU3cvnqKlx9WGVr28ecp1CVM=;
-        b=OdbA8SzTYy07dZMw09UxLrYKjL+Gnvb+b5HsWvQVmHHR80sbjxfVYnkJ3cOnng63oOgWJB
-        x6+d345z6/0Y6cAg==
+        bh=vnO2N6nVw1TEhvVMCgRYZZ4/HKJ6EFn4IqxFiyN50cE=;
+        b=vTQ0d2ENfK4FonSW0v6NVQ1XKERVg6TamNhfBvoX+nqDgNbyITRcwnphKvf7JmFK8HoKHC
+        H3KOmePJQwwhDACg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/cpu: Re-enable stackprotector
+Subject: [tip: x86/core] x86/cpu: Get rid of redundant switch_to_new_gdt() invocations
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111143.303010511@infradead.org>
-References: <20220915111143.303010511@infradead.org>
+In-Reply-To: <20220915111143.198076128@infradead.org>
+References: <20220915111143.198076128@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601846890.401.14873709384624392317.tip-bot2@tip-bot2>
+Message-ID: <166601847006.401.13481476393028263195.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,64 +66,127 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     2cb15faaedeb67f52f2ddc32b5ca152acfc422c2
-Gitweb:        https://git.kernel.org/tip/2cb15faaedeb67f52f2ddc32b5ca152acfc422c2
+Commit-ID:     1f19e2d50baf6515991844eaa8a84a0b0037da70
+Gitweb:        https://git.kernel.org/tip/1f19e2d50baf6515991844eaa8a84a0b0037da70
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 15 Sep 2022 13:10:43 +02:00
+AuthorDate:    Thu, 15 Sep 2022 13:10:42 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 17 Oct 2022 16:40:56 +02:00
 
-x86/cpu: Re-enable stackprotector
+x86/cpu: Get rid of redundant switch_to_new_gdt() invocations
 
-Commit 5416c2663517 ("x86: make sure load_percpu_segment has no
-stackprotector") disabled the stackprotector for cpu/common.c because of
-load_percpu_segment(). Back then the boot stack canary was initialized very
-early in start_kernel(). Switching the per CPU area by loading the GDT
-caused the stackprotector to fail with paravirt enabled kernels as the
-GSBASE was not updated yet. In hindsight a wrong change because it would
-have been sufficient to ensure that the canary is the same in both per CPU
-areas.
+The only place where switch_to_new_gdt() is required is early boot to
+switch from the early GDT to the direct GDT. Any other invocation is
+completely redundant because it does not change anything.
 
-Commit d55535232c3d ("random: move rand_initialize() earlier") moved the
-stack canary initialization to a later point in the init sequence. As a
-consequence the per CPU stack canary is 0 when switching the per CPU areas,
-so there is no requirement anymore to exclude this file.
+Secondary CPUs come out of the ASM code with GDT and GSBASE correctly set
+up. The same is true for XEN_PV.
 
-Add a comment to load_percpu_segment().
+Remove all the voodoo invocations which are left overs from the ancient
+past, rename the function to switch_gdt_and_percpu_base() and mark it init.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111143.303010511@infradead.org
+Link: https://lore.kernel.org/r/20220915111143.198076128@infradead.org
 ---
- arch/x86/kernel/cpu/Makefile | 3 ---
- arch/x86/kernel/cpu/common.c | 3 +++
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/processor.h |  2 +-
+ arch/x86/kernel/cpu/common.c     | 17 ++++++-----------
+ arch/x86/kernel/setup_percpu.c   |  2 +-
+ arch/x86/kernel/smpboot.c        |  6 +++++-
+ arch/x86/xen/enlighten_pv.c      |  2 +-
+ 5 files changed, 14 insertions(+), 15 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
-index f10a921..d7e3cea 100644
---- a/arch/x86/kernel/cpu/Makefile
-+++ b/arch/x86/kernel/cpu/Makefile
-@@ -17,9 +17,6 @@ KMSAN_SANITIZE_common.o := n
- # As above, instrumenting secondary CPU boot code causes boot hangs.
- KCSAN_SANITIZE_common.o := n
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index e21ec97..c660700 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -667,7 +667,7 @@ extern int sysenter_setup(void);
+ /* Defined in head.S */
+ extern struct desc_ptr		early_gdt_descr;
  
--# Make sure load_percpu_segment has no stackprotector
--CFLAGS_common.o		:= -fno-stack-protector
--
- obj-y			:= cacheinfo.o scattered.o topology.o
- obj-y			+= common.o
- obj-y			+= rdrand.o
+-extern void switch_to_new_gdt(int);
++extern void switch_gdt_and_percpu_base(int);
+ extern void load_direct_gdt(int);
+ extern void load_fixmap_gdt(int);
+ extern void cpu_init(void);
 diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index f51928d..8e87318 100644
+index c09abee..f51928d 100644
 --- a/arch/x86/kernel/cpu/common.c
 +++ b/arch/x86/kernel/cpu/common.c
-@@ -752,6 +752,9 @@ void __init switch_gdt_and_percpu_base(int cpu)
- 	 * early mapping is still valid. That means the GSBASE update will
- 	 * lose any prior per CPU data which was not copied over in
- 	 * setup_per_cpu_areas().
-+	 *
-+	 * This works even with stackprotector enabled because the
-+	 * per CPU stack canary is 0 in both per CPU areas.
- 	 */
- 	wrmsrl(MSR_GS_BASE, cpu_kernelmode_gs_base(cpu));
- #else
+@@ -729,14 +729,15 @@ void load_fixmap_gdt(int cpu)
+ EXPORT_SYMBOL_GPL(load_fixmap_gdt);
+ 
+ /**
+- * switch_to_new_gdt - Switch form early GDT to the direct one
++ * switch_gdt_and_percpu_base - Switch to direct GDT and runtime per CPU base
+  * @cpu:	The CPU number for which this is invoked
+  *
+- * Invoked during early boot to switch from early GDT and early per CPU
+- * (%fs on 32bit, GS_BASE on 64bit) to the direct GDT and the runtime per
+- * CPU area.
++ * Invoked during early boot to switch from early GDT and early per CPU to
++ * the direct GDT and the runtime per CPU area. On 32-bit the percpu base
++ * switch is implicit by loading the direct GDT. On 64bit this requires
++ * to update GSBASE.
+  */
+-void switch_to_new_gdt(int cpu)
++void __init switch_gdt_and_percpu_base(int cpu)
+ {
+ 	load_direct_gdt(cpu);
+ 
+@@ -2263,12 +2264,6 @@ void cpu_init(void)
+ 	    boot_cpu_has(X86_FEATURE_TSC) || boot_cpu_has(X86_FEATURE_DE))
+ 		cr4_clear_bits(X86_CR4_VME|X86_CR4_PVI|X86_CR4_TSD|X86_CR4_DE);
+ 
+-	/*
+-	 * Initialize the per-CPU GDT with the boot GDT,
+-	 * and set up the GDT descriptor:
+-	 */
+-	switch_to_new_gdt(cpu);
+-
+ 	if (IS_ENABLED(CONFIG_X86_64)) {
+ 		loadsegment(fs, 0);
+ 		memset(cur->thread.tls_array, 0, GDT_ENTRY_TLS_ENTRIES * 8);
+diff --git a/arch/x86/kernel/setup_percpu.c b/arch/x86/kernel/setup_percpu.c
+index 49325ca..555089a 100644
+--- a/arch/x86/kernel/setup_percpu.c
++++ b/arch/x86/kernel/setup_percpu.c
+@@ -211,7 +211,7 @@ void __init setup_per_cpu_areas(void)
+ 		 * area.  Reload any changed state for the boot CPU.
+ 		 */
+ 		if (!cpu)
+-			switch_to_new_gdt(cpu);
++			switch_gdt_and_percpu_base(cpu);
+ 	}
+ 
+ 	/* indicate the early static arrays will soon be gone */
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 3f3ea02..ce8728d 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1453,7 +1453,11 @@ void arch_thaw_secondary_cpus_end(void)
+ void __init native_smp_prepare_boot_cpu(void)
+ {
+ 	int me = smp_processor_id();
+-	switch_to_new_gdt(me);
++
++	/* SMP handles this from setup_per_cpu_areas() */
++	if (!IS_ENABLED(CONFIG_SMP))
++		switch_gdt_and_percpu_base(me);
++
+ 	/* already set me in cpu_online_mask in boot_cpu_init() */
+ 	cpumask_set_cpu(me, cpu_callout_mask);
+ 	cpu_set_state_online(me);
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index f82857e..9b89207 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -1209,7 +1209,7 @@ static void __init xen_setup_gdt(int cpu)
+ 	pv_ops.cpu.write_gdt_entry = xen_write_gdt_entry_boot;
+ 	pv_ops.cpu.load_gdt = xen_load_gdt_boot;
+ 
+-	switch_to_new_gdt(cpu);
++	switch_gdt_and_percpu_base(cpu);
+ 
+ 	pv_ops.cpu.write_gdt_entry = xen_write_gdt_entry;
+ 	pv_ops.cpu.load_gdt = xen_load_gdt;
