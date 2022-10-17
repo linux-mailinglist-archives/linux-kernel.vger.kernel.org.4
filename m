@@ -2,66 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43651601680
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A873601681
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiJQSjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S229997AbiJQSk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiJQSjL (ORCPT
+        with ESMTP id S230237AbiJQSkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:39:11 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A496175397;
-        Mon, 17 Oct 2022 11:39:00 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1321a1e94b3so14280677fac.1;
-        Mon, 17 Oct 2022 11:39:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HVjkColzLJkhV5CmuDI7LfNZ/MBGdI9xHtDT0GRnfH0=;
-        b=bP3YZerwzTc/3MXOGi577uI8nFp7zW+aByBdJ93CgoAGNbepHy31bvNbLmyMdDsYsQ
-         o3jZJbZkijSFRfBqu0SW9ilnrM6eq8uyTXjcGz7EYXC+C1HTxFaLO4bJXShMt+Sdlheq
-         FXhBBJLqFpuHer6B5tcZ9UKOfKsAYgIn3My3SzmE+ZzHkTc0h9h7VtGlyXtEY0BqcSXR
-         J0cDBxMtuEwsIbgNNdXpKjwzrekwlmzlOPRW6ViETxzFw3oUrxfB3o0NRZ+0HF4j4zqI
-         GtQ+f++5qvJGMVGsVkz/xpwiK1KoZ0q14CJH4sz7jiUKIFJRFAz3SS2uyxRTrfw8/VxF
-         kd7A==
-X-Gm-Message-State: ACrzQf158K2c4I2ODG8GQAvYi+vLCbzS6ECOYMDIVRmkrD5pDaha5qRi
-        y1GsEKWziAlqHGclr/4uIg==
-X-Google-Smtp-Source: AMsMyM4Owgl4KxiTfWIlsubQR4f1tMkCAZKWNxRtPZW0O7HZFOpOhemPP2xpPZFlq8U7oV9H2x3aGQ==
-X-Received: by 2002:a05:6870:390b:b0:132:9ca3:8dc1 with SMTP id b11-20020a056870390b00b001329ca38dc1mr6373660oap.106.1666031934466;
-        Mon, 17 Oct 2022 11:38:54 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r41-20020a056808212900b0034fd36e95bfsm4702748oiw.31.2022.10.17.11.38.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:38:53 -0700 (PDT)
-Received: (nullmailer pid 2260004 invoked by uid 1000);
-        Mon, 17 Oct 2022 18:38:54 -0000
-Date:   Mon, 17 Oct 2022 13:38:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document Mikrotik RB3011
- board
-Message-ID: <166603193400.2259949.9596015282136077583.robh@kernel.org>
-References: <20221017014653.12970-1-krzysztof.kozlowski@linaro.org>
+        Mon, 17 Oct 2022 14:40:23 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68788733C2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:40:21 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 29HIdeAM1523530
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 17 Oct 2022 11:39:40 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 29HIdeAM1523530
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022100601; t=1666031982;
+        bh=ayWKj5OxbMwLJRpGCYUSRaH2lEGi5P4bc0Ya3yQKFtg=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=INPdfgatmwg8qvs2Gg+KQrvuaYhulauPFLqUQrSJgqhSYYuLzbkWhu/MRfMtbjM4+
+         2I/Y1jHScAMfRk+JeBe+jufSEkkoPGAQfs8wgxn1fL9rtg6oenc4zdix7vIKBLMr5X
+         6PAHD9AZZvt5GqMJuC08UeytQlvcGkVTeYfIuGAjUfqfUhauLrTigexCQS4eMdCE+J
+         OLrViVV8uz6kg0qExhgft0mYpky44ONixmNbLcRKLxTOuUdCI3avsnTA/oSa4Qlt2R
+         CpSZ5uv+I2GdPfwiLyjYXrjtxPyvDb0hMMNnAVHR+zTFX5cPRAgjgfVBXLuixoysv/
+         jUDJsguTGIXRg==
+Date:   Mon, 17 Oct 2022 11:39:40 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'Xin Li'" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "brgerst@gmail.com" <brgerst@gmail.com>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>
+Subject: RE: [PATCH v3 3/6] x86/gsseg: make asm_load_gs_index() take an u16
+User-Agent: K-9 Mail for Android
+In-Reply-To: <bdf3f750103f4b64a697191d1edb8ad0@AcuMS.aculab.com>
+References: <20221013200134.1487-1-xin3.li@intel.com> <20221013200134.1487-4-xin3.li@intel.com> <86f60a8edf0e458c86cd84970364cfa2@AcuMS.aculab.com> <1FCB6543-A666-4423-986B-4CDA1B4DD016@zytor.com> <bdf3f750103f4b64a697191d1edb8ad0@AcuMS.aculab.com>
+Message-ID: <B75B19B9-1560-4002-9E76-D7C4D605EFB0@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017014653.12970-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,13 +62,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Oct 2022 21:46:52 -0400, Krzysztof Kozlowski wrote:
-> Add compatible for existing Mikrotik RB3011 board.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On October 17, 2022 12:49:41 AM PDT, David Laight <David=2ELaight@ACULAB=2E=
+COM> wrote:
+>From: H=2E Peter Anvin
+>> Sent: 15 October 2022 03:41
+>>=20
+>> On October 14, 2022 5:28:25 AM PDT, David Laight <David=2ELaight@ACULAB=
+=2ECOM> wrote:
+>> >From: Xin Li
+>> >> Sent: 13 October 2022 21:02
+>> >>
+>> >> From: "H=2E Peter Anvin (Intel)" <hpa@zytor=2Ecom>
+>> >>
+>> >> Let gcc know that only the low 16 bits of load_gs_index() argument
+>> >> actually matter=2E It might allow it to create slightly better
+>> >> code=2E However, do not propagate this into the prototypes of functi=
+ons
+>> >> that end up being paravirtualized, to avoid unnecessary changes=2E
+>> >
+>> >Using u16 will almost always make the code worse=2E
+>> >At some point the value has to be masked and/or extended
+>> >to ensure an out of range value doesn't appear in
+>> >a register=2E
+>> >
+>> >	David
+>>=20
+>> Is that a general statement or are you actually invoking it in this cas=
+e?
+>> This is about it being a narrowing input, *removing* such constraints=
+=2E
+>
+>It is a general statement=2E
+>You suggested you might get better code=2E
+>If fact you'll probably get worse code=2E
+>It might not matter here, but =2E=2E=2E
+>
+>Most modern calling conventions use cpu register to pass arguments
+>and results=2E
+>So the compiler is required to ensure that u16 values are in range
+>in either the caller or called code (or both)=2E
+>Just because the domain of a value is small doesn't mean that
+>the best type isn't 'int' or 'unsigned int'=2E
+>
+>Additionally (except on x86) any arithmetic on sub-32bit values
+>requires additional instructions to mask the result=2E
+>
+>Even on x86-64 if you index an array with an 'int' the compiler
+>has to generate code to sign extend the value to 64 bits=2E
+>You get better code for 'signed long' or unsigned types=2E
+>This is probably true for all 64bit architectures=2E
+>
+>Since (most) cpu have both sign extending an zero extending
+>loads from memory, it can make sense to use u8 and u16 to
+>reduce the size of structures=2E
+>But for function arguments and function locals it almost
+>always makes the code worse=2E
+>
+>	David
+>
+>-
+>Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+>Registration No: 1397386 (Wales)
+>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Ok=2E You are plain incorrect in this case for two reasons:
+
+1=2E The x86-64 calling convention makes it up to the receiver (callee for=
+ arguments, caller for returns) to do such masking of values=2E
+
+2=2E The consumer of the values here does not need any masking or extensio=
+ns=2E
+
+So this is simply telling the compiler what the programmer knows=2E
