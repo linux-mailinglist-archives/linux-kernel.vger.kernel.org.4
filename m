@@ -2,73 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2A7601697
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209F060169B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiJQSrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S230238AbiJQStJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiJQSq7 (ORCPT
+        with ESMTP id S229962AbiJQStB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:46:59 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0FA75390;
-        Mon, 17 Oct 2022 11:46:54 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id a13so17415671edj.0;
-        Mon, 17 Oct 2022 11:46:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xOnduGdWwNX1YfeZsOAvcXCZLPvcfJ2PqKkkX8Fx7O4=;
-        b=NMkdJwU2X/H+STTyDxMpUL1FQFYwoN+XheRebuwN3COa2JW/UEuI5jOS1BIwEgypnV
-         ciEz60dWdsSLJOO0r8DALjo880+eW6td2yueBqrIGJs1qm5EuKV3/a5/jyPSRcGjAVYP
-         sJREphuL3EwNzUuyoZtGXAtGZA6SQ0ULbvW1cCEOQ+PsCOLRw/P8VINZGhynBJuY17qW
-         oL82A35ian9mlu6o+3zYMsTh5o/v1wd+x2JM+UKyMPCEVOAChjL4AQVMcUOy/Mn8WGiu
-         Mau+v6d0TRGTSikAzuzX/8bxKqcn+NNIjjGsN4KtwpP1/PNjdGoSB2jtPN1mqzWvVmyO
-         OHWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xOnduGdWwNX1YfeZsOAvcXCZLPvcfJ2PqKkkX8Fx7O4=;
-        b=LqXW7PtqWVzVYh4OaGwkrj/ojSZXZbrbs3pq2KJsl39pZvcZZMB2FwuKYyQzkLK00+
-         /uyfxAtS0n8DOGkapZUzfh3NjXlumErxkWMPo4ngH0jRzex2Oy8b4JXVSk5/1ASAKzDB
-         twwJJ1HYGLVm9wuabhJ1tulAbKlbQ739/oinhHmuv+NzmDERRvHXBnNSxlrgpil7nGpW
-         x7bzTzoTMcTn2muDRWZe1i+fRejE3naHNwsOX8gPMZ+jo1ze6zMcSMDze+6GIpwSLsiy
-         YGW6noj1x0QDpSrpaXOOYFar2PIQtL4orK1M+aNPU0L2uBVbXhLO5OALQIjZIbOssMLI
-         fz0A==
-X-Gm-Message-State: ACrzQf0JmgYmNuHKpZM4usOvQK0CJgWVaUX3jrwqD1L3kc4MkQWATLKp
-        Q1nMtmODwSg6IS/sXw9vvWY=
-X-Google-Smtp-Source: AMsMyM5ZAyJ5V+XIL0BwajqkqHOZh1Zrq/87LpgSUyRWGilqq4El/ypNBkUxveL7Ze4gbsLPs7vn4g==
-X-Received: by 2002:a05:6402:1394:b0:456:97cd:e9d4 with SMTP id b20-20020a056402139400b0045697cde9d4mr12055900edv.174.1666032412435;
-        Mon, 17 Oct 2022 11:46:52 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id kv2-20020a17090778c200b0077e6be40e4asm6567982ejc.175.2022.10.17.11.46.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:46:51 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 21:46:49 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com
-Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support
- for LAN937x switch
-Message-ID: <20221017184649.meh7snyhvuepan25@skbuf>
-References: <20221014152857.32645-1-arun.ramadoss@microchip.com>
+        Mon, 17 Oct 2022 14:49:01 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B98872B6A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:48:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FIXnszuzZUejGfWBLYJbdiKxFD9SYHkLvSbO/yUTPPhy4nn4OidRS/sqXy83OsnsOJ7UAoz93OqP28XxQq9irpC+GIrgfkNkIl8TvKrGPHpLexohy/BBwjvOdexGM0VEC/oHybjGL3CMSNMwIEqV0YHmr3A9qkClCWIG8YnUwU/diQdezZLqnkPKG09gHqa74scO+a5Q3lOHip1+5Y1ffON1e7pX2XoAt6m42juI9HU7ZxA1ZDCZqrYFDDY7RqVwwONh7Ya4pQmsN+gR/1LKFlSvibmWw4kmiJjeASdazkwLB2o1liZ/Q8tp3/pgLoOdBlTfylYdTrBlg6QOY++OIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ib1IyOHf/J5F0ZwutGvwRcwbkOXUJ0vSGdoR28iJbyw=;
+ b=CbE4tMcG5R9k3+Jv+1oWCR5FKi8UE+D33UqvP4z3UtFHo/RDiznM8KunUs84HefrRyjFNBN7Xn17GV8XmGSnnBB4XLFLOxOuXeZ9nk9HlBzxM/Lwj+IEHbBeaq3zs9dJ2Jc6OrkMwCpbh52/NJxZnwVlQuGk/3NwLWYlzFctsz1kAecKyNj1DnCsvoMvTewn2bv8Sh82pH1/LCFoFcWmwKTGW1Wm5iuooT/TovFOVJ65bX3X04KmHXXWDH4+FM3regZjDjjlA4xiAqq5b4BPzqmT60RdP1X75/XkrUeaYUm7kU5H2P5HLbHnRjSqlKlOWCPilKTWB8rNpHueXbfvsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ib1IyOHf/J5F0ZwutGvwRcwbkOXUJ0vSGdoR28iJbyw=;
+ b=Q2PQXK49XjwwSAwPLNhcMq4rf17ufuDaL5psacYzx0Hrly7E/LLjsUygzerzxcAYQesZDw0ZVIMikWHRRmlsOdzB+rQNjtMZ2vjnhWKkCSugca4n/Qplhq1Ti+0Tcrz0qMVxXqfV6QqwkVkyowSM9gAkwFYW5Myq1lwaGrPL0k0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by BY5PR12MB4951.namprd12.prod.outlook.com (2603:10b6:a03:1d2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Mon, 17 Oct
+ 2022 18:48:55 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395%6]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
+ 18:48:55 +0000
+Message-ID: <2b472233-f432-f046-bef3-5152b18a2b79@amd.com>
+Date:   Mon, 17 Oct 2022 14:48:50 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3] drm/amd/display: add an ASSERT() to irq service
+ functions
+Content-Language: en-US
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Stylon Wang <stylon.wang@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        linux-kernel@vger.kernel.org, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Roman Li <roman.li@amd.com>, dri-devel@lists.freedesktop.org,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        David Airlie <airlied@linux.ie>, Alex Hung <alex.hung@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <20221017161322.95808-1-hamza.mahfooz@amd.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20221017161322.95808-1-hamza.mahfooz@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0152.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2f::31) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014152857.32645-1-arun.ramadoss@microchip.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|BY5PR12MB4951:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2ba129a4-12a6-45d2-ab64-08dab0703df2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PEBZ9l4SyGYcjmjAK8bDQT5WVOOrWpXcTcqNS4LcBkumoBWmqyaNdE8a5hWLtQG3OTNsu0uS9mXO3hZvNWqO4xQlEmVr6xW1GPnmNT6LzT3YZc3Q8Pgdq4STP0me0b3Knhp0+c3PSXeVc8m89DyE5Em2XRKRCiMGOllxBOAi8bqrjGJqZwFuChzdpgo4AA5GzW7xIN6Q99WYKtMfCPQOv79Zt8aX+rVhs62CcDsVmYTDudFhFetaxExO6Vih2Kstmyn3y4UJUMoBjKg8D0O9Z8JZ+I54osSuWwX9kbrAQ9sOVs6d0qbeAcJfAfedU1NHF70lsi7WZN/KRtxM7la+wHLRmXDHR1eSjQK6kuqAJd9hk/vNrqYwVNrVSyzTH01yd52fpvbD2fttmJuwQKpLYFTtL6o2x2S0GRz2jOSTPjJRlZ1pxEm77ttP7TDJhWRWw0a1wefhhK0+hw5EDriXHKn+F/GWcBsHt6OFNUX64NNZ+tGiBheXofO+NirDKZ+eEMyjot15vZxKxx1phGxrTyxCZNKnZg02G4hB55+LULAaGDslRUvJ+m8pSu5LIZiRCjQS82dTO0NVtq63vfIkWs6l2fgrldBqKPKNkTW3HYG5vXHqDNkSwzC9ud+GO3vGv4TRAi8YYekplMemtkMhHaYnpGaDIWMe8+fjjUElH9QQxV9G4l9dtfGUv/GP6Mi8sUScoyRvr6LvD10eKU+fMmsg8t3MHdsZRSK1qxONwQaKN94Y2Etds7phWnUGYg9nrBk7AFTmsP+lzyT4TlM5gYHDCZ+uf4ML8HgJPwT3DL4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(451199015)(31686004)(44832011)(54906003)(5660300002)(8676002)(316002)(478600001)(6506007)(66476007)(41300700001)(53546011)(6512007)(26005)(186003)(4001150100001)(2906002)(6486002)(4326008)(66556008)(2616005)(8936002)(36756003)(83380400001)(6666004)(38100700002)(66946007)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UnFCYWQyeldYVFhNdTYyQzBBTmpzVlBWS2ZPd1o1QmoxdVVDSzhVb29Wa2FE?=
+ =?utf-8?B?TExOOXc2U1FOWThRN1VqenlHMytDcU5QSk8xQnRoaXl2YTROektocU94aHU5?=
+ =?utf-8?B?NExiajFRWlhrRDBqNFFDZkYrbGs3ZVdXdGpUQzV0eGhISmR5UHNMYmJEYWMv?=
+ =?utf-8?B?V0lxaWlBY0IwWkhVdlFDOGxUL01ldXhGZ0pPSlo0VXVVemhtc2g0dzh4SlR6?=
+ =?utf-8?B?b2xydXNQSmNrTHRaeXNTeXhJMzF1R014bXhSNURoOU40RVFmaTAxWkxYY3ZL?=
+ =?utf-8?B?Y2Z5clJhcUUxeDJOSnV0bDV4WUZNWko3aVgyTGtRYm8wdGRMa1U3TjZRZVNJ?=
+ =?utf-8?B?UDUrM21ZOEtjOVZQUjY3QmExcHFaWDh5TVJWOGxWNVV2cTZGdGJaYWFvaXhF?=
+ =?utf-8?B?T3NENUVBY2Z6ZTJlQ2hEQ1ZuZm13Vjk0Y3o2UXFicHNhU21LVThkTm1VTkNh?=
+ =?utf-8?B?eTk4b0IremVyaTBQUE5rVlhLL2MvdzhacCtTSUFXVGVrYnJqMm9XdGFKSi8x?=
+ =?utf-8?B?bWRBejMvYmhuOVEwZXRQVktsSGxmQlBaVy8vVklMUTI0R0hBeW40c1ZOamZa?=
+ =?utf-8?B?QzA3WWhLb2lZTmZTTGdTaG5Vdkx3MEZPT0dFT25OYUNFTW1uelNOUFMybEZB?=
+ =?utf-8?B?SDMvc3ZhT241V3FoelBoT2J5R0JLcWE1UWFLcnRKMmxHRlM1WDhwNHAzTUU4?=
+ =?utf-8?B?V3MxVGZ2T0w2M0xjV29VMXliRjhJeFZENE1BcGthMlhOenBBcWFZdmJzeHg2?=
+ =?utf-8?B?RjEvSENnRkVTRDUwczJxbU42dWxsVXEvd0dLclg3S1B1OUxQVjdZTFhyQ1Z6?=
+ =?utf-8?B?MzVrS0VGWGJhbXh4OG5IOHgxTW5RQU9MSkVwbERwMG9laG1iV2oxV1B0eWNH?=
+ =?utf-8?B?MzVCa2ZmMElTK0ZtQzBXb3kvV2NJYVR6STdsL2NWTk9CT2xoODJLTXR6akpK?=
+ =?utf-8?B?dkdiN2tubUNOd3hPaU1tckQ0NUw1VTdTSm96a05TQVFPL2xuMWpuRkY2L1lN?=
+ =?utf-8?B?ckVCRWxSQW5CRDJTa3c1RWRYeDQ4UkNHSVpPU05CMDRML2p3KzIzempJM2xJ?=
+ =?utf-8?B?VC9QekozOEwybHFKQXM1U2c5Q0ZCYk5zdlFNS2tjdUZqTW1nZ05pc2xVSFZC?=
+ =?utf-8?B?S3lnSWh5YUxuK3dzVllmRERQQnU4U1ZxalRsSS8wNFlXN05ic3ZXOFRWYVNn?=
+ =?utf-8?B?bHhxZXowd1dMYno2VDZST2RTVVR2TGJvL0ptZUVXc0ZvYTA1ZE5BeGhBYTMz?=
+ =?utf-8?B?VmVJRURXTXpxdC9kakpGWHBkNUcyRVFvWmVHSlZqRm4ySkpMM0dTUTNvZGhG?=
+ =?utf-8?B?WjB2NVh1WjdtQ0VJenVVUkRQS1pZN1p5UVdHalJzZUVwQnZyZTNlUUlnZEhh?=
+ =?utf-8?B?b0tOZU1qWG5Rcy9ZUjE1Smpqc2xyTVlPT1krb1FJcTBIVUhWL202T1dvWjVS?=
+ =?utf-8?B?TkI4a1A3TWdEaSt0eXdWL2dtaXFveHBsSysyaGpmUE56Mk5GYUM2Nlc0N3h2?=
+ =?utf-8?B?UWd1NTAwTUw4emdnOFJpa0RMREdSSGkwUGFxOFA1L3ZuMVkraE1BSE1vUWxH?=
+ =?utf-8?B?dFZHRXZpVWF1ckl5ckNnMU5xZ3A1eXZRVnovZ0xldElxMmNTNzRDTmlTNHpy?=
+ =?utf-8?B?bEU5TXFPNmtoR2lRcXJjdnVleUREYkRLSGVhdEZQMThHREpLdkhoYkJqNEJ2?=
+ =?utf-8?B?cDVrVm1yVysxbWhTc2xFTDg3SVh6T0JFelowRjZRWVFVZys3eEVhNHJrUkJ0?=
+ =?utf-8?B?bXZzY3UwRnR5U2FkVDhOUkc3YkNWMXR4ZFVCMFdMZVViUU5hTmgvMEUzczlw?=
+ =?utf-8?B?N3NLSnFOcitMU0J3VTVtYithRC9FZUkyRWY4YUgxdmhqZHBXZU5EaHkySmRQ?=
+ =?utf-8?B?MWo5Z2xzK29rbXdKWmwrRDZsMHhPdGpJOWFzVnp5RHQ3T09SYlFWd2tTL2N4?=
+ =?utf-8?B?a1Z3SzdOSHJtT0hOdHMwZ3VGWHkxaXlmUmVSYkIxZFFaRnIxZDJJSUpDVHdi?=
+ =?utf-8?B?d3BsRWtZUVRuTmFybDN2elVMNytlNENHY2VEa0s1MzVCUG5EalhkVXh2RW93?=
+ =?utf-8?B?NDJlZnlpd1MvSW8vMHpUSzYrVGxwWnMvMzlSSG14OUE2S25TMXo5OVU2SDFB?=
+ =?utf-8?Q?Zfgb9Qdu7c7XJxfv7kjNVUbpq?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ba129a4-12a6-45d2-ab64-08dab0703df2
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 18:48:55.1297
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y/GtQlmCgsvJBFY+swiICUP1Vkj/oeDCLRvGWzVXgcKRfeUB8WyMV2woy7xytWaTq+MoaBFtPwTuEBmSzhJkFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4951
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,12 +134,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 08:58:51PM +0530, Arun Ramadoss wrote:
-> The LAN937x switch has capable for supporting IEEE 1588 PTP protocol. This
-> patch series add gPTP profile support and tested using the ptp4l application.
-> LAN937x has the same PTP register set similar to KSZ9563, hence the
-> implementation has been made common for the ksz switches. But the testing is
-> done only for lan937x switch.
+On 2022-10-17 12:13, Hamza Mahfooz wrote:
+> Currently, if we encounter unimplemented functions, it is difficult to
+> tell what caused them just by looking at dmesg and that is compounded by
+> the fact that it is often hard to reproduce said issues, for instance we
+> have had reports of this condition being triggered when removing a
+> secondary display that is setup in mirror mode and is connected using
+> usb-c. So, to have access to more detailed debugging information, add an
+> ASSERT() to dal_irq_service_ack() and dal_irq_service_set() that only
+> triggers when we encounter an unimplemented function.
+> 
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 
-Unrelated to the proposed implementation. What user space stack do you
-use for gPTP bridging?
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+
+Harry
+
+> ---
+> v2: detail specific instance that I'm interested in and use ASSERT()
+>     instead of WARN().
+> 
+> v3: move ASSERT()s inside the new if blocks.
+> ---
+>  .../gpu/drm/amd/display/dc/irq/irq_service.c    | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
+> index 7bad39bba86b..d100edaedbbb 100644
+> --- a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
+> +++ b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
+> @@ -112,8 +112,15 @@ bool dal_irq_service_set(
+>  
+>  	dal_irq_service_ack(irq_service, source);
+>  
+> -	if (info->funcs && info->funcs->set)
+> +	if (info->funcs && info->funcs->set) {
+> +		if (info->funcs->set == dal_irq_service_dummy_set) {
+> +			DC_LOG_WARNING("%s: src: %d, st: %d\n", __func__,
+> +				       source, enable);
+> +			ASSERT(0);
+> +		}
+> +
+>  		return info->funcs->set(irq_service, info, enable);
+> +	}
+>  
+>  	dal_irq_service_set_generic(irq_service, info, enable);
+>  
+> @@ -146,8 +153,14 @@ bool dal_irq_service_ack(
+>  		return false;
+>  	}
+>  
+> -	if (info->funcs && info->funcs->ack)
+> +	if (info->funcs && info->funcs->ack) {
+> +		if (info->funcs->ack == dal_irq_service_dummy_ack) {
+> +			DC_LOG_WARNING("%s: src: %d\n", __func__, source);
+> +			ASSERT(0);
+> +		}
+> +
+>  		return info->funcs->ack(irq_service, info);
+> +	}
+>  
+>  	dal_irq_service_ack_generic(irq_service, info);
+>  
+
