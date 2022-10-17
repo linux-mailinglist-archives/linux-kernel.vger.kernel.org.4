@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E09C601480
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5737601483
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiJQRQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S230151AbiJQRQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiJQRQA (ORCPT
+        with ESMTP id S230086AbiJQRQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:16:00 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F5369F43
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:15:59 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id t25so7060083qkm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZecDoFZ2FP/kx+KdceBdgeFczEPpStIKFSrAh+N6jU=;
-        b=LXDJSdcdeLuJYxtyhdZsAI0SNOP4m46trXhDeGqAl1V4CXsnADHkT0hIDME8MnMKpI
-         XBRruyzZYQU82Ll4/zEH84hcvRlJ5p0pM24FEdi5Trj7CTeEI1d8RPsKNT7QdSC9Kk7j
-         FUS7JzlCBQn62wGI4XV7Zpvnrd+X8g6r3HyWyrjajvVTkywCowHWSf0/u/g+UB71GKVG
-         ZpVr4VlhfALLqJaTazVk01O8UnzXNlTtBo5yQ3Tsze986io4/+j+sr6ysWbXSR/GHd6b
-         NJNjvUQnYN1Nh7QE2Hx/xz1HWrS+egDBtsPwtlDO59O0zmebeJERkOTe9SqTbp4xeFXd
-         dXoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZecDoFZ2FP/kx+KdceBdgeFczEPpStIKFSrAh+N6jU=;
-        b=rVycdoM6WyF0UBfNhbXT9RD5mQQ+zEWhK1CBlF6NGLrmO0FE/hy1eQuA/jeioFu18J
-         L6gS1VjcdFBHzg5RsqB4nPONBkUOKQLYr5R7nrgjcS6Ql09KaUuBZ26LO3I9gg/IqqZd
-         zJljflW1XnU9Fah4ESm2CE79PlVUM/5W2oB7upl/20ajRb/U9Nxy31U+2A/tMrrPwOJg
-         4TmusKQJX6o6b6tOarQ666Rc9thVngT0UrWtiXbcIxARn5aEuq+UPLgllF2A9xPPZvdL
-         EXZ6I3wgswmsv+pivOesprh73HB41u8iizwNjQTY3EPTlmpZbxFBfM97W0N8ss3pi7L7
-         vS1g==
-X-Gm-Message-State: ACrzQf2/G0YrrFNbr2STBAeHghGxdySBj34hoPLhMnisuLMFpupg3ngm
-        r7TyABi+I70ZqQ4jN7qSXKUeLw==
-X-Google-Smtp-Source: AMsMyM78cEACn7q29/KOCzKKbKrK66y2E/xmtRkYp6XmajqupdFIvn1kcwfKZf54KpEbLcIXuiHOEQ==
-X-Received: by 2002:a05:620a:46a7:b0:6ee:dea7:cc1c with SMTP id bq39-20020a05620a46a700b006eedea7cc1cmr6200325qkb.506.1666026958537;
-        Mon, 17 Oct 2022 10:15:58 -0700 (PDT)
-Received: from [10.101.5.247] ([148.59.24.28])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac81119000000b003996aa171b9sm169442qtj.97.2022.10.17.10.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 10:15:57 -0700 (PDT)
-Message-ID: <5e153119-f853-ff57-8277-2d782e255be2@linaro.org>
-Date:   Mon, 17 Oct 2022 13:15:45 -0400
+        Mon, 17 Oct 2022 13:16:16 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2906E2C9;
+        Mon, 17 Oct 2022 10:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666026976; x=1697562976;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Oq9lfr47wRzD1O5V9gnT0VqegzfjTTYOexE9V2H6pyw=;
+  b=IFvhxOg2n8YJYpGH16hD9OG/hb4lXoD8/EG4D2azOtN+3vMLUpdDLQvG
+   sKMqkLAthrs9xOLbUKdBWimw9T0nqRudPCN9AW87CJQ7+5H+JPFdcx72w
+   ZbAZpNCuVzaca9Nl09OC9RxoTVsWQTRXylbtZlQTt6fKGqj6n2b/ylXhK
+   a0cyL69w9o+huVNNCudZ0xAwPPJRRXqE1B8aiACDHzREYIimjQwB720jj
+   fbq/+g2UVI19lAJdLoC+63ggP6SlK+XS5c1ZfdFtFMN2vwCbhjJt7QUUG
+   /PRrN4uQaYIVxIa9CMdsd9hb7kYAwnAZE4OItJ2lXAoWpmOIkzASVGH+Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="286255403"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="286255403"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 10:16:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="579449586"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="579449586"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 17 Oct 2022 10:16:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 3688B26D; Mon, 17 Oct 2022 20:16:34 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH v1 1/1] serial: 8250_core: Use str_enabled_disabled() helper
+Date:   Mon, 17 Oct 2022 20:16:33 +0300
+Message-Id: <20221017171633.65275-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 09/15] dt-bindings: phy: qcom,qmp-pcie: mark current
- bindings as legacy
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221017145328.22090-1-johan+linaro@kernel.org>
- <20221017145328.22090-10-johan+linaro@kernel.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221017145328.22090-10-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 10:53, Johan Hovold wrote:
-> The current QMP PCIe PHY bindings are based on the original MSM8996
-> binding which provided multiple PHYs per IP block and these in turn were
-> described by child nodes.
-> 
-> Later QMP PCIe PHY blocks only provide a single PHY and the remnant
-> child node does not really reflect the hardware.
-> 
-> The original MSM8996 binding also ended up describing the individual
-> register blocks as belonging to either the wrapper node or the PHY child
-> nodes.
-> 
-> This is an unnecessary level of detail which has lead to problems when
-> later IP blocks using different register layouts have been forced to fit
-> the original mould rather than updating the binding. The bindings are
-> arguable also incomplete as they only the describe register blocks used
-> by the current Linux drivers (e.g. does not include the per lane PCS
-> registers).
-> 
-> In preparation for adding new bindings for SC8280XP which further
-> bindings can be based on, mark the current bindings as "legacy".
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  .../{qcom,qmp-pcie-phy.yaml => qcom,qmp-pcie-phy-legacy.yaml} | 4 ++--
+Use str_enabled_disabled() helper instead of open coding the same.
 
-I don't think we should rename anything as legacy. These are "normal"
-platforms, not legacy ones. SM8450 is not even that old.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-The recommendation is to keep names matching the compatibles, not adding
-some legacy/newer/newest suffixes.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+index 94fbf0add2ce..80a2fc2fbd4d 100644
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -32,6 +32,7 @@
+ #include <linux/nmi.h>
+ #include <linux/mutex.h>
+ #include <linux/slab.h>
++#include <linux/string_helpers.h>
+ #include <linux/uaccess.h>
+ #include <linux/io.h>
+ #ifdef CONFIG_SPARC
+@@ -1175,8 +1176,8 @@ static int __init serial8250_init(void)
+ 
+ 	serial8250_isa_init_ports();
+ 
+-	pr_info("Serial: 8250/16550 driver, %d ports, IRQ sharing %sabled\n",
+-		nr_uarts, share_irqs ? "en" : "dis");
++	pr_info("Serial: 8250/16550 driver, %d ports, IRQ sharing %s\n",
++		nr_uarts, str_enabled_disabled(share_irqs));
+ 
+ #ifdef CONFIG_SPARC
+ 	ret = sunserial_register_minors(&serial8250_reg, UART_NR);
+-- 
+2.35.1
 
