@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE120601C89
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E988601C8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 00:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiJQWmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 18:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S229945AbiJQWm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 18:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiJQWl5 (ORCPT
+        with ESMTP id S230230AbiJQWmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 18:41:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4A87C1DC;
-        Mon, 17 Oct 2022 15:41:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MrsS15t9zz4x1G;
-        Tue, 18 Oct 2022 09:41:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666046514;
-        bh=Svfbpekr8l+cruikb0VblpuqiyFBzQGVTDIwB4rSlyg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pnzHY6cP+45a2ghSTqDlRwlruy11J9er28Ob1UVxSv9mL3Z/rSRgFcsKI55zLoVZa
-         56O3HsDy/MmeL4CRl/JwUyW/L9FL/Z7nfM0uHtobEMufkycOerJcyg/80TS9Tixui9
-         Mk2/YDDJeG7fo7q1nx4F6Sj2g2R3Y7OuJYj6THBku+GaP45neJs30ymqoZIAXoIxDR
-         Fg12CJslzEwI+hXJyCblaFRb3AY3KEF+186JZPA/WwHkbH1gcqbyXgaqvzqvC7auRH
-         pHAyF/yGIMHfHbfhy8Cd8yV5HEhmKPmba5URMeYeYMLZMAKBPoxIaB4U7MtO7pPLKw
-         1VZDlGEQfAW4g==
-Date:   Tue, 18 Oct 2022 09:41:52 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: linux-next: manual merge of the rcu tree with Linus' tree
-Message-ID: <20221018094152.39787a20@canb.auug.org.au>
+        Mon, 17 Oct 2022 18:42:22 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F0D7C1F3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:42:20 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id h24so8363778qta.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 15:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fK1pyh7kUvkDRwV0vj8ejMcEDOQab0zTlOv6+bJOCW0=;
+        b=q7/qR629zQuAi8jRKTHoyT4Crtw3fPi7+jOF4kmT+aXmj92IWXhUS3cRMYMWMUnnse
+         LZiBMKxoZFms725z/NJiGxpEYBx7TwUfa08yuDhm4q3HAxrqbaqDhX+Sbp6QNqMHjFxg
+         pIgKm37d5j6cvJ00fzBW/uHQDaOtROIYmO4Wm+bLnceS8U51kR/myfYabbWPZKyDIdoj
+         JdRcoo3JvGQcmu0+SQS6/CSfrJ+e4wRXQPTPbm2oAQlAsY4p+6UFZZMM2wnphHif3Lk1
+         qnW1tlfKIGz8p9WjED+BEx2e3yd5gdCt68ncLHh0qXmgBaVXPejC/lSAHPcZAfCNEgj0
+         FNag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fK1pyh7kUvkDRwV0vj8ejMcEDOQab0zTlOv6+bJOCW0=;
+        b=Jex69t1MbGZV89CCGfPxyTQPUN4C4v3OawP5kZHPuCRZtVO5LrDNGYzfLPl/f8pjqu
+         Q1ynpH7hekfvhPn1P/dtUEv7TSIICtAY05V9vURIMdYR4SVar/1LgQm3bqIcTbCcya1o
+         wGERbhd/819jqMOOcRYIf+r3udutSmOV4F9WHe2xg6mz+l7uk9Up8Bmx8KlTc1QntMrs
+         iYrkitVU6OelHUTiqJYdU/oImqCSz0Sog1kt3ocTpMnHEiTaRh/jGDRy0UpOlDHO2zaq
+         pjqMPIJ1O7UTUdAv36JeDcv8s7qxHViEd7eC5pZPkt6w27B0wh+IBV+GEkOVwzLWAAa8
+         jTQA==
+X-Gm-Message-State: ACrzQf2PP9JA7KPycefFlsvgwskFXjFM0ECD/MHE2ZvLGuquWwlXHGm/
+        jDfjlUGOH0XWQd/xRmc92TTpu6btYTcFCw==
+X-Google-Smtp-Source: AMsMyM7LOqEy+cLD21GH7xp4KdxrIvEJbneGyKwqQ+2okxi8pwb3Fb4lMWbB600Oh+TNPhsBezo04Q==
+X-Received: by 2002:a05:622a:653:b0:39c:289c:6dec with SMTP id a19-20020a05622a065300b0039c289c6decmr10818108qtb.165.1666046539534;
+        Mon, 17 Oct 2022 15:42:19 -0700 (PDT)
+Received: from localhost.localdomain (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id l3-20020a37f903000000b006ee2953fac4sm746462qkj.136.2022.10.17.15.42.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 15:42:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: (subset) [PATCH 2/2] dt-bindings: pinctrl: qcom,sdm845: convert to dtschema
+Date:   Mon, 17 Oct 2022 18:42:16 -0400
+Message-Id: <166604653346.43400.1553085215819756291.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220930200529.331223-3-krzysztof.kozlowski@linaro.org>
+References: <20220930200529.331223-1-krzysztof.kozlowski@linaro.org> <20220930200529.331223-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o8Kwt..5HbQ8hGw799583UI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/o8Kwt..5HbQ8hGw799583UI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 30 Sep 2022 22:05:29 +0200, Krzysztof Kozlowski wrote:
+> Convert Qualcomm SDM845 pin controller bindings to DT schema.  Keep
+> the parsing of pin configuration subnodes consistent with other Qualcomm
+> schemas (children named with '-state' suffix, their children with
+> '-pins').
+> 
+> 
 
-Hi all,
+Applied, thanks!
 
-Today's linux-next merge of the rcu tree got a conflict in:
+[2/2] dt-bindings: pinctrl: qcom,sdm845: convert to dtschema
+      https://git.kernel.org/krzk/linux-dt/c/dba79c34605d60cb02c2951c701ea0bc16937153
 
-  arch/loongarch/Kconfig
-
-between commit:
-
-  c78c43fe7d42 ("LoongArch: Use acpi_arch_dma_setup() and remove ARCH_HAS_P=
-HYS_TO_DMA")
-
-from Linus' tree and commit:
-
-  839fc1e464eb ("arch/loongarch: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig=
- option")
-
-from the rcu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/loongarch/Kconfig
-index 903096bd87f8,c8864768dc4d..000000000000
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@@ -10,6 -10,8 +10,7 @@@ config LOONGARC
-  	select ARCH_ENABLE_MEMORY_HOTPLUG
-  	select ARCH_ENABLE_MEMORY_HOTREMOVE
-  	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
-+ 	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
- -	select ARCH_HAS_PHYS_TO_DMA
-  	select ARCH_HAS_PTE_SPECIAL
-  	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
-  	select ARCH_INLINE_READ_LOCK if !PREEMPTION
-
---Sig_/o8Kwt..5HbQ8hGw799583UI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNN2jAACgkQAVBC80lX
-0GwA1Af/X3nWrtCvnFjZLknd8JHkZLYdgTRE/VMp1nMS+yuyaGaxa1DFYqy3jpnU
-dggMJwPdJsjegS+gj2o8oILHd8quF8jbbikWX7592Xc7bhVX7wJO0PTRc0rnpRty
-vgyaL9CYGvgvNIi+1QLbYm535nB+DBJXmv1/DQNSJyl2Z3bjHDEBugazB8b8S6HH
-zaoLhBR2RVik208fbQepooAU00qcVOQPnPR9v3S7kiqnQgXnc2RPERLBA6hHYKMd
-2ITXI3ORbSsuMvk2ARJzVN1cbtYKMMEG1EX4o4MahVFLN5yqZApUPLvfOxxQQXJ5
-+G+A/Pg6x9SEYlorvd1RVck9zEmkZA==
-=ikNb
------END PGP SIGNATURE-----
-
---Sig_/o8Kwt..5HbQ8hGw799583UI--
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
