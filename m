@@ -2,45 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93118600BAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C469600B9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJQJ5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S230520AbiJQJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiJQJ5P (ORCPT
+        with ESMTP id S229896AbiJQJyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:57:15 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1196150070
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:57:12 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MrXNN51ZZzVjWm;
-        Mon, 17 Oct 2022 17:52:36 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 17:57:10 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 17:57:10 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linmq006@gmail.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH] firmware: dmi-sysfs: Fix null-ptr-deref in dmi_sysfs_register_handle
-Date:   Mon, 17 Oct 2022 17:53:42 +0800
-Message-ID: <20221017095342.2567-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 17 Oct 2022 05:54:32 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9316DB1C5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:54:29 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id y14so23597147ejd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j7VZBmDgo9tDAmWCTFI4K5jowac2yHy5VPYWOI1fIJk=;
+        b=AjGwItTIK1GE1Vn7lsicfvWQDp04n2RMfXWhWBj2j3SsVmCXmyb+9rMlRl6aOix6Cu
+         8IzhXWm4cAsgK/ZBfmN/pifPkWQp/fc5rPbgoTTAHZvwfrGIKyzffXzC+7T88O1d+4PC
+         teXPzuPBKSMs0ep2C0pbN6elY6hkVjVyKwwiygu4y6uVZZFVBSVXUsIYz+/uUO3Xk2Su
+         ft6opU0s8fh/q1NbmXrWPwfScGpZQx37wnMJl6BGVb5mR3JjdWLH0Qy+tobxnEY3zHuv
+         HLVFzBKmHCOWSZZpNM3faQTdcegbgDB0XiAOEwJLuAvLVAxDXRTQBr6jQ71P5sq5ujaj
+         F8cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j7VZBmDgo9tDAmWCTFI4K5jowac2yHy5VPYWOI1fIJk=;
+        b=3wgI2hu0bXTA9+EHUem4miG298Yyv7ZUDg+sDsLlpNCJLX3g3UA8CnGMLTyc9skF3E
+         Yf5MjmPxFyPtz4xoX1oAcjPHbFZFDvPKSS77Tm7p1LsSN2ZSm/Xd5L9lGLxAFrE3OHsP
+         e4SOVqobFjuj8e+4cZ34QkyLPXEwTDgUsRImoAAgxphFajecL5rBj0S0eAFwc2ui1/Bo
+         xtKFd5Eho3XGo+gkQpcWCnpT6vKvPna3Km0mPo62en4W2tz6+MmTiAzYzhm9PTmCC+3I
+         1dgy1SrL+ISQ4JgH+PRbsMeAOHRpRnGJB4JREMEJSdwMV8sybZX7+AQ6nkRGUNNeMudJ
+         ZE+g==
+X-Gm-Message-State: ACrzQf3N8W/3pBmihmBzG77ihG6Q+lCgNxKhOOfxXYJ+yeFhfINUET8/
+        6GjblgRdC7UMktxl7v4i+iUayonoHGlP/LXJFR6+Jg==
+X-Google-Smtp-Source: AMsMyM4YunzBd2xFg5/dNKo1Ih3lzHKVWJu6jxsRx3nzc8UyU0/ow4XdO3xDx0rWD3E/P0qZ1FNs8tmFWvKyrQ44EfA=
+X-Received: by 2002:a17:907:7606:b0:78e:61d:757e with SMTP id
+ jx6-20020a170907760600b0078e061d757emr7547230ejc.690.1666000468556; Mon, 17
+ Oct 2022 02:54:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221010125221.28275-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010125221.28275-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 17 Oct 2022 11:54:17 +0200
+Message-ID: <CACRpkdae=+z1zYeW=ogP0eOSZBNxDmCXXV2CaCyp1dTNDJe3XA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] pinctrl: cy8c95x0: Extract cy8c95x0_set_mode() helper
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,63 +66,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN reported a null-ptr-deref error:
+On Mon, Oct 10, 2022 at 2:52 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 1373 Comm: modprobe
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-RIP: 0010:dmi_sysfs_entry_release
-...
-Call Trace:
- <TASK>
- kobject_put
- dmi_sysfs_register_handle (drivers/firmware/dmi-sysfs.c:540) dmi_sysfs
- dmi_decode_table (drivers/firmware/dmi_scan.c:133)
- dmi_walk (drivers/firmware/dmi_scan.c:1115)
- dmi_sysfs_init (drivers/firmware/dmi-sysfs.c:149) dmi_sysfs
- do_one_initcall (init/main.c:1296)
- ...
-Kernel panic - not syncing: Fatal exception
-Kernel Offset: 0x4000000 from 0xffffffff81000000
----[ end Kernel panic - not syncing: Fatal exception ]---
+> The code in newly introduced cy8c95x0_set_mode() helper may be
+> used later on by another function.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-It is because previous patch added kobject_put() to release the memory
-which will call  dmi_sysfs_entry_release() and list_del().
+Patch applied.
 
-However, list_add_tail(entry->list) is called after the error block,
-so the list_head is uninitialized and cannot be deleted.
-
-Because entry is allocated by kzalloc() so the list.prev is NULL in
-the error path. Check it in dmi_sysfs_entry_release() to avoid
-deleting uninitialized list_head.
-
-Fixes: 660ba678f999 ("firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle")
-
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- drivers/firmware/dmi-sysfs.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
-index 66727ad3361b..f8815eeed00c 100644
---- a/drivers/firmware/dmi-sysfs.c
-+++ b/drivers/firmware/dmi-sysfs.c
-@@ -557,9 +557,12 @@ static void dmi_sysfs_entry_release(struct kobject *kobj)
- {
- 	struct dmi_sysfs_entry *entry = to_entry(kobj);
- 
--	spin_lock(&entry_list_lock);
--	list_del(&entry->list);
--	spin_unlock(&entry_list_lock);
-+	if (entry->list.prev != NULL) {
-+		spin_lock(&entry_list_lock);
-+		list_del(&entry->list);
-+		spin_unlock(&entry_list_lock);
-+	}
-+
- 	kfree(entry);
- }
- 
--- 
-2.17.1
-
+Yours,
+Linus Walleij
