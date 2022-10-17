@@ -2,80 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC11D601153
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B3760115B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiJQOla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        id S230522AbiJQOnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiJQOlY (ORCPT
+        with ESMTP id S230501AbiJQOm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:41:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E370653D01;
-        Mon, 17 Oct 2022 07:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qRP0t1fzx0+D6aB4K84CvuiMlWg5VJtwt3tYbeAR3Rs=; b=LNZCt0o5CmXos7ijnk/35sQRaR
-        JMhQ6kHAgRj2JXM2il+tMaZIih8zsfl8XJecXMZsXUm+yukoT2N6RMtHSJlqENdhZ7U9r1e9usGCN
-        AK3V7Cgbx379/Bp3zjXAp9uluOH0c7XtRZzFZhXW6+kCrDCtDyTpaQmB7yoX7abNLKcsUKmxGIozx
-        fx/Hn5Sq8rwKnW9leaSxQyoDi7OssPpX4V/eBZqsQ7Bo9D6hNETJ7K18AQA28ULTm7mFb4A/1j4H4
-        V8C8Ohzv35wj62yT64+I1dRmh3zVN7Ysw9bxUxVxrZhIFxjexApzKF6xWIR79QgAsGA32mHge9SH9
-        i1SuyKow==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1okRIw-009uaN-Rr; Mon, 17 Oct 2022 14:41:22 +0000
-Date:   Mon, 17 Oct 2022 15:41:22 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, bilbao@vt.edu,
-        corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, miguel.ojeda.sandonis@gmail.com
-Subject: Re: [PATCH v2 1/2] Documentation: Start translations to Spanish
-Message-ID: <Y01pkubcT7FOwCjL@casper.infradead.org>
-References: <20221014142454.871196-2-carlos.bilbao@amd.com>
- <48b4a5a1-2a52-4159-699b-9db73a012892@gmail.com>
+        Mon, 17 Oct 2022 10:42:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292A766A78
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 07:42:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B70B2B818F6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 14:42:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5177C433D6;
+        Mon, 17 Oct 2022 14:42:48 +0000 (UTC)
+Date:   Mon, 17 Oct 2022 10:43:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Shuah Khan <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Akanksha J N <akanksha@linux.vnet.ibm.com>
+Subject: Re: [PATCH] selftests/ftrace: Add check for ping command for
+ trigger tests
+Message-ID: <20221017104312.16af5467@gandalf.local.home>
+In-Reply-To: <20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com>
+References: <20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48b4a5a1-2a52-4159-699b-9db73a012892@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 01:06:36PM +0900, Akira Yokosawa wrote:
-> Hi,
-> Minor nit on language code.
-> 
-> On Fri, 14 Oct 2022 09:24:53 -0500, Carlos Bilbao wrote:
-> > Start the process of translating kernel documentation to Spanish. Create
-> > sp_SP/ and include an index and a disclaimer, following the approach of
-> > prior translations. Add Carlos Bilbao as MAINTAINER of this translation
-> > effort.
-> IIUC, the language code for "Spanish (Spain)" should be "es-ES", as is
-> listed at e.g., http://www.lingoes.net/en/translator/langcode.htm.
-> 
-> The other translations use directory names found in the table, with
-> "-" replaced with "_".  It would be better to be consistent.
+On Mon, 17 Oct 2022 15:49:27 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
 
-I don't know what standard we're actually following.  RFC5646 suggests
-simply using "es", with "es-419" for Latin America specialisation or
-"es-ES" for Spain.  I don't know how much variation there is between
-different Spanish dialects for technical documents; as I understand it,
-it's worth supporting two dialects of Chinese, but we merrily mix &
-match en_US and en_GB spellings.  Similarly, I wouldn't suggest that we
-have separate translations for fr_CA, fr_CH, fr_FR, just a single 'fr'
-would be fine.
+> All these tests depend on the ping command and will fail if it is not
+> installed. Add an explicit check and mark the tests as unresolved if it
+> isn't found.
+> 
+> Reported-by: Akanksha J N <akanksha@linux.vnet.ibm.com>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> ---
+>  .../trigger/inter-event/trigger-field-variable-support.tc    | 5 +++++
+>  .../trigger/inter-event/trigger-inter-event-combined-hist.tc | 5 +++++
+>  .../trigger/inter-event/trigger-onchange-action-hist.tc      | 5 +++++
+>  .../trigger/inter-event/trigger-onmatch-action-hist.tc       | 5 +++++
+>  .../trigger/inter-event/trigger-onmatch-onmax-action-hist.tc | 5 +++++
+>  .../test.d/trigger/inter-event/trigger-onmax-action-hist.tc  | 5 +++++
+>  .../trigger/inter-event/trigger-snapshot-action-hist.tc      | 5 +++++
+>  .../trigger/inter-event/trigger-synthetic-event-dynstring.tc | 5 +++++
+>  .../test.d/trigger/inter-event/trigger-trace-action-hist.tc  | 5 +++++
+>  9 files changed, 45 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> index 41119e0440e960..b0969e6eed8375 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> @@ -10,6 +10,11 @@ fail() { #msg
+>  
+>  echo "Test field variable support"
+>  
+> +if ! which ping; then
+> +    echo "ping is not found. This test requires ping command."
+> +    exit_unresolved
+> +fi
+> +
 
-We do need to be careful here; people are rightfully sensitive about
-being incorrectly grouped together.  If possible we should find a
-standard to follow that's been defined by experts in these matters.
-https://en.wikipedia.org/wiki/IETF_language_tag may be a good place to
-start looking.
+This looks like something we should add to the "requires:" field and not
+add this type of logic in the test itself.
+
+Something like this:
+
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 5f6cbec847fc..e13fe1d5bd6c 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -144,7 +144,13 @@ check_requires() { # Check required files and tracers
+     for i in "$@" ; do
+         r=${i%:README}
+         t=${i%:tracer}
+-        if [ $t != $i ]; then
++        p=${i%:program}
++        if [ $p != $i ]; then
++            if ! which $p; then
++                echo "Required program $p not installed."
++                exit_unresolved
++            fi
++        elif [ $t != $i ]; then
+             if ! grep -wq $t available_tracers ; then
+                 echo "Required tracer $t is not configured."
+                 exit_unsupported
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+index 9098f1e7433f..f7447d800899 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # description: event trigger - test inter-event combined histogram trigger
+-# requires: set_event synthetic_events events/sched/sched_process_fork/hist
++# requires: set_event synthetic_events events/sched/sched_process_fork/hist ping:program
+ 
+ fail() { #msg
+     echo $1
+
+
+Then add the "ping:program" to the other tests required fields.
+
+-- Steve
