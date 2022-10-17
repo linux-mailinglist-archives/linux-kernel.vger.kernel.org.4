@@ -2,299 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D362A6008F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17016008FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 10:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiJQIoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 04:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        id S230185AbiJQIo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 04:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiJQIoM (ORCPT
+        with ESMTP id S229501AbiJQIoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:44:12 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688C42BB26
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:09 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id by36so13099617ljb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qwIwAcqWBfBMRrm9KF2boeBuiPaxpIOUZ43XencQIbo=;
-        b=Nrfotfa7MvpY7q0BJxF8GYRMfDoStqAH0gkcWf1bZUF+k/4FN4VrpQKYK3jZBNkZbU
-         9nUYp6FlyhtT/GVq0w+Zl4xOv/B2vJTf3IO5Pe/89dj2ynrkpCw9MAiTwWTe0rDsYm5n
-         OmQYUbH2dGgKPJGXIi4hqk/f+drAbYZB/w54lgCD1bgdPLIN5KGeLnBGZqdp6wjrulW/
-         SKzruULcjVdI61kdj3R8GeeunRA5I5xWFb8h58+PEB2JkOBlKLqnW+uXpsPUBhNPT3nm
-         ekW5pqYozDIRwNqbAFHW2Ragfrv47U6CG0jcv0h+KnvFqOT+UyZh5v4TBs9BU/YeHZVC
-         rkOA==
+        Mon, 17 Oct 2022 04:44:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E72BB26
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665996252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A0G/s7FFc6fRx4eiRxxpQWaSRa2q0znsD4DR8qga7U0=;
+        b=jUjGxM2ae/bzeUJQ5AGCHUPbIyxORIFMXzuLEXVsNzCYeOTcyYtNsrCauziswp5560oLUY
+        aVTPQTJL8hVEDnvnNl9IIvYpMFuf8eXQ1zUGvjmVc9PEQRZCxn9j+jnPxa/aMa7o4ngJ6y
+        tfNvYJi7SxuKD/vAU1pfuIfw07jPvLQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-99-aS48CcZ1NVeQAbXW71In6Q-1; Mon, 17 Oct 2022 04:44:10 -0400
+X-MC-Unique: aS48CcZ1NVeQAbXW71In6Q-1
+Received: by mail-wm1-f72.google.com with SMTP id l1-20020a7bc341000000b003bfe1273d6cso5241823wmj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 01:44:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qwIwAcqWBfBMRrm9KF2boeBuiPaxpIOUZ43XencQIbo=;
-        b=fLl57daBQIcRkD/HSD9OvByzdbhjOuVfBb+ibYa0yoOUfKQlh3xtZenzFCzMGX6TAa
-         QVjxEPthq+in9BrJLN8eHIiQyDtKie4WOCJk1CHlGtzh+b95bb0rSEG+Nww0QNx18Fe4
-         GlLM3HjzHtSVP3tCRlCLmaFUBiyjl3D/TXvCp0WNcTO+A+e6XvLK9HL88ItXYTLhT75y
-         t1HBtbebAh0qyHWJBLoyG4RPrMGNBXsxB6b47Lj2bWa4Cb6efBBn5oytBePusdFfYNF/
-         k8Oqpp/quHBBqy3sHg22sWu/kKYlVpm88bRC8wGFbaIVM9/OgSuDvoARvKEiS86wjJSe
-         RYnQ==
-X-Gm-Message-State: ACrzQf0hBnKpUSEgT8nY94rZQ8PXSWMQLDoVtA/nBzgJZSYgS6XUBAS9
-        uuUtarsryDHARmsCsgOyGVAlm5ffVq08fur2igO5ew==
-X-Google-Smtp-Source: AMsMyM7sr3h7oQemK/dOL+YtBSU21PIPjg5e9KcVS4lXt6tQt+i3ydRApB3/QcxDIS2D9ndM4Qe96lBxOkubafTa0gs=
-X-Received: by 2002:a2e:b5af:0:b0:26f:d634:2f0d with SMTP id
- f15-20020a2eb5af000000b0026fd6342f0dmr3852031ljn.33.1665996247476; Mon, 17
- Oct 2022 01:44:07 -0700 (PDT)
+        bh=A0G/s7FFc6fRx4eiRxxpQWaSRa2q0znsD4DR8qga7U0=;
+        b=7puVGRvmREh3ZeCdnGdXcM5yGflE/E0kGbR79OWoW5P3w3uhiV9kyyvsbnWNpLn361
+         MsuXZt6OJvM15PE9m3fj++XXcigfBWIG5RpRqDzMENjwOo2c2A2EXGtup6umofkIyXVC
+         Ert9ueqdpqSiTZfVu6vsUiyNOEqaI1jDrUAVsRfCL1uYR5xCI6ycwmeQZlvmtychV8z9
+         StWZupple168iawyfv0ZoArjXmTMg397gJYmPgFg3BrelwBlgENti7eHOkl90OXvEljD
+         Ll2a8C23cJZkAGBYbKzCKMJjc29mOW9HhNxa4EdFPq5PBns3tETPGwUsOLJczDA5SKrH
+         1Y6A==
+X-Gm-Message-State: ACrzQf1Ha+hfpDKkOPOyh4z99JUAfKO/aysDm0RDh+H3Qw2/vY/Gmw6L
+        eIBnkFtvjUe9nP8qArGJNpJdr10vWSsaWlQxgzqPOJyyE3inKpFc062Q9MMHz6VUyCfvtsWqui0
+        kQO3E4aPIaf2bbgYsZvz7v6kY
+X-Received: by 2002:a5d:4a4e:0:b0:22e:64a6:7a52 with SMTP id v14-20020a5d4a4e000000b0022e64a67a52mr5472547wrs.333.1665996249427;
+        Mon, 17 Oct 2022 01:44:09 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM61xdkOYp/u8H5U4i9P8jb5eYC8/ZeaBJJSV+HbkCVx665ScinUC4TK7sZT/C3i79ODpATzSA==
+X-Received: by 2002:a5d:4a4e:0:b0:22e:64a6:7a52 with SMTP id v14-20020a5d4a4e000000b0022e64a67a52mr5472528wrs.333.1665996249163;
+        Mon, 17 Oct 2022 01:44:09 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:2300:e5ce:21ba:1d93:4323? (p200300cbc7072300e5ce21ba1d934323.dip0.t-ipconnect.de. [2003:cb:c707:2300:e5ce:21ba:1d93:4323])
+        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003a2f2bb72d5sm20496939wmp.45.2022.10.17.01.44.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 01:44:08 -0700 (PDT)
+Message-ID: <2aaf2c3a-6e49-abb9-b9c8-19ce87404982@redhat.com>
+Date:   Mon, 17 Oct 2022 10:44:07 +0200
 MIME-Version: 1.0
-References: <20221014084837.1787196-1-hrkanabar@gmail.com> <20221014084837.1787196-4-hrkanabar@gmail.com>
- <5bc906b3-ccb5-a385-fcb6-fc51c8fea3fd@suse.com>
-In-Reply-To: <5bc906b3-ccb5-a385-fcb6-fc51c8fea3fd@suse.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 17 Oct 2022 10:43:55 +0200
-Message-ID: <CACT4Y+YeSOZPN+ek6vSLhsCugJ3iGF35-sghnZt4qQJ36DA6mA@mail.gmail.com>
-Subject: Re: [PATCH RFC 3/7] fs/btrfs: support `DISABLE_FS_CSUM_VERIFICATION`
- config option
-To:     Qu Wenruo <wqu@suse.com>
-Cc:     Hrutvik Kanabar <hrkanabar@gmail.com>,
-        Hrutvik Kanabar <hrutvik@google.com>,
-        Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        kasan-dev@googlegroups.com,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        "Darrick J . Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        linux-ntfs-dev@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] mm: hugetlb: support get/set_policy for hugetlb_vm_ops
+Content-Language: en-US
+To:     Albert Huang <huangjie.albert@bytedance.com>,
+        songmuchun@bytedance.com
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20221012081526.73067-1-huangjie.albert@bytedance.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221012081526.73067-1-huangjie.albert@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 at 12:24, 'Qu Wenruo' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> On 2022/10/14 16:48, Hrutvik Kanabar wrote:
-> > From: Hrutvik Kanabar <hrutvik@google.com>
-> >
-> > When `DISABLE_FS_CSUM_VERIFICATION` is enabled, bypass checksum
-> > verification.
-> >
-> > Signed-off-by: Hrutvik Kanabar <hrutvik@google.com>
->
-> I always want more fuzz for btrfs, so overall this is pretty good.
->
-> But there are some comments related to free space cache part.
->
-> Despite the details, I'm wondering would it be possible for your fuzzing
-> tool to do a better job at user space? Other than relying on loosen
-> checks from kernel?
->
-> For example, implement a (mostly) read-only tool to do the following
-> workload:
->
-> - Open the fs
->    Including understand the checksum algo, how to re-generate the csum.
->
-> - Read out the used space bitmap
->    In btrfs case, it's going to read the extent tree, process the
->    backrefs items.
->
-> - Choose the victim sectors and corrupt them
->    Obviously, vitims should be choosen from above used space bitmap.
->
-> - Re-calculate the checksum for above corrupted sectors
->    For btrfs, if it's a corrupted metadata, re-calculate the checksum.
->
-> By this, we can avoid such change to kernel, and still get a much better
-> coverage.
->
-> If you need some help on such user space tool, I'm pretty happy to
-> provide help.
->
-> > ---
-> >   fs/btrfs/check-integrity.c  | 3 ++-
-> >   fs/btrfs/disk-io.c          | 6 ++++--
-> >   fs/btrfs/free-space-cache.c | 3 ++-
-> >   fs/btrfs/inode.c            | 3 ++-
-> >   fs/btrfs/scrub.c            | 9 ++++++---
-> >   5 files changed, 16 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/fs/btrfs/check-integrity.c b/fs/btrfs/check-integrity.c
-> > index 98c6e5feab19..eab82593a325 100644
-> > --- a/fs/btrfs/check-integrity.c
-> > +++ b/fs/btrfs/check-integrity.c
-> > @@ -1671,7 +1671,8 @@ static noinline_for_stack int btrfsic_test_for_metadata(
-> >               crypto_shash_update(shash, data, sublen);
-> >       }
-> >       crypto_shash_final(shash, csum);
-> > -     if (memcmp(csum, h->csum, fs_info->csum_size))
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         memcmp(csum, h->csum, fs_info->csum_size))
-> >               return 1;
-> >
-> >       return 0; /* is metadata */
-> > diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
-> > index a2da9313c694..7cd909d44b24 100644
-> > --- a/fs/btrfs/disk-io.c
-> > +++ b/fs/btrfs/disk-io.c
-> > @@ -184,7 +184,8 @@ static int btrfs_check_super_csum(struct btrfs_fs_info *fs_info,
-> >       crypto_shash_digest(shash, raw_disk_sb + BTRFS_CSUM_SIZE,
-> >                           BTRFS_SUPER_INFO_SIZE - BTRFS_CSUM_SIZE, result);
-> >
-> > -     if (memcmp(disk_sb->csum, result, fs_info->csum_size))
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         memcmp(disk_sb->csum, result, fs_info->csum_size))
-> >               return 1;
-> >
-> >       return 0;
-> > @@ -494,7 +495,8 @@ static int validate_extent_buffer(struct extent_buffer *eb)
-> >       header_csum = page_address(eb->pages[0]) +
-> >               get_eb_offset_in_page(eb, offsetof(struct btrfs_header, csum));
-> >
-> > -     if (memcmp(result, header_csum, csum_size) != 0) {
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         memcmp(result, header_csum, csum_size) != 0) {
->
-> I believe this is the main thing fuzzing would take advantage of.
->
-> It would be much better if this is the only override...
->
-> >               btrfs_warn_rl(fs_info,
-> >   "checksum verify failed on logical %llu mirror %u wanted " CSUM_FMT " found " CSUM_FMT " level %d",
-> >                             eb->start, eb->read_mirror,
-> > diff --git a/fs/btrfs/free-space-cache.c b/fs/btrfs/free-space-cache.c
-> > index f4023651dd68..203c8a9076a6 100644
-> > --- a/fs/btrfs/free-space-cache.c
-> > +++ b/fs/btrfs/free-space-cache.c
-> > @@ -574,7 +574,8 @@ static int io_ctl_check_crc(struct btrfs_io_ctl *io_ctl, int index)
-> >       io_ctl_map_page(io_ctl, 0);
-> >       crc = btrfs_crc32c(crc, io_ctl->orig + offset, PAGE_SIZE - offset);
-> >       btrfs_crc32c_final(crc, (u8 *)&crc);
-> > -     if (val != crc) {
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         val != crc) {
->
-> I'm already seeing this to cause problems, especially for btrfs.
->
-> Btrfs has a very strong dependency on free space tracing, as all of our
-> metadata (and data by default) relies on COW to keep the fs consistent.
->
-> I tried a lot of different methods in the past to make sure we won't
-> write into previously used space, but it's causing a lot of performance
-> impact.
->
-> Unlike tree-checker, we can not easily got a centerlized space to handle
-> all the free space cross-check thing (thus it's only verified by things
-> like btrfs-check).
->
-> Furthermore, even if you skip this override, with latest default
-> free-space-tree feature, free space info is stored in regular btrfs
-> metadata (tree blocks), with regular metadata checksum protection.
->
-> Thus I'm pretty sure we will have tons of reports on this, and
-> unfortunately we can only go whac-a-mole way for it.
+On 12.10.22 10:15, Albert Huang wrote:
+> From: "huangjie.albert" <huangjie.albert@bytedance.com>
+> 
+> implement these two functions so that we can set the mempolicy to
+> the inode of the hugetlb file. This ensures that the mempolicy of
+> all processes sharing this huge page file is consistent.
+> 
+> In some scenarios where huge pages are shared:
+> if we need to limit the memory usage of vm within node0, so I set qemu's
+> mempilciy bind to node0, but if there is a process (such as virtiofsd)
+> shared memory with the vm, in this case. If the page fault is triggered
+> by virtiofsd, the allocated memory may go to node1 which  depends on
+> virtiofsd.
+> 
 
-Hi Qu,
+Any VM that uses hugetlb should be preallocating memory. For example, 
+this is the expected default under QEMU when using huge pages.
 
-I don't fully understand what you mean. Could you please elaborate?
+Once preallocation does the right thing regarding NUMA policy, there is 
+no need to worry about it in other sub-processes.
 
-Do you mean that btrfs uses this checksum check to detect blocks that
-were written to w/o updating the checksum?
+-- 
+Thanks,
 
+David / dhildenb
 
-
-
-> >               btrfs_err_rl(io_ctl->fs_info,
-> >                       "csum mismatch on free space cache");
-> >               io_ctl_unmap_page(io_ctl);
-> > diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-> > index b0807c59e321..1a49d897b5c1 100644
-> > --- a/fs/btrfs/inode.c
-> > +++ b/fs/btrfs/inode.c
-> > @@ -3434,7 +3434,8 @@ int btrfs_check_sector_csum(struct btrfs_fs_info *fs_info, struct page *page,
-> >       crypto_shash_digest(shash, kaddr, fs_info->sectorsize, csum);
-> >       kunmap_local(kaddr);
-> >
-> > -     if (memcmp(csum, csum_expected, fs_info->csum_size))
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         memcmp(csum, csum_expected, fs_info->csum_size))
->
-> This skips data csum check, I don't know how valueable it is, but this
-> should be harmless mostly.
->
-> If we got reports related to this, it would be a nice surprise.
->
-> >               return -EIO;
-> >       return 0;
-> >   }
-> > diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-> > index f260c53829e5..a7607b492f47 100644
-> > --- a/fs/btrfs/scrub.c
-> > +++ b/fs/btrfs/scrub.c
-> > @@ -1997,7 +1997,8 @@ static int scrub_checksum_data(struct scrub_block *sblock)
-> >
-> >       crypto_shash_digest(shash, kaddr, fs_info->sectorsize, csum);
-> >
-> > -     if (memcmp(csum, sector->csum, fs_info->csum_size))
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         memcmp(csum, sector->csum, fs_info->csum_size))
->
-> Same as data csum verification overide.
-> Not necessary/useful but good to have.
->
-> >               sblock->checksum_error = 1;
-> >       return sblock->checksum_error;
-> >   }
-> > @@ -2062,7 +2063,8 @@ static int scrub_checksum_tree_block(struct scrub_block *sblock)
-> >       }
-> >
-> >       crypto_shash_final(shash, calculated_csum);
-> > -     if (memcmp(calculated_csum, on_disk_csum, sctx->fs_info->csum_size))
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         memcmp(calculated_csum, on_disk_csum, sctx->fs_info->csum_size))
->
-> This is much less valueable, since it's only affecting scrub, and scrub
-> itself is already very little checking the content of metadata.
-
-Could you please elaborate here as well?
-This is less valuable from what perspective?
-The data loaded from disk can have any combination of
-(correct/incorrect metadata) x (correct/incorrect checksum).
-Correctness of metadata and checksum are effectively orthogonal,
-right?
-
-
-
-> Thanks,
-> Qu
->
-> >               sblock->checksum_error = 1;
-> >
-> >       return sblock->header_error || sblock->checksum_error;
-> > @@ -2099,7 +2101,8 @@ static int scrub_checksum_super(struct scrub_block *sblock)
-> >       crypto_shash_digest(shash, kaddr + BTRFS_CSUM_SIZE,
-> >                       BTRFS_SUPER_INFO_SIZE - BTRFS_CSUM_SIZE, calculated_csum);
-> >
-> > -     if (memcmp(calculated_csum, s->csum, sctx->fs_info->csum_size))
-> > +     if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-> > +         memcmp(calculated_csum, s->csum, sctx->fs_info->csum_size))
-> >               ++fail_cor;
-> >
-> >       return fail_cor + fail_gen;
