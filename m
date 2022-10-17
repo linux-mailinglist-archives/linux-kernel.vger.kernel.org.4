@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A82600AD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123E3600AA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 11:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiJQJc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 05:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S231292AbiJQJ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 05:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiJQJcr (ORCPT
+        with ESMTP id S231196AbiJQJ1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:32:47 -0400
-Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc08])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84AC550B5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 02:32:45 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MrWpZ0skczMq6HQ;
-        Mon, 17 Oct 2022 11:26:46 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MrWpX6ttJzMppMq;
-        Mon, 17 Oct 2022 11:26:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1665998806;
-        bh=Dtqqx/if1ibvMMPRjJERffrtCsRUnCY7m3rsjyXBRgM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZXlehtNi2gROMyNPvpn6xEoGYafMaWeNVUohoi9gv1Z4tBj0H/9jnrJ5/voT2jG4y
-         LBugl+JkVyZXe5aAVsNkGo5lqG8xC04RjwAsOu046lQhjfSnh2SaV0yVJbyLBGznpH
-         02GvexwKNa0ZQ7DAq2kAwMOrfv5LdSU1KP9zpX7w=
-Message-ID: <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
-Date:   Mon, 17 Oct 2022 11:26:44 +0200
+        Mon, 17 Oct 2022 05:27:20 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E945B2D1EF;
+        Mon, 17 Oct 2022 02:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665998836; x=1697534836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uMXEjdYfJ4AJV1TGc6N3Z98FaBO6KSM8lYZW5Txc/+Q=;
+  b=Pi7/Q36Gv0V2i/sunl3bQdHyhH5qB8SHZyMfmWmEat3yrl9eiKxT78Sz
+   APOS0Qb8qzVjrN+KNu07fJY7PNHx6BR3vNnbyS2PlR7gNCTALCG/B3pjI
+   9k7dg1EMl7UN1N1aJmZs6RrJdhY3aY0sh6olGIhCCIrS1byNmiiKokih9
+   rYNJFHXPbcxGE4GVOsKLfRpsj69TJb46Ng5U0gOylBsvY6Mb9zIGJT/+2
+   wDH8gHghzQ3uBIKgysAt4oXt9QEzxK8fuxNPnGt2UdYba7J6MyAienvNa
+   vwMi4RvzF1QZ6NvCZP+EGFWGJw8xlOeBWP4ynSBBnCycHY3jrlswlS21f
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="303365454"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="303365454"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 02:27:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="630619961"
+X-IronPort-AV: E=Sophos;i="5.95,191,1661842800"; 
+   d="scan'208";a="630619961"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Oct 2022 02:27:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1okMOj-008i6R-2u;
+        Mon, 17 Oct 2022 12:27:01 +0300
+Date:   Mon, 17 Oct 2022 12:27:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [rft, PATCH v2 00/36] pinctrl: Clean up and add missed headers
+Message-ID: <Y00f5exY2fM6IwZ+@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdZ1M3ckw+jFgvMqG4jvR-t_44GPoZ6ZDXszwZCJr-cDpg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH 1/9] integrity: Prepare for having "ima" and "evm"
- available in "integrity" LSM
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20221013222702.never.990-kees@kernel.org>
- <20221013223654.659758-1-keescook@chromium.org>
- <08a8b202-69b4-e154-28f5-337a898acf61@digikod.net>
- <202210141050.A8DF7D10@keescook>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <202210141050.A8DF7D10@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdZ1M3ckw+jFgvMqG4jvR-t_44GPoZ6ZDXszwZCJr-cDpg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,SUSPICIOUS_RECIPS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 14/10/2022 19:59, Kees Cook wrote:
-> On Fri, Oct 14, 2022 at 04:40:01PM +0200, Mickaël Salaün wrote:
->> This is not backward compatible
+On Mon, Oct 17, 2022 at 11:02:09AM +0200, Linus Walleij wrote:
+> On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Why? Nothing will be running LSM hooks until init finishes, at which
-> point the integrity inode cache will be allocated. And ima and evm don't
-> start up until lateinit.
+> > Currently the header inclusion inside the pinctrl headers seems more arbitrary
+> > than logical. This series is basically out of two parts:
+> > - add missed headers to the pin control drivers / users
+> > - clean up the headers of pin control subsystem
+> >
+> > The idea is to have this series to be pulled after -rc1 by the GPIO and
+> > pin control subsystems, so all new drivers will utilize cleaned up headers
+> > of the pin control.
 > 
->> , but can easily be fixed thanks to
->> DEFINE_LSM().order
-> 
-> That forces the LSM to be enabled, which may not be desired?
+> Aha I see you want to send a pull request so I backed out the applied patches
+> from the series for now.
 
-This is not backward compatible because currently IMA is enabled 
-independently of the "lsm=" cmdline, which means that for all installed 
-systems using IMA and also with a custom "lsm=" cmdline, updating the 
-kernel with this patch will (silently) disable IMA. Using ".order =
-LSM_ORDER_FIRST," should keep this behavior.
+Can I consider all that you answered to as Rb tag?
 
-BTW, I think we should set such order (but maybe rename it) for LSMs 
-that do nothing unless configured (e.g. Yama, Landlock).
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> 
->> Side node: I proposed an alternative to that but it was Nacked:
->> https://lore.kernel.org/all/20210222150608.808146-1-mic@digikod.net/
-> 
-> Yeah, for the reasons pointed out -- that can't work. The point is to
-> not have The Default LSM. I do think Casey's NAK was rather prickly,
-> though. ;)
-
-I don't agree, there is no "the default LSM", and this new behavior is 
-under an LSM_AUTO configuration option.
