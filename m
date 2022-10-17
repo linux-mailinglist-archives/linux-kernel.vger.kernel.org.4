@@ -2,104 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8A3601B8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A679601B93
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiJQV4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S229997AbiJQV47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJQV4j (ORCPT
+        with ESMTP id S229969AbiJQV44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:56:39 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6BC3C16D;
-        Mon, 17 Oct 2022 14:56:38 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b4so20633163wrs.1;
-        Mon, 17 Oct 2022 14:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bls0sFpMHM96G1RM5fg41i/BvVUOqCU47KqAcUa9dcc=;
-        b=ECZW/PtHmPPhkVHfY/7jTcXy6fpoZT9bkKVg4IWJ6CeC7iRr/Lb9rr3w1+1qj9Wb2b
-         f87r+9s9E1mhdS3mlsEf5JsaJYyjmKt0UYuu/0GWxCxol2yif0IKwnPy8bOqW00K+huQ
-         lRRW7Wnfp+UG5WHVDrdmnYZ8Wg9fO8Q1dAwv/+kdJTgKZWBrYTihsuYNmQvYre+3DOIy
-         SVGWjRRgbvJ7kfUknB9yHTNETyOtMCZtd1lPtfooZnpn+887i3WdgoSeZHZpriSN+CYx
-         bpqNN59WyWYdCucbpgGoy6gfLoxSfyavkkMmliJPNuuj4CoZWHH7lgEe1fBu+GH/Q+cm
-         siKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bls0sFpMHM96G1RM5fg41i/BvVUOqCU47KqAcUa9dcc=;
-        b=cXS9BLJ43srEC/BH2x+dTCr+HuL1WaPSBoWM7OK9OKe9+7rwvvp5jotLSspLbCb8Dg
-         jUDGv55ZNbnLoCcNgJ1yBOTspRt6fgw70WWUbNtVM9hMWKdjInOvxdHma5qUuKV9sKma
-         VdR2pHWymaRbEYUpHZaiCyVuhbeoRXJwH6ysZjhwxHWUz3DPsiZDBJWd6OfAdBxIMdrm
-         IX7Jfaj+CdIU6JNPaPQWbp95yxFeoJpQNkFnr8HD2Rrbv6HTHRgbJ2VntwqyBvfA9/qZ
-         eSBW4bXI5NBCdvC98tlj7ewBirOkVtuIwU/ePsg4kULjoFYoIsNU81WGeAChQpSG2CwF
-         /r8w==
-X-Gm-Message-State: ACrzQf3rKyrvz2zZPxKGtFc5htJ5znWf97KPyImu5BwomNsy+zfi7oq4
-        XIeTHFch20pAm5vnO/TJR1Q=
-X-Google-Smtp-Source: AMsMyM41tOCu+UuZ3B9X1THbfx5NNSWRkRxZ9rrx6c7KKw+tpCuM0Qbcxh0B2I48sdzKqlzwgoNALg==
-X-Received: by 2002:adf:fbc7:0:b0:220:6004:18ca with SMTP id d7-20020adffbc7000000b00220600418camr7178363wrs.632.1666043797270;
-        Mon, 17 Oct 2022 14:56:37 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d550a000000b0022860e8ae7csm9203528wrv.77.2022.10.17.14.56.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 14:56:36 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Dave Kleikamp <shaggy@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] jfs: remove redundant assignments to ipaimap and ipaimap2
-Date:   Mon, 17 Oct 2022 22:56:36 +0100
-Message-Id: <20221017215636.863916-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 17 Oct 2022 17:56:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B777C604B4;
+        Mon, 17 Oct 2022 14:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666043815; x=1697579815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+DTNPAffPPvJd+GNSv7BeFveo34E4B6ZbDE8a3YpK5s=;
+  b=IWrDNptf3+iZ2vmKdCe+BE6xGi30LY4kbfjb/7RAgbYVaIdxteLwZaN8
+   qxrb6wlKI2gh716uY0Ph1jSeHGDf0iK/SZ2ZmTigzOhf2CPocbcWx3NwM
+   VMuGBmiUBGWw/+YfFlwvOzyIF0fVLdojpHt0SxqC1nqiycUH14dPWLv7g
+   7nTybIc52FYrdxf8SWmIHf40z5EzMqMCrWDJNlJxw7uJbJDx0HdTqx2hc
+   qhfjq/WuUl6UjAnFG2EMqD2+mx0ynl9kSraQiyVPFGIkSYsjMiYIPQGkW
+   IXogcNQamdnWV4scimBkiysdN0XHmeY2cCxwFwe0d7ykH+2DqxiZDfRgF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="370128247"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="370128247"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 14:56:55 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="803493914"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="803493914"
+Received: from dludovic-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.44.179])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 14:56:43 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 068F6104611; Tue, 18 Oct 2022 00:56:41 +0300 (+03)
+Date:   Tue, 18 Oct 2022 00:56:40 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Message-ID: <20221017215640.hobzcz47es7dq2bi@box.shutemov.name>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <de680280-f6b1-9337-2ae4-4b2faf2b823b@suse.cz>
+ <20221017161955.t4gditaztbwijgcn@box.shutemov.name>
+ <c63ad0cd-d517-0f1e-59e9-927d8ae15a1a@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c63ad0cd-d517-0f1e-59e9-927d8ae15a1a@amd.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointers ipaimap and ipaimap2 are initialized with values that are
-never read, they are re-assigned later when they are required. The
-initializations are redundant and can be removed.
+On Mon, Oct 17, 2022 at 06:39:06PM +0200, Gupta, Pankaj wrote:
+> On 10/17/2022 6:19 PM, Kirill A . Shutemov wrote:
+> > On Mon, Oct 17, 2022 at 03:00:21PM +0200, Vlastimil Babka wrote:
+> > > On 9/15/22 16:29, Chao Peng wrote:
+> > > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > > > 
+> > > > KVM can use memfd-provided memory for guest memory. For normal userspace
+> > > > accessible memory, KVM userspace (e.g. QEMU) mmaps the memfd into its
+> > > > virtual address space and then tells KVM to use the virtual address to
+> > > > setup the mapping in the secondary page table (e.g. EPT).
+> > > > 
+> > > > With confidential computing technologies like Intel TDX, the
+> > > > memfd-provided memory may be encrypted with special key for special
+> > > > software domain (e.g. KVM guest) and is not expected to be directly
+> > > > accessed by userspace. Precisely, userspace access to such encrypted
+> > > > memory may lead to host crash so it should be prevented.
+> > > > 
+> > > > This patch introduces userspace inaccessible memfd (created with
+> > > > MFD_INACCESSIBLE). Its memory is inaccessible from userspace through
+> > > > ordinary MMU access (e.g. read/write/mmap) but can be accessed via
+> > > > in-kernel interface so KVM can directly interact with core-mm without
+> > > > the need to map the memory into KVM userspace.
+> > > > 
+> > > > It provides semantics required for KVM guest private(encrypted) memory
+> > > > support that a file descriptor with this flag set is going to be used as
+> > > > the source of guest memory in confidential computing environments such
+> > > > as Intel TDX/AMD SEV.
+> > > > 
+> > > > KVM userspace is still in charge of the lifecycle of the memfd. It
+> > > > should pass the opened fd to KVM. KVM uses the kernel APIs newly added
+> > > > in this patch to obtain the physical memory address and then populate
+> > > > the secondary page table entries.
+> > > > 
+> > > > The userspace inaccessible memfd can be fallocate-ed and hole-punched
+> > > > from userspace. When hole-punching happens, KVM can get notified through
+> > > > inaccessible_notifier it then gets chance to remove any mapped entries
+> > > > of the range in the secondary page tables.
+> > > > 
+> > > > The userspace inaccessible memfd itself is implemented as a shim layer
+> > > > on top of real memory file systems like tmpfs/hugetlbfs but this patch
+> > > > only implemented tmpfs. The allocated memory is currently marked as
+> > > > unmovable and unevictable, this is required for current confidential
+> > > > usage. But in future this might be changed.
+> > > > 
+> > > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > > > ---
+> > > 
+> > > ...
+> > > 
+> > > > +static long inaccessible_fallocate(struct file *file, int mode,
+> > > > +				   loff_t offset, loff_t len)
+> > > > +{
+> > > > +	struct inaccessible_data *data = file->f_mapping->private_data;
+> > > > +	struct file *memfd = data->memfd;
+> > > > +	int ret;
+> > > > +
+> > > > +	if (mode & FALLOC_FL_PUNCH_HOLE) {
+> > > > +		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+> > > > +			return -EINVAL;
+> > > > +	}
+> > > > +
+> > > > +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
+> > > > +	inaccessible_notifier_invalidate(data, offset, offset + len);
+> > > 
+> > > Wonder if invalidate should precede the actual hole punch, otherwise we open
+> > > a window where the page tables point to memory no longer valid?
+> > 
+> > Yes, you are right. Thanks for catching this.
+> 
+> I also noticed this. But then thought the memory would be anyways zeroed
+> (hole punched) before this call?
 
-Cleans up two clang scan build warnings:
-fs/jfs/jfs_umount.c:42:16: warning: Value stored to 'ipaimap' during
-its initialization is never read [deadcode.DeadStores]
+Hole punching can free pages, given that offset/len covers full page.
 
-fs/jfs/jfs_umount.c:43:16: warning: Value stored to 'ipaimap2' during
-its initialization is never read [deadcode.DeadStores]
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/jfs/jfs_umount.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/jfs/jfs_umount.c b/fs/jfs/jfs_umount.c
-index 3e8b13e6aa01..cc4d7e6e8a4b 100644
---- a/fs/jfs/jfs_umount.c
-+++ b/fs/jfs/jfs_umount.c
-@@ -39,8 +39,8 @@ int jfs_umount(struct super_block *sb)
- 	struct jfs_sb_info *sbi = JFS_SBI(sb);
- 	struct inode *ipbmap = sbi->ipbmap;
- 	struct inode *ipimap = sbi->ipimap;
--	struct inode *ipaimap = sbi->ipaimap;
--	struct inode *ipaimap2 = sbi->ipaimap2;
-+	struct inode *ipaimap;
-+	struct inode *ipaimap2;
- 	struct jfs_log *log;
- 	int rc = 0;
- 
 -- 
-2.37.3
-
+  Kiryl Shutsemau / Kirill A. Shutemov
