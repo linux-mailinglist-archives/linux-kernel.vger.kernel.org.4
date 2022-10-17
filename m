@@ -2,118 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D81F6005F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 06:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F576005F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 06:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJQEUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 00:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        id S229797AbiJQEWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 00:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJQEUa (ORCPT
+        with ESMTP id S229630AbiJQEWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 00:20:30 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7F949B76;
-        Sun, 16 Oct 2022 21:20:29 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p3-20020a17090a284300b0020a85fa3ffcso13103962pjf.2;
-        Sun, 16 Oct 2022 21:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gTOwOA0XmX0CaamOlVKmNlRf9Mc4V2zE7CIUJkQl9HE=;
-        b=kfsJ1j4npUBZD7/RMmHcxvOa+69Mp/VbxCtTBwUIOQ+iY6dGoEFB6N4JxA/7r7DRot
-         fFYg7T8YBScYq6coK+Ydji793t1Wcq4KvWi7bYHcd2Yyv427UBZdmhCH/5Wevpo8Y+WK
-         W6jjMrq3dUQFPxaNfu1SpAqflbzITxteOi9mDrihmrHDr8MObPwvBhdQqrNTMss3sOE5
-         hEdvWHL6rtZB4hI619QonGDnD+Dlc7ec0w7Y7F5270t1iwCsiPVRIlqOUWf6CQUIkW1M
-         exq8WYsYUHrM6tk3Ut30SYAVxVenAnJfoz0Rvz9lDwsAW+DZ06X3eeAmZLiIeidgXnOo
-         q3bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gTOwOA0XmX0CaamOlVKmNlRf9Mc4V2zE7CIUJkQl9HE=;
-        b=Vf1sR/aRMPjqNkMt6UmYNFOg6W74LY7t44Y1Xaev0Mjv3Yc/9FD62kdaWIDXQY8mJM
-         HtrT7vNT47F452n2EX+jpMqxuqSyn2ziLzV4y3oC2VSg0hkipT12gg/tG6vRYgi2Bhu3
-         RPO0gBM5WErI2EqRsqYnbsQuQLDbTdTlRhnOcUuDMsgMW3FfJQkTDW1d4BRf227JOkWn
-         7ptQ4lefw7oSTMSFoBgBOVzbqfI+Us6OjZ/SjlwmZpp8HNGphIdFlZh50rXoczTvePGq
-         2TNdzt1XQ2g8QFGBcbSLUcNnpGcp7VYSTd7+ERVvKnVgb+78r/ljEKv73L1Jcw9OBfAW
-         NOZQ==
-X-Gm-Message-State: ACrzQf0VVtcH1rdFFLH16YiZlJb0hp+lY69R41UiSReXz3ifZRa+Mk8j
-        ZHFTPeOT2c1aA1NQZecTEQI=
-X-Google-Smtp-Source: AMsMyM6BIsSq04fxAuB0rHbRG0Oi/5ITFNuJWFzVzhxYUI13F+kVnmFJX+i8J3tMlHsi/4pezIEaoA==
-X-Received: by 2002:a17:903:240a:b0:183:6555:7a89 with SMTP id e10-20020a170903240a00b0018365557a89mr10240566plo.68.1665980429115;
-        Sun, 16 Oct 2022 21:20:29 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-89.three.co.id. [180.214.233.89])
-        by smtp.gmail.com with ESMTPSA id b3-20020a170902d50300b00174d9bbeda4sm5531616plg.197.2022.10.16.21.20.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 21:20:28 -0700 (PDT)
-Message-ID: <9bf36e3a-f718-ec96-3759-e8f17fe025f3@gmail.com>
-Date:   Mon, 17 Oct 2022 11:20:24 +0700
+        Mon, 17 Oct 2022 00:22:10 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 996024A123
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 21:22:08 -0700 (PDT)
+Received: from [10.136.12.12] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx32tp2ExjT2cwAA--.33832S3;
+        Mon, 17 Oct 2022 12:22:02 +0800 (CST)
+Subject: Re: [PATCH V2] LoongArch: Add unaligned access support
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+References: <20221017022330.2383060-1-chenhuacai@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <67d9acd0-692f-95d4-2c92-4e43e1d0100c@loongson.cn>
+Date:   Mon, 17 Oct 2022 12:22:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: 6.1rc1: NFS memcpy warning on mount
+In-Reply-To: <20221017022330.2383060-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Dave Jones <davej@codemonkey.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
- <Y0zEzZwhOxTDcBTB@codemonkey.org.uk> <Y0zS/5WLi2q4Ua2U@debian.me>
- <202210162113.1A948FEAB@keescook>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <202210162113.1A948FEAB@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Bx32tp2ExjT2cwAA--.33832S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4UWw1fCw15Kr1kKFWfZrb_yoW8Wr4Upa
+        yrGa4DKa9FqryxZF1UJw1Dt34FgrnrJr9IkrsxJrZ8Zr18CFnavFyfur1xXrsxKr9rWF1Y
+        qa4aq3yfur4DKFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUU
+        U==
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/22 11:17, Kees Cook wrote:
-> On Mon, Oct 17, 2022 at 10:58:55AM +0700, Bagas Sanjaya wrote:
->> On Sun, Oct 16, 2022 at 10:58:21PM -0400, Dave Jones wrote:
->>> Started getting this during mount on a 6.1rc1 kernel..
->>> not sure which mount it's complaining about, but they're all v3 tcp
->>> mounts on that machine.
->>>
->>> [   19.617475] memcpy: detected field-spanning write (size 28) of single field "request.sap" at fs/nfs/super.c:857 (size 18446744073709551615)
->> [...]
->> Hmm, the blamed line in the warning is introduced by 38465f5d1af932 ("NFS:
->> rename nfs_fs_context pointer arg in a few functions"). Cc: the commit
->> author. Also Cc: Kees for authoring the patch [1] that have fixed
->> similar warning.
-> 
-> The warning is from commit 54d9469bc515 ("fortify: Add run-time WARN
-> for cross-field memcpy()")
-> 
->> Also, does v6.0 have this warning? If so, you need to bisect in the range
->> of v6.0..v6.1-rc1.
-> 
-> No need for bisection -- this is almost certainly a false positive (as
-> detailed in the above commit: we're working on purging all of these
-> cases from the kernel).
-> 
->> [1]: https://lore.kernel.org/lkml/20221011065243.583650-1-keescook@chromium.org/
-> 
-> Yeah, I have a v2 of this patch, which should also fix this request.sap
-> issue. Sending shortly...
-> 
+Hi, Huacai,
 
-OK, thanks!
 
--- 
-An old man doll... just what I always wanted! - Clara
+On 2022/10/17 上午10:23, Huacai Chen wrote:
+> [...]
+> +	default:
+> +		panic("unexpected fd '%d'", fd);
+Due to the optimization of gcc, the panic() is unused actually and leave
+the symbol 'read/write_fpr' in vmlinux. Maybe we can use unreachable() and
+
+always_inline.
+
+> [...]
+> +
+> +fault:
+> +	/* roll back jump/branch */
+> +	regs->csr_era = origpc;
+> +	regs->regs[1] = origra;
+
+I'm not sure where the csr_era and regs[1] was damaged...
+
+> [...]
+>
+> +/*
+> + * unsigned long unaligned_read(void *addr, void *value, unsigned long n, bool sign)
+> + *
+> + * a0: addr
+> + * a1: value
+> + * a2: n
+> + * a3: sign
+> + */
+> +SYM_FUNC_START(unaligned_read)
+> +	beqz	a2, 5f
+> +
+> +	li.w	t1, 8
+IMHO we can avoid the constant reg t1.
+> +	li.w	t2, 0
+> +
+> +	addi.d	t0, a2, -1
+> +	mul.d	t1, t0, t1
+> +	add.d 	a0, a0, t0
+> +
+> +	beq	a3, zero, 2f
+beqz
+> +1:	ld.b	t3, a0, 0
+> +	b	3f
+> +
+> +2:	ld.bu	t3, a0, 0
+> +3:	sll.d	t3, t3, t1
+> +	or	t2, t2, t3
+> +	addi.d	t1, t1, -8
+> +	addi.d	a0, a0, -1
+> +	addi.d	a2, a2, -1
+> +	bgt	a2, zero, 2b
+bgtz
+> +4:	st.d	t2, a1, 0
+> +
+> +	move	a0, a2
+> +	jr	ra
+> +
+> +5:	li.w    a0, -EFAULT
+> +	jr	ra
+> +
+> +	fixup_ex 1, 6, 1
+> +	fixup_ex 2, 6, 0
+> +	fixup_ex 4, 6, 0
+> +SYM_FUNC_END(unaligned_read)
+> +
+> +/*
+> + * unsigned long unaligned_write(void *addr, unsigned long value, unsigned long n)
+> + *
+> + * a0: addr
+> + * a1: value
+> + * a2: n
+> + */
+> +SYM_FUNC_START(unaligned_write)
+> +	beqz	a2, 3f
+> +
+> +	li.w	t0, 0
+> +1:	srl.d	t1, a1, t0
+> +2:	st.b	t1, a0, 0
+> +	addi.d	t0, t0, 8
+> +	addi.d	a2, a2, -1
+> +	addi.d	a0, a0, 1
+> +	bgt	a2, zero, 1b
+bgtz
+> +
+> +	move	a0, a2
+> +	jr	ra
+> +
+> +3:	li.w    a0, -EFAULT
+> +	jr	ra
+> +
+> +	fixup_ex 2, 4, 1
+> +SYM_FUNC_END(unaligned_write)
+
+Thanks,
+
+Jinyang
 
