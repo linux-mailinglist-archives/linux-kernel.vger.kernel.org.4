@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B46E6011DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8D56011E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 16:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiJQOzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 10:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S231376AbiJQO4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 10:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiJQOyH (ORCPT
+        with ESMTP id S230272AbiJQOyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:54:07 -0400
+        Mon, 17 Oct 2022 10:54:14 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C1668CFA;
-        Mon, 17 Oct 2022 07:53:59 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:53:53 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34756919B;
+        Mon, 17 Oct 2022 07:54:00 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 14:53:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666018434;
+        s=2020; t=1666018436;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uQw/5TSKpLxhNJ8ePMNlo4lTG5ZNTsMbyrcfgVXfCLc=;
-        b=dP2xaqlApv5qMz9964ECeOM+PpiWWKuwJvY+X2ZLYor7emK2DkqIApI1uQFkQQoJl7PTEA
-        s+qt8356Tch1XX5z7kjdiPV+afHUzMc0eX/tVk9dlH7tzDWELrEuyPc5VNbS9jEI0xZg7z
-        f7NO3a8Ygr7MYK7AkDu/6Iqg28+QoBSq0U/a7lEJ+4rFyn8n9wopy7xZB+t7UIhbavb+6/
-        fqeacYpbkrzWq3l7PvCsWNQpPhGb4eDZehNQKXBv2D7V2FI6wFafTtRA0qDse0a9njuKir
-        dNaD5aQ9+htiRBG/D4PhV7y4jdqVoPvOPaNCOs+n6n7l0FZblNes5bfoNjSmOg==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=wEbSB4eYOnzEgjZLzAxChD4UceIefjlICnfOr05C2gc=;
+        b=m6JyQ0xDyTmdSD/7qlqK7x/P1rSTn15xlpesMyuDzO5UM2c7J6kgqzIkjvAyabObVPfG5m
+        DBH+nTe5nJTEBJ5W/CMIWJNMypSH6AiTyNeoumHLQdQlPYfTvTrBi1MKVdO0Er8GIjCibm
+        j1yyOBHva89KBCtib0ud9nvUmb5nG+UgpUso29yDzFLfdZUOlDSkJjDZpm/KYtCKRNKoIB
+        MDdzz49T8+4Xae/XhjnzlTtllflmq2J/rdgLRw+qpYzW5IqiG7ifDVtBc1dd5we2lkSXd+
+        djV9CEDhCLaxeCGSyaeG4yQs61egTrdSJERA4P0FZM0CfXRYP21R4EUP1nwnTw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666018434;
+        s=2020e; t=1666018436;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uQw/5TSKpLxhNJ8ePMNlo4lTG5ZNTsMbyrcfgVXfCLc=;
-        b=GsPYvQ707SlMzMllzxsqgf9GKuMTtt7+QNN+vdATi2+BSl4Ghi9teQMiStVLop+UC5UimV
-        tWuWeKgXI1q9d6Cw==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=wEbSB4eYOnzEgjZLzAxChD4UceIefjlICnfOr05C2gc=;
+        b=21lr+pkk6b+WAPNm0Fpi6KXSyu4UeweB3K4U/pe5/Wfx9eb4oD3S3KPREiY3NwGATzKaSI
+        yHLzqAs3fskevGAg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/entry: Make sync_regs() invocation a tail call
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+Subject: [tip: x86/core] objtool: Allow STT_NOTYPE -> STT_FUNC+0 sibling-calls
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220915111146.539578813@infradead.org>
-References: <20220915111146.539578813@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166601843361.401.5567797360188596748.tip-bot2@tip-bot2>
+Message-ID: <166601843470.401.18305296132807566901.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,48 +59,153 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     ef79ed20e3ae9ee9ac2e0f3a4e12814893972e63
-Gitweb:        https://git.kernel.org/tip/ef79ed20e3ae9ee9ac2e0f3a4e12814893972e63
+Commit-ID:     5a9c361a416fc3a3301e859ff09587cc1b933eb8
+Gitweb:        https://git.kernel.org/tip/5a9c361a416fc3a3301e859ff09587cc1b933eb8
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 15 Sep 2022 13:11:14 +02:00
+AuthorDate:    Mon, 11 Jul 2022 11:49:50 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 17 Oct 2022 16:41:09 +02:00
 
-x86/entry: Make sync_regs() invocation a tail call
+objtool: Allow STT_NOTYPE -> STT_FUNC+0 sibling-calls
 
-No point in having a call there. Spare the call/ret overhead.
+Teach objtool about STT_NOTYPE -> STT_FUNC+0 sibling calls. Doing do
+allows slightly simpler .S files.
+
+There is a slight complication in that we specifically do not want to
+allow sibling calls from symbol holes (previously covered by STT_WEAK
+symbols) -- such things exist where a weak function has a .cold
+subfunction for example.
+
+Additionally, STT_NOTYPE tail-calls are allowed to happen with a
+modified stack frame, they don't need to obey the normal rules after
+all.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220915111146.539578813@infradead.org
 ---
- arch/x86/entry/entry_64.S | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ tools/objtool/check.c | 74 ++++++++++++++++++++++++++----------------
+ 1 file changed, 47 insertions(+), 27 deletions(-)
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 5c578a7..b24b84b 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -1062,11 +1062,8 @@ SYM_CODE_START_LOCAL(error_entry)
- 	UNTRAIN_RET
- 
- 	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
--.Lerror_entry_from_usermode_after_swapgs:
--
- 	/* Put us onto the real thread stack. */
--	call	sync_regs
--	RET
-+	jmp	sync_regs
- 
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index e532efb..7936312 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -129,16 +129,13 @@ static bool is_jump_table_jump(struct instruction *insn)
+ static bool is_sibling_call(struct instruction *insn)
+ {
  	/*
- 	 * There are two places in the kernel that can potentially fault with
-@@ -1124,7 +1121,7 @@ SYM_CODE_START_LOCAL(error_entry)
- 	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
- 	call	fixup_bad_iret
- 	mov	%rax, %rdi
--	jmp	.Lerror_entry_from_usermode_after_swapgs
-+	jmp	sync_regs
- SYM_CODE_END(error_entry)
+-	 * Assume only ELF functions can make sibling calls.  This ensures
+-	 * sibling call detection consistency between vmlinux.o and individual
+-	 * objects.
++	 * Assume only STT_FUNC calls have jump-tables.
+ 	 */
+-	if (!insn_func(insn))
+-		return false;
+-
+-	/* An indirect jump is either a sibling call or a jump to a table. */
+-	if (insn->type == INSN_JUMP_DYNAMIC)
+-		return !is_jump_table_jump(insn);
++	if (insn_func(insn)) {
++		/* An indirect jump is either a sibling call or a jump to a table. */
++		if (insn->type == INSN_JUMP_DYNAMIC)
++			return !is_jump_table_jump(insn);
++	}
  
- SYM_CODE_START_LOCAL(error_return)
+ 	/* add_jump_destinations() sets insn->call_dest for sibling calls. */
+ 	return (is_static_jump(insn) && insn->call_dest);
+@@ -1400,21 +1397,18 @@ static void add_return_call(struct objtool_file *file, struct instruction *insn,
+ 		list_add_tail(&insn->call_node, &file->return_thunk_list);
+ }
+ 
+-static bool same_function(struct instruction *insn1, struct instruction *insn2)
+-{
+-	return insn_func(insn1)->pfunc == insn_func(insn2)->pfunc;
+-}
+-
+-static bool is_first_func_insn(struct objtool_file *file, struct instruction *insn)
++static bool is_first_func_insn(struct objtool_file *file,
++			       struct instruction *insn, struct symbol *sym)
+ {
+-	if (insn->offset == insn_func(insn)->offset)
++	if (insn->offset == sym->offset)
+ 		return true;
+ 
++	/* Allow direct CALL/JMP past ENDBR */
+ 	if (opts.ibt) {
+ 		struct instruction *prev = prev_insn_same_sym(file, insn);
+ 
+ 		if (prev && prev->type == INSN_ENDBR &&
+-		    insn->offset == insn_func(insn)->offset + prev->len)
++		    insn->offset == sym->offset + prev->len)
+ 			return true;
+ 	}
+ 
+@@ -1422,6 +1416,32 @@ static bool is_first_func_insn(struct objtool_file *file, struct instruction *in
+ }
+ 
+ /*
++ * A sibling call is a tail-call to another symbol -- to differentiate from a
++ * recursive tail-call which is to the same symbol.
++ */
++static bool jump_is_sibling_call(struct objtool_file *file,
++				 struct instruction *from, struct instruction *to)
++{
++	struct symbol *fs = from->sym;
++	struct symbol *ts = to->sym;
++
++	/* Not a sibling call if from/to a symbol hole */
++	if (!fs || !ts)
++		return false;
++
++	/* Not a sibling call if not targeting the start of a symbol. */
++	if (!is_first_func_insn(file, to, ts))
++		return false;
++
++	/* Disallow sibling calls into STT_NOTYPE */
++	if (ts->type == STT_NOTYPE)
++		return false;
++
++	/* Must not be self to be a sibling */
++	return fs->pfunc != ts->pfunc;
++}
++
++/*
+  * Find the destination instructions for all jumps.
+  */
+ static int add_jump_destinations(struct objtool_file *file)
+@@ -1519,18 +1539,18 @@ static int add_jump_destinations(struct objtool_file *file)
+ 			    strstr(insn_func(jump_dest)->name, ".cold")) {
+ 				insn_func(insn)->cfunc = insn_func(jump_dest);
+ 				insn_func(jump_dest)->pfunc = insn_func(insn);
+-
+-			} else if (!same_function(insn, jump_dest) &&
+-				   is_first_func_insn(file, jump_dest)) {
+-				/*
+-				 * Internal sibling call without reloc or with
+-				 * STT_SECTION reloc.
+-				 */
+-				add_call_dest(file, insn, insn_func(jump_dest), true);
+-				continue;
+ 			}
+ 		}
+ 
++		if (jump_is_sibling_call(file, insn, jump_dest)) {
++			/*
++			 * Internal sibling call without reloc or with
++			 * STT_SECTION reloc.
++			 */
++			add_call_dest(file, insn, insn_func(jump_dest), true);
++			continue;
++		}
++
+ 		insn->jump_dest = jump_dest;
+ 	}
+ 
+@@ -3309,7 +3329,7 @@ static int validate_sibling_call(struct objtool_file *file,
+ 				 struct instruction *insn,
+ 				 struct insn_state *state)
+ {
+-	if (has_modified_stack_frame(insn, state)) {
++	if (insn_func(insn) && has_modified_stack_frame(insn, state)) {
+ 		WARN_FUNC("sibling call from callable instruction with modified stack frame",
+ 				insn->sec, insn->offset);
+ 		return 1;
