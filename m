@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC52B601098
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD9E60109F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 15:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiJQN4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 09:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S230223AbiJQN6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 09:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiJQN43 (ORCPT
+        with ESMTP id S230202AbiJQN5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:56:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C515464C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 06:56:26 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666014985;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5d1QzgRSD0JRva4615IYb620QEIPs213050MB2/TnI8=;
-        b=BapstiHpWGZA6P4nRyUp1d4o0a7OW2AotVj0zPb0P6sl83BEs21K7o8+manxMc41BMcjX9
-        LF5/0ONRhbVyqHJ2+8YU8eM3TpcTZT2zcWmPM7//ZUZ+mjZ/6fzPsAVqz9xJC6KIuHVIxu
-        7gs/7MZcr4F+J7ZFLvG5AUqyC/ePDrzpyWsxMJnetuPqdQznZ0ruBW0zWQo2mAgvF4DQgZ
-        8Yix/Qk0w3as7IK1f3m010BMiBuDXNBf16grxYD1X72z8+STi1PLcSdb1scvL/PApJ43S2
-        qoAAWfASbLf7MmUgko8ekz7bGDyb0vsrqjp7wc25wjT9aVbk7w4KYUzoj8yboA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666014985;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5d1QzgRSD0JRva4615IYb620QEIPs213050MB2/TnI8=;
-        b=jBHDMdAQbIrCzyvuqfA7ZTxwlDkZAlm0FQhxcG3rTmHc+5EuZupboC1/AFNi7VU0RY1Mi/
-        HsaXfGh2x94ea2CA==
-To:     Liang He <windhl@126.com>, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Cc:     jgg@ziepe.ca, kirill.shutemov@linux.intel.com,
-        brijesh.singh@amd.com, linux-kernel@vger.kernel.org, windhl@126.com
-Subject: Re: [PATCH] arch: x86: kernel: Add missing of_node_put() in x86_init.c
-In-Reply-To: <20220615125739.3966617-1-windhl@126.com>
-References: <20220615125739.3966617-1-windhl@126.com>
-Date:   Mon, 17 Oct 2022 15:56:25 +0200
-Message-ID: <87zgdupn92.ffs@tglx>
+        Mon, 17 Oct 2022 09:57:42 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14D3642D1;
+        Mon, 17 Oct 2022 06:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6QZ3gapeMS/aSRKE6Bc1zdlguo4AQT7A2NhJ50U8mgk=; b=sWH+XupFFO60xes+EwZS6aJ6/o
+        qjRpjYWRAlGfyttkjnohOP054j5rWeCHxcsnCop9rmvN1ugvH9q1xXi1MfPlzX1fZOrBFhPPOUKAQ
+        CZvyO8HhNVrD/2ymBDo9dMjeRmUKw2or9NVYMG05TtMv/Ze7HFXPP3aG7uC57iBXlEDY/z7USmgHX
+        oxAmDtgqXjmm7/yIBNubAd0/lMa4JKD1jHuCbUNAKrARVHsgeiqqs6VpxZVXS1ot3mQeeodY710Pz
+        26jiD2tsm7SY7aUgc1cB3tFotq4fHciB7EBepLQD0FRttCjQGJjiKyzaDbhjkw6lRwk8WQ9mh/zrS
+        9jkh49AQ==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1okQcM-000Nos-4q; Mon, 17 Oct 2022 15:57:22 +0200
+Message-ID: <0d9d589e-4f6c-02a4-fb00-b4467e75b47f@igalia.com>
+Date:   Mon, 17 Oct 2022 10:57:01 -0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V2] x86/split_lock: Add sysctl to control the misery mode
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, luto@kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, Andre Almeida <andrealmeid@igalia.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Joshua Ashton <joshua@froggi.es>,
+        Melissa Wen <mwen@igalia.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Pavel Machek <pavel@denx.de>,
+        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Zebediah Figura <zfigura@codeweavers.com>
+References: <20221014180506.211592-1-gpiccoli@igalia.com>
+ <Y0tz1/pR/s7+j6s+@debian.me>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Y0tz1/pR/s7+j6s+@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,37 +67,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Liang,
+Thank you Bagas! I see you fixed the documentation in more than one
+place, appreciate that.
 
-On Wed, Jun 15 2022 at 20:57, Liang He wrote:
+What's the next step then, re-submit with your fixes, or wait more
+feedback perhaps?
 
-please check https://www.kernel.org/doc/html/latest/process/maintainer-tip.html
-for instructions vs. subject prefixes and changelogs.
+If a maintainer plans to pick this one, maybe they can just apply your
+fix-up on top of it.
+Cheers,
 
-> In x86_wallclock_init(), we need to use of_node_put() for the
-> of_find_matching_node() which returns a node pointer with refcount
-> incremented.
->
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->  arch/x86/kernel/x86_init.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-> index e84ee5cdbd8c..81c071080efe 100644
-> --- a/arch/x86/kernel/x86_init.c
-> +++ b/arch/x86/kernel/x86_init.c
-> @@ -50,6 +50,7 @@ static __init void x86_wallclock_init(void)
->  	struct device_node *node = of_find_matching_node(NULL, of_cmos_match);
->  
->  	if (node && !of_device_is_available(node)) {
-> +		of_node_put(node);
->  		x86_platform.get_wallclock = get_rtc_noop;
->  		x86_platform.set_wallclock = set_rtc_noop;
->  	}
 
-That still leaks the node in the case when the device is available, no?
-
-Thanks,
-
-        tglx
+Guilherme
