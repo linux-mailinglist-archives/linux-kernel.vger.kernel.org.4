@@ -2,126 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5587F60142A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B7B601433
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 19:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiJQRBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 13:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S229999AbiJQRDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 13:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiJQRBu (ORCPT
+        with ESMTP id S229925AbiJQRDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:01:50 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8AF6F56E
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:01:49 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e793329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e793:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D8AF11EC0682;
-        Mon, 17 Oct 2022 19:01:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666026104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oRbsyHvyA4OIDsg2Dzh8CYhxKvYWtgJA9qKqNFK15uE=;
-        b=Np8vwR1ZqtYDEkjW0UyYIBToXtd0GABIySrilYus31feEDwIymB+M0T4qGDapC0cvO0DtI
-        11DWm64ZbkuxewyDK9fffeBnuOx2IxmATMaG5dPKhLlG+hIpILNaKFFMeKGZTxunsGo/4f
-        KkLDKbatWih8cH/jxp5IhMUPaLwwStM=
-Date:   Mon, 17 Oct 2022 19:01:40 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Li Zetao <lizetao1@huawei.com>
-Cc:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        masahiroy@kernel.org, michael.roth@amd.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nathan@kernel.org,
-        ndesaulniers@google.com, brijesh.singh@amd.com,
-        peterz@infradead.org, venu.busireddy@oracle.com,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [PATCH -next v4 2/2] x86/boot/compressed: Add "-Wall" flag to
- Makefile
-Message-ID: <Y02KdJfTSFRlbnwn@zn.tnic>
-References: <202210090815.526C76396@keescook>
- <20221011012904.2330473-1-lizetao1@huawei.com>
- <20221011012904.2330473-3-lizetao1@huawei.com>
+        Mon, 17 Oct 2022 13:03:20 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922EC6F24C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:03:19 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id s2so17013703edd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 10:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8PEAKmr2CI0TXwvfrawXTFbhFFi06yK1UneHj5n8les=;
+        b=TjheCZnif4XRsppklB13NvbRAwEhQDor3aQmCcTMiRHVDerbUlmn4+FJC7afQLbx3P
+         EeE6Jmy74BawuW6jL/BGvi12phISSECmi4S1nIOLj+mgaPO+M3NANYP/g60nZBkAwMJF
+         LqPW/Q4q3HSgJYHlHRFukXg1qWGFzmDcm40IpHGCoScVNcm0bb6lb2l2lAgvHOBYzH2Q
+         9Jq5u4ydyrq5QHadjpPLVz+6tYLIHadO4lKlyxKov4dlG4h+EFiJtcpkN664khvoGaXJ
+         qrOpsjJil3y0zHCpXXcRCGcWqqV7fI0w4UBpgab1J4mArjuxXACVJkyx/inoExS2AV2A
+         w4fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8PEAKmr2CI0TXwvfrawXTFbhFFi06yK1UneHj5n8les=;
+        b=sY5k4dqmO8j9aaSmE4tVOObfZRBP6vgqNysFrrj+1vuyO0HBx+U2GV+hOKlQ+dIlho
+         G9pgax60U3HjcysDyAp9Uhs4aRPf93SiHDyTAfTnUrJl8wdMCzxaztU1Iau55apjdUfx
+         Khy6AxwkQo27/oij2FmEnGG6WOsSVcNqasfhFX2vHU11/Khr8VTIIW2CX6zQQMWpdZZu
+         slT0U/T5qIgXbzOUX/JuLnpnftro1tLxvWd057CQAt3IenD5NMHRuLcw5mzg4Hs341Wi
+         hVAVpPc/UfL3dtJFCxQT+VQRb4TjrURGw+/GLP0JiY3+IaLViVvrXVLO7QaMw/twCqt+
+         ObOQ==
+X-Gm-Message-State: ACrzQf022yfwFYTgXo7vkdOr/4mUbXw7TVBQ3YH9jDnb4AnXn0B8vwi9
+        FCd7k/9HyMR7p8gBhG+OUa2CVMIYt8T13QUBiTZ2tg==
+X-Google-Smtp-Source: AMsMyM57JhXHdQs3OS3h9I5iJZRe/WtkIvp0rlIjEeIiu8nhX+R4ZQ7cZUQYnzdJTfwOBs+/RBaGlKmC3tbq+fyyy0s=
+X-Received: by 2002:a05:6402:2913:b0:45c:a7d6:c1ef with SMTP id
+ ee19-20020a056402291300b0045ca7d6c1efmr11004768edb.276.1666026198097; Mon, 17
+ Oct 2022 10:03:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221011012904.2330473-3-lizetao1@huawei.com>
+References: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
+ <20221013-rpi-dpi-improvements-v1-6-8a7a96949cb0@cerno.tech> <Y0rqQu8Ztowj3/Gi@pendragon.ideasonboard.com>
+In-Reply-To: <Y0rqQu8Ztowj3/Gi@pendragon.ideasonboard.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Mon, 17 Oct 2022 18:03:03 +0100
+Message-ID: <CAPY8ntAiX6WJ86wGUgMvTxhehG8OgoS66AojvWYukADciM5X5w@mail.gmail.com>
+Subject: Re: [PATCH 6/7] drm/vc4: dpi: Change the default DPI format to being
+ 18bpp, not 24.
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Eric Anholt <eric@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Rob Herring <robh@kernel.org>,
+        Emma Anholt <emma@anholt.net>, dri-devel@lists.freedesktop.org,
+        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 01:29:04AM +0000, Li Zetao wrote:
-> This warning is disabled in the main Makefile for this reason so we
+Hi Laurent
 
-Who's "we"?
+On Sat, 15 Oct 2022 at 18:14, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Maxime (and Dave),
+>
+> Thank you for the patch.
+>
+> On Thu, Oct 13, 2022 at 11:56:50AM +0200, Maxime Ripard wrote:
+> > From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> >
+> > DPI hasn't really been used up until now, so the default has
+> > been meaningless.
+> > In theory we should be able to pass the desired format for the
+> > adjacent bridge chip through, but framework seems to be missing
+> > for that.
+>
+> Doesn't the bridge infrastructure allow that ? Or maybe this commit
+> message was written a while ago, before it was possible ?
 
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
+Infrastructure may do, but it isn't always implemented.
+Rightly or wrongly, the driver is currently finding the associated
+connector, as commented as [1].
 
-Also, pls read section "2) Describe your changes" in
-Documentation/process/submitting-patches.rst for more details.
+The main chain I'm looking is:
+vc4_dpi -> dumb-vga-dac -> vga-connector
+Unless I'm missing something, nothing in that chain defines the format
+for the output. vga-connector (display-connector driver) tries to ask
+the previous bridge for formats via atomic_get_output_bus_fmts and
+atomic_get_input_fmts, but dumb-vga-dac (simple-bridge) doesn't
+implement them.
+So even if we tried following the chain it dies due to , and currently
+the connector has no bus_formats defined in display_info, hence we end
+up needing a default.
+(Why do I get deja vu with panel-dpi and bus-format discussions?!)
 
-Also, see section "Changelog" in
-Documentation/process/maintainer-tip.rst
+Panels are fine as they do generally have a bus_format defined in display_info.
 
-Bottom line is: personal pronouns are ambiguous in text, especially with
-so many parties/companies/etc developing the kernel so let's avoid them
-please.
+[1] https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/vc4/vc4_dpi.c#L139
 
-In any case, it is getting there but this is not how you structure a
-patchset like this. The proper order is:
+> In any case, it would be nice to use the bus format exposed by the next
+> bridge in the chain, but that can be done in a subsequent step. The new
+> default seems reasonable.
 
-1st patch: Remove unused variables
+I'll add having a look at atomic_get_output_bus_fmts and
+atomic_get_input_fmts to my list of tasks again.
 
-2nd patch: Fix -Wframe-address warning and explain why
+  Dave
 
-3rd patch: Fix arch/x86/boot/compressed/acpi.c:23:1: warning: unused function "__efi_get_rsdp_addr" [-Wunused-function]
-
-Btw, I also get with -Wall
-
-In function ‘find_trampoline_placement’,
-    inlined from ‘paging_prepare’ at arch/x86/boot/compressed/pgtable_64.c:135:35:
-arch/x86/boot/compressed/pgtable_64.c:60:30: warning: array subscript 0 is outside array bounds of ‘short unsigned int[0]’ [-Warray-bounds]
-   60 |                 ebda_start = *(unsigned short *)0x40e << 4;
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~
-arch/x86/boot/compressed/pgtable_64.c:61:30: warning: array subscript 0 is outside array bounds of ‘short unsigned int[0]’ [-Warray-bounds]
-   61 |                 bios_start = *(unsigned short *)0x413 << 10;
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~
-In function ‘bios_get_rsdp_addr’,
-    inlined from ‘get_rsdp_addr’ at arch/x86/boot/compressed/acpi.c:163:8:
-arch/x86/boot/compressed/acpi.c:130:19: warning: array subscript 0 is outside array bounds of ‘u16[0]’ {aka ‘short unsigned int[]’} [-Warray-bounds]
-  130 |         address = *(u16 *)ACPI_EBDA_PTR_LOCATION;
-
-That should be a separate patch too.
-
-Nth patch(es): Fix more warnings after building at least
-
-	"allnoconfig" "defconfig" "allmodconfig" "allyesconfig"
-
-for both 32-bit and 64-bit. A bunch of randconfigs on a big machine
-would help a lot.
-
-N + kth patch: Add -std=gnu11
-
-X. Final patch: Add -Wall to compressed/Makefile.
-
-In that order so that no warnings are seen when doing random builds.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>
+> > As the main device to use DPI is the VGA666 or Adafruit Kippah,
+> > both of which use RGB666, change the default to being RGB666 instead
+> > of RGB888.
+> >
+> > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > ---
+> >  drivers/gpu/drm/vc4/vc4_dpi.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
+> > index ecbe4cd87036..fdae02760b6d 100644
+> > --- a/drivers/gpu/drm/vc4/vc4_dpi.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_dpi.c
+> > @@ -150,8 +150,8 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
+> >       }
+> >       drm_connector_list_iter_end(&conn_iter);
+> >
+> > -     /* Default to 24bit if no connector or format found. */
+> > -     dpi_c |= VC4_SET_FIELD(DPI_FORMAT_24BIT_888_RGB, DPI_FORMAT);
+> > +     /* Default to 18bit if no connector or format found. */
+> > +     dpi_c |= VC4_SET_FIELD(DPI_FORMAT_18BIT_666_RGB_1, DPI_FORMAT);
+> >
+> >       if (connector) {
+> >               if (connector->display_info.num_bus_formats) {
+> >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
