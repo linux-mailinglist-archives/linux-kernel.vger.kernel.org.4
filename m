@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC55601B57
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA5B601B58
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 23:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiJQVdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 17:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S230426AbiJQVdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 17:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiJQVdG (ORCPT
+        with ESMTP id S230196AbiJQVdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 17:33:06 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0217CB66;
-        Mon, 17 Oct 2022 14:33:02 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id m6so7546190qkm.4;
-        Mon, 17 Oct 2022 14:33:02 -0700 (PDT)
+        Mon, 17 Oct 2022 17:33:08 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9757CB60;
+        Mon, 17 Oct 2022 14:33:06 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bk15so20461124wrb.13;
+        Mon, 17 Oct 2022 14:33:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zsL7sE2NY9nd+Z7C5awnq6ymEQUvmX75a8CLY1tINwQ=;
-        b=PgCnWtz/NwW1XoM9JOUmaoo+DPu3mJV9uQIVpqFsx5zmy9L6s67Ik5HkOuUxsgZoT0
-         rlKUJL0BOZZcwSgJJfeazFzj/RW3m4PZPexzzEJ0YX8HgeY3nA4bUPMLzvdksdcwY47e
-         Ufd7B+9FwBwBJhXXgEziuVeaTkU68XCkb/IsaUht+UCeX7ToStClfZR1yNHaL5oT7s+T
-         ITFHNaNs4UXzyFM4urVsFK+S9+9fzWger9iDTFL6KE9up2SBT5rgUoGZZTfRGw72MoZB
-         /+ad0nLeC2k2xpdVDTqFF71hgV9gpHcS+JBp/+9HAtGsHS2Jb/kvOrr1zPMoJTMTMihp
-         sOew==
+        bh=Mrrqbi0ETnzpqhsWzfV/EevlRMo1cT5WVvO8a9vtxFI=;
+        b=UdHksNN5rbd+RRvD3BeLgx17CdEj+flAObUVYgo/sRpGqkAIUan5iaac3ySA8qkQkd
+         hx7QqP4GyoXDJhwSq3nVouYXs6WH+8+GTb+0iu6RVkOhL900KXB7x7y3mGx9tc3w2Cbt
+         daLkdaGHUZJo6LlVfb1DWX4A2IsthEaCLoc2LHEOzJIrcxVNXwqUC0+BWwPDjqluTxgP
+         g78+v+UbeomWaUKDZf/8J1WCBJKwbJUFE5bLuQJ4WdR0jVVIi4J5Mtsanij9uK5V8mFm
+         81nr5Won27d5y53ictdytiaZ+tJ0BWHwR8w9aA26c82fwwJ294zaE1C9DIXDqM/3av4V
+         8/WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zsL7sE2NY9nd+Z7C5awnq6ymEQUvmX75a8CLY1tINwQ=;
-        b=gprtj8EQmg2wOzeyXX33ZkQz/9sD3QX1MfqnvU+iHlnl1JtKh2jeGPb7U5U8ujMzRR
-         ltNYB/eXSFpp3PC2FdO8XI8jJIiM7re1dr1UDnsqQKLMvDIsSkmAPeU9Hkd6JvVaOfXC
-         VVEk63EfMBbEjWWlLQXaVPAs/8ZSlC7Miaam3EvanUztScUMJkF/3BKE3uA7w1e+z0So
-         USyWxkRUbYVA2wazWr3GWJEKVZ9wJmF/UiPSeXZ/X+rF8RV2tRfT5oFg7EaSPgARYq68
-         vf/0TvZhdqCFdiCj8olJCe3+ZLKKesPnwhnjcEE4rfZfWdFdcIed9CY0xf9H/8O4S4UB
-         p41g==
-X-Gm-Message-State: ACrzQf2wiO8BSxKg1qejvT9raoSnlz0XFDpckWAgKNTvU6DMJkVquDHY
-        pFXXPtUI4KzWkQ8C/8Pptg1cMoGorv4=
-X-Google-Smtp-Source: AMsMyM5k9qMb3dSiXR8L3wfh/wImObAYAmKPabyfCrxvV6k6rooh+oe/+RzHHtBalHFg8/HJPNf6cQ==
-X-Received: by 2002:a05:620a:2b92:b0:6ed:b30a:d564 with SMTP id dz18-20020a05620a2b9200b006edb30ad564mr9368693qkb.234.1666042380839;
-        Mon, 17 Oct 2022 14:33:00 -0700 (PDT)
-Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s7-20020a05620a254700b006ec59941acasm786335qko.11.2022.10.17.14.32.59
+        bh=Mrrqbi0ETnzpqhsWzfV/EevlRMo1cT5WVvO8a9vtxFI=;
+        b=mnBHvreezLu1JVEuQh4xOVXQR+T1jSawIS8tcPzPq6dFdtpiAYI/mxBXypZArPKxFx
+         CrUv8gWjVEFH2UokOBLeJOPl9ZVZBfbBlACahncQHRQksDqWbIyiQKq+prkYDUqkSqhQ
+         sSBUGBVU8CbHWoC8WRpjP89KB/JuKfoo3ZeIZmofp/hp44wwYEbs17UMJqDXqW2JgPxd
+         4RD4XXcgtB9gw57v5lr7gGvFWQAuhykSKmXZaGILUXjskvURBQobm59vgOBi2nEcrmr8
+         vNSCUudLDVzvRdv6d3wm0n5YpWVTF83GMRN/W8gf4ozzcPL/O1/qqSoaXtfTP0PEUMQM
+         hUVQ==
+X-Gm-Message-State: ACrzQf2421HoXUqRuJs1xlrFvxJr6LbO3HTMgsgEn5dFP/aGGmqRXRDj
+        9VggbuAgSbib0nri2HKzYmQ=
+X-Google-Smtp-Source: AMsMyM477UyaymfEn2BUTuCU3QmLWSbebTtZ9HUU9ZTvd0l6IBA7/FDwH3gmK40/MblMYKXehCNNOA==
+X-Received: by 2002:a5d:6745:0:b0:22f:ed4:65d7 with SMTP id l5-20020a5d6745000000b0022f0ed465d7mr7549035wrw.259.1666042384871;
+        Mon, 17 Oct 2022 14:33:04 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c1c1300b003c6c1686b10sm18151187wms.7.2022.10.17.14.33.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 14:33:00 -0700 (PDT)
-From:   Doug Berger <opendmb@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH net-next] net: bcmgenet: add RX_CLS_LOC_ANY support
-Date:   Mon, 17 Oct 2022 14:32:37 -0700
-Message-Id: <20221017213237.814861-1-opendmb@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Oct 2022 14:33:04 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Anton Altaparmakov <anton@tuxera.com>,
+        linux-ntfs-dev@lists.sourceforge.net
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fs/ntfs: remove redundant assignment to pointer m
+Date:   Mon, 17 Oct 2022 22:33:03 +0100
+Message-Id: <20221017213303.862794-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -73,79 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a matching flow spec exists its current location is as good
-as ANY. If not add the new flow spec at the first available
-location.
+The pointer m is being assigned a value that is never read, it
+is being re-assigned to a NULL later on. The assignment is
+redundant and can be removed.
 
-Signed-off-by: Doug Berger <opendmb@gmail.com>
+Cleans up clang scan build warning:
+fs/ntfs/file.c:194:3: warning: Value stored to 'm' is never
+read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- .../net/ethernet/broadcom/genet/bcmgenet.c    | 32 +++++++++++++++++--
- 1 file changed, 29 insertions(+), 3 deletions(-)
+ fs/ntfs/file.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 25c450606985..9b1e544547f7 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -1387,7 +1387,8 @@ static int bcmgenet_validate_flow(struct net_device *dev,
- 	struct ethtool_usrip4_spec *l4_mask;
- 	struct ethhdr *eth_mask;
- 
--	if (cmd->fs.location >= MAX_NUM_OF_FS_RULES) {
-+	if (cmd->fs.location >= MAX_NUM_OF_FS_RULES &&
-+	    cmd->fs.location != RX_CLS_LOC_ANY) {
- 		netdev_err(dev, "rxnfc: Invalid location (%d)\n",
- 			   cmd->fs.location);
- 		return -EINVAL;
-@@ -1452,6 +1453,7 @@ static int bcmgenet_insert_flow(struct net_device *dev,
- {
- 	struct bcmgenet_priv *priv = netdev_priv(dev);
- 	struct bcmgenet_rxnfc_rule *loc_rule;
-+	__u32 tmp;
- 	int err;
- 
- 	if (priv->hw_params->hfb_filter_size < 128) {
-@@ -1470,7 +1472,31 @@ static int bcmgenet_insert_flow(struct net_device *dev,
- 	if (err)
- 		return err;
- 
--	loc_rule = &priv->rxnfc_rules[cmd->fs.location];
-+	if (cmd->fs.location == RX_CLS_LOC_ANY) {
-+		list_for_each_entry(loc_rule, &priv->rxnfc_list, list) {
-+			tmp = loc_rule->fs.location;
-+			loc_rule->fs.location = cmd->fs.location;
-+			err = memcmp(&loc_rule->fs, &cmd->fs,
-+				     sizeof(struct ethtool_rx_flow_spec));
-+			loc_rule->fs.location = tmp;
-+			if (!err) {
-+				/* rule exists so return current location */
-+				cmd->fs.location = tmp;
-+				return 0;
-+			}
-+		}
-+		for (tmp = 0; tmp < MAX_NUM_OF_FS_RULES; tmp++) {
-+			loc_rule = &priv->rxnfc_rules[tmp];
-+			if (loc_rule->state == BCMGENET_RXNFC_STATE_UNUSED) {
-+				cmd->fs.location = tmp;
-+				break;
-+			}
-+		}
-+		if (tmp == MAX_NUM_OF_FS_RULES)
-+			return -ENOSPC;
-+	} else {
-+		loc_rule = &priv->rxnfc_rules[cmd->fs.location];
-+	}
- 	if (loc_rule->state == BCMGENET_RXNFC_STATE_ENABLED)
- 		bcmgenet_hfb_disable_filter(priv, cmd->fs.location);
- 	if (loc_rule->state != BCMGENET_RXNFC_STATE_UNUSED) {
-@@ -1583,7 +1609,7 @@ static int bcmgenet_get_rxnfc(struct net_device *dev, struct ethtool_rxnfc *cmd,
- 		break;
- 	case ETHTOOL_GRXCLSRLCNT:
- 		cmd->rule_cnt = bcmgenet_get_num_flows(priv);
--		cmd->data = MAX_NUM_OF_FS_RULES;
-+		cmd->data = MAX_NUM_OF_FS_RULES | RX_CLS_LOC_SPECIAL;
- 		break;
- 	case ETHTOOL_GRXCLSRULE:
- 		err = bcmgenet_get_flow(dev, cmd, cmd->fs.location);
+diff --git a/fs/ntfs/file.c b/fs/ntfs/file.c
+index c481b14e4fd9..56d08374739a 100644
+--- a/fs/ntfs/file.c
++++ b/fs/ntfs/file.c
+@@ -191,7 +191,6 @@ static int ntfs_attr_extend_initialized(ntfs_inode *ni, const s64 new_init_size)
+ 				err = -EIO;
+ 			goto err_out;
+ 		}
+-		m = ctx->mrec;
+ 		a = ctx->attr;
+ 		BUG_ON(!a->non_resident);
+ 		BUG_ON(old_i_size != (loff_t)
 -- 
-2.25.1
+2.37.3
 
