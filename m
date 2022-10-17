@@ -2,82 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431EA60162B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A1060162D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Oct 2022 20:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiJQSVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 14:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S229921AbiJQSWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 14:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiJQSU7 (ORCPT
+        with ESMTP id S229594AbiJQSWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 14:20:59 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43C06D9E9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:20:57 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id t25so7188888qkm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:20:57 -0700 (PDT)
+        Mon, 17 Oct 2022 14:22:44 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F272263852
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:22:43 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d24so11539430pls.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 11:22:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ASJnvbXdmbENnmELYX21Km/XI3pCAL3HYWqBCGT72Y=;
-        b=py5hnISP+vNcRCvrzlR6VM021OOidZOopS8YOp2I/MYSkjn/IXbXq0MP760tCiZIeq
-         vhIF88sffbaI+QdDO9hXnsYiLNdQxr6FM26NE9RI9fTeivzUL6c9JzGZRWa9vsihF9Yw
-         83YT6UGOE+sWnm+cGaWoaY+t4C1LG7cAhD89p0aMTwfru10b9bUWNUqzrvPIq2zfXtve
-         1Rsu2RgKer9QZavQfj+9tBWtkiwI5XzORJ+z9ZIOrfb/KrVyuHUFmTpfqpw0i57nDRhl
-         7xDiqRzZ1M9LmFgZltEn9XDDX/t8sJvwZ/9FS/cIXqw5nbJe4M4B8Zm55xIwBJ8wb1i3
-         n4Sw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q6K0fLEBttx8lrk4TTwV2hs18H4QMB+rkLX1+fm4Wis=;
+        b=nxqUGdizsCANm/EpHpz5hqb4AimuiKiL4vxSxSv4+4wYsCrg3ZX2r+R0nalfLws+lo
+         hkpfcpbWLzwK3FjxPPyjYWRoo2eJlZVFqFfN1ttObKYlxV3X/0770D3G8e0NtmrnyM2h
+         NRRQp2E9X5Q+TL0/EC7JOM6GGtX+WIi/eFLLU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ASJnvbXdmbENnmELYX21Km/XI3pCAL3HYWqBCGT72Y=;
-        b=1nZM1rvnT8fiSfpXC3Vkj08XYl2IeeLnP+we+0UCRz5D68wP/NCbzNvxohWQsspuZP
-         2K99JWoPlasd09uQ69uVbjzohosAUhI8ZIdNG+jmu01Ty+SH5uMVL8wEoypVN5Ao+0sZ
-         yW9LeOvmiE6mAHaviKiXMDaN8iHSqLUB9fXtWLjhd878ko/uQi8k9Z3OLMgsDc8Y3BHL
-         5becaO9n9kNsbvIH5PVcozr4XmZiwj2/vHryMbyHazbOl68lAlg7DbCc/px1kvJnMISJ
-         Pynl0SU5rk+NOk7P9rjqHQvfJiEnrWwHRr+GYiLK5qIBLOI5DMkorl89x4rHK810TIoj
-         zJVw==
-X-Gm-Message-State: ACrzQf0X/6vDJWBUB8wA0AC4imbbzmmBmV5oDVTIroW4VAo81tjffH9n
-        sSGshK9tK71+NAnoImN9fgYktQ==
-X-Google-Smtp-Source: AMsMyM6J6Dor4LjaeQvdKkX1FJT68wOSGUH5+/u7d4t1++RTN5ctc8WvL//DY4qpdoDWEqpjcWItaQ==
-X-Received: by 2002:a05:620a:4114:b0:6ee:dfb7:1584 with SMTP id j20-20020a05620a411400b006eedfb71584mr5776200qko.262.1666030856659;
-        Mon, 17 Oct 2022 11:20:56 -0700 (PDT)
-Received: from localhost (cpe-174-109-170-245.nc.res.rr.com. [174.109.170.245])
-        by smtp.gmail.com with ESMTPSA id cf17-20020a05622a401100b0039c7b9522ecsm336321qtb.35.2022.10.17.11.20.56
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q6K0fLEBttx8lrk4TTwV2hs18H4QMB+rkLX1+fm4Wis=;
+        b=oqhKW/a08V2DnU/RERZyyU+nTQspDIyWooEjjcv/zp2gGYEBfClMnpg1Bms8d3nq+m
+         EpN4J9LAaXwukTd9HbVdd6R8p8RnGTKwtu4xt1VFmiZeNLecTj47uUsp0tz9XcApcUJE
+         jaLY4dqROswxMl4n86pE+XDetPib8CnKPiZ1/gQyuPR9xqQRzfeAjKWKToeeVznA/RTY
+         uPyxa6byc3LRb3svUfspAEe0BHqDdxSSo3hwkqoc5OasYp6Hd86mDIs10YSM6RcUwROQ
+         PYKzrmWH6myCj0z4z6JELhYfMMP1BZyMM+UsIPExL9GZ5DicEvKmr8ADj2S8+0xfc3Oo
+         LdsQ==
+X-Gm-Message-State: ACrzQf2pgRssImmzgPsPv2EMOHM/qicGu0kts1MsHn3MRT9/HAqkTeK3
+        aAzs0pPRVFC60hLhOWsk9RtObA==
+X-Google-Smtp-Source: AMsMyM7GLm+6wFeWIABSOhA4Ga3nzDh8hX5DBawB8jbrqm0QCqI77NSN0GrmXH8LNM2NUdHzY7+V7A==
+X-Received: by 2002:a17:903:2342:b0:181:bc30:b02f with SMTP id c2-20020a170903234200b00181bc30b02fmr12928368plh.30.1666030963439;
+        Mon, 17 Oct 2022 11:22:43 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:9d:2:f043:fb90:4576:538b])
+        by smtp.gmail.com with ESMTPSA id n18-20020a170903111200b001782a0d3eeasm7014597plh.115.2022.10.17.11.22.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:20:56 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:20:55 -0400
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] block: Correct comment for scale_cookie_change
-Message-ID: <Y02dBx/nNwMLUxXm@localhost.localdomain>
-References: <20220929074055.30080-1-shikemeng@huawei.com>
- <20220929074055.30080-3-shikemeng@huawei.com>
+        Mon, 17 Oct 2022 11:22:42 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     stable@vger.kernel.org
+Cc:     Sibi Sankar <sibis@codeaurora.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Evan Green <evgreen@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alex Elder <elder@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sc7180-trogdor: Fixup modem memory region
+Date:   Mon, 17 Oct 2022 11:22:41 -0700
+Message-Id: <20221017182241.1086545-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929074055.30080-3-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:40:54PM +0800, Kemeng Shi wrote:
-> Default queue depth of iolatency_grp is unlimited, so we scale down
-> quickly(once by half) in scale_cookie_change. Remove the "subtract
-> 1/16th" part which is not the truth.
->
+From: Sibi Sankar <sibis@codeaurora.org>
 
-Ok sure, but at least update the comment to indicate what we actually do when
-scaling down.  Thanks,
+commit ef9a5d188d663753e73a3c8e8910ceab8e9305c4 upstream.
 
-Josef 
+The modem firmware memory requirements vary between 32M/140M on
+no-lte/lte skus respectively, so fixup the modem memory region
+to reflect the requirements.
+
+Reviewed-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+Link: https://lore.kernel.org/r/1602786476-27833-1-git-send-email-sibis@codeaurora.org
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Alex Elder <elder@linaro.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+This fixes boot of the modem on trogdor boards with the DTS from 5.10.y
+stable tree. Without this patch I run into memory assignment errors and
+then the modem fails to boot.
+
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi | 4 ++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi         | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
+index 44956e3165a1..469aad4e5948 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
+@@ -9,6 +9,10 @@ &ap_sar_sensor {
+ 	label = "proximity-wifi-lte";
+ };
+ 
++&mpss_mem {
++	reg = <0x0 0x86000000 0x0 0x8c00000>;
++};
++
+ &remoteproc_mpss {
+ 	firmware-name = "qcom/sc7180-trogdor/modem/mba.mbn",
+ 			"qcom/sc7180-trogdor/modem/qdsp6sw.mbn";
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index 5b2a616c6257..cb2c47f13a8a 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -39,7 +39,7 @@ atf_mem: memory@80b00000 {
+ 		};
+ 
+ 		mpss_mem: memory@86000000 {
+-			reg = <0x0 0x86000000 0x0 0x8c00000>;
++			reg = <0x0 0x86000000 0x0 0x2000000>;
+ 			no-map;
+ 		};
+ 
+
+base-commit: 014862eecf03f58066a957027dde73cbecdf4395
+-- 
+https://chromeos.dev
+
