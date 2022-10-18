@@ -2,179 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C961760282C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A283F60282F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJRJUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S229670AbiJRJVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiJRJUc (ORCPT
+        with ESMTP id S230397AbiJRJUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:20:32 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F608F277;
-        Tue, 18 Oct 2022 02:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1666084821; bh=N48MFgDUmr1tfKHznoAthvRtR1Wpy0hSpJqTj7oKYC4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cHV6qrCjD47k3jGPjUQF3lwihop1RDaw3yjdG73m7BjSD1b/7jyWqLqeN+Uyk642T
-         VvEcixZUqLhrENpMZkopSZmIH+3rzqlov7m3aEUZuBieiNorHcibY7orD6PjU5mrAB
-         wuldpVWm+HQ77bl4gfDeA0Z+scSMeI8G3x4eFq+M=
-Received: from [100.100.57.122] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 69A5760087;
-        Tue, 18 Oct 2022 17:20:20 +0800 (CST)
-Message-ID: <27ffa400-b947-7c83-0e79-c8eb9f96e12e@xen0n.name>
-Date:   Tue, 18 Oct 2022 17:20:19 +0800
+        Tue, 18 Oct 2022 05:20:49 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BF7AA37C;
+        Tue, 18 Oct 2022 02:20:39 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id b5so12800015pgb.6;
+        Tue, 18 Oct 2022 02:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3m5oTxItBn/6lCKglYoGymxp7X2N7jqkr135BYmrYCw=;
+        b=IpfdrNyZsDPBXc/FGZOSy1FhoPRGUDzoLenXgqDEkuDqCTU1oGCZzpTh0AvqTQDtKm
+         Uj8RS//OjPHTM//LTuRe3uhckUeU5Rbrzk1wggAXvJ9DY+zs80hh5r90s7cNb9gKCCxP
+         Pt9q6a/2BRO3BBjVyJzcMBmYX/eAtPQhAN2MBXPZCW8Dx1Nyp1nf0ly9Z11rhNqEo6vz
+         ydH9iCGVh9A9sydT3fva9eLdOWv3hqvDIYi/WaYe04E/UvUBFHRyyLDBizmZlojJTLRv
+         VyjUtc9pGgzBtVFN5XMQGbW6NElGke0PxF8PhkdxFfUnl54I+bU/VS+G2Q7VR74MR992
+         OO7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3m5oTxItBn/6lCKglYoGymxp7X2N7jqkr135BYmrYCw=;
+        b=jQNjzWijHQ3M00ipVi35EUIlUDjRfwQQP336T68h3gmE7IxVQUg6HNbLEDUqlmzpXW
+         78jedKGHOPUPZqOtSNQGGt8ltvbV02mKaHYxjWAk4bHhPICvafBLfw6RtIPi+JM83LZ1
+         t5AFOV9k2yMwzkQ7wEQBHpxf4MvXPr0/AqcZ2UzgW3Dqm0fcBgfrijxnTKIm77ftFbiU
+         pY9hK2gGTgfonI2G57aj9XsoKReL8yPchE2n4Rl8GTBGh9QVdavEq12hWQ5t69rzeO7x
+         9LLJ2vsgQvEGH70EETDzjrSvID50ddIr5ZqAigxKWF3vNB8gQUdHpPPs3eRRAsvIKiZd
+         olIQ==
+X-Gm-Message-State: ACrzQf2t0bQxdXdVkQhnzU/xLcGhdgeAvNt/avvW7sxUpsM6b3b4jxzg
+        bXqr0Wg+3GAFCyway8TCL+wpTj539e63F9Xe
+X-Google-Smtp-Source: AMsMyM5oz9A+uCOmRVQ78bVe8vnFMBJxmzhuIz73JNHTMTfO8AOEmmTG03uabKHRAzJnR0X1Go+snQ==
+X-Received: by 2002:a63:4750:0:b0:43c:dac:9e4b with SMTP id w16-20020a634750000000b0043c0dac9e4bmr1888341pgk.300.1666084839449;
+        Tue, 18 Oct 2022 02:20:39 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170902ed9300b00173411a4385sm8182912plj.43.2022.10.18.02.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 02:20:39 -0700 (PDT)
+From:   zys.zljxml@gmail.com
+To:     njavali@marvell.com
+Cc:     GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yushan Zhou <katrinzhou@tencent.com>
+Subject: [PATCH] scsi: qla2xxx: simplify conditional
+Date:   Tue, 18 Oct 2022 17:20:27 +0800
+Message-Id: <20221018092027.264641-1-zys.zljxml@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0)
- Gecko/20100101 Thunderbird/107.0a1
-Subject: Re: [PATCH] mm: remove kern_addr_valid() completely
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-References: <20221018074014.185687-1-wangkefeng.wang@huawei.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20221018074014.185687-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/18 15:40, Kefeng Wang wrote:
-> Most architectures(except arm64/x86/sparc) simply return 1 for
+From: Yushan Zhou <katrinzhou@tencent.com>
 
-one space before the opening parens
+Fix the following coccicheck warning:
+./drivers/scsi/qla2xxx/qla_target.c:1031:20-22: WARNING !A || A && B is equivalent to !A || B
 
-> kern_addr_valid(), which is only used in read_kcore(), and it
-> calls copy_from_kernel_nofault() which could check whether the
-> address is a valid kernel address, so no need kern_addr_valid(),
+Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+---
+ drivers/scsi/qla2xxx/qla_target.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-minor grammatical nit:
-
-"... which already checks whether the address is a valid kernel address. 
-So kern_addr_valid is unnecessary, let's remove it."
-
-> let's remove unneeded kern_addr_valid() completely.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->   arch/alpha/include/asm/pgtable.h          |  2 -
->   arch/arc/include/asm/pgtable-bits-arcv2.h |  2 -
->   arch/arm/include/asm/pgtable-nommu.h      |  2 -
->   arch/arm/include/asm/pgtable.h            |  4 --
->   arch/arm64/include/asm/pgtable.h          |  2 -
->   arch/arm64/mm/mmu.c                       | 47 -----------------------
->   arch/arm64/mm/pageattr.c                  |  3 +-
->   arch/csky/include/asm/pgtable.h           |  3 --
->   arch/hexagon/include/asm/page.h           |  7 ----
->   arch/ia64/include/asm/pgtable.h           | 16 --------
->   arch/loongarch/include/asm/pgtable.h      |  2 -
->   arch/m68k/include/asm/pgtable_mm.h        |  2 -
->   arch/m68k/include/asm/pgtable_no.h        |  1 -
->   arch/microblaze/include/asm/pgtable.h     |  3 --
->   arch/mips/include/asm/pgtable.h           |  2 -
->   arch/nios2/include/asm/pgtable.h          |  2 -
->   arch/openrisc/include/asm/pgtable.h       |  2 -
->   arch/parisc/include/asm/pgtable.h         | 15 --------
->   arch/powerpc/include/asm/pgtable.h        |  7 ----
->   arch/riscv/include/asm/pgtable.h          |  2 -
->   arch/s390/include/asm/pgtable.h           |  2 -
->   arch/sh/include/asm/pgtable.h             |  2 -
->   arch/sparc/include/asm/pgtable_32.h       |  6 ---
->   arch/sparc/mm/init_32.c                   |  3 +-
->   arch/sparc/mm/init_64.c                   |  1 -
->   arch/um/include/asm/pgtable.h             |  2 -
->   arch/x86/include/asm/pgtable_32.h         |  9 -----
->   arch/x86/include/asm/pgtable_64.h         |  1 -
->   arch/x86/mm/init_64.c                     | 41 --------------------
->   arch/xtensa/include/asm/pgtable.h         |  2 -
->   fs/proc/kcore.c                           | 26 +++++--------
->   31 files changed, 11 insertions(+), 210 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> index 946704bee599..fc70b7041b76 100644
-> --- a/arch/loongarch/include/asm/pgtable.h
-> +++ b/arch/loongarch/include/asm/pgtable.h
-> @@ -421,8 +421,6 @@ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
->   	__update_tlb(vma, address, (pte_t *)pmdp);
->   }
->   
-> -#define kern_addr_valid(addr)	(1)
-> -
->   static inline unsigned long pmd_pfn(pmd_t pmd)
->   {
->   	return (pmd_val(pmd) & _PFN_MASK) >> _PFN_SHIFT;
-
-Acked-by: WANG Xuerui <git@xen0n.name> # loongarch
-
-Thanks!
-
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index bb754a950802..4ee89ef2ab90 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -1028,8 +1028,7 @@ void qlt_free_session_done(struct work_struct *work)
+ 		}
+ 
+ 		if (ha->flags.edif_enabled &&
+-		    (!own || (own &&
+-			      own->iocb.u.isp24.status_subcode == ELS_PLOGI))) {
++		    (!own || (own->iocb.u.isp24.status_subcode == ELS_PLOGI))) {
+ 			sess->edif.authok = 0;
+ 			if (!ha->flags.host_shutting_down) {
+ 				ql_dbg(ql_dbg_edif, vha, 0x911e,
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+2.27.0
 
