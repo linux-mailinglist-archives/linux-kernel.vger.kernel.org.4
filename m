@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FC760335D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED94E603367
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiJRTbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 15:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S229623AbiJRTfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 15:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiJRTb3 (ORCPT
+        with ESMTP id S229657AbiJRTfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 15:31:29 -0400
-Received: from omta39.uswest2.a.cloudfilter.net (omta39.uswest2.a.cloudfilter.net [35.89.44.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86396D869
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 12:31:27 -0700 (PDT)
-Received: from eig-obgw-6013a.ext.cloudfilter.net ([10.0.30.177])
-        by cmsmtp with ESMTP
-        id kkPZolcOZikuaksJDoGccZ; Tue, 18 Oct 2022 19:31:27 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id ksJ9oo4pfs4voksJAo8oC0; Tue, 18 Oct 2022 19:31:24 +0000
-X-Authority-Analysis: v=2.4 cv=Cf4bWZnl c=1 sm=1 tr=0 ts=634eff0c
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=VLn1U4HDsV/kFU42pi1uTw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10
- a=wYkD_t78qR0A:10 a=cak1eodxRRWiubympP0A:9 a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B8sItrIzPT1FhGdQ0ENveK914e997Na/QHZvsstLhtM=; b=EtFXKgE3/C7QhFoXgAIqcn+mHq
-        n0jpJ1yc89SZFk3QRIYWQbQFlkZdKqHQVNmC25NtWS58DqjR9hP8X7VDgpmbZ5z9sPBo78pcP7MAk
-        lTqwTU8S2sLegbh6wRASDikI9wq5d5HT/2cXKFlzchDXxggEfq6ayJ5Ilamr1vBho8EU0ef/ogJKM
-        YBMxKWwKUop1rMOwjLtEFiD+UVGKYS2AwP+8ex28C0DBva22ITFJsYwS3LH59OxtuaMrUIgVfpCrx
-        iWHsqSFZKD3WenFiqyFkTrKo3lMyMEXfdNeKKlDBWZrd9FWi4zDzBNtc+T6o3Kz1deV1SN+Xh7ImB
-        mfQVRQ2Q==;
-Received: from [187.184.159.238] (port=8860 helo=[192.168.0.24])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1oksJ4-0006S8-1O;
-        Tue, 18 Oct 2022 14:31:18 -0500
-Message-ID: <71935a08-e9d3-5f9e-5b9a-7847bd38b756@embeddedor.com>
-Date:   Tue, 18 Oct 2022 14:31:12 -0500
+        Tue, 18 Oct 2022 15:35:10 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED35727912;
+        Tue, 18 Oct 2022 12:35:08 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g27so22019667edf.11;
+        Tue, 18 Oct 2022 12:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MEQQitYjZbXJANs1RoNeTAqxiMmroK05libS5bTqvrM=;
+        b=TJzasUE+7XDdqHpODudt3fj6P+0tKD8DDMWv0VxudtiYJJ2BkfW3a6bW3SaS1pMmm/
+         yTiJE1PsdoxcsYWHPdmWiHt6lBejV/ngHqWbk2rDW6msyzxEorIbdCG/jW4EuYc4cSZr
+         uQuobg8AR2IdelBxzmvz813y9TsH2OCmNmDdtpc61MCdY+CPp1w3e55qsXDbHhE5Ey3w
+         Hqy0Jy4wyMUjure6VzAxBREpMIn1q2g+dbPk2d936iAk+Nu+Gkr/S74Oc9n5KmzQFfFy
+         5025/ZO/MB2nbLdwFtKPt8TXNBAtZU4A5w61PItwUnTRY7DucFccuM2OU/VtMji9cp8D
+         WO4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MEQQitYjZbXJANs1RoNeTAqxiMmroK05libS5bTqvrM=;
+        b=Z6s/9ypnjIkNHCjDuJKE5u+XoCBtGrdqRKucXq13g6quGGVl2fxH6P7sePu8jWb6aC
+         qcq/axjE7+gSdr0ZjCoOoQ9Kr7olePmsRcgt3ikWjihpZ6Cnb7b+nayokDEm/4sh7edL
+         QHSWDIkmEWB+UmKMsTbhVuH3/LsfI7EhKPoB7P+HFrF8yAcBqu/iIzQyyplReD1wMIuM
+         4kmB/nb8qYu9K+o1AbjLyt7sy9yeVEx9Zos0jdoOBgBlNL0WVWjRi+bdmKYwt6LDPRZZ
+         Cb5x+PgHtTs8ViTNCn3NjaFBdwuLapD+HWQbWKNQD14aSi/aIJlGuOLwmsanw915HXl6
+         vltQ==
+X-Gm-Message-State: ACrzQf2Hv1/CvR0Cm5d4QqMnb1fgw9sGxP5VBBDpLWg9LVd/9qEYslGY
+        1f3EY5N36Gh3CH1BVy9fimAVM+eqkuI=
+X-Google-Smtp-Source: AMsMyM7h+SUBLedOYfsL7w7vWlAu8tjqt8DlKZke2cYAMbdZAWvCaOPqZVV9lSh+zp5K3iqPTBfEQQ==
+X-Received: by 2002:aa7:d7c5:0:b0:459:fad8:fd2 with SMTP id e5-20020aa7d7c5000000b00459fad80fd2mr4117207eds.336.1666121707476;
+        Tue, 18 Oct 2022 12:35:07 -0700 (PDT)
+Received: from [192.168.8.100] (94.197.72.2.threembb.co.uk. [94.197.72.2])
+        by smtp.gmail.com with ESMTPSA id fd13-20020a056402388d00b0045b3853c4b7sm9309479edb.51.2022.10.18.12.35.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 12:35:07 -0700 (PDT)
+Message-ID: <9c92c1fa-1a67-1fb1-0cc6-c65c708db01e@gmail.com>
+Date:   Tue, 18 Oct 2022 20:33:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/6][next] cfg80211: Avoid clashing function prototypes
+ Thunderbird/102.3.1
+Subject: Re: [RFC for-next 0/4] enable pcpu bio caching for IRQ I/O
+To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <cover.1666114003.git.asml.silence@gmail.com>
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <cover.1666038048.git.gustavoars@kernel.org>
- <291de76bc7cd5c21dc2f2471382ab0caaf625b22.1666038048.git.gustavoars@kernel.org>
- <202210171939.61FFBE79A7@keescook>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <202210171939.61FFBE79A7@keescook>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <cover.1666114003.git.asml.silence@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.184.159.238
-X-Source-L: No
-X-Exim-ID: 1oksJ4-0006S8-1O
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.24]) [187.184.159.238]:8860
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfM4zz6xkGgNjfN9B7ekTC89O/MxVnoC4/GKfCERw3s8cIMwfwJt2Sz5TSdoQn5ofBobSPTH3U5Em3ogwQCGA17tK+jlkxCWZktzzZV5bBeD/CkUCJKUp
- HKLR0XOAfk6p5UQH4YNmAudqzQ5oFMNh/Eh/gzEW1FGySKUT3RDfzpeZraJbRoAM2pZNv61CkQcrxTNeoIUeNbohtT3FEEe65TVX8DD1/QQZZHz6KH+mIzmc
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/18/22 19:47, Pavel Begunkov wrote:
+> This series implements bio pcpu caching for normal / IRQ-driven I/O
+> extending REQ_ALLOC_CACHE currently limited to iopoll. The allocation side
+> still only works from non-irq context, which is the reason it's not enabled
+> by default, but turning it on for other users (e.g. filesystems) is
+> as a matter of passing a flag.
+
+Ooops, wrong version, will resend
 
 
-On 10/17/22 21:41, Kees Cook wrote:
-
->>   
->>   static const iw_handler	orinoco_handler[] = {
->>   	IW_HANDLER(SIOCSIWCOMMIT,	orinoco_ioctl_commit),
->> -	IW_HANDLER(SIOCGIWNAME,		(iw_handler)cfg80211_wext_giwname),
->> +	IW_HANDLER(SIOCGIWNAME,		cfg80211_wext_giwname),
+> t/io_uring with an Optane SSD setup showed +7% for batches of 32 requests
+> and +4.3% for batches of 8.
 > 
-> This hunk should be in the orinoco patch, I think?
-
-I just didn't want to have this huge patch touching multiple
-different files. That's why I decided to split it up into three
-separate patches.
-
-But yeah; now it seems like a good idea to merge patches 1 to 3
-into just a single patch.
-
+> IRQ, 128/32/32, cache off
+> IOPS=59.08M, BW=28.84GiB/s, IOS/call=31/31
+> IOPS=59.30M, BW=28.96GiB/s, IOS/call=32/32
+> IOPS=59.97M, BW=29.28GiB/s, IOS/call=31/31
+> IOPS=59.92M, BW=29.26GiB/s, IOS/call=32/32
+> IOPS=59.81M, BW=29.20GiB/s, IOS/call=32/31
 > 
+> IRQ, 128/32/32, cache on
+> IOPS=64.05M, BW=31.27GiB/s, IOS/call=32/31
+> IOPS=64.22M, BW=31.36GiB/s, IOS/call=32/32
+> IOPS=64.04M, BW=31.27GiB/s, IOS/call=31/31
+> IOPS=63.16M, BW=30.84GiB/s, IOS/call=32/32
 > 
->> [...]
->> +	[IW_IOCTL_IDX(SIOCGIWRETRY)]    = cfg80211_wext_giwretry,
+> IRQ, 32/8/8, cache off
+> IOPS=50.60M, BW=24.71GiB/s, IOS/call=7/8
+> IOPS=50.22M, BW=24.52GiB/s, IOS/call=8/7
+> IOPS=49.54M, BW=24.19GiB/s, IOS/call=8/8
+> IOPS=50.07M, BW=24.45GiB/s, IOS/call=7/7
+> IOPS=50.46M, BW=24.64GiB/s, IOS/call=8/8
 > 
-> The common practice seems to be to use IW_HANDLER instead of open-coding
-> it like this.
+> IRQ, 32/8/8, cache on
+> IOPS=51.39M, BW=25.09GiB/s, IOS/call=8/7
+> IOPS=52.52M, BW=25.64GiB/s, IOS/call=7/8
+> IOPS=52.57M, BW=25.67GiB/s, IOS/call=8/8
+> IOPS=52.58M, BW=25.67GiB/s, IOS/call=8/7
+> IOPS=52.61M, BW=25.69GiB/s, IOS/call=8/8
 > 
-> 	IW_HANDLER(SIOCGIWRETRY,	cfg80211_wext_giwretry),
+> The main part is in patch 3. Would be great to take patch 1 separately
+> for 6.1 for extra safety.
+> 
+> Pavel Begunkov (4):
+>    bio: safeguard REQ_ALLOC_CACHE bio put
+>    bio: split pcpu cache part of bio_put into a helper
+>    block/bio: add pcpu caching for non-polling bio_put
+>    io_uring/rw: enable bio caches for IRQ rw
+> 
+>   block/bio.c   | 92 +++++++++++++++++++++++++++++++++++++++------------
+>   io_uring/rw.c |  3 +-
+>   2 files changed, 73 insertions(+), 22 deletions(-)
+> 
 
-Yeah; I forget this after reverting Sami's changes:
-
-32fc4a9ad56f ("cfg80211: fix callback type mismatches in wext-compat")
-
-I'll fix it up. :)
-
-Thanks for the feedback!
---
-Gustavo
+-- 
+Pavel Begunkov
