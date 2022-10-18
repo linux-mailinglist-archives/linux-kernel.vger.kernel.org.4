@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8B66036B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261D06036B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiJRXhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 19:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S229720AbiJRXjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 19:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJRXhC (ORCPT
+        with ESMTP id S229520AbiJRXjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 19:37:02 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB92A3F58
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:37:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VSXenhN_1666136216;
-Received: from B-P7TQMD6M-0146.lan(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VSXenhN_1666136216)
-          by smtp.aliyun-inc.com;
-          Wed, 19 Oct 2022 07:36:58 +0800
-Date:   Wed, 19 Oct 2022 07:36:55 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, ira.weiny@intel.com
-Subject: Re: [PATCH v2] erofs: use kmap_local_page() only for erofs_bread()
-Message-ID: <Y084l0m88JGOqGRN@B-P7TQMD6M-0146.lan>
-References: <20221018105313.4940-1-hsiangkao@linux.alibaba.com>
- <9108233.CDJkKcVGEf@mypc>
- <Y08asdeoz5yOAefN@B-P7TQMD6M-0146.lan>
- <2019477.yKVeVyVuyW@mypc>
+        Tue, 18 Oct 2022 19:39:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D7C8209
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:38:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D90E2B8218A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A61C433C1;
+        Tue, 18 Oct 2022 23:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666136336;
+        bh=esm08ZulWwZ80WMHJ6WXGV+D01NZx6TnxbzZ8V0xbFQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RU4sxfZU6VWLNJWMi2463MZILGF+3y9ghSy3+WCddc4NvggJshJFs5LIaZdNgu74K
+         Tvfv4JuOtLZnRdoLSA6QtMpY4skIWOQTNttItNhhTxlzJ8vjOW7yv5D59CJjyKhmME
+         M4lzxopDiWwE5QHD+hRH7HPk8EdimkM7lva1sOC5WukLc/FMFqbP2ATaZYZqQ81GJ3
+         2I8pf5DwEgSY4rXFH6OivXIg1L1KhwYRE8Tf45xCDK2+URu0DulDZIbsn9vOs7iRyf
+         cUDoEgy8jG1we5Trw0FOW+FKcFpB0qJAf8S0/8fCaMp9tdKx1kdWZoge052puqj+Sb
+         z8a4u5xOL9uYQ==
+Date:   Tue, 18 Oct 2022 16:38:54 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <20221018233854.qj3vrdxsnc6ds7qs@treble>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2019477.yKVeVyVuyW@mypc>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 01:21:27AM +0200, Fabio M. De Francesco wrote:
-> On Tuesday, October 18, 2022 11:29:21 PM CEST Gao Xiang wrote:
+On Tue, Oct 18, 2022 at 03:35:50PM +0200, Peter Zijlstra wrote:
+> 
+> Implement an alternative CFI scheme that merges both the fine-grained
+> nature of kCFI but also takes full advantage of the coarse grained
+> hardware CFI as provided by IBT.
+> 
+> To contrast:
+> 
+>   kCFI is a pure software CFI scheme and relies on being able to read
+> text -- specifically the instruction *before* the target symbol, and
+> does the hash validation *before* doing the call (otherwise control
+> flow is compromised already).
+> 
+>   FineIBT is a software and hardware hybrid scheme; by ensuring every
+> branch target starts with a hash validation it is possible to place
+> the hash validation after the branch. This has several advantages:
+> 
+>    o the (hash) load is avoided; no memop; no RX requirement.
+> 
+>    o IBT WAIT-FOR-ENDBR state is a speculation stop; by placing
+>      the hash validation in the immediate instruction after
+>      the branch target there is a minimal speculation window
+>      and the whole is a viable defence against SpectreBHB.
+> 
+> Obviously this patch relies on kCFI (upstream), but additionally it also
+> relies on the padding from the call-depth-tracking patches
+> (tip/x86/core). It uses this padding to place the hash-validation while
+> the call-sites are re-written to modify the indirect target to be 16
+> bytes in front of the original target, thus hitting this new preamble.
 
-...
+Can the objtool changes be moved to a separate patch?
 
-> 
-> > One of what I need to care is nested kmap() usage,
-> > some unmap/remap order cannot be simply converted to kmap_local()
-> 
-> Correct about nesting. If we map A and then B, we must unmap B and then A.
-> 
-> However, as you seem to convey, not always unmappings in right order (stack 
-> based) is possible, sometimes because very long functions have many loop's 
-> breaks and many goto exit labels.
-> 
-> > but I think
-> > it's not the case for erofs_bread().  Actually EROFS has one of such nested
-> > kmap() usage, but I don't really care its performance on HIGHMEM platforms,
-> > so I think kmap() is still somewhat useful compared to kmap_local() from 
-> this
-> > point of view],
-> 
-> In Btrfs I solved (thanks to David S.' advice) by mapping only one of two 
-> pages, only the one coming from the page cache. 
-> 
-> The other page didn't need the use of kmap_local_page() because it was 
-> allocated in the filesystem with "alloc_page(GFP_NOFS)". GFP_NOFS won't ever 
-> allocate from ZONE_HIGHMEM, therefore a direct page_address() could avoid the 
-> mapping and the nesting issues.
-> 
-> Did you check if you may solve the same way? 
+The RFC was 11 patches, is it now much smaller because of the new
+dependencies?  The RFC had some eBPF changes and a test module, are
+those no longer needed?
 
-That is not simple.  Currently we have compressed pages and decompressed
-pages (page cache or others), and they can be unmapped when either data
-is all consumed, so compressed pages can be unmapped first, or
-decompressed pages can be unmapped first.  That quite depends on which
-pages goes first.
-
-I think such usage is a quite common pattern for decoder or encoder,
-you could take a look at z_erofs_lzma_decompress() in
-fs/erofs/decompressor_lzma.c.  So kmap() is still useful for such cases
-since I don't really care the HIGHMEM performance but correctness, but
-other alternative could churn/complex the map/unmap/remap pattern.
-
-Thanks,
-Gao Xiang
-
-> 
-> A little group of people are working to remove all kmap() and kmap_atomic() we 
-> meet across the whole kernel. I have not yet encountered conversions which 
-> cannot be made. Sometimes we may refactor, if what I said above cannot apply.
-> 
-> > but in order to make it all work properly, I will try to do
-> > stress test with 32-bit platform later. 
-> 
-> I use QEMU/KVM x86_32 VM, 6GB RAM, and a kernel with HIGHMEM64 enabled and an 
-> openSUSE Tumbleweed 32 distro. I've heard that Debian too provides an x86_32 
-> distribution. 
-> 
-> > Since it targets for the next cycle
-> > 6.2, I will do a full stress test in the next following weeks.
-> > 
-> > Thanks,
-> > Gao Xiang
-> > 
-> 
-> Thanks,
-> 
-> Fabio
-> 
+-- 
+Josh
