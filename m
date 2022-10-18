@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C3B60346F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8694603476
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiJRU6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 16:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S230159AbiJRU7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 16:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiJRU6u (ORCPT
+        with ESMTP id S230120AbiJRU6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 16:58:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671F980F6B;
-        Tue, 18 Oct 2022 13:58:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC51B82113;
-        Tue, 18 Oct 2022 20:58:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E47C433B5;
-        Tue, 18 Oct 2022 20:58:46 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="F7gObyUL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666126723;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gbNrqkAmkdQNh54QMfahwNrlzGhnLQkj38mepOX8CvM=;
-        b=F7gObyULOPiE7SisivTExQqZhqmi06KhNSWt1DQY0nast1V8Ad0YQd9iIMN0u59zghcZXa
-        01I8l8sjW/LOPcjFgzyrK6G5KH4Bdu92IU5g38zXeZVMjHIlV+lwTpIExqbQnmNRX2pCax
-        YrpCwWvxFd9uyQePGEXBZKyv2bzWUUU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c99e1dea (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 18 Oct 2022 20:58:42 +0000 (UTC)
-Received: by mail-vs1-f51.google.com with SMTP id 3so15988493vsh.5;
-        Tue, 18 Oct 2022 13:58:42 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0Nrb0g7NqPhUHKY1FddiSuvvWyMXQN8Pi2oAxWz2YMj3RNssqf
-        Mw3cLEZMk07OtxeGyWWyeHHLGSqcE+rMVTlzVvY=
-X-Google-Smtp-Source: AMsMyM6bJ2VUjcb+te44+zGsDdQz0Fw+mBwnfeKnpOcuY+kiRk3c1H3JbyjXEFVtqLfZG3vGUSpq2CDwB0/Ne1pKMlo=
-X-Received: by 2002:a67:ed9a:0:b0:3a7:718a:7321 with SMTP id
- d26-20020a67ed9a000000b003a7718a7321mr2099048vsp.55.1666126721398; Tue, 18
- Oct 2022 13:58:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <202210190108.ESC3pc3D-lkp@intel.com> <20221018202734.140489-1-Jason@zx2c4.com>
- <Y08PVnsTw75sHfbg@smile.fi.intel.com> <Y08SGz/xGSN87ynk@zx2c4.com> <Y08TQwcY3zL3kGHR@smile.fi.intel.com>
-In-Reply-To: <Y08TQwcY3zL3kGHR@smile.fi.intel.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 18 Oct 2022 14:58:30 -0600
-X-Gmail-Original-Message-ID: <CAHmME9qQAqXYR0+K=32otECgrni51Z0c38iO3h1VRM4Xf3o2=Q@mail.gmail.com>
-Message-ID: <CAHmME9qQAqXYR0+K=32otECgrni51Z0c38iO3h1VRM4Xf3o2=Q@mail.gmail.com>
-Subject: Re: [PATCH] wifi: rt2x00: use explicitly signed type for clamping
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>
+        Tue, 18 Oct 2022 16:58:54 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BCEC06B4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:58:54 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id oo18-20020a17090b1c9200b0020bdba475afso12425395pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kNWqE5oSMNPl31vBAcUWs8MhWMZMoIHwD5R3GLMR2V0=;
+        b=hEeVUXOJOaLsXfMd/B8oSQem2Uqa5PAmxofPXcAc6ncC5A2cPCq2RpbiWUpnrzE2dM
+         IxY/39pKh+rYwNtrxWuVFLeNrVPoLsvR4qTNSqp2e8OicqxEWfIfcmcwOPqM85lGy2n1
+         rd1QXbr2sFNOX7xEcxr3KCm9J7FdAQa9VBUMdscdlm4VV9+4JX604NonlFX1Dousawxc
+         npbW52yWoOS4+ckENf/T/25av9DZFlh9H3jkAkltz9b6IqEiVWAw0kgDBHCuug5pqTUV
+         2cmaJ7XHSPfSQvHeDR5/WXlOjvjF40cs8ThZEwsYyvWdwoe8bt7pGADICYiiN5Dh0p64
+         hPyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kNWqE5oSMNPl31vBAcUWs8MhWMZMoIHwD5R3GLMR2V0=;
+        b=W5qUdNlut51FZRkMpxb8qZjt2azffEdcpYRSYX/hSRPKWA7k/3UX5kjYe+3pqM2o67
+         KExLb1hZpOPCWf5w5ImLK7e2XhiWiTn9nkto28voht1lrA+a1VbP3HnQ37WP1OjTQ11a
+         NvMConX4egCw9NpvxsT0Ipb0Hi89Iuvp4FwL5WTZFircfEKLrM9csDWTD0V1kA5JXTdF
+         IGYMaJD6sDHutTKAmxZwks9b+pymekgCXerpj9SrMEDMzywV0OZW09NvK2x5AfmRseBF
+         VC2TtGW6AVhw2wSORU4v6Kkllgwu7JTwId8jdRIeqFE9LmyGXqG88/0tmlYCuAxvCf6r
+         9QGA==
+X-Gm-Message-State: ACrzQf1CoxXTQrOxZzR+TJ7sdHhX4h++eOXTsbsierrGYyL9ncLvloFG
+        fjd6X2v0ZClXzpJFBS8OSM6M6SB6aYg=
+X-Google-Smtp-Source: AMsMyM7w2XKJKW1SsCbY9NUbjWlBQowiLQp6HtyyW9RNXzoQOfhtvEjx3ztQ5J/XNm4QDj79VvUbqdhDqu4=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:c89b:7f49:3437:9db8])
+ (user=pgonda job=sendgmr) by 2002:a17:902:e80b:b0:183:7463:f628 with SMTP id
+ u11-20020a170902e80b00b001837463f628mr5039102plg.19.1666126733578; Tue, 18
+ Oct 2022 13:58:53 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 13:58:38 -0700
+Message-Id: <20221018205845.770121-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Subject: [PATCH V5 0/7] KVM: selftests: Add simple SEV test
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, marcorr@google.com,
+        seanjc@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
+        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
+        andrew.jones@linux.dev, pgonda@google.com, vannapurve@google.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,33 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 2:57 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Oct 18, 2022 at 02:52:43PM -0600, Jason A. Donenfeld wrote:
-> > On Tue, Oct 18, 2022 at 11:40:54PM +0300, Andy Shevchenko wrote:
-> > > On Tue, Oct 18, 2022 at 02:27:34PM -0600, Jason A. Donenfeld wrote:
-> > > > On some platforms, `char` is unsigned, which makes casting -7 to char
-> > > > overflow, which in turn makes the clamping operation bogus. Instead,
-> > > > deal with an explicit `s8` type, so that the comparison is always
-> > > > signed, and return an s8 result from the function as well. Note that
-> > > > this function's result is assigned to a `short`, which is always signed.
-> > >
-> > > Why not to use short? See my patch I just sent.
-> >
-> > Trying to have the most minimal change here that doesn't rock the boat.
-> > I'm not out to rewrite the driver. I don't know the original author's
-> > rationales. This patch here is correct and will generate the same code
-> > as before on architectures where it wasn't broken.
-> >
-> > However, if you want your "change the codegen" patch to be taken
-> > seriously, you should probably send it to the wireless maintainers like
-> > this one, and they can decide. Personally, I don't really care either
-> > way.
->
-> I have checked the code paths there and I found no evidence that short can't be
-> used. That's why my patch.
+This patch series continues the work Michael Roth has done in supporting
+SEV guests in selftests. It continues on top of the work Sean
+Christopherson has sent to support ucalls from SEV guests. Along with a
+very simple version of the SEV selftests Michael originally proposed.
 
-Do you have a rationale why you want to change codegen?
+V5
+ * Rebase onto seanjc@'s latest ucall pool series.
+ * More review changes based on seanjc:
+ ** use protected instead of encrypted outside of SEV specific files
+ ** Swap memcrypt struct for kvm_vm_arch arch specific struct
+ ** Make protected page table data agnostic of address bit stealing specifics
+    of SEV
+ ** Further clean up for SEV library to just vm_sev_create_one_vcpu()
+ * Due to large changes moved more authorships from mroth@ to pgonda@. Gave 
+   originally-by tags to mroth@ as suggested by Seanjc for this.
 
-Jason
+V4
+ * Rebase ontop of seanjc@'s latest Ucall Pool series:
+   https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-8-seanjc@google.com/
+ * Fix up review comments from seanjc
+ * Switch authorship on 2 patches because of significant changes, added
+ * Michael as suggested-by or originally-by.
+
+V3
+ * Addressed more of andrew.jones@ in ucall patches.
+ * Fix build in non-x86 archs.
+
+V2
+ * Dropped RFC tag
+ * Correctly separated Sean's ucall patches into 2 as originally
+   intended.
+ * Addressed andrew.jones@ in ucall patches.
+ * Fixed ucall pool usage to work for other archs
+
+V1
+ * https://lore.kernel.org/all/20220715192956.1873315-1-pgonda@google.com/
+
+Michael Roth (2):
+  KVM: selftests: sparsebit: add const where appropriate
+  KVM: selftests: add support for protected vm_vaddr_* allocations
+
+Peter Gonda (5):
+  KVM: selftests: add hooks for managing protected guest memory
+  KVM: selftests: handle protected bits in page tables
+  KVM: selftests: add library for creating/interacting with SEV guests
+  KVM: selftests: Update ucall pool to allocate from shared memory
+  KVM: selftests: Add simple sev vm testing
+
+ tools/arch/arm64/include/asm/kvm_host.h       |   7 +
+ tools/arch/riscv/include/asm/kvm_host.h       |   7 +
+ tools/arch/s390/include/asm/kvm_host.h        |   7 +
+ tools/arch/x86/include/asm/kvm_host.h         |  15 ++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/include/kvm_util_base.h     |  49 +++-
+ .../testing/selftests/kvm/include/sparsebit.h |  36 +--
+ .../selftests/kvm/include/x86_64/sev.h        |  22 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  63 ++++-
+ tools/testing/selftests/kvm/lib/sparsebit.c   |  48 ++--
+ .../testing/selftests/kvm/lib/ucall_common.c  |   2 +-
+ .../selftests/kvm/lib/x86_64/processor.c      |  23 +-
+ tools/testing/selftests/kvm/lib/x86_64/sev.c  | 243 ++++++++++++++++++
+ .../selftests/kvm/x86_64/sev_all_boot_test.c  |  84 ++++++
+ 15 files changed, 549 insertions(+), 60 deletions(-)
+ create mode 100644 tools/arch/arm64/include/asm/kvm_host.h
+ create mode 100644 tools/arch/riscv/include/asm/kvm_host.h
+ create mode 100644 tools/arch/s390/include/asm/kvm_host.h
+ create mode 100644 tools/arch/x86/include/asm/kvm_host.h
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+
+-- 
+2.38.0.413.g74048e4d9e-goog
+
