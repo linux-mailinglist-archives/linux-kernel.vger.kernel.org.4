@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0CC602747
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F74560274A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiJRIlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
+        id S230210AbiJRImK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiJRIlx (ORCPT
+        with ESMTP id S230307AbiJRImF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:41:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418B533866
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666082508;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i/RR1Hxk78BsheEc9xl3vHs3B1J+Z1NZWyjHts3Iyx8=;
-        b=Eg6onwx07S6M0eLYG8jyurDIvCbCDtQVeZjgK4geQRUw0K1LbZzBzLSjHhJKohbXkMdfnD
-        zbnXF64y7BBjOCZ7NSrTrYXllYjs5GE83v8l2eCXPd0zSVhdfQxtxBCRRAkjQaBNnlxfzW
-        kAlUIIalaWZ+VfyWulbDBx+SU520O9U=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-395-TVMBG5CdMaWs9Qxe4yVG-g-1; Tue, 18 Oct 2022 04:41:39 -0400
-X-MC-Unique: TVMBG5CdMaWs9Qxe4yVG-g-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-132b6ed45b3so5667105fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:41:39 -0700 (PDT)
+        Tue, 18 Oct 2022 04:42:05 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC4D4C631;
+        Tue, 18 Oct 2022 01:42:03 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id r17so30448921eja.7;
+        Tue, 18 Oct 2022 01:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kJUYQnS+wDJVwg7f1yIoWn6Qu4ZOtG+kFWYfbS0s/NA=;
+        b=LESotvyxdCNWutLRLqgFjxC5CqgD8Q76mS9WrlAdiWHV+vtcDAcbaUFIfz37q2O8e1
+         Y53rczErEeYDMblVG6SxOTocLvoKUOxuMgvIZSqJ/yn1KSJo0F9FUHGmKwEUfXnRH0bF
+         ANcpwFYEE4qrSQ7hJDFICHLbV4FreluuYWAptkcf8gWH65Q0mWajo1jAIrqAzzBvdze3
+         d0esP21sAepxqYGqQNMPeQuK3M56fkbxfTifzUspOFBDtJKuDfmSuJIggBzUEymi4lnB
+         kY42qd2eOiHFvzLhYYBlZSIvq4NQRlElb+n4397gbCJOzU9eZv6tmMp3o+wcCmT33L2l
+         B/vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i/RR1Hxk78BsheEc9xl3vHs3B1J+Z1NZWyjHts3Iyx8=;
-        b=VGdlc4PdvP2D2XJfK3wJbZ423yUmXQ868Cgv/kVxEEOfqsHpdpJqPrZnNXRmgtmD7N
-         nnQkf++3lp2XnE/HBc9xUN0FdY7ANfR+gzaNwLC8NgroL1pOTM4PxSsw+jOvIWBCYQV7
-         TNA7LUwok0Y1mXUPDyVz0/mVQx/gCUPEwylD6ZoK8FU+Z9j1LDyMlSFAbYqpGAibcoi5
-         tz2eEAX5mkmmH1i3zYxgPPlDD0jKrN1eUuvKzq+ghg/sEQRRD9SbOq/OzcZGAcan1jqS
-         s52SJlpGmIqk4Q+FIOL2eIEQbq8bwDp0e41ZVeHfeF72CHSUeHFrWCDyghjg0xhfepX0
-         s8dQ==
-X-Gm-Message-State: ACrzQf0pcGV+mK9dF1wwdub753Xo3ICa+2DupbmFXCyLORChF16Ij+iv
-        /Yy9i3JCcA6lYJINNk2H4eRO/Xc/yiM3TBQwNrYRK36L4V3IfiIE2pctAx5hRtnespoY5/2jAmc
-        983VrJhk/1KlmOgL8DG0epIJv8+R1OJJp+yJRbWjF
-X-Received: by 2002:a05:6870:c1d3:b0:136:c4f6:53af with SMTP id i19-20020a056870c1d300b00136c4f653afmr17250464oad.35.1666082498732;
-        Tue, 18 Oct 2022 01:41:38 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7bNteYYU1ndwP/j/qAvOCjhKctfznqudVZ4PsSFW8zC58kN1VT9u3gUVrhXGIrPekqtFmAadEQ0UolmMdnPKg=
-X-Received: by 2002:a05:6870:c1d3:b0:136:c4f6:53af with SMTP id
- i19-20020a056870c1d300b00136c4f653afmr17250453oad.35.1666082498433; Tue, 18
- Oct 2022 01:41:38 -0700 (PDT)
+        bh=kJUYQnS+wDJVwg7f1yIoWn6Qu4ZOtG+kFWYfbS0s/NA=;
+        b=mP4Ehok7kaLctQVCjG/cb+LAMSp4RUNh6fULiigkB+4rzn7ZVLP1trh7CeGVC/qy6L
+         EHbWDHrGKrbWQBMknJZ00LjZt41CtNHpYXU2Cd8ZHWEx3/+vwh3/kZOKVmeqjPK7rvPi
+         0ji4tN4qPS5k8I1BWT/bz7CvpucfhuxTgsfGe/pHbSv4uchOCSzyc4SNakwaNlBAwb0g
+         HLFetlSGMBu5ei196zpOQCcg2uSEdb4FeLQi/lEwkHAIm/iz7FMjfpF66Favehq1jvUL
+         v3GIL3z0zR4W7YQWUWKZkalE+z7+HLW7hL/mG2BNTZcMlFGSfd8m4Peuamegtk5XQbaM
+         +8vA==
+X-Gm-Message-State: ACrzQf1DvJ5Da6oIv4Os4CGutrfw/RwHcOntNXVXbveej4wIthjHacdi
+        6us7G0UPi276H1kTTJ11qKnuR2XWMPbX12fyXsk=
+X-Google-Smtp-Source: AMsMyM7jUGbKxF0ubFnnh/Hy4klouu2/33u0QBOqt6qNKqtpDnelV9XigaA2sEaAFDMoAkR8Oq/khqb2rPYoQdNpOmY=
+X-Received: by 2002:a17:907:2cea:b0:78d:eac6:2d09 with SMTP id
+ hz10-20020a1709072cea00b0078deac62d09mr1524647ejc.124.1666082521781; Tue, 18
+ Oct 2022 01:42:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <1665793690-28120-1-git-send-email-si-wei.liu@oracle.com>
- <CACGkMEvaKnqS-0p7iqyHP_Wbbj1YdmPFA7ABfKK_8FbXMsZEkg@mail.gmail.com> <4f76d968-3086-0280-48fc-fcf250f11c67@oracle.com>
-In-Reply-To: <4f76d968-3086-0280-48fc-fcf250f11c67@oracle.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 18 Oct 2022 16:41:26 +0800
-Message-ID: <CACGkMEs6tsPUsoP1TmEB3metqCHQF-i95G+oP3koJGAOS_5PWQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] vDPA: dev config export via "vdpa dev show" command
-To:     Si-Wei Liu <si-wei.liu@oracle.com>
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Sean Mooney <smooney@redhat.com>,
-        Daniel Berrange <berrange@redhat.com>
+References: <20221017142338.1445199-1-christian.gmeiner@gmail.com> <20221017150802.GA3701588@bhelgaas>
+In-Reply-To: <20221017150802.GA3701588@bhelgaas>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Tue, 18 Oct 2022 10:41:50 +0200
+Message-ID: <CAH9NwWeiaHcWEx9eUQuHZAFzsxz3BhHh4aKUKfRySoJOLxRtQA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Add Bachmann electronic GmbH vendor ID
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Christian GMEINER <Christian.GMEINER@bachmann.info>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,149 +68,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 6:58 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+Hi Bjorn
+
 >
->
->
-> On 10/17/2022 12:08 AM, Jason Wang wrote:
-> > Adding Sean and Daniel for more thoughts.
+> On Mon, Oct 17, 2022 at 04:23:37PM +0200, Christian Gmeiner wrote:
+> > From: Christian GMEINER <Christian.GMEINER@bachmann.info>
 > >
-> > On Sat, Oct 15, 2022 at 9:33 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
-> >> Live migration of vdpa would typically require re-instate vdpa
-> >> device with an idential set of configs on the destination node,
-> >> same way as how source node created the device in the first place.
-> >>
-> >> In order to allow live migration orchestration software to export the
-> >> initial set of vdpa attributes with which the device was created, it
-> >> will be useful if the vdpa tool can report the config on demand with
-> >> simple query.
-> > For live migration, I think the management layer should have this
-> > knowledge and they can communicate directly without bothering the vdpa
-> > tool on the source. If I was not wrong this is the way libvirt is
-> > doing now.
-> I think this series doesn't conflict with what libvirt is doing now. For
-> example it can still remember the supported features for the parent
-> mgmtdev, and mtu and mac properties for vdpa creation, and use them to
-> replicate vdpa device on  destination node. The extra benefit is - the
-> management software (for live migration) doesn't need to care those
-> mgmtdev specifics - such as what features the parent mgmtdev supports,
-> whether some features are mandatory, and what are the default values for
-> those, whether there's enough system or hardware resource available to
-> create vdpa with requested features et al. This kind of process can be
-> simplified by just getting a vdpa created with the exact same features
-> and configus exposed via the 'vdpa dev show' command. Essentially this
-> export facility just provides the layer of abstraction needed for virtio
-> related device configuration and for the very core need of vdpa live
-> migration. For e.g. what're exported can even be useful to facilitate
-> live migration from vdpa to software virtio. Basically, it doesn't
-> prevent libvirt from implementing another layer on top to manage vdpa
-> between mgmtdev devices and vdpa creation, and on the other hand, would
-> benefit light-weighted mgmt software implementation with device
-> management and live migration orchestration decoupled in the upper level.
+> > Signed-off-by: Christian GMEINER <Christian.GMEINER@bachmann.info>
+>
+> I tweaked it to shorten the name in the style of other entries and
+> sort it by numeric ID.
+>
 
-Ok, I think this is fine.
+I am fine with that .. was not sure if there needs to be a match of
+the used define and
+the official "Member company" name:
+https://pcisig.com/membership/member-companies?combine=%22Bachmann+electronic%22
+
+> I assume there's a driver that will use this definition.  If so, you
+> might want to post this patch (including my ack) along with the driver
+> so they get merged together.  But let me know if you need me to take
+> it directly.
+>
+
+I hope that one driver will see the public light sooner than later but
+I have no official time frame.
 
 >
-> >> This will ease the orchestration software implementation
-> >> so that it doesn't have to keep track of vdpa config change, or have
-> >> to persist vdpa attributes across failure and recovery, in fear of
-> >> being killed due to accidental software error.
-> >>
-> >> In this series, the initial device config for vdpa creation will be
-> >> exported via the "vdpa dev show" command.
-> >> This is unlike the "vdpa
-> >> dev config show" command that usually goes with the live value in
-> >> the device config space, which is not reliable subject to the dynamics
-> >> of feature negotiation and possible change in device config space.
-> >>
-> >> Examples:
-> >>
-> >> 1) Create vDPA by default without any config attribute
-> >>
-> >> $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0
-> >> $ vdpa dev show vdpa0
-> >> vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
-> >> $ vdpa dev -jp show vdpa0
-> >> {
-> >>      "dev": {
-> >>          "vdpa0": {
-> >>              "type": "network",
-> >>              "mgmtdev": "pci/0000:41:04.2",
-> >>              "vendor_id": 5555,
-> >>              "max_vqs": 9,
-> >>              "max_vq_size": 256,
-> >>          }
-> >>      }
-> >> }
-> >>
-> >> 2) Create vDPA with config attribute(s) specified
-> >>
-> >> $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0 \
-> >>      mac e4:11:c6:d3:45:f0 max_vq_pairs 4
-> >> $ vdpa dev show
-> >> vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
-> >>    mac e4:11:c6:d3:45:f0 max_vq_pairs 4
-> >> $ vdpa dev -jp show
-> >> {
-> >>      "dev": {
-> >>          "vdpa0": {
-> >>              "type": "network",
-> >>              "mgmtdev": "pci/0000:41:04.2",
-> > So "mgmtdev" looks not necessary for live migration.
-> Right, so once the resulting device_features is exposed to the 'vdpa dev
-> show' output, the mgmt software could infer the set of config options to
-> recreate vdpa with, and filter out those unwanted attributes (or pick
-> what it really wants).
-
-Ok,  so I wonder if it is this better to have a new command instead of
-mixing it with "dev show"?
-
-Or at least have separated key for virtio like
-
-"vdpa0": {
-     "mgmtdev": "vdpasim_net",
-     "virtio config: {
-          ....
-      }
-}
-
-Thanks
-
+> Also it will be helpful if you can add the item to the PCI ID database
+> here: https://pci-ids.ucw.cz/read/PC?restrict=0, which will let lspci
+> identify devices with this Vendor ID.
 >
-> -Siwei
+
+Done - thanks.
+
+> Bjorn
 >
+>
+> commit 2fa819fdbb2b ("PCI: Add Bachmann electronic GmbH vendor ID")
+> Author: Christian GMEINER <Christian.GMEINER@bachmann.info>
+> Date:   Mon Oct 17 16:23:37 2022 +0200
+>
+>     PCI: Add Bachmann electronic GmbH vendor ID
+>
+>     Link: https://lore.kernel.org/r/20221017142338.1445199-1-christian.gmeiner@gmail.com
+>     Signed-off-by: Christian GMEINER <Christian.GMEINER@bachmann.info>
+>     Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+>
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index b362d90eb9b0..4cc0e9ecd398 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -2,7 +2,7 @@
+>  /*
+>   *     PCI Class, Vendor and Device IDs
+>   *
+> - *     Please keep sorted.
+> + *     Please keep sorted by numeric ID.
+>   *
+>   *     Do not add new entries to this file unless the definitions
+>   *     are shared between multiple drivers.
+> @@ -153,7 +153,7 @@
+>
+>  #define PCI_CLASS_OTHERS               0xff
+>
+> -/* Vendors and devices.  Sort key: vendor first, device next. */
+> +/* Vendors and devices.  Numeric sort key: vendor first, device next. */
+>  #define PCI_VENDOR_ID_PCI_SIG          0x0001
+>
+>  #define PCI_VENDOR_ID_LOONGSON         0x0014
+> @@ -172,6 +172,8 @@
+>  #define PCI_DEVICE_ID_BERKOM_A4T               0xffa4
+>  #define PCI_DEVICE_ID_BERKOM_SCITEL_QUADRO     0xffa8
+>
+> +#define PCI_VENDOR_ID_BACHMANN         0x0bae
+> +
+>  #define PCI_VENDOR_ID_COMPAQ           0x0e11
+>  #define PCI_DEVICE_ID_COMPAQ_TOKENRING 0x0508
+>  #define PCI_DEVICE_ID_COMPAQ_TACHYON   0xa0fc
+>
+> > ---
+> >  include/linux/pci_ids.h | 2 ++
+> >  1 file changed, 2 insertions(+)
 > >
-> > Thanks
+> > diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> > index b362d90eb9b0..b93a52977d85 100644
+> > --- a/include/linux/pci_ids.h
+> > +++ b/include/linux/pci_ids.h
+> > @@ -166,6 +166,8 @@
 > >
-> >>              "vendor_id": 5555,
-> >>              "max_vqs": 9,
-> >>              "max_vq_size": 256,
-> >>              "mac": "e4:11:c6:d3:45:f0",
-> >>              "max_vq_pairs": 4
-> >>          }
-> >>      }
-> >> }
-> >>
-> >> ---
-> >>
-> >> Si-Wei Liu (4):
-> >>    vdpa: save vdpa_dev_set_config in struct vdpa_device
-> >>    vdpa: pass initial config to _vdpa_register_device()
-> >>    vdpa: show dev config as-is in "vdpa dev show" output
-> >>    vdpa: fix improper error message when adding vdpa dev
-> >>
-> >>   drivers/vdpa/ifcvf/ifcvf_main.c      |  2 +-
-> >>   drivers/vdpa/mlx5/net/mlx5_vnet.c    |  2 +-
-> >>   drivers/vdpa/vdpa.c                  | 63 +++++++++++++++++++++++++++++++++---
-> >>   drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  2 +-
-> >>   drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  2 +-
-> >>   drivers/vdpa/vdpa_user/vduse_dev.c   |  2 +-
-> >>   drivers/vdpa/virtio_pci/vp_vdpa.c    |  3 +-
-> >>   include/linux/vdpa.h                 | 26 ++++++++-------
-> >>   8 files changed, 80 insertions(+), 22 deletions(-)
-> >>
-> >> --
-> >> 1.8.3.1
-> >>
->
+> >  #define PCI_VENDOR_ID_UBIQUITI               0x0777
+> >
+> > +#define PCI_VENDOR_ID_BACHMANN_ELECTRONIC 0x0bae
+> > +
+> >  #define PCI_VENDOR_ID_BERKOM                 0x0871
+> >  #define PCI_DEVICE_ID_BERKOM_A1T             0xffa1
+> >  #define PCI_DEVICE_ID_BERKOM_T_CONCEPT               0xffa2
+> > --
+> > 2.37.3
+> >
 
+
+
+-- 
+greets
+--
+Christian Gmeiner, MSc
+
+https://christian-gmeiner.info/privacypolicy
