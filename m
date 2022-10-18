@@ -2,127 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2C46035FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495E46035FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJRWfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 18:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S229775AbiJRWgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 18:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJRWft (ORCPT
+        with ESMTP id S229768AbiJRWgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 18:35:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6669CBFE5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666132545; x=1697668545;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qH3n/SenWLQ3oGvpoCfUDd6WBE2EAQyaCFEJgfz9kh4=;
-  b=Hd2f2V6RjYS7VMyC4Qg0e7+aPOkh/CoArr5SU4QNsrB4ZLNey5ZbY2eS
-   aeE28+ZUhoD/t74Q86fZXM8hIi6x2Kl4ieEurFGfx9lRLVsrDJEbDmPgD
-   QzvdD9MGUoaYOf9hogB3f0+e9J//tHFmm7hb02e9rimSZ40VJ4hkdpCoW
-   c4kS9VnDc7ig8Q0BqPqqfDsongvKWDGWWNAbdz7yobtKLD/MXkj8qCReo
-   aEraRCgW4x+zQnDZuTW+gOxOhOAgQtJHU88nm93KXLJUqywn3M4WYqXpg
-   zIJxWOHkwzoqfMKhOA7nSA9Z9fLcKZKBCg6J5TKYWDiI+kXpZn/XfDByE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="370471388"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="370471388"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 15:35:44 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="662140048"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="662140048"
-Received: from vhavel-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.51.115])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 15:35:40 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D1359104BA9; Wed, 19 Oct 2022 01:35:37 +0300 (+03)
-Date:   Wed, 19 Oct 2022 01:35:37 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv10 10/15] x86/mm, iommu/sva: Make LAM and SVM mutually
- exclusive
-Message-ID: <20221018223537.7bmhuknclkboqgnk@box.shutemov.name>
-References: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
- <20221018113358.7833-11-kirill.shutemov@linux.intel.com>
- <Y08HgXqvNSpTUgWe@a4bf019067fa.jf.intel.com>
+        Tue, 18 Oct 2022 18:36:07 -0400
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2893BCC810
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:36:02 -0700 (PDT)
+Received: from [192.168.50.220] ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id kvBoovvaFaWj1kvBooEOsQ; Wed, 19 Oct 2022 00:36:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666132561; bh=luzvlvgLF0QVUwO0gT+OoCdQWZnYIwCJYht0pOjIZ3U=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=dSUdRnUFi0Crty2pYHbqT/DSo4YUVoudW7NGYNWRPptQ30prDF4Ez61lAul/r/fkJ
+         GC5EJhNKQwRMchylAa0XX2Bq63Jhyj1n3uI2H1wj/2HcCflMHet7N0hIzC8sLh5K1a
+         +QixalwmxG2+EwDw6OFGoXStRtXobeohoJeyFsV49caURRoJemHUn9+XhgZ69sF+fC
+         FMqzn2cRohNqN8MIwbEuq/v+nxRRrBgRrOlnmM5YirOTF3IFSoXBSQ/fLiMyFpZddq
+         3eu7pAHjGK+kTcuDn5vuTFPOUD40hIMPbbYKDMzzFfZLjj19PIIc5gbCbBBtRoolyV
+         2NaThyRjN/a1g==
+Message-ID: <ac5c75e0-2921-84ef-90c3-93e526358d7c@benettiengineering.com>
+Date:   Wed, 19 Oct 2022 00:36:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y08HgXqvNSpTUgWe@a4bf019067fa.jf.intel.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/5] clk: imx: imxrt1050: fix IMXRT1050_CLK_LCDIF_APB
+ offsets
+Content-Language: en-US
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Cc:     Stephen Boyd <sboyd@kernel.org>, Haibo Chen <haibo.chen@nxp.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jesse T <mr.bossman075@gmail.com>
+References: <20221017235602.86250-1-giulio.benetti@benettiengineering.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20221017235602.86250-1-giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfOrIqwcb7/+eOP2FY7EKspVzfwUbtM756/UiDbnbjXc52sKwXx1avxmGQAPGFy7tsJypcnBnEyow6xb7ccR38m69Kt67ZKk+OE1RyIbFR8IELk59oCPu
+ s51DqBg+n0VRDLG0SeI+/qmyT60QBmYWgkvxza+soxLIsEc0BMqM+QE1LmajxHiDbhpvwDaQUnWUO8DuM6dDvz8E5NHpcva0fvnDrp52WhykFnQBsQgsYhhR
+ cNeYfrFdxRiSO7uk+d6zTYq0Yhzp8OS7n9wgVPheVzPX65nvtqcuNWcbcZBSkAsBzaz1aBwCrL719VglAJLsDKsEoOQBM/4go3sT64ssMKvybYcetGrp2VDV
+ biQy0DpKM16tWe00D6WOkYyQpJFV3U3vkmgA2f0j9wpB1HNPd1n1faONXfz+spZ4i4t0gAPqi/tHOHb4Keb2MGwIxg5GNGFZ+M1gUE533fpNJ8gHP14TSY+k
+ jJSOfMbm8nOc4GCyTK8I5vIcZjYt+VsiLm41Sn5mPvMIkkKfUrvFeBKZHtRLezAJglFDTKxQazOF3Q4h2fbwrCKYlAWqs0WLWdmZLQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 01:07:29PM -0700, Ashok Raj wrote:
-> On Tue, Oct 18, 2022 at 02:33:53PM +0300, Kirill A. Shutemov wrote:
-> > IOMMU and SVM-capable devices know nothing about LAM and only expect
-> > canonical addresses. Attempt to pass down tagged pointer will lead to
-> > address translation failure.
-> > 
-> > By default do not allow to enable both LAM and use SVM in the same
-> > process.
-> > 
-> > The new ARCH_FORCE_TAGGED_SVM arch_prctl() overrides the limitation.
-> > By using the arch_prctl() userspace takes responsibility to never pass
-> > tagged address to the device.
+Hi Jesse,
+
+On 18/10/22 01:55, Giulio Benetti wrote:
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   drivers/clk/imx/clk-imxrt1050.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+> diff --git a/drivers/clk/imx/clk-imxrt1050.c b/drivers/clk/imx/clk-imxrt1050.c
+> index 9539d35588ee..26108e9f7e67 100644
+> --- a/drivers/clk/imx/clk-imxrt1050.c
+> +++ b/drivers/clk/imx/clk-imxrt1050.c
+> @@ -140,7 +140,7 @@ static int imxrt1050_clocks_probe(struct platform_device *pdev)
+>   	hws[IMXRT1050_CLK_USDHC1] = imx_clk_hw_gate2("usdhc1", "usdhc1_podf", ccm_base + 0x80, 2);
+>   	hws[IMXRT1050_CLK_USDHC2] = imx_clk_hw_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
+>   	hws[IMXRT1050_CLK_LPUART1] = imx_clk_hw_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
+> -	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x74, 10);
+> +	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x70, 28);
+>   	hws[IMXRT1050_CLK_DMA] = imx_clk_hw_gate("dma", "ipg", ccm_base + 0x7C, 6);
+>   	hws[IMXRT1050_CLK_DMA_MUX] = imx_clk_hw_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
+>   	imx_check_clk_hws(hws, IMXRT1050_CLK_END);
 
-Thanks!
+I've forgotten to add you in Cc, can you please take a look at it?
+You've written the driver so you maybe can give me a feedback.
+Same for patch 2/5
 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  arch/x86/include/asm/mmu.h         |  6 ++++--
-> >  arch/x86/include/asm/mmu_context.h |  2 ++
-> >  arch/x86/include/uapi/asm/prctl.h  |  1 +
-> >  arch/x86/kernel/process_64.c       | 13 +++++++++++++
-> >  drivers/iommu/iommu-sva-lib.c      | 12 ++++++++++++
-> >  include/linux/mmu_context.h        |  4 ++++
-> >  6 files changed, 36 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-> > index 2fdb390040b5..cce9b32b0d6d 100644
-> > --- a/arch/x86/include/asm/mmu.h
-> > +++ b/arch/x86/include/asm/mmu.h
-> > @@ -9,9 +9,11 @@
-> >  #include <linux/bits.h>
-> >  
-> >  /* Uprobes on this MM assume 32-bit code */
-> > -#define MM_CONTEXT_UPROBE_IA32	BIT(0)
-> > +#define MM_CONTEXT_UPROBE_IA32		BIT(0)
-> >  /* vsyscall page is accessible on this MM */
-> > -#define MM_CONTEXT_HAS_VSYSCALL	BIT(1)
-> > +#define MM_CONTEXT_HAS_VSYSCALL		BIT(1)
-> 
-> Nit: Looks like the two above format changes got in here :-)
+Thank you very much!
 
-That's side effect of keeping the new longer flag aligned to the rest.
-
-A separate patch looks like an overkill, no?
-
+Best regards
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
