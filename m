@@ -2,211 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED21602480
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0522660248F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJRGgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S229763AbiJRGiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJRGgv (ORCPT
+        with ESMTP id S229687AbiJRGiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:36:51 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E3774DEA;
-        Mon, 17 Oct 2022 23:36:50 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bu30so21850962wrb.8;
-        Mon, 17 Oct 2022 23:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Srd8wu/h4bks84F/OuwafoEn79kDxKLL/Z3QEdcLzH8=;
-        b=TAjd5oozb4Lh2IDoDeIjAt8jc/SXH7+hLBCJ/VUIvAAhVNCaAODapRPRiWqfRbLToi
-         c0CXhbj+vqPETWHERWYCAHYovrVjrGJ4OVUKx6UPqjCqbFQnFwwmBeUC/LUAIot6VoPt
-         f7HkzvgY98biJYzmVeC/JoNwuqtfZzor0DUpZx+BX07r1mkxczgFuFoJxqbW19ruqpy2
-         srnWn7pdCzXmQoJTN71m34+oAe4uRSaEqi733no+NGE3WaSx4v1BAL1MIhod++x9EEvS
-         80StZt8mTJNQhDRt53W3MCWxHcrO3aJ9sXGXty96KBcAWFlVb0REC8jP4ACTvjqb5qsX
-         1uug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Srd8wu/h4bks84F/OuwafoEn79kDxKLL/Z3QEdcLzH8=;
-        b=M87WL5nVSjoL+uXtCNsKo4f2bMkWcDjdsW1QJVe+eCAh5J8OAXFmsmORCfzLtfQ3Gz
-         vpMmWldn9oxb2AbyZb9Kvz+axBJmRoY+dQCh45uPekiESELZgP1lg+YlP30rB+mKrJfd
-         kd1ehlamImZTMb70fA7f6KofV3AwgwzfGp3PueUHRMxk2gm02XJINskOi0wcJ+lRil2E
-         tWfEfLT4fSbWkUtSvUYX9WmS3a03AhQUNnZ6LsNBt4gd74yKeoGVjg/CiZLwpVvJ5Rh5
-         qDl+u4RcekrQH7VBGHY6j5nXIdQmoyj6SyQwKg1zPlo6XZ/A9vOz3Jpj5Uv9W9Eh/+Hv
-         ZwOQ==
-X-Gm-Message-State: ACrzQf3ApuywKd7BiRA7E9eNEgn0GDBqH0iciF2Fk0KbjkOxtFF3u86q
-        1+tkEb2XhZAZeZQV8NOx1YQ=
-X-Google-Smtp-Source: AMsMyM5VbpZU4b1m0B7ePZeQ3IPgx00GNiJIBOlWXF49ZU4DiCP8ccF7W/LQeU4EBnxBabgwxwAjzA==
-X-Received: by 2002:adf:d1ed:0:b0:230:9355:8da3 with SMTP id g13-20020adfd1ed000000b0023093558da3mr825931wrd.258.1666075008531;
-        Mon, 17 Oct 2022 23:36:48 -0700 (PDT)
-Received: from [192.168.0.106] ([77.126.16.127])
-        by smtp.gmail.com with ESMTPSA id p3-20020a05600c358300b003bdd2add8fcsm18432630wmq.24.2022.10.17.23.36.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 23:36:48 -0700 (PDT)
-Message-ID: <07a034cf-507a-e4ad-d78c-e5dd5a8d98b5@gmail.com>
-Date:   Tue, 18 Oct 2022 09:36:44 +0300
+        Tue, 18 Oct 2022 02:38:09 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81E08A7DC;
+        Mon, 17 Oct 2022 23:38:01 -0700 (PDT)
+X-UUID: 368b31d11a3a4dba8c4129cb21b9e595-20221018
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=eM+soasMJzB6uxzurzAYBD4NNpjZ9qTL1sEyE6FK3J8=;
+        b=WfOuPQb2y10opBmhNbzJD5LV31CgOox0UNaRcXkVQsg8p7K9Cu4C3lPUri1c47FM5KXXk6GwHxmKZwipysdb0E2zcf3vrbR/5qzw6JqqB1pXQ/oKV4NrgilEXcimxTAtwKVio+q+uC0vA9U7Tp4iam4Aqr8Y8RbuQG2NQGm2oBk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:6cf3a249-a9b5-42b6-b1b9-1618c24b7655,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:8f0921a4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 368b31d11a3a4dba8c4129cb21b9e595-20221018
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1704619019; Tue, 18 Oct 2022 14:37:56 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 18 Oct 2022 14:37:54 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs13n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 18 Oct 2022 14:37:54 +0800
+Message-ID: <b5d18b4b631cb19d435f37ccacd296a2282c2a1a.camel@mediatek.com>
+Subject: Re: [PATCH] arm64: dts: mt8195: Add Ethernet controller
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <macpaul.lin@mediatek.com>
+Date:   Tue, 18 Oct 2022 14:37:54 +0800
+In-Reply-To: <d6bda69e-d331-3e64-2100-d41e84c3fab7@linaro.org>
+References: <20221017095834.7675-1-biao.huang@mediatek.com>
+         <d6bda69e-d331-3e64-2100-d41e84c3fab7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v4 0/7] sched, net: NUMA-aware CPU spreading interface
-Content-Language: en-US
-To:     Valentin Schneider <vschneid@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-References: <20220923132527.1001870-1-vschneid@redhat.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20220923132527.1001870-1-vschneid@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Krzysztof,
+	Thanks for your comments!
 
-On 9/23/2022 4:25 PM, Valentin Schneider wrote:
-> Hi folks,
+On Mon, 2022-10-17 at 22:01 -0400, Krzysztof Kozlowski wrote:
+> On 17/10/2022 05:58, Biao Huang wrote:
+> > Add Ethernet controller node for mt8195.
+> > 
+> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> > ---
+> >  arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88
+> > ++++++++++++++++++++
+> >  arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 87
+> > +++++++++++++++++++
+> >  2 files changed, 175 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > index 4fbd99eb496a..02e04f82a4ae 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > @@ -258,6 +258,72 @@ &mt6359_vsram_others_ldo_reg {
+> >  };
+> >  
+> >  &pio {
+> > +	eth_default: eth_default {
 > 
-> Tariq pointed out in [1] that drivers allocating IRQ vectors would benefit
-> from having smarter NUMA-awareness (cpumask_local_spread() doesn't quite cut
-> it).
-> 
-> The proposed interface involved an array of CPUs and a temporary cpumask, and
-> being my difficult self what I'm proposing here is an interface that doesn't
-> require any temporary storage other than some stack variables (at the cost of
-> one wild macro).
-> 
-> Please note that this is based on top of Yury's bitmap-for-next [2] to leverage
-> his fancy new FIND_NEXT_BIT() macro.
-> 
-> [1]: https://lore.kernel.org/all/20220728191203.4055-1-tariqt@nvidia.com/
-> [2]: https://github.com/norov/linux.git/ -b bitmap-for-next
-> 
-> A note on treewide use of for_each_cpu_andnot()
-> ===============================================
-> 
-> I've used the below coccinelle script to find places that could be patched (I
-> couldn't figure out the valid syntax to patch from coccinelle itself):
-> 
-> ,-----
-> @tmpandnot@
-> expression tmpmask;
-> iterator for_each_cpu;
-> position p;
-> statement S;
-> @@
-> cpumask_andnot(tmpmask, ...);
-> 
-> ...
-> 
-> (
-> for_each_cpu@p(..., tmpmask, ...)
-> 	S
-> |
-> for_each_cpu@p(..., tmpmask, ...)
-> {
-> 	...
-> }
-> )
-> 
-> @script:python depends on tmpandnot@
-> p << tmpandnot.p;
-> @@
-> coccilib.report.print_report(p[0], "andnot loop here")
-> '-----
-> 
-> Which yields (against c40e8341e3b3):
-> 
-> .//arch/powerpc/kernel/smp.c:1587:1-13: andnot loop here
-> .//arch/powerpc/kernel/smp.c:1530:1-13: andnot loop here
-> .//arch/powerpc/kernel/smp.c:1440:1-13: andnot loop here
-> .//arch/powerpc/platforms/powernv/subcore.c:306:2-14: andnot loop here
-> .//arch/x86/kernel/apic/x2apic_cluster.c:62:1-13: andnot loop here
-> .//drivers/acpi/acpi_pad.c:110:1-13: andnot loop here
-> .//drivers/cpufreq/armada-8k-cpufreq.c:148:1-13: andnot loop here
-> .//drivers/cpufreq/powernv-cpufreq.c:931:1-13: andnot loop here
-> .//drivers/net/ethernet/sfc/efx_channels.c:73:1-13: andnot loop here
-> .//drivers/net/ethernet/sfc/siena/efx_channels.c:73:1-13: andnot loop here
-> .//kernel/sched/core.c:345:1-13: andnot loop here
-> .//kernel/sched/core.c:366:1-13: andnot loop here
-> .//net/core/dev.c:3058:1-13: andnot loop here
-> 
-> A lot of those are actually of the shape
-> 
->    for_each_cpu(cpu, mask) {
->        ...
->        cpumask_andnot(mask, ...);
->    }
-> 
-> I think *some* of the powerpc ones would be a match for for_each_cpu_andnot(),
-> but I decided to just stick to the one obvious one in __sched_core_flip().
->    
-> Revisions
-> =========
-> 
-> v3 -> v4
-> ++++++++
-> 
-> o Rebased on top of Yury's bitmap-for-next
-> o Added Tariq's mlx5e patch
-> o Made sched_numa_hop_mask() return cpu_online_mask for the NUMA_NO_NODE &&
->    hops=0 case
-> 
-> v2 -> v3
-> ++++++++
-> 
-> o Added for_each_cpu_and() and for_each_cpu_andnot() tests (Yury)
-> o New patches to fix issues raised by running the above
-> 
-> o New patch to use for_each_cpu_andnot() in sched/core.c (Yury)
-> 
-> v1 -> v2
-> ++++++++
-> 
-> o Split _find_next_bit() @invert into @invert1 and @invert2 (Yury)
-> o Rebase onto v6.0-rc1
-> 
-> Cheers,
-> Valentin
-> 
+> No underscores in node names. Please also be sure your patch does not
+> bring new warnings with `dtbs_check` (lack of suffix above could mean
+> it
+> brings...)
+OK, I'll fix the underscores issue in next send.
+As to "lack of suffix" issue, do you mean I should write it like:
+	eth-default: eth-default@0 {
+		...
+	}
+If yes, other nodes in current file don't have such suffix.
+e.g.
+	gpio_keys_pins: gpio-keys-pins
 
-Hi,
+Should I keep unified style with other nodes?
+> 
+> > +		txd_pins {
+> 
+> No underscores
+OK, will fix in next send.
+> 
+> > +			pinmux = <PINMUX_GPIO77__FUNC_GBE_TXD3>,
+> > +				 <PINMUX_GPIO78__FUNC_GBE_TXD2>,
+> > +				 <PINMUX_GPIO79__FUNC_GBE_TXD1>,
+> > +				 <PINMUX_GPIO80__FUNC_GBE_TXD0>;
+> > +			drive-strength = <MTK_DRIVE_8mA>;
+> > +		};
+> > +		cc_pins {
+> 
+> Ditto... and so on.
+OK, will fix in next send.
+> 
+> > +			pinmux = <PINMUX_GPIO85__FUNC_GBE_TXC>,
+> > +				 <PINMUX_GPIO88__FUNC_GBE_TXEN>,
+> > +				 <PINMUX_GPIO87__FUNC_GBE_RXDV>,
+> > +				 <PINMUX_GPIO86__FUNC_GBE_RXC>;
+> > +			drive-strength = <MTK_DRIVE_8mA>;
+> > +		};
+> > +		rxd_pins {
+> > +			pinmux = <PINMUX_GPIO81__FUNC_GBE_RXD3>,
+> > +				 <PINMUX_GPIO82__FUNC_GBE_RXD2>,
+> > +				 <PINMUX_GPIO83__FUNC_GBE_RXD1>,
+> > +				 <PINMUX_GPIO84__FUNC_GBE_RXD0>;
+> > +		};
+> > +		mdio_pins {
+> > +			pinmux = <PINMUX_GPIO89__FUNC_GBE_MDC>,
+> > +				 <PINMUX_GPIO90__FUNC_GBE_MDIO>;
+> > +			input-enable;
+> > +		};
+> > +		power_pins {
+> > +			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
+> > +				 <PINMUX_GPIO92__FUNC_GPIO92>;
+> > +			output-high;
+> > +		};
+> > +	};
+> > +
+> > +	eth_sleep: eth_sleep {
+> > +		txd_pins {
+> > +			pinmux = <PINMUX_GPIO77__FUNC_GPIO77>,
+> > +				 <PINMUX_GPIO78__FUNC_GPIO78>,
+> > +				 <PINMUX_GPIO79__FUNC_GPIO79>,
+> > +				 <PINMUX_GPIO80__FUNC_GPIO80>;
+> > +		};
+> > +		cc_pins {
+> > +			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>,
+> > +				 <PINMUX_GPIO88__FUNC_GPIO88>,
+> > +				 <PINMUX_GPIO87__FUNC_GPIO87>,
+> > +				 <PINMUX_GPIO86__FUNC_GPIO86>;
+> > +		};
+> > +		rxd_pins {
+> > +			pinmux = <PINMUX_GPIO81__FUNC_GPIO81>,
+> > +				 <PINMUX_GPIO82__FUNC_GPIO82>,
+> > +				 <PINMUX_GPIO83__FUNC_GPIO83>,
+> > +				 <PINMUX_GPIO84__FUNC_GPIO84>;
+> > +		};
+> > +		mdio_pins {
+> > +			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>,
+> > +				 <PINMUX_GPIO90__FUNC_GPIO90>;
+> > +			input-disable;
+> > +			bias-disable;
+> > +		};
+> > +		power_pins {
+> > +			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
+> > +				 <PINMUX_GPIO92__FUNC_GPIO92>;
+> > +			input-disable;
+> > +			bias-disable;
+> > +		};
+> > +	};
+> > +
+> >  	gpio_keys_pins: gpio-keys-pins {
+> >  		pins {
+> >  			pinmux = <PINMUX_GPIO106__FUNC_GPIO106>;
+> > @@ -434,6 +500,28 @@ &xhci0 {
+> >  	status = "okay";
+> >  };
+> >  
+> > +&eth {
+> > +	phy-mode ="rgmii-rxid";
+> > +	phy-handle = <&eth_phy0>;
+> > +	snps,reset-gpio = <&pio 93 GPIO_ACTIVE_HIGH>;
+> > +	snps,reset-delays-us = <0 10000 10000>;
+> > +	mediatek,tx-delay-ps = <2030>;
+> > +	pinctrl-names = "default", "sleep";
+> > +	pinctrl-0 = <&eth_default>;
+> > +	pinctrl-1 = <&eth_sleep>;
+> > +	status = "okay";
+> > +
+> > +	mdio {
+> > +		compatible = "snps,dwmac-mdio";
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +		eth_phy0: eth_phy0@1 {
+> 
+> ethernet-phy@1
+OK, will modify in next send.
+> 
+> > +			compatible = "ethernet-phy-id001c.c916";
+> > +			reg = <0x1>;
+> > +		};
+> > +	};
+> > +};
+> > +
+> >  &xhci1 {
+> >  	vusb33-supply = <&mt6359_vusb_ldo_reg>;
+> >  	status = "okay";
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > index 905d1a90b406..aa1fcc3b9cb6 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -1042,6 +1042,93 @@ spis1: spi@1101e000 {
+> >  			status = "disabled";
+> >  		};
+> >  
+> > +		stmmac_axi_setup: stmmac-axi-config {
+> > +			snps,wr_osr_lmt = <0x7>;
+> > +			snps,rd_osr_lmt = <0x7>;
+> > +			snps,blen = <0 0 0 0 16 8 4>;
+> > +		};
+> > +
+> > +		mtl_rx_setup: rx-queues-config {
+> > +			snps,rx-queues-to-use = <4>;
+> > +			snps,rx-sched-sp;
+> > +			queue0 {
+> > +				snps,dcb-algorithm;
+> > +				snps,map-to-dma-channel = <0x0>;
+> > +			};
+> > +			queue1 {
+> > +				snps,dcb-algorithm;
+> > +				snps,map-to-dma-channel = <0x0>;
+> > +			};
+> > +			queue2 {
+> > +				snps,dcb-algorithm;
+> > +				snps,map-to-dma-channel = <0x0>;
+> > +			};
+> > +			queue3 {
+> > +				snps,dcb-algorithm;
+> > +				snps,map-to-dma-channel = <0x0>;
+> > +			};
+> > +		};
+> > +
+> > +		mtl_tx_setup: tx-queues-config {
+> > +			snps,tx-queues-to-use = <4>;
+> > +			snps,tx-sched-wrr;
+> > +			queue0 {
+> > +				snps,weight = <0x10>;
+> > +				snps,dcb-algorithm;
+> > +				snps,priority = <0x0>;
+> > +			};
+> > +			queue1 {
+> > +				snps,weight = <0x11>;
+> > +				snps,dcb-algorithm;
+> > +				snps,priority = <0x1>;
+> > +			};
+> > +			queue2 {
+> > +				snps,weight = <0x12>;
+> > +				snps,dcb-algorithm;
+> > +				snps,priority = <0x2>;
+> > +			};
+> > +			queue3 {
+> > +				snps,weight = <0x13>;
+> > +				snps,dcb-algorithm;
+> > +				snps,priority = <0x3>;
+> > +			};
+> > +		};
+> > +
+> > +		eth: ethernet@11021000 {
+> > +			compatible = "mediatek,mt8195-gmac",
+> > "snps,dwmac-5.10a";
+> > +			reg = <0 0x11021000 0 0x4000>;
+> > +			interrupts = <GIC_SPI 716 IRQ_TYPE_LEVEL_HIGH
+> > 0>;
+> > +			interrupt-names = "macirq";
+> > +			mac-address = [00 55 7b b5 7d f7];
+> 
+> How is this property of a SoC? Are you saying now that all MT8195
+> SoCs
+> have the same MAC address?
+The mac-address here is taken as a default mac address in eth driver
+rather than a randome one.
+Actually, there will be a tool to customize eth mac address (e.g
+through "ifconfig eth0 hw ether xx:xx:xx:xx:xx:xx"), so every
+MT8195 SoCs will get their specified mac address in real product.
+> 
+> Best regards,
+> Krzysztof
+> 
+Best Regards!
+Biao
 
-What's the status of this?
-Do we have agreement on the changes needed for the next respin?
-
-Regards,
-Tariq
