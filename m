@@ -2,107 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99539602BF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A961F602BF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiJRMmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S230125AbiJRMm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiJRMmn (ORCPT
+        with ESMTP id S230109AbiJRMmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:42:43 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E64C34EB
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666096943; bh=BJDZOO5EfwDno9TdDKdQmr48wqt9eejt/Cff+GSpELk=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=D60+1QoBi0PuMtbVk/gBCxBWJUEHGmxpEsKdmdIxc2R0yEZdJ0VyyNCtBw1whVdO8
-         uvKNk9V+udiLcWjqOWbqZXtXpRHV7odT4jPcB+QnlW0TSejlp9US2CytJOA5/+LEd8
-         FCRIPkQ5jQA85cdF+vZyIp68IhAWyXNgq5xW9g+U=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via [213.182.55.206]
-        Tue, 18 Oct 2022 14:42:23 +0200 (CEST)
-X-EA-Auth: GMNQmFwPLIUsLG2ugeTbCJcxK9/GrW8tViAzMAFA14Op7bLkoJlCRbSHs8SEiLiF9UxVvYtNvFM3avWpdMPj6oz1mhWeKVOs
-Date:   Tue, 18 Oct 2022 18:12:18 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Greg KH' <gregkh@linuxfoundation.org>,
-        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
-        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "phil@philpotter.co.uk" <phil@philpotter.co.uk>,
-        "paskripkin@gmail.com" <paskripkin@gmail.com>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "saurabh.truth@gmail.com" <saurabh.truth@gmail.com>
-Subject: Re: [PATCH 2/4] staging: r8188eu: reformat long computation lines
-Message-ID: <Y06fKv7U0/GhZfSZ@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1666011479.git.drv@mailo.com>
- <2dd27eff9aab5ffe31e61086c0584982794507cf.1666011479.git.drv@mailo.com>
- <Y01iLXp20G0FSJFG@kroah.com>
- <a0bef75b959f4ca6a7bbfaacd531f8ae@AcuMS.aculab.com>
+        Tue, 18 Oct 2022 08:42:55 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A3FC1D9F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:42:53 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z97so20241983ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yMP6fIsH3iK8GvA/5hVJOpgVRfJnpqAP6lVmWiyWygE=;
+        b=f+yELfdZ47XzJ+BJzeb7htVmv1joFeJ0NqAak3zL6TROI4B11piQZ2iVrsJcg+5F31
+         gAXNnWkUOREl4sLTvoKD18xGUjkyuYK0LuWBnA8g17PMusFAqNYjbqhQFW15fGAh382g
+         dp8ZCnrIOq6F6W47+MkAOhaAJm3WNgTX5kPolUG3mcOiEuVxB8FD6toXYuhPhGpXf60f
+         Z8uoxnRDs8Nx69yZkmqiitDM4W6hGAu/QxBVmJI2FdjwAeifjFhZP384qxt9RdMp3voA
+         95sLDELZHhIihTc1Oz8Z02WUrjzGr3J13dbyNWxijVCFX//MVHs2PxeIN5eQkQehdb0K
+         PFfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yMP6fIsH3iK8GvA/5hVJOpgVRfJnpqAP6lVmWiyWygE=;
+        b=uH0X+WikEmLcSFvMReimhhX45V+SNXE2QIo15EA4OuqVFgs3tnfmIC26uvnn6Xkxm3
+         5nBEmRBbdzhAl2khDiqG05xv2PBDjs0V83BeH4Bi2krBH5LYEbTtSOxURrZBqzO4XjU3
+         8EJm+EXZ9iyh8e0pgDxB4QaGWEk19HRKzFL+HTG1MixqUmhyaA0QK+mZh3JtmaVsulSE
+         8wNXq8OIDq8IANS/TCpr4CG1qylPA65NpKHvlI56BY/BYyexpb4ZCWQYhyYEtht+axPn
+         EJGesvkbEQf0nAtXEsgiaaBas0gs+EZOizr2QKyACrBcdFYY8v+oXgZTGOTe9yv46r/4
+         iWhw==
+X-Gm-Message-State: ACrzQf2pV2Ick31AgOAwgrHqw4rk7FNx7GSFDgSacmcPX+h9XyvIdqD1
+        0MUPKviOMhdH7EdROi13PsGlWnYswF5JBRnsobopgEEgXAg=
+X-Google-Smtp-Source: AMsMyM5mAjPZvG/k4IHFmA9D7OeQo3AejAZ5I9SIzubNLQsvefoJ2et+wacsozv8bDL9L/QS7q5q7YfBOAy70BbaqoQ=
+X-Received: by 2002:a05:6402:27d4:b0:45d:a69e:336d with SMTP id
+ c20-20020a05640227d400b0045da69e336dmr2416594ede.298.1666096971346; Tue, 18
+ Oct 2022 05:42:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0bef75b959f4ca6a7bbfaacd531f8ae@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   JaeJoon Jung <rgbi3307@gmail.com>
+Date:   Tue, 18 Oct 2022 21:42:39 +0900
+Message-ID: <CAHOvCC6-8sPD8yNy3AjHNzCkmqi+RYhtPNDs5ACe1-MMtOD3KA@mail.gmail.com>
+Subject: [core-scheduling] Modify prio_less() with in CONFIG_SCHED_CORE
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Don Hiatt <dhiatt@digitalocean.com>,
+        Hongyu Ning <hongyu.ning@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Cruz Zhao <CruzZhao@linux.alibaba.com>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 11:21:26AM +0000, David Laight wrote:
-> From: Greg KH
-> > Sent: 17 October 2022 15:10
-> >
-> > On Mon, Oct 17, 2022 at 06:52:50PM +0530, Deepak R Varma wrote:
-> > > Reformat long running computation instructions to improve code readability.
-> > > Address following checkpatch script complaints:
-> > > 	CHECK: line length of 171 exceeds 100 columns
-> > > 	CHECK: line length of 113 exceeds 100 columns
-> > >
-> > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > ---
-> > >  drivers/staging/r8188eu/core/rtw_br_ext.c | 20 +++++++++++++-------
-> > >  1 file changed, 13 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > > index 79daf8f269d6..427da7e8ba4c 100644
-> > > --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > > +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > > @@ -211,8 +211,10 @@ static int __nat25_network_hash(unsigned char *network_addr)
-> > >  	} else if (network_addr[0] == NAT25_IPX) {
-> > >  		unsigned long x;
-> > >
-> > > -		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^
-> > network_addr[5] ^
-> > > -			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^
-> > network_addr[10];
-> > > +		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^
-> >
-> > Why not go out to [4] here and then you are one line shorter?
->
-> and/or use a shorter variable name....
-Hi David,
-I have already re-submitted the patch set with 4 in line arrangement. Do you
-still suggest using shorter variable names?
+Hello,
+Since the priority of sched_class can be determined by pointer operation,
+the prio_less() function can be modified as follows.
+With this fix, the __task_prio() function is not needed.
+Please review.
 
-Thank you,
-./drv
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index ee28253c9ac0..24b86773da04 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -154,21 +154,6 @@ __read_mostly int scheduler_running;
 
->
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
->
->
+ DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
 
+-/* kernel prio, less is more */
+-static inline int __task_prio(struct task_struct *p)
+-{
+-       if (p->sched_class == &stop_sched_class) /* trumps deadline */
+-               return -2;
+-
+-       if (rt_prio(p->prio)) /* includes deadline */
+-               return p->prio; /* [-1, 99] */
+-
+-       if (p->sched_class == &idle_sched_class)
+-               return MAX_RT_PRIO + NICE_WIDTH; /* 140 */
+-
+-       return MAX_RT_PRIO + MAX_NICE; /* 120, squash fair */
+-}
+-
+ /*
+  * l(a,b)
+  * le(a,b) := !l(b,a)
+@@ -179,22 +164,18 @@ static inline int __task_prio(struct task_struct *p)
+ /* real prio, less is less */
+ static inline bool prio_less(struct task_struct *a, struct
+task_struct *b, bool in_fi)
+ {
+-
+-       int pa = __task_prio(a), pb = __task_prio(b);
+-
+-       if (-pa < -pb)
+-               return true;
+-
+-       if (-pb < -pa)
+-               return false;
+-
+-       if (pa == -1) /* dl_prio() doesn't work because of stop_class above */
+-               return !dl_time_before(a->dl.deadline, b->dl.deadline);
+-
+-       if (pa == MAX_RT_PRIO + MAX_NICE)       /* fair */
+-               return cfs_prio_less(a, b, in_fi);
+-
+-       return false;
++        int less = a->sched_class - b->sched_class;
++
++        if (less) {
++                return (less > 0) ? true : false;
++        } else {
++                if (a->sched_class == &fair_sched_class)
++                       return cfs_prio_less(a, b, in_fi);
++                else if (a->sched_class == &dl_sched_class)
++                       return !dl_time_before(a->dl.deadline, b->dl.deadline);
++                else
++                        return (a->prio - b->prio > 0) ? true : false;
++        }
+ }
 
+Thanks,
+JaeJoon Jung.
