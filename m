@@ -2,164 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817C8602C3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05583602C3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiJRM4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S230247AbiJRM6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiJRM4b (ORCPT
+        with ESMTP id S230064AbiJRM6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:56:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAE9733FD;
-        Tue, 18 Oct 2022 05:56:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E4136153F;
-        Tue, 18 Oct 2022 12:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15559C433C1;
-        Tue, 18 Oct 2022 12:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666097786;
-        bh=/vHNygegziKCA4VNx1TW5Fmp5dKqLbj1UZYsAAqZAeo=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=EtZTt+G9DOU4CSgbn8arUlALvx79zUkfj+olr5bhKDXDfLPy1T06DiJOymCNdQ7JY
-         WSveE5OEC5STK4QoCWaVtx6k/E0FWgfnmjXml0P3PGMGK0zuNEMQUnUmtyE3UsBLEL
-         TT+rlXUo3QFn5Nh8XZnybCd8KH5R27cUVTgnMdilHJnPuL2ALn66OUEsQfZu4JTsZT
-         C5NhvNOCkEVrLIFyzXCbpg2qXemLTar1JzAIp9pHA9pcEvZTfvYddRwkjV2+hcC3nY
-         86AtVLZDtyA2jTTeMP7rUkM5eSWYiSmkGhlF/UwEoTqrBfMnJdPMXFYFMmS0a1JS1I
-         jO3Azr+4B1y9A==
-Date:   Tue, 18 Oct 2022 14:56:21 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-cc:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH] [next] HID: hyperv: Replace one-element array with
- flexible-array member
-In-Reply-To: <SN6PR2101MB1693AFDA151C35DE148FECAAD7299@SN6PR2101MB1693.namprd21.prod.outlook.com>
-Message-ID: <nycvar.YFH.7.76.2210181456150.29912@cbobk.fhfr.pm>
-References: <Y00JenqCzKRrcTiF@mail.google.com> <SN6PR2101MB1693AFDA151C35DE148FECAAD7299@SN6PR2101MB1693.namprd21.prod.outlook.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 18 Oct 2022 08:58:06 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F0CACF62
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:58:04 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id g16so4712544qtu.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8qZmYxGrqj3+Uv24C0tbx5K9gwcR+iJBbptYxOprIx8=;
+        b=zMyh5nUg2UX1tOdk5MTEp4J1Zsjz1dRKv7+M4bGoE8upjW5/rphkbAMGRW7AW0kkA9
+         zbk1ctRy2b/uR0hfWpGbXsbjZxp0hDzFR2AzYSnaKlCJQ3ZNd/umaatoxO9wsc1LsdVH
+         3o2/IL+8WSP7MuBJx5BeBDbNteQTJHBR2KCTkcUXDgqJjjfk3RIzG8t2p0k3CcAQHZSz
+         5EZaizvixTsvGLPEgrPCIA4lHrKr6XR8h+74dvZfVOqtcvoT3UpmpoPVkkNMK0/zHPm4
+         eXq2hfEjf8xicPvgY8OepOfBRyoDOaVIYDTwk+rTdz/l557x/OmAH3+gIhD9wwhqrnmu
+         Swaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8qZmYxGrqj3+Uv24C0tbx5K9gwcR+iJBbptYxOprIx8=;
+        b=4+24u9SkfUGGAKE5w9MJEhOEah5CaRDjx+JHopBJ1iBlTwob6sS8Cko7+iuIumC4hS
+         qyfay2b80sqMkFOpq8JUpE3NEj9gg6zXizKLHSrnVPbtsjoj0/vveIgLCQrL0mO4eyro
+         Pw9gygVmwiXSI7UozlivK/ML+2HnCpjx6BfQuSx68opgiurh8YysQ9dkM74lFFBSAS1E
+         /Z/elcLO80USNEU9CsFRiefMSZMySTobjw1w+JFYD7ouFRLuoNFXMRAldkibTFtDGZVk
+         mbrk+zFUIWoIOy89N1uKWmPbJX4bGqJG+Cg7/pMgJ8rpPqkmPNCyeR+tywMx0f5/F5dd
+         FjCQ==
+X-Gm-Message-State: ACrzQf3nYwFIBB05QGefDsMHM60f2h+lfwT3JImvypYHhSSjvqftRQpO
+        O8ezxPyiqSpLWlTDa5vA9Vrk6W7iVv/+qQ==
+X-Google-Smtp-Source: AMsMyM4btOAaU5qvNmO3mPDFLHvYNkSLNqAJvHGzl4upv4mopszgowvKKqJ3ZbdlKF9+QzouYWLxxA==
+X-Received: by 2002:ac8:5792:0:b0:390:ee6e:5d1a with SMTP id v18-20020ac85792000000b00390ee6e5d1amr1812168qta.631.1666097883681;
+        Tue, 18 Oct 2022 05:58:03 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id dt5-20020a05620a478500b006ee94c5bf26sm2382346qkb.91.2022.10.18.05.58.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 05:58:03 -0700 (PDT)
+Message-ID: <77549889-a612-8478-ee87-659e4c07f292@linaro.org>
+Date:   Tue, 18 Oct 2022 08:58:01 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/3] dt-bindings: arm: ti: Add binding for AM68 SK
+Content-Language: en-US
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+References: <20221018123849.23695-1-sinthu.raja@ti.com>
+ <20221018123849.23695-2-sinthu.raja@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221018123849.23695-2-sinthu.raja@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022, Michael Kelley (LINUX) wrote:
-
-> > One-element arrays are deprecated, and we are replacing them with
-> > flexible array members instead. So, replace one-element array with
-> > flexible-array member in structs synthhid_msg, synthhid_input_report,
-> > pipe_prt_msg and refactor the rest of the code accordingly.
-> > 
-> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> > routines on memcpy() and help us make progress towards globally
-> > enabling -fstrict-flex-arrays=3 [1].
-> > 
-> > Link: https://github.com/KSPP/linux/issues/79
-> > Link: https://github.com/KSPP/linux/issues/210
-> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
-> > 
-> > Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-> > ---
-> >  drivers/hid/hid-hyperv.c | 17 +++++++----------
-> >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/hid/hid-hyperv.c b/drivers/hid/hid-hyperv.c
-> > index e0bc73124196..208cf8d981a5 100644
-> > --- a/drivers/hid/hid-hyperv.c
-> > +++ b/drivers/hid/hid-hyperv.c
-> > @@ -61,7 +61,7 @@ struct synthhid_msg_hdr {
-> > 
-> >  struct synthhid_msg {
-> >  	struct synthhid_msg_hdr header;
-> > -	char data[1]; /* Enclosed message */
-> > +	char data[]; /* Enclosed message */
-> >  };
-> > 
-> >  union synthhid_version {
-> > @@ -99,7 +99,7 @@ struct synthhid_device_info_ack {
-> > 
-> >  struct synthhid_input_report {
-> >  	struct synthhid_msg_hdr header;
-> > -	char buffer[1];
-> > +	char buffer[];
-> >  };
-> > 
-> >  #pragma pack(pop)
-> > @@ -118,7 +118,7 @@ enum pipe_prot_msg_type {
-> >  struct pipe_prt_msg {
-> >  	enum pipe_prot_msg_type type;
-> >  	u32 size;
-> > -	char data[1];
-> > +	char data[];
-> >  };
-> > 
-> >  struct  mousevsc_prt_msg {
-> > @@ -232,7 +232,7 @@ static void mousevsc_on_receive_device_info(struct
-> > mousevsc_dev *input_device,
-> > 
-> >  	ret = vmbus_sendpacket(input_device->device->channel,
-> >  			&ack,
-> > -			sizeof(struct pipe_prt_msg) - sizeof(unsigned char) +
-> > +			sizeof(struct pipe_prt_msg) +
-> >  			sizeof(struct synthhid_device_info_ack),
-> >  			(unsigned long)&ack,
-> >  			VM_PKT_DATA_INBAND,
-> > @@ -271,16 +271,14 @@ static void mousevsc_on_receive(struct hv_device *device,
-> >  		 * malicious/buggy hypervisor/host, add a check here to
-> >  		 * ensure we don't corrupt memory.
-> >  		 */
-> > -		if ((pipe_msg->size + sizeof(struct pipe_prt_msg)
-> > -			- sizeof(unsigned char))
-> > +		if (struct_size(pipe_msg, data, pipe_msg->size)
-> >  			> sizeof(struct mousevsc_prt_msg)) {
-> >  			WARN_ON(1);
-> >  			break;
-> >  		}
-> > 
-> >  		memcpy(&input_dev->protocol_resp, pipe_msg,
-> > -		       pipe_msg->size + sizeof(struct pipe_prt_msg) -
-> > -		       sizeof(unsigned char));
-> > +				struct_size(pipe_msg, data, pipe_msg->size));
-> >  		complete(&input_dev->wait_event);
-> >  		break;
-> > 
-> > @@ -359,8 +357,7 @@ static int mousevsc_connect_to_vsp(struct hv_device *device)
-> >  	request->request.version_requested.version = SYNTHHID_INPUT_VERSION;
-> > 
-> >  	ret = vmbus_sendpacket(device->channel, request,
-> > -				sizeof(struct pipe_prt_msg) -
-> > -				sizeof(unsigned char) +
-> > +				sizeof(struct pipe_prt_msg) +
-> >  				sizeof(struct synthhid_protocol_request),
-> >  				(unsigned long)request,
-> >  				VM_PKT_DATA_INBAND,
-> > --
-> > 2.37.3
+On 18/10/2022 08:38, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
 > 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> AM68 Starter Kit is a low cost, small form factor board designed for
+> TI's AM68 SoC which is optimized to provide best in class performance
+> for industrial applications and add binding for the same.
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> ---
+>  Documentation/devicetree/bindings/arm/ti/k3.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> index 28b8232e1c5b..54f983fb23cf 100644
+> --- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> +++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> @@ -69,6 +69,7 @@ properties:
+>          items:
+>            - enum:
+>                - ti,j721s2-evm
+> +              - ti,am68-sk
 
-Thanks, applied.
+Alphabetical order please.
 
--- 
-Jiri Kosina
-SUSE Labs
+Best regards,
+Krzysztof
 
