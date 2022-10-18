@@ -2,83 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCE360313D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6703060313E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJRRAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
+        id S229682AbiJRRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiJRQ7u (ORCPT
+        with ESMTP id S229867AbiJRRAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:59:50 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D7556008
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:59:48 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso17936619pja.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b0l2HZlOZuWdOYo1ROWax2muHI31wxqlPHYjTm43zec=;
-        b=PcuH5Qmpe7v1S++KPeobFTZuJ1OT0/3Mf1vuV/rdjGtACw7E4w3+aC1KCXZssWFge0
-         Iu/XPMhvL7F3sJqOR9h/GULUOS/0uZqUKxnUNQDvMcW6zADq97FjU9tKTbOUREhVCPsY
-         sjzU+3CIpByK647KAuTGK+9fz5B+ME/WdZ1E8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b0l2HZlOZuWdOYo1ROWax2muHI31wxqlPHYjTm43zec=;
-        b=LXsbI/87piMLU365nT/ojo/AGFJppDfNyrTjmQ5H8JvJwBdQP3F36n5UUT678a5wWl
-         YiZl+FY5bLF+tfKfJQf+JnzCjfbwReoGvmQ0Qd2JZPzADtLFlvxJzBNapFED10rDwI0Z
-         KbkwxDNv7/1F5iimLRw8sE2lQaWxInyoAXazOevcgpZtDSe9z9Hp1lWXlQvYkxssyXOK
-         sNo5TiSQ3AlEM8HvvcR3kgbBVYMbLC3hGmCMrLSHCnoMCUSuG0YFpleBQVwSX9OlbfGW
-         XsWDSOo7s2l4h3Kfb+2P90XTcwN864KsOYZCm+CRzGMyikEYM0OQzy7tEcPZitlYuyfM
-         IGiQ==
-X-Gm-Message-State: ACrzQf3yRAsAdymxgGEYn3L0K6C9FhHuQ/bHtu13Tzf73fKfKFvq1IJ5
-        8VR7QLf+ALA+DOJU+jumeLxpUQ==
-X-Google-Smtp-Source: AMsMyM6Rlzv5RCnrpSOJBD3bV+5CLiPqwDe1Lc9YkBbLohQwy95ZHPsRszbYr/mpVmfAeOr1YrsZkQ==
-X-Received: by 2002:a17:90a:c90c:b0:20a:7179:b14f with SMTP id v12-20020a17090ac90c00b0020a7179b14fmr4574348pjt.58.1666112388295;
-        Tue, 18 Oct 2022 09:59:48 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:2ac3:f4e2:e908:c393])
-        by smtp.gmail.com with ESMTPSA id w11-20020a170902ca0b00b001782a6fbcacsm8888930pld.101.2022.10.18.09.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 09:59:47 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 09:59:44 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Al Cooper <alcooperx@gmail.com>, linux-mmc@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] mmc: sdhci-of-arasan: Fix SDHCI_RESET_ALL for CQHCI
-Message-ID: <Y07bgNd7KbLDttsq@google.com>
-References: <20221018035724.2061127-1-briannorris@chromium.org>
- <20221017205610.1.I29f6a2189e84e35ad89c1833793dca9e36c64297@changeid>
- <e7816e4a-8558-0de0-e25f-d10abd0ef1c3@intel.com>
+        Tue, 18 Oct 2022 13:00:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E91FCA8B8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:00:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7196061648
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:00:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5926CC433D7;
+        Tue, 18 Oct 2022 17:00:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666112400;
+        bh=j95Pr+nqCm9HQ0/2Y0CWsEer+z/8+6G8uW/jrB6rHD4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VnDUTX+2ON+KD9FPoyxYsSYtZt0fFO/i6m06G1aKvu4JKWae9UZR+ArxG3rU/SRc4
+         BaNpN739QbHT+utQMFzXnDi6guk6Ofylj1XHK6h+swRz1IWopVlhM2cr68udZSLkhb
+         Q9WrvRmOsi5KQosBf86BKsvJSbtpR3Fqe7gX/3Gs63z3rVue0l772VPq6FT7Qhj3nH
+         W6g+/LMReottOA8WF9ZJbwuQjEXLQzqLLcVIoZZisOpqSZR1WoL3Xstr7GwlIhK2Zn
+         mfT4wkJ/4KI5WhCyghv228sDdn4G86Jz4x7HeFwLwZdLi73v+BiMnpTiWc53BZqz6b
+         kGyYW2Hzpa1qA==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-damon@amazon.com,
+        linux-damon-trial@amazon.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: DAMON Beer/Coffee/Tea chat series
+Date:   Tue, 18 Oct 2022 16:59:58 +0000
+Message-Id: <20221018165958.82803-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220810225102.124459-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7816e4a-8558-0de0-e25f-d10abd0ef1c3@intel.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,32 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+On Wed, 10 Aug 2022 22:51:02 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-On Tue, Oct 18, 2022 at 07:13:28PM +0300, Adrian Hunter wrote:
-> On 18/10/22 06:57, Brian Norris wrote:
-> > So like these other patches, deactivate CQHCI when resetting the
-> > controller. Also, move around the DT/caps handling, because
-> > sdhci_setup_host() performs resets before we've initialized CQHCI. This
-> > is the pattern followed in other SDHCI/CQHCI drivers.
+> Hello,
 > 
-> Did you consider just checking host->mmc->cqe_private like
-> sdhci_cqhci_reset() ?
+> 
+> In short, I'd like to start an open, regular, and informal virtual bi-weekly
+> meeting series for DAMON community.
+> 
+> Important links and dates
+> -------------------------
+> 
+> Location: https://meet.google.com/ndx-evoc-gbu
+> Agenda: https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
 
-I did not, although I am doing so now.
+The meeting was scheduled for yesterday 18:00 PDT, but I forgot that.  Sorrry
+for my bad memory.  It's very volatile and easily corrupted.  I will try to
+sanitize it next time.
 
-My first thought is that this feels a bit too private. Is the host
-driver supposed to be memorizing the details of the CQHCI layer?
+For people who prefer the time zone, I will change the time of next meeting
+from Tuesday 09:30 PDT to Monday 18:00 PDT.  So, the next meeting will be at
+2022-10-31 (Mon) 18:00 PDT, Google Meet (https://meet.google.com/ndx-evoc-gbu).
 
-But on the plus side, that would remove some contortions needed here
-(and also in sdhci-brcmstb.c).
+Sincere apology again.  I may prepare some sweets for you ;)
 
-Here's another option I previously considered: teaching
-cqhci_deactivate() to check cqe_private itself. That would have the same
-benefits, while keeping the private details in cqhci-core.c. How do you
-like that?
 
-(Tiny downside: cqhci-core.c got its rename in v5.12, so backporting
-this to -stable would get slightly more difficult.)
-
-Brian
+Thanks,
+SJ
+[...]
