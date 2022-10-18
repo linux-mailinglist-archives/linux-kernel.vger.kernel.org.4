@@ -2,139 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927EE602D6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00702602D73
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiJRNwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S231262AbiJRNxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJRNwt (ORCPT
+        with ESMTP id S231240AbiJRNxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:52:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1C8169A;
-        Tue, 18 Oct 2022 06:52:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAE3FB81F66;
-        Tue, 18 Oct 2022 13:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2169C433C1;
-        Tue, 18 Oct 2022 13:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666101165;
-        bh=Rpe8fNS7ucIdrriKqnBNEgNQaG9KzJWM0Ibr0zsKMOE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CIIJfLtaeJFtKGx9McsAo9g+6AAAGFOqrMWC9JMBlF1r8DoifbvLVnRWqU6Rndbxu
-         XG+XsSbVSb37VD0UgPBFEAwA/r9fgbm4DpippgV9V3ZE8wmD7uOFgTXwK2nUKqtdMJ
-         /MehBPPIJM7J7neDZHPEanqw5GV+l9hI6IT3m00+VoWH4NvwaQBOmzHg5Vx0EaS1W0
-         +eWwDp0uDRDHpdbyeOvNesxBTQThwAblnA18VjREkUWWLfjr6NH83ZEO1obvYIEmAe
-         cNTw3ytrPe8bH56J3/JWrxhFOKBjd2PndLHWnF2PC0RWhaf7FDTY8qFUmdy8mb0MyD
-         B83/vH2/WSxLw==
-Received: by mail-vs1-f51.google.com with SMTP id 1so10492194vsx.1;
-        Tue, 18 Oct 2022 06:52:45 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0HWxJMCrYXtqK9TokY53F4jMd8JlbK61HCwD8w/pEkU2FeeNDP
-        IAhWoYlrS1XVAYg5fa6Bx82jIwx1lfT469yG1g==
-X-Google-Smtp-Source: AMsMyM4/B3fnDjWo+mzcsxUH9eX3UfBrB/LooXCAwejl4EWDivaUeEITq+fs76FUyI0FNO9YxRwHm0yfAjMKGdoUfH0=
-X-Received: by 2002:a67:c088:0:b0:39b:1bb3:bdd1 with SMTP id
- x8-20020a67c088000000b0039b1bb3bdd1mr1391749vsi.85.1666101164584; Tue, 18 Oct
- 2022 06:52:44 -0700 (PDT)
+        Tue, 18 Oct 2022 09:53:06 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89785CF1BF;
+        Tue, 18 Oct 2022 06:53:04 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 894CD3200990;
+        Tue, 18 Oct 2022 09:52:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 18 Oct 2022 09:53:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666101179; x=1666187579; bh=y1RDrGYs9H
+        UnA1yVzl1mHHm++7oqqakHHWPZuH5zwSg=; b=wHmQChrvpEt1boK7HsJw72s9DV
+        J+WpzM4xZ6IMFDxIHCtOsvKZ+D3pxugApUF2Nk/w3iyqy9O7ozrtf7eJuFRTMmXM
+        ZWaG4g+o7eli10sa9bSnUq25UrgeeFqKzI+6LD2621E/tqUjSqIsGNfqMbf46LUM
+        TR0Yik9cv7zFRBpFRN1K0+8MprUQqzetTRsMClogUnwQ57/hLx/1J9g53IxrtVQI
+        xJSiUrbzhitWCSBbn85PNGqRPJ4Oe3Hjl0vBRxaVj8ROxYkoV6iDeZ0ALBhVEvWi
+        oAHHqi83Rxwp9X5+gMn0KVfbZLMeU7D3QSmiJulNICsKTiJyhGx0JatiLQ6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1666101179; x=1666187579; bh=y1RDrGYs9HUnA
+        1yVzl1mHHm++7oqqakHHWPZuH5zwSg=; b=oKBiuT30EhRlVZaP+PQjRAkaoBjr5
+        nvgkZDxHfSmxEzJDraO2j2CW0KzT70j3xQbJlh6uHUiR1n9YUg7/vOfNDOk4oA+k
+        TzJW0ZWInTwop1XR66UmRJtOiDYL9wzOVEdzzf08c1oeoGRjBIx+0e+vK/ZLzect
+        s2T931Cp2lG4j/3rhNH0pXCzYzb6b5nRCAIyUz8T51zE/ARoVpHOrVsjT3szGCLB
+        WQrtBqheZv6P2McIIfHmSCW01NLOHrVJ6bXSZF45PI3578KAvWlkEQ/dXfNrL5vF
+        Ya4jkLx2vzk3nOrmkh3xUYvE1ZkfToaIYDuQUp4EaYnThmjHveF1i/ApA==
+X-ME-Sender: <xms:uq9OY96dAbiHS7le6d21RvgBNiDDIqYN_Bmr1Ns2NoMVz-Dh8PvT8g>
+    <xme:uq9OY67HIyE4k5TI0t9ALBLjHT9urVyNL9abJTlatMJNKtdX1bJPwpHoXY0imgd_j
+    Jri8UFkMZQNZ8TibY4>
+X-ME-Received: <xmr:uq9OY0exajE8f4YbtIktT13mUrD0kmYiIiDfVkv_AMl7JiugQGNOf3wMdb6O>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepvdehfeejtefhgeegudegveejieetfeeugeehveffteejkedufeeltedutdeu
+    geehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:uq9OY2KxCiol22qOa7eFD6lgdNweCFU8APDZ87ML15AfXKXcnH9OhQ>
+    <xmx:uq9OYxJXh0BkN25ECB7dSppi1kBvoKQ63DAJv6GuiejZFM16LmbTAw>
+    <xmx:uq9OY_zaWHP5dbRC19J2u5je3O5crEgjJcIINtSH1bDHuM7IZ2FiZQ>
+    <xmx:u69OY-ENAE160bT30sorIRm_QRfuQww9g0ctAyBAQ0pedp6ojmHh3g>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Oct 2022 09:52:58 -0400 (EDT)
+Subject: [PATCH 0/4] clk: Rate range improvements
 MIME-Version: 1.0
-References: <20220930163631.27040-1-zajec5@gmail.com> <166578177913.2909910.7600034251484225468.robh@kernel.org>
- <Y059lG8ZOXXzc4N+@wendy>
-In-Reply-To: <Y059lG8ZOXXzc4N+@wendy>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 18 Oct 2022 08:52:35 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLKCgW439gUTtXux+_i5ZLwoEF3SzjSg2V27-QpY9EqUA@mail.gmail.com>
-Message-ID: <CAL_JsqLKCgW439gUTtXux+_i5ZLwoEF3SzjSg2V27-QpY9EqUA@mail.gmail.com>
-Subject: Re: [PATCH V2] dt-bindings: nvmem: u-boot,env: add Broadcom's variant binding
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        William Zhang <william.zhang@broadcom.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Joel Peshkin <joel.peshkin@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        Tom Rini <trini@konsulko.com>, u-boot@lists.denx.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIALevTmMC/x2L0QqDMAwAf0XyvECbOtD9jca4BksHDcpA/HeDj8fdnWDSVAw+3QlNDjX9VYf46o
+ DzVL+CujgDBaIY4oBcNmyP4Cy8Ga76F0MKaVzTmxL1AXyeJxOcPeTse91Lua4bmy3g+20AAAA=
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Tue, 18 Oct 2022 15:52:55 +0200
+Message-Id: <20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-7da52
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1090; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=ER4lhQAig9sBx9CAnoLtTYEmj2SMtCeNYjxq2yxnBx4=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMl+63e6Zmf5rzG7sPtL2UdXt/uG9U/fF096sWJe357uWkHv
+ IzuEOkpZGMS4GGTFFFlihM2XxJ2a9bqTjW8ezBxWJpAhDFycAjCR1YcYGa5zf2kOmW24vqJ3U7TWUu
+ uTJxa/bl76OSyE+yBX+veXm28yMvSbh6VObJthdurH85/nbvetElu9+nZaSpmCpo3Cs2+JmzkB
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 5:19 AM Conor Dooley <conor.dooley@microchip.com> w=
-rote:
->
-> On Fri, Oct 14, 2022 at 04:09:40PM -0500, Rob Herring wrote:
-> > On Fri, 30 Sep 2022 18:36:31 +0200, Rafa=C5=82 Mi=C5=82ecki wrote:
-> > > From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-> > >
-> > > Broadcom uses U-Boot for a lot of their bcmbca familiy chipsets. U-Bo=
-ot
-> > > stores its configuration in an environment data block.
-> > >
-> > > Such blocks are usually stored on flash as a separated partition at
-> > > hardcoded address. Broadcom however decided to:
-> > > 1. Store env data block inside U-Boot partition
-> > > 2. Avoid sticking to hardcoded offsets
-> > > 3. Use custom header with "uEnv" magic and env data length
-> > >
-> > > Example (length 0x4000):
-> > > $ hexdump -n 32 -C -s 0x40000 /dev/mtdblock0
-> > > 00040000  76 6e 45 75 00 40 00 00  34 89 7a 82 49 4d 41 47  |vnEu.@..=
-4.z.IMAG|
-> > > 00040010  45 3d 4e 41 4e 44 3a 31  4d 2c 31 30 32 34 4d 00  |E=3DNAND=
-:1M,1024M.|
-> > > (0x40000 offset is unit specific and can change)
-> > >
-> > > Starting with the commit 118f3fbe517f4 ("dt-bindings: mtd: partitions=
-:
-> > > support label/name only partition") DT can describe partitions matchi=
-ng
-> > > them by a name (without specifying actual address). With that feature
-> > > and this binding change it's possible to:
-> > > 1. Specify DT node for Broadcom's U-Boot env data subpartition
-> > > 2. Add nodes for specific environment data variables
-> > > 3. Reference them as NVMEM cells
-> > >
-> > > This binding is unlikely to help Broadcom's U-Boot. U-Boot SPL needs =
-to
-> > > find environment data early (before it accesses DTB) and it does that=
- by
-> > > looking for an "uEnv" magic. Dirty way.
-> > >
-> > > This binding can however be used by operating systems. It allows
-> > > describing cleanly U-Boot, its env data and variables. It tells
-> > > operating system about Broadcom-specific env data so it can parse it.
-> > >
-> > > Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-> > > ---
-> > > V2: Work on better commit body & add example
-> > > ---
-> > >  .../devicetree/bindings/nvmem/u-boot,env.yaml | 21 +++++++++++++++++=
-++
-> > >  1 file changed, 21 insertions(+)
-> > >
-> >
-> > Applied, thanks!
->
-> Hey Rob,
-> Maybe my tooling is out of date or w/e but this is breaking
-> dt_binding_check for me.
->
-> I applied the below to fix the build, which I was about to send, before
-> realising that you'd applied it and wondered if I was missing something.
+Hi,
 
-Indeed, it is broken. I've applied your fix. Thanks.
+Here's a bunch of patches for issues I came across while debugging the bug
+reported by Angelo.
 
-Rob
+The most important one is the first one. Even though it looks innoculous, it
+fixes the bug in question for some reason.
+
+Let me know what you think,
+Maxime
+
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
+---
+Maxime Ripard (4):
+      clk: Remove WARN_ON NULL parent in clk_core_init_rate_req()
+      clk: Initialize the clk_rate_request even if clk_core is NULL
+      clk: Initialize max_rate in struct clk_rate_request
+      clk: Warn if we register a mux without determine_rate
+
+ drivers/clk/clk.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+---
+base-commit: 56e8142dda103af35e1a47e560517dce355ac001
+change-id: 20221018-clk-range-checks-fixes-2039f3523240
+
+Best regards,
+-- 
+Maxime Ripard <maxime@cerno.tech>
