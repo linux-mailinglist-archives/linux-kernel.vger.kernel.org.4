@@ -2,132 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB93160281C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0175A60281D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiJRJSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S231189AbiJRJSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJRJSH (ORCPT
+        with ESMTP id S230100AbiJRJSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:18:07 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF59E87FA7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:18:05 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id 13so30709161ejn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOQqs65wtvxD4dXO4tAoUmo7evjc4ehlCZeveSnwvf0=;
-        b=zb081iMh7QlIU5PcMmIu9rydRddiZCl3sflOebBzziP8ApqyWutpxbxkgnFN7y5pcb
-         kCK5FoPIfZfefyH1k8Hyr5lmpyaQER8R+F6PMP7bIaUR4Qd0uS3iba3OTCi3fZ/Z73R4
-         ow+MCscbaCzzjne6e6dEL7NVLBIS6gIK/rwdHGvt/NPXc3FXM6uaaRHkoo3ydCByNva8
-         i1QZztSRnKv46EYpVK8nPe7M1yPpdA3mA+6nQkB7IfcY5FC3GkfVPYcqZ//dReL5pHSQ
-         j4ZooHa94RjthJqm6dWyhVqylE+VB01KtYEbBIStj/b1WmzhHJUXYryVveINpQiWU0F1
-         gRqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oOQqs65wtvxD4dXO4tAoUmo7evjc4ehlCZeveSnwvf0=;
-        b=aruJPb4pjoFLeQNRMDVXSdV/RQnC3l0Y4vP7o1mhv4kQiDKHSBaGnn0RfS2VU2YAUl
-         KYjVNqHbGI6iwvyrrpCbFhSBRn5MgnjQUNdEC7v48K7jd7M9GDfdg/feWzQLCh0bAJTx
-         Vl4YoEkypuh/zVvGzxDxBaL9mTvVQyvhSrY1xWLrCxrlmR3xbt4Apd2QGhcE3t0ir09I
-         WWdClHz8mnuIZiuMfUMpRdH4XcqWp4kAGC2TUSLF7XVC/MwZThyirL3dHLryKgc8PRe2
-         VDXLjdFt0oApFiAYYgsJgVXKB/NTpDo3HKU16HWkJrs9MRZDpPry7A5UzzSlSvg9mcyK
-         h0ag==
-X-Gm-Message-State: ACrzQf0jU6rE6dx0O0zI5OtCuZcdv4KT+hafRT2KSt2kPZYcsv/CwO8w
-        YtdWCn3GW6nnjYgAxvy4nOxcipas0Bk6FRHRlSk03A==
-X-Google-Smtp-Source: AMsMyM6lZ2+Xt+1NEg2JK7nPwMIv3ssbgjEp/zROqPCRH200jqaALy3oAke4WBt/IhCcXtUVaXfHcVFtSi5ZhtdOnxs=
-X-Received: by 2002:a17:907:7805:b0:780:24fd:c4e8 with SMTP id
- la5-20020a170907780500b0078024fdc4e8mr1602811ejc.78.1666084684420; Tue, 18
- Oct 2022 02:18:04 -0700 (PDT)
+        Tue, 18 Oct 2022 05:18:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58DDBAA347
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:18:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 527F0113E;
+        Tue, 18 Oct 2022 02:18:17 -0700 (PDT)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E80D3F7D8;
+        Tue, 18 Oct 2022 02:18:10 -0700 (PDT)
+Message-ID: <9fc5ab20-c7f0-a917-4938-403e3661109f@arm.com>
+Date:   Tue, 18 Oct 2022 10:18:08 +0100
 MIME-Version: 1.0
-References: <20221018021920.3747344-1-bryan.odonoghue@linaro.org> <20221018021920.3747344-2-bryan.odonoghue@linaro.org>
-In-Reply-To: <20221018021920.3747344-2-bryan.odonoghue@linaro.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 18 Oct 2022 11:17:53 +0200
-Message-ID: <CAG3jFyuoJGNGHmQFfNsBJfnYbUw+jMCiP5uiLcYspYapYKydpA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] i2c: qcom-cci: Fix ordering of pm_runtime_xx and i2c_add_adapter
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     loic.poulain@linaro.org, wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vladimir.zapolskiy@linaro.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [Question] Question about supporting sysreg only CoreSight
+ ETMv4.4 on ACPI machines
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     yehaiyang2@hisilicon.com, wanghuiqiang <wanghuiqiang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, mark.rutland@arm.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anshuman Khandual <Anshuman.Khandual@arm.com>
+References: <6e85db13-a65f-d4c6-1b6b-660a94cb7060@huawei.com>
+Content-Language: en-US
+From:   Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <6e85db13-a65f-d4c6-1b6b-660a94cb7060@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 04:19, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
->
-> When we compile-in the CCI along with the imx412 driver and run on the RB5
-> we see that i2c_add_adapter() causes the probe of the imx412 driver to
-> happen.
->
-> This probe tries to perform an i2c xfer() and the xfer() in i2c-qcom-cci.c
-> fails on pm_runtime_get() because the i2c-qcom-cci.c::probe() function has
-> not completed to pm_runtime_enable(dev).
->
-> Fix this sequence by ensuring pm_runtime_xxx() calls happen prior to adding
-> the i2c adapter.
->
-> Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
-> Reported-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Tested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/i2c/busses/i2c-qcom-cci.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 87739fb4388b..a4b97fe3c3a5 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -639,6 +639,11 @@ static int cci_probe(struct platform_device *pdev)
->         if (ret < 0)
->                 goto error;
->
-> +       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
-> +       pm_runtime_use_autosuspend(dev);
-> +       pm_runtime_set_active(dev);
-> +       pm_runtime_enable(dev);
-> +
->         for (i = 0; i < cci->data->num_masters; i++) {
->                 if (!cci->master[i].cci)
->                         continue;
-> @@ -650,14 +655,12 @@ static int cci_probe(struct platform_device *pdev)
->                 }
->         }
->
-> -       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
-> -       pm_runtime_use_autosuspend(dev);
-> -       pm_runtime_set_active(dev);
-> -       pm_runtime_enable(dev);
-> -
->         return 0;
->
->  error_i2c:
-> +       pm_runtime_disable(dev);
-> +       pm_runtime_dont_use_autosuspend(dev);
-> +
->         for (--i ; i >= 0; i--) {
->                 if (cci->master[i].cci) {
->                         i2c_del_adapter(&cci->master[i].adap);
-> --
-> 2.34.1
->
+Hi,
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Cc: Anshuman
+
+On 18/10/2022 03:04, Xiongfeng Wang wrote:
+> Hi, Suzuki
+> 
+>     We are testing CoreSight ETMv4.4 and TRBE recently. ETMv4.4 obsoletes memory
+> mapped access to ETM and mandates the system registers. The following commit add
+> driver for sysreg only devices, but it only support device tree.
+>    commit 5214b563588e8414193bd7a174c52350256942a6
+>    coresight: etm4x: Add support for sysreg only devices
+> 
+> ACPI machine can use 'ARMHC500' to report a ETM4x device. But the corresponding
+> driver is etm4x_amba_driver. It needs memory resouces and doesn't support sysreg
+> only device.
+
+That is true. Unfortunately, supporting this requires us to move away 
+from the AMBA framework (at least) for ETM4x devices. This is currently
+developed by Anshuman. We can share it as soon as this is complete.
+
+Thanks
+Suzuki
+
+> 
+> Do we have some other way to use CoreSight ETMv4.4 on ACPI machines. Thanks a lot.
+> 
+> Thanks,
+> Xiongfeng
+
