@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35F26021D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C516021E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiJRDIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S230443AbiJRDIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJRDGt (ORCPT
+        with ESMTP id S230184AbiJRDHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:06:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8AF8F241;
-        Mon, 17 Oct 2022 20:06:43 -0700 (PDT)
+        Mon, 17 Oct 2022 23:07:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F4B9A2B0;
+        Mon, 17 Oct 2022 20:06:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 675D661369;
-        Tue, 18 Oct 2022 03:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C2BC433D7;
-        Tue, 18 Oct 2022 03:06:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BE24B81C55;
+        Tue, 18 Oct 2022 03:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ABDBC43147;
+        Tue, 18 Oct 2022 03:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666062401;
-        bh=Q8E9wGi88RIBXkr+eMu3UasZw7RITjLS8MAVqymDmxI=;
+        s=k20201202; t=1666062402;
+        bh=/JFNCvf+56Gzppfvo1oD6GGpNyK42pK9fZDPHQmB/Cc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=me1CNkmDLSY6YXJ+tpZ4MMVLohwtoWXjtoe7zKbOEOlwkwr21KhoAGLMoFL4KBvZ9
-         frvCYiWIZlE1mm1pHkUXewhf5piSkznd8MB5UDzZUhnlb9pu5BBqIHDX92V1faXB62
-         pGLz8/iuJJyzPpcJ+di6FO9tIgTEAOZANscugs7sX7WQsseDxRS6/3Mn0mPrfyf5yo
-         RedDHzGIt28cJb+Im/HhmwEdbbIyGtFbaC6lGc6cejb9EG/33RtEcr5iRQphndAPE6
-         x+t3l6BqYMNvX0HKvVaelj+H1voVb+8+GQLq8UleK6ch32TLwZcWn5YlwUrvhsDdNt
-         12kFzFA0yXM5A==
+        b=iDWxo24062sQJbZTPBYUb4wg9KtztwIPIgEwxuE4a53W6j7AzqhwacLikQJzDuORg
+         EezXLgXIWKczVJpjMsNWPqFd9nF+K+ARrv7M8uw2pxxKtPvSrEBA8T5HHy4bQuCLrB
+         HDnmK0jsIbIrM23Z+GNnNUvTNzMjC12Zwh3YzGgB91pDGpIpMJLgPZKjONlEWoMROe
+         ZfDNUkAlm5yLQGWabzXOQ/I4bkKuEsb8swNMOrWOYQPvSo8Aq3CiFed5actNgvwZq9
+         4lmHJb2s1CZmuMgrPBnZPa6ymoCag5FYuoPVnKMxIqfohpRxu9N5OgEOWJ2XGG42dY
+         imjQEajBDubQA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, judyhsiao@chromium.org
-Cc:     linux-arm-kernel@lists.infradead.org, swboyd@chromium.org,
-        dianders@chromium.org, cychiang@google.com, tzungbi@chromium.org,
+To:     kc@postmarketos.org, caleb@connolly.tech
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, srinivas.kandagatla@linaro.org,
-        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        judyhsiao@google.com
-Subject: Re: [v3 0/3] Add dtsi for sc7280 herobrine boards that using rt5682 codec
-Date:   Mon, 17 Oct 2022 22:05:23 -0500
-Message-Id: <166606235831.3553294.3277585117012586384.b4-ty@kernel.org>
+        agross@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH v2 0/3] arm64: dts: qcom: sdm845: commonize bluetooth pinconf
+Date:   Mon, 17 Oct 2022 22:05:24 -0500
+Message-Id: <166606235862.3553294.9272597956883515889.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220525014308.1853576-1-judyhsiao@chromium.org>
-References: <20220525014308.1853576-1-judyhsiao@chromium.org>
+In-Reply-To: <20221016172944.1892206-1-kc@postmarketos.org>
+References: <20221016172944.1892206-1-kc@postmarketos.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,26 +58,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 01:43:05 +0000, Judy Hsiao wrote:
-> Put sound node and lpass_cpu node settings for boards that use rt5682
-> codec in the sc7280-herobrine-audio-rt5682.dtsi as there are different
-> choices of headset codec for herobrine projects. Common audio setting
-> for the internal speaker is in sc7280-herobrine.dtsi.
+On Sun, 16 Oct 2022 18:29:40 +0100, Caleb Connolly wrote:
+> From: Caleb Connolly <caleb@connolly.tech>
 > 
-> This series depends on:
-> "Add lpass pin control support for audio on sc7280 based targets" [1]
-> "Add soundcard support for sc7280 based platforms" [2]
+> This series commonises the 4-pin pinconf used by almost all devices which have have
+> Bluetooth on uart6 and removes the node from individual device DTS files.
+> 
+> It also updates the old hsuart alias definitions to serial1. I'm happy to drop this if it
+> may causes issues with userspace, but it seemed to make sense to throw in while we're at it.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
-      commit: a1afae1ac6e71f9995fd87fea3a116859fd64fe1
-[2/3] arm64: dts: qcom: sc7280: Add sc7280-herobrine-audio-rt5682.dtsi
-      commit: 1c5b7afeaf5b6568dc2f36d444d70ad9f6632582
-[3/3] arm64: dts: qcom: sc7280: include sc7280-herobrine-audio-rt5682.dtsi in villager and herobrine-r1
-      (no commit info)
+[1/3] arm64: dts: qcom: sdm845: commonize bluetooth UART pinmux
+      commit: 691dfbf54214c9c42444f357fc3a8103a10ad738
+[2/3] arm64: dts: qcom: sdm845-shift-axolotl: fix Bluetooth
+      commit: 9833e23b6905d0ab342deb16a6c2312759ab5a0d
+[3/3] arm64: dts: qcom: sdm845-*: fix uart6 aliases
+      commit: 4772c03002c3eb2fc6dd0f908af0d8371a622499
 
 Best regards,
 -- 
