@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974B3602270
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05C060226F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiJRDUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S230255AbiJRDUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiJRDTC (ORCPT
+        with ESMTP id S231550AbiJRDSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:19:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435D4B7EC;
-        Mon, 17 Oct 2022 20:16:46 -0700 (PDT)
+        Mon, 17 Oct 2022 23:18:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C6915FFD;
+        Mon, 17 Oct 2022 20:16:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89F6CB81C67;
-        Tue, 18 Oct 2022 03:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867A6C43470;
-        Tue, 18 Oct 2022 03:14:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18A7B61405;
+        Tue, 18 Oct 2022 03:14:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7520CC43144;
+        Tue, 18 Oct 2022 03:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666062881;
-        bh=OGvmkL8Ax2VasWA91y6YkYOpsGQ6wLZRdg5ApzUi+TI=;
+        s=k20201202; t=1666062882;
+        bh=8WKZ20RAWTE5YoQcJD/xMfKZZcR1MfURos6xAwcaDSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nn/Rzgjiky8WpCgHKJLlY95jCqtoChTeB0vPsL1XGDXTVOhcP6eqxvrGQB/MALk1e
-         7GAS7y5OAS4EP094PxEUHf986O7w2Owulw3MytDsmy/0uV8hkPIEnFLPs/ZIw6K8Q1
-         BzCujZ7cDCq3SJrSdqdzUZh0Aal7D8qvp9bWsEp/n9y+jvLiJs8+jO9iK0GFssUrbD
-         ksqVzcadMX8/Q1dcRcw/cVPLyg6X0QeVYww1HRd+n3UDscofW+982T6anbzMOGCl4y
-         e21ANL3UKqaAT08IXPeA3832tfDTEF5Xnqr/PW0xiDgtB2GhY+bNbDU5zz4de7xrxJ
-         dhnB44pPckAEQ==
+        b=sm2jTcm8vnHWfUnN1EDRCzPlp45S9l+6EUY9Bwu4X6QqvApFRmORoCqJXT7XWJ1Ly
+         uKh1W7mP3MaYrdgtfA7ET1m5x/vWGbXTJUq26xpoI7nM/W5hie1kqmJvTgkmPDbWTt
+         6WQ6rdHvBMYdpnuZtBIXe972eymFkFi7zmKZiB/S+n7pYIDDOvpzC6wsURUM7ubVWt
+         ZIXRTceWJJKXV212dxZnmNtKSy5fyQdMPOkatx2dmyua807CEvROnYREc7s+JsVuH9
+         bBHvXEGmpmWQF0Yf1Aq+mxz2Ltv9Nd8+gDh7AIdzU4IdHjrZ/2Ec4oUrFADLDveGB0
+         01xTXuV84o0bg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>, quic_kriskura@quicinc.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280
-Date:   Mon, 17 Oct 2022 22:14:31 -0500
-Message-Id: <166606235841.3553294.16113585888708911297.b4-ty@kernel.org>
+To:     quic_rajeevny@quicinc.com, devicetree@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     quic_kalyant@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, robdclark@gmail.com, linux-kernel@vger.kernel.org,
+        agross@kernel.org, quic_abhinavk@quicinc.com, robh+dt@kernel.org,
+        konrad.dybcio@somainline.org
+Subject: Re: [v1] arm64: dts: qcom: sc7280: assign DSI clock source parents
+Date:   Mon, 17 Oct 2022 22:14:32 -0500
+Message-Id: <166606235853.3553294.16555470123079506813.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <1664462290-29869-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1664462290-29869-1-git-send-email-quic_kriskura@quicinc.com>
+In-Reply-To: <1662550553-28933-1-git-send-email-quic_rajeevny@quicinc.com>
+References: <1662550553-28933-1-git-send-email-quic_rajeevny@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,16 +58,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 20:08:10 +0530, Krishna Kurapati wrote:
-> Add SNPS HS Phy tuning parameters for herobrine variant of
-> SC7280 devices.
+On Wed, 7 Sep 2022 17:05:53 +0530, Rajeev Nandan wrote:
+> Assign DSI clock source parents to DSI PHY clocks.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280
-      commit: 9c2eb59712cc21a183772e9837dec2305b14a423
+[1/1] arm64: dts: qcom: sc7280: assign DSI clock source parents
+      commit: 80edac18ac173f0f0130c2164f75ddadcd68fa7f
 
 Best regards,
 -- 
