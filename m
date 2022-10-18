@@ -2,90 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9956029E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA8B6029E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJRLLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S229774AbiJRLLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiJRLLE (ORCPT
+        with ESMTP id S229956AbiJRLLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:11:04 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835468768F;
-        Tue, 18 Oct 2022 04:11:02 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id o12so13453348lfq.9;
-        Tue, 18 Oct 2022 04:11:02 -0700 (PDT)
+        Tue, 18 Oct 2022 07:11:39 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36454B0B10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:11:38 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id o12so13455582lfq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/8tni/kGjlOK1XQXN8hrFzhS2TkTfeJI5GrBJqNimS4=;
-        b=U3adCc4TOa+bs1UzQ2+mK/yffvKbwL7MjTI0L4iVAkbxlI2v9RN9MMXp5ts52m79aU
-         2JkUS/3rc6UopxWcL8xZU9nEK1IKnYNvEH34nrv8myJnl7v942cq7NGPp101gv9OLXZE
-         kLzF30AZOUIeOtuFFCd/Jp+ybmZkoq5v8qmi8VGuEhkd7a38szOIDiMUVRUh/jcNEqXi
-         m7T3Mn/ZXhAFQM+u+TcG5xdOWhZqQzQl85sDvJDoqlXBEY2qk9YS51kclGn8JPVbuRGu
-         aTr/wh2c2YmO96nRgYNOCEnVMHbjOlCCEGOvJc3tmbbm6F0Z/JGjffHyynCKeqkmQdkQ
-         MwSw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UsmuVvzUGL/tIXDCMMq9mrTS5g/NHatso0iO2PBAdX8=;
+        b=hWb9clTWPGU/bF/813AdOTEHipmOUGOlMr2CwDFf3xzqyrXgR/WYXA9gGn2hPgOcWk
+         ak4xBbJGG0+EERjIzkWEKFhN6wbpA/RyaosLmxDmfeNFO4te7aoM8V+Vr7g/0g9Mxcia
+         bwg4aDc1NuUpXhRtLOHi+OR4aD9ZF4iKQyO6Oy6oOCeLvZd69ykxCxfZqXoTHTgCqrW+
+         1KseqYoX7CaDuHWaCRII+oWowWc6dzInR8yfBBRNLUlvNpaq0FXbcMUFix9NfAqr8S2+
+         /yBarw4tOK+F1Y7yOz29uRPbK4KJyhjGlV9iMnaSraIvkvFKYW/2tWp8wOlDH/+TTyhk
+         rbmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8tni/kGjlOK1XQXN8hrFzhS2TkTfeJI5GrBJqNimS4=;
-        b=dQBUAkGEuhJ4zhUuSDwMV9G9mJ2w8axwD3UKEqyfCDoqTc3wBH8TLBewXxfkeQSNvY
-         x3dlQkodhiidBlgZSr+ZW+fxx0JId86jwSxT6/l/zRzMV9f5F83OX77y34BMwGHP7bKW
-         zy2fZWpaAv2/S6WunwJR4Bju8ZQ40icHN07uvDFj545vtyYG9S9fbnCbU6Ft3BZ3fM3F
-         CuctY2O89UYYirQmEU0aJgMBpayCRIIpoQDMcz+BZRNsLIUtM+mcw8Uls3oQUlbogcv8
-         TmV0/qTtYYBNIPwzx55Nk59bOXgEfpvlvcg63BKvzgCDULheSvixX2bxsMofLDomEtdG
-         ruKg==
-X-Gm-Message-State: ACrzQf2pT4B8bRosfS8+xYgig1CYq3/RagNfG1wIYaLW2aHUYnXaRQhm
-        Er5THzCogKvePKV39cv08HIgt/WXjsg=
-X-Google-Smtp-Source: AMsMyM4YwYjI14nqwWNbm8QXPm+0tMad0TDLe5Vzidp2gYburZTUglifXys/m57b1qZkAoier9C/Qg==
-X-Received: by 2002:a05:6512:1320:b0:488:8fcc:e196 with SMTP id x32-20020a056512132000b004888fcce196mr798229lfu.602.1666091460648;
-        Tue, 18 Oct 2022 04:11:00 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::4? (dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::4])
-        by smtp.gmail.com with ESMTPSA id p11-20020ac24ecb000000b0048a9e899693sm1837547lfr.16.2022.10.18.04.10.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 04:10:59 -0700 (PDT)
-Message-ID: <e34d8586-a471-81d6-d09c-f2e0d9884628@gmail.com>
-Date:   Tue, 18 Oct 2022 14:10:59 +0300
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UsmuVvzUGL/tIXDCMMq9mrTS5g/NHatso0iO2PBAdX8=;
+        b=wmMb3xQNhG1HpLV02Z/5WpFw5QXZhGP73YYFY8QOm4ooNkutSkWmaUvbkK04EM1VTZ
+         hFnLBFE/cYZYZqkTJ8I1FuQoPa/+PWtTDEI2JHqx2F3YcuUbKXykCwN/SSI3Cnh6sZ6o
+         vcYC2c4ySrbdJJGMWtn6YniLNTbllCyeeZK6L0XjxVXi7KtGBYs6ojqmWrge30rVQNCE
+         F59udkzFRCOriKMwvtk0FJfB7tm8Y2wcgS8OVNncMg9Qfywelt+IW5lT9FW+ZfBSaCn/
+         KXefn+9KmxfIPQld/WnDxzoT+QtjRyPKxk8vuE7Q31VgIhKo6FHNs9ln0REotpcigtq5
+         vGHg==
+X-Gm-Message-State: ACrzQf1HTxIsDILiNmSBS8SBolvpqQczMKlfOmOQrZITTHVVaHNKe2Hw
+        b0jAVU3XpC7gpxkky/f92hxlLXxK1Eyb1bH/E9QQSA==
+X-Google-Smtp-Source: AMsMyM5zbA7ZF2jb5PoA/bKYc2t4oy6VFFv73a9+vbUT3G6aSSPbo59D9h1fv/pw7uv73bg6BtTdL1xm1wa4gqam5/w=
+X-Received: by 2002:ac2:5445:0:b0:4a4:3c5c:f73 with SMTP id
+ d5-20020ac25445000000b004a43c5c0f73mr778245lfn.21.1666091496376; Tue, 18 Oct
+ 2022 04:11:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1665066397.git.mazziesaccount@gmail.com>
- <88e24b01da9f44ebf5fcd8344ded0b75ff742fbf.1665066397.git.mazziesaccount@gmail.com>
- <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
- <98b59ad5-8c29-be41-4da1-a961db67827c@gmail.com>
- <Y0QIzf2cAH9ehSeO@smile.fi.intel.com>
- <19a6db0f-40a8-dacf-4583-cdb9d74e1243@fi.rohmeurope.com>
- <b1700ea7-4a7a-263c-595c-0f7a56763c10@gmail.com>
- <20221014144247.00001eb1@huawei.com>
-Content-Language: en-US
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [RFC PATCH v2 4/5] iio: accel: Support Kionix/ROHM KX022A
- accelerometer
-In-Reply-To: <20221014144247.00001eb1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <Y0T2l3HaH2MU8M9m@gmail.com> <20221014134802.1361436-1-mdanylo@google.com>
+ <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
+In-Reply-To: <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 18 Oct 2022 13:11:25 +0200
+Message-ID: <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org,
+        gregkh@linuxfoundation.org, corbet@lwn.net, david@redhat.com,
+        kernel@collabora.com, krisman@collabora.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peter.enderborg@sony.com, shuah@kernel.org,
+        viro@zeniv.linux.org.uk, willy@infradead.org, figiel@google.com,
+        kyurtsever@google.com, Paul Gofman <pgofman@codeweavers.com>,
+        surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,116 +79,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 16:42, Jonathan Cameron wrote:
-> On Wed, 12 Oct 2022 10:40:38 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
->> On 10/10/22 16:20, Vaittinen, Matti wrote:
->>> On 10/10/22 14:58, Andy Shevchenko wrote:
->>>> On Mon, Oct 10, 2022 at 12:12:34PM +0300, Matti Vaittinen wrote:
->>>> ...
->>>>   
->>>>>>> +	ret = regmap_bulk_read(data->regmap, chan->address, &data->buffer,
->>>>>>> +			       sizeof(s16));
->>>>   
->>>>>> No endianess awareness (sizeof __le16 / __be16)
->>>>   
->>>>>>> +	if (ret)
->>>>>>> +		return ret;
->>>>>>> +
->>>>>>> +	*val = data->buffer[0];
->>>>>>
->>>>>> Ditto (get_unaligned_be16/le16 / le16/be16_to_cpup()).
->>>>>
->>>>> I have probably misunderstood something but I don't see why we should use
->>>>> 'endianess awareness' in drivers? I thought the IIO framework code takes
->>>>> care of the endianes conversions based on scan_type so each individual
->>>>> driver does not need to do that. That however has been just my assumption. I
->>>>> will need to check this. Thanks for pointing it out.
->>>>
->>>> The IIO core uses endianness field only once in iio_show_fixed_type() AFAICS.
->>
->> Following is some hand waving and speculation after my quick code read.
->> So, I may be utterly wrong in which case please do correct me...
->>
->> Anyways, it seems to me that you're correct. The endianness field is
->> only used by the IIO to build the channel information for user-space so
->> that applications reading data can parse it. As far as I understand, the
->> driver does not need to do the conversions for user-space, but the
->> user-space tools should inspect the type information and do the
->> conversion. I think it makes sense as user-space applications may be
->> better equipped to do some maths. It also may be some applications do
->> not want to spend cycles doing the conversion but the conversions can be
->> done later "offline" for the captured raw data. So omitting conversion
->> in the IIO driver kind of makes sense to me.
-> 
-> That was indeed the original reasonining for buffered data path
-> (note the endian marker is for scans only which only apply in buffered
->   / chardev case).
+On Tue, 18 Oct 2022 at 12:36, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+[...]
+> I've included the masks which the CRIU developers have specified.
+> max_out_page is another new optional variable which is needed to
+> terminate the operation without visiting all the pages after finding the
+> max_out_page number of desired pages. There is no way to terminate the
+> operation without this variable.
+>
+> How does the interface looks now? Please comment.
+>
+> /* PAGEMAP IOCTL */
+> #define PAGEMAP_GET             _IOWR('f', 16, struct pagemap_sd_args)
+> #define PAGEMAP_CLEAR           _IOWR('f', 17, struct pagemap_sd_args)
+> #define PAGEMAP_GET_AND_CLEAR   _IOWR('f', 18, struct pagemap_sd_args)
 
-So, in a case where we "push_to_buffers" the data, we can leave the data 
-to use the endianess we advertise via endianess info field?
+Why are three IOCTLs needed? Could CLEAR be a flag (like the
+PAGEMAP_NO_REUSED_REGIONS) or 'cmask' and GET be implied when vec !=3D
+NULL?
 
-> It's less obvious for the sysfs path as that's inherently slow.
-> We could have made this a problem for the IIO core, but we didn't :)
+> /* Bits are set in the bitmap of the page_region and masks in
+> pagemap_sd_args */
+> #define PAGE_IS_SD      1 << 0
+> #define PAGE_IS_FILE    1 << 1
+> #define PAGE_IS_PRESENT 1 << 2
+> #define PAGE_IS_SWAPED  1 << 3
+>
+> /**
+>   * struct page_region - Page region with bitmap flags
+>   * @start:     Start of the region
+>   * @len:       Length of the region
+>   * bitmap:     Bits sets for the region
+>   */
+> struct page_region {
+>         __u64 start;
+>         __u64 len;
+>         __u64 bitmap;
+> };
 
-But again, as far as I understood, the user-space is still expected to 
-read the sysfs field for "scan_elements/in_accel_<channel>_type"? I 
-guess it would be confusing to say "le:s16/16>>0" there while returning 
-CPU native endianess values from sysfs files?
+Could you explain what units start and len are using? Are they bytes
+or pages (what size)?
 
->> I haven't thoroughly looked (and I have never used) the in-kernel IIO
->> APIs for getting the data. A quick look at the
->> include/linux/iio/consumer.h allows me to assume the iio_chan_spec can
->> be obtained by the consumer drivers. This should make the endianess
->> information available for the consumer drivers as well. So, again,
->> consumer drivers can parse the raw-format data themself.
-> 
-> yes consumers should be be endian aware if they are using the
-> callback buffer route to get the data.  Now you mention it, we
-> may well have cases where that isn't handled correctly.
-> There are few enough users of that interface that it might well work
-> by coincidence rather than design. oops.
-> 
->>
->> I have this far only used the sysfs and iio_generic_buffer on a
->> little-endian machine so I have had no issues with the little-endian
->> data and I have only observed the code. Hence I can not really say if my
->> reasoning is correct - or if it is how IIO has been designed to operate.
->> But based on my quick study I don't see a need for the IIO driver to do
->> endianess conversion to any other format but what is indicated by
->> scan_type. Specifically for KX022A, the data is already 16B LE when read
->> from the sensor. This is also advertised by scan_type so no conversion
->> should be needed (unless, of course, I am mistaken :]).
-> 
-> Ah. I'd missed that. Data storage should reflect the read back endianness
-> and for the read_raw path you need to perform the conversion in driver
-> (but not the high perf push to buffers path).
+> /**
+>   * struct pagemap_sd_args - Soft-dirty IOCTL argument
 
-Oh, really? I think it might be confusing to say "le:s16/16>>0" in 
-"scan_elements/in_accel_<channel>_type" but return something else from 
-the in_accel_<channel>_raw. Especially the "raw" word at the end of the 
-file signals the data is in non converted raw format.
+Nit: it's not soft-dirty-specific anymore. Maybe "pagemap_scan_args"?
 
-I take your word for that if you say this is what the user-space 
-expects, it just is not what I did expect. Well, I do very little work 
-on the user-space these days ;) Still just to be on safe side - do you 
-mean I should convert the data returned from read_raw to the CPU endianess?
+>   * @start:             Starting address
+>   * @len:               Length of the region
+>   * @vec:               Output page_region struct array
+>   * @vec_len:           Length of the page_region struct array
+>   * @max_out_page:      Optional max output pages (It must be less than
+> vec_len if specified)
 
-> Sure we could probably have handled read_raw in tree as well but we didn't
-> and probably too late to sensibly fix that now.  One of many things we'd
-> probably do differently if we were starting again.
+Why is it required to be less than vec_len? vec_len effectively
+specifies max number of ranges to find, and this new additional field
+counts pages, I suppose?
+BTW, if we count pages, then what size of them? Maybe using bytes
+(matching start/len fields) would be more consistent?
 
-Well, this is pretty usual story :) Predicting the future is hard. My 
-crystal ball ran out of batteries a long ago ;)
+>   * @flags:             Special flags for the IOCTL
+>   * @rmask:             Special flags for the IOCTL
+>   * @amask:             Special flags for the IOCTL
+>   * @emask:             Special flags for the IOCTL
+>   * @__reserved:                Reserved member to preserve data alignmen=
+t. Must be 0.
+>   */
+> struct pagemap_sd_args {
+>         __u64 __user start;
+>         __u64 len;
+>         __u64 __user vec; // page_region
+>         __u64 vec_len;    // sizeof(page_region)
+>         __u32 flags;      // special flags
+>         __u32 rmask;
+>         __u32 amask;
+>         __u32 emask;
+>         __u32 max_out_page;
+>         __u32 __reserved;
+> };
+>
+> /* Special flags */
+> #define PAGEMAP_NO_REUSED_REGIONS       0x1
+
+What does this flag do?
 
 Best Regards
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Micha=C5=82 Miros=C5=82aw
