@@ -2,128 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE9C602725
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B9B60272A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiJRIid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
+        id S230163AbiJRIjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiJRIiV (ORCPT
+        with ESMTP id S229957AbiJRIjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:38:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91769F773
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666082296; x=1697618296;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PL0A8+uYcphH0sIJRwXwGnLqTPe3EEcbUoVnkmTTq0Q=;
-  b=G2co5r0GCuLEe7+tygjD5t455Tjk+9n4WGRgvg0HGN3s6R7eXNB6Ic8f
-   LE5Keykfo8lHhuuwi49RMlKzgrYavRuIB2LX3XFNsAJQjK4hPza9sCAGZ
-   398qzHQ2nCb+PoKt2o6T1nywo6ndDScV9xdO+rxmzIUlJ379Sgct5G09X
-   Fz22WBnQAYxs9dDaSOxeJ9712flzGnKdSMXoqOB6dpTd803hY4oWVT04G
-   pYnfD4fdxeNNY48HOALmbLFKm4Att1mzcia0VOMeta5sxrupWE4W3RZjc
-   XRYVpDOP2YgbhL9/xBDEPoq6rFHZgmHpmD1jL7WtLp8sM1pHf8Ye0ZelU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="368069143"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="368069143"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 01:38:15 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="753951155"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="753951155"
-Received: from aboyhan-mobl1.ger.corp.intel.com (HELO sboeuf-mobl.home) ([10.252.26.192])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 01:38:13 -0700
-From:   sebastien.boeuf@intel.com
-To:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     mst@redhat.com, jasowang@redhat.com, eperezma@redhat.com,
-        sebastien.boeuf@intel.com
-Subject: [PATCH v4 4/4] vdpa_sim: Implement resume vdpa op
-Date:   Tue, 18 Oct 2022 10:37:27 +0200
-Message-Id: <56c045ac70e44e7d80f3f9e901deae3d7485b2a1.1666082013.git.sebastien.boeuf@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666082013.git.sebastien.boeuf@intel.com>
-References: <cover.1666082013.git.sebastien.boeuf@intel.com>
+        Tue, 18 Oct 2022 04:39:32 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E866574;
+        Tue, 18 Oct 2022 01:39:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VSTn1kW_1666082351;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VSTn1kW_1666082351)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 16:39:26 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     peter.ujfalusi@gmail.com
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] dmaengine: ti: edma: Remove the unused function edma_and()
+Date:   Tue, 18 Oct 2022 16:38:20 +0800
+Message-Id: <20221018083820.25297-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastien Boeuf <sebastien.boeuf@intel.com>
+The function edma_and() is defined in the edma.c file, but not called
+elsewhere, so remove this unused function.
 
-Implement resume operation for vdpa_sim devices, so vhost-vdpa will
-offer that backend feature and userspace can effectively resume the
-device.
+drivers/dma/ti/edma.c:321:20: warning: unused function 'edma_and'.
 
-Signed-off-by: Sebastien Boeuf <sebastien.boeuf@intel.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2430
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/dma/ti/edma.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index b071f0d842fb..05e3802fb746 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -527,6 +527,18 @@ static int vdpasim_suspend(struct vdpa_device *vdpa)
- 	return 0;
+diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+index fa06d7e6d8e3..9ea91c640c32 100644
+--- a/drivers/dma/ti/edma.c
++++ b/drivers/dma/ti/edma.c
+@@ -318,14 +318,6 @@ static inline void edma_modify(struct edma_cc *ecc, int offset, unsigned and,
+ 	edma_write(ecc, offset, val);
  }
  
-+static int vdpasim_resume(struct vdpa_device *vdpa)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	int i;
-+
-+	spin_lock(&vdpasim->lock);
-+	vdpasim->running = true;
-+	spin_unlock(&vdpasim->lock);
-+
-+	return 0;
-+}
-+
- static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
+-static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
+-{
+-	unsigned val = edma_read(ecc, offset);
+-
+-	val &= and;
+-	edma_write(ecc, offset, val);
+-}
+-
+ static inline void edma_or(struct edma_cc *ecc, int offset, unsigned or)
  {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -717,6 +729,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
- 	.suspend		= vdpasim_suspend,
-+	.resume			= vdpasim_resume,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-@@ -750,6 +763,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
- 	.suspend		= vdpasim_suspend,
-+	.resume			= vdpasim_resume,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
+ 	unsigned val = edma_read(ecc, offset);
 -- 
-2.34.1
-
----------------------------------------------------------------------
-Intel Corporation SAS (French simplified joint stock company)
-Registered headquarters: "Les Montalets"- 2, rue de Paris, 
-92196 Meudon Cedex, France
-Registration Number:  302 456 199 R.C.S. NANTERRE
-Capital: 5 208 026.16 Euros
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
+2.20.1.7.g153144c
 
