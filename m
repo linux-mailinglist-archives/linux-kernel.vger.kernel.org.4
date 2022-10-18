@@ -2,263 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C2B6029AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3BA6029AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiJRKwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S229891AbiJRKx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJRKwc (ORCPT
+        with ESMTP id S229602AbiJRKxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:52:32 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261CEAEA20;
-        Tue, 18 Oct 2022 03:52:31 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ms9bN45p7z682wY;
-        Tue, 18 Oct 2022 18:49:20 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 12:52:29 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 11:52:28 +0100
-Date:   Tue, 18 Oct 2022 11:52:27 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-CC:     <dan.j.williams@intel.com>, <ira.weiny@intel.com>,
-        <dave.jiang@intel.com>, <alison.schofield@intel.com>,
-        <bwidawsk@kernel.org>, <vishal.l.verma@intel.com>,
-        <a.manzanares@samsung.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221018115227.00002a4c@huawei.com>
-In-Reply-To: <20221018103619.00004c39@huawei.com>
-References: <20221018030010.20913-1-dave@stgolabs.net>
-        <20221018030010.20913-2-dave@stgolabs.net>
-        <20221018103619.00004c39@huawei.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 18 Oct 2022 06:53:25 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9D3AE231
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:53:23 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VSUzdvy_1666090395;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VSUzdvy_1666090395)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 18:53:21 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] erofs: use kmap_local_page() only for erofs_bread()
+Date:   Tue, 18 Oct 2022 18:53:13 +0800
+Message-Id: <20221018105313.4940-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 10:36:19 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+Convert all mapped erofs_bread() users to use kmap_local_page()
+instead of kmap() or kmap_atomic().
 
-> On Mon, 17 Oct 2022 20:00:09 -0700
-> Davidlohr Bueso <dave@stgolabs.net> wrote:
-> 
-> > Introduce a generic irq table for CXL components/features that can have
-> > standard irq support - DOE requires dynamic vector sizing and is not
-> > considered here. For now the table is empty.
-> > 
-> > Create an infrastructure to query the max vectors required for the CXL
-> > device. Upon successful allocation, users can plug in their respective isr
-> > at any point thereafter, which is supported by a new cxlds->has_irq flag,
-> > for example, if the irq setup is not done in the PCI driver, such as
-> > the case of the CXL-PMU.
-> > 
-> > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> > Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>  
-> 
-> A few nitpicks inline.
-> 
-> With the comment one tidied up (other one optional)
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> I'll rebase my cpmu code on top of this shortly.
-Hi Davidlohr,
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/data.c     | 8 ++------
+ fs/erofs/internal.h | 3 +--
+ fs/erofs/xattr.c    | 8 ++++----
+ fs/erofs/zmap.c     | 4 ++--
+ 4 files changed, 9 insertions(+), 14 deletions(-)
 
-Doing the CPMU rebase has shown up that using this generic infrastructure
-ends up rather ugly.
-
-Previously I had a local array to manage the required register maps
-that was then freed.  Now I have to move that into the cxl device state
-just so I can get at it from the irq finding callback.
-
-So I have an extra step to be able to use this generic framework.
-
-1. Query how many CPMU devices there are.  Stash that and register map
-   info in cxlds.  I could do this in the callback but that's really really
-   horrible layering issue as most of what is done has nothing to do
-   with finding the vector numbers.
-2. The callback below to find those numbers 
-3. Registration of the cpmu devices.
-
-Reality is that it is cleaner to more or less ignore the infrastructure
-proposed in this patch.
-
-1. Query how many CPMU devices there are. Whilst there stash the maximim
-   cpmu vector number in the cxlds.
-2. Run a stub in this infrastructure that does max(irq, cxlds->irq_num);
-3. Carry on as before.
-
-Thus destroying the point of this infrastructure for that usecase at least
-and leaving an extra bit of state in the cxl_dev_state that is just
-to squirt a value into the callback...
-
-So with that in mind I'm withdrawing the RB above.  This looks to be
-an idea that with hindsight doesn't necessarily pan out.
-Long hand equivalent with the specific handling needed for each case
-is probably going to be neater than walking a table of much more
-restricted callbacks.  Maybe there is a nice way to fit the CPMU
-registration into this infrastructure, but I'm not immediately seeing it.
-
-One other note inline via a compiler warning.
-
-Jonathan
-
-> 
-> Jonathan
-> 
-> 
-> > ---
-> >  drivers/cxl/cxlmem.h |  3 ++
-> >  drivers/cxl/pci.c    | 72 ++++++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 75 insertions(+)
-> > 
-> > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > index 88e3a8e54b6a..72b69b003302 100644
-> > --- a/drivers/cxl/cxlmem.h
-> > +++ b/drivers/cxl/cxlmem.h
-> > @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
-> >   * @info: Cached DVSEC information about the device.
-> >   * @serial: PCIe Device Serial Number
-> >   * @doe_mbs: PCI DOE mailbox array
-> > + * @has_irq: PCIe MSI-X/MSI support
-> >   * @mbox_send: @dev specific transport for transmitting mailbox commands
-> >   *
-> >   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> > @@ -247,6 +248,8 @@ struct cxl_dev_state {
-> >  
-> >  	struct xarray doe_mbs;
-> >  
-> > +	bool has_irq;
-> > +
-> >  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
-> >  };
-> >  
-> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > index faeb5d9d7a7a..9c3e95ebaa26 100644
-> > --- a/drivers/cxl/pci.c
-> > +++ b/drivers/cxl/pci.c
-> > @@ -428,6 +428,73 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
-> >  	}
-> >  }
-> >  
-> > +/**
-> > + * struct cxl_irq_cap - CXL feature that is capable of receiving MSI-X/MSI irqs.
-> > + *
-> > + * @name: Name of the device/component generating this interrupt.
-> > + * @get_max_msgnum: Get the feature's largest interrupt message number.  If the
-> > + *		    feature does not have the Interrupt Supported bit set, then
-> > + *		    return -1.
-> > + */
-> > +struct cxl_irq_cap {
-> > +	const char *name;
-> > +	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);
-> > +};
-> > +
-> > +static const struct cxl_irq_cap cxl_irq_cap_table[] = {
-> > +	NULL
-
-That's not valid, just make it empty instead.
-
-
-> > +};
-> > +
-> > +static void cxl_pci_free_irq_vectors(void *data)
-> > +{
-> > +	pci_free_irq_vectors(data);
-> > +}
-> > +
-> > +/*
-> > + * Attempt to allocate the largest amount of necessary vectors.
-> > + *
-> > + * Returns 0 upon a successful allocation of *all* vectors, or a  
-> 
-> Technically not all vectors.  If we wanted to do that we could
-> just directly query that via pci_msix_vec_count() etc that gets
-> it from the MSIX capability. That's frowned upon because it's common
-> to stick lots of extra vectors on the end for stuff that linux never
-> cares about (debug etc, or optional features).
-> 
-> All vectors up to the maximum one the code uses would be more accurate.
-> 
-> > + * negative value otherwise.
-> > + */
-> > +static int cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> > +{
-> > +	struct device *dev = cxlds->dev;
-> > +	struct pci_dev *pdev = to_pci_dev(dev);
-> > +	int rc, i, vectors = -1;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(cxl_irq_cap_table); i++) {
-> > +		int irq;
-> > +
-> > +		if (!cxl_irq_cap_table[i].get_max_msgnum)
-> > +			continue;
-> > +
-> > +		irq = cxl_irq_cap_table[i].get_max_msgnum(cxlds);
-> > +		vectors = max_t(int, irq, vectors);
-> > +	}
-> > +
-> > +	/*
-> > +	 * Semantically lack of irq support is not an error, but we
-> > +	 * still fail to allocate, so return negative.
-> > +	 */
-> > +	if (vectors == -1)
-> > +		return -1;
-> > +
-> > +	vectors++;
-> > +	rc = pci_alloc_irq_vectors(pdev, vectors, vectors,
-> > +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> > +	if (rc < 0)
-> > +		return rc;
-> > +
-> > +	if (rc != vectors) {
-> > +		dev_dbg(dev, "Not enough interrupts; use polling instead.\n");
-> > +		/* some got allocated, clean them up */
-> > +		cxl_pci_free_irq_vectors(pdev);
-> > +		return -ENOSPC;
-> > +	}
-> > +
-> > +	return devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
-> > +}
-> > +
-> >  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >  {
-> >  	struct cxl_register_map map;
-> > @@ -494,6 +561,11 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >  	if (rc)
-> >  		return rc;
-> >  
-> > +	if (!cxl_pci_alloc_irq_vectors(cxlds)) {
-> > +		cxlds->has_irq = true;
-> > +	} else
-> > +		cxlds->has_irq = false;
-> > +  
-> 	cxlds->has_irq = !(cxl_pci_aloc_irq_vectors(cxlds) < 0);
-> 
-> maybe...
-> 
-> >  	cxlmd = devm_cxl_add_memdev(cxlds);
-> >  	if (IS_ERR(cxlmd))
-> >  		return PTR_ERR(cxlmd);  
-> 
+diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+index fe8ac0e163f7..fe1ae80284bf 100644
+--- a/fs/erofs/data.c
++++ b/fs/erofs/data.c
+@@ -13,9 +13,7 @@
+ void erofs_unmap_metabuf(struct erofs_buf *buf)
+ {
+ 	if (buf->kmap_type == EROFS_KMAP)
+-		kunmap(buf->page);
+-	else if (buf->kmap_type == EROFS_KMAP_ATOMIC)
+-		kunmap_atomic(buf->base);
++		kunmap_local(buf->base);
+ 	buf->base = NULL;
+ 	buf->kmap_type = EROFS_NO_KMAP;
+ }
+@@ -54,9 +52,7 @@ void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
+ 	}
+ 	if (buf->kmap_type == EROFS_NO_KMAP) {
+ 		if (type == EROFS_KMAP)
+-			buf->base = kmap(page);
+-		else if (type == EROFS_KMAP_ATOMIC)
+-			buf->base = kmap_atomic(page);
++			buf->base = kmap_local_page(page);
+ 		buf->kmap_type = type;
+ 	} else if (buf->kmap_type != type) {
+ 		DBG_BUGON(1);
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 1701df48c446..67dc8e177211 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -253,8 +253,7 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+ 
+ enum erofs_kmap_type {
+ 	EROFS_NO_KMAP,		/* don't map the buffer */
+-	EROFS_KMAP,		/* use kmap() to map the buffer */
+-	EROFS_KMAP_ATOMIC,	/* use kmap_atomic() to map the buffer */
++	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
+ };
+ 
+ struct erofs_buf {
+diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+index 8106bcb5a38d..a62fb8a3318a 100644
+--- a/fs/erofs/xattr.c
++++ b/fs/erofs/xattr.c
+@@ -148,7 +148,7 @@ static inline int xattr_iter_fixup(struct xattr_iter *it)
+ 
+ 	it->blkaddr += erofs_blknr(it->ofs);
+ 	it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr,
+-				       EROFS_KMAP_ATOMIC);
++				       EROFS_KMAP);
+ 	if (IS_ERR(it->kaddr))
+ 		return PTR_ERR(it->kaddr);
+ 	it->ofs = erofs_blkoff(it->ofs);
+@@ -174,7 +174,7 @@ static int inline_xattr_iter_begin(struct xattr_iter *it,
+ 	it->ofs = erofs_blkoff(iloc(sbi, vi->nid) + inline_xattr_ofs);
+ 
+ 	it->kaddr = erofs_read_metabuf(&it->buf, inode->i_sb, it->blkaddr,
+-				       EROFS_KMAP_ATOMIC);
++				       EROFS_KMAP);
+ 	if (IS_ERR(it->kaddr))
+ 		return PTR_ERR(it->kaddr);
+ 	return vi->xattr_isize - xattr_header_sz;
+@@ -368,7 +368,7 @@ static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
+ 
+ 		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+ 		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+-						  EROFS_KMAP_ATOMIC);
++						  EROFS_KMAP);
+ 		if (IS_ERR(it->it.kaddr))
+ 			return PTR_ERR(it->it.kaddr);
+ 		it->it.blkaddr = blkaddr;
+@@ -580,7 +580,7 @@ static int shared_listxattr(struct listxattr_iter *it)
+ 
+ 		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+ 		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+-						  EROFS_KMAP_ATOMIC);
++						  EROFS_KMAP);
+ 		if (IS_ERR(it->it.kaddr))
+ 			return PTR_ERR(it->it.kaddr);
+ 		it->it.blkaddr = blkaddr;
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 0bb66927e3d0..749a5ac943f4 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -178,7 +178,7 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ 	unsigned int advise, type;
+ 
+ 	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+-				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
++				      erofs_blknr(pos), EROFS_KMAP);
+ 	if (IS_ERR(m->kaddr))
+ 		return PTR_ERR(m->kaddr);
+ 
+@@ -416,7 +416,7 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ out:
+ 	pos += lcn * (1 << amortizedshift);
+ 	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+-				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
++				      erofs_blknr(pos), EROFS_KMAP);
+ 	if (IS_ERR(m->kaddr))
+ 		return PTR_ERR(m->kaddr);
+ 	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
+-- 
+2.24.4
 
