@@ -2,135 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0847560280A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532EA602811
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiJRJNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S231225AbiJRJPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiJRJNV (ORCPT
+        with ESMTP id S230143AbiJRJPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:13:21 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E9272FC6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:13:20 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DA09C3F5F1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:13:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1666084398;
-        bh=Hh8fsE9KkAVKP7Lv5PdzMeHsN9pjYg33humb2afrU8o=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=aDqCQd+FewwtieF1tSynz0H4EEaGHP3TwjG83GTfFE5yRZXZVVQPRMWFSqYlmrBwn
-         mkdAPLeRbieFvpgGvz6QOOVO/6IE7/9kX0AZvLSdtbaaphpXvE7utxQ9bBsmVIKVNG
-         Jj3w+BaeMhUVDzfr8bJH/qCr7VrBnQTm32c7fuF3wbFI/70+i5WzF8O04DgIu5I/MF
-         MwNiQLOK5tjQmpqU1Y13an4KUnVwNaCYr4n+F637HyPP2jcn+ahx/RJAepXi7/AsTv
-         xZVNUQ2kS1vXhYdM06yraHwySelv/fZJoG9NHb7uE7+WhMejLZJUGe5aCZmBrBrsNd
-         Vyncmzq0mq7QQ==
-Received: by mail-ed1-f72.google.com with SMTP id h9-20020a05640250c900b0045cfb639f56so10490198edb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:13:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hh8fsE9KkAVKP7Lv5PdzMeHsN9pjYg33humb2afrU8o=;
-        b=WqqSkPo8CuPospzt9eMTExpjZB9m4uNwaHr9RrdrcCcEWKrnQ6oB1MPUnZYDVp2qpa
-         LQns4e3HWnvOUxeDHI3FVY+Og0o5tJnd2H6bFDu1G73MQ7ff8ZpvPRDPJ5Xy3nolHKMZ
-         9RrlsaAXBzMazOU2UOLeiacPtr3c8LisoXUiRfZGSfp6t4aiNiW8SWsvdp47SfwWYqYt
-         6IcmoDf9m7sS4q2Dy++Ye2va2HF0YYT83yzb8EiVU8HlT6tYD6cDft+WPO6pkxL9aROV
-         ixMPyTkg5xyBr4g8Gnfg73JVbkQlGZ0CbKmd7WAXPis7x7tPE9WH8FC7FkyHWzJP3Q/c
-         TxTQ==
-X-Gm-Message-State: ACrzQf0NjzEsWn51J4aRsifNBpD+Mrh8dDNOE4IJjJ5e8UMYjEe+n/2T
-        mlqRaS2OqepJh6ebErW8MFg8kHJPCBpwZEYpOqTq8OO6K6cKPKFqutfyo0tHXqLgPCvXkIFHQlJ
-        RI8QD1xN5BtRE8oo/bhJCn1ADVxpJJv0op50QRKv8KA==
-X-Received: by 2002:a05:6402:548f:b0:457:ed40:5f58 with SMTP id fg15-20020a056402548f00b00457ed405f58mr1673590edb.408.1666084398207;
-        Tue, 18 Oct 2022 02:13:18 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6RtBiVWqlow4RIWQd6Iya71pSIgsGy2YuI+R6Q4lXOuU1BXFxCyytUUPbyjbx6D0cVL2MX/w==
-X-Received: by 2002:a05:6402:548f:b0:457:ed40:5f58 with SMTP id fg15-20020a056402548f00b00457ed405f58mr1673583edb.408.1666084397997;
-        Tue, 18 Oct 2022 02:13:17 -0700 (PDT)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id x9-20020a170906710900b0073a20469f31sm7270172ejj.41.2022.10.18.02.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:13:17 -0700 (PDT)
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Wesley W. Terpstra" <wesley@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] pwm: sifive: Always let the first pwm_apply_state succeed
-Date:   Tue, 18 Oct 2022 11:13:16 +0200
-Message-Id: <20221018091316.415685-1-emil.renner.berthing@canonical.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 18 Oct 2022 05:15:01 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883E73DBFF;
+        Tue, 18 Oct 2022 02:14:56 -0700 (PDT)
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ms7Qn1lQ3z67NLc;
+        Tue, 18 Oct 2022 17:11:45 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 11:14:53 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
+ 2022 10:14:53 +0100
+Date:   Tue, 18 Oct 2022 10:14:52 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v1 6/6] spi: pxa2xx: Switch from PM ifdeffery to
+ pm_ptr()
+Message-ID: <20221018101452.0000001c@huawei.com>
+In-Reply-To: <20221017171243.57078-6-andriy.shevchenko@linux.intel.com>
+References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
+        <20221017171243.57078-6-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
-RGB and green PWM controlled LEDs on the HiFive Unmatched board
-managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
-All three colours of the RGB LED and the green LED run from different
-lines of the same PWM, but with the same period so this works fine when
-the LED drivers are loaded one after the other.
+On Mon, 17 Oct 2022 20:12:43 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Unfortunately it does expose a race in the PWM driver when both LED
-drivers are loaded at roughly the same time. Here is an example:
+> Cleaning up the driver to use pm_ptr() macro instead of ifdeffery
+> that makes it simpler and allows the compiler to remove those functions
+> if built without CONFIG_PM and CONFIG_PM_SLEEP support.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+FWIW I like these - so drive by review.
 
-  |          Thread A           |          Thread B           |
-  |  led_pwm_mc_probe           |  led_pwm_probe              |
-  |    devm_fwnode_pwm_get      |                             |
-  |      pwm_sifive_request     |                             |
-  |        ddata->user_count++  |                             |
-  |                             |    devm_fwnode_pwm_get      |
-  |                             |      pwm_sifive_request     |
-  |                             |        ddata->user_count++  |
-  |         ...                 |          ...                |
-  |    pwm_state_apply          |    pwm_state_apply          |
-  |      pwm_sifive_apply       |      pwm_sifive_apply       |
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Now both calls to pwm_sifive_apply will see that ddata->approx_period,
-initially 0, is different from the requested period and the clock needs
-to be updated. But since ddata->user_count >= 2 both calls will fail
-with -EBUSY, which will then cause both LED drivers to fail to probe.
+I think you could change the handling of !pm_runtime_suspended()
+to use pm_runtime_force_suspend() and equivalent for resume path.
+I haven't checked that closely though - just looks like a typical
+usecase for those functions that are hardened against some of
+the corner cases that can occur in interactions between different
+forms of pm.
 
-Fix it by letting the first call to pwm_sifive_apply update the clock
-even when ddata->user_count != 1.
 
-Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
-Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
----
- drivers/pwm/pwm-sifive.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-index 2d4fa5e5fdd4..ccdf92045f34 100644
---- a/drivers/pwm/pwm-sifive.c
-+++ b/drivers/pwm/pwm-sifive.c
-@@ -159,7 +159,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 
- 	mutex_lock(&ddata->lock);
- 	if (state->period != ddata->approx_period) {
--		if (ddata->user_count != 1) {
-+		if (ddata->user_count != 1 && ddata->approx_period) {
- 			mutex_unlock(&ddata->lock);
- 			return -EBUSY;
- 		}
--- 
-2.37.2
+> ---
+>  drivers/spi/spi-pxa2xx.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+> index 76046612466d..60cab241200b 100644
+> --- a/drivers/spi/spi-pxa2xx.c
+> +++ b/drivers/spi/spi-pxa2xx.c
+> @@ -1680,7 +1680,6 @@ static int pxa2xx_spi_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int pxa2xx_spi_suspend(struct device *dev)
+>  {
+>  	struct driver_data *drv_data = dev_get_drvdata(dev);
+> @@ -1715,9 +1714,7 @@ static int pxa2xx_spi_resume(struct device *dev)
+>  	/* Start the queue running */
+>  	return spi_controller_resume(drv_data->controller);
+>  }
+> -#endif
+>  
+> -#ifdef CONFIG_PM
+>  static int pxa2xx_spi_runtime_suspend(struct device *dev)
+>  {
+>  	struct driver_data *drv_data = dev_get_drvdata(dev);
+> @@ -1732,12 +1729,10 @@ static int pxa2xx_spi_runtime_resume(struct device *dev)
+>  
+>  	return clk_prepare_enable(drv_data->ssp->clk);
+>  }
+> -#endif
+>  
+>  static const struct dev_pm_ops pxa2xx_spi_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(pxa2xx_spi_suspend, pxa2xx_spi_resume)
+> -	SET_RUNTIME_PM_OPS(pxa2xx_spi_runtime_suspend,
+> -			   pxa2xx_spi_runtime_resume, NULL)
+> +	SYSTEM_SLEEP_PM_OPS(pxa2xx_spi_suspend, pxa2xx_spi_resume)
+> +	RUNTIME_PM_OPS(pxa2xx_spi_runtime_suspend, pxa2xx_spi_runtime_resume, NULL)
+>  };
+>  
+>  #ifdef CONFIG_ACPI
+> @@ -1762,7 +1757,7 @@ MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
+>  static struct platform_driver driver = {
+>  	.driver = {
+>  		.name	= "pxa2xx-spi",
+> -		.pm	= &pxa2xx_spi_pm_ops,
+> +		.pm	= pm_ptr(&pxa2xx_spi_pm_ops),
+>  		.acpi_match_table = ACPI_PTR(pxa2xx_spi_acpi_match),
+>  		.of_match_table = of_match_ptr(pxa2xx_spi_of_match),
+>  	},
 
