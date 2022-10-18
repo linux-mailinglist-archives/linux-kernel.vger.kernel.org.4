@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60656020AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC2B6020AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiJRB4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S230036AbiJRB6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 21:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiJRB4c (ORCPT
+        with ESMTP id S230090AbiJRB5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:56:32 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EFD72B73
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:56:25 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id j21so7845728qkk.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:56:25 -0700 (PDT)
+        Mon, 17 Oct 2022 21:57:55 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2509F792C0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:57:46 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id t25so7870719qkm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cwnKiJHjgGODb7JZ57x/PI3J93dO3KCDNTmDBrZdsDc=;
-        b=xflSfO3croZNnEFDdG7BOLArdMlmy+EU22He2ItcgDKF+cPzrW4GyqHfDn+EHI9zAN
-         FtdDBSXhjYQV8JJmZVlWlPrOYWCBFm2F35En38JSnLi4GEB8FR+HJsn5CH/fJSe8tLiZ
-         rZPdTlOaunKSdBCHtJ/Wh3FxNLQn/RGKWEW5siTVp7xYRUpfj53c/RPUrc+YwaZYUf3P
-         ZBvApA9Gxu9brukx62hgnNia1ucmgNCdB4WTZzZh3dfaZAmEqgorXE3an33GUpbFl8Rj
-         ePveOh+GWzORHhtyXYCDVUFTvM/kI6mFSBttrncVbBGF8Jpv72/iuyjSg8RV+tstvJvV
-         lFHw==
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mYBybDD0u6tBbkRf/y6+33fBQuf81SuzZ3qkKShzqXo=;
+        b=p+dXBnaxZehl4mOjVDpE2yLZ0KftYMUKql3vXjTCmM8Z+qHqGelLFBsl9c0/m4hOrl
+         10I2LqYvX8mu5Bh6o5k5XOhpC2x8WEZsB9GyTBYNnNR0xFDvxyPRi9xc0reVAKLB8bkI
+         O9BV/ExKagQ+2zvxw4NxT9nboJpr/FC/I6nAc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cwnKiJHjgGODb7JZ57x/PI3J93dO3KCDNTmDBrZdsDc=;
-        b=PCJJS04jKlaeTQYVi9xTWnuoopElVCtWDaMyJX1MQUKjona7DfU2Px0wH3MK/KAhrh
-         9mYikjGqleCiV0KyPRk+ILsS4BlRY8gmHBstgW7jA6ICkzNeYW1Le/iN4K52+QLYlLcS
-         RydT5i16d7uU/ymCATdwe6P/bCtfsAmZqNjtxfz7a87vzwsqsDSOXwyl68hi6RDugcU1
-         CSMidVLdwSk261Nuv7/w2XQ6lm0Jka62Q30K0bwc/t6wnuXB/jN+NuQ5rwg8CMPgx6t4
-         4C8kZX/ZT71s4dTBOa37zncTNzefU7x90vB99uSW/sYmPPZ1zPHil7s+uxxQAM3bxvja
-         5ziQ==
-X-Gm-Message-State: ACrzQf01WJA+hHaACypiRZ4vbM/lfW3EmWtsRk7yrY7ghsCVET5r0cbO
-        DysL923YQasHvPMXFW1Vg9yMrg==
-X-Google-Smtp-Source: AMsMyM5ocMIfY0aC8/+qBtf+hP1sxMYMg/Y2wsOOlblki8BnnPjo0vYAfLgMcatAAS2jP/FXcwSJYA==
-X-Received: by 2002:a05:620a:1982:b0:6ee:c63f:f983 with SMTP id bm2-20020a05620a198200b006eec63ff983mr373977qkb.382.1666058184215;
-        Mon, 17 Oct 2022 18:56:24 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id s15-20020a05622a178f00b0035d432f5ba3sm1053661qtk.17.2022.10.17.18.56.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 18:56:23 -0700 (PDT)
-Message-ID: <7ada410d-8d13-b29a-869c-3f5d032528bf@linaro.org>
-Date:   Mon, 17 Oct 2022 21:56:21 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mYBybDD0u6tBbkRf/y6+33fBQuf81SuzZ3qkKShzqXo=;
+        b=t1uU3H1e3oIPJQ7i1GdFk4S8UqMbVxdLqc8VtO3zGw8lLxVFojXm+xW0BcayX7YVUF
+         QxP3iFYWXd27r5KxqpIH5MgjM6FCNANRYDfCdjk1MRJRoeP+m0SxDFGV7bv5EZZOrJos
+         Js/A+AQ0zTLwgpgUTSnXcUUApXwaMa/uAKSekIFFo1u5Bs3Izf2IBvcBmegx/rdsXaBX
+         7atoPSdat3kPyEYT7b/Gn1uzUWyBKy2vMbgeiKRCSiXwSDk1Re7O3R1Ee1go8QMiymMW
+         U5jcA7SYhmIg6HxfgS+wD8iwVTed58N0dFfErhGcOLRH98SIi+E4BM5uUXmLc4UCUEZ4
+         QTog==
+X-Gm-Message-State: ACrzQf1YgqFtQRHfWPOcy2vnRxGxLwQBI8xd0pZpAIUvotUfa8QYurdn
+        WVxTNbkBdGyKNRtcjnrLiYirzg==
+X-Google-Smtp-Source: AMsMyM7H8PCmJN/9txCa9cXhPqnjtQrTU1FftHwRYLb3DfXTYtJFyyFGrYYqrEaG3KfahdnzGa+BqA==
+X-Received: by 2002:ae9:ef04:0:b0:6ea:adcf:4c02 with SMTP id d4-20020ae9ef04000000b006eaadcf4c02mr345852qkg.779.1666058265413;
+        Mon, 17 Oct 2022 18:57:45 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id bp17-20020a05620a459100b006ce3f1af120sm1275114qkb.44.2022.10.17.18.57.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 18:57:45 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 01:57:44 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] srcu: Export srcu_check_nmi_safety() to modules
+Message-ID: <Y04IGLudV7tYORUd@google.com>
+References: <20221018013906.3890007-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for
- stm32-romem
-Content-Language: en-US
-To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018013906.3890007-1-qiang1.zhang@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 11:23, Patrick Delaunay wrote:
-> Add a new compatible for stm32mp13 support.
+On Tue, Oct 18, 2022 at 09:39:06AM +0800, Zqiang wrote:
+> When enable CONFIG_PROVE_RCU and built modules, the following
+> error appear:
 > 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+> ERROR: modpost: "srcu_check_nmi_safety" [kernel/rcu/rcutorture.ko] undefined!
+> ERROR: modpost: "srcu_check_nmi_safety" [kernel/rcu/rcuscale.ko] undefined!
+> 
+> This commit fix it by exporting the srcu_check_nmi_safety().
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+
+Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+thanks,
+
+ - Joel
+
+
 > ---
-> 
->  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
+>  kernel/rcu/srcutree.c | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-> index 448a2678dc62..16f4cad2fa55 100644
-> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
-> @@ -22,6 +22,7 @@ properties:
->    compatible:
->      enum:
->        - st,stm32f4-otp
-> +      - st,stm32mp13-bsec
->        - st,stm32mp15-bsec
-
-According to usage in DTS (separate patch for some reason), the devices
-are compatible, so please describe them like that.
-
-Best regards,
-Krzysztof
-
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index 382236dd5e46..bcd629f5f902 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -651,6 +651,7 @@ void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
+>  	}
+>  	WARN_ONCE(old_nmi_safe_mask != nmi_safe_mask, "CPU %d old state %d new state %d\n", sdp->cpu, old_nmi_safe_mask, nmi_safe_mask);
+>  }
+> +EXPORT_SYMBOL_GPL(srcu_check_nmi_safety);
+>  #endif /* CONFIG_PROVE_RCU */
+>  
+>  /*
+> -- 
+> 2.25.1
+> 
