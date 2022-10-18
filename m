@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2D3601E10
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6AC601E11
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJRADk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S230336AbiJRAE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJRADh (ORCPT
+        with ESMTP id S230071AbiJRAEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:03:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEFE237F6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:03:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5296EB81AD7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:03:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C456C433D6;
-        Tue, 18 Oct 2022 00:03:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GakdiyuA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666051410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2lAybai8gKhX1DN+fgNma6jgJEWUPQPSN+/pCq2V3uE=;
-        b=GakdiyuAlCGhaXaRbJGQUHBJktZsxtTlL5cdRm/jh5cigMewYPfxpszVlKDCsHkD65UDZ/
-        0Z9qQzUf6Ae5DBzAZQfttJZoH5Yj9QeCCLQp40BpZpcaDiEXU5qGLsibvkj76I4Y65hMgM
-        wQaU7EgEpB8jzb+Ci72sLhc77vd5HFo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 448a33b4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 18 Oct 2022 00:03:29 +0000 (UTC)
-Date:   Tue, 18 Oct 2022 02:03:27 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Hector Martin <marcan@marcan.st>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: Linux 6.1-rc1
-Message-ID: <Y03tTxLdH7HezRI+@zx2c4.com>
-References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
- <20221017123434.GA1062543@roeck-us.net>
- <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
+        Mon, 17 Oct 2022 20:04:25 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5B3A44D
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:04:23 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id j4so20127957lfk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WnYlEs3EZk1xPhzcEuoMhzmLfS8Qhk3Ay/ao9Jd31eM=;
+        b=DMlZvigCc94SZYyPbg0qYNEnDXje+xQpALw0VqQEoPxtsLJydfYkBmQqo2EFjY/+gK
+         NjvmBwVGRhqqvFWcP6UDp7yeAVlsDnXagSfK9AVz4zz/x1pYthwqt7qfpkI0v9veIlFC
+         8+zv+ebZJBy38Q+zLBLU0VOirgnEel9elGv9iFviRYKNaGI7Ib+5IrdO7mAYH2jpcwZM
+         THpSzSEYpt797kOdhOu7OazgfUB/nAtoMsKnojD93vP9iMYMQVSZikpOfDNYsH2aEjSj
+         hSZLZfndVIGzp+7FCmD+v2DJYHmst8ck6Xnxvz4FugtAZ6PN4AIgtkfk96XbU24XTG27
+         s4xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WnYlEs3EZk1xPhzcEuoMhzmLfS8Qhk3Ay/ao9Jd31eM=;
+        b=jfqNZtHAOWUIeWDkGExh+1K/PWUoRbkE3ZM5SB/ymxNgGffjhHNJ0ewez2u5Kks2TF
+         VTM3kAE3Ng8QCb802g5yd2CLvUXh6VPEzimu0Qlum7sFcKwBL0oKNgrp+z+l4uQGGzDm
+         sEDlbFeRVzIqZOth6ZlIv1luOBrVgo6f4FN0lj9rJ6oqZotVJxIq8hSApYmKKrVBcesz
+         yh79LLrFT9navGFXsDPKRlsWEaazKWOy8kHLZSVIcgiyM4a7BOV01FBe8QFm6mkB1Czp
+         oAnCF5Qzt9HwODCULaPjAfyfyAO6cqApo/rh93mGxNn4c/YNx7y4GStPNzCUa18G+w/0
+         0Pog==
+X-Gm-Message-State: ACrzQf0WrMBjHnfQo7+RXWpyRwbg9XygYVmg/1qyXhHhXIqLifFPX6Ir
+        XZiXmzeNNcUI3cnRuBJcvCtYokHjN72uoAFk9WLq
+X-Google-Smtp-Source: AMsMyM7MR2Ti5+jxGIkKK9muyJ9aH7Q7tLdx2UVUoa7qEmr7uCHPtM3VIzGFgqWdmAwQAwyb9DOEmGuGRWbP3bG7wq8=
+X-Received: by 2002:a19:7704:0:b0:4a4:5d9d:2f66 with SMTP id
+ s4-20020a197704000000b004a45d9d2f66mr49097lfc.515.1666051461519; Mon, 17 Oct
+ 2022 17:04:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221003232033.3404802-1-jstultz@google.com> <20221003232033.3404802-4-jstultz@google.com>
+ <20221010160917.p2ftu3eezsrbfdfk@wubuntu> <20221017144455.ylmwlgrdoj3tdvbp@wubuntu>
+In-Reply-To: <20221017144455.ylmwlgrdoj3tdvbp@wubuntu>
+From:   John Stultz <jstultz@google.com>
+Date:   Mon, 17 Oct 2022 17:04:09 -0700
+Message-ID: <CANDhNCo6M8NdLemjhA2sQ941agU+LQHxhRKAVMvr-qg9mQV51Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 3/3] softirq: defer softirq processing to ksoftirqd
+ if CPU is busy with RT
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        John Dias <joaodias@google.com>,
+        "Connor O'Brien" <connoro@google.com>,
+        Rick Yiu <rickyiu@google.com>, John Kacur <jkacur@redhat.com>,
+        Chris Redpath <chris.redpath@arm.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,45 +82,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 10:39:08AM -0700, Linus Torvalds wrote:
-> On Mon, Oct 17, 2022 at 5:35 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > Build results:
-> >         total: 152 pass: 152 fail: 0
-> > Qemu test results:
-> >         total: 490 pass: 420 fail: 70
-> 
-> Strange. You claim zero build failures, but then:
-> 
-> > Build failures
-> >
-> > Building riscv:defconfig ... failed
-> 
-> so I think your stats may be wrong somehow ;)
-> 
-> > mips, sparc64
-> > -------------
-> >
-> > All big endian mips tests fail to reset after boot. The problem is
-> > caused by commit 72a95859728a ("mfd: syscon: Remove repetition of the
-> > regmap_get_val_endian()").
-> 
-> Bah. I had already archived that whole thread as "sorted out", but
-> yeah, the revert clearly never made it to me for rc1.
-> 
-> But it should be in the regmap queue (Lee/Andy?), so it is hopefully
-> just a temporary thing.
-> 
-> In fact, it looks like all the failures have known fixes. So here's
-> hoping that your list will be a whole lot cleaner by rc2.
-> 
-> Knock wood.
+On Mon, Oct 17, 2022 at 7:45 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> This time I paid attention to the average as the best case number for vanilla
+> kernel is better:
+>
+>                    |       vanilla      | with softirq patches v4  |
+> -------------------|--------------------|--------------------------|
+>                    |  #1  |  #2  |  #3  |   #1   |   #2   |   #3   |
+> -------------------|------|------|------|--------|--------|--------|
+> t0 avg delay (us)  |31.59 |22.94 |26.50 | 31.81  | 33.57  | 34.90  |
+> t1 avg delay (us)  |16.85 |16.32 |37.16 | 29.05  | 30.51  | 31.65  |
+> t2 avg delay (us)  |25.34 |32.12 |17.40 | 26.76  | 28.28  | 28.56  |
+>
+> It shows that we largely hover around 30us with the patches compared to 16-26us
+> being more prevalent for vanilla kernels.
+>
+> I am not sure I can draw a concrete conclusion from these numbers. It seems
+> I need to run longer than 4 hours to hit the worst case scenario every run on
+> the vanilla kernel. There's an indication that the worst case scenario is
+> harder to hit, and it looks there's a hit on the average delay.
 
-I emailed Lee about it 3 days ago, hoping it'd make rc1 too, but never
-heard back. Maybe vacation? Dunno.
+Thanks so much for running these tests and capturing these detailed numbers!
 
-Jason
+I'll have to look further into the average case going up here.
 
-> 
-> Thanks,
->            Linus
+> I'm losing access to this system from today. I think I'll wait for more
+> feedback on this RFC; and do another round of testing for longer periods of
+> time once there's clearer sense this is indeed the direction we'll be going
+> for.
+
+Do you mind sending me the script you used to run the test, and I'll
+try to reproduce on some x86 hardware locally?
+
+thanks
+-john
