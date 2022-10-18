@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8C360250F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA49602516
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJRHJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S230108AbiJRHKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiJRHJt (ORCPT
+        with ESMTP id S230098AbiJRHKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:09:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EA0FAE6;
-        Tue, 18 Oct 2022 00:09:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05DB16148A;
-        Tue, 18 Oct 2022 07:09:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9FD1C433D6;
-        Tue, 18 Oct 2022 07:09:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666076986;
-        bh=62JY3nEqhgUp3ZcdSeMtpc1uu5IEErz2whw8ZHrBvPU=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=nRoTV+UInWMbUAm3sfWNUJCjUiSThNfWBFf1MgP+2JJGhf+LNPfWgby/T20qZLOd0
-         g+Xay5OZ2NVziVGkROaYlRCiykdSBeWsM4NM5bC0RncoD0ZjrSEiIznoC9Nr7W4Zkf
-         NyOEJqtFoyKpOPXtIG6O0d2hjUm/rUWLX+xQMwDIS9Bc3w8Hb5xH6BNkiykhoiiwxE
-         ThgVc8Oj/sGJF9Z7aqEzm+ZxYl+9CqqsQuKFpNYXNmiaNSLLq7omFY2GDfPer44LlQ
-         qvAoNNBUy4nGvhloCakXgrn8rwxkgPQa+IZ3jM5AYT58rykIkJ1+BPgIJjZDdaJi2B
-         C1ti9e8n1Cbsw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-rtc@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION v6.1-rc1] rtc: cmos: rtcwake broken on NUC8i7HVK
-References: <87edv6mlow.fsf@kernel.org>
-        <b2be77b0-bafb-0519-33cb-359d83ded4d8@leemhuis.info>
-Date:   Tue, 18 Oct 2022 10:09:40 +0300
-In-Reply-To: <b2be77b0-bafb-0519-33cb-359d83ded4d8@leemhuis.info> (Thorsten
-        Leemhuis's message of "Tue, 18 Oct 2022 08:33:37 +0200")
-Message-ID: <87a65tmwuj.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 18 Oct 2022 03:10:16 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B6D786E3;
+        Tue, 18 Oct 2022 00:10:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VSTUHWa_1666077009;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VSTUHWa_1666077009)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 15:10:10 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v2 00/15] Optimizing SM3 and SM4 algorithms using arm64 NEON/CE instructions
+Date:   Tue, 18 Oct 2022 15:09:51 +0800
+Message-Id: <20221018071006.5717-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thorsten Leemhuis <regressions@leemhuis.info> writes:
+Hi folks,
 
-> On 17.10.22 18:58, Kalle Valo wrote:
->> 
->> I upgraded my NUC8i7HVK test box to v6.1-rc1 and noticed that my suspend
->> tests with ath11k were broken, the box never woke up from suspend
->> automatically and I had to manually push the power button to trigger
->> resume. This is the command I used:
->> 
->> sudo rtcwake -m mem -s 30
->> 
->> v6.0 works without problems and a bisect found this commit:
->> 
->> commit 4919d3eb2ec0ee364f7e3cf2d99646c1b224fae8
->> Author:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> AuthorDate: Wed Oct 12 20:07:01 2022 +0200
->> Commit:     Alexandre Belloni <alexandre.belloni@bootlin.com>
->> CommitDate: Thu Oct 13 23:27:52 2022 +0200
->> 
->>     rtc: cmos: Fix event handler registration ordering issue
->
-> FWIW, Todd also reported this yesterday:
-> https://lore.kernel.org/all/967cfe4e2dba242352ccd1cd00bdbcfb48bdd697.camel@linux.intel.com/
-> https://bugzilla.kernel.org/show_bug.cgi?id=216600
->
-> And Zhang Rui provided a patch in bugzilla that should fix this.
+This series of patches uses different arm64 instruction sets to optimize
+the SM3 and SM4 algorithms, as well as the optimization of different
+modes of SM4.
 
-Thanks, this is good info. Strangely enough Zhang's workaround in [1]
-did not fix the issue for me, rtcwake is still broken. Unfortunately no
-time right now to investigate further.
+patch 1-2:   NEON instruction set optimization for SM3
+patch 3:     Refactored and streamlined SM4 NEON instruction implementation
+patch 4-5:   support test for new SM4 mode
+patch 6-8:   Refactored and streamlined SM4 CE instruction implementation
+patch 9-12:  CE accelerated implementation of SM4 CTS/XTS/ESSIV
+patch 13:    CE accelerated implementation of SM4 CMAC/XCBC/CBCMAC
+patch 14-15: CE accelerated implementation of SM4 CCM/GCM
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=216600#c3
+v2 changes:
+  - remove ARMv9 SVE acceleration implementation
+  - rebase onto v6.1-rc1
+
+Cheers,
+Tianjia
+
+Tianjia Zhang (15):
+  crypto: arm64/sm3 - raise the priority of the CE implementation
+  crypto: arm64/sm3 - add NEON assembly implementation
+  crypto: arm64/sm4 - refactor and simplify NEON implementation
+  crypto: testmgr - add SM4 cts-cbc/essiv/xts/xcbc test vectors
+  crypto: tcrypt - add SM4 cts-cbc/essiv/xts/xcbc test
+  crypto: arm64/sm4 - refactor and simplify CE implementation
+  crypto: arm64/sm4 - simplify sm4_ce_expand_key() of CE implementation
+  crypto: arm64/sm4 - export reusable CE acceleration functions
+  crypto: arm64/sm4 - add CE implementation for CTS-CBC mode
+  crypto: arm64/sm4 - add CE implementation for XTS mode
+  crypto: essiv - allow digestsize to be greater than keysize
+  crypto: arm64/sm4 - add CE implementation for ESSIV mode
+  crypto: arm64/sm4 - add CE implementation for cmac/xcbc/cbcmac
+  crypto: arm64/sm4 - add CE implementation for CCM mode
+  crypto: arm64/sm4 - add CE implementation for GCM mode
+
+ arch/arm64/crypto/Kconfig           |   47 +-
+ arch/arm64/crypto/Makefile          |    9 +
+ arch/arm64/crypto/sm3-ce-glue.c     |    2 +-
+ arch/arm64/crypto/sm3-neon-core.S   |  600 +++++++++++++
+ arch/arm64/crypto/sm3-neon-glue.c   |  103 +++
+ arch/arm64/crypto/sm4-ce-asm.h      |  209 +++++
+ arch/arm64/crypto/sm4-ce-ccm-core.S |  328 +++++++
+ arch/arm64/crypto/sm4-ce-ccm-glue.c |  303 +++++++
+ arch/arm64/crypto/sm4-ce-core.S     | 1247 ++++++++++++++++++---------
+ arch/arm64/crypto/sm4-ce-gcm-core.S |  741 ++++++++++++++++
+ arch/arm64/crypto/sm4-ce-gcm-glue.c |  286 ++++++
+ arch/arm64/crypto/sm4-ce-glue.c     |  703 ++++++++++++++-
+ arch/arm64/crypto/sm4-ce.h          |   16 +
+ arch/arm64/crypto/sm4-neon-core.S   |  630 +++++++++-----
+ arch/arm64/crypto/sm4-neon-glue.c   |  172 +---
+ crypto/essiv.c                      |   11 +-
+ crypto/tcrypt.c                     |   28 +
+ crypto/testmgr.c                    |   25 +
+ crypto/testmgr.h                    | 1161 +++++++++++++++++++++++++
+ 19 files changed, 5852 insertions(+), 769 deletions(-)
+ create mode 100644 arch/arm64/crypto/sm3-neon-core.S
+ create mode 100644 arch/arm64/crypto/sm3-neon-glue.c
+ create mode 100644 arch/arm64/crypto/sm4-ce-asm.h
+ create mode 100644 arch/arm64/crypto/sm4-ce-ccm-core.S
+ create mode 100644 arch/arm64/crypto/sm4-ce-ccm-glue.c
+ create mode 100644 arch/arm64/crypto/sm4-ce-gcm-core.S
+ create mode 100644 arch/arm64/crypto/sm4-ce-gcm-glue.c
+ create mode 100644 arch/arm64/crypto/sm4-ce.h
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.24.3 (Apple Git-128)
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
