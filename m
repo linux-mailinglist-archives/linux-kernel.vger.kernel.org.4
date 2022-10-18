@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913706035F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B490F6035F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJRWeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 18:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S230017AbiJRWeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 18:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJRWeL (ORCPT
+        with ESMTP id S229973AbiJRWeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Oct 2022 18:34:11 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6559EB3B23;
-        Tue, 18 Oct 2022 15:34:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391622BB35;
+        Tue, 18 Oct 2022 15:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666132450; x=1697668450;
+  t=1666132451; x=1697668451;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9fcaWKO9aXLkv+dqa94dbpKX48/m+j1H+Zp+GyGjibU=;
-  b=n45HdTeAaTbqPfR6L1v4dQUICHhAAtmTtyLOOxfNV/xUyl/KYzmwFdrH
-   BKMn6HnF2ERaHmUhQf/fcRJjtCkEIYn6lXC7dn9237D9IQKUMphoDmM2N
-   U3paM2TyYWrukzZ7EnvJkpkHOZJZazqmxLp0dufyHpS39RiyZU8sh5DKg
-   /DWUgop8XLHN7MgX1//UOfWXfPelXbPcZhRYKtySx/KYI6rdTM6h8jbjG
-   SxBbq8DzahG9K2wO9RfQHfF0/vA9Pnp5L5Co66K23svABTti1WWa3V54h
-   LSrLwm0Yjmy23ZAm2lneY3OtxPIBSlhYDaWsXdQlTW0qN0PEHG0QYb6gO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="306236224"
+  bh=+vCoymx5NkqT+DCUBjvcufzqfyqPvwuEyg7xUD1Func=;
+  b=MGWvVYPGJs7mcpKod8GqLcvj/TvRGAOrCMv5PGCfVI2AOSzsVeSOwKaW
+   QjURn6DvKC9EQW2BM59Neac8LrpddC3TD8bXM6XiuYewQuQ0KzIVE9bIo
+   Jy7vJci7eXpQp2mezT9IMkmIH6iBwivI1FkAU3UkvvSGxejtK5gdG4Rhq
+   gx/gf3BPUgFoOFkQrQLtBd4g6CH59+/jT7qolGxKnT/hLwW6n/BJNE9rY
+   Nk2zDIEiuX41Tf8ZbxgUQOiF7NzU1BJC+HZM0ScLpL8w+acqMH1TkvQrJ
+   5y3l/Tmc4mw72TFiwCvJhqZeGv/fKkALrDrdW0oXOi8JbDT1gJ14CqZy8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="306236227"
 X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="306236224"
+   d="scan'208";a="306236227"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 15:34:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="697745779"
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="697745782"
 X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="697745779"
+   d="scan'208";a="697745782"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga004.fm.intel.com with ESMTP; 18 Oct 2022 15:34:07 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id C9C0520B; Wed, 19 Oct 2022 01:34:28 +0300 (EEST)
+        id D16643FD; Wed, 19 Oct 2022 01:34:28 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 4/5] pinctrl: sunrisepoint: Deduplicate COMMUNITY macro code
-Date:   Wed, 19 Oct 2022 01:34:26 +0300
-Message-Id: <20221018223427.43579-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 5/5] pinctrl: tigerlake: Deduplicate COMMUNITY macro code
+Date:   Wed, 19 Oct 2022 01:34:27 +0300
+Message-Id: <20221018223427.43579-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221018223427.43579-1-andriy.shevchenko@linux.intel.com>
 References: <20221018223427.43579-1-andriy.shevchenko@linux.intel.com>
@@ -69,62 +69,53 @@ This removes some verbosity in macros.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/intel/pinctrl-sunrisepoint.c | 32 ++++++++++----------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/pinctrl/intel/pinctrl-tigerlake.c | 28 +++++++++++------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-sunrisepoint.c b/drivers/pinctrl/intel/pinctrl-sunrisepoint.c
-index 026067e18349..be5bb0f4b1dc 100644
---- a/drivers/pinctrl/intel/pinctrl-sunrisepoint.c
-+++ b/drivers/pinctrl/intel/pinctrl-sunrisepoint.c
-@@ -22,24 +22,24 @@
- #define SPT_GPI_IS		0x100
- #define SPT_GPI_IE		0x120
+diff --git a/drivers/pinctrl/intel/pinctrl-tigerlake.c b/drivers/pinctrl/intel/pinctrl-tigerlake.c
+index 5a4cd0d9a89f..4f5a3b80b72d 100644
+--- a/drivers/pinctrl/intel/pinctrl-tigerlake.c
++++ b/drivers/pinctrl/intel/pinctrl-tigerlake.c
+@@ -31,25 +31,25 @@
+ 		.gpio_base = (g),			\
+ 	}
  
--#define SPT_COMMUNITY(b, s, e, pl, gs, gn, g, n)	\
+-#define TGL_COMMUNITY(b, s, e, pl, ho, g)		\
 -	{						\
 -		.barno = (b),				\
--		.padown_offset = SPT_PAD_OWN,		\
+-		.padown_offset = TGL_PAD_OWN,		\
 -		.padcfglock_offset = (pl),		\
--		.hostown_offset = SPT_HOSTSW_OWN,	\
--		.is_offset = SPT_GPI_IS,		\
--		.ie_offset = SPT_GPI_IE,		\
--		.gpp_size = (gs),			\
--		.gpp_num_padown_regs = (gn),		\
+-		.hostown_offset = (ho),			\
+-		.is_offset = TGL_GPI_IS,		\
+-		.ie_offset = TGL_GPI_IE,		\
 -		.pin_base = (s),			\
 -		.npins = ((e) - (s) + 1),		\
 -		.gpps = (g),				\
--		.ngpps = (n),				\
-+#define SPT_COMMUNITY(b, s, e, g, n, v, gs, gn)			\
+-		.ngpps = ARRAY_SIZE(g),			\
++#define TGL_COMMUNITY(b, s, e, g, v)				\
 +	{							\
 +		.barno = (b),					\
-+		.padown_offset = SPT_PAD_OWN,			\
-+		.padcfglock_offset = SPT_##v##_PADCFGLOCK,	\
-+		.hostown_offset = SPT_HOSTSW_OWN,		\
-+		.is_offset = SPT_GPI_IS,			\
-+		.ie_offset = SPT_GPI_IE,			\
-+		.gpp_size = (gs),				\
-+		.gpp_num_padown_regs = (gn),			\
++		.padown_offset = TGL_PAD_OWN,			\
++		.padcfglock_offset = TGL_##v##_PADCFGLOCK,	\
++		.hostown_offset = TGL_##v##_HOSTSW_OWN,		\
++		.is_offset = TGL_GPI_IS,			\
++		.ie_offset = TGL_GPI_IE,			\
 +		.pin_base = (s),				\
 +		.npins = ((e) - (s) + 1),			\
 +		.gpps = (g),					\
-+		.ngpps = (n),					\
++		.ngpps = ARRAY_SIZE(g),				\
  	}
  
- #define SPT_LP_COMMUNITY(b, s, e)			\
--	SPT_COMMUNITY(b, s, e, SPT_LP_PADCFGLOCK, 24, 4, NULL, 0)
-+	SPT_COMMUNITY(b, s, e, NULL, 0, LP, 24, 4)
+ #define TGL_LP_COMMUNITY(b, s, e, g)			\
+-	TGL_COMMUNITY(b, s, e, TGL_LP_PADCFGLOCK, TGL_LP_HOSTSW_OWN, g)
++	TGL_COMMUNITY(b, s, e, g, LP)
  
- #define SPT_H_GPP(r, s, e, g)				\
- 	{						\
-@@ -50,7 +50,7 @@
- 	}
+ #define TGL_H_COMMUNITY(b, s, e, g)			\
+-	TGL_COMMUNITY(b, s, e, TGL_H_PADCFGLOCK, TGL_H_HOSTSW_OWN, g)
++	TGL_COMMUNITY(b, s, e, g, H)
  
- #define SPT_H_COMMUNITY(b, s, e, g)			\
--	SPT_COMMUNITY(b, s, e, SPT_H_PADCFGLOCK, 0, 0, g, ARRAY_SIZE(g))
-+	SPT_COMMUNITY(b, s, e, g, ARRAY_SIZE(g), H, 0, 0)
- 
- /* Sunrisepoint-LP */
- static const struct pinctrl_pin_desc sptlp_pins[] = {
+ /* Tiger Lake-LP */
+ static const struct pinctrl_pin_desc tgllp_pins[] = {
 -- 
 2.35.1
 
