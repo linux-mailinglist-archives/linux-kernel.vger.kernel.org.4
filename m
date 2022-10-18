@@ -2,111 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73476028DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABA36028CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiJRJ4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S229682AbiJRJyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiJRJ4R (ORCPT
+        with ESMTP id S230216AbiJRJx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:56:17 -0400
-X-Greylist: delayed 13237 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 02:56:12 PDT
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E9DA2A85;
-        Tue, 18 Oct 2022 02:56:12 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1666086939tfc7fd05
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 18 Oct 2022 17:55:33 +0800 (CST)
-X-QQ-SSF: 01400000000000C0K000000A0000000
-X-QQ-FEAT: bQsUcYFpAAYBiBHsWQunkLgscl2cKPYwrjfuIFuXB3Pw4YAWydLHFD4pq8yv0
-        zIRhg0mXP01fi/51RsWMDou+7Owr+a6it+uOQrgIl18ujr9zJOMJLdQvyLM2U7rjvk/G5Dy
-        LqDck9PlY82qvKp5A+cOakwn0HgxryTKmGxR/PlzBaXtuPZ1X1jfErf07zrqbLq0ncmV79Z
-        UTV7qOSZ7+G7DMnEelIc0cA7NLRzow894pbHbGNbWXXlPJWY7ENgYm5RZWyaoWH7/3lcU+K
-        Ypx+xwizF0w3mzwsML0/tV9ddY0vmW71Pt6H8pM3XAgVyIXN4RVSBWV6/Jt54VIadcGvPU8
-        iB9W3w6aH93s5ApGKmIKDWgzhzTiz74my/Am+xGKAuDr9KSEuPfQmExXJyt/F1PcmUc9TFT
-        W5HOny0lpG8=
-X-QQ-GoodBg: 1
-From:   Manyi Li <limanyi@uniontech.com>
-To:     hdegoede@redhat.com
-Cc:     ike.pan@canonical.com, limanyi@uniontech.com,
-        linux-kernel@vger.kernel.org, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH v2] platform/x86: ideapad-laptop: Disable touchpad_switch
-Date:   Tue, 18 Oct 2022 17:53:23 +0800
-Message-Id: <20221018095323.14591-1-limanyi@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
-References: <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
+        Tue, 18 Oct 2022 05:53:59 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A56836BCD;
+        Tue, 18 Oct 2022 02:53:58 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 5C8491C09D8; Tue, 18 Oct 2022 11:53:57 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 11:53:56 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Wen Gong <quic_wgong@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 4.19 16/25] wifi: ath10k: reset pointer after
+ memory free to avoid potential use-after-free
+Message-ID: <20221018095356.GH1264@duo.ucw.cz>
+References: <20221009222436.1219411-1-sashal@kernel.org>
+ <20221009222436.1219411-16-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="y0Ed1hDcWxc3B7cn"
+Content-Disposition: inline
+In-Reply-To: <20221009222436.1219411-16-sashal@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ideapads for "Lenovo Yoga 3 Pro 1370" and "ZhaoYang K4e-IML" do not
-use EC to switch touchpad.
 
-Reading VPCCMD_R_TOUCHPAD will return zero thus touchpad may be blocked
-unexpectedly.
+--y0Ed1hDcWxc3B7cn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Manyi Li <limanyi@uniontech.com>
----
- drivers/platform/x86/ideapad-laptop.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+Hi!
 
-diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
-index abd0c81d62c4..33b3dfdd1b08 100644
---- a/drivers/platform/x86/ideapad-laptop.c
-+++ b/drivers/platform/x86/ideapad-laptop.c
-@@ -1533,6 +1533,24 @@ static const struct dmi_system_id hw_rfkill_list[] = {
- 	{}
- };
- 
-+static const struct dmi_system_id no_touchpad_switch_list[] = {
-+	{
-+	.ident = "Lenovo Yoga 3 Pro 1370",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+		DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo YOGA 3"),
-+		},
-+	},
-+	{
-+	.ident = "ZhaoYang K4e-IML",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+		DMI_MATCH(DMI_PRODUCT_VERSION, "ZhaoYang K4e-IML"),
-+		},
-+	},
-+	{}
-+};
-+
- static void ideapad_check_features(struct ideapad_private *priv)
- {
- 	acpi_handle handle = priv->adev->handle;
-@@ -1541,7 +1559,12 @@ static void ideapad_check_features(struct ideapad_private *priv)
- 	priv->features.hw_rfkill_switch = dmi_check_system(hw_rfkill_list);
- 
- 	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
--	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
-+	if (acpi_dev_present("ELAN0634", NULL, -1))
-+		priv->features.touchpad_ctrl_via_ec = 0;
-+	else if (dmi_check_system(no_touchpad_switch_list))
-+		priv->features.touchpad_ctrl_via_ec = 0;
-+	else
-+		priv->features.touchpad_ctrl_via_ec = 1;
- 
- 	if (!read_ec_data(handle, VPCCMD_R_FAN, &val))
- 		priv->features.fan_mode = true;
--- 
-2.20.1
+> From: Wen Gong <quic_wgong@quicinc.com>
+>=20
+> [ Upstream commit 1e1cb8e0b73e6f39a9d4a7a15d940b1265387eb5 ]
+>=20
+> When running suspend test, kernel crash happened in ath10k, and it is
+> fixed by commit b72a4aff947b ("ath10k: skip ath10k_halt during suspend
+> for driver state RESTARTING").
+>=20
+> Currently the crash is fixed, but as a common code style, it is better
+> to set the pointer to NULL after memory is free.
+>=20
+> This is to address the code style and it will avoid potential bug of
+> use-after-free.
 
+We don't have this patch in 4.19:
+
+b72a4aff947b ("ath10k: skip ath10k_halt during suspend for driver state RES=
+TARTING").
+
+We probably should take that one, as this may depend on it. On the
+other hand, we don't need this one as it is just a cleanup...
+
+Best regards,
+								Pavel
+							=09
+> +++ b/drivers/net/wireless/ath/ath10k/htt_rx.c
+> @@ -302,12 +302,16 @@ void ath10k_htt_rx_free(struct ath10k_htt *htt)
+>  			  ath10k_htt_get_vaddr_ring(htt),
+>  			  htt->rx_ring.base_paddr);
+> =20
+> +	ath10k_htt_config_paddrs_ring(htt, NULL);
+> +
+>  	dma_free_coherent(htt->ar->dev,
+>  			  sizeof(*htt->rx_ring.alloc_idx.vaddr),
+>  			  htt->rx_ring.alloc_idx.vaddr,
+>  			  htt->rx_ring.alloc_idx.paddr);
+> +	htt->rx_ring.alloc_idx.vaddr =3D NULL;
+> =20
+>  	kfree(htt->rx_ring.netbufs_ring);
+> +	htt->rx_ring.netbufs_ring =3D NULL;
+>  }
+> =20
+>  static inline struct sk_buff *ath10k_htt_rx_netbuf_pop(struct ath10k_htt=
+ *htt)
+> @@ -641,8 +645,10 @@ int ath10k_htt_rx_alloc(struct ath10k_htt *htt)
+>  			  ath10k_htt_get_rx_ring_size(htt),
+>  			  vaddr_ring,
+>  			  htt->rx_ring.base_paddr);
+> +	ath10k_htt_config_paddrs_ring(htt, NULL);
+>  err_dma_ring:
+>  	kfree(htt->rx_ring.netbufs_ring);
+> +	htt->rx_ring.netbufs_ring =3D NULL;
+>  err_netbuf:
+>  	return -ENOMEM;
+>  }
+> --=20
+> 2.35.1
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--y0Ed1hDcWxc3B7cn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY053tAAKCRAw5/Bqldv6
+8n84AJ45/QgkGMpSg/yVjmSGm2uAOTr89QCeLihL/LnMqBq5hHDBcCEB+8hBSt0=
+=6ejv
+-----END PGP SIGNATURE-----
+
+--y0Ed1hDcWxc3B7cn--
