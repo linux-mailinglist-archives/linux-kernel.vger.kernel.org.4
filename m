@@ -2,50 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25C46035E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A6B6035E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJRW24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 18:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S229862AbiJRW3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 18:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJRW2y (ORCPT
+        with ESMTP id S229902AbiJRW3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 18:28:54 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53624C1DA3;
-        Tue, 18 Oct 2022 15:28:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 18 Oct 2022 18:29:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA65CAE61;
+        Tue, 18 Oct 2022 15:29:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MsT5q5wPhz4wgr;
-        Wed, 19 Oct 2022 09:28:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666132097;
-        bh=9rg8GxTjWVwUQW9kfD1QgAkwW4UdcWso5IiFE/0gArU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HTE2silZv59B8V6ImxBbhHQd4BY/a7Bb7O9Cm3Nq5LwTw3XaZZ7VCJLydbd1P2zhY
-         fekFXwdSbEferlTMW2mJa8RgX9vRg7/ILj08YDgPZY/4qCPMijGpMWzDYsCFwGjb5W
-         ORr9B9uLSp3SUeTgptaLGq/E10BzXX+9wzItmWAqkslZ8H9IgnsoVAZZCJZEibdKA+
-         e92//yEmyF5rzdQwteIV73/F3EeBRxHKRMuTvCC6uU/IjYnJWHt3ndqMY8ji944Qxt
-         HiZIu68tFbzTvh5dzFw3JLlrgAe2ihWsgDs1X7UU7YmJtkGpDSctl3tcsblXSrD76j
-         /CCmSZgIwU3bQ==
-Date:   Wed, 19 Oct 2022 09:28:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Richard Weinberger <richard.weinberger@gmail.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: linux-next: manual merge of the mtd tree with the mtd-fixes tree
-Message-ID: <20221019092812.7d370b06@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D520B8218B;
+        Tue, 18 Oct 2022 22:28:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A494C4347C;
+        Tue, 18 Oct 2022 22:28:57 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 18:28:58 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 1/2] rv/dot2c: Make automaton definition static
+Message-ID: <20221018182858.67d8b76e@gandalf.local.home>
+In-Reply-To: <20221018182553.06f13a50@gandalf.local.home>
+References: <ffbb92010f643307766c9307fd42f416e5b85fa0.1661266564.git.bristot@kernel.org>
+        <20221018182553.06f13a50@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rBirSiM5nqbzMPGzA0OIaEy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,53 +45,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/rBirSiM5nqbzMPGzA0OIaEy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 18 Oct 2022 18:25:53 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Hi all,
+> On Tue, 23 Aug 2022 17:20:28 +0200
+> Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+> 
+> > Monitor's automata definition is only used locally, so make dot2c generate
+> > a static definition.
+> > 
+> > Link: https://lore.kernel.org/all/202208210332.gtHXje45-lkp@intel.com
+> > Link: https://lore.kernel.org/all/202208210358.6HH3OrVs-lkp@intel.com
+> >   
+> 
+> Somehow this fell through the cracks.
+> 
+> Daniel, is there any reason I shouldn't pull this in now?
 
-Today's linux-next merge of the mtd tree got a conflict in:
+I think when I applied:
 
-  drivers/mtd/mtdcore.c
+  https://patchwork.kernel.org/project/linux-trace-devel/patch/a50e27c3738d6ef809f4201857229fed64799234.1661266564.git.bristot@kernel.org/
 
-between commit:
+I mistook that to be a new version of this patch.
 
-  12b58961de0b ("mtd: core: add missing of_node_get() in dynamic partitions=
- code")
-
-from the mtd-fixes tree and commit:
-
-  63db0cb35e1c ("mtd: core: simplify (a bit) code find partition-matching d=
-ynamic OF node")
-
-from the mtd tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/rBirSiM5nqbzMPGzA0OIaEy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNPKHwACgkQAVBC80lX
-0GyqlQgAg4CtiXm+eQ2CP3UKjFa4D7puw8+tdtA4hmQK/pu0ySeAwzWIYhK2D1jK
-N8xGqQOEAVvXkCBdb2lzTUSLhqQonFiCeSP3UrW3D2QCRIVsFsi6XhM3wtrVi89B
-O2haEtGfTEJQaf8vsM8YcD5g/PUzWpmJFEoW9W+kOXNzIBaGcp4TKAxhmIaKzvFz
-kif6XSz8kXr2k3nOz4UPPSGheNxqdsDN/Nej+6KWK4KjiS5uw3rZnP3w2Gw+9uUM
-cAhg4oqMZ050BwkDvEA0o1Sb2LCZ2WACWylqgL1g0zrh3PspAArMXnSI6HiwjxPb
-w/PuHILJyObVFW6jQwpQQ6TI0qDUxw==
-=f7tm
------END PGP SIGNATURE-----
-
---Sig_/rBirSiM5nqbzMPGzA0OIaEy--
+-- Steve
