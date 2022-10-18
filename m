@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4479860244F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB8B602451
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJRGZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S230153AbiJRGZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJRGY6 (ORCPT
+        with ESMTP id S230166AbiJRGZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:24:58 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE7E1F9C8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:24:57 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ms3fV4q2TzpVgW;
-        Tue, 18 Oct 2022 14:21:38 +0800 (CST)
-Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 14:24:55 +0800
-Subject: Re: ping// Re: [PATCH v5 0/2] squashfs: Add the mount parameter
- "threads="
-To:     Phillip Lougher <phillip.lougher@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <phillip@squashfs.org.uk>,
-        <wangle6@huawei.com>, <yi.zhang@huawei.com>,
-        <zhongjubin@huawei.com>, <chenjianguo3@huawei.com>
-References: <20220916083604.33408-1-nixiaoming@huawei.com>
- <20220930091406.50869-1-nixiaoming@huawei.com>
- <910e5533-4abc-85f1-6bfc-4d776f8bed7b@huawei.com>
- <CAB3wodeXGT0dGxZ+AGJvTU1mMHsqNo4--1c+6UVhYmJj4fO14w@mail.gmail.com>
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-Message-ID: <e07213f1-2734-95ce-994f-c707bba4d6ad@huawei.com>
-Date:   Tue, 18 Oct 2022 14:24:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0.1
+        Tue, 18 Oct 2022 02:25:15 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530305F7F;
+        Mon, 17 Oct 2022 23:25:10 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 8748530024DBD;
+        Tue, 18 Oct 2022 08:25:08 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 6AB8A61F9A; Tue, 18 Oct 2022 08:25:08 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 08:25:08 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
+        p.rosenberger@kunbus.com
+Subject: Re: [PATCH v8 08/11] tpm, tpm: Implement usage counter for locality
+Message-ID: <20221018062508.GB25237@wunner.de>
+References: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
+ <20221017235732.10145-9-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-In-Reply-To: <CAB3wodeXGT0dGxZ+AGJvTU1mMHsqNo4--1c+6UVhYmJj4fO14w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.83]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017235732.10145-9-LinoSanfilippo@gmx.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/18 6:59, Phillip Lougher wrote:
-> On Mon, Oct 17, 2022 at 2:11 AM Xiaoming Ni <nixiaoming@huawei.com> wrote:
->>
->> ping
+On Tue, Oct 18, 2022 at 01:57:29AM +0200, Lino Sanfilippo wrote:
+> Implement a usage counter for the (default) locality used by the TPM TIS
+> driver:
+> Request the locality from the TPM if it has not been claimed yet, otherwise
+> only increment the counter. Also release the locality if the counter is 0
+> otherwise only decrement the counter. Ensure thread-safety by protecting
+> the counter with a mutex.
 > 
-> I was hoping you'd notice the obvious mistake you made in the patch set,
-> and send an updated version, which would avoid me having to point out
-> such mistakes again.
-> 
-> I have replied to patch [1/2]
-> 
-> Phillip
-> 
-I'm so sorry.
-I'm very ashamed of my serial mistakes.
+> This allows to request and release the locality from a thread and the
+> interrupt handler at the same time without the danger to interfere with
+> each other.
+[...]
+> +static int tpm_tis_release_locality(struct tpm_chip *chip, int l)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  
+> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+> +	mutex_lock(&priv->locality_count_mutex);
+> +	priv->locality_count--;
+> +	if (priv->locality_count == 0)
+> +		tpm_tis_release_locality_locked(priv, l);
+> +	mutex_unlock(&priv->locality_count_mutex);
+>  
+>  	return 0;
+>  }
 
-I'll fix it again later and resend it, I'm sorry I need to take up your 
-valuable time to help review it again.
+Hm, any reason not to use struct kref for the locality counter?
+Provides correct memory ordering (no mutex needed) and allows for
+calling a release function too upon reaching 0.
 
+Thanks,
 
-Thanks
-Xiaoming Ni
-
-
+Lukas
