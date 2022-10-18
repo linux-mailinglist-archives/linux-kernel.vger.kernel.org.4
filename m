@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B356033AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CB26033B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiJRT7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 15:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
+        id S230020AbiJRUAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 16:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiJRT7u (ORCPT
+        with ESMTP id S229957AbiJRUAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 15:59:50 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B772D1C5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 12:59:47 -0700 (PDT)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id B759FFF80A;
-        Tue, 18 Oct 2022 19:59:42 +0000 (UTC)
+        Tue, 18 Oct 2022 16:00:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C130B7E81B;
+        Tue, 18 Oct 2022 13:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AB3FB82102;
+        Tue, 18 Oct 2022 20:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 310DEC433D6;
+        Tue, 18 Oct 2022 20:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666123217;
+        bh=TtckORe7oVJmfBtYEFHgrR0/5B+0GsZkTwJZYIqMLWE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=lDYCjzQWaKxoOKyCD+JaoeInAS7OuaUUNfDQiA1yP6x4kSW7laFxmmm/VMFcMTIFG
+         hq4Hm/nZwaU+qSb3s3lYkdtCk6d+dEdXxp8OkVkd4jucmUZEoUw/mE65eX2O7APM6V
+         UaeNHrmEFMETE8g3RwXtxJ3whc0G6Tdc+cBc5jjWMCz13obe1YbzgZlJe/ss58jXFj
+         vnVIaXN4ak7W05PsV0ZjNeuUkrf54M6adCQuLKFny0e6ffLApMavKevXiAMbPzJ+k0
+         SrZfLud4P37m9ybSTM61CVkjDbmQVQPN65A0z7Hr3beqgE3ekLTJ6VBYTPhTn0hJiR
+         19hbVhUgwN98g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B04AE21ED4;
+        Tue, 18 Oct 2022 20:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Date:   Tue, 18 Oct 2022 12:59:42 -0700
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] x86/ibt: Implement FineIBT
-In-Reply-To: <202210181020.79AF7F7@keescook>
-References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
- <202210181020.79AF7F7@keescook>
-Message-ID: <5094174a77cdc44cf50c346bf1617555@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] Bluetooth: L2CAP: Fix memory leak in vhci_write
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <166612321710.1440.974554274337472086.git-patchwork-notify@kernel.org>
+Date:   Tue, 18 Oct 2022 20:00:17 +0000
+References: <20221018021851.2900-1-yin31149@gmail.com>
+In-Reply-To: <20221018021851.2900-1-yin31149@gmail.com>
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, 18801353760@163.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.von.dentz@intel.com, netdev@vger.kernel.org,
+        syzbot+8f819e36e01022991cfa@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> 
->>    o IBT WAIT-FOR-ENDBR state is a speculation stop; by placing
->>      the hash validation in the immediate instruction after
->>      the branch target there is a minimal speculation window
->>      and the whole is a viable defence against SpectreBHB.
+Hello:
+
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+
+On Tue, 18 Oct 2022 10:18:51 +0800 you wrote:
+> Syzkaller reports a memory leak as follows:
+> ====================================
+> BUG: memory leak
+> unreferenced object 0xffff88810d81ac00 (size 240):
+>   [...]
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff838733d9>] __alloc_skb+0x1f9/0x270 net/core/skbuff.c:418
+>     [<ffffffff833f742f>] alloc_skb include/linux/skbuff.h:1257 [inline]
+>     [<ffffffff833f742f>] bt_skb_alloc include/net/bluetooth/bluetooth.h:469 [inline]
+>     [<ffffffff833f742f>] vhci_get_user drivers/bluetooth/hci_vhci.c:391 [inline]
+>     [<ffffffff833f742f>] vhci_write+0x5f/0x230 drivers/bluetooth/hci_vhci.c:511
+>     [<ffffffff815e398d>] call_write_iter include/linux/fs.h:2192 [inline]
+>     [<ffffffff815e398d>] new_sync_write fs/read_write.c:491 [inline]
+>     [<ffffffff815e398d>] vfs_write+0x42d/0x540 fs/read_write.c:578
+>     [<ffffffff815e3cdd>] ksys_write+0x9d/0x160 fs/read_write.c:631
+>     [<ffffffff845e0645>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845e0645>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> ====================================
 > 
-> I still think it's worth noting it does technically weaken the
-> "attacker-controlled executable memory content injection" attack
-> requirements, too. While an attacker needs to make sure they place an
-> ENDBR at the start of their injected code, they no longer need to also
-> learn and inject the CFI hash too, as the malicious code can just not
-> do the check at all. The difference in protection currently isn't much.
-> 
-> It's not a very difficult requirement to get attacker-controlled bytes
-> into executable memory, as there are already existing APIs that provide
-> this to varying degrees of reachability, utility, and discoverability 
-> --
-> for example, BPF JIT when constant blinding isn't enabled (the 
-> unfortunate
-> default). And with the hashes currently being deterministic, there's no
-> secret that needs to be exposed first; an attack can just calculate it.
-> An improvement for kCFI would be to mutate all the hashes both at build
-> time (perhaps using the same seed infrastructure that randstruct 
-> depends
-> on for sharing a seed across compilation units), and at boot time, so
-> an actual .text content exposure is needed to find the target hash 
-> value.
-> 
-If we look back at how well ASLR did over the years I think we can't 
-really rely that randomizing the hashes will solve anything. So what you 
-are suggesting is that we flip a "viable defence against SpectreBHB" for 
-a randomization-based scheme, when what we really should be doing is 
-getting constant blinding enabled by default.
+> [...]
 
-In fact, even if an attacker is able to inject an ENDBR at the target 
-through operation constants as you suggest, there is still the need for 
-an info-leak to figure out the address of the ENDBR. I bet this is not a 
-problem for any skilled attacker as much as figuring out the randomized 
-hashes shouldn't be. Unfortunately no CFI scheme I know that relies on 
-anything at the callee-side is fully reliable if an attacker can 
-manipulate executable pages, and randomizing hashes won't change that. 
-So I don't think there is a strong enough difference here. ClangCFI 
-perhaps could be better in that perspective, but as we know it would 
-bring many other drawbacks.
+Here is the summary with links:
+  - [v2] Bluetooth: L2CAP: Fix memory leak in vhci_write
+    https://git.kernel.org/bluetooth/bluetooth-next/c/97097c85c088
 
-At this point I feel like going on is a bit of bike-shedding, but if 
-this really matters, below is how to use randomization on FineIBT. Maybe 
-with lot less entropy, but just ideas thrown that could be improved over 
-time (don't take this as a serious proposal):
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Assuming we got 16 bytes padding to play with on each function prologue, 
-you can randomize between 0-11 in which offset you emit the ENDBR 
-instruction. Caller/Callee would look like (hopefully I did not mess-up 
-offset):
 
-<caller>:
-and 0xf3, r11b
-call *r11
-
-<callee>:
-nop
-nop
-nop
-endbr // <- this position is randomized/patched during boot time.
-nop
-nop
-...
-
-And of course, you get more entropy as you increase the padding nop 
-area.
