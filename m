@@ -2,202 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD106034F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4623A6034FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiJRV3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S230281AbiJRVaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiJRV3e (ORCPT
+        with ESMTP id S230243AbiJRVaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:29:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C893E0E5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666128572; x=1697664572;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=IjsYPVLF98lq62v0bmqEPEjQ6/xcrUt/tkTeBCnvqeo=;
-  b=UKCp2VZtrt7dNCHeMbbz/I2RCseuGqfgi0prqpjPsar0/kd8zoqlIOfX
-   nZPO9U1BlFdr+KXMTLwMYHl1Mg6Im2dpSxKV3QRJ42Khnd1PhzvCSaiIa
-   FCgyyznh4Yp4Wt9JMbFojnol0Ke/WdKMHX34bYpWQM839uHfoYhSofnki
-   Jl7cjWmUtSi9vJE39elgHqdfg7QYcwZeNjy46h9nV50VDVNk2kDvMlKYE
-   Owz0vZ+PWGT1Rz6lZsfx78ghZEGGZdDywbip7yI4fqxUTENgYp2bQIMZY
-   zs4iDw9pz5/MtzJvxVvMv+7odJknogGQZDdPoqOD8PgnoZpSaySqIDvoR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="307349482"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="307349482"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 14:29:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="771427142"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="771427142"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Oct 2022 14:29:18 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 14:29:17 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 14:29:17 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 18 Oct 2022 14:29:17 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.49) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 18 Oct 2022 14:29:17 -0700
+        Tue, 18 Oct 2022 17:30:12 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D7D27FDA;
+        Tue, 18 Oct 2022 14:30:10 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IKwrmC015084;
+        Tue, 18 Oct 2022 21:29:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=o3RnHSK2M0n4Rwg/sT42VEyWMg08BeI0LMllX4eVJnE=;
+ b=pNUc4rpgYLloDpW6Nngqed1XeArGxiW0NO7+esIcVvzmFrITrUAF9dBcGY3COH7f94i8
+ EYtYm0QuDrXIdSPCvcbCvPB6XP5tC4LaU5Do6YbNKPPycSxlmuIgWc9xnSFUCQCHP1y9
+ Za6rGf6nCfJ1EqwHWBpwRJxgK5wcwVK8/Rz+4y7njLVMo0WyZG1KzQaQJB56JwwxmRou
+ J9yx9HwKEr7KCtwUrfFSnre26mZje6+e6fofPg2LyWFNTuDE0D6MEWx0UmlGWpTLymcD
+ p+0ytd8pvgLtFgkaw6JRBu2K1/vZd93M3Uz1VYGLO5Tm9hVcPDZU5EkDbtv5bdE9+qEb jQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7mw3g323-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Oct 2022 21:29:21 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29IJrBI5016642;
+        Tue, 18 Oct 2022 21:29:20 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k8htgmtsj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Oct 2022 21:29:20 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nd8KzIVDxbzqs4NYsvGqvptviMBHz4IOOlvANCYK5xE2b1+82H9UvRG6GlPqnq/Jj1HyezIWll0VLEe7JDVFpM5ZShXaCJXsFIpxrZ904h6NOQ1QsmBbz5Dq5wPjIl7PMxWqojCCKNuerRWG4dgnHXW3QsT2e+rA4iF4alTWyD+0kneqpFHIN6YaYYOknqH7t5Uc46GEi3qQJdfWc0655UKXUeJVNv5x24l0zTZvmDZiMGEcCITVi1eUvBbB5DIPUfYVpYmQoGidJXpQicBDqHJlgnHqmhy8/jwTj2dSvjYtKTk08QM2SCLvc15YGyfJh41iGO+p5TNn1RdvVTFIjQ==
+ b=UpkMg3CDb5vdaCXQyUq+ThfNXmwE8UpVjiP88WlaIXrogt79cIPFC2OfxZFY08JvRfnQ+H2g/mbkXcHzinz/6kgOuJhOi3IpceMANJANgm8Kx3TMtWWEDwNGp0gUglpEYlu5bGsqF2CDrEnyKNEKe7Po/tsDoLy3S8Yfy2E1yiahueydFR9rq0yaG8lABapjyuyaCEW+mEMD68UAtMFyUjWFMx9Kz+i3xYsPbwooMmsVmFHLH46pTWXnMvjOvy7JICKzVqub8kt5SThhlRQEfYjQ1WBC55Gm23VnOthUVniG3wKz/aLocPnOlJgeRQXQEU8LMfVMOHzP56CRbmzsxA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IjsYPVLF98lq62v0bmqEPEjQ6/xcrUt/tkTeBCnvqeo=;
- b=Ahhh9rq65pW2bsPwCtpQ51uFbbEflILCNOrPZczwdP7e8YWsSWV84kf30b66d8LhgdAfSwUTfTZtuwc54/N2sdOr3OkoTFqS6k30VzFlrVgaC0oRBJlYcVWFNR4bM2ksQ/XbLjROteZkJrlJYmtoQilBqvlCL/YPyMsID+3eT7qjYoEuks4WuXcZjyqPFRiX7lTF0qHGLM5A4FCYy8ZQH52tL7YTp+ZkZ1QeIcfiyZ4FQ3CDYgsqXIZSXm1KhcPjNGzR3ZeJYYWrwnT3/zlbE0EgfCCspRi7kyKNOHMmpNGahBqGnRZCs9531z0vjonE9Xzb3fGWwskoPk7m/Mz0sQ==
+ bh=o3RnHSK2M0n4Rwg/sT42VEyWMg08BeI0LMllX4eVJnE=;
+ b=J6y4FvE5BYi9tm+YCrq1ttsrFa/les+OBHwLXFErFAXfYEkD48LtfW4k5wZizmfdhLln7OYfSxK33T8jvynxpOq8F2yakpq9KJC1xdGlNa7IV1XjR0wZROPXiU5hjxrblvPPOTCiaQ8H6DIJNCKb8ZCSnvP6abX7n6EsmNV3c1zk0TKsO/d7x4zgHeAqGr5JtOQEdxeTtqk5gsa+Xn4ft6imATAKsBleR6kTWMGjcKzrIEMGcAYc1yFRCT7AtXriEnkbKTPHDi0kOrH83qAjO+sryMeoPMjHKiIp4Q9SVsaxfBTT1Q12YAOL84e5MB+rH5sR3Fh6iOGoSlDaGFcYWQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN6PR1101MB2161.namprd11.prod.outlook.com
- (2603:10b6:405:52::15) by DS7PR11MB5967.namprd11.prod.outlook.com
- (2603:10b6:8:72::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Tue, 18 Oct
- 2022 21:29:15 +0000
-Received: from BN6PR1101MB2161.namprd11.prod.outlook.com
- ([fe80::348b:441f:ecda:baf5]) by BN6PR1101MB2161.namprd11.prod.outlook.com
- ([fe80::348b:441f:ecda:baf5%12]) with mapi id 15.20.5723.033; Tue, 18 Oct
- 2022 21:29:15 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "brgerst@gmail.com" <brgerst@gmail.com>,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>
-Subject: RE: [PATCH v3 4/6] x86/gsseg: move local_irq_save/restore() into
- asm_load_gs_index()
-Thread-Topic: [PATCH v3 4/6] x86/gsseg: move local_irq_save/restore() into
- asm_load_gs_index()
-Thread-Index: AQHY30Hw1PW2GkL5M0i2Gd7SJLBFf64PKDsAgAVE4dCAAA8eAIAANbyg
-Date:   Tue, 18 Oct 2022 21:29:14 +0000
-Message-ID: <BN6PR1101MB216107B32F33A18605FD3869A8289@BN6PR1101MB2161.namprd11.prod.outlook.com>
-References: <20221013200134.1487-1-xin3.li@intel.com>
- <20221013200134.1487-5-xin3.li@intel.com> <8735bpbhat.ffs@tglx>
- <BN6PR1101MB2161B983B1A85CE3803A3EF8A8289@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <629F4B18-CCA4-4409-946E-F00146C6BCB5@zytor.com>
-In-Reply-To: <629F4B18-CCA4-4409-946E-F00146C6BCB5@zytor.com>
-Accept-Language: en-US
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o3RnHSK2M0n4Rwg/sT42VEyWMg08BeI0LMllX4eVJnE=;
+ b=tEkzr5WDgHixc4DixWAQhmcy5/TqsR5drSL7eEteYHI3OmoDovf9G/P3zG6CY0EjLH9xIg3EKwBRz6H8YkhWR5pVM0n0Sjs8msPgmyqrpYy1rx2bNIunGRGaGU76xOP1j/+Q9TAB0Jr/h42tg20FSz8Cl2NKxRbDx/Ac09Aejt8=
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
+ by SA2PR10MB4713.namprd10.prod.outlook.com (2603:10b6:806:11d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
+ 2022 21:29:18 +0000
+Received: from BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::acd:f6fb:e646:9ff2]) by BYAPR10MB2663.namprd10.prod.outlook.com
+ ([fe80::acd:f6fb:e646:9ff2%7]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
+ 21:29:18 +0000
+Message-ID: <db44de92-381c-96fb-20d8-883305c214f8@oracle.com>
+Date:   Tue, 18 Oct 2022 14:29:16 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH RFC 1/1] perf stat: do not fatal if the leader is errored
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.500.17
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN6PR1101MB2161:EE_|DS7PR11MB5967:EE_
-x-ms-office365-filtering-correlation-id: 9ab9cb84-d005-4321-bc14-08dab14fce70
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lAq5o30ZfbaujW+T8jExReW2bcO5iCSP0UXTgEb7Y7Djglf4/+9ofrQ6kdl1D/SkW5Xosk8WSj4jJgYmbp2yD2xqi40Jzq1a9egE4O/jB86XJR4YwFe9nNx350hrTCZa0svbUcKuhmk1fM9ZZgPhZtQVM03vEHn5VLHWc82+RmXk+uTjq3XJzv7QHe7CZoSj2I8yO1/zkjgTMaUyOSChxJbALbpMNIBztx5o2sfVcpRpq9kppM2z3nN9d9imXa4eyvVqJpDrQzbtbzW6o7qkx5vhABAy8bp7niyAKi9s317arMeRs9ykU0OFRPpdloXCKtcrs0ml1GtqmA53cwAFDmxYTeMqxpp+mPy/GyI4WhKm0Rkh3LF4nnGKpmfC9p2ekZ/vH6FIXgSEoGu+DmfLAGvar5h5oNFr1k6IJCdwJL2AWKkxTgOlImxO5kBOo6zxN8SjoioOfocvDCxceRFRKaLGvkUqnEufvCvoSF4r8XE3c8T3xMz6+rJGohEF5uEK8S6vTGMO0JNYHb76h6GPD1UK0y8gqCNQrkXBrA6EMvL11QepgUlnXY+Ax22yl9DGNbl20tnO1/QqYtCLQsbYQ9Kq8F0CZYh67iHSsq2G08VljssGCHhXWfp6btgliuuNUOVnv/4zZspz8rLEAP57LzXSsFFABQgpUuuBYG/PmSAJZw7iuuouIf0jz/z73VU3Bq7PvHAiBFtDDACORLtGXnaiCR0goC6SjDoe3UmSGN/oUMy0619VuUsEPoGuPm1X0d0vjNBDEHjjLAhaOtixdg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1101MB2161.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39860400002)(346002)(136003)(396003)(376002)(451199015)(110136005)(316002)(66446008)(8676002)(66946007)(76116006)(4326008)(7696005)(66476007)(64756008)(66556008)(71200400001)(54906003)(5660300002)(52536014)(186003)(41300700001)(9686003)(2906002)(6506007)(478600001)(83380400001)(8936002)(26005)(82960400001)(38070700005)(122000001)(86362001)(38100700002)(55016003)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZFJpK0xmVXhpdExoRlFkdngzS3NaUU01YWdmMnBQbzJTQmhRbkF6UWJpdnJB?=
- =?utf-8?B?R3NucXRaWUpWUnVlK2Q4cUwyeXBteDdoSW9tRzl2M2wrRlg3MkVtVjB0dzh1?=
- =?utf-8?B?YURCVXlDN0ZDTmlxS2JGajd5dlJkZ3ZrS1JkdCtIMHlCZU1vMlNNQzJQeHVa?=
- =?utf-8?B?MHZjcTB1bnlKaHhiM201OVIvdmNtUGZxN2VsaXFTN3pPandMTitMNXZYZE40?=
- =?utf-8?B?cmJEbGgyTVRrS0Z5UU5Hc1psbHdFR2dKeWdiUVkvdFQxNmxTZVFQOFJ3Z1Y3?=
- =?utf-8?B?dFBnUGk5ZlgzaVFpSkFtVC9GNnNseFdjYURMZXN3VXdZcXJ0aHpMTFlXT1Q0?=
- =?utf-8?B?enh3a3FSZWRxWmJJRys1SmtDeDRFNUFkM292clhONFpzQmhhUms3aUx4VFFV?=
- =?utf-8?B?a2ErK2tuWHZHZ3BPTDYzb0J0NVFseGw5ZTFNa3pid0FxTkV4UmE2Y3IxRjhq?=
- =?utf-8?B?YXJtdjRVTHNhV2U1cW5RSXloRmVHYTFzOVpyaXpVTm1MUDNCd3d5R3BZNmxy?=
- =?utf-8?B?WmJmZGw2ek5YaFV6MUVBak9id0IrN0NsOFlXa3VzaTRaczdLWXVOTFJaMHk1?=
- =?utf-8?B?c0RHUFdKcTNram11NndYMThtUG91dnZxb0NMd1RGZFptQVlSZUdnMkRWazFN?=
- =?utf-8?B?VmNrWm9mOUhKd0N0TW41WVBvZE5yZ05RM28wT2JaT09XU0kzVHFMUlZ0REpv?=
- =?utf-8?B?TDFtVlViMVpHUkxnRGsrUEFxRi9KY0ZyeFRrcGhBeXNJV2NUV1ZqdXhTUDRY?=
- =?utf-8?B?NlV3VW83ZkRZc2xiNXRZa2VNTnhnR2NaSHQ2Q3IyT0t2Slp3cHhqVjg2QlVt?=
- =?utf-8?B?bHRIOGRmUVBNUi9HSHdTdGp0YjZFR1NoYmpJWkI1aGxHNlpka0MvSEF4c21i?=
- =?utf-8?B?KzJhVWNuVkQ0cFZ0OTNhOFJ6cTFFNnlsY2Y1SXpndUU5UmhwdUJjOVlGUFAv?=
- =?utf-8?B?bFBNbzZmeVV6K1lxZWprT01leFphSHJZd2gvSVJBaloyMXhaQ2tmR3Y2OVRR?=
- =?utf-8?B?REpyQlZ4eTZWWDFFdjNWVldVSWZuRWZBenNMeSs0TmRNSXBMYnR2SDJ4akQ0?=
- =?utf-8?B?YldGb3JXTWhVVUJPSjhIVm9aNUlHeEZqeXVlZndRRW5NWjY0clA3NE9TaUtL?=
- =?utf-8?B?Q2hTK0hObG9ncFVTK1I5VVRHN0d0RTkzNzAxUWV4MnFIZWlJdEJKays5OXo1?=
- =?utf-8?B?WXRLWWpLRFpKSTZ5dTZiWVhqcGM2TFQwN3lsNEJieXlGbFVEUC9CSDhROUh5?=
- =?utf-8?B?VXkrYlhrRlFPUXEvUUM0TitLMDNCRnp6MXVwQ29RYVVHNld2N1lIZkNZeFZ1?=
- =?utf-8?B?V2xyKzRLeHFpa2doNE1xc2VLYVl2V2xNWGwzUFdCYUdLeVZzcW00VFRxYjkw?=
- =?utf-8?B?YmNWeTlnVlYvVEVNa1BVaGJpNmtTbTFOV05mT1VQUEpmS1o1OWRZWmhXcktx?=
- =?utf-8?B?dm9VS0w2dTE3U3FwZEorOW1OZGtQekpCWmF2VG5nanRJc3ZlRnNaVDlZYmJn?=
- =?utf-8?B?MENIZU5qMU9ZdGQwek03a2FtNkJUS3FBMnlyQlBZdnJ5M1Z4YzJVN2d3MzBs?=
- =?utf-8?B?Y1Q0eHJRYXpYYWpqMmV4cVRsaHg0SDc4VzRPV3BoRE4wYTR0QTBGaHZhd0Jt?=
- =?utf-8?B?dnVQWkRlYXhlSWk2UTdYMHlkSkt0dFRrZFpQVkxmSzVUcVhaSGR3TEt1VXFw?=
- =?utf-8?B?SHR6WGxsV3lmWWpCL21OUHkvN0FUYmpxVXoxbytLbis3ZVVEV3RiWVZSMWxX?=
- =?utf-8?B?WGlXWER1ZUpjZTNvNlRwWjVGMk0rYTVtZVlVZG1HMVpTL0U0T1hFaVVwM1VH?=
- =?utf-8?B?N1NSQ2RISUlZYnFjRUpkTWpoZGduMUVXQW5HdTI1ZVRyNEZ3N3hjb2ltUmlO?=
- =?utf-8?B?THpiQWM5eXVDWmxRMnNkTjBWUGIyQldqV0orVlh1cmFDMzF6Z0Q4SG9sT3Ra?=
- =?utf-8?B?ajJMZU5KMFF4K1hPVWg4TXNualRyYTN1ZExVRi90U1FLQUlObktUcDNqcXpx?=
- =?utf-8?B?VUU2NTdmMHJuMXVlcGtwSjhkTkoyVDh0QUM3UW56djNNRnloMDJRSkJyZUlv?=
- =?utf-8?B?WVFBOUdSVGlTRXNWa0NtbWlpN1pjV2U4S1F2L2xjUTFQakdac3dxREpWNHNv?=
- =?utf-8?Q?9EyU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-perf-users <linux-perf-users@vger.kernel.org>,
+        KVM <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, joe.jin@oracle.com,
+        Like Xu <likexu@tencent.com>
+References: <20220922071017.17398-1-dongli.zhang@oracle.com>
+ <CAM9d7cj8z+ryyzUHR+P1Dcpot2jjW+Qcc4CPQpfafTXN=LEU0Q@mail.gmail.com>
+From:   Dongli Zhang <dongli.zhang@oracle.com>
+In-Reply-To: <CAM9d7cj8z+ryyzUHR+P1Dcpot2jjW+Qcc4CPQpfafTXN=LEU0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0114.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c5::29) To BYAPR10MB2663.namprd10.prod.outlook.com
+ (2603:10b6:a02:a9::20)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB2663:EE_|SA2PR10MB4713:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85808ee9-b50c-48e7-03f2-08dab14fd02a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e61CpcfyMTbn46byWDUjbe6mazAozikXQW59wpTv7y8JFt5v7aihzCwH0UwjEt5mV9g4McH+F+xpx0auURYezQgL9dFNKxUzQHb6kEuIZaVX6jHPpe2+Ct6dyHfP8LMa/QWSPu8p4+jSrkQEj2r5cuv8BgrERaWAgKZz71oNFPxq+0vG5N9CwFOYA3KwAWCV2TUeXobr5psJzQvX9HyduCHENViSTc52KGTvUu9f+E0RWtcKOgQWvG1/aLA/yJpAcd8jHXfTvJzHboT+mperYHUlNf/tOeiB5zKuStP5GDljHQvsxTuVPzZCNAGzRBXen3Ve7THOWOIu8fBwz3J/sDLjeggbse989xdwgbrNKMZMeWE1tadzPNKVv8d768VQE2IRnK7HmkJREkoW3mVsayxXsc0y2Q7Y+vlbEr3xzIh9ss7U123/xGIak+dSMAjfvE6P0Ee20nfmfNi+J8KyuPeXaAz7hfmrOR0wC+7jKKYVjuFaEFxrhwaoDqtBQSpI0hd44bnAyAK4j2G7vENrjCyLwjxe95rqAxjOQxtNVhnt3IFOGMYOdJvynsyE5vF+Om6Jpw7ozR1msp7fnXmYB8xO2FNEgU8rZJP0+Zrf13yOzRun6oIYmMNRGVggREig8z1te8LNGQaQU61SKZbK1UVHi//vqrE0qtF6pNkVeAPL7R94kwG/DgzMbXAHvEoKli87Z2JLCzLSbEOOP7aOIbN5m5EgbEj6TpE/Qjk5f5oTVMhH8gTGg+QBC4lbpE29+G6wUEDzGC6TVy1U60wg2hGtP8Rlk86gTlSug3It0SU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(376002)(366004)(346002)(396003)(451199015)(41300700001)(6512007)(2616005)(66946007)(478600001)(44832011)(186003)(36756003)(2906002)(6506007)(7416002)(4326008)(8936002)(5660300002)(31696002)(86362001)(53546011)(38100700002)(6916009)(316002)(19627235002)(54906003)(6486002)(8676002)(66476007)(83380400001)(66556008)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dUhRc1VaSUdDRHFhTUJncE9Mb3ZHQ0tDVTVTdUxnZFNVazVoWmhOOUJTWlVC?=
+ =?utf-8?B?Um9rK0NFRG84eGJvbmhPTlU4Z3haL0Iwc0luRVBqMGc0ODQxWE9FbUp2b0lK?=
+ =?utf-8?B?L05iZG84QVlBYUcybyt1VWV1RTMwYTZ6cWtaRTNrby9ULzFsRXgyOEJDZUxm?=
+ =?utf-8?B?eGNhWFJkV0tmd2VzaE9wSUpvc05SclZoKysreGVuUkVPWWtibDlDTVUwWFlz?=
+ =?utf-8?B?OExQZWpjMHJKWDc2ejRHOFIxdWJleGRKOXJvSUlBdXlRbmdTNURPWUNHTGhu?=
+ =?utf-8?B?UHVwMHpLcW92SmExWFhCRm5DbUxJZVRGQU1pWXNmd0djdEk5V3lSbk02b05t?=
+ =?utf-8?B?aFphak04Q01IUFBUNDc3QXlQVGpOYkk5SG9UVmo4M1JpK2ZSSllZVW5peDg5?=
+ =?utf-8?B?Q25objdxbVJFNUVTekJEeDd6eU1yN2Z0bVN2QUs0WnFtR3hKNWhkamRjVWZV?=
+ =?utf-8?B?ZTZmUDIyWlh2ampESE5NdU5WSzdVUFN2ZjBZaUl1ejdHZ2Z4RDBNWTE0WUhr?=
+ =?utf-8?B?TllCWjJNNVVIdERFNHUvSHE4Z3BXMDY0Y1lnMXVRdE0zSFZJZXdvYW5CUEps?=
+ =?utf-8?B?eWxvUVRvbFhteG1vU3BPbG1WSGVuazc3aDVpSy9wVlN4WFlyblNwQS91VnBh?=
+ =?utf-8?B?Z1kxTFJYQ2VUMnJjWFRoM3djc1RVc3ZaMHpkLzZ0QW1Yd0psSFJmeERxNVhI?=
+ =?utf-8?B?SzFXM001N0lPSS9iZUhvODB0K3lwaHF1WHFibWVVeEovbWFpYjF4WGRTZGg1?=
+ =?utf-8?B?ck9UNWplbDIzRlAwdlREOW1mbUNCeS8xTFBod0Fvend5aVU3emNHb0doNytv?=
+ =?utf-8?B?alp2UzhZaHA3NGlzRDNNd2lYQ1RFRXgyVUVOMUJ2blA1ZmkwVUdPNzZTcU1X?=
+ =?utf-8?B?VzFSMy9BQ2xBL1Y2cndieWhBWTBPUXNMckRoRlZGdlUrbnNvdjJrODBTZzk2?=
+ =?utf-8?B?Q1dhUFo1UEo3eTd1ZkxJREhWTUJKQ0N2dllrdHRMUmJ0K1NGMnQ5WVlIeWtm?=
+ =?utf-8?B?RENYUkhleFRWNVlHRWxDZEZuNTlxUE1JK3lNZkk4S3pGRUh5Q09RdXMxREIz?=
+ =?utf-8?B?azFwdUhSTjd3ZEJLOXBoS0VGck9HWkZmUGFjcVRGLzdrbi9sRkwzQTZNYmlq?=
+ =?utf-8?B?TDJ2UGF0YkJWeUlmZ2lXSHFEbmVQclBxZlNBbER6QUJWSEs1Z3hRemxLQlV5?=
+ =?utf-8?B?akxiT3M5N3ZrUURRT1VkYVZ2UnoxeGdhT1pXdGordXYxa0NNOG56VUZGTXJz?=
+ =?utf-8?B?eDlPVzJOMVh6OTB1c1BpQ3pjTTVlUXA0eTJ0cURSTm1DS3ppZnIvajNpZVdK?=
+ =?utf-8?B?cTU3OW1IMm15VmVqS2dtWXN3WFZxTXF3TWJhSlZ3U3liR2lLTUtvODFHYVVv?=
+ =?utf-8?B?d2J4SUtpN3puSVM2U2x6TWh2UEFUN1RLeGpCUEZVaTRxcGc2aVE3MnUzVmVo?=
+ =?utf-8?B?Ymo3K2JoeDduVzEvMkNUbTRFd1pOS2VSZENBa3dZTFRxRVU5L000UUFqMTZX?=
+ =?utf-8?B?RjMzR0d0TlhWbmFZTllmUmMwUG9TY1l4MERHS0p1N0JkTjJnZWZXeVBld2tx?=
+ =?utf-8?B?ZkJXTTR3STBuQkpTbHoySWpSd0VlTllsTmF5eWFiRXJoZHpnNDhOelNTMisy?=
+ =?utf-8?B?ajhvRFdkZ2tKdmpod2lxS0JhVHpSa1BKK3FTZEk5b2djWG0ySzMvYWkvYU5E?=
+ =?utf-8?B?VG1OdFc1bUZEd0tQMWJjRWlrUlV5cVh0cWFwZ0E4Y0dpMU9Wd3JGS1kwa1RJ?=
+ =?utf-8?B?U1pZYXRMdlNSRXJWTUpCUHZEalhDZXhFSFZQVE9URldscy9rMmZQbTZXekFP?=
+ =?utf-8?B?bnZoTmVsL29HMThKQWpKSUN5MVgwbGdNVnV4UVRoMU5ha005anVKUE1YMjkr?=
+ =?utf-8?B?YUdrTjFkdnN5QWg1c1d1VHdkQWtHRE1WZEJGeXJCMThiUG83ZlZFZXNxWVpC?=
+ =?utf-8?B?MWljR21QM2FBZG1zUC9DWExQcW9qVXJIc3R5dWhKTittbXg5bVArRGo0Wmds?=
+ =?utf-8?B?Q0xEMGJLc0txTXNpUkp4Q3c4WU1jZ25zekJHTDZyWk9IWWhFb1pnN2ZxZzYz?=
+ =?utf-8?B?aThBQkFrOGtUWlZ1UDlrOGlMNXJFQ0pjaXZ2NWo3ZThRaUhIWXRuaWJJQUlQ?=
+ =?utf-8?B?SzMrdzk5S082R3VhTDVPMUZZa0tQQmRPdEhmWE9Bb2tUQW9qNUpDcGhpOWU0?=
+ =?utf-8?Q?nW4yVDHvDahXeW+UCB3GFSU=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85808ee9-b50c-48e7-03f2-08dab14fd02a
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR1101MB2161.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ab9cb84-d005-4321-bc14-08dab14fce70
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2022 21:29:15.0061
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 21:29:18.1324
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CCO0tHohcCNziBh5wG8+STFchNB2Fp/veJJYFNBSz8koyowFvIHsMxvY41o2jSLamSuKEpno5cjIzTs4Xxdlfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB5967
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1MI+/ZLipOz5dfddhMwZxmiDXLJi6eR9u9wSVA0WVoW0x+4AODL21teB1zYjG0qVBDkveEa2Xv0XCbEk50wGsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4713
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-18_07,2022-10-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210180120
+X-Proofpoint-ORIG-GUID: 4J_M-k6zwtEz0_viNy6QpQL7whIBYCDS
+X-Proofpoint-GUID: 4J_M-k6zwtEz0_viNy6QpQL7whIBYCDS
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBPY3RvYmVyIDE4LCAyMDIyIDEwOjI1OjMxIEFNIFBEVCwgIkxpLCBYaW4zIiA8eGluMy5s
-aUBpbnRlbC5jb20+IHdyb3RlOg0KPiA+PiA+ICBzdGF0aWMgaW5saW5lIHZvaWQgbmF0aXZlX2xv
-YWRfZ3NfaW5kZXgodW5zaWduZWQgaW50IHNlbGVjdG9yKSAgew0KPiA+PiA+IC0JdW5zaWduZWQg
-bG9uZyBmbGFnczsNCj4gPj4gPiAtDQo+ID4+ID4gLQlsb2NhbF9pcnFfc2F2ZShmbGFncyk7DQo+
-ID4+ID4gIAlhc21fbG9hZF9nc19pbmRleChzZWxlY3Rvcik7DQo+ID4+ID4gLQlsb2NhbF9pcnFf
-cmVzdG9yZShmbGFncyk7DQo+ID4+ID4gIH0NCj4gPj4NCj4gPj4gc3RhdGljIGlubGluZSB2b2lk
-IG5hdGl2ZV9sb2FkX2dzX2luZGV4KHVuc2lnbmVkIGludCBzZWxlY3Rvcikgew0KPiA+PiAJdW5z
-aWduZWQgbG9uZyBmbGFnczsNCj4gPj4NCj4gPj4gICAgICAgICBpZiAoY3B1X2ZlYXR1cmVfZW5h
-YmxlZChMS0dTKSkgew0KPiA+PiAgICAgICAgICAgICAgIG5hdGl2ZV9sa2dzKHNlbGVjdG9yKTsN
-Cj4gPj4gICAgICAgICB9IGVsc2Ugew0KPiA+PiAJICAgICAgbG9jYWxfaXJxX3NhdmUoZmxhZ3Mp
-Ow0KPiA+PiAgICAgICAgICAgICAgIGFzbV9sb2FkX2dzX2luZGV4KHNlbGVjdG9yKTsNCj4gPj4g
-CSAgICAgIGxvY2FsX2lycV9yZXN0b3JlKGZsYWdzKTsNCj4gPj4gICAgICAgIH0NCj4gPj4gfQ0K
-PiA+Pg0KPiA+PiBGb3IgcGFyYXZpcnQgZW5hYmxlZCBrZXJuZWxzIHdlIHdhbnQgZHVyaW5nIGZl
-YXR1cmUgZGV0ZWN0aW9uOg0KPiA+Pg0KPiA+PiAgICAgICAgIGlmIChjcHVfZmVhdHVyZV9lbmFi
-bGVkKExLR1MpKSkNCj4gPj4gICAgICAgICAJcHZfb3BzLmNwdS5sb2FkX2dzX2luZGV4ID0gbmF0
-aXZlX2xrZ3M7DQo+ID4NCj4gPklmIHdlIHVzZSBzdGF0aWNfY3B1X2hhcyBpbiBuYXRpdmVfbG9h
-ZF9nc19pbmRleA0KPiA+ICAgICAgIGlmIChzdGF0aWNfY3B1X2hhcyhYODZfRkVBVFVSRV9MS0dT
-KSkgew0KPiA+ICAgICAgICAgICAgICAgbmF0aXZlX2xrZ3Moc2VsZWN0b3IpOw0KPiA+ICAgICAg
-IH0NCj4gPg0KPiA+V2UgZG9uJ3QgaGF2ZSB0byBjaGFuZ2UgcHZfb3BzLmNwdS5sb2FkX2dzX2lu
-ZGV4LCByaWdodD8NCj4gPg0KPiA+VGhhbmtzIQ0KPiA+WGluDQo+ID4NCj4gPj4NCj4gPj4gTm8/
-DQo+ID4+DQo+ID4+IFRoYW5rcywNCj4gPj4NCj4gPj4gICAgICAgICB0Z2x4DQo+ID4NCj4gDQo+
-IFlvdSBkb24ndCAqaGF2ZSogdG8sIGJ1dCBpdCB3b3VsZCBtZWFuIGEgYnJhbmNoIHRvIGEgYnJh
-bmNoLCBzbyBpdCB3b3VsZCBiZQ0KPiBtb3JlIGVmZmljaWVudC4gSXQgd291bGQgc3RyaWN0bHkg
-YmUgYW4gb3B0aW1pemF0aW9uLg0KDQpSaWdodCwgdGhlIGdlbmVyYXRlZCBvYmplY3QgZmlsZSBz
-aG93cyB0aGF0IHN0YXRpY19jcHVfaGFzIGlzIGxlc3MgZWZmaWNpZW50IHRoYW4gQUxURVJOQVRJ
-VkUuDQo=
+
+
+On 10/14/22 3:16 PM, Namhyung Kim wrote:
+> Hello,
+> 
+> On Thu, Sep 22, 2022 at 12:10 AM Dongli Zhang <dongli.zhang@oracle.com> wrote:
+>>
+>> Add kvm@vger.kernel.org as this issue is in virtualization env.
+>>
+>> The topdown metrics events became default since
+>> commit 42641d6f4d15 ("perf stat: Add Topdown metrics events as default
+>> events"). The perf will use 'slots' if the
+>> /sys/bus/event_source/devices/cpu/events/slots is available.
+>>
+>> Unfortunately, the 'slots' may not be supported in the virualization
+>> environment. The hypervisor may not expose the 'slots' counter to the VM
+>> in cpuid. As a result, the kernel may disable topdown slots and metrics
+>> events in intel_pmu_init() if slots event is not in CPUID. E.g., both
+>> c->weight and c->idxmsk64 are set to 0.
+>>
+>> There will be below error on Icelake VM since 'slots' is the leader:
+>>
+>> $ perf stat
+>> Error:
+>> The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (slots).
+>> /bin/dmesg | grep -i perf may provide additional information.
+>>
+>> This is because the stat_handle_error() returns COUNTER_FATAL when the
+>> 'slots' is used as leader of events.
+>>
+>> There are three options to fix the issue.
+>>
+>> 1. Do not expose /sys/bus/event_source/devices/cpu/events/slots to
+>> userspace so that pmu_have_event(pmu->name, "slots") returns false.
+>>
+>> 2. Run cpuid at perf userspace and avoid using 'slots' if it is not
+>> supported in cpuid.
+>>
+>> 3. Do not fatal perf if the leader is failed. Do not create events for an
+>> evsel if its leader is already failed.
+>>
+>> This RFC patch is with the 3rd option. Would you mind suggesting which
+>> option is better?
+> 
+> Sorry for the late reply but I think option 1 is the way to go.
+> 
+> The option 3 would be a transient workaround and it would affect
+> other events too.  If it's really needed, I think option 2 is slightly better
+> than option 3.  Or, we can add --force option to skip non-supported
+> events explicitly.
+> 
+> Thanks,
+> Namhyung
+> 
+>>
+>> Here is the output of patch.
+>>
+>> $ perf stat -v
+>> Using CPUID GenuineIntel-6-6A-6
+>> slots -> cpu/event=0,umask=0x4/
+>> topdown-retiring -> cpu/event=0,umask=0x80/
+>> topdown-bad-spec -> cpu/event=0,umask=0x81/
+>> topdown-fe-bound -> cpu/event=0,umask=0x82/
+>> topdown-be-bound -> cpu/event=0,umask=0x83/
+>> Control descriptor is not initialized
+>> Warning:
+>> slots event is not supported by the kernel.
+>> ^Ccpu-clock: 62021481051 62021480237 62021480237
+>> context-switches: 437 62021478064 62021478064
+>> cpu-migrations: 17 62021475294 62021475294
+>> page-faults: 12 62021471925 62021471925
+>> cycles: 15662273 62020909141 62020909141
+>> instructions: 6580385 62008944246 62008944246
+>> branches: 1446119 62008855550 62008855550
+>> branch-misses: 30970 62008643255 62008643255
+>> failed to read counter slots
+>> failed to read counter topdown-retiring
+>> failed to read counter topdown-bad-spec
+>> failed to read counter topdown-fe-bound
+>> failed to read counter topdown-be-bound
+>>
+>>  Performance counter stats for 'system wide':
+>>
+>>          62,021.48 msec cpu-clock                        #   16.006 CPUs utilized
+>>                437      context-switches                 #    7.046 /sec
+>>                 17      cpu-migrations                   #    0.274 /sec
+>>                 12      page-faults                      #    0.193 /sec
+>>         15,662,273      cycles                           #    0.000 GHz
+>>          6,580,385      instructions                     #    0.42  insn per cycle
+>>          1,446,119      branches                         #   23.316 K/sec
+>>             30,970      branch-misses                    #    2.14% of all branches
+>>    <not supported>      slots
+>>    <not supported>      topdown-retiring
+>>    <not supported>      topdown-bad-spec
+>>    <not supported>      topdown-fe-bound
+>>    <not supported>      topdown-be-bound
+>>
+>>        3.874991326 seconds time elapsed
+>>
+>> Thank you very much!
+>>
+>> Cc: Joe Jin <joe.jin@oracle.com>
+>> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+>> ---
+>>  tools/perf/builtin-stat.c | 8 +++++---
+>>  1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+>> index 0b4a62e4ff67..1053cf0886c0 100644
+>> --- a/tools/perf/builtin-stat.c
+>> +++ b/tools/perf/builtin-stat.c
+>> @@ -762,9 +762,7 @@ static enum counter_recovery stat_handle_error(struct evsel *counter)
+>>                  */
+>>                 counter->errored = true;
+>>
+>> -               if ((evsel__leader(counter) != counter) ||
+>> -                   !(counter->core.leader->nr_members > 1))
+>> -                       return COUNTER_SKIP;
+>> +               return COUNTER_SKIP;
+>>         } else if (evsel__fallback(counter, errno, msg, sizeof(msg))) {
+>>                 if (verbose > 0)
+>>                         ui__warning("%s\n", msg);
+>> @@ -843,6 +841,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>>                 if (target.use_bpf)
+>>                         break;
+>>
+>> +               if (evsel__leader(counter)->errored)
+>> +                       continue;
+>>                 if (counter->reset_group || counter->errored)
+>>                         continue;
+>>                 if (evsel__is_bpf(counter))
+>> @@ -901,6 +901,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>>                 evlist__for_each_cpu(evlist_cpu_itr, evsel_list, affinity) {
+>>                         counter = evlist_cpu_itr.evsel;
+>>
+>> +                       if (evsel__leader(counter)->errored)
+>> +                               continue;
+>>                         if (!counter->reset_group && !counter->errored)
+>>                                 continue;
+>>                         if (!counter->reset_group)
+>> --
+>> 2.17.1
+>>
