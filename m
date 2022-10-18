@@ -2,175 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3704602878
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CD7602879
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJRJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S230043AbiJRJg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiJRJf3 (ORCPT
+        with ESMTP id S229926AbiJRJgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:35:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136F71C901
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666085720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9aL/XJR8EJ0pRD4xfXjlEdra6nq4SqKP4CXxDvLcpoE=;
-        b=IYsjjU/t6e0BlUB8f3Wq/31rE2a32aoZVrzFcjqKPMLGH/hIgek4kN8ImY8dD4l1o43BnH
-        YA80pJ2T0nduV7RlvUkWGjFfUyJewf92jisgPYIbhQ5DvUDzlJAyC4D3NRSLkYifgGmwop
-        hvMf2ZHuupMz8VewKVF4jhBQYYcMHAE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-z7ljy5NNNGCug0uMxvGm3w-1; Tue, 18 Oct 2022 05:35:18 -0400
-X-MC-Unique: z7ljy5NNNGCug0uMxvGm3w-1
-Received: by mail-wr1-f72.google.com with SMTP id q28-20020adfab1c000000b0022e0399964dso4362155wrc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:35:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9aL/XJR8EJ0pRD4xfXjlEdra6nq4SqKP4CXxDvLcpoE=;
-        b=h9MoCf1tx8+pK3b+4FUVX9z+j2wSnz+UC/nmsIM5DpKN3kzrz/qLBU7fzyX5t+4ry3
-         7XQleQExiXMPQIXHYffP6jH4p9tb4PhzJFYrbG/EQyDrX4uZfugLd09le/gaf9Incs3s
-         BCk6eaCaBE0gX1Nfsgcl0y+xF5nrpzA8seOd0cyIAr5q5i60cq8l8Su9y82JSN+gJhqt
-         /Rb6Dixei5HfwYzObBJTP3lwyeUGOQlAFw/WIleyb3koF5LTI9rV6EtdRD1LEUqON+xi
-         Ml9coR0xbeb+bybbl03QHq1U0coH7V6DtO06xiRa6Bt/FH3ASSfEa8Iez+cLLCrkA5Yb
-         gZKw==
-X-Gm-Message-State: ACrzQf2yoL1ap7IhE2pULBAgxeobP1csueFFH6TSsYakueTmEsrEGTNq
-        AZcN+j2p9zAFXFCkUSTlpF06ST15hTSfrzyHbu3KF1C2FoRi9/V8D+v1h9aRLroHQSpnllM2hwu
-        h/hE8LvuiVXohcwsU9HNZ5wY7
-X-Received: by 2002:a5d:5a8f:0:b0:22f:9396:4908 with SMTP id bp15-20020a5d5a8f000000b0022f93964908mr1270918wrb.273.1666085717555;
-        Tue, 18 Oct 2022 02:35:17 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4UetMEzeww9mLgSKaEV1jjxk2feDBeaPeSqoLYUq6qo+4vH8HgLMrTveLBWXoVXoX0Tyi+Ng==
-X-Received: by 2002:a5d:5a8f:0:b0:22f:9396:4908 with SMTP id bp15-20020a5d5a8f000000b0022f93964908mr1270910wrb.273.1666085717227;
-        Tue, 18 Oct 2022 02:35:17 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:8900:d1f:5430:86b1:31ba? (p200300cbc70589000d1f543086b131ba.dip0.t-ipconnect.de. [2003:cb:c705:8900:d1f:5430:86b1:31ba])
-        by smtp.gmail.com with ESMTPSA id g33-20020a05600c4ca100b003bfaba19a8fsm12375896wmp.35.2022.10.18.02.35.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 02:35:16 -0700 (PDT)
-Message-ID: <c7839d65-1f07-02bf-19b4-aea3a6640227@redhat.com>
-Date:   Tue, 18 Oct 2022 11:35:15 +0200
+        Tue, 18 Oct 2022 05:36:24 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BE1B63;
+        Tue, 18 Oct 2022 02:36:23 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ms7vX6rrnz689Hq;
+        Tue, 18 Oct 2022 17:33:12 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 11:36:21 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
+ 2022 10:36:20 +0100
+Date:   Tue, 18 Oct 2022 10:36:19 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+CC:     <dan.j.williams@intel.com>, <ira.weiny@intel.com>,
+        <dave.jiang@intel.com>, <alison.schofield@intel.com>,
+        <bwidawsk@kernel.org>, <vishal.l.verma@intel.com>,
+        <a.manzanares@samsung.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
+Message-ID: <20221018103619.00004c39@huawei.com>
+In-Reply-To: <20221018030010.20913-2-dave@stgolabs.net>
+References: <20221018030010.20913-1-dave@stgolabs.net>
+        <20221018030010.20913-2-dave@stgolabs.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] mm: hugetlb: support get/set_policy for hugetlb_vm_ops
-Content-Language: en-US
-To:     =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20221012081526.73067-1-huangjie.albert@bytedance.com>
- <2aaf2c3a-6e49-abb9-b9c8-19ce87404982@redhat.com>
- <CABKxMyOnxiS6RsJtQEQPrnzNn-cO0Z+OGJRCUpw1M4=WANx0Dw@mail.gmail.com>
- <2f41fc4c-68eb-ab7d-970b-fcb10f474fd4@redhat.com>
- <CABKxMyO4RvEx===iYr_m2dfB0mtUTqt8A3WEuJn4Dq7r_NNM3w@mail.gmail.com>
- <03b90a2f-2854-6e19-6ccd-41f9933d8813@redhat.com>
- <CABKxMyO21rF+f2vpS+t++DAFHiy_MeWDBjB-AvupysKnDHRJfA@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CABKxMyO21rF+f2vpS+t++DAFHiy_MeWDBjB-AvupysKnDHRJfA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.10.22 11:27, 黄杰 wrote:
-> David Hildenbrand <david@redhat.com> 于2022年10月17日周一 20:00写道：
->>
->> On 17.10.22 13:46, 黄杰 wrote:
->>> David Hildenbrand <david@redhat.com> 于2022年10月17日周一 19:33写道：
->>>>
->>>> On 17.10.22 11:48, 黄杰 wrote:
->>>>> David Hildenbrand <david@redhat.com> 于2022年10月17日周一 16:44写道：
->>>>>>
->>>>>> On 12.10.22 10:15, Albert Huang wrote:
->>>>>>> From: "huangjie.albert" <huangjie.albert@bytedance.com>
->>>>>>>
->>>>>>> implement these two functions so that we can set the mempolicy to
->>>>>>> the inode of the hugetlb file. This ensures that the mempolicy of
->>>>>>> all processes sharing this huge page file is consistent.
->>>>>>>
->>>>>>> In some scenarios where huge pages are shared:
->>>>>>> if we need to limit the memory usage of vm within node0, so I set qemu's
->>>>>>> mempilciy bind to node0, but if there is a process (such as virtiofsd)
->>>>>>> shared memory with the vm, in this case. If the page fault is triggered
->>>>>>> by virtiofsd, the allocated memory may go to node1 which  depends on
->>>>>>> virtiofsd.
->>>>>>>
->>>>>>
->>>>>> Any VM that uses hugetlb should be preallocating memory. For example,
->>>>>> this is the expected default under QEMU when using huge pages.
->>>>>>
->>>>>> Once preallocation does the right thing regarding NUMA policy, there is
->>>>>> no need to worry about it in other sub-processes.
->>>>>>
->>>>>
->>>>> Hi, David
->>>>> thanks for your reminder
->>>>>
->>>>> Yes, you are absolutely right, However, the pre-allocation mechanism
->>>>> does solve this problem.
->>>>> However, some scenarios do not like to use the pre-allocation mechanism, such as
->>>>> scenarios that are sensitive to virtual machine startup time, or
->>>>> scenarios that require
->>>>> high memory utilization. The on-demand allocation mechanism may be better,
->>>>> so the key point is to find a way support for shared policy。
->>>>
->>>> Using hugetlb -- with a fixed pool size -- without preallocation is like
->>>> playing with fire. Hugetlb reservation makes one believe that on-demand
->>>> allocation is going to work, but there are various scenarios where that
->>>> can go seriously wrong, and you can run out of huge pages.
->>>>
->>>> If you're using hugetlb as memory backend for a VM without
->>>> preallocation, you really have to be very careful. I can only advise
->>>> against doing that.
->>>>
->>>>
->>>> Also: why does another process read/write *first* to a guest physical
->>>> memory location before the OS running inside the VM even initialized
->>>> that memory? That sounds very wrong. What am I missing?
->>>>
->>>
->>> for example : virtio ring buffer.
->>> For the avial descriptor, the guest kernel only gives an address to
->>> the backend,
->>> and does not actually access the memory.
->>
->> Okay, thanks. So we're essentially providing uninitialized memory to a
->> device? Hm, that implies that the device might have access to memory
->> that was previously used by someone else ... not sure how to feel about
->> that, but maybe this is just the way of doing things.
->>
->> The "easy" user-space fix would be to simply similarly mbind() in  the
->> other processes where we mmap(). Has that option been explored?
+On Mon, 17 Oct 2022 20:00:09 -0700
+Davidlohr Bueso <dave@stgolabs.net> wrote:
+
+> Introduce a generic irq table for CXL components/features that can have
+> standard irq support - DOE requires dynamic vector sizing and is not
+> considered here. For now the table is empty.
 > 
-> This can also solve the problem temporarily, but we need to change all
-> processes that share memory with it, so it can't be done once and for
-> all
+> Create an infrastructure to query the max vectors required for the CXL
+> device. Upon successful allocation, users can plug in their respective isr
+> at any point thereafter, which is supported by a new cxlds->has_irq flag,
+> for example, if the irq setup is not done in the PCI driver, such as
+> the case of the CXL-PMU.
+> 
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
 
-How many process that really care are we walking about? Usually, 
-extending the vhost-user protocol and relevant libraries should be good 
-enough.
+A few nitpicks inline.
 
--- 
-Thanks,
+With the comment one tidied up (other one optional)
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-David / dhildenb
+I'll rebase my cpmu code on top of this shortly.
+
+Jonathan
+
+
+> ---
+>  drivers/cxl/cxlmem.h |  3 ++
+>  drivers/cxl/pci.c    | 72 ++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 75 insertions(+)
+> 
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 88e3a8e54b6a..72b69b003302 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
+>   * @info: Cached DVSEC information about the device.
+>   * @serial: PCIe Device Serial Number
+>   * @doe_mbs: PCI DOE mailbox array
+> + * @has_irq: PCIe MSI-X/MSI support
+>   * @mbox_send: @dev specific transport for transmitting mailbox commands
+>   *
+>   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
+> @@ -247,6 +248,8 @@ struct cxl_dev_state {
+>  
+>  	struct xarray doe_mbs;
+>  
+> +	bool has_irq;
+> +
+>  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
+>  };
+>  
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index faeb5d9d7a7a..9c3e95ebaa26 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -428,6 +428,73 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
+>  	}
+>  }
+>  
+> +/**
+> + * struct cxl_irq_cap - CXL feature that is capable of receiving MSI-X/MSI irqs.
+> + *
+> + * @name: Name of the device/component generating this interrupt.
+> + * @get_max_msgnum: Get the feature's largest interrupt message number.  If the
+> + *		    feature does not have the Interrupt Supported bit set, then
+> + *		    return -1.
+> + */
+> +struct cxl_irq_cap {
+> +	const char *name;
+> +	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);
+> +};
+> +
+> +static const struct cxl_irq_cap cxl_irq_cap_table[] = {
+> +	NULL
+> +};
+> +
+> +static void cxl_pci_free_irq_vectors(void *data)
+> +{
+> +	pci_free_irq_vectors(data);
+> +}
+> +
+> +/*
+> + * Attempt to allocate the largest amount of necessary vectors.
+> + *
+> + * Returns 0 upon a successful allocation of *all* vectors, or a
+
+Technically not all vectors.  If we wanted to do that we could
+just directly query that via pci_msix_vec_count() etc that gets
+it from the MSIX capability. That's frowned upon because it's common
+to stick lots of extra vectors on the end for stuff that linux never
+cares about (debug etc, or optional features).
+
+All vectors up to the maximum one the code uses would be more accurate.
+
+> + * negative value otherwise.
+> + */
+> +static int cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
+> +{
+> +	struct device *dev = cxlds->dev;
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	int rc, i, vectors = -1;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(cxl_irq_cap_table); i++) {
+> +		int irq;
+> +
+> +		if (!cxl_irq_cap_table[i].get_max_msgnum)
+> +			continue;
+> +
+> +		irq = cxl_irq_cap_table[i].get_max_msgnum(cxlds);
+> +		vectors = max_t(int, irq, vectors);
+> +	}
+> +
+> +	/*
+> +	 * Semantically lack of irq support is not an error, but we
+> +	 * still fail to allocate, so return negative.
+> +	 */
+> +	if (vectors == -1)
+> +		return -1;
+> +
+> +	vectors++;
+> +	rc = pci_alloc_irq_vectors(pdev, vectors, vectors,
+> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	if (rc != vectors) {
+> +		dev_dbg(dev, "Not enough interrupts; use polling instead.\n");
+> +		/* some got allocated, clean them up */
+> +		cxl_pci_free_irq_vectors(pdev);
+> +		return -ENOSPC;
+> +	}
+> +
+> +	return devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
+> +}
+> +
+>  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  {
+>  	struct cxl_register_map map;
+> @@ -494,6 +561,11 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  	if (rc)
+>  		return rc;
+>  
+> +	if (!cxl_pci_alloc_irq_vectors(cxlds)) {
+> +		cxlds->has_irq = true;
+> +	} else
+> +		cxlds->has_irq = false;
+> +
+	cxlds->has_irq = !(cxl_pci_aloc_irq_vectors(cxlds) < 0);
+
+maybe...
+
+>  	cxlmd = devm_cxl_add_memdev(cxlds);
+>  	if (IS_ERR(cxlmd))
+>  		return PTR_ERR(cxlmd);
 
