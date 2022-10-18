@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A879860338E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1FA603395
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJRTw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 15:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S230071AbiJRTx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 15:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiJRTwk (ORCPT
+        with ESMTP id S230010AbiJRTxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 15:52:40 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934E185ABC;
-        Tue, 18 Oct 2022 12:52:30 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id d26so34897700ejc.8;
-        Tue, 18 Oct 2022 12:52:30 -0700 (PDT)
+        Tue, 18 Oct 2022 15:53:40 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0BF8FD5A;
+        Tue, 18 Oct 2022 12:53:10 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id o21so12444667ple.5;
+        Tue, 18 Oct 2022 12:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OEXvp1IreEp3SXV31DiUhQRIjvrLdojheHeDjSM1+mQ=;
-        b=abLxG+/ldgxPagEwF9tCeQMuX/Sr0ari2v1LSWCKV7wRCeCTavT4vCjimyaqVnuvuE
-         s9yHzyLcX+1aZvlmgl53O8AaqbepqqC84VuZagLgvYjxj2nSwGgfcmCgga/xfcc1yRVS
-         YKAdqIf5ZDK7VgNxWJKl1MSTSRUnYNNPOs+RRplyPXyHIi02Nk2Idz+s631Lt+NhH0/5
-         qRuMoDqYbuFSuMXUNqu+dBLhMOL2er65Wl8fQXFJqRhnYzRZBcz60yqBdnkCkSyqf+MC
-         svfstqhORWDNg41Uzqb0gjxQ3lVVMn9DFS8aNyFMJn4eqDv0QHCgr8auIvWxAkzxIjFm
-         q2jg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Decn228I23NeLLtliUyA2wHQT/chAyjBvAFPep29TTY=;
+        b=gPXw0e5DdOSjS6vUUvJpAJ25al5FdM+3bpuoFbiQViQvegio6bFFg4zi3gRrQqc8QI
+         uNd1nwd6fspz6ZrvMd2DvKYPo7yuPe3pPbz1xvMikstoqaxGPr67o75E0KE0VA4orT55
+         4KSz4FB75Q3BlufHKu3D58LBG/Gm/tF83H5lUxzVtDjyPNT0WZAaYZ5z1XV/djSnR9/7
+         p0p7hcIk2ESbzkY1StAXf9RLw+rFJcE3n9Y/TL4rwvQ2syZxXXtVvylM4HhP165eEpYy
+         3R6v4priW798+Ub3UG0W+hb7YrtEuAqx9pfhkT1JsKwwgTZJeGxJJu59xbITIrYevMDO
+         Z2gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OEXvp1IreEp3SXV31DiUhQRIjvrLdojheHeDjSM1+mQ=;
-        b=bw0GoEY51WqystaQVYSMUkeTK10yIv0eL0dfTPHrTz6Uy5bOw68IF0llD5I+i3rkKs
-         Na+25ubFVmrPpk/wzrrSo1sjYm7QbC8sT4+aS9P/ShEB+777H00XQy+Naar5gSAOSDTU
-         MaC2bAD/RvXxtAV6QjuNJQHw7ETKNGaQQNJjVWHhpX8YVPErvd2GBGNBUYLshPTR74/y
-         o5tMlIwqFyxoAcZ8JW9ml5ArLM8MSkLt3cSzw5oCxAIqjwRhq0ofGeLQNbFYJdSwbGSo
-         havG1sAdnzkx5R9l+2qgkxTyMWkOLiwUoJHniP+VmIx1+a8xgMtBXhGuIsK4NAyu9JOk
-         iZbQ==
-X-Gm-Message-State: ACrzQf0HHJQSKlKomBVSmU78DICdQ6OXC+ftZeEJXQKJK9qw3fmTwevV
-        M1aB7OMPv0jaqd2lnddShqI=
-X-Google-Smtp-Source: AMsMyM6GRe01/gzUNqYl0qBi83MJXbgcRA7kWwqcS6QpySglmmTLqgbs8KPzXOENcnWaNdqiTyWLNg==
-X-Received: by 2002:a17:907:3186:b0:777:3fe7:4659 with SMTP id xe6-20020a170907318600b007773fe74659mr3747536ejb.336.1666122729204;
-        Tue, 18 Oct 2022 12:52:09 -0700 (PDT)
-Received: from 127.0.0.1localhost (94.197.72.2.threembb.co.uk. [94.197.72.2])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b0072a881b21d8sm7945858ejg.119.2022.10.18.12.52.08
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Decn228I23NeLLtliUyA2wHQT/chAyjBvAFPep29TTY=;
+        b=gmyD52dh5cC2AqZebOcOij1cBAlk016R6wDpmIJWgCLU/wTy2zr3axPxfJsNjGNFYz
+         /xUf9Ge2jW8C6M5vmbq2A3Sq5G9hsbBW0M9hjoOFktM5PkKjzNVmJuEpMQkd+OnGwWe/
+         UtWP/ZU1OzRaU44harA76iXTBU5X0YGAKZ/svQzZw+FJSyebYmzQhEkYpovPsHKuye26
+         MOVByLKGdESEu5mxAy6z/e2xRjbJbPz04oAQ53yrwAy3cRgn6NbguK59ubm9ZegrSsg3
+         TinrCV0trXSxLwC7yrfUwUQTjWJORBVnW2fEWcxRZ3/XDtyaqkjnygdDLm1h/g37BC9M
+         FF2A==
+X-Gm-Message-State: ACrzQf1qTGvKUPH2hDO5JKFm87J0AF19uTKPhLqiDnm+xWC4XoySE7we
+        NWdsVIvBHrFyUl8vM9HVCjY=
+X-Google-Smtp-Source: AMsMyM4052ls7BSb0cFjir+Iyuqwp7lSrhnhy4HuHtKCGVeTeGzapD1MCYEa5WwiM98xw7FSZwedAQ==
+X-Received: by 2002:a17:902:8491:b0:183:c3d2:2112 with SMTP id c17-20020a170902849100b00183c3d22112mr4773643plo.133.1666122789257;
+        Tue, 18 Oct 2022 12:53:09 -0700 (PDT)
+Received: from localhost.localdomain ([103.51.72.20])
+        by smtp.gmail.com with ESMTPSA id t25-20020aa79479000000b0056126b79072sm9666063pfq.21.2022.10.18.12.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 12:52:08 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [RFC for-next v2 4/4] io_uring/rw: enable bio caches for IRQ rw
-Date:   Tue, 18 Oct 2022 20:50:58 +0100
-Message-Id: <f43faaa420b95066bdc7679aee411cb4edd160d4.1666122465.git.asml.silence@gmail.com>
+        Tue, 18 Oct 2022 12:53:08 -0700 (PDT)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Anand Moon <linux.amoon@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: meson: Enable active coling using gpio-fan on Odroid N2/N2+
+Date:   Tue, 18 Oct 2022 19:51:19 +0000
+Message-Id: <20221018195122.8877-1-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <cover.1666122465.git.asml.silence@gmail.com>
-References: <cover.1666122465.git.asml.silence@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,35 +75,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we can use IOCB_ALLOC_CACHE not only for iopoll'ed reads/write but
-also for normal IRQ driven I/O.
+Odroid N2/N2+ support active cooling via gpio-fan controller.
+Add fan controls and tip point for cpu and ddr thermal sensor
+on this boards.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
- io_uring/rw.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../dts/amlogic/meson-g12b-odroid-n2.dtsi     | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 100de2626e47..ff609b762742 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -667,6 +667,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
- 	ret = kiocb_set_rw_flags(kiocb, rw->flags);
- 	if (unlikely(ret))
- 		return ret;
-+	kiocb->ki_flags |= IOCB_ALLOC_CACHE;
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+index fd3fa82e4c33..e61a4285a910 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+@@ -39,6 +39,14 @@ emmc_pwrseq: emmc-pwrseq {
+ 		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
+ 	};
  
- 	/*
- 	 * If the file is marked O_NONBLOCK, still allow retry for it if it
-@@ -682,7 +683,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
- 			return -EOPNOTSUPP;
++	fan: gpio-fan {
++		compatible = "gpio-fan";
++		gpios = <&gpio_ao GPIOAO_10 GPIO_ACTIVE_HIGH>;
++		/* Using Dummy Speed */
++		gpio-fan,speed-map = <0 0>, <1 1>;
++		#cooling-cells = <2>;
++	};
++
+ 	leds {
+ 		compatible = "gpio-leds";
  
- 		kiocb->private = NULL;
--		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
-+		kiocb->ki_flags |= IOCB_HIPRI;
- 		kiocb->ki_complete = io_complete_rw_iopoll;
- 		req->iopoll_completed = 0;
- 	} else {
+@@ -410,6 +418,40 @@ &cpu103 {
+ 	clock-latency = <50000>;
+ };
+ 
++&cpu_thermal {
++	trips {
++		cpu_active: cpu-active {
++			temperature = <60000>; /* millicelsius */
++			hysteresis = <2000>; /* millicelsius */
++			type = "active";
++		};
++	};
++
++	cooling-maps {
++		map {
++			trip = <&cpu_active>;
++			cooling-device = <&fan THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++		};
++	};
++};
++
++&ddr_thermal {
++	trips {
++		ddr_active: cpu-active {
++			temperature = <60000>; /* millicelsius */
++			hysteresis = <2000>; /* millicelsius */
++			type = "active";
++		};
++	};
++
++	cooling-maps {
++		map {
++			trip = <&ddr_active>;
++			cooling-device = <&fan THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++		};
++	};
++};
++
+ &ext_mdio {
+ 	external_phy: ethernet-phy@0 {
+ 		/* Realtek RTL8211F (0x001cc916) */
+
+base-commit: aae703b02f92bde9264366c545e87cec451de471
 -- 
 2.38.0
 
