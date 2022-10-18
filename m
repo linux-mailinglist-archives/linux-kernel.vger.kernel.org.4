@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72DA60271D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879A1602723
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJRIho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S230238AbiJRIiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiJRIhl (ORCPT
+        with ESMTP id S229874AbiJRIiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:37:41 -0400
+        Tue, 18 Oct 2022 04:38:16 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856F061B0D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:37:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25C19F740
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666082260; x=1697618260;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nvFiXqf6TNu5W6qNejIJGhy4YQBn15VbmGk6jolXYYE=;
-  b=AsJQLWIqOWlO54hScj/qoKesGlqiwLCTBBjkBwytrv5/Re6nG+kKRLQo
-   gptgpgHp3XbPKBd1VuH3PebboSFAOErKkeBT0YIgIx+XoCB67oxV3jddt
-   uh7mMaD6e6AbaIpNKab1mIPa7p0BQxOhDCqqqlxkbI+Jwwb1NqZH53Qv4
-   JScOYPiJPFAn2NX5hCy3MXxmBSJjUfGzv1dCqOj5HuuTQbP+e7QNHJSN9
-   7YwDf9UNvvFgWQ7GbethJdKfmb9s2Rq+vFFgFgoiBfknkv9l9rqIIzMD3
-   1WfpWldTkjzh5F8U0dyD1lzREdzK4uvQAHvaYNGiMFkPxcdnsXeNcMOFV
+  t=1666082294; x=1697618294;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=w/VJ/zZxV+j4zvTylkKvQJvW+/QH7d4xZGt7+Trkcoo=;
+  b=l96uS4EmYUO3BLTGwChexAWk0zVXAtKM5sy2kKK3J1ondbDbPmPqQmB5
+   I6PqKoafoNslnU+PjJzpJnrsLr4ZGVz1J6i6KlpcotYH+AczQlgYlPhTp
+   aOoKVBw+fOC98r/CbXZS/RSOhrBHgG0Lp0RjHIiBDiwEgXhQXm/kE0vph
+   vGDH0B1juUIRBYG9EkUctUxBrtcSPhZXdcb1mzpoxmkAEgPFPS6AZIEPd
+   /ePZo56ybq4+cDNwFtlPLsh1cccf/VcOf2q+VkrcHqF20NLkOb3gFa+1Q
+   qcwpm3OnU2vQ+Mek0PLfBifh7lyFYO3DigCgrm0kedOURf+Tl7fGDSsc9
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="307125410"
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="307125502"
 X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="307125410"
+   d="scan'208";a="307125502"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 01:37:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="753950970"
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 01:37:56 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="753951033"
 X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="753950970"
+   d="scan'208";a="753951033"
 Received: from aboyhan-mobl1.ger.corp.intel.com (HELO sboeuf-mobl.home) ([10.252.26.192])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 01:37:37 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 01:37:55 -0700
 From:   sebastien.boeuf@intel.com
 To:     linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org
 Cc:     mst@redhat.com, jasowang@redhat.com, eperezma@redhat.com,
         sebastien.boeuf@intel.com
-Subject: [PATCH v4 0/4] vdpa: Add resume operation
-Date:   Tue, 18 Oct 2022 10:37:23 +0200
-Message-Id: <cover.1666082013.git.sebastien.boeuf@intel.com>
+Subject: [PATCH v4 1/4] vdpa: Add resume operation
+Date:   Tue, 18 Oct 2022 10:37:24 +0200
+Message-Id: <17c8f9fba6c8533cce013f7613247a527d4eed42.1666082013.git.sebastien.boeuf@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1666082013.git.sebastien.boeuf@intel.com>
+References: <cover.1666082013.git.sebastien.boeuf@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -62,38 +64,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sebastien Boeuf <sebastien.boeuf@intel.com>
 
-This series introduces a new operation for vdpa devices. It allows them
-to be resumed after they have been suspended. A new feature bit is
-introduced for devices to advertise their ability to be resumed after
-they have been suspended. This feature bit is different from the one
-advertising the ability to be suspended, meaning a device that can be
-suspended might not have the ability to be resumed.
+Add a new operation to allow a vDPA device to be resumed after it has
+been suspended. Trying to resume a device that wasn't suspended will
+result in a no-op.
 
-Even if it is already possible to restore a device that has been
-suspended, which is very convenient for live migrating virtual machines,
-there is a major drawback as the device must be fully reset. There is no
-way to resume a device that has been suspended without having to
-configure the device again and without having to recreate the IOMMU
-mappings. This new operation aims at filling this gap by allowing the
-device to resume processing the virtqueue descriptors without having to
-reset it. This is particularly useful for performing virtual machine
-offline migration, also called snapshot/restore, as it allows a virtual
-machine to resume to a running state after it was paused and a snapshot
-of the entire system was taken.
+This operation is optional. If it's not implemented, the associated
+backend feature bit will not be exposed. And if the feature bit is not
+exposed, invoking this operation will return an error.
 
-Sebastien Boeuf (4):
-  vdpa: Add resume operation
-  vhost-vdpa: Introduce RESUME backend feature bit
-  vhost-vdpa: uAPI to resume the device
-  vdpa_sim: Implement resume vdpa op
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Sebastien Boeuf <sebastien.boeuf@intel.com>
+---
+ include/linux/vdpa.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 14 +++++++++++++
- drivers/vhost/vdpa.c             | 34 +++++++++++++++++++++++++++++++-
- include/linux/vdpa.h             |  6 +++++-
- include/uapi/linux/vhost.h       |  8 ++++++++
- include/uapi/linux/vhost_types.h |  2 ++
- 5 files changed, 62 insertions(+), 2 deletions(-)
-
+diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+index 6d0f5e4e82c2..96d308cbf97b 100644
+--- a/include/linux/vdpa.h
++++ b/include/linux/vdpa.h
+@@ -219,7 +219,10 @@ struct vdpa_map_file {
+  * @reset:			Reset device
+  *				@vdev: vdpa device
+  *				Returns integer: success (0) or error (< 0)
+- * @suspend:			Suspend or resume the device (optional)
++ * @suspend:			Suspend the device (optional)
++ *				@vdev: vdpa device
++ *				Returns integer: success (0) or error (< 0)
++ * @resume:			Resume the device (optional)
+  *				@vdev: vdpa device
+  *				Returns integer: success (0) or error (< 0)
+  * @get_config_size:		Get the size of the configuration space includes
+@@ -324,6 +327,7 @@ struct vdpa_config_ops {
+ 	void (*set_status)(struct vdpa_device *vdev, u8 status);
+ 	int (*reset)(struct vdpa_device *vdev);
+ 	int (*suspend)(struct vdpa_device *vdev);
++	int (*resume)(struct vdpa_device *vdev);
+ 	size_t (*get_config_size)(struct vdpa_device *vdev);
+ 	void (*get_config)(struct vdpa_device *vdev, unsigned int offset,
+ 			   void *buf, unsigned int len);
 -- 
 2.34.1
 
