@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F52060374C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1339B603749
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJSA4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S229773AbiJSA4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 20:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJSA4Q (ORCPT
+        with ESMTP id S229625AbiJSA4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Oct 2022 20:56:16 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C5DC97FD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66D3CA8B1
         for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:56:15 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29INi8vU005567;
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29INi02T025707;
         Wed, 19 Oct 2022 00:56:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
- bh=Vceponq7eAFUqTu6CGWdqDZyJ21Mh5Eod4o60p5T6SU=;
- b=eUxo+IE8H9VexyDBEWzD3uKw939uGXWeg+9S6CL3G/e5ypgEpMJP3CME+Ck6echR7xx9
- nB6yl++raR8m7qfYgxSoDt6uCI+QsDZSrumF4+KjueyeNYz3lQTQWTVRIhRme4j4r9l6
- 0IWFYipweABlxyWyeKZbiQtShJ6glPxTsTUFdXU11/YXSFVS/IiPrU2skZ+9cOoIC+V3
- iz7bIts5NZAR5rYYTFwsSQL/xZnfR6RAAcDb+KLZLAFHtocvUJ7a7zM11hAG45EXOQNt
- 89ONmtKHivP90JL1GIA3Bxj03PiU/droXcwV4n/5MooLVwc/58k6U0Joa/HLCzNa+sLg Yw== 
+ bh=6OKBJgFbXS3OjE73iQJfSkItm6qvzXxZpGWp2/+KhZg=;
+ b=2nEhbjlmXgIWhX4a9OIrCzxlfVq/emWvuMZWjo4TYevCuApKvldZ8fk+sxCtesLiErkF
+ FYCecVmQqX58GFTmJ3W7ykgJOn65dfiL4gJtGRmJtTdridOH+vCGoNF2yqN5cUf0VSPD
+ hX7+hg+6FBJXgcw9Emq/oN3p5lAknqZkXZ+67euo+gPIUTRM7bvpC/u2FWhNiVrNHpl0
+ iAS/EFd8WRXEHkJYSbKdNkurzAKQoBNv6RLnS4aIWfVmNDXS+wixpva5aGMzu+EcOeUh
+ mJL4wpIeFQ9vdRjFSPyJQyP3r02EY5a2As4McJLeuGO5PMY6dVfFOdggZ/OQb45w3gCE sw== 
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7mu00ka4-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7mw3gc6m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 19 Oct 2022 00:56:12 +0000
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29ILnUhH016678;
-        Wed, 19 Oct 2022 00:56:11 GMT
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29ILnUhI016678;
+        Wed, 19 Oct 2022 00:56:12 GMT
 Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3k8htgrhfm-2;
-        Wed, 19 Oct 2022 00:56:11 +0000
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3k8htgrhfm-3;
+        Wed, 19 Oct 2022 00:56:12 +0000
 From:   Si-Wei Liu <si-wei.liu@oracle.com>
 To:     mst@redhat.com, jasowang@redhat.com
 Cc:     virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] vdpa: save vdpa_dev_set_config in struct vdpa_device
-Date:   Tue, 18 Oct 2022 16:50:29 -0700
-Message-Id: <1666137032-28192-2-git-send-email-si-wei.liu@oracle.com>
+Subject: [PATCH v2 2/4] vdpa: pass initial config to _vdpa_register_device()
+Date:   Tue, 18 Oct 2022 16:50:30 -0700
+Message-Id: <1666137032-28192-3-git-send-email-si-wei.liu@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com>
 References: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com>
@@ -53,8 +53,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 p
  suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2209130000 definitions=main-2210190003
-X-Proofpoint-ORIG-GUID: lrfdVwc3WsuiaWtj3PwmOzSJ3D1pqDll
-X-Proofpoint-GUID: lrfdVwc3WsuiaWtj3PwmOzSJ3D1pqDll
+X-Proofpoint-ORIG-GUID: zVT2XndAdswwS49CRlU8k2umoOeBn3Wt
+X-Proofpoint-GUID: zVT2XndAdswwS49CRlU8k2umoOeBn3Wt
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -65,78 +65,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to allow live migration orchestration software to export the
-initial set of vdpa attributes with which the device was created, it
-will be useful if the vdpa tool can report the config on demand with
-simple query. This will ease the orchestration software implementation
-so that it doesn't have to keep track of vdpa config change, or have
-to persist vdpa attributes across failure and recovery, in fear of
-being killed due to accidental software error.
-
-This commit attempts to make struct vdpa_device contain the struct
-vdpa_dev_set_config, where all config attributes upon vdpa creation
-are carried over. Which will be used in subsequent commits.
+Just as _vdpa_register_device taking @nvqs as the number of queues
+to feed userspace inquery via vdpa_dev_fill(), we can follow the
+same to stash config attributes in struct vdpa_device at the time
+of vdpa registration.
 
 Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
 ---
- include/linux/vdpa.h | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ drivers/vdpa/ifcvf/ifcvf_main.c      |  2 +-
+ drivers/vdpa/mlx5/net/mlx5_vnet.c    |  2 +-
+ drivers/vdpa/vdpa.c                  | 15 +++++++++++----
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  2 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  2 +-
+ drivers/vdpa/vdpa_user/vduse_dev.c   |  2 +-
+ drivers/vdpa/virtio_pci/vp_vdpa.c    |  3 ++-
+ include/linux/vdpa.h                 |  3 ++-
+ 8 files changed, 20 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+index f9c0044..c54ab2c 100644
+--- a/drivers/vdpa/ifcvf/ifcvf_main.c
++++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+@@ -771,7 +771,7 @@ static int ifcvf_vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+ 	else
+ 		ret = dev_set_name(&vdpa_dev->dev, "vdpa%u", vdpa_dev->index);
+ 
+-	ret = _vdpa_register_device(&adapter->vdpa, vf->nr_vring);
++	ret = _vdpa_register_device(&adapter->vdpa, vf->nr_vring, config);
+ 	if (ret) {
+ 		put_device(&adapter->vdpa.dev);
+ 		IFCVF_ERR(pdev, "Failed to register to vDPA bus");
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index 9091336..376082e 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -3206,7 +3206,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 	mlx5_notifier_register(mdev, &ndev->nb);
+ 	ndev->nb_registered = true;
+ 	mvdev->vdev.mdev = &mgtdev->mgtdev;
+-	err = _vdpa_register_device(&mvdev->vdev, max_vqs + 1);
++	err = _vdpa_register_device(&mvdev->vdev, max_vqs + 1, add_config);
+ 	if (err)
+ 		goto err_reg;
+ 
+diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+index febdc99..566c1c6 100644
+--- a/drivers/vdpa/vdpa.c
++++ b/drivers/vdpa/vdpa.c
+@@ -215,11 +215,16 @@ static int vdpa_name_match(struct device *dev, const void *data)
+ 	return (strcmp(dev_name(&vdev->dev), data) == 0);
+ }
+ 
+-static int __vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
++static int __vdpa_register_device(struct vdpa_device *vdev, u32 nvqs,
++				  const struct vdpa_dev_set_config *cfg)
+ {
+ 	struct device *dev;
+ 
+ 	vdev->nvqs = nvqs;
++	if (cfg)
++		vdev->vdev_cfg = *cfg;
++	else
++		vdev->vdev_cfg.mask = 0ULL;
+ 
+ 	lockdep_assert_held(&vdpa_dev_lock);
+ 	dev = bus_find_device(&vdpa_bus, NULL, dev_name(&vdev->dev), vdpa_name_match);
+@@ -237,15 +242,17 @@ static int __vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
+  * callback after setting up valid mgmtdev for this vdpa device.
+  * @vdev: the vdpa device to be registered to vDPA bus
+  * @nvqs: number of virtqueues supported by this device
++ * @cfg: initial config on vdpa device creation
+  *
+  * Return: Returns an error when fail to add device to vDPA bus
+  */
+-int _vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
++int _vdpa_register_device(struct vdpa_device *vdev, u32 nvqs,
++			  const struct vdpa_dev_set_config *cfg)
+ {
+ 	if (!vdev->mdev)
+ 		return -EINVAL;
+ 
+-	return __vdpa_register_device(vdev, nvqs);
++	return __vdpa_register_device(vdev, nvqs, cfg);
+ }
+ EXPORT_SYMBOL_GPL(_vdpa_register_device);
+ 
+@@ -262,7 +269,7 @@ int vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
+ 	int err;
+ 
+ 	down_write(&vdpa_dev_lock);
+-	err = __vdpa_register_device(vdev, nvqs);
++	err = __vdpa_register_device(vdev, nvqs, NULL);
+ 	up_write(&vdpa_dev_lock);
+ 	return err;
+ }
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+index c6db1a1..5e1cebc 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+@@ -387,7 +387,7 @@ static int vdpasim_blk_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+ 	if (IS_ERR(simdev))
+ 		return PTR_ERR(simdev);
+ 
+-	ret = _vdpa_register_device(&simdev->vdpa, VDPASIM_BLK_VQ_NUM);
++	ret = _vdpa_register_device(&simdev->vdpa, VDPASIM_BLK_VQ_NUM, config);
+ 	if (ret)
+ 		goto put_dev;
+ 
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+index c3cb225..06ef5a0 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+@@ -260,7 +260,7 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+ 
+ 	vdpasim_net_setup_config(simdev, config);
+ 
+-	ret = _vdpa_register_device(&simdev->vdpa, VDPASIM_NET_VQ_NUM);
++	ret = _vdpa_register_device(&simdev->vdpa, VDPASIM_NET_VQ_NUM, config);
+ 	if (ret)
+ 		goto reg_err;
+ 
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index 35dceee..6530fd2 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -1713,7 +1713,7 @@ static int vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = _vdpa_register_device(&dev->vdev->vdpa, dev->vq_num);
++	ret = _vdpa_register_device(&dev->vdev->vdpa, dev->vq_num, config);
+ 	if (ret) {
+ 		put_device(&dev->vdev->vdpa.dev);
+ 		return ret;
+diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+index d448db0..ffdc90e 100644
+--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
++++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+@@ -538,7 +538,8 @@ static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 	vp_vdpa->config_irq = VIRTIO_MSI_NO_VECTOR;
+ 
+ 	vp_vdpa->vdpa.mdev = &vp_vdpa_mgtdev->mgtdev;
+-	ret = _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
++	ret = _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues,
++				    add_config);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to register to vdpa bus\n");
+ 		goto err;
 diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-index 6d0f5e4..f1838f5 100644
+index f1838f5..b9d50e8 100644
 --- a/include/linux/vdpa.h
 +++ b/include/linux/vdpa.h
-@@ -58,6 +58,16 @@ struct vdpa_vq_state {
- 	};
- };
+@@ -381,7 +381,8 @@ struct vdpa_device *__vdpa_alloc_device(struct device *parent,
+ int vdpa_register_device(struct vdpa_device *vdev, u32 nvqs);
+ void vdpa_unregister_device(struct vdpa_device *vdev);
  
-+struct vdpa_dev_set_config {
-+	u64 device_features;
-+	struct {
-+		u8 mac[ETH_ALEN];
-+		u16 mtu;
-+		u16 max_vq_pairs;
-+	} net;
-+	u64 mask;
-+};
-+
- struct vdpa_mgmt_dev;
+-int _vdpa_register_device(struct vdpa_device *vdev, u32 nvqs);
++int _vdpa_register_device(struct vdpa_device *vdev, u32 nvqs,
++			  const struct vdpa_dev_set_config *cfg);
+ void _vdpa_unregister_device(struct vdpa_device *vdev);
  
  /**
-@@ -77,6 +87,8 @@ struct vdpa_vq_state {
-  * @nvqs: maximum number of supported virtqueues
-  * @mdev: management device pointer; caller must setup when registering device as part
-  *	  of dev_add() mgmtdev ops callback before invoking _vdpa_register_device().
-+ * @vdev_cfg: initial device config on vdpa creation; useful when instantiate with
-+ *            the exact same config is needed.
-  */
- struct vdpa_device {
- 	struct device dev;
-@@ -91,6 +103,7 @@ struct vdpa_device {
- 	struct vdpa_mgmt_dev *mdev;
- 	unsigned int ngroups;
- 	unsigned int nas;
-+	struct vdpa_dev_set_config vdev_cfg;
- };
- 
- /**
-@@ -103,16 +116,6 @@ struct vdpa_iova_range {
- 	u64 last;
- };
- 
--struct vdpa_dev_set_config {
--	u64 device_features;
--	struct {
--		u8 mac[ETH_ALEN];
--		u16 mtu;
--		u16 max_vq_pairs;
--	} net;
--	u64 mask;
--};
--
- /**
-  * Corresponding file area for device memory mapping
-  * @file: vma->vm_file for the mapping
 -- 
 1.8.3.1
 
