@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129DF602C8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7BB602C95
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJRNLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S230290AbiJRNMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiJRNLw (ORCPT
+        with ESMTP id S230299AbiJRNMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:11:52 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58FCC705B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:11:51 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id d13so8543636qko.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:11:51 -0700 (PDT)
+        Tue, 18 Oct 2022 09:12:09 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08E2C696A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:12:05 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso1391824pjq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:12:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gFI1bQqti6oQ8LxaWAG4fVYATWtdUovKKyLQ/A268Bc=;
-        b=V0rRk9jTWV2LwxkPjvBKehj0gnVqhihTFsLNlct1zhNnxIfdj6L7vI9CqSvpMGPdGq
-         8ru4AhKuryfocbeTDIEz65YniIblEjpd7L2vMUUzhJc1a0ME3n/CjtKlYkcsiifc/VwM
-         /DMZFjIsdAaXMRlLns9pTztXmlZEv+n9C/CU/L3WYlwpU3eUDmbEoUdO+7IrGLi5oF84
-         hObMKgdXE/eyY9nbHOd+YTmFnU6+FPGCIIHEqhDxVZdPXdo3PvJy1hJXUpa9nd7n9kUj
-         FHDyKChBYqqwUTt+uHi11/edsRVo6V9r1+t6TMfz4thNeMw3UI6lslt/+6Oy3xPguZ82
-         CN2g==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GfgN++TPk0fTsXy49wFUN76bG9RP2vq/hMwME62fwuc=;
+        b=CGXkSB9uywrxsgCdNFPuLJClpIMUtjLodXrbG2P6EA5GDH5qtFAFuSefrX06MNdx7K
+         y09Se10ajet7taVCaFyZi5lU6ag1p1po3SpuOj8qa3ikH+Rhy59iG7l+QvmqL3EkjN1g
+         02iO9A1tXmi11e1B8e5QzJHbGC3Ty5fk85n0M0JIFt1xLmuspHls3QZxaKuje3aZt5ag
+         jKBZzNMOFbine3wnRei1n1ogxTbx+zgim9cZLm19B9KInwPb4DFozHlLtBgniMPhONqF
+         kf3LWS87AjBafRqd8MEgPuVjgs1JSn14EQmTft/SLeBBC4E94/3AjdGqwXR3t43SATD6
+         +8dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gFI1bQqti6oQ8LxaWAG4fVYATWtdUovKKyLQ/A268Bc=;
-        b=t3KprgtVZ1PrGTLNDtuxulzdc+lF3ix8gQCRFnSBxakCXcY6NETij11wt5jSRUI1vw
-         /tjjMYAM2Ni7Lp24hEPE1zTLhwcuY+lsObBTq7lss7KrLGhRhSoQZ/WWP3U+5cjj0Nd9
-         8eyRklekvk8r5I8Z4Xp/CG10Pn/Wiyqbkzn6JdK2oEnZMlCKu+GEI2WFk5jTPq7LX7FT
-         CoxcH/zcSS6JMx5hRPMLfsmxe4kdx1vj5A/57BA4ke2fAsAIwfkPGlmYrm7q3R81FwnU
-         OeDobSbZ+Rt0KKnlic9tlhy2GFer463+naDY2YL3SCjkBMQ+EDpvgByMkmdfUxLQUAUt
-         BbwQ==
-X-Gm-Message-State: ACrzQf14ZcfaSVorl8foHsqUrVFCBoYI3pM8911NkZRrDDiwPt6ZR5Kh
-        sv8S84uV+zy8ViGC+shw9HZzqw==
-X-Google-Smtp-Source: AMsMyM7kSLBFDxaR0hdilsR4CoglosKJmFXZBn8yUdDuhyXL+XyatgehjaXN4MO1M2yTglX3l6EW5g==
-X-Received: by 2002:a05:620a:486:b0:6ec:543d:c32e with SMTP id 6-20020a05620a048600b006ec543dc32emr1710817qkr.161.1666098710902;
-        Tue, 18 Oct 2022 06:11:50 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id f7-20020ac84707000000b003431446588fsm1934703qtp.5.2022.10.18.06.11.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 06:11:50 -0700 (PDT)
-Message-ID: <c20edd0d-7613-5683-60e7-54317cac6e0b@linaro.org>
-Date:   Tue, 18 Oct 2022 09:11:43 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GfgN++TPk0fTsXy49wFUN76bG9RP2vq/hMwME62fwuc=;
+        b=7bKthiMF6B2YOHdr8vM3Trfg7iYVnGMBv1uiqyoWyfbeihy8d0cPjiG2y/5uu15IYb
+         IvopgsnTUfM8Vs8eATKTt44SVAwXC9ipGxMfVxGaQNY/ZOWaxPFveza9Yc4f33UZx6aX
+         GYiAI2zmXb9CIjoooqayapdOAo4OAtR5pRIVSxXbyA3B7WDACU4ojOEZxFsGeP5CcmQI
+         Pa4LqDYQ41fpdzbvYIbR+Swmva8iXtvTDJXiiiv+H/HUfwgQKZCK/6nUe9d4Z+wNcC0z
+         9QfUULam3hkMIhxj91L32fjrQ4FR39K3wygXRpL90Dp5+/WmWisZbsY6z6BNwVN/XG69
+         KYaA==
+X-Gm-Message-State: ACrzQf2rx5x5vD5eLVU06RSD/uNkrwUND6i25fKTNzW4HYtUgVbr4kTi
+        ICbSvTF9aPURIQLyRcqjuMlFC6UQ1UvzAdkQ9844og==
+X-Google-Smtp-Source: AMsMyM6WIAnvbu3GJwLi+rnRvx9SP9n/YV8ENAQvAYkNqJyKnq+TLw0aAHXTKYafdDi0g5pfux+aSCbMtCBn6X8DJwg=
+X-Received: by 2002:a17:90b:38c3:b0:20d:406e:26d9 with SMTP id
+ nn3-20020a17090b38c300b0020d406e26d9mr3569457pjb.121.1666098725139; Tue, 18
+ Oct 2022 06:12:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RESEND PATCH v2 3/5] dt-bindings: firmware: qcom-scm: Add
- optional interrupt
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     David Heidelberg <david@ixit.cz>,
-        Robert Marko <robimarko@gmail.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-References: <1661898311-30126-1-git-send-email-quic_gurus@quicinc.com>
- <1661898311-30126-4-git-send-email-quic_gurus@quicinc.com>
- <c842f6c8-fe7b-1e74-d873-4b674556ec40@linaro.org>
- <a42f6664-0f6d-657e-9934-907ebb5408ee@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a42f6664-0f6d-657e-9934-907ebb5408ee@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-4-vannapurve@google.com> <Yz80XAg74KGdSqco@google.com>
+ <CAGtprH_XSCXZDroGUnL3H1CwcsbH_A_NDn8B4P2xfpSYGqKmqw@mail.gmail.com>
+ <Y0mu1FKugNQG5T8K@google.com> <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
+ <Y02aLxlCKWwN62I5@google.com>
+In-Reply-To: <Y02aLxlCKWwN62I5@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 18 Oct 2022 18:41:53 +0530
+Message-ID: <CAGtprH-i6MDiYFQGf=cjOPcaTZyezObW7HpegBiFq6BPKa2jWQ@mail.gmail.com>
+Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
+ pool gpa
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 01:49, Sibi Sankar wrote:
->>>   Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 5 +++++
->>>   1 file changed, 5 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>> index e279fd2..4d6c89f 100644
->>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>> @@ -75,6 +75,11 @@ properties:
->>>         Specify this flag to remove SCM call serialization. Need to ensure that
->>>         the firmware being used supports this feature first.
->>>   
->>> +  interrupts:
->>> +    description:
->>> +      The wait-queue interrupt that firmware raises as part of handshake
->>> +      protocol to handle sleeping SCM calls.
->>
->> Missing constraints.
->>
->> Which firmwares support it?
->>
-> 
-> The interrupt property for scm firmware from a binding perspective
-> is completely optional i.e. not all tz fw running in the wild on sm8450
-> devices support this feature. The bootloader does the interrupt property
-> addition on sm8450 devices with support.
+On Mon, Oct 17, 2022 at 11:38 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Oct 17, 2022, Vishal Annapurve wrote:
+> > This is much sleeker and will avoid hacking KVM for testing. Only
+> > caveat here is that these tests will not be able to exercise implicit
+> > conversion path if we go this route.
+>
+> Yeah, I think that's a perfectly fine tradeoff.  Implicit conversion isn't strictly
+> a UPM feature, e.g. if TDX and SNP "architecturally" disallowed implicit conversions,
+> then KVM wouldn't need to support implicit conversions at all, i.e. that testing can
+> be punted to SNP and/or TDX selftests.
 
-OK.
-
-Best regards,
-Krzysztof
-
+Ack. Will address this feedback in the next series.
