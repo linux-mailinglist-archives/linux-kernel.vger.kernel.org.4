@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8A9603225
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67B760322C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiJRSQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
+        id S230004AbiJRSSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJRSQr (ORCPT
+        with ESMTP id S229832AbiJRSSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:16:47 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26DD7D1F4;
-        Tue, 18 Oct 2022 11:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1666117000;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=fWQgbZey9us7ESK6PQD6XKaBy+xKVXDQ/LVBroNYgfI=;
-    b=EqMm5bHB0hlVXQl3bSuYXsPhoCM3mhe6EfGhSUfrFKwbyM4j2B8FwR/itIx/6yN0WQ
-    cYTD5pfb5hZ/IivG25IxST+SJWiu7YFr6b/lB0qNdWYqv2vVXxGXKJLS0XiD5/ME6rvB
-    OxoP5flgNUi4CXwGm0A/t3fuXi+FyTE5J/TjP62sTvoNIPkCHaC9iy9UK/0r9n+gvEsB
-    mZxRkdthKFYcaUmU2B2izILiuKJAaruOD36/wKhLahkPRP/qf+L8MCZXcXszyjBKKBmU
-    ZrEAtu2KHAOmpOMTogfRDi6mr9YNYp6V88LZ2NvQHE3gg8GRIXYShcXRTzW4opOgaB21
-    f4dw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD2QzemV2tdlNlNRZBXiUw="
-X-RZG-CLASS-ID: mo02
-Received: from linux.micron.com
-    by smtp.strato.de (RZmta 48.2.0 AUTH)
-    with ESMTPSA id zad98cy9IIGdYSV
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 18 Oct 2022 20:16:39 +0200 (CEST)
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, daejun7.park@samsung.com, huobean@gmail.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] scsi: ufs: core: Use is_visible to control UFS unit descriptor sysfs nodes
-Date:   Tue, 18 Oct 2022 20:16:27 +0200
-Message-Id: <20221018181627.326657-4-beanhuo@iokpp.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221018181627.326657-1-beanhuo@iokpp.de>
-References: <20221018181627.326657-1-beanhuo@iokpp.de>
+        Tue, 18 Oct 2022 14:18:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4DF7E02C;
+        Tue, 18 Oct 2022 11:18:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E708B820EE;
+        Tue, 18 Oct 2022 18:18:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F01C433D7;
+        Tue, 18 Oct 2022 18:18:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666117084;
+        bh=mYGOGutZ4Vo9ucN0Lly1KgID1pVGbynxDNJ2SMsrc98=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AWRBtFwibDL7vA8S9et14vdl9j53tVVFgZ4kXgQbNRnI7sUffRFTXNaoMeslrqmed
+         qkner6nvIaNLRwWzTeIH4MPGXkESN45eZCBWc7ioNMNkyXK/R1YgNBozf+vedJRTT0
+         GkS3AKvn18CwSWywZEXs2JkTuZ0RcpipBI72oijQ=
+Date:   Tue, 18 Oct 2022 20:18:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, axboe@kernel.dk, willy@infradead.org,
+        martin.petersen@oracle.com, kch@nvidia.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH RFC 1/2] kobject: add return value for kobject_put()
+Message-ID: <Y07t2agdfUeujGE/@kroah.com>
+References: <20221018131432.434167-1-yukuai3@huawei.com>
+ <20221018131432.434167-2-yukuai3@huawei.com>
+ <Y06je6LiDicUfzto@kroah.com>
+ <2f962069-8fd9-08df-aa00-062b94569c36@huaweicloud.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2f962069-8fd9-08df-aa00-062b94569c36@huaweicloud.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On Tue, Oct 18, 2022 at 09:12:08PM +0800, Yu Kuai wrote:
+> 
+> 
+> 在 2022/10/18 21:00, Greg KH 写道:
+> > On Tue, Oct 18, 2022 at 09:14:31PM +0800, Yu Kuai wrote:
+> > > The return value will be used in later patch to fix uaf for slave_dir
+> > > and bd_holder_dir in block layer.
+> > 
+> > Then the user will be incorrect, this is not ok, you should never care
+> > if you are the last "put" on an object at all.  Hint, what happens right
+> > after you call this and get the result?
+> > 
+> 
+> I tried to reset the pointer to NULL in patch 2 to prevent uaf.
 
-UFS Boot and Device W-LUs do not have unit descriptors, and PRMB does not
-support WB, we can use is_visible() to control which nodes are visible
-and which are not.
+That is not ok, sorry.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/ufs/core/ufs-sysfs.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+> And the
+> whole kobject_put() and pointer reset is protected by a mutex, the mutex
+> will be used on the reader side before kobject_get as well. So, in fact,
+> I'm protecting them by the mutex...
 
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index eb6b278c4e79..883f0e44b54e 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -1285,9 +1285,27 @@ static struct attribute *ufs_sysfs_unit_descriptor[] = {
- 	NULL,
- };
- 
-+static umode_t ufs_unit_descriptor_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-+{
-+	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct scsi_device *sdev = to_scsi_device(dev);
-+	u8 lun = ufshcd_scsi_to_upiu_lun(sdev->lun);
-+	umode_t mode = attr->mode;
-+
-+	if (lun == UFS_UPIU_BOOT_WLUN || lun == UFS_UPIU_UFS_DEVICE_WLUN)
-+		/* Boot and device WLUN have no unit descriptors */
-+		mode = 0;
-+	if (lun == UFS_UPIU_RPMB_WLUN && attr == &dev_attr_wb_buf_alloc_units.attr)
-+		mode = 0;
-+
-+	return mode;
-+}
-+
-+
- const struct attribute_group ufs_sysfs_unit_descriptor_group = {
- 	.name = "unit_descriptor",
- 	.attrs = ufs_sysfs_unit_descriptor,
-+	.is_visible = ufs_unit_descriptor_is_visible,
- };
- 
- static ssize_t dyn_cap_needed_attribute_show(struct device *dev,
--- 
-2.34.1
+Still not ok.  You never know who else has a reference on a kobject,
+that's the point of reference counted objects.
 
+> I can bypass it by using another reference anyway. But let's see if
+> anyone has suggestions on the other patch.
+> 
+> > sorry, but NAK.
+> 
+> I know the best way is too refactor the lifecycle of the problematic
+> bd_holder_dir/slave_dir, however, I gave that up because this seems
+> quite complicated and influence is very huge...
+
+Please fix it up properly, core changes like this should not be needed.
+
+thanks,
+
+greg k-h
