@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EA560285A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793E1602859
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJRJ2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S229746AbiJRJ2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJRJ2e (ORCPT
+        with ESMTP id S229649AbiJRJ2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:28:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BA0AD990;
-        Tue, 18 Oct 2022 02:28:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D32FB81E0F;
-        Tue, 18 Oct 2022 09:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95968C433D6;
-        Tue, 18 Oct 2022 09:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666085310;
-        bh=FNvybaaMSsU92LM//vA2J3d3Vos299Q6dH/tB2HZSFo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BoMPy1FAOHq5BZA2CnEyws5/nBk29uNnj7pXHtFvQmOdEpi6SEsgzOrizDu+lJdiU
-         s6PEmpn4evaWY+VO1JHdctD1qpmgc2AG3rXYwhMbY9a1QB1UcmiwgE6QOkJ/Yn9+xe
-         CvU2UAgk/Yg0CPuFjJFicRyODN+e48aB4oDn1K6sR3we7H8h6PsqrfFeW8BHhWerl4
-         oxYxdfIHQIiQgCFoQXFU64r0ENhw1xxy+TAm8/G3XrfKPeCsSFfYarQDh0wzQD4PsP
-         mZ/k7OB6nOD/inO41U8TiEH4W0TEMFJerIrbcWF7KScIXwpNDAVlneIu9yyCHUK0Z7
-         ofC29dlwbBrwg==
-Date:   Tue, 18 Oct 2022 10:28:23 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, chiaen_wu@richtek.com,
-        matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        krzysztof.kozlowski+dt@linaro.org, cy_huang@richtek.com,
-        sre@kernel.org
-Subject: Re: [PATCH v3] dt-bindings: mfd: mt6370: fix the interrupt order of
- the charger in the example
-Message-ID: <Y05xt+r2tPmfJbcq@google.com>
-References: <fcf4e7e7594070a8698dc0d4b96e031bcaa9b3a3.1665585952.git.chiaen_wu@richtek.com>
- <166558333754.1988433.10175192101178879616.robh@kernel.org>
+        Tue, 18 Oct 2022 05:28:33 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91A9ACF65
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:28:31 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 67so13520941pfz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HvSGhjmv3Eg4xrw6LqhEGBu9ndJxCrKraxxLsJWVAoE=;
+        b=bx+MrBZcXWuQSfltk8RKBAexQtpB8Tyf7VvtqIqC2b/7/LkQLWlqsCvU3yW3kKJRwM
+         pXyP+KD3JxMWzfjbVWQiIoVreEuOLJgGpCkJD7sESuh0XNBCDCmlL/W7LpKrKk5eD78B
+         nvLLE0yOLbMIHNoOLIy/KV3Isa/ItZF0qAnOg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HvSGhjmv3Eg4xrw6LqhEGBu9ndJxCrKraxxLsJWVAoE=;
+        b=dswQePGKdm0IDztVQb0VXeK/z1o4UHohol0y22q51vmthO6++OXhoQfamcLfJ2NkpX
+         mVJW8YxMSGJ253x88b0VrwNsfAPgZGtQwxjqr4BnQGckXpPXowhalVeXBwfjPc5/Oe1h
+         aavRpdhVeC0xQ17jyF8mUqI5Wu1Zb/FxfpnGgDsLzfYiEU7lnaakh/8LF/zKFljYfUBR
+         F4rdgYzaeVDkfjPhV60E6uqz+QLPJlwffiadLl14+g7vv3SyJmMJ2Ar754T2v95/QY/Z
+         kkBRSX1tn5hhFIU7Kqd+DrtIPFNelpB4xdMExJ5AHo4BjMBQknSXPDApeIp2MjeVuFmp
+         l3Ow==
+X-Gm-Message-State: ACrzQf1+eTcUAuZaoUdEupBP8Alg/10w7DYGmO+psQ1sqKwHIfaTZvyw
+        0orH0fDMr/mCfM75bE+vWusw5Q==
+X-Google-Smtp-Source: AMsMyM7e9RNdettxW6HbtJS8S9dUMjgLEAyQagvghkBEvWpQO3sjx3yczL5I5LXCdLx9Nt9MQOBQWw==
+X-Received: by 2002:a05:6a00:1410:b0:528:5a5a:d846 with SMTP id l16-20020a056a00141000b005285a5ad846mr2299256pfu.9.1666085310915;
+        Tue, 18 Oct 2022 02:28:30 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170903228700b0017a0668befasm8284269plh.124.2022.10.18.02.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 02:28:30 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Alex Elder <elder@linaro.org>, Alex Elder <elder@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v3] net: ipa: Proactively round up to kmalloc bucket size
+Date:   Tue, 18 Oct 2022 02:28:27 -0700
+Message-Id: <20221018092724.give.735-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1954; h=from:subject:message-id; bh=+PFTQF0MwAeLZJKYp39gKTCjOYyXLwCQDxSN2i+QLBQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTnG7iUSkulGBQKsUdfAePGssNbp/SzVd3mEKAham YRzoo4uJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05xuwAKCRCJcvTf3G3AJgiiD/ 9GGepRQLjCCYJq0dU+ybeCdbS6MIRSjJK1nogXUkKYi5bAL/0lG/t4GkBz/pQ2U3WdrHeYKD25DWX7 8xHDT4LatQwuuNWi0zCfVsqOLtk5b24dAHQZn48f3ZErVVvHK8mMHBDAmBsml/f3JuUZFULGy//2Kj E3GTUgFfjY9N8/kWv8/2VOpg4RciexEJAqJrML1i1njeGMpGy7mCYeYR/KUPcM5o3IAstVjwnXG4ux EO4S31jwl+eIAUKyQBp/lJoV2B8kkcKaAruieA4BwU+TfpRRLEnJj2/vmHthDitPmow7Bg08GPXtbM foXZ5uxBG3mnzqaWZ370LTC8s/DFAmC7cXl7xOupH9ctmEr0pt9wOiyDzTT5iw25ZVNxd9ypilsdQ6 R9xsOtQ6uSPzB4OB/SflODFQ5Se8LTEAPL/Y6wKu2Scr+32tG4kWlnqQ119YKWfhcqdci+hDLGR2HX aLKgWl9C6vxxBlxbNS+r7q6OHpg+M1cDh4ReetpMZdfR4dXrqbyVNVp5JyT4xuknaRMNx2pzkQbOtY 4FNNRAw4WRktl3YLEG9rW5tWwSUsLpOSkUuV/0dcsR6b9w40Xz5Ei/Rao7pWAsUOacDk5tsWPfCrjP kpUFpgReic9UoVSVTjTUASJEh79q8ghXK6ccwPme+D3L6djE7QQ+m+U5Vkbg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <166558333754.1988433.10175192101178879616.robh@kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Oct 2022, Rob Herring wrote:
+Instead of discovering the kmalloc bucket size _after_ allocation, round
+up proactively so the allocation is explicitly made for the full size,
+allowing the compiler to correctly reason about the resulting size of
+the buffer through the existing __alloc_size() hint.
 
-> On Wed, 12 Oct 2022 15:08:14 +0800, ChiaEn Wu wrote:
-> > From: ChiaEn Wu <chiaen_wu@richtek.com>
-> > 
-> > Fix the interrupt order of the charger in the binding example.
-> > 
-> > Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
-> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > ---
-> > v3
-> > - Add a 'Reviewed-by' tag.
-> > 
-> > v2
-> > - Revise the commit syntax.
-> > 
-> > v1
-> > - Due to this patch modifiacation
-> >   (https://lore.kernel.org/all/20221001202918.me7z2qzm7cmrkzsg@mercury.elektranox.org/),
-> >   there will get some warnings in linux-next when compiling the dts.
-> > ---
-> >  Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> 
-> Applying to go into rc1 along with the other mt6370 fix, thanks!
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Reviewed-by: Alex Elder <elder@linaro.org>
+Link: https://lore.kernel.org/lkml/4d75a9fd-1b94-7208-9de8-5a0102223e68@ieee.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v3: rebase to v6.1-rc1
+v2: https://lore.kernel.org/lkml/20220923202822.2667581-6-keescook@chromium.org/
+---
+ drivers/net/ipa/gsi_trans.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Fine by me, but please change the subject line to start with an
-upper-case char.
-
+diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
+index 26b7f683a3e1..0f52c068c46d 100644
+--- a/drivers/net/ipa/gsi_trans.c
++++ b/drivers/net/ipa/gsi_trans.c
+@@ -87,6 +87,7 @@ struct gsi_tre {
+ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
+ 			u32 max_alloc)
+ {
++	size_t alloc_size;
+ 	void *virt;
+ 
+ 	if (!size)
+@@ -103,13 +104,15 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
+ 	 * If there aren't enough entries starting at the free index,
+ 	 * we just allocate free entries from the beginning of the pool.
+ 	 */
+-	virt = kcalloc(count + max_alloc - 1, size, GFP_KERNEL);
++	alloc_size = size_mul(count + max_alloc - 1, size);
++	alloc_size = kmalloc_size_roundup(alloc_size);
++	virt = kzalloc(alloc_size, GFP_KERNEL);
+ 	if (!virt)
+ 		return -ENOMEM;
+ 
+ 	pool->base = virt;
+ 	/* If the allocator gave us any extra memory, use it */
+-	pool->count = ksize(pool->base) / size;
++	pool->count = alloc_size / size;
+ 	pool->free = 0;
+ 	pool->max_alloc = max_alloc;
+ 	pool->size = size;
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
