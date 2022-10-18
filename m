@@ -2,126 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611E2602555
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22158602560
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiJRHRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S229796AbiJRHSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiJRHRc (ORCPT
+        with ESMTP id S229470AbiJRHS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:17:32 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAE3DF3D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:17:29 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c24so13028758plo.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WPhMYfNHJ7IkVsrnLKCMI0knahjH/ILooZWa3gsnak=;
-        b=AmW4E1j4T7QfPNnh9U/FRHyDVB+LaUhI1xOg81gtwVTbvpoocoLxgq7zX/jEU20pv5
-         Y/9n4N8KVrAzaWYS96wbeS7fj2oIDMGSBJi3M7OL/SXoou2qh49F6dHqxWCWwGTCX1st
-         pfWGKfn8pROfh3m0U5u4COYdcn5UjZFQb2oMM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+WPhMYfNHJ7IkVsrnLKCMI0knahjH/ILooZWa3gsnak=;
-        b=NSHYdOPWsTx5MGekMMQ8Db53UgT/STIGf0Vs/6ZE4TICS9Dy6db+xtJwix7N/n+WBu
-         gV1sHcysW3RGNiQR/pmrB1yOVd94XbMP/PWwdHLYWYBhSwynKqU+hNNvTUtSEQZbE15e
-         UJ3BcaDvHu6W9so161jrpPCJunEUXxrS7mLvkz1uV6BdJqDuJdHYritQE6lfvTBXP0Lp
-         uhaJIm+Jyy/viN5NgwTTNYO0c0aB/IormEdoNO4G5bV3c75Jat4r2N0J2ys/wWs5IdQD
-         f2ZA1L+e38IxBvE7HjFX6srhyreb+A6bkaT7nkdC4MQyryeO66Q5dGaU80c5b5b/ljXI
-         I+xA==
-X-Gm-Message-State: ACrzQf3MdHdiA2H/V8RXbnl/UGkHExF04e+QhiiU/rmEaImWfuEHVxRj
-        sOo93NYAHeIk5dv92i9YkpR+Uw==
-X-Google-Smtp-Source: AMsMyM7xr6hwP8NO4ur8MkkcpcspVQKhsLOgY6G/7SFFF36Kni+LmOb4oMRL+cv3iCHdxCD2vcC1Gg==
-X-Received: by 2002:a17:903:246:b0:179:96b5:1ad2 with SMTP id j6-20020a170903024600b0017996b51ad2mr1689962plh.37.1666077448997;
-        Tue, 18 Oct 2022 00:17:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 1-20020a620601000000b005626a1c77c8sm8334879pfg.80.2022.10.18.00.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 00:17:28 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Eric Biederman <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
-        Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] exec: Add comments on check_unsafe_exec() fs counting
-Date:   Tue, 18 Oct 2022 00:17:24 -0700
-Message-Id: <20221018071537.never.662-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 03:18:27 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C32DFD4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666077497; bh=JY+F/SHTji7yOJKf7kIwhuyuxqxS/UIyEF/eUKTINHY=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=DBnQxKQIF3BAtTgwgrxXyyez6l9qB4wCoX4YFetoL+wgJLJP6Hu4ZH8d8HCmIPqQJ
+         sJf048JxLgUr78H6dbFjTmJkCEDRxsymNaxvYEP+sAukWZj9Nv9EJNrzARTM8bZTuF
+         lGR1EcyoVbgKkogRl7MFcPJdUoaNpwQxJqxfBH04=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via [213.182.55.206]
+        Tue, 18 Oct 2022 09:18:17 +0200 (CEST)
+X-EA-Auth: 6rT+wPigKGh1Mdrwk3Lv2jTuS8zK1Zg7IHlGJdXHmCgmvhAy30enuoasUdm5RTgSwa8XSukxbrGq2Pq7eDT29cTRTzcK23u0
+Date:   Tue, 18 Oct 2022 12:48:13 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: [PATCH v2] staging: most: dim2: read done_buffers count locally from
+ HDM channel
+Message-ID: <Y05TNQBXLMJMgQ2r@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1688; h=from:subject:message-id; bh=2swpYsczlaIuQF3JhkoEYj/apHe5tfn1etEA/2Jg8CE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTlMDiVTpJfOh2CK4GfTNinAtSvCBsM52w9sFjjLW slnuGpSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05TAwAKCRCJcvTf3G3AJqwyD/ 40TMoaejoCKGnR0OBHDCsxwwCOSAb+WJZWQgT2n89vfSQ5UK5FFm/rdx7Xyk5nu+g4m5Ov61Q7ob2p 91gck3XKFRrxkCMPOCZhh639pC8lcB/871uLLTU+NFNAfHrlfsyXnyNMG7DS4uDSR+Qo8Vqc21aigo /2EHaVg7aZPSYXpUliPxWtMHzKOdFP9om159xQyZD/9CawmpEtcr03tFl/wzzoMuJYArTLBjpNbn11 D2aubvDJS+eHIIv7cJ59SR7q8FsJaLR8VB/9XcuY+QsVp9hEnVr/f/MwwXw3k/tEH6W/3RVSCJ05pJ LLFvfX4E/pqe9q+Deagysf1pX6gjtv6qH5uSPlZwWoZnyxgfOh2awSeDDNXtQzzDIT+xKjyMk4TG/h aXu5njuWMceTFT1GvOZtHLL4Uhceb23khZvpWaK+J1/bYBXMP++c4hqpxJPwkj6GzPG5e1W7ENG+Az hMae9jAPSuYhCyK09uqcBXS49HkOro7dcZib8IopcbrKcDIa4hdu8SiZP9t42Ipq8Polo36ZqqVoU7 eRCIHsNnWfxO8TNnE/2EuN0EjVGDtWsKXjGMPwx1qNjXruJIdPzCbPUnbMEoLz0VoxKi0Oaln2m2Ne gyaK4NFHYR3MjftTXWC08z6eK3Y/CJcKuhnnl38a0dMpPIaSRfplM3wp5jbQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some comments about what the fs counting is doing in
-check_unsafe_exec() and how it relates to the call graph.
-Specifically, we can't force an unshare of the fs because
-of at least Chrome:
-https://lore.kernel.org/lkml/86CE201B-5632-4BB7-BCF6-7CB2C2895409@chromium.org/
+The done_buffer count is already available in the hdm_channel struct.
+Calling dim_get_channel_state function to source this value out of
+the same structure is unnecessary.
+Further, the second parameter struct dim_ch_state_t to this function
+is filled by using the hdm_channel inside the function. This filled in
+variable is never used in the caller and can be altogether removed.
+So, a call to dim_get_channel_state function in this context also
+deems expensive.
 
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
- fs/exec.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Changes in v2:
+   1. Update patch log message to be more descriptive about the reason for change.
+      Feedback provided by julia.lawall@inria.fr
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 902bce45b116..01659c2ac7d8 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1571,6 +1571,12 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
- 	if (task_no_new_privs(current))
- 		bprm->unsafe |= LSM_UNSAFE_NO_NEW_PRIVS;
- 
-+	/*
-+	 * If another task is sharing our fs, we cannot safely
-+	 * suid exec because the differently privileged task
-+	 * will be able to manipulate the current directory, etc.
-+	 * It would be nice to force an unshare instead...
-+	 */
- 	t = p;
- 	n_fs = 1;
- 	spin_lock(&p->fs->lock);
-@@ -1752,6 +1758,7 @@ static int search_binary_handler(struct linux_binprm *bprm)
- 	return retval;
- }
- 
-+/* binfmt handlers will call back into begin_new_exec() on success. */
- static int exec_binprm(struct linux_binprm *bprm)
+PLEASE NOTE: I have only built the module on my machine, but have not tested it.
+I am not sure how to test this change. I am willing to test it with appropriate
+guidance provided I have the necessary hardware.
+
+
+ drivers/staging/most/dim2/dim2.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
+index ab72e11ac5ab..4c1f27898a29 100644
+--- a/drivers/staging/most/dim2/dim2.c
++++ b/drivers/staging/most/dim2/dim2.c
+@@ -259,7 +259,6 @@ static void retrieve_netinfo(struct dim2_hdm *dev, struct mbo *mbo)
+ static void service_done_flag(struct dim2_hdm *dev, int ch_idx)
  {
- 	pid_t old_pid, old_vpid;
-@@ -1810,6 +1817,11 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	if (retval)
- 		return retval;
- 
-+	/*
-+	 * Check for unsafe execution states before exec_binprm(), which
-+	 * will call back into begin_new_exec(), into bprm_creds_from_file(),
-+	 * where setuid-ness is evaluated.
-+	 */
- 	check_unsafe_exec(bprm);
- 	current->in_execve = 1;
- 
--- 
-2.34.1
+ 	struct hdm_channel *hdm_ch = dev->hch + ch_idx;
+-	struct dim_ch_state_t st;
+ 	struct list_head *head;
+ 	struct mbo *mbo;
+ 	int done_buffers;
+@@ -271,7 +270,7 @@ static void service_done_flag(struct dim2_hdm *dev, int ch_idx)
+
+ 	spin_lock_irqsave(&dim_lock, flags);
+
+-	done_buffers = dim_get_channel_state(&hdm_ch->ch, &st)->done_buffers;
++	done_buffers = hdm_ch->ch.done_sw_buffers_number;
+ 	if (!done_buffers) {
+ 		spin_unlock_irqrestore(&dim_lock, flags);
+ 		return;
+--
+2.30.2
+
+
 
