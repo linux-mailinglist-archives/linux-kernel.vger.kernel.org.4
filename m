@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81656024DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC76D6024E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJRHA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S229665AbiJRHCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJRHAy (ORCPT
+        with ESMTP id S229862AbiJRHCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:00:54 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABF11F2F4;
-        Tue, 18 Oct 2022 00:00:50 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29I70RGt016220;
-        Tue, 18 Oct 2022 02:00:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666076427;
-        bh=rlotxECe5194+Cjcu7Qtp1ZTXtwp5x44Eg6U6HO4Dd8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=yGNFKc+vkKiULvp+SdpMFat6aWWKtLBnvFwfdcbqjXYCXjf2FQs+wDjEZXRCwVCTs
-         HDJ3UN6iSqDghiAOQuZrqyltq7tuy/FQtEuap9Ax9Zd7QMgtXetyJXDTlgEAoHz5qb
-         P7C0cOFfQIquBp/7wivnRUDNMdnFKxE8Xp9W6wYE=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29I70R6o061772
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Oct 2022 02:00:27 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 18
- Oct 2022 02:00:27 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 18 Oct 2022 02:00:26 -0500
-Received: from [10.250.234.73] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29I70L8E048951;
-        Tue, 18 Oct 2022 02:00:22 -0500
-Message-ID: <d6f8b40b-3e2d-e777-28c9-ff67065e2c8b@ti.com>
-Date:   Tue, 18 Oct 2022 12:30:21 +0530
+        Tue, 18 Oct 2022 03:02:11 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0ED4B0DA
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:02:09 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f193so12576230pgc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+nVvhxkclvBh7jijvZoxqeBRD1ch68LIrE3T6tQXwcA=;
+        b=Y2OI2k0M6Ppy5IrQdu3OxcyqK0E6FMj0RbKdfVt/AXycghkatIodlK2LKFkKsnA0WT
+         NHKcBCqS45b2/2WN6/2MIZ3g/kB9oeik4IK/tK5RpF34gZSbyiKML9o1HzbiuxytlHIm
+         gQrT+zI6QlQoaNfmBoJPZiFVOERHzDXqPMXkzw+xnO3WKbwxtq7gRbuHTFKhmNIIRIw/
+         RTE/4eHnL8CbfC+J7vC2XVTG5g1sWKgWHHr7RmR5CUCsmfEmu0FXMNurav64QJ5WOkvT
+         HjL6LF0xpk6+VBXJOzDU0TGts4oA9CdajfD1MaJN31G+3mQBA9rYdS/2Pqjf7PdEciW0
+         al1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+nVvhxkclvBh7jijvZoxqeBRD1ch68LIrE3T6tQXwcA=;
+        b=rH1KQ8BcDjUh85YthyxqVfFDgHEt6b0//xq55yfxH+7Zz5zdGfwpN9CgFurpRE0074
+         e9nY9Fb7fcs13gNHTFkxal8TpkeP33YABjTqpzkhg9uCuR78JxMYacfYTLKc07fQ8XTV
+         IGjov/oN2ccTo2q5Me2M3IasROkRGpBG2fOZLkjWjkbOG5FenbhQ62a3wpYhQqPWss3h
+         IJRZhq8eE/GdzvDp97B2a32ZDcz2BtqlA5/ZTFX7YbxLht3swT8tLLeqU5+wLcv11vxA
+         XIzyn6eZSC9ti7Tq6rryGJL/iipMm5lQRjKvwVm2mW6ZDPXGNUNXApOLMPAh/lyc/Mzd
+         Fu6w==
+X-Gm-Message-State: ACrzQf17R9NmvJ4d32LGrzdKBAo1vyqsYZMUnKjUWU+8XHYSDwvWaY2r
+        GZZcjJKd+X8h6hotJxMHTv6nodGlSRU5HKlH/1NfgBWsjRE=
+X-Google-Smtp-Source: AMsMyM49UEfiusGAREFepzmkjlHJNy6ewtCu1meAQqMQVMFe4C9Y3KaAKXHbvpwDhoZCzgaEYfRUZRdXSRjygk1lfF4=
+X-Received: by 2002:a05:6a00:16c8:b0:53b:3b9f:7283 with SMTP id
+ l8-20020a056a0016c800b0053b3b9f7283mr1537420pfc.46.1666076529394; Tue, 18 Oct
+ 2022 00:02:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC PATCH v5 4/6] drm/tidss: Add support to configure OLDI mode
- for am625-dss.
-Content-Language: en-US
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>
-References: <20220928175223.15225-1-a-bhatia1@ti.com>
- <20220928175223.15225-5-a-bhatia1@ti.com>
- <88220e6f-1bcc-7746-4281-e74f9e832e97@ideasonboard.com>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <88220e6f-1bcc-7746-4281-e74f9e832e97@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220819032706.695212-1-xiehuan09@gmail.com> <20221017154057.78babf40@gandalf.local.home>
+In-Reply-To: <20221017154057.78babf40@gandalf.local.home>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Tue, 18 Oct 2022 15:01:57 +0800
+Message-ID: <CAEr6+EAEvZiU14H2bGW9iGOwJjshAw5sQk7uneFuyK23YMm-Sw@mail.gmail.com>
+Subject: Re: [PATCH v15 0/4] trace: Introduce objtrace trigger to trace the
+ kernel object
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, chensong_2000@189.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,390 +68,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi
+On Tue, Oct 18, 2022 at 3:40 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Fri, 19 Aug 2022 11:27:02 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> So on my way home from London, I tried to update it to use the fetch
+> instruction logic of kprobes (which will work), but I also ended up pretty
+> much rewriting most of it, which then I realized, I'm going much further
+> than I wanted to.
 
-Thank you for the comprehensive feedback across all the patches. I am
-working on them.
+Very excited  to hear it will work. Thank you for your hard work.
 
-I do have some concerns which I have talked about, below.
+> But know I have a much better idea of how this should work, and I'll try to
+> go through what I learned here and throughout the patches.
+>
+>
+> > Introduce a method based on function tracer to trace any object and get
+> > the value of the object dynamically. the object can be obtained from the
+> > dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
+>
+> Note, I can see the value of tracing only the value of the object, but that
+> to me would be "objfollow" not "objtrace". That is, to find out what
+> functions are calling the object. I guess that may have been your original
+> objective, but it was articulated more about knowing how the value changed
 
-On 12-Oct-22 17:53, Tomi Valkeinen wrote:
-> On 28/09/2022 20:52, Aradhya Bhatia wrote:
->> The newer version of DSS (AM625-DSS) has 2 OLDI TXes at its disposal.
->> These can be configured to support the following modes:
->>
->> 1. OLDI_SINGLE_LINK_SINGLE_MODE
->> Single Output over OLDI 0.
->> +------+        +---------+      +-------+
->> |      |        |         |      |       |
->> | CRTC +------->+ ENCODER +----->| PANEL |
->> |      |        |         |      |       |
->> +------+        +---------+      +-------+
-> 
-> Can you have single link on OLDI 1 (OLDI 0 off)? I don't know if that 
-> make sense on this platform, but if the pins for OLDI 0 and 1 are 
-> different, there might be a reason on some cases for that.
+Yes, It actually was my original objective -;)  and I also really love
+your idea of getting its value.
 
-HW does not support a case where single link is enabled over OLDI 1 with
-OLDI 0 off, even though the pins are different.
+> and not where the value is going (and the code was written more like that).
+> Having a objfollow may be nice, but reading the arguments of a function is
+> really a "best attempt" at most, and you can't really trust the arguments
+> are what you are tracing.
 
-One could still put 2 panel nodes in DT to set OLDI in a Clone Mode and
-simply not use OLDI 0 pins, but I dont think that is a valid case that
-should be supported.
+It's true, you spoke to my heart ;-)
 
-> 
->> 2. OLDI_SINGLE_LINK_CLONE_MODE
->> Duplicate Output over OLDI 0 and 1.
->> +------+        +---------+      +-------+
->> |      |        |         |      |       |
->> | CRTC +---+--->| ENCODER +----->| PANEL |
->> |      |   |    |         |      |       |
->> +------+   |    +---------+      +-------+
->>        |
-> 
-> I think you've got a tab in the line above, but otherwise use spaces.
-> 
->>             |    +---------+      +-------+
->>             |    |         |      |       |
->>             +--->| ENCODER +----->| PANEL |
->>                  |         |      |       |
->>                  +---------+      +-------+
->>
->> 3. OLDI_DUAL_LINK_MODE
->> Combined Output over OLDI 0 and 1.
->> +------+        +---------+      +-------+
->> |      |        |         +----->|       |
->> | CRTC +------->+ ENCODER |      | PANEL |
->> |      |        |         +----->|       |
->> +------+        +---------+      +-------+
->>
->> Following the above pathways for different modes, 2 encoder/panel-bridge
->> pipes get created for clone mode, and 1 pipe in cases of single link and
->> dual link mode.
->>
->> Add support for confgure the OLDI modes using of and lvds DRM helper
-> 
-> "configuring"
-> 
->> functions.
->>
->> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->> ---
->>   drivers/gpu/drm/tidss/tidss_dispc.c |  11 +++
->>   drivers/gpu/drm/tidss/tidss_dispc.h |   8 ++
->>   drivers/gpu/drm/tidss/tidss_drv.h   |   3 +
->>   drivers/gpu/drm/tidss/tidss_kms.c   | 146 +++++++++++++++++++++++-----
->>   4 files changed, 145 insertions(+), 23 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c 
->> b/drivers/gpu/drm/tidss/tidss_dispc.c
->> index 34f0da4bb3e3..88008ad39b55 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
->> @@ -354,6 +354,8 @@ struct dispc_device {
->>       bool is_enabled;
->> +    enum dispc_oldi_modes oldi_mode;
->> +
->>       struct dss_vp_data vp_data[TIDSS_MAX_PORTS];
->>       u32 *fourccs;
->> @@ -1958,6 +1960,15 @@ const u32 *dispc_plane_formats(struct 
->> dispc_device *dispc, unsigned int *len)
->>       return dispc->fourccs;
->>   }
->> +int dispc_configure_oldi_mode(struct dispc_device *dispc,
->> +                  enum dispc_oldi_modes oldi_mode)
->> +{
->> +    WARN_ON(!dispc);
->> +
->> +    dispc->oldi_mode = oldi_mode;
->> +    return 0;
->> +}
-> 
-> I think "configure" means more than just storing the value. Maybe 
-> dispc_set_oldi_mode(). And an empty line above the return.
-> 
->> +
->>   static s32 pixinc(int pixels, u8 ps)
->>   {
->>       if (pixels == 1)
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h 
->> b/drivers/gpu/drm/tidss/tidss_dispc.h
->> index b66418e583ee..45cce1054832 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc.h
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc.h
->> @@ -64,6 +64,13 @@ enum dispc_dss_subrevision {
->>       DISPC_AM625,
->>   };
->> +enum dispc_oldi_modes {
->> +    OLDI_MODE_OFF,                /* OLDI turned off / tied off in 
->> IP. */
->> +    OLDI_SINGLE_LINK_SINGLE_MODE,        /* Single Output over OLDI 
->> 0. */
->> +    OLDI_SINGLE_LINK_CLONE_MODE,        /* Duplicate Output over OLDI 
->> 0 and 1. */
->> +    OLDI_DUAL_LINK_MODE,            /* Combined Output over OLDI 0 
->> and 1. */
->> +};
->> +
->>   struct dispc_features {
->>       int min_pclk_khz;
->>       int max_pclk_khz[DISPC_VP_MAX_BUS_TYPE];
->> @@ -131,6 +138,7 @@ int dispc_plane_setup(struct dispc_device *dispc, 
->> u32 hw_plane,
->>                 u32 hw_videoport);
->>   int dispc_plane_enable(struct dispc_device *dispc, u32 hw_plane, 
->> bool enable);
->>   const u32 *dispc_plane_formats(struct dispc_device *dispc, unsigned 
->> int *len);
->> +int dispc_configure_oldi_mode(struct dispc_device *dispc, enum 
->> dispc_oldi_modes oldi_mode);
->>   int dispc_init(struct tidss_device *tidss);
->>   void dispc_remove(struct tidss_device *tidss);
->> diff --git a/drivers/gpu/drm/tidss/tidss_drv.h 
->> b/drivers/gpu/drm/tidss/tidss_drv.h
->> index d7f27b0b0315..2252ba0222ca 100644
->> --- a/drivers/gpu/drm/tidss/tidss_drv.h
->> +++ b/drivers/gpu/drm/tidss/tidss_drv.h
->> @@ -12,6 +12,9 @@
->>   #define TIDSS_MAX_PORTS 4
->>   #define TIDSS_MAX_PLANES 4
->> +/* For AM625-DSS with 2 OLDI TXes */
->> +#define TIDSS_MAX_BRIDGE_PER_PIPE    2
-> 
-> "BRIDGES"?
-> 
->> +
->>   typedef u32 dispc_irq_t;
->>   struct tidss_device {
->> diff --git a/drivers/gpu/drm/tidss/tidss_kms.c 
->> b/drivers/gpu/drm/tidss/tidss_kms.c
->> index 666e527a0acf..73afe390f36d 100644
->> --- a/drivers/gpu/drm/tidss/tidss_kms.c
->> +++ b/drivers/gpu/drm/tidss/tidss_kms.c
->> @@ -107,32 +107,84 @@ static const struct drm_mode_config_funcs 
->> mode_config_funcs = {
->>       .atomic_commit = drm_atomic_helper_commit,
->>   };
->> +static int tidss_get_oldi_mode(struct tidss_device *tidss)
-> 
-> Return enum dispc_oldi_modes, not int.
-> 
->> +{
->> +    int pixel_order;
->> +    struct device_node *dss_ports, *oldi0_port, *oldi1_port;
->> +
->> +    dss_ports = of_get_next_child(tidss->dev->of_node, NULL);
-> 
-> Hmm you get the next child and hope that it's the ports node?
-> 
-> In any case, I think you can call of_graph_get_port_by_id() with the 
-> tidss->dev->of_node and it'll do the right thing.
-I think this will only work if the child of dss node is just "ports",
-but we've been using "dss_ports" as the child.
+>I would hold off on that until we have a good BTF
+> tracing infrastructure in the function tracer.
+>
+> So I'm going to continue with "objtrace" which is about tracing the
+> object's value throughout time.
 
-However, you are right. I shouldn't expect the first child to be
-dss_ports. I will use the "of_get_child_by_name" helper to get the
-dss_ports node.
+Thanks.
 
-> 
->> +    oldi0_port = of_graph_get_port_by_id(dss_ports, 0);
->> +    oldi1_port = of_graph_get_port_by_id(dss_ports, 2);
-> 
-> I think you need to of_put these at some point.
-> 
->> +    if (!(oldi0_port && oldi1_port))
->> +        return OLDI_SINGLE_LINK_SINGLE_MODE;
-> 
-> This one matches also for !oldi0 && oldi1. If oldi1 cannot be used in 
-> single-link mode, the above should take it into account.
+>
+> >
+> > Usage:
+> > When using the kprobe event, only need to set the objtrace(a new trigger),
+> > we can get the value of the object. The object is from the setting of the
+> > kprobe event.
+> >
+> > For example:
+> > For the function bio_add_page():
+> >
+> > int bio_add_page(struct bio *bio, struct page *page,
+> >       unsigned int len, unsigned int offset)
+> >
+> > Firstly, we can set the base of the object, thus the first string "arg1"
+> > stands for the value of the first parameter of this function bio_add_gage(),
+> >
+> > # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> >
+> > Secondly, we can get the value dynamically based on above object.
+> >
+> > find the offset of the bi_size in struct bio:
+> > $ gdb vmlinux
+> > (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> > $1 = (unsigned int *) 0x28
+> >
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+> >       p_bio_add_page_0/trigger
+> >
+> > # cd /sys/kernel/debug/tracing/
+> > # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+>
+> So I was working to change the above to:
+>
+>   echo 'objtrace:add:+0x28($arg1):u32:1 if comm == "cat"'
 
-Right. I will print a warning if somebody's trying to use (!oldi0 &&
-oldi1) but since its a single link requirement, I will still set the
-OLDI for single link single mode.
+It seems easier to use, I like it.
 
-> 
->> +
->> +    /*
->> +     * OLDI Ports found for both the OLDI TXes. The DSS is to be 
->> configured
->> +     * in either Dual Link or Clone Mode.
->> +     */
->> +    pixel_order = drm_of_lvds_get_dual_link_pixel_order(oldi0_port,
->> +                                oldi1_port);
->> +    switch (pixel_order) {
->> +    case -EINVAL:
->> +        /*
->> +         * The dual link properties were not found in at least one of
->> +         * the sink nodes. Since 2 OLDI ports are present in the DT, it
->> +         * can be safely assumed that the required configuration is
->> +         * Clone Mode.
->> +         */
->> +        return OLDI_SINGLE_LINK_CLONE_MODE;
->> +
->> +    case DRM_LVDS_DUAL_LINK_EVEN_ODD_PIXELS:
->> +    case DRM_LVDS_DUAL_LINK_ODD_EVEN_PIXELS:
->> +        /*
->> +         * Note that the OLDI TX 0 transmits the odd set of pixels while
->> +         * the OLDI TX 1 transmits the even set. This is a fixed
->> +         * configuration in the IP and an cannot be change vis SW. These
->> +         * properties have been used to merely identify if a Dual Link
->> +         * configuration is required. Swapping this property in the 
->> panel
->> +         * port DT nodes will not make any difference.
->> +         */
-> 
-> But if they are in the wrong order, shouldn't we fail or at least give a 
-> warning?
->  >> +        return OLDI_DUAL_LINK_MODE;
->> +
->> +    default:
->> +        return OLDI_MODE_OFF;
->> +    }
->> +}
->> +
->>   static int tidss_dispc_modeset_init(struct tidss_device *tidss)
->>   {
->>       struct device *dev = tidss->dev;
->>       unsigned int fourccs_len;
->>       const u32 *fourccs = dispc_plane_formats(tidss->dispc, 
->> &fourccs_len);
->> -    unsigned int i;
->> +    unsigned int i, j;
->>       struct pipe {
->>           u32 hw_videoport;
->> -        struct drm_bridge *bridge;
->> +        struct drm_bridge *bridge[TIDSS_MAX_BRIDGE_PER_PIPE];
->>           u32 enc_type;
->> +        u32 num_bridges;
->>       };
->>       const struct dispc_features *feat = tidss->feat;
->> -    u32 max_vps = feat->num_vps;
->> +    u32 max_ports = feat->num_max_ports;
->>       u32 max_planes = feat->num_planes;
->>       struct pipe pipes[TIDSS_MAX_PORTS];
->>       u32 num_pipes = 0;
->> +    u32 pipe_number = 0;
->>       u32 crtc_mask;
->> +    u32 num_oldi = 0;
->> +    u32 oldi0_port = 0;
->> +    u32 hw_vp = 0;
->> +    enum dispc_oldi_modes oldi_mode;
->>       /* first find all the connected panels & bridges */
->> -    for (i = 0; i < max_vps; i++) {
->> +    for (i = 0; i < max_ports; i++) {
->>           struct drm_panel *panel;
->>           struct drm_bridge *bridge;
->> +        bool bridge_req = true;
->>           u32 enc_type = DRM_MODE_ENCODER_NONE;
->>           int ret;
->> @@ -146,6 +198,11 @@ static int tidss_dispc_modeset_init(struct 
->> tidss_device *tidss)
->>               return ret;
->>           }
->> +        /* default number of bridges required for a panel/bridge*/
->> +        pipe_number = num_pipes;
->> +        pipes[pipe_number].num_bridges = 1;
->> +        hw_vp = i;
->> +
->>           if (panel) {
->>               u32 conn_type;
->> @@ -155,7 +212,43 @@ static int tidss_dispc_modeset_init(struct 
->> tidss_device *tidss)
->>               case DISPC_VP_OLDI:
->>                   enc_type = DRM_MODE_ENCODER_LVDS;
->>                   conn_type = DRM_MODE_CONNECTOR_LVDS;
->> +
->> +                /*
->> +                 * A single DSS controller cannot support 2
->> +                 * independent displays. If 2nd node is detected,
->> +                 * it is for Dual Link Mode or Clone Mode.
->> +                 *
->> +                 * A new pipe instance is not required.
->> +                 */
->> +                if (++num_oldi == 2) {
->> +                    pipe_number = oldi0_port;
->> +                    hw_vp = i;
->> +
->> +                    /* 2nd OLDI DT node detected. Get its mode */
->> +                    oldi_mode = tidss_get_oldi_mode(tidss);
->> +                    bridge_req = false;
->> +
->> +                    /*
->> +                     * A separate panel bridge will only be
->> +                     * required if 2 panels are connected for
->> +                     * the OLDI Clone Mode.
->> +                     */
->> +                    if (oldi_mode == OLDI_SINGLE_LINK_CLONE_MODE) {
->> +                        bridge_req = true;
->> +                        (pipes[pipe_number].num_bridges)++;
->> +                    }
->> +                } else {
->> +                    /*
->> +                     * First OLDI DT node detected. Save it
->> +                     * in case there is another node for Dual
->> +                     * Link Mode or Clone Mode.
->> +                     */
->> +                    oldi0_port = i;
->> +                    oldi_mode = OLDI_SINGLE_LINK_SINGLE_MODE;
->> +                }
->> +                dispc_configure_oldi_mode(tidss->dispc, oldi_mode);
->>                   break;
->> +
->>               case DISPC_VP_DPI:
->>                   enc_type = DRM_MODE_ENCODER_DPI;
->>                   conn_type = DRM_MODE_CONNECTOR_DPI;
->> @@ -173,19 +266,23 @@ static int tidss_dispc_modeset_init(struct 
->> tidss_device *tidss)
->>                   return -EINVAL;
->>               }
->> -            bridge = devm_drm_panel_bridge_add(dev, panel);
->> -            if (IS_ERR(bridge)) {
->> -                dev_err(dev,
->> -                    "failed to set up panel bridge for port %d\n",
->> -                    i);
->> -                return PTR_ERR(bridge);
->> +            if (bridge_req) {
->> +                bridge = devm_drm_panel_bridge_add(dev, panel);
->> +                if (IS_ERR(bridge)) {
->> +                    dev_err(dev,
->> +                        "failed to set up panel bridge for port %d\n",
->> +                        i);
->> +                    return PTR_ERR(bridge);
->> +                }
->>               }
->>           }
->> -        pipes[num_pipes].hw_videoport = i;
->> -        pipes[num_pipes].bridge = bridge;
->> -        pipes[num_pipes].enc_type = enc_type;
->> -        num_pipes++;
->> +        if (bridge_req) {
->> +            pipes[pipe_number].hw_videoport = hw_vp;
->> +            pipes[pipe_number].bridge[pipes[pipe_number].num_bridges 
->> - 1] = bridge;
->> +            pipes[pipe_number].enc_type = enc_type;
->> +            num_pipes++;
->> +        }
-> 
-> I need to look at this with better time. But I started to wonder, would 
-> it be clearer to first figure out the oldi setup before the loop, rather 
-> than figuring it out inside the loop. I'm not sure if it would help 
-> much, though.
-> 
-I had not thought about taking this approach, but it might actually be
-better.
+>
+>
+> >
+> > # du -sh /test.txt
+> > 12.0K   /test.txt
+> >
+> > # cat  /test.txt > /dev/null
+> > # cat ./trace
+> > # tracer: nop
+> > #
+> > # entries-in-buffer/entries-written: 128/128   #P:4
+> > #
+> > #                                _-----=> irqs-off/BH-disabled
+> > #                               / _----=> need-resched
+> > #                              | / _---=> hardirq/softirq
+> > #                              || / _--=> preempt-depth
+> > #                              ||| / _-=> migrate-disable
+> > #                              |||| /     delay
+> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> > #              | |         |   |||||     |         |
+> >              cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> >              cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> >              cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
+> >              cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+> >              cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+>
+> Now instead of searching the function arguments for "obj", we should just
+> read the obj value at every function and report when it changed, as well as
+> the last function it was still the same. The report will be like the
+> "func_repeats" entry. And instead we can print when the object changes,
+> something like this:
+>
+>               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000 (last value:0x1000 at [002] __bio_add_page <-bio_add_page ts: 1.602245)
 
-These patches, at the moment, do not support a case where a clone mode
-or dual link mode is used on a bridge instead of a panel. My edits
-inside the loop are panel dependent. If we do have oldi setup
-information prior to the beginning of the loop, the panel dependency can
-be removed and some commond code can be written to support an additional
-encoder - bridge connection should it be required.
+This output is better than I expected.
 
-Let me know what you think!
+>
+> This will tell us when a value changed.
+>
+> It would need to store the CPU, ip and pip and timestamp of the last time
+> it was the same. And when it changes, it would then report it.
+>
+> -- Steve
 
-If this apparch is better indeed, I will make these changes before
-sending out the next revision.
-
-
-Regards
-Aradhya
+-- 
+Thanks,
+JeffXie
