@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66803602060
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6832C60208F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiJRBVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S230134AbiJRBph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 21:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiJRBVd (ORCPT
+        with ESMTP id S229732AbiJRBpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:21:33 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DED7EFFD;
-        Mon, 17 Oct 2022 18:21:28 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MrwxP0NXNzKHXR;
-        Tue, 18 Oct 2022 09:19:05 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgAXCzKR_01jxSkfAA--.17823S7;
-        Tue, 18 Oct 2022 09:21:26 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     gregkh@linuxfoundation.org, axboe@kernel.dk, yukuai3@huawei.com
-Cc:     stable@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
-        yi.zhang@hawei.com
-Subject: [PATCH 5.10 3/3] blk-wbt: fix that 'rwb->wc' is always set to 1 in wbt_init()
-Date:   Tue, 18 Oct 2022 09:43:26 +0800
-Message-Id: <20221018014326.467842-4-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221018014326.467842-1-yukuai1@huaweicloud.com>
-References: <20221018014326.467842-1-yukuai1@huaweicloud.com>
+        Mon, 17 Oct 2022 21:45:34 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB13267D
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:45:33 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 81so15347528ybf.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uc3iSsnst/L6NfYcFirJxNRFbBLqldZchqVKRw0L9/A=;
+        b=H/plYs2MWaQCz1Qqw9VMwAz1iRItNX7SVB3TGcCPvBYrMnjlmtkSONdjaiHGm/pPbd
+         jlzvDiU01I5WFPQXBUXd96ZRTu3w5UaLAFv65FzhMl507pp0bC6HGJDGNEb51u5cCIaz
+         WW6jHLk7lcRrz29dOzsKhNPOqELmECXOALgjP+nhp5VsRvYZhh+8XKNzJaLNVU2LmZmg
+         QtGVo8YH16hqSFb8QcCSo/BzlePQ91nM+tb/LcpU7MqKxUmkf8tPCg8X6g5b5gDeYE2H
+         0ipUAhKtIwxjTR1CgoBKc7FSr4jNIyL6y6lieu4h8O6ApZTRZr8qg7W5NADitjXsv9eJ
+         6lYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Uc3iSsnst/L6NfYcFirJxNRFbBLqldZchqVKRw0L9/A=;
+        b=qvvM4R2e0ccQas68B0JOaUVV1cKFomCQCQ0A1o0c2JJZtrw9dbxUF5QH2nDQ7/GoN2
+         Fk/1qvBkEmxwhtv5rUL+q228NJkf9piyXuXV/Tu7nb5dAlKB7rTuYgougcKkwWQ1oe4A
+         HPV5NHaJ9EEr1TGtgU41Xtu1XNBFWIAvUsczVCiNpGJNfBU05gVmeJZKMEWWDG+Fkqjx
+         soo1UnGqDWOEhgvgvz4WXdQ6F7M8Mw7yCvfX9UehJAs9ya2GBzw/QQYC4A6JPndypAr5
+         w7tB2Hs+VKIHvz8gYXg3ZDJ/J8fe+fCNUe1HutXHYcbEfr24lNddd+ZjO9cRLSxpJfdC
+         pyHg==
+X-Gm-Message-State: ACrzQf3F1mZmi0WtvRwsFTt9nKov6e+TyvxNAd2wmxKi4kKB3jTIKmkY
+        VUMd51h+XJy8IeXfJ2JBT9mM9+fCfK3KtuosOlCY
+X-Google-Smtp-Source: AMsMyM5On7bmlgMjHo9aS9yblYhNGik82fUAxWDT98YVn+JNWN7U7X/bxVWBK9j42c5h+Puvi3EkuJP8nBCbwctcGEg=
+X-Received: by 2002:a05:6902:124f:b0:6c0:770:1890 with SMTP id
+ t15-20020a056902124f00b006c007701890mr491854ybu.186.1666057532860; Mon, 17
+ Oct 2022 18:45:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAXCzKR_01jxSkfAA--.17823S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur1kXw48KrWfJFW8CF4fGrg_yoW8Ar17pa
-        yIk3yUGFWjgr4I93WxGa1ruFWDKan5AFy3Cr43Gw15Zay2vr4Uurs29FWUWrykZrZakFWa
-        vr4furWqvFyUGaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUd8n5UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20210222150608.808146-1-mic@digikod.net> <20210222150608.808146-2-mic@digikod.net>
+ <51725b44-bc40-0205-8583-285d3b35b5ca@schaufler-ca.com> <ee461f8d-a02d-0782-8f31-691853a57f00@digikod.net>
+ <7b67163a-9de1-313f-5b5a-8c720cef9b73@schaufler-ca.com> <CAJfZ7=n5FOxHXMLRrDQ3F-kDqbYngNoYKcz6_PWi1rPa0_8WpA@mail.gmail.com>
+ <3b97e25b-303c-d732-3e5d-f1b1a446e090@schaufler-ca.com> <202210171111.21E3983165@keescook>
+In-Reply-To: <202210171111.21E3983165@keescook>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 17 Oct 2022 21:45:21 -0400
+Message-ID: <CAHC9VhTTKpesvjnc_233x+wG1BvXyup9nM4Dv2h1953zXAvU3A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] security: Add CONFIG_LSM_AUTO to handle default
+ LSM stack ordering
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Nicolas Iooss <nicolas.iooss@m4x.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On Mon, Oct 17, 2022 at 3:29 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> [*double thread necromancy*]
 
-commit 285febabac4a16655372d23ff43e89ff6f216691 upstream.
+Yikes!  This is some pretty serious mail thread crime ...
 
-commit 8c5035dfbb94 ("blk-wbt: call rq_qos_add() after wb_normal is
-initialized") moves wbt_set_write_cache() before rq_qos_add(), which
-is wrong because wbt_rq_qos() is still NULL.
+> On Mon, Feb 22, 2021 at 02:46:24PM -0800, Casey Schaufler wrote:
+> > It wouldn't. But compiling the new LSM mynewlsm doesn't add it to
+> > the list, either. Today no one should expect a LSM to be active if
+> > it hasn't been added to the CONFIG_LSM list. The proposed addition
+> > of CONFIG_LSM_AUTO would change that. "make oldconfig" would add
+> > security modules that are built to the list. This is unnecessary
+> > since whoever changed CONFIG_SECURITY_MYNEWLSM to "y" could easily
+> > have added it to CONFIG_LSM. In the right place.
+>
+> Having CONFIG_LSM/lsm= is to support the migration away from having a
+> "default major LSM", but still provide a way to separate "built" vs
+> "enabled". As such, it needs to provide ordering. (So we have three
+> concepts here: "built" at all, "enabled" by default, and in a specific
+> "order".) And not being listed in CONFIG_LSM/lsm= means an LSM is
+> disabled.
+>
+> I don't disagree about "anyone who enables a new LSM config can add it to
+> CONFIG_LSM", but really I think the question is why require an _ordering_
+> choice. Most distros and builders don't care beyond having the current
+> "default major LSM" come first, which leaves only the "enabled by
+> default" choice.
 
-Fix the problem by removing wbt_set_write_cache() and setting 'rwb->wc'
-directly. Noted that this patch also remove the redundant setting of
-'rab->wc'.
+The code sorta cares about ordering, at least to the extent that the
+LSMs will behave differently depending on the ordering, e.g. a LSM
+lower in the priority order might never "see" an operation if a higher
+priority LSM rejects the operation.  Yes, it's an implementation
+quirk, but I'm not sure I want to start messing with the
+fail-on-first-error logic right now.  Maybe once we've got the LSM
+layer fully stackable and we've gotten past the initial support
+nightmare of that we can revisit this idea.
 
-Fixes: 8c5035dfbb94 ("blk-wbt: call rq_qos_add() after wb_normal is initialized")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/r/202210081045.77ddf59b-yujie.liu@intel.com
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20221009101038.1692875-1-yukuai1@huaweicloud.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- block/blk-wbt.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> I personally think it's reasonable that a "built" LSM be "enabled" by
+> default, however, this is not universally held to be true. :)
 
-diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-index bafdb8098893..6f63920f073c 100644
---- a/block/blk-wbt.c
-+++ b/block/blk-wbt.c
-@@ -838,12 +838,11 @@ int wbt_init(struct request_queue *q)
- 	rwb->last_comp = rwb->last_issue = jiffies;
- 	rwb->win_nsec = RWB_WINDOW_NSEC;
- 	rwb->enable_state = WBT_STATE_ON_DEFAULT;
--	rwb->wc = 1;
-+	rwb->wc = test_bit(QUEUE_FLAG_WC, &q->queue_flags);
- 	rwb->rq_depth.default_depth = RWB_DEF_DEPTH;
- 	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
- 
- 	wbt_queue_depth_changed(&rwb->rqos);
--	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
- 
- 	/*
- 	 * Assign rwb and add the stats callback.
+I personally would like to preserve the existing concept where "built"
+does *not* equate to "enabled" by default.
+
+> I *still* think there should be a way to leave ordering alone and have
+> separate enable/disable control.
+
+My current opinion is that enabling a LSM and specifying its place in
+an ordered list are one in the same.  The way LSM stacking is
+currently done almost requires the ability to specify an order if an
+admin is trying to meet an security relevant operation visibility
+goal.
+
+We can have defaults, like we do know, but I'm in no hurry to remove
+the ability to allow admins to change the ordering at boot time.
+
 -- 
-2.31.1
-
+paul-moore.com
