@@ -2,37 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E77603103
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFD7603108
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiJRQtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
+        id S229955AbiJRQu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJRQtj (ORCPT
+        with ESMTP id S229979AbiJRQuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:49:39 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302EF1CB20
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:49:37 -0700 (PDT)
+        Tue, 18 Oct 2022 12:50:20 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9205FAD4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:50:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666111765; bh=95DJzNS4+6BSZN3k/buGJ1S6mzvcYAfN1v5sPyYssJA=;
+        t=1666111802; bh=29EY3/OiWd3iMrUC+Z221n8xSKWT7a3/meFzR6wx6Rg=;
         h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
          Content-Type:In-Reply-To;
-        b=UEFpHrb3UaPdjOef6bdxjh6GwfQyQjSXod5Q2YDHUUSGXK2o2bqaD7czq9+yTwqjA
-         xwOQsktIpWtL4lOhFyTxd8mHZMVQZrJsa0HpjKaTxA6LhTt9IxniR4z6GYxMYioVdN
-         gwchKIwMeZalhgogxz1TE9KsZ0WH6p5yQoWEgCVY=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        b=UPLnrygJi8azATBCFME5W5GsJbaeoA2OVblhpJfki8SQOcVKfFEWESmga62Ey2ytx
+         LuNp1ndjOjtGbIj5A41is56guQzzBqdCOWoBbMeBkrb9M9pK4cT1kpMgWjFz47kJbf
+         bD22xvPhZWZyxZQGG1TDLRFd6yBcpMi4VmN7pKMk=
+Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
         via [213.182.55.206]
-        Tue, 18 Oct 2022 18:49:25 +0200 (CEST)
-X-EA-Auth: AAY4Oxui4nDXgDCRsm/XGiBKJS7WRerNUVMI9i/EcClgwoeDP7Yk6QLaTD4baMGpA46r8R6g3gC6m1YaWP/GSvI5gi2oEDRl
-Date:   Tue, 18 Oct 2022 22:19:21 +0530
+        Tue, 18 Oct 2022 18:50:02 +0200 (CEST)
+X-EA-Auth: 5QBNPiTmqvSkx2+BFed9ahndmwwx34D1YnmITye6VjENxrhxM3zeqiAUbZ0O2WCA6GhZFj4dswD0e80vzqrdRU5pK1CpxAVg
+Date:   Tue, 18 Oct 2022 22:19:58 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] staging: most: dim2: read done_buffers count locally
- from HDM channel
-Message-ID: <83fd237d2ac157d234e9c7cce1206904c2d8773d.1666105876.git.drv@mailo.com>
+Subject: [PATCH 2/2] staging: most: dim2: correct misleading variable name
+Message-ID: <b8550823920f40c4d02a3a691acca1af18998878.1666105876.git.drv@mailo.com>
 References: <cover.1666105876.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -47,62 +46,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function dim_get_channel_state only serves to initialize the ready and
-done_buffers fields of the structure passed as its second argument. In
-service_done_flag, this structure is never used again and the only purpose
-of the call is to get the value that is put in the done_buffers field.
-But that value is just the done_sw_buffers_number field of the call's
-first argument.  So the whole call is useless, and we can just replace it
-with an access to this field.
+Correct misleading struct variable name dim_ch_state_t to dim_ch_state
+since this not a typedef but a normal variable declaration.
 
-This change implies that the variable st is no longer used, so drop it as
-well.
-
+Suggested-by: Julia Lawall <julia.lawall@inria.fr>
 Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
-
-PLEASE NOTE:
-   1. I have only built the module on my machine, but have not tested it.
-      I am not sure how to test this change. I am willing to test it with
-      appropriate guidance provided I have the necessary hardware.
-   2. This was a standalone patch earlier. It is now combined into a patch set
-      with another patch for the same driver. Hence I am carry forwarding the
-      change log for this patch here:
-
-Changes in v3:
-   1. The patch log message is further improved. This revised verbiage is as
-      thankfully provided by julia.lawall@inria.fr
-
-Changes in v2:
-   1. Update patch log message to be more descriptive about the reason for change.
-      Feedback provided by julia.lawall@inria.fr
-
-
-
- drivers/staging/most/dim2/dim2.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/staging/most/dim2/dim2.c | 2 +-
+ drivers/staging/most/dim2/hal.c  | 4 ++--
+ drivers/staging/most/dim2/hal.h  | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-index ab72e11ac5ab..4c1f27898a29 100644
+index 4c1f27898a29..a69a61a69283 100644
 --- a/drivers/staging/most/dim2/dim2.c
 +++ b/drivers/staging/most/dim2/dim2.c
-@@ -259,7 +259,6 @@ static void retrieve_netinfo(struct dim2_hdm *dev, struct mbo *mbo)
- static void service_done_flag(struct dim2_hdm *dev, int ch_idx)
- {
- 	struct hdm_channel *hdm_ch = dev->hch + ch_idx;
--	struct dim_ch_state_t st;
- 	struct list_head *head;
+@@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
+ 	struct list_head *head = &hdm_ch->pending_list;
  	struct mbo *mbo;
- 	int done_buffers;
-@@ -271,7 +270,7 @@ static void service_done_flag(struct dim2_hdm *dev, int ch_idx)
+ 	unsigned long flags;
+-	struct dim_ch_state_t st;
++	struct dim_ch_state st;
 
- 	spin_lock_irqsave(&dim_lock, flags);
+ 	BUG_ON(!hdm_ch);
+ 	BUG_ON(!hdm_ch->is_initialized);
+diff --git a/drivers/staging/most/dim2/hal.c b/drivers/staging/most/dim2/hal.c
+index 65282c276862..a5d40b5b138a 100644
+--- a/drivers/staging/most/dim2/hal.c
++++ b/drivers/staging/most/dim2/hal.c
+@@ -943,8 +943,8 @@ u8 dim_service_channel(struct dim_channel *ch)
+ 	return channel_service(ch);
+ }
 
--	done_buffers = dim_get_channel_state(&hdm_ch->ch, &st)->done_buffers;
-+	done_buffers = hdm_ch->ch.done_sw_buffers_number;
- 	if (!done_buffers) {
- 		spin_unlock_irqrestore(&dim_lock, flags);
- 		return;
+-struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+-					     struct dim_ch_state_t *state_ptr)
++struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
++					   struct dim_ch_state *state_ptr)
+ {
+ 	if (!ch || !state_ptr)
+ 		return NULL;
+diff --git a/drivers/staging/most/dim2/hal.h b/drivers/staging/most/dim2/hal.h
+index 20531449acab..ef10a8741c10 100644
+--- a/drivers/staging/most/dim2/hal.h
++++ b/drivers/staging/most/dim2/hal.h
+@@ -27,7 +27,7 @@ enum mlb_clk_speed {
+ 	CLK_8192FS = 7,
+ };
+
+-struct dim_ch_state_t {
++struct dim_ch_state {
+ 	bool ready; /* Shows readiness to enqueue next buffer */
+ 	u16 done_buffers; /* Number of completed buffers */
+ };
+@@ -87,8 +87,8 @@ void dim_service_ahb_int_irq(struct dim_channel *const *channels);
+
+ u8 dim_service_channel(struct dim_channel *ch);
+
+-struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+-					     struct dim_ch_state_t *state_ptr);
++struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
++					   struct dim_ch_state *state_ptr);
+
+ u16 dim_dbr_space(struct dim_channel *ch);
+
 --
 2.30.2
 
