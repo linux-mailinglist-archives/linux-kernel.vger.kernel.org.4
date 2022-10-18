@@ -2,148 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C22602171
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA5F602178
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbiJRCvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S230113AbiJRCxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiJRCuq (ORCPT
+        with ESMTP id S229554AbiJRCxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:50:46 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0A876770
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:50:38 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-131dda37dddso15495695fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:50:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=slMDEqnbpFnTUvP2AfkwYXb6IrKIh9E+X/5e6tGK6FI=;
-        b=Lvrit6Zx0/wIGgadBd1fD/KvSKmD0D2Pn/xdG8fSuAPis2TrCd00K4K6G8MtoD4BQK
-         G80T1ubUkaq67cDR0oKvG0kHfa4I7CXBDaQnnbIZsInbVpfbcMJ4FFthLgOv9G8KAtuW
-         6fhf6ju9oZdjDI2SLJ8nxNI3eVaQjj18+Wzw0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=slMDEqnbpFnTUvP2AfkwYXb6IrKIh9E+X/5e6tGK6FI=;
-        b=6SwPGBUX8/kashGX2jSJGzV7CR+8DGugkz1sVDXXVSuvaBU0XXZ4cH7yeWXTPeePCO
-         MK7QrC051PK7GBdWx+/4W5a4ga2FUhkPC4r7S2xerSA7uUGo+HOdWcufjpZ9w9PZIcHQ
-         Os1LpEmqHU4DDuP/s7RGy53v8T0BJ9eqi+0Ps5zDOVOEJ6QOMVXyCcWnhSH1U6GVKS+l
-         tOL+vw4j5YYQurEWhMlQaTDEJv/aKbiE3Z0t4jkBAz5ju4TujoYxogiHyhHXHPwtQR8M
-         6mpMWAm7h8Q4+jeBsRL8rcm2gqLv+5t1bAmzCt+dARtqUc4x6AmMm8IM+cLupIZOIyEd
-         tR0w==
-X-Gm-Message-State: ACrzQf3Vsce2rRrnWfc86u8bdmRvE2rj+sAGZbV7kL0mR8NOkSdL/AcP
-        hn+8gTINf7OtexX9+LMJMtXT2t9Xv01IsA==
-X-Google-Smtp-Source: AMsMyM4xC4bK7U0RLuMWnAn5CmABJYFfIeHjIKIYhQKAGqnhAK7lfQZcKc4XVtnBsV1GueqCkGMLtQ==
-X-Received: by 2002:a17:90b:3ec4:b0:20d:93bc:32fb with SMTP id rm4-20020a17090b3ec400b0020d93bc32fbmr32880671pjb.124.1666061426063;
-        Mon, 17 Oct 2022 19:50:26 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:58b4:95a3:4654:2a9f])
-        by smtp.gmail.com with ESMTPSA id e15-20020a170902784f00b00183ba0fd54dsm7296482pln.262.2022.10.17.19.50.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 19:50:25 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 11:50:21 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv3 5/8] documentation: Add recompression documentation
-Message-ID: <Y04UbTZh3fJYPhvJ@google.com>
-References: <20221009090720.1040633-1-senozhatsky@chromium.org>
- <20221009090720.1040633-6-senozhatsky@chromium.org>
+        Mon, 17 Oct 2022 22:53:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC7752472
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666061587; x=1697597587;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sd1R8lAWnx5pqdKoqMKljNmwUhP0SdeIN0kUW2/xvAY=;
+  b=G3jKUre0sMDTZ5EjBWagsuqBoqIkfUwwV/M2LuTmndutgrJ9AiFNbnSO
+   GuwjnYjb+6SG4+o2OMkcV2DFE9EZG4PszB1BWDPwaWDTFBHGS9GW2zo+J
+   paXtN6svB3syEx3mgLu+KIplrBxEblMXTqTldUwDLU9KKR7DCCr2P1hzC
+   06CvAoj7m6J7iJvutppKP34BaHkFHbHJyDtfPS0aY6QRB9ZQ4yVlcrUQU
+   PSMnlGLP7ok919lwQU05bo/MRKiQfa6GhWcJTnbi85ifSTet5nv4O2IWp
+   hrwdbaFXx1PoQ44qvV5oM8sn8Kakg64IIwOyvo4mGLr/kZn1fy4KaNI7E
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="392282837"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="392282837"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 19:53:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="803567826"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="803567826"
+Received: from lkp-server01.sh.intel.com (HELO 8381f64adc98) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Oct 2022 19:52:13 -0700
+Received: from kbuild by 8381f64adc98 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1okciB-0001D0-21;
+        Tue, 18 Oct 2022 02:52:11 +0000
+Date:   Tue, 18 Oct 2022 10:51:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ 3548eda8ae284d6d412d59f11cd20fc7df05362b
+Message-ID: <634e14ce.GfQ/l135G4xMMJy7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009090720.1040633-6-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document user-space visible device attributes that
-are enabled by ZRAM_MULTI_COMP.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: 3548eda8ae284d6d412d59f11cd20fc7df05362b  x86/tsc: Make art_related_clocksource static
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- Documentation/admin-guide/blockdev/zram.rst | 55 +++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+elapsed time: 726m
 
-diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
-index c73b16930449..f09e778bc3dc 100644
---- a/Documentation/admin-guide/blockdev/zram.rst
-+++ b/Documentation/admin-guide/blockdev/zram.rst
-@@ -401,6 +401,61 @@ budget in next setting is user's job.
- If admin wants to measure writeback count in a certain period, they could
- know it via /sys/block/zram0/bd_stat's 3rd column.
- 
-+recompression
-+-------------
-+
-+With CONFIG_ZRAM_MULTI_COMP, zram can recompress idle/huge pages using
-+alternative (secondary) compression algorithm. The basic idea is that
-+alternative compression algorithm can provide better compression ratio
-+at a price of (potentially) slower compression/decompression speeds.
-+Alternative compression algorithm can, for example, be more successful
-+compressing huge pages (those that default algorithm failed to compress).
-+Another application is idle pages recompression - pages that are cold and
-+sit in the memory can be recompressed using more effective algorithm and,
-+hence, reduce zsmalloc memory usage.
-+
-+With CONFIG_ZRAM_MULTI_COMP, zram will setup two compression algorithms
-+per-CPU: primary and secondary ones. Primary zram compressor is explained
-+in "3) Select compression algorithm", the secondary algorithm is configured
-+in a similar way, using recomp_algorithm device attribute:
-+
-+Examples::
-+
-+	#show supported recompression algorithms
-+	cat /sys/block/zramX/recomp_algorithm
-+	zstd [lzo]
-+
-+	#select zstd recompression algorithm
-+	echo zstd > /sys/block/zramX/recomp_algorithm
-+
-+Another device attribute that CONFIG_ZRAM_MULTI_COMP enables is recompress,
-+which controls recompression:
-+
-+Examples::
-+
-+	#IDLE pages recompression is activated by `idle` mode
-+	echo idle > /sys/block/zramX/recompress
-+
-+	#HUGE pages recompression is activated by `huge` mode
-+	echo huge > /sys/block/zram0/recompress
-+
-+	#HUGE_IDLE pages recompression is activated by `huge_idle` mode
-+	echo huge_idle > /sys/block/zramX/recompress
-+
-+The number of idle pages can be significant, so user-space can pass a size
-+watermark (in bytes) value to the recompress knob, to filter out idle pages
-+for recompression: zram will recompress only idle pages of equal or greater
-+size (bytes):::
-+
-+	#recompress idle pages larger than 3000 bytes
-+	echo 3000 > /sys/block/zramX/recompress
-+
-+	#recompress idle pages larger than 2000 bytes
-+	echo 2000 > /sys/block/zramX/recompress
-+
-+Recompression is mostly focused on idle pages (except for huge pages
-+recompression), so it works better in conjunction with memory tracking.
-+
- memory tracking
- ===============
- 
+configs tested: 123
+configs skipped: 86
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+arc                  randconfig-r043-20221017
+i386                             allyesconfig
+i386                                defconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64               randconfig-a004-20221017
+x86_64               randconfig-a001-20221017
+x86_64               randconfig-a002-20221017
+x86_64               randconfig-a006-20221017
+x86_64               randconfig-a005-20221017
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+i386                 randconfig-a005-20221017
+i386                 randconfig-a003-20221017
+i386                 randconfig-a004-20221017
+i386                 randconfig-a001-20221017
+i386                 randconfig-a006-20221017
+powerpc                 mpc8540_ads_defconfig
+sh                          kfr2r09_defconfig
+powerpc                 linkstation_defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+m68k                         amcore_defconfig
+mips                           ci20_defconfig
+powerpc                      makalu_defconfig
+m68k                             alldefconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                 randconfig-c001-20221017
+arm                                 defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                        warp_defconfig
+sh                          polaris_defconfig
+m68k                          hp300_defconfig
+sh                           se7751_defconfig
+sh                          rsk7203_defconfig
+arm                             ezx_defconfig
+powerpc                     mpc83xx_defconfig
+arm                            lart_defconfig
+sh                        edosk7760_defconfig
+sh                             shx3_defconfig
+parisc                generic-64bit_defconfig
+arm                        cerfcube_defconfig
+sh                          r7785rp_defconfig
+sh                             sh03_defconfig
+m68k                            q40_defconfig
+arc                           tb10x_defconfig
+i386                 randconfig-a002-20221017
+x86_64               randconfig-a003-20221017
+powerpc                         wii_defconfig
+arm                        realview_defconfig
+arc                        vdk_hs38_defconfig
+powerpc                      chrp32_defconfig
+m68k                       m5208evb_defconfig
+mips                     decstation_defconfig
+mips                        bcm47xx_defconfig
+arc                     haps_hs_smp_defconfig
+sh                           se7705_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arm                           h3600_defconfig
+riscv                               defconfig
+x86_64               randconfig-c001-20221017
+arm                  randconfig-c002-20221017
+powerpc                     taishan_defconfig
+m68k                       bvme6000_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+
+clang tested configs:
+i386                 randconfig-a013-20221017
+i386                 randconfig-a015-20221017
+i386                 randconfig-a016-20221017
+i386                 randconfig-a011-20221017
+i386                 randconfig-a014-20221017
+i386                 randconfig-a012-20221017
+x86_64               randconfig-a014-20221017
+x86_64               randconfig-a015-20221017
+x86_64               randconfig-a012-20221017
+x86_64               randconfig-a011-20221017
+x86_64               randconfig-a013-20221017
+x86_64               randconfig-a016-20221017
+mips                 randconfig-c004-20221017
+i386                 randconfig-c001-20221017
+s390                 randconfig-c005-20221017
+arm                  randconfig-c002-20221017
+riscv                randconfig-c006-20221017
+x86_64               randconfig-c007-20221017
+powerpc              randconfig-c003-20221017
+x86_64               randconfig-k001-20221017
+s390                 randconfig-r044-20221017
+hexagon              randconfig-r045-20221017
+riscv                randconfig-r042-20221017
+hexagon              randconfig-r041-20221017
+arm                          collie_defconfig
+x86_64                        randconfig-c007
+mips                 randconfig-c004-20221018
+i386                          randconfig-c001
+s390                 randconfig-c005-20221018
+arm                  randconfig-c002-20221018
+riscv                randconfig-c006-20221018
+powerpc              randconfig-c003-20221018
+arm                        mvebu_v5_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+
 -- 
-2.38.0.413.g74048e4d9e-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
