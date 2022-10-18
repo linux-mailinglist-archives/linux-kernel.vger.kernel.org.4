@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5A06020A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D5F6020AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiJRBzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        id S229822AbiJRB4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 21:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiJRBzl (ORCPT
+        with ESMTP id S230161AbiJRB4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:55:41 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAC06CD14
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:55:39 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id m6so7860633qkm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:55:39 -0700 (PDT)
+        Mon, 17 Oct 2022 21:56:34 -0400
+Received: from mail-oa1-x43.google.com (mail-oa1-x43.google.com [IPv6:2001:4860:4864:20::43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3FF76966;
+        Mon, 17 Oct 2022 18:56:28 -0700 (PDT)
+Received: by mail-oa1-x43.google.com with SMTP id 586e51a60fabf-136b5dd6655so15358300fac.3;
+        Mon, 17 Oct 2022 18:56:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dt3s4L6WuN24AfP3E/RhLtFLakK8K9lR0cO6Rs5M7mM=;
-        b=eb0O+PgFkBTi7L6kqMTJRH4F7rpAVsgQnXX/yCtmuncA2cmZz2prCyw9Ni8iu6O+Kr
-         DNy4A587z7/afs9UMert4Iy9gBRFazJ/2p7wSUehkA5uXTkirx2W2BPYmaHP+ulm/48+
-         7gW7PGvliK36Z3fDobFHLjyPYtrGlStXbbyKJYJPcunUlNRShhMJh1tTOIku/KstPedY
-         /kf9EGmgGslMjFghzDiabJEGxh/ao0c3RPUL8hDvqFOYfNvHWq4YBSzfuz303zGdJjjq
-         uDmpGoRPyfYMQ205Zp7+oWd7Ax3PSltf7wFoMcEFpft/sRmTV9Z4YZJFsqwMw6LSI5yq
-         956A==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsOWludHMguvR58jxm4YGoRknUTgkRYO+96n1DUatLA=;
+        b=B8Mfiwc613sZw+s2Iw9zQ2Q6/pU0U5qJ82H5uqsAa+JwtocohF3Rose5Ka0Qp4dYrn
+         KVRl5lzJBrke9+mx4af5UP2kI1VWbvHIkQ1t2bd0EwZNIJPjFgWBdTU2ztf1HgN0/9oj
+         VO/1Roc7yveNWOOdg42mxUaMyQMzWyzGv6tZoyd7OczK6TrefYlHVG4gZhUg8DzdfnFv
+         2YlzxhG/zo6RcrHHS3X4Pu3ww66/7DFUmqs1eQReiJwnUA1EHV8mn7ibxI0kB5yXWn6B
+         +nsKnI0gT9XoR5LuRtMYydqqNVyJvpm3kDd6qCNenxHKO7qyaSKTfivIi4PmCfcGzQuq
+         TQkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dt3s4L6WuN24AfP3E/RhLtFLakK8K9lR0cO6Rs5M7mM=;
-        b=uA+WcaQxb+IWIn1oaqVKQlq0mCN/LeCaKxi5nI327ADZNACn8cWQV7RvN9koNLyBRt
-         H4blKITnDg8HGIrXSur0KFcGMx8h8sXFYyjPjujMjC1rs8kb+EweNIqLvqq84klzWJGE
-         AHC9Fqll2LK/Iu5mq31673mJS+YAiJot4g57BAo0yKqN4FuHmud+IMgc47O73f/J03t5
-         RTW2vq2r2I5y2m5bCdfWqFsU+4JVQBi1iGLMjdiCaByoyLCdlb7yO/6n/syANT4VT5Ge
-         J7ikWQZreWK1IlhaENtCIEVdekLXZDv8WpslHLFn4HcbrufsftNDx2fE7cZUBMj+sfsh
-         mscQ==
-X-Gm-Message-State: ACrzQf3dzVclXOfRNTe+sG7SbWJkD/xM+LPfr9GZXMhfLEXOZBIQkomb
-        pD2oby0C37CSfldEhXZb7m8PcA==
-X-Google-Smtp-Source: AMsMyM7g9mG/Ju4RyQrOyke7A1ODg1jEXPOIkeWW/ymskM+A2CttCliDmq7Do0jYHcQOck9l7UVhEg==
-X-Received: by 2002:a05:620a:25c8:b0:6ae:2408:6e9a with SMTP id y8-20020a05620a25c800b006ae24086e9amr391427qko.222.1666058138924;
-        Mon, 17 Oct 2022 18:55:38 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id s3-20020a05620a29c300b006d1d8fdea8asm1275226qkp.85.2022.10.17.18.55.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 18:55:38 -0700 (PDT)
-Message-ID: <c33c5490-c43d-17d5-f0fb-0b930dd46928@linaro.org>
-Date:   Mon, 17 Oct 2022 21:55:36 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZsOWludHMguvR58jxm4YGoRknUTgkRYO+96n1DUatLA=;
+        b=3qgRw0OfM/6HXfT1IF87b/7InvoTdf/u62eoHwdC0EGXW5VRgP93DhxtqKj85ngmtt
+         8N1y7k0KVnEw2+WXLAWqIdVn8/3dTCvhP4eJgCRuiv1RgmT0Jv/kZ6Hz/w3SvhYr3G12
+         elMLQkYKOOuVsPU0qThfcNlSTJDwLnVz/tafMEViJxISTkR5H0w8Yq6CAp8Z7Uynah/r
+         AmvkHnX2KnNsIRTXN7sskyA/9zVopvl8nPhymkryiig7Jnfe9IOMhRtfwv5GZYQOhltK
+         KhdWIVDeybT+WXU3T7YZHJmCqtka9fMhNJfPm3yUa7stFsRnNBEOxO4D4WGAUX3eEdrv
+         mFDw==
+X-Gm-Message-State: ACrzQf32HY4+u5z5t1mvjjosp3T0FSaBfOEUFeLEAzG3P9/xVjUNRlCo
+        DRQh89DVyVeiTYH6yIT3xNzGszltUKsswktCtJM=
+X-Google-Smtp-Source: AMsMyM52HxcTfY6GSOSB82yfxz5kFXA0AKse2OKY+s7zy1c7toEkXiR1h/2nWXkh2hdNw9f7rmqKb69nWs/SXhxbXj4=
+X-Received: by 2002:a05:6870:178e:b0:126:7055:fc78 with SMTP id
+ r14-20020a056870178e00b001267055fc78mr410059oae.58.1666058187237; Mon, 17 Oct
+ 2022 18:56:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] ARM: dts: stm32mp13: fix compatible for BSEC
-Content-Language: en-US
-To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20221017134437.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221017134437.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221014212133.2520531-1-void@manifault.com> <20221014212133.2520531-3-void@manifault.com>
+In-Reply-To: <20221014212133.2520531-3-void@manifault.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Tue, 18 Oct 2022 07:25:46 +0530
+Message-ID: <CAP01T77WVXqeZVBYP=Ur=74oTwvGaLOeryYo=HqeBQ9Db9A93g@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] bpf: Add kfuncs for storing struct task_struct *
+ as a kptr
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 07:44, Patrick Delaunay wrote:
-> Use the new compatible for stm32mp13 support.
-> 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+On Sat, 15 Oct 2022 at 02:51, David Vernet <void@manifault.com> wrote:
+>
+> Now that BPF supports adding new kernel functions with kfuncs, and
+> storing kernel objects in maps with kptrs, we can add a set of kfuncs
+> which allow struct task_struct objects to be stored in maps as
+> referenced kptrs. The possible use cases for doing this are plentiful.
+> During tracing, for example, it would be useful to be able to collect
+> some tasks that performed a certain operation, and then periodically
+> summarize who they are, which cgroup they're in, how much CPU time
+> they've utilized, etc.
+>
+> In order to enable this, this patch adds three new kfuncs:
+>
+> struct task_struct *bpf_task_acquire(struct task_struct *p);
+> struct task_struct *bpf_task_kptr_get(struct task_struct **pp);
+> void bpf_task_release(struct task_struct *p);
+>
+> A follow-on patch will add selftests validating these kfuncs.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
 > ---
-> This device tree modification depends on the binding modification
-> introduced by the patch:
-> 
-> dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem
-> https://patchwork.kernel.org/project/linux-arm-kernel/patch/20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid/
+>  [...]
+> +/**
+> + * bpf_task_release - Release the reference acquired on a struct task_struct *.
+> + * If this kfunc is invoked in an RCU read region, the task_struct is
+> + * guaranteed to not be freed until the current grace period has ended, even if
+> + * its refcount drops to 0.
+> + * @p: The task on which a reference is being released.
+> + */
+> +__used noinline void bpf_task_release(struct task_struct *p)
+> +{
+> +       if (!p)
+> +               return;
+> +
+> +       put_task_struct_rcu_user(p);
+> +}
+> +
+> +__diag_pop();
+> +
+> +BTF_SET8_START(generic_kfunc_btf_ids)
+>  #ifdef CONFIG_KEXEC_CORE
+>  BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
+>  #endif
+> -BTF_SET8_END(tracing_btf_ids)
+> +BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RET_NULL | KF_TRUSTED_ARGS)
+> +BTF_ID_FLAGS(func, bpf_task_kptr_get, KF_ACQUIRE | KF_KPTR_GET | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE | KF_TRUSTED_ARGS)
 
-This breaks users of DTS. The patch above did not describe devices as
-compatible and that's the problem sending patches separately, without
-context.
-
-You need to keep compatible.
-
-Best regards,
-Krzysztof
-
+You can remove KF_TRUSTED_ARGS here for bpf_task_release, if this is
+required, it would be a bug.
