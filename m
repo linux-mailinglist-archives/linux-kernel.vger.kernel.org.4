@@ -2,92 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71A6602D84
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A912602DA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiJRN5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S230375AbiJRN6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiJRN4x (ORCPT
+        with ESMTP id S230087AbiJRN6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:56:53 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C211AD0189;
-        Tue, 18 Oct 2022 06:56:51 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 2B6F9320034E;
-        Tue, 18 Oct 2022 09:56:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 18 Oct 2022 09:56:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666101409; x=
-        1666187809; bh=lTFkOoPNy5YkswWbKm4XWBhCI/IUy0uNzHm95cxOg84=; b=r
-        u6D59ntsFAHj50dRkjBOP8gpaJD5soqeN2eV+GXOsBYRPuLe6JjuQWGa2HenDG7M
-        58fzQotzvQA9m31O+yeGEY/Q36pShusK10VdaJ2aYAHF5DtnlOjbdA+WnEaOVzIy
-        8zGeuJY56N1D8HyLlmqBUfLKrhoD9lpEXttj2vf02iyAMNp25lYTI6O6ByCHIBRq
-        ra3dUm+1GNLeoZNqxFvuAfcyYg9I6w4PnG0jOE4ewkHEF/G79Sn1qbpoRHkWkedw
-        MZsPvuurI3ct/kWa4534cTkcG/oOrhUBYmRUBXHblwle90zs8PBUD0wtG5iTgg+W
-        zcrcuRAgfA5DWzRMQ7l+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666101409; x=
-        1666187809; bh=lTFkOoPNy5YkswWbKm4XWBhCI/IUy0uNzHm95cxOg84=; b=M
-        47x+8DVUJx2G+K68cZd16MqzWK2faVXinP4OaN9YlSXjoi7MD08CN/dRXmUwQZv1
-        8eFEJJQ9fwWo6IPAD5VaBJ43pzHxba9tUi5+rMegvp5nT5/2jdbyFwO035hdWSil
-        YrGVYba2RslcI1unB0KJCi7Gx7VlQ21d6WGDKBBVEHwM8G7KrNu5Aasb8TRYXzub
-        J4UA5Vi4Na/I3CfCEcByb5PaCb8qF0vqQrRlMNiscQUO/IfTPod6/r1UVAKRUp82
-        QMx2OpyTS5vb4Xm8rMj3tHxJxfTHivd2gwSLiCbN7vQI2Yes4YkIw6iZUWv1IMO3
-        13q7xrLP6ZnUl/JgjVdVA==
-X-ME-Sender: <xms:obBOY6cMI8mDw9nok3ps6rL-PHL4QbX2zH4cdLIIp2drc8ZwXeQ1ag>
-    <xme:obBOY0OJNOXnhAW18tQwZFYRu_AL-R0DqTUXY3MwWKSIIz8Yl5jG8udfTiu10uyWv
-    S166Dyul7FTJHiTs18>
-X-ME-Received: <xmr:obBOY7j71GWczOd-nHUARp4YusnWdTj2bjqSIPsjI8RC5VZFY05UQWCUvcXY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddggedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
-    jeeltdevnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:obBOY3_pWZhNKuaeJdhVICoKAWhTd17HeoNDg94eSEeErzg-wtHNCQ>
-    <xmx:obBOY2tJaEU5YOCB1hlf_aAdixw242US5nsZRVkLMHv41loQrN2j5A>
-    <xmx:obBOY-EA6DhK1Dq04MNc12vMlQYTDZd9dV1TU9_2_vq_OaQCCrY1GQ>
-    <xmx:obBOY4VSTAwu7QuLZ2-CiI1Kja4bWB5NBsUXxQ7NtAA8-JnhhfFtvA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Oct 2022 09:56:49 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Tue, 18 Oct 2022 15:56:42 +0200
-Subject: [PATCH 2/2] clk: Add trace events for rate requests
+        Tue, 18 Oct 2022 09:58:10 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E4D01A6;
+        Tue, 18 Oct 2022 06:58:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9DC95207F2;
+        Tue, 18 Oct 2022 13:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666101483; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hjPGH/f+XfkkPdSrr08xl26lKkygGjOFS9Er+Ciw6FE=;
+        b=VOptv98TbFtNOIxZIJ8r1uZnCc7mDFayvHLPzorFbsqv//VuXCNdNGjv5nhEwo999SD8er
+        P354UqvD/sEFh0EsxxdOE0jo8GexykuAD0sIHpYDdDVBcSmlg22qvovtvmaBFXC//sOTDa
+        sQw8FoXdffFnxp4R5+9tbJyN30Ys11U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666101483;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hjPGH/f+XfkkPdSrr08xl26lKkygGjOFS9Er+Ciw6FE=;
+        b=L+XWq/Iu5TsIEsACXdnZQohYWH1am4WwNMS7V6JqLzGYMONJiyYQHlDbEvyF4M3h754M0e
+        agF6Du+bt5w8BTAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F22513480;
+        Tue, 18 Oct 2022 13:58:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZPLtIuuwTmMNLgAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 18 Oct 2022 13:58:03 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 1E120A06EE; Tue, 18 Oct 2022 15:58:03 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 15:58:03 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, syzbot+c740bb18df70ad00952e@syzkaller.appspotmail.com
+Subject: Re: [PATCH -next v2] ext4: fix warning in 'ext4_da_release_space'
+Message-ID: <20221018135803.lt3ia4mqwlmnwd5s@quack3>
+References: <20221018022701.683489-1-yebin10@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221018-clk-rate-request-tracing-v1-2-6f3aa0b0b9de@cerno.tech>
-References: <20221018-clk-rate-request-tracing-v1-0-6f3aa0b0b9de@cerno.tech>
-In-Reply-To: <20221018-clk-rate-request-tracing-v1-0-6f3aa0b0b9de@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.11.0-dev-7da52
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5614; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=BkBIerSMdamyC64SYrDzkQInjQFkK6FdirzCXmlc5f4=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMl+G2Y168b/4sg92il058KHGQlu71hVfpiIyc6wcW2RlU1b
- NoW3o5SFQYyLQVZMkSVG2HxJ3KlZrzvZ+ObBzGFlAhnCwMUpABNR+MLIsMOfdf2KKYWK61gsX11vul
- fSmH3r+xRZU1mlHm3eiOvTNjEybDtSvY692nXFSt685AfGq2J8JocHOQda8VeGOs/mYFnLDgA=
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018022701.683489-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,188 +71,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is currently fairly difficult to follow what clk_rate_request are
-issued, and how they have been modified once done.
+On Tue 18-10-22 10:27:01, Ye Bin wrote:
+> Syzkaller report issue as follows:
+> EXT4-fs (loop0): Free/Dirty block details
+> EXT4-fs (loop0): free_blocks=0
+> EXT4-fs (loop0): dirty_blocks=0
+> EXT4-fs (loop0): Block reservation details
+> EXT4-fs (loop0): i_reserved_data_blocks=0
+> EXT4-fs warning (device loop0): ext4_da_release_space:1527: ext4_da_release_space: ino 18, to_free 1 with only 0 reserved data blocks
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 92 at fs/ext4/inode.c:1528 ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1524
+> Modules linked in:
+> CPU: 0 PID: 92 Comm: kworker/u4:4 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> Workqueue: writeback wb_workfn (flush-7:0)
+> RIP: 0010:ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1528
+> RSP: 0018:ffffc900015f6c90 EFLAGS: 00010296
+> RAX: 42215896cd52ea00 RBX: 0000000000000000 RCX: 42215896cd52ea00
+> RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+> RBP: 1ffff1100e907d96 R08: ffffffff816aa79d R09: fffff520002bece5
+> R10: fffff520002bece5 R11: 1ffff920002bece4 R12: ffff888021fd2000
+> R13: ffff88807483ecb0 R14: 0000000000000001 R15: ffff88807483e740
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00005555569ba628 CR3: 000000000c88e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  ext4_es_remove_extent+0x1ab/0x260 fs/ext4/extents_status.c:1461
+>  mpage_release_unused_pages+0x24d/0xef0 fs/ext4/inode.c:1589
+>  ext4_writepages+0x12eb/0x3be0 fs/ext4/inode.c:2852
+>  do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
+>  __writeback_single_inode+0xd1/0x670 fs/fs-writeback.c:1587
+>  writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1870
+>  wb_writeback+0x41f/0x7b0 fs/fs-writeback.c:2044
+>  wb_do_writeback fs/fs-writeback.c:2187 [inline]
+>  wb_workfn+0x3cb/0xef0 fs/fs-writeback.c:2227
+>  process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+>  worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+>  kthread+0x266/0x300 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> 
+> Above issue may happens as follows:
+> ext4_da_write_begin
+>   ext4_create_inline_data
+>     ext4_clear_inode_flag(inode, EXT4_INODE_EXTENTS);
+>     ext4_set_inode_flag(inode, EXT4_INODE_INLINE_DATA);
+> __ext4_ioctl
+>   ext4_ext_migrate -> will lead to eh->eh_entries not zero, and set extent flag
+> ext4_da_write_begin
+>   ext4_da_convert_inline_data_to_extent
+>     ext4_da_write_inline_data_begin
+>       ext4_da_map_blocks
+>         ext4_insert_delayed_block
+> 	  if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk))
+> 	    if (!ext4_es_scan_clu(inode, &ext4_es_is_mapped, lblk))
+> 	      ext4_clu_mapped(inode, EXT4_B2C(sbi, lblk)); -> will return 1
+> 	       allocated = true;
+>           ext4_es_insert_delayed_block(inode, lblk, allocated);
+> ext4_writepages
+>   mpage_map_and_submit_extent(handle, &mpd, &give_up_on_write); -> return -ENOSPC
+>   mpage_release_unused_pages(&mpd, give_up_on_write); -> give_up_on_write == 1
+>     ext4_es_remove_extent
+>       ext4_da_release_space(inode, reserved);
+>         if (unlikely(to_free > ei->i_reserved_data_blocks))
+> 	  -> to_free == 1  but ei->i_reserved_data_blocks == 0
+> 	  -> then trigger warning as above
+> 
+> To solve above issue, forbid inode do migrate which has inline data.
+> 
+> Reported-by: syzbot+c740bb18df70ad00952e@syzkaller.appspotmail.com
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Indeed, there's multiple paths that can be taken, some functions are
-recursive and will just forward the request to its parent, etc.
+Yeah, makes sense. Feel free to add:
 
-Adding a lot of debug prints is just not very convenient, so let's add
-trace events for the clock requests, one before they are submitted and
-one after they are returned.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-That way we can simply toggle the tracing on without modifying the
-kernel code and without affecting performances or the kernel logs too
-much.
+								Honza 
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/clk.c          | 31 +++++++++++++++++++++++++++++++
- include/trace/events/clk.h | 43 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 74 insertions(+)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index bc6f964cb676..343c50e7e214 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -603,10 +603,15 @@ int clk_mux_determine_rate_flags(struct clk_hw *hw,
- 			}
- 
- 			clk_core_forward_rate_req(core, req, parent, &parent_req, req->rate);
-+
-+			trace_clk_rate_request_start(&parent_req);
-+
- 			ret = clk_core_round_rate_nolock(parent, &parent_req);
- 			if (ret)
- 				return ret;
- 
-+			trace_clk_rate_request_done(&parent_req);
-+
- 			best = parent_req.rate;
- 		} else if (parent) {
- 			best = clk_core_get_rate_nolock(parent);
-@@ -630,10 +635,15 @@ int clk_mux_determine_rate_flags(struct clk_hw *hw,
- 			struct clk_rate_request parent_req;
- 
- 			clk_core_forward_rate_req(core, req, parent, &parent_req, req->rate);
-+
-+			trace_clk_rate_request_start(&parent_req);
-+
- 			ret = clk_core_round_rate_nolock(parent, &parent_req);
- 			if (ret)
- 				continue;
- 
-+			trace_clk_rate_request_done(&parent_req);
-+
- 			parent_rate = parent_req.rate;
- 		} else {
- 			parent_rate = clk_core_get_rate_nolock(parent);
-@@ -1551,10 +1561,15 @@ static int clk_core_round_rate_nolock(struct clk_core *core,
- 		struct clk_rate_request parent_req;
- 
- 		clk_core_forward_rate_req(core, req, core->parent, &parent_req, req->rate);
-+
-+		trace_clk_rate_request_start(&parent_req);
-+
- 		ret = clk_core_round_rate_nolock(core->parent, &parent_req);
- 		if (ret)
- 			return ret;
- 
-+		trace_clk_rate_request_done(&parent_req);
-+
- 		req->best_parent_rate = parent_req.rate;
- 		req->rate = parent_req.rate;
- 
-@@ -1605,10 +1620,14 @@ unsigned long clk_hw_round_rate(struct clk_hw *hw, unsigned long rate)
- 
- 	clk_core_init_rate_req(hw->core, &req, rate);
- 
-+	trace_clk_rate_request_start(&req);
-+
- 	ret = clk_core_round_rate_nolock(hw->core, &req);
- 	if (ret)
- 		return 0;
- 
-+	trace_clk_rate_request_done(&req);
-+
- 	return req.rate;
- }
- EXPORT_SYMBOL_GPL(clk_hw_round_rate);
-@@ -1637,8 +1656,12 @@ long clk_round_rate(struct clk *clk, unsigned long rate)
- 
- 	clk_core_init_rate_req(clk->core, &req, rate);
- 
-+	trace_clk_rate_request_start(&req);
-+
- 	ret = clk_core_round_rate_nolock(clk->core, &req);
- 
-+	trace_clk_rate_request_done(&req);
-+
- 	if (clk->exclusive_count)
- 		clk_core_rate_protect(clk->core);
- 
-@@ -2130,10 +2153,14 @@ static struct clk_core *clk_calc_new_rates(struct clk_core *core,
- 
- 		clk_core_init_rate_req(core, &req, rate);
- 
-+		trace_clk_rate_request_start(&req);
-+
- 		ret = clk_core_determine_round_nolock(core, &req);
- 		if (ret < 0)
- 			return NULL;
- 
-+		trace_clk_rate_request_done(&req);
-+
- 		best_parent_rate = req.best_parent_rate;
- 		new_rate = req.rate;
- 		parent = req.best_parent_hw ? req.best_parent_hw->core : NULL;
-@@ -2329,8 +2356,12 @@ static unsigned long clk_core_req_round_rate_nolock(struct clk_core *core,
- 
- 	clk_core_init_rate_req(core, &req, req_rate);
- 
-+	trace_clk_rate_request_start(&req);
-+
- 	ret = clk_core_round_rate_nolock(core, &req);
- 
-+	trace_clk_rate_request_done(&req);
-+
- 	/* restore the protection */
- 	clk_core_rate_restore_protect(core, cnt);
- 
-diff --git a/include/trace/events/clk.h b/include/trace/events/clk.h
-index e19edc63ee95..b19f5a549219 100644
---- a/include/trace/events/clk.h
-+++ b/include/trace/events/clk.h
-@@ -264,6 +264,49 @@ DEFINE_EVENT(clk_duty_cycle, clk_set_duty_cycle_complete,
- 	TP_ARGS(core, duty)
- );
- 
-+DECLARE_EVENT_CLASS(clk_rate_request,
-+
-+	TP_PROTO(struct clk_rate_request *req),
-+
-+	TP_ARGS(req),
-+
-+	TP_STRUCT__entry(
-+		__string(        name, req->core ? req->core->name : "none")
-+		__field(unsigned long,           min                       )
-+		__field(unsigned long,           max                       )
-+		__string(       pname, req->best_parent_hw ? clk_hw_get_name(req->best_parent_hw) : "none" )
-+		__field(unsigned long,           prate                     )
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, req->core ? req->core->name : "none");
-+		__assign_str(pname, req->best_parent_hw ? clk_hw_get_name(req->best_parent_hw) : "none");
-+		__entry->min = req->min_rate;
-+		__entry->max = req->max_rate;
-+		__entry->prate = req->best_parent_rate;
-+	),
-+
-+	TP_printk("%s min %lu max %lu, parent %s (%lu)", __get_str(name),
-+		  (unsigned long)__entry->min,
-+		  (unsigned long)__entry->max,
-+		  __get_str(pname),
-+		  (unsigned long)__entry->prate)
-+);
-+
-+DEFINE_EVENT(clk_rate_request, clk_rate_request_start,
-+
-+	TP_PROTO(struct clk_rate_request *req),
-+
-+	TP_ARGS(req)
-+);
-+
-+DEFINE_EVENT(clk_rate_request, clk_rate_request_done,
-+
-+	TP_PROTO(struct clk_rate_request *req),
-+
-+	TP_ARGS(req)
-+);
-+
- #endif /* _TRACE_CLK_H */
- 
- /* This part must be outside protection */
-
+> ---
+>  fs/ext4/migrate.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
+> index 0a220ec9862d..a19a9661646e 100644
+> --- a/fs/ext4/migrate.c
+> +++ b/fs/ext4/migrate.c
+> @@ -424,7 +424,8 @@ int ext4_ext_migrate(struct inode *inode)
+>  	 * already is extent-based, error out.
+>  	 */
+>  	if (!ext4_has_feature_extents(inode->i_sb) ||
+> -	    (ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)))
+> +	    ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS) ||
+> +	    ext4_has_inline_data(inode))
+>  		return -EINVAL;
+>  
+>  	if (S_ISLNK(inode->i_mode) && inode->i_blocks == 0)
+> -- 
+> 2.31.1
+> 
 -- 
-b4 0.11.0-dev-7da52
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
