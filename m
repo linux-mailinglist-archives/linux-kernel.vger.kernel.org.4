@@ -2,69 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED00F60283F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3B5602845
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiJRJY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S229967AbiJRJZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiJRJYo (ORCPT
+        with ESMTP id S229773AbiJRJZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:24:44 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFEFC47
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:24:43 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id f23so13263962plr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wKnlUfrKHH6eOsaSmAJUO+I2fU7S/gAKrbUxCi3SJ3I=;
-        b=I0hgQCxv1YK3Yx7MFIoanQtnbRRU/q/Y9nwkex3L3rTzpV5SrXcyGeV/YoETuDGWxm
-         G9SDoKCYuz/Hj3Afo74j1JWjtWJJpRJdmpIbRsDQfBP+DpvWwqG7hBtvkUzwVES0N5HF
-         A6RJP6ihHhRL8P48d6btxHJHMFVY5oPdhpem07EVYa5mxuFcfMtxhMPHlYl4MI66DQpX
-         SD+iuorSg6VvYfvrtT3rubN77vmvFwxljc7G3hzsEoxXJyC0rfb6t2KtRsW9HceT81FV
-         /JYxN9xn806WrlnJTrq3VQ7gtxfhHy1kWq/wgN0wrZ0qpFgPMwK6ABNEReJ0xrw57ZiA
-         oeRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wKnlUfrKHH6eOsaSmAJUO+I2fU7S/gAKrbUxCi3SJ3I=;
-        b=IcvhNZgR1vaRGyMJ5EDOit9XWcmntV3Cvp/VWzXwl32b4kcBy4Fmyeb3He4B0bv5S8
-         XIhsGjxGctN12K9tlYeARMTf9YhwPMrVd4iLUuMju00vwMDPNsUerQUVCNvFWftplrfF
-         Re5QMHwTYdBeGj5NwYpRMMSQgKeZnJm2aeoXMeVkGpbTFCsY2X6EoJsRxCJr9q1Zxsd1
-         dKCzsu+q+hB63WhQ1NaBSuMbIvzq3L4Vp6zDWnusWFNzkdkG7ycJVovTuRI4lPJOx8Z0
-         F83aj9binH8c/V3jKqhQfUqsmAbyOiEfdHrFMIkgdsJaJxYG4a97i59RdvHE7XIjT1uh
-         F7ug==
-X-Gm-Message-State: ACrzQf3EnwL99DZcXyFswSf5zMdcYHwRe+9YFZe6oDUBNuLY7fNMes4a
-        wuMMEPXJXIQ65tlb2gyEMIquWMaj/nQ/MdhCsWX0bg==
-X-Google-Smtp-Source: AMsMyM6Al+UeqXMjxbQCJZ1izxgxVdWd1ECaLrmokKJkXUMrTkefqJRBaUMrjKi1IV7vAPEotVrwTE9p2hL2gHSCHZw=
-X-Received: by 2002:a17:902:ab89:b0:17a:67c:b9e9 with SMTP id
- f9-20020a170902ab8900b0017a067cb9e9mr2037192plr.55.1666085082721; Tue, 18 Oct
- 2022 02:24:42 -0700 (PDT)
+        Tue, 18 Oct 2022 05:25:35 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF6277E9D;
+        Tue, 18 Oct 2022 02:25:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0VSURu2I_1666085111;
+Received: from 30.221.96.155(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VSURu2I_1666085111)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 17:25:13 +0800
+Message-ID: <049ec19e-60c3-2854-5f5e-9850231108b4@linux.alibaba.com>
+Date:   Tue, 18 Oct 2022 17:25:11 +0800
 MIME-Version: 1.0
-References: <20221012081526.73067-1-huangjie.albert@bytedance.com>
- <2aaf2c3a-6e49-abb9-b9c8-19ce87404982@redhat.com> <CABKxMyOnxiS6RsJtQEQPrnzNn-cO0Z+OGJRCUpw1M4=WANx0Dw@mail.gmail.com>
- <2f41fc4c-68eb-ab7d-970b-fcb10f474fd4@redhat.com> <Y02YAyE1TnU6/dkA@monkey>
-In-Reply-To: <Y02YAyE1TnU6/dkA@monkey>
-From:   =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
-Date:   Tue, 18 Oct 2022 17:24:31 +0800
-Message-ID: <CABKxMyPtm8qHRMZfetUaanqVpLCL6cVC7OJ-bdgEedz=8YYdGg@mail.gmail.com>
-Subject: Re: [PATCH] mm: hugetlb: support get/set_policy for hugetlb_vm_ops
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+To:     Baoquan He <bhe@redhat.com>, Kazuhito Hagio <k-hagio-ab@nec.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        bagasdotme@gmail.com, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, hschauhan@nulltrace.org,
+        yixun.lan@gmail.com
+References: <20221018081755.6214-1-xianting.tian@linux.alibaba.com>
+ <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
+ <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,75 +53,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Kravetz <mike.kravetz@oracle.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8818=
-=E6=97=A5=E5=91=A8=E4=BA=8C 01:59=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 10/17/22 13:33, David Hildenbrand wrote:
-> > On 17.10.22 11:48, =E9=BB=84=E6=9D=B0 wrote:
-> > > David Hildenbrand <david@redhat.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=
-=8817=E6=97=A5=E5=91=A8=E4=B8=80 16:44=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > On 12.10.22 10:15, Albert Huang wrote:
-> > > > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
-> > > > >
-> > > > > implement these two functions so that we can set the mempolicy to
-> > > > > the inode of the hugetlb file. This ensures that the mempolicy of
-> > > > > all processes sharing this huge page file is consistent.
-> > > > >
-> > > > > In some scenarios where huge pages are shared:
-> > > > > if we need to limit the memory usage of vm within node0, so I set=
- qemu's
-> > > > > mempilciy bind to node0, but if there is a process (such as virti=
-ofsd)
-> > > > > shared memory with the vm, in this case. If the page fault is tri=
-ggered
-> > > > > by virtiofsd, the allocated memory may go to node1 which  depends=
- on
-> > > > > virtiofsd.
-> > > > >
-> > > >
-> > > > Any VM that uses hugetlb should be preallocating memory. For exampl=
-e,
-> > > > this is the expected default under QEMU when using huge pages.
-> > > >
-> > > > Once preallocation does the right thing regarding NUMA policy, ther=
-e is
-> > > > no need to worry about it in other sub-processes.
-> > > >
-> > >
-> > > Hi, David
-> > > thanks for your reminder
-> > >
-> > > Yes, you are absolutely right, However, the pre-allocation mechanism
-> > > does solve this problem.
-> > > However, some scenarios do not like to use the pre-allocation mechani=
-sm, such as
-> > > scenarios that are sensitive to virtual machine startup time, or
-> > > scenarios that require
-> > > high memory utilization. The on-demand allocation mechanism may be be=
-tter,
-> > > so the key point is to find a way support for shared policy=E3=80=82
-> >
-> > Using hugetlb -- with a fixed pool size -- without preallocation is lik=
-e
-> > playing with fire. Hugetlb reservation makes one believe that on-demand
-> > allocation is going to work, but there are various scenarios where that=
- can
-> > go seriously wrong, and you can run out of huge pages.
->
-> I absolutely agree with this cautionary note.
->
-> hugetlb reservations guarantee that a sufficient number of huge pages exi=
-st.
-> However, there is no guarantee that those pages are on any specific node
-> associated with a numa policy.  Therefore, an 'on demand' allocation coul=
-d
-> fail resulting in SIGBUS being set to the faulting process.
-> -
 
-Yes, supporting on-demand requires adding a lot of other code to
-support, I have thought about this, but there is currently no code
-that is suitable for submitting to the community.
+在 2022/10/18 下午5:10, Baoquan He 写道:
+> On 10/18/22 at 04:17pm, Xianting Tian wrote:
+>> Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
+>> VMEMMAP and KERNEL_LINK_ADDR ranges), va bits and ram base for vmcore.
+>>
+>> Default pagetable levels and PAGE_OFFSET aren't same for different kernel
+>> version as below. For pagetable levels, it sets sv57 by default and falls
+>> back to setting sv48 at boot time if sv57 is not supported by the hardware.
+>>
+>> For ram base, the default value is 0x80200000 for qemu riscv64 env and,
+>> for example, is 0x200000 on the XuanTie 910 CPU.
+>>
+>>   * Linux Kernel 5.18 ~
+>>   *      PGTABLE_LEVELS = 5
+>>   *      PAGE_OFFSET = 0xff60000000000000
+>>   * Linux Kernel 5.17 ~
+>>   *      PGTABLE_LEVELS = 4
+>>   *      PAGE_OFFSET = 0xffffaf8000000000
+>>   * Linux Kernel 4.19 ~
+>>   *      PGTABLE_LEVELS = 3
+>>   *      PAGE_OFFSET = 0xffffffe000000000
+>>
+>> Since these configurations change from time to time and version to version,
+>> it is preferable to export them via vmcoreinfo than to change the crash's
+>> code frequently, it can simplify the development of crash tool.
+>>
+>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>> ---
+>>   arch/riscv/kernel/Makefile     |  1 +
+>>   arch/riscv/kernel/crash_core.c | 29 +++++++++++++++++++++++++++++
+>>   2 files changed, 30 insertions(+)
+>>   create mode 100644 arch/riscv/kernel/crash_core.c
+>>
+>> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+>> index db6e4b1294ba..4cf303a779ab 100644
+>> --- a/arch/riscv/kernel/Makefile
+>> +++ b/arch/riscv/kernel/Makefile
+>> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)		+= kgdb.o
+>>   obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
+>>   obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
+>>   obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+>> +obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
+>>   
+>>   obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+>>   
+>> diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
+>> new file mode 100644
+>> index 000000000000..8d7f5ff108da
+>> --- /dev/null
+>> +++ b/arch/riscv/kernel/crash_core.c
+>> @@ -0,0 +1,29 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +
+>> +#include <linux/crash_core.h>
+>> +#include <linux/pagemap.h>
+>> +
+>> +void arch_crash_save_vmcoreinfo(void)
+>> +{
+>> +	VMCOREINFO_NUMBER(VA_BITS);
+>> +	VMCOREINFO_NUMBER(phys_ram_base);
+>> +
+>> +	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
+>> +	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+>> +	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
+>> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+>> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
+>> +#ifdef CONFIG_64BIT
+>> +	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+>> +	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+>> +#endif
+>> +
+>> +	if (IS_ENABLED(CONFIG_64BIT)) {
+>> +#ifdef CONFIG_KASAN
+>> +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
+>> +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
+>> +#endif
+>> +		vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
+>> +		vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
+> Seems this is the firsr ARCH where kasan and kernel link/bpf space are
+> added to dump and analyze. Just curious, have you got code change to
+> make use of them to do dumping and analyze?
 
+KASAN_SHADOW_START is not used, KERNEL_LINK_ADDR is used in the crash patch set:
+https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
 
-> Mike Kravetz
+I add it in case of using in furture.
+
+>
+> Thanks
+> Baoquan
