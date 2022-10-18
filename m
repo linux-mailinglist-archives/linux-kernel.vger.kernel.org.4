@@ -2,87 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA05602F2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B700B602F30
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJRPII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
+        id S230344AbiJRPKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJRPIF (ORCPT
+        with ESMTP id S229775AbiJRPKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:08:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF02C3574;
-        Tue, 18 Oct 2022 08:08:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCB9F615AB;
-        Tue, 18 Oct 2022 15:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47443C433D7;
-        Tue, 18 Oct 2022 15:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666105683;
-        bh=slRde/SJHhsCQe4oq+YTcbRGFc/BuD3pTR0zuPQ4uBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=In5dBJJEPh+dGa4roXNDd6Xks03NLhpX0J98eVIiyFeZFE6pz6Py0np2joZPVSifI
-         ilJvwF7SthyHl3TWhG5QcaqiPe1KK2b8OAeOGvZ9ayA7JevXZYNBtAeOddCv2UmGrY
-         cYUvtNVZQNq7sYBBvjTj0I4t/jmsf6gCr6Fh+6o0r9bWEv3QMs9RBAF6DDXUDCFd48
-         lRkmi/0tJiV8BUAzu5MpG5GJj2tJILfU9VYievKFzDPoiwEs2k4+vGsmULRpCDWy50
-         rU6FOiyggYnTdx6G5BQrNxcRCSOvUEnnV3jkn0cl4WzlIxYSctkt6JSgCGR4e7WhrG
-         A7kfJpXKqgzFA==
-Date:   Tue, 18 Oct 2022 17:07:51 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Borislav Petkov <bp@suse.de>,
-        Jonathan McDowell <noodles@fb.com>,
-        Takashi Iwai <tiwai@suse.de>, Petr Vorel <pvorel@suse.cz>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 3/9] ima: Move xattr hooks into LSM
-Message-ID: <20221018150751.3qsbehcnli4c4g4o@wittgenstein>
-References: <20221013222702.never.990-kees@kernel.org>
- <20221013223654.659758-3-keescook@chromium.org>
+        Tue, 18 Oct 2022 11:10:15 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964257E310
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:10:14 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d13so8808091qko.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qqaG5WlCKcmOhxS6tO4ajkrDthnXbYZMUrCJvPijiHw=;
+        b=Q84/nXJ7hIHooTETWIBgU1ofYJMAUdhwgHN9/PSF+lm4Z2fw3Vw2OS+Fkqovw3m0YL
+         RVeQJmUpYmtS4jBdy3Tv89Raa1bvZyGf5hfIo+4bxvXf68LaDoLooI1MlAqwuf56Q/db
+         N08FJAaubcNoxBckMhTDQ9O9OuF8pJUMtjpyhyF6lTJHzhgyrrWWYiAKH7V13TDF6adV
+         k3eDWtepjPrZniYsDxZX0GmEOPSxpBmfp2iLJ0bGpfaIbWfbS6nb2amsMwtvDYalN5j2
+         d7AtTKaVw5bZr4kKrVOzGUKgKKC009Qhth8FhypMghlYHC6GxQS5tPu4xCWMtBQbDM/q
+         sYbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qqaG5WlCKcmOhxS6tO4ajkrDthnXbYZMUrCJvPijiHw=;
+        b=gLD2UolOSXue+HmCgDQXaflJWdw8P7Smt/0T0+/TanaNkWio7bUTnDLPaGGq1LKZlJ
+         ZqWY6p58YFEEATyJc3jQoaxnWaxKXwOEk7KpQvNxpuh8gdLmBr33jnvv5TjmN7VmXxYw
+         1rVmrRKO/bht/pGKgKGtMYFVKlPhGpfFFrjLfjgK1CArMEjPj8MqJUwi9k6UZ/xhTuF3
+         dp/pYxu/C3jibl41HYecc1CD0a18X97BPpwd4bVN+b9BswOj27nwcglPxYNO5qWtX+uF
+         QmlbK6vRJQ4CrwJ1iY7/uvsmEIj8ReD6dI3TZUB8oL0U4mgWx1j1KIhZ7CbISXOwlw5l
+         Zh7A==
+X-Gm-Message-State: ACrzQf1VkE0CdV+TivmVLa0Ve7g0hsULt3cchnu0MGudvxvJgen4I/vG
+        2p1YkKmKuJFKR7a84FtQjCqBbQ==
+X-Google-Smtp-Source: AMsMyM76liOTjHM67l5LfK963+nCUekT9QJYNKdF5H0BGaJYq7gU31ZhmJaJSFpoHJyHycFKEILYPg==
+X-Received: by 2002:ae9:ef81:0:b0:6ed:1614:582f with SMTP id d123-20020ae9ef81000000b006ed1614582fmr2128185qkg.403.1666105813778;
+        Tue, 18 Oct 2022 08:10:13 -0700 (PDT)
+Received: from krzk-bin.MSRM (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id fx12-20020a05622a4acc00b0039cc7ebf46bsm2035297qtb.93.2022.10.18.08.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 08:10:13 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 0/2] memory: renesas-rpc-if: Add support for R-Car Gen4
+Date:   Tue, 18 Oct 2022 11:10:08 -0400
+Message-Id: <166610580691.30968.10690829746518905934.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1665583089.git.geert+renesas@glider.be>
+References: <cover.1665583089.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221013223654.659758-3-keescook@chromium.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 03:36:48PM -0700, Kees Cook wrote:
-> Move the xattr IMA hooks into normal LSM layer. As with SELinux and
-> Smack, handle calling cap_inode_setxattr() internally.
+On Wed, 12 Oct 2022 16:01:50 +0200, Geert Uytterhoeven wrote:
+> 	Hi all,
 > 
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Jonathan McDowell <noodles@fb.com>
-> Cc: Takashi Iwai <tiwai@suse.de>
-> Cc: Petr Vorel <pvorel@suse.cz>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+> This patch series adds support for the SPI Multi I/O Bus Controller
+> (RPC-IF) in R-Car Gen4 SoCs, which is very similar to the variant found
+> in R-Car Gen3 SoCs:
+>   - The first patch fixes a missed initialization issue, which is at
+>     least seen with the current firmware stack on R-Car V4H,
+>   - The second patch adds the actual support, and takes care of the
+>     increased size of the STRTIM field.
+> 
+> [...]
 
-I like that changes obviously but in general, does IMA depend on being
-called _after_ all other LSMs or is this just a historical artifact?
+Applied, thanks!
+
+[1/2] memory: renesas-rpc-if: Clear HS bit during hardware initialization
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/d37f4c58e47f6129fbb8c52f6d1a70e71fc2c0c7
+[2/2] memory: renesas-rpc-if: Add support for R-Car Gen4
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/455aad51434e9622702373be57973a6c47a88684
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
