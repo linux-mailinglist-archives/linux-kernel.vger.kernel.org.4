@@ -2,131 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B022660280D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0847560280A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiJRJOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
+        id S231220AbiJRJNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiJRJOC (ORCPT
+        with ESMTP id S229767AbiJRJNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:14:02 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B63AA343;
-        Tue, 18 Oct 2022 02:13:49 -0700 (PDT)
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 29I9DVRL002761;
-        Tue, 18 Oct 2022 18:13:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 29I9DVRL002761
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1666084412;
-        bh=3pXlksKoX067wY5+EfFXWbUDydu8+P5Ey+k3BFIx0HE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tgEE65Ys9KPzyXxFvpkGI0OQo8q7Ukz7gxq5FAbsPugJpAoDsSSMMk0+Hw/nOB9Cz
-         b7jLoK4cjDtEophr/R+ZtEaz2kFCsmu+ApapgMJEICk/V/kLtRx9RUwsmchKKT2qjk
-         j72mDy4AC3EqTcMYf5WJq3PKKw/304scTL500NojWXurQkRKHOy6UIyyPrc11wB4eC
-         oE9pupYZDNpjcwM9oN5+75eS//Ahm5sNQOm0I72mNh+zwEYwZ459IFQIbpSpQ+kRNX
-         YuXzo3rgfnc11tOU9TpQw8+N3lKI7Ftal7U6sXTXqRhpIE3Vbmlpjey6s6F2aBbZea
-         qXPxst5WxvjRA==
-X-Nifty-SrcIP: [209.85.210.46]
-Received: by mail-ot1-f46.google.com with SMTP id d18-20020a05683025d200b00661c6f1b6a4so7258659otu.1;
-        Tue, 18 Oct 2022 02:13:32 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2hHhya9t6rW8cuUWOi0zOPR09iGijGl2NY+8M7CjEbx2X61RNQ
-        eyOs8ezqjJjlTlPttGQWgDbX3foP7SfffSsvWYc=
-X-Google-Smtp-Source: AMsMyM6/WHrDZayL0+X7b1RVI31TF7F6OSCDYccMj7Tx4f4I0BhhLPHkYSmQ8ipwEIpRc+61A3EnwI8yizPwQzCw0I8=
-X-Received: by 2002:a05:6830:6384:b0:661:bee5:73ce with SMTP id
- ch4-20020a056830638400b00661bee573cemr882692otb.343.1666084411064; Tue, 18
- Oct 2022 02:13:31 -0700 (PDT)
+        Tue, 18 Oct 2022 05:13:21 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E9272FC6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:13:20 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DA09C3F5F1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1666084398;
+        bh=Hh8fsE9KkAVKP7Lv5PdzMeHsN9pjYg33humb2afrU8o=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=aDqCQd+FewwtieF1tSynz0H4EEaGHP3TwjG83GTfFE5yRZXZVVQPRMWFSqYlmrBwn
+         mkdAPLeRbieFvpgGvz6QOOVO/6IE7/9kX0AZvLSdtbaaphpXvE7utxQ9bBsmVIKVNG
+         Jj3w+BaeMhUVDzfr8bJH/qCr7VrBnQTm32c7fuF3wbFI/70+i5WzF8O04DgIu5I/MF
+         MwNiQLOK5tjQmpqU1Y13an4KUnVwNaCYr4n+F637HyPP2jcn+ahx/RJAepXi7/AsTv
+         xZVNUQ2kS1vXhYdM06yraHwySelv/fZJoG9NHb7uE7+WhMejLZJUGe5aCZmBrBrsNd
+         Vyncmzq0mq7QQ==
+Received: by mail-ed1-f72.google.com with SMTP id h9-20020a05640250c900b0045cfb639f56so10490198edb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:13:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hh8fsE9KkAVKP7Lv5PdzMeHsN9pjYg33humb2afrU8o=;
+        b=WqqSkPo8CuPospzt9eMTExpjZB9m4uNwaHr9RrdrcCcEWKrnQ6oB1MPUnZYDVp2qpa
+         LQns4e3HWnvOUxeDHI3FVY+Og0o5tJnd2H6bFDu1G73MQ7ff8ZpvPRDPJ5Xy3nolHKMZ
+         9RrlsaAXBzMazOU2UOLeiacPtr3c8LisoXUiRfZGSfp6t4aiNiW8SWsvdp47SfwWYqYt
+         6IcmoDf9m7sS4q2Dy++Ye2va2HF0YYT83yzb8EiVU8HlT6tYD6cDft+WPO6pkxL9aROV
+         ixMPyTkg5xyBr4g8Gnfg73JVbkQlGZ0CbKmd7WAXPis7x7tPE9WH8FC7FkyHWzJP3Q/c
+         TxTQ==
+X-Gm-Message-State: ACrzQf0NjzEsWn51J4aRsifNBpD+Mrh8dDNOE4IJjJ5e8UMYjEe+n/2T
+        mlqRaS2OqepJh6ebErW8MFg8kHJPCBpwZEYpOqTq8OO6K6cKPKFqutfyo0tHXqLgPCvXkIFHQlJ
+        RI8QD1xN5BtRE8oo/bhJCn1ADVxpJJv0op50QRKv8KA==
+X-Received: by 2002:a05:6402:548f:b0:457:ed40:5f58 with SMTP id fg15-20020a056402548f00b00457ed405f58mr1673590edb.408.1666084398207;
+        Tue, 18 Oct 2022 02:13:18 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6RtBiVWqlow4RIWQd6Iya71pSIgsGy2YuI+R6Q4lXOuU1BXFxCyytUUPbyjbx6D0cVL2MX/w==
+X-Received: by 2002:a05:6402:548f:b0:457:ed40:5f58 with SMTP id fg15-20020a056402548f00b00457ed405f58mr1673583edb.408.1666084397997;
+        Tue, 18 Oct 2022 02:13:17 -0700 (PDT)
+Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
+        by smtp.gmail.com with ESMTPSA id x9-20020a170906710900b0073a20469f31sm7270172ejj.41.2022.10.18.02.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 02:13:17 -0700 (PDT)
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Wesley W. Terpstra" <wesley@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] pwm: sifive: Always let the first pwm_apply_state succeed
+Date:   Tue, 18 Oct 2022 11:13:16 +0200
+Message-Id: <20221018091316.415685-1-emil.renner.berthing@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220924181915.3251186-1-masahiroy@kernel.org>
- <20220924181915.3251186-8-masahiroy@kernel.org> <1ec14007-affc-f826-6dda-f23ee166226a@kernel.org>
-In-Reply-To: <1ec14007-affc-f826-6dda-f23ee166226a@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 18 Oct 2022 18:12:54 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARahN2xefEBb4EprpiA6B5-7Hakc1cC9_o+FieXr=a_pA@mail.gmail.com>
-Message-ID: <CAK7LNARahN2xefEBb4EprpiA6B5-7Hakc1cC9_o+FieXr=a_pA@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] kbuild: remove head-y syntax
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 5:16 PM Jiri Slaby <jirislaby@kernel.org> wrote:
->
-> Hi,
->
-> On 24. 09. 22, 20:19, Masahiro Yamada wrote:
-> > Kbuild puts the objects listed in head-y at the head of vmlinux.
-> > Conventionally, we do this for head*.S, which contains the kernel entry
-> > point.
-> >
-> > A counter approach is to control the section order by the linker script.
-> > Actually, the code marked as __HEAD goes into the ".head.text" section,
-> > which is placed before the normal ".text" section.
-> >
-> > I do not know if both of them are needed. From the build system
-> > perspective, head-y is not mandatory. If you can achieve the proper code
-> > placement by the linker script only, it would be cleaner.
-> >
-> > I collected the current head-y objects into head-object-list.txt. It is
-> > a whitelist. My hope is it will be reduced in the long run.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ...
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1149,10 +1149,10 @@ quiet_cmd_ar_vmlinux.a = AR      $@
-> >         cmd_ar_vmlinux.a = \
-> >       rm -f $@; \
-> >       $(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
-> > -     $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $(head-y)
-> > +     $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
->
-> With AR=gcc-ar, the "| head -n1" results in:
-> /usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/bin/ar
-> terminated with signal 13 [Broken pipe]
->
-> I found out only with gcc-lto. But maybe we should make it silent in any
-> case? I'm not sure how. This looks ugly (and needs the whole output to
-> be piped):
-> gcc-ar t vmlinux.a | ( head -n1; cat >/dev/null )
->
-> Note the result appears to be correct, it's only that gcc-ar complains
-> after printing out the very first line.
+Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
+RGB and green PWM controlled LEDs on the HiFive Unmatched board
+managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
+All three colours of the RGB LED and the green LED run from different
+lines of the same PWM, but with the same period so this works fine when
+the LED drivers are loaded one after the other.
 
+Unfortunately it does expose a race in the PWM driver when both LED
+drivers are loaded at roughly the same time. Here is an example:
 
-Indeed, I see the same message.
+  |          Thread A           |          Thread B           |
+  |  led_pwm_mc_probe           |  led_pwm_probe              |
+  |    devm_fwnode_pwm_get      |                             |
+  |      pwm_sifive_request     |                             |
+  |        ddata->user_count++  |                             |
+  |                             |    devm_fwnode_pwm_get      |
+  |                             |      pwm_sifive_request     |
+  |                             |        ddata->user_count++  |
+  |         ...                 |          ...                |
+  |    pwm_state_apply          |    pwm_state_apply          |
+  |      pwm_sifive_apply       |      pwm_sifive_apply       |
 
+Now both calls to pwm_sifive_apply will see that ddata->approx_period,
+initially 0, is different from the requested period and the clock needs
+to be updated. But since ddata->user_count >= 2 both calls will fail
+with -EBUSY, which will then cause both LED drivers to fail to probe.
 
-sed does not show such an error, though.
+Fix it by letting the first call to pwm_sifive_apply update the clock
+even when ddata->user_count != 1.
 
+Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
+Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+---
+ drivers/pwm/pwm-sifive.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-masahiro@zoe:~/ref/linux$ gcc-ar t vmlinux.a | head -n1
-arch/x86/kernel/head_64.o
-/usr/bin/ar terminated with signal 13 [Broken pipe]
-
-
-masahiro@zoe:~/ref/linux$ gcc-ar t vmlinux.a | sed -n 1p
-arch/x86/kernel/head_64.o
-
-
-
-
-
-
-
+diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
+index 2d4fa5e5fdd4..ccdf92045f34 100644
+--- a/drivers/pwm/pwm-sifive.c
++++ b/drivers/pwm/pwm-sifive.c
+@@ -159,7 +159,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 
+ 	mutex_lock(&ddata->lock);
+ 	if (state->period != ddata->approx_period) {
+-		if (ddata->user_count != 1) {
++		if (ddata->user_count != 1 && ddata->approx_period) {
+ 			mutex_unlock(&ddata->lock);
+ 			return -EBUSY;
+ 		}
 -- 
-Best Regards
-Masahiro Yamada
+2.37.2
+
