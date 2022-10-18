@@ -2,100 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7634C60261E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C63602621
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiJRHsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S230288AbiJRHsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiJRHsA (ORCPT
+        with ESMTP id S230034AbiJRHsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:48:00 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5C26293F;
-        Tue, 18 Oct 2022 00:47:52 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id p14so13361265pfq.5;
-        Tue, 18 Oct 2022 00:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oYQUCwExhw/Gpp42oncI15bChvHsTTJdPx7zzXszYxc=;
-        b=diWqSdGPpWLcYc5wVUgUAWU9mbRgKb1oWTLPkZ7UJQjwU8hrNt3+4HIfmxzQvaY1hD
-         tCucGt9idZ0ENMca2PeEJpvNpcPG3yiUk+tcW8/k8o+EKPLpscOaPt6jFyNYSItLmXbp
-         IQwfieBmhuZqtRiS6zQdVWDpVv6EdxGz+zVXFrxKMj4Pg5kZ1ZbW4Jr7sGBZN1eYJyzl
-         R5ZdF2kdzCfS7kjUzBxzwJVlPKr/bk982Yq9n4Hcp1J34DNssOzx3os3JLR2lMCTN/rt
-         OdWvk4Z1zBuMu0vupb9iXXAHmyHtZQH6bbLtolfvOq4sUQTPw42Anzq1Rs/dbN2LYS3G
-         khZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oYQUCwExhw/Gpp42oncI15bChvHsTTJdPx7zzXszYxc=;
-        b=ewAVjZsUrsfv3aS9zYPa4SSkOam2GlrEyh2Wjg1rGZ3uiE+5CPvu37xy5G/RxgDnPq
-         fe2aUEttXoI0c4hxBpKwAqR0zPpwdZLHwB8GC+LKgO+FUUp11jsuWeWJ+SWRqbtbr1Js
-         QxZTiqd7CpUA3UQzNfEq+QJmQsqWzexQj/jHJGeA6rEhknNb6JUVCloclyBDkwT40JGR
-         4rXM8sc2JCpEf1HFAl1yB0DkL2rS+R80VAHWkpeExURrOmTEtbFdNu22VcaB5LNahYjw
-         uBAonZesNorBZZNjcGTCOzdgoXubpox82OtzgS4UxzN4JXyLU/X2QgM2XLC0ak25+y0X
-         1RPw==
-X-Gm-Message-State: ACrzQf0scJXFme8dBb1f1OsseqUrYSXdCBuNqf+cyd4Ru/obg1Mo+gR7
-        MWRnzCA4S7smvDb6l3KzQz4=
-X-Google-Smtp-Source: AMsMyM5BDR4fAvT0NYnaUxjcEr6J7D9WQ72shCxLOvZ0V9r0T7BuJ/uOXSqT08/mEcXRpW3kPvh6nA==
-X-Received: by 2002:a63:8648:0:b0:461:722b:ffc8 with SMTP id x69-20020a638648000000b00461722bffc8mr1663147pgd.118.1666079271984;
-        Tue, 18 Oct 2022 00:47:51 -0700 (PDT)
-Received: from carlis-virtual-machine.localdomain ([156.236.96.164])
-        by smtp.gmail.com with ESMTPSA id d4-20020a62f804000000b005628a30a500sm8492393pfh.41.2022.10.18.00.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 00:47:51 -0700 (PDT)
-From:   Xuezhi Zhang <zhangxuezhi3@gmail.com>
-To:     deller@gmx.de, zhangxuezhi1@coolpad.com,
-        wsa+renesas@sang-engineering.com
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] video: fbdev: sm501fb: convert sysfs snprintf to sysfs_emit
-Date:   Tue, 18 Oct 2022 15:47:45 +0800
-Message-Id: <20221018074745.922062-1-zhangxuezhi3@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 18 Oct 2022 03:48:17 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16916527A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:48:10 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-157-rNQl31rOM_OzVpP2VZ4eFw-1; Tue, 18 Oct 2022 08:48:06 +0100
+X-MC-Unique: rNQl31rOM_OzVpP2VZ4eFw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Oct
+ 2022 08:48:04 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Tue, 18 Oct 2022 08:48:04 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Huacai Chen' <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+CC:     Huacai Chen <chenhuacai@loongson.cn>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V2] LoongArch: Add unaligned access support
+Thread-Topic: [PATCH V2] LoongArch: Add unaligned access support
+Thread-Index: AQHY4c+4g3BwiNKgXk2nk+NWr+NpZK4SijAggAE57syAAAG74A==
+Date:   Tue, 18 Oct 2022 07:48:04 +0000
+Message-ID: <cbbc32d4bb0f445197eb5d84d796595c@AcuMS.aculab.com>
+References: <20221017022330.2383060-1-chenhuacai@loongson.cn>
+ <b8792b1a71754d6eb88debe4d6c2c419@AcuMS.aculab.com>
+ <CAAhV-H5WM97+Um9ULjv7gT3i5pJ3GfQ8ex6NRNr6uzmMgdVY_Q@mail.gmail.com>
+ <c34a277a-1735-65e6-c97d-fcc2ac3d57e6@xen0n.name>
+ <CAAhV-H5y5wz0VzFEHrkDpap4wczWXBn_ibL3LW_JQyYkMzjDXQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H5y5wz0VzFEHrkDpap4wczWXBn_ibL3LW_JQyYkMzjDXQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-
-Follow the advice of the Documentation/filesystems/sysfs.rst
-and show() should only use sysfs_emit() or sysfs_emit_at()
-when formatting the value to be returned to user space.
-
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
-v2:change onvert to convert in subject.
----
- drivers/video/fbdev/sm501fb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/video/fbdev/sm501fb.c b/drivers/video/fbdev/sm501fb.c
-index fce6cfbadfd6..f743bfbde2a6 100644
---- a/drivers/video/fbdev/sm501fb.c
-+++ b/drivers/video/fbdev/sm501fb.c
-@@ -1166,7 +1166,7 @@ static ssize_t sm501fb_crtsrc_show(struct device *dev,
- 	ctrl = smc501_readl(info->regs + SM501_DC_CRT_CONTROL);
- 	ctrl &= SM501_DC_CRT_CONTROL_SEL;
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", ctrl ? "crt" : "panel");
-+	return sysfs_emit(buf, "%s\n", ctrl ? "crt" : "panel");
- }
- 
- /* sm501fb_crtsrc_show
--- 
-2.25.1
+RnJvbTogSHVhY2FpIENoZW4NCj4gU2VudDogMTggT2N0b2JlciAyMDIyIDA4OjMzDQouLi4NCj4g
+PiBXaGF0IGFib3V0IG15IG1vcmUgc3RydWN0dXJlZCBhcHByb2FjaCBpbiBhbm90aGVyIHJlcGx5
+IHRoYXQgYXZvaWRzIHRoZQ0KPiA+IGh1Z2UgZWxzZS1pZiBjb25kaXRpb25zPyBCb3RoIHRoZSB0
+ZXJyaWJsZSBsaW5lIHdyYXBzIGFuZCBjb2RlZ2VuIGNvdWxkDQo+ID4gYmUgYXZvaWRlZC4NCi4u
+Lg0KPiBPSywgbGV0IG1lIHRyeS4NCg0KSSBzdXNwZWN0IHlvdSBjYW4gbWFzayBvdXQgc29tZSAn
+b3BlcmFuZCBzaXplJyBiaXRzIGZyb20gdGhlDQppbnN0cnVjdGlvbnMgLSBpbnN0ZWFkIG9mIGNo
+ZWNraW5nIGVhY2ggb3Bjb2RlLg0KDQpJJ20gYWxzbyBwcmV0dHkgc3VyZSB5b3UgY2FuJ3QgYXNz
+dW1lIHRoZSBGUCByZWdpc3RlciBhcmUgbGl2ZS4NCklmIGEgcmVhZCBmcm9tIHVzZXJzcGFjZSBm
+YXVsdHMgdGhlbiB0aGVyZSBjYW4gYmUgYSBmdWxsDQpwcm9jZXNzIHN3aXRjaCAtIHNvIGJ5IHRo
+ZSB0aW1lIHlvdSB0cnkgdG8gd3JpdGUgdG8gdGhlDQpGUCByZWdpc3RlcnMgdGhleSBubyBsb25n
+ZXIgYmVsb25nIHRvIHRoZSBjdXJyZW50IHByb2Nlc3MuDQoNCkl0IG1pZ2h0IGJlIHNhZmVyIGFu
+ZCBzaW1wbGVyIHRvIGp1c3QgZW5mb3JjZSB0aGUgRlANCnJlZ2lzdGVycyBiZSBzYXZlZCBhbmQg
+dGhlbiBhY3Qgb24gdGhlIHNhdmUgYXJlYS4NCkknZCBndWVzcyB0aGV5IGdldCByZXN0b3JlZCBp
+biB0aGUgJ3JldHVybiB0byB1c2Vyc3BhY2UnDQpjb2RlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
+ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
+ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
