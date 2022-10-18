@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C673602A81
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB72602A6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJRLrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S230098AbiJRLnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJRLrG (ORCPT
+        with ESMTP id S229913AbiJRLnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:47:06 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3452B24F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:47:05 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 126so16647775ybw.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:47:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5SYJElMcni83QoXO3JfkKIM38CI++pdR3umfQffXROs=;
-        b=QRcjH5NWoUmotKpQ67Lk+5IDIykXm1h/xS/x8UePyHPCN06lGtAf8BjiatfpB6UjOH
-         flElgdFVk4U2ZSY9/Wvq5hlWAu8u09VszSJqNJVb6qMzplgS7jACoDJyQxrectkHBuqb
-         1aC7k/uw+YpPMEIDSqngqoNGnLHv7ob4nsRvJWLgiv/fJmxWAvot0n7RVqJLIZqAvBzj
-         l2x3ALuoDOK5JdleUg6zok1JvqqoGAW2dXoDs+DBi/lbgSAVrfGxjxTjhI+v4fsk3b0u
-         ZRzew5XhZSFdB2vfgCpCJKtUBOcBuAdNJBJtDySghjHo9A27F4v9zvlalVqU0V+ln/rP
-         8dqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5SYJElMcni83QoXO3JfkKIM38CI++pdR3umfQffXROs=;
-        b=t+hOdsWkSG1R2ZY3koGnmVMBVxJdCE1/nHxSbRbiQ4h41O2ADcNrtZukMM8x86KnAP
-         pynlSM9kTHQyM5Ypi6BngDNtVM3vTkDkx2WOFdBlfjvINRXAPdF6poePcjA6W2K6zgya
-         v2fqk8LiYad4aCqGW/nI+MC+N8NWd5xdXZbP3wVkbgGs23nRypXFg1Tq9pqxzTkp1Evp
-         cMgr9Y6zBYVbZzrse+2SzVN1en180l7qsIIwbQq+tB5imP/hxJHoPxaREzi9ToATlWns
-         e5Fkfw9HFyBdRn92NH1WRe2v/RAB3bPyuOuWU4q7x8flfvXmUC3xaMQnJW9FiQBWS+4y
-         bRlA==
-X-Gm-Message-State: ACrzQf1mdAJikoJrRTEl9iuD9/Um7vVlIUUq/b7KmHnbndr5ZZSnB30R
-        eHNv/MBeBh1DBsIMW/vrtMyNp63VmXiU4+kiLuSMbNoTPNsW0HjR
-X-Google-Smtp-Source: AMsMyM7mU0Rp5oJUI5oyBw1mcig1QYLPCMbbDInRaNwPyn2zxdyaaC2ZPG7CWt9mvejqgqmCG9dmca6wSouxOAp1GXw=
-X-Received: by 2002:a81:6ccf:0:b0:35b:c5a5:1df3 with SMTP id
- h198-20020a816ccf000000b0035bc5a51df3mr2081524ywc.132.1666093066203; Tue, 18
- Oct 2022 04:37:46 -0700 (PDT)
+        Tue, 18 Oct 2022 07:43:06 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E11222A9;
+        Tue, 18 Oct 2022 04:42:47 -0700 (PDT)
+X-UUID: ed1989fdbe9f44c5b4338f426a986e10-20221018
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=tG0N5Imt8sQtSGLzlkEksopxM01mlREtCjpaw9PTrAk=;
+        b=LwlGOjgzWt+p0aWyDjlZkmBIVdfgx3E33QT//bQokGi27m1M8WDPlKPkSGQUd0edjy3jZ8+1vixUA9EHmeGUYHHuuGyouSwGcrqxxcPDzab4uQxs+Vfwc4aHChh5zPZT2ea5/JfWBAoP9CxcaqiyvkQffTZn3Hi1oPyRDxdSLkc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:e9c60308-a294-4c3a-991c-2775c6befb14,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:39a5ff1,CLOUDID:4f652aa3-73e4-48dd-a911-57b5d5484f14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ed1989fdbe9f44c5b4338f426a986e10-20221018
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 606959868; Tue, 18 Oct 2022 19:41:26 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 18 Oct 2022 19:41:25 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 18 Oct 2022 19:41:24 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2] media: mediatek: vcodec: fix h264 cavlc bitstream fail
+Date:   Tue, 18 Oct 2022 19:41:22 +0800
+Message-ID: <20221018114122.26785-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221017145328.22090-1-johan+linaro@kernel.org>
- <20221017145328.22090-10-johan+linaro@kernel.org> <CAA8EJpqSWmy5Z4cmJnsdjMjkmACW7HSi-k5JxZ0gLCeUAWEnxQ@mail.gmail.com>
- <Y05+E90tmlq2tNFa@hovoldconsulting.com>
-In-Reply-To: <Y05+E90tmlq2tNFa@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 18 Oct 2022 14:37:35 +0300
-Message-ID: <CAA8EJprwhEvUfUr-zDir4zFh_NAyr0qPbrHi6Hf8=2HC1dAhaw@mail.gmail.com>
-Subject: Re: [PATCH 09/15] dt-bindings: phy: qcom,qmp-pcie: mark current
- bindings as legacy
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,87 +78,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 13:21, Johan Hovold <johan@kernel.org> wrote:
->
-> On Tue, Oct 18, 2022 at 12:52:03PM +0300, Dmitry Baryshkov wrote:
-> > Hi,
-> >
-> > On Mon, 17 Oct 2022 at 17:54, Johan Hovold <johan+linaro@kernel.org> wrote:
-> > >
-> > > The current QMP PCIe PHY bindings are based on the original MSM8996
-> > > binding which provided multiple PHYs per IP block and these in turn were
-> > > described by child nodes.
-> > >
-> > > Later QMP PCIe PHY blocks only provide a single PHY and the remnant
-> > > child node does not really reflect the hardware.
-> > >
-> > > The original MSM8996 binding also ended up describing the individual
-> > > register blocks as belonging to either the wrapper node or the PHY child
-> > > nodes.
-> > >
-> > > This is an unnecessary level of detail which has lead to problems when
-> > > later IP blocks using different register layouts have been forced to fit
-> > > the original mould rather than updating the binding. The bindings are
-> > > arguable also incomplete as they only the describe register blocks used
-> > > by the current Linux drivers (e.g. does not include the per lane PCS
-> > > registers).
-> >
-> > I'd like to point out that it's not only a problem peculiar to the
-> > PCIe PHYs. Other QMP PHY families also follow the same approach of
-> > separating the serdes into the common part and rx/tx/PCS/whatever into
-> > the PHY subnodes.
->
-> Yeah, I already mentioned that in the cover letter.
->
-> > For the USB+DP combo PHYs we have to have subnodes, however it would
-> > also be logical to move serdes register to the subnode devices,
-> > leaving only DP_COM in the base node.
->
-> No, not at all. First, we may not even need the subnodes (the individual
-> PHYs can be indexed), but even if we do keep them for the combo case,
-> the register block should go in the wrapper node as the registers can be
-> and are shared (e.g. for sc8280xp for which the current binding is
-> completely broken).
+Some cavlc bistream will decode fail when the frame size is small than
+20 bytes. Need to add pending data at the end of the bitstream.
 
-Hmm, which register blocks are shared on the sc8280xp combo PHY? Could
-you please lightly describe it, if possible?
+For the minimum size of mapped memory is 256 bytes(16x16), adding four bytes data
+won't lead to access unknown virtual memory.
 
-> > That said, I think we should rethink and agree on QMP PHY bindings,
-> > before renaming the bindings.
->
-> Isn't that what we are doing just now?
+Fixes: 59fba9eed5a7 ("media: mediatek: vcodec: support stateless H.264 decoding for mt8192")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+compared with v1:
+- add detail comments for function: vdec_h264_insert_startcode.
+- re-write commit message.
+---
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 32 +++++++++++++++++--
+ 1 file changed, 29 insertions(+), 3 deletions(-)
 
-Yeah, thanks for starting the discussion!
-
-> > And yes, I think we should also upgrade
-> > older DTs, keeping drivers backwards compatible (for some time?).
->
-> Possibly, but I'm not sure it's worth the dts churn. As I mentioned
-> elsewhere, supporting both the old and new binding in the driver is
-> mostly trivial, while encoding the deprecated bindings in DT schema
-> sounds like it would be painful.
-
-This is probably the time where Krzysztof can advise us. I'm still not
-sure when it is expected to encode both old and new bindings in the
-schema and when we can update both the schema and the DT.
-
-> On the other hand, adding support for new features to (or fixing bugs
-> in) old platforms using the current bindings may potentially become
-> easier if they are also converted.
-
-Yes!
-
-> > > In preparation for adding new bindings for SC8280XP which further
-> > > bindings can be based on, mark the current bindings as "legacy".
-> > >
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > ---
-> > >  .../{qcom,qmp-pcie-phy.yaml => qcom,qmp-pcie-phy-legacy.yaml} | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >  rename Documentation/devicetree/bindings/phy/{qcom,qmp-pcie-phy.yaml => qcom,qmp-pcie-phy-legacy.yaml} (98%)
->
-> Johan
-
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+index 4cc92700692b..18e048755d11 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+@@ -539,6 +539,29 @@ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
+ 	return 0;
+ }
+ 
++static void vdec_h264_insert_startcode(struct mtk_vcodec_dev *vcodec_dev, unsigned char *buf,
++				       size_t *bs_size, struct mtk_h264_pps_param *pps)
++{
++	struct device *dev = &vcodec_dev->plat_dev->dev;
++
++	/* Need to add pending data at the end of bitstream when bs_sz is small than
++	 * 20 bytes for cavlc bitstream, or lat will decode fail. This pending data is
++	 * useful for mt8192 and mt8195 platform.
++	 *
++	 * cavlc bitstream when entropy_coding_mode_flag is false.
++	 */
++	if (pps->entropy_coding_mode_flag || *bs_size > 20 ||
++	    !(of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-dec") ||
++	    of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-dec")))
++		return;
++
++	buf[*bs_size] = 0;
++	buf[*bs_size + 1] = 0;
++	buf[*bs_size + 2] = 1;
++	buf[*bs_size + 3] = 0xff;
++	(*bs_size) += 4;
++}
++
+ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 				      struct vdec_fb *fb, bool *res_chg)
+ {
+@@ -582,9 +605,6 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	}
+ 
+ 	inst->vsi->dec.nal_info = buf[nal_start_idx];
+-	inst->vsi->dec.bs_buf_addr = (u64)bs->dma_addr;
+-	inst->vsi->dec.bs_buf_size = bs->size;
+-
+ 	lat_buf->src_buf_req = src_buf_info->m2m_buf.vb.vb2_buf.req_obj.req;
+ 	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb, &lat_buf->ts_info, true);
+ 
+@@ -592,6 +612,12 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	if (err)
+ 		goto err_free_fb_out;
+ 
++	vdec_h264_insert_startcode(inst->ctx->dev, buf, &bs->size,
++				   &share_info->h264_slice_params.pps);
++
++	inst->vsi->dec.bs_buf_addr = (uint64_t)bs->dma_addr;
++	inst->vsi->dec.bs_buf_size = bs->size;
++
+ 	*res_chg = inst->resolution_changed;
+ 	if (inst->resolution_changed) {
+ 		mtk_vcodec_debug(inst, "- resolution changed -");
 -- 
-With best wishes
-Dmitry
+2.25.1
+
