@@ -2,91 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5386D603547
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D1E60354E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbiJRVvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S229779AbiJRV4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiJRVvm (ORCPT
+        with ESMTP id S229506AbiJRV4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:51:42 -0400
-Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD01CE98A;
-        Tue, 18 Oct 2022 14:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1666129892; i=@motorola.com;
-        bh=uujB7YfI4RYuL9Qe9Qd8cFtPSbJRkCOtgIQ1f9GJcPA=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Transfer-Encoding;
-        b=D5pWJRyhX93G1EAaFkYYRwFywAV0cK+R1QDJfIVeCu1jjGHtVnciMFGgUVQLqLnay
-         lP83LIOWDM5Cws1N2eAD5x52UDjEsyi5oDbMYVOiy+GFVFcl04HBHcgHX54DE0TVvU
-         NaJsNWGPVpf6T6NGTIa5zUkUlgcoq+qVuq6c7kusGWxk/nwe91YmGt5ItEgic1aPnl
-         lFIU2ObwFltRFfKGP8mMHDGy/FYQesDoHamfTWAXTzIHUr7HDsHAzFB6ZMJ1Er8XOu
-         pTIW0DqO4Y+7bN475GnozDK+aLxitDvHwd0x7FnN21f0rKkLJHQK7WbS5qHtO1C8RD
-         b/20zHZbQkk4Q==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGIsWRWlGSWpSXmKPExsWS8eKJmO4jef9
-  kg3n9NhbH2p6wWzw50M5o0btsD5tF8+L1bBadE5ewWyxsW8JicXnXHDaLRctamS22tF1hsvjx
-  p4/ZYtWCA+wO3B6zO2ayemxa1cnmsX/uGnaPxX2TWT36/xp4bNn/mdHj8ya5APYo1sy8pPyKB
-  NaM5xN3Mhbc0q7YeOMvcwPjbdUuRi4OIYEZTBJXev6yQjjrmCRObH3M2MXIycEmoCax4PUqZh
-  BbREBW4vCV38wgRcwCz5klpu28xdTFyMEhLOAj0bDUAKSGRUBVYsbLnWwgNq+ApcT3pd/BeiU
-  E5CX2HzwLZnMKWEl0PWxjAbGFgGoet15hhagXlDg58wlYnBmovnnrbOYJjLyzkKRmIUktYGRa
-  xWhWnFpUllqka2Sol1SUmZ5RkpuYmaOXWKWbqFdarFueWlyia6SXWF6sl1pcrFdcmZuck6KXl
-  1qyiREY+ClF6c92MLYs+6N3iFGSg0lJlHfON79kIb6k/JTKjMTijPii0pzU4kOMMhwcShK8nF
-  L+yUKCRanpqRVpmTnAKIRJS3DwKInwpskApXmLCxJzizPTIVKnGI05ps7+t5+Zo3N/1wFmIZa
-  8/LxUKXFeblmgUgGQ0ozSPLhBsORwiVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5Iw7wGQhTyZ
-  eSVw+14BncIEdIrpFj+QU0oSEVJSDUzq23p+i+96uXHxirBdLrX3Ba9bHJ1YfHjJtoZ9E4M1U
-  uqiEhQ4yxZ6Vf0uvFhXkJLQ8McssX7DQpGWNT1LlW8f3FG77vVJ64YzGwyOVUrp/GZMqOJQ+u
-  I4O31arzhvx4X8Qn8LLqFFEU+tvl4wTp84m+u2x0R3jTWcLO9K8tLv75PyOuqm8vYfr3F34a4
-  77o9vTv+pu+TtR899vk/Un86brXyNy2H32cXnDynUr3tyrNT4+EklpkyzpKYItrJlX4/4uemI
-  Oe/ivXDn4rxaRdd7T9WT1Fu+Wp8tulbxNnbJzP+rd5RlL1aax/cuyIp/Cid7UGNt+eTSp8YMb
-  vXiZY+LLv6cvrft2+M1x6LPWy5TYinOSDTUYi4qTgQANw1zN4kDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-12.tower-655.messagelabs.com!1666129890!235854!1
-X-Originating-IP: [104.232.228.22]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 30631 invoked from network); 18 Oct 2022 21:51:30 -0000
-Received: from unknown (HELO va32lpfpp02.lenovo.com) (104.232.228.22)
-  by server-12.tower-655.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Oct 2022 21:51:30 -0000
-Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp02.lenovo.com (Postfix) with ESMTPS id 4MsSHP6bHKz50GH2;
-        Tue, 18 Oct 2022 21:51:29 +0000 (UTC)
-Received: from p1g3.mot.com (unknown [100.64.172.121])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4MsSHP4sQlzf6WS;
-        Tue, 18 Oct 2022 21:51:29 +0000 (UTC)
-From:   Dan Vacura <w36195@motorola.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jeff Vanhoof <qjv001@motorola.com>,
-        Dan Vacura <w36195@motorola.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v4 6/6] usb: gadget: uvc: add configfs option for sg support
-Date:   Tue, 18 Oct 2022 16:50:42 -0500
-Message-Id: <20221018215044.765044-7-w36195@motorola.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221018215044.765044-1-w36195@motorola.com>
-References: <20221018215044.765044-1-w36195@motorola.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 18 Oct 2022 17:56:41 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE4C7FE63
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:56:40 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id h11-20020ab0470b000000b003bf1da44886so6337441uac.17
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m7J+/b5/L0nQHPU1N8gvtVOb8AwUDuLMMuB/44yFdGw=;
+        b=mEO2pPTxKmNgWoZtl0QxarEGwuWxwB5IlUJOcOiG99LrRsWMdv5m6glj1IUBip4WCN
+         5suO/47EjfF9pPx4xUfqzVWXv07PSgNVIFbPKvRfR4OjyQM87lxjnbKfwCEvjquoKZJ6
+         J0eviU7IkE+awbL7gWM/iQRVo5YQAFNQdCaFXY1nehdOSxffeuH6RBSX2/OlNSTsCiHS
+         WnUKkhIoBHSXMv87CJsewUE/kkuIhsYEqZ9j6aSU73ryyMG6Yce0hc1+tSb00Tq2kRuu
+         aWALp+a/U1w13NJXPFLRWgaVoe5yMWNMJVb9ioj2LOy1fTTmTRt9A4wKemWOPLDcrzrf
+         8GVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m7J+/b5/L0nQHPU1N8gvtVOb8AwUDuLMMuB/44yFdGw=;
+        b=EW6oKcoetmOZj2Hq9MIDI2XspiCnZPVK8DzMPtwDUby5ln42EFEFBMIrjl3ghVrqYJ
+         GyBEB0oqHSpTAq6GM/aOBleGvi8Vmb4bxEmG4Vmh0w51kR2uGhTQel+GRsHt8QPxRWZ3
+         Z+ok9zv5Qt91gCHQy8qtR44ILMckGvBaQDK/yBRXygM0TU8ZL5KD38P4TWJpyocSsjc1
+         iDX+ILkCQNtyfJu1m1ENwGhszDmNeQlVvjVRxHqx41qvnJxnGYoI0BIAOGVe69Dnavyg
+         6y8+DuU9EYY9ORL9TCW8Zjmenr4Xw2mTdf4BVFCgT9PYjtqb1118T7rvIq2QB/WWSd5l
+         iiXA==
+X-Gm-Message-State: ACrzQf328lDW/2vp5D6/vobkUtwqe+cEJObMORKdShP9D6wd57vwLMJl
+        O/YXnnY34OyxUrPlG4iBlCdWMBSw6A==
+X-Google-Smtp-Source: AMsMyM6swT74DF3e/aSs3KGk5NJODczWqA8x54vzE4y3j/+jMsMvWGFakKgx7XSQB8uYv/1BgYP+tWrgCQ==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a05:6122:4f8:b0:3ae:21f7:28da with SMTP id
+ s24-20020a05612204f800b003ae21f728damr2502221vkf.33.1666130199389; Tue, 18
+ Oct 2022 14:56:39 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 14:56:23 -0700
+In-Reply-To: <Y04lhwMechdfBkUU@gondor.apana.org.au>
+Mime-Version: 1.0
+References: <Y04lhwMechdfBkUU@gondor.apana.org.au>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Message-ID: <20221018215623.866014-1-nhuck@google.com>
+Subject: [PATCH v2] crypto: x86/polyval - Fix crashes when keys are not
+ 16-byte aligned
+From:   Nathan Huckleberry <nhuck@google.com>
+To:     herbert@gondor.apana.org.au
+Cc:     ardb@kernel.org, bgoncalv@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, davem@davemloft.net,
+        ebiggers@kernel.org, hpa@zytor.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, nhuck@google.com,
+        tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,134 +72,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The scatter gather support doesn't appear to work well with some UDC hw.
-Add the ability to turn off the feature depending on the controller in
-use or other platform quirks. The default is for the uvc gadget to
-support sg as long as the UDC hw supports it.
+crypto_tfm::__crt_ctx is not guaranteed to be 16-byte aligned on x86-64.
+This causes crashes due to movaps instructions in clmul_polyval_update.
 
-The specific failure was with the dwc3 controller, but fixes and
-improvements are pending for those failures. This capability is now
-more intended for future unexpected failures or poor sg support on a
-given platform.
+Add logic to align polyval_tfm_ctx to 16 bytes if required.
 
-Signed-off-by: Dan Vacura <w36195@motorola.com>
+Fixes: 34f7f6c30112 ("crypto: x86/polyval - Add PCLMULQDQ accelerated implementation of POLYVAL")
+Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
-V1 -> V2:
-- no change, new patch in series
-V2 -> V3:
-- default on, same as baseline
-V3 -> V4:
-- update comment and documentation, refactor use of opts->sg_supported 
-  directly in uvc_queue
+ arch/x86/crypto/polyval-clmulni_glue.c | 29 ++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
- Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
- Documentation/usb/gadget-testing.rst              | 4 ++++
- drivers/usb/gadget/function/f_uvc.c               | 1 +
- drivers/usb/gadget/function/u_uvc.h               | 1 +
- drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
- drivers/usb/gadget/function/uvc_queue.c           | 4 +++-
- 6 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index 5dfaa3f7f6a4..839a75fc28ee 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -9,6 +9,7 @@ Description:	UVC function directory
- 		streaming_interval	1..16
- 		function_name		string [32]
- 		req_int_skip_div	unsigned int
-+		sg_supported		0..1
- 		===================	=============================
+diff --git a/arch/x86/crypto/polyval-clmulni_glue.c b/arch/x86/crypto/polyval-clmulni_glue.c
+index b7664d018851..79ad497c32b5 100644
+--- a/arch/x86/crypto/polyval-clmulni_glue.c
++++ b/arch/x86/crypto/polyval-clmulni_glue.c
+@@ -27,13 +27,17 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/simd.h>
  
- What:		/config/usb-gadget/gadget/functions/uvc.name/control
-diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index f9b5a09be1f4..be72577a03e9 100644
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -796,6 +796,10 @@ The uvc function provides these attributes in its function directory:
- 	function_name       name of the interface
- 	req_int_skip_div    divisor of total requests to aid in calculating
- 			    interrupt frequency, 0 indicates all interrupt
-+	sg_supported        allow for scatter gather to be used if the UDC
-+			    hw supports it, this is default on and only
-+			    intended to be temporally turned off if a given
-+			    platform doesn't work well with scatter gather
- 	=================== ================================================
++#define POLYVAL_ALIGN	16
++#define POLYVAL_ALIGN_ATTR __aligned(POLYVAL_ALIGN)
++#define POLYVAL_ALIGN_EXTRA ((POLYVAL_ALIGN - 1) & ~(CRYPTO_MINALIGN - 1))
++#define POLYVAL_CTX_SIZE (sizeof(struct polyval_tfm_ctx) + POLYVAL_ALIGN_EXTRA)
+ #define NUM_KEY_POWERS	8
  
- There are also "control" and "streaming" subdirectories, each of which contain
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index e40ca26b9c55..83d96e81c05f 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -875,6 +875,7 @@ static struct usb_function_instance *uvc_alloc_inst(void)
- 	opts->streaming_interval = 1;
- 	opts->streaming_maxpacket = 1024;
- 	opts->req_int_skip_div = 4;
-+	opts->sg_supported = 1;
- 	snprintf(opts->function_name, sizeof(opts->function_name), "UVC Camera");
- 
- 	ret = uvcg_attach_configfs(opts);
-diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
-index 6f73bd5638ed..5ccced629925 100644
---- a/drivers/usb/gadget/function/u_uvc.h
-+++ b/drivers/usb/gadget/function/u_uvc.h
-@@ -25,6 +25,7 @@ struct f_uvc_opts {
- 	unsigned int					streaming_maxpacket;
- 	unsigned int					streaming_maxburst;
- 	unsigned int					req_int_skip_div;
-+	unsigned int					sg_supported;
- 
- 	unsigned int					control_interface;
- 	unsigned int					streaming_interface;
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 419e926ab57e..3784c0e02d01 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -2351,6 +2351,7 @@ UVCG_OPTS_ATTR(streaming_interval, streaming_interval, 16);
- UVCG_OPTS_ATTR(streaming_maxpacket, streaming_maxpacket, 3072);
- UVCG_OPTS_ATTR(streaming_maxburst, streaming_maxburst, 15);
- UVCG_OPTS_ATTR(req_int_skip_div, req_int_skip_div, UINT_MAX);
-+UVCG_OPTS_ATTR(sg_supported, sg_supported, 1);
- 
- #undef UVCG_OPTS_ATTR
- 
-@@ -2401,6 +2402,7 @@ static struct configfs_attribute *uvc_attrs[] = {
- 	&f_uvc_opts_attr_streaming_maxpacket,
- 	&f_uvc_opts_attr_streaming_maxburst,
- 	&f_uvc_opts_attr_req_int_skip_div,
-+	&f_uvc_opts_attr_sg_supported,
- 	&f_uvc_opts_string_attr_function_name,
- 	NULL,
+ struct polyval_tfm_ctx {
+ 	/*
+ 	 * These powers must be in the order h^8, ..., h^1.
+ 	 */
+-	u8 key_powers[NUM_KEY_POWERS][POLYVAL_BLOCK_SIZE];
++	u8 key_powers[NUM_KEY_POWERS][POLYVAL_BLOCK_SIZE] POLYVAL_ALIGN_ATTR;
  };
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index 02559906a55a..aee405663d6e 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -21,6 +21,7 @@
- #include <media/videobuf2-vmalloc.h>
  
- #include "uvc.h"
-+#include "u_uvc.h"
+ struct polyval_desc_ctx {
+@@ -45,9 +49,20 @@ asmlinkage void clmul_polyval_update(const struct polyval_tfm_ctx *keys,
+ 	const u8 *in, size_t nblocks, u8 *accumulator);
+ asmlinkage void clmul_polyval_mul(u8 *op1, const u8 *op2);
  
- /* ------------------------------------------------------------------------
-  * Video buffers queue management.
-@@ -141,6 +142,7 @@ int uvcg_queue_init(struct uvc_video_queue *queue, struct device *dev, enum v4l2
+-static void internal_polyval_update(const struct polyval_tfm_ctx *keys,
++static inline struct polyval_tfm_ctx *polyval_tfm_ctx(const void *raw_ctx)
++{
++	unsigned long addr = (unsigned long)raw_ctx;
++	unsigned long align = POLYVAL_ALIGN;
++
++	if (align <= crypto_tfm_ctx_alignment())
++		align = 1;
++	return (struct polyval_tfm_ctx *)ALIGN(addr, align);
++}
++
++static void internal_polyval_update(const void *raw_keys,
+ 	const u8 *in, size_t nblocks, u8 *accumulator)
  {
- 	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
- 	struct usb_composite_dev *cdev = video->uvc->func.config->cdev;
-+	struct f_uvc_opts *opts = fi_to_f_uvc_opts(video->uvc->func.fi);
- 	int ret;
++	const struct polyval_tfm_ctx *keys = polyval_tfm_ctx(raw_keys);
+ 	if (likely(crypto_simd_usable())) {
+ 		kernel_fpu_begin();
+ 		clmul_polyval_update(keys, in, nblocks, accumulator);
+@@ -72,7 +87,7 @@ static void internal_polyval_mul(u8 *op1, const u8 *op2)
+ static int polyval_x86_setkey(struct crypto_shash *tfm,
+ 			const u8 *key, unsigned int keylen)
+ {
+-	struct polyval_tfm_ctx *tctx = crypto_shash_ctx(tfm);
++	struct polyval_tfm_ctx *tctx = polyval_tfm_ctx(crypto_shash_ctx(tfm));
+ 	int i;
  
- 	queue->queue.type = type;
-@@ -149,7 +151,7 @@ int uvcg_queue_init(struct uvc_video_queue *queue, struct device *dev, enum v4l2
- 	queue->queue.buf_struct_size = sizeof(struct uvc_buffer);
- 	queue->queue.ops = &uvc_queue_qops;
- 	queue->queue.lock = lock;
--	if (cdev->gadget->sg_supported) {
-+	if (opts->sg_supported && cdev->gadget->sg_supported) {
- 		queue->queue.mem_ops = &vb2_dma_sg_memops;
- 		queue->use_sg = 1;
- 	} else {
+ 	if (keylen != POLYVAL_BLOCK_SIZE)
+@@ -102,7 +117,8 @@ static int polyval_x86_update(struct shash_desc *desc,
+ 			 const u8 *src, unsigned int srclen)
+ {
+ 	struct polyval_desc_ctx *dctx = shash_desc_ctx(desc);
+-	const struct polyval_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
++	const struct polyval_tfm_ctx *tctx =
++	    polyval_tfm_ctx(crypto_shash_ctx(desc->tfm));
+ 	u8 *pos;
+ 	unsigned int nblocks;
+ 	unsigned int n;
+@@ -143,7 +159,8 @@ static int polyval_x86_update(struct shash_desc *desc,
+ static int polyval_x86_final(struct shash_desc *desc, u8 *dst)
+ {
+ 	struct polyval_desc_ctx *dctx = shash_desc_ctx(desc);
+-	const struct polyval_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
++	const struct polyval_tfm_ctx *tctx =
++	    polyval_tfm_ctx(crypto_shash_ctx(desc->tfm));
+ 
+ 	if (dctx->bytes) {
+ 		internal_polyval_mul(dctx->buffer,
+@@ -167,7 +184,7 @@ static struct shash_alg polyval_alg = {
+ 		.cra_driver_name	= "polyval-clmulni",
+ 		.cra_priority		= 200,
+ 		.cra_blocksize		= POLYVAL_BLOCK_SIZE,
+-		.cra_ctxsize		= sizeof(struct polyval_tfm_ctx),
++		.cra_ctxsize		= POLYVAL_CTX_SIZE,
+ 		.cra_module		= THIS_MODULE,
+ 	},
+ };
 -- 
-2.34.1
+2.38.0.413.g74048e4d9e-goog
 
