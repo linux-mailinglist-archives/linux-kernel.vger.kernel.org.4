@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9A76023D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 797C06023DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJRFg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 01:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
+        id S230209AbiJRFlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 01:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiJRFg5 (ORCPT
+        with ESMTP id S229729AbiJRFlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 01:36:57 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E719DFB6;
-        Mon, 17 Oct 2022 22:36:56 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id d187so13653397vsd.6;
-        Mon, 17 Oct 2022 22:36:56 -0700 (PDT)
+        Tue, 18 Oct 2022 01:41:17 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993449E2DF;
+        Mon, 17 Oct 2022 22:41:16 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id h2so5469980plb.2;
+        Mon, 17 Oct 2022 22:41:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRO29qOkdnOa9C7o61HNBtwsA+7dwhlTyOkHKXO3eHc=;
-        b=a1G8HT/htXindqFfzLGz5h1TpezRmwlJpV0X38v4UqhlgnllfrHnUhY1bHGvCnKfcS
-         J+JV4oXvaAW7I85yZjLyy+ub34x6T16TibVWPYE+/bKPNfsOA68a5+jbeKEpY9xKUwBw
-         w6sPdVQxjWITpOyOufIYNfxjYY7pW9Vwsm/CE4aOZ6+x6q1SUztlTZ3z8ps57+OHao3h
-         8IeikZfeHATQitr7vyXUUI2sQqgIFHs0NyrpmgyndsBcQ2DcbrXaF/5OG06vwPeE+RLP
-         k1Is3/IpeZsIeN2T2vSaev1w7VE1kIJn1tnXYiV3ZXcW8GwDvLegsOm7TYXPkffIoDee
-         4GRg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9NG3CBgcMhiqdPdVXVfFN0tafSKygxdY4MZpqU8ulL8=;
+        b=QLcHi1gUfZaa/q2+yUxqZL2jA8pWuPlvSDT+67V72EZmsg5g8+XkKWJ1c7xsUNwz5y
+         gXtwcdEmwzHxyrMUnsfe8X1LgcGDXVsDr88y+aVVhsro9/NAtasgg2If4YYEu9Q1XTlP
+         FXytHzi3CwMIXxNDEs/c15cmSgNOnS9KnPjg+jSuJsgESciv3tfgBdM10fRfoRmNehRu
+         /PaYZ7u9fO6P/7iaA5MLy4xlPl8SsK9pNRiZTt8EnK8PFTdsIBLPEgYcRZvqbj1/ei9t
+         CF9U8mM0F+Pz0g+0bBwcRg6XYe8ZsXv3sw2+8z3gpl6BSZant2UqtrYEB+rUD2ex71zM
+         CjVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GRO29qOkdnOa9C7o61HNBtwsA+7dwhlTyOkHKXO3eHc=;
-        b=D6BP5qCvYDE8CSpuFP6MKedP+t/vA+e+tXEhxbXyT3yAtssX2GkOZ0O7CPlkosolFs
-         +5rzE6xmswBPUt2lAlITF6Y5hGvh4cyuuIdVXhaXTYm6Ab5fPtIvib5dTbJ6HYbuBuWv
-         1yPHjKI9yvM2RX3/VtawKH1KLHSpoi6n0FYGzXr6j7Dm00qzVDOUmSW4I47wiUjWHOUU
-         GVx5J5L/USPiODAwmdzg27uOvv0oeUudqXNr8+Xmu45/zmWER9KiM39QCat8RBea+U3r
-         +cYs+egqQZg8ipEjCrlpzc7xQStCu9bY/2pw6cFu5la0g+PO/lDC186YXh3hfpCcZksa
-         uA2Q==
-X-Gm-Message-State: ACrzQf3eIYFrrXb8EswqzDuXMcE3KZdOOIgRGM5R3Y1B239eCNkvjctQ
-        TORMTbyvg+vanwg7O6wCxoisdTW3jryrHwcsto0=
-X-Google-Smtp-Source: AMsMyM5pmhYvfn/YJncmzMuLVuA7hklYzWwHgwpX/cM/iPGZenUy+jNiHTitXIHs0dyiSlIHM2RGm2n5DOwIzSgKGYA=
-X-Received: by 2002:a67:df08:0:b0:3a6:cb22:8fe7 with SMTP id
- s8-20020a67df08000000b003a6cb228fe7mr478677vsk.71.1666071415094; Mon, 17 Oct
- 2022 22:36:55 -0700 (PDT)
+        bh=9NG3CBgcMhiqdPdVXVfFN0tafSKygxdY4MZpqU8ulL8=;
+        b=3hMymn0h+9q1GzYubpytCTSSKS7GIIIF9IHe7ru2yL/y1G4+PIRKRZzg/noU9I56Rv
+         sM8ooP1ls1sVVzFcqk8UasUwa30ZiEsIkQnRfquRsN5hE12Yk89XaB6qGq6aUftdKB3d
+         7mX3B5P+7LL5fp3iSZqsfVXQOnk/ZmzwYZQRaWZM1pOosmmmia1wo544dzjqTxAIZAoW
+         kT0nde418C2i32uUNU0+wZB6je2HpxXKfmcuCnwwhAXJUM6nsqeGNqA9bMQary0bhlWx
+         RRuF0l4dfv/oOLkNTNI2OKAFCYqRdc/wXt/KD3x8BJcqE8M8sVLrWg9QswiJc0b8ZYG3
+         h8sw==
+X-Gm-Message-State: ACrzQf00Zv7XD9AHpgblDHRNHMFl/DVkEOLTBnSJvvptB9VYozEGK+9+
+        lpShljnxFvL8JGufz4CAwG4=
+X-Google-Smtp-Source: AMsMyM7XHHf5Pyx6Gn8sMGSJArjz3NQyswzyQYRRuRVgwIvwKGu90zGY7HBHYd5RIvSrj/j6sjma1Q==
+X-Received: by 2002:a17:90b:4ac5:b0:20a:de32:366b with SMTP id mh5-20020a17090b4ac500b0020ade32366bmr1625503pjb.197.1666071675818;
+        Mon, 17 Oct 2022 22:41:15 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:f7bc:1bb5:e0b1:92cb])
+        by smtp.gmail.com with ESMTPSA id z7-20020a1709027e8700b00172f4835f53sm7597435pla.192.2022.10.17.22.41.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 22:41:14 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v3 00/10] gpiolib: more quirks to handle legacy names
+Date:   Mon, 17 Oct 2022 22:41:01 -0700
+Message-Id: <20221011-gpiolib-quirks-v3-0-eae9cc2ed0a1@gmail.com>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 MIME-Version: 1.0
-References: <20221013222719.277923-1-stephen.s.brennan@oracle.com>
- <20221018041233.376977-1-stephen.s.brennan@oracle.com> <20221018041233.376977-3-stephen.s.brennan@oracle.com>
-In-Reply-To: <20221018041233.376977-3-stephen.s.brennan@oracle.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 18 Oct 2022 08:36:43 +0300
-Message-ID: <CAOQ4uxjkPg=RmQzgtP=_qdBWNDhCg5=7TtZd6VjPtCFAjE6Fng@mail.gmail.com>
-Subject: Re: [PATCH 2/2] fsnotify: allow sleepable child flag update
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.11.0-dev-5166b
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,136 +75,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 7:12 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> With very large d_subdirs lists, iteration can take a long time. Since
-> iteration needs to hold parent->d_lock, this can trigger soft lockups.
-> It would be best to make this iteration sleepable. Since we have the
-> inode locked exclusive, we can drop the parent->d_lock and sleep,
-> holding a reference to a child dentry, and continue iteration once we
-> wake.
->
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-> ---
->  fs/notify/fsnotify.c | 72 ++++++++++++++++++++++++++++++--------------
->  1 file changed, 50 insertions(+), 22 deletions(-)
->
-> diff --git a/fs/notify/fsnotify.c b/fs/notify/fsnotify.c
-> index e887a195983b..499b19272b32 100644
-> --- a/fs/notify/fsnotify.c
-> +++ b/fs/notify/fsnotify.c
-> @@ -102,10 +102,13 @@ void fsnotify_sb_delete(struct super_block *sb)
->   * on a child we run all of our children and set a dentry flag saying that the
->   * parent cares.  Thus when an event happens on a child it can quickly tell
->   * if there is a need to find a parent and send the event to the parent.
-> + *
-> + * Context: inode locked exclusive
-
-Please add code assertion
-
-        WARN_ON_ONCE(!inode_is_locked(inode));
-
-and it probably wouldn't hurt to add an inline wrapper
-fsnotify_update_child_dentry_flags()
-that locks the inode and calls this helper.
-
->   */
->  void __fsnotify_update_child_dentry_flags(struct inode *inode)
->  {
-> -       struct dentry *alias;
-> +       struct dentry *child, *alias, *last_ref = NULL;
-> +       struct list_head *p;
->         int watched;
->
->         if (!S_ISDIR(inode->i_mode))
-> @@ -114,30 +117,55 @@ void __fsnotify_update_child_dentry_flags(struct inode *inode)
->         /* determine if the children should tell inode about their events */
->         watched = fsnotify_inode_watches_children(inode);
->
-> -       spin_lock(&inode->i_lock);
-> -       /* run all of the dentries associated with this inode.  Since this is a
-> -        * directory, there damn well better only be one item on this list */
-> -       hlist_for_each_entry(alias, &inode->i_dentry, d_u.d_alias) {
-> -               struct dentry *child;
-> -
-> -               /* run all of the children of the original inode and fix their
-> -                * d_flags to indicate parental interest (their parent is the
-> -                * original inode) */
-> -               spin_lock(&alias->d_lock);
-> -               list_for_each_entry(child, &alias->d_subdirs, d_child) {
-> -                       if (!child->d_inode)
-> -                               continue;
-> +       alias = d_find_any_alias(inode);
-
-Please make the alias change in a separate patch.
-It is not explained in commit message and it clutters
-the diff which makes reviewing the actual logic changes
-harder.
-
-> +
-> +       /*
-> +        * These lists can get very long, so we may need to sleep during
-> +        * iteration. Normally this would be impossible without a cursor,
-> +        * but since we have the inode locked exclusive, we're guaranteed
-> +        * that the directory won't be modified, so whichever dentry we
-> +        * pick to sleep on won't get moved. So, start a manual iteration
-> +        * over d_subdirs which will allow us to sleep.
-> +        */
-> +       spin_lock(&alias->d_lock);
-> +       p = alias->d_subdirs.next;
->
-> -                       spin_lock_nested(&child->d_lock, DENTRY_D_LOCK_NESTED);
-> -                       if (watched)
-> -                               child->d_flags |= DCACHE_FSNOTIFY_PARENT_WATCHED;
-> -                       else
-> -                               child->d_flags &= ~DCACHE_FSNOTIFY_PARENT_WATCHED;
-> -                       spin_unlock(&child->d_lock);
-> +       while (p != &alias->d_subdirs) {
-> +               child = list_entry(p, struct dentry, d_child);
-
-IMO it would be better to use list iterator helpers.
-What was wrong with list_for_each_entry()?
-Why did you feel that you need to open code it?
-
-> +               if (need_resched()) {
-> +                       /*
-> +                        * We need to hold a reference while we sleep. But when
-> +                        * we wake, dput() could free the dentry, invalidating
-> +                        * the list pointers. We can't look at the list pointers
-> +                        * until we re-lock the parent, and we can't dput() once
-> +                        * we have the parent locked. So the solution is to hold
-> +                        * onto our reference and free it the *next* time we drop
-> +                        * alias->d_lock: either at the end of the function, or
-> +                        * at the time of the next sleep.
-> +                        */
-> +                       dget(child);
-> +                       spin_unlock(&alias->d_lock);
-> +                       if (last_ref)
-> +                               dput(last_ref);
-> +                       last_ref = child;
-> +                       cond_resched();
-> +                       spin_lock(&alias->d_lock);
->                 }
-> -               spin_unlock(&alias->d_lock);
-> +               p = p->next;
-> +
-> +               if (!child->d_inode)
-> +                       continue;
-> +
-> +               spin_lock_nested(&child->d_lock, DENTRY_D_LOCK_NESTED);
-> +               if (watched)
-> +                       child->d_flags |= DCACHE_FSNOTIFY_PARENT_WATCHED;
-> +               else
-> +                       child->d_flags &= ~DCACHE_FSNOTIFY_PARENT_WATCHED;
-> +               spin_unlock(&child->d_lock);
->         }
-> -       spin_unlock(&inode->i_lock);
-> +       spin_unlock(&alias->d_lock);
-> +       if (last_ref)
-> +               dput(last_ref);
-
-Nit: if not needed. dput(NULL) works just fine.
-
-Thanks,
-Amir.
+In preparation to converting several drivers to gpiod API, and to keep=0D
+existing DTS working, this series adds additional quirks to locate=0D
+gpio lines with legacy names.=0D
+=0D
+Additionally the quirk handling has been reworked (once again) to pull=0D
+all simple renames (ones that do not involve change of indices or other=0D
+complex manipulations) into a single quirk with a table containing=0D
+transformations. This should make adding new quirks easier.=0D
+When using legacy names gpiolib will emit a message to nudge users to=0D
+update DTSes (when possible).=0D
+=0D
+Note that the last patch requires the following change from the OF tree:=0D
+=0D
+        88269151be67 ("of: base: make of_device_compatible_match() accept c=
+onst device node")=0D
+=0D
+The change is also available in mainline - it has been merged in 6.1=0D
+merge window.=0D
+=0D
+Thanks.=0D
+=0D
+To: Linus Walleij <linus.walleij@linaro.org>=0D
+To: Bartosz Golaszewski <brgl@bgdev.pl>=0D
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>=0D
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>=0D
+Cc: Daniel Thompson <daniel.thompson@linaro.org>=0D
+Cc: linux-gpio@vger.kernel.org=0D
+Cc: linux-kernel@vger.kernel.org=0D
+Cc: linux-arm-kernel@lists.infradead.org=0D
+Cc: linux-mediatek@lists.infradead.org=0D
+=0D
+---=0D
+Changes in v3:=0D
+- added missed legacy compatible for UART variant of Marvell NFC controller=
+=0D
+- added naming quirk for MOXA ART RTC=0D
+- Link to v2: https://lore.kernel.org/r/20221011-gpiolib-quirks-v2-0-73cb71=
+76fd94@gmail.com=0D
+=0D
+Changes in v2:=0D
+- fixed 'fsl,imx8mq-fec' & 'fsl,imx8qm-fec' compatibles issue noticed=0D
+  by Alexander Stein=0D
+- implemented Daniel Thompson's suggestion on tightening configs=0D
+  selecting renaming quirks and added a comment to discourage adding=0D
+  rename quirks without checks for specific compatible(s) =0D
+- added a polarity quirk for Himax LCDs=0D
+- collected reviewed-by tags=0D
+- Link to v1: https://lore.kernel.org/r/20221011-gpiolib-quirks-v1-0-e01d9d=
+3e7b29@gmail.com=0D
+=0D
+---=0D
+Dmitry Torokhov (10):=0D
+      gpiolib: of: add a quirk for legacy names in Mediatek mt2701-cs42448=
+=0D
+      gpiolib: of: consolidate simple renames into a single quirk=0D
+      gpiolib: of: tighten selection of gpio renaming quirks=0D
+      gpiolib: of: add quirk for locating reset lines with legacy bindings=
+=0D
+      gpiolib: of: add a quirk for reset line for Marvell NFC controller=0D
+      gpiolib: of: add a quirk for reset line for Cirrus CS42L56 codec=0D
+      gpiolib: of: add a quirk for legacy names in MOXA ART RTC=0D
+      gpiolib: of: factor out code overriding gpio line polarity=0D
+      gpiolib: of: add quirk for phy reset polarity for Freescale Ethernet=
+=0D
+      gpiolib: of: add a quirk for reset line polarity for Himax LCDs=0D
+=0D
+ drivers/gpio/gpiolib-of.c | 349 ++++++++++++++++++++++++++++++------------=
+----=0D
+ 1 file changed, 227 insertions(+), 122 deletions(-)=0D
+---=0D
+base-commit: dca0a0385a4963145593ba417e1417af88a7c18d=0D
+change-id: 20221011-gpiolib-quirks-d452ed31d24e=0D
+=0D
+-- =0D
+Dmitry=0D
+=0D
