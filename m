@@ -2,319 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F656027D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF2C6027D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiJRJCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        id S230271AbiJRJDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiJRJCg (ORCPT
+        with ESMTP id S231237AbiJRJCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:02:36 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F30B6F27E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:02:21 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p3-20020a17090a284300b0020a85fa3ffcso16732417pjf.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GiF+HvtpV0USerhEY/2y6Nyo31ujO6NW/Gqobixjk20=;
-        b=M898cJ+N8aqZbu8uG2BsQJHR954CJUcWg+vBzQiHzYXOxK8WbG+ffByNekaCFvB624
-         mWx1t7cuv8EFoU1UrQW24Le+nk9Br0disJfftNCjAknvjKe0Zb8OJRbuRsBF0nm/ZaUz
-         upsO5mTFRxvi72EEEeEO3JEO8Q0cX//ZZTSss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GiF+HvtpV0USerhEY/2y6Nyo31ujO6NW/Gqobixjk20=;
-        b=Oc+Vt3kYZV9yQOgKeQUeYGhtqYO9/Islf+Op2x8cirg3wnnLJ5Wnq5wW7D4GSdBaR5
-         dQ7KnkIy4XFhtcocZ53VN93KLTVEror7FKN3QRoG+aLaJBr6Hb8cR6ekcuuqzYEPMY1S
-         uRYXjBeiMpM5XJyxXvz6a/C9dbmxm0SuxSdCKmLMfe9b0j4ZjOK+uycpYNn8jugJ10H0
-         ZShsddxZofXYW1FAobBLeUpwgm+Uwa1+HKq1efzQyd//v0NrVXQ/bZF1Jj0RUhMqGPwI
-         kmLUuLJNpEieThbCfmAQmphOpaDvOoH18v9Pc2knxmE6FE76a2/5X98fAcbL1PmFWimc
-         SuHg==
-X-Gm-Message-State: ACrzQf1J9RTCEGdD5kOj8gLwH1z3gXia5NBFsg5hOwx6SClh+Kaq8QKS
-        l66QqE4gSuQU5Q5pzvj+ajCvdA==
-X-Google-Smtp-Source: AMsMyM58liADUU50Ea2Gd+JZXS22BGSdjKX9AcDXIBSVzKkmnwiaund/40rnqLs4OzHfC9QIqN5x4w==
-X-Received: by 2002:a17:902:db0b:b0:185:51cc:8113 with SMTP id m11-20020a170902db0b00b0018551cc8113mr1928957plx.64.1666083739303;
-        Tue, 18 Oct 2022 02:02:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x184-20020a6286c1000000b005622f99579esm8696464pfd.160.2022.10.18.02.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:02:18 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] bpf, test_run: Track allocation size of data
-Date:   Tue, 18 Oct 2022 02:02:13 -0700
-Message-Id: <20221018090205.never.090-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 05:02:44 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3B6A99F3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:02:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VSUDmyd_1666083748;
+Received: from 30.221.129.41(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VSUDmyd_1666083748)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 17:02:29 +0800
+Message-ID: <bf27f347-5ced-98e5-f188-659cc2a9736f@linux.alibaba.com>
+Date:   Tue, 18 Oct 2022 17:02:28 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7305; h=from:subject:message-id; bh=DTRHDHBZPBBZwilPaMBacwv+Bvqcp0DeH6UmRbkd/rA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTmuV3TRMBUqW+B5RZpQe+7x8o5DbQTFlvjEuhea6 N/Q66bWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05rlQAKCRCJcvTf3G3AJryAD/ 9VuAxCR5ybPIFdZwqttcTUU2fXGAh/Q2UqKV8K3lpm+kxJzdwfdDDpP5cn1AzZbG2v2XO5lVhpE+3N IaQbMsgYVBLcN1jc/srI2Xds34gJLg9RiaunIAykXIgraGrFjm3hfi4TKd9rh5svNwujf8OeR9Vsmw Utz031nC+3oClgpT8gkXjEAKUnenXbcEBV8SfOop+kHlD1pHwVKi6TvIkmWByP6Mk+azKBxpOOpvEk xzF0Jr/j2Qmyd0GA1KOIVF1v9uzVkRZ8DEBFNorRI0SV2aAcsIk8GizozXCJjKy457QqlayCLRSvai oBZJ2VUuvpY3iCzzXVDP4AgPFe4DjPHVuJAmUEselZFr9I10PPEHWYo/hoPzUysdtZ0LUKqofqjTla WyEG0NRhK2Xq3lTpt2YRp5nxhfuUmzBh8KjUuy2Y76Y9Vz6+qlf49BNdqafVr4RS38NAF+BDWsUB03 AURuD6iS9mUDR8KgKXoJrawEDRE/1JHREuxstdPAP0LgPyvi/LoWsfM70QQM+loqIjkdSeZcoX+ikc klRo27hKGywmQ7Ya4dKWcGKUvcI72rgKtz5G/FXhLa9XO8awqQiU+JX9usUTHGgKQO8QXE4ZY2Med/ vp/U+pm4XHGumrQmuZUahIAkW9lXti/xE5RZ2eiGr0J84evyXdkFmtD6/g6Q==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.3
+Subject: Re: [PATCH] ocfs2: possible memory leak in mlog_sys_init()
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com
+Cc:     mark@fasheh.com, jlbec@evilplan.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org
+References: <20221018075213.736562-1-yangyingliang@huawei.com>
+Content-Language: en-US
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20221018075213.736562-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for requiring that build_skb() have a non-zero size
-argument, track the data allocation size explicitly and pass it into
-build_skb(). To retain the original result of using the ksize()
-side-effect on the skb size, explicitly round up the size during
-allocation.
+Hi,
 
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- net/bpf/test_run.c | 84 +++++++++++++++++++++++++---------------------
- 1 file changed, 46 insertions(+), 38 deletions(-)
+On 10/18/22 3:52 PM, Yang Yingliang wrote:
+> Inject fault while probing module, kset_register() may fail,
+> if it fails, but the refcount of kobject is not decreased to
+> 0, the name allocated in kobject_set_name() is leaked. Fix
+> this by calling kset_put(), so that name can be freed in
+> callback function kobject_cleanup().
+> 
+> unreferenced object 0xffff888100da9348 (size 8):
+>   comm "modprobe", pid 257, jiffies 4294701096 (age 33.334s)
+>   hex dump (first 8 bytes):
+>     6c 6f 67 6d 61 73 6b 00                          logmask.
+>   backtrace:
+>     [<00000000306e441c>] __kmalloc_node_track_caller+0x44/0x1b0
+>     [<000000007c491a9e>] kstrdup+0x3a/0x70
+>     [<0000000015719a3b>] kstrdup_const+0x63/0x80
+>     [<0000000084e458ea>] kvasprintf_const+0x149/0x180
+>     [<0000000091302b42>] kobject_set_name_vargs+0x56/0x150
+>     [<000000005f48eeac>] kobject_set_name+0xab/0xe0
+> 
+> Fixes: 34980ca8faeb ("Drivers: clean up direct setting of the name of a kset")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  fs/ocfs2/cluster/masklog.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/ocfs2/cluster/masklog.c b/fs/ocfs2/cluster/masklog.c
+> index 563881ddbf00..7f9ba816d955 100644
+> --- a/fs/ocfs2/cluster/masklog.c
+> +++ b/fs/ocfs2/cluster/masklog.c
+> @@ -156,6 +156,7 @@ static struct kset mlog_kset = {
+>  int mlog_sys_init(struct kset *o2cb_kset)
+>  {
+>  	int i = 0;
+> +	int ret;
+>  
+>  	while (mlog_attrs[i].attr.mode) {
+>  		mlog_default_attrs[i] = &mlog_attrs[i].attr;
+> @@ -165,7 +166,11 @@ int mlog_sys_init(struct kset *o2cb_kset)
+>  
+>  	kobject_set_name(&mlog_kset.kobj, "logmask");
+>  	mlog_kset.kobj.kset = o2cb_kset;
+> -	return kset_register(&mlog_kset);
+> +	ret = kset_register(&mlog_kset);
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 13d578ce2a09..299ff102f516 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -762,28 +762,38 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
- BTF_SET8_END(test_sk_check_kfunc_ids)
- 
--static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
--			   u32 size, u32 headroom, u32 tailroom)
-+struct bpfalloc {
-+	size_t len;
-+	void  *data;
-+};
-+
-+static int bpf_test_init(struct bpfalloc *alloc,
-+			 const union bpf_attr *kattr, u32 user_size,
-+			 u32 size, u32 headroom, u32 tailroom)
- {
- 	void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
--	void *data;
- 
- 	if (size < ETH_HLEN || size > PAGE_SIZE - headroom - tailroom)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
- 	if (user_size > size)
--		return ERR_PTR(-EMSGSIZE);
-+		return -EMSGSIZE;
- 
--	data = kzalloc(size + headroom + tailroom, GFP_USER);
--	if (!data)
--		return ERR_PTR(-ENOMEM);
-+	alloc->len = kmalloc_size_roundup(size + headroom + tailroom);
-+	alloc->data = kzalloc(alloc->len, GFP_USER);
-+	if (!alloc->data) {
-+		alloc->len = 0;
-+		return -ENOMEM;
-+	}
- 
--	if (copy_from_user(data + headroom, data_in, user_size)) {
--		kfree(data);
--		return ERR_PTR(-EFAULT);
-+	if (copy_from_user(alloc->data + headroom, data_in, user_size)) {
-+		kfree(alloc->data);
-+		alloc->data = NULL;
-+		alloc->len = 0;
-+		return -EFAULT;
- 	}
- 
--	return data;
-+	return 0;
- }
- 
- int bpf_prog_test_run_tracing(struct bpf_prog *prog,
-@@ -1086,25 +1096,25 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	u32 size = kattr->test.data_size_in;
- 	u32 repeat = kattr->test.repeat;
- 	struct __sk_buff *ctx = NULL;
-+	struct bpfalloc alloc = { };
- 	u32 retval, duration;
- 	int hh_len = ETH_HLEN;
- 	struct sk_buff *skb;
- 	struct sock *sk;
--	void *data;
- 	int ret;
- 
- 	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
- 		return -EINVAL;
- 
--	data = bpf_test_init(kattr, kattr->test.data_size_in,
--			     size, NET_SKB_PAD + NET_IP_ALIGN,
--			     SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
--	if (IS_ERR(data))
--		return PTR_ERR(data);
-+	ret = bpf_test_init(&alloc, kattr, kattr->test.data_size_in,
-+			    size, NET_SKB_PAD + NET_IP_ALIGN,
-+			    SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
-+	if (ret)
-+		return ret;
- 
- 	ctx = bpf_ctx_init(kattr, sizeof(struct __sk_buff));
- 	if (IS_ERR(ctx)) {
--		kfree(data);
-+		kfree(alloc.data);
- 		return PTR_ERR(ctx);
- 	}
- 
-@@ -1124,15 +1134,15 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 
- 	sk = sk_alloc(net, AF_UNSPEC, GFP_USER, &bpf_dummy_proto, 1);
- 	if (!sk) {
--		kfree(data);
-+		kfree(alloc.data);
- 		kfree(ctx);
- 		return -ENOMEM;
- 	}
- 	sock_init_data(NULL, sk);
- 
--	skb = build_skb(data, 0);
-+	skb = build_skb(alloc.data, alloc.len);
- 	if (!skb) {
--		kfree(data);
-+		kfree(alloc.data);
- 		kfree(ctx);
- 		sk_free(sk);
- 		return -ENOMEM;
-@@ -1283,10 +1293,10 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	u32 repeat = kattr->test.repeat;
- 	struct netdev_rx_queue *rxqueue;
- 	struct skb_shared_info *sinfo;
-+	struct bpfalloc alloc = {};
- 	struct xdp_buff xdp = {};
- 	int i, ret = -EINVAL;
- 	struct xdp_md *ctx;
--	void *data;
- 
- 	if (prog->expected_attach_type == BPF_XDP_DEVMAP ||
- 	    prog->expected_attach_type == BPF_XDP_CPUMAP)
-@@ -1329,16 +1339,14 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		size = max_data_sz;
- 	}
- 
--	data = bpf_test_init(kattr, size, max_data_sz, headroom, tailroom);
--	if (IS_ERR(data)) {
--		ret = PTR_ERR(data);
-+	ret = bpf_test_init(&alloc, kattr, size, max_data_sz, headroom, tailroom);
-+	if (ret)
- 		goto free_ctx;
--	}
- 
- 	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
- 	rxqueue->xdp_rxq.frag_size = headroom + max_data_sz + tailroom;
- 	xdp_init_buff(&xdp, rxqueue->xdp_rxq.frag_size, &rxqueue->xdp_rxq);
--	xdp_prepare_buff(&xdp, data, headroom, size, true);
-+	xdp_prepare_buff(&xdp, alloc.data, headroom, size, true);
- 	sinfo = xdp_get_shared_info_from_buff(&xdp);
- 
- 	ret = xdp_convert_md_to_buff(ctx, &xdp);
-@@ -1410,7 +1418,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- free_data:
- 	for (i = 0; i < sinfo->nr_frags; i++)
- 		__free_page(skb_frag_page(&sinfo->frags[i]));
--	kfree(data);
-+	kfree(alloc.data);
- free_ctx:
- 	kfree(ctx);
- 	return ret;
-@@ -1441,10 +1449,10 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	u32 repeat = kattr->test.repeat;
- 	struct bpf_flow_keys *user_ctx;
- 	struct bpf_flow_keys flow_keys;
-+	struct bpfalloc alloc = {};
- 	const struct ethhdr *eth;
- 	unsigned int flags = 0;
- 	u32 retval, duration;
--	void *data;
- 	int ret;
- 
- 	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
-@@ -1453,18 +1461,18 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	if (size < ETH_HLEN)
- 		return -EINVAL;
- 
--	data = bpf_test_init(kattr, kattr->test.data_size_in, size, 0, 0);
--	if (IS_ERR(data))
--		return PTR_ERR(data);
-+	ret = bpf_test_init(&alloc, kattr, kattr->test.data_size_in, size, 0, 0);
-+	if (ret)
-+		return ret;
- 
--	eth = (struct ethhdr *)data;
-+	eth = (struct ethhdr *)alloc.data;
- 
- 	if (!repeat)
- 		repeat = 1;
- 
- 	user_ctx = bpf_ctx_init(kattr, sizeof(struct bpf_flow_keys));
- 	if (IS_ERR(user_ctx)) {
--		kfree(data);
-+		kfree(alloc.data);
- 		return PTR_ERR(user_ctx);
- 	}
- 	if (user_ctx) {
-@@ -1475,8 +1483,8 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	}
- 
- 	ctx.flow_keys = &flow_keys;
--	ctx.data = data;
--	ctx.data_end = (__u8 *)data + size;
-+	ctx.data = alloc.data;
-+	ctx.data_end = (__u8 *)alloc.data + size;
- 
- 	bpf_test_timer_enter(&t);
- 	do {
-@@ -1496,7 +1504,7 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 
- out:
- 	kfree(user_ctx);
--	kfree(data);
-+	kfree(alloc.data);
- 	return ret;
- }
- 
--- 
-2.34.1
+If register fails, it will call unregister in o2cb_sys_init(), which
+will put kobject.
 
+Thanks,
+Joseph
+
+> +	if (ret)
+> +		kset_put(&mlog_kset);
+> +
+> +	return ret;
+>  }
+>  
+>  void mlog_sys_shutdown(void)
