@@ -2,141 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47F7603175
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4065560317F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJRRSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S230064AbiJRRUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiJRRR4 (ORCPT
+        with ESMTP id S229919AbiJRRUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:17:56 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14938EF587
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:17:49 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id h8so18843217lja.11
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:17:49 -0700 (PDT)
+        Tue, 18 Oct 2022 13:20:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8688E7B284
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:20:16 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so14598636pjf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mn0g0uPQNgWAIulTAHlL4xKStBrdvYdScpOKFuxEci4=;
-        b=UJmeKnfZ0F5FNYAg1B4ZlTGwoxmU03fABlswDVlVVDgdYKNPZcdY9WwV9GCOovjwDd
-         pr0rk37er31wg/7euIBifdagIniBWY3V0gmHDwx+y5etMY0U3a0nYe+C+MTxtfPZ/5fc
-         1r9Rz5GR/ByFfPvbdaoFylxy8TMIeEtwAFCRNWDfb6Hm8/aafKJks8N+CyJYbwJCL1ow
-         mUYyOmuY/7jxV9fy7uFfgEwwCOG8ZIOG50gL1ZIE/NaVnCDyOk4j9YQLEPwjYgbEiHkP
-         5zLk7o1Cz4NUUL0z/K4cBYl+DvRpVssMkoS1R0RBaGTRoyWBJ0hRzdPNVtmg4vkuYMvW
-         DqvA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zzA7KFscGcTYw/jlVpmUrWtxk0VQxSITq1/A7jVwNp4=;
+        b=gkN5uN6j+2Rasgo1mpJY6UDA47g4OVbtLOnT9MEBTvwmeKLZ3JnFVmCgsSwTbawI60
+         fTOjmwq2NjPvM1vsxSrcCZw/2A1hxn4gexKx6LLDGHUakBh7+WUhrYI46/zWlh0B8lox
+         /ay89kGbOPwWfGnkb7sFZ0MKJlMKigYi2g7Q8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mn0g0uPQNgWAIulTAHlL4xKStBrdvYdScpOKFuxEci4=;
-        b=jYxooMzR8fE72xeXNHAiMCa4K4R36+jvSWpEG7JMbu5Gutcvn7FBJXFBiXfyp09/Ov
-         kjH00VJd68Zpeokp1OaKDTbUvsfA6NVBZU/oPUmEoFrjRZDkO+YrzACyv2UtYfHqpnkO
-         wcwcTarhl4t0FVzShpKcp+D40me9czZqwkqX4POWD30C0TCTZ+p/JAXBRl7Q5hSJmU5X
-         yHCdxXrdIqVSCpLCGGSnCRNDv36WgSjGndMLmsT3Yt9129KHk3SzhcQjmasmK4GY/Tdd
-         d9mB74t5KGDV5ysNQQIE5Z0KX2zKDugyspv4EHgIuth4CwAwc39HcygIRicNBvXaEwVp
-         7r4A==
-X-Gm-Message-State: ACrzQf1BPzV+4DV8HoThmS6xwULgKwaNsw2u010qYCLc/zMGFi+rmmTP
-        TDvMwRAfWPoLkZdQg7O7iI4F4Ukz2oDwwjtqc3ON1Q==
-X-Google-Smtp-Source: AMsMyM5Xl/iFuj+/VH/qkFLvtSgyGhPwva9B3V2p0knCNY2j/1i0nJ5N41af6+MwEGFUhgjJzb9tjkAuGpSPlyxwjxI=
-X-Received: by 2002:a2e:92d5:0:b0:26f:a674:94ac with SMTP id
- k21-20020a2e92d5000000b0026fa67494acmr1465830ljh.470.1666113467907; Tue, 18
- Oct 2022 10:17:47 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zzA7KFscGcTYw/jlVpmUrWtxk0VQxSITq1/A7jVwNp4=;
+        b=dyUVrpz/VNW+4SftqJxdfoUS/7NUoi17G3bHWP/UChvbMRYXrDxTo+QW4uQzRKxy+w
+         OhiHCrhft2cze5xcn6DPbrws370QDgQr0dGWiam8+5M6mchHLyCer0hnupB9HD4Lo7Jd
+         t0pOTpu1ukiY8vaIWmo8+Ll9ZQgY2Viz4CUsepGu7iJTr4mUPyoP5uJ4UdF3gzwAqjqD
+         DW7OGcey+kh03DblsR/UQI9QaQ83rL7lNG7rxtKnby3632swjb7pTCxePzxDM67MI/Pd
+         MUb5N+AOUsyz3qlJcamzcqp6hKhDLTNIxMfE6tlAnCgSwrAJ0KkVYG1KiugtoqF6C0Z1
+         CuDw==
+X-Gm-Message-State: ACrzQf2i9ADpKugG45GLvhyIeuIzD/90FINYAFngpxL4wGdhzNSrcAL6
+        zlIT+ETXUAnzg9xk5fq8EGsimQ==
+X-Google-Smtp-Source: AMsMyM4oPkrEyoYhrUGb9NOJMPFawGNM3cLeYe84+ieZqFzUSBTgtuJ7INnr+OaEdHAdQV5E9Fp6nA==
+X-Received: by 2002:a17:903:1c6:b0:185:47ce:f4f0 with SMTP id e6-20020a17090301c600b0018547cef4f0mr4109622plh.132.1666113614694;
+        Tue, 18 Oct 2022 10:20:14 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 75-20020a62154e000000b00562a8150c08sm9395682pfv.168.2022.10.18.10.20.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 10:20:13 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 10:20:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joao Moreira <joao@overdrivepizza.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        'Peter Zijlstra' <peterz@infradead.org>, x86@kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <202210181013.923F8809@keescook>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+ <9bb036e48580454b81e6de7224c5f006@AcuMS.aculab.com>
+ <3edb387ea335085dcb6dd49f1d9c9ce6@overdrivepizza.com>
 MIME-Version: 1.0
-References: <Y0T2l3HaH2MU8M9m@gmail.com> <20221014134802.1361436-1-mdanylo@google.com>
- <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com> <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
- <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
-In-Reply-To: <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 18 Oct 2022 19:17:36 +0200
-Message-ID: <CABb0KFFGRgy9D212skxxFMsHV5n3qjqUP9d-bQaWLUmtH46H3A@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        gregkh@linuxfoundation.org, corbet@lwn.net, david@redhat.com,
-        kernel@collabora.com, krisman@collabora.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        peter.enderborg@sony.com, shuah@kernel.org,
-        viro@zeniv.linux.org.uk, willy@infradead.org, figiel@google.com,
-        kyurtsever@google.com, Paul Gofman <pgofman@codeweavers.com>,
-        surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3edb387ea335085dcb6dd49f1d9c9ce6@overdrivepizza.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 15:23, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> On 10/18/22 4:11 PM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Tue, 18 Oct 2022 at 12:36, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-[...]
-> >>    * @start:             Starting address
-> >>    * @len:               Length of the region
-> >>    * @vec:               Output page_region struct array
-> >>    * @vec_len:           Length of the page_region struct array
-> >>    * @max_out_page:      Optional max output pages (It must be less th=
-an
-> >> vec_len if specified)
-> >
-> > Why is it required to be less than vec_len? vec_len effectively
-> > specifies max number of ranges to find, and this new additional field
-> > counts pages, I suppose?
-> > BTW, if we count pages, then what size of them? Maybe using bytes
-> > (matching start/len fields) would be more consistent?
-> Yes, it if for counting pages. As the regions can have multiple pages,
-> user cannot specify through the number of regions that how many pages
-> does he need. Page size is used here as well like the start and len.
-> This is optional argument as this is only needed to emulate the Windows
-> syscall getWriteWatch.
+On Tue, Oct 18, 2022 at 08:58:24AM -0700, Joao Moreira wrote:
+> > Does the hash value for kCFI only depend on the function type?
+> > Or is there something like a attribute that can also be included?
+> 
+> Hi David -- does this sound like what you are asking about?
+> 
+> https://github.com/ClangBuiltLinux/linux/issues/1736
+> 
+> If yes, then it is something in our todo list :) I think Sami is handling
+> it.
 
-I'm wondering about the condition that max_out_page < vec_len. Since
-both count different things (pages vs ranges) I would expect there is
-no strict relation between them and information returned is as much as
-fits both (IOW: at most vec_len ranges spanning not more than
-max_out_page pages). The field's name and description I'd suggest
-improving: maybe 'max_pages' with a comment that 0 =3D unlimited?
+I was hoping someone with prior experience with Call Graph Detaching to
+solve Transitive Clustering Relaxation[1] could assist? ;)
 
-[...]
-> >> /* Special flags */
-> >> #define PAGEMAP_NO_REUSED_REGIONS       0x1
-> >
-> > What does this flag do?
-> Some non-dirty pages get marked as dirty because of the kernel's
-> internal activity. The dirty bit of the pages is stored in the VMA flags
-> and in the per page flags. If any of these two bits are set, the page is
-> considered to be dirty. Suppose you have cleared the dirty bit of half
-> of VMA which will be done by splitting the VMA and clearing dirty flag
-> in the half VMA and the pages in it. Now kernel may decide to merge the
-> VMAs again as dirty bit of VMAs isn't considered if the VMAs should be
-> merged. So the half VMA becomes dirty again. This splitting/merging
-> costs performance. The application receives a lot of pages which aren't
-> dirty in reality but marked as dirty. Performance is lost again here.
->
-> This PAGEMAP_NO_REUSED_REGIONS flag is used to don't depend on the dirty
-> flag in the VMA flags. It only depends on the individual page dirty bit.
-> With doing this, the new memory regions which are just created, doesn't
-> look like dirty when seen with the IOCTL, but look dirty when seen from
-> pagemap. This seems okay as the user of this flag know the implication
-> of using it.
+-Kees
 
-Thanks for explaining! Could you include this as a comment in the patch?
+[1] https://www.blackhat.com/docs/asia-17/materials/asia-17-Moreira-Drop-The-Rop-Fine-Grained-Control-Flow-Integrity-For-The-Linux-Kernel.pdf
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+-- 
+Kees Cook
