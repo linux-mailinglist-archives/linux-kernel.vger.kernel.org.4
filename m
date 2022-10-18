@@ -2,91 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63771602E82
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E681602E83
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiJROa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S231540AbiJRObA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbiJROaj (ORCPT
+        with ESMTP id S231552AbiJROap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:30:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6031B56FA
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:30:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B91BA615AC
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63317C433C1;
-        Tue, 18 Oct 2022 14:30:32 +0000 (UTC)
-Date:   Tue, 18 Oct 2022 10:30:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Shuah Khan <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Akanksha J N <akanksha@linux.vnet.ibm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v2 0/2] selftests/ftrace: Capture dependency on external
- programs
-Message-ID: <20221018103033.3af4c9d2@gandalf.local.home>
-In-Reply-To: <cover.1666101523.git.naveen.n.rao@linux.vnet.ibm.com>
-References: <cover.1666101523.git.naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 18 Oct 2022 10:30:45 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A9C9C21B;
+        Tue, 18 Oct 2022 07:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666103443; x=1697639443;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zMnzECcq7UsdeairkvqeG/finXKvL3saHPbLkrRI2p8=;
+  b=D3tMwDrAC87FjDBDeRseIhMW3Z1Q6WDbhJrxVqt0UF+2XB4F2HaeQyRI
+   SCcxQGCMZVtjEU44PG/FLjRNS+vVe3xwclzFfUFRAfAvsotewhSxAdh+b
+   wwmSuzYR5dGUBuExh/YtAqXI/R1l9FEv6ZcF58Qa5C5Ro5byxeydD3IBL
+   ZdvocPj85PRGrwlcsdo3XNzZZgnDRWfLGifDQ6Do4U16r3ggXss4yY29f
+   AMU0VkYiFyNVIpKJEHbG0BcJ8AFKgE2/Pm8xjL+LJ24C8bJHvwbq6Qdea
+   arS8RH2a9Wm4RURb+xyO2bErCpvKNZnxaairo3vtRoLS3hCQhSYHb4wW6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="304856150"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="304856150"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 07:30:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="579812239"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="579812239"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 18 Oct 2022 07:30:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oknc6-009QCm-2Q;
+        Tue, 18 Oct 2022 17:30:38 +0300
+Date:   Tue, 18 Oct 2022 17:30:38 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 1/1] gpio: merrifield: Use str_enable_disable() helper
+Message-ID: <Y064jqJsss8XCPD2@smile.fi.intel.com>
+References: <20221017171448.63932-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017171448.63932-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 08:14:48PM +0300, Andy Shevchenko wrote:
+> Use str_enable_disable() helper instead of open coding the same.
 
-Masami,
+Pushed to my review and testing queue, thanks!
 
-If you are OK with this patch set, perhaps Shuah can take it through her
-tree?
+-- 
+With Best Regards,
+Andy Shevchenko
 
--- Steve
-
-
-On Tue, 18 Oct 2022 19:33:39 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
-
-> This is v2 of the below patch:
-> http://lkml.kernel.org/r/20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com
-> 
-> The second patch is new, and converts some other tests to use the new 
-> way of specifying dependency on external programs.
-> 
-> - Naveen
-> 
-> 
-> Naveen N. Rao (2):
->   selftests/ftrace: Add check for ping command for trigger tests
->   selftests/ftrace: Convert tracer tests to use 'requires' to specify
->     program dependency
-> 
->  tools/testing/selftests/ftrace/test.d/functions           | 8 +++++++-
->  tools/testing/selftests/ftrace/test.d/tracer/wakeup.tc    | 7 +------
->  tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc | 7 +------
->  .../trigger/inter-event/trigger-field-variable-support.tc | 2 +-
->  .../inter-event/trigger-inter-event-combined-hist.tc      | 2 +-
->  .../trigger/inter-event/trigger-onchange-action-hist.tc   | 2 +-
->  .../trigger/inter-event/trigger-onmatch-action-hist.tc    | 2 +-
->  .../inter-event/trigger-onmatch-onmax-action-hist.tc      | 2 +-
->  .../trigger/inter-event/trigger-onmax-action-hist.tc      | 2 +-
->  .../trigger/inter-event/trigger-snapshot-action-hist.tc   | 2 +-
->  .../inter-event/trigger-synthetic-event-dynstring.tc      | 2 +-
->  .../trigger/inter-event/trigger-trace-action-hist.tc      | 2 +-
->  12 files changed, 18 insertions(+), 22 deletions(-)
-> 
-> 
-> base-commit: 6c0f39e87b6ab1a3009e3a49d3e6f6db8dc756a8
 
