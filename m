@@ -2,108 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8086027EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673EF6027F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiJRJHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        id S230333AbiJRJH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiJRJHJ (ORCPT
+        with ESMTP id S230477AbiJRJHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:07:09 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C9672873
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:07:08 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id f23so13226258plr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ik/E//QP4NdBbqi/JKK2jChzoYGdVf04VQO8QaZ2oI=;
-        b=OJ6MXnK+VlPl3Gcy1ZICT+bgZamtzoDgN7vzGSxP1iIfM23MZk+tkti34Hy31Qeri9
-         TNMsi9ce+ddpAZLgmHjUEVLD8tv4P/osTJMT8z/x6jwe6BSRX1sbbyvcPUei9564v75q
-         yWzWdeHCQUAekASByz1Jt35L/5AFk42tL9jXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ik/E//QP4NdBbqi/JKK2jChzoYGdVf04VQO8QaZ2oI=;
-        b=mZho4jTn9TO6PsuuPnp/vIDXJW0PBX899iBhY4dkyZUAYqof7EJMBK60QyHaY0FA7s
-         Z3X+ErOwakM6c4vEox2ZrBA7iGdbLgL6A1lQltYFXPXnWZM206P/OdiXGUtBgO6L3urZ
-         17rHyV681A+uid2oVVhoaKkwD3p/vzuxU8uJK4e3A9b/64NXMercWA5Vq9iP6ZvUyxUV
-         AH/gRCRHmszSwEeswxhqJvEAGk+JRCzKAtPwdl1S1E+zkGfBcsh/XnyutJtRCAHoVvb3
-         p2juc5C47jZNTTh05bzRvt4MRnGjhMx7xx6wWxX4iaV7N7ZBhgB+X1p9A2SkTjEG7nks
-         jhHQ==
-X-Gm-Message-State: ACrzQf2IOXVJb2/XzwWhFQVZDWbdSCUcDRTDXgsDqE9I0qtaJ6hQGhkz
-        5OFXF5oCptweT6uiqaWAKhCFjgBiwfJE5Q==
-X-Google-Smtp-Source: AMsMyM6CIFIQbM4Lw/W6bIJwv433YVB+M6640oaCuA20xl6UHbu1b0zu7j1SEKv1OoEBTwDfHlePPA==
-X-Received: by 2002:a17:90b:392:b0:20b:2c3b:547f with SMTP id ga18-20020a17090b039200b0020b2c3b547fmr2529481pjb.116.1666084027916;
-        Tue, 18 Oct 2022 02:07:07 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w4-20020a17090a6b8400b0020d6fc00072sm11241693pjj.9.2022.10.18.02.07.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:07:07 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] coredump: Proactively round up to kmalloc bucket size
-Date:   Tue, 18 Oct 2022 02:07:05 -0700
-Message-Id: <20221018090701.never.996-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 05:07:21 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 390154E402;
+        Tue, 18 Oct 2022 02:07:19 -0700 (PDT)
+Received: from [192.168.4.25] (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id C6E3222233;
+        Tue, 18 Oct 2022 11:07:16 +0200 (CEST)
+Message-ID: <a2660505-f2f2-3b2a-86e2-82f9458e5e5e@gpxsee.org>
+Date:   Tue, 18 Oct 2022 11:07:16 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1213; h=from:subject:message-id; bh=p+MmonEVAKFmpb5iqSHacNcvTbIa15T8BRPfROxVUy8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTmy5m8JCx9/BE56DDkyWbIsGqGD7nmhWHa2GZ8l+ Hy6FbFKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05suQAKCRCJcvTf3G3AJnEsEA CScUD9FTn1d8hXufUPd/FUQzE357ebRSIeX+m2v0ED9JXLrqJmh1gZrjrKHLkKiHTSnAn/jgoD2dgW U/YOQFrV7yyoQ4kKZzShL7FQ0s1Kki5m9LIqY/0HwPR8+tkdVVoG9a1PJoy3TBtZBDSTBQyojqxd0X Du2BbO4D0kz4QxdO1Zwl5lldGIOh7poGa2tmqXjvxG55wMNBP4WyRTNS5Id5ZMVNW2qOS0yN3rF+ac HT2LfblPNvdimyrWPwhl/2C6Ae+75yrDwn4P3d5DncHEDWBLrCqAXG5tOl2M2fLXjp7aBDKCn9t84Z yI5N3lIzvVqgzmFoQg9Z1WPlj0LmmJv49Pd/3FEGHrFdAeq4q4cKUJjclOyHapGm+NvcmkVvJWk4FU +jEB83ZhUMSqNUBe+ck7MRnOTSjsK+dJ5cau90wJyEpods3antluvAuYwQLpZxjLF+M4HvNSpJGVIE HNFPx13lmOsyt2MVaIQdGy7sm1yi8zfE/1DnLogCFzRasB3JoVBh012nXOhnl4dF0o49scKZrY1cge DGhZ0pVgCpql0gGtmm2Abphd95b4ufD7Np9gAWqH2xgvsGGicJEtY15OqOv/r61tRSwp5ieebceKfX PIOt9137ZR+Rxj7a4MQ+iIpvMA+gJDGhPYdlPr3J6MHr0kpiM4ZLE3QyUOZw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH V8 XDMA 0/2] xilinx XDMA driver
+Content-Language: en-US
+To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com
+Cc:     max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
+        brian.xu@amd.com
+References: <1666022581-27279-1-git-send-email-lizhi.hou@amd.com>
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <1666022581-27279-1-git-send-email-lizhi.hou@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of discovering the kmalloc bucket size _after_ allocation, round
-up proactively so the allocation is explicitly made for the full size,
-allowing the compiler to correctly reason about the resulting size of
-the buffer through the existing __alloc_size() hint.
+On 17. 10. 22 18:02, Lizhi Hou wrote:
+> Hello,
+> 
+> This V8 of patch series is to provide the platform driver to support the
+> Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with the
+> PCI Express IP block to provide high performance data transfer between host
+> memory and the card's DMA subsystem. It also provides up to 16 user
+> interrupt wires to user logic that generate interrupts to the host.
+> 
+>              +-------+       +-------+       +-----------+
+>     PCIe     |       |       |       |       |           |
+>     Tx/Rx    |       |       |       |  AXI  |           |
+>   <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
+>              |       |       |       |       |           |
+>              +-------+       +-------+       +-----------+
+> 
+> The XDMA has been used for Xilinx Alveo PCIe devices.
+> And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
+>      https://www.xilinx.com/products/boards-and-kits/alveo.html
+>      https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
+> 
+> The device driver for any FPGA based PCIe device which leverages XDMA can
+> call the standard dmaengine APIs to discover and use the XDMA subsystem
+> without duplicating the XDMA driver code in its own driver.
+> 
+> Changes since v7
+> - Use pci device pointer for dma_pool_create().
+> 
+> Changes since v6:
+> - Fixed descriptor filling bug.
+> 
+> Changes since v5:
+> - Modified user logic interrupt APIs to handle user logic IP which does not
+>    have its own register to enable/disable interrupt.
+> - Clean up code based on review comments.
+> 
+> Changes since v4:
+> - Modified user logic interrupt APIs.
+> 
+> Changes since v3:
+> - Added one patch to support user logic interrupt.
+> 
+> Changes since v2:
+> - Removed tasklet.
+> - Fixed regression bug introduced to V2.
+> - Test Robot warning.
+> 
+> Changes since v1:
+> - Moved filling hardware descriptor to xdma_prep_device_sg().
+> - Changed hardware descriptor enum to "struct xdma_hw_desc".
+> - Minor changes from code review comments.
+> 
+> Lizhi Hou (2):
+>    dmaengine: xilinx: xdma: Add xilinx xdma driver
+>    dmaengine: xilinx: xdma: Add user logic interrupt support
+> 
+>   MAINTAINERS                            |   11 +
+>   drivers/dma/Kconfig                    |   13 +
+>   drivers/dma/xilinx/Makefile            |    1 +
+>   drivers/dma/xilinx/xdma-regs.h         |  171 ++++
+>   drivers/dma/xilinx/xdma.c              | 1041 ++++++++++++++++++++++++
+>   include/linux/dma/amd_xdma.h           |   16 +
+>   include/linux/platform_data/amd_xdma.h |   34 +
+>   7 files changed, 1287 insertions(+)
+>   create mode 100644 drivers/dma/xilinx/xdma-regs.h
+>   create mode 100644 drivers/dma/xilinx/xdma.c
+>   create mode 100644 include/linux/dma/amd_xdma.h
+>   create mode 100644 include/linux/platform_data/amd_xdma.h
+> 
 
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/coredump.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Hi,
+Just for the record - this version works fine with our HW.
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 7bad7785e8e6..97eaee325251 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -68,7 +68,10 @@ struct core_name {
- 
- static int expand_corename(struct core_name *cn, int size)
- {
--	char *corename = krealloc(cn->corename, size, GFP_KERNEL);
-+	char *corename;
-+
-+	size = kmalloc_size_roundup(size);
-+	corename = krealloc(cn->corename, size, GFP_KERNEL);
- 
- 	if (!corename)
- 		return -ENOMEM;
-@@ -76,7 +79,7 @@ static int expand_corename(struct core_name *cn, int size)
- 	if (size > core_name_size) /* racy but harmless */
- 		core_name_size = size;
- 
--	cn->size = ksize(corename);
-+	cn->size = size;
- 	cn->corename = corename;
- 	return 0;
- }
--- 
-2.34.1
-
+M.
