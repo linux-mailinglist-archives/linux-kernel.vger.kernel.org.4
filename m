@@ -2,151 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85ACB6025CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1828F6025D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiJRHdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S230210AbiJRHeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiJRHdT (ORCPT
+        with ESMTP id S229941AbiJRHe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:33:19 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83FA63FFC;
-        Tue, 18 Oct 2022 00:33:16 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id 10so13085450pli.0;
-        Tue, 18 Oct 2022 00:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=da75isXx88J+6UlTqgwNIlDk2sV2HDvdnOV1lRzZ9pY=;
-        b=QGiLwnR8hHfj+U3sT4Ghd/2Jtg5z5rEQdWlM0zTyKpWBFGkNxQPMSydZ/j1O9zrTkr
-         j2rYQYSC3REtq3MRfcbcLgzBfJwEow45hnXaNBYImRmspxddQMPEBVcfB4IbvO7g9Mm3
-         vsyENIBWWNn+9n+pWkTchV0lDsL7R0NZuaSNBojF1N7f1GmuJ2Cufwp899DSQYcAxxwW
-         U1UcEH+DUGsmd4hJGGldWCByZpZxugL/K0V6dM8c+OD0WVA6fGfrUgvpltTRJF8iv3Ud
-         jzO8ju8b44sEvmBOokNRpB567ZchAplBMCsRdXO1YXaNxfzF4IfmX/sBsrnBXJ/HGr0v
-         AYjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=da75isXx88J+6UlTqgwNIlDk2sV2HDvdnOV1lRzZ9pY=;
-        b=C2LFz803qHn5bEiBGAhebQq7f0vf2dJUaN+oJ9zjq7j9Q70AI1R8LPRGwtu0Ro2gDn
-         q3jKbl4fMQugHMMKzzxXJ9hdIKtguoY88elPVgIL+mrHGwhSOGI9cBnLIsk7QPia3LWG
-         1inFrwUYXR2mo863ZMatwFfDt8Jz4yW86IOap/RoOLdCzf747IQ0DwyoZs6r6gcXV/jG
-         wxqyK4aNThz0kCyH//P9LQb20PZr+EpOktlAPxHyIB86DTpeyFQEx/kgGi9Nr50nsn0g
-         uakcHc24Of2TYR/3qYO9L9syw+HSPjiQmrK7vclOdGPwFy1KLGAC0zKHOWAU6BZm6utP
-         2dww==
-X-Gm-Message-State: ACrzQf0zdQbKEDOVbtQpmvjRft/Ad3XcTIN7DjUSk83Fk6FAMYQq074W
-        NQLVpFLp4iHe3OFbBaClubo=
-X-Google-Smtp-Source: AMsMyM4giiTRXCLbRjxm43ZeOdiU0Gl6VrrUtI79rKgepiikbMZYJ7W2Jo50WJykIKe6eRL0aDGGtw==
-X-Received: by 2002:a17:90a:ab06:b0:20d:8764:b97a with SMTP id m6-20020a17090aab0600b0020d8764b97amr2149193pjq.7.1666078395919;
-        Tue, 18 Oct 2022 00:33:15 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id s1-20020a170902ea0100b001769206a766sm7853260plg.307.2022.10.18.00.33.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 18 Oct 2022 00:33:15 -0700 (PDT)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lh.kuo@sunplus.com, Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v11 2/2] dt-bindings: thermal: Add Sunplus schema
-Date:   Tue, 18 Oct 2022 15:32:52 +0800
-Message-Id: <038211f33e4d5dd5129712aef2738a83577c7745.1665990345.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1665990345.git.lhjeff911@gmail.com>
-References: <cover.1665990345.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1665990345.git.lhjeff911@gmail.com>
-References: <cover.1665990345.git.lhjeff911@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 03:34:27 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022E32DC2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:34:24 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id AFA6D2B06898;
+        Tue, 18 Oct 2022 03:34:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 18 Oct 2022 03:34:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666078459; x=
+        1666085659; bh=O28Ra42je2l6WzDm/ZO6o7rlbUD0f6okc6FR7gCx5gY=; b=c
+        D7GfdBBYv+RNoIJNHU7ZMe6/6FlTZtIgN1EVcdn7q+/E/tX8MUYD6cWK70SP+095
+        HIysOx6U4hzAzd9Oxr1+lfRNMsdTrBALP5TJwpaKAdsT441k54XiJefZoNwksmDX
+        epJn3K0Zl1gXfWdEG3WyJCO0Gf4YYQgf2AUQhy43zcRtbq4ZG8vbW4fHpJJY6cl7
+        0Q+/7raGCos6wWg5jQEYEg7BQqlsDeJTfOy8H9hEmeU6/YEQZPzEpuEl/LaL/Vj9
+        qkVpo76vgbxd82LnIZMcIfpuQG5kuH7S0M4AfuBlXTCRA+4FgLH2GFv3vIhwBUIm
+        g/6L/exJNRAJueyn9q0Kw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666078459; x=
+        1666085659; bh=O28Ra42je2l6WzDm/ZO6o7rlbUD0f6okc6FR7gCx5gY=; b=K
+        AziRhUbnFvkdSTAUOgSQwizWhJotp/ejPbOhWNRWwnOuNmPW89LQCRyji9fSEqPD
+        1U1Vltxi+zQuJhVmX9ufaEWhogLUTRpo42yYA/2OigiBIqfDHRcy99ab9ABS3u1S
+        MWPxl+1+f28ZICrHoxJAhEBL+J94+rIw7nBuIcHb7v1ooKaC4Zbinx62GNjEEy6V
+        PxLrPZ0nYSx4mS0ZC0abfrisiOcnTxgGTGK+K0Yj2Xqn9Mat/rJmJALyGyi19B1/
+        6whf2Y9wu8Z/7EdAVzlj462ybn51hI35XvXMYfbn7EOh8dHJRLKXFejvqm6ySDRi
+        xJDOsXQ3TH3VGqeNPNL0Q==
+X-ME-Sender: <xms:-lZOY2ANOVo_-VHFDC2BsVOUuyO5VW3WiDQ9xO5aOvTmwO6WQXYQxw>
+    <xme:-lZOYwgOxYjEsZMPGEguSQiviJKiwhs1S-50MRE0pJCGpMKsWo2PBRIunN_pl-rN5
+    35xj_K3svuXb7EjHnQ>
+X-ME-Received: <xmr:-lZOY5mBQh0qtc_Bbrc-pAUe2L5T5LPNYiTMFtT2v7i-3fhzSAW_G6rXN08f>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeltddguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtudenucfhrhhomhepofgr
+    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
+    frrghtthgvrhhnpeejvefftdehvedvfeevffffjeektdfgkedviefgfefhfefgtefhjeej
+    ieegieeugeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordht
+    vggthh
+X-ME-Proxy: <xmx:-lZOY0wQsKHOedSZNpvC-ut337YUuHIfSe8ADCh2G9hhIAUJz6Ho5A>
+    <xmx:-lZOY7T87jDiXPJk9cTa2Wcnzym12ZRSxOTme6T_ESJE1jBCmh6aNw>
+    <xmx:-lZOY_bsoRtzVSwxTgox0TAERmVOBddBaC3ItH-FBFBaC2V_L2o1mA>
+    <xmx:-1ZOYzzDVwXhCAG5OpWMTYanWa3VUWo4DwXwhLLxzzu4VZfUqiNMi22WE54>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Oct 2022 03:34:17 -0400 (EDT)
+Date:   Tue, 18 Oct 2022 09:34:16 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emma Anholt <emma@anholt.net>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        intel-gfx@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
+        Hans de Goede <hdegoede@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH v4 11/30] drm/modes: Add a function to generate analog
+ display modes
+Message-ID: <20221018073416.7tttm6mnbt2pdrpk@houat>
+References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v4-11-60d38873f782@cerno.tech>
+ <0aa690b8-988a-878f-4d4f-d391295bc591@tronnes.org>
+ <20221013083638.kloiaxervnhii7ew@houat>
+ <71e53906-ae9b-55b9-7a93-7bb04a891423@tronnes.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <71e53906-ae9b-55b9-7a93-7bb04a891423@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for Sunplus thermal driver
+Hi,
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v11:
- - Remove the remove function of the platform_driver
- - Fix error reported-by: kernel test robot.
+On Sat, Oct 15, 2022 at 05:04:50PM +0200, Noralf Tr=F8nnes wrote:
+> Den 13.10.2022 10.36, skrev Maxime Ripard:
+> > On Sat, Oct 01, 2022 at 02:52:06PM +0200, Noralf Tr=F8nnes wrote:
+> >> Den 29.09.2022 18.31, skrev Maxime Ripard:
+> >>> Multiple drivers (meson, vc4, sun4i) define analog TV 525-lines and
+> >>> 625-lines modes in their drivers.
+> >>>
+> >>> Since those modes are fairly standard, and that we'll need to use them
+> >>> in more places in the future, it makes sense to move their definition
+> >>> into the core framework.
+> >>>
+> >>> However, analog display usually have fairly loose timings requirement=
+s,
+> >>> the only discrete parameters being the total number of lines and pixel
+> >>> clock frequency. Thus, we created a function that will create a displ=
+ay
+> >>> mode from the standard, the pixel frequency and the active area.
+> >>>
+> >>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >>>
+> >>> ---
+> >>>
+> >>> Changes in v4:
+> >>> - Reworded the line length check comment
+> >>> - Switch to HZ_PER_KHZ in tests
+> >>> - Use previous timing to fill our mode
+> >>> - Move the number of lines check earlier
+> >>> ---
+> >>>  drivers/gpu/drm/drm_modes.c            | 474 +++++++++++++++++++++++=
+++++++++++
+> >>>  drivers/gpu/drm/tests/Makefile         |   1 +
+> >>>  drivers/gpu/drm/tests/drm_modes_test.c | 144 ++++++++++
+> >>>  include/drm/drm_modes.h                |  17 ++
+> >>>  4 files changed, 636 insertions(+)
+> >>>
+> >>
+> >> I haven't followed the discussion on this patch, but it seems rather
+> >> excessive to add over 600 lines of code (including tests) to add 2 fix=
+ed
+> >> modes. And it's very difficult to see from the code what the actual
+> >> display mode timings really are, which would be useful for other
+> >> developers down the road wanting to use them.
+> >>
+> >> Why not just hardcode the modes?
+> >=20
+> > Yeah, I have kind of the same feeling tbh, but it was asked back on the
+> > v1 to ease the transition of old fbdev drivers, since they will need
+> > such a function:
+> > https://lore.kernel.org/dri-devel/CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8f=
+BYzRYyWDuNm5=3Dg@mail.gmail.com/
+> >=20
+>=20
+> If that's the case I suggest you just hardcode them for now and leave
+> the complexity to the developer doing the actual conversion of the fbdev
+> driver. Who knows when that will happen, but that person will have your
+> well documented and discussed work to fall back on.
 
- .../bindings/thermal/sunplus,sp7021-thermal.yaml   | 43 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
+I'd rather not, tbh. We've collectively spent weeks figuring this out,
+reviewing it and so on, I very much want to avoid doing this all over
+again if it's going to be useful at some point.
 
-diff --git a/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
-new file mode 100644
-index 0000000..98b5674
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/sunplus,sp7021-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus Thermal controller
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  nvmem-cells:
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    const: calib
-+
-+required:
-+  - compatible
-+  - reg
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    thermal@9c000280 {
-+        compatible = "sunplus,sp7021-thermal";
-+        reg = <0x9c000280 0xc>;
-+        nvmem-cells = <&calib>;
-+        nvmem-cell-names = "calib";
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bf22c53..f41e625 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19757,6 +19757,7 @@ SUNPLUS THERMAL DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
- F:	drivers/thermal/sunplus_thermal.c
- 
- SUNPLUS UART DRIVER
--- 
-2.7.4
+Jani also wanted to expose a function and not a raw mode, so this patch
+also addresses that:
+https://lore.kernel.org/dri-devel/8735eeg31e.fsf@intel.com/
 
+Maxime
