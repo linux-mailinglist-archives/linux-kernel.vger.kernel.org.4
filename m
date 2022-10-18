@@ -2,207 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFC3602C4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CE5602C4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJRNA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S230148AbiJRNDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiJRNAz (ORCPT
+        with ESMTP id S229796AbiJRNDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:00:55 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EED0C4D8F;
-        Tue, 18 Oct 2022 06:00:53 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.32])
-        by gateway (Coremail) with SMTP id _____8Dx_7eDo05jHm0AAA--.605S3;
-        Tue, 18 Oct 2022 21:00:51 +0800 (CST)
-Received: from [10.20.42.32] (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuCDo05jTrMAAA--.2859S3;
-        Tue, 18 Oct 2022 21:00:51 +0800 (CST)
-Subject: Re: [PATCH V5 1/2] ACPI / scan: Support multiple dma windows with
- different offsets
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Yicong Yang <yangyicong@huawei.com>,
-        Robin Murphy <robin.murphy@arm.com>, yangyicong@hisilicon.com,
-        lpieralisi@kernel.org, chenhuacai@loongson.cn,
-        guohanjun@huawei.com, sudeep.holla@arm.com, lenb@kernel.org,
-        robert.moore@intel.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, loongarch@lists.linux.dev,
-        liulongfang <liulongfang@huawei.com>
-References: <20220911090635.5559-1-lvjianmin@loongson.cn>
- <20220911090635.5559-2-lvjianmin@loongson.cn>
- <8e9df8ea-06f0-3989-2563-d5dc6b09a062@huawei.com>
- <CAJZ5v0gBBdTxRkE08PO8W+yi1eTkWqzpGLAyMNuzZmqx02EzFA@mail.gmail.com>
- <c7ae3a66-1d24-1014-b63a-8d4af3de42c8@arm.com>
- <7904cd2e-caf5-0073-9889-306ab524d802@huawei.com>
- <ded07a34-0cf4-3f76-a538-fb6a9abd6673@loongson.cn>
- <CAJZ5v0i5jo-+B6sq5Aftj_TR=dj4gt-4aiXhbu2BW-=KETQgFw@mail.gmail.com>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <81b8f3db-73b4-b3a4-d3e9-5d1779b13947@loongson.cn>
-Date:   Tue, 18 Oct 2022 21:00:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 18 Oct 2022 09:03:06 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC39C5139
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:03:02 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id 8so8542603qka.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AB2EbrChnmBL7oBGHE/6MtN2jF0J4wzaUTGiVzmnlVg=;
+        b=x1ICTBgWWYFz1IFhPQ+53xfu8G3EaWVgNqfY1kfVOlN69hi3KO/2Gh8umBqAyLCI6R
+         AMVcqdbRtpflmltS1Ouq3EHJhlqPCZtn04VSQ/M+aghoW1YSHQz73MXrqLAbAGoOz5gG
+         uBewEzOsYqoZ0IORjxk8LT5/cT+oaxnLIhOsJVa6pcSDAk41d1NQtwQrIQnIvfDCI8Fw
+         Kflir/RW7Jw7TsQ35a/iIZvxGvklnEkPYUb7MYNG9u3RmFKKCsRqykNXFflr+j9wC+Bk
+         jeaMP3YJZ6dfuHjbS+8ivlVi3zEZabHeSRZEesYeVV5tQSl9182mrkx0+vR+OsOQp5Sb
+         IBBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AB2EbrChnmBL7oBGHE/6MtN2jF0J4wzaUTGiVzmnlVg=;
+        b=6ib8ldJ9FO6TN/1t92lNmUCOm19ckyc1Zq2HAANTWkRD2nnFGZnjSXLiSIxeeBvmvP
+         Da3Vc7PEXIfRYs+L9VMSpis4ZhzweBDOmMWC+I2BHZswt4cMpFmj8pDLSNywViMJLcaO
+         H+O7Hg+VRGFRlQ6nNaOedcKfw6vPkcT6IWUTsGp/aDR+/3SnJau1gm5UPup7QIPrEZ2E
+         w7qZri9PAHhV2aMafGdUUQd9C1Sgc+fH076P0rrF2YpgDoUMIQZR8mpF/QAiZkdS2Cc5
+         EdSTELZmXDwDWnEus3ytGF6BD+uKS6FDK4VXSPPDWuxmWbsSR+wekPN98ceYw5go6ZXY
+         iPQQ==
+X-Gm-Message-State: ACrzQf1P0BbAlAigyulC9eMhxRM7hgFaP3RX9+8yy6GCsfS3eIuQZArs
+        Dcka0B30GKxhqAzM0cm8oVL+TQ==
+X-Google-Smtp-Source: AMsMyM7FeQZGGQk4O5PWn+dFyE24MMaawpBbfCr7zAgXa6AlMNuAtHJeYuPeZPZAjtT4ob+Xsl5IJg==
+X-Received: by 2002:a05:620a:b52:b0:6ec:6204:3d7b with SMTP id x18-20020a05620a0b5200b006ec62043d7bmr1726415qkg.68.1666098180399;
+        Tue, 18 Oct 2022 06:03:00 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id i8-20020a05620a248800b006bb0f9b89cfsm2453477qkn.87.2022.10.18.06.02.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 06:02:59 -0700 (PDT)
+Message-ID: <3f1afad0-1e93-4843-defd-ca32c308cc9e@linaro.org>
+Date:   Tue, 18 Oct 2022 09:02:58 -0400
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0i5jo-+B6sq5Aftj_TR=dj4gt-4aiXhbu2BW-=KETQgFw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 3/3] arch: arm64: ti: Add support for AM68 SK base board
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxXuCDo05jTrMAAA--.2859S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3Jw1kZF4kCFyUZr43JrWDArb_yoW7Zr1xpr
-        y5GF42kr48Jr1UJr1Utw4jqryUtw1UZFyUXrWxG34DCF1qvr1UJrWUtr1rKryUAryYkr1x
-        Ja90q3ZayrWUJw7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8XTm3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+References: <20221018123849.23695-1-sinthu.raja@ti.com>
+ <20221018123849.23695-4-sinthu.raja@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221018123849.23695-4-sinthu.raja@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/10/18 下午8:56, Rafael J. Wysocki wrote:
-> On Tue, Oct 18, 2022 at 2:50 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->>
->>
->> On 2022/10/18 下午8:32, Yicong Yang wrote:
->>> On 2022/10/18 20:00, Robin Murphy wrote:
->>>> On 2022-10-18 11:08, Rafael J. Wysocki wrote:
->>>>> On Tue, Oct 18, 2022 at 11:33 AM Yicong Yang <yangyicong@huawei.com> wrote:
->>>>>>
->>>>>> On 2022/9/11 17:06, Jianmin Lv wrote:
->>>>>>> In DT systems configurations, of_dma_get_range() returns struct
->>>>>>> bus_dma_region DMA regions; they are used to set-up devices
->>>>>>> DMA windows with different offset available for translation between DMA
->>>>>>> address and CPU address.
->>>>>>>
->>>>>>> In ACPI systems configuration, acpi_dma_get_range() does not return
->>>>>>> DMA regions yet and that precludes setting up the dev->dma_range_map
->>>>>>> pointer and therefore DMA regions with multiple offsets.
->>>>>>>
->>>>>>> Update acpi_dma_get_range() to return struct bus_dma_region
->>>>>>> DMA regions like of_dma_get_range() does.
->>>>>>>
->>>>>>> After updating acpi_dma_get_range(), acpi_arch_dma_setup() is changed for
->>>>>>> ARM64, where the original dma_addr and size are removed as these
->>>>>>> arguments are now redundant, and pass 0 and U64_MAX for dma_base
->>>>>>> and size of arch_setup_dma_ops; this is a simplification consistent
->>>>>>> with what other ACPI architectures also pass to iommu_setup_dma_ops().
->>>>>>>
->>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> With this patch we met problem as well. The DMA coherent mask is not set correctly
->>>>>> for a ehci usb controller and lead to the below calltrace:
->>>>>>
->>>>>> [   16.699259] ------------[ cut here ]------------
->>>>>> [   16.703855] WARNING: CPU: 0 PID: 853 at kernel/dma/mapping.c:499 dma_alloc_attrs+0xc0/0xf0
->>>>>> [   16.712082] Modules linked in:
->>>>>> [   16.715124] CPU: 0 PID: 853 Comm: kworker/0:3 Not tainted 6.1.0-rc1-pipe-deadlock+ #5
->>>>>> [   16.722916] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B211.01 11/10/2021
->>>>>> [   16.731745] Workqueue: events work_for_cpu_fn
->>>>>> [   16.736083] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>>>>> [   16.743013] pc : dma_alloc_attrs+0xc0/0xf0
->>>>>> [   16.747091] lr : dma_pool_alloc+0x11c/0x200
->>>>>> [   16.751255] sp : ffff80001e46bb50
->>>>>> [   16.754554] x29: ffff80001e46bb50 x28: 0000000000000000 x27: 0000000000000000
->>>>>> [   16.761657] x26: ffff80000b33ce18 x25: ffff800009cc6c48 x24: 0000000000000000
->>>>>> [   16.768759] x23: ffff00208c830918 x22: 0000000000001000 x21: 0000000000000cc0
->>>>>> [   16.775861] x20: ffff00208ae82080 x19: ffff0020865c40d0 x18: 0000000000000030
->>>>>> [   16.782964] x17: 626d756e20737562 x16: 2064656e67697373 x15: ffff00208ae82640
->>>>>> [   16.790066] x14: 0000000000000000 x13: 646e756f72616b72 x12: 6f77204348207379
->>>>>> [   16.797167] x11: 73706f6e79532067 x10: ffff205f43980000 x9 : ffff80000830b3ac
->>>>>> [   16.804269] x8 : ffff0020861b1b00 x7 : 0000000000000000 x6 : 0000000000000000
->>>>>> [   16.811371] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000cc0
->>>>>> [   16.818472] x2 : ffff00208c830918 x1 : 0000000000001000 x0 : 0000000000000000
->>>>>> [   16.825574] Call trace:
->>>>>> [   16.828009]  dma_alloc_attrs+0xc0/0xf0
->>>>>> [   16.831741]  dma_pool_alloc+0x11c/0x200
->>>>>> [   16.835559]  ehci_qh_alloc+0x60/0x12c
->>>>>> [   16.839207]  ehci_setup+0x18c/0x40c
->>>>>> [   16.842680]  ehci_pci_setup+0xb8/0x680
->>>>>> [   16.846412]  usb_add_hcd+0x310/0x5c0
->>>>>> [   16.849973]  usb_hcd_pci_probe+0x254/0x36c
->>>>>> [   16.854051]  ehci_pci_probe+0x40/0x60
->>>>>> [   16.857698]  local_pci_probe+0x48/0xb4
->>>>>> [   16.861431]  work_for_cpu_fn+0x24/0x40
->>>>>> [   16.865163]  process_one_work+0x1e0/0x450
->>>>>> [   16.869155]  worker_thread+0x2cc/0x44c
->>>>>> [   16.872886]  kthread+0x114/0x120
->>>>>> [   16.876099]  ret_from_fork+0x10/0x20
->>>>>> [   16.879657] ---[ end trace 0000000000000000 ]---
->>>>>>
->>>>>> After reverting this patch the problem resolved. Tested on the latest 6.1-rc1.
->>>>>
->>>>> OK, I'll queue up a revert of this and one more commit depending on it.
->>>>
->>>> FWIW it looks like the fix should be as simple as below.
->>>>
->>>
->>> Looks like it's the case. The change works on my platform, now the ehci probed successfully again
->>> with no calltrace:
->>>
->>> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
->>>
->>>> Robin.
->>>>
->>>> ----->8-----
->>>> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
->>>> index 558664d169fc..b6962bff1eae 100644
->>>> --- a/drivers/acpi/scan.c
->>>> +++ b/drivers/acpi/scan.c
->>>> @@ -1509,6 +1509,7 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->>>>                goto out;
->>>>            }
->>>>
->>>> +        *map = r;
->>>>            list_for_each_entry(rentry, &list, node) {
->>>>                if (rentry->res->start >= rentry->res->end) {
->>>>                    kfree(r);
->>>> @@ -1523,8 +1524,6 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->>>>                r->offset = rentry->offset;
->>>>                r++;
->>>>            }
->>>> -
->>>> -        *map = r;
->>>>        }
->>>>     out:
->>>>        acpi_dev_free_resource_list(&list);
->>>>
->>
->> Ohh, yes, map got a wrong value of r because it has been changed.
+On 18/10/2022 08:38, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
 > 
-> Well, please send me a working patch by EOD tomorrow.
+> The SK architecture comprises of baseboard and a SOM board. It is
+> as follows,
 > 
+>        +--------------------------------------+---+
+>        |                                      |   |<--Connectors
+>        |                                      +---|
+>        |      +---------------------------+   |   |
+>        |      | SOM                       |   +---|
+>        |      |                           |   |   |
+>        |      |                           |   +---| Power Supply
+>        |      |                           |       |   |
+>        |      +---------------------------+       |   |
+>        |                                          |<--+
+>        |           BASE BOARD                     |
+>        +------------------------------------------+
 
-Ok!
+This is pretty straightforward for SoM, I am not sure what's the benefit
+to add it.
 
+> 
+> AM68 Starter Kit's baseboard contains most of the actual connectors,
+> power supply etc. The System on Module (SoM) is plugged on to the base
+> board. Therefore, add support for peripherals brought out in the base
+> board.
+> 
+> Schematics: https://www.ti.com/lit/zip/SPRR463
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/Makefile               |   2 +
+>  .../boot/dts/ti/k3-am68-sk-base-board.dts     | 459 ++++++++++++++++++
+>  2 files changed, 461 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> 
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index 4555a5be2257..498b089d96f8 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
+>  
+>  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
+>  
+> +dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
+> +
 
->> Maybe wo can fix it like this:
->>
->> truct bus_dma_region *r, *orig_r;
->> ...
->> orig_r = r = kcalloc(ret + 1, sizeof(*r), GFP_KERNEL);
->> ...
->> *map = orig_r;
->>
->>>> .
+Alphabetical order, although does not look like other entries are ordered...
+
+>  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
+>  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
+>  
+> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> new file mode 100644
+> index 000000000000..f51cbd2e3b72
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> @@ -0,0 +1,459 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> + *
+> + * Base Board: https://www.ti.com/lit/zip/SPRR463
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "k3-am68-sk-som.dtsi"
+> +#include <dt-bindings/net/ti-dp83867.h>
+> +#include <dt-bindings/phy/phy-cadence.h>
+> +#include <dt-bindings/phy/phy.h>
+> +#include <dt-bindings/mux/ti-serdes.h>
+> +
+> +/ {
+> +	compatible = "ti,am68-sk", "ti,j721s2";
+> +	model = "Texas Instruments AM68 SK";
+> +
+> +	chosen {
+> +		stdout-path = "serial2:115200n8";
+> +		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x2880000";
+
+None of these bootargs are suitable for mainline. earlycon for sure - it
+is pure debug option.
+
+> +	};
+> +
+> +	aliases {
+> +		serial2 = &main_uart8;
+> +		mmc1 = &main_sdhci1;
+> +		can0 = &mcu_mcan0;
+> +		can1 = &mcu_mcan1;
+> +		can2 = &main_mcan6;
+> +		can3 = &main_mcan7;
+> +	};
+> +
+> +	vusb_main: fixedregulator-vusb-main5v0 {
+
+Not "fixedregulator-" but just "regulator-"
+
+Same in other places.
+
+> +		/* USB MAIN INPUT 5V DC */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vusb-main5v0";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vsys_3v3: fixedregulator-vsys3v3 {
+> +		/* Output of LM5141 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_3v3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vusb_main>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vdd_mmc1: fixedregulator-sd {
+> +		/* Output of TPS22918 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd_mmc1";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		enable-active-high;
+> +		vin-supply = <&vsys_3v3>;
+> +		gpio = <&exp1 10 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	vdd_sd_dv: gpio-regulator-TLV71033 {
+
+1. regulator-xxxxxx
+2. lowercase node name
+
+> +		/* Output of TLV71033 */
+> +		compatible = "regulator-gpio";
+> +		regulator-name = "tlv71033";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vdd_sd_dv_pins_default>;
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		vin-supply = <&vsys_3v3>;
+> +		gpios = <&main_gpio0 49 GPIO_ACTIVE_HIGH>;> +		states = <1800000 0x0>,
+> +			 <3300000 0x1>;
+> +	};
+> +
+> +	vsys_io_1v8: regulator-vsys-io-1v8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_io_1v8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vsys_io_1v2: regulator-vsys-io-1v2 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_io_1v2";
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1200000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	transceiver1: can-phy0 {
+> +		compatible = "ti,tcan1042";
+> +		#phy-cells = <0>;
+> +		max-bitrate = <5000000>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&mcu_mcan0_pins_default>;
+> +		standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	transceiver2: can-phy1 {
+> +		compatible = "ti,tcan1042";
+> +		#phy-cells = <0>;
+> +		max-bitrate = <5000000>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
+> +		standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	transceiver3: can-phy2 {
+> +		compatible = "ti,tcan1042";
+> +		#phy-cells = <0>;
+> +		max-bitrate = <5000000>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&main_mcan6_pins_default>;
+> +		standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	transceiver4: can-phy3 {
+> +		compatible = "ti,tcan1042";
+> +		#phy-cells = <0>;
+> +		max-bitrate = <5000000>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&main_mcan7_pins_default>;
+> +		standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> +	};
+> +};
+> +
+> +&main_pmx0 {
+> +
+
+No need for blank line.
+
+> +	main_uart8_pins_default: main-uart8-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x0d0, PIN_INPUT, 11) /* (AF26) SPI0_CS1.UART8_RXD */
+> +			J721S2_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AH27) SPI0_CLK.UART8_TXD */
+> +		>;
+> +	};
+> +
+> +	main_i2c0_pins_default: i2c0_pins_default {
+
+No underscores in node names. Why do you use here different style than
+in other places?
+
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x0e0, PIN_INPUT, 0) /* (AH25) I2C0_SCL */
+> +			J721S2_IOPAD(0x0e4, PIN_INPUT, 0) /* (AE24) I2C0_SDA */
+> +		>;
+> +	};
+> +
+> +	main_mmc1_pins_default: main-mmc1-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x104, PIN_INPUT, 0) /* (P23) MMC1_CLK */
+> +			J721S2_IOPAD(0x108, PIN_INPUT, 0) /* (N24) MMC1_CMD */
+> +			J721S2_IOPAD(0x0fc, PIN_INPUT, 0) /* (M23) MMC1_DAT0 */
+> +			J721S2_IOPAD(0x0f8, PIN_INPUT, 0) /* (P24) MMC1_DAT1 */
+> +			J721S2_IOPAD(0x0f4, PIN_INPUT, 0) /* (R24) MMC1_DAT2 */
+> +			J721S2_IOPAD(0x0f0, PIN_INPUT, 0) /* (R22) MMC1_DAT3 */
+> +			J721S2_IOPAD(0x0e8, PIN_INPUT, 8) /* (AE25) TIMER_IO0.MMC1_SDCD */
+> +		>;
+> +	};
+> +
+> +	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x0c4, PIN_INPUT, 7) /* (AB26) ECAP0_IN_APWM_OUT.GPIO0_49 */
+> +		>;
+> +	};
+> +
+> +	main_usbss0_pins_default: main-usbss0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x0ec, PIN_OUTPUT, 6) /* (AG25) TIMER_IO1.USB0_DRVVBUS */
+> +		>;
+> +	};
+> +
+> +	main_mcan6_pins_default: mcan6_pins_default {
+
+Be sure you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x098, PIN_INPUT, 0) /* (V25) MCASP0_AXR10.MCAN6_RX */
+> +			J721S2_IOPAD(0x094, PIN_INPUT, 0) /* (AA25) MCASP0_AXR9.MCAN6_TX */
+> +		>;
+> +	};
+> +
+> +	main_mcan7_pins_default: mcan7_pins_default {
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x0a0, PIN_INPUT, 0) /* (AB25) MCASP0_AXR12.MCAN7_RX */
+> +			J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
+> +		>;
+> +	};
+> +
+> +};
+> +
+> +&wkup_pmx0 {
+> +	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (B22) MCU_RGMII1_RD0 */
+> +			J721S2_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B21) MCU_RGMII1_RD1 */
+> +			J721S2_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C22) MCU_RGMII1_RD2 */
+> +			J721S2_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D23) MCU_RGMII1_RD3 */
+> +			J721S2_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (D22) MCU_RGMII1_RXC */
+> +			J721S2_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (E23) MCU_RGMII1_RX_CTL */
+> +			J721S2_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (F23) MCU_RGMII1_TD0 */
+> +			J721S2_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (G22) MCU_RGMII1_TD1 */
+> +			J721S2_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E21) MCU_RGMII1_TD2 */
+> +			J721S2_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E22) MCU_RGMII1_TD3 */
+> +			J721S2_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (F21) MCU_RGMII1_TXC */
+> +			J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (F22) MCU_RGMII1_TX_CTL */
+> +		>;
+> +	};
+> +
+> +	mcu_mdio_pins_default: mcu-mdio-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A21) MCU_MDIO0_MDC */
+> +			J721S2_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (A22) MCU_MDIO0_MDIO */
+> +		>;
+> +	};
+> +
+> +	mcu_mcan0_pins_default: mcu-mcan0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x0bc, PIN_INPUT, 0) /* (E28) MCU_MCAN0_RX */
+> +			J721S2_WKUP_IOPAD(0x0b8, PIN_OUTPUT, 0) /* (E27) MCU_MCAN0_TX */
+> +		>;
+> +	};
+> +
+> +	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x0d4, PIN_INPUT, 0) /* (F26) WKUP_GPIO0_5.MCU_MCAN1_RX */
+> +			J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
+> +		>;
+> +	};
+> +
+> +	mcu_i2c1_pins_default: mcu_i2c1_pins_default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
+> +			J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
+> +		>;
+> +	};
+> +
+
+Drop line
+
+> +};
+> +
+> +&main_gpio2 {
+> +	status = "disabled";
+> +};
+> +
+Best regards,
+Krzysztof
 
