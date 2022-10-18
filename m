@@ -2,136 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98D76025A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7206025A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiJRHXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S230439AbiJRHYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiJRHXh (ORCPT
+        with ESMTP id S230416AbiJRHYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:23:37 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98754ABF1F;
-        Tue, 18 Oct 2022 00:23:24 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id s20so21098524lfi.11;
-        Tue, 18 Oct 2022 00:23:24 -0700 (PDT)
+        Tue, 18 Oct 2022 03:24:02 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF07AC498
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:23:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id pq16so13207658pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p3nyMq6EMyVRHeyxrABEnUNSYPVSUUrWhCzrtAxceXE=;
-        b=Yk+TJio+V9jwykmEv7O6EUfHHYwfvpzYFuS/VgAQQmC7I4eCJjCctniv8kHx3tZ9g2
-         woKFrOcAg6AHdQlbG3Ubyv/62eloXlajxefAHzQgd1PxMjmQ70Vfm1pxy5dgWERuaQZG
-         jF/32taSjJH5sGTSabqTuWYcLw+Sh3MjRrBVs5HisCXc6ZUI8rXWiyCHvV6MsDvdf2ws
-         z2gUR2jb/jRECe2a2q2etTWIqYMI3ZvzdEJb9Vbyjd5NHm/4Ja0dG2yul8UdsX5sC59M
-         PPNyn+Em0/ONLYcWkODlFdSMX+V1F9NxlIoFpAZOK9lhulokSEiSOOyQ+7TQ62sOOYSn
-         8Isg==
+        bh=eBwuizpkCKbq1SvzVMTwyeKTeXU4LazpzWWzaVv1xBU=;
+        b=aE7vPfO8sNeJjmd/6/cG+NJE5XS1hLqfbe0KMmeekFjfDWtjLVy53z9pfBfXOMzWuh
+         eDT/imD4IeynJD2dWFql4p8zJY2WZs8QUXbQxyzFSF6EepBDqR9uuJgyuGUdlaMPPHWL
+         RL9JuKT27kiWLLwEpO9Y52KYBELWN+ut62KpOnxhB/gj/M4Wmfivx7tx7vbYAKA4tBQ6
+         NmG0/jv0u6rHohU8wJAn0cKYdVfouhHLXaEZqyVYceit5hsj6J/KkfFsMDv77yhtiBZ8
+         hcR2raWRMmz2UjDXo3TOefvDKI9qGwT78EKy/cXIv3fLJf3TfoYH70G2C8TeGoD+4lIA
+         utpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p3nyMq6EMyVRHeyxrABEnUNSYPVSUUrWhCzrtAxceXE=;
-        b=gGGEenCfujK1cer/xEfuWVPOv8zSoRXuxhdWalAND6qpBCxK8DYgMAIvTMoLUJlvmH
-         Gj6pcv19+SSM+tRjJ4LlSW5PuAe4QgPq7YCejAokY/SQiwJyZawikW9KFcTGe+IZ32wc
-         XpvlQSaKKiW6e7NS++LmnvhkmRtDFdoaNha7CazgJnufMI9Z0fSp3o11IX2JLKr5sQDI
-         YZAuKY3bcxS3UXT/7r1u2WaZCU8y1oZxgKFOreSmt6U/1Kft+zqN1zXQTHzN2c/EKI7A
-         rF1Dur9dOXG9xinqS1/2AFbdaUGw5HOFnufwVdyRo/nmow088ww/76wb/wi4U7OaE71e
-         0boA==
-X-Gm-Message-State: ACrzQf2EXBf3m8FXyql/R1IBhb2chkGVZvUYmnVHAWLWfDNKazSQRwPv
-        8xk0a3bBkeWDEZvXLb/dVyg=
-X-Google-Smtp-Source: AMsMyM4FIi6S1pT6eltiRrryv4qE0rcqltqfJTCg+I24Bqf3BRcvPv34/82bpTDDYj7hDqtN9ZygBA==
-X-Received: by 2002:a19:5052:0:b0:4a2:caa1:e2f6 with SMTP id z18-20020a195052000000b004a2caa1e2f6mr507086lfj.65.1666077802373;
-        Tue, 18 Oct 2022 00:23:22 -0700 (PDT)
-Received: from ?IPV6:2001:2002:2f8:bfc5:11e3:17a5:f449:1926? ([2001:2002:2f8:bfc5:11e3:17a5:f449:1926])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056512361100b004a22ea5dc7fsm1750260lfs.8.2022.10.18.00.23.21
+        bh=eBwuizpkCKbq1SvzVMTwyeKTeXU4LazpzWWzaVv1xBU=;
+        b=GhJHWWWlSkV8yH4nUS2HAVOb5Dx+KFmBr0MN+4pFGbBj4ZNKPa29hof+Ou4NBA43fS
+         vkzwg0U1zhrjQh0Yv5tumJRso164emFsTfbU6PZ7kvgapLoFxDjJbOIB2UtJdD2OQkaw
+         442VrHRokvJlPxLOFn+EGKu0llBksYTI3O7+rVN8XuTE64+WnlkxDmK6mmMNI1rxI90I
+         5VJuiLzvBAzVveVojI5HK+10PZCUxW8RW4RQoWcVk+gGJ7SOn8UUvxvlkZJce36j5Xyu
+         xzqSc5JQtkzihrGXxWv9fyhquPqfEkrCvyd/QPZIdbfUEqy2l06G5Pg06pueyks5sO+J
+         2odA==
+X-Gm-Message-State: ACrzQf0e2wjBPtDF9H/lu4d/MrG47zFfQCXxMc03Ubj+4IAb/C8/kloy
+        y8fKAjger6GO5sxKkH2d3MQ=
+X-Google-Smtp-Source: AMsMyM5rNrKDU+uoU480m4jpkMFZ7GXOSt2UncqLsHnNn74mJccwffNoJpUYBZUR6Tk0KShwwcpK1g==
+X-Received: by 2002:a17:90a:2849:b0:20a:f3ff:c983 with SMTP id p9-20020a17090a284900b0020af3ffc983mr2106136pjf.198.1666077826587;
+        Tue, 18 Oct 2022 00:23:46 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-93.three.co.id. [180.214.233.93])
+        by smtp.gmail.com with ESMTPSA id y126-20020a623284000000b00560cdb3784bsm8353589pfy.60.2022.10.18.00.23.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 00:23:21 -0700 (PDT)
-Message-ID: <7509e3c2-b3be-1330-bfa4-3ae16d049d70@gmail.com>
-Date:   Tue, 18 Oct 2022 09:23:21 +0200
+        Tue, 18 Oct 2022 00:23:46 -0700 (PDT)
+Message-ID: <2522e5d5-5f8a-c5e9-4864-a82f0e6d2512@gmail.com>
+Date:   Tue, 18 Oct 2022 14:23:42 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH] kbuild: use POSIX-compatible grep option
-Content-Language: en-GB
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221017150113.334571-1-newbie13xd@gmail.com>
- <CAK7LNARsUE4j7LNYsushQaXFBEcnhhXoNg9THh2wLrYoi2jp9Q@mail.gmail.com>
-From:   Stefan Hansson <newbie13xd@gmail.com>
-In-Reply-To: <CAK7LNARsUE4j7LNYsushQaXFBEcnhhXoNg9THh2wLrYoi2jp9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
+ 6.0.0-rc3 through 6.0.0-rc7
+Content-Language: en-US
+To:     Jintao Yin <nicememory@gmail.com>, phillip@squashfs.org.uk
+Cc:     linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
+        mirsad.todorovac@alu.unizg.hr, regressions@leemhuis.info,
+        regressions@lists.linux.dev, srw@sladewatkins.net
+References: <20221015205936.5735-1-phillip@squashfs.org.uk>
+ <20221018021507.612-1-nicememory@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221018021507.612-1-nicememory@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
-
-On 2022-10-17 23:31, Masahiro Yamada wrote:
-> On Tue, Oct 18, 2022 at 12:02 AM Stefan Hansson <newbie13xd@gmail.com> wrote:
->>
->> --file is a GNU extension to grep which is not available in all
->> implementations (such as BusyBox). Use the -f option instead which is
->> eqvuialent according to the GNU grep manpage[1] and is present in
->> POSIX[2].
->>
->>   [1] https://www.gnu.org/software/grep/manual/grep.html
->>   [2] https://pubs.opengroup.org/onlinepubs/9699919799/
+On 10/18/22 09:15, Jintao Yin wrote:
+> Hi Phillip,
+>   There is a logical bug in commit 8fc78b6fe24c36b151ac98d7546591ed92083d4f
+>   which is parent commit of commit b09a7a036d2035b14636cd4c4c69518d73770f65.
+>   
+>   In function squashfs_readahead(...),
+>   file_end is initialized with i_size_read(inode) >> msblk->block_log,
+>   which means the last block index of the file.
+>   But later in the logic to check if the page is last one or not the
+>   code is 
+>     if (pages[nr_pages - 1]->index == file_end && bytes) {
+>       ...
+>     }
+>   , use file_end as the last page index of file but actually is the last
+>   block index, so for the common setup of page and block size, the first 
+>   comparison is true only when pages[nr_pages - 1]->index is 0.
+>   Otherwise, the trailing bytes of last page won't be zeroed.
 > 
-> 
-> This link does not show the spec of grep.
-> 
-> 
-> Did you mean this?
-> 
-> https://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html
-> 
+>   Maybe it's the real cause of the snap bug in some way.
 > 
 
-Yes, sorry, that's a better link. I'm new to this. Do you want me to 
-send a v2 with the commit message updated?
+Hi Jintao, thanks for explaining the real culprit. However, I'd like to
+see the fixup patch from you so that we can test.
 
-> 
-> 
-> Thanks.
-> 
-> 
-> 
-> 
-> 
->>
->> Signed-off-by: Stefan Hansson <newbie13xd@gmail.com>
->> ---
->>   Makefile | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Makefile b/Makefile
->> index c690361b393f..3513a6db66a2 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
->>         cmd_ar_vmlinux.a = \
->>          rm -f $@; \
->>          $(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
->> -       $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
->> +       $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -Ff $(srctree)/scripts/head-object-list.txt)
->>
->>   targets += vmlinux.a
->>   vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
->> --
->> 2.37.3
->>
-> 
-> 
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
