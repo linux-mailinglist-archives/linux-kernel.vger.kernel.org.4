@@ -2,179 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7B4602FDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71A3602FE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiJRPgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S230302AbiJRPjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiJRPgt (ORCPT
+        with ESMTP id S229807AbiJRPi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:36:49 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D232BAD992;
-        Tue, 18 Oct 2022 08:36:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RlkWV852OLkOK6VIC4MJ7pbO5fAQ+OZFXN8utvL/kPI4uluZxYZgF8+i2GPHMuxlGNIL9MyGOmZ2IKZ13P0Ek21O6uScm+9nHbPJQrcTw6FOlJCIS5iMY9LDu59XOnGGRklKmRPKuTgkQC0T3W4ViAQdqbPp+f6HMqbvdFVMAj+9jG1qWmG1ojCgykHrWUqgcWZG8mehUg1y7lEMgPsMaKLszio+g4JeWnCGUCWZWUF4em+8Zp0BRgLZ5LvWEZU7BuImeYRQdrRP7Hkc/3FPMvepb+tD8piiUT+G4i0ZQ8K7mv4gA8ExHvii4rqB78uso5q+bKVtHViU8H/C2sCBNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OuGk9mXWTlSnx7JBlqdTIHQR7j4WXV/bRxEo5ZyKCEI=;
- b=ix4Ek4PgOyJFsNds9CHVU3lSPe0A3VdA1/N+HKri1o8BQLe45EtXXEASvzG0SKGeBey5tRh5mGDvJB+/Yh+1WlIErolBfIPXTdxVuiEkkkM4Q2rN8ATqYpsj2VbKnC+ydjMHzZrV/CiDscaVEW//Gss8JW716ijFDNJovuSNk2qkHb8Bm4neHC28KUtLH0c40wPsvBRZTyKTWOfzzGwkLunURXuWrSmsVdrw6gajeNKFJFzP9WH7rFh2gIHdFqq8t+SZmrOCqWtuzex4hYyPR7xgNLg1SbCEbMkL0DDp7PIwO+r+BZp6ZmcPEAOSizrhMfDLNt2vLWPfsM6DING2aQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OuGk9mXWTlSnx7JBlqdTIHQR7j4WXV/bRxEo5ZyKCEI=;
- b=3pTRfrX1o/J1oaoU5M+qDQl8URFbOMTpbLq4ivx93sdC3SlSeNzgbkQfeyki0xanLvl5DSDcRXUkGKgIIgF0LMQG6lz6RrsD5grhY+C1YoG3efBZBbloZxSABke30eLV3q7uhDDbopsF3VnPWw1KLcaF1AoiDGBPLTnuuv1Bz4w=
-Received: from MW4PR04CA0386.namprd04.prod.outlook.com (2603:10b6:303:81::31)
- by MN2PR12MB4160.namprd12.prod.outlook.com (2603:10b6:208:19a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Tue, 18 Oct
- 2022 15:36:46 +0000
-Received: from CO1NAM11FT111.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::91) by MW4PR04CA0386.outlook.office365.com
- (2603:10b6:303:81::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30 via Frontend
- Transport; Tue, 18 Oct 2022 15:36:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT111.mail.protection.outlook.com (10.13.174.61) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5723.20 via Frontend Transport; Tue, 18 Oct 2022 15:36:44 +0000
-Received: from titanite-35bahost.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 10:36:42 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <bp@alien8.de>, <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <Smita.KoralahalliChannabasappa@amd.com>, <mchehab@kernel.org>,
-        <tony.luck@intel.com>, <james.morse@arm.com>, <rric@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH] EDAC/mc_sysfs: Increase legacy channel support to 12
-Date:   Tue, 18 Oct 2022 10:36:30 -0500
-Message-ID: <20221018153630.14664-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 11:38:58 -0400
+X-Greylist: delayed 333 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 08:38:56 PDT
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840B2BE51E;
+        Tue, 18 Oct 2022 08:38:56 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MsHvN4lzDz9xFn1;
+        Tue, 18 Oct 2022 23:33:36 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwC3PQRuyE5jwJgGAA--.16309S2;
+        Tue, 18 Oct 2022 16:38:31 +0100 (CET)
+Message-ID: <3935350428bf290e873d93d8a1f9c26b0e65979e.camel@huaweicloud.com>
+Subject: Re: [PATCH 0/9] integrity: Move hooks into LSM
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Paul Moore <paul@paul-moore.com>, KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 18 Oct 2022 17:38:19 +0200
+In-Reply-To: <0a8f21a6-02de-36f0-7613-06ed3daf934b@digikod.net>
+References: <20221013222702.never.990-kees@kernel.org>
+         <0a8f21a6-02de-36f0-7613-06ed3daf934b@digikod.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT111:EE_|MN2PR12MB4160:EE_
-X-MS-Office365-Filtering-Correlation-Id: 634c7ccc-862e-4bcc-8815-08dab11e9007
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MNOfAXvMh1PlL9nHeo5F+XUu33QfJsb9f0WET7VQWbP+lPOFgQoGvA8pMnW5Ah27W19MpvHzo+aKY65domWtL1lO1buxbstPEa6Ry6C82jjBZfNfX7cqhZapQG8HLJ1fF6Ly5urD6CnCOg5GgS92dLOrFIQq5XAuUT9KKdiZt+9qYcVLwnbbVBBwAXXUuM/E2qqXHDNWpj6KyDxW8y8R3M/kKetFbp+QonwmpeoNucpjH7oT4w9vbXCH5baCAyxWlKcFLIn/JQE2t7d1H4P0oOvpI1gf5nn8a6oGSw9jEACqbwz4XocdtZwRgE8T0cqPh6SIRh1p5SuH3UGJr6c6C2EoOPT9shEsHs3aec67Rg1rtF0WLlQAgctHYrvhpTqP1BzZosUbzvYOLt00VZT3Z2eSzj3FOpXeaASom/6ccpIneWhWTE6+/oQsoanG2JZPxTheCtbp0+EgZtWiffH3B7wbtg0NpQuGuKE7hWvFQlBsjyb/CR+ex9TDGF649aI9djRV54O6dONSCE7xYGIMhh0FjOZqLknOTnCA/pLBiBcit65lgGjvRYBm1mxr0h5ithKmO3v7sEDcKw2/ZpPjI4Dibf0EbMnzaRcveNdsGP9/r0I1QSsyWnCNWCNuFYL2RomCPZbhB9yQuO7dhpK7udYgjzgnnVkGGdg0O/5Gxb/FEaPdlGA8BTV4TYLBlZ+6w9cCbo9hXF04juzudhdJUpjkGXGjFJnJuN2ecnTu3qRR20xtrSn6/IQ0dLZhG+tdd5St6amCgvGSRqx36yLMSNZyO/FDx+IoaIfkateL+fo=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(376002)(136003)(451199015)(36840700001)(40470700004)(46966006)(36756003)(47076005)(44832011)(8936002)(5660300002)(82740400003)(81166007)(336012)(83380400001)(356005)(86362001)(426003)(36860700001)(26005)(110136005)(54906003)(40460700003)(16526019)(6666004)(1076003)(2616005)(478600001)(186003)(316002)(40480700001)(4326008)(70586007)(41300700001)(70206006)(8676002)(82310400005)(2906002)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 15:36:44.8175
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 634c7ccc-862e-4bcc-8815-08dab11e9007
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT111.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4160
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwC3PQRuyE5jwJgGAA--.16309S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZry7Wr4DuFyrKF4kXr1rtFb_yoW5Gw18pF
+        s3Ka43ur18JFya9F92v3W3u3W5K3yrWr1UWr13Ar10y3sIvF18Xr4UAry09Fy3WrWrAr12
+        grsFgrn8Cr1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UGYL9UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4BjQgAAsf
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Newer AMD systems, such as Genoa, can support up to 12 channels per EDAC
-"mc" device. These are detected by the device's EDAC module, and the
-current EDAC interface is properly enumerated. However, the legacy EDAC
-sysfs interface provides device attributes only for channels 0 to 7.
-Therefore, channels 8 to 11 will not be visible in the legacy interface.
-This was overlooked in the initial support for AMD Genoa.
+On Tue, 2022-10-18 at 17:31 +0200, Mickaël Salaün wrote:
+> There is a complementary patch series that didn't received review: 
+> https://lore.kernel.org/all/20210427113732.471066-1-roberto.sassu@huawei.com/
 
-Add additional device attributes so that up to 12 channels are visible
-in the legacy EDAC sysfs interface.
+Thanks Mickael, just pushed to Github the patch set you mentioned + IMA
+on LSM infrastructure.
 
-Ignore checkpatch warnings about "Symbolic permissions" to maintain
-coding style.
+That patch set was a prerequisite: allowing multiple stacked LSMs to
+provide an xattr at inode creation time.
 
-Fixes: e2be5955a886 ("EDAC/amd64: Add support for AMD Family 19h Models 10h-1Fh and A0h-AFh")
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: <stable@vger.kernel.org>
----
- drivers/edac/edac_mc_sysfs.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Roberto
 
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 0a638c97702a..15f63452a9be 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -298,6 +298,14 @@ DEVICE_CHANNEL(ch6_dimm_label, S_IRUGO | S_IWUSR,
- 	channel_dimm_label_show, channel_dimm_label_store, 6);
- DEVICE_CHANNEL(ch7_dimm_label, S_IRUGO | S_IWUSR,
- 	channel_dimm_label_show, channel_dimm_label_store, 7);
-+DEVICE_CHANNEL(ch8_dimm_label, S_IRUGO | S_IWUSR,
-+	channel_dimm_label_show, channel_dimm_label_store, 8);
-+DEVICE_CHANNEL(ch9_dimm_label, S_IRUGO | S_IWUSR,
-+	channel_dimm_label_show, channel_dimm_label_store, 9);
-+DEVICE_CHANNEL(ch10_dimm_label, S_IRUGO | S_IWUSR,
-+	channel_dimm_label_show, channel_dimm_label_store, 10);
-+DEVICE_CHANNEL(ch11_dimm_label, S_IRUGO | S_IWUSR,
-+	channel_dimm_label_show, channel_dimm_label_store, 11);
- 
- /* Total possible dynamic DIMM Label attribute file table */
- static struct attribute *dynamic_csrow_dimm_attr[] = {
-@@ -309,6 +317,10 @@ static struct attribute *dynamic_csrow_dimm_attr[] = {
- 	&dev_attr_legacy_ch5_dimm_label.attr.attr,
- 	&dev_attr_legacy_ch6_dimm_label.attr.attr,
- 	&dev_attr_legacy_ch7_dimm_label.attr.attr,
-+	&dev_attr_legacy_ch8_dimm_label.attr.attr,
-+	&dev_attr_legacy_ch9_dimm_label.attr.attr,
-+	&dev_attr_legacy_ch10_dimm_label.attr.attr,
-+	&dev_attr_legacy_ch11_dimm_label.attr.attr,
- 	NULL
- };
- 
-@@ -329,6 +341,14 @@ DEVICE_CHANNEL(ch6_ce_count, S_IRUGO,
- 		   channel_ce_count_show, NULL, 6);
- DEVICE_CHANNEL(ch7_ce_count, S_IRUGO,
- 		   channel_ce_count_show, NULL, 7);
-+DEVICE_CHANNEL(ch8_ce_count, S_IRUGO,
-+		   channel_ce_count_show, NULL, 8);
-+DEVICE_CHANNEL(ch9_ce_count, S_IRUGO,
-+		   channel_ce_count_show, NULL, 9);
-+DEVICE_CHANNEL(ch10_ce_count, S_IRUGO,
-+		   channel_ce_count_show, NULL, 10);
-+DEVICE_CHANNEL(ch11_ce_count, S_IRUGO,
-+		   channel_ce_count_show, NULL, 11);
- 
- /* Total possible dynamic ce_count attribute file table */
- static struct attribute *dynamic_csrow_ce_count_attr[] = {
-@@ -340,6 +360,10 @@ static struct attribute *dynamic_csrow_ce_count_attr[] = {
- 	&dev_attr_legacy_ch5_ce_count.attr.attr,
- 	&dev_attr_legacy_ch6_ce_count.attr.attr,
- 	&dev_attr_legacy_ch7_ce_count.attr.attr,
-+	&dev_attr_legacy_ch8_ce_count.attr.attr,
-+	&dev_attr_legacy_ch9_ce_count.attr.attr,
-+	&dev_attr_legacy_ch10_ce_count.attr.attr,
-+	&dev_attr_legacy_ch11_ce_count.attr.attr,
- 	NULL
- };
- 
--- 
-2.34.1
+> On 14/10/2022 00:36, Kees Cook wrote:
+> > Hi,
+> > 
+> > It's been over 4 years since LSM stack was introduced. The
+> > integrity
+> > subsystem is long overdue for moving to this infrastructure. Here's
+> > my
+> > first pass at converting integrity and ima (and some of evm) into
+> > LSM
+> > hooks. This should be enough of an example to finish evm, and
+> > introduce
+> > the missing hooks for both. For example, after this, it looks like
+> > ima
+> > only has a couple places it's still doing things outside of the
+> > LSM. At
+> > least these stood out:
+> > 
+> > fs/namei.c:     ima_post_create_tmpfile(mnt_userns, inode);
+> > fs/namei.c:                             ima_post_path_mknod(mnt_use
+> > rns, dentry);
+> > 
+> > Mimi, can you please take this series and finish the conversion for
+> > what's missing in ima and evm?
+> > 
+> > I would also call attention to "175 insertions(+), 240 deletions(-
+> > )" --
+> > as expected, this is a net reduction in code.
+> > 
+> > Thanks!
+> > 
+> > -Kees
+> > 
+> > Kees Cook (9):
+> >    integrity: Prepare for having "ima" and "evm" available in
+> > "integrity"
+> >      LSM
+> >    security: Move trivial IMA hooks into LSM
+> >    ima: Move xattr hooks into LSM
+> >    ima: Move ima_file_free() into LSM
+> >    LSM: Introduce inode_post_setattr hook
+> >    fs: Introduce file_to_perms() helper
+> >    ima: Move ima_file_check() into LSM
+> >    integrity: Move trivial hooks into LSM
+> >    integrity: Move integrity_inode_get() out of global header
+> > 
+> >   fs/attr.c                             |  3 +-
+> >   fs/file_table.c                       |  1 -
+> >   fs/namei.c                            |  2 -
+> >   fs/nfsd/vfs.c                         |  6 --
+> >   include/linux/evm.h                   |  6 --
+> >   include/linux/fs.h                    | 22 +++++++
+> >   include/linux/ima.h                   | 87 ----------------------
+> > -----
+> >   include/linux/integrity.h             | 30 +--------
+> >   include/linux/lsm_hook_defs.h         |  3 +
+> >   security/Kconfig                      | 10 +--
+> >   security/apparmor/include/file.h      | 18 ++----
+> >   security/integrity/evm/evm_main.c     | 14 ++++-
+> >   security/integrity/iint.c             | 28 +++++++--
+> >   security/integrity/ima/ima.h          | 12 ++++
+> >   security/integrity/ima/ima_appraise.c | 21 +++++--
+> >   security/integrity/ima/ima_main.c     | 66 ++++++++++++++------
+> >   security/integrity/integrity.h        |  8 +++
+> >   security/security.c                   | 78 ++++++--------------
+> > ----
+> >   18 files changed, 175 insertions(+), 240 deletions(-)
+> > 
 
