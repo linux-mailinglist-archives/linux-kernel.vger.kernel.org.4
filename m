@@ -2,149 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED5C601FC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75239601FCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJRAjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        id S230103AbiJRAqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232236AbiJRAjA (ORCPT
+        with ESMTP id S230087AbiJRAqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:39:00 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447B82D1D3;
-        Mon, 17 Oct 2022 17:38:44 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id 187so10543312iov.10;
-        Mon, 17 Oct 2022 17:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XlhfMLBD9roK3usgmTalym3p24qmGFsJ7yKhSqoF6eE=;
-        b=SKuxY2D1ggKZw5AIxtovMVOi0bMS6948pzTuhpr95+US+rXA2hyFjcWyfCdaCUCb/S
-         SM6+4PzuUnwDMnMspTha9/yHQQZKVwtRUuo8H+ckdNX1bL3C02cZnUKbxyDYSICzlkkL
-         PnvvwRjhz6x4R/pklBCE0RuQNK+ycvNJFIhhpH8Ff7132g4zBuH/aa5+Bcb3u8Qm97LW
-         NpECeJxZC50ldm2IQOBTskFOzdxdKW2KlpOytzQ6ERCHmkrXrWy5hJmh/dDUzS+i98Rf
-         bI3Z2pigyquQAYS7H1XD03xPG7fiF9EZ1JhC/rlTYRTqdJK1jVfAdx5X6mFtXxO8Ykle
-         2Ctg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XlhfMLBD9roK3usgmTalym3p24qmGFsJ7yKhSqoF6eE=;
-        b=3/+cFbomYcx74q46TpZhkNqkkhsTRdmcMqKXHED7jHwzzFnIoD6HPOtlBfVGMTl2y4
-         MGVcUvwgmPxGlxpAaJBdSMrrxd7hmauHKR2NmarsXc5QR9Z2JOugUZ8wDBGfzAevtbH6
-         mo1uw1mhU40tHBagYjBzj7bXWK/MQXRkk6R4ffGTJILFBLWJIdlw5R+6m06F7E2MVwbq
-         F7wSG4LPU3AasM6Eco1vfZqoxDe2fHCkqOnAxMqvy4XRJ3qTbRcvMkSjAOWzkG91GcOU
-         t/p86gX6E4qIMb6iOHGvg8ZHGA5hhd96w2+XxJeuYMWGWvwhRxF8/PX0YStGgA31lMfm
-         QqiQ==
-X-Gm-Message-State: ACrzQf39Ulb9SIcoEfCJdOXfrKVYSJiwq4rVCcmWouFitIi8zNJDbj/P
-        DGD6yV9a9+Zzj4Aq0363Dc4=
-X-Google-Smtp-Source: AMsMyM7btFADvKuqFJI+j+cM9Q57eDbr9oysnGbnjoIQefOXCXYVFU3irXtHKbQpzKghTu0GbV2sgQ==
-X-Received: by 2002:a05:6602:2c8e:b0:6a3:886a:30fb with SMTP id i14-20020a0566022c8e00b006a3886a30fbmr432747iow.75.1666053472214;
-        Mon, 17 Oct 2022 17:37:52 -0700 (PDT)
-Received: from localhost ([2607:fea8:a2e2:2d00::4a89])
-        by smtp.gmail.com with UTF8SMTPSA id k3-20020a0566022a4300b006a11760aebbsm468096iov.36.2022.10.17.17.37.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 17:37:51 -0700 (PDT)
-From:   Richard Acayan <mailingradian@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Richard Acayan <mailingradian@gmail.com>,
-        Melody Olvera <quic_molvera@quicinc.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 2/5] dmaengine: qcom: gpi: document preferred SM6350 binding
-Date:   Mon, 17 Oct 2022 20:37:28 -0400
-Message-Id: <20221018003727.22763-1-mailingradian@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <6d9df544-b99e-4d62-53d1-1f3290d31a19@linaro.org>
-References: <20221015140447.55221-1-krzysztof.kozlowski@linaro.org> <20221015140447.55221-3-krzysztof.kozlowski@linaro.org> <20221017212320.4960-1-mailingradian@gmail.com> <801c902d-4e1a-6ddc-e050-afdc2514e687@linaro.org> <20221017220004.6234-1-mailingradian@gmail.com> <6d9df544-b99e-4d62-53d1-1f3290d31a19@linaro.org>
+        Mon, 17 Oct 2022 20:46:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7561C40B
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666053992;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G5ql+ZHZqoj03bFqQztJ8LdTDZnWgqOwdaisBDDNe/I=;
+        b=CLYFgj4IFHSYuatKlDT36QbLTeV6+WDDe1Ew+Noc/l/HMDrovw1ngk6N17ueFoz0wWMWoT
+        SW89TAqhlaIYuolhQ8HChE8EZm0MY6IE5xbxME2zMNivq3s0kF44K63rQDB9hDMTOBSTsh
+        ryAWia2XeiPTW4/gO83lEJKL4Bq+0Fw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-16-eT4pDrE-OVycqNH8JzyLBA-1; Mon, 17 Oct 2022 20:46:28 -0400
+X-MC-Unique: eT4pDrE-OVycqNH8JzyLBA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC63A811E75;
+        Tue, 18 Oct 2022 00:46:27 +0000 (UTC)
+Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3A4E140C2140;
+        Tue, 18 Oct 2022 00:46:15 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
+ guest page size
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ajones@ventanamicro.com,
+        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com, peterx@redhat.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com,
+        kvmarm@lists.linux.dev
+References: <20221014071914.227134-1-gshan@redhat.com>
+ <20221014071914.227134-5-gshan@redhat.com>
+ <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
+Date:   Tue, 18 Oct 2022 08:46:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
+In-Reply-To: <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 17/10/2022 18:00, Richard Acayan wrote:
->>> On 17/10/2022 17:23, Richard Acayan wrote:
->>>>> Devices with ee offset of 0x10000 should rather bind with SM6350
->>>>> compatible, so the list will not unnecessarily grow for compatible
->>>>> devices.
->>>>>
->>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>> ---
->>>>>  drivers/dma/qcom/gpi.c | 7 ++++---
->>>>>  1 file changed, 4 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
->>>>> index f8e19e6e6117..061add832295 100644
->>>>> --- a/drivers/dma/qcom/gpi.c
->>>>> +++ b/drivers/dma/qcom/gpi.c
->>>>> @@ -2286,13 +2286,14 @@ static int gpi_probe(struct platform_device *pdev)
->>>>>  }
->>>>>  
->>>>>  static const struct of_device_id gpi_of_match[] = {
->>>>> -	{ .compatible = "qcom,sc7280-gpi-dma", .data = (void *)0x10000 },
->>>>>  	{ .compatible = "qcom,sdm845-gpi-dma", .data = (void *)0x0 },
->>>>>  	{ .compatible = "qcom,sm6350-gpi-dma", .data = (void *)0x10000 },
->>>>>  	/*
->>>>> -	 * Deprecated, devices with ee_offset = 0 should use sdm845-gpi-dma as
->>>>> -	 * fallback and not need their own entries here.
->>>>
->>>> This comment is from the dependency series [1]. Why would we need to add it just
->>>> to remove it here? I was not notified that the dependency was applied anywhere
->>>> (except as a base for other series) so it's not set in stone. Let's just drop
->>>> the original patch that this comment originates from to prevent needlessly
->>>> adding and removing the same lines at once.
->>>
->>> I don't remove the comment, I re-phrase it to be better suited for final
->>> code.
->> 
->> Yes, I didn't word that exactly right. I still think the patch that adds this is
->> now useless if it's just going to be replaced. Do you think I should keep the
->> patch that this comment originates from, even though we already know exactly how
->> its substantial contents will be replaced?
->> 
->> We can't modify history and drop commits on kernel trees, but I can still send
->> a v6 series that drops the original comment.
+On 10/18/22 5:31 AM, Maciej S. Szmigiero wrote:
+> On 14.10.2022 09:19, Gavin Shan wrote:
+>> The test case is obviously broken on aarch64 because non-4KB guest
+>> page size is supported. The guest page size on aarch64 could be 4KB,
+>> 16KB or 64KB.
+>>
+>> This supports variable guest page size, mostly for aarch64.
+>>
+>>    - The host determines the guest page size when virtual machine is
+>>      created. The value is also passed to guest through the synchronization
+>>      area.
+>>
+>>    - The number of guest pages are unknown until the virtual machine
+>>      is to be created. So all the related macros are dropped. Instead,
+>>      their values are dynamically calculated based on the guest page
+>>      size.
+>>
+>>    - The static checks on memory sizes and pages becomes dependent
+>>      on guest page size, which is unknown until the virtual machine
+>>      is about to be created. So all the static checks are converted
+>>      to dynamic checks, done in check_memory_sizes().
+>>
+>>    - As the address passed to madvise() should be aligned to host page,
+>>      the size of page chunk is automatically selected, other than one
+>>      page.
+>>
+>>    - All other changes included in this patch are almost mechanical
+>>      replacing '4096' with 'guest_page_size'.
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
+>>   1 file changed, 115 insertions(+), 76 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+>> index d5aa9148f96f..d587bd952ff9 100644
+>> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
+>> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+>> @@ -26,14 +26,11 @@
+>>   #include <processor.h>
+>>   #define MEM_SIZE        ((512U << 20) + 4096)
+>> -#define MEM_SIZE_PAGES        (MEM_SIZE / 4096)
+>>   #define MEM_GPA        0x10000000UL
+>>   #define MEM_AUX_GPA        MEM_GPA
+>>   #define MEM_SYNC_GPA        MEM_AUX_GPA
+>>   #define MEM_TEST_GPA        (MEM_AUX_GPA + 4096)
+>>   #define MEM_TEST_SIZE        (MEM_SIZE - 4096)
+>> -static_assert(MEM_SIZE % 4096 == 0, "invalid mem size");
+>> -static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
+>>   /*
+>>    * 32 MiB is max size that gets well over 100 iterations on 509 slots.
+>> @@ -42,29 +39,16 @@ static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
+>>    * limited resolution).
+>>    */
+>>   #define MEM_SIZE_MAP        ((32U << 20) + 4096)
+>> -#define MEM_SIZE_MAP_PAGES    (MEM_SIZE_MAP / 4096)
+>>   #define MEM_TEST_MAP_SIZE    (MEM_SIZE_MAP - 4096)
+>> -#define MEM_TEST_MAP_SIZE_PAGES (MEM_TEST_MAP_SIZE / 4096)
+>> -static_assert(MEM_SIZE_MAP % 4096 == 0, "invalid map test region size");
+>> -static_assert(MEM_TEST_MAP_SIZE % 4096 == 0, "invalid map test region size");
+>> -static_assert(MEM_TEST_MAP_SIZE_PAGES % 2 == 0, "invalid map test region size");
+>> -static_assert(MEM_TEST_MAP_SIZE_PAGES > 2, "invalid map test region size");
+>>   /*
+>>    * 128 MiB is min size that fills 32k slots with at least one page in each
+>>    * while at the same time gets 100+ iterations in such test
+>> + *
+>> + * 2 MiB chunk size like a typical huge page
+>>    */
+>>   #define MEM_TEST_UNMAP_SIZE        (128U << 20)
+>> -#define MEM_TEST_UNMAP_SIZE_PAGES    (MEM_TEST_UNMAP_SIZE / 4096)
+>> -/* 2 MiB chunk size like a typical huge page */
+>> -#define MEM_TEST_UNMAP_CHUNK_PAGES    (2U << (20 - 12))
+>> -static_assert(MEM_TEST_UNMAP_SIZE <= MEM_TEST_SIZE,
+>> -          "invalid unmap test region size");
+>> -static_assert(MEM_TEST_UNMAP_SIZE % 4096 == 0,
+>> -          "invalid unmap test region size");
+>> -static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+>> -          (2 * MEM_TEST_UNMAP_CHUNK_PAGES) == 0,
+>> -          "invalid unmap test region size");
+>> +#define MEM_TEST_UNMAP_CHUNK_SIZE    (2U << 20)
+>>   /*
+>>    * For the move active test the middle of the test area is placed on
+>> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+>>    * for the total size of 25 pages.
+>>    * Hence, the maximum size here is 50 pages.
+>>    */
+>> -#define MEM_TEST_MOVE_SIZE_PAGES    (50)
+>> -#define MEM_TEST_MOVE_SIZE        (MEM_TEST_MOVE_SIZE_PAGES * 4096)
+>> +#define MEM_TEST_MOVE_SIZE        0x32000
 > 
-> Sure. You can make it then:
+> The above number seems less readable than an explicit value of 50 pages.
 > 
-> 	 * Do not grow the list for compatible devices. Instead use
-> 	 * qcom,sdm845-gpi-dma (for ee_offset = 0x0).
+> In addition to that, it's 50 pages only with 4k page size, so at least
+> the comment above needs to be updated to reflect this fact.
+> 
 
-If you don't want me to drop the original patch completely, then there is no
-need to make any changes at all to the driver patches IMHO. I originally thought
-we only needed one patch for the driver (yours) but you seem to have a really
-good reason not to drop the original patch. Sorry for asking.
+Yeah, I will change the comments like below in next revision.
 
-I guess you can add this if you want:
+  /*
+   * When running this test with 32k memslots, actually 32763 excluding
+   * the reserved memory slot 0, the memory for each slot is 0x4000 bytes.
+   * The last slot contains 0x19000 bytes memory. Hence, the maximum size
+   * here is 0x32000 bytes.
+   */
 
-Acked-by: Richard Acayan <mailingradian@gmail.com>
+>>   #define MEM_TEST_MOVE_GPA_DEST        (MEM_GPA + MEM_SIZE)
+>>   static_assert(MEM_TEST_MOVE_SIZE <= MEM_TEST_SIZE,
+>>             "invalid move test region size");
+> (...)
+>> @@ -242,33 +229,34 @@ static struct vm_data *alloc_vm(void)
+>>   }
+>>   static bool prepare_vm(struct vm_data *data, int nslots, uint64_t *maxslots,
+>> -               void *guest_code, uint64_t mempages,
+>> +               void *guest_code, uint64_t mem_size,
+>>                  struct timespec *slot_runtime)
+>>   {
+>> -    uint64_t rempages;
+>> +    uint64_t mempages, rempages;
+>>       uint64_t guest_addr;
+>> -    uint32_t slot;
+>> +    uint32_t slot, guest_page_size;
+>>       struct timespec tstart;
+>>       struct sync_area *sync;
+>> -    TEST_ASSERT(mempages > 1,
+>> -            "Can't test without any memory");
+>> +    guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
+>> +    mempages = mem_size / guest_page_size;
+>> +
+>> +    data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
+>> +    ucall_init(data->vm, NULL);
+>>
+> 
+> TEST_ASSERT(data->vm->page_size == guest_page_size, "Invalid VM page size")
+> here would catch the case if someone accidentally modifies
+> __vm_create_with_one_vcpu() to use other page size than specified for
+> VM_MODE_DEFAULT.
+> 
 
+Sure, it's not harmful at least.
+
+>>       data->npages = mempages;
+>> +    TEST_ASSERT(data->npages > 1, "Can't test without any memory");
+>>       data->nslots = nslots;
+>> -    data->pages_per_slot = mempages / data->nslots;
+>> +    data->pages_per_slot = data->npages / data->nslots;
+>>       if (!data->pages_per_slot) {
+>> -        *maxslots = mempages + 1;
+>> +        *maxslots = data->npages + 1;
+>>           return false;
+>>       }
+>> -    rempages = mempages % data->nslots;
+>> +    rempages = data->npages % data->nslots;
+>>       data->hva_slots = malloc(sizeof(*data->hva_slots) * data->nslots);
+>>       TEST_ASSERT(data->hva_slots, "malloc() fail");
+>> -    data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
+>> -    ucall_init(data->vm, NULL);
+>> -
+>>       pr_info_v("Adding slots 1..%i, each slot with %"PRIu64" pages + %"PRIu64" extra pages last\n",
+>>           data->nslots, data->pages_per_slot, rempages);
+> (...)
+>> @@ -856,6 +863,35 @@ static void help(char *name, struct test_args *targs)
+>>           pr_info("%d: %s\n", ctr, tests[ctr].name);
+>>   }
+>> +static bool check_memory_sizes(void)
+>> +{
+>> +    uint32_t guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
+>> +
+>> +    if (MEM_SIZE % guest_page_size ||
+>> +        MEM_TEST_SIZE % guest_page_size) {
+>> +        pr_info("invalid MEM_SIZE or MEM_TEST_SIZE\n");
+>> +        return false;
+>> +    }
+>> +
+>> +    if (MEM_SIZE_MAP % guest_page_size        ||
+>> +        MEM_TEST_MAP_SIZE % guest_page_size        ||
+>> +        (MEM_TEST_MAP_SIZE / guest_page_size) <= 2    ||
+>> +        (MEM_TEST_MAP_SIZE / guest_page_size) % 2) {
+>> +        pr_info("invalid MEM_SIZE_MAP or MEM_TEST_MAP_SIZE\n");
+>> +        return false;
+>> +    }
+>> +
+>> +    if (MEM_TEST_UNMAP_SIZE > MEM_TEST_SIZE        ||
+>> +        MEM_TEST_UNMAP_SIZE % guest_page_size    ||
+>> +        (MEM_TEST_UNMAP_SIZE / guest_page_size) %
+>> +        (MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size)) {
 > 
-> And my patch will just change one line.
+> This should be (MEM_TEST_UNMAP_SIZE / guest_page_size) % (2 * MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size))
+> to match the old static_assert().
 > 
-> We can also keep it like:
-> 
-> 	 * Do not grow the list for compatible devices. Instead use
-> 	 * proper fallback compatibles.
-> 
-> Best regards,
-> Krzysztof
-> 
+
+Nice catch! I will fix it up in next revision :)
+
+Thanks,
+Gavin
+
