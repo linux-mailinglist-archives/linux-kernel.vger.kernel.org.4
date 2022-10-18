@@ -2,94 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0155602D32
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CCD602D37
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiJRNlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S230491AbiJRNmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJRNlO (ORCPT
+        with ESMTP id S230488AbiJRNm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:41:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E842A723
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:41:13 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4B2901F979;
-        Tue, 18 Oct 2022 13:41:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666100472; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D4dDktYe9CWTuDjVFyx2lG5Orw7IVVi7YQYZYlzAxtE=;
-        b=kKf7ZGOaFs/KIm0RKTGud/5VpSOKQAXeBF7PnID19n3RsbwKGDdueBX/lDmae3Q5L7U9y3
-        PzZFMapQzo/RjjZSAGcFQ0tGgEnoHoRKRx91+kwuMZK7ufIXPpF9T58YwmiTlS9TToueCY
-        HveMR6U2RWq+7v0eGu0p/zLkTfxCU3k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666100472;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D4dDktYe9CWTuDjVFyx2lG5Orw7IVVi7YQYZYlzAxtE=;
-        b=dKe7OWEZYUOHmGUThCL+gCUv70X2KBzV/e5p5X1a8o642CgogF12GN5dYgyli4S+eMd8RV
-        f44YOmD4OVImbnBQ==
-Received: from hawking.suse.de (unknown [10.168.4.11])
-        by relay2.suse.de (Postfix) with ESMTP id CC5772C141;
-        Tue, 18 Oct 2022 13:41:10 +0000 (UTC)
-Received: by hawking.suse.de (Postfix, from userid 17005)
-        id 51DE34401F8; Tue, 18 Oct 2022 15:41:10 +0200 (CEST)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v2 5/5] lib/cpumask: add FORCE_NR_CPUS config option
-References: <20220905230820.3295223-1-yury.norov@gmail.com>
-        <20220905230820.3295223-6-yury.norov@gmail.com>
-        <CAMuHMdUL0WxYjfRDxLWZG7Xu=2xTQkueathvpwWfLpqhG6NkFQ@mail.gmail.com>
-        <CAMuHMdW2H4egcmv238Q_5LBeu9BE=H1fm=n4vZGCGYzhg2VN1A@mail.gmail.com>
-X-Yow:  I Know A Joke
-Date:   Tue, 18 Oct 2022 15:41:10 +0200
-In-Reply-To: <CAMuHMdW2H4egcmv238Q_5LBeu9BE=H1fm=n4vZGCGYzhg2VN1A@mail.gmail.com>
-        (Geert Uytterhoeven's message of "Tue, 18 Oct 2022 15:15:32 +0200")
-Message-ID: <mvmlepdb66h.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Tue, 18 Oct 2022 09:42:27 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5853BCD5DA
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:42:24 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id i3so14090247pfk.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TQSORsKSMngPJb5f/eC6Hu6kpkY5kYXJ98QHFM8UvxY=;
+        b=ZHxxlG3UTEot3sPjKtvw1X3aBdRbEmIooxBSsM63jzfeOELeKLeWEK8Ka0UBZMDOP+
+         akvRFs76C2wKq91BFhqgTb5HB703LMV7esd/A+wWslFPM0+sKw9GkKbhOLqB+y2xkhr8
+         xAw55/tP2EjBapVx7JcnOuoy3rb21J87PUbxaFqakG14s9yKfbb31M3qi5ybSq2mRACM
+         jSitk4irsc/WL0t07xPDMeWHTF1Fx+OZSUwfySvO4jPCavdKRxOz8qiV/i/KYM1y4DB8
+         jWL9urfkjvvcFCgxaCtIJ6pE7MoPjXcItlLTszbdaWP+IhZBfYH0+bbwgZYx0bdSzYu+
+         tT2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TQSORsKSMngPJb5f/eC6Hu6kpkY5kYXJ98QHFM8UvxY=;
+        b=KUAsJ+FVZBtckTHiE9fKEPiUOoV9/GmQ+m/8bzFoGBjqi49k65MP+qROb8zj3MkNsr
+         I2q8rkf2dO6GvSIpI6m/g+5F9GEhvwft0xRgmCoLwEdU6VqX4fbof5qGNkVcAG7csUeg
+         QwhfzejUcMNmUTQe2UJ4uz9rsMane1eoojXzvT41VTeJKkiwO8/xUCtIOelfXtIN+WtX
+         v42FnSyyQmgTZeztrBRqP+BkdCBYIbhfU3P2hAoT1w6O29AJMuEIcIlTJPqibgVMVfZU
+         7zleE8fSiNb4R601JU99M9r3qTZaG2fp2gEL0pMYw+rnU5ZIznXhHsq5K/8r87UXwqZ1
+         oGVg==
+X-Gm-Message-State: ACrzQf2LkpdiUy8FeBrhd3wydBSomo/oKzRGGRF/ZwIE6uRZaSmMnv+K
+        t6LfUd/PxODKLevzGdmu1npUrp/NqRxzCmuH5TXn5w==
+X-Google-Smtp-Source: AMsMyM457hPoLFIJ8lUjGLgHK/+h3GgdmiyyuIPyEtfxcbOdN4bX0W7oNp+dFIXy83RpDOunf04FJy/8XBLnfxpoQmE=
+X-Received: by 2002:a63:88c7:0:b0:462:79de:dc75 with SMTP id
+ l190-20020a6388c7000000b0046279dedc75mr2721715pgd.458.1666100542751; Tue, 18
+ Oct 2022 06:42:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <de680280-f6b1-9337-2ae4-4b2faf2b823b@suse.cz>
+ <20221017161955.t4gditaztbwijgcn@box.shutemov.name> <c63ad0cd-d517-0f1e-59e9-927d8ae15a1a@amd.com>
+ <20221017215640.hobzcz47es7dq2bi@box.shutemov.name>
+In-Reply-To: <20221017215640.hobzcz47es7dq2bi@box.shutemov.name>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 18 Oct 2022 19:12:10 +0530
+Message-ID: <CAGtprH8xEdgATjQdhi2b_KqUuSOZHUM-Lh+O-ZtcFKbHf2_75g@mail.gmail.com>
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Okt 18 2022, Geert Uytterhoeven wrote:
+On Tue, Oct 18, 2022 at 3:27 AM Kirill A . Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> On Mon, Oct 17, 2022 at 06:39:06PM +0200, Gupta, Pankaj wrote:
+> > On 10/17/2022 6:19 PM, Kirill A . Shutemov wrote:
+> > > On Mon, Oct 17, 2022 at 03:00:21PM +0200, Vlastimil Babka wrote:
+> > > > On 9/15/22 16:29, Chao Peng wrote:
+> > > > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > > > >
+> > > > > KVM can use memfd-provided memory for guest memory. For normal userspace
+> > > > > accessible memory, KVM userspace (e.g. QEMU) mmaps the memfd into its
+> > > > > virtual address space and then tells KVM to use the virtual address to
+> > > > > setup the mapping in the secondary page table (e.g. EPT).
+> > > > >
+> > > > > With confidential computing technologies like Intel TDX, the
+> > > > > memfd-provided memory may be encrypted with special key for special
+> > > > > software domain (e.g. KVM guest) and is not expected to be directly
+> > > > > accessed by userspace. Precisely, userspace access to such encrypted
+> > > > > memory may lead to host crash so it should be prevented.
+> > > > >
+> > > > > This patch introduces userspace inaccessible memfd (created with
+> > > > > MFD_INACCESSIBLE). Its memory is inaccessible from userspace through
+> > > > > ordinary MMU access (e.g. read/write/mmap) but can be accessed via
+> > > > > in-kernel interface so KVM can directly interact with core-mm without
+> > > > > the need to map the memory into KVM userspace.
+> > > > >
+> > > > > It provides semantics required for KVM guest private(encrypted) memory
+> > > > > support that a file descriptor with this flag set is going to be used as
+> > > > > the source of guest memory in confidential computing environments such
+> > > > > as Intel TDX/AMD SEV.
+> > > > >
+> > > > > KVM userspace is still in charge of the lifecycle of the memfd. It
+> > > > > should pass the opened fd to KVM. KVM uses the kernel APIs newly added
+> > > > > in this patch to obtain the physical memory address and then populate
+> > > > > the secondary page table entries.
+> > > > >
+> > > > > The userspace inaccessible memfd can be fallocate-ed and hole-punched
+> > > > > from userspace. When hole-punching happens, KVM can get notified through
+> > > > > inaccessible_notifier it then gets chance to remove any mapped entries
+> > > > > of the range in the secondary page tables.
+> > > > >
+> > > > > The userspace inaccessible memfd itself is implemented as a shim layer
+> > > > > on top of real memory file systems like tmpfs/hugetlbfs but this patch
+> > > > > only implemented tmpfs. The allocated memory is currently marked as
+> > > > > unmovable and unevictable, this is required for current confidential
+> > > > > usage. But in future this might be changed.
+> > > > >
+> > > > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > > > > ---
+> > > >
+> > > > ...
+> > > >
+> > > > > +static long inaccessible_fallocate(struct file *file, int mode,
+> > > > > +                                  loff_t offset, loff_t len)
+> > > > > +{
+> > > > > +       struct inaccessible_data *data = file->f_mapping->private_data;
+> > > > > +       struct file *memfd = data->memfd;
+> > > > > +       int ret;
+> > > > > +
+> > > > > +       if (mode & FALLOC_FL_PUNCH_HOLE) {
+> > > > > +               if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+> > > > > +                       return -EINVAL;
+> > > > > +       }
+> > > > > +
+> > > > > +       ret = memfd->f_op->fallocate(memfd, mode, offset, len);
+> > > > > +       inaccessible_notifier_invalidate(data, offset, offset + len);
+> > > >
+> > > > Wonder if invalidate should precede the actual hole punch, otherwise we open
+> > > > a window where the page tables point to memory no longer valid?
+> > >
+> > > Yes, you are right. Thanks for catching this.
+> >
+> > I also noticed this. But then thought the memory would be anyways zeroed
+> > (hole punched) before this call?
+>
+> Hole punching can free pages, given that offset/len covers full page.
+>
+> --
+>   Kiryl Shutsemau / Kirill A. Shutemov
 
-> Moreover, this cannot be used on all systems.  E.g. on Icicle Kit with
-> Microchip PolarFire SoC, CONFIG_NR_CPUS needs to be larger than 4,
-> as the system has actually 5 CPU cores (1xE51 and 4xU54), but Linux
-> runs only on 4 of them.  So you cannot use FORCE_NR_CPUS=y.
-
-But does Linux acually see the E51 core?  On the Hifive boards it is
-disabled in the device tree, and the cpu probing just skips it,
-effectively resulting in only four cpus.
-
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+I think moving this notifier_invalidate before fallocate may not solve
+the problem completely. Is it possible that between invalidate and
+fallocate, KVM tries to handle the page fault for the guest VM from
+another vcpu and uses the pages to be freed to back gpa ranges? Should
+hole punching here also update mem_attr first to say that KVM should
+consider the corresponding gpa ranges to be no more backed by
+inaccessible memfd?
