@@ -2,142 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FC1603054
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C9760305B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiJRP4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S231126AbiJRP6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiJRP4k (ORCPT
+        with ESMTP id S229660AbiJRP6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:56:40 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1598414011;
-        Tue, 18 Oct 2022 08:56:38 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1okoxF-0006rH-E8; Tue, 18 Oct 2022 17:56:33 +0200
-Message-ID: <a1a8664c-4d06-89e7-8cfa-b730969bb841@maciej.szmigiero.name>
-Date:   Tue, 18 Oct 2022 17:56:27 +0200
+        Tue, 18 Oct 2022 11:58:14 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED72A2A96
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:58:13 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id df9so9559394qvb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:58:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nyrr1GKzUYIMpFWVlAheSVsl7aNNeygDeG3I9WF4lxY=;
+        b=HEQBGXL7dZIu1ypps03BHEFpnE3PMF6f7sCEGxqrsj4hBZB3QlXL4XXho/NizfuHiq
+         iXe14RFrIKecLdMOvjJ1Kp5zat267X23gGqMyhoNICV2vEugbXM+rzWMNyOTIEMA5pf7
+         v9E3av2l854Fh2/kmRMmjDBR3jH0hpflHvVT2MnztQuCtEVJaxZZieIzGIi5msk7KJ7U
+         99g6pVluhm/Q9Q7xOZxddAaggS7ZN+JL7XsvIIorr21HYo0jNAs39S4Fz8H7KX9g70Cf
+         AE5jHXcH8F2eAmX2btUxqSNSs0Ib6YQ4pI7hQyLhl/4mUkgEheByeaWQTDKMXOdBRrKl
+         PmFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nyrr1GKzUYIMpFWVlAheSVsl7aNNeygDeG3I9WF4lxY=;
+        b=VozE4PT6abaW4ib9cs8pf0ybglWA4+OmL66mSMRiyP310xaM4c0/2r3kXB5fS8J2/N
+         olQfpF1U0WDaCNf2oPt/7joYRhj8/Cn8uG8DWigR1cCTI7oiAowNPrdRsLQtEmHmiNci
+         1Oz1MHY0XewmZAtoZTqSJJ7/S7FPIe6XLnGtxQtxxKq5S/y3pjw3TaiIaTnEO7DNV1nH
+         ZG7TUyuKtk6e+wbKffDf80RpSpEDMmqeD4Z7ZemMzgt63pBjC5j5s/H+CgFQ1oKdUAx9
+         YX0QKuK5oJzqdiNvUKzb7hFxFupnCauWn3u+EvE3PJ8ckKm/mY4wtyDEMgEIaNGaImsR
+         x9QA==
+X-Gm-Message-State: ACrzQf1NHopxRz+yNLLyUcWrZlnxbqcLax47VvLLU6dXpbELrDgbA6ZQ
+        YCD4JTxW+TpCGZvoAWzTeFNfzw==
+X-Google-Smtp-Source: AMsMyM7kMnKXk90f9GxW+pS49t8OkZJXmVtkcvIe4Spj10MeHPBJy/kf/L+PLhlAQNMAFho8TVz4bQ==
+X-Received: by 2002:a05:6214:240a:b0:4b1:cb3e:d49c with SMTP id fv10-20020a056214240a00b004b1cb3ed49cmr2782692qvb.39.1666108692280;
+        Tue, 18 Oct 2022 08:58:12 -0700 (PDT)
+Received: from krzk-bin.MSRM (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id de38-20020a05620a372600b006ce30a5f892sm2721448qkb.102.2022.10.18.08.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 08:58:11 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 1/3] arm64: dts: qcom: msm8996-sony-xperia-tone: drop incorrect wlan pin input
+Date:   Tue, 18 Oct 2022 11:57:19 -0400
+Message-Id: <20221018155721.47140-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, pl-PL
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
-        zhenyzha@redhat.com, shan.gavin@gmail.com, kvmarm@lists.linux.dev,
-        pbonzini@redhat.com, shuah@kernel.org,
-        kvmarm@lists.cs.columbia.edu, ajones@ventanamicro.com
-References: <20221014071914.227134-1-gshan@redhat.com>
- <20221014071914.227134-5-gshan@redhat.com>
- <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
- <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
- <da2b7db0-509a-c9e0-c36b-6487a265a779@redhat.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
- guest page size
-In-Reply-To: <da2b7db0-509a-c9e0-c36b-6487a265a779@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.10.2022 02:51, Gavin Shan wrote:
-> On 10/18/22 8:46 AM, Gavin Shan wrote:
->> On 10/18/22 5:31 AM, Maciej S. Szmigiero wrote:
->>> On 14.10.2022 09:19, Gavin Shan wrote:
->>>> The test case is obviously broken on aarch64 because non-4KB guest
->>>> page size is supported. The guest page size on aarch64 could be 4KB,
->>>> 16KB or 64KB.
->>>>
->>>> This supports variable guest page size, mostly for aarch64.
->>>>
->>>>    - The host determines the guest page size when virtual machine is
->>>>      created. The value is also passed to guest through the synchronization
->>>>      area.
->>>>
->>>>    - The number of guest pages are unknown until the virtual machine
->>>>      is to be created. So all the related macros are dropped. Instead,
->>>>      their values are dynamically calculated based on the guest page
->>>>      size.
->>>>
->>>>    - The static checks on memory sizes and pages becomes dependent
->>>>      on guest page size, which is unknown until the virtual machine
->>>>      is about to be created. So all the static checks are converted
->>>>      to dynamic checks, done in check_memory_sizes().
->>>>
->>>>    - As the address passed to madvise() should be aligned to host page,
->>>>      the size of page chunk is automatically selected, other than one
->>>>      page.
->>>>
->>>>    - All other changes included in this patch are almost mechanical
->>>>      replacing '4096' with 'guest_page_size'.
->>>>
->>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>>> ---
->>>>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
->>>>   1 file changed, 115 insertions(+), 76 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
->>>> index d5aa9148f96f..d587bd952ff9 100644
->>>> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
->>>> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
-(...)
->>>> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
->>>>    * for the total size of 25 pages.
->>>>    * Hence, the maximum size here is 50 pages.
->>>>    */
->>>> -#define MEM_TEST_MOVE_SIZE_PAGES    (50)
->>>> -#define MEM_TEST_MOVE_SIZE        (MEM_TEST_MOVE_SIZE_PAGES * 4096)
->>>> +#define MEM_TEST_MOVE_SIZE        0x32000
->>>
->>> The above number seems less readable than an explicit value of 50 pages.
->>>
->>> In addition to that, it's 50 pages only with 4k page size, so at least
->>> the comment above needs to be updated to reflect this fact.
->>>
->>
->> Yeah, I will change the comments like below in next revision.
->>
->>   /*
->>    * When running this test with 32k memslots, actually 32763 excluding
->>    * the reserved memory slot 0, the memory for each slot is 0x4000 bytes.
->>    * The last slot contains 0x19000 bytes memory. Hence, the maximum size
->>    * here is 0x32000 bytes.
->>    */
->>
-> 
-> I will replace those numbers with readable ones like below :)
-> 
-> /*
->   * When running this test with 32k memslots, actually 32763 excluding
->   * the reserved memory slot 0, the memory for each slot is 16KB. The
->   * last slot contains 100KB memory with the remaining 84KB. Hence,
->   * the maximum size is double of that (200KB)
->   */
+Pin configuration has no "input-high" property, so drop it from node
+described as Wifi host wake up pin.
 
-Still, these numbers are for x86, which has KVM_INTERNAL_MEM_SLOTS
-defined as 3.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-As far as I can see aarch64 has KVM_INTERNAL_MEM_SLOTS equal to 0, so
-this arch has 32766 slot available for the test memory.
+---
 
-Quick calculations show that this will result in 112 KiB of memory in
-the last slot for 4 KiB page size (while for 64 KiB page size the
-maximum slot count for this test is 8192 anyway - not counting slot 0).
+Changes since v2:
+1. None
 
-> Thanks,
-> Gavin
-> 
+Changes since v1:
+1. Add Rb tag.
+---
+ arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks,
-Maciej
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+index ca7c8d2e1d3d..93568fb4bc86 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+@@ -912,7 +912,6 @@ wl_host_wake: wl-host-wake {
+ 		function = "gpio";
+ 		drive-strength = <2>;
+ 		bias-pull-down;
+-		input-high;
+ 	};
+ 
+ 	wl_reg_on: wl-reg-on {
+-- 
+2.34.1
 
