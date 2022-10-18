@@ -2,120 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D73602FF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75A3602FFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiJRPpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
+        id S231126AbiJRPrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbiJRPpS (ORCPT
+        with ESMTP id S229971AbiJRPrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:45:18 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3448AA223F;
-        Tue, 18 Oct 2022 08:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666107900;
-        bh=Jt9NmyfGUJIYwUHCzEW8eHOdjWosSSdsIWzKAGgNkII=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=af4k8kmuydlKzRPaqGcg5kxLEtku1l3NBrtQiBu2TBbes+tESXccMaDzhjRcXAmWO
-         I0l2raeeldApHJXHqe+ikRsse1uMppCUMT0Nc1N4BkO8Fi0wvv4byyTP3h/1mT/oYe
-         6Zj51rAOvllZR7X6oyP/XvMffcaa4TiaUYwTgF9I=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.77.116] ([80.245.77.116]) by web-mail.gmx.net
- (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Tue, 18 Oct 2022
- 17:45:00 +0200
-MIME-Version: 1.0
-Message-ID: <trinity-8fe25643-9cf4-4f09-bebb-208570a540d4-1666107900051@3c-app-gmx-bap38>
-From:   Frank Wunderlich <frank-w@public-files.de>
+        Tue, 18 Oct 2022 11:47:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF52DC14A5;
+        Tue, 18 Oct 2022 08:47:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2306615D3;
+        Tue, 18 Oct 2022 15:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F73C433D7;
+        Tue, 18 Oct 2022 15:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666108034;
+        bh=qcKyENMx6mTmZ0TU9r5WLxS2rM0ANcBloLaQCW9lMtI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qFi1Cd9XrbdgMzYwbGl4PpeXf9TywiyD/tym7bUZFa0kqOiJLEWRrHv/uMUWjPQpW
+         cbP0etVbeG0b0t6fwTSu5WRCiqGj1yr9KvbyQYUiWSdqrvmQIMFxMMCsWw88sJtayj
+         aIjiU8+WM+3QAWo3YzBWq7JZWevaBFNhFWcpBs2cyxWyxC3MsbBmDglXAlhz8p/lq+
+         Tq4UdU6eHQuv97yZk3R47af/6g5RsH6HLNzTg5Ma/XlX8wsGx+bDRaGqd4ueiMQoDS
+         dyMSOAXV6v0G/Mis30/70XcoNfBlUnhRftp1QIHKvFw0cK4xZbvhr4hHLbh+fSCUTI
+         IA9fEDh46Y6Ug==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1okoo2-00062o-FW; Tue, 18 Oct 2022 17:47:02 +0200
+Date:   Tue, 18 Oct 2022 17:47:02 +0200
+From:   Johan Hovold <johan@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Aw: Re: [RFC v1 02/12] dt-bindings: PCI: mediatek-gen3: add support
- for mt7986
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 18 Oct 2022 17:45:00 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <684c5659-0691-6534-1602-6c0a53e6e503@linaro.org>
-References: <20221017104141.7338-1-linux@fw-web.de>
- <20221017104141.7338-3-linux@fw-web.de>
- <684c5659-0691-6534-1602-6c0a53e6e503@linaro.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:PMOh3tpLUMdJNWND3roFSaz6NdXp/BM0p9g+fEsaYUCyloExNRoiqxoIPHwvPXVjpVM0z
- 0B5l1TzUaZ0CvFNKNRCUuE8US/Xs1UjdwtXKEBnhpHWRHi68JRTvBJd7x1V+fd81vJ86syjRsTcs
- YEQjSw2iNQndlmMfMuZfUVauKCjVairtdw6kOemtuJiDNzarIhRNAOYNAwkHAA2koGgd/KINNjgt
- nsCz4Rpd8DBsU3vx7wS5H3k9CwMzPP9AkSmzbMQMCi6K3W2jl/6Vwj+c7VyhzNl8TXy3aNQgLYEf
- hI=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:G7hCPfXsN6k=:TmCjYiVy2SSY1kL8mfwEFj
- JFWGn2gp0L3NVnE9OVdn2BATvK+qouS+Okg3iLkffGumPDUGbZ2g19ZaLTb1FF5JdPGB8NSdJ
- e5vm/bYfhd8QrFCyYQ5KhCX2QGTK99urFaI1QAudQtmDh/w9vgUmbAQyB4LZZ2IX/Hiu5Sp8X
- kL90zQ5Brgn+/Os/+l7AmK6JuESqeYe0P3OsleBVo5zwMnzDephXKIMihGrCZS+ayvsqZ62XW
- 46nZYR95XAcC7PA8pa0OaHEUDTvPYKRJ0J+TAwYoyNRvdp7VBx+3LlHSvII16ad6GGuZD/xvw
- geTwgsoWjkw1mJ1/Lgzvc4Lx+ycqWUGhYq5APrP6RiZfRwJV26dtZPtcAa9UEII9dQHE7wmK8
- HyDd+dIVoAWOwl5YtEAfl1c2YwwaG7lXLXM8QMnqEqzYyYvGXW16J7r9p8kqfyX6nIonrOJ6e
- bunYg+PGn/16CAqPc1ojiKVoQqwddIycVyPxbps4BTHqa5AKfe4PZTtdD23jHY88c+xBwEQmd
- Vx/FtPVepTWuLBlJywrqJ0wBVIHlAQtkq6Ni8ujbu8v47c41erwK1ZV81F1X1uRN4L9+e19+c
- K8d28j3OMMFwrLk6CN2uiGipWjRDNTAO6M4R/tg6xqjQXBJ0ey3LErS1HFO3R4oadeNg0XEPO
- yWKbCy5kNkRpRb2atxmQSBxBAiBYrJTzDM2qmXbdc13kWyH/DgthnXjPiBC7Ur3ofq+yZOb6E
- Cwpgxck+HkVRbFBn+Sr/heQjJq2ZOqpOkKqZsClqadiqTregIMqVeXRYYPjkBkjZMAq8JPz5w
- bOKk+Z2gwJQyR0BOH45XEvFIFQ6Y+aIFMB/azazxk7NT5vUHYrT+/5W81FDyjVeAv/bib/T4g
- F+yvK/zPR8f55bobu0NAggeEYm97FSvfl0iSZZmnNFRXL6CMq3clwDu5q7VrefUR5YoydGAQG
- VlTt7Fc8Pcc6paQDMkWm3woMxhLjtR7A06/C9SdGh4TCb5tDA/xt8tlx3DjSkTuDSaG0iy2KU
- Ope2usjZzJdeYbfK3iHJp4eskuL3LG0dNyPQar/Q85AG13JOIjDIjsvYGUJsATdhN721XF4k+
- tOFfqECcmqe10SCGKRGv/6xpFz9F/8eygo2TWz0rcddVZI8TvmCllUjgKWpkMKuvBn7D+A7tA
- /BgSORrCMk3HZQb8VwPXQBVpNA/+/+bfN8402Ug/VqaA1gn2swCwiUawi31pSizKwty0rXO5b
- kd+A+nCtluUwcnMiJ86TGv5xK9f7NrwgLMcAiTbuGOFdo4n3lcLN0zWRYWbFvcwNlpBpenlWg
- uWUWldxT
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/15] dt-bindings: phy: qcom,qmp-pcie: add sc8280xp
+ bindings
+Message-ID: <Y07Kdo5oG4gw82k4@hovoldconsulting.com>
+References: <20221017145328.22090-1-johan+linaro@kernel.org>
+ <20221017145328.22090-11-johan+linaro@kernel.org>
+ <d6642028-3fb9-4e39-a349-666625dabb9d@linaro.org>
+ <Y050nxCaFXIgczrA@hovoldconsulting.com>
+ <7a2b1617-5e57-994e-a246-2e6f9fd69262@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a2b1617-5e57-994e-a246-2e6f9fd69262@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Oct 18, 2022 at 11:22:13AM -0400, Krzysztof Kozlowski wrote:
+> On 18/10/2022 05:40, Johan Hovold wrote:
+> > On Mon, Oct 17, 2022 at 01:20:49PM -0400, Krzysztof Kozlowski wrote:
+> >> On 17/10/2022 10:53, Johan Hovold wrote:
+> >>> Add bindings for the PCIe QMP PHYs found on SC8280XP.
 
-> Gesendet: Dienstag, 18. Oktober 2022 um 17:35 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-> On 17/10/2022 06:41, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+> >>
+> >> Filename based on compatible, so for example:
+> >>
+> >> qcom,sc8280xp-qmp-pcie-phy.yaml
+> > 
+> > Ok, but as I mentioned in my reply to the previous patch, this file is
+> > the one that is expected to be extended with new bindings.
+> 
+> I would still propose to use compatible of this series and treat it as a
+> family name of compatible or similar devices. What other choice we have?
+> 
+> If new (third) PHY bindings appear, then rename older to "-legacies" and
+> this one to "-legacy"?
 
-> Maybe the clock is not required on mt7986?
+We could also continue using
 
-yes, mt7986 does not have all clocks currently defined in binding for gen3=
--pcie (currently mt8xxx)
+	qcom,qmp-pcie-phy.yaml
 
-the mapping is as followed:
+for the latest generic binding were new devices should be added and
+rename the "deprecated" ones after one of the compatibles to make it
+sound less generic.
 
-CLK_INFRA_IPCIER_CK: peri_26m
-CLK_INFRA_IPCIEB_CK: top_133m
-CLK_INFRA_IPCIE_CK: pcie working clock from SoC, in MT7986 it is equal to =
-tl_26m + tl_96m + tl_32k in MT8192
-CLK_INFRA_PCIE_SEL: clock mux to select source clock to CLK_INFRA_IPCIE_CK
-CLK_INFRA_IPCIE_PIPE_CK : pcie working clock from PHY, pl_250m
+But I get your point.
+	
+> > I can't seem to find where this naming scheme is documented now even if
+> > I'm quite sure I've seen it before. Do you have a pointer?
+> 
+> If you need the source of authority, then:
+> https://lore.kernel.org/linux-devicetree/YlhkwvGdcf4ozTzG@robh.at.kernel.org/
+> 
+> If you need unofficial documentation, then slides here:
+> https://osseu2022.sched.com/event/15z0W
+> 
+> If you need something official, that's on TODO list. :)
 
-as far as i see the driver only enables the clocks in bulk (no access to t=
-he clock-names), but binding needs the names
+Heh. Ok.
 
-got it solved with help from mtk (see my comment on part 7) with filling m=
-issing clocks with a fixed-clock-node.
-If this is the right way this binding-change is enough ;)
+> > And does this imply that the file name should also include the gen infix
+> > of one of the original compatibles (e.g.
+> > "qcom,sc8280xp-qmp-gen3x4-pcie-phy.yaml")?
+> 
+> Since you already have here three compatibles, you cannot have one
+> filename matching exactly all of them, so we already accept something
+> generic. Therefore I proposed the common part - matching SoC component.
 
-> Anyway, for the bindings:
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yeah, that's what I was alluding too. As soon you add one more SoC to
+the same document, the common part is no longer
 
-thx
+	qcom,sc8280xp-qmp-pcie-phy
 
-regards Frank
+but rather
+
+	qcom,qmp-pcie-phy
+
+Johan
