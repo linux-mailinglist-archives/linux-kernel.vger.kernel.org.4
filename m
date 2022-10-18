@@ -2,167 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD03602EFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E607602EF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJRO5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S229980AbiJRO5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiJRO5H (ORCPT
+        with ESMTP id S229452AbiJRO5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:57:07 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03692D8ED6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:57:05 -0700 (PDT)
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 18 Oct 2022 10:57:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F01D9960;
+        Tue, 18 Oct 2022 07:57:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 13B183F473
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1666105024;
-        bh=BafWgVTs1Qs33lQ5vYE0lEluRGQS0XS1I2Mm/0y61yc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=OZUEAoVQEBNpasj8uBxRqaPTgMjpgC+BL8NLcndDFANai2tsbRSQnZu882Y82xw6X
-         p6Nm79SR+FqYpAGyWjeC3zqDygFIGvgs6vxMvKchU3aYnPkzIgvD/OSYQW9vyjmha5
-         RZ/6Ol21et/sRFfw9cDmBDAZoOnRT1amdKE6hAcTe8f0GIShMmwrxfkDEfsdto8keC
-         KUkrx/lHwRap7W3h/xJ3lWTEuUiOB76aFUqkLHuF/XgWpjIMJkWHziATvlD53D/TFq
-         gYL4xqbCJGFszZWJupGlCE0K4B0iFKJZddBzFWepjlGFN47y1Nfkkde+3D/wFxeJam
-         cdWuBQ5TKZuuw==
-Received: by mail-qv1-f71.google.com with SMTP id i7-20020a0cab47000000b004b4376895bfso8910527qvb.20
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:57:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BafWgVTs1Qs33lQ5vYE0lEluRGQS0XS1I2Mm/0y61yc=;
-        b=rDj9yGQKeENvCq3ocWOW3lrsbbzXre9Rbt0mniWQpRMLYh7WDvzEsgCdPYyX3ISuw/
-         v6H2yMwsbqSmN/MsC53WjXsI6She0mDJtp1WAuSp5bRJ2uYPMye+JnGyohhR3BRZ7iBf
-         Ewp8sWn8QHarnECJa0VWemKGDprZMG6PFc0fGmm8iRe8TtpALP82DjpQQ6qvkRf27ghi
-         fIx0Bc9tswf8iI0MQGK9X8ii+GBbMRyrqe0zmvb2BVC7GlefX7IJqdW++PQMEVUA1fGo
-         au5S7MWytktqbk4k5//gMXDmECXtiNztFnE6vLVg9ta4G60Ls1q3abNKqkxmrxMkKtxH
-         IVjA==
-X-Gm-Message-State: ACrzQf0otxe/rAEy8aafSa1FjVJ4QrkphbdeDxFBNtjD4ZVI+oBzdhV1
-        6lyXTctjKeT9JYgb8NIw+/ECKW2NabdyOrO1EHuZUP+YxNzw9aygcVOvv2FLSYdiVlJ5r5ALTQI
-        ZnuU5wepVHYRyCCHiZ0Nim9jtox7RJCQ7HUa6U+r6hb1YIpHzM+DAYHx7Qw==
-X-Received: by 2002:a05:6214:2301:b0:498:9f6f:28d with SMTP id gc1-20020a056214230100b004989f6f028dmr2400040qvb.5.1666105022666;
-        Tue, 18 Oct 2022 07:57:02 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5VLAiOfs5ypDxb9bi0mpLfwMnKLT/JanF3CcvFCQOgy+yFhQZHARVCsQs1Lrgtks+5teBsR2NSVjwnI8zDS7I=
-X-Received: by 2002:a05:6214:2301:b0:498:9f6f:28d with SMTP id
- gc1-20020a056214230100b004989f6f028dmr2400025qvb.5.1666105022393; Tue, 18 Oct
- 2022 07:57:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221018091316.415685-1-emil.renner.berthing@canonical.com> <20221018132921.5fsbiz254npk2fci@pengutronix.de>
-In-Reply-To: <20221018132921.5fsbiz254npk2fci@pengutronix.de>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Tue, 18 Oct 2022 16:56:46 +0200
-Message-ID: <CAJM55Z_v069EJmnr_nLFx9CQV9HfAOc2vCFv95VSip59zLFvjA@mail.gmail.com>
-Subject: Re: [PATCH v1] pwm: sifive: Always let the first pwm_apply_state succeed
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Wesley W. Terpstra" <wesley@sifive.com>,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87A2BB81F93;
+        Tue, 18 Oct 2022 14:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3400BC433D6;
+        Tue, 18 Oct 2022 14:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666105019;
+        bh=qmaUREKKpKGIfPeuyHVYJiyiQ+vwR1CgcRLVNMmVems=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=tSWyO8KMO7Eo2SWIkFm8Fv/jNMSEMNYxqaBmHHVSbbPRHMjQfB2ay/FZpgWA7e39W
+         TXzVXcbSBYKTZ5fDw6ycHeG2ZTRJPHwkt14ThiP4HYcDhErgUhpJVbQfvVaIOLU4Hj
+         n6JpOEQlYl6uDQfd3C84PQ6Q2/jgU+2bRd5IR49wX/FwG1rqbD4l6srz8vsxOWGD+y
+         YkcPnRVYrf6eavusnsT1t5IkuOEkCLvZbH8GxwUUSJqI3MiE7L1adVjFQjNhBTx4L4
+         K85dWprbcFpCdFAxFmEWOcBJIZ3Fy/WiJeAJMd+gsrfjlReJDVtqMeAgHj1faQyG4C
+         +ZEqAplLOQp2A==
+Message-ID: <c303cf0701a2c09487bda33012bc0ceb79f211c0.camel@kernel.org>
+Subject: Re: [RFC PATCH v7 9/9] vfs: expose STATX_VERSION to userland
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, bfields@fieldses.org,
+        brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Date:   Tue, 18 Oct 2022 10:56:55 -0400
+In-Reply-To: <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
+References: <20221017105709.10830-1-jlayton@kernel.org>
+         <20221017105709.10830-10-jlayton@kernel.org>
+         <20221017221433.GT3600936@dread.disaster.area>
+         <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 15:29, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Hello,
->
-> On Tue, Oct 18, 2022 at 11:13:16AM +0200, Emil Renner Berthing wrote:
-> > Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
-> > RGB and green PWM controlled LEDs on the HiFive Unmatched board
-> > managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
-> > All three colours of the RGB LED and the green LED run from different
-> > lines of the same PWM, but with the same period so this works fine when
-> > the LED drivers are loaded one after the other.
-> >
-> > Unfortunately it does expose a race in the PWM driver when both LED
-> > drivers are loaded at roughly the same time. Here is an example:
-> >
-> >   |          Thread A           |          Thread B           |
-> >   |  led_pwm_mc_probe           |  led_pwm_probe              |
-> >   |    devm_fwnode_pwm_get      |                             |
-> >   |      pwm_sifive_request     |                             |
-> >   |        ddata->user_count++  |                             |
-> >   |                             |    devm_fwnode_pwm_get      |
-> >   |                             |      pwm_sifive_request     |
-> >   |                             |        ddata->user_count++  |
-> >   |         ...                 |          ...                |
-> >   |    pwm_state_apply          |    pwm_state_apply          |
-> >   |      pwm_sifive_apply       |      pwm_sifive_apply       |
-> >
-> > Now both calls to pwm_sifive_apply will see that ddata->approx_period,
-> > initially 0, is different from the requested period and the clock needs
-> > to be updated. But since ddata->user_count >=3D 2 both calls will fail
-> > with -EBUSY, which will then cause both LED drivers to fail to probe.
-> >
-> > Fix it by letting the first call to pwm_sifive_apply update the clock
-> > even when ddata->user_count !=3D 1.
-> >
-> > Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
-> > Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com=
->
-> > ---
-> >  drivers/pwm/pwm-sifive.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> > index 2d4fa5e5fdd4..ccdf92045f34 100644
-> > --- a/drivers/pwm/pwm-sifive.c
-> > +++ b/drivers/pwm/pwm-sifive.c
-> > @@ -159,7 +159,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, =
-struct pwm_device *pwm,
-> >
-> >       mutex_lock(&ddata->lock);
-> >       if (state->period !=3D ddata->approx_period) {
-> > -             if (ddata->user_count !=3D 1) {
-> > +             if (ddata->user_count !=3D 1 && ddata->approx_period) {
->
-> IMHO this needs a code comment. It should among others mention that
-> approx_period is only zero if .apply() wasn't called before.
+On Tue, 2022-10-18 at 06:35 -0400, Jeff Layton wrote:
+> On Tue, 2022-10-18 at 09:14 +1100, Dave Chinner wrote:
+> > On Mon, Oct 17, 2022 at 06:57:09AM -0400, Jeff Layton wrote:
+> > > From: Jeff Layton <jlayton@redhat.com>
+> > >=20
+> > > Claim one of the spare fields in struct statx to hold a 64-bit inode
+> > > version attribute. When userland requests STATX_VERSION, copy the
+> > > value from the kstat struct there, and stop masking off
+> > > STATX_ATTR_VERSION_MONOTONIC.
+> >=20
+> > Can we please make the name more sepcific than "version"? It's way
+> > too generic and - we already have userspace facing "version" fields
+> > for inodes that refer to the on-disk format version exposed in
+> > various UAPIs. It's common for UAPI structures used for file
+> > operations to have a "version" field that refers to the *UAPI
+> > structure version* rather than file metadata or data being retrieved
+> > from the file in question.
+> >=20
+> > The need for an explanatory comment like this:
+> >=20
+> > > +	__u64	stx_version; /* Inode change attribute */
+> >=20
+> > demonstrates it is badly named. If you want it known as an inode
+> > change attribute, then don't name the variable "version". In
+> > reality, it really needs to be an opaque cookie, not something
+> > applications need to decode directly to make sense of.
+> >=20
+>=20
+> Fair enough. I started with this being named stx_change_attr and other
+> people objected. I then changed to stx_ino_version, but the "_ino"
+> seemed redundant.
+>=20
+> I'm open to suggestions here. Naming things like this is hard.
+>=20
 
-Agreed. I'll add in v2.
+How about:
 
-> Let me note this is inconsistent. I didn't check the details, but let's
-> assume the PWM can implement .period =3D 500 and .period =3D 514 and noth=
-ing
-> in between. So if the the first PWM requests 512 ns it gets (I hope) 500
-> ns. Then when the second requests comes in requesting 511 it fails and
-> if it requests 512 is succeeds also getting 500 ns. Hmm.
+    STATX_CHANGE / statx->stx_change / STATX_ATTR_CHANGE_MONOTONIC
 
-Yes, if two different consumers wants different periods then whoever
-gets to take the mutex in pwm_sifive_apply first gets to set the clock
-for its requested period and the other consumer will get -EBUSY. I
-don't see how this lets one consumer call pwm_state_apply successfully
-but still get a different period though.
-
-/Emil
-
-> Best regards
-> Uwe
->
-> --
-> Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig       =
-     |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ =
-|
+?
+--=20
+Jeff Layton <jlayton@kernel.org>
