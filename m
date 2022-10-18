@@ -2,227 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFA96031A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F2E6031AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJRRfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
+        id S230037AbiJRRha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJRRfC (ORCPT
+        with ESMTP id S229691AbiJRRh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:35:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D09552DE9;
-        Tue, 18 Oct 2022 10:35:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 383A6B82081;
-        Tue, 18 Oct 2022 17:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B258C433D6;
-        Tue, 18 Oct 2022 17:34:58 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ImkinLzb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666114496;
+        Tue, 18 Oct 2022 13:37:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAAAD038B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666114645;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7XMkYIGMgupwppPotNYu9obKkCzLFIuRLklhiM2amjU=;
-        b=ImkinLzbFY4YpsK1seMTWP+u+P5GLQwArJpGW+7FbAh3BBn6fhl9ko0a92FkbbTl8zrxBL
-        0dlL6OrN8tkgLWDk6VFz1hDUSBr8XAixPZkd+yHTsTh66FJ4NKp08eaem6vR4WHY3taPBi
-        0PTdAMiC5aZRtKTyi5vJ3yZM3YrtPAI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7d1abb0b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 18 Oct 2022 17:34:55 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     sneves@dei.uc.pt, ebiggers@kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v2] random: use rejection sampling for uniform bounded random integers
-Date:   Tue, 18 Oct 2022 11:34:21 -0600
-Message-Id: <20221018173420.127174-1-Jason@zx2c4.com>
-In-Reply-To: <Y05P+KTzFHGaK4C3@sol.localdomain>
-References: <Y05P+KTzFHGaK4C3@sol.localdomain>
+        bh=hEybKauCdgd6YIkHlr+iEVr5RqBpDho20JihxoHBxbM=;
+        b=b6Won7Bs255GQMtjfiWKCb/YDW0p8rR0fDe3WkN0+YW86iI0F7LiNqbi5J4/CG3z4ljyJg
+        zt+JnNfwlzLjushwzMmxEsiyXul+wqkF1jgvgO+ih4j1NxdLEoSmIUVk+4rweaYUzHHxCM
+        C8LZyeTiEGzVh/BFfQDv+3YreCsnvEk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-475-iigGy_CVMZGj0kCAis02uA-1; Tue, 18 Oct 2022 13:37:22 -0400
+X-MC-Unique: iigGy_CVMZGj0kCAis02uA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DC783C02193;
+        Tue, 18 Oct 2022 17:37:21 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DBC251121315;
+        Tue, 18 Oct 2022 17:37:20 +0000 (UTC)
+Message-ID: <ef17f410-1cc2-7159-5e4c-f146a9e4aad1@redhat.com>
+Date:   Tue, 18 Oct 2022 13:37:20 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 4/5] locking/rwsem: Enable direct rwsem lock handoff
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Hillf Danton <hdanton@sina.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221017211356.333862-1-longman@redhat.com>
+ <20221018111424.1007-1-hdanton@sina.com>
+ <9b63611e-8d9a-529b-dcdc-05b10a8a712a@quicinc.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <9b63611e-8d9a-529b-dcdc-05b10a8a712a@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Until the very recent commits, many bounded random integers were
-calculated using `get_random_u32() % max_plus_one`, which not only
-incurs the price of a division -- indicating performance mostly was not
-a real issue -- but also does not result in a uniformly distributed
-output if max_plus_one is not a power of two. Recent commits moved to
-using `prandom_u32_max(max_plus_one)`, which replaces the division with
-a faster multiplication, but still does not solve the issue with
-non-uniform output.
+On 10/18/22 10:13, Mukesh Ojha wrote:
+> Hi,
+>
+> On 10/18/2022 4:44 PM, Hillf Danton wrote:
+>> On 17 Oct 2022 17:13:55 -0400 Waiman Long <longman@redhat.com>
+>>> @@ -1067,13 +1119,33 @@ rwsem_down_read_slowpath(struct rw_semaphore 
+>>> *sem, long count, unsigned int stat
+>>>               return sem;
+>>>           }
+>>>           adjustment += RWSEM_FLAG_WAITERS;
+>>> +    } else if ((count & RWSEM_FLAG_HANDOFF) &&
+>>> +          ((count & RWSEM_LOCK_MASK) == RWSEM_READER_BIAS)) {
+>>
+>> Could a couple of CPUs go read slow path in parallel?
+This is under wait_lock protection. So no parallel execution is possible.
+>>
+>>> +        /*
+>>> +         * If the waiter to be handed off is a reader, this reader
+>>> +         * can piggyback on top of top of that.
+>>> +         */
+>>> +        if (rwsem_first_waiter(sem)->type == RWSEM_WAITING_FOR_READ)
+>>> +            adjustment = 0;
+>>> +        rwsem_handoff(sem, adjustment, &wake_q);
+>>> +
+>>> +        if (!adjustment) {
+>>> +            raw_spin_unlock_irq(&sem->wait_lock);
+>>> +            wake_up_q(&wake_q);
+>>> +            return sem;
+>>> +        }
+>>> +        adjustment = 0;
+>>>       }
+>>>       rwsem_add_waiter(sem, &waiter);
+>>
+>> Why can this acquirer pigyback without becoming a waiter?
+The idea is to have as much reader parallelism as possible without 
+writer starvation. In other word, a continuous stream of readers is not 
+allowed to block out writer. However, there are places where allow one 
+more reader to get the lock won't cause writer starvation.
+>>
+>>>   -    /* we're now waiting on the lock, but no longer actively 
+>>> locking */
+>>> -    count = atomic_long_add_return(adjustment, &sem->count);
+>>> -
+>>> -    rwsem_cond_wake_waiter(sem, count, &wake_q);
+>>> +    if (adjustment) {
+>>> +        /*
+>>> +         * We are now waiting on the lock with no handoff, but no
+>>> +         * longer actively locking.
+>>> +         */
+>>> +        count = atomic_long_add_return(adjustment, &sem->count);
+>>> +        rwsem_cond_wake_waiter(sem, count, &wake_q);
+>>> +    }
+>>>       raw_spin_unlock_irq(&sem->wait_lock);
+>>>         if (!wake_q_empty(&wake_q))
+>>> @@ -1120,7 +1192,6 @@ static struct rw_semaphore __sched *
+>>>   rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+>>>   {
+>>>       struct rwsem_waiter waiter;
+>>> -    int null_owner_retries;
+>>
+>> This reverts 2/5 and feel free to drop it directly.
+>
+> I think, he intents to tag the first two patches to go to stable 
+> branches.
 
-For some users, maybe this isn't a problem, and for others, maybe it is,
-but for the majority of users, probably the question has never been
-posed and analyzed, and nobody thought much about it, probably assuming
-random is random is random. In other words, the unthinking expectation
-of most users is likely that the resultant numbers are uniform.
+This patch is too disruptive to go to the stable branches. Yes, I do 
+intend the first 2 patches to go into stable branches.
 
-So we implement here an efficient way of generating uniform bounded
-random integers. Through use of compile-time evaluation, and avoiding
-divisions as much as possible, this commit introduces no measurable
-overhead. At least for hot-path uses tested, any potential difference
-was lost in the noise. On both clang and gcc, code generation is pretty
-small.
-
-The new function, get_random_u32_below(), lives in random.h, rather than
-prandom.h, and has a "get_random_xxx" function name, because it is
-suitable for all uses, including cryptography.
-
-In order to be efficient, we implement a kernel-specific variant of
-Daniel Lemire's algorithm from "Fast Random Integer Generation in an
-Interval", linked below. The kernel's variant takes advantage of
-constant folding to avoid divisions entirely in the vast majority of
-cases, works on both 32-bit and 64-bit architectures, and requests a
-minimal amount of bytes from the RNG.
-
-Link: https://arxiv.org/pdf/1805.10941.pdf
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v1->v2:
-- Add a few explanatory comments.
-
- drivers/char/random.c   | 22 ++++++++++++++++++++++
- include/linux/prandom.h | 18 ++----------------
- include/linux/random.h  | 40 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 64 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 2fe28eeb2f38..e3cf4f51ed58 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -160,6 +160,7 @@ EXPORT_SYMBOL(wait_for_random_bytes);
-  *	u8 get_random_u8()
-  *	u16 get_random_u16()
-  *	u32 get_random_u32()
-+ *	u32 get_random_u32_below(u32 ceil)
-  *	u64 get_random_u64()
-  *	unsigned long get_random_long()
-  *
-@@ -510,6 +511,27 @@ DEFINE_BATCHED_ENTROPY(u16)
- DEFINE_BATCHED_ENTROPY(u32)
- DEFINE_BATCHED_ENTROPY(u64)
- 
-+u32 __get_random_u32_below(u32 ceil)
-+{
-+	/*
-+	 * This is the slow path for variable ceil. It is still fast, most of
-+	 * the time, by doing traditional reciprocal multiplication and
-+	 * opportunistically comparing the lower half to ceil itself, before
-+	 * falling back to computing a larger bound, and then rejecting samples
-+	 * whose lower half would indicate a range indivisible by ceil. The use
-+	 * of `-ceil % ceil` is analogous to `2^32 % ceil`, but is computable
-+	 * in 32-bits.
-+	 */
-+	u64 mult = (u64)ceil * get_random_u32();
-+	if (unlikely((u32)mult < ceil)) {
-+		u32 bound = -ceil % ceil;
-+		while (unlikely((u32)mult < bound))
-+			mult = (u64)ceil * get_random_u32();
-+	}
-+	return mult >> 32;
-+}
-+EXPORT_SYMBOL(__get_random_u32_below);
-+
- #ifdef CONFIG_SMP
- /*
-  * This function is called when the CPU is coming up, with entry
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index e0a0759dd09c..1f4a0de7b019 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -23,24 +23,10 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state);
- #define prandom_init_once(pcpu_state)			\
- 	DO_ONCE(prandom_seed_full_state, (pcpu_state))
- 
--/**
-- * prandom_u32_max - returns a pseudo-random number in interval [0, ep_ro)
-- * @ep_ro: right open interval endpoint
-- *
-- * Returns a pseudo-random number that is in interval [0, ep_ro). This is
-- * useful when requesting a random index of an array containing ep_ro elements,
-- * for example. The result is somewhat biased when ep_ro is not a power of 2,
-- * so do not use this for cryptographic purposes.
-- *
-- * Returns: pseudo-random number in interval [0, ep_ro)
-- */
-+/* Deprecated: use get_random_u32_below() instead. */
- static inline u32 prandom_u32_max(u32 ep_ro)
- {
--	if (__builtin_constant_p(ep_ro <= 1U << 8) && ep_ro <= 1U << 8)
--		return (get_random_u8() * ep_ro) >> 8;
--	if (__builtin_constant_p(ep_ro <= 1U << 16) && ep_ro <= 1U << 16)
--		return (get_random_u16() * ep_ro) >> 16;
--	return ((u64)get_random_u32() * ep_ro) >> 32;
-+	return get_random_u32_below(ep_ro);
- }
- 
- /*
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 147a5e0d0b8e..3a82c0a8bc46 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -51,6 +51,46 @@ static inline unsigned long get_random_long(void)
- #endif
- }
- 
-+u32 __get_random_u32_below(u32 ceil);
-+
-+/*
-+ * Returns a random integer in the interval [0, ceil), with uniform
-+ * distribution, suitable for all uses. Fastest when ceil is a constant, but
-+ * still fast for variable ceil as well.
-+ */
-+static inline u32 get_random_u32_below(u32 ceil)
-+{
-+	if (!__builtin_constant_p(ceil))
-+		return __get_random_u32_below(ceil);
-+
-+	/*
-+	 * For the fast path, below, all operations on ceil are precomputed by
-+	 * the compiler, so this incurs no overhead for checking pow2, doing
-+	 * divisions, or branching based on integer size. The resultant
-+	 * algorithm does traditional reciprocal multiplication (typically
-+	 * optimized by the compiler into shifts and adds), rejecting samples
-+	 * whose lower half would indicate a range indivisible by ceil.
-+	 */
-+	BUILD_BUG_ON_MSG(!ceil, "get_random_u32_below() must take ceil > 0");
-+	if (ceil <= 1)
-+		return 0;
-+	for (;;) {
-+		if (ceil <= 1U << 8) {
-+			u32 mult = ceil * get_random_u8();
-+			if (likely(is_power_of_2(ceil) || (u8)mult >= (1U << 8) % ceil))
-+				return mult >> 8;
-+		} else if (ceil <= 1U << 16) {
-+			u32 mult = ceil * get_random_u16();
-+			if (likely(is_power_of_2(ceil) || (u16)mult >= (1U << 16) % ceil))
-+				return mult >> 16;
-+		} else {
-+			u64 mult = (u64)ceil * get_random_u32();
-+			if (likely(is_power_of_2(ceil) || (u32)mult >= -ceil % ceil))
-+				return mult >> 32;
-+		}
-+	}
-+}
-+
- /*
-  * On 64-bit architectures, protect against non-terminated C string overflows
-  * by zeroing out the first byte of the canary; this leaves 56 bits of entropy.
--- 
-2.37.3
+Cheers,
+Longman
 
