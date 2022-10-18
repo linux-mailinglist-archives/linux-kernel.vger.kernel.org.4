@@ -2,114 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9539D603099
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A196030B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiJRQPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
+        id S229456AbiJRQY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJRQPu (ORCPT
+        with ESMTP id S229605AbiJRQYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:15:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3F522B28;
-        Tue, 18 Oct 2022 09:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666109749; x=1697645749;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oVwEkTvo388mdVRGCGIjhvZMJ0FRpThRSVZC/miQszI=;
-  b=AuDAbU4viKFqSvmi08HqDMh4LyP6hB6ONicoUlsX1ZWArzPl22qOrmy+
-   iTlstDMbQMLTjJoS3KULOevmBSQ9FxP7Gh5/+lJhjpLjR6DqHnjaD1Cto
-   fMK52B15BxMUdUKL4JHhRK8uMkrm/HrQhvjwhdwaPoepQlKonymSCzZD1
-   iWnAeIjmLanUu/34MqkclFuCqinRSH//HYEIS7+/aOpYqf96R6OrU3CGg
-   3U7T4zE3a3KLc9tiK0+dwi5RSQOw1TI4QA22VJEP9wNusKwv4jFgP7uyj
-   DWKWTv1AMBzu/h3LdpZcQtiBJoas4oUMKBtr/OTvfMlxqMOyvUZFmH+0N
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="293524770"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="293524770"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 09:15:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="606617636"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="606617636"
-Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.132])
-  by orsmga006.jf.intel.com with ESMTP; 18 Oct 2022 09:15:45 -0700
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: [PATCH] x86/hyperv: Remove BUG_ON() for kmap_local_page()
-Date:   Wed, 19 Oct 2022 00:21:17 +0800
-Message-Id: <20221018162117.2332508-1-zhao1.liu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 12:24:25 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A4621AC;
+        Tue, 18 Oct 2022 09:24:22 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 9816cde6ce27baf2; Tue, 18 Oct 2022 18:24:21 +0200
+Received: from kreacher.localnet (unknown [213.134.183.104])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 20447666963;
+        Tue, 18 Oct 2022 18:24:20 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla blues"
+Date:   Tue, 18 Oct 2022 18:24:19 +0200
+Message-ID: <4452253.LvFx2qVVIh@kreacher>
+In-Reply-To: <20221017204731.a7rixhqlqmhlntvl@nitro.local>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info> <f0412b37-fac0-c3f5-9877-0460a027e109@leemhuis.info> <20221017204731.a7rixhqlqmhlntvl@nitro.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.104
+X-CLIENT-HOSTNAME: 213.134.183.104
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddgjedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekfedruddtgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrddutdegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugieslhgvvghmhhhuihhsrdhinhhfohdprhgtphhtthhopehkohhnshhtrghnthhinheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopegrrhhoshesghhmgidrtghomhdprhgtphhtthhopeifohhrkhhflhhofihssehvghgvrhdrkhgvrhhnvghlrdho
+ rhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrvghgrhgvshhsihhonhhssehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepkhhsuhhmmhhitheslhhishhtshdrlhhinhhugidruggvvh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhao Liu <zhao1.liu@intel.com>
+On Monday, October 17, 2022 10:47:31 PM CEST Konstantin Ryabitsev wrote:
+> On Mon, Oct 17, 2022 at 03:57:17PM +0200, Thorsten Leemhuis wrote:
+> > > Here's my counter-plan, which builds on top of yours.
+> > 
+> > Is this the agreed on path forward by silent agreement? And if so: who
+> > will actually shepherd this? I just wonder, as it sounded to me that
+> > Konstantin would be happy to take care of the bot-related stuff, but
+> > leave the rest to somebody else.
+> 
+> Indeed, I need to do most of the preliminary legwork. I will start by creating
+> a public-inbox feed of all bugzilla comments, which is something I was
+> planning to do for a while anyway. Once that is in place, I can build on top
+> of that to add a two-way bridge to replace bugzilla's native (and rather
+> limited, in my experience) email bridge implementation.
+> 
+> Once I have this in place, we can consider what next steps should be taken.
 
-The commit 154fb14df7a3c ("x86/hyperv: Replace kmap() with
-kmap_local_page()") keeps the BUG_ON() to check if kmap_local_page()
-fails.
+Sounds good to me.
 
-But in fact, kmap_local_page() always returns a valid kernel address
-and won't return NULL here. It will BUG on its own if it fails. [1]
+Cheers!
 
-So directly use memcpy_to_page() which creates local mapping to copy.
 
-[1]: https://lore.kernel.org/lkml/YztFEyUA48et0yTt@iweiny-mobl/
-
-Fixes: 154fb14df7a3 ("x86/hyperv: Replace kmap() with kmap_local_page()")
-Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
----
- arch/x86/hyperv/hv_init.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 29774126e931..f66c5709324f 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -459,13 +459,11 @@ void __init hyperv_init(void)
- 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
- 
- 		pg = vmalloc_to_page(hv_hypercall_pg);
--		dst = kmap_local_page(pg);
- 		src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
- 				MEMREMAP_WB);
--		BUG_ON(!(src && dst));
--		memcpy(dst, src, HV_HYP_PAGE_SIZE);
-+		BUG_ON(!src);
-+		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
- 		memunmap(src);
--		kunmap_local(dst);
- 	} else {
- 		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
- 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
--- 
-2.34.1
 
