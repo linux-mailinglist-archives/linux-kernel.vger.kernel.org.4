@@ -2,130 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262A060211C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2399C602123
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiJRCZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
+        id S230270AbiJRC0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJRCY7 (ORCPT
+        with ESMTP id S230164AbiJRC0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:24:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D833474D7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:24:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FFD5B81A70
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D11C43470
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666059893;
-        bh=ahqzlzV/Qs05A5nah1C8yqsfOcgXxjdWa7D1s6LX56A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gUi+StEhvBq2q0qcN80YsWcyC6zImKAg2cJeg5Pm+h+9odraviFOXsN2Uy2zaInlB
-         gcOg965LxPFUARopqwhQTMGJVxaP9AJyHUVlaPlD4wobUj5ELmdw2b/MV1M0HcJCe/
-         iXwVPUBocwD5qDfVB2o9oZlh8Ur+lkO9J+8lG69d4PS3GMKxCPkBFrJhnI2/3QaBWx
-         xHLjpWXFOt6lxWGdwl+eywbgTou6oOG6P00fELRmSSziJ6WlEAaqNxrYaxI32/SegG
-         9g78zkFlOrkOlLtw6z6vJit3p+wqqfKtyr/pfaPCYx8c3X//wHX7EHlSqW48+4CMcr
-         x4joWn3ZXBw2Q==
-Received: by mail-ed1-f50.google.com with SMTP id b12so18545413edd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:24:52 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1qfU8wvmwCMk67k8cs2S1bI5Y0d95PSgohd11g6PvNQ5Z4tKDs
-        4XgTx/8D7AQz8V6sQd+wnncYSqSID/kvAaDK36k=
-X-Google-Smtp-Source: AMsMyM6ogI6gORLAlleouq3SQebnILswU8F5xU0WqsJklBQ5vAvtAZEsSOKr5m3tcxJxST8XyXnq7YkEbgI+jjnuloE=
-X-Received: by 2002:a05:6402:550e:b0:456:f79f:2bed with SMTP id
- fi14-20020a056402550e00b00456f79f2bedmr576124edb.106.1666059891208; Mon, 17
- Oct 2022 19:24:51 -0700 (PDT)
+        Mon, 17 Oct 2022 22:26:10 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F64C7969D
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:26:08 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id f140so12811244pfa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/KZhy//nHZxzt7N+DIXJ4f0oPILyzcXc82OGC+Wmp/k=;
+        b=BNQoXVjyQzateVtvrG7WFBq7bZIutgY4fn3PO7YW7fW4F6ZKob4YvPwsZfSuxZJJ1y
+         9qT6OBPYy22bDT0dfOMnEP06BZRtXWBq+hH2RCqBJNeU5TScoTKF3IZzSlopKwtV6GIc
+         j7ydQqNtqK8FDU47mblyFvt4BnTs+KHl4e/Es=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/KZhy//nHZxzt7N+DIXJ4f0oPILyzcXc82OGC+Wmp/k=;
+        b=nXFKs1LGdpmVuCzZY3IT4P0FBFMCytxNcxm+dC/saBv0wjIfXXblSlaof3PLmyiEqn
+         6t+W/jcvR99RvKbmJNKkdolbX2U+hkMs/lzrwz9caGWQ+FvfCL6ufffavo+wTUIxldqX
+         6CUJtuvBc5DfVLl2bJTOHfSxzdoaCgNE6f81/JKSOdazewXSB3HelfD39hgrwwrvXrhJ
+         bb582RekIhp3/kX+0o/xj/D0MKacWvq2qM4EddFG7tY3rXzhnL1X6wJU7gF3vpOm4zOB
+         CDayYodGPv8EzJm+0M+rkfFHdquWsGkYE/JtASGc9vMBUpRxvsJ6+bz4Vb9hQJvf0nyQ
+         QKZQ==
+X-Gm-Message-State: ACrzQf3qSULmBdCyWXlFNsPni1unMOfD5VIyuj9WRnIaDDiy+iKjO1cx
+        RJdiYWNHz1Z4FR9ByQ0qvzcMvQ==
+X-Google-Smtp-Source: AMsMyM44tI9T+OrjStrhBakQHZqVAo+drzSjAJZvAYJDXZdKqjPYu8K6XRQt6u2BFVqHJsVCsEwuww==
+X-Received: by 2002:a63:1f5c:0:b0:469:d0e6:dac0 with SMTP id q28-20020a631f5c000000b00469d0e6dac0mr681043pgm.427.1666059967533;
+        Mon, 17 Oct 2022 19:26:07 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i196-20020a636dcd000000b00434abd19eeasm6778334pgc.78.2022.10.17.19.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 19:26:06 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 19:26:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/6][next] orinoco: Avoid clashing function prototypes
+Message-ID: <202210171914.B3E5CE55@keescook>
+References: <cover.1666038048.git.gustavoars@kernel.org>
+ <2387e02ae7f31388f24041cae8d02d5e12151708.1666038048.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-References: <20221017022330.2383060-1-chenhuacai@loongson.cn> <b8792b1a71754d6eb88debe4d6c2c419@AcuMS.aculab.com>
-In-Reply-To: <b8792b1a71754d6eb88debe4d6c2c419@AcuMS.aculab.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 18 Oct 2022 10:24:36 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5WM97+Um9ULjv7gT3i5pJ3GfQ8ex6NRNr6uzmMgdVY_Q@mail.gmail.com>
-Message-ID: <CAAhV-H5WM97+Um9ULjv7gT3i5pJ3GfQ8ex6NRNr6uzmMgdVY_Q@mail.gmail.com>
-Subject: Re: [PATCH V2] LoongArch: Add unaligned access support
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2387e02ae7f31388f24041cae8d02d5e12151708.1666038048.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, David,
+On Mon, Oct 17, 2022 at 03:33:01PM -0500, Gustavo A. R. Silva wrote:
+> When built with Control Flow Integrity, function prototypes between
+> caller and function declaration must match. These mismatches are visible
+> at compile time with the new -Wcast-function-type-strict in Clang[1].
+> 
+> Fix a total of 53 warnings like these:
+> 
+> drivers/net/wireless/intersil/orinoco/wext.c:1379:27: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_param *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+>         IW_HANDLER(SIOCGIWPOWER,        (iw_handler)orinoco_ioctl_getpower),
+>                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> ../net/wireless/wext-compat.c:1607:33: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_point *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+>         [IW_IOCTL_IDX(SIOCSIWGENIE)]    = (iw_handler) cfg80211_wext_siwgenie,
+>                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On Mon, Oct 17, 2022 at 8:58 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Huacai Chen
-> > Sent: 17 October 2022 03:24
-> >
-> > Loongson-2 series (Loongson-2K500, Loongson-2K1000) don't support
-> > unaligned access in hardware, while Loongson-3 series (Loongson-3A5000,
-> > Loongson-3C5000) are configurable whether support unaligned access in
-> > hardware. This patch add unaligned access emulation for those LoongArch
-> > processors without hardware support.
-> >
-> ...
-> > +     /*
-> > +      * This load never faults.
-> > +      */
-> > +     __get_inst(&insn.word, pc, user);
->
-> On what basis does it never fault?
-> Any user access can fault.
-> If nothing else another thread of the process can unmap
-> the page.
-Yes, this can happen, since __get_inst() handles fault, we can just
-remove the comment.
+Thank you for working on these! Was this conversion done manually, via
+coccinelle, or something else?
 
->
-> > +     if (user && !access_ok(addr, 8))
-> > +             goto sigbus;
->
-> Surely that is technically wrong - a two or four byte
-> access is valid right at the end of valid user addreeses.
-Yes, this check should be moved to each case.
+> The orinoco Wireless Extension handler callbacks (iw_handler) use a
+> union for the data argument. Actually use the union and perform explicit
+> member selection in the function body instead of having a function
+> prototype mismatch. No significant binary differences were seen
+> before/after changes.
 
->
-> > +
-> > +     if (insn.reg2i12_format.opcode == ldd_op ||
-> > +             insn.reg2i14_format.opcode == ldptrd_op ||
-> > +             insn.reg3_format.opcode == ldxd_op) {
-> > +             res = unaligned_read(addr, &value, 8, 1);
->
-> That is the most horrid indentation of long lines I've
-> ever seen.
-> I'd also guess you can common up some of this code
-> by looking at the instruction field that include the
-> transfer width.
->
-> The long elsif list will generate horrid code.
-> But maybe since you've just taken a fault it really
-> doesn't matter.
-> Indeed just emulating in C using byte accesses
-> it probably fine.
-I want to keep the assembly, because we can use more efficient methods
-with the upcoming alternative mechanism.
+What does "significant" mean here? :P Anything related to line counts
+can just be ignored. But I'd expect the .text output of
+drivers/net/wireless/intersil/orinoco/wext.o before/after to be
+identical.
 
-Huacai
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
->
+> [...]
+>  	IW_HANDLER(SIOCSIWRTS,		(iw_handler)cfg80211_wext_siwrts),
+^^^ I think these are fixed explicitly later, but maybe better to just
+collapse them into this patch?
+
+> [...]
+> @@ -1391,15 +1406,15 @@ static const iw_handler	orinoco_handler[] = {
+>    Added typecasting since we no longer use iwreq_data -- Moustafa
+>   */
+>  static const iw_handler	orinoco_private_handler[] = {
+> -	[0] = (iw_handler)orinoco_ioctl_reset,
+> -	[1] = (iw_handler)orinoco_ioctl_reset,
+> -	[2] = (iw_handler)orinoco_ioctl_setport3,
+> -	[3] = (iw_handler)orinoco_ioctl_getport3,
+> -	[4] = (iw_handler)orinoco_ioctl_setpreamble,
+> -	[5] = (iw_handler)orinoco_ioctl_getpreamble,
+> -	[6] = (iw_handler)orinoco_ioctl_setibssport,
+> -	[7] = (iw_handler)orinoco_ioctl_getibssport,
+> -	[9] = (iw_handler)orinoco_ioctl_getrid,
+> +	[0] = orinoco_ioctl_reset,
+> +	[1] = orinoco_ioctl_reset,
+> +	[2] = orinoco_ioctl_setport3,
+> +	[3] = orinoco_ioctl_getport3,
+> +	[4] = orinoco_ioctl_setpreamble,
+> +	[5] = orinoco_ioctl_getpreamble,
+> +	[6] = orinoco_ioctl_setibssport,
+> +	[7] = orinoco_ioctl_getibssport,
+> +	[9] = orinoco_ioctl_getrid,
+
+Oops, I broke atmel. These really are 0-indexed...
+
+ static const iw_handler atmel_private_handler[] =
+ {
+-	NULL,				/* SIOCIWFIRSTPRIV */
++	IW_HANDLER(SIOCIWFIRSTPRIV,	NULL),
+ };
+ 
+I'll send a fix!
+
+-- 
+Kees Cook
