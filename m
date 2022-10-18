@@ -2,112 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33445602D7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5729C602D80
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiJRN4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S231281AbiJRN4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiJRN4e (ORCPT
+        with ESMTP id S231295AbiJRN4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:56:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481C3CF874;
-        Tue, 18 Oct 2022 06:56:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E30ECB81F67;
-        Tue, 18 Oct 2022 13:56:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE0CC433D6;
-        Tue, 18 Oct 2022 13:56:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666101390;
-        bh=qJ6vThAIE44VrwsfcxpiUgz6ZVzbsL/WPJFVhMYDSlw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rx45QDPaSXJRF3zL7QHyHW33SWwq46lbIpEKwn6nTDAUPNQZLeiZDVidaRmpSzOfx
-         8ltj05lsXIF/1lfBJLtknkl6Ph11dGi2QR9s5k+n71W3I9HqVb5jQX/v6OEX5VQpJG
-         ByLs8gBcjQsUFWEnYHwjPRY+FtGKzjqmH0i6kP6IDt14E39MlohU6kIuCSydNaMTdL
-         Wu67/PqcFV4JjiKO3AMSY5/7VtTOFt3wkUL9NZpVJq4yNZEmhQxyrTiE2g+b52Dntf
-         koBythbCrMqOegKPPT5bW3trCbewh37572jmOg1VjVX/tXD3SMYqLJKcAXxcMulb3S
-         D0ebFN3mraDnw==
-Date:   Tue, 18 Oct 2022 14:56:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V4 1/7] arm64/perf: Add BRBE registers and fields
-Message-ID: <Y06wiI2hgsz5QPTh@sirena.org.uk>
-References: <20221017055713.451092-1-anshuman.khandual@arm.com>
- <20221017055713.451092-2-anshuman.khandual@arm.com>
+        Tue, 18 Oct 2022 09:56:46 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF79D0184;
+        Tue, 18 Oct 2022 06:56:45 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 6A102320025E;
+        Tue, 18 Oct 2022 09:56:44 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 18 Oct 2022 09:56:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666101404; x=1666187804; bh=d6o/9ZjWll
+        tettTtq0x0QTbIW2ZWxkr4XOTjsAM1BxQ=; b=QJfdmUcngfRtR5r0k42D/lqIS/
+        kl1ZVK76EZYQWdQQ9/6dKNNTl5Y1op/V9aE5XMkWluq8Ddba2oLPELKAxG5HRzM7
+        P7KYEw8CEMQRzLLfUzlf8OsQ2hD7Aep7UCDEUpSQ32bGDpZ2rA/z/0jDI2WBbmJu
+        DCPk+gqqYE4E30lTAh9aA1vXprhj0JbHSn36u+RkmyO6yZxm8ENBGP3sQttS/JYn
+        XOjP29U5kwU5Bv2UJ9wi4KpZLI/+AkkSPUXLzbpFqWPcw5VD0mMkvn3JXMQ98qdL
+        Zk8bJr9GWbg6TEs/1UFz8bnJ0DITCzvrnm6eYlHaDw63boiISSm+QL5plCSQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1666101404; x=1666187804; bh=d6o/9ZjWlltet
+        tTtq0x0QTbIW2ZWxkr4XOTjsAM1BxQ=; b=OZs4beNAU1KIAZvlDs+MPnzZmc4jf
+        myliUlaYzIgKtwoAQGNm+WYEqzq841HwMkNMWN+xAsfkhoeR3rnQ5NZvOFqnOCo2
+        bj8fWJYH8LLQUnH6My7/rYRasl4js+KJhjJr6xX64v4nl6TBzilGxHKNUz7+yucv
+        O7mYtzcm5XUeAldby8lgrgKNK2LQQOtNzUU6S3Qc41DrrvAh5UYM8Y5/Xl7fdXa+
+        AFAuiJdbxKfANl4mewbCkX0qVqMTXyjztVuNgdoQK47O8YK8IhO9ozYAlfU1eOsz
+        Ln6anF79S/D3yvHuf2a0OvpYvtImuAy6ZDDDIaOo7ije39BqQk749m1MA==
+X-ME-Sender: <xms:m7BOYz5ZonXNqICaBxmukVMq8pebsWPijnRVCHoWUej2z2DPQdr8VA>
+    <xme:m7BOY47Pa0MJY4wQz0ZOW_8NAjhAzk3zewMdG15WFGy9mvt_wuvrR5wOJJGOR6Fpc
+    kJ740kQM8p0_pwrpkU>
+X-ME-Received: <xmr:m7BOY6dLqQN8iV2GQWcGjP8mFxfUZQVl-fFyCuOXMmiVb0yYaFrd4rCfr968>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepvdehfeejtefhgeegudegveejieetfeeugeehveffteejkedufeeltedutdeu
+    geehnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:m7BOY0Ks5H2532Kz0GTpiWwh0OOQJSWa4Ubp1CrkRfcUAp-FKk027g>
+    <xmx:m7BOY3JoPFI9FzN3ttLy04AMTjd3yGT-jtKf90t897wps-7OTAXRwg>
+    <xmx:m7BOY9yAje_XaS3uztBy2ht7OotSGYqQtQA6JCjiM3w19gYKjSl0vw>
+    <xmx:nLBOY9gJwvwpXrPHudwjjHi0Xhmy4UMvmJKBrbF8gVzxJ8qy56sm4Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Oct 2022 09:56:43 -0400 (EDT)
+Subject: [PATCH 0/2] clk: Rate Request Tracing
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GFneNsft22FHtzEa"
-Content-Disposition: inline
-In-Reply-To: <20221017055713.451092-2-anshuman.khandual@arm.com>
-X-Cookie: Lake Erie died for your sins.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAJiwTmMC/w3MMQrDMAxA0asEzRXYrkNDbyM7IhExKpWcLiF3r8c3/H+Bswk7vKcLjH/i8tGB+J
+ ig7qQbo6zDkEJKMcQFazvQqDMaf0/2jt2oim74yryEkudnXiOMvJAzFiOt+xjo2dp9/wH6kLqNbwAA AA==
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Tue, 18 Oct 2022 15:56:40 +0200
+Message-Id: <20221018-clk-rate-request-tracing-v1-0-6f3aa0b0b9de@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>
+X-Mailer: b4 0.11.0-dev-7da52
+X-Developer-Signature: v=1; a=openpgp-sha256; l=978; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=SwaImmjFBLVh/HJnbJyXqAs1S1NtasMsz9acLyU1qOY=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMl+G2aJNz3k/CHZc8myKrFYeePzE6FJ9V5RE7c1Hnv7KVRz
+ 6aSCjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEykdAsjw/dZTZM8yjuDbC89tJpRKV
+ YTa6XxcrnbyQyfs9ZK/U/VZjL8Zr9zbiPfZqlDzg5Wuy78XLeR/0YHU+FEndzny6NKmm4GMgMA
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---GFneNsft22FHtzEa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Here's a couple of patches to enable the tracing of clk_rate_requests as they
+are submitted to round/determine_rate.
 
-On Mon, Oct 17, 2022 at 11:27:07AM +0530, Anshuman Khandual wrote:
+Let me know what you think,
+Maxime
 
-I spotted one typo below but otherwise this looks good!
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-> +# This is just a dummy register declaration to get all common field masks and
-> +# shifts for accessing given BRBINF contents.
-> +Sysreg	BRBINF_EL1	2	1	8	0	0
+---
+Maxime Ripard (2):
+      clk: Store clk_core for clk_rate_request
+      clk: Add trace events for rate requests
 
-This seems reasonable to me, others may disagree.
+ drivers/clk/clk.c            | 32 ++++++++++++++++++++++++++++++++
+ include/linux/clk-provider.h |  2 ++
+ include/trace/events/clk.h   | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 77 insertions(+)
+---
+base-commit: 69a14e4a9d5a0e1ed73063e0d439c3cb33ce9829
+change-id: 20221018-clk-rate-request-tracing-74e80b4534d1
 
-> +Sysreg	BRBCR_EL1	2	1	9	0	0
-> +Res0	63:24
-> +Field	23 	EXCEPTION
-> +Field	22 	ERTN
-> +Res0	21:9
-> +Field	8 	FZP
-> +Res0	7
-> +Enum	6:5	TS
-> +	0b1	VIRTUAL
-
-I'd have expected this to be written as 0b01.  Doesn't make any
-practical difference though.
-
-> +Sysreg	BRBFCR_EL1	2	1	9	0	1
-
-> +Field	16	EnL
-
-This is "EnI" in DDI0487I.a.
-
---GFneNsft22FHtzEa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNOsIcACgkQJNaLcl1U
-h9B8mQf/YGziWfn/iGHXXqP1g1TRcgidWG2RKf40LqRQFjE9CFIZXE9CFKF/phii
-c6DnpdV6gRyWoQUN/0YyyYoVQqoOiZuLiec5/5izwOR/sz5KHAsiOmSBNouC2URX
-HXB7X+ISeV8yJnmHv6LSTEPo9Wli55CDlcFa7r6gknyC6jz7pYG+jEBw6EGzLSAW
-5S4ulolNpsNeWvzCXm9lqljVU8U9LYkKESspFoLMylIf+E5kY1T7Nl70g+ZM0wpo
-3Y2eJZmaGg+tnXp7jPz4x9iJEpnc3YPdhTgOWKWSTS56qwxAo8jplreQdfEHdVwB
-qXammSL9S07Ms9UB+Bo8nigp3ywwZw==
-=cqL5
------END PGP SIGNATURE-----
-
---GFneNsft22FHtzEa--
+Best regards,
+-- 
+Maxime Ripard <maxime@cerno.tech>
