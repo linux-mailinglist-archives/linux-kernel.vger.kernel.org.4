@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D8960212B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2099860213C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiJRC3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S229797AbiJRCgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiJRC3G (ORCPT
+        with ESMTP id S229727AbiJRCgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:29:06 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EB294113
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666060142; x=1697596142;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m1JiaK/FEuNSd19PhWHZBeUN0AO92BjHPiKfuk8s/DE=;
-  b=Br+XuIMcW6HUrDkOG3sRbtUsuUbQbDqtp+/M88oEqWhnXxKEGoFyPHZP
-   Bti+tkxXxddvUJBYTKlvrf0PqR2SQR+RL0HjtZyEbGG8FgZ5pYy5v7O2L
-   ur7t3EM3YRy3HU8+sk/+MockpvqCiLUHJdaM20kt5xoDGF8UuOwzqEDC5
-   TMNPKifmZYqvsqhHXySIVA7V5g1zloylxo5TdMYAbV9Lc3zeU+tsCjxEE
-   cCzfu5D9DoAuKPnGuOm6YDL8RrPuiOAiqgMTIMsWLjfKZn9WKqh2MKlf4
-   6hiX2+vgs/fu4MEOL5Etw9FalVRDz5R3I0VP9TmCVHTI40gnb6ClLaQVM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="392279535"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="392279535"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 19:29:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="630922430"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="630922430"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Oct 2022 19:29:01 -0700
-Date:   Mon, 17 Oct 2022 19:35:27 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] sched/fair: Avoid unnecessary migrations within SMT
- domains
-Message-ID: <20221018023527.GB23064@ranerica-svr.sc.intel.com>
-References: <20220825225529.26465-1-ricardo.neri-calderon@linux.intel.com>
+        Mon, 17 Oct 2022 22:36:18 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F038418380;
+        Mon, 17 Oct 2022 19:36:17 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id a6-20020a17090abe0600b0020d7c0c6650so16061856pjs.0;
+        Mon, 17 Oct 2022 19:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qQsvsKFvIgYktIg/XKnkN+HjvyN+ijqDltwi/tGC1YQ=;
+        b=Olf2nqyyty+JBycOlgJblOjTCAWJTo8Yp3OrQi6+5/7+7XIdlOCSIux3/EUeUEVQXZ
+         +ma530KdOkh0nrg8x32h0il2YvWYTAsr6uMnlrmRLh03difFGXQ1CHbgnFeR9UIyh3d4
+         mAWfRWnwKRyaZHzu//1LIaTyybdCATDD5XcBbAF3mKB8Hp9JHLKbiT94d2Q4viX87enE
+         JIjcUi+1j9k5hC+vrZmTqQSy+amn0LE2M+tWAgCxj0IhXho5Hx4hiQjflZgSRYelCK81
+         fXjJ8AvfNcz81TbOJKN2Jw48ffoyitn9qNyT6Je8ALN4RJuQp6I5VuvO0dbkEumUDTuq
+         GLVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQsvsKFvIgYktIg/XKnkN+HjvyN+ijqDltwi/tGC1YQ=;
+        b=b5UqV5HKWVQif1Cqar+0vPD0szEoTgmy6+NvU/nHVR+iX5HuOL6ArHqt5kuj0hykIs
+         Wn7nfDKWcg7V1L5l2l8oHQXhUfP8rLaxYErinAzrq0HKCsaKPHldwu2e9PIU2P1CduHZ
+         ACLs59pNHdl0ASvcjZRYib3aHBmSXSd5Gj61RGVg3IboLinZxkqzuYtrXSZc2iX8Xxd7
+         sfJ1vkxPoHN83S9aaVynMrcFNEk3cNpAhxZzH6Kr5NRyiNxMuxvP68ZlhdmvU//PVFFw
+         9BGQ3+eAQmHvnPEPUCPkGQWzy321xsvXQHDBob5N0aR+MWOOBR0KgtlI7GpvSYYOs2XK
+         dCyg==
+X-Gm-Message-State: ACrzQf3K2HNW7R+qkrmIheY4yEpuvIdjAPYIFv6QNCV8v6VlVf+4i7Qh
+        ksa+SuzjIaQo0JRQOkvZFzM=
+X-Google-Smtp-Source: AMsMyM59m/v/Nwrhs3kECx31Bo+s5XUbUhpMtDDJvD3Ta1QQ+hBCIQ9oYq1GgZI/F+S6RIoW6c6www==
+X-Received: by 2002:a17:903:11c4:b0:178:634b:1485 with SMTP id q4-20020a17090311c400b00178634b1485mr709561plh.142.1666060577437;
+        Mon, 17 Oct 2022 19:36:17 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id v8-20020a654608000000b0044046aec036sm6807949pgq.81.2022.10.17.19.36.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 19:36:16 -0700 (PDT)
+Message-ID: <8e2a1da1-2914-b223-85b0-a769339d9c39@gmail.com>
+Date:   Tue, 18 Oct 2022 11:36:12 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825225529.26465-1-ricardo.neri-calderon@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH v2 1/2] Documentation: Start translations to Spanish
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, bilbao@vt.edu,
+        corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, miguel.ojeda.sandonis@gmail.com,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20221014142454.871196-2-carlos.bilbao@amd.com>
+ <48b4a5a1-2a52-4159-699b-9db73a012892@gmail.com>
+ <Y01pkubcT7FOwCjL@casper.infradead.org>
+Content-Language: en-US
+In-Reply-To: <Y01pkubcT7FOwCjL@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 03:55:25PM -0700, Ricardo Neri wrote:
-> Intel processors that support Intel Turbo Boost Max 3.0 use asym_packing
-> to assign higher priorities to CPUs with higher maximum frequencies. It
-> artificially assigns, however, a lower priority to the higher-numbered
-> SMT siblings to ensure that they are used last.
+On 2022/10/17 23:41, Matthew Wilcox wrote:
+> On Sat, Oct 15, 2022 at 01:06:36PM +0900, Akira Yokosawa wrote:
+>> Hi,
+>> Minor nit on language code.
+>>
+>> On Fri, 14 Oct 2022 09:24:53 -0500, Carlos Bilbao wrote:
+>>> Start the process of translating kernel documentation to Spanish. Create
+>>> sp_SP/ and include an index and a disclaimer, following the approach of
+>>> prior translations. Add Carlos Bilbao as MAINTAINER of this translation
+>>> effort.
+>> IIUC, the language code for "Spanish (Spain)" should be "es-ES", as is
+>> listed at e.g., http://www.lingoes.net/en/translator/langcode.htm.
+>>
+>> The other translations use directory names found in the table, with
+>> "-" replaced with "_".  It would be better to be consistent.
 > 
-> This results in unnecessary task migrations within the SMT domains.
+> I don't know what standard we're actually following.  RFC5646 suggests
+> simply using "es", with "es-419" for Latin America specialisation or
+> "es-ES" for Spain.  I don't know how much variation there is between
+> different Spanish dialects for technical documents; as I understand it,
+> it's worth supporting two dialects of Chinese, but we merrily mix &
+> match en_US and en_GB spellings.  Similarly, I wouldn't suggest that we
+> have separate translations for fr_CA, fr_CH, fr_FR, just a single 'fr'
+> would be fine.
 > 
-> On processors with a mixture of higher-frequency SMT cores and lower-
-> frequency non-SMT cores (such as Intel hybrid processors), a lower-
-> priority CPU pulls tasks from the higher-priority cores if more than one
-> SMT sibling is busy.
-> 
-> Do not use different priorities for each SMT sibling. Instead, tweak the
-> asym_packing load balancer to recognize SMT cores with more than one
-> busy sibling and let lower-priority CPUs pull tasks.
-> 
-> Removing these artificial priorities avoids superfluous migrations and
-> lets lower-priority cores inspect all SMT siblings for the busiest queue.
+> We do need to be careful here; people are rightfully sensitive about
+> being incorrectly grouped together.  If possible we should find a
+> standard to follow that's been defined by experts in these matters.
+> https://en.wikipedia.org/wiki/IETF_language_tag may be a good place to
+> start looking.
 
-Hello. I'd like to know if there are any comments on these patches. This
-patchset is a requisite for the IPC classes of tasks patchset [1].
+I think generic "es" is OK, especially if "es_ES" can have such a
+negative connotation to some. I just wanted to point out "sp_SP"
+looks wrong.
 
-Thanks in advance!
-Ricardo
+Carlos, if you go the "es" way, it would be better to mention the
+reason of the choice in the Changelog for future reference.
 
-[1]. https://lore.kernel.org/lkml/20220909231205.14009-5-ricardo.neri-calderon@linux.intel.com/T/
+Subdirectories "ja_JP", "ko_KR", and "zh_CN" were added under
+Documentation/ way back in 2007 (v2.6.23).
+
+As you might see, two of the three language codes needed region
+distinction and they were reasonable choices at the time.
+
+        Thanks, Akira
