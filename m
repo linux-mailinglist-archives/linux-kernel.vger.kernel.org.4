@@ -2,252 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B566024B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6967C6024BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJRGqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S229720AbiJRGrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJRGqA (ORCPT
+        with ESMTP id S229456AbiJRGrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:46:00 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2064.outbound.protection.outlook.com [40.107.20.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C99F7C30E;
-        Mon, 17 Oct 2022 23:45:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yt2WendOwY5LvDD0i+XZCXfLXL1cYyJyt7QIzMGRgu29XsCPqruYi8NP8h8ekFReYZpBDF3ZF6zFKcPrQJZEeC1r/gDnxIQhlr9dLv9COm0BUQD4RWYq3dLTvQZ10zjuSZzkPVBeCcu9/u3lw4EaT0IcQsj5ZDJg+/Cw5xSLJuQhpBgXlHvAjUa3kXkEuqhc95W7KkuxzpVNcMNKhUwaB7op8VjruThv0vJXC2SRgykTzaKojOINg4rye36fEo4lOU9qbR+FLapX5rpalOU8oaAzNa0vMKaFbnfb66L4UGwtHRdgwxsORM10Cf76k94WyX0p6zZL0UCvYfYG7bvNGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V9cVTAcwPTqnIrttdHACckAKJ5EkfiiJPyIfEEMq+2U=;
- b=QGEgaTEWYYYEDCaQG6bB1icLJhwR265E3FNT1/uBw1DkpBeF7FRuPEAYfTWJQrFg4Kk5PbfdQQurGZzgY/X8GC9mN3TMpiNLTGRDacdHNvEO+qvhRrEjDnBm8uEbJ7N0TdGDDjCI0sMTkqGFqIMUM2HTmleLf99SAl+CkJoEEMQX1pkXhjYrmLOGP3xRTRDtnapTodqnGO7VGZ8NebQiTEo95sIVwyyT+nMDNnYn1IrJQjdKy4XnW0cIW06k2Zft/frQrg+6chuTWftF9vr5oafrCQo+Mo4s0Suw7z6aESZVOgk2KgH/ogVTw3D6k3XGbaZ/nViHB5At7Qk9UAeByQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V9cVTAcwPTqnIrttdHACckAKJ5EkfiiJPyIfEEMq+2U=;
- b=AgRJQ0lq7EPmmWwzauOnyuOOak2K3F3IxK0hu7QqFwQwEbadIacrxXlbYk58SHatRTMu8exvBmXm7qCMgNqhbDAMymU/nogXvkdt2/aP/Zj1jBrV/G8axkH9oAoxu3X1KiRp3vXeIaVurELf1e6wvoU9PWKGfMmJbnDnClfkfJo=
-Received: from AM6PR04MB3976.eurprd04.prod.outlook.com (2603:10a6:209:3f::17)
- by AS8PR04MB8532.eurprd04.prod.outlook.com (2603:10a6:20b:423::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Tue, 18 Oct
- 2022 06:45:57 +0000
-Received: from AM6PR04MB3976.eurprd04.prod.outlook.com
- ([fe80::d607:898d:a3eb:4e06]) by AM6PR04MB3976.eurprd04.prod.outlook.com
- ([fe80::d607:898d:a3eb:4e06%4]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
- 06:45:57 +0000
-From:   Madalin Bucur <madalin.bucur@nxp.com>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: RE: [PATCH net] net: fman: Use physical address for userspace
- interfaces
-Thread-Topic: [PATCH net] net: fman: Use physical address for userspace
- interfaces
-Thread-Index: AQHY4kV4CTBQ6TpejkOf0p9IZqtcYq4TtZCQ
-Date:   Tue, 18 Oct 2022 06:45:56 +0000
-Message-ID: <AM6PR04MB3976D736CB1EFD55F0224E0BEC289@AM6PR04MB3976.eurprd04.prod.outlook.com>
-References: <20221017162807.1692691-1-sean.anderson@seco.com>
-In-Reply-To: <20221017162807.1692691-1-sean.anderson@seco.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB3976:EE_|AS8PR04MB8532:EE_
-x-ms-office365-filtering-correlation-id: ff898856-0b48-4357-0ea8-08dab0d4691f
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Wto+bLbiyfTBuv/9N8c/lLI++UvH/+OWhTO9uDdIzq2k0EfSL3vp82tMRo/WWomhrvPwObgSskDJAWzKaOgNiHCxvOr0/tu7Wt0SgnBYV8U6Jun9CF9+oX2VhKMkNJ0N4cxwu8gpPJyDs7ldTREG1rDomAmc0I7faU2IgBAzmn3RI3Ue366uWmjeByNWecPCbPRJH9YEjlHnDChvXiB5YHjGTw1kUoTesrSOhqLcwk8c7yqQzJmLgJ/KTwHyvYs1upwDqtGU5qJnei1axxlpYP/XQCpq2Y/g8vcwSPGahwJwJRjOIWpLLQvpUeHh8J6rt/ZEhBaBEYjTlUjz0PpHsZT+bSQbD/3ksT0yx19YfiuiWUAIezWUfxXzbGy9NNemim74PwveNwGHslJunw70wQJuVOXUjMy/MzL8mZo1N/vTdtAMfaXAe9ODjqggRUrDF7Dqbjf8WaVLviXymXSPNkdYozG6D4Qgr8RMx1bc5TJn8iJHCpXMUQg4tE9gtXOZheFKTcQnsp5m2oic/AOL/tfw/yxLaQIHabmmYShEoRNn4BDYF3OkVeoknE3XRno29209bksbbnIc0yx+Gp0JsHvKN3dtIBC95gzY+IellvNEVYwscAfXWGXyQzfqD5jWJooakBWaCBaOotunp7HljhNQ+ZHiDeC8ZOhWZFkPRmchcferBX9oQC7sebTJOMGxfrvRWV3BJzesk7z5URKNx950ULMEhLUpCcwJr6WeiqgL607PzD69lgXTMo1gzMiGtrplvHsu3wV2481p1Yl/jQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB3976.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199015)(38100700002)(38070700005)(86362001)(122000001)(4326008)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(71200400001)(316002)(110136005)(54906003)(44832011)(5660300002)(2906002)(41300700001)(8936002)(52536014)(186003)(83380400001)(478600001)(9686003)(7696005)(6506007)(53546011)(26005)(55016003)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gIWs/Oqi72FqMTdmCuKjE4K5LwR+rqjqE1xGxkgOVI0M+b7iWcB0AYDvVM2M?=
- =?us-ascii?Q?2S2H1x905X/rgWOpoEBrnOD90bJ1u0JOWzP5HzasCLUUHAUUYFNNgyKbj1da?=
- =?us-ascii?Q?KOblq/jUCrMYAAuH+an2UIVMFqo+KM54Wgu6X21M5BGZt7LwFtz7DB+rvbWg?=
- =?us-ascii?Q?y5sjjfkyusq5sBa8Pnwa1XXYmaSqeN+p/11YO04SHvBq75wnoiN06Syuecjj?=
- =?us-ascii?Q?RDrG+jdbUoubpseXh+HOwCAND9JdLvBZ7ngkP9L+VkkYwA1nqQHTUJ7RTcHC?=
- =?us-ascii?Q?2RQu/98mDTNPlmDQJgmh0Ogm87rUexmvsWqwBEHYHltw6EDU2Ki/7J37E/vz?=
- =?us-ascii?Q?ebuZJXptUe/M2AAU75veHKRND3EuOnsLIufasQ/SH8/Um+I8/TtAjIceiu3u?=
- =?us-ascii?Q?jTeH2GZY4xs/BUxWNGzvTlIGiOhYeexmSedo9F0ODTGXYsSqPdMULQO1CdRA?=
- =?us-ascii?Q?7OUq4lYmu11/e25YNbXwxVDsrB//EhUNWv7qdeY5ZVLy60xIU5GAbWHTRYP4?=
- =?us-ascii?Q?xGhjoMeKei7y+f5s3qJQY7baKuGwEULQzgOv8ZSfq+BNvBMFvMhc3GjB9XOp?=
- =?us-ascii?Q?qv7l/zNcyhF/FydwR6zPxYOfXP8HeMjAZlyb+h4CC4VF7hyqeBnZypMpXVzA?=
- =?us-ascii?Q?r5mZJmJOkfbQxt0867G5KQmzVCYhT3Y34T2b3b7kryzz4d4t3O2qqyERe/uR?=
- =?us-ascii?Q?IgQ0q0EnwUdJ9GSFDCebkcNz3k1qjMHgQ1Exl2ERhVMyBtKc+AV2bq83et8Y?=
- =?us-ascii?Q?hhpVK+ddjo0XpSwVAfBGc9TrmjZreMrt/cjb04N2s/OGgcSbSOu0eE1kCk9z?=
- =?us-ascii?Q?pJyyq9jM/ovFlQHp33NM/RhgblumKxEN40MFG4LXrCcIqq3q7jVdajBO1wh9?=
- =?us-ascii?Q?yrNJnTwIcgbheRCw783qHBdct5xh7ZU67vSG26H9isIPpBD0OH42D62fmWVu?=
- =?us-ascii?Q?Tj30bT3cwN473WHbJ3WAeBDCt2XoKkn3QF0G4NiVEBWC9/ivWxaOj8Gezj5X?=
- =?us-ascii?Q?Ymw+025PPQzU/dnde4OII6pHXefHiOTiVFtKOn0dkDMoRCm61EjzsD+ZU2US?=
- =?us-ascii?Q?E4hconJxmeeuZF2QHCNiZ0GDwj+UhkQl/pDqTUjRqv+01IjxM4OzUO1sKrHS?=
- =?us-ascii?Q?PH4FT+N22uDV//zlZO62AcX2co/107ZUiVUVQfLaZxAIWE7w+uiJObjTfs3j?=
- =?us-ascii?Q?ttsivi2iPs7DJYBXsVz/aKkTf4mpr4phai+K0Srdvzd8c88K+MrmEKcw+SXG?=
- =?us-ascii?Q?KAgclcoHJNqXXuGZ2+XLeJKtuj24Jvc2W6lnQ2rEzG0PnDM/cJqUxPX9+4nk?=
- =?us-ascii?Q?Y0cjCbG1MSZyJpsVLo4S1WXuFM+zR+onjWIeDZ4TQhw+McTHi17lTe+NdRVs?=
- =?us-ascii?Q?GFz6q+4yDEJ1OCIuq339fnN9KfgqrkkazUNsbYIVWnfojDubwlA748GktzX9?=
- =?us-ascii?Q?pDv0xWF+Kkoh8QPrSjB7aA2Fq8pa4GMswDKUwiwJLsZky0IYccK/WtEp1tUG?=
- =?us-ascii?Q?7oDOJIwm58feGPoN8qutZfntO1VBlgSMkbsLu8LwuHF4tEhsK6n0EOvdESxp?=
- =?us-ascii?Q?HEGe6G4wFBRZxCkaB5bf/iHD3wkW/BWYiwbNawCq?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 18 Oct 2022 02:47:31 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C41A59B3
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:47:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VSTSjO6_1666075645;
+Received: from 30.221.130.77(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VSTSjO6_1666075645)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 14:47:26 +0800
+Message-ID: <537dcde9-864e-37d4-1898-2307d254c69d@linux.alibaba.com>
+Date:   Tue, 18 Oct 2022 14:47:24 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB3976.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff898856-0b48-4357-0ea8-08dab0d4691f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2022 06:45:56.9076
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YBdqOfmFPkxBgP7W+TpaRIQYfOD4i+dKjKEhSQyjdP+ChDCBzC82z011ftRi/BrYir8i2IhLOYTSR1Zs5CLitQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8532
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [PATCH] erofs: use kmap_local_page() only for erofs_bread()
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <20221018035536.114792-1-hsiangkao@linux.alibaba.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20221018035536.114792-1-hsiangkao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sean Anderson <sean.anderson@seco.com>
-> Sent: 17 October 2022 19:28
-> To: David S . Miller <davem@davemloft.net>; netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org; Madalin Bucur <madalin.bucur@nxp.com>;
-> Jakub Kicinski <kuba@kernel.org>; Eric Dumazet <edumazet@google.com>;
-> Paolo Abeni <pabeni@redhat.com>; Camelia Alexandra Groza
-> <camelia.groza@nxp.com>; Geert Uytterhoeven <geert@linux-m68k.org>; Sean
-> Anderson <sean.anderson@seco.com>
-> Subject: [PATCH net] net: fman: Use physical address for userspace
-> interfaces
->=20
-> For whatever reason, the address of the MAC is exposed to userspace in
-> several places. We need to use the physical address for this purpose to
-> avoid leaking information about the kernel's memory layout, and to keep
-> backwards compatibility.
->=20
-> Fixes: 262f2b782e25 ("net: fman: Map the base address once")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+
+
+On 10/18/22 11:55 AM, Gao Xiang wrote:
+> Convert all mapped erofs_bread() users to use kmap_local_page()
+> instead of kmap() or kmap_atomic().
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+LGTM.
+
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
 > ---
->=20
->  drivers/net/ethernet/freescale/dpaa/dpaa_eth.c       |  4 ++--
->  drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c |  2 +-
->  drivers/net/ethernet/freescale/fman/mac.c            | 12 ++++++------
->  drivers/net/ethernet/freescale/fman/mac.h            |  2 +-
->  4 files changed, 10 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> index 31cfa121333d..fc68a32ce2f7 100644
-> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> @@ -221,8 +221,8 @@ static int dpaa_netdev_init(struct net_device *net_de=
-v,
->  	net_dev->netdev_ops =3D dpaa_ops;
->  	mac_addr =3D mac_dev->addr;
->=20
-> -	net_dev->mem_start =3D (unsigned long)mac_dev->vaddr;
-> -	net_dev->mem_end =3D (unsigned long)mac_dev->vaddr_end;
-> +	net_dev->mem_start =3D (unsigned long)priv->mac_dev->res->start;
-> +	net_dev->mem_end =3D (unsigned long)priv->mac_dev->res->end;
->=20
->  	net_dev->min_mtu =3D ETH_MIN_MTU;
->  	net_dev->max_mtu =3D dpaa_get_max_mtu();
-> diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c
-> b/drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c
-> index 258eb6c8f4c0..4fee74c024bd 100644
-> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c
-> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth_sysfs.c
-> @@ -18,7 +18,7 @@ static ssize_t dpaa_eth_show_addr(struct device *dev,
->=20
->  	if (mac_dev)
->  		return sprintf(buf, "%llx",
-> -				(unsigned long long)mac_dev->vaddr);
-> +				(unsigned long long)mac_dev->res->start);
->  	else
->  		return sprintf(buf, "none");
+>  fs/erofs/data.c     | 8 ++------
+>  fs/erofs/internal.h | 3 +--
+>  fs/erofs/xattr.c    | 8 ++++----
+>  fs/erofs/zmap.c     | 4 ++--
+>  4 files changed, 9 insertions(+), 14 deletions(-)
+> 
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index fe8ac0e163f7..3873395173b5 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -13,9 +13,7 @@
+>  void erofs_unmap_metabuf(struct erofs_buf *buf)
+>  {
+>  	if (buf->kmap_type == EROFS_KMAP)
+> -		kunmap(buf->page);
+> -	else if (buf->kmap_type == EROFS_KMAP_ATOMIC)
+> -		kunmap_atomic(buf->base);
+> +		kunmap_local(buf->page);
+>  	buf->base = NULL;
+>  	buf->kmap_type = EROFS_NO_KMAP;
 >  }
-> diff --git a/drivers/net/ethernet/freescale/fman/mac.c
-> b/drivers/net/ethernet/freescale/fman/mac.c
-> index 7b7526fd7da3..65df308bad97 100644
-> --- a/drivers/net/ethernet/freescale/fman/mac.c
-> +++ b/drivers/net/ethernet/freescale/fman/mac.c
-> @@ -279,7 +279,6 @@ static int mac_probe(struct platform_device *_of_dev)
->  	struct device_node	*mac_node, *dev_node;
->  	struct mac_device	*mac_dev;
->  	struct platform_device	*of_dev;
-> -	struct resource		*res;
->  	struct mac_priv_s	*priv;
->  	struct fman_mac_params	 params;
->  	u32			 val;
-> @@ -338,24 +337,25 @@ static int mac_probe(struct platform_device *_of_de=
-v)
->  	of_node_put(dev_node);
->=20
->  	/* Get the address of the memory mapped registers */
-> -	res =3D platform_get_mem_or_io(_of_dev, 0);
-> -	if (!res) {
-> +	mac_dev->res =3D platform_get_mem_or_io(_of_dev, 0);
-> +	if (!mac_dev->res) {
->  		dev_err(dev, "could not get registers\n");
->  		return -EINVAL;
+> @@ -54,9 +52,7 @@ void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
 >  	}
->=20
-> -	err =3D devm_request_resource(dev, fman_get_mem_region(priv->fman),
-> res);
-> +	err =3D devm_request_resource(dev, fman_get_mem_region(priv->fman),
-> +				    mac_dev->res);
->  	if (err) {
->  		dev_err_probe(dev, err, "could not request resource\n");
->  		return err;
->  	}
->=20
-> -	mac_dev->vaddr =3D devm_ioremap(dev, res->start, resource_size(res));
-> +	mac_dev->vaddr =3D devm_ioremap(dev, mac_dev->res->start,
-> +				      resource_size(mac_dev->res));
->  	if (!mac_dev->vaddr) {
->  		dev_err(dev, "devm_ioremap() failed\n");
->  		return -EIO;
->  	}
-> -	mac_dev->vaddr_end =3D mac_dev->vaddr + resource_size(res);
->=20
->  	if (!of_device_is_available(mac_node))
->  		return -ENODEV;
-> diff --git a/drivers/net/ethernet/freescale/fman/mac.h
-> b/drivers/net/ethernet/freescale/fman/mac.h
-> index b95d384271bd..13b69ca5f00c 100644
-> --- a/drivers/net/ethernet/freescale/fman/mac.h
-> +++ b/drivers/net/ethernet/freescale/fman/mac.h
-> @@ -20,8 +20,8 @@ struct mac_priv_s;
->=20
->  struct mac_device {
->  	void __iomem		*vaddr;
-> -	void __iomem		*vaddr_end;
->  	struct device		*dev;
-> +	struct resource		*res;
->  	u8			 addr[ETH_ALEN];
->  	struct fman_port	*port[2];
->  	u32			 if_support;
-> --
-> 2.35.1.1320.gc452695387.dirty
+>  	if (buf->kmap_type == EROFS_NO_KMAP) {
+>  		if (type == EROFS_KMAP)
+> -			buf->base = kmap(page);
+> -		else if (type == EROFS_KMAP_ATOMIC)
+> -			buf->base = kmap_atomic(page);
+> +			buf->base = kmap_local_page(page);
+>  		buf->kmap_type = type;
+>  	} else if (buf->kmap_type != type) {
+>  		DBG_BUGON(1);
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 1701df48c446..67dc8e177211 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -253,8 +253,7 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+>  
+>  enum erofs_kmap_type {
+>  	EROFS_NO_KMAP,		/* don't map the buffer */
+> -	EROFS_KMAP,		/* use kmap() to map the buffer */
+> -	EROFS_KMAP_ATOMIC,	/* use kmap_atomic() to map the buffer */
+> +	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
+>  };
+>  
+>  struct erofs_buf {
+> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+> index 8106bcb5a38d..a62fb8a3318a 100644
+> --- a/fs/erofs/xattr.c
+> +++ b/fs/erofs/xattr.c
+> @@ -148,7 +148,7 @@ static inline int xattr_iter_fixup(struct xattr_iter *it)
+>  
+>  	it->blkaddr += erofs_blknr(it->ofs);
+>  	it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr,
+> -				       EROFS_KMAP_ATOMIC);
+> +				       EROFS_KMAP);
+>  	if (IS_ERR(it->kaddr))
+>  		return PTR_ERR(it->kaddr);
+>  	it->ofs = erofs_blkoff(it->ofs);
+> @@ -174,7 +174,7 @@ static int inline_xattr_iter_begin(struct xattr_iter *it,
+>  	it->ofs = erofs_blkoff(iloc(sbi, vi->nid) + inline_xattr_ofs);
+>  
+>  	it->kaddr = erofs_read_metabuf(&it->buf, inode->i_sb, it->blkaddr,
+> -				       EROFS_KMAP_ATOMIC);
+> +				       EROFS_KMAP);
+>  	if (IS_ERR(it->kaddr))
+>  		return PTR_ERR(it->kaddr);
+>  	return vi->xattr_isize - xattr_header_sz;
+> @@ -368,7 +368,7 @@ static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
+>  
+>  		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+>  		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+> -						  EROFS_KMAP_ATOMIC);
+> +						  EROFS_KMAP);
+>  		if (IS_ERR(it->it.kaddr))
+>  			return PTR_ERR(it->it.kaddr);
+>  		it->it.blkaddr = blkaddr;
+> @@ -580,7 +580,7 @@ static int shared_listxattr(struct listxattr_iter *it)
+>  
+>  		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+>  		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+> -						  EROFS_KMAP_ATOMIC);
+> +						  EROFS_KMAP);
+>  		if (IS_ERR(it->it.kaddr))
+>  			return PTR_ERR(it->it.kaddr);
+>  		it->it.blkaddr = blkaddr;
+> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+> index 0bb66927e3d0..749a5ac943f4 100644
+> --- a/fs/erofs/zmap.c
+> +++ b/fs/erofs/zmap.c
+> @@ -178,7 +178,7 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  	unsigned int advise, type;
+>  
+>  	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+> -				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
+> +				      erofs_blknr(pos), EROFS_KMAP);
+>  	if (IS_ERR(m->kaddr))
+>  		return PTR_ERR(m->kaddr);
+>  
+> @@ -416,7 +416,7 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  out:
+>  	pos += lcn * (1 << amortizedshift);
+>  	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+> -				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
+> +				      erofs_blknr(pos), EROFS_KMAP);
+>  	if (IS_ERR(m->kaddr))
+>  		return PTR_ERR(m->kaddr);
+>  	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
 
-Thanks for the fix,
-
-Acked-by: Madalin Bucur <madalin.bucur@oss.nxp.com>=20
+-- 
+Thanks,
+Jingbo
