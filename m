@@ -2,125 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD92860326E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BAD603270
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiJRS1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S229685AbiJRS3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiJRS1c (ORCPT
+        with ESMTP id S229986AbiJRS3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:27:32 -0400
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FAC80BC0;
-        Tue, 18 Oct 2022 11:27:29 -0700 (PDT)
-Received: by mail-pf1-f170.google.com with SMTP id 3so14917779pfw.4;
-        Tue, 18 Oct 2022 11:27:29 -0700 (PDT)
+        Tue, 18 Oct 2022 14:29:07 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CE5814EE
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:29:06 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id f8so9232875qkg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jf71w/kMAtLTuZpw+aeynxFbJonRYosXdM0sN0F9YJQ=;
+        b=QyPtio5WxIjCn0zb+wjna2OySfw2zIuGY3eeBmkvLgsfLTvwctfMJVZB2v95/HPEjG
+         W/LzBAjV7nX5q6D6mL2vXB9CwWc35oUIbragvzLNU2vBhPn0HQMAXTeIOPg9WKdKbcj0
+         oRvf72Vpd6pIkGIsOe4Nk11/QqMfBFl5IRjl5qnV6xLDQ9WYhqCtAVO6YWTPfYa2gFcf
+         wqFEzpDL89d8RZ/IjCHCC6fAnFN4xyxb7vQbY2vloC81sFeyAZWHHFq7g6wqOjHucsWJ
+         JzBwV7nPLTdeMJVBK6GvWgsUOvghhC4kEYesz8jNDvMMMLvCLzsoU5S6HglApZ8IPcMB
+         JP4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5gTnDYN+v/DnI0QsKpXa/UtAUso84QgTliR3hhbiP+U=;
-        b=GVz4twAc9DSQsaXr0zseJ2/rZGuktWxUluvHVUyyG2VOK4ee7s16gkstVb9eZbeE0s
-         5KsOyvHf5blTGy1RVCozhGPwFdfM4+MOUc3kI1biusDZ5Hfm/yd8HacAF4z/C8Qi11eI
-         GNYa9jVvFejV8pLEihAe+Y4X7ZhCccZMpt/xtn5NMNxe3cPZUab25QDLAgFCCYNANuLD
-         GADTdHXi6CQDTLKHMruAA4TgRN+LcbSDHTFJb8b/L0Cnz5j7g4rw4mNE20WCPLfJYgVA
-         BMXmKqUADKH3QHIEWHnOp/3Pz6Qv+d61231ynFxmVnJByoTOvulR1rxrb9dJM3OohK3b
-         hHSA==
-X-Gm-Message-State: ACrzQf2LebDdfJc0kashiQPSEiaDrWNROlAgPKUdxZI30R7OrhKSE8/O
-        V+ypjfcRQzsAjqEh4LPsOK0=
-X-Google-Smtp-Source: AMsMyM7JkzmG8pULqktRD7quRNIV212kjStg+eqb79LUMY1/+o+FdqhXlghGnhNlEYEby9J5P0dzPw==
-X-Received: by 2002:a05:6a00:d72:b0:562:86e9:ae55 with SMTP id n50-20020a056a000d7200b0056286e9ae55mr4282340pfv.13.1666117648764;
-        Tue, 18 Oct 2022 11:27:28 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:522b:67a3:58b:5d29? ([2620:15c:211:201:522b:67a3:58b:5d29])
-        by smtp.gmail.com with ESMTPSA id r3-20020a17090a438300b0020ad53b5883sm8454334pjg.14.2022.10.18.11.27.26
+        bh=Jf71w/kMAtLTuZpw+aeynxFbJonRYosXdM0sN0F9YJQ=;
+        b=cTDf+Y0A5mOCeijfhQpPM9qyEEbnH7cqgnE/u/monDU7TVpltLjfKL6wXJIRC2EBNM
+         3/AvmriTaiaHGcZzDxeT+Xb8oNOH4fw8+OfseA8rbk8ESXNtMAry9CvXiU3RtxjkIX9E
+         yizwtrUd9MdivnoUXLYZrJS7SKxh8RDD/JLWNrFDHGbxpY5+hKDbGIcEYWB7Y2n1XAgj
+         8MR3P5eVZlOg24T4I8vR4bPvtetzHBsvcO2Wbla4NJd2WafUqohLVUbTbpa3GGS3zeBz
+         UXspeo1qCyTAsXPC18bf+vEQZwxeD4T3Ai+UFQ0zmhgSzk4J/fQMvgwrqF/3NCYAGMF6
+         0c0Q==
+X-Gm-Message-State: ACrzQf1xlg4n41fD68vel1Y1Lzj90TVNtFoDo1CK6wiHvZNXlZtkCkpC
+        hWWjs4wL9KBduMz/oB7mb9IxTw==
+X-Google-Smtp-Source: AMsMyM6Ka5CO8JW+udIuW1pTo+oi3POKxDhOQ2etdGB19wypOpdxMZP7SqrspYTEsdDdzY/4x5HGTg==
+X-Received: by 2002:a05:620a:1452:b0:6ec:3f82:522b with SMTP id i18-20020a05620a145200b006ec3f82522bmr2719440qkl.402.1666117745901;
+        Tue, 18 Oct 2022 11:29:05 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id y4-20020a37e304000000b006b5cc25535fsm2699092qki.99.2022.10.18.11.29.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 11:27:28 -0700 (PDT)
-Message-ID: <9868763a-d360-db53-02b9-2d7ab9628d79@acm.org>
-Date:   Tue, 18 Oct 2022 11:27:25 -0700
+        Tue, 18 Oct 2022 11:29:04 -0700 (PDT)
+Message-ID: <5d87f1c3-1c73-054b-dca1-9f52939e187d@linaro.org>
+Date:   Tue, 18 Oct 2022 14:29:03 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 2/3] scsi: ufs: core: Cleanup ufshcd_slave_alloc()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 2/2] dt-bingdings: mmc: Mediatek: add ICE clock
 Content-Language: en-US
-To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com, huobean@gmail.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221018181627.326657-1-beanhuo@iokpp.de>
- <20221018181627.326657-3-beanhuo@iokpp.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221018181627.326657-3-beanhuo@iokpp.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Mengqi Zhang <mengqi.zhang@mediatek.com>,
+        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, wenbin.mei@mediatek.com
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221017142007.5408-1-mengqi.zhang@mediatek.com>
+ <20221017142007.5408-3-mengqi.zhang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221017142007.5408-3-mengqi.zhang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 11:16, Bean Huo wrote:
-> +static void ufshcd_lu_init(struct ufs_hba *hba, struct scsi_device *sdev)
-> +{
-> +	u8 lun_qdepth;
-> +	u8 *desc_buf;
-> +	int ret;
-> +	int len;
-> +	u8 lun;
-> +
-> +	lun_qdepth = hba->nutrs;
-> +	lun = ufshcd_scsi_to_upiu_lun(sdev->lun);
-> +	len = hba->desc_size[QUERY_DESC_IDN_UNIT];
+On 17/10/2022 10:20, Mengqi Zhang wrote:
+> Document the binding for crypto clock of the Inline Crypto Engine
+> of Mediatek SoCs.
 
-Isn't the preferred style for kernel code to combine the above 
-declarations and assignments (but not memory allocation calls)?
+This does not match the patch contents at all.
 
-> +	desc_buf = kzalloc(len, GFP_KERNEL);
-> +	if (!desc_buf)
-> +		goto set_qdepth;
-> +
-> +	ret = ufshcd_read_unit_desc_param(hba, lun, 0, desc_buf, len);
-> +	if (ret < 0) {
-> +		if (ret == -EOPNOTSUPP)
-> +			/* If LU doesn't support unit descriptor, its queue depth is set to 1 */
-> +			lun_qdepth = 1;
-> +		kfree(desc_buf);
-> +		goto set_qdepth;
-> +	}
-> +
-> +	if (desc_buf[UNIT_DESC_PARAM_LU_Q_DEPTH])
-> +		/*
-> +		 * In per-LU queueing architecture, bLUQueueDepth will not be 0, then we will
-> +		 * use the smaller between UFSHCI CAP.NUTRS and UFS LU bLUQueueDepth
-> +		 */
-> +		lun_qdepth = min_t(int, desc_buf[UNIT_DESC_PARAM_LU_Q_DEPTH], hba->nutrs);
+> 
+> Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Should a test be added that verifies that UNIT_DESC_PARAM_LU_Q_DEPTH < len?
+Best regards,
+Krzysztof
 
-Additionally, please use braces ({}) around multi-line if-statement bodies.
-
-> +	/*
-> +	 * According to UFS device specification, the write protection mode is only supported by
-> +	 * normal LU, not supported by WLUN.
-> +	 */
-> +	if (hba->dev_info.f_power_on_wp_en && lun < hba->dev_info.max_lu_supported &&
-> +	    !hba->dev_info.is_lu_power_on_wp &&
-> +	    desc_buf[UNIT_DESC_PARAM_LU_WR_PROTECT] == UFS_LU_POWER_ON_WP)
-> +		hba->dev_info.is_lu_power_on_wp = true;
-
-Also here, should the following test be added: 
-UNIT_DESC_PARAM_LU_WR_PROTECT < len?
-
-Otherwise this patch looks good to me.
-
-Thanks,
-
-Bart.
