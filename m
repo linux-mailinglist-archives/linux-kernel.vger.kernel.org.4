@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDE9601E0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 01:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2D3601E10
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiJQX6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 19:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S229944AbiJRADk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiJQX6T (ORCPT
+        with ESMTP id S229772AbiJRADh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 19:58:19 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDC586802;
-        Mon, 17 Oct 2022 16:58:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666051074;
-        bh=buEw+w1lPaY9DnLnvIwHNA83JT8Bq6RdLmvLWuRAigo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=C1uKCl14AdWDIjY1KVavFgtxvfuBAr1j1iTRRE/BySwSCXiv6Znp7HDjevv+52ZID
-         L1oHKz2kXBovl1q6qaBsK9Sw+91gJEssdVR4zM8qDq+nDiG7aiigu6TWCIsjcsNbNQ
-         J/E5jgQvsUCswnLf0b4ztRBa8Q1kZMVVMcRT4TXk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.speedport.ip ([84.162.5.241]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbivG-1pGsbn48pq-00dDlQ; Tue, 18
- Oct 2022 01:57:54 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
-        LinoSanfilippo@gmx.de, lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: [PATCH v8 11/11] tpm, tpm_tis: Enable interrupt test
-Date:   Tue, 18 Oct 2022 01:57:32 +0200
-Message-Id: <20221017235732.10145-12-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
-References: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
+        Mon, 17 Oct 2022 20:03:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEFE237F6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:03:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5296EB81AD7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:03:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C456C433D6;
+        Tue, 18 Oct 2022 00:03:32 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GakdiyuA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666051410;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2lAybai8gKhX1DN+fgNma6jgJEWUPQPSN+/pCq2V3uE=;
+        b=GakdiyuAlCGhaXaRbJGQUHBJktZsxtTlL5cdRm/jh5cigMewYPfxpszVlKDCsHkD65UDZ/
+        0Z9qQzUf6Ae5DBzAZQfttJZoH5Yj9QeCCLQp40BpZpcaDiEXU5qGLsibvkj76I4Y65hMgM
+        wQaU7EgEpB8jzb+Ci72sLhc77vd5HFo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 448a33b4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 18 Oct 2022 00:03:29 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 02:03:27 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Hector Martin <marcan@marcan.st>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: Linux 6.1-rc1
+Message-ID: <Y03tTxLdH7HezRI+@zx2c4.com>
+References: <CAHk-=wj6y5fipM2A5kEuOO9qm5PBzUY=-m9viEahhtxT09KR_g@mail.gmail.com>
+ <20221017123434.GA1062543@roeck-us.net>
+ <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:G/UrceEJMQh7OfbfZywk0mbMyJC0ez0JbQCh2fp8L4GbW1scecR
- MxktYbhNp81XSKlyTQJ9vnG6diNUOeH78L/NAZ9vhiEXcVtFynmKRzz3nYChxYS4ruB1vlX
- c3JAuk7x+zRnawWu9mdx0UDlSiTfd/PpqXNk/HrpCzt2sdHotAWRVFu+YP9KDWNu+kvLiWs
- nDp0MCO/1CCqktZHvXHsw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QTPKhxW+/Y4=:DG+4oVkJurEO+P5euZJ65W
- +XszL3dIXeK5rBI1aCcaCbZZpX9P7Ypn5tQWM7sDBQoOrzXCDmqU2tHzYkDqnQYSrMdXuvv6n
- Zrovy232IVy2kjyJlgCryOZFxou+pjJjKw4sgWK7TVcaCga1Xc4uAYTxiAJtVB7/60NCqueRB
- Lf6xDWT+XRbF4LEvKBA02sN2s2y2NvSNZ2vyIZCXvoHLCYia6mW+e4t978YmNDhEwKYClw9BB
- VKgRh8qSuVC1cdrsga1oXnAq3Xjko6Qpv809rG7emQdIXTobUrJWABP2kLVNNuipIbcJCLXBQ
- g6DQNbp89PBGuG8BhhcZpIK4s0FNi1zyhcWgUfotHgUX01WDG9R97gXoEvHePLmT/jIyndYOg
- y5VAOMKM97I+99xQMyDxOwRHNV+DWH4iMn0yYba1Opy6twgkUzmjnWBov1pV4j9HSSlxsHXCX
- kcSEbmAV0P3oi2BVyJyevTUrTT1YryvvVMjuo0wRJKKG+3DFwuMBWXcYekuRh53q5jC4oly1x
- H3ojD/DvhFbs2bJpBNTw3mfvvswo51uiAj4k+nT42tJSxHiJIR1LJWB3zYHy9j5dIJ4m7PkJR
- Dtoa1sjP3ex3j4ffyJklALDrbjnR3rg+iU9S3Mkgo1Pcgfji9sdFK6UlpZArta3cVa5FlzzKn
- 49H8HWSvQ8yPrWRZIKbHwVc4TGRPZBqRuMLYZ6a/0ozJkv86nVA/X2fIoXLymhLkLpizWG7fX
- BwPq8A+eKQrA8RKLfAm9JBLGJP7G1dwIb3P5mLtzoMHRPNmrrKP70jUpkAowqYhI3FbvpHBql
- cUuK0TStSz5uBSsqMC6iemzElA9jP6D1Rsjt7vGaWrNGULwJFCXTJiKu0hbEChlpEX/5I0S3y
- T/FYk3pMOybO4XTedIcgfV69Kn3iV4pH8Dm9G6FjJPmDNpXwlMOSGZblsFKcvOpbUiiBrSQOv
- aTJmSnrw7nDxR/9jTlvk88AYa/sWMlcSq0nwwr+fwFSSW78DpfPJUlHiS5D8aU/vNbESyx7xX
- GrTPV8WzEytkk3wOm3usd8513weXHEQqhfHh2YRIVM1lTs2yRfeZiz2+VDogMQH/FHBLKH55H
- HhiEFLv7ZDWjX+OQbfGdptMcqyQRdgRUu3kFjOBx7ZrbcYNEfT43K92mV709W5bQhhxOInP41
- b7p1Nwh/ZsBYZ5ieM16+ck81WmukEzB0umQSlQLz6NcrmRq4JPZjK5plWGe75KECuxzNvFyRh
- XH4sMpp9trEufWmlshbGeXCKJt/0wdpgD9i+z5D0MW2Lr6KjByg9VqXtMhZhs6bOcIC1v5ZkF
- BO9tMQQLZDmvRXm6A7kSGT7LXt/ISdsMOgs1UgUT6oA9Y8/DQKRI/EuvTBd7BwdxqA+unFIeI
- m0XtwrFn2aBlLpqr5KOFKb6PeVUvg9Zxf/6+jfsIB6iD4EcSJ5zLehjsBL14BofJAnLEEZzvu
- VXExgh1HDTr/+FoqN9FpG7r3qg9eG7rwn3HW2/eJmB0vwy5kpsB3lthlMrpYdWpWhFirlKz0q
- NRG0ebXnmw9p8AJg404PCV7nGEN75uhCARkSFONWkKy6b
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wh9o1x43Me0kRZAwN-DmZzUgJzUhA2_v+Uo0Aq04hB_=A@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoZSB0ZXN0
-IGZvciBpbnRlcnJ1cHRzIGluIHRwbV90aXNfc2VuZCgpIGlzIHNraXBwZWQgaWYgdGhlIGZsYWcK
-VFBNX0NISVBfRkxBR19JUlEgaXMgbm90IHNldC4gU2luY2UgdGhlIGN1cnJlbnQgY29kZSBuZXZl
-ciBzZXRzIHRoZSBmbGFnCmluaXRpYWxseSB0aGUgdGVzdCBpcyBuZXZlciBleGVjdXRlZC4KCkZp
-eCB0aGlzIGJ5IHNldHRpbmcgdGhlIGZsYWcgaW4gdHBtX3Rpc19nZW5faW50ZXJydXB0KCkgcmln
-aHQgYWZ0ZXIKaW50ZXJydXB0cyBoYXZlIGJlZW4gZW5hYmxlZCBhbmQgYmVmb3JlIHRoZSB0ZXN0
-IGlzIGV4ZWN1dGVkLgoKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlw
-cG9Aa3VuYnVzLmNvbT4KVGVzdGVkLWJ5OiBNaWNoYWVsIE5pZXfDtmhuZXIgPGxpbnV4QG1uaWV3
-b2VobmVyLmRlPgotLS0KIGRyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgfCA1ICsrKysr
-CiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9j
-aGFyL3RwbS90cG1fdGlzX2NvcmUuYyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMK
-aW5kZXggNDJmNjI4ZTUyY2RlLi45Nzc4ODYwZTE1OTggMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvY2hh
-ci90cG0vdHBtX3Rpc19jb3JlLmMKKysrIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUu
-YwpAQCAtNzkzLDExICs3OTMsMTYgQEAgc3RhdGljIGludCB0cG1fdGlzX2dlbl9pbnRlcnJ1cHQo
-c3RydWN0IHRwbV9jaGlwICpjaGlwKQogCWlmIChyZXQgPCAwKQogCQlyZXR1cm4gcmV0OwogCisJ
-Y2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19JUlE7CisKIAlpZiAoY2hpcC0+ZmxhZ3MgJiBU
-UE1fQ0hJUF9GTEFHX1RQTTIpCiAJCXJldCA9IHRwbTJfZ2V0X3RwbV9wdChjaGlwLCAweDEwMCwg
-JmNhcDIsIGRlc2MpOwogCWVsc2UKIAkJcmV0ID0gdHBtMV9nZXRjYXAoY2hpcCwgVFBNX0NBUF9Q
-Uk9QX1RJU19USU1FT1VULCAmY2FwLCBkZXNjLCAwKTsKIAorCWlmIChyZXQpCisJCWNoaXAtPmZs
-YWdzICY9IH5UUE1fQ0hJUF9GTEFHX0lSUTsKKwogCXRwbV90aXNfcmVsZWFzZV9sb2NhbGl0eShj
-aGlwLCAwKTsKIAogCXJldHVybiByZXQ7Ci0tIAoyLjM2LjEKCg==
+On Mon, Oct 17, 2022 at 10:39:08AM -0700, Linus Torvalds wrote:
+> On Mon, Oct 17, 2022 at 5:35 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > Build results:
+> >         total: 152 pass: 152 fail: 0
+> > Qemu test results:
+> >         total: 490 pass: 420 fail: 70
+> 
+> Strange. You claim zero build failures, but then:
+> 
+> > Build failures
+> >
+> > Building riscv:defconfig ... failed
+> 
+> so I think your stats may be wrong somehow ;)
+> 
+> > mips, sparc64
+> > -------------
+> >
+> > All big endian mips tests fail to reset after boot. The problem is
+> > caused by commit 72a95859728a ("mfd: syscon: Remove repetition of the
+> > regmap_get_val_endian()").
+> 
+> Bah. I had already archived that whole thread as "sorted out", but
+> yeah, the revert clearly never made it to me for rc1.
+> 
+> But it should be in the regmap queue (Lee/Andy?), so it is hopefully
+> just a temporary thing.
+> 
+> In fact, it looks like all the failures have known fixes. So here's
+> hoping that your list will be a whole lot cleaner by rc2.
+> 
+> Knock wood.
+
+I emailed Lee about it 3 days ago, hoping it'd make rc1 too, but never
+heard back. Maybe vacation? Dunno.
+
+Jason
+
+> 
+> Thanks,
+>            Linus
