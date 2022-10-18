@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3796023CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFC56023D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiJRFdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 01:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S229955AbiJRFeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 01:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiJRFdX (ORCPT
+        with ESMTP id S229731AbiJRFeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 01:33:23 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4FD9AF90;
-        Mon, 17 Oct 2022 22:33:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0VSTEQpA_1666071173;
-Received: from 30.221.96.155(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VSTEQpA_1666071173)
-          by smtp.aliyun-inc.com;
-          Tue, 18 Oct 2022 13:32:55 +0800
-Message-ID: <f872ec97-89d8-16ca-b0ff-a2d713d72b85@linux.alibaba.com>
-Date:   Tue, 18 Oct 2022 13:32:53 +0800
+        Tue, 18 Oct 2022 01:34:02 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5230F98349;
+        Mon, 17 Oct 2022 22:34:01 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id p14so13115522pfq.5;
+        Mon, 17 Oct 2022 22:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o+oImAqUi4TycUnQDZjAUtxnRF+A1Z+mDlOgFraFVAI=;
+        b=L1yIl/Sue5u90YPFN5ors2MuFXNZ6H2mucAk6Ya4TgUp42FMCUh/B2RHLvDdNp/Lmw
+         GicCot03vuYGlB5tm4y9o4azJNxnUJne8HNrZ4SW89IjaJ46NmmLfGSkIYnpf/C5UfGG
+         4MvFZid+6jWa4pqSO/xVcIc+NvILy2jw40NBRIQZRCZU/9JsIBwggz9//JxJ+0utdadW
+         1ITjFvJ0GZP6imyGSztKP9pE3cl2B6H7IRDIIkNroCmKZO6xAeWkkGmrFJ8o7pUZl4yA
+         zB+nDM0VAW7UzwYQiYUQ7yCSqSbkcPwIERlram/AoqF3dneDBaefL3N48nr111VJiGl7
+         E/Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o+oImAqUi4TycUnQDZjAUtxnRF+A1Z+mDlOgFraFVAI=;
+        b=rmppm4XlCvzaFWo3lKiONIFnLeOo9rOpYP9JTC4WMJel7F5xg4Vcp/gbPR30jcpBV6
+         5TEfJrZc2REysgz1ojfSeFQ/NjCjRho6R60nZQvSSqqVoszIwY6oXKn3NTcEE1sq2g5b
+         xRCW/peqPpyf/jjVDOR+5XBiZo5jmZNPtQ7m1wkxG671HMkcgj1rYV/NeThFb0poMEO2
+         hYNzDmf+v6N6/Dez/gjQDqt+VbqQpYceAT7YbZ07VjGWz95EZ62QpM9XWKVDXqK/HHc9
+         UImiP9kv52DAhJIwo6N6svHVkMCfDQEg3ipz29kTsgx6LODT3c9T0kvbMS9LC/9ROUNs
+         qOhg==
+X-Gm-Message-State: ACrzQf2PBzFFGDAoNHQKfwyyoLyeUst4EwrccQTh+LWMIACFjg38RMP2
+        twVaa6nxQWq1fZuSPoVWdJU=
+X-Google-Smtp-Source: AMsMyM6PHbGeHp26NsSHh/G1u+W4EsbhYRa8Hl5LaXbf6eTRwnXqDQ0SYYiysRXjZST9tKf2vbw3Fw==
+X-Received: by 2002:a63:5b05:0:b0:460:a6a:ec38 with SMTP id p5-20020a635b05000000b004600a6aec38mr1210011pgb.485.1666071240786;
+        Mon, 17 Oct 2022 22:34:00 -0700 (PDT)
+Received: from localhost ([115.117.107.100])
+        by smtp.gmail.com with ESMTPSA id f5-20020aa79d85000000b005637e5d7770sm8049644pfq.219.2022.10.17.22.33.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 22:34:00 -0700 (PDT)
+From:   Manank Patel <pmanank200502@gmail.com>
+To:     sgoutham@marvell.com
+Cc:     gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sundeep.lkml@gmail.com,
+        Manank Patel <pmanank200502@gmail.com>
+Subject: [PATCH v2] ethernet: marvell: octeontx2 Fix resource not freed after malloc
+Date:   Tue, 18 Oct 2022 11:03:18 +0530
+Message-Id: <20221018053317.18900-1-pmanank200502@gmail.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <CALHRZupuBVAhd=fK+4E=keBTnt=GEGrWOTpN0-xBfu2Yj1+PDA@mail.gmail.com>
+References: <CALHRZupuBVAhd=fK+4E=keBTnt=GEGrWOTpN0-xBfu2Yj1+PDA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH V2 2/2] Documentation: kdump: describe VMCOREINFO export
- for RISCV64
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
-        k-hagio-ab@nec.com, hschauhan@nulltrace.org, yixun.lan@gmail.com
-References: <20221014134139.5151-1-xianting.tian@linux.alibaba.com>
- <20221014134139.5151-3-xianting.tian@linux.alibaba.com>
- <Y04bOv49sRsauLb6@debian.me>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-In-Reply-To: <Y04bOv49sRsauLb6@debian.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,59 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+fix rxsc and txsc not getting freed before going out of scope
 
-在 2022/10/18 上午11:19, Bagas Sanjaya 写道:
-> On Fri, Oct 14, 2022 at 09:41:39PM +0800, Xianting Tian wrote:
->> The following interrelated definitions and ranges are needed by the kdump
->> crash tool, they are exported by "arch/riscv/kernel/crash_core.c":
-> Better say "..., which are exported by ..."
+Fixes: c54ffc73601c ("octeontx2-pf: mcs: Introduce MACSEC hardware offloading")
 
-will fix it in v3
+Signed-off-by: Manank Patel <pmanank200502@gmail.com>
+---
 
-thanks
+Changelog
+    v1->v2:
+            add the same fix in cn10k_mcs_create_txsc
 
->
->> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
->> index 6726f439958c..8e2e164cf3db 100644
->> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
->> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
->> @@ -595,3 +595,33 @@ X2TLB
->>   -----
->>   
->>   Indicates whether the crashed kernel enabled SH extended mode.
->> +
->> +RISCV64
->> +=======
->> +
->> +VA_BITS
->> +-------
->> +
->> +The maximum number of bits for virtual addresses. Used to compute the
->> +virtual memory ranges.
->> +
->> +PAGE_OFFSET
->> +-----------
->> +
->> +Indicates the virtual kernel start address of direct-mapped RAM region.
->> +
->> +phys_ram_base
->> +-------------
->> +
->> +Indicates the start physical RAM address.
->> +
->> +MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
->> +----------------------------------------------------------------------------------------------------------------------------------------------------
->> +
->> +Used to get the correct ranges:
->> +
->> +  * MODULES_VADDR ~ MODULES_END : Kernel module space.
->> +  * VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
->> +  * VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
->> +  * KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
->> +  * KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
-> The documentation LGTM, thanks.
->
-> When the patch subject is fixed,
->
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
->
+ drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
+index 9809f551fc2e..9ec5f38d38a8 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
+@@ -815,6 +815,7 @@ static struct cn10k_mcs_txsc *cn10k_mcs_create_txsc(struct otx2_nic *pfvf)
+ 	cn10k_mcs_free_rsrc(pfvf, MCS_TX, MCS_RSRC_TYPE_FLOWID,
+ 			    txsc->hw_flow_id, false);
+ fail:
++	kfree(txsc);
+ 	return ERR_PTR(ret);
+ }
+ 
+@@ -870,6 +871,7 @@ static struct cn10k_mcs_rxsc *cn10k_mcs_create_rxsc(struct otx2_nic *pfvf)
+ 	cn10k_mcs_free_rsrc(pfvf, MCS_RX, MCS_RSRC_TYPE_FLOWID,
+ 			    rxsc->hw_flow_id, false);
+ fail:
++	kfree(rxsc);
+ 	return ERR_PTR(ret);
+ }
+ 
+-- 
+2.38.0
+
