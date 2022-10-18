@@ -2,153 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195E3602623
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7966025A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiJRHsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S229990AbiJRH0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiJRHsd (ORCPT
+        with ESMTP id S229966AbiJRH0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:48:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20376BD7B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666079301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DsW6AFUCvdQWxKPmdrQSUF2jRKznY19HdIKCRi3R3wI=;
-        b=cC8IOBxAWqVcrc69mdX8M35ZeAVkfvw8C40Pbo8gbmI1HTaowWQG/OJSaD3s38j2NzIgAl
-        yIsPnTVKG3o33tjPWHXGazWKilFCG+uwXmsMFvkCTIwT/hN3KmsPBtjXVQFqXNzoFxZ3k9
-        gEMATNXEINfVgUSJpDylkmyQe00rNdU=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-658-dp5AvHoAMEWWmErcz7S-5w-1; Tue, 18 Oct 2022 03:48:20 -0400
-X-MC-Unique: dp5AvHoAMEWWmErcz7S-5w-1
-Received: by mail-ej1-f72.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso5884780ejb.14
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:48:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DsW6AFUCvdQWxKPmdrQSUF2jRKznY19HdIKCRi3R3wI=;
-        b=eIbGmO5ARps1Ezh4q2o8P3mkQ9et3Hgsaoj6lk6ZUiK8Y/J31Nno8qa1vQpU2jrYtm
-         l5WcV1PnfZ+7spj2iVESN6QqX0raI84p5kndmGijSKghQGdN9uQ8nui4Xf34zW2yR+Qs
-         oLxH0y+Fe8KYa/mjPLeH0jz91B2NdRG94s4yVmu8kU3j0j6vFhzNV90O8ZdCrpppYkQo
-         jSpf2xBysyJDQFVm64V8dDE9kZPD52RkE0pyvIv7WXvuw1z08+Hw/S9bRZXBm5UooPy9
-         jxXvWmxCufMQAIFfkyDvclwRzsf3qi1hsYV3vlzKgpqe8Cbr2fxxQgiyw8ap3/CA+SIs
-         vmmg==
-X-Gm-Message-State: ACrzQf2q3VjN7YNjZAtzLrbYuQQOsI1wg4w9SQWVgxrQcwN1kumq3A+z
-        rLYOYmrBMLeSiCawJSjmsT+P1iwz3xWXeafC/cZ5k3lG3E474+601r3EbCkpZkD3YgZDRn+2mxN
-        +oQgDEF/mRcZwts0V9NwiF11P
-X-Received: by 2002:a17:907:e88:b0:78d:fb98:6f5d with SMTP id ho8-20020a1709070e8800b0078dfb986f5dmr1343144ejc.5.1666079299297;
-        Tue, 18 Oct 2022 00:48:19 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7TZTpxCEixsinQYF9o1yYhc2T6vMAUXsWMlVpZfKMDdIquBSv6+mfNFb5bnILyY/x3KH+DOQ==
-X-Received: by 2002:a17:907:e88:b0:78d:fb98:6f5d with SMTP id ho8-20020a1709070e8800b0078dfb986f5dmr1343128ejc.5.1666079299084;
-        Tue, 18 Oct 2022 00:48:19 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id a13-20020aa7cf0d000000b00454546561cfsm8477482edy.82.2022.10.18.00.48.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 00:48:18 -0700 (PDT)
-Message-ID: <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
-Date:   Tue, 18 Oct 2022 09:48:16 +0200
+        Tue, 18 Oct 2022 03:26:30 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD08D1BE8D
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:26:28 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ms5584t0mz4wqT;
+        Tue, 18 Oct 2022 15:26:20 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 15:26:26 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
+ 2022 15:26:25 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <david.oberhollenzer@sigma-star.at>, <richard@nod.at>,
+        <miquel.raynal@bootlin.com>, <vigneshr@ti.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>
+Subject: [PATCH] ubiattach: introduce disable_fm in UBI_IOCATT
+Date:   Tue, 18 Oct 2022 15:48:26 +0800
+Message-ID: <20221018074826.2753019-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] platform/x86: ideapad-laptop: Disable touchpad_switch
-To:     Manyi Li <limanyi@uniontech.com>, ike.pan@canonical.com,
-        markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221018061457.26937-1-limanyi@uniontech.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221018061457.26937-1-limanyi@uniontech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The ioctl UBI_IOCATT has been extended with disable_fm parameter after
+[1].
 
-On 10/18/22 08:14, Manyi Li wrote:
-> Ideapads for "Lenovo Yoga 3 Pro 1370" and "ZhaoYang K4e-IML" do not
-> use EC to switch touchpad.
-> 
-> Reading VPCCMD_R_TOUCHPAD will return zero thus touchpad may be blocked
-> unexpectedly.
-> 
-> Signed-off-by: Manyi Li <limanyi@uniontech.com>
-> ---
->  drivers/platform/x86/ideapad-laptop.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
-> index abd0c81d62c4..20b8a94934b4 100644
-> --- a/drivers/platform/x86/ideapad-laptop.c
-> +++ b/drivers/platform/x86/ideapad-laptop.c
-> @@ -1533,6 +1533,24 @@ static const struct dmi_system_id hw_rfkill_list[] = {
->  	{}
->  };
->  
-> +static const struct dmi_system_id no_touchpad_switch_list[] = {
-> +	{
-> +	.ident = "Lenovo Yoga 3 Pro 1370",
-> +	.matches = {
-> +		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +		DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo YOGA 3"),
-> +		},
-> +	},
-> +	{
-> +	.ident = "ZhaoYang K4e-IML",
-> +	.matches = {
-> +		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +		DMI_MATCH(DMI_PRODUCT_VERSION, "ZhaoYang K4e-IML"),
-> +		},
-> +	},
-> +	{}
-> +};
-> +
->  static void ideapad_check_features(struct ideapad_private *priv)
->  {
->  	acpi_handle handle = priv->adev->handle;
-> @@ -1542,6 +1560,7 @@ static void ideapad_check_features(struct ideapad_private *priv)
->  
->  	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
->  	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
-> +	priv->features.touchpad_ctrl_via_ec = !dmi_check_system(no_touchpad_switch_list);
-
-This needs to be:
-
-	priv->features.touchpad_ctrl_via_ec =
-		!acpi_dev_present("ELAN0634", NULL, -1) &&
-		!dmi_check_system(no_touchpad_switch_list);
-
-Otherwise you over overriding the results of the ELAN0634 check. Also I wonder if there
-is not a better way to check for this (for both cases) ?
-
-Is the touchpad on these devices perhaps connected over I2C ? Maybe we need to figure
-out a way to check for that.
-
-Regards,
-
-Hans
+This parameter is used for disabling fastmap for target ubi device.
+If 'disable_fm' is set, ubi doesn't create new fastmap even the module
+param 'fm_autoconvert' is set, and existed old fastmap will be destroyed
+after attaching process.
 
 
+A simple test case in [2].
 
->  
->  	if (!read_ec_data(handle, VPCCMD_R_FAN, &val))
->  		priv->features.fan_mode = true;
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/mtd?h=v6.1-rc1&id=669d204469c46e91d99da24914130f78277a71d3.
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=216278
+
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+ include/libubi.h       |  3 +++
+ include/mtd/ubi-user.h |  7 ++++++-
+ lib/libubi.c           |  1 +
+ ubi-utils/ubiattach.c  | 14 ++++++++++++--
+ 4 files changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/include/libubi.h b/include/libubi.h
+index 46c732a..8ea11e0 100644
+--- a/include/libubi.h
++++ b/include/libubi.h
+@@ -25,6 +25,7 @@
+ 
+ #include <ctype.h>
+ #include <stdint.h>
++#include <stdbool.h>
+ #include <mtd/ubi-user.h>
+ 
+ #ifdef __cplusplus
+@@ -53,6 +54,7 @@ typedef void * libubi_t;
+  * @vid_hdr_offset: VID header offset (%0 means default offset and this is what
+  *                  most of the users want)
+  * @max_beb_per1024: Maximum expected bad eraseblocks per 1024 eraseblocks
++ * @disable_fm: whether disable fastmap
+  */
+ struct ubi_attach_request
+ {
+@@ -61,6 +63,7 @@ struct ubi_attach_request
+ 	const char *mtd_dev_node;
+ 	int vid_hdr_offset;
+ 	int max_beb_per1024;
++	bool disable_fm;
+ };
+ 
+ /**
+diff --git a/include/mtd/ubi-user.h b/include/mtd/ubi-user.h
+index 707c4f2..309c29f 100644
+--- a/include/mtd/ubi-user.h
++++ b/include/mtd/ubi-user.h
+@@ -270,13 +270,18 @@ enum {
+  * eraseblocks for new bad eraseblocks, but attempts to use available
+  * eraseblocks (if any). The accepted range is 0-768. If 0 is given, the
+  * default kernel value of %CONFIG_MTD_UBI_BEB_LIMIT will be used.
++ *
++ * If @disable_fm is not zero, ubi doesn't create new fastmap even the module
++ * param 'fm_autoconvert' is set, and existed old fastmap will be destroyed
++ * after doing full scanning.
+  */
+ struct ubi_attach_req {
+ 	int32_t ubi_num;
+ 	int32_t mtd_num;
+ 	int32_t vid_hdr_offset;
+ 	int16_t max_beb_per1024;
+-	int8_t  padding[10];
++	int8_t	disable_fm;
++	int8_t  padding[9];
+ };
+ 
+ /*
+diff --git a/lib/libubi.c b/lib/libubi.c
+index baaca2f..410d104 100644
+--- a/lib/libubi.c
++++ b/lib/libubi.c
+@@ -767,6 +767,7 @@ int ubi_attach(libubi_t desc, const char *node, struct ubi_attach_request *req)
+ 	r.ubi_num = req->dev_num;
+ 	r.mtd_num = req->mtd_num;
+ 	r.vid_hdr_offset = req->vid_hdr_offset;
++	r.disable_fm = req->disable_fm ? 1 : 0;
+ 
+ 	if (req->max_beb_per1024) {
+ 		/*
+diff --git a/ubi-utils/ubiattach.c b/ubi-utils/ubiattach.c
+index 09f85af..527a735 100644
+--- a/ubi-utils/ubiattach.c
++++ b/ubi-utils/ubiattach.c
+@@ -42,6 +42,7 @@ struct args {
+ 	const char *node;
+ 	const char *dev;
+ 	int max_beb_per1024;
++	bool disable_fm;
+ };
+ 
+ static struct args args = {
+@@ -51,6 +52,7 @@ static struct args args = {
+ 	.node = NULL,
+ 	.dev = NULL,
+ 	.max_beb_per1024 = 0,
++	.disable_fm = false,
+ };
+ 
+ static const char doc[] = PROGRAM_NAME " version " VERSION
+@@ -67,6 +69,8 @@ static const char optionsstr[] =
+ "-b, --max-beb-per1024 maximum expected bad block number per 1024 eraseblock.\n"
+ "                      The default value is correct for most NAND devices.\n"
+ "                      Allowed range is 0-768, 0 means the default kernel value.\n"
++"-f, --disable-fastmap don't create new fastmap and do full scanning (existed\n"
++"                      fastmap will be destroyed) for the given ubi device.\n"
+ "-h, --help            print help message\n"
+ "-V, --version         print program version";
+ 
+@@ -74,7 +78,7 @@ static const char usage[] =
+ "Usage: " PROGRAM_NAME " [<UBI control device node file name>]\n"
+ "\t[-m <MTD device number>] [-d <UBI device number>] [-p <path to device>]\n"
+ "\t[--mtdn=<MTD device number>] [--devn=<UBI device number>]\n"
+-"\t[--dev-path=<path to device>]\n"
++"\t[--dev-path=<path to device>] [-f] [--disable-fastmap]\n"
+ "\t[--max-beb-per1024=<maximum bad block number per 1024 blocks>]\n"
+ "UBI control device defaults to " DEFAULT_CTRL_DEV " if not supplied.\n"
+ "Example 1: " PROGRAM_NAME " -p /dev/mtd0 - attach /dev/mtd0 to UBI\n"
+@@ -93,6 +97,7 @@ static const struct option long_options[] = {
+ 	{ .name = "mtdn",            .has_arg = 1, .flag = NULL, .val = 'm' },
+ 	{ .name = "vid-hdr-offset",  .has_arg = 1, .flag = NULL, .val = 'O' },
+ 	{ .name = "max-beb-per1024", .has_arg = 1, .flag = NULL, .val = 'b' },
++	{ .name = "disable-fastmap", .has_arg = 0, .flag = NULL, .val = 'f' },
+ 	{ .name = "help",            .has_arg = 0, .flag = NULL, .val = 'h' },
+ 	{ .name = "version",         .has_arg = 0, .flag = NULL, .val = 'V' },
+ 	{ NULL, 0, NULL, 0},
+@@ -103,7 +108,7 @@ static int parse_opt(int argc, char * const argv[])
+ 	while (1) {
+ 		int key, error = 0;
+ 
+-		key = getopt_long(argc, argv, "p:m:d:O:b:hV", long_options, NULL);
++		key = getopt_long(argc, argv, "p:m:d:O:b:fhV", long_options, NULL);
+ 		if (key == -1)
+ 			break;
+ 
+@@ -143,6 +148,10 @@ static int parse_opt(int argc, char * const argv[])
+ 
+ 			break;
+ 
++		case 'f':
++			args.disable_fm = true;
++			break;
++
+ 		case 'h':
+ 			printf("%s\n\n", doc);
+ 			printf("%s\n\n", usage);
+@@ -213,6 +222,7 @@ int main(int argc, char * const argv[])
+ 	req.vid_hdr_offset = args.vidoffs;
+ 	req.mtd_dev_node = args.dev;
+ 	req.max_beb_per1024 = args.max_beb_per1024;
++	req.disable_fm = args.disable_fm;
+ 
+ 	err = ubi_attach(libubi, args.node, &req);
+ 	if (err < 0) {
+-- 
+2.13.6
 
