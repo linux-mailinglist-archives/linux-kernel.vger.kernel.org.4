@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB0B6026DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8576026E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJRI2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S231166AbiJRI3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiJRI14 (ORCPT
+        with ESMTP id S231159AbiJRI31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:27:56 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494849C221
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:27:46 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id h2so5786887plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:27:45 -0700 (PDT)
+        Tue, 18 Oct 2022 04:29:27 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F789C7D9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:29:06 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id fw14so13323551pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6JQMxkXv8mQ1Cge7g4D4yz8kxz9e6M1Q1dbsKZa3FJ8=;
-        b=DmO0/d1FaXa15fY0eqVEvCoCZc0mb8i0//GzZGUK2c6JyZNioWLkj2m70HawoalhXa
-         c4pZZOpbrOmQV0ftJ1jqiOZg8nS213MMPtPqsHND+TMd8szVH/PArflOMD460MCKNYpk
-         FPPkPefJZ/o7KipOfsBRTR0WiG+ZiQn8VEBEM=
+        bh=y0rinkZyJHH2ZykEoVU0TMV2xcKhCwQAG3oPOXiXpGU=;
+        b=ZTX1xroCggrjwGtPoaDlkNH14vjG8Vd4UM7xzW30TnkujxxN9lf7kd7MvAFpQoAzzQ
+         MSYy7pNGa1AXTwcGQMO9lzvo4SIAN8vXWHckiavU4b3zlClrbi5bqtnPX/sEzeojtIMT
+         toTAlEoVx40Ztq8iMUHVYsCxcARq7eGHYAaPw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6JQMxkXv8mQ1Cge7g4D4yz8kxz9e6M1Q1dbsKZa3FJ8=;
-        b=jqZ7haaz1QkoKJMp31Gkm23EPxL/jjXGs+5qjmccYusYPCu70XE8JmaFEP1h1fueip
-         fxCsMjs/Fwz1BzGzlIWdGY75ecbUpmjEsemBud2Q/kO0xUhy243uPp32dzp46U7VfLvC
-         KxP+M7NYwOfuq++aCLPKbtp5CcE8P26/7IQwVKqNYR1b6MHO4n7xfRjFum2FEaGfJgRZ
-         j8LNn+unvGF8bVDG1Q+Jdx5qNFcbtJA586HA4x63CGxbYAiI/6YqNZasTsi7XCUzftMM
-         GzRnf1E+qouIlcgRho9AmRrI52Lz06lgzMyTl+xJm4ax4MN7fUrjeyTPRnXh6VRr7P15
-         sfEg==
-X-Gm-Message-State: ACrzQf3WpjWRPCsqCce0y0lSTEfR13EXts/OQmGbvchNNDFnjMJOjkfm
-        YKGaYqtGNqwubC7xO74Dh6Qv+g==
-X-Google-Smtp-Source: AMsMyM6pCqqmb1I5bzi98XAQmVznaqmBVGuzMs6GMGfK8QP3gDGY25J1ZLhOEIwi5cAJtRmx4HQptQ==
-X-Received: by 2002:a17:90b:1c0a:b0:20a:7393:d8e9 with SMTP id oc10-20020a17090b1c0a00b0020a7393d8e9mr36753419pjb.188.1666081665083;
-        Tue, 18 Oct 2022 01:27:45 -0700 (PDT)
+        bh=y0rinkZyJHH2ZykEoVU0TMV2xcKhCwQAG3oPOXiXpGU=;
+        b=XyvGWWY+XNWSbGtzNfEnHkKX2APwMFW+HOGbrh0KxO97BRSW9tRr7t/ZSiAjy9KE3D
+         t1kLdkp6DjdHjq03D2D0JnVDB43WAXr1/KjajD4E44T456EKI6kRFl5Tv1JFGPV189B7
+         Phf7lrbpuZ1REV3teS+K5s+rrYl+HizcfO6P7DqI4smytAoZ/MLv/XXkbNX+My6xdUvy
+         aoENGrVHm9V47kO6GooqFOZpEhzSblYSi5aJP7VsdcAENKck0xsiV8nip+IHOPweu9Ru
+         eEcQeMZ3l8n5BQQCNgdVDhjwVACVAC/7B7MtYhf63lZc/05m8/UF6L6dhgonqF8H99qm
+         yygA==
+X-Gm-Message-State: ACrzQf30PYs7RlqmV4Pynwm5CDkhuhU8guHqLrQ+rRpZEcTUu0KLNmki
+        /e62K/aIEiRdAM1HE7AUNZQniA==
+X-Google-Smtp-Source: AMsMyM5yxBeo4nVnzhEj3DmhH922Md+/d0+2PrI8NaPDNvQ8aTJMUI4bzfcivvaA635Pun3rVSR7Vw==
+X-Received: by 2002:a17:90b:4d0d:b0:1fb:a86d:e752 with SMTP id mw13-20020a17090b4d0d00b001fba86de752mr2320411pjb.120.1666081745011;
+        Tue, 18 Oct 2022 01:29:05 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902ec8600b001755e4278a6sm8101733plg.261.2022.10.18.01.27.44
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709027ec900b00176ab6a0d5fsm8015527plb.54.2022.10.18.01.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 01:27:44 -0700 (PDT)
+        Tue, 18 Oct 2022 01:29:04 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     linux-hardening@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kunit/fortify: Validate __alloc_size attribute results
-Date:   Tue, 18 Oct 2022 01:27:41 -0700
-Message-Id: <20221018082559.never.406-kees@kernel.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Tobin C . Harding" <tobin@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] string: Convert strscpy() self-test to KUnit
+Date:   Tue, 18 Oct 2022 01:28:59 -0700
+Message-Id: <20221018082824.never.845-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4584; h=from:subject:message-id; bh=cqnD43HvNxjTrJeCb4jyi/kcbzUkumxTTwgCBYcw0BY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTmN98gW0SnFSk2qn1CuOo+7cEzOifQl8lBoZx6SR rPQahgaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05jfQAKCRCJcvTf3G3AJv8eEA CUjOW1IXRuFdP9d/7g+yZv73vDBK8Q+ZnK6xQs5kvnSISGrZv+N1pzNmGreolYErvoHrjAmWfW9pw+ hElJDfq4Tq+7ZgdhErGmAmuZWHDvs23c4K+MX1AdAGKYuaUpgcMDAiIM/+O3WLYWrAP3RkSB9hiR71 yFBo/0UYslUl3XHgnDnlpU/vuky5j9yicO5wG1aAZzUgKh/2p2KVghJonf1bDDewoP/I+uzXVd0o/H sBYQMumJRJmtN21FHuXXAHw44FzbILRrDuoXAdCXFsoYYE39IbYcZ2splT5EWbXpOW1jrRgDsGDeHI OxPc5novssNJwzPxEtaOwTCsaqs/djNYXod79VYkjkoMiV8tYcHT5ke/3pDXsxb9UD2pL4wbjJIA/B DZUw1/7XWlURodBEFFKa14euT861B2HMPgsyHLAUAkny8awYPYznJC0p+Ib0vl2lLwPyQIy0pFoZZk 6Yu04dVOY2qZkjHO57iUJ6u7jVOnyc3zoiCFc5SWpIEpEkxDWu3pRsvWes28xEipcM2VaIWcEZ24T/ 2fWOfeS5WYh7+Jwzb0F0GNKDLAzUDR9SPVhc1L/8RDjycipBk5iFfGSRtIJe+8NtWG2eHnygSYOZ66 MtEDgS2VvLsdiYvQl3nrxOa+WzQ1eeH/CzL4EmHOpTJVEmsfNxsUNq6Cg8ng==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11647; h=from:subject:message-id; bh=MZDo9BhZPauJWQAOGda21U/fsKr8lwpA6thCztzHtaw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTmPLVGOzqjwtr8Gks6Ea1/1D0T1LA0e/G7xIAICi LLX0oteJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05jywAKCRCJcvTf3G3AJkc+D/ 0ZtP3ZRmcyWwLlOtP+GoOCGYZwFhlXVQu/wYTWS23JxPNXIXyyQ7JGYJIURrWDbB/BPJFdykkxxxE0 21QDcpteNxgUWrT+RoZG7wj5GHWhcBtRedWCiYGi3n+qFConzIMxDT7f5ZkcAjQu3AN1vYf3Ma7mJT YcxrQnncXnNmALuVVWkXQrbgJR6xARSmVIWTtdF40yVEb3NA01+Ly0OYApK4ZURDO4RsNmnLHR4B0c 6qxMYTydfDlox4VEsRFzG7Pp0OMdJZ2iyW8tekMimtWc3HZDyJCLqhqRxF+EUFLlGG9HjAotMT5VK8 OsY4zTE+ZZPykDF+nnC1Lsf/bWVBGlJZCDoBzM5RuCdvXGuzK/+fnepPtrXZApVTD7f8DzcNa3D+Mk Mkt7QKekRdzh/xyOh/+IuHc697wFr92mgSp7kIbkZ1b/SNzPeu0wo1ksJCpF9om8z1HSqLnYK0oCGY mF5Y3s43Y63AihUvTG+ANfiBf70F1ic0GqDdxc2IvrAvSPXckxVOZZG9ZWaWlzjqdv3FZt5werpmFp BZkEAi36tFTlwEbt/qka5sjlSgmTHkK5to28jCPce1viNopkTeIYkqaT1YYeawrnssKtDoKUrG0nXM i6m4OYVcjAocDWhenvSWeJhg4F+dZ0W01EKQhqhu0LIV9FeGWOGzCSP0pKmg==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,134 +69,370 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Validate the effect of the __alloc_size attribute on allocators. If the
-compiler doesn't support __builtin_dynamic_object_size(), skip the test.
+Convert the strscpy() self-test to a KUnit test.
 
-Cc: linux-hardening@vger.kernel.org
+Cc: David Gow <davidgow@google.com>
+Cc: Tobin C. Harding <tobin@kernel.org>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-To pass this depends on the following patches:
-https://lore.kernel.org/lkml/20221018073430.never.551-kees@kernel.org/
-https://lore.kernel.org/lkml/20221018082232.never.213-kees@kernel.org/
-To not be skipped, either GCC 12 or Clang is needed.
----
- lib/fortify_kunit.c | 92 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+ MAINTAINERS         |   1 +
+ lib/Kconfig.debug   |   8 ++-
+ lib/Makefile        |   2 +-
+ lib/strscpy_kunit.c | 129 +++++++++++++++++++++++++++++++++++++
+ lib/test_strscpy.c  | 150 --------------------------------------------
+ 5 files changed, 136 insertions(+), 154 deletions(-)
+ create mode 100644 lib/strscpy_kunit.c
+ delete mode 100644 lib/test_strscpy.c
 
-diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
-index 409af07f340a..5076ba11adfd 100644
---- a/lib/fortify_kunit.c
-+++ b/lib/fortify_kunit.c
-@@ -16,7 +16,10 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9dd8d74c4df0..232d78340d79 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8045,6 +8045,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/har
+ F:	include/linux/fortify-string.h
+ F:	lib/fortify_kunit.c
+ F:	lib/memcpy_kunit.c
++F:	lib/strscpy_kunit.c
+ F:	lib/test_fortify/*
+ F:	scripts/test_fortify.sh
+ K:	\b__NO_FORTIFY\b
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 3fc7abffc7aa..e0a4d52e434c 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2215,9 +2215,6 @@ config STRING_SELFTEST
+ config TEST_STRING_HELPERS
+ 	tristate "Test functions located in the string_helpers module at runtime"
  
- #include <kunit/test.h>
-+#include <linux/device.h>
- #include <linux/string.h>
-+#include <linux/slab.h>
-+#include <linux/vmalloc.h>
+-config TEST_STRSCPY
+-	tristate "Test strscpy*() family of functions at runtime"
+-
+ config TEST_KSTRTOX
+ 	tristate "Test kstrto*() family of functions at runtime"
  
- static const char array_of_10[] = "this is 10";
- static const char *ptr_of_11 = "this is 11!";
-@@ -60,9 +63,98 @@ static void control_flow_split_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, want_minus_one(pick), SIZE_MAX);
- }
+@@ -2583,6 +2580,11 @@ config HW_BREAKPOINT_KUNIT_TEST
  
-+#define check_alloc(alloc, free)	do {				\
-+	size_t expected = size;						\
-+	void *p = alloc;						\
-+	KUNIT_EXPECT_TRUE_MSG(test, p != NULL, #alloc " failed?!\n");	\
-+	KUNIT_EXPECT_EQ_MSG(test, __builtin_dynamic_object_size(p, 1),	\
-+		expected,						\
-+		"__alloc_size() not working with " #alloc "\n");	\
-+	free;								\
-+} while (0)
+ 	  If unsure, say N.
+ 
++config STRSCPY_KUNIT_TEST
++	tristate "Test strscpy*() family of functions at runtime" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
 +
-+static volatile size_t unknown_size = 50;
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 161d6a724ff7..1905e5c26849 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -82,7 +82,6 @@ obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
+ obj-$(CONFIG_TEST_PRINTF) += test_printf.o
+ obj-$(CONFIG_TEST_SCANF) += test_scanf.o
+ obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
+-obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
+ obj-$(CONFIG_TEST_UUID) += test_uuid.o
+ obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
+ obj-$(CONFIG_TEST_PARMAN) += test_parman.o
+@@ -380,6 +379,7 @@ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+ CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
+ obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
+ obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
++obj-$(CONFIG_STRSCPY_KUNIT_TEST) += strscpy_kunit.o
+ 
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ 
+diff --git a/lib/strscpy_kunit.c b/lib/strscpy_kunit.c
+new file mode 100644
+index 000000000000..98523f828d3a
+--- /dev/null
++++ b/lib/strscpy_kunit.c
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Kernel module for testing 'strscpy' family of functions.
++ */
 +
-+static void alloc_size_test(struct kunit *test)
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <kunit/test.h>
++#include <linux/string.h>
++
++/*
++ * tc() - Run a specific test case.
++ * @src: Source string, argument to strscpy_pad()
++ * @count: Size of destination buffer, argument to strscpy_pad()
++ * @expected: Expected return value from call to strscpy_pad()
++ * @terminator: 1 if there should be a terminating null byte 0 otherwise.
++ * @chars: Number of characters from the src string expected to be
++ *         written to the dst buffer.
++ * @pad: Number of pad characters expected (in the tail of dst buffer).
++ *       (@pad does not include the null terminator byte.)
++ *
++ * Calls strscpy_pad() and verifies the return value and state of the
++ * destination buffer after the call returns.
++ */
++static void tc(struct kunit *test, char *src, int count, int expected,
++	       int chars, int terminator, int pad)
 +{
-+#if !__has_builtin(__builtin_dynamic_object_size)
-+	kunit_skip(test, "Compiler is missing __builtin_dynamic_object_size() support\n");
-+#else
-+	const char device_name[] = "fortify-test";
-+	struct device *dev;
-+	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;
-+	size_t size = unknown_size, prev_size;
-+	void *orig;
++	int nr_bytes_poison;
++	int max_expected;
++	int max_count;
++	int written;
++	char buf[6];
++	int index, i;
++	const char POISON = 'z';
 +
-+	/* kmalloc()-family */
-+	check_alloc(kmalloc(size++, gfp),			kfree(p));
-+	check_alloc(kmalloc_node(size++, gfp, NUMA_NO_NODE),	kfree(p));
-+	check_alloc(kzalloc(size++, gfp),			kfree(p));
-+	check_alloc(kzalloc_node(size++, gfp, NUMA_NO_NODE),	kfree(p));
-+	check_alloc(kcalloc(1, size++, gfp),			kfree(p));
-+	check_alloc(kcalloc_node(1, size++, gfp, NUMA_NO_NODE),	kfree(p));
-+	check_alloc(kmalloc_array(1, size++, gfp),		kfree(p));
-+	check_alloc(kmalloc_array_node(1, size++, gfp, NUMA_NO_NODE), kfree(p));
-+	check_alloc(__kmalloc(size++, gfp),			kfree(p));
-+	check_alloc(__kmalloc_node(size++, gfp, NUMA_NO_NODE),	kfree(p));
++	KUNIT_ASSERT_TRUE_MSG(test, src != NULL,
++			      "null source string not supported");
 +
-+	/* kmemdup() */
-+	prev_size = size;
-+	size = 11;
-+	check_alloc(kmemdup("hello there", size, gfp),		kfree(p));
-+	size = prev_size + 1;
++	memset(buf, POISON, sizeof(buf));
++	/* Future proofing test suite, validate args */
++	max_count = sizeof(buf) - 2; /* Space for null and to verify overflow */
++	max_expected = count - 1;    /* Space for the null */
 +
-+	/* krealloc()-family */
-+	orig = kmalloc(size++, gfp);
-+	check_alloc(krealloc(orig, size++, gfp),		kfree(p));
-+	orig = kmalloc(size++, gfp);
-+	check_alloc(krealloc_array(orig, 1, size++, gfp),	kfree(p));
++	KUNIT_ASSERT_LE_MSG(test, count, max_count,
++		"count (%d) is too big (%d) ... aborting", count, max_count);
++	KUNIT_EXPECT_LE_MSG(test, expected, max_expected,
++		"expected (%d) is bigger than can possibly be returned (%d)",
++		expected, max_expected);
 +
-+	/* vmalloc()-family */
-+	check_alloc(vmalloc(size++),				vfree(p));
-+	check_alloc(vzalloc(size++),				vfree(p));
-+	check_alloc(__vmalloc(size++, gfp),			vfree(p));
++	written = strscpy_pad(buf, src, count);
++	KUNIT_ASSERT_EQ(test, written, expected);
 +
-+	/* kvalloc()-family */
-+	check_alloc(kvmalloc(size++, gfp),			kvfree(p));
-+	check_alloc(kvmalloc_node(size++, gfp, NUMA_NO_NODE),	kvfree(p));
-+	check_alloc(kvzalloc(size++, gfp),			kvfree(p));
-+	check_alloc(kvzalloc_node(size++, gfp, NUMA_NO_NODE),	kvfree(p));
-+	check_alloc(kvcalloc(1, size++, gfp),			kvfree(p));
-+	check_alloc(kvmalloc_array(1, size++, gfp),		kvfree(p));
++	if (count && written == -E2BIG) {
++		KUNIT_ASSERT_EQ_MSG(test, 0, strncmp(buf, src, count - 1),
++			"buffer state invalid for -E2BIG");
++		KUNIT_ASSERT_EQ_MSG(test, buf[count - 1], '\0',
++			"too big string is not null terminated correctly");
++	}
 +
-+	/* kvrealloc() */
-+	prev_size = size++;
-+	orig = kvmalloc(prev_size, gfp);
-+	check_alloc(kvrealloc(orig, prev_size, size++, gfp),	kfree(p));
++	for (i = 0; i < chars; i++)
++		KUNIT_ASSERT_EQ_MSG(test, buf[i], src[i],
++			"buf[i]==%c != src[i]==%c", buf[i], src[i]);
 +
-+	/* Create dummy device for devm_kmalloc()-family tests. */
-+	dev = root_device_register(device_name);
-+	KUNIT_ASSERT_FALSE_MSG(test, IS_ERR(dev),
-+			       "Cannot register test device\n");
++	if (terminator)
++		KUNIT_ASSERT_EQ_MSG(test, buf[count - 1], '\0',
++			"string is not null terminated correctly");
 +
-+	/* devm_kmalloc()-family */
-+	check_alloc(devm_kmalloc(dev, size++, gfp),		devm_kfree(dev, p));
-+	check_alloc(devm_kzalloc(dev, size++, gfp),		devm_kfree(dev, p));
++	for (i = 0; i < pad; i++) {
++		index = chars + terminator + i;
++		KUNIT_ASSERT_EQ_MSG(test, buf[index], '\0',
++			"padding missing at index: %d", i);
++	}
 +
-+	/* devm_kmemdup() */
-+	prev_size = size;
-+	size = 4;
-+	check_alloc(devm_kmemdup(dev, "Ohai", size, gfp),	devm_kfree(dev, p));
-+	size = prev_size + 1;
-+
-+	/* devm_kremalloc() */
-+	orig = devm_kmalloc(dev, size++, gfp);
-+	check_alloc(devm_krealloc(dev, orig, size++, gfp),	devm_kfree(dev, p));
-+
-+	device_unregister(dev);
-+#endif
++	nr_bytes_poison = sizeof(buf) - chars - terminator - pad;
++	for (i = 0; i < nr_bytes_poison; i++) {
++		index = sizeof(buf) - 1 - i; /* Check from the end back */
++		KUNIT_ASSERT_EQ_MSG(test, buf[index], POISON,
++			"poison value missing at index: %d", i);
++	}
 +}
 +
- static struct kunit_case fortify_test_cases[] = {
- 	KUNIT_CASE(known_sizes_test),
- 	KUNIT_CASE(control_flow_split_test),
-+	KUNIT_CASE(alloc_size_test),
- 	{}
- };
- 
++static void strscpy_test(struct kunit *test)
++{
++	/*
++	 * tc() uses a destination buffer of size 6 and needs at
++	 * least 2 characters spare (one for null and one to check for
++	 * overflow).  This means we should only call tc() with
++	 * strings up to a maximum of 4 characters long and 'count'
++	 * should not exceed 4.  To test with longer strings increase
++	 * the buffer size in tc().
++	 */
++
++	/* tc(test, src, count, expected, chars, terminator, pad) */
++	tc(test, "a", 0, -E2BIG, 0, 0, 0);
++	tc(test, "",  0, -E2BIG, 0, 0, 0);
++
++	tc(test, "a", 1, -E2BIG, 0, 1, 0);
++	tc(test, "",  1, 0,	 0, 1, 0);
++
++	tc(test, "ab", 2, -E2BIG, 1, 1, 0);
++	tc(test, "a",  2, 1,	  1, 1, 0);
++	tc(test, "",   2, 0,	  0, 1, 1);
++
++	tc(test, "abc", 3, -E2BIG, 2, 1, 0);
++	tc(test, "ab",  3, 2,	   2, 1, 0);
++	tc(test, "a",   3, 1,	   1, 1, 1);
++	tc(test, "",    3, 0,	   0, 1, 2);
++
++	tc(test, "abcd", 4, -E2BIG, 3, 1, 0);
++	tc(test, "abc",  4, 3,	    3, 1, 0);
++	tc(test, "ab",   4, 2,	    2, 1, 1);
++	tc(test, "a",    4, 1,	    1, 1, 2);
++	tc(test, "",     4, 0,	    0, 1, 3);
++}
++
++static struct kunit_case strscpy_test_cases[] = {
++	KUNIT_CASE(strscpy_test),
++	{}
++};
++
++static struct kunit_suite strscpy_test_suite = {
++	.name = "strscpy",
++	.test_cases = strscpy_test_cases,
++};
++
++kunit_test_suite(strscpy_test_suite);
++
++MODULE_AUTHOR("Tobin C. Harding <tobin@kernel.org>");
++MODULE_LICENSE("GPL");
+diff --git a/lib/test_strscpy.c b/lib/test_strscpy.c
+deleted file mode 100644
+index a827f94601f5..000000000000
+--- a/lib/test_strscpy.c
++++ /dev/null
+@@ -1,150 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/string.h>
+-
+-#include "../tools/testing/selftests/kselftest_module.h"
+-
+-/*
+- * Kernel module for testing 'strscpy' family of functions.
+- */
+-
+-KSTM_MODULE_GLOBALS();
+-
+-/*
+- * tc() - Run a specific test case.
+- * @src: Source string, argument to strscpy_pad()
+- * @count: Size of destination buffer, argument to strscpy_pad()
+- * @expected: Expected return value from call to strscpy_pad()
+- * @terminator: 1 if there should be a terminating null byte 0 otherwise.
+- * @chars: Number of characters from the src string expected to be
+- *         written to the dst buffer.
+- * @pad: Number of pad characters expected (in the tail of dst buffer).
+- *       (@pad does not include the null terminator byte.)
+- *
+- * Calls strscpy_pad() and verifies the return value and state of the
+- * destination buffer after the call returns.
+- */
+-static int __init tc(char *src, int count, int expected,
+-		     int chars, int terminator, int pad)
+-{
+-	int nr_bytes_poison;
+-	int max_expected;
+-	int max_count;
+-	int written;
+-	char buf[6];
+-	int index, i;
+-	const char POISON = 'z';
+-
+-	total_tests++;
+-
+-	if (!src) {
+-		pr_err("null source string not supported\n");
+-		return -1;
+-	}
+-
+-	memset(buf, POISON, sizeof(buf));
+-	/* Future proofing test suite, validate args */
+-	max_count = sizeof(buf) - 2; /* Space for null and to verify overflow */
+-	max_expected = count - 1;    /* Space for the null */
+-	if (count > max_count) {
+-		pr_err("count (%d) is too big (%d) ... aborting", count, max_count);
+-		return -1;
+-	}
+-	if (expected > max_expected) {
+-		pr_warn("expected (%d) is bigger than can possibly be returned (%d)",
+-			expected, max_expected);
+-	}
+-
+-	written = strscpy_pad(buf, src, count);
+-	if ((written) != (expected)) {
+-		pr_err("%d != %d (written, expected)\n", written, expected);
+-		goto fail;
+-	}
+-
+-	if (count && written == -E2BIG) {
+-		if (strncmp(buf, src, count - 1) != 0) {
+-			pr_err("buffer state invalid for -E2BIG\n");
+-			goto fail;
+-		}
+-		if (buf[count - 1] != '\0') {
+-			pr_err("too big string is not null terminated correctly\n");
+-			goto fail;
+-		}
+-	}
+-
+-	for (i = 0; i < chars; i++) {
+-		if (buf[i] != src[i]) {
+-			pr_err("buf[i]==%c != src[i]==%c\n", buf[i], src[i]);
+-			goto fail;
+-		}
+-	}
+-
+-	if (terminator) {
+-		if (buf[count - 1] != '\0') {
+-			pr_err("string is not null terminated correctly\n");
+-			goto fail;
+-		}
+-	}
+-
+-	for (i = 0; i < pad; i++) {
+-		index = chars + terminator + i;
+-		if (buf[index] != '\0') {
+-			pr_err("padding missing at index: %d\n", i);
+-			goto fail;
+-		}
+-	}
+-
+-	nr_bytes_poison = sizeof(buf) - chars - terminator - pad;
+-	for (i = 0; i < nr_bytes_poison; i++) {
+-		index = sizeof(buf) - 1 - i; /* Check from the end back */
+-		if (buf[index] != POISON) {
+-			pr_err("poison value missing at index: %d\n", i);
+-			goto fail;
+-		}
+-	}
+-
+-	return 0;
+-fail:
+-	failed_tests++;
+-	return -1;
+-}
+-
+-static void __init selftest(void)
+-{
+-	/*
+-	 * tc() uses a destination buffer of size 6 and needs at
+-	 * least 2 characters spare (one for null and one to check for
+-	 * overflow).  This means we should only call tc() with
+-	 * strings up to a maximum of 4 characters long and 'count'
+-	 * should not exceed 4.  To test with longer strings increase
+-	 * the buffer size in tc().
+-	 */
+-
+-	/* tc(src, count, expected, chars, terminator, pad) */
+-	KSTM_CHECK_ZERO(tc("a", 0, -E2BIG, 0, 0, 0));
+-	KSTM_CHECK_ZERO(tc("", 0, -E2BIG, 0, 0, 0));
+-
+-	KSTM_CHECK_ZERO(tc("a", 1, -E2BIG, 0, 1, 0));
+-	KSTM_CHECK_ZERO(tc("", 1, 0, 0, 1, 0));
+-
+-	KSTM_CHECK_ZERO(tc("ab", 2, -E2BIG, 1, 1, 0));
+-	KSTM_CHECK_ZERO(tc("a", 2, 1, 1, 1, 0));
+-	KSTM_CHECK_ZERO(tc("", 2, 0, 0, 1, 1));
+-
+-	KSTM_CHECK_ZERO(tc("abc", 3, -E2BIG, 2, 1, 0));
+-	KSTM_CHECK_ZERO(tc("ab", 3, 2, 2, 1, 0));
+-	KSTM_CHECK_ZERO(tc("a", 3, 1, 1, 1, 1));
+-	KSTM_CHECK_ZERO(tc("", 3, 0, 0, 1, 2));
+-
+-	KSTM_CHECK_ZERO(tc("abcd", 4, -E2BIG, 3, 1, 0));
+-	KSTM_CHECK_ZERO(tc("abc", 4, 3, 3, 1, 0));
+-	KSTM_CHECK_ZERO(tc("ab", 4, 2, 2, 1, 1));
+-	KSTM_CHECK_ZERO(tc("a", 4, 1, 1, 1, 2));
+-	KSTM_CHECK_ZERO(tc("", 4, 0, 0, 1, 3));
+-}
+-
+-KSTM_MODULE_LOADERS(test_strscpy);
+-MODULE_AUTHOR("Tobin C. Harding <tobin@kernel.org>");
+-MODULE_LICENSE("GPL");
 -- 
 2.34.1
 
