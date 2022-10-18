@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837716020D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AC26020DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiJRCF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S230413AbiJRCGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiJRCFl (ORCPT
+        with ESMTP id S230512AbiJRCFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:05:41 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7288E0EC;
-        Mon, 17 Oct 2022 19:03:57 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id a14-20020a9d470e000000b00661b66a5393so6855479otf.11;
-        Mon, 17 Oct 2022 19:03:57 -0700 (PDT)
+        Mon, 17 Oct 2022 22:05:48 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE9F76743
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:04:24 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id de14so8524066qvb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HxTl7Pvn0Bec2shpwvEv5s8beVffTT/3S32nRS/mxsA=;
-        b=BEmwZ/RYC149NHygsqHnZCK+2kx6DTG2aDAJrgSbLxkLMwP7pNNyoR0nvmuAXntAEP
-         7jh0euTa7iBRNu/YKNQOi3JbO2r78uOaYbjkvMexAhKwkONmdq1YEovev48dSoaa6EKp
-         uQa9EXAR0E2SaV5f8Y3nJW7cW3T7BvPM23UjZ0gU3ropuLsDiPqqllTPI/C3agDHWWAM
-         cp3EBmroAKDfJPwiaY2TMto0V1T4wEwV9rcgv6oi/q+t3AqG+kwxGPtgdlbz6j5ZzTk7
-         epBhjkX+xBVzejJn+DqAH8c1L4Y/zUTDji6JetE5sfm77p0FPUINPFBUupodaYnF8txk
-         p0+A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PVyi5PVQNv3F8w1xp80kMe6Ib2NG2Y9FxoJE2eHyRKY=;
+        b=m+Kx4QpA01PKOOmGYOtlKOXg51ZtAxVOUFbJDmNiax8aHQSYpsTt6k1kGkTcOzMFOD
+         QHZ+E4l1/AmC3bHBW1iLGDfovOq9tsW6+0bsosKcdvbdcM95X2oAfrKGoXKUMsOyWv+S
+         UXnUJLzahnGg9tPcbwyGWCTuIF47GGGdTvkEuzDwKwH4DKhS0gTp7fxhb9CtlMCy29Nb
+         NH5gSCUugnN3/Wb7Swcumm9HXDlCh+vtRgHAMbQOAFK5QeG0FljVTx1bLUz1YB8v5rHk
+         yZjImxMTehLQ97fSMfua6VBhXCEDMsHTAS3Ug08P4NbW+VbZ6GXioA+TXGFLFUac7fXa
+         SWww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HxTl7Pvn0Bec2shpwvEv5s8beVffTT/3S32nRS/mxsA=;
-        b=wWCiwwazlkoaNUvlcr3Ch30tBoYCtJa/X/lVK2TNG6BoFPo+9SarYjq2ztRzOMXIrn
-         ZJiy7FIDLrC0Fd2uUvWdmfT3s7YwXfIaJ/GeH588K0QHLXFQKfQXhrIvSb5zAkJXKvaO
-         mz0yK5uxehGYVsZhkOp0hqswnSBvEmGujaUALYZMlFs5ah4EE1cRwnS0dsK3LUITYmUB
-         HRjMxdDg4KrosJUF6907YEaMq5aQmNytXT8OuU4mNOnQzyEZHnUWfCPR0pBVCYBKGhse
-         1jKBx41u+HbA8XycV1t93h5qKV89MIp+2LgPkdEaLMNOum8u8BRbSwKdZGz4Tbs8KJsz
-         0bjQ==
-X-Gm-Message-State: ACrzQf0aZWesLUNZ7qfHtwk6+WbMExlhqpFUlkYcFOSJMLF7e6HWXyI0
-        4xAAxNWHLHoaHLK3TaYdZHG1npYn3gFEegPHGxM=
-X-Google-Smtp-Source: AMsMyM6YDyKg2qVy2VCwY4Wi8lkdnmdfkZsxSGCbhiZod/qb5zyMSTDdGcySP9NXBcuBz/yH2N+opeRkeqB+/UssNjg=
-X-Received: by 2002:a9d:156:0:b0:661:c2eb:9da5 with SMTP id
- 80-20020a9d0156000000b00661c2eb9da5mr363065otu.326.1666058626727; Mon, 17 Oct
- 2022 19:03:46 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PVyi5PVQNv3F8w1xp80kMe6Ib2NG2Y9FxoJE2eHyRKY=;
+        b=tcOR7CimOwlQC9KEwI2HWmUG9zx+kaziOqu+4FlFozcmI9PHistGvw+3J2VoxI81kt
+         H/2tlI2bB0k2vODRg225VtkW9df4xNUJTdZeyGzs4XyEVrPTem8URr7OVm2Tsgg1qGxB
+         /8a5T+iVh6s2vA5v34Yn5EarGTzeqm9DAALpVplRyx8Or6qvnWeYRohabTQ20e6VqvRL
+         pfvEmNIFLTL+nEppF6Zh4L2oBH9R1k/kX+11FzMR05rvmK5cHzqcn99Fedn4jqgE7cML
+         ivJnuAiIP6wq+vryzPs049I+K82UYRX5IbAS8F/Dz94U99AScCvuaPod2p7g0rYmRqGq
+         qZIQ==
+X-Gm-Message-State: ACrzQf21P6KGppXYO8qFuvsJVMH3ImwTmFCZKT11SxvUCQ1lcPNP/FrD
+        NONTmDXyw1KYqhFf+N61cXHZHg==
+X-Google-Smtp-Source: AMsMyM5aCAXfdkRU0CwAatX5ppnsMYQaVnFvVFTGbW175A9gq2nXM1rYqsYorG+7SqvmRcRMmJf7rQ==
+X-Received: by 2002:a05:6214:20e2:b0:4b1:77b6:1555 with SMTP id 2-20020a05621420e200b004b177b61555mr437967qvk.51.1666058647826;
+        Mon, 17 Oct 2022 19:04:07 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id m21-20020a05620a24d500b006bb82221013sm1315824qkn.0.2022.10.17.19.04.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 19:04:06 -0700 (PDT)
+Message-ID: <cef4dea2-9892-971f-5dbc-62eaac478d62@linaro.org>
+Date:   Mon, 17 Oct 2022 22:04:04 -0400
 MIME-Version: 1.0
-References: <20221014201427.2435461-1-void@manifault.com> <20221014201427.2435461-4-void@manifault.com>
- <CAP01T77PTK+bD2mBrxJShKNPhEypT2+nSHcr3=uuJbrghv_wFg@mail.gmail.com>
-In-Reply-To: <CAP01T77PTK+bD2mBrxJShKNPhEypT2+nSHcr3=uuJbrghv_wFg@mail.gmail.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Tue, 18 Oct 2022 07:33:06 +0530
-Message-ID: <CAP01T747PKC2jySOZCWu_gauHbBfaj4JE=hbtm4Z4C-Y8b3ZHg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] bpf/selftests: Add selftests for new task kfuncs
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: arm: add samsung,starqltechn board
+ based on sdm845 chip
+Content-Language: en-US
+To:     Dzmitry Sankouski <dsankouski@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20221012185411.1282838-1-dsankouski@gmail.com>
+ <20221012185411.1282838-2-dsankouski@gmail.com>
+ <99652775-8921-9d4a-193e-20d1487e6759@linaro.org>
+ <CABTCjFDDEhNo0OVk+87kU93xwvXNR3tMuinfLXzZ6PeyweCpag@mail.gmail.com>
+ <8c773f11-1c00-1856-daa7-250a4ec37d23@linaro.org>
+ <CABTCjFAajiT7QpyA9mG7i4XzWxtLsvRsDLPtWTvwmJbMYEr1SQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CABTCjFAajiT7QpyA9mG7i4XzWxtLsvRsDLPtWTvwmJbMYEr1SQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 07:23, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
-> On Sat, 15 Oct 2022 at 01:45, David Vernet <void@manifault.com> wrote:
-> >
-> > A previous change added a series of kfuncs for storing struct
-> > task_struct objects as referenced kptrs. This patch adds a new
-> > task_kfunc test suite for validating their expected behavior.
-> >
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> > [...]
-> > +
-> > +SEC("tp_btf/task_newtask")
-> > +int BPF_PROG(task_kfunc_acquire_trusted_nested, struct task_struct *task, u64 clone_flags)
-> > +{
-> > +       struct task_struct *acquired;
-> > +
-> > +       if (!is_test_kfunc_task())
-> > +               return 0;
-> > +
-> > +       /* Can't invoke bpf_task_acquire() on a trusted pointer at a nonzero offset. */
-> > +       acquired = bpf_task_acquire(task->last_wakee);
->
-> The comment is incorrect, that would be &task->last_wakee instead,
-> this is PTR_TO_BTF_ID | PTR_NESTED.
->
-> > +       if (!acquired)
-> > +               return 0;
-> > +       bpf_task_release(acquired);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > [...]
-> > +
-> > +static int test_acquire_release(struct task_struct *task)
-> > +{
-> > +       struct task_struct *acquired;
-> > +
-> > +       acquired = bpf_task_acquire(task);
->
-> Unfortunately a side effect of this change is that now since
-> PTR_TO_BTF_ID without ref_obj_id is considered trusted, the bpf_ct_*
-> functions would begin working with tp_btf args. That probably needs to
-> be fixed so that they reject them (ideally with a failing test case to
-> make sure it doesn't resurface), probably with a new suffix __ref/or
-> __owned as added here [0].
->
-> Alexei, since you've suggested avoiding adding that suffix, do you see
-> any other way out here?
-> It's questionable whether bpf_ct_set_timeout/status should work for CT
-> not owned by the BPF program.
->
->   [0]: https://lore.kernel.org/bpf/dfb859a6b76a9234baa194e795ae89cb7ca5694b.1662383493.git.lorenzo@kernel.org
->
+On 17/10/2022 04:02, Dzmitry Sankouski wrote:
+>>> I've been told it's easier for maintainers to resend all patch series,
+>>> even if only 1 patch from the series requires change. So I decided to
+>>> keep versions equal in all patches, to clearly indicate those patches
+>>> are from the same series. Please, correct me if I'm wrong.
+>>
+>> This is okay, but you wrote here there was a v1 and v2, and you changed
+>> nothing against it. If there was v1 and v2, we would ack it, I think.
+>>
+>> Or this changelog is for some other patch? Not for this one?
+> There's no previous versions of this patch, since it was born in the
+> v3 patch series. The empty changelog for this patch indicates that
+> there's no point to look for previous versions. I think I'll do it
+> differently next time to avoid confusion - just a sentence that vN is
+> the start version for patch.
 
-Sorry for accidentally bumping this v3 thread instead of v5, whosoever
-replies please continue there.
+Yes, please. Something like:
+
+Changes for v3: New patch.
+
+Best regards,
+Krzysztof
+
