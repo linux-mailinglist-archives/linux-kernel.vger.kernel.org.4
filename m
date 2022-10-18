@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CCE6027B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AB86027AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbiJRI6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
+        id S230023AbiJRI6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiJRI6n (ORCPT
+        with ESMTP id S229602AbiJRI6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:58:43 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D230553A7D;
-        Tue, 18 Oct 2022 01:58:41 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29I8wTXO042014;
-        Tue, 18 Oct 2022 03:58:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666083509;
-        bh=YkULLNGYTCiKKV3uTi6aQb+TYdDAV94MFgivkAOeMeU=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=M/k2ew09yjWhkh2bjwGbP16KWzPey6WbuksRdUqnWjIzpyfyMU7++7AcB6bGo8/9e
-         Jl5zc7JOmlc8kJefWYTRLiIYldaOoVYu+I8nr+f1+oSu7nucd3UvqhqKQDn08k26Cj
-         rMkxPLfdqeapLRLrkavCAsoo0/AWF06o2XFT++6E=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29I8wTaI030340
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Oct 2022 03:58:29 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 18
- Oct 2022 03:58:28 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 18 Oct 2022 03:58:29 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29I8wAcR010100;
-        Tue, 18 Oct 2022 03:58:24 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <vigneshr@ti.com>, <nsekhar@ti.com>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
-Subject: [PATCH v2 3/3] net: ethernet: ti: am65-cpsw: Add support for SERDES configuration
-Date:   Tue, 18 Oct 2022 14:28:10 +0530
-Message-ID: <20221018085810.151327-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221018085810.151327-1-s-vadapalli@ti.com>
-References: <20221018085810.151327-1-s-vadapalli@ti.com>
+        Tue, 18 Oct 2022 04:58:34 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A41F3F333
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:58:32 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id 13so30598487ejn.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UXGbEH0YjKxQ5lQbGaSZrNNxQW34vJDdcKfHy34rEps=;
+        b=H2+AI+grzf76WPuzlXes0XqihWDAH3vvMJF5CKtRcfyepU8F35wE2UrjorcMHaqtPl
+         RIKAHrdO+ksC0EciRSL24IrHAgV0dXhx9T6asZH59SkKOWlOinN4b0XeXR0XMd2RJgy+
+         jC5P/rwikwlE2eZjiMyX6hfjTYeysxRhXZX3QR0PtTeec6zDJomf0nzz4CIhPqAKFys/
+         19I+gRKhfrezZxaVQIYUIuQrTTIOGCau7Tpwy/6Y4omg9OGOaX1TZav+ou38jXRQRjda
+         unE0MHZ00fCfe9hq0qyPxoM/wNDofxp7IASaMUIfICHJGfJMsiLWhQ/edTV9craTv8RI
+         HFRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UXGbEH0YjKxQ5lQbGaSZrNNxQW34vJDdcKfHy34rEps=;
+        b=BWf2uiT86Azb9HnKa9MoI2fvAzyea/dqBB5oLOMqZdwRLbngu0awGiPuOemddzvZpF
+         aDlaxDnWD5os5AZmHxCeu8ZffjJ4inQ15onsgHA1LsAl5uSqO83fPOd+K+yRbkDV4Jco
+         kisLWhEXtJ1oV8WSjjnVJ549wGrOydJX+rglGlJ7G4KMaLYVh1dzNb8WTvO2c5mOmjHT
+         cSOlxtvh/d59hGyX0GtymSbr+rxl1f02IR6ZHfYWk405bHYAbK4uaZ5zr8UOybbbuIpB
+         cQ2M6n8QkwFR90aQmZjaT9vjaTCz3awxZ0Snb7mbEXSqNY2vxJK7CAxvuSaYp14JJMiB
+         nbUA==
+X-Gm-Message-State: ACrzQf2iT7LsPSTENxZzkkDgQ5pTU8yPu+D+Vch+lJ3hV9OE8qma2HLJ
+        d5OzCSv5lDS2cuFtnowkamUpmg/vC8v3KGvHjsrOKA==
+X-Google-Smtp-Source: AMsMyM6PMLMnUO5jeMWNXYPGtfSpnb88qOBPovYY5AxWrZQtw9ZvIfxPsQm9uZxDdbMfximlGMNKMsWj3z03dRpHygk=
+X-Received: by 2002:a17:907:a06b:b0:78d:d25f:b726 with SMTP id
+ ia11-20020a170907a06b00b0078dd25fb726mr1522606ejc.203.1666083510941; Tue, 18
+ Oct 2022 01:58:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20221013214640.31214-1-palmer@rivosinc.com>
+In-Reply-To: <20221013214640.31214-1-palmer@rivosinc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 18 Oct 2022 10:58:19 +0200
+Message-ID: <CACRpkda4h1_VSYQP-7Wg006SNJYU4G1xUnvzhhom+iLRjNKd_w@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for ulli-kroll
+To:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,112 +67,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use PHY framework APIs to initialize the SERDES PHY connected to CPSW MAC.
+On Thu, Oct 13, 2022 at 11:49 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
 
-Define the functions am65_cpsw_disable_phy(), am65_cpsw_enable_phy(),
-am65_cpsw_disable_serdes_phy() and am65_cpsw_init_serdes_phy().
+> Github deprecated the git:// links about a year ago, so let's move to
+> the https:// URLs instead.
+>
+> Reported-by: Conor Dooley <conor.dooley@microchip.com>
+> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+(...)
+> -T:     git git://github.com/ulli-kroll/linux.git
+> +T:     git https://github.com/ulli-kroll/linux.git
 
-Power on and initialize the SerDes PHY in am65_cpsw_nuss_init_slave_ports()
-by invoking am65_cpsw_init_serdes_phy().
+There is no gemini branch on Hans' tree, actually I haven't heard
+from him in a long time, Hans are you there?
 
-Power off the SerDes PHY in am65_cpsw_nuss_remove() by invoking
-am65_cpsw_disable_serdes_phy().
+This tree has some gemini branches that are active:
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git/
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 65 ++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+Yours,
+Linus Walleij
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 91e294afc3ad..519ebd371dd8 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1403,6 +1403,65 @@ static const struct net_device_ops am65_cpsw_nuss_netdev_ops = {
- 	.ndo_get_devlink_port   = am65_cpsw_ndo_get_devlink_port,
- };
- 
-+static void am65_cpsw_disable_phy(struct phy *phy)
-+{
-+	phy_power_off(phy);
-+	phy_exit(phy);
-+}
-+
-+static int am65_cpsw_enable_phy(struct phy *phy)
-+{
-+	int ret;
-+
-+	ret = phy_init(phy);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = phy_power_on(phy);
-+	if (ret < 0) {
-+		phy_exit(phy);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void am65_cpsw_disable_serdes_phy(struct am65_cpsw_common *common)
-+{
-+	struct device_node *node, *port_np;
-+	struct device *dev = common->dev;
-+	const char *name = "serdes-phy";
-+	struct phy *phy;
-+
-+	node = of_get_child_by_name(dev->of_node, "ethernet-ports");
-+
-+	for_each_child_of_node(node, port_np) {
-+		phy = devm_of_phy_get(dev, port_np, name);
-+		am65_cpsw_disable_phy(phy);
-+	}
-+}
-+
-+static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *port_np)
-+{
-+	const char *name = "serdes-phy";
-+	struct phy *phy;
-+	int ret;
-+
-+	phy = devm_of_phy_get(dev, port_np, name);
-+	if (PTR_ERR(phy) == -ENODEV)
-+		return 0;
-+
-+	ret =  am65_cpsw_enable_phy(phy);
-+	if (ret < 0)
-+		goto err_phy;
-+
-+	return 0;
-+
-+err_phy:
-+	devm_phy_put(dev, phy);
-+	return ret;
-+}
-+
- static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
- 				      const struct phylink_link_state *state)
- {
-@@ -1880,6 +1939,11 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
- 			goto of_node_put;
- 		}
- 
-+		/* Initialize the phy for the port */
-+		ret = am65_cpsw_init_serdes_phy(dev, port_np);
-+		if (ret)
-+			return ret;
-+
- 		port->slave.mac_only =
- 				of_property_read_bool(port_np, "ti,mac-only");
- 
-@@ -2833,6 +2897,7 @@ static int am65_cpsw_nuss_remove(struct platform_device *pdev)
- 
- 	am65_cpsw_nuss_phylink_cleanup(common);
- 	am65_cpsw_unregister_devlink(common);
-+	am65_cpsw_disable_serdes_phy(common);
- 	am65_cpsw_unregister_notifiers(common);
- 
- 	/* must unregister ndevs here because DD release_driver routine calls
--- 
-2.25.1
-
+Yours,
+Linus Walleij
