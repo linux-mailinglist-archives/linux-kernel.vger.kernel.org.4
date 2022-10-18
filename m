@@ -2,104 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4F0602BE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20068602BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiJRMkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S229682AbiJRMmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJRMkr (ORCPT
+        with ESMTP id S229470AbiJRMmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:40:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6A1A59A4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:40:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF946B81E05
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 12:40:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A58A3C4347C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 12:40:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666096841;
-        bh=cDI8VfW/AF6NrGhMRTUwjxIejQkorXt38BMo18OIObo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f3Psn9sX5ux6fiZFNToYOp8kdGy1VH9ed3u6L3BG6YBvRFnHk5Q/kh6Qbo6v4RPJU
-         PuO6XFq69OkrDfuWE6wz502RFbIhqbmxgGn0DB8bmzhun/D/H4cEBl9wcOOKu5DoHX
-         OjT6V/MFV6CtHuPqymX3wXFPyxgNgpwICZJkLKDKBa/xD6Nlgjoo+ozvXvWo6jVUCu
-         vCcNBb0FqYTys9nI/zL28why6WnEq/9exmjLdiFayBfAAi5m5vYYSZjhISIWiN+oOn
-         UMM4oVD6fV4IW5GVhcB6Yyu3nBc10Oo1reKOqA0tXx+81hNQ/wo6YHZeHmKnO1zjl8
-         wAAULoeV24Xag==
-Received: by mail-ed1-f49.google.com with SMTP id a67so20192000edf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:40:41 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1Sif313n4A0D1VQJJfKLINY4oBxL7zIoZkkgYA+dZQqgnCeBVY
-        Gl6/8nltbp/v7H7m3smB055Nea9yfz6zgjZTLp8=
-X-Google-Smtp-Source: AMsMyM7L9/2fDG8D52xfgKVGygf0bMgoEg7J0xxPTSpynEjWLF0JmV5E+wQd31WHXA+etoCNEDCoEC0biIb2lYhEvQ0=
-X-Received: by 2002:aa7:d4d9:0:b0:45c:7eae:d8d8 with SMTP id
- t25-20020aa7d4d9000000b0045c7eaed8d8mr2436200edr.254.1666096839795; Tue, 18
- Oct 2022 05:40:39 -0700 (PDT)
+        Tue, 18 Oct 2022 08:42:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80F7A87A7;
+        Tue, 18 Oct 2022 05:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666096932; x=1697632932;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MsAE7+/Uvyq9EmYiyG/WgM2cVqod6GgSrZuR7R1V7Ro=;
+  b=CF7pSVCYQINFfR9vaYRXFbFjnsRgkjIEbQoBegnabnrnWcNXUKCSa6Ui
+   kNQyIJcs9/KfhaMcfVdlxY03SDsVwY3QJxQOUX92OBTudmTnczIvHFvLM
+   HLTWRFa5hGZBqqU85ajXxuQA0A/VnS4aoba1xOoFBrbhRt4oU+52X0nLc
+   tlkaqZWDeVCWC0PTGOh3+0wrXdWbknPHYBgeJnquUCUx3jUuRbvyGwAQG
+   Rgd01Dpl9NpAgmSbUcDeQfAxzG7ZdxROc117Ct2KhQ/tTBHEhJ0Xf7Pca
+   /o/vtMSRDxOJdtP/Ed9Cg3seftDqudVIJxNQMpzxFE3BaKKW6+a/mi2iK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="304829082"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="304829082"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 05:42:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="606520561"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="606520561"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 18 Oct 2022 05:42:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oklv4-009MLZ-33;
+        Tue, 18 Oct 2022 15:42:06 +0300
+Date:   Tue, 18 Oct 2022 15:42:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 4/5] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+Message-ID: <Y06fHg6JdSA2GbII@smile.fi.intel.com>
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+ <88e24b01da9f44ebf5fcd8344ded0b75ff742fbf.1665066397.git.mazziesaccount@gmail.com>
+ <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
+ <20221009133351.6ff4894b@jic23-huawei>
+ <Y0O4fiQQX0M317h/@smile.fi.intel.com>
+ <7abed64a-d544-a228-b5f1-4c7b5a3bd1be@fi.rohmeurope.com>
+ <20221014142232.000038df@huawei.com>
+ <b7017e04-83a0-da3e-4ea7-28a2d34febc8@gmail.com>
 MIME-Version: 1.0
-References: <20221018094742.324576-1-zys.zljxml@gmail.com> <59b75b38-8995-ea54-b5cf-eca78249b65e@xen0n.name>
-In-Reply-To: <59b75b38-8995-ea54-b5cf-eca78249b65e@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 18 Oct 2022 20:40:27 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H614sr9zqVdqiAJ-XKsv=6g0XK49G=AKXCFsOe0TeVZyQ@mail.gmail.com>
-Message-ID: <CAAhV-H614sr9zqVdqiAJ-XKsv=6g0XK49G=AKXCFsOe0TeVZyQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: use flexible-array member instead of
- zero-length array
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     zys.zljxml@gmail.com, oleg@redhat.com, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, chenhuacai@loongson.cn,
-        lixuefeng@loongson.cn, yangtiezhu@loongson.cn,
-        Yushan Zhou <katrinzhou@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7017e04-83a0-da3e-4ea7-28a2d34febc8@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued for loongarch-fixes
+On Tue, Oct 18, 2022 at 02:27:20PM +0300, Matti Vaittinen wrote:
+> On 10/14/22 16:22, Jonathan Cameron wrote:
+> > On Tue, 11 Oct 2022 09:10:21 +0000
+> > "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com> wrote:
+> > > On 10/10/22 09:15, Andy Shevchenko wrote:
+> > > > On Sun, Oct 09, 2022 at 01:33:51PM +0100, Jonathan Cameron wrote:
+> > > > > On Thu, 6 Oct 2022 21:32:11 +0300 Andy Shevchenko
+> > > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > > On Thu, Oct 06, 2022 at 05:38:14PM +0300, Matti Vaittinen wrote:
 
-On Tue, Oct 18, 2022 at 8:27 PM WANG Xuerui <kernel@xen0n.name> wrote:
->
-> On 2022/10/18 17:47, zys.zljxml@gmail.com wrote:
-> > From: Yushan Zhou <katrinzhou@tencent.com>
-> >
-> > Eliminate the following coccicheck warning:
-> > ./arch/loongarch/include/asm/ptrace.h:32:15-21: WARNING use flexible-array member instead
-> >
-> > Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
-> > ---
-> >   arch/loongarch/include/asm/ptrace.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-> > index 17838c6b7ccd..7437b9366c3b 100644
-> > --- a/arch/loongarch/include/asm/ptrace.h
-> > +++ b/arch/loongarch/include/asm/ptrace.h
-> > @@ -29,7 +29,7 @@ struct pt_regs {
-> >       unsigned long csr_euen;
-> >       unsigned long csr_ecfg;
-> >       unsigned long csr_estat;
-> > -     unsigned long __last[0];
-> > +     unsigned long __last[];
-> >   } __aligned(8);
-> >
-> >   static inline int regs_irqs_disabled(struct pt_regs *regs)
->
-> Seems good. Thanks.
->
-> Reviewed-by: WANG Xuerui <git@xen0n.name>
->
-> --
-> WANG "xen0n" Xuerui
->
-> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
->
->
+...
+
+> > > > > > > +module_param(g_kx022a_use_buffer, bool, 0);
+> > > > > > > +MODULE_PARM_DESC(g_kx022a_use_buffer, +		 "Buffer samples. Use
+> > > > > > > at own risk. Fifo must not overflow");
+> // snip
+> 
+> > > This would be a way to have the FIFO disabled by default and warn users
+> > > via dt-binding docs if they decide to explicitly enable the FIFO.
+> > > (Besides, I believe the FIFO is usable on at least some of the Kionix
+> > > sensors - because I've heard it is used on a few platforms).
+> > > 
+> > > This could give us safe defaults while not shutting the doors from those
+> > > who wish to use the FIFO. Sure we need a buy-in from Krzysztof / Rob,
+> > > but that may be less of an obstacle compared to the module param if Greg
+> > > is so strongly oppsoing those. (And the dt-property could also provide
+> > > some technical merites as these sensors seem to really have differencies
+> > > in FIFOs).
+> > 
+> > I'm dubious about having this for known broken parts - but I guess you
+> > can propose it and see what the dt-maintainers say.
+> > 
+> > I don't want to see fifo size in the dt binding though.
+> 
+> // snip
+> 
+> > > > Also it needs some communication
+> > > >   with a vendor to clarify the things.
+> > > 
+> > > I do communication with the vendor on a daily basis :] Nowadays Kionix
+> > > is part of ROHM, and Finland SWDC has been collaboration with Kionix
+> > > even before they "merged" (but I have not been part of the "sensor team"
+> > > back then).
+> > > 
+> > > Unfortunately, reaching the correct people inside the company is hard
+> > > and occasionally impossible - long story...
+> > 
+> > :)
+> 
+> Just a note. I have done some further investigation (further testing
+> combined with tracing the SPI lines) and also got some answer(s) from the
+> ASIC designers. First thing is that the underlying FIFO is 258 bytes and can
+> hold up-to 43 HiRes samples. This is also fixed in the recent data-sheet.
+> The register informing how many bytes of data is stored in FIFO is still
+> only 8bits. When FIFO is full, the magic value 255 is used to indicate the
+> 258 bytes of data. This explains the strange 42,5 samples (255 bytes) of
+> data being reported.
+> 
+> Furthermore, I've noticed that the FIFO appearing to be "stuck", eg. amount
+> of data stored in FIFO not decreasing when data is read is 100%
+> reproducible. The condition is that the PC1 bit (accelerometer state
+> control) is toggled before the FIFO is read. The issue does not seem to be
+> reproducible if the PC1 is not touched. I have also asked if this is a known
+> limitation.
+> 
+> Anyways, it seems we have a solution to the problem. We simply handle the
+> case when 255 bytes is reported correctly (by reading 258 bytes of valid
+> data) - and we prevent changing the sensor configuration when FIFO is
+> enabled.
+> 
+> I will implement these changes to the v3 and drop both the module-param and
+> the dt-property. Sorry for the hassle and thanks for the patience/support!
+
+This is very good news, Matti, thanks for pushing this forward and finding
+better solution!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
