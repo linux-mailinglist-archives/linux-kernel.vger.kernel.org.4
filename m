@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1ED8603509
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E2760350F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiJRVhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S229596AbiJRVjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiJRVha (ORCPT
+        with ESMTP id S229719AbiJRVjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:37:30 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1EC7CE3E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:37:29 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id g16so5742937qtu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:37:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jh/sgBmX5hq4Hl0naA+BS4En8+zhwQfH6/hn1rzrP6U=;
-        b=ivYhcIJ1qdVqtKJrZX2qoPG+j04czSqmpcGyAjNeME0eBp0CyiuUer7IslYv5h2APF
-         97Q5oNs35Syx3lRSKjkOt/pZZUmAK5TYiJBrvo+KuJJxxAYWYyhJuMI+NxBQVghc1nZ+
-         JbQGhSvSXDOoqKXPy1KdK1JyK1qQQjMaRvkf9wYbb6fuInBr40aLAi5fJfkhB5W2WkDj
-         9Ygh53XUEDdB2hKXuCseUJmEQExbjh3J1tH9oGXmXiQ64meKbLDPUNQJhMTGOkY9fCHt
-         BsKid1wig2VobcVXOWMxNdpsHJYslBYlILC1Zh/jstounlu/zDEXxfZ8LgG1lT9piB0E
-         EgsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jh/sgBmX5hq4Hl0naA+BS4En8+zhwQfH6/hn1rzrP6U=;
-        b=SkfOgKaBV9GjtDTWFvSni9Ele2T3RU51aFlutdTcaHsSIaAZw4X7kYsdgxzPA3JMQZ
-         RUF/zSKKd7KFsZmcA2eknL13TrQkqf3iYffyUcMFEwLA/yprOWOT6LxNj8L7L9SEFLGk
-         42r/sYDDZ8X2fc62uzOAY23oYl2oSUjAhof7l5OGsyNrO7tlX63ATxiQ66sm9Ymqoi7W
-         x0F7cK03XPht8+xe6/kZVDC1J7y1j6EtN5+g2LmTQOIER1geDb0hLbdALX0KQsExXu2j
-         TU0/JrAYqJAvwW0PtB4vsxVGPccvvWtmIHkWN6Wb7vvYp31I1v8j1nnNekDd5zHjTM3F
-         BZKA==
-X-Gm-Message-State: ACrzQf0mA8tqd8H9oXr3I93315rvabkFRN2/eInCz6Ivxres6EF9Xfto
-        /hDrAheiJgQZ+SKIb0oAdG1Hj9UZoAjByA==
-X-Google-Smtp-Source: AMsMyM6enZ6m0flY7LkSIdX6E6c0Y1Bk8wEPlnDZf3TRloHt4FjIeQWMJm7zFHoCwgzL97Uc8qQb3A==
-X-Received: by 2002:ac8:5a82:0:b0:39c:cbe1:e177 with SMTP id c2-20020ac85a82000000b0039ccbe1e177mr3997401qtc.393.1666129048528;
-        Tue, 18 Oct 2022 14:37:28 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id h7-20020a05620a284700b006ecb9dfdd15sm3240384qkp.92.2022.10.18.14.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 14:37:27 -0700 (PDT)
-Message-ID: <2dcc0ee2-5fc2-8fe3-9eb1-2c57007286f3@linaro.org>
-Date:   Tue, 18 Oct 2022 17:37:26 -0400
+        Tue, 18 Oct 2022 17:39:40 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE681F2DC;
+        Tue, 18 Oct 2022 14:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=kkMKLBAX6vZe5+FR2sneUyNPLXj5K2NRXGHtjYxoPEQ=; b=gPOzOaSQRy6C01KNcLOtFWyOWi
+        bIqQ3X7Ob0FyVjq1di8Zlo/yFj/XUeEMn7UOHdxXE9K2rIURKq/+pOyym8Kf//aImSuYrEuhQFmXM
+        cgOWteyLXX56xH9XdMTJVi/3efv8tXEtndSo8Ypnx3fTK6jncvQsoozo3dHYJhi7gdew=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1okuJ6-002OPI-29; Tue, 18 Oct 2022 23:39:28 +0200
+Date:   Tue, 18 Oct 2022 23:39:28 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Camelia Groza <camelia.groza@nxp.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH net] net: fman: Use physical address for userspace
+ interfaces
+Message-ID: <Y08dECNbfMc3VUcG@lunn.ch>
+References: <20221017162807.1692691-1-sean.anderson@seco.com>
+ <Y07guYuGySM6F/us@lunn.ch>
+ <c409789a-68cb-7aba-af31-31488b16f918@seco.com>
+ <97aae18e-a96c-a81b-74b7-03e32131a58f@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/4 v5] dt-bindings: memory: Factor out common properties
- of LPDDR bindings
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, Jian-Jia Su <jjsu@google.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-References: <20220930220606.303395-1-jwerner@chromium.org>
- <166610580692.30968.11562735981650899285.b4-ty@linaro.org>
- <56ce7440-b60b-4688-c7ac-d0435f79eb97@linaro.org>
- <CAODwPW_p2=u=YP75BW_RYG2wNgu8sjthYabEC3H4MgHG7ae4sw@mail.gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAODwPW_p2=u=YP75BW_RYG2wNgu8sjthYabEC3H4MgHG7ae4sw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97aae18e-a96c-a81b-74b7-03e32131a58f@ti.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 17:36, Julius Werner wrote:
->>> [1/4] dt-bindings: memory: Factor out common properties of LPDDR bindings
->>>       https://git.kernel.org/krzk/linux-mem-ctrl/c/087cf0c5a19c638dd3b26fe7034274b38bc8db6b
->>> [2/4] dt-bindings: memory: Add numeric LPDDR compatible string variant
->>>       https://git.kernel.org/krzk/linux-mem-ctrl/c/f4deb90635ec8a7dd5d5e4e931ab539edc9a9c90
->>
->> Run checkpatch before sending patches to the mailing list... This was a
->> v5 so I expected it ti be clean.
+On Tue, Oct 18, 2022 at 01:33:55PM -0500, Andrew Davis wrote:
+> On 10/18/22 12:37 PM, Sean Anderson wrote:
+> > Hi Andrew,
+> > 
+> > On 10/18/22 1:22 PM, Andrew Lunn wrote:
+> > > On Mon, Oct 17, 2022 at 12:28:06PM -0400, Sean Anderson wrote:
+> > > > For whatever reason, the address of the MAC is exposed to userspace in
+> > > > several places. We need to use the physical address for this purpose to
+> > > > avoid leaking information about the kernel's memory layout, and to keep
+> > > > backwards compatibility.
+> > > 
+> > > How does this keep backwards compatibility? Whatever is in user space
+> > > using this virtual address expects a virtual address. If it now gets a
+> > > physical address it will probably do the wrong thing. Unless there is
+> > > a one to one mapping, and you are exposing virtual addresses anyway.
+> > > 
+> > > If you are going to break backwards compatibility Maybe it would be
+> > > better to return 0xdeadbeef? Or 0?
+> > > 
+> > >         Andrew
+> > > 
+> > 
+> > The fixed commit was added in v6.1-rc1 and switched from physical to
+> > virtual. So this is effectively a partial revert to the previous
+> > behavior (but keeping the other changes). See [1] for discussion.
+
+Please don't assume a reviewer has seen the previous
+discussion. Include the background in the commit message to help such
+reviewers.
+
+> > 
+> > --Sean
+> > 
+> > [1] https://lore.kernel.org/netdev/20220902215737.981341-1-sean.anderson@seco.com/T/#md5c6b66bc229c09062d205352a7d127c02b8d262
 > 
-> Apologies, I ran checkpatch originally but forgot to run it again
-> after the incremental updates. Looks like there's a typo in the commit
-> message, but I see you fixed it in the version you picked up, thanks
-> for taking care of that. So I assume you don't need me to send a v6
-> update, right?
+> I see it asked in that thread, but not answered. Why are you exposing
+> "physical" addresses to userspace? There should be no reason for that.
 
-No need for v6.
+I don't see anything about needing physical or virtual address in the
+discussion, or i've missed it.
 
-Best regards,
-Krzysztof
+If nobody knows why it is needed, either use an obfusticated value, or
+remove it all together. If somebody/something does need it, they will
+report the regression.
 
+       Andrew
