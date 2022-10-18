@@ -2,148 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD870602839
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4506260283C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiJRJYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
+        id S230160AbiJRJYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiJRJX4 (ORCPT
+        with ESMTP id S229999AbiJRJYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:23:56 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53CFACA1D;
-        Tue, 18 Oct 2022 02:23:45 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n7so13280286plp.1;
-        Tue, 18 Oct 2022 02:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nt4xF0sF59aYzJb+0BGH2wGz8PUJGN3YQ/EwsiEsBo0=;
-        b=SlJG+7ME4evT99t4F0lDdlNZvSFr4IGijCcaqz12H+hJ+ILxaIvJVbz2+3hDVtLR6Q
-         1mOx2qKY5vYxhb6nANmJxtI1lGumEt6T73t7edZ9//f7cLa5FawR6rEZLELX6lEOIWoY
-         gbYJ4EesUTRAYB0XPUOUl/TuujyQ56gu8CbyP1/nQRw1R0xwph6Iz/APBghItkfr80hh
-         mwYWsIGrqBq2n/2r6Tni6AdliHQOylTKnhMbjajQ4knJh3W5N4AHVTnDM5AgPSrvAcYj
-         TMZYitv+Gv4j3tMgWOZwrHGzX400GwTdVflF92nGMvSbEGIEk68PWKSrlBNQozJQEdpB
-         ON7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nt4xF0sF59aYzJb+0BGH2wGz8PUJGN3YQ/EwsiEsBo0=;
-        b=G4qPm7aMHzASjSQAPl5xKFgQkaG3Y+SUwpc6xfyt2kkZthpgBtf9wVsHi6pYul4JCU
-         o6eN9ZQ+Sae2VtZbVUU1F+liii7MYbZf6aJ93dSmkbjZSu470ksYGpTf50IoyyuV2z8w
-         CeQjn0zjNvBgM2HG/Z82iWG7ymwt/R4j8a3zRcgzKVr+SgtueaTPI/hFXg5NjNr3F82Y
-         +Hkpq1mFU6Ub/y8Y67zC5sNpyORElcO1bJSND+M75bkG9CwdHzH67UoL/Oacq/T4LYsN
-         24wgwnM2paQp8viO4FSbjc1JBYsBnfLnzpV9IjRyYxaH4+SO6RThw/Q7iZ17OYldunHy
-         OieQ==
-X-Gm-Message-State: ACrzQf3t84/DlRDIKNF8HuC54Islgmo/Gb5A1HEc+wNVi18fDNTFycgF
-        j6h86DrhhmYMu02RdBo74mI=
-X-Google-Smtp-Source: AMsMyM6K9TlFn90QXRWI2S9Cu2nds2zQSAAmn9ap7qNVJ0hA4fS6U3GPKqONoT6Y63C/tkPU85KOCQ==
-X-Received: by 2002:a17:90b:4d05:b0:202:ec78:9d73 with SMTP id mw5-20020a17090b4d0500b00202ec789d73mr2506378pjb.103.1666085025186;
-        Tue, 18 Oct 2022 02:23:45 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170903120800b0016c09a0ef87sm8247438plh.255.2022.10.18.02.23.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 02:23:44 -0700 (PDT)
-Message-ID: <a9c64b36-9770-1198-7958-3d66b98737c1@gmail.com>
-Date:   Tue, 18 Oct 2022 18:23:39 +0900
+        Tue, 18 Oct 2022 05:24:02 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA9EACF4B;
+        Tue, 18 Oct 2022 02:23:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2796E2002A;
+        Tue, 18 Oct 2022 09:23:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666085030; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DU9aUKfe8YiSdBMpeyV3GLQ4rLKutE7C4dx+hv01OMA=;
+        b=D5kpcQm7hez0sNUS250ZsyzcaSWlOuOBwJG9lit3I05Nd/OiZUCYSlfz8zuR5p+jxXURLs
+        wxle+PgXojzSsvryNl2RZQREddF9ApdaQyGwwfJuT2OdPsVmh9ces+hoqsZCc1kSN+w33w
+        TiEBC8Bx7ifq2rCzB9KznbQz1XcaJto=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666085030;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DU9aUKfe8YiSdBMpeyV3GLQ4rLKutE7C4dx+hv01OMA=;
+        b=GKP62Khoi8ff8rvlt5e3xjTGfC3MxZUlCsNI+gWmPw3lnmvdgAa52QxddcTrhgfbtYQsLq
+        KEQx3IEuu25sIgBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B91413480;
+        Tue, 18 Oct 2022 09:23:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ghoWGaVwTmPWBwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 18 Oct 2022 09:23:49 +0000
+Message-ID: <c8ebeaf0-2dbb-37d8-52c8-7880c516ce6a@suse.cz>
+Date:   Tue, 18 Oct 2022 11:23:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation for
- writel() example
-To:     Arnd Bergmann <arnd@arndb.de>, Parav Pandit <parav@nvidia.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>, parri.andrea@gmail.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        Nicholas Piggin <npiggin@gmail.com>, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        "Paul E. McKenney" <paulmck@kernel.org>, dlustig@nvidia.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <20221010101331.29942-1-parav@nvidia.com>
- <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
- <59d99be6-f79e-45bd-203c-17972255cc39@gmail.com>
- <12f51033-1461-43f9-8d8d-cd726fbb4758@app.fastmail.com>
- <a91e8216-7767-9126-e1d2-c67846cf32fc@gmail.com>
- <b88e4bd2-5c2e-430a-99f9-18cd43463fd6@app.fastmail.com>
+ Thunderbird/102.3.0
+Subject: Re: [PATCH AUTOSEL 5.4 10/13] kmsan: disable physical page merging in
+ biovec
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <b88e4bd2-5c2e-430a-99f9-18cd43463fd6@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Eric Biggers <ebiggers@kernel.org>, Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-block@vger.kernel.org
+References: <20221018001102.2731930-1-sashal@kernel.org>
+ <20221018001102.2731930-10-sashal@kernel.org>
+ <Y03xyaUhL6gSLWYQ@sol.localdomain>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y03xyaUhL6gSLWYQ@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 09:49:34 +0200, Arnd Bergmann wrote:
-> On Tue, Oct 18, 2022, at 9:40 AM, Akira Yokosawa wrote:
->> On Tue, 18 Oct 2022 08:44:09 +0200, Arnd Bergmann wrote:
->>>
->>> Anything weaker than a full "wmb()" probably makes the driver calling
->>> the writel() non-portable, so that is both vague and incorrect.
+On 10/18/22 02:22, Eric Biggers wrote:
+> On Mon, Oct 17, 2022 at 08:10:59PM -0400, Sasha Levin wrote:
+>> From: Alexander Potapenko <glider@google.com>
 >>
->> Do you mean there is a writel() implementation somewhere in the kernel
->> which doesn't guarantee an implicit wmb() before MMIO write?
+>> [ Upstream commit f630a5d0ca59a6e73b61e3f82c371dc230da99ff ]
+>>
+>> KMSAN metadata for adjacent physical pages may not be adjacent, therefore
+>> accessing such pages together may lead to metadata corruption.  We disable
+>> merging pages in biovec to prevent such corruptions.
+>>
+>> Link: https://lkml.kernel.org/r/20220915150417.722975-28-glider@google.com
+>> Signed-off-by: Alexander Potapenko <glider@google.com>
+>> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+>> Cc: Alexei Starovoitov <ast@kernel.org>
+>> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+>> Cc: Andrey Konovalov <andreyknvl@google.com>
+>> Cc: Andy Lutomirski <luto@kernel.org>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: Christoph Hellwig <hch@lst.de>
+>> Cc: Christoph Lameter <cl@linux.com>
+>> Cc: David Rientjes <rientjes@google.com>
+>> Cc: Dmitry Vyukov <dvyukov@google.com>
+>> Cc: Eric Biggers <ebiggers@google.com>
+>> Cc: Eric Biggers <ebiggers@kernel.org>
+>> Cc: Eric Dumazet <edumazet@google.com>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+>> Cc: Ilya Leoshkevich <iii@linux.ibm.com>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Jens Axboe <axboe@kernel.dk>
+>> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Marco Elver <elver@google.com>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Michael S. Tsirkin <mst@redhat.com>
+>> Cc: Pekka Enberg <penberg@kernel.org>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Petr Mladek <pmladek@suse.com>
+>> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Cc: Steven Rostedt <rostedt@goodmis.org>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Vasily Gorbik <gor@linux.ibm.com>
+>> Cc: Vegard Nossum <vegard.nossum@oracle.com>
+>> Cc: Vlastimil Babka <vbabka@suse.cz>
+>> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>   block/blk.h | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/block/blk.h b/block/blk.h
+>> index ee3d5664d962..3358ef4244fe 100644
+>> --- a/block/blk.h
+>> +++ b/block/blk.h
+>> @@ -79,6 +79,13 @@ static inline bool biovec_phys_mergeable(struct request_queue *q,
+>>   	phys_addr_t addr1 = page_to_phys(vec1->bv_page) + vec1->bv_offset;
+>>   	phys_addr_t addr2 = page_to_phys(vec2->bv_page) + vec2->bv_offset;
+>>   
+>> +	/*
+>> +	 * Merging adjacent physical pages may not work correctly under KMSAN
+>> +	 * if their metadata pages aren't adjacent. Just disable merging.
+>> +	 */
+>> +	if (IS_ENABLED(CONFIG_KMSAN))
+>> +		return false;
+>> +
+>>   	if (addr1 + vec1->bv_len != addr2)
+>>   		return false;
+>>   	if (xen_domain() && !xen_biovec_phys_mergeable(vec1, vec2->bv_page))
 > 
-> There are lots of those, but that's not what I meant. E.g. on x86,
-> writel() does not imply a full wmb() but still guarantees serialization
-> between DMA and the register access.
-> 
->> Or do you mean my version is confusing because it can imply a weaker
->> write barrier is sufficient before writel_relaxed()?
-> 
-> That's what I meant, yes. On a lot of architectures, it is sufficient
-> to have something weaker than wmb() before writel_relaxed(), especially
-> on anything that defines writel_relaxed() to be the same as writel(),
-> any barrier would technically work. On arm32, using __iowmb() would be
-> sufficient, and this can be less than a full wmb() but again it's
-> obviously not portable. These details should not be needed in the
-> documentation.
-Thanks for the clarification.
+> So KMSAN is being backported to 5.4?
 
-I think I was confused by the current wording.
-I might be wrong, but I guess Parav's motivation of this change was
-to prevent this kind of confusion from the first place.
+No, AUTOSEL is drunk and should drop the random kmsan patches for random 
+stable versions.
 
-Parav, may I suggest a reworked changelog? :
+> - Eric
 
-    The cited commit describes that when using writel(), explcit wmb()
-    is not needed. However, wmb() can be an expensive barrier depending
-    on platforms. Arch-specific writel() can use a platform-specific
-    weaker barrier needed for the guarantee mentioned in section "KERNEL
-    I/O BARRIER EFFECTS".
-
-    Current wording of:
-        Note that, when using writel(), a prior wmb() is not needed
-        to guarantee that the cache coherent memory writes have completed
-        before writing to the MMIO region.
-
-    is confusing because it can be interpreted that writel() always has
-    a barrier equivalent to the heavy-weight wmb(), which is not the case.
-
-    Hence stop mentioning wmb() and just call "a prior barrier" in the
-    notice.
-
-    commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
-
-Am I still missing something?
-
-        Thanks, Akira
-
-> 
->       Arnd
