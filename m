@@ -2,124 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA254602960
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B511B602967
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiJRKeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S229949AbiJRKf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiJRKdw (ORCPT
+        with ESMTP id S229649AbiJRKfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:33:52 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5412EB4483;
-        Tue, 18 Oct 2022 03:33:51 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A4F285C00CD;
-        Tue, 18 Oct 2022 06:33:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 18 Oct 2022 06:33:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666089230; x=1666175630; bh=urMCChgCu1u+56jJGaeezcXuErkz
-        0/nAyptCtTcKAcc=; b=EW+G5ucp3HiQ0siiSTUhTA4p8V2d8zcFZpKXOP3CzkRr
-        A04oWt1tAIiyOkHSazLT/ot/liLe4rhjuQUsnjQduyUwOhyHq6wSDRPJDg7F6f2D
-        AQIPeqRQQFKydjwF6qfPe5Hcd6TdGfuwXL4rOcxdYckg8S0eShQgg3UhT1IFuamZ
-        UieemhI47uDsk5pAGY7gB0s7ffrDin53lWz6/1WOXXFckL7SmJpQ166PALbIVjE/
-        TqwQ21BEPZ/SGTfJWIdBR35ugKolRvGm7XtPwh5+34JLZQafEeUMIWnOF0YyAnlS
-        88khAbGuyjmbdF1yCadsxvEYJCgN8bmnkKG4gLbRLQ==
-X-ME-Sender: <xms:DoFOY9NG_H_uSEcMfkaE43bD6AGuDA7hZnQzpElG_maclGjFGKCa6Q>
-    <xme:DoFOY__VhbILrmFQuP2XUj9VNOa5S3dnOECHjogetN1gwkn1t7YdJYIxX1K4WlBxv
-    MBg0gT7ZAN6iOw>
-X-ME-Received: <xmr:DoFOY8SPs6H39l3Jhoi5yrwAxlBe4Kaj8VvkB1NOKQReTKim9AQDporhxDrUPSuYc1pTcziwl8t6aJUdkMuJhtomCS6aug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvdcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfutghh
-    ihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtthgvrh
-    hnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeghfen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughosh
-    gthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:DoFOY5u6MfKuGtDUc-v7zORUgfBNwfPbsW4GtXYnSBJJwYCuUyqSfA>
-    <xmx:DoFOY1d6-3mXqAAhsytAIw2n1_fRiGYcvBU_Y1v68UXJ3x7rBAca5w>
-    <xmx:DoFOY13dF5tQfP2qVddc5U-7PKGAaRUQmjcihXv0oR2ERkHfGyS4UA>
-    <xmx:DoFOY8pE1725d-CmP5gN2yfkMaePDCefVP9oR8DSmV2G9uSn_17Obw>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Oct 2022 06:33:49 -0400 (EDT)
-Date:   Tue, 18 Oct 2022 13:33:45 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
-        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
-        miquel.raynal@bootlin.com, shawnguo@kernel.org,
-        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
-        j-keerthy@ti.com, Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v5 01/33] thermal/of: Rework the thermal device tree
- initialization
-Message-ID: <Y06BCSh+jq5Ztf+3@shredder>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-2-daniel.lezcano@linexp.org>
- <Y05/8JUU+3kLCZvb@shredder>
+        Tue, 18 Oct 2022 06:35:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CEF7C1BC;
+        Tue, 18 Oct 2022 03:35:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F193461514;
+        Tue, 18 Oct 2022 10:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E62C433C1;
+        Tue, 18 Oct 2022 10:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666089318;
+        bh=uk+2llSxw5KW7Yz/+41u4KeAVldLmNVnkBrffbF65JU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=DCwdGL2rQp3pcs2wApnbM8vvlqVQPxWhPzYImyP+rG6jJUvQy2NydTlyLM0kQcNWA
+         Jm7IKs95W9FL6/SuFVKvkclTfRIPPkdu8KexWvBFWvu4UkN3UW7Zicw1piIh5fZNwO
+         SxUAOhKuhY5b8F1jDKpvjIwnVlyPNQUxlmQsSVirqK4sqmap5L3HgQZtKxT2lsOhaN
+         SvVgS2l+Kc1rKGLrPBomjJX5DJpJKRax9IyzPTFS4rNLUGMcwjOdMnZ06D9SMzVgRC
+         FmYYrzPPX4e46esPC1HpiwU5Lc4WVSJImKlWf1b46lu0plmhp/var5O5JaXPlFWSCJ
+         Qdpy7SOGsSVYg==
+Message-ID: <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
+Subject: Re: [RFC PATCH v7 9/9] vfs: expose STATX_VERSION to userland
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, bfields@fieldses.org,
+        brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Date:   Tue, 18 Oct 2022 06:35:14 -0400
+In-Reply-To: <20221017221433.GT3600936@dread.disaster.area>
+References: <20221017105709.10830-1-jlayton@kernel.org>
+         <20221017105709.10830-10-jlayton@kernel.org>
+         <20221017221433.GT3600936@dread.disaster.area>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y05/8JUU+3kLCZvb@shredder>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 01:29:04PM +0300, Ido Schimmel wrote:
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index d4b6335ace15..43d55c29a29a 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -604,13 +604,15 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
->         if (IS_ERR(np)) {
->                 if (PTR_ERR(np) != -ENODEV)
->                         pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
-> -               return ERR_CAST(np);
-> +               ret = PTR_ERR(np);
-> +               goto out_kfree_of_ops;
->         }
->  
->         trips = thermal_of_trips_init(np, &ntrips);
->         if (IS_ERR(trips)) {
->                 pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
-> -               return ERR_CAST(trips);
-> +               ret = PTR_ERR(np);
+On Tue, 2022-10-18 at 09:14 +1100, Dave Chinner wrote:
+> On Mon, Oct 17, 2022 at 06:57:09AM -0400, Jeff Layton wrote:
+> > From: Jeff Layton <jlayton@redhat.com>
+> >=20
+> > Claim one of the spare fields in struct statx to hold a 64-bit inode
+> > version attribute. When userland requests STATX_VERSION, copy the
+> > value from the kstat struct there, and stop masking off
+> > STATX_ATTR_VERSION_MONOTONIC.
+>=20
+> Can we please make the name more sepcific than "version"? It's way
+> too generic and - we already have userspace facing "version" fields
+> for inodes that refer to the on-disk format version exposed in
+> various UAPIs. It's common for UAPI structures used for file
+> operations to have a "version" field that refers to the *UAPI
+> structure version* rather than file metadata or data being retrieved
+> from the file in question.
+>=20
+> The need for an explanatory comment like this:
+>=20
+> > +	__u64	stx_version; /* Inode change attribute */
+>=20
+> demonstrates it is badly named. If you want it known as an inode
+> change attribute, then don't name the variable "version". In
+> reality, it really needs to be an opaque cookie, not something
+> applications need to decode directly to make sense of.
+>=20
 
-Sorry, should be:
+Fair enough. I started with this being named stx_change_attr and other
+people objected. I then changed to stx_ino_version, but the "_ino"
+seemed redundant.
 
-ret = PTR_ERR(trips);
+I'm open to suggestions here. Naming things like this is hard.
 
-> +               goto out_kfree_of_ops;
->         }
->  
->         ret = thermal_of_monitor_init(np, &delay, &pdelay);
-> @@ -659,6 +661,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
->         kfree(tzp);
->  out_kfree_trips:
->         kfree(trips);
-> +out_kfree_of_ops:
-> +       kfree(of_ops);
->  
->         return ERR_PTR(ret);
->  }
+> > Update the test-statx sample program to output the change attr and
+> > MountId.
+> >=20
+> > Reviewed-by: NeilBrown <neilb@suse.de>
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  fs/stat.c                 | 12 +++---------
+> >  include/linux/stat.h      |  9 ---------
+> >  include/uapi/linux/stat.h |  6 ++++--
+> >  samples/vfs/test-statx.c  |  8 ++++++--
+> >  4 files changed, 13 insertions(+), 22 deletions(-)
+> >=20
+> > Posting this as an RFC as we're still trying to sort out what semantics
+> > we want to present to userland. In particular, this patch leaves the
+> > problem of crash resilience in to userland applications on filesystems
+> > that don't report as MONOTONIC.
+>=20
+> Firstly, if userspace wants to use the change attribute, they are
+> going to have to detect crashes themselves anyway because no fs in
+> the kernel can set the MONOTONIC flag right now and it may be years
+> before kernels/filesystems actually support it in production
+> systems.
+>=20
+
+We can turn it on today in CephFS, NFS and tmpfs. Maybe also btrfs
+(modulo the issue you point out with snapshots, of course).
+
+> But more fundamentally, I think this monotonic increase guarantee is
+> completely broken by the presence of snapshots and snapshot
+> rollbacks. If you change something, then a while later decide it
+> broke (e.g. a production system upgrade went awry) and you roll back
+> the filesystem to the pre-upgrade snapshot, then all the change
+> counters and m/ctimes are guaranteed to go backwards because they
+> will revert to the snapshot values. Maybe the filesystem can bump
+> some internal counter for the snapshot when the revert happens, but
+> until that is implemented, filesystems that support snapshots and
+> rollback can't assert MONOTONIC.
+>=20
+> And that's worse for other filesystems, because if you put them on
+> dm-thinp and roll them back, they are completely unaware of the fact
+> that a rollback happened and there's *nothing* the filesystem can do
+> about this. Indeed, snapshots are suppose to be done on clean
+> filesystems so snapshot images don't require journal recovery, so
+> any crash detection put in the filesystem recovery code to guarantee
+> MONOTONIC behaviour will be soundly defeated by such block device
+> snapshot rollbacks.
+>=20
+> Hence I think MONOTONIC is completely unworkable for most existing
+> filesystems because snapshots and rollbacks completely break the
+> underlying assumption MONOTONIC relies on: that filesystem
+> modifications always move forwards in both the time and modification
+> order dimensions....
+>=20
+> This means that monotonicity is probably not acheivable by any
+> existing filesystem and so should not ever be mentioned in the UAPI.
+> I think userspace semantics can be simplified down to "if the change
+> cookie does not match exactly, caches are invalid" combined with
+> "applications are responsible for detecting temporal discontiguities
+> in filesystem presentation at start up (e.g. after a crash, unclean
+> shutdown, restoration from backup, snapshot rollback, etc) for
+> persistent cache invalidation purposes"....
+>=20
+
+I don't think we can make any sort of blanket statement about
+monotonicity in the face of snapshots. Restoring a snapshot (or a backup
+for that matter) means restoring the filesystem to a particular point in
+time in the past. I think it's reasonable to expect that the change
+attrs may roll backward in the face of these sorts of events.
+
+> > Trond is of the opinion that monotonicity is a hard requirement, and
+> > that we should not allow filesystems that can't provide that quality to
+> > report STATX_VERSION at all.  His rationale is that one of the main use=
+s
+> > for this is for backup applications, and for those a counter that could
+> > go backward is worse than useless.
+>=20
+> From the perspective of a backup program doing incremental backups,
+> an inode with a change counter that has a different value to the
+> current backup inventory means the file contains different
+> information than what the current backup inventory holds. Again,
+> snapshots, rollbacks, etc.
+>=20
+> Therefore, regardless of whether the change counter has gone
+> forwards or backwards, the backup program needs to back up this
+> current version of the file in this backup because it is different
+> to the inventory copy.  Hence if the backup program fails to back it
+> up, it will not be creating an exact backup of the user's data at
+> the point in time the backup is run...
+>=20
+> Hence I don't see that MONOTONIC is a requirement for backup
+> programs - they really do have to be able to handle filesystems that
+> have modifications that move backwards in time as well as forwards...
+
+Rolling backward is not a problem in and of itself. The big issue is
+that after a crash, we can end up with a change attr seen before the
+crash that is now associated with a completely different inode state.
+
+The scenario is something like:
+
+- Change attr for an empty file starts at 1
+
+- Write "A" to file, change attr goes to 2
+
+- Read and statx happens (client sees "A" with change attr 2)
+
+- Crash (before last change is logged to disk)
+
+- Machine reboots, inode is empty, change attr back to 1
+
+- Write "B" to file, change attr goes to 2
+
+- Client stat's file, sees change attr 2 and assumes its cache is
+correct when it isn't (should be "B" not "A" now).
+
+The real danger comes not from the thing going backward, but the fact
+that it can march forward again after going backward, and then the
+client can see two different inode states associated with the same
+change attr value. Jumping all the change attributes forward by a
+significant amount after a crash should avoid this issue.
+--=20
+Jeff Layton <jlayton@kernel.org>
