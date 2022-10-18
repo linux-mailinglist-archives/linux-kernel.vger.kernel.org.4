@@ -2,176 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03596035E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2476035E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiJRWau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 18:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S229544AbiJRWdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 18:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJRWas (ORCPT
+        with ESMTP id S229526AbiJRWc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 18:30:48 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F941DEFF;
-        Tue, 18 Oct 2022 15:30:46 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au [49.181.106.210])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 422641102C83;
-        Wed, 19 Oct 2022 09:30:43 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1okv6g-003ckX-1i; Wed, 19 Oct 2022 09:30:42 +1100
-Date:   Wed, 19 Oct 2022 09:30:42 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, baocong.liu@unisoc.com,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
-Message-ID: <20221018223042.GJ2703033@dread.disaster.area>
-References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y0lSChlclGPkwTeA@casper.infradead.org>
- <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
- <Y017BeC64GDb3Kg7@casper.infradead.org>
- <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
- <Y04Y3RNq6D2T9rVw@casper.infradead.org>
+        Tue, 18 Oct 2022 18:32:58 -0400
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D65CBB9F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:32:56 -0700 (PDT)
+Received: from [192.168.50.220] ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id kv8oovsDcaWj1kv8ooENmQ; Wed, 19 Oct 2022 00:32:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666132375; bh=PwkAlvBRJbTSbNHckqJd3KlxkLSx6fedTB8xDPnpVAE=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=gZEGxu3Esg404PHAkA2jcGjqyiKkYfClD1fUJM8NCEI+IxA4tx6TPiTAM5yXSwEgd
+         ZCB99cPRt+5nox3ZPfqSp3ajdROeiNmwejATHk0V0E00Ssjhr90hSyE4lTkbqSy3/Z
+         EpK4nFeks3RP1CtPOOmnE1894vl7pCiu1BZlxcJbRDgq9CgbFI8hHOrKr70ztzaCQK
+         8RZkcK4bnGOQQlqR62t4XT2F1r2nT94EHaWBSbHFNXAbDqZXpFoCjn/RleDqPXspev
+         2fmGbBFWBGgekm8GKX0dgWJOWRm9APIWYw1coQaIW4NfAeJ57jpjwjMDNJs/5MKUhz
+         CVpZ3/YUW1XVA==
+Message-ID: <3fc711c8-4981-26f7-689c-549bdafa40ac@benettiengineering.com>
+Date:   Wed, 19 Oct 2022 00:32:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y04Y3RNq6D2T9rVw@casper.infradead.org>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=634f2914
-        a=j6JUzzrSC7wlfFge/rmVbg==:117 a=j6JUzzrSC7wlfFge/rmVbg==:17
-        a=kj9zAlcOel0A:10 a=Qawa6l4ZSaYA:10 a=JfrnYn6hAAAA:8 a=icsG72s9AAAA:8
-        a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=7-415B0cAAAA:8 a=FVvNlm1tYNsfbB76iTkA:9
-        a=CjuIK1q_8ugA:10 a=1CNFftbPRP8L7MoqJWF3:22 a=T89tl0cgrjxRNoSN2Dv0:22
-        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] ARM: mm: fix no-MMU ZERO_PAGE() implementation
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>
+References: <20221017233700.84918-1-giulio.benetti@benettiengineering.com>
+ <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
+ <972a3be7-4522-b4f0-adfa-6b42be56c52f@benettiengineering.com>
+ <dc5a5c40-8e96-4f91-a3c6-5a1fc8b26ad1@app.fastmail.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <dc5a5c40-8e96-4f91-a3c6-5a1fc8b26ad1@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfFqBkruL1dx6sKKjJmwREg/QP4D1HUm2sfhSlSrJ/7FDJHd7cb4eToQ71MxMvuKLJ6A+oKqW3m6thIUX4UVvmU/AeL/vrbD4y4byHmD4YNV5TyEyqg5A
+ P0GjmXT4iYfLgdE4u/DymhKutGRgiVwFtkYuUMDlNQijUpprYDr0mTYb6J9aq7CkwXZ07n0wOpK7gLab7Xlfx3WHNb9T+p6ZeEX8W9DO/xQd8jrbm1DyzcQv
+ 96nL01rJ+xzd+uQzYxHyopL6h3MXDrpNCK4f1oablr9JjrHIYxFf5dzyvGbwWZ5dt+5F8HSvSp92lyhoz/I0mMBansVAnU+sCu08XHuA9bqocsPGm8vXsZYg
+ yZ1kGQ/Uh6zMAlHqi45EBnIN3sNv4fT09PbCTaiWpQc0tN1m3qgWWm8mioTLybfucqPhgsbhMgH2rlbQHTwym1XqVziX21EArHZGZoCQsiqQ7cE6l9ZQi4uo
+ Om0mP9bSU4rijal3rpCpF+Na9902hcnRGTN3TVPSw5PpzGg+Ork30dsu0fc=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 04:09:17AM +0100, Matthew Wilcox wrote:
-> On Tue, Oct 18, 2022 at 10:52:19AM +0800, Zhaoyang Huang wrote:
-> > On Mon, Oct 17, 2022 at 11:55 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > >
-> > > On Mon, Oct 17, 2022 at 01:34:13PM +0800, Zhaoyang Huang wrote:
-> > > > On Fri, Oct 14, 2022 at 8:12 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > >
-> > > > > On Fri, Oct 14, 2022 at 01:30:48PM +0800, zhaoyang.huang wrote:
-> > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > >
-> > > > > > Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
-> > > > > > superblock's inode list. The direct reason is zombie page keeps staying on the
-> > > > > > xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
-> > > > > > and supposed could be an xa update without synchronize_rcu etc. I would like to
-> > > > > > suggest skip this page to break the live lock as a workaround.
-> > > > >
-> > > > > No, the underlying bug should be fixed.
-> > >
-> > >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > Understand. IMHO, find_get_entry actruely works as an open API dealing
-> > with different kinds of address_spaces page cache, which requires high
-> > robustness to deal with any corner cases. Take the current problem as
-> > example, the inode with fault page(refcount=0) could remain on the
-> > sb's list without live lock problem.
+On 18/10/22 20:35, Arnd Bergmann wrote:
+> On Tue, Oct 18, 2022, at 19:44, Giulio Benetti wrote:
+>> On 18/10/22 09:03, Arnd Bergmann wrote:
+>>> On Tue, Oct 18, 2022, at 1:37 AM, Giulio Benetti wrote:
+>>>> Actually in no-MMU SoCs(i.e. i.MXRT) ZERO_PAGE(vaddr) expands to
+>>
+>>> It looks like we dropped the ball on this when it came up last.
+>>> I'm also not sure when we started requiring this, any idea?
+>>
+>> No to be honest. But in my case I've met ZERO_PAGE() calling in sdhci
+>> driver. And as stated on the ML link above:
+>> ```
+>> But I wonder if it's safe for noMMU architectures to go on without a
+>> working ZERO_PAGE(0).  It has uses scattered throughout the tree, in
+>> drivers, fs, crypto and more, and it's not at all obvious (to me) that
+>> they all depend on CONFIG_MMU.
+>> ```
+>> And I've found this driver that requires it and probably is not the last
+>> since imxrt support is not complete.
+>>
+>>> I can see that microblaze-nommu used BUG() in ZERO_PAGE(), so at
+>>> whenever microblaze last worked, we clearly did not call it.
+>>
+>> This probably means that microblaze-nommu doesn't use drivers or other
+>> subsystems that require ZERO_PAGE().
 > 
-> But it's a corner case that shouldn't happen!  What else is going on
-> at the time?  Can you reproduce this problem easily?  If so, how?
+> To clarify: microblaze-nommu support was removed two years ago,
+> and probably was already broken for a while before that.
+> 
+>>> In addition to your fix, I see that arm is the only architecture
+>>> that defines 'empty_zero_page' as a pointer to the page, when
+>>> everything else just makes it a pointer to the data itself,
+>>> or an 'extern char empty_zero_page[]' array, which we may want
+>>> to change for consistency.
+>>
+>> I was about doing it, but then I tought to move one piece at a time.
+> 
+> Right, it would definitely be a separate patch, but it
+> can be a series of two patches. We probably wouldn't need to
+> backport the second patch that turns it into a static allocation.
 
-I've been seeing this livelock, too. The reproducer is,
-unfortunately, something I can't share - it's a massive program that
-triggers a data corruption I'm working on solving.
+I've sent the patchset of 2:
+https://lore.kernel.org/all/20221018222503.90118-1-giulio.benetti@benettiengineering.com/T/#t
 
-Now that I've
-mostly fixed the data corruption, long duration test runs end up
-livelocking in page cache lookup after several hours.
+I'm wondering if it makes sense to send a patchset for all those
+architectures that have only one zero page. I've seen that for example
+loongarch has more than one. But for the others I find the array
+approach more linear, with less code all around and a bit faster in term
+of code execution(of course really few, but better than nothing) since
+that array is in .bss, so it will be zeroed earlier during a long
+"memset" where assembly instructions for zeroing 8 bytes at a time are
+used. What about this?
 
-The test is effectively writing a 100MB file with multiple threads
-doing reverse adjacent racing 1MB unaligned writes. Once the file is
-written, it is then mmap()d and read back from the filesystem for
-verification.
+>> But yes, I can modify accordingly. That way we also avoid the early
+>> allocation in pagint_init() since it would be a .bss array.
+> 
+>>> There are three references to empty_zero_page in architecture
+>>> independent code, and while we don't seem to use any of them
+>>> on Arm, they would clearly be wrong if we did:
+>>>
+>>> drivers/acpi/scan.c:#define INVALID_ACPI_HANDLE ((acpi_handle)empty_zero_page)
+>>> drivers/spi/spi-fsl-cpm.c:      mspi->dma_dummy_tx = dma_map_single(dev, empty_zero_page, PAGE_SIZE,
+>>> include/linux/raid/pq.h:# define raid6_empty_zero_page empty_zero_page
+>>
+>> For them I can send patches to substitute with PAGE_ZERO(0) correctly
+>> adapted.
+>>
+>> What do you think?
+> 
+> That sounds like a good idea as well.
 
-THis is then run with tens of processes concurrently, and then under
-a massively confined memcg (e.g. 32 processes/files are run in a
-memcg with only 200MB of memory allowed). This causes writeback,
-readahead and memory reclaim to race with incoming mmap read faults
-and writes.  The livelock occurs on file verification and it appears
-to be an interaction with readahead thrashing.
+I've just sent a patchset for this:
+https://lore.kernel.org/all/20221018215755.33566-1-giulio.benetti@benettiengineering.com/T/#t
 
-On my test rig, the physical read to write ratio is at least 20:1 -
-with 32 processes running, the 5s IO rates are:
-
-Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
-dm-0          52187.20      3677.42      1345.92         0.00      18387       6729          0
-dm-0          62865.60      5947.29         0.08         0.00      29736          0          0
-dm-0          62972.80      5911.20         0.00         0.00      29556          0          0
-dm-0          59803.00      5516.72       133.47         0.00      27583        667          0
-dm-0          63068.20      5292.34       511.52         0.00      26461       2557          0
-dm-0          56775.60      4184.52      1248.38         0.00      20922       6241          0
-dm-0          63087.40      5901.26        43.77         0.00      29506        218          0
-dm-0          62769.00      5833.97        60.54         0.00      29169        302          0
-dm-0          64810.20      5636.13       305.63         0.00      28180       1528          0
-dm-0          65222.60      5598.99       349.48         0.00      27994       1747          0
-dm-0          62444.00      4887.05       926.67         0.00      24435       4633          0
-dm-0          63812.00      5622.68       294.66         0.00      28113       1473          0
-dm-0          63482.00      5728.43       195.74         0.00      28642        978          0
-
-This is reading and writing the same amount of file data at the
-application level, but once the data has been written and kicked out
-of the page cache it seems to require an awful lot more read IO to
-get it back to the application. i.e. this looks like mmap() is
-readahead thrashing severely, and eventually it livelocks with this
-sort of report:
-
-[175901.982484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[175901.985095] rcu:    Tasks blocked on level-1 rcu_node (CPUs 0-15): P25728
-[175901.987996]         (detected by 0, t=97399871 jiffies, g=15891025, q=1972622 ncpus=32)
-[175901.991698] task:test_write      state:R  running task     stack:12784 pid:25728 ppid: 25696 flags:0x00004002
-[175901.995614] Call Trace:
-[175901.996090]  <TASK>
-[175901.996594]  ? __schedule+0x301/0xa30
-[175901.997411]  ? sysvec_apic_timer_interrupt+0xb/0x90
-[175901.998513]  ? sysvec_apic_timer_interrupt+0xb/0x90
-[175901.999578]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-[175902.000714]  ? xas_start+0x53/0xc0
-[175902.001484]  ? xas_load+0x24/0xa0
-[175902.002208]  ? xas_load+0x5/0xa0
-[175902.002878]  ? __filemap_get_folio+0x87/0x340
-[175902.003823]  ? filemap_fault+0x139/0x8d0
-[175902.004693]  ? __do_fault+0x31/0x1d0
-[175902.005372]  ? __handle_mm_fault+0xda9/0x17d0
-[175902.006213]  ? handle_mm_fault+0xd0/0x2a0
-[175902.006998]  ? exc_page_fault+0x1d9/0x810
-[175902.007789]  ? asm_exc_page_fault+0x22/0x30
-[175902.008613]  </TASK>
-
-Given that filemap_fault on XFS is probably trying to map large
-folios, I do wonder if this is a result of some kind of race with
-teardown of a large folio...
-
-There is a very simple corruption reproducer script that has been
-written, but I haven't been using it. I don't know if long term
-running of the script here:
-
-https://lore.kernel.org/linux-xfs/d00aff43-2bdc-0724-1996-4e58e061ecfd@redhat.com/
-
-will trigger the livelock as the verification step is
-significantly different, but it will give you insight into the
-setup of the environment that leads to the livelock. Maybe you could
-replace the md5sum verification with a mmap read with xfs_io to
-simulate the fault load that seems to lead to this issue...
-
-Cheers,
-
-Dave.
+Best regards
 -- 
-Dave Chinner
-david@fromorbit.com
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
