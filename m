@@ -2,388 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD70602A5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C64602A53
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiJRLhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S230216AbiJRLgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiJRLgt (ORCPT
+        with ESMTP id S229991AbiJRLfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:36:49 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2EC8768E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666092956; x=1697628956;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=I7mUpTnORPvv75eTCJTRzwfjLc/N5wp2MuStyApPKRw=;
-  b=iIKa+IywDQuadHIW7b3wKvJHuWHinekRHjR0670pSaQaUZqdu+NHVfKz
-   0RdEN7R4c2bUOyOKGt5/zRZg+sl0uVmy5KIzuDqpt+xhiJGjlde8FMVq8
-   85/gNztgeLxuBbQaV0iA8xTbFNEOl/pYvLbSoVNiEKj1gv+6wvoiQsEHb
-   2W6gPh8GYh2r861sWbLVk5eayOnh0tsvWKr9nmWS2F4utsqyRe9fyMGXX
-   SackRN9NPOYJszgE6lY1RwvDWNBbJbG22HKGccmV0Edg2EJKYCrdhIijC
-   kniM9N7c1BD7r8SRMvV0MZJqdmYomcv7tAyintrlquu/YBlsljr9Mwd+4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="392382163"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="392382163"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:34:24 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="691763237"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="691763237"
-Received: from vhavel-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.51.115])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:34:19 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 91A72104BAD; Tue, 18 Oct 2022 14:34:04 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Weihong Zhang <weihong.zhang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv10 15/15] selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVM test cases for linear-address masking
-Date:   Tue, 18 Oct 2022 14:33:58 +0300
-Message-Id: <20221018113358.7833-16-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
-References: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
+        Tue, 18 Oct 2022 07:35:30 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2135.outbound.protection.outlook.com [40.107.105.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44A285AB3;
+        Tue, 18 Oct 2022 04:35:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jQf4RWMoHhFsjURPR0iNrZ0oHFwRjXwYqK1mtKXk0Oua17atVfJkBNgd3q5BzniUc/w7i8v7QJU6MoVJ8pE+7VH5mxRAbdUGe+C8XpHG/DC37QBgfI6F6WiQPoFZbC9SlvaQbeIXIVyEi+cSFWovhUxc2aT1hwpbvwQaq+rO0dwp1knzqD7rXA0cF4cJh3eXe6DCCdSfRzBg9on5G/wzew3vcCm0zHPURYVnBEBcs6s5ZZIRAEMkrxyonAUU1nDXPWa8YT8iT4SBrgDaO/eKeG8zDQ6f4Z8Qa1wOeDonYit8xzuoqB08FnWx+6KEGYXQ9Y9MYBOs6skkiYMm9yHssA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xYf7+7ywWhm8+oqS+1Czes95nmvSVKWaEjfRgqkTfac=;
+ b=n0dQhj+EWWn4jtzyTloRJEfl7q7Hm+XfrxCvHnk2rJOkABPKJzoeEnlGIMyvdzAe7tC3RLrMSMVxgALjlz2UQTi99zel0d2uWy8niJH6qR5psWBLQi9dfiwRt3WUyn0GWeasmFgotC/uNpqipZwy78Je3sn6veW8hJ51Z/qPTId1B9Xkm/hDkrS98xV6R+7REePbonz+/AquhMWJ8iX/Q5sEtXmu49tXR3q9+54oyVSryDDXQJtTSia2y/EdLVDFMw2O2y3LhnULfGpkqEmN1cAuA0/AIVvlvIMZGtG5izw4nitHNjZEErRl2OPRALow9/mRAW3DwPlL5dT4vV4/rA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xYf7+7ywWhm8+oqS+1Czes95nmvSVKWaEjfRgqkTfac=;
+ b=ZsILeEAAikZtF7bYuXyzUq9FyHKf+3eCwj1PMRaxSK7NCx3Bf4UYBaf0ViR7YGMxSwpouulPCjS/6UFm5zqUNmA5gjvmGZErwrSPV0kygj3BOXVoGTxi3S7t8LoSRAv150165+2sE4EdvvnbcwVUWGB+d1t3izwYoM3liV3D9pg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
+ by AM8P190MB1010.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:1c7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
+ 2022 11:34:30 +0000
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::a621:b61f:de56:b8]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::a621:b61f:de56:b8%7]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
+ 11:34:29 +0000
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Elad Nachman <enachman@marvell.com>,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: [PATCH v2] usb: ehci-orion: Extend DMA mask to 64 bit for AC5 platform
+Date:   Tue, 18 Oct 2022 14:34:00 +0300
+Message-Id: <20221018113401.32229-1-vadym.kochan@plvision.eu>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: FR0P281CA0014.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:15::19) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:802:38::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|AM8P190MB1010:EE_
+X-MS-Office365-Filtering-Correlation-Id: 750b35ba-bd96-4c2b-d3d6-08dab0fcb822
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hEyFGo+Id9BiO3p2lIzlrO5095cthIM0CZUn9xOvVzTqgTO7iFsXRIDmprPtAxhiGuDY5Oina3RUzX5lMfx2zoqLSY8rXHjweVyzELmmFD0wE5+1aeMYYVOp56jGjnSxFx1WDtmwgQjULs632keG4gTylBA/3hMYtUJmxR9sMoY3hf6j2gemfZ5N1l9zuzudZWHwvFIV9seJazM78yjCfIpJoZ03RHMxX8TMWZ6o8NCm8843kbJycfJLbPRy5JzFSaNuQY2tUDAr52X6lY/9aANeCJl4r0iOfxt9nVsOeWTFJGEeU6q5pwy7RWL3BojLhlMYmG6Z6sxIjPQVqjXCiwtQ3U3Hk1pX30nDC/NeC/nOrCFwl9qgp0DVAaI9++wF7AOtzyXq73tILKIem3jCwfw/PkEi1haRTg6Eeud5Da5nIxogtbKDd8hrXvCh0VNu/wxrWyY7apEBs5w6wfcrToo6YXwQSNjjGrpkh8J4HvxHY8ZRUUOJyhctuuLotAGYCPK24NP6VAqnXth8nUsGR0wn5Su8xdUZYxBLixHeB18Dt1v0NV9iUDoe0GmW5V2eT8O2FWgBm/C3oJVe+mCzP3u3gn56a/VY/yYDMEv5/P42uxbbRjgaU7Uwj6Qj+5/YyTKTff1J8XTbS0ij++NrqMuy0ni/LmmyPCvm948llO5sGFNCz3/tOX2USnj7eV8wbs/MUz7amGeDb3EjwUcrTO+TTnEE4HFefHbTQ/ztclA+IqFjKJlKOuD8Un60e7JJ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(34036004)(366004)(376002)(346002)(39830400003)(136003)(396003)(451199015)(6486002)(83380400001)(2616005)(1076003)(186003)(41300700001)(86362001)(38350700002)(38100700002)(2906002)(5660300002)(44832011)(4326008)(52116002)(6666004)(41320700001)(8676002)(107886003)(508600001)(6512007)(110136005)(26005)(6506007)(316002)(66556008)(66476007)(66946007)(8936002)(36756003)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zFtLR2SwSJMpaDfyKLkA2dG/3kFses4w//MeSRFjRBhpOKiNM8uLuwgvOj3b?=
+ =?us-ascii?Q?uJWX/WC5szjbaFyfCLAybDKHqIBf21PomtefnjwNl8vmTfzng25u/1iTLfML?=
+ =?us-ascii?Q?ejHShQ9Ev9rPZnS51KT6f6F6+zkY2RTLPG+n8EVoYZbBDGi0ScnQG+VrhJZW?=
+ =?us-ascii?Q?OzbB9LvJyKMFkHw36p9hx9MHpYlp5IEJWIGFNW95gjQiPWbjqzQ4kHJbW2tL?=
+ =?us-ascii?Q?UqOVT5iVQcs5puSxrZW0kmgVZNRRFVlkFV28nFCGjyLrA1xgDp+KcVT3eiWi?=
+ =?us-ascii?Q?eMko8pNtVHakvg6HcPjzirkSwePjtr8keQX/xjZZS56iT8a9pr2RVSrbISd6?=
+ =?us-ascii?Q?pvW1e1bxbcxCaqrQE17hPV49FCVf7fVG3VOJNrZNvG4pUtuWXQmx3DQjzbDj?=
+ =?us-ascii?Q?WYyKZaiDKsHsRRsXjeMNG0Noi3mv+NcZhrA5EPfbdhtwymjjzy1kIdxCe+H/?=
+ =?us-ascii?Q?tWheiX5dXwzDf4ODDFr+dEYxi0gv1rhNiSvR15eQ4n9RmA7W26n1tvG/Qqts?=
+ =?us-ascii?Q?Q7JYJ9zY7Ni9a43xkBvSXZ6mfNlW0lyLZ7gLOATZIFYkjhpwb6sfZ5b4HCf6?=
+ =?us-ascii?Q?fPnTeq5E7svfwgh5jQ/33nnnD1az1mRZtAaoN3BM7zCDNZJFHd1bBRjG/SBW?=
+ =?us-ascii?Q?+/vzh7LYxotgyPPPJDxcHxSIcw/LzOCNeX7/QUPHJN+aX0VeH/6n4c0Iww1m?=
+ =?us-ascii?Q?tb11UzXgpw7PGSsXe50JwrzDMwkcj/1cquIUQpQIrhMLRirPOALylh0lFf1h?=
+ =?us-ascii?Q?z+CMKfGDWfDRdCPv+l6rG1Y/SAwk18F9iniJcNNiftEyPa4cJmzthex5EV/q?=
+ =?us-ascii?Q?qLTJ0QDK2fkWAlQlxwOK+WHyND1ME73NIIZ1osAnFsJaU6nlT6Gdi6hp+C2F?=
+ =?us-ascii?Q?GwAR7Jq3Y70GyD4OyWZxI0kha8Vcs+TM6nxWkytbASrLlQ9+btiJqsm25DaN?=
+ =?us-ascii?Q?zwqnTS/8sDkqIVJpbCr2MPLOp+LgGP4ybgryLSzYncCqPU1EYSOMwSMES4Hd?=
+ =?us-ascii?Q?I15P4P7JGbwQ6boQn8SQULgcVrnHthYiZDRo5pS9yI12FxOxCXhMITG7ztVg?=
+ =?us-ascii?Q?baBRz53fYyfptfMAXgYirQ5QwjthZEnuQFUH67qHfKZffIeXsbW0JlBxD2W+?=
+ =?us-ascii?Q?EcmBCHtrORVZj8rIRIisAHG+Ypla6YuMtOfwmxI8whCXJh7lJrosz9oUtQpT?=
+ =?us-ascii?Q?CrIiuUuuaVnH1ocgV2dGmkfxUsDdImSeiw65GjnYfZE6PI/KsMIIQXj+TD46?=
+ =?us-ascii?Q?5IIOqsgaMla2bhKG4xdLS7o2gNdCQOu9DAfj2Y84uzJf/OPvR8RzwXZMtwu5?=
+ =?us-ascii?Q?sZmMass+fATLY3puhvR6lHgpqEwJxKFqAGYtrCVxPSGh9xWPtu6NQqLWr6QL?=
+ =?us-ascii?Q?qZ+plNp8n2dX210OQ2Mveq5NR7nix0Hu5dH6UVSmV5L1XWaa+jgfR4bw/qIT?=
+ =?us-ascii?Q?HpgBzG9HXeBk/ZkhKzoU9ZOv7F9krQOCuzQuy7R0udyVurjAhFhWA0pA5h+4?=
+ =?us-ascii?Q?QNTqVFs6Ht4FyyJ1W2tyXPjS7f4Hu8Pbfwt6LvYk+12XcnyeuLBS/LZMyl65?=
+ =?us-ascii?Q?cUbfcP1VDg/5fbLGW+FqPP1Vr48SUY8Nsd+y0wmJNnDHPesevB3UYWQmL2mp?=
+ =?us-ascii?Q?Sw=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 750b35ba-bd96-4c2b-d3d6-08dab0fcb822
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 11:34:29.6227
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tNDB52TZm/8z5wK11whZcU9iA0XF9zKu0Emd9/KLMdVMHLPmRH+0CknIStlSsfzWJQpHpaoQvjAFAuHApYwnRZnwrBpROPV2bhmaI3hunCU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8P190MB1010
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weihong Zhang <weihong.zhang@intel.com>
+From: Elad Nachman <enachman@marvell.com>
 
-By default do not allow to enable both LAM and use SVM in the same
-process.
-The new ARCH_FORCE_TAGGED_SVM arch_prctl() overrides the limitation.
+AC5 is a 64-bit platform so extend the dma mask accordingly.
 
-Add new test cases for the new arch_prctl:
-Defore using ARCH_FORCE_TAGGED_SVM, should not allow to enable LAM/SVM
-coexisting. the test cases should be negative.
+Checked this mask on armv7 a38x SoC (which has this
+USB controller) platform with simple fs ops on the storage device
+but on older 4.14 Linux version.
 
-The test depands on idxd driver and iommu. before test, need add
-"intel_iommu=on,sm_on" in kernel command line and insmod idxd driver.
-
-Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Elad Nachman <enachman@marvell.com>
+Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
 ---
- tools/testing/selftests/x86/lam.c | 237 +++++++++++++++++++++++++++++-
- 1 file changed, 235 insertions(+), 2 deletions(-)
+v2:
+   Add missing description.
 
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index cfc9073c0262..4b9da41de5c8 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -30,6 +30,7 @@
- #define ARCH_GET_UNTAG_MASK     0x4001
- #define ARCH_ENABLE_TAGGED_ADDR 0x4002
- #define ARCH_GET_MAX_TAG_BITS   0x4003
-+#define ARCH_FORCE_TAGGED_SVM	0x4004
+ drivers/usb/host/ehci-orion.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
+index a3454a3ea4e0..c6205abebbdf 100644
+--- a/drivers/usb/host/ehci-orion.c
++++ b/drivers/usb/host/ehci-orion.c
+@@ -230,7 +230,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
+ 	 * set. Since shared usb code relies on it, set it here for
+ 	 * now. Once we have dma capability bindings this can go away.
+ 	 */
+-	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
++	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	if (err)
+ 		goto err;
  
- /* Specified test function bits */
- #define FUNC_MALLOC             0x1
-@@ -38,8 +39,9 @@
- #define FUNC_SYSCALL            0x8
- #define FUNC_URING              0x10
- #define FUNC_INHERITE           0x20
-+#define FUNC_PASID              0x40
- 
--#define TEST_MASK               0x3f
-+#define TEST_MASK               0x7f
- 
- #define LOW_ADDR                (0x1UL << 30)
- #define HIGH_ADDR               (0x3UL << 48)
-@@ -55,11 +57,19 @@
- #define URING_QUEUE_SZ 1
- #define URING_BLOCK_SZ 2048
- 
-+/* Pasid test define */
-+#define LAM_CMD_BIT 0x1
-+#define PAS_CMD_BIT 0x2
-+#define SVM_CMD_BIT 0x4
-+
-+#define PAS_CMD(cmd1, cmd2, cmd3) (((cmd3) << 8) | ((cmd2) << 4) | ((cmd1) << 0))
-+
- struct testcases {
- 	unsigned int later;
- 	int expected; /* 2: SIGSEGV Error; 1: other errors */
- 	unsigned long lam;
- 	uint64_t addr;
-+	uint64_t cmd;
- 	int (*test_func)(struct testcases *test);
- 	const char *msg;
- };
-@@ -556,7 +566,7 @@ int do_uring(unsigned long lam)
- 	struct file_io *fi;
- 	struct stat st;
- 	int ret = 1;
--	char path[PATH_MAX];
-+	char path[PATH_MAX] = {0};
- 
- 	/* get current process path */
- 	if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
-@@ -852,6 +862,226 @@ static void cmd_help(void)
- 	printf("\t-h: help\n");
- }
- 
-+/* Check for file existence */
-+uint8_t file_Exists(const char *fileName)
-+{
-+	struct stat buffer;
-+
-+	uint8_t ret = (stat(fileName, &buffer) == 0);
-+
-+	return ret;
-+}
-+
-+/* Sysfs idxd files */
-+const char *dsa_configs[] = {
-+	"echo 1 > /sys/bus/dsa/devices/dsa0/wq0.1/group_id",
-+	"echo shared > /sys/bus/dsa/devices/dsa0/wq0.1/mode",
-+	"echo 10 > /sys/bus/dsa/devices/dsa0/wq0.1/priority",
-+	"echo 16 > /sys/bus/dsa/devices/dsa0/wq0.1/size",
-+	"echo 15 > /sys/bus/dsa/devices/dsa0/wq0.1/threshold",
-+	"echo user > /sys/bus/dsa/devices/dsa0/wq0.1/type",
-+	"echo MyApp1 > /sys/bus/dsa/devices/dsa0/wq0.1/name",
-+	"echo 1 > /sys/bus/dsa/devices/dsa0/engine0.1/group_id",
-+	"echo dsa0 > /sys/bus/dsa/drivers/idxd/bind",
-+	/* bind files and devices, generated a device file in /dev */
-+	"echo wq0.1 > /sys/bus/dsa/drivers/user/bind",
-+};
-+
-+/* DSA device file */
-+const char *dsaDeviceFile = "/dev/dsa/wq0.1";
-+/* file for io*/
-+const char *dsaPasidEnable = "/sys/bus/dsa/devices/dsa0/pasid_enabled";
-+
-+/*
-+ * DSA depends on kernel cmdline "intel_iommu=on,sm_on"
-+ * return pasid_enabled (0: disable 1:enable)
-+ */
-+int Check_DSA_Kernel_Setting(void)
-+{
-+	char command[256] = "";
-+	char buf[256] = "";
-+	char *ptr;
-+	int rv = -1;
-+
-+	snprintf(command, sizeof(command) - 1, "cat %s", dsaPasidEnable);
-+
-+	FILE *cmd = popen(command, "r");
-+
-+	if (cmd) {
-+		while (fgets(buf, sizeof(buf) - 1, cmd) != NULL);
-+
-+		pclose(cmd);
-+		rv = strtol(buf, &ptr, 16);
-+	}
-+
-+	return rv;
-+}
-+
-+/*
-+ * Config DSA's sysfs files as shared DSA's WQ.
-+ * Generated a device file /dev/dsa/wq0.1
-+ * Return:  0 OK; 1 Failed; 3 Skip(SVM disabled).
-+ */
-+int Dsa_Init_Sysfs(void)
-+{
-+	uint len = ARRAY_SIZE(dsa_configs);
-+	const char **p = dsa_configs;
-+
-+	if (file_Exists(dsaDeviceFile) == 1)
-+		return 0;
-+
-+	/* check the idxd driver */
-+	if (file_Exists(dsaPasidEnable) != 1) {
-+		printf("Please make sure idxd driver was loaded\n");
-+		return 3;
-+	}
-+
-+	/* Check SVM feature */
-+	if (Check_DSA_Kernel_Setting() != 1) {
-+		printf("Please enable SVM.(Add intel_iommu=on,sm_on in kernel cmdline)\n");
-+		return 3;
-+	}
-+
-+	/* Check the idxd device file on /dev/dsa/ */
-+	for (int i = 0; i < len; i++) {
-+		if (system(p[i]))
-+			return 1;
-+	}
-+
-+	/* After config, /dev/dsa/wq0.1 should be generated */
-+	return (file_Exists(dsaDeviceFile) != 1);
-+}
-+
-+/*
-+ * Open DSA device file, triger API: iommu_sva_alloc_pasid
-+ */
-+void *allocate_dsa_pasid(void)
-+{
-+	int fd;
-+	void *wq;
-+
-+	fd = open(dsaDeviceFile, O_RDWR);
-+	if (fd < 0) {
-+		perror("open");
-+		return MAP_FAILED;
-+	}
-+
-+	wq = mmap(NULL, 0x1000, PROT_WRITE,
-+			   MAP_SHARED | MAP_POPULATE, fd, 0);
-+	if (wq == MAP_FAILED)
-+		perror("mmap");
-+
-+	return wq;
-+}
-+
-+int set_force_svm(void)
-+{
-+	int ret = 0;
-+
-+	ret = syscall(SYS_arch_prctl, ARCH_FORCE_TAGGED_SVM);
-+
-+	return ret;
-+}
-+
-+int handle_pasid(struct testcases *test)
-+{
-+	uint tmp = test->cmd;
-+	uint runed = 0x0;
-+	int ret = 0;
-+	void *wq = NULL;
-+
-+	ret = Dsa_Init_Sysfs();
-+	if (ret != 0)
-+		return ret;
-+
-+	for (int i = 0; i < 3; i++) {
-+		int err = 0;
-+
-+		if (tmp & 0x1) {
-+			/* run set lam mode*/
-+			if ((runed & 0x1) == 0)	{
-+				err = set_lam(LAM_U57_BITS);
-+				runed = runed | 0x1;
-+			} else
-+				err = 1;
-+		} else if (tmp & 0x4) {
-+			/* run force svm */
-+			if ((runed & 0x4) == 0)	{
-+				err = set_force_svm();
-+				runed = runed | 0x4;
-+			} else
-+				err = 1;
-+		} else if (tmp & 0x2) {
-+			/* run allocate pasid */
-+			if ((runed & 0x2) == 0) {
-+				runed = runed | 0x2;
-+				wq = allocate_dsa_pasid();
-+				if (wq == MAP_FAILED)
-+					err = 1;
-+			} else
-+				err = 1;
-+		}
-+
-+		ret = ret + err;
-+		if (ret > 0)
-+			break;
-+
-+		tmp = tmp >> 4;
-+	}
-+
-+	if (wq != MAP_FAILED && wq != NULL)
-+		if (munmap(wq, 0x1000))
-+			printf("munmap failed %d\n", errno);
-+
-+	if (runed != 0x7)
-+		ret = 1;
-+
-+	return (ret != 0);
-+}
-+
-+/*
-+ * Pasid test depends on idxd and SVM, kernel should enable iommu and sm.
-+ * command line(intel_iommu=on,sm_on)
-+ */
-+static struct testcases pasid_cases[] = {
-+	{
-+		.expected = 1,
-+		.cmd = PAS_CMD(LAM_CMD_BIT, PAS_CMD_BIT, SVM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: [Negative] Execute LAM, PASID, SVM in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(LAM_CMD_BIT, SVM_CMD_BIT, PAS_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute LAM, SVM, PASID in sequence\n",
-+	},
-+	{
-+		.expected = 1,
-+		.cmd = PAS_CMD(PAS_CMD_BIT, LAM_CMD_BIT, SVM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: [Negative] Execute PASID, LAM, SVM in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(PAS_CMD_BIT, SVM_CMD_BIT, LAM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute PASID, SVM, LAM in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(SVM_CMD_BIT, LAM_CMD_BIT, PAS_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute SVM, LAM, PASID in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(SVM_CMD_BIT, PAS_CMD_BIT, LAM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute SVM, PASID, LAM in sequence\n",
-+	},
-+};
-+
- int main(int argc, char **argv)
- {
- 	int c = 0;
-@@ -910,6 +1140,9 @@ int main(int argc, char **argv)
- 	if (tests & FUNC_INHERITE)
- 		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
- 
-+	if (tests & FUNC_PASID)
-+		run_test(pasid_cases, ARRAY_SIZE(pasid_cases));
-+
- 	ksft_set_plan(tests_cnt);
- 
- 	return ksft_exit_pass();
 -- 
-2.38.0
+2.17.1
 
