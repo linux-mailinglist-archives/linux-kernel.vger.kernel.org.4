@@ -2,96 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17932602702
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2ABE602705
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiJRIe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S229945AbiJRIfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJRIey (ORCPT
+        with ESMTP id S229633AbiJRIfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:34:54 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03D6D2FC1C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:34:49 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.162.98.155])
-        by mail-app4 (Coremail) with SMTP id cS_KCgC3294QZU5jXctcBw--.7796S2;
-        Tue, 18 Oct 2022 16:34:32 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        paskripkin@gmail.com, gregkh@linuxfoundation.org, martin@kaiser.cx,
-        straube.linux@gmail.com, kuba@kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] drivers: staging: r8188eu: Fix sleep-in-atomic-context bug in rtw_join_timeout_handler
-Date:   Tue, 18 Oct 2022 16:34:24 +0800
-Message-Id: <20221018083424.79741-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgC3294QZU5jXctcBw--.7796S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZrW5Gw1xurW8tr1kCryDWrg_yoWkKFXEgr
-        Z2qF47Zr1kAFn7Jw15AanIvrySva1UWF40q3yvgFWaq3yUJayxXrn2grWDCF15Gay7AF9x
-        AF1vgw1rAr1xAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbs8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl6s0DM28EF7xvwVC2z280
-        aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07
-        x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18
-        McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-        1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
-        ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIHAVZdtb+JnwAUsF
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 04:35:16 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D7876777
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:35:11 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bu30so22277271wrb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=irjEodZoDWyqh+myKZC6Ercv4pu3++KsqjUWNNDJUpE=;
+        b=JPvqqXowX1wb/VJFyzoCz3lQa4JJH5ObSlbB4B0FMj9dt6WE0Kd1kJ3CmKi02AcCo3
+         8gw8/mf2hMix3EFWeSmSLIIr+IXTqq7q6uRvTZfeIRNjMJr8rkWpUi8n1kntqaCPleY1
+         BP9IJab7Y0EDsK7xTKSBhlah5agbyrTpl2dAqvBh8IaKEiXDGbub0JrVFoTueFbkXrML
+         I70KbL+aC7IOfVXj9DLM1xR2o2FllF+p9ZNQwHJY0xwAcMqbgVHx8rXHoso3+dBsQ/OS
+         +UacA5MFyJh3bMj9MkdT3Dnf0dD1isxZhKB96CfTk2qyVBtPghDyc72IvMYiQDpQhpNZ
+         CQXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=irjEodZoDWyqh+myKZC6Ercv4pu3++KsqjUWNNDJUpE=;
+        b=ova0eqjGxeLEfo+1HGU8XNdra7rlae54vN6+pGDJwLjnAmLxDR8SnYY/MjIoYI6Mt1
+         0mM9Ru+tHs8tXnwoFwFg9NRFY51UQ1d0CZ1rAPczeBplIgUb3V+BG1A3o/BhtpIyyqhm
+         AdJV/z3YJdINUYQ2EsMeuSTJvD0Xgog5ShMM+fIRBbVykWtKofNwjJCdkQOoqOMHvbhR
+         x8eQkWkXJMmv1tPje3r2jFMxC2+Fu0fV7rXMK0ZhOZcyV9lZVxKQ+UDmWPdiYxC4RVXW
+         inSOJRiRlm+ltRW12F6+7/99+2A7OFrCG/E2nvAUvnPUkw+s5NdHmU3WeuK+jflZ6RbD
+         oJzw==
+X-Gm-Message-State: ACrzQf0jVNFjyKiqTJ9VFEgm7duaXWBInsGOTPuphvYaaDj42RX9Oapo
+        x7ytb5MxdjFGQ0xml3pE42Hygg==
+X-Google-Smtp-Source: AMsMyM58ioqGoCbBfImW8eqHlvEj78w0cBupGkEntr7jeLeD6WzEB9OB6IlXe5bzqWRzQ4y+5kArCA==
+X-Received: by 2002:a05:6000:154e:b0:230:45ad:fb87 with SMTP id 14-20020a056000154e00b0023045adfb87mr1163550wry.270.1666082109826;
+        Tue, 18 Oct 2022 01:35:09 -0700 (PDT)
+Received: from [192.168.79.175] (93.red-88-29-179.dynamicip.rima-tde.net. [88.29.179.93])
+        by smtp.gmail.com with ESMTPSA id bl13-20020adfe24d000000b00228de351fc0sm10301823wrb.38.2022.10.18.01.35.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 01:35:09 -0700 (PDT)
+Message-ID: <ab62f6fc-10f4-a353-5c17-8fec82eea662@linaro.org>
+Date:   Tue, 18 Oct 2022 10:35:07 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH 06/13] mips: ptrace: user_regset_copyin_ignore() always
+ returns 0
+Content-Language: en-US
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>
+References: <20221014212235.10770-1-s.shtylyov@omp.ru>
+ <20221014212235.10770-7-s.shtylyov@omp.ru>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221014212235.10770-7-s.shtylyov@omp.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rtw_join_timeout_handler() is a timer handler that
-runs in atomic context, but it could call msleep().
-As a result, the sleep-in-atomic-context bug will happen.
-The process is shown below:
+On 14/10/22 23:22, Sergey Shtylyov wrote:
+> user_regset_copyin_ignore() always returns 0, so checking its result seems
+> pointless -- don't do this anymore...
+> 
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> ---
+>   arch/mips/kernel/ptrace.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
 
-     (atomic context)
-rtw_join_timeout_handler
- _rtw_join_timeout_handler
-  rtw_do_join
-   rtw_select_and_join_from_scanned_queue
-    rtw_indicate_disconnect
-     rtw_lps_ctrl_wk_cmd
-      lps_ctrl_wk_hdl
-       LPS_Leave
-        LPS_RF_ON_check
-         msleep //sleep in atomic context
-
-Fix by removing msleep() and replacing with mdelay().
-
-Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/staging/r8188eu/core/rtw_pwrctrl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-index 870d81735b8..5290ac36f08 100644
---- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-+++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-@@ -273,7 +273,7 @@ static s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
- 			err = -1;
- 			break;
- 		}
--		msleep(1);
-+		mdelay(1);
- 	}
- 
- 	return err;
--- 
-2.17.1
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
