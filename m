@@ -2,89 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41E1602DDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A0E602DC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiJROEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        id S231297AbiJROCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiJROEO (ORCPT
+        with ESMTP id S230108AbiJROCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:04:14 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED10D03A9;
-        Tue, 18 Oct 2022 07:04:12 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B14902139A8;
-        Tue, 18 Oct 2022 16:04:10 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7B6B621399A;
-        Tue, 18 Oct 2022 16:04:10 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 5A671180226C;
-        Tue, 18 Oct 2022 22:04:09 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     andersson@kernel.org, mathieu.poirier@linaro.org,
-        arnaud.pouliquen@foss.st.com
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shengjiu.wang@gmail.com
-Subject: [PATCH v3] remoteproc: core: Auto select rproc-virtio device id
-Date:   Tue, 18 Oct 2022 21:44:04 +0800
-Message-Id: <1666100644-27010-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 10:02:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD9CF845;
+        Tue, 18 Oct 2022 07:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666101753; x=1697637753;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qhBJb5AwanzkbExo0wi1KFE2t5S/3G4iTEnZOg5Vhh4=;
+  b=GjdKa5q/2f3QNUpOJeNg4auP2nRPbdnXbqACw7r0ilhPrDZRFNEPuppZ
+   SpFOj2Cads1y6hzxiplnd3l67IaoMre0w+sGjiZTaWnnQo7wHepvdXbVY
+   rv7KfKu31Icz59819kucuN+klBStyLoBNbwtB0VuOjWU61GQadt9Ee3rm
+   9PYTRx0mHQ5anwbRRgv4i4bEABBiD1qOaq6ayZHpk873ZwjqPT55VJqgy
+   1yzz1PFA0XWa8U/2EDPTK+OIxB7jriOTgdFlm0PRR4DSKpgTyOlsbL/yr
+   BmquaNFQeDTy0mzYWFJrwVuS3K6M5jG+NufZa8CuEz2Omk3bKy40bknIi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="286502851"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="286502851"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 07:02:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="697510384"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="697510384"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Oct 2022 07:02:31 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 29IE2TUK011675;
+        Tue, 18 Oct 2022 15:02:30 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net-next 0/6] netlink: add universal 'bigint' attribute type
+Date:   Tue, 18 Oct 2022 16:00:21 +0200
+Message-Id: <20221018140027.48086-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With multiple remoteproc device, there will below error:
+Add a new type of Netlink attribute -- big integer.
 
-sysfs: cannot create duplicate filename '/bus/platform/devices/rproc-virtio.0'
+Basically bigints are just arrays of u32s, but can carry anything,
+with 1 bit precision. Using variable-length arrays of a fixed type
+gives the following:
 
-The rvdev_data.index is duplicate, that cause issue, so
-need to use the PLATFORM_DEVID_AUTO instead. After fixing
-device name it becomes something like:
-/bus/platform/devices/rproc-virtio.2.auto
+* versatility: one type can carry scalars from u8 to u64, bitmaps,
+  binary data etc.;
+* scalability: the same Netlink attribute can be changed to a wider
+  (or shorter) data type with no compatibility issues, same for
+  growing bitmaps;
+* optimization: 4-byte units don't require wasting slots for empty
+  padding attributes (they always have natural alignment in Netlink
+  messages).
 
-Fixes: 1d7b61c06dc3 ("remoteproc: virtio: Create platform device for the remoteproc_virtio")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
-Tested-by: Peng Fan <peng.fan@nxp.com>
----
-changes in v3:
-- add comment in codec
+The only downside is that get/put functions sometimes are not just
+direct assignment inlines due to the internal representation using
+bitmaps (longs) and the bitmap API. The first patch in the series
+partially addresses that.
 
-changes in v2:
-- update commit message
+Basic consumer functions/macros are:
+* nla_put_bigint() and nla_get_bigint() -- to easily put a bigint to
+  an skb or get it from a received message (only pointer to an
+  unsigned long array and the number of bits in it are needed);
+* nla_put_bigint_{u,be,le,net}{8,16,32,64}() -- alternatives to the
+  already existing family to send/receive scalars using the new type
+  (instead of distinct attr types);
+* nla_total_size_bigint*() -- to provide estimate size in bytes to
+  Netlink needed to store a bigint/type;
+* NLA_POLICY_BIGINT*() -- to declare a Netlink policy for a bigint
+  attribute.
 
- drivers/remoteproc/remoteproc_core.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+There are also *_bitmap() aliases for the *_bigint() helpers which
+have no differences and designed to distinguish bigints from bitmaps
+in the call sites (for readability).
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 8768cb64f560..f9187e35b090 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -509,7 +509,13 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
- 	rvdev_data.rsc_offset = offset;
- 	rvdev_data.rsc = rsc;
- 
--	pdev = platform_device_register_data(dev, "rproc-virtio", rvdev_data.index, &rvdev_data,
-+	/*
-+	 * When there is more than one remote processor, rproc->nb_vdev number is
-+	 * same for each separate instances of "rproc". If rvdev_data.index is used
-+	 * as device id, then we get dupliation in sysfs, so need to use
-+	 * PLATFORM_DEVID_AUTO to auto select device id.
-+	 */
-+	pdev = platform_device_register_data(dev, "rproc-virtio", PLATFORM_DEVID_AUTO, &rvdev_data,
- 					     sizeof(rvdev_data));
- 	if (IS_ERR(pdev)) {
- 		dev_err(dev, "failed to create rproc-virtio device\n");
+Netlink policy for a bigint can have an optional bitmap mask of bits
+supported by the code -- for example, to filter out obsolete bits
+removed some time ago or limit value to n bits (e.g. 53 instead of
+64). Without it, Netlink will just make sure no bits past the passed
+number are set. Both variants can be requested from the userspace
+and the kernel will put a mask into a new policy attribute
+(%NL_POLICY_TYPE_ATTR_BIGINT_MASK).
+Unlike BITFIELD32 or Ethtool bitsets, bigints don't implement
+"selectors" as a basic feature, but it's pretty easy to emulate it
+with just sending both selector and value in one data chunk (as these
+bigints are dynamically-sized) and masking unused gaps between them
+with the bitmap mask policy feature.
+
+An example of using this API can be found in my IP tunnel tree[0]
+(to be submitted after that one hits the repo), the actual average
+number of locs to start both sending and receiving bitmaps in one
+subsys is ~10. And it looks like that some of the already existing
+APIs could be later converted to Netlink bigints or expanded as
+well.
+
+And here's sample userspace output for failed in-kernel validation --
+IP tunnel flags attribute was declared as 17-bit bitmap/bigint, but
+the modified userspace passed data with the 20th bit set:
+
+$ ip/ip r add 14.0.1.8 encap ip id 30001 dst 10.0.18.210 dev vxlan1
+Policy: type: BIGINT, mask: 0x0003ffff
+Error: Attribute failed policy validation.
+
+From v1[1]:
+ - use u32-array representation instead of u64-array to conserve
+   attributes (no need to have "padding" dummy attrs) and some bytes
+   (4-byte step instead of 8-byte) (Jakub);
+ - try to resolve arr32 <-> bitmap conversions on 64-bit LEs to
+   inline code at compile-time to reduce get/set overhead (me);
+ - drop Endianness shenanigans: it makes no sense to encode bitmaps/
+   arrays to a specific Endian (Jakub);
+ - rename it from 'bitmap' to 'bigint' to increase usecase coverage
+   (Jakub);
+ - introduce helpers to send scalars (u8-u64) via the API to make it
+   universal / more useful (Jakub);
+ - change kfree() to bitmap_free() when freeing allocated bitmaps
+   (Andy);
+ - make BYTES_TO_BITS() treewide-available and use it (Andy);
+ - make bitmap_validate_arr32() return `bool`: there were only two
+   return values possible (Andy);
+ - drop redundant `!!len` check before memchr_inv() call: the
+   function does that itself (Andy);
+ - expand the #if 0 presence explanation (Andy);
+ - add runtime tests for the new arr32 functions: 5 test cases that
+   cover all condition branches (Andy);
+ - run make includecheck, ensure including <linux/bitmap.h> to
+   <net/netlink.h> doesn't introduce compile time regressions,
+   mention that in the commitmsg (Andy);
+ - drop more redundant `if (len)` condition checks before string
+   operations (Andy);
+ - make bitmap_arr32_compat() and bitmap_{from,to}_arr32() a bit
+   more readable (Andy);
+ - don't use `min_t(typeof())`, specify types explicitly (Andy);
+ - don't initialize the bitmap two times in a row in
+   __netlink_policy_dump_write_attr_bigint() and use more simple
+   bitmap_fill(): nla_put_bigint() will then clear the tail
+   properly itself (Andy).
+
+The series is also available on my open GitHub: [2]
+
+[0] https://github.com/alobakin/linux/commits/ip_tunnel
+[1] https://lore.kernel.org/all/20220721155950.747251-1-alexandr.lobakin@intel.com
+[2] https://github.com/alobakin/linux/commits/netlink_bitmap
+
+Alexander Lobakin (6):
+  bitmap: try to optimize arr32 <-> bitmap on 64-bit LEs
+  bitmap: add a couple more helpers to work with arrays of u32s
+  lib/test_bitmap: verify intermediate arr32 when converting <-> bitmap
+  lib/test_bitmap: test the newly added arr32 functions
+  bitops: make BYTES_TO_BITS() treewide-available
+  netlink: add universal 'bigint' attribute type
+
+ include/linux/bitmap.h         |  71 ++++++++---
+ include/linux/bitops.h         |   1 +
+ include/net/netlink.h          | 208 ++++++++++++++++++++++++++++++++-
+ include/uapi/linux/netlink.h   |   6 +
+ kernel/trace/trace_probe.c     |   2 -
+ lib/bitmap.c                   |  52 ++++++++-
+ lib/nlattr.c                   |  42 ++++++-
+ lib/test_bitmap.c              |  47 ++++++++
+ net/netlink/policy.c           |  40 +++++++
+ tools/include/linux/bitops.h   |   1 +
+ tools/perf/util/probe-finder.c |   2 -
+ 11 files changed, 445 insertions(+), 27 deletions(-)
+
+
+base-commit: f00909e2e6fe4ac6b2420e3863a0c533fe4f15e0
 -- 
-2.34.1
+2.37.3
 
