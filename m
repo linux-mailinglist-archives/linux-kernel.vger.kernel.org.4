@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFB760311B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C13603135
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiJRQ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S230026AbiJRQ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJRQ4h (ORCPT
+        with ESMTP id S230180AbiJRQ61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:56:37 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDF1BEFB5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:56:35 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so14537336pjf.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:56:35 -0700 (PDT)
+        Tue, 18 Oct 2022 12:58:27 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F084CEC508
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:57:59 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id c22so17443572lja.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aX+f1aKTWuCaRtpe8oYSPCaFSr1D16+zAAHvgYMM3Zo=;
-        b=R6Gv+3IG1iLaOlVgLEbN8WjYPxZerEqODSTfzQyFFbWHEdFWJFjm8eUEgFnxiI4U0E
-         p9HnxoiRwzbxGiNmlrZbpkmfHnTR3W2ShE4fQ7ddsGomhyxGT3zcNzhjsHGa+FkVEsbI
-         B5VojHp0lIqcyWsOjBOCy1RWTAA+nyNXqcrmo=
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N2QegD+ETQQI3mRdeSdsqtt8NNjSySbMLRkeFg8er6c=;
+        b=GAoo1b5eu+1yj0Ud2AVk7DUhlpyFCMGwvnIszr1KowZsu4giFsbahBqNKPTT6OXrFt
+         /Drkpw6/d7WE6ltPYuSsJ4zQBqXL/sTcF9uh9Sb7lKiv+KMOkHqSuBcjKJnX/GuvddJV
+         iA2rzJIwol0Au2t+UcptuL/fxwC6WMMo0/rP+vo1dynBg0A1fSGs3MBtVgzodZa08Jgs
+         jeFANMF0VlbxODw0lVa5YAHkjJ4O5O2vBxwMSHfVOewQcrCtYweCemp0Wr5FtXYJ4/7i
+         pldW3kJpMAt9xShnngiBoA4v37oAm6hG+YOBTC925x9LwfpXgDOQrQEjDqlQGvp41ce3
+         HgNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aX+f1aKTWuCaRtpe8oYSPCaFSr1D16+zAAHvgYMM3Zo=;
-        b=NTYPIEGmE8DUqvKrOp7N4UIx6jBQrGcvZa3IX6V/WVoQj31qb/AORf7gzd1scQ0OUC
-         Eij3NRbsQLmB/MspfHlAPsi2Ej9EGbdi/7P4OOaiR5NykYRwRtbJ8Eyj/sppGEQ51myR
-         CI0+r7k7ugaC950/jUdqdf8g3QRk2DGp9ipxH2xisqQYKgGPSE1aBfxHNekPdxG23Oz9
-         uHSKoZTPwUZEKAfHyi8jIsRiG9XatdkqZjjwgVtwIVFB31IvckjY67lgS/Yy27sULj/H
-         6MkxySxteT++602BKrdCq4RWVjJltSXJD8PnwNQtItgiy2ZSXU+sPPT2ipSaB8er52SE
-         13mg==
-X-Gm-Message-State: ACrzQf3BSvu+iibLIOU6Oyq0QTx+usipYLjlVp4pHcPCKZ5yopdvYd/A
-        rML4x9nYJIukstS9PWMlChJMlw==
-X-Google-Smtp-Source: AMsMyM7EiDhq7ZjZ2Gd1Bxbo03ECXLOB8ZkjJ+Y7TCVR1Yhm0ucGTwlAWAUsfIX6Zkb1a/L9MHkXPA==
-X-Received: by 2002:a17:903:246:b0:179:96b5:1ad2 with SMTP id j6-20020a170903024600b0017996b51ad2mr3949944plh.37.1666112194673;
-        Tue, 18 Oct 2022 09:56:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f23-20020a63f757000000b00460c67afbd5sm8327716pgk.7.2022.10.18.09.56.32
+        bh=N2QegD+ETQQI3mRdeSdsqtt8NNjSySbMLRkeFg8er6c=;
+        b=iwnA5krScf2ARxQMjpAo9rPpnKPIPrJzU1MEqj9Z9SR461+kaCYBCz6LmMc2Ux9y/Q
+         NvV+9tMoj1eau3DZLfn21KH23CDDxUCvxyRF4w84UdPNCLsTUNI67l2lc0Shb8+cPTAu
+         IZv+qlRTlmfdAmo2qBGXCKlA1S13fKlBd7HB5o+MJoDhcr8z5fPPO8tzAgSHFnJpJ+jx
+         PfM9UMl0Je8rCqfV2xb6o7cGtTC0gtBHXCBv5NGWKdBl6lgdDqFYbrb/92UuX8CEHMK6
+         DEz0PfFwv4hnEHrT9unMoTCLlBHmcPPjPYka/tYLklUztOxW/IweHY7HWy33IhWKDOn5
+         gQXQ==
+X-Gm-Message-State: ACrzQf3m4+F8UBSzbS1ouY0VKfDtbd8J//Biu0tbz/0VBNeW5EZi95Iu
+        8bw/nv1GzbrIMBXFEKG+Utg=
+X-Google-Smtp-Source: AMsMyM66SGJ9a6tn0DE3b9iVt+A2R1O7LQqxIKbiY+V5GktrzGk1fMzvsQCpZBjQVA9uaefPXtiOdA==
+X-Received: by 2002:a05:651c:983:b0:26c:1c6b:8473 with SMTP id b3-20020a05651c098300b0026c1c6b8473mr1320776ljq.341.1666112265513;
+        Tue, 18 Oct 2022 09:57:45 -0700 (PDT)
+Received: from pc636 (host-90-235-12-21.mobileonline.telia.com. [90.235.12.21])
+        by smtp.gmail.com with ESMTPSA id bf12-20020a2eaa0c000000b0026c4e922fb2sm2052071ljb.48.2022.10.18.09.57.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 09:56:33 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 09:56:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
+        Tue, 18 Oct 2022 09:57:45 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 18 Oct 2022 18:57:42 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf, test_run: Track allocation size of data
-Message-ID: <202210180948.0A0D16844D@keescook>
-References: <20221018090205.never.090-kees@kernel.org>
- <CAADnVQKBfPeDqHE8U6f79XKqrQsLWysRQMweBhwBd-qRP0FDpw@mail.gmail.com>
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 1/7] mm: vmap: Add alloc_vmap_area trace event
+Message-ID: <Y07bBsCBfHiKJ6Bj@pc636>
+References: <20221017160233.16582-1-urezki@gmail.com>
+ <20221017160233.16582-2-urezki@gmail.com>
+ <20221018124127.2c5adf45@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQKBfPeDqHE8U6f79XKqrQsLWysRQMweBhwBd-qRP0FDpw@mail.gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221018124127.2c5adf45@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 09:29:07AM -0700, Alexei Starovoitov wrote:
-> On Tue, Oct 18, 2022 at 2:02 AM Kees Cook <keescook@chromium.org> wrote:
-> > +       alloc->len = kmalloc_size_roundup(size + headroom + tailroom);
-> > +       alloc->data = kzalloc(alloc->len, GFP_USER);
+On Tue, Oct 18, 2022 at 12:41:27PM -0400, Steven Rostedt wrote:
+> On Mon, 17 Oct 2022 18:02:25 +0200
+> "Uladzislau Rezki (Sony)" <urezki@gmail.com> wrote:
 > 
-> Don't you need to do this generalically in many places in the kernel?
+> > It is for a debug purpose and for validation of passed parameters.
+> > 
+> > To: Steven Rostedt <rostedt@goodmis.org>
+> 
+> FYI, it's "Cc:" not "To:" as I did not receive this email (nor patches 2 or 3).
+> 
+OK. I will resend it anyway and just put you in Cc instead.
 
-The size tracking or the rounding up?
+Thanks!
 
-The need for rounding up is surprisingly rare[1] -- very few things actually
-used ksize(), and almost all of them are due to following some variation
-of a realloc idiom. I've sent patches for all of them now, so that should
-be a short road to solving the problems ksize() created.
-
-The need for missed size tracking is also pretty uncommon (most
-dynamically sized things already track their size in some form
-or another). Finding a truly generalizable solution is an ongoing
-experiment[2].
-
--Kees
-
-[1] https://lore.kernel.org/lkml/20220923202822.2667581-1-keescook@chromium.org/
-[2] https://lore.kernel.org/llvm/20220504014440.3697851-1-keescook@chromium.org/
-
--- 
-Kees Cook
+--
+Uladzislau Rezki
