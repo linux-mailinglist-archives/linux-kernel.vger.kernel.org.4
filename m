@@ -2,47 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8940F60310F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE28603115
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJRQxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        id S229610AbiJRQzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiJRQxe (ORCPT
+        with ESMTP id S229956AbiJRQzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:53:34 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FC7F5FD2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=LfINb
-        ieI9y81fR/YR8yjekbvoW1Faa+qpXcowvV6Uuo=; b=LCp9EtSnuNZnpeboFcpmp
-        jYK5IgJfwe3Gep8pxIO05SLZO7fwUvAvApvKT5aJRHztlotiwqz5QKbi/XQBGi7W
-        PVgFZHVzbSVqnaLb3n/CXzGkF02fqVkhe4Okn1I9MXWHWqttoln6rMDr+istoT0M
-        sy4WbBK6CZoLCsuO4injbM=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp2 (Coremail) with SMTP id GtxpCgAHKr_s2U5jMl8Amw--.10046S2;
-        Wed, 19 Oct 2022 00:53:00 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v3] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Wed, 19 Oct 2022 00:52:59 +0800
-Message-Id: <20221018165259.693958-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 18 Oct 2022 12:55:19 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61921AD992
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:55:17 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id r22so18734658ljn.10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/SAC92zkDCoOb8Cpvbv0BcWkETu3jP+yy1JmC279Q2A=;
+        b=Ra4wyabBIp8rt9azFlOFv7RAzTCWDvDKgJPw5swQEzTJq6MKRaWjqvOKB44/IJK3b5
+         Fqe5fr5J5YyPnYY7au/ad5MSVNQfm968kRvremL2DDRzx3+TdnX5AtraZhZMS3neP4Op
+         7fLWw75qb6CTQz/HU61J8Tjo8H0q7TRIir51cuKXvQYJrDVxUIQqyONLtpOYbToi4vIa
+         /idIGQKogtLdsMLGCFUwe4RTHoDEPBUyWi/Yb+DvNgMj3N8sTOQSM67BE2eMjSYAGwBT
+         7ZaPN6v9OOQjYAD1zZbb6TH9lGYW8xE2qXZ8pREFLnWRQXswbGCBMsDSwSjS7MQMQXZ5
+         ObgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/SAC92zkDCoOb8Cpvbv0BcWkETu3jP+yy1JmC279Q2A=;
+        b=NRtRZGR7NyKAmZvwzguRNGk1XAecT24dB1ezajLoxvx98o1/S71uKQ/ptZ/9sbYHgP
+         UeIkaK7ntHln2yvU+IQVWcj2H/+AL6jvFKxsbgXY8H4Glds5l2jcUpZm41wnHfN26GNs
+         +yWHsqcQNrZ4dbMEapGNyuaLNiSwItvudYELCS/77CHEMT7Qv4DJLzABnXdBjCemUWXG
+         HFhQMpHVPCrPPM15jllftXKc7IDYil8ySUHOlFAbkegim7yammdnSRGZN7azz0A6JpvD
+         jfD52L0tDFOb2LeF8sN9SQdEHPUkt9seSMjN9oQNWCeqGbZm/QJv6VBWvKGpferRwvlO
+         1MoA==
+X-Gm-Message-State: ACrzQf2fnv4jZthV8eaJqTcp/PAh9Mv78hYGEHZaAChad1TBTwhPgja8
+        qGO+qe5x0Wj09HCf6BxgJ+c=
+X-Google-Smtp-Source: AMsMyM59JORIxeg6rOYkUZ+KB07JvYoNGW7Mv3gX1JuxcOd0SzDy/yYMNJ7CqWBTax8cH7uwpRuIaA==
+X-Received: by 2002:a2e:8ecc:0:b0:26f:dd45:e50f with SMTP id e12-20020a2e8ecc000000b0026fdd45e50fmr1493871ljl.48.1666112115228;
+        Tue, 18 Oct 2022 09:55:15 -0700 (PDT)
+Received: from pc636 (host-90-235-12-21.mobileonline.telia.com. [90.235.12.21])
+        by smtp.gmail.com with ESMTPSA id a13-20020a19f80d000000b004948b667d95sm1915582lff.265.2022.10.18.09.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 09:55:14 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 18 Oct 2022 18:55:10 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 4/7] mm/vmalloc: Use a trace_alloc_vmap_area event
+Message-ID: <Y07abvR1ugEBH0w+@pc636>
+References: <20221017160233.16582-7-urezki@gmail.com>
+ <202210180250.V8hzNH8X-lkp@intel.com>
+ <Y07Rsz5R1ufZu6Od@pc636>
+ <20221018124412.3beca846@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgAHKr_s2U5jMl8Amw--.10046S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKFy3KF1UGw4rXwb_yoWrtF4xpa
-        1jg348ZrW3XF4Y9rsrta1kWFW3Ca4kJFWUGr9rt34F9w4rAFs8C34DJas8tr4DZrW0qr4a
-        yr4rtFnI9an0gaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXAyeU1Xl4hhhVwAAsh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018124412.3beca846@gandalf.local.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -53,146 +82,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gts may be freed in gru_check_chiplet_assignment.
-The caller still use it after that, UAF happens.
+On Tue, Oct 18, 2022 at 12:44:12PM -0400, Steven Rostedt wrote:
+> On Tue, 18 Oct 2022 18:17:55 +0200
+> Uladzislau Rezki <urezki@gmail.com> wrote:
+> 
+> > Hello, Steven.
+> > 
+> > > 
+> > > [auto build test ERROR on akpm-mm/mm-everything]
+> > > [also build test ERROR on linus/master v6.1-rc1 next-20221017]
+> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > > And when submitting patch, we suggest to use '--base' as documented in
+> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > > 
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Uladzislau-Rezki-Sony/Add-basic-trace-events-for-vmap-vmalloc/20221018-000544
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> > > patch link:    https://lore.kernel.org/r/20221017160233.16582-7-urezki%40gmail.com
+> > > patch subject: [PATCH 4/7] mm/vmalloc: Use a trace_alloc_vmap_area event
+> > > config: um-i386_defconfig
+> > > compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> > > reproduce (this is a W=1 build):
+> > >         # https://github.com/intel-lab-lkp/linux/commit/fbc853c689b29d3bb9fe250b2653fd2dd8046fc7
+> > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> > >         git fetch --no-tags linux-review Uladzislau-Rezki-Sony/Add-basic-trace-events-for-vmap-vmalloc/20221018-000544
+> > >         git checkout fbc853c689b29d3bb9fe250b2653fd2dd8046fc7
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > >    In file included from include/trace/events/vmap.h:123,
+> > >                     from mm/vmalloc.c:47:  
+> > > >> include/trace/define_trace.h:84:34: fatal error: trace/events/kernel_vmap.h: No such file or directory  
+> > >       84 | # define __TRACE_INCLUDE(system) <trace/events/system.h>
+> > >          |                                  ^
+> > >    compilation terminated.
+> > >  
+> > I can reproduce it. It seems it happens so far only on the ARCH=um case.
+> > For regular arm/x86 i do not see such build error.
+> > 
+> > If i rename the TRACE_SYSTEM macro to something different then "vmap"
+> > it compiles fine. In case of:
+> > 
+> > #define TRACE_SYSTEM vmap
+> > 
+> > the prefix "kernel_" is added, thus the header name becomes as kernel_vmap.h
+> > 
+> > Steven can you give some indications? Or any thoughts about it?
+> > 
+> > Thank you in advance!
+> 
+> It comes from this:
+> 
+>    arch/um/Makefile:# -Dvmap=kernel_vmap prevents anything from referencing the libpcap.o symbol so
+>    arch/um/Makefile:       $(ARCH_INCLUDE) $(MODE_INCLUDE) -Dvmap=kernel_vmap      \
+> 
+> 
+> It defines "vmap" to "kernel_vmap" which will change the above
+> TRACE_SYSTEM Define to:
+> 
+>   #define TRACE_SYSTEM kernel_vmap
+> 
+> and that will confuse everything else.
+> 
+Hm... Right then it goes completely crazy. So there is only one option
+it is to rename the trace header defined by the TRACE_SYSTEM.
 
-Fix it by introducing a return value to see if it's in error path or not.
-Free the gts in caller if gru_check_chiplet_assignment check failed.
+Thank you for your help :)
 
-Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v3:
-- add preempt_enable and use VM_FAULT_NOPAGE as failure code by Yejian
-
-v2:
-- commit message changes suggested by Greg
-
-v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
----
- drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
- drivers/misc/sgi-gru/grumain.c   | 18 ++++++++++++++----
- drivers/misc/sgi-gru/grutables.h |  2 +-
- 3 files changed, 27 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-index d7ef61e602ed..864be8a2cb61 100644
---- a/drivers/misc/sgi-gru/grufault.c
-+++ b/drivers/misc/sgi-gru/grufault.c
-@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
- 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
- 		goto exit;
- 
--	gru_check_context_placement(gts);
-+	ret = gru_check_context_placement(gts);
-+	if (ret)
-+		goto err;
- 
- 	/*
- 	 * CCH may contain stale data if ts_force_cch_reload is set.
-@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
- exit:
- 	gru_unlock_gts(gts);
- 	return ret;
-+err:
-+	gru_unlock_gts(gts);
-+	gru_unload_context(gts, 1);
-+	return VM_FAULT_NOPAGE;
- }
- 
- /*
-@@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
- 		} else {
- 			gts->ts_user_blade_id = req.val1;
- 			gts->ts_user_chiplet_id = req.val0;
--			gru_check_context_placement(gts);
-+			ret = gru_check_context_placement(gts);
- 		}
- 		break;
- 	case sco_gseg_owner:
-@@ -889,6 +895,10 @@ int gru_set_context_option(unsigned long arg)
- 		ret = -EINVAL;
- 	}
- 	gru_unlock_gts(gts);
-+	if (ret) {
-+		gru_unload_context(gts, 1);
-+		ret = VM_FAULT_NOPAGE;
-+	}
- 
- 	return ret;
- }
-diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-index 9afda47efbf2..952803790818 100644
---- a/drivers/misc/sgi-gru/grumain.c
-+++ b/drivers/misc/sgi-gru/grumain.c
-@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
-  * chiplet. Misassignment can occur if the process migrates to a different
-  * blade or if the user changes the selected blade/chiplet.
-  */
--void gru_check_context_placement(struct gru_thread_state *gts)
-+int gru_check_context_placement(struct gru_thread_state *gts)
- {
- 	struct gru_state *gru;
-+	int ret = 0;
- 
- 	/*
- 	 * If the current task is the context owner, verify that the
-@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
- 	 */
- 	gru = gts->ts_gru;
- 	if (!gru || gts->ts_tgid_owner != current->tgid)
--		return;
-+		return ret;
- 
- 	if (!gru_check_chiplet_assignment(gru, gts)) {
- 		STAT(check_context_unload);
--		gru_unload_context(gts, 1);
-+		ret = VM_FAULT_NOPAGE;
- 	} else if (gru_retarget_intr(gts)) {
- 		STAT(check_context_retarget_intr);
- 	}
-+
-+	return ret;
- }
- 
- 
-@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	struct gru_thread_state *gts;
- 	unsigned long paddr, vaddr;
- 	unsigned long expires;
-+	int ret;
- 
- 	vaddr = vmf->address;
- 	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
-@@ -934,7 +938,13 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	mutex_lock(&gts->ts_ctxlock);
- 	preempt_disable();
- 
--	gru_check_context_placement(gts);
-+	ret = gru_check_context_placement(gts);
-+	if (ret) {
-+		preempt_enable();
-+		mutex_unlock(&gts->ts_ctxlock);
-+		gru_unload_context(gts, 1);
-+		return ret;
-+	}
- 
- 	if (!gts->ts_gru) {
- 		STAT(load_user_context);
-diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-index 5efc869fe59a..f4a5a787685f 100644
---- a/drivers/misc/sgi-gru/grutables.h
-+++ b/drivers/misc/sgi-gru/grutables.h
-@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
- extern int gru_user_unload_context(unsigned long arg);
- extern int gru_get_exception_detail(unsigned long arg);
- extern int gru_set_context_option(unsigned long address);
--extern void gru_check_context_placement(struct gru_thread_state *gts);
-+extern int gru_check_context_placement(struct gru_thread_state *gts);
- extern int gru_cpu_fault_map_id(void);
- extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
- extern void gru_flush_all_tlb(struct gru_state *gru);
--- 
-2.25.1
-
+--
+Uladzislau Rezki
