@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49794602FCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD570602FD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiJRPfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S230418AbiJRPfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJRPfD (ORCPT
+        with ESMTP id S229970AbiJRPfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:35:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EA27695E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666107301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=949/Qi1pDpeDMTUI2Vsxrx0ghbk4aAqTjCByU1zx60Q=;
-        b=XcOI/0lXGxMMs+9MGCtDoIkD5xYL/AJiAcjND9IQBxui0tL8nqwcHbMmx+aYHzN4iwMmg5
-        yd7i4ncW8In50GY+6S0/P9JeQj9t2f3qXxu/+R1y6ro+TzzOKFE9zFaxmsjddCxzBI5+Pu
-        bW5MH+/kDMW3ns7RTNUo7yeimx5Aj1Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-257-WVrt5p-1PuaGMq31yPQtIQ-1; Tue, 18 Oct 2022 11:34:56 -0400
-X-MC-Unique: WVrt5p-1PuaGMq31yPQtIQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E64A811E81;
-        Tue, 18 Oct 2022 15:34:55 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.74])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7BDF7C15BA4;
-        Tue, 18 Oct 2022 15:34:52 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        David.Laight@ACULAB.COM, carlos@redhat.com,
-        Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>
-Subject: Re: [PATCH v4 01/25] rseq: Introduce feature size and alignment ELF
- auxiliary vector entries
-References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
-        <20220922105941.237830-2-mathieu.desnoyers@efficios.com>
-        <877d1726kd.fsf@oldenburg.str.redhat.com>
-        <d128fb7d-6b24-5caf-8e3a-99d55922cd95@efficios.com>
-        <0a4a1a2c-964e-dcc6-948a-fd252962aaff@efficios.com>
-Date:   Tue, 18 Oct 2022 17:34:50 +0200
-In-Reply-To: <0a4a1a2c-964e-dcc6-948a-fd252962aaff@efficios.com> (Mathieu
-        Desnoyers's message of "Mon, 17 Oct 2022 13:32:07 -0400")
-Message-ID: <87fsfli1r9.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Tue, 18 Oct 2022 11:35:09 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2403844F9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:35:07 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id w3so9854819qtv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f0bIa8wyTi8rbAcSZxWhCurl6ZK0Xte2iA5Q836GnBQ=;
+        b=dKkNYSYmqsNvyoNglHA29uVahhFDihXll/UUBpziWBkT9xPuazvfnr71TBYlvqe9w8
+         XSAikAIB4RkBfh3PZC9NoohzDSUNmPfj4KJoSMIcscWs88HWvGsG6078gw8PY/r++GFE
+         xVGZaU/EtYOlFiDBoU0emIo7nr9/Skx0UUA2vZmegdCUpWOBdeZfFpuDiL0YHWYCD/OP
+         t1rC7uijzyiN91/i+Gq4ObhWwjFL/GSyvYyuVU2S3c5aEJJgbLdXaUrWV0oVmbag8fdF
+         OXeLLptMDmaw6Ty/AUdYhvLiPFQOXYLzgOCII09MUnXq4qYrUrvGq+GDt5DsUyL3A4CC
+         jsSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f0bIa8wyTi8rbAcSZxWhCurl6ZK0Xte2iA5Q836GnBQ=;
+        b=Xaxa0Fy8IfaS9VqeLputDBw+4oWNRQxzbrf5W9ndWvKN0zdasxBYBN22hgSLpYKmDb
+         xGuPtEKmxSgvq1/V6LbjFTN8kKIXWW/exY3YcDoeymqSwkh4MDLSg+qwc4saAQPXI+Pk
+         gyjXiEyjqWc9tU1iauZ7RKBdDSOjxcPcdHkDhtDi0UBcJRFsUMEs+nkhDLhbavc9cuGi
+         vQRgJUJ32UL164Xzzh/xT+vy3mjpGQmIPsNFs9SnEjbC/2lDb0W50U373Unqk/MyTCGH
+         sCMFXyjVid3egOEWy+y9i0dnUJLirdou2aHZND9+d0cPuqzzNQzMOVcCAyHIKixmeQIn
+         g77Q==
+X-Gm-Message-State: ACrzQf2+euYkHTZvBMtCKWoQJvQZhLfsHOPgD6ilqD/3It9fhl9owksG
+        qSeesrO/eOpF+LxW56r8nBewyA==
+X-Google-Smtp-Source: AMsMyM4FoTodLhR6r4cs+duQkTco0qem4q2FGg/JDNLCynJiZ54JLd68bW+8p2Tqy2nqvzgOS5r2qw==
+X-Received: by 2002:ac8:5b56:0:b0:39c:db95:ac4 with SMTP id n22-20020ac85b56000000b0039cdb950ac4mr2538109qtw.299.1666107307125;
+        Tue, 18 Oct 2022 08:35:07 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id k2-20020a05620a414200b006bba46e5eeasm2787991qko.37.2022.10.18.08.35.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 08:35:06 -0700 (PDT)
+Message-ID: <684c5659-0691-6534-1602-6c0a53e6e503@linaro.org>
+Date:   Tue, 18 Oct 2022 11:35:04 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RFC v1 02/12] dt-bindings: PCI: mediatek-gen3: add support for
+ mt7986
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221017104141.7338-1-linux@fw-web.de>
+ <20221017104141.7338-3-linux@fw-web.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221017104141.7338-3-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Mathieu Desnoyers:
+On 17/10/2022 06:41, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add compatible string for mt7986.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> mt7986a.dtsi misses clock-names which are now required since support of
+> MT8192/MT8188/MT8195. This change also introduces a 6th clock which is
+> now needed for all pcie-gen3 dts.
+> 
+> i do not know how to map the clocks to the names...
+> 
+> mediatek-pcie-gen3.yaml:
+> 
+>   clock-names:
+>     items:
+>       - const: pl_250m
+>       - const: tl_26m
+>       - const: tl_96m
+>       - const: tl_32k
+>       - const: peri_26m
+>       - enum:
+>           - top_133m        # for MT8192
+>           - peri_mem        # for MT8188/MT8195
+> 
+> mt7986a.dtsi:
+> 
+> 	clocks = <&infracfg CLK_INFRA_PCIE_SEL>,
+> 		 <&infracfg CLK_INFRA_IPCIE_CK>,
+> 		 <&infracfg CLK_INFRA_IPCIE_PIPE_CK>,
+> 		 <&infracfg CLK_INFRA_IPCIER_CK>,
+> 		 <&infracfg CLK_INFRA_IPCIEB_CK>;
 
-> If we extend struct rseq to a size that makes the compiler use an
-> alignment larger than 32 bytes in the future, and if the compiler uses 
-> that larger alignment knowledge to issue instructions that require the
-> larger alignment, then it would be incorrect for user-space to
-> allocate the struct rseq on an alignment lower than the required
-> alignment.
->
-> Indeed, on rseq registration, we have the following check:
->
-> if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq))
-> [...]
->    return -EINVAL;
->
-> Which would break if the size of struct rseq is large enough that the
-> alignment grows larger than 32 bytes.
+Maybe the clock is not required on mt7986?
 
-I never quite understood the reason for that check, it certainly made
-the glibc implementation more complicated.  But to support variable
-sizes internally, we'll have to put in some extra effort anyway, so that
-it won't matter much in the end.  As long as the required alignment
-isn't larger than the page size. 8-/
+Anyway, for the bindings:
 
-> You mentioned we could steal some high bits from AT_RSEQ_FEATURE_SIZE
-> to put the alignment. What is the issue with exposing an explicit 
-> AT_RSEQ_ALIGN ? It's just a auxv entry, so I don't see it as a huge
-> performance concern to access 2 entries rather than one.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I don't mind too much, we already have a large on-stack array in the
-loader so that we can decode the auxiliary vector without a humongous
-switch statement.  But eventually that approach will stop working if the
-set of interesting AT_* values become too large and discontinuous.
-
-Thanks,
-Florian
+Best regards,
+Krzysztof
 
