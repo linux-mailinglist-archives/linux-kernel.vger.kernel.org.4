@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F53602853
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7DB602657
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiJRJ0v convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Oct 2022 05:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S230383AbiJRICm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiJRJ0d (ORCPT
+        with ESMTP id S229770AbiJRICj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:26:33 -0400
-X-Greylist: delayed 5387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 02:26:17 PDT
-Received: from correo4.agesic.gub.uy (correo4.agesic.gub.uy [179.27.170.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897BCAE234
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:26:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by correo4.agesic.gub.uy (Postfix) with ESMTP id 3CB953161568;
-        Tue, 18 Oct 2022 04:24:08 -0300 (-03)
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-        zimbramta01.agesic.gub.uy
-X-Spam-Score: 1.769
-X-Spam-Level: ******
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_99,BAYES_999,
-        FREEMAIL_FORGED_REPLYTO,MISSING_HEADERS,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-Received: from correo4.agesic.gub.uy ([127.0.0.1])
-        by localhost (zimbramta01.agesic.gub.uy [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id pq6c4iLnIJHK; Tue, 18 Oct 2022 04:24:07 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by correo4.agesic.gub.uy (Postfix) with ESMTP id 66FE03161570;
-        Tue, 18 Oct 2022 04:24:07 -0300 (-03)
-X-Virus-Scanned: amavisd-new at zimbramta01.agesic.gub.uy
-Received: from correo4.agesic.gub.uy ([127.0.0.1])
-        by localhost (zimbramta01.agesic.gub.uy [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Gb1oIpVtUtED; Tue, 18 Oct 2022 04:24:07 -0300 (-03)
-Received: from zimbrambx06.agesic.gub.uy (zimbrambx06.agesic.gub.uy [10.233.15.15])
-        by correo4.agesic.gub.uy (Postfix) with ESMTP id 948803160F9D;
-        Tue, 18 Oct 2022 04:23:58 -0300 (-03)
-Date:   Tue, 18 Oct 2022 04:23:58 -0300 (UYT)
-From:   VERONICA JOSELINE DEMICCE CARRERAS <veronica.demicce@inau.gub.uy>
-Reply-To: updates@mail2director.com
-Message-ID: <1154678411.728.1666077838877.JavaMail.zimbra@inau.gub.uy>
-Subject: Wichtiger Hinweis
+        Tue, 18 Oct 2022 04:02:39 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3517C84E6A;
+        Tue, 18 Oct 2022 01:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=r1TxYC0slJVe2mkpKf7pL1bopDnMUMi1PqaWciekznc=; b=Zlx+jYynivcCjWcnHQqo0vFWcH
+        4RA26wsE8kmjTnrYuDmdB4uO+aAMan0UlfSnw7Sym074Wkmzo1T+23QGJ81jhnTKHVNxUDDeiaQUB
+        hXim3dcqdj5mbv5CtplvZRbYD1ULewNaq6Qi3a56h31fXxFAKH4mB6CxRkAhQmnvooQS5/uHgyMP6
+        qEDIZzCffCKoKdRvKJUE2mL3v0russVwkMizIgKv1oXEZP/AAzAN7E0xqCyWosCA8j+mqKrjEFQr4
+        4ACKb51M+xESOMf6+aZy/1ufWvT8GeKTviRQBfIWZVYMjZQRBRgGprab95R9973U1tr0paXyl8+gg
+        5pTo+kdg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34766)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1okhYO-0004Bh-B2; Tue, 18 Oct 2022 09:02:24 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1okhYJ-0000vX-NR; Tue, 18 Oct 2022 09:02:19 +0100
+Date:   Tue, 18 Oct 2022 09:02:19 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank <Frank.Sae@motor-comm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v7] net: phy: Add driver for Motorcomm yt8521
+ gigabit ethernet phy
+Message-ID: <Y05diwTQdqr9za3G@shell.armlinux.org.uk>
+References: <20221018011439.1169-1-Frank.Sae@motor-comm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Zimbra 8.8.15_GA_4372 (zclient/8.8.15_GA_4372)
-Thread-Index: gmez+XfH5nTKlNGIpKvKx1VX/cjJSw==
-Thread-Topic: Wichtiger Hinweis
-X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        * -2.3 RCVD_IN_DNSWL_MED RBL: Sender listed at https://www.dnswl.org/,
-        *       medium trust
-        *      [179.27.170.181 listed in list.dnswl.org]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [179.27.170.181 listed in wl.mailspike.net]
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018011439.1169-1-Frank.Sae@motor-comm.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 18, 2022 at 09:14:39AM +0800, Frank wrote:
+>  Add a driver for the motorcomm yt8521 gigabit ethernet phy. We have verified
+>  the driver on StarFive VisionFive development board, which is developed by
+>  Shanghai StarFive Technology Co., Ltd.. On the board, yt8521 gigabit ethernet
+>  phy works in utp mode, RGMII interface, supports 1000M/100M/10M speeds, and
+>  wol(magic package).
+> 
+> Signed-off-by: Frank <Frank.Sae@motor-comm.com>
+> ---
+> patch v7:
+>  Hi Russell
+> 
+> > As previously pointed out, dropping the MDIO bus lock in a
+> > phy_select_page()..phy_restore_page() region unsafe. I think you need
+> > to ensure that yt8521_fiber_config_aneg() is safe to be called under
+> > the lock, and I suspect having a version of genphy_config_aneg() which
+> > can be called with the lock held would be a better approach.
+> 
+>  with your suggestion we add yt8521_set_page() which does not hold the lock.
 
+And so you don't understand the locking issues...
 
-Herzlichen Glückwunsch, Sie haben €650.000,00 bei den monatlichen Gewinnspielen von Euro Millions / Google Promo am 17.Oktober 2022 gewonnen.
+If you drop the lock, it means that some other thread (e.g. userspace) can
+come in and change the page register under you, which will completely
+change which register(s) you are accessing.
 
-Bitte geben Sie die folgenden Informationen ein, damit Ihr Gewinnbetrag an Sie überwiesen werden kann.
+Please implement locking properly, don't bodge around with it. I made my
+suggestion above specifically after having thought about the issues and
+what would be possible to give a correct locking implementation.
 
-Vollständiger Name:
-Heimatadresse:
-Geschlecht:
-Alter:
-Telefon:
-
-VERONICA JOSELINE
-Online-Koordinator
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
