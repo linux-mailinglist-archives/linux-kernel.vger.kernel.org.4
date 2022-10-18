@@ -2,70 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DAE6028F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9186028F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiJRKDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        id S230303AbiJRKDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiJRKD1 (ORCPT
+        with ESMTP id S230182AbiJRKD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Oct 2022 06:03:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566DAB1B8B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666087405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dbUnzvIvlrGRDX1mE6CPBS4n0v7KTHoQYr0wJY597WU=;
-        b=eRSXz6ECA0TywF0lRDv+nsWrD4Smyia67uyF01mQ3RIyNoktnMjO/R41H/QcVfurH+moP4
-        OC4ADFeu8mvQ+gT7LB8N6pblTb6ImDuPq91sI/ocVwh7MHZSZn8vvfvrEj2Xi2dzcHZ/JV
-        HsGyeh+Ul4e6wOu/ll50Uklldh4lpxs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-nmYZgiEOO2iUX8PsY6IIIA-1; Tue, 18 Oct 2022 06:03:20 -0400
-X-MC-Unique: nmYZgiEOO2iUX8PsY6IIIA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A535982DFDD;
-        Tue, 18 Oct 2022 10:03:19 +0000 (UTC)
-Received: from localhost (ovpn-12-68.pek2.redhat.com [10.72.12.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 64908146820D;
-        Tue, 18 Oct 2022 10:03:18 +0000 (UTC)
-Date:   Tue, 18 Oct 2022 18:03:15 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     Kazuhito Hagio <k-hagio-ab@nec.com>, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        heiko@sntech.de, guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        bagasdotme@gmail.com, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
-        heinrich.schuchardt@canonical.com, hschauhan@nulltrace.org,
-        yixun.lan@gmail.com
-Subject: Re: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
-Message-ID: <Y05540td7lLz+0BY@MiWiFi-R3L-srv>
-References: <20221018081755.6214-1-xianting.tian@linux.alibaba.com>
- <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
- <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
- <049ec19e-60c3-2854-5f5e-9850231108b4@linux.alibaba.com>
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2055.outbound.protection.outlook.com [40.107.105.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAB0B1B85;
+        Tue, 18 Oct 2022 03:03:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SDY9xnOQaSEPWAwSJv1U0rStnvQyzD6RZfTxdq2LuHDJtqbRvvw5tMkzktP18J+/4Vh3OoSKaIp8B9rv0y/x+dIV7xujkbOgDHBP6vQzENNXl69B4qYh1sPyzQe1ejEwAQ8xL0JTjZTf7HRYp51cz5oIxuEV7KZ+6Byjcx7W05TAkawxDSmAgdXX+5pnfaN//83AVJBRQMz5EkrRSzAK523lMUCl6g7B4ZO9JiIvcFFlEM7K5kVv5AVtC2e9um4ikc4WYUIVsI01JQW8v2RWQtnknHqksNdjlw2jggE2ICHyo4jQmbH2z+wTvie+umVYfTpvy36Gw51C6TR6TUEYWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2WL7bflt+m0olirv1vyJqfW6Ye9Y9fUswoAbbPVmxsE=;
+ b=I/5gHdhVBzt+6hPVo3Qc0Aijre3XwNyhT9MQbtjcnauLxm2S5RyGLb7BYU+WOPCk587ECzOTgqjsAq/45W4ckdzbdBkrbt9qHCw7xbUrD5O+a0b5QUiV0XEB9vT5Uu68ccBn41V+diBt0tByA8q7zs296Ph16mNE1Cdb5KOVlvP530atBk9ETc0bjwwfKxCW66mCtpqCxniPxNXdaEO/IQKiI8p2FYQDaHXkQ6pSnl+vzxByWaHjmKwVLoJWn1ZpIYEAd2MdMlIA/wlqCx6SwQFJ+8TNDCFDUW/D1ZvoLSpJOxcNN8IvmTiG3oLWrkqSq22C1lPgZgfkNTYnzbFhCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2WL7bflt+m0olirv1vyJqfW6Ye9Y9fUswoAbbPVmxsE=;
+ b=DpwpD1vcDbW7sytTG23dlEG6bML3GtCec0slG0In/vc4zSzahw0M+7C6qCIAyXlhfdilynjXMb1ckdXJDIyKav+oWhQtg0Vz5nXKz20L1/CgxS08wudFMyChtmNy63SxoURPpZDQNcuYtNkXwmHTJcJncR0vFW0oi9wpTcUPzw4=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PAXPR04MB8239.eurprd04.prod.outlook.com (2603:10a6:102:1c2::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
+ 2022 10:03:24 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5723.032; Tue, 18 Oct 2022
+ 10:03:24 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Pavel Machek <pavel@denx.de>
+CC:     Sasha Levin <sashal@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "vinicius.gomes@intel.com" <vinicius.gomes@intel.com>,
+        "jhs@mojatatu.com" <jhs@mojatatu.com>,
+        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+        "jiri@resnulli.us" <jiri@resnulli.us>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH AUTOSEL 5.10 22/34] net/sched: taprio: taprio_dump and
+ taprio_change are protected by rtnl_mutex
+Thread-Topic: [PATCH AUTOSEL 5.10 22/34] net/sched: taprio: taprio_dump and
+ taprio_change are protected by rtnl_mutex
+Thread-Index: AQHY3C2kHrdjzthEi0WraLEdXdCgp64T9AOAgAAAvICAAAScgA==
+Date:   Tue, 18 Oct 2022 10:03:23 +0000
+Message-ID: <20221018100323.4cglkjn4xkdmzzai@skbuf>
+References: <20221009222129.1218277-1-sashal@kernel.org>
+ <20221009222129.1218277-22-sashal@kernel.org>
+ <20221018094415.GF1264@duo.ucw.cz> <20221018094653.nt4sh67m2mjkcnkv@skbuf>
+In-Reply-To: <20221018094653.nt4sh67m2mjkcnkv@skbuf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|PAXPR04MB8239:EE_
+x-ms-office365-filtering-correlation-id: 4d4f70ca-ade1-4047-8905-08dab0effe8a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2+u1tJJzZQ7viMnqafUNsmA1rvYtHFNgkdEfN2EnRVpBh1BYNiU610AFzB03yvI7QTDzx5zyFc56TAWIbXKjhhkdiXQxCEiNGt41X4z/ACRHquqh3za5wRlVBv/OVFCMggW7jCP9iRbBh1wJLx0gnx+um0pFdyPlUCQVdw68Uc/5+kSlQRG7ZZorgPk61uCMHNM66/Gvy+uwDahN6W69SVjCvr8L1voPHGxrdcCPt0qgLH/yilJFntcEM4jLlR3UQsrkw0AT2Yn9/D6wfudughfIeEWPoaYVUEvp6qIbrqNaO6fgWxHnxxN4z0dkBCDsNgFras7Xnfdfn9cSVMvHlKQmP1DZOzdumFNacYDWxqwM80S3Mq1fh149WgqzdKOOw7VQw+0KFPi7UhLpJkyWUz04zRUSX51RBOg/uSOx0lf2wSfVMJM1fsRo/kkNC/VM374Plgcpj0HF0/Eey5Uo88PqUONXZEwjKutqReoJV1Uzc7tQ/gTa9ob7SHzLhSKuIGFSnU0cjE0uP1jGS/iIx6xIo/XYFBPPPvHhx1opJSrLghxyV/LzcsigemOR+lkasSrlHWsadI0HfIEEcXBTnazog+NEzcK7hYMTYOQZ7Be+ua6UgLNovLDEBEcVhOw5LilFHpFkyA5C/i9Bnf2zcAw6LNTOwW3kPq11WmOsK2yvfPjpoDH5/mQqceM9CQvYrKPErF/EdwzP+Ba6JY+eASu7wr2pZXlhnaMuniQ2Q5CjKBumRU1QDoXAKOzDpgx6l+xeQ6Hds9zRLCVOuSpN0YFm4I8qtsZoP1N7uKqaMRk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199015)(6506007)(478600001)(71200400001)(66476007)(64756008)(8676002)(76116006)(66946007)(38070700005)(4326008)(66556008)(91956017)(66446008)(6486002)(966005)(54906003)(6916009)(316002)(33716001)(1076003)(186003)(122000001)(6512007)(86362001)(26005)(9686003)(83380400001)(38100700002)(41300700001)(8936002)(44832011)(4744005)(7416002)(5660300002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GtbRI2t62b9jjlwyAw5XZrPg85ZXIbEpt2KdkEvXf2WQ5r6gAdZfGnhJGchm?=
+ =?us-ascii?Q?KIjos9QzZWZECJfFHewnitXsRB/veXLN4bQlZldsWuxhM6ElfN6MI/50JEtV?=
+ =?us-ascii?Q?pcUF07VOPs31Cj2efkknguUjv9mHe/tN0Fd6vSD38WpHs4+0d4yb9y6Ggk2d?=
+ =?us-ascii?Q?Ri7RmReAfpDPouqrDaMnPfg8v4IjBa2SrGT2CQNfbPP73+YqfKMTH8WUJABd?=
+ =?us-ascii?Q?joh3/oREbhYHg6kSxoUExTkbNUkqIeGNa9dWgW+fKviXv6+8cY11E1WCH8Zv?=
+ =?us-ascii?Q?fOUQZiLpy+L/aTrhrCSvaaBw+ub9p7Kz6E17FafwwBLxyyiz5Xbd1fv0+UlU?=
+ =?us-ascii?Q?LyfoZ7vJwG7Q4h1YRWPx9fBz/R3Zub1lqrWSKYZgpUMQpro68ekeUxjWnlDu?=
+ =?us-ascii?Q?n3OSUgu7U/dy8xH4Vx7pFzxei1QXedMUXTuttbCuP9KsDf+JZe8A1K+HlSuj?=
+ =?us-ascii?Q?zHFMHpxFGxneeQZrd+krLSqU1tF3rIBXG1yBtdqm+w9JGYmtQwYWRQZwP99u?=
+ =?us-ascii?Q?EkeGf596PRKFWNCGJ7+nsA4ESgIZhrYlfhwxXfwjHw95KBpxaffFgqjP1zVY?=
+ =?us-ascii?Q?JNI1aEj7cPmnJKhTV39knRlpVBKFappHU7br67Ez4b9ms8HH8q2GUH6AKHs8?=
+ =?us-ascii?Q?jn1bq4+tOIK3siEu8OEYExMFDORFkdv39aRugbHb/340O8A42CXzhh+NmJWu?=
+ =?us-ascii?Q?GB2w8xTneOOhtNa/y73p4AJZLwaXzjt8v4N+VSmBdvLuc1WRQ2uaxbwcFR8E?=
+ =?us-ascii?Q?1oetf/Le0mXCm1kJQhNhYZ8e9U5MWpdNYGjL7eNYCN1lA9i5u4r7nNFJ3O08?=
+ =?us-ascii?Q?WZqxGCAUCwK5u8T+TukI0XrTg++cHAukFhFaPN/R2X2yhicUu1XsoYL8er3c?=
+ =?us-ascii?Q?02h7yCfVspb3rbguFyG82UuRdXUQTSXY0hHI3XyraRtQPTRJjaOYWrimEN2+?=
+ =?us-ascii?Q?i2prxC8udiu4GcygxZQNbuaVEO30tHRiys1bzQQ5T4rwDIIvPdioYEdsN8hJ?=
+ =?us-ascii?Q?v1QY/9XAWRiQK5jaq80NJ5aSbGY8z/yrhW5ywYGRSlMPOZBBGUQecyJCawKt?=
+ =?us-ascii?Q?E2AKqEuWXHnSjCnHBSCzyJ5lT++EgkzOZ6xyvE1MhB1DM1MadlL2DO7whwsR?=
+ =?us-ascii?Q?BU7/pOK5EuFbILTOjO36C58k61D+MdK332pqiJle2ri08PZHn+DGrj6V8RwV?=
+ =?us-ascii?Q?U2ug6Fx4E6ZXInlCd4rpW+m7FV3DrGRaG/4u+8FC2j5bl7RVx/fUIVz1liVH?=
+ =?us-ascii?Q?Ic1qNFokSLlfTKHv8y64PMLSyF3epCUNFFyGSDs5MJdEasjF3iTYCUncPHHo?=
+ =?us-ascii?Q?JTLgV7I3Yc6iuGXGPQ0Q9l9wdOqleZ6GDYBzoVEnj7xS/psyREv1HW+KbGlH?=
+ =?us-ascii?Q?//n5SDJhyTa9Iv5Zr2dUlKiAj+z45DPBba4LCCY8i7kyJ2VBVgvGUlPtFVE2?=
+ =?us-ascii?Q?aENeDifjRq3pYHqFVZK7DRzvbQdmh47T4xZ9LIfdswFy5QeFD52Xz3+hG0OF?=
+ =?us-ascii?Q?H/UPN1U+nofi/dXBVsoyn+TgExgtNCHcEMeEIlH78ys8+hIbAKDwReAJvqXX?=
+ =?us-ascii?Q?qOvr1uGOyHvdWH1Ke8YUk3Q+13LllfG++tz6lEeLMoJOcgyHoqhwIH3ub2DZ?=
+ =?us-ascii?Q?Aw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8A7EB5724616864A8DA8F40091D0ACE9@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <049ec19e-60c3-2854-5f5e-9850231108b4@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d4f70ca-ade1-4047-8905-08dab0effe8a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2022 10:03:23.9885
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Gz/h7ZWX58cXo6QB3a50LIDU4RpIU4KejGt0mtwhith0Xqw32uVdJnkkDRmJlye4ImQZrC6s8RYQ/TCsG0EjRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8239
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,104 +131,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 at 05:25pm, Xianting Tian wrote:
-> 
-> 在 2022/10/18 下午5:10, Baoquan He 写道:
-> > On 10/18/22 at 04:17pm, Xianting Tian wrote:
-> > > Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
-> > > VMEMMAP and KERNEL_LINK_ADDR ranges), va bits and ram base for vmcore.
-> > > 
-> > > Default pagetable levels and PAGE_OFFSET aren't same for different kernel
-> > > version as below. For pagetable levels, it sets sv57 by default and falls
-> > > back to setting sv48 at boot time if sv57 is not supported by the hardware.
-> > > 
-> > > For ram base, the default value is 0x80200000 for qemu riscv64 env and,
-> > > for example, is 0x200000 on the XuanTie 910 CPU.
-> > > 
-> > >   * Linux Kernel 5.18 ~
-> > >   *      PGTABLE_LEVELS = 5
-> > >   *      PAGE_OFFSET = 0xff60000000000000
-> > >   * Linux Kernel 5.17 ~
-> > >   *      PGTABLE_LEVELS = 4
-> > >   *      PAGE_OFFSET = 0xffffaf8000000000
-> > >   * Linux Kernel 4.19 ~
-> > >   *      PGTABLE_LEVELS = 3
-> > >   *      PAGE_OFFSET = 0xffffffe000000000
-> > > 
-> > > Since these configurations change from time to time and version to version,
-> > > it is preferable to export them via vmcoreinfo than to change the crash's
-> > > code frequently, it can simplify the development of crash tool.
-> > > 
-> > > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> > > ---
-> > >   arch/riscv/kernel/Makefile     |  1 +
-> > >   arch/riscv/kernel/crash_core.c | 29 +++++++++++++++++++++++++++++
-> > >   2 files changed, 30 insertions(+)
-> > >   create mode 100644 arch/riscv/kernel/crash_core.c
-> > > 
-> > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > > index db6e4b1294ba..4cf303a779ab 100644
-> > > --- a/arch/riscv/kernel/Makefile
-> > > +++ b/arch/riscv/kernel/Makefile
-> > > @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)		+= kgdb.o
-> > >   obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
-> > >   obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
-> > >   obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
-> > > +obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
-> > >   obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
-> > > diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
-> > > new file mode 100644
-> > > index 000000000000..8d7f5ff108da
-> > > --- /dev/null
-> > > +++ b/arch/riscv/kernel/crash_core.c
-> > > @@ -0,0 +1,29 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +
-> > > +#include <linux/crash_core.h>
-> > > +#include <linux/pagemap.h>
-> > > +
-> > > +void arch_crash_save_vmcoreinfo(void)
-> > > +{
-> > > +	VMCOREINFO_NUMBER(VA_BITS);
-> > > +	VMCOREINFO_NUMBER(phys_ram_base);
-> > > +
-> > > +	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
-> > > +	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
-> > > +	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
-> > > +	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
-> > > +	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
-> > > +#ifdef CONFIG_64BIT
-> > > +	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
-> > > +	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
-> > > +#endif
-> > > +
-> > > +	if (IS_ENABLED(CONFIG_64BIT)) {
-> > > +#ifdef CONFIG_KASAN
-> > > +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
-> > > +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
-> > > +#endif
-> > > +		vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
-> > > +		vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
-> > Seems this is the firsr ARCH where kasan and kernel link/bpf space are
-> > added to dump and analyze. Just curious, have you got code change to
-> > make use of them to do dumping and analyze?
-> 
-> KASAN_SHADOW_START is not used, KERNEL_LINK_ADDR is used in the crash patch set:
-> https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
+On Tue, Oct 18, 2022 at 12:46:53PM +0300, Vladimir Oltean wrote:
+> On Tue, Oct 18, 2022 at 11:44:15AM +0200, Pavel Machek wrote:
+> > Hi!
+> >=20
+> > > From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> > >=20
+> > > [ Upstream commit 18cdd2f0998a4967b1fff4c43ed9aef049e42c39 ]
+> > >=20
+> > > Since the writer-side lock is taken here, we do not need to open an R=
+CU
+> > > read-side critical section, instead we can use rtnl_dereference() to
+> > > tell lockdep we are serialized with concurrent writes.
+> >=20
+> > This is cleanup, not a bugfix. We should not have it in 5.10.
+>=20
+> Agreed, looks like I missed this one when replying to Sasha for all the o=
+thers.
 
-Oh, I would say please no. Sometime we got tons of objection when adding an
-necessary one, we definitely should not add one for possible future
-use.
+Ah, I do see that I did in fact respond to this already.
+https://lore.kernel.org/lkml/20221010133337.4q75fsa6m2v5ttk7@skbuf/
 
-For this kind of newly added one, we need get ack from
-makedumpfile/crash utility maintainer so that we know they are necessary
-to have. At least they don't oppose.
-
-> 
-> I add it in case of using in furture.
-> 
-> > 
-> > Thanks
-> > Baoquan
-> 
-
+Not sure how you put your eyes on this particular patch?=
