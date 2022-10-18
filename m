@@ -2,134 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4647E6029CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0709F6029DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJRLEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S229875AbiJRLHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiJRLEt (ORCPT
+        with ESMTP id S229606AbiJRLHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:04:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E95B1A81E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:04:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0273361512
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EBBC433D6;
-        Tue, 18 Oct 2022 11:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666091083;
-        bh=HvjzO44pKryf0ZLXnp4RbwbKoggx9p/6gNppYwITc2k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QoPNgARvjMnTsXvVWk13br5dcOJjYsCO+YzkU9faNuCLR5+/ZwCVzvN2vM2BhLAvA
-         +79HVk5XfPpyctFeVNphwShlEpPieWPoX82qa0a9F8g/NZXnjOkmBmHdbv8oyBryoo
-         xZnx4JrbFWLq2tIWCjLDjf8yqTv/orWdH+thtoAI=
-Date:   Tue, 18 Oct 2022 13:04:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        vincent.guittot@linaro.org, vschneid@redhat.com,
-        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, ritesh.list@gmail.com,
-        aneesh.kumar@linux.ibm.com
-Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
-Message-ID: <Y06ISBWhJflnV+NI@kroah.com>
-References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
- <Y01sk3l8yCMvhvYm@kroah.com>
- <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+        Tue, 18 Oct 2022 07:07:12 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6255B5FE1;
+        Tue, 18 Oct 2022 04:07:10 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666091228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6slPvh5nOW6GsvuvgTCwVYEyF+ng4Q8ONP9U1HohB8c=;
+        b=OPZdMR6nWQO0VN0S1yTX9Y8wQJQWqV6VDVtC8AKu0q43UMtoL+OgoHL0uJsqLtnvkjWa41
+        XCZ5CmZhJ391mi4RZARA5RwlIqngx3qvO1HvK77oEsa67zXMYOBgADH9TXwuYoO3K+FR96
+        wfqf2gJHQiChm6TzCbIH+1bHWCaUsqQ=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     kuba@kernel.org
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qiao Ma <mqaio@linux.alibaba.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] net: hinic: Set max_mtu/min_mtu directly to simplify the code.
+Date:   Tue, 18 Oct 2022 19:06:52 +0800
+Message-Id: <20221018110701.3958-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 04:07:06PM +0530, Vishal Chourasia wrote:
-> On Mon, Oct 17, 2022 at 04:54:11PM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Oct 17, 2022 at 04:19:31PM +0200, Peter Zijlstra wrote:
-> > > 
-> > > +GregKH who actually knows about debugfs.
-> > > 
-> > > On Mon, Oct 17, 2022 at 06:40:49PM +0530, Vishal Chourasia wrote:
-> > > > smt=off operation on system with 1920 CPUs is taking approx 59 mins on v5.14
-> > > > versus 29 mins on v5.11 measured using:
-> > > > # time ppc64_cpu --smt=off
-> > > > 
-> > > > 
-> > > > |--------------------------------+----------------+--------------|
-> > > > | method                         | sysctl         | debugfs      |
-> > > > |--------------------------------+----------------+--------------|
-> > > > | unregister_sysctl_table        |   0.020050 s   | NA           |
-> > > > | build_sched_domains            |   3.090563 s   | 3.119130 s   |
-> > > > | register_sched_domain_sysctl   |   0.065487 s   | NA           |
-> > > > | update_sched_domain_debugfs    |   NA           | 2.791232 s   |
-> > > > | partition_sched_domains_locked |   3.195958 s   | 5.933254 s   |
-> > > > |--------------------------------+----------------+--------------|
-> > > > 
-> > > > Note: partition_sched_domains_locked internally calls build_sched_domains
-> > > >       and calls other functions respective to what's being currently used to
-> > > >       export information i.e. sysctl or debugfs
-> > > > 
-> > > > Above numbers are quoted from the case where we tried offlining 1 cpu in system
-> > > > with 1920 online cpus.
-> > > > 
-> > > > From the above table, register_sched_domain_sysctl and
-> > > > unregister_sysctl_table collectively took ~0.085 secs, whereas
-> > > > update_sched_domain_debugfs took ~2.79 secs. 
-> > > > 
-> > > > Root cause:
-> > > > 
-> > > > The observed regression stems from the way these two pseudo-filesystems handle
-> > > > creation and deletion of files and directories internally.  
-> > 
-> > Yes, debugfs is not optimized for speed or memory usage at all.  This
-> > happens to be the first code path I have seen that cares about this for
-> > debugfs files.
-> > 
-> > You can either work on not creating so many debugfs files (do you really
-> > really need all of them all the time?)  Or you can work on moving
-> > debugfs to use kernfs as the backend logic, which will save you both
-> > speed and memory usage overall as kernfs is used to being used on
-> > semi-fast paths.
-> > 
-> > Maybe do both?
-> > 
-> > hope this helps,
-> > 
-> > greg k-h
-> 
-> Yes, we need to create 7-8 files per domain per CPU, eventually ending up
-> creating a lot of files. 
+Set max_mtu/min_mtu directly to avoid making the validity judgment
+when set mtu, because the judgment is made in net/core: dev_validate_mtu,
+so to simplify the code.
 
-Why do you need to?  What tools require these debugfs files to be
-present?
+Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+---
+v1->v2:
+	1.Update changelog.
+	2.Reverse MAX_MTU to max jumbo frame size.
 
-And if you only have 7-8 files per CPU, that does not seem like a lot of
-files overall (14000-16000)?  If you only offline 1 cpu, how is removing
-7 or 8 files a bottleneck?  Do you really offline 1999 cpus for a 2k
-system?
+v2->v3:
+	1.Update signature
 
-> Is there a possibility of reverting back to /proc/sys/kernel/sched_domain/?
+	v1 link: https://lore.kernel.org/lkml/20221012082945.10353-1-cai.huoqing@linux.dev/
+        v2 link: https://lore.kernel.org/lkml/20220429033733.GA15753@chq-T47/
 
-No, these are debugging-only things, they do not belong in /proc/
 
-If you rely on them for real functionality, that's a different story,
-but I want to know what tool uses them and for what functionality as
-debugfs should never be relied on for normal operation of a system.
+ drivers/net/ethernet/huawei/hinic/hinic_dev.h  |  4 ++++
+ drivers/net/ethernet/huawei/hinic/hinic_main.c |  3 ++-
+ drivers/net/ethernet/huawei/hinic/hinic_port.c | 17 +----------------
+ 3 files changed, 7 insertions(+), 17 deletions(-)
 
-thanks,
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
+index a4fbf44f944c..2bbc94c0a9c1 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_dev.h
++++ b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
+@@ -22,6 +22,10 @@
+ 
+ #define LP_PKT_CNT		64
+ 
++#define HINIC_MAX_JUMBO_FRAME_SIZE 	15872
++#define HINIC_MAX_MTU_SIZE 	(HINIC_MAX_JUMBO_FRAME_SIZE - ETH_HLEN - ETH_FCS_LEN)
++#define HINIC_MIN_MTU_SIZE 	256
++
+ enum hinic_flags {
+ 	HINIC_LINK_UP = BIT(0),
+ 	HINIC_INTF_UP = BIT(1),
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+index c23ee2ddbce3..41e52f775aae 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+@@ -1189,7 +1189,8 @@ static int nic_dev_init(struct pci_dev *pdev)
+ 	else
+ 		netdev->netdev_ops = &hinicvf_netdev_ops;
+ 
+-	netdev->max_mtu = ETH_MAX_MTU;
++	netdev->max_mtu = HINIC_MAX_MTU_SIZE;
++	netdev->min_mtu = HINIC_MIN_MTU_SIZE;
+ 
+ 	nic_dev = netdev_priv(netdev);
+ 	nic_dev->netdev = netdev;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.c b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+index 28ae6f1201a8..0a39c3dffa9a 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_port.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+@@ -17,9 +17,6 @@
+ #include "hinic_port.h"
+ #include "hinic_dev.h"
+ 
+-#define HINIC_MIN_MTU_SIZE              256
+-#define HINIC_MAX_JUMBO_FRAME_SIZE      15872
+-
+ enum mac_op {
+ 	MAC_DEL,
+ 	MAC_SET,
+@@ -147,24 +144,12 @@ int hinic_port_get_mac(struct hinic_dev *nic_dev, u8 *addr)
+  **/
+ int hinic_port_set_mtu(struct hinic_dev *nic_dev, int new_mtu)
+ {
+-	struct net_device *netdev = nic_dev->netdev;
+ 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
+ 	struct hinic_port_mtu_cmd port_mtu_cmd;
+ 	struct hinic_hwif *hwif = hwdev->hwif;
+ 	u16 out_size = sizeof(port_mtu_cmd);
+ 	struct pci_dev *pdev = hwif->pdev;
+-	int err, max_frame;
+-
+-	if (new_mtu < HINIC_MIN_MTU_SIZE) {
+-		netif_err(nic_dev, drv, netdev, "mtu < MIN MTU size");
+-		return -EINVAL;
+-	}
+-
+-	max_frame = new_mtu + ETH_HLEN + ETH_FCS_LEN;
+-	if (max_frame > HINIC_MAX_JUMBO_FRAME_SIZE) {
+-		netif_err(nic_dev, drv, netdev, "mtu > MAX MTU size");
+-		return -EINVAL;
+-	}
++	int err;
+ 
+ 	port_mtu_cmd.func_idx = HINIC_HWIF_FUNC_IDX(hwif);
+ 	port_mtu_cmd.mtu = new_mtu;
+-- 
+2.25.1
 
-greg k-h
