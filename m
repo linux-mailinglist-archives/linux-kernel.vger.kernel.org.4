@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452B2602DD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C533602DD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiJRODj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S230023AbiJROEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiJRODc (ORCPT
+        with ESMTP id S231499AbiJROD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:03:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE80D2581
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:02:58 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IDPbQv008429;
-        Tue, 18 Oct 2022 14:02:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=DOKy8TZjBJuaWeQcB9x5tAOPu7knV4WtbkFSgi+edMA=;
- b=XnvZ4gvShWMJsY1UPcIv9miQmU9LgwF/T4KjJqqGkKsrYP9Bso8f6hUWqq4RJdTYGlPg
- a2637CxgS201W3dmdDqTDdBg5Ax5ol68jtjgg+X+iK3Jqlu+ItGDt/RRPFnkOPrftSYT
- YXTOoqNmUuV4w/ZTEIGFPXyt+FtJcxGArsMkB9cO2LQQpzp3JtXlOdKc5ChBl2eKKuIF
- 7Kf00eXsBqScG1w6QAda8T5i9hN07XAOaHl8HG3+Waq82Hks9tV6rlWyMIT9odouTuLG
- ZPeOk3wF4ETicTxYvu8pqqK9Orzho9aWwjwFXVpTYOpUcxH//+bC7Bk1Vya2qSSOMyzG jA== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k9w139pme-1
+        Tue, 18 Oct 2022 10:03:58 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901BAD039B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:03:32 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IDhpQE019711;
+        Tue, 18 Oct 2022 14:03:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=/1XJhabtQUGv3oxTHCHZbo8H+yW04oSQHMIEjdxLC6I=;
+ b=pol7DiP4eSdmHE+a6I+Irj7XBDGipNeUI6a64dc0ud5/Lc9scP/xTPvH6UgxZv4gnD0v
+ yAzvwrVrAKM9bZQxSx7Y7xKRJIs/FFUTF9E7ndb4rNT6QT/JAixrQecHeOSDbrbkvb0Q
+ GAOoaSL7y8IcFmwzfTdkQ9QfZi/ryK7WQjK/l/UIWPva83wRiequjmktOFn4cfWFIuJZ
+ E9WvBl6+4p5QeTVa/6ip2wq6RL7eas5WCN3l7AALeYQ6w63rTXuRKrQRMzN19QhIIi9S
+ IedfRBHdVmGXoP6SSizTkT48B694alxg0sRAqhBF0PtyOUcDjBbfMR/LQfdXZz1KLfZN gg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k9w9dgqvc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Oct 2022 14:02:43 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29IDsuPo022047;
-        Tue, 18 Oct 2022 14:02:35 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma01wdc.us.ibm.com with ESMTP id 3k9be29w8w-1
+        Tue, 18 Oct 2022 14:03:27 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29IDtB8F024085;
+        Tue, 18 Oct 2022 14:03:24 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3k7mg95c40-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Oct 2022 14:02:35 +0000
-Received: from smtpav02.dal12v.mail.ibm.com ([9.208.128.128])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29IE2aa443712814
+        Tue, 18 Oct 2022 14:03:24 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29IE3LNH64225622
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Oct 2022 14:02:36 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C241B5805C;
-        Tue, 18 Oct 2022 14:02:34 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 213B058060;
-        Tue, 18 Oct 2022 14:02:34 +0000 (GMT)
-Received: from [9.160.80.75] (unknown [9.160.80.75])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Oct 2022 14:02:34 +0000 (GMT)
-Message-ID: <36908c1d-4672-807a-d157-d3ccd0b03148@linux.ibm.com>
-Date:   Tue, 18 Oct 2022 09:02:33 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 0/5] fsi: Add regmap and refactor sbefifo
-To:     Mark Brown <broonie@kernel.org>
-Cc:     joel@jms.id.au, jk@ozlabs.org, alistair@popple.id.au,
-        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org
-References: <20221014220540.55570-1-eajames@linux.ibm.com>
- <Y02SztthO39FYIeu@sirena.org.uk>
-Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <Y02SztthO39FYIeu@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Tue, 18 Oct 2022 14:03:21 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFB834C044;
+        Tue, 18 Oct 2022 14:03:21 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3EE2C4C04A;
+        Tue, 18 Oct 2022 14:03:20 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.89.190])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Oct 2022 14:03:20 +0000 (GMT)
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Akanksha J N <akanksha@linux.vnet.ibm.com>
+Subject: [PATCH v2 0/2] selftests/ftrace: Capture dependency on external 
+Date:   Tue, 18 Oct 2022 19:32:57 +0530
+Message-Id: <cover.1666101523.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dUw-xid7m_220pP6K4mkCtSOkPtuV5-8
-X-Proofpoint-ORIG-GUID: dUw-xid7m_220pP6K4mkCtSOkPtuV5-8
+X-Proofpoint-GUID: oA4BWmALP0Ps_VBnLlKMmXPRy-lCJR5m
+X-Proofpoint-ORIG-GUID: oA4BWmALP0Ps_VBnLlKMmXPRy-lCJR5m
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-18_04,2022-10-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=744 clxscore=1015 bulkscore=0 adultscore=0
- mlxscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210180080
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ adultscore=0 suspectscore=0 malwarescore=0 bulkscore=0 spamscore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210180080
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is v2 of the below patch:
+http://lkml.kernel.org/r/20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com
 
-On 10/17/22 12:37, Mark Brown wrote:
-> On Fri, Oct 14, 2022 at 05:05:35PM -0500, Eddie James wrote:
->> The SBEFIFO hardware can now be attached over a new I2C endpoint
->> interface called the I2C Responder (I2CR). In order to use the
->> existing SBEFIFO driver, add regmap drivers for both FSI busses
->> and the I2CR. Then, refactor the SBEFIFO and OCC drivers to clean
->> up and use the new regmap drivers.
-> Is there any great reason to provide support in the regmap core for this
-> rather than just implementing in drivers/fsi?  AFAICT this is just
-> ending up as an implementation detail of shared code in drivers/fsi and
-> won't have any external users?
+The second patch is new, and converts some other tests to use the new 
+way of specifying dependency on external programs.
+
+- Naveen
 
 
-One reason is to have a common interface with the new FSI regmap. That 
-way abstracting out the bus transfer is trivial in the new SBEFIFO 
-driver, assuming the SBEFIFO driver should switch to use the FSI regmap.
+Naveen N. Rao (2):
+  selftests/ftrace: Add check for ping command for trigger tests
+  selftests/ftrace: Convert tracer tests to use 'requires' to specify
+    program dependency
 
-But you are correct, I doubt anyone else will use this. I suppose 
-SBEFIFO may as well not use the regmap and just use some callbacks for 
-whichever bus transfer...
+ tools/testing/selftests/ftrace/test.d/functions           | 8 +++++++-
+ tools/testing/selftests/ftrace/test.d/tracer/wakeup.tc    | 7 +------
+ tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc | 7 +------
+ .../trigger/inter-event/trigger-field-variable-support.tc | 2 +-
+ .../inter-event/trigger-inter-event-combined-hist.tc      | 2 +-
+ .../trigger/inter-event/trigger-onchange-action-hist.tc   | 2 +-
+ .../trigger/inter-event/trigger-onmatch-action-hist.tc    | 2 +-
+ .../inter-event/trigger-onmatch-onmax-action-hist.tc      | 2 +-
+ .../trigger/inter-event/trigger-onmax-action-hist.tc      | 2 +-
+ .../trigger/inter-event/trigger-snapshot-action-hist.tc   | 2 +-
+ .../inter-event/trigger-synthetic-event-dynstring.tc      | 2 +-
+ .../trigger/inter-event/trigger-trace-action-hist.tc      | 2 +-
+ 12 files changed, 18 insertions(+), 22 deletions(-)
 
 
-Thanks,
-
-Eddie
-
+base-commit: 6c0f39e87b6ab1a3009e3a49d3e6f6db8dc756a8
+-- 
+2.38.0
 
