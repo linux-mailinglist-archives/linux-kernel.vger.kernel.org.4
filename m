@@ -2,127 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE7A6026A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B653F6026C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiJRIWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S230491AbiJRI1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiJRIWJ (ORCPT
+        with ESMTP id S230235AbiJRI1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:22:09 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2005695AEC
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:22:09 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id r19so9222474qtx.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:22:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vI3ZnOUgyhDtbIsMZt8LRqDd4gbizXvliS1A8m7UQjQ=;
-        b=U8a7ihfuWLSvbHY8IBALWM4RnPbqN22kpE6A3JjVL6fhYMKi5rVy8qv3j+YaOQHmmm
-         7gEVijRLYTYaYtsmCCiK0XjJ1dq47qEKvji8NTALxEtOCTWhtizQuwkips4D2xQmJV+m
-         XswG+Mn9BZN/AGeO1OiCToD4kKDb/LOn6bowMwUeyaxpmwshC23XbckJ3v2eX3HJRuhh
-         fRdt87iviLeftbBIfn5QSN8JV8ftHFOROl5CvE9b6jXhJD+69Zz+sJGhM02kPpid2E86
-         EQEBrIUy8o3sAGLqJVmY2+kuGUCqUzGqq3EPPQhVBK5fz2pnEwhwSvpfWEMc6VO+yAVp
-         gAyA==
-X-Gm-Message-State: ACrzQf1g0pNfUvfscr1ngRTM4ubP/LB37veuMgDyl/ZL4XdGErP3xwa8
-        SHKmQZXJ3XUX2UI5afWfJj+7+tlOo6RV6Q==
-X-Google-Smtp-Source: AMsMyM4DLh6htkoFVbsyZsNAbSFcgLu/Olm4CLEH5KMp0XEQMNoVEBmENp6Kz6sg1h02kZRFNjlJyA==
-X-Received: by 2002:ac8:5702:0:b0:39c:f612:29b8 with SMTP id 2-20020ac85702000000b0039cf61229b8mr794435qtw.68.1666081328007;
-        Tue, 18 Oct 2022 01:22:08 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id bl12-20020a05620a1a8c00b006bbc09af9f5sm1924701qkb.101.2022.10.18.01.22.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 01:22:06 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 126so16120256ybw.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:22:06 -0700 (PDT)
-X-Received: by 2002:a25:2:0:b0:6c4:dc1:d37c with SMTP id 2-20020a250002000000b006c40dc1d37cmr1382484yba.380.1666081325735;
- Tue, 18 Oct 2022 01:22:05 -0700 (PDT)
+        Tue, 18 Oct 2022 04:27:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F99975495;
+        Tue, 18 Oct 2022 01:27:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9EAF113E;
+        Tue, 18 Oct 2022 01:27:17 -0700 (PDT)
+Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.212.212])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DC9253F7D8;
+        Tue, 18 Oct 2022 01:27:04 -0700 (PDT)
+From:   Jia He <justin.he@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>
+Cc:     James Morse <james.morse@arm.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, Peter Zijlstra <peterz@infradead.org>,
+        Jia He <justin.he@arm.com>
+Subject: [PATCH v10 0/7] Make ghes_edac a proper module
+Date:   Tue, 18 Oct 2022 08:22:07 +0000
+Message-Id: <20221018082214.569504-1-justin.he@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220905230820.3295223-1-yury.norov@gmail.com> <20220905230820.3295223-6-yury.norov@gmail.com>
-In-Reply-To: <20220905230820.3295223-6-yury.norov@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Oct 2022 10:21:54 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUL0WxYjfRDxLWZG7Xu=2xTQkueathvpwWfLpqhG6NkFQ@mail.gmail.com>
-Message-ID: <CAMuHMdUL0WxYjfRDxLWZG7Xu=2xTQkueathvpwWfLpqhG6NkFQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] lib/cpumask: add FORCE_NR_CPUS config option
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yury,
+Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
+apci_init()") introduced a bug that ghes_edac_register() would be invoked
+before edac_init(). Because at that time, the bus "edac" hasn't been even
+registered, this created sysfs /devices/mc0 instead of
+/sys/devices/system/edac/mc/mc0 on an Ampere eMag server.
 
-On Tue, Sep 6, 2022 at 1:10 AM Yury Norov <yury.norov@gmail.com> wrote:
-> The size of cpumasks is hard-limited by compile-time parameter NR_CPUS,
-> but defined at boot-time when kernel parses ACPI/DT tables, and stored in
-> nr_cpu_ids. In many practical cases, number of CPUs for a target is known
-> at compile time, and can be provided with NR_CPUS.
->
-> In that case, compiler may be instructed to rely on NR_CPUS as on actual
-> number of CPUs, not an upper limit. It allows to optimize many cpumask
-> routines and significantly shrink size of the kernel image.
->
-> This patch adds FORCE_NR_CPUS option to teach the compiler to rely on
-> NR_CPUS and enable corresponding optimizations.
->
-> If FORCE_NR_CPUS=y, kernel will not set nr_cpu_ids at boot, but only check
-> that the actual number of possible CPUs is equal to NR_CPUS, and WARN if
-> that doesn't hold.
->
-> The new option is especially useful in embedded applications because
-> kernel configurations are unique for each SoC, the number of CPUs is
-> constant and known well, and memory limitations are typically harder.
->
-> For my 4-CPU ARM64 build with NR_CPUS=4, FORCE_NR_CPUS=y saves 46KB:
->   add/remove: 3/4 grow/shrink: 46/729 up/down: 652/-46952 (-46300)
->
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+The solution is to make ghes_edac a proper module.
 
-Thanks for your patch, which is now commit 6f9c07be9d020489
-("lib/cpumask: add FORCE_NR_CPUS config option") in v6.1-rc1.
+Changelog:
+v10:
+ - add the RCU_INITIALIZER and use the unrcu_pointer wrap for victim
+v9:https://lore.kernel.org/lkml/20221017130140.420986-1-justin.he@arm.com/
+ - drop the unrcu_pointer patch 06 of v8
+ - add Ard's xchg_release patch to use a better memory barrier
+v8:https://lore.kernel.org/lkml/20221010023559.69655-1-justin.he@arm.com/
+ - merge v7 two force_enable and ghes_get_devices() patches into one
+ - make force_enable static
+v7:https://lore.kernel.org/lkml/20220929023726.73727-1-justin.he@arm.com/
+ - remove the ghes_edac_preferred and ghes_present (suggested by Borislav)
+ - adjust the patch splitting, no major functional changes
+ - remove the r-b tag in those changed patches
+v6:https://www.spinics.net/lists/kernel/msg4511453.html
+ - no code changes from v5 patches
+ - add the reviewed and acked by from Toshi
+ - describe the removal of ghes_edac_force_enable checking in Patch 05
+v5: https://www.spinics.net/lists/kernel/msg4502787.html
+ - add the review-by from Toshi for patch 04 and 06
+ - refine the commit msg
+ - remove the unconditional set of ghes_edac_force_enable on Arm
+v4: https://lore.kernel.org/lkml/20220831074027.13849-6-justin.he@arm.com/
+ - move the kernel boot option to ghes module parameter
+ - collapse th ghes_present and ghes_edac_preferred into one patch
+v3: https://lore.kernel.org/lkml/20220822154048.188253-1-justin.he@arm.com/
+ - refine the commit logs
+ - introduce ghes preferred and present flag (by Toshi)
+ - move force_load to setup parameter
+ - add the ghes_edac_preferred() check for x86/Arm edac drivers
+v2: https://lore.kernel.org/lkml/20220817143458.335938-1-justin.he@arm.com/
+ - add acked-by tag of Patch 1 from Ard
+ - split the notifier patch
+ - add 2 patch to get regular drivers selected when ghes edac is not loaded
+ - fix an errno in igen6 driver
+ - add a patch to fix the sparse warning of ghes
+ - refine the commit logs
+v1: https://lore.kernel.org/lkml/20220811091713.10427-1-justin.he@arm.com/
 
-FORCE_NR_CPUS is enabled for e.g. an allmodconfig kernel, which I
-believe now makes it unsafe to boot such a kernel on any system that
-does not have exactly CONFIG_NR_CPUS CPU cores?
+Ard Biesheuvel (1):
+  apei/ghes: Use xchg_release() for updating new cache slot instead of
+    cmpxchg()
 
-If my assumption is true, this really needs some protection to prevent
-enabling this option inadvertently, as it is quite common to boot
-allmodconfig kernels for testing.
+Jia He (6):
+  efi/cper: export several helpers for ghes_edac to use
+  EDAC/ghes: Add a notifier for reporting memory errors
+  EDAC/ghes: Prepare to make ghes_edac a proper module
+  EDAC/ghes: Make ghes_edac a proper module to remove the dependency on
+    ghes
+  EDAC: Add the ghes_get_devices() check for chipset-specific edac
+    drivers
+  EDAC/igen6: Return consistent errno when another edac driver is
+    enabled
 
-Gr{oetje,eeting}s,
+ drivers/acpi/apei/ghes.c       | 111 +++++++++++++++++++++++++--------
+ drivers/edac/Kconfig           |   4 +-
+ drivers/edac/amd64_edac.c      |   3 +
+ drivers/edac/armada_xp_edac.c  |   3 +
+ drivers/edac/edac_module.h     |   1 +
+ drivers/edac/ghes_edac.c       |  90 +++++++++++++++-----------
+ drivers/edac/i10nm_base.c      |   3 +
+ drivers/edac/igen6_edac.c      |   5 +-
+ drivers/edac/layerscape_edac.c |   3 +
+ drivers/edac/pnd2_edac.c       |   3 +
+ drivers/edac/sb_edac.c         |   3 +
+ drivers/edac/skx_base.c        |   3 +
+ drivers/edac/thunderx_edac.c   |   3 +
+ drivers/edac/xgene_edac.c      |   3 +
+ drivers/firmware/efi/cper.c    |   3 +
+ include/acpi/ghes.h            |  34 +++-------
+ 16 files changed, 187 insertions(+), 88 deletions(-)
 
-                        Geert
+-- 
+2.25.1
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
