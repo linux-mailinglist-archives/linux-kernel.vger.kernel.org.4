@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92783603139
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED7A60313A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJRQ7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        id S230094AbiJRQ7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJRQ6x (ORCPT
+        with ESMTP id S230117AbiJRQ7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:58:53 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DE8ED980;
-        Tue, 18 Oct 2022 09:58:29 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id g27so21401659edf.11;
-        Tue, 18 Oct 2022 09:58:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=siBPcYsCfbgitX+AQjieJu8JYh/+uUDCJkJNpknXFJ4=;
-        b=wL0T0K/L/3noK56uA7NScOSvAQYLo4US44uVGEcZugl0BIXbD3dxzcN7NH0njDYLDp
-         YfQofxB2xlBY0sSI1Dbi3knbAtUOyXUjIUjMUuSWGnWwxuhQDVIHgqpRSr3286fwY8oO
-         2mp8Pihf27XasSGuXX1BFSo+FbAkPel2kB0grT7fUxJvhp4CFvr7RnJaXFGxp89BqAzu
-         picZAZrRZNXiwtmpW9gqtunPiOmk7GS+oaepirfLcYvrvgpcNMkq8x9RoRvAX86+PXZG
-         EkJUhE5iwRHXknjigONTgUl5f4WEkD1IDrZTokK6T6o4qtYpt1uUJBmDsO/bJAU+Nods
-         E4kQ==
-X-Gm-Message-State: ACrzQf0FJrXCG3wGkUO4y2gjDLgks5maVF1IrAIK2z5WZ2O1LqJbUsVX
-        Byz3YzDm9cFM5ANrUlYHzp4HGp0oZUJw//liZQc=
-X-Google-Smtp-Source: AMsMyM6hk5JmXwWKZXrHq2Dku1MYgmqWKxWbuxNPlgQQSM/zUNSd9wVd16CI1pqLl5EjNqIX4+djNCeijdTLG26GVV4=
-X-Received: by 2002:a05:6402:4302:b0:45d:c9b4:c007 with SMTP id
- m2-20020a056402430200b0045dc9b4c007mr3515568edc.328.1666112293447; Tue, 18
- Oct 2022 09:58:13 -0700 (PDT)
+        Tue, 18 Oct 2022 12:59:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B20ED9B2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666112355; x=1697648355;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8L7Kzq1+x/vIL40N0kqvIsFh/ZGsBTQNt2/eP3b/BVg=;
+  b=cF/4MPLohsjiBlru8VQgmqyE5/2OdpGhJ0bNmGLb/ZdSATuGN3VJcsuM
+   yQi3wUsqhf29MzUDIv2XynhbCUpAGjCCPUtf2SO97XXjWgOmDZYA+cvS2
+   7CDNF9Z8UQPvKLpF5jvgDySOQ30qyGiA3TETJMFCl1GykK//LD2YjwL0d
+   wxwG6J+OeyYcpp8U2flAZkKSjZJ22Fn8ww33jVTwsR0YLCrbGYc77UHJ7
+   pz/QGfV8co5zxp+7vxj2UbmObQYbth5RXy1C3eWitsO2tLGYdxABZpJZ1
+   bV2LDMDnzmVcpePDhGGVbRKGynV3/ktbnkAbs1Sk0fKNIDzoNLxmAv376
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="370364126"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="370364126"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 09:59:07 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="771301491"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="771301491"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 09:59:07 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH v3] RAS: Fix return value from show_trace()
+Date:   Tue, 18 Oct 2022 09:59:00 -0700
+Message-Id: <20221018165900.109029-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <Y066BV4jiRMxgjYV@agluck-desk3.sc.intel.com>
+References: <Y066BV4jiRMxgjYV@agluck-desk3.sc.intel.com>
 MIME-Version: 1.0
-References: <5887691.lOV4Wx5bFT@kreacher> <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
-In-Reply-To: <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Tue, 18 Oct 2022 18:58:01 +0200
-Message-ID: <CAJvTdKnNM=bT9q=Ypv9FESBLSo0GOViRFn=SOUz_pYk3dFvBaQ@mail.gmail.com>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Works for me!
+Documentation/filesystems/seq_file.rst describes the possible return
+values from a "show()" function used by single_open().
 
-Tested-by: Len Brown <len.brown@intel.com>
+show_trace() returns the value of "trace_count" this could be interpreted
+as "SEQ_SKIP", or just confuse the calling function.
 
-On Tue, Oct 18, 2022 at 6:39 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On Tue, 18 Oct 2022 18:09:31 +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
-> > ordering issue") overlooked the fact that cmos_do_probe() depended
-> > on the preparations carried out by cmos_wake_setup() and the wake
-> > alarm stopped working after the ordering of them had been changed.
-> >
-> > [...]
->
-> Applied, thanks!
->
-> [1/1] rtc: rtc-cmos: Fix wake alarm breakage
->       commit: 0782b66ed2fbb035dda76111df0954515e417b24
->
-> Best regards,
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Change to just return "0" to avoid confusing anyone reading this code
+and possibly using as a template. Reading "daemon_active" was never
+an intended use case.
 
+Signed-off-by: Tony Luck <tony.luck@intel.com>
 
+---
+V3: Boris: "let's keep this effort minimal and only address valid use
+cases"
+---
+ drivers/ras/debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/ras/debugfs.c b/drivers/ras/debugfs.c
+index 0d4f985afbf3..f0a6391b1146 100644
+--- a/drivers/ras/debugfs.c
++++ b/drivers/ras/debugfs.c
+@@ -15,7 +15,7 @@ EXPORT_SYMBOL_GPL(ras_userspace_consumers);
+ 
+ static int trace_show(struct seq_file *m, void *v)
+ {
+-	return atomic_read(&trace_count);
++	return 0;
+ }
+ 
+ static int trace_open(struct inode *inode, struct file *file)
 -- 
-Len Brown, Intel
+2.37.3
+
