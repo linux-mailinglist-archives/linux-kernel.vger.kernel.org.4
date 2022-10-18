@@ -2,95 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BAD603270
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCE4603278
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJRS3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S229898AbiJRS3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiJRS3H (ORCPT
+        with ESMTP id S229918AbiJRS3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:29:07 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CE5814EE
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:29:06 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id f8so9232875qkg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jf71w/kMAtLTuZpw+aeynxFbJonRYosXdM0sN0F9YJQ=;
-        b=QyPtio5WxIjCn0zb+wjna2OySfw2zIuGY3eeBmkvLgsfLTvwctfMJVZB2v95/HPEjG
-         W/LzBAjV7nX5q6D6mL2vXB9CwWc35oUIbragvzLNU2vBhPn0HQMAXTeIOPg9WKdKbcj0
-         oRvf72Vpd6pIkGIsOe4Nk11/QqMfBFl5IRjl5qnV6xLDQ9WYhqCtAVO6YWTPfYa2gFcf
-         wqFEzpDL89d8RZ/IjCHCC6fAnFN4xyxb7vQbY2vloC81sFeyAZWHHFq7g6wqOjHucsWJ
-         JzBwV7nPLTdeMJVBK6GvWgsUOvghhC4kEYesz8jNDvMMMLvCLzsoU5S6HglApZ8IPcMB
-         JP4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jf71w/kMAtLTuZpw+aeynxFbJonRYosXdM0sN0F9YJQ=;
-        b=cTDf+Y0A5mOCeijfhQpPM9qyEEbnH7cqgnE/u/monDU7TVpltLjfKL6wXJIRC2EBNM
-         3/AvmriTaiaHGcZzDxeT+Xb8oNOH4fw8+OfseA8rbk8ESXNtMAry9CvXiU3RtxjkIX9E
-         yizwtrUd9MdivnoUXLYZrJS7SKxh8RDD/JLWNrFDHGbxpY5+hKDbGIcEYWB7Y2n1XAgj
-         8MR3P5eVZlOg24T4I8vR4bPvtetzHBsvcO2Wbla4NJd2WafUqohLVUbTbpa3GGS3zeBz
-         UXspeo1qCyTAsXPC18bf+vEQZwxeD4T3Ai+UFQ0zmhgSzk4J/fQMvgwrqF/3NCYAGMF6
-         0c0Q==
-X-Gm-Message-State: ACrzQf1xlg4n41fD68vel1Y1Lzj90TVNtFoDo1CK6wiHvZNXlZtkCkpC
-        hWWjs4wL9KBduMz/oB7mb9IxTw==
-X-Google-Smtp-Source: AMsMyM6Ka5CO8JW+udIuW1pTo+oi3POKxDhOQ2etdGB19wypOpdxMZP7SqrspYTEsdDdzY/4x5HGTg==
-X-Received: by 2002:a05:620a:1452:b0:6ec:3f82:522b with SMTP id i18-20020a05620a145200b006ec3f82522bmr2719440qkl.402.1666117745901;
-        Tue, 18 Oct 2022 11:29:05 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id y4-20020a37e304000000b006b5cc25535fsm2699092qki.99.2022.10.18.11.29.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 11:29:04 -0700 (PDT)
-Message-ID: <5d87f1c3-1c73-054b-dca1-9f52939e187d@linaro.org>
-Date:   Tue, 18 Oct 2022 14:29:03 -0400
+        Tue, 18 Oct 2022 14:29:37 -0400
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F011B7A7;
+        Tue, 18 Oct 2022 11:29:31 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 18:29:12 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1666117769; x=1666376969;
+        bh=39j/N8FEDTlg592aMy449d8TbNb26ue3BrX+9fClMEM=;
+        h=Date:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=Qpcad0zWnJwbQrjv1rdxAt5LKpcayscF7lm64ACGbl5l7l/uQayJSBgXpzh6Zc6vi
+         520RxBhqtNNxC/RgCVhxYGnaSVaPqdl4vA9CsehNB/ULSbWdSsAwkt8hH8QmkLpB+X
+         4hB2Wv+ASQsbEBztvIzLrPcTGiRC90f9SngAovCk=
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     krzysztof.kozlowski@linaro.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH v7 1/2] dt-bindings: input: document Qualcomm PMI8998 haptics driver
+Message-ID: <e588abdb-6817-25cf-dd9e-be23044e1e94@connolly.tech>
+In-Reply-To: <20221015172915.1436236-2-caleb@connolly.tech>
+References: <20221015172915.1436236-1-caleb@connolly.tech> <20221015172915.1436236-2-caleb@connolly.tech>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/2] dt-bingdings: mmc: Mediatek: add ICE clock
-Content-Language: en-US
-To:     Mengqi Zhang <mengqi.zhang@mediatek.com>,
-        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, wenbin.mei@mediatek.com
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221017142007.5408-1-mengqi.zhang@mediatek.com>
- <20221017142007.5408-3-mengqi.zhang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221017142007.5408-3-mengqi.zhang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 10:20, Mengqi Zhang wrote:
-> Document the binding for crypto clock of the Inline Crypto Engine
-> of Mediatek SoCs.
 
-This does not match the patch contents at all.
 
-> 
-> Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
+On 15/10/2022 18:30, Caleb Connolly wrote:
+> Add bindings for qcom PMIC PMI8998 haptics driver.
+>
+> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
 > ---
->  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>   .../bindings/input/qcom,pmi8998-haptics.yaml  | 73 +++++++++++++++++++
+>   1 file changed, 73 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/input/qcom,pmi8998=
+-haptics.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics=
+.yaml b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
+> new file mode 100644
+> index 000000000000..d43324cceb89
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright 2020 Unisoc Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/qcom,pmi8998-haptics.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PMI8998/PM660 Haptics
+> +
+> +maintainers:
+> +  - Caleb Connolly <caleb@connolly.tech>
+> +
+> +description: |
+> +  Qualcomm SPMI haptics is a peripheral on some QTI PMICs. It supports l=
+inear resonant
+> +  actuators and eccentric rotating mass type haptics commonly found in m=
+obile devices.
+> +  It supports multiple sources of wave data such as an internal buffer, =
+direct play
+> +  (from kernel or userspace) as well as an audio output mode.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,pmi8998-haptics
+> +          - qcom,pm660-charger
 
-Best regards,
-Krzysztof
+I've just noticed this typo! Will respin and fix...
+
+> +          - qcom,pmi8996-haptics
+> +          - qcom,pmi8941-haptics
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: short
+> +      - const: play
+> +
+> +  qcom,wave-play-duration-us:
+> +    description: |
+> +      Wave sample duration in microseconds, 1/f where f
+> +      is the resonant frequency of the actuator.
+> +      This property is named qcom,wave-play-rate-us in
+> +      downstream kernels.
+> +    minimum: 0
+> +    maximum: 20475
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - qcom,wave-play-rate-us
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    spmi {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +      pmi8998_haptics: haptics@c000 {
+> +        compatible =3D "qcom,pmi8998-haptics";
+> +        reg =3D <0xc000>;
+> +
+> +        interrupts =3D <0x3 0xc0 0x0 IRQ_TYPE_EDGE_BOTH>,
+> +                     <0x3 0xc0 0x1 IRQ_TYPE_EDGE_BOTH>;
+> +        interrupt-names =3D "short", "play";
+> +
+> +        qcom,wave-play-rate-us =3D <4255>;
+> +      };
+> +    };
+> --
+> 2.38.0
+>
+
+--
+Kind Regards,
+Caleb
 
