@@ -2,148 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A4E602EAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD03602EFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiJROiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S230071AbiJRO5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiJROiE (ORCPT
+        with ESMTP id S229584AbiJRO5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:38:04 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF36C97CC;
-        Tue, 18 Oct 2022 07:38:01 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MsGcT5n69zKG7J;
-        Tue, 18 Oct 2022 22:35:37 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP3 (Coremail) with SMTP id _Ch0CgBne11Guk5jh5e9AQ--.19076S2;
-        Tue, 18 Oct 2022 22:37:59 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH] libbpf: Avoid allocating reg_name with sscanf in parse_usdt_arg()
-Date:   Tue, 18 Oct 2022 10:55:38 -0400
-Message-Id: <20221018145538.2046842-1-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 18 Oct 2022 10:57:07 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03692D8ED6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:57:05 -0700 (PDT)
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 13B183F473
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1666105024;
+        bh=BafWgVTs1Qs33lQ5vYE0lEluRGQS0XS1I2Mm/0y61yc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=OZUEAoVQEBNpasj8uBxRqaPTgMjpgC+BL8NLcndDFANai2tsbRSQnZu882Y82xw6X
+         p6Nm79SR+FqYpAGyWjeC3zqDygFIGvgs6vxMvKchU3aYnPkzIgvD/OSYQW9vyjmha5
+         RZ/6Ol21et/sRFfw9cDmBDAZoOnRT1amdKE6hAcTe8f0GIShMmwrxfkDEfsdto8keC
+         KUkrx/lHwRap7W3h/xJ3lWTEuUiOB76aFUqkLHuF/XgWpjIMJkWHziATvlD53D/TFq
+         gYL4xqbCJGFszZWJupGlCE0K4B0iFKJZddBzFWepjlGFN47y1Nfkkde+3D/wFxeJam
+         cdWuBQ5TKZuuw==
+Received: by mail-qv1-f71.google.com with SMTP id i7-20020a0cab47000000b004b4376895bfso8910527qvb.20
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:57:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BafWgVTs1Qs33lQ5vYE0lEluRGQS0XS1I2Mm/0y61yc=;
+        b=rDj9yGQKeENvCq3ocWOW3lrsbbzXre9Rbt0mniWQpRMLYh7WDvzEsgCdPYyX3ISuw/
+         v6H2yMwsbqSmN/MsC53WjXsI6She0mDJtp1WAuSp5bRJ2uYPMye+JnGyohhR3BRZ7iBf
+         Ewp8sWn8QHarnECJa0VWemKGDprZMG6PFc0fGmm8iRe8TtpALP82DjpQQ6qvkRf27ghi
+         fIx0Bc9tswf8iI0MQGK9X8ii+GBbMRyrqe0zmvb2BVC7GlefX7IJqdW++PQMEVUA1fGo
+         au5S7MWytktqbk4k5//gMXDmECXtiNztFnE6vLVg9ta4G60Ls1q3abNKqkxmrxMkKtxH
+         IVjA==
+X-Gm-Message-State: ACrzQf0otxe/rAEy8aafSa1FjVJ4QrkphbdeDxFBNtjD4ZVI+oBzdhV1
+        6lyXTctjKeT9JYgb8NIw+/ECKW2NabdyOrO1EHuZUP+YxNzw9aygcVOvv2FLSYdiVlJ5r5ALTQI
+        ZnuU5wepVHYRyCCHiZ0Nim9jtox7RJCQ7HUa6U+r6hb1YIpHzM+DAYHx7Qw==
+X-Received: by 2002:a05:6214:2301:b0:498:9f6f:28d with SMTP id gc1-20020a056214230100b004989f6f028dmr2400040qvb.5.1666105022666;
+        Tue, 18 Oct 2022 07:57:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5VLAiOfs5ypDxb9bi0mpLfwMnKLT/JanF3CcvFCQOgy+yFhQZHARVCsQs1Lrgtks+5teBsR2NSVjwnI8zDS7I=
+X-Received: by 2002:a05:6214:2301:b0:498:9f6f:28d with SMTP id
+ gc1-20020a056214230100b004989f6f028dmr2400025qvb.5.1666105022393; Tue, 18 Oct
+ 2022 07:57:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgBne11Guk5jh5e9AQ--.19076S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFW8Xw4fuF1rKF17Kw1rJFb_yoW5Ar43pw
-        4Sgw1qvrn7J3ySga4DXanYq34UCrZrJrZYyr18ta45ZF4fWr95t34fKF4Fywn5GFW7AF4a
-        9F4rCryrGFy5Xr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018091316.415685-1-emil.renner.berthing@canonical.com> <20221018132921.5fsbiz254npk2fci@pengutronix.de>
+In-Reply-To: <20221018132921.5fsbiz254npk2fci@pengutronix.de>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Tue, 18 Oct 2022 16:56:46 +0200
+Message-ID: <CAJM55Z_v069EJmnr_nLFx9CQV9HfAOc2vCFv95VSip59zLFvjA@mail.gmail.com>
+Subject: Re: [PATCH v1] pwm: sifive: Always let the first pwm_apply_state succeed
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Wesley W. Terpstra" <wesley@sifive.com>,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Tue, 18 Oct 2022 at 15:29, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> Hello,
+>
+> On Tue, Oct 18, 2022 at 11:13:16AM +0200, Emil Renner Berthing wrote:
+> > Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
+> > RGB and green PWM controlled LEDs on the HiFive Unmatched board
+> > managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
+> > All three colours of the RGB LED and the green LED run from different
+> > lines of the same PWM, but with the same period so this works fine when
+> > the LED drivers are loaded one after the other.
+> >
+> > Unfortunately it does expose a race in the PWM driver when both LED
+> > drivers are loaded at roughly the same time. Here is an example:
+> >
+> >   |          Thread A           |          Thread B           |
+> >   |  led_pwm_mc_probe           |  led_pwm_probe              |
+> >   |    devm_fwnode_pwm_get      |                             |
+> >   |      pwm_sifive_request     |                             |
+> >   |        ddata->user_count++  |                             |
+> >   |                             |    devm_fwnode_pwm_get      |
+> >   |                             |      pwm_sifive_request     |
+> >   |                             |        ddata->user_count++  |
+> >   |         ...                 |          ...                |
+> >   |    pwm_state_apply          |    pwm_state_apply          |
+> >   |      pwm_sifive_apply       |      pwm_sifive_apply       |
+> >
+> > Now both calls to pwm_sifive_apply will see that ddata->approx_period,
+> > initially 0, is different from the requested period and the clock needs
+> > to be updated. But since ddata->user_count >=3D 2 both calls will fail
+> > with -EBUSY, which will then cause both LED drivers to fail to probe.
+> >
+> > Fix it by letting the first call to pwm_sifive_apply update the clock
+> > even when ddata->user_count !=3D 1.
+> >
+> > Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
+> > Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com=
+>
+> > ---
+> >  drivers/pwm/pwm-sifive.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
+> > index 2d4fa5e5fdd4..ccdf92045f34 100644
+> > --- a/drivers/pwm/pwm-sifive.c
+> > +++ b/drivers/pwm/pwm-sifive.c
+> > @@ -159,7 +159,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, =
+struct pwm_device *pwm,
+> >
+> >       mutex_lock(&ddata->lock);
+> >       if (state->period !=3D ddata->approx_period) {
+> > -             if (ddata->user_count !=3D 1) {
+> > +             if (ddata->user_count !=3D 1 && ddata->approx_period) {
+>
+> IMHO this needs a code comment. It should among others mention that
+> approx_period is only zero if .apply() wasn't called before.
 
-The reg_name in parse_usdt_arg() is used to hold register name, which
-is short enough to be held in a 16-byte array, so we could define
-reg_name as char reg_name[16] to avoid dynamically allocating reg_name
-with sscanf.
+Agreed. I'll add in v2.
 
-Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- tools/lib/bpf/usdt.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+> Let me note this is inconsistent. I didn't check the details, but let's
+> assume the PWM can implement .period =3D 500 and .period =3D 514 and noth=
+ing
+> in between. So if the the first PWM requests 512 ns it gets (I hope) 500
+> ns. Then when the second requests comes in requesting 511 it fails and
+> if it requests 512 is succeeds also getting 500 ns. Hmm.
 
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index 49f3c3b7f609..28fa1b2283de 100644
---- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -1225,26 +1225,24 @@ static int calc_pt_regs_off(const char *reg_name)
- 
- static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
- {
--	char *reg_name = NULL;
-+	char reg_name[16];
- 	int arg_sz, len, reg_off;
- 	long off;
- 
--	if (sscanf(arg_str, " %d @ %ld ( %%%m[^)] ) %n", &arg_sz, &off, &reg_name, &len) == 3) {
-+	if (sscanf(arg_str, " %d @ %ld ( %%%15[^)] ) %n", &arg_sz, &off, reg_name, &len) == 3) {
- 		/* Memory dereference case, e.g., -4@-20(%rbp) */
- 		arg->arg_type = USDT_ARG_REG_DEREF;
- 		arg->val_off = off;
- 		reg_off = calc_pt_regs_off(reg_name);
--		free(reg_name);
- 		if (reg_off < 0)
- 			return reg_off;
- 		arg->reg_off = reg_off;
--	} else if (sscanf(arg_str, " %d @ %%%ms %n", &arg_sz, &reg_name, &len) == 2) {
-+	} else if (sscanf(arg_str, " %d @ %%%15s %n", &arg_sz, reg_name, &len) == 2) {
- 		/* Register read case, e.g., -4@%eax */
- 		arg->arg_type = USDT_ARG_REG;
- 		arg->val_off = 0;
- 
- 		reg_off = calc_pt_regs_off(reg_name);
--		free(reg_name);
- 		if (reg_off < 0)
- 			return reg_off;
- 		arg->reg_off = reg_off;
-@@ -1456,16 +1454,15 @@ static int calc_pt_regs_off(const char *reg_name)
- 
- static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
- {
--	char *reg_name = NULL;
-+	char reg_name[16];
- 	int arg_sz, len, reg_off;
- 	long off;
- 
--	if (sscanf(arg_str, " %d @ %ld ( %m[a-z0-9] ) %n", &arg_sz, &off, &reg_name, &len) == 3) {
-+	if (sscanf(arg_str, " %d @ %ld ( %15[a-z0-9] ) %n", &arg_sz, &off, reg_name, &len) == 3) {
- 		/* Memory dereference case, e.g., -8@-88(s0) */
- 		arg->arg_type = USDT_ARG_REG_DEREF;
- 		arg->val_off = off;
- 		reg_off = calc_pt_regs_off(reg_name);
--		free(reg_name);
- 		if (reg_off < 0)
- 			return reg_off;
- 		arg->reg_off = reg_off;
-@@ -1474,12 +1471,11 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
- 		arg->arg_type = USDT_ARG_CONST;
- 		arg->val_off = off;
- 		arg->reg_off = 0;
--	} else if (sscanf(arg_str, " %d @ %m[a-z0-9] %n", &arg_sz, &reg_name, &len) == 2) {
-+	} else if (sscanf(arg_str, " %d @ %15[a-z0-9] %n", &arg_sz, reg_name, &len) == 2) {
- 		/* Register read case, e.g., -8@a1 */
- 		arg->arg_type = USDT_ARG_REG;
- 		arg->val_off = 0;
- 		reg_off = calc_pt_regs_off(reg_name);
--		free(reg_name);
- 		if (reg_off < 0)
- 			return reg_off;
- 		arg->reg_off = reg_off;
--- 
-2.30.2
+Yes, if two different consumers wants different periods then whoever
+gets to take the mutex in pwm_sifive_apply first gets to set the clock
+for its requested period and the other consumer will get -EBUSY. I
+don't see how this lets one consumer call pwm_state_apply successfully
+but still get a different period though.
 
+/Emil
+
+> Best regards
+> Uwe
+>
+> --
+> Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig       =
+     |
+> Industrial Linux Solutions                 | https://www.pengutronix.de/ =
+|
