@@ -2,248 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9B46031FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781346031FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiJRSHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
+        id S229463AbiJRSJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiJRSHl (ORCPT
+        with ESMTP id S229554AbiJRSJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:07:41 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB7E5C363
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:07:40 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id j12-20020a63594c000000b004468ff8fc78so8458632pgm.10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:07:40 -0700 (PDT)
+        Tue, 18 Oct 2022 14:09:17 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FE15EDC3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:09:16 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id o17-20020a17090aac1100b0020d98b0c0f4so16769152pjq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:09:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuVjSplyBXIPd7uWO393ugBi/njAUtKrGdSOK72nMMo=;
-        b=oCN1jDfBFe0TZVpGUlaA/ZZtrXqmMoDyg2Xic0OjjoRanJrpKg517yTqDVe7dRqy1z
-         AECFSeXfdl6b3KJLmBTghr1pR/Nr9a8QYIF5TCOoHrJK6RyQOIJP4v7VtxdfhiMZGiMe
-         azHmeZmV5QC73wA/YZ5PxwDh1ZrG07R8yXJ5aBcHUDYiFEFs8G0EEhOn4mHrf9S2Qa8D
-         D9CjqmSfzRR87v/AwVqgXtnheJOW8h3zbqyn6O05QmNYCFyuwkJFD0kdqFt6UzlcZhV8
-         kGT1vGW4q+ZuieONJelSFhWDo9sjwExgKB0x75CtI6xQsti11GJN+yl9VLGsueaCA/zM
-         IsRg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AMuB6JFVOyqdER293NidtAVyJ00hndHqLd79moXaHH0=;
+        b=SxYPEtw1Hj5BFRZDYafhryK1ZYRdbiUnWYfKg15cY1nFw12NqO02a1GaNaOuboCMBU
+         8pr14H3IG12creGd4eh7liWjX4Q7+qLBx2jm1ijLnt9DVPI4xKjOpEzNmw9aYINcVoCO
+         jU9F09m0lmsYurKxFboCZmTZsT/EJAqeU2+iE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuVjSplyBXIPd7uWO393ugBi/njAUtKrGdSOK72nMMo=;
-        b=ojGLanj43YVw5YramfT99rhQ7nt7ISDGFFg0RwjW23idOO8+fpio8zkJMou+Q9GaWd
-         Fr46N7qXZccwdL47hjFjQpD4E2q47TGApHecN0OMeZ03NHwzRv/tjFRbV9fcy4+APtMN
-         UYj5sVa7anFv8gdbjlQqJNA8LVM8iv6ZlQiADYFhX1b5bKMBZGGX1qWEtK2+lEYdknOq
-         ecS47bIJHimJkFEi+/Vmqt/pO5J3z9x+jpGUJuUGwurEiTxjr8BUv/MZgdR6fxByVbFs
-         5o2bp2KqZIe2qXP4dJ8m8p5D0XDZUlPteoYsFyPna0ivuyHpRLrFmxYW1cmg/s78OnpH
-         HQ7Q==
-X-Gm-Message-State: ACrzQf1aIoxfiD+41iSB0/Cy142wzLaaGcZqzGqmO+NKgbF9YivgYlIJ
-        lur/LyDBk7eiHOrkTOm/y1vnMOE=
-X-Google-Smtp-Source: AMsMyM4kTW3fLnTML3Zt8GdvqSub4ZsxSFSiIsHj8w9JHnGzIiT4SuAdzosdCmimydC5OKOcFwwsCZs=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:1707:b0:562:e790:dfc3 with SMTP id
- h7-20020a056a00170700b00562e790dfc3mr4484929pfc.59.1666116460090; Tue, 18 Oct
- 2022 11:07:40 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 11:07:38 -0700
-In-Reply-To: <20221018090550.never.834-kees@kernel.org>
-Mime-Version: 1.0
-References: <20221018090550.never.834-kees@kernel.org>
-Message-ID: <Y07raim32wOBRGPi@google.com>
-Subject: Re: [PATCH] bpf: Use kmalloc_size_roundup() to match ksize() usage
-From:   sdf@google.com
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AMuB6JFVOyqdER293NidtAVyJ00hndHqLd79moXaHH0=;
+        b=vgkTBjjZ4GWv4+3j0ft6Q4UDgcoQeMT7jcT0Xf1mmaYJyNo8cDoSUQ7A11YA140M4a
+         BMrVkTFv/5iezqRBnBWvLNLBf/Qw7NSyx9sF8r4PTjblkrF8EZnr6VCTVhTLfsmO3Bmw
+         XlaNIcErouwQrZ9GTVIeq6V9hmTENcvHd6NmWUYOhq2yWNZHaiSRij29OSJu4MJzXEPd
+         C1ypvcYG9XCvAWVZdc3JM617Db38hQ6I+ZH1Ocx8qrWGIwg8D29WiyiiCeROLLhdSi65
+         OK3ELXVFDXb8g2bfEDfOvgVLeqxlrZaC6dy9K1QXozUSsfedEGV2CTEVx7BYQSnXLyoY
+         1dZA==
+X-Gm-Message-State: ACrzQf1ymrYXkAH4492HhUzFLMbZmdgapwJhmbeBCCeowzaurn5mg5XK
+        cw2ZHg+UizbIjzwPkYAmMeupgQ==
+X-Google-Smtp-Source: AMsMyM6sH8lJy6qNaJdS/u0S3H6KQmscXj0Oh/cd8tbO9gAP/DRFhipqT+FR1orWSQKW7y9lw94/gw==
+X-Received: by 2002:a17:90a:2d8e:b0:20d:b4ee:aed3 with SMTP id p14-20020a17090a2d8e00b0020db4eeaed3mr29163279pjd.61.1666116555354;
+        Tue, 18 Oct 2022 11:09:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s187-20020a625ec4000000b005662e18c899sm9503828pfb.68.2022.10.18.11.09.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 11:09:14 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 11:09:13 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <202210181020.79AF7F7@keescook>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18, Kees Cook wrote:
-> Round up allocations with kmalloc_size_roundup() so that the verifier's
-> use of ksize() is always accurate and no special handling of the memory
-> is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
-> information back up to callers so they can use the space immediately,
-> so array resizing to happen less frequently as well. Explicitly zero
-> any trailing bytes in new allocations.
+On Tue, Oct 18, 2022 at 03:35:50PM +0200, Peter Zijlstra wrote:
+> Implement an alternative CFI scheme that merges both the fine-grained
+> nature of kCFI but also takes full advantage of the coarse grained
+> hardware CFI as provided by IBT.
 
-> Additionally fix a memory allocation leak: if krealloc() fails, "arr"
-> wasn't freed, but NULL was return to the caller of realloc_array() would
-> be writing NULL to the lvalue, losing the reference to the original
-> memory.
+Very nice to have!
 
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   kernel/bpf/verifier.c | 49 +++++++++++++++++++++++++++----------------
->   1 file changed, 31 insertions(+), 18 deletions(-)
+> To contrast:
+> 
+>   kCFI is a pure software CFI scheme and relies on being able to read
+> text -- specifically the instruction *before* the target symbol, and
+> does the hash validation *before* doing the call (otherwise control
+> flow is compromised already).
+> 
+>   FineIBT is a software and hardware hybrid scheme; by ensuring every
+> branch target starts with a hash validation it is possible to place
+> the hash validation after the branch. This has several advantages:
+> 
+>    o the (hash) load is avoided; no memop; no RX requirement.
+> 
+>    o IBT WAIT-FOR-ENDBR state is a speculation stop; by placing
+>      the hash validation in the immediate instruction after
+>      the branch target there is a minimal speculation window
+>      and the whole is a viable defence against SpectreBHB.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 014ee0953dbd..8a0b60207d0e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -1000,42 +1000,53 @@ static void print_insn_state(struct  
-> bpf_verifier_env *env,
->    */
->   static void *copy_array(void *dst, const void *src, size_t n, size_t  
-> size, gfp_t flags)
->   {
-> -	size_t bytes;
-> +	size_t src_bytes, dst_bytes;
+I still think it's worth noting it does technically weaken the
+"attacker-controlled executable memory content injection" attack
+requirements, too. While an attacker needs to make sure they place an
+ENDBR at the start of their injected code, they no longer need to also
+learn and inject the CFI hash too, as the malicious code can just not
+do the check at all. The difference in protection currently isn't much.
 
->   	if (ZERO_OR_NULL_PTR(src))
->   		goto out;
+It's not a very difficult requirement to get attacker-controlled bytes
+into executable memory, as there are already existing APIs that provide
+this to varying degrees of reachability, utility, and discoverability --
+for example, BPF JIT when constant blinding isn't enabled (the unfortunate
+default). And with the hashes currently being deterministic, there's no
+secret that needs to be exposed first; an attack can just calculate it.
+An improvement for kCFI would be to mutate all the hashes both at build
+time (perhaps using the same seed infrastructure that randstruct depends
+on for sharing a seed across compilation units), and at boot time, so
+an actual .text content exposure is needed to find the target hash value.
 
-> -	if (unlikely(check_mul_overflow(n, size, &bytes)))
-> +	if (unlikely(check_mul_overflow(n, size, &src_bytes)))
->   		return NULL;
-
-> -	if (ksize(dst) < bytes) {
-> +	dst_bytes = kmalloc_size_roundup(src_bytes);
-> +	if (ksize(dst) < dst_bytes) {
-
-Why not simply do the following here?
-
-	if (ksize(dst) < ksize(src)) {
-
-?
-
-It seems like we care about src_bytes/bytes only in this case, so maybe
-move that check_mul_overflow under this branch as well?
-
-
->   		kfree(dst);
-> -		dst = kmalloc_track_caller(bytes, flags);
-> +		dst = kmalloc_track_caller(dst_bytes, flags);
->   		if (!dst)
->   			return NULL;
->   	}
-
-> -	memcpy(dst, src, bytes);
-> +	memcpy(dst, src, src_bytes);
-> +	memset(dst + src_bytes, 0, dst_bytes - src_bytes);
->   out:
->   	return dst ? dst : ZERO_SIZE_PTR;
->   }
-
-> -/* resize an array from old_n items to new_n items. the array is  
-> reallocated if it's too
-> - * small to hold new_n items. new items are zeroed out if the array  
-> grows.
-> +/* Resize an array from old_n items to *new_n items. The array is  
-> reallocated if it's too
-> + * small to hold *new_n items. New items are zeroed out if the array  
-> grows. Allocation
-> + * is rounded up to next kmalloc bucket size to reduce frequency of  
-> resizing. *new_n
-> + * contains the new total number of items that will fit.
->    *
-> - * Contrary to krealloc_array, does not free arr if new_n is zero.
-> + * Contrary to krealloc, does not free arr if new_n is zero.
->    */
-> -static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t  
-> size)
-> +static void *realloc_array(void *arr, size_t old_n, size_t *new_n,  
-> size_t size)
->   {
-> -	if (!new_n || old_n == new_n)
-> +	void *old_arr = arr;
-> +	size_t alloc_size;
+> Obviously this patch relies on kCFI (upstream), but additionally it also
+> relies on the padding from the call-depth-tracking patches
+> (tip/x86/core). It uses this padding to place the hash-validation while
+> the call-sites are re-written to modify the indirect target to be 16
+> bytes in front of the original target, thus hitting this new preamble.
+> 
+> Notably, there is no hardware that needs call-depth-tracking (Skylake)
+> and supports IBT (Tigerlake and onwards).
+> 
+> Suggested-by: Joao Moreira (Intel) <joao@overdrivepizza.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> [...]
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2464,13 +2464,23 @@ config FUNCTION_PADDING_BYTES
+>  	default FUNCTION_PADDING_CFI if CFI_CLANG
+>  	default FUNCTION_ALIGNMENT
+>  
+> +config CALL_PADDING
+> +	def_bool n
+> +	depends on CC_HAS_ENTRY_PADDING && OBJTOOL
+> +	select FUNCTION_ALIGNMENT_16B
 > +
-> +	if (!new_n || !*new_n || old_n == *new_n)
->   		goto out;
+> +config FINEIBT
+> +	def_bool y
+> +	depends on X86_KERNEL_IBT && CFI_CLANG
+> +	select CALL_PADDING
 
+To that end, can we please make this a prompted choice?
 
-[..]
+And this is a good time to ping you about this patch as well:
+https://lore.kernel.org/lkml/20220902234213.3034396-1-keescook@chromium.org/
 
-> -	arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-> -	if (!arr)
-> +	alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
-> +	arr = krealloc(old_arr, alloc_size, GFP_KERNEL);
-> +	if (!arr) {
-> +		kfree(old_arr);
->   		return NULL;
-> +	}
+> [...]
+> +#ifdef CONFIG_FINEIBT
+> +/*
+> + * kCFI						FineIBT
+> + *
+> + * __cfi_\func:					__cfi_\func:
+> + *	movl   $0x12345678,%eax			     endbr64			// 4
 
-Any reason not do hide this complexity behind krealloc_array? Why can't
-it take care of those roundup details?
+kCFI emits endbr64 here first too ...
 
+> + *	nop					     subl   $0x12345678,%r10d   // 7
+> + *	nop					     jz     1f			// 2
+> + *	nop					     ud2			// 2
+> + *	nop					1:   nop			// 1
+> + *	nop
+> + *	nop
+> + *	nop
+> + *	nop
+> + *	nop
+> + *	nop
+> + *	nop
 
-> -	if (new_n > old_n)
-> -		memset(arr + old_n * size, 0, (new_n - old_n) * size);
-> +	*new_n = alloc_size / size;
-> +	if (*new_n > old_n)
-> +		memset(arr + old_n * size, 0, (*new_n - old_n) * size);
+Tangent: why are these nop instead of 0xcc? These bytes aren't executed
+ever are they?
 
->   out:
->   	return arr ? arr : ZERO_SIZE_PTR;
-> @@ -1067,7 +1078,7 @@ static int copy_stack_state(struct bpf_func_state  
-> *dst, const struct bpf_func_st
-
->   static int resize_reference_state(struct bpf_func_state *state, size_t n)
->   {
-> -	state->refs = realloc_array(state->refs, state->acquired_refs, n,
-> +	state->refs = realloc_array(state->refs, state->acquired_refs, &n,
->   				    sizeof(struct bpf_reference_state));
->   	if (!state->refs)
->   		return -ENOMEM;
-> @@ -1083,11 +1094,11 @@ static int grow_stack_state(struct bpf_func_state  
-> *state, int size)
->   	if (old_n >= n)
->   		return 0;
-
-> -	state->stack = realloc_array(state->stack, old_n, n, sizeof(struct  
-> bpf_stack_state));
-> +	state->stack = realloc_array(state->stack, old_n, &n, sizeof(struct  
-> bpf_stack_state));
->   	if (!state->stack)
->   		return -ENOMEM;
-
-> -	state->allocated_stack = size;
-> +	state->allocated_stack = n * BPF_REG_SIZE;
->   	return 0;
->   }
-
-> @@ -2499,9 +2510,11 @@ static int push_jmp_history(struct  
-> bpf_verifier_env *env,
->   {
->   	u32 cnt = cur->jmp_history_cnt;
->   	struct bpf_idx_pair *p;
-> +	size_t size;
-
->   	cnt++;
-> -	p = krealloc(cur->jmp_history, cnt * sizeof(*p), GFP_USER);
-> +	size = kmalloc_size_roundup(size_mul(cnt, sizeof(*p)));
-> +	p = krealloc(cur->jmp_history, size, GFP_USER);
->   	if (!p)
->   		return -ENOMEM;
->   	p[cnt - 1].idx = env->insn_idx;
-> --
-> 2.34.1
-
+-- 
+Kees Cook
