@@ -2,124 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563A4602C34
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB374602C38
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiJRMyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S230294AbiJRM4c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Oct 2022 08:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiJRMyL (ORCPT
+        with ESMTP id S230178AbiJRM40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:54:11 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AE6C4C2E;
-        Tue, 18 Oct 2022 05:54:10 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id l22so20288495edj.5;
-        Tue, 18 Oct 2022 05:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3VZrAcxYIFLhBzdmWrO+0osx70QYrpMUX4awPJm7NAI=;
-        b=ftXv806rGAILQ+FzU8QV4pQRO+u2iUTu9nNDx5gr0EITjpUgxiQYaD+uFko26DChbf
-         mteF68jR/Vl7xHlegQibANlr8D7p1xs9MOAb594xr23jplXZF+Ay+roWraFHR17d0z02
-         ZYbswuzR+9nH579Ql0xyfu4+uE3KeF6FbX05nQnHUl/tny+uwrt7sd5LFHuMvWXjrcKL
-         JW4xebwV3D/5/5BWpJWLZYH6kv0Q3mgFlGt83t2qxgi4gniGWJUtPa3kH44WSNI2UbIu
-         ufU1f2GoB8j5U6vJ6bi1zLIquXU2QCMLUKswrQH/rlrS2l5o50idJoewYg7pkgGaRdFh
-         ZOJQ==
+        Tue, 18 Oct 2022 08:56:26 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B56733FD;
+        Tue, 18 Oct 2022 05:56:25 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id a5so8509520qkl.6;
+        Tue, 18 Oct 2022 05:56:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3VZrAcxYIFLhBzdmWrO+0osx70QYrpMUX4awPJm7NAI=;
-        b=1SxOeoEq7z5nYd12VLmuMisdGmuqYYm5inZIQrqzAjjwqzVu3bynLUfbEOmR0MJ7qJ
-         8thN2ZKNCL/4xC48sg3Ramd/ZSOw1ROslgVStK0PHWM2qOfMXha8xvU5W3Qx80ARdtYU
-         J0Na4kO60ioEDPad4Wmr2wnx4eVWC2ESXbD7zksanmNoIrWY/MDi+PzX7JOdPKIFzgml
-         PUOYHL/h34dQsYcvHeNrCOvUjg5xqVcnH83Jb6HpZT4mirh+RW46jMKJbmT+jneeVF0I
-         3j3FasdYh+Rl06RpTSF+RfHTbDNWRCRrNbdsnPEZR9myDTvppldcXMylBCfT3qW1+g9h
-         /Ecg==
-X-Gm-Message-State: ACrzQf3ZJeEkSmQyjRrFg1OfRjTUmgAVBhkGD7FPZ+esVc/T0y7XdgRf
-        s6S2bn9LrAxMKD1Uhrc8+Y0=
-X-Google-Smtp-Source: AMsMyM7kL8grcFCnBhd5sOHIhyXGwrFcVflwEN5K6HesM+p/OpsVt1t8AZUk4PWPZsGvtMNiyXxjTg==
-X-Received: by 2002:a05:6402:3887:b0:458:289e:c9cc with SMTP id fd7-20020a056402388700b00458289ec9ccmr2491864edb.101.1666097648734;
-        Tue, 18 Oct 2022 05:54:08 -0700 (PDT)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id k17-20020aa7c391000000b00456cbd8c65bsm8962346edq.6.2022.10.18.05.54.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 05:54:08 -0700 (PDT)
-Message-ID: <f7e79f3a-be97-334b-84f2-76da0981e991@gmail.com>
-Date:   Tue, 18 Oct 2022 14:54:07 +0200
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B9HBrugsK31TJm1JiE6A5CYKBZDunxsHKdFGHyRGfLo=;
+        b=6yJ5vJqkZVRbeqcXexSTuPJ8icwOQ6GEYbJvnb3rhnde6dbguDssawOv2AE8Q6xNi2
+         41V7JcqWl7YbHjTOoddfeqFlSr37VDMFZq4Z/7+B9LkHzKEZfL2dOA91DRSo5tmq/fhl
+         QQLZYFLzP0S0LmL6VMVK21MUcztv2mNr+rqR/vN76aJEf8j4M6k4vJ9XM6bBJtulPDWw
+         TBVjXynlMiqfgqpJW2ZKpwNECv3f+QWj8T04ed2AP68L/go9SHlm9oYP4L1LPubSg/Fu
+         g5YVtmPBRvsO+p6O650HeU1N2bl0oy1arNEr8BBxuKdJb9BMcljzg1SaqMrpjyLECw7U
+         FTPQ==
+X-Gm-Message-State: ACrzQf2I9RiLGA4zAtBzdoP71KbkNu/pqukaXcL/NuceKrPtWeqaFUjQ
+        mwV2lXzXSGQaM7zvmaUrwDhqQKFvLiPDT3AjbEs=
+X-Google-Smtp-Source: AMsMyM4+Icbq+yeVGzKx5N3fr5SyZdlowFI47yvEYlUO9UU26C+9m1bQhevIGOSoy14JK5XUR5/Iu4Xba/JoFGYkAz8=
+X-Received: by 2002:a05:620a:4687:b0:6ee:e69c:e3f1 with SMTP id
+ bq7-20020a05620a468700b006eee69ce3f1mr1597151qkb.285.1666097784790; Tue, 18
+ Oct 2022 05:56:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH] perf report: Skip symbols for idle symbols
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220608055146.1446-1-zajec5@gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <20220608055146.1446-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220911090635.5559-1-lvjianmin@loongson.cn> <20220911090635.5559-2-lvjianmin@loongson.cn>
+ <8e9df8ea-06f0-3989-2563-d5dc6b09a062@huawei.com> <CAJZ5v0gBBdTxRkE08PO8W+yi1eTkWqzpGLAyMNuzZmqx02EzFA@mail.gmail.com>
+ <c7ae3a66-1d24-1014-b63a-8d4af3de42c8@arm.com> <7904cd2e-caf5-0073-9889-306ab524d802@huawei.com>
+ <ded07a34-0cf4-3f76-a538-fb6a9abd6673@loongson.cn>
+In-Reply-To: <ded07a34-0cf4-3f76-a538-fb6a9abd6673@loongson.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 18 Oct 2022 14:56:13 +0200
+Message-ID: <CAJZ5v0i5jo-+B6sq5Aftj_TR=dj4gt-4aiXhbu2BW-=KETQgFw@mail.gmail.com>
+Subject: Re: [PATCH V5 1/2] ACPI / scan: Support multiple dma windows with
+ different offsets
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Yicong Yang <yangyicong@huawei.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, yangyicong@hisilicon.com,
+        lpieralisi@kernel.org, chenhuacai@loongson.cn,
+        guohanjun@huawei.com, sudeep.holla@arm.com, lenb@kernel.org,
+        robert.moore@intel.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, loongarch@lists.linux.dev,
+        liulongfang <liulongfang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8.06.2022 07:51, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Displaying idle symbols is rather useless and makes reviewing "real"
-> symbols harder. perf top already skips them so perf report should
-> probably do the same.
-> 
-> BEFORE
-> 
-> # Overhead  Command          Shared Object          Symbol
-> # ........  ...............  .....................  ...................................
-> #
->      75.04%  swapper          [kernel.kallsyms]      [k] arch_cpu_idle
->       1.05%  ksoftirqd/0      [kernel.kallsyms]      [k] __pi___inval_dcache_area
->       0.78%  ksoftirqd/0      [kernel.kallsyms]      [k] __netif_receive_skb_core
->       0.75%  ksoftirqd/0      [kernel.kallsyms]      [k] fib_table_lookup
->       0.58%  ksoftirqd/0      [kernel.kallsyms]      [k] __dev_queue_xmit
->       0.56%  ksoftirqd/0      [kernel.kallsyms]      [k] bcm4908_enet_start_xmit
->       0.55%  ksoftirqd/0      [kernel.kallsyms]      [k] __skb_flow_dissect
->       0.53%  ksoftirqd/0      [kernel.kallsyms]      [k] __pi___clean_dcache_area_poc
-> 
-> AFTER
-> 
-> # Overhead  Command          Shared Object          Symbol
-> # ........  ...............  .....................  ...................................
-> #
->       4.21%  ksoftirqd/0      [kernel.kallsyms]      [k] __pi___inval_dcache_area
->       3.13%  ksoftirqd/0      [kernel.kallsyms]      [k] __netif_receive_skb_core
->       3.01%  ksoftirqd/0      [kernel.kallsyms]      [k] fib_table_lookup
->       2.32%  ksoftirqd/0      [kernel.kallsyms]      [k] __dev_queue_xmit
->       2.23%  ksoftirqd/0      [kernel.kallsyms]      [k] bcm4908_enet_start_xmit
->       2.21%  ksoftirqd/0      [kernel.kallsyms]      [k] __skb_flow_dissect
->       2.13%  ksoftirqd/0      [kernel.kallsyms]      [k] __pi___clean_dcache_area_poc
->       2.00%  ksoftirqd/0      [kernel.kallsyms]      [k] eth_type_trans
->       1.86%  ksoftirqd/0      [kernel.kallsyms]      [k] bcm4908_enet_poll_rx
->       1.73%  ksoftirqd/0      [kernel.kallsyms]      [k] __local_bh_enable_ip
->       1.63%  ksoftirqd/0      [kernel.kallsyms]      [k] fib_rules_lookup
->       1.61%  ksoftirqd/0      [kernel.kallsyms]      [k] bcm4908_enet_poll_tx
->       (...)
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+On Tue, Oct 18, 2022 at 2:50 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>
+>
+>
+> On 2022/10/18 下午8:32, Yicong Yang wrote:
+> > On 2022/10/18 20:00, Robin Murphy wrote:
+> >> On 2022-10-18 11:08, Rafael J. Wysocki wrote:
+> >>> On Tue, Oct 18, 2022 at 11:33 AM Yicong Yang <yangyicong@huawei.com> wrote:
+> >>>>
+> >>>> On 2022/9/11 17:06, Jianmin Lv wrote:
+> >>>>> In DT systems configurations, of_dma_get_range() returns struct
+> >>>>> bus_dma_region DMA regions; they are used to set-up devices
+> >>>>> DMA windows with different offset available for translation between DMA
+> >>>>> address and CPU address.
+> >>>>>
+> >>>>> In ACPI systems configuration, acpi_dma_get_range() does not return
+> >>>>> DMA regions yet and that precludes setting up the dev->dma_range_map
+> >>>>> pointer and therefore DMA regions with multiple offsets.
+> >>>>>
+> >>>>> Update acpi_dma_get_range() to return struct bus_dma_region
+> >>>>> DMA regions like of_dma_get_range() does.
+> >>>>>
+> >>>>> After updating acpi_dma_get_range(), acpi_arch_dma_setup() is changed for
+> >>>>> ARM64, where the original dma_addr and size are removed as these
+> >>>>> arguments are now redundant, and pass 0 and U64_MAX for dma_base
+> >>>>> and size of arch_setup_dma_ops; this is a simplification consistent
+> >>>>> with what other ACPI architectures also pass to iommu_setup_dma_ops().
+> >>>>>
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> With this patch we met problem as well. The DMA coherent mask is not set correctly
+> >>>> for a ehci usb controller and lead to the below calltrace:
+> >>>>
+> >>>> [   16.699259] ------------[ cut here ]------------
+> >>>> [   16.703855] WARNING: CPU: 0 PID: 853 at kernel/dma/mapping.c:499 dma_alloc_attrs+0xc0/0xf0
+> >>>> [   16.712082] Modules linked in:
+> >>>> [   16.715124] CPU: 0 PID: 853 Comm: kworker/0:3 Not tainted 6.1.0-rc1-pipe-deadlock+ #5
+> >>>> [   16.722916] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B211.01 11/10/2021
+> >>>> [   16.731745] Workqueue: events work_for_cpu_fn
+> >>>> [   16.736083] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> >>>> [   16.743013] pc : dma_alloc_attrs+0xc0/0xf0
+> >>>> [   16.747091] lr : dma_pool_alloc+0x11c/0x200
+> >>>> [   16.751255] sp : ffff80001e46bb50
+> >>>> [   16.754554] x29: ffff80001e46bb50 x28: 0000000000000000 x27: 0000000000000000
+> >>>> [   16.761657] x26: ffff80000b33ce18 x25: ffff800009cc6c48 x24: 0000000000000000
+> >>>> [   16.768759] x23: ffff00208c830918 x22: 0000000000001000 x21: 0000000000000cc0
+> >>>> [   16.775861] x20: ffff00208ae82080 x19: ffff0020865c40d0 x18: 0000000000000030
+> >>>> [   16.782964] x17: 626d756e20737562 x16: 2064656e67697373 x15: ffff00208ae82640
+> >>>> [   16.790066] x14: 0000000000000000 x13: 646e756f72616b72 x12: 6f77204348207379
+> >>>> [   16.797167] x11: 73706f6e79532067 x10: ffff205f43980000 x9 : ffff80000830b3ac
+> >>>> [   16.804269] x8 : ffff0020861b1b00 x7 : 0000000000000000 x6 : 0000000000000000
+> >>>> [   16.811371] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000cc0
+> >>>> [   16.818472] x2 : ffff00208c830918 x1 : 0000000000001000 x0 : 0000000000000000
+> >>>> [   16.825574] Call trace:
+> >>>> [   16.828009]  dma_alloc_attrs+0xc0/0xf0
+> >>>> [   16.831741]  dma_pool_alloc+0x11c/0x200
+> >>>> [   16.835559]  ehci_qh_alloc+0x60/0x12c
+> >>>> [   16.839207]  ehci_setup+0x18c/0x40c
+> >>>> [   16.842680]  ehci_pci_setup+0xb8/0x680
+> >>>> [   16.846412]  usb_add_hcd+0x310/0x5c0
+> >>>> [   16.849973]  usb_hcd_pci_probe+0x254/0x36c
+> >>>> [   16.854051]  ehci_pci_probe+0x40/0x60
+> >>>> [   16.857698]  local_pci_probe+0x48/0xb4
+> >>>> [   16.861431]  work_for_cpu_fn+0x24/0x40
+> >>>> [   16.865163]  process_one_work+0x1e0/0x450
+> >>>> [   16.869155]  worker_thread+0x2cc/0x44c
+> >>>> [   16.872886]  kthread+0x114/0x120
+> >>>> [   16.876099]  ret_from_fork+0x10/0x20
+> >>>> [   16.879657] ---[ end trace 0000000000000000 ]---
+> >>>>
+> >>>> After reverting this patch the problem resolved. Tested on the latest 6.1-rc1.
+> >>>
+> >>> OK, I'll queue up a revert of this and one more commit depending on it.
+> >>
+> >> FWIW it looks like the fix should be as simple as below.
+> >>
+> >
+> > Looks like it's the case. The change works on my platform, now the ehci probed successfully again
+> > with no calltrace:
+> >
+> > Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+> >
+> >> Robin.
+> >>
+> >> ----->8-----
+> >> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> >> index 558664d169fc..b6962bff1eae 100644
+> >> --- a/drivers/acpi/scan.c
+> >> +++ b/drivers/acpi/scan.c
+> >> @@ -1509,6 +1509,7 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+> >>               goto out;
+> >>           }
+> >>
+> >> +        *map = r;
+> >>           list_for_each_entry(rentry, &list, node) {
+> >>               if (rentry->res->start >= rentry->res->end) {
+> >>                   kfree(r);
+> >> @@ -1523,8 +1524,6 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+> >>               r->offset = rentry->offset;
+> >>               r++;
+> >>           }
+> >> -
+> >> -        *map = r;
+> >>       }
+> >>    out:
+> >>       acpi_dev_free_resource_list(&list);
+> >>
+>
+> Ohh, yes, map got a wrong value of r because it has been changed.
 
-Ping? Does it look OK to you?
+Well, please send me a working patch by EOD tomorrow.
+
+> Maybe wo can fix it like this:
+>
+> truct bus_dma_region *r, *orig_r;
+> ...
+> orig_r = r = kcalloc(ret + 1, sizeof(*r), GFP_KERNEL);
+> ...
+> *map = orig_r;
+>
+> >> .
