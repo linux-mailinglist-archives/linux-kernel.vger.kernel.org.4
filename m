@@ -2,84 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EF26033E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935956033E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiJRU03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 16:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S229922AbiJRU1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 16:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJRU02 (ORCPT
+        with ESMTP id S229604AbiJRU1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 16:26:28 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA7C7F13F;
-        Tue, 18 Oct 2022 13:26:26 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 18 Oct 2022 16:27:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4D47F13F;
+        Tue, 18 Oct 2022 13:27:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MsQPC6301z4xFs;
-        Wed, 19 Oct 2022 07:26:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666124783;
-        bh=FK5Q8VNWE3orkYGwsDEN4kgJdYgLRepfQDzI6MbhflM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UMu9epSKdp4ul5CDz47iujs0WcFyx7UMbtSxs0YHB/VeKnt2Q55OXZcvDmJFbRr/Y
-         Orob8tsO7t38B1D40fsTn1Zd5SKyP8PV6bIsiRgUAMqGPQC9a4ExPawmRTlilyAFar
-         8m3na7ut6FFvUht2BvwUYJ6j/cvNfT7E7DoIH2E2F3L8Src4eENdkmR285xug01iDH
-         0L6JW9MN+mzRy1KxUQOJDmwWzqjUeLI/zsgfC1rJpwIQ1fqbI5mTKIs3JZjCO1rgQR
-         XdxnFFeKh7lz3Xn8KP2fkdtQQYCmZ8cBJQ4QaD8EtYbpu/jCGsvqalZAf3dTMLV9er
-         8l29FZZzWDHrA==
-Date:   Wed, 19 Oct 2022 07:26:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the libata tree
-Message-ID: <20221019072605.7d6c8cbd@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B7D616EA;
+        Tue, 18 Oct 2022 20:27:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16D7C433D6;
+        Tue, 18 Oct 2022 20:27:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AfpjIH9c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666124863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z9dNg5RUH3ZUYvEP9bPk55wn/6KP5eKiCL7817xOPJo=;
+        b=AfpjIH9cDCFgTUBq9oDwFF23ExG/kMnTNG/BdqNSodzUqas/Qs1Ff+i/Tkfdk3qCikxF2A
+        Gf1m5C/q+h9bIvjQfT62a63b1Gd1YOBJqzdqAtD7sPIpvc6Ugpa1AJlT5JSGx84LUXVQ4o
+        nTBiOSN2Eqnjn7VirEb05LDPLfwmF2E=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3a8f4031 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 18 Oct 2022 20:27:43 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Helmut Schaa <helmut.schaa@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH] wifi: rt2x00: use explicitly signed type for clamping
+Date:   Tue, 18 Oct 2022 14:27:34 -0600
+Message-Id: <20221018202734.140489-1-Jason@zx2c4.com>
+In-Reply-To: <202210190108.ESC3pc3D-lkp@intel.com>
+References: <202210190108.ESC3pc3D-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LSE2hyvAV4fwD0xDQ8/qA=h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/LSE2hyvAV4fwD0xDQ8/qA=h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On some platforms, `char` is unsigned, which makes casting -7 to char
+overflow, which in turn makes the clamping operation bogus. Instead,
+deal with an explicit `s8` type, so that the comparison is always
+signed, and return an s8 result from the function as well. Note that
+this function's result is assigned to a `short`, which is always signed.
 
-Hi all,
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: Helmut Schaa <helmut.schaa@googlemail.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/net/wireless/ralink/rt2x00/rt2800lib.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Commit
+diff --git a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+index cbbb1a4849cf..e233ef9892b3 100644
+--- a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
++++ b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+@@ -4035,23 +4035,23 @@ static void rt2800_iq_calibrate(struct rt2x00_dev *rt2x00dev, int channel)
+ 	rt2800_bbp_write(rt2x00dev, 159, cal != 0xff ? cal : 0);
+ }
+ 
+-static char rt2800_txpower_to_dev(struct rt2x00_dev *rt2x00dev,
++static s8 rt2800_txpower_to_dev(struct rt2x00_dev *rt2x00dev,
+ 				  unsigned int channel,
+-				  char txpower)
++				  s8 txpower)
+ {
+ 	if (rt2x00_rt(rt2x00dev, RT3593) ||
+ 	    rt2x00_rt(rt2x00dev, RT3883))
+ 		txpower = rt2x00_get_field8(txpower, EEPROM_TXPOWER_ALC);
+ 
+ 	if (channel <= 14)
+-		return clamp_t(char, txpower, MIN_G_TXPOWER, MAX_G_TXPOWER);
++		return clamp_t(s8, txpower, MIN_G_TXPOWER, MAX_G_TXPOWER);
+ 
+ 	if (rt2x00_rt(rt2x00dev, RT3593) ||
+ 	    rt2x00_rt(rt2x00dev, RT3883))
+-		return clamp_t(char, txpower, MIN_A_TXPOWER_3593,
++		return clamp_t(s8, txpower, MIN_A_TXPOWER_3593,
+ 			       MAX_A_TXPOWER_3593);
+ 	else
+-		return clamp_t(char, txpower, MIN_A_TXPOWER, MAX_A_TXPOWER);
++		return clamp_t(s8, txpower, MIN_A_TXPOWER, MAX_A_TXPOWER);
+ }
+ 
+ static void rt3883_bbp_adjust(struct rt2x00_dev *rt2x00dev,
+-- 
+2.37.3
 
-  61503af327ca ("scsi: libsas: make use of ata_port_is_frozen() helper")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/LSE2hyvAV4fwD0xDQ8/qA=h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNPC90ACgkQAVBC80lX
-0GzVDQf+PloIr9d/a9zIMOyG48MSw5fdJEAq+A9YyS51n4LGZIzDe0PGZYSoWk5g
-0o4byiiXnM5a7bJInnRTR7g9glXXp4/zNUIz+8ml6DdmNm7nPx8ieJfgZ9fe0uH4
-ex/olfNBTTRezwmUMONeaRJWa80CdNZCfQ3RPXoGa/vAXkdkMXyNXDIpwDL2Lrtz
-M9YQ9AdtqnXg8CHteVBxZTEYjxwpV5i1RllRUMWwWCsyLSxt+BZnMgUnDBN+sE4x
-5qmL9tY90SLRKBwuExFYSx/m8tA36pVXpDlKjd8chMziYK31d/1a57nK5+SqmisF
-Rzi+15Sn03uDWx8Y0DWgi0O2wSpF5w==
-=Rqfx
------END PGP SIGNATURE-----
-
---Sig_/LSE2hyvAV4fwD0xDQ8/qA=h--
