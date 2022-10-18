@@ -2,182 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876616036D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E12603763
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 03:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJRX7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 19:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
+        id S229926AbiJSBGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 21:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJRX7P (ORCPT
+        with ESMTP id S229945AbiJSBGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 19:59:15 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108DBBECF3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666137555; x=1697673555;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=5IQpCu6MJ5XKmggd5jq4opDYe3Fs7imdAsu/CVVYq4s=;
-  b=hmMduDY5O8bJULoHpmTnjaCCJLyX4YE/l7bHMYKbLf48y5Ci4pIyoD/9
-   AHuSQ3dyxzJfgzOUSP3uuhK9yEaEITdj6VD7FNxDbWalRFtTd5y8+tLSF
-   w1XVuyK2nj0YRY1npyZ8kPnWs3YM5iJjADsvI7F0qh4DeNo0luBf1bYu9
-   6STYk27uTP9Uv28XM6nXnuC4zoXxhFVXq6NdIrTVs3av5r1vZg/OpdL8N
-   azR8hU0B3XEH5nZH5XpYyrqkWzSxkqTj85Fw2uT+QUTIT97oJbOvqCfT6
-   9NSWDFxuvbbJg55Y6tFxz8ccNW+LMwPiuLsnKReWkevr28tg8t0xFl5+U
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332809765"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="332809765"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 16:59:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="628972448"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="628972448"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga002.jf.intel.com with ESMTP; 18 Oct 2022 16:59:14 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 16:59:13 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 18 Oct 2022 16:59:13 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 18 Oct 2022 16:59:11 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h2oO9W99adds7Ais7F34E5a+mE0uclLYdG60zZA5YgfIp+JMgvsLD5HBDWhxcQbkIgxatWswkENW7R0fcjoVJClyaDg3A78tSRj/9ke4svw/Y6A0stREKy6kDGg8xQQ/rOrKgiDOdOvHeTVcBUu+rj7Sh+2hCoN64oHPTfApJ+wMDwe1sxwq4SsMd1TEnIofoYZ1N87sa6SCbShPpe+eiDnPg7FygLcKiWDHx1UY1HgRTHtGHKzEu94h/JrM8VJk4RBtor4mOd9klG5RVqZs7xelOHz4PsiFD67WN3CQe6SeiaJL1jlDNcH30XZxZSzU7f6GqzNovHSEdPdwkYIqHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/RC4M+hrbAVYC3mzHteh4Ij351XuWxz4AKVrP2vs7G4=;
- b=EzeY8QuLwP2QnW+r+EqLkntBqiizIcB8/Pbrkjtw8id2K4FTEPb5xqVE1Ff7FgqTd5CegL1W5fNPmWdYSZR6s9Kf8Qip1Mq0hIuVkJKO+GJ9rkcPBGdkS6EjgFKmX8hr0UEGVd3OhtSJ0ZW1KicgdD0doc7P61HGnrZClovSL+6Ed+nVYrxk4TOdVFEjCjgttmvJU2h4lR6I0TJCbtguK5RBHuJppJwfbVXVwp3ag1Gfd+XHjFbB8eYVmxxtiACPW8eD/kxYzj341QOM7/ddEr0PMj6aA4zK1/tGiAR93rE2FUF2u3/JifCMA8yIpeKP8iiufAxK+yerZxjiR1mE0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by CH0PR11MB5298.namprd11.prod.outlook.com (2603:10b6:610:bd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
- 2022 23:59:10 +0000
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::effa:dd0:aa9e:2ae6]) by SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::effa:dd0:aa9e:2ae6%3]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
- 23:59:09 +0000
-Date:   Tue, 18 Oct 2022 16:59:03 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-CC:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Bharata B Rao" <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCHv10 10/15] x86/mm, iommu/sva: Make LAM and SVM mutually
- exclusive
-Message-ID: <Y089x212wn0KMPAx@a4bf019067fa.jf.intel.com>
-References: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
- <20221018113358.7833-11-kirill.shutemov@linux.intel.com>
- <Y08HgXqvNSpTUgWe@a4bf019067fa.jf.intel.com>
- <20221018223537.7bmhuknclkboqgnk@box.shutemov.name>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221018223537.7bmhuknclkboqgnk@box.shutemov.name>
-X-ClientProxiedBy: SJ0PR05CA0063.namprd05.prod.outlook.com
- (2603:10b6:a03:332::8) To SJ1PR11MB6201.namprd11.prod.outlook.com
- (2603:10b6:a03:45c::14)
+        Tue, 18 Oct 2022 21:06:23 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78898DFB64;
+        Tue, 18 Oct 2022 18:06:21 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.32])
+        by gateway (Coremail) with SMTP id _____8AxzNgfoU5jdWwAAA--.2528S3;
+        Tue, 18 Oct 2022 20:50:39 +0800 (CST)
+Received: from [10.20.42.32] (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuIeoU5j9LEAAA--.2942S3;
+        Tue, 18 Oct 2022 20:50:38 +0800 (CST)
+Subject: Re: [PATCH V5 1/2] ACPI / scan: Support multiple dma windows with
+ different offsets
+To:     Yicong Yang <yangyicong@huawei.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     yangyicong@hisilicon.com, lpieralisi@kernel.org,
+        chenhuacai@loongson.cn, guohanjun@huawei.com, sudeep.holla@arm.com,
+        lenb@kernel.org, robert.moore@intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        loongarch@lists.linux.dev, liulongfang <liulongfang@huawei.com>
+References: <20220911090635.5559-1-lvjianmin@loongson.cn>
+ <20220911090635.5559-2-lvjianmin@loongson.cn>
+ <8e9df8ea-06f0-3989-2563-d5dc6b09a062@huawei.com>
+ <CAJZ5v0gBBdTxRkE08PO8W+yi1eTkWqzpGLAyMNuzZmqx02EzFA@mail.gmail.com>
+ <c7ae3a66-1d24-1014-b63a-8d4af3de42c8@arm.com>
+ <7904cd2e-caf5-0073-9889-306ab524d802@huawei.com>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <ded07a34-0cf4-3f76-a538-fb6a9abd6673@loongson.cn>
+Date:   Tue, 18 Oct 2022 20:50:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|CH0PR11MB5298:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d562536-b0b4-45b3-8e95-08dab164bfbd
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hmPC6ID1CCb8jYJ5bd7nSLpvrl6GPwoRLP/L5y/nenGYeCdbfy0UXZA5ujdj8ZUKPD6yJlRzS4wmkvD1wxQLEOzXqDM9nhXZzHthtqw5rw+dgkuyEHH/MwpIVjBy+jszgO0MIZNxTtInLEcp0H8y8nuIGlZGD6g0/K3bNNMmpMrW1LAfIyIccXeuVMb+zYaPkq9wIbigZrNWPSzYrW9NDzymOI+DvdHcVLqpFiesTw990ObDIg0q2Ib190fkbksJfZ7QUWTtQESQJ4UzzZ02tTpBVoTLbr6XAdIE18veRZdN3Vu2CAYKIeI+mHvK8wLPYbwuiXHgVo5WD6oOmDF+4tFeAoObKBLkinu2brqx5M/qrs4YAeej3FQiOFtcVwIqCjPxQnUP2Rr6xN2f/eEddE5DRwrZ568QAMHO7w0VMK6ukJKTWha/UlWJwv+AyyJCWLdNzOjH0J87w4rmFs44ydbO+olKhrcYnG0T0H1QS2kTo6dA0cxdqIclZJcGB0cSsznx/E67wyPMnbExiEdHOOARj0pp7s8X1iVae2kcZg9CEm9FtzOx6QXk62fejlaxDV27Nhn+bloEMjgJZU23tThpfm2N4beDmpLE0qGFuEsaGxuCZklHEV2xlVzBcSRCXYJpnAJ5KCg7gXJLBpbhrMGu6S2ab7FIdSA9wNUTO7x9gPb6Bi+PUidJ05LaCYxWZm/xaBtR4G638hUN4k9v9w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(136003)(396003)(346002)(366004)(451199015)(26005)(4744005)(41300700001)(6512007)(66946007)(44832011)(186003)(478600001)(2906002)(6666004)(6506007)(7416002)(8936002)(4326008)(5660300002)(86362001)(38100700002)(82960400001)(6916009)(316002)(54906003)(6486002)(8676002)(66476007)(83380400001)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eWWovijoMXOh3fVITmfhVGAP0pb5AvHbLJjuqWQOaK+0qbWZsM9S9qM6hp0D?=
- =?us-ascii?Q?ZCEvddkKDZakKKiZBE0yAVm6XrsByZW+zDhk6za71V0x84Rcrakij+JCAeKO?=
- =?us-ascii?Q?CJnbzGuuejbo69GDtr5f8O+NEaGAMHVwur7RskfSR5wIumkDtxQxyPeT2rf9?=
- =?us-ascii?Q?kq1BrxATZz+CBCaR6FPwhDt4G88hiBA5HC1O4ErSqamgOuBlbZ/FC5aQNEXH?=
- =?us-ascii?Q?VVkBiK4FjjcqYW9tGv7ua/+Us7bZQNEkbpjGfreTu07uaMoNl6J9E7A0IKST?=
- =?us-ascii?Q?LVyVEB5e+471bI6iii+e44pYXx9DAtxl/dfdy40B32cVKjXbQNbKgK8rYdBL?=
- =?us-ascii?Q?T08RCcVqxWay4jC0ZDtvpXMI7/YU7CvBMxwT2ERNUflPq+WaVSKMawlj6Rtq?=
- =?us-ascii?Q?c8wguN7q5wwBXa8Wn7arCXMZP5cJ072jZgYhvY0MPe7H6Kaxb0fX9uQ1ZZT7?=
- =?us-ascii?Q?sLUZ2izsLjxQvRNtv3vIcm1yj4HX17Okh3b7nr2MYGAP/SRf9VVqg3sD1uFd?=
- =?us-ascii?Q?GZHGc8MxiImGzyg+EWJIPSae5eKYLegYEOf6vHmyFbL4hD6bIOXVI+QQTOfj?=
- =?us-ascii?Q?AhmfPx3AJX83yHh7H3P/UWc0AX8wGXJgV4C4XLyHrWaczzM+2NjcxBxMKAxU?=
- =?us-ascii?Q?0KMc1OzPdfuRrHlXbwC6j5a5XUMdjhTTWEH4URRN4Ms16DUzfogl45L1hp4S?=
- =?us-ascii?Q?50gWlVnfheXJG1BOvBgJ5G51LwamCcLH2+tVDAkgI9dlNSFLioHlJAH2zvqx?=
- =?us-ascii?Q?D036EASP4JgTtY2OwTYY8Yus7kQUet8xPxmmfnSk4hi9kiQYph6lytwv34IU?=
- =?us-ascii?Q?wqpZBPFPAwNHvxAmnEdo5HJd8XrERvGdwrouAy0i9sxmBdyY3z2Th8hoq86I?=
- =?us-ascii?Q?2dBjEDdpgnJ2BU5F8LdhliQxVRqPF17Qz96ht4ss9ij8e3myEltkYNs9tkuZ?=
- =?us-ascii?Q?sJVVVhY9fM0jOiwxcbDi1h+DUB1yNXVBGSRkfjZP5OoG2ciNwMNd/WY8W32Z?=
- =?us-ascii?Q?nmYmBRH/xFrSWN1E5hZOZA3WqMMM2u24tOF2McgPmDlZqjYR8n+jjr3y560r?=
- =?us-ascii?Q?nZ3WSf+bV1nYsutC39zorHKeR6Yim9cK3oLjv9fIWyNSGqXyaN494rSYCGMT?=
- =?us-ascii?Q?1Q37m4AtEuoXQ65SV7owBrKOxhZNrCtdMu0qNoP7TEQ15K6gn/J/sLRR24De?=
- =?us-ascii?Q?QbxOMXzw52d4eyRtOyelOiJU+v96O+D6wnsaCXuNyetBtR8D1SZNd5ZjTXVq?=
- =?us-ascii?Q?5zBNfiaglSwfSxYCIe9oJi4qA06SdndzimNV8pjsftqBOs6zZrOkxMIvgbdk?=
- =?us-ascii?Q?9H5DZWVGA4dzlKSm0NXIdKEkav/9YB4m0xP+5TybRIHbdnIsDYZyk82dRhmr?=
- =?us-ascii?Q?mLqxJzdmRh1uTASRB/DDnvFUBN/JoFK8MOOWWrRFyeIf0OEv0Dt5hBwRhHj5?=
- =?us-ascii?Q?GOxrRXz7rlGtRZj24anhz6WXrCwYv2FHwpPn3BvveqjxIVt4mG55itlqMhwT?=
- =?us-ascii?Q?G4Nr9ZMU/xaVVU4MzV0FCrHppoYI5yiRJrJvkqRi3uonwrblz8VOMB1tLT6G?=
- =?us-ascii?Q?V1Iz2HoW9xlTtubUv+xoEzzjLuKj/1M3JS3NXyX8kAEZT6SGV5kaPejNztRM?=
- =?us-ascii?Q?CQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d562536-b0b4-45b3-8e95-08dab164bfbd
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 23:59:09.9001
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9VLfu1Q+CeqjLIrhbYM/gVO3sOkXaqaKTetLHCd3ySRkJsX/8XZ0xBH9rJWZ/UyecaouKAMHKHilF3kDleapLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5298
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7904cd2e-caf5-0073-9889-306ab524d802@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxHuIeoU5j9LEAAA--.2942S3
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3JF4DGr43AFy8tF48GryUZFb_yoW7Zr13pr
+        95JFW7CrWrJr18Gr1jyw1jg34Ut3WUA3WUZrZ7Ga4DCFsFyr12qr4jqr10gryUArW8Ar17
+        tFZ0qw1Iv34UA3DanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
+X-Gw-Check: 6e1d8bfb8515bcad
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 01:35:37AM +0300, Kirill A. Shutemov wrote:
-> > >  
-> > >  /* Uprobes on this MM assume 32-bit code */
-> > > -#define MM_CONTEXT_UPROBE_IA32	BIT(0)
-> > > +#define MM_CONTEXT_UPROBE_IA32		BIT(0)
-> > >  /* vsyscall page is accessible on this MM */
-> > > -#define MM_CONTEXT_HAS_VSYSCALL	BIT(1)
-> > > +#define MM_CONTEXT_HAS_VSYSCALL		BIT(1)
-> > 
-> > Nit: Looks like the two above format changes got in here :-)
-> 
-> That's side effect of keeping the new longer flag aligned to the rest.
-> 
-> A separate patch looks like an overkill, no?
 
-Agree, just thought i'll flag it, but I don't think a new patch is
-required.
+
+On 2022/10/18 下午8:32, Yicong Yang wrote:
+> On 2022/10/18 20:00, Robin Murphy wrote:
+>> On 2022-10-18 11:08, Rafael J. Wysocki wrote:
+>>> On Tue, Oct 18, 2022 at 11:33 AM Yicong Yang <yangyicong@huawei.com> wrote:
+>>>>
+>>>> On 2022/9/11 17:06, Jianmin Lv wrote:
+>>>>> In DT systems configurations, of_dma_get_range() returns struct
+>>>>> bus_dma_region DMA regions; they are used to set-up devices
+>>>>> DMA windows with different offset available for translation between DMA
+>>>>> address and CPU address.
+>>>>>
+>>>>> In ACPI systems configuration, acpi_dma_get_range() does not return
+>>>>> DMA regions yet and that precludes setting up the dev->dma_range_map
+>>>>> pointer and therefore DMA regions with multiple offsets.
+>>>>>
+>>>>> Update acpi_dma_get_range() to return struct bus_dma_region
+>>>>> DMA regions like of_dma_get_range() does.
+>>>>>
+>>>>> After updating acpi_dma_get_range(), acpi_arch_dma_setup() is changed for
+>>>>> ARM64, where the original dma_addr and size are removed as these
+>>>>> arguments are now redundant, and pass 0 and U64_MAX for dma_base
+>>>>> and size of arch_setup_dma_ops; this is a simplification consistent
+>>>>> with what other ACPI architectures also pass to iommu_setup_dma_ops().
+>>>>>
+>>>>
+>>>> Hi,
+>>>>
+>>>> With this patch we met problem as well. The DMA coherent mask is not set correctly
+>>>> for a ehci usb controller and lead to the below calltrace:
+>>>>
+>>>> [   16.699259] ------------[ cut here ]------------
+>>>> [   16.703855] WARNING: CPU: 0 PID: 853 at kernel/dma/mapping.c:499 dma_alloc_attrs+0xc0/0xf0
+>>>> [   16.712082] Modules linked in:
+>>>> [   16.715124] CPU: 0 PID: 853 Comm: kworker/0:3 Not tainted 6.1.0-rc1-pipe-deadlock+ #5
+>>>> [   16.722916] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B211.01 11/10/2021
+>>>> [   16.731745] Workqueue: events work_for_cpu_fn
+>>>> [   16.736083] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>> [   16.743013] pc : dma_alloc_attrs+0xc0/0xf0
+>>>> [   16.747091] lr : dma_pool_alloc+0x11c/0x200
+>>>> [   16.751255] sp : ffff80001e46bb50
+>>>> [   16.754554] x29: ffff80001e46bb50 x28: 0000000000000000 x27: 0000000000000000
+>>>> [   16.761657] x26: ffff80000b33ce18 x25: ffff800009cc6c48 x24: 0000000000000000
+>>>> [   16.768759] x23: ffff00208c830918 x22: 0000000000001000 x21: 0000000000000cc0
+>>>> [   16.775861] x20: ffff00208ae82080 x19: ffff0020865c40d0 x18: 0000000000000030
+>>>> [   16.782964] x17: 626d756e20737562 x16: 2064656e67697373 x15: ffff00208ae82640
+>>>> [   16.790066] x14: 0000000000000000 x13: 646e756f72616b72 x12: 6f77204348207379
+>>>> [   16.797167] x11: 73706f6e79532067 x10: ffff205f43980000 x9 : ffff80000830b3ac
+>>>> [   16.804269] x8 : ffff0020861b1b00 x7 : 0000000000000000 x6 : 0000000000000000
+>>>> [   16.811371] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000cc0
+>>>> [   16.818472] x2 : ffff00208c830918 x1 : 0000000000001000 x0 : 0000000000000000
+>>>> [   16.825574] Call trace:
+>>>> [   16.828009]  dma_alloc_attrs+0xc0/0xf0
+>>>> [   16.831741]  dma_pool_alloc+0x11c/0x200
+>>>> [   16.835559]  ehci_qh_alloc+0x60/0x12c
+>>>> [   16.839207]  ehci_setup+0x18c/0x40c
+>>>> [   16.842680]  ehci_pci_setup+0xb8/0x680
+>>>> [   16.846412]  usb_add_hcd+0x310/0x5c0
+>>>> [   16.849973]  usb_hcd_pci_probe+0x254/0x36c
+>>>> [   16.854051]  ehci_pci_probe+0x40/0x60
+>>>> [   16.857698]  local_pci_probe+0x48/0xb4
+>>>> [   16.861431]  work_for_cpu_fn+0x24/0x40
+>>>> [   16.865163]  process_one_work+0x1e0/0x450
+>>>> [   16.869155]  worker_thread+0x2cc/0x44c
+>>>> [   16.872886]  kthread+0x114/0x120
+>>>> [   16.876099]  ret_from_fork+0x10/0x20
+>>>> [   16.879657] ---[ end trace 0000000000000000 ]---
+>>>>
+>>>> After reverting this patch the problem resolved. Tested on the latest 6.1-rc1.
+>>>
+>>> OK, I'll queue up a revert of this and one more commit depending on it.
+>>
+>> FWIW it looks like the fix should be as simple as below.
+>>
+> 
+> Looks like it's the case. The change works on my platform, now the ehci probed successfully again
+> with no calltrace:
+> 
+> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+> 
+>> Robin.
+>>
+>> ----->8-----
+>> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+>> index 558664d169fc..b6962bff1eae 100644
+>> --- a/drivers/acpi/scan.c
+>> +++ b/drivers/acpi/scan.c
+>> @@ -1509,6 +1509,7 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+>>               goto out;
+>>           }
+>>
+>> +        *map = r;
+>>           list_for_each_entry(rentry, &list, node) {
+>>               if (rentry->res->start >= rentry->res->end) {
+>>                   kfree(r);
+>> @@ -1523,8 +1524,6 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+>>               r->offset = rentry->offset;
+>>               r++;
+>>           }
+>> -
+>> -        *map = r;
+>>       }
+>>    out:
+>>       acpi_dev_free_resource_list(&list);
+>>
+
+Ohh, yes, map got a wrong value of r because it has been changed.
+Maybe wo can fix it like this:
+
+truct bus_dma_region *r, *orig_r;
+...
+orig_r = r = kcalloc(ret + 1, sizeof(*r), GFP_KERNEL);
+...
+*map = orig_r;
+
+>> .
+
