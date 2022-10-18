@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE23602FA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58947602FAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiJRP1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S230294AbiJRP2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiJRP1l (ORCPT
+        with ESMTP id S230229AbiJRP2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:27:41 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CB9BC62D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:27:38 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id o22so8844185qkl.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WlrRdSiBc3+5x9el6+WiPvB5GSvm3lz/xveRGeJez/Y=;
-        b=EG4Jn93JA7AM0w+NYd6U5tSunzgTzsLPJB6RjP4zYCZU9YHf1M0jKzBPVe27OL136x
-         MyKkdfB2RKkeJ21qM2W8EIkOq99xdz8GYOH1phybCn/G3EHufIgmp3UoJMOCFs/8giKr
-         vxm5yZcYMM441WpCJSKIfKCy2c36eX2ddb7N4X4Zpm/EPI6WzKBY5QumEHJyKO9EnZuI
-         qOJY4mDirk6vZ6bSZldRzeY2UjHOE2LVs0nCcHvdoLHAT17synotSEmp68cI0tl+gYRI
-         z/ioOlQDknuVnOveAKcJI0eeRX2k3Q9zCs8Y3i/bhFNCB9rsVncWP+jvt1+WKrbn2aiT
-         3mxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WlrRdSiBc3+5x9el6+WiPvB5GSvm3lz/xveRGeJez/Y=;
-        b=dIgtKoPRExsnxdSbDttHOsXV0NvU8QTfC6LTqhXb0KQnkg7uzRWicp8Gfhk1w8dNi2
-         c3L/ZWozwk7l0fMLHfnQ39oZXg8YIzLLErWEponhXFxjl6axzvvkDTzozF5HH5/ltKuh
-         a7l9kBZbm3Dbdah4/WW0KPEVUAKmGyi54xgx1/V8XCO1nhIF8KerHFqGfJVN5z/CtOi5
-         SHZ7yt5YMV7moXZzW8Y+eXl8NDXECwX/hhJ9D5Rw3M1JsqTeJjAH6mUDYELEmmFH+D/J
-         S7pbEfFGVtknPKda7BHqGYdjJZPfBsuUmT7HQeeRRNiXR8taf4iBev9I8JtrGonzd26i
-         KykQ==
-X-Gm-Message-State: ACrzQf1Ws/zbXytxVEoxeydk+anbBKxmcrsbB9QjIgj4juaVuKfmyY+3
-        QFoE3IqozbJphSiId2NW1sfILQ==
-X-Google-Smtp-Source: AMsMyM5iD16RwRypyXJlH9TWM1p1s0lQhnKdXXOoxUFalUOI9aplDm8h+1FMPxcIpbk+rdSjCD1iuw==
-X-Received: by 2002:a05:620a:bc9:b0:6be:9d56:78dc with SMTP id s9-20020a05620a0bc900b006be9d5678dcmr2165897qki.365.1666106857366;
-        Tue, 18 Oct 2022 08:27:37 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id b14-20020ac844ce000000b003434d3b5938sm2107848qto.2.2022.10.18.08.27.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 08:27:36 -0700 (PDT)
-Message-ID: <39a7d2d1-06c2-4002-e222-54c24c5eb31f@linaro.org>
-Date:   Tue, 18 Oct 2022 11:27:35 -0400
+        Tue, 18 Oct 2022 11:28:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D37BC470
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:28:37 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1okoVx-0007uw-HU; Tue, 18 Oct 2022 17:28:21 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1okoVv-00055x-P0; Tue, 18 Oct 2022 17:28:19 +0200
+Date:   Tue, 18 Oct 2022 17:28:19 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Dan Vacura <w36195@motorola.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Dan Scally <dan.scally@ideasonboard.com>,
+        linux-usb@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jeff Vanhoof <qjv001@motorola.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] usb: gadget: uvc: add configfs option for sg
+ support
+Message-ID: <20221018152819.GA9097@pengutronix.de>
+References: <20221017205446.523796-1-w36195@motorola.com>
+ <20221017205446.523796-7-w36195@motorola.com>
+ <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
+ <Y065ASuFhM9bntvd@rowland.harvard.edu>
+ <Y07C7hYKyByahNjL@p1g3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 09/15] dt-bindings: phy: qcom,qmp-pcie: mark current
- bindings as legacy
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221017145328.22090-1-johan+linaro@kernel.org>
- <20221017145328.22090-10-johan+linaro@kernel.org>
- <5e153119-f853-ff57-8277-2d782e255be2@linaro.org>
- <Y05Qf2nDCIVg23Zh@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y05Qf2nDCIVg23Zh@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4Ckj6UjgE2iN1+kY"
+Content-Disposition: inline
+In-Reply-To: <Y07C7hYKyByahNjL@p1g3>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,98 +68,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 03:06, Johan Hovold wrote:
-> On Mon, Oct 17, 2022 at 01:15:45PM -0400, Krzysztof Kozlowski wrote:
->> On 17/10/2022 10:53, Johan Hovold wrote:
->>> The current QMP PCIe PHY bindings are based on the original MSM8996
->>> binding which provided multiple PHYs per IP block and these in turn were
->>> described by child nodes.
->>>
->>> Later QMP PCIe PHY blocks only provide a single PHY and the remnant
->>> child node does not really reflect the hardware.
->>>
->>> The original MSM8996 binding also ended up describing the individual
->>> register blocks as belonging to either the wrapper node or the PHY child
->>> nodes.
->>>
->>> This is an unnecessary level of detail which has lead to problems when
->>> later IP blocks using different register layouts have been forced to fit
->>> the original mould rather than updating the binding. The bindings are
->>> arguable also incomplete as they only the describe register blocks used
->>> by the current Linux drivers (e.g. does not include the per lane PCS
->>> registers).
->>>
->>> In preparation for adding new bindings for SC8280XP which further
->>> bindings can be based on, mark the current bindings as "legacy".
->>>
->>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>> ---
->>>  .../{qcom,qmp-pcie-phy.yaml => qcom,qmp-pcie-phy-legacy.yaml} | 4 ++--
+
+--4Ckj6UjgE2iN1+kY
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Dan!
+
+On Tue, Oct 18, 2022 at 10:14:54AM -0500, Dan Vacura wrote:
+>On Tue, Oct 18, 2022 at 10:32:33AM -0400, Alan Stern wrote:
+>> On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
+>> > On 17/10/2022 21:54, Dan Vacura wrote:
+>> > > The scatter gather support doesn't appear to work well with some UDC=
+ hw.
+>> > > Add the ability to turn on the feature depending on the controller in
+>> > > use.
+>> > >
+>> > > Signed-off-by: Dan Vacura <w36195@motorola.com>
+>> >
+>> >
+>> > Nitpick: I would call it use_sg everywhere, but either way:
+>> >
+>> >
+>> > Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> >
+>> > Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> >
+>> > > ---
+>> > > V1 -> V2:
+>> > > - no change, new patch in serie
+>> > > V2 -> V3:
+>> > > - default on, same as baseline
+>> > >
+>> > >   Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
+>> > >   Documentation/usb/gadget-testing.rst              | 2 ++
+>> > >   drivers/usb/gadget/function/f_uvc.c               | 2 ++
+>> > >   drivers/usb/gadget/function/u_uvc.h               | 1 +
+>> > >   drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
+>> > >   drivers/usb/gadget/function/uvc_queue.c           | 4 ++--
+>> > >   6 files changed, 10 insertions(+), 2 deletions(-)
+>> > >
+>> > > diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Doc=
+umentation/ABI/testing/configfs-usb-gadget-uvc
+>> > > index 5dfaa3f7f6a4..839a75fc28ee 100644
+>> > > --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>> > > +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+>> > > @@ -9,6 +9,7 @@ Description:	UVC function directory
+>> > >   		streaming_interval	1..16
+>> > >   		function_name		string [32]
+>> > >   		req_int_skip_div	unsigned int
+>> > > +		sg_supported		0..1
+>> > >   		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+>> > >   What:		/config/usb-gadget/gadget/functions/uvc.name/control
+>> > > diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/us=
+b/gadget-testing.rst
+>> > > index f9b5a09be1f4..8e3072d6a590 100644
+>> > > --- a/Documentation/usb/gadget-testing.rst
+>> > > +++ b/Documentation/usb/gadget-testing.rst
+>> > > @@ -796,6 +796,8 @@ The uvc function provides these attributes in it=
+s function directory:
+>> > >   	function_name       name of the interface
+>> > >   	req_int_skip_div    divisor of total requests to aid in calculati=
+ng
+>> > >   			    interrupt frequency, 0 indicates all interrupt
+>> > > +	sg_supported        allow for scatter gather to be used if the UDC
+>> > > +			    hw supports it
 >>
->> I don't think we should rename anything as legacy. These are "normal"
->> platforms, not legacy ones. SM8450 is not even that old.
-> 
-> I'm not really referring to the platforms as legacy, but the rather the
-> format of the bindings. The intent is that by marking the current ones
-> as such, people will not base new bindings on the old scheme.
-> 
-> There's no problem supporting both schemes in the driver also for the
-> current compatibles, but expressing such a deprecation in DT schema
-> sounds like it would be painful. We instead decided to simple draw the
-> line at SC8280XP and have future bindings be based on its binding.
-> 
->> The recommendation is to keep names matching the compatibles, not adding
->> some legacy/newer/newest suffixes.
-> 
-> Yeah, I know, but that's not what the current bindings do. And if we
-> keep 
-> 
-> 	qcom,qmp-pcie-phy.yaml
-> 
-> and add
-> 
-> 	qcom,sc8280xp-qmp-pcie-phy.yaml
-> 
-> then I fear that people will base their bindings on the former rather
-> than the latter.
+>> Why is a configuration option needed for this?  Why not always use SG
+>> when the UDC supports it?  Or at least, make the decision automatically
+>> (say, based on the amount of data to be transferred) with no need for
+>> any user input?
+>
+>Patches for a fix and to select to use SG depending on amount of data
+>are already submitted and under review. I agree, ideally we don't need
+>this patch, but there have been several regressions uncovered with
+>enabling this support and it takes time to root cause these issues.
+>
 
-Then how about renaming this file to something matching the oldest
-supported SoC? Like: qcom,msm8998-qmp-pcie-phy.yaml
-(I don't know which one is the oldest there)
+>In my specific environment, Android GKI 2.0, changes need to get
+>upstreamed first here before they're pulled into Android device
+>software.
 
-Or ipq6018 as the first one appearing in the list.
+In fact this is actually a good policy, but adding workarounds mainline
+to "hopefully" fix the real problems later are probably not what this
+policy is about. Hopefully!
 
-> 
-> I guess I can just add a comment in the old schema file with a reference
-> to the sc8280xp bindings to try to prevent people from adding new ones
-> in the wrong place.
+Michael
 
-Yes, that's also works for me. You can change the description part to
-have something like:
-"QMP PHY controller on SoCs like sc8180x and older. For newer SoCs,
-please look at xxxxx.yaml"
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-> If I understand you correctly this is what you are suggesting? And that
-> the new file should still be named "qcom,sc8280xp-qmp-pcie-phy.yaml"
-> also as new bindings are added to that file?
+--4Ckj6UjgE2iN1+kY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Yes.
+-----BEGIN PGP SIGNATURE-----
 
-> 
-> I could also rename the old schema file after one of the old platforms
-> platforms therein (e.g. qcom,msm8998-qmp-pcie-phy) to make it sounds
-> less like a generic schema for new bindings.
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNOxhEACgkQC+njFXoe
+LGSssQ//b4Lz/efc2dnA6tGJFhJOg/dj0QWOOdV7Ty/cXt2Hz/gAyne7IqdilP2N
+vZV+MJL2twg6kRQ9y/SqBGNilDKYrqo3zp820ptk7KZMNTL+76mTLWCLoUtFg5pH
+kEtZT/6az0aZVsNneEi9vvjzTwOqyLbHZElJlDhm+TEWK2BHtslVpepCd1mr+r+f
+TBqDH2vKx30LNrnDt/yPnFBc2HMj5LVf4Y1sdvuutfOSa6XDvnAbY3Zsoa0cQfm7
+ObNXGDjSwcsgsFmzX0fxDX+Ozz4jOF+VEPa4UGXzGgS0WFHyJq+ARuaMAfKLtvX4
+aqkAmVi3HYku/De7CUrUwB/5LxHluS8v8o3mcJb4ZEuQP+EDTOco7gBJS1WvHuWl
+kmNiXMt33raUi9aZDN95LGYSMXmdXC235pJWGwCvimxK5ROiNg3ucjly0MtEtUeK
+3UYJeX/CSbXXG9wekj+7BPlxTrjbeeFRvyuTU6rrL2mQq07W8JX3Z/vGhdNxN1yS
+XAf7pcXBBM7fB2pr64+0sHuu6KCFl71qL3qjsctK4urmh1ALRwsSW7KQCCbLSYVE
+iKhdtuwsr7aXYz9n2HmYcMh4qb5Z2dw77JkMe8+YyId601Rj6KxCjmAFhA3Nsszr
+iS4vPnlnmIv2lRri5kGaJDDkbpeM/Qp0zpOVA6HvQVOoJRPu3dA=
+=pYYo
+-----END PGP SIGNATURE-----
 
-Oh, we thought about the same.
-
-> 
-> That is
-> 
-> 	qcom,msm8998-qmp-pcie-phy.yaml + comment (for current bindings)
-> 	qcom,sc8280xp-qmp-pcie-phy.yaml (for new bindings)
-
-Yes, please.
-
-Best regards,
-Krzysztof
-
+--4Ckj6UjgE2iN1+kY--
