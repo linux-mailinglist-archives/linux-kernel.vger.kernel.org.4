@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA5E602C29
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE70602C2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiJRMwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S230244AbiJRMws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiJRMwd (ORCPT
+        with ESMTP id S230223AbiJRMwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:52:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F31C4C3D;
-        Tue, 18 Oct 2022 05:52:32 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MsDKM5X4kzHtt3;
-        Tue, 18 Oct 2022 20:52:23 +0800 (CST)
+        Tue, 18 Oct 2022 08:52:46 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D12C4C2E;
+        Tue, 18 Oct 2022 05:52:44 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MsDGg6t8pzJn3X;
+        Tue, 18 Oct 2022 20:50:03 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 20:52:29 +0800
+ 15.1.2375.31; Tue, 18 Oct 2022 20:52:30 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
  (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 20:52:28 +0800
+ 2022 20:52:29 +0800
 From:   Yu Kuai <yukuai3@huawei.com>
 To:     <hch@lst.de>, <axboe@kernel.dk>, <gregkh@linuxfoundation.org>,
         <willy@infradead.org>, <martin.petersen@oracle.com>,
@@ -33,9 +33,9 @@ To:     <hch@lst.de>, <axboe@kernel.dk>, <gregkh@linuxfoundation.org>,
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <yukuai3@huawei.com>, <yukuai1@huaweicloud.com>,
         <yi.zhang@huawei.com>
-Subject: [PATCH RFC 1/2] kobject: add return value for kobject_put()
-Date:   Tue, 18 Oct 2022 21:14:31 +0800
-Message-ID: <20221018131432.434167-2-yukuai3@huawei.com>
+Subject: [PATCH RFC 2/2] block: protect slave_dir/bd_holder_dir by open_mutex
+Date:   Tue, 18 Oct 2022 21:14:32 +0800
+Message-ID: <20221018131432.434167-3-yukuai3@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221018131432.434167-1-yukuai3@huawei.com>
 References: <20221018131432.434167-1-yukuai3@huawei.com>
@@ -54,53 +54,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value will be used in later patch to fix uaf for slave_dir
-and bd_holder_dir in block layer.
+Lifecycle of slave_dir/bd_holder_dir is problematic currently:
+
+t1:			t2:
+
+// get bdev of lower disk
+blkdev_get_by_dev
+			// remove lower disk
+			del_gendisk
+			 // initial reference is released, and
+			 // slave_dir/bd_holder_dir can be freed
+			 kobject_put
+// uaf is triggered
+bd_link_disk_holder
+
+Fix the problem by protecting them by open_mutex.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- include/linux/kobject.h | 2 +-
- lib/kobject.c           | 7 +++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ block/genhd.c           |  8 ++++++--
+ block/holder.c          | 13 ++++++++++++-
+ block/partitions/core.c |  5 ++++-
+ 3 files changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index 57fb972fea05..f12de6274c51 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -110,7 +110,7 @@ extern int __must_check kobject_move(struct kobject *, struct kobject *);
- extern struct kobject *kobject_get(struct kobject *kobj);
- extern struct kobject * __must_check kobject_get_unless_zero(
- 						struct kobject *kobj);
--extern void kobject_put(struct kobject *kobj);
-+extern bool kobject_put(struct kobject *kobj);
+diff --git a/block/genhd.c b/block/genhd.c
+index 17b33c62423d..d9ad889d011a 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -622,8 +622,12 @@ void del_gendisk(struct gendisk *disk)
  
- extern const void *kobject_namespace(struct kobject *kobj);
- extern void kobject_get_ownership(struct kobject *kobj,
-diff --git a/lib/kobject.c b/lib/kobject.c
-index a0b2dbfcfa23..f86c55ae7376 100644
---- a/lib/kobject.c
-+++ b/lib/kobject.c
-@@ -711,15 +711,18 @@ static void kobject_release(struct kref *kref)
-  *
-  * Decrement the refcount, and if 0, call kobject_cleanup().
-  */
--void kobject_put(struct kobject *kobj)
-+bool kobject_put(struct kobject *kobj)
- {
- 	if (kobj) {
- 		if (!kobj->state_initialized)
- 			WARN(1, KERN_WARNING
- 				"kobject: '%s' (%p): is not initialized, yet kobject_put() is being called.\n",
- 			     kobject_name(kobj), kobj);
--		kref_put(&kobj->kref, kobject_release);
-+		if (kref_put(&kobj->kref, kobject_release))
-+			return true;
- 	}
+ 	blk_unregister_queue(disk);
+ 
+-	kobject_put(disk->part0->bd_holder_dir);
+-	kobject_put(disk->slave_dir);
++	mutex_lock(&disk->open_mutex);
++	if (kobject_put(disk->part0->bd_holder_dir))
++		disk->part0->bd_holder_dir = NULL;
++	if (kobject_put(disk->slave_dir))
++		disk->slave_dir = NULL;
++	mutex_unlock(&disk->open_mutex);
+ 
+ 	part_stat_set_all(disk->part0, 0);
+ 	disk->part0->bd_stamp = 0;
+diff --git a/block/holder.c b/block/holder.c
+index 5283bc804cc1..fdfbe82e31e3 100644
+--- a/block/holder.c
++++ b/block/holder.c
+@@ -75,6 +75,13 @@ int bd_link_disk_holder(struct block_device *bdev, struct gendisk *disk)
+ 	struct bd_holder_disk *holder;
+ 	int ret = 0;
+ 
++	mutex_lock(&bdev->bd_disk->open_mutex);
++	/* Failed if bd_holder_dir is freed by del_gendisk() */
++	if (!bdev->bd_holder_dir) {
++		mutex_unlock(&bdev->bd_disk->open_mutex);
++		return -ENODEV;
++	}
 +
-+	return false;
- }
- EXPORT_SYMBOL(kobject_put);
+ 	mutex_lock(&disk->open_mutex);
  
+ 	WARN_ON_ONCE(!bdev->bd_holder);
+@@ -111,6 +118,7 @@ int bd_link_disk_holder(struct block_device *bdev, struct gendisk *disk)
+ 
+ out_unlock:
+ 	mutex_unlock(&disk->open_mutex);
++	mutex_unlock(&bdev->bd_disk->open_mutex);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(bd_link_disk_holder);
+@@ -136,16 +144,19 @@ void bd_unlink_disk_holder(struct block_device *bdev, struct gendisk *disk)
+ {
+ 	struct bd_holder_disk *holder;
+ 
++	mutex_lock(&bdev->bd_disk->open_mutex);
+ 	mutex_lock(&disk->open_mutex);
+ 	holder = bd_find_holder_disk(bdev, disk);
+ 	if (!WARN_ON_ONCE(holder == NULL) && !--holder->refcnt) {
+ 		if (disk->slave_dir)
+ 			__unlink_disk_holder(bdev, disk);
+-		kobject_put(bdev->bd_holder_dir);
++		if (kobject_put(bdev->bd_holder_dir))
++			bdev->bd_holder_dir = NULL;
+ 		list_del_init(&holder->list);
+ 		kfree(holder);
+ 	}
+ 	mutex_unlock(&disk->open_mutex);
++	mutex_unlock(&bdev->bd_disk->open_mutex);
+ }
+ EXPORT_SYMBOL_GPL(bd_unlink_disk_holder);
+ 
+diff --git a/block/partitions/core.c b/block/partitions/core.c
+index b8112f52d388..eef7b8615419 100644
+--- a/block/partitions/core.c
++++ b/block/partitions/core.c
+@@ -279,7 +279,10 @@ static void delete_partition(struct block_device *part)
+ 	__invalidate_device(part, true);
+ 
+ 	xa_erase(&part->bd_disk->part_tbl, part->bd_partno);
+-	kobject_put(part->bd_holder_dir);
++	mutex_lock(&part->bd_disk->open_mutex);
++	if (kobject_put(part->bd_holder_dir))
++		part->bd_holder_dir = NULL;
++	mutex_unlock(&part->bd_disk->open_mutex);
+ 	device_del(&part->bd_device);
+ 
+ 	/*
 -- 
 2.31.1
 
