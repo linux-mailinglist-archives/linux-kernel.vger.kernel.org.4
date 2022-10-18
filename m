@@ -2,98 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E5C6034DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A536034DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJRVYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S229822AbiJRV0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJRVX6 (ORCPT
+        with ESMTP id S229592AbiJRV0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:23:58 -0400
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C7C8E9A8;
-        Tue, 18 Oct 2022 14:23:56 -0700 (PDT)
-Message-ID: <e645c42a-b4f1-a0fe-1269-ff380bb1ab05@manjaro.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-        t=1666128234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C0BsEcvPhkmGUdhefsoRzXvg+m3TVMbdMVKPxzr/HVI=;
-        b=GYRWm2gJIBcfWa1en/5Gqx9cW3PzEwFCyZt9lzd376GxQIJiZUIzha72gPcCKh7sIx7ZgQ
-        orEFZUa6J/baErJzztWCPFqyvS2yeRCPI04Vxc7NOXiiNPE2F2fSiUBuWW7szLJjGX2sFO
-        gqoFzWTkI8Ry3VXnWzS0BdRtIMwwnaVk2Tn8ZjYfPN4duC+4Wdkh9fBXYLe126Q7fH9Xoz
-        o3iMGIV9ZM3gOhXZ04PgBy9ZDYVqShLj1vibDBEa4J1jDhUZ9RHEJyK1UBhpikOyCRmI1U
-        vaEADVtXFsO6KpNDb+VFxRS2x7E/MkYlbQ1FCoh9psJBG8kDXssizxKww2IQzA==
-Date:   Tue, 18 Oct 2022 23:23:53 +0200
+        Tue, 18 Oct 2022 17:26:32 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9D07FFAC;
+        Tue, 18 Oct 2022 14:26:30 -0700 (PDT)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 29ILPrgQ026111;
+        Wed, 19 Oct 2022 06:25:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 29ILPrgQ026111
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1666128354;
+        bh=jwdFvUbmk3sXW78e0UcxZUeeQXON1eb/7xWdpvyqIA0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WkZa6H6gWirZV5mik9OhX88ta9TTfgsVUNeV88kHoARkfVdA30Kyhz2I1aR9MJmDE
+         EcI9RRcxxPqr0GyglvY2fgT0pjk4gMgHp9B7xZHvwIodkg8aOHagQe+CUgxQ3bmClU
+         gEAYVQAVuhfxDdsejvUmEgdwrusvgNRlfVTPS7b0Ai9NlxBg+C+RGNc35vkFUQBSmA
+         Sl5BaepmuURUg+yb/eEnZSaef7VOZNRFRg864eZFQBYwKn9RTLdrybNDAxqWFq0PRj
+         3WIc2p0zNQ5zY7OML35/hAo95P/c06VxFjQuJY9RLW3OQO1EcRHhmwSrsIauAJa8j4
+         y/fRhVDuuum6Q==
+X-Nifty-SrcIP: [209.85.210.47]
+Received: by mail-ot1-f47.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so8393031otu.7;
+        Tue, 18 Oct 2022 14:25:54 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2W/MxAt4MT980Vh1f/rgZEvY6B0JeiFsVbzZyuoHeRV7qqRdLb
+        sBdYohR0HVrfFPJEPmJPrRjBgiBH9j88zTGaJY4=
+X-Google-Smtp-Source: AMsMyM54UKAw/KvcMCpPIbPn/TMWGGQGyjE7BcP4xpHJvcQh3q+IKRKjAqO6+/osr0f4tp6m28P6c33rGHpukpWXauk=
+X-Received: by 2002:a05:6830:6384:b0:661:bee5:73ce with SMTP id
+ ch4-20020a056830638400b00661bee573cemr2315210otb.343.1666128353141; Tue, 18
+ Oct 2022 14:25:53 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH] arm64: dts: meson: Enable active coling using gpio-fan on
- Odroid N2/N2+
-Content-Language: da-DK
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Anand Moon <linux.amoon@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221018195122.8877-1-linux.amoon@gmail.com>
- <CAFBinCCqXBk9Xq0k=NA3zGi8spwyPQN7dMVWcjE+pXkXYf+FKQ@mail.gmail.com>
-From:   Dan Johansen <strit@manjaro.org>
-Organization: Manjaro ARM
-In-Reply-To: <CAFBinCCqXBk9Xq0k=NA3zGi8spwyPQN7dMVWcjE+pXkXYf+FKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Authentication-Results: ORIGINATING;
-        auth=pass smtp.auth=strit@manjaro.org smtp.mailfrom=strit@manjaro.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017150113.334571-1-newbie13xd@gmail.com> <CAK7LNARsUE4j7LNYsushQaXFBEcnhhXoNg9THh2wLrYoi2jp9Q@mail.gmail.com>
+ <7509e3c2-b3be-1330-bfa4-3ae16d049d70@gmail.com>
+In-Reply-To: <7509e3c2-b3be-1330-bfa4-3ae16d049d70@gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 19 Oct 2022 06:25:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASjJ52hmGx2=hTFN0NJpcCFyY3aLAMjBChbRaRRVmxEsQ@mail.gmail.com>
+Message-ID: <CAK7LNASjJ52hmGx2=hTFN0NJpcCFyY3aLAMjBChbRaRRVmxEsQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: use POSIX-compatible grep option
+To:     Stefan Hansson <newbie13xd@gmail.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 18, 2022 at 4:23 PM Stefan Hansson <newbie13xd@gmail.com> wrote:
+>
+> Hi Masahiro,
+>
+> On 2022-10-17 23:31, Masahiro Yamada wrote:
+> > On Tue, Oct 18, 2022 at 12:02 AM Stefan Hansson <newbie13xd@gmail.com> wrote:
+> >>
+> >> --file is a GNU extension to grep which is not available in all
+> >> implementations (such as BusyBox). Use the -f option instead which is
+> >> eqvuialent according to the GNU grep manpage[1] and is present in
+> >> POSIX[2].
+> >>
+> >>   [1] https://www.gnu.org/software/grep/manual/grep.html
+> >>   [2] https://pubs.opengroup.org/onlinepubs/9699919799/
+> >
+> >
+> > This link does not show the spec of grep.
+> >
+> >
+> > Did you mean this?
+> >
+> > https://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html
+> >
+> >
+>
+> Yes, sorry, that's a better link. I'm new to this. Do you want me to
+> send a v2 with the commit message updated?
 
-Den 18.10.2022 kl. 23.16 skrev Martin Blumenstingl:
-> Hello Anand,
->
-> On Tue, Oct 18, 2022 at 9:53 PM Anand Moon <linux.amoon@gmail.com> wrote:
->> Odroid N2/N2+ support active cooling via gpio-fan controller.
->> Add fan controls and tip point for cpu and ddr thermal sensor
->> on this boards.
-> In the schematics for board rev 0.6 [0] I cannot find any information
-> about a fan connector.
-> The schematics for board rev 0.3 [1] on the other hand document a PWM
-> based fan connector on page 16.
-> So now I am not sure whether your patch only applies to certain board
-> revisions, the schematics are incorrect, etc.
->
-> Can you please provide some details about the fan connector on
-> Odroid-N2/N2+ and which hardware revisions are supported (and which
-> aren't) by your patch?
-I can add that my N2+ rev 0.5 does have a fan connector.
->
->
-> Thank you!
-> Martin
->
->
-> [0] https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
-> [1] https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.3_20190117.pdf
->
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+No worries.
+I applied the patch with the link replaced.
+
+
+Thanks.
+
+
+
+
+
+> >
+> >
+> > Thanks.
+> >
+> >
+> >
+> >
+> >
+> >>
+> >> Signed-off-by: Stefan Hansson <newbie13xd@gmail.com>
+> >> ---
+> >>   Makefile | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/Makefile b/Makefile
+> >> index c690361b393f..3513a6db66a2 100644
+> >> --- a/Makefile
+> >> +++ b/Makefile
+> >> @@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
+> >>         cmd_ar_vmlinux.a = \
+> >>          rm -f $@; \
+> >>          $(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
+> >> -       $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
+> >> +       $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -Ff $(srctree)/scripts/head-object-list.txt)
+> >>
+> >>   targets += vmlinux.a
+> >>   vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
+> >> --
+> >> 2.37.3
+> >>
+> >
+> >
+
+
+
 -- 
-Kind regards
-*Dan Johansen*
-Project lead of the *Manjaro ARM* project
-Manjaro-ARM <https://manjaro.org>
+Best Regards
+Masahiro Yamada
