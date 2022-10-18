@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476BC6021CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C6D6021D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJRDH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        id S229913AbiJRDHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiJRDGl (ORCPT
+        with ESMTP id S230318AbiJRDGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:06:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAD11659E;
-        Mon, 17 Oct 2022 20:06:38 -0700 (PDT)
+        Mon, 17 Oct 2022 23:06:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE66172B58;
+        Mon, 17 Oct 2022 20:06:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F3B6B81BDF;
-        Tue, 18 Oct 2022 03:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A086C43143;
-        Tue, 18 Oct 2022 03:06:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B1866CE076D;
+        Tue, 18 Oct 2022 03:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20AD5C43141;
+        Tue, 18 Oct 2022 03:06:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666062395;
-        bh=wwH3kXkF5b9/j45O+71rK3UCfCfCJ1NTBp4FMKc5syE=;
+        s=k20201202; t=1666062396;
+        bh=oCXr3dbM5LjEvH17WGOa9blmcsR9MAlQIezoyVamM9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GOf3C3OOrOKqqaOFv7gix4GPkd6xxN22myTCvzP8CISjK0ZsZRv2KDPQg/SFiu7Hj
-         Zxp1xoSEBgyDMVoNekLOs9LFCdsxkWh5VEBwFdzg+508F/Jd/IHPz65h6/ImWh7Mhs
-         1u9KHJ1OPnZjfe1mxgSG/tNLpG/SSZgaJoY1re+riz8yGJ4hYSTtyBEO2h5E3vtXqu
-         IrG5QtWiCX/Ux1a2f1ACixvQzcXIUnfmom9dEVICtPZXPTsfN5NWol1tSCHr8klrPR
-         tLZSSWaQ3sJ3RUU/rmZ+NI0lDreOufdg6eSVugroGZJpTn52mJRPq+CzrQgRwlS1wA
-         K/kFcnTBlheng==
+        b=b0ErFZqPiM1lXUIbMwYsYQhjyGtFCn2l8aQ5zKn94aWZRnymFKRvblv5qRCiT63ff
+         v0jSF0kDGHIoUMhiqfdN3pXj5QpyqQ16T6to52xngg7SEtXA0hy/qYDspyk2jZvonq
+         D4ORLuxrebYBMKnv5ynWaxWWwSFWpVGN4Nnxn8T1ySRGsqPFkSymINwEgPHDEbNnpW
+         ZddrKZSRYS4zXjJoz20uTBzm0Yzhw3yD1FBdG1GoxuGUDpZzdco327PZuTxKWTTDI9
+         6MptDjB2xxfishji0pidmFitcC6tEgOKSnRALjY30Ms7ZFs7DKwxWxbOIbByrh1BRI
+         +ALV7EjL8RODg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     joelselvaraj.oss@gmail.com, Bjorn Andersson <andersson@kernel.org>,
-        robh+dt@kernel.org, agross@kernel.org,
+To:     johan+linaro@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agross@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     phone-devel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v5 0/3] Add support for Xiaomi Poco F1 EBBG variant
-Date:   Mon, 17 Oct 2022 22:05:17 -0500
-Message-Id: <166606235854.3553294.4567323167810982228.b4-ty@kernel.org>
+Subject: Re: [PATCH 0/4] arm64: dts: qcom: sc8280xp: fix USB/DP PHYs
+Date:   Mon, 17 Oct 2022 22:05:18 -0500
+Message-Id: <166606235847.3553294.15074071965403871212.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220909035447.36674-1-joelselvaraj.oss@gmail.com>
-References: <20220909035447.36674-1-joelselvaraj.oss@gmail.com>
+In-Reply-To: <20220919094454.1574-1-johan+linaro@kernel.org>
+References: <20220919094454.1574-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,30 +57,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sep 2022 22:54:44 -0500, Joel Selvaraj wrote:
-> Changes in v5:
-> --------------
-> - Do not rename the compatible property of the existing variant (Tianma)
-> to avoid any further conflict with other projects/users.
-> (Suggested by Krzysztof Kozlowski)
+On Mon, 19 Sep 2022 11:44:50 +0200, Johan Hovold wrote:
+> When adding a check for overlapping register regions to the QMP PHY
+> drivers I noticed that the USB4/USB3/DP PHY nodes are currently broken
+> in multiple ways.
 > 
-> Changes in v4:
-> --------------
-> - Update board's compatible and model property to distinguish between the
-> two variants. (Suggested by Krzysztof Kozlowski and Marijn Suijten)
-> - Update the dt-bindings as per the new compatible values.
-> (Fix checkpatch.pl script warnings)
+> This series fixes the SS PHY nodes and drops the DP PHY nodes which can
+> be added back after the binding and driver has been updated.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] arm64: dts: qcom: split beryllium dts into common dtsi and tianma dts
-      commit: dd6459a0890a17e136c539abda07f8b671615c29
-[2/3] dt-bindings: arm: qcom: Add Xiaomi Poco F1 EBBG variant bindings
-      commit: 341fdef8ea49448a0c44a17ab442a1d25e4481fa
-[3/3] arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce Xiaomi Poco F1 EBBG variant
-      commit: bcf429831ecb4810caf1454f6692352401616ad4
+[1/4] arm64: dts: qcom: sc8280xp: fix USB0 PHY PCS_MISC registers
+      commit: 31b3b3059791be536e2ec0c6830767b596af340f
+[2/4] arm64: dts: qcom: sc8280xp: fix USB1 PHY RX1 registers
+      commit: 81cad26c6c3984d01b0612069c70ffd820f62dfa
+[3/4] arm64: dts: qcom: sc8280xp: fix USB PHY PCS registers
+      commit: 8723c3f290c7b798c0cbd89998576e6b365bda3a
+[4/4] arm64: dts: qcom: sc8280xp: drop broken DP PHY nodes
+      commit: 7cdfb7a54ac88f7cb6d830ebb78bdbcbcb44bb4c
 
 Best regards,
 -- 
