@@ -2,374 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE8A6031C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7D46031CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiJRRum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S229823AbiJRRvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJRRui (ORCPT
+        with ESMTP id S229574AbiJRRvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:50:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3B0BD06E;
-        Tue, 18 Oct 2022 10:50:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E563861698;
-        Tue, 18 Oct 2022 17:50:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E1CC433D7;
-        Tue, 18 Oct 2022 17:50:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666115435;
-        bh=s0AtPCxvwT/SYc2M4XT+07XI3Fxh92Yc/HIv16ZnFNw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dAr20U50dwi5uzOcYbf33SpSmuU8Rb33ooA0Jug3IZt4EEYTtnMep3V4fPXh7+PyA
-         Z/p2NhqD+fXtvTF8lhnaHOpf39AkXP5MDaRLFNJHPweYPjqobR1iEcJNWtNNqa2nEP
-         6ua8G3eOfUny9ISLlsR5xcMfJVsmGLM+D1hsL+D6cBJnY0L/ggYfLa4EVxUqCHLVHH
-         /36pQp2M7IgZ3IYz0wn+/Owo6SDNEQEmAnS7FTFPkbvxZk1uNWlZmS6SnAcw6F/kIW
-         2E1z50/DMqMnM9b16vazcXik/l8CFXYjJb3aKwwXTHYO+ixLB8r9toeeJpwd2J2RCH
-         tUeCV99Ok1LVw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EAF525C0528; Tue, 18 Oct 2022 10:50:34 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 10:50:34 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Zqiang <qiang1.zhang@intel.com>, joel@joelfernandes.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] srcu: Export srcu_check_nmi_safety() to modules
-Message-ID: <20221018175034.GU5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221018013906.3890007-1-qiang1.zhang@intel.com>
- <20221018104533.GC1166572@lothringen>
+        Tue, 18 Oct 2022 13:51:48 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6C1D9F;
+        Tue, 18 Oct 2022 10:51:47 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id y191so14840665pfb.2;
+        Tue, 18 Oct 2022 10:51:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TMLVsDeOxaJfLSB7Nf4Fo7/C7oXeEsIQmvCMFgmnqE0=;
+        b=XrvzkWmtESC1AgLqiZGVRrwjW89MUpmcQKu6gVg44kf11WOU8V7DM2d88EDorXDboR
+         0m4Rm0iIXkHvqq4hiEEEwRfU6ptCbPDqYg4Mh8gbQg58JO/+LRpAh2wa0FBNjYCJ4+VJ
+         Ob5C3WJlYjZI0MSPWRPw7MGArfz+OTeEvm2pOxfrZ1Dhjg73/OUF6Qrm4B/nA8RfUeO6
+         FOy2KwdcG6z7jZXQ7ZoIY0nZQ1WxknQLfRFPx73EVKBJeF9vfQ6PmxXSjR/GP/sz/WLN
+         2eAh8IAhABBa/gpC+CpzE1nnYcAgmnyxay4JarxAniEnzmXHRdwY9CCusm6F6/fjoiuo
+         g5SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TMLVsDeOxaJfLSB7Nf4Fo7/C7oXeEsIQmvCMFgmnqE0=;
+        b=GyXAPgBxGiqELXOp7FWOvutVevjq/sz3xhTJL4Ks56vXD+FpOaFVueta5SFCI6kKKe
+         Xfgqr32g28WK9gKdH7+g3j30e8lundzpLu9mVW76zJlzs2gRW/o0sweDxY5pYhtHMPrj
+         Fud9LqO9pbhPM2dSHa8LNrTH44YkXwJL/QwLudhguT+gFU5LrlwkFha+4ByfwqEY7Fok
+         m/n+s+Ydpo/wuOXkyWhSwLuzvRADJJ+LuNJFDMDWSYFCjPVJc2WqxpBKLHe1yXCUdFnZ
+         Pm+hcmZeYIJQSs1lKwMLFjTofEhmJguyq2SHKX/TZPLWV41KShNs/8yn4D5Ue7YspYvi
+         AatQ==
+X-Gm-Message-State: ACrzQf0ANtOv+zW7g2u9Karb/ZxIYbIXebWSfBZz2e9FbozH2fcpAAya
+        oCSQc1Om8AlgFLkOnyKTOU/0wBJsPDLvNdTJXIQ=
+X-Google-Smtp-Source: AMsMyM4flMKuRrdtA9zB35sp9o8LErRNHsL0X4chitFUdIByl4v05gzOWyNaZHWfOr8VW14oX7WFvHNqg6LQTY6JEzM=
+X-Received: by 2002:a05:6a00:24c2:b0:52e:7181:a8a0 with SMTP id
+ d2-20020a056a0024c200b0052e7181a8a0mr4417808pfv.57.1666115506399; Tue, 18 Oct
+ 2022 10:51:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018104533.GC1166572@lothringen>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221005180341.1738796-1-shy828301@gmail.com> <20221005180341.1738796-3-shy828301@gmail.com>
+ <Yz7qeI0s6TjSEIFe@bfoster> <CAHbLzkprAJFApT8hK5z8MB8Xc4Kq6ZDTXJRByujQNEgcvo5TgQ@mail.gmail.com>
+ <Y0lQJUSSjqyXTt5G@bfoster>
+In-Reply-To: <Y0lQJUSSjqyXTt5G@bfoster>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 18 Oct 2022 10:51:33 -0700
+Message-ID: <CAHbLzkoB1+eeaFR8TAxo75V3AxRe8oaDyYF-9PnNt4pZU--udg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] mm: mempool: introduce page bulk allocator
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     mgorman@techsingularity.net, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 12:45:33PM +0200, Frederic Weisbecker wrote:
-> On Tue, Oct 18, 2022 at 09:39:06AM +0800, Zqiang wrote:
-> > When enable CONFIG_PROVE_RCU and built modules, the following
-> > error appear:
-> > 
-> > ERROR: modpost: "srcu_check_nmi_safety" [kernel/rcu/rcutorture.ko] undefined!
-> > ERROR: modpost: "srcu_check_nmi_safety" [kernel/rcu/rcuscale.ko] undefined!
-> > 
-> > This commit fix it by exporting the srcu_check_nmi_safety().
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> 
-> Paul, whichever way you prefer, editing the commit or adding this
-> one on top.
-> 
-> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+On Fri, Oct 14, 2022 at 5:03 AM Brian Foster <bfoster@redhat.com> wrote:
+>
+> On Thu, Oct 06, 2022 at 11:43:21AM -0700, Yang Shi wrote:
+> > On Thu, Oct 6, 2022 at 7:47 AM Brian Foster <bfoster@redhat.com> wrote:
+> > >
+> > > On Wed, Oct 05, 2022 at 11:03:39AM -0700, Yang Shi wrote:
+> > > > Since v5.13 the page bulk allocator was introduced to allocate order-0
+> > > > pages in bulk.  There are a few mempool allocator callers which does
+> > > > order-0 page allocation in a loop, for example, dm-crypt, f2fs compress,
+> > > > etc.  A mempool page bulk allocator seems useful.  So introduce the
+> > > > mempool page bulk allocator.
+> > > >
+> > > > It introduces the below APIs:
+> > > >   - mempool_init_pages_bulk()
+> > > >   - mempool_create_pages_bulk()
+> > > > They initialize the mempool for page bulk allocator.  The pool is filled
+> > > > by alloc_page() in a loop.
+> > > >
+> > > >   - mempool_alloc_pages_bulk_list()
+> > > >   - mempool_alloc_pages_bulk_array()
+> > > > They do bulk allocation from mempool.
+> > > > They do the below conceptually:
+> > > >   1. Call bulk page allocator
+> > > >   2. If the allocation is fulfilled then return otherwise try to
+> > > >      allocate the remaining pages from the mempool
+> > > >   3. If it is fulfilled then return otherwise retry from #1 with sleepable
+> > > >      gfp
+> > > >   4. If it is still failed, sleep for a while to wait for the mempool is
+> > > >      refilled, then retry from #1
+> > > > The populated pages will stay on the list or array until the callers
+> > > > consume them or free them.
+> > > > Since mempool allocator is guaranteed to success in the sleepable context,
+> > > > so the two APIs return true for success or false for fail.  It is the
+> > > > caller's responsibility to handle failure case (partial allocation), just
+> > > > like the page bulk allocator.
+> > > >
+> > > > The mempool typically is an object agnostic allocator, but bulk allocation
+> > > > is only supported by pages, so the mempool bulk allocator is for page
+> > > > allocation only as well.
+> > > >
+> > > > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > > > ---
+> > >
+> > > Hi Yang,
+> > >
+> > > I'm not terribly familiar with either component so I'm probably missing
+> > > context/details, but just a couple high level thoughts when reading your
+> > > patches...
+> > >
+> > > >  include/linux/mempool.h |  19 ++++
+> > > >  mm/mempool.c            | 188 +++++++++++++++++++++++++++++++++++++---
+> > > >  2 files changed, 197 insertions(+), 10 deletions(-)
+> > > >
+> > > ...
+> > > > diff --git a/mm/mempool.c b/mm/mempool.c
+> > > > index ba32151f3843..7711ca2e6d66 100644
+> > > > --- a/mm/mempool.c
+> > > > +++ b/mm/mempool.c
+> > > > @@ -177,6 +177,7 @@ void mempool_destroy(mempool_t *pool)
+> > > >  EXPORT_SYMBOL(mempool_destroy);
+> > > >
+> > > >  static inline int __mempool_init(mempool_t *pool, int min_nr,
+> > > > +                              mempool_alloc_pages_bulk_t *alloc_pages_bulk_fn,
+> > > >                                mempool_alloc_t *alloc_fn,
+> > > >                                mempool_free_t *free_fn, void *pool_data,
+> > > >                                gfp_t gfp_mask, int node_id)
+> > > > @@ -186,8 +187,11 @@ static inline int __mempool_init(mempool_t *pool, int min_nr,
+> > > >       pool->pool_data = pool_data;
+> > > >       pool->alloc     = alloc_fn;
+> > > >       pool->free      = free_fn;
+> > > > +     pool->alloc_pages_bulk = alloc_pages_bulk_fn;
+> > > >       init_waitqueue_head(&pool->wait);
+> > > >
+> > > > +     WARN_ON_ONCE(alloc_pages_bulk_fn && alloc_fn);
+> > > > +
+> > > >       pool->elements = kmalloc_array_node(min_nr, sizeof(void *),
+> > > >                                           gfp_mask, node_id);
+> > > >       if (!pool->elements)
+> > > > @@ -199,7 +203,10 @@ static inline int __mempool_init(mempool_t *pool, int min_nr,
+> > > >       while (pool->curr_nr < pool->min_nr) {
+> > > >               void *element;
+> > > >
+> > > > -             element = pool->alloc(gfp_mask, pool->pool_data);
+> > > > +             if (pool->alloc_pages_bulk)
+> > > > +                     element = alloc_page(gfp_mask);
+> > >
+> > > Any reason to not use the callback from the caller for the bulk variant
+> > > here? It looks like some users might expect consistency between the
+> > > alloc / free callbacks for the pool. I.e., I'm not familiar with
+> > > dm-crypt, but the code modified in the subsequent patches looks like it
+> > > keeps an allocated page count. Will that still work with this, assuming
+> > > these pages are freed through free_fn?
+> >
+> > No special reason, this implementation just end up with fewer code
+> > otherwise we should need to define a list, and manipulate the list,
+> > seems like a little bit overkilling for initialization code.
+> >
+> > Yes, that allocated page count works, just the pages in the pool are
+> > not counted in the count anymore, 256 pages should be not a big deal
+> > IMHO.
+> >
+>
+> Ok. I defer to dm-crypt folks on whether/how much it might care about
+> pages being hidden from the accounting. My concern was partly that, but
+> also partly whether it was possible to break consistency between the
+> number of alloc and free callbacks to be expected. For example, wouldn't
+> these counters underflow if the mempool is torn down or shrunk (via
+> mempool_resize()), and thus the caller gets ->free() callbacks for pages
+> it never accounted for in the first place?
 
-Thank you all!
+For graceful tear down, all the pages should be freed before tear down
+IMHO. For mempool resize, it may be possible, but dm-crypt doesn't
+resize mempool IIRC. Anyway this counter is driver specific, it could
+be inc'ed or dec'ed when the mempool is created or resized.
 
-This is what I currently have, folded into Frederic's original.
-
-Thoughts?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 88a6ff77b433f1f60af01fc94430eaad448ca491
-Author: Frederic Weisbecker <frederic@kernel.org>
-Date:   Thu Oct 13 19:22:44 2022 +0200
-
-    srcu: Debug NMI safety even on archs that don't require it
-    
-    Currently the NMI safety debugging is only performed on architectures
-    that don't support NMI-safe this_cpu_inc().
-    
-    Reorder the code so that other architectures like x86 also detect bad
-    uses.
-    
-    [ paulmck: Apply kernel test robot, Stephen Rothwell, and Zqiang feedback. ]
-    
-    Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 565f60d574847..f0814ffca34bb 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -52,8 +52,6 @@ int init_srcu_struct(struct srcu_struct *ssp);
- #else
- /* Dummy definition for things like notifiers.  Actual use gets link error. */
- struct srcu_struct { };
--int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe) __acquires(ssp);
--void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe) __releases(ssp);
- #endif
- 
- void call_srcu(struct srcu_struct *ssp, struct rcu_head *head,
-@@ -66,6 +64,20 @@ unsigned long get_state_synchronize_srcu(struct srcu_struct *ssp);
- unsigned long start_poll_synchronize_srcu(struct srcu_struct *ssp);
- bool poll_state_synchronize_srcu(struct srcu_struct *ssp, unsigned long cookie);
- 
-+#ifdef CONFIG_NEED_SRCU_NMI_SAFE
-+int __srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp);
-+void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx) __releases(ssp);
-+#else
-+static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp)
-+{
-+	return __srcu_read_lock(ssp);
-+}
-+static inline void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
-+{
-+	__srcu_read_unlock(ssp, idx);
-+}
-+#endif /* CONFIG_NEED_SRCU_NMI_SAFE */
-+
- #ifdef CONFIG_SRCU
- void srcu_init(void);
- #else /* #ifdef CONFIG_SRCU */
-@@ -106,6 +118,18 @@ static inline int srcu_read_lock_held(const struct srcu_struct *ssp)
- 
- #endif /* #else #ifdef CONFIG_DEBUG_LOCK_ALLOC */
- 
-+#define SRCU_NMI_UNKNOWN	0x0
-+#define SRCU_NMI_UNSAFE		0x1
-+#define SRCU_NMI_SAFE		0x2
-+
-+#if defined(CONFIG_PROVE_RCU) && defined(CONFIG_TREE_SRCU)
-+void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe);
-+#else
-+static inline void srcu_check_nmi_safety(struct srcu_struct *ssp,
-+					 bool nmi_safe) { }
-+#endif
-+
-+
- /**
-  * srcu_dereference_check - fetch SRCU-protected pointer for later dereferencing
-  * @p: the pointer to fetch and protect for later dereferencing
-@@ -163,6 +187,7 @@ static inline int srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp)
- {
- 	int retval;
- 
-+	srcu_check_nmi_safety(ssp, false);
- 	retval = __srcu_read_lock(ssp);
- 	rcu_lock_acquire(&(ssp)->dep_map);
- 	return retval;
-@@ -179,10 +204,8 @@ static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp
- {
- 	int retval;
- 
--	if (IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
--		retval = __srcu_read_lock_nmisafe(ssp, true);
--	else
--		retval = __srcu_read_lock(ssp);
-+	srcu_check_nmi_safety(ssp, true);
-+	retval = __srcu_read_lock_nmisafe(ssp);
- 	rcu_lock_acquire(&(ssp)->dep_map);
- 	return retval;
- }
-@@ -193,6 +216,7 @@ srcu_read_lock_notrace(struct srcu_struct *ssp) __acquires(ssp)
- {
- 	int retval;
- 
-+	srcu_check_nmi_safety(ssp, false);
- 	retval = __srcu_read_lock(ssp);
- 	return retval;
- }
-@@ -208,6 +232,7 @@ static inline void srcu_read_unlock(struct srcu_struct *ssp, int idx)
- 	__releases(ssp)
- {
- 	WARN_ON_ONCE(idx & ~0x1);
-+	srcu_check_nmi_safety(ssp, false);
- 	rcu_lock_release(&(ssp)->dep_map);
- 	__srcu_read_unlock(ssp, idx);
- }
-@@ -223,17 +248,16 @@ static inline void srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
- 	__releases(ssp)
- {
- 	WARN_ON_ONCE(idx & ~0x1);
-+	srcu_check_nmi_safety(ssp, true);
- 	rcu_lock_release(&(ssp)->dep_map);
--	if (IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
--		__srcu_read_unlock_nmisafe(ssp, idx, true);
--	else
--		__srcu_read_unlock(ssp, idx);
-+	__srcu_read_unlock_nmisafe(ssp, idx);
- }
- 
- /* Used by tracing, cannot be traced and cannot call lockdep. */
- static inline notrace void
- srcu_read_unlock_notrace(struct srcu_struct *ssp, int idx) __releases(ssp)
- {
-+	srcu_check_nmi_safety(ssp, false);
- 	__srcu_read_unlock(ssp, idx);
- }
- 
-diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
-index efd808a23f8d8..a2f620f8c5592 100644
---- a/include/linux/srcutiny.h
-+++ b/include/linux/srcutiny.h
-@@ -87,16 +87,4 @@ static inline void srcu_torture_stats_print(struct srcu_struct *ssp,
- 		 data_race(READ_ONCE(ssp->srcu_lock_nesting[!idx])),
- 		 data_race(READ_ONCE(ssp->srcu_lock_nesting[idx])));
- }
--
--static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe)
--{
--	BUG();
--	return 0;
--}
--
--static inline void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe)
--{
--	BUG();
--}
--
- #endif
-diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-index 35ffdedf86ccb..c689a81752c9a 100644
---- a/include/linux/srcutree.h
-+++ b/include/linux/srcutree.h
-@@ -43,10 +43,6 @@ struct srcu_data {
- 	struct srcu_struct *ssp;
- };
- 
--#define SRCU_NMI_UNKNOWN	0x0
--#define SRCU_NMI_NMI_UNSAFE	0x1
--#define SRCU_NMI_NMI_SAFE	0x2
--
- /*
-  * Node in SRCU combining tree, similar in function to rcu_data.
-  */
-@@ -159,7 +155,4 @@ void synchronize_srcu_expedited(struct srcu_struct *ssp);
- void srcu_barrier(struct srcu_struct *ssp);
- void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
- 
--int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe) __acquires(ssp);
--void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe) __releases(ssp);
--
- #endif
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 272830a87e566..ca4b5dcec675b 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -631,17 +631,16 @@ void cleanup_srcu_struct(struct srcu_struct *ssp)
- }
- EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
- 
-+#ifdef CONFIG_PROVE_RCU
- /*
-  * Check for consistent NMI safety.
-  */
--static void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
-+void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
- {
- 	int nmi_safe_mask = 1 << nmi_safe;
- 	int old_nmi_safe_mask;
- 	struct srcu_data *sdp;
- 
--	if (!IS_ENABLED(CONFIG_PROVE_RCU))
--		return;
- 	/* NMI-unsafe use in NMI is a bad sign */
- 	WARN_ON_ONCE(!nmi_safe && in_nmi());
- 	sdp = raw_cpu_ptr(ssp->sda);
-@@ -652,6 +651,8 @@ static void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
- 	}
- 	WARN_ONCE(old_nmi_safe_mask != nmi_safe_mask, "CPU %d old state %d new state %d\n", sdp->cpu, old_nmi_safe_mask, nmi_safe_mask);
- }
-+EXPORT_SYMBOL_GPL(srcu_check_nmi_safety);
-+#endif /* CONFIG_PROVE_RCU */
- 
- /*
-  * Counts the new reader in the appropriate per-CPU element of the
-@@ -665,7 +666,6 @@ int __srcu_read_lock(struct srcu_struct *ssp)
- 	idx = READ_ONCE(ssp->srcu_idx) & 0x1;
- 	this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
- 	smp_mb(); /* B */  /* Avoid leaking the critical section. */
--	srcu_check_nmi_safety(ssp, false);
- 	return idx;
- }
- EXPORT_SYMBOL_GPL(__srcu_read_lock);
-@@ -679,7 +679,6 @@ void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
- {
- 	smp_mb(); /* C */  /* Avoid leaking the critical section. */
- 	this_cpu_inc(ssp->sda->srcu_unlock_count[idx].counter);
--	srcu_check_nmi_safety(ssp, false);
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock);
- 
-@@ -690,7 +689,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
-  * srcu_struct, but in an NMI-safe manner using RMW atomics.
-  * Returns an index that must be passed to the matching srcu_read_unlock().
-  */
--int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe)
-+int __srcu_read_lock_nmisafe(struct srcu_struct *ssp)
- {
- 	int idx;
- 	struct srcu_data *sdp = raw_cpu_ptr(ssp->sda);
-@@ -698,8 +697,6 @@ int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe)
- 	idx = READ_ONCE(ssp->srcu_idx) & 0x1;
- 	atomic_long_inc(&sdp->srcu_lock_count[idx]);
- 	smp_mb__after_atomic(); /* B */  /* Avoid leaking the critical section. */
--	if (chknmisafe)
--		srcu_check_nmi_safety(ssp, true);
- 	return idx;
- }
- EXPORT_SYMBOL_GPL(__srcu_read_lock_nmisafe);
-@@ -709,14 +706,12 @@ EXPORT_SYMBOL_GPL(__srcu_read_lock_nmisafe);
-  * element of the srcu_struct.  Note that this may well be a different
-  * CPU than that which was incremented by the corresponding srcu_read_lock().
-  */
--void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe)
-+void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
- {
- 	struct srcu_data *sdp = raw_cpu_ptr(ssp->sda);
- 
- 	smp_mb__before_atomic(); /* C */  /* Avoid leaking the critical section. */
- 	atomic_long_inc(&sdp->srcu_unlock_count[idx]);
--	if (chknmisafe)
--		srcu_check_nmi_safety(ssp, true);
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock_nmisafe);
- 
-@@ -1163,7 +1158,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
- 	 * SRCU read-side critical section so that the grace-period
- 	 * sequence number cannot wrap around in the meantime.
- 	 */
--	idx = __srcu_read_lock_nmisafe(ssp, false);
-+	idx = __srcu_read_lock_nmisafe(ssp);
- 	ss_state = smp_load_acquire(&ssp->srcu_size_state);
- 	if (ss_state < SRCU_SIZE_WAIT_CALL)
- 		sdp = per_cpu_ptr(ssp->sda, 0);
-@@ -1196,7 +1191,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
- 		srcu_funnel_gp_start(ssp, sdp, s, do_norm);
- 	else if (needexp)
- 		srcu_funnel_exp_start(ssp, sdp_mynode, s);
--	__srcu_read_unlock_nmisafe(ssp, idx, false);
-+	__srcu_read_unlock_nmisafe(ssp, idx);
- 	return s;
- }
- 
-@@ -1500,13 +1495,13 @@ void srcu_barrier(struct srcu_struct *ssp)
- 	/* Initial count prevents reaching zero until all CBs are posted. */
- 	atomic_set(&ssp->srcu_barrier_cpu_cnt, 1);
- 
--	idx = __srcu_read_lock_nmisafe(ssp, false);
-+	idx = __srcu_read_lock_nmisafe(ssp);
- 	if (smp_load_acquire(&ssp->srcu_size_state) < SRCU_SIZE_WAIT_BARRIER)
- 		srcu_barrier_one_cpu(ssp, per_cpu_ptr(ssp->sda, 0));
- 	else
- 		for_each_possible_cpu(cpu)
- 			srcu_barrier_one_cpu(ssp, per_cpu_ptr(ssp->sda, cpu));
--	__srcu_read_unlock_nmisafe(ssp, idx, false);
-+	__srcu_read_unlock_nmisafe(ssp, idx);
- 
- 	/* Remove the initial count, at which point reaching zero can happen. */
- 	if (atomic_dec_and_test(&ssp->srcu_barrier_cpu_cnt))
+>
+> Brian
+>
+> > >
+> > > > +             else
+> > > > +                     element = pool->alloc(gfp_mask, pool->pool_data);
+> > > >               if (unlikely(!element)) {
+> > > >                       mempool_exit(pool);
+> > > >                       return -ENOMEM;
+> > > ...
+> > > > @@ -457,6 +499,132 @@ void *mempool_alloc(mempool_t *pool, gfp_t gfp_mask)
+> > > >  }
+> > > >  EXPORT_SYMBOL(mempool_alloc);
+> > > >
+> > > > +/**
+> > > > + * mempool_alloc_pages_bulk - allocate a bulk of pagesfrom a specific
+> > > > + *                           memory pool
+> > > > + * @pool:       pointer to the memory pool which was allocated via
+> > > > + *              mempool_create().
+> > > > + * @gfp_mask:   the usual allocation bitmask.
+> > > > + * @nr:         the number of requested pages.
+> > > > + * @page_list:  the list the pages will be added to.
+> > > > + * @page_array: the array the pages will be added to.
+> > > > + *
+> > > > + * this function only sleeps if the alloc_pages_bulk_fn() function sleeps
+> > > > + * or the allocation can not be satisfied even though the mempool is depleted.
+> > > > + * Note that due to preallocation, this function *never* fails when called
+> > > > + * from process contexts. (it might fail if called from an IRQ context.)
+> > > > + * Note: using __GFP_ZERO is not supported.  And the caller should not pass
+> > > > + * in both valid page_list and page_array.
+> > > > + *
+> > > > + * Return: true when nr pages are allocated or false if not.  It is the
+> > > > + *         caller's responsibility to free the partial allocated pages.
+> > > > + */
+> > > > +static bool mempool_alloc_pages_bulk(mempool_t *pool, gfp_t gfp_mask,
+> > > > +                                  unsigned int nr,
+> > > > +                                  struct list_head *page_list,
+> > > > +                                  struct page **page_array)
+> > > > +{
+> > > > +     unsigned long flags;
+> > > > +     wait_queue_entry_t wait;
+> > > > +     gfp_t gfp_temp;
+> > > > +     int i;
+> > > > +     unsigned int ret, nr_remaining;
+> > > > +     struct page *page;
+> > > > +
+> > >
+> > > This looks like a lot of duplicate boilerplate from mempool_alloc().
+> > > Could this instead do something like: rename the former to
+> > > __mempool_alloc() and add a count parameter, implement bulk alloc
+> > > support in there for count > 1, then let traditional (i.e., non-bulk)
+> > > mempool_alloc() callers pass a count of 1?
+> >
+> > Thanks for the suggestion. Yeah, the duplicate code is not perfect. I
+> > thought about this way too, but it may need to have a lot of "if
+> > (count > 0)" of "if (is_bulk_alloc) " if a flag is used in the code to
+> > handle the bulk allocation, for example, calculate remaining nr, loop
+> > to remove element from the pool, manipulate list or array, etc. Seems
+> > not that readable IMHO.
+> >
+> > We may be able to extract some common code into shared helpers, for
+> > example, the gfp sanitization and wait logic.
+> >
+> > >
+> > > Along the same lines, I also wonder if there's any value in generic bulk
+> > > alloc support for mempool. For example, I suppose technically this could
+> > > be implemented via one change to support a pool->alloc_bulk() callback
+> > > that any user could implement via a loop if they wanted
+> > > mempool_alloc_bulk() support backed by a preallocated pool. The page
+> > > based user could then just use that to call alloc_pages_bulk_*() as an
+> > > optimization without the mempool layer needing to know or care about
+> > > whether the underlying elements are pages or not. Hm?
+> >
+> > Thanks for the suggestion. Actually I thought about this too. But the
+> > memory space overhead, particularly stack space seems like a
+> > showstopper to me. We just can put the pointers into an array, but
+> > this may consume a significant amount of stack memory. One pointer is
+> > 8 bytes, 256 objects imply 2K stack space. Of course the users could
+> > move the array into a dynamic allocated data structure, but this may
+> > need the users modify their driver. Bulk kmalloc via kmalloc_array()
+> > may be fine, this is the only usercase other than pages I could think
+> > of.
+> >
+> > >
+> > > Brian
+> > >
+> > > > +     VM_WARN_ON_ONCE(gfp_mask & __GFP_ZERO);
+> > > > +     might_alloc(gfp_mask);
+> > > > +
+> > > > +     gfp_mask |= __GFP_NOMEMALLOC;   /* don't allocate emergency reserves */
+> > > > +     gfp_mask |= __GFP_NORETRY;      /* don't loop in __alloc_pages */
+> > > > +     gfp_mask |= __GFP_NOWARN;       /* failures are OK */
+> > > > +
+> > > > +     gfp_temp = gfp_mask & ~(__GFP_DIRECT_RECLAIM|__GFP_IO);
+> > > > +
+> > > > +repeat_alloc:
+> > > > +     i = 0;
+> > > > +     ret = pool->alloc_pages_bulk(gfp_temp, nr, pool->pool_data, page_list,
+> > > > +                                  page_array);
+> > > > +
+> > > > +     if (ret == nr)
+> > > > +             return true;
+> > > > +
+> > > > +     nr_remaining = nr - ret;
+> > > > +
+> > > > +     spin_lock_irqsave(&pool->lock, flags);
+> > > > +     /* Allocate page from the pool and add to the list or array */
+> > > > +     while (pool->curr_nr && (nr_remaining > 0)) {
+> > > > +             page = remove_element(pool);
+> > > > +             spin_unlock_irqrestore(&pool->lock, flags);
+> > > > +             smp_wmb();
+> > > > +
+> > > > +             kmemleak_update_trace((void *)page);
+> > > > +
+> > > > +             if (page_list)
+> > > > +                     list_add(&page->lru, page_list);
+> > > > +             else
+> > > > +                     page_array[ret + i] = page;
+> > > > +
+> > > > +             i++;
+> > > > +             nr_remaining--;
+> > > > +
+> > > > +             spin_lock_irqsave(&pool->lock, flags);
+> > > > +     }
+> > > > +
+> > > > +     spin_unlock_irqrestore(&pool->lock, flags);
+> > > > +
+> > > > +     if (!nr_remaining)
+> > > > +             return true;
+> > > > +
+> > > > +     /*
+> > > > +      * The bulk allocator counts in the populated pages for array,
+> > > > +      * but don't do it for list.
+> > > > +      */
+> > > > +     if (page_list)
+> > > > +             nr = nr_remaining;
+> > > > +
+> > > > +     /*
+> > > > +      * We use gfp mask w/o direct reclaim or IO for the first round.  If
+> > > > +      * alloc failed with that and @pool was empty, retry immediately.
+> > > > +      */
+> > > > +     if (gfp_temp != gfp_mask) {
+> > > > +             gfp_temp = gfp_mask;
+> > > > +             goto repeat_alloc;
+> > > > +     }
+> > > > +
+> > > > +     /* We must not sleep if !__GFP_DIRECT_RECLAIM */
+> > > > +     if (!(gfp_mask & __GFP_DIRECT_RECLAIM))
+> > > > +             return false;
+> > > > +
+> > > > +     /* Let's wait for someone else to return an element to @pool */
+> > > > +     init_wait(&wait);
+> > > > +     prepare_to_wait(&pool->wait, &wait, TASK_UNINTERRUPTIBLE);
+> > > > +
+> > > > +     /*
+> > > > +      * FIXME: this should be io_schedule().  The timeout is there as a
+> > > > +      * workaround for some DM problems in 2.6.18.
+> > > > +      */
+> > > > +     io_schedule_timeout(5*HZ);
+> > > > +
+> > > > +     finish_wait(&pool->wait, &wait);
+> > > > +     goto repeat_alloc;
+> > > > +}
+> > > > +
+> > > > +bool mempool_alloc_pages_bulk_list(mempool_t *pool, gfp_t gfp_mask,
+> > > > +                                unsigned int nr,
+> > > > +                                struct list_head *page_list)
+> > > > +{
+> > > > +     return mempool_alloc_pages_bulk(pool, gfp_mask, nr, page_list, NULL);
+> > > > +}
+> > > > +EXPORT_SYMBOL(mempool_alloc_pages_bulk_list);
+> > > > +
+> > > > +bool mempool_alloc_pages_bulk_array(mempool_t *pool, gfp_t gfp_mask,
+> > > > +                                 unsigned int nr,
+> > > > +                                 struct page **page_array)
+> > > > +{
+> > > > +     return mempool_alloc_pages_bulk(pool, gfp_mask, nr, NULL, page_array);
+> > > > +}
+> > > > +EXPORT_SYMBOL(mempool_alloc_pages_bulk_array);
+> > > > +
+> > > >  /**
+> > > >   * mempool_free - return an element to the pool.
+> > > >   * @element:   pool element pointer.
+> > > > --
+> > > > 2.26.3
+> > > >
+> > >
+> >
+>
