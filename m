@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D914602408
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB84560240A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiJRFzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 01:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S230347AbiJRF4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 01:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiJRFzf (ORCPT
+        with ESMTP id S229711AbiJRF4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 01:55:35 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB7E8F944
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 22:55:33 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id fw14so13012960pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 22:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RSQN0hwdZlX1y7u16DsnIwcWO7mjXUN5LAASmU8cjwM=;
-        b=eG3/tYkCfaz1l0HV4b9o4Arup6zLLv2hJBbc8fVEbyDhV0zndJrwVQsMa0LvY+xrsM
-         xcyOH0EuCWQVQvCacTLS94fkfmlKNDat0BQUjJUeZBjPFcdX2iUZKhj2cZradov4pmk6
-         MIpd1Tt7jcFgiwcqP/Vyg0WSO73Ql2zvJ3GBg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RSQN0hwdZlX1y7u16DsnIwcWO7mjXUN5LAASmU8cjwM=;
-        b=gdruCqRp7tW12ZJJM4CpU3pUoFXakgsY1Zg5ByNuPJvm5CyBxYZQgxf5TqK+pNhB7k
-         o+Q9UR50K573wavmiikNzMC1b6JRVK30cPZF93bbMrDb8MmeEIP+4Ro3IJTBlZ42r/1l
-         ZaMIh0QvTG0v7h7xG3NTyZYxnYFBvsv0y0UlvAJct9nhLRrvXDOLG+7sSLSPvgCZ+RwT
-         ULTj/6QoWmYKS2UIpvwxd2Hmi/QfZ/PemDeXhqUcy8AEGKiQwK6mkcv6enq+6pWiVwLO
-         uQkcOyuE4WHDpQarO62R5SE9VGxm8qfGeJe+bK7er9PLLzVqGvR/KjnH6Frixne8aDmV
-         zTvQ==
-X-Gm-Message-State: ACrzQf0qFzrmrTw7zv68qWVkcoa+I0YFNQzQE3treCXRI+IIuhpAhlKX
-        f9EcWWYsw0BH3HeBXUEZEphzyeTFTAB7zw==
-X-Google-Smtp-Source: AMsMyM4tWFDs3k8YT7Kcl2bUy6iKgC8N5CCJCcGphkhNJeVs9KBEYz/AsGbihGkjC5doqWdyfdzUrA==
-X-Received: by 2002:a17:90a:3f86:b0:20a:e7dc:340a with SMTP id m6-20020a17090a3f8600b0020ae7dc340amr1746037pjc.157.1666072532868;
-        Mon, 17 Oct 2022 22:55:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q15-20020a170902a3cf00b0017c6959724asm7613471plb.258.2022.10.17.22.55.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 22:55:31 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 22:55:30 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Nicolas Iooss <nicolas.iooss@m4x.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v3 1/1] security: Add CONFIG_LSM_AUTO to handle default
- LSM stack ordering
-Message-ID: <202210172153.C65BF23D5E@keescook>
-References: <20210222150608.808146-1-mic@digikod.net>
- <20210222150608.808146-2-mic@digikod.net>
- <51725b44-bc40-0205-8583-285d3b35b5ca@schaufler-ca.com>
- <ee461f8d-a02d-0782-8f31-691853a57f00@digikod.net>
- <7b67163a-9de1-313f-5b5a-8c720cef9b73@schaufler-ca.com>
- <CAJfZ7=n5FOxHXMLRrDQ3F-kDqbYngNoYKcz6_PWi1rPa0_8WpA@mail.gmail.com>
- <3b97e25b-303c-d732-3e5d-f1b1a446e090@schaufler-ca.com>
- <202210171111.21E3983165@keescook>
- <CAHC9VhTTKpesvjnc_233x+wG1BvXyup9nM4Dv2h1953zXAvU3A@mail.gmail.com>
+        Tue, 18 Oct 2022 01:56:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBD27A75E;
+        Mon, 17 Oct 2022 22:56:20 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29I5ma46004214;
+        Tue, 18 Oct 2022 05:56:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iBYrOM6D+B3y1YMpOUSDbglLMKT4a9SUo60Ak3nsuCE=;
+ b=YiH6tmfKcCJaM4ZGaEku1BZc99TKmJMeRstqWWqs6d9QFL7VIv7FS3YVP2sZfHGEX8YI
+ oL8ir9zThIR/qgmzVLqHt9CF+OeiOydncX7NtY9hOv9lODzlhdk6+BRNAS/T0v+4mnaN
+ cotJ11AQuRO+Qoe9V3dPWAcOy3OVwl5eJDPINZY7gGVY15iu8ng0EjR/iyMP33Z2ip4P
+ H3OpG1QC9/a6Iqv8R0hmn9Tu1jS/4xNd+xk0gkZj/yCzC+v+zYDgJB4vfSqdqaFzcJoN
+ TCbTTNvkL449qaZeVPVzu8TkHVzZx2sPoBEsLAUGJ8jVBtILgEFY/NsqWP6wwwlvhsXT Iw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9n2p07p0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 05:56:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29I5u833030166
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 05:56:08 GMT
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 17 Oct
+ 2022 22:56:04 -0700
+Subject: Re: [RESEND PATCH v2 1/5] dt-bindings: firmware: qcom-scm: Add
+ "allow-multi-call" property
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     David Heidelberg <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+References: <1661898311-30126-1-git-send-email-quic_gurus@quicinc.com>
+ <1661898311-30126-2-git-send-email-quic_gurus@quicinc.com>
+ <453bce1e-e2d3-bf26-9954-774e1e267d82@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <2713bacb-922d-475c-e700-3107d4ebac90@quicinc.com>
+Date:   Tue, 18 Oct 2022 11:26:02 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhTTKpesvjnc_233x+wG1BvXyup9nM4Dv2h1953zXAvU3A@mail.gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <453bce1e-e2d3-bf26-9954-774e1e267d82@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yEuMQUEGEApoljnrXPFep3iJTod9UN-U
+X-Proofpoint-GUID: yEuMQUEGEApoljnrXPFep3iJTod9UN-U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-18_01,2022-10-17_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210180033
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,45 +88,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 09:45:21PM -0400, Paul Moore wrote:
-> The code sorta cares about ordering, at least to the extent that the
-> LSMs will behave differently depending on the ordering, e.g. a LSM
+Hey Krzysztof,
+Thanks for taking time to review the series.
 
-Right -- this is why I've been so uncomfortable with allowing
-arbitrarily reordering of the LSM list from lsm=. There are orderings we
-know work, and others may have undesirable side-effects. I'd much rather
-the kernel be specific about the order.
 
-> I personally would like to preserve the existing concept where "built"
-> does *not* equate to "enabled" by default.
-
-Yup, understood. I didn't think I was going to win over anyone on that
-one, but figured I'd just point it out again. ;)
-
-> > I *still* think there should be a way to leave ordering alone and have
-> > separate enable/disable control.
+On 8/31/22 1:30 PM, Krzysztof Kozlowski wrote:
+> On 31/08/2022 01:25, Guru Das Srinagesh wrote:
+>> For firmware that supports it, allow multiple SCM calls to be passed
+>> down to it by removing the serialization lock in the SCM driver.
+>>
+>> This patch is based on this YAML conversion patch [1] that is in-flight
+>> currently.
+>>
+>> [1] https://lore.kernel.org/lkml/20220708090431.30437-1-david@ixit.cz/
+>>
+>> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
 > 
-> My current opinion is that enabling a LSM and specifying its place in
-> an ordered list are one in the same.  The way LSM stacking as
-> currently done almost requires the ability to specify an order if an
-> admin is trying to meet an security relevant operation visibility
-> goal.
+> Thank you for your patch. There is something to discuss/improve.
+> 
+> If you make a resend, at least be sure you Cc proper people. Use
+> scripts/get_maintainers.pl to CC all maintainers and relevant mailing lists.
+> 
+> This was not Cced to device tree maintainers, therefore it has to be NAK-ed.
+> 
+> 
+>> ---
+>>   Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> index 9fdeee0..e279fd2 100644
+>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> @@ -70,6 +70,11 @@ properties:
+>>     '#reset-cells':
+>>       const: 1
+>>   
+>> +  allow-multi-call:
+>> +    description:
+>> +      Specify this flag to remove SCM call serialization. Need to ensure that
+>> +      the firmware being used supports this feature first.
+> 
+> Missing vendor prefix, missing type.
 
-As in an admin wants to see selinux rejections instead of loadpin
-rejections for a blocked module loading?
+Ack
 
-Hmmm. Is this a realistic need?
+> 
+> Isn't support for this obvious from compatible?\
 
-> We can have defaults, like we do know, but I'm in no hurry to remove
-> the ability to allow admins to change the ordering at boot time.
+On further testing it looks like the property can't be truly enabled on
+sm8450 yet so I'll drop the patch in the next re-spin.
 
-My concern is with new LSMs vs the build system. A system builder will
-be prompted for a new CONFIG_SECURITY_SHINY, but won't be prompted
-about making changes to CONFIG_LSM to include it.
-
-Even booting with "lsm.debug" isn't entirely helpful to helping someone
-construct the "lsm=" option they actually want... I guess I can fix that
-part, at least. :)
-
--- 
-Kees Cook
+> 
+> Best regards,
+> Krzysztof
+> 
