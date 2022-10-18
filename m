@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106896020FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F69E6020FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiJRCMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S229917AbiJRCNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJRCMg (ORCPT
+        with ESMTP id S229648AbiJRCNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:12:36 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABA7635F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:12:15 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id k9so12051310pll.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhunVWViOQq+jYCX/ovpRh7yWUwRqDSJab0KzFcLVZQ=;
-        b=e5a30VeCk2RpehU6eGYBcDsz/+X2qb5BtjVnkOmFBfnooFxeeOXMJVq43vTJAZmAsa
-         OHGrLwVEDEpUjTY/LLRcQR1f27hbjyyQyuD55dN00I+i24ePeFCV8XC2Gc8ZjOrRIKoq
-         4RFidxL6ZFXZR9thwNAwYzEpjRGuM0RDgsmPA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EhunVWViOQq+jYCX/ovpRh7yWUwRqDSJab0KzFcLVZQ=;
-        b=deadFU7WtljDGyDtSLDjLn15sTpqR7Cp/SgOwU3txU2df8Hy5ZKGLiS7OaM51PP9Do
-         Ipyl8ZgLd9OHh797SPykhpMPSKr05GxmZZ1P8GOYwMgn/f0Iyr/K+VcMPE+L80lxm74n
-         R0ZC/iCGv+aSHoqSiSu8ka8DFoIrP1sQXqQTx9O2casm2j33iA2rBJVKl72ZpaLfXCoY
-         B0TlizL6ORInLUBYhZAWA6IBP3OlDe5cWINq+T6UmwXbL9k5I3Q36/1Gy22q10wL92Vu
-         3LhUZWDPkAd3dNlHiOlgUViJBtdjh8buSDWMAS4Td8AJq6G75prxS9chtgH1VNBVa8bR
-         v66g==
-X-Gm-Message-State: ACrzQf2qAsjKZBlGOKvA6wiNDVxsUzGzJgNeXZF1Ezra3q9Shgp2sVlC
-        eJuydVUk2BHRrGhBn1bQ/2YV3w==
-X-Google-Smtp-Source: AMsMyM7t1bozwiZ3hsC6aoXOk5mQp8jw6vae+hgNeUzIvaQtDLVnsnfhVNHEXfeCVGvBN6KrsbixOQ==
-X-Received: by 2002:a17:902:7481:b0:180:58d7:24e0 with SMTP id h1-20020a170902748100b0018058d724e0mr695847pll.49.1666059134263;
-        Mon, 17 Oct 2022 19:12:14 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:58b4:95a3:4654:2a9f])
-        by smtp.gmail.com with ESMTPSA id w9-20020a628209000000b0056276519e8fsm1146716pfd.73.2022.10.17.19.12.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 19:12:13 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 11:12:10 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv3 4/8] zram: Introduce recompress sysfs knob
-Message-ID: <Y04LerrIH9KTJM2A@google.com>
-References: <20221009090720.1040633-1-senozhatsky@chromium.org>
- <20221009090720.1040633-5-senozhatsky@chromium.org>
- <20221017170850.034705ad83c54b92236d14f7@linux-foundation.org>
+        Mon, 17 Oct 2022 22:13:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD4912A85;
+        Mon, 17 Oct 2022 19:13:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mry8D2tMWz4x1G;
+        Tue, 18 Oct 2022 13:13:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666059212;
+        bh=xkkcdp0//wKAI0Jdtp1I2x0RLjBWNFC7jv3X+ENzRnc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tdt7txRE4gdpOIvWXy+fYpTHY3MYXLa4jXjfv8UmNZXGMftaTjkOb5nKC1Bx1Dkro
+         HCTMHQ3NwLgIZOEh+y43DI7FOfE1vvJk9jp8DlDVo6G4mE/5c+JnIPYLcotn0+lQLV
+         kwptl8FenDGIYNIXRctEn13qhYHj2rsNcqijpMd/4XO1wXen2wo7U+aq16J9ciYzQg
+         zNVDGdeZ6yn7IkhPXz1q84qNbojHIvZCcYpeeIUI02WhgRodlg8WX+ecGwXAyTWS3Z
+         amLvxTEAWDPkG2bbpNf0XL8sIplg9to9BlQOyeLjeQbv/Gw6Vp26pmY2veJYd9tEFv
+         0GK0LuVym9G2g==
+Date:   Tue, 18 Oct 2022 13:13:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pinctrl-intel tree
+Message-ID: <20221018131330.75fc1807@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017170850.034705ad83c54b92236d14f7@linux-foundation.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/cSQsey3m2yig/09V6eHz8RY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/10/17 17:08), Andrew Morton wrote:
-> > Allow zram to recompress (using secondary compression streams)
-> > pages. We support three modes:
-> > 
-> > 1) IDLE pages recompression is activated by `idle` mode
-> > 
-> > 	echo idle > /sys/block/zram0/recompress
-> > 
-> > 2) Since there may be many idle pages user-space may pass a size
-> > watermark value and we will recompress IDLE pages only of equal
-> > or greater size:
-> > 
-> > 	echo 888 > /sys/block/zram0/recompress
-> 
-> It's helpful to describe the units ("bytes") here and in the
-> docmentation.
+--Sig_/cSQsey3m2yig/09V6eHz8RY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Will send fixup patches.
+Hi all,
 
-> > 3) HUGE pages recompression is activated by `huge` mode
-> > 
-> > 	echo huge > /sys/block/zram0/recompress
-> > 
-> > 4) HUGE_IDLE pages recompression is activated by `huge_idle` mode
-> > 
-> > 	echo huge_idle > /sys/block/zram0/recompress
-> > 
-> > ...
-> >
-> > +	if (IS_ERR((void *)handle_next)) {
-> 
-> IS_ERR_VALUE() avoids castsing back and forth.
+After merging the pinctrl-intel tree, today's linux-next build (arm64
+defconfig) failed like this:
 
-Thanks, I'll send a separate patch for this (if you don't mind).
+
+Presumably caused by commit
+
+  e6b665a1c9ae ("pinctrl: Clean up headers")
+
+I have applied the following patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 18 Oct 2022 13:06:39 +1100
+Subject: [PATCH] fix up for "pinctrl: Clean up headers"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/pinctrl/pinctrl-zynqmp.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pinctrl/pinctrl-zynqmp.c b/drivers/pinctrl/pinctrl-zyn=
+qmp.c
+index 1a94db1ffa4f..f2be341f73e1 100644
+--- a/drivers/pinctrl/pinctrl-zynqmp.c
++++ b/drivers/pinctrl/pinctrl-zynqmp.c
+@@ -18,6 +18,7 @@
+ #include <linux/firmware/xlnx-zynqmp.h>
+=20
+ #include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
+ #include <linux/pinctrl/pinmux.h>
+=20
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/cSQsey3m2yig/09V6eHz8RY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNOC8oACgkQAVBC80lX
+0Gyp2Qf+KZxzeGMR/kl4xR80i7VAYdXB82H1EV8myMQfg6Wnx8fedkhwneDDm7i4
+g9hkRxT1OBrPvZMQhHy4qK6AdVJjcNjKlMw+npjQOKKF4I/l0jpKvqIsGfVUSvjR
+XZdCROUO9VwDx1+z6G3BRmbxhvPHh2CRqWqLlphQkKMipaSDQDVcwBHl16LfhswP
+QKN1ICdAuvxuLctvOY0rVMb/FoLmRSjU6e9OLMA2shXYy2EJNRExJNmgge9iEKl9
+9a5sx7bxf7QX0vhTo8qxi3RqGlUeI0QI4fFymx8Wfhz/5UuCCkSBkZdHOM7SJv5t
+kEJeEFeVGzPe7L6hvJjBfyV+kcRweg==
+=GE0f
+-----END PGP SIGNATURE-----
+
+--Sig_/cSQsey3m2yig/09V6eHz8RY--
