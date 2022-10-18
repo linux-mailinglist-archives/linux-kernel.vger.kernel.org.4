@@ -2,103 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7BB602C95
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD477602C9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiJRNMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
+        id S230303AbiJRNMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiJRNMJ (ORCPT
+        with ESMTP id S229788AbiJRNMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:12:09 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08E2C696A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:12:05 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso1391824pjq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfgN++TPk0fTsXy49wFUN76bG9RP2vq/hMwME62fwuc=;
-        b=CGXkSB9uywrxsgCdNFPuLJClpIMUtjLodXrbG2P6EA5GDH5qtFAFuSefrX06MNdx7K
-         y09Se10ajet7taVCaFyZi5lU6ag1p1po3SpuOj8qa3ikH+Rhy59iG7l+QvmqL3EkjN1g
-         02iO9A1tXmi11e1B8e5QzJHbGC3Ty5fk85n0M0JIFt1xLmuspHls3QZxaKuje3aZt5ag
-         jKBZzNMOFbine3wnRei1n1ogxTbx+zgim9cZLm19B9KInwPb4DFozHlLtBgniMPhONqF
-         kf3LWS87AjBafRqd8MEgPuVjgs1JSn14EQmTft/SLeBBC4E94/3AjdGqwXR3t43SATD6
-         +8dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GfgN++TPk0fTsXy49wFUN76bG9RP2vq/hMwME62fwuc=;
-        b=7bKthiMF6B2YOHdr8vM3Trfg7iYVnGMBv1uiqyoWyfbeihy8d0cPjiG2y/5uu15IYb
-         IvopgsnTUfM8Vs8eATKTt44SVAwXC9ipGxMfVxGaQNY/ZOWaxPFveza9Yc4f33UZx6aX
-         GYiAI2zmXb9CIjoooqayapdOAo4OAtR5pRIVSxXbyA3B7WDACU4ojOEZxFsGeP5CcmQI
-         Pa4LqDYQ41fpdzbvYIbR+Swmva8iXtvTDJXiiiv+H/HUfwgQKZCK/6nUe9d4Z+wNcC0z
-         9QfUULam3hkMIhxj91L32fjrQ4FR39K3wygXRpL90Dp5+/WmWisZbsY6z6BNwVN/XG69
-         KYaA==
-X-Gm-Message-State: ACrzQf2rx5x5vD5eLVU06RSD/uNkrwUND6i25fKTNzW4HYtUgVbr4kTi
-        ICbSvTF9aPURIQLyRcqjuMlFC6UQ1UvzAdkQ9844og==
-X-Google-Smtp-Source: AMsMyM6WIAnvbu3GJwLi+rnRvx9SP9n/YV8ENAQvAYkNqJyKnq+TLw0aAHXTKYafdDi0g5pfux+aSCbMtCBn6X8DJwg=
-X-Received: by 2002:a17:90b:38c3:b0:20d:406e:26d9 with SMTP id
- nn3-20020a17090b38c300b0020d406e26d9mr3569457pjb.121.1666098725139; Tue, 18
- Oct 2022 06:12:05 -0700 (PDT)
+        Tue, 18 Oct 2022 09:12:14 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B6836406;
+        Tue, 18 Oct 2022 06:12:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MsDjs21Przl6V4;
+        Tue, 18 Oct 2022 21:10:09 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3PS4opk5jpJ03AA--.4670S3;
+        Tue, 18 Oct 2022 21:12:10 +0800 (CST)
+Subject: Re: [PATCH RFC 1/2] kobject: add return value for kobject_put()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     hch@lst.de, axboe@kernel.dk, willy@infradead.org,
+        martin.petersen@oracle.com, kch@nvidia.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221018131432.434167-1-yukuai3@huawei.com>
+ <20221018131432.434167-2-yukuai3@huawei.com> <Y06je6LiDicUfzto@kroah.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <2f962069-8fd9-08df-aa00-062b94569c36@huaweicloud.com>
+Date:   Tue, 18 Oct 2022 21:12:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-4-vannapurve@google.com> <Yz80XAg74KGdSqco@google.com>
- <CAGtprH_XSCXZDroGUnL3H1CwcsbH_A_NDn8B4P2xfpSYGqKmqw@mail.gmail.com>
- <Y0mu1FKugNQG5T8K@google.com> <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
- <Y02aLxlCKWwN62I5@google.com>
-In-Reply-To: <Y02aLxlCKWwN62I5@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 18 Oct 2022 18:41:53 +0530
-Message-ID: <CAGtprH-i6MDiYFQGf=cjOPcaTZyezObW7HpegBiFq6BPKa2jWQ@mail.gmail.com>
-Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
- pool gpa
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y06je6LiDicUfzto@kroah.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3PS4opk5jpJ03AA--.4670S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw48CryxAryxXr48tFWrXwb_yoWDJwc_Cr
+        WfAFZrCw4fWw1Ik3W8twn8GrW7trZF9a4jqrZFqr17Xa48WanxJrWUG34F9Fs7CrWktF1D
+        Cr9Yy343Ww12vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:38 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Oct 17, 2022, Vishal Annapurve wrote:
-> > This is much sleeker and will avoid hacking KVM for testing. Only
-> > caveat here is that these tests will not be able to exercise implicit
-> > conversion path if we go this route.
->
-> Yeah, I think that's a perfectly fine tradeoff.  Implicit conversion isn't strictly
-> a UPM feature, e.g. if TDX and SNP "architecturally" disallowed implicit conversions,
-> then KVM wouldn't need to support implicit conversions at all, i.e. that testing can
-> be punted to SNP and/or TDX selftests.
 
-Ack. Will address this feedback in the next series.
+
+ÔÚ 2022/10/18 21:00, Greg KH Ð´µÀ:
+> On Tue, Oct 18, 2022 at 09:14:31PM +0800, Yu Kuai wrote:
+>> The return value will be used in later patch to fix uaf for slave_dir
+>> and bd_holder_dir in block layer.
+> 
+> Then the user will be incorrect, this is not ok, you should never care
+> if you are the last "put" on an object at all.  Hint, what happens right
+> after you call this and get the result?
+> 
+
+I tried to reset the pointer to NULL in patch 2 to prevent uaf. And the
+whole kobject_put() and pointer reset is protected by a mutex, the mutex
+will be used on the reader side before kobject_get as well. So, in fact,
+I'm protecting them by the mutex...
+
+I can bypass it by using another reference anyway. But let's see if
+anyone has suggestions on the other patch.
+
+> sorry, but NAK.
+
+I know the best way is too refactor the lifecycle of the problematic
+bd_holder_dir/slave_dir, however, I gave that up because this seems
+quite complicated and influence is very huge...
+
+Thanks,
+Kuai
+> 
+> greg k-h
+> .
+> 
+
