@@ -2,277 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0396602E63
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22F0602E67
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiJROZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S230482AbiJRO0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJROYz (ORCPT
+        with ESMTP id S229926AbiJRO03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:24:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C68FE57555;
-        Tue, 18 Oct 2022 07:24:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3A99113E;
-        Tue, 18 Oct 2022 07:24:57 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA1783F792;
-        Tue, 18 Oct 2022 07:24:50 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 15:24:48 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Yu Liao <liaoyu15@huawei.com>, "liwei (GF)" <liwei391@huawei.com>,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [BUG] possible deadlock in __rcu_irq_enter_check_tick
-Message-ID: <Y063MGk3oVg6ney0@lakrids>
-References: <e015e32d-d068-2d17-1ca5-c584c30ffebb@huawei.com>
- <20221012064911.GN4221@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 18 Oct 2022 10:26:29 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A719AFB6;
+        Tue, 18 Oct 2022 07:26:29 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso16984598fac.6;
+        Tue, 18 Oct 2022 07:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jJB9ivUqw3F+dMYrKLA2kwqlgOk9VKugArobXTWH0xM=;
+        b=L7Jnyc2vNK5H0lbnIYCoMnh2Ayt17o/YaKYgom65gGlLoYBMY+m3BZHaZkdILOw69b
+         axjCooFq80igazhwWKQcegfs5v4Zh2BozBPLB4yBTU/77PT53mZmBIO801dl2FhMVr1z
+         omb59hrEJEHA/5V4/e5T27e0kqJXnLGXQqioQu9yfUlZ05kJazPzW4G3yIlZ12KwsyZK
+         LE1zjYsLGDtGSGrWnfEqesXN9BVAf25LI15CdG6IbvUV95pJZFWFNAiejXE+i/qzySMW
+         FvY30ZdJoWrPCsmVSMhP+BoWxzkoUV1uhHmMWJPkrwwiKlayUDfYVnn4Wt81pB1ho87V
+         /KQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jJB9ivUqw3F+dMYrKLA2kwqlgOk9VKugArobXTWH0xM=;
+        b=ww7gTPLZZ3BSql5huwNLxEkR70vS7fNhE1Efrxh2CNfZyJMz742KduUd+hapRWck7E
+         nccBIgGleATLHrv/v3A5YX8E/lsEPeAZwwgBUzN/iVo1wpUVvGX6gAWAS2v7cLTs6GUU
+         TZ51dZ/+Ls3bAKOnfLz5eQD7BMRnfkg27bxAHjX+bCOZ4j493D/DVykVDFoZJr+YLS7Z
+         iMtjm2c73qf6UwgTFgiWQ/kU5IZP8OtbTMIAGLepxCXH2XpxmuijNdQwtia5XG4rKh11
+         pv4pGOcjdBn/hmONuqPbsKiPVz7yT0c24AdQeY8p77nvrsNg/TYDn+MaioWQwEBTsB6l
+         iT/g==
+X-Gm-Message-State: ACrzQf2G2Fc+ZkzYxZ9dtw0afJp++pUKJCvidypjfsV+8oepAsr6gnAk
+        yAHeCc4K1gOdmwxYhL5iDQ8=
+X-Google-Smtp-Source: AMsMyM687VtwhmvJxsI0F4ocYwDeCWuGUtCIdxOONuH0brQ9jluRqc8MEXTf9MzlCQMW6ndhpayNdw==
+X-Received: by 2002:a05:6870:2189:b0:132:b270:2107 with SMTP id l9-20020a056870218900b00132b2702107mr1661427oae.55.1666103188199;
+        Tue, 18 Oct 2022 07:26:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 23-20020aca2117000000b00354efb5be11sm5533568oiz.15.2022.10.18.07.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 07:26:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 18 Oct 2022 07:26:26 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Faiz Abbas <faiz_abbas@ti.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Al Cooper <alcooperx@gmail.com>, linux-mmc@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] mmc: sdhci-of-arasan: Fix SDHCI_RESET_ALL for CQHCI
+Message-ID: <20221018142626.GA2096645@roeck-us.net>
+References: <20221018035724.2061127-1-briannorris@chromium.org>
+ <20221017205610.1.I29f6a2189e84e35ad89c1833793dca9e36c64297@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221012064911.GN4221@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221017205610.1.I29f6a2189e84e35ad89c1833793dca9e36c64297@changeid>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 11:49:11PM -0700, Paul E. McKenney wrote:
-> On Tue, Oct 11, 2022 at 09:18:11PM +0800, Yu Liao wrote:
-> > Hello,
-> > 
-> > When I run syzkaller, a deadlock problem occurs. The call stack is as follows:
-> > [ 1088.244366][    C1] ======================================================
-> > [ 1088.244838][    C1] WARNING: possible circular locking dependency detected
-> > [ 1088.245313][    C1] 5.10.0-04424-ga472e3c833d3 #1 Not tainted
-> > [ 1088.245745][    C1] ------------------------------------------------------
+On Mon, Oct 17, 2022 at 08:57:20PM -0700, Brian Norris wrote:
+> SDHCI_RESET_ALL resets will reset the hardware CQE state, but we aren't
+> tracking that properly in software. When out of sync, we may trigger
+> various timeouts.
 > 
-> It is quite possible that an unfortunate set of commits were backported
-> to v5.10.  Could you please bisect?
+> It's not typical to perform resets while CQE is enabled, but one
+> particular case I hit commonly enough: mmc_suspend() -> mmc_power_off().
+> Typically we will eventually deactivate CQE (cqhci_suspend() ->
+> cqhci_deactivate()), but that's not guaranteed -- in particular, if
+> we perform a partial (e.g., interrupted) system suspend.
 > 
-> > [ 1088.246214][    C1] syz-executor.2/932 is trying to acquire lock:
-> > [ 1088.246628][    C1] ffffa0001440c418 (rcu_node_0){..-.}-{2:2}, at:
-> > __rcu_irq_enter_check_tick+0x128/0x2f4
-> > [ 1088.247330][    C1]
-> > [ 1088.247330][    C1] but task is already holding lock:
-> > [ 1088.247830][    C1] ffff000224d0c298 (&rq->lock){-.-.}-{2:2}, at:
-> > try_to_wake_up+0x6e0/0xd40
-> > [ 1088.248424][    C1]
-> > [ 1088.248424][    C1] which lock already depends on the new lock.
-> > [ 1088.248424][    C1]
-> > [ 1088.249127][    C1]
-> > [ 1088.249127][    C1] the existing dependency chain (in reverse order) is:
-> > [ 1088.249726][    C1]
-> > [ 1088.249726][    C1] -> #1 (&rq->lock){-.-.}-{2:2}:
-> > [ 1088.250239][    C1]        validate_chain+0x6dc/0xb0c
-> > [ 1088.250591][    C1]        __lock_acquire+0x498/0x940
-> > [ 1088.250942][    C1]        lock_acquire+0x228/0x580
-> > [ 1088.251346][    C1]        _raw_spin_lock_irqsave+0xc0/0x15c
-> > [ 1088.251758][    C1]        resched_cpu+0x5c/0x110
-> > [ 1088.252091][    C1]        rcu_implicit_dynticks_qs+0x2b0/0x5d0
-> > [ 1088.252501][    C1]        force_qs_rnp+0x244/0x39c
-> > [ 1088.252847][    C1]        rcu_gp_fqs_loop+0x2e4/0x440
-> > [ 1088.253219][    C1]        rcu_gp_kthread+0x1a4/0x240
-> > [ 1088.253597][    C1]        kthread+0x20c/0x260
-> > [ 1088.253963][    C1]        ret_from_fork+0x10/0x18
-> > [ 1088.254389][    C1]
-> > [ 1088.254389][    C1] -> #0 (rcu_node_0){..-.}-{2:2}:
-> > [ 1088.255296][    C1]        check_prev_add+0xe0/0x105c
-> > [ 1088.256000][    C1]        check_prevs_add+0x1c8/0x3d4
-> > [ 1088.256693][    C1]        validate_chain+0x6dc/0xb0c
-> > [ 1088.257372][    C1]        __lock_acquire+0x498/0x940
-> > [ 1088.257731][    C1]        lock_acquire+0x228/0x580
-> > [ 1088.258079][    C1]        _raw_spin_lock+0xa0/0x120
-> > [ 1088.258425][    C1]        __rcu_irq_enter_check_tick+0x128/0x2f4
-> > [ 1088.258844][    C1]        rcu_nmi_enter+0xc4/0xd0
+> The same bug was already found and fixed for two other drivers, in v5.7
+> and v5.9:
 > 
-> This is looking like we took an interrupt while holding an rq lock.
-> Am I reading this correctly?  If so, that is bad in and of itself.
+> 5cf583f1fb9c mmc: sdhci-msm: Deactivate CQE during SDHC reset
+> df57d73276b8 mmc: sdhci-pci: Fix SDHCI_RESET_ALL for CQHCI for Intel GLK-based controllers
+> 
+> The latter is especially prescient, saying "other drivers using CQHCI
+> might benefit from a similar change, if they also have CQHCI reset by
+> SDHCI_RESET_ALL."
+> 
+> So like these other patches, deactivate CQHCI when resetting the
+> controller. Also, move around the DT/caps handling, because
+> sdhci_setup_host() performs resets before we've initialized CQHCI. This
+> is the pattern followed in other SDHCI/CQHCI drivers.
+> 
+> Fixes: 84362d79f436 ("mmc: sdhci-of-arasan: Add CQHCI support for arasan,sdhci-5.1")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-In this case it's not an interrupt; per the entry bits below:
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> > [ 1088.259183][    C1]        arm64_enter_el1_dbg+0xb0/0x160
-> > [ 1088.259623][    C1]        el1_dbg+0x28/0x50
-> > [ 1088.260011][    C1]        el1_sync_handler+0xf4/0x150
-> > [ 1088.260481][    C1]        el1_sync+0x74/0x100
-
-... this is a synchronous debug exception, which is one of:
-
- * A hardware single-step exception
- * A hardware watchpoint
- * A hardware breakpoint
- * A software breakpoint (i.e. a BRK instruction)
-
-... and we have to treat those as NMIs.
-
-That could be a kprobe, or a WARN, etc.
-
-Thanks,
-Mark.
-
-> > [ 1088.260800][    C1]        update_irq_load_avg+0x5d8/0xaa0
-> > [ 1088.261194][    C1]        update_rq_clock_task+0xb8/0x2d0
-> > [ 1088.261595][    C1]        update_rq_clock+0x8c/0x120
-> > [ 1088.261952][    C1]        try_to_wake_up+0x70c/0xd40
-> > [ 1088.262305][    C1]        wake_up_process+0x1c/0x24
-> > [ 1088.262652][    C1]        wakeup_softirqd+0x58/0x64
-> > [ 1088.263000][    C1]        __do_softirq+0x6b8/0x95c
-> > [ 1088.263345][    C1]        irq_exit+0x27c/0x2d0
-> > [ 1088.263674][    C1]        __handle_domain_irq+0x100/0x184
-> > [ 1088.264049][    C1]        gic_handle_irq+0xc0/0x760
-> > [ 1088.264394][    C1]        el1_irq+0xb8/0x140
-> > [ 1088.264709][    C1]        _raw_spin_unlock_irqrestore+0x7c/0x130
-> > [ 1088.265134][    C1]        __aarch64_insn_write+0xc4/0x100
-> > [ 1088.265516][    C1]        aarch64_insn_patch_text_nosync+0x40/0xa0
-> > [ 1088.265942][    C1]        ftrace_make_nop+0x120/0x1a4
-> > [ 1088.266300][    C1]        __ftrace_replace_code+0xdc/0x160
-> > [ 1088.266684][    C1]        ftrace_replace_code+0x100/0x1a4
-> > [ 1088.267063][    C1]        ftrace_modify_all_code+0x1a8/0x260
-> > [ 1088.267456][    C1]        arch_ftrace_update_code+0x1c/0x2c
-> > [ 1088.267847][    C1]        ftrace_run_update_code+0x38/0xa4
-> > [ 1088.268259][    C1]        ftrace_shutdown.part.0+0x2dc/0x550
-> > [ 1088.268682][    C1]        unregister_ftrace_function+0x74/0xc0
-> > [ 1088.269117][    C1]        perf_ftrace_event_register+0x130/0x1a0
-> > [ 1088.269559][    C1]        perf_trace_destroy+0x68/0x9c
-> > [ 1088.269938][    C1]        tp_perf_event_destroy+0x1c/0x2c
-> > [ 1088.270340][    C1]        _free_event+0x2f4/0x670
-> > [ 1088.270696][    C1]        put_event+0x7c/0x90
-> > [ 1088.271031][    C1]        perf_event_release_kernel+0x3c0/0x450
-> > [ 1088.271467][    C1]        perf_release+0x24/0x34
-> > [ 1088.271824][    C1]        __fput+0x1dc/0x500
-> > [ 1088.272155][    C1]        ____fput+0x24/0x30
-> > [ 1088.272471][    C1]        task_work_run+0xf4/0x1ec
-> > [ 1088.272811][    C1]        do_notify_resume+0x378/0x410
-> > [ 1088.273180][    C1]        work_pending+0xc/0x198
-> > [ 1088.273504][    C1]
-> > [ 1088.273504][    C1] other info that might help us debug this:
-> > [ 1088.273504][    C1]
-> > [ 1088.274168][    C1]  Possible unsafe locking scenario:
-> > [ 1088.274168][    C1]
-> > [ 1088.274658][    C1]        CPU0                    CPU1
-> > [ 1088.275012][    C1]        ----                    ----
-> > [ 1088.275367][    C1]   lock(&rq->lock);
-> > [ 1088.275646][    C1]                                lock(rcu_node_0);
-> > [ 1088.276082][    C1]                                lock(&rq->lock);
-> > [ 1088.276517][    C1]   lock(rcu_node_0);
-> > [ 1088.276797][    C1]
-> > [ 1088.276797][    C1]  *** DEADLOCK ***
-> > [ 1088.276797][    C1]
-> > [ 1088.277339][    C1] 4 locks held by syz-executor.2/932:
-> > [ 1088.277696][    C1]  #0: ffffa000145251e8 (event_mutex){+.+.}-{3:3}, at:
-> > perf_trace_destroy+0x34/0x9c
-> > [ 1088.278345][    C1]  #1: ffffa000144fb5a8 (ftrace_lock){+.+.}-{3:3}, at:
-> > unregister_ftrace_function+0x2c/0xc0
-> > [ 1088.279034][    C1]  #2: ffff0000c0e0c968 (&p->pi_lock){-.-.}-{2:2}, at:
-> > try_to_wake_up+0xbc/0xd40
-> > [ 1088.279672][    C1]  #3: ffff000224d0c298 (&rq->lock){-.-.}-{2:2}, at:
-> > try_to_wake_up+0x6e0/0xd40
-> > [ 1088.280300][    C1]
-> > [ 1088.280300][    C1] stack backtrace:
-> > [ 1088.280706][    C1] CPU: 1 PID: 932 Comm: syz-executor.2 Not tainted
-> > 5.10.0-04424-ga472e3c833d3 #1
-> > [ 1088.281315][    C1] Hardware name: linux,dummy-virt (DT)
-> > [ 1088.281679][    C1] Call trace:
-> > [ 1088.281910][    C1]  dump_backtrace+0x0/0x41c
-> > [ 1088.282218][    C1]  show_stack+0x30/0x40
-> > [ 1088.282505][    C1]  dump_stack+0x1fc/0x2c0
-> > [ 1088.282807][    C1]  print_circular_bug+0x1ec/0x284
-> > [ 1088.283149][    C1]  check_noncircular+0x1cc/0x1ec
-> > [ 1088.283486][    C1]  check_prev_add+0xe0/0x105c
-> > [ 1088.283804][    C1]  check_prevs_add+0x1c8/0x3d4
-> > [ 1088.284126][    C1]  validate_chain+0x6dc/0xb0c
-> > [ 1088.284442][    C1]  __lock_acquire+0x498/0x940
-> > [ 1088.284764][    C1]  lock_acquire+0x228/0x580
-> > [ 1088.285072][    C1]  _raw_spin_lock+0xa0/0x120
-> > [ 1088.285392][    C1]  __rcu_irq_enter_check_tick+0x128/0x2f4
-> > [ 1088.285779][    C1]  rcu_nmi_enter+0xc4/0xd0
-> > [ 1088.286082][    C1]  arm64_enter_el1_dbg+0xb0/0x160
-> > [ 1088.286420][    C1]  el1_dbg+0x28/0x50
-> > [ 1088.286689][    C1]  el1_sync_handler+0xf4/0x150
-> > [ 1088.287010][    C1]  el1_sync+0x74/0x100
-> > [ 1088.287295][    C1]  update_irq_load_avg+0x5d8/0xaa0
-> > [ 1088.287640][    C1]  update_rq_clock_task+0xb8/0x2d0
-> > [ 1088.287988][    C1]  update_rq_clock+0x8c/0x120
-> > [ 1088.288309][    C1]  try_to_wake_up+0x70c/0xd40
-> > [ 1088.288629][    C1]  wake_up_process+0x1c/0x24
-> > [ 1088.288945][    C1]  wakeup_softirqd+0x58/0x64
-> > [ 1088.289271][    C1]  __do_softirq+0x6b8/0x95c
-> > [ 1088.289580][    C1]  irq_exit+0x27c/0x2d0
-> > [ 1088.289868][    C1]  __handle_domain_irq+0x100/0x184
-> > [ 1088.290211][    C1]  gic_handle_irq+0xc0/0x760
-> > [ 1088.290522][    C1]  el1_irq+0xb8/0x140
-> > [ 1088.290801][    C1]  _raw_spin_unlock_irqrestore+0x7c/0x130
-> > [ 1088.291188][    C1]  __aarch64_insn_write+0xc4/0x100
-> > [ 1088.291533][    C1]  aarch64_insn_patch_text_nosync+0x40/0xa0
-> > [ 1088.291928][    C1]  ftrace_make_nop+0x120/0x1a4
-> > [ 1088.292256][    C1]  __ftrace_replace_code+0xdc/0x160
-> > [ 1088.292613][    C1]  ftrace_replace_code+0x100/0x1a4
-> > [ 1088.292963][    C1]  ftrace_modify_all_code+0x1a8/0x260
-> > [ 1088.293335][    C1]  arch_ftrace_update_code+0x1c/0x2c
-> > [ 1088.293694][    C1]  ftrace_run_update_code+0x38/0xa4
-> > [ 1088.294048][    C1]  ftrace_shutdown.part.0+0x2dc/0x550
-> > [ 1088.294415][    C1]  unregister_ftrace_function+0x74/0xc0
-> > [ 1088.294787][    C1]  perf_ftrace_event_register+0x130/0x1a0
-> > [ 1088.295172][    C1]  perf_trace_destroy+0x68/0x9c
-> > [ 1088.295500][    C1]  tp_perf_event_destroy+0x1c/0x2c
-> > [ 1088.295850][    C1]  _free_event+0x2f4/0x670
-> > [ 1088.296154][    C1]  put_event+0x7c/0x90
-> > [ 1088.296439][    C1]  perf_event_release_kernel+0x3c0/0x450
-> > [ 1088.296820][    C1]  perf_release+0x24/0x34
-> > [ 1088.297125][    C1]  __fput+0x1dc/0x500
-> > [ 1088.297404][    C1]  ____fput+0x24/0x30
-> > [ 1088.297682][    C1]  task_work_run+0xf4/0x1ec
-> > [ 1088.297989][    C1]  do_notify_resume+0x378/0x410
-> > [ 1088.298316][    C1]  work_pending+0xc/0x198
-> > 
-> > I checked the code. The following scenarios may cause deadlock.
-> > 
-> > static void ttwu_queue(struct task_struct *p, int cpu, int wake_flags)
-> > {
-> >     struct rq *rq = cpu_rq(cpu);
-> >     struct rq_flags rf;
-> > 
-> >     if (ttwu_queue_wakelist(p, cpu, wake_flags))
-> >         return;
-> > 
-> >     rq_lock(rq, &rf);
-> >     update_rq_clock(rq);	
-> > 		===> el1_dbg
-> > 			  ->rcu_nmi_enter
-> > 			    ->__rcu_irq_enter_check_tick
-> > 				  ->raw_spin_lock_rcu_node(rdp->mynode);
-> >     ttwu_do_activate(rq, p, wake_flags, &rf);
-> >     rq_unlock(rq, &rf);
-> > }
-> > 
-> > static void rcu_gp_fqs(bool first_time)
-> > {
-> >     struct rcu_node *rnp = rcu_get_root();
-> > 
-> >     WRITE_ONCE(rcu_state.gp_activity, jiffies);
-> >     WRITE_ONCE(rcu_state.n_force_qs, rcu_state.n_force_qs + 1);
-> >     if (first_time) {
-> >         /* Collect dyntick-idle snapshots. */
-> >         force_qs_rnp(dyntick_save_progress_counter);
-> >     } else {
-> >         /* Handle dyntick-idle and offline CPUs. */
-> >         force_qs_rnp(rcu_implicit_dynticks_qs);	
-> > 			===>raw_spin_lock_irqsave_rcu_node(rnp, flags);
-> > 			===>rcu_implicit_dynticks_qs
-> > 				  ->resched_cpu
-> > 				    ->raw_spin_lock_irqsave(&rq->lock, flags);
-> >     }
-> >     /* Clear flag to prevent immediate re-entry. */
-> >     if (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) {
-> >         raw_spin_lock_irq_rcu_node(rnp);
-> >         WRITE_ONCE(rcu_state.gp_flags,
-> >                READ_ONCE(rcu_state.gp_flags) & ~RCU_GP_FLAG_FQS);
-> >         raw_spin_unlock_irq_rcu_node(rnp);
-> >     }
-> > }
-> > 
+> ---
+> 
+>  drivers/mmc/host/sdhci-of-arasan.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+> index 3997cad1f793..1988a703781a 100644
+> --- a/drivers/mmc/host/sdhci-of-arasan.c
+> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+> @@ -366,6 +366,10 @@ static void sdhci_arasan_reset(struct sdhci_host *host, u8 mask)
+>  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+>  	struct sdhci_arasan_data *sdhci_arasan = sdhci_pltfm_priv(pltfm_host);
+>  
+> +	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL) &&
+> +	    sdhci_arasan->has_cqe)
+> +		cqhci_deactivate(host->mmc);
+> +
+>  	sdhci_reset(host, mask);
+>  
+>  	if (sdhci_arasan->quirks & SDHCI_ARASAN_QUIRK_FORCE_CDTEST) {
+> @@ -1521,7 +1525,8 @@ static int sdhci_arasan_register_sdclk(struct sdhci_arasan_data *sdhci_arasan,
+>  	return 0;
+>  }
+>  
+> -static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan)
+> +static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan,
+> +				 struct device_node *np)
+>  {
+>  	struct sdhci_host *host = sdhci_arasan->host;
+>  	struct cqhci_host *cq_host;
+> @@ -1549,6 +1554,10 @@ static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan)
+>  	if (dma64)
+>  		cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>  
+> +	host->mmc->caps2 |= MMC_CAP2_CQE;
+> +	if (!of_property_read_bool(np, "disable-cqe-dcmd"))
+> +		host->mmc->caps2 |= MMC_CAP2_CQE_DCMD;
+> +
+>  	ret = cqhci_init(cq_host, host->mmc, dma64);
+>  	if (ret)
+>  		goto cleanup;
+> @@ -1705,13 +1714,9 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
+>  		host->mmc_host_ops.start_signal_voltage_switch =
+>  					sdhci_arasan_voltage_switch;
+>  		sdhci_arasan->has_cqe = true;
+> -		host->mmc->caps2 |= MMC_CAP2_CQE;
+> -
+> -		if (!of_property_read_bool(np, "disable-cqe-dcmd"))
+> -			host->mmc->caps2 |= MMC_CAP2_CQE_DCMD;
+>  	}
+>  
+> -	ret = sdhci_arasan_add_host(sdhci_arasan);
+> +	ret = sdhci_arasan_add_host(sdhci_arasan, np);
+>  	if (ret)
+>  		goto err_add_host;
+>  
+> -- 
+> 2.38.0.413.g74048e4d9e-goog
+> 
