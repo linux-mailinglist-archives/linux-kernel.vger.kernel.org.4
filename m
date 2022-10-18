@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B12602F99
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9737A602F9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiJRPXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S230118AbiJRPYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiJRPXu (ORCPT
+        with ESMTP id S230242AbiJRPYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:23:50 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2F77FD01AA
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:23:49 -0700 (PDT)
-Received: (qmail 1216402 invoked by uid 1000); 18 Oct 2022 11:23:48 -0400
-Date:   Tue, 18 Oct 2022 11:23:48 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     Dan Scally <dan.scally@ideasonboard.com>,
-        linux-usb@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jeff Vanhoof <qjv001@motorola.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] usb: gadget: uvc: add configfs option for sg
- support
-Message-ID: <Y07FBDIQKEysy+lF@rowland.harvard.edu>
-References: <20221017205446.523796-1-w36195@motorola.com>
- <20221017205446.523796-7-w36195@motorola.com>
- <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
- <Y065ASuFhM9bntvd@rowland.harvard.edu>
- <Y07C7hYKyByahNjL@p1g3>
+        Tue, 18 Oct 2022 11:24:31 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E7A5F7D;
+        Tue, 18 Oct 2022 08:24:23 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29IFOC4x028995;
+        Tue, 18 Oct 2022 10:24:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666106652;
+        bh=yeXu6LAsPOv7ziEk86rcmv96Ao8dzF3pExh/3NJ67Pk=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=KpyywX9fcBO2sNcsnxgfhWM4e6QAi+goA4/NATSywB/PuNJzvVW+kZI4hDpvFNTkf
+         5X+CBxzIxAKvHCfGempyQ0XitIKzk6pREKdds9cVKXStzaou7ZZP+F3tm0tCklF62v
+         zUI7O1AFfS4ynxayuNFa3W7QQZwEzUtU6GTkBLiY=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29IFOCJQ018949
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Oct 2022 10:24:12 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 18
+ Oct 2022 10:24:11 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 18 Oct 2022 10:24:11 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29IFOBVm026167;
+        Tue, 18 Oct 2022 10:24:11 -0500
+Date:   Tue, 18 Oct 2022 10:24:11 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     Andrew Davis <afd@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/10] AM64x Disable Incomplete DT Nodes
+Message-ID: <20221018152411.iguw2mg27ahexq2e@bryanbrattlof.com>
+References: <20221017192532.23825-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <Y07C7hYKyByahNjL@p1g3>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221017192532.23825-1-afd@ti.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 10:14:54AM -0500, Dan Vacura wrote:
-> Hi Alan,
+On October 17, 2022 thus sayeth Andrew Davis:
+> Hello all,
 > 
-> On Tue, Oct 18, 2022 at 10:32:33AM -0400, Alan Stern wrote:
-> > On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
-> > > Hi Dan
-
-> > > > --- a/Documentation/usb/gadget-testing.rst
-> > > > +++ b/Documentation/usb/gadget-testing.rst
-> > > > @@ -796,6 +796,8 @@ The uvc function provides these attributes in its function directory:
-> > > >   	function_name       name of the interface
-> > > >   	req_int_skip_div    divisor of total requests to aid in calculating
-> > > >   			    interrupt frequency, 0 indicates all interrupt
-> > > > +	sg_supported        allow for scatter gather to be used if the UDC
-> > > > +			    hw supports it
-> > 
-> > Why is a configuration option needed for this?  Why not always use SG 
-> > when the UDC supports it?  Or at least, make the decision automatically 
-> > (say, based on the amount of data to be transferred) with no need for 
-> > any user input?
+> This series goes through the AM64x dtsi and disables the set of nodes
+> that are not functional without additional board level information.
+> This is usually pinmux data, but can also be inernal device resources.
 > 
-> Patches for a fix and to select to use SG depending on amount of data
-> are already submitted and under review. I agree, ideally we don't need
-> this patch, but there have been several regressions uncovered with
-> enabling this support and it takes time to root cause these issues.
+> Only when the node is completed in the board file should the node be
+> enabled. This helps prevents nodes that represent IP that are not
+> pinned-out on a given board from being left enabled.
+> 
+> This also reduces the effort needed to add a new board, one no longer
+> needs to manually disable all the extra IP. For instance TI J784s4 has
+> 20(!) MCAN instances. It is much easier to enable the one you pin out,
+> vs disabling the 19 that you did not.
+> 
+> Thanks,
+> Andrew
+> 
+> Andrew Davis (10):
+>   arm64: dts: ti: k3-am64: Enable UART nodes at the board level
+>   arm64: dts: ti: k3-am64: Enable I2C nodes at the board level
+>   arm64: dts: ti: k3-am64: Enable SPI nodes at the board level
+>   arm64: dts: ti: k3-am64: Enable EPWM nodes at the board level
+>   arm64: dts: ti: k3-am64: Enable ECAP nodes at the board level
+>   arm64: dts: ti: k3-am64: Enable PCIe nodes at the board level
+>   arm64: dts: ti: k3-am64: MDIO pinmux should belong to the MDIO node
+>   arm64: dts: ti: k3-am64: Enable MDIO nodes at the board level
+>   arm64: dts: ti: k3-am64: Enable MCAN nodes at the board level
+>   arm64: dts: ti: k3-am64: Enable GPMC and ELM nodes at the board level
+> 
+>  arch/arm64/boot/dts/ti/k3-am64-main.dtsi |  37 ++++++
+>  arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi  |   6 +
+>  arch/arm64/boot/dts/ti/k3-am642-evm.dts  | 119 ++-----------------
+>  arch/arm64/boot/dts/ti/k3-am642-sk.dts   | 142 ++---------------------
+>  4 files changed, 63 insertions(+), 241 deletions(-)
+> 
 
-Please put this information into the patch description, and maybe also 
-into the documentation file.  For your readers' and reviewers' sake it's 
-important -- probably _more_ important -- to explain why you're making a 
-change than what that change is.
+Reviewed-by: Bryan Brattlof <bb@ti.com>
 
-Alan Stern
+I wholeheartedly agree! This looks great to me!
 
-> In my specific environment, Android GKI 2.0, changes need to get
-> upstreamed first here before they're pulled into Android device
-> software. Having this logic in place gives us the ability to turn off
-> this functionality without going through this process. A revert was also
-> considered until all the bugs are resolved, but the code is quite
-> entrenched now to take out, plus others seem to benefit from it being
-> enabled. Thus the configurability.
+~Bryan
