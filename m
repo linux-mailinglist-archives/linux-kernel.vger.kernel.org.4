@@ -2,47 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D3A60293D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94477602942
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJRKV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S229633AbiJRKX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiJRKVZ (ORCPT
+        with ESMTP id S229596AbiJRKX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:21:25 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11612126B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=OTNfub20XKiblrmAKXf7vUMGbiYJAhN4mTRLxCxGmnw=;
-  b=GoANrRpyMMbx/C0xU7QgqK/I2KJeUpmv4fdV+RD1dk9DS3Ns/BZuDuB5
-   yYCDfckMv1HhBB9zTROEREUd3HQXsO3hA8FIePls2kUCvhD6KwSIjrKjJ
-   DKEU+uaMqiAK1moInxN3Q8om252HWMPpV+cEiYh3/xh3ERpVnah3koE8E
-   s=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,193,1661810400"; 
-   d="scan'208";a="65704101"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 12:21:19 +0200
-Date:   Tue, 18 Oct 2022 12:21:19 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     Tanju Brunostar <tanjubrunostar0@gmail.com>
-cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH] [PATCH] staging: rts5208: merge unnecessary split line
-In-Reply-To: <CAHJEyKWpeyBpGy74cLe55v1xfCkn4WBB6tkn+N6eXcn3G3LXaQ@mail.gmail.com>
-Message-ID: <f26a5887-bf7d-1988-c11c-10844872add3@inria.fr>
-References: <Y0550VcHI8NzFzzf@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net> <3f65f367-e07f-5b71-ea7c-4f13c23eca8d@inria.fr> <CAHJEyKWpeyBpGy74cLe55v1xfCkn4WBB6tkn+N6eXcn3G3LXaQ@mail.gmail.com>
+        Tue, 18 Oct 2022 06:23:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7845DB03E2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666088604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lGc1brklA5v9OUHTBe6S3k3fA4Qi2pTlNeYEp6W+HVI=;
+        b=B4bEGTuLgH1kfKIBewdUEmn4vLFnF0uh64PerpxP32PSbedbiikarO7gDJTHfhhLKkozu4
+        mYWUT1bchSpil66H8PcHnR4RKUrse6iCmbiiBBIhP0v7gh5/dofP771eWVCdCBJuNlKH50
+        C5QVYVGBFsDRpwF3gvqFe9nZ+cjYbZU=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-195-0eyRkvcuN-et8k6neXvCwQ-1; Tue, 18 Oct 2022 06:23:23 -0400
+X-MC-Unique: 0eyRkvcuN-et8k6neXvCwQ-1
+Received: by mail-pg1-f199.google.com with SMTP id 83-20020a630156000000b0046b208f6ae3so6717756pgb.16
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:23:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lGc1brklA5v9OUHTBe6S3k3fA4Qi2pTlNeYEp6W+HVI=;
+        b=WYiD02NiYQ3BXZ1s5pRXrnmbkkcSX2w0KWXnUPeHhirl/DUmXav13E8wwooxce+Moo
+         VispXZ9kEV+RlaP79WPAxv5NKPuaJpKQ38fZPCs+TRAyCNPF93HGknIZX2+3geW10yvW
+         bI8jUKaTXHK6Zd009RfZkEnadgtC34dL77phcepov3xtHZ/p0c9amDvxcycO7qrQL/nq
+         gkddj2mskWC8oDapj6lWQ191tIPxHc+asGO0lyfVJHnpV5NhYiCsM82oz34Rkvio0Qem
+         8usELJrl3Cgkit8R4/lvOomssqljC5Gh4n3YWE2X+lsS3rGiDEmfXMyn93KKg8ZkahuB
+         SYRw==
+X-Gm-Message-State: ACrzQf1fLIg3SVgr+Bal3oqoxiKQpKCJPopsdWr40FhyruRZzVmqqiU+
+        qX1V9qUhKcmaPIOWtmOn7TLeqotHwYGsXG7AOdrnHt2/5zu8H1Vv96/T7STSCwm0KpNmqnfQTrw
+        /PqL/QrLkg/9Gh9m6jyt1YHyz
+X-Received: by 2002:a17:90b:4a8a:b0:20d:8a4d:c2ae with SMTP id lp10-20020a17090b4a8a00b0020d8a4dc2aemr36943055pjb.179.1666088602212;
+        Tue, 18 Oct 2022 03:23:22 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4yZEZ3zz/NaaPvomcA0q2fWZLeE26WLTAC0kzNafK9BiNR2Y6DRwutygGdqw7K1vCRk2VOgw==
+X-Received: by 2002:a17:90b:4a8a:b0:20d:8a4d:c2ae with SMTP id lp10-20020a17090b4a8a00b0020d8a4dc2aemr36943033pjb.179.1666088601967;
+        Tue, 18 Oct 2022 03:23:21 -0700 (PDT)
+Received: from zeus.flets-east.jp ([240b:10:83a2:bd00:6e35:f2f5:2e21:ae3a])
+        by smtp.gmail.com with ESMTPSA id l5-20020a17090a4d4500b00205d85cfb30sm11173373pjh.20.2022.10.18.03.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 03:23:21 -0700 (PDT)
+From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
+To:     elver@google.com, dvyukov@google.com, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com
+Cc:     Ryosuke Yasuoka <ryasuoka@redhat.com>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] kcsan: Fix trivial typo in Kconfig help comments
+Date:   Tue, 18 Oct 2022 19:22:54 +0900
+Message-Id: <20221018102254.2424506-1-ryasuoka@redhat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1467809331-1666088479=:3791"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,69 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Fix trivial typo in Kconfig help comments in KCSAN_SKIP_WATCH and
+KCSAN_SKIP_WATCH_RANDOMIZE
 
---8323329-1467809331-1666088479=:3791
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
+---
+ lib/Kconfig.kcsan | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+index 47a693c45864..375575a5a0e3 100644
+--- a/lib/Kconfig.kcsan
++++ b/lib/Kconfig.kcsan
+@@ -125,7 +125,7 @@ config KCSAN_SKIP_WATCH
+ 	default 4000
+ 	help
+ 	  The number of per-CPU memory operations to skip, before another
+-	  watchpoint is set up, i.e. one in KCSAN_WATCH_SKIP per-CPU
++	  watchpoint is set up, i.e. one in KCSAN_SKIP_WATCH per-CPU
+ 	  memory operations are used to set up a watchpoint. A smaller value
+ 	  results in more aggressive race detection, whereas a larger value
+ 	  improves system performance at the cost of missing some races.
+@@ -135,8 +135,8 @@ config KCSAN_SKIP_WATCH_RANDOMIZE
+ 	default y
+ 	help
+ 	  If instruction skip count should be randomized, where the maximum is
+-	  KCSAN_WATCH_SKIP. If false, the chosen value is always
+-	  KCSAN_WATCH_SKIP.
++	  KCSAN_SKIP_WATCH. If false, the chosen value is always
++	  KCSAN_SKIP_WATCH.
+ 
+ config KCSAN_INTERRUPT_WATCHER
+ 	bool "Interruptible watchers" if !KCSAN_STRICT
+-- 
+2.37.3
 
-
-On Tue, 18 Oct 2022, Tanju Brunostar wrote:
-
-> Got it. 
-
-Don't top post.  Reply to comments underneath the comment you are replying
-to.
-
-julia
-
->
-> On Tue, Oct 18, 2022, 11:11 AM Julia Lawall <julia.lawall@inria.fr> wrote:
->
->
->       On Tue, 18 Oct 2022, Tanjuate Brunostar wrote:
->
->       > Fix checkpatch warning by merging unnecessary split line in order to
->       > avoid ending a line of code with a "(". The resulting code does
->       > not affect readability and is well within the code-style guidelines
->
->       Thanks for the patch.
->
->       You don't need the extra [PATCH] in the subject line.
->
->       Actually, you don't need the parentheses at all, but that might be a
->       matter of personal taste.
->
->       julia
->
->       >
->       > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
->       > ---
->       >  drivers/staging/rts5208/sd.c | 3 +--
->       >  1 file changed, 1 insertion(+), 2 deletions(-)
->       >
->       > diff --git a/drivers/staging/rts5208/sd.c b/drivers/staging/rts5208/sd.c
->       > index d1fafd530c80..4643127a87ca 100644
->       > --- a/drivers/staging/rts5208/sd.c
->       > +++ b/drivers/staging/rts5208/sd.c
->       > @@ -4501,8 +4501,7 @@ int sd_execute_write_data(struct scsi_cmnd *srb, struct rtsx_chip *chip)
->       >                       sd_card->sd_lock_notify = 1;
->       >                       if (sd_lock_state &&
->       >                           (sd_card->sd_lock_status & SD_LOCK_1BIT_MODE)) {
->       > -                             sd_card->sd_lock_status |= (
->       > -                                     SD_UNLOCK_POW_ON | SD_SDR_RST);
->       > +                             sd_card->sd_lock_status |= (SD_UNLOCK_POW_ON | SD_SDR_RST);
->       >                               if (CHK_SD(sd_card)) {
->       >                                       retval = reset_sd(chip);
->       >                                       if (retval != STATUS_SUCCESS) {
->       > --
->       > 2.34.1
->       >
->       >
->       >
->
->
->
---8323329-1467809331-1666088479=:3791--
