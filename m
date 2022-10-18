@@ -2,192 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8796032B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684076032D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiJRSsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S229777AbiJRSvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJRSse (ORCPT
+        with ESMTP id S229751AbiJRSvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:48:34 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFA79F363;
-        Tue, 18 Oct 2022 11:48:32 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id j16so25203373wrh.5;
-        Tue, 18 Oct 2022 11:48:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
-         :mime-version:date:message-id:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1B4uQFomqZcKA1aWhx4jMpHwleRSccFekx+UVfGhW1E=;
-        b=Fhk2zU4yzRCoc/3UIGYe5w0pV84U6qJ8Ld8XEaWQ8sybzJCy1HIyLm2B7BSODnaZA7
-         gsyA7BOJFAD/VmT9jD+zMU1j07DTLgYUWX03+OBkrxMVfQwzVF7bSrL5E+BSyfYLg/U3
-         6Ba5BtxuOCVEfWxjPXppcOL3owBTQvzL9WSqFsPkLk470/ljamx4GWtDnu8FSOkPHYkO
-         SU9fkEAyairO7hQX3zz1N9K8VFlygwFxvpf26wyUhY4Y0e/pfjjE4+iOM4aZTw/0H11p
-         lDtdOWmkTbfIGyIXLofPSczMhHVeIS+Z1I+sphY/gryiBVgvCClSU0ZpCTt19/GmNOZy
-         wVCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
-         :mime-version:date:message-id:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1B4uQFomqZcKA1aWhx4jMpHwleRSccFekx+UVfGhW1E=;
-        b=Ue4Qu4s6xwcCn2J2xDWZDiiy3pTiJDlB/XeUcBZ22fDfoQB4RFVJXvKgpfhWEP2t8w
-         T7Nj+ED3ZFXa9Yzgg1AJ2Cfq91ct/Yrb8psa/IHBikzeqCVFSQW29LFAQobEfPrsqv5E
-         H4DKMMny+u1p7rGSU5MxWBD/yU0p+f5Tb+cbHYaUsSSjfqPWxP3792CYqiLBzaE/yRHr
-         cgsonrmD4oAwzDOY6DDg8Zb537qD1J8Us9i6u29SpzA402LNwj5NCYvZHhiF/+s+voDR
-         QAGJN/kGKBX/2yAK7FAWykJNgb2XROyO2yoIQeV3Lz+vRkqU0UuV/iRNuy0E3A3TOHCQ
-         VQQg==
-X-Gm-Message-State: ACrzQf0lLdUFadTbU7KUR+WB5cs6tByito1c2MFfP2rExtnxw8E7qjrO
-        4skCQwgb5HFLK0A+lrWCbMg=
-X-Google-Smtp-Source: AMsMyM618G4qNRFWj1h5K+/NYtPnnh0r7INysWssGfChFVQGZmZ2UNQUYGajcgmJZD940vn0eBO/bg==
-X-Received: by 2002:a5d:6a42:0:b0:22e:6706:647b with SMTP id t2-20020a5d6a42000000b0022e6706647bmr2801236wrw.58.1666118911351;
-        Tue, 18 Oct 2022 11:48:31 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id bl13-20020adfe24d000000b00230b3a0f461sm11581949wrb.33.2022.10.18.11.48.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 11:48:30 -0700 (PDT)
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-X-Google-Original-From: Alejandro Colomar <alx@kernel.org>
-Message-ID: <4ba6c215-6d28-1769-52d3-04941b962ff3@kernel.org>
-Date:   Tue, 18 Oct 2022 20:48:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Content-Language: en-US
-To:     Michael Kerrisk <mtk.manpages@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-man <linux-man@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "Dr. Tobias Quathamer" <toddy@debian.org>,
-        Marcos Fouces <marcos@debian.org>, Sam James <sam@gentoo.org>,
-        Pierre Labastie <pierre.labastie@neuf.fr>
-Subject: man-pages-6.01 released
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 14:51:35 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A69726CB
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:51:30 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 5161D320015C;
+        Tue, 18 Oct 2022 14:51:28 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 18 Oct 2022 14:51:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666119087; x=1666205487; bh=3RC7vjx470
+        1esgCkuWvNG5/6JY7MnC1sAs73PlHoeiQ=; b=D8g0GXL8A6vRp6/fbp1VXzYpXZ
+        dEITLY0IbO3QT47HK+6XTXlZMB2BfqCK+WCKaKGx4z02RqHbaV3Ak2yqwcANznub
+        3ll9zNhTSWUO3mw1Ua+zQdCc0h8YtuWqNfhwG4I4bw2kMg2be3lSnhLXHt+zqmLB
+        c11ua2ndkWWo6MgMiCmEjg5AP2Fy+fpcq9IoQDOmOoXXUzQe+gdCKnyFMefWvU7K
+        ALq9/6nqIidqxu5tY59xwlOeSmdbk57uyrh/NnyO3TggGcF4K168ZRcv4MliXbdV
+        brnqF/t519QvJZmuTZ4pwY1fWPWyTaFQUXzflDFM9XNlN7DFNlFBCw4Dp+rg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666119087; x=1666205487; bh=3RC7vjx4701esgCkuWvNG5/6JY7M
+        nC1sAs73PlHoeiQ=; b=iFevmzKcvQ2zxCaanVDxSg7ul4jm5nRxURMijHT/lq0R
+        ez1fQefThF01ucRMUlKyPuCXIjMmsYN3uqAD/53i8EPOYBH4zj5jyoN/8K8z8MM7
+        6K1smqR2dUo051gX1i4uO/vp4PQwy9rU5Tx5X+8dmLvoXP0LwVLEK9a8NU1enT8p
+        UaWdzw+v0DRzuOaXPl1G/8G2kdl8x9FTL4JeuRb5HEyZnxHpTBW5ZwyXu2hwUv/S
+        W+XncV58VwoYrqYjiGtqpZ4QS9ZA7ljDiFcn3UKo5pO7gFeWP1yFJ89dguwbsceo
+        +YDfpvWpxBm/RyoAGD2cLGei8NjNbwQXn24/zbVlZw==
+X-ME-Sender: <xms:r_VOY1_uylDNqMMQI49RAK1wtSPHUzrXEfUk-wcn68XjkG4HT4yMog>
+    <xme:r_VOY5v0GiLXn85GEx7F4g-aAk10RDVS1AjxfXWLZ5OT1XduGz3rfFnugeUzPTWmR
+    1ggPiHwlqC_dg3nIRQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:r_VOYzDAgZ2gn6ZbwlAHjiuJ20a1tKS5qE-hNRKVRn9g1ji6xYvvwQ>
+    <xmx:r_VOY5dgDbTYZLFWqaPt_JkLoOOlbNr8LZT5riE5JwWbUoilimn_hA>
+    <xmx:r_VOY6OO8ee7igBnQ-VICFTe4fMOrA53oElCux_7K2XvasQsJBXCww>
+    <xmx:r_VOY3pNM86GuF6zhzZMoIOmQ-cS4ojG-uk4ddtelBmp5LfY5CkyLw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 42077B60086; Tue, 18 Oct 2022 14:51:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <b4011de0-d5a4-4083-aa0d-2fe5861ba4d6@app.fastmail.com>
+In-Reply-To: <868rldf5qx.wl-maz@kernel.org>
+References: <20221018133034.10442-1-firas.ashkar@savoirfairelinux.com>
+ <868rldf5qx.wl-maz@kernel.org>
+Date:   Tue, 18 Oct 2022 20:51:01 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Marc Zyngier" <maz@kernel.org>,
+        "Firas Ashkar" <firas.ashkar@savoirfairelinux.com>
+Cc:     alex@digriz.org.uk, "Thomas Gleixner" <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, inux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] irqchip: add TS7800v1 fpga based controller driver
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gidday!
+On Tue, Oct 18, 2022, at 18:36, Marc Zyngier wrote:
 
-I'm proud to announce:
+>>  }
+>> @@ -371,6 +418,12 @@ static int ts78xx_fpga_load_devices(void)
+>>  {
+>>  	int tmp, ret = 0;
+>>  
+>> +	if (ts78xx_fpga.supports.ts_irqc.present == 1) {
+>> +		tmp = ts_irqc_load();
+>> +		if (tmp)
+>> +			ts78xx_fpga.supports.ts_irqc.present = 0;
+>> +		ret |= tmp;
+>> +	}
+>>  	if (ts78xx_fpga.supports.ts_rtc.present == 1) {
+>>  		tmp = ts78xx_ts_rtc_load();
+>>  		if (tmp)
+>> @@ -402,6 +455,8 @@ static int ts78xx_fpga_unload_devices(void)
+>>  		ts78xx_ts_nand_unload();
+>>  	if (ts78xx_fpga.supports.ts_rng.present == 1)
+>>  		ts78xx_ts_rng_unload();
+>> +	if (ts78xx_fpga.supports.ts_irqc.present == 1)
+>> +		ts_irqc_unload();
+>>  
+>>  	return 0;
+>>  }
+>
+> I am absolutely *NOT* keen on adding more non-DT stuff in this day and
+> age. The DT effort has been going on for over 10 years, and maybe it
+> is time that this board makes the jump before we add anything new to
+> it, specially given that there is a DT board for this platform.
+>
+> Arnd, what's your call on this?
 
-     man-pages-6.01 - manual pages for GNU/Linux
+I'm in the middle of sending out the patch series that removes
+most of the legacy board files:
 
-This release results from patches, bug reports, reviews, and comments
-from around 16 contributors.  The release includes around 14 commits,
-and changed all of the pages.
+https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=boardfile-remove
 
-Tarball download:
-     <https://mirrors.edge.kernel.org/pub/linux/docs/man-pages/>
-Git repository:
-     <https://git.kernel.org/cgit/docs/man-pages/man-pages.git/>
+TS78xx actually stays for now because this is one of the
+machines enabled in the debian armel tree, but my hope is
+for the remaining 27 board files, we can either complete
+the DT conversion or just remove them in the future.
 
-The most notable changes in man-pages-6.01 are the following:
+Aside from the FPGA, this machine should be fairly easy to
+convert, so I agree we should try doing this first. Not
+sure how the FPGA is best represented, but I'm sure we can come
+up with something once the rest of the system is working
+with DT.
 
-- Build system fixes.  These were quite bad for distributors, which is
-   the reason we released 6.01 so soon after 6.00.
-
-- Document EOF, FAN_MARK_IGNORE, STATX_DIOALIGN, and a few feature
-   test macros.
-
-Thank you all for contributing.
-
-
-Cheers,
-
-Alex
-
-==================== Changes in man-pages-6.01 ====================
-
-Released: 2022-10-18, Aldaya
-
-
-Contributors
-------------
-
-The following people contributed patches/fixes, reports, notes,
-ideas, and discussions that have been incorporated in changes in
-this release:
-
-"G. Branden Robinson" <g.branden.robinson@gmail.com>
-Agostino Sarubbo <ago@gentoo.org>
-Alejandro Colomar <alx@kernel.org>
-Amir Goldstein <amir73il@gmail.com>
-Darrick J. Wong <djwong@kernel.org>
-Eric Biggers <ebiggers@google.com>
-Grigoriy <grigoriyremvar@protonmail.com>
-Jakub Wilk <jwilk@jwilk.net>
-Jan Kara <jack@suse.cz>
-Matthew Bobrowski <repnop@google.com>
-Michael Tokarev <mjt@tls.msk.ru>
-Mike Gilbert <floppym@gentoo.org>
-Nicolás A. Ortega Froysa <nicolas@ortegas.org>
-Pierre Labastie <pierre.labastie@neuf.fr>
-Sam James <sam@gentoo.org>
-Steve Izma <sizma@golden.net>
-
-Apologies if I missed anyone!
-
-
-New and rewritten pages
------------------------
-
-EOF.3const
-
-
-Newly documented interfaces in existing pages
----------------------------------------------
-
-fanotify_mark.2
-	FAN_MARK_IGNORE
-
-open.2, statx.2
-	STATX_DIOALIGN
-
-feature_test_macros.7
-	_FORTIFY_SOURCE=3
-	_TIME_BITS
-
-
-Global changes
---------------
-
-- Build system:
-
-   - Update manual page dates (TH 3rd argument) when creating the tarball
-     with 'make dist'.  this removes the need for a tstamp commit before
-     each release.
-
-   - Don't print spurious errors from the Makefile that are not relevant.
-
-- Manual pages' sections:
-
-   - Title (.TH):
-
-     - Remove the hardcoded date (TH 3rd argument), and replace it by a
-       placeholder that should be changed when creating the tarball.
-       This removes the need for a tstamp commit before each release.
-
-
-Changes to individual pages
----------------------------
-
-The manual pages (and other files in the repository) have been improved
-beyond what this changelog covers.  To learn more about changes applied
-to individual pages, use git(1).
-
-
--- 
-<http://www.alejandro-colomar.es/>
+      Arnd
