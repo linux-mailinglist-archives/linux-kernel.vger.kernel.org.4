@@ -2,91 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF1C60203E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927ED602041
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiJRBNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
+        id S230325AbiJRBNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 21:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiJRBNL (ORCPT
+        with ESMTP id S230439AbiJRBNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:13:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C37193FF;
-        Mon, 17 Oct 2022 18:13:09 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mrwkk2l0mzpVrk;
-        Tue, 18 Oct 2022 09:09:50 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 09:13:00 +0800
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 09:12:59 +0800
-Message-ID: <b936b12e-8b2c-4583-1c71-1f914d0fdb82@huawei.com>
-Date:   Tue, 18 Oct 2022 09:12:52 +0800
+        Mon, 17 Oct 2022 21:13:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2531491E4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666055609;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PsBDvbs2M4mxVb7McFh5IYYbPQ7mymshNGX5zOJy4Eg=;
+        b=NVPVr9iAc8G4oiTCz0trTevtliQ+NqLUXUK5Gnst6ogK47kVQlMuUVeEnLp8sj1GPtoHSQ
+        MHZ+5DNDOIlRBpZrLVBk0V1KTB1uwu9lDMDDzf/LxrPunNTnxetkGTX1/hR5EPamNubqDC
+        6Kkus7/OYMlgqRbCdjTHryIlbao1zb8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-sHvPlOf4OcC8k6B_KEyumA-1; Mon, 17 Oct 2022 21:13:24 -0400
+X-MC-Unique: sHvPlOf4OcC8k6B_KEyumA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6ACE833AEC;
+        Tue, 18 Oct 2022 01:13:23 +0000 (UTC)
+Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8F5BC14657C6;
+        Tue, 18 Oct 2022 01:13:18 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 5/6] KVM: selftests: memslot_perf_test: Consolidate memory
+ sizes
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ajones@ventanamicro.com, pbonzini@redhat.com, maz@kernel.org,
+        shuah@kernel.org, oliver.upton@linux.dev, seanjc@google.com,
+        peterx@redhat.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+References: <20221014071914.227134-1-gshan@redhat.com>
+ <20221014071914.227134-6-gshan@redhat.com>
+ <cebafa0d-a2dc-c3f7-64c8-2637a254e3d0@maciej.szmigiero.name>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <ac09476d-da8d-db0f-1af2-93dc41251bb0@redhat.com>
+Date:   Tue, 18 Oct 2022 09:13:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2] "ACPI: PCC: Fix unintentional integer overflow"
-To:     Manank Patel <pmanank200502@gmail.com>, <rafael@kernel.org>
-CC:     <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
-References: <20221017182035.3g67uudttl6k5gag@bogus>
- <20221017184338.64152-1-pmanank200502@gmail.com>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20221017184338.64152-1-pmanank200502@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <cebafa0d-a2dc-c3f7-64c8-2637a254e3d0@maciej.szmigiero.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/18/22 5:36 AM, Maciej S. Szmigiero wrote:
+> On 14.10.2022 09:19, Gavin Shan wrote:
+>> The addresses and sizes passed to madvise() and vm_userspace_mem_region_add()
+>> should be aligned to host page size, which can be 64KB on aarch64. So it's
+>> wrong by passing additional fixed 4KB memory area to various tests.
+>>
+>> Fix it by passing additional fixed 64KB memory area to various tests. After
+>> it's applied, the following command works fine on 64KB-page-size-host and
+>> 4KB-page-size-guest.
+>>
+>>    # ./memslot_perf_test -v -s 512
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   .../testing/selftests/kvm/memslot_perf_test.c  | 18 ++++++++++--------
+>>   1 file changed, 10 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+>> index d587bd952ff9..e6d34744b45d 100644
+>> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
+>> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+>> @@ -25,12 +25,14 @@
+>>   #include <kvm_util.h>
+>>   #include <processor.h>
+>> -#define MEM_SIZE        ((512U << 20) + 4096)
+>> -#define MEM_GPA        0x10000000UL
+>> +#define MEM_EXTRA_SIZE        0x10000
+> 
+> So the biggest page size supported right now is 64 KiB - it would be
+> good to have an assert somewhere to explicitly check for this
+> (regardless of implicit checks present in other calculations).
+> 
+> Also, an expression like "(64 << 10)" is more readable than a "1"
+> with a tail of zeroes (it's easy to add one zero too many or be one
+> zero short).
+> 
 
-在 2022/10/18 2:43, Manank Patel 写道:
-> Fixed unintentional u32 overflow by changing PCC_CMD_WAIT_RETRIES_NUM to 500ULL
->
-> Fixes: 91cefefb6991 ("ACPI: PCC: replace wait_for_completion()")
->
-> Signed-off-by: Manank Patel <pmanank200502@gmail.com>
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
->
-> ---
-> Thank you so much @sudeep for your clarifications!
->
-> Changelog:
-> v1->v2:
->          Change the macro itself to ULL instead of typecasting in the
->          code
->
->   drivers/acpi/acpi_pcc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
-> index ee4ce5ba1fb2..3e252be047b8 100644
-> --- a/drivers/acpi/acpi_pcc.c
-> +++ b/drivers/acpi/acpi_pcc.c
-> @@ -27,7 +27,7 @@
->    * Arbitrary retries in case the remote processor is slow to respond
->    * to PCC commands
->    */
-> -#define PCC_CMD_WAIT_RETRIES_NUM	500
-> +#define PCC_CMD_WAIT_RETRIES_NUM	500ULL
->   
->   struct pcc_data {
->   	struct pcc_mbox_chan *pcc_chan;
+Yes, it makes sense to me. Lets add check in check_memory_sizes(), which
+was added in the previous patch, to fail early if host/guest page size
+exceeds 64KB.
 
-Acked-by: Huisong Li <lihuisong@huawei.com>
+    if (host_page_size > SIZE_64KiB || guest_page_size > SIZE_64KiB) {
+       pr_info("Unsupported page size on host (0x%x) or guest (0x%x)\n",
+               host_page_size, guest_page_size);
+    }
+
+
+For the macros, I think all of us agree on KiB, MiB, GiB, TiB and
+their variants :)
+
+Thanks,
+Gavin
 
