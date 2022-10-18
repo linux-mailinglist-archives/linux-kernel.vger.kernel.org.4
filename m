@@ -2,154 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9186028F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1556028FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiJRKDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S230294AbiJRKFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiJRKD1 (ORCPT
+        with ESMTP id S229796AbiJRKFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:03:27 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2055.outbound.protection.outlook.com [40.107.105.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAB0B1B85;
-        Tue, 18 Oct 2022 03:03:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SDY9xnOQaSEPWAwSJv1U0rStnvQyzD6RZfTxdq2LuHDJtqbRvvw5tMkzktP18J+/4Vh3OoSKaIp8B9rv0y/x+dIV7xujkbOgDHBP6vQzENNXl69B4qYh1sPyzQe1ejEwAQ8xL0JTjZTf7HRYp51cz5oIxuEV7KZ+6Byjcx7W05TAkawxDSmAgdXX+5pnfaN//83AVJBRQMz5EkrRSzAK523lMUCl6g7B4ZO9JiIvcFFlEM7K5kVv5AVtC2e9um4ikc4WYUIVsI01JQW8v2RWQtnknHqksNdjlw2jggE2ICHyo4jQmbH2z+wTvie+umVYfTpvy36Gw51C6TR6TUEYWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2WL7bflt+m0olirv1vyJqfW6Ye9Y9fUswoAbbPVmxsE=;
- b=I/5gHdhVBzt+6hPVo3Qc0Aijre3XwNyhT9MQbtjcnauLxm2S5RyGLb7BYU+WOPCk587ECzOTgqjsAq/45W4ckdzbdBkrbt9qHCw7xbUrD5O+a0b5QUiV0XEB9vT5Uu68ccBn41V+diBt0tByA8q7zs296Ph16mNE1Cdb5KOVlvP530atBk9ETc0bjwwfKxCW66mCtpqCxniPxNXdaEO/IQKiI8p2FYQDaHXkQ6pSnl+vzxByWaHjmKwVLoJWn1ZpIYEAd2MdMlIA/wlqCx6SwQFJ+8TNDCFDUW/D1ZvoLSpJOxcNN8IvmTiG3oLWrkqSq22C1lPgZgfkNTYnzbFhCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2WL7bflt+m0olirv1vyJqfW6Ye9Y9fUswoAbbPVmxsE=;
- b=DpwpD1vcDbW7sytTG23dlEG6bML3GtCec0slG0In/vc4zSzahw0M+7C6qCIAyXlhfdilynjXMb1ckdXJDIyKav+oWhQtg0Vz5nXKz20L1/CgxS08wudFMyChtmNy63SxoURPpZDQNcuYtNkXwmHTJcJncR0vFW0oi9wpTcUPzw4=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PAXPR04MB8239.eurprd04.prod.outlook.com (2603:10a6:102:1c2::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
- 2022 10:03:24 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5723.032; Tue, 18 Oct 2022
- 10:03:24 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Pavel Machek <pavel@denx.de>
-CC:     Sasha Levin <sashal@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "vinicius.gomes@intel.com" <vinicius.gomes@intel.com>,
-        "jhs@mojatatu.com" <jhs@mojatatu.com>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 5.10 22/34] net/sched: taprio: taprio_dump and
- taprio_change are protected by rtnl_mutex
-Thread-Topic: [PATCH AUTOSEL 5.10 22/34] net/sched: taprio: taprio_dump and
- taprio_change are protected by rtnl_mutex
-Thread-Index: AQHY3C2kHrdjzthEi0WraLEdXdCgp64T9AOAgAAAvICAAAScgA==
-Date:   Tue, 18 Oct 2022 10:03:23 +0000
-Message-ID: <20221018100323.4cglkjn4xkdmzzai@skbuf>
-References: <20221009222129.1218277-1-sashal@kernel.org>
- <20221009222129.1218277-22-sashal@kernel.org>
- <20221018094415.GF1264@duo.ucw.cz> <20221018094653.nt4sh67m2mjkcnkv@skbuf>
-In-Reply-To: <20221018094653.nt4sh67m2mjkcnkv@skbuf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|PAXPR04MB8239:EE_
-x-ms-office365-filtering-correlation-id: 4d4f70ca-ade1-4047-8905-08dab0effe8a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2+u1tJJzZQ7viMnqafUNsmA1rvYtHFNgkdEfN2EnRVpBh1BYNiU610AFzB03yvI7QTDzx5zyFc56TAWIbXKjhhkdiXQxCEiNGt41X4z/ACRHquqh3za5wRlVBv/OVFCMggW7jCP9iRbBh1wJLx0gnx+um0pFdyPlUCQVdw68Uc/5+kSlQRG7ZZorgPk61uCMHNM66/Gvy+uwDahN6W69SVjCvr8L1voPHGxrdcCPt0qgLH/yilJFntcEM4jLlR3UQsrkw0AT2Yn9/D6wfudughfIeEWPoaYVUEvp6qIbrqNaO6fgWxHnxxN4z0dkBCDsNgFras7Xnfdfn9cSVMvHlKQmP1DZOzdumFNacYDWxqwM80S3Mq1fh149WgqzdKOOw7VQw+0KFPi7UhLpJkyWUz04zRUSX51RBOg/uSOx0lf2wSfVMJM1fsRo/kkNC/VM374Plgcpj0HF0/Eey5Uo88PqUONXZEwjKutqReoJV1Uzc7tQ/gTa9ob7SHzLhSKuIGFSnU0cjE0uP1jGS/iIx6xIo/XYFBPPPvHhx1opJSrLghxyV/LzcsigemOR+lkasSrlHWsadI0HfIEEcXBTnazog+NEzcK7hYMTYOQZ7Be+ua6UgLNovLDEBEcVhOw5LilFHpFkyA5C/i9Bnf2zcAw6LNTOwW3kPq11WmOsK2yvfPjpoDH5/mQqceM9CQvYrKPErF/EdwzP+Ba6JY+eASu7wr2pZXlhnaMuniQ2Q5CjKBumRU1QDoXAKOzDpgx6l+xeQ6Hds9zRLCVOuSpN0YFm4I8qtsZoP1N7uKqaMRk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199015)(6506007)(478600001)(71200400001)(66476007)(64756008)(8676002)(76116006)(66946007)(38070700005)(4326008)(66556008)(91956017)(66446008)(6486002)(966005)(54906003)(6916009)(316002)(33716001)(1076003)(186003)(122000001)(6512007)(86362001)(26005)(9686003)(83380400001)(38100700002)(41300700001)(8936002)(44832011)(4744005)(7416002)(5660300002)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GtbRI2t62b9jjlwyAw5XZrPg85ZXIbEpt2KdkEvXf2WQ5r6gAdZfGnhJGchm?=
- =?us-ascii?Q?KIjos9QzZWZECJfFHewnitXsRB/veXLN4bQlZldsWuxhM6ElfN6MI/50JEtV?=
- =?us-ascii?Q?pcUF07VOPs31Cj2efkknguUjv9mHe/tN0Fd6vSD38WpHs4+0d4yb9y6Ggk2d?=
- =?us-ascii?Q?Ri7RmReAfpDPouqrDaMnPfg8v4IjBa2SrGT2CQNfbPP73+YqfKMTH8WUJABd?=
- =?us-ascii?Q?joh3/oREbhYHg6kSxoUExTkbNUkqIeGNa9dWgW+fKviXv6+8cY11E1WCH8Zv?=
- =?us-ascii?Q?fOUQZiLpy+L/aTrhrCSvaaBw+ub9p7Kz6E17FafwwBLxyyiz5Xbd1fv0+UlU?=
- =?us-ascii?Q?LyfoZ7vJwG7Q4h1YRWPx9fBz/R3Zub1lqrWSKYZgpUMQpro68ekeUxjWnlDu?=
- =?us-ascii?Q?n3OSUgu7U/dy8xH4Vx7pFzxei1QXedMUXTuttbCuP9KsDf+JZe8A1K+HlSuj?=
- =?us-ascii?Q?zHFMHpxFGxneeQZrd+krLSqU1tF3rIBXG1yBtdqm+w9JGYmtQwYWRQZwP99u?=
- =?us-ascii?Q?EkeGf596PRKFWNCGJ7+nsA4ESgIZhrYlfhwxXfwjHw95KBpxaffFgqjP1zVY?=
- =?us-ascii?Q?JNI1aEj7cPmnJKhTV39knRlpVBKFappHU7br67Ez4b9ms8HH8q2GUH6AKHs8?=
- =?us-ascii?Q?jn1bq4+tOIK3siEu8OEYExMFDORFkdv39aRugbHb/340O8A42CXzhh+NmJWu?=
- =?us-ascii?Q?GB2w8xTneOOhtNa/y73p4AJZLwaXzjt8v4N+VSmBdvLuc1WRQ2uaxbwcFR8E?=
- =?us-ascii?Q?1oetf/Le0mXCm1kJQhNhYZ8e9U5MWpdNYGjL7eNYCN1lA9i5u4r7nNFJ3O08?=
- =?us-ascii?Q?WZqxGCAUCwK5u8T+TukI0XrTg++cHAukFhFaPN/R2X2yhicUu1XsoYL8er3c?=
- =?us-ascii?Q?02h7yCfVspb3rbguFyG82UuRdXUQTSXY0hHI3XyraRtQPTRJjaOYWrimEN2+?=
- =?us-ascii?Q?i2prxC8udiu4GcygxZQNbuaVEO30tHRiys1bzQQ5T4rwDIIvPdioYEdsN8hJ?=
- =?us-ascii?Q?v1QY/9XAWRiQK5jaq80NJ5aSbGY8z/yrhW5ywYGRSlMPOZBBGUQecyJCawKt?=
- =?us-ascii?Q?E2AKqEuWXHnSjCnHBSCzyJ5lT++EgkzOZ6xyvE1MhB1DM1MadlL2DO7whwsR?=
- =?us-ascii?Q?BU7/pOK5EuFbILTOjO36C58k61D+MdK332pqiJle2ri08PZHn+DGrj6V8RwV?=
- =?us-ascii?Q?U2ug6Fx4E6ZXInlCd4rpW+m7FV3DrGRaG/4u+8FC2j5bl7RVx/fUIVz1liVH?=
- =?us-ascii?Q?Ic1qNFokSLlfTKHv8y64PMLSyF3epCUNFFyGSDs5MJdEasjF3iTYCUncPHHo?=
- =?us-ascii?Q?JTLgV7I3Yc6iuGXGPQ0Q9l9wdOqleZ6GDYBzoVEnj7xS/psyREv1HW+KbGlH?=
- =?us-ascii?Q?//n5SDJhyTa9Iv5Zr2dUlKiAj+z45DPBba4LCCY8i7kyJ2VBVgvGUlPtFVE2?=
- =?us-ascii?Q?aENeDifjRq3pYHqFVZK7DRzvbQdmh47T4xZ9LIfdswFy5QeFD52Xz3+hG0OF?=
- =?us-ascii?Q?H/UPN1U+nofi/dXBVsoyn+TgExgtNCHcEMeEIlH78ys8+hIbAKDwReAJvqXX?=
- =?us-ascii?Q?qOvr1uGOyHvdWH1Ke8YUk3Q+13LllfG++tz6lEeLMoJOcgyHoqhwIH3ub2DZ?=
- =?us-ascii?Q?Aw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8A7EB5724616864A8DA8F40091D0ACE9@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 18 Oct 2022 06:05:53 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BC7B1BA9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:05:50 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id q10-20020a17090a304a00b0020b1d5f6975so13590823pjl.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xpXkUl+z1zNizj9vgkTXvIWAiqD+SGhYAW2dD7JSoQI=;
+        b=DzVSaK73+xGrwYowzaegLcBLY3WpmQ4r/uHTmcLTaNlBWKKxQr2IT/3y/a3k9tPfZS
+         KhT3I0ScX2Eduz6NBVOLf9qrDJNVKGA/dwt+FQYHUgwItAv3B2JtFjCM664IWOpsZoIx
+         5unKNvKHT26Yb/i3SalFenyqelwKbaEVOVHYE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xpXkUl+z1zNizj9vgkTXvIWAiqD+SGhYAW2dD7JSoQI=;
+        b=jo3zxCN1LSIZ5IlnA5IBD66cjIZSyx/lLEGb0YSIp6i/9Ll4112KfYE34govCzg10I
+         JpNhaesxdOOLYA7ioSnB+xUede6OmjW7/T5TsziYiJSXIAvPvHE/JZXxhdf7nfNXdtMx
+         41Lh9vwGXjvqicmrlD0Orlyn9RCmAdY9MvA8DV66Og6eJsBshp9d3jJap1Upqs4u6ry4
+         QKkoTAb1QaFC6Tkvin6wAw12Ypwmx71OysKQUQTXM6wzPZUGd6ZmTDtBIpNfMjnT50Np
+         pvccOhfCBR1lpF2dn1M/RsSTg3m3RFk0er82dlIVIWxdf704OzJXwyL8b0m0fRqLtfo1
+         iW6Q==
+X-Gm-Message-State: ACrzQf153LBRUeJFjoJtpWvg8pKQMelLq5v4v++GiOFho6qjv+pQXzED
+        lzPOg6Fen80RIbYqmzyjTRVByg==
+X-Google-Smtp-Source: AMsMyM4nwgopl4PThVGH3PQzxQrGrADwJg4nz7UwMJTN07fHWiz3gkdMa8WvOowOmT5Y2CmBQtra9Q==
+X-Received: by 2002:a17:90b:f18:b0:20a:9d2b:b75a with SMTP id br24-20020a17090b0f1800b0020a9d2bb75amr38512829pjb.95.1666087549092;
+        Tue, 18 Oct 2022 03:05:49 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b12-20020aa78ecc000000b005627470944dsm8730232pfr.189.2022.10.18.03.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 03:05:48 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] siphash: Convert selftest to KUnit
+Date:   Tue, 18 Oct 2022 03:05:46 -0700
+Message-Id: <20221018100510.never.479-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d4f70ca-ade1-4047-8905-08dab0effe8a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2022 10:03:23.9885
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Gz/h7ZWX58cXo6QB3a50LIDU4RpIU4KejGt0mtwhith0Xqw32uVdJnkkDRmJlye4ImQZrC6s8RYQ/TCsG0EjRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8239
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10466; h=from:subject:message-id; bh=bXI7LVTcU0TAHuxQIqyN9rCLQTorw9vOeWRXpjgDiWg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTnp6J5XHOzMkOwH0LYtAmytll5RTblS0h+meiDm5 BjB73MyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY056egAKCRCJcvTf3G3AJrqMD/ 4yeqkx0Y7HF7pRyX1vJu3yxpcWz2agRNsxMWFQrTAXiAA8tI6yz1+8WqPxtiByPxJGcGl4aJQXgYBL ARR9TsrlEOYTDX1xwWP7/uFr59YB67XHzAq6hJauvGs6Au9X1u+x7gfzYKUURQgJ2Cwgs4PmkZodoe jxTpWi/6Tp5u3WTiq7Wnx9RBN8/v2F9FYFthj5q0VHoox9eDaAgZc3FF7RTg9WhmdaxjLD9iyJGiwA gJgDQLd+YCTKE/30rc6mZ/CHB+0IC7jTz6JKNES7rVFa4KhQRHbZeoWJclJb0cg77IhWA/nweK8t51 o0cNA4dVPzN9pPmTYV2vVbA2N7VhrRbT1YCpjqrUquYibLoWMpw2fJ2SHTy1p7sscPs/iR6GOUyE8k Uys8QoCTbLx43g7SrHSXDz2jGWdiOR5di30Tih1ys4XtqQOenvn48g7TmqMt7cfycuaNdlc8/hEpbr C4E7BK8ThPbjn9vR36MHfUQmoNFcgjYQ8moJOQ/CgvhEBPIKlvbgIaPV0UJyfS2d+B9zrEoczonJSb Z4wS/8JIa68MOhBoYJfpUfWparRsivtgHBxVzzrXlpzsxdqpZPhHmj2dmHjZXZ9zb7K/4FL3g5+mYM +sGLuSgR9oZoMEGas2QC4aUOILG1g+t1m982aQDosqhkiP0/b0WCDW8t0+qg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 12:46:53PM +0300, Vladimir Oltean wrote:
-> On Tue, Oct 18, 2022 at 11:44:15AM +0200, Pavel Machek wrote:
-> > Hi!
-> >=20
-> > > From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> > >=20
-> > > [ Upstream commit 18cdd2f0998a4967b1fff4c43ed9aef049e42c39 ]
-> > >=20
-> > > Since the writer-side lock is taken here, we do not need to open an R=
-CU
-> > > read-side critical section, instead we can use rtnl_dereference() to
-> > > tell lockdep we are serialized with concurrent writes.
-> >=20
-> > This is cleanup, not a bugfix. We should not have it in 5.10.
->=20
-> Agreed, looks like I missed this one when replying to Sasha for all the o=
-thers.
+Convert the siphash self-test to KUnit so it will be included in "all
+KUnit tests" coverage, and can be run individually still:
 
-Ah, I do see that I did in fact respond to this already.
-https://lore.kernel.org/lkml/20221010133337.4q75fsa6m2v5ttk7@skbuf/
+$ ./tools/testing/kunit/kunit.py run siphash
+...
+[02:58:45] Starting KUnit Kernel (1/1)...
+[02:58:45] ============================================================
+[02:58:45] =================== siphash (1 subtest) ====================
+[02:58:45] [PASSED] siphash_test
+[02:58:45] ===================== [PASSED] siphash =====================
+[02:58:45] ============================================================
+[02:58:45] Testing complete. Ran 1 tests: passed: 1
+[02:58:45] Elapsed time: 21.421s total, 4.306s configuring, 16.947s building, 0.148s running
 
-Not sure how you put your eyes on this particular patch?=
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: David Gow <davidgow@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ MAINTAINERS                             |   2 +-
+ lib/Kconfig.debug                       |  20 +--
+ lib/Makefile                            |   2 +-
+ lib/{test_siphash.c => siphash_kunit.c} | 165 ++++++++++--------------
+ 4 files changed, 83 insertions(+), 106 deletions(-)
+ rename lib/{test_siphash.c => siphash_kunit.c} (60%)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..037466b9a027 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18862,7 +18862,7 @@ M:	Jason A. Donenfeld <Jason@zx2c4.com>
+ S:	Maintained
+ F:	include/linux/siphash.h
+ F:	lib/siphash.c
+-F:	lib/test_siphash.c
++F:	lib/siphash_kunit.c
+ 
+ SIS 190 ETHERNET DRIVER
+ M:	Francois Romieu <romieu@fr.zoreil.com>
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 3fc7abffc7aa..65593675cd5a 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2247,15 +2247,6 @@ config TEST_RHASHTABLE
+ 
+ 	  If unsure, say N.
+ 
+-config TEST_SIPHASH
+-	tristate "Perform selftest on siphash functions"
+-	help
+-	  Enable this option to test the kernel's siphash (<linux/siphash.h>) hash
+-	  functions on boot (or module load).
+-
+-	  This is intended to help people writing architecture-specific
+-	  optimized versions.  If unsure, say N.
+-
+ config TEST_IDA
+ 	tristate "Perform selftest on IDA functions"
+ 
+@@ -2583,6 +2574,17 @@ config HW_BREAKPOINT_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config SIPHASH_KUNIT_TEST
++	tristate "Perform selftest on siphash functions" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this option to test the kernel's siphash (<linux/siphash.h>) hash
++	  functions on boot (or module load).
++
++	  This is intended to help people writing architecture-specific
++	  optimized versions.  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 161d6a724ff7..bca02ac1adf8 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -62,7 +62,6 @@ obj-$(CONFIG_TEST_BITOPS) += test_bitops.o
+ CFLAGS_test_bitops.o += -Werror
+ obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_kunit.o
+ obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
+-obj-$(CONFIG_TEST_SIPHASH) += test_siphash.o
+ obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
+ obj-$(CONFIG_TEST_IDA) += test_ida.o
+ obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
+@@ -380,6 +379,7 @@ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+ CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
+ obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
+ obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
++obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
+ 
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ 
+diff --git a/lib/test_siphash.c b/lib/siphash_kunit.c
+similarity index 60%
+rename from lib/test_siphash.c
+rename to lib/siphash_kunit.c
+index a96788d0141d..a3c697e8be35 100644
+--- a/lib/test_siphash.c
++++ b/lib/siphash_kunit.c
+@@ -13,6 +13,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <kunit/test.h>
+ #include <linux/siphash.h>
+ #include <linux/kernel.h>
+ #include <linux/string.h>
+@@ -109,114 +110,88 @@ static const u32 test_vectors_hsiphash[64] = {
+ };
+ #endif
+ 
+-static int __init siphash_test_init(void)
++#define chk(hash, vector, fmt...)			\
++	KUNIT_EXPECT_EQ_MSG(test, hash, vector, fmt)
++
++static void siphash_test(struct kunit *test)
+ {
+ 	u8 in[64] __aligned(SIPHASH_ALIGNMENT);
+ 	u8 in_unaligned[65] __aligned(SIPHASH_ALIGNMENT);
+ 	u8 i;
+-	int ret = 0;
+ 
+ 	for (i = 0; i < 64; ++i) {
+ 		in[i] = i;
+ 		in_unaligned[i + 1] = i;
+-		if (siphash(in, i, &test_key_siphash) !=
+-						test_vectors_siphash[i]) {
+-			pr_info("siphash self-test aligned %u: FAIL\n", i + 1);
+-			ret = -EINVAL;
+-		}
+-		if (siphash(in_unaligned + 1, i, &test_key_siphash) !=
+-						test_vectors_siphash[i]) {
+-			pr_info("siphash self-test unaligned %u: FAIL\n", i + 1);
+-			ret = -EINVAL;
+-		}
+-		if (hsiphash(in, i, &test_key_hsiphash) !=
+-						test_vectors_hsiphash[i]) {
+-			pr_info("hsiphash self-test aligned %u: FAIL\n", i + 1);
+-			ret = -EINVAL;
+-		}
+-		if (hsiphash(in_unaligned + 1, i, &test_key_hsiphash) !=
+-						test_vectors_hsiphash[i]) {
+-			pr_info("hsiphash self-test unaligned %u: FAIL\n", i + 1);
+-			ret = -EINVAL;
+-		}
+-	}
+-	if (siphash_1u64(0x0706050403020100ULL, &test_key_siphash) !=
+-						test_vectors_siphash[8]) {
+-		pr_info("siphash self-test 1u64: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (siphash_2u64(0x0706050403020100ULL, 0x0f0e0d0c0b0a0908ULL,
+-			 &test_key_siphash) != test_vectors_siphash[16]) {
+-		pr_info("siphash self-test 2u64: FAIL\n");
+-		ret = -EINVAL;
++		chk(siphash(in, i, &test_key_siphash),
++		    test_vectors_siphash[i],
++		    "siphash self-test aligned %u: FAIL", i + 1);
++		chk(siphash(in_unaligned + 1, i, &test_key_siphash),
++		    test_vectors_siphash[i],
++		    "siphash self-test unaligned %u: FAIL", i + 1);
++		chk(hsiphash(in, i, &test_key_hsiphash),
++		    test_vectors_hsiphash[i],
++		    "hsiphash self-test aligned %u: FAIL", i + 1);
++		chk(hsiphash(in_unaligned + 1, i, &test_key_hsiphash),
++		    test_vectors_hsiphash[i],
++		    "hsiphash self-test unaligned %u: FAIL", i + 1);
+ 	}
+-	if (siphash_3u64(0x0706050403020100ULL, 0x0f0e0d0c0b0a0908ULL,
+-			 0x1716151413121110ULL, &test_key_siphash) !=
+-						test_vectors_siphash[24]) {
+-		pr_info("siphash self-test 3u64: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (siphash_4u64(0x0706050403020100ULL, 0x0f0e0d0c0b0a0908ULL,
++	chk(siphash_1u64(0x0706050403020100ULL, &test_key_siphash),
++	    test_vectors_siphash[8],
++	    "siphash self-test 1u64: FAIL");
++	chk(siphash_2u64(0x0706050403020100ULL, 0x0f0e0d0c0b0a0908ULL,
++			 &test_key_siphash),
++	    test_vectors_siphash[16],
++	    "siphash self-test 2u64: FAIL");
++	chk(siphash_3u64(0x0706050403020100ULL, 0x0f0e0d0c0b0a0908ULL,
++			 0x1716151413121110ULL, &test_key_siphash),
++	    test_vectors_siphash[24],
++	    "siphash self-test 3u64: FAIL");
++	chk(siphash_4u64(0x0706050403020100ULL, 0x0f0e0d0c0b0a0908ULL,
+ 			 0x1716151413121110ULL, 0x1f1e1d1c1b1a1918ULL,
+-			 &test_key_siphash) != test_vectors_siphash[32]) {
+-		pr_info("siphash self-test 4u64: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (siphash_1u32(0x03020100U, &test_key_siphash) !=
+-						test_vectors_siphash[4]) {
+-		pr_info("siphash self-test 1u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (siphash_2u32(0x03020100U, 0x07060504U, &test_key_siphash) !=
+-						test_vectors_siphash[8]) {
+-		pr_info("siphash self-test 2u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (siphash_3u32(0x03020100U, 0x07060504U,
+-			 0x0b0a0908U, &test_key_siphash) !=
+-						test_vectors_siphash[12]) {
+-		pr_info("siphash self-test 3u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (siphash_4u32(0x03020100U, 0x07060504U,
+-			 0x0b0a0908U, 0x0f0e0d0cU, &test_key_siphash) !=
+-						test_vectors_siphash[16]) {
+-		pr_info("siphash self-test 4u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (hsiphash_1u32(0x03020100U, &test_key_hsiphash) !=
+-						test_vectors_hsiphash[4]) {
+-		pr_info("hsiphash self-test 1u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (hsiphash_2u32(0x03020100U, 0x07060504U, &test_key_hsiphash) !=
+-						test_vectors_hsiphash[8]) {
+-		pr_info("hsiphash self-test 2u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (hsiphash_3u32(0x03020100U, 0x07060504U,
+-			  0x0b0a0908U, &test_key_hsiphash) !=
+-						test_vectors_hsiphash[12]) {
+-		pr_info("hsiphash self-test 3u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (hsiphash_4u32(0x03020100U, 0x07060504U,
+-			  0x0b0a0908U, 0x0f0e0d0cU, &test_key_hsiphash) !=
+-						test_vectors_hsiphash[16]) {
+-		pr_info("hsiphash self-test 4u32: FAIL\n");
+-		ret = -EINVAL;
+-	}
+-	if (!ret)
+-		pr_info("self-tests: pass\n");
+-	return ret;
++			 &test_key_siphash),
++	    test_vectors_siphash[32],
++	    "siphash self-test 4u64: FAIL");
++	chk(siphash_1u32(0x03020100U, &test_key_siphash),
++	    test_vectors_siphash[4],
++	    "siphash self-test 1u32: FAIL");
++	chk(siphash_2u32(0x03020100U, 0x07060504U, &test_key_siphash),
++	    test_vectors_siphash[8],
++	    "siphash self-test 2u32: FAIL");
++	chk(siphash_3u32(0x03020100U, 0x07060504U,
++			 0x0b0a0908U, &test_key_siphash),
++	    test_vectors_siphash[12],
++	    "siphash self-test 3u32: FAIL");
++	chk(siphash_4u32(0x03020100U, 0x07060504U,
++			 0x0b0a0908U, 0x0f0e0d0cU, &test_key_siphash),
++	    test_vectors_siphash[16],
++	    "siphash self-test 4u32: FAIL");
++	chk(hsiphash_1u32(0x03020100U, &test_key_hsiphash),
++	    test_vectors_hsiphash[4],
++	    "hsiphash self-test 1u32: FAIL");
++	chk(hsiphash_2u32(0x03020100U, 0x07060504U, &test_key_hsiphash),
++	    test_vectors_hsiphash[8],
++	    "hsiphash self-test 2u32: FAIL");
++	chk(hsiphash_3u32(0x03020100U, 0x07060504U,
++			  0x0b0a0908U, &test_key_hsiphash),
++	    test_vectors_hsiphash[12],
++	    "hsiphash self-test 3u32: FAIL");
++	chk(hsiphash_4u32(0x03020100U, 0x07060504U,
++			  0x0b0a0908U, 0x0f0e0d0cU, &test_key_hsiphash),
++	    test_vectors_hsiphash[16],
++	    "hsiphash self-test 4u32: FAIL");
+ }
+ 
+-static void __exit siphash_test_exit(void)
+-{
+-}
++static struct kunit_case siphash_test_cases[] = {
++	KUNIT_CASE(siphash_test),
++	{}
++};
++
++static struct kunit_suite siphash_test_suite = {
++	.name = "siphash",
++	.test_cases = siphash_test_cases,
++};
+ 
+-module_init(siphash_test_init);
+-module_exit(siphash_test_exit);
++kunit_test_suite(siphash_test_suite);
+ 
+ MODULE_AUTHOR("Jason A. Donenfeld <Jason@zx2c4.com>");
+ MODULE_LICENSE("Dual BSD/GPL");
+-- 
+2.34.1
+
