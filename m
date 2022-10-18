@@ -2,210 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94286022AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FCA6020BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbiJRDcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S230367AbiJRCCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiJRDbL (ORCPT
+        with ESMTP id S229928AbiJRCCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:31:11 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90C4A5980
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 20:22:38 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221018031352epoutp036372835a831be5a16d28a69abd4345bd~fC1GR8jjf2032320323epoutp03I
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:13:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221018031352epoutp036372835a831be5a16d28a69abd4345bd~fC1GR8jjf2032320323epoutp03I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1666062832;
-        bh=c/a+95d+SSTk7rbIdpxKMCAMcfv3X4Pw1T9RxrAwG1M=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=JYz9auHiXYhzLOB3gf1mSWUct2JTHoCP6DSPMd/6kVQfRecTLfRDIqnmaPLQgzqHm
-         JXHXq26ajAESVmOiBpXX4k7jdcHz6XFeHUZx6qAdxX4gxO0vRH6DW4g6o+a+F2uqsk
-         dGVFSefsc0LuVonAJxS8z0jMrApMqc6+knqJirw0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20221018031351epcas5p3273be2a9ab89617cb2ed7a14ab4c026f~fC1FrGjim1357913579epcas5p3d;
-        Tue, 18 Oct 2022 03:13:51 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4MrzTm1h7vz4x9Q9; Tue, 18 Oct
-        2022 03:13:48 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FC.A7.56352.CE91E436; Tue, 18 Oct 2022 12:13:48 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20221017141616epcas5p4c2b5406e266beb45d2f80155364c9b45~e4OK1pZhH1394913949epcas5p4W;
-        Mon, 17 Oct 2022 14:16:16 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221017141616epsmtrp1671cfdcd278e61f2c859abeb95ddbc23~e4OK0Yft13032930329epsmtrp1T;
-        Mon, 17 Oct 2022 14:16:16 +0000 (GMT)
-X-AuditID: b6c32a4b-5f7fe7000001dc20-89-634e19ec3f6e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        07.EC.14392.0B36D436; Mon, 17 Oct 2022 23:16:16 +0900 (KST)
-Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221017141613epsmtip1c028052d20d25d4b07cc20bd48240698~e4OHmNS7O2783727837epsmtip1X;
-        Mon, 17 Oct 2022 14:16:12 +0000 (GMT)
-From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzk@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
-        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
-        <benjamin.gaignard@collabora.com>, <stanimir.varbanov@linaro.org>,
-        <dillon.minfei@gmail.com>, <david.plowman@raspberrypi.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <andi@etezian.org>, <alim.akhtar@samsung.com>,
-        <aswani.reddy@samsung.com>, <pankaj.dubey@samsung.com>,
-        <linux-fsd@tesla.com>, <smitha.t@samsung.com>
-In-Reply-To: <87380fdb-4053-e8dc-e997-b7c42be025ca@kernel.org>
-Subject: RE: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
- for MFC
-Date:   Mon, 17 Oct 2022 19:46:11 +0530
-Message-ID: <000001d8e233$04db73d0$0e925b70$@samsung.com>
+        Mon, 17 Oct 2022 22:02:31 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0935580515;
+        Mon, 17 Oct 2022 19:02:31 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id c24so12458098pls.9;
+        Mon, 17 Oct 2022 19:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=dXiBhtiiGX2gaVqn8atJkfkWgiCpu0hyyh6MvxjNUNM=;
+        b=dC2GSUOJYa46BbAmpzD3phhO+UpqHHX3pWxr425U2IfMJRilj2zHjhCicyv8rcHQ04
+         07AfVqi55PKSjQJvB8Uiwck8nzHjj40TcaA/aeAWXcNmhNOKEDWbimEKiUFIadt0RMMh
+         yvOKMFloqvlaPtTCGlXgyvhV2WOLE7DgpQ/Inw0FVgkEKeBJbP+bEixPyL2WeN0zV7sI
+         wJE/Jj6Z0JaycKoBrEOHtiav6pS8HnOaGryaoKC54j7gC0CHEZHkOBtD1apXhiKJcTnk
+         AKPcDNpRJTyy0FNY6dgiCWeqSKkL+P4ApffS2nkp6SwbWADTKNa7qKNQKzVfyQSfcKyC
+         goVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dXiBhtiiGX2gaVqn8atJkfkWgiCpu0hyyh6MvxjNUNM=;
+        b=tCxr6ll08ePvH926yqLTy15JtKCdugbWBOY+QfnXqn9cQ5RWAhvQMm+gHP5lMHDc/k
+         8e9K2DC1Kx34IX0BGoX8/kruDXST3RjEN5Ed4aMM/aCuSaq/g9fqndPd7/FW/vjeXXmW
+         t/mf/2T9XK7j07a6wD8NPbpIpzhxVjflLoM5uiUr7bNYAAPusFjjaH/1l0x1tflRWMvM
+         ctDUD2y8229Dnr5PJrtl03uvdPRsFOFQcBsh0fxHocor/9flgrobdU72fHxtv17oHocQ
+         DWxxAxqeURBADjeeB/SD8WmNuIMvHPD2xKegHDcG2dCQNj2LkYm6w86MaE5KpKHX1EqW
+         cxbQ==
+X-Gm-Message-State: ACrzQf1QUmyCgkGx8kgTveQuEDzfkXohGDbLtKeByiNdh+3E0VY3P3fd
+        ZBsfX0YbS5lmL/SUmki6jYU=
+X-Google-Smtp-Source: AMsMyM7Or8rTGWNsBW7Six7djZS/6QrXCd5/sq/0KSE1DRRd/WAMjwDzHS067zBCYMTWz0J49PIm6A==
+X-Received: by 2002:a17:903:247:b0:179:b5e1:54b7 with SMTP id j7-20020a170903024700b00179b5e154b7mr607858plh.84.1666058550327;
+        Mon, 17 Oct 2022 19:02:30 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1f90:85c4:58f0:7a81:6bb5])
+        by smtp.gmail.com with ESMTPSA id t4-20020a655544000000b00464858cf6b0sm6851564pgr.54.2022.10.17.19.02.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 19:02:29 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Subject: [PATCHSET 00/20] perf stat: Cleanup counter aggregation (v3)
+Date:   Mon, 17 Oct 2022 19:02:07 -0700
+Message-Id: <20221018020227.85905-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIjXZOHgvokXGuofbg3rWbxTFZEMQGGfBLcASb/h3kCFgW7f61XjFLw
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfVBUVRjG59y9u3ehdr0hDIfNkrlNFjgLbMB6STFKZG5BSUPqZDl0270D
-        DPvVfoAxmUyBKQJSasFKYCyQEIIuH4J8SLCMQiWjICyjC4gkLpWUgAMLAy17ofjvd973ec57
-        nnPm8DkeRZiIn6TSM1oVrSB47mhDp9/L4j993pEFVSxi5GhRA480zU0g5IhpGiU7ausxsq7/
-        LIf88Vo7lyy23OCSl38eQ8lLD53dmwU2lJworgak3TjMI3t7L2Kk+f4Al7w3uZ/su1LII7Mv
-        1nPJCxYbRpYN3kTIcvMiQpbUz2BkZqsFI20tDYDMOGpBIiBVVVQFqEZbKaAGSx9zqCajDaNM
-        LXaEMlce51F3B1p4VG3pESqzy4FSuXWVgFr64nuMyrIM8qhp8/NUz+w0Fis8kLwjkaHljNaX
-        UcnU8iRVQjgRHRe/Kz5UGiQRS8LIbYSvilYy4URkTKw4KknhvAbCN4VWGJylWFqnIwJ37tCq
-        DXrGN1Gt04cTjEau0IRoAnS0UmdQJQSoGP2rkqCgV0Kdwo+SE5dPWRHNgNehkSETmg4ueWQB
-        Nz7EQ6B9eZGTBdz5HngzgFUdpTx28RjAIWP+aucJgH3XKzhrlts5tYBttAJ4yzKMsIsJAM9/
-        5+CuqHh4IBzpyeauNDzxBgCnlyZcG3PwkyhcGPoWW1G54Tvho2Ntrn034vtghmXO5UbxF2F6
-        YxZvhQV4GBwqdwCWn4HdBePoCnPwrbD8hz9Wz+QL538vd3k98Sh4taCBx2q8Ydd8tisExG+5
-        wYoZ06ohEt6pOQNY3ggnr9VhLIug/eTRVZbB+yX2Vb0C1rScRll+Dbb3FzqZ7xzgB2uuBLLl
-        5+CZnmqEnSuEOQvjCFsXwMaiNd4CC++yGSG+CXb+VAbyAGFcF824LppxXQTj/9POAbQS+DAa
-        nTKB0YVqglVM6n9vLlMrzcD1UfyjG8HY6N8BHQDhgw4A+RzCUxA1EyPzEMjpT9MYrTpea1Aw
-        ug4Q6rzvrzkiL5na+dNU+nhJSFhQiFQqDQkLlkoIb4Ep31/mgSfQeiaZYTSMds2H8N1E6ciD
-        r2rHmg9b50Wp32x+49fuX07MRDim+g2ih+nWE0bNwu3Tw+dTbJ8HxLVF0Ht3zT3553j8lDDt
-        pbemj4yMPp1f1/juUpNDU1T++gFeq+CUVSga8H1w0CgetVRV5BDVb28/PDnbWXXMYd+XWpbb
-        5dM92d4r/+Dsbmz3zH775QslX75gbc7tFW9QZ/j1ZYq3KgPUvz21PbVYfO4E6Ckdn92rePSZ
-        0bxtc15Bb4zXh/yo4JbIO4ZP3oNx7hvE/YcSU9QRtUPLCiXt8B+QSyUf22nvvIqDmlHhjaWr
-        EUybPVqeVvz+9fApTB2zkASsb1ZWisT4Yv4W9z1Nf0Vu2rN4j4AW4bMEqkukJf4crY7+Fx4y
-        yGixBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphleLIzCtJLcpLzFFi42LZdlhJTndDsm+ywdoPIhYP5m1js1j84zmT
-        xf3Fn1ksDm3eym6x5cpsZovlxw+wWsw/co7VYvvBRywWG18AZS/OvMti8Xz+OkaLl7PusVmc
-        P7+B3WLT42usFg9fhVtc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4Td4u6e
-        bYwWLW1HmBwkPNbMW8PosePuEkaP60s+MXvsnHWX3WPxnpdMHptWdbJ53Lm2h81j85J6j9aj
-        v1g8+rasYvT41zSX3aPryHU2j8+b5DxOff3MHsAXxWWTkpqTWZZapG+XwJXxaflf1oIJohX/
-        Ht9kbGB8LdjFyMkhIWAicbV3M2MXIxeHkMBuRonmS1fZIRIyEv/bjkHZwhIr/z1nhyh6yiix
-        7VYPWIJNQF/i/qkeVhBbRGAXo8SSl+YgRcwCS1kkriy/zgrR8ZlRou3zXLAOTgE7iXcd+5i7
-        GDk4hAVCJHZ/qwMJswioSjTs6GIDsXkFLCVuLvvFCGELSpyc+YQFxGYW0JZ4evMpnL1s4Wtm
-        iOsUJH4+XQZ1hJvE/pnb2CBqxCWO/uxhnsAoPAvJqFlIRs1CMmoWkpYFjCyrGCVTC4pz03OL
-        DQsM81LL9YoTc4tL89L1kvNzNzGCE4qW5g7G7as+6B1iZOJgPMQowcGsJMLr9sUnWYg3JbGy
-        KrUoP76oNCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQamtOYwXfZ4vVrP6Vc/
-        Sk2aqH3NgvW4f8nP8KfWlzYLZguFMU2tey1zevfevPzdmq5TvZleqs79vvDovpn8ukUVe6dF
-        Vzx8ZP1O+t2bG7qm0axTVSKtlvlNVbhm8vleF0/6P+6FzI9yF/nIJalp5gidOq/Vr6FT/LZ0
-        Q9HjNTIeXyacYryQ8rYrM/mLxIyAVXllXZvuJdsdWxQ5ZdIps7fTEsTYWpW3G+uE9c2Lib2U
-        KL92bdW3nlbpSuUnXcvd7Z7vbgzTSv63yvT7/lkneQ68mvQ6s7X82JnIm2dDXjZ+v8/0+r69
-        rdX9tztnhUmk/2B4c8Iwt/zsAZMoX+eiQ5MKTK47qTjukJh4bafkjfYNSizFGYmGWsxFxYkA
-        8R0G75cDAAA=
-X-CMS-MailID: 20221017141616epcas5p4c2b5406e266beb45d2f80155364c9b45
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca
-References: <20221011122516.32135-1-aakarsh.jain@samsung.com>
-        <CGME20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca@epcas5p1.samsung.com>
-        <20221011122516.32135-2-aakarsh.jain@samsung.com>
-        <87380fdb-4053-e8dc-e997-b7c42be025ca@kernel.org>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+Current perf stat code is somewhat hard to follow since it handles
+many combinations of PMUs/events for given display and aggregation
+options.  This is my attempt to clean it up a little. ;-)
+
+changes in v3)
+ * fix cgroup event display
+ * fix perf test failures  (Arnaldo)
+ * add comment on the global debug output  (Athira)
+
+changes in v2)
+ * fix a segfault in perf stat report for per-process record  (Jiri)
+ * fix metric only display  (Jiri)
+ * add evsel__reset_aggr_stat  (ian)
+ * add more comments  (Ian)
+ * add Acked-by from Ian
 
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski =5Bmailto:krzk=40kernel.org=5D
-> Sent: 12 October 2022 18:27
-> To: aakarsh jain <aakarsh.jain=40samsung.com>; linux-arm-
-> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
-> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
-> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
-> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
-> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
-> benjamin.gaignard=40collabora.com; stanimir.varbanov=40linaro.org;
-> dillon.minfei=40gmail.com; david.plowman=40raspberrypi.com;
-> mark.rutland=40arm.com; robh+dt=40kernel.org; krzk+dt=40kernel.org;
-> andi=40etezian.org; alim.akhtar=40samsung.com; aswani.reddy=40samsung.com=
-;
-> pankaj.dubey=40samsung.com; linux-fsd=40tesla.com; smitha.t=40samsung.com
-> Subject: Re: =5BPatch v3 01/15=5D dt-bindings: media: s5p-mfc: Add new DT
-> schema for MFC
->=20
-> On 11/10/2022 08:25, aakarsh jain wrote:
-> > From: Smitha T Murthy <smitha.t=40samsung.com>
-> >
-> > Convert DT schema for s5p-mfc in yaml format
->=20
-> Convert S5P-MFC bindings to DT schema.
->=20
-> You also missed full-stop.
->=20
-Ok will address it in next series.
+My first concern is that aggregation and display routines are intermixed
+and processed differently depends on the aggregation mode.  I'd like to
+separate them apart and make the logic clearer.
 
-> My second comment was ignored here.
->=20
-I missed one review comment which was related to change in commit message. =
-Will address it in next series.
-> >
-> > Cc: linux-fsd=40tesla.com
-> > Signed-off-by: Smitha T Murthy <smitha.t=40samsung.com>
-> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
-> > ---
-> >  .../devicetree/bindings/media/s5p-mfc.txt     =7C  75 --------
-> >  .../bindings/media/samsung,s5p-mfc.yaml       =7C 163
-> ++++++++++++++++++
-> >  2 files changed, 163 insertions(+), 75 deletions(-)  create mode
-> > 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> > b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> > index aa54c8159d9f..8b137891791f 100644
-> > --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> > +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
->=20
-> This is a friendly reminder during the review process.
->=20
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all reques=
-ted
-> changes or keep discussing them.
->=20
-> Thank you.
->=20
-Apart from your second review comment  I guess we have addressed all your r=
-eview comments in the current patch.
-Please review other changes as well and let us know if any changes required=
-.
+To do that, I added struct perf_stat_aggr to save the aggregated counter
+values and other info.  It'll be allocated and processed according to
+the aggr_mode and display logic will use it.
 
-Thanks for the review.
+I've tested the following combination.
 
-> Best regards,
-> Krzysztof
+  $ cat test-matrix.sh
+  #!/bin/sh
 
+  set -e
+
+  yes > /dev/null &
+  TARGET=$!
+
+  ./perf stat true
+  ./perf stat -a true
+  ./perf stat -C0 true
+  ./perf stat -p $TARGET true
+  ./perf stat -t $TARGET true
+
+  ./perf stat -a -A true
+  ./perf stat -a --per-node true
+  ./perf stat -a --per-socket true
+  ./perf stat -a --per-die true
+  ./perf stat -a --per-core true
+  ./perf stat -a --per-thread true
+
+  ./perf stat -a -I 500 sleep 1
+  ./perf stat -a -I 500 --summary sleep 1
+  ./perf stat -a -I 500 --per-socket sleep 1
+  ./perf stat -a -I 500 --summary --per-socket sleep 1
+
+  ./perf stat -a --metric-only true
+  ./perf stat -a --metric-only --per-socket true
+  ./perf stat -a --metric-only -I 500 sleep 1
+  ./perf stat -a --metric-only -I 500 --per-socket sleep 1
+
+  ./perf stat record true && ./perf stat report
+  ./perf stat record -p $TARGET true && ./perf stat report
+  ./perf stat record -a true && ./perf stat report
+  ./perf stat record -a --per-core true && ./perf stat report
+  ./perf stat record -a --per-core --metric-only true && ./perf stat report
+  ./perf stat record -a -I 500 sleep 1 && ./perf stat report
+  ./perf stat record -a -I 500 --per-core sleep 1 && ./perf stat report
+  ./perf stat record -a -I 500 --per-core --metric-only sleep 1 && ./perf stat report
+
+  ./perf stat -a -A -e cpu/event=cpu-cycles,percore/ true
+  ./perf stat -a -A -e cpu/event=cpu-cycles,percore/ --percore-show-thread true
+
+  kill $TARGET
+
+The code is available at 'perf/stat-aggr-v3' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (20):
+  perf tools: Save evsel->pmu in parse_events()
+  perf tools: Use pmu info in evsel__is_hybrid()
+  perf stat: Use evsel__is_hybrid() more
+  perf stat: Add aggr id for global mode
+  perf stat: Add cpu aggr id for no aggregation mode
+  perf stat: Add 'needs_sort' argument to cpu_aggr_map__new()
+  perf stat: Add struct perf_stat_aggr to perf_stat_evsel
+  perf stat: Allocate evsel->stats->aggr properly
+  perf stat: Aggregate events using evsel->stats->aggr
+  perf stat: Factor out evsel__count_has_error()
+  perf stat: Aggregate per-thread stats using evsel->stats->aggr
+  perf stat: Allocate aggr counts for recorded data
+  perf stat: Reset aggr counts for each interval
+  perf stat: Split process_counters()
+  perf stat: Add perf_stat_merge_counters()
+  perf stat: Add perf_stat_process_percore()
+  perf stat: Add perf_stat_process_shadow_stats()
+  perf stat: Display event stats using aggr counts
+  perf stat: Display percore events properly
+  perf stat: Remove unused perf_counts.aggr field
+
+ tools/perf/builtin-script.c                   |   4 +-
+ tools/perf/builtin-stat.c                     | 186 +++++--
+ tools/perf/tests/parse-metric.c               |   2 +-
+ tools/perf/tests/pmu-events.c                 |   2 +-
+ tools/perf/util/counts.c                      |   1 -
+ tools/perf/util/counts.h                      |   1 -
+ tools/perf/util/cpumap.c                      |  16 +-
+ tools/perf/util/cpumap.h                      |   8 +-
+ tools/perf/util/evsel.c                       |  32 +-
+ tools/perf/util/parse-events.c                |   1 +
+ tools/perf/util/pmu.c                         |   4 +
+ .../scripting-engines/trace-event-python.c    |   6 -
+ tools/perf/util/stat-display.c                | 462 +++---------------
+ tools/perf/util/stat.c                        | 407 ++++++++++++---
+ tools/perf/util/stat.h                        |  40 +-
+ 15 files changed, 633 insertions(+), 539 deletions(-)
+
+
+base-commit: a3a365655a28f12f07eddf4f3fd596987b175e1d
+-- 
+2.38.0.413.g74048e4d9e-goog
 
