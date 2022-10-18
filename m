@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D666024AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBFC6024B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiJRGom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S229904AbiJRGoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiJRGoh (ORCPT
+        with ESMTP id S229535AbiJRGoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:44:37 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDEE31DF3;
-        Mon, 17 Oct 2022 23:44:35 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 1FC0D320097B;
-        Tue, 18 Oct 2022 02:44:32 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 18 Oct 2022 02:44:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666075471; x=1666161871; bh=u2SaGnC5yw
-        r5cuY3ReRbz6hIRErCTTDk96Lbny/ETMo=; b=L7mmMQG0UCaYJ6FD6sQLwpU9ib
-        sZmfLxRZrQnOPJOAt6/ucNIKLQzR81Cns1CrcIToHfGWfJz6PTKbNrgNSxUnE6Iz
-        UGyPV568LBmYSogcIST5B/4p8U3kfynaMCOfXcefZzO/fyQh17t62QE/vfgCSApc
-        VLkkjsayii21BORI4EAPXy7CFMd/qnOxWT3kq5JWtQdHuPIG+6gXOMq7FD5DOQAy
-        7LuQY66QJXNnewnLbNaw0D4mNU4OspUma0/d2tcxtYsdCsnfQzzWWCOMYW3kwic/
-        6luSxyGU8LqwjcIPb3XZvXtua/yWV0D5aUlrGA8o0PZDZ+Rp8Pr87kCNjyiA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666075471; x=1666161871; bh=u2SaGnC5ywr5cuY3ReRbz6hIRErC
-        TTDk96Lbny/ETMo=; b=GHRmO7y+iNJQgMAUGEoQeABp071zUnmBadFqtMKBrnjy
-        1/+E0m7eksuWGdrqHIRqgHhIsCV0XOxury7/Tk298pkCHnsdnCRcjH2JbOU0MT46
-        oSbVk/t4NuRbhKtrT37XE8KytbX5YmcmAogKnINV8FghnqB0vQB8zvTxZd28c/P/
-        VPsqu3G4GyTZpbSJOetGMEB5qnM/urt/fylXZ0k5yLgJOtkQkg6GLtvq9su/ptWX
-        gHGYXj785HTF2ep4sU3zXduYG1gHzSVOQqNIhbODGqOIfGrv6WlVf7m9KXdFxM9G
-        FziPbzVBDLAWC9MeMuM56Sx35BsJ9aCzqT3Ju+hLJw==
-X-ME-Sender: <xms:T0tOY0QKHboqStLgocWZ4bx-NvOaOGliaeUL_32xtwrmD3dnEiA9Dg>
-    <xme:T0tOYxyTPAwQwJMAn9DrthrNJASn9s07tVy7RbxwlfIHZKwVlhDxrafaDbej4bJJG
-    c1VY-PxCMMOjZs6Rq0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeltddguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:T0tOYx0jJn_nLWkRIhjRpJ-ZOmqa_zNPAFgKEBcwzqQIoiGJdaMSMw>
-    <xmx:T0tOY4BtaDD9_SMrI8vMcJhmUxgGljSKl2yM8UaZ53SUGlPrlrOHzw>
-    <xmx:T0tOY9hjG52WpcU7GXh_PfY1Pi33fp9YMcCaQ0mFWqocxMpa6PHp7A>
-    <xmx:T0tOY8ROiwhfbza7UGDsNoRHqSgpU8dM9LlJO5f6oRlYJbEhLqSWSQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 40EDCB60089; Tue, 18 Oct 2022 02:44:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <12f51033-1461-43f9-8d8d-cd726fbb4758@app.fastmail.com>
-In-Reply-To: <59d99be6-f79e-45bd-203c-17972255cc39@gmail.com>
-References: <20221010101331.29942-1-parav@nvidia.com>
- <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
- <59d99be6-f79e-45bd-203c-17972255cc39@gmail.com>
-Date:   Tue, 18 Oct 2022 08:44:09 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Akira Yokosawa" <akiyks@gmail.com>,
-        "Parav Pandit" <parav@nvidia.com>
-Cc:     bagasdotme@gmail.com, "Alan Stern" <stern@rowland.harvard.edu>,
-        parri.andrea@gmail.com, "Will Deacon" <will@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>, boqun.feng@gmail.com,
-        "Nicholas Piggin" <npiggin@gmail.com>, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        "Paul E. McKenney" <paulmck@kernel.org>, dlustig@nvidia.com,
-        "Joel Fernandes" <joel@joelfernandes.org>,
-        "Jonathan Corbet" <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation for writel()
- example
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Tue, 18 Oct 2022 02:44:39 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6222B1A5;
+        Mon, 17 Oct 2022 23:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666075457;
+        bh=63HZwXGejDLFqTyjSGQIERszUjqAubInWNkbhxQHRfw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=dorsbPzY5+G3UbsKLlQ90/xJXEeNF+VxEYVaQbu6mS+CKoHHwr5Jmf2/kzrZlvGj6
+         4iFK+UZ+7t6g15AsfLz1IZhqJ0irysgeDvAblo8rlmaenoXS75dvbkZzPM4eq1E7H+
+         pAZn+1jouJBRJR0VFZ5jjgrICiYxdW/fMr4gCuys=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.165.172]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGz1f-1oxedu34sd-00E3TI; Tue, 18
+ Oct 2022 08:44:17 +0200
+Message-ID: <b1a1e5b0-206c-6b3c-41f0-94de7b056f72@gmx.de>
+Date:   Tue, 18 Oct 2022 08:44:16 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] video: fbdev: sm501fb: onvert sysfs snprintf to
+ sysfs_emit
+Content-Language: en-US
+To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>, zhangxuezhi1@coolpad.com,
+        wsa+renesas@sang-engineering.com
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221018062548.642910-1-zhangxuezhi3@gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221018062548.642910-1-zhangxuezhi3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:m0LUg5lPRQQEw6XOGHCdkytsWPN2mwF8nfxCnoi7lXPqe5vNeO0
+ 8HONJbY/nJaUWviqJy6UB65Ve3vgZB99WGxPyhFluZZ8ydSoH3bbpZaIWwMzF3UgRc32P2J
+ sRUWmEzUdIakUVq6svprEX+E7zcCE9t+bpk48YuwIotineLHPHL4H6A8AhvzeD34RD3MwOd
+ YnQj6j5aa/RGSOuvMCX6Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ROU90UQi0hY=:VK1PRXw00TKdNnI/PBgQvP
+ V8bZOtcqB3npbx38QOlShFibE/ISpQ9/j7cceWW7073LPfeArVfKIh9QR7VbkpL5YRwFfgord
+ 5Ln18dk449YM8KWvoqOH8d1C/iTHJ0C7rAjYQ+pgxe00CVN7NknMM5zjHxoTApCrUg9ZteeGD
+ GT3jqp8gK0N/t7EDO6PtuKNI7sY+q3cqfziQTOibNVc/JthRDJfRYoRcMKttwGnZAoo0E58kJ
+ GEsqh3YSYM21vEeW1KzvjVhJJyCWQ6ar1z0n21jpkIT78tuie7C/5lztkDiCl35lkXkZ1aWZV
+ CS60Y5r9Xzpzqry2iRzBDbmhgATxDhQpzqQqq6WqQCvR+U4IsEqxB5L/ZLdz8PTgfvaNAgK+N
+ HqnwTgRtjrGNmWrHgnzy/IUdh8d4QqaZPnSPnOiUF35PNsbtI+qrC0VV0orshHNA+cfstTc/u
+ 4IqjGQlp6BovKiL4EwQl8pX5NbIIW9f/9D1WzOPtMhcuW1T6N+wOtpREsiGY7NKMf/w+fjmg8
+ fNpmUQZ9+N2OC7EuCbi4hsekwUtaYOvjk3rxvZtwI8gOs+lGdJGeljPXW/mKfdqd3i1FbaRg+
+ WBdasiEIzlNwLePqPLGpwoMrJRG5kq9vKownm+KhvgjlR9A3JHk8RyemQyQMW1Hw4vIDN1oce
+ Wbo7MmqKRBCesoczHKV7EFnofDf3DJvkIJdWEgCKG037NdmYqpIfHH8Yx2C7ZEyA68dGdxiCZ
+ 1p8j549Fvb9v9NM/Uj+iHwtl/PDZbUa8VZAA9z8GPjDLw3Azk/dEtn9KKLaF6eH8HMs47DI29
+ YGFo3ENkPszbE3/AMrIXeLNGrsq0oT2JjoF3iAnORL/NjNRjjIy3R1fR+naR8Fhult0amMGo5
+ /v/8VN0rcbb5A7ZS9HoPT2Zffbx9k7ZGmLNSCh0NGNIXSqRH0cqawEDbM/fS6voBZ4SI0KuGC
+ kifdH2PmWMfckuDInA4iOlK68PDkM+rJ9/RlDqJq8z77aWiYrhFJfyxm0+TPgU3GX3k6wKyPX
+ bXmOPxWBkHifUPcbiK0JI1LYB0L1ZneGTTiJNvQB3TRXYVzzgsR+bgkHnf3NSe2Kcz75foDcO
+ Xwn9JW9kif1e7vyFkHmpAm34+TYNcPPLpJf/4ko9oqIFs4ZI9AfgZidojsMkTM1wcXvA8TE/g
+ rWxLsSLM2dzREsrv/hDOZyLD2STn2yqgSqfhqY33r4y/KM03Q+bExBTwbpFv0xCahr50cPF3v
+ cYcHCQFMHAQZVaX3tBLPkPsYJFHzM2KtYjNe3y8zYblJ1b60nWIW9etTaofRL0xSDvfZGEfER
+ XVI4qgn28iXWlyuSWKt6GVY5+oCqIiKDZvLJGucFzF8TOJR6vRSroqvbxcDzp4nsNWXHQETDg
+ shpwI8cbZIhNUXeDsdZAZSxRx82bjhqBhxP9zpsyR9F7vPrHifBVl43S22z1IuMO6n7I+JIyh
+ C1AofKqaV+8jyACEq/kYJfrUEjBsp2A9Bqv4mf0bkHsgsjG6j7oFPq9nNfxX+M65DILrQPiVE
+ esiBCVrxM3Zsm04Z5zhm9ygkMt1ChCpz1gl9vb/mByDYN
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,30 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022, at 3:37 AM, Akira Yokosawa wrote:
-> On 2022/10/18 5:55, Arnd Bergmann wrote:
->> On Mon, Oct 10, 2022, at 12:13 PM, Parav Pandit wrote:
+On 10/18/22 08:25, Xuezhi Zhang wrote:
+> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 >
-> "a barrier" can mean "any barrier", which can include a full barrier
-> in theory.
+> Follow the advice of the Documentation/filesystems/sysfs.rst
+> and show() should only use sysfs_emit() or sysfs_emit_at()
+> when formatting the value to be returned to user space.
 >
-> So I'd rather make the substituted text read something like:
+> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+
+applied.
+Thanks!
+Helge
+
+> ---
+>   drivers/video/fbdev/sm501fb.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
->   Note that, when using writel(), a prior wmb() or weaker is not
->   needed to guarantee that the cache coherent memory writes have
->   completed before writing to the MMIO region.
+> diff --git a/drivers/video/fbdev/sm501fb.c b/drivers/video/fbdev/sm501fb=
+.c
+> index fce6cfbadfd6..f743bfbde2a6 100644
+> --- a/drivers/video/fbdev/sm501fb.c
+> +++ b/drivers/video/fbdev/sm501fb.c
+> @@ -1166,7 +1166,7 @@ static ssize_t sm501fb_crtsrc_show(struct device *=
+dev,
+>   	ctrl =3D smc501_readl(info->regs + SM501_DC_CRT_CONTROL);
+>   	ctrl &=3D SM501_DC_CRT_CONTROL_SEL;
 >
-> In my opinion, "or weaker" is redundant for careful readers who are
-> well aware of context of this example, but won't do no harm.
+> -	return snprintf(buf, PAGE_SIZE, "%s\n", ctrl ? "crt" : "panel");
+> +	return sysfs_emit(buf, "%s\n", ctrl ? "crt" : "panel");
+>   }
+>
+>   /* sm501fb_crtsrc_show
 
-I think that would be more confusing than either of the other variants.
-
-Anything weaker than a full "wmb()" probably makes the driver calling
-the writel() non-portable, so that is both vague and incorrect.
-
-The current version works because it specifically mentions the correct
-barrier to use, while Parav's version works because it doesn't
-make any attempt to name the specific barrier and just states that
-adding one is a bad idea regardless.
-
-      Arnd
