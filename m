@@ -2,160 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B39560229D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8300A60229C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiJRD0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S230056AbiJRD0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiJRDZU (ORCPT
+        with ESMTP id S229941AbiJRDZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:25:20 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF862AE5;
-        Mon, 17 Oct 2022 20:19:26 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q1so12156698pgl.11;
-        Mon, 17 Oct 2022 20:19:26 -0700 (PDT)
+        Mon, 17 Oct 2022 23:25:19 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2C921E29;
+        Mon, 17 Oct 2022 20:19:41 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so12753159pjl.3;
+        Mon, 17 Oct 2022 20:19:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=27lM4fsG2VGltbyI+HsR0GNVvFQa8niyfY/IiXC6g9U=;
-        b=KjI9HR/u+WX7XG89cbrIUblYlmumfw6lIxgUY6dfjSZZ5wzG6Wia0bL09yLUAV9xfb
-         a7mxiZDBmoJk5Bucbj/AjxlorzkmoOC03xXSu0VmBzuIgVnR1g5DS2yU0UHVKMfKnYCS
-         /p/Lh529Xc5tUM21xfxM5QcW/4oNcWiT8sO+Yxdf4yJoiAbobNK8YFB3tksk5yU8wAqc
-         uVrNODUp6495s2HoZOWgrzCqwdfx14qbkfhMEmIbAYLUqLpuka58am7ydj2eutrtt2Tc
-         AdAiAv+1Svq1H1JNu8hJ9uRbNQ6y74kQ0zVNldgwq0xoVLdXHUp2A3eJKhgAHlY4sD+Q
-         6u3Q==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g3vYctWMe2Khoxx+tqp1Z68DkYIq+ZmCbB/96U7bDx8=;
+        b=XTq4VNAtxYa02TWlV9dzQRCrMsA1pXBUDdALUmwbLyor47kqIOIvXiT1Es6nd+08Om
+         d5TbTRNVqGCC+lf3/9G3U3DRaxKRfz65Ax6JHGlg7Xg1ezeN/0nHLlo9mFcx56xJm8YW
+         uZv0LnVfCGOUb0MTvfHWSbX+r/HDGcrIUoSeGUm4xWlJKfhoIrGO96HLglhUK/bQjUYR
+         ajdZZpJQYjyL+/ktKdbd8hTrWbmignyR6I5gU3YFdMOpo9PQEsjB3J8OPP6hYMFELbNK
+         zJCiYpLIb6+Psj0eTricgfSSFSLBI6LUzoia+mB+N9gMaZ6gyEsJ7jhh+PuxdhM3kanU
+         0SaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=27lM4fsG2VGltbyI+HsR0GNVvFQa8niyfY/IiXC6g9U=;
-        b=WVVKBfG0/s90kpmvOcZbCtzp6fFLy+fNi8GSKUcRxeVqFr8OLB0zvnwnmSbP3cnjlX
-         f9hm6NOwcizW939mNvKLZvgyBZbwXOzqDxNAGaGl0WTA40SOgzWo0e1Sa2oruchSPpMX
-         OKBovB7IAfwBfDkvf+DbSLZWMTCEdofNEzP4kxULGpgwov2/tt+WQ5PBXX5vF6xNR5FX
-         QDdlB6HoGXwpg/l45Rk012n8d9RNt6uf201Vkmfd7KalRx1X5UUU92aUoTmShAjJwSRs
-         PzHAhFDOYWPW6YQ+6lhIb/Olf85rfnU5ss9N/Rw4N0ct5cXJRbO1stIUchiUAnphAgsi
-         W/Sg==
-X-Gm-Message-State: ACrzQf3Ulx4NGiQxBOs7lHy6FhXR5rYfpH8GA+qMpYR9HVUlNuY/0T6h
-        wAx1VqJ1kOA3upGwl//oDmY=
-X-Google-Smtp-Source: AMsMyM6/a5vrznwL4ETCawwT7rzRy/qDKRaxQuif1QLAUCW5m9HXfnhGNCmjaMT71zdnAr9JpvFQBw==
-X-Received: by 2002:a63:4850:0:b0:45d:6ee6:1c18 with SMTP id x16-20020a634850000000b0045d6ee61c18mr880131pgk.255.1666063166087;
-        Mon, 17 Oct 2022 20:19:26 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-84.three.co.id. [180.214.233.84])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902f78a00b0017a018221e2sm7317751pln.70.2022.10.17.20.19.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 20:19:25 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 03473103AB4; Tue, 18 Oct 2022 10:19:22 +0700 (WIB)
-Date:   Tue, 18 Oct 2022 10:19:22 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
-        k-hagio-ab@nec.com, hschauhan@nulltrace.org, yixun.lan@gmail.com
-Subject: Re: [PATCH V2 2/2] Documentation: kdump: describe VMCOREINFO export
- for RISCV64
-Message-ID: <Y04bOv49sRsauLb6@debian.me>
-References: <20221014134139.5151-1-xianting.tian@linux.alibaba.com>
- <20221014134139.5151-3-xianting.tian@linux.alibaba.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g3vYctWMe2Khoxx+tqp1Z68DkYIq+ZmCbB/96U7bDx8=;
+        b=c1Jg1Kja7R/t/YtRnbUagswZPhVnjhp2tOGdD3PWIuG/OT3o9RNo/G6t/4S7HHmEDP
+         Zt5pfzj1RJGgx1tRE6ruRrXN3Rq1yELfndgr+ucuD9cUZw7z2kE86XncYHRv2eacgRbZ
+         oSl/C3NmxlyighYSeraElI9gQ2WXQ8EH/9k9Mc87dgXO/NyShJr0dzeIqMdw/n+nJwZs
+         ZZgh1Asx4Le23J2g1oHg4nvThWFm/jiKVfJ5lsJIJ0XcIkaprURMPP0EZm5lBBfhVZ7a
+         9KvJnTyf8wJ3Jd6VPhxB7GWGnK6kGZf7UvEgbv09KfBJQJbKV4IX/Q8NVO/eab+zbS3E
+         Om4A==
+X-Gm-Message-State: ACrzQf0JnQZ7TsQ2J2ZIfnM//W2lLjljTfwwQeQBqtLq37nRoYc+1nLM
+        mQgvY1kBn7U244Uu4rcqUeO2Eg1UDV1CpA==
+X-Google-Smtp-Source: AMsMyM6MkkSS/Rv5rM1qlKw86NPM42hBqBjkleWvycrUFZ5HvAl2w2NRgGJ05jGA1EfPrldWUY/p/g==
+X-Received: by 2002:a17:902:e804:b0:185:5276:7063 with SMTP id u4-20020a170902e80400b0018552767063mr863672plg.171.1666063181339;
+        Mon, 17 Oct 2022 20:19:41 -0700 (PDT)
+Received: from [127.0.0.1] (n058152077178.netvigator.com. [58.152.77.178])
+        by smtp.gmail.com with ESMTPSA id t10-20020a1709027fca00b00178aaf6247bsm7356211plb.21.2022.10.17.20.19.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 20:19:40 -0700 (PDT)
+Message-ID: <50faa0c3-6996-c1b2-572a-96b296f4268b@gmail.com>
+Date:   Tue, 18 Oct 2022 11:19:32 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mJXlfJec3bfb1DWQ"
-Content-Disposition: inline
-In-Reply-To: <20221014134139.5151-3-xianting.tian@linux.alibaba.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 0/3] kvm support for ksm
+Content-Language: en-US
+To:     Izik Eidus <ieidus@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, avi@redhat.com, aarcange@redhat.com,
+        chrisw@redhat.com, riel@redhat.com, jeremy@goop.org,
+        mtosatti@redhat.com, hugh@veritas.com, corbet@lwn.net,
+        yaniv@redhat.com, dmonakhov@openvz.org
+References: <1238457604-7637-1-git-send-email-ieidus@redhat.com>
+From:   ewandevelop <ewandevelop@gmail.com>
+In-Reply-To: <1238457604-7637-1-git-send-email-ieidus@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, I'm learning kvm-mmu codes, when I was reading codes from this patch,
 
---mJXlfJec3bfb1DWQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I can't understand why we need to do special process for "writable pte".
 
-On Fri, Oct 14, 2022 at 09:41:39PM +0800, Xianting Tian wrote:
-> The following interrelated definitions and ranges are needed by the kdump
-> crash tool, they are exported by "arch/riscv/kernel/crash_core.c":
+ > +static int kvm_set_pte_rmapp(struct kvm *kvm, unsigned long *rmapp,
+ > +                 unsigned long data)
+ > +{
+ > +    int need_flush = 0;
+ > +    u64 *spte, new_spte;
+ > +    pte_t *ptep = (pte_t *)data;
+ > +    pfn_t new_pfn;
+ > +
+ > +    new_pfn = pte_pfn(ptep_val(ptep));
+ > +    spte = rmap_next(kvm, rmapp, NULL);
+ > +    while (spte) {
+ > +        BUG_ON(!is_shadow_present_pte(*spte));
+ > +        rmap_printk("kvm_set_pte_rmapp: spte %p %llx\n", spte, *spte);
+ > +        need_flush = 1;
+ > +        if (pte_write(ptep_val(ptep))) {
+ > +            rmap_remove(kvm, spte);
+ > +            set_shadow_pte(spte, shadow_trap_nonpresent_pte);
+ > +            spte = rmap_next(kvm, rmapp, NULL);
+ > +        } else {
+ > +            new_spte = *spte &~ (PT64_BASE_ADDR_MASK);
+ > +            new_spte |= new_pfn << PAGE_SHIFT;
+ > +
+ > +            if (!pte_write(ptep_val(ptep))) {
+ > +                new_spte &= ~PT_WRITABLE_MASK;
+ > +                new_spte &= ~SPTE_HOST_WRITEABLE;
+ > +                if (is_writeble_pte(*spte))
+ > +                    kvm_set_pfn_dirty(spte_to_pfn(*spte));
+ > +            }
+ > +            set_shadow_pte(spte, new_spte);
+ > +            spte = rmap_next(kvm, rmapp, spte);
+ > +        }
+ > +    }
+ > +    if (need_flush)
+ > +        kvm_flush_remote_tlbs(kvm);
+ > +
+ > +    return 0;
+ > +}
+ > +
 
-Better say "..., which are exported by ..."
+In my opinion, we can just regard writable pte same as readable/executable,
 
-> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentati=
-on/admin-guide/kdump/vmcoreinfo.rst
-> index 6726f439958c..8e2e164cf3db 100644
-> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
-> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-> @@ -595,3 +595,33 @@ X2TLB
->  -----
-> =20
->  Indicates whether the crashed kernel enabled SH extended mode.
-> +
-> +RISCV64
-> +=3D=3D=3D=3D=3D=3D=3D
-> +
-> +VA_BITS
-> +-------
-> +
-> +The maximum number of bits for virtual addresses. Used to compute the
-> +virtual memory ranges.
-> +
-> +PAGE_OFFSET
-> +-----------
-> +
-> +Indicates the virtual kernel start address of direct-mapped RAM region.
-> +
-> +phys_ram_base
-> +-------------
-> +
-> +Indicates the start physical RAM address.
-> +
-> +MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMA=
-P_END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
-> +------------------------------------------------------------------------=
-----------------------------------------------------------------------------
-> +
-> +Used to get the correct ranges:
-> +
-> +  * MODULES_VADDR ~ MODULES_END : Kernel module space.
-> +  * VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
-> +  * VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page a=
-rray.
-> +  * KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
-> +  * KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
+all the corresponding sptes will be set as write-protect, and when guest
 
-The documentation LGTM, thanks.
+access them, an EPT-violation occurs and we do this #PF in kvm.
 
-When the patch subject is fixed,
+Shall anyone has some hint ?
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---mJXlfJec3bfb1DWQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY04bNgAKCRD2uYlJVVFO
-o9kOAP9AaJtAmveWT2rKBcXBOriMgs2qxe6Fqu9neGo2fj4foQD/UM0HMxKN6GnG
-IlT9w8j9jQUfpIzT4s7r+oaaSOgTJQY=
-=ew2W
------END PGP SIGNATURE-----
-
---mJXlfJec3bfb1DWQ--
+On 2009/3/31 08:00, Izik Eidus wrote:
+> apply it against Avi git tree.
+>
+> Izik Eidus (3):
+>    kvm: dont hold pagecount reference for mapped sptes pages.
+>    kvm: add SPTE_HOST_WRITEABLE flag to the shadow ptes.
+>    kvm: add support for change_pte mmu notifiers
+>
+>   arch/x86/include/asm/kvm_host.h |    1 +
+>   arch/x86/kvm/mmu.c              |   89 ++++++++++++++++++++++++++++++++-------
+>   arch/x86/kvm/paging_tmpl.h      |   16 ++++++-
+>   virt/kvm/kvm_main.c             |   14 ++++++
+>   4 files changed, 101 insertions(+), 19 deletions(-)
+>
+> --
+> To unsubscribe, send a message with 'unsubscribe linux-mm' in
+> the body to majordomo@kvack.org.  For more info on Linux MM,
+> see: http://www.linux-mm.org/ .
+> Don't email: <a href=mailto:"dont@kvack.org"> email@kvack.org </a>
+>
+>
