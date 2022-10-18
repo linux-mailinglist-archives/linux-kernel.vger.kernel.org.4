@@ -2,474 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBA5602A9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D81602B06
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiJRLzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S230314AbiJRMCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiJRLzs (ORCPT
+        with ESMTP id S230404AbiJRMAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:55:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684CFBBF36;
-        Tue, 18 Oct 2022 04:55:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666094143; x=1697630143;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XzPfilzQSoJAVBNLbjv9Jtm1IkBeJDhzE9TgU4r6G2U=;
-  b=D0Xx2l3Pd6cXqtGwq00lYE/1fIBApJGEu9JtbxrVE/ZsEiRGZY0mTDjv
-   JTvx8uIJu2lqcH6RRIC1RoIbE7yVfDkaOAQCIMYe36xjyJdn/2MUP85UP
-   0HVV3DpqdM8YVdhsBE2QSgHBluRhkaxrN5YV3moSzZNVkmNup/7lEMexX
-   hT6N3dQUxKjWrxqrG2PbQNXPBE2sXFWDmLbZSqbrjrIO8mOsxmz3YhAtD
-   FbzQht6CQyXmTncBj2fkptWKBkDvlC9RpYYFlvQiatdzLK4W4BQX8QXZL
-   uEnwhpyZjVWpj7CyZdh9oGcWTX/M918wDPiAqtfVCH7RBlUqh2v0qL0+m
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="285802905"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="285802905"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:55:42 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="628683558"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="628683558"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:55:38 -0700
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        rajat.khandelwal@intel.com,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v2] iio: temperature: Add driver support for Maxim MAX30208
-Date:   Wed, 19 Oct 2022 17:25:39 +0530
-Message-Id: <20221019115539.779804-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 08:00:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11A119E2E2;
+        Tue, 18 Oct 2022 05:00:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 109631758;
+        Tue, 18 Oct 2022 05:00:23 -0700 (PDT)
+Received: from [10.57.5.134] (unknown [10.57.5.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C64563F7D8;
+        Tue, 18 Oct 2022 05:00:13 -0700 (PDT)
+Message-ID: <c7ae3a66-1d24-1014-b63a-8d4af3de42c8@arm.com>
+Date:   Tue, 18 Oct 2022 13:00:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH V5 1/2] ACPI / scan: Support multiple dma windows with
+ different offsets
+Content-Language: en-GB
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yicong Yang <yangyicong@huawei.com>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, yangyicong@hisilicon.com,
+        lpieralisi@kernel.org, chenhuacai@loongson.cn,
+        guohanjun@huawei.com, sudeep.holla@arm.com, lenb@kernel.org,
+        robert.moore@intel.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, loongarch@lists.linux.dev,
+        liulongfang <liulongfang@huawei.com>
+References: <20220911090635.5559-1-lvjianmin@loongson.cn>
+ <20220911090635.5559-2-lvjianmin@loongson.cn>
+ <8e9df8ea-06f0-3989-2563-d5dc6b09a062@huawei.com>
+ <CAJZ5v0gBBdTxRkE08PO8W+yi1eTkWqzpGLAyMNuzZmqx02EzFA@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAJZ5v0gBBdTxRkE08PO8W+yi1eTkWqzpGLAyMNuzZmqx02EzFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxim MAX30208 is a digital temperature sensor with 0.1°C accuracy.
+On 2022-10-18 11:08, Rafael J. Wysocki wrote:
+> On Tue, Oct 18, 2022 at 11:33 AM Yicong Yang <yangyicong@huawei.com> wrote:
+>>
+>> On 2022/9/11 17:06, Jianmin Lv wrote:
+>>> In DT systems configurations, of_dma_get_range() returns struct
+>>> bus_dma_region DMA regions; they are used to set-up devices
+>>> DMA windows with different offset available for translation between DMA
+>>> address and CPU address.
+>>>
+>>> In ACPI systems configuration, acpi_dma_get_range() does not return
+>>> DMA regions yet and that precludes setting up the dev->dma_range_map
+>>> pointer and therefore DMA regions with multiple offsets.
+>>>
+>>> Update acpi_dma_get_range() to return struct bus_dma_region
+>>> DMA regions like of_dma_get_range() does.
+>>>
+>>> After updating acpi_dma_get_range(), acpi_arch_dma_setup() is changed for
+>>> ARM64, where the original dma_addr and size are removed as these
+>>> arguments are now redundant, and pass 0 and U64_MAX for dma_base
+>>> and size of arch_setup_dma_ops; this is a simplification consistent
+>>> with what other ACPI architectures also pass to iommu_setup_dma_ops().
+>>>
+>>
+>> Hi,
+>>
+>> With this patch we met problem as well. The DMA coherent mask is not set correctly
+>> for a ehci usb controller and lead to the below calltrace:
+>>
+>> [   16.699259] ------------[ cut here ]------------
+>> [   16.703855] WARNING: CPU: 0 PID: 853 at kernel/dma/mapping.c:499 dma_alloc_attrs+0xc0/0xf0
+>> [   16.712082] Modules linked in:
+>> [   16.715124] CPU: 0 PID: 853 Comm: kworker/0:3 Not tainted 6.1.0-rc1-pipe-deadlock+ #5
+>> [   16.722916] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B211.01 11/10/2021
+>> [   16.731745] Workqueue: events work_for_cpu_fn
+>> [   16.736083] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [   16.743013] pc : dma_alloc_attrs+0xc0/0xf0
+>> [   16.747091] lr : dma_pool_alloc+0x11c/0x200
+>> [   16.751255] sp : ffff80001e46bb50
+>> [   16.754554] x29: ffff80001e46bb50 x28: 0000000000000000 x27: 0000000000000000
+>> [   16.761657] x26: ffff80000b33ce18 x25: ffff800009cc6c48 x24: 0000000000000000
+>> [   16.768759] x23: ffff00208c830918 x22: 0000000000001000 x21: 0000000000000cc0
+>> [   16.775861] x20: ffff00208ae82080 x19: ffff0020865c40d0 x18: 0000000000000030
+>> [   16.782964] x17: 626d756e20737562 x16: 2064656e67697373 x15: ffff00208ae82640
+>> [   16.790066] x14: 0000000000000000 x13: 646e756f72616b72 x12: 6f77204348207379
+>> [   16.797167] x11: 73706f6e79532067 x10: ffff205f43980000 x9 : ffff80000830b3ac
+>> [   16.804269] x8 : ffff0020861b1b00 x7 : 0000000000000000 x6 : 0000000000000000
+>> [   16.811371] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000cc0
+>> [   16.818472] x2 : ffff00208c830918 x1 : 0000000000001000 x0 : 0000000000000000
+>> [   16.825574] Call trace:
+>> [   16.828009]  dma_alloc_attrs+0xc0/0xf0
+>> [   16.831741]  dma_pool_alloc+0x11c/0x200
+>> [   16.835559]  ehci_qh_alloc+0x60/0x12c
+>> [   16.839207]  ehci_setup+0x18c/0x40c
+>> [   16.842680]  ehci_pci_setup+0xb8/0x680
+>> [   16.846412]  usb_add_hcd+0x310/0x5c0
+>> [   16.849973]  usb_hcd_pci_probe+0x254/0x36c
+>> [   16.854051]  ehci_pci_probe+0x40/0x60
+>> [   16.857698]  local_pci_probe+0x48/0xb4
+>> [   16.861431]  work_for_cpu_fn+0x24/0x40
+>> [   16.865163]  process_one_work+0x1e0/0x450
+>> [   16.869155]  worker_thread+0x2cc/0x44c
+>> [   16.872886]  kthread+0x114/0x120
+>> [   16.876099]  ret_from_fork+0x10/0x20
+>> [   16.879657] ---[ end trace 0000000000000000 ]---
+>>
+>> After reverting this patch the problem resolved. Tested on the latest 6.1-rc1.
+> 
+> OK, I'll queue up a revert of this and one more commit depending on it.
 
-Add support for max30208 driver in iio subsystem.
-Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
+FWIW it looks like the fix should be as simple as below.
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
----
+Robin.
 
-v2:
-1. Removed TODO
-2. Removed unnecessary blank spaces
-3. Corrected MC->MILLICELCIUS
-4. Comments added wherever required
-5. dev_err on i2c fails
-6. Rearranged some flows
-7. Removed PROCESSED
-8. int error return on gpio setup
-9. device_register at the end of probe
-10. Return on unsuccessful reset
-11. acpi_match_table and of_match_table added
-12. Minor quirks
+----->8-----
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 558664d169fc..b6962bff1eae 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -1509,6 +1509,7 @@ int acpi_dma_get_range(struct device *dev, const 
+struct bus_dma_region **map)
+  			goto out;
+  		}
 
-module_i2c_driver() can't be added since module_init and module_exit
-are added explicitly.
-
- MAINTAINERS                        |   6 +
- drivers/iio/temperature/Kconfig    |  10 +
- drivers/iio/temperature/Makefile   |   1 +
- drivers/iio/temperature/max30208.c | 323 +++++++++++++++++++++++++++++
- 4 files changed, 340 insertions(+)
- create mode 100644 drivers/iio/temperature/max30208.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1390b8270b2..7f1fd2e31b94 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12373,6 +12373,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/regulator/maxim,max20086.yaml
- F:	drivers/regulator/max20086-regulator.c
- 
-+MAXIM MAX30208 TEMPERATURE SENSOR DRIVER
-+M:	Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	drivers/iio/temperature/max30208.c
-+
- MAXIM MAX77650 PMIC MFD DRIVER
- M:	Bartosz Golaszewski <brgl@bgdev.pl>
- L:	linux-kernel@vger.kernel.org
-diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
-index e8ed849e3b76..ed384f33e0c7 100644
---- a/drivers/iio/temperature/Kconfig
-+++ b/drivers/iio/temperature/Kconfig
-@@ -128,6 +128,16 @@ config TSYS02D
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tsys02d.
- 
-+config MAX30208
-+	tristate "Maxim MAX30208 digital temperature sensor"
-+	depends on I2C
-+	help
-+	  If you say yes here you get support for Maxim MAX30208
-+	  digital temperature sensor connected via I2C.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called max30208.
-+
- config MAX31856
- 	tristate "MAX31856 thermocouple sensor"
- 	depends on SPI
-diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
-index dd08e562ffe0..dfec8c6d3019 100644
---- a/drivers/iio/temperature/Makefile
-+++ b/drivers/iio/temperature/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_IQS620AT_TEMP) += iqs620at-temp.o
- obj-$(CONFIG_LTC2983) += ltc2983.o
- obj-$(CONFIG_HID_SENSOR_TEMP) += hid-sensor-temperature.o
- obj-$(CONFIG_MAXIM_THERMOCOUPLE) += maxim_thermocouple.o
-+obj-$(CONFIG_MAX30208) += max30208.o
- obj-$(CONFIG_MAX31856) += max31856.o
- obj-$(CONFIG_MAX31865) += max31865.o
- obj-$(CONFIG_MLX90614) += mlx90614.o
-diff --git a/drivers/iio/temperature/max30208.c b/drivers/iio/temperature/max30208.c
-new file mode 100644
-index 000000000000..fcdd8db2af3d
---- /dev/null
-+++ b/drivers/iio/temperature/max30208.c
-@@ -0,0 +1,323 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-+ *
-+ * Maxim MAX30208 digital temperature sensor with 0.1°C accuracy
-+ * (7-bit I2C slave address (0x50 - 0x53))
-+ *
-+ * Note: This driver sets GPIO1 to behave as input for temperature
-+ * conversion and GPIO0 to act as interrupt for temperature conversion.
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/delay.h>
-+#include <linux/iio/iio.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/types.h>
-+
-+#define MAX30208_DRV_NAME		"max30208"
-+
-+#define MAX30208_STATUS			0x00
-+#define MAX30208_STATUS_TEMP_RDY	BIT(0)
-+#define MAX30208_INT_ENABLE		0x01
-+#define MAX30208_INT_ENABLE_TEMP_RDY	BIT(0)
-+
-+#define MAX30208_FIFO_OVF_CNTR		0x06
-+#define MAX30208_FIFO_DATA_CNTR		0x07
-+#define MAX30208_FIFO_DATA		0x08
-+
-+#define MAX30208_SYSTEM_CTRL		0x0c
-+#define MAX30208_SYSTEM_CTRL_RESET	0x01
-+
-+#define MAX30208_TEMP_SENSOR_SETUP	0x14
-+#define MAX30208_TEMP_SENSOR_SETUP_CONV	BIT(0)
-+
-+#define MAX30208_GPIO_SETUP		0x20
-+#define MAX30208_GPIO1_SETUP		GENMASK(7, 6)
-+#define MAX30208_GPIO0_SETUP		GENMASK(1, 0)
-+#define MAX30208_GPIO_CTRL		0x21
-+#define MAX30208_GPIO1_CTRL		BIT(3)
-+#define MAX30208_GPIO0_CTRL		BIT(0)
-+
-+#define MAX30208_RES_MILLICELCIUS	5
-+
-+struct max30208_data {
-+	struct i2c_client *client;
-+	struct iio_dev *indio_dev;
-+	struct mutex lock; /* Lock to prevent concurrent reads */
-+};
-+
-+static const struct iio_chan_spec max30208_channels[] = {
-+	{
-+		.type = IIO_TEMP,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-+	},
-+};
-+
-+/**
-+ * max30208_request() - Request a reading
-+ * @data: Struct comprising member elements of the device
-+ *
-+ * Requests a reading from the device and waits until the conversion is ready.
-+ */
-+static int max30208_request(struct max30208_data *data)
-+{
-+	int retries = 10; /*
-+			   * Sensor can take up to 500 ms to respond so execute a
-+			   * total of 10 retries to give the device sufficient time.
-+			   */
-+	int ret;
-+
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error reading reg temperature setup\n");
-+		return ret;
-+	}
-+
-+	ret |= MAX30208_TEMP_SENSOR_SETUP_CONV;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP, ret);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error writing reg temperature setup\n");
-+		return ret;
-+	}
-+
-+	while (retries--) {
-+		ret = i2c_smbus_read_byte_data(data->client, MAX30208_STATUS);
-+		if (ret < 0) {
-+			dev_err(&data->client->dev, "Error reading reg status\n");
-+			goto sleep;
-+		}
-+
-+		if (ret & MAX30208_STATUS_TEMP_RDY)
-+			return 0;
-+
-+		msleep(50);
-+	}
-+	dev_warn(&data->client->dev, "Temperature conversion failed\n");
-+
-+	return 0;
-+
-+sleep:
-+	usleep_range(50000, 60000);
-+	return 0;
-+}
-+
-+static int max30208_update_temp(struct max30208_data *data)
-+{
-+	u16 temp_raw = 0;
-+	s8 data_count;
-+	int ret;
-+
-+	mutex_lock(&data->lock);
-+
-+	ret = max30208_request(data);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error reading reg FIFO overflow counter\n");
-+		return ret;
-+	} else if (!ret) {
-+		ret = i2c_smbus_read_byte_data(data->client,
-+					       MAX30208_FIFO_DATA_CNTR);
-+		if (ret < 0) {
-+			dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
-+			return ret;
-+		}
-+	}
-+
-+	data_count = ret;
-+
-+	/*
-+	 * Ideally, counter should decrease by 1 each time a word is read from FIFO.
-+	 * However, practically, the device behaves erroneously and counter sometimes
-+	 * decreases by more than 1. Hence, do not loop the counter until it becomes 0
-+	 * rather, use the exact counter value after each FIFO word is read.
-+	 * Return the last reading from FIFO as the most recently triggered one.
-+	 */
-+	while (data_count) {
-+		ret = i2c_smbus_read_word_swapped(data->client,
-+						  MAX30208_FIFO_DATA);
-+		if (ret < 0) {
-+			dev_err(&data->client->dev, "Error reading reg FIFO data\n");
-+			return ret;
-+		}
-+
-+		data_count = i2c_smbus_read_byte_data(data->client,
-+						      MAX30208_FIFO_DATA_CNTR);
-+		if (data_count < 0) {
-+			dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
-+			return data_count;
-+		}
-+	}
-+	temp_raw = ret;
-+
-+	mutex_unlock(&data->lock);
-+
-+	return temp_raw;
-+}
-+
-+static int max30208_read(struct iio_dev *indio_dev,
-+			 struct iio_chan_spec const *chan,
-+			 int *val, int *val2, long mask)
-+{
-+	struct max30208_data *data = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		ret = max30208_update_temp(data);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = sign_extend32(ret, 15);
-+		return IIO_VAL_INT;
-+
-+	case IIO_CHAN_INFO_SCALE:
-+		*val = MAX30208_RES_MILLICELCIUS;
-+		return IIO_VAL_INT;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int max30208_gpio_setup(struct max30208_data *data)
-+{
-+	int ret;
-+
-+	ret = i2c_smbus_read_byte_data(data->client,
-+				       MAX30208_GPIO_SETUP);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error reading reg GPIO setup\n");
-+		return ret;
-+	}
-+
-+	/*
-+	 * Setting GPIO1 to trigger temperature conversion
-+	 * when driven low.
-+	 * Setting GPIO0 to trigger interrupt when temperature
-+	 * conversion gets completed.
-+	 */
-+	ret |= MAX30208_GPIO1_SETUP | MAX30208_GPIO0_SETUP;
-+	ret = i2c_smbus_write_byte_data(data->client,
-+					MAX30208_GPIO_SETUP, ret);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error writing reg GPIO setup\n");
-+		return ret;
-+	}
-+
-+	ret = i2c_smbus_read_byte_data(data->client,
-+				       MAX30208_INT_ENABLE);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error reading reg interrupt enable\n");
-+		return ret;
-+	}
-+
-+	/* Enabling GPIO0 interrupt */
-+	ret |= MAX30208_INT_ENABLE_TEMP_RDY;
-+	ret = i2c_smbus_write_byte_data(data->client,
-+					MAX30208_INT_ENABLE, ret);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Error writing reg interrupt enable\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct iio_info max30208_info = {
-+	.read_raw = max30208_read,
-+};
-+
-+static int max30208_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev = &i2c->dev;
-+	struct max30208_data *data;
-+	struct iio_dev *indio_dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	data = iio_priv(indio_dev);
-+	data->client = i2c;
-+	mutex_init(&data->lock);
-+
-+	indio_dev->name = MAX30208_DRV_NAME;
-+	indio_dev->channels = max30208_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(max30208_channels);
-+	indio_dev->info = &max30208_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	/* Reset the device initially */
-+	ret = i2c_smbus_write_byte_data(data->client, MAX30208_SYSTEM_CTRL,
-+					MAX30208_SYSTEM_CTRL_RESET);
-+	if (ret) {
-+		dev_err(dev, "Failure in performing reset\n");
-+		return ret;
-+	}
-+
-+	usleep_range(50000, 60000);
-+
-+	ret = max30208_gpio_setup(data);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = devm_iio_device_register(dev, indio_dev);
-+	if (ret) {
-+		dev_err(dev, "Failed to register IIO device\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id max30208_id_table[] = {
-+	{ "max30208" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(i2c, max30208_id_table);
-+
-+static const struct acpi_device_id max30208_acpi_match[] = {
-+	{ "MAX30208" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, max30208_acpi_match);
-+
-+static const struct of_device_id max30208_of_match[] = {
-+	{ .compatible = "maxim,max30208" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, max30208_of_match);
-+
-+static struct i2c_driver max30208_driver = {
-+	.driver = {
-+		.name = MAX30208_DRV_NAME,
-+		.of_match_table = max30208_of_match,
-+		.acpi_match_table = ACPI_PTR(max30208_acpi_match),
-+	},
-+	.probe_new = max30208_probe,
-+	.id_table = max30208_id_table,
-+};
-+
-+static int __init max30208_init(void)
-+{
-+	return i2c_add_driver(&max30208_driver);
-+}
-+module_init(max30208_init);
-+
-+static void __exit max30208_exit(void)
-+{
-+	i2c_del_driver(&max30208_driver);
-+}
-+module_exit(max30208_exit);
-+
-+MODULE_AUTHOR("Rajat Khandelwal <rajat.khandelwal@linux.intel.com>");
-+MODULE_DESCRIPTION("Maxim MAX30208 digital temperature sensor");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
-
++		*map = r;
+  		list_for_each_entry(rentry, &list, node) {
+  			if (rentry->res->start >= rentry->res->end) {
+  				kfree(r);
+@@ -1523,8 +1524,6 @@ int acpi_dma_get_range(struct device *dev, const 
+struct bus_dma_region **map)
+  			r->offset = rentry->offset;
+  			r++;
+  		}
+-
+-		*map = r;
+  	}
+   out:
+  	acpi_dev_free_resource_list(&list);
