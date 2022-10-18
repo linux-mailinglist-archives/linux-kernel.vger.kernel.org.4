@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9D760227E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA807602288
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiJRDVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S229550AbiJRDWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJRDUi (ORCPT
+        with ESMTP id S231303AbiJRDVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:20:38 -0400
+        Mon, 17 Oct 2022 23:21:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FDD9C2D9;
-        Mon, 17 Oct 2022 20:17:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1599D512;
+        Mon, 17 Oct 2022 20:17:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E0FC6142A;
-        Tue, 18 Oct 2022 03:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B508CC433D6;
-        Tue, 18 Oct 2022 03:14:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEE6C613E9;
+        Tue, 18 Oct 2022 03:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0760AC43143;
+        Tue, 18 Oct 2022 03:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666062900;
-        bh=XSc/xOHMku0byyKMX33l4+YBlkxl0uqGG660+PyYv9c=;
+        s=k20201202; t=1666062902;
+        bh=aouoEcGjVXwuJ1lqdAmf9IvRDAoG+IwDHGv9FvuoLPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oZ7xSE0kdA2UsPhdEWZUwdbRfdr1Y4BQIFAB9Muj68uPpwdRACCVRe77raUrYcWli
-         M2LZWys2mJT0SLzA/ikDxB0ppW15SId0EKiqtFMfIVNDRKCKsElnyd6Vf3C4Kjv3wh
-         IbP4Phmig3+F1J2IEC7jrRTsP2g+Re/DYuTHThCG7wtT3kHQu6weYSsGoBfIgPPu9x
-         LtctesHcvb8q9ZZpziBxYMIYeNp66Yz89DpWh7rsPNw005vTwWI+KBA2kihppdPeje
-         cieg2/kbBh8YJ6hbJyql5SCg9cDeejIZQ88aTsHidGN/GA0NT1N+zP1dtwAn9+EcHm
-         EZdhetuzr5Kyw==
+        b=Vwdn4LPYEjVg4BTnb8IKt5yxhyQ6WuwuoD6rAOKMUG1hxVncLF723R4C3K4EtRWvn
+         5xOSC0z+Qq/62DzbhI8QmDOuJBdY/J6Yt8tDocqxSNXAWpabSCzlvstfCDmx0YPcgJ
+         C9kuTSGvfipRCnkUjjmB/5zL6qYtU8vYp8rFRGHJAeTSM6WIAtT8vwUGm34N7US+bi
+         3n3Sga49fLryacXY+qro/Npz56IGcIinDGOtHQ3KkYuKAfL7XlzENFG/uMD1MuZILp
+         3O/wuDQHrVWrW4tPdHJzbRC5t5lKHFaLnM3C0ttOoO0OTmd+NMxNItYIKcCXnBRlhQ
+         Xea7z1d6Lat/A==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     sivaprak@codeaurora.org, Bjorn Andersson <andersson@kernel.org>,
-        mturquette@baylibre.com, konrad.dybcio@somainline.org,
-        dmitry.baryshkov@linaro.org, devicetree@vger.kernel.org,
-        sboyd@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, robimarko@gmail.com
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: Re: (subset) [PATCH v3 1/9] clk: qcom: clk-rcg2: add rcg2 mux ops
-Date:   Mon, 17 Oct 2022 22:14:54 -0500
-Message-Id: <166606235833.3553294.4443950708165085561.b4-ty@kernel.org>
+To:     amitk@kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        thara.gopinath@gmail.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, agross@kernel.org,
+        linux-pm@vger.kernel.org, robh+dt@kernel.org,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        rui.zhang@intel.com, robimarko@gmail.com, rafael@kernel.org
+Cc:     krzysztof.kozlowski@linaro.org
+Subject: Re: (subset) [PATCH v7 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Mon, 17 Oct 2022 22:14:55 -0500
+Message-Id: <166606235843.3553294.15679468325033987716.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220818220628.339366-1-robimarko@gmail.com>
-References: <20220818220628.339366-1-robimarko@gmail.com>
+In-Reply-To: <20220818220245.338396-1-robimarko@gmail.com>
+References: <20220818220245.338396-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,22 +59,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 00:06:20 +0200, Robert Marko wrote:
-> From: Christian Marangi <ansuelsmth@gmail.com>
+On Fri, 19 Aug 2022 00:02:41 +0200, Robert Marko wrote:
+> Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+> only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 > 
-> An RCG may act as a mux that switch between 2 parents.
-> This is the case on IPQ6018 and IPQ8074 where the APCS core clk that feeds
-> the CPU cluster clock just switches between XO and the PLL that feeds it.
+> We also have to make sure that correct interrupts are set according to
+> compatibles, so populate interrupt information per compatibles.
 > 
-> Add the required ops to add support for this special configuration and use
-> the generic mux function to determine the rate.
 > 
 > [...]
 
 Applied, thanks!
 
-[9/9] arm64: dts: qcom: ipq8074: add A53 PLL node
-      commit: fe6d5b8de04780e7ec27037b836324b59fade45b
+[5/5] arm64: dts: ipq8074: add thermal nodes
+      commit: 887ac08946cc0f2a2b915140fcf8d4365ca9393d
 
 Best regards,
 -- 
