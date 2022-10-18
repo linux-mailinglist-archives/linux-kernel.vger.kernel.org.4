@@ -2,211 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925356020D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837716020D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiJRCEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S231297AbiJRCF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiJRCDy (ORCPT
+        with ESMTP id S231253AbiJRCFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:03:54 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4468E797;
-        Mon, 17 Oct 2022 19:03:08 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id l1so12436037pld.13;
-        Mon, 17 Oct 2022 19:03:08 -0700 (PDT)
+        Mon, 17 Oct 2022 22:05:41 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7288E0EC;
+        Mon, 17 Oct 2022 19:03:57 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id a14-20020a9d470e000000b00661b66a5393so6855479otf.11;
+        Mon, 17 Oct 2022 19:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1udheg5sHf0ONuxdfUoe8f9Q18ghdgubAqjN0gANnY8=;
-        b=Rm62ohz+DFBI6eZQNjQVIT9ILFhku/7CucD+oEe1lTPx2nneIj61QVcgLbQVNJS8wr
-         SEAQOVT8IZtMNyzvXNmWihYWZ0qt27WRRfZLVI/W4LYnuQVN6E4pMpV6FJpId5XnQ5Jd
-         EQj1A8vk8Rl6FwzGC4TsGaWpeHnmll90JApdakBxscK8vmwvGhXyDC54lfYV7X00+ob7
-         A/n1gZs7KO4oZJcyLC5fYzEJ9ZxfU1XMkFId6dm4pNFqg4dK3SgOB07ZNop+y7K6K9tF
-         Wmu+EEffujOLcEZyjNB4kyXeFMEMN5AHUrfaoRE8lMrz77njT/2pDwm46SnddKCyDqSI
-         pBzQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HxTl7Pvn0Bec2shpwvEv5s8beVffTT/3S32nRS/mxsA=;
+        b=BEmwZ/RYC149NHygsqHnZCK+2kx6DTG2aDAJrgSbLxkLMwP7pNNyoR0nvmuAXntAEP
+         7jh0euTa7iBRNu/YKNQOi3JbO2r78uOaYbjkvMexAhKwkONmdq1YEovev48dSoaa6EKp
+         uQa9EXAR0E2SaV5f8Y3nJW7cW3T7BvPM23UjZ0gU3ropuLsDiPqqllTPI/C3agDHWWAM
+         cp3EBmroAKDfJPwiaY2TMto0V1T4wEwV9rcgv6oi/q+t3AqG+kwxGPtgdlbz6j5ZzTk7
+         epBhjkX+xBVzejJn+DqAH8c1L4Y/zUTDji6JetE5sfm77p0FPUINPFBUupodaYnF8txk
+         p0+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1udheg5sHf0ONuxdfUoe8f9Q18ghdgubAqjN0gANnY8=;
-        b=mxW1JyQxjJuWDBU0q9ewvC+t9hbo1zWc6Hfu4RU6lBoYIFFb1SH4Rax/BIdID1JqCS
-         vL0yX+cIhcuOAVcGCBa0+MYZzjdv9yPp1iTTCkXnyWxUPHtTvocghpLAw8ntwumyudLp
-         zRlUujT5eNlsFxK4cvCN9nSMt2nKXXAfvVO+FJA+0KcarmoqtmReHBAfNZ6kIuITeJwI
-         URbq5SVhr7/rXPZ9ZQuTIPLueF2yHjlcH0qyZ5q/oDaULzmyaWL4RqZng+7ljZR2nhNn
-         aJKpclP1jEMGG0JUW3XvNJgZo08nnetu+jC+KH2eP4yuwWDYvXEbzTUMa2NgZYEEuKbM
-         buBg==
-X-Gm-Message-State: ACrzQf32l5ZVYaRpLUpejTs3pycydpfZ+uWhSbSncO94Ff+8xYBkJMhT
-        NX3k7ivpHQ2HTmTH7mWoVlU=
-X-Google-Smtp-Source: AMsMyM4Mskt7MdB+oriIsrZbWriuKmqlKBko/6uWA791BfKIaoi9R5mwf73LcGHtjFtgvjTM9rs6VQ==
-X-Received: by 2002:a17:903:11cd:b0:170:cde8:18b7 with SMTP id q13-20020a17090311cd00b00170cde818b7mr651563plh.165.1666058587516;
-        Mon, 17 Oct 2022 19:03:07 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1f90:85c4:58f0:7a81:6bb5])
-        by smtp.gmail.com with ESMTPSA id t4-20020a655544000000b00464858cf6b0sm6851564pgr.54.2022.10.17.19.03.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 19:03:06 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Michael Petlan <mpetlan@redhat.com>
-Subject: [PATCH 20/20] perf stat: Remove unused perf_counts.aggr field
-Date:   Mon, 17 Oct 2022 19:02:27 -0700
-Message-Id: <20221018020227.85905-21-namhyung@kernel.org>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-In-Reply-To: <20221018020227.85905-1-namhyung@kernel.org>
-References: <20221018020227.85905-1-namhyung@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HxTl7Pvn0Bec2shpwvEv5s8beVffTT/3S32nRS/mxsA=;
+        b=wWCiwwazlkoaNUvlcr3Ch30tBoYCtJa/X/lVK2TNG6BoFPo+9SarYjq2ztRzOMXIrn
+         ZJiy7FIDLrC0Fd2uUvWdmfT3s7YwXfIaJ/GeH588K0QHLXFQKfQXhrIvSb5zAkJXKvaO
+         mz0yK5uxehGYVsZhkOp0hqswnSBvEmGujaUALYZMlFs5ah4EE1cRwnS0dsK3LUITYmUB
+         HRjMxdDg4KrosJUF6907YEaMq5aQmNytXT8OuU4mNOnQzyEZHnUWfCPR0pBVCYBKGhse
+         1jKBx41u+HbA8XycV1t93h5qKV89MIp+2LgPkdEaLMNOum8u8BRbSwKdZGz4Tbs8KJsz
+         0bjQ==
+X-Gm-Message-State: ACrzQf0aZWesLUNZ7qfHtwk6+WbMExlhqpFUlkYcFOSJMLF7e6HWXyI0
+        4xAAxNWHLHoaHLK3TaYdZHG1npYn3gFEegPHGxM=
+X-Google-Smtp-Source: AMsMyM6YDyKg2qVy2VCwY4Wi8lkdnmdfkZsxSGCbhiZod/qb5zyMSTDdGcySP9NXBcuBz/yH2N+opeRkeqB+/UssNjg=
+X-Received: by 2002:a9d:156:0:b0:661:c2eb:9da5 with SMTP id
+ 80-20020a9d0156000000b00661c2eb9da5mr363065otu.326.1666058626727; Mon, 17 Oct
+ 2022 19:03:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221014201427.2435461-1-void@manifault.com> <20221014201427.2435461-4-void@manifault.com>
+ <CAP01T77PTK+bD2mBrxJShKNPhEypT2+nSHcr3=uuJbrghv_wFg@mail.gmail.com>
+In-Reply-To: <CAP01T77PTK+bD2mBrxJShKNPhEypT2+nSHcr3=uuJbrghv_wFg@mail.gmail.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Tue, 18 Oct 2022 07:33:06 +0530
+Message-ID: <CAP01T747PKC2jySOZCWu_gauHbBfaj4JE=hbtm4Z4C-Y8b3ZHg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] bpf/selftests: Add selftests for new task kfuncs
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The aggr field in the struct perf_counts is to keep the aggregated value
-in the AGGR_GLOBAL for the old code.  But it's not used anymore.
+On Tue, 18 Oct 2022 at 07:23, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> On Sat, 15 Oct 2022 at 01:45, David Vernet <void@manifault.com> wrote:
+> >
+> > A previous change added a series of kfuncs for storing struct
+> > task_struct objects as referenced kptrs. This patch adds a new
+> > task_kfunc test suite for validating their expected behavior.
+> >
+> > Signed-off-by: David Vernet <void@manifault.com>
+> > ---
+> > [...]
+> > +
+> > +SEC("tp_btf/task_newtask")
+> > +int BPF_PROG(task_kfunc_acquire_trusted_nested, struct task_struct *task, u64 clone_flags)
+> > +{
+> > +       struct task_struct *acquired;
+> > +
+> > +       if (!is_test_kfunc_task())
+> > +               return 0;
+> > +
+> > +       /* Can't invoke bpf_task_acquire() on a trusted pointer at a nonzero offset. */
+> > +       acquired = bpf_task_acquire(task->last_wakee);
+>
+> The comment is incorrect, that would be &task->last_wakee instead,
+> this is PTR_TO_BTF_ID | PTR_NESTED.
+>
+> > +       if (!acquired)
+> > +               return 0;
+> > +       bpf_task_release(acquired);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > [...]
+> > +
+> > +static int test_acquire_release(struct task_struct *task)
+> > +{
+> > +       struct task_struct *acquired;
+> > +
+> > +       acquired = bpf_task_acquire(task);
+>
+> Unfortunately a side effect of this change is that now since
+> PTR_TO_BTF_ID without ref_obj_id is considered trusted, the bpf_ct_*
+> functions would begin working with tp_btf args. That probably needs to
+> be fixed so that they reject them (ideally with a failing test case to
+> make sure it doesn't resurface), probably with a new suffix __ref/or
+> __owned as added here [0].
+>
+> Alexei, since you've suggested avoiding adding that suffix, do you see
+> any other way out here?
+> It's questionable whether bpf_ct_set_timeout/status should work for CT
+> not owned by the BPF program.
+>
+>   [0]: https://lore.kernel.org/bpf/dfb859a6b76a9234baa194e795ae89cb7ca5694b.1662383493.git.lorenzo@kernel.org
+>
 
-Acked-by: Ian Rogers <irogers@google.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/counts.c |  1 -
- tools/perf/util/counts.h |  1 -
- tools/perf/util/stat.c   | 39 ++++++---------------------------------
- 3 files changed, 6 insertions(+), 35 deletions(-)
-
-diff --git a/tools/perf/util/counts.c b/tools/perf/util/counts.c
-index 7a447d918458..11cd85b278a6 100644
---- a/tools/perf/util/counts.c
-+++ b/tools/perf/util/counts.c
-@@ -48,7 +48,6 @@ void perf_counts__reset(struct perf_counts *counts)
- {
- 	xyarray__reset(counts->loaded);
- 	xyarray__reset(counts->values);
--	memset(&counts->aggr, 0, sizeof(struct perf_counts_values));
- }
- 
- void evsel__reset_counts(struct evsel *evsel)
-diff --git a/tools/perf/util/counts.h b/tools/perf/util/counts.h
-index 5de275194f2b..42760242e0df 100644
---- a/tools/perf/util/counts.h
-+++ b/tools/perf/util/counts.h
-@@ -11,7 +11,6 @@ struct evsel;
- 
- struct perf_counts {
- 	s8			  scaled;
--	struct perf_counts_values aggr;
- 	struct xyarray		  *values;
- 	struct xyarray		  *loaded;
- };
-diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-index 0316557adce9..3a432a949d46 100644
---- a/tools/perf/util/stat.c
-+++ b/tools/perf/util/stat.c
-@@ -308,8 +308,6 @@ static void evsel__copy_prev_raw_counts(struct evsel *evsel)
- 				*perf_counts(evsel->prev_raw_counts, idx, thread);
- 		}
- 	}
--
--	evsel->counts->aggr = evsel->prev_raw_counts->aggr;
- }
- 
- void evlist__copy_prev_raw_counts(struct evlist *evlist)
-@@ -320,26 +318,6 @@ void evlist__copy_prev_raw_counts(struct evlist *evlist)
- 		evsel__copy_prev_raw_counts(evsel);
- }
- 
--void evlist__save_aggr_prev_raw_counts(struct evlist *evlist)
--{
--	struct evsel *evsel;
--
--	/*
--	 * To collect the overall statistics for interval mode,
--	 * we copy the counts from evsel->prev_raw_counts to
--	 * evsel->counts. The perf_stat_process_counter creates
--	 * aggr values from per cpu values, but the per cpu values
--	 * are 0 for AGGR_GLOBAL. So we use a trick that saves the
--	 * previous aggr value to the first member of perf_counts,
--	 * then aggr calculation in process_counter_values can work
--	 * correctly.
--	 */
--	evlist__for_each_entry(evlist, evsel) {
--		*perf_counts(evsel->prev_raw_counts, 0, 0) =
--			evsel->prev_raw_counts->aggr;
--	}
--}
--
- static size_t pkg_id_hash(const void *__key, void *ctx __maybe_unused)
- {
- 	uint64_t *key = (uint64_t *) __key;
-@@ -442,7 +420,6 @@ process_counter_values(struct perf_stat_config *config, struct evsel *evsel,
- 		       int cpu_map_idx, int thread,
- 		       struct perf_counts_values *count)
- {
--	struct perf_counts_values *aggr = &evsel->counts->aggr;
- 	struct perf_stat_evsel *ps = evsel->stats;
- 	static struct perf_counts_values zero;
- 	bool skip = false;
-@@ -511,12 +488,6 @@ process_counter_values(struct perf_stat_config *config, struct evsel *evsel,
- 		}
- 	}
- 
--	if (config->aggr_mode == AGGR_GLOBAL) {
--		aggr->val += count->val;
--		aggr->ena += count->ena;
--		aggr->run += count->run;
--	}
--
- 	return 0;
- }
- 
-@@ -541,13 +512,10 @@ static int process_counter_maps(struct perf_stat_config *config,
- int perf_stat_process_counter(struct perf_stat_config *config,
- 			      struct evsel *counter)
- {
--	struct perf_counts_values *aggr = &counter->counts->aggr;
- 	struct perf_stat_evsel *ps = counter->stats;
--	u64 *count = counter->counts->aggr.values;
-+	u64 *count;
- 	int ret;
- 
--	aggr->val = aggr->ena = aggr->run = 0;
--
- 	if (counter->per_pkg)
- 		evsel__zero_per_pkg(counter);
- 
-@@ -558,6 +526,11 @@ int perf_stat_process_counter(struct perf_stat_config *config,
- 	if (config->aggr_mode != AGGR_GLOBAL)
- 		return 0;
- 
-+	/*
-+	 * GLOBAL aggregation mode only has a single aggr counts,
-+	 * so we can use ps->aggr[0] as the actual output.
-+	 */
-+	count = ps->aggr[0].counts.values;
- 	update_stats(&ps->res_stats, *count);
- 
- 	if (verbose > 0) {
--- 
-2.38.0.413.g74048e4d9e-goog
-
+Sorry for accidentally bumping this v3 thread instead of v5, whosoever
+replies please continue there.
