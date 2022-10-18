@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FC1603156
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CFC603147
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiJRRHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
+        id S229584AbiJRRCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiJRRHW (ORCPT
+        with ESMTP id S229509AbiJRRCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:07:22 -0400
-X-Greylist: delayed 254 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 10:06:14 PDT
-Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA0CEEA9C;
-        Tue, 18 Oct 2022 10:06:14 -0700 (PDT)
-Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
-        by pb-smtp21.pobox.com (Postfix) with ESMTP id E54AD1D38EA;
-        Tue, 18 Oct 2022 13:01:59 -0400 (EDT)
-        (envelope-from junio@pobox.com)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
-        :subject:date:message-id:mime-version:content-type; s=sasl; bh=I
-        kKmOpEPStNaMelI3cfGCmpw8kYhTIhBTRT5Mc3GJhY=; b=MLo2fRJqDKE3XJk7i
-        gy85fmhVvaY4W+3ASZCZQ+OyjYtm+EaEmnZjqwtvMzzUxrsUcKUBdYyARX0av4nu
-        dcmcNi2FtGR06MI6NDVFHV+j8wxDErLcwf6RK6mTjw94vIOg4dEkIDXcyXe78Oze
-        Fd0ZYA+wY59QtCfaZ9RanPArfU=
-Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp21.pobox.com (Postfix) with ESMTP id DE2821D38E9;
-        Tue, 18 Oct 2022 13:01:59 -0400 (EDT)
-        (envelope-from junio@pobox.com)
-Received: from pobox.com (unknown [34.83.5.33])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp21.pobox.com (Postfix) with ESMTPSA id 94C171D38E8;
-        Tue, 18 Oct 2022 13:01:55 -0400 (EDT)
-        (envelope-from junio@pobox.com)
-From:   Junio C Hamano <gitster@pobox.com>
-To:     git@vger.kernel.org
-Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
-        git-packagers@googlegroups.com
-Subject: [ANNOUNCE] Git v2.38.1 and others
-Date:   Tue, 18 Oct 2022 10:01:54 -0700
-Message-ID: <xmqq4jw1uku5.fsf@gitster.g>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Tue, 18 Oct 2022 13:02:21 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49675EE095
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:02:20 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id k2so33856337ejr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EvNFUcsg6CZf4Twcacgk4/TpKqaK+NR+PSADwLx1Qqk=;
+        b=NO9Rpc7gw8DAzJvh3gLWr8+d5iG6WcxapUthrhBuntkU2o5NzO/8iuTamVLA9MXUef
+         51252nvKL7xcVLOqjbS2w9Bb5VeQL9KTFGmb91bdUa2ErDtAZA9HN2935cd3DrnCuS8n
+         8AWDbR2NL5Uz1HOBQnVoP5KJ3aVbsnfFKLVWk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EvNFUcsg6CZf4Twcacgk4/TpKqaK+NR+PSADwLx1Qqk=;
+        b=mdprqCnktLZbcdUb2T3CP2gkK/snwmBmvnStvvihEG0cR36kN0xMAMdH4xYJI5lSCk
+         HnpHaIwfrEAoI3rkfn0+WT00xrlWfkXEqgMSgImRRtt3eZg8w+ytv4PFRSRho68RmedY
+         pv3Wzg7Uy2cqHzjQ+no2YSwoSOESOMTNyXUFmpMNgcTwg60Emnjnb4HXqNS/lOW1Dap0
+         lqBQNIZoGb8RizvwLeo8o4VU1CRNRMxks++PoH2Uh6ei7kEiAAypdNRAajjAdsBp7No7
+         qq2DbFpsh1OhKlwW0hwKV3q7cONHXy4Bwk1QQOc8eXS4DbZvHpXWrvVbTuNneMErvpkx
+         ZxHA==
+X-Gm-Message-State: ACrzQf1k7XEdGTpTUy+4eiZMyJNEEcOJ+7m83hA+3lrcC3qnU0ayWPjJ
+        t9kfTMSwB+wJNzqiRU8Jy18fXL/zFW7UYQ==
+X-Google-Smtp-Source: AMsMyM4q3YBmgS6KrU83dbcB1kBOFrQFy9UtekLB/JjiyoNbuFAncc1vBQQxAPX+fG/ip0Bf8WJ9eQ==
+X-Received: by 2002:a17:907:3ea4:b0:78e:25e2:c33b with SMTP id hs36-20020a1709073ea400b0078e25e2c33bmr3113366ejc.603.1666112538617;
+        Tue, 18 Oct 2022 10:02:18 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-244-101-110.retail.telecomitalia.it. [95.244.101.110])
+        by smtp.gmail.com with ESMTPSA id d7-20020aa7d687000000b004580296bb0bsm9172616edr.83.2022.10.18.10.02.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 10:02:17 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Subject: [PATCH] mtd: nand: drop EXPORT_SYMBOL_GPL for nanddev_erase()
+Date:   Tue, 18 Oct 2022 19:02:05 +0200
+Message-Id: <20221018170205.1733958-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Pobox-Relay-ID: 92005E3E-4F06-11ED-9265-B31D44D1D7AA-77302942!pb-smtp21.pobox.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A maintenance release v2.38.1, together with releases for older
-maintenance tracks v2.30.6, v2.31.5, v2.32.4, v2.33.5, v2.34.5,
-v2.35.5, v2.36.3, and v2.37.4, are now available at the usual
-places.
+This function is only used within this module, so it is no longer
+necessary to use EXPORT_SYMBOL_GPL().
 
-These maintenance releases are to address the security issues
-identified as CVE-2022-39253 and CVE-2022-39260.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-The tarballs are found at:
+ drivers/mtd/nand/core.c  | 3 +--
+ include/linux/mtd/nand.h | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-    https://www.kernel.org/pub/software/scm/git/
+diff --git a/drivers/mtd/nand/core.c b/drivers/mtd/nand/core.c
+index dbd7b06524b3..7737b1a4a177 100644
+--- a/drivers/mtd/nand/core.c
++++ b/drivers/mtd/nand/core.c
+@@ -126,7 +126,7 @@ EXPORT_SYMBOL_GPL(nanddev_isreserved);
+  *
+  * Return: 0 in case of success, a negative error code otherwise.
+  */
+-int nanddev_erase(struct nand_device *nand, const struct nand_pos *pos)
++static int nanddev_erase(struct nand_device *nand, const struct nand_pos *pos)
+ {
+ 	if (nanddev_isbad(nand, pos) || nanddev_isreserved(nand, pos)) {
+ 		pr_warn("attempt to erase a bad/reserved block @%llx\n",
+@@ -136,7 +136,6 @@ int nanddev_erase(struct nand_device *nand, const struct nand_pos *pos)
+ 
+ 	return nand->ops->erase(nand, pos);
+ }
+-EXPORT_SYMBOL_GPL(nanddev_erase);
+ 
+ /**
+  * nanddev_mtd_erase() - Generic mtd->_erase() implementation for NAND devices
+diff --git a/include/linux/mtd/nand.h b/include/linux/mtd/nand.h
+index c3693bb87b4c..b2996dc987ff 100644
+--- a/include/linux/mtd/nand.h
++++ b/include/linux/mtd/nand.h
+@@ -999,7 +999,6 @@ static inline bool nanddev_io_iter_end(struct nand_device *nand,
+ 
+ bool nanddev_isbad(struct nand_device *nand, const struct nand_pos *pos);
+ bool nanddev_isreserved(struct nand_device *nand, const struct nand_pos *pos);
+-int nanddev_erase(struct nand_device *nand, const struct nand_pos *pos);
+ int nanddev_markbad(struct nand_device *nand, const struct nand_pos *pos);
+ 
+ /* ECC related functions */
+-- 
+2.32.0
 
-The following public repositories all have a copy of the v2.38.1
-tag, as well as the tags for older maintenance tracks for v2.30.6,
-v2.31.5, v2.32.4, v2.33.5, v2.34.5, v2.35.5, v2.36.3, and v2.37.4.
-
-  url = https://git.kernel.org/pub/scm/git/git
-  url = https://kernel.googlesource.com/pub/scm/git/git
-  url = git://repo.or.cz/alt-git.git
-  url = https://github.com/gitster/git
-
-CVE-2022-39253:
-   When relying on the `--local` clone optimization, Git dereferences
-   symbolic links in the source repository before creating hardlinks
-   (or copies) of the dereferenced link in the destination repository.
-   This can lead to surprising behavior where arbitrary files are
-   present in a repository's `$GIT_DIR` when cloning from a malicious
-   repository.
-
-   Git will no longer dereference symbolic links via the `--local`
-   clone mechanism, and will instead refuse to clone repositories that
-   have symbolic links present in the `$GIT_DIR/objects` directory.
-
-   Additionally, the value of `protocol.file.allow` is changed to be
-   "user" by default.
-
-CVE-2022-39260:
-   An overly-long command string given to `git shell` can result in
-   overflow in `split_cmdline()`, leading to arbitrary heap writes and
-   remote code execution when `git shell` is exposed and the directory
-   `$HOME/git-shell-commands` exists.
-
-   `git shell` is taught to refuse interactive commands that are
-   longer than 4MiB in size. `split_cmdline()` is hardened to reject
-   inputs larger than 2GiB.
-
-Credit for finding CVE-2022-39253 goes to Cory Snider of Mirantis. The
-fix was authored by Taylor Blau, with help from Johannes Schindelin.
-
-Credit for finding CVE-2022-39260 goes to Kevin Backhouse of GitHub.
-The fix was authored by Kevin Backhouse, Jeff King, and Taylor Blau.
