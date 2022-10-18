@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79ED602804
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B022660280D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiJRJLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
+        id S231224AbiJRJOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJRJL1 (ORCPT
+        with ESMTP id S231259AbiJRJOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:11:27 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65C115FD9;
-        Tue, 18 Oct 2022 02:11:24 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ms7MJ52JfzJn2y;
-        Tue, 18 Oct 2022 17:08:44 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 17:11:18 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 17:11:17 +0800
-Subject: Re: [PATCH v7 11/11] kallsyms: Add self-test facility
-To:     kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-CC:     <kbuild-all@lists.01.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <20221017064950.2038-12-thunder.leizhen@huawei.com>
- <202210181636.S8XlpSMd-lkp@intel.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <e8c45c81-d488-db80-57cf-cfc59f05f32d@huawei.com>
-Date:   Tue, 18 Oct 2022 17:11:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 18 Oct 2022 05:14:02 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B63AA343;
+        Tue, 18 Oct 2022 02:13:49 -0700 (PDT)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 29I9DVRL002761;
+        Tue, 18 Oct 2022 18:13:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 29I9DVRL002761
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1666084412;
+        bh=3pXlksKoX067wY5+EfFXWbUDydu8+P5Ey+k3BFIx0HE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tgEE65Ys9KPzyXxFvpkGI0OQo8q7Ukz7gxq5FAbsPugJpAoDsSSMMk0+Hw/nOB9Cz
+         b7jLoK4cjDtEophr/R+ZtEaz2kFCsmu+ApapgMJEICk/V/kLtRx9RUwsmchKKT2qjk
+         j72mDy4AC3EqTcMYf5WJq3PKKw/304scTL500NojWXurQkRKHOy6UIyyPrc11wB4eC
+         oE9pupYZDNpjcwM9oN5+75eS//Ahm5sNQOm0I72mNh+zwEYwZ459IFQIbpSpQ+kRNX
+         YuXzo3rgfnc11tOU9TpQw8+N3lKI7Ftal7U6sXTXqRhpIE3Vbmlpjey6s6F2aBbZea
+         qXPxst5WxvjRA==
+X-Nifty-SrcIP: [209.85.210.46]
+Received: by mail-ot1-f46.google.com with SMTP id d18-20020a05683025d200b00661c6f1b6a4so7258659otu.1;
+        Tue, 18 Oct 2022 02:13:32 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2hHhya9t6rW8cuUWOi0zOPR09iGijGl2NY+8M7CjEbx2X61RNQ
+        eyOs8ezqjJjlTlPttGQWgDbX3foP7SfffSsvWYc=
+X-Google-Smtp-Source: AMsMyM6/WHrDZayL0+X7b1RVI31TF7F6OSCDYccMj7Tx4f4I0BhhLPHkYSmQ8ipwEIpRc+61A3EnwI8yizPwQzCw0I8=
+X-Received: by 2002:a05:6830:6384:b0:661:bee5:73ce with SMTP id
+ ch4-20020a056830638400b00661bee573cemr882692otb.343.1666084411064; Tue, 18
+ Oct 2022 02:13:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <202210181636.S8XlpSMd-lkp@intel.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220924181915.3251186-1-masahiroy@kernel.org>
+ <20220924181915.3251186-8-masahiroy@kernel.org> <1ec14007-affc-f826-6dda-f23ee166226a@kernel.org>
+In-Reply-To: <1ec14007-affc-f826-6dda-f23ee166226a@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 18 Oct 2022 18:12:54 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARahN2xefEBb4EprpiA6B5-7Hakc1cC9_o+FieXr=a_pA@mail.gmail.com>
+Message-ID: <CAK7LNARahN2xefEBb4EprpiA6B5-7Hakc1cC9_o+FieXr=a_pA@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] kbuild: remove head-y syntax
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,212 +63,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 18, 2022 at 5:16 PM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> Hi,
+>
+> On 24. 09. 22, 20:19, Masahiro Yamada wrote:
+> > Kbuild puts the objects listed in head-y at the head of vmlinux.
+> > Conventionally, we do this for head*.S, which contains the kernel entry
+> > point.
+> >
+> > A counter approach is to control the section order by the linker script.
+> > Actually, the code marked as __HEAD goes into the ".head.text" section,
+> > which is placed before the normal ".text" section.
+> >
+> > I do not know if both of them are needed. From the build system
+> > perspective, head-y is not mandatory. If you can achieve the proper code
+> > placement by the linker script only, it would be cleaner.
+> >
+> > I collected the current head-y objects into head-object-list.txt. It is
+> > a whitelist. My hope is it will be reduced in the long run.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ...
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1149,10 +1149,10 @@ quiet_cmd_ar_vmlinux.a = AR      $@
+> >         cmd_ar_vmlinux.a = \
+> >       rm -f $@; \
+> >       $(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
+> > -     $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $(head-y)
+> > +     $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
+>
+> With AR=gcc-ar, the "| head -n1" results in:
+> /usr/lib64/gcc/x86_64-suse-linux/7/../../../../x86_64-suse-linux/bin/ar
+> terminated with signal 13 [Broken pipe]
+>
+> I found out only with gcc-lto. But maybe we should make it silent in any
+> case? I'm not sure how. This looks ugly (and needs the whole output to
+> be piped):
+> gcc-ar t vmlinux.a | ( head -n1; cat >/dev/null )
+>
+> Note the result appears to be correct, it's only that gcc-ar complains
+> after printing out the very first line.
 
 
-On 2022/10/18 16:21, kernel test robot wrote:
-> Hi Zhen,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on masahiroy-kbuild/for-next]
-> [also build test WARNING on linus/master v6.1-rc1 next-20221018]
-> [cannot apply to mcgrof/modules-next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-> patch link:    https://lore.kernel.org/r/20221017064950.2038-12-thunder.leizhen%40huawei.com
-> patch subject: [PATCH v7 11/11] kallsyms: Add self-test facility
-> config: sh-allmodconfig
-> compiler: sh4-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
->         git checkout 3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    kernel/kallsyms_selftest.c:67:5: warning: no previous prototype for 'test_func' [-Wmissing-prototypes]
->       67 | int test_func(void)
->          |     ^~~~~~~~~
->    kernel/kallsyms_selftest.c:72:12: warning: no previous prototype for 'test_func_weak' [-Wmissing-prototypes]
->       72 | __weak int test_func_weak(void)
->          |            ^~~~~~~~~~~~~~
->    kernel/kallsyms_selftest.c: In function 'test_kallsyms_basic_function':
->>> kernel/kallsyms_selftest.c:424:1: warning: the frame size of 1124 bytes is larger than 1024 bytes [-Wframe-larger-than=]
->      424 | }
->          | ^
+Indeed, I see the same message.
 
-OK, thanks. These warnings are minor. I will fix them in the next version after collecting review comments.
 
-> 
-> 
-> vim +424 kernel/kallsyms_selftest.c
-> 
->    275	
->    276	static int test_kallsyms_basic_function(void)
->    277	{
->    278		int i, j, ret;
->    279		int next = 0, nr_failed = 0;
->    280		char *prefix;
->    281		unsigned short rand;
->    282		unsigned long addr, lookup_addr;
->    283		char namebuf[KSYM_NAME_LEN];
->    284		struct test_stat stat, stat2;
->    285	
->    286		prefix = "kallsyms_lookup_name() for";
->    287		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
->    288			addr = kallsyms_lookup_name(test_items[i].name);
->    289			if (addr != test_items[i].addr) {
->    290				nr_failed++;
->    291				pr_info("%s %s failed: addr=%lx, expect %lx\n",
->    292					prefix, test_items[i].name, addr, test_items[i].addr);
->    293			}
->    294		}
->    295	
->    296		prefix = "kallsyms_on_each_symbol() for";
->    297		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
->    298			memset(&stat, 0, sizeof(stat));
->    299			stat.max = INT_MAX;
->    300			stat.name = test_items[i].name;
->    301			kallsyms_on_each_symbol(find_symbol, &stat);
->    302			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
->    303				nr_failed++;
->    304				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
->    305					prefix, test_items[i].name,
->    306					stat.real_cnt, stat.addr, test_items[i].addr);
->    307			}
->    308		}
->    309	
->    310		prefix = "kallsyms_on_each_match_symbol() for";
->    311		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
->    312			memset(&stat, 0, sizeof(stat));
->    313			stat.max = INT_MAX;
->    314			stat.name = test_items[i].name;
->    315			kallsyms_on_each_match_symbol(match_symbol, test_items[i].name, &stat);
->    316			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
->    317				nr_failed++;
->    318				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
->    319					prefix, test_items[i].name,
->    320					stat.real_cnt, stat.addr, test_items[i].addr);
->    321			}
->    322		}
->    323	
->    324		if (nr_failed)
->    325			return -ESRCH;
->    326	
->    327		for (i = 0; i < kallsyms_num_syms; i++) {
->    328			addr = kallsyms_sym_address(i);
->    329			if (!is_ksym_addr(addr))
->    330				continue;
->    331	
->    332			ret = lookup_symbol_name(addr, namebuf);
->    333			if (unlikely(ret)) {
->    334				namebuf[0] = 0;
->    335				goto failed;
->    336			}
->    337	
->    338			/*
->    339			 * The first '.' may be the initial letter, in which case the
->    340			 * entire symbol name will be truncated to an empty string in
->    341			 * cleanup_symbol_name(). Do not test these symbols.
->    342			 *
->    343			 * For example:
->    344			 * cat /proc/kallsyms | awk '{print $3}' | grep -E "^\." | head
->    345			 * .E_read_words
->    346			 * .E_leading_bytes
->    347			 * .E_trailing_bytes
->    348			 * .E_write_words
->    349			 * .E_copy
->    350			 * .str.292.llvm.12122243386960820698
->    351			 * .str.24.llvm.12122243386960820698
->    352			 * .str.29.llvm.12122243386960820698
->    353			 * .str.75.llvm.12122243386960820698
->    354			 * .str.99.llvm.12122243386960820698
->    355			 */
->    356			if (IS_ENABLED(CONFIG_LTO_CLANG) && !namebuf[0])
->    357				continue;
->    358	
->    359			lookup_addr = kallsyms_lookup_name(namebuf);
->    360	
->    361			memset(&stat, 0, sizeof(stat));
->    362			stat.max = INT_MAX;
->    363			kallsyms_on_each_match_symbol(match_symbol, namebuf, &stat);
->    364	
->    365			/*
->    366			 * kallsyms_on_each_symbol() is too slow, randomly select some
->    367			 * symbols for test.
->    368			 */
->    369			if (i >= next) {
->    370				memset(&stat2, 0, sizeof(stat2));
->    371				stat2.max = INT_MAX;
->    372				stat2.name = namebuf;
->    373				kallsyms_on_each_symbol(find_symbol, &stat2);
->    374	
->    375				/*
->    376				 * kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
->    377				 * need to get the same traversal result.
->    378				 */
->    379				if (stat.addr != stat2.addr ||
->    380				    stat.real_cnt != stat2.real_cnt ||
->    381				    memcmp(stat.addrs, stat2.addrs,
->    382					   stat.save_cnt * sizeof(stat.addrs[0])))
->    383					goto failed;
->    384	
->    385				/*
->    386				 * The average of random increments is 128, that is, one of
->    387				 * them is tested every 128 symbols.
->    388				 */
->    389				get_random_bytes(&rand, sizeof(rand));
->    390				next = i + (rand & 0xff) + 1;
->    391			}
->    392	
->    393			/* Need to be found at least once */
->    394			if (!stat.real_cnt)
->    395				goto failed;
->    396	
->    397			/*
->    398			 * kallsyms_lookup_name() returns the address of the first
->    399			 * symbol found and cannot be NULL.
->    400			 */
->    401			if (!lookup_addr || lookup_addr != stat.addrs[0])
->    402				goto failed;
->    403	
->    404			/*
->    405			 * If the addresses of all matching symbols are recorded, the
->    406			 * target address needs to be exist.
->    407			 */
->    408			if (stat.real_cnt <= MAX_NUM_OF_RECORDS) {
->    409				for (j = 0; j < stat.save_cnt; j++) {
->    410					if (stat.addrs[j] == addr)
->    411						break;
->    412				}
->    413	
->    414				if (j == stat.save_cnt)
->    415					goto failed;
->    416			}
->    417		}
->    418	
->    419		return 0;
->    420	
->    421	failed:
->    422		pr_info("Test for %dth symbol failed: (%s) addr=%lx", i, namebuf, addr);
->    423		return -ESRCH;
->  > 424	}
->    425	
-> 
+sed does not show such an error, though.
+
+
+masahiro@zoe:~/ref/linux$ gcc-ar t vmlinux.a | head -n1
+arch/x86/kernel/head_64.o
+/usr/bin/ar terminated with signal 13 [Broken pipe]
+
+
+masahiro@zoe:~/ref/linux$ gcc-ar t vmlinux.a | sed -n 1p
+arch/x86/kernel/head_64.o
+
+
+
+
+
+
 
 -- 
-Regards,
-  Zhen Lei
+Best Regards
+Masahiro Yamada
