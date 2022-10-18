@@ -2,103 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDD16022ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA096022EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiJRDyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S229834AbiJRDzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJRDyg (ORCPT
+        with ESMTP id S229801AbiJRDzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:54:36 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5936F60C7;
-        Mon, 17 Oct 2022 20:54:27 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c24so12673606plo.3;
-        Mon, 17 Oct 2022 20:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EXydlB+x9/yS8YgHBF3l/5e7/0G8nhm8UFrGg/lnonk=;
-        b=n/C/bdH4+SNwsSk2qM2fUW3BWJTkGU/b6DW/7DY4Q6eeA060oPAXxHBixsQprQe9w3
-         hhi4E6QHvO8OYc0XDM9/2Ee/Ab8O1/tRjhY0e9bALy6D2a2CIBgBPi7fTW/MTaxI0Zot
-         +O/R1XhzDXDwiRsFRqXRtT+RH2+Ohd/EHfvWM1rY+tN6IzCha3Ywtu+sBrohbYkUYp+3
-         VGw/8V8EBI7tlRAe76meLmZ/Qm82U/XZFgsiQcQ8SrDqnZifSJdjk0FHxUImmLs4js2y
-         /yO19329xSI3Zoa25islP42dkqKiqi0QXFoqPfwkaA6ZJzs1co3HuRKhRDLpVB9hOxmy
-         2YqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EXydlB+x9/yS8YgHBF3l/5e7/0G8nhm8UFrGg/lnonk=;
-        b=YRY5RQdoroB6OW0BivKz11H3K74iHpr0dscMIJOdapBacRILI9SxWe4Dozmbkytkya
-         sJX5+8WFXthqe6Wo0hbq7bj27/6fjpto6Ou4AVgtXSpx2YtpO9E4yndm8aSg3y2BMcCb
-         ibO3MnN0plIEFzbqSCOKrjVGuP7j0Ge7FBgB5qa5TIh/88gxD5pv78INJUo8lg1KIPRm
-         draCXlEAd3VcX0PUnoFWGUf4pdhkitTFDNyrINsGP4LFJ+10dOvO3i+eL6iq6XqaWgcn
-         cRbosNmeUJ/LpY53kGxMdT+foJahqtVatheB3PaznGl2XQz1rq++BtCDkLIjYNaputfN
-         rhEg==
-X-Gm-Message-State: ACrzQf14YCT88ZG9TNkQ0/z1RZp24fF0a/PpWp+cLmBpCMGHTqPyJJd3
-        yCbbZ2XcfA5KAivalbMDfWGHg7znxJpHXTY7uaw=
-X-Google-Smtp-Source: AMsMyM6/EuOW1Hu1tlfs0A5mrlPSH8WDCodmhvAtU8ypPyEo9xHIReWk8lm5S9/ey3Tsh2k+nUWMuXOQ5MeFmXHGejI=
-X-Received: by 2002:a17:902:8542:b0:179:eb8d:f41d with SMTP id
- d2-20020a170902854200b00179eb8df41dmr954301plo.62.1666065266837; Mon, 17 Oct
- 2022 20:54:26 -0700 (PDT)
+        Mon, 17 Oct 2022 23:55:47 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6732827B26
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 20:55:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VSSk58Q_1666065337;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VSSk58Q_1666065337)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 11:55:44 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH] erofs: use kmap_local_page() only for erofs_bread()
+Date:   Tue, 18 Oct 2022 11:55:36 +0800
+Message-Id: <20221018035536.114792-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-References: <20221017191743.75177-1-pmanank200502@gmail.com>
-In-Reply-To: <20221017191743.75177-1-pmanank200502@gmail.com>
-From:   sundeep subbaraya <sundeep.lkml@gmail.com>
-Date:   Tue, 18 Oct 2022 09:24:15 +0530
-Message-ID: <CALHRZupuBVAhd=fK+4E=keBTnt=GEGrWOTpN0-xBfu2Yj1+PDA@mail.gmail.com>
-Subject: Re: [PATCH] ethernet: marvell: octeontx2 Fix resource not freed after malloc
-To:     Manank Patel <pmanank200502@gmail.com>
-Cc:     sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-        hkelam@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Convert all mapped erofs_bread() users to use kmap_local_page()
+instead of kmap() or kmap_atomic().
 
-On Tue, Oct 18, 2022 at 1:27 AM Manank Patel <pmanank200502@gmail.com> wrote:
->
-> fix rxsc not getting freed before going out of scope
->
-> Fixes: c54ffc73601c ("octeontx2-pf: mcs: Introduce MACSEC hardware offloading")
->
-> Signed-off-by: Manank Patel <pmanank200502@gmail.com>
-> ---
->  drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-> index 9809f551fc2e..c7b2ebb2c75b 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-> @@ -870,6 +870,7 @@ static struct cn10k_mcs_rxsc *cn10k_mcs_create_rxsc(struct otx2_nic *pfvf)
->         cn10k_mcs_free_rsrc(pfvf, MCS_RX, MCS_RSRC_TYPE_FLOWID,
->                             rxsc->hw_flow_id, false);
->  fail:
-> +       kfree(rxsc);
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/data.c     | 8 ++------
+ fs/erofs/internal.h | 3 +--
+ fs/erofs/xattr.c    | 8 ++++----
+ fs/erofs/zmap.c     | 4 ++--
+ 4 files changed, 9 insertions(+), 14 deletions(-)
 
-Thanks for the fix. Can you do the same in cn10k_mcs_create_txsc as well.
+diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+index fe8ac0e163f7..3873395173b5 100644
+--- a/fs/erofs/data.c
++++ b/fs/erofs/data.c
+@@ -13,9 +13,7 @@
+ void erofs_unmap_metabuf(struct erofs_buf *buf)
+ {
+ 	if (buf->kmap_type == EROFS_KMAP)
+-		kunmap(buf->page);
+-	else if (buf->kmap_type == EROFS_KMAP_ATOMIC)
+-		kunmap_atomic(buf->base);
++		kunmap_local(buf->page);
+ 	buf->base = NULL;
+ 	buf->kmap_type = EROFS_NO_KMAP;
+ }
+@@ -54,9 +52,7 @@ void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
+ 	}
+ 	if (buf->kmap_type == EROFS_NO_KMAP) {
+ 		if (type == EROFS_KMAP)
+-			buf->base = kmap(page);
+-		else if (type == EROFS_KMAP_ATOMIC)
+-			buf->base = kmap_atomic(page);
++			buf->base = kmap_local_page(page);
+ 		buf->kmap_type = type;
+ 	} else if (buf->kmap_type != type) {
+ 		DBG_BUGON(1);
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 1701df48c446..67dc8e177211 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -253,8 +253,7 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+ 
+ enum erofs_kmap_type {
+ 	EROFS_NO_KMAP,		/* don't map the buffer */
+-	EROFS_KMAP,		/* use kmap() to map the buffer */
+-	EROFS_KMAP_ATOMIC,	/* use kmap_atomic() to map the buffer */
++	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
+ };
+ 
+ struct erofs_buf {
+diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+index 8106bcb5a38d..a62fb8a3318a 100644
+--- a/fs/erofs/xattr.c
++++ b/fs/erofs/xattr.c
+@@ -148,7 +148,7 @@ static inline int xattr_iter_fixup(struct xattr_iter *it)
+ 
+ 	it->blkaddr += erofs_blknr(it->ofs);
+ 	it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr,
+-				       EROFS_KMAP_ATOMIC);
++				       EROFS_KMAP);
+ 	if (IS_ERR(it->kaddr))
+ 		return PTR_ERR(it->kaddr);
+ 	it->ofs = erofs_blkoff(it->ofs);
+@@ -174,7 +174,7 @@ static int inline_xattr_iter_begin(struct xattr_iter *it,
+ 	it->ofs = erofs_blkoff(iloc(sbi, vi->nid) + inline_xattr_ofs);
+ 
+ 	it->kaddr = erofs_read_metabuf(&it->buf, inode->i_sb, it->blkaddr,
+-				       EROFS_KMAP_ATOMIC);
++				       EROFS_KMAP);
+ 	if (IS_ERR(it->kaddr))
+ 		return PTR_ERR(it->kaddr);
+ 	return vi->xattr_isize - xattr_header_sz;
+@@ -368,7 +368,7 @@ static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
+ 
+ 		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+ 		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+-						  EROFS_KMAP_ATOMIC);
++						  EROFS_KMAP);
+ 		if (IS_ERR(it->it.kaddr))
+ 			return PTR_ERR(it->it.kaddr);
+ 		it->it.blkaddr = blkaddr;
+@@ -580,7 +580,7 @@ static int shared_listxattr(struct listxattr_iter *it)
+ 
+ 		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+ 		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+-						  EROFS_KMAP_ATOMIC);
++						  EROFS_KMAP);
+ 		if (IS_ERR(it->it.kaddr))
+ 			return PTR_ERR(it->it.kaddr);
+ 		it->it.blkaddr = blkaddr;
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 0bb66927e3d0..749a5ac943f4 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -178,7 +178,7 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ 	unsigned int advise, type;
+ 
+ 	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+-				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
++				      erofs_blknr(pos), EROFS_KMAP);
+ 	if (IS_ERR(m->kaddr))
+ 		return PTR_ERR(m->kaddr);
+ 
+@@ -416,7 +416,7 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ out:
+ 	pos += lcn * (1 << amortizedshift);
+ 	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+-				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
++				      erofs_blknr(pos), EROFS_KMAP);
+ 	if (IS_ERR(m->kaddr))
+ 		return PTR_ERR(m->kaddr);
+ 	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
+-- 
+2.24.4
 
-Sundeep
-
->         return ERR_PTR(ret);
->  }
->
-> --
-> 2.38.0
->
