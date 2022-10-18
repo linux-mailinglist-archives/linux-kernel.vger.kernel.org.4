@@ -2,269 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75239601FCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4792601FCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJRAqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S230158AbiJRArh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiJRAqf (ORCPT
+        with ESMTP id S229969AbiJRArc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:46:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7561C40B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666053992;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G5ql+ZHZqoj03bFqQztJ8LdTDZnWgqOwdaisBDDNe/I=;
-        b=CLYFgj4IFHSYuatKlDT36QbLTeV6+WDDe1Ew+Noc/l/HMDrovw1ngk6N17ueFoz0wWMWoT
-        SW89TAqhlaIYuolhQ8HChE8EZm0MY6IE5xbxME2zMNivq3s0kF44K63rQDB9hDMTOBSTsh
-        ryAWia2XeiPTW4/gO83lEJKL4Bq+0Fw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-16-eT4pDrE-OVycqNH8JzyLBA-1; Mon, 17 Oct 2022 20:46:28 -0400
-X-MC-Unique: eT4pDrE-OVycqNH8JzyLBA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC63A811E75;
-        Tue, 18 Oct 2022 00:46:27 +0000 (UTC)
-Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3A4E140C2140;
-        Tue, 18 Oct 2022 00:46:15 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
- guest page size
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ajones@ventanamicro.com,
-        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com, peterx@redhat.com,
-        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com,
-        kvmarm@lists.linux.dev
-References: <20221014071914.227134-1-gshan@redhat.com>
- <20221014071914.227134-5-gshan@redhat.com>
- <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
-Date:   Tue, 18 Oct 2022 08:46:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 17 Oct 2022 20:47:32 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA91E702
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:47:29 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id MAN00125;
+        Tue, 18 Oct 2022 08:47:25 +0800
+Received: from jtjnmail201619.home.langchao.com (10.100.2.19) by
+ jtjnmail201624.home.langchao.com (10.100.2.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 18 Oct 2022 08:47:24 +0800
+Received: from jtjnmail201619.home.langchao.com ([fe80::c426:eceb:41d0:3372])
+ by jtjnmail201619.home.langchao.com ([fe80::c426:eceb:41d0:3372%2]) with mapi
+ id 15.01.2507.012; Tue, 18 Oct 2022 08:47:24 +0800
+From:   =?utf-8?B?dG9tb3Jyb3cgV2FuZyAo546L5b635piOKQ==?= 
+        <wangdeming@inspur.com>
+To:     "felix.kuehling@amd.com" <felix.kuehling@amd.com>
+CC:     "airlied@gmail.com" <airlied@gmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIGRybS9hbWRrZmQ6IHVzZSB2bWFfbG9va3VwKCkg?=
+ =?utf-8?Q?instead_of_find=5Fvma()?=
+Thread-Topic: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
+Thread-Index: AQHY2vZO6b6Y9HXq4kWrbMYt0exbfK4SgyyAgADbmcA=
+Date:   Tue, 18 Oct 2022 00:47:24 +0000
+Message-ID: <2dc397050eed4d11ade7b9020fe2e298@inspur.com>
+References: <20221007024818.4921-1-wangdeming@inspur.com>
+ <a1d36d76-396a-0bf0-26b7-c009fbae5dd0@amd.com>
+In-Reply-To: <a1d36d76-396a-0bf0-26b7-c009fbae5dd0@amd.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.200.104.82]
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
+        micalg=SHA1; boundary="----=_NextPart_000_0009_01D8E2CE.3D0137E0"
 MIME-Version: 1.0
-In-Reply-To: <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+tUid:   20221018084725b822b4c2c956701375f65a334ee6c27f
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 5:31 AM, Maciej S. Szmigiero wrote:
-> On 14.10.2022 09:19, Gavin Shan wrote:
->> The test case is obviously broken on aarch64 because non-4KB guest
->> page size is supported. The guest page size on aarch64 could be 4KB,
->> 16KB or 64KB.
->>
->> This supports variable guest page size, mostly for aarch64.
->>
->>    - The host determines the guest page size when virtual machine is
->>      created. The value is also passed to guest through the synchronization
->>      area.
->>
->>    - The number of guest pages are unknown until the virtual machine
->>      is to be created. So all the related macros are dropped. Instead,
->>      their values are dynamically calculated based on the guest page
->>      size.
->>
->>    - The static checks on memory sizes and pages becomes dependent
->>      on guest page size, which is unknown until the virtual machine
->>      is about to be created. So all the static checks are converted
->>      to dynamic checks, done in check_memory_sizes().
->>
->>    - As the address passed to madvise() should be aligned to host page,
->>      the size of page chunk is automatically selected, other than one
->>      page.
->>
->>    - All other changes included in this patch are almost mechanical
->>      replacing '4096' with 'guest_page_size'.
->>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
->>   1 file changed, 115 insertions(+), 76 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
->> index d5aa9148f96f..d587bd952ff9 100644
->> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
->> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
->> @@ -26,14 +26,11 @@
->>   #include <processor.h>
->>   #define MEM_SIZE        ((512U << 20) + 4096)
->> -#define MEM_SIZE_PAGES        (MEM_SIZE / 4096)
->>   #define MEM_GPA        0x10000000UL
->>   #define MEM_AUX_GPA        MEM_GPA
->>   #define MEM_SYNC_GPA        MEM_AUX_GPA
->>   #define MEM_TEST_GPA        (MEM_AUX_GPA + 4096)
->>   #define MEM_TEST_SIZE        (MEM_SIZE - 4096)
->> -static_assert(MEM_SIZE % 4096 == 0, "invalid mem size");
->> -static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
->>   /*
->>    * 32 MiB is max size that gets well over 100 iterations on 509 slots.
->> @@ -42,29 +39,16 @@ static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
->>    * limited resolution).
->>    */
->>   #define MEM_SIZE_MAP        ((32U << 20) + 4096)
->> -#define MEM_SIZE_MAP_PAGES    (MEM_SIZE_MAP / 4096)
->>   #define MEM_TEST_MAP_SIZE    (MEM_SIZE_MAP - 4096)
->> -#define MEM_TEST_MAP_SIZE_PAGES (MEM_TEST_MAP_SIZE / 4096)
->> -static_assert(MEM_SIZE_MAP % 4096 == 0, "invalid map test region size");
->> -static_assert(MEM_TEST_MAP_SIZE % 4096 == 0, "invalid map test region size");
->> -static_assert(MEM_TEST_MAP_SIZE_PAGES % 2 == 0, "invalid map test region size");
->> -static_assert(MEM_TEST_MAP_SIZE_PAGES > 2, "invalid map test region size");
->>   /*
->>    * 128 MiB is min size that fills 32k slots with at least one page in each
->>    * while at the same time gets 100+ iterations in such test
->> + *
->> + * 2 MiB chunk size like a typical huge page
->>    */
->>   #define MEM_TEST_UNMAP_SIZE        (128U << 20)
->> -#define MEM_TEST_UNMAP_SIZE_PAGES    (MEM_TEST_UNMAP_SIZE / 4096)
->> -/* 2 MiB chunk size like a typical huge page */
->> -#define MEM_TEST_UNMAP_CHUNK_PAGES    (2U << (20 - 12))
->> -static_assert(MEM_TEST_UNMAP_SIZE <= MEM_TEST_SIZE,
->> -          "invalid unmap test region size");
->> -static_assert(MEM_TEST_UNMAP_SIZE % 4096 == 0,
->> -          "invalid unmap test region size");
->> -static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
->> -          (2 * MEM_TEST_UNMAP_CHUNK_PAGES) == 0,
->> -          "invalid unmap test region size");
->> +#define MEM_TEST_UNMAP_CHUNK_SIZE    (2U << 20)
->>   /*
->>    * For the move active test the middle of the test area is placed on
->> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
->>    * for the total size of 25 pages.
->>    * Hence, the maximum size here is 50 pages.
->>    */
->> -#define MEM_TEST_MOVE_SIZE_PAGES    (50)
->> -#define MEM_TEST_MOVE_SIZE        (MEM_TEST_MOVE_SIZE_PAGES * 4096)
->> +#define MEM_TEST_MOVE_SIZE        0x32000
-> 
-> The above number seems less readable than an explicit value of 50 pages.
-> 
-> In addition to that, it's 50 pages only with 4k page size, so at least
-> the comment above needs to be updated to reflect this fact.
-> 
+------=_NextPart_000_0009_01D8E2CE.3D0137E0
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, I will change the comments like below in next revision.
+Hi,
+The function vma_lookup show below.  Vma valid check is included in it. =
+Or, What other questions do you have?
 
-  /*
-   * When running this test with 32k memslots, actually 32763 excluding
-   * the reserved memory slot 0, the memory for each slot is 0x4000 bytes.
-   * The last slot contains 0x19000 bytes memory. Hence, the maximum size
-   * here is 0x32000 bytes.
-   */
+static inline
+struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long =
+addr)
+ {
+         struct vm_area_struct *vma =3D find_vma(mm, addr);
 
->>   #define MEM_TEST_MOVE_GPA_DEST        (MEM_GPA + MEM_SIZE)
->>   static_assert(MEM_TEST_MOVE_SIZE <= MEM_TEST_SIZE,
->>             "invalid move test region size");
-> (...)
->> @@ -242,33 +229,34 @@ static struct vm_data *alloc_vm(void)
->>   }
->>   static bool prepare_vm(struct vm_data *data, int nslots, uint64_t *maxslots,
->> -               void *guest_code, uint64_t mempages,
->> +               void *guest_code, uint64_t mem_size,
->>                  struct timespec *slot_runtime)
->>   {
->> -    uint64_t rempages;
->> +    uint64_t mempages, rempages;
->>       uint64_t guest_addr;
->> -    uint32_t slot;
->> +    uint32_t slot, guest_page_size;
->>       struct timespec tstart;
->>       struct sync_area *sync;
->> -    TEST_ASSERT(mempages > 1,
->> -            "Can't test without any memory");
->> +    guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
->> +    mempages = mem_size / guest_page_size;
->> +
->> +    data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
->> +    ucall_init(data->vm, NULL);
->>
-> 
-> TEST_ASSERT(data->vm->page_size == guest_page_size, "Invalid VM page size")
-> here would catch the case if someone accidentally modifies
-> __vm_create_with_one_vcpu() to use other page size than specified for
-> VM_MODE_DEFAULT.
-> 
+         if (vma && addr < vma->vm_start)
+                 vma =3D NULL;
 
-Sure, it's not harmful at least.
+         return vma;
+ }
 
->>       data->npages = mempages;
->> +    TEST_ASSERT(data->npages > 1, "Can't test without any memory");
->>       data->nslots = nslots;
->> -    data->pages_per_slot = mempages / data->nslots;
->> +    data->pages_per_slot = data->npages / data->nslots;
->>       if (!data->pages_per_slot) {
->> -        *maxslots = mempages + 1;
->> +        *maxslots = data->npages + 1;
->>           return false;
->>       }
->> -    rempages = mempages % data->nslots;
->> +    rempages = data->npages % data->nslots;
->>       data->hva_slots = malloc(sizeof(*data->hva_slots) * data->nslots);
->>       TEST_ASSERT(data->hva_slots, "malloc() fail");
->> -    data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
->> -    ucall_init(data->vm, NULL);
->> -
->>       pr_info_v("Adding slots 1..%i, each slot with %"PRIu64" pages + %"PRIu64" extra pages last\n",
->>           data->nslots, data->pages_per_slot, rempages);
-> (...)
->> @@ -856,6 +863,35 @@ static void help(char *name, struct test_args *targs)
->>           pr_info("%d: %s\n", ctr, tests[ctr].name);
->>   }
->> +static bool check_memory_sizes(void)
->> +{
->> +    uint32_t guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
->> +
->> +    if (MEM_SIZE % guest_page_size ||
->> +        MEM_TEST_SIZE % guest_page_size) {
->> +        pr_info("invalid MEM_SIZE or MEM_TEST_SIZE\n");
->> +        return false;
->> +    }
->> +
->> +    if (MEM_SIZE_MAP % guest_page_size        ||
->> +        MEM_TEST_MAP_SIZE % guest_page_size        ||
->> +        (MEM_TEST_MAP_SIZE / guest_page_size) <= 2    ||
->> +        (MEM_TEST_MAP_SIZE / guest_page_size) % 2) {
->> +        pr_info("invalid MEM_SIZE_MAP or MEM_TEST_MAP_SIZE\n");
->> +        return false;
->> +    }
->> +
->> +    if (MEM_TEST_UNMAP_SIZE > MEM_TEST_SIZE        ||
->> +        MEM_TEST_UNMAP_SIZE % guest_page_size    ||
->> +        (MEM_TEST_UNMAP_SIZE / guest_page_size) %
->> +        (MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size)) {
-> 
-> This should be (MEM_TEST_UNMAP_SIZE / guest_page_size) % (2 * MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size))
-> to match the old static_assert().
-> 
 
-Nice catch! I will fix it up in next revision :)
+> from: Felix Kuehling <felix.kuehling@amd.com>
+> time: 2022=E5=B9=B410=E6=9C=8818=E6=97=A5 3:35
+> to: tomorrow Wang (=E7=8E=8B=E5=BE=B7=E6=98=8E) =
+<wangdeming@inspur.com>;
+> airlied@gmail.com; daniel@ffwll.ch; alexander.deucher@amd.com;
+> christian.koenig@amd.com; Xinhui.Pan@amd.com
+> linux-kernel@vger.kernel.org
+> sub: Re: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
+>=20
+>=20
+> On 2022-10-06 22:48, Deming Wang wrote:
+> > Using vma_lookup() verifies the start address is contained in the
+> > found vma.  This results in easier to read the code.
+>=20
+> Thank you for the patches. This and your other patch look good to me.
+> However, you missed one use of find_vma in svm_range_is_valid. Is that =
+an
+> oversight or is there a reason why we need to use find_vma there?
+>=20
+> If you're going to respin it, you may also squash the two patches into =
+one.
+>=20
+> Thanks,
+>    Felix
+>=20
+>=20
+> >
+> > Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 12 ++++++------
+> >   1 file changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> > b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> > index 64fdf63093a0..cabcc2ca3c23 100644
+> > --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> > @@ -1586,8 +1586,8 @@ static int svm_range_validate_and_map(struct
+> mm_struct *mm,
+> >   		unsigned long npages;
+> >   		bool readonly;
+> >
+> > -		vma =3D find_vma(mm, addr);
+> > -		if (!vma || addr < vma->vm_start) {
+> > +		vma =3D vma_lookup(mm, addr);
+> > +		if (!vma) {
+> >   			r =3D -EFAULT;
+> >   			goto unreserve_out;
+> >   		}
+> > @@ -2542,8 +2542,8 @@ svm_range_get_range_boundaries(struct
+> kfd_process *p, int64_t addr,
+> >   	struct interval_tree_node *node;
+> >   	unsigned long start_limit, end_limit;
+> >
+> > -	vma =3D find_vma(p->mm, addr << PAGE_SHIFT);
+> > -	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
+> > +	vma =3D vma_lookup(p->mm, addr << PAGE_SHIFT);
+> > +	if (!vma) {
+> >   		pr_debug("VMA does not exist in address [0x%llx]\n", addr);
+> >   		return -EFAULT;
+> >   	}
+> > @@ -2871,8 +2871,8 @@ svm_range_restore_pages(struct amdgpu_device
+> *adev, unsigned int pasid,
+> >   	/* __do_munmap removed VMA, return success as we are handling =
+stale
+> >   	 * retry fault.
+> >   	 */
+> > -	vma =3D find_vma(mm, addr << PAGE_SHIFT);
+> > -	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
+> > +	vma =3D vma_lookup(mm, addr << PAGE_SHIFT);
+> > +	if (!vma) {
+> >   		pr_debug("address 0x%llx VMA is removed\n", addr);
+> >   		r =3D 0;
+> >   		goto out_unlock_range;
 
-Thanks,
-Gavin
+------=_NextPart_000_0009_01D8E2CE.3D0137E0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
 
+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
+AgICAIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMB0GA1UdDgQWBBT2m8+B
+pv3zOH+FCDvTbpfMkvPbAzAfBgNVHSMEGDAWgBReWQOmtExYYJFO9h61pTmmMsE1ajCCAQ8GA1Ud
+HwSCAQYwggECMIH/oIH8oIH5hoG6bGRhcDovLy9DTj1JTlNQVVItQ0EsQ049SlRDQTIwMTIsQ049
+Q0RQLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRp
+b24sREM9aG9tZSxEQz1sYW5nY2hhbyxEQz1jb20/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9i
+YXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50hjpodHRwOi8vSlRDQTIwMTIuaG9t
+ZS5sYW5nY2hhby5jb20vQ2VydEVucm9sbC9JTlNQVVItQ0EuY3JsMIIBKQYIKwYBBQUHAQEEggEb
+MIIBFzCBsQYIKwYBBQUHMAKGgaRsZGFwOi8vL0NOPUlOU1BVUi1DQSxDTj1BSUEsQ049UHVibGlj
+JTIwS2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1ob21lLERD
+PWxhbmdjaGFvLERDPWNvbT9jQUNlcnRpZmljYXRlP2Jhc2U/b2JqZWN0Q2xhc3M9Y2VydGlmaWNh
+dGlvbkF1dGhvcml0eTBhBggrBgEFBQcwAoZVaHR0cDovL0pUQ0EyMDEyLmhvbWUubGFuZ2NoYW8u
+Y29tL0NlcnRFbnJvbGwvSlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb21fSU5TUFVSLUNBLmNydDBH
+BgNVHREEQDA+oCUGCisGAQQBgjcUAgOgFwwVd2FuZ2RlbWluZ0BpbnNwdXIuY29tgRV3YW5nZGVt
+aW5nQGluc3B1ci5jb20wDQYJKoZIhvcNAQELBQADggEBAKD6Oh0Yu1g2xXDIaczYlx8WZiYqTi7t
+bFCmsNT5DmNUfLaJre5UDyaWjgwW6Z/KN1X19Piy6oS8ex93gaeF4siDuQimREZoKxePJyUeyFs5
+oC6kpsw95f/0RM5zhHb4I8L4AgplfwySCGAeMRr74rThzkYWfoU1AM+c8cBtViIispknx6KxJFo2
+b533lCx168UKeNRb1n7pUANxFYd+1jjdRKCPrszdJcJddFmnLBetcnD4DG0ID62hnw+/g0KoAlfd
+ORikFVBLobsDNy+NQ++5ZYgx1ahEQ6BESIjeWxut+2Zqis6Zbwd5ZsBhm892l5EdzJCuYe5xDEZw
+0Z0bGvUxggOTMIIDjwIBATBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZ
+FghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA
+1tjc3okYpZWK7QAAAADW2DAJBgUrDgMCGgUAoIIB+DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjEwMTgwMDQ3MjJaMCMGCSqGSIb3DQEJBDEWBBST67mw4N90PcF4
+hgqli2sF5Rg5IDB/BgkrBgEEAYI3EAQxcjBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJ
+kiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BV
+Ui1DQQITfgAA1tjc3okYpZWK7QAAAADW2DCBgQYLKoZIhvcNAQkQAgsxcqBwMFkxEzARBgoJkiaJ
+k/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhv
+bWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA1tjc3okYpZWK7QAAAADW2DCBkwYJKoZIhvcNAQkP
+MYGFMIGCMAoGCCqGSIb3DQMHMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAEC
+MA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCGjALBglghkgBZQMEAgMwCwYJ
+YIZIAWUDBAICMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBieZuG7cH9zIGAfzZ/LrYc
+cfFwMZ2EKcBCxCB07+B4iSrawKROtNMcuvp7OEZZWPl4FMctbG28ZbzwcESf9ZY6zGO902Jmkjow
+/Qj+x/D0RkIcdERgcXpp2yqoSbguNHu3sc/dQYzUTP7uyJJcmK2xPZUoZTxuB5SZVuBL17DwGe8x
+hjcsFif3crFo6Y0s9zuCYToOHm0NIROT5tcvIf+vfXEX7yfJYj3QBJQnk7pLt52ayzg4Im8cdFHb
++lvX+XbY3dc/1yXVe61uDacwbvLgADF2/e//6qLDBgtiAyOtzga1IKv0xeuhfMp3v1Fnc87l77s8
+NUW2PUBrBAzPmbLaAAAAAAAA
+
+------=_NextPart_000_0009_01D8E2CE.3D0137E0--
