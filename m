@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B5160259B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FAB60259E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiJRHWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:22:36 -0400
+        id S230391AbiJRHWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:22:51 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiJRHWX (ORCPT
+        with ESMTP id S230323AbiJRHWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:22:23 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED14AB83B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:22:22 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d10so13296881pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:22:22 -0700 (PDT)
+        Tue, 18 Oct 2022 03:22:32 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F11AB80A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:22:32 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id cl1so13098843pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zmmQqngBHRO64jwJHlH4N8QJ8HHeFfHjYmmW2fvTNrE=;
-        b=mKyGm3XbRd8gH9cVGki2o1JHhGdcCBGN+sKVLSvL4QrvYRZrmNHYVkn3fPf6/zZbF8
-         3dSuHMcZ+u5twLyXF1CCYNKe93YlLTLAJr+tQ0ddx8gVLJAzLDG/4hzDsZ5jEJNG/4v/
-         +BCij7wsdF/uu9G2B0LiZv2OE9AF28ixq1SWE=
+        bh=IuC2u8JFBj5aBto1I57uFCGMj8aA6SvkPGDr21Vsm18=;
+        b=nogYsolXRwDmj3kSODI4WsB8i6jRSM7IotIlqcdOmhXjOprssKP129Dcnh3XehLRBK
+         qsVaY5JHIeTGPsilErJrgu6xEmw+NNg9Nfd1XedLjzWypKIyFbr9M4ARtlML3j8wQ1Gc
+         iSgWMrLrDR0lX13lQVRGoJBxCOA6IZrg7B+bg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zmmQqngBHRO64jwJHlH4N8QJ8HHeFfHjYmmW2fvTNrE=;
-        b=JTxZMxWzvTRtXcTTO/4b8bDT14cAs1ZiphPPJUIVVAwUjRCZJdHdRQOu5nGV3u7HrY
-         Ycg1tuYYZvjr1qlSwBdy34yRQU10Piuk7sKKq3NoNr+qTsOv4mQE7fTbd8HaANAn68+j
-         nhKvxy8o32SG9nPnPvIrMsBCiPD9T4r7Q1l5GS4dCsba7eIq4aenoTmY4Su9mkB0EvuC
-         viNqZS/Iw0/zyFJGdJDyF7DEuPkAj8kBcL2QoZX8+bF84oIZfYFxtyYaWVX05ylNn8Ip
-         5p0erl40+YAIk0/ZAL1Ii97hcJcvRgXtlRjZCEAGvY2v/uZrPeABA5HUUREpYAD2UE10
-         RnBw==
-X-Gm-Message-State: ACrzQf1vENGBwTz9wmlbEH7gBaJkvnBv7p87rzlte4VeeP+IdnRJ1H26
-        vZAnBxzWrXo+uVNuL+dja5DZmQ==
-X-Google-Smtp-Source: AMsMyM7sSHggHqyJ0TcgW9+BkVyaT7rEgzYrT/GyJ+YeoRMLr8q0Oj65cetn/KVqd9ihtHbeu0I/ww==
-X-Received: by 2002:a05:6a00:13a3:b0:563:6d36:ba58 with SMTP id t35-20020a056a0013a300b005636d36ba58mr1576650pfg.43.1666077742371;
-        Tue, 18 Oct 2022 00:22:22 -0700 (PDT)
+        bh=IuC2u8JFBj5aBto1I57uFCGMj8aA6SvkPGDr21Vsm18=;
+        b=P6e6a73PEPI67wxBFdn1j2nIB9IcSeGvns8VfpeyJq0O2sz7PA3uqSoI/o+rWrQFO5
+         ZbCmWpKLw/yQRf0Qu6EYxU74eLd36utpc1yOYc25aEehUJ4ZR8/o74bkc4pHWSusfRVV
+         LyjloSY86Is49KxhcvzVE9+V63p2YBurm6z7fzAlE/SXkq4ZBA5rRtAjYoeRg0DJiEi7
+         bA7/bmQy8eo4b6V4rZB3xWkMOujoXvMsshykftLyF7qsQSyAbrMZfrhihHLg4Y8adV1Y
+         9oEWGUXozWS0ZZlU+4jc7zFutY5bdtvozb4k+e4zAkE4/HBrnEh4ZGCxWmDq/DC+BMlA
+         v5fQ==
+X-Gm-Message-State: ACrzQf2ByUUX0YCMxOMNnC0m5hJyo/bhqxzn1jo/5nl3NKo9j781lRJJ
+        0+Yxhep02KbO3FfgTNqm9HG45Q==
+X-Google-Smtp-Source: AMsMyM6onBfVVsToaqLZ7OZhSdCJc/BgFa6yiHoN3qZTXqMw/zn7OCh6rNuz3dDo8g+HKAdJmMPheg==
+X-Received: by 2002:a17:902:ccc2:b0:178:29f9:5c5e with SMTP id z2-20020a170902ccc200b0017829f95c5emr1562942ple.21.1666077751606;
+        Tue, 18 Oct 2022 00:22:31 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z8-20020a1709027e8800b00178af82a000sm7864182pla.122.2022.10.18.00.22.21
+        by smtp.gmail.com with ESMTPSA id f17-20020a170902ce9100b00172f4835f60sm7896045plg.189.2022.10.18.00.22.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 00:22:21 -0700 (PDT)
+        Tue, 18 Oct 2022 00:22:30 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, ebiederm@xmission.com,
-        bernd.edlinger@hotmail.de
-Cc:     Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] exec: Copy oldsighand->action under spin-lock
-Date:   Tue, 18 Oct 2022 00:22:06 -0700
-Message-Id: <166607772207.3775126.2855869252440923728.b4-ty@chromium.org>
+To:     eb@emlix.com, ebiederm@xmission.com
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] ELF uapi: add spaces before '{'
+Date:   Tue, 18 Oct 2022 00:22:08 -0700
+Message-Id: <166607772208.3775126.8911298240981358816.b4-ty@chromium.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <AM8PR10MB470871DEBD1DED081F9CC391E4389@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-References: <AM8PR10MB470871DEBD1DED081F9CC391E4389@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <11563980.Ss37MnutNL@mobilepool36.emlix.com>
+References: <11563980.Ss37MnutNL@mobilepool36.emlix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -70,15 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Jun 2021 15:54:27 +0200, Bernd Edlinger wrote:
-> unshare_sighand should only access oldsighand->action
-> while holding oldsighand->siglock, to make sure that
-> newsighand->action is in a consistent state.
+On Tue, 04 Oct 2022 12:25:40 +0200, Rolf Eike Beer wrote:
+> When searching for a struct definition I often enough end up simply doing
+> 
+>   git grep 'struct foobar {'
+> 
+> Sadly some of the ELF structs did not follow the usual coding style so they
+> were invisible.
+> 
+> [...]
 
 Applied to for-next/execve, thanks!
 
-[1/1] exec: Copy oldsighand->action under spin-lock
-      https://git.kernel.org/kees/c/f53283b0165f
+[1/1] ELF uapi: add spaces before '{'
+      https://git.kernel.org/kees/c/5ce85ed9d20e
 
 -- 
 Kees Cook
