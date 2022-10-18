@@ -2,263 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FE660241F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A534D602423
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiJRGGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
+        id S230350AbiJRGGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiJRGGN (ORCPT
+        with ESMTP id S230261AbiJRGGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:06:13 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351F3A2863
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:06:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id w18so29702544ejq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EWA2hwkSsjImpnq19q3HqZSD12LMEEGS/Z8QL4wjg38=;
-        b=PlFNPKCJedgthU3/o4ldkwo2E18LMZq2FUtOM0A06YZtVYiqwG9UgqCvkXD5MjqBc6
-         Gf4Puz/Kt69IvxcoKgPLhH0HrCTfC7mneSWix/gGWu/NG8Ofx9Xt/+iDG8CnrLE4O/+X
-         vdxLP6MYsBHDEBlslKwZ+1FsnOo6MVw6YQQ4cHZGeVTP8twBkcv8xHvGx79EcjK+U7G+
-         uwSCbTGSygG2+k6sbaXNcf6BS5JbZ3lxn6ynO2Re/mXmR474xrCwzM3SpamLdii00oIo
-         Rd3iPY9eeE15fajBiEWFh2KzLvDABe7o/SmBshIZ3oYiTf4VxgV7Wec5Wh4AeD3zJZyD
-         w3+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EWA2hwkSsjImpnq19q3HqZSD12LMEEGS/Z8QL4wjg38=;
-        b=R12+dZK3n6/e57gvClDdKIv8PeXbbcnuQYW61xrbbKG8CCUmdVpTopJM/7q+ZgUVlT
-         nMqe5aHA+ZFYKI/W1FOxfj2y/ozpYfbdJ/YmouIWMr+lv5sZQe4QW6/Go/C2snOz7MFL
-         to/sXB3wIgSZTlRjaKQjmp+kOu8yM3biiPHIpPxFsR9cZgDKGz6Ab0QvC7pSe+j1m+6x
-         nLQUJshdQq3WKkiWjs00w+WNCR/HftZjrf+L3Pnt2/4Nq9/0jImnhgjpMRuhCYODrAZx
-         YA48DDegNBqcd28THBxd0gzLiY8vs//wB09EMBL2AY2h7bAKnXkUOy2NhBr+C+flaOnV
-         A9ew==
-X-Gm-Message-State: ACrzQf0cxX7dbSaVjnP3SF6dT/+LxF7mbvrYb3KhFSBrqfKNB42UFK4b
-        sqJm5R+XLXdt8S6vUL/GpLxYlecaip5uqHEAoQzHFvzYCuTIlw==
-X-Google-Smtp-Source: AMsMyM4RyZP8sSlrtRJ1YUStexYkP8CwNNxT5ec0eOrpuadDuuDmrcFwpr65UBh+W3VdsP1mSVpK4FxQK2EkHCVg8wk=
-X-Received: by 2002:a17:907:7b93:b0:770:1d4f:4de9 with SMTP id
- ne19-20020a1709077b9300b007701d4f4de9mr1048423ejc.201.1666073168638; Mon, 17
- Oct 2022 23:06:08 -0700 (PDT)
+        Tue, 18 Oct 2022 02:06:35 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132A7A3A95;
+        Mon, 17 Oct 2022 23:06:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0VSTCoBD_1666073183;
+Received: from 30.221.96.155(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VSTCoBD_1666073183)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 14:06:24 +0800
+Message-ID: <188e331c-d399-e86d-e894-a2a116deb753@linux.alibaba.com>
+Date:   Tue, 18 Oct 2022 14:06:22 +0800
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 18 Oct 2022 11:35:57 +0530
-Message-ID: <CA+G9fYu4cZW8_S3OvQwqaT4CYfVh5vyPAGSkENWXuBN4FJ67vQ@mail.gmail.com>
-Subject: kunit: drm_framebuffer: kernel BUG at drivers/gpu/drm/drm_buddy.c
-To:     open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V2 2/2] Documentation: kdump: describe VMCOREINFO export
+ for RISCV64
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
+        k-hagio-ab@nec.com, hschauhan@nulltrace.org, yixun.lan@gmail.com
+References: <20221014134139.5151-1-xianting.tian@linux.alibaba.com>
+ <20221014134139.5151-3-xianting.tian@linux.alibaba.com>
+ <Y04bOv49sRsauLb6@debian.me>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <Y04bOv49sRsauLb6@debian.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel BUG reported while running kunit drm_framebuffer tests
-on Linux mainline 6.1.0-rc1.
 
-Started happening from Linux next 6.0.0-rc1-next-20220818.
-Stared happening on Linux mainline from
-git_sha: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Crash log:
-[   38.366527] ok 39 - drm_framebuffer
-[   38.367919]     # Subtest: drm_buddy
-[   38.367921]     1..6
-[   38.368686] ------------[ cut here ]------------
-[   38.370089] kernel BUG at drivers/gpu/drm/drm_buddy.c:140!
-[   38.371111] invalid opcode: 0000 [#1] PREEMPT SMP
-[   38.372003] CPU: 1 PID: 654 Comm: kunit_try_catch Tainted: G    B
-         N 6.1.0-rc1 #1
-[   38.373486] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[   38.374972] EIP: drm_buddy_init+0x2c0/0x340
-[   38.375767] Code: 21 29 c1 83 f9 33 0f 86 27 ff ff ff 8d b4 26 00
-00 00 00 8d b4 26 00 00 00 00 0f 0b 8d b6 00 00 00 00 0f 0b 8d b6 00
-00 00 00 <0f> 0b 8d b6 00 00 00 00 0f bd 45 0c 0f 44 c1 83 c0 21 e9 e0
-fd ff
-[   38.379066] EAX: c1379898 EBX: c1aaf0a0 ECX: c1aaf090 EDX: c1aaf0b8
-[   38.380196] ESI: 00000034 EDI: c2bcff20 EBP: c2bcfebc ESP: c2bcfe8c
-[   38.381308] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010297
-[   38.382507] CR0: 80050033 CR2: f4f5e000 CR3: 0f947000 CR4: 003506d0
-[   38.383659] DR0: cf9aada4 DR1: cf9aada9 DR2: cf9aadaa DR3: cf9aadab
-[   38.384760] DR6: ffff0ff0 DR7: 00000600
-[   38.385441] Call Trace:
-[   38.385909]  drm_test_buddy_alloc_limit+0x47/0x3c0
-[   38.386772]  ? __switch_to_asm+0x8f/0xf0
-[   38.387488]  ? __switch_to_asm+0x89/0xf0
-[   38.388192]  ? __switch_to_asm+0x83/0xf0
-[   38.388903]  ? finish_task_switch+0x80/0x2b0
-[   38.389670]  ? __schedule+0x2dc/0xac0
-[   38.390325]  ? trace_hardirqs_on+0x36/0xf0
-[   38.391066]  ? finish_task_switch+0x80/0x2b0
-[   38.391848]  ? __switch_to+0x18/0x1e0
-[   38.392505]  ? drm_buddy_init_test+0x25/0x40
-[   38.393287]  ? get_random_u32+0x8f/0xf0
-[   38.393991]  ? drm_buddy_init_test+0x25/0x40
-[   38.394775]  kunit_try_run_case+0x52/0x80
-[   38.395524]  ? trace_hardirqs_on+0x36/0xf0
-[   38.396259]  kunit_generic_run_threadfn_adapter+0x16/0x20
-[   38.397231]  kthread+0xe0/0x110
-[   38.397820]  ? kunit_try_catch_throw+0x20/0x20
-[   38.398620]  ? kthread_complete_and_exit+0x20/0x20
-[   38.399503]  ret_from_fork+0x1c/0x28
-[   38.400174] Modules linked in:
-[   38.400781] ---[ end trace 0000000000000000 ]---
-[   38.401623] EIP: drm_buddy_init+0x2c0/0x340
-[   38.402374] Code: 21 29 c1 83 f9 33 0f 86 27 ff ff ff 8d b4 26 00
-00 00 00 8d b4 26 00 00 00 00 0f 0b 8d b6 00 00 00 00 0f 0b 8d b6 00
-00 00 00 <0f> 0b 8d b6 00 00 00 00 0f bd 45 0c 0f 44 c1 83 c0 21 e9 e0
-fd ff
-[   38.405711] EAX: c1379898 EBX: c1aaf0a0 ECX: c1aaf090 EDX: c1aaf0b8
-[   38.406830] ESI: 00000034 EDI: c2bcff20 EBP: c2bcfebc ESP: c2bcfe8c
-[   38.407976] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010297
-[   38.409186] CR0: 80050033 CR2: f4f5e000 CR3: 0f947000 CR4: 003506d0
-login-action: exception
-[login-action] Waiting for messages, (timeout 00:09:56)
-[   38.410313] DR0: cf9aada4 DR1: cf9aada9 DR2: cf9aadaa DR3: cf9aadab
-[   38.411481] DR6: ffff0ff0 DR7: 00000600
-[  365.847635]     # drm_test_buddy_alloc_limit: try timed out
-[  365.848890] ------------[ cut here ]------------
-[  365.849823] refcount_t: addition on 0; use-after-free.
-[  365.850822] WARNING: CPU: 3 PID: 1 at lib/refcount.c:25
-refcount_warn_saturate+0x84/0x120
-[  365.852421] Modules linked in:
-[  365.853055] CPU: 3 PID: 1 Comm: swapper/0 Tainted: G    B D
- N 6.1.0-rc1 #1
-[  365.854612] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[  365.856032] EIP: refcount_warn_saturate+0x84/0x120
-[  365.856931] Code: cf e8 bb 9a a1 00 0f 0b eb cf 8d 74 26 00 80 3d
-54 c7 7d cf 00 75 c2 c7 04 24 90 41 43 cf b0 01 a2 54 c7 7d cf e8 97
-9a a1 00 <0f> 0b eb ab 8d b4 26 00 00 00 00 90 80 3d 56 c7 7d cf 00 75
-9a c7
-[  365.860283] EAX: 0000002a EBX: c23a0000 ECX: ce17a1d2 EDX: 00000000
-[  365.861373] ESI: c23a0018 EDI: c23a0000 EBP: c11cdc90 ESP: c11cdc8c
-[  365.862567] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010296
-[  365.863917] CR0: 80050033 CR2: 00000000 CR3: 0f947000 CR4: 003506d0
-[  365.865113] DR0: cf9aadac DR1: cf9aadad DR2: cf9aadae DR3: cf9aadaf
-[  365.866330] DR6: ffff0ff0 DR7: 00000600
-[  365.867157] Call Trace:
-[  365.867736]  kthread_stop+0x184/0x190
-[  365.868480]  kunit_try_catch_run.cold+0x7b/0xc1
-[  365.869373]  kunit_run_case_catch_errors+0x6e/0xa8
-[  365.870394]  kunit_run_tests.cold+0x1c4/0x5fe
-[  365.871218]  ? kunit_catch_run_case+0x50/0x50
-[  365.872153]  ? kunit_module_notify+0x90/0x90
-[  365.872945]  ? up_write+0x37/0x70
-[  365.873565]  ? preempt_count_sub+0xc1/0x110
-[  365.874356]  ? preempt_count_add+0x6c/0xd0
-[  365.875120]  ? up_write+0x37/0x70
-[  365.875723]  ? __debugfs_create_file+0xdb/0x1a0
-[  365.876625]  ? up_write+0x37/0x70
-[  365.877264]  ? debugfs_create_file+0x3c/0x50
-[  365.878134]  ? kunit_debugfs_create_suite+0x90/0xa0
-[  365.879046]  __kunit_test_suites_init+0x52/0x70
-[  365.879873]  kunit_run_all_tests.cold+0xeb/0x170
-[  365.880730]  ? kernel_init_freeable+0x1d0/0x209
-[  365.881702]  kernel_init_freeable+0x1d5/0x209
-[  365.882568]  ? rest_init+0xc0/0xc0
-[  365.883240]  kernel_init+0x1a/0x110
-[  365.883950]  ? schedule_tail_wrapper+0x9/0xc
-[  365.884756]  ret_from_fork+0x1c/0x28
-[  365.885431] ---[ end trace 0000000000000000 ]---
-[  365.886320] BUG: kernel NULL pointer dereference, address: 00000000
-[  365.887443] #PF: supervisor write access in kernel mode
-login-action: exception
-[login-action] Waiting for messages, (timeout 00:09:56)
-[  365.888395] #PF: error_code(0x0002) - not-present page
-[  365.889329] *pde = 00000000
-[  365.889883] Oops: 0002 [#2] PREEMPT SMP
-[  365.890599] CPU: 3 PID: 1 Comm: swapper/0 Tainted: G    B D W
- N 6.1.0-rc1 #1
-[  365.891980] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[  365.893510] EIP: kthread_stop+0x42/0x190
-[  365.894236] Code: 00 00 f0 0f c1 43 18 85 c0 0f 84 51 01 00 00 8d
-50 01 09 c2 0f 88 fe 00 00 00 f6 43 1e 20 0f 84 14 01 00 00 8b bb 2c
-04 00 00 <f0> 80 0f 02 89 d8 e8 83 f7 ff ff f0 80 4b 02 02 89 d8 e8 b7
-2e 01
-[  365.897721] EAX: 0000002a EBX: c23a0000 ECX: ce17a1d2 EDX: 00000000
-[  365.898816] ESI: c23a0018 EDI: 00000000 EBP: c11cdca4 ESP: c11cdc98
-[  365.899951] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010202
-[  365.901188] CR0: 80050033 CR2: 00000000 CR3: 0f947000 CR4: 003506d0
-[  365.902360] DR0: cf9aadac DR1: cf9aadad DR2: cf9aadae DR3: cf9aadaf
-[  365.903457] DR6: ffff0ff0 DR7: 00000600
-[  365.904164] Call Trace:
-[  365.904650]  kunit_try_catch_run.cold+0x7b/0xc1
-[  365.905538]  kunit_run_case_catch_errors+0x6e/0xa8
-[  365.906471]  kunit_run_tests.cold+0x1c4/0x5fe
-[  365.907297]  ? kunit_catch_run_case+0x50/0x50
-[  365.908127]  ? kunit_module_notify+0x90/0x90
-[  365.908935]  ? up_write+0x37/0x70
-[  365.909565]  ? preempt_count_sub+0xc1/0x110
-[  365.910336]  ? preempt_count_add+0x6c/0xd0
-[  365.911094]  ? up_write+0x37/0x70
-[  365.911763]  ? __debugfs_create_file+0xdb/0x1a0
-[  365.912657]  ? up_write+0x37/0x70
-[  365.913274]  ? debugfs_create_file+0x3c/0x50
-[  365.914963]  ? kunit_debugfs_create_suite+0x90/0xa0
-[  365.916691]  __kunit_test_suites_init+0x52/0x70
-[  365.918568]  kunit_run_all_tests.cold+0xeb/0x170
-[  365.919874]  ? kernel_init_freeable+0x1d0/0x209
-[  365.922279]  kernel_init_freeable+0x1d5/0x209
-[  365.923195]  ? rest_init+0xc0/0xc0
-[  365.923922]  kernel_init+0x1a/0x110
-[  365.924720]  ? schedule_tail_wrapper+0x9/0xc
-[  365.925416]  ret_from_fork+0x1c/0x28
-[  365.926043] Modules linked in:
-[  365.926558] CR2: 0000000000000000
-[  365.927137] ---[ end trace 0000000000000000 ]---
-[  365.927898] EIP: drm_buddy_init+0x2c0/0x340
-[  365.928623] Code: 21 29 c1 83 f9 33 0f 86 27 ff ff ff 8d b4 26 00
-00 00 00 8d b4 26 00 00 00 00 0f 0b 8d b6 00 00 00 00 0f 0b 8d b6 00
-00 00 00 <0f> 0b 8d b6 00 00 00 00 0f bd 45 0c 0f 44 c1 83 c0 21 e9 e0
-fd ff
-[  365.932581] EAX: c1379898 EBX: c1aaf0a0 ECX: c1aaf090 EDX: c1aaf0b8
-[  365.933606] ESI: 00000034 EDI: c2bcff20 EBP: c2bcfebc ESP: c2bcfe8c
-[  365.934846] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010297
-[  365.936612] CR0: 80050033 CR2: 00000000 CR3: 0f947000 CR4: 003506d0
-[  365.938215] DR0: cf9aadac DR1: cf9aadad DR2: cf9aadae DR3: cf9aadaf
-[  365.939499] DR6: ffff0ff0 DR7: 00000600
-[  365.940268] Kernel panic - not syncing: Attempted to kill init!
-exitcode=0x00000009
-[  365.941729] Kernel Offset: disabled
-
-URL:
-[1] https://lkft.validation.linaro.org/scheduler/job/5689216#L2230
-[2] https://lkft.validation.linaro.org/scheduler/job/5633224#L217
-
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: 9abf2313adc1ca1b6180c508c25f22f9395cc780
-  git_describe: v6.1-rc1
-  kernel_version: 6.1.0-rc1
-  kernel-config: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/668166832
-  artifact-location: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH
-  toolchain: gcc-11
-  System.map: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH/System.map
-  vmlinux.xz: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH/vmlinux.xz
-
---
-Linaro LKFT
-https://lkft.linaro.org
+在 2022/10/18 上午11:19, Bagas Sanjaya 写道:
+> On Fri, Oct 14, 2022 at 09:41:39PM +0800, Xianting Tian wrote:
+>> The following interrelated definitions and ranges are needed by the kdump
+>> crash tool, they are exported by "arch/riscv/kernel/crash_core.c":
+> Better say "..., which are exported by ..."
+>
+>> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+>> index 6726f439958c..8e2e164cf3db 100644
+>> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
+>> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+>> @@ -595,3 +595,33 @@ X2TLB
+>>   -----
+>>   
+>>   Indicates whether the crashed kernel enabled SH extended mode.
+>> +
+>> +RISCV64
+>> +=======
+>> +
+>> +VA_BITS
+>> +-------
+>> +
+>> +The maximum number of bits for virtual addresses. Used to compute the
+>> +virtual memory ranges.
+>> +
+>> +PAGE_OFFSET
+>> +-----------
+>> +
+>> +Indicates the virtual kernel start address of direct-mapped RAM region.
+>> +
+>> +phys_ram_base
+>> +-------------
+>> +
+>> +Indicates the start physical RAM address.
+>> +
+>> +MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
+>> +----------------------------------------------------------------------------------------------------------------------------------------------------
+>> +
+>> +Used to get the correct ranges:
+>> +
+>> +  * MODULES_VADDR ~ MODULES_END : Kernel module space.
+>> +  * VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
+>> +  * VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
+>> +  * KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
+>> +  * KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
+> The documentation LGTM, thanks.
+>
+> When the patch subject is fixed,
+Could you tell me what patch subject should be changed to ? thanks
+>
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>
