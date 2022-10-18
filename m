@@ -2,176 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A912602DA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE998602DAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiJRN6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S231310AbiJRN6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiJRN6K (ORCPT
+        with ESMTP id S231283AbiJRN6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:58:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E4D01A6;
-        Tue, 18 Oct 2022 06:58:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9DC95207F2;
-        Tue, 18 Oct 2022 13:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666101483; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hjPGH/f+XfkkPdSrr08xl26lKkygGjOFS9Er+Ciw6FE=;
-        b=VOptv98TbFtNOIxZIJ8r1uZnCc7mDFayvHLPzorFbsqv//VuXCNdNGjv5nhEwo999SD8er
-        P354UqvD/sEFh0EsxxdOE0jo8GexykuAD0sIHpYDdDVBcSmlg22qvovtvmaBFXC//sOTDa
-        sQw8FoXdffFnxp4R5+9tbJyN30Ys11U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666101483;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hjPGH/f+XfkkPdSrr08xl26lKkygGjOFS9Er+Ciw6FE=;
-        b=L+XWq/Iu5TsIEsACXdnZQohYWH1am4WwNMS7V6JqLzGYMONJiyYQHlDbEvyF4M3h754M0e
-        agF6Du+bt5w8BTAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F22513480;
-        Tue, 18 Oct 2022 13:58:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZPLtIuuwTmMNLgAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 18 Oct 2022 13:58:03 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 1E120A06EE; Tue, 18 Oct 2022 15:58:03 +0200 (CEST)
-Date:   Tue, 18 Oct 2022 15:58:03 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, syzbot+c740bb18df70ad00952e@syzkaller.appspotmail.com
-Subject: Re: [PATCH -next v2] ext4: fix warning in 'ext4_da_release_space'
-Message-ID: <20221018135803.lt3ia4mqwlmnwd5s@quack3>
-References: <20221018022701.683489-1-yebin10@huawei.com>
+        Tue, 18 Oct 2022 09:58:44 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F59CF874;
+        Tue, 18 Oct 2022 06:58:41 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z97so20565426ede.8;
+        Tue, 18 Oct 2022 06:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yNvg7dJc4v85iivVesuNckJ8VnSoJSGr9nvVYYYfI8Q=;
+        b=MvSWiW5yn8tumonucJ27BJ1DvOPfCyCk1Eott6lHotQqjJ9KPwEMFaXOzLSM7sYYKn
+         +bz8rTOJ32iFsZa+92WkVydmKZYuk12FtsbeDZrhRsAQU5FsRQVp+zgxCSfPhYVir48r
+         PnNmicXzCOAxCapJNyEBpkVBnSTpYovvaKRcdI/zXNofeIkroIkPDplKxFpYtiK5MY+U
+         Pt9WLxCHN8WJSQTdRa+bMk7TkDIJGhtGX3CVbluiFNQMTAn7anXnuQMGL2oxlDRGpwHY
+         UBEVUH59fVwwe1xFbcU2Zql2KiC5nsgjZqmZ+xIBgg/SEeOuy4A50/n9dFwtFpuvczo3
+         634g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yNvg7dJc4v85iivVesuNckJ8VnSoJSGr9nvVYYYfI8Q=;
+        b=FmVhbOCr4bZDgPnLw4GoJebEx3caPjRtUH32Sc0RrquU56+dDRzWPSfjmykNnOFHDn
+         WNZZIMkqwvVdAzMGJbL0BskhQ5cF7l+Azibt4QWU/i4UXcl5n7LhrrAhnxQcQUksXH3Q
+         dx2Lh7Hqd6Kw3F+rhvWvAcFgxwMgsWuP0YCobcKCaLq9IWlgKwrTejdLJRWruzP/LXwS
+         WIVIMEQjT12r1ZcX6L3g8GA6l4xrM6i8rme73YiaeeL6GYHm6V0spcJRZVVN5IwJoqzb
+         MzxAfK+++TPdwifQloS0s2S4avOXiNIT/+j6zLRNO/7gIReL9yMwYVOMXvagm7K3slFR
+         TKvQ==
+X-Gm-Message-State: ACrzQf1aiF+AaKTZvbasQ2qJZyn5tdzABgiRFpL16odZTnc/+GE8WJnd
+        P+aqGdMGfZHISu+im7oD2zo=
+X-Google-Smtp-Source: AMsMyM44JA4l96VvTHi5y+ZBj/40V5m/M6cGl/qXjUusmCeaucu0OggoXyEtHKyggzqxkuMlDTp/RQ==
+X-Received: by 2002:a05:6402:1604:b0:458:b2b7:bd5a with SMTP id f4-20020a056402160400b00458b2b7bd5amr2615998edv.73.1666101519504;
+        Tue, 18 Oct 2022 06:58:39 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id 24-20020a170906301800b0073dd8e5a39fsm7445732ejz.156.2022.10.18.06.58.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 06:58:39 -0700 (PDT)
+Message-ID: <2f5f0c7f-4e1d-2434-51b4-d98d3fa7f49a@gmail.com>
+Date:   Tue, 18 Oct 2022 15:58:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018022701.683489-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH V2] dt-bindings: nvmem: u-boot,env: add Broadcom's variant
+ binding
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        William Zhang <william.zhang@broadcom.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Joel Peshkin <joel.peshkin@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Rini <trini@konsulko.com>, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220930163631.27040-1-zajec5@gmail.com>
+ <166578177913.2909910.7600034251484225468.robh@kernel.org>
+ <Y059lG8ZOXXzc4N+@wendy>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <Y059lG8ZOXXzc4N+@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 18-10-22 10:27:01, Ye Bin wrote:
-> Syzkaller report issue as follows:
-> EXT4-fs (loop0): Free/Dirty block details
-> EXT4-fs (loop0): free_blocks=0
-> EXT4-fs (loop0): dirty_blocks=0
-> EXT4-fs (loop0): Block reservation details
-> EXT4-fs (loop0): i_reserved_data_blocks=0
-> EXT4-fs warning (device loop0): ext4_da_release_space:1527: ext4_da_release_space: ino 18, to_free 1 with only 0 reserved data blocks
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 92 at fs/ext4/inode.c:1528 ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1524
-> Modules linked in:
-> CPU: 0 PID: 92 Comm: kworker/u4:4 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> Workqueue: writeback wb_workfn (flush-7:0)
-> RIP: 0010:ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1528
-> RSP: 0018:ffffc900015f6c90 EFLAGS: 00010296
-> RAX: 42215896cd52ea00 RBX: 0000000000000000 RCX: 42215896cd52ea00
-> RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
-> RBP: 1ffff1100e907d96 R08: ffffffff816aa79d R09: fffff520002bece5
-> R10: fffff520002bece5 R11: 1ffff920002bece4 R12: ffff888021fd2000
-> R13: ffff88807483ecb0 R14: 0000000000000001 R15: ffff88807483e740
-> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00005555569ba628 CR3: 000000000c88e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  ext4_es_remove_extent+0x1ab/0x260 fs/ext4/extents_status.c:1461
->  mpage_release_unused_pages+0x24d/0xef0 fs/ext4/inode.c:1589
->  ext4_writepages+0x12eb/0x3be0 fs/ext4/inode.c:2852
->  do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
->  __writeback_single_inode+0xd1/0x670 fs/fs-writeback.c:1587
->  writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1870
->  wb_writeback+0x41f/0x7b0 fs/fs-writeback.c:2044
->  wb_do_writeback fs/fs-writeback.c:2187 [inline]
->  wb_workfn+0x3cb/0xef0 fs/fs-writeback.c:2227
->  process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
->  worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
->  kthread+0x266/0x300 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
+On 18.10.2022 12:19, Conor Dooley wrote:
+> On Fri, Oct 14, 2022 at 04:09:40PM -0500, Rob Herring wrote:
+>> On Fri, 30 Sep 2022 18:36:31 +0200, Rafał Miłecki wrote:
+>>> From: Rafał Miłecki <rafal@milecki.pl>
+>>>
+>>> Broadcom uses U-Boot for a lot of their bcmbca familiy chipsets. U-Boot
+>>> stores its configuration in an environment data block.
+>>>
+>>> Such blocks are usually stored on flash as a separated partition at
+>>> hardcoded address. Broadcom however decided to:
+>>> 1. Store env data block inside U-Boot partition
+>>> 2. Avoid sticking to hardcoded offsets
+>>> 3. Use custom header with "uEnv" magic and env data length
+>>>
+>>> Example (length 0x4000):
+>>> $ hexdump -n 32 -C -s 0x40000 /dev/mtdblock0
+>>> 00040000  76 6e 45 75 00 40 00 00  34 89 7a 82 49 4d 41 47  |vnEu.@..4.z.IMAG|
+>>> 00040010  45 3d 4e 41 4e 44 3a 31  4d 2c 31 30 32 34 4d 00  |E=NAND:1M,1024M.|
+>>> (0x40000 offset is unit specific and can change)
+>>>
+>>> Starting with the commit 118f3fbe517f4 ("dt-bindings: mtd: partitions:
+>>> support label/name only partition") DT can describe partitions matching
+>>> them by a name (without specifying actual address). With that feature
+>>> and this binding change it's possible to:
+>>> 1. Specify DT node for Broadcom's U-Boot env data subpartition
+>>> 2. Add nodes for specific environment data variables
+>>> 3. Reference them as NVMEM cells
+>>>
+>>> This binding is unlikely to help Broadcom's U-Boot. U-Boot SPL needs to
+>>> find environment data early (before it accesses DTB) and it does that by
+>>> looking for an "uEnv" magic. Dirty way.
+>>>
+>>> This binding can however be used by operating systems. It allows
+>>> describing cleanly U-Boot, its env data and variables. It tells
+>>> operating system about Broadcom-specific env data so it can parse it.
+>>>
+>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>>> ---
+>>> V2: Work on better commit body & add example
+>>> ---
+>>>   .../devicetree/bindings/nvmem/u-boot,env.yaml | 21 +++++++++++++++++++
+>>>   1 file changed, 21 insertions(+)
+>>>
+>>
+>> Applied, thanks!
 > 
-> Above issue may happens as follows:
-> ext4_da_write_begin
->   ext4_create_inline_data
->     ext4_clear_inode_flag(inode, EXT4_INODE_EXTENTS);
->     ext4_set_inode_flag(inode, EXT4_INODE_INLINE_DATA);
-> __ext4_ioctl
->   ext4_ext_migrate -> will lead to eh->eh_entries not zero, and set extent flag
-> ext4_da_write_begin
->   ext4_da_convert_inline_data_to_extent
->     ext4_da_write_inline_data_begin
->       ext4_da_map_blocks
->         ext4_insert_delayed_block
-> 	  if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk))
-> 	    if (!ext4_es_scan_clu(inode, &ext4_es_is_mapped, lblk))
-> 	      ext4_clu_mapped(inode, EXT4_B2C(sbi, lblk)); -> will return 1
-> 	       allocated = true;
->           ext4_es_insert_delayed_block(inode, lblk, allocated);
-> ext4_writepages
->   mpage_map_and_submit_extent(handle, &mpd, &give_up_on_write); -> return -ENOSPC
->   mpage_release_unused_pages(&mpd, give_up_on_write); -> give_up_on_write == 1
->     ext4_es_remove_extent
->       ext4_da_release_space(inode, reserved);
->         if (unlikely(to_free > ei->i_reserved_data_blocks))
-> 	  -> to_free == 1  but ei->i_reserved_data_blocks == 0
-> 	  -> then trigger warning as above
+> Hey Rob,
+> Maybe my tooling is out of date or w/e but this is breaking
+> dt_binding_check for me.
 > 
-> To solve above issue, forbid inode do migrate which has inline data.
-> 
-> Reported-by: syzbot+c740bb18df70ad00952e@syzkaller.appspotmail.com
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> I applied the below to fix the build, which I was about to send, before
+> realising that you'd applied it and wondered if I was missing something.
 
-Yeah, makes sense. Feel free to add:
+Thanks for catching that and submitting a fix!
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza 
-
-> ---
->  fs/ext4/migrate.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
-> index 0a220ec9862d..a19a9661646e 100644
-> --- a/fs/ext4/migrate.c
-> +++ b/fs/ext4/migrate.c
-> @@ -424,7 +424,8 @@ int ext4_ext_migrate(struct inode *inode)
->  	 * already is extent-based, error out.
->  	 */
->  	if (!ext4_has_feature_extents(inode->i_sb) ||
-> -	    (ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)))
-> +	    ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS) ||
-> +	    ext4_has_inline_data(inode))
->  		return -EINVAL;
->  
->  	if (S_ISLNK(inode->i_mode) && inode->i_blocks == 0)
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I guess I didn't run dt_binding_check this time or I did it before
+adding an example. Sorry for that!
