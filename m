@@ -2,109 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80716602302
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BFF602306
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 06:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiJRD7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S229736AbiJREAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 00:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiJRD7S (ORCPT
+        with ESMTP id S229896AbiJREAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:59:18 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC5F88A20
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 20:59:15 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id be13so4979528lfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 20:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b1IbzdSiR6tLjp8VojCh4WDcI7764XTDkXzy+V8xmVY=;
-        b=B5PkU4My2AxIlUJjYKnjO09o2ko/+ftSVSLvqM1r1SXOLwoUNKrCz+O1IeLkFmJT1X
-         4QLi2puqIkCWUzWNDoqGtzr+oKk9s+FLTuQGWJamRpggVMHG2qrwyHSCA/Qi3smcubFX
-         hrSAJvlcdaas8RAAFunnT3XUGWqs4yz9Kgt/J1RG8MxEAtyrQdMP0i5kU5dkxlEq4X1z
-         ikp5NrdL026ZaBX9lHTk49il5M2R/nK/7FpY2HAhBv7gmRz1hRbT6FCFIl/mftA12HO/
-         8AKQefLlzlBUMatpi1S2P42kKxXnbMkoNU3EF7q0RR6qB+3duHe3qrFywwFDWiDQwxeM
-         nFRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b1IbzdSiR6tLjp8VojCh4WDcI7764XTDkXzy+V8xmVY=;
-        b=lvB48fvcY7S39XRGoJZL3Z+0gJb5eap4c306HDChEyRln/4Q3lOjV5tFu39UdAoF6W
-         fi0Pdd39wU5kg/KlcMJyWh87Lp469o8AJErS33SosqJkmMh6LGKbdfJEBDOgpadE9lwp
-         8JayfHhF9uYnHXhFA2HntpWgI3RWh6wgBWZCn1RBKVds3n8hd9LHRKn99gMkQj00d1vn
-         DrVVSXomkSWbx3VwohtJYD9bNyhQUgfFOXQyx4isSO3zQAA1BhCEKG8gd+9wSAQBGG0x
-         xZqxuOOg2YV7Oqo+QfvB1BZ1sn5FoSJXtJTyggP7u1BKqKcxpceHHhDtIKZ2D6+2s+CR
-         iZyg==
-X-Gm-Message-State: ACrzQf0/PIn5yQqWCVyrqfT5H3HsSbHgCKHMRRTiXmW9zE3mtAOhnGaA
-        YjxQiPGV/nhQ7NNcGVIjRhtuJ9sU01aYY268HftW
-X-Google-Smtp-Source: AMsMyM72TApPq3OVgpetzuPHz8LlxPX1q59uQQ0L+B3PKdxgU5eHHQA0xVvpb0bSquwhc+Cnf67wTXxCBYn8E/8IA5M=
-X-Received: by 2002:ac2:4c47:0:b0:4a2:c07b:4b62 with SMTP id
- o7-20020ac24c47000000b004a2c07b4b62mr275725lfk.426.1666065553267; Mon, 17 Oct
- 2022 20:59:13 -0700 (PDT)
+        Tue, 18 Oct 2022 00:00:19 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DE34A114;
+        Mon, 17 Oct 2022 21:00:12 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ms0SY0S6tz6PmS9;
+        Tue, 18 Oct 2022 11:57:49 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCX0DDFJE5jY80kAA--.32294S3;
+        Tue, 18 Oct 2022 12:00:07 +0800 (CST)
+Subject: Re: [patch v11 0/6] support concurrent sync io for bfq on a specail
+ occasion
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        Paolo Valente <paolo.valente@linaro.org>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
+ <29348B39-94AE-4D76-BD2E-B759056264B6@linaro.org>
+ <011d479f-644f-0013-40bf-664b62f93bec@huaweicloud.com>
+ <A9D22DB6-6481-46BA-9D4C-5A828D19CB61@linaro.org>
+ <bcd07062-5a3b-563e-fb2d-2fa8e4c8bba5@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <82f1e969-742d-d3c3-63ca-961c755b5c35@huaweicloud.com>
+Date:   Tue, 18 Oct 2022 12:00:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20221003232033.3404802-1-jstultz@google.com> <20221003232033.3404802-3-jstultz@google.com>
- <Y01NPB4sa8Z98ntK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com> <CANDhNCoTGNANDnOQ6touhreG_UEn1-N4T4BktWFxpLPSWVfrdA@mail.gmail.com>
-In-Reply-To: <CANDhNCoTGNANDnOQ6touhreG_UEn1-N4T4BktWFxpLPSWVfrdA@mail.gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Mon, 17 Oct 2022 20:59:00 -0700
-Message-ID: <CANDhNCqsVm6OFm1aYoWJbha8EXS433JL3-jg3eFLcmE5wX9NOw@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 2/3] sched: Avoid placing RT threads on cores
- handling long softirqs
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Connor O'Brien" <connoro@google.com>,
-        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
-        John Kacur <jkacur@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bcd07062-5a3b-563e-fb2d-2fa8e4c8bba5@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCX0DDFJE5jY80kAA--.32294S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF4fWF13Kw13CryUuFWDXFb_yoWruw4rpw
+        1fJF43CryUGr1S9ry3Kw1Uta45tw48Jw1UXr45Xa18ur1qvr1jqr4xZrW0gryDZrWxGr12
+        qr1UJr1xur1UJrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 8:42 PM John Stultz <jstultz@google.com> wrote:
->  On Mon, Oct 17, 2022 at 5:40 AM Alexander Gordeev
-> <agordeev@linux.ibm.com> wrote:
-> > select_task_rq_rt() takes the lock and reads curr already,
-> > before calling this funciton. I think there is a way to
-> > decompose it in a better way.
->
-> Hrm. Suggestions? As select_task_rq_rt() is only one of the callers.
-> Trying to pass curr into cpu_busy_with_softirqs() would mean
-> cpupri_find_fitness() would need to read the cpu_rq(cpu)->curr for the
-> specified cpu and pass that in.
->
-> The original patch actually was
->
+Hi, Paolo
 
-Whoops I didn't finish my thought there. I was going to say the
-original patch did similar to your suggestion, passing the target cpu
-curr task value in from select_task_rq_rt().
-However it didn't use the cpupri_find_fitness() and duplicated a lot
-of similar logic in a way that is not as nice as what the current
-version uses.  But I'm very much open to suggestions for other ways to
-simplify that as you suggest.
+在 2022/10/11 17:36, Yu Kuai 写道:
+>>>> Your patches seem ok to me now (thanks for you contribution and, 
+>>>> above all, for your patience). I have only a high-level concern: 
+>>>> what do you mean when you say that service guarantees are still 
+>>>> preserved? What test did you run exactly? This point is very 
+>>>> important to me. I'd like to see some convincing test with 
+>>>> differentiated weights. In case you don't have other tools for 
+>>>> executing such tests quickly, you may want to use the 
+>>>> bandwidth-latency test in my simple S benchmark suite (for which I'm 
+>>>> willing to help).
+>>>
+>>> Is there any test that you wish me to try?
+>>>
+>>> By the way, I think for the case that multiple groups are activaced, (
+>>> specifically num_groups_with_pendind_rqs > 1), io path in bfq is the
+>>> same with or without this patchset.
+> 
+> I just ran the test for one time, result is a liiter inconsistent, do
+> you think it's in the normal fluctuation range?
 
-thanks
--john
+I rerun the manually test for 5 times, here is the average result:
+
+without this patchset / with this patchset:
+
+| --------------- | ------------- | ------------ | -------------- | 
+------------- | -------------- |
+| cg1 weight      | 10            | 20           | 30             | 40 
+          | 50             |
+| cg2 weight      | 90            | 80           | 70             | 60 
+          | 50             |
+| cg1 bw MiB/s    | 21.4 / 21.74  | 42.72 / 46.6 | 63.82 / 61.52  | 
+94.74 / 90.92 | 140 / 138.2    |
+| cg2 bw MiB/s    | 197.2 / 197.4 | 182 / 181.2  | 171.2 / 173.44 | 162 
+/ 156.8   | 138.6 / 137.04 |
+| cg2 bw / cg1 bw | 9.22 / 9.08   | 4.26 / 3.89  | 2.68 / 2.82    | 1.71 
+/ 1.72   | 0.99 / 0.99    |
+
+> 
+> test script:
+> fio -filename=/dev/nullb0 -ioengine=libaio -ioscheduler=bfq -jumjobs=1 
+> -iodepth=64 -direct=1 -bs=4k -rw=randread -runtime=60 -name=test
+> 
+> without this patchset:
+> |                 |      |      |      |      |      |
+> | --------------- | ---- | ---- | ---- | ---- | ---- |
+> | cg1 weight      | 10   | 20   | 30   | 40   | 50   |
+> | cg2 weight      | 90   | 80   | 70   | 60   | 50   |
+> | cg1 bw MiB/s    | 25.8 | 51.0 | 80.1 | 90.5 | 138  |
+> | cg2 bw MiB/s    | 193  | 179  | 162  | 127  | 136  |
+> | cg2 bw / cg1 bw | 7.48 | 3.51 | 2.02 | 1.40 | 0.98 |
+> 
+> with this patchset
+> |                 |      |      |      |      |      |
+> | --------------- | ---- | ---- | ---- | ---- | ---- |
+> | cg1 weight      | 10   | 20   | 30   | 40   | 50   |
+> | cg2 weight      | 90   | 80   | 70   | 60   | 50   |
+> | cg1 bw MiB/s    | 21.5 | 43.9 | 62.7 | 87.4 | 136  |
+> | cg2 bw MiB/s    | 195  | 185  | 173  | 138  | 141  |
+> | cg2 bw / cg1 bw | 9.07 | 4.21 | 2.75 | 1.57 | 0.96 |
+>>>
+>>
+>> The tests cases you mentioned are ok for me (whatever tool or personal
+>> code you use to run them).  Just show me your results with and without
+>> your patchset applied.
+>>
+>> Thanks,
+>> Paolo
+>>
+>>> Thanks,
+>>> Kuai
+>>>> Thanks,
+>>>> Paolo
+>>>>> Previous versions:
+>>>>> RFC: 
+>>>>> https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/ 
+>>>>>
+>>>>> v1: 
+>>>>> https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/ 
+>>>>>
+>>>>> v2: 
+>>>>> https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/ 
+>>>>>
+>>>>> v3: 
+>>>>> https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
+>>>>> v4: 
+>>>>> https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/ 
+>>>>>
+>>>>> v5: 
+>>>>> https://lore.kernel.org/all/20220428120837.3737765-1-yukuai3@huawei.com/ 
+>>>>>
+>>>>> v6: 
+>>>>> https://lore.kernel.org/all/20220523131818.2798712-1-yukuai3@huawei.com/ 
+>>>>>
+>>>>> v7: 
+>>>>> https://lore.kernel.org/all/20220528095020.186970-1-yukuai3@huawei.com/ 
+>>>>>
+>>>>>
+>>>>>
+>>>>> Yu Kuai (6):
+>>>>>   block, bfq: support to track if bfqq has pending requests
+>>>>>   block, bfq: record how many queues have pending requests
+>>>>>   block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+>>>>>   block, bfq: do not idle if only one group is activated
+>>>>>   block, bfq: cleanup bfq_weights_tree add/remove apis
+>>>>>   block, bfq: cleanup __bfq_weights_tree_remove()
+>>>>>
+>>>>> block/bfq-cgroup.c  | 10 +++++++
+>>>>> block/bfq-iosched.c | 71 +++++++--------------------------------------
+>>>>> block/bfq-iosched.h | 30 +++++++++----------
+>>>>> block/bfq-wf2q.c    | 69 ++++++++++++++++++++++++++-----------------
+>>>>> 4 files changed, 76 insertions(+), 104 deletions(-)
+>>>>>
+>>>>> -- 
+>>>>> 2.31.1
+>>>>>
+>>>> .
+>>
+>> .
+>>
+> 
+> .
+> 
+
