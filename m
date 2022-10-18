@@ -2,131 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1688260214A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88E760214C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJRCl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S230326AbiJRCmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJRClx (ORCPT
+        with ESMTP id S230333AbiJRCmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:41:53 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FA989839
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:41:50 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 3so12832100pfw.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:41:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zg4TUcI05oybhWwKK7WfEpddIyR7SKg7hJD3GVQqv+4=;
-        b=fI5BizILWdXp7nlbeCT1NMtSOeJfetKwhyk2vhTnmJhdNuxvwZ5/KZIBnmOAIuPYkU
-         muvJcgK82bGjwibdRIEOBeqr3ohEjKkk5fLI2Vrw6Jc+xDffe85lRmSCk5MjDvyMp11r
-         MbNIzGS1Rp+hjZZEu6J5filgRNOEkTQ6jeXMM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zg4TUcI05oybhWwKK7WfEpddIyR7SKg7hJD3GVQqv+4=;
-        b=6oBnyCZEBSzl0hJtWdQfCPoAZ7kinY7ynU4OqZVQo29NrZ1/JQK/pz/kyuN6eV9ukJ
-         GtZwcImg10VTxQ5WwAr+kG1VaszWVedOgPV3nG48BihftatSjnKoGffyatbHe7Po6DT5
-         aIhJCS12ywiGMjne84uzFJqCwQp8yP23utuzSbBeuzIWuPYU68ppcVLNQIccDu3HhD5x
-         sOgyPcro3qblOQRFjo9lPOMYjltidylynMltTiFuBDS/jJBfyYU70m0L4uxRurdDQGoZ
-         67lVN3e4oWwtm8v34ywvNGLVTPCMBh/8kpACJlDJ6zVLU1L9A8iGrSp2tFcBh5zOufq2
-         kNVw==
-X-Gm-Message-State: ACrzQf3pSBFvV7CYLXWg62aZOk0V4Y/zlOSqhIZgCabGvLHyi4IMOs32
-        HhVxm768p9lHCMoMlL/e752aaQ==
-X-Google-Smtp-Source: AMsMyM4m5Ra8jwDfvqCT8zik/EZVj46VRT7zLYklwFkogFGxGKXj6Ms7IkYQpPnVqgz2TkZVySegMQ==
-X-Received: by 2002:a63:e113:0:b0:439:e032:c879 with SMTP id z19-20020a63e113000000b00439e032c879mr745675pgh.287.1666060910313;
-        Mon, 17 Oct 2022 19:41:50 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i6-20020a17090332c600b001806f4fbf25sm7361585plr.182.2022.10.17.19.41.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 19:41:49 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 19:41:48 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/6][next] cfg80211: Avoid clashing function prototypes
-Message-ID: <202210171939.61FFBE79A7@keescook>
-References: <cover.1666038048.git.gustavoars@kernel.org>
- <291de76bc7cd5c21dc2f2471382ab0caaf625b22.1666038048.git.gustavoars@kernel.org>
+        Mon, 17 Oct 2022 22:42:01 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ABD95AF8;
+        Mon, 17 Oct 2022 19:41:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VSSPzYT_1666060910;
+Received: from 30.221.96.155(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VSSPzYT_1666060910)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Oct 2022 10:41:52 +0800
+Message-ID: <a4d2dc7e-7f45-00b7-6c31-cc934ba9c1f5@linux.alibaba.com>
+Date:   Tue, 18 Oct 2022 10:41:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <291de76bc7cd5c21dc2f2471382ab0caaf625b22.1666038048.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V2 2/2] Documentation: kdump: describe VMCOREINFO export
+ for RISCV64
+To:     Conor Dooley <conor@kernel.org>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        bagasdotme@gmail.com, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+References: <20221014134139.5151-1-xianting.tian@linux.alibaba.com>
+ <20221014134139.5151-3-xianting.tian@linux.alibaba.com>
+ <Y02vm7FrhdEoSXZ+@spud>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <Y02vm7FrhdEoSXZ+@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 03:34:22PM -0500, Gustavo A. R. Silva wrote:
-> When built with Control Flow Integrity, function prototypes between
-> caller and function declaration must match. These mismatches are visible
-> at compile time with the new -Wcast-function-type-strict in Clang[1].
-> 
-> Fix a total of 10 warnings like these:
-> 
-> ../drivers/net/wireless/intersil/orinoco/wext.c:1390:27: error: incompatible function pointer types initializing 'const iw_handler' (aka 'int (*const)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') with an expression of type 'int (struct net_device *, struct iw_request_info *, struct iw_param *, char *)' [-Wincompatible-function-pointer-types]
->         IW_HANDLER(SIOCGIWRETRY,        cfg80211_wext_giwretry),
->                                         ^~~~~~~~~~~~~~~~~~~~~~
-> ../include/uapi/linux/wireless.h:357:23: note: expanded from macro 'IW_HANDLER'
->         [IW_IOCTL_IDX(id)] = func
-> 
-> The cfg80211 Wireless Extension handler callbacks (iw_handler) use a
-> union for the data argument. Actually use the union and perform explicit
-> member selection in the function body instead of having a function
-> prototype mismatch. No significant binary differences were seen
-> before/after changes.
-> 
-> Link: https://github.com/KSPP/linux/issues/234
-> Link: https://reviews.llvm.org/D134831 [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/net/wireless/intersil/orinoco/wext.c |  22 +--
->  include/net/cfg80211-wext.h                  |  20 +--
->  net/wireless/scan.c                          |   3 +-
->  net/wireless/wext-compat.c                   | 180 +++++++++----------
->  net/wireless/wext-compat.h                   |   8 +-
->  net/wireless/wext-sme.c                      |   5 +-
->  6 files changed, 112 insertions(+), 126 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/intersil/orinoco/wext.c b/drivers/net/wireless/intersil/orinoco/wext.c
-> index b8eb5d60192f..dea1ff044342 100644
-> --- a/drivers/net/wireless/intersil/orinoco/wext.c
-> +++ b/drivers/net/wireless/intersil/orinoco/wext.c
-> @@ -1363,31 +1363,31 @@ static const struct iw_priv_args orinoco_privtab[] = {
->  
->  static const iw_handler	orinoco_handler[] = {
->  	IW_HANDLER(SIOCSIWCOMMIT,	orinoco_ioctl_commit),
-> -	IW_HANDLER(SIOCGIWNAME,		(iw_handler)cfg80211_wext_giwname),
-> +	IW_HANDLER(SIOCGIWNAME,		cfg80211_wext_giwname),
 
-This hunk should be in the orinoco patch, I think?
+在 2022/10/18 上午3:40, Conor Dooley 写道:
+> On Fri, Oct 14, 2022 at 09:41:39PM +0800, Xianting Tian wrote:
+>> The following interrelated definitions and ranges are needed by the kdump
+>> crash tool, they are exported by "arch/riscv/kernel/crash_core.c":
+>>      VA_BITS,
+>>      PAGE_OFFSET,
+>>      phys_ram_base,
+>>      MODULES_VADDR ~ MODULES_END,
+>>      VMALLOC_START ~ VMALLOC_END,
+>>      VMEMMAP_START ~ VMEMMAP_END,
+>>      KASAN_SHADOW_START ~ KASAN_SHADOW_END,
+>>      KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END
+>>
+>> Document these RISCV64 exports above.
+>>
+>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>> ---
+>>   .../admin-guide/kdump/vmcoreinfo.rst          | 30 +++++++++++++++++++
+>>   1 file changed, 30 insertions(+)
+>>
+>> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+>> index 6726f439958c..8e2e164cf3db 100644
+>> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
+>> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+>> @@ -595,3 +595,33 @@ X2TLB
+>>   -----
+>>   
+>>   Indicates whether the crashed kernel enabled SH extended mode.
+>> +
+>> +RISCV64
+>> +=======
+>> +
+>> +VA_BITS
+>> +-------
+>> +
+>> +The maximum number of bits for virtual addresses. Used to compute the
+>> +virtual memory ranges.
+>> +
+>> +PAGE_OFFSET
+>> +-----------
+>> +
+>> +Indicates the virtual kernel start address of direct-mapped RAM region.
+> Apologies for not seeing this sooner, but should there not be a "the"
+> prior to "direct-mapped"?
+will fix in v3
+>
+>> +
+>> +phys_ram_base
+>> +-------------
+>> +
+>> +Indicates the start physical RAM address.
+>> +
+>> +MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
+>> +----------------------------------------------------------------------------------------------------------------------------------------------------
+>> +
+>> +Used to get the correct ranges:
+>> +
+>> +  * MODULES_VADDR ~ MODULES_END : Kernel module space.
+>> +  * VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
+>> +  * VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
+> Since I'm in pedant mode, it does look a little odd that you're using
+> region for vmemmap but space for the others but idc that much.
 
+Sorry, I didn't get your point :(
 
-> [...]
-> +	[IW_IOCTL_IDX(SIOCGIWRETRY)]    = cfg80211_wext_giwretry,
+it contains vmemmap area with reference wth arch/arm64/kernel/crash_core.c.
 
-The common practice seems to be to use IW_HANDLER instead of open-coding
-it like this.
-
-	IW_HANDLER(SIOCGIWRETRY,	cfg80211_wext_giwretry),
-
--- 
-Kees Cook
+>
+> Thanks,
+> Conor.
+>
+>> +  * KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
+>> +  * KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
+>> -- 
+>> 2.17.1
+>>
+>>
