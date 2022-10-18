@@ -2,242 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743D9602DF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A98602DFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJROJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S231336AbiJROKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJROJ3 (ORCPT
+        with ESMTP id S230117AbiJROKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:09:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5BC25EC;
-        Tue, 18 Oct 2022 07:09:21 -0700 (PDT)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FD688B9;
-        Tue, 18 Oct 2022 16:09:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1666102159;
-        bh=XW3IWSkyTJNdMSanD5x08FhrrBKsT2/IbrHkChUSIec=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o+6iX7VaRKS+pWv5oWVv7aPkYOoBztyd8AKZeKkfLw0o4dsVrr2nYNgRBnoTU4Fwt
-         AgtofK9FGAXJ66m16sig80+FsLYtfpFhqdLDJU37hFEbGZ0z88ZH9uCwDq9SojQN2Z
-         Z/ttSEf4YwL/yWITpVPB0IYobtXJc+geMZBO3lXE=
-Message-ID: <40def24c-6d03-e792-de27-864b41fa0ac7@ideasonboard.com>
-Date:   Tue, 18 Oct 2022 15:09:15 +0100
+        Tue, 18 Oct 2022 10:10:07 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDD766A4A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:10:00 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-132af5e5543so16915312fac.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CFEBNR5Cs6lFyz1sMa6cjqpnxQazEOZFCO9dkP/ZaiQ=;
+        b=QZFx9U0TQj5pwsZKzZ61LIvtF6W/Q92yWWbcUS5c+cxRn1tL9yJ6U2hGl+FrGfi7n0
+         4RY8LoPkip8d2xVxr/Qa+Wl4FuW4ZM9A8r5eW26MMGV99owH3JU/Ue09mHsUgARDdW7G
+         zlT3RG2mkEaaNbg8+ZvD5iwpxAwhZD8yFMOx9N3aPvMvvUt/7+hzAoNRm4w45L4eY3Uc
+         kypeWRpYDpTYNNci58O0qdxIdocsQgykQUlH7TLinG3lgAQwofURlRspC54hVu6Q9kfE
+         l5EYmYpPQiFjIgcj0HsCIs08Rl5noZcZL/Xp2pT+NakSgFEyL+vop+akot8FWUOb9KNz
+         fJjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CFEBNR5Cs6lFyz1sMa6cjqpnxQazEOZFCO9dkP/ZaiQ=;
+        b=q/HjQsKqGj67s0IemyrtudVpCnKoIw7mBysKJUA1OQ2c6B/ce6uYpHWiSpgmh3u4bG
+         7Xu4RVaOlK/Oou78Mys7Z3nW35wcmJy9J86BBt3ZNd6q2fEu2ygyYCJqPmzjaVP8KRdO
+         5BI8D9e5/VnLH+2V+WLBM9NP/kaGD6QMrKrZ2MxIgO1ADu7XtLCCyoOVKX46rhmiGB1p
+         MRhqxEpa1UmW2DmvoyeQaYsdDACpk40RMsDuL9aGBksB+9yvBtrNSWIhVRJfZqxOi68I
+         l95UXU2czrTP9RxwHMfPbHavRXsgR8loDHwpW2L7g9K21agb29a4g0pZGitzp5LbV9H0
+         /4fQ==
+X-Gm-Message-State: ACrzQf1S+dsrVHCMQwRuil+v/Mi1lSjqs0ENcK1vvfRL36NtSJg8mM79
+        J9Ki+UdTlja+1b2tCAMmc163rgPVPmenfRx4Zw7mjw==
+X-Google-Smtp-Source: AMsMyM5MkE65OUJ+R+5WvfENsxNfj4F8w30eMaL2nOD8ed1Fjw9HxC8M8UQ4CV5Ig535cp4+IJ4IOVMVl8wCiImeGWg=
+X-Received: by 2002:a05:6870:4411:b0:136:71ed:c7cd with SMTP id
+ u17-20020a056870441100b0013671edc7cdmr1752021oah.108.1666102198983; Tue, 18
+ Oct 2022 07:09:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 6/6] usb: gadget: uvc: add configfs option for sg
- support
-Content-Language: en-US
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     Dan Vacura <w36195@motorola.com>, linux-usb@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jeff Vanhoof <qjv001@motorola.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20221017205446.523796-1-w36195@motorola.com>
- <20221017205446.523796-7-w36195@motorola.com>
- <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
- <20221018140432.GE5651@pengutronix.de>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <20221018140432.GE5651@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20221017164005.2622934-1-amit.pundir@linaro.org>
+ <20221017201654.u7x5vrjsad653kma@bogus> <CAPDyKFqMLHhzFzYZ5wB5xTSaHkesp9pxX3QEhT+8XZictUnUaQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFqMLHhzFzYZ5wB5xTSaHkesp9pxX3QEhT+8XZictUnUaQ@mail.gmail.com>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Tue, 18 Oct 2022 19:39:22 +0530
+Message-ID: <CAMi1Hd2Ds3-wZ8sUvSFF0ew1WVsj0vrJAQSpV9WG7YrZcRJh1A@mail.gmail.com>
+Subject: Re: [PATCH] Revert "arm64: dts: qcom: sm8250: Add cpuidle states"
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael
+On Tue, 18 Oct 2022 at 16:00, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Mon, 17 Oct 2022 at 22:17, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Mon, Oct 17, 2022 at 10:10:05PM +0530, Amit Pundir wrote:
+> > > This reverts commit 32bc936d732171d48c9c8f96c4fa25ac3ed7e1c7.
+> > >
+> > > This patch was part of a patch series to add APSS RSC to
+> > > Cluster power domain
+> > > https://patchwork.kernel.org/project/linux-pm/cover/1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com/
+> > > but the rest of the patches in this series got NACKed and didn't land.
+> > >
+> > > These cpuidle states made RB5 (sm8250) highly unstable and I run into
+> > > following crash every now and then:
+> > >
+> > > [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
+> > > [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
+> > > [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
+> > >
+> > > I reported this breakage earlier this year as well:
+> > > https://lore.kernel.org/all/CAMi1Hd2Sngya_2m2odkjq4fdV8OiiXsFMEX1bb807cWMC7H-sg@mail.gmail.com/
+> > > I can confirm that if I cherry-pick the rest of the patches from the
+> > > series then I can't reproduce this crash, but I'm not sure when the rest
+> > > of the patches are going to land though.
+>
+> I have been talking to Maulik (offlist) about re-posting the series,
+> but apparently she has been too busy to move this forward.
+>
+> I assume a better option, than reverting, is to get the above series
+> merged. If I recall, there were only a few minor comments from me on
+> the genpd patch [1]. That said, let me help out and refresh the
+> series, I will do it asap!
+>
+> > >
+> > > Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/sm8250.dtsi | 105 ---------------------------
+> > >  1 file changed, 105 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > > index a5b62cadb129..a2c15da1a450 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > > @@ -101,8 +101,6 @@ CPU0: cpu@0 {
+> > >                       capacity-dmips-mhz = <448>;
+> > >                       dynamic-power-coefficient = <205>;
+> > >                       next-level-cache = <&L2_0>;
+> > > -                     power-domains = <&CPU_PD0>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 0>;
+> > >                       operating-points-v2 = <&cpu0_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -125,8 +123,6 @@ CPU1: cpu@100 {
+> > >                       capacity-dmips-mhz = <448>;
+> > >                       dynamic-power-coefficient = <205>;
+> > >                       next-level-cache = <&L2_100>;
+> > > -                     power-domains = <&CPU_PD1>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 0>;
+> > >                       operating-points-v2 = <&cpu0_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -146,8 +142,6 @@ CPU2: cpu@200 {
+> > >                       capacity-dmips-mhz = <448>;
+> > >                       dynamic-power-coefficient = <205>;
+> > >                       next-level-cache = <&L2_200>;
+> > > -                     power-domains = <&CPU_PD2>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 0>;
+> > >                       operating-points-v2 = <&cpu0_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -167,8 +161,6 @@ CPU3: cpu@300 {
+> > >                       capacity-dmips-mhz = <448>;
+> > >                       dynamic-power-coefficient = <205>;
+> > >                       next-level-cache = <&L2_300>;
+> > > -                     power-domains = <&CPU_PD3>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 0>;
+> > >                       operating-points-v2 = <&cpu0_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -188,8 +180,6 @@ CPU4: cpu@400 {
+> > >                       capacity-dmips-mhz = <1024>;
+> > >                       dynamic-power-coefficient = <379>;
+> > >                       next-level-cache = <&L2_400>;
+> > > -                     power-domains = <&CPU_PD4>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 1>;
+> > >                       operating-points-v2 = <&cpu4_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -209,8 +199,6 @@ CPU5: cpu@500 {
+> > >                       capacity-dmips-mhz = <1024>;
+> > >                       dynamic-power-coefficient = <379>;
+> > >                       next-level-cache = <&L2_500>;
+> > > -                     power-domains = <&CPU_PD5>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 1>;
+> > >                       operating-points-v2 = <&cpu4_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -231,8 +219,6 @@ CPU6: cpu@600 {
+> > >                       capacity-dmips-mhz = <1024>;
+> > >                       dynamic-power-coefficient = <379>;
+> > >                       next-level-cache = <&L2_600>;
+> > > -                     power-domains = <&CPU_PD6>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 1>;
+> > >                       operating-points-v2 = <&cpu4_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -252,8 +238,6 @@ CPU7: cpu@700 {
+> > >                       capacity-dmips-mhz = <1024>;
+> > >                       dynamic-power-coefficient = <444>;
+> > >                       next-level-cache = <&L2_700>;
+> > > -                     power-domains = <&CPU_PD7>;
+> > > -                     power-domain-names = "psci";
+> > >                       qcom,freq-domain = <&cpufreq_hw 2>;
+> > >                       operating-points-v2 = <&cpu7_opp_table>;
+> > >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> > > @@ -300,42 +284,6 @@ core7 {
+> > >                               };
+> > >                       };
+> > >               };
+> > > -
+> > > -             idle-states {
+> > > -                     entry-method = "psci";
+> > > -
+> > > -                     LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
+> > > -                             compatible = "arm,idle-state";
+> > > -                             idle-state-name = "silver-rail-power-collapse";
+> > > -                             arm,psci-suspend-param = <0x40000004>;
+> > > -                             entry-latency-us = <360>;
+> > > -                             exit-latency-us = <531>;
+> > > -                             min-residency-us = <3934>;
+> > > -                             local-timer-stop;
+> >
+> > If this is temporary fix for some broke firmware or setup, I suggest to
+> > just add status = "disabled" for these states. Also worth checking if keeping
+> > the cpu states is okay and only cluster state is the issue or everything
+> > needs to be disabled. That way it would avoid the churn when re-enabling it.
+>
+> That's a good option, unless we can get the other series (that fixes
+> this issue) merged soon. As stated, I will help to re-spin it and then
+> we can take it from there.
 
-On 18/10/2022 15:04, Michael Grzeschik wrote:
-> Hi Dan!
-> Hi Dan!
->
-> On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
->> Hi Dan
->>
->> On 17/10/2022 21:54, Dan Vacura wrote:
->>> The scatter gather support doesn't appear to work well with some UDC 
->>> hw.
->>> Add the ability to turn on the feature depending on the controller in
->>> use.
->>>
->>> Signed-off-by: Dan Vacura <w36195@motorola.com>
->>
->>
->> Nitpick: I would call it use_sg everywhere, but either way:
->
-> Or even only "scatter_gather". How does that sound?
->
->>
->> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
->>
->> Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
->>
->>> ---
->>> V1 -> V2:
->>> - no change, new patch in serie
->>> V2 -> V3:
->>> - default on, same as baseline
->>>
->>>  Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
->>>  Documentation/usb/gadget-testing.rst              | 2 ++
->>>  drivers/usb/gadget/function/f_uvc.c               | 2 ++
->>>  drivers/usb/gadget/function/u_uvc.h               | 1 +
->>>  drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
->>>  drivers/usb/gadget/function/uvc_queue.c           | 4 ++--
->>>  6 files changed, 10 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc 
->>> b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>> index 5dfaa3f7f6a4..839a75fc28ee 100644
->>> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
->>> @@ -9,6 +9,7 @@ Description:    UVC function directory
->>>          streaming_interval    1..16
->>>          function_name        string [32]
->>>          req_int_skip_div    unsigned int
->>> +        sg_supported        0..1
->>>          ===================    =============================
->>>  What: /config/usb-gadget/gadget/functions/uvc.name/control
->>> diff --git a/Documentation/usb/gadget-testing.rst 
->>> b/Documentation/usb/gadget-testing.rst
->>> index f9b5a09be1f4..8e3072d6a590 100644
->>> --- a/Documentation/usb/gadget-testing.rst
->>> +++ b/Documentation/usb/gadget-testing.rst
->>> @@ -796,6 +796,8 @@ The uvc function provides these attributes in 
->>> its function directory:
->>>      function_name       name of the interface
->>>      req_int_skip_div    divisor of total requests to aid in 
->>> calculating
->>>                  interrupt frequency, 0 indicates all interrupt
->>> +    sg_supported        allow for scatter gather to be used if the UDC
->>> +                hw supports it
->>>      =================== 
->>> ================================================
->>>  There are also "control" and "streaming" subdirectories, each of 
->>> which contain
->>> diff --git a/drivers/usb/gadget/function/f_uvc.c 
->>> b/drivers/usb/gadget/function/f_uvc.c
->>> index e40ca26b9c55..d08ebe3ffeb2 100644
->>> --- a/drivers/usb/gadget/function/f_uvc.c
->>> +++ b/drivers/usb/gadget/function/f_uvc.c
->>> @@ -656,6 +656,7 @@ uvc_function_bind(struct usb_configuration *c, 
->>> struct usb_function *f)
->>>                  (opts->streaming_maxburst + 1));
->>>      uvc->config_skip_int_div = opts->req_int_skip_div;
->>> +    uvc->video.queue.use_sg = opts->sg_supported;
->
-> Why do you set this here?
->
->>>      /* Allocate endpoints. */
->>>      ep = usb_ep_autoconfig(cdev->gadget, &uvc_control_ep);
->>> @@ -875,6 +876,7 @@ static struct usb_function_instance 
->>> *uvc_alloc_inst(void)
->>>      opts->streaming_interval = 1;
->>>      opts->streaming_maxpacket = 1024;
->>>      opts->req_int_skip_div = 4;
->>> +    opts->sg_supported = 1;
->>>      snprintf(opts->function_name, sizeof(opts->function_name), "UVC 
->>> Camera");
->>>      ret = uvcg_attach_configfs(opts);
->>> diff --git a/drivers/usb/gadget/function/u_uvc.h 
->>> b/drivers/usb/gadget/function/u_uvc.h
->>> index 6f73bd5638ed..5ccced629925 100644
->>> --- a/drivers/usb/gadget/function/u_uvc.h
->>> +++ b/drivers/usb/gadget/function/u_uvc.h
->>> @@ -25,6 +25,7 @@ struct f_uvc_opts {
->>>      unsigned int                    streaming_maxpacket;
->>>      unsigned int                    streaming_maxburst;
->>>      unsigned int                    req_int_skip_div;
->>> +    unsigned int                    sg_supported;
->>>      unsigned int                    control_interface;
->>>      unsigned int                    streaming_interface;
->>> diff --git a/drivers/usb/gadget/function/uvc_configfs.c 
->>> b/drivers/usb/gadget/function/uvc_configfs.c
->>> index 419e926ab57e..3784c0e02d01 100644
->>> --- a/drivers/usb/gadget/function/uvc_configfs.c
->>> +++ b/drivers/usb/gadget/function/uvc_configfs.c
->>> @@ -2351,6 +2351,7 @@ UVCG_OPTS_ATTR(streaming_interval, 
->>> streaming_interval, 16);
->>>  UVCG_OPTS_ATTR(streaming_maxpacket, streaming_maxpacket, 3072);
->>>  UVCG_OPTS_ATTR(streaming_maxburst, streaming_maxburst, 15);
->>>  UVCG_OPTS_ATTR(req_int_skip_div, req_int_skip_div, UINT_MAX);
->>> +UVCG_OPTS_ATTR(sg_supported, sg_supported, 1);
->>>  #undef UVCG_OPTS_ATTR
->>> @@ -2401,6 +2402,7 @@ static struct configfs_attribute *uvc_attrs[] = {
->>>      &f_uvc_opts_attr_streaming_maxpacket,
->>>      &f_uvc_opts_attr_streaming_maxburst,
->>>      &f_uvc_opts_attr_req_int_skip_div,
->>> +    &f_uvc_opts_attr_sg_supported,
->>>      &f_uvc_opts_string_attr_function_name,
->>>      NULL,
->>>  };
->>> diff --git a/drivers/usb/gadget/function/uvc_queue.c 
->>> b/drivers/usb/gadget/function/uvc_queue.c
->>> index 02559906a55a..3c7aa5c4bba2 100644
->>> --- a/drivers/usb/gadget/function/uvc_queue.c
->>> +++ b/drivers/usb/gadget/function/uvc_queue.c
->>> @@ -149,11 +149,11 @@ int uvcg_queue_init(struct uvc_video_queue 
->>> *queue, struct device *dev, enum v4l2
->>>      queue->queue.buf_struct_size = sizeof(struct uvc_buffer);
->>>      queue->queue.ops = &uvc_queue_qops;
->>>      queue->queue.lock = lock;
->>> -    if (cdev->gadget->sg_supported) {
->>> +    if (queue->use_sg && cdev->gadget->sg_supported) {
->>>          queue->queue.mem_ops = &vb2_dma_sg_memops;
->>> -        queue->use_sg = 1;
->>>      } else {
->>>          queue->queue.mem_ops = &vb2_vmalloc_memops;
->>> +        queue->use_sg = false;
->
-> I am unsure, but can you actually not always use vb2_dma_sg_memops.
+Hi Ulf, I just verified over multiple reboots that disabling the
+cpuidle states, as suggested by Sudeep, does the trick and I no longer
+see the crash.
 
+Do you suggest we wait for the re-spin of the other series or should I
+go ahead and submit that RB5 workaround for the time being?
 
-We have problems with this on the imx8mp EVK, because it doesn't account 
-for dma-range properties in device tree and so will attempt to allocate 
-memory outside the 4GB range that a DWC3 can access. The allocation 
-attempts to fall back on the swiotlb, but that's slow even if it 
-works...and it can fail and return -ENOMEM if the swiotlb is too small.
+Regards,
+Amit Pundir
 
 
-Probably some future work needs to fix the vb2_dma_sg_memops to take 
-those dma constraints into account, but for now I wouldn't force its use.
 
 >
-> With my last patch we always set buf->mem to vb2_plane_vaddr(vb, 0);
+> >
+> > --
+> > Regards,
+> > Sudeep
 >
-> https://lore.kernel.org/linux-usb/20221017221141.3134818-1-m.grzeschik@pengutronix.de/T/#u 
->
->
->
-> The condition to decide if encode_isoc_sg or encode_isoc should then
-> remain the last place to switch between sg or not. I would hook the
-> userspace decision in here.
->
-> You can also directly get to opts->scatter_gather by using
->
->     struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
->
-> in the function uvcg_video_enable.
->
->>>      }
->>>      queue->queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY
->>
->
-> Thanks,
-> Michael
->
+> Kind regards
+> Uffe
