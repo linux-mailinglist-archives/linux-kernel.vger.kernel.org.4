@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B420E602801
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79ED602804
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiJRJKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S231197AbiJRJLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJRJKh (ORCPT
+        with ESMTP id S229607AbiJRJL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:10:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C4F1CB25
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666084234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OC1swdFow0uJqX4WlD4v3iRTy+BCH4Nt+XpJ4yDSskM=;
-        b=exOnqASe1zZmr4W8GH1J6L5Qtow7Jxkm9MV5yGgA1PqJZ7Og1VEIuqeZO3uIlpAgNUxw/h
-        nighFgkVminq5OlRIRoBt71w+ky4eWUoF+5w9+jRLChC5Ci3h2pcdjnrEWa2EdqtnSbxzN
-        FBgw5izs5VO4KLfcfooXVvBqpwbcY6M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-3g-oGcCxMlS6sCK4Dsm1_A-1; Tue, 18 Oct 2022 05:10:28 -0400
-X-MC-Unique: 3g-oGcCxMlS6sCK4Dsm1_A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E4416811E67;
-        Tue, 18 Oct 2022 09:10:27 +0000 (UTC)
-Received: from localhost (ovpn-12-68.pek2.redhat.com [10.72.12.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B41D2C1E87F;
-        Tue, 18 Oct 2022 09:10:26 +0000 (UTC)
-Date:   Tue, 18 Oct 2022 17:10:23 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Kazuhito Hagio <k-hagio-ab@nec.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        bagasdotme@gmail.com, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org, yixun.lan@gmail.com
-Subject: Re: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
-Message-ID: <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
-References: <20221018081755.6214-1-xianting.tian@linux.alibaba.com>
- <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
+        Tue, 18 Oct 2022 05:11:27 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65C115FD9;
+        Tue, 18 Oct 2022 02:11:24 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ms7MJ52JfzJn2y;
+        Tue, 18 Oct 2022 17:08:44 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 17:11:18 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 17:11:17 +0800
+Subject: Re: [PATCH v7 11/11] kallsyms: Add self-test facility
+To:     kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+CC:     <kbuild-all@lists.01.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <20221017064950.2038-12-thunder.leizhen@huawei.com>
+ <202210181636.S8XlpSMd-lkp@intel.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <e8c45c81-d488-db80-57cf-cfc59f05f32d@huawei.com>
+Date:   Tue, 18 Oct 2022 17:11:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <202210181636.S8XlpSMd-lkp@intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,88 +70,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 at 04:17pm, Xianting Tian wrote:
-> Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
-> VMEMMAP and KERNEL_LINK_ADDR ranges), va bits and ram base for vmcore.
-> 
-> Default pagetable levels and PAGE_OFFSET aren't same for different kernel
-> version as below. For pagetable levels, it sets sv57 by default and falls
-> back to setting sv48 at boot time if sv57 is not supported by the hardware.
-> 
-> For ram base, the default value is 0x80200000 for qemu riscv64 env and,
-> for example, is 0x200000 on the XuanTie 910 CPU.
-> 
->  * Linux Kernel 5.18 ~
->  *      PGTABLE_LEVELS = 5
->  *      PAGE_OFFSET = 0xff60000000000000
->  * Linux Kernel 5.17 ~
->  *      PGTABLE_LEVELS = 4
->  *      PAGE_OFFSET = 0xffffaf8000000000
->  * Linux Kernel 4.19 ~
->  *      PGTABLE_LEVELS = 3
->  *      PAGE_OFFSET = 0xffffffe000000000
-> 
-> Since these configurations change from time to time and version to version,
-> it is preferable to export them via vmcoreinfo than to change the crash's
-> code frequently, it can simplify the development of crash tool.
-> 
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> ---
->  arch/riscv/kernel/Makefile     |  1 +
->  arch/riscv/kernel/crash_core.c | 29 +++++++++++++++++++++++++++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 arch/riscv/kernel/crash_core.c
-> 
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index db6e4b1294ba..4cf303a779ab 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)		+= kgdb.o
->  obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
->  obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
->  obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
-> +obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
->  
->  obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
->  
-> diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
-> new file mode 100644
-> index 000000000000..8d7f5ff108da
-> --- /dev/null
-> +++ b/arch/riscv/kernel/crash_core.c
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/crash_core.h>
-> +#include <linux/pagemap.h>
-> +
-> +void arch_crash_save_vmcoreinfo(void)
-> +{
-> +	VMCOREINFO_NUMBER(VA_BITS);
-> +	VMCOREINFO_NUMBER(phys_ram_base);
-> +
-> +	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
-> +	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
-> +	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
-> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
-> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
-> +#ifdef CONFIG_64BIT
-> +	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
-> +	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
-> +#endif
-> +
-> +	if (IS_ENABLED(CONFIG_64BIT)) {
-> +#ifdef CONFIG_KASAN
-> +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
-> +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
-> +#endif
-> +		vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
-> +		vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
 
-Seems this is the firsr ARCH where kasan and kernel link/bpf space are
-added to dump and analyze. Just curious, have you got code change to
-make use of them to do dumping and analyze?
 
-Thanks
-Baoquan
+On 2022/10/18 16:21, kernel test robot wrote:
+> Hi Zhen,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on masahiroy-kbuild/for-next]
+> [also build test WARNING on linus/master v6.1-rc1 next-20221018]
+> [cannot apply to mcgrof/modules-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+> patch link:    https://lore.kernel.org/r/20221017064950.2038-12-thunder.leizhen%40huawei.com
+> patch subject: [PATCH v7 11/11] kallsyms: Add self-test facility
+> config: sh-allmodconfig
+> compiler: sh4-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
+>         git checkout 3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    kernel/kallsyms_selftest.c:67:5: warning: no previous prototype for 'test_func' [-Wmissing-prototypes]
+>       67 | int test_func(void)
+>          |     ^~~~~~~~~
+>    kernel/kallsyms_selftest.c:72:12: warning: no previous prototype for 'test_func_weak' [-Wmissing-prototypes]
+>       72 | __weak int test_func_weak(void)
+>          |            ^~~~~~~~~~~~~~
+>    kernel/kallsyms_selftest.c: In function 'test_kallsyms_basic_function':
+>>> kernel/kallsyms_selftest.c:424:1: warning: the frame size of 1124 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>      424 | }
+>          | ^
 
+OK, thanks. These warnings are minor. I will fix them in the next version after collecting review comments.
+
+> 
+> 
+> vim +424 kernel/kallsyms_selftest.c
+> 
+>    275	
+>    276	static int test_kallsyms_basic_function(void)
+>    277	{
+>    278		int i, j, ret;
+>    279		int next = 0, nr_failed = 0;
+>    280		char *prefix;
+>    281		unsigned short rand;
+>    282		unsigned long addr, lookup_addr;
+>    283		char namebuf[KSYM_NAME_LEN];
+>    284		struct test_stat stat, stat2;
+>    285	
+>    286		prefix = "kallsyms_lookup_name() for";
+>    287		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
+>    288			addr = kallsyms_lookup_name(test_items[i].name);
+>    289			if (addr != test_items[i].addr) {
+>    290				nr_failed++;
+>    291				pr_info("%s %s failed: addr=%lx, expect %lx\n",
+>    292					prefix, test_items[i].name, addr, test_items[i].addr);
+>    293			}
+>    294		}
+>    295	
+>    296		prefix = "kallsyms_on_each_symbol() for";
+>    297		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
+>    298			memset(&stat, 0, sizeof(stat));
+>    299			stat.max = INT_MAX;
+>    300			stat.name = test_items[i].name;
+>    301			kallsyms_on_each_symbol(find_symbol, &stat);
+>    302			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
+>    303				nr_failed++;
+>    304				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
+>    305					prefix, test_items[i].name,
+>    306					stat.real_cnt, stat.addr, test_items[i].addr);
+>    307			}
+>    308		}
+>    309	
+>    310		prefix = "kallsyms_on_each_match_symbol() for";
+>    311		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
+>    312			memset(&stat, 0, sizeof(stat));
+>    313			stat.max = INT_MAX;
+>    314			stat.name = test_items[i].name;
+>    315			kallsyms_on_each_match_symbol(match_symbol, test_items[i].name, &stat);
+>    316			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
+>    317				nr_failed++;
+>    318				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
+>    319					prefix, test_items[i].name,
+>    320					stat.real_cnt, stat.addr, test_items[i].addr);
+>    321			}
+>    322		}
+>    323	
+>    324		if (nr_failed)
+>    325			return -ESRCH;
+>    326	
+>    327		for (i = 0; i < kallsyms_num_syms; i++) {
+>    328			addr = kallsyms_sym_address(i);
+>    329			if (!is_ksym_addr(addr))
+>    330				continue;
+>    331	
+>    332			ret = lookup_symbol_name(addr, namebuf);
+>    333			if (unlikely(ret)) {
+>    334				namebuf[0] = 0;
+>    335				goto failed;
+>    336			}
+>    337	
+>    338			/*
+>    339			 * The first '.' may be the initial letter, in which case the
+>    340			 * entire symbol name will be truncated to an empty string in
+>    341			 * cleanup_symbol_name(). Do not test these symbols.
+>    342			 *
+>    343			 * For example:
+>    344			 * cat /proc/kallsyms | awk '{print $3}' | grep -E "^\." | head
+>    345			 * .E_read_words
+>    346			 * .E_leading_bytes
+>    347			 * .E_trailing_bytes
+>    348			 * .E_write_words
+>    349			 * .E_copy
+>    350			 * .str.292.llvm.12122243386960820698
+>    351			 * .str.24.llvm.12122243386960820698
+>    352			 * .str.29.llvm.12122243386960820698
+>    353			 * .str.75.llvm.12122243386960820698
+>    354			 * .str.99.llvm.12122243386960820698
+>    355			 */
+>    356			if (IS_ENABLED(CONFIG_LTO_CLANG) && !namebuf[0])
+>    357				continue;
+>    358	
+>    359			lookup_addr = kallsyms_lookup_name(namebuf);
+>    360	
+>    361			memset(&stat, 0, sizeof(stat));
+>    362			stat.max = INT_MAX;
+>    363			kallsyms_on_each_match_symbol(match_symbol, namebuf, &stat);
+>    364	
+>    365			/*
+>    366			 * kallsyms_on_each_symbol() is too slow, randomly select some
+>    367			 * symbols for test.
+>    368			 */
+>    369			if (i >= next) {
+>    370				memset(&stat2, 0, sizeof(stat2));
+>    371				stat2.max = INT_MAX;
+>    372				stat2.name = namebuf;
+>    373				kallsyms_on_each_symbol(find_symbol, &stat2);
+>    374	
+>    375				/*
+>    376				 * kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
+>    377				 * need to get the same traversal result.
+>    378				 */
+>    379				if (stat.addr != stat2.addr ||
+>    380				    stat.real_cnt != stat2.real_cnt ||
+>    381				    memcmp(stat.addrs, stat2.addrs,
+>    382					   stat.save_cnt * sizeof(stat.addrs[0])))
+>    383					goto failed;
+>    384	
+>    385				/*
+>    386				 * The average of random increments is 128, that is, one of
+>    387				 * them is tested every 128 symbols.
+>    388				 */
+>    389				get_random_bytes(&rand, sizeof(rand));
+>    390				next = i + (rand & 0xff) + 1;
+>    391			}
+>    392	
+>    393			/* Need to be found at least once */
+>    394			if (!stat.real_cnt)
+>    395				goto failed;
+>    396	
+>    397			/*
+>    398			 * kallsyms_lookup_name() returns the address of the first
+>    399			 * symbol found and cannot be NULL.
+>    400			 */
+>    401			if (!lookup_addr || lookup_addr != stat.addrs[0])
+>    402				goto failed;
+>    403	
+>    404			/*
+>    405			 * If the addresses of all matching symbols are recorded, the
+>    406			 * target address needs to be exist.
+>    407			 */
+>    408			if (stat.real_cnt <= MAX_NUM_OF_RECORDS) {
+>    409				for (j = 0; j < stat.save_cnt; j++) {
+>    410					if (stat.addrs[j] == addr)
+>    411						break;
+>    412				}
+>    413	
+>    414				if (j == stat.save_cnt)
+>    415					goto failed;
+>    416			}
+>    417		}
+>    418	
+>    419		return 0;
+>    420	
+>    421	failed:
+>    422		pr_info("Test for %dth symbol failed: (%s) addr=%lx", i, namebuf, addr);
+>    423		return -ESRCH;
+>  > 424	}
+>    425	
+> 
+
+-- 
+Regards,
+  Zhen Lei
