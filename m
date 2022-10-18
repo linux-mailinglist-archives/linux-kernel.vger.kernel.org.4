@@ -2,106 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF51601FA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED5C601FC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbiJRAfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S230048AbiJRAjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiJRAfX (ORCPT
+        with ESMTP id S232236AbiJRAjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:35:23 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E104E412
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:35:11 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-12c8312131fso15193733fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:35:11 -0700 (PDT)
+        Mon, 17 Oct 2022 20:39:00 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447B82D1D3;
+        Mon, 17 Oct 2022 17:38:44 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id 187so10543312iov.10;
+        Mon, 17 Oct 2022 17:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZFNHgeagPRGpN511S5OVmTVLDSRxzqHSZND+ilItHI=;
-        b=rX/14hxyK+jbBsNmsi6OICKyz6vY8MdAjLpdpmL8Eoa7S9QfTsmtZ2g16772VPAdQ3
-         fyx8viqBFbhwe4fsuILQVTdMHesYZMcl1oUOCmX8b3E05NNXj84+XzmbL1LsDXmL5F1j
-         LMV1n2XU1a76XmxIXhbX/jQLk94Nf9oyipbD0iN/8f2ZIv+JsTvOocrVsgP0HsxvQWOB
-         FV59MeLky59LcmcQNFmf5mPPHgZyPDz4SSGEWvXafNz+jO3Il6nH3aWk0dudbCEewkRL
-         w2EkcpSee8Zn3VXKnm1otN85uvjvLHE28I2YLKCADeFtBWdkawzMyHE1W2n1XGklWzw2
-         7bHw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XlhfMLBD9roK3usgmTalym3p24qmGFsJ7yKhSqoF6eE=;
+        b=SKuxY2D1ggKZw5AIxtovMVOi0bMS6948pzTuhpr95+US+rXA2hyFjcWyfCdaCUCb/S
+         SM6+4PzuUnwDMnMspTha9/yHQQZKVwtRUuo8H+ckdNX1bL3C02cZnUKbxyDYSICzlkkL
+         PnvvwRjhz6x4R/pklBCE0RuQNK+ycvNJFIhhpH8Ff7132g4zBuH/aa5+Bcb3u8Qm97LW
+         NpECeJxZC50ldm2IQOBTskFOzdxdKW2KlpOytzQ6ERCHmkrXrWy5hJmh/dDUzS+i98Rf
+         bI3Z2pigyquQAYS7H1XD03xPG7fiF9EZ1JhC/rlTYRTqdJK1jVfAdx5X6mFtXxO8Ykle
+         2Ctg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DZFNHgeagPRGpN511S5OVmTVLDSRxzqHSZND+ilItHI=;
-        b=Tg2Nap1V4iIg82KnkiOahkXBlsC73vuZhsd7WlXGc9JIYjsKO4RxAeev+mjZMrs4Nj
-         ta4+A4Lg2eLzkHM/1imZbtA0RtTbNELJkkC8u29b8boCESKmy5EYbBhD199mbNDCOdaI
-         6iLM6C+Q3vn7dSh7ZxKG3vOLkWGSjNib3tRkBuKntJui/HKrCujOKlUUA1ka/pt6fOKh
-         UsZED2wRASMCIvef2uYM0/twnpcn+uiS9XiIRu6bzvRVfxPY+4yo526KWF77Dz20uu4m
-         iGN3pBIusUfp/f3Rw02YVBMYf/qdalprmKUwqWBrB0TNQBVo65UP+JOegVHUIEpgcOZ8
-         luOQ==
-X-Gm-Message-State: ACrzQf3dCWoUBMd8mVqa7S8lkIVFcUjSbQ/yiOeLyZIlpLA0cepZq+rf
-        /huTzItsNMNWb/XEWvxflET2UgfQAnd3/w==
-X-Google-Smtp-Source: AMsMyM6GsW9qHuPFp8+B+qhuY2BytXR7EdsQrQz18ZdcSSusgW2PC6Ay30Uig0XRAo3WSxCvao9eLQ==
-X-Received: by 2002:a17:90a:4594:b0:20b:23d5:8ead with SMTP id v20-20020a17090a459400b0020b23d58eadmr35608180pjg.127.1666053232202;
-        Mon, 17 Oct 2022 17:33:52 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q59-20020a17090a1b4100b001efa9e83927sm9986738pjq.51.2022.10.17.17.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 17:33:51 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 00:33:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <Y030bGhh0mvGS6E1@google.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
- <Yyi+l3+p9lbBAC4M@google.com>
- <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
- <20220926142330.GC2658254@chaop.bj.intel.com>
- <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
- <YzN9gYn1uwHopthW@google.com>
- <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XlhfMLBD9roK3usgmTalym3p24qmGFsJ7yKhSqoF6eE=;
+        b=3/+cFbomYcx74q46TpZhkNqkkhsTRdmcMqKXHED7jHwzzFnIoD6HPOtlBfVGMTl2y4
+         MGVcUvwgmPxGlxpAaJBdSMrrxd7hmauHKR2NmarsXc5QR9Z2JOugUZ8wDBGfzAevtbH6
+         mo1uw1mhU40tHBagYjBzj7bXWK/MQXRkk6R4ffGTJILFBLWJIdlw5R+6m06F7E2MVwbq
+         F7wSG4LPU3AasM6Eco1vfZqoxDe2fHCkqOnAxMqvy4XRJ3qTbRcvMkSjAOWzkG91GcOU
+         t/p86gX6E4qIMb6iOHGvg8ZHGA5hhd96w2+XxJeuYMWGWvwhRxF8/PX0YStGgA31lMfm
+         QqiQ==
+X-Gm-Message-State: ACrzQf39Ulb9SIcoEfCJdOXfrKVYSJiwq4rVCcmWouFitIi8zNJDbj/P
+        DGD6yV9a9+Zzj4Aq0363Dc4=
+X-Google-Smtp-Source: AMsMyM7btFADvKuqFJI+j+cM9Q57eDbr9oysnGbnjoIQefOXCXYVFU3irXtHKbQpzKghTu0GbV2sgQ==
+X-Received: by 2002:a05:6602:2c8e:b0:6a3:886a:30fb with SMTP id i14-20020a0566022c8e00b006a3886a30fbmr432747iow.75.1666053472214;
+        Mon, 17 Oct 2022 17:37:52 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00::4a89])
+        by smtp.gmail.com with UTF8SMTPSA id k3-20020a0566022a4300b006a11760aebbsm468096iov.36.2022.10.17.17.37.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 17:37:51 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Richard Acayan <mailingradian@gmail.com>,
+        Melody Olvera <quic_molvera@quicinc.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 2/5] dmaengine: qcom: gpi: document preferred SM6350 binding
+Date:   Mon, 17 Oct 2022 20:37:28 -0400
+Message-Id: <20221018003727.22763-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <6d9df544-b99e-4d62-53d1-1f3290d31a19@linaro.org>
+References: <20221015140447.55221-1-krzysztof.kozlowski@linaro.org> <20221015140447.55221-3-krzysztof.kozlowski@linaro.org> <20221017212320.4960-1-mailingradian@gmail.com> <801c902d-4e1a-6ddc-e050-afdc2514e687@linaro.org> <20221017220004.6234-1-mailingradian@gmail.com> <6d9df544-b99e-4d62-53d1-1f3290d31a19@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,83 +80,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022, Fuad Tabba wrote:
-> > > > > pKVM would also need a way to make an fd accessible again
-> > > > > when shared back, which I think isn't possible with this patch.
-> > > >
-> > > > But does pKVM really want to mmap/munmap a new region at the page-level,
-> > > > that can cause VMA fragmentation if the conversion is frequent as I see.
-> > > > Even with a KVM ioctl for mapping as mentioned below, I think there will
-> > > > be the same issue.
-> > >
-> > > pKVM doesn't really need to unmap the memory. What is really important
-> > > is that the memory is not GUP'able.
-> >
-> > Well, not entirely unguppable, just unguppable without a magic FOLL_* flag,
-> > otherwise KVM wouldn't be able to get the PFN to map into guest memory.
-> >
-> > The problem is that gup() and "mapped" are tied together.  So yes, pKVM doesn't
-> > strictly need to unmap memory _in the untrusted host_, but since mapped==guppable,
-> > the end result is the same.
-> >
-> > Emphasis above because pKVM still needs unmap the memory _somehwere_.  IIUC, the
-> > current approach is to do that only in the stage-2 page tables, i.e. only in the
-> > context of the hypervisor.  Which is also the source of the gup() problems; the
-> > untrusted kernel is blissfully unaware that the memory is inaccessible.
-> >
-> > Any approach that moves some of that information into the untrusted kernel so that
-> > the kernel can protect itself will incur fragmentation in the VMAs.  Well, unless
-> > all of guest memory becomes unguppable, but that's likely not a viable option.
+> On 17/10/2022 18:00, Richard Acayan wrote:
+>>> On 17/10/2022 17:23, Richard Acayan wrote:
+>>>>> Devices with ee offset of 0x10000 should rather bind with SM6350
+>>>>> compatible, so the list will not unnecessarily grow for compatible
+>>>>> devices.
+>>>>>
+>>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>> ---
+>>>>>  drivers/dma/qcom/gpi.c | 7 ++++---
+>>>>>  1 file changed, 4 insertions(+), 3 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+>>>>> index f8e19e6e6117..061add832295 100644
+>>>>> --- a/drivers/dma/qcom/gpi.c
+>>>>> +++ b/drivers/dma/qcom/gpi.c
+>>>>> @@ -2286,13 +2286,14 @@ static int gpi_probe(struct platform_device *pdev)
+>>>>>  }
+>>>>>  
+>>>>>  static const struct of_device_id gpi_of_match[] = {
+>>>>> -	{ .compatible = "qcom,sc7280-gpi-dma", .data = (void *)0x10000 },
+>>>>>  	{ .compatible = "qcom,sdm845-gpi-dma", .data = (void *)0x0 },
+>>>>>  	{ .compatible = "qcom,sm6350-gpi-dma", .data = (void *)0x10000 },
+>>>>>  	/*
+>>>>> -	 * Deprecated, devices with ee_offset = 0 should use sdm845-gpi-dma as
+>>>>> -	 * fallback and not need their own entries here.
+>>>>
+>>>> This comment is from the dependency series [1]. Why would we need to add it just
+>>>> to remove it here? I was not notified that the dependency was applied anywhere
+>>>> (except as a base for other series) so it's not set in stone. Let's just drop
+>>>> the original patch that this comment originates from to prevent needlessly
+>>>> adding and removing the same lines at once.
+>>>
+>>> I don't remove the comment, I re-phrase it to be better suited for final
+>>> code.
+>> 
+>> Yes, I didn't word that exactly right. I still think the patch that adds this is
+>> now useless if it's just going to be replaced. Do you think I should keep the
+>> patch that this comment originates from, even though we already know exactly how
+>> its substantial contents will be replaced?
+>> 
+>> We can't modify history and drop commits on kernel trees, but I can still send
+>> a v6 series that drops the original comment.
 > 
-> Actually, for pKVM, there is no need for the guest memory to be GUP'able at
-> all if we use the new inaccessible_get_pfn().
+> Sure. You can make it then:
+> 
+> 	 * Do not grow the list for compatible devices. Instead use
+> 	 * qcom,sdm845-gpi-dma (for ee_offset = 0x0).
 
-Ya, I was referring to pKVM without UPM / inaccessible memory.
+If you don't want me to drop the original patch completely, then there is no
+need to make any changes at all to the driver patches IMHO. I originally thought
+we only needed one patch for the driver (yours) but you seem to have a really
+good reason not to drop the original patch. Sorry for asking.
 
-Jumping back to blocking gup(), what about using the same tricks as secretmem to
-block gup()?  E.g. compare vm_ops to block regular gup() and a_ops to block fast
-gup() on struct page?  With a Kconfig that's selected by pKVM (which would also
-need its own Kconfig), e.g. CONFIG_INACCESSIBLE_MAPPABLE_MEM, there would be zero
-performance overhead for non-pKVM kernels, i.e. hooking gup() shouldn't be
-controversial.
+I guess you can add this if you want:
 
-I suspect the fast gup() path could even be optimized to avoid the page_mapping()
-lookup by adding a PG_inaccessible flag that's defined iff the TBD Kconfig is
-selected.  I'm guessing pKVM isn't expected to be deployed on massivve NUMA systems
-anytime soon, so there should be plenty of page flags to go around.
+Acked-by: Richard Acayan <mailingradian@gmail.com>
 
-Blocking gup() instead of trying to play refcount games when converting back to
-private would eliminate the need to put heavy restrictions on mapping, as the goal
-of those were purely to simplify the KVM implementation, e.g. the "one mapping per
-memslot" thing would go away entirely.
-
-> This of course goes back to what I'd mentioned before in v7; it seems that
-> representing the memslot memory as a file descriptor should be orthogonal to
-> whether the memory is shared or private, rather than a private_fd for private
-> memory and the userspace_addr for shared memory.
-
-I also explored the idea of backing any guest memory with an fd, but came to
-the conclusion that private memory needs a separate handle[1], at least on x86.
-
-For SNP and TDX, even though the GPA is the same (ignoring the fact that SNP and
-TDX steal GPA bits to differentiate private vs. shared), the two types need to be
-treated as separate mappings[2].  Post-boot, converting is lossy in both directions,
-so even conceptually they are two disctint pages that just happen to share (some)
-GPA bits.
-
-To allow conversions, i.e. changing which mapping to use, without memslot updates,
-KVM needs to let userspace provide both mappings in a single memslot.  So while
-fd-based memory is an orthogonal concept, e.g. we could add fd-based shared memory,
-KVM would still need a dedicated private handle.
-
-For pKVM, the fd doesn't strictly need to be mutually exclusive with the existing
-userspace_addr, but since the private_fd is going to be added for x86, I think it
-makes sense to use that instead of adding generic fd-based memory for pKVM's use
-case (which is arguably still "private" memory but with special semantics).
-
-[1] https://lore.kernel.org/all/YulTH7bL4MwT5v5K@google.com
-[2] https://lore.kernel.org/all/869622df-5bf6-0fbb-cac4-34c6ae7df119@kernel.org
-
->  The host can then map or unmap the shared/private memory using the fd, which
->  allows it more freedom in even choosing to unmap shared memory when not
->  needed, for example.
+> 
+> And my patch will just change one line.
+> 
+> We can also keep it like:
+> 
+> 	 * Do not grow the list for compatible devices. Instead use
+> 	 * proper fallback compatibles.
+> 
+> Best regards,
+> Krzysztof
+> 
