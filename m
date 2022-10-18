@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A3C60287D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8571E60287E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiJRJhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S229945AbiJRJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiJRJh2 (ORCPT
+        with ESMTP id S229942AbiJRJiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:37:28 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF682A73D;
-        Tue, 18 Oct 2022 02:37:28 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id CECD51C09D9; Tue, 18 Oct 2022 11:37:26 +0200 (CEST)
-Date:   Tue, 18 Oct 2022 11:37:25 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Marek Bykowski <marek.bykowski@gmail.com>,
-        Rob Herring <robh@kernel.org>, robh+dt@kernel.org,
-        frowand.list@gmail.com, devicetree@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.9 1/8] of/fdt: Don't calculate initrd size from
- DT if start > end
-Message-ID: <20221018093725.GC1264@duo.ucw.cz>
-References: <20221018001202.2732458-1-sashal@kernel.org>
+        Tue, 18 Oct 2022 05:38:20 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F2B7CA9C;
+        Tue, 18 Oct 2022 02:38:19 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ms80D3MQlz6HJ8p;
+        Tue, 18 Oct 2022 17:37:16 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 11:38:17 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
+ 2022 10:38:16 +0100
+Date:   Tue, 18 Oct 2022 10:38:15 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+CC:     <dan.j.williams@intel.com>, <ira.weiny@intel.com>,
+        <dave.jiang@intel.com>, <alison.schofield@intel.com>,
+        <bwidawsk@kernel.org>, <vishal.l.verma@intel.com>,
+        <a.manzanares@samsung.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] cxl/mbox: Wire up irq support
+Message-ID: <20221018103815.00003cb2@huawei.com>
+In-Reply-To: <20221018030010.20913-3-dave@stgolabs.net>
+References: <20221018030010.20913-1-dave@stgolabs.net>
+        <20221018030010.20913-3-dave@stgolabs.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="eHhjakXzOLJAF9wJ"
-Content-Disposition: inline
-In-Reply-To: <20221018001202.2732458-1-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 17 Oct 2022 20:00:10 -0700
+Davidlohr Bueso <dave@stgolabs.net> wrote:
 
---eHhjakXzOLJAF9wJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> With enough vectors properly allocated, this adds support for
+> (the primary) mailbox interrupt, which is needed for background
+> completion handling, beyond polling.
+> 
+> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
 
-Hi!
+Whilst I get the need for an example, I'd rather this didn't
+go in until we have that background handler in place.
 
-> It should be stressed, it is generally a fault of the bootloader's with
-> the kernel relying on it, however we should not allow the bootloader's
-> misconfiguration to lead to the kernel oops. Not only the kernel
-> should be
+Unused infrastructure tends to rot or not be quite what is
+needed.
 
-I believe we should at least printk() if we detect bootloader bug of
-this severity.
+Follow up comment below.
 
-Best regards,
-								Pavel
+Jonathan
 
 
-> +++ b/drivers/of/fdt.c
-> @@ -917,6 +917,8 @@ static void __init early_init_dt_check_for_initrd(uns=
-igned long node)
->  	if (!prop)
->  		return;
->  	end =3D of_read_number(prop, len/4);
-> +	if (start > end)
-> +		return;
-> =20
->  	__early_init_dt_declare_initrd(start, end);
-> =20
-> --=20
-> 2.35.1
+>  static void cxl_pci_free_irq_vectors(void *data)
+> @@ -562,6 +588,7 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		return rc;
+>  
+>  	if (!cxl_pci_alloc_irq_vectors(cxlds)) {
+> +		cxl_pci_mbox_irqsetup(cxlds);
 
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Ah. That rather wrecks my previous suggestion :)
 
---eHhjakXzOLJAF9wJ
-Content-Type: application/pgp-signature; name="signature.asc"
+>  		cxlds->has_irq = true;
+>  	} else
+>  		cxlds->has_irq = false;
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY05z1QAKCRAw5/Bqldv6
-8ql/AKCg9oS8C4ZuU/xkeG7iWO3HpQPUhgCeLcwc3IO2azfdvu9oZF93Vs3Fklk=
-=SD+H
------END PGP SIGNATURE-----
-
---eHhjakXzOLJAF9wJ--
