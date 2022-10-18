@@ -2,110 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C64602A53
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA161602A51
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiJRLgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S230188AbiJRLgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiJRLfa (ORCPT
+        with ESMTP id S229936AbiJRLf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:35:30 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2135.outbound.protection.outlook.com [40.107.105.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44A285AB3;
-        Tue, 18 Oct 2022 04:35:02 -0700 (PDT)
+        Tue, 18 Oct 2022 07:35:29 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2079.outbound.protection.outlook.com [40.107.94.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B4177550;
+        Tue, 18 Oct 2022 04:35:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jQf4RWMoHhFsjURPR0iNrZ0oHFwRjXwYqK1mtKXk0Oua17atVfJkBNgd3q5BzniUc/w7i8v7QJU6MoVJ8pE+7VH5mxRAbdUGe+C8XpHG/DC37QBgfI6F6WiQPoFZbC9SlvaQbeIXIVyEi+cSFWovhUxc2aT1hwpbvwQaq+rO0dwp1knzqD7rXA0cF4cJh3eXe6DCCdSfRzBg9on5G/wzew3vcCm0zHPURYVnBEBcs6s5ZZIRAEMkrxyonAUU1nDXPWa8YT8iT4SBrgDaO/eKeG8zDQ6f4Z8Qa1wOeDonYit8xzuoqB08FnWx+6KEGYXQ9Y9MYBOs6skkiYMm9yHssA==
+ b=btgfvf4PypcK6USPCAngPmntT74fJASLccN/II8MNLlv6kFBYIsBsFsYMiM0qMrTqH8WlFpjWlQnPy/bwz3Rs0Swj/FYG1VRhCKaLSYkFYcEwKHn32Mwn4PtVkMz0Tvge8jH2oGTQuYIVwroyMcZDi7SrWyrWDv21nOSIivyH6FuO2UDoB+bwWI/mXKePpqqRJ8m0urJcYBzJdHESPUu4U7tHZ7IRv9kujUWfpOvKpm9McgXRawm65IR3sW1OYK0MmURHxtPDbcKbfq+PgucSL6SlYAhtHbQwdZ6WDUsGhdKElrsgrxGawntLlW34vmBq2Og4eI8F4043tlO6Dq66Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xYf7+7ywWhm8+oqS+1Czes95nmvSVKWaEjfRgqkTfac=;
- b=n0dQhj+EWWn4jtzyTloRJEfl7q7Hm+XfrxCvHnk2rJOkABPKJzoeEnlGIMyvdzAe7tC3RLrMSMVxgALjlz2UQTi99zel0d2uWy8niJH6qR5psWBLQi9dfiwRt3WUyn0GWeasmFgotC/uNpqipZwy78Je3sn6veW8hJ51Z/qPTId1B9Xkm/hDkrS98xV6R+7REePbonz+/AquhMWJ8iX/Q5sEtXmu49tXR3q9+54oyVSryDDXQJtTSia2y/EdLVDFMw2O2y3LhnULfGpkqEmN1cAuA0/AIVvlvIMZGtG5izw4nitHNjZEErRl2OPRALow9/mRAW3DwPlL5dT4vV4/rA==
+ bh=13uRgY/D7XlDTKeQPSz4XAAFNNCKoGyW++2oyD1gRQs=;
+ b=hPctN/UsSFmphzQE+L/3lCqWQNRQMlUsu2ZNCqimJLhT27WwYjhBmKHpXLCR/TH1QY/EqoTdAaNw/IjQDxcz+WuUD06YKsepWelQBzhiNg+BOGbuzITS3dHWcuEWqUelI22OVPTTHuLunNatAYYRYCB6JJF8uKtZy873FXBEa7CSR5LlOIb8jWACgSJXlH8Zpma/YvgLfHE82oLqzqbsv6h2h4YDrUr7hHKjkejaiz1mciH4rYNIdnTycEyb+xuSrFv9m0j635BxgVZJ0ao2t3pqhO6b0UdbcMr5gBAAKKSpM3RQcqsVbP93NiG+vmkGZ00z+8RfY5T33no80haazQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xYf7+7ywWhm8+oqS+1Czes95nmvSVKWaEjfRgqkTfac=;
- b=ZsILeEAAikZtF7bYuXyzUq9FyHKf+3eCwj1PMRaxSK7NCx3Bf4UYBaf0ViR7YGMxSwpouulPCjS/6UFm5zqUNmA5gjvmGZErwrSPV0kygj3BOXVoGTxi3S7t8LoSRAv150165+2sE4EdvvnbcwVUWGB+d1t3izwYoM3liV3D9pg=
+ bh=13uRgY/D7XlDTKeQPSz4XAAFNNCKoGyW++2oyD1gRQs=;
+ b=wLNK0lzU9Fo4DAcivArOtiIoqnmRCQP1RSDXZ8t/erdLu9Y7/CAtBs4Pfi1oW9Ak5NeNG9xlbRF/cY4CYGvZJm3F8koFcE48sdhL4S6jl+UfEGcF467MKrDgbLR56ewkE1JQsBz+STl6NvkZ5oRoZMrlErKvpz3MolQ4Us3s8GA=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
- by AM8P190MB1010.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:1c7::18) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SA1PR12MB7245.namprd12.prod.outlook.com (2603:10b6:806:2bf::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
- 2022 11:34:30 +0000
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::a621:b61f:de56:b8]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::a621:b61f:de56:b8%7]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
- 11:34:29 +0000
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: [PATCH v2] usb: ehci-orion: Extend DMA mask to 64 bit for AC5 platform
-Date:   Tue, 18 Oct 2022 14:34:00 +0300
-Message-Id: <20221018113401.32229-1-vadym.kochan@plvision.eu>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: FR0P281CA0014.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::19) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:802:38::26)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Tue, 18 Oct
+ 2022 11:34:25 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644%6]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
+ 11:34:25 +0000
+Message-ID: <ce1927b4-d6c5-0649-5ae4-270045aa319f@amd.com>
+Date:   Tue, 18 Oct 2022 13:34:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 00/21] Move all drivers to a common dma-buf locking
+ convention
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Ruhl Michael J <michael.j.ruhl@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20221017172229.42269-1-dmitry.osipenko@collabora.com>
+ <d943fec8-a1ef-faa5-4132-c7618acb891f@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <d943fec8-a1ef-faa5-4132-c7618acb891f@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0172.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a0::10) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|AM8P190MB1010:EE_
-X-MS-Office365-Filtering-Correlation-Id: 750b35ba-bd96-4c2b-d3d6-08dab0fcb822
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SA1PR12MB7245:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4682a26f-30b3-4504-4dd2-08dab0fcb558
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hEyFGo+Id9BiO3p2lIzlrO5095cthIM0CZUn9xOvVzTqgTO7iFsXRIDmprPtAxhiGuDY5Oina3RUzX5lMfx2zoqLSY8rXHjweVyzELmmFD0wE5+1aeMYYVOp56jGjnSxFx1WDtmwgQjULs632keG4gTylBA/3hMYtUJmxR9sMoY3hf6j2gemfZ5N1l9zuzudZWHwvFIV9seJazM78yjCfIpJoZ03RHMxX8TMWZ6o8NCm8843kbJycfJLbPRy5JzFSaNuQY2tUDAr52X6lY/9aANeCJl4r0iOfxt9nVsOeWTFJGEeU6q5pwy7RWL3BojLhlMYmG6Z6sxIjPQVqjXCiwtQ3U3Hk1pX30nDC/NeC/nOrCFwl9qgp0DVAaI9++wF7AOtzyXq73tILKIem3jCwfw/PkEi1haRTg6Eeud5Da5nIxogtbKDd8hrXvCh0VNu/wxrWyY7apEBs5w6wfcrToo6YXwQSNjjGrpkh8J4HvxHY8ZRUUOJyhctuuLotAGYCPK24NP6VAqnXth8nUsGR0wn5Su8xdUZYxBLixHeB18Dt1v0NV9iUDoe0GmW5V2eT8O2FWgBm/C3oJVe+mCzP3u3gn56a/VY/yYDMEv5/P42uxbbRjgaU7Uwj6Qj+5/YyTKTff1J8XTbS0ij++NrqMuy0ni/LmmyPCvm948llO5sGFNCz3/tOX2USnj7eV8wbs/MUz7amGeDb3EjwUcrTO+TTnEE4HFefHbTQ/ztclA+IqFjKJlKOuD8Un60e7JJ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(34036004)(366004)(376002)(346002)(39830400003)(136003)(396003)(451199015)(6486002)(83380400001)(2616005)(1076003)(186003)(41300700001)(86362001)(38350700002)(38100700002)(2906002)(5660300002)(44832011)(4326008)(52116002)(6666004)(41320700001)(8676002)(107886003)(508600001)(6512007)(110136005)(26005)(6506007)(316002)(66556008)(66476007)(66946007)(8936002)(36756003)(54906003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: smren2V6AYejFy4U2PmVkpNNRLm+h1yS/f9r4JXcVfxfqGCm/FDGdTugxtvaDDiQzl0qTJXxZz63NCIecZkyeCVJa+kGW0Im4orNOXzolOI4qNuu3ZZKENXzNIHRMC0wOwxgdB2Wa7B6cEavCL25/DHZbzwCA9og88YKKUQyCbI8nCPKMN6PzUC/XlnSysQzOCtqMpAxdTmYFToRHXEh+piGUtnPVBmngP9ntqpHjBEKQ6skq8a+/gBB6MwWlsFEQuAxwOSRcvI6DfWZaWo9CajT/r6QYlVTA0urfhi6OwtaghJOEjbmL8RzgwBXSNIUBFXGxu1vJQ5tJMs11Uv2etcw82f3EdCzcEdBhSlzGu/EUX2aOdrsPavIx6MWJMzCtKY+qYugtL2bxenjy2jBt7d9Lnj65UkUtfBP2noQEYD7YIQh29p3yLVaIlIYS/mZx5Dq5AaxESo4nP6Xr6XZVSbeS847GPtweQ5USPfje+RZCXISxiOmDSt35tj5MitEQOvZHpUTL0HKz40XYue+zpKN3Dggw6uradIg1cqJ9xiZe6DD8702kL5FNoibu8XuKOjP1NyT7fg/UPu7KFn4/Y/ooE+YQGjjebqIrY5LMoUdVkRafXnq2zD0o6mMEWf+C5WxP4xD/LJcNSzZfaI52pxLzuMPhKeE18+B1U8lzYhAB1iattsVxTgGr0arADO+ShzDGCx5dStdGqSMxkkNBzPkPJ+o6zahUDIW1air+tIUPFepOHJyg+CKRiM4PEoqHpAQl9zfBiGLn3Hcp3LWYQZONzb4jZ5qOBX4JmEhimIfC508OrzfP6FHwMDfiw9s
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(136003)(366004)(396003)(451199015)(110136005)(31696002)(921005)(83380400001)(38100700002)(19627235002)(86362001)(316002)(41300700001)(8936002)(53546011)(6486002)(6512007)(6506007)(2906002)(6666004)(186003)(66574015)(478600001)(7406005)(2616005)(5660300002)(36756003)(7416002)(31686004)(66946007)(66476007)(66556008)(8676002)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zFtLR2SwSJMpaDfyKLkA2dG/3kFses4w//MeSRFjRBhpOKiNM8uLuwgvOj3b?=
- =?us-ascii?Q?uJWX/WC5szjbaFyfCLAybDKHqIBf21PomtefnjwNl8vmTfzng25u/1iTLfML?=
- =?us-ascii?Q?ejHShQ9Ev9rPZnS51KT6f6F6+zkY2RTLPG+n8EVoYZbBDGi0ScnQG+VrhJZW?=
- =?us-ascii?Q?OzbB9LvJyKMFkHw36p9hx9MHpYlp5IEJWIGFNW95gjQiPWbjqzQ4kHJbW2tL?=
- =?us-ascii?Q?UqOVT5iVQcs5puSxrZW0kmgVZNRRFVlkFV28nFCGjyLrA1xgDp+KcVT3eiWi?=
- =?us-ascii?Q?eMko8pNtVHakvg6HcPjzirkSwePjtr8keQX/xjZZS56iT8a9pr2RVSrbISd6?=
- =?us-ascii?Q?pvW1e1bxbcxCaqrQE17hPV49FCVf7fVG3VOJNrZNvG4pUtuWXQmx3DQjzbDj?=
- =?us-ascii?Q?WYyKZaiDKsHsRRsXjeMNG0Noi3mv+NcZhrA5EPfbdhtwymjjzy1kIdxCe+H/?=
- =?us-ascii?Q?tWheiX5dXwzDf4ODDFr+dEYxi0gv1rhNiSvR15eQ4n9RmA7W26n1tvG/Qqts?=
- =?us-ascii?Q?Q7JYJ9zY7Ni9a43xkBvSXZ6mfNlW0lyLZ7gLOATZIFYkjhpwb6sfZ5b4HCf6?=
- =?us-ascii?Q?fPnTeq5E7svfwgh5jQ/33nnnD1az1mRZtAaoN3BM7zCDNZJFHd1bBRjG/SBW?=
- =?us-ascii?Q?+/vzh7LYxotgyPPPJDxcHxSIcw/LzOCNeX7/QUPHJN+aX0VeH/6n4c0Iww1m?=
- =?us-ascii?Q?tb11UzXgpw7PGSsXe50JwrzDMwkcj/1cquIUQpQIrhMLRirPOALylh0lFf1h?=
- =?us-ascii?Q?z+CMKfGDWfDRdCPv+l6rG1Y/SAwk18F9iniJcNNiftEyPa4cJmzthex5EV/q?=
- =?us-ascii?Q?qLTJ0QDK2fkWAlQlxwOK+WHyND1ME73NIIZ1osAnFsJaU6nlT6Gdi6hp+C2F?=
- =?us-ascii?Q?GwAR7Jq3Y70GyD4OyWZxI0kha8Vcs+TM6nxWkytbASrLlQ9+btiJqsm25DaN?=
- =?us-ascii?Q?zwqnTS/8sDkqIVJpbCr2MPLOp+LgGP4ybgryLSzYncCqPU1EYSOMwSMES4Hd?=
- =?us-ascii?Q?I15P4P7JGbwQ6boQn8SQULgcVrnHthYiZDRo5pS9yI12FxOxCXhMITG7ztVg?=
- =?us-ascii?Q?baBRz53fYyfptfMAXgYirQ5QwjthZEnuQFUH67qHfKZffIeXsbW0JlBxD2W+?=
- =?us-ascii?Q?EcmBCHtrORVZj8rIRIisAHG+Ypla6YuMtOfwmxI8whCXJh7lJrosz9oUtQpT?=
- =?us-ascii?Q?CrIiuUuuaVnH1ocgV2dGmkfxUsDdImSeiw65GjnYfZE6PI/KsMIIQXj+TD46?=
- =?us-ascii?Q?5IIOqsgaMla2bhKG4xdLS7o2gNdCQOu9DAfj2Y84uzJf/OPvR8RzwXZMtwu5?=
- =?us-ascii?Q?sZmMass+fATLY3puhvR6lHgpqEwJxKFqAGYtrCVxPSGh9xWPtu6NQqLWr6QL?=
- =?us-ascii?Q?qZ+plNp8n2dX210OQ2Mveq5NR7nix0Hu5dH6UVSmV5L1XWaa+jgfR4bw/qIT?=
- =?us-ascii?Q?HpgBzG9HXeBk/ZkhKzoU9ZOv7F9krQOCuzQuy7R0udyVurjAhFhWA0pA5h+4?=
- =?us-ascii?Q?QNTqVFs6Ht4FyyJ1W2tyXPjS7f4Hu8Pbfwt6LvYk+12XcnyeuLBS/LZMyl65?=
- =?us-ascii?Q?cUbfcP1VDg/5fbLGW+FqPP1Vr48SUY8Nsd+y0wmJNnDHPesevB3UYWQmL2mp?=
- =?us-ascii?Q?Sw=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 750b35ba-bd96-4c2b-d3d6-08dab0fcb822
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VG9nVGFtaEExRnkvV09FVVZlQ3QyQktKZTNieHlYSkJ6aHdTdkxhS2ZYeksv?=
+ =?utf-8?B?VXp2cmxzZUN0TXRDeEFQUmE4ZE8zWnBtcm9zMFN6dUhBUW9YTWlQR3FLUG01?=
+ =?utf-8?B?anF1SFJSSnJ3VGdTdTZ3aVJPUDE4MC8reFNieGk3aVBScThtTjVibG5maTRm?=
+ =?utf-8?B?THowYnBoM2s4aEIxZGVacEZ0UlZOdzA4YXpwdDdhVEk5eFZxblBya2FVUjFB?=
+ =?utf-8?B?YkVPMjBVVGNXWW45Zno4T2R6Y3FwT1JZZjgwNXFsT1ZXZ2dnSUUvSnFBdHB4?=
+ =?utf-8?B?bWp2bzBkc3NFTlRmUTBNSGpSeno4Rjlnd3Q5L1VpZVdlaFg3b29KT2xZMkhh?=
+ =?utf-8?B?K1dCME5aQlZTZUJPQnZnOFFrVGVOVlVheVZwOEo1aUxnU3kwTGRDSFZnVFVH?=
+ =?utf-8?B?KytQb3p3bGxOajlmd3I4Qk9NTG9FSFhOYzVmM2hBRGVqTUhFSlYxVWhxc2wx?=
+ =?utf-8?B?NzJ4ZUZ4Z2VLRk5lWUhRSXF6STJXRjlNb3IzV3hWazgrSGphaUZ3YkhqMUVJ?=
+ =?utf-8?B?OFBaSEloS1JLZjVDWXlYN2FJSFEzRXZFUTFwenliMDdsYWFORE0zVEpuMUZl?=
+ =?utf-8?B?cGprSkZhMm5veitQc1J5OGJyUk5vZzdHdjM5ZlB1VkdFdk9kWnBkVTVVQmYz?=
+ =?utf-8?B?NEI1Q2lXRFZ3cGRGV2pTcnVzN3ZXMFNmbUxxdFBSRGduNnFWRXJuZ3VURXRz?=
+ =?utf-8?B?RzVxR1AzYXdBMWlDZ0hDUGlYcTAxR2ZpMkoxck1RRU5wbGg0cFNxWmFuSXBm?=
+ =?utf-8?B?QW96QTg4SnVhcnJ3NGxjMFBvVWVUeXNvMmpvam8rdHV6S1JSSiszVUVQOGcv?=
+ =?utf-8?B?VEpaTEUwa1hDSDhZaVhtYStiMVYvRlBZTW1pdk5mVXluM1Btc3pKd0wrNXBq?=
+ =?utf-8?B?WlVTM2VKZnJhL3VPQXJRT1BPQ0p1WnFmQkR3VHRTVlZpSzh3RCs1OWo0U1FV?=
+ =?utf-8?B?eDJ1VE5tRFd3VjUrY00xamVNak1wTkRyaFlrcGhnZ3lNcDFLR2hwWHN1VDJh?=
+ =?utf-8?B?Z3puQUR6RksweVpPZGE4dTZBd1QzNVIyYld0dDFQdmZCSlJCNWYwVDBSR25r?=
+ =?utf-8?B?c29uaWtrZHlhKzJ3cmNDd3QrUTdoOEJMN2NlQ2dTTkdrN3N2M21scGxpc2Nn?=
+ =?utf-8?B?WURITjhKQlMxSGpzNkUwTmV4dWtYQ3VnMzVYVURBSUVDZHo1RXc2NXNJa1Vj?=
+ =?utf-8?B?MXhMd1FTUTMvUFNDODZURGdhVWNqZktkSk9CdS83U2Q0RWNRYW4xb3hRN2Fh?=
+ =?utf-8?B?NTdTVUUveW10UVVRUVZmc0FJaytNRWxDOExub2hzMkxtcG9MQ3NNZFpVNzNB?=
+ =?utf-8?B?dnZhSEUxRmhLbE5mWW1MM256WG9xZkgwZXpIMUFxTk1sNHhhcFJGTFVMT3Y0?=
+ =?utf-8?B?eDV0U1Q1bExKVzRiRnI3MG5NR0U3MEtCZ0kzcXJaOWJpUWRVaDEzSEdqMWZZ?=
+ =?utf-8?B?bEJnTk90cHBsREJISmZ5RHpBRStaYkplSjkzeCs3T1hEVW5qZjR2a0NDSkIw?=
+ =?utf-8?B?cTJHYmtyMUlVM3JTNU9ZV0VVODY1akRvTXRvYy9oemdEejZaK0pRUjV4ZFQx?=
+ =?utf-8?B?b1hIMzVDVzdiU1hjV0FEK2JxK0tYTjVxbURTSUx4cnhEYzVialB3STJodjND?=
+ =?utf-8?B?RmN1WWNkRXYrNWpscXBqWWE3eHR0RXNrZ3cyTkRDczVnSnp1Y2M3eTVsK3ZX?=
+ =?utf-8?B?ZWJ5WE5sbkhXVnlWKzh5dXg2L2JvTVhYVWlrdHJZZnlSVHdlVGIvVDh3V1Nn?=
+ =?utf-8?B?NFRjME1jZFMwREE3RzZ6U2FvcXhOcWVZY2h4YjltQmFvL1ZhWnJmRkh2eElF?=
+ =?utf-8?B?cUtMNHVLd2xDcVBLTmZEdXRoWjcwdDdvZlgwd2c0YkJndGpoOWxOeVZTTkVR?=
+ =?utf-8?B?Z3VPSUxSWlNjNmIwaGtRaWt5MWMyVnJjR1IrK3J0VzJjQVY2Q2d6a3JHbFU2?=
+ =?utf-8?B?RDhEUzdwRDdRbEcrRVRxSlVmWC9MeG9xQndNdGE5bGVOS2F6TldwOEpGY0Yx?=
+ =?utf-8?B?bGFMaUJjRWdZNnI3MEtFTnI4YUR1dXJaWHJJRTV4MmlHaFdpM2dvd0twVFJp?=
+ =?utf-8?B?d3dGaWRyWE5mSFJyS1BJWHpzNTFLTUdQV3B0UGRNV2l5RTk3L2JkN1cyb0hr?=
+ =?utf-8?B?ekxsN3cxREsrZ09nbzR5YnhzZWtwNVNnK1BFZ2FsaW9iTjRWMC9xVEs5QzND?=
+ =?utf-8?Q?1cDTCla2z5g/T+Bzuj5SzCK9R+0BkXnWKjtT65qrqwgw?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4682a26f-30b3-4504-4dd2-08dab0fcb558
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 11:34:29.6227
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 11:34:24.9244
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tNDB52TZm/8z5wK11whZcU9iA0XF9zKu0Emd9/KLMdVMHLPmRH+0CknIStlSsfzWJQpHpaoQvjAFAuHApYwnRZnwrBpROPV2bhmaI3hunCU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8P190MB1010
+X-MS-Exchange-CrossTenant-UserPrincipalName: jOYxdd3sJc9dkMTMTHC2+G6cGYD0shaYm1rJBGNooWitS8/2n3QnPL0azmwwnsvq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7245
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -114,36 +169,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Elad Nachman <enachman@marvell.com>
+Am 18.10.22 um 01:07 schrieb Dmitry Osipenko:
+> On 10/17/22 20:22, Dmitry Osipenko wrote:
+>> Hello,
+>>
+>> This series moves all drivers to a dynamic dma-buf locking specification.
+>>  From now on all dma-buf importers are made responsible for holding
+>> dma-buf's reservation lock around all operations performed over dma-bufs
+>> in accordance to the locking specification. This allows us to utilize
+>> reservation lock more broadly around kernel without fearing of a potential
+>> deadlocks.
+>>
+>> This patchset passes all i915 selftests. It was also tested using VirtIO,
+>> Panfrost, Lima, Tegra, udmabuf, AMDGPU and Nouveau drivers. I tested cases
+>> of display+GPU, display+V4L and GPU+V4L dma-buf sharing (where appropriate),
+>> which covers majority of kernel drivers since rest of the drivers share
+>> same or similar code paths.
+>>
+>> Changelog:
+>>
+>> v7: - Rebased on top of recent drm-misc-next.
+>>
+>>      - Added ack from Jason Gunthorpe to the RDMA patch.
+>>
+>>      - Added iosys_map_clear() to dma_buf_vmap_unlocked(), making it fully
+>>        consistent with dma_buf_vmap().
+>>
+>> v6: - Added r-b from Michael Ruhl to the i915 patch.
+>>
+>>      - Added acks from Sumit Semwal and updated commit message of the
+>>        "Move dma_buf_vmap() to dynamic locking specification" patch like
+>>        was suggested by Sumit.
+>>
+>>      - Added "!dmabuf" check to dma_buf_vmap_unlocked() to match the locked
+>>        variant of the function, for consistency.
+>>
+>> v5: - Added acks and r-bs that were given to v4.
+>>
+>>      - Changed i915 preparation patch like was suggested by Michael Ruhl.
+>>        The scope of reservation locking is smaller now.
+>>
+>> v4: - Added dma_buf_mmap() to the "locking convention" documentation,
+>>        which was missed by accident in v3.
+>>
+>>      - Added acks from Christian König, Tomasz Figa and Hans Verkuil that
+>>        they gave to couple v3 patches.
+>>
+>>      - Dropped the "_unlocked" postfix from function names that don't have
+>>        the locked variant, as was requested by Christian König.
+>>
+>>      - Factored out the per-driver preparations into separate patches
+>>        to ease reviewing of the changes, which is now doable without the
+>>        global dma-buf functions renaming.
+>>
+>>      - Factored out the dynamic locking convention enforcements into separate
+>>        patches which add the final dma_resv_assert_held(dmabuf->resv) to the
+>>        dma-buf API functions.
+>>
+>> v3: - Factored out dma_buf_mmap_unlocked() and attachment functions
+>>        into aseparate patches, like was suggested by Christian König.
+>>
+>>      - Corrected and factored out dma-buf locking documentation into
+>>        a separate patch, like was suggested by Christian König.
+>>
+>>      - Intel driver dropped the reservation locking fews days ago from
+>>        its BO-release code path, but we need that locking for the imported
+>>        GEMs because in the end that code path unmaps the imported GEM.
+>>        So I added back the locking needed by the imported GEMs, updating
+>>        the "dma-buf attachment locking specification" patch appropriately.
+>>
+>>      - Tested Nouveau+Intel dma-buf import/export combo.
+>>
+>>      - Tested udmabuf import to i915/Nouveau/AMDGPU.
+>>
+>>      - Fixed few places in Etnaviv, Panfrost and Lima drivers that I missed
+>>        to switch to locked dma-buf vmapping in the drm/gem: Take reservation
+>>        lock for vmap/vunmap operations" patch. In a result invalidated the
+>>        Christian's r-b that he gave to v2.
+>>
+>>      - Added locked dma-buf vmap/vunmap functions that are needed for fixing
+>>        vmappping of Etnaviv, Panfrost and Lima drivers mentioned above.
+>>        I actually had this change stashed for the drm-shmem shrinker patchset,
+>>        but then realized that it's already needed by the dma-buf patches.
+>>        Also improved my tests to better cover these code paths.
+>>
+>> v2: - Changed locking specification to avoid problems with a cross-driver
+>>        ww locking, like was suggested by Christian König. Now the attach/detach
+>>        callbacks are invoked without the held lock and exporter should take the
+>>        lock.
+>>
+>>      - Added "locking convention" documentation that explains which dma-buf
+>>        functions and callbacks are locked/unlocked for importers and exporters,
+>>        which was requested by Christian König.
+>>
+>>      - Added ack from Tomasz Figa to the V4L patches that he gave to v1.
+>>
+>> Dmitry Osipenko (21):
+>>    dma-buf: Add unlocked variant of vmapping functions
+>>    dma-buf: Add unlocked variant of attachment-mapping functions
+>>    drm/gem: Take reservation lock for vmap/vunmap operations
+>>    drm/prime: Prepare to dynamic dma-buf locking specification
+>>    drm/armada: Prepare to dynamic dma-buf locking specification
+>>    drm/i915: Prepare to dynamic dma-buf locking specification
+>>    drm/omapdrm: Prepare to dynamic dma-buf locking specification
+>>    drm/tegra: Prepare to dynamic dma-buf locking specification
+>>    drm/etnaviv: Prepare to dynamic dma-buf locking specification
+>>    RDMA/umem: Prepare to dynamic dma-buf locking specification
+>>    misc: fastrpc: Prepare to dynamic dma-buf locking specification
+>>    xen/gntdev: Prepare to dynamic dma-buf locking specification
+>>    media: videobuf2: Prepare to dynamic dma-buf locking specification
+>>    media: tegra-vde: Prepare to dynamic dma-buf locking specification
+>>    dma-buf: Move dma_buf_vmap() to dynamic locking specification
+>>    dma-buf: Move dma_buf_attach() to dynamic locking specification
+>>    dma-buf: Move dma_buf_map_attachment() to dynamic locking
+>>      specification
+>>    dma-buf: Move dma_buf_mmap() to dynamic locking specification
+>>    dma-buf: Document dynamic locking convention
+>>    media: videobuf2: Stop using internal dma-buf lock
+>>    dma-buf: Remove obsoleted internal lock
+>>
+>>   Documentation/driver-api/dma-buf.rst          |   6 +
+>>   drivers/dma-buf/dma-buf.c                     | 216 +++++++++++++++---
+>>   drivers/gpu/drm/armada/armada_gem.c           |   8 +-
+>>   drivers/gpu/drm/drm_client.c                  |   4 +-
+>>   drivers/gpu/drm/drm_gem.c                     |  24 ++
+>>   drivers/gpu/drm/drm_gem_dma_helper.c          |   6 +-
+>>   drivers/gpu/drm/drm_gem_framebuffer_helper.c  |   6 +-
+>>   drivers/gpu/drm/drm_gem_ttm_helper.c          |   9 +-
+>>   drivers/gpu/drm/drm_prime.c                   |   6 +-
+>>   drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   2 +-
+>>   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   2 +-
+>>   drivers/gpu/drm/i915/gem/i915_gem_object.c    |  14 ++
+>>   .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |  16 +-
+>>   drivers/gpu/drm/lima/lima_sched.c             |   4 +-
+>>   drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   4 +-
+>>   drivers/gpu/drm/panfrost/panfrost_dump.c      |   4 +-
+>>   drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |   6 +-
+>>   drivers/gpu/drm/qxl/qxl_object.c              |  17 +-
+>>   drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
+>>   drivers/gpu/drm/tegra/gem.c                   |  17 +-
+>>   drivers/infiniband/core/umem_dmabuf.c         |   7 +-
+>>   .../common/videobuf2/videobuf2-dma-contig.c   |  22 +-
+>>   .../media/common/videobuf2/videobuf2-dma-sg.c |  19 +-
+>>   .../common/videobuf2/videobuf2-vmalloc.c      |  17 +-
+>>   .../platform/nvidia/tegra-vde/dmabuf-cache.c  |   6 +-
+>>   drivers/misc/fastrpc.c                        |   6 +-
+>>   drivers/xen/gntdev-dmabuf.c                   |   8 +-
+>>   include/drm/drm_gem.h                         |   3 +
+>>   include/linux/dma-buf.h                       |  17 +-
+>>   29 files changed, 325 insertions(+), 155 deletions(-)
+>>
+> Applied to drm-misc-next
 
-AC5 is a 64-bit platform so extend the dma mask accordingly.
+Finally! Fingers crossed that all corner cases where fixed during the 
+review.
 
-Checked this mask on armv7 a38x SoC (which has this
-USB controller) platform with simple fs ops on the storage device
-but on older 4.14 Linux version.
+But if anything shows up feel free to loop me in to help fixing things.
 
-Signed-off-by: Elad Nachman <enachman@marvell.com>
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
----
-v2:
-   Add missing description.
+Thanks a lot for doing this,
+Christian.
 
- drivers/usb/host/ehci-orion.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
-index a3454a3ea4e0..c6205abebbdf 100644
---- a/drivers/usb/host/ehci-orion.c
-+++ b/drivers/usb/host/ehci-orion.c
-@@ -230,7 +230,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
- 	 * set. Since shared usb code relies on it, set it here for
- 	 * now. Once we have dma capability bindings this can go away.
- 	 */
--	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-+	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
- 	if (err)
- 		goto err;
- 
--- 
-2.17.1
 
