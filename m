@@ -2,82 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA90A60260A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2695F60260F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiJRHnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S230075AbiJRHpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiJRHnC (ORCPT
+        with ESMTP id S229675AbiJRHpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:43:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E0536DD9;
-        Tue, 18 Oct 2022 00:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666078922;
-        bh=9lQ3c21/dV2FzwdL7z4S9pE8ufyt4NxvrP77mf5nnvw=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DIufbi9gKL2fRWPU54oASLbY1JtHeg/On4z5OkIjGFeDVZNb3tJUpvgLOaqt0f4Gm
-         /ZXjXnUSOo1zqj6wLFhPSnnwtMUXjV9neIIpWhW2DJGRLcQObkNGY6vodW66HrIvJO
-         zUqDGG9WhRp0Rr1D11cXKKkHnDsf7Mszmf8EW+ww=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.46] ([84.162.5.241]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLR1V-1oSkyf2fdz-00IQzc; Tue, 18
- Oct 2022 09:42:02 +0200
-Message-ID: <3b768ce9-085a-220e-6e9c-154cbe44475f@gmx.de>
-Date:   Tue, 18 Oct 2022 09:42:01 +0200
+        Tue, 18 Oct 2022 03:45:01 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2CC2018D;
+        Tue, 18 Oct 2022 00:44:59 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ms5Qr0PG3zpSsn;
+        Tue, 18 Oct 2022 15:41:40 +0800 (CST)
+Received: from [10.174.178.171] (10.174.178.171) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 15:44:56 +0800
+Subject: Re: [PATCH -next] tcp: fix a signed-integer-overflow bug in
+ tcp_add_backlog()
+To:     Eric Dumazet <edumazet@google.com>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221012103844.1095777-1-luwei32@huawei.com>
+ <CANn89iL3iWQkhbJ1-YgJ_DQErkhB6=rOD_JuJBiJaEb+36QrkA@mail.gmail.com>
+From:   "luwei (O)" <luwei32@huawei.com>
+Message-ID: <15e10efe-f357-ac99-6733-3aefa9bd9525@huawei.com>
+Date:   Tue, 18 Oct 2022 15:44:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 08/11] tpm, tpm: Implement usage counter for locality
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
-        p.rosenberger@kunbus.com
-References: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
- <20221017235732.10145-9-LinoSanfilippo@gmx.de>
- <20221018062508.GB25237@wunner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <20221018062508.GB25237@wunner.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:lCVFtOoqDbzmfsxfmDZwaK8PlSks6PrDY2ub2oJa6d4iRAUVzJ5
- H4JKZMwuNIg86+/+6H5UuqixPY9ECP/TQ9ikq5C50bWTPLF2Sb+TfNRc2iyBIV/dqiCC3AL
- SrOE0AQasKeq3fNVu7PEYdVtW6BXPC3B6eQHqn9+FYjP4iOMg/muQfGZ1FcQHGIs7kmw1db
- yOmBW8SfrfmVkym835syQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QHHZQdOwWoE=:w+13iBpNo5DcSdrSXyeB27
- ULjzb2BII62ByJiW+Yvtku+cRV3Cha5RDrpkLYnNcnEP/p7nwo7nzsohVRhKB9Zmgz0XsUOOj
- 5gwYYICnTSAFjgdKZOu9kg7o3PABFloDv6hbbI1JECugBn9ZruVfo2c+UotNurGC1fsnXmhlr
- /lzE47NCcynpgN6dLoRlwU+72dAYJyhNyxe+6cE0V1evx8W442ZT7riDQWN9mdE4dLtmDGoY4
- lfwz2IN+xzKFg0BfVxwmvhMqxsP0uMBOzd5M6ESjZ/qKGOUdYp88lJioo65+lqUb8C3fj6l/9
- lRaNHyNTe1Uq0jmI4V5AAQGmyCAWp3+0OlZT0Qh81zZOzfnOZ03kbQKLLt+5fm7B6k0HK88bJ
- 9YZ+4wcgkoCn0/3Z4oyio3FjraoRS56hm9YoT6gS6IFxu9SQkPzunNYgLYoigRsoHHbuJNJ9z
- DdSonuFd95I4clIDG/AYRCoByqRFaVM6t8jrfEbOCJ9o+Udg64v50K+EL8StPXyGz0lMQE45y
- 8vZj9M005oKTVoRhjJj8lV3MAQMXPCODOTN/O/+yj2/3laASQRQJe+JAdAVdV7RYgd9lamOkc
- 35yjyoX4pwq3C3XYehc+lWykFAcyGCBwmxcQuojm/mfrBb3iq4M67Z1fegMmzk9czU3D0FvR3
- TkwFPJ7PSWYD2R/YSAwQdEYjozL5MZ2zdNdUPefbYDQgShivicNpKniMX3WDopvOBzTHU4dbd
- 9E4JdN76daood2f4mERV2QOg5ERyJFXvE5rV10j42sjCFfbx6MKIN+SxKBXSxGgbB1POBC78i
- Qz5wqeW1T0tcbkrqO3AijsYNr9P+z1rtyyIu6Uf1H2v0diIh0BX4LqKiEv6cljqY5hbxH/aUk
- uw3WtXy34CdLsVuLvpmUyJyOMbmTxqX/aME2Q++SzT6ImpP735jnKpN/50HAEE7OE0XWZ9x6U
- T1Co5iFIc1DwQ54oxkfzrPRxXUBgqGv3MoklZZodLdTBI9Xe5uK3cJuA/1acoDkY+l0i8dyXK
- 97MD6Aex35RtGvAslitITQCycIVu9yQODGshuh/rA0UPQ8ulJoztm209D6apnvsSGQbrHI83P
- K2tRwjjginePU9NKwlwGdSfkY9lkbbT9ZIi6JIxO3kZCPUR958cDs0mapsuN3+kAz+ntdXeEh
- srrALtkomn8WMlO73vWdYwSnUXnOezSJZ9RE/UlY1ho8gR3lEV2BoDIPy8dqURtkbPJWci0Ts
- VzpfCxn9563I7Rd4xOJomd585Eq2mm/bbeUzjOFg3ymZpTaEN8GaKnox8u0jXuH8WRNOydV78
- xisXYK1VlqAYE2qraU/NVpKJ3Ncy5CwejTIFOcXbGNgQrOf5ZIpjAbpeTYEFA7VTcP+NbjO/d
- u/nGkxo2YKmKx0Myl0XjgpBTkApiXbzXytvIrLeDbvUISqWDyqMIbE9bGGtah+jHR4WvNbt/b
- +GhLF5ir1+zfNqO3f9Ff1abC3rB3dBOx7FH/fhIt4Zlm5XMKgK2QX7XVESblIwHrMCgny0uMf
- qT+OgBHPnAJB0k9XHe6gFrC33O6GYhQT/gnyIjq3IFceMhsWwndIq43iXT7uFSlyMp/NrPaQ+
- QUtmAIsqyqBCBFOEH7r0Z2SGvFLZq3WaCzDnqn0Fp//j+h9nNBEy4h3K3fl+DkBY/WuwXIToA
- Aup39gxGTbVc54jmYYi1B2irnABHyV33Ez8P9hJfTbIGToQ0Q==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CANn89iL3iWQkhbJ1-YgJ_DQErkhB6=rOD_JuJBiJaEb+36QrkA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.171]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,18 +53,53 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 18.10.22 08:25, Lukas Wunner wrote:
-> Hm, any reason not to use struct kref for the locality counter?
-> Provides correct memory ordering (no mutex needed) and allows for
-> calling a release function too upon reaching 0.
+在 2022/10/12 8:31 PM, Eric Dumazet 写道:
+> On Wed, Oct 12, 2022 at 2:35 AM Lu Wei <luwei32@huawei.com> wrote:
+>> The type of sk_rcvbuf and sk_sndbuf in struct sock is int, and
+>> in tcp_add_backlog(), the variable limit is caculated by adding
+>> sk_rcvbuf, sk_sndbuf and 64 * 1024, it may exceed the max value
+>> of u32 and be truncated. So change it to u64 to avoid a potential
+>> signed-integer-overflow, which leads to opposite result is returned
+>> in the following function.
+>>
+>> Signed-off-by: Lu Wei <luwei32@huawei.com>
+> You need to add a Fixes: tag, please.
 >
+>> ---
+>>   include/net/sock.h  | 4 ++--
+>>   net/ipv4/tcp_ipv4.c | 6 ++++--
+>>   2 files changed, 6 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/net/sock.h b/include/net/sock.h
+>> index 08038a385ef2..fc0fa29d8865 100644
+>> --- a/include/net/sock.h
+>> +++ b/include/net/sock.h
+>> @@ -1069,7 +1069,7 @@ static inline void __sk_add_backlog(struct sock *sk, struct sk_buff *skb)
+>>    * Do not take into account this skb truesize,
+>>    * to allow even a single big packet to come.
+>>    */
+>> -static inline bool sk_rcvqueues_full(const struct sock *sk, unsigned int limit)
+>> +static inline bool sk_rcvqueues_full(const struct sock *sk, u64 limit)
+>>   {
+>>          unsigned int qsize = sk->sk_backlog.len + atomic_read(&sk->sk_rmem_alloc);
+> qsize would then overflow :/
+>
+> I would rather limit sk_rcvbuf and sk_sndbuf to 0x7fff0000, instead of
+> 0x7ffffffe
+>
+> If really someone is using 2GB for both send and receive queues,  I
+> doubt removing 64KB will be a problem.
+> .
 
-I already tried this but krefs turned out to be not very usable
-in this case. See my post here:
+thanks for reply, I will change the type of qsize to u64 in V2. Besides, 
+how to limit sk_rcvbuf and sk_sndbuf
 
-https://lore.kernel.org/lkml/09eefdab-f677-864a-99f7-869d7a8744c2@gmx.de/
+to 0x7ffff0000, do you mean in sysctl interface? If so, the varible 
+limit will still overflow since it's calculated
 
-Regards,
-Lino
+by adding sk_rcvbuf and sk_sndbuf.
+
+-- 
+Best Regards,
+Lu Wei
 
