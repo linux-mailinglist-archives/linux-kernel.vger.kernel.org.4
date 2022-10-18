@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24206021D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9296021D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJRDHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
+        id S229982AbiJRDH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiJRDGn (ORCPT
+        with ESMTP id S230337AbiJRDGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Oct 2022 23:06:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E9197ED0;
-        Mon, 17 Oct 2022 20:06:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC99A9836D;
+        Mon, 17 Oct 2022 20:06:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9430B81C5C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E36BBB81C55;
+        Tue, 18 Oct 2022 03:06:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D88C43148;
         Tue, 18 Oct 2022 03:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F5DC43470;
-        Tue, 18 Oct 2022 03:06:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666062399;
-        bh=LP8bpf6Cb1KMx5rvVhfDL/6NfoP3tFsnt/oNldrp+bw=;
+        s=k20201202; t=1666062400;
+        bh=6bJyLPxsVhaIusmLVfg043zJdG7nc7Swagot1PtJfcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n3MLrV6VvGPvOt7jNQ1Kxq+B2C3AGOc6SiZBhsVG3cYwPTXSh7htyHgJ/tnPQEw0K
-         Yc9wxZyZsIwE3LEnA4fqSUj3Iw526h/vzDd8aovZMAlmGh49EiKkRptZnHTxakaP+j
-         YsYV71lvN+5cK0LcGyHs0hzAYi8c5vff2/yAmZSRMdBtSpqI+XOW9gjXiXs7tfjcUI
-         b9mmf9IV3HKm46N7Wybdg2NJr9IQUsB1FINAq0x4/CfGXVt6taCnB7Zlfh/Mo++meB
-         ihwoIYp7jrSeWSjVVE/8I33vYi655sKAd0n+5AagPx22OW2PX69DeEg0hrWfWCAE+u
-         F1plrFNJsFmxw==
+        b=DkKaaHAaTKVGMwCmg6Bzjo0PZm3xkJLyspsnfpGt+fmJ0GmXNTc1pEIEVS/eDWOAF
+         D8a4++e3jz2gyREf8SGbhotluR1pCnUwMyr784ihGanOKlqiXOVUvjp0L5YK7g5ATc
+         PK21EUyKrN8gtlzgZj2lJJh+CDdxn3Osf5eL25QQu0afgDtuhRTTz9mErjlFUFzco9
+         Rr7ZejpRNAVSpWrWaiKHbXWPKtK8t6HjfuYGOCNjAnraHFG6SCV3j+cbcX/bBZCM1X
+         u+FByVa/f/absnQFG6omk3J0JoX/n094CDgDBWUSnEpbnej+g0ao3QdKAhWVooKkBq
+         s/7NFk1vpEAVw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     johan+linaro@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
-Date:   Mon, 17 Oct 2022 22:05:21 -0500
-Message-Id: <166606235855.3553294.2604907142030947566.b4-ty@kernel.org>
+To:     agross@kernel.org, judyhsiao@chromium.org
+Cc:     linux-arm-kernel@lists.infradead.org, swboyd@chromium.org,
+        dianders@chromium.org, cychiang@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, srinivas.kandagatla@linaro.org,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        judyhsiao@google.com
+Subject: Re: [PATCH v4 0/3] Add dtsi for sc7280 herobrine boards that using
+Date:   Mon, 17 Oct 2022 22:05:22 -0500
+Message-Id: <166606235842.3553294.9084316282686568235.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220915141601.18435-1-johan+linaro@kernel.org>
-References: <20220915141601.18435-1-johan+linaro@kernel.org>
+In-Reply-To: <20220721083849.1571744-1-judyhsiao@chromium.org>
+References: <20220721083849.1571744-1-judyhsiao@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,17 +58,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 16:16:01 +0200, Johan Hovold wrote:
-> The size of the UFS PHY serdes register region is 0x1c8 and the
-> corresponding 'reg' property should specifically not include the
-> adjacent regions that are defined in the child node (e.g. tx and rx).
+On Thu, 21 Jul 2022 08:38:46 +0000, Judy Hsiao wrote:
+> Put sound node and lpass_cpu node settings for boards that use rt5682
+> codec in the sc7280-herobrine-audio-rt5682.dtsi as there are different
+> choices of headset codec for herobrine projects. Common audio setting
+> for the internal speaker is in sc7280-herobrine.dtsi.
 > 
+> This series depends on:
+> Add soundcard support for sc7280 based platforms. [1]
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
-      commit: 8703d55bd5eac642275fe91b34ac62ad0ad312b5
+[1/3] arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
+      commit: a1afae1ac6e71f9995fd87fea3a116859fd64fe1
+[2/3] arm64: dts: qcom: sc7280: Add sc7280-herobrine-audio-rt5682.dtsi
+      commit: 1c5b7afeaf5b6568dc2f36d444d70ad9f6632582
+[3/3] arm64: dts: qcom: sc7280: Include sc7280-herobrine-audio-rt5682.dtsi in herobrine-r1
+      commit: dd1651572165ffbe52e3d1aa184c04a9c11d3a03
 
 Best regards,
 -- 
