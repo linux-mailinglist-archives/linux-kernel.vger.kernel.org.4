@@ -2,148 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A625D602D4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A389B602D54
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiJRNrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S231187AbiJRNrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJRNq7 (ORCPT
+        with ESMTP id S231139AbiJRNrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:46:59 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45FF61D48
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:46:58 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id w3so9614800qtv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bk1cdWlqVhbhLyQ5Z0Zwm2RMGNfzdRPJPquTEkxwGHE=;
-        b=eTE2CBBoY8P+wFvZ5WJ8YTjFt3XYrDBbVejGXLnQROjLeveblnjTK7tp6+x3PNeyLV
-         nl+kC/51un8xz66tWMZFsOfn7l6JOXEdSX4noD/wVmTq59861M7563YIEj36/A4iytgT
-         ypqFJKyPaNnb2jA4K2WKMjyYtXYpyyt1xiamShV7Q5mkqy1S1BW9QPCwNSudex4VdPoZ
-         CL52impiIZL8J1vI2exlcidmRxw7MzWnn5lqSjfPCQE4wVjsYBd480CRrOukxCQyXq4v
-         E0vdLe/zF54VtEl3O+iY22rgkC8XMpaOgZEC904aXAvLSRiPQqIc+h/Xlx2488hMYKmA
-         AMlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bk1cdWlqVhbhLyQ5Z0Zwm2RMGNfzdRPJPquTEkxwGHE=;
-        b=sz6Y4sNCFgeZebWhdqjkMPPw/hd3t+UMMMdkrb36XwrCZHFha6qrWHdypRqTcqPknX
-         1zE98CayZU9yfaOwI9rlp7mddihcAsrT5kW7je7LC7Wh5jzuYFXJvJjIDTXG/ntNENGr
-         K8c3N9i7F6tLKiT26VI6ny4gcj3IHeH2ldwHSL/KaEVh6mYxTLK2PakAjxP738GFnRr3
-         /8yVcCfbDQ9dcrJOGivLJwr3GSXgQYfq90FPCzV5HIYNK+2eo03NR0Q5Zl6s+2YpLHrF
-         VT1CHntzdEybYWTVLgfJhO2QVufqBEPFhIvnWH64RZgLT8ozACrq3L42FA3OlvU9h8Lv
-         4jXw==
-X-Gm-Message-State: ACrzQf0hHQK4rSn2zHzmyYCyNt9hxAZYLZut8y+MdThb7NMqTMiuj/bD
-        wvy+ib9VUITZTwDtOafPfgA6+A==
-X-Google-Smtp-Source: AMsMyM6WvkWA2L2ll4WKjb1TisgOdDzT0tIlfPlXDDEbaY+sefp3eDrCawcJJSviK5xy4qL9wXJecQ==
-X-Received: by 2002:a05:622a:164b:b0:39c:ec98:a13 with SMTP id y11-20020a05622a164b00b0039cec980a13mr2131165qtj.339.1666100817866;
-        Tue, 18 Oct 2022 06:46:57 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id s23-20020a05622a1a9700b003988b3d5280sm2027602qtc.70.2022.10.18.06.46.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 06:46:57 -0700 (PDT)
-Message-ID: <eb670850-6e97-df7b-cb62-1513f877956a@linaro.org>
-Date:   Tue, 18 Oct 2022 09:46:55 -0400
+        Tue, 18 Oct 2022 09:47:32 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9982CBEFBF;
+        Tue, 18 Oct 2022 06:47:30 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 13EBB18848B0;
+        Tue, 18 Oct 2022 13:47:28 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id F349E25001FA;
+        Tue, 18 Oct 2022 13:47:27 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id E7C529EC0009; Tue, 18 Oct 2022 13:47:27 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v1 1/3] clk: loongson2: add clock dt-bindings include file
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20221018130531.301-1-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221018130531.301-1-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 18 Oct 2022 15:47:27 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 net-next 3/9] net: switchdev: add support for
+ offloading of the FDB locked flag
+In-Reply-To: <Y05GQWYu0vM+bx5t@shredder>
+References: <20221009174052.1927483-1-netdev@kapio-technology.com>
+ <20221009174052.1927483-4-netdev@kapio-technology.com>
+ <Y0gbVoeV/e6wzlbM@shredder>
+ <d314ba738b12e28694a955de1301e906@kapio-technology.com>
+ <Y05GQWYu0vM+bx5t@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <cd69c33669957099096d84c0ae401108@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 09:05, Yinbo Zhu wrote:
-> This file defines all loongson2 soc clock indexes, it should be
-> included in the device tree in which there's device using the
-> clocks.
+On 2022-10-18 08:22, Ido Schimmel wrote:
+> On Thu, Oct 13, 2022 at 08:58:57PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-10-13 16:06, Ido Schimmel wrote:
+>> > > diff --git a/net/dsa/port.c b/net/dsa/port.c
+>> > > index e4a0513816bb..eab32b7a945a 100644
+>> > > --- a/net/dsa/port.c
+>> > > +++ b/net/dsa/port.c
+>> > > @@ -304,7 +304,7 @@ static int dsa_port_inherit_brport_flags(struct
+>> > > dsa_port *dp,
+>> > >  					 struct netlink_ext_ack *extack)
+>> > >  {
+>> > >  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
+>> > > -				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
+>> > > +				   BR_BCAST_FLOOD;
+>> >
+>> > Not sure how this is related to the patchset.
+>> >
+>> 
+>> In general it is needed as a fix because of the way learning with 
+>> locked
+>> port is handled in the driver,
+>> so as with MAB and also locked port in the future needing a non-zero 
+>> Port
+>> Association Vector (PAV)
+>> for refresh etc to work, inheritance of the locked port flag is a bad 
+>> idea
+>> (say bug) and shouldn't have
+>> been in the first place.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  MAINTAINERS                                 |  6 +++++
->  include/dt-bindings/clock/loongson2-clock.h | 29 +++++++++++++++++++++
+> If it's a fix, then it needs to be submitted to 'net' tree.
 
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
-
-These are bindings.
-
->  2 files changed, 35 insertions(+)
->  create mode 100644 include/dt-bindings/clock/loongson2-clock.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a162b6fba6fe..3db469f51d74 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11914,6 +11914,12 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
->  F:	drivers/clocksource/loongson2_hpet.c
->  
-> +LOONGSON2 SOC SERIES CLOCK DRIVER
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:	linux-clk@vger.kernel.org
-> +S:	Maintained
-> +F:	include/dt-bindings/clock/loongson2-clock.h
-> +
->  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->  M:	Sathya Prakash <sathya.prakash@broadcom.com>
->  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> diff --git a/include/dt-bindings/clock/loongson2-clock.h b/include/dt-bindings/clock/loongson2-clock.h
-> new file mode 100644
-> index 000000000000..23806408fe49
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/loongson2-clock.h
-
-Filename matching the compatible, so:
-loongson,ls2k-clk.h
-
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-
-Dual license, like bindings, unless you are not allowed.
-
-> +/*
-> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
-> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#ifndef __DT_BINDINGS_CLOCK_LOONGSON2_H
-> +#define __DT_BINDINGS_CLOCK_LOONGSON2_H
-> +
-> +#define	LOONGSON2_REFCLK_100M				0
-
-Drop weird indentation after define.
-
-
-Best regards,
-Krzysztof
-
+It is a 'fix' for this patch set, as it changes 
+mv88e6xxx_port_set_lock() to need this change.
+It is not strictly necessary to change it for earlier hehaviour.
