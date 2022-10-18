@@ -2,80 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E167F603146
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FC1603156
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiJRRAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S229947AbiJRRHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiJRRAf (ORCPT
+        with ESMTP id S229978AbiJRRHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:00:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC15EE08E;
-        Tue, 18 Oct 2022 10:00:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 18 Oct 2022 13:07:22 -0400
+X-Greylist: delayed 254 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 10:06:14 PDT
+Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA0CEEA9C;
+        Tue, 18 Oct 2022 10:06:14 -0700 (PDT)
+Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id E54AD1D38EA;
+        Tue, 18 Oct 2022 13:01:59 -0400 (EDT)
+        (envelope-from junio@pobox.com)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
+        :subject:date:message-id:mime-version:content-type; s=sasl; bh=I
+        kKmOpEPStNaMelI3cfGCmpw8kYhTIhBTRT5Mc3GJhY=; b=MLo2fRJqDKE3XJk7i
+        gy85fmhVvaY4W+3ASZCZQ+OyjYtm+EaEmnZjqwtvMzzUxrsUcKUBdYyARX0av4nu
+        dcmcNi2FtGR06MI6NDVFHV+j8wxDErLcwf6RK6mTjw94vIOg4dEkIDXcyXe78Oze
+        Fd0ZYA+wY59QtCfaZ9RanPArfU=
+Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id DE2821D38E9;
+        Tue, 18 Oct 2022 13:01:59 -0400 (EDT)
+        (envelope-from junio@pobox.com)
+Received: from pobox.com (unknown [34.83.5.33])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCE5AB8206C;
-        Tue, 18 Oct 2022 17:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05476C433D6;
-        Tue, 18 Oct 2022 17:00:30 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mMmvBy6a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666112428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fJEhn0FZkEy7ERnPpVq7NsjGDJYzLySY4oAdXCAtR50=;
-        b=mMmvBy6aOM3ohEAqbCtrEzALiyfnFJ6zLAHHR0NVI70ZJo/D128xFErDzTpnWf1LGeX3AE
-        GkbPdxxhncABwiEDTNRiwtekavdFuDuSevB5xfPdrH0gtJN5VHpn0cOPxqenNI8I7R5XvK
-        JhYKKEbnCl0H6Zx1zL/EQ9GvkCOhC8U=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6113814d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 18 Oct 2022 17:00:28 +0000 (UTC)
-Date:   Tue, 18 Oct 2022 11:00:26 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] siphash: Convert selftest to KUnit
-Message-ID: <Y07bqnZVrA9FO03z@zx2c4.com>
-References: <20221018100510.never.479-kees@kernel.org>
+        by pb-smtp21.pobox.com (Postfix) with ESMTPSA id 94C171D38E8;
+        Tue, 18 Oct 2022 13:01:55 -0400 (EDT)
+        (envelope-from junio@pobox.com)
+From:   Junio C Hamano <gitster@pobox.com>
+To:     git@vger.kernel.org
+Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        git-packagers@googlegroups.com
+Subject: [ANNOUNCE] Git v2.38.1 and others
+Date:   Tue, 18 Oct 2022 10:01:54 -0700
+Message-ID: <xmqq4jw1uku5.fsf@gitster.g>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221018100510.never.479-kees@kernel.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Pobox-Relay-ID: 92005E3E-4F06-11ED-9265-B31D44D1D7AA-77302942!pb-smtp21.pobox.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 03:05:46AM -0700, Kees Cook wrote:
-> Convert the siphash self-test to KUnit so it will be included in "all
-> KUnit tests" coverage, and can be run individually still:
-> 
-> $ ./tools/testing/kunit/kunit.py run siphash
-> ...
-> [02:58:45] Starting KUnit Kernel (1/1)...
-> [02:58:45] ============================================================
-> [02:58:45] =================== siphash (1 subtest) ====================
-> [02:58:45] [PASSED] siphash_test
-> [02:58:45] ===================== [PASSED] siphash =====================
-> [02:58:45] ============================================================
-> [02:58:45] Testing complete. Ran 1 tests: passed: 1
-> [02:58:45] Elapsed time: 21.421s total, 4.306s configuring, 16.947s building, 0.148s running
-> 
-> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> Cc: David Gow <davidgow@google.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+A maintenance release v2.38.1, together with releases for older
+maintenance tracks v2.30.6, v2.31.5, v2.32.4, v2.33.5, v2.34.5,
+v2.35.5, v2.36.3, and v2.37.4, are now available at the usual
+places.
 
-I'll queue this up. Thanks for the conversion. Appears to work well.
+These maintenance releases are to address the security issues
+identified as CVE-2022-39253 and CVE-2022-39260.
 
-Jason
+The tarballs are found at:
+
+    https://www.kernel.org/pub/software/scm/git/
+
+The following public repositories all have a copy of the v2.38.1
+tag, as well as the tags for older maintenance tracks for v2.30.6,
+v2.31.5, v2.32.4, v2.33.5, v2.34.5, v2.35.5, v2.36.3, and v2.37.4.
+
+  url = https://git.kernel.org/pub/scm/git/git
+  url = https://kernel.googlesource.com/pub/scm/git/git
+  url = git://repo.or.cz/alt-git.git
+  url = https://github.com/gitster/git
+
+CVE-2022-39253:
+   When relying on the `--local` clone optimization, Git dereferences
+   symbolic links in the source repository before creating hardlinks
+   (or copies) of the dereferenced link in the destination repository.
+   This can lead to surprising behavior where arbitrary files are
+   present in a repository's `$GIT_DIR` when cloning from a malicious
+   repository.
+
+   Git will no longer dereference symbolic links via the `--local`
+   clone mechanism, and will instead refuse to clone repositories that
+   have symbolic links present in the `$GIT_DIR/objects` directory.
+
+   Additionally, the value of `protocol.file.allow` is changed to be
+   "user" by default.
+
+CVE-2022-39260:
+   An overly-long command string given to `git shell` can result in
+   overflow in `split_cmdline()`, leading to arbitrary heap writes and
+   remote code execution when `git shell` is exposed and the directory
+   `$HOME/git-shell-commands` exists.
+
+   `git shell` is taught to refuse interactive commands that are
+   longer than 4MiB in size. `split_cmdline()` is hardened to reject
+   inputs larger than 2GiB.
+
+Credit for finding CVE-2022-39253 goes to Cory Snider of Mirantis. The
+fix was authored by Taylor Blau, with help from Johannes Schindelin.
+
+Credit for finding CVE-2022-39260 goes to Kevin Backhouse of GitHub.
+The fix was authored by Kevin Backhouse, Jeff King, and Taylor Blau.
