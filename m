@@ -2,148 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F244360241E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FE660241F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJRGEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S229808AbiJRGGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJRGEs (ORCPT
+        with ESMTP id S229686AbiJRGGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:04:48 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8384C2B613
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:04:46 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id m9-20020a056e021c2900b002fadb905ddcso11477563ilh.18
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:04:46 -0700 (PDT)
+        Tue, 18 Oct 2022 02:06:13 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351F3A2863
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:06:11 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id w18so29702544ejq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EWA2hwkSsjImpnq19q3HqZSD12LMEEGS/Z8QL4wjg38=;
+        b=PlFNPKCJedgthU3/o4ldkwo2E18LMZq2FUtOM0A06YZtVYiqwG9UgqCvkXD5MjqBc6
+         Gf4Puz/Kt69IvxcoKgPLhH0HrCTfC7mneSWix/gGWu/NG8Ofx9Xt/+iDG8CnrLE4O/+X
+         vdxLP6MYsBHDEBlslKwZ+1FsnOo6MVw6YQQ4cHZGeVTP8twBkcv8xHvGx79EcjK+U7G+
+         uwSCbTGSygG2+k6sbaXNcf6BS5JbZ3lxn6ynO2Re/mXmR474xrCwzM3SpamLdii00oIo
+         Rd3iPY9eeE15fajBiEWFh2KzLvDABe7o/SmBshIZ3oYiTf4VxgV7Wec5Wh4AeD3zJZyD
+         w3+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ntB9ov/k0haLRVm8l+offq3gPwk3Ri7xX5xK34NeQ14=;
-        b=BC+JvgWaW3SyFDWa2irD5jmGybvrzB85NY1D7Bd7+Aw0kfyt/kAqU0BhGmGIzJP/8l
-         LFoi8Q1sSpN6UPr0aNYTt4EAg5Qx13XrnwrXsx1EnfMKZ4x2/U6XyZpjruLu4EYGJC6h
-         D3DsRPwvmvVmt3JaIOAJBkjI4KtopzmkF4q4/6R9iTWKg8VZ1SE8MMvSNA+3aPr6WUVV
-         B9Cj6wD/oJGGVxsm1zbw4EOkJr+ExmTutKjVQ3sO95Y/SGPaGjnvsyl/rNbqwxDPWB/j
-         X+ZdZlq0bAKoA+Hlug8gDuersaYUpyQLegUygO3NN1pKMeRS5s5/+r6kq2eSItaL8e+9
-         SLZg==
-X-Gm-Message-State: ACrzQf14MPcAdyG5WqhTtKqfCvaRrsgsckgYLy+lAM+1TwnIHC7/hrGv
-        pHAKS5Xng22L+MHhzy62AlYt2s5HEQsg8gC9DLj9hzJpOL4a
-X-Google-Smtp-Source: AMsMyM7j4Z1zkqgUXIa1+J6nd7sasSFQwPgjo1E5tJCRZIYXqgCAU5KElp0l7ox1Yti4cvyjNZyTUjr1nCLk+zlqnpKa1HSemo7q
+        bh=EWA2hwkSsjImpnq19q3HqZSD12LMEEGS/Z8QL4wjg38=;
+        b=R12+dZK3n6/e57gvClDdKIv8PeXbbcnuQYW61xrbbKG8CCUmdVpTopJM/7q+ZgUVlT
+         nMqe5aHA+ZFYKI/W1FOxfj2y/ozpYfbdJ/YmouIWMr+lv5sZQe4QW6/Go/C2snOz7MFL
+         to/sXB3wIgSZTlRjaKQjmp+kOu8yM3biiPHIpPxFsR9cZgDKGz6Ab0QvC7pSe+j1m+6x
+         nLQUJshdQq3WKkiWjs00w+WNCR/HftZjrf+L3Pnt2/4Nq9/0jImnhgjpMRuhCYODrAZx
+         YA48DDegNBqcd28THBxd0gzLiY8vs//wB09EMBL2AY2h7bAKnXkUOy2NhBr+C+flaOnV
+         A9ew==
+X-Gm-Message-State: ACrzQf0cxX7dbSaVjnP3SF6dT/+LxF7mbvrYb3KhFSBrqfKNB42UFK4b
+        sqJm5R+XLXdt8S6vUL/GpLxYlecaip5uqHEAoQzHFvzYCuTIlw==
+X-Google-Smtp-Source: AMsMyM4RyZP8sSlrtRJ1YUStexYkP8CwNNxT5ec0eOrpuadDuuDmrcFwpr65UBh+W3VdsP1mSVpK4FxQK2EkHCVg8wk=
+X-Received: by 2002:a17:907:7b93:b0:770:1d4f:4de9 with SMTP id
+ ne19-20020a1709077b9300b007701d4f4de9mr1048423ejc.201.1666073168638; Mon, 17
+ Oct 2022 23:06:08 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:b887:0:b0:6bb:fc82:d94b with SMTP id
- i129-20020a6bb887000000b006bbfc82d94bmr864495iof.205.1666073085848; Mon, 17
- Oct 2022 23:04:45 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 23:04:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000073b6d905eb48de3f@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in reiserfs_find_entry
-From:   syzbot <syzbot+4654552e088ed458b10d@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 18 Oct 2022 11:35:57 +0530
+Message-ID: <CA+G9fYu4cZW8_S3OvQwqaT4CYfVh5vyPAGSkENWXuBN4FJ67vQ@mail.gmail.com>
+Subject: kunit: drm_framebuffer: kernel BUG at drivers/gpu/drm/drm_buddy.c
+To:     open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org
+Cc:     Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Following kernel BUG reported while running kunit drm_framebuffer tests
+on Linux mainline 6.1.0-rc1.
 
-syzbot found the following issue on:
+Started happening from Linux next 6.0.0-rc1-next-20220818.
+Stared happening on Linux mainline from
+git_sha: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
 
-HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14e8a2c2880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
-dashboard link: https://syzkaller.appspot.com/bug?extid=4654552e088ed458b10d
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Crash log:
+[   38.366527] ok 39 - drm_framebuffer
+[   38.367919]     # Subtest: drm_buddy
+[   38.367921]     1..6
+[   38.368686] ------------[ cut here ]------------
+[   38.370089] kernel BUG at drivers/gpu/drm/drm_buddy.c:140!
+[   38.371111] invalid opcode: 0000 [#1] PREEMPT SMP
+[   38.372003] CPU: 1 PID: 654 Comm: kunit_try_catch Tainted: G    B
+         N 6.1.0-rc1 #1
+[   38.373486] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[   38.374972] EIP: drm_buddy_init+0x2c0/0x340
+[   38.375767] Code: 21 29 c1 83 f9 33 0f 86 27 ff ff ff 8d b4 26 00
+00 00 00 8d b4 26 00 00 00 00 0f 0b 8d b6 00 00 00 00 0f 0b 8d b6 00
+00 00 00 <0f> 0b 8d b6 00 00 00 00 0f bd 45 0c 0f 44 c1 83 c0 21 e9 e0
+fd ff
+[   38.379066] EAX: c1379898 EBX: c1aaf0a0 ECX: c1aaf090 EDX: c1aaf0b8
+[   38.380196] ESI: 00000034 EDI: c2bcff20 EBP: c2bcfebc ESP: c2bcfe8c
+[   38.381308] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010297
+[   38.382507] CR0: 80050033 CR2: f4f5e000 CR3: 0f947000 CR4: 003506d0
+[   38.383659] DR0: cf9aada4 DR1: cf9aada9 DR2: cf9aadaa DR3: cf9aadab
+[   38.384760] DR6: ffff0ff0 DR7: 00000600
+[   38.385441] Call Trace:
+[   38.385909]  drm_test_buddy_alloc_limit+0x47/0x3c0
+[   38.386772]  ? __switch_to_asm+0x8f/0xf0
+[   38.387488]  ? __switch_to_asm+0x89/0xf0
+[   38.388192]  ? __switch_to_asm+0x83/0xf0
+[   38.388903]  ? finish_task_switch+0x80/0x2b0
+[   38.389670]  ? __schedule+0x2dc/0xac0
+[   38.390325]  ? trace_hardirqs_on+0x36/0xf0
+[   38.391066]  ? finish_task_switch+0x80/0x2b0
+[   38.391848]  ? __switch_to+0x18/0x1e0
+[   38.392505]  ? drm_buddy_init_test+0x25/0x40
+[   38.393287]  ? get_random_u32+0x8f/0xf0
+[   38.393991]  ? drm_buddy_init_test+0x25/0x40
+[   38.394775]  kunit_try_run_case+0x52/0x80
+[   38.395524]  ? trace_hardirqs_on+0x36/0xf0
+[   38.396259]  kunit_generic_run_threadfn_adapter+0x16/0x20
+[   38.397231]  kthread+0xe0/0x110
+[   38.397820]  ? kunit_try_catch_throw+0x20/0x20
+[   38.398620]  ? kthread_complete_and_exit+0x20/0x20
+[   38.399503]  ret_from_fork+0x1c/0x28
+[   38.400174] Modules linked in:
+[   38.400781] ---[ end trace 0000000000000000 ]---
+[   38.401623] EIP: drm_buddy_init+0x2c0/0x340
+[   38.402374] Code: 21 29 c1 83 f9 33 0f 86 27 ff ff ff 8d b4 26 00
+00 00 00 8d b4 26 00 00 00 00 0f 0b 8d b6 00 00 00 00 0f 0b 8d b6 00
+00 00 00 <0f> 0b 8d b6 00 00 00 00 0f bd 45 0c 0f 44 c1 83 c0 21 e9 e0
+fd ff
+[   38.405711] EAX: c1379898 EBX: c1aaf0a0 ECX: c1aaf090 EDX: c1aaf0b8
+[   38.406830] ESI: 00000034 EDI: c2bcff20 EBP: c2bcfebc ESP: c2bcfe8c
+[   38.407976] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010297
+[   38.409186] CR0: 80050033 CR2: f4f5e000 CR3: 0f947000 CR4: 003506d0
+login-action: exception
+[login-action] Waiting for messages, (timeout 00:09:56)
+[   38.410313] DR0: cf9aada4 DR1: cf9aada9 DR2: cf9aadaa DR3: cf9aadab
+[   38.411481] DR6: ffff0ff0 DR7: 00000600
+[  365.847635]     # drm_test_buddy_alloc_limit: try timed out
+[  365.848890] ------------[ cut here ]------------
+[  365.849823] refcount_t: addition on 0; use-after-free.
+[  365.850822] WARNING: CPU: 3 PID: 1 at lib/refcount.c:25
+refcount_warn_saturate+0x84/0x120
+[  365.852421] Modules linked in:
+[  365.853055] CPU: 3 PID: 1 Comm: swapper/0 Tainted: G    B D
+ N 6.1.0-rc1 #1
+[  365.854612] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  365.856032] EIP: refcount_warn_saturate+0x84/0x120
+[  365.856931] Code: cf e8 bb 9a a1 00 0f 0b eb cf 8d 74 26 00 80 3d
+54 c7 7d cf 00 75 c2 c7 04 24 90 41 43 cf b0 01 a2 54 c7 7d cf e8 97
+9a a1 00 <0f> 0b eb ab 8d b4 26 00 00 00 00 90 80 3d 56 c7 7d cf 00 75
+9a c7
+[  365.860283] EAX: 0000002a EBX: c23a0000 ECX: ce17a1d2 EDX: 00000000
+[  365.861373] ESI: c23a0018 EDI: c23a0000 EBP: c11cdc90 ESP: c11cdc8c
+[  365.862567] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010296
+[  365.863917] CR0: 80050033 CR2: 00000000 CR3: 0f947000 CR4: 003506d0
+[  365.865113] DR0: cf9aadac DR1: cf9aadad DR2: cf9aadae DR3: cf9aadaf
+[  365.866330] DR6: ffff0ff0 DR7: 00000600
+[  365.867157] Call Trace:
+[  365.867736]  kthread_stop+0x184/0x190
+[  365.868480]  kunit_try_catch_run.cold+0x7b/0xc1
+[  365.869373]  kunit_run_case_catch_errors+0x6e/0xa8
+[  365.870394]  kunit_run_tests.cold+0x1c4/0x5fe
+[  365.871218]  ? kunit_catch_run_case+0x50/0x50
+[  365.872153]  ? kunit_module_notify+0x90/0x90
+[  365.872945]  ? up_write+0x37/0x70
+[  365.873565]  ? preempt_count_sub+0xc1/0x110
+[  365.874356]  ? preempt_count_add+0x6c/0xd0
+[  365.875120]  ? up_write+0x37/0x70
+[  365.875723]  ? __debugfs_create_file+0xdb/0x1a0
+[  365.876625]  ? up_write+0x37/0x70
+[  365.877264]  ? debugfs_create_file+0x3c/0x50
+[  365.878134]  ? kunit_debugfs_create_suite+0x90/0xa0
+[  365.879046]  __kunit_test_suites_init+0x52/0x70
+[  365.879873]  kunit_run_all_tests.cold+0xeb/0x170
+[  365.880730]  ? kernel_init_freeable+0x1d0/0x209
+[  365.881702]  kernel_init_freeable+0x1d5/0x209
+[  365.882568]  ? rest_init+0xc0/0xc0
+[  365.883240]  kernel_init+0x1a/0x110
+[  365.883950]  ? schedule_tail_wrapper+0x9/0xc
+[  365.884756]  ret_from_fork+0x1c/0x28
+[  365.885431] ---[ end trace 0000000000000000 ]---
+[  365.886320] BUG: kernel NULL pointer dereference, address: 00000000
+[  365.887443] #PF: supervisor write access in kernel mode
+login-action: exception
+[login-action] Waiting for messages, (timeout 00:09:56)
+[  365.888395] #PF: error_code(0x0002) - not-present page
+[  365.889329] *pde = 00000000
+[  365.889883] Oops: 0002 [#2] PREEMPT SMP
+[  365.890599] CPU: 3 PID: 1 Comm: swapper/0 Tainted: G    B D W
+ N 6.1.0-rc1 #1
+[  365.891980] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  365.893510] EIP: kthread_stop+0x42/0x190
+[  365.894236] Code: 00 00 f0 0f c1 43 18 85 c0 0f 84 51 01 00 00 8d
+50 01 09 c2 0f 88 fe 00 00 00 f6 43 1e 20 0f 84 14 01 00 00 8b bb 2c
+04 00 00 <f0> 80 0f 02 89 d8 e8 83 f7 ff ff f0 80 4b 02 02 89 d8 e8 b7
+2e 01
+[  365.897721] EAX: 0000002a EBX: c23a0000 ECX: ce17a1d2 EDX: 00000000
+[  365.898816] ESI: c23a0018 EDI: 00000000 EBP: c11cdca4 ESP: c11cdc98
+[  365.899951] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010202
+[  365.901188] CR0: 80050033 CR2: 00000000 CR3: 0f947000 CR4: 003506d0
+[  365.902360] DR0: cf9aadac DR1: cf9aadad DR2: cf9aadae DR3: cf9aadaf
+[  365.903457] DR6: ffff0ff0 DR7: 00000600
+[  365.904164] Call Trace:
+[  365.904650]  kunit_try_catch_run.cold+0x7b/0xc1
+[  365.905538]  kunit_run_case_catch_errors+0x6e/0xa8
+[  365.906471]  kunit_run_tests.cold+0x1c4/0x5fe
+[  365.907297]  ? kunit_catch_run_case+0x50/0x50
+[  365.908127]  ? kunit_module_notify+0x90/0x90
+[  365.908935]  ? up_write+0x37/0x70
+[  365.909565]  ? preempt_count_sub+0xc1/0x110
+[  365.910336]  ? preempt_count_add+0x6c/0xd0
+[  365.911094]  ? up_write+0x37/0x70
+[  365.911763]  ? __debugfs_create_file+0xdb/0x1a0
+[  365.912657]  ? up_write+0x37/0x70
+[  365.913274]  ? debugfs_create_file+0x3c/0x50
+[  365.914963]  ? kunit_debugfs_create_suite+0x90/0xa0
+[  365.916691]  __kunit_test_suites_init+0x52/0x70
+[  365.918568]  kunit_run_all_tests.cold+0xeb/0x170
+[  365.919874]  ? kernel_init_freeable+0x1d0/0x209
+[  365.922279]  kernel_init_freeable+0x1d5/0x209
+[  365.923195]  ? rest_init+0xc0/0xc0
+[  365.923922]  kernel_init+0x1a/0x110
+[  365.924720]  ? schedule_tail_wrapper+0x9/0xc
+[  365.925416]  ret_from_fork+0x1c/0x28
+[  365.926043] Modules linked in:
+[  365.926558] CR2: 0000000000000000
+[  365.927137] ---[ end trace 0000000000000000 ]---
+[  365.927898] EIP: drm_buddy_init+0x2c0/0x340
+[  365.928623] Code: 21 29 c1 83 f9 33 0f 86 27 ff ff ff 8d b4 26 00
+00 00 00 8d b4 26 00 00 00 00 0f 0b 8d b6 00 00 00 00 0f 0b 8d b6 00
+00 00 00 <0f> 0b 8d b6 00 00 00 00 0f bd 45 0c 0f 44 c1 83 c0 21 e9 e0
+fd ff
+[  365.932581] EAX: c1379898 EBX: c1aaf0a0 ECX: c1aaf090 EDX: c1aaf0b8
+[  365.933606] ESI: 00000034 EDI: c2bcff20 EBP: c2bcfebc ESP: c2bcfe8c
+[  365.934846] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010297
+[  365.936612] CR0: 80050033 CR2: 00000000 CR3: 0f947000 CR4: 003506d0
+[  365.938215] DR0: cf9aadac DR1: cf9aadad DR2: cf9aadae DR3: cf9aadaf
+[  365.939499] DR6: ffff0ff0 DR7: 00000600
+[  365.940268] Kernel panic - not syncing: Attempted to kill init!
+exitcode=0x00000009
+[  365.941729] Kernel Offset: disabled
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c8f5131ab57d/disk-55be6084.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/77167f226f35/vmlinux-55be6084.xz
+URL:
+[1] https://lkft.validation.linaro.org/scheduler/job/5689216#L2230
+[2] https://lkft.validation.linaro.org/scheduler/job/5633224#L217
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4654552e088ed458b10d@syzkaller.appspotmail.com
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+  git_sha: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+  git_describe: v6.1-rc1
+  kernel_version: 6.1.0-rc1
+  kernel-config: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/668166832
+  artifact-location: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH
+  toolchain: gcc-11
+  System.map: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH/System.map
+  vmlinux.xz: https://builds.tuxbuild.com/2GEkhTdtJyiEiwjlnDNtueheTdH/vmlinux.xz
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor instruction fetch in kernel mode
-#PF: error_code(0x0010) - not-present page
-PGD 793df067 P4D 793df067 PUD 7601a067 PMD 0 
-Oops: 0010 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 25700 Comm: syz-executor.4 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-RSP: 0018:ffffc90003c0f158 EFLAGS: 00010246
-RAX: 1ffff11010973c1b RBX: ffff888084b9e0d8 RCX: 0000000000040000
-RDX: ffffc9000c01a000 RSI: 0000000000000005 RDI: ffff88801f59f098
-RBP: ffffc90003c0f2f0 R08: 0000000000000005 R09: ffffffff8222326d
-R10: 0000000000000003 R11: ffff888023308000 R12: ffff888083088678
-R13: dffffc0000000000 R14: ffff888037621c10 R15: 0000000000000005
-FS:  00007feebdc43700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 0000000036ec7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- get_third_component fs/reiserfs/namei.c:196 [inline]
- reiserfs_find_entry+0x253/0x1a10 fs/reiserfs/namei.c:317
- reiserfs_lookup+0x1e3/0x4a0 fs/reiserfs/namei.c:368
- __lookup_slow+0x286/0x3e0 fs/namei.c:1685
- lookup_slow fs/namei.c:1702 [inline]
- lookup_one_unlocked+0x3f8/0x670 fs/namei.c:2772
- ovl_lookup_positive_unlocked fs/overlayfs/namei.c:207 [inline]
- ovl_lookup_single+0x11f/0xa60 fs/overlayfs/namei.c:233
- ovl_lookup_layer+0x44e/0x540 fs/overlayfs/namei.c:320
- ovl_lookup+0xb09/0x2470 fs/overlayfs/namei.c:923
- __lookup_hash+0x115/0x240 fs/namei.c:1601
- do_renameat2+0x58b/0x1400 fs/namei.c:4850
- __do_sys_rename fs/namei.c:4953 [inline]
- __se_sys_rename fs/namei.c:4951 [inline]
- __x64_sys_rename+0x82/0x90 fs/namei.c:4951
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7feebca8b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007feebdc43168 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-RAX: ffffffffffffffda RBX: 00007feebcbabf80 RCX: 00007feebca8b5a9
-RDX: 0000000000000000 RSI: 0000000020000800 RDI: 00000000200007c0
-RBP: 00007feebcae6580 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff2dc3b58f R14: 00007feebdc43300 R15: 0000000000022000
- </TASK>
-Modules linked in:
-CR2: 0000000000000000
----[ end trace 0000000000000000 ]---
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-RSP: 0018:ffffc90003c0f158 EFLAGS: 00010246
-RAX: 1ffff11010973c1b RBX: ffff888084b9e0d8 RCX: 0000000000040000
-RDX: ffffc9000c01a000 RSI: 0000000000000005 RDI: ffff88801f59f098
-RBP: ffffc90003c0f2f0 R08: 0000000000000005 R09: ffffffff8222326d
-R10: 0000000000000003 R11: ffff888023308000 R12: ffff888083088678
-R13: dffffc0000000000 R14: ffff888037621c10 R15: 0000000000000005
-FS:  00007feebdc43700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 0000000036ec7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--
+Linaro LKFT
+https://lkft.linaro.org
