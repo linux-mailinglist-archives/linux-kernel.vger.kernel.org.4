@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4776D602E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7923602EDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiJROaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S231489AbiJROwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiJRO3m (ORCPT
+        with ESMTP id S230366AbiJROwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:29:42 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C85192A8;
-        Tue, 18 Oct 2022 07:29:41 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MsGQv1Bpmz6R48k;
-        Tue, 18 Oct 2022 22:27:19 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgBHWTBRuE5jkSo6AA--.18765S7;
-        Tue, 18 Oct 2022 22:29:39 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     axboe@kernel.dk, rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, yebin@huaweicloud.com
-Subject: [PATCH v2 3/3] blktrace: remove unnessary stop block trace in 'blk_trace_shutdown'
-Date:   Tue, 18 Oct 2022 22:51:35 +0800
-Message-Id: <20221018145135.932240-4-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221018145135.932240-1-yebin@huaweicloud.com>
-References: <20221018145135.932240-1-yebin@huaweicloud.com>
+        Tue, 18 Oct 2022 10:52:16 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44E7D994F;
+        Tue, 18 Oct 2022 07:52:11 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id q19so20817024edd.10;
+        Tue, 18 Oct 2022 07:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VdDndPV91SgyMkTQ4AOZFrCVVQ8EFi+AlwFk89m7OCk=;
+        b=jwtBcSs6qlzBVVm91NsjwcTCP82c4aIoxUossafUf6XaZ2aVFUsQcqfvzeYwmUNdEa
+         5jBy455pdXEKITguIhHME9Rp+sMEXzqwaIa4YydgLm45obZvK1SJfajY4o4gFcXkQNwy
+         wl0Boi6R9GqyvJ9Rf7wEz53UC+9Yah51GgptczMSH9f7o0DGX8aQN4Ffvq0zc1BYa0x0
+         QgM8qx9+buDMSmJ1TUetY3v/J4yLMOIQBBrq6sQAV7fHJZ3j+lMchRDWZA6EWBdZ1W/C
+         HCSQEvhZMqqMNFhO8OhhxlR/Gg/tHfPfFDk9OwoYcFeuDWriKsoZ9odzgftCCRv05ssB
+         8YIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VdDndPV91SgyMkTQ4AOZFrCVVQ8EFi+AlwFk89m7OCk=;
+        b=MCZ7Kh5cBhnl78mKz/dhF6O8EQ3JG+/W4ZssBbXjRMU+gopO4N13p2+TBeKh88hQaP
+         g258FuOahn864Rv3ElzvbvWRZnQl/Ccuux5zLxGEC9Peb23MCyJ0CWGUXQ0wuschl4No
+         kvxicGptY/I6pbbOkKwvOlx4xVa7FgGu9qIqaMpz4wDMo4/XMLQK1lH4Eq/Nvawv+B2T
+         rt7b3fIVEA9Xus3HxOyuZ8x7CL55i3PfI9vabYkoB7FO0ogGizsbzR+n8Ol2ZCOaLyRf
+         zYYHk2RWSK+M+SlHo1TEQ+GPeEVLLLf28SJ4yhFZgdhboEV59tR3SxyPGYnMrQAUFepc
+         g4PA==
+X-Gm-Message-State: ACrzQf2yoEPSNLszYyEoA5rbb/Ad35Ldmc0Lw+WNnwIlZh5zw6ttfgbO
+        bnE3fW+V2ks5JbTLzc3W7MZSJ8kVKhv7PA==
+X-Google-Smtp-Source: AMsMyM4nlHReoog0AoDXBjeuOIWhgm+BBc6vmW4PoHknsNjVcIkvHFcirWG7Yt2b6HMWAjQN4AhdZg==
+X-Received: by 2002:a05:6402:c7:b0:457:cd5d:d777 with SMTP id i7-20020a05640200c700b00457cd5dd777mr2891686edu.245.1666104729452;
+        Tue, 18 Oct 2022 07:52:09 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056402028200b0045bd14e241csm9033063edv.76.2022.10.18.07.52.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 07:52:08 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>, Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] zram: use try_cmpxchg in update_used_max
+Date:   Tue, 18 Oct 2022 16:51:54 +0200
+Message-Id: <20221018145154.3699-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBHWTBRuE5jkSo6AA--.18765S7
-X-Coremail-Antispam: 1UD129KBjvdXoWrtrW5ury5ury8AryfXF1rCrg_yoWfAwb_A3
-        WUWwn2ga17Gr9Yvr4fJF4fXw1qq3sFqF109a45JrW5Aw1DJrZ8GanxAFs8Wr90va1qgasr
-        Zr13Jwn7J3ZYyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-kFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6r1j6r18M7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjAR67UUUUU==
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As previous commit, 'blk_trace_cleanup' will stop block trace if
-block trace's state is 'Blktrace_running'.
-So remove unnessary stop block trace in 'blk_trace_shutdown'.
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+update_used_max.  x86 CMPXCHG instruction returns success in ZF flag,
+so this change saves a compare after cmpxchg (and related move
+instruction in front of cmpxchg).
 
-Signed-off-by: Ye Bin <yebin@huaweicloud.com>
+Also, reorder code a bit to remove additional compare and
+conditional jump from the assembly code.  Together, hese two
+changes save 15 bytes from the function when compiled for x86_64.
+
+No functional change intended.
+
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Nitin Gupta <ngupta@vflare.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 ---
- kernel/trace/blktrace.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/block/zram/zram_drv.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
-index 030e5716661e..2be8c747f796 100644
---- a/kernel/trace/blktrace.c
-+++ b/kernel/trace/blktrace.c
-@@ -784,10 +784,8 @@ int blk_trace_ioctl(struct block_device *bdev, unsigned cmd, char __user *arg)
- void blk_trace_shutdown(struct request_queue *q)
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 966aab902d19..87711ddf4b54 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -188,16 +188,13 @@ static void update_position(u32 *index, int *offset, struct bio_vec *bvec)
+ static inline void update_used_max(struct zram *zram,
+ 					const unsigned long pages)
  {
- 	if (rcu_dereference_protected(q->blk_trace,
--				      lockdep_is_held(&q->debugfs_mutex))) {
--		__blk_trace_startstop(q, 0);
-+				      lockdep_is_held(&q->debugfs_mutex)))
- 		__blk_trace_remove(q);
--	}
+-	unsigned long old_max, cur_max;
+-
+-	old_max = atomic_long_read(&zram->stats.max_used_pages);
++	unsigned long cur_max = atomic_long_read(&zram->stats.max_used_pages);
+ 
+ 	do {
+-		cur_max = old_max;
+-		if (pages > cur_max)
+-			old_max = atomic_long_cmpxchg(
+-				&zram->stats.max_used_pages, cur_max, pages);
+-	} while (old_max != cur_max);
++		if (cur_max >= pages)
++			return;
++	} while (!atomic_long_try_cmpxchg(&zram->stats.max_used_pages,
++					  &cur_max, pages));
  }
  
- #ifdef CONFIG_BLK_CGROUP
+ static inline void zram_fill_page(void *ptr, unsigned long len,
 -- 
-2.31.1
+2.37.3
 
