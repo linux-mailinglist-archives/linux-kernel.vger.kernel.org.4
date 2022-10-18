@@ -2,84 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0332F6030F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B46030FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiJRQqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S229898AbiJRQru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiJRQqG (ORCPT
+        with ESMTP id S229623AbiJRQrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:46:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850D9BBF34
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666111564;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QZP3yvTEQQM8pWfWWjNvcvdOOz/gh8bcKPbdVAik3fQ=;
-        b=SelquGwYOU6J1rZnhrCVg48LK2X+QZy/f5HrimnYJTEAXDrP5Muf3K7hBwCqIqH00WNF7y
-        9nefzf0zVFYXmGDwiOIxogtmhY9kOIgyAcQpUeb0YHkjglGfaARUV51qtaLnQfyLEQoiB5
-        stoW0jNPB4aQX6B+TlEf5YMxZDzp/pY=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-661-1RGJqJN8N16pwnMmCAp9bw-1; Tue, 18 Oct 2022 12:46:03 -0400
-X-MC-Unique: 1RGJqJN8N16pwnMmCAp9bw-1
-Received: by mail-qv1-f71.google.com with SMTP id kr13-20020a0562142b8d00b004b1d5953a2cso8963948qvb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:46:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QZP3yvTEQQM8pWfWWjNvcvdOOz/gh8bcKPbdVAik3fQ=;
-        b=niADSiI7uaxgDL0LifZ7dRAD0Rn4Ars/BTdtJIdbXYXhUQ1pB6N2uzN2Vyo3FfpOeW
-         S8+eid1YMT+hfLZjvLUhhYXZXnI/X0TGR4R49Or18BbwIr6OrAdzd1oCUzuD8C5kKifI
-         sRLeuBrt2LBYJqaMWN+0gh+nTTQzE+XJHC4AlTKY1nTAmkDZ9KDnk8e1WSQokXRGNeJU
-         lBVnhbLw+b5q4TuglIK2UTdCH5jnFGV1N/GFOrxGHi6iWJrtlf8zqvZFI2KEurSxWRLs
-         KIyLW73GiVmdEOTJPQEIgYd0VhSup+IV/LnoGNLxDNkeI2vV1LoslIeUaHEwqjr7699r
-         mo7g==
-X-Gm-Message-State: ACrzQf0/o7wzrauIZDzjGkLIuMPfc79yJSv7VQVAzjI1zTMSAXJvcrQr
-        9iWaXegrYktn4HxmsAgzNXXbSOPkWZJL4PgQmyd7dw8XcobvvVStEcsY4AH/bY45hYKNyDfP+D4
-        PdPOxDHdNgX0hbE+Mxiyp1IN8
-X-Received: by 2002:a0c:9122:0:b0:4b1:80fc:c405 with SMTP id q31-20020a0c9122000000b004b180fcc405mr3134941qvq.120.1666111562691;
-        Tue, 18 Oct 2022 09:46:02 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5qRKddE7VWNwmZ5E6Sy6/79Fxdoo5cJ0pbCHMIAhFQSQw6AiGBLAstyLwyrj9w+PYdaDSKhg==
-X-Received: by 2002:a0c:9122:0:b0:4b1:80fc:c405 with SMTP id q31-20020a0c9122000000b004b180fcc405mr3134927qvq.120.1666111562513;
-        Tue, 18 Oct 2022 09:46:02 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id l13-20020ac8148d000000b0039c72bb51f3sm2185059qtj.86.2022.10.18.09.46.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 09:46:01 -0700 (PDT)
-Message-ID: <12a6fae1-c7c5-c531-fce7-1a57cf6122fa@redhat.com>
-Date:   Tue, 18 Oct 2022 18:45:58 +0200
+        Tue, 18 Oct 2022 12:47:47 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE587EA374;
+        Tue, 18 Oct 2022 09:47:44 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7c1329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7c1:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 46E231EC06EE;
+        Tue, 18 Oct 2022 18:47:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666111659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SzR5aucNzYth/ilLrj8wXigxDEHh6z7QEBNhMFKzJ1Q=;
+        b=KofcBB3zWnY4gvrj9X0NQGj8nXKqkuLPZHz8zXTQFhQRaGEMEDu5y9pGdVSZj2AV6+bp5P
+        GEYux0xaFU9ezR0u97sLiaSNrwGB6QwTenR8UqlGzUjkG2z7wKb1H/rPbqkEsR/3Pg60P7
+        GUXLo/Op7L3fTxeUw7B6uF8xGlFJ54k=
+Date:   Tue, 18 Oct 2022 18:47:35 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, fenghua.yu@intel.com,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Babu Moger <babu.moger@amd.com>
+Subject: Re: [PATCH v5 0/2] x86/resctrl: Fix min_cbm_bits for AMD and code
+ cleanup
+Message-ID: <Y07Yp4C6Qkk8lt/b@zn.tnic>
+References: <166430959655.372014.14294247239089851375.stgit@bmoger-ubuntu>
+ <703e6dfd-68d6-6def-183d-fb99b39692b3@intel.com>
+ <Y07VzWTRpSnpbuc2@zn.tnic>
+ <fe3baf5f-1536-46d7-9472-5ab908b8f4f2@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH] vfio: platform: Do not pass return buffer to ACPI _RST
- method
-Content-Language: en-US
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Sinan Kaya <okaya@codeaurora.org>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221018152825.891032-1-rafaelmendsr@gmail.com>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <20221018152825.891032-1-rafaelmendsr@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fe3baf5f-1536-46d7-9472-5ab908b8f4f2@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,38 +66,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
-On 10/18/22 17:28, Rafael Mendonca wrote:
-> The ACPI _RST method has no return value, there's no need to pass a return
-> buffer to acpi_evaluate_object().
->
-> Fixes: d30daa33ec1d ("vfio: platform: call _RST method when using ACPI")
-> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-Reviewed-by: Eric Auger <eric.auger@redhat.com>
+On Tue, Oct 18, 2022 at 09:43:15AM -0700, Reinette Chatre wrote:
+> Correct. Apologies for missing the "Cc: stable@vger.kernel.org" in
+> that one.
 
-Thanks
+Nothing to apologize, all good.
 
-Eric
-> ---
->  drivers/vfio/platform/vfio_platform_common.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/vfio/platform/vfio_platform_common.c b/drivers/vfio/platform/vfio_platform_common.c
-> index 55dc4f43c31e..1a0a238ffa35 100644
-> --- a/drivers/vfio/platform/vfio_platform_common.c
-> +++ b/drivers/vfio/platform/vfio_platform_common.c
-> @@ -72,12 +72,11 @@ static int vfio_platform_acpi_call_reset(struct vfio_platform_device *vdev,
->  				  const char **extra_dbg)
->  {
->  #ifdef CONFIG_ACPI
-> -	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
->  	struct device *dev = vdev->device;
->  	acpi_handle handle = ACPI_HANDLE(dev);
->  	acpi_status acpi_ret;
->  
-> -	acpi_ret = acpi_evaluate_object(handle, "_RST", NULL, &buffer);
-> +	acpi_ret = acpi_evaluate_object(handle, "_RST", NULL, NULL);
->  	if (ACPI_FAILURE(acpi_ret)) {
->  		if (extra_dbg)
->  			*extra_dbg = acpi_format_exception(acpi_ret);
+Lemme take care of them.
 
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
