@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F0460284B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157FE602851
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiJRJZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S229971AbiJRJ0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiJRJZi (ORCPT
+        with ESMTP id S229943AbiJRJ0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:25:38 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0523BA
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:25:29 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id l6so12798429pgu.7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RqxmiGcyV/mYk+QnLNTvWwmJYpQlgvRrFVxVqfYig2w=;
-        b=n5v+XaUqdK0+YZuXiM/XX3batect/k3rJvwMnNLANYSL1DpJ+RImp3kOJ5HqhKUyii
-         ooP8NryD/OQXpkXZhU024WM8KNVYn0QQCY47VPI0TA1PHLyy+8pGcoL/5Qz4K4HhdxgJ
-         crj+l/0hqMhq2l3cDfm6MR1V8ZCaeE5z3GI3Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RqxmiGcyV/mYk+QnLNTvWwmJYpQlgvRrFVxVqfYig2w=;
-        b=1zOcKhzQCxxu/5q4Hv2FTWYs86ZxIpiNU4kBjFkYDxobk2zLuQeQAEjnIqXOlc9T6+
-         XcuFZm9jhcL4n0kkqudag+XjYeg50X3YEAfn2n9RuY9ccPftTPTL7US0pMoEEWTYlWk9
-         d1bzCtmHVeVgIZlHrYer4/s11h8J3EAdOzVl29eKmQ9qdwmD1ucbnYd5BeJ/iQO5gr0K
-         y3J8XTY2xD8uGad3fdpuou/nESDIbXiu1UefxfKqkk9pUQEn2r3CGgp3bVzo7RZMKExa
-         drpqyswwqSkH8riyte6GaRKj8aZyPtbhnLVnKTWkXoVpVJMrC+a25xknYAiUbWzh5I8B
-         wtvQ==
-X-Gm-Message-State: ACrzQf2a2u9VuG6BITOPfWNZnN2L604W8yhyScSSo6bydT+TEOIgjetQ
-        0k/rBVRiEaQS7zBRuVeDSkA6Ng==
-X-Google-Smtp-Source: AMsMyM40urcw8Pb7S8ckoDST6aKu+pm+tQR6oHRoX1O+U0ftrbh4sDAM/9HRAv8LcoqmNLrOKmM3jg==
-X-Received: by 2002:a05:6a00:b95:b0:565:9cbd:a7e5 with SMTP id g21-20020a056a000b9500b005659cbda7e5mr2242933pfj.74.1666085129233;
-        Tue, 18 Oct 2022 02:25:29 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y2-20020a170902864200b001754cfb5e21sm8170513plt.96.2022.10.18.02.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:25:28 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Ruhl@www.outflux.net, Michael J <michael.j.ruhl@intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v3 2/2] igb: Proactively round up to kmalloc bucket size
-Date:   Tue, 18 Oct 2022 02:25:25 -0700
-Message-Id: <20221018092526.4035344-2-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221018092340.never.556-kees@kernel.org>
-References: <20221018092340.never.556-kees@kernel.org>
+        Tue, 18 Oct 2022 05:26:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749C8AE848;
+        Tue, 18 Oct 2022 02:26:20 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 09:26:15 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666085177;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=k1t2QP68OmE6u2uzMGPoB8a7JOZ2kIqcFRyJqlQqc6A=;
+        b=jj3zOxKigIdkl2IAmy9jJF1vl1x266TiYq5fuLJonxzG0p7ESzH7issoXhbtk8NrdQKLJj
+        h4t5GEX6a63Dnwrn8LUItSme2k6SWWMvGczSFX+07ogardio19cJG54qmvphl8pgCiEMFX
+        2Iks4dkUDNuLBvue7Sf8ZLA60sd88UcTpLXmGIhrze7I7Ku9Wzh1pheoAsR5WBeztF7stn
+        B1/oqaiNYYtCP+eKcYTNwQptRl7B53pF9EPkDyFeZ4jarWBHWIYikHC8scBBzrb4hOaNci
+        gfKQxn07NA8graJHDFETfxRBSHuqdWEwlsaKQvW/5F/sTiM0cQI7gxG/ldHJCg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666085177;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=k1t2QP68OmE6u2uzMGPoB8a7JOZ2kIqcFRyJqlQqc6A=;
+        b=iROsh7ZwVQwCQDQeJ5cTvUee+3mqOin302YkbQ489/mj5xLqqfX32DPRo87t+PicTW/QGk
+        M2fgoScgqfpWA0Dg==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/microcode/AMD: Apply the patch early on every
+ logical thread
+Cc:     stefantalpalaru@yahoo.com, Borislav Petkov <bp@suse.de>,
+        <stable@vger.kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1271; h=from:subject; bh=Lg7BoPA33TyF1N9Ak5ejRPt+aJUHR3UR0w6mwamzyDU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTnEF5cGlPXkPcKPv34lox4vlIGHaJ00+4ZE1Nfh7 Om9sbOGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05xBQAKCRCJcvTf3G3AJgc8D/ 9jBTPoFwFRkggAABohaocGh+SUXdr/tnCRtpBj1FnUDptaAqftQwbSemQKe/dNGdevoTRrcqFgYYLT QMvF6A5/qBFO7QiysDelk5iQt8J81h+leDO5DJnFZkQ2HMKCT2i0KVHUBSzzYgvAIlEalNqp3hz1Ws /BqyZq+CFVZ9jGet8Pap7DAGjauTXZyOCbjcf37mi+9pUHIX0fQB74d/oUBVh22x9s0TxbJZtcp0HQ dVAL5ulwMgSTvikjYGwzlDjdZJ3n7FWqNnXLFH+h4m8JFDZnyVq7ORhWQHzsvMton83QYopI5GTn2N ltGBC4L9wK4uPtiO4+VRw7sKkcuGPIiuXo+fA9pScZopO9vTcXbXaREhQ1bqSzmSHfQTsFR3GA2WvP lrohwfZk73id4wpmWwcibd6erFkaGn3MThfnABeNAwOV4lGFLjUWgM0gd6owrwii5bUyoMwkx1fPLQ jyQKhVIjNYs5DGv1dT4HJSiGVSBdkDZb6O+84PLYpUoDGP0QXg1K0y6nG/lJz6hkW2hPflxjO+Aefo RLXTCeTG7FcKDzuUbNugmuICL8B3oUKG/iXY7fKYbVAl/2mpUgXMe2rFw3c8NBHreGhiKQpwpC/9jN CowsdSTEpdA5snuZ++ijX40XFdZFNGUxDYGavFpVpvqBV6g3PXsyeVKWYvBg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166608517523.401.12312055863747452497.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for removing the "silently change allocation size"
-users of ksize(), explicitly round up all q_vector allocations so that
-allocations can be correctly compared to ksize().
+The following commit has been merged into the x86/urgent branch of tip:
 
-Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Commit-ID:     e7ad18d1169c62e6c78c01ff693fd362d9d65278
+Gitweb:        https://git.kernel.org/tip/e7ad18d1169c62e6c78c01ff693fd362d9d=
+65278
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Wed, 05 Oct 2022 12:00:08 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 18 Oct 2022 11:03:27 +02:00
+
+x86/microcode/AMD: Apply the patch early on every logical thread
+
+Currently, the patch application logic checks whether the revision
+needs to be applied on each logical CPU (SMT thread). Therefore, on SMT
+designs where the microcode engine is shared between the two threads,
+the application happens only on one of them as that is enough to update
+the shared microcode engine.
+
+However, there are microcode patches which do per-thread modification,
+see Link tag below.
+
+Therefore, drop the revision check and try applying on each thread. This
+is what the BIOS does too so this method is very much tested.
+
+Btw, change only the early paths. On the late loading paths, there's no
+point in doing per-thread modification because if is it some case like
+in the bugzilla below - removing a CPUID flag - the kernel cannot go and
+un-use features it has detected are there early. For that, one should
+use early loading anyway.
+
+  [ bp: Fixes does not contain the oldest commit which did check for
+    equality but that is good enough. ]
+
+Fixes: 8801b3fcb574 ("x86/microcode/AMD: Rework container parsing")
+Reported-by:  =C8=98tefan Talpalaru <stefantalpalaru@yahoo.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Tested-by:  =C8=98tefan Talpalaru <stefantalpalaru@yahoo.com>
+Cc: <stable@vger.kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216211
 ---
- drivers/net/ethernet/intel/igb/igb_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kernel/cpu/microcode/amd.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 6256855d0f62..7a3a41dc0276 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -1195,7 +1195,7 @@ static int igb_alloc_q_vector(struct igb_adapter *adapter,
- 		return -ENOMEM;
- 
- 	ring_count = txr_count + rxr_count;
--	size = struct_size(q_vector, ring, ring_count);
-+	size = kmalloc_size_roundup(struct_size(q_vector, ring, ring_count));
- 
- 	/* allocate q_vector and rings */
- 	q_vector = adapter->q_vector[v_idx];
--- 
-2.34.1
-
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microc=
+ode/amd.c
+index e7410e9..3a35dec 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -440,7 +440,13 @@ apply_microcode_early_amd(u32 cpuid_1_eax, void *ucode, =
+size_t size, bool save_p
+ 		return ret;
+=20
+ 	native_rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+-	if (rev >=3D mc->hdr.patch_id)
++
++	/*
++	 * Allow application of the same revision to pick up SMT-specific
++	 * changes even if the revision of the other SMT thread is already
++	 * up-to-date.
++	 */
++	if (rev > mc->hdr.patch_id)
+ 		return ret;
+=20
+ 	if (!__apply_microcode_amd(mc)) {
+@@ -528,8 +534,12 @@ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
+=20
+ 	native_rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+=20
+-	/* Check whether we have saved a new patch already: */
+-	if (*new_rev && rev < mc->hdr.patch_id) {
++	/*
++	 * Check whether a new patch has been saved already. Also, allow applicatio=
+n of
++	 * the same revision in order to pick up SMT-thread-specific configuration =
+even
++	 * if the sibling SMT thread already has an up-to-date revision.
++	 */
++	if (*new_rev && rev <=3D mc->hdr.patch_id) {
+ 		if (!__apply_microcode_amd(mc)) {
+ 			*new_rev =3D mc->hdr.patch_id;
+ 			return;
