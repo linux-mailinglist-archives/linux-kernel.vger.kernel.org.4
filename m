@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247ED6028B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A674C6028B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJRJsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S229868AbiJRJsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiJRJsJ (ORCPT
+        with ESMTP id S230083AbiJRJsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:48:09 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85169B0B0C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:48:08 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y8so13547904pfp.13
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgN57VsOmEbW0oef2R7lDWd91i+seWCcSmuwkn3qm8s=;
-        b=CXpoZkphNnzb3HdWkvbxbX+OdQIuzsEiDKIALM04EGdA0N5wGbiAERk0wougKpWT7B
-         ZYPyDYdtKD65v7HlfNRkRhb9a5c/7Qs5Dt9bFQDUqTyBXIIDG57SRGr+H1igaqm4O35U
-         nkXYGwJLT5JP7o0fjJn1V1eRGDGTnjs3Co0Ydp+Fe87uScw4Z43sLrfd6OoHFaXaYeKd
-         KQ5oa6fXbGltBKCDCreI3T9P7zeZPvoeBW4dYGcN/qKG9JDmkgFuS5BqQLuA72jt53z9
-         B3UwHk7OSxxM9gCqhwzpCNhupg5xGuNqWt1fxhcQef3jC2qtTqJOtZAhfPjoJjBr0TaL
-         bOtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jgN57VsOmEbW0oef2R7lDWd91i+seWCcSmuwkn3qm8s=;
-        b=wk6UVAk3l3c1xln1Gtef6MdK/0hhk742SwOvBsaqaLLiwMAi9SakP+xXi0W0Vu8IWR
-         NdZxSZaIL07dVorU8cUIcX3xbq1/1ic+6hUJ24OW/ORE8byMW93IEnv/kJ/sjREtxa8e
-         kLQiDe7KBVOJnaDfofAI6KKdkXLVKEDiIpD7Cx6S/y2xavt0Swd4z6hj4Vyiv0bEHJ2U
-         pxPR5dyw0ev1ME2MCDuS7Bx/taPO3h+YG4yEeZI1ZF+3XXv3eZozVtd5F8naxDpj3HhS
-         OZDoYxjgLjVbw+toBU9vMrsU8pmFpiNtDu+W+PgWS0SaZs8ZJZCwX1jPfOd4uQsvMcST
-         LtMQ==
-X-Gm-Message-State: ACrzQf3lydtgZbMKJnH0rTgpAVmOedVnDEvXvyYjdSaHDiM0q/Lj+4mD
-        gg4FmGkdUDEdyJPASD3itKM=
-X-Google-Smtp-Source: AMsMyM7YrZlETnFnw/Z85QePmZIRib8ilbCH1b/A+iimOLBUdYKd0zLRQzbpBTayU56qlrjADefY6A==
-X-Received: by 2002:a63:8549:0:b0:461:3995:60d1 with SMTP id u70-20020a638549000000b00461399560d1mr1931790pgd.105.1666086488060;
-        Tue, 18 Oct 2022 02:48:08 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.4])
-        by smtp.gmail.com with ESMTPSA id q19-20020aa79613000000b005635477c42dsm8775730pfg.133.2022.10.18.02.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:48:07 -0700 (PDT)
-From:   zys.zljxml@gmail.com
-To:     chenhuacai@kernel.org
-Cc:     kernel@xen0n.name, oleg@redhat.com, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, chenhuacai@loongson.cn,
-        lixuefeng@loongson.cn, yangtiezhu@loongson.cn,
-        Yushan Zhou <katrinzhou@tencent.com>
-Subject: [PATCH] LoongArch: use flexible-array member instead of zero-length array
-Date:   Tue, 18 Oct 2022 17:47:42 +0800
-Message-Id: <20221018094742.324576-1-zys.zljxml@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 18 Oct 2022 05:48:30 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4ABAB03FE;
+        Tue, 18 Oct 2022 02:48:24 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id B05C31C09D9; Tue, 18 Oct 2022 11:48:22 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 11:48:21 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        GUO Zihua <guozihua@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        philipp.g.hortmann@gmail.com, dave@stgolabs.net,
+        paskripkin@gmail.com, dan.carpenter@oracle.com,
+        yogi.kernel@gmail.com, yangyingliang@huawei.com,
+        f3sch.git@outlook.com, linux-staging@lists.linux.dev
+Subject: Re: [PATCH AUTOSEL 5.10 10/33] staging: rtl8192e: Fix return type
+ for implementation of ndo_start_xmit
+Message-ID: <20221018094821.GG1264@duo.ucw.cz>
+References: <20221013002334.1894749-1-sashal@kernel.org>
+ <20221013002334.1894749-10-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="w2JjAQZceEVGylhD"
+Content-Disposition: inline
+In-Reply-To: <20221013002334.1894749-10-sashal@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yushan Zhou <katrinzhou@tencent.com>
 
-Eliminate the following coccicheck warning:
-./arch/loongarch/include/asm/ptrace.h:32:15-21: WARNING use flexible-array member instead
+--w2JjAQZceEVGylhD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
----
- arch/loongarch/include/asm/ptrace.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi!
 
-diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-index 17838c6b7ccd..7437b9366c3b 100644
---- a/arch/loongarch/include/asm/ptrace.h
-+++ b/arch/loongarch/include/asm/ptrace.h
-@@ -29,7 +29,7 @@ struct pt_regs {
- 	unsigned long csr_euen;
- 	unsigned long csr_ecfg;
- 	unsigned long csr_estat;
--	unsigned long __last[0];
-+	unsigned long __last[];
- } __aligned(8);
- 
- static inline int regs_irqs_disabled(struct pt_regs *regs)
--- 
-2.27.0
+> [ Upstream commit 513d9a61156d79dd0979c4ad400c8587f52cbb9d ]
+>=20
+> CFI (Control Flow Integrity) is a safety feature allowing the system to
+> detect and react should a potential control flow hijacking occurs. In
+> particular, the Forward-Edge CFI protects indirect function calls by
+> ensuring the prototype of function that is actually called matches the
+> definition of the function hook.
+>=20
+> Since Linux now supports CFI, it will be a good idea to fix mismatched
+> return type for implementation of hooks. Otherwise this would get
+> cought out by CFI and cause a panic.
+>=20
+> Use enums from netdev_tx_t as return value instead, then change return
+> type to netdev_tx_t. Note that rtllib_xmit_inter() would return 1 only
+> on allocation failure and the queue is stopped if that happens, meeting
+> the documented requirement if NETDEV_TX_BUSY should be returned by
+> ndo_start_xmit.
+>=20
 
+> +++ b/drivers/staging/rtl8192e/rtllib_tx.c
+> @@ -964,9 +964,9 @@ static int rtllib_xmit_inter(struct sk_buff *skb, str=
+uct net_device *dev)
+> =20
+>  }
+> =20
+> -int rtllib_xmit(struct sk_buff *skb, struct net_device *dev)
+> +netdev_tx_t rtllib_xmit(struct sk_buff *skb, struct net_device *dev)
+>  {
+>  	memset(skb->cb, 0, sizeof(skb->cb));
+> -	return rtllib_xmit_inter(skb, dev);
+> +	return rtllib_xmit_inter(skb, dev) ? NETDEV_TX_BUSY : NETDEV_TX_OK;
+>  }
+>  EXPORT_SYMBOL(rtllib_xmit);
+
+First, rtllib_xmit_inter() should be fixed to return the enum, too.
+
+Second, we really should not take this to stable, as CFI is not
+available there. We should drop these patches:
+
+ 4.19 14/19] staging: rtl8192u: Fix return type of ieee80211_xmit
+ 5.10 09/33] staging: rtl8712: Fix return type for implementation of ndo_st=
+art_xmit
+ 5.10 10/33] staging: rtl8192e: Fix return type for implementation of ndo_s=
+tart_xmit
+
+Thank you,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--w2JjAQZceEVGylhD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY052ZQAKCRAw5/Bqldv6
+8hTcAJ9PBdweJJhOG74AwK6TImK+wL5L+wCgs9x/IBjvRqzunKW9aVpiy21Y8ZE=
+=+pT0
+-----END PGP SIGNATURE-----
+
+--w2JjAQZceEVGylhD--
