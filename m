@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059AB602D2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A14602D2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiJRNkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        id S230504AbiJRNkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiJRNjv (ORCPT
+        with ESMTP id S230460AbiJRNjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:39:51 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DD71EED0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:39:49 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id o22so8597540qkl.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:39:49 -0700 (PDT)
+        Tue, 18 Oct 2022 09:39:55 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77906220CB
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:39:51 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id hh9so9599802qtb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:39:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/GaRn096EJkVZZlzc+nVh5YRf5MDAhYRvE4OmZmnDu4=;
-        b=EkZruu4rs61lg7zj4v5FZ1R0zXYR0uE99SAj0j59YpOF+DJnIASEoPqnf5Yd6OLWY6
-         47gGheGUjp9pPEtdXY42ElrGLfqOhPxb9tRvkw7qc5n3HqyouhWOkcCm5decCz3/BF4k
-         b5MQsDdoccFi0GpEZnd8x372f/fHtb/CcE66/d3zZ+3FCRSMWOWQmnhr99exOThmKYwM
-         IeVARrdEgtqZVnqkk2B2l4Ag4q+/MruisnU0zCqKnnrMC/O7L2pM2X+6yPPnNuQovvu6
-         DJuI8fAeCblhXKzz1GhRP2E99GEjJzt7kGYkRpOhjR+3aIZ1+Omu1dOhxx78ZjhUVeI8
-         Izdw==
+        bh=4ItLv3MrqFjkUjgy6D960E6gyycJQXgxPRZWuas15FM=;
+        b=tTSPX3c/2Nmk9ShKjuwCzhVqnKOI59gBJpa/06ZeOfsicSC+rf4JFeV20qFwNsjydK
+         GceXru9FHsrzxm1denxxeXHg/aQLihq2j027YT4rkaGQoltRTOzC3zkjLSL7wCNJtR3y
+         R9RIn+ikEtMC8u+Q7n2u+MVJ94QMo2MHI5itvcIldQAovUxE1W2xs/uT/pBRIwIk2fko
+         4e9a6Uaz3FofjBFJvGOj8I42qjjb8rAHc9RO9Mj/iYFoHqxoARYWr4AEZ/d6iJw0KaGs
+         JfkVG5moiDfHxQHxfR3XPjCMuits0JvzwgkccLIJQiK1DewiSkInTvWBzPiC4J5cIDje
+         FYEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/GaRn096EJkVZZlzc+nVh5YRf5MDAhYRvE4OmZmnDu4=;
-        b=m4/uPR8dQa3Lbbbf6mi7S/S9tWKVZ6CEqvkjYgCSCLH5+FBYWaamo3PPgzfST8uLfj
-         FUGDj0uwqzDTT6AWX5q+2//IDn/NW44uRw4/0+wsTdAx+8EdrsqiGZQONeR9Lg3kzqbo
-         5ZYXfBLZOI8+5bsfBYnv3SIqB78UCJEWql1DzRycLcaBShucPZADNiDcD10MfevYSdgl
-         xrsW465OoMM2yTPf1eW8KcvgBUlXl74nWUz2B0Tzhmc2mH5LnekTZgKGZulYxL+OiWci
-         VLG7Larw5dnjPuJXIzjMw+7n/l6we5ZFgM7iA/RRy3PcxJqZsDIinf2t2F87aghLpKbj
-         3OIw==
-X-Gm-Message-State: ACrzQf3KEz+80lClCZITFIUOWJaeac79nGFukmkiiIeaA4Qt/I//0r46
-        gGAEaZm7x15KmiB+h7JeMOw0Ag==
-X-Google-Smtp-Source: AMsMyM5YKTiiYTgjU4PSq7epPdghQRg90zvIlzhA0QCwaCfBBNZM4GK4cwt3eJXzBRaLNQHo+LfMPA==
-X-Received: by 2002:a37:e205:0:b0:6ee:834:1a1b with SMTP id g5-20020a37e205000000b006ee08341a1bmr1808177qki.342.1666100388736;
-        Tue, 18 Oct 2022 06:39:48 -0700 (PDT)
+        bh=4ItLv3MrqFjkUjgy6D960E6gyycJQXgxPRZWuas15FM=;
+        b=Zv9fmSNJGOmwsOG8sSRWg0z70BfttYR+eI+uV903yJ72I6KzJHhlxJyRw/OGgPp4wK
+         ldV4SaLRLYXXNmNB4lp2Dxi6BLCABZemCnV5nKOEtcGJZm6sfla2aAHTn/HgdA2vsTd4
+         /ZpdNKfiQjG0IOcwQcBE1JXJTjys8lObjCrP8kRAthBXAvzFXMSK56IiSSFCuxDbRc5s
+         6uPwvR6e9lFnFz/2tAArWltVCdaQLMF7Ua256tMykrpvoof9KdRByIxyzQaHGLldbP02
+         bTT07zeh8JxRw301/kX9A/rgCiqX0WOyRlCp3stIWY74UCb1Lpp4gQgJrv2YNk3YLibv
+         epzQ==
+X-Gm-Message-State: ACrzQf1LgfP8NJ67pSa36w2dUzW+CZaV1AXS8IXGL2OTL0TIvT1M6sVU
+        2/3JbSSfU/2lDxy42G9gztgQWA==
+X-Google-Smtp-Source: AMsMyM5WX5G1+bv+TTjJ8KAiYFJyFCJ7K1wLBkHNS5+MrEGAk9iZiPB+umJcqXwMOHI/1sVsaTt0bg==
+X-Received: by 2002:a05:622a:147:b0:39c:dc0d:7d0f with SMTP id v7-20020a05622a014700b0039cdc0d7d0fmr2026339qtw.281.1666100390342;
+        Tue, 18 Oct 2022 06:39:50 -0700 (PDT)
 Received: from krzk-bin.MSRM (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id t24-20020a37ea18000000b006c73c3d288esm2368713qkj.131.2022.10.18.06.39.47
+        by smtp.gmail.com with ESMTPSA id t24-20020a37ea18000000b006c73c3d288esm2368713qkj.131.2022.10.18.06.39.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 06:39:47 -0700 (PDT)
+        Tue, 18 Oct 2022 06:39:49 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Gregory Clement <gregory.clement@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         Rob Herring <robh+dt@kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: ARM: marvell: include bindings
-Date:   Tue, 18 Oct 2022 09:39:44 -0400
-Message-Id: <166610038083.12522.9467894060649948229.b4-ty@linaro.org>
+Cc:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3] dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename
+Date:   Tue, 18 Oct 2022 09:39:45 -0400
+Message-Id: <166610038083.12522.4054828286732887763.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220809055729.19242-1-krzysztof.kozlowski@linaro.org>
-References: <20220809055729.19242-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220811062953.5976-1-krzysztof.kozlowski@linaro.org>
+References: <20220811062953.5976-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -79,15 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 08:57:29 +0300, Krzysztof Kozlowski wrote:
-> Include top-level Marvell bindings in Marvell maintainer entries.
+On Thu, 11 Aug 2022 09:29:53 +0300, Krzysztof Kozlowski wrote:
+> The Nuvia DC-SCM BMC board compatible was renamed in commit
+> 7f058112873e ("ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom"),
+> so adjust the bindings as well.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] MAINTAINERS: ARM: marvell: include bindings
-      https://git.kernel.org/krzk/linux-dt/c/b65c1735c73019549255e3a59ec80e9b9201c6e5
+[1/1] dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename
+      https://git.kernel.org/krzk/linux-dt/c/c74eb454dbf482b29d53e7bcc2af74a53b516fa3
 
 Best regards,
 -- 
