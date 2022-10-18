@@ -2,83 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9862602F3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D076C602F5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiJRPLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S230034AbiJRPOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJRPLe (ORCPT
+        with ESMTP id S230144AbiJRPOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:11:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F141868A5;
-        Tue, 18 Oct 2022 08:11:33 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IF6YBu010713;
-        Tue, 18 Oct 2022 15:11:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=IeTbFhUNkNs/q6jQFENQ4qg4Yy9Z8X9Pz3/Uov/ew5U=;
- b=aA9moSjk5AQKlK5PVymAnRaZEw/eTo/2WBTaDn9OrdASkbpgrxKRYYTlU6i010sZmskz
- KBZ9XCFLBSoP52l1y3sBU8UQ9cL4T8fuEe9r1Eb7fKBBOLq7RBid3zOa6FeAzHBVGAAf
- mVDkUqbQmobGZGObNFCkeDwRFtI7AoFYNHnHgCZ48lxmWX1YfsHVH/h5kZzBL3J97E5O
- Ht5G/so4nfcYZb7Z8AaXJtffW6P93ULyfGO0M6VCy1+zOvzCgNP6Sw/QYqPiYQ+W51/d
- q66xEKMB9gKKt04i7kIHv5f3qQzcifQfpJMzhQ5OnWktppypwR4e+T0Y+tc/XDLD2ZPZ 1Q== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k9vta49h6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Oct 2022 15:11:26 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29IEpaNG030321;
-        Tue, 18 Oct 2022 15:11:23 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3k7m4jc6uv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Oct 2022 15:11:23 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29IFBrwO53084652
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Oct 2022 15:11:53 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE090A4057;
-        Tue, 18 Oct 2022 15:11:20 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA17CA4051;
-        Tue, 18 Oct 2022 15:11:20 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 18 Oct 2022 15:11:20 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 25651)
-        id 88EB6E0133; Tue, 18 Oct 2022 17:11:20 +0200 (CEST)
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-To:     dxu@dxuuu.xyz
-Cc:     bpf@vger.kernel.org, jolsa@kernel.org, kuba@kernel.org,
-        martin.lau@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: WARN: multiple IDs found for 'nf_conn': 92168, 117897 - using 92168
-Date:   Tue, 18 Oct 2022 17:11:20 +0200
-Message-Id: <20221018151120.1435085-1-borntraeger@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221004144603.obymbke3oarhgnnz@kashmir.localdomain>
-References: <20221004144603.obymbke3oarhgnnz@kashmir.localdomain>
+        Tue, 18 Oct 2022 11:14:43 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CE01F9C6;
+        Tue, 18 Oct 2022 08:14:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666106080; x=1697642080;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XIk8rnYCV/xKkm4yWKJej0Ef26WangurQvbBJaJZ7xU=;
+  b=fberNBkpm+1TKQVfrlAkRQPp5FjDvFdtX0MXLRjqFUWrXaSQvwa1zaEn
+   97mN32b1LM1xkcBMidwhClZdlzD7gGI4T2oe7XWiwhhUUCFQMzOfUk/ld
+   1ExkmXkFDx/wLZ9YL+JSbOPJIPA2gNOEh3dUneygpfcX2KkR0+GpGCZBF
+   QE7PXXJx361zUHl6q73Hs6f9hhvNjkmT2dIjeSyWWTsCjRHR5QEToMxdG
+   oveo632HZ4mpjF2GjOZxw1qa734YMyBT0YlYX7mjYwhkdF8lHLJpNOV5v
+   LpYrNJgQoFOCPDhYrkOXWLvXn6Tr0Rb5cZyoz8roDGznWfNVFu18prgPS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332681421"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="332681421"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 08:12:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="628760333"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="628760333"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 18 Oct 2022 08:12:04 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5C446B9; Tue, 18 Oct 2022 18:12:25 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/1] pinctrl: cy8c95x0: Don't use cy8c95x0_set_mode() twice
+Date:   Tue, 18 Oct 2022 18:12:23 +0300
+Message-Id: <20221018151223.80846-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YMmqkhJWn9SFomlgZwi4HGP7esy4hDG8
-X-Proofpoint-GUID: YMmqkhJWn9SFomlgZwi4HGP7esy4hDG8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-18_05,2022-10-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxlogscore=745 impostorscore=0 malwarescore=0 mlxscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 suspectscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210180086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,9 +62,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-chiming in. I also see that on s390x with 6.1-rc.
+Instead, call it once in cy8c95x0_pinmux_mode() and if selector is 0,
+shortcut the flow by returning 0 immediately.
 
-latest greates pahole does seem to fix this for me on s390 with gcc, but 
-with clang I still see this.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/pinctrl-cy8c95x0.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Christian
+diff --git a/drivers/pinctrl/pinctrl-cy8c95x0.c b/drivers/pinctrl/pinctrl-cy8c95x0.c
+index b44b36be54b3..ee753e080481 100644
+--- a/drivers/pinctrl/pinctrl-cy8c95x0.c
++++ b/drivers/pinctrl/pinctrl-cy8c95x0.c
+@@ -1107,13 +1107,13 @@ static int cy8c95x0_pinmux_mode(struct cy8c95x0_pinctrl *chip,
+ 	u8 bit = cypress_get_pin_mask(chip, group);
+ 	int ret;
+ 
+-	if (selector == 0)
+-		return cy8c95x0_set_mode(chip, group, false);
+-
+-	ret = cy8c95x0_set_mode(chip, group, true);
++	ret = cy8c95x0_set_mode(chip, group, selector);
+ 	if (ret < 0)
+ 		return ret;
+ 
++	if (selector == 0)
++		return 0;
++
+ 	/* Set direction to output & set output to 1 so that PWM can work */
+ 	ret = regmap_write_bits(chip->regmap, CY8C95X0_DIRECTION, bit, bit);
+ 	if (ret < 0)
+-- 
+2.35.1
+
