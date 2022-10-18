@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 026426034B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F8E6034C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiJRVPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S230382AbiJRVQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiJRVPq (ORCPT
+        with ESMTP id S230308AbiJRVPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:15:46 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B838E45D;
-        Tue, 18 Oct 2022 14:15:45 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29ILFc31079168;
-        Tue, 18 Oct 2022 16:15:38 -0500
+        Tue, 18 Oct 2022 17:15:53 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B259DFA7;
+        Tue, 18 Oct 2022 14:15:52 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29ILFdm5098744;
+        Tue, 18 Oct 2022 16:15:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666127738;
-        bh=l/VEWyQzjcF+Wb99yTd9C4vF2iabN6mgdcsbabH1d0g=;
+        s=ti-com-17Q1; t=1666127739;
+        bh=ynKL0Sd3SS9FgVBdB3JB/48+L76XQNXQPeXcaOoNpdw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=xrQZDdxehADB3U2zoVrnq7i7sQEbYX40x1vy5uh+0pWaQi4mIcI899S4j1UCZ+a1t
-         yrXiYnC/a/y5XOK/BeY3YadyXtbJHAKTohbAIay5eBErEFcpFFulwa1LKHfnu8r2Jk
-         LHbC6280HQiRI53GnS22ympvdNMs1x7+xjBByPxQ=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29ILFc5I014804
+        b=aYO023PxsaQgBV9jMNwnxfY8lGklr2Ur44LtCIKRPMFOWIV1VOZlnRKfK2uR3NTZJ
+         ZJ+FpBuqBdULR2+MEJhIqFBeyaPS4OdJ2LmYuehuqbzsLwP2QDvjwIEN5UNEkx9Br/
+         bjYNnXHkaJ/mvF9pQdZXxEeK3RfiIoB/KpPUvICA=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29ILFdVZ005850
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Oct 2022 16:15:38 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 18 Oct 2022 16:15:39 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 18
  Oct 2022 16:15:38 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
  Frontend Transport; Tue, 18 Oct 2022 16:15:38 -0500
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29ILFXoH014456;
-        Tue, 18 Oct 2022 16:15:37 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29ILFXoI014456;
+        Tue, 18 Oct 2022 16:15:38 -0500
 From:   Andrew Davis <afd@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
@@ -49,9 +49,9 @@ To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Andrew Davis <afd@ti.com>
-Subject: [PATCH 07/10] arm64: dts: ti: k3-am62: Enable MDIO nodes at the board level
-Date:   Tue, 18 Oct 2022 16:15:30 -0500
-Message-ID: <20221018211533.21335-8-afd@ti.com>
+Subject: [PATCH 08/10] arm64: dts: ti: k3-am62: Enable MCAN nodes at the board level
+Date:   Tue, 18 Oct 2022 16:15:31 -0500
+Message-ID: <20221018211533.21335-9-afd@ti.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221018211533.21335-1-afd@ti.com>
 References: <20221018211533.21335-1-afd@ti.com>
@@ -68,45 +68,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MDIO nodes defined in the top-level AM62x SoC dtsi files are incomplete
-and will not be functional unless they are extended with a pinmux.
+MCAN nodes defined in the top-level AM62x SoC dtsi files are incomplete
+and will not be functional unless they are extended with pinmux
+information.
 
-As the attached PHY is only known about at the board integration level,
-these nodes should only be enabled when provided with this information.
+As the pinmux is only known at the board integration level, these
+nodes should only be enabled when provided with this information.
 
-Disable the MDIO nodes in the dtsi files and only enable the ones that
+Disable the MCAN nodes in the dtsi files and only enable the ones that
 are actually pinned out on a given board.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 1 +
- arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 1 +
- 2 files changed, 2 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 4 ----
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-index a580867e68b2..5169f77cd37a 100644
+index 5169f77cd37a..43eebff429ab 100644
 --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
 +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-@@ -534,6 +534,7 @@ cpsw3g_mdio: mdio@f00 {
- 			clocks = <&k3_clks 13 0>;
- 			clock-names = "fck";
- 			bus_freq = <1000000>;
-+			status = "disabled";
- 		};
+@@ -607,6 +607,7 @@ main_mcan0: can@20701000 {
+ 			     <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>;
+ 		interrupt-names = "int0", "int1";
+ 		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
++		status = "disabled";
+ 	};
  
- 		cpts@3d000 {
+ 	epwm0: pwm@23000000 {
 diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 318ec805ff54..b8938eb9c55a 100644
+index b8938eb9c55a..b6d53366ec50 100644
 --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
 +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -368,6 +368,7 @@ &cpsw_port2 {
+@@ -452,7 +452,3 @@ partition@3fc0000 {
+ 		};
+ 	};
  };
- 
- &cpsw3g_mdio {
-+	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_mdio1_pins_default>;
- 
+-
+-&main_mcan0 {
+-	status = "disabled";
+-};
 -- 
 2.37.3
 
