@@ -2,134 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8321B602C5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F394602C58
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiJRNF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S229995AbiJRNFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiJRNFv (ORCPT
+        with ESMTP id S230177AbiJRNFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:05:51 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 062DBC5895;
-        Tue, 18 Oct 2022 06:05:46 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxzNippE5jdG0AAA--.2548S3;
-        Tue, 18 Oct 2022 21:05:45 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbuCipE5j_LMAAA--.2960S2;
-        Tue, 18 Oct 2022 21:05:44 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Tue, 18 Oct 2022 09:05:34 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A7FC4D90
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:05:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id d6so22357192lfs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xgD9kZURxSV2+Jxzl+l3QUkumq48W2A38D+vEtiJ1Rc=;
+        b=BR0V+6uNZn/HO6b3BiLjY69G/W/m65ZgIp+zLnD98J/oBPW87eSoIIilOP6LKeh3lH
+         MgH7eZWuPIqhy0v1wJyxx4owSEVLRJaHe/229RwaAbAc6coo8uNwfgjVUcPQzWw6CLL1
+         VqLffgVudxbPZFBLVtQI6r7B35UFNBMVox2K+JSSScLQhcf5nLgALa3RfW44hIpJDT+h
+         3HU1asjDS9oskPcN+6PQpa5gz8bRlPa6cS6VY6j8yBtgHre8w5ywLmJuT+wZhUVcbZFc
+         3q9qfonK2pn2xzFJbCaHTNRBJ942ajnUvZTlsmtZHcfD4kn/Xf0hTx3JJfyptByXh7hi
+         +hGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xgD9kZURxSV2+Jxzl+l3QUkumq48W2A38D+vEtiJ1Rc=;
+        b=ote6zHoBlUorxwZUnsVlNtZbQ5DOsgI8pz4BMti8BRpSbmah4GdTNQU/pF1HoCC0DO
+         OZEIVM4hxyQCZzSRr/vGo9tCgBDMJG+aDEUem1W3gFqYuwMfn1AdtwXs/nb98OeGMipA
+         PTwodoSsLrRd9BejHJ9IOR8jU+9Zzy0zNKzBE7xv3zReI0Wo9P42q6UhPduQ88AUPeQx
+         NB71/wshaBxybyTPkd3xOJoexAKchCWh/aiTxd9HSxhNUYW/wEe2uyrC+CIT0HsOZnRy
+         LD+P4tnMyDV8L6S2zyUbi1xMz23/RcsD1wjxApEuWz+spvNlz/TlOShodGiK93fmmjRn
+         6s3g==
+X-Gm-Message-State: ACrzQf0/+3iXJ1CR+yh59ORtUP9Orw9tiWRnRmVEefuufaCzuPJtY2oh
+        i+bJOTqcGz3nIzwQIUY7ttip/g==
+X-Google-Smtp-Source: AMsMyM6cSxZHtfiUXjJkcPdZwXMrh4R2F6KBhxzZQtIK46bRK4C4DOqqSINnIf8MTi9aV3jj9iFtJQ==
+X-Received: by 2002:a19:f80c:0:b0:4a4:5923:5174 with SMTP id a12-20020a19f80c000000b004a459235174mr1016570lff.151.1666098330548;
+        Tue, 18 Oct 2022 06:05:30 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id v18-20020a2ea452000000b0026ab83298d6sm1976580ljn.77.2022.10.18.06.05.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 06:05:30 -0700 (PDT)
+Message-ID: <2cf670a0-59bd-31b0-8816-496c1e13165d@linaro.org>
+Date:   Tue, 18 Oct 2022 16:05:29 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 13/15] phy: qcom-qmp-pcie: add support for pipediv2 clock
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v1 1/3] clk: loongson2: add clock dt-bindings include file
-Date:   Tue, 18 Oct 2022 21:05:29 +0800
-Message-Id: <20221018130531.301-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxbuCipE5j_LMAAA--.2960S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7AF4UWr4rXFWfKrWUJw13Arb_yoW8uw48pr
-        s7CFWfKry7KF4I9wsYgFy3Kr13uw4xCw17AF47uF1UAFn7Jw18JrsF9F1fAFZrXF4kCFyx
-        Z3Z7uw409a9rWw7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        CVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8Ta0PUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221017145328.22090-1-johan+linaro@kernel.org>
+ <20221017145328.22090-14-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221017145328.22090-14-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This file defines all loongson2 soc clock indexes, it should be
-included in the device tree in which there's device using the
-clocks.
+On 17/10/2022 17:53, Johan Hovold wrote:
+> Some QMP PHYs have a second fixed-divider pipe clock that needs to be
+> enabled along with the pipe clock.
+> 
+> Add support for an optional "pipediv2" clock.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 42 ++++++++++++++++++++----
+>   1 file changed, 36 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> index 9c8e009033f1..c1d74c06fad1 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> @@ -1379,7 +1379,9 @@ struct qmp_pcie {
+>   	void __iomem *rx2;
+>   
+>   	struct clk *pipe_clk;
+> +	struct clk *pipediv2_clk;
+>   	struct clk_bulk_data *clks;
+> +
+>   	struct reset_control_bulk_data *resets;
+>   	struct regulator_bulk_data *vregs;
+>   
+> @@ -1902,6 +1904,36 @@ static int qmp_pcie_exit(struct phy *phy)
+>   	return 0;
+>   }
+>   
+> +static int pipe_clk_enable(struct qmp_pcie *qmp)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(qmp->pipe_clk);
+> +	if (ret) {
+> +		dev_err(qmp->dev, "failed to enable pipe clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(qmp->pipediv2_clk);
+> +	if (ret) {
+> +		dev_err(qmp->dev, "failed to enable pipediv2 clock: %d\n", ret);
+> +		goto err_disable_pipe_clk;
+> +	}
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- MAINTAINERS                                 |  6 +++++
- include/dt-bindings/clock/loongson2-clock.h | 29 +++++++++++++++++++++
- 2 files changed, 35 insertions(+)
- create mode 100644 include/dt-bindings/clock/loongson2-clock.h
+Do they have to be enabled in sequence? If not, I'd use a bulk clocks 
+here for the pipe clocks. While it can look like an overkill, it would 
+be a safe net for the possible future changes, which might include 
+additional clocks.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a162b6fba6fe..3db469f51d74 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11914,6 +11914,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
- F:	drivers/clocksource/loongson2_hpet.c
- 
-+LOONGSON2 SOC SERIES CLOCK DRIVER
-+M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-+L:	linux-clk@vger.kernel.org
-+S:	Maintained
-+F:	include/dt-bindings/clock/loongson2-clock.h
-+
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
- M:	Sathya Prakash <sathya.prakash@broadcom.com>
- M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-diff --git a/include/dt-bindings/clock/loongson2-clock.h b/include/dt-bindings/clock/loongson2-clock.h
-new file mode 100644
-index 000000000000..23806408fe49
---- /dev/null
-+++ b/include/dt-bindings/clock/loongson2-clock.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
-+ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#ifndef __DT_BINDINGS_CLOCK_LOONGSON2_H
-+#define __DT_BINDINGS_CLOCK_LOONGSON2_H
-+
-+#define	LOONGSON2_REFCLK_100M				0
-+#define	LOONGSON2_NODE_PLL				1
-+#define	LOONGSON2_DDR_PLL				2
-+#define	LOONGSON2_DC_PLL				3
-+#define	LOONGSON2_PIX0_PLL				4
-+#define	LOONGSON2_PIX1_PLL				5
-+#define	LOONGSON2_NODE_CLK				6
-+#define	LOONGSON2_HDA_CLK				7
-+#define	LOONGSON2_GPU_CLK				8
-+#define	LOONGSON2_DDR_CLK				9
-+#define	LOONGSON2_GMAC_CLK				10
-+#define	LOONGSON2_DC_CLK				11
-+#define	LOONGSON2_APB_CLK				12
-+#define	LOONGSON2_USB_CLK				13
-+#define	LOONGSON2_SATA_CLK				14
-+#define	LOONGSON2_PIX0_CLK				15
-+#define	LOONGSON2_PIX1_CLK				16
-+#define	LOONGSON2_CLK_END				17
-+
-+#endif
+> +
+> +	return 0;
+> +
+> +err_disable_pipe_clk:
+> +	clk_disable_unprepare(qmp->pipe_clk);
+> +
+> +	return ret;
+> +}
+> +
+> +static void pipe_clk_disable(struct qmp_pcie *qmp)
+> +{
+> +	clk_disable_unprepare(qmp->pipediv2_clk);
+> +	clk_disable_unprepare(qmp->pipe_clk);
+> +}
+> +
+>   static int qmp_pcie_power_on(struct phy *phy)
+>   {
+>   	struct qmp_pcie *qmp = phy_get_drvdata(phy);
+> @@ -1923,11 +1955,9 @@ static int qmp_pcie_power_on(struct phy *phy)
+>   	qmp_pcie_init_registers(qmp, &cfg->tables);
+>   	qmp_pcie_init_registers(qmp, mode_tables);
+>   
+> -	ret = clk_prepare_enable(qmp->pipe_clk);
+> -	if (ret) {
+> -		dev_err(qmp->dev, "pipe_clk enable failed err=%d\n", ret);
+> +	ret = pipe_clk_enable(qmp);
+> +	if (ret)
+>   		return ret;
+> -	}
+>   
+>   	/* Pull PHY out of reset state */
+>   	qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+> @@ -1950,7 +1980,7 @@ static int qmp_pcie_power_on(struct phy *phy)
+>   	return 0;
+>   
+>   err_disable_pipe_clk:
+> -	clk_disable_unprepare(qmp->pipe_clk);
+> +	pipe_clk_disable(qmp);
+>   
+>   	return ret;
+>   }
+> @@ -1960,7 +1990,7 @@ static int qmp_pcie_power_off(struct phy *phy)
+>   	struct qmp_pcie *qmp = phy_get_drvdata(phy);
+>   	const struct qmp_phy_cfg *cfg = qmp->cfg;
+>   
+> -	clk_disable_unprepare(qmp->pipe_clk);
+> +	pipe_clk_disable(qmp);
+>   
+>   	/* PHY reset */
+>   	qphy_setbits(qmp->pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+
 -- 
-2.20.1
+With best wishes
+Dmitry
 
