@@ -2,110 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958A7603087
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B1060308B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiJRQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S230337AbiJRQJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiJRQJE (ORCPT
+        with ESMTP id S229852AbiJRQJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:09:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B53AA3CD;
-        Tue, 18 Oct 2022 09:09:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 18 Oct 2022 12:09:44 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598BA22BFD;
+        Tue, 18 Oct 2022 09:09:40 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 349dc4d4a828391b; Tue, 18 Oct 2022 18:09:37 +0200
+Received: from kreacher.localnet (unknown [213.134.183.104])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97716615FF;
-        Tue, 18 Oct 2022 16:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B37D0C433C1;
-        Tue, 18 Oct 2022 16:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666109342;
-        bh=GM6MSYEr926mJXjI6RLujQbUK1lPFH8a6M91n4+Nf+0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qKKvld+uoC2djWFzFuyPcWZBEda3UQIIR3gfS2YnjIncpcRBsEPANnOWC+F2Jhe7R
-         YUM5Ex1zpgY79zIW5DEApHHdi5Ipq4UH+l9ipp5vfII1XpkPu/Rc5VilAc2r3QtX62
-         lew5v0kCCQsHMInMtaQmhXUmUe3mG2yuhP2EmBt83O+QLO/Jowg9KtQ4u87F4gmGL8
-         tXWR2oArseCaV9qzf+h/0SBBnUlBntPf2YH2tH4/vaZg3nBSoMPOykvLv9LSqfxkm3
-         3Q3rZSxWclvn6phWaI8dOHxB2M6JaTri71EJjRVgySreTCafAwBIjOvq5Lipga64l/
-         fo0LEJWxzpfSA==
-Date:   Tue, 18 Oct 2022 11:08:59 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH v3 2/2] PCI: qcom: Add support for modular builds
-Message-ID: <20221018160859.GA3805344@bhelgaas>
+        by v370.home.net.pl (Postfix) with ESMTPSA id BA45666695D;
+        Tue, 18 Oct 2022 18:09:36 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
+Date:   Tue, 18 Oct 2022 18:09:31 +0200
+Message-ID: <5887691.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y07B/cHkyvw3M4NV@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.104
+X-CLIENT-HOSTNAME: 213.134.183.104
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddgieejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddukeefrddutdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekfedruddtgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepuddupdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
+ thhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmghhorhhmrghnsehtvggthhhsihhnghhulhgrrhhithihrdhnvghtpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehtohguugdrvgdrsghrrghnughtsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 05:10:53PM +0200, Johan Hovold wrote:
-> On Mon, Oct 17, 2022 at 12:34:22PM -0500, Bjorn Helgaas wrote:
-> > On Mon, Oct 17, 2022 at 01:47:05PM +0200, Johan Hovold wrote:
-> > > Allow the Qualcomm PCIe controller driver to be built as a module, which
-> > > is useful for multi-platform kernels as well as during development.
-> > 
-> > There are two different goals here, and there's no real reason to
-> > bundle them together:
-> > 
-> >   1) Make qcom a loadable module.  This is a hard requirement so
-> >      multi-platform kernels don't need to build in all drivers
-> >      statically.
-> > 
-> >   2) Make qcom unloadable.  This is a high want, possibly even a
-> >      requirement for developers, but is not really a big issue for
-> >      users.
-> > 
-> > There are different changes required: 1) requires the Kconfig change;
-> > 2) requires .remove() to be implemented.  Since there's no requirement
-> > that these be done together, let's split them into separate patches.
-> > 
-> > Then we can make sure that at least 1) gets done, and if for any
-> > reason 2) isn't safe or breaks something, we can at least bisect and
-> > if necessary revert it without losing 1).
-> 
-> Implementing 1) in itself requires more than simply splitting this
-> patch. And I don't think we should be making life harder for developers,
-> as well as users assisting during debugging, by going in that direction.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-If you're saying this patch can't be split, can you elaborate on the
-details of *why* it can't be split?
+Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
+ordering issue") overlooked the fact that cmos_do_probe() depended
+on the preparations carried out by cmos_wake_setup() and the wake
+alarm stopped working after the ordering of them had been changed.
 
-> We have tons of modules in the kernel and very few that cannot be
-> unloaded. Anyone who doesn't trust root to not unload modules can
-> always disable unloading completely using CONFIG_MODULE_UNLOAD.
+Address this by partially reverting commit 4919d3eb2ec0 so that
+cmos_wake_setup() is called before cmos_do_probe() again and moving
+the rtc_wake_setup() invocation from cmos_wake_setup() directly to the
+callers of cmos_do_probe() where it will happen after a successful
+completion of the latter.
 
-This is all true, but IIUC, the issue is about unloading IRQ
-controller drivers, and this doesn't address that.  I don't have a
-clear understanding of the issue, and it would be nice if a patch that
-specifically added unloadability could elaborate on that.  Then we can
-decide that "yes, this is a risk, and we're willing to accept it." An
-argument that "tons of modules do this" totally avoids the issues of
-this particular case.
+Fixes: 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration ordering issue")
+Reported-by: Zhang Rui <rui.zhang@intel.com>
+Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-Bjorn
+@Bjorn: This is the minimum fix.  Folding cmos_wake_setup() into cmos_do_probe()
+requires changes that are a bit intrusive for post-rc1, but I will do that later.
+
+---
+ drivers/rtc/rtc-cmos.c |   11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+Index: linux-pm/drivers/rtc/rtc-cmos.c
+===================================================================
+--- linux-pm.orig/drivers/rtc/rtc-cmos.c
++++ linux-pm/drivers/rtc/rtc-cmos.c
+@@ -1233,6 +1233,9 @@ static u32 rtc_handler(void *context)
+ 
+ static inline void rtc_wake_setup(struct device *dev)
+ {
++	if (acpi_disabled)
++		return;
++
+ 	acpi_install_fixed_event_handler(ACPI_EVENT_RTC, rtc_handler, dev);
+ 	/*
+ 	 * After the RTC handler is installed, the Fixed_RTC event should
+@@ -1286,7 +1289,6 @@ static void cmos_wake_setup(struct devic
+ 
+ 	use_acpi_alarm_quirks();
+ 
+-	rtc_wake_setup(dev);
+ 	acpi_rtc_info.wake_on = rtc_wake_on;
+ 	acpi_rtc_info.wake_off = rtc_wake_off;
+ 
+@@ -1354,6 +1356,8 @@ static int cmos_pnp_probe(struct pnp_dev
+ {
+ 	int irq, ret;
+ 
++	cmos_wake_setup(&pnp->dev);
++
+ 	if (pnp_port_start(pnp, 0) == 0x70 && !pnp_irq_valid(pnp, 0)) {
+ 		irq = 0;
+ #ifdef CONFIG_X86
+@@ -1372,7 +1376,7 @@ static int cmos_pnp_probe(struct pnp_dev
+ 	if (ret)
+ 		return ret;
+ 
+-	cmos_wake_setup(&pnp->dev);
++	rtc_wake_setup(&pnp->dev);
+ 
+ 	return 0;
+ }
+@@ -1461,6 +1465,7 @@ static int __init cmos_platform_probe(st
+ 	int irq, ret;
+ 
+ 	cmos_of_init(pdev);
++	cmos_wake_setup(&pdev->dev);
+ 
+ 	if (RTC_IOMAPPED)
+ 		resource = platform_get_resource(pdev, IORESOURCE_IO, 0);
+@@ -1474,7 +1479,7 @@ static int __init cmos_platform_probe(st
+ 	if (ret)
+ 		return ret;
+ 
+-	cmos_wake_setup(&pdev->dev);
++	rtc_wake_setup(&pdev->dev);
+ 
+ 	return 0;
+ }
+
+
+
