@@ -2,116 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E60601FE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B718601FE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiJRAwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
+        id S230448AbiJRAwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJRAvw (ORCPT
+        with ESMTP id S230525AbiJRAwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:51:52 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7C38980C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:51:48 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id p127so13369410oih.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=++YEm2X3VpuQkbISsUK8GFhQZpmQpyZfoXHzrDKbz1o=;
-        b=FVgkFmaH5sGeiw8duNFK9UsXWLj8kC1JBekA5Cj6dQZ1ludhryEMsAr6RzjdsK5HV2
-         PBV3PUPaSsPwxpRgdbFMXYTgrO15rMM5PlPso9FoK6GNHKdSOFKfQFQsMmpW8r2rf+hA
-         6ARbRWqT4FdIeeukuMTRCcYIm+TxyI1meXLyJP2UQZoK98htSDYda2KQ4xH/RhN+sA7q
-         e/yYucYRrzQC7khDZW+2yu/va+tiiIsVYIYqmxDukkfZ6p4/a9JWrCN1raoepb2outp6
-         Glts4V3KlsDCNJdp4V53rFKgio+URBj+osxPG6/Ciwr9m6F3VN9KHkfljkOrq8VklHox
-         4khA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=++YEm2X3VpuQkbISsUK8GFhQZpmQpyZfoXHzrDKbz1o=;
-        b=7giIfGPHGOfC7hCnZVBK2aEdW0aXE1GG9MqD+JnD+ray/NHuzT0fDi6Lt40iHWMovy
-         l5AjOq0Zg3a0iv/jfp4C6gkwDYUc3NbJSxPti0B6QiexPm8rUojEVjyo73nLpna6+Sby
-         cV0WKZdXqjM+knBPPibXZi4P6JsCWqcA0iQ7mshzoSboLbDnHZiZexUOVXa3/AO9tqXc
-         5wnDKQH7GgQvZlraR7KhLQCzfKetpPf0gJlc6UcMGyVr737E/5eGAwDSVn39ZqRpueJ6
-         PVE7w54W8DoIdRgfnetzfmQCODBfodYJLOpX0HEULg1zAwLsxgMHpKlFu472kaMhiZgc
-         9BZA==
-X-Gm-Message-State: ACrzQf2hTTq9yz/iYCIBySj6XcxdO2jDQtBiarSN7kwIBek8AZTT2g1/
-        0DT65DT+9ndr/c8CIme6Sq2YGQ==
-X-Google-Smtp-Source: AMsMyM4CniTbhUJ1/68vEI9m58DAMK115zJlcpKJ7av3jsu3SBoMHOKICrjw9TiACHsFIxsIysePwQ==
-X-Received: by 2002:a05:6808:30a4:b0:354:92c2:3978 with SMTP id bl36-20020a05680830a400b0035492c23978mr14461123oib.212.1666054307691;
-        Mon, 17 Oct 2022 17:51:47 -0700 (PDT)
-Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id v24-20020a4ae058000000b00480ba1434a6sm3701639oos.34.2022.10.17.17.51.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 17:51:47 -0700 (PDT)
-Message-ID: <bc96324f-c560-3baf-a771-beef6955a537@kali.org>
-Date:   Mon, 17 Oct 2022 19:51:44 -0500
+        Mon, 17 Oct 2022 20:52:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE6D82750
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666054324;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Lch+0lg3n7TS+igKmtmFC8qqNbSDuMXa3xxdCzWFQyQ=;
+        b=A+Gautvxoy4si5VMjhp//Er4IQ7S9l6vMbTVJi9uek568JoxjNq2JUjtw/eKo97oR1zpO7
+        VlH7+WirH5eh+KyqCDjmZG0ld+rXw6NqDgmQ5EGIIXfEZS/rSUFrZmphfMHmAcRADPHz/1
+        6m3840f1Gx0WlAnXHWg35C4elnTvhoY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-376-b0g3CsSxPWelPq238NY-PQ-1; Mon, 17 Oct 2022 20:51:58 -0400
+X-MC-Unique: b0g3CsSxPWelPq238NY-PQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9945E38012C3;
+        Tue, 18 Oct 2022 00:51:57 +0000 (UTC)
+Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19C0B401D59;
+        Tue, 18 Oct 2022 00:51:52 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
+ guest page size
+From:   Gavin Shan <gshan@redhat.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
+        zhenyzha@redhat.com, shan.gavin@gmail.com, kvmarm@lists.linux.dev,
+        pbonzini@redhat.com, shuah@kernel.org,
+        kvmarm@lists.cs.columbia.edu, ajones@ventanamicro.com
+References: <20221014071914.227134-1-gshan@redhat.com>
+ <20221014071914.227134-5-gshan@redhat.com>
+ <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
+ <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
+Message-ID: <da2b7db0-509a-c9e0-c36b-6487a265a779@redhat.com>
+Date:   Tue, 18 Oct 2022 08:51:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v2 2/2] clk: qcom: Add SC8280XP display clock controller
+In-Reply-To: <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220926203800.16771-1-quic_bjorande@quicinc.com>
- <20220926203800.16771-3-quic_bjorande@quicinc.com>
- <a8bf3887-b4fb-1f60-14e4-998f71b84181@kali.org>
-In-Reply-To: <a8bf3887-b4fb-1f60-14e4-998f71b84181@kali.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Round 2 because the patch is too long for the mailing lists, I hope it 
-is okay to strip out a bit of the patch
+On 10/18/22 8:46 AM, Gavin Shan wrote:
+> On 10/18/22 5:31 AM, Maciej S. Szmigiero wrote:
+>> On 14.10.2022 09:19, Gavin Shan wrote:
+>>> The test case is obviously broken on aarch64 because non-4KB guest
+>>> page size is supported. The guest page size on aarch64 could be 4KB,
+>>> 16KB or 64KB.
+>>>
+>>> This supports variable guest page size, mostly for aarch64.
+>>>
+>>>    - The host determines the guest page size when virtual machine is
+>>>      created. The value is also passed to guest through the synchronization
+>>>      area.
+>>>
+>>>    - The number of guest pages are unknown until the virtual machine
+>>>      is to be created. So all the related macros are dropped. Instead,
+>>>      their values are dynamically calculated based on the guest page
+>>>      size.
+>>>
+>>>    - The static checks on memory sizes and pages becomes dependent
+>>>      on guest page size, which is unknown until the virtual machine
+>>>      is about to be created. So all the static checks are converted
+>>>      to dynamic checks, done in check_memory_sizes().
+>>>
+>>>    - As the address passed to madvise() should be aligned to host page,
+>>>      the size of page chunk is automatically selected, other than one
+>>>      page.
+>>>
+>>>    - All other changes included in this patch are almost mechanical
+>>>      replacing '4096' with 'guest_page_size'.
+>>>
+>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>>> ---
+>>>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
+>>>   1 file changed, 115 insertions(+), 76 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+>>> index d5aa9148f96f..d587bd952ff9 100644
+>>> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
+>>> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+>>> @@ -26,14 +26,11 @@
+>>>   #include <processor.h>
+>>>   #define MEM_SIZE        ((512U << 20) + 4096)
+>>> -#define MEM_SIZE_PAGES        (MEM_SIZE / 4096)
+>>>   #define MEM_GPA        0x10000000UL
+>>>   #define MEM_AUX_GPA        MEM_GPA
+>>>   #define MEM_SYNC_GPA        MEM_AUX_GPA
+>>>   #define MEM_TEST_GPA        (MEM_AUX_GPA + 4096)
+>>>   #define MEM_TEST_SIZE        (MEM_SIZE - 4096)
+>>> -static_assert(MEM_SIZE % 4096 == 0, "invalid mem size");
+>>> -static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
+>>>   /*
+>>>    * 32 MiB is max size that gets well over 100 iterations on 509 slots.
+>>> @@ -42,29 +39,16 @@ static_assert(MEM_TEST_SIZE % 4096 == 0, "invalid mem test size");
+>>>    * limited resolution).
+>>>    */
+>>>   #define MEM_SIZE_MAP        ((32U << 20) + 4096)
+>>> -#define MEM_SIZE_MAP_PAGES    (MEM_SIZE_MAP / 4096)
+>>>   #define MEM_TEST_MAP_SIZE    (MEM_SIZE_MAP - 4096)
+>>> -#define MEM_TEST_MAP_SIZE_PAGES (MEM_TEST_MAP_SIZE / 4096)
+>>> -static_assert(MEM_SIZE_MAP % 4096 == 0, "invalid map test region size");
+>>> -static_assert(MEM_TEST_MAP_SIZE % 4096 == 0, "invalid map test region size");
+>>> -static_assert(MEM_TEST_MAP_SIZE_PAGES % 2 == 0, "invalid map test region size");
+>>> -static_assert(MEM_TEST_MAP_SIZE_PAGES > 2, "invalid map test region size");
+>>>   /*
+>>>    * 128 MiB is min size that fills 32k slots with at least one page in each
+>>>    * while at the same time gets 100+ iterations in such test
+>>> + *
+>>> + * 2 MiB chunk size like a typical huge page
+>>>    */
+>>>   #define MEM_TEST_UNMAP_SIZE        (128U << 20)
+>>> -#define MEM_TEST_UNMAP_SIZE_PAGES    (MEM_TEST_UNMAP_SIZE / 4096)
+>>> -/* 2 MiB chunk size like a typical huge page */
+>>> -#define MEM_TEST_UNMAP_CHUNK_PAGES    (2U << (20 - 12))
+>>> -static_assert(MEM_TEST_UNMAP_SIZE <= MEM_TEST_SIZE,
+>>> -          "invalid unmap test region size");
+>>> -static_assert(MEM_TEST_UNMAP_SIZE % 4096 == 0,
+>>> -          "invalid unmap test region size");
+>>> -static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+>>> -          (2 * MEM_TEST_UNMAP_CHUNK_PAGES) == 0,
+>>> -          "invalid unmap test region size");
+>>> +#define MEM_TEST_UNMAP_CHUNK_SIZE    (2U << 20)
+>>>   /*
+>>>    * For the move active test the middle of the test area is placed on
+>>> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+>>>    * for the total size of 25 pages.
+>>>    * Hence, the maximum size here is 50 pages.
+>>>    */
+>>> -#define MEM_TEST_MOVE_SIZE_PAGES    (50)
+>>> -#define MEM_TEST_MOVE_SIZE        (MEM_TEST_MOVE_SIZE_PAGES * 4096)
+>>> +#define MEM_TEST_MOVE_SIZE        0x32000
+>>
+>> The above number seems less readable than an explicit value of 50 pages.
+>>
+>> In addition to that, it's 50 pages only with 4k page size, so at least
+>> the comment above needs to be updated to reflect this fact.
+>>
+> 
+> Yeah, I will change the comments like below in next revision.
+> 
+>   /*
+>    * When running this test with 32k memslots, actually 32763 excluding
+>    * the reserved memory slot 0, the memory for each slot is 0x4000 bytes.
+>    * The last slot contains 0x19000 bytes memory. Hence, the maximum size
+>    * here is 0x32000 bytes.
+>    */
+> 
 
-On 10/17/22 6:09 PM, Steev Klimaszewski wrote:
-> Hi Bjorn,
->
-> On 9/26/22 3:38 PM, Bjorn Andersson wrote:
->> From: Bjorn Andersson <bjorn.andersson@linaro.org>
->>
->> The Qualcomm SC8280XP platform has two display clock controller
->> instances, add support for these. Duplication between the two
->> implementations is reduced by reusing any constant data between the two
->> sets of clock data.
->>
->> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->> ---
->>
->> Changes since v1:
->> - Lowercased hex numbers
->> - Changed "DISP CC 0" in error print, to work for second dispcc as well.
->>
->>   drivers/clk/qcom/Kconfig           |    9 +
->>   drivers/clk/qcom/Makefile          |    1 +
->>   drivers/clk/qcom/dispcc-sc8280xp.c | 3218 ++++++++++++++++++++++++++++
->>   3 files changed, 3228 insertions(+)
->>   create mode 100644 drivers/clk/qcom/dispcc-sc8280xp.c
->>
-Tested on Lenovo Thinkpad X13s
+I will replace those numbers with readable ones like below :)
 
-Tested-by: Steev Klimaszewski <steev@kali.org>
+/*
+  * When running this test with 32k memslots, actually 32763 excluding
+  * the reserved memory slot 0, the memory for each slot is 16KB. The
+  * last slot contains 100KB memory with the remaining 84KB. Hence,
+  * the maximum size is double of that (200KB)
+  */
+
+>>>   #define MEM_TEST_MOVE_GPA_DEST        (MEM_GPA + MEM_SIZE)
+>>>   static_assert(MEM_TEST_MOVE_SIZE <= MEM_TEST_SIZE,
+>>>             "invalid move test region size");
+>> (...)
+>>> @@ -242,33 +229,34 @@ static struct vm_data *alloc_vm(void)
+>>>   }
+>>>   static bool prepare_vm(struct vm_data *data, int nslots, uint64_t *maxslots,
+>>> -               void *guest_code, uint64_t mempages,
+>>> +               void *guest_code, uint64_t mem_size,
+>>>                  struct timespec *slot_runtime)
+>>>   {
+>>> -    uint64_t rempages;
+>>> +    uint64_t mempages, rempages;
+>>>       uint64_t guest_addr;
+>>> -    uint32_t slot;
+>>> +    uint32_t slot, guest_page_size;
+>>>       struct timespec tstart;
+>>>       struct sync_area *sync;
+>>> -    TEST_ASSERT(mempages > 1,
+>>> -            "Can't test without any memory");
+>>> +    guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
+>>> +    mempages = mem_size / guest_page_size;
+>>> +
+>>> +    data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
+>>> +    ucall_init(data->vm, NULL);
+>>>
+>>
+>> TEST_ASSERT(data->vm->page_size == guest_page_size, "Invalid VM page size")
+>> here would catch the case if someone accidentally modifies
+>> __vm_create_with_one_vcpu() to use other page size than specified for
+>> VM_MODE_DEFAULT.
+>>
+> 
+> Sure, it's not harmful at least.
+> 
+>>>       data->npages = mempages;
+>>> +    TEST_ASSERT(data->npages > 1, "Can't test without any memory");
+>>>       data->nslots = nslots;
+>>> -    data->pages_per_slot = mempages / data->nslots;
+>>> +    data->pages_per_slot = data->npages / data->nslots;
+>>>       if (!data->pages_per_slot) {
+>>> -        *maxslots = mempages + 1;
+>>> +        *maxslots = data->npages + 1;
+>>>           return false;
+>>>       }
+>>> -    rempages = mempages % data->nslots;
+>>> +    rempages = data->npages % data->nslots;
+>>>       data->hva_slots = malloc(sizeof(*data->hva_slots) * data->nslots);
+>>>       TEST_ASSERT(data->hva_slots, "malloc() fail");
+>>> -    data->vm = __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code);
+>>> -    ucall_init(data->vm, NULL);
+>>> -
+>>>       pr_info_v("Adding slots 1..%i, each slot with %"PRIu64" pages + %"PRIu64" extra pages last\n",
+>>>           data->nslots, data->pages_per_slot, rempages);
+>> (...)
+>>> @@ -856,6 +863,35 @@ static void help(char *name, struct test_args *targs)
+>>>           pr_info("%d: %s\n", ctr, tests[ctr].name);
+>>>   }
+>>> +static bool check_memory_sizes(void)
+>>> +{
+>>> +    uint32_t guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
+>>> +
+>>> +    if (MEM_SIZE % guest_page_size ||
+>>> +        MEM_TEST_SIZE % guest_page_size) {
+>>> +        pr_info("invalid MEM_SIZE or MEM_TEST_SIZE\n");
+>>> +        return false;
+>>> +    }
+>>> +
+>>> +    if (MEM_SIZE_MAP % guest_page_size        ||
+>>> +        MEM_TEST_MAP_SIZE % guest_page_size        ||
+>>> +        (MEM_TEST_MAP_SIZE / guest_page_size) <= 2    ||
+>>> +        (MEM_TEST_MAP_SIZE / guest_page_size) % 2) {
+>>> +        pr_info("invalid MEM_SIZE_MAP or MEM_TEST_MAP_SIZE\n");
+>>> +        return false;
+>>> +    }
+>>> +
+>>> +    if (MEM_TEST_UNMAP_SIZE > MEM_TEST_SIZE        ||
+>>> +        MEM_TEST_UNMAP_SIZE % guest_page_size    ||
+>>> +        (MEM_TEST_UNMAP_SIZE / guest_page_size) %
+>>> +        (MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size)) {
+>>
+>> This should be (MEM_TEST_UNMAP_SIZE / guest_page_size) % (2 * MEM_TEST_UNMAP_CHUNK_SIZE / guest_page_size))
+>> to match the old static_assert().
+>>
+> 
+> Nice catch! I will fix it up in next revision :)
+> 
+
+Thanks,
+Gavin
 
