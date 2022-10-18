@@ -2,85 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A4060341B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F6E603423
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiJRUls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 16:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        id S229491AbiJRUom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 16:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiJRUll (ORCPT
+        with ESMTP id S230026AbiJRUof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 16:41:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E3E58084;
-        Tue, 18 Oct 2022 13:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666125666; x=1697661666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=h4GeoGqkMQvfqFU2jQajYgDMnOjpIkPLpUI3afDMASg=;
-  b=mJ00N/Iv5n4FsrM4zuD3ZepkkY7fG+wR/JTD6B7cVAt5XVq2RMgIsXF8
-   Dziziy2JV4b7q5f4B4Gzwteqyzn8ddux8C2H2wmzD5zVLr5lAfJH9sxPr
-   SuA/sWVKo2FyRgcw6T+zRbHuA9t4SJBHR70dn12aXyNZbJ2Q32IAortEj
-   7eO9C6RO6+4H5vSwBEw+FzQKMFqlYdsVN9bsXfabPUpKHNs3Yzr7Vt/R1
-   fdTS2lkJ2B/jdO2SOJDXsQfvVuRvWJc+gVCXwT+vOAwoS8QRmXIl6u/7D
-   O2lABLfqZ4iBf3uRIfOAkZlonlbX4vxo7DUUFC+D0bj0e6Q7iBVA9hj9k
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="392533573"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="392533573"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 13:40:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="733840135"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="733840135"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Oct 2022 13:40:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oktOR-009Y1O-0H;
-        Tue, 18 Oct 2022 23:40:55 +0300
-Date:   Tue, 18 Oct 2022 23:40:54 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: Re: [PATCH] wifi: rt2x00: use explicitly signed type for clamping
-Message-ID: <Y08PVnsTw75sHfbg@smile.fi.intel.com>
-References: <202210190108.ESC3pc3D-lkp@intel.com>
- <20221018202734.140489-1-Jason@zx2c4.com>
+        Tue, 18 Oct 2022 16:44:35 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E422B1A223;
+        Tue, 18 Oct 2022 13:44:30 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IIw1ct022194;
+        Tue, 18 Oct 2022 20:44:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=mBcZKhQtPPk6nDupBGM0mwVz5W4ozyHmllOfvso8wEc=;
+ b=pFNV+1fP+71xlQgg5C3euqWXAsZa/VHo30i/+vSxT53PLw4QTsKXXx3RqoihYPi2PfAC
+ gUtKl5uS+TBPBcbyUfm6njRIPEONMq59fl53vo+cLUqJwmFDsFRzKoQpDkScNac5gTwH
+ bOMaowTikq3cl8cEXRS3dGRhPnDcucKjGHgxYjgUcLrbdM4zwnOL9GBbWMTsU/LdFVsB
+ IxS3VIwMk4IKtR/1JCqUL3V0jGJj42Ir55E8jCv6PB5OVDK0de09WixuS5BxGu74kVfv
+ OGNKx/BhJ/32sjk9CLLzdl12c5sfOlZ76A8Ili02LEGlJMK/giAmpeq0NRhU7F9GyeBW zQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9qwp1qr4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 20:44:18 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29IKiHdD025077
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 20:44:17 GMT
+Received: from quicinc.com (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 18 Oct
+ 2022 13:44:16 -0700
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [RESEND PATCH] remoteproc: sysmon: Make QMI message rules const
+Date:   Tue, 18 Oct 2022 13:44:08 -0700
+Message-ID: <20221018204408.13314-1-quic_jjohnson@quicinc.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220914234705.28405-3-quic_jjohnson@quicinc.com>
+References: <20220914234705.28405-3-quic_jjohnson@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018202734.140489-1-Jason@zx2c4.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: YY595TaBYfefQ5CjstgCcHlGi3iiJyqS
+X-Proofpoint-ORIG-GUID: YY595TaBYfefQ5CjstgCcHlGi3iiJyqS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-18_07,2022-10-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ phishscore=0 bulkscore=0 mlxlogscore=992 malwarescore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210180116
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:27:34PM -0600, Jason A. Donenfeld wrote:
-> On some platforms, `char` is unsigned, which makes casting -7 to char
-> overflow, which in turn makes the clamping operation bogus. Instead,
-> deal with an explicit `s8` type, so that the comparison is always
-> signed, and return an s8 result from the function as well. Note that
-> this function's result is assigned to a `short`, which is always signed.
+Commit ff6d365898d4 ("soc: qcom: qmi: use const for struct
+qmi_elem_info") allows QMI message encoding/decoding rules to be
+const, so do that for sysmon.
 
-Why not to use short? See my patch I just sent.
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Reviewed-by: Alex Elder <elder@linaro.org>
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+---
+This patch was last sent as part of the series:
+[PATCH v2 0/4] Make QMI message rules const
+https://lore.kernel.org/linux-arm-msm/20220914234705.28405-1-quic_jjohnson@quicinc.com/
 
+As
+
+[PATCH v2 2/4] remoteproc: sysmon: Make QMI message rules const
+https://lore.kernel.org/linux-arm-msm/20220914234705.28405-3-quic_jjohnson@quicinc.com/
+
+Since the individual patches in the series will land in separate
+trees, and since there are no dependencies between them, they are
+being resent separately when the following dependent change has landed
+in the destination tree
+ff6d365898d4 ("soc: qcom: qmi: use const for struct qmi_elem_info")
+
+That dependent change has landed in the rproc-next branch of
+remoteproc/linux.git so this patch is now ready to be consumed.
+
+ drivers/remoteproc/qcom_sysmon.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
+index 57dde2a69b9d..3992bb61d2ec 100644
+--- a/drivers/remoteproc/qcom_sysmon.c
++++ b/drivers/remoteproc/qcom_sysmon.c
+@@ -190,7 +190,7 @@ struct ssctl_shutdown_resp {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+-static struct qmi_elem_info ssctl_shutdown_resp_ei[] = {
++static const struct qmi_elem_info ssctl_shutdown_resp_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -211,7 +211,7 @@ struct ssctl_subsys_event_req {
+ 	u32 evt_driven;
+ };
+ 
+-static struct qmi_elem_info ssctl_subsys_event_req_ei[] = {
++static const struct qmi_elem_info ssctl_subsys_event_req_ei[] = {
+ 	{
+ 		.data_type	= QMI_DATA_LEN,
+ 		.elem_len	= 1,
+@@ -269,7 +269,7 @@ struct ssctl_subsys_event_resp {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+-static struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
++static const struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -283,7 +283,7 @@ static struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info ssctl_shutdown_ind_ei[] = {
++static const struct qmi_elem_info ssctl_shutdown_ind_ei[] = {
+ 	{}
+ };
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.3
 
