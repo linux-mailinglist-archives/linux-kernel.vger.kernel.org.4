@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CE5603646
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FF4603661
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJRXDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 19:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
+        id S230119AbiJRXFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 19:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJRXDE (ORCPT
+        with ESMTP id S230120AbiJRXFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 19:03:04 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A94BCBAF
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:03:02 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m16so22752025edc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:03:02 -0700 (PDT)
+        Tue, 18 Oct 2022 19:05:00 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43647437E2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:04:47 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-355ae0f4d3dso153088787b3.14
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:04:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5PU7hPEIqMrr7mHQR+by2rxkaknzANGyzbduzUJ57MQ=;
-        b=C/U2QxOqKuFQw6hfJdYnYcqQvR/y2e6tiQAND7kPLzGadV4LgukBu6YEvAOMpIl9s7
-         8Xq8tWyKVz2nFeU2nlamoBkmq/bWbvl2taaogoiHTB7fq25IZ1F8xVDUA+hcYmlO4T9I
-         eouOChWSDcNbMfKJo8N/SJLX6DOzycmRofhkKM26QpqZPgMGHEUcv/cyL40AXYh87Bhi
-         F/PJpG1jP4dCVQaq0p6Dp2eqGxoFLINcIKDFmkGSONYGZauiyE/zabK9nUViZ8/mamTs
-         NirhB6899kjetW3Pz2k1S51/c+qDIh3j0EryVbrMt46zNxJ8OYZjfzgSCpiLPOL7uIAk
-         0YYg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/k50xcora8SusgWH3PC14s9L2Ta+3apzzJKJhsds4aQ=;
+        b=Ex5XMJrkse9STYw9ZDiUFUgkqKcQV7UAnfL8qqxPTT7wSILe1Pd9egosOfYxh0shn8
+         sjrmCZqKm4fAk+PZBqqMNvAZ/O8oRDilep2AOwiQPbsfzuG7uAdWOEo99mPbpPfPN5IQ
+         hrIypZ+r27+++zVjtnL6v7AAPq4nBJThSYMpsQLhCF5BMWbALoZZnNcBvhbQ338gvima
+         GKiMB4usiu6YqkWgHYYV+qcj9+h/XWLWBnO+0XcHw4Tj3outSR86xz93g++zepNrYuoj
+         4ZT4ADUS4Md6xJhXE7PbCmpXevqP993WJ/Phmc1ak3nv5GJNH1hAw1YTrkNpNhajP+yE
+         f4dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5PU7hPEIqMrr7mHQR+by2rxkaknzANGyzbduzUJ57MQ=;
-        b=gpQMIhBjTo/TaTpiOJgeDiH6FZEDkjafaege/DWz/P2WAefL/UJlaKqTZEamzipiDn
-         cyDNEEYulzglrRS5GojLKqG0gd93N18d4/FU4CUv+HiWoHCfQfRq43GolGip2w/xqV+o
-         ll2SobTX8RfU7xaI5fCYrxQUn6YuYHDZ7TfiV9ORSxUkP2SDytHaSjCKEtH1GfVxTEns
-         24eT3KLEXWXws0OZYgfuN8wUyB8+gA9RczspjSy6CItS6upk0XKRtxcPjd2iFk51fL41
-         2ad6NpiuLlLM+44dwei4qrDG7gpIH4rFIlfZYbsNduMZFKwTOlKoxqUEK4Q2lCYKbHY1
-         C1Gg==
-X-Gm-Message-State: ACrzQf120e9yC8N2AvhKUxD7UrKgkRatZuvj4RyUfFwlrKsUJk7pMAPH
-        lQeBsmG5IFSpOyadLC9CIlw=
-X-Google-Smtp-Source: AMsMyM5tKkRA+5+GaUxKMmnE5vtiiKScjjT/cObwVa/r9Sq8PoVpcyibBB4YUY9g3ZK6TCfLzMv4Iw==
-X-Received: by 2002:a05:6402:400d:b0:45c:9a5c:444a with SMTP id d13-20020a056402400d00b0045c9a5c444amr4609636eda.283.1666134181473;
-        Tue, 18 Oct 2022 16:03:01 -0700 (PDT)
-Received: from localhost (188.28.2.110.threembb.co.uk. [188.28.2.110])
-        by smtp.gmail.com with ESMTPSA id gc37-20020a1709072b2500b0077d6f628e14sm8119188ejc.83.2022.10.18.16.02.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 16:03:00 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org
-Cc:     kuninori.morimoto.gx@renesas.com, spujar@nvidia.com,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] ASoC: simple-card: Fix up checks for HW param fixups
-Date:   Wed, 19 Oct 2022 00:04:09 +0100
-Message-Id: <20221018230409.610538-1-aidanmacdonald.0x0@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/k50xcora8SusgWH3PC14s9L2Ta+3apzzJKJhsds4aQ=;
+        b=J9+eirBeP82ehB9EFOFccWE2/SGWKY9By2r4crXk5JCDjGnrDBno1ZKzFzr7Vgcd1r
+         KoJ4fwCo5cwM0cOtuVvJZ0/Wqpgo7DTKRtZCBz2UxdBD4f2xCGSp5EVge84jQMrykxKg
+         eduzMbzJTq4ULx9VZJGwXhhMSeIVN4lmhHHhvAYYF+QIaIWUmHSWwG+i/HEk8oJ6Zq2f
+         K04ESKarpYGPRjbiS5X+Fv45KDdX4YMLKE2LvXmA2KcYs+O299oPtaZb9R1DDnQNzY3p
+         t6mJkOz0QIxvr0YnnJOZtaTpBBHAl2MIZ9E0LIk0DRPSsWi6G031a/XYjnyagv4CvBL0
+         G3KA==
+X-Gm-Message-State: ACrzQf1pjK9A0f6cOjegVDLrQayKyQNoq1EkOIfBoAhDRxImwkAbzJLA
+        riTFHv4quvbQ11uliNAg7X6lppehZA==
+X-Google-Smtp-Source: AMsMyM42OmmsI248GW1q6Cx2tnJLcApQITiriyV5uHtjNqgqP/EHV7at+rjrjiCxXNjcNIf8GTBMt3cYUA==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a25:8e0a:0:b0:6be:fb9a:9027 with SMTP id
+ p10-20020a258e0a000000b006befb9a9027mr4585013ybl.8.1666134280586; Tue, 18 Oct
+ 2022 16:04:40 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 16:04:12 -0700
+In-Reply-To: <Y08rHF09/qxCVK+K@sol.localdomain>
+Mime-Version: 1.0
+References: <Y08rHF09/qxCVK+K@sol.localdomain>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Message-ID: <20221018230412.886349-1-nhuck@google.com>
+Subject: [PATCH v3] crypto: x86/polyval - Fix crashes when keys are not
+ 16-byte aligned
+From:   Nathan Huckleberry <nhuck@google.com>
+To:     ebiggers@kernel.org
+Cc:     ardb@kernel.org, bgoncalv@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, davem@davemloft.net,
+        herbert@gondor.apana.org.au, hpa@zytor.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, nhuck@google.com, tglx@linutronix.de,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,94 +73,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "convert-xxx" properties only have an effect for DPCM DAI links.
-A DAI link is only created as DPCM if the device tree requires it;
-part of this involves checking for the use of "convert-xxx" properties.
+crypto_tfm::__crt_ctx is not guaranteed to be 16-byte aligned on x86-64.
+This causes crashes due to movaps instructions in clmul_polyval_update.
 
-When the convert-sample-format property was added, the checks got out
-of sync. A DAI link that specified only convert-sample-format but did
-not pass any of the other DPCM checks would not go into DPCM mode and
-the convert-sample-format property would be silently ignored.
+Add logic to align polyval_tfm_ctx to 16 bytes.
 
-Fix this by adding a function to do the "convert-xxx" property checks,
-instead of open-coding it in simple-card and audio-graph-card. And add
-"convert-sample-format" to the check function so that DAI links using
-it will be initialized correctly.
-
-Fixes: 047a05366f4b ("ASoC: simple-card-utils: Fixup DAI sample format")
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Fixes: 34f7f6c30112 ("crypto: x86/polyval - Add PCLMULQDQ accelerated implementation of POLYVAL")
+Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
- include/sound/simple_card_utils.h     |  1 +
- sound/soc/generic/audio-graph-card.c  |  2 +-
- sound/soc/generic/simple-card-utils.c | 15 +++++++++++++++
- sound/soc/generic/simple-card.c       |  3 +--
- 4 files changed, 18 insertions(+), 3 deletions(-)
+ arch/x86/crypto/polyval-clmulni_glue.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/include/sound/simple_card_utils.h b/include/sound/simple_card_utils.h
-index a0b827f0c2f6..cfed741e0181 100644
---- a/include/sound/simple_card_utils.h
-+++ b/include/sound/simple_card_utils.h
-@@ -177,6 +177,7 @@ void asoc_simple_convert_fixup(struct asoc_simple_data *data,
- 				      struct snd_pcm_hw_params *params);
- void asoc_simple_parse_convert(struct device_node *np, char *prefix,
- 			       struct asoc_simple_data *data);
-+bool asoc_simple_convert_is_required(const struct asoc_simple_data *data);
+diff --git a/arch/x86/crypto/polyval-clmulni_glue.c b/arch/x86/crypto/polyval-clmulni_glue.c
+index b7664d018851..8fa58b0f3cb3 100644
+--- a/arch/x86/crypto/polyval-clmulni_glue.c
++++ b/arch/x86/crypto/polyval-clmulni_glue.c
+@@ -27,13 +27,17 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/simd.h>
  
- int asoc_simple_parse_routing(struct snd_soc_card *card,
- 				      char *prefix);
-diff --git a/sound/soc/generic/audio-graph-card.c b/sound/soc/generic/audio-graph-card.c
-index b327372f2e4a..7804625b131e 100644
---- a/sound/soc/generic/audio-graph-card.c
-+++ b/sound/soc/generic/audio-graph-card.c
-@@ -417,7 +417,7 @@ static inline bool parse_as_dpcm_link(struct asoc_simple_priv *priv,
- 	 * or has convert-xxx property
++#define POLYVAL_ALIGN	16
++#define POLYVAL_ALIGN_ATTR __aligned(POLYVAL_ALIGN)
++#define POLYVAL_ALIGN_EXTRA ((POLYVAL_ALIGN - 1) & ~(CRYPTO_MINALIGN - 1))
++#define POLYVAL_CTX_SIZE (sizeof(struct polyval_tfm_ctx) + POLYVAL_ALIGN_EXTRA)
+ #define NUM_KEY_POWERS	8
+ 
+ struct polyval_tfm_ctx {
+ 	/*
+ 	 * These powers must be in the order h^8, ..., h^1.
  	 */
- 	if ((of_get_child_count(codec_port) > 1) ||
--	    (adata->convert_rate || adata->convert_channels))
-+	    asoc_simple_convert_is_required(adata))
- 		return true;
+-	u8 key_powers[NUM_KEY_POWERS][POLYVAL_BLOCK_SIZE];
++	u8 key_powers[NUM_KEY_POWERS][POLYVAL_BLOCK_SIZE] POLYVAL_ALIGN_ATTR;
+ };
  
- 	return false;
-diff --git a/sound/soc/generic/simple-card-utils.c b/sound/soc/generic/simple-card-utils.c
-index bef16833c487..7a708be24656 100644
---- a/sound/soc/generic/simple-card-utils.c
-+++ b/sound/soc/generic/simple-card-utils.c
-@@ -85,6 +85,21 @@ void asoc_simple_parse_convert(struct device_node *np,
- }
- EXPORT_SYMBOL_GPL(asoc_simple_parse_convert);
+ struct polyval_desc_ctx {
+@@ -45,6 +49,11 @@ asmlinkage void clmul_polyval_update(const struct polyval_tfm_ctx *keys,
+ 	const u8 *in, size_t nblocks, u8 *accumulator);
+ asmlinkage void clmul_polyval_mul(u8 *op1, const u8 *op2);
  
-+/**
-+ * asoc_simple_convert_is_required() - Query if HW param conversion was requested
-+ * @data: Link data.
-+ *
-+ * Returns true if any HW param conversion was requested for this DAI link with
-+ * any "convert-xxx" properties.
-+ */
-+bool asoc_simple_convert_is_required(const struct asoc_simple_data *data)
++static inline struct polyval_tfm_ctx *polyval_tfm_ctx(struct crypto_shash *tfm)
 +{
-+	return data->convert_rate ||
-+	       data->convert_channels ||
-+	       data->convert_sample_format;
++	return PTR_ALIGN(crypto_shash_ctx(tfm), POLYVAL_ALIGN);
 +}
-+EXPORT_SYMBOL_GPL(asoc_simple_convert_is_required);
 +
- int asoc_simple_parse_daifmt(struct device *dev,
- 			     struct device_node *node,
- 			     struct device_node *codec,
-diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
-index 78419e18717d..675991cdee87 100644
---- a/sound/soc/generic/simple-card.c
-+++ b/sound/soc/generic/simple-card.c
-@@ -393,8 +393,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 			 * or has convert-xxx property
- 			 */
- 			if (dpcm_selectable &&
--			    (num > 2 ||
--			     adata.convert_rate || adata.convert_channels)) {
-+			    (num > 2 || asoc_simple_convert_is_required(&adata))) {
- 				/*
- 				 * np
- 				 *	 |1(CPU)|0(Codec)  li->cpu
+ static void internal_polyval_update(const struct polyval_tfm_ctx *keys,
+ 	const u8 *in, size_t nblocks, u8 *accumulator)
+ {
+@@ -72,7 +81,7 @@ static void internal_polyval_mul(u8 *op1, const u8 *op2)
+ static int polyval_x86_setkey(struct crypto_shash *tfm,
+ 			const u8 *key, unsigned int keylen)
+ {
+-	struct polyval_tfm_ctx *tctx = crypto_shash_ctx(tfm);
++	struct polyval_tfm_ctx *tctx = polyval_tfm_ctx(tfm);
+ 	int i;
+ 
+ 	if (keylen != POLYVAL_BLOCK_SIZE)
+@@ -102,7 +111,7 @@ static int polyval_x86_update(struct shash_desc *desc,
+ 			 const u8 *src, unsigned int srclen)
+ {
+ 	struct polyval_desc_ctx *dctx = shash_desc_ctx(desc);
+-	const struct polyval_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
++	const struct polyval_tfm_ctx *tctx = polyval_tfm_ctx(desc->tfm);
+ 	u8 *pos;
+ 	unsigned int nblocks;
+ 	unsigned int n;
+@@ -143,7 +152,7 @@ static int polyval_x86_update(struct shash_desc *desc,
+ static int polyval_x86_final(struct shash_desc *desc, u8 *dst)
+ {
+ 	struct polyval_desc_ctx *dctx = shash_desc_ctx(desc);
+-	const struct polyval_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
++	const struct polyval_tfm_ctx *tctx = polyval_tfm_ctx(desc->tfm);
+ 
+ 	if (dctx->bytes) {
+ 		internal_polyval_mul(dctx->buffer,
+@@ -167,7 +176,7 @@ static struct shash_alg polyval_alg = {
+ 		.cra_driver_name	= "polyval-clmulni",
+ 		.cra_priority		= 200,
+ 		.cra_blocksize		= POLYVAL_BLOCK_SIZE,
+-		.cra_ctxsize		= sizeof(struct polyval_tfm_ctx),
++		.cra_ctxsize		= POLYVAL_CTX_SIZE,
+ 		.cra_module		= THIS_MODULE,
+ 	},
+ };
 -- 
-2.38.0
+2.38.0.413.g74048e4d9e-goog
 
