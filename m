@@ -2,210 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C596B6033C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E362E6033BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiJRUIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 16:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S230055AbiJRUIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 16:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiJRUIM (ORCPT
+        with ESMTP id S229929AbiJRUH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 16:08:12 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36238ACA30
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666123691; x=1697659691;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=ewL2y6xUnvnxsKT8SFI35xeFhJILtLCP43JODMAw5vc=;
-  b=Ewre5Dze287Pql0BX4480NXb02iDgvCX6sVUGtBylW2oGv22/wNCneDQ
-   8LBz+ZCXPAer/6U75ANvjGJi2V1ATk2tS/y91hiVDEPZ7Xf4RwoDN0nE4
-   WkUIrekeImRtugwnA7OFRdZGYS/X976Yzd5HiZd6Fg9+BbDVU/jcVyjIE
-   EZLNEtoqybpjFjtv+t0Ws+fHTV01WD2tQrJYaXXu6vRmyttcngSIHSZ08
-   qZQlwxOHii8uw8qgf0qtWAIbouUj6pSVng43lq+j+JuJymYFhhtAKYBWn
-   E0s6luzIBqGGvKm5pHTwXn0sAx/NM0GuYwnIzGZDJAOi3UlLaGsC3p9q0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="293617849"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="293617849"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 13:08:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="659975001"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="659975001"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga008.jf.intel.com with ESMTP; 18 Oct 2022 13:08:09 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 13:08:08 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 13:08:08 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 18 Oct 2022 13:08:08 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 18 Oct 2022 13:08:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FaG2x695kI4lL8f5h+fCK5vMg0c+Ht8TirMH9JaOgqgYns+1FL1BBzhWX+X3vNnKM9dZAOLhYOoWjzhmaqtfGp8tAIlJZeH8zgBbXzMoNFphqnGWnjGepx52CsngbSY9fGKkMKDwpWvh+ffV/VzN0JEU5rguSk7N23fdtXmZGniQc7Zmn8+k41aHTFa0oX4FYmEq3PbK7ED+KGzs3Wp4/Xa6hq8JrpCWtqg4d8B4vO8AAWiHg7qa5q6LJpMcgSU3AbzFf0ZhntW/xot4w7N6nL4ltZ/wjS6uySU3zRcB4yACl6JMeYlhDlFj7BBxJH7qjALYXDUkAO8NxdSdjwg8Iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XneHoxhqe60Js0tLjjORjKRLqOOuP6Ukd80V0EPFwaM=;
- b=KZmxbIklxr9eQxQ4/yr+46gHAUjXvEwgkbjGKwilPmcPWMD8RaSxc3pBLWxJimJaPEpoTmjGJObLl4so2vL6do2qOZFj0c3Vms63hRcFjFFPkjQB2+dX21FU27gmCPzNMTqPPj8WJVhzAdEFvmcUD8Jendbc866RyVPHn8tXr9Vn4mhgZKhSVOKfEm/7KO7eqpbP5l5853FvOyEHbzqzGraCQ39N/7QSKNIAGy5cwI9zL+YkuzuLV/au3YT7R1OVtf6hc995IMQ8TCgE6AsSKAIMFmKcLwPRm2hRMJAhGlskErMZLp9fFpAu+vjFJEhSbgDsDlDaiGvslyixtiJLHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by PH0PR11MB5610.namprd11.prod.outlook.com (2603:10b6:510:e9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Tue, 18 Oct
- 2022 20:08:03 +0000
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::effa:dd0:aa9e:2ae6]) by SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::effa:dd0:aa9e:2ae6%3]) with mapi id 15.20.5723.033; Tue, 18 Oct 2022
- 20:08:03 +0000
-Date:   Tue, 18 Oct 2022 13:07:29 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-CC:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Bharata B Rao" <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCHv10 10/15] x86/mm, iommu/sva: Make LAM and SVM mutually
- exclusive
-Message-ID: <Y08HgXqvNSpTUgWe@a4bf019067fa.jf.intel.com>
-References: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
- <20221018113358.7833-11-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221018113358.7833-11-kirill.shutemov@linux.intel.com>
-X-ClientProxiedBy: BYAPR05CA0102.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::43) To SJ1PR11MB6201.namprd11.prod.outlook.com
- (2603:10b6:a03:45c::14)
+        Tue, 18 Oct 2022 16:07:59 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2171ABD7A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:07:57 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id y80so12727476iof.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:07:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JpelpJ2RUBl2/Qi1M4Vh9Y2HxJjWm0G/aDT41HqmUC0=;
+        b=Nhb4jvAWqE76yCRqMYzFtE7u5krQ1EroS4E6lrrT5u9AWGE1JixNm1tenfB6JXiGP0
+         Z3aButljmymrLRAPcXFV2zQJjsCsBLXfDR1PznRboJ3pXOj0nKgeTf3uVX3KOi66PLMt
+         Ps8TTVhWJdaYlt2Z0n7ktlGnWdIUF0XvgDWLokz0841zcoaq+wn1SSzkiP7u5BFqFAte
+         ezhLManXjpuz/yEKHH5ygbCFQ+qv9oG6Mg80+cIEOtrPVkK//9KaLntuYc4VcS60qkTI
+         KTUsBzqSUAq6nkWAMmumpuR+kWHT0mieYgAgxHzICkxW5WKbPxnKMD+KykfgFgd7dlCv
+         ch+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JpelpJ2RUBl2/Qi1M4Vh9Y2HxJjWm0G/aDT41HqmUC0=;
+        b=LKmUFrjs6D+XoZ/MDaQc70VIyp/lQ/I9iGF1G486uBQEDmsCjX6gg04iwvfslIfCeF
+         Vu2eL49w1ZakEeApDSVkh1JStVblxEEoCY7t4TGzCnnSjCrpCYALQrsc+X74qcTwdCXP
+         uBhOTyy7rkb/EGd3qmV7jY9UQNKE8+Rd8Fg4N5tPO3GRzOfeJz+bccguP52Ed3I9tIqp
+         LoCvAvhGjlo4dFktCuDJ3kSCCyEfnsx2kpCrtw+42oDGMmRZeYP1tukCBXz+mHmcM6SB
+         6opxKjuvufdger3Q3LDpIQ9H8/OS6qIcRkm5NWJv5VeHhzPPDY9hk9Fr0Ltbkte7Dbrn
+         6mvA==
+X-Gm-Message-State: ACrzQf3Fxp6wIg8+vs/DSgyEMNET/2SeFdsMnS0CtM1IwlpfE++p1O6W
+        EEfvbGbdt9ADj5WAFE1i6S2u6NrPwsFufftDsVAOPA==
+X-Google-Smtp-Source: AMsMyM7f5t5YB3dzGMSGQALGtHyDA7exsywYWD85nS9KuB0Cdebt7cScXuaC1piSYHkZNDhpdVaamLIMiiX1zNZP0r4=
+X-Received: by 2002:a05:6638:1455:b0:363:d1a9:5cc0 with SMTP id
+ l21-20020a056638145500b00363d1a95cc0mr3123218jad.288.1666123676863; Tue, 18
+ Oct 2022 13:07:56 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|PH0PR11MB5610:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed8c9c36-0df1-4e79-d7dd-08dab14476d2
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LUAh0usLrouYygipKepfoA/ri4Va0Jc0qKZ3F2SVgHfhShs60sxm/Jmxu+EfLaGVVkM+YHlKXUshGbmsGYc0HlscONYj1+XOuhK/ScXjbZDRZwg/0uFKd2/bNGTIT0n0sw6E/xnp1MgaBT2W74NOYtbokcOlPUlo3fT3GVzW0zC2nnYE/VOb+2Y2DKL4NE9e1xFC+S4c3HrVGZbJlhYbe9vb511zHPNmvwGl60GpdqAfFGw1iCOJ65AYhLSeE/lHgXVHRMfbTLLvMXMh4MeHYlD9uGpyNvWoeKgA/12eU+QcTog/et6heOcL3O13mDu/siOq0J0IAWVqR08v2seDZnovcbt/4GDE7hu/T33Zhz+hMlQuHYY1O7AO5mWxN+c1q+cgnKAHb34/WCZBROIAmHBFAO6zN5nh9TTNnOamEVu6HjGWedNzJa0IPJN2xlpVpTHGw9MTTTVjVQxkQ7NCngvHCi8AkExhS6es0jrRgXpWGuhiqngKahW6R1FSaDxSUpxN4wMSYZnTOvfNjDnxvBFVg9cQsyTQIYBDjd/Um1H/R8NyHWp2no+1Qbh/pltqhSO8aRdxNF+hoqVUJscQB9EGxVhFEZOaTla6lTxVcMWylLpahezZiGsHmx9puZBKt4eFWu5hE1s4Jp70xM6cjHRak72XWv6ZeETibxapWiydTVF7BRt1SHzw9Ym2TLv/lBfTxhitwPyRYBBzD6VQeA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199015)(186003)(6512007)(6666004)(26005)(6506007)(83380400001)(7416002)(2906002)(5660300002)(44832011)(54906003)(8936002)(478600001)(6486002)(316002)(41300700001)(66946007)(4326008)(8676002)(66476007)(66556008)(6916009)(86362001)(82960400001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mQXM8qKqkweVlYtHceOu+hkM77sZ4zr860SAiclfJzEN1LHPEKXoFHHfTvJB?=
- =?us-ascii?Q?XzHZFn5mlWeIL82qIm9cVG1eotpIhUo+owm6BS5IVxU4KSBChZ3171eIHmZt?=
- =?us-ascii?Q?/F8d0xhmjTDWlcAed0Mq/Jtwkwmf0EegAmh1WTvMjYpFhV9fo324zz/Nw4DL?=
- =?us-ascii?Q?4kCAyNH+XZmaoKuiYeSrg516JodcRx6hXrSCboNRfml3yEhcSGbsR046OBjw?=
- =?us-ascii?Q?oFJ8l3Lm+mlDilXYwj92PUDx0OxmXEy8IbAhg9BYSgFZxwJecOQS+fUinfrq?=
- =?us-ascii?Q?N1JSF3qCs2s/Aor8gonzxnqcDjQUuYuzYSBfkrWLwpIdDF4Qbxg5TLZjl2uv?=
- =?us-ascii?Q?TY2S4rWENFCnKyOTTdh3ZPxkJjHN3LGNym67d8rCejxTk0JFwSgHOxuMy8Dm?=
- =?us-ascii?Q?8UOFQuTxgoOAgM+o8xwCQSeNedTCZmWnTXbMWLe81Rl/fJW/DA8FOtx6+2qO?=
- =?us-ascii?Q?+rXwcnSflwlhPQQavphRK7vEeuO3ejTOQEZfcW38tHPyXburiXERgaLtFs/p?=
- =?us-ascii?Q?phN7y6REjQ2aNzIHOYOb3RlAbwaLlH9EvmWZjEShJH/0YZyDsmeAlz+IZiZn?=
- =?us-ascii?Q?FX1SciERhf372YQNs3+2/IBop8ZBXv9UaFdaMbdVTT73uRS+0NxNoo9L/Aea?=
- =?us-ascii?Q?sciyjmX9jkhJ3R4BMUNBUhBxiTQI6r/aFmGBLiZ1DW64SLezqoYYisLy5OqG?=
- =?us-ascii?Q?/RGTkqElBqE1wnVmU6mPd057uLS/fY1Uq7ZB+9eawrp0DJiERj/qkamZHtwc?=
- =?us-ascii?Q?ti7oZ/OsYh3XbkmRImBN0VSPlmcLN85DaDlK0Lcbh8XeujrKWhC0DjJ5fprD?=
- =?us-ascii?Q?Ex06ov1r84hMXu7p0jDbc98qWVsufuaT4ju4+G4XPauT75h+u9HV3tCFdXEc?=
- =?us-ascii?Q?AdySJrk5yxH8+eTnJuEN8UIrYRUT4ZC22dU0/NkTkzBGvTYe9N7U3px7D/F5?=
- =?us-ascii?Q?XDIlXew4w7jORqAVY1AvyMCHv1c6RtKieFe7SD+OG4bJLli0AxjXNNef+8z9?=
- =?us-ascii?Q?2ZuEqBiyqyAiBkGu7UbzoQFsFkjAwglSFiorQMX3I/XAtaeo4nbtg7PzO+iM?=
- =?us-ascii?Q?DkXJ9FDvFhK5aBgFEX4J9vveVlzuOOcaWqFZK3r0MWCo4ZFGvpqgovYob/0G?=
- =?us-ascii?Q?QwoFtDzPvvHca3PP9VszjVzGdD6fynZtFFfTQ+3SJZaGA5m3JK3J8OHVDJq8?=
- =?us-ascii?Q?pFJwkSU3GBXfaBdOSCfIknYPyiaHFVNsvzIvzJzhxOomd5ZI/Deiv4jXKn67?=
- =?us-ascii?Q?Z4RAyNIvHuLQw0RU6EvaAjYMwFpcoYW2Chqegf+dvZqJsw0bvEl4NEtdlcUv?=
- =?us-ascii?Q?oqd0W2Z3gRaCoowiOFbXucJTgmfc326UIhRfbAFr4Is9IbPg69oBVWaDj+dB?=
- =?us-ascii?Q?pSNRbuRZbs9+8Ff+2PIsXpYr7ta+ayx7SBWaOVJsF34gkU8rx4fERsLJja7A?=
- =?us-ascii?Q?4jpgTexfYyPBzEwkiVDa+/8+VQqlhu8jo6u/sfZUyk3fUWnRE0BabfQXVqxA?=
- =?us-ascii?Q?sKy9wcGsZZi8hFFthFkNGLFwrnniTN4n3isn90ShfK2WD3P9JM4Ideb9MKhq?=
- =?us-ascii?Q?P22jhBsMsMR+IIxD9V16cD8c/lULnuVyuoMvkDLkThSwtAF0ms/u9+weveTn?=
- =?us-ascii?Q?mw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed8c9c36-0df1-4e79-d7dd-08dab14476d2
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 20:08:03.7174
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9asnlw1h6w7Fmuh8u0dtkjMLBaxHF98U4dPPDyKcZDTrZSe9eVkbt1ZXDY5dTdh6UM9/jEyN9SRnYbeXIE0wUA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5610
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018090550.never.834-kees@kernel.org> <Y07raim32wOBRGPi@google.com>
+ <202210181110.CD92A00@keescook>
+In-Reply-To: <202210181110.CD92A00@keescook>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 18 Oct 2022 13:07:45 -0700
+Message-ID: <CAKH8qBvwKfhMYjHV=rizA0ZinArHKmBP6U_N63HTcZTmM=QQ+g@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Use kmalloc_size_roundup() to match ksize() usage
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:33:53PM +0300, Kirill A. Shutemov wrote:
-> IOMMU and SVM-capable devices know nothing about LAM and only expect
-> canonical addresses. Attempt to pass down tagged pointer will lead to
-> address translation failure.
-> 
-> By default do not allow to enable both LAM and use SVM in the same
-> process.
-> 
-> The new ARCH_FORCE_TAGGED_SVM arch_prctl() overrides the limitation.
-> By using the arch_prctl() userspace takes responsibility to never pass
-> tagged address to the device.
+On Tue, Oct 18, 2022 at 11:19 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Oct 18, 2022 at 11:07:38AM -0700, sdf@google.com wrote:
+> > On 10/18, Kees Cook wrote:
+> > > Round up allocations with kmalloc_size_roundup() so that the verifier's
+> > > use of ksize() is always accurate and no special handling of the memory
+> > > is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
+> > > information back up to callers so they can use the space immediately,
+> > > so array resizing to happen less frequently as well. Explicitly zero
+> > > any trailing bytes in new allocations.
+> >
+> > > Additionally fix a memory allocation leak: if krealloc() fails, "arr"
+> > > wasn't freed, but NULL was return to the caller of realloc_array() would
+> > > be writing NULL to the lvalue, losing the reference to the original
+> > > memory.
+> >
+> > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > > Cc: Song Liu <song@kernel.org>
+> > > Cc: Yonghong Song <yhs@fb.com>
+> > > Cc: KP Singh <kpsingh@kernel.org>
+> > > Cc: Stanislav Fomichev <sdf@google.com>
+> > > Cc: Hao Luo <haoluo@google.com>
+> > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > Cc: bpf@vger.kernel.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >   kernel/bpf/verifier.c | 49 +++++++++++++++++++++++++++----------------
+> > >   1 file changed, 31 insertions(+), 18 deletions(-)
+> >
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 014ee0953dbd..8a0b60207d0e 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -1000,42 +1000,53 @@ static void print_insn_state(struct
+> > > bpf_verifier_env *env,
+> > >    */
+> > >   static void *copy_array(void *dst, const void *src, size_t n, size_t
+> > > size, gfp_t flags)
+> > >   {
+> > > -   size_t bytes;
+> > > +   size_t src_bytes, dst_bytes;
+> >
+> > >     if (ZERO_OR_NULL_PTR(src))
+> > >             goto out;
+> >
+> > > -   if (unlikely(check_mul_overflow(n, size, &bytes)))
+> > > +   if (unlikely(check_mul_overflow(n, size, &src_bytes)))
+> > >             return NULL;
+> >
+> > > -   if (ksize(dst) < bytes) {
+> > > +   dst_bytes = kmalloc_size_roundup(src_bytes);
+> > > +   if (ksize(dst) < dst_bytes) {
+> >
+> > Why not simply do the following here?
+> >
+> >       if (ksize(dst) < ksize(src)) {
+> >
+> > ?
+>
+> Yeah, if src always passes through rounding-up allocation path, that
+> might work. I need to double-check that there isn't a case where "size"
+> makes this go weird -- e.g. a rounded up "src" may be larger than
+> "n * size", but I think that's okay because the memcpy/memset does the
+> right thing.
+>
+> > It seems like we care about src_bytes/bytes only in this case, so maybe
+> > move that check_mul_overflow under this branch as well?
+> >
+> >
+> > >             kfree(dst);
+> > > -           dst = kmalloc_track_caller(bytes, flags);
+> > > +           dst = kmalloc_track_caller(dst_bytes, flags);
+> > >             if (!dst)
+> > >                     return NULL;
+> > >     }
+> >
+> > > -   memcpy(dst, src, bytes);
+> > > +   memcpy(dst, src, src_bytes);
+> > > +   memset(dst + src_bytes, 0, dst_bytes - src_bytes);
+> > >   out:
+> > >     return dst ? dst : ZERO_SIZE_PTR;
+> > >   }
+> >
+> > > -/* resize an array from old_n items to new_n items. the array is
+> > > reallocated if it's too
+> > > - * small to hold new_n items. new items are zeroed out if the array
+> > > grows.
+> > > +/* Resize an array from old_n items to *new_n items. The array is
+> > > reallocated if it's too
+> > > + * small to hold *new_n items. New items are zeroed out if the array
+> > > grows. Allocation
+> > > + * is rounded up to next kmalloc bucket size to reduce frequency of
+> > > resizing. *new_n
+> > > + * contains the new total number of items that will fit.
+> > >    *
+> > > - * Contrary to krealloc_array, does not free arr if new_n is zero.
+> > > + * Contrary to krealloc, does not free arr if new_n is zero.
+> > >    */
+> > > -static void *realloc_array(void *arr, size_t old_n, size_t new_n,
+> > > size_t size)
+> > > +static void *realloc_array(void *arr, size_t old_n, size_t *new_n,
+> > > size_t size)
+> > >   {
+> > > -   if (!new_n || old_n == new_n)
+> > > +   void *old_arr = arr;
+> > > +   size_t alloc_size;
+> > > +
+> > > +   if (!new_n || !*new_n || old_n == *new_n)
+> > >             goto out;
+> >
+> >
+> > [..]
+> >
+> > > -   arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
+> > > -   if (!arr)
+> > > +   alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
+> > > +   arr = krealloc(old_arr, alloc_size, GFP_KERNEL);
+> > > +   if (!arr) {
+> > > +           kfree(old_arr);
+> > >             return NULL;
+> > > +   }
+> >
+> > Any reason not do hide this complexity behind krealloc_array? Why can't
+> > it take care of those roundup details?
+>
+> It might be possible to do this with a macro, yes, but then callers
+> aren't in a position to take advantage of the new size. Maybe we need
+> something like:
+>
+>         arr = krealloc_up(old_arr, alloc_size, &new_size, GFP_KERNEL);
 
-Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+Maybe even krealloc_array_up(arr, &new_n, size, flags) or similar
+where we return a new size?
+Though I don't know if there are any other places in the kernel to
+reuse it and warrant a new function..
 
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  arch/x86/include/asm/mmu.h         |  6 ++++--
->  arch/x86/include/asm/mmu_context.h |  2 ++
->  arch/x86/include/uapi/asm/prctl.h  |  1 +
->  arch/x86/kernel/process_64.c       | 13 +++++++++++++
->  drivers/iommu/iommu-sva-lib.c      | 12 ++++++++++++
->  include/linux/mmu_context.h        |  4 ++++
->  6 files changed, 36 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-> index 2fdb390040b5..cce9b32b0d6d 100644
-> --- a/arch/x86/include/asm/mmu.h
-> +++ b/arch/x86/include/asm/mmu.h
-> @@ -9,9 +9,11 @@
->  #include <linux/bits.h>
->  
->  /* Uprobes on this MM assume 32-bit code */
-> -#define MM_CONTEXT_UPROBE_IA32	BIT(0)
-> +#define MM_CONTEXT_UPROBE_IA32		BIT(0)
->  /* vsyscall page is accessible on this MM */
-> -#define MM_CONTEXT_HAS_VSYSCALL	BIT(1)
-> +#define MM_CONTEXT_HAS_VSYSCALL		BIT(1)
+> Thanks for looking this over!
+>
+> --
+> Kees Cook
 
-Nit: Looks like the two above format changes got in here :-)
-
-Cheers,
-Ashok
+On Tue, Oct 18, 2022 at 11:19 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Oct 18, 2022 at 11:07:38AM -0700, sdf@google.com wrote:
+> > On 10/18, Kees Cook wrote:
+> > > Round up allocations with kmalloc_size_roundup() so that the verifier's
+> > > use of ksize() is always accurate and no special handling of the memory
+> > > is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
+> > > information back up to callers so they can use the space immediately,
+> > > so array resizing to happen less frequently as well. Explicitly zero
+> > > any trailing bytes in new allocations.
+> >
+> > > Additionally fix a memory allocation leak: if krealloc() fails, "arr"
+> > > wasn't freed, but NULL was return to the caller of realloc_array() would
+> > > be writing NULL to the lvalue, losing the reference to the original
+> > > memory.
+> >
+> > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > > Cc: Song Liu <song@kernel.org>
+> > > Cc: Yonghong Song <yhs@fb.com>
+> > > Cc: KP Singh <kpsingh@kernel.org>
+> > > Cc: Stanislav Fomichev <sdf@google.com>
+> > > Cc: Hao Luo <haoluo@google.com>
+> > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > Cc: bpf@vger.kernel.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >   kernel/bpf/verifier.c | 49 +++++++++++++++++++++++++++----------------
+> > >   1 file changed, 31 insertions(+), 18 deletions(-)
+> >
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 014ee0953dbd..8a0b60207d0e 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -1000,42 +1000,53 @@ static void print_insn_state(struct
+> > > bpf_verifier_env *env,
+> > >    */
+> > >   static void *copy_array(void *dst, const void *src, size_t n, size_t
+> > > size, gfp_t flags)
+> > >   {
+> > > -   size_t bytes;
+> > > +   size_t src_bytes, dst_bytes;
+> >
+> > >     if (ZERO_OR_NULL_PTR(src))
+> > >             goto out;
+> >
+> > > -   if (unlikely(check_mul_overflow(n, size, &bytes)))
+> > > +   if (unlikely(check_mul_overflow(n, size, &src_bytes)))
+> > >             return NULL;
+> >
+> > > -   if (ksize(dst) < bytes) {
+> > > +   dst_bytes = kmalloc_size_roundup(src_bytes);
+> > > +   if (ksize(dst) < dst_bytes) {
+> >
+> > Why not simply do the following here?
+> >
+> >       if (ksize(dst) < ksize(src)) {
+> >
+> > ?
+>
+> Yeah, if src always passes through rounding-up allocation path, that
+> might work. I need to double-check that there isn't a case where "size"
+> makes this go weird -- e.g. a rounded up "src" may be larger than
+> "n * size", but I think that's okay because the memcpy/memset does the
+> right thing.
+>
+> > It seems like we care about src_bytes/bytes only in this case, so maybe
+> > move that check_mul_overflow under this branch as well?
+> >
+> >
+> > >             kfree(dst);
+> > > -           dst = kmalloc_track_caller(bytes, flags);
+> > > +           dst = kmalloc_track_caller(dst_bytes, flags);
+> > >             if (!dst)
+> > >                     return NULL;
+> > >     }
+> >
+> > > -   memcpy(dst, src, bytes);
+> > > +   memcpy(dst, src, src_bytes);
+> > > +   memset(dst + src_bytes, 0, dst_bytes - src_bytes);
+> > >   out:
+> > >     return dst ? dst : ZERO_SIZE_PTR;
+> > >   }
+> >
+> > > -/* resize an array from old_n items to new_n items. the array is
+> > > reallocated if it's too
+> > > - * small to hold new_n items. new items are zeroed out if the array
+> > > grows.
+> > > +/* Resize an array from old_n items to *new_n items. The array is
+> > > reallocated if it's too
+> > > + * small to hold *new_n items. New items are zeroed out if the array
+> > > grows. Allocation
+> > > + * is rounded up to next kmalloc bucket size to reduce frequency of
+> > > resizing. *new_n
+> > > + * contains the new total number of items that will fit.
+> > >    *
+> > > - * Contrary to krealloc_array, does not free arr if new_n is zero.
+> > > + * Contrary to krealloc, does not free arr if new_n is zero.
+> > >    */
+> > > -static void *realloc_array(void *arr, size_t old_n, size_t new_n,
+> > > size_t size)
+> > > +static void *realloc_array(void *arr, size_t old_n, size_t *new_n,
+> > > size_t size)
+> > >   {
+> > > -   if (!new_n || old_n == new_n)
+> > > +   void *old_arr = arr;
+> > > +   size_t alloc_size;
+> > > +
+> > > +   if (!new_n || !*new_n || old_n == *new_n)
+> > >             goto out;
+> >
+> >
+> > [..]
+> >
+> > > -   arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
+> > > -   if (!arr)
+> > > +   alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
+> > > +   arr = krealloc(old_arr, alloc_size, GFP_KERNEL);
+> > > +   if (!arr) {
+> > > +           kfree(old_arr);
+> > >             return NULL;
+> > > +   }
+> >
+> > Any reason not do hide this complexity behind krealloc_array? Why can't
+> > it take care of those roundup details?
+>
+> It might be possible to do this with a macro, yes, but then callers
+> aren't in a position to take advantage of the new size. Maybe we need
+> something like:
+>
+>         arr = krealloc_up(old_arr, alloc_size, &new_size, GFP_KERNEL);
+>
+> Thanks for looking this over!
+>
+> --
+> Kees Cook
