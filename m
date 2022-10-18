@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA5F602178
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72BA602175
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiJRCxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S230085AbiJRCwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJRCxH (ORCPT
+        with ESMTP id S229554AbiJRCww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:53:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC7752472
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666061587; x=1697597587;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sd1R8lAWnx5pqdKoqMKljNmwUhP0SdeIN0kUW2/xvAY=;
-  b=G3jKUre0sMDTZ5EjBWagsuqBoqIkfUwwV/M2LuTmndutgrJ9AiFNbnSO
-   GuwjnYjb+6SG4+o2OMkcV2DFE9EZG4PszB1BWDPwaWDTFBHGS9GW2zo+J
-   paXtN6svB3syEx3mgLu+KIplrBxEblMXTqTldUwDLU9KKR7DCCr2P1hzC
-   06CvAoj7m6J7iJvutppKP34BaHkFHbHJyDtfPS0aY6QRB9ZQ4yVlcrUQU
-   PSMnlGLP7ok919lwQU05bo/MRKiQfa6GhWcJTnbi85ifSTet5nv4O2IWp
-   hrwdbaFXx1PoQ44qvV5oM8sn8Kakg64IIwOyvo4mGLr/kZn1fy4KaNI7E
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="392282837"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="392282837"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 19:53:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="803567826"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="803567826"
-Received: from lkp-server01.sh.intel.com (HELO 8381f64adc98) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Oct 2022 19:52:13 -0700
-Received: from kbuild by 8381f64adc98 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1okciB-0001D0-21;
-        Tue, 18 Oct 2022 02:52:11 +0000
-Date:   Tue, 18 Oct 2022 10:51:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- 3548eda8ae284d6d412d59f11cd20fc7df05362b
-Message-ID: <634e14ce.GfQ/l135G4xMMJy7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 17 Oct 2022 22:52:52 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB60857F9;
+        Mon, 17 Oct 2022 19:52:50 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id o12so11994284lfq.9;
+        Mon, 17 Oct 2022 19:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9M6zSM2YI+mr2xkSzd7bZIJc0rGYX5w30o9ggxyac70=;
+        b=micluZpS+rdPpy7sIsZANMa5tslB3dvnpJSnGFkT30l3hPlHqlrFHzChtx8nL/fxAh
+         TUO4BaMZWLOLtX+nf74D6X+wS+lOeqEi2JOhi1afjhzIkzoz2H6XJp0vO7p9Dzh68rEk
+         PXNVStgIhbyo/4qKT1BJuzIfbYhfjKXHLUs6KHHXvEkNRTzti5VgLsHM3EM6bq6Hchh1
+         2rgSg+wh0Ev+eUIGmBwam1La5dSTilfH3cUddU0RhYDovEhs43vNzqIGVDY/Fy5Pjaw1
+         7iTP/KavCCsdSYNxPQwgSUFBqHCQ7PRR0vmHRvjRJ1BM191hObqGkQQGQqS1pJa2yN2n
+         1sMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9M6zSM2YI+mr2xkSzd7bZIJc0rGYX5w30o9ggxyac70=;
+        b=4jQihP+P/P/ArfPIxruSFDmlcmhWu5fU6OVXnY1EzgbRglSI9CQx3uVl7o7b03CD+f
+         wHMyLZI+Dyp0bjeLmtm+JuT53t0ht7apaTCtnUyZNzHEY6q0sQY6ORX9o/DTQnmha/+/
+         4KVrGQPxDQpfbm36Cm3+i0aVt5JsHgWZDwyZBa3/BJZy+b3blrwI6g9T+k/5gbg4qh1G
+         rfKvC/252H14rLgRMe30mE0GMgumuUB5dG+/9LL4x+KDDa/jZwQf9Vxv78OY8VPoaP4O
+         wSgHFeLzDdQJfDT50YdGLhixHAHfj6OHZE5v59Qsc0VRGEH2hV4DPbdfMrVPeqhlWwLq
+         fwOw==
+X-Gm-Message-State: ACrzQf0Y+9Ms3SkUvGWTs+Ax5ba3Krs3tjKYjJ4xDHlMdbWMBYxe9n9y
+        xKxkI0FgbgUPgJaV2gEVM5NbStVzfYYJDHDPIXQ=
+X-Google-Smtp-Source: AMsMyM57cwzckKxi0qqdRvUuUq1kK1M5roDiPHZ0/++9LYQbPOmDIfnGPngZDvxbepfRUyjgpxvLn8wXUyzhmmps/zY=
+X-Received: by 2002:a05:6512:12c5:b0:4a2:6c32:5c5e with SMTP id
+ p5-20020a05651212c500b004a26c325c5emr211949lfg.464.1666061568857; Mon, 17 Oct
+ 2022 19:52:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <Y0lSChlclGPkwTeA@casper.infradead.org> <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
+ <Y017BeC64GDb3Kg7@casper.infradead.org>
+In-Reply-To: <Y017BeC64GDb3Kg7@casper.infradead.org>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Tue, 18 Oct 2022 10:52:19 +0800
+Message-ID: <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com, baocong.liu@unisoc.com,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,146 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: 3548eda8ae284d6d412d59f11cd20fc7df05362b  x86/tsc: Make art_related_clocksource static
-
-elapsed time: 726m
-
-configs tested: 123
-configs skipped: 86
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                  randconfig-r043-20221017
-i386                             allyesconfig
-i386                                defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64               randconfig-a004-20221017
-x86_64               randconfig-a001-20221017
-x86_64               randconfig-a002-20221017
-x86_64               randconfig-a006-20221017
-x86_64               randconfig-a005-20221017
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-i386                 randconfig-a005-20221017
-i386                 randconfig-a003-20221017
-i386                 randconfig-a004-20221017
-i386                 randconfig-a001-20221017
-i386                 randconfig-a006-20221017
-powerpc                 mpc8540_ads_defconfig
-sh                          kfr2r09_defconfig
-powerpc                 linkstation_defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-m68k                         amcore_defconfig
-mips                           ci20_defconfig
-powerpc                      makalu_defconfig
-m68k                             alldefconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                 randconfig-c001-20221017
-arm                                 defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                        warp_defconfig
-sh                          polaris_defconfig
-m68k                          hp300_defconfig
-sh                           se7751_defconfig
-sh                          rsk7203_defconfig
-arm                             ezx_defconfig
-powerpc                     mpc83xx_defconfig
-arm                            lart_defconfig
-sh                        edosk7760_defconfig
-sh                             shx3_defconfig
-parisc                generic-64bit_defconfig
-arm                        cerfcube_defconfig
-sh                          r7785rp_defconfig
-sh                             sh03_defconfig
-m68k                            q40_defconfig
-arc                           tb10x_defconfig
-i386                 randconfig-a002-20221017
-x86_64               randconfig-a003-20221017
-powerpc                         wii_defconfig
-arm                        realview_defconfig
-arc                        vdk_hs38_defconfig
-powerpc                      chrp32_defconfig
-m68k                       m5208evb_defconfig
-mips                     decstation_defconfig
-mips                        bcm47xx_defconfig
-arc                     haps_hs_smp_defconfig
-sh                           se7705_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-arm                           h3600_defconfig
-riscv                               defconfig
-x86_64               randconfig-c001-20221017
-arm                  randconfig-c002-20221017
-powerpc                     taishan_defconfig
-m68k                       bvme6000_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-
-clang tested configs:
-i386                 randconfig-a013-20221017
-i386                 randconfig-a015-20221017
-i386                 randconfig-a016-20221017
-i386                 randconfig-a011-20221017
-i386                 randconfig-a014-20221017
-i386                 randconfig-a012-20221017
-x86_64               randconfig-a014-20221017
-x86_64               randconfig-a015-20221017
-x86_64               randconfig-a012-20221017
-x86_64               randconfig-a011-20221017
-x86_64               randconfig-a013-20221017
-x86_64               randconfig-a016-20221017
-mips                 randconfig-c004-20221017
-i386                 randconfig-c001-20221017
-s390                 randconfig-c005-20221017
-arm                  randconfig-c002-20221017
-riscv                randconfig-c006-20221017
-x86_64               randconfig-c007-20221017
-powerpc              randconfig-c003-20221017
-x86_64               randconfig-k001-20221017
-s390                 randconfig-r044-20221017
-hexagon              randconfig-r045-20221017
-riscv                randconfig-r042-20221017
-hexagon              randconfig-r041-20221017
-arm                          collie_defconfig
-x86_64                        randconfig-c007
-mips                 randconfig-c004-20221018
-i386                          randconfig-c001
-s390                 randconfig-c005-20221018
-arm                  randconfig-c002-20221018
-riscv                randconfig-c006-20221018
-powerpc              randconfig-c003-20221018
-arm                        mvebu_v5_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Mon, Oct 17, 2022 at 11:55 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Oct 17, 2022 at 01:34:13PM +0800, Zhaoyang Huang wrote:
+> > On Fri, Oct 14, 2022 at 8:12 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Fri, Oct 14, 2022 at 01:30:48PM +0800, zhaoyang.huang wrote:
+> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > >
+> > > > Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
+> > > > superblock's inode list. The direct reason is zombie page keeps staying on the
+> > > > xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
+> > > > and supposed could be an xa update without synchronize_rcu etc. I would like to
+> > > > suggest skip this page to break the live lock as a workaround.
+> > >
+> > > No, the underlying bug should be fixed.
+>
+>     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Understand. IMHO, find_get_entry actruely works as an open API dealing
+with different kinds of address_spaces page cache, which requires high
+robustness to deal with any corner cases. Take the current problem as
+example, the inode with fault page(refcount=0) could remain on the
+sb's list without live lock problem.
+>
+> > OK, could I move the xas like below?
+> >
+> > +     if (!folio_try_get_rcu(folio)) {
+> > +             xas_next_offset(xas);
+> >               goto reset;
+> > +     }
