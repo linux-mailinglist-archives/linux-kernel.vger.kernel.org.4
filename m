@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD42602BC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEAAF602BC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiJRM3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S229691AbiJRMaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiJRM3h (ORCPT
+        with ESMTP id S230094AbiJRMa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:29:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377A3EA7;
-        Tue, 18 Oct 2022 05:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666096172; x=1697632172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PaE+ltoOm4ofs4LgjGMXlY2Byk9Xcbkppn+A/cYaqjM=;
-  b=Y9IvJopAe+JXXpohSP6ERAgDC/rins/fwzUjgkXZP0qwvhjJcsZciglX
-   ut1YLKUxr59ogh2IqWDrE3yD7sslxSq6qi2CMs4Y6l7DxxeeXmkPxJ4JI
-   KynLlCDrOneDmecXi1NKZo7HAJb10qtnznk8EQXeHyWESDbG849UKygnx
-   HNXDyFqMxmRCySptB3KnPGU5apacmaRpMRUpvD8CQ5XaVzmThDm7yPorf
-   34Vs05XDO7BKqg626l5a4BziAFVsCkPDUDNVjIBPho5/xZoxHcqwgis84
-   WxS6IDPk9JILcvEUdgez/5ztK4epzhiHJelrQLseEGTB63boe/yYUol/J
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="304826541"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="304826541"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 05:29:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="659768037"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="659768037"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 18 Oct 2022 05:29:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oklio-009M5d-2g;
-        Tue, 18 Oct 2022 15:29:26 +0300
-Date:   Tue, 18 Oct 2022 15:29:26 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pinctrl-intel tree
-Message-ID: <Y06cJt+naCww8p5O@smile.fi.intel.com>
-References: <20221018131330.75fc1807@canb.auug.org.au>
+        Tue, 18 Oct 2022 08:30:26 -0400
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8214FA02FF;
+        Tue, 18 Oct 2022 05:30:24 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id a24so9469408qto.10;
+        Tue, 18 Oct 2022 05:30:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LA5Rw3StwiOqL+QwzJgo3njgEZhTbHuX12wcOa2B5Os=;
+        b=Ii73Xm4qYOpwdKdTImAOfK4v5TThDEEOii1c40foC6cBmIQSl/oJ4CNt/qBjkwV+Rf
+         IsCodeAX1yd+Aahx1Ab5Akm93REV+z6kv36LLvLPjTw1Gh09VmCkGj+iMAEQ1/DZz3eW
+         KZKJMHRIs30cTpTdfKRWfGS7R97bi7ipz9d52ZVWdDBQq4YUM37WOcsHa2fHSMSHgAYy
+         HPo4VY3NXUsWm+TUyON6gV3TDy4wAw31/HG1zFhUuopJVw4gGFJlPmOUxH92WvSUJc/p
+         zThQaaInMOrC+k0As2qDfLoHyzcMlAtj+2LdBbVjF7JVYY1B3i5fZzksVQ+y6uuAL6AH
+         84YA==
+X-Gm-Message-State: ACrzQf1uXHGsROcsNficI288QEVWleJx/Bae8A3dLvURj5I1PA7LyHJ+
+        8Ar9Sh4d1YpumoTDTAqvaFN4UwiQcqFjaQ==
+X-Google-Smtp-Source: AMsMyM787KZDxWm9qtGFBmjdpQkf8XwXaiFsOUrkiHjboDALwsYvDEqYVzAiEuaUvcSfOPX2zumXkQ==
+X-Received: by 2002:ac8:5848:0:b0:39c:e974:1c2c with SMTP id h8-20020ac85848000000b0039ce9741c2cmr1833279qth.674.1666096223404;
+        Tue, 18 Oct 2022 05:30:23 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id bq36-20020a05620a46a400b006ee77f1ecc3sm2249510qkb.31.2022.10.18.05.30.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 05:30:23 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3573ed7cc15so135568527b3.1;
+        Tue, 18 Oct 2022 05:30:22 -0700 (PDT)
+X-Received: by 2002:a81:98d:0:b0:357:2422:13b4 with SMTP id
+ 135-20020a81098d000000b00357242213b4mr2107285ywj.316.1666096222450; Tue, 18
+ Oct 2022 05:30:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018131330.75fc1807@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017145157.1866351-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2210171653540.9136@ramsan.of.borg> <alpine.DEB.2.21.2210181126040.50489@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2210181126040.50489@angie.orcam.me.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Oct 2022 14:30:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
+Message-ID: <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v6.1-rc1
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     linux-kernel@vger.kernel.org,
+        D Scott Phillips <scott@os.amperecomputing.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-arm-kernel@lists.infradead.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-um@lists.infradead.org, linux-rdma@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
+        sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 01:13:30PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the pinctrl-intel tree, today's linux-next build (arm64
-> defconfig) failed like this:
-> 
-> 
-> Presumably caused by commit
-> 
->   e6b665a1c9ae ("pinctrl: Clean up headers")
-> 
-> I have applied the following patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 18 Oct 2022 13:06:39 +1100
-> Subject: [PATCH] fix up for "pinctrl: Clean up headers"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/pinctrl/pinctrl-zynqmp.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-zynqmp.c b/drivers/pinctrl/pinctrl-zynqmp.c
-> index 1a94db1ffa4f..f2be341f73e1 100644
-> --- a/drivers/pinctrl/pinctrl-zynqmp.c
-> +++ b/drivers/pinctrl/pinctrl-zynqmp.c
-> @@ -18,6 +18,7 @@
->  #include <linux/firmware/xlnx-zynqmp.h>
->  
->  #include <linux/pinctrl/pinconf-generic.h>
-> +#include <linux/pinctrl/pinconf.h>
->  #include <linux/pinctrl/pinctrl.h>
->  #include <linux/pinctrl/pinmux.h>
+Hi Maciej,
 
-Right, thank you for the fix, I'll incorporate it into the original patch.
+On Tue, Oct 18, 2022 at 12:39 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+> On Mon, 17 Oct 2022, Geert Uytterhoeven wrote:
+> > .> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9abf2313adc1ca1b6180c508c25f22f9395cc780/ (all 149 configs)
 
+> > >  + {standard input}: Error: branch to a symbol in another ISA mode: 1339 =>
+> > > 2616, 2621
+> >
+> > mips-gcc11/micro32r2_defconfig
+> > mips-gcc11/micro32r2el_defconfig
+>
+>  Where can these configs be obtained from?
 
--- 
-With Best Regards,
-Andy Shevchenko
+By following the links in the URL above you removed while replying? ;-)
 
+http://kisskb.ellerman.id.au/kisskb/buildresult/14818296/
+http://kisskb.ellerman.id.au/kisskb/buildresult/14818298/
 
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
