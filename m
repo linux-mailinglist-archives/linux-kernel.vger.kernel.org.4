@@ -2,145 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2399C602123
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAA4602124
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 04:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiJRC0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 22:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        id S230397AbiJRC00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 22:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiJRC0K (ORCPT
+        with ESMTP id S230229AbiJRC0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 22:26:10 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F64C7969D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:26:08 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id f140so12811244pfa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/KZhy//nHZxzt7N+DIXJ4f0oPILyzcXc82OGC+Wmp/k=;
-        b=BNQoXVjyQzateVtvrG7WFBq7bZIutgY4fn3PO7YW7fW4F6ZKob4YvPwsZfSuxZJJ1y
-         9qT6OBPYy22bDT0dfOMnEP06BZRtXWBq+hH2RCqBJNeU5TScoTKF3IZzSlopKwtV6GIc
-         j7ydQqNtqK8FDU47mblyFvt4BnTs+KHl4e/Es=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/KZhy//nHZxzt7N+DIXJ4f0oPILyzcXc82OGC+Wmp/k=;
-        b=nXFKs1LGdpmVuCzZY3IT4P0FBFMCytxNcxm+dC/saBv0wjIfXXblSlaof3PLmyiEqn
-         6t+W/jcvR99RvKbmJNKkdolbX2U+hkMs/lzrwz9caGWQ+FvfCL6ufffavo+wTUIxldqX
-         6CUJtuvBc5DfVLl2bJTOHfSxzdoaCgNE6f81/JKSOdazewXSB3HelfD39hgrwwrvXrhJ
-         bb582RekIhp3/kX+0o/xj/D0MKacWvq2qM4EddFG7tY3rXzhnL1X6wJU7gF3vpOm4zOB
-         CDayYodGPv8EzJm+0M+rkfFHdquWsGkYE/JtASGc9vMBUpRxvsJ6+bz4Vb9hQJvf0nyQ
-         QKZQ==
-X-Gm-Message-State: ACrzQf3qSULmBdCyWXlFNsPni1unMOfD5VIyuj9WRnIaDDiy+iKjO1cx
-        RJdiYWNHz1Z4FR9ByQ0qvzcMvQ==
-X-Google-Smtp-Source: AMsMyM44tI9T+OrjStrhBakQHZqVAo+drzSjAJZvAYJDXZdKqjPYu8K6XRQt6u2BFVqHJsVCsEwuww==
-X-Received: by 2002:a63:1f5c:0:b0:469:d0e6:dac0 with SMTP id q28-20020a631f5c000000b00469d0e6dac0mr681043pgm.427.1666059967533;
-        Mon, 17 Oct 2022 19:26:07 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i196-20020a636dcd000000b00434abd19eeasm6778334pgc.78.2022.10.17.19.26.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 19:26:06 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 19:26:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/6][next] orinoco: Avoid clashing function prototypes
-Message-ID: <202210171914.B3E5CE55@keescook>
-References: <cover.1666038048.git.gustavoars@kernel.org>
- <2387e02ae7f31388f24041cae8d02d5e12151708.1666038048.git.gustavoars@kernel.org>
+        Mon, 17 Oct 2022 22:26:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841258FD74
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 19:26:16 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MryKR4vhLzmV9B;
+        Tue, 18 Oct 2022 10:21:31 +0800 (CST)
+Received: from [10.67.110.176] (10.67.110.176) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 10:26:13 +0800
+Subject: Re: [PATCH] copy_process(): fix a memleak in copy_process()
+To:     Christian Brauner <brauner@kernel.org>
+CC:     <akpm@linux-foundation.org>, <tglx@linutronix.de>,
+        <ebiederm@xmission.com>, <luto@kernel.org>,
+        <bigeasy@linutronix.de>, <Liam.Howlett@Oracle.com>,
+        <fenghua.yu@intel.com>, <peterz@infradead.org>,
+        <viro@zeniv.linux.org.uk>, <jannh@google.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221017063406.604188-1-cuigaosheng1@huawei.com>
+ <20221017071832.yy7oyhatdszlg3l2@wittgenstein>
+From:   cuigaosheng <cuigaosheng1@huawei.com>
+Message-ID: <d0ccf66e-da42-6077-d57c-e44a4095ae1b@huawei.com>
+Date:   Tue, 18 Oct 2022 10:26:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2387e02ae7f31388f24041cae8d02d5e12151708.1666038048.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221017071832.yy7oyhatdszlg3l2@wittgenstein>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.176]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 03:33:01PM -0500, Gustavo A. R. Silva wrote:
-> When built with Control Flow Integrity, function prototypes between
-> caller and function declaration must match. These mismatches are visible
-> at compile time with the new -Wcast-function-type-strict in Clang[1].
-> 
-> Fix a total of 53 warnings like these:
-> 
-> drivers/net/wireless/intersil/orinoco/wext.c:1379:27: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_param *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
->         IW_HANDLER(SIOCGIWPOWER,        (iw_handler)orinoco_ioctl_getpower),
->                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> ../net/wireless/wext-compat.c:1607:33: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_point *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
->         [IW_IOCTL_IDX(SIOCSIWGENIE)]    = (iw_handler) cfg80211_wext_siwgenie,
->                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> This will be released during __fput() when ->release() ==
+> pidfd_release() is called so calling put_pid() here will result in UAF
+> later on. What syzbot instance does this report come from?
+> .
 
-Thank you for working on these! Was this conversion done manually, via
-coccinelle, or something else?
+Thanks for taking time to review the patch, kmemleak report this when
+I'm doing some kernel tests, unfortunately, I didn't realize that
+pidfd_release would release pid. Perhaps there is another reason for this
+issue, but I'm not sure now, I will try to prove it.
 
-> The orinoco Wireless Extension handler callbacks (iw_handler) use a
-> union for the data argument. Actually use the union and perform explicit
-> member selection in the function body instead of having a function
-> prototype mismatch. No significant binary differences were seen
-> before/after changes.
+By the way, do you have any ideas about it? such as "->release() == NULL"?
 
-What does "significant" mean here? :P Anything related to line counts
-can just be ignored. But I'd expect the .text output of
-drivers/net/wireless/intersil/orinoco/wext.o before/after to be
-identical.
+Thanks very much!
 
-> [...]
->  	IW_HANDLER(SIOCSIWRTS,		(iw_handler)cfg80211_wext_siwrts),
-^^^ I think these are fixed explicitly later, but maybe better to just
-collapse them into this patch?
-
-> [...]
-> @@ -1391,15 +1406,15 @@ static const iw_handler	orinoco_handler[] = {
->    Added typecasting since we no longer use iwreq_data -- Moustafa
->   */
->  static const iw_handler	orinoco_private_handler[] = {
-> -	[0] = (iw_handler)orinoco_ioctl_reset,
-> -	[1] = (iw_handler)orinoco_ioctl_reset,
-> -	[2] = (iw_handler)orinoco_ioctl_setport3,
-> -	[3] = (iw_handler)orinoco_ioctl_getport3,
-> -	[4] = (iw_handler)orinoco_ioctl_setpreamble,
-> -	[5] = (iw_handler)orinoco_ioctl_getpreamble,
-> -	[6] = (iw_handler)orinoco_ioctl_setibssport,
-> -	[7] = (iw_handler)orinoco_ioctl_getibssport,
-> -	[9] = (iw_handler)orinoco_ioctl_getrid,
-> +	[0] = orinoco_ioctl_reset,
-> +	[1] = orinoco_ioctl_reset,
-> +	[2] = orinoco_ioctl_setport3,
-> +	[3] = orinoco_ioctl_getport3,
-> +	[4] = orinoco_ioctl_setpreamble,
-> +	[5] = orinoco_ioctl_getpreamble,
-> +	[6] = orinoco_ioctl_setibssport,
-> +	[7] = orinoco_ioctl_getibssport,
-> +	[9] = orinoco_ioctl_getrid,
-
-Oops, I broke atmel. These really are 0-indexed...
-
- static const iw_handler atmel_private_handler[] =
- {
--	NULL,				/* SIOCIWFIRSTPRIV */
-+	IW_HANDLER(SIOCIWFIRSTPRIV,	NULL),
- };
- 
-I'll send a fix!
-
--- 
-Kees Cook
+On 2022/10/17 15:18, Christian Brauner wrote:
+> On Mon, Oct 17, 2022 at 02:34:06PM +0800, Gaosheng Cui wrote:
+>> If CLONE_PIDFD is set in clone_flags, pidfile will hold the reference
+>> count of pid by getpid(pid), In the error path bad_fork_put_pidfd, the
+>> reference of pid needs to be released, otherwise there will be a
+>> memleak issue, fix it.
+>>
+>> unreferenced object 0xffff888164aed400 (size 224):
+>>    comm "sh", pid 75274, jiffies 4295717290 (age 2955.536s)
+>>    hex dump (first 32 bytes):
+>>      01 00 00 00 00 00 00 00 00 00 00 00 ad 4e ad de  .............N..
+>>      ff ff ff ff 00 00 00 00 ff ff ff ff ff ff ff ff  ................
+>>    backtrace:
+>>      [<00000000bcb9eebb>] kmem_cache_alloc+0x16a/0x7f0
+>>      [<00000000340cf9ad>] alloc_pid+0xc5/0xce0
+>>      [<000000002387362c>] copy_process+0x29ef/0x6c90
+>>      [<00000000bf7d7efc>] kernel_clone+0xd9/0xc70
+>>      [<0000000047b1a04f>] __do_sys_clone+0xe1/0x120
+>>      [<0000000000f1aa25>] __x64_sys_clone+0xc3/0x150
+>>      [<00000000250a19f1>] do_syscall_64+0x5c/0x90
+>>      [<000000007e0ac417>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> Fixes: 6fd2fe494b17 ("copy_process(): don't use ksys_close() on cleanups")
+>> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+>> ---
+>>   kernel/fork.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/kernel/fork.c b/kernel/fork.c
+>> index 08969f5aa38d..8706c06be8af 100644
+>> --- a/kernel/fork.c
+>> +++ b/kernel/fork.c
+>> @@ -2499,6 +2499,7 @@ static __latent_entropy struct task_struct *copy_process(
+>>   	cgroup_cancel_fork(p, args);
+>>   bad_fork_put_pidfd:
+>>   	if (clone_flags & CLONE_PIDFD) {
+>> +		put_pid(pid);
+> This will be released during __fput() when ->release() ==
+> pidfd_release() is called so calling put_pid() here will result in UAF
+> later on. What syzbot instance does this report come from?
+> .
