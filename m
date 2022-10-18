@@ -2,107 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102786031BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AA76031BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJRRmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        id S229823AbiJRRoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiJRRmW (ORCPT
+        with ESMTP id S229649AbiJRRoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:42:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D76BEEAB7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:42:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BBA8B8208B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:42:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17039C433C1;
-        Tue, 18 Oct 2022 17:42:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666114935;
-        bh=Y1SmAIBJbXB7lofHkE0yT9ZGmSVcPna44OsF5h7gypg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=UPvVi/sspSqTaVQRhcpCXpz5gwPm4StgaAqpJRgzMj6rJo7BE/i4gwpzARBrde0uL
-         emmK274aYnzf9EX8WsoGg1Y1nVtP21UD2LVRMbl1cP10AzdMergpBZXBIUKBTH4pl3
-         eKgzLEVljwgdRolK/Oye72J5IVFW5b2aZ/rdsDVSD7kO57fDdEDn7sTPsssCSnKKjc
-         iof72v9fsbYIOVf8KrHnRgnbQhpq/3IQj4/vvm+TjaCr2fiL3/U5J0t/O26oPD86Jd
-         nT2Gw6JgKnM+SXwS11tkZKzdCu6gZUeFjMs94lTploX1UtYaLO4wlVFIE7lmqbx/tc
-         +zxslyAGlUp/g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B24285C0528; Tue, 18 Oct 2022 10:42:14 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 10:42:14 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Ryosuke Yasuoka <ryasuoka@redhat.com>, dvyukov@google.com,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] kcsan: Fix trivial typo in Kconfig help comments
-Message-ID: <20221018174214.GS5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221018102254.2424506-1-ryasuoka@redhat.com>
- <CANpmjNMoZ6X-bPHg3pfWrnBfP-khpwXNvHxxrwXf2R27_PuSZA@mail.gmail.com>
+        Tue, 18 Oct 2022 13:44:14 -0400
+Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98BA7BD043
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:44:13 -0700 (PDT)
+Received: from [192.168.50.220] ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id kqdPos7NKaWj1kqdPoCiGi; Tue, 18 Oct 2022 19:44:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666115052; bh=EpI0ycdh8Ig95P/hY3/+K/iwa0CUCWGqrcTlTVhGMVQ=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=PmfUbG7S9OTwnKSQPitcE1z8b38QfgTfE5lG3wBDVaGzZd0LBZwGsU7oJnmXE/FYR
+         KhBr81niyjpjCqiqZp6WoLhDs+/ULX1WNOuxYkRb1h0s/IPDKXWZyFfHyTLUnN+UWx
+         pdatAnnftksmWlAv8kxGktL9fCNDMU3x2j2PY7lNq1m6E4Ri2JWY47BTIFcMCa24qG
+         KniLSSWczXk9Jhwwkfu9sursK8R7CwLQ2zb+/kQjNRlQpnVGVQ5uU1Uqm1nwHdRweI
+         nDSsEivQ6M8KXkLNBHpi/m+yLnv30kACMOiqCKnwqX5Fcs9serNI8hCcpMmRMPgATz
+         Zm4rnQ3O+YIqg==
+Message-ID: <972a3be7-4522-b4f0-adfa-6b42be56c52f@benettiengineering.com>
+Date:   Tue, 18 Oct 2022 19:44:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNMoZ6X-bPHg3pfWrnBfP-khpwXNvHxxrwXf2R27_PuSZA@mail.gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] ARM: mm: fix no-MMU ZERO_PAGE() implementation
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>
+References: <20221017233700.84918-1-giulio.benetti@benettiengineering.com>
+ <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfGXXZoTJNft61coI9sV7MyMRJ4QVPzXaGpDzP2umrcTBDjbrNbAnVRENaaZaU00qf9Zb+PZAhmd2iC/anlqxwXddVPXCzWSqY1Vh06fI3v41a3DN9yTZ
+ bUQcsMxqyg8RcOm79RGyoLwl8GLXX74iGVuBkQDZUSrnBBuA+gXDxACsXlrpxYYs37MTO8QnCcYTthz1p2vaLNTXEjCBG2JeuYPkk1pdIjYuwm1xevT1q6Vs
+ kKSnLdnRqZ44yeSh2l4PmRTC1vPh42vs4djB8qCP6Adg+DmkC9B+/3tYhFaYXNgMiR7tjLNpQ8YnL4YaxAu1yjIS8RP4uy9A82tUgOpY0EmP1l98wjI0ldKt
+ RdaqUMcUZ3tlRdL0XgvcE1fbBghoX+D08LbmfIYCkQXvBfi/pQeq4ZC9mmCFfku/dzO5eUjYI55o9mO5/CUCpWNFqpg8BzQeHtWFNzCHFzXf2stlC2Zz2pn4
+ K73LFXe+YKmHSLTP0yeXjhG5cnQ7GD/DmFjIdy3++XhPTEvxSBWzX5qhKgs=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 08:15:26AM -0700, Marco Elver wrote:
-> On Tue, 18 Oct 2022 at 03:23, Ryosuke Yasuoka <ryasuoka@redhat.com> wrote:
-> >
-> > Fix trivial typo in Kconfig help comments in KCSAN_SKIP_WATCH and
-> > KCSAN_SKIP_WATCH_RANDOMIZE
-> >
-> > Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
+Hi Arnd,
+
+On 18/10/22 09:03, Arnd Bergmann wrote:
+> On Tue, Oct 18, 2022, at 1:37 AM, Giulio Benetti wrote:
+>> Actually in no-MMU SoCs(i.e. i.MXRT) ZERO_PAGE(vaddr) expands to
+>> ```
+>> virt_to_page(0)
+>> ```
+>> that in order expands to:
+>> ```
+>> pfn_to_page(virt_to_pfn(0))
+>> ```
+>> and then virt_to_pfn(0) to:
+>> ```
+>> #define virt_to_pfn(0) \
+>> 	((((unsigned long)(0) - PAGE_OFFSET) >> PAGE_SHIFT) + \
+>> 	 PHYS_PFN_OFFSET)
+>> ```
+>> where PAGE_OFFSET and PHYS_PFN_OFFSET are the DRAM offset(0x80000000) and
+>> PAGE_SHIFT is 12. This way we obtain 16MB(0x01000000) summed to the base of
+>> DRAM(0x80000000).
+>> When ZERO_PAGE(0) is then used, for example in bio_add_page(), the page
+>> gets an address that is out of DRAM bounds.
+>> So instead of using fake virtual page 0 let's allocate a dedicated
+>> zero_page during paging_init() and assign it to a global 'struct page *
+>> empty_zero_page' the same way mmu.c does. Then let's move ZERO_PAGE()
+>> definition to the top of pgtable.h to be in common between mmu.c and
+>> nommu.c.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > 
-> Reviewed-by: Marco Elver <elver@google.com>
+> Maybe mention commit dc068f462179 ("m68knommu: set ZERO_PAGE() to the
+> allocated zeroed page") for the commit that fixed this first,
+> as well as the previous discussion at
+> https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#m1266ceb63ad140743174d6b3070364d3c9a5179b
 
-Applied, thank you both!
+Thanks for poiting, I was unaware of this. I'll point it for sure.
 
-							Thanx, Paul
+> It looks like we dropped the ball on this when it came up last.
+> I'm also not sure when we started requiring this, any idea?
 
-> Thanks.
+No to be honest. But in my case I've met ZERO_PAGE() calling in sdhci
+driver. And as stated on the ML link above:
+```
+But I wonder if it's safe for noMMU architectures to go on without a
+working ZERO_PAGE(0).  It has uses scattered throughout the tree, in
+drivers, fs, crypto and more, and it's not at all obvious (to me) that
+they all depend on CONFIG_MMU.
+```
+And I've found this driver that requires it and probably is not the last
+since imxrt support is not complete.
+
+> I can see that microblaze-nommu used BUG() in ZERO_PAGE(), so at
+> whenever microblaze last worked, we clearly did not call it.
+
+This probably means that microblaze-nommu doesn't use drivers or other
+subsystems that require ZERO_PAGE().
+
 > 
-> > ---
-> >  lib/Kconfig.kcsan | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-> > index 47a693c45864..375575a5a0e3 100644
-> > --- a/lib/Kconfig.kcsan
-> > +++ b/lib/Kconfig.kcsan
-> > @@ -125,7 +125,7 @@ config KCSAN_SKIP_WATCH
-> >         default 4000
-> >         help
-> >           The number of per-CPU memory operations to skip, before another
-> > -         watchpoint is set up, i.e. one in KCSAN_WATCH_SKIP per-CPU
-> > +         watchpoint is set up, i.e. one in KCSAN_SKIP_WATCH per-CPU
-> >           memory operations are used to set up a watchpoint. A smaller value
-> >           results in more aggressive race detection, whereas a larger value
-> >           improves system performance at the cost of missing some races.
-> > @@ -135,8 +135,8 @@ config KCSAN_SKIP_WATCH_RANDOMIZE
-> >         default y
-> >         help
-> >           If instruction skip count should be randomized, where the maximum is
-> > -         KCSAN_WATCH_SKIP. If false, the chosen value is always
-> > -         KCSAN_WATCH_SKIP.
-> > +         KCSAN_SKIP_WATCH. If false, the chosen value is always
-> > +         KCSAN_SKIP_WATCH.
-> >
-> >  config KCSAN_INTERRUPT_WATCHER
-> >         bool "Interruptible watchers" if !KCSAN_STRICT
-> > --
-> > 2.37.3
-> >
+>> +#ifndef __ASSEMBLY__
+>> +/*
+>> + * ZERO_PAGE is a global shared page that is always zero: used
+>> + * for zero-mapped memory areas etc..
+>> + */
+>> +extern struct page *empty_zero_page;
+>> +#define ZERO_PAGE(vaddr)	(empty_zero_page)
+>> +#endif
+> 
+> In addition to your fix, I see that arm is the only architecture
+> that defines 'empty_zero_page' as a pointer to the page, when
+> everything else just makes it a pointer to the data itself,
+> or an 'extern char empty_zero_page[]' array, which we may want
+> to change for consistency.
+
+I was about doing it, but then I tought to move one piece at a time.
+But yes, I can modify accordingly. That way we also avoid the early
+allocation in pagint_init() since it would be a .bss array.
+
+> There are three references to empty_zero_page in architecture
+> independent code, and while we don't seem to use any of them
+> on Arm, they would clearly be wrong if we did:
+> 
+> drivers/acpi/scan.c:#define INVALID_ACPI_HANDLE ((acpi_handle)empty_zero_page)
+> drivers/spi/spi-fsl-cpm.c:      mspi->dma_dummy_tx = dma_map_single(dev, empty_zero_page, PAGE_SIZE,
+> include/linux/raid/pq.h:# define raid6_empty_zero_page empty_zero_page
+
+For them I can send patches to substitute with PAGE_ZERO(0) correctly 
+adapted.
+
+What do you think?
+
+Thanks for reviewing.
+
+Best regards
+-- 
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
