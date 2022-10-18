@@ -2,95 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261D06036B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6967C6036B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJRXjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 19:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S229612AbiJRXkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 19:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJRXjB (ORCPT
+        with ESMTP id S229520AbiJRXkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 19:39:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D7C8209
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:38:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D90E2B8218A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:38:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A61C433C1;
-        Tue, 18 Oct 2022 23:38:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666136336;
-        bh=esm08ZulWwZ80WMHJ6WXGV+D01NZx6TnxbzZ8V0xbFQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RU4sxfZU6VWLNJWMi2463MZILGF+3y9ghSy3+WCddc4NvggJshJFs5LIaZdNgu74K
-         Tvfv4JuOtLZnRdoLSA6QtMpY4skIWOQTNttItNhhTxlzJ8vjOW7yv5D59CJjyKhmME
-         M4lzxopDiWwE5QHD+hRH7HPk8EdimkM7lva1sOC5WukLc/FMFqbP2ATaZYZqQ81GJ3
-         2I8pf5DwEgSY4rXFH6OivXIg1L1KhwYRE8Tf45xCDK2+URu0DulDZIbsn9vOs7iRyf
-         cUDoEgy8jG1we5Trw0FOW+FKcFpB0qJAf8S0/8fCaMp9tdKx1kdWZoge052puqj+Sb
-         z8a4u5xOL9uYQ==
-Date:   Tue, 18 Oct 2022 16:38:54 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] x86/ibt: Implement FineIBT
-Message-ID: <20221018233854.qj3vrdxsnc6ds7qs@treble>
-References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+        Tue, 18 Oct 2022 19:40:01 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA3C48A27;
+        Tue, 18 Oct 2022 16:39:59 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id l127so13121125iof.12;
+        Tue, 18 Oct 2022 16:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SQny1BPtkzNGj7ldMA47rhjiJlgg7erY4ac0SwGdIYQ=;
+        b=gyKQuaKXa791sgchUF23cA10pL+wyHyik86n5531IxeNu4A87kAC4BWuh2lr5+DOmj
+         4yNghh/N1BJw+PHLDcDf07HXlFTTucREHCWEQav/Mjs/uMjAeK96zLoYNeDSH+Ii8klf
+         Z3QXfzlcj7OSFyDp6fh8FinqkNJ30ZIVCxHDREurIN5ndppIcx5DFyq9cHVMy8wCXt7Y
+         l0X8+BawNPe/JMf8di/+HqQdxI7KcCwe0ZgzxLKvR8w1GDuR8kylDlai5K8nnPo2ZvSD
+         Jsp+LyVLgHwIvwl5KygEHK7zkFF2TiTfzTkvVR0VCxNB7oMpIExSviWRki0tDevklxS1
+         2Vaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SQny1BPtkzNGj7ldMA47rhjiJlgg7erY4ac0SwGdIYQ=;
+        b=Yv5nMe/g6w8dXBYVC8Ji0QZSzslsQTE8vdmsrUA/bDFQS0vUJFv1HFV12n2WDuMns9
+         Je1a5yHt5x7xNPiJG/n681wokEkjVQyM726OEucIuIrHRmLy0aIi8TxvoLzDl+QI+oB0
+         I7jcNt/CV7t+rN37OFsNJ/9UZa6vQ6PxufIe3wBVvt+TjbXpreY7gn39ID33hyLmTLh2
+         M2hBKj7up6l0jObgCzAOnB/4YH1z0NDfEcr3uuGHj+2zV6gQxSf+I+bdzn2fB0Ohr303
+         V/ZPr2RZ3+EipjoeSCWOv/XqLn+f9Td6Te9bhMMTcGpN31T9i60tSDhPC1n/DAhOGWu1
+         xEPA==
+X-Gm-Message-State: ACrzQf1kujwFAIz+qeOFpiJFUVigyI0UeUm6aUjfjn/Kbk84jBDzi84U
+        fw3XpMFzU/eQhYHPMCl5nDSab4ZVyH5IN18qbRs=
+X-Google-Smtp-Source: AMsMyM6YKLqCwHtPfLBSJBbnI8+TsIvgERke3CDtU0tjh/jN9V+SeSMrE4nwKYrNTaIfAcaHUoBvz56WjkqJl48wFwk=
+X-Received: by 2002:a5d:9411:0:b0:6a7:f7ec:6dd8 with SMTP id
+ v17-20020a5d9411000000b006a7f7ec6dd8mr3371256ion.44.1666136398884; Tue, 18
+ Oct 2022 16:39:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221001002638.2881842-1-dlatypov@google.com> <CANiq72nU-eDOT94q26dTVgCFA_Hs1cGiLpDCmQ5n-cCVKAcsqQ@mail.gmail.com>
+ <CAGS_qxqVUmjxULZ_Kt-gWRJb=+EYpG2_K89sQTq0BYbUighn5w@mail.gmail.com>
+ <CANiq72m5nk4zvcYozFKjO=9gOXG2wx2MG1EYsgAZwB_PnHUSJA@mail.gmail.com> <CAGS_qxpi+93JPaKiowVM65WJJ0Nipd6EN6HYHe0ZO_McWy2woQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxpi+93JPaKiowVM65WJJ0Nipd6EN6HYHe0ZO_McWy2woQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 19 Oct 2022 01:39:48 +0200
+Message-ID: <CANiq72=i4E7PczeiAt7G5qSMn1fyxe7iSXOsO==qiet8Dr591w@mail.gmail.com>
+Subject: Re: [PATCH 0/4] kunit: more assertion reworking
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 03:35:50PM +0200, Peter Zijlstra wrote:
-> 
-> Implement an alternative CFI scheme that merges both the fine-grained
-> nature of kCFI but also takes full advantage of the coarse grained
-> hardware CFI as provided by IBT.
-> 
-> To contrast:
-> 
->   kCFI is a pure software CFI scheme and relies on being able to read
-> text -- specifically the instruction *before* the target symbol, and
-> does the hash validation *before* doing the call (otherwise control
-> flow is compromised already).
-> 
->   FineIBT is a software and hardware hybrid scheme; by ensuring every
-> branch target starts with a hash validation it is possible to place
-> the hash validation after the branch. This has several advantages:
-> 
->    o the (hash) load is avoided; no memop; no RX requirement.
-> 
->    o IBT WAIT-FOR-ENDBR state is a speculation stop; by placing
->      the hash validation in the immediate instruction after
->      the branch target there is a minimal speculation window
->      and the whole is a viable defence against SpectreBHB.
-> 
-> Obviously this patch relies on kCFI (upstream), but additionally it also
-> relies on the padding from the call-depth-tracking patches
-> (tip/x86/core). It uses this padding to place the hash-validation while
-> the call-sites are re-written to modify the indirect target to be 16
-> bytes in front of the original target, thus hitting this new preamble.
+On Wed, Oct 19, 2022 at 1:26 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> No worries.
+> You've had a very busy couple of weeks, I imagine.
 
-Can the objtool changes be moved to a separate patch?
+Just a bit :) Nevertheless, it was my intention to reply :(
 
-The RFC was 11 patches, is it now much smaller because of the new
-dependencies?  The RFC had some eBPF changes and a test module, are
-those no longer needed?
+I have linked this thread from the PR noting that you warned me about
+the future conflict [1], thanks again!
 
--- 
-Josh
+[1] https://github.com/Rust-for-Linux/linux/pull/915#issuecomment-1283138279
+
+Cheers,
+Miguel
