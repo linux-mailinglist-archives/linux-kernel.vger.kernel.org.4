@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E06F60368E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFE560369E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiJRXOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 19:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S229770AbiJRXUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 19:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiJRXOD (ORCPT
+        with ESMTP id S229506AbiJRXUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 19:14:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDE9D9957;
-        Tue, 18 Oct 2022 16:14:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F9FAB8218A;
-        Tue, 18 Oct 2022 23:14:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FC6C433D7;
-        Tue, 18 Oct 2022 23:13:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1666134839;
-        bh=Bwa4jweO9boJ1ae2H8vPdpx5UbQEya05ZuGsjBJ9/yI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BNa8qEh/TV4+nuKBpx1Hv0FYGYDerl3JL2iWAf4uVpPzJGN2HdF0w9hwY/Akbu7E8
-         EziGaaQ0Pb+Nh7UCdiRAi/jGPRYoW0tLYXI5gqK4S1il98BMOwORNZt4j41SWtok9O
-         jN43wjoRyKKyHE33dz4JX57cqgf8P4XaQYHBmr4M=
-Date:   Tue, 18 Oct 2022 16:13:57 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Alexey Dobriyan <adobriyan@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        David Laight <David.Laight@aculab.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Mike Rapoport <rppt@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Subject: Re: [PATCH v3] proc: report open files as size in stat() for
- /proc/pid/fd
-Message-Id: <20221018161357.4891fcdb94ecc63035b6792a@linux-foundation.org>
-In-Reply-To: <20221018045844.37697-1-ivan@cloudflare.com>
-References: <20221018045844.37697-1-ivan@cloudflare.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 19:20:34 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC457E00A;
+        Tue, 18 Oct 2022 16:20:33 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id h203so13123965iof.1;
+        Tue, 18 Oct 2022 16:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DpcZwD/VTohz2sMEZHghcKoGpwp7viWCf88pD6gczuY=;
+        b=PkYye5Dx/rZwH+W9lzinlIcLs31ssQDHpMrSk3RvbH1dV4zUSX6udiS429Yw+YHbob
+         J2j3vn4faLjFpi3MFJsQUZrU+sSLqu+vI3hdeh5L7SpAOG7IAlmZwpFtDTb8O1KudlBD
+         yau99r7qHcXv+ELKKnV/KRV6rlFZBLb5QgOEKgXsdKEqyQW7/kQElzKqino1XMhECqUi
+         RXZ4DbnRaHCVfqh+cW4G3QCHa+uEtFiY6hDdGRz5vGRx+38cZmMrSinawVt1pIFIGF7g
+         yLJZ8iSV3/4Lli8+ULwk7kWRuVvNGq++DRrYFLF0kUpNL5w6I8HwperPcIDps6npJTH4
+         Re5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DpcZwD/VTohz2sMEZHghcKoGpwp7viWCf88pD6gczuY=;
+        b=7ErX1SccKzBxMrwH4rjCHo+0vBvVcZvAUkeXTtGLxoq62odSTVIoNHH/j/yrcSxrL6
+         6+oo4veD96of/oNh08TVc+aET2QJEcoy5OV+jeXcNeRI/ooegjiK2J+zT0UL9mwdqgda
+         AB7F1kjCtFbfAX2imibGS0jE/SDSIvZ6bVEeA46OpEMoNrORLjnrU7NryL9s7PBNbmXp
+         Sde5h10uWKS84290NbuPxG+rZTnQnRl+RcPvOSTWJx2sgtdaI681NiO7XcSiLvYO2NmP
+         n1BTuk/5R0TEonsbK1zqPOM3Qk+WT+wIM5tO4FV2n87bWdjmWYoFqwp8hyWX0+RSyCDo
+         QkvA==
+X-Gm-Message-State: ACrzQf1Gky8UsXGppTkBu0EmVmKoT2FvNMBJANabaI3tFgrLZ3YnpW6N
+        FF1MQegJ6t3g4+B8tg7+VTk1MZo6q2qujHYOgbk=
+X-Google-Smtp-Source: AMsMyM4qcksNk1keuarNtmVMyvT4Mysk87fdtW2CuQ2kpElEi8xfDz+sd2PVtgVfhhbU8K3rA1Gon5Nsz2Nw8bFOnkw=
+X-Received: by 2002:a05:6638:dcc:b0:35a:7ba6:ad51 with SMTP id
+ m12-20020a0566380dcc00b0035a7ba6ad51mr3979566jaj.256.1666135232695; Tue, 18
+ Oct 2022 16:20:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221001002638.2881842-1-dlatypov@google.com> <CANiq72nU-eDOT94q26dTVgCFA_Hs1cGiLpDCmQ5n-cCVKAcsqQ@mail.gmail.com>
+ <CAGS_qxqVUmjxULZ_Kt-gWRJb=+EYpG2_K89sQTq0BYbUighn5w@mail.gmail.com>
+In-Reply-To: <CAGS_qxqVUmjxULZ_Kt-gWRJb=+EYpG2_K89sQTq0BYbUighn5w@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 19 Oct 2022 01:20:21 +0200
+Message-ID: <CANiq72m5nk4zvcYozFKjO=9gOXG2wx2MG1EYsgAZwB_PnHUSJA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] kunit: more assertion reworking
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 21:58:44 -0700 Ivan Babrou <ivan@cloudflare.com> wrote:
+On Sat, Oct 1, 2022 at 8:00 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> While I have you here, any thoughts on how to coordinate the change?
 
-> v3: Made use of bitmap_weight() to count the bits.
+My bad, I forgot to reply to this, sorry. I noticed it again when
+merging 6.1-rc1 into our branch.
 
-Thanks, I queued the below delta:
+Normally I fix the issues when I merge back from Linus. Since we
+intend to keep the CI green on every PR, I added the fix for this in
+the merge itself.
 
---- a/fs/proc/fd.c~proc-report-open-files-as-size-in-stat-for-proc-pid-fd-v3
-+++ a/fs/proc/fd.c
-@@ -283,7 +283,7 @@ static int proc_readfd_count(struct inod
- {
- 	struct task_struct *p = get_proc_task(inode);
- 	struct fdtable *fdt;
--	unsigned int i, size, open_fds = 0;
-+	unsigned int open_fds = 0;
- 
- 	if (!p)
- 		return -ENOENT;
-@@ -293,10 +293,7 @@ static int proc_readfd_count(struct inod
- 		rcu_read_lock();
- 
- 		fdt = files_fdtable(p->files);
--		size = fdt->max_fds;
--
--		for (i = size / BITS_PER_LONG; i > 0;)
--			open_fds += hweight64(fdt->open_fds[--i]);
-+		open_fds = bitmap_weight(fdt->open_fds, fdt->max_fds);
- 
- 		rcu_read_unlock();
- 	}
-_
+In any case, to clarify, the `rust` branch in GitHub is just where we
+placed a lot of things that we wanted to eventually submit (and some
+that should not, e.g. the GitHub CI files). We will be minimizing the
+differences w.r.t. upstream in that branch by preparing proper patches
+from scratch and submitting them through `rust-next` and other trees,
+and eventually remove it (or reusing the name for the fixes branch
+since that is the name other trees use, but we will see).
 
-
-Also, let's explicitly include the header file to avoid possible
-accidents with unexpected Kconfigs.
-
---- a/fs/proc/fd.c~proc-report-open-files-as-size-in-stat-for-proc-pid-fd-v3-fix
-+++ a/fs/proc/fd.c
-@@ -7,6 +7,7 @@
- #include <linux/namei.h>
- #include <linux/pid.h>
- #include <linux/ptrace.h>
-+#include <linux/bitmap.h>
- #include <linux/security.h>
- #include <linux/file.h>
- #include <linux/seq_file.h>
-_
-
+Cheers,
+Miguel
