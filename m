@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86B0602951
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EC4602953
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiJRK3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        id S229866AbiJRK3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJRK3O (ORCPT
+        with ESMTP id S229556AbiJRK3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:29:14 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179B2B3B27;
-        Tue, 18 Oct 2022 03:29:12 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 44DEB5C00D9;
-        Tue, 18 Oct 2022 06:29:10 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 18 Oct 2022 06:29:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666088950; x=1666175350; bh=n/Zbi+VZv8PL4XGNXNoym9Ld2zzm
-        MW3vQ0V8B/QhPt4=; b=PZ6y+XQavhSxLuPV/X+prIBxO9XpY39PIJ1kE2N68POW
-        WVoIm8Xqu6u9A1ycfemAi9TGdAoy4D0W2T0E6xY8hI2MnSLMrURYesOnholM1WbD
-        MqMr5E4q5jYuIR5rlFGgInYm/R4P1iL/JuQ10Qxe9CrmQxzkDUckl0gJWWkgMYGb
-        K94QKBkTCSXkU+I7KcepMRl8Ja5CDixWeqwq8fIWG8k7fTkquaxk0RGBHvp1O5Bn
-        26RRv6Jb0AcaoswTEsuekWT5xqI9LPcA3K8yqLkUIEN6QpsgbZSRd9aJQbnx5gow
-        j3KKop7cLVFMVnLwSyL16VUgoLdtV9NCck4kjVRfkQ==
-X-ME-Sender: <xms:9X9OY33b7Pa4Jc9xJwYH__909T8La2QMxUOz0KQp7KpKrc8V5MjKcA>
-    <xme:9X9OY2HePfVJPkDS1EozCCglHfXQ_GUOE5HXoJm0adz3rCoiGAb5LNHD4t3wF1nW6
-    9kcqtNLVdCebks>
-X-ME-Received: <xmr:9X9OY34t7xdE9d7ldt7KoaeODkeEfx1hWydUPIRi-FEs1OZzrflnyzV-LPHqFromyXrlrkKI9FWGFdSkZAq-lQROPuio5A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvdcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfutghh
-    ihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtthgvrh
-    hnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeghfen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughosh
-    gthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:9X9OY83-wIxVhLeG_EyJHB-76nU1yZ0nrr4YGFeZmVD33bCAed_UNA>
-    <xmx:9X9OY6FvWDq3ERUQkW960f9Mj1vRGjW21B3FR2rnSihxdjHojzW5KQ>
-    <xmx:9X9OY9_JRFNPV48ON3KtZegy_k7vGG7RBO6KQQUpxr2JBdOwRXKBzA>
-    <xmx:9n9OYyR5URycp81hcuRzbR7BhMTU5nctiJiCnWmZHY2RghmvKZYURg>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Oct 2022 06:29:08 -0400 (EDT)
-Date:   Tue, 18 Oct 2022 13:29:04 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
-        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
-        miquel.raynal@bootlin.com, shawnguo@kernel.org,
-        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
-        j-keerthy@ti.com, Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v5 01/33] thermal/of: Rework the thermal device tree
- initialization
-Message-ID: <Y05/8JUU+3kLCZvb@shredder>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-2-daniel.lezcano@linexp.org>
+        Tue, 18 Oct 2022 06:29:35 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CCDEE00;
+        Tue, 18 Oct 2022 03:29:30 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id t16so537464edd.2;
+        Tue, 18 Oct 2022 03:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wyb1pD8c4kNkSky1rGfLKeKyLpRrL4+xpIFRZD/O20=;
+        b=FUwR6yFHr1g2QDyMU1Xcktrr+tj+iccihtOH3JwTJU3x0Dvo4u5fk5n000NwmQDmuV
+         oK3zrOrIrhfAEm2D4M8UMDfYbsVUEjhWqObSS+GV2Cq9BR0OXkt+y6jNOQWmSXgtKYDC
+         tNzPKGZLpPLOXwkeiHgvpmVM/kYv+o2Z/EdzZYnZHTXwih86aGN5A9SB0kyhUJVXehKn
+         qFAUwk3rgU9wbhHx5F1XeKIsKXdbNqwH0xw4nwk+Wx3LjRGJMOE3WAz0SaPpYWAqReJh
+         kWfoa3hhvhW/rKZbld7EWa95hAAiCykqaLFP2Fx9YSgMxr8hsN3WAs1lt7Xh8XcWDy/r
+         KfmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8wyb1pD8c4kNkSky1rGfLKeKyLpRrL4+xpIFRZD/O20=;
+        b=E+tkWW2KESTjGaML1EHyUtw7yKcWF7Z+TqamZ/hBxUP0nyInMAswT5Q4GxjNHzGzgo
+         Fq3oRtyQU2xZepmP9OJgg8xPLksuGTC4gpmz29sKpbTINgKPMbPHa9gT6Ko5TVXzUb4X
+         j/YuUd9QjRTnvy0MYV+8ijF1z/Qb2vvl5iWuHvp7HEwpUbAlkaLWKTHPM0hqb8bx2/2y
+         KRqvsPNKRyU2ackeOUtv1lWNpSjbysmgBytvj/icWaX755lGJBJizIpQWW568wO3Ecil
+         Mx/8EsQM7V1TafyusEAiPnzwRPwODkKz+iH98WNv2K+6LN01qxRqldHlusThEzNP43iI
+         bqSA==
+X-Gm-Message-State: ACrzQf277SbMOXZnqjQMyeQfxHf5jpJge4cMGckx/7LsMIi0cBgRKIDy
+        FaQD5DHSRIiczXWCDVRypyg=
+X-Google-Smtp-Source: AMsMyM6L5Q5weA0xG2DIC9K5KwiMf1vUdfVyiobb/GxgqTAjCzsPWc9Zo5j64qSDUiJLFyKHjpQqCQ==
+X-Received: by 2002:a05:6402:3408:b0:43c:2dd3:d86b with SMTP id k8-20020a056402340800b0043c2dd3d86bmr1966191edc.108.1666088968878;
+        Tue, 18 Oct 2022 03:29:28 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id f11-20020a170906738b00b0073dc8d0eabesm7490755ejl.15.2022.10.18.03.29.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 03:29:27 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 13:29:24 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun.Ramadoss@microchip.com
+Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
+        linux@armlinux.org.uk, ceggers@arri.de, Tristram.Ha@microchip.com,
+        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, Woojung.Huh@microchip.com,
+        davem@davemloft.net, b.hutchman@gmail.com
+Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support
+ for LAN937x switch
+Message-ID: <20221018102924.g2houe3fz6wxlril@skbuf>
+References: <20221014152857.32645-1-arun.ramadoss@microchip.com>
+ <20221017171916.oszpyxfnblezee6u@skbuf>
+ <77959874a88756045ae13e0efede5e697be44a7b.camel@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220804224349.1926752-2-daniel.lezcano@linexp.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
+In-Reply-To: <77959874a88756045ae13e0efede5e697be44a7b.camel@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,191 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 12:43:17AM +0200, Daniel Lezcano wrote:
-> +struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-> +						     const struct thermal_zone_device_ops *ops)
-> +{
-> +	struct thermal_zone_device *tz;
-> +	struct thermal_trip *trips;
-> +	struct thermal_zone_params *tzp;
-> +	struct thermal_zone_device_ops *of_ops;
-> +	struct device_node *np;
-> +	int delay, pdelay;
-> +	int ntrips, mask;
-> +	int ret;
-> +
-> +	of_ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
-> +	if (!of_ops)
-> +		return ERR_PTR(-ENOMEM);
-> +	
-> +	np = of_thermal_zone_find(sensor, id);
-> +	if (IS_ERR(np)) {
-> +		pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
-> +		return ERR_CAST(np);
-> +	}
-> +
-> +	trips = thermal_of_trips_init(np, &ntrips);
-> +	if (IS_ERR(trips)) {
-> +		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
-> +		return ERR_CAST(trips);
-> +	}
-> +
-> +	ret = thermal_of_monitor_init(np, &delay, &pdelay);
-> +	if (ret) {
-> +		pr_err("Failed to initialize monitoring delays from %pOFn\n", np);
-> +		goto out_kfree_trips;
-> +	}
-> +
-> +	tzp = thermal_of_parameters_init(np);
-> +	if (IS_ERR(tzp)) {
-> +		ret = PTR_ERR(tzp);
-> +		pr_err("Failed to initialize parameter from %pOFn: %d\n", np, ret);
-> +		goto out_kfree_trips;
-> +	}
-> +
-> +	of_ops->get_trip_type = of_ops->get_trip_type ? : of_thermal_get_trip_type;
-> +	of_ops->get_trip_temp = of_ops->get_trip_temp ? : of_thermal_get_trip_temp;
-> +	of_ops->get_trip_hyst = of_ops->get_trip_hyst ? : of_thermal_get_trip_hyst;
-> +	of_ops->set_trip_hyst = of_ops->set_trip_hyst ? : of_thermal_set_trip_hyst;
-> +	of_ops->get_crit_temp = of_ops->get_crit_temp ? : of_thermal_get_crit_temp;
-> +	of_ops->bind = thermal_of_bind;
-> +	of_ops->unbind = thermal_of_unbind;
-> +
-> +	mask = GENMASK_ULL((ntrips) - 1, 0);
-> +
-> +	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
-> +						     mask, data, of_ops, tzp,
-> +						     pdelay, delay);
-> +	if (IS_ERR(tz)) {
-> +		ret = PTR_ERR(tz);
-> +		pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
-> +		goto out_kfree_tzp;
-> +	}
-> +
-> +	ret = thermal_zone_device_enable(tz);
-> +	if (ret) {
-> +		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-> +		       tz->type, tz->id, ret);
-> +		thermal_of_zone_unregister(tz);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	return tz;
-> +
-> +out_kfree_tzp:
-> +	kfree(tzp);
-> +out_kfree_trips:
-> +	kfree(trips);
-> +
-> +	return ERR_PTR(ret);
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_of_zone_register);
+On Tue, Oct 18, 2022 at 06:44:04AM +0000, Arun.Ramadoss@microchip.com wrote:
+> I had developed this patch set to add gPTP support for LAN937x based on
+> the Christian eggers patch for KSZ9563. Initially I thought of keeping
+> implementation specific to LAN937x through lan937x_ptp.c files. Since
+> the register sets are same for LAN937x/KSZ9563, I developed using
+> ksz_ptp.c so that in future Christain eggers patch can be merged to it
+> to support the 1 step clock support.
+> I read the Hardware errata of KSZ95xx on 2 step clock and found that it
+> was fixed in LAN937x switches. If this is case, Do I need to move this
+> 2 step timestamping specific to LAN937x as LAN937x_ptp.c & not claim
+> for ksz9563 or common implementation in ksz_ptp.c & export the
+> functionality based on chip-id in get_ts_info dsa hooks.
 
-Daniel, I started seeing these memory leaks [1] since commit
-613ed3f67609 ("hwmon: pm_bus: core: Switch to new of thermal API").
-Seems to be fixed by the following patch [2].
+The high-level visible behavior needs to be that the kernel denies
+hardware timestamping from being enabled on the platforms on which it
+does not work (this includes platforms on which it is conveniently
+"not tested" by Microchip engineers, despite there being published
+errata stating it doesn't work). Then, the code organization needs to be
+such that if anyone wants to add one step TX timestamping to KSZ9477/KSZ9563
+as a workaround later, the code reuse is close to maximal without
+further refactoring. And there should be plenty of reuse beyond the TX
+timestamping procedure.
 
-Do you already have a patch for this issue or should I submit it?
-
-Thanks
-
-[1]
-unreferenced object 0xffff8ee846198c80 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294699704 (age 70.076s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    d0 3f 6e 8c ff ff ff ff 00 00 00 00 00 00 00 00  .?n.............
-  backtrace:
-    [<00000000d136f562>] __kmalloc_node_track_caller+0x42/0x120
-    [<0000000063f31678>] kmemdup+0x1d/0x40
-    [<00000000e6d24096>] thermal_of_zone_register+0x49/0x520
-    [<000000005e78c755>] devm_thermal_of_zone_register+0x54/0x90
-    [<00000000ee6b209e>] pmbus_add_sensor+0x1b4/0x1d0
-    [<00000000896105e3>] pmbus_add_sensor_attrs_one+0x123/0x440
-    [<0000000049e990a6>] pmbus_add_sensor_attrs+0xfe/0x1d0
-    [<00000000466b5440>] pmbus_do_probe+0x66b/0x14e0
-    [<0000000084d42285>] i2c_device_probe+0x13b/0x2f0
-    [<0000000029e2ae74>] really_probe+0xce/0x2c0
-    [<00000000692df15c>] driver_probe_device+0x19/0xd0
-    [<00000000547d9cce>] __device_attach_driver+0x6f/0x100
-    [<0000000020abd24b>] bus_for_each_drv+0x76/0xc0
-    [<00000000665d9563>] __device_attach+0xfc/0x180
-    [<000000008ddd4d6a>] bus_probe_device+0x82/0xa0
-    [<000000009e61132b>] device_add+0x3fe/0x920
-unreferenced object 0xffff8ee846199200 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294699710 (age 70.070s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    d0 3f 6e 8c ff ff ff ff 00 00 00 00 00 00 00 00  .?n.............
-  backtrace:
-    [<00000000d136f562>] __kmalloc_node_track_caller+0x42/0x120
-    [<0000000063f31678>] kmemdup+0x1d/0x40
-    [<00000000e6d24096>] thermal_of_zone_register+0x49/0x520
-    [<000000005e78c755>] devm_thermal_of_zone_register+0x54/0x90
-    [<00000000ee6b209e>] pmbus_add_sensor+0x1b4/0x1d0
-    [<00000000896105e3>] pmbus_add_sensor_attrs_one+0x123/0x440
-    [<0000000049e990a6>] pmbus_add_sensor_attrs+0xfe/0x1d0
-    [<00000000466b5440>] pmbus_do_probe+0x66b/0x14e0
-    [<0000000084d42285>] i2c_device_probe+0x13b/0x2f0
-    [<0000000029e2ae74>] really_probe+0xce/0x2c0
-    [<00000000692df15c>] driver_probe_device+0x19/0xd0
-    [<00000000547d9cce>] __device_attach_driver+0x6f/0x100
-    [<0000000020abd24b>] bus_for_each_drv+0x76/0xc0
-    [<00000000665d9563>] __device_attach+0xfc/0x180
-    [<000000008ddd4d6a>] bus_probe_device+0x82/0xa0
-    [<000000009e61132b>] device_add+0x3fe/0x920
-unreferenced object 0xffff8ee846199780 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294699716 (age 70.064s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    d0 3f 6e 8c ff ff ff ff 00 00 00 00 00 00 00 00  .?n.............
-  backtrace:
-    [<00000000d136f562>] __kmalloc_node_track_caller+0x42/0x120
-    [<0000000063f31678>] kmemdup+0x1d/0x40
-    [<00000000e6d24096>] thermal_of_zone_register+0x49/0x520
-    [<000000005e78c755>] devm_thermal_of_zone_register+0x54/0x90
-    [<00000000ee6b209e>] pmbus_add_sensor+0x1b4/0x1d0
-    [<00000000896105e3>] pmbus_add_sensor_attrs_one+0x123/0x440
-    [<0000000049e990a6>] pmbus_add_sensor_attrs+0xfe/0x1d0
-    [<00000000466b5440>] pmbus_do_probe+0x66b/0x14e0
-    [<0000000084d42285>] i2c_device_probe+0x13b/0x2f0
-    [<0000000029e2ae74>] really_probe+0xce/0x2c0
-    [<00000000692df15c>] driver_probe_device+0x19/0xd0
-    [<00000000547d9cce>] __device_attach_driver+0x6f/0x100
-    [<0000000020abd24b>] bus_for_each_drv+0x76/0xc0
-    [<00000000665d9563>] __device_attach+0xfc/0x180
-    [<000000008ddd4d6a>] bus_probe_device+0x82/0xa0
-    [<000000009e61132b>] device_add+0x3fe/0x920
-
-[2]
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index d4b6335ace15..43d55c29a29a 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -604,13 +604,15 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
-        if (IS_ERR(np)) {
-                if (PTR_ERR(np) != -ENODEV)
-                        pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
--               return ERR_CAST(np);
-+               ret = PTR_ERR(np);
-+               goto out_kfree_of_ops;
-        }
- 
-        trips = thermal_of_trips_init(np, &ntrips);
-        if (IS_ERR(trips)) {
-                pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
--               return ERR_CAST(trips);
-+               ret = PTR_ERR(np);
-+               goto out_kfree_of_ops;
-        }
- 
-        ret = thermal_of_monitor_init(np, &delay, &pdelay);
-@@ -659,6 +661,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
-        kfree(tzp);
- out_kfree_trips:
-        kfree(trips);
-+out_kfree_of_ops:
-+       kfree(of_ops);
- 
-        return ERR_PTR(ret);
- }
+I expect that Christian will also be able to find some time to review
+this RFC and propose some changes/ask some questions based on his prior
+observations, at least so he said privately.
