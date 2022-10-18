@@ -2,252 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439D4601FA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF51601FA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiJRAgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S231871AbiJRAfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbiJRAfk (ORCPT
+        with ESMTP id S232158AbiJRAfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:35:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94C613D45
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:35:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38E9661309
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9069AC433D6;
-        Tue, 18 Oct 2022 00:33:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666053230;
-        bh=s8Ob3Xrk7tyLWJ7Xn4reoQ1dzzjGxajI/oJLYN0+MuE=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Xj5Ux9KgDYEZGY6LVpo7mp1bwA/gxjzQhEEUR60vl/f83SfM3nPTo0XHlINhnXG/Z
-         BhhcYyrzLjQEr0Z+JpiwxrGfb6Bt/veMiczXkUi1PQBAcR3FSWq87KbulLA6bfTZG3
-         tYje0HlpPAeqTzKWGNoMmE1KM/zq24qJohlstfmRtimWJo6GXF4w3GoaSUEyqsqfCD
-         q80F/en95pj3E2Q0sSxMuEOib0pgBukCd/E2pNe3YTzijSU0wvuEpJ/zEQ2BhHnEWg
-         EdtDOKQmjBQ0Pp7JPPwlR8KASO0kjD+JJnQCwVcgIxSAGyt3zBOHKX/hYcTE9j6aRg
-         O8U7lfdIxVmlA==
-Date:   Mon, 17 Oct 2022 17:33:47 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH V2] xen/virtio: Handle PCI devices which Host controller
- is described in DT
-In-Reply-To: <20221015153409.918775-1-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2210171731110.4587@ubuntu-linux-20-04-desktop>
-References: <20221015153409.918775-1-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 17 Oct 2022 20:35:23 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E104E412
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:35:11 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-12c8312131fso15193733fac.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZFNHgeagPRGpN511S5OVmTVLDSRxzqHSZND+ilItHI=;
+        b=rX/14hxyK+jbBsNmsi6OICKyz6vY8MdAjLpdpmL8Eoa7S9QfTsmtZ2g16772VPAdQ3
+         fyx8viqBFbhwe4fsuILQVTdMHesYZMcl1oUOCmX8b3E05NNXj84+XzmbL1LsDXmL5F1j
+         LMV1n2XU1a76XmxIXhbX/jQLk94Nf9oyipbD0iN/8f2ZIv+JsTvOocrVsgP0HsxvQWOB
+         FV59MeLky59LcmcQNFmf5mPPHgZyPDz4SSGEWvXafNz+jO3Il6nH3aWk0dudbCEewkRL
+         w2EkcpSee8Zn3VXKnm1otN85uvjvLHE28I2YLKCADeFtBWdkawzMyHE1W2n1XGklWzw2
+         7bHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DZFNHgeagPRGpN511S5OVmTVLDSRxzqHSZND+ilItHI=;
+        b=Tg2Nap1V4iIg82KnkiOahkXBlsC73vuZhsd7WlXGc9JIYjsKO4RxAeev+mjZMrs4Nj
+         ta4+A4Lg2eLzkHM/1imZbtA0RtTbNELJkkC8u29b8boCESKmy5EYbBhD199mbNDCOdaI
+         6iLM6C+Q3vn7dSh7ZxKG3vOLkWGSjNib3tRkBuKntJui/HKrCujOKlUUA1ka/pt6fOKh
+         UsZED2wRASMCIvef2uYM0/twnpcn+uiS9XiIRu6bzvRVfxPY+4yo526KWF77Dz20uu4m
+         iGN3pBIusUfp/f3Rw02YVBMYf/qdalprmKUwqWBrB0TNQBVo65UP+JOegVHUIEpgcOZ8
+         luOQ==
+X-Gm-Message-State: ACrzQf3dCWoUBMd8mVqa7S8lkIVFcUjSbQ/yiOeLyZIlpLA0cepZq+rf
+        /huTzItsNMNWb/XEWvxflET2UgfQAnd3/w==
+X-Google-Smtp-Source: AMsMyM6GsW9qHuPFp8+B+qhuY2BytXR7EdsQrQz18ZdcSSusgW2PC6Ay30Uig0XRAo3WSxCvao9eLQ==
+X-Received: by 2002:a17:90a:4594:b0:20b:23d5:8ead with SMTP id v20-20020a17090a459400b0020b23d58eadmr35608180pjg.127.1666053232202;
+        Mon, 17 Oct 2022 17:33:52 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q59-20020a17090a1b4100b001efa9e83927sm9986738pjq.51.2022.10.17.17.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 17:33:51 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 00:33:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Message-ID: <Y030bGhh0mvGS6E1@google.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
+ <Yyi+l3+p9lbBAC4M@google.com>
+ <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
+ <20220926142330.GC2658254@chaop.bj.intel.com>
+ <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
+ <YzN9gYn1uwHopthW@google.com>
+ <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 15 Oct 2022, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+On Fri, Sep 30, 2022, Fuad Tabba wrote:
+> > > > > pKVM would also need a way to make an fd accessible again
+> > > > > when shared back, which I think isn't possible with this patch.
+> > > >
+> > > > But does pKVM really want to mmap/munmap a new region at the page-level,
+> > > > that can cause VMA fragmentation if the conversion is frequent as I see.
+> > > > Even with a KVM ioctl for mapping as mentioned below, I think there will
+> > > > be the same issue.
+> > >
+> > > pKVM doesn't really need to unmap the memory. What is really important
+> > > is that the memory is not GUP'able.
+> >
+> > Well, not entirely unguppable, just unguppable without a magic FOLL_* flag,
+> > otherwise KVM wouldn't be able to get the PFN to map into guest memory.
+> >
+> > The problem is that gup() and "mapped" are tied together.  So yes, pKVM doesn't
+> > strictly need to unmap memory _in the untrusted host_, but since mapped==guppable,
+> > the end result is the same.
+> >
+> > Emphasis above because pKVM still needs unmap the memory _somehwere_.  IIUC, the
+> > current approach is to do that only in the stage-2 page tables, i.e. only in the
+> > context of the hypervisor.  Which is also the source of the gup() problems; the
+> > untrusted kernel is blissfully unaware that the memory is inaccessible.
+> >
+> > Any approach that moves some of that information into the untrusted kernel so that
+> > the kernel can protect itself will incur fragmentation in the VMAs.  Well, unless
+> > all of guest memory becomes unguppable, but that's likely not a viable option.
 > 
-> Use the same "xen-grant-dma" device concept for the PCI devices
-> behind device-tree based PCI Host controller, but with one modification.
-> Unlike for platform devices, we cannot use generic IOMMU bindings
-> (iommus property), as we need to support more flexible configuration.
-> The problem is that PCI devices under the single PCI Host controller
-> may have the backends running in different Xen domains and thus have
-> different endpoints ID (backend domains ID).
+> Actually, for pKVM, there is no need for the guest memory to be GUP'able at
+> all if we use the new inaccessible_get_pfn().
 
-Hi Oleksandr,
+Ya, I was referring to pKVM without UPM / inaccessible memory.
 
-From another email I understood that you successfully managed to
-describe in device tree all the individual virtio pci devices so that
-you can have iommu-map/iommu-map-mask properties under each virtio
-device node. Is that right?
+Jumping back to blocking gup(), what about using the same tricks as secretmem to
+block gup()?  E.g. compare vm_ops to block regular gup() and a_ops to block fast
+gup() on struct page?  With a Kconfig that's selected by pKVM (which would also
+need its own Kconfig), e.g. CONFIG_INACCESSIBLE_MAPPABLE_MEM, there would be zero
+performance overhead for non-pKVM kernels, i.e. hooking gup() shouldn't be
+controversial.
 
-If that is the case, then I would rather jump straight to that approach
-because I think it is far better than this one.
+I suspect the fast gup() path could even be optimized to avoid the page_mapping()
+lookup by adding a PG_inaccessible flag that's defined iff the TBD Kconfig is
+selected.  I'm guessing pKVM isn't expected to be deployed on massivve NUMA systems
+anytime soon, so there should be plenty of page flags to go around.
 
-Cheers,
+Blocking gup() instead of trying to play refcount games when converting back to
+private would eliminate the need to put heavy restrictions on mapping, as the goal
+of those were purely to simplify the KVM implementation, e.g. the "one mapping per
+memslot" thing would go away entirely.
 
-Stefano
+> This of course goes back to what I'd mentioned before in v7; it seems that
+> representing the memslot memory as a file descriptor should be orthogonal to
+> whether the memory is shared or private, rather than a private_fd for private
+> memory and the userspace_addr for shared memory.
 
+I also explored the idea of backing any guest memory with an fd, but came to
+the conclusion that private memory needs a separate handle[1], at least on x86.
 
+For SNP and TDX, even though the GPA is the same (ignoring the fact that SNP and
+TDX steal GPA bits to differentiate private vs. shared), the two types need to be
+treated as separate mappings[2].  Post-boot, converting is lossy in both directions,
+so even conceptually they are two disctint pages that just happen to share (some)
+GPA bits.
 
-> So use generic PCI-IOMMU bindings instead (iommu-map/iommu-map-mask
-> properties) which allows us to describe relationship between PCI
-> devices and backend domains ID properly.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> ---
-> Slightly RFC. This is needed to support Xen grant mappings for virtio-pci devices
-> on Arm at some point in the future. The Xen toolstack side is not completely ready yet.
-> Here, for PCI devices we use more flexible way to pass backend domid to the guest
-> than for platform devices.
-> 
-> Changes V1 -> V2:
->    - update commit description
->    - rebase
->    - rework to use generic PCI-IOMMU bindings instead of generic IOMMU bindings
-> 
-> Previous discussion is at:
-> https://lore.kernel.org/xen-devel/20221006174804.2003029-1-olekstysh@gmail.com/
-> 
-> Based on:
-> https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/log/?h=for-linus-6.1
-> ---
->  drivers/xen/grant-dma-ops.c | 87 ++++++++++++++++++++++++++++++++-----
->  1 file changed, 76 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> index daa525df7bdc..b79d9d6ce154 100644
-> --- a/drivers/xen/grant-dma-ops.c
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -10,6 +10,7 @@
->  #include <linux/module.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/of.h>
-> +#include <linux/pci.h>
->  #include <linux/pfn.h>
->  #include <linux/xarray.h>
->  #include <linux/virtio_anchor.h>
-> @@ -292,12 +293,55 @@ static const struct dma_map_ops xen_grant_dma_ops = {
->  	.dma_supported = xen_grant_dma_supported,
->  };
->  
-> +static struct device_node *xen_dt_get_pci_host_node(struct device *dev)
-> +{
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	struct pci_bus *bus = pdev->bus;
-> +
-> +	/* Walk up to the root bus to look for PCI Host controller */
-> +	while (!pci_is_root_bus(bus))
-> +		bus = bus->parent;
-> +
-> +	return of_node_get(bus->bridge->parent->of_node);
-> +}
-> +
-> +static struct device_node *xen_dt_get_node(struct device *dev)
-> +{
-> +	if (dev_is_pci(dev))
-> +		return xen_dt_get_pci_host_node(dev);
-> +
-> +	return of_node_get(dev->of_node);
-> +}
-> +
-> +static int xen_dt_map_id(struct device *dev, struct device_node **iommu_np,
-> +			 u32 *sid)
-> +{
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	u32 rid = PCI_DEVID(pdev->bus->number, pdev->devfn);
-> +	struct device_node *host_np;
-> +	int ret;
-> +
-> +	host_np = xen_dt_get_pci_host_node(dev);
-> +	if (!host_np)
-> +		return -ENODEV;
-> +
-> +	ret = of_map_id(host_np, rid, "iommu-map", "iommu-map-mask", iommu_np, sid);
-> +	of_node_put(host_np);
-> +
-> +	return ret;
-> +}
-> +
->  static bool xen_is_dt_grant_dma_device(struct device *dev)
->  {
-> -	struct device_node *iommu_np;
-> +	struct device_node *iommu_np = NULL;
->  	bool has_iommu;
->  
-> -	iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
-> +	if (dev_is_pci(dev)) {
-> +		if (xen_dt_map_id(dev, &iommu_np, NULL))
-> +			return false;
-> +	} else
-> +		iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
-> +
->  	has_iommu = iommu_np &&
->  		    of_device_is_compatible(iommu_np, "xen,grant-dma");
->  	of_node_put(iommu_np);
-> @@ -307,9 +351,17 @@ static bool xen_is_dt_grant_dma_device(struct device *dev)
->  
->  bool xen_is_grant_dma_device(struct device *dev)
->  {
-> +	struct device_node *np;
-> +
->  	/* XXX Handle only DT devices for now */
-> -	if (dev->of_node)
-> -		return xen_is_dt_grant_dma_device(dev);
-> +	np = xen_dt_get_node(dev);
-> +	if (np) {
-> +		bool ret;
-> +
-> +		ret = xen_is_dt_grant_dma_device(dev);
-> +		of_node_put(np);
-> +		return ret;
-> +	}
->  
->  	return false;
->  }
-> @@ -325,12 +377,19 @@ bool xen_virtio_mem_acc(struct virtio_device *dev)
->  static int xen_dt_grant_init_backend_domid(struct device *dev,
->  					   struct xen_grant_dma_data *data)
->  {
-> -	struct of_phandle_args iommu_spec;
-> +	struct of_phandle_args iommu_spec = { .args_count = 1 };
->  
-> -	if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
-> -			0, &iommu_spec)) {
-> -		dev_err(dev, "Cannot parse iommus property\n");
-> -		return -ESRCH;
-> +	if (dev_is_pci(dev)) {
-> +		if (xen_dt_map_id(dev, &iommu_spec.np, iommu_spec.args)) {
-> +			dev_err(dev, "Cannot translate ID\n");
-> +			return -ESRCH;
-> +		}
-> +	} else {
-> +		if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
-> +				0, &iommu_spec)) {
-> +			dev_err(dev, "Cannot parse iommus property\n");
-> +			return -ESRCH;
-> +		}
->  	}
->  
->  	if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
-> @@ -354,6 +413,7 @@ static int xen_dt_grant_init_backend_domid(struct device *dev,
->  void xen_grant_setup_dma_ops(struct device *dev)
->  {
->  	struct xen_grant_dma_data *data;
-> +	struct device_node *np;
->  
->  	data = find_xen_grant_dma_data(dev);
->  	if (data) {
-> @@ -365,8 +425,13 @@ void xen_grant_setup_dma_ops(struct device *dev)
->  	if (!data)
->  		goto err;
->  
-> -	if (dev->of_node) {
-> -		if (xen_dt_grant_init_backend_domid(dev, data))
-> +	np = xen_dt_get_node(dev);
-> +	if (np) {
-> +		int ret;
-> +
-> +		ret = xen_dt_grant_init_backend_domid(dev, data);
-> +		of_node_put(np);
-> +		if (ret)
->  			goto err;
->  	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT)) {
->  		dev_info(dev, "Using dom0 as backend\n");
-> -- 
-> 2.25.1
-> 
+To allow conversions, i.e. changing which mapping to use, without memslot updates,
+KVM needs to let userspace provide both mappings in a single memslot.  So while
+fd-based memory is an orthogonal concept, e.g. we could add fd-based shared memory,
+KVM would still need a dedicated private handle.
+
+For pKVM, the fd doesn't strictly need to be mutually exclusive with the existing
+userspace_addr, but since the private_fd is going to be added for x86, I think it
+makes sense to use that instead of adding generic fd-based memory for pKVM's use
+case (which is arguably still "private" memory but with special semantics).
+
+[1] https://lore.kernel.org/all/YulTH7bL4MwT5v5K@google.com
+[2] https://lore.kernel.org/all/869622df-5bf6-0fbb-cac4-34c6ae7df119@kernel.org
+
+>  The host can then map or unmap the shared/private memory using the fd, which
+>  allows it more freedom in even choosing to unmap shared memory when not
+>  needed, for example.
