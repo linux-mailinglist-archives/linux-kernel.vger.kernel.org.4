@@ -2,116 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D296027FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B420E602801
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiJRJKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
+        id S230365AbiJRJKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJRJKQ (ORCPT
+        with ESMTP id S229607AbiJRJKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:10:16 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA44454D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:10:14 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id z20so13205013plb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ukoFf7wEa/GfUfveeUzu2PUBZk7HPVe9cL2u/UltyEU=;
-        b=csXExqhBkarPFPg6wEBtNxdgATZM8UopsHo3GUeTmwW04QbJH4NX5y5046JrhCf66H
-         OS0czsOqU3JxwafgRAZIi/JmUa4SB4MFcsWb6JIv40cZWC5kkr9pC+tJUljFXEwRJ0fy
-         cnX/HOTJHiOBudJTp5MtFv4L99UUXYYVX7yLg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ukoFf7wEa/GfUfveeUzu2PUBZk7HPVe9cL2u/UltyEU=;
-        b=nbbZQIINAtKkVVatVqs2N5TFX21ji8nJeGZig6owPZvbN5LE2Y+sugG1Pxi5WX1qVt
-         Nus4zhqYOBOu214lZqCMpaHFa5x4GBoMEAPBwVqhIl4E2kkjNgYk+ETLglDAbZ7SwoJv
-         Pd+X4g3Au4gArVRNrP/NzCe8eXg/gwk1ZxYZWkkrOvzh9xw05xGWO6FNcLa2dYSVeXNo
-         8F/0YHx+GXJATBe+9cwOqXbv53ILIcC/cxgBwxhBcaAuiwff0oeIyGKiIT0utV7L+ZC8
-         2pcBJT5rjhK3GJPChnrmB8cFf+q9MSel/iVNt8wLU782NYrJQxsh7LEbFYvTBItGhTbc
-         tt2w==
-X-Gm-Message-State: ACrzQf1lbHU8CLfGCil+hG+9sOBpmMoRatm0Vuig3aXDUSPNnjIvKVA8
-        urzB2jeQSvT35UV0kS1/1wis9Q==
-X-Google-Smtp-Source: AMsMyM6AMqxalz2EiUvSsTLj683MBoAwpQpreDb/Xeav5jgLr57NynSC9KI51LhT7Kytdced3HqcMQ==
-X-Received: by 2002:a17:90b:3588:b0:20b:590:46a2 with SMTP id mm8-20020a17090b358800b0020b059046a2mr2491865pjb.14.1666084214343;
-        Tue, 18 Oct 2022 02:10:14 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902680a00b0017300ec80b0sm8058997plk.308.2022.10.18.02.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:10:13 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v3] dma-buf: Proactively round up to kmalloc bucket size
-Date:   Tue, 18 Oct 2022 02:10:11 -0700
-Message-Id: <20221018090858.never.941-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 05:10:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C4F1CB25
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666084234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OC1swdFow0uJqX4WlD4v3iRTy+BCH4Nt+XpJ4yDSskM=;
+        b=exOnqASe1zZmr4W8GH1J6L5Qtow7Jxkm9MV5yGgA1PqJZ7Og1VEIuqeZO3uIlpAgNUxw/h
+        nighFgkVminq5OlRIRoBt71w+ky4eWUoF+5w9+jRLChC5Ci3h2pcdjnrEWa2EdqtnSbxzN
+        FBgw5izs5VO4KLfcfooXVvBqpwbcY6M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-3g-oGcCxMlS6sCK4Dsm1_A-1; Tue, 18 Oct 2022 05:10:28 -0400
+X-MC-Unique: 3g-oGcCxMlS6sCK4Dsm1_A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E4416811E67;
+        Tue, 18 Oct 2022 09:10:27 +0000 (UTC)
+Received: from localhost (ovpn-12-68.pek2.redhat.com [10.72.12.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B41D2C1E87F;
+        Tue, 18 Oct 2022 09:10:26 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 17:10:23 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Kazuhito Hagio <k-hagio-ab@nec.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        bagasdotme@gmail.com, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+Subject: Re: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+Message-ID: <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
+References: <20221018081755.6214-1-xianting.tian@linux.alibaba.com>
+ <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1673; h=from:subject:message-id; bh=8hepCmu6KkNCIQiT6ONpaMe4VoHSy9sRDnadRc3o6dY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTm1zq8jKCG/tc7/8bPvsM44d+bw8pliNmUV1nYs9 oZ3UNCqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05tcwAKCRCJcvTf3G3AJh7AEA CTcI1pdlR5PlvYxNvP2WDxxU4tjQpCYFU8DL3QIbpSPAGCSHnu/fLH6mOTmflitrQ/DsyHD4LRh+Gc MNL44FREEbJ4PDUi+k2SbLlkCESNKduXwzMSU4AzBIbf3TD2GmvqnQc6663oVj/0gCMK1PtcnYqkkK 7dOrQHMvouIoxWrgiOoK8U8K+6pHwwJK66vChECKJN261DcRu+LrteWxTMCEuwWexFa8DVde3NAK9Z rBLz4Cq8ZdLitk/OXx0Dq5Sr+lvsTuhgodexasrD6PbK4g3XSSyHuqSiRLwSb+WgKJaOQ/FwHA/zxz N1ktC3FGVv0rs3PTxdAwcI0FNVEpUdZUkQI0UfFotI03jATt3Ar/11oa77oln6OVD4p86J25TmPSsL 5mbkclNofm6EXo/VniQoq6dc6Bt4acmroVMeYDxRuAwfwxW0tBusHyGG0uUaczhMLcI+8aB7B9Ww5w Z1tpDuQLaTSmDAfOskStapWlFTBdZczM8RsO88iM5k/TH/00g53wBnDEHyYBXaMZWIc+rSuGFChZzf H0+guk6+nfMF3k18/pY3Ysj5RPQE3FF4i1DOJ1aqc9zQLB9+BV8bbsTxy/GCHGenjhYmFipzHZeJat dOlM+mCyFQ3zOAYDS2ZW+1sW0Gfg5Xqh5qC7jyxMfqfwVjvzt1oaXABQEm0g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of discovering the kmalloc bucket size _after_ allocation, round
-up proactively so the allocation is explicitly made for the full size,
-allowing the compiler to correctly reason about the resulting size of
-the buffer through the existing __alloc_size() hint.
+On 10/18/22 at 04:17pm, Xianting Tian wrote:
+> Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
+> VMEMMAP and KERNEL_LINK_ADDR ranges), va bits and ram base for vmcore.
+> 
+> Default pagetable levels and PAGE_OFFSET aren't same for different kernel
+> version as below. For pagetable levels, it sets sv57 by default and falls
+> back to setting sv48 at boot time if sv57 is not supported by the hardware.
+> 
+> For ram base, the default value is 0x80200000 for qemu riscv64 env and,
+> for example, is 0x200000 on the XuanTie 910 CPU.
+> 
+>  * Linux Kernel 5.18 ~
+>  *      PGTABLE_LEVELS = 5
+>  *      PAGE_OFFSET = 0xff60000000000000
+>  * Linux Kernel 5.17 ~
+>  *      PGTABLE_LEVELS = 4
+>  *      PAGE_OFFSET = 0xffffaf8000000000
+>  * Linux Kernel 4.19 ~
+>  *      PGTABLE_LEVELS = 3
+>  *      PAGE_OFFSET = 0xffffffe000000000
+> 
+> Since these configurations change from time to time and version to version,
+> it is preferable to export them via vmcoreinfo than to change the crash's
+> code frequently, it can simplify the development of crash tool.
+> 
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> ---
+>  arch/riscv/kernel/Makefile     |  1 +
+>  arch/riscv/kernel/crash_core.c | 29 +++++++++++++++++++++++++++++
+>  2 files changed, 30 insertions(+)
+>  create mode 100644 arch/riscv/kernel/crash_core.c
+> 
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index db6e4b1294ba..4cf303a779ab 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)		+= kgdb.o
+>  obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
+>  obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
+>  obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+> +obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
+>  
+>  obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+>  
+> diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
+> new file mode 100644
+> index 000000000000..8d7f5ff108da
+> --- /dev/null
+> +++ b/arch/riscv/kernel/crash_core.c
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/crash_core.h>
+> +#include <linux/pagemap.h>
+> +
+> +void arch_crash_save_vmcoreinfo(void)
+> +{
+> +	VMCOREINFO_NUMBER(VA_BITS);
+> +	VMCOREINFO_NUMBER(phys_ram_base);
+> +
+> +	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
+> +	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+> +	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
+> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
+> +#ifdef CONFIG_64BIT
+> +	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+> +	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+> +#endif
+> +
+> +	if (IS_ENABLED(CONFIG_64BIT)) {
+> +#ifdef CONFIG_KASAN
+> +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
+> +		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
+> +#endif
+> +		vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
+> +		vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
 
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v3: added reviewed-by, rebase to v6.1-rc1
-v2: https://lore.kernel.org/lkml/20220923202822.2667581-9-keescook@chromium.org/
----
- drivers/dma-buf/dma-resv.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Seems this is the firsr ARCH where kasan and kernel link/bpf space are
+added to dump and analyze. Just curious, have you got code change to
+make use of them to do dumping and analyze?
 
-diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index e3885c90a3ac..1c76aed8e262 100644
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -98,12 +98,17 @@ static void dma_resv_list_set(struct dma_resv_list *list,
- static struct dma_resv_list *dma_resv_list_alloc(unsigned int max_fences)
- {
- 	struct dma_resv_list *list;
-+	size_t size;
- 
--	list = kmalloc(struct_size(list, table, max_fences), GFP_KERNEL);
-+	/* Round up to the next kmalloc bucket size. */
-+	size = kmalloc_size_roundup(struct_size(list, table, max_fences));
-+
-+	list = kmalloc(size, GFP_KERNEL);
- 	if (!list)
- 		return NULL;
- 
--	list->max_fences = (ksize(list) - offsetof(typeof(*list), table)) /
-+	/* Given the resulting bucket size, recalculated max_fences. */
-+	list->max_fences = (size - offsetof(typeof(*list), table)) /
- 		sizeof(*list->table);
- 
- 	return list;
--- 
-2.34.1
+Thanks
+Baoquan
 
