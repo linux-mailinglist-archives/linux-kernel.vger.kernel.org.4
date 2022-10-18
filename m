@@ -2,107 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C856024C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F391F6024C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJRGxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S229955AbiJRGw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiJRGw5 (ORCPT
+        with ESMTP id S229947AbiJRGwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:52:57 -0400
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0C252DE3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:52:55 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 378E51E80D76;
-        Tue, 18 Oct 2022 14:52:13 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id rymyJ6sXaElW; Tue, 18 Oct 2022 14:52:10 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 4226D1E80D17;
-        Tue, 18 Oct 2022 14:52:10 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     hubcap@omnibond.com, martin@omnibond.com
-Cc:     devel@lists.orangefs.org, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] orangefs: inode: Optimized orangefs* correlation function
-Date:   Tue, 18 Oct 2022 14:52:47 +0800
-Message-Id: <20221018065247.83191-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 02:52:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4A62DE3;
+        Mon, 17 Oct 2022 23:52:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9F6E61382;
+        Tue, 18 Oct 2022 06:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C89C433D6;
+        Tue, 18 Oct 2022 06:52:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666075973;
+        bh=5kBdTUkiPs2hh+mrHHAI/779iU8Ym/D4iAWri5OaKv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NMpJXucQPhkD5s93OX/roQZzy6oK9lvt05bJTK//E/xr4YeMPfUxj4GqV7nI+BfmK
+         x4EcE1gP+5ah01yJ6ovRU3BaY09NSBLsPUZgG9Px/4SEZvY5+O/Fj3HZBMYprLyUJS
+         u2wSRzIvHQiUg9pm28HiCbX3apbfEPRuJ9FtEj1A=
+Date:   Tue, 18 Oct 2022 08:52:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     sashal@kernel.org, alexander.deucher@amd.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] Revert "drm/amdgpu: move nbio sdma_doorbell_range() into
+ sdma code for vega"
+Message-ID: <Y05NQkSmGneXt1gB@kroah.com>
+References: <20221018010746.603662-1-skhan@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018010746.603662-1-skhan@linuxfoundation.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The orangefs* function has been optimized as follows.
-1. Remove the initialization assignment of variables, which are assigned
-first.
-2. Remove void* associated variable cast.
+On Mon, Oct 17, 2022 at 07:07:45PM -0600, Shuah Khan wrote:
+> This reverts commit 9f55f36f749a7608eeef57d7d72991a9bd557341.
+> 
+> This commit causes repeated WARN_ONs from
+> 
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amd
+> gpu_dm.c:7391 amdgpu_dm_atomic_commit_tail+0x23b9/0x2430 [amdgpu]
+> 
+> dmesg fills up with the following messages and drm initialization takes
+> a very long time.
+> 
+> Cc: <stable@vger.kernel.org>    # 5.10
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c |  5 -----
+>  drivers/gpu/drm/amd/amdgpu/soc15.c     | 25 +++++++++++++++++++++++++
+>  2 files changed, 25 insertions(+), 5 deletions(-)
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- fs/orangefs/inode.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Both reverts now queued up, thanks.
 
-diff --git a/fs/orangefs/inode.c b/fs/orangefs/inode.c
-index 7a8c0c6e698d..54d47b9ad0db 100644
---- a/fs/orangefs/inode.c
-+++ b/fs/orangefs/inode.c
-@@ -719,7 +719,7 @@ static int orangefs_setattr_size(struct inode *inode, struct iattr *iattr)
- 	struct orangefs_inode_s *orangefs_inode = ORANGEFS_I(inode);
- 	struct orangefs_kernel_op_s *new_op;
- 	loff_t orig_size;
--	int ret = -EINVAL;
-+	int ret;
- 
- 	gossip_debug(GOSSIP_INODE_DEBUG,
- 		     "%s: %pU: Handle is %pU | fs_id %d | size is %llu\n",
-@@ -941,7 +941,7 @@ static int orangefs_fileattr_get(struct dentry *dentry, struct fileattr *fa)
- static int orangefs_fileattr_set(struct user_namespace *mnt_userns,
- 				 struct dentry *dentry, struct fileattr *fa)
- {
--	u64 val = 0;
-+	u64 val;
- 
- 	gossip_debug(GOSSIP_FILE_DEBUG, "%s: called on %pd\n", __func__,
- 		     dentry);
-@@ -1021,7 +1021,7 @@ static inline ino_t orangefs_handle_hash(struct orangefs_object_kref *ref)
-  */
- static int orangefs_set_inode(struct inode *inode, void *data)
- {
--	struct orangefs_object_kref *ref = (struct orangefs_object_kref *) data;
-+	struct orangefs_object_kref *ref = data;
- 	ORANGEFS_I(inode)->refn.fs_id = ref->fs_id;
- 	ORANGEFS_I(inode)->refn.khandle = ref->khandle;
- 	ORANGEFS_I(inode)->attr_valid = 0;
-@@ -1036,8 +1036,8 @@ static int orangefs_set_inode(struct inode *inode, void *data)
-  */
- static int orangefs_test_inode(struct inode *inode, void *data)
- {
--	struct orangefs_object_kref *ref = (struct orangefs_object_kref *) data;
--	struct orangefs_inode_s *orangefs_inode = NULL;
-+	struct orangefs_object_kref *ref = data;
-+	struct orangefs_inode_s *orangefs_inode;
- 
- 	orangefs_inode = ORANGEFS_I(inode);
- 	/* test handles and fs_ids... */
-@@ -1056,7 +1056,7 @@ static int orangefs_test_inode(struct inode *inode, void *data)
- struct inode *orangefs_iget(struct super_block *sb,
- 		struct orangefs_object_kref *ref)
- {
--	struct inode *inode = NULL;
-+	struct inode *inode;
- 	unsigned long hash;
- 	int error;
- 
--- 
-2.18.2
-
+greg k-h
