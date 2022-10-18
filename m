@@ -2,105 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C526602678
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D162360267A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiJRIIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S229506AbiJRIJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJRIIR (ORCPT
+        with ESMTP id S229550AbiJRIJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:08:17 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAED289971
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:08:14 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 0EDFD2B05993;
-        Tue, 18 Oct 2022 04:08:09 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 18 Oct 2022 04:08:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1666080489; x=1666087689; bh=QyIR2mU70I
-        1YwkwOLa0CmZ/17qlaxKeUVXrXvltnm30=; b=GFjusIHgj8xz/yi7jFvMKNEQxw
-        HZ7+9YtYcFDKPj4XhMSDNdoNg/sq2vcXZOu9JUJQNrnfSNhv3FzbuQxvyTe7zxv6
-        HNmaCAy+x3F8INAsxCFyjYbN1zyXSznVuvbVd4WvSDSSfB22mp4BjmYOkJmMCop4
-        c1zma+hOzfeHlhisprEz6BF7/WdlcDHPoui4ePgJ9+iTrBn7LuNWHOpfCyU43RMZ
-        9MWeUivxIiVvXOW+9NvBgpukWnqglECw5oQu01fWdHAZtkMyAEHB6cdf76bEC7Uc
-        fUq5aW+BidlQZg4CgEQ37ngnY/EzqNA1p95Hy5fsAV1QBg65BD9ITLEjG/AQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666080489; x=1666087689; bh=QyIR2mU70I1YwkwOLa0CmZ/17qla
-        xKeUVXrXvltnm30=; b=ZH1+1s4aJx7OrygMRTnrhV+LMcQ0Fl5Kp6pyvkYoBkNo
-        GmwWfybSd1z+VI69F79wLXYaoim/Qfyfzn7n/MB2+IRbKrZ+/b0QOLeRsZgAb8Fd
-        8PqGjo137EOY7CpjWJOeILZb5MjokJbqjUopRfiibgZuUB8FSPF0/jVkgsaLmZG8
-        6n0wJBtTYqEA+1IaLVqwIbLsA2onk7csRjzUKB8isgB3AEspSi0yKiQX04nzOXNX
-        QiiD4owR9mc4e3meKqg462agLHz3WMQCHWoqPbZ7itzrI8V5rg6/UmHyfqxXmP5G
-        /cd+qux90phW4qVWeCFzCmteS3SOHvJV9HsRIxHA3w==
-X-ME-Sender: <xms:6F5OY6HZgytdMm6Vqyzy8NxLARZpJWI_0b2lwYu5aLlpXTaMlsBOaQ>
-    <xme:6F5OY7VrDINVe0nwa0Y4HWj0xhoc3U-yXZYYH5rqOEMWBepziDr6qryZMpsGL7G0i
-    uwg_8bQZ_ldVY7eD3M>
-X-ME-Received: <xmr:6F5OY0LSSi0uY7NN5F6JAO1Z9rY8338rOwxovMAxprRpD9x04i00D-JrrQI8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeludcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhmvgcu
-    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvg
-    hrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffhvedu
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgi
-    himhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:6F5OY0E-ftftih6cOybLdHtpHMzyczz1Aqr_zQyRxv2j9OIzvIxqUg>
-    <xmx:6F5OYwWs3iqVw9YFSBe8SVI8Gk47k1-kxwFyZmVaKn7vT-3wO295oQ>
-    <xmx:6F5OY3NY3rp3gilKugt8Ne3JrajjqLSGe1BvCkrJkzzq1uqDWjql1A>
-    <xmx:6V5OY304Z5gl1LgvOk3C5up8PynQd6xXAoo8YLHxpnj8yXiTGpcxLIvPyw4>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Oct 2022 04:08:08 -0400 (EDT)
-Date:   Tue, 18 Oct 2022 10:08:06 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     kfyatek+publicgit@gmail.com
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>, Emma Anholt <emma@anholt.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Phil Elwell <phil@raspberrypi.com>
-Subject: Re: [PATCH v5 06/22] drm/modes: Add a function to generate analog
- display modes
-Message-ID: <20221018080806.mkw4zbzchlatxgwq@houat>
-References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
- <20220728-rpi-analog-tv-properties-v5-6-d841cc64fe4b@cerno.tech>
- <30dbbcc8-1d14-0fc8-ed7c-0c3f7d094ea3@gmail.com>
+        Tue, 18 Oct 2022 04:09:33 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4675A11813
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1666080568; bh=qdvFsQ/lCWl0sUbt75T+DP3VwTt8nZuoicBEZ3m6IBc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Oe6D8dWNwzZes1JZTzieYLLrmx6jyC1gICh0elTn+Kupq1hl47is6BnlOHPbgm5cF
+         HOUI+baX1le6HsjVaydsvI/o3xo6piPMlIU5qA5QIQzI4phNQzu+ThqsWUUPuJmVeg
+         t02b5hRgBP59KvDv6COVMYVGOwQmm1lW97hvdQk8=
+Received: from [100.100.57.122] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D4856600A9;
+        Tue, 18 Oct 2022 16:09:27 +0800 (CST)
+Message-ID: <e58d7c6d-cf8a-017b-7e72-6ae579ce6be2@xen0n.name>
+Date:   Tue, 18 Oct 2022 16:09:27 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bz2m37ekv7hmvzdb"
-Content-Disposition: inline
-In-Reply-To: <30dbbcc8-1d14-0fc8-ed7c-0c3f7d094ea3@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0)
+ Gecko/20100101 Thunderbird/107.0a1
+Subject: Re: [PATCH V2] LoongArch: Add unaligned access support
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Huacai Chen' <chenhuacai@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221017022330.2383060-1-chenhuacai@loongson.cn>
+ <b8792b1a71754d6eb88debe4d6c2c419@AcuMS.aculab.com>
+ <CAAhV-H5WM97+Um9ULjv7gT3i5pJ3GfQ8ex6NRNr6uzmMgdVY_Q@mail.gmail.com>
+ <c34a277a-1735-65e6-c97d-fcc2ac3d57e6@xen0n.name>
+ <CAAhV-H5y5wz0VzFEHrkDpap4wczWXBn_ibL3LW_JQyYkMzjDXQ@mail.gmail.com>
+ <cbbc32d4bb0f445197eb5d84d796595c@AcuMS.aculab.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <cbbc32d4bb0f445197eb5d84d796595c@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,145 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/10/18 15:48, David Laight wrote:
+> From: Huacai Chen
+>> Sent: 18 October 2022 08:33
+> ...
+>>> What about my more structured approach in another reply that avoids the
+>>> huge else-if conditions? Both the terrible line wraps and codegen could
+>>> be avoided.
+> ...
+>> OK, let me try.
+> 
+> I suspect you can mask out some 'operand size' bits from the
+> instructions - instead of checking each opcode.
 
---bz2m37ekv7hmvzdb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Technically LoongArch instruction formats don't contain any "operand 
+size bit", because most current opcodes seem to be simply sequentially 
+allocated. While there seem to exist a certain pattern in e.g. encodings 
+of {LD,ST,FLD,FST}.{B,H,W,D}, I believe it's just coincidence (e.g. bits 
+23:22 of those instructions seem to represent "B/H/W/D"; but other 
+instructions clearly don't follow such a pattern, not even the 
+{LD,ST}.{BU,HU,WU} ones).
 
-Hi,
+For now I'd personally prefer readability and maintainability over 
+performance, because traps are already expensive enough that 
+optimizations like this don't really matter.
 
-On Sun, Oct 16, 2022 at 07:34:12PM +0200, Mateusz Kwiatkowski wrote:
-> Hi Maxime & everyone,
->=20
-> Sorry for being inactive in the discussions about this patchset for the l=
-ast
-> couple of weeks.
->=20
-> > +const static struct analog_parameters tv_modes_parameters[] =3D {
-> > +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_NTSC,
-> > +			  NTSC_LINES_NUMBER,
-> > +			  NTSC_LINE_DURATION_NS,
-> > +			  PARAM_RANGE(NTSC_HACT_DURATION_MIN_NS,
-> > +				      NTSC_HACT_DURATION_TYP_NS,
-> > +				      NTSC_HACT_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(NTSC_HFP_DURATION_MIN_NS,
-> > +				      NTSC_HFP_DURATION_TYP_NS,
-> > +				      NTSC_HFP_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(NTSC_HSLEN_DURATION_MIN_NS,
-> > +				      NTSC_HSLEN_DURATION_TYP_NS,
-> > +				      NTSC_HSLEN_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(NTSC_HBP_DURATION_MIN_NS,
-> > +				      NTSC_HBP_DURATION_TYP_NS,
-> > +				      NTSC_HBP_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(NTSC_HBLK_DURATION_MIN_NS,
-> > +				      NTSC_HBLK_DURATION_TYP_NS,
-> > +				      NTSC_HBLK_DURATION_MAX_NS),
-> > +			  16,
-> > +			  PARAM_FIELD(3, 3),
-> > +			  PARAM_FIELD(3, 3),
-> > +			  PARAM_FIELD(16, 17)),
-> > +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_PAL,
-> > +			  PAL_LINES_NUMBER,
-> > +			  PAL_LINE_DURATION_NS,
-> > +			  PARAM_RANGE(PAL_HACT_DURATION_MIN_NS,
-> > +				      PAL_HACT_DURATION_TYP_NS,
-> > +				      PAL_HACT_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(PAL_HFP_DURATION_MIN_NS,
-> > +				      PAL_HFP_DURATION_TYP_NS,
-> > +				      PAL_HFP_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(PAL_HSLEN_DURATION_MIN_NS,
-> > +				      PAL_HSLEN_DURATION_TYP_NS,
-> > +				      PAL_HSLEN_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(PAL_HBP_DURATION_MIN_NS,
-> > +				      PAL_HBP_DURATION_TYP_NS,
-> > +				      PAL_HBP_DURATION_MAX_NS),
-> > +			  PARAM_RANGE(PAL_HBLK_DURATION_MIN_NS,
-> > +				      PAL_HBLK_DURATION_TYP_NS,
-> > +				      PAL_HBLK_DURATION_MAX_NS),
-> > +			  12,
-> > +
-> > +			  /*
-> > +			   * The front porch is actually 6 short sync
-> > +			   * pulses for the even field, and 5 for the
-> > +			   * odd field. Each sync takes half a life so
-> > +			   * the odd field front porch is shorter by
-> > +			   * half a line.
-> > +			   *
-> > +			   * In progressive, we're supposed to use 6
-> > +			   * pulses, so we're fine there
-> > +			   */
-> > +			  PARAM_FIELD(3, 2),
-> > +
-> > +			  /*
-> > +			   * The vsync length is 5 long sync pulses,
-> > +			   * each field taking half a line. We're
-> > +			   * shorter for both fields by half a line.
-> > +			   *
-> > +			   * In progressive, we're supposed to use 5
-> > +			   * pulses, so we're off by half
-> > +			   * a line.
-> > +			   *
-> > +			   * In interlace, we're now off by half a line
-> > +			   * for the even field and one line for the odd
-> > +			   * field.
-> > +			   */
-> > +			  PARAM_FIELD(3, 3),
-> > +
-> > +			  /*
-> > +			   * The back porch starts with post-equalizing
-> > +			   * pulses, consisting in 5 short sync pulses
-> > +			   * for the even field, 4 for the odd field. In
-> > +			   * progressive, it's 5 short syncs.
-> > +			   *
-> > +			   * In progressive, we thus have 2.5 lines,
-> > +			   * plus the 0.5 line we were missing
-> > +			   * previously, so we should use 3 lines.
-> > +			   *
-> > +			   * In interlace, the even field is in the
-> > +			   * exact same case than progressive. For the
-> > +			   * odd field, we should be using 2 lines but
-> > +			   * we're one line short, so we'll make up for
-> > +			   * it here by using 3.
-> > +			   *
-> > +			   * The entire blanking area is supposed to
-> > +			   * take 25 lines, so we also need to account
-> > +			   * for the rest of the blanking area that
-> > +			   * can't be in either the front porch or sync
-> > +			   * period.
-> > +			   */
-> > +			  PARAM_FIELD(19, 20)),
-> > +};
->=20
-> Nit: setting vbp limits like that makes it impossible to use
-> drm_analog_tv_mode() to generate modes that include the VBI for e.g. emit=
-ting
-> teletext.
->=20
-> This probably doesn't matter, as it can still be created as a custom mode=
- from
-> userspace, hence I'm mentioning it as a nit.
+-- 
+WANG "xen0n" Xuerui
 
-Yeah, I think it's out of scope at least for now. Also, the compositor
-should probably be aware of the margins being used to put the VBI data,
-so expecting userspace to come up with the mode is probably best?
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
-> > +		 * By convention, NSTC (aka 525/60) systems start with
->=20
-> Typo: s/NSTC/NTSC/
-
-Fixed, thanks
-Maxime
-
---bz2m37ekv7hmvzdb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY05e5QAKCRDj7w1vZxhR
-xR8VAQC+375DtcagkAytZVeOEe9aSmsByYFfuLp2Bt0aRSrhEAD/SoTKGvPkbrp3
-DYtTf34PAYs3gXueCuNbfrKzWk9/DgM=
-=IY6U
------END PGP SIGNATURE-----
-
---bz2m37ekv7hmvzdb--
