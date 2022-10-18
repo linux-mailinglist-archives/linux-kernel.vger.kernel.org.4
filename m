@@ -2,149 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10CA60329D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C523A6032A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiJRSgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S229891AbiJRSiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiJRSgG (ORCPT
+        with ESMTP id S229651AbiJRSiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:36:06 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47759C20C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:36:01 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 3B62532001FF;
-        Tue, 18 Oct 2022 14:35:58 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 18 Oct 2022 14:35:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666118157; x=1666204557; bh=5a8BQYkg5n
-        QpQl0T1/Lr36V3/KGyrlSGmYOCZyfCIjk=; b=fHV0kdo8M4KP2DVa+pamxxSTNd
-        xR2HThITRWXoMhUWHCMeW3qi3fwbACTJR0pePYbqJ/XvAh8o/XWalvCQM8fJw4bE
-        tN/se/n1EjVLlc2M2lWAAC7L0YZ+l+eChn/WHzVoAoJoKRrNv7YoMBZkeHHYVzEx
-        oV5BCjaacz9lMm4BuhXQq1Q5hXNMHaHo+/ud4nrurj88aGu/6YSrrOCiD4h3tAeN
-        6uhx10oszg9tmwOJCfR3A+ddR6N06zM3Zqih7ZY5QmkPLIoqz0R5n94VSQRNAnfx
-        6AEVtVJ2l6hbgSFW+IS/iX+cYf9s9ab6LWxKXrf6TEUjnc1LVSVzb6kQdB4w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666118157; x=1666204557; bh=5a8BQYkg5nQpQl0T1/Lr36V3/KGy
-        rlSGmYOCZyfCIjk=; b=DLxownU8ofxWI+Ca8cDXFwEp0tb+CYGgv+178kpwFGby
-        7dNVH7d4C7pL1V+4mfdyYGyFL0TNfOv7qtw8Uc6k+IjnFYc5WeMeoyMaL2ZSdaVd
-        0UKg3NIrhQYwh7tEsshBI5iU1HRiMZiwW/KPXW9j9YQj6acyijmsu4H/Sb+yy0FF
-        t8IUgKOER3dc15z0Sb5v9resWJjqiKY5xGP70DssLJI9vOdOY8RRUpv5GeEqe34K
-        vaO8MDnd5f2rZjP5eTiAJJNPAmyJ7KGmnuxZVUYfPCsYEct6DK+F8PDZWzzL04ba
-        KEypngrgj9SPtDvpfVzsrIuOwsQo4nVRsybkyXKZcg==
-X-ME-Sender: <xms:DfJOY4kgY7eom6Y6v6Tp2aR6eYzKvjDRx71TjoSHXFCHDDNANYnYJA>
-    <xme:DfJOY30MsjjMbVzNZvgl2RnI0CX3s23hmacCtMYaKhxybIxZ2h4rOS3jjWiSOzvjD
-    XhUgOdUwCU20r--ClE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:DfJOY2r3o_sgEAr-VF2DRhi_F238PBu2Nv6q0I5ECzMuqoxjgwdvDA>
-    <xmx:DfJOY0kAtbtHJUZXgObJO7yWLBuerNNdudYSR1Jhep7p37vLCG6vNg>
-    <xmx:DfJOY2154lf2gL-ZjKzkmglS8o-Cl8W0dZ71Bs5PAfqXjR_OocF2Vw>
-    <xmx:DfJOYwq67R-ZtF5O8mE1omFjuYOck9UNJ0KKS5DpHVLF2i6Mooy9Ng>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0A168B60086; Tue, 18 Oct 2022 14:35:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <dc5a5c40-8e96-4f91-a3c6-5a1fc8b26ad1@app.fastmail.com>
-In-Reply-To: <972a3be7-4522-b4f0-adfa-6b42be56c52f@benettiengineering.com>
-References: <20221017233700.84918-1-giulio.benetti@benettiengineering.com>
- <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
- <972a3be7-4522-b4f0-adfa-6b42be56c52f@benettiengineering.com>
-Date:   Tue, 18 Oct 2022 20:35:36 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Giulio Benetti" <giulio.benetti@benettiengineering.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     "Russell King" <linux@armlinux.org.uk>,
-        "Anshuman Khandual" <anshuman.khandual@arm.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
-        "Russell King" <rmk+kernel@armlinux.org.uk>,
-        "Will Deacon" <will@kernel.org>
-Subject: Re: [PATCH] ARM: mm: fix no-MMU ZERO_PAGE() implementation
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 14:38:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306489D535;
+        Tue, 18 Oct 2022 11:38:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCBE5616B3;
+        Tue, 18 Oct 2022 18:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E577C43470;
+        Tue, 18 Oct 2022 18:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666118294;
+        bh=gvTaZypEgGGido85MgcyNS4DS7bHb03iQAm+R660AJM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=h4X44UYm3ssdYIwEMDeIKB+A8Wu3y81H9L1q7UHCTRiH81BO6Fwyh+r3HRDXObFgM
+         YSGuG344wbamHqscdLZNrOsnxltHOjZQ7S6KQ7aGvr+77Sk1f6DTK/KJuDVhiXWDva
+         7e0PdZ+3qytT7OlWGb2x98uIkofmpQv/nuG9Uj7oTl1ND8JE2dgbTp2SQWMQ34J6Ix
+         WGb34uKpa/YphSZF1jeeAt95+5oIxfZhgcXWOP9R2WYiK0FnK7F6TFyJHJedOBSsB/
+         Ez3XK2Zt0lNEkhwjy3fU7pDNiypgxbckClGsac0TX9JtIf/7Sgw7deTkf4y671tGmt
+         laVGf1xJGyiBw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D16295C0990; Tue, 18 Oct 2022 11:38:13 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 11:38:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: linux-next: manual merge of the rcu tree with Linus' tree
+Message-ID: <20221018183813.GW5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221018094152.39787a20@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018094152.39787a20@canb.auug.org.au>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022, at 19:44, Giulio Benetti wrote:
-> On 18/10/22 09:03, Arnd Bergmann wrote:
->> On Tue, Oct 18, 2022, at 1:37 AM, Giulio Benetti wrote:
->>> Actually in no-MMU SoCs(i.e. i.MXRT) ZERO_PAGE(vaddr) expands to
->
->> It looks like we dropped the ball on this when it came up last.
->> I'm also not sure when we started requiring this, any idea?
->
-> No to be honest. But in my case I've met ZERO_PAGE() calling in sdhci
-> driver. And as stated on the ML link above:
-> ```
-> But I wonder if it's safe for noMMU architectures to go on without a
-> working ZERO_PAGE(0).  It has uses scattered throughout the tree, in
-> drivers, fs, crypto and more, and it's not at all obvious (to me) that
-> they all depend on CONFIG_MMU.
-> ```
-> And I've found this driver that requires it and probably is not the last
-> since imxrt support is not complete.
->
->> I can see that microblaze-nommu used BUG() in ZERO_PAGE(), so at
->> whenever microblaze last worked, we clearly did not call it.
->
-> This probably means that microblaze-nommu doesn't use drivers or other
-> subsystems that require ZERO_PAGE().
+On Tue, Oct 18, 2022 at 09:41:52AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the rcu tree got a conflict in:
+> 
+>   arch/loongarch/Kconfig
+> 
+> between commit:
+> 
+>   c78c43fe7d42 ("LoongArch: Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA")
+> 
+> from Linus' tree and commit:
+> 
+>   839fc1e464eb ("arch/loongarch: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option")
+> 
+> from the rcu tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-To clarify: microblaze-nommu support was removed two years ago,
-and probably was already broken for a while before that.
+Thank you, Stephen!
 
->> In addition to your fix, I see that arm is the only architecture
->> that defines 'empty_zero_page' as a pointer to the page, when
->> everything else just makes it a pointer to the data itself,
->> or an 'extern char empty_zero_page[]' array, which we may want
->> to change for consistency.
->
-> I was about doing it, but then I tought to move one piece at a time.
+For whatever it is worth, this will go away once I test my rebase to v6.1.
 
-Right, it would definitely be a separate patch, but it
-can be a series of two patches. We probably wouldn't need to
-backport the second patch that turns it into a static allocation.
+							Thanx, Paul
 
-> But yes, I can modify accordingly. That way we also avoid the early
-> allocation in pagint_init() since it would be a .bss array.
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/loongarch/Kconfig
+> index 903096bd87f8,c8864768dc4d..000000000000
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@@ -10,6 -10,8 +10,7 @@@ config LOONGARC
+>   	select ARCH_ENABLE_MEMORY_HOTPLUG
+>   	select ARCH_ENABLE_MEMORY_HOTREMOVE
+>   	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+> + 	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>  -	select ARCH_HAS_PHYS_TO_DMA
+>   	select ARCH_HAS_PTE_SPECIAL
+>   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+>   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
 
->> There are three references to empty_zero_page in architecture
->> independent code, and while we don't seem to use any of them
->> on Arm, they would clearly be wrong if we did:
->> 
->> drivers/acpi/scan.c:#define INVALID_ACPI_HANDLE ((acpi_handle)empty_zero_page)
->> drivers/spi/spi-fsl-cpm.c:      mspi->dma_dummy_tx = dma_map_single(dev, empty_zero_page, PAGE_SIZE,
->> include/linux/raid/pq.h:# define raid6_empty_zero_page empty_zero_page
->
-> For them I can send patches to substitute with PAGE_ZERO(0) correctly 
-> adapted.
->
-> What do you think?
 
-That sounds like a good idea as well.
-
-     Arnd
