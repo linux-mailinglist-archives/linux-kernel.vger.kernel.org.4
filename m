@@ -2,238 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4792601FCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80B5601FD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJRArh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        id S230188AbiJRAud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiJRArc (ORCPT
+        with ESMTP id S230122AbiJRAu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:47:32 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA91E702
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 17:47:29 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id MAN00125;
-        Tue, 18 Oct 2022 08:47:25 +0800
-Received: from jtjnmail201619.home.langchao.com (10.100.2.19) by
- jtjnmail201624.home.langchao.com (10.100.2.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 18 Oct 2022 08:47:24 +0800
-Received: from jtjnmail201619.home.langchao.com ([fe80::c426:eceb:41d0:3372])
- by jtjnmail201619.home.langchao.com ([fe80::c426:eceb:41d0:3372%2]) with mapi
- id 15.01.2507.012; Tue, 18 Oct 2022 08:47:24 +0800
-From:   =?utf-8?B?dG9tb3Jyb3cgV2FuZyAo546L5b635piOKQ==?= 
-        <wangdeming@inspur.com>
-To:     "felix.kuehling@amd.com" <felix.kuehling@amd.com>
-CC:     "airlied@gmail.com" <airlied@gmail.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIGRybS9hbWRrZmQ6IHVzZSB2bWFfbG9va3VwKCkg?=
- =?utf-8?Q?instead_of_find=5Fvma()?=
-Thread-Topic: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
-Thread-Index: AQHY2vZO6b6Y9HXq4kWrbMYt0exbfK4SgyyAgADbmcA=
-Date:   Tue, 18 Oct 2022 00:47:24 +0000
-Message-ID: <2dc397050eed4d11ade7b9020fe2e298@inspur.com>
-References: <20221007024818.4921-1-wangdeming@inspur.com>
- <a1d36d76-396a-0bf0-26b7-c009fbae5dd0@amd.com>
-In-Reply-To: <a1d36d76-396a-0bf0-26b7-c009fbae5dd0@amd.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.200.104.82]
-Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-        micalg=SHA1; boundary="----=_NextPart_000_0009_01D8E2CE.3D0137E0"
+        Mon, 17 Oct 2022 20:50:27 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3CC75493;
+        Mon, 17 Oct 2022 17:50:23 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id s185so6200769vkb.0;
+        Mon, 17 Oct 2022 17:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RkScJFeR7NGyjQc4HVD1kacAUQO2OZTBJDnljnkr0d0=;
+        b=NyR1YtKiFdlwHUcVPFYY30llUw2sBfvW+1cKLEakB+0v8niUayly4+yYrnwJjQUj1b
+         Ay9+KJYaorLPlEHEZqPhwiI6dvQ4sLXBnehQoHcqW/z48HkiHBQwOZNs01hROfJILcDk
+         yI3Kx74HBue/kiImbxlDu/qdbHJvt7q8XIRLlGo4rD+hGuNvwb6rmmnwvc2YlsM/dKwr
+         Nso756ISLgbSv+4fDsAwgJXJkMeZZjTwnNwyVjdnqtzsOrzKmKHN0QA9aGkz7mhBu14S
+         2B5rM8s2X2T+5UpqsrPRDMRhqMSGsuKmyYAc4UBzyutLIgAdTg4N/zWTP0qS0nFDRzbT
+         T2FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RkScJFeR7NGyjQc4HVD1kacAUQO2OZTBJDnljnkr0d0=;
+        b=HAvWPY9ZHnG73uNprCDSGbXAWwo4UkZ535CsblgHbwcxKgsVvn3eDDqKMjTk2X19Vo
+         +2uYZbelyhUJIJd8iKKucHh0gyCWxoMUxr2ji4AtxPkds3BruhhKhymjwXYNsbJnZBO4
+         ec9OyXfKuPa7P3XuRdtBF+QRK5GAS8g9kDRl3E2rbPqlIwAF3dVZmU9sOSckzC4bNM6N
+         /a9bICtWv11X2ciqP9Yb2NviINQ1tmH6UQDVIgw5QwlPNp+39E/h7qOnTohUvbiVnwfl
+         zbgWh40R0IuiLJvBr1WH/gemKORRtZzjwqgYHLUGelpiQ/VDHmwr6rR5kbV/EGC/jeD/
+         Ir0A==
+X-Gm-Message-State: ACrzQf0mFUUA6cdVzsOV3S8hpQ3p8WfKUiYxFyFg8r6KA70DidW+2tfY
+        48TIazwEXoC50P78ei5cCIU5P4f6ctkFP028Ixc=
+X-Google-Smtp-Source: AMsMyM5Sx7F8AR8nLMo1cG82NE57fp76FoQ+kMVQlSZmXlFsbwgW75DI1dVWEGqT0rqNl4O2CTbL5b26WzG7Bj99TZs=
+X-Received: by 2002:a1f:5083:0:b0:3ab:b520:e998 with SMTP id
+ e125-20020a1f5083000000b003abb520e998mr191359vkb.23.1666054222290; Mon, 17
+ Oct 2022 17:50:22 -0700 (PDT)
 MIME-Version: 1.0
-tUid:   20221018084725b822b4c2c956701375f65a334ee6c27f
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000028a3c05eb364667@google.com>
+In-Reply-To: <000000000000028a3c05eb364667@google.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Tue, 18 Oct 2022 09:50:05 +0900
+Message-ID: <CAKFNMomSc0s0fWzQHO0uJxsmx0PtXCgUqDZVvW0uA+Yt72GwDg@mail.gmail.com>
+Subject: Re: [syzbot] BUG: spinlock bad magic in nilfs_palloc_destroy_cache
+To:     syzbot <syzbot+5f89bb8d098de14e095a@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------=_NextPart_000_0009_01D8E2CE.3D0137E0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 17, 2022 at 4:53 PM syzbot  wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14b7bfa4880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5f89bb8d098de14e095a
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16dbead6880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105d329a880000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/79de466a501c/mount_0.gz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+5f89bb8d098de14e095a@syzkaller.appspotmail.com
+>
+> BUG: spinlock bad magic on CPU#1, syz-executor283/3079
+>  lock: lock_classes+0x4aac0/0x180000, .magic: ffff8000, .owner: /235063856, .owner_cpu: 242347152
+> CPU: 1 PID: 3079 Comm: syz-executor283 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+> Call trace:
+>  dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+>  show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+>  dump_stack+0x1c/0x58 lib/dump_stack.c:113
+>  spin_dump kernel/locking/spinlock_debug.c:69 [inline]
+>  spin_bug+0xa8/0xec kernel/locking/spinlock_debug.c:77
+>  debug_spin_lock_before kernel/locking/spinlock_debug.c:85 [inline]
+>  do_raw_spin_lock+0xb0/0x110 kernel/locking/spinlock_debug.c:114
+>  __raw_spin_lock include/linux/spinlock_api_smp.h:134 [inline]
+>  _raw_spin_lock+0x5c/0x6c kernel/locking/spinlock.c:154
+>  spin_lock include/linux/spinlock.h:349 [inline]
+>  nilfs_palloc_clear_cache fs/nilfs2/alloc.c:848 [inline]
+>  nilfs_palloc_destroy_cache+0x2c/0xb8 fs/nilfs2/alloc.c:860
+>  nilfs_mdt_clear+0x34/0x70 fs/nilfs2/mdt.c:478
+>  nilfs_clear_inode+0x64/0x140 fs/nilfs2/inode.c:886
+>  nilfs_evict_inode+0x68/0x1cc fs/nilfs2/inode.c:908
+>  evict+0xec/0x334 fs/inode.c:665
+>  iput_final fs/inode.c:1748 [inline]
+>  iput+0x2c4/0x324 fs/inode.c:1774
+>  nilfs_put_super+0x6c/0x9c fs/nilfs2/super.c:476
+>  generic_shutdown_super+0x8c/0x190 fs/super.c:491
+>  kill_block_super+0x30/0x78 fs/super.c:1427
+>  deactivate_locked_super+0x70/0xe8 fs/super.c:332
+>  deactivate_super+0xd0/0xd4 fs/super.c:363
+>  cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
+>  __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+>  task_work_run+0xc4/0x14c kernel/task_work.c:177
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+>  prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+>  exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+>  el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
+>  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+>  el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+> Unable to handle kernel paging request at virtual address ffff80000d272a70
+> Mem abort info:
+>   ESR = 0x0000000096000047
+>   EC = 0x25: DABT (current EL), IL = 32 bits
+>   SET = 0, FnV = 0
+>   EA = 0, S1PTW = 0
+>   FSC = 0x07: level 3 translation fault
+> Data abort info:
+>   ISV = 0, ISS = 0x00000047
+>   CM = 0, WnR = 1
+> swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c566b000
+> [ffff80000d272a70] pgd=100000023ffff003, p4d=100000023ffff003, pud=100000023fffe003, pmd=100000023fffa003, pte=0000000000000000
+> Internal error: Oops: 0000000096000047 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 1 PID: 3079 Comm: syz-executor283 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+> pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : queued_spin_lock_slowpath+0x198/0x380 kernel/locking/qspinlock.c:474
+> lr : queued_spin_lock_slowpath+0x114/0x380 kernel/locking/qspinlock.c:405
+> sp : ffff800010fe3a70
+> x29: ffff800010fe3a70 x28: ffff0000c02f4f80 x27: 0000000000000000
+> x26: ffff80000d30cf28 x25: 0000000000000000 x24: ffff0001fefefa40
+> x23: 0000000000000000 x22: ffff80000d30cf28 x21: ffff80000d272a40
+> x20: 0000000000000001 x19: ffff80000db93c18 x18: 0000000000000260
+> x17: 6e69676e45206574 x16: 0000000000000002 x15: 0000000000000000
+> x14: 0000000000000000 x13: 0000000000000db7 x12: 0000000000000000
+> x11: ffff80000d272a70 x10: 0000000000080000 x9 : ffff0001fefefa48
+> x8 : ffff0001fefefa40 x7 : 205b5d3838383531 x6 : ffff80000819545c
+> x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+> x2 : 0000000000000001 x1 : ffff80000ce26a9f x0 : 0000000000000001
+> Call trace:
+>  decode_tail kernel/locking/qspinlock.c:131 [inline]
+>  queued_spin_lock_slowpath+0x198/0x380 kernel/locking/qspinlock.c:471
+>  queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
+>  do_raw_spin_lock+0x10c/0x110 kernel/locking/spinlock_debug.c:115
+>  __raw_spin_lock include/linux/spinlock_api_smp.h:134 [inline]
+>  _raw_spin_lock+0x5c/0x6c kernel/locking/spinlock.c:154
+>  spin_lock include/linux/spinlock.h:349 [inline]
+>  nilfs_palloc_clear_cache fs/nilfs2/alloc.c:848 [inline]
+>  nilfs_palloc_destroy_cache+0x2c/0xb8 fs/nilfs2/alloc.c:860
+>  nilfs_mdt_clear+0x34/0x70 fs/nilfs2/mdt.c:478
+>  nilfs_clear_inode+0x64/0x140 fs/nilfs2/inode.c:886
+>  nilfs_evict_inode+0x68/0x1cc fs/nilfs2/inode.c:908
+>  evict+0xec/0x334 fs/inode.c:665
+>  iput_final fs/inode.c:1748 [inline]
+>  iput+0x2c4/0x324 fs/inode.c:1774
+>  nilfs_put_super+0x6c/0x9c fs/nilfs2/super.c:476
+>  generic_shutdown_super+0x8c/0x190 fs/super.c:491
+>  kill_block_super+0x30/0x78 fs/super.c:1427
+>  deactivate_locked_super+0x70/0xe8 fs/super.c:332
+>  deactivate_super+0xd0/0xd4 fs/super.c:363
+>  cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
+>  __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+>  task_work_run+0xc4/0x14c kernel/task_work.c:177
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+>  prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+>  exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+>  el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
+>  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+>  el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+> Code: 8b2c4ecc f85f818c 1200056b 8b2b52ab (f82b6988)
+> ---[ end trace 0000000000000000 ]---
+> ----------------
+> Code disassembly (best guess):
+>    0:   8b2c4ecc        add     x12, x22, w12, uxtw #3
+>    4:   f85f818c        ldur    x12, [x12, #-8]
+>    8:   1200056b        and     w11, w11, #0x3
+>    c:   8b2b52ab        add     x11, x21, w11, uxtw #4
+> * 10:   f82b6988        str     x8, [x12, x11] <-- trapping instruction
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-Hi,
-The function vma_lookup show below.  Vma valid check is included in it. =
-Or, What other questions do you have?
+This is the same UAF bug as below:
 
-static inline
-struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long =
-addr)
- {
-         struct vm_area_struct *vma =3D find_vma(mm, addr);
+#syz dup: BUG: unable to handle kernel paging request in kernfs_put_active
 
-         if (vma && addr < vma->vm_start)
-                 vma =3D NULL;
+The bugfix for this is the patch titled "fs: fix UAF/GPF bug in
+nilfs_mdt_destroy", which is already merged in the mainline.
 
-         return vma;
- }
+I confirmed that the above patch suppresses the bug by using the C-reproducer.
 
-
-> from: Felix Kuehling <felix.kuehling@amd.com>
-> time: 2022=E5=B9=B410=E6=9C=8818=E6=97=A5 3:35
-> to: tomorrow Wang (=E7=8E=8B=E5=BE=B7=E6=98=8E) =
-<wangdeming@inspur.com>;
-> airlied@gmail.com; daniel@ffwll.ch; alexander.deucher@amd.com;
-> christian.koenig@amd.com; Xinhui.Pan@amd.com
-> linux-kernel@vger.kernel.org
-> sub: Re: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
->=20
->=20
-> On 2022-10-06 22:48, Deming Wang wrote:
-> > Using vma_lookup() verifies the start address is contained in the
-> > found vma.  This results in easier to read the code.
->=20
-> Thank you for the patches. This and your other patch look good to me.
-> However, you missed one use of find_vma in svm_range_is_valid. Is that =
-an
-> oversight or is there a reason why we need to use find_vma there?
->=20
-> If you're going to respin it, you may also squash the two patches into =
-one.
->=20
-> Thanks,
->    Felix
->=20
->=20
-> >
-> > Signed-off-by: Deming Wang <wangdeming@inspur.com>
-> > ---
-> >   drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 12 ++++++------
-> >   1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-> > b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-> > index 64fdf63093a0..cabcc2ca3c23 100644
-> > --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-> > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-> > @@ -1586,8 +1586,8 @@ static int svm_range_validate_and_map(struct
-> mm_struct *mm,
-> >   		unsigned long npages;
-> >   		bool readonly;
-> >
-> > -		vma =3D find_vma(mm, addr);
-> > -		if (!vma || addr < vma->vm_start) {
-> > +		vma =3D vma_lookup(mm, addr);
-> > +		if (!vma) {
-> >   			r =3D -EFAULT;
-> >   			goto unreserve_out;
-> >   		}
-> > @@ -2542,8 +2542,8 @@ svm_range_get_range_boundaries(struct
-> kfd_process *p, int64_t addr,
-> >   	struct interval_tree_node *node;
-> >   	unsigned long start_limit, end_limit;
-> >
-> > -	vma =3D find_vma(p->mm, addr << PAGE_SHIFT);
-> > -	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
-> > +	vma =3D vma_lookup(p->mm, addr << PAGE_SHIFT);
-> > +	if (!vma) {
-> >   		pr_debug("VMA does not exist in address [0x%llx]\n", addr);
-> >   		return -EFAULT;
-> >   	}
-> > @@ -2871,8 +2871,8 @@ svm_range_restore_pages(struct amdgpu_device
-> *adev, unsigned int pasid,
-> >   	/* __do_munmap removed VMA, return success as we are handling =
-stale
-> >   	 * retry fault.
-> >   	 */
-> > -	vma =3D find_vma(mm, addr << PAGE_SHIFT);
-> > -	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
-> > +	vma =3D vma_lookup(mm, addr << PAGE_SHIFT);
-> > +	if (!vma) {
-> >   		pr_debug("address 0x%llx VMA is removed\n", addr);
-> >   		r =3D 0;
-> >   		goto out_unlock_range;
-
-------=_NextPart_000_0009_01D8E2CE.3D0137E0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-
-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
-AgICAIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMB0GA1UdDgQWBBT2m8+B
-pv3zOH+FCDvTbpfMkvPbAzAfBgNVHSMEGDAWgBReWQOmtExYYJFO9h61pTmmMsE1ajCCAQ8GA1Ud
-HwSCAQYwggECMIH/oIH8oIH5hoG6bGRhcDovLy9DTj1JTlNQVVItQ0EsQ049SlRDQTIwMTIsQ049
-Q0RQLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRp
-b24sREM9aG9tZSxEQz1sYW5nY2hhbyxEQz1jb20/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9i
-YXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50hjpodHRwOi8vSlRDQTIwMTIuaG9t
-ZS5sYW5nY2hhby5jb20vQ2VydEVucm9sbC9JTlNQVVItQ0EuY3JsMIIBKQYIKwYBBQUHAQEEggEb
-MIIBFzCBsQYIKwYBBQUHMAKGgaRsZGFwOi8vL0NOPUlOU1BVUi1DQSxDTj1BSUEsQ049UHVibGlj
-JTIwS2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1ob21lLERD
-PWxhbmdjaGFvLERDPWNvbT9jQUNlcnRpZmljYXRlP2Jhc2U/b2JqZWN0Q2xhc3M9Y2VydGlmaWNh
-dGlvbkF1dGhvcml0eTBhBggrBgEFBQcwAoZVaHR0cDovL0pUQ0EyMDEyLmhvbWUubGFuZ2NoYW8u
-Y29tL0NlcnRFbnJvbGwvSlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb21fSU5TUFVSLUNBLmNydDBH
-BgNVHREEQDA+oCUGCisGAQQBgjcUAgOgFwwVd2FuZ2RlbWluZ0BpbnNwdXIuY29tgRV3YW5nZGVt
-aW5nQGluc3B1ci5jb20wDQYJKoZIhvcNAQELBQADggEBAKD6Oh0Yu1g2xXDIaczYlx8WZiYqTi7t
-bFCmsNT5DmNUfLaJre5UDyaWjgwW6Z/KN1X19Piy6oS8ex93gaeF4siDuQimREZoKxePJyUeyFs5
-oC6kpsw95f/0RM5zhHb4I8L4AgplfwySCGAeMRr74rThzkYWfoU1AM+c8cBtViIispknx6KxJFo2
-b533lCx168UKeNRb1n7pUANxFYd+1jjdRKCPrszdJcJddFmnLBetcnD4DG0ID62hnw+/g0KoAlfd
-ORikFVBLobsDNy+NQ++5ZYgx1ahEQ6BESIjeWxut+2Zqis6Zbwd5ZsBhm892l5EdzJCuYe5xDEZw
-0Z0bGvUxggOTMIIDjwIBATBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZ
-FghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA
-1tjc3okYpZWK7QAAAADW2DAJBgUrDgMCGgUAoIIB+DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEwMTgwMDQ3MjJaMCMGCSqGSIb3DQEJBDEWBBST67mw4N90PcF4
-hgqli2sF5Rg5IDB/BgkrBgEEAYI3EAQxcjBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJ
-kiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BV
-Ui1DQQITfgAA1tjc3okYpZWK7QAAAADW2DCBgQYLKoZIhvcNAQkQAgsxcqBwMFkxEzARBgoJkiaJ
-k/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhv
-bWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA1tjc3okYpZWK7QAAAADW2DCBkwYJKoZIhvcNAQkP
-MYGFMIGCMAoGCCqGSIb3DQMHMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAEC
-MA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCGjALBglghkgBZQMEAgMwCwYJ
-YIZIAWUDBAICMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBieZuG7cH9zIGAfzZ/LrYc
-cfFwMZ2EKcBCxCB07+B4iSrawKROtNMcuvp7OEZZWPl4FMctbG28ZbzwcESf9ZY6zGO902Jmkjow
-/Qj+x/D0RkIcdERgcXpp2yqoSbguNHu3sc/dQYzUTP7uyJJcmK2xPZUoZTxuB5SZVuBL17DwGe8x
-hjcsFif3crFo6Y0s9zuCYToOHm0NIROT5tcvIf+vfXEX7yfJYj3QBJQnk7pLt52ayzg4Im8cdFHb
-+lvX+XbY3dc/1yXVe61uDacwbvLgADF2/e//6qLDBgtiAyOtzga1IKv0xeuhfMp3v1Fnc87l77s8
-NUW2PUBrBAzPmbLaAAAAAAAA
-
-------=_NextPart_000_0009_01D8E2CE.3D0137E0--
+Ryusuke Konishi
