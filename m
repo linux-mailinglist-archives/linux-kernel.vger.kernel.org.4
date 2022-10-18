@@ -2,203 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413F3603178
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A467603170
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiJRRSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S229981AbiJRRRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJRRSS (ORCPT
+        with ESMTP id S229769AbiJRRRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:18:18 -0400
-X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 10:18:14 PDT
-Received: from p3plwbeout16-03.prod.phx3.secureserver.net (p3plsmtp16-03-2.prod.phx3.secureserver.net [173.201.193.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3106A347B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:18:14 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.142])
-        by :WBEOUT: with ESMTP
-        id kqBco3zbV5A6BkqBdoO93u; Tue, 18 Oct 2022 10:15:29 -0700
-X-CMAE-Analysis: v=2.4 cv=GM3NrsBK c=1 sm=1 tr=0 ts=634edf31
- a=s1hRAmXuQnGNrIj+3lWWVA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10 a=lAgNKBcoAAAA:8
- a=VwQbUJbxAAAA:8 a=e5mUnYsNAAAA:8 a=JfrnYn6hAAAA:8 a=ygIEzA4lYqtJ-tnP5d0A:9
- a=QEXdDO2ut3YA:10 a=drE6d5tx1tjNRBs8zHOc:22 a=AjGcO6oz07-iQ99wixmX:22
- a=Vxmtnl_E_bksehYqCbjh:22 a=1CNFftbPRP8L7MoqJWF3:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  kqBco3zbV5A6B
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp05.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1okqBY-0000Nu-2a; Tue, 18 Oct 2022 18:15:27 +0100
-Message-ID: <cfe5dd3a-5820-98cf-ae31-b6a3ff3f0578@squashfs.org.uk>
-Date:   Tue, 18 Oct 2022 18:15:23 +0100
+        Tue, 18 Oct 2022 13:17:39 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2084.outbound.protection.outlook.com [40.107.100.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11701EEA9E;
+        Tue, 18 Oct 2022 10:17:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VlhRQ0NimhVcHcv+a4rxKNRpvZqR6dqd2YTMDo+a0NN3KdNjufoSifrebcykEKUD11OwJPBtW8BUgCGDZV98II5U4eS+vFoySF6RePSmaWmnN6P1RiY4MUEVJ7Wn70gZaE459vzXbx5aPKAruBzBEM77AjqRLg6jd7fzvuWpxXt2FzXKlU75V80udxex5axvUzq0iFrUw0Xy/VPJh3jr9bOoERfdcR8bLUudyavBGfQmuH03tXf5+p85PkxU8k8bM1N1+X73ms0seniX30ZAzm+vKj2JsQKd7OngrnYgSz/67b+TgDU5JjpZwdJ/Zvc5cfBfxemKNSfWsNnyF6mF3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UQuOej4xx8hZg2PS/umZ1UgoBkvh+3xVyLfm/jwKjbk=;
+ b=oBbivN0Tvf/pd2poNjTRJ9fdBOZp9a13GSvrU4kqHBbzqklg//SVnAgsiEjgoXI0aAFb/CwmlY6RjDrAC5Lg1ObzzBZaop615cuM77pM+acUCnyeuRhwIVICbq5TgrNw8HdN7+n177gf8OdkJbFP7fZvwUjmt4iOUkUw50KKmohjpiFiPDdr5xFwljFFzHWEiaF+NQPdY97xF68WwgLK74VNzGsWUHCTX2Er923MyS+dnhIbOEJQkUDpwT2TRCI25+O5Tlz6mw2eiszrSQ8lu4akEf45BD1eBfzB9jeOTFbLSyiQKBEa/PCcTv0psLt1z3muCoHI1Fa7WUftoWXIlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UQuOej4xx8hZg2PS/umZ1UgoBkvh+3xVyLfm/jwKjbk=;
+ b=ieTA1+eY1Mfy/CJyiHG80OII5UEdwcMnvV5CIO80QRm6t1a5vXQo827U0BEAF6CNdk7HcHHBTgySHh4etame1DnqG6/Ty5ZgzK3M0aQC/lkgkGWR4PVL8KhVxBRbXnvvGPMpUCYFTnbS0bJCMqt/ddJ589z+uxrtb7etBBS/CM0=
+Received: from BN9PR03CA0103.namprd03.prod.outlook.com (2603:10b6:408:fd::18)
+ by MN2PR12MB4319.namprd12.prod.outlook.com (2603:10b6:208:1dc::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
+ 2022 17:17:29 +0000
+Received: from BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fd:cafe::7c) by BN9PR03CA0103.outlook.office365.com
+ (2603:10b6:408:fd::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.31 via Frontend
+ Transport; Tue, 18 Oct 2022 17:17:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT008.mail.protection.outlook.com (10.13.177.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5746.16 via Frontend Transport; Tue, 18 Oct 2022 17:17:29 +0000
+Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
+ 2022 12:17:24 -0500
+From:   Arvind Yadav <Arvind.Yadav@amd.com>
+To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
+        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
+        <Arunpravin.PaneerSelvam@amd.com>, <sumit.semwal@linaro.org>,
+        <gustavo@padovan.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <steven.price@arm.com>
+CC:     Arvind Yadav <Arvind.Yadav@amd.com>
+Subject: [PATCH v4] drm/sched: Fix kernel NULL pointer dereference error
+Date:   Tue, 18 Oct 2022 22:46:52 +0530
+Message-ID: <20221018171652.589004-1-Arvind.Yadav@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
- 6.0.0-rc3 through 6.0.0-rc7
-To:     Jintao Yin <nicememory@gmail.com>
-Cc:     bagasdotme@gmail.com, linux-kernel@vger.kernel.org,
-        marcmiltenberger@gmail.com, mirsad.todorovac@alu.unizg.hr,
-        regressions@leemhuis.info, regressions@lists.linux.dev,
-        srw@sladewatkins.net, Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20221015205936.5735-1-phillip@squashfs.org.uk>
- <20221018021507.612-1-nicememory@gmail.com>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20221018021507.612-1-nicememory@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfCowMskq7U6p9shwdsXd+WHlmdlsO/SE817Zwm/ldYhtuqw7XtvDhkInuaj2gVfnGx5iq5katKp7q0hs4ylMIs0sDkprpSGDOLGHwgzaLKKzwYhgxPZh
- tM/1u0Ghao/JP2AEyTaH/HBEzSiFgcbvtuegCnQTjXkcBe6V3vAHfZIrcb7pZlV090M9u6EqmMt/Y6teOMjoz29WeNQadHpuCb0=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT008:EE_|MN2PR12MB4319:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8eaf065-bc8c-426b-34ce-08dab12ca2d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FZIcV0+6Q7Yik5gioKypPwamu29bgnpe/wL1k8b40I5VdSRDb0EmEp2Dw4hh3zhF8oYtylrVj3RUwgj4z7l3N1G0cFopdIedWpylcQ+pzkOr1wKoVovaHWWorH6FZLOOfCHCnl8El1udSucSAhJd73N9MW+xMg//FXHn9BM47oSQFizYBIC5BUGzfzm8u6vxF62tQTFqioU1lP3U2BwNV/gkZuQlFB2iks3Je1+oI0nTi7Lah2ryqAt9PdCliXl4/Ryhcm4z9ynqbrqe4GFfvZnmiJOytCZBChRrDKY/9I38F1SBdRFwWCLn0xlW1W3VdCqMkSN33gqLYdT2DxAr3MKF/M6/Pmbz+5JUE4N0LvA3Dglalqk+1GGklNXtN2Snx6gJ5vWGDSFX48oCe4ONhaIeahJJP0g1hwk6/d14SFoinxBYyBYzOPKohsc5S0oTmmhRsxpmFToGYS/0Kn6Q8YRN6Ou9vNde+cQjeRiShnG38dUJ0Y+U5Dc9BcENBy/f61rFp2J0NIm7TSVicOhPxuS2FXeaKIOCTzXfNakIkzGktkfPIYSNZUtO7T2TS86+MA51+uoSPYmZpnVZw2AHhzvCDGNlAvtX/MbLw75+35eSJGemQ4jHRb159dLdAcWQliAMgo6U3DFCmXqtXqAvVZN14dRilqWUCuYATF+UBKWCTXF5eSOaOq3lCzdwJuCPCsCi0p6SUaBbxXGoJbJpPDW7AT72x7KGMXis9ctYv0TWSkDsWUniLtUau6R51F4DaFxvGJD7e5WqGYDzY92eyTQ15C9IkEJ5qR5OPbIYaxFJI5GhF0hxYXkiw7p8GO8mY/4ZXZ3r7XUjNrgttbh8HfXYsLMqxiLKz5m7PZK+ZUk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199015)(36840700001)(40470700004)(46966006)(86362001)(82310400005)(81166007)(47076005)(36860700001)(82740400003)(336012)(186003)(426003)(83380400001)(16526019)(1076003)(8676002)(70206006)(70586007)(2616005)(26005)(7696005)(6666004)(356005)(110136005)(478600001)(316002)(921005)(40480700001)(4326008)(36756003)(2906002)(8936002)(5660300002)(40460700003)(41300700001)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 17:17:29.4698
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8eaf065-bc8c-426b-34ce-08dab12ca2d9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4319
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 03:15, Jintao Yin wrote:
-> On Sat, Oct 15, 2022 at 09:59:36PM +0100, Phillip Lougher wrote:
->> Thorsten Leemhuis <regressions@leemhuis.info> wrote:
->>>
->>> Topposting, to make this easier to access for everyone.
->>>
->>> @Mirsad, thx for bisecting.
->>>
->>> @Phillip: if you want to see a problem description and the whole
->>> backstory of the problem that apparently is caused by 	b09a7a036d20
->>> ("squashfs: support reading fragments in readahead call"), see this
->>> thread (Mirsad sadly started a new one with the quoted mail below):
->>> https://lore.kernel.org/all/b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr/
->>>
->>
->> The above backstory tends to suggest data corruption which is happening
->> after a couple of hours especially on heavy loads, e.g. the comment
->>
->>> On 10/3/22 at 4:18 AM, Mirsad Goran Todorovac wrote:
->>> The bug usually isn't showing immediately, but after a couple of hours
->>> of running (especially with multimedia running inside Firefox).
->>
->> Which is typically caused by double freed buffers or race conditions in
->> freeing and reusing.
->>
->> Thanks Mirsad for the following
->>
->> On Sat, 15 Oct 2022 16:59:44 +0200, Mirsad Goran Todorovac wrote:
->>>
->>> Here are the results of the requested bisect on the bug involving the
->>> Firefox snap build 104.x, 105.0.x, squashfs and which was manifested on
->>> both Ubuntu snap and with snapd in AlmaLinux 8.6 (CentOS fork):
->>>
->>> mtodorov@domac:~/linux/kernel/linux_stable$ git bisect log
->>> git bisect start
->>> # bad: [568035b01cfb107af8d2e4bd2fb9aea22cf5b868] Linux 6.0-rc1
->>> git bisect bad 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
->>> # good: [51dd976781da8c0b47e106ed59a96d7c28972ce4] Linux 5.19.15
->>> git bisect good 51dd976781da8c0b47e106ed59a96d7c28972ce4
->>> # good: [3d7cb6b04c3f3115719235cc6866b10326de34cd] Linux 5.19
->>> git bisect good 3d7cb6b04c3f3115719235cc6866b10326de34cd
->>> # good: [b44f2fd87919b5ae6e1756d4c7ba2cbba22238e1] Merge tag
->>> 'drm-next-2022-08-03' of git://anongit.freedesktop.org/drm/drm
->>> git bisect good b44f2fd87919b5ae6e1756d4c7ba2cbba22238e1
->>> # good: [6614a3c3164a5df2b54abb0b3559f51041cf705b] Merge tag
->>> 'mm-stable-2022-08-03' of
->>> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->>> git bisect good 6614a3c3164a5df2b54abb0b3559f51041cf705b
->>> # bad: [eb5699ba31558bdb2cee6ebde3d0a68091e47dce] Merge tag
->>> 'mm-nonmm-stable-2022-08-06-2' of
->>> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->>> git bisect bad eb5699ba31558bdb2cee6ebde3d0a68091e47dce
->>> # good: [24df5428ef9d1ca1edd54eca7eb667110f2dfae3] ALSA: hda/realtek:
->>> Add quirk for HP Spectre x360 15-eb0xxx
->>> git bisect good 24df5428ef9d1ca1edd54eca7eb667110f2dfae3
->>> # good: [c993e07be023acdeec8e84e2e0743c52adb5fc94] Merge tag
->>> 'dma-mapping-5.20-2022-08-06' of
->>> git://git.infradead.org/users/hch/dma-mapping
->>> git bisect good c993e07be023acdeec8e84e2e0743c52adb5fc94
->>> # good: [4cfa6ff24a9744ba484521c38bea613134fbfcb3] powerpc/64e: Fix
->>> kexec build error
->>> git bisect good 4cfa6ff24a9744ba484521c38bea613134fbfcb3
->>> # good: [24cb958695724ffb4488ef4f65892c0767bcd2f2] Merge tag
->>> 's390-5.20-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux
->>> git bisect good 24cb958695724ffb4488ef4f65892c0767bcd2f2
->>> # good: [db98b43086275350294f5c6f797249b714d6316d] squashfs: always
->>> build "file direct" version of page actor
->>> git bisect good db98b43086275350294f5c6f797249b714d6316d
->>> # good: [6ba592fa014f21f35a8ee8da4ca7b95a018f13e8] video: fbdev: s3fb:
->>> Check the size of screen before memset_io()
->>> git bisect good 6ba592fa014f21f35a8ee8da4ca7b95a018f13e8
->>> # good: [b5a8466d37d30cfcc8015789f4a3f0c44b6c7bc6] Merge tag
->>> 'for-5.20/fbdev-1' of
->>> git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev
->>> git bisect good b5a8466d37d30cfcc8015789f4a3f0c44b6c7bc6
->>> # bad: [97d3b2676fc6bc4865eb825037f4492f0fb804eb] ocfs2: remove some
->>> useless functions
->>> git bisect bad 97d3b2676fc6bc4865eb825037f4492f0fb804eb
->>> # bad: [591c32bddbe20ba0e172d9def3c7f22b9c926ad9] kernel/hung_task: fix
->>> address space of proc_dohung_task_timeout_secs
->>> git bisect bad 591c32bddbe20ba0e172d9def3c7f22b9c926ad9
->>> # bad: [b09a7a036d2035b14636cd4c4c69518d73770f65]  squashfs: support
->>> reading fragments in readahead call
->>> git bisect bad b09a7a036d2035b14636cd4c4c69518d73770f65
->>> mtodorov@domac:~/linux/kernel/linux_stable$
->>>
->>> The git bisect stopped at the squashfs commit
->>> b09a7a036d2035b14636cd4c4c69518d73770f65, so I included Phillip in Cc:,
->>> according to the Code of Conduct.
->>
->> Which identified the "squashfs: support reading fragments in readahead call"
->> patch.
->>
->> There is a race-condition introduced in that patch, which involves cache
->> releasing and reuse.
->>
->> The following diff will fix that race-condition.  It would be great if
->> someone could test and verify before sending it out as a patch.
->>
->> Thanks
->>
->> Phillip
-> Hi Phillip,
->    There is a logical bug in commit 8fc78b6fe24c36b151ac98d7546591ed92083d4f
->    which is parent commit of commit b09a7a036d2035b14636cd4c4c69518d73770f65.
->    
->    In function squashfs_readahead(...),
->    file_end is initialized with i_size_read(inode) >> msblk->block_log,
->    which means the last block index of the file.
->    But later in the logic to check if the page is last one or not the
->    code is
->      if (pages[nr_pages - 1]->index == file_end && bytes) {
->        ...
->      }
->    , use file_end as the last page index of file but actually is the last
->    block index, so for the common setup of page and block size, the first
->    comparison is true only when pages[nr_pages - 1]->index is 0.
->    Otherwise, the trailing bytes of last page won't be zeroed.
-> 
->    Maybe it's the real cause of the snap bug in some way.
-> 
+-This is purely a timing issue. Here, sometimes Job free
+is happening before the job is done.
+To fix this issue moving 'dma_fence_cb' callback from
+job(struct drm_sched_job) to scheduler fence (struct drm_sched_fence).
 
-That code segment is indeed the cause of the bug.  But the logic to
-check if it is the last page is completely wrong and more broken than
-described.
+-Added drm_sched_fence_set_parent() and drm_sched_fence_clear_parent()
+functions to move fence handling into sched_fence.c and this just cleanup.
 
-I will send a diff.  This has aleady been shown to fix the issue with my
-reproducer.
+BUG: kernel NULL pointer dereference, address: 0000000000000088
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 2 PID: 0 Comm: swapper/2 Not tainted 6.0.0-rc2-custom #1
+ Hardware name: AMD Dibbler/Dibbler, BIOS RDB1107CC 09/26/2018
+ RIP: 0010:drm_sched_job_done.isra.0+0x11/0x140 [gpu_sched]
+ Code: 8b fe ff ff be 03 00 00 00 e8 7b da b7 e3 e9 d4 fe ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 48 89 e5 41 55 41 54 49 89 fc 53 <48> 8b 9f 88 00 00 00 f0 ff 8b f0 00 00 00 48 8b 83 80 01 00 00 f0
+ RSP: 0018:ffffb1b1801d4d38 EFLAGS: 00010087
+ RAX: ffffffffc0aa48b0 RBX: ffffb1b1801d4d70 RCX: 0000000000000018
+ RDX: 000036c70afb7c1d RSI: ffff8a45ca413c60 RDI: 0000000000000000
+ RBP: ffffb1b1801d4d50 R08: 00000000000000b5 R09: 0000000000000000
+ R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+ R13: ffffb1b1801d4d70 R14: ffff8a45c4160000 R15: ffff8a45c416a708
+ FS:  0000000000000000(0000) GS:ffff8a48a0a80000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 0000000000000088 CR3: 000000014ad50000 CR4: 00000000003506e0
+ Call Trace:
+  <IRQ>
+  drm_sched_job_done_cb+0x12/0x20 [gpu_sched]
+  dma_fence_signal_timestamp_locked+0x7e/0x110
+  dma_fence_signal+0x31/0x60
+  amdgpu_fence_process+0xc4/0x140 [amdgpu]
+  gfx_v9_0_eop_irq+0x9d/0xd0 [amdgpu]
+  amdgpu_irq_dispatch+0xb7/0x210 [amdgpu]
+  amdgpu_ih_process+0x86/0x100 [amdgpu]
+  amdgpu_irq_handler+0x24/0x60 [amdgpu]
+  __handle_irq_event_percpu+0x4b/0x190
+  handle_irq_event_percpu+0x15/0x50
+  handle_irq_event+0x39/0x60
+  handle_edge_irq+0xaf/0x210
+  __common_interrupt+0x6e/0x110
+  common_interrupt+0xc1/0xe0
+  </IRQ>
+  <TASK>
 
-Thanks
+Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+---
 
-Phillip
+Changes in v2: Moving 'dma_fence_cb' callback from
+job(struct drm_sched_job) to scheduler fence(struct drm_sched_fence)
+instead of adding NULL check for s_fence.
 
->    Thanks,
-> 
->    Jintao
+Changes in v3: Added drm_sched_fence_set_parent() function(and others *_parent_cb)
+in sched_fence.c. Moved parent fence intilization and callback
+installation into this (this just cleanup).
 
+Changes in v4 : Add drm_sched_fence_clear_parent() function in sched_fence.c.
+and done the changes as per review comments. 
+---
+ drivers/gpu/drm/scheduler/sched_fence.c | 64 +++++++++++++++++++++++++
+ drivers/gpu/drm/scheduler/sched_main.c  | 53 ++++----------------
+ include/drm/gpu_scheduler.h             | 10 +++-
+ 3 files changed, 81 insertions(+), 46 deletions(-)
+
+diff --git a/drivers/gpu/drm/scheduler/sched_fence.c b/drivers/gpu/drm/scheduler/sched_fence.c
+index 7fd869520ef2..68343614f9ed 100644
+--- a/drivers/gpu/drm/scheduler/sched_fence.c
++++ b/drivers/gpu/drm/scheduler/sched_fence.c
+@@ -78,6 +78,70 @@ static void drm_sched_fence_free_rcu(struct rcu_head *rcu)
+ 		kmem_cache_free(sched_fence_slab, fence);
+ }
+ 
++/**
++ * drm_sched_fence_parent_cb - the callback for a done job
++ * @f: fence
++ * @cb: fence callbacks
++ */
++static void drm_sched_fence_parent_cb(struct dma_fence *f, struct dma_fence_cb *cb)
++{
++	struct drm_sched_fence *s_fence = container_of(cb, struct drm_sched_fence,
++						       cb);
++	struct drm_gpu_scheduler *sched = s_fence->sched;
++
++	atomic_dec(&sched->hw_rq_count);
++	atomic_dec(sched->score);
++
++	dma_fence_get(&s_fence->finished);
++	drm_sched_fence_finished(s_fence);
++	dma_fence_put(&s_fence->finished);
++	wake_up_interruptible(&sched->wake_up_worker);
++}
++
++/**
++ * drm_sched_fence_clear_parent -  Remove callbacks from pending list
++ * @s_fence: pointer to the fence
++ *
++ * Remove callbacks from pending list and clear the parent fence.
++ */
++bool drm_sched_fence_clear_parent(struct drm_sched_fence *s_fence)
++{
++	if (s_fence->parent &&
++	    dma_fence_remove_callback(s_fence->parent, &s_fence->cb)) {
++		dma_fence_put(s_fence->parent);
++		s_fence->parent = NULL;
++		return true;
++	}
++
++	return false;
++}
++
++/**
++ * drm_sched_fence_set_parent - set the parent fence and add the callback
++ * @s_fence: pointer to the fence
++ * fence: pointer to the hw fence
++ *
++ * Set the parent fence and install the callback for a done job.
++ */
++void drm_sched_fence_set_parent(struct drm_sched_fence *s_fence,
++			       struct dma_fence *fence)
++{
++	int r;
++
++	if (s_fence->parent &&
++	    dma_fence_remove_callback(s_fence->parent, &s_fence->cb))
++		dma_fence_put(s_fence->parent);
++
++	/* We keep the reference of the parent fence here. */
++	swap(s_fence->parent, fence);
++	dma_fence_put(fence);
++
++	r = dma_fence_add_callback(s_fence->parent, &s_fence->cb,
++				      drm_sched_fence_parent_cb);
++	if (r == -ENOENT)
++		drm_sched_fence_parent_cb(NULL, &s_fence->cb);
++}
++
+ /**
+  * drm_sched_fence_free - free up an uninitialized fence
+  *
+diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+index 4cc59bae38dd..30597d9a949f 100644
+--- a/drivers/gpu/drm/scheduler/sched_main.c
++++ b/drivers/gpu/drm/scheduler/sched_main.c
+@@ -253,13 +253,12 @@ drm_sched_rq_select_entity_fifo(struct drm_sched_rq *rq)
+ 
+ /**
+  * drm_sched_job_done - complete a job
+- * @s_job: pointer to the job which is done
++ * @s_fence: pointer to the fence of a done job
+  *
+  * Finish the job's fence and wake up the worker thread.
+  */
+-static void drm_sched_job_done(struct drm_sched_job *s_job)
++static void drm_sched_job_done(struct drm_sched_fence *s_fence)
+ {
+-	struct drm_sched_fence *s_fence = s_job->s_fence;
+ 	struct drm_gpu_scheduler *sched = s_fence->sched;
+ 
+ 	atomic_dec(&sched->hw_rq_count);
+@@ -273,18 +272,6 @@ static void drm_sched_job_done(struct drm_sched_job *s_job)
+ 	wake_up_interruptible(&sched->wake_up_worker);
+ }
+ 
+-/**
+- * drm_sched_job_done_cb - the callback for a done job
+- * @f: fence
+- * @cb: fence callbacks
+- */
+-static void drm_sched_job_done_cb(struct dma_fence *f, struct dma_fence_cb *cb)
+-{
+-	struct drm_sched_job *s_job = container_of(cb, struct drm_sched_job, cb);
+-
+-	drm_sched_job_done(s_job);
+-}
+-
+ /**
+  * drm_sched_dependency_optimized - test if the dependency can be optimized
+  *
+@@ -504,11 +491,7 @@ void drm_sched_stop(struct drm_gpu_scheduler *sched, struct drm_sched_job *bad)
+ 	 */
+ 	list_for_each_entry_safe_reverse(s_job, tmp, &sched->pending_list,
+ 					 list) {
+-		if (s_job->s_fence->parent &&
+-		    dma_fence_remove_callback(s_job->s_fence->parent,
+-					      &s_job->cb)) {
+-			dma_fence_put(s_job->s_fence->parent);
+-			s_job->s_fence->parent = NULL;
++		if (drm_sched_fence_clear_parent(s_job->s_fence)) {
+ 			atomic_dec(&sched->hw_rq_count);
+ 		} else {
+ 			/*
+@@ -560,7 +543,6 @@ EXPORT_SYMBOL(drm_sched_stop);
+ void drm_sched_start(struct drm_gpu_scheduler *sched, bool full_recovery)
+ {
+ 	struct drm_sched_job *s_job, *tmp;
+-	int r;
+ 
+ 	/*
+ 	 * Locking the list is not required here as the sched thread is parked
+@@ -575,16 +557,10 @@ void drm_sched_start(struct drm_gpu_scheduler *sched, bool full_recovery)
+ 		if (!full_recovery)
+ 			continue;
+ 
+-		if (fence) {
+-			r = dma_fence_add_callback(fence, &s_job->cb,
+-						   drm_sched_job_done_cb);
+-			if (r == -ENOENT)
+-				drm_sched_job_done(s_job);
+-			else if (r)
+-				DRM_DEV_ERROR(sched->dev, "fence add callback failed (%d)\n",
+-					  r);
+-		} else
+-			drm_sched_job_done(s_job);
++		if (fence)
++			drm_sched_fence_set_parent(s_job->s_fence, fence);
++		else
++			drm_sched_job_done(s_job->s_fence);
+ 	}
+ 
+ 	if (full_recovery) {
+@@ -1008,7 +984,6 @@ static bool drm_sched_blocked(struct drm_gpu_scheduler *sched)
+ static int drm_sched_main(void *param)
+ {
+ 	struct drm_gpu_scheduler *sched = (struct drm_gpu_scheduler *)param;
+-	int r;
+ 
+ 	sched_set_fifo_low(current);
+ 
+@@ -1049,22 +1024,12 @@ static int drm_sched_main(void *param)
+ 		drm_sched_fence_scheduled(s_fence);
+ 
+ 		if (!IS_ERR_OR_NULL(fence)) {
+-			s_fence->parent = dma_fence_get(fence);
+-			/* Drop for original kref_init of the fence */
+-			dma_fence_put(fence);
+-
+-			r = dma_fence_add_callback(fence, &sched_job->cb,
+-						   drm_sched_job_done_cb);
+-			if (r == -ENOENT)
+-				drm_sched_job_done(sched_job);
+-			else if (r)
+-				DRM_DEV_ERROR(sched->dev, "fence add callback failed (%d)\n",
+-					  r);
++			drm_sched_fence_set_parent(s_fence, fence);
+ 		} else {
+ 			if (IS_ERR(fence))
+ 				dma_fence_set_error(&s_fence->finished, PTR_ERR(fence));
+ 
+-			drm_sched_job_done(sched_job);
++			drm_sched_job_done(s_fence);
+ 		}
+ 
+ 		wake_up(&sched->job_scheduled);
+diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+index 1f7d9dd1a444..5066729c15ce 100644
+--- a/include/drm/gpu_scheduler.h
++++ b/include/drm/gpu_scheduler.h
+@@ -281,6 +281,10 @@ struct drm_sched_fence {
+          * @owner: job owner for debugging
+          */
+ 	void				*owner;
++	/**
++	 * @cb: callback
++	 */
++	struct dma_fence_cb cb;
+ };
+ 
+ struct drm_sched_fence *to_drm_sched_fence(struct dma_fence *f);
+@@ -300,7 +304,6 @@ struct drm_sched_fence *to_drm_sched_fence(struct dma_fence *f);
+  *         be scheduled further.
+  * @s_priority: the priority of the job.
+  * @entity: the entity to which this job belongs.
+- * @cb: the callback for the parent fence in s_fence.
+  *
+  * A job is created by the driver using drm_sched_job_init(), and
+  * should call drm_sched_entity_push_job() once it wants the scheduler
+@@ -325,7 +328,6 @@ struct drm_sched_job {
+ 	atomic_t			karma;
+ 	enum drm_sched_priority		s_priority;
+ 	struct drm_sched_entity         *entity;
+-	struct dma_fence_cb		cb;
+ 	/**
+ 	 * @dependencies:
+ 	 *
+@@ -559,6 +561,10 @@ void drm_sched_fence_free(struct drm_sched_fence *fence);
+ void drm_sched_fence_scheduled(struct drm_sched_fence *fence);
+ void drm_sched_fence_finished(struct drm_sched_fence *fence);
+ 
++bool drm_sched_fence_clear_parent(struct drm_sched_fence *s_fence);
++void drm_sched_fence_set_parent(struct drm_sched_fence *s_fence,
++			       struct dma_fence *fence);
++
+ unsigned long drm_sched_suspend_timeout(struct drm_gpu_scheduler *sched);
+ void drm_sched_resume_timeout(struct drm_gpu_scheduler *sched,
+ 		                unsigned long remaining);
+-- 
+2.25.1
 
