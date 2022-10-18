@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22F6602774
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8CC602778
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbiJRIsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S231138AbiJRItD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJRIs3 (ORCPT
+        with ESMTP id S231168AbiJRIs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:48:29 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF43220F67
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:48:28 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id a13so19493852edj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eoRiuU9V2WhvCPPrdX4BURCWAuCZBmpxPF9L89jLsOQ=;
-        b=gUmSCUCJbOcxJXEEgGaETNcA07Tv9Z/WeSqkgNfjCccoOupnpdmXsDO2JVMUbmEuut
-         rBPlCkB5uuPqgqgjMvdMEXqn8+MEpcpNsDX8JXOwd8o1uyPHmyjK0L9Fe1FU700xg6n/
-         fqRDbwucSCpw8P8EWxE3ZJb8TBSgoQTtNz4f8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eoRiuU9V2WhvCPPrdX4BURCWAuCZBmpxPF9L89jLsOQ=;
-        b=MyfV1FbnGM7TWB4C3eb+f5r0mcVr7Bg3CSBU528jY7dOdxwrrsgSJDPv3FfQE2w17w
-         +Ft5R+GHRFl14zc9lhvcpx/UWfrNNgFPEUwGoqX775JAj9LEpQpeBBclIS8EW3Y+eypg
-         /aTtYmSJaDdB1KBUqwZPJd7jwGF2CIAvW11sEIGcP9W9XD3sVXBofX2h6qESsA35gCsl
-         Js6Z/yftBxsVMrDyfaSmDwbZ6/Nx3nJbdxkQ0o9XM6pVsLev+j8Iz+iGZe39uBhESz1J
-         rVc/TpVXnntDdLpN0NgqipyQYaFYdNHyYCKJ4g6t5um5vaknDqZLJKhj3t4NBapcK7K1
-         qxYA==
-X-Gm-Message-State: ACrzQf3wNUqhtHdUlQz5LGY4sEaSkQM3AOSiVSDI53ecb/imFFWNuXC2
-        flFDHFDL3ftzSRPIKSg7i1KB5/FQZT8Azr+nuaDmpw==
-X-Google-Smtp-Source: AMsMyM6G5inBCr/z7iG+g0Z+flcQJMNmqRamCOm5Tzqd2zDPrn2EokhnBWOdwzjFn3Gml4KaX6OBMno8a3y7+1QHTs4=
-X-Received: by 2002:a05:6402:3896:b0:45c:93c3:3569 with SMTP id
- fd22-20020a056402389600b0045c93c33569mr1659759edb.37.1666082907394; Tue, 18
- Oct 2022 01:48:27 -0700 (PDT)
+        Tue, 18 Oct 2022 04:48:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8210927DD4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666082936;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I71EikHKgf+Cumvg3ZhyuGvJzSPCx8y69uStaChXwig=;
+        b=dkZJl8VMDh2Tdjy6s4WN4FR3jgw+HD1SwKsSwcby91IcDrMVgtdDpfdbEYJslBEP2O+f+N
+        aj/rDfWYZcJw3wCHh1y/toqLfT0SDmUntOnoDR49J/nChfFbEdAYJVZ+2b5QlyBQxm8Kv2
+        HADv/tlOfqkcaV9TMlsuaFQ1Gu1lV+M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-576-EOXjjTozOO6CtfRjlIgsIw-1; Tue, 18 Oct 2022 04:48:53 -0400
+X-MC-Unique: EOXjjTozOO6CtfRjlIgsIw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 97229857FAB;
+        Tue, 18 Oct 2022 08:48:52 +0000 (UTC)
+Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D4A1F2166B41;
+        Tue, 18 Oct 2022 08:48:43 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 5/6] KVM: selftests: memslot_perf_test: Consolidate memory
+ sizes
+To:     Oliver Upton <oliver.upton@linux.dev>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ajones@ventanamicro.com, pbonzini@redhat.com, maz@kernel.org,
+        shuah@kernel.org, peterx@redhat.com, ricarkol@google.com,
+        zhenyzha@redhat.com, shan.gavin@gmail.com
+References: <20221014071914.227134-1-gshan@redhat.com>
+ <20221014071914.227134-6-gshan@redhat.com>
+ <cebafa0d-a2dc-c3f7-64c8-2637a254e3d0@maciej.szmigiero.name>
+ <Y03ScGUUCA1KwlLF@google.com> <Y05aCJH+BBo+Y+nh@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <2aa1e089-7af1-24f8-e33c-b123f094f4c3@redhat.com>
+Date:   Tue, 18 Oct 2022 16:48:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20220922224027.59266-1-ivan@cloudflare.com> <20221017184700.e1e6944e743bfc38e9abd953@linux-foundation.org>
- <CABWYdi1UJsi1iGOAME1tW5eJdqvo3XJidWyO97ksxS85w3ZUPQ@mail.gmail.com>
- <CABEBQineydLjdHcc84+JuQnvEbGqkiXuVRXvcmk58bO=9X901Q@mail.gmail.com> <57b146037b5744d4877fd77b1e4db262@AcuMS.aculab.com>
-In-Reply-To: <57b146037b5744d4877fd77b1e4db262@AcuMS.aculab.com>
-From:   Frank Hofmann <fhofmann@cloudflare.com>
-Date:   Tue, 18 Oct 2022 09:48:15 +0100
-Message-ID: <CABEBQimNm_Ba6j=2cAc8Gw68K_8nVccrT=10LsSkMnTMbo9s3g@mail.gmail.com>
-Subject: Re: [PATCH v2] proc: report open files as size in stat() for /proc/pid/fd
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Ivan Babrou <ivan@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Theodore Ts'o" <tytso@mit.edu>, Jonathan Corbet <corbet@lwn.net>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Mike Rapoport <rppt@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y05aCJH+BBo+Y+nh@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 9:25 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Frank Hofmann
-> > Sent: 18 October 2022 09:13
-> >
-> > On Tue, Oct 18, 2022 at 6:02 AM Ivan Babrou <ivan@cloudflare.com> wrote:
-> > >
-> > > On Mon, Oct 17, 2022 at 6:47 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > > > +
-> > > > > +             fdt = files_fdtable(p->files);
-> > > > > +             size = fdt->max_fds;
-> > > > > +
-> > > > > +             for (i = size / BITS_PER_LONG; i > 0;)
-> > > > > +                     open_fds += hweight64(fdt->open_fds[--i]);
-> > > >
-> > > > Could BITMAP_WEIGHT() or __bitmap_weight() or bitmap_weight() be used here?
-> > >
-> > > That's a great suggestion. I tested it with bitmap_weight() and it
-> > > looks much cleaner while providing the same result.
-> > >
-> > > I just sent the v3 with this suggestion applied.
-> >
-> > +1 from me on using bitmap_weight() - good spotting that.
->
-> Does that have the optimisations for the value being 0, ~0u
-> or 2**n-1 all of which are likely for the fd table.
-> (Especially if there is no 'popcnt' instruction.)
->
->         David
+On 10/18/22 3:47 PM, Oliver Upton wrote:
+> On Mon, Oct 17, 2022 at 10:08:48PM +0000, Sean Christopherson wrote:
+>> On Mon, Oct 17, 2022, Maciej S. Szmigiero wrote:
+>>>> +#define MEM_EXTRA_SIZE		0x10000
+>>>
+>>> Also, an expression like "(64 << 10)" is more readable than a "1"
+>>> with a tail of zeroes (it's easy to add one zero too many or be one
+>>> zero short).
+>>
+>> +1 to not open coding raw numbers.
+>>
+>> I think it's high time KVM selftests add #defines for the common sizes, e.g. SIZE_4KB,
+>> 16KB, 64K, 2MB, 1GB, etc...
+>>
+>> Alternatively (or in addition), just #define 1KB, 1MB, 1GB, and 1TB, and then do
+>> math off of those.
+> 
+> I mean I love boilerplate as much as the next guy, but we can just use
+> tools/include/linux/sizes.h
+> 
 
-bitmap_weight() uses hweight_*() under the hood, which then falls
-through to platform-specific popcnt where available.
-Re, lib/bitmap.c and arch/.../asm/bitops.h or arch/.../hweight.S, for
-the impl details.
+Nice point, I didn't realize we already had 'tools/include/linux/sizes.h'.
+The suggested macros (KiB, MiB, GiB, TiB and their variants) have been added
+to PATCH[v2 5/6]. I think it's reasonable to use 'tools/include/linux/sizes.h'
+directly instead of reinventing the wheel.
 
-FrankH.
+I will go ahead to use 'tools/include/linux/sizes.h' directly in v3 if nobody
+objects. I would like to receive comments on v2 before I'm going to post v3.
 
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+Thanks,
+Gavin
+
