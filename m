@@ -2,180 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2767B602E4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF4B602E51
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiJROWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S231392AbiJROW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiJROVg (ORCPT
+        with ESMTP id S231445AbiJROWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:21:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED51F9C2EE;
-        Tue, 18 Oct 2022 07:21:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88413615AE;
-        Tue, 18 Oct 2022 14:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B23C433D6;
-        Tue, 18 Oct 2022 14:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666102872;
-        bh=55bQHB+WjSBUXWHhVZsz39JliyTH3ce5NbGUN3TOoiM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=tr45N7iF0mc2KUeRnM9/A9JhZd7/U22GyrFHvEUutjRjJCh5j0QCmmGK88a6JcXsN
-         nbMNqjvE54H5AijupL1GbiE+fXuIo/OL+lWmzdR0WdIX0HPTw89uf7uUSP6dj3Cd3u
-         bunQ1S5EVPlBqX1d7pyW6bkWTc5+N1xqieGOiwyAlv/gSZ+7s3ICZzwV52Mnx6xw5i
-         QlMUsCeQdO8sEYkRgNDAulTaRiEDnqM17XTMA9HxnFOcKuVCdi3+fbiVvShLN0tVjY
-         YCbtm+/blYEIoQnoZCxModsrkU1bSheNwrkkJGYnP5Wlqev2DkJQ5i80qdKjoHLPvv
-         p/ee7Equqs9Dw==
-Message-ID: <28a3d6b9978cf0280961385e28ae52f278d65d92.camel@kernel.org>
-Subject: Re: [RFC PATCH v7 9/9] vfs: expose STATX_VERSION to userland
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Dave Chinner <david@fromorbit.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, djwong@kernel.org,
-        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, bfields@fieldses.org, brauner@kernel.org,
-        fweimer@redhat.com, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Date:   Tue, 18 Oct 2022 10:21:08 -0400
-In-Reply-To: <20221018134910.v4jim6jyjllykcaf@quack3>
-References: <20221017105709.10830-1-jlayton@kernel.org>
-         <20221017105709.10830-10-jlayton@kernel.org>
-         <20221017221433.GT3600936@dread.disaster.area>
-         <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
-         <20221018134910.v4jim6jyjllykcaf@quack3>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 18 Oct 2022 10:22:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C3AD7E01
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666102953; x=1697638953;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=r8hfM9vlb4HsYk2fm6pCiYv38TSz52CmPPsPliY0T8I=;
+  b=lITEvrOZdTagXwRn8aHS8MyJdoYQ+3Ev8V4GFrcP61KX7pf7yGh07pyY
+   +QXG2y2j4eoLiS+pXMrwz0H7Er3IC+MN1rAilnzeS/pnCgm2t+3JqVhk8
+   HM3N0W3EICe7GQ2BBhZhQyEyZBdiDseS9D/RPtK3sP6Gv0d/v9lX2L+G5
+   yjXtGKMrpaaH0C4dsCtUt2zq3kYODysMwP7JzvSeSYBZiNc/xYgXHWkB5
+   dVJpOINO+g1R/9uV8NFowi1/hHJxOhPQ8V79nSvT0cq1S39M9SGQXX7sZ
+   XS0weAWYV6uPwQUl3lmH0eudYiMdXbPwxwk7zNKtMIRga0o92Za8dwTnH
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="182745264"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Oct 2022 07:22:31 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 18 Oct 2022 07:22:30 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 18 Oct 2022 07:22:29 -0700
+Date:   Tue, 18 Oct 2022 15:22:06 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     binglei wang <l3b2w1@gmail.com>
+CC:     Conor Dooley <conor@kernel.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <mhiramat@kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8] rethook: add riscv rethook implementation
+Message-ID: <Y062jiPZbWEAVjpO@wendy>
+References: <20220930081357.651914-1-l3b2w1@gmail.com>
+ <Yzm+z+mv/VSA+5hg@spud>
+ <CAJ3C4KzyAR7dKYFBKHzFEXr-dzr-JMGRFVx+dybMhRPy0uHUgA@mail.gmail.com>
+ <Y01tdcRRFBdOmaYc@spud>
+ <CAJ3C4Kwj0yYS5JCPw=g0X9qiQhw04iKy_cTjc0x8iWdy0ay7bg@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ3C4Kwj0yYS5JCPw=g0X9qiQhw04iKy_cTjc0x8iWdy0ay7bg@mail.gmail.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-18 at 15:49 +0200, Jan Kara wrote:
-> On Tue 18-10-22 06:35:14, Jeff Layton wrote:
-> > On Tue, 2022-10-18 at 09:14 +1100, Dave Chinner wrote:
-> > > On Mon, Oct 17, 2022 at 06:57:09AM -0400, Jeff Layton wrote:
-> > > > Trond is of the opinion that monotonicity is a hard requirement, an=
-d
-> > > > that we should not allow filesystems that can't provide that qualit=
-y to
-> > > > report STATX_VERSION at all.  His rationale is that one of the main=
- uses
-> > > > for this is for backup applications, and for those a counter that c=
-ould
-> > > > go backward is worse than useless.
-> > >=20
-> > > From the perspective of a backup program doing incremental backups,
-> > > an inode with a change counter that has a different value to the
-> > > current backup inventory means the file contains different
-> > > information than what the current backup inventory holds. Again,
-> > > snapshots, rollbacks, etc.
-> > >=20
-> > > Therefore, regardless of whether the change counter has gone
-> > > forwards or backwards, the backup program needs to back up this
-> > > current version of the file in this backup because it is different
-> > > to the inventory copy.  Hence if the backup program fails to back it
-> > > up, it will not be creating an exact backup of the user's data at
-> > > the point in time the backup is run...
-> > >=20
-> > > Hence I don't see that MONOTONIC is a requirement for backup
-> > > programs - they really do have to be able to handle filesystems that
-> > > have modifications that move backwards in time as well as forwards...
-> >=20
-> > Rolling backward is not a problem in and of itself. The big issue is
-> > that after a crash, we can end up with a change attr seen before the
-> > crash that is now associated with a completely different inode state.
-> >=20
-> > The scenario is something like:
-> >=20
-> > - Change attr for an empty file starts at 1
-> >=20
-> > - Write "A" to file, change attr goes to 2
-> >=20
-> > - Read and statx happens (client sees "A" with change attr 2)
-> >=20
-> > - Crash (before last change is logged to disk)
-> >=20
-> > - Machine reboots, inode is empty, change attr back to 1
-> >=20
-> > - Write "B" to file, change attr goes to 2
-> >=20
-> > - Client stat's file, sees change attr 2 and assumes its cache is
-> > correct when it isn't (should be "B" not "A" now).
-> >=20
-> > The real danger comes not from the thing going backward, but the fact
-> > that it can march forward again after going backward, and then the
-> > client can see two different inode states associated with the same
-> > change attr value. Jumping all the change attributes forward by a
-> > significant amount after a crash should avoid this issue.
->=20
-> As Dave pointed out, the problem with change attr having the same value f=
-or
-> a different inode state (after going backwards) holds not only for the
-> crashes but also for restore from backups, fs snapshots, device snapshots
-> etc. So relying on change attr only looks a bit fragile. It works for the
-> common case but the edge cases are awkward and there's no easy way to
-> detect you are in the edge case.
->=20
+On Tue, Oct 18, 2022 at 10:08:55PM +0800, binglei wang wrote:
+> Hi Conor:
+> Thank you for your help to check the merging process for this patch.
+> 
+> > Thread overview: 3+ messages (download: mbox.gz / follow: Atom feed)
+> > -- links below jump to the message on this page --
+> >      [not found] <20220930081357.651914-1-l3b2w1@gmail.com>
+> I have no idea what this means, I guess maybe the way i sended the
+> patch was not right.
+> 
+> I found the patch on the lore in this url, is this helpful ?
+> https://lore.kernel.org/lkml/20221002181035.490ad0155d741e39faa29716@kernel.org/
 
-This is true. In fact in the snapshot case you can't even rely on doing
-anything at reboot since you won't necessarily need to reboot to make it
-roll backward.
+Hmm, looks like your patch made it to lkml itself but got rejected by
+linux-riscv which is hosted by infradead. It's missing here:
+https://lore.kernel.org/linux-riscv/CAJ3C4Kwj0yYS5JCPw=g0X9qiQhw04iKy_cTjc0x8iWdy0ay7bg@mail.gmail.com/T/#t
 
-Whether that obviates the use of this value altogether, I'm not sure.
+> 
+> > I'm not really sure what's happened there.. I can only see your v1 and
+> > your v4 on lore/patchwork.
+> I find all my commits from v1 to v8 in this addr
+> https://lore.kernel.org/lkml/?q=l3b2w1
+> 
+> Should I resend the patch as a last resort ?
 
-> So I think any implementation caring about data integrity would have to
-> include something like ctime into the picture anyway. Or we could just
-> completely give up any idea of monotonicity and on each mount select rand=
-om
-> prime P < 2^64 and instead of doing inc when advancing the change
-> attribute, we'd advance it by P. That makes collisions after restore /
-> crash fairly unlikely.
+Eh, I guess you could try (and CC patches@lists.linux.dev). I'm not sure
+if that'll help at all though.. At worst, if that doesn't work I could
+possibly send the patches for you. Or if you think you may end up doing
+more upstream work you could always apply for an @linux.dev account?
+See https://korg.docs.kernel.org/linuxdev.html for more information on
+that.
 
-Part of the goal (at least for NFS) is to avoid unnecessary cache
-invalidations.
-
-If we just increment it by a particular offset on every reboot, then
-every time the server reboots, the clients will invalidate all of their
-cached inodes, and proceed to hammer the server with READ calls just as
-it's having to populate its own caches from disk.
-
-IOW, that will not be good for performance. Doing that after a crash is
-also less than ideal, but crashes should (hopefully) be rare enough that
-it's not a major issue.
-
-In any case, we need to decide whether and what to present to userland.
-There is a lot of disagreement here, and we need to come to a consensus.
-I think we have to answer 2 questions:
-
-1/ Is this counter useful enough on its own, without any baked-in
-rollback=A0resilience to justify exposing it via statx()?
-
-2/ if the answer above is "yes", then is there any value to the
-MONOTONIC flag, given that we can't really do anything about snapshot
-rollbacks and the like?
-
-I tend to be in the camp of "let's make the raw counter available and
-leave it up to userland to deal with the potential issues". After all,
-the c/mtime are still widely used today to detect changes and they have
-many of the same problems.
-
-Trying to do anything more elaborate than that will lead to a lot of
-extra complexity in the kernel, and make it a lot more difficult for any
-filesystem to report this at all.
---=20
-Jeff Layton <jlayton@kernel.org>
+> 
+> Binglei Wang
+> Best wishes.
+> 
+> Conor Dooley <conor@kernel.org> 于2022年10月17日周一 22:58写道：
+> >
+> > On Mon, Oct 17, 2022 at 10:31:28PM +0800, binglei wang wrote:
+> > > Hi Conor,
+> > > could you please help me to push forward merging process of this patch
+> > > into the 6.1 ?  Thank you!
+> >
+> > Hey Binglei,
+> > Unfortunately it is too late for v6.1 (the merge window closed on
+> > Sunday, Palmer sent his second PR on Friday) but I don't see why this
+> > should not be picked for v6.2. I tried last week & again just now to
+> > check the status of this patch on patchwork but I cannot find it there.
+> > Similarly, the patch does not appear on lore:
+> > https://lore.kernel.org/linux-riscv/CAJ3C4KzyAR7dKYFBKHzFEXr-dzr-JMGRFVx+dybMhRPy0uHUgA@mail.gmail.com/T/#t
+> > Thread overview: 3+ messages (download: mbox.gz / follow: Atom feed)
+> > -- links below jump to the message on this page --
+> >      [not found] <20220930081357.651914-1-l3b2w1@gmail.com>
+> > 2022-10-02  9:10 ` [PATCH v8] rethook: add riscv rethook implementation Masami Hiramatsu
+> > 2022-10-02 16:39 ` Conor Dooley
+> > 2022-10-17 14:31   ` binglei wang
+> >
+> > I'm not really sure what's happened there.. I can only see your v1 and
+> > your v4 on lore/patchwork. Maybe take a look if you changed anything
+> > between versions & try resending as v9?
+> >
+> > HTH,
+> > Conor.
+> >
+> > >
+> > > Binglei Wang
+> > > Best wishes.
+> > >
+> > >
+> > > On 2022-10-03 00:39, Conor Dooley wrote:
+> > > > Hey Binglei,
+> > > > I am not qualified to give you an actual R-b on this patch, but I see
+> > > > you did get one from Masami who very much is!
+> > > >
+> > > > That said, the patch looks a lot better (and much simpler!) now. Thanks
+> > > > for sticking with it despite the initial issues with your email setup
+> > > > and the submission process.
+> > > >
+> > > > Thanks,
+> > > > Conor.
+> > > >
+> > > > On Fri, Sep 30, 2022 at 04:13:57PM +0800, Binglei Wang wrote:
+> > > >> From: Binglei Wang <l3b2w1@gmail.com>
+> > > >>
+> > > >> Implement the kretprobes on riscv arch by using rethook machenism
+> > > >> which abstracts general kretprobe info into a struct rethook_node
+> > > >> to be embedded in the struct kretprobe_instance.
+> > > >>
+> > > >> Signed-off-by: Binglei Wang <l3b2w1@gmail.com>
+> > > >> ---
+> > > >>
+> > > >> Notes:
+> > > >>      v8: Add the omitted rethook.h
+> > > >>      v7: Add the changelog.
+> > > >>      v6: Remove the kretprobes trampoline.
+> > > >>      v5: Trt to fix robot compiling error and warnings.
+> > > >>      v4: Add patch version number.
+> > > >>      v3: Trt to fix robot compiling error and warnings.
+> > > >>      v2: Add comit log to explain reasons behind changes.
+> > > >>          Use my personal email instead of work email
+> > > >>              to avoid the attachments of company informaton.
+> > > >>          Make the kprobes_trampoline.S code to be shared.
+> > > >>      v1: Add riscv rethook implementation.
+> > > >>
+> > > >>   arch/riscv/Kconfig                            |  1 +
+> > > >>   arch/riscv/include/asm/kprobes.h              |  2 --
+> > > >>   arch/riscv/kernel/probes/Makefile             |  2 +-
+> > > >>   arch/riscv/kernel/probes/kprobes.c            | 13 ---------
+> > > >>   arch/riscv/kernel/probes/rethook.c            | 27 +++++++++++++++++++
+> > > >>   arch/riscv/kernel/probes/rethook.h            |  8 ++++++
+> > > >>   ...obes_trampoline.S => rethook_trampoline.S} |  6 ++---
+> > > >>   7 files changed, 40 insertions(+), 19 deletions(-)
+> > > >>   create mode 100644 arch/riscv/kernel/probes/rethook.c
+> > > >>   create mode 100644 arch/riscv/kernel/probes/rethook.h
+> > > >>   rename arch/riscv/kernel/probes/{kprobes_trampoline.S => rethook_trampoline.S} (94%)
+> > > >>
+> > > >> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > >> index 59d18881f..bfb66cdc5 100644
+> > > >> --- a/arch/riscv/Kconfig
+> > > >> +++ b/arch/riscv/Kconfig
+> > > >> @@ -97,6 +97,7 @@ config RISCV
+> > > >>      select HAVE_KPROBES if !XIP_KERNEL
+> > > >>      select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+> > > >>      select HAVE_KRETPROBES if !XIP_KERNEL
+> > > >> +    select HAVE_RETHOOK if !XIP_KERNEL
+> > > >>      select HAVE_MOVE_PMD
+> > > >>      select HAVE_MOVE_PUD
+> > > >>      select HAVE_PCI
+> > > >> diff --git a/arch/riscv/include/asm/kprobes.h b/arch/riscv/include/asm/kprobes.h
+> > > >> index 217ef89f2..e7882ccb0 100644
+> > > >> --- a/arch/riscv/include/asm/kprobes.h
+> > > >> +++ b/arch/riscv/include/asm/kprobes.h
+> > > >> @@ -40,8 +40,6 @@ void arch_remove_kprobe(struct kprobe *p);
+> > > >>   int kprobe_fault_handler(struct pt_regs *regs, unsigned int trapnr);
+> > > >>   bool kprobe_breakpoint_handler(struct pt_regs *regs);
+> > > >>   bool kprobe_single_step_handler(struct pt_regs *regs);
+> > > >> -void __kretprobe_trampoline(void);
+> > > >> -void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
+> > > >>
+> > > >>   #endif /* CONFIG_KPROBES */
+> > > >>   #endif /* _ASM_RISCV_KPROBES_H */
+> > > >> diff --git a/arch/riscv/kernel/probes/Makefile b/arch/riscv/kernel/probes/Makefile
+> > > >> index 7f0840dcc..c40139e9c 100644
+> > > >> --- a/arch/riscv/kernel/probes/Makefile
+> > > >> +++ b/arch/riscv/kernel/probes/Makefile
+> > > >> @@ -1,6 +1,6 @@
+> > > >>   # SPDX-License-Identifier: GPL-2.0
+> > > >>   obj-$(CONFIG_KPROBES)              += kprobes.o decode-insn.o simulate-insn.o
+> > > >> -obj-$(CONFIG_KPROBES)               += kprobes_trampoline.o
+> > > >> +obj-$(CONFIG_RETHOOK)               += rethook.o rethook_trampoline.o
+> > > >>   obj-$(CONFIG_KPROBES_ON_FTRACE)    += ftrace.o
+> > > >>   obj-$(CONFIG_UPROBES)              += uprobes.o decode-insn.o simulate-insn.o
+> > > >>   CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
+> > > >> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+> > > >> index e6e950b7c..f21592d20 100644
+> > > >> --- a/arch/riscv/kernel/probes/kprobes.c
+> > > >> +++ b/arch/riscv/kernel/probes/kprobes.c
+> > > >> @@ -345,19 +345,6 @@ int __init arch_populate_kprobe_blacklist(void)
+> > > >>      return ret;
+> > > >>   }
+> > > >>
+> > > >> -void __kprobes __used *trampoline_probe_handler(struct pt_regs *regs)
+> > > >> -{
+> > > >> -    return (void *)kretprobe_trampoline_handler(regs, NULL);
+> > > >> -}
+> > > >> -
+> > > >> -void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+> > > >> -                                  struct pt_regs *regs)
+> > > >> -{
+> > > >> -    ri->ret_addr = (kprobe_opcode_t *)regs->ra;
+> > > >> -    ri->fp = NULL;
+> > > >> -    regs->ra = (unsigned long) &__kretprobe_trampoline;
+> > > >> -}
+> > > >> -
+> > > >>   int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+> > > >>   {
+> > > >>      return 0;
+> > > >> diff --git a/arch/riscv/kernel/probes/rethook.c b/arch/riscv/kernel/probes/rethook.c
+> > > >> new file mode 100644
+> > > >> index 000000000..cbd0da059
+> > > >> --- /dev/null
+> > > >> +++ b/arch/riscv/kernel/probes/rethook.c
+> > > >> @@ -0,0 +1,27 @@
+> > > >> +// SPDX-License-Identifier: GPL-2.0-only
+> > > >> +/*
+> > > >> + * Generic return hook for riscv.
+> > > >> + */
+> > > >> +
+> > > >> +#include <linux/kprobes.h>
+> > > >> +#include <linux/rethook.h>
+> > > >> +#include "rethook.h"
+> > > >> +
+> > > >> +/* This is called from arch_rethook_trampoline() */
+> > > >> +unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
+> > > >> +{
+> > > >> +    return rethook_trampoline_handler(regs, regs->s0);
+> > > >> +}
+> > > >> +NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+> > > >> +
+> > > >> +
+> > > >> +void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
+> > > >> +{
+> > > >> +    rhn->ret_addr = regs->ra;
+> > > >> +    rhn->frame = regs->s0;
+> > > >> +
+> > > >> +    /* replace return addr with trampoline */
+> > > >> +    regs->ra = (unsigned long)arch_rethook_trampoline;
+> > > >> +}
+> > > >> +NOKPROBE_SYMBOL(arch_rethook_prepare);
+> > > >> +
+> > > >> diff --git a/arch/riscv/kernel/probes/rethook.h b/arch/riscv/kernel/probes/rethook.h
+> > > >> new file mode 100644
+> > > >> index 000000000..cc573d701
+> > > >> --- /dev/null
+> > > >> +++ b/arch/riscv/kernel/probes/rethook.h
+> > > >> @@ -0,0 +1,8 @@
+> > > >> +// SPDX-License-Identifier: GPL-2.0-only
+> > > >> +#ifndef __RISCV_RETHOOK_H
+> > > >> +#define __RISCV_RETHOOK_H
+> > > >> +
+> > > >> +unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs);
+> > > >> +void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount);
+> > > >> +
+> > > >> +#endif
+> > > >> diff --git a/arch/riscv/kernel/probes/kprobes_trampoline.S b/arch/riscv/kernel/probes/rethook_trampoline.S
+> > > >> similarity index 94%
+> > > >> rename from arch/riscv/kernel/probes/kprobes_trampoline.S
+> > > >> rename to arch/riscv/kernel/probes/rethook_trampoline.S
+> > > >> index 7bdb09ded..21bac92a1 100644
+> > > >> --- a/arch/riscv/kernel/probes/kprobes_trampoline.S
+> > > >> +++ b/arch/riscv/kernel/probes/rethook_trampoline.S
+> > > >> @@ -75,13 +75,13 @@
+> > > >>      REG_L x31, PT_T6(sp)
+> > > >>      .endm
+> > > >>
+> > > >> -ENTRY(__kretprobe_trampoline)
+> > > >> +ENTRY(arch_rethook_trampoline)
+> > > >>      addi sp, sp, -(PT_SIZE_ON_STACK)
+> > > >>      save_all_base_regs
+> > > >>
+> > > >>      move a0, sp /* pt_regs */
+> > > >>
+> > > >> -    call trampoline_probe_handler
+> > > >> +    call arch_rethook_trampoline_callback
+> > > >>
+> > > >>      /* use the result as the return-address */
+> > > >>      move ra, a0
+> > > >> @@ -90,4 +90,4 @@ ENTRY(__kretprobe_trampoline)
+> > > >>      addi sp, sp, PT_SIZE_ON_STACK
+> > > >>
+> > > >>      ret
+> > > >> -ENDPROC(__kretprobe_trampoline)
+> > > >> +ENDPROC(arch_rethook_trampoline)
+> > > >> --
+> > > >> 2.27.0
+> > > >>
+> > >
+> > > _______________________________________________
+> > > linux-riscv mailing list
+> > > linux-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > >
