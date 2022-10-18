@@ -2,83 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6703060313E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D068060313F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJRRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S229596AbiJRRAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJRRAE (ORCPT
+        with ESMTP id S230076AbiJRRAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:00:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E91FCA8B8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:00:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7196061648
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:00:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5926CC433D7;
-        Tue, 18 Oct 2022 17:00:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666112400;
-        bh=j95Pr+nqCm9HQ0/2Y0CWsEer+z/8+6G8uW/jrB6rHD4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VnDUTX+2ON+KD9FPoyxYsSYtZt0fFO/i6m06G1aKvu4JKWae9UZR+ArxG3rU/SRc4
-         BaNpN739QbHT+utQMFzXnDi6guk6Ofylj1XHK6h+swRz1IWopVlhM2cr68udZSLkhb
-         Q9WrvRmOsi5KQosBf86BKsvJSbtpR3Fqe7gX/3Gs63z3rVue0l772VPq6FT7Qhj3nH
-         W6g+/LMReottOA8WF9ZJbwuQjEXLQzqLLcVIoZZisOpqSZR1WoL3Xstr7GwlIhK2Zn
-         mfT4wkJ/4KI5WhCyghv228sDdn4G86Jz4x7HeFwLwZdLi73v+BiMnpTiWc53BZqz6b
-         kGyYW2Hzpa1qA==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     damon@lists.linux.dev, linux-damon@amazon.com,
-        linux-damon-trial@amazon.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: DAMON Beer/Coffee/Tea chat series
-Date:   Tue, 18 Oct 2022 16:59:58 +0000
-Message-Id: <20221018165958.82803-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220810225102.124459-1-sj@kernel.org>
-References: 
+        Tue, 18 Oct 2022 13:00:07 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E66C97D1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=fIaMfcW+f9+cXq6fKIPffjMaApmB4P+tYRthG1mlouk=;
+  b=sCawu3zOWzJvdCfCZ0v9/E1Km46t/+BcPpl4OsxLxI70eVyG36zEqeJt
+   UBeUW+6h1Lm520SMU59446caZ3904G+P4T5GbGOa+dvwlmVk7dMYS654q
+   Hy2wu6YIbcwRg8Unq8sX/GYAtQidBV4Wh7ULeN9dHaSLCHATvD6fArpLo
+   w=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,193,1661810400"; 
+   d="scan'208";a="31793337"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 18:59:59 +0200
+Date:   Tue, 18 Oct 2022 18:59:59 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Deepak R Varma <drv@mailo.com>
+cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] staging: most: dim2: correct misleading variable
+ name
+In-Reply-To: <b8550823920f40c4d02a3a691acca1af18998878.1666105876.git.drv@mailo.com>
+Message-ID: <66e6d6f-3574-e317-946e-2c2467726eab@inria.fr>
+References: <cover.1666105876.git.drv@mailo.com> <b8550823920f40c4d02a3a691acca1af18998878.1666105876.git.drv@mailo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 22:51:02 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> Hello,
-> 
-> 
-> In short, I'd like to start an open, regular, and informal virtual bi-weekly
-> meeting series for DAMON community.
-> 
-> Important links and dates
-> -------------------------
-> 
-> Location: https://meet.google.com/ndx-evoc-gbu
-> Agenda: https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
-
-The meeting was scheduled for yesterday 18:00 PDT, but I forgot that.  Sorrry
-for my bad memory.  It's very volatile and easily corrupted.  I will try to
-sanitize it next time.
-
-For people who prefer the time zone, I will change the time of next meeting
-from Tuesday 09:30 PDT to Monday 18:00 PDT.  So, the next meeting will be at
-2022-10-31 (Mon) 18:00 PDT, Google Meet (https://meet.google.com/ndx-evoc-gbu).
-
-Sincere apology again.  I may prepare some sweets for you ;)
 
 
-Thanks,
-SJ
-[...]
+On Tue, 18 Oct 2022, Deepak R Varma wrote:
+
+> Correct misleading struct variable name dim_ch_state_t to dim_ch_state
+> since this not a typedef but a normal variable declaration.
+
+Actually, it's not the name of a variable, but the name of a type.
+
+julia
+
+>
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+>  drivers/staging/most/dim2/dim2.c | 2 +-
+>  drivers/staging/most/dim2/hal.c  | 4 ++--
+>  drivers/staging/most/dim2/hal.h  | 6 +++---
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
+> index 4c1f27898a29..a69a61a69283 100644
+> --- a/drivers/staging/most/dim2/dim2.c
+> +++ b/drivers/staging/most/dim2/dim2.c
+> @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
+>  	struct list_head *head = &hdm_ch->pending_list;
+>  	struct mbo *mbo;
+>  	unsigned long flags;
+> -	struct dim_ch_state_t st;
+> +	struct dim_ch_state st;
+>
+>  	BUG_ON(!hdm_ch);
+>  	BUG_ON(!hdm_ch->is_initialized);
+> diff --git a/drivers/staging/most/dim2/hal.c b/drivers/staging/most/dim2/hal.c
+> index 65282c276862..a5d40b5b138a 100644
+> --- a/drivers/staging/most/dim2/hal.c
+> +++ b/drivers/staging/most/dim2/hal.c
+> @@ -943,8 +943,8 @@ u8 dim_service_channel(struct dim_channel *ch)
+>  	return channel_service(ch);
+>  }
+>
+> -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+> -					     struct dim_ch_state_t *state_ptr)
+> +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
+> +					   struct dim_ch_state *state_ptr)
+>  {
+>  	if (!ch || !state_ptr)
+>  		return NULL;
+> diff --git a/drivers/staging/most/dim2/hal.h b/drivers/staging/most/dim2/hal.h
+> index 20531449acab..ef10a8741c10 100644
+> --- a/drivers/staging/most/dim2/hal.h
+> +++ b/drivers/staging/most/dim2/hal.h
+> @@ -27,7 +27,7 @@ enum mlb_clk_speed {
+>  	CLK_8192FS = 7,
+>  };
+>
+> -struct dim_ch_state_t {
+> +struct dim_ch_state {
+>  	bool ready; /* Shows readiness to enqueue next buffer */
+>  	u16 done_buffers; /* Number of completed buffers */
+>  };
+> @@ -87,8 +87,8 @@ void dim_service_ahb_int_irq(struct dim_channel *const *channels);
+>
+>  u8 dim_service_channel(struct dim_channel *ch);
+>
+> -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+> -					     struct dim_ch_state_t *state_ptr);
+> +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
+> +					   struct dim_ch_state *state_ptr);
+>
+>  u16 dim_dbr_space(struct dim_channel *ch);
+>
+> --
+> 2.30.2
+>
+>
+>
+>
+>
