@@ -2,161 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CC56028D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F266D6028D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiJRJzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
+        id S230217AbiJRJ4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiJRJzu (ORCPT
+        with ESMTP id S230170AbiJRJ4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:55:50 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07869B0B1E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:55:49 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id p7so14159674vsr.7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:55:48 -0700 (PDT)
+        Tue, 18 Oct 2022 05:56:10 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EB8B14F4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:56:09 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id pq16so13524136pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fHxePj/mZk3CsytYYPoDZH/iNdYUG/Ul5xfu8zN39CE=;
-        b=OYyvIRNLbIXwMu8B/GP88pxXrBL1rTVN9OKaaVp/yCjYwxp2DiR8uf2cHv99SQhhbP
-         ovobN81Sc9Ab+x8TgvH+gt2GR5hbwNAMQg0nTIJtF0QSR75P6jA1F51PqRneDvCrwdWr
-         eSLd9+3CKgZGM+8HyndN0MCQ3By0MhOjASV9Q=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jtrYS4YHTHJyeV0BrKarMa2E7fQ5TkzCkIZIXsuNB6M=;
+        b=oenwaTPW1G/G0oYjiY2Jz+vgubsEzMHjnssLGIteFpvx1UHaicxfzkrTXcHfKNjqgr
+         H5GDYD8DIZsmoqWcOduHGD4UkJxy4uDmj2EHyhD3GGddJoR1x5FCwUlzeEnpJg5ofZ8b
+         p7bQ9+3Ym69YubrP9h+mGcRCyXp/kWwXpymLg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fHxePj/mZk3CsytYYPoDZH/iNdYUG/Ul5xfu8zN39CE=;
-        b=TO1bINICpc/djWh3uLw5LSUWTn08ugdjhcIA9OH+5LS3iClocSvBBaACebLnE9Fbc5
-         EcugW8cN4dP2Bxj3nx86pix2YZoDXT64BCriKNBK232WnrTAywrgKvsZLwHBayE79fFi
-         UsaU1GUHatWoHsjsEnU4HNZRQVODAdyKgA8//0H8cbzG7Tq97BCnyq7FEnBmG/3q4WU3
-         Jmw40Be4/mwcxRu4j61xjjD/bPkMOB0LO514dKFUR/9XFN2URGmvldxkNBw3F5g9ySAQ
-         2ZO9M/eiV2ga/J+IGWmsQ9A4jKfqRz0SLOQFPaleukh88s4FwPlYPRwqJNem4Pi+7aLH
-         xTdQ==
-X-Gm-Message-State: ACrzQf0oZZP7/J7VMvqyuBFsaLVDYnaXQ+dhLmTQth9d1c0TqGXM0dXl
-        EPoIdxyRtXxIhJqS0tFd90GYKd7uSiY5txxdadMCiw==
-X-Google-Smtp-Source: AMsMyM6GgD/Ll61bSvxwgEJyCP26sucK9tDFdq9CCdZxSHx2TzvQOlTTAReK+eEoO6lxWQgVsRzgtN68ZiTGLSBKSFA=
-X-Received: by 2002:a67:f684:0:b0:392:ac17:f9b0 with SMTP id
- n4-20020a67f684000000b00392ac17f9b0mr926868vso.85.1666086948130; Tue, 18 Oct
- 2022 02:55:48 -0700 (PDT)
+        bh=jtrYS4YHTHJyeV0BrKarMa2E7fQ5TkzCkIZIXsuNB6M=;
+        b=N5Tkft17hdhEAWk2qwqSOYhv4RVv5rWc6QUF83MmaxkUz69cfoa3oCPHHR27IZVCsc
+         uSDYQeV3XV/1/2yWVzwsoT6cQ/DTdhpvlO9+fUhWkHKxHsp9j4zVyK0VLhKrwm5xwCmZ
+         7OIbIwp7fBJ7UMD/mVlLKVsYnF4Hc/sRUb5gZIszGKX6R1NpDzb63zueexCMffWTn8bn
+         MrtTTicbVC7IVNeJhWcJR25GgcpsBARFue/L3ALDKfO+4vRBfQ/QMAJhYsPQnZfVEqGZ
+         OBOhQAoZ3J3JV/5a43k6Jtv7A9EABTfTNPcl6PXxmr/SkpNVwnLpnNTCp5ToK41dPagb
+         ElKA==
+X-Gm-Message-State: ACrzQf21G8cLR7dhJb4wc8Zjbmz+db1W6NjOhGc7GgpDBFE5fMB+8Nip
+        8Cx4oI0io79t+bnilLaboD+HdA==
+X-Google-Smtp-Source: AMsMyM5kBAOpMO4cIxI/xoGLpufUFikFXHqNkBnrcviabpH1rUnjV3XPBSpbn19uO3b0a9DH3TkvaA==
+X-Received: by 2002:a17:903:22d2:b0:17f:7dea:985f with SMTP id y18-20020a17090322d200b0017f7dea985fmr2216382plg.68.1666086969145;
+        Tue, 18 Oct 2022 02:56:09 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa7970f000000b00561ed54aa53sm9031861pfg.97.2022.10.18.02.56.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 02:56:08 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Dylan Yudaken <dylany@fb.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Petr Machata <petrm@nvidia.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        syzbot <syzkaller@googlegroups.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        netdev@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "D. Wythe" <alibuda@linux.alibaba.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Congyu Liu <liu3101@purdue.edu>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] net: dev: Convert sa_data to flexible array in struct sockaddr
+Date:   Tue, 18 Oct 2022 02:56:03 -0700
+Message-Id: <20221018095503.never.671-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221017090208.19041-1-yunfei.dong@mediatek.com>
-In-Reply-To: <20221017090208.19041-1-yunfei.dong@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 18 Oct 2022 17:55:36 +0800
-Message-ID: <CAGXv+5G5Lr6rCB0D+q9egRFmhAzpGL49dNrQeCT8JpeUT+OiAA@mail.gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: fix h264 cavlc bitstream fail
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5049; h=from:subject:message-id; bh=rod5eHf0YQaVZ5sdwIzdd3C3vGobY6SuehBoBbg6GcI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTngzTHeW9kIfcHHQzkfp7D2VeT13DlZgTB42LZtK VyM9/qCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY054MwAKCRCJcvTf3G3AJjpoD/ 4mywSfiiYVC2vh0zMOE/MTSX2SRkfMVgE8MnDwc61EJGRB2o0fYwvty4chFUzQrZcR9YURMHRu9+86 /3CAxYYoQVJgwbwZi7zoYlb6NowRphiNorvQ/ny0q6bDOTwUzF1DbADlrMaVwRjsg0j02bOHSb6AQq WSOa+11Xtjmp/4JAczO9sk/06Zuh8S0Pm4ITZrQxoIydZZVLo2HujJ2wcKqAelUiCXHKVAR4d+YgmZ bbnRvO7WvnsPRy1tEKrBSTsi4HfGwkdFLTRxAwkptpcMWB8fYdqnlcBwiIUdcgNvMuKyJ2FFSV1+n1 Ygy7hah6Sj40CJw4QpRgNlcA+Qt8yK3Gr8zys8oNZ73vR9LcHTXsX5tkFVo/KRzoFsBfXFKL4ldLHw VxbjJrk8q2ZodJfmqfBs8y9x1RVuOjHYJL2Lw71G6klBfjHobULRfdJ9Sz64UvGteSGQcoEkR5ar18 TdHVxysdjUrKciYlOWQrCiU+lXt1lXV2qHydQEf61GM1EOPnItbikWumCcxezfsUgdgXD8CYsSLW4D 5Hh625MMZen1VjTSztbEibqJcNHj8BQMoARGjMlsTdVCBctf2HRwofrX51F9BYeO1cvM4gi+bAEOz+ d090jiMeXjVqaiTUsXHJlu89A/7PwgcfRWYuIBHv4MdK8vKMU6l/L41uMP/A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 5:02 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
->
-> Some cavlc bistream will decode fail when the frame size is small than
-> 20 bytes. Need to add pending data at the end of the bitstream.
+One of the worst offenders of "fake flexible arrays" is struct sockaddr,
+as it is the classic example of why GCC and Clang have been traditionally
+forced to treat all trailing arrays as fake flexible arrays: in the
+distant misty past, sa_data became too small, and code started just
+treating it as a flexible array, even though it was fixed-size. The
+special case by the compiler is specifically that sizeof(sa->sa_data)
+and FORTIFY_SOURCE (which uses __builtin_object_size(sa->sa_data, 1))
+do not agree (14 and -1 respectively), which makes FORTIFY_SOURCE treat
+it as a flexible array.
 
-"magic terminating pattern" instead of "pending data"?
+However, the coming -fstrict-flex-arrays compiler flag will remove
+these special cases so that FORTIFY_SOURCE can gain coverage over all
+the trailing arrays in the kernel that are _not_ supposed to be treated
+as a flexible array. To deal with this change, convert sa_data to a true
+flexible array. To keep the structure size the same, move sa_data into
+a union with a newly introduced sa_data_min with the original size. The
+result is that FORTIFY_SOURCE can continue to have no idea how large
+sa_data may actually be, but anything using sizeof(sa->sa_data) must
+switch to sizeof(sa->sa_data_min).
 
-> For the size of mapped memory is at least one page, adding four bytes data
-> won't lead to access unknown virtual memory.
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Dylan Yudaken <dylany@fb.com>
+Cc: Yajun Deng <yajun.deng@linux.dev>
+Cc: Petr Machata <petrm@nvidia.com>
+Cc: Hangbin Liu <liuhangbin@gmail.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: syzbot <syzkaller@googlegroups.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/socket.h |  5 ++++-
+ net/core/dev.c         |  2 +-
+ net/core/dev_ioctl.c   |  2 +-
+ net/packet/af_packet.c | 10 +++++-----
+ 4 files changed, 11 insertions(+), 8 deletions(-)
 
-Actually we can narrow this down a bit. The minimum dimension (16x16)
-sets the minimum size of the buffer at 256 bytes.
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index de3701a2a212..13c3a237b9c9 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -33,7 +33,10 @@ typedef __kernel_sa_family_t	sa_family_t;
+ 
+ struct sockaddr {
+ 	sa_family_t	sa_family;	/* address family, AF_xxx	*/
+-	char		sa_data[14];	/* 14 bytes of protocol address	*/
++	union {
++		char sa_data_min[14];		/* Minimum 14 bytes of protocol address	*/
++		DECLARE_FLEX_ARRAY(char, sa_data);
++	};
+ };
+ 
+ struct linger {
+diff --git a/net/core/dev.c b/net/core/dev.c
+index fa53830d0683..0649826e5803 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -8818,7 +8818,7 @@ EXPORT_SYMBOL(dev_set_mac_address_user);
+ 
+ int dev_get_mac_address(struct sockaddr *sa, struct net *net, char *dev_name)
+ {
+-	size_t size = sizeof(sa->sa_data);
++	size_t size = sizeof(sa->sa_data_min);
+ 	struct net_device *dev;
+ 	int ret = 0;
+ 
+diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
+index 7674bb9f3076..5cdbfbf9a7dc 100644
+--- a/net/core/dev_ioctl.c
++++ b/net/core/dev_ioctl.c
+@@ -342,7 +342,7 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
+ 		if (ifr->ifr_hwaddr.sa_family != dev->type)
+ 			return -EINVAL;
+ 		memcpy(dev->broadcast, ifr->ifr_hwaddr.sa_data,
+-		       min(sizeof(ifr->ifr_hwaddr.sa_data),
++		       min(sizeof(ifr->ifr_hwaddr.sa_data_min),
+ 			   (size_t)dev->addr_len));
+ 		call_netdevice_notifiers(NETDEV_CHANGEADDR, dev);
+ 		return 0;
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 6ce8dd19f33c..8c5b3da0c29f 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -3277,7 +3277,7 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr *uaddr,
+ 			    int addr_len)
+ {
+ 	struct sock *sk = sock->sk;
+-	char name[sizeof(uaddr->sa_data) + 1];
++	char name[sizeof(uaddr->sa_data_min) + 1];
+ 
+ 	/*
+ 	 *	Check legality
+@@ -3288,8 +3288,8 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr *uaddr,
+ 	/* uaddr->sa_data comes from the userspace, it's not guaranteed to be
+ 	 * zero-terminated.
+ 	 */
+-	memcpy(name, uaddr->sa_data, sizeof(uaddr->sa_data));
+-	name[sizeof(uaddr->sa_data)] = 0;
++	memcpy(name, uaddr->sa_data, sizeof(uaddr->sa_data_min));
++	name[sizeof(uaddr->sa_data_min)] = 0;
+ 
+ 	return packet_do_bind(sk, name, 0, pkt_sk(sk)->num);
+ }
+@@ -3561,11 +3561,11 @@ static int packet_getname_spkt(struct socket *sock, struct sockaddr *uaddr,
+ 		return -EOPNOTSUPP;
+ 
+ 	uaddr->sa_family = AF_PACKET;
+-	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data));
++	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data_min));
+ 	rcu_read_lock();
+ 	dev = dev_get_by_index_rcu(sock_net(sk), READ_ONCE(pkt_sk(sk)->ifindex));
+ 	if (dev)
+-		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data));
++		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data_min));
+ 	rcu_read_unlock();
+ 
+ 	return sizeof(*uaddr);
+-- 
+2.34.1
 
-> Fixes: 59fba9eed5a7 ("media: mediatek: vcodec: support stateless H.264 decoding for mt8192")
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  .../vcodec/vdec/vdec_h264_req_multi_if.c      | 27 ++++++++++++++++---
->  1 file changed, 24 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> index 4cc92700692b..c1583dddcb04 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> @@ -539,6 +539,24 @@ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
->         return 0;
->  }
->
-> +static void vdec_h264_insert_startcode(struct mtk_vcodec_dev *vcodec_dev, unsigned char *buf,
-> +                                      size_t *bs_size, struct mtk_h264_pps_param *pps)
-> +{
-> +       struct device *dev = &vcodec_dev->plat_dev->dev;
-> +
-> +       /* cavlc bitstream when entropy_coding_mode_flag is false. */
-> +       if (pps->entropy_coding_mode_flag || *bs_size > 20 ||
-> +           !(of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-dec") ||
-> +           of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-dec")))
-> +               return;
-> +
-
-There should be a comment here describing what is added.
-
-
-ChenYu
-
-> +       buf[*bs_size] = 0;
-> +       buf[*bs_size + 1] = 0;
-> +       buf[*bs_size + 2] = 1;
-> +       buf[*bs_size + 3] = 0xff;
-> +       (*bs_size) += 4;
-> +}
-> +
->  static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
->                                       struct vdec_fb *fb, bool *res_chg)
->  {
-> @@ -582,9 +600,6 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
->         }
->
->         inst->vsi->dec.nal_info = buf[nal_start_idx];
-> -       inst->vsi->dec.bs_buf_addr = (u64)bs->dma_addr;
-> -       inst->vsi->dec.bs_buf_size = bs->size;
-> -
->         lat_buf->src_buf_req = src_buf_info->m2m_buf.vb.vb2_buf.req_obj.req;
->         v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb, &lat_buf->ts_info, true);
->
-> @@ -592,6 +607,12 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
->         if (err)
->                 goto err_free_fb_out;
->
-> +       vdec_h264_insert_startcode(inst->ctx->dev, buf, &bs->size,
-> +                                  &share_info->h264_slice_params.pps);
-> +
-> +       inst->vsi->dec.bs_buf_addr = (uint64_t)bs->dma_addr;
-> +       inst->vsi->dec.bs_buf_size = bs->size;
-> +
->         *res_chg = inst->resolution_changed;
->         if (inst->resolution_changed) {
->                 mtk_vcodec_debug(inst, "- resolution changed -");
-> --
-> 2.25.1
->
