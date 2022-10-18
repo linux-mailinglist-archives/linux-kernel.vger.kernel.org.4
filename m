@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAAF602BC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66655602BCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJRMaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S230173AbiJRMam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiJRMa0 (ORCPT
+        with ESMTP id S230099AbiJRMac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:30:26 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8214FA02FF;
-        Tue, 18 Oct 2022 05:30:24 -0700 (PDT)
-Received: by mail-qt1-f176.google.com with SMTP id a24so9469408qto.10;
-        Tue, 18 Oct 2022 05:30:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LA5Rw3StwiOqL+QwzJgo3njgEZhTbHuX12wcOa2B5Os=;
-        b=Ii73Xm4qYOpwdKdTImAOfK4v5TThDEEOii1c40foC6cBmIQSl/oJ4CNt/qBjkwV+Rf
-         IsCodeAX1yd+Aahx1Ab5Akm93REV+z6kv36LLvLPjTw1Gh09VmCkGj+iMAEQ1/DZz3eW
-         KZKJMHRIs30cTpTdfKRWfGS7R97bi7ipz9d52ZVWdDBQq4YUM37WOcsHa2fHSMSHgAYy
-         HPo4VY3NXUsWm+TUyON6gV3TDy4wAw31/HG1zFhUuopJVw4gGFJlPmOUxH92WvSUJc/p
-         zThQaaInMOrC+k0As2qDfLoHyzcMlAtj+2LdBbVjF7JVYY1B3i5fZzksVQ+y6uuAL6AH
-         84YA==
-X-Gm-Message-State: ACrzQf1uXHGsROcsNficI288QEVWleJx/Bae8A3dLvURj5I1PA7LyHJ+
-        8Ar9Sh4d1YpumoTDTAqvaFN4UwiQcqFjaQ==
-X-Google-Smtp-Source: AMsMyM787KZDxWm9qtGFBmjdpQkf8XwXaiFsOUrkiHjboDALwsYvDEqYVzAiEuaUvcSfOPX2zumXkQ==
-X-Received: by 2002:ac8:5848:0:b0:39c:e974:1c2c with SMTP id h8-20020ac85848000000b0039ce9741c2cmr1833279qth.674.1666096223404;
-        Tue, 18 Oct 2022 05:30:23 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id bq36-20020a05620a46a400b006ee77f1ecc3sm2249510qkb.31.2022.10.18.05.30.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 05:30:23 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3573ed7cc15so135568527b3.1;
-        Tue, 18 Oct 2022 05:30:22 -0700 (PDT)
-X-Received: by 2002:a81:98d:0:b0:357:2422:13b4 with SMTP id
- 135-20020a81098d000000b00357242213b4mr2107285ywj.316.1666096222450; Tue, 18
- Oct 2022 05:30:22 -0700 (PDT)
+        Tue, 18 Oct 2022 08:30:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C19BB8C21;
+        Tue, 18 Oct 2022 05:30:31 -0700 (PDT)
+Received: from [192.168.10.9] (unknown [39.45.244.84])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A9C96602363;
+        Tue, 18 Oct 2022 13:30:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666096229;
+        bh=XrK7UDKQ26rBS+50UH9ViTCAxUXkpLoN+e1Isa94oQo=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=QbVvAvx10uxuWUCVHvhs1nQxY/ad3dXtF4UyVrCk2MXOXAuSEVbcXs9cd73OP4YXr
+         wM7H8NGGpGLD4oUdIseZ3LsUAczfdh9qzrMWaCbkQbmcnKieBM0DVnZ3wQle7DmiXF
+         cHVxJilap0ln6QEcpOPzeNAdG8Q+u/lxwPW6gG6cD+ylvCpiVZa1lESAk4jC9MN3z1
+         4f4af2QTKx/nh7uN7WV1BOygZH2Ic8NOjJXf+0058dY9Y1l98r/u3jhfDziKEAh1rj
+         ho4jNAbFe87KcNnQ9eNp6OzphKzopvg37e9G4FppvyqmfaYkWKQYqHfaN/FjiJWeoE
+         KymKxN3Z6ZMFQ==
+Message-ID: <2f95ed2d-6dba-850c-7ae9-5c0ebc05191c@collabora.com>
+Date:   Tue, 18 Oct 2022 17:30:20 +0500
 MIME-Version: 1.0
-References: <20221017145157.1866351-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2210171653540.9136@ramsan.of.borg> <alpine.DEB.2.21.2210181126040.50489@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2210181126040.50489@angie.orcam.me.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Oct 2022 14:30:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
-Message-ID: <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v6.1-rc1
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     linux-kernel@vger.kernel.org,
-        D Scott Phillips <scott@os.amperecomputing.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-arm-kernel@lists.infradead.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-um@lists.infradead.org, linux-rdma@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, corbet@lwn.net,
+        david@redhat.com, kernel@collabora.com, krisman@collabora.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peter.enderborg@sony.com, shuah@kernel.org,
+        viro@zeniv.linux.org.uk, willy@infradead.org, emmir@google.com,
+        figiel@google.com, kyurtsever@google.com,
+        Paul Gofman <pgofman@codeweavers.com>, surenb@google.com
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+References: <Y0T2l3HaH2MU8M9m@gmail.com>
+ <20221014134802.1361436-1-mdanylo@google.com>
+ <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
+ <Y06EZNAkLtigZi25@kroah.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y06EZNAkLtigZi25@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maciej,
+On 10/18/22 3:48 PM, Greg KH wrote:
+> On Tue, Oct 18, 2022 at 03:36:24PM +0500, Muhammad Usama Anjum wrote:
+>> /**
+>>   * struct pagemap_sd_args - Soft-dirty IOCTL argument
+>>   * @start:		Starting address
+>>   * @len:		Length of the region
+>>   * @vec:		Output page_region struct array
+>>   * @vec_len:		Length of the page_region struct array
+>>   * @max_out_page:	Optional max output pages (It must be less than vec_len if
+>> specified)
+>>   * @flags:		Special flags for the IOCTL
+>>   * @rmask:		Special flags for the IOCTL
+>>   * @amask:		Special flags for the IOCTL
+>>   * @emask:		Special flags for the IOCTL
+> 
+> What do you mean exactly by "special flags"?
+Sorry typo in the comments above. Optional flag can be specified in the 
+flag. At the moment, there is only one flag(PAGEMAP_NO_REUSED_REGIONS).
 
-On Tue, Oct 18, 2022 at 12:39 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> On Mon, 17 Oct 2022, Geert Uytterhoeven wrote:
-> > .> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9abf2313adc1ca1b6180c508c25f22f9395cc780/ (all 149 configs)
+/**
+  * struct pagemap_sd_args - Soft-dirty IOCTL argument
+  * @start:		Starting address
+  * @len:		Length of the region
+  * @vec:		Output page_region struct array
+  * @vec_len:		Length of the page_region struct array
+  * @max_out_page:	Optional max output pages (It must be less than 
+vec_len if specified)
+  * @flags:		Special flags for the IOCTL
+  * @rmask:		Required mask - All of these bits have to be set
+  * @amask:		Any mask - Any of these bits are set
+  * @emask:		Exclude mask - None of these bits are set
+  * @rmask:		Bits that have to be reported to the user in page_region
+  */
+struct pagemap_scan_args {
+	__u64 __user start;
+	__u64 len;
+	__u64 __user vec;
+	__u64 vec_len;
+	__u32 max_out_page;
+	__u32 flags;
+	__u32 rmask;
+	__u32 amask;
+	__u32 emask;
+	__u32 rmask;
+};
 
-> > >  + {standard input}: Error: branch to a symbol in another ISA mode: 1339 =>
-> > > 2616, 2621
-> >
-> > mips-gcc11/micro32r2_defconfig
-> > mips-gcc11/micro32r2el_defconfig
->
->  Where can these configs be obtained from?
+> 
+>>   * @__reserved:		Reserved member to preserve data alignment. Must be 0.
+>>   */
+>> struct pagemap_sd_args {
+>> 	__u64 __user start;
+>> 	__u64 len;
+>> 	__u64 __user vec; // page_region
+> 
+> __user is a marking for a pointer, not a u64, right?  Now the fact that
+> you treat it like a pointer later in the kernel is different, but that
+> shouldn't be on the uapi header file.  You can put it in the kerneldoc,
+> which you did not do.
+I'll update.
 
-By following the links in the URL above you removed while replying? ;-)
-
-http://kisskb.ellerman.id.au/kisskb/buildresult/14818296/
-http://kisskb.ellerman.id.au/kisskb/buildresult/14818298/
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> thanks,
+> 
+> greg k-h
