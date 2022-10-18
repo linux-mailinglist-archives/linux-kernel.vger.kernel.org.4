@@ -2,156 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ACD6028A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76B96028AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJRJqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        id S230162AbiJRJrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJRJql (ORCPT
+        with ESMTP id S229744AbiJRJrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:46:41 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7204FA199;
-        Tue, 18 Oct 2022 02:46:40 -0700 (PDT)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ms87Q0158z67ZwS;
-        Tue, 18 Oct 2022 17:43:30 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 11:46:38 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 10:46:37 +0100
-Date:   Tue, 18 Oct 2022 10:46:36 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        "Davidlohr Bueso" <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC V2 PATCH 05/11] cxl/mem: Trace General Media Event Record
-Message-ID: <20221018104636.000016fc@huawei.com>
-In-Reply-To: <20221017132143.360d2d46@gandalf.local.home>
-References: <20221010224131.1866246-1-ira.weiny@intel.com>
-        <20221010224131.1866246-6-ira.weiny@intel.com>
-        <20221011135702.00006f74@huawei.com>
-        <Y0nx1UOeYfQu5WYO@iweiny-desk3>
-        <20221017173717.00005921@huawei.com>
-        <20221017132143.360d2d46@gandalf.local.home>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 18 Oct 2022 05:47:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358259E689;
+        Tue, 18 Oct 2022 02:47:19 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29I75HPK002285;
+        Tue, 18 Oct 2022 09:47:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=qcppdkim1;
+ bh=amlqMKTV6n+Mwr6Kr0ex/PU4p5+azvXSx5leivwm0pA=;
+ b=Zx2OIpBZkoGNbjQRQlLRmHGpbQrZjM5lqQFe1xpiaXGq12XNFO48jCFnGdEXI/sioTVm
+ YiV/5gf7Og6Yeppyp5w6XWd/u871Sdof6sq/a8rzZXqc8uQKn/v/LfpFpl8OoCHpG5mb
+ 3p3EM/OVVro4879F3Mup970zz9DfBTtB6KJeBXgR1rUz+HuwyRzju54BhDPY/lpm7+cL
+ UQ2MYCTiJhC0fTFZVfmH84n8qIO9/Kf9uA1nYgUJy7FEkbzhlTuXaefVIqb8P7ubS25g
+ 50btaUz2QJ1cZFSek0coyphhKlD1sZwM9pkYsWRkiJqbL45SCOSeyBRe+oBJmoJowctZ Fg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9gwe9ayy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 09:47:10 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29I9l92a013786
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 09:47:09 GMT
+Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 18 Oct 2022 02:47:05 -0700
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>
+CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <konrad.dybcio@somainline.org>, <robimarko@gmail.com>,
+        <quic_gurus@quicinc.com>, <quic_rjendra@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH V3 0/2] SCM: Add support for wait-queue aware firmware
+Date:   Tue, 18 Oct 2022 15:16:44 +0530
+Message-ID: <1666086406-5452-1-git-send-email-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kw8OjKg_m3INRbwPkIWTcaYzB-DnGUjT
+X-Proofpoint-ORIG-GUID: kw8OjKg_m3INRbwPkIWTcaYzB-DnGUjT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-18_03,2022-10-17_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ spamscore=0 impostorscore=0 adultscore=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 lowpriorityscore=0 suspectscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210180055
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 13:21:43 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+This patch series enables the QCOM SCM driver to support firmware (FW) versions
+that expect the high-level OS (HLOS) to be tolerant of SCM call requests not
+being processed right away and, instead, being placed on a wait-queue in FW and
+processed accordingly.
 
-> On Mon, 17 Oct 2022 17:37:17 +0100
-> Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
-> 
-> > Looking at other similar cases though and we have a lot of use
-> > of trace_seq_printf() e.g. libata_trace_parse_status() though note
-> > there is some magic macro stuff in include/trace/events/libata.h 
-> > to tie that together.
-> > https://elixir.bootlin.com/linux/latest/source/drivers/ata/libata-trace.c#L14
-> > 
-> > That seems to get you access to the actual buffer we are printing into
-> > in similar cases.  
-> 
-> Looking at the code you linked to, I wonder why __print_flags() wasn't used?
-> 
-> For instance, you have:
-> 
-> const char *
-> libata_trace_parse_status(struct trace_seq *p, unsigned char status)
-> {
->         const char *ret = trace_seq_buffer_ptr(p);
-> 
->         trace_seq_printf(p, "{ ");
->         if (status & ATA_BUSY)
->                 trace_seq_printf(p, "BUSY ");
->         if (status & ATA_DRDY)
->                 trace_seq_printf(p, "DRDY ");
->         if (status & ATA_DF)
->                 trace_seq_printf(p, "DF ");
->         if (status & ATA_DSC)
->                 trace_seq_printf(p, "DSC ");
->         if (status & ATA_DRQ)
->                 trace_seq_printf(p, "DRQ ");
->         if (status & ATA_CORR)
->                 trace_seq_printf(p, "CORR ");
->         if (status & ATA_SENSE)
->                 trace_seq_printf(p, "SENSE ");
->         if (status & ATA_ERR)
->                 trace_seq_printf(p, "ERR ");
->         trace_seq_putc(p, '}');
->         trace_seq_putc(p, 0);
-> 
->         return ret;
-> }
-> 
-> 
-> Which is just a re-implementation of:
-> 
-> __print_flags(status, " ", 
-> 	{ ATA_BUSY, "BUSY" },
-> 	{ ATA_DRDY, "DRDY" },
-> 	{ ATA_DF, "DF" },
-> 	{ ATA_DSC, "DSC" },
-> 	{ ATA_DRQ, "DRQ" },
-> 	{ ATA_CORR, "CORR" },
-> 	{ ATA_SENSE, "SENSE" },
-> 	{ ATA_ERR, "ERR" })
-> 
-> 
-> The major difference between the two, is that libtraceevent will be able to
-> parse the above and convert the status bits into strings, whereas using
-> libata_trace_parse_status() will just give you a parsing error.
-> 
-> That is, perf and trace-cmd will not be able to parse it unless you write a
-> separate plugin for libtraceevent to do it but that means you'll have
-> duplicate code.
-> 
-> I know you just want echo and cat, but that will still work, and this will
-> make it work for the tooling as well.
+The problem this feature is fixing is as follows. In a scenario where there is
+a VM in addition to HLOS (and an underlying hypervisor):
 
-Excellent point, though in the case we are interested in for CXL,
-__print_flags() is not enough.
+1. HLOS makes an SMC call on core 5
+2. The hypervisor scheduling interrupt interrupts this SMC call.
+3. The hypervisor schedules the VM on core 5.
+4. The VM makes an SMC call on core 5.
+5. The SMC call is non-interruptibly stuck on FW spinlock on core 5.
+6. HLOS cannot reschedule since core 5 is not responding to Reschedule IPIs.
+7. Watchdog timer expires waiting for core 5.
 
-We have a mass of fields that only contain something useful to print if
-the valid bits in a mask are set. I just pulled that example to
-show how trace_seq_printf() could be used to achieve optional printing
-as opposed to current situation where the reader of the print has
-to interpret the mask to work out if fields contain anything useful.
+This problem is solved by FW returning a new return code SCM_WAITQ_SLEEP to
+HLOS right away when it is overwhelmed by the VM's SMC call. HLOS then places
+the call on a wait-queue and wakes it up when it receives an interrupt that
+signifies "all-clear".
 
-To do something nice with them in perf (well probably ras-daemon in
-this case) we'll have to parse the valid bits anyway so effectively
-write such a plugin.  There we need to do a bunch of mangling to get
-the events stored in a DB anyway, so this isn't a huge overhead.
+There are two new SMC calls also being defined in this design that, together
+with one new return code, form the handshake protocol between Linux and FW.
 
-Jonathan
+This design is also backwards-compatible with existing firmware versions that
+do not support this feature.
 
+v3:
+- Drop allow-multi-call property since HLOS doesn't completely support it
+  yet.
+- Fixup irq handling so as not to affect SoCs without the interrupt.
+- Fix warnings reported by kernel test-bot.
 
-> 
-> -- Steve
-> 
+v2:
+- Changes made to patches 4 and 5 are listed therein.
+- Rebased dt-bindings on top of the YAML conversion patch [1].
+
+Older version of the series:
+[v2] https://patchwork.kernel.org/project/linux-arm-msm/cover/1661898311-30126-1-git-send-email-quic_gurus@quicinc.com/
+[v1] https://patchwork.kernel.org/project/linux-arm-msm/cover/1656359076-13018-1-git-send-email-quic_gurus@quicinc.com/
+
+Guru Das Srinagesh (2):
+  dt-bindings: firmware: qcom-scm: Add optional interrupt
+  firmware: qcom: scm: Add wait-queue handling logic
+
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   5 +
+ drivers/firmware/qcom_scm-smc.c                    | 108 +++++++++++++++++--
+ drivers/firmware/qcom_scm.c                        | 120 ++++++++++++++++++++-
+ drivers/firmware/qcom_scm.h                        |  10 ++
+ 4 files changed, 234 insertions(+), 9 deletions(-)
+
+-- 
+2.7.4
 
