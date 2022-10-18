@@ -2,82 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416CD60254E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611E2602555
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiJRHQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
+        id S229705AbiJRHRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiJRHQh (ORCPT
+        with ESMTP id S230121AbiJRHRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:16:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374AE192BB
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:16:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF558B81D57
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:16:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF36C433D6;
-        Tue, 18 Oct 2022 07:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666077389;
-        bh=BJvYHhMON3X8Dpi7AQnigwItrwWZ4Jwk3LAjqDnCHog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DRaQpBlLLFe8295yY98Tw41uooJAfjXQtT+rtLbri5UcazDmO8319XUEjk8DTQ8kp
-         h6pVRrpZTXk4zxSaqUHmYoagrdkNvlMEso/VWgj5Yix5ZPOp41/g86MuhP9jzV8RL3
-         ZxtT1Km7/NBoynREaj8KFRrjY9Ake5OZA1T4EJYNc6o/8ly+2qJQ4fIXySItg0j1ec
-         a7rRzAUJDgPvuZfRfwflmDzBYeMMAWUar9TdnfMJ9MBxFQYoHntu/zXX/GRrkp25jZ
-         qi6z0avwDBq716XD5BAkb75n9VSl6TdnEIMni9LFo05Xnjnktfh6xcLdreMk29ZzBM
-         27G4dIi7j1JbQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1okgpl-0007tw-IR; Tue, 18 Oct 2022 09:16:17 +0200
-Date:   Tue, 18 Oct 2022 09:16:17 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     kernel test robot <lkp@intel.com>, Sasha Levin <sashal@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [linux-stable-rc:linux-5.19.y 2987/3450]
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts:12:10: fatal error:
- 'sc8280xp.dtsi' file not found
-Message-ID: <Y05Swd1ZRAF4SnTV@hovoldconsulting.com>
-References: <202210181441.Uo9b9Ie7-lkp@intel.com>
+        Tue, 18 Oct 2022 03:17:32 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAE3DF3D
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:17:29 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c24so13028758plo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+WPhMYfNHJ7IkVsrnLKCMI0knahjH/ILooZWa3gsnak=;
+        b=AmW4E1j4T7QfPNnh9U/FRHyDVB+LaUhI1xOg81gtwVTbvpoocoLxgq7zX/jEU20pv5
+         Y/9n4N8KVrAzaWYS96wbeS7fj2oIDMGSBJi3M7OL/SXoou2qh49F6dHqxWCWwGTCX1st
+         pfWGKfn8pROfh3m0U5u4COYdcn5UjZFQb2oMM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+WPhMYfNHJ7IkVsrnLKCMI0knahjH/ILooZWa3gsnak=;
+        b=NSHYdOPWsTx5MGekMMQ8Db53UgT/STIGf0Vs/6ZE4TICS9Dy6db+xtJwix7N/n+WBu
+         gV1sHcysW3RGNiQR/pmrB1yOVd94XbMP/PWwdHLYWYBhSwynKqU+hNNvTUtSEQZbE15e
+         UJ3BcaDvHu6W9so161jrpPCJunEUXxrS7mLvkz1uV6BdJqDuJdHYritQE6lfvTBXP0Lp
+         uhaJIm+Jyy/viN5NgwTTNYO0c0aB/IormEdoNO4G5bV3c75Jat4r2N0J2ys/wWs5IdQD
+         f2ZA1L+e38IxBvE7HjFX6srhyreb+A6bkaT7nkdC4MQyryeO66Q5dGaU80c5b5b/ljXI
+         I+xA==
+X-Gm-Message-State: ACrzQf3MdHdiA2H/V8RXbnl/UGkHExF04e+QhiiU/rmEaImWfuEHVxRj
+        sOo93NYAHeIk5dv92i9YkpR+Uw==
+X-Google-Smtp-Source: AMsMyM7xr6hwP8NO4ur8MkkcpcspVQKhsLOgY6G/7SFFF36Kni+LmOb4oMRL+cv3iCHdxCD2vcC1Gg==
+X-Received: by 2002:a17:903:246:b0:179:96b5:1ad2 with SMTP id j6-20020a170903024600b0017996b51ad2mr1689962plh.37.1666077448997;
+        Tue, 18 Oct 2022 00:17:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 1-20020a620601000000b005626a1c77c8sm8334879pfg.80.2022.10.18.00.17.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 00:17:28 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Eric Biederman <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+        Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] exec: Add comments on check_unsafe_exec() fs counting
+Date:   Tue, 18 Oct 2022 00:17:24 -0700
+Message-Id: <20221018071537.never.662-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202210181441.Uo9b9Ie7-lkp@intel.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1688; h=from:subject:message-id; bh=2swpYsczlaIuQF3JhkoEYj/apHe5tfn1etEA/2Jg8CE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTlMDiVTpJfOh2CK4GfTNinAtSvCBsM52w9sFjjLW slnuGpSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05TAwAKCRCJcvTf3G3AJqwyD/ 40TMoaejoCKGnR0OBHDCsxwwCOSAb+WJZWQgT2n89vfSQ5UK5FFm/rdx7Xyk5nu+g4m5Ov61Q7ob2p 91gck3XKFRrxkCMPOCZhh639pC8lcB/871uLLTU+NFNAfHrlfsyXnyNMG7DS4uDSR+Qo8Vqc21aigo /2EHaVg7aZPSYXpUliPxWtMHzKOdFP9om159xQyZD/9CawmpEtcr03tFl/wzzoMuJYArTLBjpNbn11 D2aubvDJS+eHIIv7cJ59SR7q8FsJaLR8VB/9XcuY+QsVp9hEnVr/f/MwwXw3k/tEH6W/3RVSCJ05pJ LLFvfX4E/pqe9q+Deagysf1pX6gjtv6qH5uSPlZwWoZnyxgfOh2awSeDDNXtQzzDIT+xKjyMk4TG/h aXu5njuWMceTFT1GvOZtHLL4Uhceb23khZvpWaK+J1/bYBXMP++c4hqpxJPwkj6GzPG5e1W7ENG+Az hMae9jAPSuYhCyK09uqcBXS49HkOro7dcZib8IopcbrKcDIa4hdu8SiZP9t42Ipq8Polo36ZqqVoU7 eRCIHsNnWfxO8TNnE/2EuN0EjVGDtWsKXjGMPwx1qNjXruJIdPzCbPUnbMEoLz0VoxKi0Oaln2m2Ne gyaK4NFHYR3MjftTXWC08z6eK3Y/CJcKuhnnl38a0dMpPIaSRfplM3wp5jbQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:50:44PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> head:   28b57a08d7fd284fdeb0c92ce4aeea9bcd023911
-> commit: c4c72ceb23b538b6cbcc9cbf9463b71c3e2ae933 [2987/3450] arm64: dts: qcom: sc8280xp: Add reference device
-> config: arm64-randconfig-r011-20221017
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=c4c72ceb23b538b6cbcc9cbf9463b71c3e2ae933
+Add some comments about what the fs counting is doing in
+check_unsafe_exec() and how it relates to the call graph.
+Specifically, we can't force an unshare of the fs because
+of at least Chrome:
+https://lore.kernel.org/lkml/86CE201B-5632-4BB7-BCF6-7CB2C2895409@chromium.org/
 
-Sasha, why on earth are you backporting commit ccd3517faf18 ("arm64:
-dts: qcom: sc8280xp: Add reference device")?!
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: linux-fsdevel@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ fs/exec.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-It seems your implementation of the stable-tree process has gone
-completely off rails.
+diff --git a/fs/exec.c b/fs/exec.c
+index 902bce45b116..01659c2ac7d8 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1571,6 +1571,12 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
+ 	if (task_no_new_privs(current))
+ 		bprm->unsafe |= LSM_UNSAFE_NO_NEW_PRIVS;
+ 
++	/*
++	 * If another task is sharing our fs, we cannot safely
++	 * suid exec because the differently privileged task
++	 * will be able to manipulate the current directory, etc.
++	 * It would be nice to force an unshare instead...
++	 */
+ 	t = p;
+ 	n_fs = 1;
+ 	spin_lock(&p->fs->lock);
+@@ -1752,6 +1758,7 @@ static int search_binary_handler(struct linux_binprm *bprm)
+ 	return retval;
+ }
+ 
++/* binfmt handlers will call back into begin_new_exec() on success. */
+ static int exec_binprm(struct linux_binprm *bprm)
+ {
+ 	pid_t old_pid, old_vpid;
+@@ -1810,6 +1817,11 @@ static int bprm_execve(struct linux_binprm *bprm,
+ 	if (retval)
+ 		return retval;
+ 
++	/*
++	 * Check for unsafe execution states before exec_binprm(), which
++	 * will call back into begin_new_exec(), into bprm_creds_from_file(),
++	 * where setuid-ness is evaluated.
++	 */
+ 	check_unsafe_exec(bprm);
+ 	current->in_execve = 1;
+ 
+-- 
+2.34.1
 
-Johan
