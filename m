@@ -2,88 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD426030AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9539D603099
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiJRQVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S230292AbiJRQPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJRQU7 (ORCPT
+        with ESMTP id S229610AbiJRQPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:20:59 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA29A3F58
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:20:58 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id y14so33483542ejd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MzvQBJdkcDIYDd+OfMrFmk39apicV8PtEEGy7jmzxjU=;
-        b=bOocASXc0vmOiyCGAuVKd+CFpXVrpxLO+ctGA4ZYCkz5L9EH9pWuRQ69uCSRIOvRBa
-         ozmkbjbCC5Zwm5Wj7FrNRgw1cRed3ys+6A7Ovm4TilVhK9N00NKt0xU/M4xTHyakrS5j
-         h1gQQe/oz9T1Wz0RRD9UJ6yzmAk8AZlDIQVySXuIlyUVjYenkire49NliuRKV3VCbENE
-         cr3QT3ioHcPzU3TanppmxJRCUkk5GX+fpqiKLCL6sZ8lJMsLnL0comcuO7Qv/uBRuObM
-         cMStOZFJKs0cL9KtAd5prqA8Za1l/Oe3Ekror1cnVmrm/JD7HZw4zAlDzuccTm8yIiBP
-         XFnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MzvQBJdkcDIYDd+OfMrFmk39apicV8PtEEGy7jmzxjU=;
-        b=Lmvg/qwvzHSughJWGSlKL3sZJmaJIBOr7gHJ5L/OeuT9HZkonKwsVIJQ1l+6B9jafu
-         dP2olXKcGovx2lrvVf5fmEYRuutx/fygGBpcLE50uentQR0Tj4ZujdC3dzylRuz8MTPI
-         kgPZSWN9bwRAVD3HvS47+3No6s85odo/iV8+MIMk/39Z0p8V1eSOEvfZyWiMD8rrbFUQ
-         +ErnJ5xv/aa8MqkfM8N/cNO2ShWkDFKyQO9R6U/Ide03feJFdjU5yUSL3LmrWZZqQpB9
-         CRUVN47EZTGqsrttE5vy/Du4N2wfIa1+PUusUgR+Vv8oHO/FfhRd/ORfsQYl/5DoZJUd
-         aR4Q==
-X-Gm-Message-State: ACrzQf0BXDXRphBoAuPVHHhN/Hn3uT4Lv5sHWX4m9D8GYB9lrFu79W5b
-        Q9L4gIf3L7ylCzf+MppIiPSMT2k4Kb8lDGipPhmK0w==
-X-Google-Smtp-Source: AMsMyM4R5enAOd9XqDkfiKl/EbFKi5tQCoMH//Bde0GSDZs7ANvUEBJ/IOKqXxtIsfT7y/Np8v4om6fq8TzN4MxVieE=
-X-Received: by 2002:a17:907:628f:b0:72f:58fc:3815 with SMTP id
- nd15-20020a170907628f00b0072f58fc3815mr3136905ejc.719.1666110057245; Tue, 18
- Oct 2022 09:20:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221013160040.2858732-1-dionnaglaze@google.com>
- <20221013160040.2858732-3-dionnaglaze@google.com> <ba5b3553-370f-3114-b920-5efe9b40ab0f@amd.com>
-In-Reply-To: <ba5b3553-370f-3114-b920-5efe9b40ab0f@amd.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Tue, 18 Oct 2022 09:20:46 -0700
-Message-ID: <CAAH4kHZKSxK1qeBALtiLO2kR7wUQ0K292HYGbipC=vAMgyFLJQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] virt/coco/sev-guest: interpret VMM errors from guest request
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
+        Tue, 18 Oct 2022 12:15:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3F522B28;
+        Tue, 18 Oct 2022 09:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666109749; x=1697645749;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oVwEkTvo388mdVRGCGIjhvZMJ0FRpThRSVZC/miQszI=;
+  b=AuDAbU4viKFqSvmi08HqDMh4LyP6hB6ONicoUlsX1ZWArzPl22qOrmy+
+   iTlstDMbQMLTjJoS3KULOevmBSQ9FxP7Gh5/+lJhjpLjR6DqHnjaD1Cto
+   fMK52B15BxMUdUKL4JHhRK8uMkrm/HrQhvjwhdwaPoepQlKonymSCzZD1
+   iWnAeIjmLanUu/34MqkclFuCqinRSH//HYEIS7+/aOpYqf96R6OrU3CGg
+   3U7T4zE3a3KLc9tiK0+dwi5RSQOw1TI4QA22VJEP9wNusKwv4jFgP7uyj
+   DWKWTv1AMBzu/h3LdpZcQtiBJoas4oUMKBtr/OTvfMlxqMOyvUZFmH+0N
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="293524770"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="293524770"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 09:15:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="606617636"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="606617636"
+Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.132])
+  by orsmga006.jf.intel.com with ESMTP; 18 Oct 2022 09:15:45 -0700
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: [PATCH] x86/hyperv: Remove BUG_ON() for kmap_local_page()
+Date:   Wed, 19 Oct 2022 00:21:17 +0800
+Message-Id: <20221018162117.2332508-1-zhao1.liu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> The GHCB spec has to be OS agnostic, so in the specification I would be
-> adding a value of 16 so that this matches. Not sure we don't want to just
-> use 2. We might be able to say the VMM error codes will follow the POSIX
-> standard, but then the currently defined value of 1 doesn't quite match an
-> EPERM.
->
-> Thoughts?
->
+From: Zhao Liu <zhao1.liu@intel.com>
 
-I also thought it was a bit weird. Let's use 2. I'll send a v2.
+The commit 154fb14df7a3c ("x86/hyperv: Replace kmap() with
+kmap_local_page()") keeps the BUG_ON() to check if kmap_local_page()
+fails.
 
+But in fact, kmap_local_page() always returns a valid kernel address
+and won't return NULL here. It will BUG on its own if it fails. [1]
+
+So directly use memcpy_to_page() which creates local mapping to copy.
+
+[1]: https://lore.kernel.org/lkml/YztFEyUA48et0yTt@iweiny-mobl/
+
+Fixes: 154fb14df7a3 ("x86/hyperv: Replace kmap() with kmap_local_page()")
+Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+---
+ arch/x86/hyperv/hv_init.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 29774126e931..f66c5709324f 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -459,13 +459,11 @@ void __init hyperv_init(void)
+ 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+ 
+ 		pg = vmalloc_to_page(hv_hypercall_pg);
+-		dst = kmap_local_page(pg);
+ 		src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
+ 				MEMREMAP_WB);
+-		BUG_ON(!(src && dst));
+-		memcpy(dst, src, HV_HYP_PAGE_SIZE);
++		BUG_ON(!src);
++		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
+ 		memunmap(src);
+-		kunmap_local(dst);
+ 	} else {
+ 		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
+ 		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
 -- 
--Dionna Glaze, PhD (she/her)
+2.34.1
+
