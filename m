@@ -2,99 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2234E602CF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99064602CF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJRN2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S230164AbiJRN3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJRN2a (ORCPT
+        with ESMTP id S230433AbiJRN3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:28:30 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38668CA8A1;
-        Tue, 18 Oct 2022 06:28:21 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id DACAD92009D; Tue, 18 Oct 2022 15:28:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id D66BA92009C;
-        Tue, 18 Oct 2022 14:28:17 +0100 (BST)
-Date:   Tue, 18 Oct 2022 14:28:17 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-cc:     linux-kernel@vger.kernel.org,
-        D Scott Phillips <scott@os.amperecomputing.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-arm-kernel@lists.infradead.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-um@lists.infradead.org, linux-rdma@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: Build regressions/improvements in v6.1-rc1
-In-Reply-To: <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2210181349060.50489@angie.orcam.me.uk>
-References: <20221017145157.1866351-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2210171653540.9136@ramsan.of.borg> <alpine.DEB.2.21.2210181126040.50489@angie.orcam.me.uk> <CAMuHMdVbo0wMaVVhe4f4tC9-TW2+DsOVAB77TtLdnsG=us8Q2A@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 18 Oct 2022 09:29:06 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9DC6C74C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:29:04 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id f11so23447679wrm.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
+        b=eEqeweMgoAha2gA3agmhPrwheBhBw4LuItboa3KIkd3futKzMLro4OSFn/+GsHoO2q
+         1g0UsVLbq6G7LYgkvrjjF0/aK9i1HtM2ftwQjwVtT+HxYmYOQu0iXWkYvn5R2pCAGqs4
+         s9cqF+SV17FECoYNEG3BbIsBfCDRYocVPcCDrmyfVwRyAV9hx0spYE9DLW1VgzgBS4tr
+         UbQ3nKR9UHhV4a0DtNBqTW1c7Zei2Dx2gjoyD+xI5pcx7YWlyHGRsdGlvYb4iC3lrx8I
+         5fNhFiugt5kE/2K8pSWMOmRr7GxD0aGVofbLzCMH3mgH/+99nu8B3Ir/+6nZinH/MMQ3
+         hyTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
+        b=5H+LgAAlLW3iATyOh7bY93lXyvgIl4/oM8roinzdlIGZTW+NpkEB0OoQNO/IAL2Rl6
+         AijQLLF7IRRsY7x4710T9HfirUUyIDocZWf+fksvySRiZbRT/LoVqKXMDtL+UJalESeF
+         VlupE7HAQszw588JGIseXuvvEjQUTJSiy7rLXilI88pIQwC79aX5UB5SSM5zv2Ci4M8v
+         3LXMg9us5HzvLYSa4SHOWHzotTeMCGbqVYk73k0q9g9K/aJbMcWMzkaOGUa/Drr+KaRg
+         V0aP9YWJZFIpMLHpnRFE5u96ETzA7EB3UUQ6gBWe37o4CHM2s4u4lQ1Vypc6La6YtFOj
+         tKjw==
+X-Gm-Message-State: ACrzQf3Dle5Ng9+pgm0iFL7OMoE2naGy466KMRZGx1XJQD06Ro+4m7/p
+        ON1NmA/IMb5kpvm/y/6jifb5x1KBX5Vb6kPal7o=
+X-Google-Smtp-Source: AMsMyM51yRiBRyVMbbU7I9haBznkPLb7xvkfhQYeXVron/xlOZ8CJeyh1CIWGi75RgG0LYv0FAdxow==
+X-Received: by 2002:a05:6000:1190:b0:232:c73d:7524 with SMTP id g16-20020a056000119000b00232c73d7524mr1991986wrx.371.1666099742541;
+        Tue, 18 Oct 2022 06:29:02 -0700 (PDT)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05600c089300b003c409244bb0sm12880231wmp.6.2022.10.18.06.28.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 06:29:01 -0700 (PDT)
+Message-ID: <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
+Date:   Tue, 18 Oct 2022 15:28:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH V11 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of
+ p?d_init()
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+References: <20221017024027.2389370-1-chenhuacai@loongson.cn>
+ <20221017024027.2389370-2-chenhuacai@loongson.cn>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221017024027.2389370-2-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-> > > .> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9abf2313adc1ca1b6180c508c25f22f9395cc780/ (all 149 configs)
+On 17/10/22 04:40, Huacai Chen wrote:
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
 > 
-> > > >  + {standard input}: Error: branch to a symbol in another ISA mode: 1339 =>
-> > > > 2616, 2621
-> > >
-> > > mips-gcc11/micro32r2_defconfig
-> > > mips-gcc11/micro32r2el_defconfig
-> >
-> >  Where can these configs be obtained from?
+> We are preparing to add sparse vmemmap support to LoongArch. MIPS and
+> LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
+> page tables, so adjust their prototypes to make generic helpers can call
+> them.
 > 
-> By following the links in the URL above you removed while replying? ;-)
+> NIOS2 declares pmd_init() but doesn't use, just remove it to avoid build
+> errors.
 > 
-> http://kisskb.ellerman.id.au/kisskb/buildresult/14818296/
-> http://kisskb.ellerman.id.au/kisskb/buildresult/14818298/
+> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   arch/loongarch/include/asm/pgalloc.h | 13 ++-----------
+>   arch/loongarch/include/asm/pgtable.h |  8 ++++----
+>   arch/loongarch/kernel/numa.c         |  4 ++--
+>   arch/loongarch/mm/pgtable.c          | 23 +++++++++++++----------
+>   arch/mips/include/asm/pgalloc.h      | 10 +++++-----
+>   arch/mips/include/asm/pgtable-64.h   |  8 ++++----
+>   arch/mips/kvm/mmu.c                  |  3 +--
+>   arch/mips/mm/pgtable-32.c            | 10 +++++-----
+>   arch/mips/mm/pgtable-64.c            | 18 ++++++++++--------
+>   arch/mips/mm/pgtable.c               |  2 +-
+>   arch/nios2/include/asm/pgalloc.h     |  5 -----
+>   11 files changed, 47 insertions(+), 57 deletions(-)
 
- Thank you.
+> diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
+> index 61891af25019..88819a21d97e 100644
+> --- a/arch/mips/mm/pgtable-32.c
+> +++ b/arch/mips/mm/pgtable-32.c
+> @@ -13,9 +13,9 @@
+>   #include <asm/pgalloc.h>
+>   #include <asm/tlbflush.h>
+>   
+> -void pgd_init(unsigned long page)
+> +void pgd_init(void *addr)
+>   {
+> -	unsigned long *p = (unsigned long *) page;
+> +	unsigned long *p = (unsigned long *)addr;
+>   	int i;
+>   
+>   	for (i = 0; i < USER_PTRS_PER_PGD; i+=8) {
+> @@ -61,9 +61,9 @@ void __init pagetable_init(void)
+>   #endif
+>   
+>   	/* Initialize the entire pgd.  */
+> -	pgd_init((unsigned long)swapper_pg_dir);
+> -	pgd_init((unsigned long)swapper_pg_dir
+> -		 + sizeof(pgd_t) * USER_PTRS_PER_PGD);
+> +	pgd_init(swapper_pg_dir);
+> +	pgd_init((void *)((unsigned long)swapper_pg_dir
+> +		 + sizeof(pgd_t) * USER_PTRS_PER_PGD));
 
- The error message is due to the use of MT ASE code in a microMIPS 
-compilation, specifically a handwritten machine instruction encoding via 
-`.word' in `dmt' from <asm/mipsmtregs.h>.  A similar construct is made 
-from `mftc0', but it isn't at a branch target, so no error is triggered.
+Pre-existing, but why not use:
 
- A `.insn' pseudo-op ought to precede such handwritten constructs to tell 
-the assembler that what follows is really an instruction rather than data, 
-which would then cause any preceding label to be correctly annotated.
+         pgd_init(&swapper_pg_dir[USER_PTRS_PER_PGD]);
 
- Now the MT ASE has been specified for the microMIPS ISA, but the machine 
-instruction encodings are different, so merely adding `.insn' won't do any 
-good.  Also we've never added support for the microMIPS MT ASE, and it's 
-not clear to me if it's ever been used with real silicon.  Perhaps QEMU 
-has it, but I suspect not.  Also no support has ever been added to 
-binutils.
+?
 
- So I think we want to just exclude the offending code from microMIPS 
-configurations, perhaps by hardcoding `cpu_has_mipsmt' to 0 if 
-CPU_MICROMIPS.
-
- On the other hand support for the MT ASE with the regular MIPS ISA has 
-been added with binutils 2.17:
-
-commit 61cc02671150a81ea68f25b8409b8ace18bda9ae
-Author: Chao-ying Fu <fu@mips.com>
-Date:   Tue Sep 6 18:46:57 2005 +0000
-
-and according to Documentation/process/changes.rst we require version 2.23 
-now.  So it looks to me like we want to discard the handwritten hacks and 
-use proper assembly instruction mnemonics.  I do believe we did this for 
-the DSP ASE already.
-
-  Maciej
+Otherwise:
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
