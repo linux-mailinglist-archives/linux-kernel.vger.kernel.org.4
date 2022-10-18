@@ -2,223 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66323602957
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6912D60295B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJRKau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S229846AbiJRKcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiJRKaq (ORCPT
+        with ESMTP id S229711AbiJRKck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:30:46 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789518F952
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:30:42 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 3so13677821pfw.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=exg8qK7HbANK8LGW8V7Sf+Nbz3fOY3t3f61wcS0cpmU=;
-        b=bwI1fqtxthcSt+uCO30znii+gfNeb5Q3uZ7GcmLwoC3d649+jbF8Ow3LyM7hk2IvuZ
-         cLK+JkAdD54eOh2j6QV0/FJcL6wkMID6ihFlcV/rqJFPKeZ3Ak/fCTBhL4rCp7zhKgZN
-         fM3mzoJAbfE3YkVKnfOJFKiItq1wQsghsle+UFshysohGg7t8WEEn+Jrk/D58LL7J6CZ
-         aHg9jAruVGlQNvXe15cht5jDlXIW/pDhN6Q2DVXNtI3YOeqRQXT9j3l06mthM9P0cQU2
-         PF5zrbpJqU3dsdtfa4ONsclOwLxmLlXWfrqhIyCE9NELiLdPn00n5ay1VQ85N6YepgzZ
-         WSTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=exg8qK7HbANK8LGW8V7Sf+Nbz3fOY3t3f61wcS0cpmU=;
-        b=tVEXL8oeYAFePHCYYeEGCeaONUctoGbU2nm/mSfNUGljY9l7ZO4iaB/aa6nSgYRW5F
-         TvCIIf4AzShysReHxj5f6OcSpF/0hvuDMxjdWXef4e6bfnxLpqeH4OKSJ/8D7upxvpNH
-         ECh2XY69lZwOX82sF/cTSgp1JwE2WN+bIJDeAAML5/G7Cft2wtztiIEbYcutmZcXcPYJ
-         IwCr/PPgFUTDotHNObf7jbQa6OCSzkVgkQL67+4GHjbP4ppreROsqQC1vbUiJNLJm0G3
-         sRWybNzZMH66IeBbvG6KeeGTAKg501w8uDJMALwRsN0SbmGhKtKtRknfpXFRtM5Abdqo
-         syeQ==
-X-Gm-Message-State: ACrzQf1on0ZC32bx+5k0I7a7VsfUoYjvmSBrtOydpGDC5KtT9BbHZi9G
-        MH4Ifx+1VPm83QRMf2tyVvvcBJUi5bh5fhpbBIbawg==
-X-Google-Smtp-Source: AMsMyM5BLMlVQf/WZNomvvuRQgyN2ps9/NivHtmdRTqq88wmho9EPNZIly4CEni5YeJKoAVezylqg9ThesITq5rux/k=
-X-Received: by 2002:a63:464d:0:b0:441:5968:cd0e with SMTP id
- v13-20020a63464d000000b004415968cd0emr2101209pgk.595.1666089041982; Tue, 18
- Oct 2022 03:30:41 -0700 (PDT)
+        Tue, 18 Oct 2022 06:32:40 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51378FD5B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666089159; x=1697625159;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=B9QBkZdiEKRXds6f01qLYgOxmjJ0WM3LSkhM7gknqPs=;
+  b=fZHaD1MuiHRNlzrBESw2oBdnI2MlBOevx0SyXDJ6di0zbtc0LIGFSH+x
+   W2BKNAsZgoYIWfc06B6k1ywEEDFpQstm983nMfiiDH4HL9gXlAGorXjY8
+   PphbcAl1ZpT1PoSMha+7J5qkOf6NCjD+/LoJZsQQQ1fio4oOTCpo0emIk
+   hiOR7T/Izdw8IEEv2UlOjag7wCAP+AYc3UyIkRaEyozpRhyno6vebtLPA
+   Kxq+ZwU+npqiXfCeH7W/s6X5M7OWjdrCYvNywNfePYlGugVWmzGOjrDzd
+   r6py0QcWY4iS2SvY4ZZbkGHPEQTNzJqgcogzIc9jAmVVqgWa9L82qxVvd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="332606597"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="332606597"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 03:32:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="803693165"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="803693165"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga005.jf.intel.com with SMTP; 18 Oct 2022 03:32:36 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 18 Oct 2022 13:32:35 +0300
+Date:   Tue, 18 Oct 2022 13:32:35 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [Intel-gfx] alderlake crashes (random memory corruption?) with
+ 6.0 i915 / ucode related
+Message-ID: <Y06Awzhqr8FutEgK@intel.com>
+References: <355dde1c-91e3-13b5-c8e8-75c9b9779b4f@redhat.com>
+ <87a65usvgq.fsf@intel.com>
+ <877d0ysv1e.fsf@intel.com>
+ <717fb4ab-5225-884f-37f9-2032c265824e@redhat.com>
+ <241af90a-4cec-9266-8fb0-3c69f9880b52@leemhuis.info>
+ <fac9a564-edff-db25-20d4-7146ae2a7dc8@redhat.com>
+ <87tu42indv.fsf@intel.com>
+ <490bed5d-8db4-dc31-7aed-bc5941c974c5@redhat.com>
 MIME-Version: 1.0
-References: <20221017164005.2622934-1-amit.pundir@linaro.org> <20221017201654.u7x5vrjsad653kma@bogus>
-In-Reply-To: <20221017201654.u7x5vrjsad653kma@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 18 Oct 2022 12:30:04 +0200
-Message-ID: <CAPDyKFqMLHhzFzYZ5wB5xTSaHkesp9pxX3QEhT+8XZictUnUaQ@mail.gmail.com>
-Subject: Re: [PATCH] Revert "arm64: dts: qcom: sm8250: Add cpuidle states"
-To:     Amit Pundir <amit.pundir@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <490bed5d-8db4-dc31-7aed-bc5941c974c5@redhat.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 at 22:17, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Mon, Oct 17, 2022 at 10:10:05PM +0530, Amit Pundir wrote:
-> > This reverts commit 32bc936d732171d48c9c8f96c4fa25ac3ed7e1c7.
-> >
-> > This patch was part of a patch series to add APSS RSC to
-> > Cluster power domain
-> > https://patchwork.kernel.org/project/linux-pm/cover/1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com/
-> > but the rest of the patches in this series got NACKed and didn't land.
-> >
-> > These cpuidle states made RB5 (sm8250) highly unstable and I run into
-> > following crash every now and then:
-> >
-> > [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
-> > [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
-> > [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
-> >
-> > I reported this breakage earlier this year as well:
-> > https://lore.kernel.org/all/CAMi1Hd2Sngya_2m2odkjq4fdV8OiiXsFMEX1bb807cWMC7H-sg@mail.gmail.com/
-> > I can confirm that if I cherry-pick the rest of the patches from the
-> > series then I can't reproduce this crash, but I'm not sure when the rest
-> > of the patches are going to land though.
+On Mon, Oct 17, 2022 at 04:32:28PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 10/17/22 15:35, Jani Nikula wrote:
+> > On Mon, 17 Oct 2022, Hans de Goede <hdegoede@redhat.com> wrote:
+> >> Hi,
+> >>
+> >> On 10/17/22 13:19, Thorsten Leemhuis wrote:
+> >>> CCing the regression mailing list, as it should be in the loop for all
+> >>> regressions, as explained here:
+> >>> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+> >>
+> >> Yes sorry about that I meant to Cc the regressions list, not you personally,
+> >> but the auto-completion picked the wrong address-book entry
+> >> (and I did not notice this).
+> >>
+> >>> On 17.10.22 12:48, Hans de Goede wrote:
+> >>>> On 10/17/22 10:39, Jani Nikula wrote:
+> >>>>> On Mon, 17 Oct 2022, Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> >>>>>> On Thu, 13 Oct 2022, Hans de Goede <hdegoede@redhat.com> wrote:
+> >>>>>>> With 6.0 the following WARN triggers:
+> >>>>>>> drivers/gpu/drm/i915/display/intel_bios.c:477:
+> >>>>>>>
+> >>>>>>>         drm_WARN(&i915->drm, min_size == 0,
+> >>>>>>>                  "Block %d min_size is zero\n", section_id);
+> >>>>>>
+> >>>>>> What's the value of section_id that gets printed?
+> >>>>>
+> >>>>> I'm guessing this is [1] fixed by commit d3a7051841f0 ("drm/i915/bios:
+> >>>>> Use hardcoded fp_timing size for generating LFP data pointers") in
+> >>>>> v6.1-rc1.
+> >>>>>
+> >>>>> I don't think this is the root cause for your issues, but I wonder if
+> >>>>> you could try v6.1-rc1 or drm-tip and see if we've fixed the other stuff
+> >>>>> already too?
+> >>>>
+> >>>> 6.1-rc1 indeed does not trigger the drm_WARN and for now (couple of
+> >>>> reboots, running for 5 minutes now) it seems stable. 6.0.0 usually
+> >>>> crashed during boot (but not always).
+> >>>>
+> >>>> Do you think it would be worthwhile to try 6.0.0 with d3a7051841f0 ?
+> >>
+> >> So I have been trying 6.0.0 with d3a7051841f0 doing a whole bunch of
+> >> reboots + general use and that seems stable, then I reverted it and
+> >> the very first boot of the kernel with that broke again, so I'm
+> >> pretty sure that d3a7051841f0 fixes things.
+> >>
+> >> So d3a7051841f0 seems to do more then just fix the WARN().
+> > 
+> > Wow, so I guess we do screw up the parsing royally then. :o
+> 
+> I'm running the kernel with lockdep + list-debugging enabled and
+> I could not reproduce this (not easily at least) on a standard
+> Fedora 6.0.0 build without that. So maybe the parsing just manages
+> to write out of binds a tiny bit which just happens to hit a list_head
+> somewhere ... ?
 
-I have been talking to Maulik (offlist) about re-posting the series,
-but apparently she has been too busy to move this forward.
+We don't parse any of the LFP data stuff if we didn't manage
+to generate the data ptrs. So can't really see how that would
+happen. Another theory might be that something else gets
+screwed up if we fail to parse anything, but can't really
+think how that would lead to list corruption either.
 
-I assume a better option, than reverting, is to get the above series
-merged. If I recall, there were only a few minor comments from me on
-the genpd patch [1]. That said, let me help out and refresh the
-series, I will do it asap!
+> 
+> Either way things look stable with d3a7051841f0 and it turns out
+> that Fedora already had that cherry-picked downstream in the
+> 5.19.13 kernel which was stable for me too.
+> 
+> >> So lets try to get d3a7051841f0 added to the official stable series
+> >> ASAP (I just noticed that Mark Pearson from Lenovo has already added it
+> >> to Fedora's 6.0.2 build.
+> > 
+> > I think I'd also pick d3a7051841f0^ i.e. both commits:
+> > 
+> > d3a7051841f0 ("drm/i915/bios: Use hardcoded fp_timing size for generating LFP data pointers")
+> > 4e78d6023c15 ("drm/i915/bios: Validate fp_timing terminator presence")
+> > 
+> > for stable.
 
-> >
-> > Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8250.dtsi | 105 ---------------------------
-> >  1 file changed, 105 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > index a5b62cadb129..a2c15da1a450 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > @@ -101,8 +101,6 @@ CPU0: cpu@0 {
-> >                       capacity-dmips-mhz = <448>;
-> >                       dynamic-power-coefficient = <205>;
-> >                       next-level-cache = <&L2_0>;
-> > -                     power-domains = <&CPU_PD0>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> >                       operating-points-v2 = <&cpu0_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -125,8 +123,6 @@ CPU1: cpu@100 {
-> >                       capacity-dmips-mhz = <448>;
-> >                       dynamic-power-coefficient = <205>;
-> >                       next-level-cache = <&L2_100>;
-> > -                     power-domains = <&CPU_PD1>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> >                       operating-points-v2 = <&cpu0_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -146,8 +142,6 @@ CPU2: cpu@200 {
-> >                       capacity-dmips-mhz = <448>;
-> >                       dynamic-power-coefficient = <205>;
-> >                       next-level-cache = <&L2_200>;
-> > -                     power-domains = <&CPU_PD2>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> >                       operating-points-v2 = <&cpu0_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -167,8 +161,6 @@ CPU3: cpu@300 {
-> >                       capacity-dmips-mhz = <448>;
-> >                       dynamic-power-coefficient = <205>;
-> >                       next-level-cache = <&L2_300>;
-> > -                     power-domains = <&CPU_PD3>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 0>;
-> >                       operating-points-v2 = <&cpu0_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -188,8 +180,6 @@ CPU4: cpu@400 {
-> >                       capacity-dmips-mhz = <1024>;
-> >                       dynamic-power-coefficient = <379>;
-> >                       next-level-cache = <&L2_400>;
-> > -                     power-domains = <&CPU_PD4>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 1>;
-> >                       operating-points-v2 = <&cpu4_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -209,8 +199,6 @@ CPU5: cpu@500 {
-> >                       capacity-dmips-mhz = <1024>;
-> >                       dynamic-power-coefficient = <379>;
-> >                       next-level-cache = <&L2_500>;
-> > -                     power-domains = <&CPU_PD5>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 1>;
-> >                       operating-points-v2 = <&cpu4_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -231,8 +219,6 @@ CPU6: cpu@600 {
-> >                       capacity-dmips-mhz = <1024>;
-> >                       dynamic-power-coefficient = <379>;
-> >                       next-level-cache = <&L2_600>;
-> > -                     power-domains = <&CPU_PD6>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 1>;
-> >                       operating-points-v2 = <&cpu4_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -252,8 +238,6 @@ CPU7: cpu@700 {
-> >                       capacity-dmips-mhz = <1024>;
-> >                       dynamic-power-coefficient = <444>;
-> >                       next-level-cache = <&L2_700>;
-> > -                     power-domains = <&CPU_PD7>;
-> > -                     power-domain-names = "psci";
-> >                       qcom,freq-domain = <&cpufreq_hw 2>;
-> >                       operating-points-v2 = <&cpu7_opp_table>;
-> >                       interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
-> > @@ -300,42 +284,6 @@ core7 {
-> >                               };
-> >                       };
-> >               };
-> > -
-> > -             idle-states {
-> > -                     entry-method = "psci";
-> > -
-> > -                     LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-> > -                             compatible = "arm,idle-state";
-> > -                             idle-state-name = "silver-rail-power-collapse";
-> > -                             arm,psci-suspend-param = <0x40000004>;
-> > -                             entry-latency-us = <360>;
-> > -                             exit-latency-us = <531>;
-> > -                             min-residency-us = <3934>;
-> > -                             local-timer-stop;
->
-> If this is temporary fix for some broke firmware or setup, I suggest to
-> just add status = "disabled" for these states. Also worth checking if keeping
-> the cpu states is okay and only cluster state is the issue or everything
-> needs to be disabled. That way it would avoid the churn when re-enabling it.
+Ack from me.
 
-That's a good option, unless we can get the other series (that fixes
-this issue) merged soon. As stated, I will help to re-spin it and then
-we can take it from there.
-
->
-> --
+> 
+> That sounds good, can you take care of submitting these to gkh ?
+> 
 > Regards,
-> Sudeep
+> 
+> Hans
 
-Kind regards
-Uffe
+-- 
+Ville Syrjälä
+Intel
