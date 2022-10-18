@@ -2,152 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E366030CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080686030D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiJRQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S229670AbiJRQfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiJRQ3f (ORCPT
+        with ESMTP id S229470AbiJRQff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:29:35 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0613F09;
-        Tue, 18 Oct 2022 09:29:21 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id 13so33541911ejn.3;
-        Tue, 18 Oct 2022 09:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3kT33+mNIFBJ/DJxtGCpSH0GNDOQJK7DLYP/xqwSgzc=;
-        b=W7swoyXzIJAHfFFkFgPm0e9j3tls98PDd/9hIvON+rJrVUxtMkTv+jROg9rKGKsRBF
-         i0fcSjrgRuxJoHU0pBU6mwl6ZjMPAUry3qhgIPLMjTcG8DTLCofddLB3ZhMrmAtnWPWU
-         B+dLe/0vtuwGiYAPn30BKWQ4BFjVeQRFX4FEFyO4wzTd0dGtBiRadwuakNq9OAHJvZp5
-         N8yV8BFYDWJJvvMZyuToLMSqIUTbg2ri6zCHJGViW64L5TP5NsIZltxb/3ODoQ4zSB6y
-         Onm55aSiSJF1r1RWIinOmyHYppAKoFgYNW52I4EhHWojxO3P8q6LdtSqapaLPjozfD5R
-         0UPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3kT33+mNIFBJ/DJxtGCpSH0GNDOQJK7DLYP/xqwSgzc=;
-        b=XpcW88gO8I8Rk47Y/W98lDHZ9qQsnUA50QO2ZIzmB+tQUm91TMILpvIArS/xWXM9U6
-         puwP2W2fDSDfqY4fuYnYAVXDmgPP5tqN4iPPmMUtvgL5nRPk1jDsdObEQWRElQKLZ4aq
-         KoqnnEEfe0CXELIui7nqw9Z+lYLwK2OE7bhpJzeLrFulJM/sdAFY76no5B3IsGFeaI0D
-         HaDffHIGddo7775lGJ4FPDQ+Hcfbc/aoVmuMuzL+jzajSRSRmOV5E9KiJ2Z93LOcZhdS
-         IlRc0gwF0pB+5OvqdMuJ8vLvYjTibswiBNa1DIgTP732xLe9/hDtMP8+c+zn/WNvQoDr
-         JHgA==
-X-Gm-Message-State: ACrzQf14QQ6dy53EJ/wy8P1RO9CSpZLJGdtC9B4iKWQbA+nr9mDFjOyM
-        9aA7fpQwZK7Ztp/0wzhrcW6+Q+Aw1WKZa5bmp2w=
-X-Google-Smtp-Source: AMsMyM5WoWjJQAvW3IeWbUZgz575QczId7A8erat7mPlN60+d3oZxLYKHrysfuufSZGov0mVWUAwtVnQ3hHQSgHOLvM=
-X-Received: by 2002:a17:907:7f93:b0:791:91a6:5615 with SMTP id
- qk19-20020a1709077f9300b0079191a65615mr3246670ejc.708.1666110558666; Tue, 18
- Oct 2022 09:29:18 -0700 (PDT)
+        Tue, 18 Oct 2022 12:35:35 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20032D57ED;
+        Tue, 18 Oct 2022 09:35:35 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7c1329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7c1:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A82B71EC058A;
+        Tue, 18 Oct 2022 18:35:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666110929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MK7s91/Zyno/A7R7+trDZq+um5qPirik4WDLX1E0kRY=;
+        b=eKBvdFf9FeT/+yzL0Tbt13jNhATTz8GL1W+tAi1q2pgdeEDTA9CfJV3kQVL0udWGidM5yC
+        295shfvHE/i5h3UPyqQlzwNNTtYoQF1iB9pMi8MTCB4q322FWy2hPSbh5oljD/qXkiKFmj
+        oTOrgZSGUNgoa4f/sGG9TJ9UZvGR/jY=
+Date:   Tue, 18 Oct 2022 18:35:25 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, fenghua.yu@intel.com,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Babu Moger <babu.moger@amd.com>
+Subject: Re: [PATCH v5 0/2] x86/resctrl: Fix min_cbm_bits for AMD and code
+ cleanup
+Message-ID: <Y07VzWTRpSnpbuc2@zn.tnic>
+References: <166430959655.372014.14294247239089851375.stgit@bmoger-ubuntu>
+ <703e6dfd-68d6-6def-183d-fb99b39692b3@intel.com>
 MIME-Version: 1.0
-References: <20221018090205.never.090-kees@kernel.org>
-In-Reply-To: <20221018090205.never.090-kees@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 18 Oct 2022 09:29:07 -0700
-Message-ID: <CAADnVQKBfPeDqHE8U6f79XKqrQsLWysRQMweBhwBd-qRP0FDpw@mail.gmail.com>
-Subject: Re: [PATCH] bpf, test_run: Track allocation size of data
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <703e6dfd-68d6-6def-183d-fb99b39692b3@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 2:02 AM Kees Cook <keescook@chromium.org> wrote:
->
-> In preparation for requiring that build_skb() have a non-zero size
-> argument, track the data allocation size explicitly and pass it into
-> build_skb(). To retain the original result of using the ksize()
-> side-effect on the skb size, explicitly round up the size during
-> allocation.
->
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  net/bpf/test_run.c | 84 +++++++++++++++++++++++++---------------------
->  1 file changed, 46 insertions(+), 38 deletions(-)
->
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 13d578ce2a09..299ff102f516 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -762,28 +762,38 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS)
->  BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
->  BTF_SET8_END(test_sk_check_kfunc_ids)
->
-> -static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
-> -                          u32 size, u32 headroom, u32 tailroom)
-> +struct bpfalloc {
-> +       size_t len;
-> +       void  *data;
-> +};
-> +
-> +static int bpf_test_init(struct bpfalloc *alloc,
-> +                        const union bpf_attr *kattr, u32 user_size,
-> +                        u32 size, u32 headroom, u32 tailroom)
->  {
->         void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
-> -       void *data;
->
->         if (size < ETH_HLEN || size > PAGE_SIZE - headroom - tailroom)
-> -               return ERR_PTR(-EINVAL);
-> +               return -EINVAL;
->
->         if (user_size > size)
-> -               return ERR_PTR(-EMSGSIZE);
-> +               return -EMSGSIZE;
->
-> -       data = kzalloc(size + headroom + tailroom, GFP_USER);
-> -       if (!data)
-> -               return ERR_PTR(-ENOMEM);
-> +       alloc->len = kmalloc_size_roundup(size + headroom + tailroom);
-> +       alloc->data = kzalloc(alloc->len, GFP_USER);
+On Tue, Oct 18, 2022 at 09:26:41AM -0700, Reinette Chatre wrote:
+> Hi X86 Maintainers,
+> 
+> Could you please consider this fix and cleanup for inclusion?
 
-Don't you need to do this generalically in many places in the kernel?
+Sure.
+
+From the looks of it, the first one needs to go to stable, right?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
