@@ -2,181 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292D3602E62
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0396602E63
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiJROYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        id S231344AbiJROZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiJROY3 (ORCPT
+        with ESMTP id S229926AbiJROYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:24:29 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2093.outbound.protection.outlook.com [40.107.237.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E792710F;
-        Tue, 18 Oct 2022 07:24:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hWcCDGnvIDw1xBoJ3JJE+mC0rJMXTTjaT9T1R2mqv6wmjaSaEIeZX7TJKBmjrYSNBSHo5xhSjkHWEGDiqAwfCZLe/flsUzwGx/8IIrAl1RgQ2KROTxdA5G/CaYuK0phsqa6b1U46Uvk84+tIX+x0SrRbmmoTOXeYcnOD8Dn2cegLlZr3IoZ/AH3GJ968f4QHv5wAouu/xC9AtYmw19coCmnKzXNWF0lVCsy+SZyqBzYA7GI49au2THQX/g/ptQuO3fjiVEWVmhxmzQz6DWp8CwG6AmSLyVdk/6YS1Ckyx4uSOI8A+GF+qFFtA5qC8Yn4jG5d0w9JjHFhpkUEqlqpvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z3J+a+ZexnN9T7s5ef//gTkeJhrZOLMV0mlh18VTeqY=;
- b=QFvRX0IcKgzvrnSoYO8JNkbacqi/QM6go9GT6j66iPwPYYY30aJ6dwjVxw4Zpl/KPrnbZob0yqddG6A5v+bGcBEa7BHFaRPlgxRqntOtL2z9RUFHGwXb5noRgrSG7gIQ8owQmQM/4N6WYDTJbQYTIucoreyT4Eo6+rz+3YRspzfT92/t60CscUtG/nIu4H/0Z3+uOfEbQ8oAM+G0DGnAAcMHOTmNrVgJzzgrKd+wiUn2/3/16AGf457JJjxewr4C205p1x3IaSwD0D9OhTsY4YJ11Mh01EWBCeLS3Dtrg9uTQOpTirNXZ5rskieFHJ17XNPGV5z+WNS+2bHtGM/n8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
- header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z3J+a+ZexnN9T7s5ef//gTkeJhrZOLMV0mlh18VTeqY=;
- b=iNJqQLgAA9PFoQj20dBP8SUFt/YngfaaTzbrDcojbSskri+Sos3gFWT7mQUkcF31XG94xVssHxz4OzCLmpvMx+tbK0WGGBUiE12dvLdi7fWNp8uPlPbwRJFKKf1eMYOdC8+V+5u/1T5X9nqv/cjYLouKnIGsFfHm8T0k7sPMrKC5U021JPzEZo/KxG56MEZj+OEhqapXJ2GSvKtEt5P2X3Y2EfNgaQ8Xk9uS3+BpayCV9f5XoyY1I9chz8FqY3E5z0fiV5GyWX3bbeMhV3x9L7V69F0Us3NH8McwbKfBTkapSs9hkZQm/CsVgHLxX7Mpqof16dgkILKQ4qbVLiZByw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
-Received: from BN6PR01MB2610.prod.exchangelabs.com (2603:10b6:404:d0::7) by
- CY1PR01MB2154.prod.exchangelabs.com (2a01:111:e400:c615::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.32; Tue, 18 Oct 2022 14:24:21 +0000
-Received: from BN6PR01MB2610.prod.exchangelabs.com
- ([fe80::6c3a:f804:5889:b2ad]) by BN6PR01MB2610.prod.exchangelabs.com
- ([fe80::6c3a:f804:5889:b2ad%10]) with mapi id 15.20.5723.033; Tue, 18 Oct
- 2022 14:24:21 +0000
-Message-ID: <4c6939b5-05b9-1346-5376-82011b4cc093@cornelisnetworks.com>
-Date:   Tue, 18 Oct 2022 10:24:18 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH] rdmavt: avoid NULL pointer dereference in rvt_qp_exit()
-Content-Language: en-US
-To:     Leon Romanovsky <leon@kernel.org>,
-        Natalia Petrova <n.petrova@fintech.ru>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-References: <20221017142652.13906-1-n.petrova@fintech.ru>
- <Y05msUNgnQTWmXyh@unreal>
-From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-In-Reply-To: <Y05msUNgnQTWmXyh@unreal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR02CA0056.namprd02.prod.outlook.com
- (2603:10b6:207:3d::33) To BN6PR01MB2610.prod.exchangelabs.com
- (2603:10b6:404:d0::7)
+        Tue, 18 Oct 2022 10:24:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C68FE57555;
+        Tue, 18 Oct 2022 07:24:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3A99113E;
+        Tue, 18 Oct 2022 07:24:57 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA1783F792;
+        Tue, 18 Oct 2022 07:24:50 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 15:24:48 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Yu Liao <liaoyu15@huawei.com>, "liwei (GF)" <liwei391@huawei.com>,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [BUG] possible deadlock in __rcu_irq_enter_check_tick
+Message-ID: <Y063MGk3oVg6ney0@lakrids>
+References: <e015e32d-d068-2d17-1ca5-c584c30ffebb@huawei.com>
+ <20221012064911.GN4221@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR01MB2610:EE_|CY1PR01MB2154:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e14b6d4-af0d-41de-9d7e-08dab11472b5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QY8GaSoarCjsY+mDt8XBcoq70HJZOzQfakKffDBj1qCOEuGHcflCJ4mzplQlTUOlZoLgCYaKnHmR/Qye7sCnVoTuRJsMCcyQOMG32hw4V5c6ib4aVwpM7ivffDXU7xglIt3w4OHte5p5Tf+UlpCrcZXBdYTBEPKWeHpi6qtfk5siZRUXqnkFp1s8NIzSph3AJyYCcderZHAzJjCnv2DS8lmpCdvPiKTDYeI6v2T2sAAG3AhNbLdKnWrRQNYso5HTPagMrUck7aZ5/ki3JJJqvG7PiaPy5YiPXy2IrrhwkH/WZjt/tu1SCkZiANNHY/jdtmmxWCl58Th2SYEntvabNTE/Cga4RI3WZlDRf2TkASQWtY0nw6jRXrXlV3N7uV3JKrZ9tY5pcbWYfFuAUPlLjIkOpSy3Wy497pJfrrvCR72piVnO5M5VPFyhY+vjhEIYlyvOzrSnwJvISD53K35lj3LNnWqYI8bDrndqMLr1AXhNZ0cJbt8f+E65x6VNWimt/tCdfgLizDWa0L2gg4RrovZzwFTJMgweL7q1/ht41jqPK8Ij8zmIUIXxgQ/VZg7icBGaTi+YfNAxBXWLy0EQtPNtJWaGrUih2t04AxG70t7oz3tTE9zYBJt30bHtePpToE9y0v+ktE3zJaQI4CFvjMCp/ZYL81tEj9p6CGGrfDpbcD9+w86FMnbrOI50j/LZAnroa0/RddeCCZ7OEm9JCOjK9Y6rO1Q3sPs9vQZY8wvaZ9lDGBAwl8asYFC5vFzZfiYSz2KF2ScHM6NezKdNROsE5LC1ymJ0kqAhyYokbgI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR01MB2610.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39840400004)(376002)(136003)(366004)(396003)(451199015)(31686004)(38350700002)(6486002)(478600001)(38100700002)(54906003)(8936002)(6512007)(110136005)(83380400001)(316002)(31696002)(41300700001)(53546011)(52116002)(186003)(36756003)(6506007)(26005)(4326008)(6666004)(2616005)(2906002)(5660300002)(66476007)(66556008)(66946007)(8676002)(86362001)(44832011)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkV5ZDRQKzg5Y24rd3NKNDRhN1p3dHhnRVh1TGxJbFZwT0xoQ0lldHpQWEVm?=
- =?utf-8?B?RVh4TlUvWFhDRXdEUGVPMUJoVXN5ajkxTDAvS3VDMk8zWUdlYy9Dblk0Smd5?=
- =?utf-8?B?TGFNYUx2b0R1bFVlNmNOdGtYcmVBeHZLTFFxUG1KY3lnWDZoSWdYUmJlZUxM?=
- =?utf-8?B?eTc5VUNwYXFaRktKWW9LZjBJcHRHRDVLYUN1Z1gva2l3TVZoSFpoTmhLdUxj?=
- =?utf-8?B?WDByZlBDb3k5Wkw1bXg3NDlmL1ZMdXM0cmhXQjBFMUVsOFRlRHRINE9FZngr?=
- =?utf-8?B?WUtkTFhTNHpZajJTMmRXanlyOGp1R2QzMitxS3dhbEVuUzM4VDh4RVo1ZFl2?=
- =?utf-8?B?Mng0QWxwWEgyTGpFSTVpWjVyUXBrWXFjWDNPTGQvUUFmYi95dDVHYy9vb0Nm?=
- =?utf-8?B?Nm5hemlmc0Y1ZEZTWGpwTXB0aDYvQXBXZGk1TmMxaXEvK2JSQkdqOEFRTjNI?=
- =?utf-8?B?VFg4c093dm01cFpXQ241WXZwNEVPKzZrOFpPdmExMGUwdzh3TkMraExEcjEr?=
- =?utf-8?B?RGNhZ1dtZEtpQlNSOHZiMnhYTVhXSXdKeHBkN0dYRGxoSDFMMHlVU1c3ay90?=
- =?utf-8?B?R0VpOFR6QnkwbHIxYmhGaVNENUMwZFpHNW02U25WQUx3cGpCdkdaV1lDMUox?=
- =?utf-8?B?WGZ6bEYzcmRFRkgxK2xGd2NiQXgxRnBTSDJkdkNzTmNsajB1MGZPTEJqUlV2?=
- =?utf-8?B?bHdLeURqV2tZTStpREtKUk5MWVNJSW9KdDVsL3V4bktYVmxJU0lkeU5TNEc5?=
- =?utf-8?B?WXdJYThMNloxZ3ZvSUV6a3BPZ1FPWjVtTzQwOTg0STlwMnpFZXVFTTh3SjI0?=
- =?utf-8?B?K0M0M1N2SEF0SGt4Qk5aU1F3Sy9sQU9yTEhpOGthZlpYMmw2OFh6SThHeHZU?=
- =?utf-8?B?VlhWU3pFc3hyWGMyd3BsUUtzUFVIeEVaQzVTNGpnYUxPMC9VMHJZQ3dFU2Qv?=
- =?utf-8?B?MExRc0lCMnNvNWZYa1I1MTNzdktEamY3WVBxTk9WQytjWlVDeXkwaVdkUFQ0?=
- =?utf-8?B?OVArZHRVOEQrVkYzTmZ2NENzRHQyNWpLTElRNnp6TkZ0RWl2M2FwamR1N2xF?=
- =?utf-8?B?bFJrRTJZcGVBRGZ0Ykdpd2tNK0FwZHIzSHBJbWd3ZnBZMW1IeVUweGtmZjBn?=
- =?utf-8?B?MFJ0Qk5QcEo2cG1GSU9YemVpVHBLWVJaaDROUGdjZys4Mkl4MjRVNkNKc1RP?=
- =?utf-8?B?d0xlWGU4MDJDVytYN0Y4dUZHZTFBSHVuNHpjRTV1OXliOHFhNFZyMndvRjZq?=
- =?utf-8?B?dUlTN1FhSzZBVFQwd09HZHcwNEpiRmUzeDVUK05CblpDdUlIWWhGbnVHNm81?=
- =?utf-8?B?RlhjcTNoKzJzd0o1NU5GaUQ4SVdKekxqMlBUQnFoZkkySkJtck1QZDUxVzZo?=
- =?utf-8?B?aE5selJmNXlWNytsQjYzaldJYXVjUldJUmpReVZ3N3Z2cmQ2TzFtcDEvYXJ1?=
- =?utf-8?B?ckhNRkZkUWZGVElJWWdia29hdzdaNlYxNUdsT1U1dzVGQ1ZJL0J0MFVadHJ1?=
- =?utf-8?B?L0E0Ry9FWUhSOTJMZlJsSEJVcVpTUG5zVWFVU05PalJ0WkJmNnllTHJ4Vk8z?=
- =?utf-8?B?cTQwR1JqVHpVY2w2NHJnK2xUTllsNXAwYUFwOHIzQXJISERpVGN0ZXFoL3pi?=
- =?utf-8?B?aW9FTERDcmNSQ1hibG02NEVkQ0lvUVdPRmw1bW9yQWhoekpQeitPUkw3Lyt4?=
- =?utf-8?B?SDZ0ZzV5U0l5T1RYQnRtUE5XV3gyWnlTam1NcHNrWGp0dHlaVFYvTnpNd3Nx?=
- =?utf-8?B?d0RUMmRtREJkckRIaDdhNnNoa1Z2NzZtblBOcmVKRFhNcy9nTjhUTFdMZ2xC?=
- =?utf-8?B?Z1BGY01TVGhVSkovZkdGNmR2UGptZ3hZb0dnYUhLb25YUWJHL2FRTHQ3ZVVm?=
- =?utf-8?B?aU9yS00ya3NhakJ4SUx6enRSU3NQZGQySWtyQjBKQW9jazV6dWdsbTQ3blpJ?=
- =?utf-8?B?SW90NS8wMFZpVjhrdSsrU3V5SDRKdVJCOW1OVzVmcGhjWWR3eTJyWElIMmd2?=
- =?utf-8?B?aFEwRTJNRWljbERTTm51anlNdDd1Tlg0RmQvL0xPY2Rld0NuRFZMU3pUNk9i?=
- =?utf-8?B?VW9KeDNIZVdpbnRwUGRFOGptczBuUHcyK3RhRHA3ZUdzKzVLTDBHdVM1cnI1?=
- =?utf-8?B?SURqYWMyNnVSR1NLZ2g2N3RFTlhBbktxM21GKzhQbGZUSmZ3TTVlWG1wUHcz?=
- =?utf-8?Q?pGFm1X2n5WQVyqzUfou3LO8=3D?=
-X-OriginatorOrg: cornelisnetworks.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e14b6d4-af0d-41de-9d7e-08dab11472b5
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR01MB2610.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 14:24:21.0347
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RhmnzzaYZTpVVXho+sf/chgOnxxwDZBZk8Lqr1ZAsWqUmmzO8b0jeiEhefNeQr26XmOOA7ccHCU0sl6nagG+PZ2RP0LLATd4QpHiZ86Lcq4R3CPLDOPO/AsyiU82ezcE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR01MB2154
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012064911.GN4221@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 4:41 AM, Leon Romanovsky wrote:
-> On Mon, Oct 17, 2022 at 05:26:52PM +0300, Natalia Petrova wrote:
->> rvt_qp_exit() checks 'rdi->qp_dev' for NULL, but the pointer is
->> dereferenced before that in rvt_free_all_qps().
->>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>
->> Fixes: f92e48718889 ("IB/rdmavt: Reset all QPs when the device is shut
->> down")
+On Tue, Oct 11, 2022 at 11:49:11PM -0700, Paul E. McKenney wrote:
+> On Tue, Oct 11, 2022 at 09:18:11PM +0800, Yu Liao wrote:
+> > Hello,
+> > 
+> > When I run syzkaller, a deadlock problem occurs. The call stack is as follows:
+> > [ 1088.244366][    C1] ======================================================
+> > [ 1088.244838][    C1] WARNING: possible circular locking dependency detected
+> > [ 1088.245313][    C1] 5.10.0-04424-ga472e3c833d3 #1 Not tainted
+> > [ 1088.245745][    C1] ------------------------------------------------------
 > 
-> Please never break fixes line.
+> It is quite possible that an unfortunate set of commits were backported
+> to v5.10.  Could you please bisect?
 > 
->> Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
->> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
->> ---
->>  drivers/infiniband/sw/rdmavt/qp.c | 9 ++++++---
->>  1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
->> index 3acab569fbb9..06e755975f61 100644
->> --- a/drivers/infiniband/sw/rdmavt/qp.c
->> +++ b/drivers/infiniband/sw/rdmavt/qp.c
->> @@ -459,13 +459,16 @@ static unsigned rvt_free_all_qps(struct rvt_dev_info *rdi)
->>   */
->>  void rvt_qp_exit(struct rvt_dev_info *rdi)
->>  {
->> -	u32 qps_inuse = rvt_free_all_qps(rdi);
->> +	u32 qps_inuse = 0;
->> +
->> +	if (!rdi->qp_dev)
->> +		return;
->> +
->> +	qps_inuse = rvt_free_all_qps(rdi);
+> > [ 1088.246214][    C1] syz-executor.2/932 is trying to acquire lock:
+> > [ 1088.246628][    C1] ffffa0001440c418 (rcu_node_0){..-.}-{2:2}, at:
+> > __rcu_irq_enter_check_tick+0x128/0x2f4
+> > [ 1088.247330][    C1]
+> > [ 1088.247330][    C1] but task is already holding lock:
+> > [ 1088.247830][    C1] ffff000224d0c298 (&rq->lock){-.-.}-{2:2}, at:
+> > try_to_wake_up+0x6e0/0xd40
+> > [ 1088.248424][    C1]
+> > [ 1088.248424][    C1] which lock already depends on the new lock.
+> > [ 1088.248424][    C1]
+> > [ 1088.249127][    C1]
+> > [ 1088.249127][    C1] the existing dependency chain (in reverse order) is:
+> > [ 1088.249726][    C1]
+> > [ 1088.249726][    C1] -> #1 (&rq->lock){-.-.}-{2:2}:
+> > [ 1088.250239][    C1]        validate_chain+0x6dc/0xb0c
+> > [ 1088.250591][    C1]        __lock_acquire+0x498/0x940
+> > [ 1088.250942][    C1]        lock_acquire+0x228/0x580
+> > [ 1088.251346][    C1]        _raw_spin_lock_irqsave+0xc0/0x15c
+> > [ 1088.251758][    C1]        resched_cpu+0x5c/0x110
+> > [ 1088.252091][    C1]        rcu_implicit_dynticks_qs+0x2b0/0x5d0
+> > [ 1088.252501][    C1]        force_qs_rnp+0x244/0x39c
+> > [ 1088.252847][    C1]        rcu_gp_fqs_loop+0x2e4/0x440
+> > [ 1088.253219][    C1]        rcu_gp_kthread+0x1a4/0x240
+> > [ 1088.253597][    C1]        kthread+0x20c/0x260
+> > [ 1088.253963][    C1]        ret_from_fork+0x10/0x18
+> > [ 1088.254389][    C1]
+> > [ 1088.254389][    C1] -> #0 (rcu_node_0){..-.}-{2:2}:
+> > [ 1088.255296][    C1]        check_prev_add+0xe0/0x105c
+> > [ 1088.256000][    C1]        check_prevs_add+0x1c8/0x3d4
+> > [ 1088.256693][    C1]        validate_chain+0x6dc/0xb0c
+> > [ 1088.257372][    C1]        __lock_acquire+0x498/0x940
+> > [ 1088.257731][    C1]        lock_acquire+0x228/0x580
+> > [ 1088.258079][    C1]        _raw_spin_lock+0xa0/0x120
+> > [ 1088.258425][    C1]        __rcu_irq_enter_check_tick+0x128/0x2f4
+> > [ 1088.258844][    C1]        rcu_nmi_enter+0xc4/0xd0
 > 
-> These lines are not needed.
-> 
->>  
->>  	if (qps_inuse)
->>  		rvt_pr_err(rdi, "QP memory leak! %u still in use\n",
->>  			   qps_inuse);
->> -	if (!rdi->qp_dev)
->> -		return;
-> 
-> It is enough to delete these two lines. At this stage, rdi->qp_dev always
-> exists as it was created in rvt_register_device().
-> 
+> This is looking like we took an interrupt while holding an rq lock.
+> Am I reading this correctly?  If so, that is bad in and of itself.
 
-Agree with Leon here. qp_dev is created in rvt_register_device which will fail
-if the qp dev allocation fails in rvt_driver_qp_init().
+In this case it's not an interrupt; per the entry bits below:
 
--Denny
+> > [ 1088.259183][    C1]        arm64_enter_el1_dbg+0xb0/0x160
+> > [ 1088.259623][    C1]        el1_dbg+0x28/0x50
+> > [ 1088.260011][    C1]        el1_sync_handler+0xf4/0x150
+> > [ 1088.260481][    C1]        el1_sync+0x74/0x100
+
+... this is a synchronous debug exception, which is one of:
+
+ * A hardware single-step exception
+ * A hardware watchpoint
+ * A hardware breakpoint
+ * A software breakpoint (i.e. a BRK instruction)
+
+... and we have to treat those as NMIs.
+
+That could be a kprobe, or a WARN, etc.
+
+Thanks,
+Mark.
+
+> > [ 1088.260800][    C1]        update_irq_load_avg+0x5d8/0xaa0
+> > [ 1088.261194][    C1]        update_rq_clock_task+0xb8/0x2d0
+> > [ 1088.261595][    C1]        update_rq_clock+0x8c/0x120
+> > [ 1088.261952][    C1]        try_to_wake_up+0x70c/0xd40
+> > [ 1088.262305][    C1]        wake_up_process+0x1c/0x24
+> > [ 1088.262652][    C1]        wakeup_softirqd+0x58/0x64
+> > [ 1088.263000][    C1]        __do_softirq+0x6b8/0x95c
+> > [ 1088.263345][    C1]        irq_exit+0x27c/0x2d0
+> > [ 1088.263674][    C1]        __handle_domain_irq+0x100/0x184
+> > [ 1088.264049][    C1]        gic_handle_irq+0xc0/0x760
+> > [ 1088.264394][    C1]        el1_irq+0xb8/0x140
+> > [ 1088.264709][    C1]        _raw_spin_unlock_irqrestore+0x7c/0x130
+> > [ 1088.265134][    C1]        __aarch64_insn_write+0xc4/0x100
+> > [ 1088.265516][    C1]        aarch64_insn_patch_text_nosync+0x40/0xa0
+> > [ 1088.265942][    C1]        ftrace_make_nop+0x120/0x1a4
+> > [ 1088.266300][    C1]        __ftrace_replace_code+0xdc/0x160
+> > [ 1088.266684][    C1]        ftrace_replace_code+0x100/0x1a4
+> > [ 1088.267063][    C1]        ftrace_modify_all_code+0x1a8/0x260
+> > [ 1088.267456][    C1]        arch_ftrace_update_code+0x1c/0x2c
+> > [ 1088.267847][    C1]        ftrace_run_update_code+0x38/0xa4
+> > [ 1088.268259][    C1]        ftrace_shutdown.part.0+0x2dc/0x550
+> > [ 1088.268682][    C1]        unregister_ftrace_function+0x74/0xc0
+> > [ 1088.269117][    C1]        perf_ftrace_event_register+0x130/0x1a0
+> > [ 1088.269559][    C1]        perf_trace_destroy+0x68/0x9c
+> > [ 1088.269938][    C1]        tp_perf_event_destroy+0x1c/0x2c
+> > [ 1088.270340][    C1]        _free_event+0x2f4/0x670
+> > [ 1088.270696][    C1]        put_event+0x7c/0x90
+> > [ 1088.271031][    C1]        perf_event_release_kernel+0x3c0/0x450
+> > [ 1088.271467][    C1]        perf_release+0x24/0x34
+> > [ 1088.271824][    C1]        __fput+0x1dc/0x500
+> > [ 1088.272155][    C1]        ____fput+0x24/0x30
+> > [ 1088.272471][    C1]        task_work_run+0xf4/0x1ec
+> > [ 1088.272811][    C1]        do_notify_resume+0x378/0x410
+> > [ 1088.273180][    C1]        work_pending+0xc/0x198
+> > [ 1088.273504][    C1]
+> > [ 1088.273504][    C1] other info that might help us debug this:
+> > [ 1088.273504][    C1]
+> > [ 1088.274168][    C1]  Possible unsafe locking scenario:
+> > [ 1088.274168][    C1]
+> > [ 1088.274658][    C1]        CPU0                    CPU1
+> > [ 1088.275012][    C1]        ----                    ----
+> > [ 1088.275367][    C1]   lock(&rq->lock);
+> > [ 1088.275646][    C1]                                lock(rcu_node_0);
+> > [ 1088.276082][    C1]                                lock(&rq->lock);
+> > [ 1088.276517][    C1]   lock(rcu_node_0);
+> > [ 1088.276797][    C1]
+> > [ 1088.276797][    C1]  *** DEADLOCK ***
+> > [ 1088.276797][    C1]
+> > [ 1088.277339][    C1] 4 locks held by syz-executor.2/932:
+> > [ 1088.277696][    C1]  #0: ffffa000145251e8 (event_mutex){+.+.}-{3:3}, at:
+> > perf_trace_destroy+0x34/0x9c
+> > [ 1088.278345][    C1]  #1: ffffa000144fb5a8 (ftrace_lock){+.+.}-{3:3}, at:
+> > unregister_ftrace_function+0x2c/0xc0
+> > [ 1088.279034][    C1]  #2: ffff0000c0e0c968 (&p->pi_lock){-.-.}-{2:2}, at:
+> > try_to_wake_up+0xbc/0xd40
+> > [ 1088.279672][    C1]  #3: ffff000224d0c298 (&rq->lock){-.-.}-{2:2}, at:
+> > try_to_wake_up+0x6e0/0xd40
+> > [ 1088.280300][    C1]
+> > [ 1088.280300][    C1] stack backtrace:
+> > [ 1088.280706][    C1] CPU: 1 PID: 932 Comm: syz-executor.2 Not tainted
+> > 5.10.0-04424-ga472e3c833d3 #1
+> > [ 1088.281315][    C1] Hardware name: linux,dummy-virt (DT)
+> > [ 1088.281679][    C1] Call trace:
+> > [ 1088.281910][    C1]  dump_backtrace+0x0/0x41c
+> > [ 1088.282218][    C1]  show_stack+0x30/0x40
+> > [ 1088.282505][    C1]  dump_stack+0x1fc/0x2c0
+> > [ 1088.282807][    C1]  print_circular_bug+0x1ec/0x284
+> > [ 1088.283149][    C1]  check_noncircular+0x1cc/0x1ec
+> > [ 1088.283486][    C1]  check_prev_add+0xe0/0x105c
+> > [ 1088.283804][    C1]  check_prevs_add+0x1c8/0x3d4
+> > [ 1088.284126][    C1]  validate_chain+0x6dc/0xb0c
+> > [ 1088.284442][    C1]  __lock_acquire+0x498/0x940
+> > [ 1088.284764][    C1]  lock_acquire+0x228/0x580
+> > [ 1088.285072][    C1]  _raw_spin_lock+0xa0/0x120
+> > [ 1088.285392][    C1]  __rcu_irq_enter_check_tick+0x128/0x2f4
+> > [ 1088.285779][    C1]  rcu_nmi_enter+0xc4/0xd0
+> > [ 1088.286082][    C1]  arm64_enter_el1_dbg+0xb0/0x160
+> > [ 1088.286420][    C1]  el1_dbg+0x28/0x50
+> > [ 1088.286689][    C1]  el1_sync_handler+0xf4/0x150
+> > [ 1088.287010][    C1]  el1_sync+0x74/0x100
+> > [ 1088.287295][    C1]  update_irq_load_avg+0x5d8/0xaa0
+> > [ 1088.287640][    C1]  update_rq_clock_task+0xb8/0x2d0
+> > [ 1088.287988][    C1]  update_rq_clock+0x8c/0x120
+> > [ 1088.288309][    C1]  try_to_wake_up+0x70c/0xd40
+> > [ 1088.288629][    C1]  wake_up_process+0x1c/0x24
+> > [ 1088.288945][    C1]  wakeup_softirqd+0x58/0x64
+> > [ 1088.289271][    C1]  __do_softirq+0x6b8/0x95c
+> > [ 1088.289580][    C1]  irq_exit+0x27c/0x2d0
+> > [ 1088.289868][    C1]  __handle_domain_irq+0x100/0x184
+> > [ 1088.290211][    C1]  gic_handle_irq+0xc0/0x760
+> > [ 1088.290522][    C1]  el1_irq+0xb8/0x140
+> > [ 1088.290801][    C1]  _raw_spin_unlock_irqrestore+0x7c/0x130
+> > [ 1088.291188][    C1]  __aarch64_insn_write+0xc4/0x100
+> > [ 1088.291533][    C1]  aarch64_insn_patch_text_nosync+0x40/0xa0
+> > [ 1088.291928][    C1]  ftrace_make_nop+0x120/0x1a4
+> > [ 1088.292256][    C1]  __ftrace_replace_code+0xdc/0x160
+> > [ 1088.292613][    C1]  ftrace_replace_code+0x100/0x1a4
+> > [ 1088.292963][    C1]  ftrace_modify_all_code+0x1a8/0x260
+> > [ 1088.293335][    C1]  arch_ftrace_update_code+0x1c/0x2c
+> > [ 1088.293694][    C1]  ftrace_run_update_code+0x38/0xa4
+> > [ 1088.294048][    C1]  ftrace_shutdown.part.0+0x2dc/0x550
+> > [ 1088.294415][    C1]  unregister_ftrace_function+0x74/0xc0
+> > [ 1088.294787][    C1]  perf_ftrace_event_register+0x130/0x1a0
+> > [ 1088.295172][    C1]  perf_trace_destroy+0x68/0x9c
+> > [ 1088.295500][    C1]  tp_perf_event_destroy+0x1c/0x2c
+> > [ 1088.295850][    C1]  _free_event+0x2f4/0x670
+> > [ 1088.296154][    C1]  put_event+0x7c/0x90
+> > [ 1088.296439][    C1]  perf_event_release_kernel+0x3c0/0x450
+> > [ 1088.296820][    C1]  perf_release+0x24/0x34
+> > [ 1088.297125][    C1]  __fput+0x1dc/0x500
+> > [ 1088.297404][    C1]  ____fput+0x24/0x30
+> > [ 1088.297682][    C1]  task_work_run+0xf4/0x1ec
+> > [ 1088.297989][    C1]  do_notify_resume+0x378/0x410
+> > [ 1088.298316][    C1]  work_pending+0xc/0x198
+> > 
+> > I checked the code. The following scenarios may cause deadlock.
+> > 
+> > static void ttwu_queue(struct task_struct *p, int cpu, int wake_flags)
+> > {
+> >     struct rq *rq = cpu_rq(cpu);
+> >     struct rq_flags rf;
+> > 
+> >     if (ttwu_queue_wakelist(p, cpu, wake_flags))
+> >         return;
+> > 
+> >     rq_lock(rq, &rf);
+> >     update_rq_clock(rq);	
+> > 		===> el1_dbg
+> > 			  ->rcu_nmi_enter
+> > 			    ->__rcu_irq_enter_check_tick
+> > 				  ->raw_spin_lock_rcu_node(rdp->mynode);
+> >     ttwu_do_activate(rq, p, wake_flags, &rf);
+> >     rq_unlock(rq, &rf);
+> > }
+> > 
+> > static void rcu_gp_fqs(bool first_time)
+> > {
+> >     struct rcu_node *rnp = rcu_get_root();
+> > 
+> >     WRITE_ONCE(rcu_state.gp_activity, jiffies);
+> >     WRITE_ONCE(rcu_state.n_force_qs, rcu_state.n_force_qs + 1);
+> >     if (first_time) {
+> >         /* Collect dyntick-idle snapshots. */
+> >         force_qs_rnp(dyntick_save_progress_counter);
+> >     } else {
+> >         /* Handle dyntick-idle and offline CPUs. */
+> >         force_qs_rnp(rcu_implicit_dynticks_qs);	
+> > 			===>raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> > 			===>rcu_implicit_dynticks_qs
+> > 				  ->resched_cpu
+> > 				    ->raw_spin_lock_irqsave(&rq->lock, flags);
+> >     }
+> >     /* Clear flag to prevent immediate re-entry. */
+> >     if (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) {
+> >         raw_spin_lock_irq_rcu_node(rnp);
+> >         WRITE_ONCE(rcu_state.gp_flags,
+> >                READ_ONCE(rcu_state.gp_flags) & ~RCU_GP_FLAG_FQS);
+> >         raw_spin_unlock_irq_rcu_node(rnp);
+> >     }
+> > }
+> > 
