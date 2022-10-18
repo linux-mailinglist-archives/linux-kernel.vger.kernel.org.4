@@ -2,122 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A0060365C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CE5603646
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 01:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiJRXES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 19:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S229680AbiJRXDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 19:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiJRXEI (ORCPT
+        with ESMTP id S229490AbiJRXDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 19:04:08 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB36D25B1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:04:03 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id o67so10288298qvo.13
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:04:03 -0700 (PDT)
+        Tue, 18 Oct 2022 19:03:04 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A94BCBAF
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:03:02 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m16so22752025edc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 16:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j5onxALWPECvEQDbcc1fJ7WbhZUDY/4v0hgNP7t4FyY=;
-        b=uuC5cdGZPruoYSQCrJao34nCJk7xGMr5lItBdzuAKncJM5qZFaEtPqF9dAVEuDckDu
-         p6yHAcJbD7ufXcArqgAFJbe65sgJywCblw1tuPel3OWZt3sE+CdoEW4MrQMbGGBHL++A
-         C7oP/UDmLY3zXMid9PROm0ctwsMvm3LuFtsNUSnsrktdmj0p0GsCi23sNn1mIaA8KIGK
-         gmruarPDwwdQPR/EVQ5/m07KMv6tG6OYc3wYCLMUSDBUGgX5uACGL8pJVntjuW853bNv
-         duX1VNKrjvEpydcptjRQWN200asq7DOPoAEAFWhhiqm8NFRrPm6bIEnndBWiXrDHiZsP
-         PlDg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5PU7hPEIqMrr7mHQR+by2rxkaknzANGyzbduzUJ57MQ=;
+        b=C/U2QxOqKuFQw6hfJdYnYcqQvR/y2e6tiQAND7kPLzGadV4LgukBu6YEvAOMpIl9s7
+         8Xq8tWyKVz2nFeU2nlamoBkmq/bWbvl2taaogoiHTB7fq25IZ1F8xVDUA+hcYmlO4T9I
+         eouOChWSDcNbMfKJo8N/SJLX6DOzycmRofhkKM26QpqZPgMGHEUcv/cyL40AXYh87Bhi
+         F/PJpG1jP4dCVQaq0p6Dp2eqGxoFLINcIKDFmkGSONYGZauiyE/zabK9nUViZ8/mamTs
+         NirhB6899kjetW3Pz2k1S51/c+qDIh3j0EryVbrMt46zNxJ8OYZjfzgSCpiLPOL7uIAk
+         0YYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j5onxALWPECvEQDbcc1fJ7WbhZUDY/4v0hgNP7t4FyY=;
-        b=CWmsahOXnBfByFuru9vi++zXRynn0/RlA6FnG76nvwpMDLDBPDPFLam7/uur+lnpH2
-         GcD7V9mNepVMJ8Xlbvdi1B8Rgt3oTdVMu0ZaqqEh3xKMWZIW0+9idJwACMPa9piMNrNJ
-         vIIAnXdks6hgxq5kcKtoJz5cjk0U4F/zr6LeICtaXkKqT38mB8hP1+5zx8A0/fGmL8u+
-         urT4NoHZ99mG48p+JAqQoCQ9uUzJpWGLPK4LQry8oVXxxWmkXQryrRQDmQrTH9HapHn6
-         Q8Sav1cPsjuTm4TLi4i0HcULFifyd6P7GWiJYcCxe7CSNkfyiLsETps+8SzO/9cRCeSn
-         bd8g==
-X-Gm-Message-State: ACrzQf27bnmTWRscEVKsHEzfV/3rEntxJO/3bI26Ftc0o4WVBA8cmJIi
-        XuQrGifKBZfbqdPaXNs9ZfhAEw==
-X-Google-Smtp-Source: AMsMyM6Q3AYdLg49yo6eXDgSEVL7g3/Syin8kl9+zJaWS0odmGgUQ5IYHT0z3rqloxzxIYSrTeTqeg==
-X-Received: by 2002:a05:6214:e49:b0:4b3:f24e:91ac with SMTP id o9-20020a0562140e4900b004b3f24e91acmr4064637qvc.41.1666134242891;
-        Tue, 18 Oct 2022 16:04:02 -0700 (PDT)
-Received: from krzk-bin.MSRM (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id 134-20020a370a8c000000b006cbcdc6efedsm3279010qkk.41.2022.10.18.16.04.00
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5PU7hPEIqMrr7mHQR+by2rxkaknzANGyzbduzUJ57MQ=;
+        b=gpQMIhBjTo/TaTpiOJgeDiH6FZEDkjafaege/DWz/P2WAefL/UJlaKqTZEamzipiDn
+         cyDNEEYulzglrRS5GojLKqG0gd93N18d4/FU4CUv+HiWoHCfQfRq43GolGip2w/xqV+o
+         ll2SobTX8RfU7xaI5fCYrxQUn6YuYHDZ7TfiV9ORSxUkP2SDytHaSjCKEtH1GfVxTEns
+         24eT3KLEXWXws0OZYgfuN8wUyB8+gA9RczspjSy6CItS6upk0XKRtxcPjd2iFk51fL41
+         2ad6NpiuLlLM+44dwei4qrDG7gpIH4rFIlfZYbsNduMZFKwTOlKoxqUEK4Q2lCYKbHY1
+         C1Gg==
+X-Gm-Message-State: ACrzQf120e9yC8N2AvhKUxD7UrKgkRatZuvj4RyUfFwlrKsUJk7pMAPH
+        lQeBsmG5IFSpOyadLC9CIlw=
+X-Google-Smtp-Source: AMsMyM5tKkRA+5+GaUxKMmnE5vtiiKScjjT/cObwVa/r9Sq8PoVpcyibBB4YUY9g3ZK6TCfLzMv4Iw==
+X-Received: by 2002:a05:6402:400d:b0:45c:9a5c:444a with SMTP id d13-20020a056402400d00b0045c9a5c444amr4609636eda.283.1666134181473;
+        Tue, 18 Oct 2022 16:03:01 -0700 (PDT)
+Received: from localhost (188.28.2.110.threembb.co.uk. [188.28.2.110])
+        by smtp.gmail.com with ESMTPSA id gc37-20020a1709072b2500b0077d6f628e14sm8119188ejc.83.2022.10.18.16.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 16:04:02 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v2 5/5] arm64: dts: qcom: sm8450: Add GPI DMA compatible fallback
-Date:   Tue, 18 Oct 2022 19:03:52 -0400
-Message-Id: <20221018230352.1238479-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221018230352.1238479-1-krzysztof.kozlowski@linaro.org>
-References: <20221018230352.1238479-1-krzysztof.kozlowski@linaro.org>
+        Tue, 18 Oct 2022 16:03:00 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org
+Cc:     kuninori.morimoto.gx@renesas.com, spujar@nvidia.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] ASoC: simple-card: Fix up checks for HW param fixups
+Date:   Wed, 19 Oct 2022 00:04:09 +0100
+Message-Id: <20221018230409.610538-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use SM6350 as fallback for GPI DMA, to indicate devices are compatible
-and that drivers can bind with only one compatible.
+The "convert-xxx" properties only have an effect for DPCM DAI links.
+A DAI link is only created as DPCM if the device tree requires it;
+part of this involves checking for the use of "convert-xxx" properties.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+When the convert-sample-format property was added, the checks got out
+of sync. A DAI link that specified only convert-sample-format but did
+not pass any of the other DPCM checks would not go into DPCM mode and
+the convert-sample-format property would be silently ignored.
+
+Fix this by adding a function to do the "convert-xxx" property checks,
+instead of open-coding it in simple-card and audio-graph-card. And add
+"convert-sample-format" to the check function so that DAI links using
+it will be initialized correctly.
+
+Fixes: 047a05366f4b ("ASoC: simple-card-utils: Fixup DAI sample format")
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/sound/simple_card_utils.h     |  1 +
+ sound/soc/generic/audio-graph-card.c  |  2 +-
+ sound/soc/generic/simple-card-utils.c | 15 +++++++++++++++
+ sound/soc/generic/simple-card.c       |  3 +--
+ 4 files changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index d32f08df743d..e01a019d8b23 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -730,7 +730,7 @@ gcc: clock-controller@100000 {
- 		};
+diff --git a/include/sound/simple_card_utils.h b/include/sound/simple_card_utils.h
+index a0b827f0c2f6..cfed741e0181 100644
+--- a/include/sound/simple_card_utils.h
++++ b/include/sound/simple_card_utils.h
+@@ -177,6 +177,7 @@ void asoc_simple_convert_fixup(struct asoc_simple_data *data,
+ 				      struct snd_pcm_hw_params *params);
+ void asoc_simple_parse_convert(struct device_node *np, char *prefix,
+ 			       struct asoc_simple_data *data);
++bool asoc_simple_convert_is_required(const struct asoc_simple_data *data);
  
- 		gpi_dma2: dma-controller@800000 {
--			compatible = "qcom,sm8450-gpi-dma";
-+			compatible = "qcom,sm8450-gpi-dma", "qcom,sm6350-gpi-dma";
- 			#dma-cells = <3>;
- 			reg = <0 0x800000 0 0x60000>;
- 			interrupts = <GIC_SPI 588 IRQ_TYPE_LEVEL_HIGH>,
-@@ -1058,7 +1058,7 @@ spi21: spi@898000 {
- 		};
+ int asoc_simple_parse_routing(struct snd_soc_card *card,
+ 				      char *prefix);
+diff --git a/sound/soc/generic/audio-graph-card.c b/sound/soc/generic/audio-graph-card.c
+index b327372f2e4a..7804625b131e 100644
+--- a/sound/soc/generic/audio-graph-card.c
++++ b/sound/soc/generic/audio-graph-card.c
+@@ -417,7 +417,7 @@ static inline bool parse_as_dpcm_link(struct asoc_simple_priv *priv,
+ 	 * or has convert-xxx property
+ 	 */
+ 	if ((of_get_child_count(codec_port) > 1) ||
+-	    (adata->convert_rate || adata->convert_channels))
++	    asoc_simple_convert_is_required(adata))
+ 		return true;
  
- 		gpi_dma0: dma-controller@900000 {
--			compatible = "qcom,sm8450-gpi-dma";
-+			compatible = "qcom,sm8450-gpi-dma", "qcom,sm6350-gpi-dma";
- 			#dma-cells = <3>;
- 			reg = <0 0x900000 0 0x60000>;
- 			interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>,
-@@ -1394,7 +1394,7 @@ uart7: serial@99c000 {
- 		};
+ 	return false;
+diff --git a/sound/soc/generic/simple-card-utils.c b/sound/soc/generic/simple-card-utils.c
+index bef16833c487..7a708be24656 100644
+--- a/sound/soc/generic/simple-card-utils.c
++++ b/sound/soc/generic/simple-card-utils.c
+@@ -85,6 +85,21 @@ void asoc_simple_parse_convert(struct device_node *np,
+ }
+ EXPORT_SYMBOL_GPL(asoc_simple_parse_convert);
  
- 		gpi_dma1: dma-controller@a00000 {
--			compatible = "qcom,sm8450-gpi-dma";
-+			compatible = "qcom,sm8450-gpi-dma", "qcom,sm6350-gpi-dma";
- 			#dma-cells = <3>;
- 			reg = <0 0xa00000 0 0x60000>;
- 			interrupts = <GIC_SPI 279 IRQ_TYPE_LEVEL_HIGH>,
++/**
++ * asoc_simple_convert_is_required() - Query if HW param conversion was requested
++ * @data: Link data.
++ *
++ * Returns true if any HW param conversion was requested for this DAI link with
++ * any "convert-xxx" properties.
++ */
++bool asoc_simple_convert_is_required(const struct asoc_simple_data *data)
++{
++	return data->convert_rate ||
++	       data->convert_channels ||
++	       data->convert_sample_format;
++}
++EXPORT_SYMBOL_GPL(asoc_simple_convert_is_required);
++
+ int asoc_simple_parse_daifmt(struct device *dev,
+ 			     struct device_node *node,
+ 			     struct device_node *codec,
+diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
+index 78419e18717d..675991cdee87 100644
+--- a/sound/soc/generic/simple-card.c
++++ b/sound/soc/generic/simple-card.c
+@@ -393,8 +393,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
+ 			 * or has convert-xxx property
+ 			 */
+ 			if (dpcm_selectable &&
+-			    (num > 2 ||
+-			     adata.convert_rate || adata.convert_channels)) {
++			    (num > 2 || asoc_simple_convert_is_required(&adata))) {
+ 				/*
+ 				 * np
+ 				 *	 |1(CPU)|0(Codec)  li->cpu
 -- 
-2.34.1
+2.38.0
 
