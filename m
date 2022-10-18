@@ -2,119 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1BE6028C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73476028DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiJRJwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
+        id S230224AbiJRJ4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiJRJwR (ORCPT
+        with ESMTP id S230216AbiJRJ4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:52:17 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E902B60D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:52:15 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-35711e5a5ceso131653517b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yT/863oLdP/+cPaioe/H9gJ2n+mzUsmGJInpfD0fWA=;
-        b=vgQUqOGz2jsZ1Ag97hWYKCqaEcyyNysPZOI/dRfJ6TrFps4rny0kAaSp79BDqTodui
-         GqepNKcbusjizNFym7FPoWggZhW/DXDilRob9n6dfXJWQr0aKOrpHHBtF6EY71NEHbNB
-         9p2MKHDAFw+bVxjQiWHj9HQeMUtSx0mmgC32CoXFPkOadxmdWhh3Xjh+0+RZuxyZN3Jp
-         8pCbk0zwZa6/vcz2aOjNaLOqQTH7JUkinENSvYvu9NUkGRAsyHtvuG3FhW11A7+Hy1ko
-         JP8+a0iJ7duSX80en8/l3HAFG68od9T78qQlnOANWJBLsyLwMKAJbnha8sQHnh7fsYD2
-         Q7ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7yT/863oLdP/+cPaioe/H9gJ2n+mzUsmGJInpfD0fWA=;
-        b=dPpTaNwu3b3f1Ade/IRJQd+Y3splZaKImkrPHrmN62hS4ropl8NBF8c6YjxF/dGezA
-         sk7U5b4bDH5TzFD1YxypI9zjBL/nZHuuJ66SpITxjM57OLzg75NmbcPvDqCppyelQmlD
-         FfsSWNc1rLq7uyamjL1tFLK0n14G6WkPNVYGcj1kluQbBWEfhhnNuLo0FRH2HJSP4+WO
-         8GrE788xVTCA5GfdavtAk+RauE5uHmdfzoS1Cfdrf6OkWBJRLO3UUQnQon6lGDT5CY5z
-         7hRSxKGTpFnS0QdZ7Ik3zDlQA+SYFQCboYF+NnTvBUkiRuDRazOtcFsudM8tB+2hkz7c
-         EWSA==
-X-Gm-Message-State: ACrzQf0U4sBxWJkbck0dhcJsFdfKC8AguM3hmNzWdkbLlKcWIhJKBAdx
-        jtB0xKQyPQ8241cPyrk2cqtpm/nB3C2v5wCLSVJHhA==
-X-Google-Smtp-Source: AMsMyM6aPRNFAUBNNYnUq9oUumpIVdp0vVrV7sCWZbLJfXnCM9jZHBb03NZGJGCh+XUEttlKgdFEbSyv3DhMosN/ToA=
-X-Received: by 2002:a0d:d806:0:b0:355:ea3e:cf69 with SMTP id
- a6-20020a0dd806000000b00355ea3ecf69mr1712464ywe.127.1666086735044; Tue, 18
- Oct 2022 02:52:15 -0700 (PDT)
+        Tue, 18 Oct 2022 05:56:17 -0400
+X-Greylist: delayed 13237 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 02:56:12 PDT
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E9DA2A85;
+        Tue, 18 Oct 2022 02:56:12 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1666086939tfc7fd05
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 18 Oct 2022 17:55:33 +0800 (CST)
+X-QQ-SSF: 01400000000000C0K000000A0000000
+X-QQ-FEAT: bQsUcYFpAAYBiBHsWQunkLgscl2cKPYwrjfuIFuXB3Pw4YAWydLHFD4pq8yv0
+        zIRhg0mXP01fi/51RsWMDou+7Owr+a6it+uOQrgIl18ujr9zJOMJLdQvyLM2U7rjvk/G5Dy
+        LqDck9PlY82qvKp5A+cOakwn0HgxryTKmGxR/PlzBaXtuPZ1X1jfErf07zrqbLq0ncmV79Z
+        UTV7qOSZ7+G7DMnEelIc0cA7NLRzow894pbHbGNbWXXlPJWY7ENgYm5RZWyaoWH7/3lcU+K
+        Ypx+xwizF0w3mzwsML0/tV9ddY0vmW71Pt6H8pM3XAgVyIXN4RVSBWV6/Jt54VIadcGvPU8
+        iB9W3w6aH93s5ApGKmIKDWgzhzTiz74my/Am+xGKAuDr9KSEuPfQmExXJyt/F1PcmUc9TFT
+        W5HOny0lpG8=
+X-QQ-GoodBg: 1
+From:   Manyi Li <limanyi@uniontech.com>
+To:     hdegoede@redhat.com
+Cc:     ike.pan@canonical.com, limanyi@uniontech.com,
+        linux-kernel@vger.kernel.org, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH v2] platform/x86: ideapad-laptop: Disable touchpad_switch
+Date:   Tue, 18 Oct 2022 17:53:23 +0800
+Message-Id: <20221018095323.14591-1-limanyi@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
+References: <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
 MIME-Version: 1.0
-References: <20221017145328.22090-1-johan+linaro@kernel.org> <20221017145328.22090-10-johan+linaro@kernel.org>
-In-Reply-To: <20221017145328.22090-10-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 18 Oct 2022 12:52:03 +0300
-Message-ID: <CAA8EJpqSWmy5Z4cmJnsdjMjkmACW7HSi-k5JxZ0gLCeUAWEnxQ@mail.gmail.com>
-Subject: Re: [PATCH 09/15] dt-bindings: phy: qcom,qmp-pcie: mark current
- bindings as legacy
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Ideapads for "Lenovo Yoga 3 Pro 1370" and "ZhaoYang K4e-IML" do not
+use EC to switch touchpad.
 
-On Mon, 17 Oct 2022 at 17:54, Johan Hovold <johan+linaro@kernel.org> wrote:
->
-> The current QMP PCIe PHY bindings are based on the original MSM8996
-> binding which provided multiple PHYs per IP block and these in turn were
-> described by child nodes.
->
-> Later QMP PCIe PHY blocks only provide a single PHY and the remnant
-> child node does not really reflect the hardware.
->
-> The original MSM8996 binding also ended up describing the individual
-> register blocks as belonging to either the wrapper node or the PHY child
-> nodes.
->
-> This is an unnecessary level of detail which has lead to problems when
-> later IP blocks using different register layouts have been forced to fit
-> the original mould rather than updating the binding. The bindings are
-> arguable also incomplete as they only the describe register blocks used
-> by the current Linux drivers (e.g. does not include the per lane PCS
-> registers).
+Reading VPCCMD_R_TOUCHPAD will return zero thus touchpad may be blocked
+unexpectedly.
 
-I'd like to point out that it's not only a problem peculiar to the
-PCIe PHYs. Other QMP PHY families also follow the same approach of
-separating the serdes into the common part and rx/tx/PCS/whatever into
-the PHY subnodes.
-For the USB+DP combo PHYs we have to have subnodes, however it would
-also be logical to move serdes register to the subnode devices,
-leaving only DP_COM in the base node.
+Signed-off-by: Manyi Li <limanyi@uniontech.com>
+---
+ drivers/platform/x86/ideapad-laptop.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-That said, I think we should rethink and agree on QMP PHY bindings,
-before renaming the bindings. And yes, I think we should also upgrade
-older DTs, keeping drivers backwards compatible (for some time?).
-
-> In preparation for adding new bindings for SC8280XP which further
-> bindings can be based on, mark the current bindings as "legacy".
->
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  .../{qcom,qmp-pcie-phy.yaml => qcom,qmp-pcie-phy-legacy.yaml} | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->  rename Documentation/devicetree/bindings/phy/{qcom,qmp-pcie-phy.yaml => qcom,qmp-pcie-phy-legacy.yaml} (98%)
-
+diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
+index abd0c81d62c4..33b3dfdd1b08 100644
+--- a/drivers/platform/x86/ideapad-laptop.c
++++ b/drivers/platform/x86/ideapad-laptop.c
+@@ -1533,6 +1533,24 @@ static const struct dmi_system_id hw_rfkill_list[] = {
+ 	{}
+ };
+ 
++static const struct dmi_system_id no_touchpad_switch_list[] = {
++	{
++	.ident = "Lenovo Yoga 3 Pro 1370",
++	.matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++		DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo YOGA 3"),
++		},
++	},
++	{
++	.ident = "ZhaoYang K4e-IML",
++	.matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++		DMI_MATCH(DMI_PRODUCT_VERSION, "ZhaoYang K4e-IML"),
++		},
++	},
++	{}
++};
++
+ static void ideapad_check_features(struct ideapad_private *priv)
+ {
+ 	acpi_handle handle = priv->adev->handle;
+@@ -1541,7 +1559,12 @@ static void ideapad_check_features(struct ideapad_private *priv)
+ 	priv->features.hw_rfkill_switch = dmi_check_system(hw_rfkill_list);
+ 
+ 	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
+-	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
++	if (acpi_dev_present("ELAN0634", NULL, -1))
++		priv->features.touchpad_ctrl_via_ec = 0;
++	else if (dmi_check_system(no_touchpad_switch_list))
++		priv->features.touchpad_ctrl_via_ec = 0;
++	else
++		priv->features.touchpad_ctrl_via_ec = 1;
+ 
+ 	if (!read_ec_data(handle, VPCCMD_R_FAN, &val))
+ 		priv->features.fan_mode = true;
 -- 
-With best wishes
-Dmitry
+2.20.1
+
