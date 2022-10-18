@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0378360206F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E6A602071
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbiJRB2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S229572AbiJRB23 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Oct 2022 21:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbiJRB2F (ORCPT
+        with ESMTP id S230037AbiJRB21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:28:05 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBAE85586
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:28:02 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id j188so14094182oih.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ilkmjMRXsx5bN+cKLCPs5nKC2+ATqDeP4QnxRLsugMY=;
-        b=ZzjlLZ4Wx4yqm5zbY/vF/fUjc8wYRue8JEToCLc7+q9CnNI4Ar2AkEJTT4HLh5dNmO
-         CWnN6eKNOFibZWC0diT/gstz/2zarzciwMhRp1t1ewMlVYYA1EpWBBaK01JnhJ9hYzSA
-         DBD3wzUx4+rIC98poEzR8BQTscvrSybtaxL27f+XOPEPryo6RevogBRh3nNt7EuFoIas
-         LYeIAgLijpKEH8j0wyQgsIeHe3X6y5/aFVcGYA7Pm8uy8OJ15VEG/t6VeSgEAYmySHm1
-         b9y35LIzAitN3379gakovwvJTyNILG1MwYgD05ZSKxdVZGfjOVk0oLznGWMJkKt3sptN
-         J1wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ilkmjMRXsx5bN+cKLCPs5nKC2+ATqDeP4QnxRLsugMY=;
-        b=KlLVfxQAhR+vo+HjOpkO7nF2OsTXqVwfgmEZR+8wRL5076K4MA92BXCFxhemrCIKn2
-         WcxTBhvMIiCieDLg4y6mKLDYe0Ub8Kkr1jRv9xhAk3gwPV/AWTzLLKk8N5wBHWnDm+f+
-         by1U+XU52GaSp7BBEg7dxch5m7Wg1r+YRns4crWT7q2khj5pD4O1G8PM1GGxg93jGoem
-         fB/VDrgU7UwkpHVySOr9QvfwW31/zTwSLDsPKrMODJiyRNXV/01yyakUX5Iig+BU+SUg
-         BwwR1uQCyQzbWq3R5jFsP60axPD2pvAr9Gt4DEntnHwSBRJ0/2poBTvZe8doXCcjb0ip
-         54vA==
-X-Gm-Message-State: ACrzQf1tiXVQxvO4c+T9ellCUJFihgZLpPjgK7yW+C89EKOqmz18AQTd
-        mWoVVvVNm9Oqi0YK8OS0WjU=
-X-Google-Smtp-Source: AMsMyM41az2Sl9WsDrici9XR23w8mdjfxyfa/Rp7Rod/2DwGKLBHzGwsPH3B5yuRtEt5m1Wlqxd6ag==
-X-Received: by 2002:a05:6808:11cb:b0:353:f841:e390 with SMTP id p11-20020a05680811cb00b00353f841e390mr318449oiv.149.1666056481769;
-        Mon, 17 Oct 2022 18:28:01 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cc:1855:b6d2:d55:b2d8:b57d])
-        by smtp.gmail.com with ESMTPSA id cj7-20020a056830640700b006619533d1ddsm5329572otb.76.2022.10.17.18.27.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 18:28:01 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ramesh Errabolu <Ramesh.Errabolu@amd.com>,
-        Oak Zeng <Oak.Zeng@amd.com>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amdkfd: Fix memory leak in kfd_mem_dmamap_userptr()
-Date:   Mon, 17 Oct 2022 22:27:50 -0300
-Message-Id: <20221018012751.887460-1-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 17 Oct 2022 21:28:27 -0400
+Received: from ipmail06.adl3.internode.on.net (ipmail06.adl3.internode.on.net [150.101.137.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA5BF2D1E2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:28:23 -0700 (PDT)
+X-SMTP-MATCH: 1
+IronPort-Data: =?us-ascii?q?A9a23=3AJNuO9KrrVYX6iPdh85D/Cixyz/deBmIBZBIvg?=
+ =?us-ascii?q?KrLsJaIsI4StFCztgarIBmDbqmMZGukLop1Pdjj80JX6JOAyoQwHgQ//CE2F?=
+ =?us-ascii?q?34R9JeYXN7JdE6rNHrOf5CeFBs6tcxEZ4TNc81pFCKD/0enG7Ww9nMUOYOgH?=
+ =?us-ascii?q?+qkUrSYUsxSqa6IcMqS4P5as7ZRbrNA2LBVPSvd4bsenOWHULOV82Yc3lM8s?=
+ =?us-ascii?q?8pvmjs21BjBkGtwUmgFWBx+lAS2e0/5rX4oDfrZw3PQGuG4FwMhLgrJ5OnRE?=
+ =?us-ascii?q?mjxp3/BBj45+4sXfHHmQpaKVeSPokkPAffk2l4a4HUHuko5HKNaMB0KzW/Rx?=
+ =?us-ascii?q?ZYrlIglWZ+YEG/FOoXFgvgdTgMeFihkJq1u+bnbLGK5tsCeiUrANX3h352CC?=
+ =?us-ascii?q?WlqZtBAobwtXTsmGfswcmtTNnhvndmeyaimTPF2j9oiKo/zNYUSt2t7wDXHB?=
+ =?us-ascii?q?PMOSJXPBa7N4Ldw1zcqh9tSHP/YIckeZDxuYzzJZhEJMVASYLo3nf2sh3TzW?=
+ =?us-ascii?q?zJdoVOR46Ew5gD75Qh8wLHrPNfPPPCHWM5Vk1ywr2fKuW/+B3kyONWZyDeBt?=
+ =?us-ascii?q?GyhmvPChwv1Vp0WEPuz9pZCjEeSg2AeFhASfV+6uuWizECkVt9TJlcX5i026?=
+ =?us-ascii?q?68o+ySDStj7Qg39o3OeuBMYc8RfHvd86wyXzKfQpQGDCQAsUjlbdtUiuNQeQ?=
+ =?us-ascii?q?T0sy0/MkdT0AzBmrLySTzSa7Lj8kN8YETxNeCpbPWlcWVJQu5+7tNtm1lSeE?=
+ =?us-ascii?q?Y04BPXg1puoDW6l+zqOuHFm0u1X1dpjO76TpBae2W/q/MCTCFRpu23qsquex?=
+ =?us-ascii?q?lsRTOaYi0aAsDA3Ncp9Ebs=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AOiHc66gyKbEQSI6kVafN6yiq1XBQXtYji2?=
+ =?us-ascii?q?hC6mlwRA09TySZ//rDoB19726RtN9xYgBEpTnuAsK9qB/nn6KdpLNxAV7AZn?=
+ =?us-ascii?q?iFhILLFvAA0WKK+VSJJ8S9zI5gPMxbHJSWZuecMbE3t6jH3DU=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2DOAQA1AE5jAPXKfQENTR4BAQsSDEA?=
+ =?us-ascii?q?JhkSEToJijjQDgROeBAsBUwQBAYUFAoRtJjgTAQIEFQEBBgEBAQEBBwQQATl?=
+ =?us-ascii?q?SjDgBAQEDI1YQCw0LAgImAgJXBgENBYJ9rg16gTIaZ4gegWWBESyBZooPHYQ?=
+ =?us-ascii?q?hN4FVRIEVJw8NgjA3PoQiAQEgg1c4gi4ElFiCHoNzOAMZKx1AAws7MwMVAxQ?=
+ =?us-ascii?q?DBSEHAxkPIw0NBBYHDAMDBSUDAgIbBwICAwIGEwUCAhc2NAgECAQrJA8FAgc?=
+ =?us-ascii?q?vBQQvAh4EBQYRCAIWAgYEBAQEFQIQCAIIJhcHExgbGQEFWQ4JIRYGDhoNBQY?=
+ =?us-ascii?q?TAyBJJgUKOA8oL2krHBsHgQwqCR8VAwQEAwIGEwMiAg0pMRQEKRMPLQcjcQk?=
+ =?us-ascii?q?CAyJlBQMDBCgsAwlAByUkPAdYEigBBAMCECI8BgMJAwIiWXYJJhEVBQMNFyU?=
+ =?us-ascii?q?IBTcaBAg8AgUGUhICChEDEg8GJ0gPSj45FgYnRQE2Dw4aA50oN4EJL14Kgh0?=
+ =?us-ascii?q?CwU40B4NjgUQGDJ5vIwuDdoxRhksDjASFdpcWIKlNgX4zGi5vAYI8UZ0rYjs?=
+ =?us-ascii?q?CBgEKAQEDCYpXAQE?=
+Received: from unknown (HELO [127.0.0.1]) ([1.125.202.245])
+  by ipmail06.adl3.internode.on.net with ESMTP; 18 Oct 2022 11:58:20 +1030
+Date:   Tue, 18 Oct 2022 11:58:06 +1030
+From:   Arthur Marsh <arthur.marsh@internode.on.net>
+To:     Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>,
+        =?ISO-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
+        Dave Airlie <airlied@gmail.com>
+CC:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        daniel.vetter@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
+Subject: Re: [git pull] drm fixes for 6.1-rc1
+User-Agent: K-9 Mail for Android
+In-Reply-To: <f3a5b249-84d8-9ba3-9977-3557c82a7850@amd.com>
+References: <CAPM=9ty3DGWa8vnfumgSrpSgWnixWjikb6C0Zk_5bW+deKLVQw@mail.gmail.com> <20221016080833.5503-1-user@am64> <CAPM=9txsBf5HJ97tAMOQ8PdiPciK-zqngERUm7hGJO8Zyyqb+w@mail.gmail.com> <C98B32CF-86B0-438D-BC8D-10FA255B3B4F@internode.on.net> <7c645fa8-bf29-4b30-bdc5-e61e6bb09927@amd.com> <f0110d36-a9c2-c1b9-b193-32da4f98a975@amd.com> <67e2904a-4b80-5173-2d8f-6a3d1f702fbb@amd.com> <CAPM=9tz8=iDye+vYai2NLLW-u3TfZ=DKdA_h2e+kk==ZO7q3PQ@mail.gmail.com> <50dcf794-e96f-24a3-5d40-6c64941b1bc0@amd.com> <f3a5b249-84d8-9ba3-9977-3557c82a7850@amd.com>
+Message-ID: <EE5085BD-98AF-452E-9AE3-4EA81E2A55E1@internode.on.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the number of pages from the userptr BO differs from the SG BO then the
-allocated memory for the SG table doesn't get freed before returning
--EINVAL, which may lead to a memory leak in some error paths. Fix this by
-checking the number of pages before allocating memory for the SG table.
+Thanks Arunpravin, your patch applied to the 6.1-rc1 code built a kernel that loaded the amdgpu module on my pc with Cape Verde GPU card with no problems.
 
-Fixes: 264fb4d332f5 ("drm/amdgpu: Add multi-GPU DMA mapping helpers")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Regards,
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index 978d3970b5cc..84f44f7e4111 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -510,13 +510,13 @@ kfd_mem_dmamap_userptr(struct kgd_mem *mem,
- 	struct ttm_tt *ttm = bo->tbo.ttm;
- 	int ret;
- 
-+	if (WARN_ON(ttm->num_pages != src_ttm->num_pages))
-+		return -EINVAL;
-+
- 	ttm->sg = kmalloc(sizeof(*ttm->sg), GFP_KERNEL);
- 	if (unlikely(!ttm->sg))
- 		return -ENOMEM;
- 
--	if (WARN_ON(ttm->num_pages != src_ttm->num_pages))
--		return -EINVAL;
--
- 	/* Same sequence as in amdgpu_ttm_tt_pin_userptr */
- 	ret = sg_alloc_table_from_pages(ttm->sg, src_ttm->pages,
- 					ttm->num_pages, 0,
+Arthur. 
+
+On 18 October 2022 7:10:45 am ACDT, Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com> wrote:
+>Hi Christian,
+>
+>Looks like we have to exit the loop if there are no blocks to compare.
+>May be that's why the function returns false.
+>
+>@Arthur Marsh Could you please test the attached patch.
+>
+>Thanks,
+>Arun
+>
+>On 10/17/2022 1:39 PM, Christian König wrote:
+>> Am 17.10.22 um 10:01 schrieb Dave Airlie:
+>>> On Mon, 17 Oct 2022 at 17:07, Christian König <christian.koenig@amd.com> wrote:
+>>>> Hi Arun,
+>>>> 
+>>>> the hw generation doesn't matter. This error message here:
+>>>> 
+>>>> amdgpu: Move buffer fallback to memcpy unavailable
+>>>> 
+>>>> indicates that the detection of linear buffers still doesn't work as
+>>>> expected or that we have a bug somewhere else.
+>>>> 
+>>>> Maybe the limiting when SDMA moves are not available isn't working
+>>>> correctly?
+>>> It is a CAPE_VERDE, so maybe something with the SI UVD memory limitations?
+>> 
+>> Yeah, good point. Could be that we try to move something into the UVD memory window and that something isn't allocated linearly.
+>> 
+>> Arun can you trace the allocation and make sure that all kernel allocations have the CONTIGUOUS flag set?
+>> 
+>> Thanks,
+>> Christian.
+>> 
+>>> 
+>>> Dave.
+>> 
+
 -- 
-2.34.1
-
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
