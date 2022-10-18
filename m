@@ -2,82 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B98602E4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B600B602E10
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbiJROWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S230037AbiJRONm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiJROVy (ORCPT
+        with ESMTP id S229660AbiJRONj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:21:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DCED38DD
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:21:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 158E4615B0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCE6DC433D6;
-        Tue, 18 Oct 2022 14:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666102896;
-        bh=OjvCILdRZ1jTgOB8uJxjbPuWbLlr+2SnsWohtENFRCg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aoTEAMpyNjdPXWRKOCnpVaEpUWLCCaiO0uiq0Goxv7apJDZwk4afsALeKT1ZIpzpo
-         RP+kSCt8txv1PTUDy3g1Sd0LWiP2pulpuJ/Ww6uYnNmlGvOaFJSWwMdKGRQlVfiaNx
-         UtPTsNSa9PCM+eJk7d5u9egQ7QCMoOcUjsQ39tZ00shvIVbyxXsSpsLNP5mdT5j7Us
-         ZJVyLoZWEnThm8YSgnQE1X/AE98ATEHUFRZrj3yCX7WesGjHznRj5Fl2FRlj4EJ8rj
-         Q7GMxgRV/ZPobO9+xBaWq9kIDlYzysIIRUMzHBuG5kfNLMkK8fizxNAV61rgEom+o0
-         B4aXi5ZIhfMxw==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH] riscv: remove special treatment for the link order of head.o
-Date:   Tue, 18 Oct 2022 22:12:00 +0800
-Message-Id: <20221018141200.1040-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Tue, 18 Oct 2022 10:13:39 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD781E708;
+        Tue, 18 Oct 2022 07:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666102417; x=1697638417;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=94bOPuLfvb++UsTwZ2og0iogtTMZkU8RTP6q7KeUdqA=;
+  b=ZHeMV3GbYxmapXRl3k0sOtgmMzN54mG2I9b9Ta2QJIbu/LjAolKysjrz
+   KcBkOZo7fI4Df0qVfYB/DV8RfCQx1fllVadYMzU4Lstx40G0EB0jj0bg/
+   Vo0doYHxK76utw0HxaCAsIpYTI6UnulGJtXIVfhBxG55TT+7BisHbhRMh
+   Y+LfYgAx29Vy7QQ5MQJZu9U+F3CRFVZcuABgaSB334yGxR4t48CwitPHg
+   PwhPNsG0OF83L0URH/4A8i7tB7VJgwz52lLYB1SwOfm0zSFaZqm2O659m
+   BbK+V0nrmROf7X0LuMfwgoXvs1HK4RgShowAyOlgY1VHNE3dsMKuwSuCw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="306097558"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="306097558"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 07:13:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="754061907"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="754061907"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 18 Oct 2022 07:13:32 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oknLW-009PYY-1H;
+        Tue, 18 Oct 2022 17:13:30 +0300
+Date:   Tue, 18 Oct 2022 17:13:30 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 6/6] netlink: add universal 'bigint'
+ attribute type
+Message-ID: <Y060io/942BpWpQw@smile.fi.intel.com>
+References: <20221018140027.48086-1-alexandr.lobakin@intel.com>
+ <20221018140027.48086-7-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018140027.48086-7-alexandr.lobakin@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/riscv/kernel/head.o does not need any special treatment - the only
-requirement is the ".head.text" section must be placed before the
-normal ".text" section.
+On Tue, Oct 18, 2022 at 04:00:27PM +0200, Alexander Lobakin wrote:
+> Add a new type of Netlink attribute -- big integer.
+> 
+> Basically bigints are just arrays of u32s, but can carry anything,
+> with 1 bit precision. Using variable-length arrays of a fixed type
+> gives the following:
+> 
+> * versatility: one type can carry scalars from u8 to u64, bitmaps,
+>   binary data etc.;
+> * scalability: the same Netlink attribute can be changed to a wider
+>   (or shorter) data type with no compatibility issues, same for
+>   growing bitmaps;
+> * optimization: 4-byte units don't require wasting slots for empty
+>   padding attributes (they always have natural alignment in Netlink
+>   messages).
+> 
+> The only downside is that get/put functions sometimes are not just
+> direct assignment inlines due to the internal representation using
+> bitmaps (longs) and the bitmap API.
+> 
+> Basic consumer functions/macros are:
+> * nla_put_bigint() and nla_get_bigint() -- to easily put a bigint to
+>   an skb or get it from a received message (only pointer to an
+>   unsigned long array and the number of bits in it are needed);
+> * nla_put_bigint_{u,be,le,net}{8,16,32,64}() -- alternatives to the
+>   already existing family to send/receive scalars using the new type
+>   (instead of distinct attr types);
+> * nla_total_size_bigint*() -- to provide estimate size in bytes to
+>   Netlink needed to store a bigint/type;
+> * NLA_POLICY_BIGINT*() -- to declare a Netlink policy for a bigint
+>   attribute.
+> 
+> There are also *_bitmap() aliases for the *_bigint() helpers which
+> have no differences and designed to distinguish bigints from bitmaps
+> in the call sites (for readability).
+> 
+> Netlink policy for a bigint can have an optional bitmap mask of bits
+> supported by the code -- for example, to filter out obsolete bits
+> removed some time ago or limit value to n bits (e.g. 53 instead of
+> 64). Without it, Netlink will just make sure no bits past the passed
+> number are set. Both variants can be requested from the userspace
+> and the kernel will put a mask into a new policy attribute
+> (%NL_POLICY_TYPE_ATTR_BIGINT_MASK).
+> 
+> Note on including <linux/bitmap.h> into <net/netlink.h>: seems to
+> introduce no visible compilation time regressions, make includecheck
+> doesn't see anything illegit as well. Hiding everything inside
+> lib/nlattr.c would require making a couple dozens optimizable
+> inlines external, doesn't sound optimal.
 
-The linker script does the right thing to do. The build system does
-not need to manipulate the link order of head.o.
+...
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- scripts/head-object-list.txt | 1 -
- 1 file changed, 1 deletion(-)
+>  #ifndef __NET_NETLINK_H
+>  #define __NET_NETLINK_H
+>  
+> -#include <linux/types.h>
+> +#include <linux/bitmap.h>
 
-diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
-index b16326a92c45..105ea7ac4751 100644
---- a/scripts/head-object-list.txt
-+++ b/scripts/head-object-list.txt
-@@ -39,7 +39,6 @@ arch/powerpc/kernel/entry_64.o
- arch/powerpc/kernel/fpu.o
- arch/powerpc/kernel/vector.o
- arch/powerpc/kernel/prom_init.o
--arch/riscv/kernel/head.o
- arch/s390/kernel/head64.o
- arch/sh/kernel/head_32.o
- arch/sparc/kernel/head_32.o
+types.h is not guaranteed to be included by bitmap.h. So, if you want to
+clean up the headers in this header, do it in a separate change.
+
+Also I would suggest to check what Ingo did in his 2000+ patch series
+to see if there is anything interesting towards this header.
+
+>  #include <linux/netlink.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/in6.h>
+
 -- 
-2.37.2
+With Best Regards,
+Andy Shevchenko
+
 
