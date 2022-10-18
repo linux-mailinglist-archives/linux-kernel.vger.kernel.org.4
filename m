@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735E760221E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AAA602222
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 05:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbiJRDKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 23:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S231381AbiJRDK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 23:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiJRDIf (ORCPT
+        with ESMTP id S230239AbiJRDIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 23:08:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D479AF91;
-        Mon, 17 Oct 2022 20:07:12 -0700 (PDT)
+        Mon, 17 Oct 2022 23:08:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC19A9DC;
+        Mon, 17 Oct 2022 20:07:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CE8C61369;
-        Tue, 18 Oct 2022 03:07:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4250C433C1;
-        Tue, 18 Oct 2022 03:07:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0BCD61375;
+        Tue, 18 Oct 2022 03:07:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85CEC433D7;
+        Tue, 18 Oct 2022 03:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666062431;
-        bh=jOsOzWE/NCwC8A+Q/qgUuroUOrJ6Pvfc/Ah6rtTsNjk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=n2e3sXTjUOwMVVzYFZsVnTJXtUGjGFR+HhFkE7Qg+sY7JxS4koEY2+pCgUZ2DQ1+W
-         4I8U6ulTldjIrftpq81peyTthRzibZfjQdXXWsE1IASgaHeV7E1h2qYBpwC99sBQGr
-         +ib0R7MTyMgapYk+CO7XIc5TkpACv+IAGa7Nxd2lSV2sHWkr2hdaZNuFyOLDDYZKHp
-         5nqIx2gHttRIQL7DtBiaqRQfa8M+e6B6zWHZaQOtDoNbYHSBl97TftDMdvPENgMcNI
-         pqJBPFlw5W9pFZ+3qWN3/+CFoAS4zT0vvAoBB3+NCq7H728f5idNCxgdd7xNqgLRu5
-         X+2tNy8nXyGJg==
+        s=k20201202; t=1666062433;
+        bh=zmLhfoS15h/bgVUCXTsHRLNIQWj/4t/e7UbR3lYD7OQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Z9i0eVpuY7bO7gzyB3w7EEDc13CvmRm4v93ky2Oao747ruXk7Hr2Vt6KlMxSVAT00
+         PB6t31AC6syKsckIGrwmHZsbdJiAq/NLyGDnu6KkRjjP7x0xJD+rA6RES3ihma5zRv
+         hb9K9DhSuSxNYVDgoskcZOhA7IacOzr1HcWhj9Oapltohr68fgYBexOH6HStxWxH5m
+         UOtXqCSh1kH3EwvK94aHe2UdcL7PwnWxguIyEqJBImlmQyNJ4RyDTzqWLZKSBm0xIP
+         GTXiVKUHAumrq/qGTs1J0sPvYp/OwX1RE63fV31l3fO8xQXcK8qFkZbsxS8gYqsMHf
+         q6K7io63oaw8A==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        stephan@gerhold.net, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        linus.walleij@linaro.org, vkoul@kernel.org, shawn.guo@linaro.org,
         robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        quic_vamslank@quicinc.com,
         Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: (subset) [PATCH v5 00/34] pinctrl/arm64: qcom: continued - fix Qualcomm TLMM pinctrl schema warnings (third set)
-Date:   Mon, 17 Oct 2022 22:05:44 -0500
-Message-Id: <166606235863.3553294.2899134058558070077.b4-ty@kernel.org>
+Cc:     robh@kernel.org, robert.foss@linaro.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        elder@linaro.org, srinivas.kandagatla@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org
+Subject: Re: [PATCH v6] dt-bindings: qcom: document preferred compatible naming
+Date:   Mon, 17 Oct 2022 22:05:45 -0500
+Message-Id: <166606235860.3553294.7875042166882265521.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org>
-References: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928152501.490840-1-krzysztof.kozlowski@linaro.org>
+References: <20220928152501.490840-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,31 +60,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Oct 2022 13:00:01 -0400, Krzysztof Kozlowski wrote:
-> Changes since v4
-> ================
-> 1. Drop drive-strength (included by common TLMM node).
+On Wed, 28 Sep 2022 17:25:01 +0200, Krzysztof Kozlowski wrote:
+> Compatibles can come in two formats.  Either "vendor,ip-soc" or
+> "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+> DT schema file documenting preferred policy and enforcing it for all new
+> compatibles, except few existing patterns.
 > 
-> Changes since v3
-> ================
-> 1. All patches with subject: "use common TLMM schema":
->    Drop properties and required items which are already provided by common TLMM
->    schema.
->    The change against v3 is non-trivial, however I retained reviewed-by tags.
-> 2. Add Rb tags.
 > 
-> [...]
 
 Applied, thanks!
 
-[03/34] ARM: dts: qcom: sdx55: add gpio-ranges to TLMM pinctrl
-        commit: 0139f183bcddcf5b36f805254bb0f0625963f783
-[04/34] ARM: dts: qcom: sdx55: align TLMM pin configuration with DT schema
-        commit: bda79af488a3e75769433fb961800c39bb07b29c
-[05/34] ARM: dts: qcom: msm8226: align TLMM pin configuration with DT schema
-        commit: df9c86025510c45a6d90669347129e8000e1bbbc
-[06/34] ARM: dts: qcom: msm8974: align TLMM pin configuration with DT schema
-        commit: 6cd72414abc7345e277fcab5e1c763c3a017dc6a
+[1/1] dt-bindings: qcom: document preferred compatible naming
+      commit: 5aa332c5e7ca2469c9ff55cf294eddb33a2c8e4b
 
 Best regards,
 -- 
