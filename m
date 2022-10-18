@@ -2,132 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972B7602887
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C87602888
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJRJji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
+        id S229967AbiJRJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiJRJjc (ORCPT
+        with ESMTP id S229718AbiJRJk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:39:32 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA29FB;
-        Tue, 18 Oct 2022 02:39:24 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 7B0FE1C09D9; Tue, 18 Oct 2022 11:39:22 +0200 (CEST)
-Date:   Tue, 18 Oct 2022 11:39:21 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Zong-Zhe Yang <kevin_yang@realtek.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@kernel.org>, tony0620emma@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.10 01/34] wifi: rtw88: phy: fix warning of
- possible buffer overflow
-Message-ID: <20221018093921.GD1264@duo.ucw.cz>
-References: <20221009222129.1218277-1-sashal@kernel.org>
+        Tue, 18 Oct 2022 05:40:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA689E2C3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+oHCmlSrQtOe8KtXGCGb0Hin+gSSgOm6PLxBdj0ubKs=; b=Y+ZmAXaWxb7eioaQCzFdKi4Yvw
+        8D1TQ1fu8m2Uc0N9P2PNrei7toGIWqnw6Q8sVeBaWs7f3ympxkJWLP28TNbTlAshM190Jsz9sPZ+j
+        wvQNvy8B4XJD5w1NUl4afrqcQ2k1RHECOVjuaH2Ac76siUv8stzUqu5g50pumWffVT4ewmsfddMYL
+        hfffRoUAYs9rVqbrwISxVU5tnNiDYKzvPKlMBOeTjHl8ogWV3/yPn2FwL77m5P0RBP/aD1j257l4b
+        vbaM4AALzT20cAMJrAZy89fLpamOCh5euDPqaxpgcd/+vHuTayD10IEo+pD30jAizoASqvHW7kgIY
+        o71RJPnQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1okj56-00AdTz-G0; Tue, 18 Oct 2022 09:40:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 663AD30004F;
+        Tue, 18 Oct 2022 11:40:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 47A692C3855A4; Tue, 18 Oct 2022 11:40:11 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 11:40:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] sched/fair: Avoid unnecessary migrations within SMT
+ domains
+Message-ID: <Y050e5XQkaUrwr5j@hirez.programming.kicks-ass.net>
+References: <20220825225529.26465-1-ricardo.neri-calderon@linux.intel.com>
+ <20221018023527.GB23064@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="+KJYzRxRHjYqLGl5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221009222129.1218277-1-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221018023527.GB23064@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 07:35:27PM -0700, Ricardo Neri wrote:
+> On Thu, Aug 25, 2022 at 03:55:25PM -0700, Ricardo Neri wrote:
+> > Intel processors that support Intel Turbo Boost Max 3.0 use asym_packing
+> > to assign higher priorities to CPUs with higher maximum frequencies. It
+> > artificially assigns, however, a lower priority to the higher-numbered
+> > SMT siblings to ensure that they are used last.
+> > 
+> > This results in unnecessary task migrations within the SMT domains.
+> > 
+> > On processors with a mixture of higher-frequency SMT cores and lower-
+> > frequency non-SMT cores (such as Intel hybrid processors), a lower-
+> > priority CPU pulls tasks from the higher-priority cores if more than one
+> > SMT sibling is busy.
+> > 
+> > Do not use different priorities for each SMT sibling. Instead, tweak the
+> > asym_packing load balancer to recognize SMT cores with more than one
+> > busy sibling and let lower-priority CPUs pull tasks.
+> > 
+> > Removing these artificial priorities avoids superfluous migrations and
+> > lets lower-priority cores inspect all SMT siblings for the busiest queue.
+> 
+> Hello. I'd like to know if there are any comments on these patches. This
+> patchset is a requisite for the IPC classes of tasks patchset [1].
 
---+KJYzRxRHjYqLGl5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Urgh.. so I'm not liking this, afaict you're sprinkling SMT2
+assumptions.
 
-Hi!
-
-> [ Upstream commit 86331c7e0cd819bf0c1d0dcf895e0c90b0aa9a6f ]
->=20
-> reported by smatch
->=20
-> phy.c:854 rtw_phy_linear_2_db() error: buffer overflow 'db_invert_table[i=
-]'
-> 8 <=3D 8 (assuming for loop doesn't break)
->=20
-> However, it seems to be a false alarm because we prevent it originally via
->        if (linear >=3D db_invert_table[11][7])
->                return 96; /* maximum 96 dB */
->=20
-> Still, we adjust the code to be more readable and avoid smatch warning.
-
-There's no bug, it is just smatch that is confused. We should not take
-this to 5.10.
-
-Best regards,
-									Pavel
-
->  drivers/net/wireless/realtek/rtw88/phy.c | 21 ++++++++-------------
->  1 file changed, 8 insertions(+), 13 deletions(-)
->=20
-> diff --git a/drivers/net/wireless/realtek/rtw88/phy.c b/drivers/net/wirel=
-ess/realtek/rtw88/phy.c
-> index af8b703d11d4..0fc5a893c395 100644
-> --- a/drivers/net/wireless/realtek/rtw88/phy.c
-> +++ b/drivers/net/wireless/realtek/rtw88/phy.c
-> @@ -604,23 +604,18 @@ static u8 rtw_phy_linear_2_db(u64 linear)
->  	u8 j;
->  	u32 dB;
-> =20
-> -	if (linear >=3D db_invert_table[11][7])
-> -		return 96; /* maximum 96 dB */
-> -
->  	for (i =3D 0; i < 12; i++) {
-> -		if (i <=3D 2 && (linear << FRAC_BITS) <=3D db_invert_table[i][7])
-> -			break;
-> -		else if (i > 2 && linear <=3D db_invert_table[i][7])
-> -			break;
-> +		for (j =3D 0; j < 8; j++) {
-> +			if (i <=3D 2 && (linear << FRAC_BITS) <=3D db_invert_table[i][j])
-> +				goto cnt;
-> +			else if (i > 2 && linear <=3D db_invert_table[i][j])
-> +				goto cnt;
-> +		}
->  	}
-> =20
-> -	for (j =3D 0; j < 8; j++) {
-> -		if (i <=3D 2 && (linear << FRAC_BITS) <=3D db_invert_table[i][j])
-> -			break;
-> -		else if (i > 2 && linear <=3D db_invert_table[i][j])
-> -			break;
-> -	}
-> +	return 96; /* maximum 96 dB */
-> =20
-> +cnt:
->  	if (j =3D=3D 0 && i =3D=3D 0)
->  		goto end;
-> =20
-> --=20
-> 2.35.1
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---+KJYzRxRHjYqLGl5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY050SQAKCRAw5/Bqldv6
-8lrCAKCqLZ4CYw9fH/ZQp/IlGS8zEkWo8wCeKeb2tTImRaifOr2l700RqY9l7y4=
-=lnek
------END PGP SIGNATURE-----
-
---+KJYzRxRHjYqLGl5--
+Why can't we make arch_asym_cpu_priority() depend on CPU state? Doesn't
+it then magically work?
