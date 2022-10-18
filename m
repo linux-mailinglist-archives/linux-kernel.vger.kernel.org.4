@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04487603491
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6829B603499
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiJRVDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S230090AbiJRVGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiJRVDF (ORCPT
+        with ESMTP id S229574AbiJRVGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:03:05 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5153BC4587
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666126973; x=1697662973;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HaNZmq41zK29iOnkJK28GdD5R+VHcXlZCvrP5NcvQyo=;
-  b=VDnNTv+6K7/mM81eb0AkSO8eZ+eNSDa4KNZFSrmCWpoAncWRfZVpD4eG
-   u9Jk+MrQCge1rufRo+w5KVemKaHAyBlpBuqhb4rdlBR6hxxek0+66i5fW
-   PtpFmxqAGggF678MMTE/cIuz+Ti1HTpCJPRtZFm9pdMhFocf/V+O+DWNg
-   vZiGR4ojlr+RghVrsIaaVl+UzH284rd3KpylReh8IydfrUM782Ji1gKT9
-   MYJiVm/E/EYnhP6HGUWFECj6ieFrQcEKnaZGqw/a7xCWzuFMHzT40uNHT
-   ntJbPjnHC57eilYYsVA+BK+LIBWT21t62p3nfJxoLzK2d1yth8pH8tcC8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="307343803"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="307343803"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 14:02:45 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="631323993"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="631323993"
-Received: from jjsopko-mobl.amr.corp.intel.com (HELO [10.213.163.40]) ([10.213.163.40])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 14:02:44 -0700
-Message-ID: <cd8939c7-6194-53f5-14e1-89bef945fb47@intel.com>
-Date:   Tue, 18 Oct 2022 14:02:43 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCHv10 09/15] x86: Expose untagging mask in
- /proc/$PID/arch_status
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tue, 18 Oct 2022 17:06:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFC59A2BB
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666127176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUAo3dL9hhBdy5lWB8FHvKsjCOg7DiowFZ/MAPIKBRo=;
+        b=KlrKh1kmeIPiIeOjBAQNgUA31XBGgP4tlt8wEcnkML2d+AtJ2+gHQsHVBBoSJdNdDwdmGs
+        hnsRy0ttxErt6rOI1Kf6n1rJxYIINWT3BBv0YkLLyWHqUbpVA5k/0sveiEI4C+oSeTgxXc
+        3iIn3XoZKenEqmdhtpAzQM7BHyLeVLc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-s4HuxjnEOT2bgY5OaJH7oA-1; Tue, 18 Oct 2022 17:04:52 -0400
+X-MC-Unique: s4HuxjnEOT2bgY5OaJH7oA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D2E93814580;
+        Tue, 18 Oct 2022 21:04:49 +0000 (UTC)
+Received: from redhat.com (unknown [10.2.17.157])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9095B2166BAD;
+        Tue, 18 Oct 2022 21:04:48 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 17:04:47 -0400
+From:   Peter Jones <pjones@redhat.com>
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
- <20221018113358.7833-10-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221018113358.7833-10-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 00/16] x86_64: Improvements at compressed kernel stage
+Message-ID: <20221018210447.sg3tddaujre6orgc@redhat.com>
+References: <cover.1662459668.git.baskov@ispras.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1662459668.git.baskov@ispras.ru>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 04:33, Kirill A. Shutemov wrote:
-> Add a line in /proc/$PID/arch_status to report untag_mask. It can be
-> used to find out LAM status of the process from the outside. It is
-> useful for debuggers.
+On Tue, Sep 06, 2022 at 01:41:04PM +0300, Evgeniy Baskov wrote:
+> This patchset is aimed
+> * to improve UEFI compatibility of compressed kernel code for x86_64
+> * to setup proper memory access attributes for code and rodata sections
+> * to implement W^X protection policy throughout the whole execution 
+>   of compressed kernel for EFISTUB code path. 
 
-Considering that address masking is not x86-specific, it seems like this
-needs a better home (another file in /proc).
+Hi Evgeniy,
 
-This could even be left out of the series for now, right?  Nothing,
-including the selftests, depends on it.
+I've tested this set of patches with the Mu firmware that supports the W^X
+feature and a modified bootloader to also support it, and also with an
+existing firmware and the grub2 build in fedora 36.  On the firmware
+without W^X support, this all works for me.  With W^X support, it works
+so long as I use CONFIG_EFI_STUB_EXTRACT_DIRECT, though I still need
+some changes in grub's loader.  IMO that's a big step forward.
+
+I can't currently make it work with W^X enabled but without direct
+extraction, and I'm still investigating why not, but I figured I'd give
+you a heads up.
+
+-- 
+        Peter
+
