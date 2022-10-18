@@ -2,108 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FEA60361C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6367E60361D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJRWjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 18:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S229886AbiJRWlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 18:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiJRWjb (ORCPT
+        with ESMTP id S229610AbiJRWla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 18:39:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284B2193;
-        Tue, 18 Oct 2022 15:39:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB4BD6170E;
-        Tue, 18 Oct 2022 22:39:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89DE9C433D6;
-        Tue, 18 Oct 2022 22:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666132767;
-        bh=nXQu6c9zXmXOQ1HwOdodGaaAxPLFBITWpD9z3hLUZls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OyEgo97Cn7hfLcChk3T+cX7WuaWJRd+H+O2qLouS2yjdVjByS6mGcdMHOnE9Ksa8W
-         eIUZ7Z1faq/NHabkMENSDpkwOsP+dvgHve8kxug1V1pNPe6Tgozt71U+e5db+c/wbb
-         MmQ5fQPXoLPTlsqhEBQ5dH4l/q5Rlu/p4AgFpEWRu+OFFz8eGkNaYxQlOkQRzmeH+Y
-         O7ULolO2gdyfipuy6v1IgbhWdUO5r8XIe/eUgg851ZKhSn7oqfurwjfWrXglK6LA/F
-         NWCuAGMm+uQzeh9+8IHrDIXVSxUOLFmPS1LStyLbd0KuxkRbN7NdwLThnpn2/tgfMG
-         +EQXqzP0TJbrg==
-Date:   Tue, 18 Oct 2022 15:39:24 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     herbert@gondor.apana.org.au, ardb@kernel.org, bgoncalv@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, davem@davemloft.net,
-        hpa@zytor.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, tglx@linutronix.de,
-        x86@kernel.org
-Subject: Re: [PATCH v2] crypto: x86/polyval - Fix crashes when keys are not
- 16-byte aligned
-Message-ID: <Y08rHF09/qxCVK+K@sol.localdomain>
-References: <Y04lhwMechdfBkUU@gondor.apana.org.au>
- <20221018215623.866014-1-nhuck@google.com>
+        Tue, 18 Oct 2022 18:41:30 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C077C7D7A7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:41:29 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id o13so8257322ilc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:41:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MRIQ7NLQxQWJwKhbJQrXjl1ev9OrSKwjvJPyN/wgvfU=;
+        b=Jrx7Ecp+i2VqXRJs3lCxayFgYp3pVM9b6yHCvu6ZxdJWGPYVFfLu7dvN5vjKPwxKwa
+         +iDctykijO685Q0vOBrStuh+RGQedlAnpf2+LlfzwuXczPuDKoXCSgPzZnJoM3U6d4RD
+         qd3CNNS9buoTaIM0q9GaJPCZZgWgIWPIMi2dM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MRIQ7NLQxQWJwKhbJQrXjl1ev9OrSKwjvJPyN/wgvfU=;
+        b=MQKeLsZDQqY0pNd+6k31wTTY6CnQmiI+QZoBCumhkkwxDM32pUFbX3gUU6MF8ygSc7
+         DSStoAVSqvaW1Ik0a3JWgIZmqe8Z6MbAKIgieFbFdX+rGM946yszfa0JK+6wuuEB6oj1
+         E+MaJiaiGDsSsys0O8fA4kNjHwGibkaqEoyPvTUsqzV1+sqXZy0az89j1nCuTT75qmNi
+         eA2J+mlPkLi1XvDtchB+cmO8cQFDc2xX3PfFjnm7BbHbs+0yXwEIexJW7u0JPbi35wuq
+         sBIgV+2NmpdLUEhMZ3VVG5n7oNbPtunHTEXQ90DdnpABLd7ZO1njfys5SHoySqhC8dTU
+         1q7w==
+X-Gm-Message-State: ACrzQf2wASKpp93r5TJuneGe0XVLb/bMO2DZJAG6uAlZz/oR36gQRJHA
+        svd9sj4RNyPNgbxUYYseS7QqkGXB/qtDPg==
+X-Google-Smtp-Source: AMsMyM44wsheS9NSIFgs75Qfq1hWdGZQJHX5qwLk3AvLRosUF874PkF99X3U4BafXCRofPSjOGYoYg==
+X-Received: by 2002:a92:ced0:0:b0:2f9:6c22:dece with SMTP id z16-20020a92ced0000000b002f96c22decemr3068516ilq.222.1666132889027;
+        Tue, 18 Oct 2022 15:41:29 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h17-20020a056638063100b00363ad9656eesm1453646jar.165.2022.10.18.15.41.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 15:41:25 -0700 (PDT)
+Message-ID: <0b747522-1398-5a68-0fb2-763db6aab5b8@linuxfoundation.org>
+Date:   Tue, 18 Oct 2022 16:41:20 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018215623.866014-1-nhuck@google.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] selftests/ftrace: Limit number of lines processed in
+ 'trace'
+Content-Language: en-US
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Akanksha J N <akanksha@linux.vnet.ibm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221017105502.307506-1-naveen.n.rao@linux.vnet.ibm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221017105502.307506-1-naveen.n.rao@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:56:23PM -0700, Nathan Huckleberry wrote:
-> -static void internal_polyval_update(const struct polyval_tfm_ctx *keys,
-> +static inline struct polyval_tfm_ctx *polyval_tfm_ctx(const void *raw_ctx)
-> +{
-> +	unsigned long addr = (unsigned long)raw_ctx;
-> +	unsigned long align = POLYVAL_ALIGN;
-> +
-> +	if (align <= crypto_tfm_ctx_alignment())
-> +		align = 1;
-> +	return (struct polyval_tfm_ctx *)ALIGN(addr, align);
-> +}
+On 10/17/22 04:55, Naveen N. Rao wrote:
+> On very large machines, ftracetest can seem to hang or otherwise take a
+> very long time to complete individual tests. This can be attributed to
+> statements that try to process the entire contents of 'trace'.
+> 
+> Limit the number of lines processed from 'trace' to resolve this. Apart
+> from the change in test.d/functions to add TRACENL, this commit is the
+> result of running the below command (and fixing some whitespace errors):
+>    grep -l -R 'cat trace |' -- ./tools/testing/selftests/ftrace/test.d/ | \
+> 	xargs -n 1 sed --in-place -e "s/cat trace |/head -\$\{TRACENL\} trace |/g"
+> 
+> Reported-by: Akanksha J N <akanksha@linux.vnet.ibm.com>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-This could just use PTR_ALIGN.  Also, checking for POLYVAL_ALIGN <=
-crypto_tfm_ctx_alignment() isn't necessary.
+Please cc linux-kselftest list on all selftest patches.
 
-> +
-> +static void internal_polyval_update(const void *raw_keys,
->  	const u8 *in, size_t nblocks, u8 *accumulator)
->  {
-> +	const struct polyval_tfm_ctx *keys = polyval_tfm_ctx(raw_keys);
+thanks,
+-- Shuah
 
-This is being passed a struct polyval_tfm_ctx.  There's no need to cast it back
-to a void pointer and align it again redundantly.
-
->  	if (likely(crypto_simd_usable())) {
->  		kernel_fpu_begin();
->  		clmul_polyval_update(keys, in, nblocks, accumulator);
-> @@ -102,7 +117,8 @@ static int polyval_x86_update(struct shash_desc *desc,
->  			 const u8 *src, unsigned int srclen)
->  {
->  	struct polyval_desc_ctx *dctx = shash_desc_ctx(desc);
-> -	const struct polyval_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
-> +	const struct polyval_tfm_ctx *tctx =
-> +	    polyval_tfm_ctx(crypto_shash_ctx(desc->tfm));
->  	u8 *pos;
->  	unsigned int nblocks;
->  	unsigned int n;
-
-It would make more sense to have the polyval_tfm_ctx() function take in the
-struct crypto_shash.
-
-How about using the following:
-
-static inline struct polyval_tfm_ctx *polyval_tfm_ctx(struct crypto_shash *tfm)
-{
-        return PTR_ALIGN(crypto_shash_ctx(tfm), POLYVAL_ALIGN);
-}
-
-- Eric
