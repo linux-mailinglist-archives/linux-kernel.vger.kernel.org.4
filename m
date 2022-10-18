@@ -2,137 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2750F60266E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA61602673
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiJRIHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S230340AbiJRIHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJRIHA (ORCPT
+        with ESMTP id S229550AbiJRIHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:07:00 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3CE8559B;
-        Tue, 18 Oct 2022 01:06:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KQbcKXaRU+7Yrc6HBG7JPf0xntSkDviEiUJrhwIRYO7nFqdobC5AqCF65afMLqXgFTm5f6zNv+fG84XUpzIq5QAvWi+lqvCr+XYPn54TBUlkIEXNkaAozRQLL5yuqGs/XQJ9bjbsIzrO2kFc/i86q0DqF9lXLREeWLSNdNOmGQQq3s5+L9ORniyQdn8nrdEIKijME2YHmbLPR+2zRfEcbmhqDifgmx0XZbxpLd8VdJecoCQxLxjmOftMfzff4eUg9lVyVTzMKkqbf9GO8AIto+JB6zQbn2dhmXHHdfUmE0IwxSPglhfbbujrJ89RsjbEUnwr6J0AZsic4G4BeFe90g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zx+yrMDh/vhQhScokhg5AOJCGl5nVvAdCROQs8ZlWNg=;
- b=dPsbtOi6TQpDYqpp4gbbOHGoUbB0VqrPyhjevrDR/9apcfJD0c3b3WiMvIDKTVS09u5p9scMC07NhRxhsWM7vrQugITv0n3LSoFxVFz37EmwYGyYVHxlsnubd3UmkCkIFyURJSC/5HTRySkSlebNhu8Tb1IeR/LDFRBkBjBmSK8XJNX5lyhf0pej2dNHz+mPGpLBnV9ggvh4NG/AVzne5wxcSXlLqyxsANORR4Jfqd92uFuA2g7lpOUCHQeeH3Ds76YKTloS/rSrmrnLlVyhgnb8B2tSynnN+9aEo5Qsehul7ErtgrYXucqvvqlDclJWA6SeTvUleHswzCh9g3FBsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zx+yrMDh/vhQhScokhg5AOJCGl5nVvAdCROQs8ZlWNg=;
- b=mp4V9KvHLqWaQNQf6mkx92Qc7XbqglT7I3Rq49IW9+57CEMrN2JeMRsaecAcLcAZJblwMclBlgqCJgxd3e3AX6KAOAM7sMp05kqy7xwuH0Q+CA5Ts6SpWZueRv52p3DTfQMHSSymtzWEs/H3lYIy87xMj8DowPAlOdfsmyb8oUY=
-Received: from DM6PR07CA0127.namprd07.prod.outlook.com (2603:10b6:5:330::28)
- by PH7PR12MB6658.namprd12.prod.outlook.com (2603:10b6:510:211::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 18 Oct
- 2022 08:06:57 +0000
-Received: from DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::f6) by DM6PR07CA0127.outlook.office365.com
- (2603:10b6:5:330::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.31 via Frontend
- Transport; Tue, 18 Oct 2022 08:06:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT101.mail.protection.outlook.com (10.13.172.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5723.20 via Frontend Transport; Tue, 18 Oct 2022 08:06:57 +0000
-Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 03:06:53 -0500
-Message-ID: <48b5848c-e8f6-a6f7-ba1e-8c914374e6b2@amd.com>
-Date:   Tue, 18 Oct 2022 10:06:50 +0200
+        Tue, 18 Oct 2022 04:07:44 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE908983A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:07:41 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id l1so13068959pld.13
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r386XTy94I8XmKFnphrGlHjUNN4wxmg9QYVFoKxy77U=;
+        b=kGS1GguWb4lC6DBAMQdrHJ/ymwsOEmeOSuLUmFZGdeWIpzsg2ztl6nj2uBt3DrPKAB
+         lIrXrmD8eY63AZEe8W0aW5qQMcQCbnZj6hUBODId3M/AGs5HEk7FdGZmv/MGXv4bLHGu
+         SisEUVcq0BlybPK79O8A9VJI6VrFCThzpHD84=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r386XTy94I8XmKFnphrGlHjUNN4wxmg9QYVFoKxy77U=;
+        b=xS1TfLwBi9ayEk0SdXoShG2Co8V37NbA0zOtPm4E5X52EQFVhYO273P5alHyW6JS65
+         Z2LX0S4c2dNYIXYE8FtdRLp4wbUXlL1Fn5d+poCCsY3Y3I4un67sskVMRL0+sD+rrLdX
+         Y/vlzZaAEMF+yoN2i14UzytFQMvsjVUZ402uiMEnpJqzAgP/g4BUiABUfN3zv9j9csy3
+         3yK9Cs9pN2vhuvQ6pduFtwhgPAw/2kLwbyAx3eN3VmZfccPbWgI+wbnEvNbnT6luOhtX
+         VQFDksG+KF6hi6tbSFla9pG4i1A4hzPTEbOUChQeYxYbFJgF7iOjCeBydWCxIw5aAwgs
+         PaCQ==
+X-Gm-Message-State: ACrzQf2RawS38eiX3efWDPUTW7lEb/z66wv87vIXVqpZfKLbY5O301zz
+        IDLl6boZFKGe+vfSJbOL+qkPnxfWyazQcQ==
+X-Google-Smtp-Source: AMsMyM5jspj+8kC7yhp4usBgy3FAOwLCNMfPWAqrfdp+mVitJn79Ooh8xEPtFvZnxqFsP/DRhUb6tQ==
+X-Received: by 2002:a17:902:eccc:b0:185:4ff6:fef8 with SMTP id a12-20020a170902eccc00b001854ff6fef8mr1964168plh.93.1666080460870;
+        Tue, 18 Oct 2022 01:07:40 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y24-20020aa79438000000b0056281da3bcbsm8800097pfo.149.2022.10.18.01.07.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 01:07:39 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 01:07:38 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] kunit/memcpy: Adding dynamic size and window tests
+Message-ID: <202210180102.2845B66@keescook>
+References: <20220929030846.1060818-1-keescook@chromium.org>
+ <CAKwvOd=aCGPP54qxoO4-K8MDBB8VEmXpUdo156FiBVxkpdxirg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 0/2] pinctrl: pinctrl-zynqmp: Revert output-enable and
- bias-high-impedance support
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-CC:     Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <saikrishna12468@gmail.com>, <git@amd.com>
-References: <20221017130303.21746-1-sai.krishna.potthuri@amd.com>
- <CACRpkdYYvznEKQ0huj5XwNwghMP-FRw5e54Di9FLVdXdsFP3-A@mail.gmail.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <CACRpkdYYvznEKQ0huj5XwNwghMP-FRw5e54Di9FLVdXdsFP3-A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT101:EE_|PH7PR12MB6658:EE_
-X-MS-Office365-Filtering-Correlation-Id: def1678d-3807-4b6f-e3c0-08dab0dfba1d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1BylaI06f9C+wkNzODEldsRMYJPW71zHd4ymOIBdNtzAoDJwxgkS1DcTgtlPQmK4xB1B2rCsn2r+b7QdwGefiEoHtn8tD671WBaH0dQPfsscU7eOm4vz24qZ+lNxCzFRegO7d3djYKcL6OXFA5I6Vgo6iL+sc20nURqPXRO3DXVFRYaV2EmiJiqre4QvadvDM4OpdBUY1ytSLilvAeIirJHB4HHxBdmIsSLgf0ItK/92L8qOAOTR1CgO5DA6SB/6BzuDVeVvwWqzxoAXXroXcwJkseCV4Wue8zeabxSYnjM7HYKnG3SXVW7dJi0KRitgsJcDvBDKsbLUjbi1B77mz2Y54SVsvMwJ8ofMbRkmLRD714KyJ6kfzioU+e51Ejm7d3stR8zOjdj+l4XItWxeuXl5KwFkbcSf0GrMWxueKnXYx4atePNoB8QsWe2K+N1UBK6hBGvxQ5WXdrhzq/+rHSOPpaKnawUTWNN682/RcWYmzzGrxFtRZT4fvb3rwGbeYPs0CBir/6/sfpmJBEdx4zZw3ijPT2AAnirRTM5ZmrIzO3tH9xi6seEuNa5R6/0z+Irnx2znP4y+Dmcdxo4MfWjdFz2+9m/ZTyjd2lEHkZAM6JRFMC+b74c1iSLZnK2QAp6T8GhbsboNVggVMs4CarKmQiflVwHFeWFQxUCXA0hX3r+NnhqJfoH/E8jPKz9L9qasObmiVP5szZ0T4tHuApadWnGQOi0bC8c254/bGRzQSjRHOPVXTM49Y2Q9LN4YRCPoJOrtR8u3ulgEleOGI4/nw4HwNxjjIwHTYnOn0xiXSuE803HKX3SgRCJYl0c4iJREs7aWIs6HdrQM9vCvzg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199015)(36840700001)(40470700004)(46966006)(66899015)(110136005)(6636002)(316002)(54906003)(478600001)(16526019)(16576012)(186003)(2906002)(336012)(4326008)(70586007)(70206006)(8676002)(8936002)(2616005)(41300700001)(53546011)(44832011)(26005)(4744005)(5660300002)(36756003)(82740400003)(40480700001)(36860700001)(40460700003)(47076005)(86362001)(426003)(31696002)(83380400001)(31686004)(356005)(82310400005)(81166007)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 08:06:57.2281
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: def1678d-3807-4b6f-e3c0-08dab0dfba1d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6658
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOd=aCGPP54qxoO4-K8MDBB8VEmXpUdo156FiBVxkpdxirg@mail.gmail.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/18/22 09:51, Linus Walleij wrote:
-> On Mon, Oct 17, 2022 at 3:03 PM Sai Krishna Potthuri
-> <sai.krishna.potthuri@amd.com> wrote:
+On Thu, Sep 29, 2022 at 02:02:05PM -0700, Nick Desaulniers wrote:
+> On Wed, Sep 28, 2022 at 8:08 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > The "side effects" memmove() test accidentally found a corner case in
+> > the recent refactoring of the i386 assembly memmove(), but missed
+> > another corner case. Instead of hoping to get lucky next time, implement
+> > much more complete tests of memcpy() and memmove() -- especially the
+> > moving window overlap for memmove() -- which catches all the issues
+> > encountered and should catch anything new.
+> >
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Link: https://lore.kernel.org/lkml/CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
->> Having support for output-enable and bias-high-impedance properties
->> causing system hang with older Xilinx ZynqMP Platform Management Firmware
->> because there is missing autodetection feature.
->> When this feature is implemented, support for these two properties should
->> bring back.
->>
->> changes in v2:
->> -> Added stable tree tag in 1/2 and 2/2 patches.
+> Regardless of my comments, I ran this through:
 > 
-> Patches applied for fixes!
+> $ ./tools/testing/kunit/kunit.py run --arch=i386 memcpy --make_options LLVM=1
+> $ ./tools/testing/kunit/kunit.py run --arch=arm64 memcpy --make_options LLVM=1
+> $ ./tools/testing/kunit/kunit.py run --arch=arm memcpy --make_options LLVM=1
+> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 memcpy --make_options LLVM=1
+> All were green for me.
 > 
-> Thanks for dealing with this, I hope you find a proper way to make
-> it work with all firmwares.
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-The way what pmufw team described is that driver will ask firmware if that 
-feature is available or not. If yes, the current calls will be made. Maybe we 
-could do it via module parameter but this is the cleanest solution for now.
+Thanks!
 
-Thanks,
-Michal
+> Do you have any thoughts on the test in my v4 wrt. potential for
+> conflicts in -next?
+> https://lore.kernel.org/lkml/20220928210512.642594-1-ndesaulniers@google.com/
 
+I designed this patch to avoid conflicts with your changes. (Has anyone
+picked up the memmove refactor for -next yet?)
+
+> It looks like even without this patch of yours,
+> $ ./tools/testing/kunit/kunit.py run --arch=i386 memcpy --make_options LLVM=1
+> demonstrates the bug in my v3.
+
+Yeah, it got lucky, mainly. :)
+
+> I also tested my v4 on top of this change with the above command line;
+> it passes. :)
+
+Perfecto! :)
+
+> 
+> > ---
+> >  lib/memcpy_kunit.c | 187 +++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 187 insertions(+)
+> >
+> > diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+> > index 2b5cc70ac53f..f15daa66c6a6 100644
+> > --- a/lib/memcpy_kunit.c
+> > +++ b/lib/memcpy_kunit.c
+> > @@ -270,6 +270,190 @@ static void memset_test(struct kunit *test)
+> >  #undef TEST_OP
+> >  }
+> >
+> > +static u8 large_src[1024];
+> > +static u8 large_dst[2048];
+> > +static const u8 large_zero[2048];
+> > +
+> > +static void init_large(struct kunit *test)
+> > +{
+> > +       int failed_rng = 0;
+> > +
+> > +       /* Get many bit patterns. */
+> > +       get_random_bytes(large_src, sizeof(large_src));
+> 
+> I know sizeof == ARRAY_SIZE when we have an array of u8, but please
+> consider using ARRAY_SIZE.
+
+Yeah, I will break myself of this habit yet. Fixed.
+
+> 
+> > +
+> > +       /* Make sure we have non-zero edges. */
+> > +       while (large_src[0] == 0) {
+> > +               get_random_bytes(large_src, 1);
+> > +               KUNIT_ASSERT_LT_MSG(test, failed_rng++, 100,
+> > +                                   "Is the RNG broken?");
+> > +       }
+> > +       while (large_src[sizeof(large_src) - 1] == 0) {
+> > +               get_random_bytes(&large_src[sizeof(large_src) - 1], 1);
+> > +               KUNIT_ASSERT_LT_MSG(test, failed_rng++, 100,
+> > +                                   "Is the RNG broken?");
+> > +       }
+> 
+> The above duplication could probably be separated out into another
+> static function where you pass in the address of the array element to
+> set to non-zero.
+
+Done in v2.
+
+> 
+> > +
+> > +       /* Explicitly zero the entire destination. */
+> > +       memset(large_dst, 0, sizeof(large_dst));
+> > +}
+> > +
+> > +/*
+> > + * Instead of an indirect function call for "copy" or a giant macro,
+> > + * use a bool to pick memcpy or memmove.
+> > + */
+> > +static void copy_large_test(struct kunit *test, bool use_memmove)
+> > +{
+> > +       init_large(test);
+> > +
+> > +       /* Copy a growing number of non-overlapping bytes ... */
+> > +       for (int bytes = 1; bytes <= sizeof(large_src); bytes++) {
+> > +               /* Over a shifting destination window ... */
+> > +               for (int offset = 0; offset < sizeof(large_src); offset++) {
+> > +                       int right_zero_pos = offset + bytes;
+> > +                       int right_zero_size = sizeof(large_dst) - right_zero_pos;
+> > +
+> > +                       /* Copy! */
+> > +                       if (use_memmove)
+> > +                               memmove(large_dst + offset, large_src, bytes);
+> > +                       else
+> > +                               memcpy(large_dst + offset, large_src, bytes);
+> > +
+> > +                       /* Did we touch anything before the copy area? */
+> > +                       KUNIT_ASSERT_EQ_MSG(test, memcmp(large_dst, large_zero, offset), 0,
+> > +                                           "with size %d at offset %d", bytes, offset);
+> > +                       /* Did we touch anything after the copy area? */
+> > +                       KUNIT_ASSERT_EQ_MSG(test, memcmp(&large_dst[right_zero_pos], large_zero, right_zero_size), 0,
+> > +                                           "with size %d at offset %d", bytes, offset);
+> > +
+> > +                       /* Are we byte-for-byte exact across the copy? */
+> > +                       KUNIT_ASSERT_EQ_MSG(test, memcmp(large_dst + offset, large_src, bytes), 0,
+> > +                                           "with size %d at offset %d", bytes, offset);
+> > +
+> > +                       /* Zero out what we copied for the next cycle. */
+> > +                       memset(large_dst + offset, 0, bytes);
+> > +               }
+> > +               /* Avoid stall warnings. */
+> > +               cond_resched();
+> 
+> I'm just curious what that is? ^
+> Should it go in the inner loop?
+
+This is to keep the soft-lockup detector from yelling about this
+extremely slow test. :P I put it here because it's seems the right
+balance between doing in too much (inner loop) and not at all.
+
+> 
+> > +       }
+> > +}
+> > +
+> > +static void memcpy_large_test(struct kunit *test)
+> > +{
+> > +       copy_large_test(test, false);
+> > +}
+> > +
+> > +static void memmove_large_test(struct kunit *test)
+> > +{
+> > +       copy_large_test(test, true);
+> > +}
+> > +
+> > +/*
+> > + * Take a single step if within "inc" of the start or end,
+> > + * otherwise, take a full "inc" steps.
+> 
+> I still have a hard time following what this logic is doing,
+> particularly the clamping to 1. Can you elaborate more in this
+> comment?
+
+Sure! I've tried to flesh this out in v2.
+
+> 
+> > + */
+> > +static inline int next_step(int idx, int start, int end, int inc)
+> 
+> Please drop the inline keyword here.
+
+Done.
+
+> 
+> > +{
+> > +       start += inc;
+> > +       end -= inc;
+> > +
+> > +       if (idx < start || idx + inc > end)
+> > +               inc = 1;
+> > +       return idx + inc;
+> > +}
+> > +
+> > +static void memmove_overlap_test(struct kunit *test)
+> > +{
+> > +       /*
+> > +        * Running all possible offset and overlap combinations takes a
+> > +        * very long time. Instead, only check up to 128 bytes offset
+> > +        * into the destintation buffer (which should result in crossing
+> 
+> typo: s/destintation/destination/
+
+Fixed :)
+
+> 
+> > +        * cachelines), with a step size of 1 through 7 to try to skip some
+> > +        * redundancy.
+> > +        */
+> > +       static const int offset_max = 128; /* sizeof(large_src); */
+> 
+> I thought large_src was 1024? Perhaps this comment is stale or
+> contradictory to the comment in the block above the variable
+> definition?
+
+This was a left-over note about how big it actually was while I was
+tuning it for sane run-times. I've updated the comment.
+
+> 
+> > +       static const int bytes_step = 7;
+> > +       static const int window_step = 7;
+> > +
+> > +       static const int bytes_start = 1;
+> > +       static const int bytes_end = sizeof(large_src) + 1;
+> > +
+> > +       init_large(test);
+> > +
+> > +       /* Copy a growing number of overlapping bytes ... */
+> > +       for (int bytes = bytes_start; bytes < bytes_end;
+> > +            bytes = next_step(bytes, bytes_start, bytes_end, bytes_step)) {
+> > +
+> > +               /* Over a shifting destination window ... */
+> > +               for (int d_off = 0; d_off < offset_max; d_off++) {
+> > +                       int s_start = max(d_off - bytes, 0);
+> > +                       int s_end = min_t(int, d_off + bytes, sizeof(large_src));
+> > +
+> > +                       /* Over a shifting source window ... */
+> > +                       for (int s_off = s_start; s_off < s_end;
+> > +                            s_off = next_step(s_off, s_start, s_end, window_step)) {
+> 
+> Might a while loop with a distinct update statement look cleaner than
+> a multiline for predicate?
+
+I originally tried it either way, and I found the "while" even uglier. :)
+
+> 
+> > +                               int left_zero_pos, left_zero_size;
+> > +                               int right_zero_pos, right_zero_size;
+> > +                               int src_pos, src_orig_pos, src_size;
+> > +                               int pos;
+> > +
+> > +                               /* Place the source in the destination buffer. */
+> > +                               memcpy(&large_dst[s_off], large_src, bytes);
+> > +
+> > +                               /* Copy to destination offset. */
+> > +                               memmove(&large_dst[d_off], &large_dst[s_off], bytes);
+> > +
+> > +                               /* Make sure destination entirely matches. */
+> > +                               KUNIT_ASSERT_EQ_MSG(test, memcmp(&large_dst[d_off], large_src, bytes), 0,
+> > +                                       "with size %d at src offset %d and dest offset %d",
+> > +                                       bytes, s_off, d_off);
+> > +
+> > +                               /* Calculate the expected zero spans. */
+> > +                               if (s_off < d_off) {
+> > +                                       left_zero_pos = 0;
+> > +                                       left_zero_size = s_off;
+> > +
+> > +                                       right_zero_pos = d_off + bytes;
+> > +                                       right_zero_size = sizeof(large_dst) - right_zero_pos;
+> > +
+> > +                                       src_pos = s_off;
+> > +                                       src_orig_pos = 0;
+> > +                                       src_size = d_off - s_off;
+> > +                               } else {
+> > +                                       left_zero_pos = 0;
+> > +                                       left_zero_size = d_off;
+> > +
+> > +                                       right_zero_pos = s_off + bytes;
+> > +                                       right_zero_size = sizeof(large_dst) - right_zero_pos;
+> > +
+> > +                                       src_pos = d_off + bytes;
+> > +                                       src_orig_pos = src_pos - s_off;
+> > +                                       src_size = right_zero_pos - src_pos;
+> > +                               }
+> 
+> Looking at the arms of these branches, I see a fair amount of
+> duplication. Mind deduplicating some of the statements here? The
+> assignments of left_zero_pos and right_zero_size look invariant of the
+> predicate.
+
+I did this originally too, but I found it easier to reason by keeping
+all of the bounds calculations separated like this for readability. Any
+duplication will get optimized away. :)
+
+Thanks for the review!
+
+-- 
+Kees Cook
