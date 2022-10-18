@@ -2,154 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020846023BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEE16023BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiJRF0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 01:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S229939AbiJRF1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 01:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJRF0J (ORCPT
+        with ESMTP id S229799AbiJRF1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 01:26:09 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C2272846
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 22:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666070768; x=1697606768;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y2RqQYPqokfPxKDpaiZB+BcZNoeDLOFn+N6zZNXnkDQ=;
-  b=Akk6ViUi01foHqe4SVTfDAlb0VsXTr6cU2db0zoZg6znX1h3SYAzrNQd
-   SmoFhqbZMVM+yIseyvgHu4vOTZBFoEVFY9PnOVUi6BestehdQBQDcmPBK
-   Bom+TvtFtwwqUQngpSNncPH1Ck38R8ca704v0Ws7EEyhFZ+4Q/MBAC0zV
-   oW4sFOcr4/Xhzb2ukCkpe9DyF0wMV8z65ZMQ49gAt2daOj3PVwN3/tiQk
-   Hm5rAgoAhh+BDFcUYLTskworCFp7s0cHP7bo+GsXWGdvc9dX3XP6DUGnX
-   VYAmFjPFFqAVxkLtFMJ643zOqu94YenDvPcNnX2em+z3dQKz0o9wSi84j
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="392303383"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="392303383"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 22:26:08 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="771043863"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="771043863"
-Received: from yhuang6-mobl2.sh.intel.com ([10.238.6.69])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 22:26:02 -0700
-From:   Huang Ying <ying.huang@intel.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Jagdish Gediya <jvgediya.oss@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: [RFC] memory tier, sysfs: rename attribute "nodes" to "nodes_list"
-Date:   Tue, 18 Oct 2022 13:25:41 +0800
-Message-Id: <20221018052541.265708-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 18 Oct 2022 01:27:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C03F726A5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 22:27:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 268F361307
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:27:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1A2C433C1;
+        Tue, 18 Oct 2022 05:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666070864;
+        bh=mD9Bnrr+Blr43HX7VzogX53dclSTqEzRKcE28LHW00o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VvYgZ9mvsXBZ/6Zl1fSK17Y5KhA97Wt54ZSd6/+mJomPBs2kHKdsnvkaWU5PplPqz
+         4ZnNdzpSzF+REf9g17yl+MOXy8G6wm7WSCzPGVFnfVeu/HKArQbPl7wm9FrC7KCfBq
+         hRTaZKhv4O0IzDDVYCNZDBNEjuP4eUwudvO4jN7w=
+Date:   Tue, 18 Oct 2022 07:28:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Brent Pappas <bpappas@pappasbrent.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brent Pappas <pappasbrent@gmail.com>
+Subject: Re: [PATCH] staging: rtl8723bs: core: Replace macros RotR1 through
+ Mk16 with static inline functions
+Message-ID: <Y045f/UzV8Dx5tpp@kroah.com>
+References: <20221017171653.12578-1-bpappas@pappasbrent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017171653.12578-1-bpappas@pappasbrent.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In sysfs, we use attribute name "cpus" for cpu mask and "cpus_list"
-for cpu list.  For example, in my system,
+On Mon, Oct 17, 2022 at 01:16:54PM -0400, Brent Pappas wrote:
+> From: Brent Pappas <pappasbrent@gmail.com>
+> 
+> Replace macros "RotR1", "Lo8", "Hi8", "Lo16", "Hi16", and "Mk16" with
+> static inline functions to comply with Linux coding style standards.
+> 
+> Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+> ---
+>  drivers/staging/rtl8723bs/core/rtw_security.c | 35 +++++++++++++++----
+>  1 file changed, 29 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_security.c b/drivers/staging/rtl8723bs/core/rtw_security.c
+> index ac731415f733..519e141fb82c 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_security.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_security.c
+> @@ -253,12 +253,35 @@ void rtw_seccalctkipmic(u8 *key, u8 *header, u8 *data, u32 data_len, u8 *mic_cod
+>  }
+>  
+>  /* macros for extraction/creation of unsigned char/unsigned short values  */
+> -#define RotR1(v16)   ((((v16) >> 1) & 0x7FFF) ^ (((v16) & 1) << 15))
+> -#define   Lo8(v16)   ((u8)((v16)       & 0x00FF))
+> -#define   Hi8(v16)   ((u8)(((v16) >> 8) & 0x00FF))
+> -#define  Lo16(v32)   ((u16)((v32)       & 0xFFFF))
+> -#define  Hi16(v32)   ((u16)(((v32) >> 16) & 0xFFFF))
+> -#define  Mk16(hi, lo) ((lo) ^ (((u16)(hi)) << 8))
+> +static inline u16 RotR1(u16 v16)
+> +{
+> +	return ((((v16) >> 1) & 0x7FFF) ^ (((v16) & 1) << 15));
+> +}
+> +
+> +static inline u8 Lo8(u16 v16)
+> +{
+> +	return ((u8)((v16)       & 0x00FF));
 
- $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus
- 0,00100004
- $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
- 2,20
+Odd use of spaces, doesn't checkpatch complain about this?
 
-It looks reasonable to use "nodes" for node mask and "nodes_list" for
-node list.  So, rename the attribute to follow the naming convention.
+But the larger question is, don't we already have functions for this in
+the core kernel?  Why not just use them instead of hand-rolling custom
+functions instead?
 
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: Bharata B Rao <bharata@amd.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Hesham Almatary <hesham.almatary@huawei.com>
-Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Tim Chen <tim.c.chen@intel.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: Yang Shi <shy828301@gmail.com>
----
- Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers | 4 ++--
- mm/memory-tiers.c                                      | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+thanks,
 
-diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-index 45985e411f13..af07e166f559 100644
---- a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-+++ b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-@@ -10,7 +10,7 @@ Description:	A collection of all the memory tiers allocated.
- 
- 
- What:		/sys/devices/virtual/memory_tiering/memory_tierN/
--		/sys/devices/virtual/memory_tiering/memory_tierN/nodes
-+		/sys/devices/virtual/memory_tiering/memory_tierN/nodes_list
- Date:		August 2022
- Contact:	Linux memory management mailing list <linux-mm@kvack.org>
- Description:	Directory with details of a specific memory tier
-@@ -21,5 +21,5 @@ Description:	Directory with details of a specific memory tier
- 		A smaller value of N implies a higher (faster) memory tier in the
- 		hierarchy.
- 
--		nodes: NUMA nodes that are part of this memory tier.
-+		nodes_list: NUMA nodes that are part of this memory tier.
- 
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index f116b7b6333e..8dbfe9ec87d5 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -131,8 +131,8 @@ static void memory_tier_device_release(struct device *dev)
- 	kfree(tier);
- }
- 
--static ssize_t nodes_show(struct device *dev,
--			  struct device_attribute *attr, char *buf)
-+static ssize_t nodes_list_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
- {
- 	int ret;
- 	nodemask_t nmask;
-@@ -143,10 +143,10 @@ static ssize_t nodes_show(struct device *dev,
- 	mutex_unlock(&memory_tier_lock);
- 	return ret;
- }
--static DEVICE_ATTR_RO(nodes);
-+static DEVICE_ATTR_RO(nodes_list);
- 
- static struct attribute *memtier_dev_attrs[] = {
--	&dev_attr_nodes.attr,
-+	&dev_attr_nodes_list.attr,
- 	NULL
- };
- 
--- 
-2.35.1
-
+greg k-h
