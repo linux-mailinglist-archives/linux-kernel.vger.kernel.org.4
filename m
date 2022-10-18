@@ -2,69 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88631602838
+	by mail.lfdr.de (Postfix) with ESMTP id DD870602839
 	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiJRJX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
+        id S229963AbiJRJYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJRJXq (ORCPT
+        with ESMTP id S229986AbiJRJX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:23:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93010A99CB
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666085010;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yBOtDHeeIVLfwUhAyBSCeK/RWi8e6lg4gpPb3l/BEu4=;
-        b=H3KfKVWfLobBiNh5an9JoxUvic9t0cnyJ7Dj8jDP+0VRu+Upq2gIqAFyENtXncWehIcL0n
-        yXtbHCuFt3cthYUKthWhAczyPIcZfkbOTKSrJ1Tt4HjcTCTudxrvskV0+2KzyjvVwqV87F
-        Y782hW5TWdczAVUoKzfUQ/5qRr4YuM8=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-220-rqbdr_D4PcieJMW8vUY5sw-1; Tue, 18 Oct 2022 05:23:29 -0400
-X-MC-Unique: rqbdr_D4PcieJMW8vUY5sw-1
-Received: by mail-pg1-f200.google.com with SMTP id p24-20020a63f458000000b0043cd718c49dso7869249pgk.15
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:23:29 -0700 (PDT)
+        Tue, 18 Oct 2022 05:23:56 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53CFACA1D;
+        Tue, 18 Oct 2022 02:23:45 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id n7so13280286plp.1;
+        Tue, 18 Oct 2022 02:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nt4xF0sF59aYzJb+0BGH2wGz8PUJGN3YQ/EwsiEsBo0=;
+        b=SlJG+7ME4evT99t4F0lDdlNZvSFr4IGijCcaqz12H+hJ+ILxaIvJVbz2+3hDVtLR6Q
+         1mOx2qKY5vYxhb6nANmJxtI1lGumEt6T73t7edZ9//f7cLa5FawR6rEZLELX6lEOIWoY
+         gbYJ4EesUTRAYB0XPUOUl/TuujyQ56gu8CbyP1/nQRw1R0xwph6Iz/APBghItkfr80hh
+         mwYWsIGrqBq2n/2r6Tni6AdliHQOylTKnhMbjajQ4knJh3W5N4AHVTnDM5AgPSrvAcYj
+         TMZYitv+Gv4j3tMgWOZwrHGzX400GwTdVflF92nGMvSbEGIEk68PWKSrlBNQozJQEdpB
+         ON7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yBOtDHeeIVLfwUhAyBSCeK/RWi8e6lg4gpPb3l/BEu4=;
-        b=DScUM8bUJxdEQnQI8A+IiR7Gl4o5+K6UJeeFCIaam1WbB3sMd/ZTFykmecAoMLiJbX
-         951LHN71JTyBi2ZMGtx0B7SrTT98BdyQlkGq7B4Xw6UHGCZ8Jw5Gwux6lhIPTtLp17ei
-         cMa0uewNb9VLBtgRyW4l+1EQhtEligOYttA2/oKdOpFAoWedUFMgsGtKDrPlyzEvpL32
-         ZQ3KFFQYhGRnFrrxF5LG18O9az+4HNABfY1VzL94I6N08dRG2BY53YbgEIEzb5B/EYNU
-         +aCgNQkSA7KPI8tNE3/Ae/eoQ4FZytYKB+Epzbq3GSjEGeIQYPuAxAe/4m5PRDYDZk5V
-         gDtw==
-X-Gm-Message-State: ACrzQf1DOJvs3FzTuR58m9EFijhzKr43LFCjsc2p2CHFhgyr8ite2h07
-        G5mwc5aUXu9qhTCoQXRO7cioDacCyGt/+LT8UjRxbRxazsZpL9VHX8TP69IJ0SxqEechvbE+FZv
-        UhxBr8kYO5u2SEVgcK1O3PbyVi4MF98AQYUrQBDYX
-X-Received: by 2002:a17:90b:3c02:b0:20d:2af9:821c with SMTP id pb2-20020a17090b3c0200b0020d2af9821cmr2468185pjb.181.1666085008521;
-        Tue, 18 Oct 2022 02:23:28 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM615JTQle3yis0nUwgTnU0Y+6ybhxCOWo9agHlFI/aWwi9iDi090LTMOfQEJ0hiSlGk4/W49sNtceJ0tEX6RHk=
-X-Received: by 2002:a17:90b:3c02:b0:20d:2af9:821c with SMTP id
- pb2-20020a17090b3c0200b0020d2af9821cmr2468172pjb.181.1666085008314; Tue, 18
- Oct 2022 02:23:28 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nt4xF0sF59aYzJb+0BGH2wGz8PUJGN3YQ/EwsiEsBo0=;
+        b=G4qPm7aMHzASjSQAPl5xKFgQkaG3Y+SUwpc6xfyt2kkZthpgBtf9wVsHi6pYul4JCU
+         o6eN9ZQ+Sae2VtZbVUU1F+liii7MYbZf6aJ93dSmkbjZSu470ksYGpTf50IoyyuV2z8w
+         CeQjn0zjNvBgM2HG/Z82iWG7ymwt/R4j8a3zRcgzKVr+SgtueaTPI/hFXg5NjNr3F82Y
+         +Hkpq1mFU6Ub/y8Y67zC5sNpyORElcO1bJSND+M75bkG9CwdHzH67UoL/Oacq/T4LYsN
+         24wgwnM2paQp8viO4FSbjc1JBYsBnfLnzpV9IjRyYxaH4+SO6RThw/Q7iZ17OYldunHy
+         OieQ==
+X-Gm-Message-State: ACrzQf3t84/DlRDIKNF8HuC54Islgmo/Gb5A1HEc+wNVi18fDNTFycgF
+        j6h86DrhhmYMu02RdBo74mI=
+X-Google-Smtp-Source: AMsMyM6K9TlFn90QXRWI2S9Cu2nds2zQSAAmn9ap7qNVJ0hA4fS6U3GPKqONoT6Y63C/tkPU85KOCQ==
+X-Received: by 2002:a17:90b:4d05:b0:202:ec78:9d73 with SMTP id mw5-20020a17090b4d0500b00202ec789d73mr2506378pjb.103.1666085025186;
+        Tue, 18 Oct 2022 02:23:45 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170903120800b0016c09a0ef87sm8247438plh.255.2022.10.18.02.23.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 02:23:44 -0700 (PDT)
+Message-ID: <a9c64b36-9770-1198-7958-3d66b98737c1@gmail.com>
+Date:   Tue, 18 Oct 2022 18:23:39 +0900
 MIME-Version: 1.0
-References: <Y00b31dX1mIfgnBP@xpf.sh.intel.com>
-In-Reply-To: <Y00b31dX1mIfgnBP@xpf.sh.intel.com>
-From:   Miklos Szeredi <mszeredi@redhat.com>
-Date:   Tue, 18 Oct 2022 11:23:17 +0200
-Message-ID: <CAOssrKfakpGguAV=102jpW4m+YfpRx=+cBBO1O43bt3iwJHiSA@mail.gmail.com>
-Subject: Re: [Syzkaller] INFO: task hung in fuse_lookup with v6.0 kernel in guest
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     linux-kernel@vger.kernel.org, heng.su@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation for
+ writel() example
+To:     Arnd Bergmann <arnd@arndb.de>, Parav Pandit <parav@nvidia.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>, parri.andrea@gmail.com,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
+        Nicholas Piggin <npiggin@gmail.com>, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        "Paul E. McKenney" <paulmck@kernel.org>, dlustig@nvidia.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <20221010101331.29942-1-parav@nvidia.com>
+ <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
+ <59d99be6-f79e-45bd-203c-17972255cc39@gmail.com>
+ <12f51033-1461-43f9-8d8d-cd726fbb4758@app.fastmail.com>
+ <a91e8216-7767-9126-e1d2-c67846cf32fc@gmail.com>
+ <b88e4bd2-5c2e-430a-99f9-18cd43463fd6@app.fastmail.com>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <b88e4bd2-5c2e-430a-99f9-18cd43463fd6@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +90,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:17 AM Pengfei Xu <pengfei.xu@intel.com> wrote:
->
-> Hi Miklos,
->
-> Greeting!
->
-> Platform: Tiger lake CPU platform.
->
-> We found 1 "task hung in fuse_lookup" issue by syzkaller with v6.0 mainline
-> kernel in guest.
->
-> Bisected and found the bad commit:
-> "
-> commit:  62dd1fc8cc6b22e3e568be46ebdb817e66f5d6a5
-> fuse: move fget() to fuse_get_tree()
-> "
->
-> Reproduced code generated by syzkaller, binary, bisect log and all the dmesg
-> info are in attached package.
+On Tue, 18 Oct 2022 09:49:34 +0200, Arnd Bergmann wrote:
+> On Tue, Oct 18, 2022, at 9:40 AM, Akira Yokosawa wrote:
+>> On Tue, 18 Oct 2022 08:44:09 +0200, Arnd Bergmann wrote:
+>>>
+>>> Anything weaker than a full "wmb()" probably makes the driver calling
+>>> the writel() non-portable, so that is both vague and incorrect.
+>>
+>> Do you mean there is a writel() implementation somewhere in the kernel
+>> which doesn't guarantee an implicit wmb() before MMIO write?
+> 
+> There are lots of those, but that's not what I meant. E.g. on x86,
+> writel() does not imply a full wmb() but still guarantees serialization
+> between DMA and the register access.
+> 
+>> Or do you mean my version is confusing because it can imply a weaker
+>> write barrier is sufficient before writel_relaxed()?
+> 
+> That's what I meant, yes. On a lot of architectures, it is sufficient
+> to have something weaker than wmb() before writel_relaxed(), especially
+> on anything that defines writel_relaxed() to be the same as writel(),
+> any barrier would technically work. On arm32, using __iowmb() would be
+> sufficient, and this can be less than a full wmb() but again it's
+> obviously not portable. These details should not be needed in the
+> documentation.
+Thanks for the clarification.
 
-Thanks for the report.
+I think I was confused by the current wording.
+I might be wrong, but I guess Parav's motivation of this change was
+to prevent this kind of confusion from the first place.
 
-I tried out the reproducer, and the deadlock can be triggered.
-Unfortunately killing the deadlocked processes is not enough, but it
-still should be possible to recover with "echo 1 >
-/sys/fs/fuse/connections/$FUSE_DEV/abort".    In my tests this works,
-so I'm not sure there's anything to fix here.
+Parav, may I suggest a reworked changelog? :
 
-Is there a real life situation where this occurs, or is this just
-triggered with fuzzing?
+    The cited commit describes that when using writel(), explcit wmb()
+    is not needed. However, wmb() can be an expensive barrier depending
+    on platforms. Arch-specific writel() can use a platform-specific
+    weaker barrier needed for the guarantee mentioned in section "KERNEL
+    I/O BARRIER EFFECTS".
 
-I'm wondering why syzbot didn't try aborting using the "abort" file in
-sysfs, AFAICS it does know this trick.
+    Current wording of:
+        Note that, when using writel(), a prior wmb() is not needed
+        to guarantee that the cache coherent memory writes have completed
+        before writing to the MMIO region.
 
-Thanks,
-Miklos
+    is confusing because it can be interpreted that writel() always has
+    a barrier equivalent to the heavy-weight wmb(), which is not the case.
 
+    Hence stop mentioning wmb() and just call "a prior barrier" in the
+    notice.
+
+    commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
+
+Am I still missing something?
+
+        Thanks, Akira
+
+> 
+>       Arnd
