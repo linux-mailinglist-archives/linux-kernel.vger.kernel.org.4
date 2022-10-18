@@ -2,155 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F6E603423
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3224603431
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiJRUom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 16:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S230026AbiJRUrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 16:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiJRUof (ORCPT
+        with ESMTP id S229463AbiJRUrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 16:44:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E422B1A223;
-        Tue, 18 Oct 2022 13:44:30 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IIw1ct022194;
-        Tue, 18 Oct 2022 20:44:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=mBcZKhQtPPk6nDupBGM0mwVz5W4ozyHmllOfvso8wEc=;
- b=pFNV+1fP+71xlQgg5C3euqWXAsZa/VHo30i/+vSxT53PLw4QTsKXXx3RqoihYPi2PfAC
- gUtKl5uS+TBPBcbyUfm6njRIPEONMq59fl53vo+cLUqJwmFDsFRzKoQpDkScNac5gTwH
- bOMaowTikq3cl8cEXRS3dGRhPnDcucKjGHgxYjgUcLrbdM4zwnOL9GBbWMTsU/LdFVsB
- IxS3VIwMk4IKtR/1JCqUL3V0jGJj42Ir55E8jCv6PB5OVDK0de09WixuS5BxGu74kVfv
- OGNKx/BhJ/32sjk9CLLzdl12c5sfOlZ76A8Ili02LEGlJMK/giAmpeq0NRhU7F9GyeBW zQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9qwp1qr4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Oct 2022 20:44:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29IKiHdD025077
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Oct 2022 20:44:17 GMT
-Received: from quicinc.com (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 18 Oct
- 2022 13:44:16 -0700
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [RESEND PATCH] remoteproc: sysmon: Make QMI message rules const
-Date:   Tue, 18 Oct 2022 13:44:08 -0700
-Message-ID: <20221018204408.13314-1-quic_jjohnson@quicinc.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220914234705.28405-3-quic_jjohnson@quicinc.com>
-References: <20220914234705.28405-3-quic_jjohnson@quicinc.com>
+        Tue, 18 Oct 2022 16:47:00 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869CE75CD2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666126019; x=1697662019;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xAISTZU5PrnGvOLvRbZpWoVuAoN++5yBROHJLs02nio=;
+  b=KwHCrdRNhsA3PcCCqIRrbDjBr5AATRH2o0+F5zxWSnyBUhnTv+4GTYk5
+   kj2oJ7LPFb3bI17fbmHS/3nDImLBcLF7Kjp4ZI+sLAd75qRmZEiUao3YA
+   knw/PyJpHgyzG97q+ux/XZI2mB7NCINGaxwnBfYw7R3esBNZHpfG20C2R
+   VXlRhHkSUFSyaXDd4kz1bBrXovuB5CQX3TPoarXtFiHN14zsjPLjBL9zR
+   Yv+gmKhgIyTgW2wdGTCrZf+uo2ni1ZvkeO7LS30swXxqXJtoIk92jOR/L
+   ZF5l5OzU+Sk5loF8rr1rBSmFkjUAthme4gqPXvfDkrYNA51ikD26v5Z0F
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="293627402"
+X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
+   d="scan'208";a="293627402"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 13:46:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="803942735"
+X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
+   d="scan'208";a="803942735"
+Received: from lkp-server01.sh.intel.com (HELO 8381f64adc98) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Oct 2022 13:46:57 -0700
+Received: from kbuild by 8381f64adc98 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oktUH-000216-04;
+        Tue, 18 Oct 2022 20:46:57 +0000
+Date:   Wed, 19 Oct 2022 04:46:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/core] BUILD SUCCESS
+ 5c9a92dec3235b0c1d51e92860f8014753161593
+Message-ID: <634f108f.kUo7cj624oGwM5x7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YY595TaBYfefQ5CjstgCcHlGi3iiJyqS
-X-Proofpoint-ORIG-GUID: YY595TaBYfefQ5CjstgCcHlGi3iiJyqS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-18_07,2022-10-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- phishscore=0 bulkscore=0 mlxlogscore=992 malwarescore=0 adultscore=0
- priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210180116
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ff6d365898d4 ("soc: qcom: qmi: use const for struct
-qmi_elem_info") allows QMI message encoding/decoding rules to be
-const, so do that for sysmon.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+branch HEAD: 5c9a92dec3235b0c1d51e92860f8014753161593  x86/bugs: Add retbleed=force
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Reviewed-by: Alex Elder <elder@linaro.org>
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
----
-This patch was last sent as part of the series:
-[PATCH v2 0/4] Make QMI message rules const
-https://lore.kernel.org/linux-arm-msm/20220914234705.28405-1-quic_jjohnson@quicinc.com/
+elapsed time: 1770m
 
-As
+configs tested: 223
+configs skipped: 8
 
-[PATCH v2 2/4] remoteproc: sysmon: Make QMI message rules const
-https://lore.kernel.org/linux-arm-msm/20220914234705.28405-3-quic_jjohnson@quicinc.com/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Since the individual patches in the series will land in separate
-trees, and since there are no dependencies between them, they are
-being resent separately when the following dependent change has landed
-in the destination tree
-ff6d365898d4 ("soc: qcom: qmi: use const for struct qmi_elem_info")
+gcc tested configs:
+i386                             allyesconfig
+i386                                defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+powerpc                 mpc8540_ads_defconfig
+sh                          kfr2r09_defconfig
+powerpc                 linkstation_defconfig
+arm                        keystone_defconfig
+powerpc                        cell_defconfig
+parisc                generic-32bit_defconfig
+riscv             nommu_k210_sdcard_defconfig
+arc                  randconfig-r043-20221017
+i386                 randconfig-a005-20221017
+i386                 randconfig-a003-20221017
+i386                 randconfig-a004-20221017
+i386                 randconfig-a001-20221017
+i386                 randconfig-a006-20221017
+x86_64               randconfig-a004-20221017
+x86_64               randconfig-a001-20221017
+x86_64               randconfig-a002-20221017
+x86_64               randconfig-a006-20221017
+x86_64               randconfig-a005-20221017
+arm64                            allyesconfig
+arm                              allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64               randconfig-a003-20221017
+arm                            lart_defconfig
+sh                        edosk7760_defconfig
+sh                             shx3_defconfig
+parisc                generic-64bit_defconfig
+sh                              ul2_defconfig
+powerpc                  storcenter_defconfig
+i386                 randconfig-a002-20221017
+i386                 randconfig-c001-20221017
+powerpc                     taishan_defconfig
+arc                           tb10x_defconfig
+m68k                       bvme6000_defconfig
+arm                                 defconfig
+sparc                       sparc32_defconfig
+sparc                       sparc64_defconfig
+arm                       aspeed_g5_defconfig
+arm64                            alldefconfig
+sh                           se7724_defconfig
+powerpc                      ppc6xx_defconfig
+csky                              allnoconfig
+loongarch                         allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arc                        vdk_hs38_defconfig
+arm                           h3600_defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+powerpc                  iss476-smp_defconfig
+sh                            hp6xx_defconfig
+nios2                               defconfig
+arc                  randconfig-r043-20221018
+s390                 randconfig-r044-20221018
+riscv                randconfig-r042-20221018
+powerpc                      chrp32_defconfig
+arm                       imx_v6_v7_defconfig
+sh                          rsk7203_defconfig
+m68k                          amiga_defconfig
+m68k                        m5307c3_defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+riscv                               defconfig
+arm                             ezx_defconfig
+powerpc                     mpc83xx_defconfig
+arm                         lpc18xx_defconfig
+powerpc                 mpc85xx_cds_defconfig
+ia64                          tiger_defconfig
+alpha                            alldefconfig
+mips                     loongson1b_defconfig
+i386                          randconfig-c001
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+mips                     decstation_defconfig
+powerpc                      makalu_defconfig
+powerpc                      pcm030_defconfig
+arm                        shmobile_defconfig
+arc                            hsdk_defconfig
+powerpc                 mpc837x_mds_defconfig
+xtensa                    xip_kc705_defconfig
+m68k                            q40_defconfig
+m68k                           sun3_defconfig
+mips                           gcw0_defconfig
+mips                      fuloong2e_defconfig
+xtensa                  audio_kc705_defconfig
+m68k                          atari_defconfig
+openrisc                       virt_defconfig
+sh                         ap325rxa_defconfig
+xtensa                           allyesconfig
+mips                           ci20_defconfig
+arm                          pxa3xx_defconfig
+sh                          sdk7786_defconfig
+powerpc                      arches_defconfig
+sh                        dreamcast_defconfig
+sh                                  defconfig
+m68k                                defconfig
+riscv                             allnoconfig
+csky                                defconfig
+powerpc                      ppc40x_defconfig
+powerpc                         wii_defconfig
+sh                   sh7770_generic_defconfig
+arc                    vdk_hs38_smp_defconfig
+arc                     nsimosci_hs_defconfig
+sparc64                             defconfig
+sh                        sh7757lcr_defconfig
+microblaze                      mmu_defconfig
+sh                           se7343_defconfig
+parisc                              defconfig
+ia64                            zx1_defconfig
+i386                          randconfig-a003
+m68k                       m5208evb_defconfig
+arm                         at91_dt_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+i386                          randconfig-a001
+i386                          randconfig-a005
+arm                        cerfcube_defconfig
+sh                  sh7785lcr_32bit_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                           jazz_defconfig
+powerpc                     asp8347_defconfig
+mips                  maltasmvp_eva_defconfig
+sh                           se7751_defconfig
+m68k                       m5275evb_defconfig
+powerpc                     pq2fads_defconfig
+arm                         cm_x300_defconfig
+loongarch                           defconfig
+loongarch                        allmodconfig
+sh                   sh7724_generic_defconfig
+openrisc                 simple_smp_defconfig
+m68k                          hp300_defconfig
+arm                          gemini_defconfig
+mips                            gpr_defconfig
+sparc                             allnoconfig
+powerpc                     tqm8541_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                   currituck_defconfig
+powerpc                 mpc834x_mds_defconfig
+arm                        trizeps4_defconfig
+m68k                        mvme16x_defconfig
+ia64                                defconfig
+arm                        mvebu_v7_defconfig
+openrisc                         alldefconfig
+arm                      jornada720_defconfig
+ia64                             allmodconfig
 
-That dependent change has landed in the rproc-next branch of
-remoteproc/linux.git so this patch is now ready to be consumed.
+clang tested configs:
+x86_64               randconfig-a014-20221017
+x86_64               randconfig-a015-20221017
+x86_64               randconfig-a012-20221017
+x86_64               randconfig-a011-20221017
+x86_64               randconfig-a013-20221017
+x86_64               randconfig-a016-20221017
+i386                 randconfig-a013-20221017
+i386                 randconfig-a015-20221017
+i386                 randconfig-a016-20221017
+i386                 randconfig-a011-20221017
+i386                 randconfig-a014-20221017
+i386                 randconfig-a012-20221017
+riscv                randconfig-r042-20221017
+hexagon              randconfig-r045-20221017
+s390                 randconfig-r044-20221017
+hexagon              randconfig-r041-20221017
+x86_64               randconfig-k001-20221017
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+mips                        maltaup_defconfig
+arm                         s3c2410_defconfig
+x86_64                        randconfig-c007
+mips                 randconfig-c004-20221018
+i386                          randconfig-c001
+s390                 randconfig-c005-20221018
+arm                  randconfig-c002-20221018
+riscv                randconfig-c006-20221018
+powerpc              randconfig-c003-20221018
+powerpc                 mpc832x_mds_defconfig
+mips                           rs90_defconfig
+mips                          rm200_defconfig
+powerpc                      ppc44x_defconfig
+riscv                             allnoconfig
+powerpc                  mpc866_ads_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+arm                         socfpga_defconfig
+arm                       mainstone_defconfig
+arm                          sp7021_defconfig
+powerpc                    mvme5100_defconfig
+x86_64                        randconfig-k001
+hexagon              randconfig-r045-20221018
+hexagon              randconfig-r041-20221018
+arm                      pxa255-idp_defconfig
+mips                       lemote2f_defconfig
+arm                      tct_hammer_defconfig
 
- drivers/remoteproc/qcom_sysmon.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
-index 57dde2a69b9d..3992bb61d2ec 100644
---- a/drivers/remoteproc/qcom_sysmon.c
-+++ b/drivers/remoteproc/qcom_sysmon.c
-@@ -190,7 +190,7 @@ struct ssctl_shutdown_resp {
- 	struct qmi_response_type_v01 resp;
- };
- 
--static struct qmi_elem_info ssctl_shutdown_resp_ei[] = {
-+static const struct qmi_elem_info ssctl_shutdown_resp_ei[] = {
- 	{
- 		.data_type	= QMI_STRUCT,
- 		.elem_len	= 1,
-@@ -211,7 +211,7 @@ struct ssctl_subsys_event_req {
- 	u32 evt_driven;
- };
- 
--static struct qmi_elem_info ssctl_subsys_event_req_ei[] = {
-+static const struct qmi_elem_info ssctl_subsys_event_req_ei[] = {
- 	{
- 		.data_type	= QMI_DATA_LEN,
- 		.elem_len	= 1,
-@@ -269,7 +269,7 @@ struct ssctl_subsys_event_resp {
- 	struct qmi_response_type_v01 resp;
- };
- 
--static struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
-+static const struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
- 	{
- 		.data_type	= QMI_STRUCT,
- 		.elem_len	= 1,
-@@ -283,7 +283,7 @@ static struct qmi_elem_info ssctl_subsys_event_resp_ei[] = {
- 	{}
- };
- 
--static struct qmi_elem_info ssctl_shutdown_ind_ei[] = {
-+static const struct qmi_elem_info ssctl_shutdown_ind_ei[] = {
- 	{}
- };
- 
 -- 
-2.37.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
