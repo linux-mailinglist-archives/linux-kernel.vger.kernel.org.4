@@ -2,88 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99064602CF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBEA602CF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiJRN3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S229866AbiJRN3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiJRN3G (ORCPT
+        with ESMTP id S229509AbiJRN3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:29:06 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9DC6C74C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:29:04 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id f11so23447679wrm.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
-        b=eEqeweMgoAha2gA3agmhPrwheBhBw4LuItboa3KIkd3futKzMLro4OSFn/+GsHoO2q
-         1g0UsVLbq6G7LYgkvrjjF0/aK9i1HtM2ftwQjwVtT+HxYmYOQu0iXWkYvn5R2pCAGqs4
-         s9cqF+SV17FECoYNEG3BbIsBfCDRYocVPcCDrmyfVwRyAV9hx0spYE9DLW1VgzgBS4tr
-         UbQ3nKR9UHhV4a0DtNBqTW1c7Zei2Dx2gjoyD+xI5pcx7YWlyHGRsdGlvYb4iC3lrx8I
-         5fNhFiugt5kE/2K8pSWMOmRr7GxD0aGVofbLzCMH3mgH/+99nu8B3Ir/+6nZinH/MMQ3
-         hyTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
-        b=5H+LgAAlLW3iATyOh7bY93lXyvgIl4/oM8roinzdlIGZTW+NpkEB0OoQNO/IAL2Rl6
-         AijQLLF7IRRsY7x4710T9HfirUUyIDocZWf+fksvySRiZbRT/LoVqKXMDtL+UJalESeF
-         VlupE7HAQszw588JGIseXuvvEjQUTJSiy7rLXilI88pIQwC79aX5UB5SSM5zv2Ci4M8v
-         3LXMg9us5HzvLYSa4SHOWHzotTeMCGbqVYk73k0q9g9K/aJbMcWMzkaOGUa/Drr+KaRg
-         V0aP9YWJZFIpMLHpnRFE5u96ETzA7EB3UUQ6gBWe37o4CHM2s4u4lQ1Vypc6La6YtFOj
-         tKjw==
-X-Gm-Message-State: ACrzQf3Dle5Ng9+pgm0iFL7OMoE2naGy466KMRZGx1XJQD06Ro+4m7/p
-        ON1NmA/IMb5kpvm/y/6jifb5x1KBX5Vb6kPal7o=
-X-Google-Smtp-Source: AMsMyM51yRiBRyVMbbU7I9haBznkPLb7xvkfhQYeXVron/xlOZ8CJeyh1CIWGi75RgG0LYv0FAdxow==
-X-Received: by 2002:a05:6000:1190:b0:232:c73d:7524 with SMTP id g16-20020a056000119000b00232c73d7524mr1991986wrx.371.1666099742541;
-        Tue, 18 Oct 2022 06:29:02 -0700 (PDT)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05600c089300b003c409244bb0sm12880231wmp.6.2022.10.18.06.28.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 06:29:01 -0700 (PDT)
-Message-ID: <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
-Date:   Tue, 18 Oct 2022 15:28:58 +0200
+        Tue, 18 Oct 2022 09:29:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFE21005C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:29:32 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1okmeq-0000U6-8n; Tue, 18 Oct 2022 15:29:24 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1okmeo-002Hwp-Pu; Tue, 18 Oct 2022 15:29:22 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1okmeo-008os2-1H; Tue, 18 Oct 2022 15:29:22 +0200
+Date:   Tue, 18 Oct 2022 15:29:21 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Wesley W. Terpstra" <wesley@sifive.com>,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] pwm: sifive: Always let the first pwm_apply_state
+ succeed
+Message-ID: <20221018132921.5fsbiz254npk2fci@pengutronix.de>
+References: <20221018091316.415685-1-emil.renner.berthing@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH V11 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of
- p?d_init()
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-References: <20221017024027.2389370-1-chenhuacai@loongson.cn>
- <20221017024027.2389370-2-chenhuacai@loongson.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221017024027.2389370-2-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4mm6vvxtocb2k52r"
+Content-Disposition: inline
+In-Reply-To: <20221018091316.415685-1-emil.renner.berthing@canonical.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,66 +59,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/22 04:40, Huacai Chen wrote:
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
-> 
-> We are preparing to add sparse vmemmap support to LoongArch. MIPS and
-> LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
-> page tables, so adjust their prototypes to make generic helpers can call
-> them.
-> 
-> NIOS2 declares pmd_init() but doesn't use, just remove it to avoid build
-> errors.
-> 
-> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+
+--4mm6vvxtocb2k52r
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Tue, Oct 18, 2022 at 11:13:16AM +0200, Emil Renner Berthing wrote:
+> Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
+> RGB and green PWM controlled LEDs on the HiFive Unmatched board
+> managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
+> All three colours of the RGB LED and the green LED run from different
+> lines of the same PWM, but with the same period so this works fine when
+> the LED drivers are loaded one after the other.
+>=20
+> Unfortunately it does expose a race in the PWM driver when both LED
+> drivers are loaded at roughly the same time. Here is an example:
+>=20
+>   |          Thread A           |          Thread B           |
+>   |  led_pwm_mc_probe           |  led_pwm_probe              |
+>   |    devm_fwnode_pwm_get      |                             |
+>   |      pwm_sifive_request     |                             |
+>   |        ddata->user_count++  |                             |
+>   |                             |    devm_fwnode_pwm_get      |
+>   |                             |      pwm_sifive_request     |
+>   |                             |        ddata->user_count++  |
+>   |         ...                 |          ...                |
+>   |    pwm_state_apply          |    pwm_state_apply          |
+>   |      pwm_sifive_apply       |      pwm_sifive_apply       |
+>=20
+> Now both calls to pwm_sifive_apply will see that ddata->approx_period,
+> initially 0, is different from the requested period and the clock needs
+> to be updated. But since ddata->user_count >=3D 2 both calls will fail
+> with -EBUSY, which will then cause both LED drivers to fail to probe.
+>=20
+> Fix it by letting the first call to pwm_sifive_apply update the clock
+> even when ddata->user_count !=3D 1.
+>=20
+> Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
+> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 > ---
->   arch/loongarch/include/asm/pgalloc.h | 13 ++-----------
->   arch/loongarch/include/asm/pgtable.h |  8 ++++----
->   arch/loongarch/kernel/numa.c         |  4 ++--
->   arch/loongarch/mm/pgtable.c          | 23 +++++++++++++----------
->   arch/mips/include/asm/pgalloc.h      | 10 +++++-----
->   arch/mips/include/asm/pgtable-64.h   |  8 ++++----
->   arch/mips/kvm/mmu.c                  |  3 +--
->   arch/mips/mm/pgtable-32.c            | 10 +++++-----
->   arch/mips/mm/pgtable-64.c            | 18 ++++++++++--------
->   arch/mips/mm/pgtable.c               |  2 +-
->   arch/nios2/include/asm/pgalloc.h     |  5 -----
->   11 files changed, 47 insertions(+), 57 deletions(-)
+>  drivers/pwm/pwm-sifive.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
+> index 2d4fa5e5fdd4..ccdf92045f34 100644
+> --- a/drivers/pwm/pwm-sifive.c
+> +++ b/drivers/pwm/pwm-sifive.c
+> @@ -159,7 +159,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, st=
+ruct pwm_device *pwm,
+> =20
+>  	mutex_lock(&ddata->lock);
+>  	if (state->period !=3D ddata->approx_period) {
+> -		if (ddata->user_count !=3D 1) {
+> +		if (ddata->user_count !=3D 1 && ddata->approx_period) {
 
-> diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
-> index 61891af25019..88819a21d97e 100644
-> --- a/arch/mips/mm/pgtable-32.c
-> +++ b/arch/mips/mm/pgtable-32.c
-> @@ -13,9 +13,9 @@
->   #include <asm/pgalloc.h>
->   #include <asm/tlbflush.h>
->   
-> -void pgd_init(unsigned long page)
-> +void pgd_init(void *addr)
->   {
-> -	unsigned long *p = (unsigned long *) page;
-> +	unsigned long *p = (unsigned long *)addr;
->   	int i;
->   
->   	for (i = 0; i < USER_PTRS_PER_PGD; i+=8) {
-> @@ -61,9 +61,9 @@ void __init pagetable_init(void)
->   #endif
->   
->   	/* Initialize the entire pgd.  */
-> -	pgd_init((unsigned long)swapper_pg_dir);
-> -	pgd_init((unsigned long)swapper_pg_dir
-> -		 + sizeof(pgd_t) * USER_PTRS_PER_PGD);
-> +	pgd_init(swapper_pg_dir);
-> +	pgd_init((void *)((unsigned long)swapper_pg_dir
-> +		 + sizeof(pgd_t) * USER_PTRS_PER_PGD));
+IMHO this needs a code comment. It should among others mention that
+approx_period is only zero if .apply() wasn't called before.
 
-Pre-existing, but why not use:
+Let me note this is inconsistent. I didn't check the details, but let's
+assume the PWM can implement .period =3D 500 and .period =3D 514 and nothing
+in between. So if the the first PWM requests 512 ns it gets (I hope) 500
+ns. Then when the second requests comes in requesting 511 it fails and
+if it requests 512 is succeeds also getting 500 ns. Hmm.
 
-         pgd_init(&swapper_pg_dir[USER_PTRS_PER_PGD]);
+Best regards
+Uwe
 
-?
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Otherwise:
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+--4mm6vvxtocb2k52r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNOqi8ACgkQwfwUeK3K
+7AkPuwf/aMdvPVFLhS+ygY/c1Guwk89BPz1Yy9kO0c0YNna1B6Vp8f02XEeGMeK7
+hirxK+eqKE+2mhj/4Ma1kqkcDCA11curbutAxiKlBo13FGJsSYGfI6fPQIb4QFc2
+B2dbxcF7MkJaDJ9+1RB5FhaK84cfJ0YSXvt0zC2MXzUQUaKQYXsO8KRIcExrmsSY
+3qni4f8ZGIojR/5BSW4wxZvdok3rt4LqAYKavkVwXsPM1gAC7QzW8bM5ian2Qz5u
+TGE+O9jX2frictFolA3vL8dW/Ums8MziSnncS1VhCKjW0Z0Hwu4JePf8Jc8Fofbq
+a9UJSsy7sT/d+Zj+1Nu7DOgPmoT8LQ==
+=ysZi
+-----END PGP SIGNATURE-----
+
+--4mm6vvxtocb2k52r--
