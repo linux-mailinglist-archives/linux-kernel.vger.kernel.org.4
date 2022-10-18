@@ -2,109 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493D7602C54
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEB9602C59
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJRNFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S229911AbiJRNFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiJRNE5 (ORCPT
+        with ESMTP id S229680AbiJRNFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:04:57 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04296F241
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:04:55 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id o2so8513727qkk.10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JVggg/zGpEgRhovjVbnJJA36oAouEK0fvptCigeAEiI=;
-        b=bhqSB3ryRV8GJLGPzDnOYf8WCdBmi9ErGIC+xRFHwuHDvaU3XCja0tioOn/5XZx6gi
-         pYWZtDI3kv97T/9WsyeyKT39mc08e5NjPyl64QwiqLamP5IuyKL69xSFl0o6vkgwcLLZ
-         iwOIT4kZPlwA4X0i+urx0c/ziQohJgNl1AF2ZTwVucDj7Pv95pzaN4n9MHjncsve1CMQ
-         +mQcn9IcYlVICCBqKCsgBLqPnxxEjDYit+tJ2jjh1bzh7QQ0iypz2Oq219OBThBhK3Bb
-         DR3BXhbG/d5wkqOyViAAo+3kPxsizYejzhewL39xrAfYGdeAVpIn+0AtRz/6SJQZAIhz
-         3O1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JVggg/zGpEgRhovjVbnJJA36oAouEK0fvptCigeAEiI=;
-        b=YvxqA5D08/EyT/fTf4Cg67SvMCLB1SU+kJdxJjfKqubdAOBP95CKd+faHkgtd61qa4
-         nGDXe/Uub2pJRZQ5gldFfKm+KMv9tjx7Ix9HjHWU4XZUeU8am0W4LsEsfbrhmb5JjTCc
-         x3yPsaquVETNfyaKnncvoNK+BEIV62igfowea1Zg20TuhtFGYLOmSSWxmRakm4kXhUJ0
-         bLOuOap7WnbvovAHyUjZsph7DFZ8hX+GpWh028n4GPvEK24F8Bgua7AkVD8yY7EzvLSK
-         6G2H/0RjKzt5kjkouYkJmAOmOyRxEQwkIZSNxNAkMEn3ZNR04a9f2eNg9xO4o9mqT37U
-         /+eA==
-X-Gm-Message-State: ACrzQf1XAqTzsZpGYxEGQG8RnexTycVlXVozTftl3NiyhPWsp2fbq+XD
-        GHR4qd+kk9DS+W260iWoljGtgEbCXSaGfg==
-X-Google-Smtp-Source: AMsMyM4UKl/gZaGJ/cWVtaEPrCGXVBFGcjnNI41kh6JnRKrICOizaNxEXyI0ZVESLEsCXd1fWghhvg==
-X-Received: by 2002:a05:620a:1a94:b0:6ee:d395:663e with SMTP id bl20-20020a05620a1a9400b006eed395663emr1733742qkb.632.1666098293130;
-        Tue, 18 Oct 2022 06:04:53 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id bw15-20020a05622a098f00b0035d08c1da35sm1893102qtb.45.2022.10.18.06.04.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 06:04:52 -0700 (PDT)
-Message-ID: <4b870c82-12cb-5e59-bbf7-4291888f9d51@linaro.org>
-Date:   Tue, 18 Oct 2022 09:04:50 -0400
+        Tue, 18 Oct 2022 09:05:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14FD2C5895
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:05:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CF1A113E;
+        Tue, 18 Oct 2022 06:05:48 -0700 (PDT)
+Received: from pierre123.arm.com (pierre123.nice.arm.com [10.34.100.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D5CE53F792;
+        Tue, 18 Oct 2022 06:05:39 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        WANG Xuerui <git@xen0n.name>, Qi Liu <liuqi115@huawei.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] firmware: arm_sdei: Fix sleep from invalid context BUG
+Date:   Tue, 18 Oct 2022 15:04:53 +0200
+Message-Id: <20221018130456.1356081-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] dt-bindings: PCI: qcom-ep: Fix PERST register description
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221018093115.7537-1-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221018093115.7537-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 05:31, Johan Hovold wrote:
-> The 'qcom,perst-regs' property holds a single phandle array with the
-> phandle of the TCSR syscon and offsets of the two PERST registers, but
-> the current schema does not capture this.
-> 
-> Update the binding to describe the single phandle array and its three
-> elements.
-> 
-> Fixes: 31c9ef002580 ("dt-bindings: PCI: Add Qualcomm PCIe Endpoint controller")
+On an Ampere Altra,
+Running a preemp_rt kernel based on v5.19-rc3-rt5 on an
+Ampere Altra triggers:
+[   15.683141] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+[   15.683154] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
+[   15.683157] preempt_count: 0, expected: 0
+[   15.683159] RCU nest depth: 0, expected: 0
+[   15.683163] 3 locks held by cpuhp/0/24:
+[   15.683167]  #0: ffffda30217c70d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
+[   15.683201]  #1: ffffda30217c7120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
+[   15.683205]  #2: ffffda3021c711f0 (sdei_list_lock){....}-{3:3}, at: sdei_cpuhp_up+0x3c/0x130
+[   15.683224] irq event stamp: 36
+[   15.683226] hardirqs last  enabled at (35): [<ffffda301e85b7bc>] finish_task_switch+0xb4/0x2b0
+[   15.683236] hardirqs last disabled at (36): [<ffffda301e812fec>] cpuhp_thread_fun+0x21c/0x248
+[   15.683238] softirqs last  enabled at (0): [<ffffda301e80b184>] copy_process+0x63c/0x1ac0
+[   15.683245] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[   15.683258] CPU: 0 PID: 24 Comm: cpuhp/0 Not tainted 5.19.0-rc3-rt5-[...]
+[   15.683265] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   15.683268] Call trace:
+[   15.683271]  dump_backtrace+0x114/0x120
+[   15.683277]  show_stack+0x20/0x70
+[   15.683279]  dump_stack_lvl+0x9c/0xd8
+[   15.683288]  dump_stack+0x18/0x34
+[   15.683289]  __might_resched+0x188/0x228
+[   15.683292]  rt_spin_lock+0x70/0x120
+[   15.683301]  sdei_cpuhp_up+0x3c/0x130
+[   15.683303]  cpuhp_invoke_callback+0x250/0xf08
+[   15.683305]  cpuhp_thread_fun+0x120/0x248
+[   15.683308]  smpboot_thread_fn+0x280/0x320
+[   15.683315]  kthread+0x130/0x140
+[   15.683321]  ret_from_fork+0x10/0x20
 
-It's not necessarily a fix, the original code was correct, just this one
-is better. :)
+sdei_cpuhp_up() is called in the STARTING hotplug section,
+which runs whith interrupts disabled. Move CPUHP_AP_ARM_SDEI_
+state to the _ONLINE section to execute the cpuhp cb with
+preemption enabled.
 
-Anyway:
+Some SDEI calls (e.g. SDEI_1_0_FN_SDEI_PE_MASK) take actions on the
+calling CPU. It is checked that preemption is disabled for them.
+_ONLINE cpuhp cb are executed in the 'per CPU hotplug thread'.
+Preemption is enabled in those threads, but their cpumask is limited
+to 1 CPU.
+Move 'WARN_ON_ONCE(preemptible())' statements so that SDEI cpuhp cb
+don't trigger them. This means that no check will be done for some
+cases, e.g. sdei_mask_local_cpu() invocations.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Also add a check for the SDEI_1_0_FN_SDEI_PRIVATE_RESET SDEI call
+which acts on the calling CPU.
 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  .../devicetree/bindings/pci/qcom,pcie-ep.yaml          | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+Suggested-by: James Morse <james.morse@arm.com>
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+---
+ drivers/firmware/arm_sdei.c | 28 ++++++++++++++--------------
+ include/linux/cpuhotplug.h  |  2 +-
+ 2 files changed, 15 insertions(+), 15 deletions(-)
 
-
-Best regards,
-Krzysztof
+diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
+index 1e1a51510e83..9b03e164a37a 100644
+--- a/drivers/firmware/arm_sdei.c
++++ b/drivers/firmware/arm_sdei.c
+@@ -301,8 +301,6 @@ int sdei_mask_local_cpu(void)
+ {
+ 	int err;
+ 
+-	WARN_ON_ONCE(preemptible());
+-
+ 	err = invoke_sdei_fn(SDEI_1_0_FN_SDEI_PE_MASK, 0, 0, 0, 0, 0, NULL);
+ 	if (err && err != -EIO) {
+ 		pr_warn_once("failed to mask CPU[%u]: %d\n",
+@@ -315,6 +313,7 @@ int sdei_mask_local_cpu(void)
+ 
+ static void _ipi_mask_cpu(void *ignored)
+ {
++	WARN_ON_ONCE(preemptible());
+ 	sdei_mask_local_cpu();
+ }
+ 
+@@ -322,8 +321,6 @@ int sdei_unmask_local_cpu(void)
+ {
+ 	int err;
+ 
+-	WARN_ON_ONCE(preemptible());
+-
+ 	err = invoke_sdei_fn(SDEI_1_0_FN_SDEI_PE_UNMASK, 0, 0, 0, 0, 0, NULL);
+ 	if (err && err != -EIO) {
+ 		pr_warn_once("failed to unmask CPU[%u]: %d\n",
+@@ -336,6 +333,7 @@ int sdei_unmask_local_cpu(void)
+ 
+ static void _ipi_unmask_cpu(void *ignored)
+ {
++	WARN_ON_ONCE(preemptible());
+ 	sdei_unmask_local_cpu();
+ }
+ 
+@@ -343,6 +341,8 @@ static void _ipi_private_reset(void *ignored)
+ {
+ 	int err;
+ 
++	WARN_ON_ONCE(preemptible());
++
+ 	err = invoke_sdei_fn(SDEI_1_0_FN_SDEI_PRIVATE_RESET, 0, 0, 0, 0, 0,
+ 			     NULL);
+ 	if (err && err != -EIO)
+@@ -389,8 +389,6 @@ static void _local_event_enable(void *data)
+ 	int err;
+ 	struct sdei_crosscall_args *arg = data;
+ 
+-	WARN_ON_ONCE(preemptible());
+-
+ 	err = sdei_api_event_enable(arg->event->event_num);
+ 
+ 	sdei_cross_call_return(arg, err);
+@@ -401,6 +399,8 @@ int sdei_event_enable(u32 event_num)
+ 	int err = -EINVAL;
+ 	struct sdei_event *event;
+ 
++	WARN_ON_ONCE(preemptible());
++
+ 	mutex_lock(&sdei_events_lock);
+ 	event = sdei_event_find(event_num);
+ 	if (!event) {
+@@ -479,8 +479,6 @@ static void _local_event_unregister(void *data)
+ 	int err;
+ 	struct sdei_crosscall_args *arg = data;
+ 
+-	WARN_ON_ONCE(preemptible());
+-
+ 	err = sdei_api_event_unregister(arg->event->event_num);
+ 
+ 	sdei_cross_call_return(arg, err);
+@@ -492,6 +490,7 @@ int sdei_event_unregister(u32 event_num)
+ 	struct sdei_event *event;
+ 
+ 	WARN_ON(in_nmi());
++	WARN_ON_ONCE(preemptible());
+ 
+ 	mutex_lock(&sdei_events_lock);
+ 	event = sdei_event_find(event_num);
+@@ -561,8 +560,6 @@ static void _local_event_register(void *data)
+ 	struct sdei_registered_event *reg;
+ 	struct sdei_crosscall_args *arg = data;
+ 
+-	WARN_ON(preemptible());
+-
+ 	reg = per_cpu_ptr(arg->event->private_registered, smp_processor_id());
+ 	err = sdei_api_event_register(arg->event->event_num, sdei_entry_point,
+ 				      reg, 0, 0);
+@@ -576,6 +573,7 @@ int sdei_event_register(u32 event_num, sdei_event_callback *cb, void *arg)
+ 	struct sdei_event *event;
+ 
+ 	WARN_ON(in_nmi());
++	WARN_ON_ONCE(preemptible());
+ 
+ 	mutex_lock(&sdei_events_lock);
+ 	if (sdei_event_find(event_num)) {
+@@ -717,6 +715,8 @@ static int sdei_pm_notifier(struct notifier_block *nb, unsigned long action,
+ {
+ 	int rv;
+ 
++	WARN_ON_ONCE(preemptible());
++
+ 	switch (action) {
+ 	case CPU_PM_ENTER:
+ 		rv = sdei_mask_local_cpu();
+@@ -765,7 +765,7 @@ static int sdei_device_freeze(struct device *dev)
+ 	int err;
+ 
+ 	/* unregister private events */
+-	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_STARTING);
++	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_ONLINE);
+ 
+ 	err = sdei_unregister_shared();
+ 	if (err)
+@@ -786,7 +786,7 @@ static int sdei_device_thaw(struct device *dev)
+ 		return err;
+ 	}
+ 
+-	err = cpuhp_setup_state(CPUHP_AP_ARM_SDEI_STARTING, "SDEI",
++	err = cpuhp_setup_state(CPUHP_AP_ARM_SDEI_ONLINE, "SDEI",
+ 				&sdei_cpuhp_up, &sdei_cpuhp_down);
+ 	if (err)
+ 		pr_warn("Failed to re-register CPU hotplug notifier...\n");
+@@ -823,7 +823,7 @@ static int sdei_reboot_notifier(struct notifier_block *nb, unsigned long action,
+ 	 * We are going to reset the interface, after this there is no point
+ 	 * doing work when we take CPUs offline.
+ 	 */
+-	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_STARTING);
++	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_ONLINE);
+ 
+ 	sdei_platform_reset();
+ 
+@@ -1003,7 +1003,7 @@ static int sdei_probe(struct platform_device *pdev)
+ 		goto remove_cpupm;
+ 	}
+ 
+-	err = cpuhp_setup_state(CPUHP_AP_ARM_SDEI_STARTING, "SDEI",
++	err = cpuhp_setup_state(CPUHP_AP_ARM_SDEI_ONLINE, "SDEI",
+ 				&sdei_cpuhp_up, &sdei_cpuhp_down);
+ 	if (err) {
+ 		pr_warn("Failed to register CPU hotplug notifier...\n");
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index f61447913db9..63b89e00a4c3 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -161,7 +161,6 @@ enum cpuhp_state {
+ 	CPUHP_AP_PERF_X86_CSTATE_STARTING,
+ 	CPUHP_AP_PERF_XTENSA_STARTING,
+ 	CPUHP_AP_MIPS_OP_LOONGSON3_STARTING,
+-	CPUHP_AP_ARM_SDEI_STARTING,
+ 	CPUHP_AP_ARM_VFP_STARTING,
+ 	CPUHP_AP_ARM64_DEBUG_MONITORS_STARTING,
+ 	CPUHP_AP_PERF_ARM_HW_BREAKPOINT_STARTING,
+@@ -209,6 +208,7 @@ enum cpuhp_state {
+ 	CPUHP_AP_IRQ_AFFINITY_ONLINE,
+ 	CPUHP_AP_BLK_MQ_ONLINE,
+ 	CPUHP_AP_ARM_MVEBU_SYNC_CLOCKS,
++	CPUHP_AP_ARM_SDEI_ONLINE,
+ 	CPUHP_AP_X86_INTEL_EPB_ONLINE,
+ 	CPUHP_AP_PERF_ONLINE,
+ 	CPUHP_AP_PERF_X86_ONLINE,
+-- 
+2.25.1
 
