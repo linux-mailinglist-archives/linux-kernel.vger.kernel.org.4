@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EF96032CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8796032B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiJRStJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
+        id S230049AbiJRSsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiJRSs5 (ORCPT
+        with ESMTP id S229453AbiJRSse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:48:57 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4589EA0242;
-        Tue, 18 Oct 2022 11:48:50 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id d26so34480907eje.10;
-        Tue, 18 Oct 2022 11:48:50 -0700 (PDT)
+        Tue, 18 Oct 2022 14:48:34 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFA79F363;
+        Tue, 18 Oct 2022 11:48:32 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j16so25203373wrh.5;
+        Tue, 18 Oct 2022 11:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
+         :mime-version:date:message-id:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OEXvp1IreEp3SXV31DiUhQRIjvrLdojheHeDjSM1+mQ=;
-        b=StZ853wy/e5RtsJT54EGTUKpdC1tUlgOYlrs3sEGGMffoVhFCAcySZ+zNVfaD1MQTp
-         hMR7D7Kq7Xkwj7xChLcHAirblIX5aaAaqxy0G/6wY09rasb4Wyz7bPp1wQmhVBenkfs3
-         XaUUSrpMu+p7lybYOS2F+fq432f0WVK60coyn97CguE3CAs29HGOugjHrvxF/A8W/foA
-         evsF12c3sbuzYKU+33M7yTxBruThoComQQJs1211x2nevgPNAk6CvOnmOw1ecu6qEER1
-         33dhbDf7rIyUZWUKI6TvvvWxR8b8S8I4Ekt328WSeicvjAGCOySDvgplDFdTSIHYEOGB
-         dNUA==
+        bh=1B4uQFomqZcKA1aWhx4jMpHwleRSccFekx+UVfGhW1E=;
+        b=Fhk2zU4yzRCoc/3UIGYe5w0pV84U6qJ8Ld8XEaWQ8sybzJCy1HIyLm2B7BSODnaZA7
+         gsyA7BOJFAD/VmT9jD+zMU1j07DTLgYUWX03+OBkrxMVfQwzVF7bSrL5E+BSyfYLg/U3
+         6Ba5BtxuOCVEfWxjPXppcOL3owBTQvzL9WSqFsPkLk470/ljamx4GWtDnu8FSOkPHYkO
+         SU9fkEAyairO7hQX3zz1N9K8VFlygwFxvpf26wyUhY4Y0e/pfjjE4+iOM4aZTw/0H11p
+         lDtdOWmkTbfIGyIXLofPSczMhHVeIS+Z1I+sphY/gryiBVgvCClSU0ZpCTt19/GmNOZy
+         wVCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
+         :mime-version:date:message-id:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OEXvp1IreEp3SXV31DiUhQRIjvrLdojheHeDjSM1+mQ=;
-        b=rEd69rZm96JdZRjEzTiuJU0cq2IEvTSYB/FkH6WI4irV8c43pxo5+DKOLhwryrb9S5
-         0TkKESplNyIfm/U4omXALfThSThVt5EQbdhIkjHOgfHsefn9JTX7uWkjjXy/YB7q37SM
-         g47aueFhSKrnHl4zXEk00JgqZjwNJ8Saeq21q9a16xlrd5gb2RMQt6B7RFOD5DPwRcju
-         eTMlNCQ746UTuKhEwzC0ZET3YWlo96bhccNVfzK3ePNFGlTQtvV4EmdNshLPPKjT2/MA
-         jY2Eyh7/HPtKp96rgZDRXMxh/0573Sl0cf+xefMld3+XSi7eAnm/eoq3gFUktb//zZPX
-         HMVQ==
-X-Gm-Message-State: ACrzQf0WXswtPtC8zGQWolWrabbjJwLwiaTivXRENkJPoLC12lft6WaQ
-        fwJpaDaQM2e3r056f3+apB0=
-X-Google-Smtp-Source: AMsMyM5Y5ZS6TDv/2mH05016sSTBXkDL48kYZI7q6Xe+foRLWaJOLgSM1up164i2Bm1RjXBT7PL2RQ==
-X-Received: by 2002:a17:907:7632:b0:78d:b5ba:87db with SMTP id jy18-20020a170907763200b0078db5ba87dbmr3568466ejc.661.1666118928064;
-        Tue, 18 Oct 2022 11:48:48 -0700 (PDT)
-Received: from 127.0.0.1localhost (94.197.72.2.threembb.co.uk. [94.197.72.2])
-        by smtp.gmail.com with ESMTPSA id j18-20020a17090623f200b0078db18d7972sm7855355ejg.117.2022.10.18.11.48.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 11:48:47 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [RFC for-next 4/4] io_uring/rw: enable bio caches for IRQ rw
-Date:   Tue, 18 Oct 2022 19:47:16 +0100
-Message-Id: <11cf38513c45083955d4ee2cedbb46df0a9f6081.1666114003.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <cover.1666114003.git.asml.silence@gmail.com>
-References: <cover.1666114003.git.asml.silence@gmail.com>
+        bh=1B4uQFomqZcKA1aWhx4jMpHwleRSccFekx+UVfGhW1E=;
+        b=Ue4Qu4s6xwcCn2J2xDWZDiiy3pTiJDlB/XeUcBZ22fDfoQB4RFVJXvKgpfhWEP2t8w
+         T7Nj+ED3ZFXa9Yzgg1AJ2Cfq91ct/Yrb8psa/IHBikzeqCVFSQW29LFAQobEfPrsqv5E
+         H4DKMMny+u1p7rGSU5MxWBD/yU0p+f5Tb+cbHYaUsSSjfqPWxP3792CYqiLBzaE/yRHr
+         cgsonrmD4oAwzDOY6DDg8Zb537qD1J8Us9i6u29SpzA402LNwj5NCYvZHhiF/+s+voDR
+         QAGJN/kGKBX/2yAK7FAWykJNgb2XROyO2yoIQeV3Lz+vRkqU0UuV/iRNuy0E3A3TOHCQ
+         VQQg==
+X-Gm-Message-State: ACrzQf0lLdUFadTbU7KUR+WB5cs6tByito1c2MFfP2rExtnxw8E7qjrO
+        4skCQwgb5HFLK0A+lrWCbMg=
+X-Google-Smtp-Source: AMsMyM618G4qNRFWj1h5K+/NYtPnnh0r7INysWssGfChFVQGZmZ2UNQUYGajcgmJZD940vn0eBO/bg==
+X-Received: by 2002:a5d:6a42:0:b0:22e:6706:647b with SMTP id t2-20020a5d6a42000000b0022e6706647bmr2801236wrw.58.1666118911351;
+        Tue, 18 Oct 2022 11:48:31 -0700 (PDT)
+Received: from [192.168.0.160] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id bl13-20020adfe24d000000b00230b3a0f461sm11581949wrb.33.2022.10.18.11.48.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 11:48:30 -0700 (PDT)
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+X-Google-Original-From: Alejandro Colomar <alx@kernel.org>
+Message-ID: <4ba6c215-6d28-1769-52d3-04941b962ff3@kernel.org>
+Date:   Tue, 18 Oct 2022 20:48:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Content-Language: en-US
+To:     Michael Kerrisk <mtk.manpages@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-man <linux-man@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "Dr. Tobias Quathamer" <toddy@debian.org>,
+        Marcos Fouces <marcos@debian.org>, Sam James <sam@gentoo.org>,
+        Pierre Labastie <pierre.labastie@neuf.fr>
+Subject: man-pages-6.01 released
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -73,35 +79,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we can use IOCB_ALLOC_CACHE not only for iopoll'ed reads/write but
-also for normal IRQ driven I/O.
+Gidday!
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/rw.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I'm proud to announce:
 
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 100de2626e47..ff609b762742 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -667,6 +667,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
- 	ret = kiocb_set_rw_flags(kiocb, rw->flags);
- 	if (unlikely(ret))
- 		return ret;
-+	kiocb->ki_flags |= IOCB_ALLOC_CACHE;
- 
- 	/*
- 	 * If the file is marked O_NONBLOCK, still allow retry for it if it
-@@ -682,7 +683,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
- 			return -EOPNOTSUPP;
- 
- 		kiocb->private = NULL;
--		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
-+		kiocb->ki_flags |= IOCB_HIPRI;
- 		kiocb->ki_complete = io_complete_rw_iopoll;
- 		req->iopoll_completed = 0;
- 	} else {
+     man-pages-6.01 - manual pages for GNU/Linux
+
+This release results from patches, bug reports, reviews, and comments
+from around 16 contributors.  The release includes around 14 commits,
+and changed all of the pages.
+
+Tarball download:
+     <https://mirrors.edge.kernel.org/pub/linux/docs/man-pages/>
+Git repository:
+     <https://git.kernel.org/cgit/docs/man-pages/man-pages.git/>
+
+The most notable changes in man-pages-6.01 are the following:
+
+- Build system fixes.  These were quite bad for distributors, which is
+   the reason we released 6.01 so soon after 6.00.
+
+- Document EOF, FAN_MARK_IGNORE, STATX_DIOALIGN, and a few feature
+   test macros.
+
+Thank you all for contributing.
+
+
+Cheers,
+
+Alex
+
+==================== Changes in man-pages-6.01 ====================
+
+Released: 2022-10-18, Aldaya
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes, reports, notes,
+ideas, and discussions that have been incorporated in changes in
+this release:
+
+"G. Branden Robinson" <g.branden.robinson@gmail.com>
+Agostino Sarubbo <ago@gentoo.org>
+Alejandro Colomar <alx@kernel.org>
+Amir Goldstein <amir73il@gmail.com>
+Darrick J. Wong <djwong@kernel.org>
+Eric Biggers <ebiggers@google.com>
+Grigoriy <grigoriyremvar@protonmail.com>
+Jakub Wilk <jwilk@jwilk.net>
+Jan Kara <jack@suse.cz>
+Matthew Bobrowski <repnop@google.com>
+Michael Tokarev <mjt@tls.msk.ru>
+Mike Gilbert <floppym@gentoo.org>
+Nicolás A. Ortega Froysa <nicolas@ortegas.org>
+Pierre Labastie <pierre.labastie@neuf.fr>
+Sam James <sam@gentoo.org>
+Steve Izma <sizma@golden.net>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+EOF.3const
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+fanotify_mark.2
+	FAN_MARK_IGNORE
+
+open.2, statx.2
+	STATX_DIOALIGN
+
+feature_test_macros.7
+	_FORTIFY_SOURCE=3
+	_TIME_BITS
+
+
+Global changes
+--------------
+
+- Build system:
+
+   - Update manual page dates (TH 3rd argument) when creating the tarball
+     with 'make dist'.  this removes the need for a tstamp commit before
+     each release.
+
+   - Don't print spurious errors from the Makefile that are not relevant.
+
+- Manual pages' sections:
+
+   - Title (.TH):
+
+     - Remove the hardcoded date (TH 3rd argument), and replace it by a
+       placeholder that should be changed when creating the tarball.
+       This removes the need for a tstamp commit before each release.
+
+
+Changes to individual pages
+---------------------------
+
+The manual pages (and other files in the repository) have been improved
+beyond what this changelog covers.  To learn more about changes applied
+to individual pages, use git(1).
+
+
 -- 
-2.38.0
-
+<http://www.alejandro-colomar.es/>
