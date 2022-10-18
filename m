@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25325602C0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4203602C0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiJRMpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S230143AbiJRMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiJRMpk (ORCPT
+        with ESMTP id S229802AbiJRMp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:45:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D6F7284C;
-        Tue, 18 Oct 2022 05:45:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 252A0B81BFB;
-        Tue, 18 Oct 2022 12:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70209C433D6;
-        Tue, 18 Oct 2022 12:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666097129;
-        bh=jRFoqeAs6PqQmn5JQefnF9EBH8A3Cf2rw0GlfDexcGw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=kj+uLC+hQU4DVsfHXBbIlMfuFkLYVPTE5S5ePWMyvZReNHoicUZnVcBDjjN35Jjmw
-         UVN5/he5xgCYX75CRcRSY7QwxqcYsE46sFtg2RUQUekAebPA9OMSaLPW1Hb1TgzDxh
-         DpJoVPGB6gm3rI40AW8knO/iHC/Qb80zoKkyPcbg9ZJfbOErDbFci6aOfFEDM7hDeJ
-         F/6Uc2ZaFo/oKPFPk2+0brvtSEcEjZ+2gGQ+PaSMiE4MMmaERaOmKLdK/b/gp7+rDW
-         7OcNgD4mwVgq/HqiIYeLlUuTQiX5sxFLEw01HhgIUhneX3X1AOkh3HS5gPCwSeGJqK
-         JLcOlMSDjtF0Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     conor.dooley@microchip.com,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-riscv@lists.infradead.org, daire.mcnamara@microchip.com
-In-Reply-To: <20221017092141.9789-1-jiapeng.chong@linux.alibaba.com>
-References: <20221017092141.9789-1-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH] spi: microchip-core: Remove the unused function mchp_corespi_enable()
-Message-Id: <166609712817.385867.3776854548759783028.b4-ty@kernel.org>
-Date:   Tue, 18 Oct 2022 13:45:28 +0100
+        Tue, 18 Oct 2022 08:45:59 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B138C4593
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:45:54 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id a24so9494744qto.10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SWxKl23w6XMI7+5jEn1eePKGLm8+GZam2TRBB7nw/fU=;
+        b=GZcjHVztgYOJHB6mAJbvi8Th0/QGV94wcDkolAkngJuS8QoerJe/nBj/jmhdKXQzrX
+         gqxH1ttIA+M2ExM5khLwidXF1/n+PyXFRUjlnHq/rb2USCzW5TVrqRiGQrHZnVNWSixh
+         DzWnw6w8R8yrmfFh8JTGIz8IwATL4WA1MNANq3VNOii9gPuWK0eARjbBA2wNeMeKusSE
+         bwpRqROC7gfCVP9ufJEEfi8AblrCoUuGkCV+dFZild+XlG3GEvpT9+yg1aZ1jSeiuAAK
+         BeXrzEdSWQoCpJScpb7wGRinN+6jIxuWmqxlvSV7uRlUDhHm2l8H+TsX2/bZSx8f6LQ9
+         T+EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SWxKl23w6XMI7+5jEn1eePKGLm8+GZam2TRBB7nw/fU=;
+        b=64n9Nc8Uo9rkxrbqyRL714MKeZDvHw0xVXkCKLXLpAT7eAPuOydB6o9kUio6FHfO9D
+         /328vRXO8r7qbkGyDBSclO9tHbwIlKUrEee+AOlZRANW17+HGl6duVgbt23krXts2c6s
+         ucjJ8W3H8F2g0v+GCir8LoHbfDI2y8AIObFXiPBUHO8jSCTXm5jQuOeslEmE5oNx5N/V
+         OPW0bsorj2R5K9Ze2YfDu4yO/0e1PjtsuKVGQoluz28WpdCAsdLRzGKPenzQQ07Og2s5
+         Z/79MbKIVCOSkwObmbHlg14JWOwtoOLr8/DQCl25Hxm+xq9e7BXfG1/J4MPLCCDwvF4Z
+         pR+Q==
+X-Gm-Message-State: ACrzQf3n6DQLFfAy09yQJNFGHyPEz4ZYpPjklojWsJ1zKwcicOn3jfhg
+        cVjaLh9gmV6dJzemtKQy9lw98Y7Qf8a9Yg==
+X-Google-Smtp-Source: AMsMyM6Vm4QBG6EQYbErftl1Bfd4F9lOWC02IlvQ57Iue1RblKX7llB4Nn053ohiLxXnC+/4oqWTsQ==
+X-Received: by 2002:a05:622a:554:b0:39c:ef65:bc66 with SMTP id m20-20020a05622a055400b0039cef65bc66mr1892322qtx.550.1666097152810;
+        Tue, 18 Oct 2022 05:45:52 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id ay40-20020a05620a17a800b006bb78d095c5sm2212951qkb.79.2022.10.18.05.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 05:45:52 -0700 (PDT)
+Message-ID: <5f9515e3-aa46-eba6-4c2d-9cd4d2e585aa@linaro.org>
+Date:   Tue, 18 Oct 2022 08:45:47 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [GIT PULL] memory: late (3rd) for v6.1
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+References: <20221003073237.11488-1-krzysztof.kozlowski@linaro.org>
+ <79d9b77f-f7e1-61d9-2e86-301f07a03721@linaro.org>
+ <0991a91e-384b-4be1-ab41-e29f8ad88d84@app.fastmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0991a91e-384b-4be1-ab41-e29f8ad88d84@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,38 +76,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 17:21:41 +0800, Jiapeng Chong wrote:
-> The function mchp_corespi_enable() is defined in the spi-microchip-core.c
-> file, but not called elsewhere, so delete this unused function.
+On 18/10/2022 03:18, Arnd Bergmann wrote:
+> On Mon, Oct 17, 2022, at 11:51 PM, Krzysztof Kozlowski wrote:
+>> On 03/10/2022 03:32, Krzysztof Kozlowski wrote:
+>>
+>> This was a late pull and missed the merge window. It was based on
+>> previous pulls. Shall I rebase on 6.1-rc1 and resubmit?
 > 
-> drivers/spi/spi-microchip-core.c:122:20: warning: unused function 'mchp_corespi_enable'.
-> 
-> 
+> I'd prefer a rebase to -rc1 before you resubmit, but sending the
+> same pull request again would work as well.
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Thanks, I'll rebase.
 
-Thanks!
+Best regards,
+Krzysztof
 
-[1/1] spi: microchip-core: Remove the unused function mchp_corespi_enable()
-      commit: 8f4b3d2f653937956fdc68b665c621dfa3cf2fa7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
