@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94477602942
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFB8602949
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJRKX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S229701AbiJRKYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJRKX0 (ORCPT
+        with ESMTP id S229752AbiJRKYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:23:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7845DB03E2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666088604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lGc1brklA5v9OUHTBe6S3k3fA4Qi2pTlNeYEp6W+HVI=;
-        b=B4bEGTuLgH1kfKIBewdUEmn4vLFnF0uh64PerpxP32PSbedbiikarO7gDJTHfhhLKkozu4
-        mYWUT1bchSpil66H8PcHnR4RKUrse6iCmbiiBBIhP0v7gh5/dofP771eWVCdCBJuNlKH50
-        C5QVYVGBFsDRpwF3gvqFe9nZ+cjYbZU=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-195-0eyRkvcuN-et8k6neXvCwQ-1; Tue, 18 Oct 2022 06:23:23 -0400
-X-MC-Unique: 0eyRkvcuN-et8k6neXvCwQ-1
-Received: by mail-pg1-f199.google.com with SMTP id 83-20020a630156000000b0046b208f6ae3so6717756pgb.16
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:23:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lGc1brklA5v9OUHTBe6S3k3fA4Qi2pTlNeYEp6W+HVI=;
-        b=WYiD02NiYQ3BXZ1s5pRXrnmbkkcSX2w0KWXnUPeHhirl/DUmXav13E8wwooxce+Moo
-         VispXZ9kEV+RlaP79WPAxv5NKPuaJpKQ38fZPCs+TRAyCNPF93HGknIZX2+3geW10yvW
-         bI8jUKaTXHK6Zd009RfZkEnadgtC34dL77phcepov3xtHZ/p0c9amDvxcycO7qrQL/nq
-         gkddj2mskWC8oDapj6lWQ191tIPxHc+asGO0lyfVJHnpV5NhYiCsM82oz34Rkvio0Qem
-         8usELJrl3Cgkit8R4/lvOomssqljC5Gh4n3YWE2X+lsS3rGiDEmfXMyn93KKg8ZkahuB
-         SYRw==
-X-Gm-Message-State: ACrzQf1fLIg3SVgr+Bal3oqoxiKQpKCJPopsdWr40FhyruRZzVmqqiU+
-        qX1V9qUhKcmaPIOWtmOn7TLeqotHwYGsXG7AOdrnHt2/5zu8H1Vv96/T7STSCwm0KpNmqnfQTrw
-        /PqL/QrLkg/9Gh9m6jyt1YHyz
-X-Received: by 2002:a17:90b:4a8a:b0:20d:8a4d:c2ae with SMTP id lp10-20020a17090b4a8a00b0020d8a4dc2aemr36943055pjb.179.1666088602212;
-        Tue, 18 Oct 2022 03:23:22 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4yZEZ3zz/NaaPvomcA0q2fWZLeE26WLTAC0kzNafK9BiNR2Y6DRwutygGdqw7K1vCRk2VOgw==
-X-Received: by 2002:a17:90b:4a8a:b0:20d:8a4d:c2ae with SMTP id lp10-20020a17090b4a8a00b0020d8a4dc2aemr36943033pjb.179.1666088601967;
-        Tue, 18 Oct 2022 03:23:21 -0700 (PDT)
-Received: from zeus.flets-east.jp ([240b:10:83a2:bd00:6e35:f2f5:2e21:ae3a])
-        by smtp.gmail.com with ESMTPSA id l5-20020a17090a4d4500b00205d85cfb30sm11173373pjh.20.2022.10.18.03.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 03:23:21 -0700 (PDT)
-From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
-To:     elver@google.com, dvyukov@google.com, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com
-Cc:     Ryosuke Yasuoka <ryasuoka@redhat.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] kcsan: Fix trivial typo in Kconfig help comments
-Date:   Tue, 18 Oct 2022 19:22:54 +0900
-Message-Id: <20221018102254.2424506-1-ryasuoka@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 18 Oct 2022 06:24:50 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C7427B3A;
+        Tue, 18 Oct 2022 03:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DshSkJs6j1g2qNN0Ljt9foy0RHxNcTT/yoMkXBCk6VM=; b=XRyCev8owxNX2OahbBXwNPlH8j
+        NTyzHcr0KM7WW1Qx+xtiP8mtX7FGY+inXq9DzlwdvZOVq13q9ZJIZIXJ8NQJXAkybHYU1wZ8pKn9/
+        CIE7PPNfKz6p4DopKPIGBWeJ5Yoa2Bast+3G8rsUsEGnrZ76MIcscw/xv4AhW1YnLBnM7PG4h4O0+
+        q7bZcmbdm85v/UucEiVbUQO+G0H/89NCDXKTXLUS1rEdHRs6lUUeL1Ygl5ZIRENPrwROiLW6huFWw
+        RxrJ//6Y+6p2KMT0/d9rZ9Funjiq7TJKY4UdpprjwmdJWJoj+D6xbXpu+p/uRWjJnymr8dua16fOT
+        IPZaqhiA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34770)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1okjm5-0004KA-In; Tue, 18 Oct 2022 11:24:41 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1okjm3-00010w-Dk; Tue, 18 Oct 2022 11:24:39 +0100
+Date:   Tue, 18 Oct 2022 11:24:39 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.10 21/34] net: sfp: move Alcatel Lucent
+ 3FE46541AA fixup
+Message-ID: <Y05+51lztI5yi/A6@shell.armlinux.org.uk>
+References: <20221009222129.1218277-1-sashal@kernel.org>
+ <20221009222129.1218277-21-sashal@kernel.org>
+ <20221018094332.GE1264@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018094332.GE1264@duo.ucw.cz>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix trivial typo in Kconfig help comments in KCSAN_SKIP_WATCH and
-KCSAN_SKIP_WATCH_RANDOMIZE
+On Tue, Oct 18, 2022 at 11:43:32AM +0200, Pavel Machek wrote:
+> Hi!
+> 
+> > Add a new fixup mechanism to the SFP quirks, and use it for this
+> > module.
+> 
+> There are two preparation patches for this, but this does not fix
+> anything -- it just reimplement quirk in a different way.
+> 
+> We should not have patches 19-21 in stable.
 
-Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
----
- lib/Kconfig.kcsan | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+They should be being dropped as, as a result of this ongoing madness,
+I've requested stable to no longer consider *any* of my patches for
+AUTOSEL treatment.
 
-diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-index 47a693c45864..375575a5a0e3 100644
---- a/lib/Kconfig.kcsan
-+++ b/lib/Kconfig.kcsan
-@@ -125,7 +125,7 @@ config KCSAN_SKIP_WATCH
- 	default 4000
- 	help
- 	  The number of per-CPU memory operations to skip, before another
--	  watchpoint is set up, i.e. one in KCSAN_WATCH_SKIP per-CPU
-+	  watchpoint is set up, i.e. one in KCSAN_SKIP_WATCH per-CPU
- 	  memory operations are used to set up a watchpoint. A smaller value
- 	  results in more aggressive race detection, whereas a larger value
- 	  improves system performance at the cost of missing some races.
-@@ -135,8 +135,8 @@ config KCSAN_SKIP_WATCH_RANDOMIZE
- 	default y
- 	help
- 	  If instruction skip count should be randomized, where the maximum is
--	  KCSAN_WATCH_SKIP. If false, the chosen value is always
--	  KCSAN_WATCH_SKIP.
-+	  KCSAN_SKIP_WATCH. If false, the chosen value is always
-+	  KCSAN_SKIP_WATCH.
- 
- config KCSAN_INTERRUPT_WATCHER
- 	bool "Interruptible watchers" if !KCSAN_STRICT
+I'm afraid that the stable kernel is loosing its purpose, and is
+becoming just another development tree as long as this autosel
+process exists that picks up what are development patches - coupled
+with the "if you don't respond we're adding it to stable anyway"
+approach means that it's a hell of a lot of work for maintainers to
+be watching what stable is doing 24 hours a day 365 days a year with
+_no_ possibility of having a break from that.
+
+As I understand it, the autosel stuff is using an AI to work out
+whether the patch is suitable or not, and no one bothers to look at
+the quality of its selection - that task is loaded on to each
+maintainer and requires said maintainer to never take any time off
+from that task.
+
+It's madness.
+
 -- 
-2.37.3
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
