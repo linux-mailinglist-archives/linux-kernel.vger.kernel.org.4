@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7D460325B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA80F60325C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiJRSYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
+        id S230250AbiJRSYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiJRSX4 (ORCPT
+        with ESMTP id S230255AbiJRSYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:23:56 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631F58262F;
-        Tue, 18 Oct 2022 11:23:54 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id h13so14904105pfr.7;
-        Tue, 18 Oct 2022 11:23:54 -0700 (PDT)
+        Tue, 18 Oct 2022 14:24:30 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B42411A3F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:24:27 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id l28so10221885qtv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
+        b=OMLZySaKL/pskdCuvqdShNx1OMtSIFtfQiHNYRn/AWGPk61iQvjKMAMVuf1be4xwd0
+         RB4fhpukkU9svy04u7RELAR1Ll7S9HS8S+VVUosDEqtosED+kwjRZVn5lDkBSXiTjuZO
+         Q8pof/7ZIuExOk2WMtDaxR2XK+Y92rZWdtIVdYoT4cEVZaZMJD1Ewc8YBeMmZDKvPzbR
+         lIA/l7lf59YxLjQRDykcKGg5NkYzBa6xhZpargU28PJeNJc4oziO3j9CSOcwJzR55IdW
+         HPqSa/mEc9mZSUL1Cck+cwr6Ap7q6OmJmn297N6Hufz7e+GDVnY4LhzXD8BcC1Yc0I+S
+         PmIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwZlsskLTT5GYX2e0o85RZ1hXTLVToD4VwKwKxi37tQ=;
-        b=b8BTNgeE0lpFa/tOzi/dn2RZEjc45RUl7nW0t70oOl2VYZH0R/kElqSylhgtJtKt1F
-         0jkOcGF2VaIbBk5EbV68OF49/jnaBrSO5Bbh0HbD4EQn2EB/LR4Jo/DjKGeOmneBP85+
-         BoRW6Doj08XDPk+nH2+agzqTsA//vpnh1Xyaf9FAf+xbDbjlh2wQr8KjUH2j9uic7sme
-         EQU+rxcef80pHSqgPM23rzi/zNJJ/RPpRHIImI9YmcxrBtR6PrrBBj5PkH2/o4B4+vtu
-         u+DvsDww5yrl7+lELic3IinttkH5fQtQOrVfjDRQ1ajlIaO4ajEnxaMbeYP+u8ilgkHG
-         YecA==
-X-Gm-Message-State: ACrzQf0D9t5C01ykNIO+iVGJKmB4ncFzIkbrm1b0PTWzpzqPtJg8FMEU
-        idhIhtXGknu5/a+AAnMO2Fw=
-X-Google-Smtp-Source: AMsMyM4PCzstgeCURld+oc9VnSIugbawgOsMP4ssutj0hm9hSDj6WnuPhRatclW/xN3bcLhkOLSKKA==
-X-Received: by 2002:a63:7e4d:0:b0:43c:8ce9:2a9f with SMTP id o13-20020a637e4d000000b0043c8ce92a9fmr3676574pgn.528.1666117433753;
-        Tue, 18 Oct 2022 11:23:53 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:522b:67a3:58b:5d29? ([2620:15c:211:201:522b:67a3:58b:5d29])
-        by smtp.gmail.com with ESMTPSA id e19-20020aa79813000000b005636d8aa98dsm9911968pfl.141.2022.10.18.11.23.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 11:23:53 -0700 (PDT)
-Message-ID: <2495df25-c64c-443b-d9b1-258246a36b37@acm.org>
-Date:   Tue, 18 Oct 2022 11:23:50 -0700
+        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
+        b=4jYCahzEpcnNQZ6S63Tvb3Vx4fPTna6ILm63lmvbwAlOdt6ZIwzv1uGhXyb1H+OKQF
+         TaeZ1xeEue3b2EJCyYqNxxDtpo7eNcilsYR7xdk/yohvnAoCIfcaEW1KQn8I7YJAFBMy
+         Hf/kuaHperKklFW8Mb0LwQyH1UGST/RVvh9kj61ZPh13xg0rPgCvFYDuaqvG74HrGUcv
+         XaCv9fXqs7FHeRLycQbPbCtcsJkgSqlShQz778vv381BR7xpS/GrsoRz5lB8ngP8y6Ea
+         DKKufSY0PYaVujtma6pO8ZYFc4wcXChru821Qr7fcdoY6dHZ2xsa7N7B3vcp/c8zhBoZ
+         k89A==
+X-Gm-Message-State: ACrzQf0K0B36ljIQkSwXLX/xL7734xKXJOhrmh0vNzEo5XCS84z2GG8Q
+        GZz5/qr7JFWvFYM9pY84Q1Z4DfT5chCVWRrZhXI=
+X-Google-Smtp-Source: AMsMyM5wmyjZm7WAwRym/bWnywZM2tuLCLmL3Gq0pYk+rnP/C98mI2dzp542bB5f0mKjJLjuQPWaDWjAW4Tyng4EX3Q=
+X-Received: by 2002:a05:622a:1649:b0:39c:f2ad:52d7 with SMTP id
+ y9-20020a05622a164900b0039cf2ad52d7mr3225409qtj.219.1666117465972; Tue, 18
+ Oct 2022 11:24:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 3/3] scsi: ufs: core: Use is_visible to control UFS
- unit descriptor sysfs nodes
-Content-Language: en-US
-To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com, huobean@gmail.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221018181627.326657-1-beanhuo@iokpp.de>
- <20221018181627.326657-4-beanhuo@iokpp.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221018181627.326657-4-beanhuo@iokpp.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:622a:511:0:0:0:0 with HTTP; Tue, 18 Oct 2022 11:24:25
+ -0700 (PDT)
+Reply-To: mmrstephen16@gmail.com
+From:   "Mr. Stephen Melvin" <powmrlee@gmail.com>
+Date:   Tue, 18 Oct 2022 11:24:25 -0700
+Message-ID: <CANT8MmdA3ZU+PKyz7+274Qn1ih-FKqHFC94wTv4=TzuCgekxGw@mail.gmail.com>
+Subject: Reply and let me know if you received this email.!!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 11:16, Bean Huo wrote:
-> From: Bean Huo <beanhuo@micron.com>
-> 
-> UFS Boot and Device W-LUs do not have unit descriptors, and PRMB does not
-                                                               ^^^^
-                                                               RPMB?
-> support WB, we can use is_visible() to control which nodes are visible
-> and which are not.
+Hello Dear, How are you today and your family? Want to believe you are
+all doing great.
 
-Otherwise this patch looks good to me. Hence:
+Please reply to me as fast as possible. I have important information for you.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Kind Regards,
+Mr. Stephen Melvin.
