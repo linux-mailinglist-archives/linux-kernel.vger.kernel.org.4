@@ -2,242 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C17D602869
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B937260286E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiJRJdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S230027AbiJRJeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiJRJdm (ORCPT
+        with ESMTP id S229999AbiJRJdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:33:42 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9866AE22D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:33:40 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id fw14so13458028pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vcm2DjcFdVdA2XmTeYXfvoBfujRgUbAVY112h3yQ01E=;
-        b=Rf81/UGr3jsRCHiHZ4O2uCDtkwk3ZukD6i1ETq7uVpiDB3hv5Pg0SQPB+lcGsWZDXa
-         bX1VCwnGbAuImcrTwkezVKVo+AzGEDVcs2xS9joui3Zb1W1q4E/V9BvIb+BZbC1gHkI1
-         9S9DlbNlB1xiEjiGvlmr9o5KXPNso43opj0Cg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vcm2DjcFdVdA2XmTeYXfvoBfujRgUbAVY112h3yQ01E=;
-        b=KsvEaxuL3v7OXjnwkatThfYhZretQxiAkVFcc/V82kBSAfq1JPFQvwcit841khSsT0
-         I708NDVtoTKEVZ160a0Qm+YZaFFLkZgx13iAhv7dMV4ujmY2/PY+kntDlAALSVCfVqf7
-         csyIDW2FcTpk+I/uo0KiYqrWWFU+Etn4dtVJBV/Qhxb3Ag3xz2p4L+efpgfEbn3PZWK8
-         TulX/rbgMlU2f72h2yNqBK4C7uFEjQOvDHU6Wz1cCXGP6N27bCMzQAogFdMv0nOmY2jL
-         cOCUDg/FQwWu+0Vy4Ai0JoKSLyDUgYno9KeNctcdAG01wifEBciYTfgwLh+1ryw38Q1O
-         EN3A==
-X-Gm-Message-State: ACrzQf19+S8Pyz93UZPxv7hZ4GIUXWFK8O5Ub9obzMgryvmVSG9F5AA4
-        Ak4IXHZNOiXeISxlu4nLH2Py9Q==
-X-Google-Smtp-Source: AMsMyM6slsitU+u2+16Y8O8YtqGpFS8zF9DIOV25bbZsfBuuEy+yjAb8GEvZKxEHewLg0d0qd1QhUg==
-X-Received: by 2002:a17:902:724c:b0:177:5080:cbeb with SMTP id c12-20020a170902724c00b001775080cbebmr2294093pll.67.1666085620323;
-        Tue, 18 Oct 2022 02:33:40 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o9-20020a170903210900b00179c9219195sm8192637ple.16.2022.10.18.02.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:33:39 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v3][next] skbuff: Proactively round up to kmalloc bucket size
-Date:   Tue, 18 Oct 2022 02:33:36 -0700
-Message-Id: <20221018093005.give.246-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Oct 2022 05:33:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB2FAE848;
+        Tue, 18 Oct 2022 02:33:52 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ms7w73yZyz9t8W;
+        Tue, 18 Oct 2022 17:33:43 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 17:33:44 +0800
+CC:     <yangyicong@hisilicon.com>, <lpieralisi@kernel.org>,
+        <chenhuacai@loongson.cn>, <robin.murphy@arm.com>,
+        <guohanjun@huawei.com>, <sudeep.holla@arm.com>,
+        <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <loongarch@lists.linux.dev>, liulongfang <liulongfang@huawei.com>
+Subject: Re: [PATCH V5 1/2] ACPI / scan: Support multiple dma windows with
+ different offsets
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+References: <20220911090635.5559-1-lvjianmin@loongson.cn>
+ <20220911090635.5559-2-lvjianmin@loongson.cn>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <8e9df8ea-06f0-3989-2563-d5dc6b09a062@huawei.com>
+Date:   Tue, 18 Oct 2022 17:33:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5848; h=from:subject:message-id; bh=pkLoivXaq3CVJLhapnRLgcHPxB9L7soYhnHwJEdUlPc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTnLvD8DVluil9nQfvRUSQMN+hxeTSt8QuPl3dr4u gC7wBFaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05y7wAKCRCJcvTf3G3AJrQKEA CXK8cN3LQuRpfc2qi+jIv4AZtTeh+TEquNKS03J+jyWEQMX2TfMqJEBtXdWx8o60qualisfkZTw2dY QPfnJO5jb9mHv6kYBWvrBx19X+wNA4AQNJjDF8oJclIwC8wicuY1Be0Pv0ObTPKKsfn7vroHgK+e+C tKAt5ZGF033olGPFQdZQnx/RKiP1i5XySSGr0DjOSn5H+BjA2ALBPe9omF6NhqsiDEHkjUSCpWpGNr IEMdF0VrB5QNU/SacfDGnSjn4B9r94dF6tqUcO0vm62Va2MnPYMhiI0mssF1Eim4bNgrNTKRFv5VHg y2a2jFqmfLo3HPGO0uSTa4IMIONZAg376fbjHBkHwDtWJsyaSxjXQShTatXtSHOOSi4gDB4Cahvzs7 pOm6d/BZu5ubZBNMq7gyZrUYYHxrfI4ATFpd7WPoMa4i1ra4ZiE4niMHnK4AQAn9hIhmTOMcEeokUh yz3wU5NACqG32ulU633t6rQMLR0dw/53ldBXPRlWB4OEgr7qK+9bTog24H4yM0AkgInaCOJ1tVuoQM 0+lqCUvjwkKC6vZje+Xh3ag8SXfeyne/gaoxV0+mOG0/AINZecQ44rBNkryrzz/PDwxqkeVzjrWO50 jBk3cWIUCieUvThMEIW6ZjRAe9Q+RRrHsJOMEv6ab4HrLMOQRT375cQHq8bA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220911090635.5559-2-lvjianmin@loongson.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of discovering the kmalloc bucket size _after_ allocation, round
-up proactively so the allocation is explicitly made for the full size,
-allowing the compiler to correctly reason about the resulting size of
-the buffer through the existing __alloc_size() hint.
+On 2022/9/11 17:06, Jianmin Lv wrote:
+> In DT systems configurations, of_dma_get_range() returns struct
+> bus_dma_region DMA regions; they are used to set-up devices
+> DMA windows with different offset available for translation between DMA
+> address and CPU address.
+> 
+> In ACPI systems configuration, acpi_dma_get_range() does not return
+> DMA regions yet and that precludes setting up the dev->dma_range_map
+> pointer and therefore DMA regions with multiple offsets.
+> 
+> Update acpi_dma_get_range() to return struct bus_dma_region
+> DMA regions like of_dma_get_range() does.
+> 
+> After updating acpi_dma_get_range(), acpi_arch_dma_setup() is changed for
+> ARM64, where the original dma_addr and size are removed as these
+> arguments are now redundant, and pass 0 and U64_MAX for dma_base
+> and size of arch_setup_dma_ops; this is a simplification consistent
+> with what other ACPI architectures also pass to iommu_setup_dma_ops().
+> 
 
-This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
-coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
-back the __alloc_size() hints that were temporarily reverted in commit
-93dd04ab0b2b ("slab: remove __alloc_size attribute from __kmalloc_track_caller")
+Hi,
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v3: refactor again to pass allocation size more cleanly to callers
-v2: https://lore.kernel.org/lkml/20220923202822.2667581-4-keescook@chromium.org/
----
- net/core/skbuff.c | 41 ++++++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 19 deletions(-)
+With this patch we met problem as well. The DMA coherent mask is not set correctly
+for a ehci usb controller and lead to the below calltrace:
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 1d9719e72f9d..3ea1032d03ec 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -425,11 +425,12 @@ EXPORT_SYMBOL(napi_build_skb);
-  * memory is free
-  */
- static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
--			     bool *pfmemalloc)
-+			     bool *pfmemalloc, size_t *alloc_size)
- {
- 	void *obj;
- 	bool ret_pfmemalloc = false;
- 
-+	size = kmalloc_size_roundup(size);
- 	/*
- 	 * Try a regular allocation, when that fails and we're not entitled
- 	 * to the reserves, fail.
-@@ -448,6 +449,7 @@ static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
- 	if (pfmemalloc)
- 		*pfmemalloc = ret_pfmemalloc;
- 
-+	*alloc_size = size;
- 	return obj;
- }
- 
-@@ -479,7 +481,7 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- {
- 	struct kmem_cache *cache;
- 	struct sk_buff *skb;
--	unsigned int osize;
-+	size_t alloc_size;
- 	bool pfmemalloc;
- 	u8 *data;
- 
-@@ -506,15 +508,15 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- 	 */
- 	size = SKB_DATA_ALIGN(size);
- 	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
--	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
--	if (unlikely(!data))
--		goto nodata;
--	/* kmalloc(size) might give us more room than requested.
-+	/* kmalloc(size) might give us more room than requested, so
-+	 * allocate the true bucket size up front.
- 	 * Put skb_shared_info exactly at the end of allocated zone,
- 	 * to allow max possible filling before reallocation.
- 	 */
--	osize = ksize(data);
--	size = SKB_WITH_OVERHEAD(osize);
-+	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc, &alloc_size);
-+	if (unlikely(!data))
-+		goto nodata;
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 	prefetchw(data + size);
- 
- 	/*
-@@ -523,7 +525,7 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- 	 * the tail pointer in struct sk_buff!
- 	 */
- 	memset(skb, 0, offsetof(struct sk_buff, tail));
--	__build_skb_around(skb, data, osize);
-+	__build_skb_around(skb, data, alloc_size);
- 	skb->pfmemalloc = pfmemalloc;
- 
- 	if (flags & SKB_ALLOC_FCLONE) {
-@@ -1816,6 +1818,7 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- {
- 	int i, osize = skb_end_offset(skb);
- 	int size = osize + nhead + ntail;
-+	size_t alloc_size;
- 	long off;
- 	u8 *data;
- 
-@@ -1830,10 +1833,10 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
- 	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+			       gfp_mask, NUMA_NO_NODE, NULL, &alloc_size);
- 	if (!data)
- 		goto nodata;
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 
- 	/* Copy only real data... and, alas, header. This should be
- 	 * optimized for the cases when header is void.
-@@ -6169,19 +6172,19 @@ static int pskb_carve_inside_header(struct sk_buff *skb, const u32 off,
- 	int i;
- 	int size = skb_end_offset(skb);
- 	int new_hlen = headlen - off;
-+	size_t alloc_size;
- 	u8 *data;
- 
- 	size = SKB_DATA_ALIGN(size);
- 
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
-+			       gfp_mask, NUMA_NO_NODE, NULL, &alloc_size);
- 	if (!data)
- 		return -ENOMEM;
- 
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 
- 	/* Copy real data, and all frags */
- 	skb_copy_from_linear_data_offset(skb, off, data, new_hlen);
-@@ -6290,18 +6293,18 @@ static int pskb_carve_inside_nonlinear(struct sk_buff *skb, const u32 off,
- 	u8 *data;
- 	const int nfrags = skb_shinfo(skb)->nr_frags;
- 	struct skb_shared_info *shinfo;
-+	size_t alloc_size;
- 
- 	size = SKB_DATA_ALIGN(size);
- 
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
-+			       gfp_mask, NUMA_NO_NODE, NULL, &alloc_size);
- 	if (!data)
- 		return -ENOMEM;
- 
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 
- 	memcpy((struct skb_shared_info *)(data + size),
- 	       skb_shinfo(skb), offsetof(struct skb_shared_info, frags[0]));
--- 
-2.34.1
+[   16.699259] ------------[ cut here ]------------
+[   16.703855] WARNING: CPU: 0 PID: 853 at kernel/dma/mapping.c:499 dma_alloc_attrs+0xc0/0xf0
+[   16.712082] Modules linked in:
+[   16.715124] CPU: 0 PID: 853 Comm: kworker/0:3 Not tainted 6.1.0-rc1-pipe-deadlock+ #5
+[   16.722916] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B211.01 11/10/2021
+[   16.731745] Workqueue: events work_for_cpu_fn
+[   16.736083] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   16.743013] pc : dma_alloc_attrs+0xc0/0xf0
+[   16.747091] lr : dma_pool_alloc+0x11c/0x200
+[   16.751255] sp : ffff80001e46bb50
+[   16.754554] x29: ffff80001e46bb50 x28: 0000000000000000 x27: 0000000000000000
+[   16.761657] x26: ffff80000b33ce18 x25: ffff800009cc6c48 x24: 0000000000000000
+[   16.768759] x23: ffff00208c830918 x22: 0000000000001000 x21: 0000000000000cc0
+[   16.775861] x20: ffff00208ae82080 x19: ffff0020865c40d0 x18: 0000000000000030
+[   16.782964] x17: 626d756e20737562 x16: 2064656e67697373 x15: ffff00208ae82640
+[   16.790066] x14: 0000000000000000 x13: 646e756f72616b72 x12: 6f77204348207379
+[   16.797167] x11: 73706f6e79532067 x10: ffff205f43980000 x9 : ffff80000830b3ac
+[   16.804269] x8 : ffff0020861b1b00 x7 : 0000000000000000 x6 : 0000000000000000
+[   16.811371] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000cc0
+[   16.818472] x2 : ffff00208c830918 x1 : 0000000000001000 x0 : 0000000000000000
+[   16.825574] Call trace:
+[   16.828009]  dma_alloc_attrs+0xc0/0xf0
+[   16.831741]  dma_pool_alloc+0x11c/0x200
+[   16.835559]  ehci_qh_alloc+0x60/0x12c
+[   16.839207]  ehci_setup+0x18c/0x40c
+[   16.842680]  ehci_pci_setup+0xb8/0x680
+[   16.846412]  usb_add_hcd+0x310/0x5c0
+[   16.849973]  usb_hcd_pci_probe+0x254/0x36c
+[   16.854051]  ehci_pci_probe+0x40/0x60
+[   16.857698]  local_pci_probe+0x48/0xb4
+[   16.861431]  work_for_cpu_fn+0x24/0x40
+[   16.865163]  process_one_work+0x1e0/0x450
+[   16.869155]  worker_thread+0x2cc/0x44c
+[   16.872886]  kthread+0x114/0x120
+[   16.876099]  ret_from_fork+0x10/0x20
+[   16.879657] ---[ end trace 0000000000000000 ]---
 
+After reverting this patch the problem resolved. Tested on the latest 6.1-rc1.
+Some investigation below...
+
+
+> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/acpi/arm64/dma.c | 28 ++++++++++++---------
+>  drivers/acpi/scan.c      | 53 +++++++++++++++++-----------------------
+>  include/acpi/acpi_bus.h  |  3 +--
+>  include/linux/acpi.h     |  7 +++---
+>  4 files changed, 44 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/acpi/arm64/dma.c b/drivers/acpi/arm64/dma.c
+> index f16739ad3cc0..93d796531af3 100644
+> --- a/drivers/acpi/arm64/dma.c
+> +++ b/drivers/acpi/arm64/dma.c
+> @@ -4,11 +4,12 @@
+>  #include <linux/device.h>
+>  #include <linux/dma-direct.h>
+>  
+> -void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
+> +void acpi_arch_dma_setup(struct device *dev)
+>  {
+>  	int ret;
+>  	u64 end, mask;
+> -	u64 dmaaddr = 0, size = 0, offset = 0;
+> +	u64 size = 0;
+> +	const struct bus_dma_region *map = NULL;
+>  
+>  	/*
+>  	 * If @dev is expected to be DMA-capable then the bus code that created
+> @@ -26,7 +27,19 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
+>  	else
+>  		size = 1ULL << 32;
+>  
+> -	ret = acpi_dma_get_range(dev, &dmaaddr, &offset, &size);
+> +	ret = acpi_dma_get_range(dev, &map);
+> +	if (!ret && map) {
+> +		const struct bus_dma_region *r = map;
+> +
+> +		for (end = 0; r->size; r++) {
+> +			if (r->dma_start + r->size - 1 > end)
+> +				end = r->dma_start + r->size - 1;
+> +		}
+> +
+
+DSDT reports a window of [mem 0x00000000-0xffffffff pref] in _DMA for the target device
+but we're not retriving it correctly here. After adding some messages, it shows we haven't
+enter this loop and make size as 1 and mask to 0 finally.
+
+Please let me know if you need more information.
+
+Thanks.
+
+> +		size = end + 1;
+> +		dev->dma_range_map = map;
+> +	}
+> +
+>  	if (ret == -ENODEV)
+>  		ret = iort_dma_get_ranges(dev, &size);
+>  	if (!ret) {
+> @@ -34,17 +47,10 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
+>  		 * Limit coherent and dma mask based on size retrieved from
+>  		 * firmware.
+>  		 */
+> -		end = dmaaddr + size - 1;
+> +		end = size - 1;
+>  		mask = DMA_BIT_MASK(ilog2(end) + 1);
+>  		dev->bus_dma_limit = end;
+>  		dev->coherent_dma_mask = min(dev->coherent_dma_mask, mask);
+>  		*dev->dma_mask = min(*dev->dma_mask, mask);
+>  	}
+> -
+> -	*dma_addr = dmaaddr;
+> -	*dma_size = size;
+> -
+> -	ret = dma_direct_set_offset(dev, dmaaddr + offset, dmaaddr, size);
+> -
+> -	dev_dbg(dev, "dma_offset(%#08llx)%s\n", offset, ret ? " failed!" : "");
+>  }
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 42cec8120f18..f96ef8536037 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/platform_data/x86/apple.h>
+>  #include <linux/pgtable.h>
+>  #include <linux/crc32.h>
+> +#include <linux/dma-direct.h>
+>  
+>  #include "internal.h"
+>  
+> @@ -1467,25 +1468,21 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
+>   * acpi_dma_get_range() - Get device DMA parameters.
+>   *
+>   * @dev: device to configure
+> - * @dma_addr: pointer device DMA address result
+> - * @offset: pointer to the DMA offset result
+> - * @size: pointer to DMA range size result
+> + * @map: pointer to DMA ranges result
+>   *
+> - * Evaluate DMA regions and return respectively DMA region start, offset
+> - * and size in dma_addr, offset and size on parsing success; it does not
+> - * update the passed in values on failure.
+> + * Evaluate DMA regions and return pointer to DMA regions on
+> + * parsing success; it does not update the passed in values on failure.
+>   *
+>   * Return 0 on success, < 0 on failure.
+>   */
+> -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+> -		       u64 *size)
+> +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+>  {
+>  	struct acpi_device *adev;
+>  	LIST_HEAD(list);
+>  	struct resource_entry *rentry;
+>  	int ret;
+>  	struct device *dma_dev = dev;
+> -	u64 len, dma_start = U64_MAX, dma_end = 0, dma_offset = 0;
+> +	struct bus_dma_region *r;
+>  
+>  	/*
+>  	 * Walk the device tree chasing an ACPI companion with a _DMA
+> @@ -1510,31 +1507,28 @@ int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+>  
+>  	ret = acpi_dev_get_dma_resources(adev, &list);
+>  	if (ret > 0) {
+> +		r = kcalloc(ret + 1, sizeof(*r), GFP_KERNEL);
+> +		if (!r) {
+> +			ret = -ENOMEM;
+> +			goto out;
+> +		}
+> +
+>  		list_for_each_entry(rentry, &list, node) {
+> -			if (dma_offset && rentry->offset != dma_offset) {
+> +			if (rentry->res->start >= rentry->res->end) {
+> +				kfree(r);
+>  				ret = -EINVAL;
+> -				dev_warn(dma_dev, "Can't handle multiple windows with different offsets\n");
+> +				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
+>  				goto out;
+>  			}
+> -			dma_offset = rentry->offset;
+>  
+> -			/* Take lower and upper limits */
+> -			if (rentry->res->start < dma_start)
+> -				dma_start = rentry->res->start;
+> -			if (rentry->res->end > dma_end)
+> -				dma_end = rentry->res->end;
+> -		}
+> -
+> -		if (dma_start >= dma_end) {
+> -			ret = -EINVAL;
+> -			dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
+> -			goto out;
+> +			r->cpu_start = rentry->res->start;
+> +			r->dma_start = rentry->res->start - rentry->offset;
+> +			r->size = resource_size(rentry->res);
+> +			r->offset = rentry->offset;
+> +			r++;
+>  		}
+>  
+> -		*dma_addr = dma_start - dma_offset;
+> -		len = dma_end - dma_start;
+> -		*size = max(len, len + 1);
+> -		*offset = dma_offset;
+> +		*map = r;
+>  	}
+>   out:
+>  	acpi_dev_free_resource_list(&list);
+> @@ -1624,20 +1618,19 @@ int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+>  			  const u32 *input_id)
+>  {
+>  	const struct iommu_ops *iommu;
+> -	u64 dma_addr = 0, size = 0;
+>  
+>  	if (attr == DEV_DMA_NOT_SUPPORTED) {
+>  		set_dma_ops(dev, &dma_dummy_ops);
+>  		return 0;
+>  	}
+>  
+> -	acpi_arch_dma_setup(dev, &dma_addr, &size);
+> +	acpi_arch_dma_setup(dev);
+>  
+>  	iommu = acpi_iommu_configure_id(dev, input_id);
+>  	if (PTR_ERR(iommu) == -EPROBE_DEFER)
+>  		return -EPROBE_DEFER;
+>  
+> -	arch_setup_dma_ops(dev, dma_addr, size,
+> +	arch_setup_dma_ops(dev, 0, U64_MAX,
+>  				iommu, attr == DEV_DMA_COHERENT);
+>  
+>  	return 0;
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index e7d27373ff71..73ac4a1d6947 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -613,8 +613,7 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev);
+>  int acpi_iommu_fwspec_init(struct device *dev, u32 id,
+>  			   struct fwnode_handle *fwnode,
+>  			   const struct iommu_ops *ops);
+> -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+> -		       u64 *size);
+> +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map);
+>  int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+>  			   const u32 *input_id);
+>  static inline int acpi_dma_configure(struct device *dev,
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 6f64b2f3dc54..bb41623dab77 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -281,12 +281,12 @@ void acpi_numa_x2apic_affinity_init(struct acpi_srat_x2apic_cpu_affinity *pa);
+>  
+>  #ifdef CONFIG_ARM64
+>  void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
+> -void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size);
+> +void acpi_arch_dma_setup(struct device *dev);
+>  #else
+>  static inline void
+>  acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
+>  static inline void
+> -acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size) { }
+> +acpi_arch_dma_setup(struct device *dev) { }
+>  #endif
+>  
+>  int acpi_numa_memory_affinity_init (struct acpi_srat_mem_affinity *ma);
+> @@ -977,8 +977,7 @@ static inline enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
+>  	return DEV_DMA_NOT_SUPPORTED;
+>  }
+>  
+> -static inline int acpi_dma_get_range(struct device *dev, u64 *dma_addr,
+> -				     u64 *offset, u64 *size)
+> +static inline int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+>  {
+>  	return -ENODEV;
+>  }
+> 
