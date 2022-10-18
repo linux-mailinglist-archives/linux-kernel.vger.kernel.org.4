@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B4660349E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F3F6034A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiJRVHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S230224AbiJRVJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJRVHi (ORCPT
+        with ESMTP id S230130AbiJRVJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:07:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B259A2BB;
-        Tue, 18 Oct 2022 14:07:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B414AB81F7E;
-        Tue, 18 Oct 2022 21:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21656C433C1;
-        Tue, 18 Oct 2022 21:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1666127255;
-        bh=CorCX6DieBaXhdOzHd++PB5+KL7ocIsH9Ly8VhaxxSo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vZtdYqeIzAWR2B3VzuHo2suJBQU3yEdzhupDah4HWp3WYMMo+EYJg4siZlVVyNe8w
-         hjNeHHnyQJNsA4otYsaOCob9EvtXCjnvAVHdASXDtc/oSZmhjW9EWIKbWhAVZI/2D9
-         fTVMoEkZgFmGoGkUCIuSPkJRr4EHroYpSEdOS8oU=
-Date:   Tue, 18 Oct 2022 14:07:34 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: Re: [PATCH] wifi: rt2x00: use explicitly signed type for clamping
-Message-Id: <20221018140734.b4e012a5c3133c025c1e1e92@linux-foundation.org>
-In-Reply-To: <20221018202734.140489-1-Jason@zx2c4.com>
-References: <202210190108.ESC3pc3D-lkp@intel.com>
-        <20221018202734.140489-1-Jason@zx2c4.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 17:09:38 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C472606
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:09:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=azLS4jtI34+AVvBn3oePJJ5T90tPMjIIZAeIJU4/1fw=; b=OoUitWYTA44ZCa0YmRW2sKqL66
+        /bZZLWHBrJ/kRt5R05b28quHN9DIQiPppO2tMZqyyY2BddLLlLjeGPDsAmyotQ/nyuCjuOZ9ju76Q
+        dXgHczkMg2sH+N56KLiWqwt9P6cMaZTgp0WGhyrrDF7m9JZ9FCHJYy9UsZtaijsTFjtdqmCKWC9wv
+        MBlpDMHgVmqkGmTE1DDwjywpNNgCu+v/eBkjWepvVHSxKz1E6zgihej/GzTYxUOKZgzTDBcLLmYtt
+        AK2e6l3w4a4N1pn/aS8yvvmYl3AXEjqmWg1NMF8xUc7gjmffV2ltNmPMGJguHW9ePFdsSxKBXw2td
+        IUJg8t9A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oktq0-004ZyB-VU; Tue, 18 Oct 2022 21:09:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 27C313000DD;
+        Tue, 18 Oct 2022 23:09:24 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 086432C0A0314; Tue, 18 Oct 2022 23:09:24 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 23:09:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <Y08WA+jFRNaH0eTQ@hirez.programming.kicks-ass.net>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+ <202210181020.79AF7F7@keescook>
+ <Y08FhjK3fKsfRAaw@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y08FhjK3fKsfRAaw@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 14:27:34 -0600 "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+On Tue, Oct 18, 2022 at 09:59:02PM +0200, Peter Zijlstra wrote:
 
-> On some platforms, `char` is unsigned, which makes casting -7 to char
-> overflow, which in turn makes the clamping operation bogus. Instead,
-> deal with an explicit `s8` type, so that the comparison is always
-> signed, and return an s8 result from the function as well. Note that
-> this function's result is assigned to a `short`, which is always signed.
+> @@ -732,6 +734,8 @@ static __init int cfi_parse_cmdline(char
+>  			cfi_mode = CFI_KCFI;
+>  		} else if (!strcmp(str, "fineibt")) {
+>  			cfi_mode = CFI_FINEIBT;
+> +		} else if (!strcmp(str, "norand")) {
+> +			cfi_rand = false;
+>  		} else {
+>  			pr_err("Ignoring unknown cfi option (%s).", str);
+>  		}
 
-Thanks.  I'll grab this for now to make -next happier.  Stephen will
-tell us when the patch (or one like it) appears via the wireless tree.
+Plus so I suppose, otherwise it'll still randomize the hashes even if it
+then leaves the whole thing disabled, which seems a bit daft :-)
 
+Index: linux-2.6/arch/x86/kernel/alternative.c
+===================================================================
+--- linux-2.6.orig/arch/x86/kernel/alternative.c
++++ linux-2.6/arch/x86/kernel/alternative.c
+@@ -730,6 +730,7 @@ static __init int cfi_parse_cmdline(char
+ 			cfi_mode = CFI_DEFAULT;
+ 		} else if (!strcmp(str, "off")) {
+ 			cfi_mode = CFI_OFF;
++			cfi_rand = false;
+ 		} else if (!strcmp(str, "kcfi")) {
+ 			cfi_mode = CFI_KCFI;
+ 		} else if (!strcmp(str, "fineibt")) {
