@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A3B603079
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A95D60307D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 18:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbiJRQEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 12:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S230451AbiJRQEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 12:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiJRQEG (ORCPT
+        with ESMTP id S230442AbiJRQEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:04:06 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D34A02F0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:04:05 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c20so18554302ljj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 09:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=APq/4ao2w3wM3w7dcXNTLMlvNyes52nnBtuQjcx7EAg=;
-        b=mAYUdBVX9g0h7NVEsuArwdO+JSkTYINBI9eZ9SZP/HN1C28OzOzJFvyKJ7HWDvfuR+
-         ncjq9cqJiYAoowUdIMYtYwgu2CBQnKus2tJAPA8Wbv25BnCyqru7+yMa0n1Wc/g/b+tJ
-         LYDVxVxEyeXNaZclFdXvci+Bn8Hd2IlqxBU+6QRev104SvVpDc5r8rI7mjqlJ8z57vKa
-         T+d9YFon6GhU0JC5SBnQt1DQRpBiVFGkOizCTTxQePe274xFh4s+7Paymc8y/UsfZn1k
-         m7syJJNF9ptZ8MZHEKbEkunJ+svNoDlC+HXUM0w2et72jP1HztzI+RkLlC7QPZI/PtHI
-         Eo1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=APq/4ao2w3wM3w7dcXNTLMlvNyes52nnBtuQjcx7EAg=;
-        b=4GYhBd3HrpUnZMEap4lHYzvAkOTLjW7N6foMxi+4SQQPjDqBB+mdLIiNyRFDpQ0BhA
-         hUN48PshqEI+PwMgdgTjZgkcjIDWRO8f6JABEnAmVNPbQbW29H2wNS+Sr7lvWqgWB2xU
-         UlnLPL5RbUVYoDa9/PFtCBr0h/A3sLSed2Ry3YywI77UHzqedGrVknFw3C4aoKqH9jpf
-         cVa9EvpoLM2pakmB4AH0xi3/VrNMV7Mg9YpmRxFxbFkBJNpyjE1YYMJT0Rpm2g/JmzUc
-         PQwLKTsrmiZJQks4drbr7jN/SzYqB/pfuWVV+zo0U7Tu61OQkQR26kGmMnM7QvS0gxmO
-         fvTw==
-X-Gm-Message-State: ACrzQf1o7KyyHnk/g1E4F0V0FIEvJrDFKHzrTqZ8xyr0svVzyuF/5UJA
-        pPKAq3YtejKcvmVDpxkesBI=
-X-Google-Smtp-Source: AMsMyM78/En+eyLIgaDhn666Ec/5nqOrgtZGxs9ntdlCa6Pxh2z0qVC5KTLlHL1Li9Y18RJ5qV4wZQ==
-X-Received: by 2002:a05:651c:194a:b0:26f:decf:a6b5 with SMTP id bs10-20020a05651c194a00b0026fdecfa6b5mr1392362ljb.240.1666109043367;
-        Tue, 18 Oct 2022 09:04:03 -0700 (PDT)
-Received: from elroy-temp-vm ([20.240.130.248])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056512348800b004a25468d86asm1905039lfr.68.2022.10.18.09.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 09:04:02 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 16:04:02 +0000
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: [PATCH v2] staging: rts5208: Replace instances of udelay by
- usleep_range
-Message-ID: <Y07OcqPNjSihOByt@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        Tue, 18 Oct 2022 12:04:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F32634D;
+        Tue, 18 Oct 2022 09:04:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C59AEB81FE7;
+        Tue, 18 Oct 2022 16:04:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E71CC433D6;
+        Tue, 18 Oct 2022 16:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666109066;
+        bh=kwn/hWdH9/e8LfszuP6LsH+3JjR3b5A0pHJNAWEXDhU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h0jlz5PaPhZ0U97fvM3qBLMgwAkRhqwijbu1o98DbDPy+DabB6V/ayEcy5iWYgctC
+         F+ihjARVSBGYqtd5prH/ipvWlYVUaZYueEMrmTKh7erHw4tmdZWfkvDXI2SoRkP56z
+         icbeVBKP5rz9SPCwBJdvmKL+4ZxewBs8/7fqVqRGwlQr2ROsRXC7gRgTj/6Q733lgK
+         bVHGoKFfX9SD+bR81VHCXpzhQnHxkgyBBm1WNdSfEUiqgrNDlgcGiQHcu+69Fu0dHl
+         LkZji6Mywv4X36Et+CNR8MNcs+8VAO3XYACU2hLJ1uMK6O2wn5sVom3BkAnXOL2LGh
+         JrGpLi6jvRrdQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1okp4g-0006F0-St; Tue, 18 Oct 2022 18:04:14 +0200
+Date:   Tue, 18 Oct 2022 18:04:14 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/15] dt-bindings: phy: qcom,qmp-pcie: mark current
+ bindings as legacy
+Message-ID: <Y07OfmfQgQWFzHZY@hovoldconsulting.com>
+References: <20221017145328.22090-1-johan+linaro@kernel.org>
+ <20221017145328.22090-10-johan+linaro@kernel.org>
+ <CAA8EJpqSWmy5Z4cmJnsdjMjkmACW7HSi-k5JxZ0gLCeUAWEnxQ@mail.gmail.com>
+ <Y05+E90tmlq2tNFa@hovoldconsulting.com>
+ <CAA8EJprwhEvUfUr-zDir4zFh_NAyr0qPbrHi6Hf8=2HC1dAhaw@mail.gmail.com>
+ <b0c1bdfb-4a31-9deb-1f0a-0ed813707464@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b0c1bdfb-4a31-9deb-1f0a-0ed813707464@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the use of udelay by usleep_range as suggested by checkpatch:
+On Tue, Oct 18, 2022 at 11:32:07AM -0400, Krzysztof Kozlowski wrote:
+> On 18/10/2022 07:37, Dmitry Baryshkov wrote:
+> > 
+> >>> And yes, I think we should also upgrade
+> >>> older DTs, keeping drivers backwards compatible (for some time?).
+> >>
+> >> Possibly, but I'm not sure it's worth the dts churn. As I mentioned
+> >> elsewhere, supporting both the old and new binding in the driver is
+> >> mostly trivial, while encoding the deprecated bindings in DT schema
+> >> sounds like it would be painful.
+> > 
+> > This is probably the time where Krzysztof can advise us. I'm still not
+> > sure when it is expected to encode both old and new bindings in the
+> > schema and when we can update both the schema and the DT.
+> 
+> I do not follow what exactly the proposal is. Are you asking whether to:
+> 1. keep existing DTS compatible with old driver?
+> or
+> 2. update existing DTS so it is working only with new driver (and not
+> compatible with old driver thus having ABI break)?
+> 
+> If so, it is less question to bindings but more to the usage of DTS in
+> other projects (like bootloaders, firmware, BSD) and generic
+> recommendation is: do not break other users, if possible. It is however
+> up to the platform maintainer (Bjorn) to decide on this, not on me.
 
-CHECK: usleep_range is preferred over udelay; see Documentation/timers/timers-howto.rst
-+               udelay(30);
+The question is whether to convert also the current bindings and DTS to
+the new (sc8280xp) scheme (e.g. drop the child nodes and register
+subregions).
 
-CHECK: usleep_range is preferred over udelay; see Documentation/timers/timers-howto.rst
-+               udelay(50);
+The driver can support both binding schemes using the same compatible
+strings for a transition period (or in theory forever) by checking for
+the existence of a child node.
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
----
+Converting the DTS to use the new bindings would obviously prevent using
+them with an old kernel (i.e. 2 above), but I don't think that's a
+problem (unlike backward compatibility during at least a transition
+period).
 
-v2: changed the max values of the usleep_rage instances as they cannot
-be equal to the min values as suggested by checkpatch
+My concern was how to describe the deprecation in DT schema if we were
+convert them. By instead just keeping the old bindings as-is in a
+separate file and continuing to support them in the driver we can have a
+nice and clean description of the new bindings (sc8280xp) without the
+legacy cruft.
 
- drivers/staging/rts5208/ms.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If we were to start introducing conditionals on existence of child
+nodes, and marking the old bindings as deprecated in one large schema,
+then that sounds like it would be very messy and hard to read and
+maintain. But perhaps there is some way to do this without such
+downsides that I'm not aware of.
 
-diff --git a/drivers/staging/rts5208/ms.c b/drivers/staging/rts5208/ms.c
-index 14449f8afad5..a9724ca5eccf 100644
---- a/drivers/staging/rts5208/ms.c
-+++ b/drivers/staging/rts5208/ms.c
-@@ -3235,7 +3235,7 @@ static int ms_write_multiple_pages(struct rtsx_chip *chip, u16 old_blk,
- 			return STATUS_FAIL;
- 		}
- 
--		udelay(30);
-+		usleep_range(30, 31);
- 
- 		rtsx_init_cmd(chip);
- 
-@@ -4157,7 +4157,7 @@ int mg_set_ICV(struct scsi_cmnd *srb, struct rtsx_chip *chip)
- 
- #ifdef MG_SET_ICV_SLOW
- 	for (i = 0; i < 2; i++) {
--		udelay(50);
-+		usleep_range(50, 51);
- 
- 		rtsx_init_cmd(chip);
- 
--- 
-2.34.1
-
+Johan
