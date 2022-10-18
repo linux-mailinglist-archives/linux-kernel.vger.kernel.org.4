@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05305601F62
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B38601F5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 02:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiJRAS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 20:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S232038AbiJRASB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 20:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiJRAP6 (ORCPT
+        with ESMTP id S231682AbiJRAPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 20:15:58 -0400
+        Mon, 17 Oct 2022 20:15:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A6B89CD9;
-        Mon, 17 Oct 2022 17:12:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB75F895E2;
+        Mon, 17 Oct 2022 17:12:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7508B81C11;
-        Tue, 18 Oct 2022 00:12:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC16C43470;
-        Tue, 18 Oct 2022 00:12:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 344DBB81C13;
+        Tue, 18 Oct 2022 00:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94169C433D6;
+        Tue, 18 Oct 2022 00:12:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666051936;
-        bh=0xUGJJuJmiAL/3D77xDmH2PkyClNfjhl4jHnwYSQc38=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kZIpBclc0gWAZc+B7diteAVv3+GTH0HJyw1eLfmYvki7psZufu2+eytXZjHwEBnKW
-         cMF/bGCE1XVNa1hwCmNXSO2/nJWJgDH57pp6XvVtJiIpHz5rOHhQoGoVZBo7xuAOIA
-         J9MP1/QBTNqiLvjNqwiu23fyG+rz8pTTJRa2d3NyZUuF0GNDVOq4iviGgLgPWj7UPQ
-         F6ezKqGyPVw+wlZuLCc6wcg/j551zptWxf5w95NAQwiLYQpTODLPMpnibTITM0CSMf
-         7deGhPxiAdme0MU1TpiSq4cwGaPusjUFe+Tuydu4UiKz8heE9GpYy+coHWQhZna+kw
-         Mmn50zsJT+/rw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Angus Chen <angus.chen@jaguarmicro.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH AUTOSEL 4.9 8/8] virtio_pci: don't try to use intxif pin is zero
-Date:   Mon, 17 Oct 2022 20:12:02 -0400
-Message-Id: <20221018001202.2732458-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221018001202.2732458-1-sashal@kernel.org>
-References: <20221018001202.2732458-1-sashal@kernel.org>
+        s=k20201202; t=1666051939;
+        bh=gnitjREAosEnc2q8OgrCTjC9y263oqZqF5PO1jPmfAk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q7i2DxbdEcxbhfpzWd7/PqUCedMhspOijxzXuQatS+gez7pf5cjxzCH9olhYsFZAQ
+         MK2bKDWrhOMTg7eqhAuu8rFjt9KYv93+6ZjGJkYMuLI9nbF72Yv1Luia0qrfJysCsF
+         mnxq5Ywwdt2Kbh25Brw2hdqK+i9N1RjnS+XpsTodn0KG6f1pzwaeJzNN4eG7LHT207
+         kOGNJDpnF1RQ9ywEXzh5XN5Kb72mJZLCMwfE8RAFNDQoN4MnKMMiHOQf9SFxaImpQ6
+         ZIymM2Xvkh/ew0lhZZBsxlGpQeYbbshRgyemsr+ycWZbpbH8XBCFWAOc5dbcOcZXuj
+         YRew0JcmpZM9w==
+Date:   Mon, 17 Oct 2022 17:12:16 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     Bruno Goncalves <bgoncalv@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto: x86/polyval - Fix crashes when keys are not
+ 16-byte aligned
+Message-ID: <Y03vYKwgdK34Hyfh@sol.localdomain>
+References: <20221017222620.715153-1-nhuck@google.com>
+ <Y03fBQPM7h7+cfGK@sol.localdomain>
+ <CAJkfWY5CXFQfSkM=U6u_DdLjDyLDoubqy2FeSZg5k7GBkOTnsQ@mail.gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJkfWY5CXFQfSkM=U6u_DdLjDyLDoubqy2FeSZg5k7GBkOTnsQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,90 +62,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Angus Chen <angus.chen@jaguarmicro.com>
+On Mon, Oct 17, 2022 at 04:38:25PM -0700, Nathan Huckleberry wrote:
+> On Mon, Oct 17, 2022 at 4:02 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> >
+> > On Mon, Oct 17, 2022 at 03:26:20PM -0700, Nathan Huckleberry wrote:
+> > > The key_powers array is not guaranteed to be 16-byte aligned, so using
+> > > movaps to operate on key_powers is not allowed.
+> > >
+> > > Switch movaps to movups.
+> > >
+> > > Fixes: 34f7f6c30112 ("crypto: x86/polyval - Add PCLMULQDQ accelerated implementation of POLYVAL")
+> > > Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
+> > > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+> > > ---
+> > >  arch/x86/crypto/polyval-clmulni_asm.S | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/x86/crypto/polyval-clmulni_asm.S b/arch/x86/crypto/polyval-clmulni_asm.S
+> > > index a6ebe4e7dd2b..32b98cb53ddf 100644
+> > > --- a/arch/x86/crypto/polyval-clmulni_asm.S
+> > > +++ b/arch/x86/crypto/polyval-clmulni_asm.S
+> > > @@ -234,7 +234,7 @@
+> > >
+> > >       movups (MSG), %xmm0
+> > >       pxor SUM, %xmm0
+> > > -     movaps (KEY_POWERS), %xmm1
+> > > +     movups (KEY_POWERS), %xmm1
+> > >       schoolbook1_noload
+> > >       dec BLOCKS_LEFT
+> > >       addq $16, MSG
+> >
+> > I thought that crypto_tfm::__crt_ctx is guaranteed to be 16-byte aligned,
+> > and that the x86 AES code relies on that property.
+> >
+> > But now I see that actually the x86 AES code manually aligns the context.
+> > See aes_ctx() in arch/x86/crypto/aesni-intel_glue.c.
+> >
+> > Did you consider doing the same for polyval?
+> 
+> I'll submit a v2 aligning the tfm_ctx. I think that makes more sense
+> than working on unaligned keys.
+> 
+> Is there a need to do the same changes on arm64? The keys are also
+> unaligned there.
+> 
 
-[ Upstream commit 71491c54eafa318fdd24a1f26a1c82b28e1ac21d ]
+arm64 defines ARCH_DMA_MINALIGN to 128, so I don't think the same issue applies
+there.  Also the instructions used don't assume aligned addresses.
 
-The background is that we use dpu in cloud computing,the arch is x86,80
-cores. We will have a lots of virtio devices,like 512 or more.
-When we probe about 200 virtio_blk devices,it will fail and
-the stack is printed as follows:
-
-[25338.485128] virtio-pci 0000:b3:00.0: virtio_pci: leaving for legacy driver
-[25338.496174] genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)
-[25338.503822] CPU: 20 PID: 5431 Comm: kworker/20:0 Kdump: loaded Tainted: G           OE    --------- -  - 4.18.0-305.30.1.el8.x86_64
-[25338.516403] Hardware name: Inspur NF5280M5/YZMB-00882-10E, BIOS 4.1.21 08/25/2021
-[25338.523881] Workqueue: events work_for_cpu_fn
-[25338.528235] Call Trace:
-[25338.530687]  dump_stack+0x5c/0x80
-[25338.534000]  __setup_irq.cold.53+0x7c/0xd3
-[25338.538098]  request_threaded_irq+0xf5/0x160
-[25338.542371]  vp_find_vqs+0xc7/0x190
-[25338.545866]  init_vq+0x17c/0x2e0 [virtio_blk]
-[25338.550223]  ? ncpus_cmp_func+0x10/0x10
-[25338.554061]  virtblk_probe+0xe6/0x8a0 [virtio_blk]
-[25338.558846]  virtio_dev_probe+0x158/0x1f0
-[25338.562861]  really_probe+0x255/0x4a0
-[25338.566524]  ? __driver_attach_async_helper+0x90/0x90
-[25338.571567]  driver_probe_device+0x49/0xc0
-[25338.575660]  bus_for_each_drv+0x79/0xc0
-[25338.579499]  __device_attach+0xdc/0x160
-[25338.583337]  bus_probe_device+0x9d/0xb0
-[25338.587167]  device_add+0x418/0x780
-[25338.590654]  register_virtio_device+0x9e/0xe0
-[25338.595011]  virtio_pci_probe+0xb3/0x140
-[25338.598941]  local_pci_probe+0x41/0x90
-[25338.602689]  work_for_cpu_fn+0x16/0x20
-[25338.606443]  process_one_work+0x1a7/0x360
-[25338.610456]  ? create_worker+0x1a0/0x1a0
-[25338.614381]  worker_thread+0x1cf/0x390
-[25338.618132]  ? create_worker+0x1a0/0x1a0
-[25338.622051]  kthread+0x116/0x130
-[25338.625283]  ? kthread_flush_work_fn+0x10/0x10
-[25338.629731]  ret_from_fork+0x1f/0x40
-[25338.633395] virtio_blk: probe of virtio418 failed with error -16
-
-The log :
-"genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)"
-was printed because of the irq 0 is used by timer exclusive,and when
-vp_find_vqs call vp_find_vqs_msix and returns false twice (for
-whatever reason), then it will call vp_find_vqs_intx as a fallback.
-Because vp_dev->pci_dev->irq is zero, we request irq 0 with
-flag IRQF_SHARED, and get a backtrace like above.
-
-According to PCI spec about "Interrupt Pin" Register (Offset 3Dh):
-"The Interrupt Pin register is a read-only register that identifies the
- legacy interrupt Message(s) the Function uses. Valid values are 01h, 02h,
- 03h, and 04h that map to legacy interrupt Messages for INTA,
- INTB, INTC, and INTD respectively. A value of 00h indicates that the
- Function uses no legacy interrupt Message(s)."
-
-So if vp_dev->pci_dev->pin is zero, we should not request legacy
-interrupt.
-
-Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
-Suggested-by: Michael S. Tsirkin <mst@redhat.com>
-Message-Id: <20220930000915.548-1-angus.chen@jaguarmicro.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/virtio/virtio_pci_common.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index 37e3ba5dadf6..d634eb926a2f 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -389,6 +389,9 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned nvqs,
- 				 true, false);
- 	if (!err)
- 		return 0;
-+	/* Is there an interrupt pin? If not give up. */
-+	if (!(to_vp_device(vdev)->pci_dev->pin))
-+		return err;
- 	/* Finally fall back to regular interrupts. */
- 	return vp_try_to_find_vqs(vdev, nvqs, vqs, callbacks, names,
- 				  false, false);
--- 
-2.35.1
-
+- Eric
