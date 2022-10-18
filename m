@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295E0602075
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDF1602085
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiJRBcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S229968AbiJRBlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 21:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiJRBcv (ORCPT
+        with ESMTP id S230078AbiJRBlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:32:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE51AD88;
-        Mon, 17 Oct 2022 18:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666056770; x=1697592770;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HU32EIXN4wgKHTDbR87eVWv30iu9Y/xR0IE3CNJy6TU=;
-  b=FkCoaLILXtiWxzkcweXlG4iLlbrBtpyQPYYIUM96XWjTU6aZI6MKtIYN
-   syAPf1spXfqRzq9MB3prPfSUHtx+DFPMqGnbBM+Qw9iDiomehvWNWTnYn
-   MnIhLDrf0Ss0MlDqtX0riqrB1LjwJPky3VQuEfOhJoSz6zs8DQ3ICiuPs
-   4h84lddVQMD26cbD9X9ehNKOUt0TGwBQR57tTOHa1HpxAygRuc7R5fsYg
-   l023NO8X9S4fzCu9XJU7d3VQ2WCCph8L4QTA52MPpJNYAyB1p/gn5bCRL
-   V1LO/FJGdCHQuVU5w3+sq46nShPRPcZg9kYLwX4vTySuCkVEvhEE3zaaz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="392267428"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="392267428"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 18:32:50 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="770986851"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="770986851"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 18:32:49 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] srcu: Export srcu_check_nmi_safety() to modules
-Date:   Tue, 18 Oct 2022 09:39:06 +0800
-Message-Id: <20221018013906.3890007-1-qiang1.zhang@intel.com>
+        Mon, 17 Oct 2022 21:41:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227821094;
+        Mon, 17 Oct 2022 18:40:57 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29I1BYkr017364;
+        Tue, 18 Oct 2022 01:40:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=SKLSM59/eOS6EjNhUYkLkSLyFACNjSC2GV9fFZqV7IY=;
+ b=n7i2ViJP1SHCtUWyRxy2mwDRyl24m8ZjJ17XnYKgky/K5Mw9qorhmxNBctwroAbJw8ZY
+ CsihiITlsoHRjod2oXdDBP7EHA/MnVVKz3q8nuc2pynPHrOTYG1Id0mMPW74I4qLtUk2
+ KAJxKK0rNdjRDwruuokqaVhdWS06qBIumW9XMdOEB5J0XtLkPrMJu5EfLP/+0u0tDWhE
+ PyowcT/qt4xzlWwOk6omj63JamE41uswF6VYw+9WD/SgnsM4dnKw/VFjgGVOV/2mdrKP
+ YZwDhaMSSNcrP9NJoTvJNa6169jl6DFwWrBcZb12nlR06F6PSLpPY0sRE1ACDz6HaNQN bw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9gwe886e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 01:40:55 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29I1et16019270
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 01:40:55 GMT
+Received: from fenglinw2-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 17 Oct 2022 18:40:53 -0700
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>
+CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
+        <quic_fenglinw@quicinc.com>
+Subject: [PATCH v3 0/2] Add LED driver for flash module in QCOM PMICs
+Date:   Tue, 18 Oct 2022 09:40:22 +0800
+Message-ID: <20221018014024.948731-1-quic_fenglinw@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: d_WHMbT5qb3ClNkCUVD7B-O3ri4UUFiE
+X-Proofpoint-ORIG-GUID: d_WHMbT5qb3ClNkCUVD7B-O3ri4UUFiE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-17_13,2022-10-17_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ spamscore=0 impostorscore=0 adultscore=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=663 lowpriorityscore=0 suspectscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210180007
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When enable CONFIG_PROVE_RCU and built modules, the following
-error appear:
+Initial driver and binding document changes for supporting flash LED
+module in Qualcomm Technologies, Inc. PMICs.
 
-ERROR: modpost: "srcu_check_nmi_safety" [kernel/rcu/rcutorture.ko] undefined!
-ERROR: modpost: "srcu_check_nmi_safety" [kernel/rcu/rcuscale.ko] undefined!
+Changes in V3:
+  1. Updated the driver to use regmap_field for register access.
+  2. Adressed the review comments in binding document change.
 
-This commit fix it by exporting the srcu_check_nmi_safety().
+Changes in V2:
+  1. Addressed review comments in binding change, thanks Krzysztof!
+  2. Updated driver to address the compilation issue reported by
+     kernel test robot.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/srcutree.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 382236dd5e46..bcd629f5f902 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -651,6 +651,7 @@ void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
- 	}
- 	WARN_ONCE(old_nmi_safe_mask != nmi_safe_mask, "CPU %d old state %d new state %d\n", sdp->cpu, old_nmi_safe_mask, nmi_safe_mask);
- }
-+EXPORT_SYMBOL_GPL(srcu_check_nmi_safety);
- #endif /* CONFIG_PROVE_RCU */
- 
- /*
+Fenglin Wu (2):
+  leds: flash: add driver to support flash LED module in QCOM PMICs
+  dt-bindings: add bindings for QCOM flash LED
+
+ .../bindings/leds/qcom,spmi-flash-led.yaml    | 116 +++
+ drivers/leds/flash/Kconfig                    |  15 +
+ drivers/leds/flash/Makefile                   |   1 +
+ drivers/leds/flash/leds-qcom-flash.c          | 700 ++++++++++++++++++
+ 4 files changed, 832 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/qcom,spmi-flash-led.yaml
+ create mode 100644 drivers/leds/flash/leds-qcom-flash.c
+
 -- 
 2.25.1
 
