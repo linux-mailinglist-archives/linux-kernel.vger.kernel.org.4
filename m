@@ -2,156 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA526034AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21F56034C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 23:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiJRVNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 17:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
+        id S230347AbiJRVQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 17:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiJRVNC (ORCPT
+        with ESMTP id S230326AbiJRVP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 17:13:02 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C150CC4C3E;
-        Tue, 18 Oct 2022 14:13:01 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id be13so9194028lfb.4;
-        Tue, 18 Oct 2022 14:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PcTgztvz01i1AUaYLJIqCVOYn5kiAMuKCqT5W3AEJoc=;
-        b=T01XTyoUWE3zKGhM5BukE0c6AKGTmT47D55TxG5MXFdgzGTAtGpp7GY+eXzqQqEyEO
-         +Ieo+MvqJkO3XpnyD0PaWiJ08qcvHucWUIJsVKaDGvBOcrjbDYJAPykOYu5/nxjJe27r
-         3CMWB4NRxPpCsxZIuQKLtO5BjzGGx6VfDUQf1N5LfbQMkHj3KjYkjQSDD77BUCWBFcSy
-         5vJbb/ot+lATv8RUkKowyiCoR0oOg5y+0mPADA/6vtm5PCrIaufzaQd7jEGLjg/iLZgE
-         4klR561pSitwWtDhCph02lXEz7+8ZBy4KbRtef0NvtbYmyz63MnHO465MlX6vTCZI0aX
-         fnSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PcTgztvz01i1AUaYLJIqCVOYn5kiAMuKCqT5W3AEJoc=;
-        b=1OnNI876l9IS3O/LVqJm2LxinWMKXcJ/L0+Hi75x7iO+fW+XttoR1M91zzZSgbbItE
-         BiR+///xip9XoN3v480LvwPCR7BahM1+TxvEkJsSpogg9CwIQ9STrV+EwQyNcHogQFFw
-         SJaVvOk9FocHsRD95bD56fHPH5DeSM1bW2uUbJlIPYiT/0R81v8LNgr+JDTbF9WBosqE
-         le+KWQP7oYtGwIG9imdK8joqacou6DJYc4aVqETO23QuHsK+uLPnq25qYNrekiaFPiXx
-         7y69FUF68pX21lTIIzjqxjAUBS2RjOvWBVPiK6XyOCEtj7lFhCg7+YToje52HJIys9as
-         ilFw==
-X-Gm-Message-State: ACrzQf1p3F3Cb0UtGBnIGTE5taVLYuV6WtxyJ0es/ReB3Jmizm4Vr/Ue
-        53ryFmvbAVZDZ5xea+Z7R6I=
-X-Google-Smtp-Source: AMsMyM5ntKDQNkrDBnb7blafjSZLYV3kqVmVdDiuWmlMEgdeMqPYBer81Mcg2MdQmkhbSRNzWJd5yw==
-X-Received: by 2002:a05:6512:a8c:b0:4a2:10f1:6e06 with SMTP id m12-20020a0565120a8c00b004a210f16e06mr1546297lfu.415.1666127581163;
-        Tue, 18 Oct 2022 14:13:01 -0700 (PDT)
-Received: from [192.168.2.145] ([109.252.119.114])
-        by smtp.googlemail.com with ESMTPSA id bf12-20020a056512258c00b004a478c2f4desm1068357lfb.163.2022.10.18.14.12.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 14:13:00 -0700 (PDT)
-Message-ID: <712c9e51-f589-b566-6194-259393180e43@gmail.com>
-Date:   Wed, 19 Oct 2022 00:12:58 +0300
+        Tue, 18 Oct 2022 17:15:59 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFE1A0336;
+        Tue, 18 Oct 2022 14:15:55 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29ILFYMV079148;
+        Tue, 18 Oct 2022 16:15:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666127734;
+        bh=ynh9GaLBqPQbclUIR+Esf/ZvXo6qcycSdKYSXZvKn6c=;
+        h=From:To:CC:Subject:Date;
+        b=McQSZZlG3hj+N3DaDLKpbLZdnUSFYnwaFD0j0BjxitPJpSk6XBan5QgRGZnsR2NsF
+         Kwyh/vaAvuMmc6ioe6SLv64ymyji+x2az8N5Wq2ixMJss5ILCTyQqhu/1qkaH2/Poy
+         GzU2bJibdJm+uA02yIj7aKc0gH0Wfbpj11+erCmE=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29ILFYxN005798
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Oct 2022 16:15:34 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 18
+ Oct 2022 16:15:34 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 18 Oct 2022 16:15:34 -0500
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29ILFXoA014456;
+        Tue, 18 Oct 2022 16:15:33 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bryan Brattlof <bb@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Davis <afd@ti.com>
+Subject: [PATCH 00/10] AM62x Disable Incomplete DT Nodes
+Date:   Tue, 18 Oct 2022 16:15:23 -0500
+Message-ID: <20221018211533.21335-1-afd@ti.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 05/16] iommu: Move bus setup to IOMMU device
- registration
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        Thierry Reding <treding@nvidia.com>
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, baolu.lu@linux.intel.com,
-        kevin.tian@intel.com, suravee.suthikulpanit@amd.com,
-        vasant.hegde@amd.com, mjrosato@linux.ibm.com,
-        schnelle@linux.ibm.com, linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <cover.1660572783.git.robin.murphy@arm.com>
- <d342b6f27efb5ef3e93aacaa3012d25386d74866.1660572783.git.robin.murphy@arm.com>
- <89d873fc-9f0a-156e-dcf2-48a2b9f93dcc@nvidia.com>
- <583c4689-844d-2ae2-79fb-4750b21c4304@arm.com>
- <41293685-54aa-6fa3-ca41-189fdbb7e8b0@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <41293685-54aa-6fa3-ca41-189fdbb7e8b0@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-18.10.2022 09:13, Jon Hunter пишет:
-> 
-> On 06/10/2022 16:27, Robin Murphy wrote:
->> On 2022-10-06 15:01, Jon Hunter wrote:
->>> Hi Robin,
->>>
->>> On 15/08/2022 17:20, Robin Murphy wrote:
->>>> Move the bus setup to iommu_device_register(). This should allow
->>>> bus_iommu_probe() to be correctly replayed for multiple IOMMU
->>>> instances,
->>>> and leaves bus_set_iommu() as a glorified no-op to be cleaned up next.
->>>>
->>>> At this point we can also handle cleanup better than just rolling back
->>>> the most-recently-touched bus upon failure - which may release devices
->>>> owned by other already-registered instances, and still leave devices on
->>>> other buses with dangling pointers to the failed instance. Now it's
->>>> easy
->>>> to clean up the exact footprint of a given instance, no more, no less.
->>>
->>>
->>> Since this change, I have noticed that the DRM driver on Tegra20 is
->>> failing to probe and I am seeing ...
->>>
->>>   tegra-gr2d 54140000.gr2d: failed to attach to domain: -19
->>>   drm drm: failed to initialize 54140000.gr2d: -19
->>>
->>> Bisect points to this change and reverting it fixes it. Let me know
->>> if you have any thoughts.
->>
->> Oh, apparently what's happened is that I've inadvertently enabled the
->> tegra-gart driver, since it seems that *wasn't* calling
->> bus_set_iommu() before. Looking at the history, it appears to have
->> been that way since c7e3ca515e78 ("iommu/tegra: gart: Do not register
->> with bus"), so essentially that driver has been broken and useless for
->> close to 8 years now :(
->>
->> Given that, I'd be inclined to "fix" it as below, or just give up and
->> delete the whole thing.
->>
->> Thanks,
->> Robin.
->>
->> ----->8-----
->> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
->> index 5c5cb5bee8b6..7b3f7fd6e527 100644
->> --- a/drivers/iommu/Kconfig
->> +++ b/drivers/iommu/Kconfig
->> @@ -230,6 +230,7 @@ config TEGRA_IOMMU_GART
->>       bool "Tegra GART IOMMU Support"
->>       depends on ARCH_TEGRA_2x_SOC
->>       depends on TEGRA_MC
->> +    depends on BROKEN
->>       select IOMMU_API
->>       help
->>         Enables support for remapping discontiguous physical memory
-> 
-> 
-> Thanks Robin. This works for me.
-> 
-> Thierry, Dmitry, we need a fix for v6.1 and so OK with the above?
+Hello all,
 
-To me it is more a problem of the DRM driver that it doesn't support
-GART. GART will require a special handling from the DRM driver anyways [1].
+Same story as for AM64x[0], this time for AM62x. If there
+are no objections here then the J7x platforms are next.
 
-[1]
-https://github.com/grate-driver/linux/blob/master/drivers/gpu/drm/grate/drm.c#L460
+Thanks,
+Andrew
 
-The GART driver itself isn't broken, it's working perfectly fine. It's
-the DRM driver that should start caring about the GART presence, IMO.
+[0] https://www.spinics.net/lists/arm-kernel/msg1018532.html
+
+Andrew Davis (10):
+  arm64: dts: ti: k3-am62: Enable UART nodes at the board level
+  arm64: dts: ti: k3-am62: Enable I2C nodes at the board level
+  arm64: dts: ti: k3-am62: Enable SPI nodes at the board level
+  arm64: dts: ti: k3-am62: Enable EPWM nodes at the board level
+  arm64: dts: ti: k3-am62: Enable ECAP nodes at the board level
+  arm64: dts: ti: k3-am62: MDIO pinmux should belong to the MDIO node
+  arm64: dts: ti: k3-am62: Enable MDIO nodes at the board level
+  arm64: dts: ti: k3-am62: Enable MCAN nodes at the board level
+  arm64: dts: ti: k3-am62: Enable SDHCI nodes at the board level
+  arm64: dts: ti: k3-am62: Enable OSPI nodes at the board level
+
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi   | 26 +++++++
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi    |  4 ++
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi |  2 +
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts     | 81 +++-------------------
+ 4 files changed, 43 insertions(+), 70 deletions(-)
+
+-- 
+2.37.3
+
