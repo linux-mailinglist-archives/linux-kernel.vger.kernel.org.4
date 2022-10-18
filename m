@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF4A603219
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8484060321D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiJRSMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S229572AbiJRSOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiJRSMp (ORCPT
+        with ESMTP id S229515AbiJRSOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:12:45 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D1B74365;
-        Tue, 18 Oct 2022 11:12:44 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id k2so34325403ejr.2;
-        Tue, 18 Oct 2022 11:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O9BWsdOmt2DdZ9rM9JV+zrPCJi6ZcySjb5J/mdJmGW4=;
-        b=apFEQeVUoC9kYaMCL1ZrShTVl2Gbz8Nn7EAwFWSkjNo2A1a4YetvqT6i8zUUqI5IIT
-         xrARLa2v1tCo02v0oXYnrSoPMR+Fn6mTme6LzAwbFUNSuzNrUy2FiPC4pA20QQbJOJTy
-         PZGJQTa6xdg4EWYlGPQOiK+hOZMP4l6pOrQvKgL0vaEktZA/qvvQepSnJT+S7HI0jH4r
-         XlZpbKEimyAoahZsewt5h3/pweuL/Rh0eVd3XTVqRVIhkYJpC/vs6LVB7Q1shy/HJnJd
-         jN7WySWufLuZi9ciS2BkvKOH8OyxxQYxF0L8X8tHmdskoM0UjGaxEVL4OXM5b48RjQ2B
-         fBPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O9BWsdOmt2DdZ9rM9JV+zrPCJi6ZcySjb5J/mdJmGW4=;
-        b=pz/Si6goxQAt/2EFchCx5fXbuQLd4x+86Dyih+4wEijwEGgF/9uROjPeMT7ql9+3yi
-         SIaYZBKZ0jFuVcIlyGhudTN1qnKXVqImH9N7aPjGpTb3zCvDCYQKA0T6XTgNxZVaU6SV
-         d7rrMNDf1f8T4JVZRqXx3UaeD4LXVX2ugWQLEnBvx8IrQr7L/tNziym3ivA2s7dtsX9u
-         V1LhaHzTxn4cNsG6IioYcAjlLpbN3Uktvgyw1e/azd0OWsoDNCGNziwwx9Ih1zkbjkXs
-         Y3f5HEvpc2ixIjcDd9gXsrcF/EmLZ1itaTsRzXFGlm2EcEep6tfxx7mDEUpeyCp/3LKB
-         6aiA==
-X-Gm-Message-State: ACrzQf0ajtoKESJRZxfjq3IXXGfGvwF2//hmFtiJZUzXk6WxJLUJSpmc
-        hiduqjNb54Ogdy8aZW2IuAk=
-X-Google-Smtp-Source: AMsMyM7ZPyVPQTXkr1zo3sQa8iuQFw0eBMml+7HJB05GhzwuI3WK14gZpi3PKA6rlXKa5IHuze1OOA==
-X-Received: by 2002:a17:907:1b1e:b0:783:8e33:2d1c with SMTP id mp30-20020a1709071b1e00b007838e332d1cmr3506475ejc.304.1666116762780;
-        Tue, 18 Oct 2022 11:12:42 -0700 (PDT)
-Received: from hp-power-15.localdomain (mm-39-1-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.1.39])
-        by smtp.gmail.com with ESMTPSA id u22-20020a056402111600b00458dc7e8ecasm9253043edv.72.2022.10.18.11.12.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 11:12:42 -0700 (PDT)
-From:   Siarhei Volkau <lis8215@gmail.com>
-Cc:     Siarhei Volkau <lis8215@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v3 2/2] dmaengine: JZ4780: Add support for the JZ4755.
-Date:   Tue, 18 Oct 2022 21:12:19 +0300
-Message-Id: <20221018181219.3251309-3-lis8215@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221018181219.3251309-1-lis8215@gmail.com>
-References: <20221018181219.3251309-1-lis8215@gmail.com>
+        Tue, 18 Oct 2022 14:14:38 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5151FE5D
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:14:34 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 29IIDq2i1687227
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 18 Oct 2022 11:13:52 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 29IIDq2i1687227
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022100601; t=1666116833;
+        bh=O+5SfYdXnWvgSzFcU395fP/yPvA6+Jy3GDPGjcsY1pw=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=qWdf4tC3EkHpJt5FnihSkh3CSg0xY9AzM9Hm+DRbN9GIWR0ZGwTXl72rlApz1cy0p
+         tfFFsXbfqbyFVnxx8jl796zWhu+qn4AhJhRd7ZeMnQZjRB/TmZTcz7ncuKAbUkPvXY
+         GICTyPlBErdY9frrXxAWMdmBFSQRCg9EKrMP8p0hkua7XPQp/0ajsBEIGR3CK9zAgf
+         VlumiJMgecWiwxK85FhtUf1iGs0/1XVd37fnok5AogghCFbJE36bhpF48422paE0k/
+         xpd+4LG5zQmrtxcHuqu3G7uwoVIMcg7iohPA0J7+mweB27w9p02f/7/ZZFaviOxqpb
+         C1LDnIcC6sRkA==
+Date:   Tue, 18 Oct 2022 11:13:50 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "brgerst@gmail.com" <brgerst@gmail.com>,
+        "Bae, Chang Seok" <chang.seok.bae@intel.com>
+Subject: =?US-ASCII?Q?RE=3A_=5BPATCH_v3_4/6=5D_x86/gsseg=3A_move_local=5Fi?= =?US-ASCII?Q?rq=5Fsave/restore=28=29_into_asm=5Fload=5Fgs=5Findex=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <BN6PR1101MB2161B983B1A85CE3803A3EF8A8289@BN6PR1101MB2161.namprd11.prod.outlook.com>
+References: <20221013200134.1487-1-xin3.li@intel.com> <20221013200134.1487-5-xin3.li@intel.com> <8735bpbhat.ffs@tglx> <BN6PR1101MB2161B983B1A85CE3803A3EF8A8289@BN6PR1101MB2161.namprd11.prod.outlook.com>
+Message-ID: <629F4B18-CCA4-4409-946E-F00146C6BCB5@zytor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The JZ4755 has 4 DMA channels per DMA unit, two idential DMA units.
+On October 18, 2022 10:25:31 AM PDT, "Li, Xin3" <xin3=2Eli@intel=2Ecom> wro=
+te:
+>> >  static inline void native_load_gs_index(unsigned int selector)  {
+>> > -	unsigned long flags;
+>> > -
+>> > -	local_irq_save(flags);
+>> >  	asm_load_gs_index(selector);
+>> > -	local_irq_restore(flags);
+>> >  }
+>>=20
+>> static inline void native_load_gs_index(unsigned int selector) {
+>> 	unsigned long flags;
+>>=20
+>>         if (cpu_feature_enabled(LKGS)) {
+>>               native_lkgs(selector);
+>>         } else {
+>> 	      local_irq_save(flags);
+>>               asm_load_gs_index(selector);
+>> 	      local_irq_restore(flags);
+>>        }
+>> }
+>>=20
+>> For paravirt enabled kernels we want during feature detection:
+>>=20
+>>         if (cpu_feature_enabled(LKGS)))
+>>         	pv_ops=2Ecpu=2Eload_gs_index =3D native_lkgs;
+>
+>If we use static_cpu_has in native_load_gs_index
+>       if (static_cpu_has(X86_FEATURE_LKGS)) {
+>               native_lkgs(selector);
+>       }
+>
+>We don't have to change pv_ops=2Ecpu=2Eload_gs_index, right?
+>
+>Thanks!
+>Xin
+>
+>>=20
+>> No?
+>>=20
+>> Thanks,
+>>=20
+>>         tglx
+>
 
-The JZ4755 has the similar DMA engine to JZ4725b and it has the
-same bug as JZ4725b, see commit a40c94be2336.
-At least the JZ_SOC_DATA_BREAK_LINKS flag make it work much better,
-although not ideal.
-
-Tested-by: Siarhei Volkau <lis8215@gmail.com>
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
----
- drivers/dma/dma-jz4780.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-index 2a483802d..9c1a6e9a9 100644
---- a/drivers/dma/dma-jz4780.c
-+++ b/drivers/dma/dma-jz4780.c
-@@ -1038,6 +1038,13 @@ static const struct jz4780_dma_soc_data jz4725b_dma_soc_data = {
- 		 JZ_SOC_DATA_BREAK_LINKS,
- };
- 
-+static const struct jz4780_dma_soc_data jz4755_dma_soc_data = {
-+	.nb_channels = 4,
-+	.transfer_ord_max = 5,
-+	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC |
-+		 JZ_SOC_DATA_BREAK_LINKS,
-+};
-+
- static const struct jz4780_dma_soc_data jz4760_dma_soc_data = {
- 	.nb_channels = 5,
- 	.transfer_ord_max = 6,
-@@ -1101,6 +1108,7 @@ static const struct jz4780_dma_soc_data x1830_dma_soc_data = {
- static const struct of_device_id jz4780_dma_dt_match[] = {
- 	{ .compatible = "ingenic,jz4740-dma", .data = &jz4740_dma_soc_data },
- 	{ .compatible = "ingenic,jz4725b-dma", .data = &jz4725b_dma_soc_data },
-+	{ .compatible = "ingenic,jz4755-dma", .data = &jz4755_dma_soc_data },
- 	{ .compatible = "ingenic,jz4760-dma", .data = &jz4760_dma_soc_data },
- 	{ .compatible = "ingenic,jz4760-mdma", .data = &jz4760_mdma_soc_data },
- 	{ .compatible = "ingenic,jz4760-bdma", .data = &jz4760_bdma_soc_data },
--- 
-2.36.1
-
+You don't *have* to, but it would mean a branch to a branch, so it would b=
+e more efficient=2E It would strictly be an optimization=2E
