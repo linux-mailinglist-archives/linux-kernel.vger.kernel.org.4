@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA16603154
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9942603157
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 19:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJRRFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 13:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
+        id S230044AbiJRRHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 13:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiJRRFI (ORCPT
+        with ESMTP id S229979AbiJRRHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:05:08 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74802D1CA
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:04:58 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id g16so5239479qtu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:04:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DEzQc+Bct6/RN359ieT08SroCePicyjw/ZP5+4KzKko=;
-        b=Yv2Yf4MClIPvLvVthW6ibzYYs/8MCcjv7A0cDTf+ru3A3yKWSCT11z1/dmpHREgniS
-         CZd8pRhZMM+2t6neOlbn+S9t/NHa3ZGG1QDeEF1tJ5P1eydU7WrOByCOReTDMVU6RSpW
-         +qqVuLR71UnsGlES4mbhwEr2E9ViuS9xEAQ5e4hiRiqcoW/DH3vqKiAcaan43qpXSPyO
-         gYed5+tLNdW53lishFHaqOzaBduIBigay/B2t3gz835uJF1s7QSI+z76uOn1xsXwwCA9
-         GaXKgl79Yx64ZuZyKOFYVJImUWHbwEfvupBj5ejMUARQb1SO9vT6+FJnhkVVI20FEQQ0
-         973w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DEzQc+Bct6/RN359ieT08SroCePicyjw/ZP5+4KzKko=;
-        b=I64DQd/walsiaMQjr1Go6MlQ+TUhHXoXuaHU7SPj/3m8hYttyOqYUWY9GGe/J4Gm7S
-         gj5ckZ4PN/7nsDQyiM0h2Je3Q32PrrEEjbt28DzHF+El9ntuCKIVfi3TUQ1m5geulPet
-         atg07oO+/Sqx301gpBWQSjcjiIHPE8u7PX2jtKhrEDNRYJLO6aZ334yfYJeYu9t9LcCx
-         Xu5Vtixc+U8hJvRpQ1yiDEDFufdY42POxnP09gq5cCLLwijVUI04/bEIaIlvRWHgdsKQ
-         Xw4Fwa5umzgZAf8r90tFlwbOBmnM2coz+S5s/fHnFONrYTXymrcnmfyxKPGXwXvBPohX
-         zbvA==
-X-Gm-Message-State: ACrzQf3UxMmt3f3QacD4kLvcw9fSu+CSBUKZrXVazIWlHXLN8EFgnvow
-        gXnOXpUqqrSrI8arvV8OzkxOsA==
-X-Google-Smtp-Source: AMsMyM6O5+hrWJ0mMLBWOJaqqxIhaz6RjAnqBNmY+sO63zvY7Q+NXA1KOLcuPzNWaNyH5Suv784shw==
-X-Received: by 2002:a05:622a:1d4:b0:39c:ef9b:e77f with SMTP id t20-20020a05622a01d400b0039cef9be77fmr2864814qtw.529.1666112697242;
-        Tue, 18 Oct 2022 10:04:57 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id u24-20020a37ab18000000b006bb83c2be40sm2757555qke.59.2022.10.18.10.04.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 10:04:56 -0700 (PDT)
-Message-ID: <56ce7440-b60b-4688-c7ac-d0435f79eb97@linaro.org>
-Date:   Tue, 18 Oct 2022 13:04:54 -0400
+        Tue, 18 Oct 2022 13:07:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE22EEA9E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 10:06:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24675B82072
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70173C433D6;
+        Tue, 18 Oct 2022 17:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666112789;
+        bh=Zhb/lj2rt5yGFgf8T/KJ6b2c8PnX/hhuM/ohylSM4Nc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H8GEnlVD56mgi40ebmUuPhLjNXC5y9Vt0AHRbRdo2RHMTYuzVbLzf9QG21neMmN0E
+         bm/0/0ggPxyUdUiUG7CbDH+CF029eKepjZZwPTk7GQFjC51+TXlPZmfXkUEfKS6clA
+         HIb8hBzKqeeFPgsxOt2PrZ/04FVBRiWg+bBxrOiQ=
+Date:   Tue, 18 Oct 2022 19:06:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] staging: rts5208: Replace instances of udelay by
+ usleep_range
+Message-ID: <Y07dExeWY5lXgKLr@kroah.com>
+References: <Y07OcqPNjSihOByt@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/4 v5] dt-bindings: memory: Factor out common properties
- of LPDDR bindings
-Content-Language: en-US
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, Jian-Jia Su <jjsu@google.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-References: <20220930220606.303395-1-jwerner@chromium.org>
- <166610580692.30968.11562735981650899285.b4-ty@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <166610580692.30968.11562735981650899285.b4-ty@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y07OcqPNjSihOByt@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 11:10, Krzysztof Kozlowski wrote:
-> On Fri, 30 Sep 2022 15:06:03 -0700, Julius Werner wrote:
->> The bindings for different LPDDR versions mostly use the same kinds of
->> properties, so in order to reduce duplication when we're adding support
->> for more versions, this patch creates a new lpddr-props subschema that
->> can be referenced by the others to define these common parts. (This will
->> consider a few smaller I/O width and density numbers "legal" for LPDDR3
->> that are usually not used there, but this should be harmless.)
->>
->> [...]
+On Tue, Oct 18, 2022 at 04:04:02PM +0000, Tanjuate Brunostar wrote:
+> Replace the use of udelay by usleep_range as suggested by checkpatch:
 > 
-> Applied, thanks!
+> CHECK: usleep_range is preferred over udelay; see Documentation/timers/timers-howto.rst
+> +               udelay(30);
 > 
-> [1/4] dt-bindings: memory: Factor out common properties of LPDDR bindings
->       https://git.kernel.org/krzk/linux-mem-ctrl/c/087cf0c5a19c638dd3b26fe7034274b38bc8db6b
-> [2/4] dt-bindings: memory: Add numeric LPDDR compatible string variant
->       https://git.kernel.org/krzk/linux-mem-ctrl/c/f4deb90635ec8a7dd5d5e4e931ab539edc9a9c90
+> CHECK: usleep_range is preferred over udelay; see Documentation/timers/timers-howto.rst
+> +               udelay(50);
+> 
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> ---
+> 
+> v2: changed the max values of the usleep_rage instances as they cannot
+> be equal to the min values as suggested by checkpatch
+> 
+>  drivers/staging/rts5208/ms.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/rts5208/ms.c b/drivers/staging/rts5208/ms.c
+> index 14449f8afad5..a9724ca5eccf 100644
+> --- a/drivers/staging/rts5208/ms.c
+> +++ b/drivers/staging/rts5208/ms.c
+> @@ -3235,7 +3235,7 @@ static int ms_write_multiple_pages(struct rtsx_chip *chip, u16 old_blk,
+>  			return STATUS_FAIL;
+>  		}
+>  
+> -		udelay(30);
+> +		usleep_range(30, 31);
 
-Run checkpatch before sending patches to the mailing list... This was a
-v5 so I expected it ti be clean.
+Did you test this?  And making the range 1 really doesn't make any
+sense, right?
 
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
