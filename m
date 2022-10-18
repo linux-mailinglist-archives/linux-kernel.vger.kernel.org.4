@@ -2,361 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E362E6033BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EEA6033C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 22:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiJRUIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 16:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S230062AbiJRUIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 16:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiJRUH7 (ORCPT
+        with ESMTP id S230056AbiJRUIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 16:07:59 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2171ABD7A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:07:57 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id y80so12727476iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JpelpJ2RUBl2/Qi1M4Vh9Y2HxJjWm0G/aDT41HqmUC0=;
-        b=Nhb4jvAWqE76yCRqMYzFtE7u5krQ1EroS4E6lrrT5u9AWGE1JixNm1tenfB6JXiGP0
-         Z3aButljmymrLRAPcXFV2zQJjsCsBLXfDR1PznRboJ3pXOj0nKgeTf3uVX3KOi66PLMt
-         Ps8TTVhWJdaYlt2Z0n7ktlGnWdIUF0XvgDWLokz0841zcoaq+wn1SSzkiP7u5BFqFAte
-         ezhLManXjpuz/yEKHH5ygbCFQ+qv9oG6Mg80+cIEOtrPVkK//9KaLntuYc4VcS60qkTI
-         KTUsBzqSUAq6nkWAMmumpuR+kWHT0mieYgAgxHzICkxW5WKbPxnKMD+KykfgFgd7dlCv
-         ch+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JpelpJ2RUBl2/Qi1M4Vh9Y2HxJjWm0G/aDT41HqmUC0=;
-        b=LKmUFrjs6D+XoZ/MDaQc70VIyp/lQ/I9iGF1G486uBQEDmsCjX6gg04iwvfslIfCeF
-         Vu2eL49w1ZakEeApDSVkh1JStVblxEEoCY7t4TGzCnnSjCrpCYALQrsc+X74qcTwdCXP
-         uBhOTyy7rkb/EGd3qmV7jY9UQNKE8+Rd8Fg4N5tPO3GRzOfeJz+bccguP52Ed3I9tIqp
-         LoCvAvhGjlo4dFktCuDJ3kSCCyEfnsx2kpCrtw+42oDGMmRZeYP1tukCBXz+mHmcM6SB
-         6opxKjuvufdger3Q3LDpIQ9H8/OS6qIcRkm5NWJv5VeHhzPPDY9hk9Fr0Ltbkte7Dbrn
-         6mvA==
-X-Gm-Message-State: ACrzQf3Fxp6wIg8+vs/DSgyEMNET/2SeFdsMnS0CtM1IwlpfE++p1O6W
-        EEfvbGbdt9ADj5WAFE1i6S2u6NrPwsFufftDsVAOPA==
-X-Google-Smtp-Source: AMsMyM7f5t5YB3dzGMSGQALGtHyDA7exsywYWD85nS9KuB0Cdebt7cScXuaC1piSYHkZNDhpdVaamLIMiiX1zNZP0r4=
-X-Received: by 2002:a05:6638:1455:b0:363:d1a9:5cc0 with SMTP id
- l21-20020a056638145500b00363d1a95cc0mr3123218jad.288.1666123676863; Tue, 18
- Oct 2022 13:07:56 -0700 (PDT)
+        Tue, 18 Oct 2022 16:08:04 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2F9AC48D
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666123683; x=1697659683;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Wzg2WCQ/apCPx1qt4T8P5/FjRGp3MoH16v0Wjx66z4Y=;
+  b=Z697say5NSlVPD+6iYhw7fxYdZDgHTVh/W2NRHjLOP71BfMCMGSvYcTf
+   y3lLf/IfP5UtMxoqlIT3STE6l5cY6RkRt79EADvTr4JWtkn8KDiuwUa37
+   tUXEQvvyG+n9MigyQwtFEk7tpOwa+3gHu2RytfiGLP6VOoDo0PQlAZKmN
+   eKMPvK8uQwY/zLgK9y9MZr2SuI7r8LYZLZ4xqkhmSyaMNXbNHKzKvrQaz
+   G2qRznGvco8cM/9FCql4HwWqRJH52zJN6mzDyvnTWHVsWlByp8KMwbvj8
+   u2XEgBPSWRCKERuKiQE/HYiVNeZJ5f441FwJQMsq12FNzNRhI2KoTbgpV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="368277554"
+X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
+   d="scan'208";a="368277554"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 13:08:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="606724501"
+X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
+   d="scan'208";a="606724501"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 18 Oct 2022 13:08:01 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1okssZ-009XLG-0r;
+        Tue, 18 Oct 2022 23:07:59 +0300
+Date:   Tue, 18 Oct 2022 23:07:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH] vsprintf: protect kernel from panic due to non-canonical
+ pointer dereference
+Message-ID: <Y08Hn6on37fgc57F@smile.fi.intel.com>
+References: <20221017191611.2577466-1-jane.chu@oracle.com>
+ <Y02sENwhtpsx5yhP@smile.fi.intel.com>
+ <5d987403-a7bf-8996-d639-c99edeaabcdf@oracle.com>
+ <Y06f4EwisLTU0rEz@alley>
+ <799e5390-2ff5-02b7-2df7-61198d5451e2@oracle.com>
 MIME-Version: 1.0
-References: <20221018090550.never.834-kees@kernel.org> <Y07raim32wOBRGPi@google.com>
- <202210181110.CD92A00@keescook>
-In-Reply-To: <202210181110.CD92A00@keescook>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 18 Oct 2022 13:07:45 -0700
-Message-ID: <CAKH8qBvwKfhMYjHV=rizA0ZinArHKmBP6U_N63HTcZTmM=QQ+g@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Use kmalloc_size_roundup() to match ksize() usage
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <799e5390-2ff5-02b7-2df7-61198d5451e2@oracle.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 11:19 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, Oct 18, 2022 at 11:07:38AM -0700, sdf@google.com wrote:
-> > On 10/18, Kees Cook wrote:
-> > > Round up allocations with kmalloc_size_roundup() so that the verifier's
-> > > use of ksize() is always accurate and no special handling of the memory
-> > > is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
-> > > information back up to callers so they can use the space immediately,
-> > > so array resizing to happen less frequently as well. Explicitly zero
-> > > any trailing bytes in new allocations.
-> >
-> > > Additionally fix a memory allocation leak: if krealloc() fails, "arr"
-> > > wasn't freed, but NULL was return to the caller of realloc_array() would
-> > > be writing NULL to the lvalue, losing the reference to the original
-> > > memory.
-> >
-> > > Cc: Alexei Starovoitov <ast@kernel.org>
-> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > > Cc: John Fastabend <john.fastabend@gmail.com>
-> > > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > > Cc: Song Liu <song@kernel.org>
-> > > Cc: Yonghong Song <yhs@fb.com>
-> > > Cc: KP Singh <kpsingh@kernel.org>
-> > > Cc: Stanislav Fomichev <sdf@google.com>
-> > > Cc: Hao Luo <haoluo@google.com>
-> > > Cc: Jiri Olsa <jolsa@kernel.org>
-> > > Cc: bpf@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >   kernel/bpf/verifier.c | 49 +++++++++++++++++++++++++++----------------
-> > >   1 file changed, 31 insertions(+), 18 deletions(-)
-> >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 014ee0953dbd..8a0b60207d0e 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -1000,42 +1000,53 @@ static void print_insn_state(struct
-> > > bpf_verifier_env *env,
-> > >    */
-> > >   static void *copy_array(void *dst, const void *src, size_t n, size_t
-> > > size, gfp_t flags)
-> > >   {
-> > > -   size_t bytes;
-> > > +   size_t src_bytes, dst_bytes;
-> >
-> > >     if (ZERO_OR_NULL_PTR(src))
-> > >             goto out;
-> >
-> > > -   if (unlikely(check_mul_overflow(n, size, &bytes)))
-> > > +   if (unlikely(check_mul_overflow(n, size, &src_bytes)))
-> > >             return NULL;
-> >
-> > > -   if (ksize(dst) < bytes) {
-> > > +   dst_bytes = kmalloc_size_roundup(src_bytes);
-> > > +   if (ksize(dst) < dst_bytes) {
-> >
-> > Why not simply do the following here?
-> >
-> >       if (ksize(dst) < ksize(src)) {
-> >
-> > ?
->
-> Yeah, if src always passes through rounding-up allocation path, that
-> might work. I need to double-check that there isn't a case where "size"
-> makes this go weird -- e.g. a rounded up "src" may be larger than
-> "n * size", but I think that's okay because the memcpy/memset does the
-> right thing.
->
-> > It seems like we care about src_bytes/bytes only in this case, so maybe
-> > move that check_mul_overflow under this branch as well?
-> >
-> >
-> > >             kfree(dst);
-> > > -           dst = kmalloc_track_caller(bytes, flags);
-> > > +           dst = kmalloc_track_caller(dst_bytes, flags);
-> > >             if (!dst)
-> > >                     return NULL;
-> > >     }
-> >
-> > > -   memcpy(dst, src, bytes);
-> > > +   memcpy(dst, src, src_bytes);
-> > > +   memset(dst + src_bytes, 0, dst_bytes - src_bytes);
-> > >   out:
-> > >     return dst ? dst : ZERO_SIZE_PTR;
-> > >   }
-> >
-> > > -/* resize an array from old_n items to new_n items. the array is
-> > > reallocated if it's too
-> > > - * small to hold new_n items. new items are zeroed out if the array
-> > > grows.
-> > > +/* Resize an array from old_n items to *new_n items. The array is
-> > > reallocated if it's too
-> > > + * small to hold *new_n items. New items are zeroed out if the array
-> > > grows. Allocation
-> > > + * is rounded up to next kmalloc bucket size to reduce frequency of
-> > > resizing. *new_n
-> > > + * contains the new total number of items that will fit.
-> > >    *
-> > > - * Contrary to krealloc_array, does not free arr if new_n is zero.
-> > > + * Contrary to krealloc, does not free arr if new_n is zero.
-> > >    */
-> > > -static void *realloc_array(void *arr, size_t old_n, size_t new_n,
-> > > size_t size)
-> > > +static void *realloc_array(void *arr, size_t old_n, size_t *new_n,
-> > > size_t size)
-> > >   {
-> > > -   if (!new_n || old_n == new_n)
-> > > +   void *old_arr = arr;
-> > > +   size_t alloc_size;
-> > > +
-> > > +   if (!new_n || !*new_n || old_n == *new_n)
-> > >             goto out;
-> >
-> >
-> > [..]
-> >
-> > > -   arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-> > > -   if (!arr)
-> > > +   alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
-> > > +   arr = krealloc(old_arr, alloc_size, GFP_KERNEL);
-> > > +   if (!arr) {
-> > > +           kfree(old_arr);
-> > >             return NULL;
-> > > +   }
-> >
-> > Any reason not do hide this complexity behind krealloc_array? Why can't
-> > it take care of those roundup details?
->
-> It might be possible to do this with a macro, yes, but then callers
-> aren't in a position to take advantage of the new size. Maybe we need
-> something like:
->
->         arr = krealloc_up(old_arr, alloc_size, &new_size, GFP_KERNEL);
+On Tue, Oct 18, 2022 at 06:56:31PM +0000, Jane Chu wrote:
+> On 10/18/2022 5:45 AM, Petr Mladek wrote:
+> > On Mon 2022-10-17 19:31:53, Jane Chu wrote:
+> >> On 10/17/2022 12:25 PM, Andy Shevchenko wrote:
+> >>> On Mon, Oct 17, 2022 at 01:16:11PM -0600, Jane Chu wrote:
+> >>>> While debugging a separate issue, it was found that an invalid string
+> >>>> pointer could very well contain a non-canical address, such as
+> >>>> 0x7665645f63616465. In that case, this line of defense isn't enough
+> >>>> to protect the kernel from crashing due to general protection fault
+> >>>>
+> >>>> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
+> >>>>                   return "(efault)";
+> >>>>
+> >>>> So instead, use kern_addr_valid() to validate the string pointer.
+> >>>
+> >>> How did you check that value of the (invalid string) pointer?
+> >>>
+> >>
+> >> In the bug scenario, the invalid string pointer was an out-of-bound
+> >> string pointer. While the OOB referencing is fixed,
+> > 
+> > Could you please provide more details about the fixed OOB?
+> > What exact vsprintf()/printk() call was broken and eventually
+> > how it was fixed, please?
+> 
+> For sensitive reason, I'd like to avoid mentioning the specific name of 
+> the sysfs attribute in the bug, instead, just call it "devX_attrY[]",
+> and describe the precise nature of the issue.
+> 
+> devX_attrY[] is a string array, declared and filled at compile time,
+> like
+>    const char const devX_attrY[] = {
+> 	[ATTRY_A] = "Dev X AttributeY A",
+> 	[ATTRY_B] = "Dev X AttributeY B",
+> 	...
+> 	[ATTRY_G] = "Dev X AttributeY G",
+>    }
+> such that, when user "cat /sys/devices/systems/.../attry_1",
+> "Dev X AttributeY B" will show up in the terminal.
+> That's it, no more reference to the pointer devX_attrY[ATTRY_B] after that.
+> 
+> The bug was that the index to the array was wrongfully produced,
+> leading up to OOB, e.g. devX_attrY[11].  The fix was to fix the 
+> calculation and that is not an upstream fix.
+> 
+> > 
+> >> the lingering issue
+> >> is that the kernel ought to be able to protect itself, as the pointer
+> >> contains a non-canonical address.
+> > 
+> > Was the pointer used only by the vsprintf()?
+> > Or was it accessed also by another code, please?
+> 
+> The OOB pointer was used only by vsprintf() for the "cat" sysfs case.
+> No other code uses the OOB pointer, verified both by code examination 
+> and test.
 
-Maybe even krealloc_array_up(arr, &new_n, size, flags) or similar
-where we return a new size?
-Though I don't know if there are any other places in the kernel to
-reuse it and warrant a new function..
+So, then the vsprintf() is _the_ point to crash and why should we hide that?
+Because of the crash you found the culprit, right? The efault will hide very
+important details.
 
-> Thanks for looking this over!
->
-> --
-> Kees Cook
+So to me it sounds like I like this change less and less...
 
-On Tue, Oct 18, 2022 at 11:19 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, Oct 18, 2022 at 11:07:38AM -0700, sdf@google.com wrote:
-> > On 10/18, Kees Cook wrote:
-> > > Round up allocations with kmalloc_size_roundup() so that the verifier's
-> > > use of ksize() is always accurate and no special handling of the memory
-> > > is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
-> > > information back up to callers so they can use the space immediately,
-> > > so array resizing to happen less frequently as well. Explicitly zero
-> > > any trailing bytes in new allocations.
-> >
-> > > Additionally fix a memory allocation leak: if krealloc() fails, "arr"
-> > > wasn't freed, but NULL was return to the caller of realloc_array() would
-> > > be writing NULL to the lvalue, losing the reference to the original
-> > > memory.
-> >
-> > > Cc: Alexei Starovoitov <ast@kernel.org>
-> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > > Cc: John Fastabend <john.fastabend@gmail.com>
-> > > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > > Cc: Song Liu <song@kernel.org>
-> > > Cc: Yonghong Song <yhs@fb.com>
-> > > Cc: KP Singh <kpsingh@kernel.org>
-> > > Cc: Stanislav Fomichev <sdf@google.com>
-> > > Cc: Hao Luo <haoluo@google.com>
-> > > Cc: Jiri Olsa <jolsa@kernel.org>
-> > > Cc: bpf@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >   kernel/bpf/verifier.c | 49 +++++++++++++++++++++++++++----------------
-> > >   1 file changed, 31 insertions(+), 18 deletions(-)
-> >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 014ee0953dbd..8a0b60207d0e 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -1000,42 +1000,53 @@ static void print_insn_state(struct
-> > > bpf_verifier_env *env,
-> > >    */
-> > >   static void *copy_array(void *dst, const void *src, size_t n, size_t
-> > > size, gfp_t flags)
-> > >   {
-> > > -   size_t bytes;
-> > > +   size_t src_bytes, dst_bytes;
-> >
-> > >     if (ZERO_OR_NULL_PTR(src))
-> > >             goto out;
-> >
-> > > -   if (unlikely(check_mul_overflow(n, size, &bytes)))
-> > > +   if (unlikely(check_mul_overflow(n, size, &src_bytes)))
-> > >             return NULL;
-> >
-> > > -   if (ksize(dst) < bytes) {
-> > > +   dst_bytes = kmalloc_size_roundup(src_bytes);
-> > > +   if (ksize(dst) < dst_bytes) {
-> >
-> > Why not simply do the following here?
-> >
-> >       if (ksize(dst) < ksize(src)) {
-> >
-> > ?
->
-> Yeah, if src always passes through rounding-up allocation path, that
-> might work. I need to double-check that there isn't a case where "size"
-> makes this go weird -- e.g. a rounded up "src" may be larger than
-> "n * size", but I think that's okay because the memcpy/memset does the
-> right thing.
->
-> > It seems like we care about src_bytes/bytes only in this case, so maybe
-> > move that check_mul_overflow under this branch as well?
-> >
-> >
-> > >             kfree(dst);
-> > > -           dst = kmalloc_track_caller(bytes, flags);
-> > > +           dst = kmalloc_track_caller(dst_bytes, flags);
-> > >             if (!dst)
-> > >                     return NULL;
-> > >     }
-> >
-> > > -   memcpy(dst, src, bytes);
-> > > +   memcpy(dst, src, src_bytes);
-> > > +   memset(dst + src_bytes, 0, dst_bytes - src_bytes);
-> > >   out:
-> > >     return dst ? dst : ZERO_SIZE_PTR;
-> > >   }
-> >
-> > > -/* resize an array from old_n items to new_n items. the array is
-> > > reallocated if it's too
-> > > - * small to hold new_n items. new items are zeroed out if the array
-> > > grows.
-> > > +/* Resize an array from old_n items to *new_n items. The array is
-> > > reallocated if it's too
-> > > + * small to hold *new_n items. New items are zeroed out if the array
-> > > grows. Allocation
-> > > + * is rounded up to next kmalloc bucket size to reduce frequency of
-> > > resizing. *new_n
-> > > + * contains the new total number of items that will fit.
-> > >    *
-> > > - * Contrary to krealloc_array, does not free arr if new_n is zero.
-> > > + * Contrary to krealloc, does not free arr if new_n is zero.
-> > >    */
-> > > -static void *realloc_array(void *arr, size_t old_n, size_t new_n,
-> > > size_t size)
-> > > +static void *realloc_array(void *arr, size_t old_n, size_t *new_n,
-> > > size_t size)
-> > >   {
-> > > -   if (!new_n || old_n == new_n)
-> > > +   void *old_arr = arr;
-> > > +   size_t alloc_size;
-> > > +
-> > > +   if (!new_n || !*new_n || old_n == *new_n)
-> > >             goto out;
-> >
-> >
-> > [..]
-> >
-> > > -   arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-> > > -   if (!arr)
-> > > +   alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
-> > > +   arr = krealloc(old_arr, alloc_size, GFP_KERNEL);
-> > > +   if (!arr) {
-> > > +           kfree(old_arr);
-> > >             return NULL;
-> > > +   }
-> >
-> > Any reason not do hide this complexity behind krealloc_array? Why can't
-> > it take care of those roundup details?
->
-> It might be possible to do this with a macro, yes, but then callers
-> aren't in a position to take advantage of the new size. Maybe we need
-> something like:
->
->         arr = krealloc_up(old_arr, alloc_size, &new_size, GFP_KERNEL);
->
-> Thanks for looking this over!
->
-> --
-> Kees Cook
+> Here is a snippet of the crash backtrace from an instrumented kernel, 
+> scratched one line for sensitive reason -
+> 
+> crash> bt
+> PID: 3250   TASK: ffff9cb50fe23d80  CPU: 18  COMMAND: "cat"
+>   #0 [ffffc0bacf377998] machine_kexec at ffffffff9b06c7c1
+>   #1 [ffffc0bacf3779f8] __crash_kexec at ffffffff9b13bb52
+>   #2 [ffffc0bacf377ac8] crash_kexec at ffffffff9b13cdac
+>   #3 [ffffc0bacf377ae8] oops_end at ffffffff9b03357a
+>   #4 [ffffc0bacf377b10] die at ffffffff9b033c32
+>   #5 [ffffc0bacf377b40] do_general_protection at ffffffff9b030c52
+>   #6 [ffffc0bacf377b70] general_protection at ffffffff9ba03db4
+>      [exception RIP: string_nocheck+19]
+>      RIP: ffffffff9b87cc73  RSP: ffffc0bacf377c20  RFLAGS: 00010286
+>      RAX: 0000000000000000  RBX: ffff9da13fc17fff  RCX: ffff0a00ffffff04
+>      RDX: 726f635f63616465  RSI: ffff9da13fc17fff  RDI: ffffffffffffffff
+>      RBP: ffffc0bacf377c20   R8: ffff9da0bfd2f010   R9: ffff9da0bfc18000
+>      R10: 0000000000001000  R11: 0000000000000000  R12: 726f635f63616465
+>      R13: ffff0a00ffffff04  R14: ffffffff9c1a6a4f  R15: ffffffff9c1a6a4f
+>      ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+>   #7 [ffffc0bacf377c28] string at ffffffff9b87ce98
+>   #8 [ffffc0bacf377c58] vsnprintf at ffffffff9b87efe3
+>   #9 [ffffc0bacf377cb8] sprintf at ffffffff9b87f506
+> #10 [ffffc0bacf377d18] <------------------------------>
+> #11 [ffffc0bacf377d28] dev_attr_show at ffffffff9b56d183
+> #12 [ffffc0bacf377d48] sysfs_kf_seq_show at ffffffff9b3272dc
+> #13 [ffffc0bacf377d68] kernfs_seq_show at ffffffff9b32576c
+> #14 [ffffc0bacf377d78] seq_read at ffffffff9b2be407
+> #15 [ffffc0bacf377de8] kernfs_fop_read at ffffffff9b325ffe
+> #16 [ffffc0bacf377e28] __vfs_read at ffffffff9b2940ea
+> #17 [ffffc0bacf377eb0] vfs_read at ffffffff9b2942ac
+> #18 [ffffc0bacf377ee0] sys_read at ffffffff9b29485c
+> #19 [ffffc0bacf377f28] do_syscall_64 at ffffffff9b003ca9
+> #20 [ffffc0bacf377f50] entry_SYSCALL_64_after_hwframe at ffffffff9ba001b1
+> 
+> crash> dis ffffffff9b87cc73
+> 0xffffffff9b87cc73 <string_nocheck+19>: movzbl (%rdx),%r8d
+> 
+> and RDX: 726f635f63616465 was a non-canonical address.
+> 
+> After applying this patch to the instrumented kernel, instead of panic, 
+> the "cat" command produced  "(efault)"
+> 
+> > 
+> > I wonder if this patch would prevent the crash or if the broken
+> > kernel would crash later anyway.
+> 
+> A broken kernel has a different issue to be fixed, the upstream kernel 
+> isn't broken, it could just offer better protect in case a bug was 
+> introduced in future.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
