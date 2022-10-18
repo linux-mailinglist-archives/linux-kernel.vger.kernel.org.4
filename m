@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E3E602A73
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DF0602A77
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiJRLnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S230365AbiJRLoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJRLnS (ORCPT
+        with ESMTP id S230452AbiJRLoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:43:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548FE89966;
-        Tue, 18 Oct 2022 04:42:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 228C561537;
-        Tue, 18 Oct 2022 11:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC77DC433C1;
-        Tue, 18 Oct 2022 11:42:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666093328;
-        bh=4eBe311Gl6JCjZC6GnoWSvoql8JiRYBOk2S/5ZU1VKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RwQhT+b5Eq90s61tdFJ7dy11DE/xXtyM85NQ+RmSvgyzNtHASkqe9gSz65BMH2nQ6
-         Y5RzjagQIjwtGfYniHmjRVavScPhju6Q6+cd7L4qnWcKl7sdti9le+NSCh32quXSbP
-         S0FVpPXRE5AW9dnbELbVs7cuzkE+KNcwxA9sjTQCuwc0/fBmZH57tqERvUCCus/DRy
-         Vgq8vlEkEkzO8pQXQHQUA6Wx1fII+3ehR4fEDM6SvfnEf6SkKoau3dwTYx4+G6fWJm
-         wNsFcfMUedy7Rj2k/4GGXW3tDnDXdX936KlP63+4w5wtp+4ZtV0uu45C+Xh9ADbIdH
-         VwkwEwCUo17KQ==
-Date:   Tue, 18 Oct 2022 12:42:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y06RCxzwrPZwIETp@sirena.org.uk>
-References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
- <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
- <Y02ObkYoUQlY9oG/@sirena.org.uk>
- <Y02SVH04iiu7Rj+8@smile.fi.intel.com>
- <Y02TR0UBseEKUjq8@sirena.org.uk>
- <Y02TxHp53XQo34ql@smile.fi.intel.com>
+        Tue, 18 Oct 2022 07:44:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2C87F243;
+        Tue, 18 Oct 2022 04:43:55 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 15B5E33E13;
+        Tue, 18 Oct 2022 11:43:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666093434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=xv0Xp2ACTMx4siFVEh8QVq7BeiWFDXEEpOE6xSyDW7o=;
+        b=hM6XsVvougQYY83slRsBbkN2GH4F8MDI0HIGaZntqheYBlkCmvGUeJI/5ifxeAbJQ6maoA
+        tGXi+QtTaiJH20W6/mh6pWiXthiO1ulsHRh8CCTa9+gfr8hGO2a4xzV66/oh/h+hIci59w
+        HUf6W+14XPq50Ho/1DPW+gQp+FuVPus=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 09AFF2C141;
+        Tue, 18 Oct 2022 11:43:54 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 82574DA79D; Tue, 18 Oct 2022 13:43:45 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.1-rc2
+Date:   Tue, 18 Oct 2022 13:43:44 +0200
+Message-Id: <cover.1666091548.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b7Oq47z4m21j2l28"
-Content-Disposition: inline
-In-Reply-To: <Y02TxHp53XQo34ql@smile.fi.intel.com>
-X-Cookie: Lake Erie died for your sins.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---b7Oq47z4m21j2l28
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+please pull the following fixes, thanks.
 
-On Mon, Oct 17, 2022 at 08:41:24PM +0300, Andy Shevchenko wrote:
-> On Mon, Oct 17, 2022 at 06:39:19PM +0100, Mark Brown wrote:
+- fiemap fixes:
+  - add missing path cache update
+  - fix processing of delayed data and tree refs during backref walking,
+    this could lead to reporting incorrect extent sharing
 
-> > Which board code is this?  The names of the new properties you're adding
-> > is really not at all idiomatic for ACPI and this is pretty old code so
-> > it's surprising that there's not existing systems that don't have this
-> > in their BIOSs.
+- fix extent range locking under heavy contention to avoid deadlocks
 
-> drivers/mfd/intel-lpss-pci.c.
+- make it possible to test send v3 in debugging mode
 
-OK, so this is another push for device properties for passing stuff
-internally.  Please resubmit this series with descriptions of why this
-is being done - I really can't tell what the benefit is here in concrete
-terms, you say it somehow improves identification of which variant is in
-use but don't articulate specifically why.
+- update links in MAINTAINERS
 
-You should probably also restructure the code interpreting the device
-IDs so that it's very clear that unknown values are handled well, this
-would split things between multiple subsystems and right now the code is
-a bit fragile.
+----------------------------------------------------------------
+The following changes since commit cbddcc4fa3443fe8cfb2ff8e210deb1f6a0eea38:
 
---b7Oq47z4m21j2l28
-Content-Type: application/pgp-signature; name="signature.asc"
+  btrfs: set generation before calling btrfs_clean_tree_block in btrfs_init_new_buffer (2022-09-29 17:08:31 +0200)
 
------BEGIN PGP SIGNATURE-----
+are available in the Git repository at:
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNOkQoACgkQJNaLcl1U
-h9CI3Qf/elavao3fuoGtG9QTK+EwdTXH38yIA40iXhb3RZk9LFhnDGu6i+c4kfNx
-13TCX0W4ndHXG6l5kNgc/Di5RlpvS3kVj538c78lvm27BRlJv4891IGeicXLZshx
-esOamwfkxlCyxaCMGQcr+xFWC0edeKv80cirnD6tPKohbbQ4CVULRxbDGN5jI736
-m7CvhCZZ3kEBbw0oCe6z3M5+9e4YT2yiwADg522ft3nfZSNZnLNsWuC8U0ZAgISN
-pqd076eRvOrG/VNdMxG5tc8ylA5Ao62cRnvNNfme5p1hHmLKHJn5xJ1b1eXkwaea
-1/jKDhK/pXs22oxdLz5eml64JNCwQg==
-=ZPrW
------END PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.1-rc1-tag
 
---b7Oq47z4m21j2l28--
+for you to fetch changes up to 4efb365a3f04d0bee7833f168b0b00a15edefeac:
+
+  MAINTAINERS: update btrfs website links and files (2022-10-14 13:54:21 +0200)
+
+----------------------------------------------------------------
+Boris Burkov (1):
+      btrfs: send: allow protocol version 3 with CONFIG_BTRFS_DEBUG
+
+David Sterba (3):
+      btrfs: send: update command for protocol version check
+      btrfs: delete stale comments after merge conflict resolution
+      MAINTAINERS: update btrfs website links and files
+
+Filipe Manana (4):
+      btrfs: add missing path cache update during fiemap
+      btrfs: fix processing of delayed data refs during backref walking
+      btrfs: fix processing of delayed tree block refs during backref walking
+      btrfs: ignore fiemap path cache if we have multiple leaves for a data extent
+
+Josef Bacik (1):
+      btrfs: unlock locked extent area if we have contention
+
+ MAINTAINERS               |  6 ++--
+ fs/btrfs/backref.c        | 84 ++++++++++++++++++++++++++++++++++++++---------
+ fs/btrfs/backref.h        |  1 +
+ fs/btrfs/block-group.c    |  2 --
+ fs/btrfs/extent-io-tree.c | 15 +++++----
+ fs/btrfs/send.c           |  5 ++-
+ fs/btrfs/send.h           |  5 +++
+ 7 files changed, 91 insertions(+), 27 deletions(-)
