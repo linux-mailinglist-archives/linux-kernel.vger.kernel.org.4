@@ -2,104 +2,516 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35816029FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEEE602A12
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJRLQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S229922AbiJRLZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJRLQc (ORCPT
+        with ESMTP id S229660AbiJRLZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:16:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5551EA;
-        Tue, 18 Oct 2022 04:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666091791; x=1697627791;
-  h=from:to:cc:subject:date:message-id;
-  bh=pA0PdqTHxsHL7/a/8drLbW+gda7QFfqXPuVNuMwE6kQ=;
-  b=kcniZT7jON9eWYaJZRDgzpYJEkLYg9lreVYaLLbIYHQjlTNuCZEDjfKL
-   kh++RGhtTi4u0PmpD4IbW+urR512ftexygXRKAYh2RFkCOS9naqzR+cbz
-   HVGDgnS9piaX6bei0cJBfcDdW9k3S868WycGnfi/gm3JKLhCgMIAE2ijo
-   RKzT5SPLG9b89AktI4uwpQ/kmVCuU9eOhzgAC0Q7T75CGASGBNBDS67f7
-   LIKkI5y7EHY4TcdIkwFj7kMIlt5qGdTssbFagWQKTy5Svl6vIjEBq91Jb
-   3pLMIuVE2sibLK+BmrmU1pvopQR1gREo9PKUPsRXpMGF3kcH8gKj9+uWe
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="370272282"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="370272282"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:16:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="957724705"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="957724705"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Oct 2022 04:16:30 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: intel: hfi: Improve the type of hfi_features::nr_table_pages
-Date:   Tue, 18 Oct 2022 04:22:40 -0700
-Message-Id: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 07:25:16 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E686C770;
+        Tue, 18 Oct 2022 04:25:14 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29I757eh004993;
+        Tue, 18 Oct 2022 11:24:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=vfZj02XSWa0s8n6A6x2+DBWB6pqqoccrOlqwXknVXYM=;
+ b=PAA1I+KpqE7WoUXm7p25GMSAVxVVenwb2BfTEQ0NiVB3MCTkIXNLQuVtsCQeFZM4m6yW
+ LISOO18AHYQVHf5JL22USt+YU8Zaf3uBEwtgH90z0YsWkmrLV/Zv+l86UfcFXdzfvpVA
+ pPhmwra1/fP+XDe92KhebbFRIiKd9QtQYpfVTmp+h7ApdMlLxFMNnlmlIZ6JO+81N0Ul
+ GqS7hxRrNEJqSTy3GFAMn91x4dTs7lP7pvhPdZcJJ/f/KINxo3MdsUWVKEzJOOF+lYfp
+ EoXmssOSpx5+W1cQEbhWFS/jXRGzmqTgK8KAjNMX0iFZlfVjnK4BLIovCM2RJsUcW4D+ xQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9bjvaaya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 11:24:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29IBOK4S026934
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 11:24:20 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 18 Oct 2022 04:24:14 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <vkoul@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Ratna Deepthi Kudaravalli" <quic_rkudarav@quicinc.com>
+Subject: [PATCH v2] dt-bindings: soundwire: Convert text file to yaml format
+Date:   Tue, 18 Oct 2022 16:54:00 +0530
+Message-ID: <1666092240-22008-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jI3-73_C-JF9CmZ55kSQmDeSoba3ruZm
+X-Proofpoint-ORIG-GUID: jI3-73_C-JF9CmZ55kSQmDeSoba3ruZm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-18_03,2022-10-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ impostorscore=0 spamscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210180065
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A Coverity static code scan raised a potential overflow_before_widen
-warning when hfi_features::nr_table_pages is used as an argument to
-memcpy in intel_hfi_process_event().
+Update soundwire bindings with yaml formats.
 
-Even though the overflow can never happen (the maximum number of pages of
-the HFI table is 0x10 and 0x10 << PAGE_SHIFT = 0x10000), using size_t as
-the data type of hfi_features::nr_table_pages makes Coverity happy and
-matches the data type of the argument 'size' of memcpy().
-
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Aubrey Li <aubrey.li@linux.intel.com>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
+Signed-off-by: Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
 ---
- drivers/thermal/intel/intel_hfi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index a0640f762dc5..239afe02e518 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -137,7 +137,7 @@ struct hfi_instance {
-  * Parameters and supported features that are common to all HFI instances
-  */
- struct hfi_features {
--	unsigned int	nr_table_pages;
-+	size_t		nr_table_pages;
- 	unsigned int	cpu_stride;
- 	unsigned int	hdr_size;
- };
+This patch depends on:
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=42801e6185290d63691bd39cf8a3bba6cd5fe520
+
+Changes since V1:
+  -- Remove the status field in example.
+  -- Remove interrupt-names property in the required list.
+  -- Add the wakeup-source property.	
+ 
+ .../devicetree/bindings/soundwire/qcom,sdw.txt     | 214 ---------------------
+ .../devicetree/bindings/soundwire/qcom,sdw.yaml    | 186 ++++++++++++++++++
+ 2 files changed, 186 insertions(+), 214 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
+ create mode 100644 Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml
+
+diff --git a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
+deleted file mode 100644
+index c85c257..0000000
+--- a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
++++ /dev/null
+@@ -1,214 +0,0 @@
+-Qualcomm SoundWire Controller Bindings
+-
+-
+-This binding describes the Qualcomm SoundWire Controller along with its
+-board specific bus parameters.
+-
+-- compatible:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: must be "qcom,soundwire-v<MAJOR>.<MINOR>.<STEP>",
+-		    Example:
+-			"qcom,soundwire-v1.3.0"
+-			"qcom,soundwire-v1.5.0"
+-			"qcom,soundwire-v1.5.1"
+-			"qcom,soundwire-v1.6.0"
+-- reg:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: the base address and size of SoundWire controller
+-		    address space.
+-
+-- interrupts:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify the SoundWire Controller core and optional
+-		    wake IRQ
+-
+-- interrupt-names:
+-	Usage: Optional
+-	Value type: boolean
+-	Value type: <stringlist>
+-	Definition: should be "core" for core and "wakeup" for wake interrupt.
+-
+-- wakeup-source:
+-	Usage: Optional
+-	Value type: boolean
+-	Definition: should specify if SoundWire Controller is wake up capable.
+-
+-- clock-names:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: should be "iface" for SoundWire Controller interface clock
+-
+-- clocks:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify the SoundWire Controller interface clock
+-
+-- #sound-dai-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 1 for digital audio interfaces on the controller.
+-
+-- qcom,dout-ports:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be count of data out ports
+-
+-- qcom,din-ports:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be count of data in ports
+-
+-- qcom,ports-offset1:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify payload transport window offset1 of each
+-		    data port. Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-offset2:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify payload transport window offset2 of each
+-		    data port. Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-sinterval-low:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should be sample interval low of each data port.
+-		    Out ports followed by In ports. Used for Sample Interval
+-		    calculation.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-word-length:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: should be size of payload channel sample.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-block-pack-mode:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: should be 0 or 1 to indicate the block packing mode.
+-		    0 to indicate Blocks are per Channel
+-		    1 to indicate Blocks are per Port.
+-		    Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-block-group-count:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: should be in range 1 to 4 to indicate how many sample
+-		    intervals are combined into a payload.
+-		    Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-lane-control:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: should be in range 0 to 7 to identify which	data lane
+-		    the data port uses.
+-		    Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-hstart:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: should be number identifying lowerst numbered coloum in
+-		    SoundWire Frame, i.e. left edge of the Transport sub-frame
+-		    for each port. Values between 0 and 15 are valid.
+-		    Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,ports-hstop:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: should be number identifying highest numbered coloum in
+-		    SoundWire Frame, i.e. the right edge of the Transport
+-		    sub-frame for each port. Values between 0 and 15 are valid.
+-		    Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- qcom,dports-type:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: should be one of the following types
+-		    0 for reduced port
+-		    1 for simple ports
+-		    2 for full port
+-		    Out ports followed by In ports.
+-		    Value of 0xFF indicates that this option is not implemented
+-		    or applicable for the respective data port.
+-		    More info in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-- reset:
+-	Usage: optional
+-	Value type: <prop-encoded-array>
+-	Definition: Should specify the SoundWire audio CSR reset controller interface,
+-		    which is required for SoundWire version 1.6.0 and above.
+-
+-- reset-names:
+-	Usage: optional
+-	Value type: <stringlist>
+-	Definition: should be "swr_audio_cgcr" for SoundWire audio CSR reset
+-		    controller interface.
+-
+-Note:
+-	More Information on detail of encoding of these fields can be
+-found in MIPI Alliance SoundWire 1.0 Specifications.
+-
+-= SoundWire devices
+-Each subnode of the bus represents SoundWire device attached to it.
+-The properties of these nodes are defined by the individual bindings.
+-
+-= EXAMPLE
+-The following example represents a SoundWire controller on DB845c board
+-which has controller integrated inside WCD934x codec on SDM845 SoC.
+-
+-soundwire: soundwire@c85 {
+-	compatible = "qcom,soundwire-v1.3.0";
+-	reg = <0xc85 0x20>;
+-	interrupts = <20 IRQ_TYPE_EDGE_RISING>;
+-	clocks = <&wcc>;
+-	clock-names = "iface";
+-	resets = <&lpass_audiocc LPASS_AUDIO_SWR_TX_CGCR>;
+-	reset-names = "swr_audio_cgcr";
+-	#sound-dai-cells = <1>;
+-	qcom,dports-type = <0>;
+-	qcom,dout-ports	= <6>;
+-	qcom,din-ports	= <2>;
+-	qcom,ports-sinterval-low = /bits/ 8  <0x07 0x1F 0x3F 0x7 0x1F 0x3F 0x0F 0x0F>;
+-	qcom,ports-offset1 = /bits/ 8 <0x01 0x02 0x0C 0x6 0x12 0x0D 0x07 0x0A >;
+-	qcom,ports-offset2 = /bits/ 8 <0x00 0x00 0x1F 0x00 0x00 0x1F 0x00 0x00>;
+-
+-	/* Left Speaker */
+-	left{
+-		....
+-	};
+-
+-	/* Right Speaker */
+-	right{
+-		....
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml b/Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml
+new file mode 100644
+index 0000000..65bff91
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml
+@@ -0,0 +1,186 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soundwire/qcom,sdw.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SoundWire Controller
++
++maintainers:
++  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
++  - Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
++
++description:
++  This binding describes the Qualcomm SoundWire controller along with its
++  board specific bus parameters.
++
++properties:
++  compatible:
++    enum:
++      - qcom,soundwire-v1.3.0
++      - qcom,soundwire-v1.5.0
++      - qcom,soundwire-v1.5.1
++      - qcom,soundwire-v1.6.0
++
++  reg:
++    items:
++      - description: the base address and size of SoundWire controller
++                   address space.
++
++  interrupts:
++    items:
++      - description: specify the SoundWire controller core and optional
++                   wake IRQ.
++
++  interrupt-names:
++    items:
++      - const: wakeup
++
++  clocks:
++    items:
++      - description: iface clock
++
++  clock-names:
++    items:
++      - const: iface
++
++  resets:
++    items:
++      - description: SWR_AUDIO_CGCR RESET
++
++  reset-names:
++    items:
++      - const: swr_audio_cgcr
++
++  '#sound-dai-cells':
++    const: 1
++
++  '#address-cells':
++    const: 2
++
++  '#size-cells':
++    const: 0
++
++  wakeup-source:
++    description: specify the Soundwire Controller is wakeup Capable.
++    type: boolean
++
++  qcom,din-ports:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: count of data in ports
++
++  qcom,dout-ports:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: count of data out ports
++
++  qcom,ports-word-length:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: size of payload channel sample.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-sinterval-low:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: sample interval low of each data port.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-offset1:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: payload transport window offset1 of each data port.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-offset2:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: payload transport window offset2 of each data port.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-lane-control:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: identify which data lane the data port uses.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-block-pack-mode:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: indicate the block packing mode.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-hstart:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: identifying lowerst numbered coloum in SoundWire frame.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-hstop:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: identifying highest numbered coloum in SoundWire frame.
++    minItems: 5
++    maxItems: 5
++
++  qcom,ports-block-group-count:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: indicate how many sample intervals are combined into a payload.
++    minItems: 5
++    maxItems: 5
++
++required:
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++  - '#sound-dai-cells'
++  - '#address-cells'
++  - '#size-cells'
++  - qcom,dout-ports
++  - qcom,din-ports
++  - qcom,ports-word-length
++  - qcom,ports-sinterval-low
++  - qcom,ports-offset1
++  - qcom,ports-offset2
++  - qcom,ports-lane-control
++  - qcom,ports-block-pack-mode
++  - qcom,ports-hstart
++  - qcom,ports-block-group-count
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
++
++    soundwire@3210000 {
++        compatible = "qcom,soundwire-v1.6.0";
++        reg = <0x03210000 0x2000>;
++
++        interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&lpass_rx_macro>;
++        clock-names = "iface";
++
++        qcom,din-ports = <0>;
++        qcom,dout-ports = <5>;
++
++        resets = <&lpass_audiocc LPASS_AUDIO_SWR_RX_CGCR>;
++        reset-names = "swr_audio_cgcr";
++
++        qcom,ports-word-length =        /bits/ 8 <0x01 0x07 0x04 0xff 0xff>;
++        qcom,ports-sinterval-low =      /bits/ 8 <0x03 0x3f 0x1f 0x03 0x03>;
++        qcom,ports-offset1 =            /bits/ 8 <0x00 0x00 0x0b 0x01 0x01>;
++        qcom,ports-offset2 =            /bits/ 8 <0x00 0x00 0x0b 0x00 0x00>;
++        qcom,ports-lane-control =       /bits/ 8 <0x01 0x00 0x00 0x00 0x00>;
++        qcom,ports-block-pack-mode =    /bits/ 8 <0xff 0x00 0x01 0xff 0xff>;
++        qcom,ports-hstart =             /bits/ 8 <0xff 0x03 0xff 0xff 0xff>;
++        qcom,ports-hstop =              /bits/ 8 <0xff 0x06 0xff 0xff 0xff>;
++        qcom,ports-block-group-count =  /bits/ 8 <0xff 0xff 0xff 0xff 0x00>;
++
++        #sound-dai-cells = <1>;
++        #address-cells = <2>;
++        #size-cells = <0>;
++    };
 -- 
-2.25.1
+2.7.4
 
