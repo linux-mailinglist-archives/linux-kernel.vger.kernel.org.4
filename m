@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFC56023D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3B36023D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 07:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiJRFeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 01:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S229618AbiJRFff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 01:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiJRFeC (ORCPT
+        with ESMTP id S229731AbiJRFfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 01:34:02 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5230F98349;
-        Mon, 17 Oct 2022 22:34:01 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id p14so13115522pfq.5;
-        Mon, 17 Oct 2022 22:34:01 -0700 (PDT)
+        Tue, 18 Oct 2022 01:35:32 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D799DFA7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 22:35:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o+oImAqUi4TycUnQDZjAUtxnRF+A1Z+mDlOgFraFVAI=;
-        b=L1yIl/Sue5u90YPFN5ors2MuFXNZ6H2mucAk6Ya4TgUp42FMCUh/B2RHLvDdNp/Lmw
-         GicCot03vuYGlB5tm4y9o4azJNxnUJne8HNrZ4SW89IjaJ46NmmLfGSkIYnpf/C5UfGG
-         4MvFZid+6jWa4pqSO/xVcIc+NvILy2jw40NBRIQZRCZU/9JsIBwggz9//JxJ+0utdadW
-         1ITjFvJ0GZP6imyGSztKP9pE3cl2B6H7IRDIIkNroCmKZO6xAeWkkGmrFJ8o7pUZl4yA
-         zB+nDM0VAW7UzwYQiYUQ7yCSqSbkcPwIERlram/AoqF3dneDBaefL3N48nr111VJiGl7
-         E/Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o+oImAqUi4TycUnQDZjAUtxnRF+A1Z+mDlOgFraFVAI=;
-        b=rmppm4XlCvzaFWo3lKiONIFnLeOo9rOpYP9JTC4WMJel7F5xg4Vcp/gbPR30jcpBV6
-         5TEfJrZc2REysgz1ojfSeFQ/NjCjRho6R60nZQvSSqqVoszIwY6oXKn3NTcEE1sq2g5b
-         xRCW/peqPpyf/jjVDOR+5XBiZo5jmZNPtQ7m1wkxG671HMkcgj1rYV/NeThFb0poMEO2
-         hYNzDmf+v6N6/Dez/gjQDqt+VbqQpYceAT7YbZ07VjGWz95EZ62QpM9XWKVDXqK/HHc9
-         UImiP9kv52DAhJIwo6N6svHVkMCfDQEg3ipz29kTsgx6LODT3c9T0kvbMS9LC/9ROUNs
-         qOhg==
-X-Gm-Message-State: ACrzQf2PBzFFGDAoNHQKfwyyoLyeUst4EwrccQTh+LWMIACFjg38RMP2
-        twVaa6nxQWq1fZuSPoVWdJU=
-X-Google-Smtp-Source: AMsMyM6PHbGeHp26NsSHh/G1u+W4EsbhYRa8Hl5LaXbf6eTRwnXqDQ0SYYiysRXjZST9tKf2vbw3Fw==
-X-Received: by 2002:a63:5b05:0:b0:460:a6a:ec38 with SMTP id p5-20020a635b05000000b004600a6aec38mr1210011pgb.485.1666071240786;
-        Mon, 17 Oct 2022 22:34:00 -0700 (PDT)
-Received: from localhost ([115.117.107.100])
-        by smtp.gmail.com with ESMTPSA id f5-20020aa79d85000000b005637e5d7770sm8049644pfq.219.2022.10.17.22.33.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 22:34:00 -0700 (PDT)
-From:   Manank Patel <pmanank200502@gmail.com>
-To:     sgoutham@marvell.com
-Cc:     gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sundeep.lkml@gmail.com,
-        Manank Patel <pmanank200502@gmail.com>
-Subject: [PATCH v2] ethernet: marvell: octeontx2 Fix resource not freed after malloc
-Date:   Tue, 18 Oct 2022 11:03:18 +0530
-Message-Id: <20221018053317.18900-1-pmanank200502@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <CALHRZupuBVAhd=fK+4E=keBTnt=GEGrWOTpN0-xBfu2Yj1+PDA@mail.gmail.com>
-References: <CALHRZupuBVAhd=fK+4E=keBTnt=GEGrWOTpN0-xBfu2Yj1+PDA@mail.gmail.com>
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WGHCb8AIms3d2souoSL3bwIlmxeeKPQhnaBM5CbNDV0=;
+  b=bNhjvKjCd3c3h7qxU85bvJ8uoaX5ATWLQD7BT0kpOjeB7G9TqpB119Jv
+   +h2I3W5tz3GrpvfBsjHKBMySx24Cn+AecEd58YIVSZu/Vc1ut0HKWaw2+
+   8X03yWH1S+BMw+YR65nlsD9o/XSL2/67rksT970bVUfLWnY+wQfotyWQE
+   k=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,193,1661810400"; 
+   d="scan'208";a="65619245"
+Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 07:35:29 +0200
+Date:   Tue, 18 Oct 2022 07:35:29 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Deepak R Varma <drv@mailo.com>
+cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH] staging: most: dim2: read done_buffers count locally
+ from HDM channel
+In-Reply-To: <Y03DpMMiOsedm6Dl@lion2204>
+Message-ID: <alpine.DEB.2.22.394.2210180733330.2938@hadrien>
+References: <Y022wjdPGYwyx7lB@debian-BULLSEYE-live-builder-AMD64> <alpine.DEB.2.22.394.2210172255250.16433@hadrien> <Y03DpMMiOsedm6Dl@lion2204>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,40 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix rxsc and txsc not getting freed before going out of scope
 
-Fixes: c54ffc73601c ("octeontx2-pf: mcs: Introduce MACSEC hardware offloading")
 
-Signed-off-by: Manank Patel <pmanank200502@gmail.com>
----
+On Tue, 18 Oct 2022, Deepak R Varma wrote:
 
-Changelog
-    v1->v2:
-            add the same fix in cn10k_mcs_create_txsc
+> On Mon, Oct 17, 2022 at 10:56:03PM +0200, Julia Lawall wrote:
+> >
+> >
+> > On Tue, 18 Oct 2022, Deepak R Varma wrote:
+> >
+> > > The done_buffer count can be directly read from HDM channel instead of
+> > > calling the dim_get_channel_state function. This change also results in
+> > > obsoleting the dim_channel_state local structure variable.
+> > >
+> > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > ---
+> > >
+> > > PLEASE NOTE: I have only built the module on my machine, but have not tested it.
+> > > I am not sure how to test this change. I am willing to test it with appropriate
+> > > guidance provided I have the necessary hardware.
+> >
+> > For non experts, maybe it would be helpful to explain what motivated you
+> > to do this?
+>
+> I was actually trying to understand the implementation of this module to
+> determine if I can replace BUG_ON calls by WARN_ON_ONCE. A "ctrl+]" navigation
+> took me to this function and I started wondering about why the function call
+> would be necessary. Hence the change.
 
- drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c | 2 ++
- 1 file changed, 2 insertions(+)
+OK, I agree with you that this story might not be super interesting.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-index 9809f551fc2e..9ec5f38d38a8 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_macsec.c
-@@ -815,6 +815,7 @@ static struct cn10k_mcs_txsc *cn10k_mcs_create_txsc(struct otx2_nic *pfvf)
- 	cn10k_mcs_free_rsrc(pfvf, MCS_TX, MCS_RSRC_TYPE_FLOWID,
- 			    txsc->hw_flow_id, false);
- fail:
-+	kfree(txsc);
- 	return ERR_PTR(ret);
- }
- 
-@@ -870,6 +871,7 @@ static struct cn10k_mcs_rxsc *cn10k_mcs_create_rxsc(struct otx2_nic *pfvf)
- 	cn10k_mcs_free_rsrc(pfvf, MCS_RX, MCS_RSRC_TYPE_FLOWID,
- 			    rxsc->hw_flow_id, false);
- fail:
-+	kfree(rxsc);
- 	return ERR_PTR(ret);
- }
- 
--- 
-2.38.0
+But the log message still seems too concise.  You have acquired some
+knowledge about why this changeis correct, but that knowledge is not at
+all reflected in the log message.  Try to explain in more detail why the
+function call is not necessary.
 
+julia
+
+>
+> While reading the Documentation under dim2 directory, I realised this module may
+> need a specialised hardware for testing [automotive???]. Hence I was not sure
+> how to test the same.
+>
+> Are you suggesting I mention this in the patch description (the motivation)?
+>
+> Thank you,
+> ./drv
+>
+> >
+> > julia
+> >
+> > >
+> > >  drivers/staging/most/dim2/dim2.c | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
+> > > index ab72e11ac5ab..4c1f27898a29 100644
+> > > --- a/drivers/staging/most/dim2/dim2.c
+> > > +++ b/drivers/staging/most/dim2/dim2.c
+> > > @@ -259,7 +259,6 @@ static void retrieve_netinfo(struct dim2_hdm *dev, struct mbo *mbo)
+> > >  static void service_done_flag(struct dim2_hdm *dev, int ch_idx)
+> > >  {
+> > >  	struct hdm_channel *hdm_ch = dev->hch + ch_idx;
+> > > -	struct dim_ch_state_t st;
+> > >  	struct list_head *head;
+> > >  	struct mbo *mbo;
+> > >  	int done_buffers;
+> > > @@ -271,7 +270,7 @@ static void service_done_flag(struct dim2_hdm *dev, int ch_idx)
+> > >
+> > >  	spin_lock_irqsave(&dim_lock, flags);
+> > >
+> > > -	done_buffers = dim_get_channel_state(&hdm_ch->ch, &st)->done_buffers;
+> > > +	done_buffers = hdm_ch->ch.done_sw_buffers_number;
+> > >  	if (!done_buffers) {
+> > >  		spin_unlock_irqrestore(&dim_lock, flags);
+> > >  		return;
+> > > --
+> > > 2.30.2
+> > >
+> > >
+> > >
+> > >
+> > >
+>
+>
+>
