@@ -2,234 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D0D6028E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA806028F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiJRKAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S230222AbiJRKCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJRKAn (ORCPT
+        with ESMTP id S230045AbiJRKCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:00:43 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5507F262
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:00:42 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 9840A2B0681B;
-        Tue, 18 Oct 2022 06:00:37 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 18 Oct 2022 06:00:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1666087237; x=1666094437; bh=Mew53OXTwH
-        iFXmVQ6iZl8wdqIVw1qLYYMvOjSnGQjvA=; b=h783S06UIS10ylSuF1/o838YPM
-        DbVp8c65C70IDJcdNMmiaofP7qPuufEnKRs4zQAgwHIPvIVKKvV6EDExmWiGRi80
-        CgRIJfH7KeyuWSnNBSqtBiCKNTxKOKb3kOtEtr/ts5UQ8kPVBhmL4xei7tMXKVS1
-        rUH8E9RIAkUwWFOya33EWvEZ4HEOH6PsAHspGS0SR2G6UqMqvqA/N+ODJRzp/ATP
-        nTOFmQZx3gM0oZRqQeyHnMo7y/2hAMjrE+b7i49b9nSCy36Ora+nv2YToDQcv7Vu
-        XdKa+TQj7D2+4zdj1THQvExQSF3thASe4B5aE3rTc5kGB53FGePLt/3Y9OlQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666087237; x=1666094437; bh=Mew53OXTwHiFXmVQ6iZl8wdqIVw1
-        qLYYMvOjSnGQjvA=; b=MBih877Ia2R4AkvypNa7P62ofASd5XL0SrMcb9zmgHoO
-        aXlyIzvS0leCX1CXutgzIouWAlIOMdSV9mQhs091IGwG7qhjErxmL+3ayoVJpmYm
-        aDbBlEqIZIWC/kOKNTgZG7jyj0RCg0ABFUzlIpihFdjX0+0TdrNk+cDVmXUka/rJ
-        UjhwInHkfq6DmPlnpqiTVtzmJigNO3ga+uVvYw3fEoE1AiVkGqMILI1Ztk5u36u1
-        salh1ELf0Isya9OJKJgV1e8qChcxXTtWWtE2uTRwjqVTEVD8vkY1WTSbA9yORqRV
-        5no88hoRCkwa4Ui9AWEQbqmNzaTqf6+6vUyIszuGWg==
-X-ME-Sender: <xms:Q3lOY2nQJX9RqPjmQNiTRRY4F2L4fPkbPAe0gSi-UyAPVOarLyhXaw>
-    <xme:Q3lOY90uGpOpg9mVbr79O-uj9LXljCEdpQ0-EZMwFa2Ocz39PpD0TO-cuvKu14ok-
-    uit2P9CtjP2JOWcwRs>
-X-ME-Received: <xmr:Q3lOY0raXPka89ULQeI7CnDB39OHXy5yWKa5IRPKT60wDypyuJ7kED84_NBp>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeluddgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeljeeugfegveetleevkeetffegudevieetieeugeeugeeivddtjeejvdef
-    feetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:RHlOY6nZwkVmV8fTV_dnJgszqGV7bUWlw6HJPq4x2iIjiOpRPgw1LA>
-    <xmx:RHlOY01HlDURHhJ5_MRfx5sLZOkPNcVYwpknmpFPSaNwIV9rdW1Msw>
-    <xmx:RHlOYxsmFAoVXp0zSZohSbuqaM0lnza9lt7ed7ZkjJpPnjuwQQZe2Q>
-    <xmx:RXlOY0U3sTCTETZD1EFyaz82r4EUI5m6-X92lt0_6gKLympJ51598NuFJKU>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Oct 2022 06:00:35 -0400 (EDT)
-Date:   Tue, 18 Oct 2022 12:00:33 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     kfyatek+publicgit@gmail.com, Karol Herbst <kherbst@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>, Emma Anholt <emma@anholt.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Phil Elwell <phil@raspberrypi.com>
-Subject: Re: [PATCH v5 20/22] drm/vc4: vec: Convert to the new TV mode
- property
-Message-ID: <20221018100033.d2sf7xagyycx5d4p@houat>
-References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
- <20220728-rpi-analog-tv-properties-v5-20-d841cc64fe4b@cerno.tech>
- <c1949248-fb40-682c-492e-bafbd915cee3@gmail.com>
- <81936381-ae37-8c84-4681-9eff19f653b5@tronnes.org>
+        Tue, 18 Oct 2022 06:02:04 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD69AF1A1;
+        Tue, 18 Oct 2022 03:02:03 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id 10so13395886pli.0;
+        Tue, 18 Oct 2022 03:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HX99tVSM1rmC3ukGV0/miTpRAU7UnBmNE0xTCI/AilE=;
+        b=J+sVV1Q8SY94v/FKhxfx3Ht4gnkVutppPRp8MWhmOijVClpynT+gjac4FLQZb/Kjda
+         e8kvZvQjU+WAX0L5xgylWUdOmNui3vDLLL1+/prTadG/W1nu6T74dAfzBI9duA/hq/lu
+         1eJIge/GVrtkNnJmGwzGiAmMPzWXeQidVpvmp9U+t9thW/sMg4rgG2FASPvJ3PLYQIlA
+         KY+c9Zh3JChyF9NQRCKPNkFcRfg3k+Im0NIpVbpyOJdr3aY2QzZw/WznpfCNO3fQuZfM
+         5eyaGDhKIN+q6oGnM2dzrujcG9TfiTeEnMBNwWgDj1Flgf4LHyaNu2pFvZpNmEO/MwOf
+         jXKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HX99tVSM1rmC3ukGV0/miTpRAU7UnBmNE0xTCI/AilE=;
+        b=Ne7myBVGnV1MA+r/FYnWd2gdF/UwM1ZFNMgiCeK/BMPocGWgZ9C6zf0Tu0MC2qUCkq
+         Hd2OvbzMBw5fw5sIEtVyEGWq1NyMyIwbBjbeR8dl7AI+8R5/XwPKrpn8qClLqGohM/QE
+         gG5EqAntAie998uLRJrPZCWLaL3anmMxTfAxosG7kxvrlfyTEoqU6pVrORbVccsNoe4Y
+         WB8rJhs7v9e+ZlooBIs9olZgB5HXZ9S+3GTC/L5TbOe6GlBnA/2B8LT/vls8rdmSsCe6
+         ViX+1qePNMgdvozGNlb9dAZAL2eujVqCIA0IUEMra5d8aCkMLX22CWYOtZwP5yoccQqF
+         B2Gg==
+X-Gm-Message-State: ACrzQf3xmTHqJWoKSQh7vu9sAekn3tTCOA2loM1ecLEAnDHAgf7lISrZ
+        vGduwYgmWqkMB/QGigwKWPDsOpKaJ7binnsa
+X-Google-Smtp-Source: AMsMyM4sAHo43edi+BR6O/wF8FJzJoUf4uFT6a3Mw1gooyy1iaOm6MWBDNN6LcZLaLFZnRxzvJWV9A==
+X-Received: by 2002:a17:903:2144:b0:182:42ce:5778 with SMTP id s4-20020a170903214400b0018242ce5778mr2173798ple.46.1666087312246;
+        Tue, 18 Oct 2022 03:01:52 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id j10-20020a637a4a000000b004405c6eb962sm7640355pgn.4.2022.10.18.03.01.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 03:01:51 -0700 (PDT)
+From:   zys.zljxml@gmail.com
+To:     ming.lei@redhat.com, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yushan Zhou <katrinzhou@tencent.com>
+Subject: [PATCH] ublk_drv: use flexible-array member instead of zero-length array
+Date:   Tue, 18 Oct 2022 18:01:32 +0800
+Message-Id: <20221018100132.355393-1-zys.zljxml@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ni7t7du2ochwvprb"
-Content-Disposition: inline
-In-Reply-To: <81936381-ae37-8c84-4681-9eff19f653b5@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yushan Zhou <katrinzhou@tencent.com>
 
---ni7t7du2ochwvprb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Eliminate the following coccicheck warning:
+./drivers/block/ublk_drv.c:127:16-19: WARNING use flexible-array member instead
 
-On Mon, Oct 17, 2022 at 12:31:31PM +0200, Noralf Tr=F8nnes wrote:
-> Den 16.10.2022 20.52, skrev Mateusz Kwiatkowski:
-> >>  static int vc4_vec_connector_get_modes(struct drm_connector *connecto=
-r)
-> >>  {
-> >> -	struct drm_connector_state *state =3D connector->state;
-> >>  	struct drm_display_mode *mode;
-> >> =20
-> >> -	mode =3D drm_mode_duplicate(connector->dev,
-> >> -				  vc4_vec_tv_modes[state->tv.legacy_mode].mode);
-> >> +	mode =3D drm_mode_analog_ntsc_480i(connector->dev);
-> >>  	if (!mode) {
-> >>  		DRM_ERROR("Failed to create a new display mode\n");
-> >>  		return -ENOMEM;
-> >>  	}
-> >> =20
-> >> +	mode->type |=3D DRM_MODE_TYPE_PREFERRED;
-> >>  	drm_mode_probed_add(connector, mode);
-> >> =20
-> >> -	return 1;
-> >> +	mode =3D drm_mode_analog_pal_576i(connector->dev);
-> >> +	if (!mode) {
-> >> +		DRM_ERROR("Failed to create a new display mode\n");
-> >> +		return -ENOMEM;
-> >> +	}
-> >> +
-> >> +	drm_mode_probed_add(connector, mode);
-> >> +
-> >> +	return 2;
-> >> +}
-> >=20
-> > Referencing those previous discussions:
-> > - https://lore.kernel.org/dri-devel/0255f7c6-0484-6456-350d-cf24f3fee5d=
-6@tronnes.org/
-> > - https://lore.kernel.org/dri-devel/c8f8015a-75da-afa8-ca7f-b2b134cacd1=
-6@gmail.com/
-> >=20
-> > Unconditionally setting the 480i mode as DRM_MODE_TYPE_PREFERRED causes=
- Xorg
-> > (at least on current Raspberry Pi OS) to display garbage when
-> > video=3DComposite1:PAL is specified on the command line, so I'm afraid =
-this won't
-> > do.
-> >=20
-> > As I see it, there are three viable solutions for this issue:
-> >=20
-> > a) Somehow query the video=3D command line option from this function, a=
-nd set
-> >    DRM_MODE_TYPE_PREFERRED appropriately. This would break the abstract=
-ion
-> >    provided by global DRM code, but should work fine.
-> >=20
-> > b) Modify drm_helper_probe_add_cmdline_mode() so that it sets
-> >    DRM_MODE_TYPE_PREFERRED in addition to DRM_MODE_TYPE_USERDEF. This s=
-eems
-> >    pretty robust, but affects the entire DRM subsystem, which may break
-> >    userspace in different ways.
-> >=20
-> >    - Maybe this could be mitigated by adding some additional conditions=
-, e.g.
-> >      setting the PREFERRED flag only if no modes are already flagged as=
- such
-> >      and/or only if the cmdline mode is a named one (~=3D analog TV mod=
-e)
-> >=20
-> > c) Forcing userspace (Xorg / Raspberry Pi OS) to get fixed and honor th=
-e USERDEF
-> >    flag.
-> >=20
-> > Either way, hardcoding 480i as PREFERRED does not seem right.
-> >=20
->=20
-> My solution for this is to look at tv.mode to know which mode to mark as
-> preferred. Maxime didn't like this since it changes things behind
-> userspace's back. I don't see how that can cause any problems for userspa=
-ce.
->=20
-> If userspace uses atomic and sets tv_mode, it has to know which mode to
-> use before hand, so it doesn't look at the preferreded flag.
->=20
-> If it uses legacy and sets tv_mode, it can end up with a stale preferred
-> flag, but no worse than not having the flag or that ntsc is always
-> preferred.
->=20
-> If it doesn't change tv_mode, there's no problem, the preferred flag
-> doesn't change.
+Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+---
+ drivers/block/ublk_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't like it because I just see no way to make this reliable. When we
-set tv_mode, we're not only going to change the preferred flag, but also
-the order of the modes to make the preferred mode first.
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 2651bf41dde3..5afce6ffaadf 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -124,7 +124,7 @@ struct ublk_queue {
+ 	bool force_abort;
+ 	unsigned short nr_io_ready;	/* how many ios setup */
+ 	struct ublk_device *dev;
+-	struct ublk_io ios[0];
++	struct ublk_io ios[];
+ };
+ 
+ #define UBLK_DAEMON_MONITOR_PERIOD	(5 * HZ)
+-- 
+2.27.0
 
-Since we just changed the mode lists, we also want to send a hotplug
-event to userspace so that it gets notified of it. It will pick up the
-new preferred mode, great.
-
-But what if it doesn't? There's no requirement for userspace to handle
-hotplug events, and Kodi won't for example. So we just changed the TV
-mode but not the actual mode, and that's it. It's just as broken for
-Kodi as it is for X11 right now.
-
-If we can't get a bullet-proof solution, then I'm not convinced it's
-worth addressing. Especially since it's already the current state, and
-it doesn't seem to bother a lot of people.
-
-Maxime
-
---ni7t7du2ochwvprb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY055QQAKCRDj7w1vZxhR
-xfTwAQDVEQYvVeMYoH1YAgDNEqY24+2ZZadq3pHFsRymVwrROQEAhc/jki+ik+Hi
-+gkkmtM8W9Ky6PhkIjnV9vsG9oldYgs=
-=FjLb
------END PGP SIGNATURE-----
-
---ni7t7du2ochwvprb--
