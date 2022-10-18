@@ -2,167 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA8B6029E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA42F6029F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJRLLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S230070AbiJRLNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiJRLLj (ORCPT
+        with ESMTP id S230049AbiJRLM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:11:39 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36454B0B10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:11:38 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id o12so13455582lfq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UsmuVvzUGL/tIXDCMMq9mrTS5g/NHatso0iO2PBAdX8=;
-        b=hWb9clTWPGU/bF/813AdOTEHipmOUGOlMr2CwDFf3xzqyrXgR/WYXA9gGn2hPgOcWk
-         ak4xBbJGG0+EERjIzkWEKFhN6wbpA/RyaosLmxDmfeNFO4te7aoM8V+Vr7g/0g9Mxcia
-         bwg4aDc1NuUpXhRtLOHi+OR4aD9ZF4iKQyO6Oy6oOCeLvZd69ykxCxfZqXoTHTgCqrW+
-         1KseqYoX7CaDuHWaCRII+oWowWc6dzInR8yfBBRNLUlvNpaq0FXbcMUFix9NfAqr8S2+
-         /yBarw4tOK+F1Y7yOz29uRPbK4KJyhjGlV9iMnaSraIvkvFKYW/2tWp8wOlDH/+TTyhk
-         rbmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UsmuVvzUGL/tIXDCMMq9mrTS5g/NHatso0iO2PBAdX8=;
-        b=wmMb3xQNhG1HpLV02Z/5WpFw5QXZhGP73YYFY8QOm4ooNkutSkWmaUvbkK04EM1VTZ
-         hFnLBFE/cYZYZqkTJ8I1FuQoPa/+PWtTDEI2JHqx2F3YcuUbKXykCwN/SSI3Cnh6sZ6o
-         vcYC2c4ySrbdJJGMWtn6YniLNTbllCyeeZK6L0XjxVXi7KtGBYs6ojqmWrge30rVQNCE
-         F59udkzFRCOriKMwvtk0FJfB7tm8Y2wcgS8OVNncMg9Qfywelt+IW5lT9FW+ZfBSaCn/
-         KXefn+9KmxfIPQld/WnDxzoT+QtjRyPKxk8vuE7Q31VgIhKo6FHNs9ln0REotpcigtq5
-         vGHg==
-X-Gm-Message-State: ACrzQf1HTxIsDILiNmSBS8SBolvpqQczMKlfOmOQrZITTHVVaHNKe2Hw
-        b0jAVU3XpC7gpxkky/f92hxlLXxK1Eyb1bH/E9QQSA==
-X-Google-Smtp-Source: AMsMyM5zbA7ZF2jb5PoA/bKYc2t4oy6VFFv73a9+vbUT3G6aSSPbo59D9h1fv/pw7uv73bg6BtTdL1xm1wa4gqam5/w=
-X-Received: by 2002:ac2:5445:0:b0:4a4:3c5c:f73 with SMTP id
- d5-20020ac25445000000b004a43c5c0f73mr778245lfn.21.1666091496376; Tue, 18 Oct
- 2022 04:11:36 -0700 (PDT)
+        Tue, 18 Oct 2022 07:12:59 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F38B6001
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:12:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BqH9DxOFbkJZjrdfrP5dWTqqr3amKC0JRoX1i6q7F65OsfRpC/QDQm1+DAY/qi4910mtwkx32Kp5hRoXf9JKrLmHh9GFMX5YJ5AO9NCSu6zblNT0YBaEkO4Ya3VF3frpm43Y5kmkv3pak8quzy0F55DfAEfsrxkKOqkjNAjivT3BK12oPYb4vaEqw0Rb4f3EhWJit8CrJ45maosgSMmX88NOwWNwJF9UnWiKczeH2+TwMHJBJrSA3v3AldL0h88L+wPdoYmRBd6YfVlTSttqe+0HEsFz/henCxFrI/Qmupb/w3UhvSX2tow0OAoAygB75m2dQMP5uorEVuLIdGMScg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=45Iz2mQCw3NL/3jnejqQNKhMOeAVsFDBnt42sesz8aM=;
+ b=HRCnBBUyYZrkFOfkwZ/TKSAkfefSJ1Fh2D0iHGlrswVjfF9WW+4YgdYMGySCRH2paXiX367qq04ws1DpYPWYZwB0Xf/nJhd8unipkXEP3dvqM+qiyp0PHatrz56XGJQfs+PxopwhXx+ecTEaSPK5NclSipe0z/IrjnOwkOAcervy2BV38o/OMbF7vUe9q29I49s9jS+CHW0yzYOEO+4n3ZzO8iGae4RQ14HP6Lw6EYIYEcm2Gs96y72NFiuk/QzYDzrnK37FB00iPjmYR+ffEiVvvxfXAERChCCkzv3vjc+gXbSDJ78Mc/Lb2bXK5hiyUnr2K7PjFlSXqEnlqdnwWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=45Iz2mQCw3NL/3jnejqQNKhMOeAVsFDBnt42sesz8aM=;
+ b=hpjJMXwNBODNdkzFcuxhnxFuv0N0KaYpAtpquKkwTS44p1vDL9WxSbGmoBBaK63C7Ofe80zqsVwSZa3Nd+S3qfhEulyTxPpvPFQYSkrsUbSz0mPzmFbw4Si0mi0JF6KHBoGctpzBDZ17I8aNQNs/3o2+3Z7ia8Su2aGZB7H4fhrP5h0vhDQfYSEtbC4aXL7jnGqox4SyEw2pnPQeqp6Q6laPz645qYrilGR2AmrnNzV7xK38qRdTxSUV66loPAf7ygIcymHiQPtY3iNCaWXOSPKwIb/trkRDcoGU/6eOBXW7dNGC91V7uH50FY79ityGfAMt+LXwRjQFq03liEhqLQ==
+Received: from MW4PR04CA0080.namprd04.prod.outlook.com (2603:10b6:303:6b::25)
+ by BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Tue, 18 Oct
+ 2022 11:12:53 +0000
+Received: from CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::f6) by MW4PR04CA0080.outlook.office365.com
+ (2603:10b6:303:6b::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34 via Frontend
+ Transport; Tue, 18 Oct 2022 11:12:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT045.mail.protection.outlook.com (10.13.175.181) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Tue, 18 Oct 2022 11:12:53 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 18 Oct
+ 2022 04:12:41 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 18 Oct
+ 2022 04:12:41 -0700
+Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.29 via Frontend Transport; Tue, 18 Oct
+ 2022 04:12:38 -0700
+From:   Eli Cohen <elic@nvidia.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>
+CC:     <si-wei.liu@oracle.com>, <eperezma@redhat.com>, <lulu@redhat.com>,
+        "Eli Cohen" <elic@nvidia.com>
+Subject: [PATCH 0/4] vdpa:/mlx5: Add debugfs subtree
+Date:   Tue, 18 Oct 2022 14:12:28 +0300
+Message-ID: <20221018111232.4021-1-elic@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <Y0T2l3HaH2MU8M9m@gmail.com> <20221014134802.1361436-1-mdanylo@google.com>
- <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
-In-Reply-To: <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 18 Oct 2022 13:11:25 +0200
-Message-ID: <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        gregkh@linuxfoundation.org, corbet@lwn.net, david@redhat.com,
-        kernel@collabora.com, krisman@collabora.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        peter.enderborg@sony.com, shuah@kernel.org,
-        viro@zeniv.linux.org.uk, willy@infradead.org, figiel@google.com,
-        kyurtsever@google.com, Paul Gofman <pgofman@codeweavers.com>,
-        surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT045:EE_|BL1PR12MB5304:EE_
+X-MS-Office365-Filtering-Correlation-Id: 842f2d26-4f81-445c-7048-08dab0f9b390
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OXe9j7JSq3/tvW8OQj1WSuk1rRB8E0Z7BWq8WatS9V/fbuLTibNq0O5UYrX1Uut+IgOR8fawEPqbXDbyImrdz0L+c39o24kG8PpVGmlzAJRpQTUi5QJUr7/ckX8vJWg07QtVANMFBfvmpTpLIyEK4p+e9jND4ZrJhi6O8iXCHj3ARnGpqV2KiOZOlV7HNa0f5//mxAAsS4dFqPHREuSdFLO6r3CjyzkqPrunBDN6TJEbb/cQCHAe2d3ut92M3bAPmaX3KanIV1f1E13xYSCiNIzV0ofzs3ws/dVeaFoRc8rB4wRyI6hCGVA0Qzmo6bG9jIzBlmj/A+ILXA9dlVScofFkV9+rs1zr9uBei+2QH2X297vgBJy0V/T8N6Th3aBXjp7AKHrit8RQ/noeYEkhjVD2Fxe3lEbe2LMVe+PhczrQ5rG9UEnBaogvuQnYPtt+O2bPxpXrl6B5CWHWgDM0ESgYlHG/sG0n4pIDbWE6bDcIdhBxoYggsv0XCNDFAoYfJzRrk3IroqAsnjofs1Iaz0/a+x0rxMVbpMTvYP4AJcihRPlCm1OPovSop3lbKCBNhNhV/WCz0uzzG7OA+awe1baQ59R252PU6eg+ZKh6K8k+UsQ0Bh4TlNjoGwl8QjJMTvrvbS4HlBWuoyLmP4tTjXM649zKh37GGRU5QxN5iYdqMus36ksBtp9EiChIo8Igz5DI1Hwv68h3zQBs6coh6O8BTjK2Xbf8KrGlBs0C4HWLgeyOd7Tu1QscLXdy4VWu47nu0pjk0XpdDQBCVzNqgw==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(451199015)(40470700004)(46966006)(36840700001)(8936002)(5660300002)(82740400003)(41300700001)(70586007)(70206006)(8676002)(4326008)(86362001)(36756003)(356005)(7636003)(2906002)(40480700001)(40460700003)(110136005)(7696005)(26005)(186003)(47076005)(426003)(336012)(2616005)(82310400005)(478600001)(6666004)(107886003)(36860700001)(83380400001)(54906003)(316002)(1076003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 11:12:53.1341
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 842f2d26-4f81-445c-7048-08dab0f9b390
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5304
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 12:36, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-[...]
-> I've included the masks which the CRIU developers have specified.
-> max_out_page is another new optional variable which is needed to
-> terminate the operation without visiting all the pages after finding the
-> max_out_page number of desired pages. There is no way to terminate the
-> operation without this variable.
->
-> How does the interface looks now? Please comment.
->
-> /* PAGEMAP IOCTL */
-> #define PAGEMAP_GET             _IOWR('f', 16, struct pagemap_sd_args)
-> #define PAGEMAP_CLEAR           _IOWR('f', 17, struct pagemap_sd_args)
-> #define PAGEMAP_GET_AND_CLEAR   _IOWR('f', 18, struct pagemap_sd_args)
+First patch fixes a copy paste error causing VLAN tagged packets to no
+be filtered.
 
-Why are three IOCTLs needed? Could CLEAR be a flag (like the
-PAGEMAP_NO_REUSED_REGIONS) or 'cmask' and GET be implied when vec !=3D
-NULL?
+Following three patches add debugfs subtree.
+First one just moves definitions to a new header file. These definitions
+are needed for following patches.
+Second patch adds entries to read flow table number and TIR number.
+Third patch adds multicast and unicast packets and bytes counters for
+for each untagged or VLAN tagged incoming traffic. This is depends on
+MLX5_VDPA_STEERING_DEBUG config option and is off by default.
 
-> /* Bits are set in the bitmap of the page_region and masks in
-> pagemap_sd_args */
-> #define PAGE_IS_SD      1 << 0
-> #define PAGE_IS_FILE    1 << 1
-> #define PAGE_IS_PRESENT 1 << 2
-> #define PAGE_IS_SWAPED  1 << 3
->
-> /**
->   * struct page_region - Page region with bitmap flags
->   * @start:     Start of the region
->   * @len:       Length of the region
->   * bitmap:     Bits sets for the region
->   */
-> struct page_region {
->         __u64 start;
->         __u64 len;
->         __u64 bitmap;
-> };
+Eli Cohen (4):
+  vdpa/mlx5: Fix rule forwarding VLAN to TIR
+  vdpa/mlx5: Move some definitions to a new header file
+  vdpa/mlx5: Add debugfs subtree
+  vdpa/mlx5: Add RX counters to debugfs
 
-Could you explain what units start and len are using? Are they bytes
-or pages (what size)?
+ drivers/vdpa/Kconfig              |  12 +++
+ drivers/vdpa/mlx5/Makefile        |   2 +-
+ drivers/vdpa/mlx5/net/debug.c     | 148 +++++++++++++++++++++++++++++
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 152 +++++++++++++++++-------------
+ drivers/vdpa/mlx5/net/mlx5_vnet.h |  94 ++++++++++++++++++
+ 5 files changed, 339 insertions(+), 69 deletions(-)
+ create mode 100644 drivers/vdpa/mlx5/net/debug.c
+ create mode 100644 drivers/vdpa/mlx5/net/mlx5_vnet.h
 
-> /**
->   * struct pagemap_sd_args - Soft-dirty IOCTL argument
+-- 
+2.35.1
 
-Nit: it's not soft-dirty-specific anymore. Maybe "pagemap_scan_args"?
-
->   * @start:             Starting address
->   * @len:               Length of the region
->   * @vec:               Output page_region struct array
->   * @vec_len:           Length of the page_region struct array
->   * @max_out_page:      Optional max output pages (It must be less than
-> vec_len if specified)
-
-Why is it required to be less than vec_len? vec_len effectively
-specifies max number of ranges to find, and this new additional field
-counts pages, I suppose?
-BTW, if we count pages, then what size of them? Maybe using bytes
-(matching start/len fields) would be more consistent?
-
->   * @flags:             Special flags for the IOCTL
->   * @rmask:             Special flags for the IOCTL
->   * @amask:             Special flags for the IOCTL
->   * @emask:             Special flags for the IOCTL
->   * @__reserved:                Reserved member to preserve data alignmen=
-t. Must be 0.
->   */
-> struct pagemap_sd_args {
->         __u64 __user start;
->         __u64 len;
->         __u64 __user vec; // page_region
->         __u64 vec_len;    // sizeof(page_region)
->         __u32 flags;      // special flags
->         __u32 rmask;
->         __u32 amask;
->         __u32 emask;
->         __u32 max_out_page;
->         __u32 __reserved;
-> };
->
-> /* Special flags */
-> #define PAGEMAP_NO_REUSED_REGIONS       0x1
-
-What does this flag do?
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
