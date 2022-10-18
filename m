@@ -2,132 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66655602BCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B99602BCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiJRMam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S229657AbiJRMcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiJRMac (ORCPT
+        with ESMTP id S229506AbiJRMcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:30:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C19BB8C21;
-        Tue, 18 Oct 2022 05:30:31 -0700 (PDT)
-Received: from [192.168.10.9] (unknown [39.45.244.84])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A9C96602363;
-        Tue, 18 Oct 2022 13:30:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666096229;
-        bh=XrK7UDKQ26rBS+50UH9ViTCAxUXkpLoN+e1Isa94oQo=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=QbVvAvx10uxuWUCVHvhs1nQxY/ad3dXtF4UyVrCk2MXOXAuSEVbcXs9cd73OP4YXr
-         wM7H8NGGpGLD4oUdIseZ3LsUAczfdh9qzrMWaCbkQbmcnKieBM0DVnZ3wQle7DmiXF
-         cHVxJilap0ln6QEcpOPzeNAdG8Q+u/lxwPW6gG6cD+ylvCpiVZa1lESAk4jC9MN3z1
-         4f4af2QTKx/nh7uN7WV1BOygZH2Ic8NOjJXf+0058dY9Y1l98r/u3jhfDziKEAh1rj
-         ho4jNAbFe87KcNnQ9eNp6OzphKzopvg37e9G4FppvyqmfaYkWKQYqHfaN/FjiJWeoE
-         KymKxN3Z6ZMFQ==
-Message-ID: <2f95ed2d-6dba-850c-7ae9-5c0ebc05191c@collabora.com>
-Date:   Tue, 18 Oct 2022 17:30:20 +0500
+        Tue, 18 Oct 2022 08:32:03 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4868D27CD8;
+        Tue, 18 Oct 2022 05:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666096323; x=1697632323;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=679yrLLfz5kJkADoDvJtXHkNCdTyNEeZjUBrx5uh7Gg=;
+  b=X7IKGcoJjIBaQCxoOEvI/OEg3aMXzvhnTNAVyT0i+kXGdXUzjH63BOmk
+   0Qpv5qnLwOE+cxhDWnSxouKQO58uMAm7UEoaBq6Hhj9ar23VIb10YqOCf
+   MPCQ52B8DVqwk3as6DHiPQVgy+1gfljdslxS987k3yIXys8QCYuV45j8o
+   2KypPNE3G4VwmkrGaWjx05lTZyIMDb75Gd+gRmaf1XUgwbC8aYs7AyX9B
+   RhCyXjM9M7EixQRkh3nxyINGj54CrwR7dcikk7TLAT7wXnrI0tGcVs3GG
+   npt8IXryVS5tiUdX6Qoxk0LFQYbx/L4cLNumQwfuZGTUjOcsOKEJyPov6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="289384271"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="289384271"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 05:32:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="733605367"
+X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
+   d="scan'208";a="733605367"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Oct 2022 05:32:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1okllG-009M9O-2Q;
+        Tue, 18 Oct 2022 15:31:58 +0300
+Date:   Tue, 18 Oct 2022 15:31:58 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 00/10] gpiolib: more quirks to handle legacy names
+Message-ID: <Y06cvrpcHn0jwZxU@smile.fi.intel.com>
+References: <20221011-gpiolib-quirks-v3-0-eae9cc2ed0a1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, corbet@lwn.net,
-        david@redhat.com, kernel@collabora.com, krisman@collabora.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        peter.enderborg@sony.com, shuah@kernel.org,
-        viro@zeniv.linux.org.uk, willy@infradead.org, emmir@google.com,
-        figiel@google.com, kyurtsever@google.com,
-        Paul Gofman <pgofman@codeweavers.com>, surenb@google.com
-Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-References: <Y0T2l3HaH2MU8M9m@gmail.com>
- <20221014134802.1361436-1-mdanylo@google.com>
- <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
- <Y06EZNAkLtigZi25@kroah.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y06EZNAkLtigZi25@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011-gpiolib-quirks-v3-0-eae9cc2ed0a1@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 3:48 PM, Greg KH wrote:
-> On Tue, Oct 18, 2022 at 03:36:24PM +0500, Muhammad Usama Anjum wrote:
->> /**
->>   * struct pagemap_sd_args - Soft-dirty IOCTL argument
->>   * @start:		Starting address
->>   * @len:		Length of the region
->>   * @vec:		Output page_region struct array
->>   * @vec_len:		Length of the page_region struct array
->>   * @max_out_page:	Optional max output pages (It must be less than vec_len if
->> specified)
->>   * @flags:		Special flags for the IOCTL
->>   * @rmask:		Special flags for the IOCTL
->>   * @amask:		Special flags for the IOCTL
->>   * @emask:		Special flags for the IOCTL
+On Mon, Oct 17, 2022 at 10:41:01PM -0700, Dmitry Torokhov wrote:
+> In preparation to converting several drivers to gpiod API, and to keep
+> existing DTS working, this series adds additional quirks to locate
+> gpio lines with legacy names.
 > 
-> What do you mean exactly by "special flags"?
-Sorry typo in the comments above. Optional flag can be specified in the 
-flag. At the moment, there is only one flag(PAGEMAP_NO_REUSED_REGIONS).
+> Additionally the quirk handling has been reworked (once again) to pull
+> all simple renames (ones that do not involve change of indices or other
+> complex manipulations) into a single quirk with a table containing
+> transformations. This should make adding new quirks easier.
+> When using legacy names gpiolib will emit a message to nudge users to
+> update DTSes (when possible).
+> 
+> Note that the last patch requires the following change from the OF tree:
+> 
+>         88269151be67 ("of: base: make of_device_compatible_match() accept const device node")
+> 
+> The change is also available in mainline - it has been merged in 6.1
+> merge window.
 
-/**
-  * struct pagemap_sd_args - Soft-dirty IOCTL argument
-  * @start:		Starting address
-  * @len:		Length of the region
-  * @vec:		Output page_region struct array
-  * @vec_len:		Length of the page_region struct array
-  * @max_out_page:	Optional max output pages (It must be less than 
-vec_len if specified)
-  * @flags:		Special flags for the IOCTL
-  * @rmask:		Required mask - All of these bits have to be set
-  * @amask:		Any mask - Any of these bits are set
-  * @emask:		Exclude mask - None of these bits are set
-  * @rmask:		Bits that have to be reported to the user in page_region
-  */
-struct pagemap_scan_args {
-	__u64 __user start;
-	__u64 len;
-	__u64 __user vec;
-	__u64 vec_len;
-	__u32 max_out_page;
-	__u32 flags;
-	__u32 rmask;
-	__u32 amask;
-	__u32 emask;
-	__u32 rmask;
-};
+I was wondering if we can use the approach that ACPI chose for itself,
+i.e.  the separate data that can be filled by the corresponding driver
+and then GPIO OF common code may use it. In that case each driver knows
+the exact list of compatible strings and associated quirks.
 
-> 
->>   * @__reserved:		Reserved member to preserve data alignment. Must be 0.
->>   */
->> struct pagemap_sd_args {
->> 	__u64 __user start;
->> 	__u64 len;
->> 	__u64 __user vec; // page_region
-> 
-> __user is a marking for a pointer, not a u64, right?  Now the fact that
-> you treat it like a pointer later in the kernel is different, but that
-> shouldn't be on the uapi header file.  You can put it in the kerneldoc,
-> which you did not do.
-I'll update.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> 
-> thanks,
-> 
-> greg k-h
+
