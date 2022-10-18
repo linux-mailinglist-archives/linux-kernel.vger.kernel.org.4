@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D980602A5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCF3602A59
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 13:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiJRLgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 07:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S230264AbiJRLgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 07:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiJRLgQ (ORCPT
+        with ESMTP id S229698AbiJRLfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 07:36:16 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1460A28E3F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:35:45 -0700 (PDT)
+        Tue, 18 Oct 2022 07:35:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9373F4D4F3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 04:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666092945; x=1697628945;
+  t=1666092926; x=1697628926;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NHTbKElyyJKm9Q90dm05YZun/yPzZoA5KBxzSmXyv5U=;
-  b=V4CP86l0NszdyOPsM1p99Nmee85VDR+h1el9Jb8J6fEdBSl4WiKjUL3g
-   7BM3TAiCz/SxzT4eTASASxcNi3+L3UI1b6UCmNlHVpEaIHM23Ahc4Daqe
-   YrUYXs4Z/SQi9xh+6scTsr2qOOGEMNrhpTyxvpKrFZ2gF7+9gf/Xx2KvA
-   taDKUcU+8wMbaQ3kFiSet6jCyQjLSE5UpjlaGSuYSqhR1JahfwOltQlaT
-   6FWYdvDSV41HwheLl1LtBAfPa6rBTDYUXiUAGm31u7bmF47/X6zYyNAHg
-   bpVeg2863MBBuJukLa0XUR5wYvJTzmCjke0Y/AJ5aoVJdJk14b1jKf7SO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="368105825"
+  bh=40WXelYo9LYaLeJacp6rhf6Ge84QFQDH6MSN4czUvf8=;
+  b=ie3iViYGe3Wrbuh5C520sMNyl5clkBGcbVbZSpNDtsdm5edWGHQWC0Xx
+   Jgpf9Bzd4kNYqCVNsRBdKpVPmIwcTX5Xe08CWVp4CqIfMXBOe4Lp8v3xj
+   Pg8YPBM0oLu2FxrlmYDfU4a8eDjvsnDV+Dk5RQaNL8Qfbomt6nV22Vx9H
+   /G5jckVN3y695fbQixYJLP6eUtkjfjSf/5HR/srtaP2mbU3Glcdv5s6YO
+   1TTzqSwG2f78Hrg+BO8Zdjo24NneHpeAcp3NpNqYidcAYygVpRqn29UHZ
+   g/dTCnXAqRthafQoW/pFfKIO+JIOhunlA2eO5Kkol6hRH+E9GSonZ0jk2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="392382135"
 X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="368105825"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:34:17 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="691763177"
+   d="scan'208";a="392382135"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:34:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="661861186"
 X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="691763177"
+   d="scan'208";a="661861186"
 Received: from vhavel-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.51.115])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:34:13 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:34:13 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 503F0104BA7; Tue, 18 Oct 2022 14:34:04 +0300 (+03)
+        id 5A2A5104BA8; Tue, 18 Oct 2022 14:34:04 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -58,9 +58,9 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv10 09/15] x86: Expose untagging mask in /proc/$PID/arch_status
-Date:   Tue, 18 Oct 2022 14:33:52 +0300
-Message-Id: <20221018113358.7833-10-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv10 10/15] x86/mm, iommu/sva: Make LAM and SVM mutually exclusive
+Date:   Tue, 18 Oct 2022 14:33:53 +0300
+Message-Id: <20221018113358.7833-11-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
 References: <20221018113358.7833-1-kirill.shutemov@linux.intel.com>
@@ -75,190 +75,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a line in /proc/$PID/arch_status to report untag_mask. It can be
-used to find out LAM status of the process from the outside. It is
-useful for debuggers.
+IOMMU and SVM-capable devices know nothing about LAM and only expect
+canonical addresses. Attempt to pass down tagged pointer will lead to
+address translation failure.
+
+By default do not allow to enable both LAM and use SVM in the same
+process.
+
+The new ARCH_FORCE_TAGGED_SVM arch_prctl() overrides the limitation.
+By using the arch_prctl() userspace takes responsibility to never pass
+tagged address to the device.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Tested-by: Alexander Potapenko <glider@google.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/mmu_context.h | 10 +++++
- arch/x86/kernel/Makefile           |  2 +
- arch/x86/kernel/fpu/xstate.c       | 47 -----------------------
- arch/x86/kernel/proc.c             | 60 ++++++++++++++++++++++++++++++
- 4 files changed, 72 insertions(+), 47 deletions(-)
- create mode 100644 arch/x86/kernel/proc.c
+ arch/x86/include/asm/mmu.h         |  6 ++++--
+ arch/x86/include/asm/mmu_context.h |  2 ++
+ arch/x86/include/uapi/asm/prctl.h  |  1 +
+ arch/x86/kernel/process_64.c       | 13 +++++++++++++
+ drivers/iommu/iommu-sva-lib.c      | 12 ++++++++++++
+ include/linux/mmu_context.h        |  4 ++++
+ 6 files changed, 36 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 2fdb390040b5..cce9b32b0d6d 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -9,9 +9,11 @@
+ #include <linux/bits.h>
+ 
+ /* Uprobes on this MM assume 32-bit code */
+-#define MM_CONTEXT_UPROBE_IA32	BIT(0)
++#define MM_CONTEXT_UPROBE_IA32		BIT(0)
+ /* vsyscall page is accessible on this MM */
+-#define MM_CONTEXT_HAS_VSYSCALL	BIT(1)
++#define MM_CONTEXT_HAS_VSYSCALL		BIT(1)
++/* Allow LAM and SVM coexisting */
++#define MM_CONTEXT_FORCE_TAGGED_SVM	BIT(2)
+ 
+ /*
+  * x86 has arch-specific MMU state beyond what lives in mm_struct.
 diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 5bd3d46685dc..b0e9ea23758b 100644
+index b0e9ea23758b..6b9ac2c60cec 100644
 --- a/arch/x86/include/asm/mmu_context.h
 +++ b/arch/x86/include/asm/mmu_context.h
-@@ -103,6 +103,11 @@ static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- 	mm->context.untag_mask = oldmm->context.untag_mask;
- }
- 
-+static inline unsigned long mm_untag_mask(struct mm_struct *mm)
-+{
-+	return mm->context.untag_mask;
-+}
-+
- static inline void mm_reset_untag_mask(struct mm_struct *mm)
- {
+@@ -113,6 +113,8 @@ static inline void mm_reset_untag_mask(struct mm_struct *mm)
  	mm->context.untag_mask = -1UL;
-@@ -119,6 +124,11 @@ static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
  }
  
-+static inline unsigned long mm_untag_mask(struct mm_struct *mm)
-+{
-+	return -1UL;
-+}
-+
- static inline void mm_reset_untag_mask(struct mm_struct *mm)
- {
- }
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index f901658d9f7c..d99fd065aba8 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -143,6 +143,8 @@ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
++#define arch_pgtable_dma_compat(mm)	\
++	(!mm_lam_cr3_mask(mm) || (mm->context.flags & MM_CONTEXT_FORCE_TAGGED_SVM))
+ #else
  
- obj-$(CONFIG_CFI_CLANG)			+= cfi.o
+ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index a31e27b95b19..7bd22defb558 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -23,5 +23,6 @@
+ #define ARCH_GET_UNTAG_MASK		0x4001
+ #define ARCH_ENABLE_TAGGED_ADDR		0x4002
+ #define ARCH_GET_MAX_TAG_BITS		0x4003
++#define ARCH_FORCE_TAGGED_SVM		0x4004
  
-+obj-$(CONFIG_PROC_FS)			+= proc.o
-+
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index c8340156bfd2..838a6f0627fd 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -10,8 +10,6 @@
- #include <linux/mman.h>
- #include <linux/nospec.h>
- #include <linux/pkeys.h>
--#include <linux/seq_file.h>
--#include <linux/proc_fs.h>
- #include <linux/vmalloc.h>
- 
- #include <asm/fpu/api.h>
-@@ -1745,48 +1743,3 @@ long fpu_xstate_prctl(int option, unsigned long arg2)
- 		return -EINVAL;
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 9952e9f517ec..8faa8774bb93 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -783,6 +783,13 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
+ 		goto out;
  	}
+ 
++#ifdef CONFIG_IOMMU_SVA
++	if (pasid_valid(mm->pasid) &&
++	    !(mm->context.flags & MM_CONTEXT_FORCE_TAGGED_SVM)) {
++		ret = -EBUSY;
++		goto out;
++	}
++#endif
+ 	if (!nr_bits) {
+ 		ret = -EINVAL;
+ 		goto out;
+@@ -893,6 +900,12 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 				(unsigned long __user *)arg2);
+ 	case ARCH_ENABLE_TAGGED_ADDR:
+ 		return prctl_enable_tagged_addr(task->mm, arg2);
++	case ARCH_FORCE_TAGGED_SVM:
++		if (mmap_write_lock_killable(task->mm))
++			return -EINTR;
++		task->mm->context.flags |= MM_CONTEXT_FORCE_TAGGED_SVM;
++		mmap_write_unlock(task->mm);
++		return 0;
+ 	case ARCH_GET_MAX_TAG_BITS:
+ 		if (!cpu_feature_enabled(X86_FEATURE_LAM))
+ 			return put_user(0, (unsigned long __user *)arg2);
+diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+index 106506143896..593ae2472e2c 100644
+--- a/drivers/iommu/iommu-sva-lib.c
++++ b/drivers/iommu/iommu-sva-lib.c
+@@ -2,6 +2,8 @@
+ /*
+  * Helpers for IOMMU drivers implementing SVA
+  */
++#include <linux/mm.h>
++#include <linux/mmu_context.h>
+ #include <linux/mutex.h>
+ #include <linux/sched/mm.h>
+ 
+@@ -31,6 +33,15 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
+ 	    min == 0 || max < min)
+ 		return -EINVAL;
+ 
++	/* Serialize against address tagging enabling */
++	if (mmap_write_lock_killable(mm))
++		return -EINTR;
++
++	if (!arch_pgtable_dma_compat(mm)) {
++		mmap_write_unlock(mm);
++		return -EBUSY;
++	}
++
+ 	mutex_lock(&iommu_sva_lock);
+ 	/* Is a PASID already associated with this mm? */
+ 	if (pasid_valid(mm->pasid)) {
+@@ -46,6 +57,7 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
+ 		mm_pasid_set(mm, pasid);
+ out:
+ 	mutex_unlock(&iommu_sva_lock);
++	mmap_write_unlock(mm);
+ 	return ret;
  }
--
--#ifdef CONFIG_PROC_PID_ARCH_STATUS
--/*
-- * Report the amount of time elapsed in millisecond since last AVX512
-- * use in the task.
-- */
--static void avx512_status(struct seq_file *m, struct task_struct *task)
--{
--	unsigned long timestamp = READ_ONCE(task->thread.fpu.avx512_timestamp);
--	long delta;
--
--	if (!timestamp) {
--		/*
--		 * Report -1 if no AVX512 usage
--		 */
--		delta = -1;
--	} else {
--		delta = (long)(jiffies - timestamp);
--		/*
--		 * Cap to LONG_MAX if time difference > LONG_MAX
--		 */
--		if (delta < 0)
--			delta = LONG_MAX;
--		delta = jiffies_to_msecs(delta);
--	}
--
--	seq_put_decimal_ll(m, "AVX512_elapsed_ms:\t", delta);
--	seq_putc(m, '\n');
--}
--
--/*
-- * Report architecture specific information
-- */
--int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
--			struct pid *pid, struct task_struct *task)
--{
--	/*
--	 * Report AVX512 state if the processor and build option supported.
--	 */
--	if (cpu_feature_enabled(X86_FEATURE_AVX512F))
--		avx512_status(m, task);
--
--	return 0;
--}
--#endif /* CONFIG_PROC_PID_ARCH_STATUS */
-diff --git a/arch/x86/kernel/proc.c b/arch/x86/kernel/proc.c
-new file mode 100644
-index 000000000000..9765b4d05ce4
---- /dev/null
-+++ b/arch/x86/kernel/proc.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/proc_fs.h>
-+#include <linux/sched/mm.h>
-+#include <linux/seq_file.h>
-+#include <uapi/asm/prctl.h>
-+#include <asm/mmu_context.h>
+ EXPORT_SYMBOL_GPL(iommu_sva_alloc_pasid);
+diff --git a/include/linux/mmu_context.h b/include/linux/mmu_context.h
+index b9b970f7ab45..115e2b518079 100644
+--- a/include/linux/mmu_context.h
++++ b/include/linux/mmu_context.h
+@@ -28,4 +28,8 @@ static inline void leave_mm(int cpu) { }
+ # define task_cpu_possible(cpu, p)	cpumask_test_cpu((cpu), task_cpu_possible_mask(p))
+ #endif
+ 
++#ifndef arch_pgtable_dma_compat
++#define arch_pgtable_dma_compat(mm)	true
++#endif
 +
-+/*
-+ * Report the amount of time elapsed in millisecond since last AVX512
-+ * use in the task.
-+ */
-+static void avx512_status(struct seq_file *m, struct task_struct *task)
-+{
-+	unsigned long timestamp = READ_ONCE(task->thread.fpu.avx512_timestamp);
-+	long delta;
-+
-+	if (!timestamp) {
-+		/*
-+		 * Report -1 if no AVX512 usage
-+		 */
-+		delta = -1;
-+	} else {
-+		delta = (long)(jiffies - timestamp);
-+		/*
-+		 * Cap to LONG_MAX if time difference > LONG_MAX
-+		 */
-+		if (delta < 0)
-+			delta = LONG_MAX;
-+		delta = jiffies_to_msecs(delta);
-+	}
-+
-+	seq_put_decimal_ll(m, "AVX512_elapsed_ms:\t", delta);
-+	seq_putc(m, '\n');
-+}
-+
-+/*
-+ * Report architecture specific information
-+ */
-+int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
-+			struct pid *pid, struct task_struct *task)
-+{
-+	struct mm_struct *mm;
-+	unsigned long untag_mask = -1UL;
-+
-+	/*
-+	 * Report AVX512 state if the processor and build option supported.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_AVX512F))
-+		avx512_status(m, task);
-+
-+	mm = get_task_mm(task);
-+	if (mm) {
-+		untag_mask = mm_untag_mask(task->mm);
-+		mmput(mm);
-+	}
-+
-+	seq_printf(m, "untag_mask:\t%#lx\n", untag_mask);
-+
-+	return 0;
-+}
+ #endif
 -- 
 2.38.0
 
