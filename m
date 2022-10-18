@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A257360288D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A2860288E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiJRJmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S229796AbiJRJmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiJRJl5 (ORCPT
+        with ESMTP id S229867AbiJRJmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:41:57 -0400
+        Tue, 18 Oct 2022 05:42:02 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5063B9AFC2;
-        Tue, 18 Oct 2022 02:41:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8FF5AF1B9;
+        Tue, 18 Oct 2022 02:42:00 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 06CC9175D;
-        Tue, 18 Oct 2022 02:42:02 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 825E62050;
+        Tue, 18 Oct 2022 02:42:06 -0700 (PDT)
 Received: from e121896.Emea.Arm.com (e121896.Emea.Arm.com [10.32.36.24])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E85EA3F7D8;
-        Tue, 18 Oct 2022 02:41:52 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6FC023F7D8;
+        Tue, 18 Oct 2022 02:41:57 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-perf-users@vger.kernel.org, acme@kernel.org,
         namhyung@kernel.org
@@ -29,11 +29,12 @@ Cc:     linux-kernel@vger.kernel.org, James Clark <james.clark@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: [PATCH v2 1/2] perf: Fix "kernel lock contention analysis" test by not printing warnings in quiet mode
-Date:   Tue, 18 Oct 2022 10:41:35 +0100
-Message-Id: <20221018094137.783081-2-james.clark@arm.com>
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>
+Subject: [PATCH v2 2/2] perf: Make quiet mode consistent between tools
+Date:   Tue, 18 Oct 2022 10:41:36 +0100
+Message-Id: <20221018094137.783081-3-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20221018094137.783081-1-james.clark@arm.com>
 References: <20221018094137.783081-1-james.clark@arm.com>
@@ -47,65 +48,317 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Especially when CONFIG_LOCKDEP and other debug configs are enabled,
-Perf can print the following warning when running the "kernel lock
-contention analysis" test:
+Use the global quiet variable everywhere so that all tools hide warnings
+in quiet mode and update the documentation to reflect this.
 
-  Warning:
-  Processed 1378918 events and lost 4 chunks!
+Perf-probe claimed that errors are not printed in quiet mode but I don't
+see this so remove it from the docs.
 
-  Check IO/CPU overload!
-
-  Warning:
-  Processed 4593325 samples and lost 70.00%!
-
-The test already supplies -q to run in quiet mode, so extend quiet mode
-to perf_stdio__warning() and also ui__warning() for consistency.
-
-This fixes the following failure due to the extra lines counted:
-
-  perf test "lock cont" -vvv
-
-  82: kernel lock contention analysis test                            :
-  --- start ---
-  test child forked, pid 3125
-  Testing perf lock record and perf lock contention
-  [Fail] Recorded result count is not 1: 9
-  test child finished with -1
-  ---- end ----
-  kernel lock contention analysis test: FAILED!
-
-Fixes: ec685de25b67 ("perf test: Add kernel lock contention test")
 Cc: Namhyung Kim <namhyung@kernel.org>
 Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- tools/perf/ui/util.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/perf/Documentation/perf-annotate.txt | 2 +-
+ tools/perf/Documentation/perf-diff.txt     | 2 +-
+ tools/perf/Documentation/perf-lock.txt     | 2 +-
+ tools/perf/Documentation/perf-probe.txt    | 2 +-
+ tools/perf/Documentation/perf-record.txt   | 2 +-
+ tools/perf/Documentation/perf-report.txt   | 2 +-
+ tools/perf/Documentation/perf-stat.txt     | 4 ++--
+ tools/perf/bench/numa.c                    | 9 +++++----
+ tools/perf/builtin-annotate.c              | 2 +-
+ tools/perf/builtin-diff.c                  | 2 +-
+ tools/perf/builtin-lock.c                  | 2 +-
+ tools/perf/builtin-probe.c                 | 7 +++----
+ tools/perf/builtin-record.c                | 2 +-
+ tools/perf/builtin-report.c                | 2 +-
+ tools/perf/builtin-stat.c                  | 8 ++++----
+ tools/perf/util/stat.h                     | 1 -
+ 16 files changed, 25 insertions(+), 26 deletions(-)
 
-diff --git a/tools/perf/ui/util.c b/tools/perf/ui/util.c
-index 689b27c34246..1d38ddf01b60 100644
---- a/tools/perf/ui/util.c
-+++ b/tools/perf/ui/util.c
-@@ -15,6 +15,9 @@ static int perf_stdio__error(const char *format, va_list args)
+diff --git a/tools/perf/Documentation/perf-annotate.txt b/tools/perf/Documentation/perf-annotate.txt
+index 18fcc52809fb..980fe2c29275 100644
+--- a/tools/perf/Documentation/perf-annotate.txt
++++ b/tools/perf/Documentation/perf-annotate.txt
+@@ -41,7 +41,7 @@ OPTIONS
  
- static int perf_stdio__warning(const char *format, va_list args)
- {
-+	if (quiet)
-+		return 0;
-+
- 	fprintf(stderr, "Warning:\n");
- 	vfprintf(stderr, format, args);
- 	return 0;
-@@ -45,6 +48,8 @@ int ui__warning(const char *format, ...)
- {
- 	int ret;
- 	va_list args;
-+	if (quiet)
-+		return 0;
+ -q::
+ --quiet::
+-	Do not show any message.  (Suppress -v)
++	Do not show any warnings or messages.  (Suppress -v)
  
- 	va_start(args, format);
- 	ret = perf_eops->warning(format, args);
+ -n::
+ --show-nr-samples::
+diff --git a/tools/perf/Documentation/perf-diff.txt b/tools/perf/Documentation/perf-diff.txt
+index be65bd55ab2a..f3067a4af294 100644
+--- a/tools/perf/Documentation/perf-diff.txt
++++ b/tools/perf/Documentation/perf-diff.txt
+@@ -75,7 +75,7 @@ OPTIONS
+ 
+ -q::
+ --quiet::
+-	Do not show any message.  (Suppress -v)
++	Do not show any warnings or messages.  (Suppress -v)
+ 
+ -f::
+ --force::
+diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+index 3b1e16563b79..4958a1ffa1cc 100644
+--- a/tools/perf/Documentation/perf-lock.txt
++++ b/tools/perf/Documentation/perf-lock.txt
+@@ -42,7 +42,7 @@ COMMON OPTIONS
+ 
+ -q::
+ --quiet::
+-	Do not show any message. (Suppress -v)
++	Do not show any warnings or messages. (Suppress -v)
+ 
+ -D::
+ --dump-raw-trace::
+diff --git a/tools/perf/Documentation/perf-probe.txt b/tools/perf/Documentation/perf-probe.txt
+index 080981d38d7b..7f8e8ba3a787 100644
+--- a/tools/perf/Documentation/perf-probe.txt
++++ b/tools/perf/Documentation/perf-probe.txt
+@@ -57,7 +57,7 @@ OPTIONS
+ 
+ -q::
+ --quiet::
+-	Be quiet (do not show any messages including errors).
++	Do not show any warnings or messages.
+ 	Can not use with -v.
+ 
+ -a::
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index e41ae950fdc3..9ea6d44aca58 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -282,7 +282,7 @@ OPTIONS
+ 
+ -q::
+ --quiet::
+-	Don't print any message, useful for scripting.
++	Don't print any warnings or messages, useful for scripting.
+ 
+ -v::
+ --verbose::
+diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
+index 4533db2ee56b..4fa509b15948 100644
+--- a/tools/perf/Documentation/perf-report.txt
++++ b/tools/perf/Documentation/perf-report.txt
+@@ -27,7 +27,7 @@ OPTIONS
+ 
+ -q::
+ --quiet::
+-	Do not show any message.  (Suppress -v)
++	Do not show any warnings or messages.  (Suppress -v)
+ 
+ -n::
+ --show-nr-samples::
+diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
+index d7ff1867feda..18abdc1dce05 100644
+--- a/tools/perf/Documentation/perf-stat.txt
++++ b/tools/perf/Documentation/perf-stat.txt
+@@ -354,8 +354,8 @@ forbids the event merging logic from sharing events between groups and
+ may be used to increase accuracy in this case.
+ 
+ --quiet::
+-Don't print output. This is useful with perf stat record below to only
+-write data to the perf.data file.
++Don't print output, warnings or messages. This is useful with perf stat
++record below to only write data to the perf.data file.
+ 
+ STAT RECORD
+ -----------
+diff --git a/tools/perf/bench/numa.c b/tools/perf/bench/numa.c
+index e78dedf9e682..9717c6c17433 100644
+--- a/tools/perf/bench/numa.c
++++ b/tools/perf/bench/numa.c
+@@ -16,6 +16,7 @@
+ #include <sched.h>
+ #include <stdio.h>
+ #include <assert.h>
++#include <debug.h>
+ #include <malloc.h>
+ #include <signal.h>
+ #include <stdlib.h>
+@@ -116,7 +117,6 @@ struct params {
+ 	long			bytes_thread;
+ 
+ 	int			nr_tasks;
+-	bool			show_quiet;
+ 
+ 	bool			show_convergence;
+ 	bool			measure_convergence;
+@@ -197,7 +197,8 @@ static const struct option options[] = {
+ 	OPT_BOOLEAN('c', "show_convergence", &p0.show_convergence, "show convergence details, "
+ 		    "convergence is reached when each process (all its threads) is running on a single NUMA node."),
+ 	OPT_BOOLEAN('m', "measure_convergence",	&p0.measure_convergence, "measure convergence latency"),
+-	OPT_BOOLEAN('q', "quiet"	, &p0.show_quiet,	"quiet mode"),
++	OPT_BOOLEAN('q', "quiet"	, &quiet,
++		    "quiet mode (do not show any warnings or messages)"),
+ 	OPT_BOOLEAN('S', "serialize-startup", &p0.serialize_startup,"serialize thread startup"),
+ 
+ 	/* Special option string parsing callbacks: */
+@@ -1474,7 +1475,7 @@ static int init(void)
+ 	/* char array in count_process_nodes(): */
+ 	BUG_ON(g->p.nr_nodes < 0);
+ 
+-	if (g->p.show_quiet && !g->p.show_details)
++	if (quiet && !g->p.show_details)
+ 		g->p.show_details = -1;
+ 
+ 	/* Some memory should be specified: */
+@@ -1553,7 +1554,7 @@ static void print_res(const char *name, double val,
+ 	if (!name)
+ 		name = "main,";
+ 
+-	if (!g->p.show_quiet)
++	if (!quiet)
+ 		printf(" %-30s %15.3f, %-15s %s\n", name, val, txt_unit, txt_short);
+ 	else
+ 		printf(" %14.3f %s\n", val, txt_long);
+diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+index f839e69492e8..517d928c00e3 100644
+--- a/tools/perf/builtin-annotate.c
++++ b/tools/perf/builtin-annotate.c
+@@ -525,7 +525,7 @@ int cmd_annotate(int argc, const char **argv)
+ 	OPT_BOOLEAN('f', "force", &data.force, "don't complain, do it"),
+ 	OPT_INCR('v', "verbose", &verbose,
+ 		    "be more verbose (show symbol address, etc)"),
+-	OPT_BOOLEAN('q', "quiet", &quiet, "do now show any message"),
++	OPT_BOOLEAN('q', "quiet", &quiet, "do now show any warnings or messages"),
+ 	OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace,
+ 		    "dump raw trace in ASCII"),
+ #ifdef HAVE_GTK2_SUPPORT
+diff --git a/tools/perf/builtin-diff.c b/tools/perf/builtin-diff.c
+index d925096dd7f0..ed07cc6cca56 100644
+--- a/tools/perf/builtin-diff.c
++++ b/tools/perf/builtin-diff.c
+@@ -1260,7 +1260,7 @@ static const char * const diff_usage[] = {
+ static const struct option options[] = {
+ 	OPT_INCR('v', "verbose", &verbose,
+ 		    "be more verbose (show symbol address, etc)"),
+-	OPT_BOOLEAN('q', "quiet", &quiet, "Do not show any message"),
++	OPT_BOOLEAN('q', "quiet", &quiet, "Do not show any warnings or messages"),
+ 	OPT_BOOLEAN('b', "baseline-only", &show_baseline_only,
+ 		    "Show only items with match in baseline"),
+ 	OPT_CALLBACK('c', "compute", &compute,
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 9722d4ab2e55..66520712a167 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -1869,7 +1869,7 @@ int cmd_lock(int argc, const char **argv)
+ 		   "file", "vmlinux pathname"),
+ 	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
+ 		   "file", "kallsyms pathname"),
+-	OPT_BOOLEAN('q', "quiet", &quiet, "Do not show any message"),
++	OPT_BOOLEAN('q', "quiet", &quiet, "Do not show any warnings or messages"),
+ 	OPT_END()
+ 	};
+ 
+diff --git a/tools/perf/builtin-probe.c b/tools/perf/builtin-probe.c
+index f62298f5db3b..2ae50fc9e597 100644
+--- a/tools/perf/builtin-probe.c
++++ b/tools/perf/builtin-probe.c
+@@ -40,7 +40,6 @@ static struct {
+ 	int command;	/* Command short_name */
+ 	bool list_events;
+ 	bool uprobes;
+-	bool quiet;
+ 	bool target_used;
+ 	int nevents;
+ 	struct perf_probe_event events[MAX_PROBES];
+@@ -514,8 +513,8 @@ __cmd_probe(int argc, const char **argv)
+ 	struct option options[] = {
+ 	OPT_INCR('v', "verbose", &verbose,
+ 		    "be more verbose (show parsed arguments, etc)"),
+-	OPT_BOOLEAN('q', "quiet", &params.quiet,
+-		    "be quiet (do not show any messages)"),
++	OPT_BOOLEAN('q', "quiet", &quiet,
++		    "be quiet (do not show any warnings or messages)"),
+ 	OPT_CALLBACK_DEFAULT('l', "list", NULL, "[GROUP:]EVENT",
+ 			     "list up probe events",
+ 			     opt_set_filter_with_command, DEFAULT_LIST_FILTER),
+@@ -634,7 +633,7 @@ __cmd_probe(int argc, const char **argv)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (params.quiet) {
++	if (quiet) {
+ 		if (verbose != 0) {
+ 			pr_err("  Error: -v and -q are exclusive.\n");
+ 			return -EINVAL;
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 52d254b1530c..81dd0917920f 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -3379,7 +3379,7 @@ static struct option __record_options[] = {
+ 		     &record_parse_callchain_opt),
+ 	OPT_INCR('v', "verbose", &verbose,
+ 		    "be more verbose (show counter open errors, etc)"),
+-	OPT_BOOLEAN('q', "quiet", &quiet, "don't print any message"),
++	OPT_BOOLEAN('q', "quiet", &quiet, "don't print any warnings or messages"),
+ 	OPT_BOOLEAN('s', "stat", &record.opts.inherit_stat,
+ 		    "per thread counts"),
+ 	OPT_BOOLEAN('d', "data", &record.opts.sample_address, "Record the sample addresses"),
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index 8361890176c2..b6d77d3da64f 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -1222,7 +1222,7 @@ int cmd_report(int argc, const char **argv)
+ 		    "input file name"),
+ 	OPT_INCR('v', "verbose", &verbose,
+ 		    "be more verbose (show symbol address, etc)"),
+-	OPT_BOOLEAN('q', "quiet", &quiet, "Do not show any message"),
++	OPT_BOOLEAN('q', "quiet", &quiet, "Do not show any warnings or messages"),
+ 	OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace,
+ 		    "dump raw trace in ASCII"),
+ 	OPT_BOOLEAN(0, "stats", &report.stats_mode, "Display event stats"),
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 265b05157972..e3531a1fe08e 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1023,7 +1023,7 @@ static void print_counters(struct timespec *ts, int argc, const char **argv)
+ 	/* Do not print anything if we record to the pipe. */
+ 	if (STAT_RECORD && perf_stat.data.is_pipe)
+ 		return;
+-	if (stat_config.quiet)
++	if (quiet)
+ 		return;
+ 
+ 	evlist__print_counters(evsel_list, &stat_config, &target, ts, argc, argv);
+@@ -1273,8 +1273,8 @@ static struct option stat_options[] = {
+ 		       "print summary for interval mode"),
+ 	OPT_BOOLEAN(0, "no-csv-summary", &stat_config.no_csv_summary,
+ 		       "don't print 'summary' for CSV summary output"),
+-	OPT_BOOLEAN(0, "quiet", &stat_config.quiet,
+-			"don't print output (useful with record)"),
++	OPT_BOOLEAN(0, "quiet", &quiet,
++			"don't print any output, messages or warnings (useful with record)"),
+ 	OPT_CALLBACK(0, "cputype", &evsel_list, "hybrid cpu type",
+ 		     "Only enable events on applying cpu with this type "
+ 		     "for hybrid platform (e.g. core or atom)",
+@@ -2277,7 +2277,7 @@ int cmd_stat(int argc, const char **argv)
+ 		goto out;
+ 	}
+ 
+-	if (!output && !stat_config.quiet) {
++	if (!output && !quiet) {
+ 		struct timespec tm;
+ 		mode = append_file ? "a" : "w";
+ 
+diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
+index b0899c6e002f..35c940d7f29c 100644
+--- a/tools/perf/util/stat.h
++++ b/tools/perf/util/stat.h
+@@ -139,7 +139,6 @@ struct perf_stat_config {
+ 	bool			 metric_no_group;
+ 	bool			 metric_no_merge;
+ 	bool			 stop_read_counter;
+-	bool			 quiet;
+ 	bool			 iostat_run;
+ 	char			 *user_requested_cpu_list;
+ 	bool			 system_wide;
 -- 
 2.28.0
 
