@@ -2,116 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109B4602FC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A18860303B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiJRPcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S231143AbiJRPxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiJRPcR (ORCPT
+        with ESMTP id S230260AbiJRPxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:32:17 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87C5D4A12
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:32:10 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id t25so8866599qkm.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G1/uDkzke1I9MIXgJReSc/5yrjYBWTdhHs4pK5HuUcU=;
-        b=eU7bFamSLI28JsgdEar8LiWEMX6cc97/5zuKhkJeJI96D4MPCqmHgaUXqVhvD47bW1
-         A+wxdY1mbuEqCwwaHmNlZz5jqMtpS6XfsJg4eyRrmKtvtutpHVZfeeeU82AKjIcRHwbR
-         zBspuDGnsCBnr06GRU9iP4HbzQk7me66qHm4DBgl1ZjhJjdT0+8FZB/doPw7kNA1O4fF
-         R13sZi9dqR3SHx8H9/9woXnOdBZHbS4bro7KjScFRupf4n35o2J1ij8CPtYJ5sVYAjRw
-         GWqwqj5FxwAQXMka1zN5L0WlOFNgCTFxjwQK1Hql7oFnh1JI1sg6F/9Sag0qsJsaJwhO
-         TGMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G1/uDkzke1I9MIXgJReSc/5yrjYBWTdhHs4pK5HuUcU=;
-        b=kCcZt+FJIZeNBhG4RIz/hpOLMeO/mfMjwh8y6uLfEswlaKzRQ3eHVa6y25E5jdj1Rs
-         b18zvxulUhwLAAoQh9TJsqGzGx7PtRFThAd8fDrslOg+zo0duMCoEOq3NNgzt89aAK3V
-         c/skZcwPu1nbD/S0JesMdVmewur3DDfIVpWj7mMRN1axcj9NCbKf6KdA+u7yuG2ajAoI
-         dEMZV4oj0dRshmGGIVxDxh8xeg2DTEr3ImR2Kqu6e/B3RaWHdYfNC7JL7pcSmAqdR+dK
-         A1nkSgjRKgbw1WyDBnxFR6tkNAvJQYx64by2FHkN/FdxXix/i3Kb/ZEPZOM1VI1/Ka0e
-         EIyw==
-X-Gm-Message-State: ACrzQf3ntQE+gp9/5OQJzswkkFhO5kGFFaE00jp2dz+TKKK73fZzRPX3
-        4RZuKUrS4Cz0RIFTYsV9y1GQbw==
-X-Google-Smtp-Source: AMsMyM7eVweGu17+jtxN0kMIKkC2qER56wGixOvLXX1kSLjhAlxUlN+fkkmcKGJrQWP5eMoSC3HGQQ==
-X-Received: by 2002:a05:620a:46a7:b0:6ee:dea7:cc1c with SMTP id bq39-20020a05620a46a700b006eedea7cc1cmr2303292qkb.506.1666107129262;
-        Tue, 18 Oct 2022 08:32:09 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac81119000000b003996aa171b9sm2043401qtj.97.2022.10.18.08.32.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 08:32:08 -0700 (PDT)
-Message-ID: <b0c1bdfb-4a31-9deb-1f0a-0ed813707464@linaro.org>
-Date:   Tue, 18 Oct 2022 11:32:07 -0400
+        Tue, 18 Oct 2022 11:53:19 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0D8C97EA;
+        Tue, 18 Oct 2022 08:53:04 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MsHls6RwJz9xrpj;
+        Tue, 18 Oct 2022 23:27:05 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwD3fgUbx05jE5UGAA--.19528S2;
+        Tue, 18 Oct 2022 16:32:53 +0100 (CET)
+Message-ID: <1b41c633bbd31b82b02fdbae718f2f11ac862181.camel@huaweicloud.com>
+Subject: Re: [PATCH 4/9] ima: Move ima_file_free() into LSM
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Petr Vorel <pvorel@suse.cz>,
+        Jonathan McDowell <noodles@fb.com>,
+        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Tue, 18 Oct 2022 17:32:40 +0200
+In-Reply-To: <20221018150213.7n4sv7rtsh6lshd5@wittgenstein>
+References: <20221013222702.never.990-kees@kernel.org>
+         <20221013223654.659758-4-keescook@chromium.org>
+         <20221018150213.7n4sv7rtsh6lshd5@wittgenstein>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 09/15] dt-bindings: phy: qcom,qmp-pcie: mark current
- bindings as legacy
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221017145328.22090-1-johan+linaro@kernel.org>
- <20221017145328.22090-10-johan+linaro@kernel.org>
- <CAA8EJpqSWmy5Z4cmJnsdjMjkmACW7HSi-k5JxZ0gLCeUAWEnxQ@mail.gmail.com>
- <Y05+E90tmlq2tNFa@hovoldconsulting.com>
- <CAA8EJprwhEvUfUr-zDir4zFh_NAyr0qPbrHi6Hf8=2HC1dAhaw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJprwhEvUfUr-zDir4zFh_NAyr0qPbrHi6Hf8=2HC1dAhaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: GxC2BwD3fgUbx05jE5UGAA--.19528S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr1ktw18Kr1rJr43Gr4UJwb_yoWrAr43pF
+        s3t3W5Crn3Jryjgr97Canrua4Fg39agryxuFyrW348tFnxtFyvvFy3Cr1Y9F4UJry0krWx
+        tF4UKry5Z3WjyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIx
+        AIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1rMa5UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4BjMQACsu
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/10/2022 07:37, Dmitry Baryshkov wrote:
+On Tue, 2022-10-18 at 17:02 +0200, Christian Brauner wrote:
+> On Thu, Oct 13, 2022 at 03:36:49PM -0700, Kees Cook wrote:
+> > The file_free_security hook already exists for managing
+> > notification of
+> > released files. Use the LSM hook instead of open-coded stacking.
+> > 
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: Petr Vorel <pvorel@suse.cz>
+> > Cc: Jonathan McDowell <noodles@fb.com>
+> > Cc: Borislav Petkov <bp@suse.de>
+> > Cc: Takashi Iwai <tiwai@suse.de>
+> > Cc: linux-integrity@vger.kernel.org
+> > Cc: linux-security-module@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  fs/file_table.c                   | 1 -
+> >  include/linux/ima.h               | 6 ------
+> >  security/integrity/ima/ima_main.c | 3 ++-
+> >  3 files changed, 2 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/fs/file_table.c b/fs/file_table.c
+> > index 99c6796c9f28..fa707d221a43 100644
+> > --- a/fs/file_table.c
+> > +++ b/fs/file_table.c
+> > @@ -311,7 +311,6 @@ static void __fput(struct file *file)
+> >  	eventpoll_release(file);
+> >  	locks_remove_file(file);
+> >  
+> > -	ima_file_free(file);
+> >  	if (unlikely(file->f_flags & FASYNC)) {
+> >  		if (file->f_op->fasync)
+> >  			file->f_op->fasync(-1, file, 0);
+> > diff --git a/include/linux/ima.h b/include/linux/ima.h
+> > index 6dc5143f89f2..9f18df366064 100644
+> > --- a/include/linux/ima.h
+> > +++ b/include/linux/ima.h
+> > @@ -19,7 +19,6 @@ extern enum hash_algo
+> > ima_get_current_hash_algo(void);
+> >  extern int ima_file_check(struct file *file, int mask);
+> >  extern void ima_post_create_tmpfile(struct user_namespace
+> > *mnt_userns,
+> >  				    struct inode *inode);
+> > -extern void ima_file_free(struct file *file);
+> >  extern void ima_post_path_mknod(struct user_namespace *mnt_userns,
+> >  				struct dentry *dentry);
+> >  extern int ima_file_hash(struct file *file, char *buf, size_t
+> > buf_size);
+> > @@ -56,11 +55,6 @@ static inline void
+> > ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+> >  {
+> >  }
+> >  
+> > -static inline void ima_file_free(struct file *file)
+> > -{
+> > -	return;
+> > -}
+> > -
+> >  static inline void ima_post_path_mknod(struct user_namespace
+> > *mnt_userns,
+> >  				       struct dentry *dentry)
+> >  {
+> > diff --git a/security/integrity/ima/ima_main.c
+> > b/security/integrity/ima/ima_main.c
+> > index b3b79d030a67..94379ba40b58 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -183,7 +183,7 @@ static void ima_check_last_writer(struct
+> > integrity_iint_cache *iint,
+> >   *
+> >   * Flag files that changed, based on i_version
+> >   */
+> > -void ima_file_free(struct file *file)
+> > +static void ima_file_free(struct file *file)
+> >  {
+> >  	struct inode *inode = file_inode(file);
+> >  	struct integrity_iint_cache *iint;
+> > @@ -1085,6 +1085,7 @@ static struct security_hook_list ima_hooks[]
+> > __lsm_ro_after_init = {
+> >  	LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
+> >  	LSM_HOOK_INIT(mmap_file, ima_file_mmap),
+> >  	LSM_HOOK_INIT(file_mprotect, ima_file_mprotect),
+> > +	LSM_HOOK_INIT(file_free_security, ima_file_free),
 > 
->>> And yes, I think we should also upgrade
->>> older DTs, keeping drivers backwards compatible (for some time?).
->>
->> Possibly, but I'm not sure it's worth the dts churn. As I mentioned
->> elsewhere, supporting both the old and new binding in the driver is
->> mostly trivial, while encoding the deprecated bindings in DT schema
->> sounds like it would be painful.
+> This doesn't work afaict. If the file is opened for writing ima may
+> update xattrs. But by the time security_file_free() is called
+> put_file_access() has already been called which will have given up
+> write
+> access to the file's mount.
 > 
-> This is probably the time where Krzysztof can advise us. I'm still not
-> sure when it is expected to encode both old and new bindings in the
-> schema and when we can update both the schema and the DT.
+> So you would have to - just one of the possibilities - have to move
+> security_file_free() out of file_free() and into the old
+> ima_file_free()
+> location. But that might cause semantic changes for other LSMs.
 
-I do not follow what exactly the proposal is. Are you asking whether to:
-1. keep existing DTS compatible with old driver?
-or
-2. update existing DTS so it is working only with new driver (and not
-compatible with old driver thus having ABI break)?
+Hi
 
-If so, it is less question to bindings but more to the usage of DTS in
-other projects (like bootloaders, firmware, BSD) and generic
-recommendation is: do not break other users, if possible. It is however
-up to the platform maintainer (Bjorn) to decide on this, not on me.
+I also did this work before. In my implementation, I created a new
+security hook called security_file_pre_free().
 
-Best regards,
-Krzysztof
+https://github.com/robertosassu/linux/commit/692c9d36fff865435b23b3cb765d31f3584f6263
+
+If useful, the whole patch set is available at:
+
+https://github.com/robertosassu/linux/commits/ima-evm-lsm-v1-devel-v3
+
+Roberto
 
