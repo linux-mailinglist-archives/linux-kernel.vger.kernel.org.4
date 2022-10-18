@@ -2,194 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9BA603356
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BF860335C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJRT3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 15:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S229454AbiJRTb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 15:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiJRT3B (ORCPT
+        with ESMTP id S229453AbiJRTbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 15:29:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A2E6D56A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 12:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=lcM7PDU+W78CbEKHN9YfRJV5gYHnLEK9SFOQzcXXDYA=; b=jgE+5SYp10uf2d7LZp4fW/9e1n
-        H0y8oFzq2013vvIW8n9xOwKbx2P1fmnQP65mPNUGrL9rppmd+3Wp2NOS1erj1v20zjVY4ZL8YFDdr
-        VkcknO+/MuQwKQssMGpERUh6HycM3mtWZ15fG/EMWrebY1/jqKe5KhlaKY2ZEVe8qXSe88wxjWWau
-        /smUoWOlAsmSqBYMvDWAVrF06ISrFJbvnkKat6re3j3M72V03gG3/ICwNCnnM3aHtZdYBwsPK1BpZ
-        VmHWZImzI1IU6fCJsNSmx8V3z0QKKtRRTVZxIhILwZcoZo96wq0EqqDawf/VlgPz70yVk6dTjhLud
-        Gfr+e5eA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oksGd-00AExV-8e; Tue, 18 Oct 2022 19:28:50 +0000
-Message-ID: <46b4bf12-f501-0447-8c3c-8dd0cb91ba92@infradead.org>
-Date:   Tue, 18 Oct 2022 12:28:46 -0700
+        Tue, 18 Oct 2022 15:31:22 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896926C75F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 12:31:21 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 63so18217087ybq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 12:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Odb/3tw3luvQ0ZjN2sRl8U/xpeYJXIVedLN9LRVos5c=;
+        b=Ky4Q4EdUaF3OQMCth1A9LVUmzBHBw6VgLCX8+tflalKsBkQuory/Kad2ivpmbFEX+b
+         FVlwJA9z2VUOFyeaFQ6KsU2BxLVeprb/QgIkCZwva+LC+I8UzG4ZSUlhEzCTMqz3vw6t
+         Ky94Vlx3tvOhjNDw2pR6bC2PIgxBZznDp2TgVWsM9HV9Pz77XlpS078z0L/zYwgVh750
+         Nun/YNuXRwiBX8+m09uG1iQF/Ox8voTTy9F19InEAwxfSbtXZCULpp7kCmAmBEUkQr46
+         zzqd4qrv3rCyxqsa3HEcjv3czx8eNiu6Qd/BtnBLwtAywP9mUTL6PjGEMzxv/poKW5Nv
+         TZhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Odb/3tw3luvQ0ZjN2sRl8U/xpeYJXIVedLN9LRVos5c=;
+        b=X7VplB1+ZDEOiMtPAGgi9r+EVPtdeXTc4Ipgje9i0c2WRq8kfqzOjUFS5QKJYBf5T+
+         rKkXcJ4uerJgK43haI0qsErZY8ShzAeWCsr/Os/N0A/pivMYBbFgnzMa82jX6Uz83Hxz
+         H6Guib7UHbuGr7jB6OHjmSmTu+0P8nuM7tQXX5GwP3TjgfoGct1WH30LjcczD+I+97Rj
+         nf25jQXYwP+sYVM5OWm4ujawrkBAeDD2TXuqdHtuhnvXPNR5TaN6MvrG+eY2kNTbl/sm
+         Ph6fnZsCg9yTvB8dGxXp452SddFsD69PGN4LyPkeD3Qa0bO/d52c56a3drY4azHphsx6
+         u/wg==
+X-Gm-Message-State: ACrzQf3lkhDtLsNTnm0JYnvhUt4oKxSLRj8QuakRpA7XbF/6WmoTqjYn
+        jRbgmr/xR7bPFcwOYAxpxEvG3qNZLShmSuvnc5TW
+X-Google-Smtp-Source: AMsMyM48whLXeORVsJ9Fz0jIQtPu4VRWuj99/Or9T6IxgLAkpQY6LlfLFEp66XTHfhCP2KjGK/HWfQZJ8mDeFwSV4y0=
+X-Received: by 2002:a05:6902:124d:b0:66d:5ce6:5924 with SMTP id
+ t13-20020a056902124d00b0066d5ce65924mr3923045ybu.320.1666121480390; Tue, 18
+ Oct 2022 12:31:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] vsprintf: protect kernel from panic due to non-canonical
- pointer dereference
-Content-Language: en-US
-To:     Jane Chu <jane.chu@oracle.com>, Petr Mladek <pmladek@suse.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-References: <20221017191611.2577466-1-jane.chu@oracle.com>
- <Y02sENwhtpsx5yhP@smile.fi.intel.com>
- <5d987403-a7bf-8996-d639-c99edeaabcdf@oracle.com> <Y06f4EwisLTU0rEz@alley>
- <799e5390-2ff5-02b7-2df7-61198d5451e2@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <799e5390-2ff5-02b7-2df7-61198d5451e2@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20210222150608.808146-1-mic@digikod.net> <20210222150608.808146-2-mic@digikod.net>
+ <51725b44-bc40-0205-8583-285d3b35b5ca@schaufler-ca.com> <ee461f8d-a02d-0782-8f31-691853a57f00@digikod.net>
+ <7b67163a-9de1-313f-5b5a-8c720cef9b73@schaufler-ca.com> <CAJfZ7=n5FOxHXMLRrDQ3F-kDqbYngNoYKcz6_PWi1rPa0_8WpA@mail.gmail.com>
+ <3b97e25b-303c-d732-3e5d-f1b1a446e090@schaufler-ca.com> <202210171111.21E3983165@keescook>
+ <CAHC9VhTTKpesvjnc_233x+wG1BvXyup9nM4Dv2h1953zXAvU3A@mail.gmail.com> <202210172153.C65BF23D5E@keescook>
+In-Reply-To: <202210172153.C65BF23D5E@keescook>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 18 Oct 2022 15:31:09 -0400
+Message-ID: <CAHC9VhSMLjzxyu0F82NZoea-q4yMgHeCZ0-TRcvxKks4WeKacQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] security: Add CONFIG_LSM_AUTO to handle default
+ LSM stack ordering
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Nicolas Iooss <nicolas.iooss@m4x.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Tue, Oct 18, 2022 at 1:55 AM Kees Cook <keescook@chromium.org> wrote:
+> On Mon, Oct 17, 2022 at 09:45:21PM -0400, Paul Moore wrote:
+> > The code sorta cares about ordering, at least to the extent that the
+> > LSMs will behave differently depending on the ordering, e.g. a LSM
+>
+> Right -- this is why I've been so uncomfortable with allowing
+> arbitrarily reordering of the LSM list from lsm=. There are orderings we
+> know work, and others may have undesirable side-effects. I'd much rather
+> the kernel be specific about the order.
 
-On 10/18/22 11:56, Jane Chu wrote:
-> On 10/18/2022 5:45 AM, Petr Mladek wrote:
->> On Mon 2022-10-17 19:31:53, Jane Chu wrote:
->>> On 10/17/2022 12:25 PM, Andy Shevchenko wrote:
->>>> On Mon, Oct 17, 2022 at 01:16:11PM -0600, Jane Chu wrote:
->>>>> While debugging a separate issue, it was found that an invalid string
->>>>> pointer could very well contain a non-canical address, such as
->>>>> 0x7665645f63616465. In that case, this line of defense isn't enough
->>>>> to protect the kernel from crashing due to general protection fault
->>>>>
->>>>> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
->>>>>                   return "(efault)";
->>>>>
->>>>> So instead, use kern_addr_valid() to validate the string pointer.
->>>>
->>>> How did you check that value of the (invalid string) pointer?
->>>>
->>>
->>> In the bug scenario, the invalid string pointer was an out-of-bound
->>> string pointer. While the OOB referencing is fixed,
->>
->> Could you please provide more details about the fixed OOB?
->> What exact vsprintf()/printk() call was broken and eventually
->> how it was fixed, please?
-> 
-> For sensitive reason, I'd like to avoid mentioning the specific name of 
-> the sysfs attribute in the bug, instead, just call it "devX_attrY[]",
-> and describe the precise nature of the issue.
-> 
-> devX_attrY[] is a string array, declared and filled at compile time,
-> like
->    const char const devX_attrY[] = {
-> 	[ATTRY_A] = "Dev X AttributeY A",
-> 	[ATTRY_B] = "Dev X AttributeY B",
-> 	...
-> 	[ATTRY_G] = "Dev X AttributeY G",
->    }
-> such that, when user "cat /sys/devices/systems/.../attry_1",
-> "Dev X AttributeY B" will show up in the terminal.
-> That's it, no more reference to the pointer devX_attrY[ATTRY_B] after that.
-> 
-> The bug was that the index to the array was wrongfully produced,
-> leading up to OOB, e.g. devX_attrY[11].  The fix was to fix the 
-> calculation and that is not an upstream fix.
-> 
->>
->>> the lingering issue
->>> is that the kernel ought to be able to protect itself, as the pointer
->>> contains a non-canonical address.
->>
->> Was the pointer used only by the vsprintf()?
->> Or was it accessed also by another code, please?
-> 
-> The OOB pointer was used only by vsprintf() for the "cat" sysfs case.
-> No other code uses the OOB pointer, verified both by code examination 
-> and test.
-> 
-> Here is a snippet of the crash backtrace from an instrumented kernel, 
-> scratched one line for sensitive reason -
-> 
-> crash> bt
-> PID: 3250   TASK: ffff9cb50fe23d80  CPU: 18  COMMAND: "cat"
->   #0 [ffffc0bacf377998] machine_kexec at ffffffff9b06c7c1
->   #1 [ffffc0bacf3779f8] __crash_kexec at ffffffff9b13bb52
->   #2 [ffffc0bacf377ac8] crash_kexec at ffffffff9b13cdac
->   #3 [ffffc0bacf377ae8] oops_end at ffffffff9b03357a
->   #4 [ffffc0bacf377b10] die at ffffffff9b033c32
->   #5 [ffffc0bacf377b40] do_general_protection at ffffffff9b030c52
->   #6 [ffffc0bacf377b70] general_protection at ffffffff9ba03db4
->      [exception RIP: string_nocheck+19]
->      RIP: ffffffff9b87cc73  RSP: ffffc0bacf377c20  RFLAGS: 00010286
->      RAX: 0000000000000000  RBX: ffff9da13fc17fff  RCX: ffff0a00ffffff04
->      RDX: 726f635f63616465  RSI: ffff9da13fc17fff  RDI: ffffffffffffffff
->      RBP: ffffc0bacf377c20   R8: ffff9da0bfd2f010   R9: ffff9da0bfc18000
->      R10: 0000000000001000  R11: 0000000000000000  R12: 726f635f63616465
->      R13: ffff0a00ffffff04  R14: ffffffff9c1a6a4f  R15: ffffffff9c1a6a4f
->      ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
->   #7 [ffffc0bacf377c28] string at ffffffff9b87ce98
->   #8 [ffffc0bacf377c58] vsnprintf at ffffffff9b87efe3
->   #9 [ffffc0bacf377cb8] sprintf at ffffffff9b87f506
-> #10 [ffffc0bacf377d18] <------------------------------>
-> #11 [ffffc0bacf377d28] dev_attr_show at ffffffff9b56d183
-> #12 [ffffc0bacf377d48] sysfs_kf_seq_show at ffffffff9b3272dc
-> #13 [ffffc0bacf377d68] kernfs_seq_show at ffffffff9b32576c
-> #14 [ffffc0bacf377d78] seq_read at ffffffff9b2be407
-> #15 [ffffc0bacf377de8] kernfs_fop_read at ffffffff9b325ffe
-> #16 [ffffc0bacf377e28] __vfs_read at ffffffff9b2940ea
-> #17 [ffffc0bacf377eb0] vfs_read at ffffffff9b2942ac
-> #18 [ffffc0bacf377ee0] sys_read at ffffffff9b29485c
-> #19 [ffffc0bacf377f28] do_syscall_64 at ffffffff9b003ca9
-> #20 [ffffc0bacf377f50] entry_SYSCALL_64_after_hwframe at ffffffff9ba001b1
-> 
-> crash> dis ffffffff9b87cc73
-> 0xffffffff9b87cc73 <string_nocheck+19>: movzbl (%rdx),%r8d
-> 
-> and RDX: 726f635f63616465 was a non-canonical address.
-> 
-> After applying this patch to the instrumented kernel, instead of panic, 
-> the "cat" command produced  "(efault)"
-> 
->>
->> I wonder if this patch would prevent the crash or if the broken
->> kernel would crash later anyway.
-> 
-> A broken kernel has a different issue to be fixed, the upstream kernel 
-> isn't broken, it could just offer better protect in case a bug was 
-> introduced in future.
-> 
->>
->>> That said, I realized that not all
->>> architecture implement meaningful kern_addr_valid(), so this line
->>>      if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
->>> is still need.  I'll send v2.
->>
->> Please, add linux-mm@kvack.org into CC. 
-> 
-> Will do.
-> 
->> I wonder if kern_addr_valid()
->> is safe to use anywhere, especially during early boot. I wonder if
->> it would make sense to implement it on all architectures.
-> 
-> On x86 architecture, kern_addr_valid() looks safe to me though, on 
-> several other architectures, it's defined (1).
+At this point in the ongoing process of LSM stacking I'd much rather
+we focus on documenting what we know to work and what is known to be
+problematic without placing any restrictions on the ordering.  I
+believe there are going to be too many "good" combinations to settle
+on one single supported ordering; perhaps at some point in the future
+we can agree on what that ordering should be, but I think there are
+still too many changes in the foreseeable future to settle on an
+ordering now.
 
-You might want to compare this patch, which seems to have some support:
+> > I personally would like to preserve the existing concept where "built"
+> > does *not* equate to "enabled" by default.
+>
+> Yup, understood. I didn't think I was going to win over anyone on that
+> one, but figured I'd just point it out again. ;)
 
-https://lore.kernel.org/lkml/20221018074014.185687-1-wangkefeng.wang@huawei.com/
+Fair enough.
+
+> > > I *still* think there should be a way to leave ordering alone and have
+> > > separate enable/disable control.
+> >
+> > My current opinion is that enabling a LSM and specifying its place in
+> > an ordered list are one in the same.  The way LSM stacking as
+> > currently done almost requires the ability to specify an order if an
+> > admin is trying to meet an security relevant operation visibility
+> > goal.
+>
+> As in an admin wants to see selinux rejections instead of loadpin
+> rejections for a blocked module loading?
+
+When I wrote my response I was thinking more of the BPF LSM, any
+future LSMs that might be merged upstream, and the myriad of security
+requirements admins must meet both now and in the future.
+
+> > We can have defaults, like we do know, but I'm in no hurry to remove
+> > the ability to allow admins to change the ordering at boot time.
+>
+> My concern is with new LSMs vs the build system. A system builder will
+> be prompted for a new CONFIG_SECURITY_SHINY, but won't be prompted
+> about making changes to CONFIG_LSM to include it.
+
+I would argue that if an admin/builder doesn't understand what a shiny
+new LSM does, they shouldn't be enabling that shiny new LSM.  Adding
+new, potentially restrictive, controls to your kernel build without a
+basic understanding of those controls is a recipe for disaster and I
+try to avoid recommending disaster as a planned course of action :)
 
 -- 
-~Randy
+paul-moore.com
