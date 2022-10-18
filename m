@@ -2,107 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E607602EF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6AE602EFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiJRO5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S230060AbiJRO5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJRO5C (ORCPT
+        with ESMTP id S230038AbiJRO53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:57:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F01D9960;
-        Tue, 18 Oct 2022 07:57:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87A2BB81F93;
-        Tue, 18 Oct 2022 14:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3400BC433D6;
-        Tue, 18 Oct 2022 14:56:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666105019;
-        bh=qmaUREKKpKGIfPeuyHVYJiyiQ+vwR1CgcRLVNMmVems=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=tSWyO8KMO7Eo2SWIkFm8Fv/jNMSEMNYxqaBmHHVSbbPRHMjQfB2ay/FZpgWA7e39W
-         TXzVXcbSBYKTZ5fDw6ycHeG2ZTRJPHwkt14ThiP4HYcDhErgUhpJVbQfvVaIOLU4Hj
-         n6JpOEQlYl6uDQfd3C84PQ6Q2/jgU+2bRd5IR49wX/FwG1rqbD4l6srz8vsxOWGD+y
-         YkcPnRVYrf6eavusnsT1t5IkuOEkCLvZbH8GxwUUSJqI3MiE7L1adVjFQjNhBTx4L4
-         K85dWprbcFpCdFAxFmEWOcBJIZ3Fy/WiJeAJMd+gsrfjlReJDVtqMeAgHj1faQyG4C
-         +ZEqAplLOQp2A==
-Message-ID: <c303cf0701a2c09487bda33012bc0ceb79f211c0.camel@kernel.org>
-Subject: Re: [RFC PATCH v7 9/9] vfs: expose STATX_VERSION to userland
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, jack@suse.cz, bfields@fieldses.org,
-        brauner@kernel.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Date:   Tue, 18 Oct 2022 10:56:55 -0400
-In-Reply-To: <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
-References: <20221017105709.10830-1-jlayton@kernel.org>
-         <20221017105709.10830-10-jlayton@kernel.org>
-         <20221017221433.GT3600936@dread.disaster.area>
-         <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 18 Oct 2022 10:57:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52465DAC7C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:57:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B994BED1;
+        Tue, 18 Oct 2022 07:57:29 -0700 (PDT)
+Received: from airbuntu (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D78123F792;
+        Tue, 18 Oct 2022 07:57:22 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 15:57:06 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, qsyousef@gmail.com
+Subject: Re: [PATCH] mailmap: Update email for Qais Yousef
+Message-ID: <20221018145439.ah4m3p25hel752hk@airbuntu>
+References: <20221014141016.539625-1-qyousef@layalina.io>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221014141016.539625-1-qyousef@layalina.io>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-18 at 06:35 -0400, Jeff Layton wrote:
-> On Tue, 2022-10-18 at 09:14 +1100, Dave Chinner wrote:
-> > On Mon, Oct 17, 2022 at 06:57:09AM -0400, Jeff Layton wrote:
-> > > From: Jeff Layton <jlayton@redhat.com>
-> > >=20
-> > > Claim one of the spare fields in struct statx to hold a 64-bit inode
-> > > version attribute. When userland requests STATX_VERSION, copy the
-> > > value from the kstat struct there, and stop masking off
-> > > STATX_ATTR_VERSION_MONOTONIC.
-> >=20
-> > Can we please make the name more sepcific than "version"? It's way
-> > too generic and - we already have userspace facing "version" fields
-> > for inodes that refer to the on-disk format version exposed in
-> > various UAPIs. It's common for UAPI structures used for file
-> > operations to have a "version" field that refers to the *UAPI
-> > structure version* rather than file metadata or data being retrieved
-> > from the file in question.
-> >=20
-> > The need for an explanatory comment like this:
-> >=20
-> > > +	__u64	stx_version; /* Inode change attribute */
-> >=20
-> > demonstrates it is badly named. If you want it known as an inode
-> > change attribute, then don't name the variable "version". In
-> > reality, it really needs to be an opaque cookie, not something
-> > applications need to decode directly to make sense of.
-> >=20
->=20
-> Fair enough. I started with this being named stx_change_attr and other
-> people objected. I then changed to stx_ino_version, but the "_ino"
-> seemed redundant.
->=20
-> I'm open to suggestions here. Naming things like this is hard.
->=20
+On 10/14/22 15:10, Qais Yousef wrote:
+> Update my email address for old entry and add a new entry for my
+> contribution while working with arm to continue support that work.
+> 
+> Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> ---
 
-How about:
+ACK
 
-    STATX_CHANGE / statx->stx_change / STATX_ATTR_CHANGE_MONOTONIC
-
-?
---=20
-Jeff Layton <jlayton@kernel.org>
+>  .mailmap | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/.mailmap b/.mailmap
+> index 380378e2db36..bd51ecdb4cd1 100644
+> --- a/.mailmap
+> +++ b/.mailmap
+> @@ -353,7 +353,8 @@ Peter Oruba <peter@oruba.de>
+>  Pratyush Anand <pratyush.anand@gmail.com> <pratyush.anand@st.com>
+>  Praveen BP <praveenbp@ti.com>
+>  Punit Agrawal <punitagrawal@gmail.com> <punit.agrawal@arm.com>
+> -Qais Yousef <qsyousef@gmail.com> <qais.yousef@imgtec.com>
+> +Qais Yousef <qyousef@layalina.io> <qais.yousef@imgtec.com>
+> +Qais Yousef <qyousef@layalina.io> <qais.yousef@arm.com>
+>  Quentin Monnet <quentin@isovalent.com> <quentin.monnet@netronome.com>
+>  Quentin Perret <qperret@qperret.net> <quentin.perret@arm.com>
+>  Rafael J. Wysocki <rjw@rjwysocki.net> <rjw@sisk.pl>
+> --
+> 2.25.1
+> 
+> 
