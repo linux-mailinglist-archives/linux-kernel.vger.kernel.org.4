@@ -2,137 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DF1602914
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A886C60290C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiJRKK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S229710AbiJRKKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiJRKKK (ORCPT
+        with ESMTP id S230315AbiJRKKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:10:10 -0400
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410896C964;
-        Tue, 18 Oct 2022 03:10:02 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1666087780toqcpdz3
-Received: from [10.4.23.219] ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 18 Oct 2022 18:09:39 +0800 (CST)
-X-QQ-SSF: 00400000000000C0K000000A0000000
-X-QQ-FEAT: TFgy1zK7+HXgfcYLTLlK3TQ03kfXa1/Vu1sUv9tj8xWm8nuVPhGBMcffgoaXY
-        dJItXYor6NypQ0nVlq8AzAovpNvU+Ril7DgWyqxU07mEiKQzTy/bN8vYS9yu+tjUx0jtGR0
-        ZTLcZug8GNChdPGYN70smlMMKawiaS+r+rFLV0nDfGUGCc94IzMIn9ViHqzUIUkA94U90tC
-        N3g3zsJZ63ZfVmLwRCv1lswXFrMUN5raBOhXSLIeDSziEopPY0lSVZVfDRmzP0tGGxF9HRb
-        CT3Lt4v2HoLxeZKJT/f5NLpAOu8zLhohp5a8we6YMX4kXwUPSUw1tVH2QF177CPf+vd9rIP
-        LMJwgY0VOd3i80BKeRtLlGvutFyXH9vFvFhmvMZrP4Tljwo8Gt2oGhLoiewRXtLB9Dvv3ce
-        UhADstclphE=
-X-QQ-GoodBg: 1
-Message-ID: <29BB6624DF28611B+45506374-c2c6-109c-df13-17531f7b1937@uniontech.com>
-Date:   Tue, 18 Oct 2022 18:09:39 +0800
+        Tue, 18 Oct 2022 06:10:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C42501A4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666087806;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T1fNmJPBVIEsz+JLKi8Sx69F/41LoIY1mODMhEBFtEs=;
+        b=aL0dZQDjX+tNYzp3S8yCF2YHOGNQ1NT0bU3r4LncmxVuTfMIyf66q+Or47qOv5NEtuL7Nl
+        jmOIiDgpOD0327cP8Yvr0xdphmSfwHvmaod0k6m5NlBvlIeQA5aUJPgZwMKyKsg9fP/vgz
+        Nu1WuV3XGyYPJTcxgKAJhjgApOKouqo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-447-Z1zQxKcNMca16ckOdHUlEA-1; Tue, 18 Oct 2022 06:10:03 -0400
+X-MC-Unique: Z1zQxKcNMca16ckOdHUlEA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3C87101A52A;
+        Tue, 18 Oct 2022 10:10:02 +0000 (UTC)
+Received: from ovpn-193-156.brq.redhat.com (ovpn-193-156.brq.redhat.com [10.40.193.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 015DE40C94AA;
+        Tue, 18 Oct 2022 10:10:00 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] KVM: VMX: nVMX: Make eVMCS enablement more robust
+Date:   Tue, 18 Oct 2022 12:09:56 +0200
+Message-Id: <20221018101000.934413-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] platform/x86: ideapad-laptop: Disable touchpad_switch
-To:     Hans de Goede <hdegoede@redhat.com>, ike.pan@canonical.com,
-        markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221018061457.26937-1-limanyi@uniontech.com>
- <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
-From:   Manyi Li <limanyi@uniontech.com>
-In-Reply-To: <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=no autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a continuation of "KVM: VMX: Support updated eVMCSv1 revision + use
+vmcs_config for L1 VMX MSRs" work:
+https://lore.kernel.org/kvm/20220830133737.1539624-1-vkuznets@redhat.com/
 
+and a preparation to enabling new eVMCS features for Hyper-V on KVM, namely
+nested TSC scaling.
 
-在 2022/10/18 15:48, Hans de Goede 写道:
-> Hi,
-> 
-> On 10/18/22 08:14, Manyi Li wrote:
->> Ideapads for "Lenovo Yoga 3 Pro 1370" and "ZhaoYang K4e-IML" do not
->> use EC to switch touchpad.
->>
->> Reading VPCCMD_R_TOUCHPAD will return zero thus touchpad may be blocked
->> unexpectedly.
->>
->> Signed-off-by: Manyi Li <limanyi@uniontech.com>
->> ---
->>   drivers/platform/x86/ideapad-laptop.c | 19 +++++++++++++++++++
->>   1 file changed, 19 insertions(+)
->>
->> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
->> index abd0c81d62c4..20b8a94934b4 100644
->> --- a/drivers/platform/x86/ideapad-laptop.c
->> +++ b/drivers/platform/x86/ideapad-laptop.c
->> @@ -1533,6 +1533,24 @@ static const struct dmi_system_id hw_rfkill_list[] = {
->>   	{}
->>   };
->>   
->> +static const struct dmi_system_id no_touchpad_switch_list[] = {
->> +	{
->> +	.ident = "Lenovo Yoga 3 Pro 1370",
->> +	.matches = {
->> +		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
->> +		DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo YOGA 3"),
->> +		},
->> +	},
->> +	{
->> +	.ident = "ZhaoYang K4e-IML",
->> +	.matches = {
->> +		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
->> +		DMI_MATCH(DMI_PRODUCT_VERSION, "ZhaoYang K4e-IML"),
->> +		},
->> +	},
->> +	{}
->> +};
->> +
->>   static void ideapad_check_features(struct ideapad_private *priv)
->>   {
->>   	acpi_handle handle = priv->adev->handle;
->> @@ -1542,6 +1560,7 @@ static void ideapad_check_features(struct ideapad_private *priv)
->>   
->>   	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
->>   	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
->> +	priv->features.touchpad_ctrl_via_ec = !dmi_check_system(no_touchpad_switch_list);
-> 
-> This needs to be:
-> 
-> 	priv->features.touchpad_ctrl_via_ec =
-> 		!acpi_dev_present("ELAN0634", NULL, -1) &&
-> 		!dmi_check_system(no_touchpad_switch_list);
-> 
-> Otherwise you over overriding the results of the ELAN0634 check. Also I wonder if there
-> is not a better way to check for this (for both cases) ?
-> 
-> Is the touchpad on these devices perhaps connected over I2C ? Maybe we need to figure
-> out a way to check for that.
+Future proof KVM against two scenarios:
+- nVMX: A new feature which doesn't have a corresponding eVMCSv1 field gets
+ implemented in KVM but EVMCS1_UNSUPPORTED_* defines are left unchanged.
+- VMX: A new feature supported by KVM but currently missing in eVMCSv1 gets
+ implemented in a future Hyper-V version breaking KVM.
 
-Yes,the touchpad on these devices is connected over I2C.
+Note: 'vmx/evmcs.{c,h}' are renamed to 'vmx/hyperv.{c,h}' in
+https://lore.kernel.org/kvm/20221004123956.188909-7-vkuznets@redhat.com/
 
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
->>   
->>   	if (!read_ec_data(handle, VPCCMD_R_FAN, &val))
->>   		priv->features.fan_mode = true;
-> 
-> 
+Vitaly Kuznetsov (4):
+  KVM: nVMX: Sanitize primary processor-based VM-execution controls with
+    eVMCS too
+  KVM: nVMX: Invert 'unsupported by eVMCSv1' check
+  KVM: nVMX: Prepare to sanitize tertiary execution controls with eVMCS
+  KVM: VMX: Resurrect vmcs_conf sanitization for KVM-on-Hyper-V
+
+ arch/x86/kvm/vmx/evmcs.c | 118 ++++++++++++++++++++++++++++++++-------
+ arch/x86/kvm/vmx/evmcs.h |  93 +++++++++++++++++++++++++-----
+ arch/x86/kvm/vmx/vmx.c   |   5 ++
+ 3 files changed, 180 insertions(+), 36 deletions(-)
 
 -- 
-Manyi Li
+2.37.3
 
