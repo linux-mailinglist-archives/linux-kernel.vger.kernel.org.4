@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EF7602F9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DB0602FA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiJRPYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S229891AbiJRP1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiJRPYW (ORCPT
+        with ESMTP id S229602AbiJRP1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:24:22 -0400
+        Tue, 18 Oct 2022 11:27:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6635625B;
-        Tue, 18 Oct 2022 08:24:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDD0B4885
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:27:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0EDE615C5;
-        Tue, 18 Oct 2022 15:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBB8C433D6;
-        Tue, 18 Oct 2022 15:24:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19851615CD
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B8AC433C1;
+        Tue, 18 Oct 2022 15:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666106659;
-        bh=BC2Hq7y2IYPbSVkSJem2YkCxDtM4WUocEUlVsVjhl5E=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Pi2DQhxFBnpCX6HRCABC6Vnh/z7gDugQU/22bxdQ8rr1lw7bBpww/pIqFP+DW56Yw
-         mOXllpywLImJT1IUVcIpyaCHhWJHRPyxUtUthP7QwHy6+U9TxHtndc+BPeiMwATQAY
-         JieK49edOoqdA2wISlR/IfVRdNqoAcjWa9MB4WoT3AqdYELxTVLzgXHECUHgi66qDH
-         0HZ3sUXrmp3ST57wOe8R+oozatSjOGGZy0AHc+YJZoA1gnNUmXDZ5MasAfsgnv5iwU
-         RIvyvFO2qP6TLKW686CoNaGL+EJXsviDkcIBEY5dDEVTPTR/Yhm27y8vzTKS889WA+
-         77dD++DAsi3iA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 03E285C0528; Tue, 18 Oct 2022 08:24:18 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 08:24:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org, tglx@linutronix.de,
-        pmladek@suse.com, Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
-Message-ID: <20221018152418.GR5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
- <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <87k04x4e0r.fsf@jogness.linutronix.de>
+        s=k20201202; t=1666106852;
+        bh=ndYwEDeqYYf4sJcQ9WB423y7Tx/pDZ5xDnUm1T2vjNg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CpLiFvwhxFyJUQGrqKFPYaQRniijzGx0jLG31Dy+yGr2tkELrWR415sTtbsx4TTA2
+         URCcynPkdMHjuB0hEgY6DSKXGUVuEpfBvjq7QT39MIuJz23UlelcqoYEacuPYt/6g6
+         If/P3tMGCjPT6/SdnDaZXUFRM8Z+VpchrR+LKbCaihSrF4TVksVMoyAsktduG2klHm
+         gcyUbW1nOQXJH0nBOPoelJrEIR/uZQp2i8fE8ZQtG6LU0b4I6yVxzZRt2o5yqHO4H0
+         zEKczOCamb8aKxGy5Kdmcye/VXvGpY+HF1TM6S7PAXW/ap4x1GsB6PvcnWGe5xtzv6
+         D7LNE+8Cy6OaA==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] mm/memremap: Mark folio_span_valid() as __maybe_unused
+Date:   Tue, 18 Oct 2022 08:26:46 -0700
+Message-Id: <20221018152645.3195108-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k04x4e0r.fsf@jogness.linutronix.de>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,37 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 12:39:40PM +0206, John Ogness wrote:
-> Hi Paul,
-> 
-> On 2022-09-29, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > This RFC series provides the second version of an NMI-safe SRCU reader
-> > API in the guise of srcu_read_lock_nmisafe() and
-> > srcu_read_unlock_nmisafe().
-> 
-> I would like to post a new series for printk that will rely on the
-> NMI-safe reader API. From the feedback of this series it appears that
-> the RFC v2 is an acceptable starting point. How should we proceed?
+When building without CONFIG_DEBUG_VM, clang warns:
 
-Currently, I have this series on -rcu branch srcunmisafe.2022.10.03a,
-with Frederic's patches on branch "dev".  I will be producing a shiny
-new branch with your fix and Frederic's debug later today, Pacific Time.
-With luck, based on v6.1-rc1.
+  mm/memremap.c:495:13: error: function 'folio_span_valid' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+  static bool folio_span_valid(struct dev_pagemap *pgmap, struct folio *folio,
+              ^
+  1 error generated.
 
-> Will Frederic be sending a patch for the extra safety checks using
-> srcu_nmi_flags? Are you planning on posting a new version? Should I
-> include this or another version within my upcoming series?
+folio_span_valid() is only used within a instance of VM_WARN_ON_ONCE(),
+which evaluates to BUILD_BUG_ON_INVALID() with CONFIG_DEBUG_VM=n, which
+ultimately resolves to sizeof(), which is fully resolved at compile
+time. Basically, the warning is flagging that folio_span_valid() is
+only used in a compile time context and will not be called at run time.
 
-I will be incorporating these commits from Frederic:
+Since this is expected given the configuration, mark folio_span_valid()
+as __maybe_unused so that there is no warning.
 
-6558b914fc4e ("srcu: Warn when NMI-unsafe API is used in NMI")
-5dc788627109 ("srcu: Explain the reason behind the read side critical section on GP start")
-54a118fce487 ("srcu: Debug NMI safety even on archs that don't require it")
+Fixes: 07108d5bfeeb ("fsdax: introduce pgmap_request_folios()")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1739
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
 
-Are there other patches I should be applying?
+I am aware the Fixes SHA is probably not stable but I figured I would
+include it anyways.
 
-> Thanks for all your help on this!
+ mm/memremap.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-And looking forward to the new improved printk()!
+diff --git a/mm/memremap.c b/mm/memremap.c
+index 53fe30bb79bb..02b796749b72 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -492,8 +492,9 @@ void free_zone_device_page(struct page *page)
+ 	put_dev_pagemap(page->pgmap);
+ }
+ 
+-static bool folio_span_valid(struct dev_pagemap *pgmap, struct folio *folio,
+-			     int nr_folios)
++static __maybe_unused bool folio_span_valid(struct dev_pagemap *pgmap,
++					    struct folio *folio,
++					    int nr_folios)
+ {
+ 	unsigned long pfn_start, pfn_end;
+ 
 
-							Thanx, Paul
+base-commit: f5938bbbb79d48ca167e305c228dccbecea0309e
+-- 
+2.38.0
+
