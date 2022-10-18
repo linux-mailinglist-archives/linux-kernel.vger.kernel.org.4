@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E6160262F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425ED602632
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiJRHv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S230239AbiJRHvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiJRHvY (ORCPT
+        with ESMTP id S230112AbiJRHvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:51:24 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349A330F79;
-        Tue, 18 Oct 2022 00:51:23 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id o21so10657979ple.5;
-        Tue, 18 Oct 2022 00:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vl1/9ecW7HlTpZtLd+FURiia+/oZgLLP0reQXEaxp9o=;
-        b=XwJwK3PJkvykkn0S5pGaZYkikEofEiVjJheRW4oOoKev2JE3DDM3XariJP/edXDo81
-         ZkdksitDaNko4Nm7vlh8MzlIJaQ9t3QfQdni+SaYCed4k1QIVsl5GRfZYfuTiQk8Lc6r
-         FUOsM4C92LPDmilPmf+5KPJulsnGAnER5cJl/WfocCGF/EeIQdjaFZ2+zdN5sedq18kr
-         mD6w4HhzHgH4j/7tHj2LYCdZ5cHyCoGkvwa8np3mPpejWuwsAQs2DJ7qeferWZfwcbGF
-         79+w+myDh7BiacNkQpvUp8fmyOLVFV7GqyQ2jn/Q/uwT0Tk8PwMHbzAXzxwFWyZhZSPN
-         R9Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vl1/9ecW7HlTpZtLd+FURiia+/oZgLLP0reQXEaxp9o=;
-        b=0yVy7jitAq6QxDeSBdB5pv8rLnB2vRSOJRw0CDb64l6rEtOYNxzph0zsvlJgn1/S7w
-         8pLPZyrcCwOIPMeVZjyQe8q1LRa4pzO0WzpV+IC2y9PPVRdn9qhnxkScMNtlEwjn6S+t
-         +RK4TIRsRMBn9SaPlpUI/6M+CDeN1wcfxb4nOLPaFQKCSqvwEr7blba56XrDGwnEi8Fi
-         JJFd6RXowTOtLQbkOpBE2clwKd67VLL069Ok5xFLafVUqdfWx8K/2GSIrWKD0hrjSWmh
-         i0zn5ktYd6yMpeIkF3GidgbcAkUNwtO8wMks+nmMXcW48ZQKrMHHEbZyN8fO/LnP+bKa
-         hnCg==
-X-Gm-Message-State: ACrzQf1O/cUxWbuyPtnvOhihyCWryLPRSK7fIdqClSnfdO9Mr4KVUOxA
-        QxfWj/pt3d/gaZxzKXYofF4=
-X-Google-Smtp-Source: AMsMyM7phLraWst4ozJkYCzYw63EtiFbS/zuVQszTlq88IO4Xq/7s4KAOuCblGjNUCz26cSQVTrpaQ==
-X-Received: by 2002:a17:902:d4d1:b0:185:52c4:f4c6 with SMTP id o17-20020a170902d4d100b0018552c4f4c6mr1794027plg.154.1666079482728;
-        Tue, 18 Oct 2022 00:51:22 -0700 (PDT)
-Received: from carlis-virtual-machine.localdomain ([156.236.96.164])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b00176e6f553efsm7901882pli.84.2022.10.18.00.51.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 00:51:22 -0700 (PDT)
-From:   Xuezhi Zhang <zhangxuezhi3@gmail.com>
-To:     zhangxuezhi1@coolpad.com, deller@gmx.de, jiasheng@iscas.ac.cn
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fbdev: gbefb: convert sysfs snprintf to sysfs_emit
-Date:   Tue, 18 Oct 2022 15:51:18 +0800
-Message-Id: <20221018075118.922212-1-zhangxuezhi3@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 18 Oct 2022 03:51:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0120932EC0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:51:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D9BEB81D59
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:51:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC4EC433C1;
+        Tue, 18 Oct 2022 07:51:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666079487;
+        bh=qXmLkh0UgSQwux0+DfA9LGTjAJnTJ7fl/3kbuY3Lpzg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=adC40N1khkg9Wm9NCqD2wkYvmZWKBb+HjEByg98moE+fIqBVuNM7J/5D1s6wZY7pc
+         EtbGffbts3t/u7eZSBHPSuhOsyEa6/x7XQ/4a759xJ13MI8cNNpm7ENIXV1Ff5DjJp
+         lDtzsKg6Tieccfq5nDbroeCM9Goe0Y8R7IE+QKqs=
+Date:   Tue, 18 Oct 2022 09:51:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, Sasha Levin <sashal@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [linux-stable-rc:linux-5.19.y 2987/3450]
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts:12:10: fatal error:
+ 'sc8280xp.dtsi' file not found
+Message-ID: <Y05a/L0wGwh7lbjy@kroah.com>
+References: <202210181441.Uo9b9Ie7-lkp@intel.com>
+ <Y05Swd1ZRAF4SnTV@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y05Swd1ZRAF4SnTV@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+On Tue, Oct 18, 2022 at 09:16:17AM +0200, Johan Hovold wrote:
+> On Tue, Oct 18, 2022 at 02:50:44PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> > head:   28b57a08d7fd284fdeb0c92ce4aeea9bcd023911
+> > commit: c4c72ceb23b538b6cbcc9cbf9463b71c3e2ae933 [2987/3450] arm64: dts: qcom: sc8280xp: Add reference device
+> > config: arm64-randconfig-r011-20221017
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm64 cross compiling tool for clang build
+> >         # apt-get install binutils-aarch64-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=c4c72ceb23b538b6cbcc9cbf9463b71c3e2ae933
+> 
+> Sasha, why on earth are you backporting commit ccd3517faf18 ("arm64:
+> dts: qcom: sc8280xp: Add reference device")?!
 
-Follow the advice of the Documentation/filesystems/sysfs.rst
-and show() should only use sysfs_emit() or sysfs_emit_at()
-when formatting the value to be returned to user space.
+Looks like it was added as a dependancy of another bugfix.  I've dropped
+it now, and the bugfix.
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
- drivers/video/fbdev/gbefb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+thanks,
 
-diff --git a/drivers/video/fbdev/gbefb.c b/drivers/video/fbdev/gbefb.c
-index 1582c718329c..000b4aa44241 100644
---- a/drivers/video/fbdev/gbefb.c
-+++ b/drivers/video/fbdev/gbefb.c
-@@ -1060,14 +1060,14 @@ static const struct fb_ops gbefb_ops = {
- 
- static ssize_t gbefb_show_memsize(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%u\n", gbe_mem_size);
-+	return sysfs_emit(buf, "%u\n", gbe_mem_size);
- }
- 
- static DEVICE_ATTR(size, S_IRUGO, gbefb_show_memsize, NULL);
- 
- static ssize_t gbefb_show_rev(struct device *device, struct device_attribute *attr, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%d\n", gbe_revision);
-+	return sysfs_emit(buf, "%d\n", gbe_revision);
- }
- 
- static DEVICE_ATTR(revision, S_IRUGO, gbefb_show_rev, NULL);
--- 
-2.25.1
-
+greg k-h
