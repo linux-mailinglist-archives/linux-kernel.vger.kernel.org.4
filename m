@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB796602FCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49794602FCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiJRPeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S230369AbiJRPfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiJRPeR (ORCPT
+        with ESMTP id S229949AbiJRPfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:34:17 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD41345986
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:34:15 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id d13so8863603qko.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=25PwxIH+CB97dQc4eYwSt0zvL+9wdm4R+OmiPZ9+hOg=;
-        b=vLCXOO3oU0ZfQ0dydfle8XZIw6pQRu1gYVIIAwm5/C5Z9kElQDG4Wdw7FaKtDb/3vH
-         6L3EFRNJ48E/8Su58KBIoQr6x1ISfg+pc15iKh36ehQnTy3aor+3MtJ9YNbnUm5WFamG
-         T8QGI1FR8d2Q/8wtOZxUvXvmnf7eInEJaBVOcp3Z7FerGEdhHUySCLv2GSMsDd7s3Wpq
-         +cmnBhNNF9wluRo/mIXqtr2X4DASPofO+zmW43gG3RyFcGKGEes+fgCY/sMfSIGkFqmR
-         Csdx4fhuGtfacVm0h+Ko4XPK68GPevIlWBMRCPRfjdwL28FZSlk/f2HqjIw6EMEfT86f
-         eU+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=25PwxIH+CB97dQc4eYwSt0zvL+9wdm4R+OmiPZ9+hOg=;
-        b=1A2ZYtmIrIFH/Y3PkBPe5U2KoWGewjAqwMrKFq/cnv9qRodsJFoH6CtxRqq2bS5j+5
-         uEUrevp+BvmdTk3OyD30NV40tum4BYH7QK7J82zgLn41E9dI4v8YGPNNx5whXuooOnZd
-         AZctQGX53SHtXWBY7imQEXy4/s2xSICMlVcNobOOw+gF/H4nBL2HhieHTmRYIgmb9R8b
-         HIHJNtEy2M8N7E7WbW7O7xbz//Q8yW01phycdVAyGXVB6v88roUA6N3oEkWuz0oKkSFj
-         kUJqc/dsLSHhath1joccHCunkIH+W/1BUBsmuoOApYKVgscEhS2qIiAQuml2tuyo78cZ
-         w/kQ==
-X-Gm-Message-State: ACrzQf17hvwmFxtLSSN3py3YFz2PuQ8bweaWQYn0+4aK2YNkDy4TucBI
-        OBkn4nRgaIzR84j3CtWY+HR0KQ==
-X-Google-Smtp-Source: AMsMyM4onaH5hp02rLlllBdKdj8sdj3xKkov6Gukv4sG8mr4QrOTttP/uDoCR+/g5eDLB7qKAf2uZQ==
-X-Received: by 2002:a05:620a:131b:b0:6ec:bce7:99a9 with SMTP id o27-20020a05620a131b00b006ecbce799a9mr2259247qkj.84.1666107255022;
-        Tue, 18 Oct 2022 08:34:15 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id t12-20020ac8530c000000b0039a55f78792sm2031844qtn.89.2022.10.18.08.34.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 08:34:14 -0700 (PDT)
-Message-ID: <58883c51-d72e-31c8-0632-211b532c584e@linaro.org>
-Date:   Tue, 18 Oct 2022 11:34:13 -0400
+        Tue, 18 Oct 2022 11:35:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EA27695E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666107301;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=949/Qi1pDpeDMTUI2Vsxrx0ghbk4aAqTjCByU1zx60Q=;
+        b=XcOI/0lXGxMMs+9MGCtDoIkD5xYL/AJiAcjND9IQBxui0tL8nqwcHbMmx+aYHzN4iwMmg5
+        yd7i4ncW8In50GY+6S0/P9JeQj9t2f3qXxu/+R1y6ro+TzzOKFE9zFaxmsjddCxzBI5+Pu
+        bW5MH+/kDMW3ns7RTNUo7yeimx5Aj1Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-257-WVrt5p-1PuaGMq31yPQtIQ-1; Tue, 18 Oct 2022 11:34:56 -0400
+X-MC-Unique: WVrt5p-1PuaGMq31yPQtIQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E64A811E81;
+        Tue, 18 Oct 2022 15:34:55 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.74])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7BDF7C15BA4;
+        Tue, 18 Oct 2022 15:34:52 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        David.Laight@ACULAB.COM, carlos@redhat.com,
+        Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Subject: Re: [PATCH v4 01/25] rseq: Introduce feature size and alignment ELF
+ auxiliary vector entries
+References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
+        <20220922105941.237830-2-mathieu.desnoyers@efficios.com>
+        <877d1726kd.fsf@oldenburg.str.redhat.com>
+        <d128fb7d-6b24-5caf-8e3a-99d55922cd95@efficios.com>
+        <0a4a1a2c-964e-dcc6-948a-fd252962aaff@efficios.com>
+Date:   Tue, 18 Oct 2022 17:34:50 +0200
+In-Reply-To: <0a4a1a2c-964e-dcc6-948a-fd252962aaff@efficios.com> (Mathieu
+        Desnoyers's message of "Mon, 17 Oct 2022 13:32:07 -0400")
+Message-ID: <87fsfli1r9.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RFC v1 01/12] dt-bindings: phy: mediatek,tphy: add support for
- mt7986
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221017104141.7338-1-linux@fw-web.de>
- <20221017104141.7338-2-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221017104141.7338-2-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/10/2022 06:41, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add compatible string for mt7986.
-> 
+* Mathieu Desnoyers:
 
+> If we extend struct rseq to a size that makes the compiler use an
+> alignment larger than 32 bytes in the future, and if the compiler uses 
+> that larger alignment knowledge to issue instructions that require the
+> larger alignment, then it would be incorrect for user-space to
+> allocate the struct rseq on an alignment lower than the required
+> alignment.
+>
+> Indeed, on rseq registration, we have the following check:
+>
+> if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq))
+> [...]
+>    return -EINVAL;
+>
+> Which would break if the size of struct rseq is large enough that the
+> alignment grows larger than 32 bytes.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I never quite understood the reason for that check, it certainly made
+the glibc implementation more complicated.  But to support variable
+sizes internally, we'll have to put in some extra effort anyway, so that
+it won't matter much in the end.  As long as the required alignment
+isn't larger than the page size. 8-/
 
-Best regards,
-Krzysztof
+> You mentioned we could steal some high bits from AT_RSEQ_FEATURE_SIZE
+> to put the alignment. What is the issue with exposing an explicit 
+> AT_RSEQ_ALIGN ? It's just a auxv entry, so I don't see it as a huge
+> performance concern to access 2 entries rather than one.
+
+I don't mind too much, we already have a large on-stack array in the
+loader so that we can decode the auxiliary vector without a humongous
+switch statement.  But eventually that approach will stop working if the
+set of interesting AT_* values become too large and discontinuous.
+
+Thanks,
+Florian
 
