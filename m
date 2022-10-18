@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E820F602E31
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2FC602E44
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 16:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbiJROUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 10:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S231210AbiJROVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 10:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiJROT6 (ORCPT
+        with ESMTP id S229535AbiJROVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 10:19:58 -0400
+        Tue, 18 Oct 2022 10:21:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AED34721;
-        Tue, 18 Oct 2022 07:19:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817B21E715
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:21:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F91615B7;
-        Tue, 18 Oct 2022 14:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29293C433D7;
-        Tue, 18 Oct 2022 14:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666102787;
-        bh=UwmPyOiwydUIdoR7qtf/m6yxy1stYEPyZMeeo4TZY14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R036K5fJI9bW6k3F8MXTK0o6oXd0L9l0JJIuXDgvJRQ+DpELLMrnQaskuGzQ3PNpl
-         5SrOaU0RImyCgy32sfxC5eRRZkNEp6CCLBW25aO6x1Bkln65rxCmf2mpg9TCz8kk9K
-         49nf3vSPxpB+mdHV2ZtAVD3BEBnCBh7pwwRRqLSzYJO7BjyixoCxxzoTaYPiDq+78S
-         iXL/ctAVdWpKPxyEKulq9MR5haIiI0mMw/eriYtqI2GRCtgocVOI8ygVejKRrEr0CY
-         G18dGkYqF/f23stp1lqmkQTbEwj7EgOANQq23OrqgNibEnsHfKKVxnzI31IUVj6WEO
-         H7UcJvj2YRQqw==
-Date:   Tue, 18 Oct 2022 16:19:44 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-Subject: Re: [PATCH v3 1/2] i2c: xiic: Added platform module alias for the
- xiic I2C driver
-Message-ID: <Y062ANTWvCy4e4XT@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Michal Simek <michal.simek@amd.com>, tumic@gpxsee.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@amd.com>,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-References: <20221018140338.7080-1-tumic@gpxsee.org>
- <20221018140338.7080-2-tumic@gpxsee.org>
- <611cd6ff-e6f1-ceed-b2eb-7dcbbf18b36b@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E603615B0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 14:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DB3C433C1;
+        Tue, 18 Oct 2022 14:20:59 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 10:21:00 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH] ftrace,kcfi: Separate ftrace_stub() and
+ ftrace_stub_graph()
+Message-ID: <20221018102100.5aa55644@gandalf.local.home>
+In-Reply-To: <Y06dg4e1xF6JTdQq@hirez.programming.kicks-ass.net>
+References: <Y06dg4e1xF6JTdQq@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Dgrm/z4i6fDpduV7"
-Content-Disposition: inline
-In-Reply-To: <611cd6ff-e6f1-ceed-b2eb-7dcbbf18b36b@amd.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 18 Oct 2022 14:35:15 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
---Dgrm/z4i6fDpduV7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Different function signatures means they needs to be different
+> functions; otherwise CFI gets upset.
+
+This is due to this commit:
+
+commit b83b43ffc6e4b514ca034a0fbdee01322e2f7022
+Author: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Date:   Tue Oct 15 09:00:55 2019 -0400
+
+    fgraph: Fix function type mismatches of ftrace_graph_return using ftrace_stub
+    
+    The C compiler is allowing more checks to make sure that function pointers
+    are assigned to the correct prototype function. Unfortunately, the function
+    graph tracer uses a special name with its assigned ftrace_graph_return
+    function pointer that maps to a stub function used by the function tracer
+    (ftrace_stub). The ftrace_graph_return variable is compared to the
+    ftrace_stub in some archs to know if the function graph tracer is enabled or
+    not. This means we can not just simply create a new function stub that
+    compares it without modifying all the archs.
+    
+    Instead, have the linker script create a function_graph_stub that maps to
+    ftrace_stub, and this way we can define the prototype for it to match the
+    prototype of ftrace_graph_return, and make the compiler checks all happy!
 
 
-> You should likely send it separately because this will go via different
-> maintainer tree.
->=20
-> Not a problem with this patch.
->=20
-> Acked-by: Michal Simek <michal.simek@amd.com>
+Perhaps its time to just modify all the archs and get rid of that hack.
 
-I'll pick it, no problems.
+Ideally, all the archs should be switched over to the FTRACE_WITH_ARGS and
+we can get rid of all of this. But that may be asking for too many ponies.
 
+At the very least, perhaps we should just make all the archs define a
+ftrace_stub_graph that need it and add a new CONFIG_HAVE.. that allows us to
+remove some of this from the core code.
 
---Dgrm/z4i6fDpduV7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNOtfwACgkQFA3kzBSg
-Kba/nA//bRwF+nTsr5x6lTTadUjNVu/UZ30i4nbf4nmtXG6YyQIkO8uQctkW0x7B
-DD7Cquhh+7Ub6L0PQm/L1L4eaevdtpo/5mMzrbSO4pNkzkyBtTSGYYTxlJJtE+Tk
-APLHphVmBeMcObGyP/MElkjUMPCjyTcBHiKKljMa0M4Uqn0K3vPmJbppGVVAb00W
-U6AksjJbjVJGX+1TqhW/I6/+oZ+GXmtd03MUfxh17bkw0ZU1HGnQwex+0FcypFur
-32mlhl3M5ASMr/xe2kjA+2UPfaRXAWBlT+mX20bWcel70kIYMFX1LF/B4kntR3HY
-xaLd3qnbwez/hfGNukcScXIgZEOZEPSDbAB9rxZAlfUOsJIMtmy4f+ijDJiy2ddZ
-FOawoo09Hxyucu9GnzYeOajAXIWP52wsBzBNYuC3QVfCC4cGtKQ9NzxcpsoReAZw
-D3FJAQ/U5Ty6OnQ2IyLOm+TigJ67w0eEV4xOXl89z6Rznd8WpbYraoVgxrktTZ5a
-2O6jwZyklrZNZ9oRny1WYsgZ6jRiU9ZkNZYfLer9+EN1FA0rmGaIo3hNtZAjaSNK
-icr9shXMj5bs/azDko7ZgRO7TTcIuVluypfZz9Q2XZIjfUlR84adH8BEKsz90xGw
-ZLfH6atu+u4M5FoZ+KelDHwQ98c7qmHeqUqTIHNrD0mHDcgW8oE=
-=vNmL
------END PGP SIGNATURE-----
-
---Dgrm/z4i6fDpduV7--
+-- Steve
