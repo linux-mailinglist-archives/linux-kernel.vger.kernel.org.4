@@ -2,104 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D8B603019
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FD5603024
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiJRPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S231322AbiJRPue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiJRPte (ORCPT
+        with ESMTP id S231287AbiJRPt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:49:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6910CC96DF;
-        Tue, 18 Oct 2022 08:49:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE7F161553;
-        Tue, 18 Oct 2022 15:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FAF7C433B5;
-        Tue, 18 Oct 2022 15:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666108159;
-        bh=Se1jgISa/ShCTPfJ44VmplkGxxjQVjFu0CQ3G/F1Jts=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p80qb6SqOk2bAztterNKvKM1efYuyA7UcmMPFQUbfGniRC9XQF3qNVweqGx0lfwRQ
-         C0FdZVOl504+BXTO2Us1HWumNIvFjZ9r+ZDyYSHJcpnTcnIvnoAezFK2k+Of/dmXO9
-         C6hOw28Sm+omxzbMKWbbFp1HgOu4sgqvPwERy/PbaTdt2ig2eJNH+yZ1nWFke8UlKn
-         tasl+dXZXh43631Dq3QFt8oJ62mDSHZbD45kL4SPKi1Q8POsLWnnMls8o8AmwDzcTG
-         6potF/gD2A0DoKjwsbW0/fNh5YhgGJQZr2YgMUwrLJo1MaWXBlKGKiELx1hDrUUNBz
-         ufdl184sW4SXA==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Tom Zanussi <zanussi@kernel.org>,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/5] tracing: docs: Update histogram doc for .percent/.graph and 'nohitcount'
-Date:   Wed, 19 Oct 2022 00:49:16 +0900
-Message-Id: <166610815604.56030.4124933216911828519.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <166610811353.56030.10023036046735082272.stgit@devnote2>
-References: <166610811353.56030.10023036046735082272.stgit@devnote2>
-User-Agent: StGit/0.19
+        Tue, 18 Oct 2022 11:49:57 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFC622BC1;
+        Tue, 18 Oct 2022 08:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jlcxA1wJ/GgonSkru8M9jDo39zGihqj0ye56NeeAZqE=; b=a6jDpIlqRUHOK5t8sl/lTtmxHC
+        KQOmwUjw3j0q+6WFkWnS4+frZSE7kM5s314K+jhI3DtPesg0WpXTrlfU6aavuAgz2K0MdOs6TXlgW
+        d/F05dQucWAYwBnjXUBaufNt9YK1L5heeFWtHr8KVn5s5dorioUksmgmntLUGG7it1DNECdaWz10J
+        xQd0P95Svab+1e9MyJWlOLM0Pb03GoPD1GwGcbZL/FMEpdRmKxMJzukEU2CXA3kG/AXd31QzxDCvH
+        ENkzTL2ytvSHjmMTvOkcLhSLdkuiqedwYWKDR/bKjtCkbXPRmT9ESrv1TYEsmy95qr7eM3r6OXHyP
+        5StUISfw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1okoqQ-007xY3-CW; Tue, 18 Oct 2022 15:49:30 +0000
+Date:   Tue, 18 Oct 2022 08:49:30 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, hch@infradead.org, ebiggers@kernel.org,
+        paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+Subject: Re: [PATCH v4 4/6] blk-wbt: don't show valid wbt_lat_usec in sysfs
+ while wbt is disabled
+Message-ID: <Y07LCnJN5q8ueV7X@infradead.org>
+References: <20220930031906.4164306-1-yukuai1@huaweicloud.com>
+ <20220930031906.4164306-5-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930031906.4164306-5-yukuai1@huaweicloud.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>  static ssize_t queue_wb_lat_show(struct request_queue *q, char *page)
+>  {
+> +	u64 lat;
+> +
+>  	if (!wbt_rq_qos(q))
+>  		return -EINVAL;
+>  
+> -	return sprintf(page, "%llu\n", div_u64(wbt_get_min_lat(q), 1000));
+> +	lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
+> +
+> +	return sprintf(page, "%llu\n", lat);
 
-Update histogram document for .percent/.graph suffixes and 'nohitcount'
-option.
+	if (wbt_disabled(q))
+		return sprintf(page, "0\n");
+	return sprintf(page, "%llu\n", div_u64(wbt_get_min_lat(q), 1000));
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Tested-by: Tom Zanussi <zanussi@kernel.org>
----
- Documentation/trace/histogram.rst |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+but otherwise the patch looks fine:
 
-diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
-index 859fd1b76c63..b2da4e9c62e8 100644
---- a/Documentation/trace/histogram.rst
-+++ b/Documentation/trace/histogram.rst
-@@ -25,7 +25,7 @@ Documentation written by Tom Zanussi
- 
-         hist:keys=<field1[,field2,...]>[:values=<field1[,field2,...]>]
-           [:sort=<field1[,field2,...]>][:size=#entries][:pause][:continue]
--          [:clear][:name=histname1][:<handler>.<action>] [if <filter>]
-+          [:clear][:name=histname1][:nohitcount][:<handler>.<action>] [if <filter>]
- 
-   When a matching event is hit, an entry is added to a hash table
-   using the key(s) and value(s) named.  Keys and values correspond to
-@@ -79,6 +79,8 @@ Documentation written by Tom Zanussi
- 	.log2          display log2 value rather than raw number
- 	.buckets=size  display grouping of values rather than raw number
- 	.usecs         display a common_timestamp in microseconds
-+        .percent       display a number of percentage value
-+        .graph         display a bar-graph of a value
- 	=============  =================================================
- 
-   Note that in general the semantics of a given field aren't
-@@ -137,6 +139,12 @@ Documentation written by Tom Zanussi
-   existing trigger, rather than via the '>' operator, which will cause
-   the trigger to be removed through truncation.
- 
-+  The 'nohitcount' (or NOHC) parameter will suppress display of
-+  raw hitcount in the histogram. This option requires at least one
-+  value field which is not a 'raw hitcount'. For example,
-+  'hist:...:vals=hitcount:nohitcount' is rejected, but
-+  'hist:...:vals=hitcount.percent:nohitcount' is OK.
-+
- - enable_hist/disable_hist
- 
-   The enable_hist and disable_hist triggers can be used to have one
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>
