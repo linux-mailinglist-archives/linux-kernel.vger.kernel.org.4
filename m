@@ -2,161 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4B060259A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B276025F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiJRHWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S230152AbiJRHij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbiJRHWS (ORCPT
+        with ESMTP id S229788AbiJRHi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:22:18 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFB3AB82B;
-        Tue, 18 Oct 2022 00:22:16 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ms4wd6MCQzpVhq;
-        Tue, 18 Oct 2022 15:18:57 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 15:22:11 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <xuwei5@huawei.com>, <wsa@kernel.org>, <robh+dt@kernel.org>,
-        <robh@kernel.org>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH next v6 2/2] dt-bindings: i2c: add entry for hisilicon,i2c-ascend910
-Date:   Tue, 18 Oct 2022 15:30:12 +0800
-Message-ID: <20221018073012.309355-2-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
-In-Reply-To: <20221018073012.309355-1-chenweilong@huawei.com>
-References: <20221018073012.309355-1-chenweilong@huawei.com>
+        Tue, 18 Oct 2022 03:38:29 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20C013E14;
+        Tue, 18 Oct 2022 00:38:26 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso15921380fac.6;
+        Tue, 18 Oct 2022 00:38:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mwq8mRE5qiqVJEFTV8PMaTxlxiFl0HRvXCI1ESDIAgA=;
+        b=uP1CncYWtzYR0ygZYHBqCusvQI3qLcARvKVbzdEo2TAs5CmdLuBBDSnvJC3CnEFymc
+         maOukJKMOanGciB5JKE+T7waF5I+BUrDHfHLjWFH3Mb4iO2Y9l4k5b4Q8zfXsmy7r6gY
+         FZ0M4pDzN7VVTrbIBwKD/hhhW0hX2swM2tihpju5CyITx3ey6gEwzsQ04iQCsN3BYFBZ
+         Mf/+G4stxLCBiFpIMxX6+FVVEEP3yvW+/SG49U9spnuwOZ4yujCiARpmS7lHoVb9COwy
+         juvLB7ddY+Q5RCRjySpjacgpYTr6+AqlCT4BusL/EyruYzuWYcFhOm5MmUvznr2r91RY
+         uH9g==
+X-Gm-Message-State: ACrzQf1/N7RbVTPNFnCefcE7yJPZk/vQj7w4sbummdliIV+DhK/c8kWo
+        E3d1oqf3tYmu0uyiT4X0rawbBxEnkAZQy6Ln
+X-Google-Smtp-Source: AMsMyM5csXdwREba7gw4KDgdxJUyoCgiqL87E6aLqBvQuxbl5zbkJBBFIZNp0ZmIdatu48jChwFRVg==
+X-Received: by 2002:a05:6870:fb90:b0:131:db1f:7785 with SMTP id kv16-20020a056870fb9000b00131db1f7785mr855895oab.189.1666078705512;
+        Tue, 18 Oct 2022 00:38:25 -0700 (PDT)
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com. [209.85.161.45])
+        by smtp.gmail.com with ESMTPSA id t9-20020a9d7489000000b006618bbede10sm5569962otk.53.2022.10.18.00.38.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 00:38:25 -0700 (PDT)
+Received: by mail-oo1-f45.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so2964440ooo.8;
+        Tue, 18 Oct 2022 00:38:25 -0700 (PDT)
+X-Received: by 2002:a81:848c:0:b0:356:e173:2c7a with SMTP id
+ u134-20020a81848c000000b00356e1732c7amr1276352ywf.502.1666078253767; Tue, 18
+ Oct 2022 00:30:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018074014.185687-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20221018074014.185687-1-wangkefeng.wang@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Oct 2022 09:30:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWwAgPkifAkah7MoBKBoyB4tb+HM5cgvenwNFaAfbg+UQ@mail.gmail.com>
+Message-ID: <CAMuHMdWwAgPkifAkah7MoBKBoyB4tb+HM5cgvenwNFaAfbg+UQ@mail.gmail.com>
+Subject: Re: [PATCH] mm: remove kern_addr_valid() completely
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-fsdevel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the new compatible for HiSilicon i2c.
+On Tue, Oct 18, 2022 at 9:25 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> Most architectures(except arm64/x86/sparc) simply return 1 for
+> kern_addr_valid(), which is only used in read_kcore(), and it
+> calls copy_from_kernel_nofault() which could check whether the
+> address is a valid kernel address, so no need kern_addr_valid(),
+> let's remove unneeded kern_addr_valid() completely.
+>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
----
-Change since v5:
-- Use hisilicon,i2c-ascend910 as compatible string. For more information about
-  the SoC at https://e.huawei.com/en/products/cloud-computing-dc/atlas/ascend-910
-- Alphabetic order the MAINTAINERS
+>  arch/m68k/include/asm/pgtable_mm.h        |  2 -
+>  arch/m68k/include/asm/pgtable_no.h        |  1 -
 
-Change since v4:
-- Add description for SoC specific compatibles.
-- Use the clock binding.
-- Fix decimal, space, case, unused labels.
-Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/#m4e1c915ead04f4e2e48d69131053a966801625db
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
 
- .../bindings/i2c/hisilicon,i2c-xxx.yaml       | 70 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 71 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
+Gr{oetje,eeting}s,
 
-diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-new file mode 100644
-index 000000000000..a7285ddc260d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/i2c/hisilicon,i2c-xxx.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: HiSilicon common IIC controller Device Tree Bindings
-+
-+maintainers:
-+  - yangyicong@huawei.com
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: hisilicon,i2c-ascend910
-+    description:
-+      The HiSilicon common IIC controller can be used for many different
-+      types of SoC such as Huawei Ascend AI series chips.
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    default: 400000
-+
-+  i2c-sda-falling-time-ns:
-+    default: 343
-+
-+  i2c-scl-falling-time-ns:
-+    default: 203
-+
-+  i2c-sda-hold-time-ns:
-+    default: 830
-+
-+  i2c-scl-rising-time-ns:
-+    default: 365
-+
-+  i2c-digital-filter-width-ns:
-+    default: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c@5038b0000 {
-+      compatible = "hisilicon,i2c-ascend910";
-+      reg = <0x38b0000 0x10000>;
-+      interrupts = <0x0 120 0x4>;
-+      i2c-sda-falling-time-ns = <56>;
-+      i2c-scl-falling-time-ns = <56>;
-+      i2c-sda-hold-time-ns = <56>;
-+      i2c-scl-rising-time-ns = <56>;
-+      i2c-digital-filter;
-+      i2c-digital-filter-width-ns = <0x0>;
-+      clocks = <&alg_clk>;
-+      clock-frequency = <400000>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ad32dc9c4822..961e4442fb08 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9211,6 +9211,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
- W:	https://www.hisilicon.com
-+F:	Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
- F:	drivers/i2c/busses/i2c-hisi.c
- 
- HISILICON LPC BUS DRIVER
--- 
-2.31.GIT
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
