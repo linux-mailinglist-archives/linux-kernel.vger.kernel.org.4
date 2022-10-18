@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18826035D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367956035B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJRWYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 18:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
+        id S229623AbiJRWPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 18:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJRWYJ (ORCPT
+        with ESMTP id S229454AbiJRWPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 18:24:09 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53593B5160
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666131849; x=1697667849;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=zFu8kdh1AJjPdS6IUdrA9kk3zAfabiMarV67lFLQNUw=;
-  b=YYXbvuiLwI6XSvN9nv08q0XyNmcV2xaxD8lB8X1335Xsm/07yh0mqUTt
-   fsBRjZqh+koT69pJWPmJSVHi17YtOs1UctqGtd08jm3L5qPDI2i8XkPDy
-   XgQsuIGQb1PtmBOn2by7SklKbvfxWSbl9v3zxGgCGpB3OFlh0BQcSn7rV
-   zDAxUeagaQLj4pgfWiV/vc219LwPF3G1Ock6oEhDfGX1dWklVE2d1mrmK
-   KlZj74VtFVgrtAxfs1aSxZEh36Tf/lAcCIC4RMbU+pl9ZQxMyDyxAiVdT
-   jl4dMBUyI80Ef4ZOrz3/Re1d32+9BP4YjNnrt4ys/MHhoWoGjPvTytAv4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="304984894"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="304984894"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 15:24:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="623834773"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="623834773"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga007.jf.intel.com with ESMTP; 18 Oct 2022 15:24:08 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, yuan.yao@intel.com,
-        chang.seok.bae@intel.com
-Subject: [PATCH 1/1] x86/fpu: Fix copy_xstate_to_uabi() to copy init states correctly
-Date:   Tue, 18 Oct 2022 15:13:49 -0700
-Message-Id: <20221018221349.4196-2-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221018221349.4196-1-chang.seok.bae@intel.com>
-References: <20220824191223.1248-1-chang.seok.bae@intel.com>
- <20221018221349.4196-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 18:15:18 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8B5804B5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:15:15 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id 8so9639343qka.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o1+6PbWMEZLRW3S77WbnMQfGu4kXttl8N+DvVGyhW/Q=;
+        b=qXT+UqSyXWVwTSLwYNr6KL7ccmG6J2dg7gP1KdS9CpARawmnb3SKus2CuK5galCDqN
+         4aZwRaU6YS5f3KLZrf5diQ7vy2Fq9GQcf7UjWsU2BVLiK9aGGUuB5gxMrOjlzyQJgmhu
+         rFRmzaE9s1c8DqlameY1ohQtQbIbBqTb4d90tQze3HcjGsqXv6tjAp5FTFinMbjjFjk6
+         zdW4EgF3Z71vdk2vYJn9yGZ0tEDLWjxDcAMJR8F6+pWoSe8dfuMblokexVqFEL1pKfIV
+         MxPwVxcer7zWYEBM7phARw4W2iIn891CEJSpksrIvDgsiJiZgRufBjgr0SWY/FekC2ru
+         wIjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o1+6PbWMEZLRW3S77WbnMQfGu4kXttl8N+DvVGyhW/Q=;
+        b=UBEUsz9d4xyPp5qF546gwZwysfyC8PM+iOMVYWjW2ec15/eFrnVmRO8CSv7Zst/oXV
+         KbIjWIo/App19q8L+RnuHiW8FuqdTFZtweSUsKtPxGXUjwpKpDoXAgTgJrjUjMNa9l4h
+         F50EWZTYCPt8es/57nhhgnVv+mjtJu/NpLLnYm3chF5W5D350yMELmwUOu/yi6pzMTTq
+         pJP3B9dpLTcDQiZ6UANS/x0iVEaKu5mquv/mjH8vz/dwQsnjSTSwg8M42rpxq5z7XDl8
+         kx2uk9Zg8/2xmfgMK86wb0Zua9uHiFloGanjZtzWF1ISGaVzldsNybw2cOiYyEN9GtKS
+         JCzQ==
+X-Gm-Message-State: ACrzQf0kqhe7DOVPIHqO8ezzFe9JuveWnApYVhit2QEVmnwmwQvGBhis
+        gdAfmwm4qUnMvf9qKigp3Pcl9Q==
+X-Google-Smtp-Source: AMsMyM4n4rW3pBJps152lVMjljUvaNQKvWvMUkEy+3ZsuPxuuRReiqeSNaPp9WczWH/qLSv3ceSUvg==
+X-Received: by 2002:a05:620a:1f3:b0:6e9:e33d:3bb6 with SMTP id x19-20020a05620a01f300b006e9e33d3bb6mr3518789qkn.115.1666131314216;
+        Tue, 18 Oct 2022 15:15:14 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id s7-20020a05620a254700b006ec59941acasm3413120qko.11.2022.10.18.15.15.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 15:15:13 -0700 (PDT)
+Message-ID: <d4158329-5a7a-c622-a8f8-ea2508b663c6@linaro.org>
+Date:   Tue, 18 Oct 2022 18:15:12 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221014221138.7552-1-quic_molvera@quicinc.com>
+ <20221014221138.7552-3-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221014221138.7552-3-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an extended state component is present in fpstate, but in init state,
-the function copies from init_fpstate via copy_feature().
+On 14/10/2022 18:11, Melody Olvera wrote:
+> Add the base DTSI files for QDU1000 and QRU1000 SoCs, including base
+> descriptions of CPUs, GCC, RPMHCC, QUP, TLMM, and interrupt-controller
+> to boot to shell with console on these SoCs.
+> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/qdu1000.dtsi | 1646 +++++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/qru1000.dtsi |   27 +
+>  2 files changed, 1673 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> new file mode 100644
+> index 000000000000..777734b30f56
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> @@ -0,0 +1,1646 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/clock/qcom,gcc-qdu1000.h>
+> +#include <dt-bindings/clock/qcom,rpmh.h>
+> +#include <dt-bindings/dma/qcom-gpi.h>
+> +#include <dt-bindings/interconnect/qcom,qdu1000.h>
+> +#include <dt-bindings/power/qcom-rpmpd.h>
+> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
 
-But, dynamic states are not present in init_fpstate. Then accessing
-init_fpstate for those will explode like this:
+As pointed out by kernel test robot, your patchset is unbuildable and
+unmerge'able, so automated tools cannot test it.
 
- BUG: kernel NULL pointer dereference, address: 0000000000000000
- ...
- RIP: 0010:memcpy_erms+0x6/0x10
-  ? __copy_xstate_to_uabi_buf+0x381/0x870
-  fpu_copy_guest_fpstate_to_uabi+0x28/0x80
-  kvm_arch_vcpu_ioctl+0x14c/0x1460 [kvm]
-  ? __this_cpu_preempt_check+0x13/0x20
-  ? vmx_vcpu_put+0x2e/0x260 [kvm_intel]
-  kvm_vcpu_ioctl+0xea/0x6b0 [kvm]
-  ? kvm_vcpu_ioctl+0xea/0x6b0 [kvm]
-  ? __fget_light+0xd4/0x130
-  __x64_sys_ioctl+0xe3/0x910
-  ? debug_smp_processor_id+0x17/0x20
-  ? fpregs_assert_state_consistent+0x27/0x50
-  do_syscall_64+0x3f/0x90
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Instead of referencing init_fpstate, simply zero out the userspace buffer
-for the state component in an all-zeros init state.
-
-Fixes: 2308ee57d93d ("x86/fpu/amx: Enable the AMX feature in 64-bit mode")
-Reported-by: Yuan Yao <yuan.yao@intel.com>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Tested-by: Yuan Yao <yuan.yao@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Link: https://lore.kernel.org/lkml/BYAPR11MB3717EDEF2351C958F2C86EED95259@BYAPR11MB3717.namprd11.prod.outlook.com/
----
- arch/x86/kernel/fpu/xstate.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index e77cabfa802f..efa9e3a269fc 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1141,10 +1141,14 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
- 			 */
- 			pkru.pkru = pkru_val;
- 			membuf_write(&to, &pkru, sizeof(pkru));
-+		} else if (!(header.xfeatures & BIT_ULL(i))) {
-+			/*
-+			 * Every extended state component has an all zeros
-+			 * init state.
-+			 */
-+			membuf_zero(&to, xstate_sizes[i]);
- 		} else {
--			copy_feature(header.xfeatures & BIT_ULL(i), &to,
--				     __raw_xsave_addr(xsave, i),
--				     __raw_xsave_addr(xinit, i),
-+			membuf_write(&to, __raw_xsave_addr(xsave, i),
- 				     xstate_sizes[i]);
- 		}
- 		/*
--- 
-2.17.1
+Best regards,
+Krzysztof
 
