@@ -2,87 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBDE602907
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DF1602914
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 12:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJRKJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 06:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        id S230325AbiJRKK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 06:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiJRKJi (ORCPT
+        with ESMTP id S230321AbiJRKKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 06:09:38 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AD01A226
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:09:35 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id f23so13361757plr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 03:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKUSHBzIV9AmjcAPIwH4d1e4/pivyZO+yk3jBrIXqik=;
-        b=Og8qUuzdDioBAnndTRdVzqW2TKX37JQVBINZ/GxEZMvHmg91nkbp/PJcaf8RpNdIEr
-         CX+xnORcAVblgI6/GK7I1zT5c5+88KvTGhc96WQKY4nHKe4MQ34CBQjvxc4GiiK13BwG
-         JbpG2Xjma0DFxR3gRlBpequA1KZ/aXUeyFs4o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zKUSHBzIV9AmjcAPIwH4d1e4/pivyZO+yk3jBrIXqik=;
-        b=J0Dp0enzFWRcITXM3J8dvz21dllxt3nypxvgQfRVDSHXwMd/KLF1Oglvd3Tu/FATuw
-         aJ8M4LzRxUY+OWXNqe8lvGL9s+hZzM4i+h/639Pp7aUQyZEtPDA1IKqsYOOEJdEJx8+F
-         K1h8gD2pBmmFQOEtE4uQ4NZgaSwdmkBGOU5ok8xnt0ssJRp6FbpP9uS79a3SskxXKcjS
-         7QZnCgWxb1/+41lqQDKXXICWRTZPGXAyuPgN65fDWgFCQ8UKKoopK0D9+PtOsuHiG9To
-         sjQTl/jXXiJXNA4S6PRyUfArzocyB4DQ19EEwsGvy9z70qBQjnC5W4LrWq7KOFQkevPL
-         3NBw==
-X-Gm-Message-State: ACrzQf1VZPCqCdywtjUCYvfPFU8elLv9hxn2guENE073uPWI1pGryJ5g
-        SHomLvBy/6WJCTpO+Gkwzkc/wg==
-X-Google-Smtp-Source: AMsMyM5wU1XEsuBMrD5Wn9zq3F5URSQDleuB2+Yfz06/29+vEOi6q0FdiYAl8IeHpZIEEsdsNB+sDA==
-X-Received: by 2002:a17:90b:1c11:b0:20d:459b:ef0e with SMTP id oc17-20020a17090b1c1100b0020d459bef0emr38396657pjb.129.1666087774961;
-        Tue, 18 Oct 2022 03:09:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902ec8100b0017da2798025sm8337107plg.295.2022.10.18.03.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 03:09:33 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 03:09:33 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Michael J Ruhl <michael.j.ruhl@intel.com>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] igb: Proactively round up to kmalloc bucket size
-Message-ID: <202210180307.484A016FE0@keescook>
-References: <20221018092340.never.556-kees@kernel.org>
+        Tue, 18 Oct 2022 06:10:10 -0400
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410896C964;
+        Tue, 18 Oct 2022 03:10:02 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1666087780toqcpdz3
+Received: from [10.4.23.219] ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 18 Oct 2022 18:09:39 +0800 (CST)
+X-QQ-SSF: 00400000000000C0K000000A0000000
+X-QQ-FEAT: TFgy1zK7+HXgfcYLTLlK3TQ03kfXa1/Vu1sUv9tj8xWm8nuVPhGBMcffgoaXY
+        dJItXYor6NypQ0nVlq8AzAovpNvU+Ril7DgWyqxU07mEiKQzTy/bN8vYS9yu+tjUx0jtGR0
+        ZTLcZug8GNChdPGYN70smlMMKawiaS+r+rFLV0nDfGUGCc94IzMIn9ViHqzUIUkA94U90tC
+        N3g3zsJZ63ZfVmLwRCv1lswXFrMUN5raBOhXSLIeDSziEopPY0lSVZVfDRmzP0tGGxF9HRb
+        CT3Lt4v2HoLxeZKJT/f5NLpAOu8zLhohp5a8we6YMX4kXwUPSUw1tVH2QF177CPf+vd9rIP
+        LMJwgY0VOd3i80BKeRtLlGvutFyXH9vFvFhmvMZrP4Tljwo8Gt2oGhLoiewRXtLB9Dvv3ce
+        UhADstclphE=
+X-QQ-GoodBg: 1
+Message-ID: <29BB6624DF28611B+45506374-c2c6-109c-df13-17531f7b1937@uniontech.com>
+Date:   Tue, 18 Oct 2022 18:09:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018092340.never.556-kees@kernel.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] platform/x86: ideapad-laptop: Disable touchpad_switch
+To:     Hans de Goede <hdegoede@redhat.com>, ike.pan@canonical.com,
+        markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221018061457.26937-1-limanyi@uniontech.com>
+ <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
+From:   Manyi Li <limanyi@uniontech.com>
+In-Reply-To: <bade32f9-594c-3efd-d6da-ea6a4a433948@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:25:23AM -0700, Kees Cook wrote:
-> Kees Cook (2):
->   igb: Do not free q_vector unless new one was allocated
->   igb: Proactively round up to kmalloc bucket size
-> 
->  drivers/net/ethernet/intel/igb/igb_main.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
 
-Ugh, yay for my MUA vs commas. Sorry for any future typo bounce spam. :(
+
+在 2022/10/18 15:48, Hans de Goede 写道:
+> Hi,
+> 
+> On 10/18/22 08:14, Manyi Li wrote:
+>> Ideapads for "Lenovo Yoga 3 Pro 1370" and "ZhaoYang K4e-IML" do not
+>> use EC to switch touchpad.
+>>
+>> Reading VPCCMD_R_TOUCHPAD will return zero thus touchpad may be blocked
+>> unexpectedly.
+>>
+>> Signed-off-by: Manyi Li <limanyi@uniontech.com>
+>> ---
+>>   drivers/platform/x86/ideapad-laptop.c | 19 +++++++++++++++++++
+>>   1 file changed, 19 insertions(+)
+>>
+>> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
+>> index abd0c81d62c4..20b8a94934b4 100644
+>> --- a/drivers/platform/x86/ideapad-laptop.c
+>> +++ b/drivers/platform/x86/ideapad-laptop.c
+>> @@ -1533,6 +1533,24 @@ static const struct dmi_system_id hw_rfkill_list[] = {
+>>   	{}
+>>   };
+>>   
+>> +static const struct dmi_system_id no_touchpad_switch_list[] = {
+>> +	{
+>> +	.ident = "Lenovo Yoga 3 Pro 1370",
+>> +	.matches = {
+>> +		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> +		DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo YOGA 3"),
+>> +		},
+>> +	},
+>> +	{
+>> +	.ident = "ZhaoYang K4e-IML",
+>> +	.matches = {
+>> +		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> +		DMI_MATCH(DMI_PRODUCT_VERSION, "ZhaoYang K4e-IML"),
+>> +		},
+>> +	},
+>> +	{}
+>> +};
+>> +
+>>   static void ideapad_check_features(struct ideapad_private *priv)
+>>   {
+>>   	acpi_handle handle = priv->adev->handle;
+>> @@ -1542,6 +1560,7 @@ static void ideapad_check_features(struct ideapad_private *priv)
+>>   
+>>   	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
+>>   	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
+>> +	priv->features.touchpad_ctrl_via_ec = !dmi_check_system(no_touchpad_switch_list);
+> 
+> This needs to be:
+> 
+> 	priv->features.touchpad_ctrl_via_ec =
+> 		!acpi_dev_present("ELAN0634", NULL, -1) &&
+> 		!dmi_check_system(no_touchpad_switch_list);
+> 
+> Otherwise you over overriding the results of the ELAN0634 check. Also I wonder if there
+> is not a better way to check for this (for both cases) ?
+> 
+> Is the touchpad on these devices perhaps connected over I2C ? Maybe we need to figure
+> out a way to check for that.
+
+Yes,the touchpad on these devices is connected over I2C.
+
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+>>   
+>>   	if (!read_ec_data(handle, VPCCMD_R_FAN, &val))
+>>   		priv->features.fan_mode = true;
+> 
+> 
 
 -- 
-Kees Cook
+Manyi Li
+
