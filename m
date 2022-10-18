@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9A7602F14
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8B8602F0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiJRPBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S230324AbiJRPAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiJRPBi (ORCPT
+        with ESMTP id S230305AbiJRO75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:01:38 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E281DB5167
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:01:35 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso7767316otb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:01:35 -0700 (PDT)
+        Tue, 18 Oct 2022 10:59:57 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46426402C7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:59:55 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id a29so23031767lfo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 07:59:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BI7ij/O+BSLU/t/Hdd+xrpFJ0CCm9rH48Y2X7l03iy8=;
-        b=W/eRXiRCD8z9KFyxp5NwSjDvAORN/Uqo67mkzrL2ojeDzzj7SQrDsrefZIL1w5EBIR
-         S9ZBS5oi+0JoWJXcsX2A6jmMbx5WrqVMHNbu1r7dYdxvUgZ3J+BndBdL9JlFf2VzL2Si
-         PY149hfGF5eXBv9Ntw1dXU8wa5llaJT6EYOSHhC0eVz1Grto7dghBYr/R5U/U9ahJr1L
-         MBhnfZR/FNtygbC5vU7Rv4hGuzINRZhgjqETMuzzZaFgMoNSG0dS2oFyIUMPeI9cLX5/
-         7Dp6h9wEEmHxlmc3HwM0LHZ1oYsWgizQABze6A1w47shY/RNbiMIzYPkXw+3ZRssedXk
-         z15A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lYrie4UT5hMp1hkII136MefcVp75Ib7e68vnqkG16Pc=;
+        b=cd1ADZB/0EC+8KIbN69XzJIqS0kCUC4kJyyq/X5H8U9eHkDgH3jDbuZrCWR+GWxuWP
+         MBsYwzZttATQp3Jpv+aO5JT0ImAlgApe+HrsPVD6EcjGt+f1Bzxj9j6d5PBTgeN6usT3
+         FHb+JfbYJV9v7YeNBFe1uh5yvJDW5IraF6SJajXdcE9ccBKTDgP/B6GGDo4DePNMP1qX
+         mJaiz20i7a6q7mFvv2bj5PUv3F0RUNSyl3SHx/b0sVOUUtn2AuV0KNE7Fd/kCyStmisz
+         5/LhiE0QoehwCirHHux+C38XDW3Q9++txKhjck6U6WEH1eeR8C5U6B/yc9QbamTdlGit
+         qD0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BI7ij/O+BSLU/t/Hdd+xrpFJ0CCm9rH48Y2X7l03iy8=;
-        b=VARQJo2hqFD58WyVvBdst0yVibzqqt1fHetnqCODh9/JIXzV04JybkFpVZuQtRkdtr
-         f0l5mgtCOKNAxG7FnrY6ccK58wlzOGzjlgf89YTwXfqjKthbKx3SbvgdbTuKz8Z8N9/O
-         W7ZBO9dAIYuY8wnz9QZhZ8OmwfjScLr48dKKGZOxPMB9AXXew3hQ6x0shTQ0MDovAbd0
-         IIE1vYdel7fvBKyWrVZH0a8mJaZ7wWYMx54TfyBVkzKh7rom7a4ehNn0QfXTPtc5k5J1
-         aZFpYjyAWhCDpFArxMVjWRyqpma9SHqBOZ2429fYvxz+pOpP7nuge3yGsgJO3f5dLuZc
-         3cKQ==
-X-Gm-Message-State: ACrzQf2OH1UC60MoiREQ6jZJFh/nWAp/WCtcwdCSEdwdn/Yv/Akjna5p
-        YlViuUTunAt9jV9oA+qL3R0=
-X-Google-Smtp-Source: AMsMyM5dxqvwl2xST5anu3oixMG5EhIq4rZx1LRoGSjUdGxEjruYBC6VxddSypGolpxyRDThAvGxIw==
-X-Received: by 2002:a05:6830:4120:b0:661:d839:cc63 with SMTP id w32-20020a056830412000b00661d839cc63mr1559640ott.51.1666105294679;
-        Tue, 18 Oct 2022 08:01:34 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id x27-20020a056870a79b00b001372c1902afsm6224450oao.52.2022.10.18.08.01.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 08:01:33 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 07:59:22 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andreas Schwab <schwab@suse.de>, linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v2 5/5] lib/cpumask: add FORCE_NR_CPUS config option
-Message-ID: <Y06/SipcWdh4uIqd@yury-laptop>
-References: <20220905230820.3295223-1-yury.norov@gmail.com>
- <20220905230820.3295223-6-yury.norov@gmail.com>
- <CAMuHMdUL0WxYjfRDxLWZG7Xu=2xTQkueathvpwWfLpqhG6NkFQ@mail.gmail.com>
- <CAMuHMdW2H4egcmv238Q_5LBeu9BE=H1fm=n4vZGCGYzhg2VN1A@mail.gmail.com>
- <mvmlepdb66h.fsf@suse.de>
- <CAMuHMdVeHPR_JH0dJ+WSddjd8_hax70JRzd4pqHLNvgbh+-znw@mail.gmail.com>
- <Y065nbfVQwZhwt51@yury-laptop>
- <Y067uYGTaA93Hn3z@smile.fi.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lYrie4UT5hMp1hkII136MefcVp75Ib7e68vnqkG16Pc=;
+        b=0Va+R1I177ESvcmDwMofrwWUgiFPcCmBjzUNx0er1RDhHSbBehe2p4RpXv6ZV8JZD5
+         LxxzaxBWNLYLKVP6J6zgwbbD27D7W3P/VP+Geb2BGy/+uG8KMHhmfroKzwuOvlg9FnX/
+         00sKgRCsr65Qg94f+kluPCqa8f9MOfRXCmChPbP2jXtMG/eW8AZZCmtVzmb6GVQuXq9q
+         99cvMePnUOKrhn1mHskDb9s3Brb4/vH2/sqwpMZ22Us0Iciu7TY8A/RP5itTQS/4tv9b
+         /G06G5wjTn/hBW1guF0294aD1pZkYBLFuyMxYaGCKK5RiKFf9a+1PipjOqDuT313fm9L
+         AHwg==
+X-Gm-Message-State: ACrzQf0EdHEnTXETpVp9MtMYUOOLU/H+NC80UEKzo1IauLoZUqRIcmM0
+        vvV0D4ssAO2hvnEvTF/K+ahG2YDxwjqWFB9qEY36yw==
+X-Google-Smtp-Source: AMsMyM5XwfMnXRbvHP4edGUVgtisf62Gh0MV76ebekK8GwU1N/ss0ilrXOQrSWkpUokjJjHAQDlTBqZ/O70ux3GP/Y4=
+X-Received: by 2002:a19:5f52:0:b0:4a2:2429:c6d5 with SMTP id
+ a18-20020a195f52000000b004a22429c6d5mr1279215lfj.291.1666105192923; Tue, 18
+ Oct 2022 07:59:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y067uYGTaA93Hn3z@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220829171021.701198-1-pgonda@google.com> <20220829171021.701198-7-pgonda@google.com>
+ <Yz8dpB5+RFjEhA3n@google.com> <CAMkAt6oZQc4jqF7FOXOKkpbP3c4NXxPumVVjX9gXwPCh-zbtYg@mail.gmail.com>
+ <Y02ZLFcDQbX6lP9z@google.com> <CAMkAt6q0g5Ua=PwLXa2oA4zCQUaHuEQ3pTXycD61HU6-dtQ5Gg@mail.gmail.com>
+ <Y028WrU3pmEQqWDq@google.com>
+In-Reply-To: <Y028WrU3pmEQqWDq@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 18 Oct 2022 08:59:40 -0600
+Message-ID: <CAMkAt6pvT15teuYWjz7r1vmUP5McDp76qjxQ26_oeg5mTnv5NA@mail.gmail.com>
+Subject: Re: [V4 6/8] KVM: selftests: add library for creating/interacting
+ with SEV guests
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
+        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
+        andrew.jones@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,30 +74,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 05:44:09PM +0300, Andy Shevchenko wrote:
-> On Tue, Oct 18, 2022 at 07:35:09AM -0700, Yury Norov wrote:
-> > On Tue, Oct 18, 2022 at 03:50:31PM +0200, Geert Uytterhoeven wrote:
-> 
-> ...
-> 
-> > For those who choose FORCE_NR_CPUS, it's required to set NR_CPUS
-> > to a value that matches to what's parsed from DT.
-> > 
-> > Can you please look at the draft below that disables FORCE_NR_CPUS
-> > in allmodconfig? If it's OK with you, I'll send a patch. If you think
-> > that there are architectures where it's not possible to set correct
-> > NR_CPUS at compile time for some reason, I'll add ARCH_UNFORCE_NR_CPUS
-> > option.
-> 
-> Instead you may simply add
-> 
-> 	depends on CONFIG_$ARCH/$MACHINE=n
-> 
-> and so on to the FORCE_NR_CPUS, no?
+On Mon, Oct 17, 2022 at 2:34 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Oct 17, 2022, Peter Gonda wrote:
+> > On Mon, Oct 17, 2022 at 12:04 PM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > On Mon, Oct 17, 2022, Peter Gonda wrote:
+> > > > This refactor sounds good, working on this with a few changes.
+> > > >
+> > > > Instead of kvm_init_vm_address_properties() as you suggested I've added this:
+> > > >
+> > > > @@ -272,6 +275,8 @@ struct kvm_vm *____vm_create(enum vm_guest_mode
+> > > >  mode, uint64_t nr_pages)
+> > > >                 vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
+> > > >  #endif
+> > > >
+> > > > +       kvm_init_vm_arch(vm);
+> > >
+> > > Why?  I'm not necessarily opposed to adding kvm_init_vm_arch(), but since x86
+> > > "needs" a dedicated hook to unpack the mode, why not piggyback that one?
+> > >
+> >
+> > Well I since I need to do more than just
+> > kvm_init_vm_address_properties() I thought the more generic name would
+> > be better. We need to allocate kvm_vm_arch, find the c-bit, and call
+> > KVM_SEV_INIT. I can put it back in that switch case if thats better,
+> > thoughts?
+> >
+> > > > +
+> > > >         vm_open(vm);
+> > > >
+> > > >         /* Limit to VA-bit canonical virtual addresses. */
+> > > >
+> > > > And I need to put kvm_arch_vm_post_create() after the vCPUs are
+> > > > created because the ordering we need is: KVM_SEV_INIT -> Create vCPUS
+> > > > -> KVM_SEV_LAUNCH_FINISH.
+> > >
+> > > Hrm, that's annoying.  Please don't use kvm_arch_vm_post_create() as the name,
+> > > that's a better fit for what Vishal is doing since the "vm_post_create()" implies
+> > > that it's called for "all" VM creation paths, where "all" means "everything
+> > > except barebones VMs".  E.g. in Vishal's series, kvm_arch_vm_post_create() can
+> > > be used to drop the vm_create_irqchip() call in common code.  In your case, IIUC
+> > > the hook will be invoked from __vm_create_with_vcpus().
+> > >
+> > > I'm a little hesitant to have an arch hook for this case since it can't be
+> > > all-or-nothing (again, ignoring barebones VMs).  If a "finalize" arch hook is added,
+> > > then arguably tests that do __vm_create() and manually add vCPUs should call the
+> > > arch hook, i.e. we'd be adding maintenance burden to tests that in all likelihood
+> > > don't care about SEV and never will.
+> > >
+> > > It's somewhat unfortunate, but dedicated vm_sev_create_with_one_vcpu() and
+> > > and vm_sev_create_with_vcpus() wrappers is probably the least awful solution.
+> >
+> > Make sense. I think we can go back to your suggestion of
+> > kvm_init_vm_address_properties() above since we can now do all the
+> > KVM_SEV_* stuff. I think this means we don't need to add
+> > VM_MODE_PXXV48_4K_SEV since we can set up the c-bit from inside of
+> > vm_sev_create_*(), thoughts?
+>
+> Configuring the C-bit inside vm_sev_create_*() won't work (at least not well).
+> The C-bit needs to be known before kvm_vm_elf_load(), i.e. can't be handled after
+> __vm_create(), and needs to be tracked inside the VM, i.e. can't be handled before
+> __vm_create().
+>
+> The proposed kvm_init_vm_address_properties() seems like the best fit since the
+> C-bit (and TDX's S-bit) is stolen from GPA space, i.e. directly affects the other
+> values computed in that path.
+>
+> As for the kvm_vm_arch allocation ugliness, when we talked off-list I didn't
+> consider the need to allocate in kvm_init_vm_address_properties().  That's quite
+> gross, especially since the pointer will be larger than the thing being allocated.
+>
+> With that in mind, adding .../include/<arch>/kvm_util.h so that "struct kvm_vm_arch"
+> can be defined and referenced directly doesn't seem so bad.  Having to stub in the
+> struct for the other architectures is annoying, but not the end of the world.
 
-Yes, if there's just one machine like that. If there's many of them, the
-'depends' list would be too long.
+I'll make "struct kvm_vm_arch" a non pointer member, so adding
+/include/<arch>/kvm_util.h files.
 
-I hope there's no such a weird machines, and we don't need that at
-all. Let's see what Geert will say.
+But I think we do not need VM_MODE_PXXV48_4K_SEV, see:
 
+struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t policy, void *guest_code,
+                                           struct kvm_vcpu **cpu)
+{
+        enum vm_guest_mode mode = VM_MODE_PXXV48_4K;
+        uint64_t nr_pages = vm_nr_pages_required(mode, 1, 0);
+        struct kvm_vm *vm;
+        uint8_t measurement[512];
+        int i;
+
+        vm = ____vm_create(mode, nr_pages);
+
+        kvm_sev_ioctl(vm, KVM_SEV_INIT, NULL);
+
+        configure_sev_pte_masks(vm);
+
+        *cpu = vm_vcpu_add(vm, 0, guest_code);
+        kvm_vm_elf_load(vm, program_invocation_name);
+
+        sev_vm_launch(vm, policy);
+
+        /* Dump the initial measurement. A test to actually verify it
+would be nice. */
+        sev_vm_launch_measure(vm, measurement);
+        pr_info("guest measurement: ");
+        for (i = 0; i < 32; ++i)
+                pr_info("%02x", measurement[i]);
+        pr_info("\n");
+
+        sev_vm_launch_finish(vm);
+
+        return vm;
+}
