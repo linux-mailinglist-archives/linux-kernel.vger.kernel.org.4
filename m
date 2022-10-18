@@ -2,179 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B9D602F13
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485F4602F17
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiJRPB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S230381AbiJRPC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiJRPBZ (ORCPT
+        with ESMTP id S230288AbiJRPCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:01:25 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EDC11145
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:01:24 -0700 (PDT)
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 18 Oct 2022 11:02:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4A6DBBFC;
+        Tue, 18 Oct 2022 08:02:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C993A3F56F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1666105279;
-        bh=eKS6yWmMyojFT+rt6lz+sSid3ThtmkubFc+40+Tp6k8=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=KpX8NArBtzPlrldPvVZeF+Hj3zwwKLZbkh5yeWUhrCofOgkmEtqHgAyDMivttOm6l
-         rug0BMEiYsNzWMwWrEgZZtcDzKzcdyEoxClw7v7uCrIMXMBrmgNRfVV+JjYb8wfdHD
-         GFaBoxr9SzSVwYGXEAFkxKhQv1nIgfIY7Q4Yq600/J5BjHgyYeavbcUOvGh0kMtfIi
-         Ra/9pjEtHS8u9d1hUn1wNRZKrfT/v4pa9Q53dnfGrD/XkOaILoMtyPZH0S7DbENJPk
-         fRTzUiLIMeM1YllUJmrAkcqtvv4vJyai3/h/cXlEbeA6UmTVOk5zyiJkmqWH0//rIM
-         R3DoXKoWcwpPQ==
-Received: by mail-qt1-f198.google.com with SMTP id cr15-20020a05622a428f00b0039cf1f8c94fso2352321qtb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 08:01:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eKS6yWmMyojFT+rt6lz+sSid3ThtmkubFc+40+Tp6k8=;
-        b=mTlYNNAye3SgPjBdiXCajODi9BdNd26/LiwdIoeCs9jVY4E8mikKAno54bLQ46wZY5
-         zZI/Mdtz0H8vCvGEpm0zZQ81w4bXBqSvBey7YaiWEFq/ISnVePRp6iKkXGwnrUldGLQm
-         wtvJWIjYleHKYANex6pp1zIEugTWnobh0vcLQOGnbTHyygS9+NQXltUAz1+E/Md8SQF0
-         4UNSF74A7G2tLVga6BgHWAyMXbSGTIwzTkPosL8QpA+UWq0di3P3k2wWmrSiDQrAKJlk
-         ++k4Y058CO+RgZg6Ov1OW1rkMu++28M+4oucXehpFaWRJiMNsIT4NrV1/348nTnTGBGQ
-         I1Kw==
-X-Gm-Message-State: ACrzQf22dHKjmhBtUykMWz7dIY8gcTswLvQZZxhVW/3YzvkZ0X+Dxcbd
-        Xc3Y8Qbo2h7eyRh8UZRMg966BBEARgjAJ+IXvfG8fTFNkr06vgMOcEdJV0u75vsknaXJlteKR2t
-        qecbdDlHnAOROo2h/AyDg75L2yW9YQIDbq5gOK2NGiVvOgkCxqZzKZn3WKA==
-X-Received: by 2002:a05:6214:19c9:b0:4b2:fe6f:90f9 with SMTP id j9-20020a05621419c900b004b2fe6f90f9mr2662145qvc.66.1666105277523;
-        Tue, 18 Oct 2022 08:01:17 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6xytzQByWh7C8hBLdqhpI6w72qMrcqLyc3YNybBSV1Prvl9EkgXA1/A4+HFlbrm8xhLrZSaR9MxAxAM7gJ4vA=
-X-Received: by 2002:a05:6214:19c9:b0:4b2:fe6f:90f9 with SMTP id
- j9-20020a05621419c900b004b2fe6f90f9mr2662098qvc.66.1666105277170; Tue, 18 Oct
- 2022 08:01:17 -0700 (PDT)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C80A0B81F94;
+        Tue, 18 Oct 2022 15:02:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83774C433D6;
+        Tue, 18 Oct 2022 15:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666105340;
+        bh=7/gSW/YAwojZ7rDGfHVc1ctabTFOpK3OWU/NQqBOtHw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z5kp4mGnLs85wnBjb8szwJHbw6vmzj0gjEP0Ax2jCOP4VnQBuRMnYScTtWnrLL7m1
+         95xDI/uLa/XJRtnpCd8qysURAtjDI8sLjrcBrpZYkoYdg3MLHqoJ0ttyA/TQaAVGnX
+         /hvlUH1S9Ctx3z3lg0pTDBIRUsQ3fg9xXEHwqZt0cSMTSlkiT1Z5YztBWjgEKCbs/C
+         GIinoNw8dk+WoyOACVLfZtKNZCx8Erx9fl8zJPLQnj134LcIPJ/i3GK450IE8AWQk2
+         sZzldoCpKcURVr/9R1xLQlrplM6nTh3LEurTV+9UplsOPwq22QgPp/2KwprRdS/8Pe
+         MdcZDlbKEhjKQ==
+Date:   Tue, 18 Oct 2022 17:02:13 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Petr Vorel <pvorel@suse.cz>,
+        Jonathan McDowell <noodles@fb.com>,
+        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 4/9] ima: Move ima_file_free() into LSM
+Message-ID: <20221018150213.7n4sv7rtsh6lshd5@wittgenstein>
+References: <20221013222702.never.990-kees@kernel.org>
+ <20221013223654.659758-4-keescook@chromium.org>
 MIME-Version: 1.0
-References: <20221018091316.415685-1-emil.renner.berthing@canonical.com>
- <20221018132921.5fsbiz254npk2fci@pengutronix.de> <CAJM55Z_v069EJmnr_nLFx9CQV9HfAOc2vCFv95VSip59zLFvjA@mail.gmail.com>
-In-Reply-To: <CAJM55Z_v069EJmnr_nLFx9CQV9HfAOc2vCFv95VSip59zLFvjA@mail.gmail.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Tue, 18 Oct 2022 17:01:01 +0200
-Message-ID: <CAJM55Z8i7JiQgccZxxLrPCio=5rT43ruTnn=83x=n0Wz+xhebw@mail.gmail.com>
-Subject: Re: [PATCH v1] pwm: sifive: Always let the first pwm_apply_state succeed
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Wesley W. Terpstra" <wesley@sifive.com>,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221013223654.659758-4-keescook@chromium.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 16:56, Emil Renner Berthing
-<emil.renner.berthing@canonical.com> wrote:
->
-> On Tue, 18 Oct 2022 at 15:29, Uwe Kleine-K=C3=B6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > Hello,
-> >
-> > On Tue, Oct 18, 2022 at 11:13:16AM +0200, Emil Renner Berthing wrote:
-> > > Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
-> > > RGB and green PWM controlled LEDs on the HiFive Unmatched board
-> > > managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
-> > > All three colours of the RGB LED and the green LED run from different
-> > > lines of the same PWM, but with the same period so this works fine wh=
-en
-> > > the LED drivers are loaded one after the other.
-> > >
-> > > Unfortunately it does expose a race in the PWM driver when both LED
-> > > drivers are loaded at roughly the same time. Here is an example:
-> > >
-> > >   |          Thread A           |          Thread B           |
-> > >   |  led_pwm_mc_probe           |  led_pwm_probe              |
-> > >   |    devm_fwnode_pwm_get      |                             |
-> > >   |      pwm_sifive_request     |                             |
-> > >   |        ddata->user_count++  |                             |
-> > >   |                             |    devm_fwnode_pwm_get      |
-> > >   |                             |      pwm_sifive_request     |
-> > >   |                             |        ddata->user_count++  |
-> > >   |         ...                 |          ...                |
-> > >   |    pwm_state_apply          |    pwm_state_apply          |
-> > >   |      pwm_sifive_apply       |      pwm_sifive_apply       |
-> > >
-> > > Now both calls to pwm_sifive_apply will see that ddata->approx_period=
-,
-> > > initially 0, is different from the requested period and the clock nee=
-ds
-> > > to be updated. But since ddata->user_count >=3D 2 both calls will fai=
-l
-> > > with -EBUSY, which will then cause both LED drivers to fail to probe.
-> > >
-> > > Fix it by letting the first call to pwm_sifive_apply update the clock
-> > > even when ddata->user_count !=3D 1.
-> > >
-> > > Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
-> > > Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.c=
-om>
-> > > ---
-> > >  drivers/pwm/pwm-sifive.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> > > index 2d4fa5e5fdd4..ccdf92045f34 100644
-> > > --- a/drivers/pwm/pwm-sifive.c
-> > > +++ b/drivers/pwm/pwm-sifive.c
-> > > @@ -159,7 +159,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip=
-, struct pwm_device *pwm,
-> > >
-> > >       mutex_lock(&ddata->lock);
-> > >       if (state->period !=3D ddata->approx_period) {
-> > > -             if (ddata->user_count !=3D 1) {
-> > > +             if (ddata->user_count !=3D 1 && ddata->approx_period) {
-> >
-> > IMHO this needs a code comment. It should among others mention that
-> > approx_period is only zero if .apply() wasn't called before.
->
-> Agreed. I'll add in v2.
->
-> > Let me note this is inconsistent. I didn't check the details, but let's
-> > assume the PWM can implement .period =3D 500 and .period =3D 514 and no=
-thing
-> > in between. So if the the first PWM requests 512 ns it gets (I hope) 50=
-0
-> > ns. Then when the second requests comes in requesting 511 it fails and
-> > if it requests 512 is succeeds also getting 500 ns. Hmm.
->
-> Yes, if two different consumers wants different periods then whoever
-> gets to take the mutex in pwm_sifive_apply first gets to set the clock
-> for its requested period and the other consumer will get -EBUSY. I
-> don't see how this lets one consumer call pwm_state_apply successfully
-> but still get a different period though.
+On Thu, Oct 13, 2022 at 03:36:49PM -0700, Kees Cook wrote:
+> The file_free_security hook already exists for managing notification of
+> released files. Use the LSM hook instead of open-coded stacking.
+> 
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: Petr Vorel <pvorel@suse.cz>
+> Cc: Jonathan McDowell <noodles@fb.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Takashi Iwai <tiwai@suse.de>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  fs/file_table.c                   | 1 -
+>  include/linux/ima.h               | 6 ------
+>  security/integrity/ima/ima_main.c | 3 ++-
+>  3 files changed, 2 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/file_table.c b/fs/file_table.c
+> index 99c6796c9f28..fa707d221a43 100644
+> --- a/fs/file_table.c
+> +++ b/fs/file_table.c
+> @@ -311,7 +311,6 @@ static void __fput(struct file *file)
+>  	eventpoll_release(file);
+>  	locks_remove_file(file);
+>  
+> -	ima_file_free(file);
+>  	if (unlikely(file->f_flags & FASYNC)) {
+>  		if (file->f_op->fasync)
+>  			file->f_op->fasync(-1, file, 0);
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 6dc5143f89f2..9f18df366064 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -19,7 +19,6 @@ extern enum hash_algo ima_get_current_hash_algo(void);
+>  extern int ima_file_check(struct file *file, int mask);
+>  extern void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+>  				    struct inode *inode);
+> -extern void ima_file_free(struct file *file);
+>  extern void ima_post_path_mknod(struct user_namespace *mnt_userns,
+>  				struct dentry *dentry);
+>  extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
+> @@ -56,11 +55,6 @@ static inline void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+>  {
+>  }
+>  
+> -static inline void ima_file_free(struct file *file)
+> -{
+> -	return;
+> -}
+> -
+>  static inline void ima_post_path_mknod(struct user_namespace *mnt_userns,
+>  				       struct dentry *dentry)
+>  {
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index b3b79d030a67..94379ba40b58 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -183,7 +183,7 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
+>   *
+>   * Flag files that changed, based on i_version
+>   */
+> -void ima_file_free(struct file *file)
+> +static void ima_file_free(struct file *file)
+>  {
+>  	struct inode *inode = file_inode(file);
+>  	struct integrity_iint_cache *iint;
+> @@ -1085,6 +1085,7 @@ static struct security_hook_list ima_hooks[] __lsm_ro_after_init = {
+>  	LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
+>  	LSM_HOOK_INIT(mmap_file, ima_file_mmap),
+>  	LSM_HOOK_INIT(file_mprotect, ima_file_mprotect),
+> +	LSM_HOOK_INIT(file_free_security, ima_file_free),
 
-Sorry now I see what you mean. You're saying that if different
-consumers want different periods, but they round to the same, then
-that shouldn't fail, but now it does. I think that's a corner case I'd
-happily live with.
+This doesn't work afaict. If the file is opened for writing ima may
+update xattrs. But by the time security_file_free() is called
+put_file_access() has already been called which will have given up write
+access to the file's mount.
 
-> > Best regards
-> > Uwe
-> >
-> > --
-> > Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig     =
-       |
-> > Industrial Linux Solutions                 | https://www.pengutronix.de=
-/ |
+So you would have to - just one of the possibilities - have to move
+security_file_free() out of file_free() and into the old ima_file_free()
+location. But that might cause semantic changes for other LSMs.
