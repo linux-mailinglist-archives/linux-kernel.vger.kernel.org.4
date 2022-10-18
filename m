@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ADD602FEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E8C602FEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 17:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiJRPmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 11:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S230453AbiJRPmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 11:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJRPmK (ORCPT
+        with ESMTP id S229890AbiJRPmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:42:10 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C78B56C5;
-        Tue, 18 Oct 2022 08:42:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id sc25so33183162ejc.12;
-        Tue, 18 Oct 2022 08:42:08 -0700 (PDT)
+        Tue, 18 Oct 2022 11:42:13 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93081B56C5;
+        Tue, 18 Oct 2022 08:42:11 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id fy4so33196050ejc.5;
+        Tue, 18 Oct 2022 08:42:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b56rtWITDRxSLrlOSl1k6NFsHhuMjl+yg3dnUWpYOLI=;
-        b=Hsg3mAtjQpvoO0pLzprhW7xgoGOGI9zwrr5XD4snsU4F2F19updt3nOKcLraXbNufg
-         6bi+WVZzw1OfNhBMm7czC2GVw6NQtKcSmH4HY4zHXL0ZxhAueBJOUTBxD50dEyLL3cp3
-         4vgWY9G0/R2YvmWhUjhEUohttuigcFXKnhaa014/PoXwR2Kv+oqqYEF8t1s9rvQ++zk0
-         6uEdLi8wSZnJXHHhkqm68CAEhVaphljOS6vR8l4GOGttnFCyREdcHlUVPDBPpIpFHevw
-         A/SMRbUmPd674Kgf7FSdbZNDrSvOTBHItZwssZwhHj0e2L4byCwUgXx0kCLc+uXBYIgt
-         SU0g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t6V4GGutCgqH9SAAugBYUbePwRzXguzjtNw602xA/gE=;
+        b=mHm+3pWbcBXYNzpH81/lPhpNc0B5kdPfe11TzAwKplI3MeDt+vueDt94EyEvU1Sp/9
+         FG7s+qK49MByuxF/6qySYFNkRnj6YmVQQEE8HHmga3zOcvsVUPoRbh5/mWw2A8h+CosA
+         443JPbvEAxAPNq/5WHvZnMihOiVz1OULEPw6NGmo6iRZMTZVReFpSbtdIE/2luLroH3l
+         7acYUGPBANPm+bneNLEmYehFT74EjsE/BD5l0SplQu2yBTl0Otb6yxygQGBfyJww9O47
+         siGdsYoNyCv6f7moBSe45FPQAvagtdUYy1gQ6hueJSaHwvMavITll5AvKH7uzXQC3EX0
+         U8aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b56rtWITDRxSLrlOSl1k6NFsHhuMjl+yg3dnUWpYOLI=;
-        b=KH7wUvYkP0zopXxC/jMuo+MfpyKMXuvDCXqlvtbgTVijV5rXa/VqqpcgETIhH/A9/4
-         bN+tVmwzaJdvfEwjS8UDqAM0FX80YVryHS4paMnC2HPoNHR+ka9ymhk9FymKRsWNSpQo
-         VZmV+UEHiZCZ4UsceSEZ7VK39y81z1O9ym3OTHslYE/DW66JLuxaDoIx9nRAEUxxmAEA
-         SSNqH8NS1EGy+MZSLDQHbUDjIed4kMc/NC3mNV7tzc4JSXl98bBav7RdNPJ1Vu1SCB8y
-         f/66lnh6/kpV8MNGS9gtGuXAh3hE4HBs2nkWjP/dPvg5ErhSwy6gGigjSjJpE+o7Vstg
-         kUMw==
-X-Gm-Message-State: ACrzQf03ztPVgxfK5Gx6F3LPapOL+2Cm5EDhnuoauthplUUswt0rKH2P
-        CaCBrFsBt+XdMVPqgiyCE54=
-X-Google-Smtp-Source: AMsMyM57XmcuD6x6f8mMwGeCzHow4jOYB0F/F3dru7OTMGAvTwEL8rc+fx9SaF+nUXUGB7wEaLBR9Q==
-X-Received: by 2002:a17:907:72d2:b0:78d:4c16:a68d with SMTP id du18-20020a17090772d200b0078d4c16a68dmr2949288ejc.401.1666107726858;
-        Tue, 18 Oct 2022 08:42:06 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t6V4GGutCgqH9SAAugBYUbePwRzXguzjtNw602xA/gE=;
+        b=H6TnyLY9o/C18/ZQ65lv2nhRx5nE4cV6g1inkLJQEyBTy2qk80YTMSJnofunpsYPf4
+         1vmiVo6iJqa0+01n9ekBcTcoEbDlDgC/8iqk84ObItAcdKt6PwN0sb0J23PVltysLDDh
+         EsKHyV/FV6DE6KuzWAMIwZztQRXUQwK/kniegZ2Wk85/yuNOELwRPCtikCCZ+4aIiQxX
+         HNKfLaI9XxKZskbQk0uIno+7Wqm7JE5HSa3y6pAiFUv+b1vOh8Xsoi7mfMPNDyEIzkVh
+         MnhRTxAvIvjST8SBF6cp5SoI51JwxMStuWFcSfV/TeSmA9c7XWKCURISG0CmqF60TjfH
+         VhOg==
+X-Gm-Message-State: ACrzQf0uDkWoRYjxBF5ns5qm6C1a9NQUQwwiuacp6Zq8iQapdQkmi4zd
+        nXc1Obau9I52HsBvS4tPyCU=
+X-Google-Smtp-Source: AMsMyM4aQBhuScJ+Q7RqBmH9Vm86c4qsX+AsD4/jD1J/4RjZSwYFXEPfljnNUP0uP4wvnYZSMzZ1OQ==
+X-Received: by 2002:a17:906:9c82:b0:781:5752:4f2b with SMTP id fj2-20020a1709069c8200b0078157524f2bmr2842003ejc.561.1666107730031;
+        Tue, 18 Oct 2022 08:42:10 -0700 (PDT)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id c18-20020a170906925200b0078dd2f9357fsm7751636ejx.89.2022.10.18.08.42.05
+        by smtp.gmail.com with ESMTPSA id c18-20020a170906925200b0078dd2f9357fsm7751636ejx.89.2022.10.18.08.42.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 08:42:06 -0700 (PDT)
+        Tue, 18 Oct 2022 08:42:09 -0700 (PDT)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -66,10 +67,12 @@ Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         bcm-kernel-feedback-list@broadcom.com,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V3 1/2] dt-bindings: mtd: partitions: u-boot: allow dynamic subpartitions
-Date:   Tue, 18 Oct 2022 17:42:01 +0200
-Message-Id: <20221018154202.4634-1-zajec5@gmail.com>
+Subject: [PATCH V3 2/2] dt-bindings: nvmem: u-boot,env: add Broadcom's variant binding
+Date:   Tue, 18 Oct 2022 17:42:02 +0200
+Message-Id: <20221018154202.4634-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221018154202.4634-1-zajec5@gmail.com>
+References: <20221018154202.4634-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -85,46 +88,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-U-Boot partition may contain subpartitions. For example Broadcom
-includes environment data block in the middle of its U-Boot partition.
+Broadcom uses U-Boot for a lot of their bcmbca familiy chipsets. U-Boot
+stores its configuration in an environment data block.
 
-This allows describing Broadcom's U-Boot env data and will allow
-referencing its NVMEM cell in the future.
+Such blocks are usually stored on flash as a separated partition at
+hardcoded address. Broadcom however decided to:
+1. Store env data block inside U-Boot partition
+2. Avoid sticking to hardcoded offsets
+3. Use custom header with "uEnv" magic and env data length
 
-Reg: 118f3fbe517f4 ("dt-bindings: mtd: partitions: support label/name only partition")
-Ref: dd638202dfb65 ("dt-bindings: mtd: partitions: add additional example for qcom,smem-part")
+Example (length 0x4000):
+$ hexdump -n 32 -C -s 0x40000 /dev/mtdblock0
+00040000  76 6e 45 75 00 40 00 00  34 89 7a 82 49 4d 41 47  |vnEu.@..4.z.IMAG|
+00040010  45 3d 4e 41 4e 44 3a 31  4d 2c 31 30 32 34 4d 00  |E=NAND:1M,1024M.|
+(0x40000 offset is unit specific and can change)
+
+Starting with the commit 118f3fbe517f4 ("dt-bindings: mtd: partitions:
+support label/name only partition") DT can describe partitions matching
+them by a name (without specifying actual address). With that feature
+and this binding change it's possible to:
+1. Specify DT node for Broadcom's U-Boot env data subpartition
+2. Add nodes for specific environment data variables
+3. Reference them as NVMEM cells
+
+This binding is unlikely to help Broadcom's U-Boot. U-Boot SPL needs to
+find environment data early (before it accesses DTB) and it does that by
+looking for an "uEnv" magic. Dirty way.
+
+This binding can however be used by operating systems. It allows
+describing cleanly U-Boot, its env data and variables. It tells
+operating system about Broadcom-specific env data so it can parse it.
+
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
-V3: Add this patch as pre-requirement for u-boot,env.yaml & brcm,env
+V2: Work on better commit body & add example
+V3: Avoid duplicated "mac" label
 ---
- .../devicetree/bindings/mtd/partitions/u-boot.yaml         | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../devicetree/bindings/nvmem/u-boot,env.yaml | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/partitions/u-boot.yaml b/Documentation/devicetree/bindings/mtd/partitions/u-boot.yaml
-index 8a88e7d16524..3c56efe48efd 100644
---- a/Documentation/devicetree/bindings/mtd/partitions/u-boot.yaml
-+++ b/Documentation/devicetree/bindings/mtd/partitions/u-boot.yaml
-@@ -27,6 +27,10 @@ properties:
-           Broadcom stores environment variables inside a U-Boot partition. They
-           can be identified by a custom header with magic value.
+diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+index e96bca99f2d9..cbc5c69fd405 100644
+--- a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
++++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+@@ -38,6 +38,8 @@ properties:
+         const: u-boot,env-redundant-bool
+       - description: Two redundant blocks with active having higher counter
+         const: u-boot,env-redundant-count
++      - description: Broadcom's variant with custom header
++        const: brcm,env
  
-+patternProperties:
-+  "^partition-.*$":
-+    $ref: partition.yaml#
+   reg:
+     maxItems: 1
+@@ -73,3 +75,22 @@ examples:
+             };
+         };
+     };
++  - |
++    partitions {
++        compatible = "fixed-partitions";
++        #address-cells = <1>;
++        #size-cells = <1>;
 +
- unevaluatedProperties: false
- 
- examples:
-@@ -40,6 +44,9 @@ examples:
-             compatible = "brcm,u-boot";
-             reg = <0x0 0x100000>;
-             label = "u-boot";
++        partition@0 {
++            reg = <0x0 0x100000>;
++            compatible = "brcm,u-boot";
++            label = "u-boot";
 +
 +            partition-u-boot-env {
++                compatible = "brcm,env";
++
++                ethaddr {
++                };
 +            };
-         };
- 
-         partition@100000 {
++        };
++    };
 -- 
 2.34.1
 
