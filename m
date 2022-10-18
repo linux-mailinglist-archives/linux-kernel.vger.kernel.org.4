@@ -2,248 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAE5602417
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F244360241E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 08:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJRGCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 02:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S229990AbiJRGEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 02:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiJRGCD (ORCPT
+        with ESMTP id S229785AbiJRGEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 02:02:03 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A53892F69;
-        Mon, 17 Oct 2022 23:02:01 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id q19so18957684edd.10;
-        Mon, 17 Oct 2022 23:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HBz9XpNnk7C63vsH23J7JUztzuCUu1YkF+D3+RSiOA4=;
-        b=AoovJkk3VKnbsFwNtjwsT2mAvNuKW6b13fZroyD5KTps0icjHPiNM7N3VkzJ137LtJ
-         ppAmhHA1n/JjYx7+eh9H0nO5l/iBbWMYfL3c7myNGP9oJbrjYIguWujus90XzUEJo9o/
-         o/pKPgfvYfcuuQgNjuxjhbdcYBuzefrn9OsWzdRSigacJ2vLKPvUZK6r0KZXO9EKtoW1
-         2kEodbPrPuyacb0uC8kAhJ64rE/7oitpTpbjSRGSPryp/HNXRnUWgV4NlQUjPoX8/UrR
-         bYL4UEhm9QZTs4MTph3lFkdKQMwziivWB2atygZgcPj2soee08E8GKpVF4WUDILmoULw
-         4xzg==
+        Tue, 18 Oct 2022 02:04:48 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8384C2B613
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:04:46 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id m9-20020a056e021c2900b002fadb905ddcso11477563ilh.18
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 23:04:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HBz9XpNnk7C63vsH23J7JUztzuCUu1YkF+D3+RSiOA4=;
-        b=SNuMOZKRIZPARLhZnCUpeGXVy+JKdXviOP0SWRvpdpG/F9Hgde4UmYARmBG+L0X2hH
-         Fo9sDHxleKidVyIsGyE5COFLaSgfd1b3OQ1dRYA0aEw4u248p6RIbfN0Q2h048U5Mwau
-         4RGb8+Xd99USAtHCqArffzt7XHtJxTd8/o/gcm9wjYE7/WwRD8h46rBc8by5sft9HQWu
-         CKFo+UBMvlgOC8lUl3rOc6kRDHWdABLIoul6iFKZXUXRBYUrIbSccHAVZkEcZ5N9r3GH
-         +/qgXr9lv0GN+nckthZtEE5hO8C/wt/YWcJ5scUBatYcIfMzOLIZjpR3RRhjfVL1XCOb
-         qjgQ==
-X-Gm-Message-State: ACrzQf0oEeLbfmHRl96tIAr5oqva556PoWve0h5thHgPgEllFstJggtY
-        jAmoF0RdmepRSSSTxmXv1ic=
-X-Google-Smtp-Source: AMsMyM6p9mc9oxWHggnNr/wzCdWjR8cyTndxlDysy7ONDnkdqi41siT9rCVvt/JYqXBlbH7FRWm+qw==
-X-Received: by 2002:a05:6402:33c4:b0:448:e63e:4f40 with SMTP id a4-20020a05640233c400b00448e63e4f40mr1104615edc.203.1666072919886;
-        Mon, 17 Oct 2022 23:01:59 -0700 (PDT)
-Received: from ?IPv6:2001:a61:2b07:7001:b004:9b9f:6a7a:db0f? ([2001:a61:2b07:7001:b004:9b9f:6a7a:db0f])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1709060cd100b00783c545544fsm6970754ejh.215.2022.10.17.23.01.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 23:01:59 -0700 (PDT)
-Message-ID: <746850ef315a8d17f34a72e83b74f9c726d56d48.camel@gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: iio: temperature: ltc2983: support
- more parts
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Date:   Tue, 18 Oct 2022 08:01:58 +0200
-In-Reply-To: <7cea27d8-c3c6-4bc2-0072-1168c9c6a2f0@linaro.org>
-References: <20221014123724.1401011-1-demonsingur@gmail.com>
-         <20221014123724.1401011-3-demonsingur@gmail.com>
-         <28c88be7-a416-3612-3e13-5346a6e92565@linaro.org>
-         <f003f3ffa86fbeae6898c23638a4b0e1228a8657.camel@gmail.com>
-         <7cea27d8-c3c6-4bc2-0072-1168c9c6a2f0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        bh=ntB9ov/k0haLRVm8l+offq3gPwk3Ri7xX5xK34NeQ14=;
+        b=BC+JvgWaW3SyFDWa2irD5jmGybvrzB85NY1D7Bd7+Aw0kfyt/kAqU0BhGmGIzJP/8l
+         LFoi8Q1sSpN6UPr0aNYTt4EAg5Qx13XrnwrXsx1EnfMKZ4x2/U6XyZpjruLu4EYGJC6h
+         D3DsRPwvmvVmt3JaIOAJBkjI4KtopzmkF4q4/6R9iTWKg8VZ1SE8MMvSNA+3aPr6WUVV
+         B9Cj6wD/oJGGVxsm1zbw4EOkJr+ExmTutKjVQ3sO95Y/SGPaGjnvsyl/rNbqwxDPWB/j
+         X+ZdZlq0bAKoA+Hlug8gDuersaYUpyQLegUygO3NN1pKMeRS5s5/+r6kq2eSItaL8e+9
+         SLZg==
+X-Gm-Message-State: ACrzQf14MPcAdyG5WqhTtKqfCvaRrsgsckgYLy+lAM+1TwnIHC7/hrGv
+        pHAKS5Xng22L+MHhzy62AlYt2s5HEQsg8gC9DLj9hzJpOL4a
+X-Google-Smtp-Source: AMsMyM7j4Z1zkqgUXIa1+J6nd7sasSFQwPgjo1E5tJCRZIYXqgCAU5KElp0l7ox1Yti4cvyjNZyTUjr1nCLk+zlqnpKa1HSemo7q
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:b887:0:b0:6bb:fc82:d94b with SMTP id
+ i129-20020a6bb887000000b006bbfc82d94bmr864495iof.205.1666073085848; Mon, 17
+ Oct 2022 23:04:45 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 23:04:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000073b6d905eb48de3f@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in reiserfs_find_entry
+From:   syzbot <syzbot+4654552e088ed458b10d@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-10-17 at 19:32 -0400, Krzysztof Kozlowski wrote:
-> On 17/10/2022 05:38, Nuno S=C3=A1 wrote:
-> > Hi Krzysztof,
-> >=20
->=20
-> (...)
->=20
-> > > > @@ -353,6 +361,41 @@ patternProperties:
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description: Boole=
-an property which set's the adc as
-> > > > single-ended.
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 type: boolean
-> > > > =C2=A0
-> > > > +=C2=A0 "^temp@":
-> > >=20
-> > > There is already a property for thermocouple. Isn't a
-> > > thermocouple a
-> > > temperature sensor? IOW, why new property is needed?
-> > >=20
-> >=20
-> > Well, most of the patternProps in this bindings are temperature
-> > sensors... It's just that the device(s) support different types of
-> > them. 'adi,sensor-type' is used to identify each sensor (as this
-> > translates in different configurations being written in the device
-> > channels).
->=20
-> Sure.
->=20
-> >=20
-> > > > +=C2=A0=C2=A0=C2=A0 type: object
-> > > > +=C2=A0=C2=A0=C2=A0 description:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Represents a channel which is being=
- used as an active
-> > > > analog
-> > > > temperature
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sensor.
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 properties:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,sensor-type:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Identifies =
-the sensor as an active analog
-> > > > temperature
-> > > > sensor.
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.ya=
-ml#/definitions/uint32
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: 31
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,single-ended:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description: Boolean pr=
-operty which sets the sensor as
-> > > > single-ended.
-> > >=20
-> > > Drop "Boolean property which sets" - it's obvious from the type.
-> > >=20
-> > >=20
-> > >=20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 type: boolean
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,custom-temp:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 This is a t=
-able, where each entry should be a pair
-> > > > of
-> > >=20
-> > > "This is a table" - obvious from the type.
-> > >=20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 voltage(mv)=
--temperature(K). The entries must be
-> > > > given in
-> > > > nv and uK
-> > >=20
-> > > mv-K or nv-uK? Confusing...
-> >=20
-> > Yeah, a bit. In Cosmin defense, I think he's just keeping the same
-> > "style" as the rest of the properties...
->=20
-> That's not the best approach for two reasons:
-> 1. The unit used by hardware matters less here, because bindings are
-> used to write DTS. In many, many other cases there will be some
-> translation (just take random voltage regulator bindings).
->=20
-> 2. What the driver is doing matters even less.
->=20
-> So just describe here what is expected in DTS.
->=20
+Hello,
 
-Alright, I see. So we just refer to nv-uK as that is what I wanted for
-dts to expect (reason being to have more resolution).
+syzbot found the following issue on:
 
-> >=20
-> > >=20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 so that, th=
-e original values must be multiplied by
-> > > > 1000000. For
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 more detail=
-s look at table 71 and 72.
-> > >=20
-> > > There is no table 71 in the bindings... It seems you pasted it
-> > > from
-> > > somewhere.
-> >=20
-> > I'm fairly sure this refers to the datasheet. I see now that this
-> > can
-> > be confusing (again this kind of references are being (ab)used in
-> > the
-> > rest of the file).
->=20
-> Yep, but there are now multiple datasheets, aren't there?
->=20
+HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14e8a2c2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
+dashboard link: https://syzkaller.appspot.com/bug?extid=4654552e088ed458b10d
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Hmm yeah that's true. By the time I wrote this binding I was not even
-thinking on the possibility of new parts being added to it... I guess
-the lesson in here is to avoid this kind os specific descriptions.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> >=20
-> > >=20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Note should=
- be signed, but dtc doesn't currently
-> > > > maintain the
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sign.
-> > >=20
-> > > What do you mean? "Maintain" as allow or keep when building FDT?=C2=
-=A0
-> > > What's
-> > > the problem of using negative numbers here and why it should be
-> > > part
-> > > of
-> > > bindings?
-> > >=20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.ya=
-ml#/definitions/uint64-matrix
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 minItems: 3
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 64
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 items:
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 minItems: 2
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 2
-> > >=20
-> > > Instead describe the items with "description" (and maybe
-> > > constraints)
-> > > like here:
-> > >=20
-> > > https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetre=
-e/bindings/iio/adc/st,stm32-adc.yaml#L278
-> > >=20
-> >=20
-> > Neat... My only comment (which probably applies to my previous
-> > ones) is
-> > that the rest of the properties are already in this "style". So
-> > maybe,
-> > follow up patches with small clean-ups would be more appropriate?
->=20
-> Of course. It would be great if the file was improved before or after
-> this one.
->=20
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c8f5131ab57d/disk-55be6084.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/77167f226f35/vmlinux-55be6084.xz
 
-Ok, IMO it would make sense to have it in this series but if Cosmin
-does not feel like fixing my mess :), I'll send a separate patch with
-your inputs...
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4654552e088ed458b10d@syzkaller.appspotmail.com
 
-- Nuno S=C3=A1
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 793df067 P4D 793df067 PUD 7601a067 PMD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 25700 Comm: syz-executor.4 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+RSP: 0018:ffffc90003c0f158 EFLAGS: 00010246
+RAX: 1ffff11010973c1b RBX: ffff888084b9e0d8 RCX: 0000000000040000
+RDX: ffffc9000c01a000 RSI: 0000000000000005 RDI: ffff88801f59f098
+RBP: ffffc90003c0f2f0 R08: 0000000000000005 R09: ffffffff8222326d
+R10: 0000000000000003 R11: ffff888023308000 R12: ffff888083088678
+R13: dffffc0000000000 R14: ffff888037621c10 R15: 0000000000000005
+FS:  00007feebdc43700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 0000000036ec7000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ get_third_component fs/reiserfs/namei.c:196 [inline]
+ reiserfs_find_entry+0x253/0x1a10 fs/reiserfs/namei.c:317
+ reiserfs_lookup+0x1e3/0x4a0 fs/reiserfs/namei.c:368
+ __lookup_slow+0x286/0x3e0 fs/namei.c:1685
+ lookup_slow fs/namei.c:1702 [inline]
+ lookup_one_unlocked+0x3f8/0x670 fs/namei.c:2772
+ ovl_lookup_positive_unlocked fs/overlayfs/namei.c:207 [inline]
+ ovl_lookup_single+0x11f/0xa60 fs/overlayfs/namei.c:233
+ ovl_lookup_layer+0x44e/0x540 fs/overlayfs/namei.c:320
+ ovl_lookup+0xb09/0x2470 fs/overlayfs/namei.c:923
+ __lookup_hash+0x115/0x240 fs/namei.c:1601
+ do_renameat2+0x58b/0x1400 fs/namei.c:4850
+ __do_sys_rename fs/namei.c:4953 [inline]
+ __se_sys_rename fs/namei.c:4951 [inline]
+ __x64_sys_rename+0x82/0x90 fs/namei.c:4951
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7feebca8b5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007feebdc43168 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+RAX: ffffffffffffffda RBX: 00007feebcbabf80 RCX: 00007feebca8b5a9
+RDX: 0000000000000000 RSI: 0000000020000800 RDI: 00000000200007c0
+RBP: 00007feebcae6580 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff2dc3b58f R14: 00007feebdc43300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+RSP: 0018:ffffc90003c0f158 EFLAGS: 00010246
+RAX: 1ffff11010973c1b RBX: ffff888084b9e0d8 RCX: 0000000000040000
+RDX: ffffc9000c01a000 RSI: 0000000000000005 RDI: ffff88801f59f098
+RBP: ffffc90003c0f2f0 R08: 0000000000000005 R09: ffffffff8222326d
+R10: 0000000000000003 R11: ffff888023308000 R12: ffff888083088678
+R13: dffffc0000000000 R14: ffff888037621c10 R15: 0000000000000005
+FS:  00007feebdc43700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 0000000036ec7000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
