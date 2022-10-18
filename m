@@ -2,111 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E98602D01
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBE2602D02
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiJRNb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S230130AbiJRNbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJRNbX (ORCPT
+        with ESMTP id S230114AbiJRNbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:31:23 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11647C90F1;
-        Tue, 18 Oct 2022 06:31:20 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.32])
-        by gateway (Coremail) with SMTP id _____8Dxu9ilqk5jE3AAAA--.2541S3;
-        Tue, 18 Oct 2022 21:31:17 +0800 (CST)
-Received: from [10.20.42.32] (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeCkqk5jpbcAAA--.2979S3;
-        Tue, 18 Oct 2022 21:31:17 +0800 (CST)
-Subject: Re: [PATCH] ACPI: scan: Fix DMA range assignment
-To:     Robin Murphy <robin.murphy@arm.com>, rafael@kernel.org
-Cc:     yangyicong@huawei.com, lpieralisi@kernel.org,
-        chenhuacai@loongson.cn, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lenb@kernel.org,
-        jeremy.linton@arm.com
-References: <e94f99cfe09a64c590f009d21c566339117394e2.1666098844.git.robin.murphy@arm.com>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <3793c2e8-15ad-2628-0660-f04d4f1071fd@loongson.cn>
-Date:   Tue, 18 Oct 2022 21:31:16 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 18 Oct 2022 09:31:35 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D5BCBFCC;
+        Tue, 18 Oct 2022 06:31:29 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id o22so8580519qkl.8;
+        Tue, 18 Oct 2022 06:31:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ht/PxSroHeqM8f9r1nGvOcWIKYTDs4nogQZYcXxwMtY=;
+        b=mjizs3yRlIr7Cyy4drNixxx04vsji8u2hUyRBOXMKwnfPjgJ1OJNIH14bQek6pd4yJ
+         ibNJCM9lgA+E+dpjOUL//XklTJ+kkX53zrWTjEyBqajo787zdCxxj0AqzrMi2e1UWCf6
+         LfhAaBXbAkXnJShwivS1MKJtMelXC49OHjS9ivr+8SJL1pKUiRAfibUcXTYf5O2J2rGf
+         8d+TVK1c3Xd4oIaFlTIDj/x1NOapRjBex9/k81wudr7GuW2yqWsG5NyEdGMegOF0dFHV
+         nIe3XqPzXaXvDTl7WcvrAzMdwNKFSLw6NHlzYjLwXGdrk5dedeG37Mf2OQXhYn/w5UWZ
+         T9aA==
+X-Gm-Message-State: ACrzQf2mSpRZbHeuGBoSZok/6B90ujK9Dche8mm+wqqM0hycz3YbHmKx
+        dfbFbqys7kg9BY9jM3uI77ZDdWY8R/eGX1b/c5w=
+X-Google-Smtp-Source: AMsMyM6VE0mm6MF4xsWZsya+OW3d5FmS7ysd4jFv/2G85Gd/2jyhh4Iwdwvbi7iM6pXxPLfWcwPE2ORvJ3RlctnrNx4=
+X-Received: by 2002:a05:620a:158f:b0:6ee:93d5:e249 with SMTP id
+ d15-20020a05620a158f00b006ee93d5e249mr1796067qkk.505.1666099888091; Tue, 18
+ Oct 2022 06:31:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <e94f99cfe09a64c590f009d21c566339117394e2.1666098844.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxLeCkqk5jpbcAAA--.2979S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tr4DKrWDWr4Utr1ruFyUZFb_yoW8Gw4fp3
-        yYg34UCr4xJrs5Wr1xJws3ua1Y9395WrW8urW5C3sa93ZxGF90yrWrCry5u3Z3JF95JF4x
-        ZFnI9F18CFWUJrDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcVc_UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018132341.76259-1-rrichter@amd.com> <20221018132341.76259-7-rrichter@amd.com>
+In-Reply-To: <20221018132341.76259-7-rrichter@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 18 Oct 2022 15:31:16 +0200
+Message-ID: <CAJZ5v0iweDu6imi_P3eRTTk0Xpzv-swB05fYxmTMAHAjCN2tiA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/12] cxl/acpi: Extract component registers of
+ restricted hosts from RCRB
+To:     Robert Richter <rrichter@amd.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Terry Bowman <terry.bowman@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Seems good. Thanks very much.
+On Tue, Oct 18, 2022 at 3:24 PM Robert Richter <rrichter@amd.com> wrote:
+>
+> A downstream port must be connected to a component register block.
+> For restricted hosts the base address is determined from the RCRB. The
+> RCRB is provided by the host's CEDT CHBS entry. Rework CEDT parser to
+> get the RCRB and add code to extract the component register block from
+> it.
+>
+> RCRB's BAR[0..1] point to the component block containing CXL subsystem
+> component registers. MEMBAR extraction follows the PCI base spec here,
+> esp. 64 bit extraction and memory range alignment (6.0, 7.5.1.2.1).
+>
+> Note: Right now the component register block is used for HDM decoder
+> capability only which is optional for RCDs. If unsupported by the RCD,
+> the HDM init will fail. It is future work to bypass it in this case.
+>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 
-Reviewed-by: Jianmin Lv <lvjianmin@loongson.cn>
+What does this S-o-B mean?  If this person is your co-developer, you
+need to add a Co-developed-by tag to clarify that.
 
-On 2022/10/18 下午9:14, Robin Murphy wrote:
-> Assigning the device's dma_range_map from the iterator variable after
-> the loop means it always points to the empty terminator at the end of
-> the map, which is not what we want. Similarly, freeing the iterator on
-> error when it points to somwhere in the middle of the allocated array
-> won't work either. Fix this.
-> 
-> Fixes: bf2ee8d0c385 ("ACPI: scan: Support multiple DMA windows with different offsets")
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 > ---
->   drivers/acpi/scan.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 558664d169fc..024cc373a197 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -1509,9 +1509,12 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->   			goto out;
->   		}
->   
-> +		*map = r;
+>  drivers/cxl/acpi.c | 79 ++++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 69 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index fb9f72813067..a92d5d7b7a92 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -9,6 +9,8 @@
+>  #include "cxlpci.h"
+>  #include "cxl.h"
+>
+> +#define CXL_RCRB_SIZE  SZ_8K
 > +
->   		list_for_each_entry(rentry, &list, node) {
->   			if (rentry->res->start >= rentry->res->end) {
-> -				kfree(r);
-> +				kfree(*map);
-> +				*map = NULL;
->   				ret = -EINVAL;
->   				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
->   				goto out;
-> @@ -1523,8 +1526,6 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->   			r->offset = rentry->offset;
->   			r++;
->   		}
-> -
-> -		*map = r;
->   	}
->    out:
->   	acpi_dev_free_resource_list(&list);
-> 
-
+>  static unsigned long cfmws_to_decoder_flags(int restrictions)
+>  {
+>         unsigned long flags = CXL_DECODER_F_ENABLE;
+> @@ -229,27 +231,82 @@ static int add_host_bridge_uport(struct device *match, void *arg)
+>  struct cxl_chbs_context {
+>         struct device *dev;
+>         unsigned long long uid;
+> -       resource_size_t chbcr;
+> +       struct acpi_cedt_chbs chbs;
+>  };
+>
+> -static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
+> -                        const unsigned long end)
+> +static int cxl_get_chbs(union acpi_subtable_headers *header, void *arg,
+> +                       const unsigned long end)
+>  {
+>         struct cxl_chbs_context *ctx = arg;
+>         struct acpi_cedt_chbs *chbs;
+>
+> -       if (ctx->chbcr)
+> +       if (ctx->chbs.base)
+>                 return 0;
+>
+>         chbs = (struct acpi_cedt_chbs *) header;
+>
+>         if (ctx->uid != chbs->uid)
+>                 return 0;
+> -       ctx->chbcr = chbs->base;
+> +       ctx->chbs = *chbs;
+>
+>         return 0;
+>  }
+>
+> +static resource_size_t cxl_get_chbcr(struct cxl_chbs_context *ctx)
+> +{
+> +       struct acpi_cedt_chbs *chbs = &ctx->chbs;
+> +       resource_size_t component_reg_phys, rcrb;
+> +       u32 bar0, bar1;
+> +       void *addr;
+> +
+> +       if (!chbs->base)
+> +               return CXL_RESOURCE_NONE;
+> +
+> +       if (chbs->cxl_version != ACPI_CEDT_CHBS_VERSION_CXL11)
+> +               return chbs->base;
+> +
+> +       /* Extract RCRB */
+> +
+> +       if (chbs->length != CXL_RCRB_SIZE)
+> +               return CXL_RESOURCE_NONE;
+> +
+> +       rcrb = chbs->base;
+> +
+> +       dev_dbg(ctx->dev, "RCRB found for UID %lld: 0x%08llx\n",
+> +               ctx->uid, (u64)rcrb);
+> +
+> +       /*
+> +        * RCRB's BAR[0..1] point to component block containing CXL
+> +        * subsystem component registers. MEMBAR extraction follows
+> +        * the PCI Base spec here, esp. 64 bit extraction and memory
+> +        * ranges alignment (6.0, 7.5.1.2.1).
+> +        */
+> +       addr = ioremap(rcrb, PCI_BASE_ADDRESS_0 + SZ_8);
+> +       bar0 = readl(addr + PCI_BASE_ADDRESS_0);
+> +       bar1 = readl(addr + PCI_BASE_ADDRESS_1);
+> +       iounmap(addr);
+> +
+> +       /* sanity check */
+> +       if (bar0 & (PCI_BASE_ADDRESS_MEM_TYPE_1M | PCI_BASE_ADDRESS_SPACE_IO))
+> +               return CXL_RESOURCE_NONE;
+> +
+> +       component_reg_phys = bar0 & PCI_BASE_ADDRESS_MEM_MASK;
+> +       if (bar0 & PCI_BASE_ADDRESS_MEM_TYPE_64)
+> +               component_reg_phys |= ((u64)bar1) << 32;
+> +
+> +       if (!component_reg_phys)
+> +               return CXL_RESOURCE_NONE;
+> +
+> +       /*
+> +        * Must be 8k aligned (size of combined CXL 1.1 Downstream and
+> +        * Upstream Port RCRBs).
+> +        */
+> +       if (component_reg_phys & (CXL_RCRB_SIZE - 1))
+> +               return CXL_RESOURCE_NONE;
+> +
+> +       return component_reg_phys;
+> +}
+> +
+>  static int add_host_bridge_dport(struct device *match, void *arg)
+>  {
+>         acpi_status status;
+> @@ -259,6 +316,7 @@ static int add_host_bridge_dport(struct device *match, void *arg)
+>         struct cxl_port *root_port = arg;
+>         struct device *host = root_port->dev.parent;
+>         struct acpi_device *bridge = to_cxl_host_bridge(host, match);
+> +       resource_size_t component_reg_phys;
+>
+>         if (!bridge)
+>                 return 0;
+> @@ -273,19 +331,20 @@ static int add_host_bridge_dport(struct device *match, void *arg)
+>         dev_dbg(match, "UID found: %lld\n", uid);
+>
+>         ctx = (struct cxl_chbs_context) {
+> -               .dev = host,
+> +               .dev = match,
+>                 .uid = uid,
+>         };
+> -       acpi_table_parse_cedt(ACPI_CEDT_TYPE_CHBS, cxl_get_chbcr, &ctx);
+> +       acpi_table_parse_cedt(ACPI_CEDT_TYPE_CHBS, cxl_get_chbs, &ctx);
+>
+> -       if (ctx.chbcr == 0) {
+> +       component_reg_phys = cxl_get_chbcr(&ctx);
+> +       if (component_reg_phys == CXL_RESOURCE_NONE) {
+>                 dev_warn(match, "No CHBS found for Host Bridge (UID %lld)\n", uid);
+>                 return 0;
+>         }
+>
+> -       dev_dbg(match, "CHBCR found: 0x%08llx\n", (u64)ctx.chbcr);
+> +       dev_dbg(match, "CHBCR found: 0x%08llx\n", (u64)component_reg_phys);
+>
+> -       dport = devm_cxl_add_dport(root_port, match, uid, ctx.chbcr);
+> +       dport = devm_cxl_add_dport(root_port, match, uid, component_reg_phys);
+>         if (IS_ERR(dport))
+>                 return PTR_ERR(dport);
+>
+> --
+> 2.30.2
+>
