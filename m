@@ -2,153 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33F9603264
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8610760326B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiJRS02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S229864AbiJRS1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 14:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJRS00 (ORCPT
+        with ESMTP id S229622AbiJRS1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:26:26 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C916A47E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:26:25 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id b79so12326880iof.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:26:25 -0700 (PDT)
+        Tue, 18 Oct 2022 14:27:22 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A9439122
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:27:20 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id s17so8039741qkj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:27:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RTmzq7eoqYW6NBc3Vsko4U0xjZphvkiO+FIl89OP+4g=;
-        b=KAEU2iVH6lvM1Vadrgtxn8/Ndza1LhSV1UA/xU5Cb4JE6wwmI7gzeJFoYih/YCwK5S
-         786yGxRpOOesWqPk0wkYuMgol6ThR+tJLe+h4KqiG0Q91wemNG0ssmKeUN+Df26cnL9d
-         rrlQcBy4e7Yl0rwWEeLx54JAAS8j92neXQVB4=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5KDGYKucLfiMgHID9r3bn/04iPGOCosjXcb6ueV7Xpw=;
+        b=GmIiIZiTf8Ow+31uIoZB6zGc8her8/I4yCWQR96ktu3UWsUKy9IwqqS2tEnQET4Mx/
+         Bsaob+n9GcUH0AR+8eD8pjh9eYHzcRLkSuRZacHXyno4lf0JT+pjb6lNVTY85oI0OirY
+         MBkFlAVKcIhANbaKuZwFuCcvlN3ruHvY82nXzKgAxw/YIqFGgKDXvSeOvdKld+t+XZzi
+         6v0eKBTHoaPxREoHGPiX584sczISS4NOdO34uL2JX2KExE+uUPCxKdhzLzE102Ya7EmU
+         e2VLg4+wRHCG4VyDaMh6F+GZx4eDRFKfSmBHuruAMsDSOXnyNWowNys1+dUto47Pq7Az
+         vyxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RTmzq7eoqYW6NBc3Vsko4U0xjZphvkiO+FIl89OP+4g=;
-        b=uTJVmPS83/xv4jCFMexY3XSGs5utYpaMC+kPjJ1PyxFgZVyv+5AtQzILS1/fVuwFmD
-         orMs+EcW94XGnSwiIrJHURGEriya+m3fN5XS1UOazBlxwWSwC6GAsfHLHadmOXFeN0TM
-         SqnMPGSxqM/BC57sID2aufNORIv9qAWnCcx2euhz7O4sFZhe2HJsWf3diw/Rn0Qm4lRs
-         T36CALR/rsR+aaHnT+fdMACtx7R19LODHW1ogUbwH9RaD8xqD/mjgS17SBez5MNAJWiT
-         ad2wKl3YWs3pwJTGqzbaJJQaYv3ZjH+rUWKqcf4Rl8r2xKT6XSeVUAQiNRqSJY+Y6KLg
-         pyNA==
-X-Gm-Message-State: ACrzQf0+wCTP7H9mxdlIQni/n5dpqZbcoumjTng0boylm/Dlgi42WTA9
-        CDiUYzdU+x2BvlYtnuqdC/7VUPDFtFZAiQ==
-X-Google-Smtp-Source: AMsMyM6XOSHDwcu0PtJMFlQnAQc64qQWTFYYfgBaO1mQ08Fl0ExPV0lqi0MNhrpLj04/PzGgS4Iubw==
-X-Received: by 2002:a05:6602:2e8d:b0:6bc:77d8:7713 with SMTP id m13-20020a0566022e8d00b006bc77d87713mr2450000iow.144.1666117584208;
-        Tue, 18 Oct 2022 11:26:24 -0700 (PDT)
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com. [209.85.166.54])
-        by smtp.gmail.com with ESMTPSA id g14-20020a02850e000000b00363ff12ca47sm1275814jai.125.2022.10.18.11.26.21
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5KDGYKucLfiMgHID9r3bn/04iPGOCosjXcb6ueV7Xpw=;
+        b=g0JIUUYXFlhWDtTBhq0i2IYXycd1x5TVzid+gT/qGYmGt/GLKX1TAw2xfL6R1PcFNH
+         aTC5x2mOsB4cTQIzORScQOQHm88UwlAw6p8s1kGDd2sMHZoFqLtlZpP+E3YOfwaObZ8q
+         vDxT5UhDjERyeKPraqA9or61A2C9S/WCUfJ2bVRLgN6nD+2YYKaSjgP5N67zsnKHiSiC
+         KoJK+d/rquF1IsFVFizc3iR+7qZv6xjqC9SQowrYdpRbxI3Wi+obU06d/CqZXhjI/Bx2
+         lZHK8KSqA/EyI0sLro8TDy0rZaIcBJ6fTQiEQZg96E/Cvyy2AAgiBBIuwKxBJ6j1uxMY
+         I4BQ==
+X-Gm-Message-State: ACrzQf0QnIFzE01uVI9EfAxibNeZwgPb/guuVqz25aAci5P1q48vEC7T
+        cQRySPtE54umCMKKRi3JB+ZaAQ==
+X-Google-Smtp-Source: AMsMyM64KB+tM8SKsGF/O5RMvYWwj38h0gZY0qEDibEpmHsA7e/OJVZBq4mqzrRsiH4miUBf7F2hGw==
+X-Received: by 2002:a05:620a:22cc:b0:6ee:3e43:ac40 with SMTP id o12-20020a05620a22cc00b006ee3e43ac40mr2874489qki.454.1666117639454;
+        Tue, 18 Oct 2022 11:27:19 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id i15-20020a05620a404f00b006ee91ab3538sm3194991qko.36.2022.10.18.11.27.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 11:26:21 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id o65so12500131iof.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 11:26:21 -0700 (PDT)
-X-Received: by 2002:a05:6602:125d:b0:6bc:61ec:29c0 with SMTP id
- o29-20020a056602125d00b006bc61ec29c0mr2464726iou.81.1666117580728; Tue, 18
- Oct 2022 11:26:20 -0700 (PDT)
+        Tue, 18 Oct 2022 11:27:18 -0700 (PDT)
+Message-ID: <94c1acb4-f914-8b69-eebb-cf5e812ca453@linaro.org>
+Date:   Tue, 18 Oct 2022 14:27:16 -0400
 MIME-Version: 1.0
-References: <20221012042030.573466-1-hsinyi@chromium.org> <CAJMQK-i1GFP_5NsH7MLYS17xacrYZf1u6bjVYBkW-qHMbuh2_w@mail.gmail.com>
-In-Reply-To: <CAJMQK-i1GFP_5NsH7MLYS17xacrYZf1u6bjVYBkW-qHMbuh2_w@mail.gmail.com>
-From:   Sean Paul <seanpaul@chromium.org>
-Date:   Tue, 18 Oct 2022 14:25:41 -0400
-X-Gmail-Original-Message-ID: <CAOw6vbLPUkwoaSHyWARZnkcsacf9rsmB6M=97z1-98kgM7BNEQ@mail.gmail.com>
-Message-ID: <CAOw6vbLPUkwoaSHyWARZnkcsacf9rsmB6M=97z1-98kgM7BNEQ@mail.gmail.com>
-Subject: Re: [PATCH v2] drm_bridge: register content protect property
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/2] dt-bindings: add binding for tft displays based on
+ ilitek,ili9488
+Content-Language: en-US
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     michael@amarulasolutions.com, linuxfancy@googlegroups.com,
+        linux-amarula@amarulasolutions.com, kamlesh.gurudasani@gmail.com,
+        David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221018164532.1705215-1-tommaso.merciai@amarulasolutions.com>
+ <20221018164532.1705215-2-tommaso.merciai@amarulasolutions.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221018164532.1705215-2-tommaso.merciai@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 9:49 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> On Wed, Oct 12, 2022 at 12:20 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> >
-> > Some bridges are able to update HDCP status from userspace request if
-> > they support HDCP.
-> >
-> > HDCP property is the same as other connector properties that need to be
-> > created after the connecter is initialized and before the connector is
-> > registered.
-> >
-> anx7625 is a user for this.
+On 18/10/2022 12:45, Tommaso Merciai wrote:
+> This binding is for the tft displays based on ilitek,ili9488.
+> waveshare,waveshare,pico-rt-lcd-35 (waveshare pico-restouch-lcd-3.5)
+> 
+> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> ---
+>  .../bindings/display/ilitek,ili9488.yaml      | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9488.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/ilitek,ili9488.yaml b/Documentation/devicetree/bindings/display/ilitek,ili9488.yaml
+> new file mode 100644
+> index 0000000000000..879ecc42c350c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/ilitek,ili9488.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/ilitek,ili9488.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ilitek ILI9488 display panels device tree bindings
 
-I feel like we should not unconditionally attach this property for
-bridges, this should be done in the driver which supports it IMO.
+Drop "device tree bindings"
 
-Sean
+> +
+> +maintainers:
+> +  - Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>
+> +  - Michael Trimarchi <michael@amarulasolutions.com>
+> +  - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> +
+> +description:
+> +  This binding is for display panels using an Ilitek ILI9488 controller in SPI
 
->
->
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > ---
-> > v2: Fix compile error when config is not set.
-> > ---
-> >  drivers/gpu/drm/drm_bridge_connector.c | 3 +++
-> >  include/drm/display/drm_hdcp_helper.h  | 8 ++++++++
-> >  2 files changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
-> > index 1c7d936523df5..a3b9ef8dc3f0b 100644
-> > --- a/drivers/gpu/drm/drm_bridge_connector.c
-> > +++ b/drivers/gpu/drm/drm_bridge_connector.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/slab.h>
-> >
-> > +#include <drm/display/drm_hdcp_helper.h>
-> >  #include <drm/drm_atomic_state_helper.h>
-> >  #include <drm/drm_bridge.h>
-> >  #include <drm/drm_bridge_connector.h>
-> > @@ -398,6 +399,8 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
-> >         if (panel_bridge)
-> >                 drm_panel_bridge_set_orientation(connector, panel_bridge);
-> >
-> > +       drm_connector_attach_content_protection_property(connector, true);
-> > +
-> >         return connector;
-> >  }
-> >  EXPORT_SYMBOL_GPL(drm_bridge_connector_init);
-> > diff --git a/include/drm/display/drm_hdcp_helper.h b/include/drm/display/drm_hdcp_helper.h
-> > index 8aaf87bf27351..c65d9f06a2532 100644
-> > --- a/include/drm/display/drm_hdcp_helper.h
-> > +++ b/include/drm/display/drm_hdcp_helper.h
-> > @@ -15,8 +15,16 @@ struct drm_device;
-> >  struct drm_connector;
-> >
-> >  int drm_hdcp_check_ksvs_revoked(struct drm_device *dev, u8 *ksvs, u32 ksv_count);
-> > +#if defined(CONFIG_DRM_DISPLAY_HDCP_HELPER)
-> >  int drm_connector_attach_content_protection_property(struct drm_connector *connector,
-> >                                                      bool hdcp_content_type);
-> > +#else
-> > +static inline int drm_connector_attach_content_protection_property(struct drm_connector *connector,
-> > +                                                                  bool hdcp_content_type)
-> > +{
-> > +       return 0;
-> > +}
-> > +#endif
-> >  void drm_hdcp_update_content_protection(struct drm_connector *connector, u64 val);
-> >
-> >  #endif
-> > --
-> > 2.38.0.rc1.362.ged0d419d3c-goog
-> >
+Drop "This binding is for" and instead describe hardware.
+
+> +  mode.
+> +
+> +allOf:
+> +  - $ref: panel/panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          # Waveshare 3.5" 320x480 Color TFT LCD
+> +          - "waveshare,pico-rt-lcd-35"
+> +      - const: ilitek,ili9488
+> +
+> +  spi-max-frequency:
+> +    maximum: 20000000
+> +
+> +  dc-gpios:
+> +    maxItems: 1
+> +    description: Display data/command selection (D/CX)
+> +
+> +  backlight: true
+> +  reg: true
+> +  reset-gpios: true
+> +  rotation: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - dc-gpios
+> +  - reset-gpios
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    backlight: backlight {
+> +            compatible = "gpio-backlight";
+> +            gpios = <&gpio 22 GPIO_ACTIVE_HIGH>;
+
+Drop it, no need for this example.
+
+
+> +    };
+> +    spi {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+
+Use 4 spaces for example indentation.
+
+> +
+> +
+
+No need for two blank lines.
+
+> +            display@0{
+> +                    compatible = "waveshare,pico-rt-lcd-35", "ilitek,ili9488";
+> +                    reg = <0>;
+> +                    spi-max-frequency = <20000000>;
+> +                    dc-gpios = <&gpio0 24 GPIO_ACTIVE_HIGH>;
+> +                    reset-gpios = <&gpio0 25 GPIO_ACTIVE_HIGH>;
+> +                    backlight = <&backlight>;
+> +            };
+> +    };
+> +
+> +...
+
+Best regards,
+Krzysztof
+
