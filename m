@@ -2,107 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E346028CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CC56028D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJRJzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S230045AbiJRJzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiJRJzW (ORCPT
+        with ESMTP id S229891AbiJRJzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:55:22 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE73A02DD;
-        Tue, 18 Oct 2022 02:55:20 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id sc25so30847130ejc.12;
-        Tue, 18 Oct 2022 02:55:20 -0700 (PDT)
+        Tue, 18 Oct 2022 05:55:50 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07869B0B1E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:55:49 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id p7so14159674vsr.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:55:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ezse1qs61ywJKaWI6GQ5oG9AI3Vzl0WMY+NM494WQY4=;
-        b=D+6rZt1RQiwvRVqD63cJ19HebnHGec0qlCI2w7BHrtTbkq8hCNzhBIYSbby9OGqtA5
-         oF1MesMyrmZk6JBEfK3z36Exd/fPzRFxg3sJUaKLeZ6fU3+ZDxJVsm+53wqgYEyP65G8
-         PPLtrdT3Y/gR6BhVkKA3Vsf6MeudkUkkvmytL9FrINIOHPuigYEmt+oGYGXEgN8mHDUp
-         T1D+VDL5Tslw6DlHuJdkUTUsYUSVx2j33QstbR722+cqEPALnW6MkHQLEBw8PewyNgP3
-         2Vk/8B88/nCmlWDbRQcY7K4Uz5EwnEvk6xZ0Vl9bSiOU7TRI4m5+ZbSz4rEdjEejUCw7
-         rmQQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fHxePj/mZk3CsytYYPoDZH/iNdYUG/Ul5xfu8zN39CE=;
+        b=OYyvIRNLbIXwMu8B/GP88pxXrBL1rTVN9OKaaVp/yCjYwxp2DiR8uf2cHv99SQhhbP
+         ovobN81Sc9Ab+x8TgvH+gt2GR5hbwNAMQg0nTIJtF0QSR75P6jA1F51PqRneDvCrwdWr
+         eSLd9+3CKgZGM+8HyndN0MCQ3By0MhOjASV9Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ezse1qs61ywJKaWI6GQ5oG9AI3Vzl0WMY+NM494WQY4=;
-        b=kMQNkOMcYudcFUL3agPoQprNmFv/DTnDHgCjL5h2ozkFqJFNUUntf3kT6+Yal6XYZS
-         GkmFZqSG2V+nNSq77PreSVbEZ+8iXTM+aR4x5IliLv5/yXgnb648FN1vG2VT/1BVhb74
-         ouj8z1FvPauqYdKCDRG3XMXi6h376bYd6wkjxGenr0FrKaTPqD1/GnZK/EThDFhRHcq9
-         XV0Fhq7P73AnicaySAxed4+7bLwXU3mVMdaJI6K3uAMLGiI66VqTCJPtw//xx3VuLJ5O
-         eRh6kC6B16yhyfHCcwzf8BEaOaQMjm1WCYgVIBIyEy7o+QZGOPtbO90wqUDdV4d+FQ17
-         dSnw==
-X-Gm-Message-State: ACrzQf2jVWVHMtw0ZwtvKTlCwQM0GcKf9y7m32kZl0HArXq3VYNdd6NQ
-        SjFuRGnauL/nd2eQKlT7S1c=
-X-Google-Smtp-Source: AMsMyM7aepROuPXPuVh7r276WkRVP4fFBkx6fqn77BknscK5bi7fmwahMfq/i6lyYvuoDuPb7ccwvQ==
-X-Received: by 2002:a17:906:eec9:b0:73d:c369:690f with SMTP id wu9-20020a170906eec900b0073dc369690fmr1709745ejb.767.1666086918399;
-        Tue, 18 Oct 2022 02:55:18 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id q7-20020a170906540700b0078d9cd0d2d6sm7478888ejo.11.2022.10.18.02.55.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:55:17 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 12:55:15 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun.Ramadoss@microchip.com
-Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
-        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
-        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, richardcochran@gmail.com,
-        netdev@vger.kernel.org, Woojung.Huh@microchip.com,
-        davem@davemloft.net
-Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support
- for LAN937x switch
-Message-ID: <20221018095515.tnhqjlyvu3dmtn3q@skbuf>
-References: <20221014152857.32645-1-arun.ramadoss@microchip.com>
- <20221017184649.meh7snyhvuepan25@skbuf>
- <ce76fa72ad1dd9d4f86a0bdcbd2ae473e2f29262.camel@microchip.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fHxePj/mZk3CsytYYPoDZH/iNdYUG/Ul5xfu8zN39CE=;
+        b=TO1bINICpc/djWh3uLw5LSUWTn08ugdjhcIA9OH+5LS3iClocSvBBaACebLnE9Fbc5
+         EcugW8cN4dP2Bxj3nx86pix2YZoDXT64BCriKNBK232WnrTAywrgKvsZLwHBayE79fFi
+         UsaU1GUHatWoHsjsEnU4HNZRQVODAdyKgA8//0H8cbzG7Tq97BCnyq7FEnBmG/3q4WU3
+         Jmw40Be4/mwcxRu4j61xjjD/bPkMOB0LO514dKFUR/9XFN2URGmvldxkNBw3F5g9ySAQ
+         2ZO9M/eiV2ga/J+IGWmsQ9A4jKfqRz0SLOQFPaleukh88s4FwPlYPRwqJNem4Pi+7aLH
+         xTdQ==
+X-Gm-Message-State: ACrzQf0oZZP7/J7VMvqyuBFsaLVDYnaXQ+dhLmTQth9d1c0TqGXM0dXl
+        EPoIdxyRtXxIhJqS0tFd90GYKd7uSiY5txxdadMCiw==
+X-Google-Smtp-Source: AMsMyM6GgD/Ll61bSvxwgEJyCP26sucK9tDFdq9CCdZxSHx2TzvQOlTTAReK+eEoO6lxWQgVsRzgtN68ZiTGLSBKSFA=
+X-Received: by 2002:a67:f684:0:b0:392:ac17:f9b0 with SMTP id
+ n4-20020a67f684000000b00392ac17f9b0mr926868vso.85.1666086948130; Tue, 18 Oct
+ 2022 02:55:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce76fa72ad1dd9d4f86a0bdcbd2ae473e2f29262.camel@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221017090208.19041-1-yunfei.dong@mediatek.com>
+In-Reply-To: <20221017090208.19041-1-yunfei.dong@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 18 Oct 2022 17:55:36 +0800
+Message-ID: <CAGXv+5G5Lr6rCB0D+q9egRFmhAzpGL49dNrQeCT8JpeUT+OiAA@mail.gmail.com>
+Subject: Re: [PATCH] media: mediatek: vcodec: fix h264 cavlc bitstream fail
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 06:29:17AM +0000, Arun.Ramadoss@microchip.com wrote:
-> > On Fri, Oct 14, 2022 at 08:58:51PM +0530, Arun Ramadoss wrote:
-> > > The LAN937x switch has capable for supporting IEEE 1588 PTP protocol. This
-> > > patch series add gPTP profile support and tested using the ptp4l application.
-> > > LAN937x has the same PTP register set similar to KSZ9563, hence the
-> > > implementation has been made common for the ksz switches. But the testing is
-> > > done only for lan937x switch.
-> > 
-> > Unrelated to the proposed implementation. What user space stack do you
-> > use for gPTP bridging?
-> 
-> I had used LinuxPTP stack for testing this patch set and in specific
-> linuxptp/configs/gptp.cfg 
-> 
-> Test Setup is of
-> LAN9370 DUT1 <LAN1> --- LAN9370 DUT2 <LAN1>
-> 
-> Ran the below command in both DUTS
-> #ptp4l -f ~/linuxptp/configs/gptp.cfg -i lan1
+On Mon, Oct 17, 2022 at 5:02 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+>
+> Some cavlc bistream will decode fail when the frame size is small than
+> 20 bytes. Need to add pending data at the end of the bitstream.
 
-gPTP bridges are when you specify "-i" more than once, similar to how
-1588 boundary clocks are created in ptp4l. Linuxptp does not support
-gPTP bridges; the time information needs to be relayed differently
-compared to both a BC and a TC, and there is also a Follow_Up information
-TLV which needs to be updated.
+"magic terminating pattern" instead of "pending data"?
 
-So I guess the answer is, you don't test gPTP bridging, ok.
+> For the size of mapped memory is at least one page, adding four bytes data
+> won't lead to access unknown virtual memory.
+
+Actually we can narrow this down a bit. The minimum dimension (16x16)
+sets the minimum size of the buffer at 256 bytes.
+
+> Fixes: 59fba9eed5a7 ("media: mediatek: vcodec: support stateless H.264 decoding for mt8192")
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  .../vcodec/vdec/vdec_h264_req_multi_if.c      | 27 ++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+> index 4cc92700692b..c1583dddcb04 100644
+> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+> @@ -539,6 +539,24 @@ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
+>         return 0;
+>  }
+>
+> +static void vdec_h264_insert_startcode(struct mtk_vcodec_dev *vcodec_dev, unsigned char *buf,
+> +                                      size_t *bs_size, struct mtk_h264_pps_param *pps)
+> +{
+> +       struct device *dev = &vcodec_dev->plat_dev->dev;
+> +
+> +       /* cavlc bitstream when entropy_coding_mode_flag is false. */
+> +       if (pps->entropy_coding_mode_flag || *bs_size > 20 ||
+> +           !(of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-dec") ||
+> +           of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-dec")))
+> +               return;
+> +
+
+There should be a comment here describing what is added.
+
+
+ChenYu
+
+> +       buf[*bs_size] = 0;
+> +       buf[*bs_size + 1] = 0;
+> +       buf[*bs_size + 2] = 1;
+> +       buf[*bs_size + 3] = 0xff;
+> +       (*bs_size) += 4;
+> +}
+> +
+>  static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+>                                       struct vdec_fb *fb, bool *res_chg)
+>  {
+> @@ -582,9 +600,6 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+>         }
+>
+>         inst->vsi->dec.nal_info = buf[nal_start_idx];
+> -       inst->vsi->dec.bs_buf_addr = (u64)bs->dma_addr;
+> -       inst->vsi->dec.bs_buf_size = bs->size;
+> -
+>         lat_buf->src_buf_req = src_buf_info->m2m_buf.vb.vb2_buf.req_obj.req;
+>         v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb, &lat_buf->ts_info, true);
+>
+> @@ -592,6 +607,12 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+>         if (err)
+>                 goto err_free_fb_out;
+>
+> +       vdec_h264_insert_startcode(inst->ctx->dev, buf, &bs->size,
+> +                                  &share_info->h264_slice_params.pps);
+> +
+> +       inst->vsi->dec.bs_buf_addr = (uint64_t)bs->dma_addr;
+> +       inst->vsi->dec.bs_buf_size = bs->size;
+> +
+>         *res_chg = inst->resolution_changed;
+>         if (inst->resolution_changed) {
+>                 mtk_vcodec_debug(inst, "- resolution changed -");
+> --
+> 2.25.1
+>
