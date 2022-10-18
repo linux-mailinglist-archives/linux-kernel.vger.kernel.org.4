@@ -2,126 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE08B602675
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C526602678
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbiJRIIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S230389AbiJRIIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiJRIID (ORCPT
+        with ESMTP id S229550AbiJRIIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:08:03 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9849D8994C;
-        Tue, 18 Oct 2022 01:07:58 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id h25so6136365vkc.6;
-        Tue, 18 Oct 2022 01:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jO2G7Ub06VleMOWVq2AgQtn2K7LEPw6osPGq9smEC0g=;
-        b=Qj72GX4oleH7IfAejvfReKtTGZCyGUCV04JVN3A1gMdNAwRAdjDIXb33Wc+r7UUyJW
-         /xzmRAg0EG6wp2O4X5XeixZ9t+FLM7XxwWRYO3934wIMU70dKbcW3scLJUbyYiO+QLcX
-         aWVkYslvSD6louW5wA5onLXwUIDE6qnuPBXXkfpbDTSS8dXNBHrB+ttBLb0oo3eqvl1Q
-         M0yZkJF3VPiDitM9KeupcLJJTnBZ/jjmrUpYzSMSyzZz74cMN2myoygEeTPB5XidjG8R
-         2BN6VxsEamVgoicbz0ppXK6mw2ip4HaAZINF29MzP8ER6BDI7mIt9x4il5kHSZ9g0tA3
-         zQwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jO2G7Ub06VleMOWVq2AgQtn2K7LEPw6osPGq9smEC0g=;
-        b=WdC6eAJLeJuPdv0GiIGZ8X7Wp8xKyUTIo3FTjLQGeB9iw5JjRzwk+cU19XQq+sRI5h
-         Q0Z5SCKJj3svaLIi6qk+wAsc8w7UC7gRemEvtS+F5DI3vtdlvd7iyB0vpgoStBBiETJI
-         H0tL0wVHAYh0zlsu4XuQJ56a1SoWtWD7IRvZXhOG0Znyib4lR+lpghAS/xsrN7vsJsw/
-         EqIVg6hkhgaaOS3hpPWZqVsG5TR4KrhKHddfekS/y6W40KVXsnzwnT/kvv637d/afFLl
-         r3bxhFSfTo7QFeQ8DFMdKqUoTWJPGKTI24qhR3e0uNPJMfxfpoHnUsHrz71RLcynqaC8
-         39GA==
-X-Gm-Message-State: ACrzQf07PtZKOVzzIrO3nR0D4h8Ptf/1ZPNSO6lFJkSsSCIdapt90Mco
-        T7OYr2kTXganRLeqMyxXE8PF2knZ3Fje16eNyHM=
-X-Google-Smtp-Source: AMsMyM45sAA7Ks+old6HyLd/Ohtxymz76NomUNpfTflxkWNGSL6yBW63n+wfgjozU8w4pa3NgeAtGcVB16xev3yMa2w=
-X-Received: by 2002:a1f:60cd:0:b0:3ae:da42:89d0 with SMTP id
- u196-20020a1f60cd000000b003aeda4289d0mr677921vkb.15.1666080476704; Tue, 18
- Oct 2022 01:07:56 -0700 (PDT)
+        Tue, 18 Oct 2022 04:08:17 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAED289971
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:08:14 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 0EDFD2B05993;
+        Tue, 18 Oct 2022 04:08:09 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 18 Oct 2022 04:08:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666080489; x=1666087689; bh=QyIR2mU70I
+        1YwkwOLa0CmZ/17qlaxKeUVXrXvltnm30=; b=GFjusIHgj8xz/yi7jFvMKNEQxw
+        HZ7+9YtYcFDKPj4XhMSDNdoNg/sq2vcXZOu9JUJQNrnfSNhv3FzbuQxvyTe7zxv6
+        HNmaCAy+x3F8INAsxCFyjYbN1zyXSznVuvbVd4WvSDSSfB22mp4BjmYOkJmMCop4
+        c1zma+hOzfeHlhisprEz6BF7/WdlcDHPoui4ePgJ9+iTrBn7LuNWHOpfCyU43RMZ
+        9MWeUivxIiVvXOW+9NvBgpukWnqglECw5oQu01fWdHAZtkMyAEHB6cdf76bEC7Uc
+        fUq5aW+BidlQZg4CgEQ37ngnY/EzqNA1p95Hy5fsAV1QBg65BD9ITLEjG/AQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666080489; x=1666087689; bh=QyIR2mU70I1YwkwOLa0CmZ/17qla
+        xKeUVXrXvltnm30=; b=ZH1+1s4aJx7OrygMRTnrhV+LMcQ0Fl5Kp6pyvkYoBkNo
+        GmwWfybSd1z+VI69F79wLXYaoim/Qfyfzn7n/MB2+IRbKrZ+/b0QOLeRsZgAb8Fd
+        8PqGjo137EOY7CpjWJOeILZb5MjokJbqjUopRfiibgZuUB8FSPF0/jVkgsaLmZG8
+        6n0wJBtTYqEA+1IaLVqwIbLsA2onk7csRjzUKB8isgB3AEspSi0yKiQX04nzOXNX
+        QiiD4owR9mc4e3meKqg462agLHz3WMQCHWoqPbZ7itzrI8V5rg6/UmHyfqxXmP5G
+        /cd+qux90phW4qVWeCFzCmteS3SOHvJV9HsRIxHA3w==
+X-ME-Sender: <xms:6F5OY6HZgytdMm6Vqyzy8NxLARZpJWI_0b2lwYu5aLlpXTaMlsBOaQ>
+    <xme:6F5OY7VrDINVe0nwa0Y4HWj0xhoc3U-yXZYYH5rqOEMWBepziDr6qryZMpsGL7G0i
+    uwg_8bQZ_ldVY7eD3M>
+X-ME-Received: <xmr:6F5OY0LSSi0uY7NN5F6JAO1Z9rY8338rOwxovMAxprRpD9x04i00D-JrrQI8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeludcutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhmvgcu
+    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvg
+    hrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffhvedu
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgi
+    himhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:6F5OY0E-ftftih6cOybLdHtpHMzyczz1Aqr_zQyRxv2j9OIzvIxqUg>
+    <xmx:6F5OYwWs3iqVw9YFSBe8SVI8Gk47k1-kxwFyZmVaKn7vT-3wO295oQ>
+    <xmx:6F5OY3NY3rp3gilKugt8Ne3JrajjqLSGe1BvCkrJkzzq1uqDWjql1A>
+    <xmx:6V5OY304Z5gl1LgvOk3C5up8PynQd6xXAoo8YLHxpnj8yXiTGpcxLIvPyw4>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Oct 2022 04:08:08 -0400 (EDT)
+Date:   Tue, 18 Oct 2022 10:08:06 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     kfyatek+publicgit@gmail.com
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>, Emma Anholt <emma@anholt.net>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH v5 06/22] drm/modes: Add a function to generate analog
+ display modes
+Message-ID: <20221018080806.mkw4zbzchlatxgwq@houat>
+References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v5-6-d841cc64fe4b@cerno.tech>
+ <30dbbcc8-1d14-0fc8-ed7c-0c3f7d094ea3@gmail.com>
 MIME-Version: 1.0
-References: <20221013222719.277923-1-stephen.s.brennan@oracle.com> <20221018041233.376977-1-stephen.s.brennan@oracle.com>
-In-Reply-To: <20221018041233.376977-1-stephen.s.brennan@oracle.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 18 Oct 2022 11:07:45 +0300
-Message-ID: <CAOQ4uxgnW1An-3FJvUfYoixeycZ0w=XDfU0fh6RdV4KM9DzX_g@mail.gmail.com>
-Subject: Re: [PATCH 0/2] fsnotify: fix softlockups iterating over d_subdirs
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bz2m37ekv7hmvzdb"
+Content-Disposition: inline
+In-Reply-To: <30dbbcc8-1d14-0fc8-ed7c-0c3f7d094ea3@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 7:12 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> Hi Jan, Amir, Al,
->
-> Here's my first shot at implementing what we discussed. I tested it using the
-> negative dentry creation tool I mentioned in my previous message, with a similar
-> workflow. Rather than having a bunch of threads accessing the directory to
-> create that "thundering herd" of CPUs in __fsnotify_update_child_dentry_flags, I
-> just started a lot of inotifywait tasks:
->
-> 1. Create 100 million negative dentries in a dir
-> 2. Use trace-cmd to watch __fsnotify_update_child_dentry_flags:
->    trace-cmd start -p function_graph -l __fsnotify_update_child_dentry_flags
->    sudo cat /sys/kernel/debug/tracing/trace_pipe
-> 3. Run a lot of inotifywait tasks: for i in {1..10} inotifywait $dir & done
->
-> With step #3, I see only one execution of __fsnotify_update_child_dentry_flags.
-> Once that completes, all the inotifywait tasks say "Watches established".
-> Similarly, once an access occurs in the directory, a single
-> __fsnotify_update_child_dentry_flags execution occurs, and all the tasks exit.
-> In short: it works great!
->
-> However, while testing this, I've observed a dentry still in use warning during
-> unmount of rpc_pipefs on the "nfs" dentry during shutdown. NFS is of course in
-> use, and I assume that fsnotify must have been used to trigger this. The error
-> is not there on mainline without my patch so it's definitely caused by this
-> code. I'll continue debugging it but I wanted to share my first take on this so
-> you could take a look.
->
-> [ 1595.197339] BUG: Dentry 000000005f5e7197{i=67,n=nfs}  still in use (2) [unmount of rpc_pipefs rpc_pipefs]
->
 
-Hmm, the assumption we made about partial stability of d_subdirs
-under dir inode lock looks incorrect for rpc_pipefs.
-None of the functions that update the rpc_pipefs dcache take the parent
-inode lock.
+--bz2m37ekv7hmvzdb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The assumption looks incorrect for other pseudo fs as well.
+Hi,
 
-The other side of the coin is that we do not really need to worry
-about walking a huge list of pseudo fs children.
+On Sun, Oct 16, 2022 at 07:34:12PM +0200, Mateusz Kwiatkowski wrote:
+> Hi Maxime & everyone,
+>=20
+> Sorry for being inactive in the discussions about this patchset for the l=
+ast
+> couple of weeks.
+>=20
+> > +const static struct analog_parameters tv_modes_parameters[] =3D {
+> > +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_NTSC,
+> > +			  NTSC_LINES_NUMBER,
+> > +			  NTSC_LINE_DURATION_NS,
+> > +			  PARAM_RANGE(NTSC_HACT_DURATION_MIN_NS,
+> > +				      NTSC_HACT_DURATION_TYP_NS,
+> > +				      NTSC_HACT_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(NTSC_HFP_DURATION_MIN_NS,
+> > +				      NTSC_HFP_DURATION_TYP_NS,
+> > +				      NTSC_HFP_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(NTSC_HSLEN_DURATION_MIN_NS,
+> > +				      NTSC_HSLEN_DURATION_TYP_NS,
+> > +				      NTSC_HSLEN_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(NTSC_HBP_DURATION_MIN_NS,
+> > +				      NTSC_HBP_DURATION_TYP_NS,
+> > +				      NTSC_HBP_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(NTSC_HBLK_DURATION_MIN_NS,
+> > +				      NTSC_HBLK_DURATION_TYP_NS,
+> > +				      NTSC_HBLK_DURATION_MAX_NS),
+> > +			  16,
+> > +			  PARAM_FIELD(3, 3),
+> > +			  PARAM_FIELD(3, 3),
+> > +			  PARAM_FIELD(16, 17)),
+> > +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_PAL,
+> > +			  PAL_LINES_NUMBER,
+> > +			  PAL_LINE_DURATION_NS,
+> > +			  PARAM_RANGE(PAL_HACT_DURATION_MIN_NS,
+> > +				      PAL_HACT_DURATION_TYP_NS,
+> > +				      PAL_HACT_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(PAL_HFP_DURATION_MIN_NS,
+> > +				      PAL_HFP_DURATION_TYP_NS,
+> > +				      PAL_HFP_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(PAL_HSLEN_DURATION_MIN_NS,
+> > +				      PAL_HSLEN_DURATION_TYP_NS,
+> > +				      PAL_HSLEN_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(PAL_HBP_DURATION_MIN_NS,
+> > +				      PAL_HBP_DURATION_TYP_NS,
+> > +				      PAL_HBP_DURATION_MAX_NS),
+> > +			  PARAM_RANGE(PAL_HBLK_DURATION_MIN_NS,
+> > +				      PAL_HBLK_DURATION_TYP_NS,
+> > +				      PAL_HBLK_DURATION_MAX_NS),
+> > +			  12,
+> > +
+> > +			  /*
+> > +			   * The front porch is actually 6 short sync
+> > +			   * pulses for the even field, and 5 for the
+> > +			   * odd field. Each sync takes half a life so
+> > +			   * the odd field front porch is shorter by
+> > +			   * half a line.
+> > +			   *
+> > +			   * In progressive, we're supposed to use 6
+> > +			   * pulses, so we're fine there
+> > +			   */
+> > +			  PARAM_FIELD(3, 2),
+> > +
+> > +			  /*
+> > +			   * The vsync length is 5 long sync pulses,
+> > +			   * each field taking half a line. We're
+> > +			   * shorter for both fields by half a line.
+> > +			   *
+> > +			   * In progressive, we're supposed to use 5
+> > +			   * pulses, so we're off by half
+> > +			   * a line.
+> > +			   *
+> > +			   * In interlace, we're now off by half a line
+> > +			   * for the even field and one line for the odd
+> > +			   * field.
+> > +			   */
+> > +			  PARAM_FIELD(3, 3),
+> > +
+> > +			  /*
+> > +			   * The back porch starts with post-equalizing
+> > +			   * pulses, consisting in 5 short sync pulses
+> > +			   * for the even field, 4 for the odd field. In
+> > +			   * progressive, it's 5 short syncs.
+> > +			   *
+> > +			   * In progressive, we thus have 2.5 lines,
+> > +			   * plus the 0.5 line we were missing
+> > +			   * previously, so we should use 3 lines.
+> > +			   *
+> > +			   * In interlace, the even field is in the
+> > +			   * exact same case than progressive. For the
+> > +			   * odd field, we should be using 2 lines but
+> > +			   * we're one line short, so we'll make up for
+> > +			   * it here by using 3.
+> > +			   *
+> > +			   * The entire blanking area is supposed to
+> > +			   * take 25 lines, so we also need to account
+> > +			   * for the rest of the blanking area that
+> > +			   * can't be in either the front porch or sync
+> > +			   * period.
+> > +			   */
+> > +			  PARAM_FIELD(19, 20)),
+> > +};
+>=20
+> Nit: setting vbp limits like that makes it impossible to use
+> drm_analog_tv_mode() to generate modes that include the VBI for e.g. emit=
+ting
+> teletext.
+>=20
+> This probably doesn't matter, as it can still be created as a custom mode=
+ from
+> userspace, hence I'm mentioning it as a nit.
 
-The question is how to classify those pseudo fs and whether there
-are other cases like this that we missed.
+Yeah, I think it's out of scope at least for now. Also, the compositor
+should probably be aware of the margins being used to put the VBI data,
+so expecting userspace to come up with the mode is probably best?
 
-Perhaps having simple_dentry_operationsis a good enough
-clue, but perhaps it is not enough. I am not sure.
+> > +		 * By convention, NSTC (aka 525/60) systems start with
+>=20
+> Typo: s/NSTC/NTSC/
 
-It covers all the cases of pseudo fs that I know about, so you
-can certainly use this clue to avoid going to sleep in the
-update loop as a first approximation.
+Fixed, thanks
+Maxime
 
-I can try to figure this out, but I prefer that Al will chime in to
-provide reliable answers to those questions.
+--bz2m37ekv7hmvzdb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Amir.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY05e5QAKCRDj7w1vZxhR
+xR8VAQC+375DtcagkAytZVeOEe9aSmsByYFfuLp2Bt0aRSrhEAD/SoTKGvPkbrp3
+DYtTf34PAYs3gXueCuNbfrKzWk9/DgM=
+=IY6U
+-----END PGP SIGNATURE-----
+
+--bz2m37ekv7hmvzdb--
