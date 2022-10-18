@@ -2,123 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A482E602B83
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B40602B88
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 14:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiJRMRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 08:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S229758AbiJRMTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 08:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJRMRr (ORCPT
+        with ESMTP id S229823AbiJRMTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 08:17:47 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E9AA3462
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:17:45 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id f8so8456734qkg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 05:17:45 -0700 (PDT)
+        Tue, 18 Oct 2022 08:19:17 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F188AAD9BB;
+        Tue, 18 Oct 2022 05:19:15 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id w3so9457951qtv.9;
+        Tue, 18 Oct 2022 05:19:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OlSg04/4Dd8U3EuUogDMELPRpoMqkuY3GumBRBmWFI0=;
-        b=ve3mDns3CqM7+7NxyWsndkD0guUHijbrCAucM26kfe6BL9xq0EPS69ikH1r+oKIwbw
-         XF19Fx7G2EHRFmsZw0LGj8fECAHmCZvQGThIwUQIt+begtsVLgoklhorPzaP/29PfM6p
-         CbgX4BaT+1W5j8RvXp/PFSlhmqG4E0756krQguM19r9lHxvnfdNPEL1ADd3PWBPf2lX7
-         VqVBZyjxaG1DvXLl5HcGzBLSurPLu57Yr+BBfjij4+g2o2/HDhfS9NCdiorCaqhZu76G
-         67b8HuzYk2s6m55RqeHTFjbNyGrPjL1g0zJmENKk6Ke3yLJk7j6oVWxPq2VsyuuW7ng0
-         5RDg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LiNDBNVyZfRCvjPG4NAD0FPyNgn27eYCFKSVJt21O1A=;
+        b=CdtklZI4CVjxSMQNIZZn21ikyKOwFwTSAmkb1Q2iioTBafnzbO2blM03OYarRgWcQ6
+         jO01FgQr4dB+gyKfPjQ+2geWll7bKxTxxQ8/wXus+f7c8ApINwU/Spi9tVFYzX8Q11Bx
+         YJqlBYPr+2JqdRHDrJ4qY0Zj1CFrkSioxE9Q10GYQHgnJHBre8Hg4oG6iZz9r7Zzvi9S
+         ih/WLMhQ3rdC4gTja7VAHXDUgD0XxwOVQCifuH6HTovM1CidvW9XwYkck3c49x4tJGMS
+         Yv4RtvmIp0TLZHmOdYMxfgzg3qOLBUfWOGyCAb1WhCuVF7woAZek8yya6U4vvjpv6r4p
+         fGXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OlSg04/4Dd8U3EuUogDMELPRpoMqkuY3GumBRBmWFI0=;
-        b=TcVF8AgkwgTglTjuiea1YzY6TzQeODZ+fYWjB/IpmBX4Px6h3+/PXpoAEk5xRTXrkW
-         huBS0qw/0M3hq7MgLUaSRTedkG8TlWyf79iDt9UUfWHDHxtUTp2tK/SJpEEdff6qyAKD
-         9EOWY/66mEkspnpyt7jSQX4OO7aT88x0pGrW6JECH7F4EwEqd9sOlLdpfDOed6/u0KfF
-         Rz0VcdncCodFxil/YRY461+ipQX5OWGUy9+e9A2UZfQfCg7SXNCjWkz8xxVwKZAse3Qq
-         /NiaRr+Zh63gbacJNj4i8GP7qrB5XrLZ7pqkWQ9rjRbNwRfkSJ4dcQaZS/wAUN3lbY7H
-         Q1uA==
-X-Gm-Message-State: ACrzQf1KucviZKgb8f9QdhgCZrb3EdRHR2m+Sv0lS8Cd/ql5ARE9vS08
-        X3HQ9KBdCXHE3RTD7YLs7JXv+QB7Wm7x/Q==
-X-Google-Smtp-Source: AMsMyM6ZG32yzEaXg8k2oSN/Tpw/jWYy6gTmmM/nXLeLt3qfUN1KFM8aIVURt5SG0G0p7IE4zhw70g==
-X-Received: by 2002:a37:ef0d:0:b0:6bb:4ec8:b312 with SMTP id j13-20020a37ef0d000000b006bb4ec8b312mr1529324qkk.249.1666095464842;
-        Tue, 18 Oct 2022 05:17:44 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id oo12-20020a05620a530c00b006eeae49537bsm2161924qkn.98.2022.10.18.05.17.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 05:17:43 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 08:17:41 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Qingtao Cao <qingtao.cao.au@gmail.com>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 1/1] gpio: exar: Allow IO port access
-Message-ID: <Y06ZZQ4q3Ql0sNkm@fedora>
-References: <20221017170600.88480-1-andriy.shevchenko@linux.intel.com>
- <CACRpkdbNkPG5KsB47jByseDh=nOt+J2eE_nh5EJqRLAPDp8v8A@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LiNDBNVyZfRCvjPG4NAD0FPyNgn27eYCFKSVJt21O1A=;
+        b=rJ9tGTpL7vkVAeMdgL8cxmA5r8rSykj12qxwwtgDN+raT6sXlyRTT9+QmPg2DmvkLi
+         ktMVoWJdU6enrOA9bhLJz8t096bcvUbpKDyO20Z/eQaeWB9bLEXLl9BxE4/jV8h8EVuZ
+         fXbkJCVaCxxaocizL0spGVLn2mRXSKev46ts4aalN6UomXxcnesHPslI25U64DM52WP0
+         tJO8/bbmmtU5OAuaDxwj6BUgN3WyYV+c2OZAYtkxzsDUEtyq1jtmVJX1vMd1KTVfGxiV
+         nUsHP6as6J4vTJ5+Qka7hOPF5tNEw9gaptPN60I5dl8dQt8pKBsRx2jg9bHfe5O4Bub6
+         Vwmg==
+X-Gm-Message-State: ACrzQf1ZzIDpk4GNr/llAwvZLFYLDXdmNMAn+gQ48S3Qz5qsEbxToId9
+        1pd0EJZiGPvHfoOHjCwljLrcNh2qfHFZlobLVrE=
+X-Google-Smtp-Source: AMsMyM42wYUHzaf6FdDo7ooxTQC/Q7AwwYYKqUW+nOUiZm+XijDhUYwDXtRDPnOV2rYbFAxZpbitt+QCIXfZL2hNI8w=
+X-Received: by 2002:a05:622a:1045:b0:39c:e2e1:dc59 with SMTP id
+ f5-20020a05622a104500b0039ce2e1dc59mr1718640qte.195.1666095554850; Tue, 18
+ Oct 2022 05:19:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Gqn9ZZgaixBaZ3cX"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdbNkPG5KsB47jByseDh=nOt+J2eE_nh5EJqRLAPDp8v8A@mail.gmail.com>
+References: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
+ <20221017184419.62d365c1@jic23-huawei> <LYfRwE3pxZfgZBDC6gwvsSrHWqcSQXHK@localhost>
+In-Reply-To: <LYfRwE3pxZfgZBDC6gwvsSrHWqcSQXHK@localhost>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Oct 2022 15:18:38 +0300
+Message-ID: <CAHp75VfL5TXvoVY8Zq946eUJYetLt2Od2m26mUSPGxsdF=TC-Q@mail.gmail.com>
+Subject: Re: [PATCH v6 00/13] Add support for AXP192 PMIC
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lee.jones@linaro.org, sre@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, lars@metafoo.de, linus.walleij@linaro.org,
+        brgl@bgdev.pl, michael@walle.cc, samuel@sholland.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 18, 2022 at 2:06 AM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
+> Jonathan Cameron <jic23@kernel.org> writes:
+> > On Mon, 17 Oct 2022 00:43:22 +0100
+> > Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
---Gqn9ZZgaixBaZ3cX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Tue, Oct 18, 2022 at 10:29:13AM +0200, Linus Walleij wrote:
-> On Mon, Oct 17, 2022 at 7:05 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
->=20
-> > It's possible that PCI device can provide an IO port resource for
-> > the device. regmap MMIO currently uses MMIO by default. With an
-> > additional flag we enable support for IO port accesses.
+> > Lee has recently expressed that he keen to take as much of these sorts
+> > of series as possible via the various subsystem trees.
 > >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->=20
-> Looks clever to me!
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> I would let William have a look at it as well, as he's worked extensively
-> with port-mapped I/O.
->=20
-> Yours,
-> Linus Walleij
+> > As such, it is useful to call out in the cover letter of such a series
+> > if this can be done.  For example, patch 9 (last IIO one) can't be
+> > applied without defines in patch 6 (I think).  Thus I'm assuming Lee
+> > will do an immutable branch with at least those patches on it.
+> >
+> > Perhaps worth expressing if that is also the case for the power
+> > and regulator subsystem patches?
 
-I love how simple it is to add IO port support to these drivers now. :-)
+> Yep, the IIO, regulator, and power subsystem patches all depend on
+> the MFD patch.
 
-Acked-by: William Breathitt Gray <william.gray@linaro.org>
+There are two types of dependencies: compile and functional.
 
-I'm hoping to convert several of the port-mapped GPIO drivers to the
-regmap API later this cycle, so it's good to see other modules making
-use of this interface as well.
+> Specifically, patches 6, 9, and 10 depend on patch 5.
+> I can't get rid of this dependency because the variant ID (AXP192_ID)
+> has to be defined centrally in the MFD patch.
 
-Thanks,
+It's not clear which one you are talking about. If it's functional,
+then each driver can be taken separately via each concerned subsystem.
 
-William Breathitt Gray
+> The axp20x_battery patches (last three of the whole series) don't
+> depend on the variant ID or other defines, so they could be taken
+> independently through the power subsystem.
+>
+> Even though the IIO cleanups (7 and 8) don't depend on anything else
+> I imagine it'd cause problems to take those via IIO because patch 9
+> depends on them.
+>
+> IOW: Lee probably needs to take patches 5-10.
 
---Gqn9ZZgaixBaZ3cX
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY06ZZQAKCRC1SFbKvhIj
-K4a2AQC5tyMmVg9lmM0Ig4lRNMikOooM39OWgxDsLS6TvV4qaAD+LgrR2MNu2N7+
-UI00cdLogtU8YgtpqEbld147YhZXoQo=
-=vFbp
------END PGP SIGNATURE-----
-
---Gqn9ZZgaixBaZ3cX--
+-- 
+With Best Regards,
+Andy Shevchenko
