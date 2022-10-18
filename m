@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0978F6035D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD8B6035D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 00:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJRWZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 18:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S229944AbiJRWZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 18:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiJRWZM (ORCPT
+        with ESMTP id S229885AbiJRWZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Oct 2022 18:25:12 -0400
 Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7E7D42E72
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:25:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 605F84AD4F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 15:25:08 -0700 (PDT)
 Received: from localhost.localdomain ([146.241.87.206])
         by Aruba Outgoing Smtp  with ESMTPSA
-        id kv1EovliYaWj1kv1EoELA7; Wed, 19 Oct 2022 00:25:07 +0200
+        id kv1EovliYaWj1kv1HoELBg; Wed, 19 Oct 2022 00:25:07 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1666131907; bh=ecGKETr6tHYjYHpQVgivf0BPNu10d7Tim6n0Zf2+ae8=;
+        t=1666131907; bh=G21UWZTIRbOHhkWY/cfvy0aqZyPYcJqojzWjie6A3oY=;
         h=From:To:Subject:Date:MIME-Version;
-        b=KWN5bUrbvitA1vzV0g/ooksAWbSRhEteGWEaaNfZEEHepIiJTOltLHJd2aLmSWFf/
-         XoFgJDEGfA9mGzs7tZ0gReRjcV9sxYGwkMbHix1Lc3h9QuheSfAn/ZSJAlvu9RS1IV
-         jzsg5qyKUg/fThoYyWIgmnC8b1+3oAH/RZR8DFL40jxcXASD9TF7NBWdBY2teOgVb2
-         8nkIEUuIsumtjGcypPxOCtZz+vHUhG8m6THC0pD+Q40OpXVdzRLdidW2Bq5IV8gsoj
-         TUVsOb8BbMHlOpA2fcCNDWHdxXmQD+gTi2VTeqYprohSGDacFkW5+gxXDwIntqxiDa
-         SlNl2pKycC0Bg==
+        b=Ud6pBCkOhW9bvos1H1dj4qs8CCcCVVIt69Nxys7taT6ylik0WXRGxKFSJxG8sYeUf
+         JbJMIBUYCt1jkpq3lcR57QYVfTl5gTurPUNuelLPh6ymK5jj35Mb9d3JMLGZn55sOY
+         3XwP95JCvof1pl5GjeXqt204+FvRC3Xwre65boVIoMMF2NnWbTdwjnbwDd7HejtON4
+         bXM0GF57lBL3PIjwRtKUIqJRu9u8SUQ/R3McRIvSt/tLNAROw3TIS3g4W0+H7hFz0f
+         E8GGWftaxRtwmbrGvtPZeCYvhUfjaz7EBNJdswcgwuMxmjYPQ3k8N49qdL4J8JdMnq
+         YcYCx1oBvw2KA==
 From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Russell King <linux@armlinux.org.uk>,
@@ -36,10 +36,12 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Russell King <rmk+kernel@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>
-Subject: [PATCH v2 1/2] ARM: mm: fix no-MMU ZERO_PAGE() implementation
-Date:   Wed, 19 Oct 2022 00:25:02 +0200
-Message-Id: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
+Subject: [PATCH v2 2/2] ARM: mm: convert empty_zero_page to array for consistency
+Date:   Wed, 19 Oct 2022 00:25:03 +0200
+Message-Id: <20221018222503.90118-2-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
+References: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4xfPZlKIhA9QmVEJg8TyQBw3iOkBHZPOM6fAPP7UVSbA59v5ex4MI480bxgNdmo8uHnNiksDWqvpGUvjzux5YgGrteQPR5O48noLtBaTn1TidfdU+mLXi/
@@ -57,132 +59,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually in no-MMU SoCs(i.e. i.MXRT) ZERO_PAGE(vaddr) expands to
-```
-virt_to_page(0)
-```
-that in order expands to:
-```
-pfn_to_page(virt_to_pfn(0))
-```
-and then virt_to_pfn(0) to:
-```
-#define virt_to_pfn(0) \
-	((((unsigned long)(0) - PAGE_OFFSET) >> PAGE_SHIFT) + \
-	 PHYS_PFN_OFFSET)
-```
-where PAGE_OFFSET and PHYS_PFN_OFFSET are the DRAM offset(0x80000000) and
-PAGE_SHIFT is 12. This way we obtain 16MB(0x01000000) summed to the base of
-DRAM(0x80000000).
-When ZERO_PAGE(0) is then used, for example in bio_add_page(), the page
-gets an address that is out of DRAM bounds.
-So instead of using fake virtual page 0 let's allocate a dedicated
-zero_page during paging_init() and assign it to a global 'struct page *
-empty_zero_page' the same way mmu.c does and it's the same approach used
-in m68k with commit dc068f462179 as discussed here[0]. Then let's move
-ZERO_PAGE() definition to the top of pgtable.h to be in common between
-mmu.c and nommu.c.
+ARM architecture is the only one to have empty_zero_page to be a
+struct page pointer, while in all other implementations empty_zero_page is
+a data pointer or directly an array(the zero page itself). So let's convert
+empty_zero_page to an array for consistency and to avoid an early
+allocation+dcache flush. Being the array in .bss it will be cleared earlier
+in a more linear way(and a bit faster) way.
 
-[0]: https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#m1266ceb63ad140743174d6b3070364d3c9a5179b
-
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 V1->V2:
-* improve commit log as suggested by Arnd Bergmann
+* create patch suggested by Arnd Bergmann
 ---
- arch/arm/include/asm/pgtable-nommu.h |  6 ------
- arch/arm/include/asm/pgtable.h       | 16 +++++++++-------
- arch/arm/mm/nommu.c                  | 19 +++++++++++++++++++
- 3 files changed, 28 insertions(+), 13 deletions(-)
+ arch/arm/include/asm/pgtable.h |  4 ++--
+ arch/arm/mm/mmu.c              | 10 +---------
+ arch/arm/mm/nommu.c            | 14 +-------------
+ 3 files changed, 4 insertions(+), 24 deletions(-)
 
-diff --git a/arch/arm/include/asm/pgtable-nommu.h b/arch/arm/include/asm/pgtable-nommu.h
-index d16aba48fa0a..090011394477 100644
---- a/arch/arm/include/asm/pgtable-nommu.h
-+++ b/arch/arm/include/asm/pgtable-nommu.h
-@@ -44,12 +44,6 @@
- 
- typedef pte_t *pte_addr_t;
- 
--/*
-- * ZERO_PAGE is a global shared page that is always zero: used
-- * for zero-mapped memory areas etc..
-- */
--#define ZERO_PAGE(vaddr)	(virt_to_page(0))
--
- /*
-  * Mark the prot value as uncacheable and unbufferable.
-  */
 diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-index 78a532068fec..ef48a55e9af8 100644
+index ef48a55e9af8..de402b345f55 100644
 --- a/arch/arm/include/asm/pgtable.h
 +++ b/arch/arm/include/asm/pgtable.h
-@@ -10,6 +10,15 @@
- #include <linux/const.h>
- #include <asm/proc-fns.h>
- 
-+#ifndef __ASSEMBLY__
-+/*
-+ * ZERO_PAGE is a global shared page that is always zero: used
-+ * for zero-mapped memory areas etc..
-+ */
-+extern struct page *empty_zero_page;
-+#define ZERO_PAGE(vaddr)	(empty_zero_page)
-+#endif
-+
- #ifndef CONFIG_MMU
- 
- #include <asm-generic/pgtable-nopud.h>
-@@ -139,13 +148,6 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
+@@ -15,8 +15,8 @@
+  * ZERO_PAGE is a global shared page that is always zero: used
+  * for zero-mapped memory areas etc..
   */
- 
- #ifndef __ASSEMBLY__
--/*
-- * ZERO_PAGE is a global shared page that is always zero: used
-- * for zero-mapped memory areas etc..
-- */
 -extern struct page *empty_zero_page;
 -#define ZERO_PAGE(vaddr)	(empty_zero_page)
--
- 
- extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
- 
-diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
-index c42debaded95..c1494a4dee25 100644
---- a/arch/arm/mm/nommu.c
-+++ b/arch/arm/mm/nommu.c
-@@ -26,6 +26,13 @@
- 
- unsigned long vectors_base;
- 
-+/*
-+ * empty_zero_page is a special page that is used for
-+ * zero-initialized data and COW.
-+ */
-+struct page *empty_zero_page;
-+EXPORT_SYMBOL(empty_zero_page);
-+
- #ifdef CONFIG_ARM_MPU
- struct mpu_rgn_info mpu_rgn_info;
++extern unsigned long empty_zero_page[];
++#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
  #endif
-@@ -148,9 +155,21 @@ void __init adjust_lowmem_bounds(void)
+ 
+ #ifndef CONFIG_MMU
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+index 463fc2a8448f..f05a5471a45a 100644
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -45,7 +45,7 @@ extern unsigned long __atags_pointer;
+  * empty_zero_page is a special page that is used for
+  * zero-initialized data and COW.
+  */
+-struct page *empty_zero_page;
++unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)] __page_aligned_bss;
+ EXPORT_SYMBOL(empty_zero_page);
+ 
+ /*
+@@ -1760,8 +1760,6 @@ static void __init early_fixmap_shutdown(void)
   */
  void __init paging_init(const struct machine_desc *mdesc)
  {
-+	void *zero_page;
-+
+-	void *zero_page;
+-
+ 	pr_debug("physical kernel sections: 0x%08llx-0x%08llx\n",
+ 		 kernel_sec_start, kernel_sec_end);
+ 
+@@ -1782,13 +1780,7 @@ void __init paging_init(const struct machine_desc *mdesc)
+ 
+ 	top_pmd = pmd_off_k(0xffff0000);
+ 
+-	/* allocate the zero page. */
+-	zero_page = early_alloc(PAGE_SIZE);
+-
+ 	bootmem_init();
+-
+-	empty_zero_page = virt_to_page(zero_page);
+-	__flush_dcache_page(NULL, empty_zero_page);
+ }
+ 
+ void __init early_mm_init(const struct machine_desc *mdesc)
+diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
+index c1494a4dee25..e0c3f59d1c5a 100644
+--- a/arch/arm/mm/nommu.c
++++ b/arch/arm/mm/nommu.c
+@@ -30,7 +30,7 @@ unsigned long vectors_base;
+  * empty_zero_page is a special page that is used for
+  * zero-initialized data and COW.
+  */
+-struct page *empty_zero_page;
++unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)] __page_aligned_bss;
+ EXPORT_SYMBOL(empty_zero_page);
+ 
+ #ifdef CONFIG_ARM_MPU
+@@ -155,21 +155,9 @@ void __init adjust_lowmem_bounds(void)
+  */
+ void __init paging_init(const struct machine_desc *mdesc)
+ {
+-	void *zero_page;
+-
  	early_trap_init((void *)vectors_base);
  	mpu_setup();
-+
-+	/* allocate the zero page. */
-+	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-+	if (!zero_page)
-+		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-+		      __func__, PAGE_SIZE, PAGE_SIZE);
-+
+-
+-	/* allocate the zero page. */
+-	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+-	if (!zero_page)
+-		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
+-		      __func__, PAGE_SIZE, PAGE_SIZE);
+-
  	bootmem_init();
-+
-+	empty_zero_page = virt_to_page(zero_page);
-+	flush_dcache_page(empty_zero_page);
+-
+-	empty_zero_page = virt_to_page(zero_page);
+-	flush_dcache_page(empty_zero_page);
  }
  
  /*
