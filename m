@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1D16020A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60656020AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiJRB4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S230368AbiJRB4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 21:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiJRB4S (ORCPT
+        with ESMTP id S230350AbiJRB4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:56:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4276C57248;
-        Mon, 17 Oct 2022 18:56:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D22EA6134F;
-        Tue, 18 Oct 2022 01:56:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43951C43470;
-        Tue, 18 Oct 2022 01:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666058176;
-        bh=FOFyrGguuAOD/IHXQEvTGpKrPLp+v+QdALq0Zhe3cVU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RLdSFgN1hi/d3+qjFng384+/YgqBUngmj69R/qQHdJSIEv9vWG9xJqMFaDizSinXy
-         Phps5SsVpVqfGTgKFY5hj0TAEVOMSCvCphlQJoopszIcCg3V10M3CQqT8tgqIeuGB1
-         Za8kSwFrhXB1AqfxAQw/y1mfUHk8tE1DGM2o6hMAfX4EX7GsnW0iQ0mlC+zhIFC4yC
-         wAugcTUc76sF3vxPd60LkR2A9fa5XNEHZ5O5abJW1ZJrHtXNaOowyV/VhEFsMTR5mz
-         X+RuSa5HxLHdSWjeiuEH7hcDkfqlGXRDWZIQzTVj7U5TFiav/cFF8N8oC9mkbB+Ieb
-         BsX9LGiArh5oQ==
-Received: by mail-oi1-f176.google.com with SMTP id g130so14130622oia.13;
-        Mon, 17 Oct 2022 18:56:16 -0700 (PDT)
-X-Gm-Message-State: ACrzQf31QP1oh9Fh0QA/+XW58cIaot4b//aQLhp53GYt5l7A015ar/fo
-        g43xk4rLwlBJBlFgJUwR1QHV6mUy111lfNrBaG4=
-X-Google-Smtp-Source: AMsMyM7iCW1MDbycsw+DlbQixQNxQ7zwZfAvDGS5mz8uTUYhYpyIc3SPVD51yQqot0rQjmd/FO1S9OOK+7Fn41Vlat4=
-X-Received: by 2002:a05:6808:10c3:b0:354:db1e:c4a8 with SMTP id
- s3-20020a05680810c300b00354db1ec4a8mr14273459ois.112.1666058175349; Mon, 17
- Oct 2022 18:56:15 -0700 (PDT)
+        Mon, 17 Oct 2022 21:56:32 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EFD72B73
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:56:25 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id j21so7845728qkk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cwnKiJHjgGODb7JZ57x/PI3J93dO3KCDNTmDBrZdsDc=;
+        b=xflSfO3croZNnEFDdG7BOLArdMlmy+EU22He2ItcgDKF+cPzrW4GyqHfDn+EHI9zAN
+         FtdDBSXhjYQV8JJmZVlWlPrOYWCBFm2F35En38JSnLi4GEB8FR+HJsn5CH/fJSe8tLiZ
+         rZPdTlOaunKSdBCHtJ/Wh3FxNLQn/RGKWEW5siTVp7xYRUpfj53c/RPUrc+YwaZYUf3P
+         ZBvApA9Gxu9brukx62hgnNia1ucmgNCdB4WTZzZh3dfaZAmEqgorXE3an33GUpbFl8Rj
+         ePveOh+GWzORHhtyXYCDVUFTvM/kI6mFSBttrncVbBGF8Jpv72/iuyjSg8RV+tstvJvV
+         lFHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cwnKiJHjgGODb7JZ57x/PI3J93dO3KCDNTmDBrZdsDc=;
+        b=PCJJS04jKlaeTQYVi9xTWnuoopElVCtWDaMyJX1MQUKjona7DfU2Px0wH3MK/KAhrh
+         9mYikjGqleCiV0KyPRk+ILsS4BlRY8gmHBstgW7jA6ICkzNeYW1Le/iN4K52+QLYlLcS
+         RydT5i16d7uU/ymCATdwe6P/bCtfsAmZqNjtxfz7a87vzwsqsDSOXwyl68hi6RDugcU1
+         CSMidVLdwSk261Nuv7/w2XQ6lm0Jka62Q30K0bwc/t6wnuXB/jN+NuQ5rwg8CMPgx6t4
+         4C8kZX/ZT71s4dTBOa37zncTNzefU7x90vB99uSW/sYmPPZ1zPHil7s+uxxQAM3bxvja
+         5ziQ==
+X-Gm-Message-State: ACrzQf01WJA+hHaACypiRZ4vbM/lfW3EmWtsRk7yrY7ghsCVET5r0cbO
+        DysL923YQasHvPMXFW1Vg9yMrg==
+X-Google-Smtp-Source: AMsMyM5ocMIfY0aC8/+qBtf+hP1sxMYMg/Y2wsOOlblki8BnnPjo0vYAfLgMcatAAS2jP/FXcwSJYA==
+X-Received: by 2002:a05:620a:1982:b0:6ee:c63f:f983 with SMTP id bm2-20020a05620a198200b006eec63ff983mr373977qkb.382.1666058184215;
+        Mon, 17 Oct 2022 18:56:24 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id s15-20020a05622a178f00b0035d432f5ba3sm1053661qtk.17.2022.10.17.18.56.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 18:56:23 -0700 (PDT)
+Message-ID: <7ada410d-8d13-b29a-869c-3f5d032528bf@linaro.org>
+Date:   Mon, 17 Oct 2022 21:56:21 -0400
 MIME-Version: 1.0
-References: <20221015130548.3634468-1-guoren@kernel.org> <20221015165017.GA1034513@roeck-us.net>
- <CAJF2gTR1eBhdd1uhJReSZxfc4vyt9n9MbaG7XQjAJcvdaFbbXQ@mail.gmail.com>
- <3e3e23a4-574a-166f-78fe-9113abec4d6b@roeck-us.net> <CAJF2gTTz=Whg+heB95doVnQWVvjNC1bCx1bYLMW4CtybABBGNA@mail.gmail.com>
- <20221017125320.18b54147@kernel.org>
-In-Reply-To: <20221017125320.18b54147@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 18 Oct 2022 09:56:02 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSQrH-sZqSo+0Ky=4cJOKFV8BxzR2e7W6sUnGN=0rj40Q@mail.gmail.com>
-Message-ID: <CAJF2gTSQrH-sZqSo+0Ky=4cJOKFV8BxzR2e7W6sUnGN=0rj40Q@mail.gmail.com>
-Subject: Re: [PATCH] Revert "cpumask: fix checking valid cpu range"
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, linux@rasmusvillemoes.dk,
-        yury.norov@gmail.com, caraitto@google.com, willemb@google.com,
-        jonolson@google.com, amritha.nambiar@intel.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for
+ stm32-romem
+Content-Language: en-US
+To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 3:53 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon, 17 Oct 2022 10:56:05 +0800 Guo Ren wrote:
-> > Ping Jakub Kicinski <kuba@kernel.org>.
-> >
-> > You seem to miss this Revert fixup on cpumask_check(n + 1).
-> >
-> > Your patch has merged in v6.1-rc1, but that is not enough.
-> > https://lore.kernel.org/netdev/166582921612.1299.769135677399153914.git-patchwork-notify@kernel.org/T/#m0111a76380626b2f91e072ecdd5827578d5cbf60
-> >
-> > Without the patch, there still is a warning.
->
-> Sorry, I don't know what you mean. I was only putting a workaround back
-> into the core networking code - I'm guessing this patch will silence
-> the warning that comes from virtio? I haven't looked into that one.
+On 14/10/2022 11:23, Patrick Delaunay wrote:
+> Add a new compatible for stm32mp13 support.
+> 
+> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+> ---
+> 
+>  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> index 448a2678dc62..16f4cad2fa55 100644
+> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> @@ -22,6 +22,7 @@ properties:
+>    compatible:
+>      enum:
+>        - st,stm32f4-otp
+> +      - st,stm32mp13-bsec
+>        - st,stm32mp15-bsec
 
-Without the patch, Linux-v6.1-rc1 would warn when
-CONFIG_DEBUG_PER_CPU_MAPS was enabled.
+According to usage in DTS (separate patch for some reason), the devices
+are compatible, so please describe them like that.
 
-[    2.130438] virtio_blk virtio0: 1/0/0 default/read/poll queues
-[    2.137585] virtio_blk virtio0: [vda] 122880 512-byte logical
-blocks (62.9 MB/60.0 MiB)
-[    2.196181] lkdtm: No crash points registered, enable through debugfs
-[    2.246658] ------------[ cut here ]------------
-[    2.247468] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:110
-__netif_set_xps_queue+0x14e/0x792
-[    2.248738] Modules linked in:
-[    2.249323] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc1 #336
-[    2.250038] Hardware name: riscv-virtio,qemu (DT)
-[    2.250697] epc : __netif_set_xps_queue+0x14e/0x792
-[    2.251538]  ra : __netif_set_xps_queue+0x56c/0x792
-[    2.252029] epc : ffffffff806f2972 ra : ffffffff806f2d90 sp :
-ff600000023279d0
-[    2.252664]  gp : ffffffff81603d88 tp : ff600000023a0000 t0 :
-ff60000003068a40
-[    2.253270]  t1 : 0000000000000003 t2 : 0000000000000000 s0 :
-ff60000002327a90
-[    2.253878]  s1 : 0000000000000000 a0 : ff60000003068a00 a1 :
-ff60000003068a00
-[    2.254491]  a2 : ff600000030687e8 a3 : 0000000000000004 a4 :
-0000000000000000
-[    2.255521]  a5 : 0000000000000000 a6 : 0000000000000000 a7 :
-0000000000000000
-[    2.256506]  s2 : 0000000000000000 s3 : 0000000000000000 s4 :
-ff60000002327aa0
-[    2.257161]  s5 : ffffffff816071c0 s6 : 0000000000000000 s7 :
-0000000000000001
-[    2.257761]  s8 : 0000000000000000 s9 : 0000000000000004 s10:
-ff600000030687c0
-[    2.258369]  s11: 0000000000000004 t3 : 0000000000000000 t4 :
-0000000000000014
-[    2.259368]  t5 : 0000000000000000 t6 : 0000000000000000
-[    2.260270] status: 0000000200000120 badaddr: 0000000000000000
-cause: 0000000000000003
-[    2.261200] [<ffffffff805d941e>] virtnet_set_affinity+0x14a/0x1c0
-[    2.261837] [<ffffffff805db734>] virtnet_probe+0x832/0xf1e
-[    2.262319] [<ffffffff804ff5d0>] virtio_dev_probe+0x164/0x2de
-[    2.263055] [<ffffffff8054d478>] really_probe+0x82/0x224
-[    2.263858] [<ffffffff8054d674>] __driver_probe_device+0x5a/0xaa
-[    2.264445] [<ffffffff8054d6f0>] driver_probe_device+0x2c/0xb8
-[    2.264987] [<ffffffff8054dd1a>] __driver_attach+0x76/0x108
-[    2.265495] [<ffffffff8054b436>] bus_for_each_dev+0x52/0x9a
-[    2.265996] [<ffffffff8054ce40>] driver_attach+0x1a/0x28
-[    2.266475] [<ffffffff8054c94a>] bus_add_driver+0x154/0x1c2
-[    2.267383] [<ffffffff8054e546>] driver_register+0x52/0x108
-[    2.268198] [<ffffffff804ff0d4>] register_virtio_driver+0x1c/0x2c
-[    2.268778] [<ffffffff80a291a0>] virtio_net_driver_init+0x7a/0xb0
-[    2.269323] [<ffffffff80002854>] do_one_initcall+0x66/0x2e4
-[    2.269834] [<ffffffff80a01226>] kernel_init_freeable+0x28a/0x304
-[    2.270372] [<ffffffff808cc8b6>] kernel_init+0x1e/0x110
-[    2.271099] [<ffffffff80003d42>] ret_from_exception+0x0/0x10
-[    2.272015] ---[ end trace 0000000000000000 ]---
+Best regards,
+Krzysztof
 
--- 
-Best Regards
- Guo Ren
