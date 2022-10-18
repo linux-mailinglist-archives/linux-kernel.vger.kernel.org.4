@@ -2,86 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEAE6032EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 20:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC2E6032F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 21:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiJRS7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 14:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S230089AbiJRTAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 15:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJRS7k (ORCPT
+        with ESMTP id S230143AbiJRTAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:59:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D7A1E3F6;
-        Tue, 18 Oct 2022 11:59:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B93F76158B;
-        Tue, 18 Oct 2022 18:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14582C433C1;
-        Tue, 18 Oct 2022 18:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666119577;
-        bh=5qxrJBoguQRA72orQ32MErE5aTKmsySC7JSf7fVJMnA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=bCF46hffZCFrkaKhs7Ot1u/98M3HLZu0sRefSZDOppGcaV75tBvQBQ2xTabRkCaIJ
-         /kPa9ZzIHojxXErztuWiLA2LRDuybvkeDYLe6zgilX+tfQJ8TAR47AsHiH5TME+vId
-         LOBHZsKwlcoLDOf8wiFVs30LTVmPUyn4VSZLyY70vHskYJ9ZdjjBixNQXT+lBAbXW8
-         b2V2vKTMnHTH7y9FjkJZDFLRnQS0FzxDT2KwakgiV3napfzBlc3WkqelPrxu3ObuDS
-         c34vCizSMBWeuBvuIpk+/u+WOR17rc8EfdVo/VYJ8gILR/CGJ//+JfbsaaVLJRDe9G
-         Ghm+qVYd2K4Iw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B3B6B5C0990; Tue, 18 Oct 2022 11:59:36 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 11:59:36 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org, tglx@linutronix.de,
-        pmladek@suse.com, Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
-Message-ID: <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
- <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <87k04x4e0r.fsf@jogness.linutronix.de>
- <20221018152418.GR5600@paulmck-ThinkPad-P17-Gen-1>
- <87ilkh0y52.fsf@jogness.linutronix.de>
+        Tue, 18 Oct 2022 15:00:13 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4F9165BA;
+        Tue, 18 Oct 2022 12:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1666119602;
+        bh=ZBUv2uCs4jiCMgU+BGJpbZD2VUQHdbdxtg8tTxbJbl4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Kamma+SeZhEBl5kiX3DSpPdnSONS8gk9tLhZi+94vSPoslsZVARP3t4shPm+u16Jw
+         FYMhOnHOmspKu8vUYuVpC/8Rwgz2H60DwaYjV+XrvufmnxRsL9GlT1hZOI/qNcV0Ot
+         QmcKAWJFBw2HLv78p85wXGk0aB00ieOYxd/yHhOcMutkOODvdKLssuntEBHenabpOv
+         ZkXFh6Q+NzW6LNQBsKaO524Llrt2+6zYaN0Juex7IwCZPPX/GT8nK8YN1mQgpIU4NG
+         Z8H/rDOCHa1yE5Atu7Cf2/V9L2Su4ZJy9z/d/Lrxk3E1Jtgvt6WyRvHbmko6EY69tT
+         ck1DAufM69Ltg==
+Received: from [10.1.0.219] (192-222-188-69.qc.cable.ebox.net [192.222.188.69])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MsNTY6DRqzVSX;
+        Tue, 18 Oct 2022 15:00:01 -0400 (EDT)
+Message-ID: <40d75f05-ef87-d64d-2e4a-60066e49f265@efficios.com>
+Date:   Tue, 18 Oct 2022 15:00:01 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ilkh0y52.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 01/25] rseq: Introduce feature size and alignment ELF
+ auxiliary vector entries
+Content-Language: en-US
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        David.Laight@ACULAB.COM, carlos@redhat.com,
+        Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>
+References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
+ <20220922105941.237830-2-mathieu.desnoyers@efficios.com>
+ <877d1726kd.fsf@oldenburg.str.redhat.com>
+ <d128fb7d-6b24-5caf-8e3a-99d55922cd95@efficios.com>
+ <0a4a1a2c-964e-dcc6-948a-fd252962aaff@efficios.com>
+ <87fsfli1r9.fsf@oldenburg.str.redhat.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <87fsfli1r9.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 08:50:57PM +0206, John Ogness wrote:
-> On 2022-10-18, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > Currently, I have this series on -rcu branch srcunmisafe.2022.10.03a,
-> > with Frederic's patches on branch "dev".  I will be producing a shiny
-> > new branch with your fix and Frederic's debug later today, Pacific
-> > Time.  With luck, based on v6.1-rc1.
+On 2022-10-18 11:34, Florian Weimer wrote:
+> * Mathieu Desnoyers:
 > 
-> Perfect!
+>> If we extend struct rseq to a size that makes the compiler use an
+>> alignment larger than 32 bytes in the future, and if the compiler uses
+>> that larger alignment knowledge to issue instructions that require the
+>> larger alignment, then it would be incorrect for user-space to
+>> allocate the struct rseq on an alignment lower than the required
+>> alignment.
+>>
+>> Indeed, on rseq registration, we have the following check:
+>>
+>> if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq))
+>> [...]
+>>     return -EINVAL;
+>>
+>> Which would break if the size of struct rseq is large enough that the
+>> alignment grows larger than 32 bytes.
 > 
-> > I will be incorporating these commits from Frederic:
-> >
-> > 6558b914fc4e ("srcu: Warn when NMI-unsafe API is used in NMI")
-> > 5dc788627109 ("srcu: Explain the reason behind the read side critical section on GP start")
-> > 54a118fce487 ("srcu: Debug NMI safety even on archs that don't require it")
-> >
-> > Are there other patches I should be applying?
-> 
-> Not that I am aware of.
+> I never quite understood the reason for that check, it certainly made
+> the glibc implementation more complicated.  But to support variable
+> sizes internally, we'll have to put in some extra effort anyway, so that
+> it won't matter much in the end.  As long as the required alignment
+> isn't larger than the page size. 8-/
 
-And if you are in a hurry, the v6.0-rc1 stack is at srcunmisafe.2022.10.18a.
-With luck, the v6.1-rc1 stack will be at srcunmisafe.2022.10.18b before
-the day is over, Pacific Time.
+I don't expect it to grow so large.
 
-							Thanx, Paul
+There is one more reason why increasing the alignment of struct rseq may 
+become useful as the structure grows: it would guarantee that it fits in 
+a single lower level cache line as its size increases. It's not 
+something I expect would break if not properly aligned, but it's a nice 
+optimization.
+
+I see two possible approaches here:
+
+1) We expose the rseq alignment explicitly through auxv, and we can keep 
+the IS_ALIGNED validation on rseq registration. This "IS_ALIGNED" check 
+would probably have to be tweaked though, because if the registered
+rseq size is 32, then an alignment of 32 is all we require. It's only if 
+the rseq_len is different from 32 that we need to validate that the 
+alignment matches the alignment of struct rseq.
+
+2) We don't expose the rseq alignment through auxv, effectively fixing 
+it at 32. We would need to modify the IS_ALIGNED check on rseq 
+registration so it validates an alignment of 32 rather than using the 
+alignment of struct rseq.
+
+> 
+>> You mentioned we could steal some high bits from AT_RSEQ_FEATURE_SIZE
+>> to put the alignment. What is the issue with exposing an explicit
+>> AT_RSEQ_ALIGN ? It's just a auxv entry, so I don't see it as a huge
+>> performance concern to access 2 entries rather than one.
+> 
+> I don't mind too much, we already have a large on-stack array in the
+> loader so that we can decode the auxiliary vector without a humongous
+> switch statement.  But eventually that approach will stop working if the
+> set of interesting AT_* values become too large and discontinuous.
+
+OK. So I guess the main question here is whether we want fixed-32-bytes 
+alignment, or do we want to be able to increase the mandated alignment 
+in the future as struct rseq expands ?
+
+The possible reasons for increasing the alignment over 32-bytes would be:
+
+- Unforeseen compiler requirement on a structure alignment larger than 
+32-bytes as we extend the size of struct rseq.
+- Optimization to fit within a single LLC cache line as struct rseq grows.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks,
+> Florian
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
