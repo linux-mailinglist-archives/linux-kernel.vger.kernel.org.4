@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B29602813
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB93160281C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 11:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiJRJQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 05:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S230199AbiJRJSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 05:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiJRJQF (ORCPT
+        with ESMTP id S230090AbiJRJSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:16:05 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C326787FA7;
-        Tue, 18 Oct 2022 02:16:04 -0700 (PDT)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ms7Tm2ZwXz687Jl;
-        Tue, 18 Oct 2022 17:14:20 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 11:16:03 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 18 Oct
- 2022 10:16:02 +0100
-Date:   Tue, 18 Oct 2022 10:16:01 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 5/6] spi: pxa2xx: Move OF and ACPI ID tables closer
- to their user
-Message-ID: <20221018101601.00007888@huawei.com>
-In-Reply-To: <20221017171243.57078-5-andriy.shevchenko@linux.intel.com>
-References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
-        <20221017171243.57078-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 18 Oct 2022 05:18:07 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF59E87FA7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:18:05 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id 13so30709161ejn.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 02:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOQqs65wtvxD4dXO4tAoUmo7evjc4ehlCZeveSnwvf0=;
+        b=zb081iMh7QlIU5PcMmIu9rydRddiZCl3sflOebBzziP8ApqyWutpxbxkgnFN7y5pcb
+         kCK5FoPIfZfefyH1k8Hyr5lmpyaQER8R+F6PMP7bIaUR4Qd0uS3iba3OTCi3fZ/Z73R4
+         ow+MCscbaCzzjne6e6dEL7NVLBIS6gIK/rwdHGvt/NPXc3FXM6uaaRHkoo3ydCByNva8
+         i1QZztSRnKv46EYpVK8nPe7M1yPpdA3mA+6nQkB7IfcY5FC3GkfVPYcqZ//dReL5pHSQ
+         j4ZooHa94RjthJqm6dWyhVqylE+VB01KtYEbBIStj/b1WmzhHJUXYryVveINpQiWU0F1
+         gRqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oOQqs65wtvxD4dXO4tAoUmo7evjc4ehlCZeveSnwvf0=;
+        b=aruJPb4pjoFLeQNRMDVXSdV/RQnC3l0Y4vP7o1mhv4kQiDKHSBaGnn0RfS2VU2YAUl
+         KYjVNqHbGI6iwvyrrpCbFhSBRn5MgnjQUNdEC7v48K7jd7M9GDfdg/feWzQLCh0bAJTx
+         Vl4YoEkypuh/zVvGzxDxBaL9mTvVQyvhSrY1xWLrCxrlmR3xbt4Apd2QGhcE3t0ir09I
+         WWdClHz8mnuIZiuMfUMpRdH4XcqWp4kAGC2TUSLF7XVC/MwZThyirL3dHLryKgc8PRe2
+         VDXLjdFt0oApFiAYYgsJgVXKB/NTpDo3HKU16HWkJrs9MRZDpPry7A5UzzSlSvg9mcyK
+         h0ag==
+X-Gm-Message-State: ACrzQf0jU6rE6dx0O0zI5OtCuZcdv4KT+hafRT2KSt2kPZYcsv/CwO8w
+        YtdWCn3GW6nnjYgAxvy4nOxcipas0Bk6FRHRlSk03A==
+X-Google-Smtp-Source: AMsMyM6lZ2+Xt+1NEg2JK7nPwMIv3ssbgjEp/zROqPCRH200jqaALy3oAke4WBt/IhCcXtUVaXfHcVFtSi5ZhtdOnxs=
+X-Received: by 2002:a17:907:7805:b0:780:24fd:c4e8 with SMTP id
+ la5-20020a170907780500b0078024fdc4e8mr1602811ejc.78.1666084684420; Tue, 18
+ Oct 2022 02:18:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221018021920.3747344-1-bryan.odonoghue@linaro.org> <20221018021920.3747344-2-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221018021920.3747344-2-bryan.odonoghue@linaro.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 18 Oct 2022 11:17:53 +0200
+Message-ID: <CAG3jFyuoJGNGHmQFfNsBJfnYbUw+jMCiP5uiLcYspYapYKydpA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] i2c: qcom-cci: Fix ordering of pm_runtime_xx and i2c_add_adapter
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     loic.poulain@linaro.org, wsa@kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vladimir.zapolskiy@linaro.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 20:12:42 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> There is no code that uses ID tables directly, except the
-> struct device_driver at the end of the file. Hence, move
-> tables closer to its user. It's always possible to access
-> them via pointer to a platform device.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Seems sensible.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+On Tue, 18 Oct 2022 at 04:19, Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
+>
+> When we compile-in the CCI along with the imx412 driver and run on the RB5
+> we see that i2c_add_adapter() causes the probe of the imx412 driver to
+> happen.
+>
+> This probe tries to perform an i2c xfer() and the xfer() in i2c-qcom-cci.c
+> fails on pm_runtime_get() because the i2c-qcom-cci.c::probe() function has
+> not completed to pm_runtime_enable(dev).
+>
+> Fix this sequence by ensuring pm_runtime_xxx() calls happen prior to adding
+> the i2c adapter.
+>
+> Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
+> Reported-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> Tested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  drivers/spi/spi-pxa2xx.c | 38 +++++++++++++++++++-------------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-> index 31927493eeb0..76046612466d 100644
-> --- a/drivers/spi/spi-pxa2xx.c
-> +++ b/drivers/spi/spi-pxa2xx.c
-> @@ -1321,25 +1321,6 @@ static void cleanup(struct spi_device *spi)
->  	kfree(chip);
->  }
->  
-> -#ifdef CONFIG_ACPI
-> -static const struct acpi_device_id pxa2xx_spi_acpi_match[] = {
-> -	{ "INT33C0" },
-> -	{ "INT33C1" },
-> -	{ "INT3430" },
-> -	{ "INT3431" },
-> -	{ "80860F0E" },
-> -	{ "8086228E" },
-> -	{ },
-> -};
-> -MODULE_DEVICE_TABLE(acpi, pxa2xx_spi_acpi_match);
-> -#endif
-> -
-> -static const struct of_device_id pxa2xx_spi_of_match[] = {
-> -	{ .compatible = "marvell,mmp2-ssp", .data = (void *)MMP2_SSP },
-> -	{},
-> -};
-> -MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
-> -
->  static bool pxa2xx_spi_idma_filter(struct dma_chan *chan, void *param)
->  {
->  	return param == chan->device->dev;
-> @@ -1759,6 +1740,25 @@ static const struct dev_pm_ops pxa2xx_spi_pm_ops = {
->  			   pxa2xx_spi_runtime_resume, NULL)
->  };
->  
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id pxa2xx_spi_acpi_match[] = {
-> +	{ "80860F0E" },
-> +	{ "8086228E" },
-> +	{ "INT33C0" },
-> +	{ "INT33C1" },
-> +	{ "INT3430" },
-> +	{ "INT3431" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, pxa2xx_spi_acpi_match);
-> +#endif
+>  drivers/i2c/busses/i2c-qcom-cci.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+> index 87739fb4388b..a4b97fe3c3a5 100644
+> --- a/drivers/i2c/busses/i2c-qcom-cci.c
+> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
+> @@ -639,6 +639,11 @@ static int cci_probe(struct platform_device *pdev)
+>         if (ret < 0)
+>                 goto error;
+>
+> +       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+> +       pm_runtime_use_autosuspend(dev);
+> +       pm_runtime_set_active(dev);
+> +       pm_runtime_enable(dev);
 > +
-> +static const struct of_device_id pxa2xx_spi_of_match[] = {
-> +	{ .compatible = "marvell,mmp2-ssp", .data = (void *)MMP2_SSP },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
+>         for (i = 0; i < cci->data->num_masters; i++) {
+>                 if (!cci->master[i].cci)
+>                         continue;
+> @@ -650,14 +655,12 @@ static int cci_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> -       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+> -       pm_runtime_use_autosuspend(dev);
+> -       pm_runtime_set_active(dev);
+> -       pm_runtime_enable(dev);
+> -
+>         return 0;
+>
+>  error_i2c:
+> +       pm_runtime_disable(dev);
+> +       pm_runtime_dont_use_autosuspend(dev);
 > +
->  static struct platform_driver driver = {
->  	.driver = {
->  		.name	= "pxa2xx-spi",
+>         for (--i ; i >= 0; i--) {
+>                 if (cci->master[i].cci) {
+>                         i2c_del_adapter(&cci->master[i].adap);
+> --
+> 2.34.1
+>
 
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
