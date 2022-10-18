@@ -2,198 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4781602D71
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F233E602CD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiJRNxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S230367AbiJRNXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiJRNxD (ORCPT
+        with ESMTP id S229698AbiJRNXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:53:03 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1197ACF856
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:53:01 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221018135257epoutp036d48a0fe6f0a85f86730bdca1405c88c~fLjGU3sWe1642916429epoutp037
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 13:52:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221018135257epoutp036d48a0fe6f0a85f86730bdca1405c88c~fLjGU3sWe1642916429epoutp037
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1666101177;
-        bh=5BJ+aEKVpMuiW5mv8B/nlmP+efBLO3FdnUVno/0wS0s=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=DbzisJz01G1/wGXPF2gPJR/ZuArKB0DimJfoUiTr2LwkLoS4uSSD77V6LyKQf8a+e
-         ZnDG+p1Ns4U4074r19tHakoaM3zjR/jyGUcGz5NZy/KWxAgRTwkvE4EQ2HmtibEJHU
-         S7skZj055qtMjbe8z1/fb64eQB9jskWVTluaEpRc=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20221018135256epcas5p465c21355e9a22f9c7bf05a78ca6698d7~fLjFl2Rli1998519985epcas5p4Z;
-        Tue, 18 Oct 2022 13:52:56 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4MsFgB4JCsz4x9Pt; Tue, 18 Oct
-        2022 13:52:54 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        85.80.56352.6BFAE436; Tue, 18 Oct 2022 22:52:54 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221018132159epcas5p24b856ad2c1aa9e10f2b0f18505d27f2e~fLIEDbQeW1111711117epcas5p2J;
-        Tue, 18 Oct 2022 13:21:59 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221018132159epsmtrp2ae6b99bccb78e512cd005665aa5935c2~fLIECHZYP2061920619epsmtrp2k;
-        Tue, 18 Oct 2022 13:21:59 +0000 (GMT)
-X-AuditID: b6c32a4b-383ff7000001dc20-7d-634eafb6a5dc
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        21.3A.18644.778AE436; Tue, 18 Oct 2022 22:21:59 +0900 (KST)
-Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221018132156epsmtip2460f70dc805400ebf48c155e4d6d2dd7~fLIAkqsCu0556505565epsmtip2j;
-        Tue, 18 Oct 2022 13:21:55 +0000 (GMT)
-From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzk@kernel.org>,
-        "'Rob Herring'" <robh@kernel.org>
-Cc:     <linux-fsd@tesla.com>, <linux-media@vger.kernel.org>,
-        <pankaj.dubey@samsung.com>, <linux-arm-kernel@lists.infradead.org>,
-        <dillon.minfei@gmail.com>, <devicetree@vger.kernel.org>,
-        <krzk+dt@kernel.org>, <smitha.t@samsung.com>,
-        <benjamin.gaignard@collabora.com>, <stanimir.varbanov@linaro.org>,
-        <jernej.skrabec@gmail.com>, <robh+dt@kernel.org>,
-        <aswani.reddy@samsung.com>, <mchehab@kernel.org>,
-        <hverkuil-cisco@xs4all.nl>, <mark.rutland@arm.com>,
-        <m.szyprowski@samsung.com>, <linux-kernel@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <andi@etezian.org>,
-        <andrzej.hajda@intel.com>, <ezequiel@vanguardiasur.com.ar>,
-        <david.plowman@raspberrypi.com>
-In-Reply-To: <1b079ee2-d406-507c-77f9-a228d337ad71@kernel.org>
-Subject: RE: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
- for MFC
-Date:   Tue, 18 Oct 2022 18:51:53 +0530
-Message-ID: <009301d8e2f4$9a2cbb30$ce863190$@samsung.com>
+        Tue, 18 Oct 2022 09:23:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901F8C14AE;
+        Tue, 18 Oct 2022 06:23:00 -0700 (PDT)
+Received: from [192.168.10.9] (unknown [39.45.244.84])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DB6EF660038D;
+        Tue, 18 Oct 2022 14:22:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666099379;
+        bh=CrRA+AfW/H247GHc3iNeat2Pq8dFOUMFUrcmgZ+W+6Q=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=Pez2BQqQFuDV+R76tOHBys8fij352NSWvkhmJbJSh5jYJKPrG+OBfzMqAgSkHR8GD
+         j7374RrhW+mbgjaBj9iZAf6303tdxjl1X0X2V6HgnAoFNFtNxLGxmZnQ3KtZO+C+w1
+         s/LRxJlnBWyA5e6pGd2vQY/lutek/yVnkmoChyyA1VTSUfJPxH9YKJ0dqREjqwrJ+L
+         gJr/qAQXP5M/qRE8obN6x2Z7e/z8UUWuzWE9CQ3jNdr/vBXjPZMY341CNQt0r/NEet
+         1KBRvpssImd1PxldEQDJ3nUAgDOQHLyE73bijKhoRxQ8O9r4m3X+9vCZ615QWcGAuK
+         X3U13xoa6JkAg==
+Message-ID: <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
+Date:   Tue, 18 Oct 2022 18:22:48 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIjXZOHgvokXGuofbg3rWbxTFZEMQGGfBLcASb/h3kBq/W9FwFzDpXTAgbDwbWtQJN84A==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TfUxTVxzNfX3tKy7FJ2i81iFNF0YgKbSD1osDRIb4NnAhbjJdSGotL4CU
-        tmvBj2UqmTgDMphmGqhdnbQyZFVYgfIxjIAlBBwaNwJjUGGggxJgypcwNlxLy8Z/557fOTk5
-        v5sfm+FjILjsDGU2rVHKFHzWBtx6PyhQYK16Xy7sfslFwwYrCxkXxzA0ZJzFUVtNHYFqe64x
-        0HcdLUx03faQiepbR3D0w7hz+rjUjqOx63cAcuiesNCjR9UEsoz2MtHvEx+hX5r0LFRYXcdE
-        t212At3se4yhcsvfGCqrmyPQ+bs2Ar1qbiCQvdkKUN4XNixmG2U2mAHVYDcBqs80w6AadXaC
-        MjY7MMpSmc+iBnubWVSN6Sx1vv0vnCqqrQTUyuffEFSBrY9FzVp2UF3zs0SS98eZkem0LJXW
-        8GilXJWaoUyL4id8IH1HKpYIRQJRBNrJ5yllWXQUPy4xSRCfoXDugs87LlPkOKkkmVbLD42O
-        1KhysmleukqbHcWn1akKdbg6RCvL0uYo00KUdPYukVD4ltgpPJKZPl5fhKsdG0+2XsVzQRun
-        ALDZkAyH7Q17C8AGtg/5I4APLrUy3Y8ZAMcWij2PWQA7cy/gaw57HbcAeDn5JgArKj9xa8YA
-        tC7mY64BiwyFQ12FTBfeTB6AVqsZd4kYpI4J6/40r4q8yGg4010OXNiXTIZ5tsVVA04GwKLn
-        3asaDhkB8xobGG68CXaWPsVdmEH6w/op/SoPSR5celbuCUuGRQP3MLdmK2xfKmS4giH5xAvq
-        z/XibkMcdBgLPNgXTnTUEm7MhbPTd1luLIejZQ5PgAJWNX/t0e+GLT361U0wyCBY1RTqpv3g
-        la47nlxv+OXyU8zNc2CDYQ2/CfWD7o6QfB3e//4m+Arwdeuq6dZV062roPs/7VuAV4JttFqb
-        lUZrxeowJX3iv++Wq7IsYPVQghMawMjw85A2gLFBG4BsBn8zJ34uUe7DSZWd+pTWqKSaHAWt
-        bQNi574vMbhb5CrnpSmzpaLwCGG4RCIJjwiTiPhbOcaSYLkPmSbLpjNpWk1r1nwY24ubi+3h
-        6PadVvMS4omRaZNvzfx0ymfGMz8drGpJ7I88MBR6eU91Z+fF1/KnK0cv+wtE2+ULSftPPbt4
-        zO+Wd+8/AvVZw8D2yUNNR4p1hv7df+wrxH15g5HFEzdKTuplL+OKFpqCEjNi6lOSYo0B4jK/
-        1ui3582m0kMt1xqj/VnE0Qcv9g8bQjDpwIevWqorTPNY/wnFxpKUyMM7lnkrk2cu1D+cDNyr
-        9I8N9Dl8Oujqz3sripnvgtLy9473tLN157ZEpwZ6DSft7CrHWQkdFpng4NGJMLEkluDM/xog
-        vZX8RiuauiIWHtu08ht7fOL2yBSmVMU6Vsw36OXcpRe75uJ97i3QMXxcmy4TBTM0Wtm/NCz0
-        jLEEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjleLIzCtJLcpLzFFi42LZdlhJXrd8hV+ywZql6hYP5m1js1j84zmT
-        xf3Fn1ksDm3eym6x5cpsZovlxw+wWsw/co7VYvvBRywWG18AZS/OvMti8Xz+OkaLl7PusVmc
-        P7+B3WLT42usFg9fhVtc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4Td4v+e
-        HewWd/dsY7RoaTvC5CDpsWbeGkaPHXeXMHpcX/KJ2WPnrLvsHov3vGTy2LSqk83jzrU9bB6b
-        l9R7tB79xeLRt2UVo8e/prnsHl1HrrN5fN4k53Hq62f2AL4oLpuU1JzMstQifbsErowX2/tY
-        Cl7yVxycxtLAeIi3i5GDQ0LAROLuVqkuRi4OIYEdjBITV19k7mLkBIrLSPxvO8YOYQtLrPz3
-        HMwWEnjKKLF9hjaIzSagL3H/VA8riC0iECSx7f8jVpBBzAKbWCXeXZjLCDH1DpPExb3X2ECq
-        OAXsJD6dXcYIsllYIERi97c6kDCLgKpE34ezTCA2r4ClRMvOHcwQtqDEyZlPWEBsZgFtiac3
-        n0LZ8hLb386BOlRB4ufTZVBHhEn03d7PBFEjLnH0Zw/zBEbhWUhGzUIyahaSUbOQtCxgZFnF
-        KJlaUJybnltsWGCUl1quV5yYW1yal66XnJ+7iRGcVLS0djDuWfVB7xAjEwfjIUYJDmYlEV63
-        Lz7JQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTDNvvT8
-        yYytppLW4ea3I8NNhBzSLc2sGySaJJ4nfmNQPjc5oO3NA+++d7u3WB9051/VtG5y/XzFvg8P
-        rPLTRB/cyDPrFC+5oCS/5OX9/2naMTNFs+bfsZjgv/vc2jOPP5xz3bJlTxTj08alBxp/eJxY
-        ezhftNs/hK9gzf69XXlL2gO03GVrNq47/ElwvnhXwoMF2SsvJt6u6XIVd1ZcF/ozufL/q4Db
-        6vU3+I5UvX3q236PN1i26pf9mjudte9rda8pXqwz+i1neXHRdDu1SSv2MqoHZ4QdTepTfpx/
-        YcdaB581B8JX7rlysuCs8WEpKY06kd/1874zPdR1b245Hrlr+eHLb2zWq5lf7Nl6eu1SJZbi
-        jERDLeai4kQAS32PS5kDAAA=
-X-CMS-MailID: 20221018132159epcas5p24b856ad2c1aa9e10f2b0f18505d27f2e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca
-References: <20221011122516.32135-1-aakarsh.jain@samsung.com>
-        <CGME20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca@epcas5p1.samsung.com>
-        <20221011122516.32135-2-aakarsh.jain@samsung.com>
-        <166558064414.1937173.2124012536890566845.robh@kernel.org>
-        <000501d8e2df$3d209700$b761c500$@samsung.com>
-        <1b079ee2-d406-507c-77f9-a228d337ad71@kernel.org>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org,
+        gregkh@linuxfoundation.org, corbet@lwn.net, david@redhat.com,
+        kernel@collabora.com, krisman@collabora.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peter.enderborg@sony.com, shuah@kernel.org,
+        viro@zeniv.linux.org.uk, willy@infradead.org, figiel@google.com,
+        kyurtsever@google.com, Paul Gofman <pgofman@codeweavers.com>,
+        surenb@google.com
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <Y0T2l3HaH2MU8M9m@gmail.com>
+ <20221014134802.1361436-1-mdanylo@google.com>
+ <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
+ <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Krzysztof Kozlowski [mailto:krzk@kernel.org]
-> Sent: 18 October 2022 18:40
-> To: Aakarsh Jain <aakarsh.jain@samsung.com>; 'Rob Herring'
-> <robh@kernel.org>
-> Cc: linux-fsd@tesla.com; linux-media@vger.kernel.org;
-> pankaj.dubey@samsung.com; linux-arm-kernel@lists.infradead.org;
-> dillon.minfei@gmail.com; devicetree@vger.kernel.org; krzk+dt@kernel.org;
-> smitha.t@samsung.com; benjamin.gaignard@collabora.com;
-> stanimir.varbanov@linaro.org; jernej.skrabec@gmail.com;
-> robh+dt@kernel.org; aswani.reddy@samsung.com; mchehab@kernel.org;
-> hverkuil-cisco@xs4all.nl; mark.rutland@arm.com;
-> m.szyprowski@samsung.com; linux-kernel@vger.kernel.org;
-> alim.akhtar@samsung.com; andi@etezian.org; andrzej.hajda@intel.com;
-> ezequiel@vanguardiasur.com.ar; david.plowman@raspberrypi.com
-> Subject: Re: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT
-> schema for MFC
+On 10/18/22 4:11 PM, Michał Mirosław wrote:
+> On Tue, 18 Oct 2022 at 12:36, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+> [...]
+>> I've included the masks which the CRIU developers have specified.
+>> max_out_page is another new optional variable which is needed to
+>> terminate the operation without visiting all the pages after finding the
+>> max_out_page number of desired pages. There is no way to terminate the
+>> operation without this variable.
+>>
+>> How does the interface looks now? Please comment.
+>>
+>> /* PAGEMAP IOCTL */
+>> #define PAGEMAP_GET             _IOWR('f', 16, struct pagemap_sd_args)
+>> #define PAGEMAP_CLEAR           _IOWR('f', 17, struct pagemap_sd_args)
+>> #define PAGEMAP_GET_AND_CLEAR   _IOWR('f', 18, struct pagemap_sd_args)
 > 
-> On 18/10/2022 06:48, Aakarsh Jain wrote:
-> >>
-> >> codec@f1700000: clock-names:1: 'sclk_mfc' was expected
-> >> 	arch/arm/boot/dts/s5pv210-aquila.dtb
-> >> 	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-> >> 	arch/arm/boot/dts/s5pv210-galaxys.dtb
-> >> 	arch/arm/boot/dts/s5pv210-goni.dtb
-> >> 	arch/arm/boot/dts/s5pv210-smdkc110.dtb
-> >> 	arch/arm/boot/dts/s5pv210-smdkv210.dtb
-> >> 	arch/arm/boot/dts/s5pv210-torbreck.dtb
-> >>
-> >> codec@f1700000: memory-region: [[51], [52]] is too long
-> >> 	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-> >>
-> >> codec@f1700000: memory-region: [[55], [56]] is too long
-> >> 	arch/arm/boot/dts/s5pv210-galaxys.dtb
-> >
-> >
-> >
-> > Hi Rob,
-> >
-> > We tried reproducing warnings as reported above, but I am not able to
-> > see these warnings after  running make dtbs_check & make
-> > DT_CHECKER_FLAGS=-m dt_binding_check.
-> > Packages used-
-> > yamllint 1.10.0
-> > $ dt-mk-schema --version
-> > 2022.9
-> 
-> 
-> Are you sure you are running these commands on proper config and arch?
-> 
-yes. arm64/defconfig .
+> Why are three IOCTLs needed? Could CLEAR be a flag (like the
+> PAGEMAP_NO_REUSED_REGIONS) or 'cmask' and GET be implied when vec !=
+> NULL?
+Makes sense. Yes, this can be done.
 
-> Best regards,
-> Krzysztof
+> 
+>> /* Bits are set in the bitmap of the page_region and masks in
+>> pagemap_sd_args */
+>> #define PAGE_IS_SD      1 << 0
+>> #define PAGE_IS_FILE    1 << 1
+>> #define PAGE_IS_PRESENT 1 << 2
+>> #define PAGE_IS_SWAPED  1 << 3
+>>
+>> /**
+>>    * struct page_region - Page region with bitmap flags
+>>    * @start:     Start of the region
+>>    * @len:       Length of the region
+>>    * bitmap:     Bits sets for the region
+>>    */
+>> struct page_region {
+>>          __u64 start;
+>>          __u64 len;
+>>          __u64 bitmap;
+>> };
+> 
+> Could you explain what units start and len are using? Are they bytes
+> or pages (what size)?
+These are page sizes. Start must be the starting address of the page. 
+Length don't need to be the exact multiple of the page size. All the 
+pages in the length are included just like mincore() syscall.
 
+> 
+>> /**
+>>    * struct pagemap_sd_args - Soft-dirty IOCTL argument
+> 
+> Nit: it's not soft-dirty-specific anymore. Maybe "pagemap_scan_args"?
+> 
+>>    * @start:             Starting address
+>>    * @len:               Length of the region
+>>    * @vec:               Output page_region struct array
+>>    * @vec_len:           Length of the page_region struct array
+>>    * @max_out_page:      Optional max output pages (It must be less than
+>> vec_len if specified)
+> 
+> Why is it required to be less than vec_len? vec_len effectively
+> specifies max number of ranges to find, and this new additional field
+> counts pages, I suppose?
+> BTW, if we count pages, then what size of them? Maybe using bytes
+> (matching start/len fields) would be more consistent?
+Yes, it if for counting pages. As the regions can have multiple pages, 
+user cannot specify through the number of regions that how many pages 
+does he need. Page size is used here as well like the start and len. 
+This is optional argument as this is only needed to emulate the Windows 
+syscall getWriteWatch.
 
+> 
+>>    * @flags:             Special flags for the IOCTL
+>>    * @rmask:             Special flags for the IOCTL
+>>    * @amask:             Special flags for the IOCTL
+>>    * @emask:             Special flags for the IOCTL
+>>    * @__reserved:                Reserved member to preserve data alignment. Must be 0.
+>>    */
+>> struct pagemap_sd_args {
+>>          __u64 __user start;
+>>          __u64 len;
+>>          __u64 __user vec; // page_region
+>>          __u64 vec_len;    // sizeof(page_region)
+>>          __u32 flags;      // special flags
+>>          __u32 rmask;
+>>          __u32 amask;
+>>          __u32 emask;
+>>          __u32 max_out_page;
+>>          __u32 __reserved;
+>> };
+>>
+>> /* Special flags */
+>> #define PAGEMAP_NO_REUSED_REGIONS       0x1
+> 
+> What does this flag do?
+Some non-dirty pages get marked as dirty because of the kernel's 
+internal activity. The dirty bit of the pages is stored in the VMA flags 
+and in the per page flags. If any of these two bits are set, the page is 
+considered to be dirty. Suppose you have cleared the dirty bit of half 
+of VMA which will be done by splitting the VMA and clearing dirty flag 
+in the half VMA and the pages in it. Now kernel may decide to merge the 
+VMAs again as dirty bit of VMAs isn't considered if the VMAs should be 
+merged. So the half VMA becomes dirty again. This splitting/merging 
+costs performance. The application receives a lot of pages which aren't 
+dirty in reality but marked as dirty. Performance is lost again here.
+
+This PAGEMAP_NO_REUSED_REGIONS flag is used to don't depend on the dirty 
+flag in the VMA flags. It only depends on the individual page dirty bit. 
+With doing this, the new memory regions which are just created, doesn't 
+look like dirty when seen with the IOCTL, but look dirty when seen from 
+pagemap. This seems okay as the user of this flag know the implication 
+of using it.
+
+> 
+> Best Regards
+> Michał Mirosław
