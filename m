@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3727D602D57
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE1C602D58
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiJRNs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S231202AbiJRNso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiJRNsZ (ORCPT
+        with ESMTP id S231199AbiJRNsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:48:25 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485EACD5EE;
-        Tue, 18 Oct 2022 06:48:24 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 2C0412D7;
-        Tue, 18 Oct 2022 13:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 2C0412D7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1666100902; bh=VtE0W9gKmiji3m+fBP4JE6QV2uJ5JjdMxX9jo/Mx+Ek=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZdOy1taLoW3g3bN2YMjLwgeGRII+Qg3vJgSQL2YkJ7v/ANgVj6T7xzfePkj46ORkq
-         1JnEbGcN11QqFKsaVQn7FiBEQov+ryevQLPu5sUk4DrMzIi8O3hoKcsXLypAW1CxTD
-         zWgHF9XrkHovqPhJXfOx2/ulc6bZOay9OKzj5sRrYyHnkrV3HM9SKQ8rrlx5PVzHvm
-         gWpXqBhVEqxsaG3v8FzwSntFKHTFSZgA3qDACbG1+bHLKtDcNiqiPQFfr8KY9Tp4S8
-         HCd3eIaceWLARP3GsBrAlqtTrRYmgBIIRBeC0yuUlSIK5tvtTzJR6o0qU/sk9gU9H1
-         MxdXE0RXorskQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Kees Cook <keescook@chromium.org>,
-        Akira Yokosawa <akiyks@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] overflow: Fix kern-doc markup for functions
-In-Reply-To: <202210171909.65FFFB5601@keescook>
-References: <20221017035732.1968394-1-keescook@chromium.org>
- <6f8aa670-fb4f-3ff9-bcd9-8490e752b349@gmail.com>
- <202210171909.65FFFB5601@keescook>
-Date:   Tue, 18 Oct 2022 07:48:21 -0600
-Message-ID: <87ilkhdyze.fsf@meer.lwn.net>
+        Tue, 18 Oct 2022 09:48:41 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4902ECE9B8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666100909; bh=8aehwf6lSmpoBzDxdJZjx59IrR44GaUW+YlwpK8P2uU=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=coYheQ5aACvX08iMUatbjBFIxmbASSbqpDcPNQQ8wMBb2Hwdq5mOQcanxkaHjr5i1
+         PgjjL7ZMj59BT4mDPnZ11rbds2XBYb9YxIFj1LNZ/q5TIJ7OGZw2CXduZ+XjCJLQyM
+         1vw9FdFfLQGJUS1q6vvI/hJ4wGA/NF0qyPAzVLKY=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via [213.182.55.206]
+        Tue, 18 Oct 2022 15:48:29 +0200 (CEST)
+X-EA-Auth: k4G4rsvDakyFRKQIvS/qsd53JTOEyb7ufL/dtXEEHiNrdWCS67WUOrR8aJLkosl6ro7PA6QePOuzV4lABlb8yLTdzYpYmvz4
+Date:   Tue, 18 Oct 2022 19:18:25 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH v2] staging: most: dim2: read done_buffers count locally
+ from HDM channel
+Message-ID: <Y06uqcQmtJATZ6YH@debian-BULLSEYE-live-builder-AMD64>
+References: <Y05TNQBXLMJMgQ2r@debian-BULLSEYE-live-builder-AMD64>
+ <1e2a71a9-4ac5-96f3-b875-a063ff62f3ad@inria.fr>
+ <Y06g2llpa5S/025M@debian-BULLSEYE-live-builder-AMD64>
+ <80696861-c73f-cdb9-b4e1-36c29ece78bb@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80696861-c73f-cdb9-b4e1-36c29ece78bb@inria.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -59,17 +52,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+On Tue, Oct 18, 2022 at 02:52:21PM +0200, Julia Lawall wrote:
+>
+>
+> On Tue, 18 Oct 2022, Deepak R Varma wrote:
+>
+> > On Tue, Oct 18, 2022 at 09:39:08AM +0200, Julia Lawall wrote:
+> > >
+> > >
+> > > On Tue, 18 Oct 2022, Deepak R Varma wrote:
+> > >
+> > > > The done_buffer count is already available in the hdm_channel struct.
+> > > > Calling dim_get_channel_state function to source this value out of
+> > > > the same structure is unnecessary.
+> > > > Further, the second parameter struct dim_ch_state_t to this function
+> > > > is filled by using the hdm_channel inside the function. This filled in
+> > > > variable is never used in the caller and can be altogether removed.
+> > > > So, a call to dim_get_channel_state function in this context also
+> > > > deems expensive.
+> > >
+> > > Thanks for the rewrite.
+> > >
+> > > I find "source this value out of" hard to understand.
+> > >
+> > > I would have written something like the following:
+> > >
+> > > The function dim_get_channel_state only serves to initialize the ready and
+> > > done_buffers fields of the structure passed as its second argument.  In
+> > > service_done_flag, this structure is never used again and the only purpose
+> > > of the call is to get the value that is put in the done_buffers field.
+> > > But that value is just the done_sw_buffers_number field of the call's
+> > > first argument.  So the whole call is useless, and we can just replace it
+> > > with an access to this field.
+> > >
+> > > This change implies that the variable st is no longer used, so drop it as
+> > > well.
+> >
+> > This is really well written. Sounds much structured. Now my own log message
+> > sounds a little random :)
+> >
+> > Is it okay for me to use your verbiage as is in my patch log?
+>
+> Yes.
 
-> If the Documentation/* changes look okay, I'd rather carry it in my tree
-> since I'm going to be poking at more functions in there soon.
+Thank you. Can I convert this into a patch set and include the other suggestion
+from you to correct the dim_ch_state_t struct name? Or should these be separate
+patches now?
 
-That seems like as good a path for it as any.  Feel free to add
+./drv
 
-Acked-by: Jonathan Corbet <corbet@lwn.net>
 
-...if you want.
 
-Thanks,
+>
+> julia
+>
 
-jon
+
