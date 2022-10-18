@@ -2,86 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540C26024EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115A26024F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 09:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiJRHEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 03:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
+        id S229785AbiJRHEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 03:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiJRHE3 (ORCPT
+        with ESMTP id S230049AbiJRHEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 03:04:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DFC13DDA;
-        Tue, 18 Oct 2022 00:04:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6CC061487;
-        Tue, 18 Oct 2022 07:04:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AB3C433C1;
-        Tue, 18 Oct 2022 07:04:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666076666;
-        bh=nzOkWr31YDiUOeIbP4635LhimacOpccRoPiypQjEzA8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EOnM0MeBov5bhe9aPWFjq9/qju0h1sLn4ikh0b+N16j6eKKRq4sl4qL7enrW/bMUx
-         c1HQguA+ds7DQo0tJNARGtxUOy6mgr/9OPQIMdb7LexoALaeMpktI5JhU/MLrlrgAV
-         MUZrj6pfr7H0X/yphD3LL9OnX/5k7EAc8rErw35LdKuq5ADTam26azDrVEKgh0zjSX
-         dN1B6Zfp8Dtv7j0jeSYYZ/rsLASxZDSucOypJw4J/BK+qFAJQoRJnSkS/qDARbdpHa
-         lpupiXAbvjtoYbFbYnjMoAtdmmC26A9p+RIFTaKAho2Zni595cROGiZ9IoP+MPZaBk
-         NfImpGadDPPxg==
-Date:   Tue, 18 Oct 2022 00:04:24 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        sneves@dei.uc.pt
-Subject: Re: [PATCH] random: use rejection sampling for uniform bounded
- random integers
-Message-ID: <Y05P+KTzFHGaK4C3@sol.localdomain>
-References: <20221017023752.3907-1-Jason@zx2c4.com>
- <Y02ehdiCtHyLErB8@sol.localdomain>
- <Y046F2pGjC0apna0@zx2c4.com>
+        Tue, 18 Oct 2022 03:04:43 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4677B248C3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:04:39 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id g15-20020a6be60f000000b006bc6bc8715aso9083930ioh.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 00:04:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XD2n27cCQIHHebWhb88zFE+CukxwK5BQNAzexMjyc8Q=;
+        b=aUIoh18OTvbx/HvbLpz9Swf/hUnZEIUEU2fzDZQNAmyIuVgOYuFfT15+x4uTcIaZ0y
+         KQee9dRmL3jdhwCK6zjE6CtmI2gjeuJCzscfKvpUntnsI/qvJgzsnpfyuUHg2rNab3Gu
+         mUBki9Cj2N5nQ34Pv9cfIhEmufNcINexalduwsSqpN1HXvKMAMPMroEZgPOSkfGh52kA
+         Ig5bjWotHkwE0H/gMNT0SI2zrVd21y2lqtarh5MkXkKqnYDa+/L6Myl3dqOmKFI8Qsn5
+         myzuizR297VkuP7sJoFXPH7y4EENZbs4q2eRoZJlmnPiuIXfe32Co012GYIKKIGkrTFm
+         k2tA==
+X-Gm-Message-State: ACrzQf3XazwnnSQOosxdHIrJtCvxpGdBfqlBD4WhOt8E5lLMN+9Bi8x3
+        qCLEFKzhATmWFUI4EdVTV2LTLtHwt/CtIKgt7whNPcDVuxcU
+X-Google-Smtp-Source: AMsMyM5BqPNu9p0GnSjz5AdBtdhntDHdzWGavKZeUNgRQp6DMfnjuEjI61M1F1Eoz8tOcucrLP1iwK6r8/OIVD+I1aA76uhVQiSD
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y046F2pGjC0apna0@zx2c4.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:3409:b0:6bc:698c:cfca with SMTP id
+ n9-20020a056602340900b006bc698ccfcamr973795ioz.98.1666076678398; Tue, 18 Oct
+ 2022 00:04:38 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 00:04:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000095ab2705eb49b484@google.com>
+Subject: [syzbot] WARNING in btrfs_add_link
+From:   syzbot <syzbot+b531e31d583db14070d4@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:31:03PM -0600, Jason A. Donenfeld wrote:
-> On Mon, Oct 17, 2022 at 11:27:17AM -0700, Eric Biggers wrote:
-> > On Sun, Oct 16, 2022 at 08:37:53PM -0600, Jason A. Donenfeld wrote:
-> > > In order to be efficient, we implement a kernel-specific variant of
-> > > Daniel Lemire's algorithm from "Fast Random Integer Generation in an
-> > > Interval", linked below. The kernel's variant takes advantage of
-> > > constant folding to avoid divisions entirely in the vast majority of
-> > > cases, works on both 32-bit and 64-bit architectures, and requests a
-> > > minimal amount of bytes from the RNG.
-> > > 
-> > > Link: https://arxiv.org/pdf/1805.10941.pdf
-> > 
-> > Thanks for doing this!  Your code looks correct, but it was hard for me to
-> > understand until I read the paper that is linked to.  Could you include a brief
-> > comment in the code that explains the algorithm?  Also, though the code looks
-> > correct, I assume that you've also explicitly tested that each of the four code
-> > paths produce uniform random numbers as intended?
-> 
-> Yes, I've tested those, and they work. (Threw a lot of cores and ram at
-> it.)
-> 
-> I could include a comment, sure. What do you have in mind? A
-> line-by-line thing, or just a short blurb at the top of the function?
-> 
-> Jason
+Hello,
 
-A comment at the top of the function would be good.
+syzbot found the following issue on:
 
-- Eric
+HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1298899a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
+dashboard link: https://syzkaller.appspot.com/bug?extid=b531e31d583db14070d4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6c791937c012/disk-55be6084.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cb21a2879b4c/vmlinux-55be6084.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b531e31d583db14070d4@syzkaller.appspotmail.com
+
+loop1: detected capacity change from 0 to 32768
+BTRFS info (device loop1): using xxhash64 (xxhash64-generic) checksum algorithm
+BTRFS info (device loop1): using free space tree
+BTRFS info (device loop1): enabling ssd optimizations
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1681 at fs/btrfs/inode.c:6568 btrfs_add_link+0xab5/0xd50 fs/btrfs/inode.c:6568
+Modules linked in:
+CPU: 1 PID: 1681 Comm: syz-executor.1 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:btrfs_add_link+0xab5/0xd50 fs/btrfs/inode.c:6568
+Code: f7 1d fe 44 89 ee bf e2 ff ff ff e8 f5 f3 1d fe 41 83 fd e2 74 6a e8 2a f7 1d fe 44 89 ee 48 c7 c7 40 9c 37 8a e8 2a db e0 05 <0f> 0b bb 01 00 00 00 e8 0f f7 1d fe 41 89 d8 44 89 e9 ba a8 19 00
+RSP: 0018:ffffc90003f2f510 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff88809c91c000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff81612e28 RDI: fffff520007e5e94
+RBP: ffffc90003f2f620 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 00000000312d2072 R12: ffff88809ded3c20
+R13: 00000000fffffff4 R14: 0000000000000108 R15: ffff888047aba000
+FS:  00007efc740b9700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000563379fb8c78 CR3: 00000000a763e000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ btrfs_create_new_inode+0x1b46/0x2890 fs/btrfs/inode.c:6504
+ btrfs_create_common+0x1d5/0x260 fs/btrfs/inode.c:6639
+ btrfs_create+0x112/0x160 fs/btrfs/inode.c:6679
+ lookup_open.isra.0+0xf05/0x12a0 fs/namei.c:3413
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x996/0x28f0 fs/namei.c:3688
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_open fs/open.c:1334 [inline]
+ __se_sys_open fs/open.c:1330 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1330
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7efc72e8b5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007efc740b9168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007efc72fabf80 RCX: 00007efc72e8b5a9
+RDX: 0000000000000000 RSI: 0000000000143142 RDI: 0000000020002000
+RBP: 00007efc740b91d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007ffc75a878af R14: 00007efc740b9300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
