@@ -2,109 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE1C602D58
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8730E602D60
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 15:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiJRNso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 09:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S231211AbiJRNtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 09:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiJRNsl (ORCPT
+        with ESMTP id S231204AbiJRNtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 09:48:41 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4902ECE9B8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 06:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666100909; bh=8aehwf6lSmpoBzDxdJZjx59IrR44GaUW+YlwpK8P2uU=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=coYheQ5aACvX08iMUatbjBFIxmbASSbqpDcPNQQ8wMBb2Hwdq5mOQcanxkaHjr5i1
-         PgjjL7ZMj59BT4mDPnZ11rbds2XBYb9YxIFj1LNZ/q5TIJ7OGZw2CXduZ+XjCJLQyM
-         1vw9FdFfLQGJUS1q6vvI/hJ4wGA/NF0qyPAzVLKY=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via [213.182.55.206]
-        Tue, 18 Oct 2022 15:48:29 +0200 (CEST)
-X-EA-Auth: k4G4rsvDakyFRKQIvS/qsd53JTOEyb7ufL/dtXEEHiNrdWCS67WUOrR8aJLkosl6ro7PA6QePOuzV4lABlb8yLTdzYpYmvz4
-Date:   Tue, 18 Oct 2022 19:18:25 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH v2] staging: most: dim2: read done_buffers count locally
- from HDM channel
-Message-ID: <Y06uqcQmtJATZ6YH@debian-BULLSEYE-live-builder-AMD64>
-References: <Y05TNQBXLMJMgQ2r@debian-BULLSEYE-live-builder-AMD64>
- <1e2a71a9-4ac5-96f3-b875-a063ff62f3ad@inria.fr>
- <Y06g2llpa5S/025M@debian-BULLSEYE-live-builder-AMD64>
- <80696861-c73f-cdb9-b4e1-36c29ece78bb@inria.fr>
+        Tue, 18 Oct 2022 09:49:13 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E5CCF1AA;
+        Tue, 18 Oct 2022 06:49:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9F07E20802;
+        Tue, 18 Oct 2022 13:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666100950; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sMwxr+Oz3KInXQcPe4Qmdr0nrPXTQW3wC4Yi95Kd59Q=;
+        b=1qlciLI1a831qiIJk895gHyfoZVOq8RD604OqQCDz4YPjZK5yiPNMdoUudwmq7Hy5joP1S
+        kaOAMCxtps7I9K5afdOYAbkGP7aX3YaQ7OPm1MDbXcMptkLdT3OWlLXjl06WVBfmB1Vwgj
+        282NZpFQv1LIQi4iV68cy8cL0+TMH2s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666100950;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sMwxr+Oz3KInXQcPe4Qmdr0nrPXTQW3wC4Yi95Kd59Q=;
+        b=I76cujcFTWIYufxjoUkCDZjfQxe5GvtQjKJg1yzBQfKRhvwzLzJNFJGgC22tszrDOebbHp
+        Gg8TOyAW9No1J5Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F21113480;
+        Tue, 18 Oct 2022 13:49:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n+fmItauTmOXKAAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 18 Oct 2022 13:49:10 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 1FE5AA06EE; Tue, 18 Oct 2022 15:49:10 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 15:49:10 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Dave Chinner <david@fromorbit.com>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, bfields@fieldses.org,
+        brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [RFC PATCH v7 9/9] vfs: expose STATX_VERSION to userland
+Message-ID: <20221018134910.v4jim6jyjllykcaf@quack3>
+References: <20221017105709.10830-1-jlayton@kernel.org>
+ <20221017105709.10830-10-jlayton@kernel.org>
+ <20221017221433.GT3600936@dread.disaster.area>
+ <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <80696861-c73f-cdb9-b4e1-36c29ece78bb@inria.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:52:21PM +0200, Julia Lawall wrote:
->
->
-> On Tue, 18 Oct 2022, Deepak R Varma wrote:
->
-> > On Tue, Oct 18, 2022 at 09:39:08AM +0200, Julia Lawall wrote:
-> > >
-> > >
-> > > On Tue, 18 Oct 2022, Deepak R Varma wrote:
-> > >
-> > > > The done_buffer count is already available in the hdm_channel struct.
-> > > > Calling dim_get_channel_state function to source this value out of
-> > > > the same structure is unnecessary.
-> > > > Further, the second parameter struct dim_ch_state_t to this function
-> > > > is filled by using the hdm_channel inside the function. This filled in
-> > > > variable is never used in the caller and can be altogether removed.
-> > > > So, a call to dim_get_channel_state function in this context also
-> > > > deems expensive.
-> > >
-> > > Thanks for the rewrite.
-> > >
-> > > I find "source this value out of" hard to understand.
-> > >
-> > > I would have written something like the following:
-> > >
-> > > The function dim_get_channel_state only serves to initialize the ready and
-> > > done_buffers fields of the structure passed as its second argument.  In
-> > > service_done_flag, this structure is never used again and the only purpose
-> > > of the call is to get the value that is put in the done_buffers field.
-> > > But that value is just the done_sw_buffers_number field of the call's
-> > > first argument.  So the whole call is useless, and we can just replace it
-> > > with an access to this field.
-> > >
-> > > This change implies that the variable st is no longer used, so drop it as
-> > > well.
-> >
-> > This is really well written. Sounds much structured. Now my own log message
-> > sounds a little random :)
-> >
-> > Is it okay for me to use your verbiage as is in my patch log?
->
-> Yes.
+On Tue 18-10-22 06:35:14, Jeff Layton wrote:
+> On Tue, 2022-10-18 at 09:14 +1100, Dave Chinner wrote:
+> > On Mon, Oct 17, 2022 at 06:57:09AM -0400, Jeff Layton wrote:
+> > > Trond is of the opinion that monotonicity is a hard requirement, and
+> > > that we should not allow filesystems that can't provide that quality to
+> > > report STATX_VERSION at all.  His rationale is that one of the main uses
+> > > for this is for backup applications, and for those a counter that could
+> > > go backward is worse than useless.
+> > 
+> > From the perspective of a backup program doing incremental backups,
+> > an inode with a change counter that has a different value to the
+> > current backup inventory means the file contains different
+> > information than what the current backup inventory holds. Again,
+> > snapshots, rollbacks, etc.
+> > 
+> > Therefore, regardless of whether the change counter has gone
+> > forwards or backwards, the backup program needs to back up this
+> > current version of the file in this backup because it is different
+> > to the inventory copy.  Hence if the backup program fails to back it
+> > up, it will not be creating an exact backup of the user's data at
+> > the point in time the backup is run...
+> > 
+> > Hence I don't see that MONOTONIC is a requirement for backup
+> > programs - they really do have to be able to handle filesystems that
+> > have modifications that move backwards in time as well as forwards...
+> 
+> Rolling backward is not a problem in and of itself. The big issue is
+> that after a crash, we can end up with a change attr seen before the
+> crash that is now associated with a completely different inode state.
+> 
+> The scenario is something like:
+> 
+> - Change attr for an empty file starts at 1
+> 
+> - Write "A" to file, change attr goes to 2
+> 
+> - Read and statx happens (client sees "A" with change attr 2)
+> 
+> - Crash (before last change is logged to disk)
+> 
+> - Machine reboots, inode is empty, change attr back to 1
+> 
+> - Write "B" to file, change attr goes to 2
+> 
+> - Client stat's file, sees change attr 2 and assumes its cache is
+> correct when it isn't (should be "B" not "A" now).
+> 
+> The real danger comes not from the thing going backward, but the fact
+> that it can march forward again after going backward, and then the
+> client can see two different inode states associated with the same
+> change attr value. Jumping all the change attributes forward by a
+> significant amount after a crash should avoid this issue.
 
-Thank you. Can I convert this into a patch set and include the other suggestion
-from you to correct the dim_ch_state_t struct name? Or should these be separate
-patches now?
+As Dave pointed out, the problem with change attr having the same value for
+a different inode state (after going backwards) holds not only for the
+crashes but also for restore from backups, fs snapshots, device snapshots
+etc. So relying on change attr only looks a bit fragile. It works for the
+common case but the edge cases are awkward and there's no easy way to
+detect you are in the edge case.
 
-./drv
+So I think any implementation caring about data integrity would have to
+include something like ctime into the picture anyway. Or we could just
+completely give up any idea of monotonicity and on each mount select random
+prime P < 2^64 and instead of doing inc when advancing the change
+attribute, we'd advance it by P. That makes collisions after restore /
+crash fairly unlikely.
 
-
-
->
-> julia
->
-
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
