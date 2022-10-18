@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D522C6020AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0E66020A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 03:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiJRB4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Oct 2022 21:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S230307AbiJRBzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Oct 2022 21:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiJRB4s (ORCPT
+        with ESMTP id S230304AbiJRBz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Oct 2022 21:56:48 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F938B2F2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:56:43 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-132af5e5543so15325085fac.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Oct 2022 18:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jlcMb8NP4ByzZ5xxQdi+RApgp0lnGjEclJOQtrYpowg=;
-        b=kHu/TbwHapINRT4A7qHEgd/WGT+uK7TvCEabH3dY+2DhcxpoafL9jcBDz7Vi/Vg+bl
-         PPMncB1gzNQlunRcDJIuMxA6CwmFyU+f64to7Od7+SS8QWAbRk1KAtjaiThTChOMVLpo
-         jrZJJS/87YNmtYi1DArPT8gidrB4fmQ6LEr6Fd4nw0LSd4CebTrLJpVTOSEHe4CN1+R6
-         PIVvM+xPgU81HZogitG3EXEx1nXJA6IBL/UXKKpvIcKAYeez/nMHxksRhqt/YhCi7cVU
-         GR4dPv4XY43ffc54UY6e0m10BrRY7df6g9+FoR8KKztQpyRfP4cAool6V7IrdXAJW6bK
-         PPHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jlcMb8NP4ByzZ5xxQdi+RApgp0lnGjEclJOQtrYpowg=;
-        b=63s5DSqE8Z+mzmAtyYMSOsGQQ5D+WcIgz1otZcrharoNISxiCAzYkFHB7t4KwmLBKO
-         ZLFZMbjw/jsn6kHFMRQ/+idZJFxgInve53+W8Rwb1Kkw7ssTJGLpqXc4UVI+7S+s/o7q
-         TKgBGGatoTCDpyndlFEYg51CkUPBQMu+Px2udq9m1C6POd83jDSjpwmvRavBA2yYdHk6
-         rmqzREiiYD1qNl5M1Sf9X68xq4HqOkxIga27/qTADeJ4WdzunsyhBhbYMFBzhJfpu6OV
-         vXTpRmJJKviX8VrbPLj34E3UmZrpUk3GNWRsoOVIqFDRbZPWOpAdoRP19wUTM1PsDmHf
-         DdpA==
-X-Gm-Message-State: ACrzQf3i/ZDWlBTK+164395xSBMwPrioozbfg5AdIVnuCFf5wOxwiJBT
-        Aq3q13kf8MC2IRG7wutMOhE1GCBWMXB1Og==
-X-Google-Smtp-Source: AMsMyM6r4g2wk9yzI92DebI7qCJ1ckHh4oi3GhwdCcC2AKuqo9jIvtGfTk7t/MaTvFg/JFHbe04EsA==
-X-Received: by 2002:a05:6871:7a7:b0:125:5c0d:de5d with SMTP id o39-20020a05687107a700b001255c0dde5dmr339413oap.297.1666058201717;
-        Mon, 17 Oct 2022 18:56:41 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cc:1855:b6d2:d55:b2d8:b57d])
-        by smtp.gmail.com with ESMTPSA id l15-20020a9d734f000000b00661a05f2a97sm5426069otk.61.2022.10.17.18.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 18:56:41 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>, Borislav Petkov <bp@suse.de>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] virt: sev-guest: Remove unnecessary free in init_crypto()
-Date:   Mon, 17 Oct 2022 22:54:25 -0300
-Message-Id: <20221018015425.887891-1-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 17 Oct 2022 21:55:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074FC3887;
+        Mon, 17 Oct 2022 18:55:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93C7B612F4;
+        Tue, 18 Oct 2022 01:55:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB2EC433C1;
+        Tue, 18 Oct 2022 01:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1666058125;
+        bh=igcQugxTzwIP0PYHpWw1TgW9tEWJhVuc8WaXwlkC/Ok=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pWk9ZE6ZgxOhyz8+YbsYxk4DbRYG+eJfnTSaDfEw5L0oHwDlqnFhF7X2RKWCJ3xiw
+         a+l7VKQAFH39/1QkFwV03tTCE/RYQwQVtIbVzFGePGML7pBVzLaEqfc9f313SRqAsB
+         D4yiNzfpDPFoNp0yTNeFlOkoC6RaDOp0CNwC+NP4=
+Date:   Mon, 17 Oct 2022 18:55:23 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Ian Kent <raven@themaw.net>
+Cc:     Al Viro <viro@ZenIV.linux.org.uk>,
+        Siddhesh Poyarekar <siddhesh@gotplt.org>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [REPOST PATCH v3 2/2] vfs: parse: deal with zero length string
+ value
+Message-Id: <20221017185523.22f43b5d7f9fee1e1e3d872f@linux-foundation.org>
+In-Reply-To: <166365878918.39016.12757946948158123324.stgit@donald.themaw.net>
+References: <166365872189.39016.10771273319597352356.stgit@donald.themaw.net>
+        <166365878918.39016.12757946948158123324.stgit@donald.themaw.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the memory allocation for the auth tag fails, then there is no need to
-free it.
+On Tue, 20 Sep 2022 15:26:29 +0800 Ian Kent <raven@themaw.net> wrote:
 
-Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
----
- drivers/virt/coco/sev-guest/sev-guest.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+> Parsing an fs string that has zero length should result in the parameter
+> being set to NULL so that downstream processing handles it correctly.
+> For example, the proc mount table processing should print "(none)" in
+> this case to preserve mount record field count, but if the value points
+> to the NULL string this doesn't happen.
+> 
+> ...
+>
+> --- a/fs/fs_parser.c
+> +++ b/fs/fs_parser.c
+> @@ -197,6 +197,8 @@ int fs_param_is_bool(struct p_log *log, const struct fs_parameter_spec *p,
+>  		     struct fs_parameter *param, struct fs_parse_result *result)
+>  {
+>  	int b;
+> +	if (param->type == fs_value_is_empty)
+> +		return 0;
+>  	if (param->type != fs_value_is_string)
+>  		return fs_param_bad_value(log, param);
+>  	if (!*param->string && (p->flags & fs_param_can_be_empty))
+> @@ -213,6 +215,8 @@ int fs_param_is_u32(struct p_log *log, const struct fs_parameter_spec *p,
+>  		    struct fs_parameter *param, struct fs_parse_result *result)
+>  {
+>  	int base = (unsigned long)p->data;
+> +	if (param->type == fs_value_is_empty)
+> +		return 0;
+>  	if (param->type != fs_value_is_string)
+>  		return fs_param_bad_value(log, param);
+>  	if (!*param->string && (p->flags & fs_param_can_be_empty))
+>
+> [etcetera]
 
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index f422f9c58ba7..e9704aecd7ee 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -152,12 +152,10 @@ static struct snp_guest_crypto *init_crypto(struct snp_guest_dev *snp_dev, u8 *k
- 	crypto->a_len = crypto_aead_authsize(crypto->tfm);
- 	crypto->authtag = kmalloc(crypto->a_len, GFP_KERNEL_ACCOUNT);
- 	if (!crypto->authtag)
--		goto e_free_auth;
-+		goto e_free_iv;
- 
- 	return crypto;
- 
--e_free_auth:
--	kfree(crypto->authtag);
- e_free_iv:
- 	kfree(crypto->iv);
- e_free_crypto:
--- 
-2.34.1
-
+This feels wrong.  Having to check for fs_value_is_empty in so many
+places makes me think "we just shouldn't have got this far".  Am I
+right for once?
