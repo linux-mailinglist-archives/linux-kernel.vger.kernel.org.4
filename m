@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D09D60274D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4BE60275C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Oct 2022 10:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiJRImv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 04:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S230398AbiJRIoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 04:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiJRImt (ORCPT
+        with ESMTP id S230460AbiJRIn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:42:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2589D3D591
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:42:48 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id k2so30507685ejr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 01:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iTyZoAG1Msmk9uodk66u2eG085RCcOEtYKv2XNmOQG8=;
-        b=MlC5tIQYknk7saPUItJ2DOuP94f1ZNnZVhQWVtB7n+Kd/Nrm6dfkKJuOKHhHNX7XvH
-         BMXOrBw09ho8M7zMKedLCocv6dzZ0T3Qi9S2canTfhydIYettVdBmRBrwYB92V+8WB+A
-         in9Kh2mh+2rfOW3pkjH4TxzWPIy/TfcIWaJQsCmTnMhDfpZp8tSrJIzGR1xeRzY0JXke
-         k3ZbhSCVZbnjPpUQ91ptQJKPof3ICLYScffpZzxiLbGWqdDDbe5sX0EsWV8dl9GsQhMy
-         bfmaC1aZK3I78SMGxT5CDF9oW5OUlALe61hFdW1/o92t6phVbH5faz1j+mwewEhfxv8+
-         l9Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iTyZoAG1Msmk9uodk66u2eG085RCcOEtYKv2XNmOQG8=;
-        b=l5JQGQ5n1Jweyn3wM2uNVogjH7sSbTF6Evb6nh512iD3OTxkkFbCm2GrcYGHD487XA
-         8EZT/r7jww7r7r8G+IF9iMZx/ttVQZ+Y5z7XAr+Y7qFDNCnsfdByFibnXTZspGZXYufa
-         weR1OEyhzedriNKD5H8XqLeMKBhoHmozf5ZRP4ibtWTLezW8BNHlv/IHP063UdGSBFCw
-         497wlYYYBGaHKkBDdhuP7SKDejnzYkbnmXi8nUnDQLcVaN0wwmS9ipZ6KZvQ7unCIbBU
-         RGeDBe9Eji4Y6zDCEYhb8fWCLlHHA4v3pOL1H3qki99dE5+kxZ1WXf1A8EJPVOLtByA6
-         CPgA==
-X-Gm-Message-State: ACrzQf38mLvDXt43ZYGug6t0KK0Rwuy0gpRv+OYuOMOFNoI4thKzRVAZ
-        Yc9v90MvaKRB2K6c/T8ATxqRjzEuG3tw55N1UIvUTw==
-X-Google-Smtp-Source: AMsMyM6eNyhJxObx3NMuafA47nbI/HO2ux80D3ao6jX7hXNxj8sZmF3gpmbTjs8h2VIYXe2WXLts9a8Yo27/FXsiALw=
-X-Received: by 2002:a17:906:5d04:b0:77f:ca9f:33d1 with SMTP id
- g4-20020a1709065d0400b0077fca9f33d1mr1492290ejt.526.1666082566712; Tue, 18
- Oct 2022 01:42:46 -0700 (PDT)
+        Tue, 18 Oct 2022 04:43:58 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B534C631;
+        Tue, 18 Oct 2022 01:43:54 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29I8hbZ3040046;
+        Tue, 18 Oct 2022 03:43:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666082617;
+        bh=QmDZI3TBEjPeKNZilh+9aFh3Fur9k+LaiSQR5pUzem8=;
+        h=From:To:CC:Subject:Date;
+        b=r/9k2rtbuN3htvghYmuj8nXP4urgbY4jvhXNaktKO3OG21ova2uWLHMDeu1p9l8q4
+         WrqcDMcJ8rEjsyv+KwhFpLm/3taZDC85pCpuieH/1kyKkq129mEYS9bmsqdhsrrXv6
+         Y59TBDTEsfkIfiowWzpG6jBIFzrX0qzz/8gzBe7E=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29I8hbnf022532
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Oct 2022 03:43:37 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 18
+ Oct 2022 03:43:37 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 18 Oct 2022 03:43:37 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29I8hXCP076871;
+        Tue, 18 Oct 2022 03:43:34 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <robh+dt@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <kishon@kernel.org>,
+        <vkoul@kernel.org>, <dan.carpenter@oracle.com>, <rogerq@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
+Subject: [PATCH v2 0/3] Add support to PHY GMII SEL for J721e CPSW9G QSGMII
+Date:   Tue, 18 Oct 2022 14:13:30 +0530
+Message-ID: <20221018084333.149790-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221018070959.1322606-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20221018070959.1322606-1-horatiu.vultur@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 18 Oct 2022 10:42:35 +0200
-Message-ID: <CACRpkdbP=x_PZfxF+J6RRqEg2jHOrP+KfmrWe=oNvpxqM9zw-Q@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: ocelot: Fix incorrect trigger of the interrupt.
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com, michael@walle.cc,
-        UNGLinuxDriver@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,21 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 9:05 AM Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
+Add compatible for J721e CPSW9G, which contains 8 external ports and 1
+internal host port.
 
-> The interrupt controller can detect only link changes. So in case an
-> external device generated a level based interrupt, then the interrupt
-> controller detected correctly the first edge. But the problem was that
-> the interrupt controller was detecting also the edge when the interrupt
-> was cleared. So it would generate another interrupt.
-> The fix for this is to clear the second interrupt but still check the
-> interrupt line status.
->
-> Fixes: c297561bc98a ("pinctrl: ocelot: Fix interrupt controller")
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Update existing approach of using compatible to differentiate between
+devices that support QSGMII mode and those that don't. The new
+approach involves storing the number of qsgmii main ports for the device
+in the num_qsgmii_main_ports member of the "struct phy_gmii_sel_soc_data".
+This approach makes it scalable for newer devices.
 
-Patch applied for fixes!
+=========
+Changelog
+=========
+v1 -> v2:
+1. Drop all patches corresponding to SGMII mode. This is done since I do
+   not have a method to test SGMII in the standard mode which uses an
+   SGMII PHY. The previous series used SGMII in a fixed-link mode,
+   bypassing the SGMII PHY. I will post the SGMII patches in a future
+   series after testing them.
+2. Update description for the property "ti,qsgmii-main-ports", to describe
+   it in a unified way across the compatibles.
+3. Add minItems, maxItems, and items at the top, where the property
+   "ti,qsgmii-main-ports" is first defined. Modify them later
+   appropriately, based on the compatible.
+4. Update the method to fetch the property "ti,qsgmii-main-ports" from the
+   device-tree, to make it scalable.
+5. Use dev_err() when the value(s) provided in the device-tree for the
+   property "ti,qsgmii-main-ports" is/are invalid.
 
-Yours,
-Linus Walleij
+v1:
+https://lore.kernel.org/r/20220914093911.187764-1-s-vadapalli@ti.com/
+
+Siddharth Vadapalli (3):
+  dt-bindings: phy: ti: phy-gmii-sel: Add bindings for J721e
+  phy: ti: gmii-sel: Update methods for fetching and using qsgmii main
+    port
+  phy: ti: gmii-sel: Add support for CPSW9G GMII SEL in J721e
+
+ .../bindings/phy/ti,phy-gmii-sel.yaml         | 48 +++++++++++++++----
+ drivers/phy/ti/phy-gmii-sel.c                 | 42 +++++++++++++---
+ 2 files changed, 75 insertions(+), 15 deletions(-)
+
+-- 
+2.25.1
+
