@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1FC6052E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B806052E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbiJSWTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
+        id S231441AbiJSWTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiJSWT0 (ORCPT
+        with ESMTP id S231406AbiJSWT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 18:19:26 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871F41011
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:19:22 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id l4so18565013plb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:19:22 -0700 (PDT)
+        Wed, 19 Oct 2022 18:19:27 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36988B1EC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:19:24 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o17-20020a17090aac1100b0020d98b0c0f4so1485366pjq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z4YnSEPLti5++1d+/gxvsHMlivYPnWvSShn2YRgOKDQ=;
-        b=bgXvbpNck6JaVV+ruo1CFDxdJ7YsYPAD1ymB7Tqr6h2QPBc718SyOrorombXW5IUsH
-         xIBydOXVYYgCtN/o1DfwN57WsmDx0gZ1BvrhW4SJos9tl7O8oXf8d+Lf+JMT5GyLaAwP
-         T4q3oGEHY8d7kLecabPsnIElNYkRuBgap+u49+zBR05R3jz15Ed5iY3Nu2xs66s4NzDi
-         3I1KAhOTc80G0XAW2e8Xnst0JhBRHvwk7rHv32QCpP5x+YCK2u9CuURcW9b1jaiVGh3/
-         Esbo1Ta/Fcy6HG1MYPY3J+UD6eviKmmLvF2luSbWaUqD4dehRlrmMUYnDQz3WbbUWe6f
-         W11Q==
+        bh=ZaGv7LlJBdgHofmM5ORri4ochUXzvI+2qUpKqb/vueI=;
+        b=XPXW0AcauLG0R9ecSLc8KU3XGw73i+SHfDt8loROSQA6cTZ5b9EowD9Wn/KEgzCYVM
+         O+03dmnQNBXaDLT3Y7U2d6SG4dgsB/7nJwvHYw97536Qclx3ik8mriTR1G4zV1244QIn
+         KcXdlV+SOBPKJCSbTBZgkU6c5qlVP/oGs7aec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z4YnSEPLti5++1d+/gxvsHMlivYPnWvSShn2YRgOKDQ=;
-        b=6rrXBp2p60MEiUJBlMmdHdkesjV9xiOIoD8njse3wIfzrrIyGazbHbgaikhEbBhC+c
-         aiUKTIsLnP47j+uhRKo0j2qRFEZB6lnHrTVL/hgLPC4Q2T1bTXoeO532B3CC/aHDAPF5
-         iAqVhHl7W1wjJfgWjJYVzApBYtLMOGd1kYtDuPr/HNsxAeGIOxg1aUldYNexZafCojKm
-         UYWlGlQ5FqQoPBSnVPgTdCG+KwdZCzf+mh5Sw+mhl/L+s2OGKpau9kJg3x69XH4amZsZ
-         SZF0OxhUPLUipSWSXHiuea/UuYzDzP4WK/esqlgA0jLaxA52wxWfUqytwm+DzxM9Gv0Q
-         C8sQ==
-X-Gm-Message-State: ACrzQf0nC5748Gz/tw/ZGV0+yLSdj3c4APYhBkP0ztO8WCHs4vAOjVNz
-        TeblRslxZD+1onZpYVf1aTdhZA==
-X-Google-Smtp-Source: AMsMyM4wOGZ6Mzbvx+vtNxRRKJcvtr2w2MQf3Xv/TVwQqz9YK42hyOCsSWd9A7ktbshogZ+wXWYy/Q==
-X-Received: by 2002:a17:90b:4c42:b0:20d:7820:2e4e with SMTP id np2-20020a17090b4c4200b0020d78202e4emr47808393pjb.40.1666217961925;
-        Wed, 19 Oct 2022 15:19:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902a38700b0017e93c158d7sm11141360pla.214.2022.10.19.15.19.21
+        bh=ZaGv7LlJBdgHofmM5ORri4ochUXzvI+2qUpKqb/vueI=;
+        b=cw/e7p+wU+24IDMVYqoM85ypjQIFD8G8fEkmJ8Xz8IVVWHNEoL8teORlb3+POqvuHE
+         KL3TqHAzHy1SvXgA9G7+mXq2sSGPtf+vBX9vHoMDlXrX2jjhnO3Wuhkr1KtNx+Pegq/N
+         y8RAJ13OTX/gIzrWQ4lF/zCXBLmrEUHMlracQzu1baZxAYeEg7XsqHUQ+1n4fbhpliZe
+         WBDcoDZ0t+05tz5GSonIKEPvx5e+fvFhTeMZUgwSOuW4KhlION10JwTC/yOeS/KvZf34
+         MyV8I1FrRiaUxtk96HKZsH5uppNujs9ecYm2GZ8TmzmLc5i4SWMS5TlAtAacmW7Gr12M
+         95PQ==
+X-Gm-Message-State: ACrzQf1jwC26HIzbvotOKhaoaVXhdBRwKx6NsfJ/ic9wOnhIrYtAB1kT
+        tTQ4EMIbKY3iFH9UCUW9TNmVmg==
+X-Google-Smtp-Source: AMsMyM6m0qybDJCJSqtG9j3D5wrv8KHuP86ID2eiErDwVgap0Kq2QZsnamY56NRwNhc9lqyG+NYllg==
+X-Received: by 2002:a17:90a:9381:b0:20a:79b7:766a with SMTP id q1-20020a17090a938100b0020a79b7766amr48854405pjo.33.1666217963650;
+        Wed, 19 Oct 2022 15:19:23 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:57b7:1f0e:44d1:f252])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902d2cc00b00172897952a0sm11458401plc.283.2022.10.19.15.19.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 15:19:21 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 22:19:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 44/46] KVM: selftests: evmcs_test: Introduce L2 TLB
- flush test
-Message-ID: <Y1B35gupSqXAvAOZ@google.com>
-References: <20221004123956.188909-1-vkuznets@redhat.com>
- <20221004123956.188909-45-vkuznets@redhat.com>
+        Wed, 19 Oct 2022 15:19:23 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 15:19:20 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Faiz Abbas <faiz_abbas@ti.com>, linux-mmc@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] mmc: sdhci-of-arasan: Fix SDHCI_RESET_ALL for
+ CQHCI
+Message-ID: <Y1B36AnqJtolGQEP@google.com>
+References: <20221019215440.277643-1-briannorris@chromium.org>
+ <20221019145246.v2.2.I29f6a2189e84e35ad89c1833793dca9e36c64297@changeid>
+ <14efb3e6-96cf-f42e-16aa-c45001ec632e@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221004123956.188909-45-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <14efb3e6-96cf-f42e-16aa-c45001ec632e@gmail.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
-> @@ -64,15 +67,33 @@ void l2_guest_code(void)
->  	vmcall();
->  	rdmsr_gs_base(); /* intercepted */
->  
-> +	/* L2 TLB flush tests */
-> +	hyperv_hypercall(HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE | HV_HYPERCALL_FAST_BIT, 0x0,
-> +			   HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES | HV_FLUSH_ALL_PROCESSORS);
+On Wed, Oct 19, 2022 at 02:59:39PM -0700, Florian Fainelli wrote:
+> On 10/19/22 14:54, Brian Norris wrote:
+> > The same bug was already found and fixed for two other drivers, in v5.7
+> > and v5.9:
+> > 
+> > 5cf583f1fb9c mmc: sdhci-msm: Deactivate CQE during SDHC reset
+> > df57d73276b8 mmc: sdhci-pci: Fix SDHCI_RESET_ALL for CQHCI for Intel GLK-based controllers
+> > 
+> > The latter is especially prescient, saying "other drivers using CQHCI
+> > might benefit from a similar change, if they also have CQHCI reset by
+> > SDHCI_RESET_ALL."
 
-Alignment is funky.
+> > --- a/drivers/mmc/host/sdhci-of-arasan.c
+> > +++ b/drivers/mmc/host/sdhci-of-arasan.c
+> > @@ -366,6 +366,9 @@ static void sdhci_arasan_reset(struct sdhci_host *host, u8 mask)
+> >   	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> >   	struct sdhci_arasan_data *sdhci_arasan = sdhci_pltfm_priv(pltfm_host);
+> > +	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL))
+> > +		cqhci_deactivate(host->mmc);
+> > +
+> >   	sdhci_reset(host, mask);
+> 
+> Cannot this be absorbed by sdhci_reset() that all of these drivers appear to
+> be utilizing since you have access to the host and the mask to make that
+> decision?
 
-> +	rdmsr_fs_base();
-> +	/*
-> +	 * Note: hypercall status (RAX) is not preserved correctly by L1 after
-> +	 * synthetic vmexit, use unchecked version.
+It potentially could.
 
-Nice...
+I don't know if this is a specified SDHCI behavior that really belongs
+in the common helper, or if this is just a commonly-shared behavior. Per
+the comments I quote above ("if they also have CQHCI reset by
+SDHCI_RESET_ALL"), I chose to leave that as an implementation-specific
+behavior.
 
-> +	 */
-> +	__hyperv_hypercall(HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE | HV_HYPERCALL_FAST_BIT, 0x0,
-> +			   HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES | HV_FLUSH_ALL_PROCESSORS,
-> +			   &unused);
-> +	/* Make sure we're no issuing Hyper-V TLB flush call again */
-> +	__asm__ __volatile__ ("mov $0xdeadbeef, %rcx");
-> +
->  	/* Done, exit to L1 and never come back.  */
->  	vmcall();
->  }
->  
-> -void guest_code(struct vmx_pages *vmx_pages, struct hyperv_test_pages *hv_pages)
-> +void guest_code(struct vmx_pages *vmx_pages, struct hyperv_test_pages *hv_pages,
-> +		vm_vaddr_t hv_hcall_page_gpa)
->  {
->  #define L2_GUEST_STACK_SIZE 64
->  	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
->  
-> +	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
-> +	wrmsr(HV_X64_MSR_HYPERCALL, hv_hcall_page_gpa);
-> +
->  	x2apic_enable();
->  
->  	GUEST_SYNC(1);
-> @@ -102,6 +123,14 @@ void guest_code(struct vmx_pages *vmx_pages, struct hyperv_test_pages *hv_pages)
->  	vmwrite(PIN_BASED_VM_EXEC_CONTROL, vmreadz(PIN_BASED_VM_EXEC_CONTROL) |
->  		PIN_BASED_NMI_EXITING);
->  
-> +	/* L2 TLB flush setup */
-> +	current_evmcs->partition_assist_page = hv_pages->partition_assist_gpa;
-> +	current_evmcs->hv_enlightenments_control.nested_flush_hypercall = 1;
-> +	current_evmcs->hv_vm_id = 1;
-> +	current_evmcs->hv_vp_id = 1;
-> +	current_vp_assist->nested_control.features.directhypercall = 1;
-> +	*(u32 *)(hv_pages->partition_assist) = 0;
-> +
->  	GUEST_ASSERT(!vmlaunch());
+I suppose it's not all that harmful to do this even if some SDHCI
+controller doesn't have the same behavior/quirk.
 
-Pre-existing code, but would it make sense to add an assert here to verify L2
-exited due to an NMI?  Feel free to ignore this for now if it's not straightforward,
-this series is plenty big :-)
+I guess I also don't know if any SDHCI controllers will support command
+queueing (MMC_CAP2_CQE) via somethings *besides* CQHCI. I see
+CQE support in sdhci-sprd.c without CQHCI, although that driver doesn't
+set MMC_CAP2_CQE.
+
+Brian
