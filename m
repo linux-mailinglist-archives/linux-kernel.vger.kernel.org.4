@@ -2,138 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E47D60403B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59832603B9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiJSJns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S229981AbiJSIhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbiJSJke (ORCPT
+        with ESMTP id S229489AbiJSIhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:40:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259FDF034C;
-        Wed, 19 Oct 2022 02:17:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC4D2617D4;
-        Wed, 19 Oct 2022 09:16:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF97C433D6;
-        Wed, 19 Oct 2022 09:16:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666170985;
-        bh=QexgGbePdpSUxSJVDrDa2mgDst0/2mVL7ZvWwc9hdg0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TtiFKQ2QcSimwPXZrXwENvmC7w4H0TsyGY9ZovRjrdu4TlCMrX5cXIix5TF8WMON0
-         UgniEYQ2gwLxEVryboTjTg3p6KfxsE9WJsnH/0G3CiHG1y3IzJ47JYi5y/JYaJRlBn
-         znuWmjdweXTbTH9prsS3IxB2Qx927J1Pb/7B/plI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 6.0 862/862] lib/Kconfig.debug: Add check for non-constant .{s,u}leb128 support to DWARF5
-Date:   Wed, 19 Oct 2022 10:35:49 +0200
-Message-Id: <20221019083327.989995776@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
-References: <20221019083249.951566199@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Wed, 19 Oct 2022 04:37:12 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732C343E52;
+        Wed, 19 Oct 2022 01:37:10 -0700 (PDT)
+X-UUID: 70f2929a6e4d4d15882d70b0aebf317a-20221019
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=VXEyPaTCrLxGpSY/5IgutvS9DnC8wiZbTJnfp0Z5oLk=;
+        b=H3jy3jdr9uCQ3VXN6SO1gA7LGwtCgbwgbU8Yavzn38a20dHoJ3p5t02rCBt55+NzqVvrYRN0qjh55+TOMoEBOaWMCHp/6cABbzFe42C+jhD0LsX8xmOX16IHnfsjx6Q17k5Dgy6DFJ6MJgbzHWZnlRoIMdu6l93sZw2CU9K+I94=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:0eb8f19d-8858-4a4c-b694-82e39c7a1d5b,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:51
+X-CID-INFO: VERSION:1.1.12,REQID:0eb8f19d-8858-4a4c-b694-82e39c7a1d5b,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:51
+X-CID-META: VersionHash:62cd327,CLOUDID:080ac3ee-314c-4293-acb8-ca4299dd021f,B
+        ulkID:221018100211ICU4VPNE,BulkQuantity:143,Recheck:0,SF:38|28|17|19|48|10
+        2,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL
+        :0
+X-UUID: 70f2929a6e4d4d15882d70b0aebf317a-20221019
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1076513339; Wed, 19 Oct 2022 16:37:04 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 19 Oct 2022 16:37:02 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 19 Oct 2022 16:37:02 +0800
+Message-ID: <8c04c2f898ecc1466c3f14eace30762956c83885.camel@mediatek.com>
+Subject: Re: [PATCH] arm64: dts: mt8195: Add Ethernet controller
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <macpaul.lin@mediatek.com>
+Date:   Wed, 19 Oct 2022 16:37:02 +0800
+In-Reply-To: <37fff2b8-a798-dea3-c010-714a2bac695f@linaro.org>
+References: <20221017095834.7675-1-biao.huang@mediatek.com>
+         <d6bda69e-d331-3e64-2100-d41e84c3fab7@linaro.org>
+         <b5d18b4b631cb19d435f37ccacd296a2282c2a1a.camel@mediatek.com>
+         <37fff2b8-a798-dea3-c010-714a2bac695f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+Dear Krzysztof,
+	Thanks for your comments~
 
-commit 0a6de78cff600cb991f2a1b7ed376935871796a0 upstream.
-
-When building with a RISC-V kernel with DWARF5 debug info using clang
-and the GNU assembler, several instances of the following error appear:
-
-  /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
-
-Dumping the .s file reveals these .uleb128 directives come from
-.debug_loc and .debug_ranges:
-
-  .Ldebug_loc0:
-          .byte   4                               # DW_LLE_offset_pair
-          .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
-          .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
-          .byte   1                               # Loc expr size
-          .byte   90                              # DW_OP_reg10
-          .byte   0                               # DW_LLE_end_of_list
-
-  .Ldebug_ranges0:
-          .byte   4                               # DW_RLE_offset_pair
-          .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
-          .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
-          .byte   4                               # DW_RLE_offset_pair
-          .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
-          .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
-          .byte   0                               # DW_RLE_end_of_list
-
-There is an outstanding binutils issue to support a non-constant operand
-to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
-be any movement on it, due to concerns over how it would work with
-linker relaxation.
-
-To avoid these build errors, prevent DWARF5 from being selected when
-using clang and an assembler that does not have support for these symbol
-deltas, which can be easily checked in Kconfig with as-instr plus the
-small test program from the dwz test suite from the binutils issue.
-
-Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-Link: https://github.com/ClangBuiltLinux/linux/issues/1719
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- lib/Kconfig.debug |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -231,6 +231,11 @@ config DEBUG_INFO
- 	  in the "Debug information" choice below, indicating that debug
- 	  information will be generated for build targets.
- 
-+# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
-+# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-+config AS_HAS_NON_CONST_LEB128
-+	def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
-+
- choice
- 	prompt "Debug information"
- 	depends on DEBUG_KERNEL
-@@ -253,7 +258,7 @@ config DEBUG_INFO_NONE
- config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- 	bool "Rely on the toolchain's implicit default DWARF version"
- 	select DEBUG_INFO
--	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
-+	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
- 	help
- 	  The implicit default version of DWARF debug info produced by a
- 	  toolchain changes over time.
-@@ -277,7 +282,7 @@ config DEBUG_INFO_DWARF4
- config DEBUG_INFO_DWARF5
- 	bool "Generate DWARF Version 5 debuginfo"
- 	select DEBUG_INFO
--	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
-+	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
- 	help
- 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
- 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-
+On Tue, 2022-10-18 at 08:51 -0400, Krzysztof Kozlowski wrote:
+> On 18/10/2022 02:37, Biao Huang wrote:
+> > Dear Krzysztof,
+> > 	Thanks for your comments!
+> > 
+> > On Mon, 2022-10-17 at 22:01 -0400, Krzysztof Kozlowski wrote:
+> > > On 17/10/2022 05:58, Biao Huang wrote:
+> > > > Add Ethernet controller node for mt8195.
+> > > > 
+> > > > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88
+> > > > ++++++++++++++++++++
+> > > >  arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 87
+> > > > +++++++++++++++++++
+> > > >  2 files changed, 175 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > > > b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > > > index 4fbd99eb496a..02e04f82a4ae 100644
+> > > > --- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > > > +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
+> > > > @@ -258,6 +258,72 @@ &mt6359_vsram_others_ldo_reg {
+> > > >  };
+> > > >  
+> > > >  &pio {
+> > > > +	eth_default: eth_default {
+> > > 
+> > > No underscores in node names. Please also be sure your patch does
+> > > not
+> > > bring new warnings with `dtbs_check` (lack of suffix above could
+> > > mean
+> > > it
+> > > brings...)
+> > 
+> > OK, I'll fix the underscores issue in next send.
+> > As to "lack of suffix" issue, do you mean I should write it like:
+> > 	eth-default: eth-default@0 {
+> 
+> I don't know whether you should have here suffix or not - please
+> check
+> your bindings. Several pinctrl bindings require suffixes (or
+> prefixes),
+> thus I asked.
+> 
+> BTW, In the label you must use underscore.
+OK, I'll check the pinctrl-mt8195.yaml, and modify the eth related
+node.
+> 
+> > 		...
+> > 	}
+> > If yes, other nodes in current file don't have such suffix.
+> > e.g.
+> > 	gpio_keys_pins: gpio-keys-pins
+> > 
+> > Should I keep unified style with other nodes?
+> 
+> Check what bindings are requiring.
+OK.
+> 
+> > > 
+> > > > +		txd_pins {
+> 
+> (...)
+> 
+> > > > +
+> > > > +		eth: ethernet@11021000 {
+> > > > +			compatible = "mediatek,mt8195-gmac",
+> > > > "snps,dwmac-5.10a";
+> > > > +			reg = <0 0x11021000 0 0x4000>;
+> > > > +			interrupts = <GIC_SPI 716
+> > > > IRQ_TYPE_LEVEL_HIGH
+> > > > 0>;
+> > > > +			interrupt-names = "macirq";
+> > > > +			mac-address = [00 55 7b b5 7d f7];
+> > > 
+> > > How is this property of a SoC? Are you saying now that all MT8195
+> > > SoCs
+> > > have the same MAC address?
+> > 
+> > The mac-address here is taken as a default mac address in eth
+> > driver
+> > rather than a randome one.
+> > Actually, there will be a tool to customize eth mac address (e.g
+> > through "ifconfig eth0 hw ether xx:xx:xx:xx:xx:xx"), so every
+> > MT8195 SoCs will get their specified mac address in real product.
+> 
+> So this means this is not one MAC address for all SoCs, so this does
+> not
+> belong to DTSI. Actually it doesn't belong to DTS either. Look how
+> others are doing...
+OK, will remove it in next send.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
