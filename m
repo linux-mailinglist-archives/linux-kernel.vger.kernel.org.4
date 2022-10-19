@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78A6605158
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B2D60515A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiJSUd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S231282AbiJSUeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiJSUdx (ORCPT
+        with ESMTP id S230215AbiJSUeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:33:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742791870BE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666211632; x=1697747632;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kbOO8HXCNH/9sysdQIqYNZClN/RyYEn/FyixWYB4ieM=;
-  b=NTW+D72KDBxHpGQnIrmHX41uUIupytipoHMszqECgr0CTaLz/fHDv64Z
-   bidK03Sr1su2G6sN6Ro3i+qHWpAU91y/th+AfXguEHrsHScsLFC+NcV92
-   roe24G4rKukdt+V03RkLgfPYz0UOahDRm9iqgBBrssFhFRJ061iBelI0t
-   rQUli4aE+jrpreG/dKdDsSKT8vLBaTrFG6gIVUqJSXcGhQMNdyFeofhYy
-   qV6e5OCwCm54ztcbZVK2IxbbK10P7PeHJVbBgqs/sxpK+0z3Syqp3P7D8
-   ck/M3RENwS2OkOHY37ttvabKvEq2nuWk/pDboRKf4+pPDFidG8pFr9RjN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="305258806"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="305258806"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 13:33:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="718658950"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="718658950"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Oct 2022 13:33:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olFl5-00A7Lo-1i;
-        Wed, 19 Oct 2022 23:33:47 +0300
-Date:   Wed, 19 Oct 2022 23:33:47 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        linux@rasmusvillemoes.dk, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com,
-        konrad.wilk@oracle.com, haakon.bugge@oracle.com,
-        john.haxby@oracle.com
-Subject: Re: [PATCH v3 1/1] vsprintf: protect kernel from panic due to
- non-canonical pointer dereference
-Message-ID: <Y1BfK6LpDJDlUYKp@smile.fi.intel.com>
-References: <20221019194159.2923873-1-jane.chu@oracle.com>
+        Wed, 19 Oct 2022 16:34:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E3F18D462;
+        Wed, 19 Oct 2022 13:34:13 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id d26so42696169ejc.8;
+        Wed, 19 Oct 2022 13:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jtKtCWpBJcv4mG/otuUX3oh6TOctp+WF/lD5F/4NwCA=;
+        b=DBWs6p7v8osqdXIRgYTYmTyPwyxcLe6XOY94WrZ4gR1htmo5l5K1YRQBVGDxlSGoYk
+         HqlwnFGfCkuqvmCKZf+pF2BGiCVv1ue8LooY/E7GikUe1vX3B0WGAYnI0rP66N73I1wl
+         YtuMJbq6d54Sahk0ljZjXQl5t62xDy1ejGtphtGQRnrxYCejFN3K0/cpHmOjeNbnHxl3
+         SAViIpRbBFZktb2EFVUkdiJgt83xzVJlhmmOTxAqXPpS+k6224Nwlpptx5J/lMVRfy8P
+         4iY64x6hURCNjZkRaIFQsDpjeppVcpkrmucwHTN1dIO1aplq7G3AQL5Pdy/74UpMqPyY
+         fDSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jtKtCWpBJcv4mG/otuUX3oh6TOctp+WF/lD5F/4NwCA=;
+        b=R8/vOJHUtBcqunazVKgJe49dbMeprRpmZf4RIMY3hk9sH0Lv1tLD8DYFUwy8G4MDW6
+         IBMdAw4Z7j1jJPWZZnSy/Tfc6stNWz3oUnpJnxS7A7E8HlMfBZkDnsnyxvZhMSYxzdcb
+         3E6szeZibgkLB+f4a0kacgBWyHPu+BWE6Ps0KQwYqVk2CAUBQNXEgBQEHvz5j99pzvli
+         CnNDYewneCmElqpOMsWo8KXVQhgRQg0VPQIVIu7AqzOqzFhIGeB0NDRbeXa3M5AE3lHC
+         u1BIigXBbYkrnu/g2K8huRtwA3vjL8bqFvrz893NJLwRnFDSmFoxBmxoM2ixU+J0NlZj
+         xnsA==
+X-Gm-Message-State: ACrzQf1kAoU3+88Z2qqDZY7TM8HXm3WN6MFVyT08qYNaxIOUKPJFYo4y
+        h1E6oJYc1/BARfMsjwIn2fEyfD4AX2k=
+X-Google-Smtp-Source: AMsMyM5OzeetuMFxb/R4kt5OLq3k3NWBPZMWiCOrhFThCEiB9l7GydZHkiWTm0PZQUNJV/sG11bThA==
+X-Received: by 2002:a17:906:1b49:b0:78d:b7b5:71cc with SMTP id p9-20020a1709061b4900b0078db7b571ccmr8167150ejg.536.1666211652323;
+        Wed, 19 Oct 2022 13:34:12 -0700 (PDT)
+Received: from nam-dell (ip-217-105-46-158.ip.prioritytelecom.net. [217.105.46.158])
+        by smtp.gmail.com with ESMTPSA id q1-20020a170906360100b00773c60c2129sm9487313ejb.141.2022.10.19.13.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 13:34:11 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 22:34:03 +0200
+From:   Nam Cao <namcaov@gmail.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+Message-ID: <20221019203403.GA149239@nam-dell>
+References: <20221006145440.10281-1-namcaov@gmail.com>
+ <20221018193951.40787445@endymion.delvare>
+ <20221018180051.236tz4yxsdzrgguq@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221019194159.2923873-1-jane.chu@oracle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221018180051.236tz4yxsdzrgguq@pali>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 01:41:59PM -0600, Jane Chu wrote:
-> Having stepped on a local kernel bug where reading sysfs has led to
-> out-of-bound pointer dereference by vsprintf() which led to GPF panic.
-> And the reason for GPF is that the OOB pointer was turned to a
-> non-canonical address such as 0x7665645f63616465.
+On Tue, Oct 18, 2022 at 08:00:51PM +0200, Pali Rohár wrote:
+> On Tuesday 18 October 2022 19:39:51 Jean Delvare wrote:
+> > On Thu, 06 Oct 2022 16:54:40 +0200, Nam Cao wrote:
+> > > Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
+> > > to the kernel. Add this address.
+> > > 
+> > > Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
+> > > 5568 laptop:
+> > >     - Horizontal: (-18,0,1044)
+> > >     - Front elevated: (522,-18,1080)
+> > >     - Left elevated: (-18,-360,1080)
+> > >     - Upside down: (36,108,-1134)
+> > > 
+> > > Signed-off-by: Nam Cao <namcaov@gmail.com>
+> > > ---
+> > >  drivers/i2c/busses/i2c-i801.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > > index a176296f4fff..e46561e095c6 100644
+> > > --- a/drivers/i2c/busses/i2c-i801.c
+> > > +++ b/drivers/i2c/busses/i2c-i801.c
+> > > @@ -1243,6 +1243,7 @@ static const struct {
+> > >  	 */
+> > >  	{ "Latitude 5480",      0x29 },
+> > >  	{ "Vostro V131",        0x1d },
+> > > +	{ "Vostro 5568",        0x29 },
+> > >  };
+> > >  
+> > >  static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
+> > 
+> > Fine with me.
+> > 
+> > Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> > 
+> > Pali, OK with you?
 > 
-> vsprintf() already has this line of defense
-> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
->                 return "(efault)";
-> Since a non-canonical pointer can be detected by kern_addr_valid()
-> on architectures that present VM holes as well as meaningful
-> implementation of kern_addr_valid() that detects the non-canonical
-> addresses, this patch adds a check on non-canonical string pointer by
-> kern_addr_valid() and "(efault)" to alert user that something
-> is wrong instead of unecessarily panic the server.
+> Yes, nice to see that other people discovered another hidden hardware
+> devices in their own laptops :-)
 > 
-> On the other hand, if the non-canonical string pointer is dereferenced
-> else where in the kernel, by virtue of being non-canonical, a crash
-> is expected to be immediate.
+> Reviewed-by: Pali Rohár <pali@kernel.org>
+> 
+> 
+> Nam Cao, could you check your ACPI DSDT table if there is not specified
+> this smbus/i2c address 0x29? Autodiscovery would be better than
+> hardcoding. At least for E6440 I was told that BIOS does not provide it.
 
-What if there is no other dereference except the one happened in printf()?
+My reply got rejected by mailing list because the attachment was too big.
+So I re-send this without the attachment, so that everyone can see.
 
-Just to point out here, that I formally NAKed this on the basis that NULL
-and error pointers are special, for the bogus pointers we need crash ASAP,
-no matter what the code issues it. I.o.w. printf() is not special for that
-kind of pointers (i.e. bogus pointers, but not special).
+I searched the DSDT table for "29", but none of them looks like an i2c
+address.
 
--- 
-With Best Regards,
-Andy Shevchenko
+But this is the first time I hear about ACPI DSDT table, so I may did
+something incorrectly. I did:
+        - cp /sys/firmware/acpi/tables/DSDT table
+        - iasl -d table
+        - Search through table.dsl
 
-
+Best regards,
+Nam
