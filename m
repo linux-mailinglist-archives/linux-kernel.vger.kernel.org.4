@@ -2,45 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21695603739
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A99E603737
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiJSAms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S229625AbiJSAm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 20:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiJSAmn (ORCPT
+        with ESMTP id S229633AbiJSAmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:42:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F85B9AF9B;
-        Tue, 18 Oct 2022 17:42:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CBEB1042;
-        Tue, 18 Oct 2022 17:42:47 -0700 (PDT)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 238213F792;
-        Tue, 18 Oct 2022 17:42:40 -0700 (PDT)
-Message-ID: <a63cddd8-b9d3-2bd7-1965-8cd974511678@arm.com>
-Date:   Tue, 18 Oct 2022 19:41:44 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] ACPI: scan: Fix DMA range assignment
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>, rafael@kernel.org
-Cc:     lvjianmin@loongson.cn, yangyicong@huawei.com,
-        lpieralisi@kernel.org, chenhuacai@loongson.cn,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lenb@kernel.org
-References: <e94f99cfe09a64c590f009d21c566339117394e2.1666098844.git.robin.murphy@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <e94f99cfe09a64c590f009d21c566339117394e2.1666098844.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 20:42:24 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46FB9379D;
+        Tue, 18 Oct 2022 17:42:18 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 0CE2E32003C0;
+        Tue, 18 Oct 2022 20:42:17 -0400 (EDT)
+Received: from imap42 ([10.202.2.92])
+  by compute2.internal (MEProxy); Tue, 18 Oct 2022 20:42:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1666140137; x=1666226537; bh=mIh4N6NCtP2679r32LZ+wgszmD5PbyIXtro
+        ysiCTqEM=; b=wSOVpxdrGzELe7TNORZ9wAoMGGJrNUS3DE8jlzG0U3DiF6sa6S+
+        +oXFKzj1hLRWB70Ivqk6C48+/tSwflWS2sdBfJW5cPNHhwG+KV85EcGY6uDifjel
+        hH/cviYwxHXRQjPkqthsfHrgGPifwo6q9XXJAzHRw/1P1NRlP2oX6wBlNxUQlBVJ
+        5JfeEdSMApWEedHsH/uLrSoDDJabklB8cEO1ivJiOCeCei5iFKffePSX9T8AO5gr
+        GIcp1t3tj1HmlNpku0EanZrQKOBm5hOHiKZibvm1CfuTi+G20YEivpLJNxGNwNKn
+        EFstRr7ldOBXJxHf2TPrhhamwsxhfcRhEyw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666140137; x=
+        1666226537; bh=mIh4N6NCtP2679r32LZ+wgszmD5PbyIXtroysiCTqEM=; b=c
+        JPYvROp0027cTrIU+zHcwp5HVHbaZRos7IyiXjqvs8qXLWz+Bmm1Lh4g9n9+dIJt
+        sh8czXk0Pea43pzj31U0ralyTlvRJRl0EdyrYa8q56iG781E89MpOukDAHAAaniO
+        gid5+beuEOejJlVn8ent8vx6iboUw1Z7PLANiv2WhxW2EIwjSqZks+mqhr0MLl8b
+        WcfI9Uisp9OjdaOADlkADqmTmGxFp5SEBpmPvHnaCJuJDzb+jtQ8vJQS51j0WtzW
+        Jy4bPThIKZzFfx1cNrMv9dmfDjaC+ZwYDbQQdQN4IwEG1gxCBTig1M/lU2VQUpUW
+        ohEDGAvIvEv4GBgO2bkYw==
+X-ME-Sender: <xms:6UdPY88KhEJMst0UWtwdnzIm1Bsdijd0xum55uUBlyMfvuioP83tYw>
+    <xme:6UdPY0uwuLQaoiICfhcKzYw7zT-4GCMJDMPME_E8LJDKdtKBhJQse0Jv1BdfW7kD_
+    c9uauFdkqcOsuwgqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelfedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefofg
+    ggkfffhffvufgtsehttdertderredtnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgedvvdeigfdthf
+    ettdfghedtleeuteefueetiefhledvhfelleeutedufedtnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:6UdPYyDKimerttOT4AkrOZ8rKn0T7XdVgWRkjHfsQkstCclyaWLJuw>
+    <xmx:6UdPY8c7FCLhQvwqwmRDskIUzgBgos6Vkfus8m2FNYVK3ocIYEBx8A>
+    <xmx:6UdPYxMCCpqOWzlCpoHzUaTSZEXZld5SuZWBdTMtkKFIJgQxvGzM0A>
+    <xmx:6UdPYzULW8tOhOsBo2EbHmEo0vk8SE65rEl8D0DibBcWNzUyo86P-A>
+Feedback-ID: i6a694271:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4F45CBC0078; Tue, 18 Oct 2022 20:42:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <f1e63e54-d88d-4b69-86f1-c0b4a0fd8035@app.fastmail.com>
+Date:   Tue, 18 Oct 2022 18:42:04 -0600
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Odd interaction with file capabilities and procfs files
+Content-Type: text/plain
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,51 +82,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 10/18/22 08:14, Robin Murphy wrote:
-> Assigning the device's dma_range_map from the iterator variable after
-> the loop means it always points to the empty terminator at the end of
-> the map, which is not what we want. Similarly, freeing the iterator on
-> error when it points to somwhere in the middle of the allocated array
-> won't work either. Fix this.
+(Going off get_maintainers.pl for fs/namei.c here)
 
-This fixes the boot problem on both SoC generations of the rpi4+ACPI,
+I'm seeing some weird interactions with file capabilities and S_IRUSR
+procfs files. Best I can tell it doesn't occur with real files on my btrfs
+home partition.
+
+Test program:
+
+        #include <fcntl.h>
+        #include <stdio.h>
+        
+        int main()
+        {
+                int fd = open("/proc/self/auxv", O_RDONLY);
+                if (fd < 0) {
+                        perror("open");
+                        return 1;
+                }
+       
+                printf("ok\n");
+                return 0;
+        }
+
+Steps to reproduce:
+
+        $ gcc main.c
+        $ ./a.out
+        ok
+        $ sudo setcap "cap_net_admin,cap_sys_admin+p" a.out
+        $ ./a.out
+        open: Permission denied
+
+It's not obvious why this happens, even after spending a few hours
+going through the standard documentation and kernel code. It's
+intuitively odd b/c you'd think adding capabilities to the permitted
+set wouldn't affect functionality.
+
+Best I could tell the -EACCES error occurs in the fallthrough codepath
+inside generic_permission().
+
+Sorry if this is something dumb or obvious.
 
 Thanks,
-
-Tested-by: Jeremy Linton <jeremy.linton@arm.com>
-
-> 
-> Fixes: bf2ee8d0c385 ("ACPI: scan: Support multiple DMA windows with different offsets")
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->   drivers/acpi/scan.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 558664d169fc..024cc373a197 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -1509,9 +1509,12 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->   			goto out;
->   		}
->   
-> +		*map = r;
-> +
->   		list_for_each_entry(rentry, &list, node) {
->   			if (rentry->res->start >= rentry->res->end) {
-> -				kfree(r);
-> +				kfree(*map);
-> +				*map = NULL;
->   				ret = -EINVAL;
->   				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
->   				goto out;
-> @@ -1523,8 +1526,6 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->   			r->offset = rentry->offset;
->   			r++;
->   		}
-> -
-> -		*map = r;
->   	}
->    out:
->   	acpi_dev_free_resource_list(&list);
-
+Daniel
