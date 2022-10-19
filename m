@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CA16051DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070EE6051E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiJSVVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S230140AbiJSVXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiJSVVW (ORCPT
+        with ESMTP id S229569AbiJSVXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:21:22 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2C216D553
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:21:21 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id y8so18393123pfp.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dj0xZ1Dkg4xYll0gq3dc/cKHh3HAtgA0/5nqHUBQtNA=;
-        b=Hliu61acZJ5HS4cjpboBws44ZSH4NbJfPBzbR5C2Jyf6bYa8tegpNLN/MJnT7pVL4l
-         JyxwH4qetwBIKpST1TAPslBdR/2DauEy7zdrAs7puFkvrNh6Lg2Xk0wBb1b/R6rUszpC
-         CDxg9b8vnGsq/PyWXafF2KcTw3esz5kziO5nnyi65cnomf5mioODYMgLt+JD/lUvjZQY
-         HWA22vFGVFQfnb38i2e+XPXOWoQiaKrHJEatTnItqiKMPJbKczEsP4XS70OrsbFEXOeA
-         ptMGawxpiRTu3X44UcHkuyDPbXDOgWbOup2ZYURruTblOOYK0q+FbpJVCV0BO01zL+UP
-         5f4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dj0xZ1Dkg4xYll0gq3dc/cKHh3HAtgA0/5nqHUBQtNA=;
-        b=AgyedufbFHS9vsKrujHy3ZqPoc0si6FIO3HpyDgktkAggc5pcw6+ddLPv8U4h76Mgx
-         r1qxPkimHhtElixl97VZyTJOvSxKoa7uaqyrQuiQQD9pf4rT76Oa7LmdnhcJOfu+pB2l
-         JVT6it75mQT3scqmsY5LPM3Os8iYbCnqUIfJSHNGG7oQJgJQDKRw/LtM7TDksvBRfWXr
-         RPDJHlgpEv2r7UZKKH2gxKbAE2TvBnvUkLvkbe/pjgvWT54H8awkFGwyd0tN6ElfPuCc
-         4PogDskWVoFaZnImRhe+uGaACf9DNyOzT28xdZr4Ig+bZzfR6EoVM8QS03fScU+LlNsU
-         cncQ==
-X-Gm-Message-State: ACrzQf1ZzdK65k3ioUD/CsDrsiamSeeTVUVJhEpVqXuiPI4xZK1PWcig
-        pfdmAX8XD39b7CYyr6yoZ/s=
-X-Google-Smtp-Source: AMsMyM4QCgngN5J3mBKq1il/R1K8zc8Lu+96JmS1FxYMoTH/71wsDnzjPmkAzoo2EZvpzHxcoFoz8w==
-X-Received: by 2002:a65:6bc1:0:b0:462:4a88:4fef with SMTP id e1-20020a656bc1000000b004624a884fefmr8804552pgw.282.1666214480796;
-        Wed, 19 Oct 2022 14:21:20 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id ix6-20020a170902f80600b00176cdd80148sm11169206plb.305.2022.10.19.14.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 14:21:20 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 19 Oct 2022 11:21:19 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chuyi Zhou <zhouchuyi@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        htejun@gmail.com, lizefan.x@bytedance.com, vschneid@redhat.com,
-        bsegall@google.com, Abel Wu <wuyun.abel@bytedance.com>
-Subject: Re: [RESEND] sched/fair: Add min_ratio for cfs bandwidth_control
-Message-ID: <Y1BqT59ovFitahJa@slm.duckdns.org>
-References: <20221019031551.24312-1-zhouchuyi@bytedance.com>
+        Wed, 19 Oct 2022 17:23:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAA518D821;
+        Wed, 19 Oct 2022 14:23:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C6F1619CB;
+        Wed, 19 Oct 2022 21:23:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76ACDC43470;
+        Wed, 19 Oct 2022 21:23:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666214593;
+        bh=JRvVcp/rqi1K8yZPC/1qfvyLBzl4zZ4GfoWHrtACY4o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=L+0qF3UebihgTSDn0LdCsyS2+SClgm7ZMNFljE+1PnVvRSszMXLZIj1BRyzlme9vw
+         PXQ9dVsU3d1J9svfXroQftez3O09Xf/leA0Zsx21Nymplw2aZZe9PYLQdEdu8KBtl8
+         NqvKHkXDPsouk3l2P8+v+Chbq/I2/V7r13vkXO6cxypCUvdEW8KAM8ph3/G0oAQ1Tu
+         3QRaIfjaHAKcUuPdbQ9U0V+IYOwodSm255vyqGo/UiV8hA6DqM4tk3BDbFQ4tu0Zv6
+         pwoF1/KP2LXRqCAiOGUlQ/s09h2I5xRMCgR0fRz9QbcK6AJNcWt8OldHpZqtfQ3FjD
+         sBiUvKKtJXpXQ==
+Received: by mail-lf1-f46.google.com with SMTP id j4so30347108lfk.0;
+        Wed, 19 Oct 2022 14:23:13 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1TJTIysfraUqc5CQViMrJ8yFeiBEwKBTAPDjXcncck9j1+yRkq
+        mg1DbP00nPaVT09QEJTDSgen2psMhQ3YYfErM5I=
+X-Google-Smtp-Source: AMsMyM5Zw9wNz4cXzIBSsR+mxUtdGnWlCcT5ojzAmUiDolf8SLSjfYeoNwMuL5tK6FI5p1w0fGd7SNAbshR3AvAQnmQ=
+X-Received: by 2002:a05:6512:314a:b0:4a2:d0b9:aa20 with SMTP id
+ s10-20020a056512314a00b004a2d0b9aa20mr4025751lfi.110.1666214591460; Wed, 19
+ Oct 2022 14:23:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019031551.24312-1-zhouchuyi@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <23DC077F-69DF-402C-A940-2E7EEABF2D97@live.com>
+In-Reply-To: <23DC077F-69DF-402C-A940-2E7EEABF2D97@live.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Oct 2022 23:23:00 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXG03-0AdM_ROf2UhH-N2Z52v7ox_emSQw=y5p3sMeTrMA@mail.gmail.com>
+Message-ID: <CAMj1kXG03-0AdM_ROf2UhH-N2Z52v7ox_emSQw=y5p3sMeTrMA@mail.gmail.com>
+Subject: Re: [REGRESSION] Failure to write the NVRAM variables starting from
+ kernel 6.0 on T2 Macs
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
+        "jk@ozlabs.org" <jk@ozlabs.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello Aditya
 
-On Wed, Oct 19, 2022 at 11:15:51AM +0800, Chuyi Zhou wrote:
-> Tasks may be throttled when holding locks for a long time by current
-> cfs bandwidth control mechanism once users set a too small quota/period
-> ratio, which can result whole system get stuck[1].
-> 
-> In order to prevent the above situation from happening, this patch adds
-> sysctl_sched_cfs_bandwidth_min_ratio in /proc/sys/kernel, which indicates
-> the minimum percentage of quota/period users can set. The default value is
-> zero and users can set quota and period without triggering this constraint.
-> 
-> Link[1]:https://lore.kernel.org/lkml/5987be34-b527-4ff5-a17d-5f6f0dc94d6d@huawei.com/T/
-> Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
-> Suggested-by: Abel Wu <wuyun.abel@bytedance.com>
+On Wed, 19 Oct 2022 at 21:26, Aditya Garg <gargaditya08@live.com> wrote:
+>
+> Starting from linux kernel 6.0, the ability to write to the NVRAM has been lost on T2 Macs.
+>
+> This has been observed especially during installation of boot loaders like GRUB, causing errors as shown :-
+>
+> Installing for x86_64-efi platform.
+> grub-install: warning: Cannot set EFI variable Boot0001.
+> grub-install: warning: efivarfs_set_variable: writing to fd 7 failed: Invalid argument.
+> grub-install: warning: _efi_set_variable_mode: ops->set_variable() failed: Invalid argument.
+> grub-install: error: failed to register the EFI boot entry: Invalid argument.
+>
 
-This is a bit of a bandaid. I think what we really need to do is only
-throttling when running in userspace. In kernel space, it should just keep
-accumulating used cycles as debt which should be paid back before userspace
-code can run again so that we don't throttle at random places in the kernel.
+Thanks for the report. I did identify an issue in some refactoring
+work of the efivars layer that went into 6.0
 
-Thanks.
+Can you please check whether the change below fixes the issue for you?
 
--- 
-tejun
+diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
+index dd74d2ad3184..35edba93cf14 100644
+--- a/drivers/firmware/efi/vars.c
++++ b/drivers/firmware/efi/vars.c
+@@ -209,7 +209,7 @@ efivar_set_variable_blocking(efi_char16_t *name,
+efi_guid_t *vendor,
+        if (data_size > 0) {
+                status = check_var_size(attr, data_size +
+                                              ucs2_strsize(name, 1024));
+-               if (status != EFI_SUCCESS)
++               if (status != EFI_SUCCESS && status != EFI_UNSUPPORTED)
+                        return status;
+        }
+        return __efivars->ops->set_variable(name, vendor, attr,
+data_size, data);
+@@ -242,7 +242,7 @@ efi_status_t
+efivar_set_variable_locked(efi_char16_t *name, efi_guid_t *vendor,
+        if (data_size > 0) {
+                status = check_var_size_nonblocking(attr, data_size +
+
+ucs2_strsize(name, 1024));
+-               if (status != EFI_SUCCESS)
++               if (status != EFI_SUCCESS && status != EFI_UNSUPPORTED)
+                        return status;
+        }
+        return setvar(name, vendor, attr, data_size, data);
