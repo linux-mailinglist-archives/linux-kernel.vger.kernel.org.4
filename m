@@ -2,134 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2A1605367
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3997960536A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiJSWug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S230319AbiJSWv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJSWu3 (ORCPT
+        with ESMTP id S230270AbiJSWvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 18:50:29 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B7052E4E;
-        Wed, 19 Oct 2022 15:50:26 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id y72so20966869oia.3;
-        Wed, 19 Oct 2022 15:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7TyeRkVEOZiqX6Ou3Xrr7rGnkYAAlYAOk++yC+obN0Y=;
-        b=NdEkwFcPeD4sVQMT3vnv0jC7pvtQaITJt4tY6qTknnB/v/qcHVDpP5/bcRlymawh3Y
-         91PMY51EYzqjs/PYdO82V+TmNrFJq/A/daXty0m2Hp9/eBryfO4AWDV7x8E3PVCiwomJ
-         eSgdGQL8uphtQ84cRrC3dL2/Hmx8/4yvIVQRbgDl5Gb8Gj1pi3os1agaBgG74g9eA4hR
-         kMRi3wZdfbHG5NSoy3VHXO1qfN00STdOEmgWsUvBytaXkHy4JiOjXwJIpty6gJ2RGRci
-         uRclFHeB7sBdiQHgqlQSXZx/jTdF/+revM3f1cq7S8S9TQ7PkPkIBnPmD4jsr3MvE0y7
-         HWfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7TyeRkVEOZiqX6Ou3Xrr7rGnkYAAlYAOk++yC+obN0Y=;
-        b=zptEXLAJZ+DJbdNfNTKdGzV/uwF9qsfMVfLWT3mK8oV6r926lSX2ePPyfRMeh16ZBc
-         z9wj32J5S2ee8d/2VQQyUpg8oSoji82mv+DWaQNFws+Yo0cUAuHgwh/tPU/Zr+Xn8AVm
-         FC99jV+Qvcyv4+43toqG2wooUFWjrvcsEJqEWnm8eAxeRlwtrJz8KcWT5UDltN3140DD
-         K2mzyczylu5YOF+DEyTwuqdmHijuy0+DpzCQqXcARgImyVC5ACW2v/+TptkLvGb471Lb
-         OYsUBgos6JvrcXmFvHJcz3KE4i+7ti3zAQg5TGSCdEYK/9jKWkbOckxkIyRrIaS6w22+
-         UQUg==
-X-Gm-Message-State: ACrzQf2AbtABUPyzuLtYjlo1ARdM/iytt/KDT2V2Lx1Lf+nNbHq1wOQN
-        co8PK3T3HI62CKTAOSxLC1S6xZtMYkA=
-X-Google-Smtp-Source: AMsMyM5Sql3FFYtgoddgiBJxw+/ww/1PObWMV2upp5iokOpUA2ejbQje4p1hcjt93ns0xcAq13vZdA==
-X-Received: by 2002:a05:6808:1b25:b0:354:c1dd:9d47 with SMTP id bx37-20020a0568081b2500b00354c1dd9d47mr5701640oib.46.1666219826106;
-        Wed, 19 Oct 2022 15:50:26 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y26-20020a4acb9a000000b0047537233dfasm6975742ooq.21.2022.10.19.15.50.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 15:50:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2d22d0ac-ecc8-1c05-fb63-b0bd0569036c@roeck-us.net>
-Date:   Wed, 19 Oct 2022 15:50:24 -0700
+        Wed, 19 Oct 2022 18:51:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88B2181CB1;
+        Wed, 19 Oct 2022 15:51:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A17D619E8;
+        Wed, 19 Oct 2022 22:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC79DC433D7;
+        Wed, 19 Oct 2022 22:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666219906;
+        bh=KTUh/BBOVf/jDi48jtrSyvr3uGxVW8ae61JQrk9NyJc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QMnspMzNjGvI3eZcJ9PJnKKYTgCQgWhpSkDUKzx4lmQ5tOQf3lVjsfp2BOtXzL5Gk
+         vu0dEyFrZXgwafcYKYjpu0Y27GSxwm1KKhl3FjaFKv5nuABUfkhHjkjKQWSxRZkYCb
+         HM2E+cqEyFrqiVfSRTvAYhMOlQMtpcmVKbH/iXfmSW3CCCIwZCp1cWnsYvQsWOUF2B
+         0qr9TT+Yzb8/ra4woz0xMTP5HazBmWakNQyf1nDfed3yguzWkgUCFzQAy36bhMDgAp
+         OWwQm2ASc6yz6oYl5r1Ue7kMaR5Xdx9A/4UK+jvcTo6GWYkT3b0z5I2amWSrjauGKx
+         fxXkLf+1pzVRw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 756C85C06B4; Wed, 19 Oct 2022 15:51:46 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, Zhen Lei <thunder.leizhen@huawei.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 01/14] rcu: Simplify rcu_init_nohz() cpumask handling
+Date:   Wed, 19 Oct 2022 15:51:31 -0700
+Message-Id: <20221019225144.2500095-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1>
+References: <20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org
-References: <20221019214108.220319-1-martin.blumenstingl@googlemail.com>
- <0d1b4fed-7ded-88fc-3c37-4f859fc505c1@roeck-us.net>
- <CAFBinCAutvvNzSD7HXfMzLOg-NZ3ubifjtHzC9yURe=BZJQEiA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (jc42) Restore the min/max/critical temperatures
- on resume
-In-Reply-To: <CAFBinCAutvvNzSD7HXfMzLOg-NZ3ubifjtHzC9yURe=BZJQEiA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 15:03, Martin Blumenstingl wrote:
-> Hi Guenter,
-> 
-> Thank you for the quick feedback!
-> 
-> On Wed, Oct 19, 2022 at 11:51 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> [...]
->>> +     if (data->valid || data->temp[t_min])
->>
->> This contradicts "with applying the previous values by only configuring
->> them if they are known valid". It explicitly applies the values if they
->> are marked as not valid, and it also applies the values if they are 0
->> (I don't really see the value of doing that).
->>
->> Sorry, I don't understand the logic. Did you mean to use "&&" instead
->> of "||" ?
-> My understanding is that that:
-> 1) data->valid = true is only set in jc42_update_device() (which is
-> only called when reading back the values from the registers)
-> 2) jc42_write() can write values without setting data->value = true
-> In other words: if jc42_read() is never called but jc42_write() is
-> then we still have some setting to apply while data->valid is false.
-> Whether that's possible in reality is something that I'm not sure
-> about.
-> 
+From: Zhen Lei <thunder.leizhen@huawei.com>
 
-The above only means that the code is not optimized for the problem
-you are trying to solve.
+In kernels built with either CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or
+CONFIG_NO_HZ_FULL=y, additional CPUs must be added to rcu_nocb_mask.
+Except that kernels booted without the rcu_nocbs= will not have
+allocated rcu_nocb_mask.  And the current rcu_init_nohz() function uses
+its need_rcu_nocb_mask and offload_all local variables to track the
+rcu_nocb and nohz_full state.
 
-- Calling jc42_update_device() would solve the valid problem.
-- Calling jc42_update_device() from the write function would
-   solve it as well.
+But there is a much simpler approach, namely creating a cpumask pointer
+to track the default and then using cpumask_available() to check the
+rcu_nocb_mask state.  This commit takes this approach, thereby simplifying
+and shortening the rcu_init_nohz() function.
 
-Relying on a previous call to the write function is most definitely
-wrong.
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Acked-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ kernel/rcu/tree_nocb.h | 34 +++++++++++-----------------------
+ 1 file changed, 11 insertions(+), 23 deletions(-)
 
-Also, for optimization, jc42_update_device() should really read the limit
-registers only once. The best solution would probably be to convert the
-driver to use regmap and let regmap handle the caching.
-
-Guenter
-
-> If your suggestion is to simplify this to use data->valid only then I
-> can do that.
-> It would be great if you could also comment on whether
-> jc42_update_device() should be called from jc42_suspend() to give the
-> driver the chance to at least read the data once (and set data->valid)
-> if this has not happened before.
-> 
-> 
-> Best regards,
-> Martin
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 0a5f0ef414845..ce526cc2791ca 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1210,45 +1210,33 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+ void __init rcu_init_nohz(void)
+ {
+ 	int cpu;
+-	bool need_rcu_nocb_mask = false;
+-	bool offload_all = false;
+ 	struct rcu_data *rdp;
+-
+-#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
+-	if (!rcu_state.nocb_is_setup) {
+-		need_rcu_nocb_mask = true;
+-		offload_all = true;
+-	}
+-#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
++	const struct cpumask *cpumask = NULL;
+ 
+ #if defined(CONFIG_NO_HZ_FULL)
+-	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
+-		need_rcu_nocb_mask = true;
+-		offload_all = false; /* NO_HZ_FULL has its own mask. */
+-	}
+-#endif /* #if defined(CONFIG_NO_HZ_FULL) */
++	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
++		cpumask = tick_nohz_full_mask;
++#endif
++
++	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) &&
++	    !rcu_state.nocb_is_setup && !cpumask)
++		cpumask = cpu_possible_mask;
+ 
+-	if (need_rcu_nocb_mask) {
++	if (cpumask) {
+ 		if (!cpumask_available(rcu_nocb_mask)) {
+ 			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
+ 				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
+ 				return;
+ 			}
+ 		}
++
++		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
+ 		rcu_state.nocb_is_setup = true;
+ 	}
+ 
+ 	if (!rcu_state.nocb_is_setup)
+ 		return;
+ 
+-#if defined(CONFIG_NO_HZ_FULL)
+-	if (tick_nohz_full_running)
+-		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+-#endif /* #if defined(CONFIG_NO_HZ_FULL) */
+-
+-	if (offload_all)
+-		cpumask_setall(rcu_nocb_mask);
+-
+ 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+ 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+ 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+-- 
+2.31.1.189.g2e36527f23
 
