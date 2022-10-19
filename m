@@ -2,265 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DD66044CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F5D6045A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiJSMPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S233365AbiJSMqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbiJSMOS (ORCPT
+        with ESMTP id S233299AbiJSMph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:14:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B741C2EA1;
-        Wed, 19 Oct 2022 04:50:57 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 08:55:50 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666169751;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OQ5DMmbfHzNYcXPZAhtE/eVm3dkudM99QWV4vaM1NtA=;
-        b=QylOY3gzUnX4OaR5VsL7q8WNt4TkjzzCjH/0nGHs5XTMHFVpFj8tEFfKo0u291vLDxww2z
-        6dd0y5pcnjNztySpMhaJB1et58/AWRxRvh2hTnQd0l4ZDsD5vMAJjSQSHkw28ZRuEXUtDd
-        O7hF/jyr8Leth99LuTmDbNR2aHDgfjigMl2aRfmvDxlek10sogxo0WW0aGSaHe3V6Jja38
-        BYyBziZ80W20stuBLM3eCNL2kXDZiX4OKvgYiwuhgRx962fZbs0VtX4CwUfldYo6RxkUU4
-        Kn1LGnifVLM0Vjm2Ujom/m7UWBApgCo67nAkiQ+8t7qJIpI8cB/OPjtPYQdOWw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666169751;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OQ5DMmbfHzNYcXPZAhtE/eVm3dkudM99QWV4vaM1NtA=;
-        b=jG6um6GjEY6NS35mSe0Yc5e6epXDaYYZFk56h5Lj38TV6lelWNeM4FcDRVRVOyjad8N/2f
-        hLupGzUIXNt7YUBw==
-From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] x86/signal: Remove sig parameter from frame setup functions
-Cc:     Brian Gerst <brgerst@gmail.com>, Borislav Petkov <bp@suse.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220606203802.158958-2-brgerst@gmail.com>
-References: <20220606203802.158958-2-brgerst@gmail.com>
+        Wed, 19 Oct 2022 08:45:37 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778AD13FA5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:28:35 -0700 (PDT)
+X-UUID: 8c9473935dc9430d907323aa6a24e1ce-20221019
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=tqvtEtatRRl/UW0RZ3T+M3Rf2MvxTlfEeOLdRGB0yZQ=;
+        b=m7CKB7i4ZrDKfnoc8ikWw1z90ggkqKEWFjKCsERsCi5Hsb6WBI+oSjsHz+vMHV6AJyA2Qavh0xyx8KKSOfLuI0j4+GCp5Ts8/O1KisXpe8SiMIZ0/67OqyuYCm1D1duqnz86QhAhFCODmf/TivHfxrSEMLFLkccmKMa8b5eYd6g=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:47c8463d-3e2c-4061-ba94-1a27a061ba67,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:62cd327,CLOUDID:7fd749a4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 8c9473935dc9430d907323aa6a24e1ce-20221019
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 612091699; Wed, 19 Oct 2022 17:07:28 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 19 Oct 2022 17:07:26 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 19 Oct 2022 17:07:26 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>,
+        <jitao.shi@mediatek.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v3] drm: mediatek: Modify dpi power on/off sequence.
+Date:   Wed, 19 Oct 2022 17:07:23 +0800
+Message-ID: <1666170443-19301-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Message-ID: <166616975030.401.1631367477728769611.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-Commit-ID:     8bb2d28e2b92ef220e82369ff31a22f39831cf2f
-Gitweb:        https://git.kernel.org/tip/8bb2d28e2b92ef220e82369ff31a22f39831cf2f
-Author:        Brian Gerst <brgerst@gmail.com>
-AuthorDate:    Mon, 06 Jun 2022 16:37:55 -04:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 19 Oct 2022 09:58:48 +02:00
+Modify dpi power on/off sequence so that the first gpio operation will take effect.
 
-x86/signal: Remove sig parameter from frame setup functions
-
-Passing the signal number as a separate parameter is unnecessary, since
-it is always ksig->sig.
-
-Signed-off-by: Brian Gerst <brgerst@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Link: https://lore.kernel.org/r/20220606203802.158958-2-brgerst@gmail.com
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Fixes: 6bd4763fd532 ("drm/mediatek: set dpi pin mode to gpio low to avoid leakage current")
+Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
 ---
- arch/x86/ia32/ia32_signal.c       | 12 ++++++------
- arch/x86/include/asm/fpu/signal.h |  4 ++--
- arch/x86/kernel/signal.c          | 23 +++++++++++------------
- 3 files changed, 19 insertions(+), 20 deletions(-)
+change note:
+v2: Remove the empty line between Fixes: and S-o-b.
 
-diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
-index c9c3859..390347a 100644
---- a/arch/x86/ia32/ia32_signal.c
-+++ b/arch/x86/ia32/ia32_signal.c
-@@ -230,7 +230,7 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
- 	return (void __user *) sp;
- }
+v1: Rebase on linus/master v6.1-rc1. Change nothing.
+
+Because dpi power_on/off is protected by dpi->refcount, the first time
+it cannot be powered on and off successfully, it will cause leakage.
+---
+---
+ drivers/gpu/drm/mediatek/mtk_dpi.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+index 508a6d994e83..f83cf64c2828 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dpi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+@@ -461,9 +461,6 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
+ 	if (--dpi->refcount != 0)
+ 		return;
  
--int ia32_setup_frame(int sig, struct ksignal *ksig,
-+int ia32_setup_frame(struct ksignal *ksig,
- 		     compat_sigset_t *set, struct pt_regs *regs)
- {
- 	struct sigframe_ia32 __user *frame;
-@@ -264,7 +264,7 @@ int ia32_setup_frame(int sig, struct ksignal *ksig,
- 	if (!user_access_begin(frame, sizeof(*frame)))
- 		return -EFAULT;
- 
--	unsafe_put_user(sig, &frame->sig, Efault);
-+	unsafe_put_user(ksig->sig, &frame->sig, Efault);
- 	unsafe_put_sigcontext32(&frame->sc, fp, regs, set, Efault);
- 	unsafe_put_user(set->sig[1], &frame->extramask[0], Efault);
- 	unsafe_put_user(ptr_to_compat(restorer), &frame->pretcode, Efault);
-@@ -280,7 +280,7 @@ int ia32_setup_frame(int sig, struct ksignal *ksig,
- 	regs->ip = (unsigned long) ksig->ka.sa.sa_handler;
- 
- 	/* Make -mregparm=3 work */
--	regs->ax = sig;
-+	regs->ax = ksig->sig;
- 	regs->dx = 0;
- 	regs->cx = 0;
- 
-@@ -296,7 +296,7 @@ Efault:
- 	return -EFAULT;
- }
- 
--int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
-+int ia32_setup_rt_frame(struct ksignal *ksig,
- 			compat_sigset_t *set, struct pt_regs *regs)
- {
- 	struct rt_sigframe_ia32 __user *frame;
-@@ -321,7 +321,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
- 	if (!user_access_begin(frame, sizeof(*frame)))
- 		return -EFAULT;
- 
--	unsafe_put_user(sig, &frame->sig, Efault);
-+	unsafe_put_user(ksig->sig, &frame->sig, Efault);
- 	unsafe_put_user(ptr_to_compat(&frame->info), &frame->pinfo, Efault);
- 	unsafe_put_user(ptr_to_compat(&frame->uc), &frame->puc, Efault);
- 
-@@ -357,7 +357,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
- 	regs->ip = (unsigned long) ksig->ka.sa.sa_handler;
- 
- 	/* Make -mregparm=3 work */
--	regs->ax = sig;
-+	regs->ax = ksig->sig;
- 	regs->dx = (unsigned long) &frame->info;
- 	regs->cx = (unsigned long) &frame->uc;
- 
-diff --git a/arch/x86/include/asm/fpu/signal.h b/arch/x86/include/asm/fpu/signal.h
-index e1c9df9..08826ad 100644
---- a/arch/x86/include/asm/fpu/signal.h
-+++ b/arch/x86/include/asm/fpu/signal.h
-@@ -14,9 +14,9 @@
- # include <uapi/asm/sigcontext.h>
- # include <asm/user32.h>
- struct ksignal;
--int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
-+int ia32_setup_rt_frame(struct ksignal *ksig,
- 			compat_sigset_t *set, struct pt_regs *regs);
--int ia32_setup_frame(int sig, struct ksignal *ksig,
-+int ia32_setup_frame(struct ksignal *ksig,
- 		     compat_sigset_t *set, struct pt_regs *regs);
- #else
- # define user_i387_ia32_struct	user_i387_struct
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index 9c7265b..40b1373 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -324,7 +324,7 @@ static const struct {
- };
- 
- static int
--__setup_frame(int sig, struct ksignal *ksig, sigset_t *set,
-+__setup_frame(struct ksignal *ksig, sigset_t *set,
- 	      struct pt_regs *regs)
- {
- 	struct sigframe __user *frame;
-@@ -336,7 +336,7 @@ __setup_frame(int sig, struct ksignal *ksig, sigset_t *set,
- 	if (!user_access_begin(frame, sizeof(*frame)))
- 		return -EFAULT;
- 
--	unsafe_put_user(sig, &frame->sig, Efault);
-+	unsafe_put_user(ksig->sig, &frame->sig, Efault);
- 	unsafe_put_sigcontext(&frame->sc, fp, regs, set, Efault);
- 	unsafe_put_user(set->sig[1], &frame->extramask[0], Efault);
- 	if (current->mm->context.vdso)
-@@ -363,7 +363,7 @@ __setup_frame(int sig, struct ksignal *ksig, sigset_t *set,
- 	/* Set up registers for signal handler */
- 	regs->sp = (unsigned long)frame;
- 	regs->ip = (unsigned long)ksig->ka.sa.sa_handler;
--	regs->ax = (unsigned long)sig;
-+	regs->ax = (unsigned long)ksig->sig;
- 	regs->dx = 0;
- 	regs->cx = 0;
- 
-@@ -379,7 +379,7 @@ Efault:
- 	return -EFAULT;
- }
- 
--static int __setup_rt_frame(int sig, struct ksignal *ksig,
-+static int __setup_rt_frame(struct ksignal *ksig,
- 			    sigset_t *set, struct pt_regs *regs)
- {
- 	struct rt_sigframe __user *frame;
-@@ -391,7 +391,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
- 	if (!user_access_begin(frame, sizeof(*frame)))
- 		return -EFAULT;
- 
--	unsafe_put_user(sig, &frame->sig, Efault);
-+	unsafe_put_user(ksig->sig, &frame->sig, Efault);
- 	unsafe_put_user(&frame->info, &frame->pinfo, Efault);
- 	unsafe_put_user(&frame->uc, &frame->puc, Efault);
- 
-@@ -428,7 +428,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
- 	/* Set up registers for signal handler */
- 	regs->sp = (unsigned long)frame;
- 	regs->ip = (unsigned long)ksig->ka.sa.sa_handler;
--	regs->ax = (unsigned long)sig;
-+	regs->ax = (unsigned long)ksig->sig;
- 	regs->dx = (unsigned long)&frame->info;
- 	regs->cx = (unsigned long)&frame->uc;
- 
-@@ -458,7 +458,7 @@ static unsigned long frame_uc_flags(struct pt_regs *regs)
- 	return flags;
- }
- 
--static int __setup_rt_frame(int sig, struct ksignal *ksig,
-+static int __setup_rt_frame(struct ksignal *ksig,
- 			    sigset_t *set, struct pt_regs *regs)
- {
- 	struct rt_sigframe __user *frame;
-@@ -493,7 +493,7 @@ static int __setup_rt_frame(int sig, struct ksignal *ksig,
+-	if (dpi->pinctrl && dpi->pins_gpio)
+-		pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
+-
+ 	mtk_dpi_disable(dpi);
+ 	clk_disable_unprepare(dpi->pixel_clk);
+ 	clk_disable_unprepare(dpi->engine_clk);
+@@ -488,9 +485,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+ 		goto err_pixel;
  	}
  
- 	/* Set up registers for signal handler */
--	regs->di = sig;
-+	regs->di = ksig->sig;
- 	/* In case the signal handler was declared without prototypes */
- 	regs->ax = 0;
+-	if (dpi->pinctrl && dpi->pins_dpi)
+-		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
+-
+ 	return 0;
  
-@@ -763,7 +763,6 @@ static inline int is_x32_frame(struct ksignal *ksig)
- static int
- setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ err_pixel:
+@@ -720,6 +714,9 @@ static void mtk_dpi_bridge_disable(struct drm_bridge *bridge)
  {
--	int usig = ksig->sig;
- 	sigset_t *set = sigmask_to_save();
- 	compat_sigset_t *cset = (compat_sigset_t *) set;
+ 	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
  
-@@ -773,13 +772,13 @@ setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
- 	/* Set up the stack frame */
- 	if (is_ia32_frame(ksig)) {
- 		if (ksig->ka.sa.sa_flags & SA_SIGINFO)
--			return ia32_setup_rt_frame(usig, ksig, cset, regs);
-+			return ia32_setup_rt_frame(ksig, cset, regs);
- 		else
--			return ia32_setup_frame(usig, ksig, cset, regs);
-+			return ia32_setup_frame(ksig, cset, regs);
- 	} else if (is_x32_frame(ksig)) {
- 		return x32_setup_rt_frame(ksig, cset, regs);
- 	} else {
--		return __setup_rt_frame(ksig->sig, ksig, set, regs);
-+		return __setup_rt_frame(ksig, set, regs);
- 	}
++	if (dpi->pinctrl && dpi->pins_gpio)
++		pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
++
+ 	mtk_dpi_power_off(dpi);
  }
  
+@@ -727,6 +724,9 @@ static void mtk_dpi_bridge_enable(struct drm_bridge *bridge)
+ {
+ 	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
+ 
++	if (dpi->pinctrl && dpi->pins_dpi)
++		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
++
+ 	mtk_dpi_power_on(dpi);
+ 	mtk_dpi_set_display_mode(dpi, &dpi->mode);
+ 	mtk_dpi_enable(dpi);
+-- 
+2.18.0
+
