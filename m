@@ -2,102 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4583A603E36
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C63A603B76
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbiJSJLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S229788AbiJSI3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbiJSJIy (ORCPT
+        with ESMTP id S229463AbiJSI3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:08:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B581F6A49F;
-        Wed, 19 Oct 2022 02:00:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Oct 2022 04:29:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB30D7CAA7;
+        Wed, 19 Oct 2022 01:29:03 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03E7961807;
-        Wed, 19 Oct 2022 08:59:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AA8C433C1;
-        Wed, 19 Oct 2022 08:59:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666169985;
-        bh=0aJmXsHy28if5uuppSC/9legPQw0PyWIgSfVD8RR20k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OYzl9gJM0RA+FKx6neBLU66/I97t/VEG/leygw+gXWSIcliV+SAO3ziKvRq54fCVu
-         555/fP8WquK28e8/WYBuREcQljhJ+Ib942MOFygCx/CyJmGvDtPhkd5Mrv6L0sAv7n
-         VwTW+iMfKdyU35B1INzjKhwkF+9Im9haBGS9vMPI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.0 451/862] arm64: dts: exynos: fix polarity of "enable" line of NFC chip in TM2
-Date:   Wed, 19 Oct 2022 10:28:58 +0200
-Message-Id: <20221019083309.901695365@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
-References: <20221019083249.951566199@linuxfoundation.org>
-User-Agent: quilt/0.67
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D3D016602388;
+        Wed, 19 Oct 2022 09:29:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666168142;
+        bh=ocWrVQMR3Z9kZzLMg8BVFlJNcN/HGEjR1aguO3cp0bc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JslCHyyIYsNdzm6vEIetBjO8qkDZ/ptAL3uvjqbctSrFPeXp6ycqYEeYvuQ/rk3SE
+         m1vLNqJp0WOvN/qqMhIHUHGe+HO0NmOI7OcLVf0Mwm3li8sTr+h3xLZwiBdqYKBeuA
+         MytITpObucpWuclzLgmsf4eLGlxzpm1WgINdmBIo/uWbiGbokxPQ8kbvMRsHP+Hdwx
+         aJ1Bc+cN5c54wCsVIVhlnHsOXqmF+musNmIUniJQdOWyNX8H9CabdT5fh2VoDOD64X
+         6SoMfuVAF5hsoAfjGpHpsVsobEHrAmv/M1uLd0Hr4kn2O63JeTFY+Vac8yMRxaFyBW
+         tiL5rtbl75dQA==
+Message-ID: <97916360-a24b-0e7d-cc86-9b801fadf869@collabora.com>
+Date:   Wed, 19 Oct 2022 10:28:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [RFC v1 02/12] dt-bindings: PCI: mediatek-gen3: add support for
+ mt7986
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20221017104141.7338-1-linux@fw-web.de>
+ <20221017104141.7338-3-linux@fw-web.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221017104141.7338-3-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Il 17/10/22 12:41, Frank Wunderlich ha scritto:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add compatible string for mt7986.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> mt7986a.dtsi misses clock-names which are now required since support of
+> MT8192/MT8188/MT8195. This change also introduces a 6th clock which is
+> now needed for all pcie-gen3 dts.
+> 
+> i do not know how to map the clocks to the names...
+> 
+> mediatek-pcie-gen3.yaml:
+> 
+>    clock-names:
+>      items:
+>        - const: pl_250m
+>        - const: tl_26m
+>        - const: tl_96m
+>        - const: tl_32k
+>        - const: peri_26m
+>        - enum:
+>            - top_133m        # for MT8192
+>            - peri_mem        # for MT8188/MT8195
+> 
+> mt7986a.dtsi:
+> 
+> 	clocks = <&infracfg CLK_INFRA_PCIE_SEL>,
+> 		 <&infracfg CLK_INFRA_IPCIE_CK>,
+> 		 <&infracfg CLK_INFRA_IPCIE_PIPE_CK>,
+> 		 <&infracfg CLK_INFRA_IPCIER_CK>,
+> 		 <&infracfg CLK_INFRA_IPCIEB_CK>;
 
-[ Upstream commit bd1a665a01b4d65fd8dc6fece4b376fa5c8c55bb ]
+If this SoC has a different clock tree... then you should add bindings for this
+kind of clock tree.
 
-According to s3fwrn5 driver code the "enable" GPIO line is driven "high"
-when chip is not in use (mode is S3FWRN5_MODE_COLD), and is driven "low"
-when chip is in use.
+CLK_INFRA_IPCIER_CK is *not* a peri clock: "peri" means PERICFG, which does not
+seem to be present in this SoC... so no, you can't assign it to "peri_26m", nor
+you can assign it to tl_32k, as that's not a 32KHz clock.
 
-s3fwrn5_phy_power_ctrl():
+CLK_INFRA_PCIEB_CK can be a "top_133m" clock... as it is gating "sysaxi_sel",
+which is a topckgen clock.
 
-	...
-	gpio_set_value(phy->gpio_en, 1);
-	...
-	if (mode != S3FWRN5_MODE_COLD) {
-		msleep(S3FWRN5_EN_WAIT_TIME);
-		gpio_set_value(phy->gpio_en, 0);
-		msleep(S3FWRN5_EN_WAIT_TIME);
-	}
+CLK_INFRA_IPCIE_CK is your "tl_(something)" clock, as that's effectively gating
+"pextp_tl_ck_sel" (which is the PCIe Transaction Layer clock mux).
 
-Therefore the line described by "en-gpios" property should be annotated
-as "active low".
+CLK_INFRA_IPCIE_PIPE_CK seems to be parented to "top_xtal", frequency = 40MHz,
+so I don't see how can this be a pl_250m? Looks like being a 40m clock and I
+wish we didn't have clock frequencies specified in the names, as "pl" would fit,
+but "pl_250m" does not.
+I wonder if we can change the clock names and reflect the changes to the mt8192
+devicetree (mt8195 does not have any pcie node yet), and if that would be a good
+idea right now.
 
-The wakeup gpio appears to have correct polarity (active high).
+...and I've left the first for last, because...
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Link: https://lore.kernel.org/r/20220929011557.4165216-1-dmitry.torokhov@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+CLK_INFRA_PCIE_SEL: I have no datasheet for this SoC, but if you're sure that
+this clock is selecting the source clock to CLK_INFRA_IPCIE_CK, then the clock
+driver is wrong...
 
---- a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-@@ -795,7 +795,7 @@
- 		reg = <0x27>;
- 		interrupt-parent = <&gpa1>;
- 		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
--		en-gpios = <&gpf1 4 GPIO_ACTIVE_HIGH>;
-+		en-gpios = <&gpf1 4 GPIO_ACTIVE_LOW>;
- 		wake-gpios = <&gpj0 2 GPIO_ACTIVE_HIGH>;
- 	};
- };
+Right now, I see the following:
 
+static const char *const infra_pcie_parents[] __initconst = {
+	"top_rtc_32p7k", "csw_f26m_sel", "top_xtal", "pextp_tl_ck_sel"
+};
+
+GATE_INFRA2(CLK_INFRA_IPCIE_CK, "infra_ipcie", "pextp_tl_ck_sel", 12),
+
+MUX_GATE_CLR_SET_UPD(CLK_INFRA_PCIE_SEL, "infra_pcie_sel",
+		     infra_pcie_parents, 0x0028, 0x0020, 0x0024, 0, 2,
+		     -1, -1, -1),
+
+....so if you're right, we should instead have:
+
+GATE_INFRA2(CLK_INFRA_IPCIE_CK, "infra_ipcie", "infra_pcie_sel", 12),
+
+....with this meaning that adding CLK_INFRA_PCIE_SEL in devicetree is useless.
+
+This clock tree looks a bit unclear (because again, there's no datasheet around),
+but that's what I understand with a rather fast look in the clock drivers and
+with some experience on other MTK SoCs.
+
+Then again, if this tree is effectively incompatible with the one from MT8192 and
+MT8195, you should have different clock names... and just as a fast idea:
+
+clock-names = "axi", "tl", "pl", "top";
+
+with clocks, in order:
+CLK_INFRA_PCIEB_CK, CLK_INFRA_IPCIE_CK,
+CLK_INFRA_IPCIE_PIPE_CK, CLK_INFRA_IPCIER_CK.
+
+...but feel free to reiterate that :-)
+Hope that was helpful.
+
+Cheers,
+Angelo
 
