@@ -2,132 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2129D60505D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE45D60505E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiJST0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S230111AbiJST0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiJST0K (ORCPT
+        with ESMTP id S229799AbiJST0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:26:10 -0400
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2034.outbound.protection.outlook.com [40.92.102.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79277181DB9;
-        Wed, 19 Oct 2022 12:26:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C7hkAcFOwTh0NVpiZ+ZzYc68T0IfRiOaBtZHHk6Gdi2PpTbmFZtRIcHMy4698zZYCENCc9YlcaGTIzq1eCkfVat/MCoQomq59NXuQulbQw0cxlTTYV9xGMmDelPx9m9osOWZTZ5FF9NvFC4ldmVap/3OU+yPapL7S7jQytydBQK0qV5dxdUiKCxpSp05LvTEMxCc/kZs3FUIyOsieNOQyvY7J904c5jWpPzt4ym+GMDbHvoWXymNShP8R2KpeCyhE2Lw6E/MQ08CGiGS5R0IQvKYuibZNR6RTeHve/kMfpYVO1e1h5p2+yhSftK8rAM2gJ5toQj+bNxsqAk06ZKFYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S5XaLNmotdWE3BQbN1yiUY+FhMRz1uWfELTUwuob4xU=;
- b=a+aRYNJTEcsAXIQU24xvdZX5m24kBFBjPIO0PJ6hyxBhwbVmW5fyzO4Xo8w6rfRJJNdkVe85385pjdkPbboKR6fhpNXPyKjHsOJe07PYDfudrx0aXQ94kco1SFiBEjgzKXN469H3cusoDgxxVWona3i2kvbx4ujzjIM+y7V8U3HD74xZmfKpNOE+PlEdXMTkiCotJIwYaYvGl81zATiY+1HEoEypG3kNzG7z4g2rBH3W9f7oSs6qsnpvcwHgr38wz4oCVEuY4o1GzPOQ30kudUBvEPW81T5BAoyPpuAa45//OjoOji3bfyCHaIY/jby+7Q3De7AqXLqwv4ydtXbT/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S5XaLNmotdWE3BQbN1yiUY+FhMRz1uWfELTUwuob4xU=;
- b=AB+DvV5tpyfsafhTXALS6hrZ6Vx7PEf2th1IOgYbbPhOT2ksX92gaI6CpHWk5yosKSaPIkB7jUX7KjZfRMy69QxkkpyO45oADdi0slFfCOxY07hmB5RZ/Ekcd1nGLohY8YR3coOGVeE7Un1gMAdt8lT7gLXxIBnX3PbZYI0dCCBdi5t6CJrZcXkeepu9VkcCMDTqVt3gLmOmEjUqiddnt0Vg45HN2R3LXir1lQuFysmxXOfECLwLJTRsA1LcP7s7dGrn6BOOcoONEsYjthscoWusazVIERR41z1B8TYmfxXpsFQTGbuXqmpvNNTZWQNrkXYhgWSYTSzvjjO7VS0bRg==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- PN3PR01MB7160.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:af::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.35; Wed, 19 Oct 2022 19:26:05 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294%9]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
- 19:26:04 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
-        "jk@ozlabs.org" <jk@ozlabs.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Orlando Chamberlain <redecorating@protonmail.com>
-Subject: [REGRESSION] Failure to write the NVRAM variables starting from
- kernel 6.0 on T2 Macs
-Thread-Topic: [REGRESSION] Failure to write the NVRAM variables starting from
- kernel 6.0 on T2 Macs
-Thread-Index: AQHY4/Ch2dExxucnNUS1nzrohEnCsQ==
-Date:   Wed, 19 Oct 2022 19:26:04 +0000
-Message-ID: <23DC077F-69DF-402C-A940-2E7EEABF2D97@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [IeW83puGjwqH0moJ/dJYwgvCCoNn+s3k]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN3PR01MB7160:EE_
-x-ms-office365-filtering-correlation-id: 3ebcca6b-491d-4a5f-39b0-08dab207c3d9
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: W0eV115S/p6QYCeeFwtxoUh9dIoHuouIF+xBGJHAdlaiUFgQcvoprGkyHrrQ24RDdAFNiFKyezFc7CY79J5v2surYyiG8DErNrPn8v6azQy1meR5PBqeJLpnvr+VwUxa5cGaQXvJjRlFZ+DVAMcwiWrgTKA/xKdeoITacmmhkkSJxCvcLtR3OsH2Q8K+XKzamNcp4fm/MYgsIyS62EUwyD1JVZcowYefSGV0c4VzgzQH/F2VT2kgYARZqqQkH61iVsVuSBaBYW9eifpBTLyZFMcM4hDSlotdgOOqc8lbS1UjIZydGuUUz/+TniiBMJkba8PbAE3GZoliE8ietzo49ajhSTKZIF+0pmHxdRRj54YkISgNTLuKpEZ8EYpIR8zx/Iu1V9DrKpl1ccNFwRHAjfrXI7BOjDMxF8tqvax1XScka2ztf1Xu6iOxMeT2izV0Vq6xZs/GVAqHeTEMyIjOn8mSLKKVxUthwNQz0Fro5uY/qaCkvFIjhVQeGreOie2cjOnOdqjV3Wy2j/d2lhRsepXldltbD09vbbu3tpAScrJdFhowySWbvBpYWBvbkPVk+1qYIQLwyRNjAaMm7R4BCfP+FXjOplnePMnMsotUXCTb7nR7sImLSEU6qRp2MZcl
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?juuMy6AZ6J+KrexlUddQpPFFsk/9CnzETNhrGGr1+BRBg25DDPdRwFp3UoF/?=
- =?us-ascii?Q?CiWT43Fpm7S1VmvG1LEM+OzUp6tnJWPW1K+FTOxdhp8zDsRT/hGl5JBW0WLC?=
- =?us-ascii?Q?ObglreS2iV87CTpLlBsrGIFOdtwaDniQ/K0Jirb88s+zMCHRaJr4QyGL3VJQ?=
- =?us-ascii?Q?RTF4P5Hc/Ke+lTdRU8Gq6hXnEA+tTBhOlz/513xAiNOBZfPwyxajISjny817?=
- =?us-ascii?Q?UbBlElpPVJZB+/d7MmnZS4M+l6/sRaEdp2hzIl8vYnfA+fZDbCZ1x3o8RDeU?=
- =?us-ascii?Q?+rUtJbAXOL5xola6y8DcB7wMkYmw5COne8wvLbl0IxsXU9mwkmA8xnW70iPB?=
- =?us-ascii?Q?mwBnedCgfBa2cKqvL13kbXeCTpT1H46AJoTkKbssHbKEU8kPOuyxUT3BNsI1?=
- =?us-ascii?Q?zqNe7lKjpl+d12tqvL4Af5MNOPbmO2R+j4hfa4+oK7D/EijpPmqG1RtZGhkr?=
- =?us-ascii?Q?u1ZP8R7QCzUD02XNjA5fsIzpDpx8r81kvlTqAy3Nb117SUKOtjrhpgeL+fey?=
- =?us-ascii?Q?r7hpxBwDSOGXq3Ecrswj8z1rk6qeSDeWExafPLojqykijR8s596kmxPLDDO8?=
- =?us-ascii?Q?ESMqM9Ix7zLRSoixJyLKCB8yp5dx3+xHF4Fh8IN+xCR7Z2ZfJLXxK5UtxyGS?=
- =?us-ascii?Q?RDas1Ql31b8pxy9CPA9yJylNlPxEnziMWLoUczXu0b+tJc9BEMnk/fsguIPi?=
- =?us-ascii?Q?xOM+4YQPbF18r7j7hpyFRFo5qla0QvEFU/zZLnDfxXPEklnsFCP8XI5RIbNO?=
- =?us-ascii?Q?HYDkpBPBjTSa7LzhKqgTWyDW0cmMASsQL84505xY1iAUC9Kk8GLBE7RbAjIp?=
- =?us-ascii?Q?5SckJMn4k98g3VDB1iwqakzsMKDhMJpBLz+ZLVsxggGdPqyini8rqsb1fCMa?=
- =?us-ascii?Q?8zl6PiW47iedU97jTyyFjUTKE1V8JO8dXr/4BMTqkQ4Y7h9Egtd4ugg2yVXX?=
- =?us-ascii?Q?jE2Hi6whYRysOx4fODVtyhYVevFVs6hrcvak8zDDhwGdc6LeW427PUwZs0Vm?=
- =?us-ascii?Q?IXS6yr/gqRh/PYHSEGotHCe6mEhm7unx9feY0jT/kuMjhGv2+9GRkr7soF6z?=
- =?us-ascii?Q?Mg1zVWFB4KzMRHWVMF1B7IY1Izr8q6x3Fwvn7arfHK3U3+tZ2+/AkIMgFLoy?=
- =?us-ascii?Q?eIK5cBgPR6nILunv1XzzO6snwwArX/nh2rvY15VLpMLFkubjL9r51kCJODIa?=
- =?us-ascii?Q?tTEb8FLAfvuN7pQDtu16pzV/mrSLkNj9rtHgX9VypXJxN/icajY3vAv3HI2G?=
- =?us-ascii?Q?iYxSacdzGvxdSf9scKwIEy6yiMWzTiuSUaD/I6tcfA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E5344940ED864A4E84B58EC325CBF812@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 19 Oct 2022 15:26:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB77190467
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:26:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666207608; x=1697743608;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WBfO4PEEZH2HCMK0CvVGY7P7dLy55zER35u6rUrGgjo=;
+  b=aPoxSzH5GC1EAR9TTaCYvjIsJotRq2ByMSLBjHjAggiLvRPsgzEi/sdN
+   QSWMMD306c0QVBxIcwR7XDL3MxSTPblWAxJCFiO/svyWz0RYh3zHk35kA
+   J61wLd254mX7hWXPsSONWzTDcJAppvmvfmzguVFmXHUd03D3Od25aWhPg
+   y5WaFwyoAnGn+K7gN0SJNjqh4OV+CrTBU9P/R7s4+Kc63kF8dr2kSTIEa
+   VZH+rF3PsIZWkp1vZ3s6UHTqQYglq2WymE/roUSFiFmqevocUPQ6YR8Dw
+   WEwku8vSjXRcu7b10oH+CFP3Vy5p9muyg0cHTdL29iTB1pm6GiaSkiYZY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="289823518"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="289823518"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 12:26:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="958496507"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="958496507"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Oct 2022 12:26:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1olEiB-00A4m0-1a;
+        Wed, 19 Oct 2022 22:26:43 +0300
+Date:   Wed, 19 Oct 2022 22:26:43 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Haakon Bugge <haakon.bugge@oracle.com>,
+        John Haxby <john.haxby@oracle.com>
+Subject: Re: [PATCH] vsprintf: protect kernel from panic due to non-canonical
+ pointer dereference
+Message-ID: <Y1BPc8JsEoApKJkL@smile.fi.intel.com>
+References: <20221017191611.2577466-1-jane.chu@oracle.com>
+ <Y02sENwhtpsx5yhP@smile.fi.intel.com>
+ <5d987403-a7bf-8996-d639-c99edeaabcdf@oracle.com>
+ <Y06f4EwisLTU0rEz@alley>
+ <799e5390-2ff5-02b7-2df7-61198d5451e2@oracle.com>
+ <Y08Hn6on37fgc57F@smile.fi.intel.com>
+ <f77145e0-2bc9-a558-7f55-22100fa4b5ed@oracle.com>
+ <Y08RVzvniYr8ycKV@smile.fi.intel.com>
+ <bb8a2add-2b6e-c35c-ff5b-a7816eeb7e26@oracle.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ebcca6b-491d-4a5f-39b0-08dab207c3d9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2022 19:26:04.6342
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3PR01MB7160
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb8a2add-2b6e-c35c-ff5b-a7816eeb7e26@oracle.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting from linux kernel 6.0, the ability to write to the NVRAM has been =
-lost on T2 Macs.
+On Wed, Oct 19, 2022 at 06:36:07PM +0000, Jane Chu wrote:
+> On 10/18/2022 1:49 PM, Andy Shevchenko wrote:
+> > On Tue, Oct 18, 2022 at 08:30:01PM +0000, Jane Chu wrote:
+> >> On 10/18/2022 1:07 PM, Andy Shevchenko wrote:
+> >>> On Tue, Oct 18, 2022 at 06:56:31PM +0000, Jane Chu wrote:
+> >>>> On 10/18/2022 5:45 AM, Petr Mladek wrote:
+> >>>>> On Mon 2022-10-17 19:31:53, Jane Chu wrote:
+> >>>>>> On 10/17/2022 12:25 PM, Andy Shevchenko wrote:
+> >>>>>>> On Mon, Oct 17, 2022 at 01:16:11PM -0600, Jane Chu wrote:
+> >>>>>>>> While debugging a separate issue, it was found that an invalid string
+> >>>>>>>> pointer could very well contain a non-canical address, such as
+> >>>>>>>> 0x7665645f63616465. In that case, this line of defense isn't enough
+> >>>>>>>> to protect the kernel from crashing due to general protection fault
+> >>>>>>>>
+> >>>>>>>> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
+> >>>>>>>>                     return "(efault)";
+> >>>>>>>>
+> >>>>>>>> So instead, use kern_addr_valid() to validate the string pointer.
+> >>>>>>>
+> >>>>>>> How did you check that value of the (invalid string) pointer?
+> >>>>>>>
+> >>>>>>
+> >>>>>> In the bug scenario, the invalid string pointer was an out-of-bound
+> >>>>>> string pointer. While the OOB referencing is fixed,
+> >>>>>
+> >>>>> Could you please provide more details about the fixed OOB?
+> >>>>> What exact vsprintf()/printk() call was broken and eventually
+> >>>>> how it was fixed, please?
+> >>>>
+> >>>> For sensitive reason, I'd like to avoid mentioning the specific name of
+> >>>> the sysfs attribute in the bug, instead, just call it "devX_attrY[]",
+> >>>> and describe the precise nature of the issue.
+> >>>>
+> >>>> devX_attrY[] is a string array, declared and filled at compile time,
+> >>>> like
+> >>>>      const char const devX_attrY[] = {
+> >>>> 	[ATTRY_A] = "Dev X AttributeY A",
+> >>>> 	[ATTRY_B] = "Dev X AttributeY B",
+> >>>> 	...
+> >>>> 	[ATTRY_G] = "Dev X AttributeY G",
+> >>>>      }
+> >>>> such that, when user "cat /sys/devices/systems/.../attry_1",
+> >>>> "Dev X AttributeY B" will show up in the terminal.
+> >>>> That's it, no more reference to the pointer devX_attrY[ATTRY_B] after that.
+> >>>>
+> >>>> The bug was that the index to the array was wrongfully produced,
+> >>>> leading up to OOB, e.g. devX_attrY[11].  The fix was to fix the
+> >>>> calculation and that is not an upstream fix.
+> >>>>
+> >>>>>
+> >>>>>> the lingering issue
+> >>>>>> is that the kernel ought to be able to protect itself, as the pointer
+> >>>>>> contains a non-canonical address.
+> >>>>>
+> >>>>> Was the pointer used only by the vsprintf()?
+> >>>>> Or was it accessed also by another code, please?
+> >>>>
+> >>>> The OOB pointer was used only by vsprintf() for the "cat" sysfs case.
+> >>>> No other code uses the OOB pointer, verified both by code examination
+> >>>> and test.
+> >>>
+> >>> So, then the vsprintf() is _the_ point to crash and why should we hide that?
+> >>> Because of the crash you found the culprit, right? The efault will hide very
+> >>> important details.
+> >>>
+> >>> So to me it sounds like I like this change less and less...
+> >>
+> >> What about the existing check
+> >>    	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
+> >>                       return "(efault)";
+> >> ?
+> > 
+> > Because it's _special_. We know that First page is equivalent to a NULL pointer
+> > and the last one is dedicated for so called error pointers. There are no more
+> > special exceptions to the addresses in the Linux kernel (I don't talk about
+> > alignment requirements by the certain architectures).
+> > 
+> >> In an experiment just to print the raw OOB pointer values, I saw below
+> >> (the devX attrY stuff are substitutes of the real attributes, other
+> >> values and strings are verbatim copy from "dmesg"):
+> >>
+> >> [ 3002.772329] devX_attrY[26]: (ffffffff84d60ad3) Dev X AttributeY E
+> >> [ 3002.772346] devX_attrY[27]: (ffffffff84d60ae4) Dev X AttributeY F
+> >> [ 3002.772347] devX_attrY[28]: (ffffffff84d60aee) Dev X AttributeY G
+> >> [ 3002.772349] devX_attrY[29]: (0) (null)
+> >> [ 3002.772350] devX_attrY[30]: (0) (null)
+> >> [ 3002.772351] devX_attrY[31]: (0) (null)
+> >> [ 3002.772352] devX_attrY[32]: (7665645f63616465) (einval)
+> >> [ 3002.772354] devX_attrY[33]: (646e61685f656369) (einval)
+> >> [ 3002.772355] devX_attrY[34]: (6f635f65755f656c) (einval)
+> >> [ 3002.772355] devX_attrY[35]: (746e75) (einval)
+> >>
+> >> where starting from index 29 are all OOB pointers.
+> >>
+> >> As you can see, if the OOBs are NULL, "(null)" was printed due to the
+> >> existing checking, but when the OOBs are turned to non-canonical which
+> >> is detectable, the fact the pointer value deviates from
+> >>     (ffffffff84d60aee + 4 * sizeof(void *))
+> >> evidently shown that the OOBs are detectable.
+> >>
+> >> The question then is why should the non-canonical OOBs be treated
+> >> differently from NULL and ERR_VALUE?
+> > 
+> > Obviously, to see the crash. And let kernel _to crash_. Isn't it what we need
+> > to see a bug as early as possible?
+> > 
+> 
+> If the purpose is to see the bug as early as possible, then getting
+> "(efault)" from reading sysfs attribute would serve the purpose, right?
+> 
+> The fact an OOB pointer has already being turned into either NULL or
+> non-canonical value implies that *if* kernel code other than
+> vsprintf() references the pointer, it'll crash else where;
 
-This has been observed especially during installation of boot loaders like =
-GRUB, causing errors as shown :-
+No, not the case for error pointers and NULL.
 
-Installing for x86_64-efi platform.
-grub-install: warning: Cannot set EFI variable Boot0001.
-grub-install: warning: efivarfs_set_variable: writing to fd 7 failed: Inval=
-id argument.
-grub-install: warning: _efi_set_variable_mode: ops->set_variable() failed: =
-Invalid argument.
-grub-install: error: failed to register the EFI boot entry: Invalid argumen=
-t.
+> but *if* no
+> other code referencing the pointer, why crash?
 
-I couldn't find any relevant error in journalctl though, but I still am pos=
-ting my journalctl just in case I missed any error.
+Because how else you can see the bug?! The trace will give you essential
+information about registers, etc that gives you a hint what the _cause_ of the
+crash. And we need that cause. The "(efault)" has not even a bit close to what
+crash gives us.
 
-https://gist.github.com/AdityaGarg8/da7a9a2c891f5b2f68f71dc0d0e77f9a
+So, this is my last message in the discussion.
 
-Regards
-Aditya=
+Here is a formal NAK. Up to maintainers to decide what to do with this.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
