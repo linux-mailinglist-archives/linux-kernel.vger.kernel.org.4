@@ -2,58 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456976041F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0DB6041AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234521AbiJSKvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S232781AbiJSKrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234471AbiJSKtK (ORCPT
+        with ESMTP id S232064AbiJSKor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:49:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384F312B34A;
-        Wed, 19 Oct 2022 03:21:57 -0700 (PDT)
+        Wed, 19 Oct 2022 06:44:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E71187A9;
+        Wed, 19 Oct 2022 03:21:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB3AB8244E;
-        Wed, 19 Oct 2022 08:59:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE96EC433B5;
-        Wed, 19 Oct 2022 08:59:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF3B5B82456;
+        Wed, 19 Oct 2022 09:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A62EAC43145;
+        Wed, 19 Oct 2022 09:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666169985;
-        bh=ihGyUt66Xn5KkFVt2Ai5BlSmYAVmRhdfjWNm29R+RKM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WgUIMkYXmrYHZYC5wNczTProIVvFgcTKLWvQoHvRYHczvvPDg3rPnIBK7LzVmcE0n
-         j2sWIpfaVOEez9QWrG3LbCZPn93/Z04LqPG+u6K4AjSGXT0dZhLC7iBmyQ1DvpCj8J
-         aIlv/opynJ1eOvPJ9K4LLOXUrHBG2lt9e1cQvnVehAPKBdcaKc1HL2Ir+IF5zgSzeH
-         nNEtrZjNjMOtD+XJSBiJucdgoFWP2WRI3gejTzHIRzWTGW6p6cv5w+BrjPJoHuUL2/
-         QCfTZNU2whkEHUSEriBe7WBqf7wYu/CxIa9umei+JScUpMvYNN0TOFwd/DNjr2246H
-         dS74ZGvaFkXYw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ol4vE-0004up-Tj; Wed, 19 Oct 2022 10:59:33 +0200
-Date:   Wed, 19 Oct 2022 10:59:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Stefan Agner <stefan@agner.ch>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        stable <stable@kernel.org>, regressions@lists.linux.dev,
-        m.szyprowski@samsung.com, krzk@kernel.org
-Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
- management
-Message-ID: <Y0+8dKESygFunXOu@hovoldconsulting.com>
-References: <20220906120702.19219-1-johan@kernel.org>
- <20220906120702.19219-4-johan@kernel.org>
- <808bdba846bb60456adf10a3016911ee@agner.ch>
+        s=k20201202; t=1666170018;
+        bh=viZDxavZnRqc957bc2vu0sL+ofeuUR6wPVOAvv3CN0o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qwVWZPkgo6wM2jsy691PS2yoU4KgKXd9Ka2/9cvWgSwR9S4uUBsLpsqZWMQddI6sm
+         omgziXwqd7EBl3eIjozII5i7a0Z1PlN/ZR4q3uAXF+QblVN6rSPhMmkJ8gRsOukDfY
+         ERcUTq17oRQfsW3GbSRAqNAPQyyVHjMQ0z0hKk8tFRfhMlOva+CdCE7bXuvYAjpRWY
+         O7u4cHYVB3AOs3ClsT/V1PHInpR7qS0BTqwdMciYjtTVdzlLa/D2lmQE+eqtCjxaGZ
+         MPfx24g9f19+yThTqOx/llXidyEI713MmktAlQ4lKuJJ4lTOE4K2/DidFFLK9749or
+         ZGNkEDbvrvnDg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B4EBE4D007;
+        Wed, 19 Oct 2022 09:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <808bdba846bb60456adf10a3016911ee@agner.ch>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v5 0/3] further improvements to marvell,pp2.yaml
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166617001856.30948.3459906903176615096.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Oct 2022 09:00:18 +0000
+References: <20221014213254.30950-1-mig@semihalf.com>
+In-Reply-To: <20221014213254.30950-1-mig@semihalf.com>
+To:     =?utf-8?q?Micha=C5=82_Grzelak_=3Cmig=40semihalf=2Ecom=3E?=@ci.codeaurora.org
+Cc:     devicetree@vger.kernel.org, mw@semihalf.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, upstream@semihalf.com
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,80 +59,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 05:27:24PM +0200, Stefan Agner wrote:
-> Hi Johan,
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 14 Oct 2022 23:32:51 +0200 you wrote:
+> Hi,
 > 
-> On 2022-09-06 14:07, Johan Hovold wrote:
-> > From: Johan Hovold <johan+linaro@kernel.org>
-> > 
-> > commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
-> > 
-> > The dwc3 driver manages its PHYs itself so the USB core PHY management
-> > needs to be disabled.
-> > 
-> > Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
-> > host: xhci-plat: add platform data support") and f768e718911e ("usb:
-> > host: xhci-plat: add priv quirk for skip PHY initialization") to
-> > propagate the setting for now.
+> This patchset addresses problems with reg ranges and
+> additional $refs. It also limits phy-mode and aligns examples.
 > 
-> [adding also Samsung/ODROID device tree authors Krzysztof and Marek]
+> Best regards,
+> Michał
 > 
-> For some reason, this commit seems to break detection of the USB to
-> S-ATA controller on ODROID-HC1 devices (Exynos 5422).
-> 
-> We have a known to work OS release of v5.15.60, and known to not be
-> working of v5.15.67. By reverting suspicious commits, I was able to
-> pinpoint the problem to this particular commit.
-> 
-> From what I understand, on that particular hardware the S-ATA controller
-> power is controlled via the V-BUS signal VBUSCTRL_U2 (Schematic [1]).
-> Presumably this signal is no longer controlled with this change.
-> 
-> This came up in our HAOS issue #2153 [2].
+> [...]
 
-Thanks for the report and sorry about the breakage. This wasn't supposed
-to go to stable but Greg thought otherwise (and I helped with the
-backporting to prevent autosel from pulling in even more changes).
+Here is the summary with links:
+  - [v5,1/3] dt-bindings: net: marvell,pp2: convert to json-schema
+    https://git.kernel.org/netdev/net-next/c/c4d175c323e3
+  - [v5,2/3] arm64: dts: marvell: Update network description to match schema
+    https://git.kernel.org/netdev/net-next/c/2994bf7705b4
+  - [v5,3/3] ARM: dts: armada-375: Update network description to match schema
+    https://git.kernel.org/netdev/net-next/c/844e44988fa8
 
-But at least this way we found out sooner that this platform depends on
-having both USB core and dwc3 managing the same PHY.
-
-I think this may be related to the calibration calls added to dwc3 and
-later removed again by commits:
-
-	d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
-	a0a465569b45 ("usb: dwc3: remove generic PHY calibrate() calls")
-
-The removal explicitly mentions that the expectation is that USB core
-will do the PHY calibration.
-
-There could be other changes in the sequencing of events that this
-platform has been implicitly relying on, but as a start, could try
-adding the missing calibration calls (patch below) and see if that makes a
-difference?
-
-Johan
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 46cf8edf7f93..f8a0e340eb63 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -198,6 +198,8 @@ static void __dwc3_set_mode(struct work_struct *work)
-                                otg_set_vbus(dwc->usb2_phy->otg, true);
-                        phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
-                        phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
-+                       phy_calibrate(dwc->usb2_generic_phy);
-+                       phy_calibrate(dwc->usb3_generic_phy);
-                        if (dwc->dis_split_quirk) {
-                                reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
-                                reg |= DWC3_GUCTL3_SPLITDISABLE;
-@@ -1369,6 +1371,8 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
-                        otg_set_vbus(dwc->usb2_phy->otg, true);
-                phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
-                phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
-+               phy_calibrate(dwc->usb2_generic_phy);
-+               phy_calibrate(dwc->usb3_generic_phy);
- 
-                ret = dwc3_host_init(dwc);
-                if (ret)
