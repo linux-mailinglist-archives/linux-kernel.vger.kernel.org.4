@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C9C603B29
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564C0603B33
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJSILo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S229872AbiJSINh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJSILk (ORCPT
+        with ESMTP id S229755AbiJSINc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:11:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 263017B1C9;
-        Wed, 19 Oct 2022 01:11:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8618E1042;
-        Wed, 19 Oct 2022 01:11:43 -0700 (PDT)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E3FDD3F7D8;
-        Wed, 19 Oct 2022 01:11:35 -0700 (PDT)
-Message-ID: <9f2d2032-8859-4388-489a-ba5cd2cee432@foss.arm.com>
-Date:   Wed, 19 Oct 2022 09:11:20 +0100
+        Wed, 19 Oct 2022 04:13:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214407B7A4;
+        Wed, 19 Oct 2022 01:13:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0516B8229C;
+        Wed, 19 Oct 2022 08:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE54AC433C1;
+        Wed, 19 Oct 2022 08:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666167209;
+        bh=grMsjd15672MfK3WGgOcqlJzZx9mIPlajFH6LUT3LyY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RjVAr0Il58bIZWLUGi0rCHF+ypPJCVywSKez1JCpU5/aREb1O+c1fsOY9WMqJTng8
+         6pK155IBfsEku8Mk2Sji4JfTbBKqV5//ZymA9ALU95IuYmUcT3skEtAxWW1pAMl3za
+         crMcr8Tei9jvrqVmx7LlXij/WR1dNi0XlnPExfHhhuU1omNyFzl4Ae2CCQ8Dd5OPKO
+         HOF+HCIy2CL4K8aXeplRwMGsEIYUOvvRzzgZbQouWWIxvKWpeVXaAbneQ86brhiXBZ
+         50ZM3naXT9wqbwGhu5qMyyF2JkdcdCmbFF9h0L67NdjCtUFDB6pBMivaGFKZz8ZNvJ
+         5ZeclOi1xCxKA==
+Date:   Wed, 19 Oct 2022 10:13:23 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     rafael@kernel.org, lvjianmin@loongson.cn, yangyicong@huawei.com,
+        chenhuacai@loongson.cn, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lenb@kernel.org,
+        jeremy.linton@arm.com
+Subject: Re: [PATCH] ACPI: scan: Fix DMA range assignment
+Message-ID: <Y0+xo2DO+M1iJc77@lpieralisi>
+References: <e94f99cfe09a64c590f009d21c566339117394e2.1666098844.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v9 02/13] perf test: Add build infra for perf test tools
- for CoreSight tests
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Leo Yan <leo.yan@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, linux-perf-users@vger.kernel.org
-References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
- <20220909152803.2317006-3-carsten.haitzler@foss.arm.com>
- <Yz67SHpIN5NggKEk@kernel.org> <Yz6/zlchVnNsVlzJ@kernel.org>
- <Yz7RAgMN6WGnD3OZ@leoy-yangtze.lan>
- <e9f980a7-fba8-4610-a058-b74e51d6ab24@foss.arm.com>
- <Y0AfK7sVphNkQA4q@kernel.org>
- <0b3afc5d-c4a1-8a50-45c3-20c706c3ecfd@foss.arm.com>
- <Y0QkIjO4pvPuzeMB@kernel.org>
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <Y0QkIjO4pvPuzeMB@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e94f99cfe09a64c590f009d21c566339117394e2.1666098844.git.robin.murphy@arm.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/10/22 14:54, Arnaldo Carvalho de Melo wrote:
-> Em Mon, Oct 10, 2022 at 08:02:29AM +0100, Carsten Haitzler escreveu:
->> On 10/7/22 13:44, Arnaldo Carvalho de Melo wrote:
->>> Em Fri, Oct 07, 2022 at 12:34:51PM +0100, Carsten Haitzler escreveu:
->>>> On 10/6/22 13:58, Leo Yan wrote:
->>>> oh sorry - indeed i didn't see this problem coming after fixing the
->>>> conflicts. i've got an update of the patches that fix that. should i just
->>>> send through the 2 updates patches as a v10 or the whole series?
+On Tue, Oct 18, 2022 at 02:14:04PM +0100, Robin Murphy wrote:
+> Assigning the device's dma_range_map from the iterator variable after
+> the loop means it always points to the empty terminator at the end of
+> the map, which is not what we want. Similarly, freeing the iterator on
+> error when it points to somwhere in the middle of the allocated array
+> won't work either. Fix this.
 > 
->>> No need, I did some fixes taking into account the comments on this
->>> thread, we can go on and fix things from what I have now at
->>> acme/perf/core, which I'll send to Linus today.
->   
->> oh cool. i'll let patches sit for now - let me know if there's anything you
->> want/need from me.
-> 
-> Not right now, I'm now just waiting for Linus to merge what I sent, then
-> you can continue from upstream.
+> Fixes: bf2ee8d0c385 ("ACPI: scan: Support multiple DMA windows with different offsets")
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>  drivers/acpi/scan.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-I'm not sure what you have sent to Linus? The patch series? Specific 
-patches?
+A quick comment below, otherwise:
+
+Reviewed-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 558664d169fc..024cc373a197 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -1509,9 +1509,12 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+>  			goto out;
+>  		}
+>  
+> +		*map = r;
+
+I wonder whether having a local variable to stash the base pointer
+would make code easier to read (so that we avoid using *map for that
+purpose and also to return the array to the caller).
+
+Thanks for fixing it so promptly.
+
+Lorenzo
+
+> +
+>  		list_for_each_entry(rentry, &list, node) {
+>  			if (rentry->res->start >= rentry->res->end) {
+> -				kfree(r);
+> +				kfree(*map);
+> +				*map = NULL;
+>  				ret = -EINVAL;
+>  				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
+>  				goto out;
+> @@ -1523,8 +1526,6 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+>  			r->offset = rentry->offset;
+>  			r++;
+>  		}
+> -
+> -		*map = r;
+>  	}
+>   out:
+>  	acpi_dev_free_resource_list(&list);
+> -- 
+> 2.36.1.dirty
+> 
