@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F893604FA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 593E9604FA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiJSSap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 14:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S230291AbiJSSbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 14:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiJSSak (ORCPT
+        with ESMTP id S230519AbiJSSbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:30:40 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776C711702B;
-        Wed, 19 Oct 2022 11:30:39 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id o22so11293297qkl.8;
-        Wed, 19 Oct 2022 11:30:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ksoUwNbFYLLNy8hgo3QVu6DMpU3MXF6PNRL2jmsEX/w=;
-        b=lQC7ixmJ9+XsTgDun3JmYo7/PQrIbLM4EwNCxnnifawsVuLBSih5FkND6HaBPhNpbs
-         uPlArpoMDI7Vz+WLAJRVBbSDsI6R7axptdanBRoerQYhijnI9Q0nEPlA4pNmgT+cEAAS
-         fdr59BQVHTAAhicoh3JsWKH/RiTWuViQMdTmSCoxhqSapksCV2BM0PE0yFl/8Av/kDIk
-         MJ1NbFnz0mrpZjZR0GNtBOj1aP3cVuer6vJNjeQCEYeys+YH+LUXX47MdVhpQxw7paRO
-         VuaXBoGUYOEA0yTAHZpAJSkAyfWa7FDidGGxiH3RPXMLZTrKPTZbh2lcngo9Yip5tQub
-         piHw==
-X-Gm-Message-State: ACrzQf19jio5F4fbZaqD3bbyPrxE8I86+Sf5KyuXZW1WbUy/m2c3gXJf
-        JYaBLlwupLD200vawQvZTMFaSKdJuXl4U3YrmgcTJNC+
-X-Google-Smtp-Source: AMsMyM5XpubSdQXcEtfcZteg4xs9UUI/l0EaFIdxTAoYYxhjzLZo+kjl+J57ZUog5PL/iOnbBTMMsju3laNUaOGKKwA=
-X-Received: by 2002:a05:620a:158f:b0:6ee:93d5:e249 with SMTP id
- d15-20020a05620a158f00b006ee93d5e249mr6577755qkk.505.1666204238591; Wed, 19
- Oct 2022 11:30:38 -0700 (PDT)
+        Wed, 19 Oct 2022 14:31:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8B6182C6E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666204260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6UYO0POKEGMi/jghAsOmJKKHztGAXU7FUcThnC6RfTA=;
+        b=X99jTpec4jkOGD0jC09Ck8nCizuK76tjPKQl30/oSYN0V6z5yZ1FCoLezC4T3sKNAX/z9q
+        EtZYlkFHyxzrcRGVL6dWF70Y5cKcT289z0MTyw7QJWAOWdxCkjZ53zdyiHnGcJVvFvRIkE
+        7MteayzgQ0HOetzDLR9dMCdmXxz8Ja0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-452-Rz0dEvSSOR6hgf_t4QGlBg-1; Wed, 19 Oct 2022 14:30:56 -0400
+X-MC-Unique: Rz0dEvSSOR6hgf_t4QGlBg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 60620381A729;
+        Wed, 19 Oct 2022 18:30:55 +0000 (UTC)
+Received: from RHTPC1VM0NT.redhat.com (unknown [10.22.8.238])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9992849BB63;
+        Wed, 19 Oct 2022 18:30:54 +0000 (UTC)
+From:   Aaron Conole <aconole@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Pravin B Shelar <pshelar@ovn.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Graf <tgraf@suug.ch>,
+        Kevin Sprague <ksprague0711@gmail.com>, dev@openvswitch.org,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Ilya Maximets <i.maximets@ovn.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net 0/2] openvswitch: syzbot splat fix and introduce selftest
+Date:   Wed, 19 Oct 2022 14:30:52 -0400
+Message-Id: <20221019183054.105815-1-aconole@redhat.com>
 MIME-Version: 1.0
-References: <e94f99cfe09a64c590f009d21c566339117394e2.1666098844.git.robin.murphy@arm.com>
- <Y0+xo2DO+M1iJc77@lpieralisi>
-In-Reply-To: <Y0+xo2DO+M1iJc77@lpieralisi>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 19 Oct 2022 20:30:27 +0200
-Message-ID: <CAJZ5v0huuJj_B_zeOyx4NxA6chyvebCBLvrQx8+O=++_=oOQdQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: scan: Fix DMA range assignment
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     rafael@kernel.org, lvjianmin@loongson.cn, yangyicong@huawei.com,
-        chenhuacai@loongson.cn, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lenb@kernel.org,
-        jeremy.linton@arm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:13 AM Lorenzo Pieralisi
-<lpieralisi@kernel.org> wrote:
->
-> On Tue, Oct 18, 2022 at 02:14:04PM +0100, Robin Murphy wrote:
-> > Assigning the device's dma_range_map from the iterator variable after
-> > the loop means it always points to the empty terminator at the end of
-> > the map, which is not what we want. Similarly, freeing the iterator on
-> > error when it points to somwhere in the middle of the allocated array
-> > won't work either. Fix this.
-> >
-> > Fixes: bf2ee8d0c385 ("ACPI: scan: Support multiple DMA windows with different offsets")
-> > Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> > ---
-> >  drivers/acpi/scan.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> A quick comment below, otherwise:
->
-> Reviewed-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Syzbot recently caught a splat when dropping features from
+openvswitch datapaths that are in-use.  The WARN() call is
+definitely too large a hammer for the situation, so change
+to pr_warn.
 
-Applied as is and the code may be cleaned up later.
+Second patch in the series introduces a new selftest suite which
+can help show that an issue is fixed.  This change might be
+more suited to net-next tree, so it has been separated out
+as an additional patch and can be either applied to either tree
+based on preference.
 
-Thanks!
+Aaron Conole (2):
+  openvswitch: switch from WARN to pr_warn
+  selftests: add openvswitch selftest suite
 
-> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > index 558664d169fc..024cc373a197 100644
-> > --- a/drivers/acpi/scan.c
-> > +++ b/drivers/acpi/scan.c
-> > @@ -1509,9 +1509,12 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
-> >                       goto out;
-> >               }
-> >
-> > +             *map = r;
->
-> I wonder whether having a local variable to stash the base pointer
-> would make code easier to read (so that we avoid using *map for that
-> purpose and also to return the array to the caller).
->
-> Thanks for fixing it so promptly.
->
-> Lorenzo
->
-> > +
-> >               list_for_each_entry(rentry, &list, node) {
-> >                       if (rentry->res->start >= rentry->res->end) {
-> > -                             kfree(r);
-> > +                             kfree(*map);
-> > +                             *map = NULL;
-> >                               ret = -EINVAL;
-> >                               dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
-> >                               goto out;
-> > @@ -1523,8 +1526,6 @@ int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
-> >                       r->offset = rentry->offset;
-> >                       r++;
-> >               }
-> > -
-> > -             *map = r;
-> >       }
-> >   out:
-> >       acpi_dev_free_resource_list(&list);
-> > --
-> > 2.36.1.dirty
-> >
+ MAINTAINERS                                   |   1 +
+ net/openvswitch/datapath.c                    |   3 +-
+ tools/testing/selftests/Makefile              |   1 +
+ .../selftests/net/openvswitch/Makefile        |  13 +
+ .../selftests/net/openvswitch/openvswitch.sh  | 216 +++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 411 ++++++++++++++++++
+ 6 files changed, 644 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/openvswitch/Makefile
+ create mode 100755 tools/testing/selftests/net/openvswitch/openvswitch.sh
+ create mode 100644 tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+
+-- 
+2.34.3
+
