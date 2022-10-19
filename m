@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41F66044CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D89E6044D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiJSMPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S232529AbiJSMPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiJSMNz (ORCPT
+        with ESMTP id S232333AbiJSMOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:13:55 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC271C2F20
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:50:27 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id g1so27633985lfu.12
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qwrn1vs8o0kePTfrmChJo2xK2fUre7OHA6jurV1GYSk=;
-        b=iA1lp7ep3qZwe3PuooZkUdm+FeHudibOWXJkUjRZdDjGjza8TwRCMxTAtpyhVkPWuJ
-         YkWNkCd4BnPI+x+Qxk/wrbvGrTr77ccoc/GHib4GzOyyRzjNw95wwrTyAcUjsALFLKMZ
-         yz8ujzuGAXX+0ZVnMO09/jiwR4hazJdCo1dx1zNiYO1mXnrpCPLmqiiD+e+KWLFu8Oes
-         sG6uvFJMLyR3dFem3lTlTUmgotrtpPPclr5opAjp4U8jUpnRh+85EbIRQfKluaQ8N8+J
-         /D94dDctYw1T13Oq5ayLD8PQdSFEEwsIe20QR/fZ8/cioW1mjD1FbO9rDa/nf4DwS9ld
-         7/sg==
+        Wed, 19 Oct 2022 08:14:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6395C15381B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666180184;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HfKaXAM67nrWxBo+o2Le2Vo+rZyeTr5pYYlDrowdGww=;
+        b=CccAIOVsrKqEtSI6i8PdRM+GTP1xYGyPYX6Hz/PMAfHJPgRwQNq+9hxgRkU+THcJKAOWV2
+        7SdOtJhWw7hDi7e39bBJNR0A98YYWktRdjUBn2Imx/kpOF1NnX2eZQgTk6+UutltAcAMon
+        ScYukKvXHxcJywOMn1XpR24fDuknR9Y=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-547-oHTTxxJFNwG3FNd1n07DEA-1; Wed, 19 Oct 2022 07:49:42 -0400
+X-MC-Unique: oHTTxxJFNwG3FNd1n07DEA-1
+Received: by mail-wm1-f71.google.com with SMTP id i5-20020a1c3b05000000b003c47c8569easo12847688wma.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:49:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qwrn1vs8o0kePTfrmChJo2xK2fUre7OHA6jurV1GYSk=;
-        b=Xh6Ig+WsQVVrXFsPagZr2hZWGPLM6NQpkvYlE2AIhJIsljqGNlXLdSgM0cAJ36ueca
-         LdxVmztflk6T8OQvpcx31pG7Va98S74RWW6J95U+74sj3I0SwMb49KQH+ggttVJUrkAp
-         8KqkPfsnricGXrY0nHrsVNNSeyon/r72DUSBac6l9f+fWPvTpmuRmaXDVK5GAMCdlBli
-         b5MtBdjN/QuiPCxhNGdrQpKOUJHp2uUnH6UHVvqsWhZ/KhtpTSHStRTt3zuzsM3lHRI7
-         X5FR71iGmoc24oNWfSbAj5jPMWBTzAeM2Xr8ivT47QISAIUjFnO1YalyZw194DCzAiLQ
-         CbFg==
-X-Gm-Message-State: ACrzQf3pQWDMqgjjXKWPD/4DAZhjLrCDsrHEIJuhstvevQzJEA/HdvEY
-        5rqCPjWWmEb6vbJLfMiZoU8=
-X-Google-Smtp-Source: AMsMyM6adnqW8A/S9iID8dTCZ/7syHVDgvsYqxEGqFWDUMPBP8/5y5RDGzIxNkly5zFYVgsL8r7DDg==
-X-Received: by 2002:a05:6512:3e2a:b0:4a2:5471:e1f6 with SMTP id i42-20020a0565123e2a00b004a25471e1f6mr2585286lfv.45.1666180165317;
-        Wed, 19 Oct 2022 04:49:25 -0700 (PDT)
-Received: from pc636 (host-90-235-12-192.mobileonline.telia.com. [90.235.12.192])
-        by smtp.gmail.com with ESMTPSA id bj11-20020a2eaa8b000000b0026a92616cd2sm2415549ljb.35.2022.10.19.04.49.23
+        bh=HfKaXAM67nrWxBo+o2Le2Vo+rZyeTr5pYYlDrowdGww=;
+        b=yUvkZTIWFxqaUFICNkKI/UVc7PFzURN2bT/lzDyEICqfCeCSsaN5qhykPT3maRYw2r
+         3CQ8CgQZGgUA++xp5MQMzNaq4jNkxmbTChvh6tQn0rVRady1blK6CJOAtO6EAv7E2Zop
+         pXbB27zSxy/vjILtwNw8HCMV9GTbP+1XvptNv9FXKFjFjmPMFjGDRdXosc6YzGR0SXO+
+         mojxAy4S2zRoDN++Tz4IRKegdqW1qXjAQ85ExitYgxnGIYEbmf3eJoP0MGi4mB97tnrw
+         cct/V+/73Vsjt1edd3y4nu6mwcvnOdRSaquWnuPZ5fFqctehRdSCrMU8KiYRW8/rnbUY
+         37dQ==
+X-Gm-Message-State: ACrzQf0t52OeSQYrEaSnLkhwmoNK/L/0jpFuBxLpsNMMp7/2Ozejez/E
+        WY6lOTSF5dYGkbyG8bC348HzFAhp7UbrIsBlSShdM2Dndao78LhUUCXHL2O391o9+NtG5lWR3Go
+        551d7BQ4woBfUgGGjnXjKgYn3
+X-Received: by 2002:a5d:598d:0:b0:231:2304:3a5a with SMTP id n13-20020a5d598d000000b0023123043a5amr4931471wri.434.1666180181690;
+        Wed, 19 Oct 2022 04:49:41 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4naKoI+49panSp4JLVPLoygdy3bA51aQUk0/netD4C5WEddCLKNJIoIp5COV9GgG6ccsYJeA==
+X-Received: by 2002:a5d:598d:0:b0:231:2304:3a5a with SMTP id n13-20020a5d598d000000b0023123043a5amr4931455wri.434.1666180181415;
+        Wed, 19 Oct 2022 04:49:41 -0700 (PDT)
+Received: from redhat.com ([2.54.191.184])
+        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003a2f2bb72d5sm30867129wmp.45.2022.10.19.04.49.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 04:49:24 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 19 Oct 2022 13:49:21 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v2 0/7] Add basic trace events for vmap/vmalloc (v2)
-Message-ID: <Y0/kQWjOTgWCEPg8@pc636>
-References: <20221018181053.434508-1-urezki@gmail.com>
- <20221018142302.7af359f5@gandalf.local.home>
- <20221018142509.0b338849@gandalf.local.home>
+        Wed, 19 Oct 2022 04:49:40 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 07:49:35 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        andriy.shevchenko@linux.intel.com, caraitto@google.com,
+        jonolson@google.com, willemb@google.com,
+        "David S .Miller" <davem@davemloft.net>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        amritha.nambiar@intel.com, linux@rasmusvillemoes.dk
+Subject: Re: [PATCH] Revert "net: fix cpu_max_bits_warn() usage in
+ netif_attrmask_next{,_and}"
+Message-ID: <20221019074843-mutt-send-email-mst@kernel.org>
+References: <20221017030947.1295426-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221018142509.0b338849@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221017030947.1295426-1-yury.norov@gmail.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,20 +93,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:25:09PM -0400, Steven Rostedt wrote:
-> On Tue, 18 Oct 2022 14:23:02 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+On Sun, Oct 16, 2022 at 08:09:47PM -0700, Yury Norov wrote:
+> This reverts commit 854701ba4c39afae2362ba19a580c461cb183e4f.
 > 
-> > > Description is here https://lore.kernel.org/linux-mm/20221017160233.16582-1-urezki@gmail.com/  
-> > 
-> > You should always copy the description in each version. It's annoying to
-> > have to click a link from a console email client.
+> The reverted commit makes netif_attr_test_online() network subsystems
+> generating warnings, and it breaks syzkaller testing.
 > 
-> Although, what I do is, include the previous version when talking about
-> differences in this version. That way the link to the old series can be
-> easily found.
+> https://syzkaller.appspot.com/bug?extid=9abe5ecc348676215427
 > 
-OK. Thanks for the review!
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
---
-Uladzislau Rezki
+Fixes: 854701ba4c39 ("net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}")
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+> ---
+>  include/linux/netdevice.h | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index a36edb0ec199..eddf8ee270e7 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -3663,8 +3663,9 @@ static inline bool netif_attr_test_online(unsigned long j,
+>  static inline unsigned int netif_attrmask_next(int n, const unsigned long *srcp,
+>  					       unsigned int nr_bits)
+>  {
+> -	/* n is a prior cpu */
+> -	cpu_max_bits_warn(n + 1, nr_bits);
+> +	/* -1 is a legal arg here. */
+> +	if (n != -1)
+> +		cpu_max_bits_warn(n, nr_bits);
+>  
+>  	if (srcp)
+>  		return find_next_bit(srcp, nr_bits, n + 1);
+> @@ -3685,8 +3686,9 @@ static inline int netif_attrmask_next_and(int n, const unsigned long *src1p,
+>  					  const unsigned long *src2p,
+>  					  unsigned int nr_bits)
+>  {
+> -	/* n is a prior cpu */
+> -	cpu_max_bits_warn(n + 1, nr_bits);
+> +	/* -1 is a legal arg here. */
+> +	if (n != -1)
+> +		cpu_max_bits_warn(n, nr_bits);
+>  
+>  	if (src1p && src2p)
+>  		return find_next_and_bit(src1p, src2p, nr_bits, n + 1);
+> -- 
+> 2.34.1
+
