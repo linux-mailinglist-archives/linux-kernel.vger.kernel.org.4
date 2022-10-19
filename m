@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE2C603903
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 06:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7451C603904
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJSE5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 00:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S229722AbiJSFAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 01:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJSE5e (ORCPT
+        with ESMTP id S229437AbiJSFAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 00:57:34 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565DB6704F;
-        Tue, 18 Oct 2022 21:57:31 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y14so37163232ejd.9;
-        Tue, 18 Oct 2022 21:57:31 -0700 (PDT)
+        Wed, 19 Oct 2022 01:00:16 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A7F1FF97
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:00:11 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id b5so15227140pgb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:00:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=35peG0IP4JiPLGxzfXqI/wQBb35mxDEhGOgvcGpqSyc=;
-        b=ZpI/bfSYkwg3sOORo0rZ+97ajfBfrUv07EUG4Z6ePd39nqsw7CORsekgXvDesNnoyy
-         2qN+GHiYzSb9mNJIprV+uaUPVIqSRhEHPXQ6FdcUGqkPrY5A8JXXQGLfR6CxHzidA79/
-         JVvGDL/k6wZOVuE4TyyqZabwGlRsxkpBxyqFQWnfRL4seu/JrO436voU6pfqdF6evLmj
-         St3fXSbxAFCCR36wOfJLcYQ/k6yUs7k783B83+qSKtw+2gRbufgm5D0Lpj7j9y6FXvZf
-         f+MEBtMmR53AT+DBh7L2XfoPO6jg9KhGpsOMUR0TyDVwjP7v7GhL/8t4WyjcV6b5rdLp
-         aVQw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=x7KlOOoo8kFDTx7VjKoH6+Vu0ogQNhNleK4mkk2uZlM=;
+        b=Rm57BG1ObCu+WcWIIGa9fmS/6ytUc0FvSPJ/WRP79SFKRTFRFVgHZYyzZ1V9LpX1KQ
+         USCkoxi5bEduel3kJl3d40HDL6dPUNswT4xTdn3S6oOGtTyuYo7B5Ze7qYop0Akqf2Ut
+         BTiiNm3S5y7ZjthnBSt6XiNKAwc7VLl9FEufs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=35peG0IP4JiPLGxzfXqI/wQBb35mxDEhGOgvcGpqSyc=;
-        b=W+J8sagKtr4RuTkYulbAw7dgsut5JpF2NBpHUaSEoegnQCl9FdzgPEyQLeQeZVy+7Q
-         H43At41LZsZz26NV8VWWCuPK1XZOajDnVzoFXnmqCXGQ5xZARlNEhTJeWaYM/AaShiOe
-         qDk4ivTXKa1nx2uCKETlKEjRJUxI4J/nBxwtJbYvq10LcpVA999TPiCEUNE2Htv++lSi
-         4lfs9sWsVTrXPss7jUtCSr6RH3U0Vm3PVpYNta1KkFdJxEGx9pU7l1Q0l7zn8rpXTtCC
-         Rg4ieeApQKYlZeuQo7y38OahsqRBvKMRZt1TE8P8SzQIKoMwgnSafTO0Heg/6XKQSNwp
-         r5GQ==
-X-Gm-Message-State: ACrzQf0p1HE3jrvVDFVQDUQ8kDuVPYCs1099gx+PcxCm6SYDUEmecdMs
-        i7vZ3pDNcmASA9NZVHlM5IRqAQ9vPsUuNYaR16E=
-X-Google-Smtp-Source: AMsMyM4QOsMkvlYidGnoGdGzD7kUE35SaXqpI7fQcpzl0796XYfe08z7lt/M19jrzA7TXR5ngJwzLJViIzExG6nghQ4=
-X-Received: by 2002:a17:907:1c98:b0:78d:3b06:dc8f with SMTP id
- nb24-20020a1709071c9800b0078d3b06dc8fmr5006085ejc.58.1666155449729; Tue, 18
- Oct 2022 21:57:29 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x7KlOOoo8kFDTx7VjKoH6+Vu0ogQNhNleK4mkk2uZlM=;
+        b=5g9Asfm3LXVUwZ5JAgTZjr9iXRM4nFYdaMvi/AdswwnCoj5frGAM6Y1XvlKRr8uF+e
+         dkmcQ+Qlugvz8SOuS1JtwsyxBZ3AmZBXEazBtsJ2uV6N6kwRmFmtd5etRx8jKbePDTgt
+         lpqEjdG+fBrPZxvzFGdhEmpKAXbXVgf7Qera6g43X6zeDDZ8mSMRQMEczaEErb4JM0LO
+         CD7AvvpySubV8z4BCRNmmv7x6jTWee35WHA0ULsdZSucj9QIMct6PJreTGnOXlGPD1rI
+         xBNPT/eOxsBYda/RgHM7teIIYwBlp2mjN8r+yRdiVCXUPk/UxY4gDq0+sO/xtGDHarlE
+         /0qw==
+X-Gm-Message-State: ACrzQf2dKJWIGDo7DtOVCorbPEstym1V/9ZoXdFzvSZjpHOElumlUv/J
+        NwI/M0SXY4FVcF6y7iXGiUfIMQ==
+X-Google-Smtp-Source: AMsMyM6mZ6u6COS/UGFoCm5x+zEApDBBbUOJgIi4/citaTjkaghXnnApMLhLQra63vV/Hv9TYCOpgg==
+X-Received: by 2002:a05:6a00:1907:b0:557:e83b:1671 with SMTP id y7-20020a056a00190700b00557e83b1671mr6494585pfi.65.1666155610773;
+        Tue, 18 Oct 2022 22:00:10 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u125-20020a627983000000b005615c8a660csm10226516pfc.65.2022.10.18.22.00.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 22:00:09 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 22:00:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <202210182157.CF5F4403@keescook>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+ <202210181020.79AF7F7@keescook>
+ <Y08G73HOddpS40ny@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <Yz8lbkx3HYQpnvIB@krava> <20221007081327.1047552-1-sumanthk@linux.ibm.com>
- <Yz/1QNGfO39Y7dOJ@krava> <Y0BDWK7cl83Fkwqz@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y0BDWK7cl83Fkwqz@hirez.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 18 Oct 2022 21:57:18 -0700
-Message-ID: <CAADnVQJ0ur6Pox9aTjoSkXs43strqN__e1h4JWya46WOER9V4w@mail.gmail.com>
-Subject: Re: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        X86 ML <x86@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y08G73HOddpS40ny@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 8:31 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Oct 07, 2022 at 11:45:36AM +0200, Jiri Olsa wrote:
-> > On Fri, Oct 07, 2022 at 10:13:27AM +0200, Sumanth Korikkar wrote:
-> > > * Raw data is also filled by bpf_perf_event_output.
-> > > * Add sample_flags to indicate raw data.
-> > > * This eliminates the segfaults as shown below:
-> > >   Run ./samples/bpf/trace_output
-> > >   BUG pid 9 cookie 1001000000004 sized 4
-> > >   BUG pid 9 cookie 1001000000004 sized 4
-> > >   BUG pid 9 cookie 1001000000004 sized 4
-> > >   Segmentation fault (core dumped)
-> > >
-> > > Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-> > > Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > > Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> >
-> > Acked-by: Jiri Olsa <jolsa@kernel.org>
-> >
-> > Peter,
-> > I think this should go through your tree again?
-> > bpf-next/master does not have sample_flags merged yet
->
-> Yep can do. I'll line it up in perf/urgent (Ingo just send out
-> perf/core).
+On Tue, Oct 18, 2022 at 10:05:03PM +0200, Peter Zijlstra wrote:
+> On Tue, Oct 18, 2022 at 11:09:13AM -0700, Kees Cook wrote:
+> > I still think it's worth noting it does technically weaken the
+> > "attacker-controlled executable memory content injection" attack
+> > requirements, too. While an attacker needs to make sure they place an
+> > ENDBR at the start of their injected code, they no longer need to also
+> > learn and inject the CFI hash too, as the malicious code can just not
+> > do the check at all. The difference in protection currently isn't much.
+> 
+> Hmm, true; although I do feel that the moment attackers can write code
+> we might be having worse problems.
 
-Peter,
+Totally agreed! :) But this is why I've wanted to keep a bright line
+between "kernel area", "modules area" and "everything else", in the
+hopes that we can use other things like PKS to block the "everything
+else" area, but one thing at a time.
 
-Could you please hurry up. 11 days have passed.
+> 
+> > It's not a very difficult requirement to get attacker-controlled bytes
+> > into executable memory, as there are already existing APIs that provide
+> > this to varying degrees of reachability, utility, and discoverability --
+> > for example, BPF JIT when constant blinding isn't enabled (the unfortunate
+> > default). 
+> 
+> BPF has another problem in that the current control transfer to BPF
+> progs is nocfi. At the very least we can have them have a hash, no?
 
-This issue affects everyone the hard way now after merging
-all the trees: tip -> linus -> net-next -> bpf-next.
-The BPF CI is red right now with 5 tests failing because
-this fix is still missing.
-It's causing a headache to maintainers and developers.
+Yup, it's on the list.
+
+-- 
+Kees Cook
