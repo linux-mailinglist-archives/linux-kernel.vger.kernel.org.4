@@ -2,223 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2F6605032
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084B4605038
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiJSTL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S230439AbiJSTM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiJSTLf (ORCPT
+        with ESMTP id S230481AbiJSTLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:11:35 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1411C712E;
-        Wed, 19 Oct 2022 12:11:31 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id p24-20020a9d6958000000b00661c528849eso10067435oto.9;
-        Wed, 19 Oct 2022 12:11:31 -0700 (PDT)
+        Wed, 19 Oct 2022 15:11:45 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C2D1C73F1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:11:43 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id f9-20020a17090a654900b00210928389f8so1055499pjs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yhu8V94jGdFAJfWlKuQJBLxMXBDTgqOAY04Z9XkILB0=;
+        b=WI+E6mdE7KikoyYbx1G5v3rb1cKskrFPEPpUcFSezZZHvmjimQNtiqHHiCfc4pM22J
+         AymUmLfO5HWh/AVsMrYSl5w3Q0rrVH5CxgWqe6ZQxBmHLQykRxTrpcQ0o1fUiTWSrSH0
+         rlUAd65tlLGEfN/PG8A2OCHLDa9Y8zuGOoBRk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=43IaqXn32YycCBd3/SGJ6Da4qva/kGDXqjobO4DMXeA=;
-        b=wu01KFcU8n49Dijx+qpwD9N7YQGuwsLIRvHnDfNyuZe+3Z384rV/UQ+8F/SotO7i6e
-         DrxY20Cvg4cfQ4QkYaOq5ey1WjyJwueLPpdiUT08K4/jB2LqmV4yKsJqjKITH8rZ6exq
-         li4pLr+4rg74fump5v1f8O0Ell/EXLlCtha+PHVTifq7frUUHH/LEYWyBt33ql9GozQO
-         7tlPMQ5dwn0ry56KjEdFJUuBqJfdfflST7FMgiQ9nK+TStFpvYcc4AjLdopQQ3zmN1cI
-         PLulEbEEdT3vf/RzLQhOLbUcXSrT7x7hv189NYQWDJGcsmy1pnvLVA+nqblzyu+pp315
-         ERdA==
-X-Gm-Message-State: ACrzQf0A8K1UsN4mXHliL9212jwitNKN6eH3xBrfrn518Zpgv6wjr/26
-        mjj/Azxmelp/J1kE3qMFlw==
-X-Google-Smtp-Source: AMsMyM52ccM2SuB4fJVuNR6xyd3GwViwYeYnmewRYJ6qofqTylHkTtpXjuHE/sY2iyCkl53jTYlNfw==
-X-Received: by 2002:a9d:6948:0:b0:661:a43c:77a3 with SMTP id p8-20020a9d6948000000b00661a43c77a3mr4934314oto.222.1666206690183;
-        Wed, 19 Oct 2022 12:11:30 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q7-20020a4aac47000000b0047f8ceca22bsm6816526oon.15.2022.10.19.12.11.29
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yhu8V94jGdFAJfWlKuQJBLxMXBDTgqOAY04Z9XkILB0=;
+        b=T63qtrXgUxhZcA11hns+xmvXW3FSfw495uUSmmDXLSs3bn1ZAzdqFMG69BvqecG1Tf
+         3BaPwuRz3Qks4ve+QcBmRakcye4VIajjL+tjivY4vRjubpqIoa6In3HYcGrINSv4KdqP
+         /62e5YUiYpP4+Zlpr4Ubpux2lh/KTeHt1hHWyqCIMiNzN92bVNDjy2QaeM0yWnoXVyt9
+         dHKdF9/Fet0xq55BB6ccMwnW5+XE2S84xB+pHRPu2h+upqCiyUkAqyYXDfo3Vvl0pi4p
+         kdx+M7MIFwt+BnddSmbn5DWceswOO1NNpMAwztoML7AdbVCrTY6GBlWAMxcAegU+xuFB
+         pRmw==
+X-Gm-Message-State: ACrzQf0XIFUyuPmxgVgsIQHNTZPsDb8n8wIPOOg4aXa/D3HoZG+ci0Va
+        nMUfHx8cBxbgT9DhRG8uDeLbjQ==
+X-Google-Smtp-Source: AMsMyM4zLj3pDGeqBxExWHkpvRO0zSZiZQezSqyo+Hqz1J5Sd+WMFDOQKLR6oMdA/dpI4i+RVsiYBg==
+X-Received: by 2002:a17:90b:4b46:b0:20a:e906:426d with SMTP id mi6-20020a17090b4b4600b0020ae906426dmr11831505pjb.48.1666206703114;
+        Wed, 19 Oct 2022 12:11:43 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902bd4400b0016d72804664sm11019006plx.205.2022.10.19.12.11.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 12:11:29 -0700 (PDT)
-Received: (nullmailer pid 3420910 invoked by uid 1000);
-        Wed, 19 Oct 2022 19:11:25 -0000
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 19 Oct 2022 14:11:30 -0500
-Subject: [PATCH v2 7/7] perf: arm_spe: Add support for SPEv1.2 inverted event
- filtering
+        Wed, 19 Oct 2022 12:11:42 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 12:11:41 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+Message-ID: <202210191209.919149F4@keescook>
+References: <20221019162648.3557490-1-Jason@zx2c4.com>
+ <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+ <20221019174345.GM25951@gate.crashing.org>
+ <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
+ <CAKwvOdn4iocWHY_-sXMqE7F1XrV669QsyQDzh7vPFg6+7368Cg@mail.gmail.com>
+ <CAHk-=wiD90ZphsbTzSetHsK3_kQzhgyiYYS0msboVsJ3jbNALQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220825-arm-spe-v8-7-v2-7-e37322d68ac0@kernel.org>
-References: <20220825-arm-spe-v8-7-v2-0-e37322d68ac0@kernel.org>
-In-Reply-To: <20220825-arm-spe-v8-7-v2-0-e37322d68ac0@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.11.0-dev
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiD90ZphsbTzSetHsK3_kQzhgyiYYS0msboVsJ3jbNALQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arm SPEv1.2 (Arm v8.7/v9.2) adds a new feature called Inverted Event
-Filter which excludes samples matching the event filter. The feature
-mirrors the existing event filter in PMSEVFR_EL1 adding a new register,
-PMSNEVFR_EL1, which has the same event bit assignments.
+On Wed, Oct 19, 2022 at 11:56:00AM -0700, Linus Torvalds wrote:
+> Hundreds and hundreds of that atomic_try_cmpxchg_acquire(), for
+> example. And they might be trivial to fix (it might be similar to the
+> fortify-string.h one where it's just a header file that generates most
+> of them in one single place), but with all the ones that are just
+> clearly the compiler being silly, they aren't really even worth
+> looking at.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
- - Update for auto generated register defines
- - Avoid accessing SYS_PMSNEVFR_EL1 on < v8.7
----
- drivers/perf/arm_spe_pmu.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
-index 0b9b847919d0..ab5fcf02a4ca 100644
---- a/drivers/perf/arm_spe_pmu.c
-+++ b/drivers/perf/arm_spe_pmu.c
-@@ -85,6 +85,7 @@ struct arm_spe_pmu {
- #define SPE_PMU_FEAT_ARCH_INST			(1UL << 3)
- #define SPE_PMU_FEAT_LDS			(1UL << 4)
- #define SPE_PMU_FEAT_ERND			(1UL << 5)
-+#define SPE_PMU_FEAT_INV_FILT_EVT		(1UL << 6)
- #define SPE_PMU_FEAT_DEV_PROBED			(1UL << 63)
- 	u64					features;
- 
-@@ -202,6 +203,10 @@ static const struct attribute_group arm_spe_pmu_cap_group = {
- #define ATTR_CFG_FLD_min_latency_LO		0
- #define ATTR_CFG_FLD_min_latency_HI		11
- 
-+#define ATTR_CFG_FLD_inv_event_filter_CFG	config3	/* PMSNEVFR_EL1 */
-+#define ATTR_CFG_FLD_inv_event_filter_LO	0
-+#define ATTR_CFG_FLD_inv_event_filter_HI	63
-+
- /* Why does everything I do descend into this? */
- #define __GEN_PMU_FORMAT_ATTR(cfg, lo, hi)				\
- 	(lo) == (hi) ? #cfg ":" #lo "\n" : #cfg ":" #lo "-" #hi
-@@ -232,6 +237,7 @@ GEN_PMU_FORMAT_ATTR(branch_filter);
- GEN_PMU_FORMAT_ATTR(load_filter);
- GEN_PMU_FORMAT_ATTR(store_filter);
- GEN_PMU_FORMAT_ATTR(event_filter);
-+GEN_PMU_FORMAT_ATTR(inv_event_filter);
- GEN_PMU_FORMAT_ATTR(min_latency);
- 
- static struct attribute *arm_spe_pmu_formats_attr[] = {
-@@ -243,12 +249,27 @@ static struct attribute *arm_spe_pmu_formats_attr[] = {
- 	&format_attr_load_filter.attr,
- 	&format_attr_store_filter.attr,
- 	&format_attr_event_filter.attr,
-+	&format_attr_inv_event_filter.attr,
- 	&format_attr_min_latency.attr,
- 	NULL,
- };
- 
-+static umode_t arm_spe_pmu_format_attr_is_visible(struct kobject *kobj,
-+						  struct attribute *attr,
-+						  int unused)
-+	{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct arm_spe_pmu *spe_pmu = dev_get_drvdata(dev);
-+
-+	if (attr == &format_attr_inv_event_filter.attr && !(spe_pmu->features & SPE_PMU_FEAT_INV_FILT_EVT))
-+		return 0;
-+
-+	return attr->mode;
-+}
-+
- static const struct attribute_group arm_spe_pmu_format_group = {
- 	.name	= "format",
-+	.is_visible = arm_spe_pmu_format_attr_is_visible,
- 	.attrs	= arm_spe_pmu_formats_attr,
- };
- 
-@@ -343,6 +364,9 @@ static u64 arm_spe_event_to_pmsfcr(struct perf_event *event)
- 	if (ATTR_CFG_GET_FLD(attr, event_filter))
- 		reg |= PMSFCR_EL1_FE;
- 
-+	if (ATTR_CFG_GET_FLD(attr, inv_event_filter))
-+		reg |= PMSFCR_EL1_FnE;
-+
- 	if (ATTR_CFG_GET_FLD(attr, min_latency))
- 		reg |= PMSFCR_EL1_FL;
- 
-@@ -355,6 +379,12 @@ static u64 arm_spe_event_to_pmsevfr(struct perf_event *event)
- 	return ATTR_CFG_GET_FLD(attr, event_filter);
- }
- 
-+static u64 arm_spe_event_to_pmsnevfr(struct perf_event *event)
-+{
-+	struct perf_event_attr *attr = &event->attr;
-+	return ATTR_CFG_GET_FLD(attr, inv_event_filter);
-+}
-+
- static u64 arm_spe_event_to_pmslatfr(struct perf_event *event)
- {
- 	struct perf_event_attr *attr = &event->attr;
-@@ -703,6 +733,9 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
- 	if (arm_spe_event_to_pmsevfr(event) & arm_spe_pmsevfr_res0(spe_pmu->pmsver))
- 		return -EOPNOTSUPP;
- 
-+	if (arm_spe_event_to_pmsnevfr(event) & arm_spe_pmsevfr_res0(spe_pmu->pmsver))
-+		return -EOPNOTSUPP;
-+
- 	if (attr->exclude_idle)
- 		return -EOPNOTSUPP;
- 
-@@ -721,6 +754,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
- 	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_EVT))
- 		return -EOPNOTSUPP;
- 
-+	if ((FIELD_GET(PMSFCR_EL1_FnE, reg)) &&
-+	    !(spe_pmu->features & SPE_PMU_FEAT_INV_FILT_EVT))
-+		return -EOPNOTSUPP;
-+
- 	if ((FIELD_GET(PMSFCR_EL1_FT, reg)) &&
- 	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_TYP))
- 		return -EOPNOTSUPP;
-@@ -756,6 +793,11 @@ static void arm_spe_pmu_start(struct perf_event *event, int flags)
- 	reg = arm_spe_event_to_pmsevfr(event);
- 	write_sysreg_s(reg, SYS_PMSEVFR_EL1);
- 
-+	if (spe_pmu->features & SPE_PMU_FEAT_INV_FILT_EVT) {
-+		reg = arm_spe_event_to_pmsnevfr(event);
-+		write_sysreg_s(reg, SYS_PMSNEVFR_EL1);
-+	}
-+
- 	reg = arm_spe_event_to_pmslatfr(event);
- 	write_sysreg_s(reg, SYS_PMSLATFR_EL1);
- 
-@@ -990,6 +1032,9 @@ static void __arm_spe_pmu_dev_probe(void *info)
- 	if (FIELD_GET(PMSIDR_EL1_FE, reg))
- 		spe_pmu->features |= SPE_PMU_FEAT_FILT_EVT;
- 
-+	if (FIELD_GET(PMSIDR_EL1_FnE, reg))
-+		spe_pmu->features |= SPE_PMU_FEAT_INV_FILT_EVT;
-+
- 	if (FIELD_GET(PMSIDR_EL1_FT, reg))
- 		spe_pmu->features |= SPE_PMU_FEAT_FILT_TYP;
- 
+Yeah, I've had to fight these casts in fortify-string.h from time to
+time. I'd love to see the patch you used -- I bet it would keep future
+problems at bay.
 
 -- 
-b4 0.11.0-dev
+Kees Cook
