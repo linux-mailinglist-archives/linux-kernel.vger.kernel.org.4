@@ -2,139 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF71E603940
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E70603942
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJSFcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 01:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S229494AbiJSFdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 01:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJSFcM (ORCPT
+        with ESMTP id S229470AbiJSFdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 01:32:12 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0227733F1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:32:08 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d10so16219339pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:32:08 -0700 (PDT)
+        Wed, 19 Oct 2022 01:33:32 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025B973336
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:33:31 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-12c8312131fso19426855fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=anrzvwqvfhQAst0P6tYGgAW9i0wdW47/jhNxqEEYWDw=;
-        b=gIsCyeKmYfkLG7tWZlC+hY2BVP6eyEj4kDopxn7zBXM8dOZIf1GS3OW2SchSWIVUBa
-         7UYsnZPFKapUzoPI9fcQlGzQ/dZJVAxB+/WFv2M7OYuIcoQK/5doncQcM3MZK55kipE5
-         j435VfachyFKqyVNPobTHpE4Qiqa7hw0enOuQ=
+        bh=qMqM5geKQutqgXVVndbar/yZMqaBPuUDeVO1Kw96YAs=;
+        b=kfyfCs9G7uLk0hlAo/EBvhJ4AaX33irvVzN95XDFPBKaPZHD5amSFpOgTpABjJF0Re
+         KwhrYUGrVWopDd9rRrR09b+bGMSL3V9MoCv3XBZQlqEEO292f7sYaYJfax6oCKXBPTqQ
+         jLaCzWpdkx8WPwLAIeUlHlQSsjXEFVBug9riU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=anrzvwqvfhQAst0P6tYGgAW9i0wdW47/jhNxqEEYWDw=;
-        b=3kEF4EP9XglpUtcmztdB+uWbEGj0BazduDa62UEcNy8QpPTg27hDpEprXvWCL4yRaz
-         5I0c7E95U1f+/9QPJFHF7cY3cjAePl5hiduHnKG+DbJ5MBIYgW8R4qDuuS/+cTBvFN2s
-         hF6DGrUl15ESgWTozh/H77eMsdl06bLnFo2hNNZIGFKVWdXaSuA7CAhlkpMoGPZMK0LC
-         2KIZQiJZooUlUTQdqxz3SXd0yYnuhwBLQU2qXtNGRW6IBI9RU1pqeYy5NsAjmi2OsE8z
-         vPpRAJOCp9LhVXbbs6mbMZzOe0Ry2/s4QYGzIIzcvrQLwIB/TyGTmeekG9v3CYroYsU/
-         7XaA==
-X-Gm-Message-State: ACrzQf1JbCaewvzNgl4P6WEk2zMzYw46a+pkHiUCdtfDjrs2agAaEgiq
-        6gX+VCOwFsUOh4TfS+j50WHjgg==
-X-Google-Smtp-Source: AMsMyM4pdUMQ32B/7SdAynxwG561I+J30C0V/h+K0TRNWb97K7H/mwxoNPhM8E/3ILdciQJBS+yqQw==
-X-Received: by 2002:a65:6bc7:0:b0:44a:dcee:18a5 with SMTP id e7-20020a656bc7000000b0044adcee18a5mr5665720pgw.413.1666157527816;
-        Tue, 18 Oct 2022 22:32:07 -0700 (PDT)
+        bh=qMqM5geKQutqgXVVndbar/yZMqaBPuUDeVO1Kw96YAs=;
+        b=IaOz5ivtBvSRbuwn8h4Lpc/xUeK+f+Z56fLGxMNIWuaS8HqmTqnoJ6CMS8ExUecNc1
+         MeNohXrProultIzb7N0rdFIFl4458bzCQpKYymr1jKvHTeFPzG7bV3sZkggkzd5HoESb
+         A7QQLRARbMIZ4vSgbEBk74CPV7DmkWE7ItkXsZqALqPfup78kFbnPAKiKVjcTmckxX52
+         klAaPI+7yux5leI/H3HJ7Sl88CNDhzvEAZ/HFLuqb8DlXLY1bGEvz8ke1WghoDEHpim3
+         22z2sNX3YqpfJtb6IHp3P+O83dH3oWiSb5hKXFkQaYmqEU0I21J6Effc98F4MTuFqHEI
+         zrTQ==
+X-Gm-Message-State: ACrzQf0FjDQcZaJA59UNTXNOjnG3f1LYirafJO4eiq96fUqvsWHm3UfL
+        iS1ikfJU0oyH35jjB9Azef/4k6uYILSdqg==
+X-Google-Smtp-Source: AMsMyM7dvEABqdRMOswj0oG+vE3GeAfsBg5a93kLvKaqRVvDTbjVQ5rMXD1EqCn9H9FgdMCl+fr3KA==
+X-Received: by 2002:a17:90b:4ac8:b0:20d:56c4:a892 with SMTP id mh8-20020a17090b4ac800b0020d56c4a892mr42084996pjb.19.1666157599452;
+        Tue, 18 Oct 2022 22:33:19 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170903120b00b0017f74cab9eesm9755946plh.128.2022.10.18.22.32.06
+        by smtp.gmail.com with ESMTPSA id p184-20020a625bc1000000b005618189b0ffsm10312524pfb.104.2022.10.18.22.33.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 22:32:07 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 22:32:06 -0700
+        Tue, 18 Oct 2022 22:33:18 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 22:33:17 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Joao Moreira <joao@overdrivepizza.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+Cc:     David Laight <David.Laight@aculab.com>,
+        'Peter Zijlstra' <peterz@infradead.org>, x86@kernel.org,
         Sami Tolvanen <samitolvanen@google.com>,
         linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>
 Subject: Re: [PATCH] x86/ibt: Implement FineIBT
-Message-ID: <202210182222.64C2D87E0@keescook>
+Message-ID: <202210182232.FC83CB5@keescook>
 References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
- <202210181020.79AF7F7@keescook>
- <5094174a77cdc44cf50c346bf1617555@overdrivepizza.com>
+ <9bb036e48580454b81e6de7224c5f006@AcuMS.aculab.com>
+ <3edb387ea335085dcb6dd49f1d9c9ce6@overdrivepizza.com>
+ <202210181013.923F8809@keescook>
+ <24d4e2f277ecaa435075745817f2bd61@overdrivepizza.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5094174a77cdc44cf50c346bf1617555@overdrivepizza.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <24d4e2f277ecaa435075745817f2bd61@overdrivepizza.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 12:59:42PM -0700, Joao Moreira wrote:
-> Kees said:
-> > I still think it's worth noting it does technically weaken the
-> > "attacker-controlled executable memory content injection" attack
-> > requirements, too. While an attacker needs to make sure they place an
-> > ENDBR at the start of their injected code, they no longer need to also
-> > learn and inject the CFI hash too, as the malicious code can just not
-> > do the check at all. The difference in protection currently isn't much.
+On Tue, Oct 18, 2022 at 01:09:25PM -0700, Joao Moreira wrote:
+> On 2022-10-18 10:20, Kees Cook wrote:
+> > On Tue, Oct 18, 2022 at 08:58:24AM -0700, Joao Moreira wrote:
+> > > > Does the hash value for kCFI only depend on the function type?
+> > > > Or is there something like a attribute that can also be included?
+> > > 
+> > > Hi David -- does this sound like what you are asking about?
+> > > 
+> > > https://github.com/ClangBuiltLinux/linux/issues/1736
+> > > 
+> > > If yes, then it is something in our todo list :) I think Sami is
+> > > handling
+> > > it.
 > > 
-> > It's not a very difficult requirement to get attacker-controlled bytes
-> > into executable memory, as there are already existing APIs that provide
-> > this to varying degrees of reachability, utility, and discoverability --
-> > for example, BPF JIT when constant blinding isn't enabled (the
-> > unfortunate
-> > default). And with the hashes currently being deterministic, there's no
-> > secret that needs to be exposed first; an attack can just calculate it.
-> > An improvement for kCFI would be to mutate all the hashes both at build
-> > time (perhaps using the same seed infrastructure that randstruct depends
-> > on for sharing a seed across compilation units), and at boot time, so
-> > an actual .text content exposure is needed to find the target hash
-> > value.
-> > 
-> If we look back at how well ASLR did over the years I think we can't really
-> rely that randomizing the hashes will solve anything. So what you are
-> suggesting is that we flip a "viable defence against SpectreBHB" for a
-> randomization-based scheme, when what we really should be doing is getting
-> constant blinding enabled by default.
-
-I don't think any of these things are mutually exclusive. The
-randomization means an additional step (and possibly additional primitive)
-is needed for an attack chain. Since we get this from a one-time cost
-on our end, that seems like reasonable value.
-
-> At this point I feel like going on is a bit of bike-shedding, but if this
-> really matters, below is how to use randomization on FineIBT. Maybe with lot
-> less entropy, but just ideas thrown that could be improved over time (don't
-> take this as a serious proposal):
+> > I was hoping someone with prior experience with Call Graph Detaching to
+> > solve Transitive Clustering Relaxation[1] could assist? ;)
 > 
-> Assuming we got 16 bytes padding to play with on each function prologue, you
-> can randomize between 0-11 in which offset you emit the ENDBR instruction.
-> Caller/Callee would look like (hopefully I did not mess-up offset):
+> Hi Kees, thanks for bringing these slides up.
 > 
-> <caller>:
-> and 0xf3, r11b
-> call *r11
+> Yeah, I would be glad to help out with automating this sort of analysis.
+> CGD, as explained in these slides would not help much here, because it was
+> more of an optimization to reduce the number of allowed targets on returns
+> (we did not have an almighty shadow stack at the time). Yet there are lots
+> of other things we might be able to do, both statically and dynamically.
+> Recent relevant research about this is multi-layer type analysis [1], which
+> I may find the time to look into more deeply soon.
 > 
-> <callee>:
-> nop
-> nop
-> nop
-> endbr // <- this position is randomized/patched during boot time.
-> nop
-> nop
-> ...
-> 
-> And of course, you get more entropy as you increase the padding nop area.
+> 1 - https://www-users.cse.umn.edu/~kjlu/papers/mlta.pdf
 
-Oh, I kind of like this -- it'd need to be per matching hash. This would
-require roughly 3 bits of entropy exposure of the .text area. For X^R,
-that becomes annoying for an attacker, though likely once close enough,
-multiple attempts could find it, assume panic_on_oops/warn wasn't set.
-
-Anyway, this sounds like an interesting idea to keep in our back
-pocket...
+Awesome! Yeah, getting the big "common" hashes broken up by separate
+clusters would be lovely.
 
 -- 
 Kees Cook
