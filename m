@@ -2,396 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD3E604BE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805D1604BEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbiJSPm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S231166AbiJSPni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiJSPmT (ORCPT
+        with ESMTP id S229765AbiJSPm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:42:19 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D3263D7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:38:16 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id b2so40924612eja.6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XAm6L0DMrBfvhKiS0CKSKcNGjrlznN+VXy5BMzHTKe0=;
-        b=ev+AGbYnswADLymKG7gZAE9DQ3YiyUdpUAFrnC552vr0dcbNjCuWEGXg1VCLbr4LlQ
-         5f9K6su2qRHna7DfpL8luBpDcNhJJ9eYAQ8zjRKHFX9uqv9y8EPsvUrHH0c4l9fsVkp+
-         YDgeVxRsBuTS4iBCqsL5+sq+EHpfTqtb/FUeMOeThsDAp1e16gvJIr4tTCTXedBU7mhV
-         t/haTsdGGott89kcLAdrbrDMkhVAWrmQAkTlsNmH9uZ8v/4H37QFJJrd6ZFiFMXFXFUu
-         rkSyonQqwFRyGJ8Kn0wQ3z/xLRcTxdcQCKw0oEyVhohNsWFjALddTu5JZ5zbfSQQj2r7
-         aAOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XAm6L0DMrBfvhKiS0CKSKcNGjrlznN+VXy5BMzHTKe0=;
-        b=7uoMVaHRNW0GaKzw2TJUrdfLxEw/dLOyLTHLKvxmp0BJoPRpf0wlQzmcdE0RnXYN9u
-         TgquML14Z6dEZDn6I5W/naGPn89S25Vte2xNmanHfnNGXo1PQ8vg0uBE1+2Hf5TLMxHI
-         tTgw3ok6kMiv3+Gq74VuMdvBODuR62OZ5oFuiB/otth76keqdBR+drRWSRwXf+bvCJl9
-         oJsgGOH3z6eK19Tww8s6gJxtXVUoQ/Rw3m91EJ/MDYqlpz5StnwNoHue5DaqIoZ7KQiF
-         H0nkIEbDzO6/vyA1Zq1hZlpLGD3QlSbtz2ae3yfOYK9LCJbNJHgxhmPhWueUqq+eT5k4
-         PtDA==
-X-Gm-Message-State: ACrzQf1bgJwptfGWJ1ndG9RvyhEBpuR9m1pLlYMY54i72HqHoyL6IhS8
-        i8Mj1iLgv+0bDsUjogHDOMtGtFpqjnwCdFpyYOtnUQ==
-X-Google-Smtp-Source: AMsMyM41v7jE3Y52qXzK/nxnAxDyMdWUhttq5QKgPvsdrPJCXW9qEX5Nf0Cj6iVf1dsgxPOH9pF+fDwp550sGkB1byQ=
-X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id
- wv11-20020a170907080b00b0077a86a1db52mr7584669ejb.294.1666193843591; Wed, 19
- Oct 2022 08:37:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220628181838.2031-1-max.oss.09@gmail.com> <20220628181838.2031-3-max.oss.09@gmail.com>
- <Y0gLdQleE64FQgn9@gaggiata.pivistrello.it> <CAPY8ntAszGzcp4XC=XKMHJvzCC9LHHf24pt=nZAUFKcK5=JM_Q@mail.gmail.com>
- <Y0tfRhn/f1FiGDi4@pendragon.ideasonboard.com>
-In-Reply-To: <Y0tfRhn/f1FiGDi4@pendragon.ideasonboard.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Wed, 19 Oct 2022 16:37:08 +0100
-Message-ID: <CAPY8ntDwAJ3e5sdqD2up=12G1kMW7pczNhDZnWKzg1Yt8FqCrg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] dt-bindings: display: add new bus-format property
- for panel-dpi
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     francesco.dolcini@toradex.com,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Marek Vasut <marex@denx.de>, max.krummenacher@toradex.com,
-        Rob Herring <robh@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 11:42:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBE1159945
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:38:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C148B824B6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC7BC433C1;
+        Wed, 19 Oct 2022 15:37:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666193841;
+        bh=Pyf/5jc/F9OftiOaZ8cadnCvgMF+wR9y0maSC3y+b+M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kXZ97hzKsXMjDn1yi/1wrzjDyE//rw6Yxp68W4bztYZI4P/e1ouPvU/G397ijyWMA
+         FwPzJp0JJwojQ/E/QJn7RNEjchfZWiAHW4rHjJJAkmfEAvxUMFhgN99wpJ/EsZXWF0
+         iAWHqbOjfZFFzDZiKH5R5WTTaH9EZeLPHY3mFbqrMRkQ/arnGzCN01NAWQUtZqi2o6
+         uuoez5ji/3XdHoKIT5m1glqcCn66F5jc+FzTWUZEW9c6HdjkkkYAJLT7mUqLBp1sR+
+         dKXI5CKZhG/StgkxTzTbzu3T74W5rFyCTZ2z6N+Kng0K1xHCqZOmEIlmVdtiqCHWLf
+         2/M5owLyFYiFw==
+Date:   Thu, 20 Oct 2022 00:37:16 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Akanksha J N <akanksha@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 1/2] selftests/ftrace: Add check for ping command for
+ trigger tests
+Message-Id: <20221020003716.00dce32c60ac97c06682f4b8@kernel.org>
+In-Reply-To: <4ec67d1b5c5d4e693a4826a89c9fd4eca5343eb6.1666101523.git.naveen.n.rao@linux.vnet.ibm.com>
+References: <cover.1666101523.git.naveen.n.rao@linux.vnet.ibm.com>
+        <4ec67d1b5c5d4e693a4826a89c9fd4eca5343eb6.1666101523.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent
+On Tue, 18 Oct 2022 19:33:40 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
 
-On Sun, 16 Oct 2022 at 02:33, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hello,
->
-> On Fri, Oct 14, 2022 at 03:08:49PM +0100, Dave Stevenson wrote:
-> > On Thu, 13 Oct 2022 at 13:58, Francesco Dolcini wrote:
-> > > On Tue, Jun 28, 2022 at 08:18:36PM +0200, Max Krummenacher wrote:
-> > > > From: Max Krummenacher <max.krummenacher@toradex.com>
-> > > >
-> > > > The property is used to set the enum bus_format and infer the bpc
-> > > > for a panel defined by 'panel-dpi'.
-> > > > This specifies how the panel is connected to the display interface.
-> > > >
-> > > > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-> > > >
-> > >
-> > > <snip>
-> > >
-> > > > diff --git a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> > > > index dae0676b5c6e..52f5db03b6a8 100644
-> > > > --- a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> > > > +++ b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> > > > @@ -26,7 +26,28 @@ properties:
-> > > >    height-mm: true
-> > > >    label: true
-> > > >    panel-timing: true
-> > > > -  port: true
-> > > > +
-> > > > +  port:
-> > > > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > > > +    description:
-> > > > +      Input port node, receives the panel data.
-> > > > +
-> > > > +    properties:
-> > > > +      endpoint:
-> > > > +        $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> > > > +
-> > > > +        properties:
-> > > > +          bus-format:
-> > > > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > > > +            minimum: 0x1001
-> > > > +            maximum: 0x1fff
-> > > > +            description: |
-> > > > +              Describes how the display panel is connected to the display interface.
-> > > > +              Valid values are defined in <dt-bindings/display/dt-media-bus-format.h>.
-> > > > +              The mapping between the color/significance of the panel lines to the
-> > > > +              parallel data lines are defined in:
-> > > > +              https://www.kernel.org/doc/html/v5.17/userspace-api/media/v4l/subdev-formats.html#packed-rgb-formats
-> > > > +
-> > >
-> > > Last month I had the chance to talk in person about this topic with
-> > > Dave, Marek and Max in Dublin.
-> > >
-> > > My understanding is that this change is addressing a general need, Dave
-> > > confirmed me they have a downstream patch for raspberrypi [1].
-> > >
-> > > From what I could tell the only concern is about the actual encoding of
-> > > this `bus-format` property.
-> > >
-> > > I am personally convinced that a simple enum is the way to go, I think
-> > > that Marek proposal is adding complexity and not flexibility (from my
-> > > understanding Dave is on the same page, just correct me if I
-> > > misunderstood you).
-> >
-> > Yes I agree with you here.
-> >
-> > This binding is for the panel, and currently the only path to pass the
-> > panel mode to the DPI transmitter is one or more MEDIA_BUS_FMT_* enums
-> > in struct drm_display_info *bus_formats.
-> >
-> > Looking at Marek's comment over DSI and data-lanes, yes both source
-> > and sink could advertise a data-lanes property to cover the condition
-> > where they aren't wired up in a 1:1 fashion. Reality is that most
-> > drivers don't support reordering the lanes - looking at the bindings,
-> > only one (msm) documents the use of data-lanes on the host side.
-> > rcar_mipi_dsi looks at the number of lanes specified only, and then
-> > checks that the number requested by the device is <= the number
-> > configured.
-> >
-> > As I see it, the comparison here is that this "bus-format" property is
-> > the equivalent of the data-lanes on the sink, and is the desired
-> > number of lanes value passed from sink to source (one integer, not a
-> > mapping).
-> > If the source can reorder the lanes, then that is a property of the
-> > source. This binding is for the sink, and so isn't a reasonable
-> > comparison. It also doesn't have to be called "bus-format" on the
-> > source, and can take a totally different form.
-> > I'll admit that I know data-lane configuration more from CSI2, but
-> > within V4L2 it is the node that can support reordering that should
-> > have the lanes in a non-incrementing order, and that is normally the
-> > SoC rather than the sensor. The same would seem to apply here - it's
-> > the SoC that can remap the signals, not the panel.
-> >
-> > It could be argued that for DPI the panel should only advertise the
-> > panel's bit depth for each channel, not the padding. The panel is
-> > generic and could handle any wiring/padding options, and it isn't
-> > necessarily a simple 16/18/24/32 bit bus representation, just a
-> > collection of N wires.
-> > Padding and wiring is a function of the DPI transmitter / SoC, or
-> > potentially an interconnect node between the two.
->
-> Sooo... I'm not sure where to start :-)
->
-> I think the trouble when describing the connection between a source and
-> a sink in DT is that none of the source or sink is an ideal place to
-> describe properties of the connection.
->
-> For DSI we have it relatively easy, as we only have to describe the
-> number of lanes that are routed on the board and possibly how the lanes
-> are rearranged. The former is a value that is common between the source
-> and the sink, that's the easiest case, it can be specified in both DT
-> nodes. The latter is a bit more complicated, and was solved by allowing
-> specifying lane reordering on both the source and the sink. As there is
-> typically only one of the two components that will support lane
-> reordering (if any), DTs will usually specify a 1:1 mapping on one side,
-> and possibly reorder on the other side. If both the source and the sink
-> support reordering, setting data-lanes = <1 2> on both sides would lead
-> to a different configuration than data-lanes = <2 1>, but both would
-> work the same (I'm not sure why anyone would want the latter though).
-> There may thus be multiple ways to describe a working setup, but that's
-> fine, the complexity is manageable, and any hardware configuration can
-> be described.
->
-> The nice thing with DSI is that the actual data format doesn't depend on
-> the board configuration (provided of course that enough lanes are
-> available to sustain the required bandwidth). For DPI, things can be
-> more difficult. In the test below, "format" refers to how data bits are
-> mapped to hardware lines, similarly in concept to the media bus codes.
->
-> I see three different cases at the hardware level:
->
-> - Either or both the sink or the source support a single format. This
->   means that the side that supports multiple formats will always use the
->   same format. If data lines are rearranged, the format output by the
->   source may not match the format received by the sink, but the hardware
->   configuration of both the sink and the source is effectively fixed to
->   system-specific values.
->
-> - Both the sink and the source support multiple formats, but only one
->   combination of formats is possible with how the data lines are routed.
->   This case is very similar to the previous one at the hardware level,
->   only one configuration is possible.
->
-> - Both the sink and the source support multiple formats, and multiple
->   format combinations can lead to working configurations. This isn't an
->   uncommon case, there are DPI panels with 24 data lines that can
->   support both RGB666 and RGB888.
->
-> At the software level, there are also multiple options:
->
-> - Both sides could specify the device configuration in DT, using media
->   bus codes or any other set of standard or device-specific properties.
->   As this would specify a single configuration, it would map quite fine
->   to the first two hardware cases. Each driver would read its own
->   properties and configure the device accordingly. There would be no
->   need for communication between the drivers at runtime in this case.
->
->   This could also support the third hardware case, but would limit it to
->   one of the supported configurations, without allowing the other ones
->   to be selected at runtime.
->
->   This scheme is similar to data-lanes, in the sense that each side
->   reads its own hardcoded configuration from DT. It does however differ
->   in that the data format gets hardcoded as well, unlike DSI where the
->   data formats needs to be communicated at runtime between the drivers.
->   As, like DSI, it requires both sides to specify their hardware
->   configuration in DT, interoperability between sources and sinks would
->   require all DT bindings for all DPI devices to adhere to this. They
->   may not have to specify their configuration using the same set of
->   properties, but they would all need to specify it in DT. This would
->   thus, I think, lead to a dead end for the third hardware case.
->
-> - The two sides could communicate at runtime to dynamically negotiate
->   their configuration. Some form of runtime configuration is required to
->   fully support the third hardware case, and it could also support the
->   other two cases.
->
->   The trouble here, beside how to express the required data in DT, is
->   how that communication would be handled. Let's consider a case where
->   data lines are "remapped":
->
->   - The display controller that has a D[23:0] output bus
->   - The panel that has a D[17:0] bus
->   - The data lines connections from the display controller to the panel
->     are D[23:18] -> D[17:12], D[15:10] -> D[11:6], D[7:2] -> D[5:0],
->     with the display controller's D[17:16], D[9:8] and D[1:0] outputs
->     unconnected
->   - The panel only supports RGB666
->   - The display controller supports both RGB888 and RGB666, and outputs
->     RGB666 as 00RRRRRR00GGGGGG00BBBBBB
+> All these tests depend on the ping command and will fail if it is not
+> found. Allow tests to specify dependencies on programs through the
+> 'requires' field. Add dependency on 'ping' for some of the trigger
+> tests.
+> 
+> Reported-by: Akanksha J N <akanksha@linux.vnet.ibm.com>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-Note that you're also effectively advocating for dropping all BGRxxx
-variants from panel definitions, as well as the CPAD variants. All of
-those would be handled in the wiring description. Not an issue, just
-worth flagging.
+Thanks, this looks good to me.
 
->   This means that the only possibly configuration is the display
->   controller outputting RGB888 and the panel receiving RGB666. If we
->   expressed that as media bus codes in DT, the panel would would
->   communicate its RGB666 input format to the display controller, which
->   wouldn't know that it would have to output RGB888.
->
->   Of course, in this particular example, only one hardware configuration
->   is possible, so we could support it by specifying the media bus code
->   in both DT nodes, but that won't scale to cases where multiple
->   configurations are possible.
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-I'll agree that the existing framework is broken in many cases, but
-it's broken for ALL panel drivers, not just panel-dpi.
-Any of the current drivers with specific compatible strings that
-provide two or more bus formats have no mechanism for negotiating or
-being told which has been chosen.
-Any mapping that isn't 1:1 can't be represented.
-
-This binding change for dpi-panel is just to bring it up to the same
-level of brokenness as all other panels.
-Yes it's DT ABI, but almost all the issues raised are about other brokenness.
-
-> The easy optin is to consider that most use cases are in the first two
-> hardware categories, specify the media bus code in DT on both sides, and
-> consider that support for the third category can be added later. I'm
-> worried that we would then corner ourselves, as explained above, because
-> this scheme requires all devices involved to specify their hardcoded
-> configuration in DT.
->
-> Will there then be a path forward that wouldn't
-> break the DT ABI ? Even if there was, it would mean that all driver
-> would then need to support two sets of DT properties, leading to a
-> painful transition period on the driver side.
-
-Very few displays need to read their format from DT - dpi-panel is the
-only one as it allows a level of configuration from DT.
-If the panel driver has a defined compatible string, then the
-format(s) is/are in the code and not DT.
-
-Once you get beyond the one entry in DT, it's an internal kernel API
-and therefore can be reworked at a later date.
+> ---
+>  tools/testing/selftests/ftrace/test.d/functions           | 8 +++++++-
+>  .../trigger/inter-event/trigger-field-variable-support.tc | 2 +-
+>  .../inter-event/trigger-inter-event-combined-hist.tc      | 2 +-
+>  .../trigger/inter-event/trigger-onchange-action-hist.tc   | 2 +-
+>  .../trigger/inter-event/trigger-onmatch-action-hist.tc    | 2 +-
+>  .../inter-event/trigger-onmatch-onmax-action-hist.tc      | 2 +-
+>  .../trigger/inter-event/trigger-onmax-action-hist.tc      | 2 +-
+>  .../trigger/inter-event/trigger-snapshot-action-hist.tc   | 2 +-
+>  .../inter-event/trigger-synthetic-event-dynstring.tc      | 2 +-
+>  .../trigger/inter-event/trigger-trace-action-hist.tc      | 2 +-
+>  10 files changed, 16 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+> index 5f6cbec847fc99..779f3e62ec9005 100644
+> --- a/tools/testing/selftests/ftrace/test.d/functions
+> +++ b/tools/testing/selftests/ftrace/test.d/functions
+> @@ -142,9 +142,15 @@ finish_ftrace() {
+>  
+>  check_requires() { # Check required files and tracers
+>      for i in "$@" ; do
+> +	p=${i%:program}
+>          r=${i%:README}
+>          t=${i%:tracer}
+> -        if [ $t != $i ]; then
+> +	if [ $p != $i ]; then
+> +	    if ! which $p ; then
+> +                echo "Required program $p is not found."
+> +                exit_unresolved
+> +	    fi
+> +        elif [ $t != $i ]; then
+>              if ! grep -wq $t available_tracers ; then
+>                  echo "Required tracer $t is not configured."
+>                  exit_unsupported
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> index 41119e0440e960..04c5dd7d0acc4b 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test field variable support
+> -# requires: set_event synthetic_events events/sched/sched_process_fork/hist
+> +# requires: set_event synthetic_events events/sched/sched_process_fork/hist ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+> index 9098f1e7433fd0..f7447d800899ac 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-inter-event-combined-hist.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event combined histogram trigger
+> -# requires: set_event synthetic_events events/sched/sched_process_fork/hist
+> +# requires: set_event synthetic_events events/sched/sched_process_fork/hist ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+> index adaabb873ed4ab..91339c1308324b 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger onchange action
+> -# requires: set_event "onchange(var)":README
+> +# requires: set_event "onchange(var)":README ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
+> index 20e39471052e9a..d645abcf11c4f7 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-action-hist.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger onmatch action
+> -# requires: set_event synthetic_events events/sched/sched_process_fork/hist
+> +# requires: set_event synthetic_events events/sched/sched_process_fork/hist ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
+> index f4b03ab7c28714..c369247efb3501 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmatch-onmax-action-hist.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger onmatch-onmax action
+> -# requires: set_event synthetic_events events/sched/sched_process_fork/hist
+> +# requires: set_event synthetic_events events/sched/sched_process_fork/hist ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
+> index 71c9b5911c7067..e28dc5f11b2be0 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onmax-action-hist.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger onmax action
+> -# requires: set_event synthetic_events events/sched/sched_process_fork/hist
+> +# requires: set_event synthetic_events events/sched/sched_process_fork/hist ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+> index 67fa328b830f5f..147967e86584ac 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger snapshot action
+> -# requires: set_event snapshot events/sched/sched_process_fork/hist "onchange(var)":README "snapshot()":README
+> +# requires: set_event snapshot events/sched/sched_process_fork/hist "onchange(var)":README "snapshot()":README ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
+> index 3d65c856eca3e6..213d890ed1886e 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger trace action with dynamic string param
+> -# requires: set_event synthetic_events events/sched/sched_process_exec/hist "char name[]' >> synthetic_events":README
+> +# requires: set_event synthetic_events events/sched/sched_process_exec/hist "char name[]' >> synthetic_events":README ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc
+> index c126d2350a6d41..d7312047ce2818 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-trace-action-hist.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger trace action
+> -# requires: set_event synthetic_events events/sched/sched_process_fork/hist "trace(<synthetic_event>":README
+> +# requires: set_event synthetic_events events/sched/sched_process_fork/hist "trace(<synthetic_event>":README ping:program
+>  
+>  fail() { #msg
+>      echo $1
+> -- 
+> 2.38.0
+> 
 
 
-If and when someone needs to extend DPI transmitters to read DT for
-simple mappings, then create and use a helper function to do the
-parsing. Currently the helper would return a MEDIA_BUS_FMT_ code, but
-internally it can have gone through the correct sets of hoops to
-either read DT, follow the bridge chain with
-atomic_get_input_bus_fmts, or otherwise find the panel to get a
-format. (This assumes that there is one true and correct method for
-getting the format which is implemented by all drivers).
-
-Should there be a situation further down the road where there is a
-need to extend that further, then a new helper function needs to be
-added that is able to read either DT API and convert between them. The
-existing helper will also need updating to support conversion from the
-new DT API.
-Converting from a "bus-format" to a more complete description for a
-new driver should be trivial with a lookup table. Converting from a
-new DT API to a single mbus format should be possible (reverse the
-previous lookup table), but you have to accept that there are new DT
-configurations that can not be expressed by mbus format, and therefore
-that the helper function can return an error.
-
-DPI transmitter drivers can be converted to the new helper as
-required, or potentially if they can't support arbitrary routing then
-they stay on the old helper forever as it will work both new and old
-bindings.
-
-
-Does this one patch for one driver really back ourselves into a corner
-that can't be handled?
-
-The one case I can think of as potentially an issue is if *bus_formats
-is removed totally from struct drm_display_info to be replaced by
-something else more generic. Under that situation you may need to
-match up an existing DT file using bus-format for a padded or BGR
-format with a brave new world where the panel advertises a DPI
-descriptor that is normally 1:1 and the DPI transmitter has the
-mapping. Even then I think is is possible as the DPI transmitter won't
-have a mapping in the old DT. It will then be looking at the
-configuration provided by the panel which will be one of the standard
-table lookups for an MEDIA_BUS_FMT_xxx_, and that gets us back to the
-same configuration as before.
-
-Thanks.
-  Dave
-
-> > > The current proposal is already encoding the exact bit placing as
-> > > described in Documentation/userspace-api/media/v4l/subdev-formats.rst [2],
-> > > this enumeration can be extended to address any future needs
-> > > and I would not invent a new one to define the exact same
-> > > things (and using the same enum was also suggested by Rob).
-> > >
-> > > Marek: you told me that you had some concern about some valid use case
-> > > not covered by this solution, would you mind explaining why that would
-> > > not be covered with an addition on this enumeration?
-> >
-> > All the MEDIA_BUS_FMT_* enums are explicitly defined with regard to
-> > the colour component bit positions. Should someone be in the position
-> > of needing to implement a YUV or similar DPI display, converting these
-> > enums into the relevant new structure will be straightforward, so
-> > backwards compatibility can be achieved easily.
-> >
-> > > Any other opinion on this topic? How can we move this forward?
-> > >
-> > > Francesco
-> > >
-> > > [1] https://github.com/raspberrypi/linux/commit/8e43f1898191b43aa7ed6e6ca3a4cd28709af86d
-> > > [2] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/subdev-formats.html
->
-> --
-> Regards,
->
-> Laurent Pinchart
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
