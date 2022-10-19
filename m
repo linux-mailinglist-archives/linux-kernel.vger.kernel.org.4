@@ -2,53 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFF460542A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C486A605435
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbiJSXn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 19:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S229971AbiJSXuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 19:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJSXnv (ORCPT
+        with ESMTP id S229807AbiJSXuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 19:43:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245D3157F59;
-        Wed, 19 Oct 2022 16:43:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19346B82639;
-        Wed, 19 Oct 2022 23:43:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BFEC433C1;
-        Wed, 19 Oct 2022 23:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666223025;
-        bh=SkLLkcU5TOFI2QjJPz7/UivzW23oiY6PsaSXHNNVu3M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=InHDNrPnMkFob4mpq5C6539OmORNNVC7wBXoXxKdnXLwi1LR4tzNBQEu4c8Z+EQ62
-         o8Du9O3vRs8qfvKQ47F2/TSXqCNCGyjPA+ACsBiPgrS5ojxiya3HjvAUds3wkyAtnR
-         1Lp30P3VN8keUlmBEL4+0yXwTUraS41QD6KC8tY7mL/xtjtLVziNk2x2AWSiKyd2dL
-         G2UQSqb5owTumHZXrl3p0iJbbbkmJFCb1iyVeTETN5Z8d7O7/q8RtIpfs8RNSSoHov
-         5ozpr0eF6vBJbxeJUqFi3j9hU5D8oHhdO7wt3U435w4mxJ2Zh66d2BlOpGayaRawJG
-         JzRvSN0xpnKYA==
-Date:   Wed, 19 Oct 2022 16:43:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <linux-kernel@vger.kernel.org>, <Bryan.Whitehead@microchip.com>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next V4] net: lan743x: Add support to SGMII register
- dump for PCI11010/PCI11414 chips
-Message-ID: <20221019164344.52cf16dd@kernel.org>
-In-Reply-To: <20221018061425.3400-1-Raju.Lakkaraju@microchip.com>
-References: <20221018061425.3400-1-Raju.Lakkaraju@microchip.com>
+        Wed, 19 Oct 2022 19:50:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D88FF8F6;
+        Wed, 19 Oct 2022 16:50:10 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JMvF0N005767;
+        Wed, 19 Oct 2022 23:49:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PKlvJyr2CLODo5qWsgOnyStlxfDpx8K32m51Mvty0So=;
+ b=EjX1n2PSktb274+6pjGEvtdzZnnWDOXhkKVCbxAyAWKx4HP2x/ZVnvTqbJw5G/Z5ltDz
+ 4//ppxyLpti16SePtoXOT2FI4rFZxrfaMEKAPWiPttDJX+V7lcCqaa2nsdYGqgrBMZrC
+ pWIMg9UttruVAUMp3BEZDTDH9uNhQ6161N6FSo46YDiM8okl7pvLO2sJeSFmneZ21bqI
+ xbcnBHcTOIoLbE7KavwV1YDd35rj5Lk8fr4O8lJZzZB5VnryQTvzKaAkwvOJC2eTkb5f
+ knnIvlyfVmYKRYjFvhFxTHhxHRPPU3f56O9r7zU+oRHPuGc7VSBZBYbLwiC4XI7TOq9P rw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ka820v6kc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 23:49:53 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29JNnqiK031012
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 23:49:52 GMT
+Received: from [10.134.66.255] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 19 Oct
+ 2022 16:49:52 -0700
+Message-ID: <0d9123cd-d741-31c3-7c75-92c8e98e1000@quicinc.com>
+Date:   Wed, 19 Oct 2022 16:49:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 3/6] clk: qcom: branch: Add BRANCH_HALT_INVERT flag
+ support for branch clocks
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Imran Shaik <quic_imrashai@quicinc.com>
+References: <20221014221011.7360-1-quic_molvera@quicinc.com>
+ <20221014221011.7360-4-quic_molvera@quicinc.com>
+ <20221015002007.E3815C433D7@smtp.kernel.org>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <20221015002007.E3815C433D7@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: IYAedlfPUMCJJK-RJSWQ85rBRpKeYDL7
+X-Proofpoint-GUID: IYAedlfPUMCJJK-RJSWQ85rBRpKeYDL7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_13,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190133
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,58 +88,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 11:44:25 +0530 Raju Lakkaraju wrote:
-> Add support to SGMII register dump
 
-> +++ b/drivers/net/ethernet/microchip/lan743x_ethtool.c
-> @@ -24,6 +24,9 @@
->  #define LOCK_TIMEOUT_MAX_CNT		    (100) // 1 sec (10 msce * 100)
->  
->  #define LAN743X_CSR_READ_OP(offset)	     lan743x_csr_read(adapter, offset)
-> +#define VSPEC1			MDIO_MMD_VEND1
-> +#define VSPEC2			MDIO_MMD_VEND2
-> +#define SGMII_RD(adp, dev, adr) lan743x_sgmii_dump_read(adp, dev, adr)
 
-These defines help limit the line length?
-Please don't obfuscate code like that, see below.
+On 10/14/2022 5:20 PM, Stephen Boyd wrote:
+> Quoting Melody Olvera (2022-10-14 15:10:08)
+>> diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
+>> index f869fc6aaed6..b5dc1f4ef277 100644
+>> --- a/drivers/clk/qcom/clk-branch.c
+>> +++ b/drivers/clk/qcom/clk-branch.c
+>> @@ -1,6 +1,7 @@
+>>  // SPDX-License-Identifier: GPL-2.0
+>>  /*
+>>   * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
+>>   */
+>>  
+>>  #include <linux/kernel.h>
+>> @@ -56,6 +57,10 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
+>>  
+>>         if (enabling) {
+>>                 val &= mask;
+>> +
+>> +               if (br->halt_check == BRANCH_HALT_INVERT)
+>> +                       return (val & BRANCH_CLK_OFF) == BRANCH_CLK_OFF;
+>> +
+>>                 return (val & BRANCH_CLK_OFF) == 0 ||
+>>                         val == BRANCH_NOC_FSM_STATUS_ON;
+>>         } else {
+>> diff --git a/drivers/clk/qcom/clk-branch.h b/drivers/clk/qcom/clk-branch.h
+>> index 17a58119165e..4ac1debeb91e 100644
+>> --- a/drivers/clk/qcom/clk-branch.h
+>> +++ b/drivers/clk/qcom/clk-branch.h
+>> @@ -1,5 +1,6 @@
+>>  /* SPDX-License-Identifier: GPL-2.0 */
+>>  /* Copyright (c) 2013, The Linux Foundation. All rights reserved. */
+>> +/* Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved. */
+>>  
+>>  #ifndef __QCOM_CLK_BRANCH_H__
+>>  #define __QCOM_CLK_BRANCH_H__
+>> @@ -33,6 +34,7 @@ struct clk_branch {
+>>  #define BRANCH_HALT_ENABLE_VOTED       (BRANCH_HALT_ENABLE | BRANCH_VOTED)
+>>  #define BRANCH_HALT_DELAY              2 /* No bit to check; just delay */
+>>  #define BRANCH_HALT_SKIP               3 /* Don't check halt bit */
+>> +#define BRANCH_HALT_INVERT             4 /* Invert logic for halt bit */
+> How is it different from BRANCH_HALT vs. BRANCH_HALT_ENABLE?
+Main difference here is in how other parts of the register are checked to see if halting
+happened or not. Turns out the clocks that use this can be reconfigured to be a little
+more friendly to the code already submitted, so this patch isn't necessary. I'll drop it
+in the next PS.
 
-> +static void lan743x_sgmii_regs(struct net_device *dev, void *p)
-> +{
-> +	struct lan743x_adapter *adp = netdev_priv(dev);
-> +	u32 *rb = p;
-> +
-> +	rb[ETH_SR_VSMMD_DEV_ID1]                = SGMII_RD(adp, VSPEC1, 0x0002);
-> +	rb[ETH_SR_VSMMD_DEV_ID2]                = SGMII_RD(adp, VSPEC1, 0x0003);
-> +	rb[ETH_SR_VSMMD_PCS_ID1]                = SGMII_RD(adp, VSPEC1, 0x0004);
-> +	rb[ETH_SR_VSMMD_PCS_ID2]                = SGMII_RD(adp, VSPEC1, 0x0005);
-> +	rb[ETH_SR_VSMMD_STS]                    = SGMII_RD(adp, VSPEC1, 0x0008);
-> +	rb[ETH_SR_VSMMD_CTRL]                   = SGMII_RD(adp, VSPEC1, 0x0009);
-> +	rb[ETH_SR_MII_CTRL]                     = SGMII_RD(adp, VSPEC2, 0x0000);
-> +	rb[ETH_SR_MII_STS]                      = SGMII_RD(adp, VSPEC2, 0x0001);
-> +	rb[ETH_SR_MII_DEV_ID1]                  = SGMII_RD(adp, VSPEC2, 0x0002);
-> +	rb[ETH_SR_MII_DEV_ID2]                  = SGMII_RD(adp, VSPEC2, 0x0003);
-> +	rb[ETH_SR_MII_AN_ADV]                   = SGMII_RD(adp, VSPEC2, 0x0004);
-> +	rb[ETH_SR_MII_LP_BABL]                  = SGMII_RD(adp, VSPEC2, 0x0005);
-> +	rb[ETH_SR_MII_EXPN]                     = SGMII_RD(adp, VSPEC2, 0x0006);
-> +	rb[ETH_SR_MII_EXT_STS]                  = SGMII_RD(adp, VSPEC2, 0x000F);
-> +	rb[ETH_SR_MII_TIME_SYNC_ABL]            = SGMII_RD(adp, VSPEC2, 0x0708);
-> +	rb[ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x0709);
-
-You can declare a structure holding the params and save the info there:
-
-	struct {
-		u8 id;
-		u8 dev;
-		u16 addr;
-	} regs[] = {
-		{ ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR,	MDIO_MMD_VEND2,	0x0709 },
-	};
-
-that should fit on the line.
-
-You can then read the values in a loop. And inside that loop you can
-handle errors (perhaps avoiding the need for lan743x_sgmii_dump_read()
-which seems rather unnecessary as lan743x_sgmii_read() already prints 
-errors).
-
-FWIW I like Andrew's suggestion from v3 to use version as a bitfield, too.
+Thanks,
+Melody
