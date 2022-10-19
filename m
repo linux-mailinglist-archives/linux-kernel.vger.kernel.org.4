@@ -2,190 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1BD604BBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5032F604BD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiJSPiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S231722AbiJSPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiJSPhz (ORCPT
+        with ESMTP id S232145AbiJSPi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:37:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640DB11A14;
-        Wed, 19 Oct 2022 08:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666193662; x=1697729662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UHIaR+J+RVnHQe0Epq5Q2DkYje1xjf/qW1B/YS+Op6c=;
-  b=VvPpVcXKTnPm6ViHgyMo2/wtljFGuq5++wIOWJJ9lsIjZw6LauP0h0Mb
-   L9Zy/NS3EsTIAcFWU15APa5MqDs8bKuQhlvN85adCPYfGT+IAMLvF47+F
-   154orwrFsWezjQqUTt1DxS+h2+iKAa/kEuOIXq2f2jhZgNjjhxxgqZyjb
-   s4aqi2BiCcAOnfvZLXHfWA22nXOx7GVEsK5XKQHj1BSi0VVboLmvcN/Gz
-   m6Q67G+bKe7iT+/Ec+4agKVwm/wt2qGZr2ckLQFbT6fHqkrAzcZgCBf8I
-   QzancLZ9mEatE46AXkpNbFF/4MfyhI0aTvo6ybne0Ya9+kxYwfzxoWonG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="286163006"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="286163006"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 08:32:38 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="607149381"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="607149381"
-Received: from selvaku-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.38.73])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 08:32:28 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id DEF33106C73; Wed, 19 Oct 2022 18:32:25 +0300 (+03)
-Date:   Wed, 19 Oct 2022 18:32:25 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <20221019153225.njvg45glehlnjgc7@box.shutemov.name>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <de680280-f6b1-9337-2ae4-4b2faf2b823b@suse.cz>
- <20221017161955.t4gditaztbwijgcn@box.shutemov.name>
- <c63ad0cd-d517-0f1e-59e9-927d8ae15a1a@amd.com>
- <20221017215640.hobzcz47es7dq2bi@box.shutemov.name>
- <CAGtprH8xEdgATjQdhi2b_KqUuSOZHUM-Lh+O-ZtcFKbHf2_75g@mail.gmail.com>
+        Wed, 19 Oct 2022 11:38:57 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B9611D9AB;
+        Wed, 19 Oct 2022 08:35:04 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id w196so19629996oiw.8;
+        Wed, 19 Oct 2022 08:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=laOx8JEUkYOBVsrZgeUaM0M4fbp7OLGnhupIrYPqb4w=;
+        b=RrQWM8yAa/UvluekZaABCeB0Aj49W8VpK7/qpWX2XyabhBVIJvyvImRc16Kl82x/uo
+         5R+MTXu1XvFUSP6G6VbvChnhXMP8cM0E51V1JhLmDEyblBauJ/cKBTUS6HI82gLxRAqS
+         mkeBpyf4OH9NkCQnbK1tuYa1ZGhftb4k0C3HiQIMxxniZNH1WzgF6LkbO9PDHgsz6kcC
+         Tg6GLPCG2shArlndJslH2NaHOjE2wHOIjv/dZrZ42KyQlm7mXZa0+ptZ70uj+uheX4/p
+         ee9PwIFwCvZww9BCYZvKcXBXCakOWaaiTp8xsCYPNa7jpKqiFkaCN/gVyM+VJG+u6G91
+         fosw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=laOx8JEUkYOBVsrZgeUaM0M4fbp7OLGnhupIrYPqb4w=;
+        b=vnooGYSHblFoi+DiJcXM+LVwVo5D8/2Z/9HfEWzSS+U6LCiQvekaxPHLd7Nyf49tAs
+         g02c2WLJhZITMmYW4uHLU4vFOeuUKKKtz5IuC7tRq4Z4oYpzEGJ0/IsBJpeRIBCc8RiH
+         GGUGOwtPeuX6wHIZokGupk0L4UjpK01vy98h4pNFoakO9uIi8qYHChZKkdlep9ffLfZB
+         HvGvN9aYJDXbD+dp6Nlx1SsOwYiwQ0vTX04j24THZLANaxK+cAWZEJf4ytSlQki50Wvm
+         oc9YWfDRD0cHT2H5azUgAlG2p9V6m+sa36Akbhn47QSHP8hq2gShniaMnVrldwIEP7lK
+         beUQ==
+X-Gm-Message-State: ACrzQf3H4enb/erunmPhxtXIgqW/wdxKGbu8CnVcSey3oIn7qsWpgaF0
+        HrNMDj6f2/qKl32uD9fI1/M=
+X-Google-Smtp-Source: AMsMyM7S1b7Sbh6MAlG1ceyYKGiYGhaEiw1qbNfnuu1w0Mxwzi9gAiWFmoQkB+AdGBRzHRfgyzfBSA==
+X-Received: by 2002:a05:6808:221b:b0:354:cca5:9215 with SMTP id bd27-20020a056808221b00b00354cca59215mr4756130oib.53.1666193589306;
+        Wed, 19 Oct 2022 08:33:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bd40-20020a056870d7a800b0012d6f3d370bsm7507906oab.55.2022.10.19.08.33.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 08:33:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 19 Oct 2022 08:33:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org, shawnguo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
+        kernel@pengutronix.de, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, robh+dt@kernel.org
+Subject: Re: [PATCH 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
+Message-ID: <20221019153306.GC4602@roeck-us.net>
+References: <20221019111714.1953262-1-andrej.picej@norik.com>
+ <20221019111714.1953262-2-andrej.picej@norik.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGtprH8xEdgATjQdhi2b_KqUuSOZHUM-Lh+O-ZtcFKbHf2_75g@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221019111714.1953262-2-andrej.picej@norik.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 07:12:10PM +0530, Vishal Annapurve wrote:
-> On Tue, Oct 18, 2022 at 3:27 AM Kirill A . Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > On Mon, Oct 17, 2022 at 06:39:06PM +0200, Gupta, Pankaj wrote:
-> > > On 10/17/2022 6:19 PM, Kirill A . Shutemov wrote:
-> > > > On Mon, Oct 17, 2022 at 03:00:21PM +0200, Vlastimil Babka wrote:
-> > > > > On 9/15/22 16:29, Chao Peng wrote:
-> > > > > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > > > > >
-> > > > > > KVM can use memfd-provided memory for guest memory. For normal userspace
-> > > > > > accessible memory, KVM userspace (e.g. QEMU) mmaps the memfd into its
-> > > > > > virtual address space and then tells KVM to use the virtual address to
-> > > > > > setup the mapping in the secondary page table (e.g. EPT).
-> > > > > >
-> > > > > > With confidential computing technologies like Intel TDX, the
-> > > > > > memfd-provided memory may be encrypted with special key for special
-> > > > > > software domain (e.g. KVM guest) and is not expected to be directly
-> > > > > > accessed by userspace. Precisely, userspace access to such encrypted
-> > > > > > memory may lead to host crash so it should be prevented.
-> > > > > >
-> > > > > > This patch introduces userspace inaccessible memfd (created with
-> > > > > > MFD_INACCESSIBLE). Its memory is inaccessible from userspace through
-> > > > > > ordinary MMU access (e.g. read/write/mmap) but can be accessed via
-> > > > > > in-kernel interface so KVM can directly interact with core-mm without
-> > > > > > the need to map the memory into KVM userspace.
-> > > > > >
-> > > > > > It provides semantics required for KVM guest private(encrypted) memory
-> > > > > > support that a file descriptor with this flag set is going to be used as
-> > > > > > the source of guest memory in confidential computing environments such
-> > > > > > as Intel TDX/AMD SEV.
-> > > > > >
-> > > > > > KVM userspace is still in charge of the lifecycle of the memfd. It
-> > > > > > should pass the opened fd to KVM. KVM uses the kernel APIs newly added
-> > > > > > in this patch to obtain the physical memory address and then populate
-> > > > > > the secondary page table entries.
-> > > > > >
-> > > > > > The userspace inaccessible memfd can be fallocate-ed and hole-punched
-> > > > > > from userspace. When hole-punching happens, KVM can get notified through
-> > > > > > inaccessible_notifier it then gets chance to remove any mapped entries
-> > > > > > of the range in the secondary page tables.
-> > > > > >
-> > > > > > The userspace inaccessible memfd itself is implemented as a shim layer
-> > > > > > on top of real memory file systems like tmpfs/hugetlbfs but this patch
-> > > > > > only implemented tmpfs. The allocated memory is currently marked as
-> > > > > > unmovable and unevictable, this is required for current confidential
-> > > > > > usage. But in future this might be changed.
-> > > > > >
-> > > > > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > > > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > > > > > ---
-> > > > >
-> > > > > ...
-> > > > >
-> > > > > > +static long inaccessible_fallocate(struct file *file, int mode,
-> > > > > > +                                  loff_t offset, loff_t len)
-> > > > > > +{
-> > > > > > +       struct inaccessible_data *data = file->f_mapping->private_data;
-> > > > > > +       struct file *memfd = data->memfd;
-> > > > > > +       int ret;
-> > > > > > +
-> > > > > > +       if (mode & FALLOC_FL_PUNCH_HOLE) {
-> > > > > > +               if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-> > > > > > +                       return -EINVAL;
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-> > > > > > +       inaccessible_notifier_invalidate(data, offset, offset + len);
-> > > > >
-> > > > > Wonder if invalidate should precede the actual hole punch, otherwise we open
-> > > > > a window where the page tables point to memory no longer valid?
-> > > >
-> > > > Yes, you are right. Thanks for catching this.
-> > >
-> > > I also noticed this. But then thought the memory would be anyways zeroed
-> > > (hole punched) before this call?
-> >
-> > Hole punching can free pages, given that offset/len covers full page.
-> >
-> > --
-> >   Kiryl Shutsemau / Kirill A. Shutemov
+On Wed, Oct 19, 2022 at 01:17:12PM +0200, Andrej Picej wrote:
+> Putting device into the "Suspend-To-Idle" mode causes watchdog to
+> trigger and reset the board after set watchdog timeout period elapses.
 > 
-> I think moving this notifier_invalidate before fallocate may not solve
-> the problem completely. Is it possible that between invalidate and
-> fallocate, KVM tries to handle the page fault for the guest VM from
-> another vcpu and uses the pages to be freed to back gpa ranges? Should
-> hole punching here also update mem_attr first to say that KVM should
-> consider the corresponding gpa ranges to be no more backed by
-> inaccessible memfd?
+> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+> watchdog in WAIT mode. This is done by setting WDW bit in WCR
+> (Watchdog Control Register) Watchdog operation is restored after exiting
+> WAIT mode as expected. WAIT mode coresponds with Linux's
+> "Suspend-To-Idle".
+> 
 
-We rely on external synchronization to prevent this. See code around
-mmu_invalidate_retry_hva().
+Does that have any impact on suspend/resume handling in the driver,
+specifically with the "no_ping" variable used for fsl,imx7d-wdt ?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Thanks,
+Guenter
+
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> ---
+>  drivers/watchdog/imx2_wdt.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> index d0c5d47ddede..150ba83ce176 100644
+> --- a/drivers/watchdog/imx2_wdt.c
+> +++ b/drivers/watchdog/imx2_wdt.c
+> @@ -35,6 +35,7 @@
+>  
+>  #define IMX2_WDT_WCR		0x00		/* Control Register */
+>  #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
+> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable for WAIT */
+>  #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset WDOG_B */
+>  #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset Signal */
+>  #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable */
+> @@ -67,6 +68,7 @@ struct imx2_wdt_device {
+>  	bool ext_reset;
+>  	bool clk_is_on;
+>  	bool no_ping;
+> +	bool sleep_wait;
+>  };
+>  
+>  static bool nowayout = WATCHDOG_NOWAYOUT;
+> @@ -129,6 +131,9 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
+>  
+>  	/* Suspend timer in low power mode, write once-only */
+>  	val |= IMX2_WDT_WCR_WDZST;
+> +	/* Suspend timer in low power WAIT mode, write once-only */
+> +	if (wdev->sleep_wait)
+> +		val |= IMX2_WDT_WCR_WDW;
+>  	/* Strip the old watchdog Time-Out value */
+>  	val &= ~IMX2_WDT_WCR_WT;
+>  	/* Generate internal chip-level reset if WDOG times out */
+> @@ -313,6 +318,8 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>  
+>  	wdev->ext_reset = of_property_read_bool(dev->of_node,
+>  						"fsl,ext-reset-output");
+> +	wdev->sleep_wait = of_property_read_bool(dev->of_node,
+> +						"fsl,suspend-in-wait");
+>  	/*
+>  	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
+>  	 * during suspend.
+> -- 
+> 2.25.1
+> 
