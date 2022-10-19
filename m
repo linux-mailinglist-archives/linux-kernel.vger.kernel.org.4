@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D50D603D27
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23BA60404D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiJSI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S234315AbiJSJph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiJSI5C (ORCPT
+        with ESMTP id S234868AbiJSJlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:57:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4321452085;
-        Wed, 19 Oct 2022 01:52:51 -0700 (PDT)
+        Wed, 19 Oct 2022 05:41:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB553559D;
+        Wed, 19 Oct 2022 02:18:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82E906174E;
-        Wed, 19 Oct 2022 08:51:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9410AC433D7;
-        Wed, 19 Oct 2022 08:51:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF06561873;
+        Wed, 19 Oct 2022 08:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E0CC433C1;
+        Wed, 19 Oct 2022 08:51:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666169495;
-        bh=mFUfEOAY7UgFEz0zOrho4a8Un5hZ2rqTQSz5pjCrbhc=;
+        s=korg; t=1666169501;
+        bh=JG8aswyTxj+PG1imCI7E1yc8Njj0+tfR7kirz+dwzUg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uAgRG3N0LhpELRlwVxPdsWE9MxHE32t0zQE2/oDmJz82eosuu0wGtaDr5P3xpepSi
-         tI8Pt+li50GV4KJu16pacMJi/ABCcK2VGCR/aFcQq+MNBOR+UT9IcnDsUQWxnbBaXp
-         Zd91yr6lVWWK0LcV36WlZNGeO/oZcGMBKs5TPqj0=
+        b=PJjeyq/PLW6FJSe0u7ezCfDhdt1eAkZSXCVsA8WbyhneaASXZ6nxy3+EqdFlCMwKI
+         ztdIb3Om5+tNmrwRvgFEgQuLtdTW/hac8PurlDBKZYWjj+4VvFCz9BlotQDe8CQrZE
+         eIZyWTFY00BUJQUpBc/mObxhQ04XVRLhKz8a46tY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baochen Qiang <quic_bqiang@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Xin Liu <liuxin350@huawei.com>,
+        Weibin Kong <kongweibin2@huawei.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.0 297/862] wifi: ath11k: Include STA_KEEPALIVE_ARP_RESPONSE TLV header by default
-Date:   Wed, 19 Oct 2022 10:26:24 +0200
-Message-Id: <20221019083303.127004220@linuxfoundation.org>
+Subject: [PATCH 6.0 299/862] libbpf: Fix NULL pointer exception in API btf_dump__dump_type_data
+Date:   Wed, 19 Oct 2022 10:26:26 +0200
+Message-Id: <20221019083303.226230896@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
 References: <20221019083249.951566199@linuxfoundation.org>
@@ -54,68 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baochen Qiang <quic_bqiang@quicinc.com>
+From: Xin Liu <liuxin350@huawei.com>
 
-[ Upstream commit b7b6f86149a7e06269d61a7a5206360f5b642f80 ]
+[ Upstream commit 7620bffbf72cd66a5d18e444a143b5b5989efa87 ]
 
-In current code STA_KEEPALIVE_ARP_RESPONSE TLV header is included only
-when ARP method is used, this causes firmware always to crash when wowlan
-is enabled because firmware needs it to be present no matter ARP method
-is used or not.
+We found that function btf_dump__dump_type_data can be called by the
+user as an API, but in this function, the `opts` parameter may be used
+as a null pointer.This causes `opts->indent_str` to trigger a NULL
+pointer exception.
 
-Fix this issue by including STA_KEEPALIVE_ARP_RESPONSE TLV header by
-default.
-
-Also fix below typo:
-  s/WMI_TAG_STA_KEEPALVE_ARP_RESPONSE/WMI_TAG_STA_KEEPALIVE_ARP_RESPONSE/
-
-Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3
-
-Fixes: 0f84a156aa3b ("ath11k: Handle keepalive during WoWLAN suspend and resume")
-Signed-off-by: Baochen Qiang <quic_bqiang@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220913044358.2037-1-quic_bqiang@quicinc.com
+Fixes: 2ce8450ef5a3 ("libbpf: add bpf_object__open_{file, mem} w/ extensible opts")
+Signed-off-by: Xin Liu <liuxin350@huawei.com>
+Signed-off-by: Weibin Kong <kongweibin2@huawei.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220917084809.30770-1-liuxin350@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/wmi.c | 9 +++++----
- drivers/net/wireless/ath/ath11k/wmi.h | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ tools/lib/bpf/btf_dump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/wmi.c b/drivers/net/wireless/ath/ath11k/wmi.c
-index 88ee4f9d19da..b658ea60dcf7 100644
---- a/drivers/net/wireless/ath/ath11k/wmi.c
-+++ b/drivers/net/wireless/ath/ath11k/wmi.c
-@@ -8962,12 +8962,13 @@ int ath11k_wmi_sta_keepalive(struct ath11k *ar,
- 	cmd->interval = arg->interval;
- 	cmd->method = arg->method;
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 627edb5bb6de..4221f73a74d0 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -2385,7 +2385,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+ 	d->typed_dump->indent_lvl = OPTS_GET(opts, indent_level, 0);
  
-+	arp = (struct wmi_sta_keepalive_arp_resp *)(cmd + 1);
-+	arp->tlv_header = FIELD_PREP(WMI_TLV_TAG,
-+				     WMI_TAG_STA_KEEPALIVE_ARP_RESPONSE) |
-+			 FIELD_PREP(WMI_TLV_LEN, sizeof(*arp) - TLV_HDR_SIZE);
-+
- 	if (arg->method == WMI_STA_KEEPALIVE_METHOD_UNSOLICITED_ARP_RESPONSE ||
- 	    arg->method == WMI_STA_KEEPALIVE_METHOD_GRATUITOUS_ARP_REQUEST) {
--		arp = (struct wmi_sta_keepalive_arp_resp *)(cmd + 1);
--		arp->tlv_header = FIELD_PREP(WMI_TLV_TAG,
--					     WMI_TAG_STA_KEEPALVE_ARP_RESPONSE) |
--				 FIELD_PREP(WMI_TLV_LEN, sizeof(*arp) - TLV_HDR_SIZE);
- 		arp->src_ip4_addr = arg->src_ip4_addr;
- 		arp->dest_ip4_addr = arg->dest_ip4_addr;
- 		ether_addr_copy(arp->dest_mac_addr.addr, arg->dest_mac_addr);
-diff --git a/drivers/net/wireless/ath/ath11k/wmi.h b/drivers/net/wireless/ath/ath11k/wmi.h
-index 4da248ffa318..ba5343a3411f 100644
---- a/drivers/net/wireless/ath/ath11k/wmi.h
-+++ b/drivers/net/wireless/ath/ath11k/wmi.h
-@@ -1214,7 +1214,7 @@ enum wmi_tlv_tag {
- 	WMI_TAG_NS_OFFLOAD_TUPLE,
- 	WMI_TAG_FTM_INTG_CMD,
- 	WMI_TAG_STA_KEEPALIVE_CMD,
--	WMI_TAG_STA_KEEPALVE_ARP_RESPONSE,
-+	WMI_TAG_STA_KEEPALIVE_ARP_RESPONSE,
- 	WMI_TAG_P2P_SET_VENDOR_IE_DATA_CMD,
- 	WMI_TAG_AP_PS_PEER_CMD,
- 	WMI_TAG_PEER_RATE_RETRY_SCHED_CMD,
+ 	/* default indent string is a tab */
+-	if (!opts->indent_str)
++	if (!OPTS_GET(opts, indent_str, NULL))
+ 		d->typed_dump->indent_str[0] = '\t';
+ 	else
+ 		libbpf_strlcpy(d->typed_dump->indent_str, opts->indent_str,
 -- 
 2.35.1
 
