@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E59603A84
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65A1603A82
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJSHUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S229918AbiJSHUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiJSHU0 (ORCPT
+        with ESMTP id S229633AbiJSHUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:20:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3046276954
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:20:20 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol3Ms-0003Jb-10; Wed, 19 Oct 2022 09:19:58 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol3Mp-0003wC-Hu; Wed, 19 Oct 2022 09:19:55 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol3Mo-00915M-S1; Wed, 19 Oct 2022 09:19:54 +0200
-Date:   Wed, 19 Oct 2022 09:19:54 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     xinlei.lee@mediatek.com
-Cc:     thierry.reding@gmail.com, matthias.bgg@gmail.com,
-        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v3] pwm: mtk-disp: Fix the parameters calculated by the
- enabled flag of disp_pwm
-Message-ID: <20221019071954.qv67h3brj6vnhxpw@pengutronix.de>
-References: <1664447209-19417-1-git-send-email-xinlei.lee@mediatek.com>
+        Wed, 19 Oct 2022 03:20:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF89C4D4F6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BE3AB82266
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D9BDC433D6;
+        Wed, 19 Oct 2022 07:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666164017;
+        bh=qZJGPYJhWSg9HQuKthn3430obiGHVRfi2d0cY0Qdp4M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=b/qQBS2x3i6Xq3yycOaBcncVHeEIHKz5ZQg1RPwffX4qTmGT5VMMeTlLWOHWf0Gry
+         kR0EDfwqBhyyE7qmX67UGeSYeg6b5tPvU1UdvXSNfdLuMOeFF4hLBCW9RTP2ChoIgL
+         AY/7C8s4GMN/igad4Y5iP7j305A8+1oD0DsjvAi3WeVOvLORm5vd3ynOyaX3JcMxT+
+         ljHRZIWxVUs0TobfPU0o0DSM97FYyLhXxfQyegh/Wt8B/KrJzhvULCBbwvpKdGRxTJ
+         DppyOE8h7ZIXhaQlEVLNRYArZd1qvL+diF0yGu3gbyzuhqTJR5HThP4SLWCiuwq3Q7
+         9zayvd/ypnGxw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5F8BE270EA;
+        Wed, 19 Oct 2022 07:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jj2msqu4zaqgjq6h"
-Content-Disposition: inline
-In-Reply-To: <1664447209-19417-1-git-send-email-xinlei.lee@mediatek.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] platform/chrome: cros_hps_i2c: make remove callback return
+ void
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <166616401693.8747.4313124084194924915.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Oct 2022 07:20:16 +0000
+References: <20221018235237.2274969-1-dcallagh@chromium.org>
+In-Reply-To: <20221018235237.2274969-1-dcallagh@chromium.org>
+To:     Dan Callaghan <dcallagh@chromium.org>
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        skyostil@chromium.org, bleung@chromium.org, tzungbi@kernel.org,
+        lkp@intel.com
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,56 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---jj2msqu4zaqgjq6h
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-Hello,
+On Wed, 19 Oct 2022 10:52:37 +1100 you wrote:
+> Commit ed5c2f5fd10d ("i2c: Make remove callback return void") changed
+> the return type of the 'remove' callback to void, but this driver was
+> originally written before that change landed. Update the remove callback
+> to match.
+> 
+> Fixes: 5f9952548d91 ("platform/chrome: add a driver for HPS")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Dan Callaghan <dcallagh@chromium.org>
+> 
+> [...]
 
-On Thu, Sep 29, 2022 at 06:26:49PM +0800, xinlei.lee@mediatek.com wrote:
-> From: xinlei lee <xinlei.lee@mediatek.com>
->=20
-> In the original mtk_disp_pwm_get_state() function, the result of reading
-> con0 & BIT(0) is enabled as disp_pwm.
-> In order to conform to the register table, we should use the disp_pwm
-> base address as the enabled judgment.
+Here is the summary with links:
+  - platform/chrome: cros_hps_i2c: make remove callback return void
+    https://git.kernel.org/chrome-platform/c/d8cb88f1541f
 
-I assume the change is fine. However I don't understand the commit log.
-My guess is you mean:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-	mtk_disp_pwm_get_state() wrongly uses bit 0 of CON0 to judge if the
-	PWM is enabled. However that is indicated by a bit (at a machine
-	dependent position) in the DISP_PWM_EN register. Fix this
-	accordingly.
 
-> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
->=20
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
-
-Nitpick: There is no empty line between Fixes: and S-o-b.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---jj2msqu4zaqgjq6h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNPpRcACgkQwfwUeK3K
-7Amduwf7BvhwtNcAt4vuj9gzQ+s/NYxV/0QuR4vGcO6h4hfcHNuWqbVpQGG9pqCW
-VnfbrDK2FJOvBAJaQt9n0sqOIkaYpml4m5MiTlFNIgg1fsPaNn1MmQ020iGaFl00
-rbHXRjP/bzv95awJ0zBSircbNOJnKJMugspqSA5b6CRPv8vMm/yvJdMfqd6RSwTY
-YJltkzqvoTip8ri837u8CQGQVNkPdChwScJQidAXkZeX3p53NQIUkcmhi4MoR6hr
-dFe7FGm9v0YuEayovq5fsQjw7DVq4FCuEUhb6yiInlLG9cfK5/Rnsswb3tBa2Yof
-RjLCMovkK7mZnvZz3AezADVH0/Kh4Q==
-=aM7U
------END PGP SIGNATURE-----
-
---jj2msqu4zaqgjq6h--
