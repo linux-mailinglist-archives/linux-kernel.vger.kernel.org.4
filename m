@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720C5604E71
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5360604E72
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiJSRR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S230516AbiJSRRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiJSRRY (ORCPT
+        with ESMTP id S230218AbiJSRRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:17:24 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370C51D2F6A;
-        Wed, 19 Oct 2022 10:17:13 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 187so15032042iov.10;
-        Wed, 19 Oct 2022 10:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AlUj/QFNV2i9ZGSPJzeC1G6oHQCEl/zD5yljY4F0lQc=;
-        b=ZXMyREUu4xIZz3ws/x/a9lf4cPrx/BaKTr/gdL5w0Ks5jzmnGGlQSLpcXbkCnsDmsj
-         0d/k/iCDgt1zBII42EAwqtvXA7gFiETu6evdk6a8vXmnPNfUW4JofkfzlT00Ve9Hpu96
-         pw8JV1yY4+VlCSR0no8zmlMbPISuQ5P5yye5lIxr7iazG/MulLc1dxiG9xWwMh2+G3ri
-         kgSyOXY9hGj5/ANGR/g2EThUpzl/1vxsKDy7IXpKBY24nkZTu4OpSwO+3hy1QlVihv3/
-         ulzf38jMGwmGbb9FHvQI52Gy6QPYQ612GH1mZk9UapDc3IwjC53wNm2rMvRshBEhA+PC
-         +LMQ==
+        Wed, 19 Oct 2022 13:17:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52AF18024B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666199838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U8o5JxEqoCPCnIb2m03iS0ooGJi9njDkBwMULUXIkW8=;
+        b=Brk18onKcCkgUIvdRYcYhXJS0pzR15n2cECPJsijCQCWcRqGe1arVslX7YFlH2hyKGTkrN
+        kiM4kc5/myg/MkYn8/V6w8qhDHCiYc3ffoEDow+uAUNvPxxte+OXB+Y9pHAt9kphf0Hw5g
+        uD0sxYY5a5aefXQ7kOPddWPm6c0Hv9s=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-626-ojWK3bs0MdKvuu5hEt-qKw-1; Wed, 19 Oct 2022 13:17:16 -0400
+X-MC-Unique: ojWK3bs0MdKvuu5hEt-qKw-1
+Received: by mail-qt1-f198.google.com with SMTP id d1-20020ac80601000000b00388b0fc84beso13211682qth.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:17:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AlUj/QFNV2i9ZGSPJzeC1G6oHQCEl/zD5yljY4F0lQc=;
-        b=w6WkL1op/NZAjHgqQRdbUqrw/GUJVC+qqRKNUeTwQ5vsBCsIh3EWT+Jj0+90RCoN6C
-         QnlOX+mIxdUwJdddBOMUD8frEl9SP+kpQRQpgxSQ1TmWN9ZiZ4iXub4/LdCReBTkorPS
-         8y41SvWe8Q/fqrh7Rg/gugOZeiBePI/uVLm7uZPACrIkp7y1FzFVi2JHaZkI0c8Tq3rv
-         gbgIVJo9b+KDIkas3Th97nO0zcoCmUmHaRO1IXKjGsV8abXN9d4aRaoUxEBTpOVIAk4p
-         aITz5ri21CSLlDpRhrogfFoYTh/4zshTsCHf4QYAge/zfh7TJKFzKRH9iB/qOsE8HeXx
-         EDHw==
-X-Gm-Message-State: ACrzQf3eZtD7pXvJzU6DGEoSFUHvmn7g0QzNau3PyepONhxRTt94WfjG
-        oDIZZnm5l74X6BsHgOUYux7Cgrxv0T6vv2sJRao=
-X-Google-Smtp-Source: AMsMyM45u5EqgmWIvzSP0ManQlUWYAgNb/OwLrfi0zMCsU3sYDTwOpX5k0YBdlf2jwW9lP9jS+bMvGiCCWkvy96GhDM=
-X-Received: by 2002:a02:cf33:0:b0:363:ed19:3a27 with SMTP id
- s19-20020a02cf33000000b00363ed193a27mr7303430jar.179.1666199831400; Wed, 19
- Oct 2022 10:17:11 -0700 (PDT)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U8o5JxEqoCPCnIb2m03iS0ooGJi9njDkBwMULUXIkW8=;
+        b=eR1h5dwaTdXeQ5ncjLRwqphJ1ojUXlxqICdqtqfZQTYGDOMBHqCdv3ulbCFJAQYvfY
+         hGJ393eiZVcWEvhciMsBtG2lHSheLxqVTIBYva3pNJFIZAR/+C8Fa4QE4VhyAynZhkjf
+         dyP/v/gPv4Mf3aNiZdmxEE+DIAYhAXHWu0mslXoRG3Y3l3PbOvCZnShjXgGYVj4AefMe
+         nBx8YGqNH+uzKaDtBdyFrl2Hcv67v8ZYRIJoTtVZVLWFrAxttuRKJsrIW52Cudj4f0+W
+         XlezaRv3ObN+GlRLwXMXd9ULHUNGlDedGKGfu+/x85XG8azTCIRpzNY9MtSq2+g0lTmJ
+         2kFg==
+X-Gm-Message-State: ACrzQf2E0NWF0QrhgzkuqH99nndgA33QsVwTgaTJwyXWY5f6GrOqIMAB
+        KWqaqjAmjDySpiKFStD2JLl/hTMuqVySTF+45gHSpH2YeygBPiWnX1ZkHw0STsS3HTbc65Hj/Gz
+        5rOENeICx6lXSrTzuWeCG1h0p
+X-Received: by 2002:a05:622a:242:b0:39c:f8a5:480a with SMTP id c2-20020a05622a024200b0039cf8a5480amr6303382qtx.337.1666199835904;
+        Wed, 19 Oct 2022 10:17:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM69fO0O8ZaQr9sXqoZlO42C13wiDAagYmFIaCg+Q6LJuidone5FYtVK6oA3+lE1HNcSW+2K/w==
+X-Received: by 2002:a05:622a:242:b0:39c:f8a5:480a with SMTP id c2-20020a05622a024200b0039cf8a5480amr6303361qtx.337.1666199835703;
+        Wed, 19 Oct 2022 10:17:15 -0700 (PDT)
+Received: from vschneid.remote.csb ([149.71.65.94])
+        by smtp.gmail.com with ESMTPSA id k11-20020a05620a414b00b006e99290e83fsm5439526qko.107.2022.10.19.10.17.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 10:17:15 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, John Stultz <jstultz@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Connor O'Brien <connoro@google.com>
+Subject: Re: [RFC PATCH 05/11] sched: Split scheduler execution context
+In-Reply-To: <20221003214501.2050087-6-connoro@google.com>
+References: <20221003214501.2050087-1-connoro@google.com>
+ <20221003214501.2050087-6-connoro@google.com>
+Date:   Wed, 19 Oct 2022 18:17:12 +0100
+Message-ID: <xhsmhr0z3wx5z.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20221018195122.8877-1-linux.amoon@gmail.com> <CAFBinCCqXBk9Xq0k=NA3zGi8spwyPQN7dMVWcjE+pXkXYf+FKQ@mail.gmail.com>
- <CANAwSgSR6jHRQR6QgzUop_B4gcOsQnfc6LoUXrP0CSTasZkVfQ@mail.gmail.com>
- <CANAwSgRLZfon5qUFeKW9U9AbHvSa=uKVaVgqghVk554-H1LVKw@mail.gmail.com> <402500e8-b4fe-9b8f-d634-e329191af1b8@linaro.org>
-In-Reply-To: <402500e8-b4fe-9b8f-d634-e329191af1b8@linaro.org>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 19 Oct 2022 22:46:55 +0530
-Message-ID: <CANAwSgQhWrzeRcpQSSAmfp+i3966dUQdtCLbcWwifQk=1ce=og@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: meson: Enable active coling using gpio-fan on
- Odroid N2/N2+
-To:     neil.armstrong@linaro.org
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,82 +90,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil
+On 03/10/22 21:44, Connor O'Brien wrote:
+> @@ -1303,7 +1303,7 @@ static u64 grub_reclaim(u64 delta, struct rq *rq, struct sched_dl_entity *dl_se)
+>   */
+>  static void update_curr_dl(struct rq *rq)
+>  {
+> -	struct task_struct *curr = rq->curr;
+> +	struct task_struct *curr = rq->proxy;
 
-On Wed, 19 Oct 2022 at 16:39, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->
-> Hi Anand,
->
-> On 19/10/2022 11:48, Anand Moon wrote:
-> > Hi Martin,
-> >
-> > On Wed, 19 Oct 2022 at 08:36, Anand Moon <linux.amoon@gmail.com> wrote:
-> >>
-> >> Hi Martin,
-> >>
-> >> On Wed, 19 Oct 2022 at 02:46, Martin Blumenstingl
-> >> <martin.blumenstingl@googlemail.com> wrote:
-> >>>
-> >>> Hello Anand,
-> >>>
-> >>> On Tue, Oct 18, 2022 at 9:53 PM Anand Moon <linux.amoon@gmail.com> wrote:
-> >>>>
-> >>>> Odroid N2/N2+ support active cooling via gpio-fan controller.
-> >>>> Add fan controls and tip point for cpu and ddr thermal sensor
-> >>>> on this boards.
-> >>> In the schematics for board rev 0.6 [0] I cannot find any information
-> >>> about a fan connector.
-> >>> The schematics for board rev 0.3 [1] on the other hand document a PWM
-> >>> based fan connector on page 16.
-> >>> So now I am not sure whether your patch only applies to certain board
-> >>> revisions, the schematics are incorrect, etc.
-> >>>
-> >>> Can you please provide some details about the fan connector on
-> >>> Odroid-N2/N2+ and which hardware revisions are supported (and which
-> >>> aren't) by your patch?
-> >>>
-> >>>
-> >> Ok I got this wrong the schematics below there is pwm controller, not
-> >> gpio controller
-> >> GPIOAO.BIT10 (PWM)
-> >> I will correct the patch sorry for the mistake I did not look more carefully.
-> >>
-> >
-> > As per the schematics GPIOAO_10 is controlled by PWMAO_D
-> > But looking into the datasheet [0] I could not find the relevant
-> > PWMAO_D pmw ip block to link the fan to the PWM controller.
-> >
-> > [0] https://dn.odroid.com/S922X/ODROID-N2/Datasheet/S922X_Public_Datasheet_V0.2.pdf
-> >
-> > I could get the PWM node but is not working for me.
-> >
-> > @@ -547,6 +588,14 @@ &pwm_ab {
-> >          status = "okay";
-> >   };
-> >
-> > +&pwm_AO_ab {
->
-> &pwm_AO_cd not _ab
->
-No it has a conflict with CPU_B (vddcpu_b) PWM
+I found a note pointing out that Juri has a patch to unify the
+update_curr*() functions as part of the deadline servers thing; I think it
+could be picked as a standalone to at least unify the curr = rq->proxy
+trickery - this will also (hopefully) remove redundancy for whatever we do
+to expose sane runtime values to userspace.
 
-I have tried linking all the PWM with pwm-fan but it's not working.
+Last iteration I could find is:
 
-# sudo cat /sys/kernel/debug/pwm
-platform/ffd1b000.pwm, 2 PWM devices
- pwm-0   (regulator-vddcpu-a  ): requested enabled period: 1250 ns
-duty: 0 ns polarity: normal
- pwm-1   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
+https://lore.kernel.org/all/20200807095051.385985-2-juri.lelli@redhat.com/
 
-platform/ff807000.pwm, 2 PWM devices
- pwm-0   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
- pwm-1   (pwm-fan             ): requested period: 1250 ns duty: 0 ns
-polarity: normal
-
-platform/ff802000.pwm, 2 PWM devices
- pwm-0   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
- pwm-1   (regulator-vddcpu-b  ): requested enabled period: 1250 ns
-duty: 88 ns polarity: normal
-
-Thanks
--Anand
