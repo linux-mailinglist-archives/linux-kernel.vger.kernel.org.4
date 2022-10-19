@@ -2,95 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C4E605025
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6C560502E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJSTKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S230453AbiJSTLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiJSTKm (ORCPT
+        with ESMTP id S229622AbiJSTLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:10:42 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC251814A9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:10:41 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g28so18121138pfk.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tigera.io; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ktkbq0iHmuOGr8YKybw9yRJ3NFz4+wIdXshxJ8vlzvI=;
-        b=hlq0t5O46kYRtoorj9rCVBuGvthMsQoJWM0Ekd+3w7Pidjgzzod8b/q1klsnYEsIDl
-         CVnnlT7m+Bx3X9IgGerr/YH0Uspii3p6hwQXNHKN3ZBEK4143xhBRCSGKeG0XBF3D9Xo
-         hN093Khih0GclxrQeK2qHp+jamrB+4BgiNECw=
+        Wed, 19 Oct 2022 15:11:31 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B2F181DA6;
+        Wed, 19 Oct 2022 12:11:25 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-132af5e5543so21823738fac.8;
+        Wed, 19 Oct 2022 12:11:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ktkbq0iHmuOGr8YKybw9yRJ3NFz4+wIdXshxJ8vlzvI=;
-        b=8QdEA0B1AZ3VKbOha0fssNdDK/YALsJNh7xWOHwefotN0p/tBRenQzadvaNaJAiS4P
-         qyPnX954VOenr9jTpr1ZBj3ygtgaXkFQ24+d8DTeHNDpAEtI3LT9vUvTpbHp7OjDMVNO
-         q62AtksmE/rPve1XHeQ6jEqZmTJVZRgUBOEGVdT+7/NHF4wj6eOWdETgl7uzfUsj4RJI
-         bgQgOCf5eq3xihTTKBx5pjPLH4vn8PXYIOX6Jiqat893H8DUa1/RCr6DNa3qRQBzsEo2
-         pA5GadUCmZrP1gzCHlmy5odIk6ruDpmgD6MrSvYoteIE2DqkiDlCoMttIgnEyjC2vxuD
-         oosQ==
-X-Gm-Message-State: ACrzQf0IfNP+gT5WNG/I0gYbfAh2hQS9fIktQUSX4d5FWhp1EJnl+B2c
-        NAkuCzZk8plxYR7556rLwP5Zxy+UR5g80OZu2fb5LaD7ElSmYw==
-X-Google-Smtp-Source: AMsMyM6I0TBrtrMEp/rj71K4thQ8oUEjXuY+Q4aANUx5iDZd5PFDc8dAn90ga3hlsw8F4ZzIInbLU43h7zdaF5dS0Ew=
-X-Received: by 2002:a63:1608:0:b0:45a:355a:9420 with SMTP id
- w8-20020a631608000000b0045a355a9420mr8420755pgl.354.1666206640880; Wed, 19
- Oct 2022 12:10:40 -0700 (PDT)
+        bh=8HWbMi0BhU5RSsaj3t9gz8sb2tRhVv6F39wL/nVJWCs=;
+        b=oY3643uoeK2h2EQmqcZb0CYchxdcS7t/3I8dZAO2bnQOyN+XVErSAd3/qDN2LTE3DG
+         Z3GqdkevO/bWez4+XMT9NYCBuDhoxwtSTxsRMgn2R0YF8CrxY3N9hPaweT5kack917CW
+         C/AtczxVOhzL1DBi0mkXJGnSzxs5wipjQYV8vSGLhrRpOEVoKImWU2zEtr1xPimes4ga
+         bIawoIPUNiDKD1P7uSGGeZ28zIJwXBgQDQF1sLab4byze/QgD2KRfNPkWlman8HwDJqx
+         BBd8NTi3TnQu2QOFiTGu7AUJWxGEAFHYP2x/rcRjEpPBFs080kbExbzL+lB/L9nkCg0k
+         dZ2g==
+X-Gm-Message-State: ACrzQf0ufe5BiFjlCtnZ0IwgyRUHiubl1UOtn+lsYCOvqKw9/6AY302h
+        GxxEb8+vkD5c/KH8bpGWaQ==
+X-Google-Smtp-Source: AMsMyM6L+gye/LwLSUbTwvcqYD3FLUzUB3vYmZL9Im4PgtcEfWLLmd/KydKz+OoIOnaMZdgD5mTlwg==
+X-Received: by 2002:a05:6870:9688:b0:132:9c55:72 with SMTP id o8-20020a056870968800b001329c550072mr6180621oaq.104.1666206684576;
+        Wed, 19 Oct 2022 12:11:24 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056830018a00b006618f1fbb84sm7348116ota.80.2022.10.19.12.11.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 12:11:24 -0700 (PDT)
+Received: (nullmailer pid 3420895 invoked by uid 1000);
+        Wed, 19 Oct 2022 19:11:25 -0000
+Subject: [PATCH v2 0/7] perf: Arm SPEv1.2 support
 MIME-Version: 1.0
-References: <CAM=1FV3ODgP1+iST6zVh4EFY9WLf=Us8PTTmbH=8KF1Xc7zmvA@mail.gmail.com>
-In-Reply-To: <CAM=1FV3ODgP1+iST6zVh4EFY9WLf=Us8PTTmbH=8KF1Xc7zmvA@mail.gmail.com>
-From:   Tomas Hruby <tomas@tigera.io>
-Date:   Wed, 19 Oct 2022 12:10:30 -0700
-Message-ID: <CAM=1FV1Nt9a5-d7LneS=-o0S2=FnDeCxLPXrB==XYJvjJ8v=+A@mail.gmail.com>
-Subject: Re: kernel BUG at net/core/skbuff.c:4219
-To:     eric.dumazet@gmail.com
-Cc:     edumazet@google.com, herbert@gondor.apana.org.au,
-        jpiotrowski@linux.microsoft.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, seh@panix.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIANtLUGMC/3WNzQrCMBCEX6Xs2ZV0tb8n30M8pO2mCdZENhqQknc3ePc0fAPfzA6RxXGEsdpBOL
+ nogi9Ahwpmq/3K6JbCQIpI9dSglgfGJ2PqsUPDi1FnrltDJyjKpCPjJNrPtkj+vW2ltC6+gnx+F6ku
+ cf2zlmpUOHfN1C8DcTvQ5c7ieTsGWeGWc/4CRvTey64AAAA=
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 19 Oct 2022 14:11:23 -0500
+Message-Id: <20220825-arm-spe-v8-7-v2-0-e37322d68ac0@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     kvmarm@lists.cs.columbia.edu, kvmarm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.11.0-dev
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Hi,
-> >
-> > One of our Flatcar users has been hitting the kernel BUG in the subject line
-> > for the past year (https://github.com/flatcar/Flatcar/issues/378). This was
-> > first reported when on 5.10.25, but has been happening across kernel updates,
-> > most recently with 5.15.63. The nodes where this happens are AWS EC2 instances,
-> > using ENA and calico networking in eBPF mode with VXLAN encapsulation. When
-> > GRO/GSO is enabled, the host hits this bug and prints the following stacktrace:
->
->
-> I suspect eBPF code lowers gso_size ?
->
-> gso stack is not able to arbitrarily segment a GRO packet after gso_size
-> being changed.
+This series adds support for Arm SPEv1.2 which is part of the
+Armv8.7/Armv9.2 architecture. There's 2 new features that affect the 
+kernel: a new event filter bit, branch 'not taken', and an inverted 
+event filter register. 
 
-Based on the stack trace, it happens for a tcp packet. Since it seems
-like it is on egress from a host, I suspect that it is encapsulating a
-tcp packet into a vxlan tunnel and useds bpf_skb_adjust_room() here
-https://github.com/projectcalico/calico/blob/master/felix/bpf-gpl/nat.h#L77-L80
-Not sure if it should use BPF_F_ADJ_ROOM_FIXED_GSO in that case.
+Since this support adds new registers and fields, first the SPE register 
+defines are converted to automatic generation.
 
-Calico uses the flag when decapsulating packets here
-https://github.com/projectcalico/calico/blob/master/felix/bpf-gpl/nat.h#L143
-and it uses the flag as the packet is UDP.
+Note that the 'config3' addition in sysfs format files causes SPE to 
+break. A stable fix e552b7be12ed ("perf: Skip and warn on unknown format 
+'configN' attrs") landed in v6.1-rc1.
 
-Any of that could cause the BUG?
+The perf tool side changes are available here[1].
 
+Tested on FVP.
 
-Tomas
+[1] https://lore.kernel.org/all/20220914-arm-perf-tool-spe1-2-v2-v4-0-83c098e6212e@kernel.org/
+
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Changes in v2:
+- Convert the SPE register defines to automatic generation
+- Fixed access to SYS_PMSNEVFR_EL1 when not present
+- Rebase on v6.1-rc1
+- Link to v1: https://lore.kernel.org/r/20220825-arm-spe-v8-7-v1-0-c75b8d92e692@kernel.org
+
+---
+Rob Herring (7):
+      perf: arm_spe: Use feature numbering for PMSEVFR_EL1 defines
+      arm64: Drop SYS_ from SPE register defines
+      arm64/sysreg: Convert SPE registers to automatic generation
+      perf: arm_spe: Drop BIT() and use FIELD_GET/PREP accessors
+      perf: arm_spe: Support new SPEv1.2/v8.7 'not taken' event
+      perf: Add perf_event_attr::config3
+      perf: arm_spe: Add support for SPEv1.2 inverted event filtering
+
+ arch/arm64/include/asm/el2_setup.h |   6 +-
+ arch/arm64/include/asm/sysreg.h    |  99 +++------------------------
+ arch/arm64/kvm/debug.c             |   2 +-
+ arch/arm64/kvm/hyp/nvhe/debug-sr.c |   2 +-
+ arch/arm64/tools/sysreg            | 116 +++++++++++++++++++++++++++++++
+ drivers/perf/arm_spe_pmu.c         | 136 ++++++++++++++++++++++++-------------
+ include/uapi/linux/perf_event.h    |   3 +
+ 7 files changed, 224 insertions(+), 140 deletions(-)
+---
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+change-id: 20220825-arm-spe-v8-7-fedf04e16f23
+
+Best regards,
+-- 
+Rob Herring <robh@kernel.org>
