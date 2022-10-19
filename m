@@ -2,169 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B6F604072
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CE4604083
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbiJSJ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S234420AbiJSKAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234394AbiJSJ43 (ORCPT
+        with ESMTP id S234677AbiJSJ7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:56:29 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8805810A7FE;
-        Wed, 19 Oct 2022 02:32:33 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id n12so27936920wrp.10;
-        Wed, 19 Oct 2022 02:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRkokOnUGTB7YuuZ3HxvCL2EU7JYl74de/Mbu83cbuA=;
-        b=RDX8T5T0XtX3o+g5YTuJgc/k6wZqjY06wjnbWG8cfKToMu2DIl3ujkjBGAufkRIMRH
-         Hfsoocd9Ll60B8Lozu3PEVlzVVKSsIJ8WmLi228cYopOrpF9rfCJH9O/LuWrGuars7d9
-         m4moV7UzxQ7GNjJZfvn7Et6EBW4MKtB2aQ+PaNos7BQR53D5MswBZj6iSK9AZc5FRBHK
-         HKn+7JAlAfJG3mjgCV8Avjhrf0hTOhoU6WUkCQSBE1YfCYMm707DetMhBYvl1XRkPQ+B
-         PXQRdYMRWb387QTMTHYtPFhFtvWobbE8wJqE7ZPkDMPZTFR7dWAF2CQZIgwf7YZvYtWx
-         6a+w==
+        Wed, 19 Oct 2022 05:59:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0B811A96E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666172106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B+TyF7PNH8EB0gGdWhZWNT7enwe2PDt7WQr2gXMuwD0=;
+        b=HKnwd2ph/8LfRn+HWhbiPil2tVt0om+Kdwt/jLk4xc2XYY4eTQ3qav9ARiB9el0zyNs/L/
+        pRRJXaUzLWLRh1TOPn60bAZ9DJSu6xRShh09ZjT65nDgoKc2b9R0Tw+tpzrjeyIqYiZEZ5
+        hJt2repC0VjISVLKgDjH9RiNd59vCJo=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-27-V_PiXrY6PUa8tu8nuLP9ew-1; Wed, 19 Oct 2022 05:31:52 -0400
+X-MC-Unique: V_PiXrY6PUa8tu8nuLP9ew-1
+Received: by mail-pl1-f198.google.com with SMTP id b14-20020a170902d50e00b001854f631c4eso6127057plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:31:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uRkokOnUGTB7YuuZ3HxvCL2EU7JYl74de/Mbu83cbuA=;
-        b=45832iBD20GI5ionXDhlbjniSDA8NQplSI6BFnj+Tr1FW6yaINnub+IpILTgSXtOuL
-         SX3r0mCmOSa/I6YsWH24HW6xAb6q/UiJXzuMMudEthzUEhv9BmF5Oda3BPkIsMZCvGxK
-         XXaW5FBj0VXf42VY3DVkPMRZngtkk+2ts/o5P+zGUe63Mhv3R2ZGPqPiFzYVxeBfTrmA
-         5bx3PRGKGzXjbUL6aBC+pSRU0zgPLj1r/11bN4iAxYKhjHYEBdTBFfJd0+fBGw06Tfbm
-         dNOPpnCHkd659xos+B2WVQ9mANcza6CqCZu3veujexeLvxrDfeZZ7n7V78KCqUHU0qmL
-         BjpQ==
-X-Gm-Message-State: ACrzQf2gWYsdTUATVeLE2JD8OdgRGoYJpY2CRPtfdsQjWgApBvwe1s4x
-        6zKOYOfUtcD2xHe96T9OD54=
-X-Google-Smtp-Source: AMsMyM6hY/mR6nXmoP38MIbO0/nm/YOio2x+b9h9je3MNNv/Dhv0OhDQqND0rZdCpyg+KQBiimsSdg==
-X-Received: by 2002:a5d:54ce:0:b0:22e:2ecf:7c2a with SMTP id x14-20020a5d54ce000000b0022e2ecf7c2amr4371465wrv.181.1666171814580;
-        Wed, 19 Oct 2022 02:30:14 -0700 (PDT)
-Received: from krava ([83.240.63.167])
-        by smtp.gmail.com with ESMTPSA id u7-20020a7bc047000000b003b5054c6f87sm15647813wmc.21.2022.10.19.02.30.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 02:30:13 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 19 Oct 2022 11:30:11 +0200
-To:     sdf@google.com
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Akihiro HARAI <jharai0815@gmail.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH] x86: Include asm/ptrace.h in syscall_wrapper header
-Message-ID: <Y0/Do4l0bALGrD0p@krava>
-References: <20221018122708.823792-1-jolsa@kernel.org>
- <Y07vGVPIf913gND8@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B+TyF7PNH8EB0gGdWhZWNT7enwe2PDt7WQr2gXMuwD0=;
+        b=M8qAjigAB26LP19QNukjCdpQ2xjWzzUny8KR9/QhljMNNMosMuOfyYc8NVKC9hXTOw
+         HxbfDRna8JOAH8CKbCx0uTJpZlWn6jX3WNmQAl9Mdva/uj6vSS6AA3/M8pf6zHrEBT5q
+         4k9LV/xs4XCRBS1Q4nJMbrfDy7eNI0e4rCo6p/4qzKdQ9Xo57t9lPErq9zPGz1c+43N7
+         n73yw7vGuR7P4kINo76fmLs9Do4HeEpSXjLDT4wpZZusv1lpXnRqOOgJZ9cIzZlqObQw
+         IoNZKmRQ8Nfza7z3uplmdzmnt4+/U4y3yDVnQT4MEf36uHw3hEh9qiKMzEHKBmENTtlv
+         TO9w==
+X-Gm-Message-State: ACrzQf3bxs+CHF/sXxxR2TnLvmA/3/R+nBKKKgo4bPa1fIOvQb2y4lPG
+        o5E+9VME8as1IZXYtZLT0XeoG+iOAxQAwyht6pSdZfR+iyOnE7TE0PReBGnNtan9gRQHYBDhyF3
+        SsXqwFc2sJZtDaLiIqzVLJGQhz7cBw6jAlVGnjS9Z
+X-Received: by 2002:a17:903:2585:b0:185:483e:e4ce with SMTP id jb5-20020a170903258500b00185483ee4cemr7360967plb.17.1666171911537;
+        Wed, 19 Oct 2022 02:31:51 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM56luafnwZQEi9GpQyPokUf92iOHlSzmSs19PT41u8H0lTV8lCiXBqpGPGXONjNZIUMJkPvXMwV0WzMOWYxVbA=
+X-Received: by 2002:a17:903:2585:b0:185:483e:e4ce with SMTP id
+ jb5-20020a170903258500b00185483ee4cemr7360946plb.17.1666171911232; Wed, 19
+ Oct 2022 02:31:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y07vGVPIf913gND8@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1666082013.git.sebastien.boeuf@intel.com> <56c045ac70e44e7d80f3f9e901deae3d7485b2a1.1666082013.git.sebastien.boeuf@intel.com>
+In-Reply-To: <56c045ac70e44e7d80f3f9e901deae3d7485b2a1.1666082013.git.sebastien.boeuf@intel.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Wed, 19 Oct 2022 11:31:14 +0200
+Message-ID: <CAJaqyWdePmapASK060=k+LvqHJHWppMApcQ65N2=THfuCmbjkw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] vdpa_sim: Implement resume vdpa op
+To:     sebastien.boeuf@intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        jasowang@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 11:23:21AM -0700, sdf@google.com wrote:
-> On 10/18, Jiri Olsa wrote:
-> > From: Jiri Olsa <olsajiri@gmail.com>
-> 
-> > With just the forward declaration of the 'struct pt_regs' in
-> > syscall_wrapper.h, the syscall stub functions:
-> 
-> >    __[x64|ia32]_sys_*(struct pt_regs *regs)
-> 
-> > will have different definition of 'regs' argument in BTF data
-> > based on which object file they are defined in.
-> 
-> > If the syscall's object includes 'struct pt_regs' definition,
-> > the BTF argument data will point to 'struct pt_regs' record,
-> > like:
-> 
-> >    [226] STRUCT 'pt_regs' size=168 vlen=21
-> >           'r15' type_id=1 bits_offset=0
-> >           'r14' type_id=1 bits_offset=64
-> >           'r13' type_id=1 bits_offset=128
-> >    ...
-> 
-> > If not, it will point to fwd declaration record:
-> 
-> >    [15439] FWD 'pt_regs' fwd_kind=struct
-> 
-> > and make bpf tracing program hooking on those functions unable
-> > to access fields from 'struct pt_regs'.
-> 
-> Is the core issue here is that we can't / don't resolve FWD declarations
-> at load time (or dedup time)? I'm assuming 'struct pt_regs' is still
-> exposed somewhere in BTF via some other obj file, it's just those
-> syscall definitions that have FWD decl?
+On Tue, Oct 18, 2022 at 10:38 AM <sebastien.boeuf@intel.com> wrote:
+>
+> From: Sebastien Boeuf <sebastien.boeuf@intel.com>
+>
+> Implement resume operation for vdpa_sim devices, so vhost-vdpa will
+> offer that backend feature and userspace can effectively resume the
+> device.
+>
+> Signed-off-by: Sebastien Boeuf <sebastien.boeuf@intel.com>
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> index b071f0d842fb..05e3802fb746 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -527,6 +527,18 @@ static int vdpasim_suspend(struct vdpa_device *vdpa)
+>         return 0;
+>  }
+>
+> +static int vdpasim_resume(struct vdpa_device *vdpa)
+> +{
+> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> +       int i;
+> +
+> +       spin_lock(&vdpasim->lock);
+> +       vdpasim->running = true;
+> +       spin_unlock(&vdpasim->lock);
+> +
+> +       return 0;
+> +}
+> +
 
-yes, BTF is generated from dwarf debug info, so it's object based,
-and in some objects the regs argument will point to full struct
-definition and in some just to forward declaration
+To never kick at resuming is not the right thing to do :).
 
-> 
-> Applying this patch seems fine for now, but also seems fragile. Should
-> we instead/also teach verifier/dedup/whatever to resolve those FWD
-> declarations?
+Maybe to store in the vdpasim_virtqueue if it was kicked during the
+suspend window?
 
-I'm not sure how hard it'd be to connect forward declarations
-to definitions.. it'd need to be probably in dedup or verifier
-as you suggest
+Thanks!
 
-and I think it'd need to be done just based on struct name search,
-so I expect all sort of unexpected problems ;-) other than to be
-sure you connect to proper struct
 
-Andrii will have probably better idea if and where this is possible
 
-jirka
+>  static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> @@ -717,6 +729,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+>         .set_status             = vdpasim_set_status,
+>         .reset                  = vdpasim_reset,
+>         .suspend                = vdpasim_suspend,
+> +       .resume                 = vdpasim_resume,
+>         .get_config_size        = vdpasim_get_config_size,
+>         .get_config             = vdpasim_get_config,
+>         .set_config             = vdpasim_set_config,
+> @@ -750,6 +763,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+>         .set_status             = vdpasim_set_status,
+>         .reset                  = vdpasim_reset,
+>         .suspend                = vdpasim_suspend,
+> +       .resume                 = vdpasim_resume,
+>         .get_config_size        = vdpasim_get_config_size,
+>         .get_config             = vdpasim_get_config,
+>         .set_config             = vdpasim_set_config,
+> --
+> 2.34.1
+>
+> ---------------------------------------------------------------------
+> Intel Corporation SAS (French simplified joint stock company)
+> Registered headquarters: "Les Montalets"- 2, rue de Paris,
+> 92196 Meudon Cedex, France
+> Registration Number:  302 456 199 R.C.S. NANTERRE
+> Capital: 5 208 026.16 Euros
+>
+> This e-mail and any attachments may contain confidential material for
+> the sole use of the intended recipient(s). Any review or distribution
+> by others is strictly prohibited. If you are not the intended
+> recipient, please contact the sender and delete all copies.
+>
 
-> 
-> > Including asm/ptrace.h directly in syscall_wrapper.h to make
-> > sure all syscalls see 'struct pt_regs' definition and resulted
-> > BTF for '__*_sys_*(struct pt_regs *regs)' functions point to
-> > actual struct, not just forward declaration.
-> 
-> > Reported-by: Akihiro HARAI <jharai0815@gmail.com>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >   arch/x86/include/asm/syscall_wrapper.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> > diff --git a/arch/x86/include/asm/syscall_wrapper.h
-> > b/arch/x86/include/asm/syscall_wrapper.h
-> > index 59358d1bf880..fd2669b1cb2d 100644
-> > --- a/arch/x86/include/asm/syscall_wrapper.h
-> > +++ b/arch/x86/include/asm/syscall_wrapper.h
-> > @@ -6,7 +6,7 @@
-> >   #ifndef _ASM_X86_SYSCALL_WRAPPER_H
-> >   #define _ASM_X86_SYSCALL_WRAPPER_H
-> 
-> > -struct pt_regs;
-> > +#include <asm/ptrace.h>
-> 
-> >   extern long __x64_sys_ni_syscall(const struct pt_regs *regs);
-> >   extern long __ia32_sys_ni_syscall(const struct pt_regs *regs);
-> > --
-> > 2.37.3
-> 
