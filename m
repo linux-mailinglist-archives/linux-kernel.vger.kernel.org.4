@@ -2,115 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9713603AEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B1B603AF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiJSHrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S230154AbiJSHwd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 03:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiJSHr2 (ORCPT
+        with ESMTP id S229525AbiJSHwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:47:28 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8DA6CD02;
-        Wed, 19 Oct 2022 00:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666165642; x=1697701642;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LypfmRLZezRvZ80PtilHRfcQRqUmEX2LdxRqHmA8vmo=;
-  b=LbEr/IucazeVVhSvh4fpj3cdS6tQwJ6ZbMBdT2cNAC7rBS+bYZMYikBV
-   j99HqVlQLwvBj6+kEfAaVdwQy8C9kQx5VEzrq7PMvFsIq+CEcEqhsohCu
-   YwaqaTwjVx9Lpkj4P9AYCKAug7J2rmLis19OHqi79UM1EU+Do1skboZbb
-   JLeb0tYHksS6yTDd3hkV0xyQa4eyb/zp0koSzmHQardZxMoGQg2U0Tpe/
-   IurnXWjvoA+hbr6GFzkjLQBmlJfoel3f0r7xAgXxhX4F9W/99gq9qXa5A
-   sRIPX1r8tc2IkOWyu1tVzI3GBuN9LYP28TflVEsf6zkHHeXUq8sZZ/OxP
-   w==;
-X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="196077013"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 00:47:22 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 19 Oct 2022 00:47:21 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 00:47:20 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH] ARM: dts: lan966x: Enable sgpio on pcb8291
-Date:   Wed, 19 Oct 2022 09:51:54 +0200
-Message-ID: <20221019075154.2555054-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Wed, 19 Oct 2022 03:52:30 -0400
+Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556671055D;
+        Wed, 19 Oct 2022 00:52:28 -0700 (PDT)
+Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.emlix.com (Postfix) with ESMTPS id D99715FE74;
+        Wed, 19 Oct 2022 09:52:26 +0200 (CEST)
+From:   Rolf Eike Beer <eb@emlix.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] binfmt_elf: simplify error handling in load_elf_phdrs()
+Date:   Wed, 19 Oct 2022 09:52:16 +0200
+Message-ID: <4137126.7Qn9TF0dmF@mobilepool36.emlix.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable sgpio node on pcb8291 as this is needed to be able to control
-the LEDs on this board. Otherwise the LEDs support on the board will
-not be available.
-On the other board pcb8309 the sgpio is already enabled because it
-needed to access the SFP ports.
+The err variable was the same like retval, but capped to <= 0. This is the
+same as retval as elf_read() never returns positive values.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Rolf Eike Beer <eb@emlix.com>
 ---
- arch/arm/boot/dts/lan966x-pcb8291.dts | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ fs/binfmt_elf.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-index f4f054cdf2a87..3a3d76af86122 100644
---- a/arch/arm/boot/dts/lan966x-pcb8291.dts
-+++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-@@ -69,6 +69,12 @@ can0_b_pins:  can0-b-pins {
- 		pins = "GPIO_35", "GPIO_36";
- 		function = "can0_b";
- 	};
-+
-+	sgpio_a_pins: sgpio-a-pins {
-+		/* SCK, D0, D1, LD */
-+		pins = "GPIO_32", "GPIO_33", "GPIO_34", "GPIO_35";
-+		function = "sgpio_a";
-+	};
- };
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index cfd5f7ad019d..1fdc92e95170 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -462,7 +462,7 @@ static struct elf_phdr *load_elf_phdrs(const struct elfhdr *elf_ex,
+ 				       struct file *elf_file)
+ {
+ 	struct elf_phdr *elf_phdata = NULL;
+-	int retval, err = -1;
++	int retval = -1;
+ 	unsigned int size;
  
- &can0 {
-@@ -118,6 +124,20 @@ &serdes {
- 	status = "okay";
- };
+ 	/*
+@@ -484,15 +484,9 @@ static struct elf_phdr *load_elf_phdrs(const struct elfhdr *elf_ex,
  
-+&sgpio {
-+	pinctrl-0 = <&sgpio_a_pins>;
-+	pinctrl-names = "default";
-+	microchip,sgpio-port-ranges = <0 3>, <8 11>;
-+	status = "okay";
-+
-+	gpio@0 {
-+		ngpios = <64>;
-+	};
-+	gpio@1 {
-+		ngpios = <64>;
-+	};
-+};
-+
- &switch {
- 	status = "okay";
- };
+ 	/* Read in the program headers */
+ 	retval = elf_read(elf_file, elf_phdata, size, elf_ex->e_phoff);
+-	if (retval < 0) {
+-		err = retval;
+-		goto out;
+-	}
+ 
+-	/* Success! */
+-	err = 0;
+ out:
+-	if (err) {
++	if (retval) {
+ 		kfree(elf_phdata);
+ 		elf_phdata = NULL;
+ 	}
 -- 
-2.38.0
+2.37.3
+
+-- 
+Rolf Eike Beer, emlix GmbH, https://www.emlix.com
+Fon +49 551 30664-0, Fax +49 551 30664-11
+Gothaer Platz 3, 37083 Göttingen, Germany
+Sitz der Gesellschaft: Göttingen, Amtsgericht Göttingen HR B 3160
+Geschäftsführung: Heike Jordan, Dr. Uwe Kracke – Ust-IdNr.: DE 205 198 055
+
+emlix - smart embedded open source
+
 
