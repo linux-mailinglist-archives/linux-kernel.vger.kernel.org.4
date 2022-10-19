@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B77604A88
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6949604A96
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJSPGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S232118AbiJSPGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiJSPFF (ORCPT
+        with ESMTP id S231892AbiJSPFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:05:05 -0400
+        Wed, 19 Oct 2022 11:05:42 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FEB17A023
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:59:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432F6193EE9;
+        Wed, 19 Oct 2022 07:59:07 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1666191373;
@@ -22,32 +22,35 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2RcyNuvhxtc3XAp6KUXXBEZGfBTKoyRNmah0KdJRqUM=;
-        b=s+uK2CVyfeRWS2SM8ONtEm3ezF4TKCfBKPBHIwbQeW7/3EKdt2DXK8Se8xiredxeNeCSkY
-        ZKidWJ9kOFMnJ+GDRhqzajlfU0p4AFkX17OY/4V8RDFxWqEJS/1ZvxtBmCOcbU/4l2IV5+
-        uARnYyoVv6Nyvh9wOtzsxW1T3vJw5LOkY1LuXAHyxPLMVW6YaxF14EZEX4gyzIy+5CXUjS
-        vS1F3O108Xc1xgSipOJuPxZcLQ/qV1jeZloh/cC1xGCqj2wAIwT9zN8nuby6knA2dC3umy
-        BQvb2BMGIRylFs6NDquzoIBMVcnZI7H6sM7m8P0T/FddSctNfiRBDKDOqpiRPg==
+        bh=aHpEExScLzm4b3PGICcqjxP6eSShWDRVil4o7DIdRaU=;
+        b=eDfs/FrHZ7HvnRF4atKhYEZ/pRXno8GEGAkw6IqnyiCmO75Q9sEJ6bqLoRWApu5I/kGcQh
+        KCTzK1MrPYWFQHFbhhZ4ddIBd7thtElTQ1FhTZSvTGr+D/NiY6ja5av6esQrgKRy3JmdV3
+        rrRE8vZ1b74ucDPVRwBFE1RIC+RhuKL5DdLWniGfxLfcajr60p331h+dY6KdEzGysIZMdC
+        yATsOHK/PLnHwsUFjoxiti7aJ0XxaKU0B+KQDroX00sQ4UKCeboef9oWWEJpZprSsCboLS
+        UQL5y2A8i38TojR6bF2UMoVPjjyV/EALMD7ITlxAjhc539biNA5Q3/A88oMp9w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1666191373;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2RcyNuvhxtc3XAp6KUXXBEZGfBTKoyRNmah0KdJRqUM=;
-        b=o+Tf43pKW3jb3K3SYt/Uyhx64JMO0G2cG8/ulnFuahJncjT6ev9pQxCcwgJEpI8Oeo5SuX
-        YSUluQ/obMklGtAg==
+        bh=aHpEExScLzm4b3PGICcqjxP6eSShWDRVil4o7DIdRaU=;
+        b=ag8wipmZjScVK96FvYUT41NwW8W8jBS77tduneOJOnLYN8uLmQW8RkuO+x9sTyAf/SfPXA
+        QV5RyDV2N62v9UBQ==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org
-Subject: [PATCH printk v2 20/38] um: kmsg_dumper: use srcu console list iterator
-Date:   Wed, 19 Oct 2022 17:01:42 +0206
-Message-Id: <20221019145600.1282823-21-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+Subject: [PATCH printk v2 21/38] serial: kgdboc: use srcu console list iterator
+Date:   Wed, 19 Oct 2022 17:01:43 +0206
+Message-Id: <20221019145600.1282823-22-john.ogness@linutronix.de>
 In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
 References: <20221019145600.1282823-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -62,43 +65,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than using the console_lock to guarantee safe console list
-traversal, use srcu console list iteration.
+Use srcu console list iteration for safe console list traversal.
+
+Note that configure_kgdboc() still requires the console_lock in
+order to ensure that no console is in its write() callback when
+its direct() callback is called. Add comments to clarify this.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- arch/um/kernel/kmsg_dump.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ drivers/tty/serial/kgdboc.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/arch/um/kernel/kmsg_dump.c b/arch/um/kernel/kmsg_dump.c
-index 3a3bbbb22090..44a418dec919 100644
---- a/arch/um/kernel/kmsg_dump.c
-+++ b/arch/um/kernel/kmsg_dump.c
-@@ -16,20 +16,17 @@ static void kmsg_dumper_stdout(struct kmsg_dumper *dumper,
- 	struct console *con;
- 	unsigned long flags;
- 	size_t len = 0;
+diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+index b17aa7e49894..e9d3f8c6e3dc 100644
+--- a/drivers/tty/serial/kgdboc.c
++++ b/drivers/tty/serial/kgdboc.c
+@@ -171,6 +171,7 @@ static int configure_kgdboc(void)
+ 	int err = -ENODEV;
+ 	char *cptr = config;
+ 	struct console *cons;
 +	int cookie;
  
- 	/* only dump kmsg when no console is available */
--	if (!console_trylock())
--		return;
--
--	for_each_console(con) {
+ 	if (!strlen(config) || isspace(config[0])) {
+ 		err = 0;
+@@ -193,8 +194,14 @@ static int configure_kgdboc(void)
+ 	if (!p)
+ 		goto noconfig;
+ 
++	/*
++	 * Stop console printing because the device() callback may
++	 * assume the console is not within its write() callback.
++	 */
+ 	console_lock();
+-	for_each_console(cons) {
++
 +	cookie = console_srcu_read_lock();
-+	for_each_console_srcu(con) {
- 		if (strcmp(con->name, "tty") == 0 &&
- 		    (console_is_enabled(con) || (con->flags & CON_CONSDEV))) {
++	for_each_console_srcu(cons) {
+ 		int idx;
+ 		if (cons->device && cons->device(cons, &idx) == p &&
+ 		    idx == tty_line) {
+@@ -202,6 +209,8 @@ static int configure_kgdboc(void)
  			break;
  		}
  	}
--
--	console_unlock();
--
 +	console_srcu_read_unlock(cookie);
- 	if (con)
- 		return;
++
+ 	console_unlock();
  
+ 	kgdb_tty_driver = p;
+@@ -451,6 +460,7 @@ static void kgdboc_earlycon_pre_exp_handler(void)
+ {
+ 	struct console *con;
+ 	static bool already_warned;
++	int cookie;
+ 
+ 	if (already_warned)
+ 		return;
+@@ -463,9 +473,14 @@ static void kgdboc_earlycon_pre_exp_handler(void)
+ 	 * serial drivers might be OK with this, print a warning once per
+ 	 * boot if we detect this case.
+ 	 */
+-	for_each_console(con)
++	cookie = console_srcu_read_lock();
++	for_each_console_srcu(con) {
+ 		if (con == kgdboc_earlycon_io_ops.cons)
+-			return;
++			break;
++	}
++	console_srcu_read_unlock(cookie);
++	if (con)
++		return;
+ 
+ 	already_warned = true;
+ 	pr_warn("kgdboc_earlycon is still using bootconsole\n");
 -- 
 2.30.2
 
