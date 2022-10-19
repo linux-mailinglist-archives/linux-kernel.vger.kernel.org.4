@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEA1605256
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BAF60525D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiJSVz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S231626AbiJSVzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiJSVzP (ORCPT
+        with ESMTP id S231387AbiJSVzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:55:15 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C4037FA0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:55:07 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id 10so18576454pli.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:55:07 -0700 (PDT)
+        Wed, 19 Oct 2022 17:55:23 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC47116CA66
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:55:20 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-132af5e5543so22327887fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:55:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0aSPJogmlylX7KM1RJ0D1MDbzbxw24/coSip2lgP3l8=;
-        b=FfeJSmTDi68H718jGTkL3Qo1tO+F4L+j54/kcb1cwGvPvCRoxWbXgrlkIzP8z1mliR
-         GZ3uqYlcUUjHj9i+2kUHXcKMhvofvcwCX0imm1RPyUM1cBAIEklypYsyDLGlghvh/Th5
-         ePYBz8C0cLy280KU4RVy6tzul8GnmJ1Y48fYA=
+        bh=Wydu2mgXy/Ti5pZeMNO0oB2V13SqCsRFUj9VGtENhPc=;
+        b=ChDSlokPNsjy2o/57nhAg7mfMjZkGB61uN8KGokp5uFWwk9gAqAvvQdsKuPhhf4Er9
+         wmKVQHHL8CkIAihTw0hRaEFTwdI+sSmSvrHn8I7fE03IUF48Nd0r5X/3gjaqFYEsNSKg
+         5Er7iJ8I6HnyOcMvqA10t1iAAiUYMokHH21IE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0aSPJogmlylX7KM1RJ0D1MDbzbxw24/coSip2lgP3l8=;
-        b=bwIuI7iuN+g1T5lvQfRQBU9iTwD27Y0N35jm+Ge+RQ8LbJxknq8BXGiBXlu7l0mjjD
-         HIeXfxzAph6tL9q2WDUrKLWKtyty0ZvmYiiAnSpr+s5JsXDRC4iGe8ijhFr8MqZdRIwV
-         ZJw3l5zsZS+fqZln1DVJPwQtwOlYD99b5BRXZqTi9fJDrVB1sKbccwZWmGqS76Un4ik5
-         16n+bA5bMYIl9JoftBBablMnUr9dGG2WdY7NPM/+IaOrn7zSpf627L+ywwyXAuwg5v+s
-         hPw/agQwuBx69F95EoblNnZz+B3u0wFPXmCeQ9PoAaWRlyDiUAvfeWdXc3cHKoFWL6as
-         7cfg==
-X-Gm-Message-State: ACrzQf2dh8mLrbv51TIDB1FB3rxw4ykOLbGkVEWeZ412ZYOKlKzJ4eqA
-        LRumdVigTP5M1xunsL+QWLXCQw==
-X-Google-Smtp-Source: AMsMyM7Iv6iv4kAIoVGRCrEZHEH/ZPVWrqoEmnkjZdmu4WQ95eSFzTazbt4oPRQx024Pge0QJgZ0DA==
-X-Received: by 2002:a17:902:9048:b0:17f:93a5:4638 with SMTP id w8-20020a170902904800b0017f93a54638mr10696224plz.108.1666216506540;
-        Wed, 19 Oct 2022 14:55:06 -0700 (PDT)
+        bh=Wydu2mgXy/Ti5pZeMNO0oB2V13SqCsRFUj9VGtENhPc=;
+        b=rJYPR0iwDSbox8fylZTbUxMg/kzAMKlqsBo5CoAjhLaYcECLXQY/VccJTO6q8GHD/+
+         0KwDWTMhPGsQ+mWu/yk9Oz1xXfZxcJK5qkCXDzLEebex1N6RXCYkSblw0fIZYaRFqXUk
+         7oqA561P7Y1Uyhgp0H53cv1D2+HtTiyBl4kEhSSlnIETNewPBKWiwZtk8kFS3I/yoO22
+         52YgcGB/vBH4wABw6XbPhJ45YYS5g8eu4r0n42ivhzTRyMu/yP/y7hH3N7o5c4H/U/B8
+         xAKj5rEOeW+SSIhd8oOx3Fy4Xa9zUO87lWZVHPUR5Fu3HjhJAihxgv/VUiNrO79czn3L
+         rlag==
+X-Gm-Message-State: ACrzQf1GAMicMBptYrN0rAkXUeCn6KmFKBpvDnZK179o/oxl+eX12GDQ
+        B+UPH55Y8YHYDM0j9iW96IZn1nUT+yisYQ==
+X-Google-Smtp-Source: AMsMyM65zy9w0RdzVEqmld4/qnsBulitgQpGHjJqxSrm9Wcnqk0BhVHkXGaAFZEodAFwIynT26Y3TA==
+X-Received: by 2002:a17:90a:c782:b0:202:c73e:5488 with SMTP id gn2-20020a17090ac78200b00202c73e5488mr47000873pjb.202.1666216509347;
+        Wed, 19 Oct 2022 14:55:09 -0700 (PDT)
 Received: from localhost ([2620:15c:9d:2:57b7:1f0e:44d1:f252])
-        by smtp.gmail.com with UTF8SMTPSA id s13-20020aa78bcd000000b00543a098a6ffsm11792418pfd.212.2022.10.19.14.55.04
+        by smtp.gmail.com with UTF8SMTPSA id l10-20020a170903244a00b0017f637b3e87sm11258807pls.279.2022.10.19.14.55.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 14:55:06 -0700 (PDT)
+        Wed, 19 Oct 2022 14:55:08 -0700 (PDT)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Shawn Lin <shawn.lin@rock-chips.com>,
@@ -69,9 +69,9 @@ Cc:     Shawn Lin <shawn.lin@rock-chips.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2 3/7] mmc: sdhci-brcmstb: Fix SDHCI_RESET_ALL for CQHCI
-Date:   Wed, 19 Oct 2022 14:54:36 -0700
-Message-Id: <20221019145246.v2.3.I6a715feab6d01f760455865e968ecf0d85036018@changeid>
+Subject: [PATCH v2 4/7] mms: sdhci-esdhc-imx: Fix SDHCI_RESET_ALL for CQHCI
+Date:   Wed, 19 Oct 2022 14:54:37 -0700
+Message-Id: <20221019145246.v2.4.I7d01f9ad11bacdc9213dee61b7918982aea39115@changeid>
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 In-Reply-To: <20221019215440.277643-1-briannorris@chromium.org>
 References: <20221019215440.277643-1-briannorris@chromium.org>
@@ -79,7 +79,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,31 +101,30 @@ various timeouts.
 It's not typical to perform resets while CQE is enabled, but this may
 occur in some suspend or error recovery scenarios.
 
-Fixes: d46ba2d17f90 ("mmc: sdhci-brcmstb: Add support for Command Queuing (CQE)")
+Fixes: bb6e358169bf ("mmc: sdhci-esdhc-imx: add CMDQ support")
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
 Changes in v2:
- - Rely on cqhci_deactivate() to handle NULL cqe_private, instead of
-   moving around CQE capability flags
+ - Drop unnecessary ESDHC_FLAG_CQHCI check
 
- drivers/mmc/host/sdhci-brcmstb.c | 3 +++
+ drivers/mmc/host/sdhci-esdhc-imx.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
-index aff36a933ebe..d479ca39c987 100644
---- a/drivers/mmc/host/sdhci-brcmstb.c
-+++ b/drivers/mmc/host/sdhci-brcmstb.c
-@@ -55,6 +55,9 @@ static void brcmstb_reset(struct sdhci_host *host, u8 mask)
- 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
- 	struct sdhci_brcmstb_priv *priv = sdhci_pltfm_priv(pltfm_host);
+diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+index 55981b0f0b10..c07df7b71b22 100644
+--- a/drivers/mmc/host/sdhci-esdhc-imx.c
++++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+@@ -1288,6 +1288,9 @@ static void esdhc_set_uhs_signaling(struct sdhci_host *host, unsigned timing)
  
+ static void esdhc_reset(struct sdhci_host *host, u8 mask)
+ {
 +	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL))
 +		cqhci_deactivate(host->mmc);
 +
  	sdhci_reset(host, mask);
  
- 	/* Reset will clear this, so re-enable it */
+ 	sdhci_writel(host, host->ier, SDHCI_INT_ENABLE);
 -- 
 2.38.0.413.g74048e4d9e-goog
 
