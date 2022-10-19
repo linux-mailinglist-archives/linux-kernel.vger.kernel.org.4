@@ -2,213 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC30603D68
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB26603E59
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiJSJBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S233003AbiJSJNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbiJSI7Y (ORCPT
+        with ESMTP id S233225AbiJSJK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:59:24 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7490C1EEE3;
-        Wed, 19 Oct 2022 01:54:44 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id bh13so15655721pgb.4;
-        Wed, 19 Oct 2022 01:54:44 -0700 (PDT)
+        Wed, 19 Oct 2022 05:10:29 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D43CC2CBD
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:02:05 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q9so15662768pgq.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:02:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A9I2hdsafS0GLgFrUl5npQLZoG5UYLa7iPh5261ayqo=;
-        b=ND2gNkFGJK/iFxe1u4L1Z4VR6R0+/irm1SWn/+mVJZ8kRiC4sqLxORRE3Bnzb3IAm/
-         PpsdWaARYEUywuq4KsAobLlpVmEo5ztkYnFTx3/y0dia2U/Pz/tiXLOwZDEXqhIE4UYN
-         fZxCb3tmjy9J92XOVGnNlsgT0KfHvuv8ZAvaer/D0bvdtoiQJBl7h9bOqFapKnkGhJKV
-         kaiQk9vEA/QI5Gv8F5CJmTzwNcADZ939bhd1j/lQtqE7/i30WMXekTVkzpKu0G7FWGW2
-         9Tl2xTQAx1zUi5XmGL37kAJFV7HLzrIiQpXTy8xLfCetzCweyxf4oW9nm9BNwH0zjbEq
-         ZUlQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W82ENRi/vWm2336iUxijeBhhPjgIoPANGK5XokAwjLM=;
+        b=AfZbhz6SL2hrtwh9lZFyL6cCLHpURECSAaG31B/o5dwTITxUgeqQidPyFMafuRAWzE
+         2iKiwoQbLrrjGZBvRWNh6Q2r5yw1rl8E9+ISOzb8HQoqAPVKj53pDitXacv83EUhtfAo
+         vO5oHmi8u17MiKlbizxhlEi/6X5Vr0lZwDwSQKhRbz/sOUsfKMxKUd3ox3TN0DWx0rTK
+         T34VJ43DFjRpB/1/4nc2GEEppkiicx08BXBc8Nu6cS0vppBBYDdWeZb8YCUc5gy+fr+v
+         dM4vMHpq2Gj/aRctQOJakIAx0GdXlmnGVwoo+mpDA2+/Q7sKolagnWGvmaICH7/nzu4Q
+         ad4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A9I2hdsafS0GLgFrUl5npQLZoG5UYLa7iPh5261ayqo=;
-        b=IC8uI7asMXSWE4xZv91Z1NIFBaB/49shOhUMB0PbmeRgmwTiPjLGGJ+SXzNoc+1US3
-         w0oeqv5jplOFofYVDWs5uClJXpcHPnJOFKldVTX8yfwcyCHauuVq+X8XFK/w0y0k8fRi
-         VhyyY6f/lm2uaQDM0PBWjoE06OVMoOE/mGu0rEen3RiMi7fTigV7L039zTdweFqRzSK9
-         VBb0ooYfYnxC69TNPIq+hm3CzCB5p2eyRPO/eBfXAowEZpALicrDhQGJ68IIuV/vz80i
-         UiBED8YoA32AbrfwJlqX6Q7xk1mnKtp6sRAf1JctOfZRBnQuQwFfMt8Wq1p9lNBpDkq6
-         lMqA==
-X-Gm-Message-State: ACrzQf3rZ7aewbuluSjr8CXnuKGXwOjBYMxeGSalhHe7gksFolAquKO3
-        JxHSVgpQ4XD1w00tc3oMVdQphXOAKUdf6XBt
-X-Google-Smtp-Source: AMsMyM40w6UMkYswxtch5o/A/PXXkcHSQKHravoRfkRZr1dMkwH8z470vBIsGgTeshYz3je9LHISdA==
-X-Received: by 2002:a05:6a00:f03:b0:563:210a:5ffb with SMTP id cr3-20020a056a000f0300b00563210a5ffbmr7565582pfb.70.1666169468546;
-        Wed, 19 Oct 2022 01:51:08 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id pf15-20020a17090b1d8f00b00200a85fa777sm12978904pjb.1.2022.10.19.01.51.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 01:51:07 -0700 (PDT)
-Message-ID: <c4e78b67-bfcb-3671-3de9-252b97062c27@gmail.com>
-Date:   Wed, 19 Oct 2022 16:50:53 +0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W82ENRi/vWm2336iUxijeBhhPjgIoPANGK5XokAwjLM=;
+        b=PXOj+Y6Up9Wh6vMyodE1mNdp8A6SdZZtCv9MEvO9fZaE4PNIPUWwuStkrNap7uzP+J
+         eaM4AIYnSI8i2rXmaDzzcq6aIXIUkqBH1rqO+9fT/WFQdUOc204TJIZ1FaKSt6WeC2c7
+         0xUr5pcBw1MPsloJTyivyMN5XTDEyuTowpm42/odCZiZfO+hMxe6FDbCfLSdxV1KL8n9
+         VAL+KVGQFJGw1Qzskj36XL8P032Uixg0YKfXNSFlVYufxnULI+Ggpb0+QIKcWekckIdR
+         a66NwmoKYmyN72Aaz1PfE3uFM6ehkH18RLEr+BotkMEJxkwqo/MXJh6O/4rBlC2y5031
+         421A==
+X-Gm-Message-State: ACrzQf3eVuROVyy4eWoPPpAu4W6cEfKZKE4cdcUmpLcWKz6NNJ3o9yH4
+        1d6gJSY1NhTK4XlubYMIhPktrNVzzMyAn9faI5A=
+X-Google-Smtp-Source: AMsMyM6RTDhb7E9g5FHm/PpzD9A77KswvYCfiS1Xl0yUhM+9dmkn3sZYwkY9aT6Vn0KQgnkycF0OCA==
+X-Received: by 2002:a63:a06:0:b0:458:2853:45e4 with SMTP id 6-20020a630a06000000b00458285345e4mr6175346pgk.20.1666169491395;
+        Wed, 19 Oct 2022 01:51:31 -0700 (PDT)
+Received: from leoy-huanghe.lan (211-75-219-199.hinet-ip.hinet.net. [211.75.219.199])
+        by smtp.gmail.com with ESMTPSA id t16-20020a170902e85000b00179eaf275d5sm10278662plg.27.2022.10.19.01.51.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 01:51:30 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 16:51:25 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v9 02/13] perf test: Add build infra for perf test tools
+ for CoreSight tests
+Message-ID: <Y0+6jbL1oC4jk8Ja@leoy-huanghe.lan>
+References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
+ <20220909152803.2317006-3-carsten.haitzler@foss.arm.com>
+ <Yz67SHpIN5NggKEk@kernel.org>
+ <Yz6/zlchVnNsVlzJ@kernel.org>
+ <Yz7RAgMN6WGnD3OZ@leoy-yangtze.lan>
+ <e9f980a7-fba8-4610-a058-b74e51d6ab24@foss.arm.com>
+ <Y0AfK7sVphNkQA4q@kernel.org>
+ <0b3afc5d-c4a1-8a50-45c3-20c706c3ecfd@foss.arm.com>
+ <Y0QkIjO4pvPuzeMB@kernel.org>
+ <9f2d2032-8859-4388-489a-ba5cd2cee432@foss.arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.3
-Subject: Re: [kvm-unit-tests PATCH 1/2] x86/pmu: Update rdpmc testcase to
- cover #GP and emulation path
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220905123946.95223-1-likexu@tencent.com>
- <20220905123946.95223-6-likexu@tencent.com> <Yz347iKzq7cbjMdw@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Yz347iKzq7cbjMdw@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f2d2032-8859-4388-489a-ba5cd2cee432@foss.arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/2022 5:36 am, Sean Christopherson wrote:
-> On Mon, Sep 05, 2022, Like Xu wrote:
->> From: Like Xu <likexu@tencent.com>
->>
->> Specifying an unsupported PMC encoding will cause a #GP(0).
->> All testcases should be passed when the KVM_FEP prefix is added.
->>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->>   lib/x86/processor.h |  5 ++++-
->>   x86/pmu.c           | 13 +++++++++++++
->>   2 files changed, 17 insertions(+), 1 deletion(-)
->>
->> diff --git a/lib/x86/processor.h b/lib/x86/processor.h
->> index 10bca27..9c490d9 100644
->> --- a/lib/x86/processor.h
->> +++ b/lib/x86/processor.h
->> @@ -441,7 +441,10 @@ static inline int wrmsr_safe(u32 index, u64 val)
->>   static inline uint64_t rdpmc(uint32_t index)
->>   {
->>   	uint32_t a, d;
->> -	asm volatile ("rdpmc" : "=a"(a), "=d"(d) : "c"(index));
->> +	if (is_fep_available())
->> +		asm volatile (KVM_FEP "rdpmc" : "=a"(a), "=d"(d) : "c"(index));
->> +	else
->> +		asm volatile ("rdpmc" : "=a"(a), "=d"(d) : "c"(index));
-> 
-> Hmm, not sure how I feel about the idea of always use FEP in a common helper when
-> it's available.  Part of me likes the idea, but part of me is worried that it
-> will cause confusion due to not being explicit.
-> 
-> Unless there's a pressing need to force emulation, let's punt the FEP stuff for
-> now.  More below.
-
-Some security researchers are very interested in these corners.
-
-To my limited testing, most KVM emulation code (at least arch/x86/kvm/emulate.c) 
-are not
-adequately covered by test cases, and perhaps some will move them to the user space.
-
-> 
->>   	return a | ((uint64_t)d << 32);
->>   }
->>   
->> diff --git a/x86/pmu.c b/x86/pmu.c
->> index 203a9d4..11607c0 100644
->> --- a/x86/pmu.c
->> +++ b/x86/pmu.c
->> @@ -758,12 +758,25 @@ static bool pmu_is_detected(void)
->>   	return detect_intel_pmu();
->>   }
->>   
->> +static void rdpmc_unsupported_counter(void *data)
->> +{
->> +	rdpmc(64);
->> +}
->> +
->> +static void check_rdpmc_cause_gp(void)
-> 
-> Maybe check_invalid_rdpmc_gp()?  There are multiple reasons RDPMC can #GP, the
-> one that is being relied on to guarantee #GP is specifically that the PMC is
-> invalid.
-
-Applied.
-
-> dd
-
-p, :D
-
-> 
->> +{
->> +	report(test_for_exception(GP_VECTOR, rdpmc_unsupported_counter, NULL),
-> 
-> I'd really like to move away from test_for_exception() and use ASM_TRY().  Ignoring
-> FEP for the moment, the most extensible solution is to provide a safe variant:
-> 
-> static inline int rdpmc_safe(u32 index, uint64_t *val)
-> {
-> 	uint32_t a, d;
-> 
-> 	asm volatile (ASM_TRY("1f")
-> 		      "rdpmc"
-> 		      : "=a"(a), "=d"(d) : "c"(index));
-
-	asm volatile (ASM_TRY("1f")
-		      "rdpmc\n\t"
-		      "1:"
-		      : "=a"(a), "=d"(d) : "c"(index) : "memory");
-
-, otherwise the compiler will complain.
-
-> 	*val = (uint64_t)a | ((uint64_t)d << 32);
-> 	return exception_vector();
-> }
-> 
-> static inline uint64_t rdpmc(uint32_t index)
-> {
-> 	uint64_t val;
-> 	int vector = rdpmc_safe(index, &val);
-> 
-> 	assert_msg(!vector, "Unexpected %s on RDPMC(%d)",
-> 		   exception_mnemonic(vector), index);
-> 	return val;
-> }
-
-Applied.
-
+On Wed, Oct 19, 2022 at 09:11:20AM +0100, Carsten Haitzler wrote:
 > 
 > 
-> For long-term emulation validation, the best idea I have at this point is to do
-> add a config knob to opt-in to using FEP in _all_ common helpers (where "all"
-> means everything KVM actually emulates).  It'd take some macro magic, but it'd
-> be easier to maintain (no need to have two paths in every helper) and would be
-> controllable.
-
-With both hands up in favour. Leave it to you, as this involves a wider change.
-
+> On 10/10/22 14:54, Arnaldo Carvalho de Melo wrote:
+> > Em Mon, Oct 10, 2022 at 08:02:29AM +0100, Carsten Haitzler escreveu:
+> > > On 10/7/22 13:44, Arnaldo Carvalho de Melo wrote:
+> > > > Em Fri, Oct 07, 2022 at 12:34:51PM +0100, Carsten Haitzler escreveu:
+> > > > > On 10/6/22 13:58, Leo Yan wrote:
+> > > > > oh sorry - indeed i didn't see this problem coming after fixing the
+> > > > > conflicts. i've got an update of the patches that fix that. should i just
+> > > > > send through the 2 updates patches as a v10 or the whole series?
+> > 
+> > > > No need, I did some fixes taking into account the comments on this
+> > > > thread, we can go on and fix things from what I have now at
+> > > > acme/perf/core, which I'll send to Linus today.
+> > > oh cool. i'll let patches sit for now - let me know if there's anything you
+> > > want/need from me.
+> > 
+> > Not right now, I'm now just waiting for Linus to merge what I sent, then
+> > you can continue from upstream.
 > 
->> +		"rdpmc with invalid PMC index raises #GP");
->> +}
->> +
->>   int main(int ac, char **av)
->>   {
->>   	setup_vm();
->>   	handle_irq(PC_VECTOR, cnt_overflow);
->>   	buf = malloc(N*64);
->>   
->> +	check_rdpmc_cause_gp();
->> +
->>   	if (!pmu_is_detected())
->>   		return report_summary();
->>   
->> -- 
->> 2.37.3
->>
+> I'm not sure what you have sent to Linus? The patch series? Specific
+> patches?
+
+I think the whole patch set has been merged into Linux mainline;
+after git pull the Linux mainline code and you could see:
+
+$ git log --oneline --author="Carsten Haitzle"
+dc2e0fb00bb2 perf test coresight: Add relevant documentation about ARM64 CoreSight testing
+43c688cb3241 perf test: Add git ignore for tmp and output files of ARM CoreSight tests
+b65c6477f6bb perf test coresight: Add unroll thread test shell script
+fc0a0ea03980 perf test coresight: Add unroll thread test tool
+74c62b8d6161 perf test coresight: Add thread loop test shell scripts
+e9664b96c6c0 perf test coresight: Add thread loop test tool
+b76692fea7f2 perf test coresight: Add memcpy thread test shell script
+f1288bdb6d48 perf test coresight: Add memcpy thread test tool
+6ea586b1e3dc perf test: Add git ignore for perf data generated by the ARM CoreSight tests
+fdc25cc59c71 perf test: Add arm64 asm pureloop test shell script
+8b97519711c3 perf test: Add asm pureloop test tool
+34bec35cbbb2 perf test: Add build infra for perf test tools for ARM CoreSight tests
+c63317ab14b0 perf test: Add CoreSight shell lib shared code for future tests
+7391db645938 perf test: Refactor shell tests allowing subdirs
+
+Thanks,
+Leo
