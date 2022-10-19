@@ -2,220 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D70560512C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18E060512F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiJSUS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S231258AbiJSUTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiJSUSw (ORCPT
+        with ESMTP id S231241AbiJSUTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:18:52 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0631A0C2F;
-        Wed, 19 Oct 2022 13:18:49 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1olFWW-0003EF-DJ; Wed, 19 Oct 2022 22:18:44 +0200
-Message-ID: <a45cfcc9-0255-14f0-30a5-18d6efaad0d4@maciej.szmigiero.name>
-Date:   Wed, 19 Oct 2022 22:18:38 +0200
+        Wed, 19 Oct 2022 16:19:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07980240AC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:19:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7461B822EB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D90FDC433C1;
+        Wed, 19 Oct 2022 20:19:30 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bbSVGaHM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666210768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C5fVcK31viwo6cd+Ntr7JvcXlPspuKK/0tBhkAp7rS4=;
+        b=bbSVGaHMrn3+fdih8eHeNZKmyvNtAFlmp0SakMWD716TytdSbCA9Urv9G/y5v1txQdL8Vx
+        DDizKMClOts+I3M0vy8BhMV5cw9xi8Gu64h5OPb69gI24IaPUm/ZM2A4PgnISpqFLwUcQ6
+        H3FQW7LibPmJT2A/wbQJ6d8YFLUzKFI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f73e1fa5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 19 Oct 2022 20:19:27 +0000 (UTC)
+Date:   Wed, 19 Oct 2022 14:19:23 -0600
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, sultan@kerneltoast.com
+Subject: Re: [Intel-gfx] signal: break out of wait loops on kthread_stop()
+Message-ID: <Y1Bby6FEEWiFIjjD@zx2c4.com>
+References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
+ <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
+ <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com>
+ <Y1A+9kN6bwfXeqVt@zx2c4.com>
+ <8acc3e4a-abbc-32bc-626e-7a216f6755c3@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, pl-PL
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
-        zhenyzha@redhat.com, shan.gavin@gmail.com, kvmarm@lists.linux.dev,
-        pbonzini@redhat.com, shuah@kernel.org,
-        kvmarm@lists.cs.columbia.edu, ajones@ventanamicro.com
-References: <20221014071914.227134-1-gshan@redhat.com>
- <20221014071914.227134-5-gshan@redhat.com>
- <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
- <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
- <da2b7db0-509a-c9e0-c36b-6487a265a779@redhat.com>
- <a1a8664c-4d06-89e7-8cfa-b730969bb841@maciej.szmigiero.name>
- <5bfbe050-a654-8400-e1f1-dcfa4dba13e6@redhat.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
- guest page size
-In-Reply-To: <5bfbe050-a654-8400-e1f1-dcfa4dba13e6@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8acc3e4a-abbc-32bc-626e-7a216f6755c3@linux.intel.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.10.2022 02:26, Gavin Shan wrote:
-> On 10/18/22 11:56 PM, Maciej S. Szmigiero wrote:
->> On 18.10.2022 02:51, Gavin Shan wrote:
->>> On 10/18/22 8:46 AM, Gavin Shan wrote:
->>>> On 10/18/22 5:31 AM, Maciej S. Szmigiero wrote:
->>>>> On 14.10.2022 09:19, Gavin Shan wrote:
->>>>>> The test case is obviously broken on aarch64 because non-4KB guest
->>>>>> page size is supported. The guest page size on aarch64 could be 4KB,
->>>>>> 16KB or 64KB.
->>>>>>
->>>>>> This supports variable guest page size, mostly for aarch64.
->>>>>>
->>>>>>    - The host determines the guest page size when virtual machine is
->>>>>>      created. The value is also passed to guest through the synchronization
->>>>>>      area.
->>>>>>
->>>>>>    - The number of guest pages are unknown until the virtual machine
->>>>>>      is to be created. So all the related macros are dropped. Instead,
->>>>>>      their values are dynamically calculated based on the guest page
->>>>>>      size.
->>>>>>
->>>>>>    - The static checks on memory sizes and pages becomes dependent
->>>>>>      on guest page size, which is unknown until the virtual machine
->>>>>>      is about to be created. So all the static checks are converted
->>>>>>      to dynamic checks, done in check_memory_sizes().
->>>>>>
->>>>>>    - As the address passed to madvise() should be aligned to host page,
->>>>>>      the size of page chunk is automatically selected, other than one
->>>>>>      page.
->>>>>>
->>>>>>    - All other changes included in this patch are almost mechanical
->>>>>>      replacing '4096' with 'guest_page_size'.
->>>>>>
->>>>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>>>>> ---
->>>>>>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
->>>>>>   1 file changed, 115 insertions(+), 76 deletions(-)
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
->>>>>> index d5aa9148f96f..d587bd952ff9 100644
->>>>>> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
->>>>>> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
->> (...)
->>>>>> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
->>>>>>    * for the total size of 25 pages.
->>>>>>    * Hence, the maximum size here is 50 pages.
->>>>>>    */
->>>>>> -#define MEM_TEST_MOVE_SIZE_PAGES    (50)
->>>>>> -#define MEM_TEST_MOVE_SIZE        (MEM_TEST_MOVE_SIZE_PAGES * 4096)
->>>>>> +#define MEM_TEST_MOVE_SIZE        0x32000
->>>>>
->>>>> The above number seems less readable than an explicit value of 50 pages.
->>>>>
->>>>> In addition to that, it's 50 pages only with 4k page size, so at least
->>>>> the comment above needs to be updated to reflect this fact.
->>>>>
->>>>
->>>> Yeah, I will change the comments like below in next revision.
->>>>
->>>>   /*
->>>>    * When running this test with 32k memslots, actually 32763 excluding
->>>>    * the reserved memory slot 0, the memory for each slot is 0x4000 bytes.
->>>>    * The last slot contains 0x19000 bytes memory. Hence, the maximum size
->>>>    * here is 0x32000 bytes.
->>>>    */
->>>>
->>>
->>> I will replace those numbers with readable ones like below :)
->>>
->>> /*
->>>   * When running this test with 32k memslots, actually 32763 excluding
->>>   * the reserved memory slot 0, the memory for each slot is 16KB. The
->>>   * last slot contains 100KB memory with the remaining 84KB. Hence,
->>>   * the maximum size is double of that (200KB)
->>>   */
->>
->> Still, these numbers are for x86, which has KVM_INTERNAL_MEM_SLOTS
->> defined as 3.
->>
->> As far as I can see aarch64 has KVM_INTERNAL_MEM_SLOTS equal to 0, so
->> this arch has 32766 slot available for the test memory.
->>
->> Quick calculations show that this will result in 112 KiB of memory in
->> the last slot for 4 KiB page size (while for 64 KiB page size the
->> maximum slot count for this test is 8192 anyway - not counting slot 0).
->>
-> 
-> It seems your calculation had (512MB+64KB), instead of (512MB+4KB).
-> In this particular patch, we still have (512MB+4KB). How about to change
-> like below in this patch. In next patch, it's adjusted accordingly after
-> we have (512MB+64KB).
+On Wed, Oct 19, 2022 at 09:09:28PM +0100, Tvrtko Ursulin wrote:
+> Hm why is kthread_stop() after kthread_run() abuse? I don't see it in 
+> kerneldoc that it must not be used for stopping threads.
 
-My review comment above referred to the final MEM_SIZE value after the
-whole series, so 512 MiB + 64 KiB.
+Because you don't want it to stop. You want to wait until it's done. If
+you call stop right after run, it will even stop it before it even
+begins to run. That's why you wind up sprinkling your msleeps
+everywhere, indicating that clearly this is not meant to work that way.
 
-I placed that review comment on patch 4 since it's the only patch in this
-series that modified the code comment about MEM_TEST_MOVE_SIZE.
+> Yep the yields and sleeps are horrible and will go. But they are also 
+> not relevant for the topic at hand.
 
-> 
-> (1) In this patch, the comment is changed to as below
-> 
->      /*
->       * We have different number of memory slots, excluding the reserved
->       * memory slot 0, on various architectures and configurations. The
->       * memory size in this test is calculated by doubling the maximal
->       * memory size in last memory slot, with alignment to the largest
->       * supported page size (64KB).
->       *
->       * architecture   slots    memory-per-slot    memory-on-last-slot
->       * --------------------------------------------------------------
->       * x86-4KB        32763    16KB               100KB
->       * arm64-4KB      32766    16KB               52KB
->       * arm64-64KB     8192     64KB               64KB
->       */
->      #define MEM_TEST_MOVE_SIZE    0x40000           /* 256KB */
->
-> (2) In the next patch, where we have (512MB+64KB) after the various
->      memory sizes are consolidated, It is adjusted accordingly as below.
-> 
->      /*
->       * We have different number of memory slots, excluding the reserved
->       * memory slot 0, on various architectures and configurations. The
->       * memory size in this test is calculated by doubling the maximal
->       * memory size in last memory slot, with alignment to the largest
->       * supported page size (64KB).
->       *
->       * architecture   slots    memory-per-slot    memory-on-last-slot
->       * --------------------------------------------------------------
->       * x86-4KB        32763    16KB               160KB
->       * arm64-4KB      32766    16KB               112KB
->       * arm64-64KB     8192     64KB               128KB
->       */
->      #define MEM_TEST_MOVE_SIZE    0x50000           /* 320KB */
+Except they very much are. The reason you need these is because you're
+using kthread_stop() for something it's not meant to do.
 
-Now MEM_TEST_MOVE_SIZE is too high for arm64-4KB and arm64-64KB cases
-(it needs 160 KiB in the last slot but has less available in these two
-cases).
+> Never mind, I was not looking for anything more than a suggestion on how 
+> to maybe work around it in piece as someone is dealing with the affected 
+> call sites.
 
-Using a test size of 192 KiB instead seems like a small difference
-from the original size of 200 KiB, while still being aligned to
-64 KiB.
+Sultan's kthread_work idea is probably the right direction. This would
+seem to have what you need.
 
-The move benchmarks runtime difference on x86-4KB with this size
-(compared to sizes of 200 KiB and 320 KiB) seems to be negligible.
-
-Since it's an odd number of 64 KiB pages (3) the code that halves
-this number of pages will need to be adjusted to operate on raw
-sizes instead.
-
-I can see a single block of code that will need such adjustment:
-> if (lastpages < move_pages / 2) {
->         *maxslots = 0;
->         return false;
-> }   
-
-Similar remark goes for the case (1) above, where you'll probably need
-to use 64 KiB test area size (it's only an intermediate form of code
-before the final patch changes this value so it's fine if it doesn't
-perform as well as the final form of the code).
-
-> Thanks,
-> Gavin
-> 
-
-Thanks,
-Maciej
-
+Jason
