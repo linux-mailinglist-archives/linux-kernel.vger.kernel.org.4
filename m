@@ -2,142 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD3F6050CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370956050D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiJSTwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S229680AbiJSTxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiJSTw0 (ORCPT
+        with ESMTP id S230222AbiJSTxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:52:26 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1FC1C77EB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:52:20 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n7so18295120plp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hnwB06qHFVpiyjYkVj8hLBRnRlHSm7STOnmVqd/nWMs=;
-        b=NfGmDTqXy5LHjgivlWFDkeKrrRP0nhqXyYq+zER68SfYiZ/KZZx55AuFU2tETRwgAG
-         CvvYny8VR6n3ncCR/48eWF3EybY8bqIo35OsVMApVLgRUjVki1Mm6DmQ7Tq5flL0mMYO
-         mNF17c2CPXu6ixK/flyZnAE0D0cCSy9ooydINwO0X8LCNdRUR+h0UmMAazER/6XahBsA
-         5YmNMtMm/j+kwF3tLuwcG76h9h6PH++x/Vu/SIXEFiffvTOz5HSUq7QAnuy27sy9AfV7
-         lGNOZomSPfGgb0TR3KyQ425c8DWQ1f52ku7t8Xbl8Q5QdcZn6g9mForUsgYFK+tdNVDJ
-         497w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hnwB06qHFVpiyjYkVj8hLBRnRlHSm7STOnmVqd/nWMs=;
-        b=tSnge+SUR+5Lv4Gc0xBUpcRl57Z9HV3LTJfrrnUILbgO2pky4xScFNc+VWnos6/nWf
-         jrYcdJKfLGvLaFnHuNaRRNZ8zQohtCfdplsx2rk+9PJFpWZtFHDWaBM/URaUawo1KbE+
-         MNwVfI27+emrMkIEzG1ZmPL+yqcmaIiXdqCbKb4nAJBWl556d/9GjfAZ4x2LyIK3cvpV
-         qllXbR7rVZG8HKglRepYQdlbSr3SK/6dl9MIIhyghjGpOvPetyonBTplfVyG/dRh3pt0
-         +HNdSF4qotpoDRc33n9888OTqXCMgNvNV0v99tyt6lfuKnP0Wxr6Dp9DdTxop6FPz5kb
-         ibyg==
-X-Gm-Message-State: ACrzQf04DDYfooq9QCWt5ujcNSmfcNjcbSpwEc1VTAmUqG40oQP55HUO
-        fuO1FdwPJ5xf9KI6DeKGYfm75w==
-X-Google-Smtp-Source: AMsMyM75YJZ2jZ3WYMp87mMgAHA1mh0zI14iepyX5OdZ2yLFzi/fYu9BTOwEEIdtpyMqh4eAabTBDQ==
-X-Received: by 2002:a17:902:8c81:b0:178:a33f:8b8f with SMTP id t1-20020a1709028c8100b00178a33f8b8fmr10299902plo.50.1666209139843;
-        Wed, 19 Oct 2022 12:52:19 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u14-20020a63d34e000000b0046b1dabf9a8sm10365023pgi.70.2022.10.19.12.52.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 12:52:19 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 19:52:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 09/46] KVM: x86: hyper-v: Introduce TLB flush fifo
-Message-ID: <Y1BVcDFt851sfSkU@google.com>
-References: <20221004123956.188909-1-vkuznets@redhat.com>
- <20221004123956.188909-10-vkuznets@redhat.com>
+        Wed, 19 Oct 2022 15:53:35 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751221D6A46
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666209205; bh=nNXwKU1Ppl1AKa70b/f+2U0MS7Cyq2/czmAaiBlx53o=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=VVfRx/mpKP1CVQhc7zc1zeGGXpPsrtRH20uXAQL0NNQKpy5/+KhtgMWIgs1KS24jn
+         zbn7D3rKdRddQxVoGlX2oYvFg63sre+ed1FVeMz+g7AFbfgd9MFEpB7ujDlHiYAGes
+         z8mnCWWT9RznfHWdlN9bQHvlguEUHS6+4nsm3MV8=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via [213.182.55.206]
+        Wed, 19 Oct 2022 21:53:25 +0200 (CEST)
+X-EA-Auth: l8mDwtAV0BDO3bjb0LZpCiCJNtFyTDFWWrTwGQ3xJ0RWyYBlAO1M0Oltyqbdcf+h9dpnO5itJBkEnn536veef+u5CJ/GItUT
+Date:   Thu, 20 Oct 2022 01:23:20 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: [PATCH v4 0/2] staging: most: dim2: remove unnecessary function call
+ and variable usage
+Message-ID: <cover.1666208065.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221004123956.188909-10-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 0539d216f760..7fb8bd42b13e 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3388,7 +3388,7 @@ static void kvm_vcpu_flush_tlb_all(struct kvm_vcpu *vcpu)
->  	kvm_clear_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
->  }
->  
-> -static void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu)
-> +void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu)
+Patch set simplifies service_done_flag function by eliminating call to
+dim_get_channel_state. Also corrects the misleading dim_ch_state_t variable
+type name.
 
-kvm_vcpu_flush_tlb_guest() doesn't need to be exposed in this patch, i.e. can
-remain static.  I think it can be restricted to x86.c even in the final form
-(will follow-up in later patch).
+Changes in v4:
+   1. Patch set versioning missed earlier. Now added. [feedback from gregkh@linuxfoundation.org]
+   2. Patch 1/2 : None.
+   3. Patch 2/2 : Correct patch subject and log. [feedback from julia.lawall@inria.fr]
 
->  {
->  	++vcpu->stat.tlb_flush;
->  
-> @@ -3409,7 +3409,7 @@ static void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu)
->  	 * Flushing all "guest" TLB is always a superset of Hyper-V's fine
->  	 * grained flushing.
->  	 */
-> -	kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
-> +	kvm_hv_vcpu_purge_flush_tlb(vcpu);
->  }
->  
->  
-> @@ -10484,7 +10484,14 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  
->  		kvm_service_local_tlb_flush_requests(vcpu);
->  
-> -		if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
-> +		/*
-> +		 * Fall back to a "full" guest flush if Hyper-V's precise
-> +		 * flushing fails.  Note, Hyper-V's flushing is per-vCPU, but
-> +		 * the flushes are considered "remote" and not "local" because
-> +		 * the requests can be initiated from other vCPUs.
-> +		 */
-> +		if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu) &&
-> +		    kvm_hv_vcpu_flush_tlb(vcpu))
->  			kvm_vcpu_flush_tlb_guest(vcpu);
->  
->  		if (kvm_check_request(KVM_REQ_REPORT_TPR_ACCESS, vcpu)) {
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index a784ff90740b..1ea28a7bdf2f 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -79,6 +79,7 @@ static inline unsigned int __shrink_ple_window(unsigned int val,
->  
->  #define MSR_IA32_CR_PAT_DEFAULT  0x0007040600070406ULL
->  
-> +void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu);
+Change in v3:
+   1. Patch set introduced since another patch from same area added.
 
-As above, this is unnecessary.
 
->  void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu);
->  int kvm_check_nested_events(struct kvm_vcpu *vcpu);
->  
-> -- 
-> 2.37.3
-> 
+Deepak R Varma (2):
+  staging: most: dim2: read done_buffers count locally from HDM channel
+  staging: most: dim2: correct misleading struct type name
+
+ drivers/staging/most/dim2/dim2.c | 5 ++---
+ drivers/staging/most/dim2/hal.c  | 4 ++--
+ drivers/staging/most/dim2/hal.h  | 6 +++---
+ 3 files changed, 7 insertions(+), 8 deletions(-)
+
+--
+2.30.2
+
+
+
