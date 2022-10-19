@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F69460520B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078D8605214
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiJSVfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S231182AbiJSVhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiJSVfM (ORCPT
+        with ESMTP id S231150AbiJSVhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:35:12 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFFD107A9F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:35:07 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id a67so27128828edf.12
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:35:07 -0700 (PDT)
+        Wed, 19 Oct 2022 17:37:06 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A1E1956EB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:37:05 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id a10so31157064wrm.12
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yiqpubSSRjqi+xo3Zt6mRBDg4WQe+McsHWUueSRR8rc=;
-        b=ZVPAHbECm9m1eYbMBBh9dm9FZ/PRwITiBRs6KLA8kM4fWSiN6WK8hRCLJA3OYDEkrm
-         ajNYPk9TcK/15qfelg34GMb1JG5u6n68n4/ipxOk0IqHwLoTULy3Wxv/iqWvsR0oBjjn
-         9ynUYvg6TuCuclTLiQ3uctoTFs6UQkUCRuz4qMOV0dMPouTfTaYNqDq+Jywr4gFmAg8x
-         dfFIODgyW5KcsvbZyrGeFA9B5ZgfmmxKwD4UQXIZL0owjwst7MYYXyPsbjGMVo8k61DI
-         P1ZBdj9Zn38YNki9eyU0x1HVKadKQdTzYQYQtAyyPzIJlQJmxBpnHRk5qChQ8D1jwO0z
-         aQVA==
+        d=google.com; s=20210112;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rQVk2CI7gUTucSPsYsRuO+Xgt/DLnqyh0SKi8lL+BxQ=;
+        b=kEVsf5yva6tPgrJ28OEjDXh5az9gBpktNnS2hvVjuDF+md4bSzDCTm+yLSoP1QbyCF
+         nmvNyXfObeOLojWLCz86IsZhxLuBaicxiZndWHvw9g8EeVbOQMDwRPb40itjjAn8SR60
+         nETxvBCs7XCrBF7ofuSBIcD8XDwUg25BGJeeyC5neQwRiSrK8XjG/og8YoSeibMcNzI4
+         cCTvbda7YB4O3z4MsBZokpHXnboje0jgXWsJ9OvWDu7xGKth403zmdIXNWN0mtOmqzln
+         +KYYaS5K402ENk8RVDvJZG3VhziKJuQt0TNA7vm0tPoHTF1iLlFjc3Yzj4q6WncoJYWS
+         9GmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yiqpubSSRjqi+xo3Zt6mRBDg4WQe+McsHWUueSRR8rc=;
-        b=rO7gUT781RriFTE1krvxu3hRc1/yOdvfnMXKpyLGqIJmQOfubn4tUdHbuyW8MYueVt
-         4CLvuF3MLf+bfp5ID4+KjtgHJEuSXtBEUMBJLsJF2tTB65sGCGN39rOTcJrA8GeZPqHm
-         NE/uFi+30atI5dYLH+BSqySrnwtACpgo4hbZHhmee4znDUB5EookT/oP6Pwd6q1HAntn
-         0H3+r2aBTYuySDkgEqVQmfspN8Ud4ealhRjG1WkZLGrCtp8UZjBra74yds/Apgsf4bid
-         BpOnlqW+AbMsgQEmw7XJ38jbAs5gJeeME+KOgxy+ylVFMmi7xxTSfEecS0Yc72AAkKh/
-         VRZg==
-X-Gm-Message-State: ACrzQf1ipZQoWL3jt6wz5Vjq12ex2iFV0RpRUJxgnMGrHWJPCkp6AEl1
-        5bCHUSc21Thc/WTHI1jakdl/C6QP16U=
-X-Google-Smtp-Source: AMsMyM5p5Q+y3GHvQ1uQlf0tVyPoWXJvSJ0/bWAEhhHlK32H8om8vlPlJ0nMYGLQnHUtl0k07WGQmQ==
-X-Received: by 2002:a05:6402:360d:b0:459:5f40:5b0a with SMTP id el13-20020a056402360d00b004595f405b0amr9017951edb.168.1666215305362;
-        Wed, 19 Oct 2022 14:35:05 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id bs15-20020a170906d1cf00b0077958ddaec6sm9232118ejb.186.2022.10.19.14.35.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 14:35:04 -0700 (PDT)
-Message-ID: <ebe91504-c5df-99e4-635f-832218584051@gmail.com>
-Date:   Wed, 19 Oct 2022 23:35:03 +0200
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rQVk2CI7gUTucSPsYsRuO+Xgt/DLnqyh0SKi8lL+BxQ=;
+        b=sw1fd+IdT3ePFAaoihN/1KHWuBbsXqO6uz5Dv+meaQC8mrrGPr2pbs2l/Uw08cizsv
+         uyC0C2Nlf9GqIeH5wgKjEcb3fH4M3Ja/1MBJYR1P4KQsNNA65UPmD9ukx4noRPGsqoJS
+         bM5S2AihqFgCANBD85He/3EB64OnF7SYEZZ6e3EXnp+IsA3aMPz9ondARyMBOcsQP54j
+         j58l8s5U/tK6hfnNWY//ABvBC8vseExjudbiR0j9ioYIBHJiCBRD9PDTXLI3KGoUxkaA
+         Ml8QQgNstRnXY8aD3t5KThqYkkT7gZ+MCfXbJJiyFiQP3waYQPH5vf4yt5E+2/moAF5p
+         vUvw==
+X-Gm-Message-State: ACrzQf3ZXwev2+pAs9vEtcsJh9lCNm6HZbSJ+p8NPWhf65y2VozNj4xr
+        LFNSzVPQPq37I9Azd1Nq/A5PWg==
+X-Google-Smtp-Source: AMsMyM7qopHlpx/0st3r1u+WJ8I0s2s8sNijf+qUWSM5iyTi/IS/3JDBYAUI/Wlvu3L9ZDi6G/UWsw==
+X-Received: by 2002:a05:6000:1843:b0:22e:77b0:2e5 with SMTP id c3-20020a056000184300b0022e77b002e5mr6255132wri.215.1666215423700;
+        Wed, 19 Oct 2022 14:37:03 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:b751:df72:2e0f:684c])
+        by smtp.gmail.com with ESMTPSA id g7-20020a05600c4ec700b003c409244bb0sm1236729wmq.6.2022.10.19.14.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 14:37:02 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 23:36:56 +0200
+From:   Marco Elver <elver@google.com>
+To:     youling 257 <youling257@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+Message-ID: <Y1Bt+Ia93mVV/lT3@elver.google.com>
+References: <20220915150417.722975-19-glider@google.com>
+ <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+ <Y1BXQlu+JOoJi6Yk@elver.google.com>
+ <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1] drm: rockchip: remove rockchip_drm_framebuffer_init()
- function
-To:     john@metanate.com
-Cc:     heiko@sntech.de, hjc@rock-chips.com, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,95 +112,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function rockchip_drm_framebuffer_init() was in use
-in the rockchip_drm_fbdev.c file, but that is now replaced
-by a generic fbdev setup. Reduce the image size by
-removing the rockchip_drm_framebuffer_init() and sub function
-rockchip_fb_alloc() and cleanup the rockchip_drm_fb.h header file.
+On Thu, Oct 20, 2022 at 04:07AM +0800, youling 257 wrote:
+> That is i did,i already test, remove "u64 __tmp…kmsan_unpoison_memory", no help.
+> i only remove kmsan_copy_to_user, fix my issue.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- drivers/gpu/drm/rockchip/rockchip_drm_fb.c | 43 ----------------------
- drivers/gpu/drm/rockchip/rockchip_drm_fb.h |  6 ---
- 2 files changed, 49 deletions(-)
+Ok - does only the below work (without the reverts)?
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-index 092bf863110b..409eaa1bf092 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-@@ -25,35 +25,6 @@ static const struct drm_framebuffer_funcs rockchip_drm_fb_funcs = {
- 	.dirty	       = drm_atomic_helper_dirtyfb,
- };
- 
--static struct drm_framebuffer *
--rockchip_fb_alloc(struct drm_device *dev, const struct drm_mode_fb_cmd2 *mode_cmd,
--		  struct drm_gem_object **obj, unsigned int num_planes)
--{
--	struct drm_framebuffer *fb;
--	int ret;
--	int i;
--
--	fb = kzalloc(sizeof(*fb), GFP_KERNEL);
--	if (!fb)
--		return ERR_PTR(-ENOMEM);
--
--	drm_helper_mode_fill_fb_struct(dev, fb, mode_cmd);
--
--	for (i = 0; i < num_planes; i++)
--		fb->obj[i] = obj[i];
--
--	ret = drm_framebuffer_init(dev, fb, &rockchip_drm_fb_funcs);
--	if (ret) {
--		DRM_DEV_ERROR(dev->dev,
--			      "Failed to initialize framebuffer: %d\n",
--			      ret);
--		kfree(fb);
--		return ERR_PTR(ret);
--	}
--
--	return fb;
--}
--
- static const struct drm_mode_config_helper_funcs rockchip_mode_config_helpers = {
- 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
- };
-@@ -106,20 +77,6 @@ static const struct drm_mode_config_funcs rockchip_drm_mode_config_funcs = {
- 	.atomic_commit = drm_atomic_helper_commit,
- };
- 
--struct drm_framebuffer *
--rockchip_drm_framebuffer_init(struct drm_device *dev,
--			      const struct drm_mode_fb_cmd2 *mode_cmd,
--			      struct drm_gem_object *obj)
--{
--	struct drm_framebuffer *fb;
--
--	fb = rockchip_fb_alloc(dev, mode_cmd, &obj, 1);
--	if (IS_ERR(fb))
--		return ERR_CAST(fb);
--
--	return fb;
--}
--
- void rockchip_drm_mode_config_init(struct drm_device *dev)
+diff --git a/include/linux/kmsan-checks.h b/include/linux/kmsan-checks.h
+index c4cae333deec..eb05caa8f523 100644
+--- a/include/linux/kmsan-checks.h
++++ b/include/linux/kmsan-checks.h
+@@ -73,8 +73,8 @@ static inline void kmsan_unpoison_memory(const void *address, size_t size)
+ static inline void kmsan_check_memory(const void *address, size_t size)
  {
- 	dev->mode_config.min_width = 0;
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.h b/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-index 1a696521096d..bae4e079dfb1 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-@@ -7,11 +7,5 @@
- #ifndef _ROCKCHIP_DRM_FB_H
- #define _ROCKCHIP_DRM_FB_H
+ }
+-static inline void kmsan_copy_to_user(void __user *to, const void *from,
+-				      size_t to_copy, size_t left)
++static __always_inline void kmsan_copy_to_user(void __user *to, const void *from,
++					       size_t to_copy, size_t left)
+ {
+ }
  
--struct drm_framebuffer *
--rockchip_drm_framebuffer_init(struct drm_device *dev,
--			      const struct drm_mode_fb_cmd2 *mode_cmd,
--			      struct drm_gem_object *obj);
--void rockchip_drm_framebuffer_fini(struct drm_framebuffer *fb);
--
- void rockchip_drm_mode_config_init(struct drm_device *dev);
- #endif /* _ROCKCHIP_DRM_FB_H */
--- 
-2.20.1
 
+... because when you say only removing kmsan_copy_to_user() (from
+instrument_put_user()) works, it really doesn't make any sense. The only
+explanation would be if the compiler inlining is broken.
