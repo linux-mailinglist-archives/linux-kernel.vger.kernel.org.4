@@ -2,375 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0FF6037FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5A16037FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiJSCWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 22:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S229905AbiJSCXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 22:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJSCWt (ORCPT
+        with ESMTP id S229755AbiJSCXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 22:22:49 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBDFB56EF
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:22:47 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id j21so9896246qkk.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f5CsfMItzKX6acLzl11vwpPmN1BA6KZvOi/g9HYGupc=;
-        b=kMc5LprrewGysF1s2VpBZcvnjphOAwA7+kybpYRcFEWYm54blGw1G8STnbfC55Crzl
-         2yK2ON7K6AqR9Kja/8wxEk3Xxs8fgGI3GhkM4Et0CfIfa31enUuAbDJ2PgVPlnaktL3U
-         JcZsNbCEsOXV89/UUcgrWr3r4uXkc0WvJQsew7pK56f+BMne9GiuyceamCdqcKtYZp2h
-         LXh785ZBLib+vrqBd2RXE/rtlbLf/39YYCb3JuLpRm2+WPkhIhFcgyQr3mrnVIQhJnFX
-         N6XFOf+0ssJUsjL1Ad7bBxWz6SeRO+b//8JzhXEEC1pwo6twYG56eBY5GvpLsnQQf8K+
-         1lqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f5CsfMItzKX6acLzl11vwpPmN1BA6KZvOi/g9HYGupc=;
-        b=V6MwEFObDLVMpg+VVmotIS+v2srOE2O5blgkDxPRCzig4r3QDvm1JpjccajNO/3FBZ
-         gEzI348lgEgRvR3bF0K+4W7KytWLt5EOofvdt3PWL4HI9Be2F2oQ/ppa9QWjVkR31WEj
-         982dKWvwoWr9TZoqnrLPP4amq9kvFEoIS3TUHxIHWVsQFa128iAaypsTE7BWmHwrD8ux
-         HyhMlJ1Q5jbQb8RxDkW09b+EXKMITPdAZoYI4W/QLD/ZbX6+EEQKRKwvvxeVpQLYlH95
-         yV+N7xU8yKJm9hOnmWce8u6zeUyZCoj25e2UIM5UfpZwg9nVwA7pDjgez9lf02jIzFmM
-         LV8w==
-X-Gm-Message-State: ACrzQf0mp6JrtbkbC0PZIOYLVvZz3JY2PjYpPOczBwcKJteE6vOwWWE1
-        yKUUvod8cMOcEWiH56rbphQnwA==
-X-Google-Smtp-Source: AMsMyM6uVdKLG4NIIPMBI98DpCK7zNjCjvx2I/NLmYcUwGs9TcIY9oeuihKO/MG7smwrBx0tumL4jQ==
-X-Received: by 2002:a05:620a:17a9:b0:6ee:d5b6:e35c with SMTP id ay41-20020a05620a17a900b006eed5b6e35cmr3929738qkb.728.1666146166621;
-        Tue, 18 Oct 2022 19:22:46 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id b14-20020ac844ce000000b003434d3b5938sm3082694qto.2.2022.10.18.19.22.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 19:22:45 -0700 (PDT)
-Message-ID: <7e05ad85-9887-75b6-f96d-c3ef02d9b717@linaro.org>
-Date:   Tue, 18 Oct 2022 22:22:43 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v6, 1/8] dt-bindings: media: mediatek: vcodec: Adds
- encoder cores dt-bindings for mt8195
-Content-Language: en-US
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20221001031737.18266-1-irui.wang@mediatek.com>
- <20221001031737.18266-2-irui.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221001031737.18266-2-irui.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 18 Oct 2022 22:23:23 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80075.outbound.protection.outlook.com [40.107.8.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD34B03F7;
+        Tue, 18 Oct 2022 19:23:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hZDX5NkdCCxseIwxUKTCqXY46mGHV3VrnguFism2tocZ0bg96VWaHIjneEcorF0RjFGWmgr3JIfdP9cvwD5DIp9DMCCdrltsxHXuf5LKYiAE0wSIgVeaI28KDVFSABpjEwi87wPp2sAIRF66vlGnBPzCvL8n4a1fuOjXB/vIOAEda3hSHKWmrxdMTueIp5DbZlw71OQwohUOTyIR8j/PfldT1rp33fQOVabYB5N3vu74svzUEuiLRoJE/Td3oX6YAAGCimQudXcBN/GysNzwwFzGqYa2QHYGQ8Kd9a0qW8ZhP1LVfLde9wRbjyX4zZ4PF8QQbadjCt3WuOMhqGQ8GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fJtZh4//vd0pgYoqaQACVbf41pEueAin4tJfeuhl4tg=;
+ b=ZzY6UJu6xdXf8UeRDo0EdblPsnHqz4qoDudGpdolXj8FZAXj9mEIZEenu8ppVYgz3vU4E7xPlsUQA0pENIaWI6d1qLIqtjX2PRrkZwXqiB1UPaWhSPWcqbELmJPZ7vV790573wkamTHojMfHW0I1KWcYQiEjOjo6NMatLLwwY0l5hePwOuiDEOUAnWOXqlfys9z54je7Iip0hOYhkOEaCeOZKc7z8zLrWxlstNszh4IMV3MBV9PWvgza6brGoxlSJl5TaNVLbOVUUcsIjgtGyP3d5Mx1LjTBqLs7mb1D1z7G3B7BTyu8s+g15aTqp8Lhn+0i/q2x47jrQOHTQm1LiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fJtZh4//vd0pgYoqaQACVbf41pEueAin4tJfeuhl4tg=;
+ b=XFZRQG6MXDdg9Rd69/KLmxYfXKo0GudDcYhh4IKTArIxnKsEOoRSXkp8lC80ejxt7dSVdSXZMZf/J8q1Lb9HGsgwE8filnKSNTiZjoAOPkn0Z/WFzPfZKRVh0snFp3TyYYoFRu1QeKqeapdLNnARLyRHOu9uiqzhkhh/47ZLSis=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by DU0PR04MB9562.eurprd04.prod.outlook.com (2603:10a6:10:321::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Wed, 19 Oct
+ 2022 02:23:19 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::181b:75f7:dbc8:b4bc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::181b:75f7:dbc8:b4bc%6]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
+ 02:23:19 +0000
+Message-ID: <fd29de19b976148011ceb39aab879d55a2f243fb.camel@nxp.com>
+Subject: Re: [PATCH v12 5/6] drm/imx: Introduce i.MX8qm/qxp DPU DRM
+From:   Liu Ying <victor.liu@nxp.com>
+To:     kernel test robot <lkp@intel.com>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, p.zabel@pengutronix.de, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, guido.gunther@puri.sm,
+        marcel.ziswiler@toradex.com, laurentiu.palcu@oss.nxp.com,
+        robh@kernel.org
+Date:   Wed, 19 Oct 2022 10:22:43 +0800
+In-Reply-To: <202210190730.rlLYtBVv-lkp@intel.com>
+References: <20221017092308.249665-6-victor.liu@nxp.com>
+         <202210190730.rlLYtBVv-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR01CA0025.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::10) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|DU0PR04MB9562:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9af3ac7a-96ec-4b39-d4e7-08dab178e359
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z4PYJluh0poc7zrBkPjyNc/tcV2WEWT4sPKCLBPBVGKWHz2OS7sU5pGSD2T3gswjX0AJNx5v67pD8gt01iMfRutOvCHgy3aJiT3Um6cDuSOCFUtjXGTeIhhumKvVwQBZJez8CTnXQJh9lX2JrewIZ2kP2ac4vubOM97MkvRAQHW/GhwgeQIDurqND/3gg8qDJAY+TaE/pZvhF7ofVfwXuJcFL6DFrIgGWs5dN3RRygsNz2crue7GWQtDvA0/6Z1ZCE5IC6qpwdhfJTmR0K5ri9hzUyRVOr4QJ87hfj/5oqCfy4QWYVdehPyozs0Kr9fjeU3UTU7X+ZA8z7GSqLCFXTJSCIeo0fE3Kg49yRWhUd0PZddidrG8KKV4ei5SeM9ptZbs9igl5szhTHi/IXwladv/k/NCZSDqLRLIHJswkKhOhHsiPgCBtOcID/UnqzZWXj2ye+hFcLrCv9vslUnao0rHpQPYujg8SweetOc9EYDF0nAWt07gCJGozGFcRsqFVzxy44cDsO2/b6DCt9EEwDk8P47toNDVLYiH8ENA+5WeQ+cMtIR6TnbLkD37ZTmZCf17eg0N6A2mS5E1IzRtNLutvyJsgcsIfYfAVXAF86IxrLAl41R3IKofIK+hs2XQ3gRPc+49oJFBdT3ruzAW1buGycTv05hu0X9Ptv5N4ByKl8TbtGN9LL7Ix7gHwvOCeVET7LlDUPRiAXGMtgHJ+pXWQLpxNr+O8RX96XHUgDCeG8CI29rLzPUjjSsJAi2O6hznG9XMnr9wqM0PXFavr7iJ3K14LCpetDMmXQknZdM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199015)(6486002)(316002)(8676002)(66946007)(4326008)(6666004)(66476007)(66556008)(52116002)(4744005)(5660300002)(186003)(7416002)(2616005)(41300700001)(2906002)(6506007)(478600001)(6512007)(8936002)(36756003)(26005)(86362001)(38100700002)(38350700002)(4001150100001)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGtDRzd0TXRNbFJ3SE5OQXh3SjY3N3d5UnhVdHFsTFJrTkRmeWtRS3BDNmhW?=
+ =?utf-8?B?V0I0b0l1ZmxQekg5RFNONHF5Q1U4RVB2WS9uRGN1L1lGSytTZHhXb0UwU2U1?=
+ =?utf-8?B?ZXpqc3NIeUxCOVVyVWFMejRVYUs2dnRXckUzTVRJaUNodmtyUHA0VHh5d0g1?=
+ =?utf-8?B?VUhPZTc0enUwdHBsSUx6RWsyN3lVNTkra3o4NlBxRlg5OWhUdmREL2I3TnpV?=
+ =?utf-8?B?ZlUwT0ZrMEdpdmNSajMwTWFwR0piQms1R3F6S2F4VVkyZ1V1UWFUK2RkU1ZK?=
+ =?utf-8?B?K0dKbGxIR0xiU1YvS3JYQ3doMXpZRVBSR29LVjkvaC9GNThuZXNuUmJmRU1P?=
+ =?utf-8?B?Y3VqVS9odFNibEZkTVJFWGVSTG1jcUVDRVVWSnNBelkycGQ1UU56ZFU0MHk1?=
+ =?utf-8?B?YktrL0xBMGRndTBJVGxlWFMxUUQvZkdtdEwyQUc3MGt2SEl3ZkNCSUFrWWdn?=
+ =?utf-8?B?TldsWFJjUHhMOXA3NU9yc2RsWFJ0K1ZqTEV2eFlwcGJ4K1Jqam1NeDB5RkRZ?=
+ =?utf-8?B?VDZ5dlh6MFpwYUprelBrSmhEaSt6cFhRVVFNQWJNaVg1SEVkWEpaM2I2U1Vm?=
+ =?utf-8?B?VUluakdEWkRKUWdOY2wreXkyN1p6RmJIQUd6ZnZ1bnYxcjAxeSt1UjNmamU0?=
+ =?utf-8?B?K0pRcTB1Y3JWdlcvWnF6STRndFVLZHNzcnlTTmhoUUs3NUp5RUMza1RjVVFS?=
+ =?utf-8?B?STZqS053Rk4xVVdTS1dxMDhLbzQwTlBkY2YvdkNJcVpvR25uSUFPbHJtelJ1?=
+ =?utf-8?B?Q29HSGtXSGpNaG1zNHh3cmZ2cW5aZ3psaEtwMHEwTGVaRGdDOTNoTGsvelRa?=
+ =?utf-8?B?QjJxUkE4ZDFJRVNtVEpxZGRSenVac3R6Y0FybXBMdFJpZnpoSktZREdhK2dw?=
+ =?utf-8?B?WGVaOXB1cC81TDVvbENFRGhaejJGYnpKMWZTS3BrM0NmQzJIRjAzYmgyUXlL?=
+ =?utf-8?B?UFJPTXc4bnc4SVdqczBEaHRPS1ZVbVZPeXdMSzZuSGpUTmhvV0dOcS9OdThY?=
+ =?utf-8?B?Rldndm5WNXBZNmUraWtKN2tVNGh0b3g4TTIwV0ZnelpMU2dCVDJjcXM4OWw2?=
+ =?utf-8?B?T3U4YlhaOUowMURXMGtPdXAvNGI0aUhmQWxOalErQ0poMENTRkwzMS9LRDJw?=
+ =?utf-8?B?Q0h5TmJDYkQ2U09uUWFQT1pMdVR4aU8vbElXT2RpNnF2S3IxRVhhbGg2emJZ?=
+ =?utf-8?B?RDdFTEdrdEJwM2VoVnlkL2FDVUhtNkRoTWFmbWxzMVNiRjFrOWNwQnA5K2cx?=
+ =?utf-8?B?WGFGNHBxYzREQTZJZFJyTHhiVzltWktjK3lZM0YwbmIzYStvWWZsbS9BQjdE?=
+ =?utf-8?B?clhuY1k1MjdMbUxKUFA0enQ0MTFQYXBzRDlHaTFLaGlkWGdVMWlKcy9qMDRZ?=
+ =?utf-8?B?cFFvVTNyNENES1BwZ2pLOTl5bkF1YUJCQ1Eycm83cEpxZGRJdEd2K2tCSXJ4?=
+ =?utf-8?B?RnhMY1F3UjNZQzNEcmJhNndlUWUxZzhyQ1pGQ2hqR1JSaWtKQzQxT1h6UWZ5?=
+ =?utf-8?B?L24wNUxoN2p0Q1grdUxuN21iRFJFLzRYOHJqUlYwL1dlcFIxTEtiU3VOSEFM?=
+ =?utf-8?B?K2poM3gwK3dJZ0R0Q3NCTzlGV0lMOFRzM1YwUFZFNWpWUXpTUlBvekp5bVMw?=
+ =?utf-8?B?dmhmRlk1MENweEhDZUlXellGc2htZjh0UEJzY3AyYmY4ZmxyOFpkQnMzSHdE?=
+ =?utf-8?B?ODJzYXQ2NkdaMnF1dmI4VHN6MEZYMnNBMzNnUjJrTTNITTJvWG5TaTcvTUx5?=
+ =?utf-8?B?VVJwUnNKbDdWdW4yZGdKU1NkcUprN1czRzRVeFlOTFpIZ1ZQTVd6a2pvOUFo?=
+ =?utf-8?B?WFNWZ044YzhJdnZ3blY3c0RYQWl6Vyt4VitiUVVIVGlxbFkzVjNoZkVWMDV6?=
+ =?utf-8?B?N3JGQkhTQmI5SW9jejV4ZC9RaXd0Tzdzdk5KbEJFV0tsZUFDWjgvRXBQMUp4?=
+ =?utf-8?B?QUhYTjlORllsZCtXYWVaNW5kcEorbGVmU1Fpdm90UmdUNXcxRmpjMHVoWlhB?=
+ =?utf-8?B?Si8xVTZCK2ZBb0gvSFlZUkl4UXNRTTlhRUV5MXhRdStaNzlSTzNDTkFSTFVo?=
+ =?utf-8?B?TWVBbjdNYWM2ajBLZ0FxWmptZjFncVdUd01iUDRVazlsOUg2SFNDY2oxRXkx?=
+ =?utf-8?Q?LlH8Ky4yImSJm6jJTLTYN++pG?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9af3ac7a-96ec-4b39-d4e7-08dab178e359
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 02:23:19.6902
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3h1EzhriieRjeFoQ7KOhDT2EfSOnmMcuJJ4TlHMzrDkUsaaBQ2inGWYZTUhYczoIoqKAvGHrUpEmaF63+L2qCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9562
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/09/2022 23:17, Irui Wang wrote:
-> mt8195 has two H264 encoder hardware, which are named core0 and core1.
-> The two encoder cores are independent, we can just enable one core to
-> do encoding or enable both of them to achieve higher performance. We
-> pick core0 as main device and core1 as its subdevice, it just a way to
-> to manage the two encoder hardware, because they are two equal encoder
-> hardware with the same function.
+On Wed, 2022-10-19 at 07:41 +0800, kernel test robot wrote:
+> Hi Liu,
 > 
-
-You have redundant dt-bindings (second one) in the subject. Drop it.
-
-> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> ---
->  .../media/mediatek,vcodec-encoder-core.yaml   | 217 ++++++++++++++++++
->  .../media/mediatek,vcodec-encoder.yaml        |   1 -
->  2 files changed, 217 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
+> I love your patch! Yet something to improve:
 > 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
-> new file mode 100644
-> index 000000000000..1dda7d7908da
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
-> @@ -0,0 +1,217 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/media/mediatek,vcodec-encoder-core.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: MediaTek Video Encoder Accelerator With Multi Core
-> +
-> +maintainers:
-> +  - Irui Wang <irui.wang@mediatek.com>
-> +
-> +description: |
-> +  MediaTek Video Encoder is the video encoder hardware present in MediaTek
-> +  SoCs which supports high resolution encoding functionalities. To meet higher
-> +  encoder performance, there will be one or more encoder hardware inside SoC,
-> +  which named core0, core1, etc.. For example, mt8195 has two encoder hardware,
-> +  the two encoder cores block diagram, can check below.
-> +  --------------------------------------------------------------
-> +  Input frame  0     1     2     3     4     5     6
-> +               |     |     |     |     |     |     |
-> +               v     |     v     |     v     |     v
-> +           +-------+ | +-------+ | +-------+ | +-------+
-> +           | core0 | | | core0 | | | core0 | | | core0 |
-> +           +-------+ | +-------+ | +-------+ | +-------+
-> +               |     |     |     |     |     |     |
-> +               |     v     |     v     |     v     |
-> +               | +-------+ | +-------+ | +-------+ |
-> +               | | core1 | | | core1 | | | core1 | |
-> +               | +-------+ | +-------+ | +-------+ |
-> +               |     |     |     |     |     |     |
-> +               v     v     v     v     v     v     v    <parent>
-> +  --------------------------------------------------------------
-> +                            core || index               <child>
-> +                                 \/
-> +       +--------------------------------------------------+
-> +       |                     core0/core1                  |
-> +       |             enable/disable power/clk/irq         |
-> +       +--------------------------------------------------+
-> +  --------------------------------------------------------------
-> +  As above, there are two cores child devices, they are two encoder hardware
-> +  which can encode input frames in order. When start encoding, input frame 0
-> +  will be encoded by core0, and input frame 1 can be encoded by core1 even if
-> +  frame 0 has not been encoded done yet, after frame 0 encoded done, frame 2
-> +  will be encoded by core0, even input frames are encoded by core0 and odd
-> +  input frames are encoded by core1, these two encoder cores encode ench input
-> +  frames in this overlapping manner.
-> +
-> +properties:
-> +  compatible:
-> +    items:
+> [auto build test ERROR on drm-misc/drm-misc-next]
+> [also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next
+> drm-intel/for-linux-next drm-tip/drm-tip linus/master v6.1-rc1 next-
+> 20221018]
 
-Drop items (you have only one item).
+[...]
 
-> +      - enum:
-> +          - mediatek,mt8195-vcodec-enc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  mediatek,scp:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      The node of system control processor (SCP), using
-> +      the remoteproc & rpmsg framework.
-> +
-> +  iommus:
-> +    minItems: 1
-> +    maxItems: 32
-> +    description: |
-> +      List of the hardware port in respective IOMMU block for current Socs.
-> +      Refer to bindings/iommu/mediatek,iommu.yaml.
+> All errors (new ones prefixed by >>):
+> 
+>    drivers/gpu/drm/imx/dpu/dpu-drv.c: In function 'dpu_drm_bind':
+> > > drivers/gpu/drm/imx/dpu/dpu-drv.c:67:12: error: 'struct
+> > > drm_device' has no member named 'irq_enabled'
+> 
+>       67 |         drm->irq_enabled = true;
+>          |            ^~
 
-Drop the path, is rather obvious (and actually not correct, because it
-misses include).
+I've sent v13 to fix the potential build break by removing this line
+since drm->irq_enabled should only be used by legacy drm drivers with
+userspace modesetting but not imx-dpu drm driver.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  dma-ranges:
-> +    maxItems: 1
-> +    description: |
-> +      Describes the physical address space of IOMMU maps to memory.
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 2
-> +
-> +  ranges: true
-> +
-> +# Required child node:
-> +patternProperties:
-> +  "^venc-core@[0-9a-f]+$":
+Thanks for reporting the issue.
 
-Didn't we have a big discussion that these should be called differently?
-Maybe the hardware is different... but maybe not.
+Liu Ying
 
-https://lore.kernel.org/all/20220930112237.14411-2-allen-kh.cheng@mediatek.com/
-
-> +    type: object
-> +    description: |
-> +      The video encoder core device node which should be added as subnodes to
-> +      the main venc node, it represents a encoder hardware.
-> +
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mtk-venc-hw
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      mediatek,hw-id:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: |
-> +          Current encoder core id. We use it to pick which one encoder core
-> +          will be used to encoding current input frame.
-
-Isn't this coming from unit address? Why do you need some ID?
-
-> +
-> +      iommus:
-> +        minItems: 1
-> +        maxItems: 32
-> +        description: |
-> +          List of the hardware port in respective IOMMU block for current Socs.
-> +          Refer to bindings/iommu/mediatek,iommu.yaml.
-
-Also drop last line.
-
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      clocks:
-> +        maxItems: 1
-> +
-> +      clock-names:
-> +        maxItems: 1
-> +
-> +      power-domains:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - mediatek,hw-id
-> +      - iommus
-> +      - interrupts
-> +      - clocks
-> +      - clock-names
-> +      - assigned-clocks
-> +      - assigned-clock-parents
-> +      - power-domains
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - mediatek,scp
-> +  - iommus
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - dma-ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        venc: venc@1a020000 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +            compatible = "mediatek,mt8195-vcodec-enc";
-> +            reg = <0 0x1a020000 0 0x10000>;
-> +            mediatek,scp = <&scp>;
-> +            iommus = <&iommu_vdo M4U_PORT_L19_VENC_RCPU>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_REC>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_BSDMA>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_SV_COMV>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_RD_COMV>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_CUR_LUMA>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_CUR_CHROMA>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_REF_LUMA>,
-> +                     <&iommu_vdo M4U_PORT_L19_VENC_REF_CHROMA>;
-> +            interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
-> +            clocks = <&vencsys CLK_VENC_VENC>;
-> +            clock-names = "clk_venc";
-> +            power-domains = <&spm MT8195_POWER_DOMAIN_VENC>;
-> +            dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +            ranges;
-> +
-> +            venc-core@1b020000 {
-> +                compatible = "mediatek,mtk-venc-hw";
-> +                reg = <0 0x1b020000 0 0x10000>;
-> +                mediatek,hw-id = <1>;
-> +                iommus = <&iommu_vpp M4U_PORT_L20_VENC_RCPU>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_REC>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_BSDMA>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_SV_COMV>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_RD_COMV>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_CUR_LUMA>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_CUR_CHROMA>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_REF_LUMA>,
-> +                         <&iommu_vpp M4U_PORT_L20_VENC_REF_CHROMA>;
-> +                interrupts = <GIC_SPI 346 IRQ_TYPE_LEVEL_HIGH 0>;
-> +                clocks = <&vencsys_core1 CLK_VENC_CORE1_VENC>;
-> +                clock-names = "clk_venc_core1";
-> +                assigned-clocks = <&topckgen CLK_TOP_VENC>;
-> +                assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-> +                power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
-> +            };
-> +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> index 32aee09aea33..f5f79efe3ba3 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> @@ -22,7 +22,6 @@ properties:
->        - mediatek,mt8183-vcodec-enc
->        - mediatek,mt8188-vcodec-enc
->        - mediatek,mt8192-vcodec-enc
-> -      - mediatek,mt8195-vcodec-enc
-
-Why? Commit msg did not explain this to me.
-
->  
->    reg:
->      maxItems: 1
-
-Best regards,
-Krzysztof
+[...]
 
