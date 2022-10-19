@@ -2,129 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE93B60519D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40616051A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbiJSUwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S231189AbiJSU6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiJSUwp (ORCPT
+        with ESMTP id S230348AbiJSU60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:52:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291F48B2EC;
-        Wed, 19 Oct 2022 13:52:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8AD3619A9;
-        Wed, 19 Oct 2022 20:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEA9C433D7;
-        Wed, 19 Oct 2022 20:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666212763;
-        bh=vUMA+KIEyk/mYPhfmyufPAgBG9tekFxdVUbAeXTernc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p172OvXvWm/p6RKTQNulUGe+kEr9zh/MoX+B0PaLbFGYaCtEweB95zPuTVG2Dib1l
-         3eFX65O9mcEtg8K+ZGAP095XFU0sXw8WRMWUB1ahMLe9bQd30eACPNLy1SGojiJ6bx
-         2StzfEOxWFj/VapNszY8oJR1iiJPt3PHwx2aWbocpq77QdoMKxwwEFwaP8jdMHxKFW
-         BLIMJ0d2sj7YrHYnxwofGtxSkWk12SozvzcJoSBDOoKNbhjPQ+Fn4L2r5tOLk3vRor
-         wJzNnjI+xMcY8a4H4hUgt1TzUcJMmSSPrjaYmE/uZPclQaORMCIQ6T1/DwThLhI9xM
-         QLVU4ggVcN+MQ==
-Received: by pali.im (Postfix)
-        id 07FC13AC; Wed, 19 Oct 2022 22:52:39 +0200 (CEST)
-Date:   Wed, 19 Oct 2022 22:52:39 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
-Message-ID: <20221019205239.6n5sfqejtljlpyci@pali>
-References: <20221006145440.10281-1-namcaov@gmail.com>
- <20221018193951.40787445@endymion.delvare>
- <20221018180051.236tz4yxsdzrgguq@pali>
- <20221019203403.GA149239@nam-dell>
+        Wed, 19 Oct 2022 16:58:26 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5251C19DF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:58:22 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-315-TU_RwXfeOCir53l4hE-8bg-1; Wed, 19 Oct 2022 21:58:19 +0100
+X-MC-Unique: TU_RwXfeOCir53l4hE-8bg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Oct
+ 2022 21:58:18 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Wed, 19 Oct 2022 21:58:18 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: RE: [PATCH] kbuild: treat char as always signed
+Thread-Topic: [PATCH] kbuild: treat char as always signed
+Thread-Index: AQHY4/SnObmw28AtX0ic5yIlEoAaH64WMdrw
+Date:   Wed, 19 Oct 2022 20:58:18 +0000
+Message-ID: <191893d857c44b71abf19cce3d77956a@AcuMS.aculab.com>
+References: <20221019162648.3557490-1-Jason@zx2c4.com>
+ <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
+In-Reply-To: <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019203403.GA149239@nam-dell>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 19 October 2022 22:34:03 Nam Cao wrote:
-> On Tue, Oct 18, 2022 at 08:00:51PM +0200, Pali Rohár wrote:
-> > On Tuesday 18 October 2022 19:39:51 Jean Delvare wrote:
-> > > On Thu, 06 Oct 2022 16:54:40 +0200, Nam Cao wrote:
-> > > > Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
-> > > > to the kernel. Add this address.
-> > > > 
-> > > > Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
-> > > > 5568 laptop:
-> > > >     - Horizontal: (-18,0,1044)
-> > > >     - Front elevated: (522,-18,1080)
-> > > >     - Left elevated: (-18,-360,1080)
-> > > >     - Upside down: (36,108,-1134)
-> > > > 
-> > > > Signed-off-by: Nam Cao <namcaov@gmail.com>
-> > > > ---
-> > > >  drivers/i2c/busses/i2c-i801.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > > 
-> > > > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> > > > index a176296f4fff..e46561e095c6 100644
-> > > > --- a/drivers/i2c/busses/i2c-i801.c
-> > > > +++ b/drivers/i2c/busses/i2c-i801.c
-> > > > @@ -1243,6 +1243,7 @@ static const struct {
-> > > >  	 */
-> > > >  	{ "Latitude 5480",      0x29 },
-> > > >  	{ "Vostro V131",        0x1d },
-> > > > +	{ "Vostro 5568",        0x29 },
-> > > >  };
-> > > >  
-> > > >  static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
-> > > 
-> > > Fine with me.
-> > > 
-> > > Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> > > 
-> > > Pali, OK with you?
-> > 
-> > Yes, nice to see that other people discovered another hidden hardware
-> > devices in their own laptops :-)
-> > 
-> > Reviewed-by: Pali Rohár <pali@kernel.org>
-> > 
-> > 
-> > Nam Cao, could you check your ACPI DSDT table if there is not specified
-> > this smbus/i2c address 0x29? Autodiscovery would be better than
-> > hardcoding. At least for E6440 I was told that BIOS does not provide it.
-> 
-> My reply got rejected by mailing list because the attachment was too big.
-> So I re-send this without the attachment, so that everyone can see.
-> 
-> I searched the DSDT table for "29", but none of them looks like an i2c
-> address.
-> 
-> But this is the first time I hear about ACPI DSDT table, so I may did
-> something incorrectly. I did:
->         - cp /sys/firmware/acpi/tables/DSDT table
->         - iasl -d table
->         - Search through table.dsl
-> 
-> Best regards,
-> Nam
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTkgT2N0b2JlciAyMDIyIDIwOjU0DQo+IA0K
+PiBPbiBXZWQsIE9jdCAxOSwgMjAyMiBhdCA5OjI3IEFNIEphc29uIEEuIERvbmVuZmVsZCA8SmFz
+b25AengyYzQuY29tPiB3cm90ZToNCj4gPg0KPiA+IFNvIGxldCdzIGp1c3QgZWxpbWluYXRlIHRo
+aXMgcGFydGljdWxhciB2YXJpZXR5IG9mIGhlaXNlbnNpZ25lZCBidWdzDQo+ID4gZW50aXJlbHku
+IFNldCBgLWZzaWduZWQtY2hhcmAgZ2xvYmFsbHksIHNvIHRoYXQgZ2NjIG1ha2VzIHRoZSB0eXBl
+DQo+ID4gc2lnbmVkIG9uIGFsbCBhcmNoaXRlY3R1cmVzLg0KPiANCj4gQnR3LCBJIGRvIHdvbmRl
+ciBpZiB3ZSBtaWdodCBhY3R1YWxseSBiZSBiZXR0ZXIgb2ZmIGRvaW5nIHRoaXMgLSBidXQNCj4g
+ZG9pbmcgaXQgdGhlIG90aGVyIHdheSBhcm91bmQuDQo+IA0KPiBJT1csIG1ha2UgJ2NoYXInIGFs
+d2F5cyBVTnNpZ25lZC4gVW5saWtlIHRoZSBzaWduZWQgY2hhciB0aGluZywgaXQNCj4gc2hvdWxk
+bid0IGdlbmVyYXRlIGFueSB3b3JzZSBjb2RlIG9uIGFueSBjb21tb24gYXJjaGl0ZWN0dXJlLg0K
+PiANCj4gQW5kIEkgZG8gdGhpbmsgdGhhdCBoYXZpbmcgb2RkIGFyY2hpdGVjdHVyZSBkaWZmZXJl
+bmNlcyBpcyBnZW5lcmFsbHkgYQ0KPiBiYWQgaWRlYSwgYW5kIG1ha2luZyB0aGUgbGFuZ3VhZ2Ug
+cnVsZXMgc3RyaWN0ZXIgdG8gYXZvaWQgZGlmZmVyZW5jZXMNCj4gaXMgYSBnb29kIHRoaW5nLg0K
+PiANCj4gTm93LCB5b3UgZGlkICctZnNpZ25lZC1jaGFyJywgYmVjYXVzZSB0aGF0J3MgdGhlICJj
+b21tb24gZGVmYXVsdCIgaW4NCj4gYW4geDg2LWNlbnRyaWMgd29ybGQuDQoNCkknbSBwcmV0dHkg
+c3VyZSBjaGFyIGlzIHNpZ25lZCBiZWNhdXNlIHRoZSBwZHAxMSBvbmx5IGhhZA0Kc2lnbi1leHRl
+bmRpbmcgYnl0ZSBsb2Fkcy4NCg0KPiBZb3UgYXJlIGFsc28gcmlnaHQgdGhhdCBwZW9wbGUgbWln
+aHQgdGhpbmsgdGhhdCAiY2hhciIgd29ya3MgbGlrZQ0KPiAiaW50IiwgYW5kIHRoYXQgaWYgeW91
+IGRvbid0IHNwZWNpZnkgdGhlIHNpZ24sIGl0J3Mgc2lnbmVkLg0KDQpCdXQgZXZlbiAndW5zaWdu
+ZWQgY2hhcicgd29ya3MgbGlrZSBpbnQuDQpUaGUgdmFsdWVzIGFyZSBwcm9tb3RlZCB0byBpbnQg
+KHRoYW5rcyB0byB0aGUgYnJhaW4tZGVhZCBBTlNJLUMNCmNvbW1pdHRlZSkgcmF0aGVyIHRoYW4g
+dW5zaWduZWQgaW50ICh3aGljaCBJIHRoaW5rIHdhcyBpbiBLJlIgQykuDQooVGhlcmUgaXMgYW4g
+ZXhjZXB0aW9uLCBpbnQsIHNob3J0IGFuZCBjaGFyIGNhbiBhbGwgYmUgdGhlIHNhbWUgc2l6ZS4N
+CkluIHdoaWNoIGNhc2UgdW5zaWduZWQgY2hhciBwcm9tb3RlcyB0byB1bnNpZ25lZCBpbnQuKQ0K
+DQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQs
+IE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86
+IDEzOTczODYgKFdhbGVzKQ0K
 
-You did it correctly. I'm not surprised that you have not found
-anything. When I did experiments in the past, I was not able too...
-That is why there is that harcoded table...
-
-It just means that Dell did not fixed it or they perfectly hidden it.
