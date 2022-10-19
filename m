@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0EA605219
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33D660521D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiJSVjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
+        id S230436AbiJSVjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiJSVi7 (ORCPT
+        with ESMTP id S230354AbiJSVjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:38:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB27C1956F5;
-        Wed, 19 Oct 2022 14:38:58 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666215536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VNePVIgPGNqgS+SwB/8484A+Is/lBhjxfV0Sa3OBHZk=;
-        b=ACgXFXxaJSbl5RRlRXmhzmHnGjrq4h4hsirx/c2WZ0OPRARyeYklxLSl2fMMyUJdsKN6jr
-        P0lbq6qt6X2GvzPN7eRzvSJnKpz0Ht2TbQggA7ok1pXOqW8LNvbpsbvXvJro7AoQHp7hnL
-        BXuOEVL4ExL+4ORURm9kiC6IgDK/8tpWo20o0wAbYQOOq8RtfyhavdgWvu0Z9tyY6iADJR
-        wLx1YpKCIaE3xsA5k/e8GQmZAFXwGVr79DzJ9BZvmoKHBVgWt1SElrXT5hCLsFYTB/iy6O
-        H9DlLrzHKoztp/7Y6MGoNEbyvC+361+FCPv9WdGIZPW2hIJc53cMzOLF3DhB1w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666215536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VNePVIgPGNqgS+SwB/8484A+Is/lBhjxfV0Sa3OBHZk=;
-        b=KiO7CbEEYZGc2wK8BV3m3o2VLOu8/3aBPJjoI0wFI6pr+yryxmgX1XhaKkaUmVKgcYHfp5
-        tDIARXB4sx3eqCBA==
-To:     paulmck@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org, tglx@linutronix.de,
-        pmladek@suse.com, Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
-In-Reply-To: <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
-References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
- <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <87k04x4e0r.fsf@jogness.linutronix.de>
- <20221018152418.GR5600@paulmck-ThinkPad-P17-Gen-1>
- <87ilkh0y52.fsf@jogness.linutronix.de>
- <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
- <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
- <87pmeoawwe.fsf@jogness.linutronix.de>
- <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
-Date:   Wed, 19 Oct 2022 23:44:55 +0206
-Message-ID: <87tu3z334g.fsf@jogness.linutronix.de>
+        Wed, 19 Oct 2022 17:39:47 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA6865246;
+        Wed, 19 Oct 2022 14:39:44 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13ae8117023so708437fac.9;
+        Wed, 19 Oct 2022 14:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CSYItm3BIqT+lrnqxjZIxoxYlxk4bXzGi8d0VD/QWug=;
+        b=VgxnS3kSACYY7DLiSvk/cwSCffLWwXdhCKAzKhcuoyDAidLkfG/a8D7bd5gDQXWvFf
+         7eRwZFxSor7ruUXvQsidQB4TVBinamqLNSFBf7F6zVnkRA3IhZ4aDsVvKpq3fzDt9Ywf
+         vOldUHqZZ6ujUlgOo0m+5KirHVGEYbCW9hc8qBips8s9oFpbD8bT5KHV1f2YVNqLFb8w
+         IXZ/015Gfs++j9MFTbdh9GDUZW14/I6JCm7KFABBWVGuHK5i4hB0G6MBZJiW5e5FMFZE
+         eydcdNPWJiSUaDiJeUIlYwXX8lJxgZmKUGsIhlrVV7hbAR3LsmubSboOfizktGgNkGHo
+         CWDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CSYItm3BIqT+lrnqxjZIxoxYlxk4bXzGi8d0VD/QWug=;
+        b=LgUK1SnOssKcrGv0Mb0roQCOnON6mpi/hq1y7uWP9ZpqgMj/ZU9JZ3rrHDPiQ+PFR2
+         NNyFLiR6l8oAKvVe371RkacYwopt+1BOwrMy75bw0gZlmlwpODB6Cpe8F79eMv8wgxTi
+         xHtj9IXSiXlpffYhm75ICQq6jWhAHdMjMYk+Ld0weizDWGmaADn+NtwyKyQlQovpeQ99
+         t34XrP4jujdMzpMQisKVVj2tXVqbNIqi1uwyMGVbkoTqJxYDpq5saVXpRLMUjZJYVSNA
+         0SgfoA3sNKVU+/no+7leln+/7+l9WsT6PWpT9eW/F8AJcz/3CARHdl/9tlx3LfdLKBCR
+         9cjQ==
+X-Gm-Message-State: ACrzQf3mC8no/WZC27G/nur6Ll4cH5xRNDRNc+zNvI0jUCTkvhbcDEGu
+        FCN5KFzStnDgFs1AHewhtw4=
+X-Google-Smtp-Source: AMsMyM6m6xRz+D0YNIsB2zjKpRLfZ+jOURU5ykjUi7EdsSUIzsDumbFPodE0HYznfys8HpRRSk/pZA==
+X-Received: by 2002:a05:6870:ea9e:b0:137:a7:3cae with SMTP id s30-20020a056870ea9e00b0013700a73caemr6401388oap.48.1666215583949;
+        Wed, 19 Oct 2022 14:39:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l10-20020a4a434a000000b004768f725b7csm6869857ooj.23.2022.10.19.14.39.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 14:39:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 19 Oct 2022 14:39:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 6.0 000/862] 6.0.3-rc1 review
+Message-ID: <20221019213941.GA2632115@roeck-us.net>
+References: <20221019083249.951566199@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,15 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> my thought is to make this change in the name of bisectability,
-> then produce a new srcunmisafe branch.  The printk() series would
-> then need to rebase or remerge this new series.
->
-> John, would that work for you?
+On Wed, Oct 19, 2022 at 10:21:27AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.3 release.
+> There are 862 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 21 Oct 2022 08:30:19 +0000.
+> Anything received after that time might be too late.
+> 
 
-Yes, that is fine. It really is just a bisectability issue, so for the
-review of my v2 series it does not matter. I will rebase on the new
-branch for my v3. ;-)
+Build results:
+	total: 152 pass: 152 fail: 0
+Qemu test results:
+	total: 490 pass: 490 fail: 0
 
-John
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
