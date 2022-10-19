@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC7D604DB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09A7604D86
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiJSQpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S231130AbiJSQir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJSQpg (ORCPT
+        with ESMTP id S229649AbiJSQio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:45:36 -0400
-Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF9DB6D;
-        Wed, 19 Oct 2022 09:45:31 -0700 (PDT)
-X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
-Received: by mail.steuer-voss.de (Postfix, from userid 1000)
-        id B70DF1C59; Wed, 19 Oct 2022 18:45:26 +0200 (CEST)
-From:   Nikolaus Voss <nikolaus.voss@haag-streit.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 19 Oct 2022 18:38:20 +0200
-Subject: [PATCH v6] KEYS: encrypted: fix key instantiation with user-provided
- data
-Message-Id: <20221019164526.B70DF1C59@mail.steuer-voss.de>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 12:38:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A57C107CEC;
+        Wed, 19 Oct 2022 09:38:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0987BB8254E;
+        Wed, 19 Oct 2022 16:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2530C433D6;
+        Wed, 19 Oct 2022 16:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666197520;
+        bh=hWAN4W/Rzw9KgPVsCE2gQRgnd0phSSxJxzE7lCGoioY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TawPkvlnwajRtpZUccEz/raJqSSEkR5n6viMazNe8WRK1EZffnexS4T5CIdsvoAEe
+         x/5VQl89yoYkabEm8Mk+WJ+G5KE1F0WbZegeR9hsITqEVDpbW9rUvneSWhuIu1I7ac
+         ULGMrHZZuWC8r8j383T1XKANGZAux+MS4ukBcLbQTETqdZG4RuPHw9T1LlQxpniLQk
+         /Ur7U4WJCqC3agt1DVCKpCudcMPrTZKqR91AGl/bfluP6I4Ygl0Ao1jShKfB61+nR+
+         K//B1z0ST1JoSA87k+xhjwl2azEl5XiFv5+BmlBBP2eH7RXegD34d3PWdIDdJFgBfh
+         v5LwsnJpcfcgA==
+Date:   Wed, 19 Oct 2022 22:08:36 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     peda@axentia.se, du@axentia.se, regressions@leemhuis.info,
+        ludovic.desroches@microchip.com, maciej.sosnowski@intel.com,
+        dan.j.williams@intel.com, nicolas.ferre@microchip.com,
+        mripard@kernel.org, torfl6749@gmail.com,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Tudor Ambarus <tudor.ambarus@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 07/33] dmaengine: at_hdmac: Fix at_lli struct definition
+Message-ID: <Y1AoDDVoiWDJ2ae2@matsya>
+References: <20220820125717.588722-1-tudor.ambarus@microchip.com>
+ <20220820125717.588722-8-tudor.ambarus@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220820125717.588722-8-tudor.ambarus@microchip.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with
-user-provided decrypted data") added key instantiation with user
-provided decrypted data.  The user data is hex-ascii-encoded but was
-just memcpy'ed to the binary buffer. Fix this to use hex2bin instead.
+On 20-08-22, 15:56, Tudor Ambarus wrote:
+> From: Tudor Ambarus <tudor.ambarus@gmail.com>
+> 
+> Those hardware registers are all of 32 bits, while dma_addr_t ca be of
+> type u64 or u32 depending on CONFIG_ARCH_DMA_ADDR_T_64BIT. Force u32 to
+> comply with what the hardware expects.
+> 
+> Fixes: dc78baa2b90b ("dmaengine: at_hdmac: new driver for the Atmel AHB DMA Controller")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@gmail.com>
+> Cc: stable@vger.kernel.org
 
-Old keys created from user provided decrypted data saved with "keyctl
-pipe" are still valid, however if the key is recreated from decrypted
-data the old key must be converted to the correct format. This can be
-done with a small shell script, e.g.:
+Okay
 
-BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
-NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
-keyctl add user masterkey "$(cat masterkey.bin)" @u
-keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
+> ---
+>  drivers/dma/at_hdmac.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
+> index 91e53a590d5f..e89facf14fab 100644
+> --- a/drivers/dma/at_hdmac.c
+> +++ b/drivers/dma/at_hdmac.c
+> @@ -187,13 +187,13 @@
+>  /* LLI == Linked List Item; aka DMA buffer descriptor */
+>  struct at_lli {
+>  	/* values that are not changed by hardware */
+> -	dma_addr_t	saddr;
+> -	dma_addr_t	daddr;
+> +	u32 saddr;
+> +	u32 daddr;
 
-However, NEWKEY is still broken: If for BROKENKEY 32 bytes were
-specified, a brute force attacker knowing the key properties would only
-need to try at most 2^(16*8) keys, as if the key was only 16 bytes long.
+I think you should add fixes first in the series and then do header
+move, that way we can backport this and other fixes to stable kernels...
 
-The security issue is a result of the combination of limiting the input
-range to hex-ascii and using memcpy() instead of hex2bin(). It could
-have been fixed either by allowing binary input or using hex2bin() (and
-doubling the ascii input key length). This patch implements the latter.
+>  	/* value that may get written back: */
+> -	u32		ctrla;
+> +	u32 ctrla;
+>  	/* more values that are not changed by hardware */
+> -	u32		ctrlb;
+> -	dma_addr_t	dscr;	/* chain to next lli */
+> +	u32 ctrlb;
+> +	u32 dscr;	/* chain to next lli */
+>  };
+>  
+>  /**
+> -- 
+> 2.25.1
 
-The corresponding test for the Linux Test Project ltp has also been
-fixed (see link below).
-
-Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
-Cc: stable@kernel.org
-Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
----
-Changes
-=======
-v6: - fix checkpatch warnings
-v5: - explain security issue in commit message, add Reviewd-by
-v4: - change "Link:" address
-v3: - use generated random key in example, reformat commit message
-v2: - clarify commit message, add example to recover old/broken keys
-    - improve example in Documentation/security/keys/trusted-encrypted.rst
-    - add link to ltp patch
-
- Documentation/security/keys/trusted-encrypted.rst | 3 ++-
- security/keys/encrypted-keys/encrypted.c          | 6 +++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index 0bfb4c339748..9bc9db8ec651 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -350,7 +350,8 @@ Load an encrypted key "evm" from saved blob::
- 
- Instantiate an encrypted key "evm" using user-provided decrypted data::
- 
--    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm_decrypted_data.blob`" @u
-+    $ evmkey=$(dd if=/dev/urandom bs=1 count=32 | xxd -c32 -p)
-+    $ keyctl add encrypted evm "new default user:kmk 32 $evmkey" @u
-     794890253
- 
-     $ keyctl print 794890253
-diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
-index e05cfc2e49ae..1e313982af02 100644
---- a/security/keys/encrypted-keys/encrypted.c
-+++ b/security/keys/encrypted-keys/encrypted.c
-@@ -627,7 +627,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
- 			pr_err("encrypted key: instantiation of keys using provided decrypted data is disabled since CONFIG_USER_DECRYPTED_DATA is set to false\n");
- 			return ERR_PTR(-EINVAL);
- 		}
--		if (strlen(decrypted_data) != decrypted_datalen) {
-+		if (strlen(decrypted_data) != decrypted_datalen * 2) {
- 			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
- 			return ERR_PTR(-EINVAL);
- 		}
-@@ -791,8 +791,8 @@ static int encrypted_init(struct encrypted_key_payload *epayload,
- 		ret = encrypted_key_decrypt(epayload, format, hex_encoded_iv);
- 	} else if (decrypted_data) {
- 		get_random_bytes(epayload->iv, ivsize);
--		memcpy(epayload->decrypted_data, decrypted_data,
--				   epayload->decrypted_datalen);
-+		ret = hex2bin(epayload->decrypted_data, decrypted_data,
-+			      epayload->decrypted_datalen);
- 	} else {
- 		get_random_bytes(epayload->iv, ivsize);
- 		get_random_bytes(epayload->decrypted_data, epayload->decrypted_datalen);
 -- 
-2.34.1
-
+~Vinod
