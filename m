@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40C5604AA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809CB604A95
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbiJSPIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
+        id S231446AbiJSPG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbiJSPGi (ORCPT
+        with ESMTP id S231894AbiJSPFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:06:38 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C213F36798;
-        Wed, 19 Oct 2022 07:59:31 -0700 (PDT)
+        Wed, 19 Oct 2022 11:05:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C3D2DC6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:59:21 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1666191381;
@@ -22,29 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M9ps/+3zFTTMX/Xw+H343+FOn0pASHbTafsRYfPyD80=;
-        b=xryRBIthFWhP4UrwlfzbLHB1wneSnBcBBrCWGbfzhFtyZZ62blHFAAWadbR3RfJ0xiS3D8
-        E8G/EiTVA2QAo78BFXu4HLdwD+wAF6JL8ZZPT3fT3XiPQ0U3QnQkiqFxYtRNWpb8fxr2Cx
-        A/Cmed+jZKcC1QRl0fM0J5BhpF3Ep4COPsunR9DMwyMVrS6nOyn1FZdHgAvIlS9jd3c3/u
-        DNATXphbwlgI1vTSZ6DZy++PAOL/yQeAkH6xkw/VIyWpUi46a/OKZkof+PQOokG1dN51E3
-        ScxR1SESvRXx3+MDvobD2S55zRzzj6vOpkbNnDYcWKvXBeaZ6jqGRdPZWw68+w==
+        bh=ERAmScBWw3AWOQd/N8KPYvjMNho4M2d8wqoVxvpkojg=;
+        b=p7EHFUdVULSPTa08I7V4W4rGuOGZwbKXMbpmy7FQ/hM/Akq2VHbWOybQyOPaIOQrMynit4
+        ej7WV/9P69E8eZBOhLDiLJlrtilFtFK9XGJgoWlTrZNjwAdU/JWjcQgAlEaOPb4G1nWl5b
+        TReEvqMia7ozppHpRIsh6OEWPdoTOkcPeJH4N8SEI0A/MzxlshaDMF13LQKP1TnMI+ubx9
+        Xl4NboHNjl6nuEPXtwS+kozYdOGmAF+ePdeob47Ak0wL6PRzU1obyGe39bWtW3Iy7oJVyD
+        Vkv8yDL44DmJ8w3tppP5p/BE8zRaOFrxQ6dZE4JLY+ict0Hs+OTjbOcit2hpwA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1666191381;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M9ps/+3zFTTMX/Xw+H343+FOn0pASHbTafsRYfPyD80=;
-        b=nK0TpZ0gm/hS4UwI6UaYUoHDooyjpXsBf4rDrK5NbkFeKSjWQqGLTzLJJFbqmldTgUwgZh
-        deKrFqZ6DM/L2uDQ==
+        bh=ERAmScBWw3AWOQd/N8KPYvjMNho4M2d8wqoVxvpkojg=;
+        b=XSBfRYfXfVmjl1gxZkSLwF2XwQJDPNi9TKXi2UryMFR1GEHWj2Cu4NTSvRskEHY/1hTm0t
+        8ZS0wYOq2I7A30BQ==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH printk v2 36/38] proc: consoles: use console_list_lock for list iteration
-Date:   Wed, 19 Oct 2022 17:01:58 +0206
-Message-Id: <20221019145600.1282823-37-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v2 37/38] printk: relieve console_lock of list synchronization duties
+Date:   Wed, 19 Oct 2022 17:01:59 +0206
+Message-Id: <20221019145600.1282823-38-john.ogness@linutronix.de>
 In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
 References: <20221019145600.1282823-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,64 +59,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The console_lock is used in part to guarantee safe list iteration.
-The console_list_lock should be used because list synchronization
-repsponsibility will be removed from the console_lock in a later
-change.
+The console_list_lock provides synchronization for console list and
+console->flags updates. All call sites that were using the console_lock
+for this synchronization have either switched to use the
+console_list_lock or the SRCU list iterator.
 
-Note, the console_lock is still needed to stop console printing.
+Remove console_lock usage for console list updates and console->flags
+updates.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- fs/proc/consoles.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ kernel/printk/printk.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
-diff --git a/fs/proc/consoles.c b/fs/proc/consoles.c
-index 32512b477605..77409b176569 100644
---- a/fs/proc/consoles.c
-+++ b/fs/proc/consoles.c
-@@ -33,7 +33,15 @@ static int show_console_dev(struct seq_file *m, void *v)
- 	if (con->device) {
- 		const struct tty_driver *driver;
- 		int index;
-+
-+		/*
-+		 * Stop console printing because the device() callback may
-+		 * assume the console is not within its write() callback.
-+		 */
-+		console_lock();
- 		driver = con->device(con, &index);
-+		console_unlock();
-+
- 		if (driver) {
- 			dev = MKDEV(driver->major, driver->minor_start);
- 			dev += index;
-@@ -64,14 +72,11 @@ static void *c_start(struct seq_file *m, loff_t *pos)
- 	loff_t off = 0;
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 3615ee6d68fd..840d581c4b23 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -82,8 +82,8 @@ EXPORT_SYMBOL(oops_in_progress);
+ static DEFINE_MUTEX(console_mutex);
  
- 	/*
--	 * Stop console printing because the device() callback may
--	 * assume the console is not within its write() callback.
--	 *
--	 * Hold the console_lock to guarantee safe traversal of the
-+	 * Hold the console_list_lock to guarantee safe traversal of the
- 	 * console list. SRCU cannot be used because there is no
- 	 * place to store the SRCU cookie.
+ /*
+- * console_sem protects console_list and console->flags updates, and also
+- * provides serialization for access to the entire console driver system.
++ * console_sem protects updates to console->seq and console_suspended,
++ * and also provides serialization for console printing.
+  */
+ static DEFINE_SEMAPHORE(console_sem);
+ HLIST_HEAD(console_list);
+@@ -2635,7 +2635,7 @@ static int console_cpu_notify(unsigned int cpu)
+  * console_lock - lock the console system for exclusive use.
+  *
+  * Acquires a lock which guarantees that the caller has
+- * exclusive access to the console system and console_list.
++ * exclusive access to the console system.
+  *
+  * Can sleep, returns nothing.
+  */
+@@ -2655,7 +2655,7 @@ EXPORT_SYMBOL(console_lock);
+  * console_trylock - try to lock the console system for exclusive use.
+  *
+  * Try to acquire a lock which guarantees that the caller has exclusive
+- * access to the console system and console_list.
++ * access to the console system.
+  *
+  * returns 1 on success, and 0 on failure to acquire the lock.
+  */
+@@ -2911,8 +2911,7 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
+ /**
+  * console_unlock - unlock the console system
+  *
+- * Releases the console_lock which the caller holds on the console system
+- * and the console driver list.
++ * Releases the console_lock which the caller holds on the console system.
+  *
+  * While the console_lock was held, console output may have been buffered
+  * by printk().  If this is the case, console_unlock(); emits
+@@ -3098,9 +3097,7 @@ void console_stop(struct console *console)
+ {
+ 	__pr_flush(console, 1000, true);
+ 	console_list_lock();
+-	console_lock();
+ 	console->flags &= ~CON_ENABLED;
+-	console_unlock();
+ 	console_list_unlock();
+ 
+ 	/* Ensure that all SRCU list walks have completed */
+@@ -3111,9 +3108,7 @@ EXPORT_SYMBOL(console_stop);
+ void console_start(struct console *console)
+ {
+ 	console_list_lock();
+-	console_lock();
+ 	console->flags |= CON_ENABLED;
+-	console_unlock();
+ 	console_list_unlock();
+ 	__pr_flush(console, 1000, true);
+ }
+@@ -3315,7 +3310,6 @@ void register_console(struct console *newcon)
+ 	 * Put this console in the list - keep the
+ 	 * preferred driver at the head of the list.
  	 */
 -	console_lock();
-+	console_list_lock();
- 	for_each_console(con)
- 		if (off++ == *pos)
- 			break;
-@@ -89,7 +94,7 @@ static void *c_next(struct seq_file *m, void *v, loff_t *pos)
- 
- static void c_stop(struct seq_file *m, void *v)
- {
+ 	if (hlist_empty(&console_list)) {
+ 		/* Ensure CON_CONSDEV is always set for the head. */
+ 		newcon->flags |= CON_CONSDEV;
+@@ -3329,7 +3323,6 @@ void register_console(struct console *newcon)
+ 	} else {
+ 		hlist_add_behind_rcu(&newcon->node, console_list.first);
+ 	}
 -	console_unlock();
-+	console_list_unlock();
- }
  
- static const struct seq_operations consoles_op = {
+ 	/* No need to synchronize SRCU here! */
+ 
+@@ -3370,8 +3363,6 @@ static int unregister_console_locked(struct console *console)
+ 	if (res > 0)
+ 		return 0;
+ 
+-	console_lock();
+-
+ 	/* Disable it unconditionally */
+ 	console->flags &= ~CON_ENABLED;
+ 
+@@ -3394,8 +3385,6 @@ static int unregister_console_locked(struct console *console)
+ 	if (!hlist_empty(&console_list) && console->flags & CON_CONSDEV)
+ 		console_first()->flags |= CON_CONSDEV;
+ 
+-	console_unlock();
+-
+ 	/* Ensure that all SRCU list walks have completed */
+ 	synchronize_srcu(&console_srcu);
+ 
 -- 
 2.30.2
 
