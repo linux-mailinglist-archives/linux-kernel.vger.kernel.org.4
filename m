@@ -2,133 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B68604CCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84CD604CD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiJSQKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
+        id S230369AbiJSQKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiJSQJ4 (ORCPT
+        with ESMTP id S231721AbiJSQKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:09:56 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB554CAF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:09:40 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id u6so195739plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ypkvL3yaAxMPxurJS0uFGqCkiFZ+RyzOnuF9leoHMPg=;
-        b=h+1KlUYCjsRVvRZom/eZaqVVZPwLNuYTzVtc/yfchg/FVn3f5I4RUVC9fB77Ol9VGf
-         HgCK8mY6Nv+Xq72Fx81Po6YrtpzWxQ53rseaDQp3xO+NUuzg/Q/QlKyJ26MY8whFSFB9
-         Yz/rDhSdBT3TPLIrEG1lXL4xKfi0GT6oeGR8n8SqA7rIg+ZhIQiSL6k7+pVB5ukZ64kF
-         kVFFiLi2o9zlE+Zz99wb/PPKOZvfE8v4DtNHoGGtu9prsA4BZL7zqk0frRY/JGZwwNq7
-         g2L2w4CVrM6EQ0r7EXNj734PT3xgw2/P2uRLexg59HxYszjKm2su2n+onT/oKpMmOXgw
-         qJ9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ypkvL3yaAxMPxurJS0uFGqCkiFZ+RyzOnuF9leoHMPg=;
-        b=Czd3EGJzSv9hcGTqWFNtdlBhKkUU9ADRs+aNZwgmBKH7lBlUJrndpZXw/26H5qxKib
-         6U8NTXxT/jmz/VCeNgrEpJmLaGhsb4zttdH9cbnH+16I/WpHGMVssd102izKE4MLP65l
-         iS2S0W410nxR8xaHkq5u8BBNr6VtwGFht12XLKvVrGJ/Xh/5XFUSyiQE31Gqy2pRF4s9
-         l/fHE8j6/fUKQIvqC/UyunTvE40W5OT7fFilS5EpPDEpYN4xBACmenDBENB0Yb1h6Bus
-         nEWsb1NyF2/e9hazUZTk890CNL8O+mnWmgIUWrhyzYmAUSTCKJzNZBE4qkZQZvzsKuNF
-         U0FQ==
-X-Gm-Message-State: ACrzQf3iwUmhVgXiFIW9aE+fD4nWa76lhNfzIymEzxQqmfzebsfBp9jU
-        +Du5oXWBd75YRa5C8jPrme+mRA==
-X-Google-Smtp-Source: AMsMyM5J8mv9XBDJfNSTMwrJGznqodpAH+vWLTNt9JpHQACwNEqu56e3wBHUQ6hekV2SylbV5oa2BA==
-X-Received: by 2002:a17:903:248b:b0:17d:ea45:d76a with SMTP id p11-20020a170903248b00b0017dea45d76amr9440949plw.97.1666195779474;
-        Wed, 19 Oct 2022 09:09:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d13-20020aa797ad000000b00553d573222fsm11558997pfq.199.2022.10.19.09.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 09:09:38 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 16:09:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 5/8] KVM: Register/unregister the guest private memory
- regions
-Message-ID: <Y1AhP0dlRSgTCObX@google.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-6-chao.p.peng@linux.intel.com>
- <CA+EHjTxukqBfaN6D+rPOiX83zkGknHEQ16J0k6GQSdL_-e9C6g@mail.gmail.com>
- <20221012023516.GA3218049@chaop.bj.intel.com>
- <CA+EHjTyGyGL+ox81=jdtoHERtHPV=P7wJub=3j7chdijyq-AgA@mail.gmail.com>
- <Y03UiYYioV+FQIpx@google.com>
- <20221019132308.GA3496045@chaop.bj.intel.com>
- <CA+EHjTytCEup0m-nhnVHsuQ1xjaCxXNHO_Oxe+QbpwqaewpfKQ@mail.gmail.com>
+        Wed, 19 Oct 2022 12:10:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C25143A76;
+        Wed, 19 Oct 2022 09:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9vOa0+msvviK5V7ZlQiw3aFY3XiVnsGVWrJcmPEHwWI=; b=D5Vriblg+tFApNhrbvyUBH9YK+
+        O6JtPYdppx8i6ctqGiud/iZLz5NCZyImk4Firnmq0WZ0pyl19LaQWaSyEZr1TOpcW0mervHlzg/m8
+        FBc9PWYH3hgAc2bIoCZBF18w87NLdo/RevlzcsHqizCfCq6RulaJkW1TVtQGtveT1t0kt8iIcvGBz
+        8N7Vf3ACHXRYAG6sJK2vFDvL52MZ3u4zyIMTPYEqafLWxO9pnc0yz+e7bFWFYFflwexYo97RZJj6o
+        p2IjeUw/SRZAvzmJNuIAkwmyvHO3R3hnWP2kwFooTwyk3NjHUaNJduPckXMmKOj/sbKjV4gLymvSG
+        FizyZuuQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olBeK-003lRO-20; Wed, 19 Oct 2022 16:10:32 +0000
+Date:   Wed, 19 Oct 2022 09:10:32 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Dirk =?iso-8859-1?Q?M=FCller?= <dmueller@suse.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] lib/raid6: drop RAID6_USE_EMPTY_ZERO_PAGE
+Message-ID: <Y1AhePTKiBS1WKf6@infradead.org>
+References: <Y0/Yt4uJWg4knNoc@infradead.org>
+ <20221019160407.7550-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+EHjTytCEup0m-nhnVHsuQ1xjaCxXNHO_Oxe+QbpwqaewpfKQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221019160407.7550-1-giulio.benetti@benettiengineering.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022, Fuad Tabba wrote:
-> > > > This sounds good. Thank you.
-> > >
-> > > I like the idea of a separate Kconfig, e.g. CONFIG_KVM_GENERIC_PRIVATE_MEM or
-> > > something.  I highly doubt there will be any non-x86 users for multiple years,
-> > > if ever, but it would allow testing the private memory stuff on ARM (and any other
-> > > non-x86 arch) without needing full pKVM support and with only minor KVM
-> > > modifications, e.g. the x86 support[*] to test UPM without TDX is shaping up to be
-> > > trivial.
-> >
-> > CONFIG_KVM_GENERIC_PRIVATE_MEM looks good to me.
-> 
-> That sounds good to me, and just keeping the xarray isn't really an
-> issue for pKVM.
+On Wed, Oct 19, 2022 at 06:04:07PM +0200, Giulio Benetti wrote:
+> RAID6_USE_EMPTY_ZERO_PAGE is unused and hardcoded to 0, so let's drop it.
 
-The xarray won't exist for pKVM if the #ifdefs in this patch are changed from
-CONFIG_HAVE_KVM_PRIVATE_MEM => CONFIG_KVM_GENERIC_PRIVATE_MEM.
+Looks good:
 
-> We could end up using it instead of some of the other
-> structures we use for tracking.
-
-I don't think pKVM should hijack the xarray for other purposes.  At best, it will
-be confusing, at worst we'll end up with a mess if ARM ever supports the "generic"
-implementation.  
+Reviewed-by: Christoph Hellwig <hch@lst.de>
