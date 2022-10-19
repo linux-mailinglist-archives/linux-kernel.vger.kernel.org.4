@@ -2,72 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207B0604691
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8A760468E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiJSNPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S230313AbiJSNO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiJSNPB (ORCPT
+        with ESMTP id S233509AbiJSNOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:15:01 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E181C2F21;
-        Wed, 19 Oct 2022 06:00:33 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1666184265ts1d409a
-Received: from localhost.localdomain ( [182.148.15.91])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 19 Oct 2022 20:57:44 +0800 (CST)
-X-QQ-SSF: 01000000008000F0I000B00A0000000
-X-QQ-FEAT: k8Irs33ik7sILmaHIJIKazcpedYQTXSyVb7gcd1y8saozIYNH5bXRuhnQO5B8
-        SWZ9upd814P4xShyibxu61MWNqCE8tch/gIjSZItSK0/xuHX4awzX672bkvgOXGzhe4vIkX
-        RvejmXyU5Es4iw7TyTMNh7yFak8YB0eUd8pH5ajNJTF77j5d5lLdBU00yvQ2HHcQVmxzjH/
-        4G3B/HzwGa4Je/LB/JW3rv7FIwybuXP0JrSU9QiCfVGHJ53Wta/9gTphZ9Eb6wkkds4CrS4
-        f7TAdFrPppanMdIb4x3L7yTFytEOLJW3QcFIPJVCmcaid10Dl03duaerDT6isFmidbTFNF5
-        E8JlTxslIHR2Q2Uo85eGpOuhSE2ojkhg8mro1igmXXsRUDL/h9OurpYGMDdIlnN7ley0iGk
-        oNDHIOIswnM=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     thomas@winischhofer.net, deller@gmx.de
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] video: fix repeated words in comments
-Date:   Wed, 19 Oct 2022 20:57:38 +0800
-Message-Id: <20221019125738.54964-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 19 Oct 2022 09:14:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E481E4F38E;
+        Wed, 19 Oct 2022 05:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666184373; x=1697720373;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=TxD76gxWxWY7Vah+aZmHr2ByAHaRPt2R0yoC+T8dfug=;
+  b=VozWZAMBp/aIvrFhPhjVxFFrM4WqEEM14pljmbEd+Pq75hiF/B8JlJr9
+   QpMgNif4ojKmyuJQzs7M5plFEBpcy2izrGvVQGB51xRO6FinGWkrt+Hrm
+   MVNPG7HfMh9BMmdJs3z1+FVSEC2DIrxqs7l2fGPhw3mSZ8xVNsfNkKzp1
+   /EslsM180yPRGGZnzBfTS6LVNuE3VgWSQ7+3otdeyWX38m32BSvia+dmA
+   50KdyrLYEBAtTfmfG5Wq1/13o53+y8oXqwbmGiO0JDtOB2A51TDRQ6kK4
+   JIRD004u88072JroVBF1l3OsaXBFc+0xpT43E5Y72LbFMfP4CeS0lfN1H
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="306390888"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="306390888"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 05:57:53 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="698059872"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="698059872"
+Received: from mosermix-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.50.2])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 05:57:50 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] ACPI: PCI: Fix device reference counting in
+ acpi_get_pci_dev()
+In-Reply-To: <Y0/sGveKPjuUWOhO@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <12097002.O9o76ZdvQC@kreacher> <Y0+7Ug9Yh6J6uHVr@intel.com>
+ <CAJZ5v0gKW9S29xS2+qkcopzYtZKTcM=ZT-Jjc4fnEJfu=oYKaw@mail.gmail.com>
+ <Y0/sGveKPjuUWOhO@intel.com>
+Date:   Wed, 19 Oct 2022 15:57:48 +0300
+Message-ID: <87zgdsgecz.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+On Wed, 19 Oct 2022, Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com=
+> wrote:
+> On Wed, Oct 19, 2022 at 01:35:26PM +0200, Rafael J. Wysocki wrote:
+>> If catching things like this early is better, what about pulling my
+>> bleeding-edge branch, where all of my changes are staged before going
+>> into linux-next, into the CI?
+>
+> Pretty sure we don't have the resources to become the CI for
+> everyone. So testing random trees is not really possible. And=20
+> the alternative of pulling random trees into drm-tip is probably
+> a not a popular idea either. We used to pull in the sound tree
+> since it's pretty closely tied to graphics, but I think we
+> stopped even that because it eneded up pulling the whole of
+> -rc1 in at random points in time when we were't expecting it.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/video/fbdev/sis/sis_accel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Basically, we only pull branches to drm-tip that are managed using our
+tools and our development model and under our control. It was too much
+trouble dealing with conflicts, Linus' master being pulled in at random
+points (like in the middle of the merge window), and stuff like that,
+with the external trees.
 
-diff --git a/drivers/video/fbdev/sis/sis_accel.c b/drivers/video/fbdev/sis/sis_accel.c
-index 1914ab5a5a91..5850e4325f07 100644
---- a/drivers/video/fbdev/sis/sis_accel.c
-+++ b/drivers/video/fbdev/sis/sis_accel.c
-@@ -202,7 +202,7 @@ SiS310SubsequentScreenToScreenCopy(struct sis_video_info *ivideo, int src_x, int
- 	 * and destination blitting areas overlap and
- 	 * adapt the bitmap addresses synchronously
- 	 * if the coordinates exceed the valid range.
--	 * The the areas do not overlap, we do our
-+	 * The areas do not overlap, we do our
- 	 * normal check.
- 	 */
- 	if((mymax - mymin) < height) {
--- 
-2.36.1
+> Ideally each subsystem would have its own CI, or there should
+> be some kernel wide thing. But I suppose the progress towards
+> something like that is glacial.
+>
+> That said, we do test linux-next to some degree. And looks like
+> at least one of these could have been caught a bit earlier through
+> that. Unfortunately no one is really keeping an eye on that so
+> things tend to slip through. Probably need to figure out something
+> to make better use of that.
 
+Yeah, we need to pay more attention to linux-next test results, as well
+as Linus' master during the merge window. It's not necessarily easy with
+the volatility of linux-next, you could easily have very broken runs
+followed by good ones, but the low hanging fruit is raising more flags
+and being louder about it earlier when everything's busted for several
+days in linux-next or Linus' master.
+
+
+BR,
+Jani.
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
