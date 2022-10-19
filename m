@@ -2,226 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D88604AFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1518604B95
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiJSPQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S229670AbiJSPeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiJSPQJ (ORCPT
+        with ESMTP id S232072AbiJSPdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:16:09 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C81A347F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:09:11 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id w74so19595377oie.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:09:11 -0700 (PDT)
+        Wed, 19 Oct 2022 11:33:52 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07B4155DBB;
+        Wed, 19 Oct 2022 08:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ay+FMyDJ6mrCFfmDeqeDYg/OUapBZxlc0xVY9+qqxc=;
-        b=UdOSJ/n8yfsYhzLSqIYsFOfh8GSjAaZhtcRzKDgVJWldd9wCjYvvKegxlJvJ7svK6G
-         8Bd1VBPOy2xVIU7wItLjuIa0v9RCtzTb5UaU87AU5iarWSX/jeo0Q8Sju90E0S78bP36
-         ytZboSINkcXkwmy8ZyQZLtaRAT6fkcXJmUg/QCSvrVGRuxF9Xlad0Pm6A5QJUwhe3RlN
-         iXGFVpjKYYMeYW8C9dbzHxHn5xOz8Kldrn0rMjoWdD2G6VtZX8PoeFWNB9Yl8ocvMV2C
-         n33/kIn5Ky1BTh442zAxwihjvojosOHQJzY6Kw+aJF6CGhpeKglEQnZA27Pt00Qd/BGt
-         M8lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ay+FMyDJ6mrCFfmDeqeDYg/OUapBZxlc0xVY9+qqxc=;
-        b=6dT5ibzA91EeJs7wmmu9kP9tCU/rwSuNQ2AaoW55zpcQ6M4SZPCTEEzbKiQg+2OsoX
-         XfKAMOEQoNnCOi704y+T1YCX6aMBw5a4hTRRt57wdtwteU5tQi2btIp6lNiY1fJi9GNf
-         Ta6YuY3lOVGbh/gfw0Eb7CFJNT121fYh5Ht9uTwpg3uI59Ziclpcs9roHOkK04h0S3WQ
-         GxuRfjuAZnjUVRYXnRjP4Eui2pGdvVpe2TimqOd2zm33Hv5KSAdm77UkxzZsGxNKXGlA
-         CSg/0sV0uRf2xJ3DkXej8xheN+8iGQwiEOEMRuTRQ/uoFOJF44HOeunMAQ9Y8+bpMtZB
-         wYAw==
-X-Gm-Message-State: ACrzQf18lOaDCJ2JUJ+Nrk6EyxYbREUPJmnVPPInKxTEHzJ8SqlwoVU8
-        20XtT8SEiz7BK24BjHFX05PUcg==
-X-Google-Smtp-Source: AMsMyM5vr3f8E3wG/TwBM0lhVIbvGK4VxAN1rNww5cccyMGDxuaUmlUxhVRCfTsIY2pkxFHLZLODBw==
-X-Received: by 2002:aca:120e:0:b0:354:ae0d:e063 with SMTP id 14-20020aca120e000000b00354ae0de063mr4421804ois.250.1666191998315;
-        Wed, 19 Oct 2022 08:06:38 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k4-20020a9d7604000000b0066194b13fe9sm7041703otl.73.2022.10.19.08.06.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 08:06:37 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 08:06:26 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Yu Kuai <yukuai3@huawei.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH 6.0 479/862] sbitmap: fix possible io hung due to lost
- wakeup
-In-Reply-To: <20221019083311.114449669@linuxfoundation.org>
-Message-ID: <174a196-5473-4e93-a52a-5e26eb37949@google.com>
-References: <20221019083249.951566199@linuxfoundation.org> <20221019083311.114449669@linuxfoundation.org>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1666193322;
+  x=1697729322;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hCTTTOmWPuE1nWOozcq8XqfrXalZRdh/62SN0Hq9k/w=;
+  b=IoyWvcE3I23IrYGwjXMnrIcRZqADX9mVwWFm21pzRNtbiqO+boTXR9FE
+   vjm/MioM/teU5PLVosGqge+6VShQIi5e8nsgF9zFtzdkj06z54Mg0JzTq
+   cpB4AEJXTebz7cxTZbHkiLx5fhW/M4MhZnKy49gXQNwdzgcWw+cYHExb4
+   wjAYufjf3wA2TcSPgqjj/Lmc8nRtj3jhxGHRZuZuOoHFWYh3w/PVkFTpL
+   eA87mS463WvwzICfNEmyWwEtMX+Obyelk1s1Kq8Fg2O7nOLtCx57VSZ5L
+   H3MQXx0z9d4wSIBAC+JTRUq1RRsLMQ6+IO/mdAwkP3NrCpPLZhOyi8fjP
+   g==;
+Date:   Wed, 19 Oct 2022 17:07:27 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+CC:     Ulf Hansson <ulf.hansson@linaro.org>, kernel <kernel@axis.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH] mmc: core: support zeroout using TRIM
+Message-ID: <Y1ASr6zpqobEbFmG@axis.com>
+References: <20220429152118.3617303-1-vincent.whitchurch@axis.com>
+ <3c75ca82-f889-a346-a031-2c417c57e2b0@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3c75ca82-f889-a346-a031-2c417c57e2b0@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022, Greg Kroah-Hartman wrote:
+On Wed, Oct 19, 2022 at 04:54:12PM +0200, Jon Hunter wrote:
+> [    4.168317] mmc0: Command Queue Engine enabled
+> [    4.176723] mmc0: new HS400 Enhanced strobe MMC card at address 0001
+> [    4.189609] mmcblk0: mmc0:0001 HBG4a2 29.1 GiB
+> [    4.207660] mmc0: running CQE recovery
+> [    4.215332]  mmcblk0: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 p20 p21 p22 p23 p24 p25 p26 p27 p28 p29 p30 p31 p32 p33 p34 p35 p36 p37 p38 p39 p40 p41 p42
+> [    4.249403] mmcblk0boot0: mmc0:0001 HBG4a2 8.00 MiB
+> [    4.255457] mmcblk0boot1: mmc0:0001 HBG4a2 8.00 MiB
+> [    4.262063] mmcblk0rpmb: mmc0:0001 HBG4a2 4.00 MiB, chardev (511:0)
+> ...
+> [    9.034384] ------------[ cut here ]------------
+> [    9.038985] WARNING: CPU: 4 PID: 199 at /mlt/kernel/drivers/mmc/core/block.c:2379 mmc_blk_mq_issue_rq+0x370/0x820
+> [    9.049100] Modules linked in: ip_tables x_tables ipv6
+> [    9.054180] CPU: 4 PID: 199 Comm: kworker/4:1H Not tainted 6.1.0-rc1-00025-gaae703b02f92 #1
+> [    9.062399] Hardware name: NVIDIA Jetson AGX Xavier Developer Kit (DT)
+> [    9.068821] Workqueue: kblockd blk_mq_run_work_fn
+> [    9.073464] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    9.080318] pc : mmc_blk_mq_issue_rq+0x370/0x820
+> [    9.084872] lr : mmc_blk_mq_issue_rq+0x70/0x820
+> [    9.089382] sp : ffff80000b5b3ad0
+> [    9.092643] x29: ffff80000b5b3ad0 x28: ffff00008467a288 x27: 0000000000000014
+> [    9.099733] x26: ffff000082d49000 x25: ffff00008467a240 x24: ffff0000802acad8
+> [    9.106758] x23: ffff0000802aca10 x22: ffff0000802aca00 x21: 0000000000000000
+> [    9.113810] x20: ffff000080fa0800 x19: ffff800009824000 x18: 0000000000000080
+> [    9.120858] x17: 0000000000000000 x16: f8ffffffffffffff x15: 000000000000029a
+> [    9.127918] x14: 0000000000000000 x13: 0000000000002000 x12: 0000000000000000
+> [    9.134980] x11: 0000000106d66000 x10: 0000000000000001 x9 : 0000000000000002
+> [    9.142066] x8 : 0000000000000009 x7 : ffff000084650118 x6 : 00000000000000ff
+> [    9.149171] x5 : ffff000084650000 x4 : 0000000000403082 x3 : ffffffffffffca4a
+> [    9.156240] x2 : 0000000000000000 x1 : 00000000ffffffe7 x0 : 0000000000000009
+> [    9.163276] Call trace:
+> [    9.165737]  mmc_blk_mq_issue_rq+0x370/0x820
+> [    9.169993]  mmc_mq_queue_rq+0x134/0x270
+> [    9.173900]  blk_mq_dispatch_rq_list+0x14c/0x8d8
+> [    9.178500]  blk_mq_do_dispatch_sched+0x330/0x348
+> [    9.183169]  __blk_mq_sched_dispatch_requests+0xd4/0x170
+> [    9.188440]  blk_mq_sched_dispatch_requests+0x34/0x70
+> [    9.193456]  __blk_mq_run_hw_queue+0x58/0xb0
+> [    9.197666]  blk_mq_run_work_fn+0x20/0x28
+> [    9.201673]  process_one_work+0x1e0/0x348
+> [    9.205672]  worker_thread+0x48/0x410
+> [    9.209326]  kthread+0xf4/0x110
+> [    9.212462]  ret_from_fork+0x10/0x20
+> [    9.216025] ---[ end trace 0000000000000000 ]---
+> [    9.220899] I/O error, dev mmcblk0, sector 12624 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
+> [   11.500035] I/O error, dev mmcblk0, sector 16720 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
+> [   13.804317] I/O error, dev mmcblk0, sector 20816 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
+> [   16.104063] I/O error, dev mmcblk0, sector 24912 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
+> 
+> 
+> Reverting this makes the issue go away. Please let me know if you have any thoughts on this.
 
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> [ Upstream commit 040b83fcecfb86f3225d3a5de7fd9b3fbccf83b4 ]
-> 
-> There are two problems can lead to lost wakeup:
-> 
-> 1) invalid wakeup on the wrong waitqueue:
-> 
-> For example, 2 * wake_batch tags are put, while only wake_batch threads
-> are woken:
-> 
-> __sbq_wake_up
->  atomic_cmpxchg -> reset wait_cnt
-> 			__sbq_wake_up -> decrease wait_cnt
-> 			...
-> 			__sbq_wake_up -> wait_cnt is decreased to 0 again
-> 			 atomic_cmpxchg
-> 			 sbq_index_atomic_inc -> increase wake_index
-> 			 wake_up_nr -> wake up and waitqueue might be empty
->  sbq_index_atomic_inc -> increase again, one waitqueue is skipped
->  wake_up_nr -> invalid wake up because old wakequeue might be empty
-> 
-> To fix the problem, increasing 'wake_index' before resetting 'wait_cnt'.
-> 
-> 2) 'wait_cnt' can be decreased while waitqueue is empty
-> 
-> As pointed out by Jan Kara, following race is possible:
-> 
-> CPU1				CPU2
-> __sbq_wake_up			 __sbq_wake_up
->  sbq_wake_ptr()			 sbq_wake_ptr() -> the same
->  wait_cnt = atomic_dec_return()
->  /* decreased to 0 */
->  sbq_index_atomic_inc()
->  /* move to next waitqueue */
->  atomic_set()
->  /* reset wait_cnt */
->  wake_up_nr()
->  /* wake up on the old waitqueue */
-> 				 wait_cnt = atomic_dec_return()
-> 				 /*
-> 				  * decrease wait_cnt in the old
-> 				  * waitqueue, while it can be
-> 				  * empty.
-> 				  */
-> 
-> Fix the problem by waking up before updating 'wake_index' and
-> 'wait_cnt'.
-> 
-> With this patch, noted that 'wait_cnt' is still decreased in the old
-> empty waitqueue, however, the wakeup is redirected to a active waitqueue,
-> and the extra decrement on the old empty waitqueue is not handled.
-> 
-> Fixes: 88459642cba4 ("blk-mq: abstract tag allocation out into sbitmap library")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Link: https://lore.kernel.org/r/20220803121504.212071-1-yukuai1@huaweicloud.com
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Could you please test if the below change fixes it?  Thank you.
 
-I have no authority on linux-block, but I'll say NAK to this one
-(and 517/862), and let Jens and Jan overrule me if they disagree.
-
-This was the first of several 6.1-rc1 commits which had given me lost
-wakeups never suffered before; was not tagged Cc stable; and (unless I've
-missed it on lore) never had AUTOSEL posted to linux-block or linux-kernel.
-
-Hugh
-
-> ---
->  lib/sbitmap.c | 55 ++++++++++++++++++++++++++++++---------------------
->  1 file changed, 33 insertions(+), 22 deletions(-)
-> 
-> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-> index 29eb0484215a..1f31147872e6 100644
-> --- a/lib/sbitmap.c
-> +++ b/lib/sbitmap.c
-> @@ -611,32 +611,43 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
->  		return false;
->  
->  	wait_cnt = atomic_dec_return(&ws->wait_cnt);
-> -	if (wait_cnt <= 0) {
-> -		int ret;
-> +	/*
-> +	 * For concurrent callers of this, callers should call this function
-> +	 * again to wakeup a new batch on a different 'ws'.
-> +	 */
-> +	if (wait_cnt < 0 || !waitqueue_active(&ws->wait))
-> +		return true;
->  
-> -		wake_batch = READ_ONCE(sbq->wake_batch);
-> +	if (wait_cnt > 0)
-> +		return false;
->  
-> -		/*
-> -		 * Pairs with the memory barrier in sbitmap_queue_resize() to
-> -		 * ensure that we see the batch size update before the wait
-> -		 * count is reset.
-> -		 */
-> -		smp_mb__before_atomic();
-> +	wake_batch = READ_ONCE(sbq->wake_batch);
->  
-> -		/*
-> -		 * For concurrent callers of this, the one that failed the
-> -		 * atomic_cmpxhcg() race should call this function again
-> -		 * to wakeup a new batch on a different 'ws'.
-> -		 */
-> -		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
-> -		if (ret == wait_cnt) {
-> -			sbq_index_atomic_inc(&sbq->wake_index);
-> -			wake_up_nr(&ws->wait, wake_batch);
-> -			return false;
-> -		}
-> +	/*
-> +	 * Wake up first in case that concurrent callers decrease wait_cnt
-> +	 * while waitqueue is empty.
-> +	 */
-> +	wake_up_nr(&ws->wait, wake_batch);
->  
-> -		return true;
-> -	}
-> +	/*
-> +	 * Pairs with the memory barrier in sbitmap_queue_resize() to
-> +	 * ensure that we see the batch size update before the wait
-> +	 * count is reset.
-> +	 *
-> +	 * Also pairs with the implicit barrier between decrementing wait_cnt
-> +	 * and checking for waitqueue_active() to make sure waitqueue_active()
-> +	 * sees result of the wakeup if atomic_dec_return() has seen the result
-> +	 * of atomic_set().
-> +	 */
-> +	smp_mb__before_atomic();
-> +
-> +	/*
-> +	 * Increase wake_index before updating wait_cnt, otherwise concurrent
-> +	 * callers can see valid wait_cnt in old waitqueue, which can cause
-> +	 * invalid wakeup on the old waitqueue.
-> +	 */
-> +	sbq_index_atomic_inc(&sbq->wake_index);
-> +	atomic_set(&ws->wait_cnt, wake_batch);
->  
->  	return false;
->  }
-> -- 
-> 2.35.1
-> 
-> 
-> 
-> 
+diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+index fefaa901b50f..3661ba0bbc87 100644
+--- a/drivers/mmc/core/queue.c
++++ b/drivers/mmc/core/queue.c
+@@ -48,6 +48,7 @@ static enum mmc_issue_type mmc_cqe_issue_type(struct mmc_host *host,
+ 	case REQ_OP_DRV_OUT:
+ 	case REQ_OP_DISCARD:
+ 	case REQ_OP_SECURE_ERASE:
++	case REQ_OP_WRITE_ZEROES:
+ 		return MMC_ISSUE_SYNC;
+ 	case REQ_OP_FLUSH:
+ 		return mmc_cqe_can_dcmd(host) ? MMC_ISSUE_DCMD : MMC_ISSUE_SYNC;
