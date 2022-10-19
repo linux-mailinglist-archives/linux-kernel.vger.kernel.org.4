@@ -2,214 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE45D60505E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7796D605063
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiJST0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S230333AbiJST3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiJST0v (ORCPT
+        with ESMTP id S229936AbiJST3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:26:51 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB77190467
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666207608; x=1697743608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WBfO4PEEZH2HCMK0CvVGY7P7dLy55zER35u6rUrGgjo=;
-  b=aPoxSzH5GC1EAR9TTaCYvjIsJotRq2ByMSLBjHjAggiLvRPsgzEi/sdN
-   QSWMMD306c0QVBxIcwR7XDL3MxSTPblWAxJCFiO/svyWz0RYh3zHk35kA
-   J61wLd254mX7hWXPsSONWzTDcJAppvmvfmzguVFmXHUd03D3Od25aWhPg
-   y5WaFwyoAnGn+K7gN0SJNjqh4OV+CrTBU9P/R7s4+Kc63kF8dr2kSTIEa
-   VZH+rF3PsIZWkp1vZ3s6UHTqQYglq2WymE/roUSFiFmqevocUPQ6YR8Dw
-   WEwku8vSjXRcu7b10oH+CFP3Vy5p9muyg0cHTdL29iTB1pm6GiaSkiYZY
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="289823518"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="289823518"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 12:26:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="958496507"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="958496507"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Oct 2022 12:26:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olEiB-00A4m0-1a;
-        Wed, 19 Oct 2022 22:26:43 +0300
-Date:   Wed, 19 Oct 2022 22:26:43 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Haakon Bugge <haakon.bugge@oracle.com>,
-        John Haxby <john.haxby@oracle.com>
-Subject: Re: [PATCH] vsprintf: protect kernel from panic due to non-canonical
- pointer dereference
-Message-ID: <Y1BPc8JsEoApKJkL@smile.fi.intel.com>
-References: <20221017191611.2577466-1-jane.chu@oracle.com>
- <Y02sENwhtpsx5yhP@smile.fi.intel.com>
- <5d987403-a7bf-8996-d639-c99edeaabcdf@oracle.com>
- <Y06f4EwisLTU0rEz@alley>
- <799e5390-2ff5-02b7-2df7-61198d5451e2@oracle.com>
- <Y08Hn6on37fgc57F@smile.fi.intel.com>
- <f77145e0-2bc9-a558-7f55-22100fa4b5ed@oracle.com>
- <Y08RVzvniYr8ycKV@smile.fi.intel.com>
- <bb8a2add-2b6e-c35c-ff5b-a7816eeb7e26@oracle.com>
+        Wed, 19 Oct 2022 15:29:05 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA611960A3;
+        Wed, 19 Oct 2022 12:29:04 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id a6so23493634ljq.5;
+        Wed, 19 Oct 2022 12:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1J+LkGJJsG58CkJ3Qd9XTdOjWMcQXIZDNg+2efZ9DT8=;
+        b=Zs3D8ie/O78VXdUFRbswnnVyMUFKQTi+weY/1rbfp0bq2vH4HC+4WLyeQVMXHPYCAi
+         2ECkR/KLht8Hyqa3u2Z0PQC1zsqs1nr5elWU/6lftN85gXuL4+vQ+fwZns1FtCnp5Jxw
+         qSopG89Arj3LY54xjxvkbBdgMT/cgvL2QvQjYNBrWIDlqcHiJZ8wVIUNe5/p2yafobMH
+         DnICUEblvNYeI69wK3h6gx1Kzy8oiKELAPgzmBmz7GTs97IH9q6ahlbKctexF3JZYQuW
+         rwtwT7TvHoAVzG1+nXmvdN5ZyW5yDdOt/Y0LeejRX9gtyUXq0FHVQIDXv5ysgrta+ri0
+         1nag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1J+LkGJJsG58CkJ3Qd9XTdOjWMcQXIZDNg+2efZ9DT8=;
+        b=6zWQSWgwRVFlroCS9neZlVrn446RpV3NSJfRwwUvWPr8R8s/4K/vRhh4980qGzTenG
+         U077zQE8XbYzHVvxQsggbFikZuIGi49EdFZ4BnhQ5QpGvCjUKCP/pQS3CuxQOLza4PSq
+         SFgBnyTptyZ1IXIDTbvkQHOSZWLsuB4lemrF07cLW1hEFabKQV5lWldRfrsbtSlgvZ/M
+         YDYFPZapsBHDf0ckNj2zJ3q+/IvLt6J184Mgg8O4AsfxWph87bJeda3eL6+WYcIpRCAv
+         YFx1Enhj8b8mBTPSBDHLIT3ytKELTwKfLnwtPQu+gpdW0ItEwBSrlI8w5P6qWljuKD1e
+         teJg==
+X-Gm-Message-State: ACrzQf11WoNgN8SdrcVNBLc+yF223TL5a1XW6nlclJxIbGuYbPnBTUwq
+        73DWg8wVPkzQSNV/MqDj44AfBfQb+J4XIwk8jE0=
+X-Google-Smtp-Source: AMsMyM4/a8mro7O35SGkjXAGwMZz8FGjEXZwFrLyoLo7XaOhAeR+5e35yobKB5fffcFn7Qi0JTM+jG1hgh5hA0qfPsg=
+X-Received: by 2002:a2e:8796:0:b0:26e:8b13:a29c with SMTP id
+ n22-20020a2e8796000000b0026e8b13a29cmr3457109lji.210.1666207742198; Wed, 19
+ Oct 2022 12:29:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb8a2add-2b6e-c35c-ff5b-a7816eeb7e26@oracle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Wed, 19 Oct 2022
+ 12:29:01 -0700 (PDT)
+In-Reply-To: <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com> <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+From:   youling 257 <youling257@gmail.com>
+Date:   Thu, 20 Oct 2022 03:29:01 +0800
+Message-ID: <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 06:36:07PM +0000, Jane Chu wrote:
-> On 10/18/2022 1:49 PM, Andy Shevchenko wrote:
-> > On Tue, Oct 18, 2022 at 08:30:01PM +0000, Jane Chu wrote:
-> >> On 10/18/2022 1:07 PM, Andy Shevchenko wrote:
-> >>> On Tue, Oct 18, 2022 at 06:56:31PM +0000, Jane Chu wrote:
-> >>>> On 10/18/2022 5:45 AM, Petr Mladek wrote:
-> >>>>> On Mon 2022-10-17 19:31:53, Jane Chu wrote:
-> >>>>>> On 10/17/2022 12:25 PM, Andy Shevchenko wrote:
-> >>>>>>> On Mon, Oct 17, 2022 at 01:16:11PM -0600, Jane Chu wrote:
-> >>>>>>>> While debugging a separate issue, it was found that an invalid string
-> >>>>>>>> pointer could very well contain a non-canical address, such as
-> >>>>>>>> 0x7665645f63616465. In that case, this line of defense isn't enough
-> >>>>>>>> to protect the kernel from crashing due to general protection fault
-> >>>>>>>>
-> >>>>>>>> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
-> >>>>>>>>                     return "(efault)";
-> >>>>>>>>
-> >>>>>>>> So instead, use kern_addr_valid() to validate the string pointer.
-> >>>>>>>
-> >>>>>>> How did you check that value of the (invalid string) pointer?
-> >>>>>>>
-> >>>>>>
-> >>>>>> In the bug scenario, the invalid string pointer was an out-of-bound
-> >>>>>> string pointer. While the OOB referencing is fixed,
-> >>>>>
-> >>>>> Could you please provide more details about the fixed OOB?
-> >>>>> What exact vsprintf()/printk() call was broken and eventually
-> >>>>> how it was fixed, please?
-> >>>>
-> >>>> For sensitive reason, I'd like to avoid mentioning the specific name of
-> >>>> the sysfs attribute in the bug, instead, just call it "devX_attrY[]",
-> >>>> and describe the precise nature of the issue.
-> >>>>
-> >>>> devX_attrY[] is a string array, declared and filled at compile time,
-> >>>> like
-> >>>>      const char const devX_attrY[] = {
-> >>>> 	[ATTRY_A] = "Dev X AttributeY A",
-> >>>> 	[ATTRY_B] = "Dev X AttributeY B",
-> >>>> 	...
-> >>>> 	[ATTRY_G] = "Dev X AttributeY G",
-> >>>>      }
-> >>>> such that, when user "cat /sys/devices/systems/.../attry_1",
-> >>>> "Dev X AttributeY B" will show up in the terminal.
-> >>>> That's it, no more reference to the pointer devX_attrY[ATTRY_B] after that.
-> >>>>
-> >>>> The bug was that the index to the array was wrongfully produced,
-> >>>> leading up to OOB, e.g. devX_attrY[11].  The fix was to fix the
-> >>>> calculation and that is not an upstream fix.
-> >>>>
-> >>>>>
-> >>>>>> the lingering issue
-> >>>>>> is that the kernel ought to be able to protect itself, as the pointer
-> >>>>>> contains a non-canonical address.
-> >>>>>
-> >>>>> Was the pointer used only by the vsprintf()?
-> >>>>> Or was it accessed also by another code, please?
-> >>>>
-> >>>> The OOB pointer was used only by vsprintf() for the "cat" sysfs case.
-> >>>> No other code uses the OOB pointer, verified both by code examination
-> >>>> and test.
-> >>>
-> >>> So, then the vsprintf() is _the_ point to crash and why should we hide that?
-> >>> Because of the crash you found the culprit, right? The efault will hide very
-> >>> important details.
-> >>>
-> >>> So to me it sounds like I like this change less and less...
-> >>
-> >> What about the existing check
-> >>    	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
-> >>                       return "(efault)";
-> >> ?
-> > 
-> > Because it's _special_. We know that First page is equivalent to a NULL pointer
-> > and the last one is dedicated for so called error pointers. There are no more
-> > special exceptions to the addresses in the Linux kernel (I don't talk about
-> > alignment requirements by the certain architectures).
-> > 
-> >> In an experiment just to print the raw OOB pointer values, I saw below
-> >> (the devX attrY stuff are substitutes of the real attributes, other
-> >> values and strings are verbatim copy from "dmesg"):
-> >>
-> >> [ 3002.772329] devX_attrY[26]: (ffffffff84d60ad3) Dev X AttributeY E
-> >> [ 3002.772346] devX_attrY[27]: (ffffffff84d60ae4) Dev X AttributeY F
-> >> [ 3002.772347] devX_attrY[28]: (ffffffff84d60aee) Dev X AttributeY G
-> >> [ 3002.772349] devX_attrY[29]: (0) (null)
-> >> [ 3002.772350] devX_attrY[30]: (0) (null)
-> >> [ 3002.772351] devX_attrY[31]: (0) (null)
-> >> [ 3002.772352] devX_attrY[32]: (7665645f63616465) (einval)
-> >> [ 3002.772354] devX_attrY[33]: (646e61685f656369) (einval)
-> >> [ 3002.772355] devX_attrY[34]: (6f635f65755f656c) (einval)
-> >> [ 3002.772355] devX_attrY[35]: (746e75) (einval)
-> >>
-> >> where starting from index 29 are all OOB pointers.
-> >>
-> >> As you can see, if the OOBs are NULL, "(null)" was printed due to the
-> >> existing checking, but when the OOBs are turned to non-canonical which
-> >> is detectable, the fact the pointer value deviates from
-> >>     (ffffffff84d60aee + 4 * sizeof(void *))
-> >> evidently shown that the OOBs are detectable.
-> >>
-> >> The question then is why should the non-canonical OOBs be treated
-> >> differently from NULL and ERR_VALUE?
-> > 
-> > Obviously, to see the crash. And let kernel _to crash_. Isn't it what we need
-> > to see a bug as early as possible?
-> > 
-> 
-> If the purpose is to see the bug as early as possible, then getting
-> "(efault)" from reading sysfs attribute would serve the purpose, right?
-> 
-> The fact an OOB pointer has already being turned into either NULL or
-> non-canonical value implies that *if* kernel code other than
-> vsprintf() references the pointer, it'll crash else where;
+arch x86, this's my revert,
+https://github.com/youling257/android-mainline/commit/401cbfa61cbfc20c87a5b=
+e8e2dda68ac5702389f
+i tried different revert, have to remove kmsan_copy_to_user.
 
-No, not the case for error pointers and NULL.
-
-> but *if* no
-> other code referencing the pointer, why crash?
-
-Because how else you can see the bug?! The trace will give you essential
-information about registers, etc that gives you a hint what the _cause_ of the
-crash. And we need that cause. The "(efault)" has not even a bit close to what
-crash gives us.
-
-So, this is my last message in the discussion.
-
-Here is a formal NAK. Up to maintainers to decide what to do with this.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+2022-10-20 1:58 GMT+08:00, Marco Elver <elver@google.com>:
+> On Wed, 19 Oct 2022 at 10:37, youling 257 <youling257@gmail.com> wrote:
+>>
+>>
+>>
+>> ---------- Forwarded message ---------
+>> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9A youling257 <youling257@gmail.com>
+>> Date: 2022=E5=B9=B410=E6=9C=8820=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=
+=8D=881:36
+>> Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+>> To: <glider@google.com>
+>> Cc: <youling257@gmail.com>
+>>
+>>
+>> i using linux kernel 6.1rc1 on android, i use gcc12 build kernel 6.1 for
+>> android, CONFIG_KMSAN is not set.
+>> "instrumented.h: add KMSAN support" cause android bluetooth high CPU
+>> usage.
+>> git bisect linux kernel 6.1rc1, "instrumented.h: add KMSAN support" is a
+>> bad commit for my android.
+>>
+>> this is my kernel 6.1,  revert include/linux/instrumented.h fix high cpu
+>> usage problem.
+>> https://github.com/youling257/android-mainline/commits/6.1
+>
+> What arch?
+> If x86, can you try to revert only the change to
+> instrument_get_user()? (I wonder if the u64 conversion is causing
+> issues.)
+>
