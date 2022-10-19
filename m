@@ -2,132 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688FD6037E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FDD6037E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJSCKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 22:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S229918AbiJSCJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 22:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJSCKK (ORCPT
+        with ESMTP id S229489AbiJSCJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 22:10:10 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2049.outbound.protection.outlook.com [40.107.104.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455952CDCB;
-        Tue, 18 Oct 2022 19:10:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BAS8Q+ZtWzHkdtEZMzpoiCQ6OTtCbeewQKjsp6HiD1McloJ5EIKhIVg1MAdQ2QLLIwF88wI55oCpmDJIhZe28zh3Smv5MytSPWCFNfCzSKoqs444gnLystIVwy91nnCpy+SKdpErnupKlopU/fMsS2e/FUezn/DA90i45vyWf03pUX5fPenCXkcnM18l9aVsvL+RJkORI4+UoIoqJDQ1MdNiwOKcCnSuud6k4q9XRr5hn0x03jQJ6L1x1egMJyRnthDJjJlkyj0ZNkXtYhoP7L+jGLW1xH2Jg6N5rWvxy2SXkLDggnH8Ys/iVI37aXK3AEL9dKPfy8TUl7+CWh1xVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=90tDNvPsuZXXkDik+PY6mHPcMeYR5hn9mS16hVUG71w=;
- b=X2uUmfADaluiyvlYjMP4Wlrryw1P2nbjijjE/7akCjuCSuHQ/I/blhCZsgomhtuI1fMwmqRPRGTHugj3ScF7DsNIcYC/Yq1Tl7ly+h2LTDEpuOq23mqOsJ76r7gYbVMiO8dyvaKQlCYC5KLnrgNeVtGPcW514V2i1LyzFLqStqcIV9Qb7EWzwu1j544pioSpnnPx+5mHIgGoNjGlRTOv79sUis8mOKFhiu+v3PuiZPZHiNzwzQfHGpcmAnZ/xkpgp74OpzTGR4Zvn5zkc8izvw/sHDlT1zUzE+OO/ic43Rvf8gkEhgJyMCAI4goWn9yhpxk/poentlKhwQAFyL5C2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=90tDNvPsuZXXkDik+PY6mHPcMeYR5hn9mS16hVUG71w=;
- b=rnc88jsZZrHDtf0nzjODVqSn2uPYtoEYzplFH2KmCjXuYzdojbHbePRKZqmEJFWDJEyiejSx8QZGPOxEHF8xMQBbaJYmTDX3up1MfbuL1XUCTNeCjd2zDf2IAzxtEQxOgIDzYbzY0A1g4ND8e1WrLUAZKWJ+qkICzdXoqVwsCNM=
-Received: from DB9PR04MB9628.eurprd04.prod.outlook.com (2603:10a6:10:30b::14)
- by PA4PR04MB7934.eurprd04.prod.outlook.com (2603:10a6:102:ca::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Wed, 19 Oct
- 2022 02:10:03 +0000
-Received: from DB9PR04MB9628.eurprd04.prod.outlook.com
- ([fe80::56ef:967c:937d:8d76]) by DB9PR04MB9628.eurprd04.prod.outlook.com
- ([fe80::56ef:967c:937d:8d76%5]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
- 02:10:03 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Xu Yang <xu.yang_2@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, Peng Fan <peng.fan@nxp.com>
-Subject: RE: [EXT] Re: [PATCH V2 1/6] dt-bindings: usb: usbmisc-imx: convert
- to DT schema
-Thread-Topic: [EXT] Re: [PATCH V2 1/6] dt-bindings: usb: usbmisc-imx: convert
- to DT schema
-Thread-Index: AQHY37JhrICZs6ojUU203kZt3gxCgK4PjEKAgAJiSgCAAtp8AIAANVIw
-Date:   Wed, 19 Oct 2022 02:10:03 +0000
-Message-ID: <DB9PR04MB9628C50A44BF8DC09C75CAF9892B9@DB9PR04MB9628.eurprd04.prod.outlook.com>
-References: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
- <20221014095148.2063669-2-peng.fan@oss.nxp.com>
- <359bc301-fed6-80eb-6945-caeb7fbb319d@linaro.org>
- <PAXPR04MB87840FFD365C5C044D54B55F8C299@PAXPR04MB8784.eurprd04.prod.outlook.com>
- <9e03801c-dea8-1029-4ba1-fa0d6144b0d7@linaro.org>
-In-Reply-To: <9e03801c-dea8-1029-4ba1-fa0d6144b0d7@linaro.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB9PR04MB9628:EE_|PA4PR04MB7934:EE_
-x-ms-office365-filtering-correlation-id: 28067a3a-6195-4e3e-8d3c-08dab17708cb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zqkm/8Tlleh9A1HB2RO/A3DZNO8Wyy2QgM4xErLLp0GGJAcSPwF18Q/eZDZggb49cjzUVZLBKum6v9AsCysSJjtzwpn2m5zZjKwGpu4EfylL80cF+FmhIaDkrAx64T+IA4Py7r3wVIxAgAhIHSrLs3/kxJQLr0lA3yGJFTgWejbx67Od393CnMaCgg6OcJk/K+/nJ1v6RcVtuq30I5yrM4SRZy3/L2oa9HI4KJ1F0StfX8NtdxDCAo4wt+DtG5Xal34i4LhYKO+1CrrrdQ5pXDQ/zybLdhbTR+nYL7lnV6b5d2Srj1BC1Rs5fX95C0WdcJru2VK3BWJNcMr7ZFipCazcNAro9YaSvgEoIl7+MHo+R73kAJVpG2/8EhYtScBf1syuS3Zi2ZhwknUwogiKc28FvFWXdwWLhq39hI26c8BckyNAcYxl/sQNwMO8LHWRoHYWvX7qN7ikU15Zjdjvu1Y7RmHpK8dkgg6ukOMWEthl9zQPSiCixeMv69NQbCBXcmkxOzyYCcot4Wj1y0bsIzo6EKDhtdJbQV7t4DHV9f+f5MeEOUkJGoJ4pAJTgWpEhXmlhX1iXAae0083VMUMvOEstgnVQmVbKCLKwDfGd42r5djydZpRLi2XV8h0Ll+jkoHjndG4Bxwf+U2GhtsXRTUzMVttrOHNzv/8Nlr2yoNHF2kSM0Chv83SwJG+4SBFa9F+VzO1P5HLNhpInIz+HTN6FDf6jGeup9T7KUfshwFCxV4JnvvT0VRpQ7GsKozTUHaSy4fr0B13MXDMJpOwKI8J2rYKgjmzcWp9zj1n0MiJK1n2L5ckmJ/NuxHP1Eei7/m5qtZfcIgoI3BsKqHb6A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9628.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(366004)(136003)(346002)(396003)(451199015)(316002)(2906002)(19627235002)(110136005)(54906003)(186003)(33656002)(26005)(9686003)(41300700001)(44832011)(5660300002)(38100700002)(6506007)(7416002)(8936002)(55016003)(52536014)(66556008)(4326008)(8676002)(64756008)(66446008)(66946007)(76116006)(66476007)(53546011)(86362001)(7696005)(83380400001)(71200400001)(122000001)(966005)(38070700005)(478600001)(45080400002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5WA8WhkF7ZQ9TzorPgLxT346uy9u4N9BHjoP83IgDlLc9+qfWxRt884E9K9t?=
- =?us-ascii?Q?g6B19zUR618poL/VbwSncVOU+ZEUoEgnMO/rHs7xpWuw6qnxR6zjlfZhYzEX?=
- =?us-ascii?Q?CrEqMbUd933ZX5aT0/y2URY4YWamKHeNGftHNqBGUdTzPp//DPX0C3Qe+txc?=
- =?us-ascii?Q?Ka1rLtUYVXv8njptz2Fr+U8CjR30ae6TALcYE3vZrdEMoBhFTy8cXnCWDno6?=
- =?us-ascii?Q?4IqcuaILpg2gP8xq2ZwOlFmptYCg5g34lZy4UuI+eQw8dBL/ynyiV9H9+xyf?=
- =?us-ascii?Q?9o7sSvgAqz0AYj6zDsERmJP+/L7gZmzuVHo073sFe/Ixd1xyaV2HrxgNBFE/?=
- =?us-ascii?Q?Jqoz0SybmeUdOGQxCpZCTF54inafA/Cmpt30zAwaw96YC2YmQXE3ExwGs7gq?=
- =?us-ascii?Q?VdV89kzYNr/Z2aLSOKYiF9MHNVMQr0F77SsFv4vliLgtI0G6nhf5X0BSpZv7?=
- =?us-ascii?Q?Pw/rn9oMUvVtZCZEBvVYUeZW17FxxUeOPTzrNFIaTA7gCUAFeV83jh0vk3rA?=
- =?us-ascii?Q?YDjYsDV9ARPJDb3d2RtrK4tqgdPx9SFlUkxuiBF/dsUJd7tc+N8q+tLFszVu?=
- =?us-ascii?Q?7cSKFThSCwW6gjlqg0hPBL8bsuqX+lPK/03JqRjOzu7JO29/nsjKGPfXReIP?=
- =?us-ascii?Q?mcAMFuy6QPvpPU/t3oZq4pnqVNv2QT541iNaM4IXoz1CCFtNxIz0gXAoZ1jI?=
- =?us-ascii?Q?8qPeempUChimddVCdIVd+HAI46IIlVIoxP4RqbBq5FC24yGgr31XUdxD+aSY?=
- =?us-ascii?Q?I3ilPKS7r8NaTU1iy6ZPLedu5UEvawkTznyjP5cEDM6DfVIWpL1s6OZcY4kF?=
- =?us-ascii?Q?NyA7KX3skSC/f/fsKOEGKqXte9MlCVf8QQl+xs0tM387tHFxcujxy0NXk9fa?=
- =?us-ascii?Q?cK4hsSwnnlLx2N89AEv3pRUdTxl4jX9rjpma4d68bpm4S7yFf8JayguU0kWe?=
- =?us-ascii?Q?1JLfY8vznzF9F8CjWv5RSlZ+gC9iOxC1gavqSDco9HwvTje4BH4z/Z3bopHy?=
- =?us-ascii?Q?4WYFRgFbdchh5hhwU9T6wK7AppvXaWIzXh1YHxrHUzfaczBQLMeTZy10UrTF?=
- =?us-ascii?Q?9T0/4bRUSw9K74i/ELRIFw6jV8/IheR2LLmQ8A25KzYt0IjayI9o8MUAVH51?=
- =?us-ascii?Q?p2zbVMbasfejOt9P8JBvZYEbzanN/OPgMXtyDd1lXmNgeIqZQSqJ3g7l3zJy?=
- =?us-ascii?Q?d83UTwd+r9XtF3mMiAYvbRK4T0u1d6Y3RryIM/E9QMbgsJpK+u6gEsmKXE6u?=
- =?us-ascii?Q?/iJyH20CZmsQqTTz0JYKP4Oi7Hz53sxl/C1K2zporwpy/wWk4MRjfpEbWNLs?=
- =?us-ascii?Q?NeAdS/BmY/OUrg0BYRPgpqC9SBJLCDP34kzYAgT4pQhsWu6yU2UC238nyWEM?=
- =?us-ascii?Q?TTkE9wJvhuDPfc9HQD7QddYXkYV/Ct+0Fe/OXpjAsYS2iMZAKHtmDmrTDHaJ?=
- =?us-ascii?Q?RM2P8V3A/7tV/VBe/sKvrz+ZrHhh+oQSPvT49rWlZk9TBxULKNUNhnPfnoTx?=
- =?us-ascii?Q?D52OF4d8+kE6RUcpyPIAl4GnMC/qZ/cnI3ykYp+20VHIunrnJZPzBTRenBh4?=
- =?us-ascii?Q?w1GVqvcsZMwhP+ZjPJ8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 18 Oct 2022 22:09:45 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1492711C39;
+        Tue, 18 Oct 2022 19:09:44 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id f37so25739342lfv.8;
+        Tue, 18 Oct 2022 19:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mmCTinY52KbZt+uBCZCpAheaWizV9m369exbq9S3d4w=;
+        b=gdhqay8/dHKxwC9B0+Gq2upmNvuQpQSoFmlmmE6+AFnD+6LDujmGDOaSiIfwlW/e9f
+         jZXa9ll//JxZiv1dCr3f4mBDKd1tvYyYKTptL+zw/bWIK+Lj7OKD7XmA+2IRb2Kztnjp
+         9kMSFj8E/6XjCisAG0CBckFcHdh8+F8NzIA/hzrtQm4454pigZoUWuNnj0mp+PE+am2I
+         9/gb67w4ubBF6oEEcXlduBuKwRjawHKPjgC+uIUYoSVbCSLhdxhPuSWr6dQf+lJ+5BTA
+         E+mPIec7tXOhtvZgF7VSMWYu/ZWHIUqn49515hgyUqL3laRu7YLLAzRl5rgrYXNNdyw4
+         OJDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mmCTinY52KbZt+uBCZCpAheaWizV9m369exbq9S3d4w=;
+        b=XrdwkJKoiyy+33wYvqj7l4JeQBdLqVBLPYbd7uMu14dxy/smFvU3fuG4kKjf9RRyQU
+         GDNpBxIx4Bfa4EBJWjTg+YiOnNyNZMY74yfL0dNQAqB1Qlmt3oLjarrxVKebKclwjYcu
+         XK1K7LOnrURI9+4ljf5vK0V/Re7ZIdRj0IX/YTJlRQr1OVr5NvqHAxyN6zcPGe7XNDIC
+         XglVkFzxvxlZY8S8SgM29rAZ7SznGFxD8vQEfdEH38JEj49sUOfJBUi86B9jotAsKhQI
+         dVibDkY7VikaQPuAiiKBG2TE468QUsW/O3S0n/peaEVdsx9XPkf5mSRbqhvzi7v/QOLk
+         hNXg==
+X-Gm-Message-State: ACrzQf3Q7k7YSzBNYpBVx/3Fy9xLosYJXAPyP+SPmeGfnddsyP97/hSq
+        rsL8JF2ay/itZ4lPUU1lsuRKsDCrSqaNjfGMRCM=
+X-Google-Smtp-Source: AMsMyM4tf12B5v3IjC3VTEM+aiTPw1NUqKiGuQkPbINKNLy/Y112LaJmzi7Czca/tEztlgUJvdBL83PykKVM24Fwa5c=
+X-Received: by 2002:a05:6512:1586:b0:498:fa29:35ec with SMTP id
+ bp6-20020a056512158600b00498fa2935ecmr2084247lfb.641.1666145382080; Tue, 18
+ Oct 2022 19:09:42 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9628.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28067a3a-6195-4e3e-8d3c-08dab17708cb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2022 02:10:03.2815
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vUBZHFhVc/z85puibonqtP1AK8WqSCY7HDiEPLtxaYpjGm2kWjIYmK/PTYqqlWk/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7934
+References: <cover.1665931914.git.tonyhuang.sunplus@gmail.com>
+ <039075b210d78d2f4fdeb66b6826b8d2c2836088.1665931914.git.tonyhuang.sunplus@gmail.com>
+ <f8f803a8-ee36-4f32-8920-1fcf6b2265d1@app.fastmail.com>
+In-Reply-To: <f8f803a8-ee36-4f32-8920-1fcf6b2265d1@app.fastmail.com>
+From:   =?UTF-8?B?6buD5oe35Y6a?= <tonyhuang.sunplus@gmail.com>
+Date:   Wed, 19 Oct 2022 10:10:48 +0800
+Message-ID: <CAHpW4oTqQxzXZ_LReA8cBBANyVg1n25KxLnjdyv6dLkPkPq+nA@mail.gmail.com>
+Subject: Re: [PATCH v10 2/2] mmc: Add mmc driver for Sunplus SP7021
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wells.lu@sunplus.com, Tony Huang <tony.huang@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,160 +74,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Dear Arnd, Ulf:
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Sent: Wednesday, October 19, 2022 6:52 AM
-> To: Xu Yang <xu.yang_2@nxp.com>; Peng Fan (OSS) <peng.fan@oss.nxp.com>;
-> gregkh@linuxfoundation.org; robh+dt@kernel.org;
-> krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> s.hauer@pengutronix.de
-> Cc: kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx
-> <linux-imx@nxp.com>; linux-usb@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; Jun Li <jun.li@nxp.com>; Peng Fan
-> <peng.fan@nxp.com>
-> Subject: Re: [EXT] Re: [PATCH V2 1/6] dt-bindings: usb: usbmisc-imx: conv=
-ert
-> to DT schema
->=20
-> On 16/10/2022 23:17, Xu Yang wrote:
-> > Hi Krzysztof,
+Arnd Bergmann <arnd@arndb.de> =E6=96=BC 2022=E5=B9=B410=E6=9C=8817=E6=97=A5=
+ =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:25=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Sun, Oct 16, 2022, at 5:48 PM, Tony Huang wrote:
+> > This is a patch for mmc driver for Sunplus SP7021 SOC.
+> > Supports eMMC 4.41 DDR 104MB/s speed mode.
 > >
-> >> -----Original Message-----
-> >> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> Sent: Saturday, October 15, 2022 10:53 PM
-> >> To: Peng Fan (OSS) <peng.fan@oss.nxp.com>;
-> >> gregkh@linuxfoundation.org; robh+dt@kernel.org;
-> >> krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> >> s.hauer@pengutronix.de; Xu Yang <xu.yang_2@nxp.com>
-> >> Cc: kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx
-> >> <linux-imx@nxp.com>; linux-usb@vger.kernel.org;
-> >> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
-> >> linux-arm-kernel@lists.infradead.org; Jun Li <jun.li@nxp.com>; Peng
-> >> Fan <peng.fan@nxp.com>
-> >> Subject: [EXT] Re: [PATCH V2 1/6] dt-bindings: usb: usbmisc-imx:
-> >> convert to DT schema
-> >>
-> >> Caution: EXT Email
-> >>
-> >> On 14/10/2022 05:51, Peng Fan (OSS) wrote:
-> >>> From: Peng Fan <peng.fan@nxp.com>
-> >>>
-> >>> Convert usbmisc-imx to DT schema format.
-> >>>
-> >>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> >>> ---
-> >>>  .../devicetree/bindings/usb/fsl,usbmisc.yaml  | 52
-> +++++++++++++++++++
-> >>>  .../devicetree/bindings/usb/usbmisc-imx.txt   | 18 -------
-> >>>  2 files changed, 52 insertions(+), 18 deletions(-)  create mode
-> >>> 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> >>>  delete mode 100644
-> >>> Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> >> b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..c83ffb6729b5
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> >>> @@ -0,0 +1,52 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
-> >>> +---
-> >>> +$id:
-> >>
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fdevi
-> >>
-> cetree.org%2Fschemas%2Fusb%2Ffsl%2Cusbmi&amp;data=3D05%7C01%7Cjun.li%40
-> >>
-> nxp.com%7C15ee8a29acf04f95ff4108dab15b5b88%7C686ea1d3bc2b4c6fa92cd99c
-> >>
-> 5c301635%7C0%7C0%7C638017303177794862%7CUnknown%7CTWFpbGZsb3d8eyJWIjo
-> >>
-> iMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C
-> >> %7C%7C&amp;sdata=3DtovO%2F6fnxAMSUu9hTFv1Kgarmo%2BwxKCxS%2FeJAbt3e0k%3
-> D
-> >> &amp;reserved=3D0
-> >>
-> sc.yaml%23&amp;data=3D05%7C01%7Cxu.yang_2%40nxp.com%7C24e82b830d9f47018
-> >> ff408daaebcf83d%7C686ea1d3bc2b4c6
-> >>
-> fa92cd99c5c301635%7C0%7C0%7C638014423898086337%7CUnknown%7CTWFpbGZsb3
-> >> d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi
-> >>
-> V2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DgNwM
-> >> bGsiuMS1zgvbgATYAY70gv2nIhX%2F
-> >> 16IxiSYBf3s%3D&amp;reserved=3D0
-> >>> +$schema:
-> >>>
-> +https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fde
-> >>>
-> +vicetree.org%2Fmeta-&amp;data=3D05%7C01%7Cjun.li%40nxp.com%7C15ee8a29
-> >>>
-> +acf04f95ff4108dab15b5b88%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0
-> >>>
-> +%7C638017303177794862%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiL
-> >>>
-> +CJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;s
-> >>>
-> +data=3DNxKdgHlJ9q%2F82XtXwWxHf5UFJR3v08L83jomQxg3Blo%3D&amp;reserved=3D
-> >>> +0
-> >>
-> schemas%2Fcore.yaml%23&amp;data=3D05%7C01%7Cxu.yang_2%40nxp.com%7C24e82
-> >> b830d9f47018ff408daaebcf83d%7C68
-> >>
-> 6ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638014423898242035%7CUnknown
-> >> %7CTWFpbGZsb3d8eyJWIjoiMC4wLjA
-> >>
-> wMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&a
-> >> mp;sdata=3DjJUP5aKNkfkAefhNQL9almV
-> >> Gqzn8cTNyjcRlZMOZwRk%3D&amp;reserved=3D0
-> >>> +
-> >>> +title: Freescale i.MX non-core registers
-> >>
-> >> You sent v2 before we finished this topic. Is it correct? Even if TXT
-> >> had such title, let's don't keep the wrong name.
-> >>
-> >> If it is non-core registers, why it is in USB? Why it is an usb-misc d=
-evice?
-> >
-> > The chipidea's doc has a more clear explanation about core and
-> > non-core registers as follow:
-> >
-> > "There are two kinds of registers in the USB module: USB core
-> > registers and USB non-core registers. USB core registers are used to
-> > control USB core functions, and more independent of USB features. Each
-> > USB controller core has its own core registers. USB non-core registers
-> > are additional to USB core registers, and more dependent on USB
-> > features. i.MX series products vary in non-core registers."
-> >
-> > So we have named it like this.
->=20
-> "Freescale i.MX non-core registers" implies this hardware is about i.MX
-> registers. i.MX like for all SoCs.
->=20
-> What you wrote now, about USB registers - quite different.
->=20
-> However if you describe here registers, not some device, usually it's pla=
-ce
-> is not USB...
->=20
-> And actually all devices are bunch of registers, right? So everything sho=
-uld
-> be called registers?
->=20
-> Name is poor choice, so please find more appropriate one matching real pu=
-rpose
-> of this block.
+> > Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+>
+> Looks ok to me me overall.
+>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Just one more thing I noticed:
+>
+> > +#define SPMMC_TIMEOUT                        500000
+> ...
+> > +static inline int spmmc_wait_finish(struct spmmc_host *host)
+> > +{
+> > +     u32 state;
+> > +
+> > +     return readl_poll_timeout_atomic(host->base + SPMMC_SD_STATE_REG,
+> > state,
+> > +                                     (state & SPMMC_SDSTATE_FINISH), 1=
+, SPMMC_TIMEOUT);
+> > +}
+> > +
+> > +static inline int spmmc_wait_sdstatus(struct spmmc_host *host,
+> > unsigned int status_bit)
+> > +{
+> > +     u32 status;
+> > +
+> > +     return readl_poll_timeout_atomic(host->base + SPMMC_SD_STATUS_REG=
+,
+> > status,
+> > +                                     (status & status_bit), 1, SPMMC_T=
+IMEOUT);
+> > +}
+>
+> 500ms seems like an awfully long time for a busy-wait, I wonder if this
+> could be improved in some way. Is this always called from atomic context?
+>
+> If not, any callers from non-atomic context could use
+> readl_poll_timeout() instead, or maybe there could be a shorter
+> timeout in atomic context, with a fallback to a non-atomic
+> workqueue if that times out, so only the MMC access will stall but
+> not the entire system.
 
-How about "Freescale i.MX wrapper module for Chipidea USB2 controller"
+OK, I would use real_poll_timeout() instead.
+Because I see "BUG: scheduling while atomic" issue before.
+I have solved this problem.
 
-Thanks
-Li Jun
->=20
->=20
-> Best regards,
-> Krzysztof
-
+>
+> The same problem does appear to be in dw_mmc.c and mtk-sd.c but not
+> in sdhci*.c, so I don't know if this is avoidable.
+>
+>      Arnd
