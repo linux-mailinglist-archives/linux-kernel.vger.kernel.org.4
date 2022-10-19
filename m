@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1926036E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5106036DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJSANd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S229726AbiJSAN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 20:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiJSAN0 (ORCPT
+        with ESMTP id S229515AbiJSANZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:13:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46620D0CF8;
-        Tue, 18 Oct 2022 17:13:25 -0700 (PDT)
+        Tue, 18 Oct 2022 20:13:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B1CCF181
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:13:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8C96B821A0;
-        Wed, 19 Oct 2022 00:13:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0B0C433C1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFFBD61739
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D23C43143;
         Wed, 19 Oct 2022 00:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666138402;
-        bh=dpOBk5cVjdXzz1IhM8jwMTCjeK/vMf8lWOrAu4uF1nI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AMx1r4qTE/UyPgLZgfR5w8EvSMa0cCZcRacr+T37GLPlvpDnrsV5EV9anW1tduwEz
-         E6qFwNNegxjwQfGq52tzTQEUHmCJmMXqBgslB+xe2jyWfYYx3alV7HZOhemXyeDxxe
-         mWa9vG4ErR4W5SQunrbc/Dv3iz7DUuoqAbErw+08cKG3Bzmt/Ni3FRsH47s4pNBxnH
-         pvthyGj5RJV4PpHP3r3fSx/0rOZKHXYNUmdIfGoJRg+haHcBvQNzpLj9Esi4wQXLer
-         zT1o6Sp/8DsxgnftipgRl55GRnS6LFt2QkVAvSmDPGrszWcGiuz5e9TlxgEExCzrVf
-         DGpbnHIXrQ4ug==
+        s=k20201202; t=1666138403;
+        bh=jVhlNwLsjt67wXHZfUgL7Bm3gznBRvz6GErr20vGaZU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qjfYy6zCoCS6+WMJo0yZNj/DOAteSImrKrsK1sElpQ337vGtAToqHdcOOZd+sKURr
+         +ck5nymWY6Dxn5n3qHjZmHz6vW02YxF8JMpkPzer5JTSkRUesf+pKZYsPZ7pm4/a1u
+         E3pOes2w2XjJVUG7S7QaE4km88H8SHvsUQ1a2QTC5nvmgt+yXcNpV7ZbtglXMAGigQ
+         tejRrq8uU7JbuVUMdUzFfwLQH1vMxNTmXirDCRShiaIwbXWjyw68nWdzwiGFjwidB+
+         za8hscElz9K2saauoyh9R/SWp1zmhqyZ2oQRPyDxre9UHx9fBOurqpSQYoupVUQUol
+         EK9QB61mi0kNg==
 From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, SeongJae Park <sj@kernel.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 00/18] efficiently expose damos action tried regions information
-Date:   Wed, 19 Oct 2022 00:12:59 +0000
-Message-Id: <20221019001317.104270-1-sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        linux-mm@kvack.org
+Subject: [RFC PATCH 01/18] mm/damon/modules: deduplicate init steps for DAMON context setup
+Date:   Wed, 19 Oct 2022 00:13:00 +0000
+Message-Id: <20221019001317.104270-2-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221019001317.104270-1-sj@kernel.org>
+References: <20221019001317.104270-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -52,94 +54,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAMON users can retrieve the monitoring results via 'after_aggregation'
-callbacks if the user is using the kernel API, or 'damon_aggregated'
-tracepoint if the user is in the user space.  Those are useful if full
-monitoring results are necessary.  However, if the user has interest in
-only some regions having specific access pattern, the interfaces could
-be inefficient.  For example, some DAMOS users might want to know
-exactly what regions were identified as fulfilling the access pattern of
-the scheme, for a debugging or a tuning.
+DAMON_RECLAIM and DAMON_LRU_SORT has duplicated code for DAMON context
+and target initializations.  Deduplicate the part by implementing a
+function for the initialization in 'modules-common.c' and using it.
 
-This patchset implements DAMON kernel API callbacks and sysfs directory
-for efficient exposure of the information.  The new callback will be
-called for each region before specific DAMOS action is gonna tried to be
-applied.  The sysfs directory will be called 'tried_regions' and placed
-under each scheme sysfs directory.  User can write a special keyworkd,
-'update_schemes_regions' to the 'state' file of a kdamond sysfs
-directory.  Then, DAMON sysfs interface will fill the directory with the
-information of regions that corresponding scheme action was tried to be
-applied for one aggregation interval.
-
-Patches Sequence
-----------------
-
-First five patches (1-5) clean up and refactor code that following patch
-will touch, and the following one (patch 6) implements the DAMON
-callback for DAMON kernel API users.
-
-Following six patches (7-12) clean up and refactor the sysfs interface
-before the new sysfs directory introduction.  Following two patches (13
-and 14) implement the sysfs directories, and successing two patches (15
-and 16) implement the special keyword for 'state' to fill and clean up
-the directories.
-
-Finally, two more patches (17 and 18) for the documentation of the usage
-and ABI follow.
-
-Assembled Tree
---------------
-
-This patchset is based on the latest mm-unstable tree[1].  Assembled
-tree is also available at the damon/next tree[2].
-
-[1] https://git.kernel.org/akpm/mm/h/mm-unstable
-[2] https://git.kernel.org/sj/h/damon/next
-
-SeongJae Park (18):
-  mm/damon/modules: deduplicate init steps for DAMON context setup
-  mm/damon/core: split out DAMOS-charged region skip logic into a new
-    function
-  mm/damon/core: split damos application logic into a new function
-  mm/damon/core: split out scheme stat update logic into a new function
-  mm/damon/core: split out scheme quota adjustment logic into a new
-    function
-  mm/damon/core: add a DAMON callback for scheme target regions check
-  mm/damon/sysfs: Use damon_addr_range for regions' start and end values
-  mm/damon/sysfs: remove parameters of damon_sysfs_region_alloc()
-  mm/damon/sysfs: move sysfs_lock to common module
-  mm/damon/sysfs: move unsigned long range directory to common module
-  mm/damon/sysfs: split out kdamond-independent schemes stats update
-    logic into a new function
-  mm/damon/sysfs: move schemes directory implementation to separate
-    module
-  mm/damon/sysfs-schemes: implement schemes/tried_regions directory
-  mm/damon/sysfs-schemes: implement scheme region directory
-  mm/damon/sysfs: implement DAMOS-tried regions update command
-  mm/damon/sysfs-schemes: implement DAMOS tried regions clear command
-  Docs/admin-guide/mm/damon/usage: document schemes/<s>/tried_regions
-    directory
-  Docs/ABI/damon: document 'schemes/<s>/tried_regions' directory
-
- .../ABI/testing/sysfs-kernel-mm-damon         |   32 +
- Documentation/admin-guide/mm/damon/usage.rst  |   44 +-
- include/linux/damon.h                         |    5 +
- mm/damon/Makefile                             |    6 +-
- mm/damon/core.c                               |  259 ++--
- mm/damon/lru_sort.c                           |   17 +-
- mm/damon/modules-common.c                     |   42 +
- mm/damon/modules-common.h                     |    3 +
- mm/damon/reclaim.c                            |   17 +-
- mm/damon/sysfs-common.c                       |  107 ++
- mm/damon/sysfs-common.h                       |   56 +
- mm/damon/sysfs-schemes.c                      | 1281 +++++++++++++++++
- mm/damon/sysfs.c                              | 1224 ++--------------
- 13 files changed, 1813 insertions(+), 1280 deletions(-)
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/Makefile         |  4 ++--
+ mm/damon/lru_sort.c       | 17 +++-------------
+ mm/damon/modules-common.c | 42 +++++++++++++++++++++++++++++++++++++++
+ mm/damon/modules-common.h |  3 +++
+ mm/damon/reclaim.c        | 17 +++-------------
+ 5 files changed, 53 insertions(+), 30 deletions(-)
  create mode 100644 mm/damon/modules-common.c
- create mode 100644 mm/damon/sysfs-common.c
- create mode 100644 mm/damon/sysfs-common.h
- create mode 100644 mm/damon/sysfs-schemes.c
 
+diff --git a/mm/damon/Makefile b/mm/damon/Makefile
+index 3e6b8ad73858..a076ccd55d44 100644
+--- a/mm/damon/Makefile
++++ b/mm/damon/Makefile
+@@ -5,5 +5,5 @@ obj-$(CONFIG_DAMON_VADDR)	+= ops-common.o vaddr.o
+ obj-$(CONFIG_DAMON_PADDR)	+= ops-common.o paddr.o
+ obj-$(CONFIG_DAMON_SYSFS)	+= sysfs.o
+ obj-$(CONFIG_DAMON_DBGFS)	+= dbgfs.o
+-obj-$(CONFIG_DAMON_RECLAIM)	+= reclaim.o
+-obj-$(CONFIG_DAMON_LRU_SORT)	+= lru_sort.o
++obj-$(CONFIG_DAMON_RECLAIM)	+= modules-common.o reclaim.o
++obj-$(CONFIG_DAMON_LRU_SORT)	+= modules-common.o lru_sort.o
+diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
+index efbc2bda8b9c..a1896c5acfe9 100644
+--- a/mm/damon/lru_sort.c
++++ b/mm/damon/lru_sort.c
+@@ -314,25 +314,14 @@ static int damon_lru_sort_after_wmarks_check(struct damon_ctx *c)
+ 
+ static int __init damon_lru_sort_init(void)
+ {
+-	ctx = damon_new_ctx();
+-	if (!ctx)
+-		return -ENOMEM;
++	int err = damon_modules_new_paddr_ctx_target(&ctx, &target);
+ 
+-	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
+-		damon_destroy_ctx(ctx);
+-		return -EINVAL;
+-	}
++	if (err)
++		return err;
+ 
+ 	ctx->callback.after_wmarks_check = damon_lru_sort_after_wmarks_check;
+ 	ctx->callback.after_aggregation = damon_lru_sort_after_aggregation;
+ 
+-	target = damon_new_target();
+-	if (!target) {
+-		damon_destroy_ctx(ctx);
+-		return -ENOMEM;
+-	}
+-	damon_add_target(ctx, target);
+-
+ 	schedule_delayed_work(&damon_lru_sort_timer, 0);
+ 
+ 	damon_lru_sort_initialized = true;
+diff --git a/mm/damon/modules-common.c b/mm/damon/modules-common.c
+new file mode 100644
+index 000000000000..b2381a8466ec
+--- /dev/null
++++ b/mm/damon/modules-common.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Common Primitives for DAMON Modules
++ *
++ * Author: SeongJae Park <sjpark@amazon.de>
++ */
++
++#include <linux/damon.h>
++
++#include "modules-common.h"
++
++/*
++ * Allocate, set, and return a DAMON context for the physical address space.
++ * @ctxp:	Pointer to save the point to the newly created context
++ * @targetp:	Pointer to save the point to the newly created target
++ */
++int damon_modules_new_paddr_ctx_target(struct damon_ctx **ctxp,
++		struct damon_target **targetp)
++{
++	struct damon_ctx *ctx;
++	struct damon_target *target;
++
++	ctx = damon_new_ctx();
++	if (!ctx)
++		return -ENOMEM;
++
++	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
++		damon_destroy_ctx(ctx);
++		return -EINVAL;
++	}
++
++	target = damon_new_target();
++	if (!target) {
++		damon_destroy_ctx(ctx);
++		return -ENOMEM;
++	}
++	damon_add_target(ctx, target);
++
++	*ctxp = ctx;
++	*targetp = target;
++	return 0;
++}
+diff --git a/mm/damon/modules-common.h b/mm/damon/modules-common.h
+index 5a4921851d32..f49cdb417005 100644
+--- a/mm/damon/modules-common.h
++++ b/mm/damon/modules-common.h
+@@ -44,3 +44,6 @@
+ 			0400);						\
+ 	module_param_named(nr_##qt_exceed_name, stat.qt_exceeds, ulong,	\
+ 			0400);
++
++int damon_modules_new_paddr_ctx_target(struct damon_ctx **ctxp,
++		struct damon_target **targetp);
+diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+index 162c9b1ca00f..3173f373435c 100644
+--- a/mm/damon/reclaim.c
++++ b/mm/damon/reclaim.c
+@@ -256,25 +256,14 @@ static int damon_reclaim_after_wmarks_check(struct damon_ctx *c)
+ 
+ static int __init damon_reclaim_init(void)
+ {
+-	ctx = damon_new_ctx();
+-	if (!ctx)
+-		return -ENOMEM;
++	int err = damon_modules_new_paddr_ctx_target(&ctx, &target);
+ 
+-	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
+-		damon_destroy_ctx(ctx);
+-		return -EINVAL;
+-	}
++	if (err)
++		return err;
+ 
+ 	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
+ 	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
+ 
+-	target = damon_new_target();
+-	if (!target) {
+-		damon_destroy_ctx(ctx);
+-		return -ENOMEM;
+-	}
+-	damon_add_target(ctx, target);
+-
+ 	schedule_delayed_work(&damon_reclaim_timer, 0);
+ 
+ 	damon_reclaim_initialized = true;
 -- 
 2.25.1
 
