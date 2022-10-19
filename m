@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E97C604576
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB8C604567
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbiJSMhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S230095AbiJSMe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiJSMhQ (ORCPT
+        with ESMTP id S233077AbiJSMe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:37:16 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC47E171CE3;
-        Wed, 19 Oct 2022 05:17:32 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.239])
-        by gateway (Coremail) with SMTP id _____8AxDdnR6E9j2b8AAA--.3892S3;
-        Wed, 19 Oct 2022 20:08:49 +0800 (CST)
-Received: from [192.168.100.127] (unknown [112.20.109.239])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxDuLN6E9j7E0BAA--.5393S3;
-        Wed, 19 Oct 2022 20:08:46 +0800 (CST)
-Message-ID: <14a49844-8ac3-630b-bee2-fa9ea422cb52@loongson.cn>
-Date:   Wed, 19 Oct 2022 20:08:45 +0800
+        Wed, 19 Oct 2022 08:34:28 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DA9B89;
+        Wed, 19 Oct 2022 05:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666181661; x=1697717661;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+QDC/ti9fpwkNu6ttuWsf4ww+GX4cuHwHLZ0BV5EjEs=;
+  b=B8cORVLoh17+kwyizObCQdOC4ysFxbPyevfe1C91/lgTUzPgy+Vr+YnA
+   9B8SdJVGW4ljqE2xdLx6ch0OCEKTnW7fhOc2WckqjUFvWkI6I6ZLw6jvc
+   AFijGj3KgbMg+O4/fA9V/SBZILO1IhVjne9r8Kz3+ezGGeheZbpefBGM+
+   Zzu7TZLXBM38B3Y2ubgDMoZDIkJu6PMIcP3RSSFFvuv6hFRAikf0N1H6T
+   V5x4hAIXn9GZayEUGx6KerLpo76b6eOA7FqjLsqciOvqP/588JFa/QCy3
+   FnjH7bc2pS0051bJszi89W5w3JlWVflHaSQ7vNtK67fJCcX+26jmRXExN
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="179537294"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 05:10:48 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 19 Oct 2022 05:10:44 -0700
+Received: from ROB-ULT-M68701.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 05:10:42 -0700
+From:   Sergiu Moga <sergiu.moga@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux@armlinux.org.uk>,
+        <f.fainelli@gmail.com>, <tudor.ambarus@microchip.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Sergiu Moga <sergiu.moga@microchip.com>
+Subject: [PATCH v2] net: macb: Specify PHY PM management done by MAC
+Date:   Wed, 19 Oct 2022 15:09:32 +0300
+Message-ID: <20221019120929.63098-1-sergiu.moga@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/2] docs/zh_CN: Add userspace-api/ebpf Chinese
- translation
-Content-Language: en-US
-To:     Rui Li <me@lirui.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Wu XiangCheng <wu.xiangcheng@linux.dev>
-References: <cover.1666093699.git.me@lirui.org>
- <8d032bf9a69ac6703260ac91408562c562c03f2d.1666093699.git.me@lirui.org>
-From:   Yanteng Si <siyanteng@loongson.cn>
-In-Reply-To: <8d032bf9a69ac6703260ac91408562c562c03f2d.1666093699.git.me@lirui.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxDuLN6E9j7E0BAA--.5393S3
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWF17XrykGrWDAr1fGr18AFb_yoW5CFy5pF
-        nakr1fGayfArW3Crn7Wr1xCFn7CF48WayUCw17J34Syr95tF9Yyr17tFWxGw43JryI9FWv
-        qrsYqFyj934xZaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8CksDUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,100 +62,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The `macb_resume`/`macb_suspend` methods already call the
+`phylink_start`/`phylink_stop` methods during their execution so
+explicitly say that the PM of the PHY is done by MAC by using the
+`mac_managed_pm` flag of the `struct phylink_config`.
 
-On 10/18/22 19:54, Rui Li wrote:
-> Translate the following documents into Chinese:
->
-> - userspace-api/ebpf/index.rst
-> - userspace-api/ebpf/syscall.rst
->
-> Signed-off-by: Rui Li <me@lirui.org>
-> ---
-> Changes since v1:
-> - Translate bpf subcommand title
-> - Align title
-> - Add space after doc path
-> ---
->   .../zh_CN/userspace-api/ebpf/index.rst        | 22 +++++++++++++
->   .../zh_CN/userspace-api/ebpf/syscall.rst      | 31 +++++++++++++++++++
->   2 files changed, 53 insertions(+)
->   create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
->   create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
->
-> diff --git a/Documentation/translations/zh_CN/userspace-api/ebpf/index.rst b/Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
-> new file mode 100644
-> index 000000000000..d52c7052f101
-> --- /dev/null
-> +++ b/Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
-> @@ -0,0 +1,22 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +.. include:: ../../disclaimer-zh_CN.rst
-> +
-> +:Original: Documentation/userspace-api/ebpf/index.rst
-> +
-> +:翻译:
-> +
-> + 李睿 Rui Li <me@lirui.org>
-> +
-> +eBPF 用户空间API
-> +================
-> +
-> +eBPF是一种在Linux内核中提供沙箱化运行环境的机制，它可以在不改变内核源码或加载
-> +内核模块的情况下扩展运行时和编写工具。eBPF程序能够被附加到各种内核子系统中，包
-> +括网络，跟踪和Linux安全模块(LSM)等。
-> +
-> +关于eBPF的内部内核文档，请查看 Documentation/bpf/index.rst 。
-> +
-> +.. toctree::
-> +   :maxdepth: 1
-> +
-> +   syscall
-> diff --git a/Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst b/Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
-> new file mode 100644
-> index 000000000000..17515728f544
-> --- /dev/null
-> +++ b/Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
-> @@ -0,0 +1,31 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +.. include:: ../../disclaimer-zh_CN.rst
-> +
-> +:Original: Documentation/userspace-api/ebpf/syscall.rst
-> +
-> +:翻译:
-> +
-> + 李睿 Rui Li <me@lirui.org>
-> +
-> +eBPF Syscall
-> +------------
-> +
-> +:作者:
-> +    - Alexei Starovoitov <ast@kernel.org>
-> +    - Joe Stringer <joe@wand.net.nz>
-> +    - Michael Kerrisk <mtk.manpages@gmail.com>
-> +
-> +bpf syscall的主要信息可以在 `man-pages`_ 中的 `bpf(2)`_ 找到。
-> +
-> +bpf() 子命令参考
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +.. kernel-doc:: include/uapi/linux/bpf.h
-> +   :doc: eBPF Syscall Preamble
-> +
-> +.. kernel-doc:: include/uapi/linux/bpf.h
-> +   :doc: eBPF Syscall Commands
+This also fixes the warning message issued during resume:
+WARNING: CPU: 0 PID: 237 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0x144/0x148
 
-This generates a lot of documentation in English.
+Depends-on: 96de900ae78e ("net: phylink: add mac_managed_pm in phylink_config structure")
+Fixes: 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume() state")
+Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+---
 
 
-See Documentation/translations/zh_CN/core-api/kernel-api.rst
+v1 -> v2:
+- Add Depends-on: tag
 
 
-Thanks,
+ drivers/net/ethernet/cadence/macb_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yanteng
-
-> +
-> +.. Links:
-> +.. _man-pages: https://www.kernel.org/doc/man-pages/
-> +.. _bpf(2): https://man7.org/linux/man-pages/man2/bpf.2.html
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index 51c9fd6f68a4..4f63f1ba3161 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -806,6 +806,7 @@ static int macb_mii_probe(struct net_device *dev)
+ 
+ 	bp->phylink_config.dev = &dev->dev;
+ 	bp->phylink_config.type = PHYLINK_NETDEV;
++	bp->phylink_config.mac_managed_pm = true;
+ 
+ 	if (bp->phy_interface == PHY_INTERFACE_MODE_SGMII) {
+ 		bp->phylink_config.poll_fixed_state = true;
+-- 
+2.34.1
 
