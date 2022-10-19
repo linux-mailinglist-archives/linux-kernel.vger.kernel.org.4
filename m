@@ -2,136 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08976046A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038C9604694
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiJSNQZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 09:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S230229AbiJSNP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiJSNPv (ORCPT
+        with ESMTP id S231390AbiJSNPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:15:51 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227351DC825;
-        Wed, 19 Oct 2022 06:01:31 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id z8so11563187qtv.5;
-        Wed, 19 Oct 2022 06:01:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3neje0k7T3cx7D7C9HLG6iO3ovR2451tT9bBWNpd1HI=;
-        b=U4j1tiVNLgBom3Fbg9Ja6CyfAQ5ADhndxt/jZWqsvacNYnrp6dOU5t2RthWZryJtwq
-         RTSuxnWLtFWPzTbWKoZvDA60lJT8nfxbTuXhjgYNRc02MZ4FD01NjA/q8c6br7Zgq7Ew
-         ys1qJhAOStddz7ablFkr3vAwTLPOI8n7Tj/4JwDv6XqTfvXUuhgwNufPkE2UafkCGFr6
-         Eq/THjOHSWHtkPAsGiR1ATuR/NA+5dJ6v/gRp5tCxL4pfBBDU98+PQo9oMJGPDOF+8ET
-         tla4SYItiwWyv0aGt6upZT1tlOMrLxDo0MtM0ckzC2Y7TIXDt/q3PovNs+eNKnIjXKg9
-         SHwQ==
-X-Gm-Message-State: ACrzQf0ynKggrsI/aw5Qj8Mg5GfemhvuCyCQ5j2+46MTe24ko3S1+uhb
-        wtKabWxdgwuyAOCt6xx+bx0YqYzleCjJKeFYZ+U=
-X-Google-Smtp-Source: AMsMyM5AXDZhR6X0SfzaRw+VO5tHTbxkxUczN5nB/2Y/zue0gU7uIAIrZQUDwIWkE8nim4szWBMx9SDfRMrdJB6x0YA=
-X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
- hj10-20020a05622a620a00b0035cbf9e8748mr6319785qtb.494.1666184414930; Wed, 19
- Oct 2022 06:00:14 -0700 (PDT)
+        Wed, 19 Oct 2022 09:15:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D46E1D377A;
+        Wed, 19 Oct 2022 06:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CD5F6188A;
+        Wed, 19 Oct 2022 13:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A61A8C433D7;
+        Wed, 19 Oct 2022 13:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666184424;
+        bh=sYs7tDX+/LNkMgLYx2SFrU5ZqAAiUe1u6NpBIZxmgrA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=poOYIUimxoKAmJAgsBUrhpiP/NzlVYYeRGDTPK8ggZsj9LRNGNiCuJlYFPvxO8/fC
+         Mg6hsYEg+iXKWZwmm8j90hzjODWS++oZUF0/8/XmwPtiZgLPrXmVQo2/N9s2loPjud
+         grxDChulJlWlsxShboOFNdt2XTZTt3DAgXb0yO7rtWyAJZtHDJH4p+KscfmDkLpIZ2
+         3guHtdRtSf1R/BTWVaBGr9kx88OZJRXB4HUOWDyh35JuDgfxQ/UgP91jFEgfI4t8hw
+         UVxtW129jgWDc7ouMXLK4rz5NIUJLJtBlden3kMpI114g1B7Al2BpsfDdBCkuCiIiU
+         bPC0Nef4202MA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F425E29F37;
+        Wed, 19 Oct 2022 13:00:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <12097002.O9o76ZdvQC@kreacher> <Y0+7Ug9Yh6J6uHVr@intel.com>
- <CAJZ5v0gKW9S29xS2+qkcopzYtZKTcM=ZT-Jjc4fnEJfu=oYKaw@mail.gmail.com> <Y0/sGveKPjuUWOhO@intel.com>
-In-Reply-To: <Y0/sGveKPjuUWOhO@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 19 Oct 2022 15:00:01 +0200
-Message-ID: <CAJZ5v0gdcVSOPkfs0yzfubpU9EXu02n2u8Pau7sE=yrZ-mvDEQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: PCI: Fix device reference counting in acpi_get_pci_dev()
-To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v7 00/10] net: dpaa: Convert to phylink
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166618442458.15395.17847684706172912226.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Oct 2022 13:00:24 +0000
+References: <20221017202241.1741671-1-sean.anderson@seco.com>
+In-Reply-To: <20221017202241.1741671-1-sean.anderson@seco.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, madalin.bucur@nxp.com,
+        camelia.groza@nxp.com, netdev@vger.kernel.org, edumazet@google.com,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, pabeni@redhat.com, benh@kernel.crashing.org,
+        ioana.ciornei@nxp.com, krzysztof.kozlowski+dt@linaro.org,
+        leoyang.li@nxp.com, mpe@ellerman.id.au, paulus@samba.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, devicetree@vger.kernel.org
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 2:22 PM Ville Syrjälä
-<ville.syrjala@linux.intel.com> wrote:
->
-> On Wed, Oct 19, 2022 at 01:35:26PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Oct 19, 2022 at 11:02 AM Ville Syrjälä
-> > <ville.syrjala@linux.intel.com> wrote:
-> > >
-> > > On Tue, Oct 18, 2022 at 07:34:03PM +0200, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Commit 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()") failed
-> > > > to reference count the device returned by acpi_get_pci_dev() as
-> > > > expected by its callers which in some cases may cause device objects
-> > > > to be dropped prematurely.
-> > > >
-> > > > Add the missing get_device() to acpi_get_pci_dev().
-> > > >
-> > > > Fixes: 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()")
-> > >
-> > > FYI this (and the rtc-cmos regression discussed in
-> > > https://lore.kernel.org/linux-acpi/5887691.lOV4Wx5bFT@kreacher/)
-> > > took down the entire Intel gfx CI.
-> >
-> > Sorry for the disturbance.
-> >
-> > > I've applied both fixes into our fixup branch and things are looking much
-> > > healthier now.
-> >
-> > Thanks for letting me know.
-> >
-> > I've just added the $subject patch to my linux-next branch as an
-> > urgent fix and the other one has been applied to the RTC tree.
-> >
-> > > This one caused i915 selftests to eat a lot of POISON_FREE
-> > > in the CI. While bisecting it locally I didn't have
-> > > poisoning enabled so I got refcount_t undeflows instead.
-> >
-> > Unfortunately, making no mistakes is generally hard to offer.
-> >
-> > If catching things like this early is better, what about pulling my
-> > bleeding-edge branch, where all of my changes are staged before going
-> > into linux-next, into the CI?
->
-> Pretty sure we don't have the resources to become the CI for
-> everyone. So testing random trees is not really possible. And
-> the alternative of pulling random trees into drm-tip is probably
-> a not a popular idea either. We used to pull in the sound tree
-> since it's pretty closely tied to graphics, but I think we
-> stopped even that because it eneded up pulling the whole of
-> -rc1 in at random points in time when we were't expecting it.
+Hello:
 
-I see.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> Ideally each subsystem would have its own CI, or there should
-> be some kernel wide thing. But I suppose the progress towards
-> something like that is glacial.
+On Mon, 17 Oct 2022 16:22:31 -0400 you wrote:
+> This series converts the DPAA driver to phylink.
+> 
+> I have tried to maintain backwards compatibility with existing device
+> trees whereever possible. However, one area where I was unable to
+> achieve this was with QSGMII. Please refer to patch 2 for details.
+> 
+> All mac drivers have now been converted. I would greatly appreciate if
+> anyone has T-series or P-series boards they can test/debug this series
+> on. I only have an LS1046ARDB. Everything but QSGMII should work without
+> breakage; QSGMII needs patches 7 and 8. For this reason, the last 4
+> patches in this series should be applied together (and should not go
+> through separate trees).
+> 
+> [...]
 
-Well, I definitely cannot afford a dedicated CI just for my tree and I
-haven't got any useful information from KernlCI yet (even though hey
-pull and test my linux-next branch on a regular basis).
+Here is the summary with links:
+  - [net-next,v7,01/10] dt-bindings: net: Expand pcs-handle to an array
+    https://git.kernel.org/netdev/net-next/c/76025ee53b7d
+  - [net-next,v7,02/10] dt-bindings: net: Add Lynx PCS binding
+    https://git.kernel.org/netdev/net-next/c/00af103d06b3
+  - [net-next,v7,03/10] dt-bindings: net: fman: Add additional interface properties
+    https://git.kernel.org/netdev/net-next/c/045d05018a2d
+  - [net-next,v7,04/10] net: phylink: provide phylink_validate_mask_caps() helper
+    (no matching commit)
+  - [net-next,v7,05/10] net: fman: memac: Add serdes support
+    https://git.kernel.org/netdev/net-next/c/0fc83bd79589
+  - [net-next,v7,06/10] net: fman: memac: Use lynx pcs driver
+    https://git.kernel.org/netdev/net-next/c/a7c2a32e7f22
+  - [net-next,v7,07/10] net: dpaa: Convert to phylink
+    (no matching commit)
+  - [net-next,v7,08/10] powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G
+    https://git.kernel.org/netdev/net-next/c/36926a7d70c2
+  - [net-next,v7,09/10] powerpc: dts: qoriq: Add nodes for QSGMII PCSs
+    https://git.kernel.org/netdev/net-next/c/4e31b808fad1
+  - [net-next,v7,10/10] arm64: dts: layerscape: Add nodes for QSGMII PCSs
+    https://git.kernel.org/netdev/net-next/c/4e748b1bd7c0
 
-KernelCI seems to be focusing on different set of hardware, so to speak.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> That said, we do test linux-next to some degree. And looks like
-> at least one of these could have been caught a bit earlier through
-> that. Unfortunately no one is really keeping an eye on that so
-> things tend to slip through. Probably need to figure out something
-> to make better use of that.
 
-I think it could also be possible to contribute to KernelCI to get
-more useful x86 coverage from it.
