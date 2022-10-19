@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0577B605108
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3396660510A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiJSUJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S230060AbiJSUJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJSUI5 (ORCPT
+        with ESMTP id S229698AbiJSUJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:08:57 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1707A193462
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=xLUOFYSzTwcdJD1bSDpGV62OSIArCZrsREk8+4s+Uec=;
-  b=ETfFsSnSDw1qGno5kvmuyV/L8zLQmEPEcks43pQSSS7rE4PmxtXT6lrB
-   CdBFamHn890jRyrqDvoJ+x9lXf6nKYTnoI223vgDSvOT/iE00zYnG1L/j
-   y//Vsbim6f+8y1s+C5YGS7ZJOn/O8v/+JJBgmHzv2iaO/vmprmVCtEqLh
-   U=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,196,1661810400"; 
-   d="scan'208";a="66044576"
-Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 22:08:54 +0200
-Date:   Wed, 19 Oct 2022 22:08:53 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Deepak R Varma <drv@mailo.com>
-cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
- type name
-In-Reply-To: <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com>
-Message-ID: <alpine.DEB.2.22.394.2210192208290.3068@hadrien>
-References: <cover.1666208065.git.drv@mailo.com> <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 19 Oct 2022 16:09:37 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA6024BF1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666210172; x=1697746172;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=l4m25spAE1rAU5YjmiQHfjM5t0sBwCCtecDZV0wPr5A=;
+  b=CfVxeDaL94LNEGaR2ZarrLCEkUYV+z8EzGUxuKUhb+5XgCmTuInlbM6v
+   ajNeLsrASLUHBSx1WeURXgseEegEfd7SNVUusExZclA5Y4dv8/wgCvZ2M
+   vixxB14A3IrdqU72AlmGITrxboaQUi9x8O8U0aXbuLy/vuJDrimfSBqlm
+   OZyKjuf4rr5yxWcXOxm4wKVcdnMC57yZNI0GC0JLfB1HIO9hLF3GQ0V53
+   ++JeZNzmFSR1ESObXhnfS3v5dJF++CVSsLjmqTmfUNqH2eObmy+zgexkj
+   SejY3MvnvEPEAdQgKr7X3jBP2ixQv93NbUN5NIOIUo3p9S46XHE2NY0gq
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="305253664"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="305253664"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 13:09:31 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="692561919"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="692561919"
+Received: from vyomapat-mobl.ger.corp.intel.com (HELO [10.213.202.155]) ([10.213.202.155])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 13:09:30 -0700
+Message-ID: <8acc3e4a-abbc-32bc-626e-7a216f6755c3@linux.intel.com>
+Date:   Wed, 19 Oct 2022 21:09:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: signal: break out of wait loops on kthread_stop()
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org,
+        "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
+ <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
+ <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com>
+ <Y1A+9kN6bwfXeqVt@zx2c4.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <Y1A+9kN6bwfXeqVt@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,89 +70,159 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 19/10/2022 19:16, Jason A. Donenfeld wrote:
+> On Wed, Oct 19, 2022 at 06:57:38PM +0100, Tvrtko Ursulin wrote:
+>>
+>> On 19/10/2022 17:00, Jason A. Donenfeld wrote:
+>>> On Wed, Oct 19, 2022 at 7:31 AM Tvrtko Ursulin
+>>> <tvrtko.ursulin@linux.intel.com> wrote:
+>>>>
+>>>>
+>>>> Hi,
+>>>>
+>>>> A question regarding a7c01fa93aeb ("signal: break out of wait loops on
+>>>> kthread_stop()") if I may.
+>>>>
+>>>> We have a bunch code in i915, possibly limited to self tests (ie debug
+>>>> builds) but still important for our flows, which spawn kernel threads
+>>>> and exercises parts of the driver.
+>>>>
+>>>> Problem we are hitting with this patch is that code did not really need
+>>>> to be signal aware until now. Well to say that more accurately - we were
+>>>> able to test the code which is normally executed from userspace, so is
+>>>> signal aware, but not worry about -ERESTARTSYS or -EINTR within the test
+>>>> cases itself.
+>>>>
+>>>> For example threads which exercise an internal API for a while until the
+>>>> parent calls kthread_stop. Now those tests can hit unexpected errors.
+>>>>
+>>>> Question is how to best approach working around this change. It is of
+>>>> course technically possible to rework our code in more than one way,
+>>>> although with some cost and impact already felt due reduced pass rates
+>>>> in our automated test suites.
+>>>>
+>>>> Maybe an opt out kthread flag from this new behavior? Would that be
+>>>> acceptable as a quick fix? Or any other comments?
+>>>
+>>> You can opt out by running `clear_tsk_thread_flag(current,
+>>> TIF_NOTIFY_SIGNAL);` at the top of your kthread. But you should really
+>>> fix your code instead. Were I your reviewer, I wouldn't merge code
+>>> that took the lazy path like that. However, that should work, if you
+>>> do opt for the quick fix.
+>>
+>> Also, are you confident that the change will not catch anyone else by
+>> surprise? In the original thread I did not spot any concerns about the
+>> kthreads being generally unprepared to start receiving EINTR/ERESTARTSYS
+>> from random call chains.
+> 
+> Pretty sure, yea. i915 is unique in its abuse of the API. Keep in mind
+> that kthread_stop() also sets KTHREAD_SHOULD_STOP and such. Your code is
+> abusing the API by calling kthread_run() followed by kthread_stop().
 
-On Thu, 20 Oct 2022, Deepak R Varma wrote:
+Hm why is kthread_stop() after kthread_run() abuse? I don't see it in 
+kerneldoc that it must not be used for stopping threads.
 
-> Correct misleading struct type name dim_ch_state_t to dim_ch_state
-> since this not a typedef but a normal structure declaration.
->
-> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->
-> Changes in v4:
->    1. Correct patch subject and log message. Use struct type name instead of
->       variable name for the change description. Feedback from julia.lawall@inria.fr
->
-> Changes in v3:
->    1. Patch introduced in the patch set
->
->  drivers/staging/most/dim2/dim2.c | 2 +-
->  drivers/staging/most/dim2/hal.c  | 4 ++--
->  drivers/staging/most/dim2/hal.h  | 6 +++---
->  3 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-> index 4c1f27898a29..a69a61a69283 100644
-> --- a/drivers/staging/most/dim2/dim2.c
-> +++ b/drivers/staging/most/dim2/dim2.c
-> @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
->  	struct list_head *head = &hdm_ch->pending_list;
->  	struct mbo *mbo;
->  	unsigned long flags;
-> -	struct dim_ch_state_t st;
-> +	struct dim_ch_state st;
+> As evidence of how broken your code actually is, the kthread_stop()
+> function has a comment that makes it clear, "This can also be called
+> after kthread_create() instead of calling wake_up_process(): the thread
+> will exit without calling threadfn()," yet i915 has attempted to hack
+> around it with ridiculous yields and msleeps. For example:
+> 
+>                  threads[n] = kthread_run(__igt_breadcrumbs_smoketest,
+>                                           &t, "igt/%d", n);
+> ...
+> 
+>          yield(); /* start all threads before we begin */
+>          msleep(jiffies_to_msecs(i915_selftest.timeout_jiffies));
+> ...
+>                  err = kthread_stop(threads[n]);
+> 
+> 
+> Or here's another one:
+> 
+>                  tsk = kthread_run(fn, &thread[i], "igt-%d", i);
+> ...
+>          msleep(10); /* start all threads before we kthread_stop() */
+> ...
+>                  status = kthread_stop(tsk);
+> 
+> I mean come on.
+> 
+> This is brittle and bad and kind of ridiculous that it shipped this way.
+> Now you're asking to extend your brittleness, so that you can avoid the
+> work of cleaning up 5 call sites. Just clean up those 5 call sites. It's
+> only 5, as far as I can tell.
 
-Is there another use in service_done_flag?
+Yep the yields and sleeps are horrible and will go. But they are also 
+not relevant for the topic at hand. Issue is signal_pending() in the 
+thread which just happens to now let kthread_stop() exit the thread 
+before the work it used to do. And lack of consistent EINTR/ERESTARTSYS 
+handling throughout.
 
-julia
+Luckily I am almost sure this hasn't "shipped" anywhere real, in the 
+sense it is debug only part of the driver.
 
->
->  	BUG_ON(!hdm_ch);
->  	BUG_ON(!hdm_ch->is_initialized);
-> diff --git a/drivers/staging/most/dim2/hal.c b/drivers/staging/most/dim2/hal.c
-> index 65282c276862..a5d40b5b138a 100644
-> --- a/drivers/staging/most/dim2/hal.c
-> +++ b/drivers/staging/most/dim2/hal.c
-> @@ -943,8 +943,8 @@ u8 dim_service_channel(struct dim_channel *ch)
->  	return channel_service(ch);
->  }
->
-> -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> -					     struct dim_ch_state_t *state_ptr)
-> +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
-> +					   struct dim_ch_state *state_ptr)
->  {
->  	if (!ch || !state_ptr)
->  		return NULL;
-> diff --git a/drivers/staging/most/dim2/hal.h b/drivers/staging/most/dim2/hal.h
-> index 20531449acab..ef10a8741c10 100644
-> --- a/drivers/staging/most/dim2/hal.h
-> +++ b/drivers/staging/most/dim2/hal.h
-> @@ -27,7 +27,7 @@ enum mlb_clk_speed {
->  	CLK_8192FS = 7,
->  };
->
-> -struct dim_ch_state_t {
-> +struct dim_ch_state {
->  	bool ready; /* Shows readiness to enqueue next buffer */
->  	u16 done_buffers; /* Number of completed buffers */
->  };
-> @@ -87,8 +87,8 @@ void dim_service_ahb_int_irq(struct dim_channel *const *channels);
->
->  u8 dim_service_channel(struct dim_channel *ch);
->
-> -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> -					     struct dim_ch_state_t *state_ptr);
-> +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
-> +					   struct dim_ch_state *state_ptr);
->
->  u16 dim_dbr_space(struct dim_channel *ch);
->
-> --
-> 2.30.2
->
->
->
->
->
+Never mind, I was not looking for anything more than a suggestion on how 
+to maybe work around it in piece as someone is dealing with the affected 
+call sites.
+
+kthread_wait below is perhaps a bit too indirect, since overall 
+refactoring of the approach will be needed, but thanks anyway.
+
+Thanks,
+
+Tvrtko
+
+>> Right, but our hand is a bit forced at the moment. Since 6.1-rc1 has
+>> propagated to our development tree on Monday, our automated testing
+>> started failing significantly, which prevents us merging new work until
+>> resolved. So a quick fix trumps the ideal road in the short term. Just
+>> because it is quick.
+> 
+> "Short term" -- somehow I can imagine the short term hack will turn into
+> a long term one.
+> 
+> Anyway, what I suspect you might actually want as a bandaid is a
+> "kthread_wait()"-like function, that doesn't try to stop the thread with
+> KTHREAD_SHOULD_STOP and such, but just waits for the completion:
+> 
+> diff --git a/include/linux/kthread.h b/include/linux/kthread.h
+> index 30e5bec81d2b..2699cc45ad15 100644
+> --- a/include/linux/kthread.h
+> +++ b/include/linux/kthread.h
+> @@ -86,6 +86,7 @@ void free_kthread_struct(struct task_struct *k);
+>   void kthread_bind(struct task_struct *k, unsigned int cpu);
+>   void kthread_bind_mask(struct task_struct *k, const struct cpumask *mask);
+>   int kthread_stop(struct task_struct *k);
+> +int kthread_wait(struct task_struct *k);
+>   bool kthread_should_stop(void);
+>   bool kthread_should_park(void);
+>   bool __kthread_should_park(struct task_struct *k);
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index f97fd01a2932..d581d78a3a26 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -715,6 +715,22 @@ int kthread_stop(struct task_struct *k)
+>   }
+>   EXPORT_SYMBOL(kthread_stop);
+> 
+> +int kthread_wait(struct task_struct *k)
+> +{
+> +	struct kthread *kthread;
+> +	int ret;
+> +
+> +	get_task_struct(k);
+> +	kthread = to_kthread(k);
+> +	wake_up_process(k);
+> +	wait_for_completion(&kthread->exited);
+> +	ret = kthread->result;
+> +	put_task_struct(k);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(kthread_stop);
+> +
+>   int kthreadd(void *unused)
+>   {
+>   	struct task_struct *tsk = current;
+> 
