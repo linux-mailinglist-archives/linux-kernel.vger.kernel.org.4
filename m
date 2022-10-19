@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC09604A9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82749604A98
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiJSPHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
+        id S230527AbiJSPHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiJSPFq (ORCPT
+        with ESMTP id S229717AbiJSPFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:05:46 -0400
+        Wed, 19 Oct 2022 11:05:45 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACD4BE38;
-        Wed, 19 Oct 2022 07:59:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DCD6573
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:59:25 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1666191376;
@@ -22,29 +22,35 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vk9lLFSPw7DVFHn+Ltr9+ux4PzL45JriVQ+GTbz1WOY=;
-        b=qy+XfEMThEbkLnrE1n36Z2pN+sVWm/xcWaaykneLdYt/vpE15mr9kwHlg/KLo+RWPWYf34
-        etPdErRihRuc+qZDB4lMGkJwkzOj0k873ip2RAnXf1ME6l4C75Nr7d+ZfLt0A0Xix765FH
-        uOFeEgTaLBDP2HXzMyNMjWIC6zZ5DT5w5YwqCIu/1LYCInpQWEgjFfzVpFkk5Po66g2mEg
-        NgEYb4GBaW4tD2U/AaebbabvrhjAUfC3V7esyJ4gKfuPnB8m9poV9ANs+Oggu69i9E/XY4
-        u16HcZa6/YcQ4gML73ZuMD0kDTA/mUUFqcAiH6w2xMHdUNjXCQYt02KOINdzng==
+        bh=l6JL8Q05OijoTEvKKyIiYa7K6VvZeDLREPexuqG68w4=;
+        b=2lE2ZSVvaLYxX/mxts/imwzBNHAp8IFSDC/ai7lkxP1zyF6vpMFV8KAaG0pwB+zKzWkutn
+        BNZQsjhTA+fE9mUGf/9zLZQuPNRIBu0owJpd7GDzfuULoEKri5Ic8olH4bE1eI5Rf1CKGy
+        vTs3ThAfna4xN6EPjQmcBVcPNNwb7z99UsM+MaDiSMsHRWQQdQDukhcxIu7T4tOZ2TYmxg
+        Bfdt5cy+/S+IRAvC/LS6NYxQYe0e79/FQQRYb/Mcd8jS8qxWB1iuXQe85SqXEhXYqiH8j4
+        +8mgUokSmCQOtAKhWeO3fUlqU5Flbi2cC2akX0Xw1B69Gv1ldKxWWm+8ITOUfQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1666191376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vk9lLFSPw7DVFHn+Ltr9+ux4PzL45JriVQ+GTbz1WOY=;
-        b=Bczhayh0iGG8icRI55cYRrg7pJAHOfB2u8QZ/VTPoePhI61+DqIcsXd3xFHatJNL5JU+gj
-        3w0K/ax5IwNRZjBw==
+        bh=l6JL8Q05OijoTEvKKyIiYa7K6VvZeDLREPexuqG68w4=;
+        b=CQZkI2DXDnPwDZmhG2PVbvPciqqo6PQ6K7EPwjaFXRMKTNR/ZrE840g4rZSpD8aFVitZok
+        a6Wx9DhxTm9LofBg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH printk v2 25/38] proc: consoles: document console_lock usage
-Date:   Wed, 19 Oct 2022 17:01:47 +0206
-Message-Id: <20221019145600.1282823-26-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        kgdb-bugreport@lists.sourceforge.net
+Subject: [PATCH printk v2 26/38] kdb: use srcu console list iterator
+Date:   Wed, 19 Oct 2022 17:01:48 +0206
+Message-Id: <20221019145600.1282823-27-john.ogness@linutronix.de>
 In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
 References: <20221019145600.1282823-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,36 +65,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The console_lock is held throughout the start/show/stop procedure
-to print out device/driver information about all registered
-consoles. Since the console_lock is being used for multiple reasons,
-explicitly document these reasons. This will be useful when the
-console_lock is split into fine-grained locking.
+Guarantee safe iteration of the console list by using SRCU.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- fs/proc/consoles.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ kernel/debug/kdb/kdb_io.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/fs/proc/consoles.c b/fs/proc/consoles.c
-index cf2e0788f9c7..32512b477605 100644
---- a/fs/proc/consoles.c
-+++ b/fs/proc/consoles.c
-@@ -63,6 +63,14 @@ static void *c_start(struct seq_file *m, loff_t *pos)
- 	struct console *con;
- 	loff_t off = 0;
+diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
+index 550fe8b456ec..5c0bd93c3574 100644
+--- a/kernel/debug/kdb/kdb_io.c
++++ b/kernel/debug/kdb/kdb_io.c
+@@ -545,6 +545,7 @@ static void kdb_msg_write(const char *msg, int msg_len)
+ {
+ 	struct console *c;
+ 	const char *cp;
++	int cookie;
+ 	int len;
  
-+	/*
-+	 * Stop console printing because the device() callback may
-+	 * assume the console is not within its write() callback.
-+	 *
-+	 * Hold the console_lock to guarantee safe traversal of the
-+	 * console list. SRCU cannot be used because there is no
-+	 * place to store the SRCU cookie.
-+	 */
- 	console_lock();
- 	for_each_console(con)
- 		if (off++ == *pos)
+ 	if (msg_len == 0)
+@@ -558,7 +559,8 @@ static void kdb_msg_write(const char *msg, int msg_len)
+ 		cp++;
+ 	}
+ 
+-	for_each_console(c) {
++	cookie = console_srcu_read_lock();
++	for_each_console_srcu(c) {
+ 		if (!console_is_enabled(c))
+ 			continue;
+ 		if (c == dbg_io_ops->cons)
+@@ -577,6 +579,7 @@ static void kdb_msg_write(const char *msg, int msg_len)
+ 		--oops_in_progress;
+ 		touch_nmi_watchdog();
+ 	}
++	console_srcu_read_unlock(cookie);
+ }
+ 
+ int vkdb_printf(enum kdb_msgsrc src, const char *fmt, va_list ap)
 -- 
 2.30.2
 
