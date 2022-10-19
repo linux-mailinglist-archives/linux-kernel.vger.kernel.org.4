@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA52603951
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3738F603954
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJSFkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 01:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
+        id S229894AbiJSFnS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 01:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiJSFkh (ORCPT
+        with ESMTP id S229463AbiJSFnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 01:40:37 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D0149B42
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:40:36 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id y26-20020a5d9b1a000000b006bc71505e97so12144772ion.16
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:40:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E0euC444GphM3Ky4TUWZPtkQzv94eUiH/s9cx8crkmw=;
-        b=FVQ0wPXc7LtvtnLGgRH4uu5+hh8bE9IvNbPaBsClD1lMXnyVIjROBcQE6Z+SDbkAVH
-         BPmBQwO8olI/uc65ZmSyh6YYE2dgV/zRypgS25CR1BJvrP4ga/iIZOYYOIFb7DLMlSDc
-         AFoNgz75KOkpy0bOCt2FNMBzm8geG0wWPSlkjIl4alSxH+KoE7jQ6aA7feSJdxdfSZXa
-         rooo5m5t5LayTeffp9vWFC9BDdYHBebvYypRf07/MgDAvno9Ulu90ndSW2qWBCwbEv6A
-         fqBdFOLbBAvR14iKntd9bB1t5V3GaEM06TXuzWgaGrUVLYS3KzJ/x5NWxtJkKHuRUnw+
-         DVKA==
-X-Gm-Message-State: ACrzQf3AbNt02Xakr8LyNO7RJfxAjVyC6Tf/egT7KTCsrpsLbwYYnxkB
-        gBS/xRHOAfn8aYS+hdFwmXD2hzIZJJ0OuLqWneeO+f/2YKH3
-X-Google-Smtp-Source: AMsMyM4T9m8BwUnklZGcyg4fPhOp61ep3xdcuuwcU0V15MBJ0+Ytg6eDL3CT853iggs8sc2Tx4hW9ZLuPxUIimV1de/Yuwo/mz8N
+        Wed, 19 Oct 2022 01:43:15 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BF84BA76
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:43:14 -0700 (PDT)
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id 4E6EAC0857;
+        Wed, 19 Oct 2022 05:43:13 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 9DD496000C;
+        Wed, 19 Oct 2022 05:43:09 +0000 (UTC)
+Message-ID: <e2675698427ed987dd88ed5f9996fe86e5315dbb.camel@perches.com>
+Subject: Re: [PATCH 2/4] staging: r8188eu: reformat long computation lines
+From:   Joe Perches <joe@perches.com>
+To:     Deepak R Varma <drv@mailo.com>,
+        David Laight <David.Laight@aculab.com>
+Cc:     'Greg KH' <gregkh@linuxfoundation.org>,
+        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
+        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
+        "phil@philpotter.co.uk" <phil@philpotter.co.uk>,
+        "paskripkin@gmail.com" <paskripkin@gmail.com>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
+        "saurabh.truth@gmail.com" <saurabh.truth@gmail.com>
+Date:   Tue, 18 Oct 2022 22:43:07 -0700
+In-Reply-To: <Y06fKv7U0/GhZfSZ@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666011479.git.drv@mailo.com>
+         <2dd27eff9aab5ffe31e61086c0584982794507cf.1666011479.git.drv@mailo.com>
+         <Y01iLXp20G0FSJFG@kroah.com>
+         <a0bef75b959f4ca6a7bbfaacd531f8ae@AcuMS.aculab.com>
+         <Y06fKv7U0/GhZfSZ@debian-BULLSEYE-live-builder-AMD64>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20e3:b0:2fa:3db:3585 with SMTP id
- q3-20020a056e0220e300b002fa03db3585mr4496787ilv.238.1666158035825; Tue, 18
- Oct 2022 22:40:35 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 22:40:35 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dd7d5a05eb5ca523@google.com>
-Subject: [syzbot] UBSAN: array-index-out-of-bounds in dbDiscardAG
-From:   syzbot <syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: det7t86cbxipwk4auj16zko96s9gy3zt
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 9DD496000C
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/aU4SbA6v7Q/bW11O0NXQh6OD7EPBNPuQ=
+X-HE-Tag: 1666158189-171141
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 2022-10-18 at 18:12 +0530, Deepak R Varma wrote:
+> On Tue, Oct 18, 2022 at 11:21:26AM +0000, David Laight wrote:
+> > From: Greg KH
+> > > Sent: 17 October 2022 15:10
+> > > 
+> > > On Mon, Oct 17, 2022 at 06:52:50PM +0530, Deepak R Varma wrote:
+> > > > Reformat long running computation instructions to improve code readability.
+> > > > Address following checkpatch script complaints:
+> > > > 	CHECK: line length of 171 exceeds 100 columns
+> > > > 	CHECK: line length of 113 exceeds 100 columns
+[]
+> > > > diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+[]
+> > > > @@ -211,8 +211,10 @@ static int __nat25_network_hash(unsigned char *network_addr)
+> > > >  	} else if (network_addr[0] == NAT25_IPX) {
+> > > >  		unsigned long x;
+> > > > 
+> > > > -		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^
+> > > network_addr[5] ^
+> > > > -			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^
+> > > network_addr[10];
+> > > > +		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^
+> > > 
+> > > Why not go out to [4] here and then you are one line shorter?
+> > 
+> > and/or use a shorter variable name....
+> Hi David,
+> I have already re-submitted the patch set with 4 in line arrangement. Do you
+> still suggest using shorter variable names?
 
-syzbot found the following issue on:
+Assuming this code is not performance sensitive, I suggest not just
+molifying checkpatch but perhaps improving the code by adding a helper
+function something like:
 
-HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=114e4eaa880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=f0e0fcf3cd1047ae60ad
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+u8 xor_array_u8(u8 *x, size_t len)
+{
+	size_t i;
+	u8 xor = x[0];
 
-Unfortunately, I don't have any reproducer for this issue yet.
+	for (i = 1; i < len; i++)
+		xor ^= x[i];
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+	return xor;
+}
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com
+so for instance this could be:
 
-ERROR: (device loop2): dbAllocAG: allocation request is larger than the allocation group size
-ERROR: (device loop2): dbDiscardAG: -EIO
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/jfs/jfs_dmap.c:1567:12
-index 128 is out of range for type 's64 [128]'
-CPU: 1 PID: 26571 Comm: syz-executor.2 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
- dbDiscardAG+0x9d6/0xa50 fs/jfs/jfs_dmap.c:1567
- jfs_ioc_trim+0x433/0x660 fs/jfs/jfs_discard.c:100
- jfs_ioctl+0x2bd/0x3d0 fs/jfs/ioctl.c:131
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa60c68b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fa60d808168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fa60c7abf80 RCX: 00007fa60c68b5a9
-RDX: 0000000020000140 RSI: 00000000c0185879 RDI: 0000000000000003
-RBP: 00007fa60c6e6580 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc54dd4dbf R14: 00007fa60d808300 R15: 0000000000022000
- </TASK>
-================================================================================
+		x = xor_array_u8(&network_addr[1], 10);
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
