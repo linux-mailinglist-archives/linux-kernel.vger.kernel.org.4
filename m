@@ -2,129 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5A16037FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE8F603803
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJSCXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 22:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
+        id S229657AbiJSC0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 22:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJSCXX (ORCPT
+        with ESMTP id S229906AbiJSC0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 22:23:23 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80075.outbound.protection.outlook.com [40.107.8.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD34B03F7;
-        Tue, 18 Oct 2022 19:23:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hZDX5NkdCCxseIwxUKTCqXY46mGHV3VrnguFism2tocZ0bg96VWaHIjneEcorF0RjFGWmgr3JIfdP9cvwD5DIp9DMCCdrltsxHXuf5LKYiAE0wSIgVeaI28KDVFSABpjEwi87wPp2sAIRF66vlGnBPzCvL8n4a1fuOjXB/vIOAEda3hSHKWmrxdMTueIp5DbZlw71OQwohUOTyIR8j/PfldT1rp33fQOVabYB5N3vu74svzUEuiLRoJE/Td3oX6YAAGCimQudXcBN/GysNzwwFzGqYa2QHYGQ8Kd9a0qW8ZhP1LVfLde9wRbjyX4zZ4PF8QQbadjCt3WuOMhqGQ8GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fJtZh4//vd0pgYoqaQACVbf41pEueAin4tJfeuhl4tg=;
- b=ZzY6UJu6xdXf8UeRDo0EdblPsnHqz4qoDudGpdolXj8FZAXj9mEIZEenu8ppVYgz3vU4E7xPlsUQA0pENIaWI6d1qLIqtjX2PRrkZwXqiB1UPaWhSPWcqbELmJPZ7vV790573wkamTHojMfHW0I1KWcYQiEjOjo6NMatLLwwY0l5hePwOuiDEOUAnWOXqlfys9z54je7Iip0hOYhkOEaCeOZKc7z8zLrWxlstNszh4IMV3MBV9PWvgza6brGoxlSJl5TaNVLbOVUUcsIjgtGyP3d5Mx1LjTBqLs7mb1D1z7G3B7BTyu8s+g15aTqp8Lhn+0i/q2x47jrQOHTQm1LiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fJtZh4//vd0pgYoqaQACVbf41pEueAin4tJfeuhl4tg=;
- b=XFZRQG6MXDdg9Rd69/KLmxYfXKo0GudDcYhh4IKTArIxnKsEOoRSXkp8lC80ejxt7dSVdSXZMZf/J8q1Lb9HGsgwE8filnKSNTiZjoAOPkn0Z/WFzPfZKRVh0snFp3TyYYoFRu1QeKqeapdLNnARLyRHOu9uiqzhkhh/47ZLSis=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by DU0PR04MB9562.eurprd04.prod.outlook.com (2603:10a6:10:321::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Wed, 19 Oct
- 2022 02:23:19 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::181b:75f7:dbc8:b4bc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::181b:75f7:dbc8:b4bc%6]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
- 02:23:19 +0000
-Message-ID: <fd29de19b976148011ceb39aab879d55a2f243fb.camel@nxp.com>
-Subject: Re: [PATCH v12 5/6] drm/imx: Introduce i.MX8qm/qxp DPU DRM
-From:   Liu Ying <victor.liu@nxp.com>
-To:     kernel test robot <lkp@intel.com>, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, p.zabel@pengutronix.de, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, guido.gunther@puri.sm,
-        marcel.ziswiler@toradex.com, laurentiu.palcu@oss.nxp.com,
-        robh@kernel.org
-Date:   Wed, 19 Oct 2022 10:22:43 +0800
-In-Reply-To: <202210190730.rlLYtBVv-lkp@intel.com>
-References: <20221017092308.249665-6-victor.liu@nxp.com>
-         <202210190730.rlLYtBVv-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR01CA0025.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::10) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|DU0PR04MB9562:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9af3ac7a-96ec-4b39-d4e7-08dab178e359
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z4PYJluh0poc7zrBkPjyNc/tcV2WEWT4sPKCLBPBVGKWHz2OS7sU5pGSD2T3gswjX0AJNx5v67pD8gt01iMfRutOvCHgy3aJiT3Um6cDuSOCFUtjXGTeIhhumKvVwQBZJez8CTnXQJh9lX2JrewIZ2kP2ac4vubOM97MkvRAQHW/GhwgeQIDurqND/3gg8qDJAY+TaE/pZvhF7ofVfwXuJcFL6DFrIgGWs5dN3RRygsNz2crue7GWQtDvA0/6Z1ZCE5IC6qpwdhfJTmR0K5ri9hzUyRVOr4QJ87hfj/5oqCfy4QWYVdehPyozs0Kr9fjeU3UTU7X+ZA8z7GSqLCFXTJSCIeo0fE3Kg49yRWhUd0PZddidrG8KKV4ei5SeM9ptZbs9igl5szhTHi/IXwladv/k/NCZSDqLRLIHJswkKhOhHsiPgCBtOcID/UnqzZWXj2ye+hFcLrCv9vslUnao0rHpQPYujg8SweetOc9EYDF0nAWt07gCJGozGFcRsqFVzxy44cDsO2/b6DCt9EEwDk8P47toNDVLYiH8ENA+5WeQ+cMtIR6TnbLkD37ZTmZCf17eg0N6A2mS5E1IzRtNLutvyJsgcsIfYfAVXAF86IxrLAl41R3IKofIK+hs2XQ3gRPc+49oJFBdT3ruzAW1buGycTv05hu0X9Ptv5N4ByKl8TbtGN9LL7Ix7gHwvOCeVET7LlDUPRiAXGMtgHJ+pXWQLpxNr+O8RX96XHUgDCeG8CI29rLzPUjjSsJAi2O6hznG9XMnr9wqM0PXFavr7iJ3K14LCpetDMmXQknZdM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199015)(6486002)(316002)(8676002)(66946007)(4326008)(6666004)(66476007)(66556008)(52116002)(4744005)(5660300002)(186003)(7416002)(2616005)(41300700001)(2906002)(6506007)(478600001)(6512007)(8936002)(36756003)(26005)(86362001)(38100700002)(38350700002)(4001150100001)(99106002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGtDRzd0TXRNbFJ3SE5OQXh3SjY3N3d5UnhVdHFsTFJrTkRmeWtRS3BDNmhW?=
- =?utf-8?B?V0I0b0l1ZmxQekg5RFNONHF5Q1U4RVB2WS9uRGN1L1lGSytTZHhXb0UwU2U1?=
- =?utf-8?B?ZXpqc3NIeUxCOVVyVWFMejRVYUs2dnRXckUzTVRJaUNodmtyUHA0VHh5d0g1?=
- =?utf-8?B?VUhPZTc0enUwdHBsSUx6RWsyN3lVNTkra3o4NlBxRlg5OWhUdmREL2I3TnpV?=
- =?utf-8?B?ZlUwT0ZrMEdpdmNSajMwTWFwR0piQms1R3F6S2F4VVkyZ1V1UWFUK2RkU1ZK?=
- =?utf-8?B?K0dKbGxIR0xiU1YvS3JYQ3doMXpZRVBSR29LVjkvaC9GNThuZXNuUmJmRU1P?=
- =?utf-8?B?Y3VqVS9odFNibEZkTVJFWGVSTG1jcUVDRVVWSnNBelkycGQ1UU56ZFU0MHk1?=
- =?utf-8?B?YktrL0xBMGRndTBJVGxlWFMxUUQvZkdtdEwyQUc3MGt2SEl3ZkNCSUFrWWdn?=
- =?utf-8?B?TldsWFJjUHhMOXA3NU9yc2RsWFJ0K1ZqTEV2eFlwcGJ4K1Jqam1NeDB5RkRZ?=
- =?utf-8?B?VDZ5dlh6MFpwYUprelBrSmhEaSt6cFhRVVFNQWJNaVg1SEVkWEpaM2I2U1Vm?=
- =?utf-8?B?VUluakdEWkRKUWdOY2wreXkyN1p6RmJIQUd6ZnZ1bnYxcjAxeSt1UjNmamU0?=
- =?utf-8?B?K0pRcTB1Y3JWdlcvWnF6STRndFVLZHNzcnlTTmhoUUs3NUp5RUMza1RjVVFS?=
- =?utf-8?B?STZqS053Rk4xVVdTS1dxMDhLbzQwTlBkY2YvdkNJcVpvR25uSUFPbHJtelJ1?=
- =?utf-8?B?Q29HSGtXSGpNaG1zNHh3cmZ2cW5aZ3psaEtwMHEwTGVaRGdDOTNoTGsvelRa?=
- =?utf-8?B?QjJxUkE4ZDFJRVNtVEpxZGRSenVac3R6Y0FybXBMdFJpZnpoSktZREdhK2dw?=
- =?utf-8?B?WGVaOXB1cC81TDVvbENFRGhaejJGYnpKMWZTS3BrM0NmQzJIRjAzYmgyUXlL?=
- =?utf-8?B?UFJPTXc4bnc4SVdqczBEaHRPS1ZVbVZPeXdMSzZuSGpUTmhvV0dOcS9OdThY?=
- =?utf-8?B?Rldndm5WNXBZNmUraWtKN2tVNGh0b3g4TTIwV0ZnelpMU2dCVDJjcXM4OWw2?=
- =?utf-8?B?T3U4YlhaOUowMURXMGtPdXAvNGI0aUhmQWxOalErQ0poMENTRkwzMS9LRDJw?=
- =?utf-8?B?Q0h5TmJDYkQ2U09uUWFQT1pMdVR4aU8vbElXT2RpNnF2S3IxRVhhbGg2emJZ?=
- =?utf-8?B?RDdFTEdrdEJwM2VoVnlkL2FDVUhtNkRoTWFmbWxzMVNiRjFrOWNwQnA5K2cx?=
- =?utf-8?B?WGFGNHBxYzREQTZJZFJyTHhiVzltWktjK3lZM0YwbmIzYStvWWZsbS9BQjdE?=
- =?utf-8?B?clhuY1k1MjdMbUxKUFA0enQ0MTFQYXBzRDlHaTFLaGlkWGdVMWlKcy9qMDRZ?=
- =?utf-8?B?cFFvVTNyNENES1BwZ2pLOTl5bkF1YUJCQ1Eycm83cEpxZGRJdEd2K2tCSXJ4?=
- =?utf-8?B?RnhMY1F3UjNZQzNEcmJhNndlUWUxZzhyQ1pGQ2hqR1JSaWtKQzQxT1h6UWZ5?=
- =?utf-8?B?L24wNUxoN2p0Q1grdUxuN21iRFJFLzRYOHJqUlYwL1dlcFIxTEtiU3VOSEFM?=
- =?utf-8?B?K2poM3gwK3dJZ0R0Q3NCTzlGV0lMOFRzM1YwUFZFNWpWUXpTUlBvekp5bVMw?=
- =?utf-8?B?dmhmRlk1MENweEhDZUlXellGc2htZjh0UEJzY3AyYmY4ZmxyOFpkQnMzSHdE?=
- =?utf-8?B?ODJzYXQ2NkdaMnF1dmI4VHN6MEZYMnNBMzNnUjJrTTNITTJvWG5TaTcvTUx5?=
- =?utf-8?B?VVJwUnNKbDdWdW4yZGdKU1NkcUprN1czRzRVeFlOTFpIZ1ZQTVd6a2pvOUFo?=
- =?utf-8?B?WFNWZ044YzhJdnZ3blY3c0RYQWl6Vyt4VitiUVVIVGlxbFkzVjNoZkVWMDV6?=
- =?utf-8?B?N3JGQkhTQmI5SW9jejV4ZC9RaXd0Tzdzdk5KbEJFV0tsZUFDWjgvRXBQMUp4?=
- =?utf-8?B?QUhYTjlORllsZCtXYWVaNW5kcEorbGVmU1Fpdm90UmdUNXcxRmpjMHVoWlhB?=
- =?utf-8?B?Si8xVTZCK2ZBb0gvSFlZUkl4UXNRTTlhRUV5MXhRdStaNzlSTzNDTkFSTFVo?=
- =?utf-8?B?TWVBbjdNYWM2ajBLZ0FxWmptZjFncVdUd01iUDRVazlsOUg2SFNDY2oxRXkx?=
- =?utf-8?Q?LlH8Ky4yImSJm6jJTLTYN++pG?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9af3ac7a-96ec-4b39-d4e7-08dab178e359
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 02:23:19.6902
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3h1EzhriieRjeFoQ7KOhDT2EfSOnmMcuJJ4TlHMzrDkUsaaBQ2inGWYZTUhYczoIoqKAvGHrUpEmaF63+L2qCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9562
+        Tue, 18 Oct 2022 22:26:12 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5321D6D54A;
+        Tue, 18 Oct 2022 19:26:11 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id h12so15823851pjk.0;
+        Tue, 18 Oct 2022 19:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=er/1qGyGPvy6leNV/3q4zAE8W98J7263JUcIKC3pW08=;
+        b=kGTujcOB3B+7jMN5o1Z99H9KU3GHkeaI9cm8VoIcbyq2/AO6Qc6EA2YrA24w+7YQ2Z
+         twmL8+DIJycKjL5ZmO9D/Zi5SzxfKKJK2Oz6IyftXGFLD/Pl3pKqCz85Y366E7VH8Yf8
+         adXGCEHt5eyafr3niacj1kpwnnBluq72pG5eda2vjXp6/bx22V1U7uakYwH73YArQ/nJ
+         8CZf3oKvqEiWRgRtQxifyvJ3EWNtt3ikzMlvYqnC08a6FVJ34YToX2AL8XQ92+X5G89P
+         FhhvK1PCCTmUyoOvLLFazppu2D3kYRdes33+qT23DYlAnSSOntlZa/Gp6B+ZE/NKxegw
+         tGfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=er/1qGyGPvy6leNV/3q4zAE8W98J7263JUcIKC3pW08=;
+        b=rw30vO825f6KE0NzMmZqOqAW8EE2RUpMVyLoos1Hq6zYb6jv0mSYfqCpCefTilbYz7
+         vEDHBBbytcG9LNU1yD3Ff98KwD6yNxZUey2GcfvKabyWCzvDA8FI0ixMZ1rbNPOS5J/2
+         heCCKgeP32O4A274yz6TZdjeMnkaZwGMmVhtIUdy+QL67Ov3clFmSvjgYrLrK/NaM3C6
+         VCckJvoZGasko/WY4bYHyG2AIj5B5H5QG65S9wTh+iDbT8hJx+4Eil2FVYYZcKe/XKr4
+         0z1f+CX9ClGywyJYERdQjEpel4/f9tda2z5ihKl00IOkp+v50AsEBLrpvqMzr1syHS8/
+         kPeg==
+X-Gm-Message-State: ACrzQf06hj3GnDK70tO46JMb9uCgdNeWjmKfntNkWJECzYlxfNjMV7xN
+        FMGI0QmUuTLDBUciOn2PA5HA3ll+hjFI
+X-Google-Smtp-Source: AMsMyM7Yurvg98ZqCVYDyHQO86dBDHZRnNHEf77YxFX38kvUJi7qaSIEHQwsDWnCc3YMDOZ5kQtC9w==
+X-Received: by 2002:a17:903:2c2:b0:182:df88:e6d3 with SMTP id s2-20020a17090302c200b00182df88e6d3mr5980937plk.81.1666146370650;
+        Tue, 18 Oct 2022 19:26:10 -0700 (PDT)
+Received: from localhost.localdomain ([106.104.115.142])
+        by smtp.gmail.com with ESMTPSA id x185-20020a6263c2000000b00562a526cd2esm9855880pfb.55.2022.10.18.19.26.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 19:26:10 -0700 (PDT)
+From:   chengwei <foxfly.lai.tw@gmail.com>
+X-Google-Original-From: chengwei <larry.lai@yunjingtech.com>
+To:     lee@kernel.org, broonie@kernel.org, rafael@kernel.org,
+        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, GaryWang@aaeon.com.tw,
+        musa.lin@yunjingtech.com, jack.chang@yunjingtech.com,
+        chengwei <larry.lai@yunjingtech.com>
+Subject: [PATCH 0/5] Add support control UP board CPLD/FPGA pin control
+Date:   Wed, 19 Oct 2022 10:24:45 +0800
+Message-Id: <20221019022450.16851-1-larry.lai@yunjingtech.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,34 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-19 at 07:41 +0800, kernel test robot wrote:
-> Hi Liu,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on drm-misc/drm-misc-next]
-> [also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next
-> drm-intel/for-linux-next drm-tip/drm-tip linus/master v6.1-rc1 next-
-> 20221018]
+The UP board <http://www.upboard.com> is the computer board for 
+Professional Makers and Industrial Applications. We want to upstream 
+the UP board 40-pin GP-bus Kernel driver for giving the users better 
+experience on the software release. (not just download from UP board 
+github)
 
-[...]
+These patches are generated from the Linux kernel mainline tag v6.0.
 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/gpu/drm/imx/dpu/dpu-drv.c: In function 'dpu_drm_bind':
-> > > drivers/gpu/drm/imx/dpu/dpu-drv.c:67:12: error: 'struct
-> > > drm_device' has no member named 'irq_enabled'
-> 
->       67 |         drm->irq_enabled = true;
->          |            ^~
+(1) PATCH 1 (mfd: Add support for UP board CPLD/FPGA)
+We did git send-email this patch to maintainer on 2022/10/11 for reviewing.
 
-I've sent v13 to fix the potential build break by removing this line
-since drm->irq_enabled should only be used by legacy drm drivers with
-userspace modesetting but not imx-dpu drm driver.
+(2) PATCH 2 (regmap: Expose regmap_writable function to check if a register is
+    writable)
+The regmap patch expose the regmap_writeable function for pinctrl-upboard 
+reference.
 
-Thanks for reporting the issue.
+(3) PATCH 3 (ACPI: acpi_node_add_pin_mapping added to header file)
+Declare acpi_node_add_pin_mapping added in header file.
 
-Liu Ying
+(4) PATCH 4 (GPIO ACPI: Add support to map GPIO resources to ranges)
+Add a pin mapping for named GPIO resources for pinctrl-upboard 
+reference.
 
-[...]
+(3) PATCH 5 (pinctrl: Add support pin control for UP board CPLD/FPGA)
+The UP board implements certain features (pin control) through an on-board CPLD.
+** This patch depends on PATCH 1 (mfd: Add support for UP board CPLD/FPGA).
+** This patch depends on PATCH 2 to refer to regmap_writeable function.
+** This patch depends on PATCH 3 and PATCH 4 to refer to acpi_node_add_pin_mapping 
+function.
+
+chengwei (5):
+  mfd: Add support for UP board CPLD/FPGA
+  regmap: Expose regmap_writeable function to check if a register is
+    writable
+  ACPI: acpi_node_add_pin_mapping added to header file
+  GPIO ACPI: Add support to map GPIO resources to ranges
+  pinctrl: Add support pin control for UP board CPLD/FPGA
+
+ drivers/base/regmap/internal.h    |    5 -
+ drivers/base/regmap/regmap.c      |    5 +
+ drivers/gpio/gpiolib-acpi.c       |   88 ++-
+ drivers/mfd/Kconfig               |   12 +
+ drivers/mfd/Makefile              |    1 +
+ drivers/mfd/upboard-fpga.c        |  482 ++++++++++++++
+ drivers/pinctrl/Kconfig           |   15 +
+ drivers/pinctrl/Makefile          |    1 +
+ drivers/pinctrl/pinctrl-upboard.c | 1003 +++++++++++++++++++++++++++++
+ include/linux/acpi.h              |   14 +
+ include/linux/mfd/upboard-fpga.h  |   49 ++
+ include/linux/regmap.h            |    6 +
+ 12 files changed, 1659 insertions(+), 22 deletions(-)
+ create mode 100644 drivers/mfd/upboard-fpga.c
+ create mode 100644 drivers/pinctrl/pinctrl-upboard.c
+ create mode 100644 include/linux/mfd/upboard-fpga.h
+
+
+base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+-- 
+2.17.1
 
