@@ -2,46 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57301603AEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75555603AEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJSHsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        id S229787AbiJSHrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJSHsg (ORCPT
+        with ESMTP id S229506AbiJSHro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:48:36 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4E36CD00
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:48:34 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MsjQr6fcdzmV8R;
-        Wed, 19 Oct 2022 15:43:48 +0800 (CST)
-Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
- 2022 15:48:32 +0800
-From:   ruanjinjie <ruanjinjie@huawei.com>
-To:     <harry.wentland@amd.com>, <sunpeng.li@amd.com>,
-        <Rodrigo.Siqueira@amd.com>, <alexander.deucher@amd.com>,
-        <christian.koenig@amd.com>, <Xinhui.Pan@amd.com>,
-        <airlied@gmail.com>, <daniel@ffwll.ch>, <qingqing.zhuo@amd.com>,
-        <agustin.gutierrez@amd.com>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] drm/amd/display: Make some symbols static
-Date:   Wed, 19 Oct 2022 15:45:02 +0800
-Message-ID: <20221019074502.4048521-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.83]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Wed, 19 Oct 2022 03:47:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDC06CD14
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:47:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA2FF617AE
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1E9C433D7;
+        Wed, 19 Oct 2022 07:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666165662;
+        bh=5d4mhchK2QgTYmF+smLIlMhTyaaJWtq6LqoaxHurJo8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XGdcHzJb484u760dNrX3gy+bJkkeFoPy/gYRQaZBxrZC/9c1i0J9IYh0Vn9CVHP9a
+         Vbvw05JY1S2p2rXuvPhmvd8+cZVYr+EaqBdtjXckk8A+GF1SHN2pvq3QgFoiOUfqfv
+         EGCzXXgDi22KtS6DIPzL+KAeNMreJHZf4lrnhvCJocAr2hEI0EO1aoT0mjsM2Za+jT
+         pfUZjGapAYlPUB1JH8vgATNflt8f++r0izXab2hIlpcUt+mTfCrdpZGQBvQ9moz9Xz
+         xRcHTdEhvvN5qEaITG+N110e5pchwE8FZBx4RusyNasJPotrI4ZdWUiWd1/9qOshf8
+         lPkttBXmOeLpw==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ol3nd-00HTRY-Ot;
+        Wed, 19 Oct 2022 08:47:40 +0100
+Date:   Wed, 19 Oct 2022 08:46:39 +0100
+Message-ID: <87k04wgsrk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: Re: [PATCH] irqchip/loongson-htvec: Add ACPI init support
+In-Reply-To: <20221017031847.2407930-1-chenhuacai@loongson.cn>
+References: <20221017031847.2407930-1-chenhuacai@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com, lvjianmin@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,240 +68,306 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These symbols qp_table_422_10bpc_min, qp_table_444_8bpc_max,
-qp_table_420_12bpc_max, qp_table_444_10bpc_min, qp_table_420_8bpc_max,
-qp_table_444_8bpc_min, qp_table_444_12bpc_min, qp_table_420_12bpc_min,
-qp_table_422_12bpc_min, qp_table_422_12bpc_max, qp_table_444_12bpc_max,
-qp_table_420_8bpc_min, qp_table_422_8bpc_min, qp_table_422_10bpc_max,
-qp_table_420_10bpc_max, qp_table_420_10bpc_min, qp_table_444_10bpc_max,
-qp_table_422_8bpc_max are not used outside of the file,
-so mark them static.
+On Mon, 17 Oct 2022 04:18:47 +0100,
+Huacai Chen <chenhuacai@loongson.cn> wrote:
+> 
+> HTVECINTC stands for "HyperTransport Interrupts" that described in
+> Section 14.3 of "Loongson 3A5000 Processor Reference Manual". For more
+> information please refer Documentation/loongarch/irq-chip-model.rst.
+> 
+> Though the extended model is the recommended one, there are still some
+> legacy model machines. So we add ACPI init support for HTVECINTC.
+> 
+> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/irq.h       |   2 +-
+>  drivers/irqchip/Kconfig                |   1 +
+>  drivers/irqchip/irq-loongson-htvec.c   | 145 +++++++++++++++++++------
+>  drivers/irqchip/irq-loongson-liointc.c |  21 +++-
+>  4 files changed, 133 insertions(+), 36 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+> index d06d4542b634..9d3d36e41afe 100644
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@ -93,7 +93,7 @@ int liointc_acpi_init(struct irq_domain *parent,
+>  int eiointc_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_eio_pic *acpi_eiointc);
+>  
+> -struct irq_domain *htvec_acpi_init(struct irq_domain *parent,
+> +int htvec_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_ht_pic *acpi_htvec);
+>  int pch_lpc_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_lpc_pic *acpi_pchlpc);
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 7ef9f5e696d3..17396e6e42fc 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -576,6 +576,7 @@ config IRQ_LOONGARCH_CPU
+>  	select GENERIC_IRQ_CHIP
+>  	select IRQ_DOMAIN
+>  	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> +	select LOONGSON_HTVEC
+>  	select LOONGSON_LIOINTC
+>  	select LOONGSON_EIOINTC
+>  	select LOONGSON_PCH_PIC
+> diff --git a/drivers/irqchip/irq-loongson-htvec.c b/drivers/irqchip/irq-loongson-htvec.c
+> index 60a335d7e64e..1bb414ec6e78 100644
+> --- a/drivers/irqchip/irq-loongson-htvec.c
+> +++ b/drivers/irqchip/irq-loongson-htvec.c
+> @@ -20,7 +20,6 @@
+>  /* Registers */
+>  #define HTVEC_EN_OFF		0x20
+>  #define HTVEC_MAX_PARENT_IRQ	8
+> -
+>  #define VEC_COUNT_PER_REG	32
+>  #define VEC_REG_IDX(irq_id)	((irq_id) / VEC_COUNT_PER_REG)
+>  #define VEC_REG_BIT(irq_id)	((irq_id) % VEC_COUNT_PER_REG)
+> @@ -32,6 +31,8 @@ struct htvec {
+>  	raw_spinlock_t		htvec_lock;
+>  };
+>  
+> +static struct htvec *htvec_priv;
+> +
+>  static void htvec_irq_dispatch(struct irq_desc *desc)
+>  {
+>  	int i;
+> @@ -155,64 +156,140 @@ static void htvec_reset(struct htvec *priv)
+>  	}
+>  }
+>  
+> -static int htvec_of_init(struct device_node *node,
+> -				struct device_node *parent)
+> +static int htvec_init(phys_addr_t addr, unsigned long size,
+> +		int num_parents, int parent_irq[], struct fwnode_handle *domain_handle)
+>  {
+> +	int i;
+>  	struct htvec *priv;
+> -	int err, parent_irq[8], i;
+>  
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> +	priv->num_parents = num_parents;
+> +	priv->base = ioremap(addr, size);
+>  	raw_spin_lock_init(&priv->htvec_lock);
+> -	priv->base = of_iomap(node, 0);
+> -	if (!priv->base) {
+> -		err = -ENOMEM;
+> -		goto free_priv;
+> -	}
+> -
+> -	/* Interrupt may come from any of the 8 interrupt lines */
+> -	for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++) {
+> -		parent_irq[i] = irq_of_parse_and_map(node, i);
+> -		if (parent_irq[i] <= 0)
+> -			break;
+> -
+> -		priv->num_parents++;
+> -	}
+> -
+> -	if (!priv->num_parents) {
+> -		pr_err("Failed to get parent irqs\n");
+> -		err = -ENODEV;
+> -		goto iounmap_base;
+> -	}
+>  
+> -	priv->htvec_domain = irq_domain_create_linear(of_node_to_fwnode(node),
+> +	/* Setup IRQ domain */
+> +	priv->htvec_domain = irq_domain_create_linear(domain_handle,
+>  					(VEC_COUNT_PER_REG * priv->num_parents),
+>  					&htvec_domain_ops, priv);
+>  	if (!priv->htvec_domain) {
+> -		pr_err("Failed to create IRQ domain\n");
+> -		err = -ENOMEM;
+> -		goto irq_dispose;
+> +		pr_err("loongson-htvec: cannot add IRQ domain\n");
+> +		goto iounmap_base;
+>  	}
+>  
+>  	htvec_reset(priv);
+>  
+> -	for (i = 0; i < priv->num_parents; i++)
+> +	for (i = 0; i < priv->num_parents; i++) {
+>  		irq_set_chained_handler_and_data(parent_irq[i],
+>  						 htvec_irq_dispatch, priv);
+> +	}
+> +
+> +	htvec_priv = priv;
+>  
+>  	return 0;
+>  
+> -irq_dispose:
+> -	for (; i > 0; i--)
+> -		irq_dispose_mapping(parent_irq[i - 1]);
+>  iounmap_base:
+>  	iounmap(priv->base);
+> -free_priv:
+>  	kfree(priv);
+>  
+> -	return err;
+> +	return -EINVAL;
+> +}
+> +
+> +#ifdef CONFIG_OF
+> +
+> +static int htvec_of_init(struct device_node *node,
+> +				struct device_node *parent)
+> +{
+> +	int i, err;
+> +	int parent_irq[8];
+> +	int num_parents = 0;
+> +	struct resource res;
+> +
+> +	if (of_address_to_resource(node, 0, &res))
+> +		return -EINVAL;
+> +
+> +	/* Interrupt may come from any of the 8 interrupt lines */
+> +	for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++) {
+> +		parent_irq[i] = irq_of_parse_and_map(node, i);
+> +		if (parent_irq[i] <= 0)
+> +			break;
+> +
+> +		num_parents++;
+> +	}
+> +
+> +	err = htvec_init(res.start, resource_size(&res),
+> +			num_parents, parent_irq, of_node_to_fwnode(node));
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return 0;
+>  }
+>  
+>  IRQCHIP_DECLARE(htvec, "loongson,htvec-1.0", htvec_of_init);
+> +
+> +#endif
+> +
+> +#ifdef CONFIG_ACPI
+> +static int __init
+> +pch_pic_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:28:18: warning:
-symbol 'qp_table_422_10bpc_min' was not declared. Should it be static?
+Please write the function name and the return type on the same
+line. Long lines are just fine.
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:61:18: warning:
-symbol 'qp_table_444_8bpc_max' was not declared. Should it be static?
+> +{
+> +	struct acpi_madt_bio_pic *pchpic_entry = (struct acpi_madt_bio_pic *)header;
+> +
+> +	return pch_pic_acpi_init(htvec_priv->htvec_domain, pchpic_entry);
+> +}
+> +
+> +static int __init
+> +pch_msi_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
+> +{
+> +	struct acpi_madt_msi_pic *pchmsi_entry = (struct acpi_madt_msi_pic *)header;
+> +
+> +	return pch_msi_acpi_init(htvec_priv->htvec_domain, pchmsi_entry);
+> +}
+> +
+> +static int __init acpi_cascade_irqdomain_init(void)
+> +{
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
+> +			      pch_pic_parse_madt, 0);
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_MSI_PIC,
+> +			      pch_msi_parse_madt, 0);
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:102:18: warning:
-symbol 'qp_table_420_12bpc_max' was not declared. Should it be static?
+What if any of these fail? They have a return value for a reason.
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:135:18: warning:
-symbol 'qp_table_444_10bpc_min' was not declared. Should it be static?
+> +	return 0;
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:188:18: warning:
-symbol 'qp_table_420_8bpc_max' was not declared. Should it be static?
+There is only a single possible return value, which is never checked.
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:209:18: warning:
-symbol 'qp_table_444_8bpc_min' was not declared. Should it be static?
+> +}
+> +
+> +int __init htvec_acpi_init(struct irq_domain *parent,
+> +				   struct acpi_madt_ht_pic *acpi_htvec)
+> +{
+> +	int i, ret;
+> +	int num_parents, parent_irq[8];
+> +	struct fwnode_handle *domain_handle;
+> +
+> +	if (!acpi_htvec)
+> +		return -EINVAL;
+> +
+> +	num_parents = HTVEC_MAX_PARENT_IRQ;
+> +
+> +	domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_htvec);
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:250:18: warning:
-symbol 'qp_table_444_12bpc_min' was not declared. Should it be static?
+NAK. Enough. I already mopped the floor for you during the previous
+cycle, I'm not going to do it again. Please see 7e4fd7a1a6fd.
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:315:18: warning:
-symbol 'qp_table_420_12bpc_min' was not declared. Should it be static?
+> +	if (!domain_handle) {
+> +		pr_err("Unable to allocate domain handle\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	/* Interrupt may come from any of the 8 interrupt lines */
+> +	for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++)
+> +		parent_irq[i] = irq_create_mapping(parent, acpi_htvec->cascade[i]);
+> +
+> +	ret = htvec_init(acpi_htvec->address, acpi_htvec->size,
+> +			num_parents, parent_irq, domain_handle);
+> +
+> +	if (ret == 0)
+> +		acpi_cascade_irqdomain_init();
+> +	else
+> +		irq_domain_free_fwnode(domain_handle);
+> +
+> +	return ret;
+> +}
+> +
+> +#endif
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+> index 0da8716f8f24..ddf23b1114cb 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -349,6 +349,22 @@ IRQCHIP_DECLARE(loongson_liointc_2_0, "loongson,liointc-2.0", liointc_of_init);
+>  #endif
+>  
+>  #ifdef CONFIG_ACPI
+> +static int __init htintc_parse_madt(union acpi_subtable_headers *header,
+> +					const unsigned long end)
+> +{
+> +	struct acpi_madt_ht_pic *htintc_entry = (struct acpi_madt_ht_pic *)header;
+> +	struct irq_domain *parent = irq_find_matching_fwnode(liointc_handle, DOMAIN_BUS_ANY);
+> +
+> +	return htvec_acpi_init(parent, htintc_entry);
+> +}
+> +
+> +static int __init acpi_cascade_irqdomain_init(void)
+> +{
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_HT_PIC,
+> +			      htintc_parse_madt, 0);
+> +	return 0;
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:348:18: warning:
-symbol 'qp_table_422_12bpc_min' was not declared. Should it be static?
+Same comments as above.
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:389:18: warning:
-symbol 'qp_table_422_12bpc_max' was not declared. Should it be static?
+> +}
+> +
+>  int __init liointc_acpi_init(struct irq_domain *parent, struct acpi_madt_lio_pic *acpi_liointc)
+>  {
+>  	int ret;
+> @@ -365,9 +381,12 @@ int __init liointc_acpi_init(struct irq_domain *parent, struct acpi_madt_lio_pic
+>  		pr_err("Unable to allocate domain handle\n");
+>  		return -ENOMEM;
+>  	}
+> +
+>  	ret = liointc_init(acpi_liointc->address, acpi_liointc->size,
+>  			   1, domain_handle, NULL);
+> -	if (ret)
+> +	if (ret == 0)
+> +		acpi_cascade_irqdomain_init();
+> +	else
+>  		irq_domain_free_fwnode(domain_handle);
+>  
+>  	return ret;
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:430:18: warning:
-symbol 'qp_table_444_12bpc_max' was not declared. Should it be static?
+	M.
 
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:495:18: warning:
-symbol 'qp_table_420_8bpc_min' was not declared. Should it be static?
-
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:516:18: warning:
-symbol 'qp_table_422_8bpc_min' was not declared. Should it be static?
-
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:541:18: warning:
-symbol 'qp_table_422_10bpc_max' was not declared. Should it be static?
-
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:574:16: warning:
-symbol 'qp_table_420_10bpc_max' was not declared. Should it be static?
-
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:601:18: warning:
-symbol 'qp_table_420_10bpc_min' was not declared. Should it be static?
-
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:628:18: warning:
-symbol 'qp_table_444_10bpc_max' was not declared. Should it be static?
-
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:681:18: warning:
-symbol 'qp_table_422_8bpc_max' was not declared. Should it be static?
-
-Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
----
- .../drm/amd/display/dc/dml/dsc/qp_tables.h    | 36 +++++++++----------
- 1 file changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h b/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h
-index e5fac9f4181d..dcff0dd2b6a1 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h
-@@ -25,7 +25,7 @@
-  */
- 
- 
--const qp_table   qp_table_422_10bpc_min = {
-+static const qp_table   qp_table_422_10bpc_min = {
- 	{   6, { 0, 4, 5, 6, 6, 6, 6, 7, 7, 8, 9, 9, 9, 12, 16} },
- 	{ 6.5, { 0, 4, 5, 6, 6, 6, 6, 7, 7, 8, 9, 9, 9, 12, 16} },
- 	{   7, { 0, 4, 5, 6, 6, 6, 6, 7, 7, 7, 9, 9, 9, 11, 15} },
-@@ -58,7 +58,7 @@ const qp_table   qp_table_422_10bpc_min = {
- };
- 
- 
--const qp_table   qp_table_444_8bpc_max = {
-+static const qp_table   qp_table_444_8bpc_max = {
- 	{   6, { 4, 6, 8, 8, 9, 9, 9, 10, 11, 12, 12, 12, 12, 13, 15} },
- 	{ 6.5, { 4, 6, 7, 8, 8, 8, 9, 10, 11, 11, 12, 12, 12, 13, 15} },
- 	{   7, { 4, 5, 7, 7, 8, 8, 8, 9, 10, 11, 11, 12, 12, 13, 14} },
-@@ -99,7 +99,7 @@ const qp_table   qp_table_444_8bpc_max = {
- };
- 
- 
--const qp_table   qp_table_420_12bpc_max = {
-+static const qp_table   qp_table_420_12bpc_max = {
- 	{   4, {11, 12, 13, 14, 15, 15, 15, 16, 17, 18, 18, 19, 19, 21, 22} },
- 	{ 4.5, {10, 11, 12, 13, 14, 15, 15, 16, 17, 18, 18, 19, 19, 20, 21} },
- 	{   5, { 9, 11, 12, 13, 14, 15, 15, 16, 17, 17, 18, 18, 19, 20, 21} },
-@@ -132,7 +132,7 @@ const qp_table   qp_table_420_12bpc_max = {
- };
- 
- 
--const qp_table   qp_table_444_10bpc_min = {
-+static const qp_table   qp_table_444_10bpc_min = {
- 	{   6, { 0, 4, 7, 7, 9, 9, 9, 9, 9, 10, 10, 10, 10, 12, 18} },
- 	{ 6.5, { 0, 4, 6, 7, 8, 8, 9, 9, 9, 9, 10, 10, 10, 12, 18} },
- 	{   7, { 0, 4, 6, 6, 8, 8, 8, 8, 8, 9, 9, 10, 10, 12, 17} },
-@@ -185,7 +185,7 @@ const qp_table   qp_table_444_10bpc_min = {
- };
- 
- 
--const qp_table   qp_table_420_8bpc_max = {
-+static const qp_table   qp_table_420_8bpc_max = {
- 	{   4, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 13, 14} },
- 	{ 4.5, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 12, 13} },
- 	{   5, { 3, 4, 5, 6, 7, 7, 7, 8, 9, 9, 10, 10, 11, 12, 13} },
-@@ -206,7 +206,7 @@ const qp_table   qp_table_420_8bpc_max = {
- };
- 
- 
--const qp_table   qp_table_444_8bpc_min = {
-+static const qp_table   qp_table_444_8bpc_min = {
- 	{   6, { 0, 1, 3, 3, 5, 5, 5, 5, 5, 6, 6, 6, 6, 9, 14} },
- 	{ 6.5, { 0, 1, 2, 3, 4, 4, 5, 5, 5, 5, 6, 6, 6, 9, 14} },
- 	{   7, { 0, 0, 2, 2, 4, 4, 4, 4, 4, 5, 5, 6, 6, 9, 13} },
-@@ -247,7 +247,7 @@ const qp_table   qp_table_444_8bpc_min = {
- };
- 
- 
--const qp_table   qp_table_444_12bpc_min = {
-+static const qp_table   qp_table_444_12bpc_min = {
- 	{   6, { 0, 5, 11, 11, 13, 13, 13, 13, 13, 14, 14, 14, 14, 17, 22} },
- 	{ 6.5, { 0, 5, 10, 11, 12, 12, 13, 13, 13, 13, 14, 14, 14, 17, 22} },
- 	{   7, { 0, 5, 10, 10, 12, 12, 12, 12, 12, 13, 13, 14, 14, 17, 21} },
-@@ -312,7 +312,7 @@ const qp_table   qp_table_444_12bpc_min = {
- };
- 
- 
--const qp_table   qp_table_420_12bpc_min = {
-+static const qp_table   qp_table_420_12bpc_min = {
- 	{   4, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 15, 21} },
- 	{ 4.5, { 0, 4, 8, 9, 10, 11, 11, 11, 11, 11, 13, 13, 13, 15, 20} },
- 	{   5, { 0, 4, 8, 9, 10, 11, 11, 11, 11, 11, 13, 13, 13, 15, 20} },
-@@ -345,7 +345,7 @@ const qp_table   qp_table_420_12bpc_min = {
- };
- 
- 
--const qp_table   qp_table_422_12bpc_min = {
-+static const qp_table   qp_table_422_12bpc_min = {
- 	{   6, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 16, 20} },
- 	{ 6.5, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 16, 20} },
- 	{   7, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 15, 19} },
-@@ -386,7 +386,7 @@ const qp_table   qp_table_422_12bpc_min = {
- };
- 
- 
--const qp_table   qp_table_422_12bpc_max = {
-+static const qp_table   qp_table_422_12bpc_max = {
- 	{   6, {12, 12, 13, 14, 15, 15, 15, 16, 17, 18, 18, 19, 19, 20, 21} },
- 	{ 6.5, {12, 12, 13, 14, 15, 15, 15, 16, 17, 18, 18, 19, 19, 20, 21} },
- 	{   7, {11, 12, 13, 14, 15, 15, 15, 16, 17, 17, 18, 18, 19, 19, 20} },
-@@ -427,7 +427,7 @@ const qp_table   qp_table_422_12bpc_max = {
- };
- 
- 
--const qp_table   qp_table_444_12bpc_max = {
-+static const qp_table   qp_table_444_12bpc_max = {
- 	{   6, {12, 14, 16, 16, 17, 17, 17, 18, 19, 20, 20, 20, 20, 21, 23} },
- 	{ 6.5, {12, 14, 15, 16, 16, 16, 17, 18, 19, 19, 20, 20, 20, 21, 23} },
- 	{   7, {12, 13, 15, 15, 16, 16, 16, 17, 18, 19, 19, 20, 20, 21, 22} },
-@@ -492,7 +492,7 @@ const qp_table   qp_table_444_12bpc_max = {
- };
- 
- 
--const qp_table   qp_table_420_8bpc_min = {
-+static const qp_table   qp_table_420_8bpc_min = {
- 	{   4, { 0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 9, 13} },
- 	{ 4.5, { 0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
- 	{   5, { 0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
-@@ -513,7 +513,7 @@ const qp_table   qp_table_420_8bpc_min = {
- };
- 
- 
--const qp_table   qp_table_422_8bpc_min = {
-+static const qp_table   qp_table_422_8bpc_min = {
- 	{   6, { 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
- 	{ 6.5, { 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
- 	{   7, { 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 11} },
-@@ -538,7 +538,7 @@ const qp_table   qp_table_422_8bpc_min = {
- };
- 
- 
--const qp_table   qp_table_422_10bpc_max = {
-+static const qp_table   qp_table_422_10bpc_max = {
- 	{   6, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 16, 17} },
- 	{ 6.5, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 16, 17} },
- 	{   7, { 7, 8, 9, 10, 11, 11, 11, 12, 13, 13, 14, 14, 15, 15, 16} },
-@@ -571,7 +571,7 @@ const qp_table   qp_table_422_10bpc_max = {
- };
- 
- 
--const qp_table qp_table_420_10bpc_max = {
-+static const qp_table qp_table_420_10bpc_max = {
- 	{   4, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 17, 18} },
- 	{ 4.5, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 16, 17} },
- 	{   5, { 7, 8, 9, 10, 11, 11, 11, 12, 13, 13, 14, 14, 15, 16, 17} },
-@@ -598,7 +598,7 @@ const qp_table qp_table_420_10bpc_max = {
- };
- 
- 
--const qp_table   qp_table_420_10bpc_min = {
-+static const qp_table   qp_table_420_10bpc_min = {
- 	{   4, { 0, 4, 4, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 13, 17} },
- 	{ 4.5, { 0, 4, 4, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 12, 16} },
- 	{   5, { 0, 4, 4, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 12, 16} },
-@@ -625,7 +625,7 @@ const qp_table   qp_table_420_10bpc_min = {
- };
- 
- 
--const qp_table   qp_table_444_10bpc_max = {
-+static const qp_table   qp_table_444_10bpc_max = {
- 	{   6, { 8, 10, 12, 12, 13, 13, 13, 14, 15, 16, 16, 16, 16, 17, 19} },
- 	{ 6.5, { 8, 10, 11, 12, 12, 12, 13, 14, 15, 15, 16, 16, 16, 17, 19} },
- 	{   7, { 8, 9, 11, 11, 12, 12, 12, 13, 14, 15, 15, 16, 16, 17, 18} },
-@@ -678,7 +678,7 @@ const qp_table   qp_table_444_10bpc_max = {
- };
- 
- 
--const qp_table   qp_table_422_8bpc_max = {
-+static const qp_table   qp_table_422_8bpc_max = {
- 	{   6, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 12, 13} },
- 	{ 6.5, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 12, 13} },
- 	{   7, { 3, 4, 5, 6, 7, 7, 7, 8, 9, 9, 10, 10, 11, 11, 12} },
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.
