@@ -2,73 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9865604BA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE97604BDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiJSPgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S232212AbiJSPmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiJSPgK (ORCPT
+        with ESMTP id S231953AbiJSPl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:36:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DAA10535D;
-        Wed, 19 Oct 2022 08:32:06 -0700 (PDT)
+        Wed, 19 Oct 2022 11:41:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8E5658F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:37:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3435A61839;
-        Wed, 19 Oct 2022 15:30:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B23CC433C1;
-        Wed, 19 Oct 2022 15:29:53 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AC4F6CE227D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52B4C433D6;
+        Wed, 19 Oct 2022 15:31:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666193400;
-        bh=xzCE/ict48D7RLDZ+1922a0XNtUN1g7ugQy5IbJ7sSA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gnwNz9Ti3cWDaYwUr4mi3nyM+RLRpF9tjilb+e4d6UzRvZ8WLlgNx6/I9zgRWQ/6r
-         kVEFA3pwPkjfrqCeza7yJFYDABVJc7efEr05AyOke37cxSGUfjU4U19c6m+YxMUeoP
-         g02j5dMNDaJYbyqufJtbIi4Wpy4dewNXxiKOXGo+NnzgmgPaVcg1kv8nZP1qFcRcbj
-         1/wP/IsJ8PuLOwNzH+SuP7hyQSI0o4gMY747a7aw/BiRMkLkgSRnR2Wqty3k4hmRTT
-         TQkCtxv09OgdzgFwFUopzjUTBuSqy9sp6cBClaPY6yr96ehHMpPp6mhsN0xQ2DHhzQ
-         IgguWvjF/kBCw==
+        s=k20201202; t=1666193487;
+        bh=m7AhYtXKBjqpTvXV3JTWNIeYuM5PqPowIgBf1xYMH0w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NNg5vooKw7gpjAgoAooU8WEnGCqRU0+oxvZ9O3y3FcAjSt3WGPxgcZY6mQJy5uFi1
+         hvKQrNbi6dDGuuzTd77Nt7jsFd+H+K3H8lMVaYVSdwU67HpNNxZkfqlODA7tLOVn30
+         wmCsyH7qzB9R9oK6h9WoD2i7qqCCpygOHoE1muTpBH/tw1Y7gnlFOuhQJi1djGlAN6
+         O64YEaeTKmWXvNtktPZEE+OYV2MtZa7UQ/5/Z+7Hr0+i/byD1DeKMiIpDaeGz9pk/t
+         gawbfcqPB0ai1EUkN3yVt72lrORBMeFQH27c2pLphFyz8jRALAqHcEVw1hvcZ/JWod
+         p9G3O0ilrqwcg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
         linux-arm-kernel@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        David Lechner <david@lechnology.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 00/14] ARM: remove unused davinci board & drivers
-Date:   Wed, 19 Oct 2022 17:29:26 +0200
-Message-Id: <20221019152947.3857217-1-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 01/14] ARM: davinci: remove unused board support
+Date:   Wed, 19 Oct 2022 17:29:27 +0200
+Message-Id: <20221019152947.3857217-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
+References: <20221019152947.3857217-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -82,178 +56,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-As part of removing all board files that were previously marked as unused,
-I looked through the davinci platform and recursively removed everything
-that has now become unused.
+All Kconfig entries marked as "depends on UNUSED_BOARD_FILES"
+and their direct dependencies are removed here as planned.
 
-In particular, this is for all dm3xx support, in addition to the dm64xx
-support removed previously. The remaining support is now for da8xx using
-devicetree only, which means a lot of the da8xx specific device support
-can also go away.
-
-As with the previous series, I can keep patches together in the
-soc tree, or subsystem maintainers can pick them up individually
-through their subsystems, whichever they prefer.
-
-Arnd Bergmann (14):
-  ARM: davinci: remove unused board support
-  ARM: davinci: drop DAVINCI_DMxxx references
-  ARM: davinci: clean up platform support
-  clk: remove davinci dm3xx drivers
-  usb: musb: remove unused davinci support
-  mfd: remove dm355evm_msp driver
-  input: remove davinci keyboard driver
-  rtc: remove davinci rtc driver
-  ASoC: remove unused davinci support
-  mfd: remove davinci voicecodec driver
-  pata: remove palmchip bk3710 driver
-  irqchip: remove davinci aintc driver
-  staging: media: remove davinci vpfe_capture driver
-  media: davinci: remove vpbe support
-
-Cc: Sekhar Nori <nsekhar@ti.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: David Lechner <david@lechnology.com>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc: Lee Jones <lee@kernel.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bin Liu <b-liu@ti.com>
-Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Yang Yingliang <yangyingliang@huawei.com>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-ide@vger.kernel.org
-Cc: linux-clk@vger.kernel.org
-Cc: linux-input@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-staging@lists.linux.dev
-Cc: linux-usb@vger.kernel.org
-Cc: alsa-devel@alsa-project.org
-
- .../admin-guide/media/davinci-vpbe.rst        |   65 -
- .../admin-guide/media/platform-cardlist.rst   |    1 -
- .../admin-guide/media/v4l-drivers.rst         |    1 -
- .../media/drivers/davinci-vpbe-devel.rst      |   39 -
- .../driver-api/media/drivers/index.rst        |    1 -
- MAINTAINERS                                   |    1 -
- arch/arm/Kconfig.debug                        |   16 +-
- arch/arm/mach-davinci/Kconfig                 |  142 --
- arch/arm/mach-davinci/Makefile                |   18 +-
- arch/arm/mach-davinci/board-da830-evm.c       |  690 ------
- arch/arm/mach-davinci/board-da850-evm.c       | 1550 --------------
- arch/arm/mach-davinci/board-dm355-evm.c       |  444 ----
- arch/arm/mach-davinci/board-dm355-leopard.c   |  278 ---
- arch/arm/mach-davinci/board-dm365-evm.c       |  855 --------
- arch/arm/mach-davinci/board-mityomapl138.c    |  638 ------
- arch/arm/mach-davinci/board-omapl138-hawk.c   |  451 ----
- arch/arm/mach-davinci/common.h                |    7 +-
- arch/arm/mach-davinci/cputype.h               |   53 -
- arch/arm/mach-davinci/da830.c                 |  274 ---
- arch/arm/mach-davinci/da850.c                 |  400 +---
- arch/arm/mach-davinci/da8xx.h                 |   95 +-
- arch/arm/mach-davinci/davinci.h               |  136 --
- arch/arm/mach-davinci/devices-da8xx.c         | 1094 ----------
- arch/arm/mach-davinci/devices.c               |  303 ---
- arch/arm/mach-davinci/dm355.c                 |  832 -------
- arch/arm/mach-davinci/dm365.c                 | 1094 ----------
- arch/arm/mach-davinci/mux.c                   |   15 -
- arch/arm/mach-davinci/serial.c                |   92 -
- arch/arm/mach-davinci/serial.h                |   15 -
- arch/arm/mach-davinci/usb-da8xx.c             |  146 --
- arch/arm/mach-davinci/usb.c                   |   87 -
- drivers/ata/Kconfig                           |   10 -
- drivers/ata/Makefile                          |    1 -
- drivers/ata/pata_bk3710.c                     |  380 ----
- drivers/clk/davinci/Makefile                  |    4 -
- drivers/clk/davinci/pll-dm355.c               |   77 -
- drivers/clk/davinci/pll-dm365.c               |  146 --
- drivers/clk/davinci/pll.c                     |    8 -
- drivers/clk/davinci/pll.h                     |    5 -
- drivers/clk/davinci/psc-dm355.c               |   89 -
- drivers/clk/davinci/psc-dm365.c               |  111 -
- drivers/clk/davinci/psc.c                     |    6 -
- drivers/clk/davinci/psc.h                     |    7 -
- drivers/input/keyboard/Kconfig                |   10 -
- drivers/input/keyboard/Makefile               |    1 -
- drivers/input/keyboard/davinci_keyscan.c      |  315 ---
- drivers/input/misc/Kconfig                    |   11 -
- drivers/input/misc/Makefile                   |    1 -
- drivers/input/misc/dm355evm_keys.c            |  238 ---
- drivers/irqchip/Kconfig                       |    5 -
- drivers/irqchip/Makefile                      |    1 -
- drivers/irqchip/irq-davinci-aintc.c           |  163 --
- drivers/media/platform/ti/davinci/Kconfig     |   16 -
- drivers/media/platform/ti/davinci/Makefile    |    3 -
- drivers/media/platform/ti/davinci/vpbe.c      |  840 --------
- .../media/platform/ti/davinci/vpbe_display.c  | 1510 -------------
- drivers/media/platform/ti/davinci/vpbe_osd.c  | 1582 --------------
- .../media/platform/ti/davinci/vpbe_osd_regs.h |  352 ---
- drivers/media/platform/ti/davinci/vpbe_venc.c |  676 ------
- .../platform/ti/davinci/vpbe_venc_regs.h      |  165 --
- drivers/media/platform/ti/davinci/vpss.c      |  529 -----
- drivers/mfd/Kconfig                           |   13 -
- drivers/mfd/Makefile                          |    3 -
- drivers/mfd/davinci_voicecodec.c              |  136 --
- drivers/mfd/dm355evm_msp.c                    |  454 ----
- drivers/rtc/Kconfig                           |   16 -
- drivers/rtc/Makefile                          |    2 -
- drivers/rtc/rtc-davinci.c                     |  512 -----
- drivers/rtc/rtc-dm355evm.c                    |  151 --
- drivers/staging/media/Kconfig                 |    1 -
- drivers/staging/media/Makefile                |    1 -
- .../media/deprecated/vpfe_capture/Kconfig     |   58 -
- .../media/deprecated/vpfe_capture/Makefile    |    4 -
- .../media/deprecated/vpfe_capture/TODO        |    7 -
- .../deprecated/vpfe_capture/ccdc_hw_device.h  |   80 -
- .../deprecated/vpfe_capture/dm355_ccdc.c      |  934 --------
- .../deprecated/vpfe_capture/dm355_ccdc.h      |  308 ---
- .../deprecated/vpfe_capture/dm355_ccdc_regs.h |  297 ---
- .../deprecated/vpfe_capture/dm644x_ccdc.c     |  879 --------
- .../deprecated/vpfe_capture/dm644x_ccdc.h     |  171 --
- .../vpfe_capture/dm644x_ccdc_regs.h           |  140 --
- .../media/deprecated/vpfe_capture/isif.c      | 1127 ----------
- .../media/deprecated/vpfe_capture/isif.h      |  518 -----
- .../media/deprecated/vpfe_capture/isif_regs.h |  256 ---
- .../deprecated/vpfe_capture/vpfe_capture.c    | 1902 -----------------
- drivers/usb/musb/Kconfig                      |   12 -
- drivers/usb/musb/Makefile                     |    2 -
- drivers/usb/musb/cppi_dma.c                   | 1547 --------------
- drivers/usb/musb/davinci.c                    |  606 ------
- drivers/usb/musb/davinci.h                    |  103 -
- include/linux/clk/davinci.h                   |    9 -
- include/linux/mfd/dm355evm_msp.h              |   79 -
- include/media/davinci/vpbe.h                  |  184 --
- include/media/davinci/vpbe_display.h          |  122 --
- include/media/davinci/vpbe_osd.h              |  382 ----
- include/media/davinci/vpbe_types.h            |   74 -
- include/media/davinci/vpbe_venc.h             |   37 -
- include/media/davinci/vpfe_capture.h          |  177 --
- include/media/davinci/vpss.h                  |  111 -
- sound/soc/ti/Kconfig                          |   40 -
- sound/soc/ti/Makefile                         |    2 -
- sound/soc/ti/davinci-evm.c                    |  267 +--
- sound/soc/ti/davinci-vcif.c                   |  247 ---
- 103 files changed, 17 insertions(+), 29049 deletions(-)
- delete mode 100644 Documentation/admin-guide/media/davinci-vpbe.rst
- delete mode 100644 Documentation/driver-api/media/drivers/davinci-vpbe-devel.rst
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm/Kconfig.debug                      |   16 +-
+ arch/arm/mach-davinci/Kconfig               |  130 +-
+ arch/arm/mach-davinci/Makefile              |    9 -
+ arch/arm/mach-davinci/board-da830-evm.c     |  690 ---------
+ arch/arm/mach-davinci/board-da850-evm.c     | 1550 -------------------
+ arch/arm/mach-davinci/board-dm355-evm.c     |  444 ------
+ arch/arm/mach-davinci/board-dm355-leopard.c |  278 ----
+ arch/arm/mach-davinci/board-dm365-evm.c     |  855 ----------
+ arch/arm/mach-davinci/board-mityomapl138.c  |  638 --------
+ arch/arm/mach-davinci/board-omapl138-hawk.c |  451 ------
+ arch/arm/mach-davinci/devices.c             |  303 ----
+ arch/arm/mach-davinci/dm355.c               |  832 ----------
+ arch/arm/mach-davinci/dm365.c               | 1094 -------------
+ 13 files changed, 5 insertions(+), 7285 deletions(-)
  delete mode 100644 arch/arm/mach-davinci/board-da830-evm.c
  delete mode 100644 arch/arm/mach-davinci/board-da850-evm.c
  delete mode 100644 arch/arm/mach-davinci/board-dm355-evm.c
@@ -261,59 +82,7444 @@ Cc: alsa-devel@alsa-project.org
  delete mode 100644 arch/arm/mach-davinci/board-dm365-evm.c
  delete mode 100644 arch/arm/mach-davinci/board-mityomapl138.c
  delete mode 100644 arch/arm/mach-davinci/board-omapl138-hawk.c
- delete mode 100644 arch/arm/mach-davinci/davinci.h
  delete mode 100644 arch/arm/mach-davinci/devices.c
  delete mode 100644 arch/arm/mach-davinci/dm355.c
  delete mode 100644 arch/arm/mach-davinci/dm365.c
- delete mode 100644 arch/arm/mach-davinci/serial.c
- delete mode 100644 arch/arm/mach-davinci/usb-da8xx.c
- delete mode 100644 arch/arm/mach-davinci/usb.c
- delete mode 100644 drivers/ata/pata_bk3710.c
- delete mode 100644 drivers/clk/davinci/pll-dm355.c
- delete mode 100644 drivers/clk/davinci/pll-dm365.c
- delete mode 100644 drivers/clk/davinci/psc-dm355.c
- delete mode 100644 drivers/clk/davinci/psc-dm365.c
- delete mode 100644 drivers/input/keyboard/davinci_keyscan.c
- delete mode 100644 drivers/input/misc/dm355evm_keys.c
- delete mode 100644 drivers/irqchip/irq-davinci-aintc.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_display.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_osd.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_osd_regs.h
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_venc.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_venc_regs.h
- delete mode 100644 drivers/media/platform/ti/davinci/vpss.c
- delete mode 100644 drivers/mfd/davinci_voicecodec.c
- delete mode 100644 drivers/mfd/dm355evm_msp.c
- delete mode 100644 drivers/rtc/rtc-davinci.c
- delete mode 100644 drivers/rtc/rtc-dm355evm.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
- delete mode 100644 drivers/usb/musb/cppi_dma.c
- delete mode 100644 drivers/usb/musb/davinci.c
- delete mode 100644 drivers/usb/musb/davinci.h
- delete mode 100644 include/linux/mfd/dm355evm_msp.h
- delete mode 100644 include/media/davinci/vpbe.h
- delete mode 100644 include/media/davinci/vpbe_display.h
- delete mode 100644 include/media/davinci/vpbe_osd.h
- delete mode 100644 include/media/davinci/vpbe_types.h
- delete mode 100644 include/media/davinci/vpbe_venc.h
- delete mode 100644 include/media/davinci/vpfe_capture.h
- delete mode 100644 include/media/davinci/vpss.h
- delete mode 100644 sound/soc/ti/davinci-vcif.c
 
+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+index c03fd448c59e..20312792340d 100644
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -323,14 +323,6 @@ choice
+ 		  Say Y here if you want the debug print routines to direct
+ 		  their output to UART2 serial port on DaVinci DA8XX devices.
+ 
+-	config DEBUG_DAVINCI_DMx_UART0
+-		bool "Kernel low-level debugging on DaVinci DMx using UART0"
+-		depends on ARCH_DAVINCI_DMx
+-		select DEBUG_UART_8250
+-		help
+-		  Say Y here if you want the debug print routines to direct
+-		  their output to UART0 serial port on DaVinci DMx devices.
+-
+ 	config DEBUG_DC21285_PORT
+ 		bool "Kernel low-level debugging messages via footbridge serial port"
+ 		depends on FOOTBRIDGE
+@@ -1590,7 +1582,6 @@ config DEBUG_UART_8250
+ 
+ config DEBUG_UART_PHYS
+ 	hex "Physical base address of debug UART"
+-	default 0x01c20000 if DEBUG_DAVINCI_DMx_UART0
+ 	default 0x01c28000 if DEBUG_SUNXI_UART0
+ 	default 0x01c28400 if DEBUG_SUNXI_UART1
+ 	default 0x01d0c000 if DEBUG_DAVINCI_DA8XX_UART1
+@@ -1810,7 +1801,6 @@ config DEBUG_UART_VIRT
+ 	default 0xfec03000 if DEBUG_SOCFPGA_CYCLONE5_UART1
+ 	default 0xfec12000 if DEBUG_MVEBU_UART0 || DEBUG_MVEBU_UART0_ALTERNATE
+ 	default 0xfec12100 if DEBUG_MVEBU_UART1_ALTERNATE
+-	default 0xfec20000 if DEBUG_DAVINCI_DMx_UART0
+ 	default 0xfec90000 if DEBUG_RK32_UART2
+ 	default 0xfed0c000 if DEBUG_DAVINCI_DA8XX_UART1
+ 	default 0xfed0d000 if DEBUG_DAVINCI_DA8XX_UART2 || DEBUG_SD5203_UART
+@@ -1854,9 +1844,9 @@ config DEBUG_UART_8250_WORD
+ 	default y if DEBUG_SOCFPGA_UART0 || DEBUG_SOCFPGA_ARRIA10_UART1 || \
+ 		DEBUG_SOCFPGA_CYCLONE5_UART1 || DEBUG_KEYSTONE_UART0 || \
+ 		DEBUG_KEYSTONE_UART1 || DEBUG_ALPINE_UART0 || \
+-		DEBUG_DAVINCI_DMx_UART0 || DEBUG_DAVINCI_DA8XX_UART1 || \
+-		DEBUG_DAVINCI_DA8XX_UART2 || DEBUG_BCM_IPROC_UART3 || \
+-		DEBUG_BCM_KONA_UART || DEBUG_RK32_UART2
++		DEBUG_DAVINCI_DA8XX_UART1 || DEBUG_DAVINCI_DA8XX_UART2 || \
++		DEBUG_BCM_IPROC_UART3 || DEBUG_BCM_KONA_UART || \
++		DEBUG_RK32_UART2
+ 
+ config DEBUG_UART_8250_PALMCHIP
+ 	bool "8250 UART is Palmchip BK-310x"
+diff --git a/arch/arm/mach-davinci/Kconfig b/arch/arm/mach-davinci/Kconfig
+index c8cbd9a30791..588213583051 100644
+--- a/arch/arm/mach-davinci/Kconfig
++++ b/arch/arm/mach-davinci/Kconfig
+@@ -14,20 +14,11 @@ menuconfig ARCH_DAVINCI
+ 
+ if ARCH_DAVINCI
+ 
+-config ARCH_DAVINCI_DMx
+-	bool
+-
+ comment "DaVinci Core Type"
+ 
+-config ARCH_DAVINCI_DM355
+-	bool "DaVinci 355 based system"
+-	depends on ATAGS && UNUSED_BOARD_FILES
+-	select DAVINCI_AINTC
+-	select ARCH_DAVINCI_DMx
+-
+ config ARCH_DAVINCI_DA830
+ 	bool "DA830/OMAP-L137/AM17x based system"
+-	depends on !ARCH_DAVINCI_DMx || (AUTO_ZRELADDR && ARM_PATCH_PHYS_VIRT)
++	depends on AUTO_ZRELADDR && ARM_PATCH_PHYS_VIRT
+ 	depends on ATAGS
+ 	select ARCH_DAVINCI_DA8XX
+ 	# needed on silicon revs 1.0, 1.1:
+@@ -36,7 +27,7 @@ config ARCH_DAVINCI_DA830
+ 
+ config ARCH_DAVINCI_DA850
+ 	bool "DA850/OMAP-L138/AM18x based system"
+-	depends on !ARCH_DAVINCI_DMx || (AUTO_ZRELADDR && ARM_PATCH_PHYS_VIRT)
++	depends on AUTO_ZRELADDR && ARM_PATCH_PHYS_VIRT
+ 	depends on ATAGS
+ 	select ARCH_DAVINCI_DA8XX
+ 	select DAVINCI_CP_INTC
+@@ -44,12 +35,6 @@ config ARCH_DAVINCI_DA850
+ config ARCH_DAVINCI_DA8XX
+ 	bool
+ 
+-config ARCH_DAVINCI_DM365
+-	bool "DaVinci 365 based system"
+-	depends on ATAGS && UNUSED_BOARD_FILES
+-	select DAVINCI_AINTC
+-	select ARCH_DAVINCI_DMx
+-
+ comment "DaVinci Board Type"
+ 
+ config MACH_DA8XX_DT
+@@ -61,117 +46,6 @@ config MACH_DA8XX_DT
+ 	  Say y here to include support for TI DaVinci DA850 based using
+ 	  Flattened Device Tree. More information at Documentation/devicetree
+ 
+-config MACH_DAVINCI_DM355_EVM
+-	bool "TI DM355 EVM"
+-	default ARCH_DAVINCI_DM355
+-	depends on ARCH_DAVINCI_DM355
+-	help
+-	  Configure this option to specify the whether the board used
+-	  for development is a DM355 EVM
+-
+-config MACH_DM355_LEOPARD
+-	bool "DM355 Leopard board"
+-	depends on ARCH_DAVINCI_DM355
+-	help
+-	  Configure this option to specify the whether the board used
+-	  for development is a DM355 Leopard board.
+-
+-config MACH_DAVINCI_DM365_EVM
+-	bool "TI DM365 EVM"
+-	default ARCH_DAVINCI_DM365
+-	depends on ARCH_DAVINCI_DM365
+-	help
+-	  Configure this option to specify whether the board used
+-	  for development is a DM365 EVM
+-
+-config MACH_DAVINCI_DA830_EVM
+-	bool "TI DA830/OMAP-L137/AM17x Reference Platform"
+-	default ARCH_DAVINCI_DA830
+-	depends on ATAGS && UNUSED_BOARD_FILES
+-	depends on ARCH_DAVINCI_DA830
+-	select GPIO_PCF857X if I2C
+-	help
+-	  Say Y here to select the TI DA830/OMAP-L137/AM17x Evaluation Module.
+-
+-choice
+-	prompt "Select DA830/OMAP-L137/AM17x UI board peripheral"
+-	depends on MACH_DAVINCI_DA830_EVM
+-	help
+-	  The presence of UI card on the DA830/OMAP-L137/AM17x EVM is
+-	  detected automatically based on successful probe of the I2C
+-	  based GPIO expander on that board. This option selected in this
+-	  menu has an effect only in case of a successful UI card detection.
+-
+-config DA830_UI_LCD
+-	bool "LCD"
+-	help
+-	  Say Y here to use the LCD as a framebuffer or simple character
+-	  display.
+-
+-config DA830_UI_NAND
+-	bool "NAND flash"
+-	help
+-	  Say Y here to use the NAND flash. Do not forget to setup
+-	  the switch correctly.
+-endchoice
+-
+-config MACH_DAVINCI_DA850_EVM
+-	bool "TI DA850/OMAP-L138/AM18x Reference Platform"
+-	depends on ATAGS && UNUSED_BOARD_FILES
+-	default ARCH_DAVINCI_DA850
+-	depends on ARCH_DAVINCI_DA850
+-	help
+-	  Say Y here to select the TI DA850/OMAP-L138/AM18x Evaluation Module.
+-
+-choice
+-	prompt "Select peripherals connected to expander on UI board"
+-	depends on MACH_DAVINCI_DA850_EVM
+-	help
+-	  The presence of User Interface (UI) card on the DA850/OMAP-L138/AM18x
+-	  EVM is detected automatically based on successful probe of the I2C
+-	  based GPIO expander on that card. This option selected in this
+-	  menu has an effect only in case of a successful UI card detection.
+-
+-config DA850_UI_NONE
+-	bool "No peripheral is enabled"
+-	help
+-	  Say Y if you do not want to enable any of the peripherals connected
+-	  to TCA6416 expander on DA850/OMAP-L138/AM18x EVM UI card
+-
+-config DA850_UI_RMII
+-	bool "RMII Ethernet PHY"
+-	help
+-	  Say Y if you want to use the RMII PHY on the DA850/OMAP-L138/AM18x
+-	  EVM. This PHY is found on the UI daughter card that is supplied with
+-	  the EVM.
+-	  NOTE: Please take care while choosing this option, MII PHY will
+-	  not be functional if RMII mode is selected.
+-
+-config DA850_UI_SD_VIDEO_PORT
+-	bool "Video Port Interface"
+-	help
+-	  Say Y if you want to use Video Port Interface (VPIF) on the
+-	  DA850/OMAP-L138 EVM. The Video decoders/encoders are found on the
+-	  UI daughter card that is supplied with the EVM.
+-
+-endchoice
+-
+-config MACH_MITYOMAPL138
+-	bool "Critical Link MityDSP-L138/MityARM-1808 SoM"
+-	depends on ARCH_DAVINCI_DA850
+-	depends on ATAGS && UNUSED_BOARD_FILES
+-	help
+-	  Say Y here to select the Critical Link MityDSP-L138/MityARM-1808
+-	  System on Module.  Information on this SoM may be found at
+-	  https://www.mitydsp.com
+-
+-config MACH_OMAPL138_HAWKBOARD
+-	bool "TI AM1808 / OMAPL-138 Hawkboard platform"
+-	depends on ARCH_DAVINCI_DA850
+-	depends on ATAGS && UNUSED_BOARD_FILES
+-	help
+-	  Say Y here to select the TI AM1808 / OMAPL-138 Hawkboard platform .
+-
+ config DAVINCI_MUX
+ 	bool "DAVINCI multiplexing support"
+ 	depends on ARCH_DAVINCI
+diff --git a/arch/arm/mach-davinci/Makefile b/arch/arm/mach-davinci/Makefile
+index 3f4894aa7528..5b15a3bbf909 100644
+--- a/arch/arm/mach-davinci/Makefile
++++ b/arch/arm/mach-davinci/Makefile
+@@ -10,20 +10,11 @@ obj-y 					:= serial.o usb.o common.o sram.o
+ obj-$(CONFIG_DAVINCI_MUX)		+= mux.o
+ 
+ # Chip specific
+-obj-$(CONFIG_ARCH_DAVINCI_DM355)        += dm355.o devices.o
+-obj-$(CONFIG_ARCH_DAVINCI_DM365)	+= dm365.o devices.o
+ obj-$(CONFIG_ARCH_DAVINCI_DA830)	+= da830.o devices-da8xx.o usb-da8xx.o
+ obj-$(CONFIG_ARCH_DAVINCI_DA850)	+= da850.o devices-da8xx.o usb-da8xx.o
+ 
+ # Board specific
+ obj-$(CONFIG_MACH_DA8XX_DT)		+= da8xx-dt.o pdata-quirks.o
+-obj-$(CONFIG_MACH_DAVINCI_DM355_EVM)	+= board-dm355-evm.o
+-obj-$(CONFIG_MACH_DM355_LEOPARD)	+= board-dm355-leopard.o
+-obj-$(CONFIG_MACH_DAVINCI_DM365_EVM)	+= board-dm365-evm.o
+-obj-$(CONFIG_MACH_DAVINCI_DA830_EVM)	+= board-da830-evm.o
+-obj-$(CONFIG_MACH_DAVINCI_DA850_EVM)	+= board-da850-evm.o
+-obj-$(CONFIG_MACH_MITYOMAPL138)		+= board-mityomapl138.o
+-obj-$(CONFIG_MACH_OMAPL138_HAWKBOARD)	+= board-omapl138-hawk.o
+ 
+ # Power Management
+ obj-$(CONFIG_CPU_IDLE)			+= cpuidle.o
+diff --git a/arch/arm/mach-davinci/board-da830-evm.c b/arch/arm/mach-davinci/board-da830-evm.c
+deleted file mode 100644
+index 6299e5c8f4ea..000000000000
+--- a/arch/arm/mach-davinci/board-da830-evm.c
++++ /dev/null
+@@ -1,690 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * TI DA830/OMAP L137 EVM board
+- *
+- * Author: Mark A. Greer <mgreer@mvista.com>
+- * Derived from: arch/arm/mach-davinci/board-dm644x-evm.c
+- *
+- * 2007, 2009 (c) MontaVista Software, Inc.
+- */
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/console.h>
+-#include <linux/interrupt.h>
+-#include <linux/gpio.h>
+-#include <linux/gpio/machine.h>
+-#include <linux/platform_device.h>
+-#include <linux/i2c.h>
+-#include <linux/platform_data/pcf857x.h>
+-#include <linux/property.h>
+-#include <linux/mtd/mtd.h>
+-#include <linux/mtd/partitions.h>
+-#include <linux/spi/spi.h>
+-#include <linux/spi/flash.h>
+-#include <linux/platform_data/gpio-davinci.h>
+-#include <linux/platform_data/mtd-davinci.h>
+-#include <linux/platform_data/mtd-davinci-aemif.h>
+-#include <linux/platform_data/spi-davinci.h>
+-#include <linux/platform_data/usb-davinci.h>
+-#include <linux/platform_data/ti-aemif.h>
+-#include <linux/regulator/fixed.h>
+-#include <linux/regulator/machine.h>
+-#include <linux/nvmem-provider.h>
+-
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-
+-#include "common.h"
+-#include "mux.h"
+-#include "da8xx.h"
+-#include "irqs.h"
+-
+-#define DA830_EVM_PHY_ID		""
+-/*
+- * USB1 VBUS is controlled by GPIO1[15], over-current is reported on GPIO2[4].
+- */
+-#define ON_BD_USB_DRV	GPIO_TO_PIN(1, 15)
+-#define ON_BD_USB_OVC	GPIO_TO_PIN(2, 4)
+-
+-static const short da830_evm_usb11_pins[] = {
+-	DA830_GPIO1_15, DA830_GPIO2_4,
+-	-1
+-};
+-
+-static struct regulator_consumer_supply da830_evm_usb_supplies[] = {
+-	REGULATOR_SUPPLY("vbus", NULL),
+-};
+-
+-static struct regulator_init_data da830_evm_usb_vbus_data = {
+-	.consumer_supplies	= da830_evm_usb_supplies,
+-	.num_consumer_supplies	= ARRAY_SIZE(da830_evm_usb_supplies),
+-	.constraints    = {
+-		.valid_ops_mask = REGULATOR_CHANGE_STATUS,
+-	},
+-};
+-
+-static struct fixed_voltage_config da830_evm_usb_vbus = {
+-	.supply_name		= "vbus",
+-	.microvolts		= 33000000,
+-	.init_data		= &da830_evm_usb_vbus_data,
+-};
+-
+-static struct platform_device da830_evm_usb_vbus_device = {
+-	.name		= "reg-fixed-voltage",
+-	.id		= 0,
+-	.dev		= {
+-		.platform_data = &da830_evm_usb_vbus,
+-	},
+-};
+-
+-static struct gpiod_lookup_table da830_evm_usb_oc_gpio_lookup = {
+-	.dev_id		= "ohci-da8xx",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", ON_BD_USB_OVC, "oc", 0),
+-		{ }
+-	},
+-};
+-
+-static struct gpiod_lookup_table da830_evm_usb_vbus_gpio_lookup = {
+-	.dev_id		= "reg-fixed-voltage.0",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", ON_BD_USB_DRV, NULL, 0),
+-		{ }
+-	},
+-};
+-
+-static struct gpiod_lookup_table *da830_evm_usb_gpio_lookups[] = {
+-	&da830_evm_usb_oc_gpio_lookup,
+-	&da830_evm_usb_vbus_gpio_lookup,
+-};
+-
+-static struct da8xx_ohci_root_hub da830_evm_usb11_pdata = {
+-	/* TPS2065 switch @ 5V */
+-	.potpgt		= (3 + 1) / 2,	/* 3 ms max */
+-};
+-
+-static __init void da830_evm_usb_init(void)
+-{
+-	int ret;
+-
+-	ret = da8xx_register_usb_phy_clocks();
+-	if (ret)
+-		pr_warn("%s: USB PHY CLK registration failed: %d\n",
+-			__func__, ret);
+-
+-	gpiod_add_lookup_tables(da830_evm_usb_gpio_lookups,
+-				ARRAY_SIZE(da830_evm_usb_gpio_lookups));
+-
+-	ret = da8xx_register_usb_phy();
+-	if (ret)
+-		pr_warn("%s: USB PHY registration failed: %d\n",
+-			__func__, ret);
+-
+-	ret = davinci_cfg_reg(DA830_USB0_DRVVBUS);
+-	if (ret)
+-		pr_warn("%s: USB 2.0 PinMux setup failed: %d\n", __func__, ret);
+-	else {
+-		/*
+-		 * TPS2065 switch @ 5V supplies 1 A (sustains 1.5 A),
+-		 * with the power on to power good time of 3 ms.
+-		 */
+-		ret = da8xx_register_usb20(1000, 3);
+-		if (ret)
+-			pr_warn("%s: USB 2.0 registration failed: %d\n",
+-				__func__, ret);
+-	}
+-
+-	ret = davinci_cfg_reg_list(da830_evm_usb11_pins);
+-	if (ret) {
+-		pr_warn("%s: USB 1.1 PinMux setup failed: %d\n", __func__, ret);
+-		return;
+-	}
+-
+-	ret = platform_device_register(&da830_evm_usb_vbus_device);
+-	if (ret) {
+-		pr_warn("%s: Unable to register the vbus supply\n", __func__);
+-		return;
+-	}
+-
+-	ret = da8xx_register_usb11(&da830_evm_usb11_pdata);
+-	if (ret)
+-		pr_warn("%s: USB 1.1 registration failed: %d\n", __func__, ret);
+-}
+-
+-static const short da830_evm_mcasp1_pins[] = {
+-	DA830_AHCLKX1, DA830_ACLKX1, DA830_AFSX1, DA830_AHCLKR1, DA830_AFSR1,
+-	DA830_AMUTE1, DA830_AXR1_0, DA830_AXR1_1, DA830_AXR1_2, DA830_AXR1_5,
+-	DA830_ACLKR1, DA830_AXR1_6, DA830_AXR1_7, DA830_AXR1_8, DA830_AXR1_10,
+-	DA830_AXR1_11,
+-	-1
+-};
+-
+-static u8 da830_iis_serializer_direction[] = {
+-	RX_MODE,	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,
+-	INACTIVE_MODE,	TX_MODE,	INACTIVE_MODE,	INACTIVE_MODE,
+-	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,
+-};
+-
+-static struct snd_platform_data da830_evm_snd_data = {
+-	.tx_dma_offset  = 0x2000,
+-	.rx_dma_offset  = 0x2000,
+-	.op_mode        = DAVINCI_MCASP_IIS_MODE,
+-	.num_serializer = ARRAY_SIZE(da830_iis_serializer_direction),
+-	.tdm_slots      = 2,
+-	.serial_dir     = da830_iis_serializer_direction,
+-	.asp_chan_q     = EVENTQ_0,
+-	.version	= MCASP_VERSION_2,
+-	.txnumevt	= 1,
+-	.rxnumevt	= 1,
+-};
+-
+-/*
+- * GPIO2[1] is used as MMC_SD_WP and GPIO2[2] as MMC_SD_INS.
+- */
+-static const short da830_evm_mmc_sd_pins[] = {
+-	DA830_MMCSD_DAT_0, DA830_MMCSD_DAT_1, DA830_MMCSD_DAT_2,
+-	DA830_MMCSD_DAT_3, DA830_MMCSD_DAT_4, DA830_MMCSD_DAT_5,
+-	DA830_MMCSD_DAT_6, DA830_MMCSD_DAT_7, DA830_MMCSD_CLK,
+-	DA830_MMCSD_CMD,   DA830_GPIO2_1,     DA830_GPIO2_2,
+-	-1
+-};
+-
+-#define DA830_MMCSD_WP_PIN		GPIO_TO_PIN(2, 1)
+-#define DA830_MMCSD_CD_PIN		GPIO_TO_PIN(2, 2)
+-
+-static struct gpiod_lookup_table mmc_gpios_table = {
+-	.dev_id = "da830-mmc.0",
+-	.table = {
+-		/* gpio chip 1 contains gpio range 32-63 */
+-		GPIO_LOOKUP("davinci_gpio", DA830_MMCSD_CD_PIN, "cd",
+-			    GPIO_ACTIVE_LOW),
+-		GPIO_LOOKUP("davinci_gpio", DA830_MMCSD_WP_PIN, "wp",
+-			    GPIO_ACTIVE_LOW),
+-		{ }
+-	},
+-};
+-
+-static struct davinci_mmc_config da830_evm_mmc_config = {
+-	.wires			= 8,
+-	.max_freq		= 50000000,
+-	.caps			= MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED,
+-};
+-
+-static inline void da830_evm_init_mmc(void)
+-{
+-	int ret;
+-
+-	ret = davinci_cfg_reg_list(da830_evm_mmc_sd_pins);
+-	if (ret) {
+-		pr_warn("%s: mmc/sd mux setup failed: %d\n", __func__, ret);
+-		return;
+-	}
+-
+-	gpiod_add_lookup_table(&mmc_gpios_table);
+-
+-	ret = da8xx_register_mmcsd0(&da830_evm_mmc_config);
+-	if (ret) {
+-		pr_warn("%s: mmc/sd registration failed: %d\n", __func__, ret);
+-		gpiod_remove_lookup_table(&mmc_gpios_table);
+-	}
+-}
+-
+-#define HAS_MMC		IS_ENABLED(CONFIG_MMC_DAVINCI)
+-
+-#ifdef CONFIG_DA830_UI_NAND
+-static struct mtd_partition da830_evm_nand_partitions[] = {
+-	/* bootloader (U-Boot, etc) in first sector */
+-	[0] = {
+-		.name		= "bootloader",
+-		.offset		= 0,
+-		.size		= SZ_128K,
+-		.mask_flags	= MTD_WRITEABLE,	/* force read-only */
+-	},
+-	/* bootloader params in the next sector */
+-	[1] = {
+-		.name		= "params",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_128K,
+-		.mask_flags	= MTD_WRITEABLE,	/* force read-only */
+-	},
+-	/* kernel */
+-	[2] = {
+-		.name		= "kernel",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_2M,
+-		.mask_flags	= 0,
+-	},
+-	/* file system */
+-	[3] = {
+-		.name		= "filesystem",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-		.mask_flags	= 0,
+-	}
+-};
+-
+-/* flash bbt descriptors */
+-static uint8_t da830_evm_nand_bbt_pattern[] = { 'B', 'b', 't', '0' };
+-static uint8_t da830_evm_nand_mirror_pattern[] = { '1', 't', 'b', 'B' };
+-
+-static struct nand_bbt_descr da830_evm_nand_bbt_main_descr = {
+-	.options	= NAND_BBT_LASTBLOCK | NAND_BBT_CREATE |
+-			  NAND_BBT_WRITE | NAND_BBT_2BIT |
+-			  NAND_BBT_VERSION | NAND_BBT_PERCHIP,
+-	.offs		= 2,
+-	.len		= 4,
+-	.veroffs	= 16,
+-	.maxblocks	= 4,
+-	.pattern	= da830_evm_nand_bbt_pattern
+-};
+-
+-static struct nand_bbt_descr da830_evm_nand_bbt_mirror_descr = {
+-	.options	= NAND_BBT_LASTBLOCK | NAND_BBT_CREATE |
+-			  NAND_BBT_WRITE | NAND_BBT_2BIT |
+-			  NAND_BBT_VERSION | NAND_BBT_PERCHIP,
+-	.offs		= 2,
+-	.len		= 4,
+-	.veroffs	= 16,
+-	.maxblocks	= 4,
+-	.pattern	= da830_evm_nand_mirror_pattern
+-};
+-
+-static struct davinci_aemif_timing da830_evm_nandflash_timing = {
+-	.wsetup         = 24,
+-	.wstrobe        = 21,
+-	.whold          = 14,
+-	.rsetup         = 19,
+-	.rstrobe        = 50,
+-	.rhold          = 0,
+-	.ta             = 20,
+-};
+-
+-static struct davinci_nand_pdata da830_evm_nand_pdata = {
+-	.core_chipsel	= 1,
+-	.parts		= da830_evm_nand_partitions,
+-	.nr_parts	= ARRAY_SIZE(da830_evm_nand_partitions),
+-	.engine_type	= NAND_ECC_ENGINE_TYPE_ON_HOST,
+-	.ecc_bits	= 4,
+-	.bbt_options	= NAND_BBT_USE_FLASH,
+-	.bbt_td		= &da830_evm_nand_bbt_main_descr,
+-	.bbt_md		= &da830_evm_nand_bbt_mirror_descr,
+-	.timing         = &da830_evm_nandflash_timing,
+-};
+-
+-static struct resource da830_evm_nand_resources[] = {
+-	[0] = {		/* First memory resource is NAND I/O window */
+-		.start	= DA8XX_AEMIF_CS3_BASE,
+-		.end	= DA8XX_AEMIF_CS3_BASE + PAGE_SIZE - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {		/* Second memory resource is AEMIF control registers */
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device da830_evm_aemif_devices[] = {
+-	{
+-		.name		= "davinci_nand",
+-		.id		= 1,
+-		.dev		= {
+-			.platform_data	= &da830_evm_nand_pdata,
+-		},
+-		.num_resources	= ARRAY_SIZE(da830_evm_nand_resources),
+-		.resource	= da830_evm_nand_resources,
+-	},
+-};
+-
+-static struct resource da830_evm_aemif_resource[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct aemif_abus_data da830_evm_aemif_abus_data[] = {
+-	{
+-		.cs	= 3,
+-	},
+-};
+-
+-static struct aemif_platform_data da830_evm_aemif_pdata = {
+-	.abus_data		= da830_evm_aemif_abus_data,
+-	.num_abus_data		= ARRAY_SIZE(da830_evm_aemif_abus_data),
+-	.sub_devices		= da830_evm_aemif_devices,
+-	.num_sub_devices	= ARRAY_SIZE(da830_evm_aemif_devices),
+-	.cs_offset		= 2,
+-};
+-
+-static struct platform_device da830_evm_aemif_device = {
+-	.name		= "ti-aemif",
+-	.id		= -1,
+-	.dev = {
+-		.platform_data = &da830_evm_aemif_pdata,
+-	},
+-	.resource	= da830_evm_aemif_resource,
+-	.num_resources	= ARRAY_SIZE(da830_evm_aemif_resource),
+-};
+-
+-/*
+- * UI board NAND/NOR flashes only use 8-bit data bus.
+- */
+-static const short da830_evm_emif25_pins[] = {
+-	DA830_EMA_D_0, DA830_EMA_D_1, DA830_EMA_D_2, DA830_EMA_D_3,
+-	DA830_EMA_D_4, DA830_EMA_D_5, DA830_EMA_D_6, DA830_EMA_D_7,
+-	DA830_EMA_A_0, DA830_EMA_A_1, DA830_EMA_A_2, DA830_EMA_A_3,
+-	DA830_EMA_A_4, DA830_EMA_A_5, DA830_EMA_A_6, DA830_EMA_A_7,
+-	DA830_EMA_A_8, DA830_EMA_A_9, DA830_EMA_A_10, DA830_EMA_A_11,
+-	DA830_EMA_A_12, DA830_EMA_BA_0, DA830_EMA_BA_1, DA830_NEMA_WE,
+-	DA830_NEMA_CS_2, DA830_NEMA_CS_3, DA830_NEMA_OE, DA830_EMA_WAIT_0,
+-	-1
+-};
+-
+-static inline void da830_evm_init_nand(int mux_mode)
+-{
+-	int ret;
+-
+-	if (HAS_MMC) {
+-		pr_warn("WARNING: both MMC/SD and NAND are enabled, but they share AEMIF pins\n"
+-			"\tDisable MMC/SD for NAND support\n");
+-		return;
+-	}
+-
+-	ret = davinci_cfg_reg_list(da830_evm_emif25_pins);
+-	if (ret)
+-		pr_warn("%s: emif25 mux setup failed: %d\n", __func__, ret);
+-
+-	ret = platform_device_register(&da830_evm_aemif_device);
+-	if (ret)
+-		pr_warn("%s: AEMIF device not registered\n", __func__);
+-
+-	gpio_direction_output(mux_mode, 1);
+-}
+-#else
+-static inline void da830_evm_init_nand(int mux_mode) { }
+-#endif
+-
+-#ifdef CONFIG_DA830_UI_LCD
+-static inline void da830_evm_init_lcdc(int mux_mode)
+-{
+-	int ret;
+-
+-	ret = davinci_cfg_reg_list(da830_lcdcntl_pins);
+-	if (ret)
+-		pr_warn("%s: lcdcntl mux setup failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_lcdc(&sharp_lcd035q3dg01_pdata);
+-	if (ret)
+-		pr_warn("%s: lcd setup failed: %d\n", __func__, ret);
+-
+-	gpio_direction_output(mux_mode, 0);
+-}
+-#else
+-static inline void da830_evm_init_lcdc(int mux_mode) { }
+-#endif
+-
+-static struct nvmem_cell_info da830_evm_nvmem_cells[] = {
+-	{
+-		.name		= "macaddr",
+-		.offset		= 0x7f00,
+-		.bytes		= ETH_ALEN,
+-	}
+-};
+-
+-static struct nvmem_cell_table da830_evm_nvmem_cell_table = {
+-	.nvmem_name	= "1-00500",
+-	.cells		= da830_evm_nvmem_cells,
+-	.ncells		= ARRAY_SIZE(da830_evm_nvmem_cells),
+-};
+-
+-static struct nvmem_cell_lookup da830_evm_nvmem_cell_lookup = {
+-	.nvmem_name	= "1-00500",
+-	.cell_name	= "macaddr",
+-	.dev_id		= "davinci_emac.1",
+-	.con_id		= "mac-address",
+-};
+-
+-static const struct property_entry da830_evm_i2c_eeprom_properties[] = {
+-	PROPERTY_ENTRY_U32("pagesize", 64),
+-	{ }
+-};
+-
+-static const struct software_node da830_evm_i2c_eeprom_node = {
+-	.properties = da830_evm_i2c_eeprom_properties,
+-};
+-
+-static int __init da830_evm_ui_expander_setup(struct i2c_client *client,
+-		int gpio, unsigned ngpio, void *context)
+-{
+-	gpio_request(gpio + 6, "UI MUX_MODE");
+-
+-	/* Drive mux mode low to match the default without UI card */
+-	gpio_direction_output(gpio + 6, 0);
+-
+-	da830_evm_init_lcdc(gpio + 6);
+-
+-	da830_evm_init_nand(gpio + 6);
+-
+-	return 0;
+-}
+-
+-static void da830_evm_ui_expander_teardown(struct i2c_client *client, int gpio,
+-		unsigned ngpio, void *context)
+-{
+-	gpio_free(gpio + 6);
+-}
+-
+-static struct pcf857x_platform_data __initdata da830_evm_ui_expander_info = {
+-	.gpio_base	= DAVINCI_N_GPIO,
+-	.setup		= da830_evm_ui_expander_setup,
+-	.teardown	= da830_evm_ui_expander_teardown,
+-};
+-
+-static struct i2c_board_info __initdata da830_evm_i2c_devices[] = {
+-	{
+-		I2C_BOARD_INFO("24c256", 0x50),
+-		.swnode = &da830_evm_i2c_eeprom_node,
+-	},
+-	{
+-		I2C_BOARD_INFO("tlv320aic3x", 0x18),
+-	},
+-	{
+-		I2C_BOARD_INFO("pcf8574", 0x3f),
+-		.platform_data	= &da830_evm_ui_expander_info,
+-	},
+-};
+-
+-static struct davinci_i2c_platform_data da830_evm_i2c_0_pdata = {
+-	.bus_freq	= 100,	/* kHz */
+-	.bus_delay	= 0,	/* usec */
+-};
+-
+-/*
+- * The following EDMA channels/slots are not being used by drivers (for
+- * example: Timer, GPIO, UART events etc) on da830/omap-l137 EVM, hence
+- * they are being reserved for codecs on the DSP side.
+- */
+-static const s16 da830_dma_rsv_chans[][2] = {
+-	/* (offset, number) */
+-	{ 8,  2},
+-	{12,  2},
+-	{24,  4},
+-	{30,  2},
+-	{-1, -1}
+-};
+-
+-static const s16 da830_dma_rsv_slots[][2] = {
+-	/* (offset, number) */
+-	{ 8,  2},
+-	{12,  2},
+-	{24,  4},
+-	{30, 26},
+-	{-1, -1}
+-};
+-
+-static struct edma_rsv_info da830_edma_rsv[] = {
+-	{
+-		.rsv_chans	= da830_dma_rsv_chans,
+-		.rsv_slots	= da830_dma_rsv_slots,
+-	},
+-};
+-
+-static struct mtd_partition da830evm_spiflash_part[] = {
+-	[0] = {
+-		.name = "DSP-UBL",
+-		.offset = 0,
+-		.size = SZ_8K,
+-		.mask_flags = MTD_WRITEABLE,
+-	},
+-	[1] = {
+-		.name = "ARM-UBL",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = SZ_16K + SZ_8K,
+-		.mask_flags = MTD_WRITEABLE,
+-	},
+-	[2] = {
+-		.name = "U-Boot",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = SZ_256K - SZ_32K,
+-		.mask_flags = MTD_WRITEABLE,
+-	},
+-	[3] = {
+-		.name = "U-Boot-Environment",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = SZ_16K,
+-		.mask_flags = 0,
+-	},
+-	[4] = {
+-		.name = "Kernel",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = MTDPART_SIZ_FULL,
+-		.mask_flags = 0,
+-	},
+-};
+-
+-static struct flash_platform_data da830evm_spiflash_data = {
+-	.name		= "m25p80",
+-	.parts		= da830evm_spiflash_part,
+-	.nr_parts	= ARRAY_SIZE(da830evm_spiflash_part),
+-	.type		= "w25x32",
+-};
+-
+-static struct davinci_spi_config da830evm_spiflash_cfg = {
+-	.io_type	= SPI_IO_TYPE_DMA,
+-	.c2tdelay	= 8,
+-	.t2cdelay	= 8,
+-};
+-
+-static struct spi_board_info da830evm_spi_info[] = {
+-	{
+-		.modalias		= "m25p80",
+-		.platform_data		= &da830evm_spiflash_data,
+-		.controller_data	= &da830evm_spiflash_cfg,
+-		.mode			= SPI_MODE_0,
+-		.max_speed_hz		= 30000000,
+-		.bus_num		= 0,
+-		.chip_select		= 0,
+-	},
+-};
+-
+-static __init void da830_evm_init(void)
+-{
+-	struct davinci_soc_info *soc_info = &davinci_soc_info;
+-	int ret;
+-
+-	da830_register_clocks();
+-
+-	ret = da830_register_gpio();
+-	if (ret)
+-		pr_warn("%s: GPIO init failed: %d\n", __func__, ret);
+-
+-	ret = da830_register_edma(da830_edma_rsv);
+-	if (ret)
+-		pr_warn("%s: edma registration failed: %d\n", __func__, ret);
+-
+-	ret = davinci_cfg_reg_list(da830_i2c0_pins);
+-	if (ret)
+-		pr_warn("%s: i2c0 mux setup failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_i2c(0, &da830_evm_i2c_0_pdata);
+-	if (ret)
+-		pr_warn("%s: i2c0 registration failed: %d\n", __func__, ret);
+-
+-	da830_evm_usb_init();
+-
+-	soc_info->emac_pdata->rmii_en = 1;
+-	soc_info->emac_pdata->phy_id = DA830_EVM_PHY_ID;
+-
+-	ret = davinci_cfg_reg_list(da830_cpgmac_pins);
+-	if (ret)
+-		pr_warn("%s: cpgmac mux setup failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_emac();
+-	if (ret)
+-		pr_warn("%s: emac registration failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_watchdog();
+-	if (ret)
+-		pr_warn("%s: watchdog registration failed: %d\n",
+-			__func__, ret);
+-
+-	davinci_serial_init(da8xx_serial_device);
+-
+-	nvmem_add_cell_table(&da830_evm_nvmem_cell_table);
+-	nvmem_add_cell_lookups(&da830_evm_nvmem_cell_lookup, 1);
+-
+-	i2c_register_board_info(1, da830_evm_i2c_devices,
+-			ARRAY_SIZE(da830_evm_i2c_devices));
+-
+-	ret = davinci_cfg_reg_list(da830_evm_mcasp1_pins);
+-	if (ret)
+-		pr_warn("%s: mcasp1 mux setup failed: %d\n", __func__, ret);
+-
+-	da8xx_register_mcasp(1, &da830_evm_snd_data);
+-
+-	da830_evm_init_mmc();
+-
+-	ret = da8xx_register_rtc();
+-	if (ret)
+-		pr_warn("%s: rtc setup failed: %d\n", __func__, ret);
+-
+-	ret = spi_register_board_info(da830evm_spi_info,
+-				      ARRAY_SIZE(da830evm_spi_info));
+-	if (ret)
+-		pr_warn("%s: spi info registration failed: %d\n",
+-			__func__, ret);
+-
+-	ret = da8xx_register_spi_bus(0, ARRAY_SIZE(da830evm_spi_info));
+-	if (ret)
+-		pr_warn("%s: spi 0 registration failed: %d\n", __func__, ret);
+-
+-	regulator_has_full_constraints();
+-}
+-
+-#ifdef CONFIG_SERIAL_8250_CONSOLE
+-static int __init da830_evm_console_init(void)
+-{
+-	if (!machine_is_davinci_da830_evm())
+-		return 0;
+-
+-	return add_preferred_console("ttyS", 2, "115200");
+-}
+-console_initcall(da830_evm_console_init);
+-#endif
+-
+-static void __init da830_evm_map_io(void)
+-{
+-	da830_init();
+-}
+-
+-MACHINE_START(DAVINCI_DA830_EVM, "DaVinci DA830/OMAP-L137/AM17x EVM")
+-	.atag_offset	= 0x100,
+-	.map_io		= da830_evm_map_io,
+-	.init_irq	= da830_init_irq,
+-	.init_time	= da830_init_time,
+-	.init_machine	= da830_evm_init,
+-	.init_late	= davinci_init_late,
+-	.dma_zone_size	= SZ_128M,
+-MACHINE_END
+diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
+deleted file mode 100644
+index d752ee2b30ff..000000000000
+--- a/arch/arm/mach-davinci/board-da850-evm.c
++++ /dev/null
+@@ -1,1550 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * TI DA850/OMAP-L138 EVM board
+- *
+- * Copyright (C) 2009 Texas Instruments Incorporated - https://www.ti.com/
+- *
+- * Derived from: arch/arm/mach-davinci/board-da830-evm.c
+- * Original Copyrights follow:
+- *
+- * 2007, 2009 (c) MontaVista Software, Inc.
+- */
+-#include <linux/console.h>
+-#include <linux/delay.h>
+-#include <linux/gpio.h>
+-#include <linux/gpio_keys.h>
+-#include <linux/gpio/machine.h>
+-#include <linux/init.h>
+-#include <linux/kernel.h>
+-#include <linux/leds.h>
+-#include <linux/i2c.h>
+-#include <linux/platform_data/pca953x.h>
+-#include <linux/input.h>
+-#include <linux/input/tps6507x-ts.h>
+-#include <linux/mfd/tps6507x.h>
+-#include <linux/mtd/mtd.h>
+-#include <linux/mtd/rawnand.h>
+-#include <linux/mtd/partitions.h>
+-#include <linux/nvmem-provider.h>
+-#include <linux/mtd/physmap.h>
+-#include <linux/platform_device.h>
+-#include <linux/platform_data/gpio-davinci.h>
+-#include <linux/platform_data/mtd-davinci.h>
+-#include <linux/platform_data/mtd-davinci-aemif.h>
+-#include <linux/platform_data/ti-aemif.h>
+-#include <linux/platform_data/spi-davinci.h>
+-#include <linux/platform_data/uio_pruss.h>
+-#include <linux/property.h>
+-#include <linux/regulator/machine.h>
+-#include <linux/regulator/tps6507x.h>
+-#include <linux/regulator/fixed.h>
+-#include <linux/spi/spi.h>
+-#include <linux/spi/flash.h>
+-
+-#include "common.h"
+-#include "da8xx.h"
+-#include "mux.h"
+-#include "irqs.h"
+-#include "sram.h"
+-
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-#include <asm/system_info.h>
+-
+-#include <media/i2c/tvp514x.h>
+-#include <media/i2c/adv7343.h>
+-
+-#define DA850_EVM_PHY_ID		"davinci_mdio-0:00"
+-#define DA850_LCD_PWR_PIN		GPIO_TO_PIN(2, 8)
+-#define DA850_LCD_BL_PIN		GPIO_TO_PIN(2, 15)
+-
+-#define DA850_MII_MDIO_CLKEN_PIN	GPIO_TO_PIN(2, 6)
+-
+-static struct mtd_partition da850evm_spiflash_part[] = {
+-	[0] = {
+-		.name = "UBL",
+-		.offset = 0,
+-		.size = SZ_64K,
+-		.mask_flags = MTD_WRITEABLE,
+-	},
+-	[1] = {
+-		.name = "U-Boot",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = SZ_512K,
+-		.mask_flags = MTD_WRITEABLE,
+-	},
+-	[2] = {
+-		.name = "U-Boot-Env",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = SZ_64K,
+-		.mask_flags = MTD_WRITEABLE,
+-	},
+-	[3] = {
+-		.name = "Kernel",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = SZ_2M + SZ_512K,
+-		.mask_flags = 0,
+-	},
+-	[4] = {
+-		.name = "Filesystem",
+-		.offset = MTDPART_OFS_APPEND,
+-		.size = SZ_4M,
+-		.mask_flags = 0,
+-	},
+-	[5] = {
+-		.name = "MAC-Address",
+-		.offset = SZ_8M - SZ_64K,
+-		.size = SZ_64K,
+-		.mask_flags = MTD_WRITEABLE,
+-	},
+-};
+-
+-static struct nvmem_cell_info da850evm_nvmem_cells[] = {
+-	{
+-		.name		= "macaddr",
+-		.offset		= 0x0,
+-		.bytes		= ETH_ALEN,
+-	}
+-};
+-
+-static struct nvmem_cell_table da850evm_nvmem_cell_table = {
+-	/*
+-	 * The nvmem name differs from the partition name because of the
+-	 * internal works of the nvmem framework.
+-	 */
+-	.nvmem_name	= "MAC-Address0",
+-	.cells		= da850evm_nvmem_cells,
+-	.ncells		= ARRAY_SIZE(da850evm_nvmem_cells),
+-};
+-
+-static struct nvmem_cell_lookup da850evm_nvmem_cell_lookup = {
+-	.nvmem_name	= "MAC-Address0",
+-	.cell_name	= "macaddr",
+-	.dev_id		= "davinci_emac.1",
+-	.con_id		= "mac-address",
+-};
+-
+-static struct flash_platform_data da850evm_spiflash_data = {
+-	.name		= "m25p80",
+-	.parts		= da850evm_spiflash_part,
+-	.nr_parts	= ARRAY_SIZE(da850evm_spiflash_part),
+-	.type		= "m25p64",
+-};
+-
+-static struct davinci_spi_config da850evm_spiflash_cfg = {
+-	.io_type	= SPI_IO_TYPE_DMA,
+-	.c2tdelay	= 8,
+-	.t2cdelay	= 8,
+-};
+-
+-static struct spi_board_info da850evm_spi_info[] = {
+-	{
+-		.modalias		= "m25p80",
+-		.platform_data		= &da850evm_spiflash_data,
+-		.controller_data	= &da850evm_spiflash_cfg,
+-		.mode			= SPI_MODE_0,
+-		.max_speed_hz		= 30000000,
+-		.bus_num		= 1,
+-		.chip_select		= 0,
+-	},
+-};
+-
+-static struct mtd_partition da850_evm_norflash_partition[] = {
+-	{
+-		.name           = "bootloaders + env",
+-		.offset         = 0,
+-		.size           = SZ_512K,
+-		.mask_flags     = MTD_WRITEABLE,
+-	},
+-	{
+-		.name           = "kernel",
+-		.offset         = MTDPART_OFS_APPEND,
+-		.size           = SZ_2M,
+-		.mask_flags     = 0,
+-	},
+-	{
+-		.name           = "filesystem",
+-		.offset         = MTDPART_OFS_APPEND,
+-		.size           = MTDPART_SIZ_FULL,
+-		.mask_flags     = 0,
+-	},
+-};
+-
+-static struct physmap_flash_data da850_evm_norflash_data = {
+-	.width		= 2,
+-	.parts		= da850_evm_norflash_partition,
+-	.nr_parts	= ARRAY_SIZE(da850_evm_norflash_partition),
+-};
+-
+-static struct resource da850_evm_norflash_resource[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CS2_BASE,
+-		.end	= DA8XX_AEMIF_CS2_BASE + SZ_32M - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-/* DA850/OMAP-L138 EVM includes a 512 MByte large-page NAND flash
+- * (128K blocks). It may be used instead of the (default) SPI flash
+- * to boot, using TI's tools to install the secondary boot loader
+- * (UBL) and U-Boot.
+- */
+-static struct mtd_partition da850_evm_nandflash_partition[] = {
+-	{
+-		.name		= "u-boot env",
+-		.offset		= 0,
+-		.size		= SZ_128K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	 },
+-	{
+-		.name		= "UBL",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_128K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	},
+-	{
+-		.name		= "u-boot",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= 4 * SZ_128K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	},
+-	{
+-		.name		= "kernel",
+-		.offset		= 0x200000,
+-		.size		= SZ_2M,
+-		.mask_flags	= 0,
+-	},
+-	{
+-		.name		= "filesystem",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-		.mask_flags	= 0,
+-	},
+-};
+-
+-static struct davinci_aemif_timing da850_evm_nandflash_timing = {
+-	.wsetup		= 24,
+-	.wstrobe	= 21,
+-	.whold		= 14,
+-	.rsetup		= 19,
+-	.rstrobe	= 50,
+-	.rhold		= 0,
+-	.ta		= 20,
+-};
+-
+-static struct davinci_nand_pdata da850_evm_nandflash_data = {
+-	.core_chipsel	= 1,
+-	.parts		= da850_evm_nandflash_partition,
+-	.nr_parts	= ARRAY_SIZE(da850_evm_nandflash_partition),
+-	.engine_type	= NAND_ECC_ENGINE_TYPE_ON_HOST,
+-	.ecc_bits	= 4,
+-	.bbt_options	= NAND_BBT_USE_FLASH,
+-	.timing		= &da850_evm_nandflash_timing,
+-};
+-
+-static struct resource da850_evm_nandflash_resource[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CS3_BASE,
+-		.end	= DA8XX_AEMIF_CS3_BASE + SZ_512K + 2 * SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct resource da850_evm_aemif_resource[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K,
+-		.flags	= IORESOURCE_MEM,
+-	}
+-};
+-
+-static struct aemif_abus_data da850_evm_aemif_abus_data[] = {
+-	{
+-		.cs	= 3,
+-	}
+-};
+-
+-static struct platform_device da850_evm_aemif_devices[] = {
+-	{
+-		.name		= "davinci_nand",
+-		.id		= 1,
+-		.dev		= {
+-			.platform_data	= &da850_evm_nandflash_data,
+-		},
+-		.num_resources	= ARRAY_SIZE(da850_evm_nandflash_resource),
+-		.resource	= da850_evm_nandflash_resource,
+-	},
+-	{
+-		.name		= "physmap-flash",
+-		.id		= 0,
+-		.dev		= {
+-			.platform_data  = &da850_evm_norflash_data,
+-		},
+-		.num_resources	= 1,
+-		.resource	= da850_evm_norflash_resource,
+-	}
+-};
+-
+-static struct aemif_platform_data da850_evm_aemif_pdata = {
+-	.cs_offset = 2,
+-	.abus_data = da850_evm_aemif_abus_data,
+-	.num_abus_data = ARRAY_SIZE(da850_evm_aemif_abus_data),
+-	.sub_devices = da850_evm_aemif_devices,
+-	.num_sub_devices = ARRAY_SIZE(da850_evm_aemif_devices),
+-};
+-
+-static struct platform_device da850_evm_aemif_device = {
+-	.name		= "ti-aemif",
+-	.id		= -1,
+-	.dev = {
+-		.platform_data	= &da850_evm_aemif_pdata,
+-	},
+-	.resource	= da850_evm_aemif_resource,
+-	.num_resources	= ARRAY_SIZE(da850_evm_aemif_resource),
+-};
+-
+-static const short da850_evm_nand_pins[] = {
+-	DA850_EMA_D_0, DA850_EMA_D_1, DA850_EMA_D_2, DA850_EMA_D_3,
+-	DA850_EMA_D_4, DA850_EMA_D_5, DA850_EMA_D_6, DA850_EMA_D_7,
+-	DA850_EMA_A_1, DA850_EMA_A_2, DA850_NEMA_CS_3, DA850_NEMA_CS_4,
+-	DA850_NEMA_WE, DA850_NEMA_OE,
+-	-1
+-};
+-
+-static const short da850_evm_nor_pins[] = {
+-	DA850_EMA_BA_1, DA850_EMA_CLK, DA850_EMA_WAIT_1, DA850_NEMA_CS_2,
+-	DA850_NEMA_WE, DA850_NEMA_OE, DA850_EMA_D_0, DA850_EMA_D_1,
+-	DA850_EMA_D_2, DA850_EMA_D_3, DA850_EMA_D_4, DA850_EMA_D_5,
+-	DA850_EMA_D_6, DA850_EMA_D_7, DA850_EMA_D_8, DA850_EMA_D_9,
+-	DA850_EMA_D_10, DA850_EMA_D_11, DA850_EMA_D_12, DA850_EMA_D_13,
+-	DA850_EMA_D_14, DA850_EMA_D_15, DA850_EMA_A_0, DA850_EMA_A_1,
+-	DA850_EMA_A_2, DA850_EMA_A_3, DA850_EMA_A_4, DA850_EMA_A_5,
+-	DA850_EMA_A_6, DA850_EMA_A_7, DA850_EMA_A_8, DA850_EMA_A_9,
+-	DA850_EMA_A_10, DA850_EMA_A_11, DA850_EMA_A_12, DA850_EMA_A_13,
+-	DA850_EMA_A_14, DA850_EMA_A_15, DA850_EMA_A_16, DA850_EMA_A_17,
+-	DA850_EMA_A_18, DA850_EMA_A_19, DA850_EMA_A_20, DA850_EMA_A_21,
+-	DA850_EMA_A_22, DA850_EMA_A_23,
+-	-1
+-};
+-
+-#define HAS_MMC		IS_ENABLED(CONFIG_MMC_DAVINCI)
+-
+-static inline void da850_evm_setup_nor_nand(void)
+-{
+-	int ret = 0;
+-
+-	if (!HAS_MMC) {
+-		ret = davinci_cfg_reg_list(da850_evm_nand_pins);
+-		if (ret)
+-			pr_warn("%s: NAND mux setup failed: %d\n",
+-				__func__, ret);
+-
+-		ret = davinci_cfg_reg_list(da850_evm_nor_pins);
+-		if (ret)
+-			pr_warn("%s: NOR mux setup failed: %d\n",
+-				__func__, ret);
+-
+-		ret = platform_device_register(&da850_evm_aemif_device);
+-		if (ret)
+-			pr_warn("%s: registering aemif failed: %d\n",
+-				__func__, ret);
+-	}
+-}
+-
+-#ifdef CONFIG_DA850_UI_RMII
+-static inline void da850_evm_setup_emac_rmii(int rmii_sel)
+-{
+-	struct davinci_soc_info *soc_info = &davinci_soc_info;
+-
+-	soc_info->emac_pdata->rmii_en = 1;
+-	gpio_set_value_cansleep(rmii_sel, 0);
+-}
+-#else
+-static inline void da850_evm_setup_emac_rmii(int rmii_sel) { }
+-#endif
+-
+-
+-#define DA850_KEYS_DEBOUNCE_MS	10
+-/*
+- * At 200ms polling interval it is possible to miss an
+- * event by tapping very lightly on the push button but most
+- * pushes do result in an event; longer intervals require the
+- * user to hold the button whereas shorter intervals require
+- * more CPU time for polling.
+- */
+-#define DA850_GPIO_KEYS_POLL_MS	200
+-
+-enum da850_evm_ui_exp_pins {
+-	DA850_EVM_UI_EXP_SEL_C = 5,
+-	DA850_EVM_UI_EXP_SEL_B,
+-	DA850_EVM_UI_EXP_SEL_A,
+-	DA850_EVM_UI_EXP_PB8,
+-	DA850_EVM_UI_EXP_PB7,
+-	DA850_EVM_UI_EXP_PB6,
+-	DA850_EVM_UI_EXP_PB5,
+-	DA850_EVM_UI_EXP_PB4,
+-	DA850_EVM_UI_EXP_PB3,
+-	DA850_EVM_UI_EXP_PB2,
+-	DA850_EVM_UI_EXP_PB1,
+-};
+-
+-static const char * const da850_evm_ui_exp[] = {
+-	[DA850_EVM_UI_EXP_SEL_C]        = "sel_c",
+-	[DA850_EVM_UI_EXP_SEL_B]        = "sel_b",
+-	[DA850_EVM_UI_EXP_SEL_A]        = "sel_a",
+-	[DA850_EVM_UI_EXP_PB8]          = "pb8",
+-	[DA850_EVM_UI_EXP_PB7]          = "pb7",
+-	[DA850_EVM_UI_EXP_PB6]          = "pb6",
+-	[DA850_EVM_UI_EXP_PB5]          = "pb5",
+-	[DA850_EVM_UI_EXP_PB4]          = "pb4",
+-	[DA850_EVM_UI_EXP_PB3]          = "pb3",
+-	[DA850_EVM_UI_EXP_PB2]          = "pb2",
+-	[DA850_EVM_UI_EXP_PB1]          = "pb1",
+-};
+-
+-#define DA850_N_UI_PB		8
+-
+-static struct gpio_keys_button da850_evm_ui_keys[] = {
+-	[0 ... DA850_N_UI_PB - 1] = {
+-		.type			= EV_KEY,
+-		.active_low		= 1,
+-		.wakeup			= 0,
+-		.debounce_interval	= DA850_KEYS_DEBOUNCE_MS,
+-		.code			= -1, /* assigned at runtime */
+-		.gpio			= -1, /* assigned at runtime */
+-		.desc			= NULL, /* assigned at runtime */
+-	},
+-};
+-
+-static struct gpio_keys_platform_data da850_evm_ui_keys_pdata = {
+-	.buttons = da850_evm_ui_keys,
+-	.nbuttons = ARRAY_SIZE(da850_evm_ui_keys),
+-	.poll_interval = DA850_GPIO_KEYS_POLL_MS,
+-};
+-
+-static struct platform_device da850_evm_ui_keys_device = {
+-	.name = "gpio-keys-polled",
+-	.id = 0,
+-	.dev = {
+-		.platform_data = &da850_evm_ui_keys_pdata
+-	},
+-};
+-
+-static void da850_evm_ui_keys_init(unsigned gpio)
+-{
+-	int i;
+-	struct gpio_keys_button *button;
+-
+-	for (i = 0; i < DA850_N_UI_PB; i++) {
+-		button = &da850_evm_ui_keys[i];
+-		button->code = KEY_F8 - i;
+-		button->desc = da850_evm_ui_exp[DA850_EVM_UI_EXP_PB8 + i];
+-		button->gpio = gpio + DA850_EVM_UI_EXP_PB8 + i;
+-	}
+-}
+-
+-#ifdef CONFIG_DA850_UI_SD_VIDEO_PORT
+-static inline void da850_evm_setup_video_port(int video_sel)
+-{
+-	gpio_set_value_cansleep(video_sel, 0);
+-}
+-#else
+-static inline void da850_evm_setup_video_port(int video_sel) { }
+-#endif
+-
+-static int da850_evm_ui_expander_setup(struct i2c_client *client, unsigned gpio,
+-						unsigned ngpio, void *c)
+-{
+-	int sel_a, sel_b, sel_c, ret;
+-
+-	sel_a = gpio + DA850_EVM_UI_EXP_SEL_A;
+-	sel_b = gpio + DA850_EVM_UI_EXP_SEL_B;
+-	sel_c = gpio + DA850_EVM_UI_EXP_SEL_C;
+-
+-	ret = gpio_request(sel_a, da850_evm_ui_exp[DA850_EVM_UI_EXP_SEL_A]);
+-	if (ret) {
+-		pr_warn("Cannot open UI expander pin %d\n", sel_a);
+-		goto exp_setup_sela_fail;
+-	}
+-
+-	ret = gpio_request(sel_b, da850_evm_ui_exp[DA850_EVM_UI_EXP_SEL_B]);
+-	if (ret) {
+-		pr_warn("Cannot open UI expander pin %d\n", sel_b);
+-		goto exp_setup_selb_fail;
+-	}
+-
+-	ret = gpio_request(sel_c, da850_evm_ui_exp[DA850_EVM_UI_EXP_SEL_C]);
+-	if (ret) {
+-		pr_warn("Cannot open UI expander pin %d\n", sel_c);
+-		goto exp_setup_selc_fail;
+-	}
+-
+-	/* deselect all functionalities */
+-	gpio_direction_output(sel_a, 1);
+-	gpio_direction_output(sel_b, 1);
+-	gpio_direction_output(sel_c, 1);
+-
+-	da850_evm_ui_keys_init(gpio);
+-	ret = platform_device_register(&da850_evm_ui_keys_device);
+-	if (ret) {
+-		pr_warn("Could not register UI GPIO expander push-buttons");
+-		goto exp_setup_keys_fail;
+-	}
+-
+-	pr_info("DA850/OMAP-L138 EVM UI card detected\n");
+-
+-	da850_evm_setup_nor_nand();
+-
+-	da850_evm_setup_emac_rmii(sel_a);
+-
+-	da850_evm_setup_video_port(sel_c);
+-
+-	return 0;
+-
+-exp_setup_keys_fail:
+-	gpio_free(sel_c);
+-exp_setup_selc_fail:
+-	gpio_free(sel_b);
+-exp_setup_selb_fail:
+-	gpio_free(sel_a);
+-exp_setup_sela_fail:
+-	return ret;
+-}
+-
+-static void da850_evm_ui_expander_teardown(struct i2c_client *client,
+-					   unsigned gpio, unsigned ngpio, void *c)
+-{
+-	platform_device_unregister(&da850_evm_ui_keys_device);
+-
+-	/* deselect all functionalities */
+-	gpio_set_value_cansleep(gpio + DA850_EVM_UI_EXP_SEL_C, 1);
+-	gpio_set_value_cansleep(gpio + DA850_EVM_UI_EXP_SEL_B, 1);
+-	gpio_set_value_cansleep(gpio + DA850_EVM_UI_EXP_SEL_A, 1);
+-
+-	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_C);
+-	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_B);
+-	gpio_free(gpio + DA850_EVM_UI_EXP_SEL_A);
+-}
+-
+-/* assign the baseboard expander's GPIOs after the UI board's */
+-#define DA850_UI_EXPANDER_N_GPIOS ARRAY_SIZE(da850_evm_ui_exp)
+-#define DA850_BB_EXPANDER_GPIO_BASE (DAVINCI_N_GPIO + DA850_UI_EXPANDER_N_GPIOS)
+-
+-enum da850_evm_bb_exp_pins {
+-	DA850_EVM_BB_EXP_DEEP_SLEEP_EN = 0,
+-	DA850_EVM_BB_EXP_SW_RST,
+-	DA850_EVM_BB_EXP_TP_23,
+-	DA850_EVM_BB_EXP_TP_22,
+-	DA850_EVM_BB_EXP_TP_21,
+-	DA850_EVM_BB_EXP_USER_PB1,
+-	DA850_EVM_BB_EXP_USER_LED2,
+-	DA850_EVM_BB_EXP_USER_LED1,
+-	DA850_EVM_BB_EXP_USER_SW1,
+-	DA850_EVM_BB_EXP_USER_SW2,
+-	DA850_EVM_BB_EXP_USER_SW3,
+-	DA850_EVM_BB_EXP_USER_SW4,
+-	DA850_EVM_BB_EXP_USER_SW5,
+-	DA850_EVM_BB_EXP_USER_SW6,
+-	DA850_EVM_BB_EXP_USER_SW7,
+-	DA850_EVM_BB_EXP_USER_SW8
+-};
+-
+-static const char * const da850_evm_bb_exp[] = {
+-	[DA850_EVM_BB_EXP_DEEP_SLEEP_EN]	= "deep_sleep_en",
+-	[DA850_EVM_BB_EXP_SW_RST]		= "sw_rst",
+-	[DA850_EVM_BB_EXP_TP_23]		= "tp_23",
+-	[DA850_EVM_BB_EXP_TP_22]		= "tp_22",
+-	[DA850_EVM_BB_EXP_TP_21]		= "tp_21",
+-	[DA850_EVM_BB_EXP_USER_PB1]		= "user_pb1",
+-	[DA850_EVM_BB_EXP_USER_LED2]		= "user_led2",
+-	[DA850_EVM_BB_EXP_USER_LED1]		= "user_led1",
+-	[DA850_EVM_BB_EXP_USER_SW1]		= "user_sw1",
+-	[DA850_EVM_BB_EXP_USER_SW2]		= "user_sw2",
+-	[DA850_EVM_BB_EXP_USER_SW3]		= "user_sw3",
+-	[DA850_EVM_BB_EXP_USER_SW4]		= "user_sw4",
+-	[DA850_EVM_BB_EXP_USER_SW5]		= "user_sw5",
+-	[DA850_EVM_BB_EXP_USER_SW6]		= "user_sw6",
+-	[DA850_EVM_BB_EXP_USER_SW7]		= "user_sw7",
+-	[DA850_EVM_BB_EXP_USER_SW8]		= "user_sw8",
+-};
+-
+-#define DA850_N_BB_USER_SW	8
+-
+-static struct gpio_keys_button da850_evm_bb_keys[] = {
+-	[0] = {
+-		.type			= EV_KEY,
+-		.active_low		= 1,
+-		.wakeup			= 0,
+-		.debounce_interval	= DA850_KEYS_DEBOUNCE_MS,
+-		.code			= KEY_PROG1,
+-		.desc			= NULL, /* assigned at runtime */
+-		.gpio			= -1, /* assigned at runtime */
+-	},
+-	[1 ... DA850_N_BB_USER_SW] = {
+-		.type			= EV_SW,
+-		.active_low		= 1,
+-		.wakeup			= 0,
+-		.debounce_interval	= DA850_KEYS_DEBOUNCE_MS,
+-		.code			= -1, /* assigned at runtime */
+-		.desc			= NULL, /* assigned at runtime */
+-		.gpio			= -1, /* assigned at runtime */
+-	},
+-};
+-
+-static struct gpio_keys_platform_data da850_evm_bb_keys_pdata = {
+-	.buttons = da850_evm_bb_keys,
+-	.nbuttons = ARRAY_SIZE(da850_evm_bb_keys),
+-	.poll_interval = DA850_GPIO_KEYS_POLL_MS,
+-};
+-
+-static struct platform_device da850_evm_bb_keys_device = {
+-	.name = "gpio-keys-polled",
+-	.id = 1,
+-	.dev = {
+-		.platform_data = &da850_evm_bb_keys_pdata
+-	},
+-};
+-
+-static void da850_evm_bb_keys_init(unsigned gpio)
+-{
+-	int i;
+-	struct gpio_keys_button *button;
+-
+-	button = &da850_evm_bb_keys[0];
+-	button->desc = da850_evm_bb_exp[DA850_EVM_BB_EXP_USER_PB1];
+-	button->gpio = gpio + DA850_EVM_BB_EXP_USER_PB1;
+-
+-	for (i = 0; i < DA850_N_BB_USER_SW; i++) {
+-		button = &da850_evm_bb_keys[i + 1];
+-		button->code = SW_LID + i;
+-		button->desc = da850_evm_bb_exp[DA850_EVM_BB_EXP_USER_SW1 + i];
+-		button->gpio = gpio + DA850_EVM_BB_EXP_USER_SW1 + i;
+-	}
+-}
+-
+-static struct gpio_led da850_evm_bb_leds[] = {
+-	{
+-		.name = "user_led2",
+-	},
+-	{
+-		.name = "user_led1",
+-	},
+-};
+-
+-static struct gpio_led_platform_data da850_evm_bb_leds_pdata = {
+-	.leds = da850_evm_bb_leds,
+-	.num_leds = ARRAY_SIZE(da850_evm_bb_leds),
+-};
+-
+-static struct gpiod_lookup_table da850_evm_bb_leds_gpio_table = {
+-	.dev_id = "leds-gpio",
+-	.table = {
+-		GPIO_LOOKUP_IDX("i2c-bb-expander",
+-				DA850_EVM_BB_EXP_USER_LED2, NULL,
+-				0, GPIO_ACTIVE_LOW),
+-		GPIO_LOOKUP_IDX("i2c-bb-expander",
+-				DA850_EVM_BB_EXP_USER_LED2 + 1, NULL,
+-				1, GPIO_ACTIVE_LOW),
+-
+-		{ },
+-	},
+-};
+-
+-static struct platform_device da850_evm_bb_leds_device = {
+-	.name		= "leds-gpio",
+-	.id		= -1,
+-	.dev = {
+-		.platform_data = &da850_evm_bb_leds_pdata
+-	}
+-};
+-
+-static int da850_evm_bb_expander_setup(struct i2c_client *client,
+-						unsigned gpio, unsigned ngpio,
+-						void *c)
+-{
+-	int ret;
+-
+-	/*
+-	 * Register the switches and pushbutton on the baseboard as a gpio-keys
+-	 * device.
+-	 */
+-	da850_evm_bb_keys_init(gpio);
+-	ret = platform_device_register(&da850_evm_bb_keys_device);
+-	if (ret) {
+-		pr_warn("Could not register baseboard GPIO expander keys");
+-		goto io_exp_setup_sw_fail;
+-	}
+-
+-	gpiod_add_lookup_table(&da850_evm_bb_leds_gpio_table);
+-	ret = platform_device_register(&da850_evm_bb_leds_device);
+-	if (ret) {
+-		pr_warn("Could not register baseboard GPIO expander LEDs");
+-		goto io_exp_setup_leds_fail;
+-	}
+-
+-	return 0;
+-
+-io_exp_setup_leds_fail:
+-	platform_device_unregister(&da850_evm_bb_keys_device);
+-io_exp_setup_sw_fail:
+-	return ret;
+-}
+-
+-static void da850_evm_bb_expander_teardown(struct i2c_client *client,
+-					   unsigned gpio, unsigned ngpio, void *c)
+-{
+-	platform_device_unregister(&da850_evm_bb_leds_device);
+-	platform_device_unregister(&da850_evm_bb_keys_device);
+-}
+-
+-static struct pca953x_platform_data da850_evm_ui_expander_info = {
+-	.gpio_base	= DAVINCI_N_GPIO,
+-	.setup		= da850_evm_ui_expander_setup,
+-	.teardown	= da850_evm_ui_expander_teardown,
+-	.names		= da850_evm_ui_exp,
+-};
+-
+-static struct pca953x_platform_data da850_evm_bb_expander_info = {
+-	.gpio_base	= DA850_BB_EXPANDER_GPIO_BASE,
+-	.setup		= da850_evm_bb_expander_setup,
+-	.teardown	= da850_evm_bb_expander_teardown,
+-	.names		= da850_evm_bb_exp,
+-};
+-
+-static struct i2c_board_info __initdata da850_evm_i2c_devices[] = {
+-	{
+-		I2C_BOARD_INFO("tlv320aic3x", 0x18),
+-	},
+-	{
+-		I2C_BOARD_INFO("tca6416", 0x20),
+-		.dev_name = "ui-expander",
+-		.platform_data = &da850_evm_ui_expander_info,
+-	},
+-	{
+-		I2C_BOARD_INFO("tca6416", 0x21),
+-		.dev_name = "bb-expander",
+-		.platform_data = &da850_evm_bb_expander_info,
+-	},
+-};
+-
+-static struct davinci_i2c_platform_data da850_evm_i2c_0_pdata = {
+-	.bus_freq	= 100,	/* kHz */
+-	.bus_delay	= 0,	/* usec */
+-};
+-
+-/* davinci da850 evm audio machine driver */
+-static u8 da850_iis_serializer_direction[] = {
+-	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,
+-	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,
+-	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,	TX_MODE,
+-	RX_MODE,	INACTIVE_MODE,	INACTIVE_MODE,	INACTIVE_MODE,
+-};
+-
+-static struct snd_platform_data da850_evm_snd_data = {
+-	.tx_dma_offset		= 0x2000,
+-	.rx_dma_offset		= 0x2000,
+-	.op_mode		= DAVINCI_MCASP_IIS_MODE,
+-	.num_serializer		= ARRAY_SIZE(da850_iis_serializer_direction),
+-	.tdm_slots		= 2,
+-	.serial_dir		= da850_iis_serializer_direction,
+-	.asp_chan_q		= EVENTQ_0,
+-	.ram_chan_q		= EVENTQ_1,
+-	.version		= MCASP_VERSION_2,
+-	.txnumevt		= 1,
+-	.rxnumevt		= 1,
+-	.sram_size_playback	= SZ_8K,
+-	.sram_size_capture	= SZ_8K,
+-};
+-
+-static const short da850_evm_mcasp_pins[] __initconst = {
+-	DA850_AHCLKX, DA850_ACLKX, DA850_AFSX,
+-	DA850_AHCLKR, DA850_ACLKR, DA850_AFSR, DA850_AMUTE,
+-	DA850_AXR_11, DA850_AXR_12,
+-	-1
+-};
+-
+-#define DA850_MMCSD_CD_PIN		GPIO_TO_PIN(4, 0)
+-#define DA850_MMCSD_WP_PIN		GPIO_TO_PIN(4, 1)
+-
+-static struct gpiod_lookup_table mmc_gpios_table = {
+-	.dev_id = "da830-mmc.0",
+-	.table = {
+-		/* gpio chip 2 contains gpio range 64-95 */
+-		GPIO_LOOKUP("davinci_gpio", DA850_MMCSD_CD_PIN, "cd",
+-			    GPIO_ACTIVE_LOW),
+-		GPIO_LOOKUP("davinci_gpio", DA850_MMCSD_WP_PIN, "wp",
+-			    GPIO_ACTIVE_HIGH),
+-		{ }
+-	},
+-};
+-
+-static struct davinci_mmc_config da850_mmc_config = {
+-	.wires		= 4,
+-	.max_freq	= 50000000,
+-	.caps		= MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED,
+-};
+-
+-static const short da850_evm_mmcsd0_pins[] __initconst = {
+-	DA850_MMCSD0_DAT_0, DA850_MMCSD0_DAT_1, DA850_MMCSD0_DAT_2,
+-	DA850_MMCSD0_DAT_3, DA850_MMCSD0_CLK, DA850_MMCSD0_CMD,
+-	DA850_GPIO4_0, DA850_GPIO4_1,
+-	-1
+-};
+-
+-static struct property_entry da850_lcd_backlight_props[] = {
+-	PROPERTY_ENTRY_BOOL("default-on"),
+-	{ }
+-};
+-
+-static struct gpiod_lookup_table da850_lcd_backlight_gpio_table = {
+-	.dev_id		= "gpio-backlight",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", DA850_LCD_BL_PIN, NULL, 0),
+-		{ }
+-	},
+-};
+-
+-static const struct platform_device_info da850_lcd_backlight_info = {
+-	.name		= "gpio-backlight",
+-	.id		= PLATFORM_DEVID_NONE,
+-	.properties	= da850_lcd_backlight_props,
+-};
+-
+-static struct regulator_consumer_supply da850_lcd_supplies[] = {
+-	REGULATOR_SUPPLY("lcd", NULL),
+-};
+-
+-static struct regulator_init_data da850_lcd_supply_data = {
+-	.consumer_supplies	= da850_lcd_supplies,
+-	.num_consumer_supplies	= ARRAY_SIZE(da850_lcd_supplies),
+-	.constraints    = {
+-		.valid_ops_mask = REGULATOR_CHANGE_STATUS,
+-	},
+-};
+-
+-static struct fixed_voltage_config da850_lcd_supply = {
+-	.supply_name		= "lcd",
+-	.microvolts		= 33000000,
+-	.init_data		= &da850_lcd_supply_data,
+-};
+-
+-static struct platform_device da850_lcd_supply_device = {
+-	.name			= "reg-fixed-voltage",
+-	.id			= 1, /* Dummy fixed regulator is 0 */
+-	.dev			= {
+-		.platform_data = &da850_lcd_supply,
+-	},
+-};
+-
+-static struct gpiod_lookup_table da850_lcd_supply_gpio_table = {
+-	.dev_id			= "reg-fixed-voltage.1",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", DA850_LCD_PWR_PIN, NULL, 0),
+-		{ }
+-	},
+-};
+-
+-static struct gpiod_lookup_table *da850_lcd_gpio_lookups[] = {
+-	&da850_lcd_backlight_gpio_table,
+-	&da850_lcd_supply_gpio_table,
+-};
+-
+-static int da850_lcd_hw_init(void)
+-{
+-	struct platform_device *backlight;
+-	int status;
+-
+-	gpiod_add_lookup_tables(da850_lcd_gpio_lookups,
+-				ARRAY_SIZE(da850_lcd_gpio_lookups));
+-
+-	backlight = platform_device_register_full(&da850_lcd_backlight_info);
+-	if (IS_ERR(backlight))
+-		return PTR_ERR(backlight);
+-
+-	status = platform_device_register(&da850_lcd_supply_device);
+-	if (status)
+-		return status;
+-
+-	return 0;
+-}
+-
+-/* Fixed regulator support */
+-static struct regulator_consumer_supply fixed_supplies[] = {
+-	/* Baseboard 3.3V: 5V -> TPS73701DCQ -> 3.3V */
+-	REGULATOR_SUPPLY("AVDD", "1-0018"),
+-	REGULATOR_SUPPLY("DRVDD", "1-0018"),
+-
+-	/* Baseboard 1.8V: 5V -> TPS73701DCQ -> 1.8V */
+-	REGULATOR_SUPPLY("DVDD", "1-0018"),
+-
+-	/* UI card 3.3V: 5V -> TPS73701DCQ -> 3.3V */
+-	REGULATOR_SUPPLY("vcc", "1-0020"),
+-};
+-
+-/* TPS65070 voltage regulator support */
+-
+-/* 3.3V */
+-static struct regulator_consumer_supply tps65070_dcdc1_consumers[] = {
+-	{
+-		.supply = "usb0_vdda33",
+-	},
+-	{
+-		.supply = "usb1_vdda33",
+-	},
+-};
+-
+-/* 3.3V or 1.8V */
+-static struct regulator_consumer_supply tps65070_dcdc2_consumers[] = {
+-	{
+-		.supply = "dvdd3318_a",
+-	},
+-	{
+-		.supply = "dvdd3318_b",
+-	},
+-	{
+-		.supply = "dvdd3318_c",
+-	},
+-	REGULATOR_SUPPLY("IOVDD", "1-0018"),
+-};
+-
+-/* 1.2V */
+-static struct regulator_consumer_supply tps65070_dcdc3_consumers[] = {
+-	{
+-		.supply = "cvdd",
+-	},
+-};
+-
+-/* 1.8V LDO */
+-static struct regulator_consumer_supply tps65070_ldo1_consumers[] = {
+-	{
+-		.supply = "sata_vddr",
+-	},
+-	{
+-		.supply = "usb0_vdda18",
+-	},
+-	{
+-		.supply = "usb1_vdda18",
+-	},
+-	{
+-		.supply = "ddr_dvdd18",
+-	},
+-};
+-
+-/* 1.2V LDO */
+-static struct regulator_consumer_supply tps65070_ldo2_consumers[] = {
+-	{
+-		.supply = "sata_vdd",
+-	},
+-	{
+-		.supply = "pll0_vdda",
+-	},
+-	{
+-		.supply = "pll1_vdda",
+-	},
+-	{
+-		.supply = "usbs_cvdd",
+-	},
+-	{
+-		.supply = "vddarnwa1",
+-	},
+-};
+-
+-/* We take advantage of the fact that both defdcdc{2,3} are tied high */
+-static struct tps6507x_reg_platform_data tps6507x_platform_data = {
+-	.defdcdc_default = true,
+-};
+-
+-static struct regulator_init_data tps65070_regulator_data[] = {
+-	/* dcdc1 */
+-	{
+-		.constraints = {
+-			.min_uV = 3150000,
+-			.max_uV = 3450000,
+-			.valid_ops_mask = (REGULATOR_CHANGE_VOLTAGE |
+-				REGULATOR_CHANGE_STATUS),
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65070_dcdc1_consumers),
+-		.consumer_supplies = tps65070_dcdc1_consumers,
+-	},
+-
+-	/* dcdc2 */
+-	{
+-		.constraints = {
+-			.min_uV = 1710000,
+-			.max_uV = 3450000,
+-			.valid_ops_mask = (REGULATOR_CHANGE_VOLTAGE |
+-				REGULATOR_CHANGE_STATUS),
+-			.boot_on = 1,
+-			.always_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65070_dcdc2_consumers),
+-		.consumer_supplies = tps65070_dcdc2_consumers,
+-		.driver_data = &tps6507x_platform_data,
+-	},
+-
+-	/* dcdc3 */
+-	{
+-		.constraints = {
+-			.min_uV = 950000,
+-			.max_uV = 1350000,
+-			.valid_ops_mask = (REGULATOR_CHANGE_VOLTAGE |
+-				REGULATOR_CHANGE_STATUS),
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65070_dcdc3_consumers),
+-		.consumer_supplies = tps65070_dcdc3_consumers,
+-		.driver_data = &tps6507x_platform_data,
+-	},
+-
+-	/* ldo1 */
+-	{
+-		.constraints = {
+-			.min_uV = 1710000,
+-			.max_uV = 1890000,
+-			.valid_ops_mask = (REGULATOR_CHANGE_VOLTAGE |
+-				REGULATOR_CHANGE_STATUS),
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65070_ldo1_consumers),
+-		.consumer_supplies = tps65070_ldo1_consumers,
+-	},
+-
+-	/* ldo2 */
+-	{
+-		.constraints = {
+-			.min_uV = 1140000,
+-			.max_uV = 1320000,
+-			.valid_ops_mask = (REGULATOR_CHANGE_VOLTAGE |
+-				REGULATOR_CHANGE_STATUS),
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65070_ldo2_consumers),
+-		.consumer_supplies = tps65070_ldo2_consumers,
+-	},
+-};
+-
+-static struct touchscreen_init_data tps6507x_touchscreen_data = {
+-	.poll_period =  30,	/* ms between touch samples */
+-	.min_pressure = 0x30,	/* minimum pressure to trigger touch */
+-	.vendor = 0,		/* /sys/class/input/input?/id/vendor */
+-	.product = 65070,	/* /sys/class/input/input?/id/product */
+-	.version = 0x100,	/* /sys/class/input/input?/id/version */
+-};
+-
+-static struct tps6507x_board tps_board = {
+-	.tps6507x_pmic_init_data = &tps65070_regulator_data[0],
+-	.tps6507x_ts_init_data = &tps6507x_touchscreen_data,
+-};
+-
+-static struct i2c_board_info __initdata da850_evm_tps65070_info[] = {
+-	{
+-		I2C_BOARD_INFO("tps6507x", 0x48),
+-		.platform_data = &tps_board,
+-	},
+-};
+-
+-static int __init pmic_tps65070_init(void)
+-{
+-	return i2c_register_board_info(1, da850_evm_tps65070_info,
+-					ARRAY_SIZE(da850_evm_tps65070_info));
+-}
+-
+-static const short da850_evm_lcdc_pins[] = {
+-	DA850_GPIO2_8, DA850_GPIO2_15,
+-	-1
+-};
+-
+-static const short da850_evm_mii_pins[] = {
+-	DA850_MII_TXEN, DA850_MII_TXCLK, DA850_MII_COL, DA850_MII_TXD_3,
+-	DA850_MII_TXD_2, DA850_MII_TXD_1, DA850_MII_TXD_0, DA850_MII_RXER,
+-	DA850_MII_CRS, DA850_MII_RXCLK, DA850_MII_RXDV, DA850_MII_RXD_3,
+-	DA850_MII_RXD_2, DA850_MII_RXD_1, DA850_MII_RXD_0, DA850_MDIO_CLK,
+-	DA850_MDIO_D,
+-	-1
+-};
+-
+-static const short da850_evm_rmii_pins[] = {
+-	DA850_RMII_TXD_0, DA850_RMII_TXD_1, DA850_RMII_TXEN,
+-	DA850_RMII_CRS_DV, DA850_RMII_RXD_0, DA850_RMII_RXD_1,
+-	DA850_RMII_RXER, DA850_RMII_MHZ_50_CLK, DA850_MDIO_CLK,
+-	DA850_MDIO_D,
+-	-1
+-};
+-
+-static struct gpiod_hog da850_evm_emac_gpio_hogs[] = {
+-	{
+-		.chip_label	= "davinci_gpio",
+-		.chip_hwnum	= DA850_MII_MDIO_CLKEN_PIN,
+-		.line_name	= "mdio_clk_en",
+-		.lflags		= 0,
+-		/* dflags set in da850_evm_config_emac() */
+-	},
+-	{ }
+-};
+-
+-static int __init da850_evm_config_emac(void)
+-{
+-	void __iomem *cfg_chip3_base;
+-	int ret;
+-	u32 val;
+-	struct davinci_soc_info *soc_info = &davinci_soc_info;
+-	u8 rmii_en;
+-
+-	if (!machine_is_davinci_da850_evm())
+-		return 0;
+-
+-	rmii_en = soc_info->emac_pdata->rmii_en;
+-
+-	cfg_chip3_base = DA8XX_SYSCFG0_VIRT(DA8XX_CFGCHIP3_REG);
+-
+-	val = __raw_readl(cfg_chip3_base);
+-
+-	if (rmii_en) {
+-		val |= BIT(8);
+-		ret = davinci_cfg_reg_list(da850_evm_rmii_pins);
+-		pr_info("EMAC: RMII PHY configured, MII PHY will not be"
+-							" functional\n");
+-	} else {
+-		val &= ~BIT(8);
+-		ret = davinci_cfg_reg_list(da850_evm_mii_pins);
+-		pr_info("EMAC: MII PHY configured, RMII PHY will not be"
+-							" functional\n");
+-	}
+-
+-	if (ret)
+-		pr_warn("%s: CPGMAC/RMII mux setup failed: %d\n",
+-			__func__, ret);
+-
+-	/* configure the CFGCHIP3 register for RMII or MII */
+-	__raw_writel(val, cfg_chip3_base);
+-
+-	ret = davinci_cfg_reg(DA850_GPIO2_6);
+-	if (ret)
+-		pr_warn("%s:GPIO(2,6) mux setup failed\n", __func__);
+-
+-	da850_evm_emac_gpio_hogs[0].dflags = rmii_en ? GPIOD_OUT_HIGH
+-						     : GPIOD_OUT_LOW;
+-	gpiod_add_hogs(da850_evm_emac_gpio_hogs);
+-
+-	soc_info->emac_pdata->phy_id = DA850_EVM_PHY_ID;
+-
+-	ret = da8xx_register_emac();
+-	if (ret)
+-		pr_warn("%s: EMAC registration failed: %d\n", __func__, ret);
+-
+-	return 0;
+-}
+-device_initcall(da850_evm_config_emac);
+-
+-/*
+- * The following EDMA channels/slots are not being used by drivers (for
+- * example: Timer, GPIO, UART events etc) on da850/omap-l138 EVM, hence
+- * they are being reserved for codecs on the DSP side.
+- */
+-static const s16 da850_dma0_rsv_chans[][2] = {
+-	/* (offset, number) */
+-	{ 8,  6},
+-	{24,  4},
+-	{30,  2},
+-	{-1, -1}
+-};
+-
+-static const s16 da850_dma0_rsv_slots[][2] = {
+-	/* (offset, number) */
+-	{ 8,  6},
+-	{24,  4},
+-	{30, 50},
+-	{-1, -1}
+-};
+-
+-static const s16 da850_dma1_rsv_chans[][2] = {
+-	/* (offset, number) */
+-	{ 0, 28},
+-	{30,  2},
+-	{-1, -1}
+-};
+-
+-static const s16 da850_dma1_rsv_slots[][2] = {
+-	/* (offset, number) */
+-	{ 0, 28},
+-	{30, 90},
+-	{-1, -1}
+-};
+-
+-static struct edma_rsv_info da850_edma_cc0_rsv = {
+-	.rsv_chans	= da850_dma0_rsv_chans,
+-	.rsv_slots	= da850_dma0_rsv_slots,
+-};
+-
+-static struct edma_rsv_info da850_edma_cc1_rsv = {
+-	.rsv_chans	= da850_dma1_rsv_chans,
+-	.rsv_slots	= da850_dma1_rsv_slots,
+-};
+-
+-static struct edma_rsv_info *da850_edma_rsv[2] = {
+-	&da850_edma_cc0_rsv,
+-	&da850_edma_cc1_rsv,
+-};
+-
+-#ifdef CONFIG_CPU_FREQ
+-static __init int da850_evm_init_cpufreq(void)
+-{
+-	switch (system_rev & 0xF) {
+-	case 3:
+-		da850_max_speed = 456000;
+-		break;
+-	case 2:
+-		da850_max_speed = 408000;
+-		break;
+-	case 1:
+-		da850_max_speed = 372000;
+-		break;
+-	}
+-
+-	return da850_register_cpufreq("pll0_sysclk3");
+-}
+-#else
+-static __init int da850_evm_init_cpufreq(void) { return 0; }
+-#endif
+-
+-#if defined(CONFIG_DA850_UI_SD_VIDEO_PORT)
+-
+-#define TVP5147_CH0		"tvp514x-0"
+-#define TVP5147_CH1		"tvp514x-1"
+-
+-/* VPIF capture configuration */
+-static struct tvp514x_platform_data tvp5146_pdata = {
+-		.clk_polarity = 0,
+-		.hs_polarity  = 1,
+-		.vs_polarity  = 1,
+-};
+-
+-#define TVP514X_STD_ALL (V4L2_STD_NTSC | V4L2_STD_PAL)
+-
+-static struct vpif_input da850_ch0_inputs[] = {
+-	{
+-		.input = {
+-			.index = 0,
+-			.name  = "Composite",
+-			.type  = V4L2_INPUT_TYPE_CAMERA,
+-			.capabilities = V4L2_IN_CAP_STD,
+-			.std   = TVP514X_STD_ALL,
+-		},
+-		.input_route = INPUT_CVBS_VI2B,
+-		.output_route = OUTPUT_10BIT_422_EMBEDDED_SYNC,
+-		.subdev_name = TVP5147_CH0,
+-	},
+-};
+-
+-static struct vpif_input da850_ch1_inputs[] = {
+-	{
+-		.input = {
+-			.index = 0,
+-			.name  = "S-Video",
+-			.type  = V4L2_INPUT_TYPE_CAMERA,
+-			.capabilities = V4L2_IN_CAP_STD,
+-			.std   = TVP514X_STD_ALL,
+-		},
+-		.input_route = INPUT_SVIDEO_VI2C_VI1C,
+-		.output_route = OUTPUT_10BIT_422_EMBEDDED_SYNC,
+-		.subdev_name = TVP5147_CH1,
+-	},
+-};
+-
+-static struct vpif_subdev_info da850_vpif_capture_sdev_info[] = {
+-	{
+-		.name = TVP5147_CH0,
+-		.board_info = {
+-			I2C_BOARD_INFO("tvp5146", 0x5d),
+-			.platform_data = &tvp5146_pdata,
+-		},
+-	},
+-	{
+-		.name = TVP5147_CH1,
+-		.board_info = {
+-			I2C_BOARD_INFO("tvp5146", 0x5c),
+-			.platform_data = &tvp5146_pdata,
+-		},
+-	},
+-};
+-
+-static struct vpif_capture_config da850_vpif_capture_config = {
+-	.subdev_info = da850_vpif_capture_sdev_info,
+-	.subdev_count = ARRAY_SIZE(da850_vpif_capture_sdev_info),
+-	.i2c_adapter_id = 1,
+-	.chan_config[0] = {
+-		.inputs = da850_ch0_inputs,
+-		.input_count = ARRAY_SIZE(da850_ch0_inputs),
+-		.vpif_if = {
+-			.if_type = VPIF_IF_BT656,
+-			.hd_pol  = 1,
+-			.vd_pol  = 1,
+-			.fid_pol = 0,
+-		},
+-	},
+-	.chan_config[1] = {
+-		.inputs = da850_ch1_inputs,
+-		.input_count = ARRAY_SIZE(da850_ch1_inputs),
+-		.vpif_if = {
+-			.if_type = VPIF_IF_BT656,
+-			.hd_pol  = 1,
+-			.vd_pol  = 1,
+-			.fid_pol = 0,
+-		},
+-	},
+-	.card_name = "DA850/OMAP-L138 Video Capture",
+-};
+-
+-/* VPIF display configuration */
+-
+-static struct adv7343_platform_data adv7343_pdata = {
+-	.mode_config = {
+-		.dac = { 1, 1, 1 },
+-	},
+-	.sd_config = {
+-		.sd_dac_out = { 1 },
+-	},
+-};
+-
+-static struct vpif_subdev_info da850_vpif_subdev[] = {
+-	{
+-		.name = "adv7343",
+-		.board_info = {
+-			I2C_BOARD_INFO("adv7343", 0x2a),
+-			.platform_data = &adv7343_pdata,
+-		},
+-	},
+-};
+-
+-static const struct vpif_output da850_ch0_outputs[] = {
+-	{
+-		.output = {
+-			.index = 0,
+-			.name = "Composite",
+-			.type = V4L2_OUTPUT_TYPE_ANALOG,
+-			.capabilities = V4L2_OUT_CAP_STD,
+-			.std = V4L2_STD_ALL,
+-		},
+-		.subdev_name = "adv7343",
+-		.output_route = ADV7343_COMPOSITE_ID,
+-	},
+-	{
+-		.output = {
+-			.index = 1,
+-			.name = "S-Video",
+-			.type = V4L2_OUTPUT_TYPE_ANALOG,
+-			.capabilities = V4L2_OUT_CAP_STD,
+-			.std = V4L2_STD_ALL,
+-		},
+-		.subdev_name = "adv7343",
+-		.output_route = ADV7343_SVIDEO_ID,
+-	},
+-};
+-
+-static struct vpif_display_config da850_vpif_display_config = {
+-	.subdevinfo   = da850_vpif_subdev,
+-	.subdev_count = ARRAY_SIZE(da850_vpif_subdev),
+-	.chan_config[0] = {
+-		.outputs = da850_ch0_outputs,
+-		.output_count = ARRAY_SIZE(da850_ch0_outputs),
+-	},
+-	.card_name    = "DA850/OMAP-L138 Video Display",
+-	.i2c_adapter_id = 1,
+-};
+-
+-static __init void da850_vpif_init(void)
+-{
+-	int ret;
+-
+-	ret = da850_register_vpif();
+-	if (ret)
+-		pr_warn("da850_evm_init: VPIF setup failed: %d\n", ret);
+-
+-	ret = davinci_cfg_reg_list(da850_vpif_capture_pins);
+-	if (ret)
+-		pr_warn("da850_evm_init: VPIF capture mux setup failed: %d\n",
+-			ret);
+-
+-	ret = da850_register_vpif_capture(&da850_vpif_capture_config);
+-	if (ret)
+-		pr_warn("da850_evm_init: VPIF capture setup failed: %d\n", ret);
+-
+-	ret = davinci_cfg_reg_list(da850_vpif_display_pins);
+-	if (ret)
+-		pr_warn("da850_evm_init: VPIF display mux setup failed: %d\n",
+-			ret);
+-
+-	ret = da850_register_vpif_display(&da850_vpif_display_config);
+-	if (ret)
+-		pr_warn("da850_evm_init: VPIF display setup failed: %d\n", ret);
+-}
+-
+-#else
+-static __init void da850_vpif_init(void) {}
+-#endif
+-
+-#define DA850EVM_SATA_REFCLKPN_RATE	(100 * 1000 * 1000)
+-
+-static __init void da850_evm_init(void)
+-{
+-	int ret;
+-
+-	da850_register_clocks();
+-
+-	ret = da850_register_gpio();
+-	if (ret)
+-		pr_warn("%s: GPIO init failed: %d\n", __func__, ret);
+-
+-	regulator_register_fixed(0, fixed_supplies, ARRAY_SIZE(fixed_supplies));
+-
+-	ret = pmic_tps65070_init();
+-	if (ret)
+-		pr_warn("%s: TPS65070 PMIC init failed: %d\n", __func__, ret);
+-
+-	ret = da850_register_edma(da850_edma_rsv);
+-	if (ret)
+-		pr_warn("%s: EDMA registration failed: %d\n", __func__, ret);
+-
+-	ret = davinci_cfg_reg_list(da850_i2c0_pins);
+-	if (ret)
+-		pr_warn("%s: I2C0 mux setup failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_i2c(0, &da850_evm_i2c_0_pdata);
+-	if (ret)
+-		pr_warn("%s: I2C0 registration failed: %d\n", __func__, ret);
+-
+-
+-	ret = da8xx_register_watchdog();
+-	if (ret)
+-		pr_warn("%s: watchdog registration failed: %d\n",
+-			__func__, ret);
+-
+-	if (HAS_MMC) {
+-		ret = davinci_cfg_reg_list(da850_evm_mmcsd0_pins);
+-		if (ret)
+-			pr_warn("%s: MMCSD0 mux setup failed: %d\n",
+-				__func__, ret);
+-
+-		gpiod_add_lookup_table(&mmc_gpios_table);
+-
+-		ret = da8xx_register_mmcsd0(&da850_mmc_config);
+-		if (ret)
+-			pr_warn("%s: MMCSD0 registration failed: %d\n",
+-				__func__, ret);
+-	}
+-
+-	davinci_serial_init(da8xx_serial_device);
+-
+-	nvmem_add_cell_table(&da850evm_nvmem_cell_table);
+-	nvmem_add_cell_lookups(&da850evm_nvmem_cell_lookup, 1);
+-
+-	i2c_register_board_info(1, da850_evm_i2c_devices,
+-			ARRAY_SIZE(da850_evm_i2c_devices));
+-
+-	/*
+-	 * shut down uart 0 and 1; they are not used on the board and
+-	 * accessing them causes endless "too much work in irq53" messages
+-	 * with arago fs
+-	 */
+-	__raw_writel(0, IO_ADDRESS(DA8XX_UART1_BASE) + 0x30);
+-	__raw_writel(0, IO_ADDRESS(DA8XX_UART0_BASE) + 0x30);
+-
+-	ret = davinci_cfg_reg_list(da850_evm_mcasp_pins);
+-	if (ret)
+-		pr_warn("%s: McASP mux setup failed: %d\n", __func__, ret);
+-
+-	da850_evm_snd_data.sram_pool = sram_get_gen_pool();
+-	da8xx_register_mcasp(0, &da850_evm_snd_data);
+-
+-	ret = davinci_cfg_reg_list(da850_lcdcntl_pins);
+-	if (ret)
+-		pr_warn("%s: LCDC mux setup failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_uio_pruss();
+-	if (ret)
+-		pr_warn("da850_evm_init: pruss initialization failed: %d\n",
+-				ret);
+-
+-	/* Handle board specific muxing for LCD here */
+-	ret = davinci_cfg_reg_list(da850_evm_lcdc_pins);
+-	if (ret)
+-		pr_warn("%s: EVM specific LCD mux setup failed: %d\n",
+-			__func__, ret);
+-
+-	ret = da850_lcd_hw_init();
+-	if (ret)
+-		pr_warn("%s: LCD initialization failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_lcdc(&sharp_lk043t1dg01_pdata);
+-	if (ret)
+-		pr_warn("%s: LCDC registration failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_rtc();
+-	if (ret)
+-		pr_warn("%s: RTC setup failed: %d\n", __func__, ret);
+-
+-	ret = da850_evm_init_cpufreq();
+-	if (ret)
+-		pr_warn("%s: cpufreq registration failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_cpuidle();
+-	if (ret)
+-		pr_warn("%s: cpuidle registration failed: %d\n", __func__, ret);
+-
+-	davinci_pm_init();
+-	da850_vpif_init();
+-
+-	ret = spi_register_board_info(da850evm_spi_info,
+-				      ARRAY_SIZE(da850evm_spi_info));
+-	if (ret)
+-		pr_warn("%s: spi info registration failed: %d\n", __func__,
+-			ret);
+-
+-	ret = da8xx_register_spi_bus(1, ARRAY_SIZE(da850evm_spi_info));
+-	if (ret)
+-		pr_warn("%s: SPI 1 registration failed: %d\n", __func__, ret);
+-
+-	ret = da850_register_sata(DA850EVM_SATA_REFCLKPN_RATE);
+-	if (ret)
+-		pr_warn("%s: SATA registration failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_rproc();
+-	if (ret)
+-		pr_warn("%s: dsp/rproc registration failed: %d\n",
+-			__func__, ret);
+-
+-	regulator_has_full_constraints();
+-}
+-
+-#ifdef CONFIG_SERIAL_8250_CONSOLE
+-static int __init da850_evm_console_init(void)
+-{
+-	if (!machine_is_davinci_da850_evm())
+-		return 0;
+-
+-	return add_preferred_console("ttyS", 2, "115200");
+-}
+-console_initcall(da850_evm_console_init);
+-#endif
+-
+-static void __init da850_evm_map_io(void)
+-{
+-	da850_init();
+-}
+-
+-MACHINE_START(DAVINCI_DA850_EVM, "DaVinci DA850/OMAP-L138/AM18x EVM")
+-	.atag_offset	= 0x100,
+-	.map_io		= da850_evm_map_io,
+-	.init_irq	= da850_init_irq,
+-	.init_time	= da850_init_time,
+-	.init_machine	= da850_evm_init,
+-	.init_late	= davinci_init_late,
+-	.dma_zone_size	= SZ_128M,
+-	.reserve	= da8xx_rproc_reserve_cma,
+-MACHINE_END
+diff --git a/arch/arm/mach-davinci/board-dm355-evm.c b/arch/arm/mach-davinci/board-dm355-evm.c
+deleted file mode 100644
+index b48ab1c3e48b..000000000000
+--- a/arch/arm/mach-davinci/board-dm355-evm.c
++++ /dev/null
+@@ -1,444 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * TI DaVinci EVM board support
+- *
+- * Author: Kevin Hilman, Deep Root Systems, LLC
+- *
+- * 2007 (c) MontaVista Software, Inc.
+- */
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/err.h>
+-#include <linux/platform_device.h>
+-#include <linux/mtd/mtd.h>
+-#include <linux/mtd/partitions.h>
+-#include <linux/mtd/rawnand.h>
+-#include <linux/i2c.h>
+-#include <linux/gpio.h>
+-#include <linux/gpio/machine.h>
+-#include <linux/clk.h>
+-#include <linux/dm9000.h>
+-#include <linux/videodev2.h>
+-#include <media/i2c/tvp514x.h>
+-#include <linux/spi/spi.h>
+-#include <linux/spi/eeprom.h>
+-#include <linux/platform_data/gpio-davinci.h>
+-#include <linux/platform_data/i2c-davinci.h>
+-#include <linux/platform_data/mtd-davinci.h>
+-#include <linux/platform_data/mmc-davinci.h>
+-#include <linux/platform_data/usb-davinci.h>
+-
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-
+-#include "serial.h"
+-#include "common.h"
+-#include "davinci.h"
+-
+-/* NOTE:  this is geared for the standard config, with a socketed
+- * 2 GByte Micron NAND (MT29F16G08FAA) using 128KB sectors.  If you
+- * swap chips, maybe with a different block size, partitioning may
+- * need to be changed.
+- */
+-#define NAND_BLOCK_SIZE		SZ_128K
+-
+-static struct mtd_partition davinci_nand_partitions[] = {
+-	{
+-		/* UBL (a few copies) plus U-Boot */
+-		.name		= "bootloader",
+-		.offset		= 0,
+-		.size		= 15 * NAND_BLOCK_SIZE,
+-		.mask_flags	= MTD_WRITEABLE, /* force read-only */
+-	}, {
+-		/* U-Boot environment */
+-		.name		= "params",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= 1 * NAND_BLOCK_SIZE,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "kernel",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_4M,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "filesystem1",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_512M,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "filesystem2",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-		.mask_flags	= 0,
+-	}
+-	/* two blocks with bad block table (and mirror) at the end */
+-};
+-
+-static struct davinci_nand_pdata davinci_nand_data = {
+-	.core_chipsel		= 0,
+-	.mask_chipsel		= BIT(14),
+-	.parts			= davinci_nand_partitions,
+-	.nr_parts		= ARRAY_SIZE(davinci_nand_partitions),
+-	.engine_type		= NAND_ECC_ENGINE_TYPE_ON_HOST,
+-	.bbt_options		= NAND_BBT_USE_FLASH,
+-	.ecc_bits		= 4,
+-};
+-
+-static struct resource davinci_nand_resources[] = {
+-	{
+-		.start		= DM355_ASYNC_EMIF_DATA_CE0_BASE,
+-		.end		= DM355_ASYNC_EMIF_DATA_CE0_BASE + SZ_32M - 1,
+-		.flags		= IORESOURCE_MEM,
+-	}, {
+-		.start		= DM355_ASYNC_EMIF_CONTROL_BASE,
+-		.end		= DM355_ASYNC_EMIF_CONTROL_BASE + SZ_4K - 1,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device davinci_nand_device = {
+-	.name			= "davinci_nand",
+-	.id			= 0,
+-
+-	.num_resources		= ARRAY_SIZE(davinci_nand_resources),
+-	.resource		= davinci_nand_resources,
+-
+-	.dev			= {
+-		.platform_data	= &davinci_nand_data,
+-	},
+-};
+-
+-#define DM355_I2C_SDA_PIN	GPIO_TO_PIN(0, 15)
+-#define DM355_I2C_SCL_PIN	GPIO_TO_PIN(0, 14)
+-
+-static struct gpiod_lookup_table i2c_recovery_gpiod_table = {
+-	.dev_id = "i2c_davinci.1",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", DM355_I2C_SDA_PIN, "sda",
+-			    GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN),
+-		GPIO_LOOKUP("davinci_gpio", DM355_I2C_SCL_PIN, "scl",
+-			    GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN),
+-		{ }
+-	},
+-};
+-
+-static struct davinci_i2c_platform_data i2c_pdata = {
+-	.bus_freq	= 400	/* kHz */,
+-	.bus_delay	= 0	/* usec */,
+-	.gpio_recovery	= true,
+-};
+-
+-static int dm355evm_mmc_gpios = -EINVAL;
+-
+-static void dm355evm_mmcsd_gpios(unsigned gpio)
+-{
+-	gpio_request(gpio + 0, "mmc0_ro");
+-	gpio_request(gpio + 1, "mmc0_cd");
+-	gpio_request(gpio + 2, "mmc1_ro");
+-	gpio_request(gpio + 3, "mmc1_cd");
+-
+-	/* we "know" these are input-only so we don't
+-	 * need to call gpio_direction_input()
+-	 */
+-
+-	dm355evm_mmc_gpios = gpio;
+-}
+-
+-static struct i2c_board_info dm355evm_i2c_info[] = {
+-	{	I2C_BOARD_INFO("dm355evm_msp", 0x25),
+-		.platform_data = dm355evm_mmcsd_gpios,
+-	},
+-	/* { plus irq  }, */
+-	{ I2C_BOARD_INFO("tlv320aic33", 0x1b), },
+-};
+-
+-static void __init evm_init_i2c(void)
+-{
+-	gpiod_add_lookup_table(&i2c_recovery_gpiod_table);
+-	davinci_init_i2c(&i2c_pdata);
+-
+-	gpio_request(5, "dm355evm_msp");
+-	gpio_direction_input(5);
+-	dm355evm_i2c_info[0].irq = gpio_to_irq(5);
+-
+-	i2c_register_board_info(1, dm355evm_i2c_info,
+-			ARRAY_SIZE(dm355evm_i2c_info));
+-}
+-
+-static struct resource dm355evm_dm9000_rsrc[] = {
+-	{
+-		/* addr */
+-		.start	= 0x04014000,
+-		.end	= 0x04014001,
+-		.flags	= IORESOURCE_MEM,
+-	}, {
+-		/* data */
+-		.start	= 0x04014002,
+-		.end	= 0x04014003,
+-		.flags	= IORESOURCE_MEM,
+-	}, {
+-		.flags	= IORESOURCE_IRQ
+-			| IORESOURCE_IRQ_HIGHEDGE /* rising (active high) */,
+-	},
+-};
+-
+-static struct dm9000_plat_data dm335evm_dm9000_platdata;
+-
+-static struct platform_device dm355evm_dm9000 = {
+-	.name		= "dm9000",
+-	.id		= -1,
+-	.resource	= dm355evm_dm9000_rsrc,
+-	.num_resources	= ARRAY_SIZE(dm355evm_dm9000_rsrc),
+-	.dev		= {
+-		.platform_data = &dm335evm_dm9000_platdata,
+-	},
+-};
+-
+-static struct tvp514x_platform_data tvp5146_pdata = {
+-	.clk_polarity = 0,
+-	.hs_polarity = 1,
+-	.vs_polarity = 1
+-};
+-
+-#define TVP514X_STD_ALL	(V4L2_STD_NTSC | V4L2_STD_PAL)
+-/* Inputs available at the TVP5146 */
+-static struct v4l2_input tvp5146_inputs[] = {
+-	{
+-		.index = 0,
+-		.name = "Composite",
+-		.type = V4L2_INPUT_TYPE_CAMERA,
+-		.std = TVP514X_STD_ALL,
+-	},
+-	{
+-		.index = 1,
+-		.name = "S-Video",
+-		.type = V4L2_INPUT_TYPE_CAMERA,
+-		.std = TVP514X_STD_ALL,
+-	},
+-};
+-
+-/*
+- * this is the route info for connecting each input to decoder
+- * ouput that goes to vpfe. There is a one to one correspondence
+- * with tvp5146_inputs
+- */
+-static struct vpfe_route tvp5146_routes[] = {
+-	{
+-		.input = INPUT_CVBS_VI2B,
+-		.output = OUTPUT_10BIT_422_EMBEDDED_SYNC,
+-	},
+-	{
+-		.input = INPUT_SVIDEO_VI2C_VI1C,
+-		.output = OUTPUT_10BIT_422_EMBEDDED_SYNC,
+-	},
+-};
+-
+-static struct vpfe_subdev_info vpfe_sub_devs[] = {
+-	{
+-		.name = "tvp5146",
+-		.grp_id = 0,
+-		.num_inputs = ARRAY_SIZE(tvp5146_inputs),
+-		.inputs = tvp5146_inputs,
+-		.routes = tvp5146_routes,
+-		.can_route = 1,
+-		.ccdc_if_params = {
+-			.if_type = VPFE_BT656,
+-			.hdpol = VPFE_PINPOL_POSITIVE,
+-			.vdpol = VPFE_PINPOL_POSITIVE,
+-		},
+-		.board_info = {
+-			I2C_BOARD_INFO("tvp5146", 0x5d),
+-			.platform_data = &tvp5146_pdata,
+-		},
+-	}
+-};
+-
+-static struct vpfe_config vpfe_cfg = {
+-	.num_subdevs = ARRAY_SIZE(vpfe_sub_devs),
+-	.i2c_adapter_id = 1,
+-	.sub_devs = vpfe_sub_devs,
+-	.card_name = "DM355 EVM",
+-	.ccdc = "DM355 CCDC",
+-};
+-
+-/* venc standards timings */
+-static struct vpbe_enc_mode_info dm355evm_enc_preset_timing[] = {
+-	{
+-		.name		= "ntsc",
+-		.timings_type	= VPBE_ENC_STD,
+-		.std_id		= V4L2_STD_NTSC,
+-		.interlaced	= 1,
+-		.xres		= 720,
+-		.yres		= 480,
+-		.aspect		= {11, 10},
+-		.fps		= {30000, 1001},
+-		.left_margin	= 0x79,
+-		.upper_margin	= 0x10,
+-	},
+-	{
+-		.name		= "pal",
+-		.timings_type	= VPBE_ENC_STD,
+-		.std_id		= V4L2_STD_PAL,
+-		.interlaced	= 1,
+-		.xres		= 720,
+-		.yres		= 576,
+-		.aspect		= {54, 59},
+-		.fps		= {25, 1},
+-		.left_margin	= 0x7E,
+-		.upper_margin	= 0x16
+-	},
+-};
+-
+-#define VENC_STD_ALL	(V4L2_STD_NTSC | V4L2_STD_PAL)
+-
+-/*
+- * The outputs available from VPBE + ecnoders. Keep the
+- * the order same as that of encoders. First those from venc followed by that
+- * from encoders. Index in the output refers to index on a particular encoder.
+- * Driver uses this index to pass it to encoder when it supports more than
+- * one output. Application uses index of the array to set an output.
+- */
+-static struct vpbe_output dm355evm_vpbe_outputs[] = {
+-	{
+-		.output		= {
+-			.index		= 0,
+-			.name		= "Composite",
+-			.type		= V4L2_OUTPUT_TYPE_ANALOG,
+-			.std		= VENC_STD_ALL,
+-			.capabilities	= V4L2_OUT_CAP_STD,
+-		},
+-		.subdev_name	= DM355_VPBE_VENC_SUBDEV_NAME,
+-		.default_mode	= "ntsc",
+-		.num_modes	= ARRAY_SIZE(dm355evm_enc_preset_timing),
+-		.modes		= dm355evm_enc_preset_timing,
+-		.if_params	= MEDIA_BUS_FMT_FIXED,
+-	},
+-};
+-
+-static struct vpbe_config dm355evm_display_cfg = {
+-	.module_name	= "dm355-vpbe-display",
+-	.i2c_adapter_id	= 1,
+-	.osd		= {
+-		.module_name	= DM355_VPBE_OSD_SUBDEV_NAME,
+-	},
+-	.venc		= {
+-		.module_name	= DM355_VPBE_VENC_SUBDEV_NAME,
+-	},
+-	.num_outputs	= ARRAY_SIZE(dm355evm_vpbe_outputs),
+-	.outputs	= dm355evm_vpbe_outputs,
+-};
+-
+-static struct platform_device *davinci_evm_devices[] __initdata = {
+-	&dm355evm_dm9000,
+-	&davinci_nand_device,
+-};
+-
+-static void __init dm355_evm_map_io(void)
+-{
+-	dm355_init();
+-}
+-
+-static int dm355evm_mmc_get_cd(int module)
+-{
+-	if (!gpio_is_valid(dm355evm_mmc_gpios))
+-		return -ENXIO;
+-	/* low == card present */
+-	return !gpio_get_value_cansleep(dm355evm_mmc_gpios + 2 * module + 1);
+-}
+-
+-static int dm355evm_mmc_get_ro(int module)
+-{
+-	if (!gpio_is_valid(dm355evm_mmc_gpios))
+-		return -ENXIO;
+-	/* high == card's write protect switch active */
+-	return gpio_get_value_cansleep(dm355evm_mmc_gpios + 2 * module + 0);
+-}
+-
+-static struct davinci_mmc_config dm355evm_mmc_config = {
+-	.get_cd		= dm355evm_mmc_get_cd,
+-	.get_ro		= dm355evm_mmc_get_ro,
+-	.wires		= 4,
+-	.max_freq       = 50000000,
+-	.caps           = MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED,
+-};
+-
+-/* Don't connect anything to J10 unless you're only using USB host
+- * mode *and* have to do so with some kind of gender-bender.  If
+- * you have proper Mini-B or Mini-A cables (or Mini-A adapters)
+- * the ID pin won't need any help.
+- */
+-#define USB_ID_VALUE	1	/* ID pulled low */
+-
+-static struct spi_eeprom at25640a = {
+-	.byte_len	= SZ_64K / 8,
+-	.name		= "at25640a",
+-	.page_size	= 32,
+-	.flags		= EE_ADDR2,
+-};
+-
+-static const struct spi_board_info dm355_evm_spi_info[] __initconst = {
+-	{
+-		.modalias	= "at25",
+-		.platform_data	= &at25640a,
+-		.max_speed_hz	= 10 * 1000 * 1000,	/* at 3v3 */
+-		.bus_num	= 0,
+-		.chip_select	= 0,
+-		.mode		= SPI_MODE_0,
+-	},
+-};
+-
+-static __init void dm355_evm_init(void)
+-{
+-	struct clk *aemif;
+-	int ret;
+-
+-	dm355_register_clocks();
+-
+-	ret = dm355_gpio_register();
+-	if (ret)
+-		pr_warn("%s: GPIO init failed: %d\n", __func__, ret);
+-
+-	gpio_request(1, "dm9000");
+-	gpio_direction_input(1);
+-	dm355evm_dm9000_rsrc[2].start = gpio_to_irq(1);
+-
+-	aemif = clk_get(&dm355evm_dm9000.dev, "aemif");
+-	if (!WARN(IS_ERR(aemif), "unable to get AEMIF clock\n"))
+-		clk_prepare_enable(aemif);
+-
+-	platform_add_devices(davinci_evm_devices,
+-			     ARRAY_SIZE(davinci_evm_devices));
+-	evm_init_i2c();
+-	davinci_serial_init(dm355_serial_device);
+-
+-	/* NOTE:  NAND flash timings set by the UBL are slower than
+-	 * needed by MT29F16G08FAA chips ... EMIF.A1CR is 0x40400204
+-	 * but could be 0x0400008c for about 25% faster page reads.
+-	 */
+-
+-	gpio_request(2, "usb_id_toggle");
+-	gpio_direction_output(2, USB_ID_VALUE);
+-	/* irlml6401 switches over 1A in under 8 msec */
+-	davinci_setup_usb(1000, 8);
+-
+-	davinci_setup_mmc(0, &dm355evm_mmc_config);
+-	davinci_setup_mmc(1, &dm355evm_mmc_config);
+-
+-	dm355_init_video(&vpfe_cfg, &dm355evm_display_cfg);
+-
+-	dm355_init_spi0(BIT(0), dm355_evm_spi_info,
+-			ARRAY_SIZE(dm355_evm_spi_info));
+-
+-	/* DM335 EVM uses ASP1; line-out is a stereo mini-jack */
+-	dm355_init_asp1(ASP1_TX_EVT_EN | ASP1_RX_EVT_EN);
+-}
+-
+-MACHINE_START(DAVINCI_DM355_EVM, "DaVinci DM355 EVM")
+-	.atag_offset  = 0x100,
+-	.map_io	      = dm355_evm_map_io,
+-	.init_irq     = dm355_init_irq,
+-	.init_time	= dm355_init_time,
+-	.init_machine = dm355_evm_init,
+-	.init_late	= davinci_init_late,
+-	.dma_zone_size	= SZ_128M,
+-MACHINE_END
+diff --git a/arch/arm/mach-davinci/board-dm355-leopard.c b/arch/arm/mach-davinci/board-dm355-leopard.c
+deleted file mode 100644
+index 32b9d607d025..000000000000
+--- a/arch/arm/mach-davinci/board-dm355-leopard.c
++++ /dev/null
+@@ -1,278 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * DM355 leopard board support
+- *
+- * Based on board-dm355-evm.c
+- */
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/err.h>
+-#include <linux/platform_device.h>
+-#include <linux/mtd/mtd.h>
+-#include <linux/mtd/partitions.h>
+-#include <linux/mtd/rawnand.h>
+-#include <linux/i2c.h>
+-#include <linux/gpio.h>
+-#include <linux/clk.h>
+-#include <linux/spi/spi.h>
+-#include <linux/spi/eeprom.h>
+-#include <linux/platform_data/i2c-davinci.h>
+-#include <linux/platform_data/mmc-davinci.h>
+-#include <linux/platform_data/mtd-davinci.h>
+-#include <linux/platform_data/usb-davinci.h>
+-
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-
+-#include "common.h"
+-#include "serial.h"
+-#include "davinci.h"
+-
+-/* NOTE:  this is geared for the standard config, with a socketed
+- * 2 GByte Micron NAND (MT29F16G08FAA) using 128KB sectors.  If you
+- * swap chips, maybe with a different block size, partitioning may
+- * need to be changed.
+- */
+-#define NAND_BLOCK_SIZE		SZ_128K
+-
+-static struct mtd_partition davinci_nand_partitions[] = {
+-	{
+-		/* UBL (a few copies) plus U-Boot */
+-		.name		= "bootloader",
+-		.offset		= 0,
+-		.size		= 15 * NAND_BLOCK_SIZE,
+-		.mask_flags	= MTD_WRITEABLE, /* force read-only */
+-	}, {
+-		/* U-Boot environment */
+-		.name		= "params",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= 1 * NAND_BLOCK_SIZE,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "kernel",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_4M,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "filesystem1",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_512M,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "filesystem2",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-		.mask_flags	= 0,
+-	}
+-	/* two blocks with bad block table (and mirror) at the end */
+-};
+-
+-static struct davinci_nand_pdata davinci_nand_data = {
+-	.core_chipsel		= 0,
+-	.mask_chipsel		= BIT(14),
+-	.parts			= davinci_nand_partitions,
+-	.nr_parts		= ARRAY_SIZE(davinci_nand_partitions),
+-	.engine_type		= NAND_ECC_ENGINE_TYPE_ON_HOST,
+-	.ecc_placement		= NAND_ECC_PLACEMENT_INTERLEAVED,
+-	.ecc_bits		= 4,
+-	.bbt_options		= NAND_BBT_USE_FLASH,
+-};
+-
+-static struct resource davinci_nand_resources[] = {
+-	{
+-		.start		= DM355_ASYNC_EMIF_DATA_CE0_BASE,
+-		.end		= DM355_ASYNC_EMIF_DATA_CE0_BASE + SZ_32M - 1,
+-		.flags		= IORESOURCE_MEM,
+-	}, {
+-		.start		= DM355_ASYNC_EMIF_CONTROL_BASE,
+-		.end		= DM355_ASYNC_EMIF_CONTROL_BASE + SZ_4K - 1,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device davinci_nand_device = {
+-	.name			= "davinci_nand",
+-	.id			= 0,
+-
+-	.num_resources		= ARRAY_SIZE(davinci_nand_resources),
+-	.resource		= davinci_nand_resources,
+-
+-	.dev			= {
+-		.platform_data	= &davinci_nand_data,
+-	},
+-};
+-
+-static struct davinci_i2c_platform_data i2c_pdata = {
+-	.bus_freq	= 400	/* kHz */,
+-	.bus_delay	= 0	/* usec */,
+-};
+-
+-static int leopard_mmc_gpio = -EINVAL;
+-
+-static void dm355leopard_mmcsd_gpios(unsigned gpio)
+-{
+-	gpio_request(gpio + 0, "mmc0_ro");
+-	gpio_request(gpio + 1, "mmc0_cd");
+-	gpio_request(gpio + 2, "mmc1_ro");
+-	gpio_request(gpio + 3, "mmc1_cd");
+-
+-	/* we "know" these are input-only so we don't
+-	 * need to call gpio_direction_input()
+-	 */
+-
+-	leopard_mmc_gpio = gpio;
+-}
+-
+-static struct i2c_board_info dm355leopard_i2c_info[] = {
+-	{ I2C_BOARD_INFO("dm355leopard_msp", 0x25),
+-		.platform_data = dm355leopard_mmcsd_gpios,
+-		/* plus irq */ },
+-	/* { I2C_BOARD_INFO("tlv320aic3x", 0x1b), }, */
+-	/* { I2C_BOARD_INFO("tvp5146", 0x5d), }, */
+-};
+-
+-static void __init leopard_init_i2c(void)
+-{
+-	davinci_init_i2c(&i2c_pdata);
+-
+-	gpio_request(5, "dm355leopard_msp");
+-	gpio_direction_input(5);
+-	dm355leopard_i2c_info[0].irq = gpio_to_irq(5);
+-
+-	i2c_register_board_info(1, dm355leopard_i2c_info,
+-			ARRAY_SIZE(dm355leopard_i2c_info));
+-}
+-
+-static struct resource dm355leopard_dm9000_rsrc[] = {
+-	{
+-		/* addr */
+-		.start	= 0x04000000,
+-		.end	= 0x04000001,
+-		.flags	= IORESOURCE_MEM,
+-	}, {
+-		/* data */
+-		.start	= 0x04000016,
+-		.end	= 0x04000017,
+-		.flags	= IORESOURCE_MEM,
+-	}, {
+-		.flags	= IORESOURCE_IRQ
+-			| IORESOURCE_IRQ_HIGHEDGE /* rising (active high) */,
+-	},
+-};
+-
+-static struct platform_device dm355leopard_dm9000 = {
+-	.name		= "dm9000",
+-	.id		= -1,
+-	.resource	= dm355leopard_dm9000_rsrc,
+-	.num_resources	= ARRAY_SIZE(dm355leopard_dm9000_rsrc),
+-};
+-
+-static struct platform_device *davinci_leopard_devices[] __initdata = {
+-	&dm355leopard_dm9000,
+-	&davinci_nand_device,
+-};
+-
+-static void __init dm355_leopard_map_io(void)
+-{
+-	dm355_init();
+-}
+-
+-static int dm355leopard_mmc_get_cd(int module)
+-{
+-	if (!gpio_is_valid(leopard_mmc_gpio))
+-		return -ENXIO;
+-	/* low == card present */
+-	return !gpio_get_value_cansleep(leopard_mmc_gpio + 2 * module + 1);
+-}
+-
+-static int dm355leopard_mmc_get_ro(int module)
+-{
+-	if (!gpio_is_valid(leopard_mmc_gpio))
+-		return -ENXIO;
+-	/* high == card's write protect switch active */
+-	return gpio_get_value_cansleep(leopard_mmc_gpio + 2 * module + 0);
+-}
+-
+-static struct davinci_mmc_config dm355leopard_mmc_config = {
+-	.get_cd		= dm355leopard_mmc_get_cd,
+-	.get_ro		= dm355leopard_mmc_get_ro,
+-	.wires		= 4,
+-	.max_freq       = 50000000,
+-	.caps           = MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED,
+-};
+-
+-/* Don't connect anything to J10 unless you're only using USB host
+- * mode *and* have to do so with some kind of gender-bender.  If
+- * you have proper Mini-B or Mini-A cables (or Mini-A adapters)
+- * the ID pin won't need any help.
+- */
+-#define USB_ID_VALUE	1	/* ID pulled low */
+-
+-static struct spi_eeprom at25640a = {
+-	.byte_len	= SZ_64K / 8,
+-	.name		= "at25640a",
+-	.page_size	= 32,
+-	.flags		= EE_ADDR2,
+-};
+-
+-static const struct spi_board_info dm355_leopard_spi_info[] __initconst = {
+-	{
+-		.modalias	= "at25",
+-		.platform_data	= &at25640a,
+-		.max_speed_hz	= 10 * 1000 * 1000,	/* at 3v3 */
+-		.bus_num	= 0,
+-		.chip_select	= 0,
+-		.mode		= SPI_MODE_0,
+-	},
+-};
+-
+-static __init void dm355_leopard_init(void)
+-{
+-	struct clk *aemif;
+-	int ret;
+-
+-	dm355_register_clocks();
+-
+-	ret = dm355_gpio_register();
+-	if (ret)
+-		pr_warn("%s: GPIO init failed: %d\n", __func__, ret);
+-
+-	gpio_request(9, "dm9000");
+-	gpio_direction_input(9);
+-	dm355leopard_dm9000_rsrc[2].start = gpio_to_irq(9);
+-
+-	aemif = clk_get(&dm355leopard_dm9000.dev, "aemif");
+-	if (!WARN(IS_ERR(aemif), "unable to get AEMIF clock\n"))
+-		clk_prepare_enable(aemif);
+-
+-	platform_add_devices(davinci_leopard_devices,
+-			     ARRAY_SIZE(davinci_leopard_devices));
+-	leopard_init_i2c();
+-	davinci_serial_init(dm355_serial_device);
+-
+-	/* NOTE:  NAND flash timings set by the UBL are slower than
+-	 * needed by MT29F16G08FAA chips ... EMIF.A1CR is 0x40400204
+-	 * but could be 0x0400008c for about 25% faster page reads.
+-	 */
+-
+-	gpio_request(2, "usb_id_toggle");
+-	gpio_direction_output(2, USB_ID_VALUE);
+-	/* irlml6401 switches over 1A in under 8 msec */
+-	davinci_setup_usb(1000, 8);
+-
+-	davinci_setup_mmc(0, &dm355leopard_mmc_config);
+-	davinci_setup_mmc(1, &dm355leopard_mmc_config);
+-
+-	dm355_init_spi0(BIT(0), dm355_leopard_spi_info,
+-			ARRAY_SIZE(dm355_leopard_spi_info));
+-}
+-
+-MACHINE_START(DM355_LEOPARD, "DaVinci DM355 leopard")
+-	.atag_offset  = 0x100,
+-	.map_io	      = dm355_leopard_map_io,
+-	.init_irq     = dm355_init_irq,
+-	.init_time	= dm355_init_time,
+-	.init_machine = dm355_leopard_init,
+-	.init_late	= davinci_init_late,
+-	.dma_zone_size	= SZ_128M,
+-MACHINE_END
+diff --git a/arch/arm/mach-davinci/board-dm365-evm.c b/arch/arm/mach-davinci/board-dm365-evm.c
+deleted file mode 100644
+index d8c6c360818b..000000000000
+--- a/arch/arm/mach-davinci/board-dm365-evm.c
++++ /dev/null
+@@ -1,855 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * TI DaVinci DM365 EVM board support
+- *
+- * Copyright (C) 2009 Texas Instruments Incorporated
+- */
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/err.h>
+-#include <linux/i2c.h>
+-#include <linux/io.h>
+-#include <linux/clk.h>
+-#include <linux/property.h>
+-#include <linux/leds.h>
+-#include <linux/mtd/mtd.h>
+-#include <linux/mtd/partitions.h>
+-#include <linux/slab.h>
+-#include <linux/mtd/rawnand.h>
+-#include <linux/nvmem-provider.h>
+-#include <linux/input.h>
+-#include <linux/spi/spi.h>
+-#include <linux/spi/eeprom.h>
+-#include <linux/v4l2-dv-timings.h>
+-#include <linux/platform_data/ti-aemif.h>
+-#include <linux/regulator/fixed.h>
+-#include <linux/regulator/machine.h>
+-
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-
+-#include <linux/platform_data/i2c-davinci.h>
+-#include <linux/platform_data/mmc-davinci.h>
+-#include <linux/platform_data/mtd-davinci.h>
+-#include <linux/platform_data/keyscan-davinci.h>
+-
+-#include <media/i2c/ths7303.h>
+-#include <media/i2c/tvp514x.h>
+-
+-#include "mux.h"
+-#include "common.h"
+-#include "serial.h"
+-#include "davinci.h"
+-
+-static inline int have_imager(void)
+-{
+-	/* REVISIT when it's supported, trigger via Kconfig */
+-	return 0;
+-}
+-
+-static inline int have_tvp7002(void)
+-{
+-	/* REVISIT when it's supported, trigger via Kconfig */
+-	return 0;
+-}
+-
+-#define DM365_EVM_PHY_ID		"davinci_mdio-0:01"
+-/*
+- * A MAX-II CPLD is used for various board control functions.
+- */
+-#define CPLD_OFFSET(a13a8,a2a1)		(((a13a8) << 10) + ((a2a1) << 3))
+-
+-#define CPLD_VERSION	CPLD_OFFSET(0,0)	/* r/o */
+-#define CPLD_TEST	CPLD_OFFSET(0,1)
+-#define CPLD_LEDS	CPLD_OFFSET(0,2)
+-#define CPLD_MUX	CPLD_OFFSET(0,3)
+-#define CPLD_SWITCH	CPLD_OFFSET(1,0)	/* r/o */
+-#define CPLD_POWER	CPLD_OFFSET(1,1)
+-#define CPLD_VIDEO	CPLD_OFFSET(1,2)
+-#define CPLD_CARDSTAT	CPLD_OFFSET(1,3)	/* r/o */
+-
+-#define CPLD_DILC_OUT	CPLD_OFFSET(2,0)
+-#define CPLD_DILC_IN	CPLD_OFFSET(2,1)	/* r/o */
+-
+-#define CPLD_IMG_DIR0	CPLD_OFFSET(2,2)
+-#define CPLD_IMG_MUX0	CPLD_OFFSET(2,3)
+-#define CPLD_IMG_MUX1	CPLD_OFFSET(3,0)
+-#define CPLD_IMG_DIR1	CPLD_OFFSET(3,1)
+-#define CPLD_IMG_MUX2	CPLD_OFFSET(3,2)
+-#define CPLD_IMG_MUX3	CPLD_OFFSET(3,3)
+-#define CPLD_IMG_DIR2	CPLD_OFFSET(4,0)
+-#define CPLD_IMG_MUX4	CPLD_OFFSET(4,1)
+-#define CPLD_IMG_MUX5	CPLD_OFFSET(4,2)
+-
+-#define CPLD_RESETS	CPLD_OFFSET(4,3)
+-
+-#define CPLD_CCD_DIR1	CPLD_OFFSET(0x3e,0)
+-#define CPLD_CCD_IO1	CPLD_OFFSET(0x3e,1)
+-#define CPLD_CCD_DIR2	CPLD_OFFSET(0x3e,2)
+-#define CPLD_CCD_IO2	CPLD_OFFSET(0x3e,3)
+-#define CPLD_CCD_DIR3	CPLD_OFFSET(0x3f,0)
+-#define CPLD_CCD_IO3	CPLD_OFFSET(0x3f,1)
+-
+-static void __iomem *cpld;
+-
+-
+-/* NOTE:  this is geared for the standard config, with a socketed
+- * 2 GByte Micron NAND (MT29F16G08FAA) using 128KB sectors.  If you
+- * swap chips with a different block size, partitioning will
+- * need to be changed. This NAND chip MT29F16G08FAA is the default
+- * NAND shipped with the Spectrum Digital DM365 EVM
+- */
+-#define NAND_BLOCK_SIZE		SZ_128K
+-
+-static struct mtd_partition davinci_nand_partitions[] = {
+-	{
+-		/* UBL (a few copies) plus U-Boot */
+-		.name		= "bootloader",
+-		.offset		= 0,
+-		.size		= 30 * NAND_BLOCK_SIZE,
+-		.mask_flags	= MTD_WRITEABLE, /* force read-only */
+-	}, {
+-		/* U-Boot environment */
+-		.name		= "params",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= 2 * NAND_BLOCK_SIZE,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "kernel",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_4M,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "filesystem1",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_512M,
+-		.mask_flags	= 0,
+-	}, {
+-		.name		= "filesystem2",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-		.mask_flags	= 0,
+-	}
+-	/* two blocks with bad block table (and mirror) at the end */
+-};
+-
+-static struct davinci_nand_pdata davinci_nand_data = {
+-	.core_chipsel		= 0,
+-	.mask_chipsel		= BIT(14),
+-	.parts			= davinci_nand_partitions,
+-	.nr_parts		= ARRAY_SIZE(davinci_nand_partitions),
+-	.engine_type		= NAND_ECC_ENGINE_TYPE_ON_HOST,
+-	.bbt_options		= NAND_BBT_USE_FLASH,
+-	.ecc_bits		= 4,
+-};
+-
+-static struct resource davinci_nand_resources[] = {
+-	{
+-		.start		= DM365_ASYNC_EMIF_DATA_CE0_BASE,
+-		.end		= DM365_ASYNC_EMIF_DATA_CE0_BASE + SZ_32M - 1,
+-		.flags		= IORESOURCE_MEM,
+-	}, {
+-		.start		= DM365_ASYNC_EMIF_CONTROL_BASE,
+-		.end		= DM365_ASYNC_EMIF_CONTROL_BASE + SZ_4K - 1,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device davinci_aemif_devices[] = {
+-	{
+-		.name		= "davinci_nand",
+-		.id		= 0,
+-		.num_resources	= ARRAY_SIZE(davinci_nand_resources),
+-		.resource	= davinci_nand_resources,
+-		.dev		= {
+-			.platform_data	= &davinci_nand_data,
+-		},
+-	}
+-};
+-
+-static struct resource davinci_aemif_resources[] = {
+-	{
+-		.start		= DM365_ASYNC_EMIF_CONTROL_BASE,
+-		.end		= DM365_ASYNC_EMIF_CONTROL_BASE + SZ_4K - 1,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct aemif_abus_data da850_evm_aemif_abus_data[] = {
+-	{
+-		.cs		= 1,
+-	},
+-};
+-
+-static struct aemif_platform_data davinci_aemif_pdata = {
+-	.abus_data		= da850_evm_aemif_abus_data,
+-	.num_abus_data		= ARRAY_SIZE(da850_evm_aemif_abus_data),
+-	.sub_devices		= davinci_aemif_devices,
+-	.num_sub_devices	= ARRAY_SIZE(davinci_aemif_devices),
+-};
+-
+-static struct platform_device davinci_aemif_device = {
+-	.name			= "ti-aemif",
+-	.id			= -1,
+-	.dev = {
+-		.platform_data	= &davinci_aemif_pdata,
+-	},
+-	.resource		= davinci_aemif_resources,
+-	.num_resources		= ARRAY_SIZE(davinci_aemif_resources),
+-};
+-
+-static struct nvmem_cell_info davinci_nvmem_cells[] = {
+-	{
+-		.name		= "macaddr",
+-		.offset		= 0x7f00,
+-		.bytes		= ETH_ALEN,
+-	}
+-};
+-
+-static struct nvmem_cell_table davinci_nvmem_cell_table = {
+-	.nvmem_name	= "1-00500",
+-	.cells		= davinci_nvmem_cells,
+-	.ncells		= ARRAY_SIZE(davinci_nvmem_cells),
+-};
+-
+-static struct nvmem_cell_lookup davinci_nvmem_cell_lookup = {
+-	.nvmem_name	= "1-00500",
+-	.cell_name	= "macaddr",
+-	.dev_id		= "davinci_emac.1",
+-	.con_id		= "mac-address",
+-};
+-
+-static const struct property_entry eeprom_properties[] = {
+-	PROPERTY_ENTRY_U32("pagesize", 64),
+-	{ }
+-};
+-
+-static const struct software_node eeprom_node = {
+-	.properties = eeprom_properties,
+-};
+-
+-static struct i2c_board_info i2c_info[] = {
+-	{
+-		I2C_BOARD_INFO("24c256", 0x50),
+-		.swnode = &eeprom_node,
+-	},
+-	{
+-		I2C_BOARD_INFO("tlv320aic3x", 0x18),
+-	},
+-};
+-
+-static struct davinci_i2c_platform_data i2c_pdata = {
+-	.bus_freq	= 400	/* kHz */,
+-	.bus_delay	= 0	/* usec */,
+-};
+-
+-/* Fixed regulator support */
+-static struct regulator_consumer_supply fixed_supplies_3_3v[] = {
+-	/* Baseboard 3.3V: 5V -> TPS767D301 -> 3.3V */
+-	REGULATOR_SUPPLY("AVDD", "1-0018"),
+-	REGULATOR_SUPPLY("DRVDD", "1-0018"),
+-	REGULATOR_SUPPLY("IOVDD", "1-0018"),
+-};
+-
+-static struct regulator_consumer_supply fixed_supplies_1_8v[] = {
+-	/* Baseboard 1.8V: 5V -> TPS767D301 -> 1.8V */
+-	REGULATOR_SUPPLY("DVDD", "1-0018"),
+-};
+-
+-static int dm365evm_keyscan_enable(struct device *dev)
+-{
+-	return davinci_cfg_reg(DM365_KEYSCAN);
+-}
+-
+-static unsigned short dm365evm_keymap[] = {
+-	KEY_KP2,
+-	KEY_LEFT,
+-	KEY_EXIT,
+-	KEY_DOWN,
+-	KEY_ENTER,
+-	KEY_UP,
+-	KEY_KP1,
+-	KEY_RIGHT,
+-	KEY_MENU,
+-	KEY_RECORD,
+-	KEY_REWIND,
+-	KEY_KPMINUS,
+-	KEY_STOP,
+-	KEY_FASTFORWARD,
+-	KEY_KPPLUS,
+-	KEY_PLAYPAUSE,
+-	0
+-};
+-
+-static struct davinci_ks_platform_data dm365evm_ks_data = {
+-	.device_enable	= dm365evm_keyscan_enable,
+-	.keymap		= dm365evm_keymap,
+-	.keymapsize	= ARRAY_SIZE(dm365evm_keymap),
+-	.rep		= 1,
+-	/* Scan period = strobe + interval */
+-	.strobe		= 0x5,
+-	.interval	= 0x2,
+-	.matrix_type	= DAVINCI_KEYSCAN_MATRIX_4X4,
+-};
+-
+-static int cpld_mmc_get_cd(int module)
+-{
+-	if (!cpld)
+-		return -ENXIO;
+-
+-	/* low == card present */
+-	return !(__raw_readb(cpld + CPLD_CARDSTAT) & BIT(module ? 4 : 0));
+-}
+-
+-static int cpld_mmc_get_ro(int module)
+-{
+-	if (!cpld)
+-		return -ENXIO;
+-
+-	/* high == card's write protect switch active */
+-	return !!(__raw_readb(cpld + CPLD_CARDSTAT) & BIT(module ? 5 : 1));
+-}
+-
+-static struct davinci_mmc_config dm365evm_mmc_config = {
+-	.get_cd		= cpld_mmc_get_cd,
+-	.get_ro		= cpld_mmc_get_ro,
+-	.wires		= 4,
+-	.max_freq	= 50000000,
+-	.caps		= MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED,
+-};
+-
+-static void dm365evm_emac_configure(void)
+-{
+-	/*
+-	 * EMAC pins are multiplexed with GPIO and UART
+-	 * Further details are available at the DM365 ARM
+-	 * Subsystem Users Guide(sprufg5.pdf) pages 125 - 127
+-	 */
+-	davinci_cfg_reg(DM365_EMAC_TX_EN);
+-	davinci_cfg_reg(DM365_EMAC_TX_CLK);
+-	davinci_cfg_reg(DM365_EMAC_COL);
+-	davinci_cfg_reg(DM365_EMAC_TXD3);
+-	davinci_cfg_reg(DM365_EMAC_TXD2);
+-	davinci_cfg_reg(DM365_EMAC_TXD1);
+-	davinci_cfg_reg(DM365_EMAC_TXD0);
+-	davinci_cfg_reg(DM365_EMAC_RXD3);
+-	davinci_cfg_reg(DM365_EMAC_RXD2);
+-	davinci_cfg_reg(DM365_EMAC_RXD1);
+-	davinci_cfg_reg(DM365_EMAC_RXD0);
+-	davinci_cfg_reg(DM365_EMAC_RX_CLK);
+-	davinci_cfg_reg(DM365_EMAC_RX_DV);
+-	davinci_cfg_reg(DM365_EMAC_RX_ER);
+-	davinci_cfg_reg(DM365_EMAC_CRS);
+-	davinci_cfg_reg(DM365_EMAC_MDIO);
+-	davinci_cfg_reg(DM365_EMAC_MDCLK);
+-
+-	/*
+-	 * EMAC interrupts are multiplexed with GPIO interrupts
+-	 * Details are available at the DM365 ARM
+-	 * Subsystem Users Guide(sprufg5.pdf) pages 133 - 134
+-	 */
+-	davinci_cfg_reg(DM365_INT_EMAC_RXTHRESH);
+-	davinci_cfg_reg(DM365_INT_EMAC_RXPULSE);
+-	davinci_cfg_reg(DM365_INT_EMAC_TXPULSE);
+-	davinci_cfg_reg(DM365_INT_EMAC_MISCPULSE);
+-}
+-
+-static void dm365evm_mmc_configure(void)
+-{
+-	/*
+-	 * MMC/SD pins are multiplexed with GPIO and EMIF
+-	 * Further details are available at the DM365 ARM
+-	 * Subsystem Users Guide(sprufg5.pdf) pages 118, 128 - 131
+-	 */
+-	davinci_cfg_reg(DM365_SD1_CLK);
+-	davinci_cfg_reg(DM365_SD1_CMD);
+-	davinci_cfg_reg(DM365_SD1_DATA3);
+-	davinci_cfg_reg(DM365_SD1_DATA2);
+-	davinci_cfg_reg(DM365_SD1_DATA1);
+-	davinci_cfg_reg(DM365_SD1_DATA0);
+-}
+-
+-static struct tvp514x_platform_data tvp5146_pdata = {
+-	.clk_polarity = 0,
+-	.hs_polarity = 1,
+-	.vs_polarity = 1
+-};
+-
+-#define TVP514X_STD_ALL        (V4L2_STD_NTSC | V4L2_STD_PAL)
+-/* Inputs available at the TVP5146 */
+-static struct v4l2_input tvp5146_inputs[] = {
+-	{
+-		.index = 0,
+-		.name = "Composite",
+-		.type = V4L2_INPUT_TYPE_CAMERA,
+-		.std = TVP514X_STD_ALL,
+-	},
+-	{
+-		.index = 1,
+-		.name = "S-Video",
+-		.type = V4L2_INPUT_TYPE_CAMERA,
+-		.std = TVP514X_STD_ALL,
+-	},
+-};
+-
+-/*
+- * this is the route info for connecting each input to decoder
+- * ouput that goes to vpfe. There is a one to one correspondence
+- * with tvp5146_inputs
+- */
+-static struct vpfe_route tvp5146_routes[] = {
+-	{
+-		.input = INPUT_CVBS_VI2B,
+-		.output = OUTPUT_10BIT_422_EMBEDDED_SYNC,
+-	},
+-{
+-		.input = INPUT_SVIDEO_VI2C_VI1C,
+-		.output = OUTPUT_10BIT_422_EMBEDDED_SYNC,
+-	},
+-};
+-
+-static struct vpfe_subdev_info vpfe_sub_devs[] = {
+-	{
+-		.name = "tvp5146",
+-		.grp_id = 0,
+-		.num_inputs = ARRAY_SIZE(tvp5146_inputs),
+-		.inputs = tvp5146_inputs,
+-		.routes = tvp5146_routes,
+-		.can_route = 1,
+-		.ccdc_if_params = {
+-			.if_type = VPFE_BT656,
+-			.hdpol = VPFE_PINPOL_POSITIVE,
+-			.vdpol = VPFE_PINPOL_POSITIVE,
+-		},
+-		.board_info = {
+-			I2C_BOARD_INFO("tvp5146", 0x5d),
+-			.platform_data = &tvp5146_pdata,
+-		},
+-	},
+-};
+-
+-static struct vpfe_config vpfe_cfg = {
+-	.num_subdevs = ARRAY_SIZE(vpfe_sub_devs),
+-	.sub_devs = vpfe_sub_devs,
+-	.i2c_adapter_id = 1,
+-	.card_name = "DM365 EVM",
+-	.ccdc = "ISIF",
+-};
+-
+-/* venc standards timings */
+-static struct vpbe_enc_mode_info dm365evm_enc_std_timing[] = {
+-	{
+-		.name		= "ntsc",
+-		.timings_type	= VPBE_ENC_STD,
+-		.std_id		= V4L2_STD_NTSC,
+-		.interlaced	= 1,
+-		.xres		= 720,
+-		.yres		= 480,
+-		.aspect		= {11, 10},
+-		.fps		= {30000, 1001},
+-		.left_margin	= 0x79,
+-		.upper_margin	= 0x10,
+-	},
+-	{
+-		.name		= "pal",
+-		.timings_type	= VPBE_ENC_STD,
+-		.std_id		= V4L2_STD_PAL,
+-		.interlaced	= 1,
+-		.xres		= 720,
+-		.yres		= 576,
+-		.aspect		= {54, 59},
+-		.fps		= {25, 1},
+-		.left_margin	= 0x7E,
+-		.upper_margin	= 0x16,
+-	},
+-};
+-
+-/* venc dv timings */
+-static struct vpbe_enc_mode_info dm365evm_enc_preset_timing[] = {
+-	{
+-		.name		= "480p59_94",
+-		.timings_type	= VPBE_ENC_DV_TIMINGS,
+-		.dv_timings	= V4L2_DV_BT_CEA_720X480P59_94,
+-		.interlaced	= 0,
+-		.xres		= 720,
+-		.yres		= 480,
+-		.aspect		= {1, 1},
+-		.fps		= {5994, 100},
+-		.left_margin	= 0x8F,
+-		.upper_margin	= 0x2D,
+-	},
+-	{
+-		.name		= "576p50",
+-		.timings_type	= VPBE_ENC_DV_TIMINGS,
+-		.dv_timings	= V4L2_DV_BT_CEA_720X576P50,
+-		.interlaced	= 0,
+-		.xres		= 720,
+-		.yres		= 576,
+-		.aspect		= {1, 1},
+-		.fps		= {50, 1},
+-		.left_margin	= 0x8C,
+-		.upper_margin   = 0x36,
+-	},
+-	{
+-		.name		= "720p60",
+-		.timings_type	= VPBE_ENC_DV_TIMINGS,
+-		.dv_timings	= V4L2_DV_BT_CEA_1280X720P60,
+-		.interlaced	= 0,
+-		.xres		= 1280,
+-		.yres		= 720,
+-		.aspect		= {1, 1},
+-		.fps		= {60, 1},
+-		.left_margin	= 0x117,
+-		.right_margin	= 70,
+-		.upper_margin	= 38,
+-		.lower_margin	= 3,
+-		.hsync_len	= 80,
+-		.vsync_len	= 5,
+-	},
+-	{
+-		.name		= "1080i60",
+-		.timings_type	= VPBE_ENC_DV_TIMINGS,
+-		.dv_timings	= V4L2_DV_BT_CEA_1920X1080I60,
+-		.interlaced	= 1,
+-		.xres		= 1920,
+-		.yres		= 1080,
+-		.aspect		= {1, 1},
+-		.fps		= {30, 1},
+-		.left_margin	= 0xc9,
+-		.right_margin	= 80,
+-		.upper_margin	= 30,
+-		.lower_margin	= 3,
+-		.hsync_len	= 88,
+-		.vsync_len	= 5,
+-	},
+-};
+-
+-#define VENC_STD_ALL	(V4L2_STD_NTSC | V4L2_STD_PAL)
+-
+-/*
+- * The outputs available from VPBE + ecnoders. Keep the
+- * the order same as that of encoders. First those from venc followed by that
+- * from encoders. Index in the output refers to index on a particular
+- * encoder.Driver uses this index to pass it to encoder when it supports more
+- * than one output. Application uses index of the array to set an output.
+- */
+-static struct vpbe_output dm365evm_vpbe_outputs[] = {
+-	{
+-		.output		= {
+-			.index		= 0,
+-			.name		= "Composite",
+-			.type		= V4L2_OUTPUT_TYPE_ANALOG,
+-			.std		= VENC_STD_ALL,
+-			.capabilities	= V4L2_OUT_CAP_STD,
+-		},
+-		.subdev_name	= DM365_VPBE_VENC_SUBDEV_NAME,
+-		.default_mode	= "ntsc",
+-		.num_modes	= ARRAY_SIZE(dm365evm_enc_std_timing),
+-		.modes		= dm365evm_enc_std_timing,
+-		.if_params	= MEDIA_BUS_FMT_FIXED,
+-	},
+-	{
+-		.output		= {
+-			.index		= 1,
+-			.name		= "Component",
+-			.type		= V4L2_OUTPUT_TYPE_ANALOG,
+-			.capabilities	= V4L2_OUT_CAP_DV_TIMINGS,
+-		},
+-		.subdev_name	= DM365_VPBE_VENC_SUBDEV_NAME,
+-		.default_mode	= "480p59_94",
+-		.num_modes	= ARRAY_SIZE(dm365evm_enc_preset_timing),
+-		.modes		= dm365evm_enc_preset_timing,
+-		.if_params	= MEDIA_BUS_FMT_FIXED,
+-	},
+-};
+-
+-/*
+- * Amplifiers on the board
+- */
+-static struct ths7303_platform_data ths7303_pdata = {
+-	.ch_1 = 3,
+-	.ch_2 = 3,
+-	.ch_3 = 3,
+-};
+-
+-static struct amp_config_info vpbe_amp = {
+-	.module_name	= "ths7303",
+-	.is_i2c		= 1,
+-	.board_info	= {
+-		I2C_BOARD_INFO("ths7303", 0x2c),
+-		.platform_data = &ths7303_pdata,
+-	}
+-};
+-
+-static struct vpbe_config dm365evm_display_cfg = {
+-	.module_name	= "dm365-vpbe-display",
+-	.i2c_adapter_id	= 1,
+-	.amp		= &vpbe_amp,
+-	.osd		= {
+-		.module_name	= DM365_VPBE_OSD_SUBDEV_NAME,
+-	},
+-	.venc		= {
+-		.module_name	= DM365_VPBE_VENC_SUBDEV_NAME,
+-	},
+-	.num_outputs	= ARRAY_SIZE(dm365evm_vpbe_outputs),
+-	.outputs	= dm365evm_vpbe_outputs,
+-};
+-
+-static void __init evm_init_i2c(void)
+-{
+-	davinci_init_i2c(&i2c_pdata);
+-	i2c_register_board_info(1, i2c_info, ARRAY_SIZE(i2c_info));
+-}
+-
+-static inline int have_leds(void)
+-{
+-#ifdef CONFIG_LEDS_CLASS
+-	return 1;
+-#else
+-	return 0;
+-#endif
+-}
+-
+-struct cpld_led {
+-	struct led_classdev	cdev;
+-	u8			mask;
+-};
+-
+-static const struct {
+-	const char *name;
+-	const char *trigger;
+-} cpld_leds[] = {
+-	{ "dm365evm::ds2", },
+-	{ "dm365evm::ds3", },
+-	{ "dm365evm::ds4", },
+-	{ "dm365evm::ds5", },
+-	{ "dm365evm::ds6", "nand-disk", },
+-	{ "dm365evm::ds7", "mmc1", },
+-	{ "dm365evm::ds8", "mmc0", },
+-	{ "dm365evm::ds9", "heartbeat", },
+-};
+-
+-static void cpld_led_set(struct led_classdev *cdev, enum led_brightness b)
+-{
+-	struct cpld_led *led = container_of(cdev, struct cpld_led, cdev);
+-	u8 reg = __raw_readb(cpld + CPLD_LEDS);
+-
+-	if (b != LED_OFF)
+-		reg &= ~led->mask;
+-	else
+-		reg |= led->mask;
+-	__raw_writeb(reg, cpld + CPLD_LEDS);
+-}
+-
+-static enum led_brightness cpld_led_get(struct led_classdev *cdev)
+-{
+-	struct cpld_led *led = container_of(cdev, struct cpld_led, cdev);
+-	u8 reg = __raw_readb(cpld + CPLD_LEDS);
+-
+-	return (reg & led->mask) ? LED_OFF : LED_FULL;
+-}
+-
+-static int __init cpld_leds_init(void)
+-{
+-	int	i;
+-
+-	if (!have_leds() ||  !cpld)
+-		return 0;
+-
+-	/* setup LEDs */
+-	__raw_writeb(0xff, cpld + CPLD_LEDS);
+-	for (i = 0; i < ARRAY_SIZE(cpld_leds); i++) {
+-		struct cpld_led *led;
+-
+-		led = kzalloc(sizeof(*led), GFP_KERNEL);
+-		if (!led)
+-			break;
+-
+-		led->cdev.name = cpld_leds[i].name;
+-		led->cdev.brightness_set = cpld_led_set;
+-		led->cdev.brightness_get = cpld_led_get;
+-		led->cdev.default_trigger = cpld_leds[i].trigger;
+-		led->mask = BIT(i);
+-
+-		if (led_classdev_register(NULL, &led->cdev) < 0) {
+-			kfree(led);
+-			break;
+-		}
+-	}
+-
+-	return 0;
+-}
+-/* run after subsys_initcall() for LEDs */
+-fs_initcall(cpld_leds_init);
+-
+-
+-static void __init evm_init_cpld(void)
+-{
+-	u8 mux, resets;
+-	const char *label;
+-	struct clk *aemif_clk;
+-	int rc;
+-
+-	/* Make sure we can configure the CPLD through CS1.  Then
+-	 * leave it on for later access to MMC and LED registers.
+-	 */
+-	aemif_clk = clk_get(NULL, "aemif");
+-	if (IS_ERR(aemif_clk))
+-		return;
+-	clk_prepare_enable(aemif_clk);
+-
+-	if (request_mem_region(DM365_ASYNC_EMIF_DATA_CE1_BASE, SECTION_SIZE,
+-			"cpld") == NULL)
+-		goto fail;
+-	cpld = ioremap(DM365_ASYNC_EMIF_DATA_CE1_BASE, SECTION_SIZE);
+-	if (!cpld) {
+-		release_mem_region(DM365_ASYNC_EMIF_DATA_CE1_BASE,
+-				SECTION_SIZE);
+-fail:
+-		pr_err("ERROR: can't map CPLD\n");
+-		clk_disable_unprepare(aemif_clk);
+-		return;
+-	}
+-
+-	/* External muxing for some signals */
+-	mux = 0;
+-
+-	/* Read SW5 to set up NAND + keypad _or_ OneNAND (sync read).
+-	 * NOTE:  SW4 bus width setting must match!
+-	 */
+-	if ((__raw_readb(cpld + CPLD_SWITCH) & BIT(5)) == 0) {
+-		/* external keypad mux */
+-		mux |= BIT(7);
+-
+-		rc = platform_device_register(&davinci_aemif_device);
+-		if (rc)
+-			pr_warn("%s(): error registering the aemif device: %d\n",
+-				__func__, rc);
+-	} else {
+-		/* no OneNAND support yet */
+-	}
+-
+-	/* Leave external chips in reset when unused. */
+-	resets = BIT(3) | BIT(2) | BIT(1) | BIT(0);
+-
+-	/* Static video input config with SN74CBT16214 1-of-3 mux:
+-	 *  - port b1 == tvp7002 (mux lowbits == 1 or 6)
+-	 *  - port b2 == imager (mux lowbits == 2 or 7)
+-	 *  - port b3 == tvp5146 (mux lowbits == 5)
+-	 *
+-	 * Runtime switching could work too, with limitations.
+-	 */
+-	if (have_imager()) {
+-		label = "HD imager";
+-		mux |= 2;
+-
+-		/* externally mux MMC1/ENET/AIC33 to imager */
+-		mux |= BIT(6) | BIT(5) | BIT(3);
+-	} else {
+-		struct davinci_soc_info *soc_info = &davinci_soc_info;
+-
+-		/* we can use MMC1 ... */
+-		dm365evm_mmc_configure();
+-		davinci_setup_mmc(1, &dm365evm_mmc_config);
+-
+-		/* ... and ENET ... */
+-		dm365evm_emac_configure();
+-		soc_info->emac_pdata->phy_id = DM365_EVM_PHY_ID;
+-		resets &= ~BIT(3);
+-
+-		/* ... and AIC33 */
+-		resets &= ~BIT(1);
+-
+-		if (have_tvp7002()) {
+-			mux |= 1;
+-			resets &= ~BIT(2);
+-			label = "tvp7002 HD";
+-		} else {
+-			/* default to tvp5146 */
+-			mux |= 5;
+-			resets &= ~BIT(0);
+-			label = "tvp5146 SD";
+-		}
+-	}
+-	__raw_writeb(mux, cpld + CPLD_MUX);
+-	__raw_writeb(resets, cpld + CPLD_RESETS);
+-	pr_info("EVM: %s video input\n", label);
+-
+-	/* REVISIT export switches: NTSC/PAL (SW5.6), EXTRA1 (SW5.2), etc */
+-}
+-
+-static void __init dm365_evm_map_io(void)
+-{
+-	dm365_init();
+-}
+-
+-static struct spi_eeprom at25640 = {
+-	.byte_len	= SZ_64K / 8,
+-	.name		= "at25640",
+-	.page_size	= 32,
+-	.flags		= EE_ADDR2,
+-};
+-
+-static const struct spi_board_info dm365_evm_spi_info[] __initconst = {
+-	{
+-		.modalias	= "at25",
+-		.platform_data	= &at25640,
+-		.max_speed_hz	= 10 * 1000 * 1000,
+-		.bus_num	= 0,
+-		.chip_select	= 0,
+-		.mode		= SPI_MODE_0,
+-	},
+-};
+-
+-static __init void dm365_evm_init(void)
+-{
+-	int ret;
+-
+-	dm365_register_clocks();
+-
+-	ret = dm365_gpio_register();
+-	if (ret)
+-		pr_warn("%s: GPIO init failed: %d\n", __func__, ret);
+-
+-	regulator_register_always_on(0, "fixed-dummy", fixed_supplies_1_8v,
+-				     ARRAY_SIZE(fixed_supplies_1_8v), 1800000);
+-	regulator_register_always_on(1, "fixed-dummy", fixed_supplies_3_3v,
+-				     ARRAY_SIZE(fixed_supplies_3_3v), 3300000);
+-
+-	nvmem_add_cell_table(&davinci_nvmem_cell_table);
+-	nvmem_add_cell_lookups(&davinci_nvmem_cell_lookup, 1);
+-
+-	evm_init_i2c();
+-	davinci_serial_init(dm365_serial_device);
+-
+-	dm365evm_emac_configure();
+-	dm365evm_mmc_configure();
+-
+-	davinci_setup_mmc(0, &dm365evm_mmc_config);
+-
+-	dm365_init_video(&vpfe_cfg, &dm365evm_display_cfg);
+-
+-	/* maybe setup mmc1/etc ... _after_ mmc0 */
+-	evm_init_cpld();
+-
+-#ifdef CONFIG_SND_SOC_DM365_AIC3X_CODEC
+-	dm365_init_asp();
+-#elif defined(CONFIG_SND_SOC_DM365_VOICE_CODEC)
+-	dm365_init_vc();
+-#endif
+-	dm365_init_rtc();
+-	dm365_init_ks(&dm365evm_ks_data);
+-
+-	dm365_init_spi0(BIT(0), dm365_evm_spi_info,
+-			ARRAY_SIZE(dm365_evm_spi_info));
+-}
+-
+-MACHINE_START(DAVINCI_DM365_EVM, "DaVinci DM365 EVM")
+-	.atag_offset	= 0x100,
+-	.map_io		= dm365_evm_map_io,
+-	.init_irq	= dm365_init_irq,
+-	.init_time	= dm365_init_time,
+-	.init_machine	= dm365_evm_init,
+-	.init_late	= davinci_init_late,
+-	.dma_zone_size	= SZ_128M,
+-MACHINE_END
+diff --git a/arch/arm/mach-davinci/board-mityomapl138.c b/arch/arm/mach-davinci/board-mityomapl138.c
+deleted file mode 100644
+index a46e7b9ff8e0..000000000000
+--- a/arch/arm/mach-davinci/board-mityomapl138.c
++++ /dev/null
+@@ -1,638 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Critical Link MityOMAP-L138 SoM
+- *
+- * Copyright (C) 2010 Critical Link LLC - https://www.criticallink.com
+- */
+-
+-#define pr_fmt(fmt) "MityOMAPL138: " fmt
+-
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/console.h>
+-#include <linux/platform_device.h>
+-#include <linux/property.h>
+-#include <linux/mtd/partitions.h>
+-#include <linux/notifier.h>
+-#include <linux/nvmem-consumer.h>
+-#include <linux/nvmem-provider.h>
+-#include <linux/regulator/machine.h>
+-#include <linux/i2c.h>
+-#include <linux/etherdevice.h>
+-#include <linux/spi/spi.h>
+-#include <linux/spi/flash.h>
+-
+-#include <asm/io.h>
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-
+-#include "common.h"
+-#include "da8xx.h"
+-#include "mux.h"
+-
+-#include <linux/platform_data/mtd-davinci.h>
+-#include <linux/platform_data/mtd-davinci-aemif.h>
+-#include <linux/platform_data/ti-aemif.h>
+-#include <linux/platform_data/spi-davinci.h>
+-
+-#define MITYOMAPL138_PHY_ID		""
+-
+-#define FACTORY_CONFIG_MAGIC	0x012C0138
+-#define FACTORY_CONFIG_VERSION	0x00010001
+-
+-/* Data Held in On-Board I2C device */
+-struct factory_config {
+-	u32	magic;
+-	u32	version;
+-	u8	mac[6];
+-	u32	fpga_type;
+-	u32	spare;
+-	u32	serialnumber;
+-	char	partnum[32];
+-};
+-
+-static struct factory_config factory_config;
+-
+-#ifdef CONFIG_CPU_FREQ
+-struct part_no_info {
+-	const char	*part_no;	/* part number string of interest */
+-	int		max_freq;	/* khz */
+-};
+-
+-static struct part_no_info mityomapl138_pn_info[] = {
+-	{
+-		.part_no	= "L138-C",
+-		.max_freq	= 300000,
+-	},
+-	{
+-		.part_no	= "L138-D",
+-		.max_freq	= 375000,
+-	},
+-	{
+-		.part_no	= "L138-F",
+-		.max_freq	= 456000,
+-	},
+-	{
+-		.part_no	= "1808-C",
+-		.max_freq	= 300000,
+-	},
+-	{
+-		.part_no	= "1808-D",
+-		.max_freq	= 375000,
+-	},
+-	{
+-		.part_no	= "1808-F",
+-		.max_freq	= 456000,
+-	},
+-	{
+-		.part_no	= "1810-D",
+-		.max_freq	= 375000,
+-	},
+-};
+-
+-static void mityomapl138_cpufreq_init(const char *partnum)
+-{
+-	int i, ret;
+-
+-	for (i = 0; partnum && i < ARRAY_SIZE(mityomapl138_pn_info); i++) {
+-		/*
+-		 * the part number has additional characters beyond what is
+-		 * stored in the table.  This information is not needed for
+-		 * determining the speed grade, and would require several
+-		 * more table entries.  Only check the first N characters
+-		 * for a match.
+-		 */
+-		if (!strncmp(partnum, mityomapl138_pn_info[i].part_no,
+-			     strlen(mityomapl138_pn_info[i].part_no))) {
+-			da850_max_speed = mityomapl138_pn_info[i].max_freq;
+-			break;
+-		}
+-	}
+-
+-	ret = da850_register_cpufreq("pll0_sysclk3");
+-	if (ret)
+-		pr_warn("cpufreq registration failed: %d\n", ret);
+-}
+-#else
+-static void mityomapl138_cpufreq_init(const char *partnum) { }
+-#endif
+-
+-static int read_factory_config(struct notifier_block *nb,
+-			       unsigned long event, void *data)
+-{
+-	int ret;
+-	const char *partnum = NULL;
+-	struct nvmem_device *nvmem = data;
+-
+-	if (strcmp(nvmem_dev_name(nvmem), "1-00500") != 0)
+-		return NOTIFY_DONE;
+-
+-	if (!IS_BUILTIN(CONFIG_NVMEM)) {
+-		pr_warn("Factory Config not available without CONFIG_NVMEM\n");
+-		goto bad_config;
+-	}
+-
+-	ret = nvmem_device_read(nvmem, 0, sizeof(factory_config),
+-				&factory_config);
+-	if (ret != sizeof(struct factory_config)) {
+-		pr_warn("Read Factory Config Failed: %d\n", ret);
+-		goto bad_config;
+-	}
+-
+-	if (factory_config.magic != FACTORY_CONFIG_MAGIC) {
+-		pr_warn("Factory Config Magic Wrong (%X)\n",
+-			factory_config.magic);
+-		goto bad_config;
+-	}
+-
+-	if (factory_config.version != FACTORY_CONFIG_VERSION) {
+-		pr_warn("Factory Config Version Wrong (%X)\n",
+-			factory_config.version);
+-		goto bad_config;
+-	}
+-
+-	partnum = factory_config.partnum;
+-	pr_info("Part Number = %s\n", partnum);
+-
+-bad_config:
+-	/* default maximum speed is valid for all platforms */
+-	mityomapl138_cpufreq_init(partnum);
+-
+-	return NOTIFY_STOP;
+-}
+-
+-static struct notifier_block mityomapl138_nvmem_notifier = {
+-	.notifier_call = read_factory_config,
+-};
+-
+-/*
+- * We don't define a cell for factory config as it will be accessed from the
+- * board file using the nvmem notifier chain.
+- */
+-static struct nvmem_cell_info mityomapl138_nvmem_cells[] = {
+-	{
+-		.name		= "macaddr",
+-		.offset		= 0x64,
+-		.bytes		= ETH_ALEN,
+-	}
+-};
+-
+-static struct nvmem_cell_table mityomapl138_nvmem_cell_table = {
+-	.nvmem_name	= "1-00500",
+-	.cells		= mityomapl138_nvmem_cells,
+-	.ncells		= ARRAY_SIZE(mityomapl138_nvmem_cells),
+-};
+-
+-static struct nvmem_cell_lookup mityomapl138_nvmem_cell_lookup = {
+-	.nvmem_name	= "1-00500",
+-	.cell_name	= "macaddr",
+-	.dev_id		= "davinci_emac.1",
+-	.con_id		= "mac-address",
+-};
+-
+-static const struct property_entry mityomapl138_fd_chip_properties[] = {
+-	PROPERTY_ENTRY_U32("pagesize", 8),
+-	PROPERTY_ENTRY_BOOL("read-only"),
+-	{ }
+-};
+-
+-static const struct software_node mityomapl138_fd_chip_node = {
+-	.properties = mityomapl138_fd_chip_properties,
+-};
+-
+-static struct davinci_i2c_platform_data mityomap_i2c_0_pdata = {
+-	.bus_freq	= 100,	/* kHz */
+-	.bus_delay	= 0,	/* usec */
+-};
+-
+-/* TPS65023 voltage regulator support */
+-/* 1.2V Core */
+-static struct regulator_consumer_supply tps65023_dcdc1_consumers[] = {
+-	{
+-		.supply = "cvdd",
+-	},
+-};
+-
+-/* 1.8V */
+-static struct regulator_consumer_supply tps65023_dcdc2_consumers[] = {
+-	{
+-		.supply = "usb0_vdda18",
+-	},
+-	{
+-		.supply = "usb1_vdda18",
+-	},
+-	{
+-		.supply = "ddr_dvdd18",
+-	},
+-	{
+-		.supply = "sata_vddr",
+-	},
+-};
+-
+-/* 1.2V */
+-static struct regulator_consumer_supply tps65023_dcdc3_consumers[] = {
+-	{
+-		.supply = "sata_vdd",
+-	},
+-	{
+-		.supply = "usb_cvdd",
+-	},
+-	{
+-		.supply = "pll0_vdda",
+-	},
+-	{
+-		.supply = "pll1_vdda",
+-	},
+-};
+-
+-/* 1.8V Aux LDO, not used */
+-static struct regulator_consumer_supply tps65023_ldo1_consumers[] = {
+-	{
+-		.supply = "1.8v_aux",
+-	},
+-};
+-
+-/* FPGA VCC Aux (2.5 or 3.3) LDO */
+-static struct regulator_consumer_supply tps65023_ldo2_consumers[] = {
+-	{
+-		.supply = "vccaux",
+-	},
+-};
+-
+-static struct regulator_init_data tps65023_regulator_data[] = {
+-	/* dcdc1 */
+-	{
+-		.constraints = {
+-			.min_uV = 1150000,
+-			.max_uV = 1350000,
+-			.valid_ops_mask = REGULATOR_CHANGE_VOLTAGE |
+-					  REGULATOR_CHANGE_STATUS,
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65023_dcdc1_consumers),
+-		.consumer_supplies = tps65023_dcdc1_consumers,
+-	},
+-	/* dcdc2 */
+-	{
+-		.constraints = {
+-			.min_uV = 1800000,
+-			.max_uV = 1800000,
+-			.valid_ops_mask = REGULATOR_CHANGE_STATUS,
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65023_dcdc2_consumers),
+-		.consumer_supplies = tps65023_dcdc2_consumers,
+-	},
+-	/* dcdc3 */
+-	{
+-		.constraints = {
+-			.min_uV = 1200000,
+-			.max_uV = 1200000,
+-			.valid_ops_mask = REGULATOR_CHANGE_STATUS,
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65023_dcdc3_consumers),
+-		.consumer_supplies = tps65023_dcdc3_consumers,
+-	},
+-	/* ldo1 */
+-	{
+-		.constraints = {
+-			.min_uV = 1800000,
+-			.max_uV = 1800000,
+-			.valid_ops_mask = REGULATOR_CHANGE_STATUS,
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65023_ldo1_consumers),
+-		.consumer_supplies = tps65023_ldo1_consumers,
+-	},
+-	/* ldo2 */
+-	{
+-		.constraints = {
+-			.min_uV = 2500000,
+-			.max_uV = 3300000,
+-			.valid_ops_mask = REGULATOR_CHANGE_VOLTAGE |
+-					  REGULATOR_CHANGE_STATUS,
+-			.boot_on = 1,
+-		},
+-		.num_consumer_supplies = ARRAY_SIZE(tps65023_ldo2_consumers),
+-		.consumer_supplies = tps65023_ldo2_consumers,
+-	},
+-};
+-
+-static struct i2c_board_info __initdata mityomap_tps65023_info[] = {
+-	{
+-		I2C_BOARD_INFO("tps65023", 0x48),
+-		.platform_data = &tps65023_regulator_data[0],
+-	},
+-	{
+-		I2C_BOARD_INFO("24c02", 0x50),
+-		.swnode = &mityomapl138_fd_chip_node,
+-	},
+-};
+-
+-static int __init pmic_tps65023_init(void)
+-{
+-	return i2c_register_board_info(1, mityomap_tps65023_info,
+-					ARRAY_SIZE(mityomap_tps65023_info));
+-}
+-
+-/*
+- * SPI Devices:
+- *	SPI1_CS0: 8M Flash ST-M25P64-VME6G
+- */
+-static struct mtd_partition spi_flash_partitions[] = {
+-	[0] = {
+-		.name		= "ubl",
+-		.offset		= 0,
+-		.size		= SZ_64K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	},
+-	[1] = {
+-		.name		= "u-boot",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_512K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	},
+-	[2] = {
+-		.name		= "u-boot-env",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_64K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	},
+-	[3] = {
+-		.name		= "periph-config",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_64K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	},
+-	[4] = {
+-		.name		= "reserved",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_256K + SZ_64K,
+-	},
+-	[5] = {
+-		.name		= "kernel",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_2M + SZ_1M,
+-	},
+-	[6] = {
+-		.name		= "fpga",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_2M,
+-	},
+-	[7] = {
+-		.name		= "spare",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-	},
+-};
+-
+-static struct flash_platform_data mityomapl138_spi_flash_data = {
+-	.name		= "m25p80",
+-	.parts		= spi_flash_partitions,
+-	.nr_parts	= ARRAY_SIZE(spi_flash_partitions),
+-	.type		= "m24p64",
+-};
+-
+-static struct davinci_spi_config spi_eprom_config = {
+-	.io_type	= SPI_IO_TYPE_DMA,
+-	.c2tdelay	= 8,
+-	.t2cdelay	= 8,
+-};
+-
+-static struct spi_board_info mityomapl138_spi_flash_info[] = {
+-	{
+-		.modalias		= "m25p80",
+-		.platform_data		= &mityomapl138_spi_flash_data,
+-		.controller_data	= &spi_eprom_config,
+-		.mode			= SPI_MODE_0,
+-		.max_speed_hz		= 30000000,
+-		.bus_num		= 1,
+-		.chip_select		= 0,
+-	},
+-};
+-
+-/*
+- * MityDSP-L138 includes a 256 MByte large-page NAND flash
+- * (128K blocks).
+- */
+-static struct mtd_partition mityomapl138_nandflash_partition[] = {
+-	{
+-		.name		= "rootfs",
+-		.offset		= 0,
+-		.size		= SZ_128M,
+-		.mask_flags	= 0, /* MTD_WRITEABLE, */
+-	},
+-	{
+-		.name		= "homefs",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-		.mask_flags	= 0,
+-	},
+-};
+-
+-static struct davinci_nand_pdata mityomapl138_nandflash_data = {
+-	.core_chipsel	= 1,
+-	.parts		= mityomapl138_nandflash_partition,
+-	.nr_parts	= ARRAY_SIZE(mityomapl138_nandflash_partition),
+-	.engine_type	= NAND_ECC_ENGINE_TYPE_ON_HOST,
+-	.bbt_options	= NAND_BBT_USE_FLASH,
+-	.options	= NAND_BUSWIDTH_16,
+-	.ecc_bits	= 1, /* 4 bit mode is not supported with 16 bit NAND */
+-};
+-
+-static struct resource mityomapl138_nandflash_resource[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CS3_BASE,
+-		.end	= DA8XX_AEMIF_CS3_BASE + SZ_512K + 2 * SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device mityomapl138_aemif_devices[] = {
+-	{
+-		.name		= "davinci_nand",
+-		.id		= 1,
+-		.dev		= {
+-			.platform_data	= &mityomapl138_nandflash_data,
+-		},
+-		.num_resources	= ARRAY_SIZE(mityomapl138_nandflash_resource),
+-		.resource	= mityomapl138_nandflash_resource,
+-	},
+-};
+-
+-static struct resource mityomapl138_aemif_resources[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct aemif_abus_data mityomapl138_aemif_abus_data[] = {
+-	{
+-		.cs	= 1,
+-	},
+-};
+-
+-static struct aemif_platform_data mityomapl138_aemif_pdata = {
+-	.abus_data		= mityomapl138_aemif_abus_data,
+-	.num_abus_data		= ARRAY_SIZE(mityomapl138_aemif_abus_data),
+-	.sub_devices		= mityomapl138_aemif_devices,
+-	.num_sub_devices	= ARRAY_SIZE(mityomapl138_aemif_devices),
+-};
+-
+-static struct platform_device mityomapl138_aemif_device = {
+-	.name		= "ti-aemif",
+-	.id		= -1,
+-	.dev = {
+-		.platform_data	= &mityomapl138_aemif_pdata,
+-	},
+-	.resource	= mityomapl138_aemif_resources,
+-	.num_resources	= ARRAY_SIZE(mityomapl138_aemif_resources),
+-};
+-
+-static void __init mityomapl138_setup_nand(void)
+-{
+-	if (platform_device_register(&mityomapl138_aemif_device))
+-		pr_warn("%s: Cannot register AEMIF device\n", __func__);
+-}
+-
+-static const short mityomap_mii_pins[] = {
+-	DA850_MII_TXEN, DA850_MII_TXCLK, DA850_MII_COL, DA850_MII_TXD_3,
+-	DA850_MII_TXD_2, DA850_MII_TXD_1, DA850_MII_TXD_0, DA850_MII_RXER,
+-	DA850_MII_CRS, DA850_MII_RXCLK, DA850_MII_RXDV, DA850_MII_RXD_3,
+-	DA850_MII_RXD_2, DA850_MII_RXD_1, DA850_MII_RXD_0, DA850_MDIO_CLK,
+-	DA850_MDIO_D,
+-	-1
+-};
+-
+-static const short mityomap_rmii_pins[] = {
+-	DA850_RMII_TXD_0, DA850_RMII_TXD_1, DA850_RMII_TXEN,
+-	DA850_RMII_CRS_DV, DA850_RMII_RXD_0, DA850_RMII_RXD_1,
+-	DA850_RMII_RXER, DA850_RMII_MHZ_50_CLK, DA850_MDIO_CLK,
+-	DA850_MDIO_D,
+-	-1
+-};
+-
+-static void __init mityomapl138_config_emac(void)
+-{
+-	void __iomem *cfg_chip3_base;
+-	int ret;
+-	u32 val;
+-	struct davinci_soc_info *soc_info = &davinci_soc_info;
+-
+-	soc_info->emac_pdata->rmii_en = 0; /* hardcoded for now */
+-
+-	cfg_chip3_base = DA8XX_SYSCFG0_VIRT(DA8XX_CFGCHIP3_REG);
+-	val = __raw_readl(cfg_chip3_base);
+-
+-	if (soc_info->emac_pdata->rmii_en) {
+-		val |= BIT(8);
+-		ret = davinci_cfg_reg_list(mityomap_rmii_pins);
+-		pr_info("RMII PHY configured\n");
+-	} else {
+-		val &= ~BIT(8);
+-		ret = davinci_cfg_reg_list(mityomap_mii_pins);
+-		pr_info("MII PHY configured\n");
+-	}
+-
+-	if (ret) {
+-		pr_warn("mii/rmii mux setup failed: %d\n", ret);
+-		return;
+-	}
+-
+-	/* configure the CFGCHIP3 register for RMII or MII */
+-	__raw_writel(val, cfg_chip3_base);
+-
+-	soc_info->emac_pdata->phy_id = MITYOMAPL138_PHY_ID;
+-
+-	ret = da8xx_register_emac();
+-	if (ret)
+-		pr_warn("emac registration failed: %d\n", ret);
+-}
+-
+-static void __init mityomapl138_init(void)
+-{
+-	int ret;
+-
+-	da850_register_clocks();
+-
+-	/* for now, no special EDMA channels are reserved */
+-	ret = da850_register_edma(NULL);
+-	if (ret)
+-		pr_warn("edma registration failed: %d\n", ret);
+-
+-	ret = da8xx_register_watchdog();
+-	if (ret)
+-		pr_warn("watchdog registration failed: %d\n", ret);
+-
+-	davinci_serial_init(da8xx_serial_device);
+-
+-	nvmem_register_notifier(&mityomapl138_nvmem_notifier);
+-	nvmem_add_cell_table(&mityomapl138_nvmem_cell_table);
+-	nvmem_add_cell_lookups(&mityomapl138_nvmem_cell_lookup, 1);
+-
+-	ret = da8xx_register_i2c(0, &mityomap_i2c_0_pdata);
+-	if (ret)
+-		pr_warn("i2c0 registration failed: %d\n", ret);
+-
+-	ret = pmic_tps65023_init();
+-	if (ret)
+-		pr_warn("TPS65023 PMIC init failed: %d\n", ret);
+-
+-	mityomapl138_setup_nand();
+-
+-	ret = spi_register_board_info(mityomapl138_spi_flash_info,
+-				      ARRAY_SIZE(mityomapl138_spi_flash_info));
+-	if (ret)
+-		pr_warn("spi info registration failed: %d\n", ret);
+-
+-	ret = da8xx_register_spi_bus(1,
+-				     ARRAY_SIZE(mityomapl138_spi_flash_info));
+-	if (ret)
+-		pr_warn("spi 1 registration failed: %d\n", ret);
+-
+-	mityomapl138_config_emac();
+-
+-	ret = da8xx_register_rtc();
+-	if (ret)
+-		pr_warn("rtc setup failed: %d\n", ret);
+-
+-	ret = da8xx_register_cpuidle();
+-	if (ret)
+-		pr_warn("cpuidle registration failed: %d\n", ret);
+-
+-	davinci_pm_init();
+-}
+-
+-#ifdef CONFIG_SERIAL_8250_CONSOLE
+-static int __init mityomapl138_console_init(void)
+-{
+-	if (!machine_is_mityomapl138())
+-		return 0;
+-
+-	return add_preferred_console("ttyS", 1, "115200");
+-}
+-console_initcall(mityomapl138_console_init);
+-#endif
+-
+-static void __init mityomapl138_map_io(void)
+-{
+-	da850_init();
+-}
+-
+-MACHINE_START(MITYOMAPL138, "MityDSP-L138/MityARM-1808")
+-	.atag_offset	= 0x100,
+-	.map_io		= mityomapl138_map_io,
+-	.init_irq	= da850_init_irq,
+-	.init_time	= da850_init_time,
+-	.init_machine	= mityomapl138_init,
+-	.init_late	= davinci_init_late,
+-	.dma_zone_size	= SZ_128M,
+-MACHINE_END
+diff --git a/arch/arm/mach-davinci/board-omapl138-hawk.c b/arch/arm/mach-davinci/board-omapl138-hawk.c
+deleted file mode 100644
+index 8a80115999ad..000000000000
+--- a/arch/arm/mach-davinci/board-omapl138-hawk.c
++++ /dev/null
+@@ -1,451 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Hawkboard.org based on TI's OMAP-L138 Platform
+- *
+- * Initial code: Syed Mohammed Khasim
+- *
+- * Copyright (C) 2009 Texas Instruments Incorporated - https://www.ti.com
+- */
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/console.h>
+-#include <linux/interrupt.h>
+-#include <linux/gpio.h>
+-#include <linux/gpio/machine.h>
+-#include <linux/mtd/partitions.h>
+-#include <linux/mtd/rawnand.h>
+-#include <linux/platform_data/gpio-davinci.h>
+-#include <linux/platform_data/mtd-davinci.h>
+-#include <linux/platform_data/mtd-davinci-aemif.h>
+-#include <linux/platform_data/ti-aemif.h>
+-#include <linux/regulator/fixed.h>
+-#include <linux/regulator/machine.h>
+-
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-
+-#include "common.h"
+-#include "da8xx.h"
+-#include "mux.h"
+-
+-#define HAWKBOARD_PHY_ID		"davinci_mdio-0:07"
+-
+-#define DA850_USB1_VBUS_PIN		GPIO_TO_PIN(2, 4)
+-#define DA850_USB1_OC_PIN		GPIO_TO_PIN(6, 13)
+-
+-static short omapl138_hawk_mii_pins[] __initdata = {
+-	DA850_MII_TXEN, DA850_MII_TXCLK, DA850_MII_COL, DA850_MII_TXD_3,
+-	DA850_MII_TXD_2, DA850_MII_TXD_1, DA850_MII_TXD_0, DA850_MII_RXER,
+-	DA850_MII_CRS, DA850_MII_RXCLK, DA850_MII_RXDV, DA850_MII_RXD_3,
+-	DA850_MII_RXD_2, DA850_MII_RXD_1, DA850_MII_RXD_0, DA850_MDIO_CLK,
+-	DA850_MDIO_D,
+-	-1
+-};
+-
+-static __init void omapl138_hawk_config_emac(void)
+-{
+-	void __iomem *cfgchip3 = DA8XX_SYSCFG0_VIRT(DA8XX_CFGCHIP3_REG);
+-	int ret;
+-	u32 val;
+-	struct davinci_soc_info *soc_info = &davinci_soc_info;
+-
+-	val = __raw_readl(cfgchip3);
+-	val &= ~BIT(8);
+-	ret = davinci_cfg_reg_list(omapl138_hawk_mii_pins);
+-	if (ret) {
+-		pr_warn("%s: CPGMAC/MII mux setup failed: %d\n", __func__, ret);
+-		return;
+-	}
+-
+-	/* configure the CFGCHIP3 register for MII */
+-	__raw_writel(val, cfgchip3);
+-	pr_info("EMAC: MII PHY configured\n");
+-
+-	soc_info->emac_pdata->phy_id = HAWKBOARD_PHY_ID;
+-
+-	ret = da8xx_register_emac();
+-	if (ret)
+-		pr_warn("%s: EMAC registration failed: %d\n", __func__, ret);
+-}
+-
+-/*
+- * The following EDMA channels/slots are not being used by drivers (for
+- * example: Timer, GPIO, UART events etc) on da850/omap-l138 EVM/Hawkboard,
+- * hence they are being reserved for codecs on the DSP side.
+- */
+-static const s16 da850_dma0_rsv_chans[][2] = {
+-	/* (offset, number) */
+-	{ 8,  6},
+-	{24,  4},
+-	{30,  2},
+-	{-1, -1}
+-};
+-
+-static const s16 da850_dma0_rsv_slots[][2] = {
+-	/* (offset, number) */
+-	{ 8,  6},
+-	{24,  4},
+-	{30, 50},
+-	{-1, -1}
+-};
+-
+-static const s16 da850_dma1_rsv_chans[][2] = {
+-	/* (offset, number) */
+-	{ 0, 28},
+-	{30,  2},
+-	{-1, -1}
+-};
+-
+-static const s16 da850_dma1_rsv_slots[][2] = {
+-	/* (offset, number) */
+-	{ 0, 28},
+-	{30, 90},
+-	{-1, -1}
+-};
+-
+-static struct edma_rsv_info da850_edma_cc0_rsv = {
+-	.rsv_chans	= da850_dma0_rsv_chans,
+-	.rsv_slots	= da850_dma0_rsv_slots,
+-};
+-
+-static struct edma_rsv_info da850_edma_cc1_rsv = {
+-	.rsv_chans	= da850_dma1_rsv_chans,
+-	.rsv_slots	= da850_dma1_rsv_slots,
+-};
+-
+-static struct edma_rsv_info *da850_edma_rsv[2] = {
+-	&da850_edma_cc0_rsv,
+-	&da850_edma_cc1_rsv,
+-};
+-
+-static const short hawk_mmcsd0_pins[] = {
+-	DA850_MMCSD0_DAT_0, DA850_MMCSD0_DAT_1, DA850_MMCSD0_DAT_2,
+-	DA850_MMCSD0_DAT_3, DA850_MMCSD0_CLK, DA850_MMCSD0_CMD,
+-	DA850_GPIO3_12, DA850_GPIO3_13,
+-	-1
+-};
+-
+-#define DA850_HAWK_MMCSD_CD_PIN		GPIO_TO_PIN(3, 12)
+-#define DA850_HAWK_MMCSD_WP_PIN		GPIO_TO_PIN(3, 13)
+-
+-static struct gpiod_lookup_table mmc_gpios_table = {
+-	.dev_id = "da830-mmc.0",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", DA850_HAWK_MMCSD_CD_PIN, "cd",
+-			    GPIO_ACTIVE_LOW),
+-		GPIO_LOOKUP("davinci_gpio", DA850_HAWK_MMCSD_WP_PIN, "wp",
+-			    GPIO_ACTIVE_LOW),
+-	},
+-};
+-
+-static struct davinci_mmc_config da850_mmc_config = {
+-	.wires		= 4,
+-	.max_freq	= 50000000,
+-	.caps		= MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED,
+-};
+-
+-static __init void omapl138_hawk_mmc_init(void)
+-{
+-	int ret;
+-
+-	ret = davinci_cfg_reg_list(hawk_mmcsd0_pins);
+-	if (ret) {
+-		pr_warn("%s: MMC/SD0 mux setup failed: %d\n", __func__, ret);
+-		return;
+-	}
+-
+-	gpiod_add_lookup_table(&mmc_gpios_table);
+-
+-	ret = da8xx_register_mmcsd0(&da850_mmc_config);
+-	if (ret) {
+-		pr_warn("%s: MMC/SD0 registration failed: %d\n", __func__, ret);
+-		goto mmc_setup_mmcsd_fail;
+-	}
+-
+-	return;
+-
+-mmc_setup_mmcsd_fail:
+-	gpiod_remove_lookup_table(&mmc_gpios_table);
+-}
+-
+-static struct mtd_partition omapl138_hawk_nandflash_partition[] = {
+-	{
+-		.name		= "u-boot env",
+-		.offset		= 0,
+-		.size		= SZ_128K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	 },
+-	{
+-		.name		= "u-boot",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= SZ_512K,
+-		.mask_flags	= MTD_WRITEABLE,
+-	},
+-	{
+-		.name		= "free space",
+-		.offset		= MTDPART_OFS_APPEND,
+-		.size		= MTDPART_SIZ_FULL,
+-		.mask_flags	= 0,
+-	},
+-};
+-
+-static struct davinci_aemif_timing omapl138_hawk_nandflash_timing = {
+-	.wsetup		= 24,
+-	.wstrobe	= 21,
+-	.whold		= 14,
+-	.rsetup		= 19,
+-	.rstrobe	= 50,
+-	.rhold		= 0,
+-	.ta		= 20,
+-};
+-
+-static struct davinci_nand_pdata omapl138_hawk_nandflash_data = {
+-	.core_chipsel	= 1,
+-	.parts		= omapl138_hawk_nandflash_partition,
+-	.nr_parts	= ARRAY_SIZE(omapl138_hawk_nandflash_partition),
+-	.engine_type	= NAND_ECC_ENGINE_TYPE_ON_HOST,
+-	.ecc_bits	= 4,
+-	.bbt_options	= NAND_BBT_USE_FLASH,
+-	.options	= NAND_BUSWIDTH_16,
+-	.timing		= &omapl138_hawk_nandflash_timing,
+-	.mask_chipsel	= 0,
+-	.mask_ale	= 0,
+-	.mask_cle	= 0,
+-};
+-
+-static struct resource omapl138_hawk_nandflash_resource[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CS3_BASE,
+-		.end	= DA8XX_AEMIF_CS3_BASE + SZ_32M,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct resource omapl138_hawk_aemif_resource[] = {
+-	{
+-		.start	= DA8XX_AEMIF_CTL_BASE,
+-		.end	= DA8XX_AEMIF_CTL_BASE + SZ_32K,
+-		.flags	= IORESOURCE_MEM,
+-	}
+-};
+-
+-static struct aemif_abus_data omapl138_hawk_aemif_abus_data[] = {
+-	{
+-		.cs	= 3,
+-	}
+-};
+-
+-static struct platform_device omapl138_hawk_aemif_devices[] = {
+-	{
+-		.name		= "davinci_nand",
+-		.id		= -1,
+-		.dev		= {
+-			.platform_data	= &omapl138_hawk_nandflash_data,
+-		},
+-		.resource	= omapl138_hawk_nandflash_resource,
+-		.num_resources	= ARRAY_SIZE(omapl138_hawk_nandflash_resource),
+-	}
+-};
+-
+-static struct aemif_platform_data omapl138_hawk_aemif_pdata = {
+-	.cs_offset = 2,
+-	.abus_data = omapl138_hawk_aemif_abus_data,
+-	.num_abus_data = ARRAY_SIZE(omapl138_hawk_aemif_abus_data),
+-	.sub_devices = omapl138_hawk_aemif_devices,
+-	.num_sub_devices = ARRAY_SIZE(omapl138_hawk_aemif_devices),
+-};
+-
+-static struct platform_device omapl138_hawk_aemif_device = {
+-	.name		= "ti-aemif",
+-	.id		= -1,
+-	.dev = {
+-		.platform_data	= &omapl138_hawk_aemif_pdata,
+-	},
+-	.resource	= omapl138_hawk_aemif_resource,
+-	.num_resources	= ARRAY_SIZE(omapl138_hawk_aemif_resource),
+-};
+-
+-static const short omapl138_hawk_nand_pins[] = {
+-	DA850_EMA_WAIT_1, DA850_NEMA_OE, DA850_NEMA_WE, DA850_NEMA_CS_3,
+-	DA850_EMA_D_0, DA850_EMA_D_1, DA850_EMA_D_2, DA850_EMA_D_3,
+-	DA850_EMA_D_4, DA850_EMA_D_5, DA850_EMA_D_6, DA850_EMA_D_7,
+-	DA850_EMA_D_8, DA850_EMA_D_9, DA850_EMA_D_10, DA850_EMA_D_11,
+-	DA850_EMA_D_12, DA850_EMA_D_13, DA850_EMA_D_14, DA850_EMA_D_15,
+-	DA850_EMA_A_1, DA850_EMA_A_2,
+-	-1
+-};
+-
+-static int omapl138_hawk_register_aemif(void)
+-{
+-	int ret;
+-
+-	ret = davinci_cfg_reg_list(omapl138_hawk_nand_pins);
+-	if (ret)
+-		pr_warn("%s: NAND mux setup failed: %d\n", __func__, ret);
+-
+-	return platform_device_register(&omapl138_hawk_aemif_device);
+-}
+-
+-static const short da850_hawk_usb11_pins[] = {
+-	DA850_GPIO2_4, DA850_GPIO6_13,
+-	-1
+-};
+-
+-static struct regulator_consumer_supply hawk_usb_supplies[] = {
+-	REGULATOR_SUPPLY("vbus", NULL),
+-};
+-
+-static struct regulator_init_data hawk_usb_vbus_data = {
+-	.consumer_supplies	= hawk_usb_supplies,
+-	.num_consumer_supplies	= ARRAY_SIZE(hawk_usb_supplies),
+-	.constraints    = {
+-		.valid_ops_mask = REGULATOR_CHANGE_STATUS,
+-	},
+-};
+-
+-static struct fixed_voltage_config hawk_usb_vbus = {
+-	.supply_name		= "vbus",
+-	.microvolts		= 3300000,
+-	.init_data		= &hawk_usb_vbus_data,
+-};
+-
+-static struct platform_device hawk_usb_vbus_device = {
+-	.name		= "reg-fixed-voltage",
+-	.id		= 0,
+-	.dev		= {
+-		.platform_data = &hawk_usb_vbus,
+-	},
+-};
+-
+-static struct gpiod_lookup_table hawk_usb_oc_gpio_lookup = {
+-	.dev_id		= "ohci-da8xx",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", DA850_USB1_OC_PIN, "oc", 0),
+-		{ }
+-	},
+-};
+-
+-static struct gpiod_lookup_table hawk_usb_vbus_gpio_lookup = {
+-	.dev_id		= "reg-fixed-voltage.0",
+-	.table = {
+-		GPIO_LOOKUP("davinci_gpio", DA850_USB1_VBUS_PIN, NULL, 0),
+-		{ }
+-	},
+-};
+-
+-static struct gpiod_lookup_table *hawk_usb_gpio_lookups[] = {
+-	&hawk_usb_oc_gpio_lookup,
+-	&hawk_usb_vbus_gpio_lookup,
+-};
+-
+-static struct da8xx_ohci_root_hub omapl138_hawk_usb11_pdata = {
+-	/* TPS2087 switch @ 5V */
+-	.potpgt         = (3 + 1) / 2,  /* 3 ms max */
+-};
+-
+-static __init void omapl138_hawk_usb_init(void)
+-{
+-	int ret;
+-
+-	ret = davinci_cfg_reg_list(da850_hawk_usb11_pins);
+-	if (ret) {
+-		pr_warn("%s: USB 1.1 PinMux setup failed: %d\n", __func__, ret);
+-		return;
+-	}
+-
+-	ret = da8xx_register_usb_phy_clocks();
+-	if (ret)
+-		pr_warn("%s: USB PHY CLK registration failed: %d\n",
+-			__func__, ret);
+-
+-	gpiod_add_lookup_tables(hawk_usb_gpio_lookups,
+-				ARRAY_SIZE(hawk_usb_gpio_lookups));
+-
+-	ret = da8xx_register_usb_phy();
+-	if (ret)
+-		pr_warn("%s: USB PHY registration failed: %d\n",
+-			__func__, ret);
+-
+-	ret = platform_device_register(&hawk_usb_vbus_device);
+-	if (ret) {
+-		pr_warn("%s: Unable to register the vbus supply\n", __func__);
+-		return;
+-	}
+-
+-	ret = da8xx_register_usb11(&omapl138_hawk_usb11_pdata);
+-	if (ret)
+-		pr_warn("%s: USB 1.1 registration failed: %d\n", __func__, ret);
+-
+-	return;
+-}
+-
+-static __init void omapl138_hawk_init(void)
+-{
+-	int ret;
+-
+-	da850_register_clocks();
+-
+-	ret = da850_register_gpio();
+-	if (ret)
+-		pr_warn("%s: GPIO init failed: %d\n", __func__, ret);
+-
+-	davinci_serial_init(da8xx_serial_device);
+-
+-	omapl138_hawk_config_emac();
+-
+-	ret = da850_register_edma(da850_edma_rsv);
+-	if (ret)
+-		pr_warn("%s: EDMA registration failed: %d\n", __func__, ret);
+-
+-	omapl138_hawk_mmc_init();
+-
+-	omapl138_hawk_usb_init();
+-
+-	ret = omapl138_hawk_register_aemif();
+-	if (ret)
+-		pr_warn("%s: aemif registration failed: %d\n", __func__, ret);
+-
+-	ret = da8xx_register_watchdog();
+-	if (ret)
+-		pr_warn("%s: watchdog registration failed: %d\n",
+-			__func__, ret);
+-
+-	ret = da8xx_register_rproc();
+-	if (ret)
+-		pr_warn("%s: dsp/rproc registration failed: %d\n",
+-			__func__, ret);
+-
+-	regulator_has_full_constraints();
+-}
+-
+-#ifdef CONFIG_SERIAL_8250_CONSOLE
+-static int __init omapl138_hawk_console_init(void)
+-{
+-	if (!machine_is_omapl138_hawkboard())
+-		return 0;
+-
+-	return add_preferred_console("ttyS", 2, "115200");
+-}
+-console_initcall(omapl138_hawk_console_init);
+-#endif
+-
+-static void __init omapl138_hawk_map_io(void)
+-{
+-	da850_init();
+-}
+-
+-MACHINE_START(OMAPL138_HAWKBOARD, "AM18x/OMAP-L138 Hawkboard")
+-	.atag_offset	= 0x100,
+-	.map_io		= omapl138_hawk_map_io,
+-	.init_irq	= da850_init_irq,
+-	.init_time	= da850_init_time,
+-	.init_machine	= omapl138_hawk_init,
+-	.init_late	= davinci_init_late,
+-	.dma_zone_size	= SZ_128M,
+-	.reserve	= da8xx_rproc_reserve_cma,
+-MACHINE_END
+diff --git a/arch/arm/mach-davinci/devices.c b/arch/arm/mach-davinci/devices.c
+deleted file mode 100644
+index 199c26d9a2b6..000000000000
+--- a/arch/arm/mach-davinci/devices.c
++++ /dev/null
+@@ -1,303 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * mach-davinci/devices.c
+- *
+- * DaVinci platform device setup/initialization
+- */
+-
+-#include <linux/init.h>
+-#include <linux/platform_device.h>
+-#include <linux/platform_data/i2c-davinci.h>
+-#include <linux/platform_data/mmc-davinci.h>
+-#include <linux/platform_data/edma.h>
+-#include <linux/dma-mapping.h>
+-#include <linux/io.h>
+-#include <linux/reboot.h>
+-
+-#include "hardware.h"
+-#include "cputype.h"
+-#include "mux.h"
+-#include "davinci.h"
+-#include "irqs.h"
+-
+-#define DAVINCI_I2C_BASE	     0x01C21000
+-#define DAVINCI_ATA_BASE	     0x01C66000
+-#define DAVINCI_MMCSD0_BASE	     0x01E10000
+-#define DM355_MMCSD0_BASE	     0x01E11000
+-#define DM355_MMCSD1_BASE	     0x01E00000
+-#define DM365_MMCSD0_BASE	     0x01D11000
+-#define DM365_MMCSD1_BASE	     0x01D00000
+-
+-void __iomem  *davinci_sysmod_base;
+-
+-void davinci_map_sysmod(void)
+-{
+-	davinci_sysmod_base = ioremap(DAVINCI_SYSTEM_MODULE_BASE,
+-					      0x800);
+-	/*
+-	 * Throw a bug since a lot of board initialization code depends
+-	 * on system module availability. ioremap() failing this early
+-	 * need careful looking into anyway.
+-	 */
+-	BUG_ON(!davinci_sysmod_base);
+-}
+-
+-static struct resource i2c_resources[] = {
+-	{
+-		.start		= DAVINCI_I2C_BASE,
+-		.end		= DAVINCI_I2C_BASE + 0x40,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-	{
+-		.start		= DAVINCI_INTC_IRQ(IRQ_I2C),
+-		.flags		= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct platform_device davinci_i2c_device = {
+-	.name           = "i2c_davinci",
+-	.id             = 1,
+-	.num_resources	= ARRAY_SIZE(i2c_resources),
+-	.resource	= i2c_resources,
+-};
+-
+-void __init davinci_init_i2c(struct davinci_i2c_platform_data *pdata)
+-{
+-	if (cpu_is_davinci_dm644x())
+-		davinci_cfg_reg(DM644X_I2C);
+-
+-	davinci_i2c_device.dev.platform_data = pdata;
+-	(void) platform_device_register(&davinci_i2c_device);
+-}
+-
+-static struct resource ide_resources[] = {
+-	{
+-		.start		= DAVINCI_ATA_BASE,
+-		.end		= DAVINCI_ATA_BASE + 0x7ff,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-	{
+-		.start		= DAVINCI_INTC_IRQ(IRQ_IDE),
+-		.end		= DAVINCI_INTC_IRQ(IRQ_IDE),
+-		.flags		= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static u64 ide_dma_mask = DMA_BIT_MASK(32);
+-
+-static struct platform_device ide_device = {
+-	.name           = "palm_bk3710",
+-	.id             = -1,
+-	.resource       = ide_resources,
+-	.num_resources  = ARRAY_SIZE(ide_resources),
+-	.dev = {
+-		.dma_mask		= &ide_dma_mask,
+-		.coherent_dma_mask      = DMA_BIT_MASK(32),
+-	},
+-};
+-
+-void __init davinci_init_ide(void)
+-{
+-	if (cpu_is_davinci_dm644x()) {
+-		davinci_cfg_reg(DM644X_HPIEN_DISABLE);
+-		davinci_cfg_reg(DM644X_ATAEN);
+-		davinci_cfg_reg(DM644X_HDIREN);
+-	} else if (cpu_is_davinci_dm646x()) {
+-		/* IRQ_DM646X_IDE is the same as IRQ_IDE */
+-		davinci_cfg_reg(DM646X_ATAEN);
+-	} else {
+-		WARN_ON(1);
+-		return;
+-	}
+-
+-	platform_device_register(&ide_device);
+-}
+-
+-#if IS_ENABLED(CONFIG_MMC_DAVINCI)
+-
+-static u64 mmcsd0_dma_mask = DMA_BIT_MASK(32);
+-
+-static struct resource mmcsd0_resources[] = {
+-	{
+-		/* different on dm355 */
+-		.start = DAVINCI_MMCSD0_BASE,
+-		.end   = DAVINCI_MMCSD0_BASE + SZ_4K - 1,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	/* IRQs:  MMC/SD, then SDIO */
+-	{
+-		.start = DAVINCI_INTC_IRQ(IRQ_MMCINT),
+-		.flags = IORESOURCE_IRQ,
+-	}, {
+-		/* different on dm355 */
+-		.start = DAVINCI_INTC_IRQ(IRQ_SDIOINT),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct platform_device davinci_mmcsd0_device = {
+-	.name = "dm6441-mmc",
+-	.id = 0,
+-	.dev = {
+-		.dma_mask = &mmcsd0_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-	.num_resources = ARRAY_SIZE(mmcsd0_resources),
+-	.resource = mmcsd0_resources,
+-};
+-
+-static u64 mmcsd1_dma_mask = DMA_BIT_MASK(32);
+-
+-static struct resource mmcsd1_resources[] = {
+-	{
+-		.start = DM355_MMCSD1_BASE,
+-		.end   = DM355_MMCSD1_BASE + SZ_4K - 1,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	/* IRQs:  MMC/SD, then SDIO */
+-	{
+-		.start = DAVINCI_INTC_IRQ(IRQ_DM355_MMCINT1),
+-		.flags = IORESOURCE_IRQ,
+-	}, {
+-		.start = DAVINCI_INTC_IRQ(IRQ_DM355_SDIOINT1),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct platform_device davinci_mmcsd1_device = {
+-	.name = "dm6441-mmc",
+-	.id = 1,
+-	.dev = {
+-		.dma_mask = &mmcsd1_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-	.num_resources = ARRAY_SIZE(mmcsd1_resources),
+-	.resource = mmcsd1_resources,
+-};
+-
+-
+-void __init davinci_setup_mmc(int module, struct davinci_mmc_config *config)
+-{
+-	struct platform_device	*pdev = NULL;
+-
+-	if (WARN_ON(cpu_is_davinci_dm646x()))
+-		return;
+-
+-	/* REVISIT: update PINMUX, ARM_IRQMUX, and EDMA_EVTMUX here too;
+-	 * for example if MMCSD1 is used for SDIO, maybe DAT2 is unused.
+-	 *
+-	 * FIXME dm6441 (no MMC/SD), dm357 (one), and dm335 (two) are
+-	 * not handled right here ...
+-	 */
+-	switch (module) {
+-	case 1:
+-		if (cpu_is_davinci_dm355()) {
+-			/* REVISIT we may not need all these pins if e.g. this
+-			 * is a hard-wired SDIO device...
+-			 */
+-			davinci_cfg_reg(DM355_SD1_CMD);
+-			davinci_cfg_reg(DM355_SD1_CLK);
+-			davinci_cfg_reg(DM355_SD1_DATA0);
+-			davinci_cfg_reg(DM355_SD1_DATA1);
+-			davinci_cfg_reg(DM355_SD1_DATA2);
+-			davinci_cfg_reg(DM355_SD1_DATA3);
+-		} else if (cpu_is_davinci_dm365()) {
+-			/* Configure pull down control */
+-			unsigned v;
+-
+-			v = __raw_readl(DAVINCI_SYSMOD_VIRT(SYSMOD_PUPDCTL1));
+-			__raw_writel(v & ~0xfc0,
+-					DAVINCI_SYSMOD_VIRT(SYSMOD_PUPDCTL1));
+-
+-			mmcsd1_resources[0].start = DM365_MMCSD1_BASE;
+-			mmcsd1_resources[0].end = DM365_MMCSD1_BASE +
+-							SZ_4K - 1;
+-			mmcsd1_resources[2].start = DAVINCI_INTC_IRQ(
+-							IRQ_DM365_SDIOINT1);
+-			davinci_mmcsd1_device.name = "da830-mmc";
+-		} else
+-			break;
+-
+-		pdev = &davinci_mmcsd1_device;
+-		break;
+-	case 0:
+-		if (cpu_is_davinci_dm355()) {
+-			mmcsd0_resources[0].start = DM355_MMCSD0_BASE;
+-			mmcsd0_resources[0].end = DM355_MMCSD0_BASE + SZ_4K - 1;
+-			mmcsd0_resources[2].start = DAVINCI_INTC_IRQ(
+-							IRQ_DM355_SDIOINT0);
+-
+-			/* expose all 6 MMC0 signals:  CLK, CMD, DATA[0..3] */
+-			davinci_cfg_reg(DM355_MMCSD0);
+-
+-			/* enable RX EDMA */
+-			davinci_cfg_reg(DM355_EVT26_MMC0_RX);
+-		} else if (cpu_is_davinci_dm365()) {
+-			mmcsd0_resources[0].start = DM365_MMCSD0_BASE;
+-			mmcsd0_resources[0].end = DM365_MMCSD0_BASE +
+-							SZ_4K - 1;
+-			mmcsd0_resources[2].start = DAVINCI_INTC_IRQ(
+-							IRQ_DM365_SDIOINT0);
+-			davinci_mmcsd0_device.name = "da830-mmc";
+-		} else if (cpu_is_davinci_dm644x()) {
+-			/* REVISIT: should this be in board-init code? */
+-			/* Power-on 3.3V IO cells */
+-			__raw_writel(0,
+-				DAVINCI_SYSMOD_VIRT(SYSMOD_VDD3P3VPWDN));
+-			/*Set up the pull regiter for MMC */
+-			davinci_cfg_reg(DM644X_MSTK);
+-		}
+-
+-		pdev = &davinci_mmcsd0_device;
+-		break;
+-	}
+-
+-	if (WARN_ON(!pdev))
+-		return;
+-
+-	pdev->dev.platform_data = config;
+-	platform_device_register(pdev);
+-}
+-
+-#else
+-
+-void __init davinci_setup_mmc(int module, struct davinci_mmc_config *config)
+-{
+-}
+-
+-#endif
+-
+-/*-------------------------------------------------------------------------*/
+-
+-static struct resource wdt_resources[] = {
+-	{
+-		.start	= DAVINCI_WDOG_BASE,
+-		.end	= DAVINCI_WDOG_BASE + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device davinci_wdt_device = {
+-	.name		= "davinci-wdt",
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(wdt_resources),
+-	.resource	= wdt_resources,
+-};
+-
+-int davinci_init_wdt(void)
+-{
+-	return platform_device_register(&davinci_wdt_device);
+-}
+-
+-static struct platform_device davinci_gpio_device = {
+-	.name	= "davinci_gpio",
+-	.id	= -1,
+-};
+-
+-int davinci_gpio_register(struct resource *res, int size, void *pdata)
+-{
+-	davinci_gpio_device.resource = res;
+-	davinci_gpio_device.num_resources = size;
+-	davinci_gpio_device.dev.platform_data = pdata;
+-	return platform_device_register(&davinci_gpio_device);
+-}
+diff --git a/arch/arm/mach-davinci/dm355.c b/arch/arm/mach-davinci/dm355.c
+deleted file mode 100644
+index a12ba859beca..000000000000
+--- a/arch/arm/mach-davinci/dm355.c
++++ /dev/null
+@@ -1,832 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * TI DaVinci DM355 chip specific setup
+- *
+- * Author: Kevin Hilman, Deep Root Systems, LLC
+- *
+- * 2007 (c) Deep Root Systems, LLC.
+- */
+-
+-#include <linux/clk-provider.h>
+-#include <linux/clk/davinci.h>
+-#include <linux/clkdev.h>
+-#include <linux/dma-mapping.h>
+-#include <linux/dmaengine.h>
+-#include <linux/init.h>
+-#include <linux/io.h>
+-#include <linux/irqchip/irq-davinci-aintc.h>
+-#include <linux/platform_data/edma.h>
+-#include <linux/platform_data/gpio-davinci.h>
+-#include <linux/platform_data/spi-davinci.h>
+-#include <linux/platform_device.h>
+-#include <linux/serial_8250.h>
+-#include <linux/spi/spi.h>
+-
+-#include <clocksource/timer-davinci.h>
+-
+-#include <asm/mach/map.h>
+-
+-#include "common.h"
+-#include "cputype.h"
+-#include "serial.h"
+-#include "asp.h"
+-#include "davinci.h"
+-#include "irqs.h"
+-#include "mux.h"
+-
+-#define DM355_UART2_BASE	(IO_PHYS + 0x206000)
+-#define DM355_OSD_BASE		(IO_PHYS + 0x70200)
+-#define DM355_VENC_BASE		(IO_PHYS + 0x70400)
+-
+-/*
+- * Device specific clocks
+- */
+-#define DM355_REF_FREQ		24000000	/* 24 or 36 MHz */
+-
+-static u64 dm355_spi0_dma_mask = DMA_BIT_MASK(32);
+-
+-static struct resource dm355_spi0_resources[] = {
+-	{
+-		.start = 0x01c66000,
+-		.end   = 0x01c667ff,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	{
+-		.start = DAVINCI_INTC_IRQ(IRQ_DM355_SPINT0_0),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct davinci_spi_platform_data dm355_spi0_pdata = {
+-	.version 	= SPI_VERSION_1,
+-	.num_chipselect = 2,
+-	.cshold_bug	= true,
+-	.dma_event_q	= EVENTQ_1,
+-	.prescaler_limit = 1,
+-};
+-static struct platform_device dm355_spi0_device = {
+-	.name = "spi_davinci",
+-	.id = 0,
+-	.dev = {
+-		.dma_mask = &dm355_spi0_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-		.platform_data = &dm355_spi0_pdata,
+-	},
+-	.num_resources = ARRAY_SIZE(dm355_spi0_resources),
+-	.resource = dm355_spi0_resources,
+-};
+-
+-void __init dm355_init_spi0(unsigned chipselect_mask,
+-		const struct spi_board_info *info, unsigned len)
+-{
+-	/* for now, assume we need MISO */
+-	davinci_cfg_reg(DM355_SPI0_SDI);
+-
+-	/* not all slaves will be wired up */
+-	if (chipselect_mask & BIT(0))
+-		davinci_cfg_reg(DM355_SPI0_SDENA0);
+-	if (chipselect_mask & BIT(1))
+-		davinci_cfg_reg(DM355_SPI0_SDENA1);
+-
+-	spi_register_board_info(info, len);
+-
+-	platform_device_register(&dm355_spi0_device);
+-}
+-
+-/*----------------------------------------------------------------------*/
+-
+-#define INTMUX		0x18
+-#define EVTMUX		0x1c
+-
+-/*
+- * Device specific mux setup
+- *
+- *	soc	description	mux  mode   mode  mux	 dbg
+- *				reg  offset mask  mode
+- */
+-static const struct mux_config dm355_pins[] = {
+-#ifdef CONFIG_DAVINCI_MUX
+-MUX_CFG(DM355,	MMCSD0,		4,   2,     1,	  0,	 false)
+-
+-MUX_CFG(DM355,	SD1_CLK,	3,   6,     1,	  1,	 false)
+-MUX_CFG(DM355,	SD1_CMD,	3,   7,     1,	  1,	 false)
+-MUX_CFG(DM355,	SD1_DATA3,	3,   8,     3,	  1,	 false)
+-MUX_CFG(DM355,	SD1_DATA2,	3,   10,    3,	  1,	 false)
+-MUX_CFG(DM355,	SD1_DATA1,	3,   12,    3,	  1,	 false)
+-MUX_CFG(DM355,	SD1_DATA0,	3,   14,    3,	  1,	 false)
+-
+-MUX_CFG(DM355,	I2C_SDA,	3,   19,    1,	  1,	 false)
+-MUX_CFG(DM355,	I2C_SCL,	3,   20,    1,	  1,	 false)
+-
+-MUX_CFG(DM355,	MCBSP0_BDX,	3,   0,     1,	  1,	 false)
+-MUX_CFG(DM355,	MCBSP0_X,	3,   1,     1,	  1,	 false)
+-MUX_CFG(DM355,	MCBSP0_BFSX,	3,   2,     1,	  1,	 false)
+-MUX_CFG(DM355,	MCBSP0_BDR,	3,   3,     1,	  1,	 false)
+-MUX_CFG(DM355,	MCBSP0_R,	3,   4,     1,	  1,	 false)
+-MUX_CFG(DM355,	MCBSP0_BFSR,	3,   5,     1,	  1,	 false)
+-
+-MUX_CFG(DM355,	SPI0_SDI,	4,   1,     1,    0,	 false)
+-MUX_CFG(DM355,	SPI0_SDENA0,	4,   0,     1,    0,	 false)
+-MUX_CFG(DM355,	SPI0_SDENA1,	3,   28,    1,    1,	 false)
+-
+-INT_CFG(DM355,  INT_EDMA_CC,	      2,    1,    1,     false)
+-INT_CFG(DM355,  INT_EDMA_TC0_ERR,     3,    1,    1,     false)
+-INT_CFG(DM355,  INT_EDMA_TC1_ERR,     4,    1,    1,     false)
+-
+-EVT_CFG(DM355,  EVT8_ASP1_TX,	      0,    1,    0,     false)
+-EVT_CFG(DM355,  EVT9_ASP1_RX,	      1,    1,    0,     false)
+-EVT_CFG(DM355,  EVT26_MMC0_RX,	      2,    1,    0,     false)
+-
+-MUX_CFG(DM355,	VOUT_FIELD,	1,   18,    3,	  1,	 false)
+-MUX_CFG(DM355,	VOUT_FIELD_G70,	1,   18,    3,	  0,	 false)
+-MUX_CFG(DM355,	VOUT_HVSYNC,	1,   16,    1,	  0,	 false)
+-MUX_CFG(DM355,	VOUT_COUTL_EN,	1,   0,     0xff, 0x55,  false)
+-MUX_CFG(DM355,	VOUT_COUTH_EN,	1,   8,     0xff, 0x55,  false)
+-
+-MUX_CFG(DM355,	VIN_PCLK,	0,   14,    1,    1,	 false)
+-MUX_CFG(DM355,	VIN_CAM_WEN,	0,   13,    1,    1,	 false)
+-MUX_CFG(DM355,	VIN_CAM_VD,	0,   12,    1,    1,	 false)
+-MUX_CFG(DM355,	VIN_CAM_HD,	0,   11,    1,    1,	 false)
+-MUX_CFG(DM355,	VIN_YIN_EN,	0,   10,    1,    1,	 false)
+-MUX_CFG(DM355,	VIN_CINL_EN,	0,   0,   0xff, 0x55,	 false)
+-MUX_CFG(DM355,	VIN_CINH_EN,	0,   8,     3,    3,	 false)
+-#endif
+-};
+-
+-static u8 dm355_default_priorities[DAVINCI_N_AINTC_IRQ] = {
+-	[IRQ_DM355_CCDC_VDINT0]		= 2,
+-	[IRQ_DM355_CCDC_VDINT1]		= 6,
+-	[IRQ_DM355_CCDC_VDINT2]		= 6,
+-	[IRQ_DM355_IPIPE_HST]		= 6,
+-	[IRQ_DM355_H3AINT]		= 6,
+-	[IRQ_DM355_IPIPE_SDR]		= 6,
+-	[IRQ_DM355_IPIPEIFINT]		= 6,
+-	[IRQ_DM355_OSDINT]		= 7,
+-	[IRQ_DM355_VENCINT]		= 6,
+-	[IRQ_ASQINT]			= 6,
+-	[IRQ_IMXINT]			= 6,
+-	[IRQ_USBINT]			= 4,
+-	[IRQ_DM355_RTOINT]		= 4,
+-	[IRQ_DM355_UARTINT2]		= 7,
+-	[IRQ_DM355_TINT6]		= 7,
+-	[IRQ_CCINT0]			= 5,	/* dma */
+-	[IRQ_CCERRINT]			= 5,	/* dma */
+-	[IRQ_TCERRINT0]			= 5,	/* dma */
+-	[IRQ_TCERRINT]			= 5,	/* dma */
+-	[IRQ_DM355_SPINT2_1]		= 7,
+-	[IRQ_DM355_TINT7]		= 4,
+-	[IRQ_DM355_SDIOINT0]		= 7,
+-	[IRQ_MBXINT]			= 7,
+-	[IRQ_MBRINT]			= 7,
+-	[IRQ_MMCINT]			= 7,
+-	[IRQ_DM355_MMCINT1]		= 7,
+-	[IRQ_DM355_PWMINT3]		= 7,
+-	[IRQ_DDRINT]			= 7,
+-	[IRQ_AEMIFINT]			= 7,
+-	[IRQ_DM355_SDIOINT1]		= 4,
+-	[IRQ_TINT0_TINT12]		= 2,	/* clockevent */
+-	[IRQ_TINT0_TINT34]		= 2,	/* clocksource */
+-	[IRQ_TINT1_TINT12]		= 7,	/* DSP timer */
+-	[IRQ_TINT1_TINT34]		= 7,	/* system tick */
+-	[IRQ_PWMINT0]			= 7,
+-	[IRQ_PWMINT1]			= 7,
+-	[IRQ_PWMINT2]			= 7,
+-	[IRQ_I2C]			= 3,
+-	[IRQ_UARTINT0]			= 3,
+-	[IRQ_UARTINT1]			= 3,
+-	[IRQ_DM355_SPINT0_0]		= 3,
+-	[IRQ_DM355_SPINT0_1]		= 3,
+-	[IRQ_DM355_GPIO0]		= 3,
+-	[IRQ_DM355_GPIO1]		= 7,
+-	[IRQ_DM355_GPIO2]		= 4,
+-	[IRQ_DM355_GPIO3]		= 4,
+-	[IRQ_DM355_GPIO4]		= 7,
+-	[IRQ_DM355_GPIO5]		= 7,
+-	[IRQ_DM355_GPIO6]		= 7,
+-	[IRQ_DM355_GPIO7]		= 7,
+-	[IRQ_DM355_GPIO8]		= 7,
+-	[IRQ_DM355_GPIO9]		= 7,
+-	[IRQ_DM355_GPIOBNK0]		= 7,
+-	[IRQ_DM355_GPIOBNK1]		= 7,
+-	[IRQ_DM355_GPIOBNK2]		= 7,
+-	[IRQ_DM355_GPIOBNK3]		= 7,
+-	[IRQ_DM355_GPIOBNK4]		= 7,
+-	[IRQ_DM355_GPIOBNK5]		= 7,
+-	[IRQ_DM355_GPIOBNK6]		= 7,
+-	[IRQ_COMMTX]			= 7,
+-	[IRQ_COMMRX]			= 7,
+-	[IRQ_EMUINT]			= 7,
+-};
+-
+-/*----------------------------------------------------------------------*/
+-
+-static s8 queue_priority_mapping[][2] = {
+-	/* {event queue no, Priority} */
+-	{0, 3},
+-	{1, 7},
+-	{-1, -1},
+-};
+-
+-static const struct dma_slave_map dm355_edma_map[] = {
+-	{ "davinci-mcbsp.0", "tx", EDMA_FILTER_PARAM(0, 2) },
+-	{ "davinci-mcbsp.0", "rx", EDMA_FILTER_PARAM(0, 3) },
+-	{ "davinci-mcbsp.1", "tx", EDMA_FILTER_PARAM(0, 8) },
+-	{ "davinci-mcbsp.1", "rx", EDMA_FILTER_PARAM(0, 9) },
+-	{ "spi_davinci.2", "tx", EDMA_FILTER_PARAM(0, 10) },
+-	{ "spi_davinci.2", "rx", EDMA_FILTER_PARAM(0, 11) },
+-	{ "spi_davinci.1", "tx", EDMA_FILTER_PARAM(0, 14) },
+-	{ "spi_davinci.1", "rx", EDMA_FILTER_PARAM(0, 15) },
+-	{ "spi_davinci.0", "tx", EDMA_FILTER_PARAM(0, 16) },
+-	{ "spi_davinci.0", "rx", EDMA_FILTER_PARAM(0, 17) },
+-	{ "dm6441-mmc.0", "rx", EDMA_FILTER_PARAM(0, 26) },
+-	{ "dm6441-mmc.0", "tx", EDMA_FILTER_PARAM(0, 27) },
+-	{ "dm6441-mmc.1", "rx", EDMA_FILTER_PARAM(0, 30) },
+-	{ "dm6441-mmc.1", "tx", EDMA_FILTER_PARAM(0, 31) },
+-};
+-
+-static struct edma_soc_info dm355_edma_pdata = {
+-	.queue_priority_mapping	= queue_priority_mapping,
+-	.default_queue		= EVENTQ_1,
+-	.slave_map		= dm355_edma_map,
+-	.slavecnt		= ARRAY_SIZE(dm355_edma_map),
+-};
+-
+-static struct resource edma_resources[] = {
+-	{
+-		.name	= "edma3_cc",
+-		.start	= 0x01c00000,
+-		.end	= 0x01c00000 + SZ_64K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_tc0",
+-		.start	= 0x01c10000,
+-		.end	= 0x01c10000 + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_tc1",
+-		.start	= 0x01c10400,
+-		.end	= 0x01c10400 + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_ccint",
+-		.start	= DAVINCI_INTC_IRQ(IRQ_CCINT0),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.name	= "edma3_ccerrint",
+-		.start	= DAVINCI_INTC_IRQ(IRQ_CCERRINT),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	/* not using (or muxing) TC*_ERR */
+-};
+-
+-static const struct platform_device_info dm355_edma_device __initconst = {
+-	.name		= "edma",
+-	.id		= 0,
+-	.dma_mask	= DMA_BIT_MASK(32),
+-	.res		= edma_resources,
+-	.num_res	= ARRAY_SIZE(edma_resources),
+-	.data		= &dm355_edma_pdata,
+-	.size_data	= sizeof(dm355_edma_pdata),
+-};
+-
+-static struct resource dm355_asp1_resources[] = {
+-	{
+-		.name	= "mpu",
+-		.start	= DAVINCI_ASP1_BASE,
+-		.end	= DAVINCI_ASP1_BASE + SZ_8K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= DAVINCI_DMA_ASP1_TX,
+-		.end	= DAVINCI_DMA_ASP1_TX,
+-		.flags	= IORESOURCE_DMA,
+-	},
+-	{
+-		.start	= DAVINCI_DMA_ASP1_RX,
+-		.end	= DAVINCI_DMA_ASP1_RX,
+-		.flags	= IORESOURCE_DMA,
+-	},
+-};
+-
+-static struct platform_device dm355_asp1_device = {
+-	.name		= "davinci-mcbsp",
+-	.id		= 1,
+-	.num_resources	= ARRAY_SIZE(dm355_asp1_resources),
+-	.resource	= dm355_asp1_resources,
+-};
+-
+-static void dm355_ccdc_setup_pinmux(void)
+-{
+-	davinci_cfg_reg(DM355_VIN_PCLK);
+-	davinci_cfg_reg(DM355_VIN_CAM_WEN);
+-	davinci_cfg_reg(DM355_VIN_CAM_VD);
+-	davinci_cfg_reg(DM355_VIN_CAM_HD);
+-	davinci_cfg_reg(DM355_VIN_YIN_EN);
+-	davinci_cfg_reg(DM355_VIN_CINL_EN);
+-	davinci_cfg_reg(DM355_VIN_CINH_EN);
+-}
+-
+-static struct resource dm355_vpss_resources[] = {
+-	{
+-		/* VPSS BL Base address */
+-		.name		= "vpss",
+-		.start          = 0x01c70800,
+-		.end            = 0x01c70800 + 0xff,
+-		.flags          = IORESOURCE_MEM,
+-	},
+-	{
+-		/* VPSS CLK Base address */
+-		.name		= "vpss",
+-		.start          = 0x01c70000,
+-		.end            = 0x01c70000 + 0xf,
+-		.flags          = IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device dm355_vpss_device = {
+-	.name			= "vpss",
+-	.id			= -1,
+-	.dev.platform_data	= "dm355_vpss",
+-	.num_resources		= ARRAY_SIZE(dm355_vpss_resources),
+-	.resource		= dm355_vpss_resources,
+-};
+-
+-static struct resource vpfe_resources[] = {
+-	{
+-		.start          = DAVINCI_INTC_IRQ(IRQ_VDINT0),
+-		.end            = DAVINCI_INTC_IRQ(IRQ_VDINT0),
+-		.flags          = IORESOURCE_IRQ,
+-	},
+-	{
+-		.start          = DAVINCI_INTC_IRQ(IRQ_VDINT1),
+-		.end            = DAVINCI_INTC_IRQ(IRQ_VDINT1),
+-		.flags          = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static u64 vpfe_capture_dma_mask = DMA_BIT_MASK(32);
+-static struct resource dm355_ccdc_resource[] = {
+-	/* CCDC Base address */
+-	{
+-		.flags          = IORESOURCE_MEM,
+-		.start          = 0x01c70600,
+-		.end            = 0x01c70600 + 0x1ff,
+-	},
+-};
+-static struct platform_device dm355_ccdc_dev = {
+-	.name           = "dm355_ccdc",
+-	.id             = -1,
+-	.num_resources  = ARRAY_SIZE(dm355_ccdc_resource),
+-	.resource       = dm355_ccdc_resource,
+-	.dev = {
+-		.dma_mask               = &vpfe_capture_dma_mask,
+-		.coherent_dma_mask      = DMA_BIT_MASK(32),
+-		.platform_data		= dm355_ccdc_setup_pinmux,
+-	},
+-};
+-
+-static struct platform_device vpfe_capture_dev = {
+-	.name		= CAPTURE_DRV_NAME,
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(vpfe_resources),
+-	.resource	= vpfe_resources,
+-	.dev = {
+-		.dma_mask		= &vpfe_capture_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct resource dm355_osd_resources[] = {
+-	{
+-		.start	= DM355_OSD_BASE,
+-		.end	= DM355_OSD_BASE + 0x17f,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device dm355_osd_dev = {
+-	.name		= DM355_VPBE_OSD_SUBDEV_NAME,
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(dm355_osd_resources),
+-	.resource	= dm355_osd_resources,
+-	.dev		= {
+-		.dma_mask		= &vpfe_capture_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct resource dm355_venc_resources[] = {
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	/* venc registers io space */
+-	{
+-		.start	= DM355_VENC_BASE,
+-		.end	= DM355_VENC_BASE + 0x17f,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	/* VDAC config register io space */
+-	{
+-		.start	= DAVINCI_SYSTEM_MODULE_BASE + SYSMOD_VDAC_CONFIG,
+-		.end	= DAVINCI_SYSTEM_MODULE_BASE + SYSMOD_VDAC_CONFIG + 3,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct resource dm355_v4l2_disp_resources[] = {
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	/* venc registers io space */
+-	{
+-		.start	= DM355_VENC_BASE,
+-		.end	= DM355_VENC_BASE + 0x17f,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static int dm355_vpbe_setup_pinmux(u32 if_type, int field)
+-{
+-	switch (if_type) {
+-	case MEDIA_BUS_FMT_SGRBG8_1X8:
+-		davinci_cfg_reg(DM355_VOUT_FIELD_G70);
+-		break;
+-	case MEDIA_BUS_FMT_YUYV10_1X20:
+-		if (field)
+-			davinci_cfg_reg(DM355_VOUT_FIELD);
+-		else
+-			davinci_cfg_reg(DM355_VOUT_FIELD_G70);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	davinci_cfg_reg(DM355_VOUT_COUTL_EN);
+-	davinci_cfg_reg(DM355_VOUT_COUTH_EN);
+-
+-	return 0;
+-}
+-
+-static int dm355_venc_setup_clock(enum vpbe_enc_timings_type type,
+-				   unsigned int pclock)
+-{
+-	void __iomem *vpss_clk_ctrl_reg;
+-
+-	vpss_clk_ctrl_reg = DAVINCI_SYSMOD_VIRT(SYSMOD_VPSS_CLKCTL);
+-
+-	switch (type) {
+-	case VPBE_ENC_STD:
+-		writel(VPSS_DACCLKEN_ENABLE | VPSS_VENCCLKEN_ENABLE,
+-		       vpss_clk_ctrl_reg);
+-		break;
+-	case VPBE_ENC_DV_TIMINGS:
+-		if (pclock > 27000000)
+-			/*
+-			 * For HD, use external clock source since we cannot
+-			 * support HD mode with internal clocks.
+-			 */
+-			writel(VPSS_MUXSEL_EXTCLK_ENABLE, vpss_clk_ctrl_reg);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static struct platform_device dm355_vpbe_display = {
+-	.name		= "vpbe-v4l2",
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(dm355_v4l2_disp_resources),
+-	.resource	= dm355_v4l2_disp_resources,
+-	.dev		= {
+-		.dma_mask		= &vpfe_capture_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct venc_platform_data dm355_venc_pdata = {
+-	.setup_pinmux	= dm355_vpbe_setup_pinmux,
+-	.setup_clock	= dm355_venc_setup_clock,
+-};
+-
+-static struct platform_device dm355_venc_dev = {
+-	.name		= DM355_VPBE_VENC_SUBDEV_NAME,
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(dm355_venc_resources),
+-	.resource	= dm355_venc_resources,
+-	.dev		= {
+-		.dma_mask		= &vpfe_capture_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-		.platform_data		= (void *)&dm355_venc_pdata,
+-	},
+-};
+-
+-static struct platform_device dm355_vpbe_dev = {
+-	.name		= "vpbe_controller",
+-	.id		= -1,
+-	.dev		= {
+-		.dma_mask		= &vpfe_capture_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct resource dm355_gpio_resources[] = {
+-	{	/* registers */
+-		.start	= DAVINCI_GPIO_BASE,
+-		.end	= DAVINCI_GPIO_BASE + SZ_4K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{	/* interrupt */
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK0),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK0),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK1),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK1),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK2),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK2),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK3),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK3),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK4),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK4),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK5),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK5),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK6),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM355_GPIOBNK6),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct davinci_gpio_platform_data dm355_gpio_platform_data = {
+-	.no_auto_base	= true,
+-	.base		= 0,
+-	.ngpio		= 104,
+-};
+-
+-int __init dm355_gpio_register(void)
+-{
+-	return davinci_gpio_register(dm355_gpio_resources,
+-				     ARRAY_SIZE(dm355_gpio_resources),
+-				     &dm355_gpio_platform_data);
+-}
+-/*----------------------------------------------------------------------*/
+-
+-static struct map_desc dm355_io_desc[] = {
+-	{
+-		.virtual	= IO_VIRT,
+-		.pfn		= __phys_to_pfn(IO_PHYS),
+-		.length		= IO_SIZE,
+-		.type		= MT_DEVICE
+-	},
+-};
+-
+-/* Contents of JTAG ID register used to identify exact cpu type */
+-static struct davinci_id dm355_ids[] = {
+-	{
+-		.variant	= 0x0,
+-		.part_no	= 0xb73b,
+-		.manufacturer	= 0x00f,
+-		.cpu_id		= DAVINCI_CPU_ID_DM355,
+-		.name		= "dm355",
+-	},
+-};
+-
+-/*
+- * Bottom half of timer0 is used for clockevent, top half is used for
+- * clocksource.
+- */
+-static const struct davinci_timer_cfg dm355_timer_cfg = {
+-	.reg = DEFINE_RES_IO(DAVINCI_TIMER0_BASE, SZ_4K),
+-	.irq = {
+-		DEFINE_RES_IRQ(DAVINCI_INTC_IRQ(IRQ_TINT0_TINT12)),
+-		DEFINE_RES_IRQ(DAVINCI_INTC_IRQ(IRQ_TINT0_TINT34)),
+-	},
+-};
+-
+-static struct plat_serial8250_port dm355_serial0_platform_data[] = {
+-	{
+-		.mapbase	= DAVINCI_UART0_BASE,
+-		.irq		= DAVINCI_INTC_IRQ(IRQ_UARTINT0),
+-		.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST |
+-				  UPF_IOREMAP,
+-		.iotype		= UPIO_MEM,
+-		.regshift	= 2,
+-	},
+-	{
+-		.flags	= 0,
+-	}
+-};
+-static struct plat_serial8250_port dm355_serial1_platform_data[] = {
+-	{
+-		.mapbase	= DAVINCI_UART1_BASE,
+-		.irq		= DAVINCI_INTC_IRQ(IRQ_UARTINT1),
+-		.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST |
+-				  UPF_IOREMAP,
+-		.iotype		= UPIO_MEM,
+-		.regshift	= 2,
+-	},
+-	{
+-		.flags	= 0,
+-	}
+-};
+-static struct plat_serial8250_port dm355_serial2_platform_data[] = {
+-	{
+-		.mapbase	= DM355_UART2_BASE,
+-		.irq		= DAVINCI_INTC_IRQ(IRQ_DM355_UARTINT2),
+-		.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST |
+-				  UPF_IOREMAP,
+-		.iotype		= UPIO_MEM,
+-		.regshift	= 2,
+-	},
+-	{
+-		.flags	= 0,
+-	}
+-};
+-
+-struct platform_device dm355_serial_device[] = {
+-	{
+-		.name			= "serial8250",
+-		.id			= PLAT8250_DEV_PLATFORM,
+-		.dev			= {
+-			.platform_data	= dm355_serial0_platform_data,
+-		}
+-	},
+-	{
+-		.name			= "serial8250",
+-		.id			= PLAT8250_DEV_PLATFORM1,
+-		.dev			= {
+-			.platform_data	= dm355_serial1_platform_data,
+-		}
+-	},
+-	{
+-		.name			= "serial8250",
+-		.id			= PLAT8250_DEV_PLATFORM2,
+-		.dev			= {
+-			.platform_data	= dm355_serial2_platform_data,
+-		}
+-	},
+-	{
+-	}
+-};
+-
+-static const struct davinci_soc_info davinci_soc_info_dm355 = {
+-	.io_desc		= dm355_io_desc,
+-	.io_desc_num		= ARRAY_SIZE(dm355_io_desc),
+-	.jtag_id_reg		= 0x01c40028,
+-	.ids			= dm355_ids,
+-	.ids_num		= ARRAY_SIZE(dm355_ids),
+-	.pinmux_base		= DAVINCI_SYSTEM_MODULE_BASE,
+-	.pinmux_pins		= dm355_pins,
+-	.pinmux_pins_num	= ARRAY_SIZE(dm355_pins),
+-	.sram_dma		= 0x00010000,
+-	.sram_len		= SZ_32K,
+-};
+-
+-void __init dm355_init_asp1(u32 evt_enable)
+-{
+-	/* we don't use ASP1 IRQs, or we'd need to mux them ... */
+-	if (evt_enable & ASP1_TX_EVT_EN)
+-		davinci_cfg_reg(DM355_EVT8_ASP1_TX);
+-
+-	if (evt_enable & ASP1_RX_EVT_EN)
+-		davinci_cfg_reg(DM355_EVT9_ASP1_RX);
+-
+-	platform_device_register(&dm355_asp1_device);
+-}
+-
+-void __init dm355_init(void)
+-{
+-	davinci_common_init(&davinci_soc_info_dm355);
+-	davinci_map_sysmod();
+-}
+-
+-void __init dm355_init_time(void)
+-{
+-	void __iomem *pll1, *psc;
+-	struct clk *clk;
+-	int rv;
+-
+-	clk_register_fixed_rate(NULL, "ref_clk", NULL, 0, DM355_REF_FREQ);
+-
+-	pll1 = ioremap(DAVINCI_PLL1_BASE, SZ_1K);
+-	dm355_pll1_init(NULL, pll1, NULL);
+-
+-	psc = ioremap(DAVINCI_PWR_SLEEP_CNTRL_BASE, SZ_4K);
+-	dm355_psc_init(NULL, psc);
+-
+-	clk = clk_get(NULL, "timer0");
+-	if (WARN_ON(IS_ERR(clk))) {
+-		pr_err("Unable to get the timer clock\n");
+-		return;
+-	}
+-
+-	rv = davinci_timer_register(clk, &dm355_timer_cfg);
+-	WARN(rv, "Unable to register the timer: %d\n", rv);
+-}
+-
+-static struct resource dm355_pll2_resources[] = {
+-	{
+-		.start	= DAVINCI_PLL2_BASE,
+-		.end	= DAVINCI_PLL2_BASE + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device dm355_pll2_device = {
+-	.name		= "dm355-pll2",
+-	.id		= -1,
+-	.resource	= dm355_pll2_resources,
+-	.num_resources	= ARRAY_SIZE(dm355_pll2_resources),
+-};
+-
+-void __init dm355_register_clocks(void)
+-{
+-	/* PLL1 and PSC are registered in dm355_init_time() */
+-	platform_device_register(&dm355_pll2_device);
+-}
+-
+-int __init dm355_init_video(struct vpfe_config *vpfe_cfg,
+-				struct vpbe_config *vpbe_cfg)
+-{
+-	if (vpfe_cfg || vpbe_cfg)
+-		platform_device_register(&dm355_vpss_device);
+-
+-	if (vpfe_cfg) {
+-		vpfe_capture_dev.dev.platform_data = vpfe_cfg;
+-		platform_device_register(&dm355_ccdc_dev);
+-		platform_device_register(&vpfe_capture_dev);
+-	}
+-
+-	if (vpbe_cfg) {
+-		dm355_vpbe_dev.dev.platform_data = vpbe_cfg;
+-		platform_device_register(&dm355_osd_dev);
+-		platform_device_register(&dm355_venc_dev);
+-		platform_device_register(&dm355_vpbe_dev);
+-		platform_device_register(&dm355_vpbe_display);
+-	}
+-
+-	return 0;
+-}
+-
+-static const struct davinci_aintc_config dm355_aintc_config = {
+-	.reg = {
+-		.start		= DAVINCI_ARM_INTC_BASE,
+-		.end		= DAVINCI_ARM_INTC_BASE + SZ_4K - 1,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-	.num_irqs		= 64,
+-	.prios			= dm355_default_priorities,
+-};
+-
+-void __init dm355_init_irq(void)
+-{
+-	davinci_aintc_init(&dm355_aintc_config);
+-}
+-
+-static int __init dm355_init_devices(void)
+-{
+-	struct platform_device *edma_pdev;
+-	int ret = 0;
+-
+-	if (!cpu_is_davinci_dm355())
+-		return 0;
+-
+-	davinci_cfg_reg(DM355_INT_EDMA_CC);
+-	edma_pdev = platform_device_register_full(&dm355_edma_device);
+-	if (IS_ERR(edma_pdev)) {
+-		pr_warn("%s: Failed to register eDMA\n", __func__);
+-		return PTR_ERR(edma_pdev);
+-	}
+-
+-	ret = davinci_init_wdt();
+-	if (ret)
+-		pr_warn("%s: watchdog init failed: %d\n", __func__, ret);
+-
+-	return ret;
+-}
+-postcore_initcall(dm355_init_devices);
+diff --git a/arch/arm/mach-davinci/dm365.c b/arch/arm/mach-davinci/dm365.c
+deleted file mode 100644
+index 7538bb87f373..000000000000
+--- a/arch/arm/mach-davinci/dm365.c
++++ /dev/null
+@@ -1,1094 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * TI DaVinci DM365 chip specific setup
+- *
+- * Copyright (C) 2009 Texas Instruments
+- */
+-
+-#include <linux/clk-provider.h>
+-#include <linux/clk/davinci.h>
+-#include <linux/clkdev.h>
+-#include <linux/dma-mapping.h>
+-#include <linux/dmaengine.h>
+-#include <linux/init.h>
+-#include <linux/io.h>
+-#include <linux/irqchip/irq-davinci-aintc.h>
+-#include <linux/platform_data/edma.h>
+-#include <linux/platform_data/gpio-davinci.h>
+-#include <linux/platform_data/keyscan-davinci.h>
+-#include <linux/platform_data/spi-davinci.h>
+-#include <linux/platform_device.h>
+-#include <linux/serial_8250.h>
+-#include <linux/spi/spi.h>
+-
+-#include <clocksource/timer-davinci.h>
+-
+-#include <asm/mach/map.h>
+-
+-#include "common.h"
+-#include "cputype.h"
+-#include "serial.h"
+-#include "asp.h"
+-#include "davinci.h"
+-#include "irqs.h"
+-#include "mux.h"
+-
+-#define DM365_REF_FREQ		24000000	/* 24 MHz on the DM365 EVM */
+-#define DM365_RTC_BASE			0x01c69000
+-#define DM365_KEYSCAN_BASE		0x01c69400
+-#define DM365_OSD_BASE			0x01c71c00
+-#define DM365_VENC_BASE			0x01c71e00
+-#define DAVINCI_DM365_VC_BASE		0x01d0c000
+-#define DAVINCI_DMA_VC_TX		2
+-#define DAVINCI_DMA_VC_RX		3
+-#define DM365_EMAC_BASE			0x01d07000
+-#define DM365_EMAC_MDIO_BASE		(DM365_EMAC_BASE + 0x4000)
+-#define DM365_EMAC_CNTRL_OFFSET		0x0000
+-#define DM365_EMAC_CNTRL_MOD_OFFSET	0x3000
+-#define DM365_EMAC_CNTRL_RAM_OFFSET	0x1000
+-#define DM365_EMAC_CNTRL_RAM_SIZE	0x2000
+-
+-#define INTMUX		0x18
+-#define EVTMUX		0x1c
+-
+-
+-static const struct mux_config dm365_pins[] = {
+-#ifdef CONFIG_DAVINCI_MUX
+-MUX_CFG(DM365,	MMCSD0,		0,   24,     1,	  0,	 false)
+-
+-MUX_CFG(DM365,	SD1_CLK,	0,   16,    3,	  1,	 false)
+-MUX_CFG(DM365,	SD1_CMD,	4,   30,    3,	  1,	 false)
+-MUX_CFG(DM365,	SD1_DATA3,	4,   28,    3,	  1,	 false)
+-MUX_CFG(DM365,	SD1_DATA2,	4,   26,    3,	  1,	 false)
+-MUX_CFG(DM365,	SD1_DATA1,	4,   24,    3,	  1,	 false)
+-MUX_CFG(DM365,	SD1_DATA0,	4,   22,    3,	  1,	 false)
+-
+-MUX_CFG(DM365,	I2C_SDA,	3,   23,    3,	  2,	 false)
+-MUX_CFG(DM365,	I2C_SCL,	3,   21,    3,	  2,	 false)
+-
+-MUX_CFG(DM365,	AEMIF_AR_A14,	2,   0,     3,	  1,	 false)
+-MUX_CFG(DM365,	AEMIF_AR_BA0,	2,   0,     3,	  2,	 false)
+-MUX_CFG(DM365,	AEMIF_A3,	2,   2,     3,	  1,	 false)
+-MUX_CFG(DM365,	AEMIF_A7,	2,   4,     3,	  1,	 false)
+-MUX_CFG(DM365,	AEMIF_D15_8,	2,   6,     1,	  1,	 false)
+-MUX_CFG(DM365,	AEMIF_CE0,	2,   7,     1,	  0,	 false)
+-MUX_CFG(DM365,	AEMIF_CE1,	2,   8,     1,    0,     false)
+-MUX_CFG(DM365,	AEMIF_WE_OE,	2,   9,     1,    0,     false)
+-
+-MUX_CFG(DM365,	MCBSP0_BDX,	0,   23,    1,	  1,	 false)
+-MUX_CFG(DM365,	MCBSP0_X,	0,   22,    1,	  1,	 false)
+-MUX_CFG(DM365,	MCBSP0_BFSX,	0,   21,    1,	  1,	 false)
+-MUX_CFG(DM365,	MCBSP0_BDR,	0,   20,    1,	  1,	 false)
+-MUX_CFG(DM365,	MCBSP0_R,	0,   19,    1,	  1,	 false)
+-MUX_CFG(DM365,	MCBSP0_BFSR,	0,   18,    1,	  1,	 false)
+-
+-MUX_CFG(DM365,	SPI0_SCLK,	3,   28,    1,    1,	 false)
+-MUX_CFG(DM365,	SPI0_SDI,	3,   26,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI0_SDO,	3,   25,    1,    1,	 false)
+-MUX_CFG(DM365,	SPI0_SDENA0,	3,   29,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI0_SDENA1,	3,   26,    3,    2,	 false)
+-
+-MUX_CFG(DM365,	UART0_RXD,	3,   20,    1,    1,	 false)
+-MUX_CFG(DM365,	UART0_TXD,	3,   19,    1,    1,	 false)
+-MUX_CFG(DM365,	UART1_RXD,	3,   17,    3,    2,	 false)
+-MUX_CFG(DM365,	UART1_TXD,	3,   15,    3,    2,	 false)
+-MUX_CFG(DM365,	UART1_RTS,	3,   23,    3,    1,	 false)
+-MUX_CFG(DM365,	UART1_CTS,	3,   21,    3,    1,	 false)
+-
+-MUX_CFG(DM365,  EMAC_TX_EN,	3,   17,    3,    1,     false)
+-MUX_CFG(DM365,  EMAC_TX_CLK,	3,   15,    3,    1,     false)
+-MUX_CFG(DM365,  EMAC_COL,	3,   14,    1,    1,     false)
+-MUX_CFG(DM365,  EMAC_TXD3,	3,   13,    1,    1,     false)
+-MUX_CFG(DM365,  EMAC_TXD2,	3,   12,    1,    1,     false)
+-MUX_CFG(DM365,  EMAC_TXD1,	3,   11,    1,    1,     false)
+-MUX_CFG(DM365,  EMAC_TXD0,	3,   10,    1,    1,     false)
+-MUX_CFG(DM365,  EMAC_RXD3,	3,   9,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_RXD2,	3,   8,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_RXD1,	3,   7,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_RXD0,	3,   6,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_RX_CLK,	3,   5,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_RX_DV,	3,   4,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_RX_ER,	3,   3,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_CRS,	3,   2,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_MDIO,	3,   1,     1,    1,     false)
+-MUX_CFG(DM365,  EMAC_MDCLK,	3,   0,     1,    1,     false)
+-
+-MUX_CFG(DM365,	KEYSCAN,	2,   0,     0x3f, 0x3f,  false)
+-
+-MUX_CFG(DM365,	PWM0,		1,   0,     3,    2,     false)
+-MUX_CFG(DM365,	PWM0_G23,	3,   26,    3,    3,     false)
+-MUX_CFG(DM365,	PWM1,		1,   2,     3,    2,     false)
+-MUX_CFG(DM365,	PWM1_G25,	3,   29,    3,    2,     false)
+-MUX_CFG(DM365,	PWM2_G87,	1,   10,    3,    2,     false)
+-MUX_CFG(DM365,	PWM2_G88,	1,   8,     3,    2,     false)
+-MUX_CFG(DM365,	PWM2_G89,	1,   6,     3,    2,     false)
+-MUX_CFG(DM365,	PWM2_G90,	1,   4,     3,    2,     false)
+-MUX_CFG(DM365,	PWM3_G80,	1,   20,    3,    3,     false)
+-MUX_CFG(DM365,	PWM3_G81,	1,   18,    3,    3,     false)
+-MUX_CFG(DM365,	PWM3_G85,	1,   14,    3,    2,     false)
+-MUX_CFG(DM365,	PWM3_G86,	1,   12,    3,    2,     false)
+-
+-MUX_CFG(DM365,	SPI1_SCLK,	4,   2,     3,    1,	 false)
+-MUX_CFG(DM365,	SPI1_SDI,	3,   31,    1,    1,	 false)
+-MUX_CFG(DM365,	SPI1_SDO,	4,   0,     3,    1,	 false)
+-MUX_CFG(DM365,	SPI1_SDENA0,	4,   4,     3,    1,	 false)
+-MUX_CFG(DM365,	SPI1_SDENA1,	4,   0,     3,    2,	 false)
+-
+-MUX_CFG(DM365,	SPI2_SCLK,	4,   10,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI2_SDI,	4,   6,     3,    1,	 false)
+-MUX_CFG(DM365,	SPI2_SDO,	4,   8,     3,    1,	 false)
+-MUX_CFG(DM365,	SPI2_SDENA0,	4,   12,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI2_SDENA1,	4,   8,     3,    2,	 false)
+-
+-MUX_CFG(DM365,	SPI3_SCLK,	0,   0,	    3,    2,	 false)
+-MUX_CFG(DM365,	SPI3_SDI,	0,   2,     3,    2,	 false)
+-MUX_CFG(DM365,	SPI3_SDO,	0,   6,     3,    2,	 false)
+-MUX_CFG(DM365,	SPI3_SDENA0,	0,   4,     3,    2,	 false)
+-MUX_CFG(DM365,	SPI3_SDENA1,	0,   6,     3,    3,	 false)
+-
+-MUX_CFG(DM365,	SPI4_SCLK,	4,   18,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI4_SDI,	4,   14,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI4_SDO,	4,   16,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI4_SDENA0,	4,   20,    3,    1,	 false)
+-MUX_CFG(DM365,	SPI4_SDENA1,	4,   16,    3,    2,	 false)
+-
+-MUX_CFG(DM365,	CLKOUT0,	4,   20,    3,    3,     false)
+-MUX_CFG(DM365,	CLKOUT1,	4,   16,    3,    3,     false)
+-MUX_CFG(DM365,	CLKOUT2,	4,   8,     3,    3,     false)
+-
+-MUX_CFG(DM365,	GPIO20,		3,   21,    3,    0,	 false)
+-MUX_CFG(DM365,	GPIO30,		4,   6,     3,	  0,	 false)
+-MUX_CFG(DM365,	GPIO31,		4,   8,     3,	  0,	 false)
+-MUX_CFG(DM365,	GPIO32,		4,   10,    3,	  0,	 false)
+-MUX_CFG(DM365,	GPIO33,		4,   12,    3,	  0,	 false)
+-MUX_CFG(DM365,	GPIO40,		4,   26,    3,	  0,	 false)
+-MUX_CFG(DM365,	GPIO64_57,	2,   6,     1,	  0,	 false)
+-
+-MUX_CFG(DM365,	VOUT_FIELD,	1,   18,    3,	  1,	 false)
+-MUX_CFG(DM365,	VOUT_FIELD_G81,	1,   18,    3,	  0,	 false)
+-MUX_CFG(DM365,	VOUT_HVSYNC,	1,   16,    1,	  0,	 false)
+-MUX_CFG(DM365,	VOUT_COUTL_EN,	1,   0,     0xff, 0x55,  false)
+-MUX_CFG(DM365,	VOUT_COUTH_EN,	1,   8,     0xff, 0x55,  false)
+-MUX_CFG(DM365,	VIN_CAM_WEN,	0,   14,    3,	  0,	 false)
+-MUX_CFG(DM365,	VIN_CAM_VD,	0,   13,    1,	  0,	 false)
+-MUX_CFG(DM365,	VIN_CAM_HD,	0,   12,    1,	  0,	 false)
+-MUX_CFG(DM365,	VIN_YIN4_7_EN,	0,   0,     0xff, 0,	 false)
+-MUX_CFG(DM365,	VIN_YIN0_3_EN,	0,   8,     0xf,  0,	 false)
+-
+-INT_CFG(DM365,  INT_EDMA_CC,         2,     1,    1,     false)
+-INT_CFG(DM365,  INT_EDMA_TC0_ERR,    3,     1,    1,     false)
+-INT_CFG(DM365,  INT_EDMA_TC1_ERR,    4,     1,    1,     false)
+-INT_CFG(DM365,  INT_EDMA_TC2_ERR,    22,    1,    1,     false)
+-INT_CFG(DM365,  INT_EDMA_TC3_ERR,    23,    1,    1,     false)
+-INT_CFG(DM365,  INT_PRTCSS,          10,    1,    1,     false)
+-INT_CFG(DM365,  INT_EMAC_RXTHRESH,   14,    1,    1,     false)
+-INT_CFG(DM365,  INT_EMAC_RXPULSE,    15,    1,    1,     false)
+-INT_CFG(DM365,  INT_EMAC_TXPULSE,    16,    1,    1,     false)
+-INT_CFG(DM365,  INT_EMAC_MISCPULSE,  17,    1,    1,     false)
+-INT_CFG(DM365,  INT_IMX0_ENABLE,     0,     1,    0,     false)
+-INT_CFG(DM365,  INT_IMX0_DISABLE,    0,     1,    1,     false)
+-INT_CFG(DM365,  INT_HDVICP_ENABLE,   0,     1,    1,     false)
+-INT_CFG(DM365,  INT_HDVICP_DISABLE,  0,     1,    0,     false)
+-INT_CFG(DM365,  INT_IMX1_ENABLE,     24,    1,    1,     false)
+-INT_CFG(DM365,  INT_IMX1_DISABLE,    24,    1,    0,     false)
+-INT_CFG(DM365,  INT_NSF_ENABLE,      25,    1,    1,     false)
+-INT_CFG(DM365,  INT_NSF_DISABLE,     25,    1,    0,     false)
+-
+-EVT_CFG(DM365,	EVT2_ASP_TX,         0,     1,    0,     false)
+-EVT_CFG(DM365,	EVT3_ASP_RX,         1,     1,    0,     false)
+-EVT_CFG(DM365,	EVT2_VC_TX,          0,     1,    1,     false)
+-EVT_CFG(DM365,	EVT3_VC_RX,          1,     1,    1,     false)
+-#endif
+-};
+-
+-static u64 dm365_spi0_dma_mask = DMA_BIT_MASK(32);
+-
+-static struct davinci_spi_platform_data dm365_spi0_pdata = {
+-	.version 	= SPI_VERSION_1,
+-	.num_chipselect = 2,
+-	.dma_event_q	= EVENTQ_3,
+-	.prescaler_limit = 1,
+-};
+-
+-static struct resource dm365_spi0_resources[] = {
+-	{
+-		.start = 0x01c66000,
+-		.end   = 0x01c667ff,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	{
+-		.start = DAVINCI_INTC_IRQ(IRQ_DM365_SPIINT0_0),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct platform_device dm365_spi0_device = {
+-	.name = "spi_davinci",
+-	.id = 0,
+-	.dev = {
+-		.dma_mask = &dm365_spi0_dma_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-		.platform_data = &dm365_spi0_pdata,
+-	},
+-	.num_resources = ARRAY_SIZE(dm365_spi0_resources),
+-	.resource = dm365_spi0_resources,
+-};
+-
+-void __init dm365_init_spi0(unsigned chipselect_mask,
+-		const struct spi_board_info *info, unsigned len)
+-{
+-	davinci_cfg_reg(DM365_SPI0_SCLK);
+-	davinci_cfg_reg(DM365_SPI0_SDI);
+-	davinci_cfg_reg(DM365_SPI0_SDO);
+-
+-	/* not all slaves will be wired up */
+-	if (chipselect_mask & BIT(0))
+-		davinci_cfg_reg(DM365_SPI0_SDENA0);
+-	if (chipselect_mask & BIT(1))
+-		davinci_cfg_reg(DM365_SPI0_SDENA1);
+-
+-	spi_register_board_info(info, len);
+-
+-	platform_device_register(&dm365_spi0_device);
+-}
+-
+-static struct resource dm365_gpio_resources[] = {
+-	{	/* registers */
+-		.start	= DAVINCI_GPIO_BASE,
+-		.end	= DAVINCI_GPIO_BASE + SZ_4K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{	/* interrupt */
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO0),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO0),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO1),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO1),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO2),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO2),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO3),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO3),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO4),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO4),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO5),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO5),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO6),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO6),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO7),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_GPIO7),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct davinci_gpio_platform_data dm365_gpio_platform_data = {
+-	.no_auto_base	= true,
+-	.base		= 0,
+-	.ngpio		= 104,
+-	.gpio_unbanked	= 8,
+-};
+-
+-int __init dm365_gpio_register(void)
+-{
+-	return davinci_gpio_register(dm365_gpio_resources,
+-				     ARRAY_SIZE(dm365_gpio_resources),
+-				     &dm365_gpio_platform_data);
+-}
+-
+-static struct emac_platform_data dm365_emac_pdata = {
+-	.ctrl_reg_offset	= DM365_EMAC_CNTRL_OFFSET,
+-	.ctrl_mod_reg_offset	= DM365_EMAC_CNTRL_MOD_OFFSET,
+-	.ctrl_ram_offset	= DM365_EMAC_CNTRL_RAM_OFFSET,
+-	.ctrl_ram_size		= DM365_EMAC_CNTRL_RAM_SIZE,
+-	.version		= EMAC_VERSION_2,
+-};
+-
+-static struct resource dm365_emac_resources[] = {
+-	{
+-		.start	= DM365_EMAC_BASE,
+-		.end	= DM365_EMAC_BASE + SZ_16K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_RXTHRESH),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_RXTHRESH),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_RXPULSE),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_RXPULSE),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_TXPULSE),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_TXPULSE),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.start	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_MISCPULSE),
+-		.end	= DAVINCI_INTC_IRQ(IRQ_DM365_EMAC_MISCPULSE),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct platform_device dm365_emac_device = {
+-	.name		= "davinci_emac",
+-	.id		= 1,
+-	.dev = {
+-		.platform_data	= &dm365_emac_pdata,
+-	},
+-	.num_resources	= ARRAY_SIZE(dm365_emac_resources),
+-	.resource	= dm365_emac_resources,
+-};
+-
+-static struct resource dm365_mdio_resources[] = {
+-	{
+-		.start	= DM365_EMAC_MDIO_BASE,
+-		.end	= DM365_EMAC_MDIO_BASE + SZ_4K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device dm365_mdio_device = {
+-	.name		= "davinci_mdio",
+-	.id		= 0,
+-	.num_resources	= ARRAY_SIZE(dm365_mdio_resources),
+-	.resource	= dm365_mdio_resources,
+-};
+-
+-static u8 dm365_default_priorities[DAVINCI_N_AINTC_IRQ] = {
+-	[IRQ_VDINT0]			= 2,
+-	[IRQ_VDINT1]			= 6,
+-	[IRQ_VDINT2]			= 6,
+-	[IRQ_HISTINT]			= 6,
+-	[IRQ_H3AINT]			= 6,
+-	[IRQ_PRVUINT]			= 6,
+-	[IRQ_RSZINT]			= 6,
+-	[IRQ_DM365_INSFINT]		= 7,
+-	[IRQ_VENCINT]			= 6,
+-	[IRQ_ASQINT]			= 6,
+-	[IRQ_IMXINT]			= 6,
+-	[IRQ_DM365_IMCOPINT]		= 4,
+-	[IRQ_USBINT]			= 4,
+-	[IRQ_DM365_RTOINT]		= 7,
+-	[IRQ_DM365_TINT5]		= 7,
+-	[IRQ_DM365_TINT6]		= 5,
+-	[IRQ_CCINT0]			= 5,
+-	[IRQ_CCERRINT]			= 5,
+-	[IRQ_TCERRINT0]			= 5,
+-	[IRQ_TCERRINT]			= 7,
+-	[IRQ_PSCIN]			= 4,
+-	[IRQ_DM365_SPINT2_1]		= 7,
+-	[IRQ_DM365_TINT7]		= 7,
+-	[IRQ_DM365_SDIOINT0]		= 7,
+-	[IRQ_MBXINT]			= 7,
+-	[IRQ_MBRINT]			= 7,
+-	[IRQ_MMCINT]			= 7,
+-	[IRQ_DM365_MMCINT1]		= 7,
+-	[IRQ_DM365_PWMINT3]		= 7,
+-	[IRQ_AEMIFINT]			= 2,
+-	[IRQ_DM365_SDIOINT1]		= 2,
+-	[IRQ_TINT0_TINT12]		= 7,
+-	[IRQ_TINT0_TINT34]		= 7,
+-	[IRQ_TINT1_TINT12]		= 7,
+-	[IRQ_TINT1_TINT34]		= 7,
+-	[IRQ_PWMINT0]			= 7,
+-	[IRQ_PWMINT1]			= 3,
+-	[IRQ_PWMINT2]			= 3,
+-	[IRQ_I2C]			= 3,
+-	[IRQ_UARTINT0]			= 3,
+-	[IRQ_UARTINT1]			= 3,
+-	[IRQ_DM365_RTCINT]		= 3,
+-	[IRQ_DM365_SPIINT0_0]		= 3,
+-	[IRQ_DM365_SPIINT3_0]		= 3,
+-	[IRQ_DM365_GPIO0]		= 3,
+-	[IRQ_DM365_GPIO1]		= 7,
+-	[IRQ_DM365_GPIO2]		= 4,
+-	[IRQ_DM365_GPIO3]		= 4,
+-	[IRQ_DM365_GPIO4]		= 7,
+-	[IRQ_DM365_GPIO5]		= 7,
+-	[IRQ_DM365_GPIO6]		= 7,
+-	[IRQ_DM365_GPIO7]		= 7,
+-	[IRQ_DM365_EMAC_RXTHRESH]	= 7,
+-	[IRQ_DM365_EMAC_RXPULSE]	= 7,
+-	[IRQ_DM365_EMAC_TXPULSE]	= 7,
+-	[IRQ_DM365_EMAC_MISCPULSE]	= 7,
+-	[IRQ_DM365_GPIO12]		= 7,
+-	[IRQ_DM365_GPIO13]		= 7,
+-	[IRQ_DM365_GPIO14]		= 7,
+-	[IRQ_DM365_GPIO15]		= 7,
+-	[IRQ_DM365_KEYINT]		= 7,
+-	[IRQ_DM365_TCERRINT2]		= 7,
+-	[IRQ_DM365_TCERRINT3]		= 7,
+-	[IRQ_DM365_EMUINT]		= 7,
+-};
+-
+-/* Four Transfer Controllers on DM365 */
+-static s8 dm365_queue_priority_mapping[][2] = {
+-	/* {event queue no, Priority} */
+-	{0, 7},
+-	{1, 7},
+-	{2, 7},
+-	{3, 0},
+-	{-1, -1},
+-};
+-
+-static const struct dma_slave_map dm365_edma_map[] = {
+-	{ "davinci-mcbsp", "tx", EDMA_FILTER_PARAM(0, 2) },
+-	{ "davinci-mcbsp", "rx", EDMA_FILTER_PARAM(0, 3) },
+-	{ "davinci_voicecodec", "tx", EDMA_FILTER_PARAM(0, 2) },
+-	{ "davinci_voicecodec", "rx", EDMA_FILTER_PARAM(0, 3) },
+-	{ "spi_davinci.2", "tx", EDMA_FILTER_PARAM(0, 10) },
+-	{ "spi_davinci.2", "rx", EDMA_FILTER_PARAM(0, 11) },
+-	{ "spi_davinci.1", "tx", EDMA_FILTER_PARAM(0, 14) },
+-	{ "spi_davinci.1", "rx", EDMA_FILTER_PARAM(0, 15) },
+-	{ "spi_davinci.0", "tx", EDMA_FILTER_PARAM(0, 16) },
+-	{ "spi_davinci.0", "rx", EDMA_FILTER_PARAM(0, 17) },
+-	{ "spi_davinci.3", "tx", EDMA_FILTER_PARAM(0, 18) },
+-	{ "spi_davinci.3", "rx", EDMA_FILTER_PARAM(0, 19) },
+-	{ "da830-mmc.0", "rx", EDMA_FILTER_PARAM(0, 26) },
+-	{ "da830-mmc.0", "tx", EDMA_FILTER_PARAM(0, 27) },
+-	{ "da830-mmc.1", "rx", EDMA_FILTER_PARAM(0, 30) },
+-	{ "da830-mmc.1", "tx", EDMA_FILTER_PARAM(0, 31) },
+-};
+-
+-static struct edma_soc_info dm365_edma_pdata = {
+-	.queue_priority_mapping	= dm365_queue_priority_mapping,
+-	.default_queue		= EVENTQ_3,
+-	.slave_map		= dm365_edma_map,
+-	.slavecnt		= ARRAY_SIZE(dm365_edma_map),
+-};
+-
+-static struct resource edma_resources[] = {
+-	{
+-		.name	= "edma3_cc",
+-		.start	= 0x01c00000,
+-		.end	= 0x01c00000 + SZ_64K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_tc0",
+-		.start	= 0x01c10000,
+-		.end	= 0x01c10000 + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_tc1",
+-		.start	= 0x01c10400,
+-		.end	= 0x01c10400 + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_tc2",
+-		.start	= 0x01c10800,
+-		.end	= 0x01c10800 + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_tc3",
+-		.start	= 0x01c10c00,
+-		.end	= 0x01c10c00 + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.name	= "edma3_ccint",
+-		.start	= DAVINCI_INTC_IRQ(IRQ_CCINT0),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	{
+-		.name	= "edma3_ccerrint",
+-		.start	= DAVINCI_INTC_IRQ(IRQ_CCERRINT),
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-	/* not using TC*_ERR */
+-};
+-
+-static const struct platform_device_info dm365_edma_device __initconst = {
+-	.name		= "edma",
+-	.id		= 0,
+-	.dma_mask	= DMA_BIT_MASK(32),
+-	.res		= edma_resources,
+-	.num_res	= ARRAY_SIZE(edma_resources),
+-	.data		= &dm365_edma_pdata,
+-	.size_data	= sizeof(dm365_edma_pdata),
+-};
+-
+-static struct resource dm365_asp_resources[] = {
+-	{
+-		.name	= "mpu",
+-		.start	= DAVINCI_DM365_ASP0_BASE,
+-		.end	= DAVINCI_DM365_ASP0_BASE + SZ_8K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= DAVINCI_DMA_ASP0_TX,
+-		.end	= DAVINCI_DMA_ASP0_TX,
+-		.flags	= IORESOURCE_DMA,
+-	},
+-	{
+-		.start	= DAVINCI_DMA_ASP0_RX,
+-		.end	= DAVINCI_DMA_ASP0_RX,
+-		.flags	= IORESOURCE_DMA,
+-	},
+-};
+-
+-static struct platform_device dm365_asp_device = {
+-	.name		= "davinci-mcbsp",
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(dm365_asp_resources),
+-	.resource	= dm365_asp_resources,
+-};
+-
+-static struct resource dm365_vc_resources[] = {
+-	{
+-		.start	= DAVINCI_DM365_VC_BASE,
+-		.end	= DAVINCI_DM365_VC_BASE + SZ_1K - 1,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	{
+-		.start	= DAVINCI_DMA_VC_TX,
+-		.end	= DAVINCI_DMA_VC_TX,
+-		.flags	= IORESOURCE_DMA,
+-	},
+-	{
+-		.start	= DAVINCI_DMA_VC_RX,
+-		.end	= DAVINCI_DMA_VC_RX,
+-		.flags	= IORESOURCE_DMA,
+-	},
+-};
+-
+-static struct platform_device dm365_vc_device = {
+-	.name		= "davinci_voicecodec",
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(dm365_vc_resources),
+-	.resource	= dm365_vc_resources,
+-};
+-
+-static struct resource dm365_rtc_resources[] = {
+-	{
+-		.start = DM365_RTC_BASE,
+-		.end = DM365_RTC_BASE + SZ_1K - 1,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	{
+-		.start = DAVINCI_INTC_IRQ(IRQ_DM365_RTCINT),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct platform_device dm365_rtc_device = {
+-	.name = "rtc_davinci",
+-	.id = 0,
+-	.num_resources = ARRAY_SIZE(dm365_rtc_resources),
+-	.resource = dm365_rtc_resources,
+-};
+-
+-static struct map_desc dm365_io_desc[] = {
+-	{
+-		.virtual	= IO_VIRT,
+-		.pfn		= __phys_to_pfn(IO_PHYS),
+-		.length		= IO_SIZE,
+-		.type		= MT_DEVICE
+-	},
+-};
+-
+-static struct resource dm365_ks_resources[] = {
+-	{
+-		/* registers */
+-		.start = DM365_KEYSCAN_BASE,
+-		.end = DM365_KEYSCAN_BASE + SZ_1K - 1,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	{
+-		/* interrupt */
+-		.start = DAVINCI_INTC_IRQ(IRQ_DM365_KEYINT),
+-		.end = DAVINCI_INTC_IRQ(IRQ_DM365_KEYINT),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct platform_device dm365_ks_device = {
+-	.name		= "davinci_keyscan",
+-	.id		= 0,
+-	.num_resources	= ARRAY_SIZE(dm365_ks_resources),
+-	.resource	= dm365_ks_resources,
+-};
+-
+-/* Contents of JTAG ID register used to identify exact cpu type */
+-static struct davinci_id dm365_ids[] = {
+-	{
+-		.variant	= 0x0,
+-		.part_no	= 0xb83e,
+-		.manufacturer	= 0x017,
+-		.cpu_id		= DAVINCI_CPU_ID_DM365,
+-		.name		= "dm365_rev1.1",
+-	},
+-	{
+-		.variant	= 0x8,
+-		.part_no	= 0xb83e,
+-		.manufacturer	= 0x017,
+-		.cpu_id		= DAVINCI_CPU_ID_DM365,
+-		.name		= "dm365_rev1.2",
+-	},
+-};
+-
+-/*
+- * Bottom half of timer0 is used for clockevent, top half is used for
+- * clocksource.
+- */
+-static const struct davinci_timer_cfg dm365_timer_cfg = {
+-	.reg = DEFINE_RES_IO(DAVINCI_TIMER0_BASE, SZ_128),
+-	.irq = {
+-		DEFINE_RES_IRQ(DAVINCI_INTC_IRQ(IRQ_TINT0_TINT12)),
+-		DEFINE_RES_IRQ(DAVINCI_INTC_IRQ(IRQ_TINT0_TINT34)),
+-	},
+-};
+-
+-#define DM365_UART1_BASE	(IO_PHYS + 0x106000)
+-
+-static struct plat_serial8250_port dm365_serial0_platform_data[] = {
+-	{
+-		.mapbase	= DAVINCI_UART0_BASE,
+-		.irq		= DAVINCI_INTC_IRQ(IRQ_UARTINT0),
+-		.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST |
+-				  UPF_IOREMAP,
+-		.iotype		= UPIO_MEM,
+-		.regshift	= 2,
+-	},
+-	{
+-		.flags	= 0,
+-	}
+-};
+-static struct plat_serial8250_port dm365_serial1_platform_data[] = {
+-	{
+-		.mapbase	= DM365_UART1_BASE,
+-		.irq		= DAVINCI_INTC_IRQ(IRQ_UARTINT1),
+-		.flags		= UPF_BOOT_AUTOCONF | UPF_SKIP_TEST |
+-				  UPF_IOREMAP,
+-		.iotype		= UPIO_MEM,
+-		.regshift	= 2,
+-	},
+-	{
+-		.flags	= 0,
+-	}
+-};
+-
+-struct platform_device dm365_serial_device[] = {
+-	{
+-		.name			= "serial8250",
+-		.id			= PLAT8250_DEV_PLATFORM,
+-		.dev			= {
+-			.platform_data	= dm365_serial0_platform_data,
+-		}
+-	},
+-	{
+-		.name			= "serial8250",
+-		.id			= PLAT8250_DEV_PLATFORM1,
+-		.dev			= {
+-			.platform_data	= dm365_serial1_platform_data,
+-		}
+-	},
+-	{
+-	}
+-};
+-
+-static const struct davinci_soc_info davinci_soc_info_dm365 = {
+-	.io_desc		= dm365_io_desc,
+-	.io_desc_num		= ARRAY_SIZE(dm365_io_desc),
+-	.jtag_id_reg		= 0x01c40028,
+-	.ids			= dm365_ids,
+-	.ids_num		= ARRAY_SIZE(dm365_ids),
+-	.pinmux_base		= DAVINCI_SYSTEM_MODULE_BASE,
+-	.pinmux_pins		= dm365_pins,
+-	.pinmux_pins_num	= ARRAY_SIZE(dm365_pins),
+-	.emac_pdata		= &dm365_emac_pdata,
+-	.sram_dma		= 0x00010000,
+-	.sram_len		= SZ_32K,
+-};
+-
+-void __init dm365_init_asp(void)
+-{
+-	davinci_cfg_reg(DM365_MCBSP0_BDX);
+-	davinci_cfg_reg(DM365_MCBSP0_X);
+-	davinci_cfg_reg(DM365_MCBSP0_BFSX);
+-	davinci_cfg_reg(DM365_MCBSP0_BDR);
+-	davinci_cfg_reg(DM365_MCBSP0_R);
+-	davinci_cfg_reg(DM365_MCBSP0_BFSR);
+-	davinci_cfg_reg(DM365_EVT2_ASP_TX);
+-	davinci_cfg_reg(DM365_EVT3_ASP_RX);
+-	platform_device_register(&dm365_asp_device);
+-}
+-
+-void __init dm365_init_vc(void)
+-{
+-	davinci_cfg_reg(DM365_EVT2_VC_TX);
+-	davinci_cfg_reg(DM365_EVT3_VC_RX);
+-	platform_device_register(&dm365_vc_device);
+-}
+-
+-void __init dm365_init_ks(struct davinci_ks_platform_data *pdata)
+-{
+-	dm365_ks_device.dev.platform_data = pdata;
+-	platform_device_register(&dm365_ks_device);
+-}
+-
+-void __init dm365_init_rtc(void)
+-{
+-	davinci_cfg_reg(DM365_INT_PRTCSS);
+-	platform_device_register(&dm365_rtc_device);
+-}
+-
+-void __init dm365_init(void)
+-{
+-	davinci_common_init(&davinci_soc_info_dm365);
+-	davinci_map_sysmod();
+-}
+-
+-void __init dm365_init_time(void)
+-{
+-	void __iomem *pll1, *pll2, *psc;
+-	struct clk *clk;
+-	int rv;
+-
+-	clk_register_fixed_rate(NULL, "ref_clk", NULL, 0, DM365_REF_FREQ);
+-
+-	pll1 = ioremap(DAVINCI_PLL1_BASE, SZ_1K);
+-	dm365_pll1_init(NULL, pll1, NULL);
+-
+-	pll2 = ioremap(DAVINCI_PLL2_BASE, SZ_1K);
+-	dm365_pll2_init(NULL, pll2, NULL);
+-
+-	psc = ioremap(DAVINCI_PWR_SLEEP_CNTRL_BASE, SZ_4K);
+-	dm365_psc_init(NULL, psc);
+-
+-	clk = clk_get(NULL, "timer0");
+-	if (WARN_ON(IS_ERR(clk))) {
+-		pr_err("Unable to get the timer clock\n");
+-		return;
+-	}
+-
+-	rv = davinci_timer_register(clk, &dm365_timer_cfg);
+-	WARN(rv, "Unable to register the timer: %d\n", rv);
+-}
+-
+-void __init dm365_register_clocks(void)
+-{
+-	/* all clocks are currently registered in dm365_init_time() */
+-}
+-
+-static struct resource dm365_vpss_resources[] = {
+-	{
+-		/* VPSS ISP5 Base address */
+-		.name           = "isp5",
+-		.start          = 0x01c70000,
+-		.end            = 0x01c70000 + 0xff,
+-		.flags          = IORESOURCE_MEM,
+-	},
+-	{
+-		/* VPSS CLK Base address */
+-		.name           = "vpss",
+-		.start          = 0x01c70200,
+-		.end            = 0x01c70200 + 0xff,
+-		.flags          = IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct platform_device dm365_vpss_device = {
+-       .name                   = "vpss",
+-       .id                     = -1,
+-       .dev.platform_data      = "dm365_vpss",
+-       .num_resources          = ARRAY_SIZE(dm365_vpss_resources),
+-       .resource               = dm365_vpss_resources,
+-};
+-
+-static struct resource vpfe_resources[] = {
+-	{
+-		.start          = DAVINCI_INTC_IRQ(IRQ_VDINT0),
+-		.end            = DAVINCI_INTC_IRQ(IRQ_VDINT0),
+-		.flags          = IORESOURCE_IRQ,
+-	},
+-	{
+-		.start          = DAVINCI_INTC_IRQ(IRQ_VDINT1),
+-		.end            = DAVINCI_INTC_IRQ(IRQ_VDINT1),
+-		.flags          = IORESOURCE_IRQ,
+-	},
+-};
+-
+-static u64 vpfe_capture_dma_mask = DMA_BIT_MASK(32);
+-static struct platform_device vpfe_capture_dev = {
+-	.name           = CAPTURE_DRV_NAME,
+-	.id             = -1,
+-	.num_resources  = ARRAY_SIZE(vpfe_resources),
+-	.resource       = vpfe_resources,
+-	.dev = {
+-		.dma_mask               = &vpfe_capture_dma_mask,
+-		.coherent_dma_mask      = DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static void dm365_isif_setup_pinmux(void)
+-{
+-	davinci_cfg_reg(DM365_VIN_CAM_WEN);
+-	davinci_cfg_reg(DM365_VIN_CAM_VD);
+-	davinci_cfg_reg(DM365_VIN_CAM_HD);
+-	davinci_cfg_reg(DM365_VIN_YIN4_7_EN);
+-	davinci_cfg_reg(DM365_VIN_YIN0_3_EN);
+-}
+-
+-static struct resource isif_resource[] = {
+-	/* ISIF Base address */
+-	{
+-		.start          = 0x01c71000,
+-		.end            = 0x01c71000 + 0x1ff,
+-		.flags          = IORESOURCE_MEM,
+-	},
+-	/* ISIF Linearization table 0 */
+-	{
+-		.start          = 0x1C7C000,
+-		.end            = 0x1C7C000 + 0x2ff,
+-		.flags          = IORESOURCE_MEM,
+-	},
+-	/* ISIF Linearization table 1 */
+-	{
+-		.start          = 0x1C7C400,
+-		.end            = 0x1C7C400 + 0x2ff,
+-		.flags          = IORESOURCE_MEM,
+-	},
+-};
+-static struct platform_device dm365_isif_dev = {
+-	.name           = "isif",
+-	.id             = -1,
+-	.num_resources  = ARRAY_SIZE(isif_resource),
+-	.resource       = isif_resource,
+-	.dev = {
+-		.dma_mask               = &vpfe_capture_dma_mask,
+-		.coherent_dma_mask      = DMA_BIT_MASK(32),
+-		.platform_data		= dm365_isif_setup_pinmux,
+-	},
+-};
+-
+-static struct resource dm365_osd_resources[] = {
+-	{
+-		.start = DM365_OSD_BASE,
+-		.end   = DM365_OSD_BASE + 0xff,
+-		.flags = IORESOURCE_MEM,
+-	},
+-};
+-
+-static u64 dm365_video_dma_mask = DMA_BIT_MASK(32);
+-
+-static struct platform_device dm365_osd_dev = {
+-	.name		= DM365_VPBE_OSD_SUBDEV_NAME,
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(dm365_osd_resources),
+-	.resource	= dm365_osd_resources,
+-	.dev		= {
+-		.dma_mask		= &dm365_video_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct resource dm365_venc_resources[] = {
+-	{
+-		.start = DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.end   = DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-	/* venc registers io space */
+-	{
+-		.start = DM365_VENC_BASE,
+-		.end   = DM365_VENC_BASE + 0x177,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	/* vdaccfg registers io space */
+-	{
+-		.start = DAVINCI_SYSTEM_MODULE_BASE + SYSMOD_VDAC_CONFIG,
+-		.end   = DAVINCI_SYSTEM_MODULE_BASE + SYSMOD_VDAC_CONFIG + 3,
+-		.flags = IORESOURCE_MEM,
+-	},
+-};
+-
+-static struct resource dm365_v4l2_disp_resources[] = {
+-	{
+-		.start = DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.end   = DAVINCI_INTC_IRQ(IRQ_VENCINT),
+-		.flags = IORESOURCE_IRQ,
+-	},
+-	/* venc registers io space */
+-	{
+-		.start = DM365_VENC_BASE,
+-		.end   = DM365_VENC_BASE + 0x177,
+-		.flags = IORESOURCE_MEM,
+-	},
+-};
+-
+-static int dm365_vpbe_setup_pinmux(u32 if_type, int field)
+-{
+-	switch (if_type) {
+-	case MEDIA_BUS_FMT_SGRBG8_1X8:
+-		davinci_cfg_reg(DM365_VOUT_FIELD_G81);
+-		davinci_cfg_reg(DM365_VOUT_COUTL_EN);
+-		davinci_cfg_reg(DM365_VOUT_COUTH_EN);
+-		break;
+-	case MEDIA_BUS_FMT_YUYV10_1X20:
+-		if (field)
+-			davinci_cfg_reg(DM365_VOUT_FIELD);
+-		else
+-			davinci_cfg_reg(DM365_VOUT_FIELD_G81);
+-		davinci_cfg_reg(DM365_VOUT_COUTL_EN);
+-		davinci_cfg_reg(DM365_VOUT_COUTH_EN);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int dm365_venc_setup_clock(enum vpbe_enc_timings_type type,
+-				  unsigned int pclock)
+-{
+-	void __iomem *vpss_clkctl_reg;
+-	u32 val;
+-
+-	vpss_clkctl_reg = DAVINCI_SYSMOD_VIRT(SYSMOD_VPSS_CLKCTL);
+-
+-	switch (type) {
+-	case VPBE_ENC_STD:
+-		val = VPSS_VENCCLKEN_ENABLE | VPSS_DACCLKEN_ENABLE;
+-		break;
+-	case VPBE_ENC_DV_TIMINGS:
+-		if (pclock <= 27000000) {
+-			val = VPSS_VENCCLKEN_ENABLE | VPSS_DACCLKEN_ENABLE;
+-		} else {
+-			/* set sysclk4 to output 74.25 MHz from pll1 */
+-			val = VPSS_PLLC2SYSCLK5_ENABLE | VPSS_DACCLKEN_ENABLE |
+-			      VPSS_VENCCLKEN_ENABLE;
+-		}
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-	writel(val, vpss_clkctl_reg);
+-
+-	return 0;
+-}
+-
+-static struct platform_device dm365_vpbe_display = {
+-	.name		= "vpbe-v4l2",
+-	.id		= -1,
+-	.num_resources  = ARRAY_SIZE(dm365_v4l2_disp_resources),
+-	.resource	= dm365_v4l2_disp_resources,
+-	.dev		= {
+-		.dma_mask		= &dm365_video_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct venc_platform_data dm365_venc_pdata = {
+-	.setup_pinmux	= dm365_vpbe_setup_pinmux,
+-	.setup_clock	= dm365_venc_setup_clock,
+-};
+-
+-static struct platform_device dm365_venc_dev = {
+-	.name		= DM365_VPBE_VENC_SUBDEV_NAME,
+-	.id		= -1,
+-	.num_resources	= ARRAY_SIZE(dm365_venc_resources),
+-	.resource	= dm365_venc_resources,
+-	.dev		= {
+-		.dma_mask		= &dm365_video_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-		.platform_data		= (void *)&dm365_venc_pdata,
+-	},
+-};
+-
+-static struct platform_device dm365_vpbe_dev = {
+-	.name		= "vpbe_controller",
+-	.id		= -1,
+-	.dev		= {
+-		.dma_mask		= &dm365_video_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-int __init dm365_init_video(struct vpfe_config *vpfe_cfg,
+-				struct vpbe_config *vpbe_cfg)
+-{
+-	if (vpfe_cfg || vpbe_cfg)
+-		platform_device_register(&dm365_vpss_device);
+-
+-	if (vpfe_cfg) {
+-		vpfe_capture_dev.dev.platform_data = vpfe_cfg;
+-		platform_device_register(&dm365_isif_dev);
+-		platform_device_register(&vpfe_capture_dev);
+-	}
+-	if (vpbe_cfg) {
+-		dm365_vpbe_dev.dev.platform_data = vpbe_cfg;
+-		platform_device_register(&dm365_osd_dev);
+-		platform_device_register(&dm365_venc_dev);
+-		platform_device_register(&dm365_vpbe_dev);
+-		platform_device_register(&dm365_vpbe_display);
+-	}
+-
+-	return 0;
+-}
+-
+-static const struct davinci_aintc_config dm365_aintc_config = {
+-	.reg = {
+-		.start		= DAVINCI_ARM_INTC_BASE,
+-		.end		= DAVINCI_ARM_INTC_BASE + SZ_4K - 1,
+-		.flags		= IORESOURCE_MEM,
+-	},
+-	.num_irqs		= 64,
+-	.prios			= dm365_default_priorities,
+-};
+-
+-void __init dm365_init_irq(void)
+-{
+-	davinci_aintc_init(&dm365_aintc_config);
+-}
+-
+-static int __init dm365_init_devices(void)
+-{
+-	struct platform_device *edma_pdev;
+-	int ret = 0;
+-
+-	if (!cpu_is_davinci_dm365())
+-		return 0;
+-
+-	davinci_cfg_reg(DM365_INT_EDMA_CC);
+-	edma_pdev = platform_device_register_full(&dm365_edma_device);
+-	if (IS_ERR(edma_pdev)) {
+-		pr_warn("%s: Failed to register eDMA\n", __func__);
+-		return PTR_ERR(edma_pdev);
+-	}
+-
+-	platform_device_register(&dm365_mdio_device);
+-	platform_device_register(&dm365_emac_device);
+-
+-	ret = davinci_init_wdt();
+-	if (ret)
+-		pr_warn("%s: watchdog init failed: %d\n", __func__, ret);
+-
+-	return ret;
+-}
+-postcore_initcall(dm365_init_devices);
 -- 
 2.29.2
 
