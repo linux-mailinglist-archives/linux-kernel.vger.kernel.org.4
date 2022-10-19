@@ -2,230 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0425A604595
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A2760462B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233214AbiJSMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S231982AbiJSNAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbiJSMmB (ORCPT
+        with ESMTP id S233856AbiJSM7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:42:01 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37F632042
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:24:41 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id 13so39426170ejn.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QMeiIZiyblteVRq78CiV17LjNnwkts3YE/C63wZ/Nwc=;
-        b=BOfrgwQgEzrrFhKlFXE5x9tOZKfxASj6ILDrcwagHhpNJzX2kSs2Pfwaq05XnINQrP
-         l9Dcw6XLRGkIV/RuE9xQwi3EOMuw+8BlM+Ttw8VcjZ1tO542VMZUeok+gYu6K2Oxcoyv
-         JCS7h9hBMXUcEQpLUiz14l5B1rJUeimFAXFYKlVtg6KB/j5ZC3t1NvKNhYliUgE/09kP
-         FvO3ZTD6PyMJqSljuEY6tvCuYO8TVwCyijjZjXl1Zj1l3BP5xzgYzNvZ72LIeSl75qJE
-         gAVd+M+YBGvhGKF3dsq+fGiSHDVzzhN+pJS4OGO8eaYTaC3lfevZaCl2XTNxkVAAcOI0
-         oi8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QMeiIZiyblteVRq78CiV17LjNnwkts3YE/C63wZ/Nwc=;
-        b=TmxgkYbhKNwXElN70OJlSplqrrwwXL57eglCSfBkz0kiRlAa48gueun0MYJ7iUAe+f
-         Ep+MvBXeWR1jmsRaK5GmO4pALoYEdEOwp5X8EFquYurF6YlqISRNFfxmmyaZj+tghJIx
-         6zkYijmNEqr+m19DONZbkizPJ0t70cPT5MJc+fZHPcJCC5ZTTXf1qqJCg/Aja9zdxjvA
-         ZtkujCHqr4wKrocFdUzK640QYYLomJqo4GtMomsy3vqom/2kPjWY0wp5bdNzmHszalYR
-         LhEMCQcSJbu6IBvXhUU8cUR7/Se2Z6MG1GgUMBog10vDbpyg/u69mB1CtRFEcDyRDskr
-         zyGQ==
-X-Gm-Message-State: ACrzQf0x/aBXUMGn8T5r5CFuKKaz8r8DX328JIqH71S7ITq1vK+Dyq5L
-        iVHpT1s7j+WPs9+4IC/5EkKxQr+anxWmP2VqXgm7Ng==
-X-Google-Smtp-Source: AMsMyM549WtB2Hp0Bg2is6s2aYzKVD5TFE9cKOvyf0h+dgbaICCawPeNl7yp77ABZoj2vRJfgHQWT34GvNzmBoECr2U=
-X-Received: by 2002:a17:906:ee81:b0:77e:829a:76e9 with SMTP id
- wt1-20020a170906ee8100b0077e829a76e9mr6852093ejb.207.1666182176287; Wed, 19
- Oct 2022 05:22:56 -0700 (PDT)
+        Wed, 19 Oct 2022 08:59:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE31710EA0B;
+        Wed, 19 Oct 2022 05:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666183403; x=1697719403;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=E2p35ATnNVue4S2XAAi/7LxZWtiUvtDcbfvFBxl94qs=;
+  b=RNNKEUwcTAONFtb0H179Nuo6L7lN47dyyy4jdteRhSHt3I/bDFmtZMUz
+   BLOYNY9lE+NklnP4ZSgBHvXxwvxHqFTvI9PwaObyhC1y3xPai4zb2/iY8
+   FfxJytjO3c2wNv0hFKc8z2PobDjqpIxO3wa6WvCPaMSEjdmYNieOhXSyp
+   lrOuCxaQee9e/3QtPEAqmjTj6+fmwfNi4L8c/c8S2T+g0KY0kLke3YQDj
+   HS++7W6dEFmxwb68QOgkidmCAvmuyibZz+/mYh8NbJ4gyrDuvY5CzwcuC
+   m6lch8AvE+HAIOmmWaR6xfu9ohfgmH6YZ23S6Mtrqq7VoQRfWV3Awq3Eu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="308080448"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="308080448"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 05:22:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="662439218"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="662439218"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga001.jf.intel.com with SMTP; 19 Oct 2022 05:22:51 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Wed, 19 Oct 2022 15:22:50 +0300
+Date:   Wed, 19 Oct 2022 15:22:50 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH] ACPI: PCI: Fix device reference counting in
+ acpi_get_pci_dev()
+Message-ID: <Y0/sGveKPjuUWOhO@intel.com>
+References: <12097002.O9o76ZdvQC@kreacher>
+ <Y0+7Ug9Yh6J6uHVr@intel.com>
+ <CAJZ5v0gKW9S29xS2+qkcopzYtZKTcM=ZT-Jjc4fnEJfu=oYKaw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221019121622.179024-1-apatel@ventanamicro.com> <20221019121622.179024-2-apatel@ventanamicro.com>
-In-Reply-To: <20221019121622.179024-2-apatel@ventanamicro.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 19 Oct 2022 17:52:42 +0530
-Message-ID: <CAAhSdy1bjD15c-xnhHv6K9Zsy_fvmNU6w=TyM1hS41MYtJkmTg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] RISC-V: Fix compilation without RISCV_ISA_ZICBOM
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        kernel test robot <lkp@intel.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gKW9S29xS2+qkcopzYtZKTcM=ZT-Jjc4fnEJfu=oYKaw@mail.gmail.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+On Wed, Oct 19, 2022 at 01:35:26PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Oct 19, 2022 at 11:02 AM Ville Syrjälä
+> <ville.syrjala@linux.intel.com> wrote:
+> >
+> > On Tue, Oct 18, 2022 at 07:34:03PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Commit 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()") failed
+> > > to reference count the device returned by acpi_get_pci_dev() as
+> > > expected by its callers which in some cases may cause device objects
+> > > to be dropped prematurely.
+> > >
+> > > Add the missing get_device() to acpi_get_pci_dev().
+> > >
+> > > Fixes: 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()")
+> >
+> > FYI this (and the rtc-cmos regression discussed in
+> > https://lore.kernel.org/linux-acpi/5887691.lOV4Wx5bFT@kreacher/)
+> > took down the entire Intel gfx CI.
+> 
+> Sorry for the disturbance.
+> 
+> > I've applied both fixes into our fixup branch and things are looking much
+> > healthier now.
+> 
+> Thanks for letting me know.
+> 
+> I've just added the $subject patch to my linux-next branch as an
+> urgent fix and the other one has been applied to the RTC tree.
+> 
+> > This one caused i915 selftests to eat a lot of POISON_FREE
+> > in the CI. While bisecting it locally I didn't have
+> > poisoning enabled so I got refcount_t undeflows instead.
+> 
+> Unfortunately, making no mistakes is generally hard to offer.
+> 
+> If catching things like this early is better, what about pulling my
+> bleeding-edge branch, where all of my changes are staged before going
+> into linux-next, into the CI?
 
-On Wed, Oct 19, 2022 at 5:46 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> From: Andrew Jones <ajones@ventanamicro.com>
->
-> riscv_cbom_block_size and riscv_init_cbom_blocksize() should always
-> be available and riscv_init_cbom_blocksize() should always be
-> invoked, even when compiling without RISCV_ISA_ZICBOM enabled. This
-> is because disabling RISCV_ISA_ZICBOM means "don't use zicbom
-> instructions in the kernel" not "pretend there isn't zicbom, even
-> when there is". When zicbom is available, whether the kernel enables
-> its use with RISCV_ISA_ZICBOM or not, KVM will offer it to guests.
-> Ensure we can build KVM and that the block size is initialized even
-> when compiling without RISCV_ISA_ZICBOM.
->
-> Fixes: 8f7e001e0325 ("RISC-V: Clean up the Zicbom block size probing")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Pretty sure we don't have the resources to become the CI for
+everyone. So testing random trees is not really possible. And 
+the alternative of pulling random trees into drm-tip is probably
+a not a popular idea either. We used to pull in the sound tree
+since it's pretty closely tied to graphics, but I think we
+stopped even that because it eneded up pulling the whole of
+-rc1 in at random points in time when we were't expecting it.
 
-Currently, the KVM RISC-V compilation is broken for toolchains not
-having Zicbom support.
+Ideally each subsystem would have its own CI, or there should
+be some kernel wide thing. But I suppose the progress towards
+something like that is glacial.
 
-I plan to take this patch through the KVM RISC-V tree and I will be
-sending a PR by the end of this week. Let me know if you want this
-patch to go through the RISC-V tree.
+That said, we do test linux-next to some degree. And looks like
+at least one of these could have been caught a bit earlier through
+that. Unfortunately no one is really keeping an eye on that so
+things tend to slip through. Probably need to figure out something
+to make better use of that.
 
-Regards,
-Anup
+> 
+> > https://intel-gfx-ci.01.org/tree/drm-tip/index.html has a lot
+> > of colorful boxes to click if you're interested in any of the
+> > logs. The fixes are included in the CI_DRM_12259 build. Earlier
+> > builds were broken.
+> 
+> Thanks!
 
-> ---
->  arch/riscv/mm/cacheflush.c      | 41 +++++++++++++++++++++++++++++++++
->  arch/riscv/mm/dma-noncoherent.c | 41 ---------------------------------
->  2 files changed, 41 insertions(+), 41 deletions(-)
->
-> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> index 6cb7d96ad9c7..f318b2553612 100644
-> --- a/arch/riscv/mm/cacheflush.c
-> +++ b/arch/riscv/mm/cacheflush.c
-> @@ -3,6 +3,8 @@
->   * Copyright (C) 2017 SiFive
->   */
->
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <asm/cacheflush.h>
->
->  #ifdef CONFIG_SMP
-> @@ -86,3 +88,42 @@ void flush_icache_pte(pte_t pte)
->                 flush_icache_all();
->  }
->  #endif /* CONFIG_MMU */
-> +
-> +unsigned int riscv_cbom_block_size;
-> +EXPORT_SYMBOL_GPL(riscv_cbom_block_size);
-> +
-> +#ifdef CONFIG_RISCV_ISA_ZICBOM
-> +void riscv_init_cbom_blocksize(void)
-> +{
-> +       struct device_node *node;
-> +       unsigned long cbom_hartid;
-> +       u32 val, probed_block_size;
-> +       int ret;
-> +
-> +       probed_block_size = 0;
-> +       for_each_of_cpu_node(node) {
-> +               unsigned long hartid;
-> +
-> +               ret = riscv_of_processor_hartid(node, &hartid);
-> +               if (ret)
-> +                       continue;
-> +
-> +               /* set block-size for cbom extension if available */
-> +               ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> +               if (ret)
-> +                       continue;
-> +
-> +               if (!probed_block_size) {
-> +                       probed_block_size = val;
-> +                       cbom_hartid = hartid;
-> +               } else {
-> +                       if (probed_block_size != val)
-> +                               pr_warn("cbom-block-size mismatched between harts %lu and %lu\n",
-> +                                       cbom_hartid, hartid);
-> +               }
-> +       }
-> +
-> +       if (probed_block_size)
-> +               riscv_cbom_block_size = probed_block_size;
-> +}
-> +#endif
-> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-> index b0add983530a..d919efab6eba 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -8,13 +8,8 @@
->  #include <linux/dma-direct.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/mm.h>
-> -#include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <asm/cacheflush.h>
->
-> -unsigned int riscv_cbom_block_size;
-> -EXPORT_SYMBOL_GPL(riscv_cbom_block_size);
-> -
->  static bool noncoherent_supported;
->
->  void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-> @@ -77,42 +72,6 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
->         dev->dma_coherent = coherent;
->  }
->
-> -#ifdef CONFIG_RISCV_ISA_ZICBOM
-> -void riscv_init_cbom_blocksize(void)
-> -{
-> -       struct device_node *node;
-> -       unsigned long cbom_hartid;
-> -       u32 val, probed_block_size;
-> -       int ret;
-> -
-> -       probed_block_size = 0;
-> -       for_each_of_cpu_node(node) {
-> -               unsigned long hartid;
-> -
-> -               ret = riscv_of_processor_hartid(node, &hartid);
-> -               if (ret)
-> -                       continue;
-> -
-> -               /* set block-size for cbom extension if available */
-> -               ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> -               if (ret)
-> -                       continue;
-> -
-> -               if (!probed_block_size) {
-> -                       probed_block_size = val;
-> -                       cbom_hartid = hartid;
-> -               } else {
-> -                       if (probed_block_size != val)
-> -                               pr_warn("cbom-block-size mismatched between harts %lu and %lu\n",
-> -                                       cbom_hartid, hartid);
-> -               }
-> -       }
-> -
-> -       if (probed_block_size)
-> -               riscv_cbom_block_size = probed_block_size;
-> -}
-> -#endif
-> -
->  void riscv_noncoherent_supported(void)
->  {
->         WARN(!riscv_cbom_block_size,
-> --
-> 2.34.1
->
+-- 
+Ville Syrjälä
+Intel
