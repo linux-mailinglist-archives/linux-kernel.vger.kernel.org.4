@@ -2,169 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0B4603747
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4326F603755
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 03:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiJSAyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S229766AbiJSBAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 21:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJSAyF (ORCPT
+        with ESMTP id S229508AbiJSBAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:54:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6D0C787A;
-        Tue, 18 Oct 2022 17:54:04 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J0g8SH014256;
-        Wed, 19 Oct 2022 00:53:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=M4YM3Zp3y6UhKaOdP0cTdGdvvzaOvoeI6HEani4nNic=;
- b=IypdOPluw+swsF5XQTVf6T7ppii4m+bM2FxQrAL0/5C3dA0SJ11+ZQWvGV04RhFCiiqu
- MfK/ONh/5NL7bHpT9dyUXAcxibwEw8jebwohOtLPs7JSjN3vASLo/ATA05iuAFYfEsYB
- AiaxhXRTgaKIh6nZ6VCMMs2n8LbiiXQlBeVmF7+NGRSD12Y//WFZnnX5J2V8q0VwsBDP
- 7rBWP1TbHrG/rEgcwI0fAAWtvufEmolVJS41ujReN/BWNr4Ba0wXkD2Hpow542FqknSO
- uK6h9N7z0p6gxlnPs3iWCOrS6GJILbUlGMOET6W5uNgDmBW/gSEOxThvjtduZmbCWHnr Qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ka6x5r80s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 00:53:43 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29J0gwbM017117;
-        Wed, 19 Oct 2022 00:53:43 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ka6x5r806-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 00:53:42 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29J0bwgZ005153;
-        Wed, 19 Oct 2022 00:53:41 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma03wdc.us.ibm.com with ESMTP id 3k7mg9j2w9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 00:53:41 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29J0rerE5702374
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Oct 2022 00:53:41 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 579D258050;
-        Wed, 19 Oct 2022 00:53:40 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD03F58058;
-        Wed, 19 Oct 2022 00:53:37 +0000 (GMT)
-Received: from sig-9-65-232-148.ibm.com (unknown [9.65.232.148])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Oct 2022 00:53:37 +0000 (GMT)
-Message-ID: <3e2a42216662adb390831f98ea429a4245a4598a.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: fix key instantiation with
- user-provided data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nikolaus Voss <nv@vosn.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 18 Oct 2022 20:53:37 -0400
-In-Reply-To: <1b621acf-a1f1-ec9b-21f6-d081d69ed74@vosn.de>
-References: <20221013064308.857011E25@mail.steuer-voss.de>
-          <924a29d81cc7e0d3e2f62f693a0d8fcef97b9779.camel@linux.ibm.com>
-          <c620d6ed-d97f-b0c3-574-7b3cd63a7799@vosn.de>
-         <16fe5265c49fcecdf613fe9dd660efe4ae8d452e.camel@linux.ibm.com>
-         <1b621acf-a1f1-ec9b-21f6-d081d69ed74@vosn.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BS7bdyvuKodL2A6r7ZMgsg4VLNfM0MvT
-X-Proofpoint-ORIG-GUID: RRwvLxu41O_L1FDqIztkxmhZnCWXqIaA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-18_09,2022-10-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- adultscore=0 clxscore=1015 suspectscore=0 impostorscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210190000
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 21:00:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C930CC823F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 18:00:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666141241; x=1697677241;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aDVSrblbxjUrl9rBex0zEUaGNmL3cagKEcM5NrBCtus=;
+  b=ZE/U56Q5e8C1KldrGq/kbwQVClHZTtiidkOINXaxM8zCSsYLCF6ipd8q
+   BPyAq6gvlAyZIw7ODMc9pS1D2pZRHcX1ePPvqdQGabzN7BrOTstYuxCs5
+   2WstApJ22ekdT+qkRtNAICodIb/2q5AsAhspR7MLfwfwuoxf0gFRk3wtY
+   WXzEgNkMnFC108b44BE9LXKFgDb2D4B/zaZQhDwSvkFmWOZDtxmyWSleg
+   QGJBVwDNTMVDrppIkoZkntRHL2V4Oo7ci2TZu/7NvIXgsdtU8OuI9elZe
+   pPLSmsIsvfLEjTZMDnGUG45dqk1VQLgdn/yfj5iiEdlDMfLoipbqAbNYN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="307960244"
+X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
+   d="scan'208";a="307960244"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 18:00:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="660079123"
+X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
+   d="scan'208";a="660079123"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga008.jf.intel.com with ESMTP; 18 Oct 2022 18:00:39 -0700
+Message-ID: <a732a2c7-c5d7-53f1-1abc-f9907384ef71@linux.intel.com>
+Date:   Wed, 19 Oct 2022 08:54:13 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v2] iommu/vt-d: Clean up si_domain in the init_dmars()
+ error path
+Content-Language: en-US
+To:     Jerry Snitselaar <jsnitsel@redhat.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20221010065608.281860-1-jsnitsel@redhat.com>
+ <20221010144842.308890-1-jsnitsel@redhat.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20221010144842.308890-1-jsnitsel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-14 at 13:39 +0200, Nikolaus Voss wrote:
-> On Fri, 14 Oct 2022, Mimi Zohar wrote:
-> > On Fri, 2022-10-14 at 08:40 +0200, Nikolaus Voss wrote:
-> >> On Thu, 13 Oct 2022, Mimi Zohar wrote:
-> >>> On Thu, 2022-10-13 at 08:39 +0200, Nikolaus Voss wrote:
-> >>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> >>>> decrypted data") added key instantiation with user provided decrypted data.
-> >>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> >>>> Fix this to use hex2bin instead.
-> >>>>
-> >>>> Old keys created from user provided decrypted data saved with "keyctl pipe"
-> >>>> are still valid, however if the key is recreated from decrypted data the
-> >>>> old key must be converted to the correct format. This can be done with a
-> >>>> small shell script, e.g.:
-> >>>>
-> >>>> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
-> >>>> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
-> >>>> keyctl add user masterkey "$(cat masterkey.bin)" @u
-> >>>> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
-> >>>>
-> >>>> It is encouraged to switch to a new key because the effective key size
-> >>>> of the old keys is only half of the specified size.
-> >>>
-> >>> Both the old and new decrypted data size is 32 bytes.  Is the above
-> >>> statement necessary, especially since the Documentation example does
-> >>> the equivalent?
-> >>
-> >> The old key has the same byte size but all bytes must be within the
-> >> hex-ascíi range of characters, otherwise it is refused by the kernel.
-> >> So if you wanted a 32 bytes key you get 16 effective bytes for the key.
-> >> In the above example the string size of the $BROKENKEY is 32, while
-> >> the string size of the $NEWKEY is 64.
-> >>
-> >> If you do
-> >>
-> >> $ echo $NEWKEY
-> >> 6162636465664142434445463132333435363738393061616161616161616161
-> >>
-> >> for the example, the range problem is obvious, so $NEWKEY is still broken.
-> >> That's why it should only be used to recover data which should be
-> >> reencypted with a new key. If you count exactly, the effective key size is
-> >> _slightly_ longer than half of the specified size, but it is still a
-> >> severe security problem.
-> >
-> > So the issue with NEWKEY isn't the "effective key size of the old keys
-> > is only half of the specified size", but that the old key, itself, is
-> > limited to the hex-ascii range of characters.
+On 10/10/22 10:48 PM, Jerry Snitselaar wrote:
+> A splat from kmem_cache_destroy() was seen with a kernel prior to
+> commit ee2653bbe89d ("iommu/vt-d: Remove domain and devinfo mempool")
+> when there was a failure in init_dmars(), because the iommu_domain
+> cache still had objects. While the mempool code is now gone, there
+> still is a leak of the si_domain memory if init_dmars() fails. So
+> clean up si_domain in the init_dmars() error path.
 > 
-> The latter resulting in the former. If for BROKENKEY 32 bytes were 
-> specified, a brute force attacker knowing the key properties would only 
-> need to try at most 2^(16*8) keys, as if the key was only 16 bytes long. 
-> This is what I mean with "effective size" in contrast to the key's byte 
-> size which is 32 in my example.
-> 
-> The security issue is a result of the combination of limiting the input 
-> range to hex-ascii and using memcpy() instead of hex2bin(). It could have 
-> been fixed either by allowing binary input or using hex2bin() (and 
-> doubling the ascii input key length). I chose the latter.
+> Cc: Lu Baolu<baolu.lu@linux.intel.com>
+> Cc: Joerg Roedel<joro@8bytes.org>
+> Cc: Will Deacon<will@kernel.org>
+> Cc: Robin Murphy<robin.murphy@arm.com>
+> Fixes: 86080ccc223a ("iommu/vt-d: Allocate si_domain in init_dmars()")
+> Signed-off-by: Jerry Snitselaar<jsnitsel@redhat.com>
 
-Agreed the latter is better solution.  Please update/replace the
-sentence "It is encouraged to switch to a new key because ..." based on
-this more complete explanation.
+Thanks for the patch. It has been queued for v6.1.
 
-thanks,
+https://lore.kernel.org/linux-iommu/20221019004447.4563-1-baolu.lu@linux.intel.com/
 
-Mimi
-
+Best regards,
+baolu
