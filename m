@@ -2,383 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A6E604F1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B40604F1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJSRpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S231383AbiJSRqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiJSRpp (ORCPT
+        with ESMTP id S229979AbiJSRqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:45:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BB419DDA9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:45:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666201544; x=1697737544;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=U1d+4ZECpZ/x5zaGXgTJBuusdQNG2yhtoNcG5S0NZCY=;
-  b=B7vj9X2zgMqAsNaBXssah3axkAHmsT4dmAaU1/R4sGXI4EUoewKvq/O+
-   enV077qxkGCs8DA3l4DAF/dQe95lq89muEebz8C4O1UMXSPf/TCRCZmdT
-   xdfm6wMEwZwiMbEb2y/8u9CuhDbyQzOHWjge4Z2sAAqKD5HS7D1k/G0tT
-   00W3MIID86Iya0woO12dVbdflmMznqJIg9sSTtES9WIM5c/8MTIyOx6+u
-   d7EyjAUoQTYZjuwILSihxDZawifQoaY5iw5P9JVO6P8OyU2chRKOliifx
-   bo/mJ1pZVmC27Kl/5br274uiO3p9ApducaYXGRNW79ZgLQSu105/gZj8+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="306477564"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="306477564"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 10:45:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="580453921"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="580453921"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga003.jf.intel.com with ESMTP; 19 Oct 2022 10:45:43 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 10:45:43 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 10:45:43 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 19 Oct 2022 10:45:43 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 19 Oct 2022 10:45:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KFkCfREs/Ktyg7hvQiZNLSAVZpHHmCD4fE7kHmcfcSd4+MmfcsgRMuDNw32ud4AJ+66chAKEc0BIOTp5cchDZTN3RXc7YTyUi4fKCbyZu5X5iBv+yXWN3eF5+4PF+IslkyTDs0EESR4zCvOHOV22g55r/96jdvug/DPBo18urwCJ7FDEJ+yFsI333v75zjtzbNVRccZPjGAK+AxR34m6ZmsZW9SB+KV7MQaQG4Gg4RlPONA7BqNUxf/98xWBPWtn721RBGmRE5yy5H61eyAv6F1jsVT3/B5RYqR9eQB8RfD3JymWs3O7s2Uy4e+4BGOigYt95gYCAkuiNukC0pVhvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XnTw6H8ZZI6cvzZLhdjkB78rGQ0KSOogAkQo/FqtG/Q=;
- b=G4Y0oTibU4MklnUY8XFm/Ts8oFtQDmfehlLTFyne1N07O2dahts6WlDVCDSad9+kMiu24MG0vUCKUFmSEJ4dcNKKqd7pWAgy7ZnYD2bluZKn1mxLnwXMaJP6RIq/2/xGv42etoubwg/ONMJ6JscSmxx+Ig/IglwBD4jcd5JAa29JBEQ4QrC3u9f6UzVYCsIULhGkl/bJR5WrBL11Xm13eDkFny7hsAP2uWUR7yENMbmZaTSaCMX0uBJxmVHrIfWUBCX1VnQfTPYwk/qdrU+rNRfQYfzOwNnV9t+ctpz0xbgPuHiLhahHqVHhHehcqh+QX4QjsxjFW9PfrRpsVGMIVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by PH7PR11MB6721.namprd11.prod.outlook.com
- (2603:10b6:510:1ad::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Wed, 19 Oct
- 2022 17:45:41 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::7d5a:684d:99f7:4e83]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::7d5a:684d:99f7:4e83%12]) with mapi id 15.20.5723.034; Wed, 19 Oct
- 2022 17:45:41 +0000
-Date:   Wed, 19 Oct 2022 10:45:38 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Tony Luck <tony.luck@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Miaohe Lin <linmiaohe@huawei.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, Tony Luck <tony.luck@intel.com>
-Subject: RE: [PATCH v2] mm, hwpoison: Try to recover from copy-on write faults
-Message-ID: <635037c26bafa_24ac294c7@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-References: <SJ1PR11MB60838C1F65CA293188BB442DFC289@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20221019170835.155381-1-tony.luck@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221019170835.155381-1-tony.luck@intel.com>
-X-ClientProxiedBy: SJ0PR13CA0182.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::7) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Wed, 19 Oct 2022 13:46:00 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA591BE42C;
+        Wed, 19 Oct 2022 10:45:57 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id t16so7133345edd.2;
+        Wed, 19 Oct 2022 10:45:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b3qQsYa/7ZweA0u9kpHAV4Ioh1PIQ7YV+2Zy1Ir6xbc=;
+        b=EF+8GxOqjD7tz5bBqhQA4A8MVrYO9BfsHFXvcqliLTVztgNGNy46gTL+cw8it3RwDk
+         I/yhw3zBTCKhOcz/MgyqQTstezO7xTAkqm0DgFYQ4Tx83dsic6vwctukoJj3QKIMWym0
+         x75Ep7MCrpFRgXJuifRFM79uan1zhrm/Yy7bXUf/HDFQ3dP3EMZUYM6SGW5RNUd6aL5u
+         EUc/wtxvAwVC0n+0OSEmsqktGpgf6+SMfQdJgBK7Jxr4LzxOhQpW+d2LaXnc+cpxZdmp
+         xqyfYl5yO4B1HRkjPdhh33z4p7MAPeFrW3wRXwICAgaTIPIVpFTcNF0U9GRU0JWpsX/e
+         LRkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b3qQsYa/7ZweA0u9kpHAV4Ioh1PIQ7YV+2Zy1Ir6xbc=;
+        b=A2eSfIp33uM0iDRftUr2q0xcAKSZv8rU6ZBZ+W4N+EzH6MG5GaVpAb+yGgqaRJWDW6
+         9bEYwy8jPDyT8B5/hRNLTQ2Pe+erT0JaGcrtKuwBiaBGnoKTf1PAi5Yfsi3UOuTnt8P7
+         6B9xTfqmPPaI1Zr3FTWZNAtzIVGju7X9/Pv4O0lXUm0MI+tFs66E8lIk0WGkciwHvbLb
+         ndTj3VM/emFq4YwMeRv/pnjAflY+RYkspkIwNO0MnR0Z48OQeBlJy6QqG238JoJm9xUF
+         uq6R9TF+zf8h1qXtC+VAZFzJpv1rf+Xa5EEmYfE+hWtz5pnTTSkdsOoA4rT0sf3WnSIo
+         vSSQ==
+X-Gm-Message-State: ACrzQf0iS0h87dMiwx0dak8HPWJaYetAxSjzBXReR29pP679w9RS2EZ1
+        RhvKxqUSJNg0v+nKx9ELBpA=
+X-Google-Smtp-Source: AMsMyM7+C12t1o8higEU9r6SRH5hrJEdLyfeE4a3rQuBGmahnVZeQqTgOz5AVJmtx85oAd+c0bbn/g==
+X-Received: by 2002:aa7:ca45:0:b0:458:d9a2:6164 with SMTP id j5-20020aa7ca45000000b00458d9a26164mr8734873edt.340.1666201555073;
+        Wed, 19 Oct 2022 10:45:55 -0700 (PDT)
+Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id qn24-20020a170907211800b0073c10031dc9sm9218382ejb.80.2022.10.19.10.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 10:45:54 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH 0/2] media: cedrus: h264/h265: Improve aux buffer management
+Date:   Wed, 19 Oct 2022 19:45:49 +0200
+Message-Id: <20221019174551.2695149-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|PH7PR11MB6721:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69b6de3d-4409-4a5e-3c59-08dab1f9bd6f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xaZWyKcfSX6jP3BlQz4/mkZwCq25KbDDaSs7zDLrW7T1V9/oEoXf1p7fGunQVVR2g7JcVOQH8whLv7e38nt8SML0bzAFrcDsjSEjTv8vTCEjiUH+pdlLsGUMA072hoqJEERHxVxc1Z1QJOf7L3VrA0KHH2FC6++QLnvA9keXJBvTzyfvrn46kMKPhwl8lGknxc+DKIjJ/R4gvnnsA4mX3aG2dAGcmk5MmqJq68GKzCBEfzXtNsM0RoD5afhi4R8WWB9uoGmEjqh3M5uWFtLZEDvjtNdi3PLUecnjljZdDFVYGVRM/+BvncoAIK/ND8p0sN/5NCILZBtySGpblM52Zb4lzZ7i65FagviQ2rADB1vZkpcGJR/Xn8CjK/R1DoinaHdO6c2/qMQOp4Dwt21Nwp7NhuMxKXhva55eIOvFqj6wRmIZIkM+omuCVfpCcaYQUBqbUbye6PM0cVOJpaBSvcpJuNrw2cc6PfXvcNQ6hv3EK01qgzOg4ot3iUqN3/aOYtoAmM5j7nG+ElDO0p5tyDxILk23FoehRva0q7d1MjxlQgcCzXzUf0mkC6r08Zjwxd19ZH7il0REBjxGISuKHOx8rTG2HzMhWO8vOPp+XXZon6sLAk2x/Pu8jPmJJ82vRCpbWwpJ2yeyf/T6uDVBcZtEmNPa0AKRbG0swze9CoufwQoxg5FO02JecCp77XZu3XVtcvDxUfttsFbMeSSn2w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(136003)(376002)(39860400002)(346002)(451199015)(86362001)(6486002)(38100700002)(110136005)(478600001)(316002)(54906003)(66556008)(4326008)(8676002)(66476007)(66946007)(83380400001)(6506007)(5660300002)(66899015)(41300700001)(6512007)(9686003)(26005)(82960400001)(7416002)(186003)(6666004)(107886003)(2906002)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ngXzd8hxK/Bmm9WuLnjPvonkXiYTXeKwlfNO/fVQkFeMwa/Oed7tTCHi/5h2?=
- =?us-ascii?Q?8PnVPPqrCHVsDcv5e7FlBeYkh1QQzKjj0+wwng0sZMB71J+IxcY5k4qWxvj1?=
- =?us-ascii?Q?DQssFnGt1DPX3TOtVJAZ9RBK8ZRVW5HBNfESDZV1mKpTnuRHR3fU87TAl6cw?=
- =?us-ascii?Q?Kr64sxDwhaRkjJcIvXgIXMQO0au7vej1ztv55mY5XCYCV4HmpyoJngb4uMSQ?=
- =?us-ascii?Q?7TxMrFh5y/WDUV6yuXJxq2m6dWdm/hT162sJxuK6MuGSXDTTDmOE5BJ6tF1K?=
- =?us-ascii?Q?yWuuIepVADghiId3gxeqAeczt6O1IC5X7psGLfNFoT3c/DlylBdkyKTt9f7K?=
- =?us-ascii?Q?UbRxcCGfJvUu0FWq+KEybeWI893kY+8V8poCrTjadl5BDJ1HcDRHVE6+EXaq?=
- =?us-ascii?Q?lenfXBmJkfnkRyn2x6ECgh2uyFlAn94wcKrTJFwTaSWRW7RnKgoUX5/iGqqL?=
- =?us-ascii?Q?Hr/CEmGnQh3DGMzrIgqjNKuHWRPT7W19uTshzHYW7zXoJ3J5TbOLK5EvRv93?=
- =?us-ascii?Q?JElKFZPgszpMuQYsuE5L4MUeUnrClRiS/XlaNcQ9EheWFNXy+syuiaZ3BaxI?=
- =?us-ascii?Q?nkDB6F19YiPj+TOg8Gb2tzo/UVVC1aBwP87megr5z8IlKmFPUGAYBIOuc+aq?=
- =?us-ascii?Q?sbakl8SGkPqXPn4z7r8BKAnx//USX1g8Yj1+Mn+qVWgsyD97LCp8QfTLC81H?=
- =?us-ascii?Q?g7EAQaixdUNRxQnV/elzbdEUkn9lbOJa9e7NvSWDbKO/Z1t0TOpW4IAvBN7H?=
- =?us-ascii?Q?7rJbo1xMawPYvYXu0ENgD0tq/6Okf+t+PiXKE6GaY0AWuky50Sx8wkur/fA6?=
- =?us-ascii?Q?7WeN2suDukyay4EP8/jl36vkJ/Dx0JY2Z4j1Rbqninzo6zjfUJwlMVTxGbww?=
- =?us-ascii?Q?ocqHIV1ypqUQyUyg1yj0EZ/gBo7yagCWwwu7UqyreB5rTw0a9J4DR/GYgliw?=
- =?us-ascii?Q?FqhoEdT22g0wHFfI44lVAldzSiBAImwL312UTQOr15ScTJYZ7PsZ4ow59rDR?=
- =?us-ascii?Q?XvsLnkjPUMxy4F+EYOuETLf8i+erpmlQpfYU0plF2Y7lZfnmQviy51lNRtZC?=
- =?us-ascii?Q?EQl9PGLkCLkvjDShOBDMaoi5OkesaBB6XX2y5lHhpw+/RMW/MKoShOrRaNEc?=
- =?us-ascii?Q?UYgS847iTpfUu7PbgVgFYfbYx6wDyD4DmFlARCPyEMsl9+QjteMi2xU0klO/?=
- =?us-ascii?Q?q1wgKJwSSYMn1qNj1XMNBdJGN5lCPbljGJJyIXfSLR+tsnlBQUMIoRqfeZre?=
- =?us-ascii?Q?D5nQ5ajsAtxhPr7HqxopAHrN/Bd7P3EqbJusRCCYhEomZEty5t7zQTUlb7XZ?=
- =?us-ascii?Q?HGFx3KHUB8zwOMFnb5XcS2P9z8kBeVje+h2BCWXLoFrONA/iAW5xwK81mp/y?=
- =?us-ascii?Q?3aue6o0NzfE5RTCdzixaJcZpB5mJa/T4dCMSEPEbsKXDDgjoKdBMP/ovszU8?=
- =?us-ascii?Q?WkBPa79OpmoAGdgXkZudY5M1XgPFujKRwVKgNwufKwzu/ZeZqgctWTHlS7ho?=
- =?us-ascii?Q?qf8DWGeqb7+iIQILIc+gCnWdUBJBEdiua8T4Tu3SPVAQDuwAIk521sUGOKfE?=
- =?us-ascii?Q?Ad5zB25xn/YwXbZWNMrT0maSeAFZJ9AAfRU+1nbSomaOjYgSp7YIhKwjqWC+?=
- =?us-ascii?Q?Zw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69b6de3d-4409-4a5e-3c59-08dab1f9bd6f
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 17:45:41.0753
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f9mHMHd7pQcBYdJ6qXXbAzAZbSA91Z84HCpkqST+xWZHMyyv0rNUOzPOZ4ocBG4R81ANbvQTxfxx0wKgTdLEIGMLOo0Ao/t95V+UDvPg63U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6721
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tony Luck wrote:
-> If the kernel is copying a page as the result of a copy-on-write
-> fault and runs into an uncorrectable error, Linux will crash because
-> it does not have recovery code for this case where poison is consumed
-> by the kernel.
-> 
-> It is easy to set up a test case. Just inject an error into a private
-> page, fork(2), and have the child process write to the page.
-> 
-> I wrapped that neatly into a test at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/aegl/ras-tools.git
-> 
-> just enable ACPI error injection and run:
-> 
->   # ./einj_mem-uc -f copy-on-write
-> 
-> Add a new copy_user_highpage_mc() function that uses copy_mc_to_kernel()
-> on architectures where that is available (currently x86 and powerpc).
-> When an error is detected during the page copy, return VM_FAULT_HWPOISON
-> to caller of wp_page_copy(). This propagates up the call stack. Both x86
-> and powerpc have code in their fault handler to deal with this code by
-> sending a SIGBUS to the application.
-> 
-> Note that this patch avoids a system crash and signals the process that
-> triggered the copy-on-write action. It does not take any action for the
-> memory error that is still in the shared page. To handle that a call to
-> memory_failure() is needed. But this cannot be done from wp_page_copy()
-> because it holds mmap_lock(). Perhaps the architecture fault handlers
-> can deal with this loose end in a subsequent patch?
-> 
-> On Intel/x86 this loose end will often be handled automatically because
-> the memory controller provides an additional notification of the h/w
-> poison in memory, the handler for this will call memory_failure(). This
-> isn't a 100% solution. If there are multiple errors, not all may be
-> logged in this way.
-> 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
+Current handling of mv col aux buffers in h264 and h265 code is not
+optimal. In h264 case, it allocates pool for worst case possible which
+basically never happens with typical videos. This also prevents it from
+working well on very memory constrained devices, where CMA pool is very
+small. In h265 case, number of buffers in a pool is equal to number of
+capture buffers allocated before streaming is started. If any capture
+buffer is allocated afterwards, Cedrus gets bogus pointers. This might
+cause memory corruption.
 
-Just some minor comments below, but you can add:
+Solution is the same in both cases. Instead of using memory pool, do
+individual allocations later, right before aux buffer is first used.
+Such approach allocates just right amount of buffers of optimal size.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Proposed solution frees aux buffers in streaming off callback, which
+is first possible occasion. I can move this to .buf_cleanup too, if you
+think that it's more appropriate.
 
-> 
-> ---
-> Changes in V2:
->    Naoya Horiguchi:
-> 	1) Use -EHWPOISON error code instead of minus one.
-> 	2) Poison path needs also to deal with old_page
->    Tony Luck:
-> 	Rewrote commit message
-> 	Added some powerpc folks to Cc: list
-> ---
->  include/linux/highmem.h | 19 +++++++++++++++++++
->  mm/memory.c             | 28 +++++++++++++++++++---------
->  2 files changed, 38 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-> index e9912da5441b..5967541fbf0e 100644
-> --- a/include/linux/highmem.h
-> +++ b/include/linux/highmem.h
-> @@ -319,6 +319,25 @@ static inline void copy_user_highpage(struct page *to, struct page *from,
->  
->  #endif
->  
-> +static inline int copy_user_highpage_mc(struct page *to, struct page *from,
-> +					unsigned long vaddr, struct vm_area_struct *vma)
-> +{
-> +	unsigned long ret = 0;
-> +#ifdef copy_mc_to_kernel
-> +	char *vfrom, *vto;
-> +
-> +	vfrom = kmap_local_page(from);
-> +	vto = kmap_local_page(to);
-> +	ret = copy_mc_to_kernel(vto, vfrom, PAGE_SIZE);
-> +	kunmap_local(vto);
-> +	kunmap_local(vfrom);
-> +#else
-> +	copy_user_highpage(to, from, vaddr, vma);
-> +#endif
-> +
-> +	return ret;
-> +}
-> +
+Finally, h265 patch can be considered as a fix (prevents overwriting
+random memory). If deemed appropriate, fixes tag can be added.
 
-There is likely some small benefit of doing this the idiomatic way and
-let grep see that there are multiple definitions of
-copy_user_highpage_mc() with an organization like:
+Let me know what you think.
 
-#ifdef copy_mc_to_kernel
-static inline int copy_user_highpage_mc(struct page *to, struct page *from,
-                                        unsigned long vaddr,
-                                        struct vm_area_struct *vma)
-{    
-        unsigned long ret = 0;
-        char *vfrom, *vto;
-     
-        vfrom = kmap_local_page(from);
-        vto = kmap_local_page(to);
-        ret = copy_mc_to_kernel(vto, vfrom, PAGE_SIZE);
-        kunmap_local(vto);
-        kunmap_local(vfrom);
-     
-        return ret;
-}
-#else
-static inline int copy_user_highpage_mc(struct page *to, struct page *from,
-                                        unsigned long vaddr,
-                                        struct vm_area_struct *vma)
-{       
-        copy_user_highpage(to, from, vaddr, vma);
-        return 0;
-}
-#endif
+Best regards,
+Jernej
 
-Per the copy_mc* discussion with Linus I would have called this function
-copy_mc_to_user_highpage() to clarify that hwpoison is handled from the
-source buffer of the copy.
+Jernej Skrabec (2):
+  media: cedrus: h265: Associate mv col buffers with buffer
+  media: cedrus: h264: Optimize mv col buffer allocation
 
->  #ifndef __HAVE_ARCH_COPY_HIGHPAGE
->  
->  static inline void copy_highpage(struct page *to, struct page *from)
-> diff --git a/mm/memory.c b/mm/memory.c
-> index f88c351aecd4..a32556c9b689 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2848,8 +2848,14 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
->  	return same;
->  }
->  
-> -static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
-> -				       struct vm_fault *vmf)
-> +/*
-> + * Return:
-> + *	-EHWPOISON:	copy failed due to hwpoison in source page
-> + *	0:		copied failed (some other reason)
-> + *	1:		copied succeeded
-> + */
-> +static inline int __wp_page_copy_user(struct page *dst, struct page *src,
-> +				      struct vm_fault *vmf)
->  {
->  	bool ret;
->  	void *kaddr;
-> @@ -2860,8 +2866,9 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
->  	unsigned long addr = vmf->address;
->  
->  	if (likely(src)) {
-> -		copy_user_highpage(dst, src, addr, vma);
-> -		return true;
-> +		if (copy_user_highpage_mc(dst, src, addr, vma))
-> +			return -EHWPOISON;
+ drivers/staging/media/sunxi/cedrus/cedrus.h   |  16 +--
+ .../staging/media/sunxi/cedrus/cedrus_h264.c  | 118 +++++++++---------
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  63 +++++-----
+ 3 files changed, 99 insertions(+), 98 deletions(-)
 
-Given there is no use case for the residue value returned by
-copy_mc_to_kernel() perhaps just return EHWPOISON directly from
-copyuser_highpage_mc() in the short-copy case?
+--
+2.38.0
 
-> +		return 1;
->  	}
->  
->  	/*
-> @@ -2888,7 +2895,7 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
->  			 * and update local tlb only
->  			 */
->  			update_mmu_tlb(vma, addr, vmf->pte);
-> -			ret = false;
-> +			ret = 0;
-
-What do you think about just making these 'false' cases also return a
-negative errno? (rationale below...)
-
->  			goto pte_unlock;
->  		}
->  
-> @@ -2913,7 +2920,7 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
->  		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
->  			/* The PTE changed under us, update local tlb */
->  			update_mmu_tlb(vma, addr, vmf->pte);
-> -			ret = false;
-> +			ret = 0;
->  			goto pte_unlock;
->  		}
->  
-> @@ -2932,7 +2939,7 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
->  		}
->  	}
->  
-> -	ret = true;
-> +	ret = 1;
->  
->  pte_unlock:
->  	if (locked)
-> @@ -3104,6 +3111,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->  	pte_t entry;
->  	int page_copied = 0;
->  	struct mmu_notifier_range range;
-> +	int ret;
->  
->  	delayacct_wpcopy_start();
->  
-> @@ -3121,19 +3129,21 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
->  		if (!new_page)
->  			goto oom;
->  
-> -		if (!__wp_page_copy_user(new_page, old_page, vmf)) {
-> +		ret = __wp_page_copy_user(new_page, old_page, vmf);
-> +		if (ret <= 0) {
-
-...this would become a typical '0 == success' and 'negative errno ==
-failure', where all but EHWPOISON are retried.
-
->  			/*
->  			 * COW failed, if the fault was solved by other,
->  			 * it's fine. If not, userspace would re-fault on
->  			 * the same address and we will handle the fault
->  			 * from the second attempt.
-> +			 * The -EHWPOISON case will not be retried.
->  			 */
->  			put_page(new_page);
->  			if (old_page)
->  				put_page(old_page);
->  
->  			delayacct_wpcopy_end();
-> -			return 0;
-> +			return ret == -EHWPOISON ? VM_FAULT_HWPOISON : 0;
