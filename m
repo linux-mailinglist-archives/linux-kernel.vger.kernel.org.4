@@ -2,143 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDC16047CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2719F6047BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbiJSNpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S230362AbiJSNpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233590AbiJSNob (ORCPT
+        with ESMTP id S233380AbiJSNoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:44:31 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A0199886;
-        Wed, 19 Oct 2022 06:31:41 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
-        t=1666186257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjuWJVNhkBvpGyB36JX1wwbKTh+Ncxz/qy06/EtkAxA=;
-        b=JjwMk2ka730u9Fk4Et1ZdFdXTU80c10Qs5qqtXUSf9fROQhlCbPRNA6cQfJqVhkPyzSCXe
-        D4rxGmSexAj0R7lmY2RdqZchJzGMDJvOc8ehTrTSICiYLD5fUOU2bhIeP+d/Dp2vNT7vYL
-        nTBrYUHDgumpRmFVeZBhbxHqoWoDa6xL3lgSBBImoXk7oRou1Bb/l8i1tzHcjY+1cNQ0zc
-        oFvzfb75mK1S1PriJxpuX4pGPNTY4aBPVBpx7QVuks8i3pgmotEW9lOWBR76oFuje57/vH
-        KcTsoBOjPleRsFMJL2W+Me4IcfegXjXQcPUvC4eFbQRAuygsgTz0I7WgFcqNvQ==
-From:   Rui Li <me@lirui.org>
-To:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Wu XiangCheng <wu.xiangcheng@linux.dev>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rui Li <me@lirui.org>
-Subject: [PATCH v3 1/2] docs/zh_CN: Add userspace-api/index Chinese translation
-Date:   Wed, 19 Oct 2022 21:30:21 +0800
-Message-Id: <76b86e687034d5347e1e49c4acfc28e9c45abe47.1666185911.git.me@lirui.org>
-In-Reply-To: <cover.1666185911.git.me@lirui.org>
-References: <cover.1666185911.git.me@lirui.org>
+        Wed, 19 Oct 2022 09:44:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EAA18D82E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:31:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47B1FB823B3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:30:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37603C433D6;
+        Wed, 19 Oct 2022 13:30:21 +0000 (UTC)
+Date:   Wed, 19 Oct 2022 09:30:22 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     mingo@redhat.com, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, xiehuan09@gmail.com
+Subject: Re: [PATCH v2] trace/kprobe: remove duplicated calls of
+ ring_buffer_event_data
+Message-ID: <20221019093022.7ef5a0de@gandalf.local.home>
+In-Reply-To: <1666145478-4706-1-git-send-email-chensong_2000@189.cn>
+References: <1666145478-4706-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Translate userspace-api/index.rst into Chinese, add it into
-zh_CN/index.rst.
+On Wed, 19 Oct 2022 10:11:18 +0800
+Song Chen <chensong_2000@189.cn> wrote:
 
-Signed-off-by: Rui Li <me@lirui.org>
----
-Changes since v2:
-- Change patch set order
+> Function __kprobe_trace_func calls ring_buffer_event_data to
+> get a ring buffer, however, it has been done in above call
+> trace_event_buffer_reserve. So does __kretprobe_trace_func.
+> 
+> This patch removes those duplicated calls.
+> 
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
 
-Changes since v1:
-- Align title
-- Change some translation
----
- Documentation/translations/zh_CN/index.rst    |  2 +-
- .../zh_CN/userspace-api/index.rst             | 46 +++++++++++++++++++
- 2 files changed, 47 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/userspace-api/index.rst
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
-index ec99ef5fe990..272414971ce9 100644
---- a/Documentation/translations/zh_CN/index.rst
-+++ b/Documentation/translations/zh_CN/index.rst
-@@ -90,12 +90,12 @@ TODOList:
- 
-    admin-guide/index
-    admin-guide/reporting-issues.rst
-+   userspace-api/index
- 
- TODOList:
- 
- * 内核构建系统 <kbuild/index>
- * 用户空间工具 <tools/index>
--* userspace-api/index
- 
- 也可参考独立于内核文档的 `Linux 手册页 <https://www.kernel.org/doc/man-pages/>`_ 。
- 
-diff --git a/Documentation/translations/zh_CN/userspace-api/index.rst b/Documentation/translations/zh_CN/userspace-api/index.rst
-new file mode 100644
-index 000000000000..3b834fe7e33b
---- /dev/null
-+++ b/Documentation/translations/zh_CN/userspace-api/index.rst
-@@ -0,0 +1,46 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/userspace-api/index.rst
-+
-+:翻译:
-+
-+ 李睿 Rui Li <me@lirui.org>
-+
-+=========================
-+Linux 内核用户空间API指南
-+=========================
-+
-+.. _man-pages: https://www.kernel.org/doc/man-pages/
-+
-+尽管许多用户空间API的文档被记录在别处（特别是在 man-pages_ 项目中），
-+在代码树中仍然可以找到有关用户空间的部分信息。这个手册意在成为这些信息
-+聚集的地方。
-+
-+.. class:: toc-title
-+
-+	   目录
-+
-+TODOList:
-+
-+* no_new_privs
-+* seccomp_filter
-+* landlock
-+* unshare
-+* spec_ctrl
-+* accelerators/ocxl
-+* ebpf/index
-+* ioctl/index
-+* iommu
-+* media/index
-+* netlink/index
-+* sysfs-platform_profile
-+* vduse
-+* futex2
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
--- 
-2.30.2
+Masami, want to take this one?
+
+-- Steve
+
+> ---
+>  kernel/trace/trace_kprobe.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 23f7f0ec4f4c..f905829b856b 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -1394,7 +1394,6 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
+>  		return;
+>  
+>  	fbuffer.regs = regs;
+> -	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+>  	entry->ip = (unsigned long)tk->rp.kp.addr;
+>  	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
+>  
+> @@ -1435,7 +1434,6 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
+>  		return;
+>  
+>  	fbuffer.regs = regs;
+> -	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+>  	entry->func = (unsigned long)tk->rp.kp.addr;
+>  	entry->ret_ip = get_kretprobe_retaddr(ri);
+>  	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
 
