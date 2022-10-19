@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17736037BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DF56037BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJSCAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 22:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S229756AbiJSCAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 22:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJSCAT (ORCPT
+        with ESMTP id S229602AbiJSCAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 22:00:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D540486F94
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:00:18 -0700 (PDT)
+        Tue, 18 Oct 2022 22:00:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BBC9C7E2;
+        Tue, 18 Oct 2022 19:00:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2255B81F2D
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E857C433D6;
-        Wed, 19 Oct 2022 02:00:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD46B821CF;
+        Wed, 19 Oct 2022 02:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34BEC43142;
+        Wed, 19 Oct 2022 02:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666144816;
-        bh=mugrCEwIc0Keq7Vmnig+0zMi8mv8dsQ668NkPGtyjrE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Po20yU2dYPrDArQHKj1+w1thcJ0SDTGOCRj0WfCii/mDlU+LbuvHBSbljV09n6lqP
-         pC3CvXE27fONTKM0fvpZ2bcDriqjp3xKjXgE06zyYOeaQMKldB7YpY9vGI+8/aqG1e
-         vM/CBo5eudgr7pfw2zkGBZTpABD5BqbZgIQ/afXSkMM3k8mObzQQik2g/Z+o9F++TO
-         JpLU7MlgEAqKC+lt+R+tUGwJ5g1xdHK49KiTk/sRmhz6D86Gq/koc+f+9gU9lhpGkx
-         xdepgvEz2vYtQHZTJn2874X8ZCW8IP7pCjUDdDx1irXXR5qOPGXAKO+z+Q1aWlgrFW
-         cCOixzV850m8w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2AF32E270EF;
-        Wed, 19 Oct 2022 02:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1666144835;
+        bh=TCSW17AvKHdkoRbEkTskjv1Qo5Q/OxvcAE+xqUKV4UM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hz2yl4Id2b3n0774YtVIuKgTYQo3ezL3TMyAdSVbtuHTKfklHhxuGx88xZX1X4RZh
+         3sjMR9qNcG1/LOUCDLVF+Pf0Hx03JfvwFr5y4bGL47TR6vLIKN4u+AOEMgXwrY6FG5
+         rctrVP2SNH0TArAZOGDWD9bHynPTVUNRw45B/GhAwgVpBpQNUkzT2SOs2TYOzfrPl5
+         2X2xfwOFzh9NGzFg1r8s3YbbY9w7GO3JBrVIfi5l2VezlXiwQn5TwlmtXMo6vw0UiV
+         oqEi4jsMU4IcE8qIxpW8I2+wIWe51CdUFAf1T5GTEQPZ1+IFASMdoY15+Y6cytojDQ
+         VcxXQ7/F8OmBg==
+Received: by mail-ed1-f53.google.com with SMTP id r14so23130940edc.7;
+        Tue, 18 Oct 2022 19:00:35 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0i9gGyhFfE7om7M20YNOm7B8pWkczkP83m8y8BjTvwdswYEhgR
+        PxKXwWKXZblfCGVwdTidMSEDLgTsjfXeZcXTt7U=
+X-Google-Smtp-Source: AMsMyM64mo5oO4aZyzU8eaQiDb6rojExVJjHSCuo0K2CqponBGF6WAHNIqRGxtJ/4teFs6yoHZ3KmXPEqi1H/ao5Pe8=
+X-Received: by 2002:aa7:df16:0:b0:45b:f51f:ab73 with SMTP id
+ c22-20020aa7df16000000b0045bf51fab73mr5144349edy.366.1666144833892; Tue, 18
+ Oct 2022 19:00:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform/chrome: cros_hps_i2c: make remove callback return
- void
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <166614481616.23833.33489974249314814.git-patchwork-notify@kernel.org>
-Date:   Wed, 19 Oct 2022 02:00:16 +0000
-References: <20221018235237.2274969-1-dcallagh@chromium.org>
-In-Reply-To: <20221018235237.2274969-1-dcallagh@chromium.org>
-To:     Dan Callaghan <dcallagh@chromium.org>
-Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        skyostil@chromium.org, bleung@chromium.org, tzungbi@kernel.org,
-        lkp@intel.com
+References: <20221017024027.2389370-1-chenhuacai@loongson.cn>
+ <20221017024027.2389370-2-chenhuacai@loongson.cn> <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
+In-Reply-To: <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 19 Oct 2022 10:00:22 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5x6fskGSObfh=P2JeDEhhFs6c9iQcOAKroeQQv4fu3uA@mail.gmail.com>
+Message-ID: <CAAhV-H5x6fskGSObfh=P2JeDEhhFs6c9iQcOAKroeQQv4fu3uA@mail.gmail.com>
+Subject: Re: [PATCH V11 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init()
+To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,30 +77,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi, Philippe,
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+On Tue, Oct 18, 2022 at 9:29 PM Philippe Mathieu-Daud=C3=A9
+<philmd@linaro.org> wrote:
+>
+> On 17/10/22 04:40, Huacai Chen wrote:
+> > From: Feiyang Chen <chenfeiyang@loongson.cn>
+> >
+> > We are preparing to add sparse vmemmap support to LoongArch. MIPS and
+> > LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
+> > page tables, so adjust their prototypes to make generic helpers can cal=
+l
+> > them.
+> >
+> > NIOS2 declares pmd_init() but doesn't use, just remove it to avoid buil=
+d
+> > errors.
+> >
+> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/loongarch/include/asm/pgalloc.h | 13 ++-----------
+> >   arch/loongarch/include/asm/pgtable.h |  8 ++++----
+> >   arch/loongarch/kernel/numa.c         |  4 ++--
+> >   arch/loongarch/mm/pgtable.c          | 23 +++++++++++++----------
+> >   arch/mips/include/asm/pgalloc.h      | 10 +++++-----
+> >   arch/mips/include/asm/pgtable-64.h   |  8 ++++----
+> >   arch/mips/kvm/mmu.c                  |  3 +--
+> >   arch/mips/mm/pgtable-32.c            | 10 +++++-----
+> >   arch/mips/mm/pgtable-64.c            | 18 ++++++++++--------
+> >   arch/mips/mm/pgtable.c               |  2 +-
+> >   arch/nios2/include/asm/pgalloc.h     |  5 -----
+> >   11 files changed, 47 insertions(+), 57 deletions(-)
+>
+> > diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
+> > index 61891af25019..88819a21d97e 100644
+> > --- a/arch/mips/mm/pgtable-32.c
+> > +++ b/arch/mips/mm/pgtable-32.c
+> > @@ -13,9 +13,9 @@
+> >   #include <asm/pgalloc.h>
+> >   #include <asm/tlbflush.h>
+> >
+> > -void pgd_init(unsigned long page)
+> > +void pgd_init(void *addr)
+> >   {
+> > -     unsigned long *p =3D (unsigned long *) page;
+> > +     unsigned long *p =3D (unsigned long *)addr;
+> >       int i;
+> >
+> >       for (i =3D 0; i < USER_PTRS_PER_PGD; i+=3D8) {
+> > @@ -61,9 +61,9 @@ void __init pagetable_init(void)
+> >   #endif
+> >
+> >       /* Initialize the entire pgd.  */
+> > -     pgd_init((unsigned long)swapper_pg_dir);
+> > -     pgd_init((unsigned long)swapper_pg_dir
+> > -              + sizeof(pgd_t) * USER_PTRS_PER_PGD);
+> > +     pgd_init(swapper_pg_dir);
+> > +     pgd_init((void *)((unsigned long)swapper_pg_dir
+> > +              + sizeof(pgd_t) * USER_PTRS_PER_PGD));
+>
+> Pre-existing, but why not use:
+>
+>          pgd_init(&swapper_pg_dir[USER_PTRS_PER_PGD]);
+>
+> ?
+OK, that seems better, thanks.
 
-On Wed, 19 Oct 2022 10:52:37 +1100 you wrote:
-> Commit ed5c2f5fd10d ("i2c: Make remove callback return void") changed
-> the return type of the 'remove' callback to void, but this driver was
-> originally written before that change landed. Update the remove callback
-> to match.
-> 
-> Fixes: 5f9952548d91 ("platform/chrome: add a driver for HPS")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Dan Callaghan <dcallagh@chromium.org>
-> 
-> [...]
-
-Here is the summary with links:
-  - platform/chrome: cros_hps_i2c: make remove callback return void
-    https://git.kernel.org/chrome-platform/c/d8cb88f1541f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Huacai
+>
+> Otherwise:
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+>
