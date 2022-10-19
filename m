@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76EA660375F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 03:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0F260376C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 03:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJSBGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 21:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S229760AbiJSBQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 21:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiJSBGV (ORCPT
+        with ESMTP id S229508AbiJSBP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 21:06:21 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3925CDED38;
-        Tue, 18 Oct 2022 18:06:15 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MsXYm4Xsrzl66p;
-        Wed, 19 Oct 2022 09:04:12 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAXCzKETU9jlvBPAA--.9090S3;
-        Wed, 19 Oct 2022 09:06:13 +0800 (CST)
-Subject: Re: [PATCH v4 4/6] blk-wbt: don't show valid wbt_lat_usec in sysfs
- while wbt is disabled
-To:     Christoph Hellwig <hch@infradead.org>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     jack@suse.cz, ebiggers@kernel.org, paolo.valente@linaro.org,
-        axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220930031906.4164306-1-yukuai1@huaweicloud.com>
- <20220930031906.4164306-5-yukuai1@huaweicloud.com>
- <Y07LCnJN5q8ueV7X@infradead.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <63e04cac-974a-3235-275d-64499cbd5863@huaweicloud.com>
-Date:   Wed, 19 Oct 2022 09:06:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 18 Oct 2022 21:15:57 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2431C5A2F7;
+        Tue, 18 Oct 2022 18:15:57 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J0tfqf032095;
+        Wed, 19 Oct 2022 01:15:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=8tSN5Rf0FvOU8jPXKjpxE37kkUeI+a1foe7H3Wbg7DY=;
+ b=ALlBfnolJlXVJStUNdEv9bIey6j0Jb+iG1RfSXtMI+Vn9kMmi2NHtfUla+pIhtJDLXqP
+ /LTIOcUrLBiYzPBe79wLOphB2P5U2iIS0mcXZ/vSpjw+VlWHCIqOUgwOs87LwFgLH9C5
+ sjboYRRfN3Clqzn5cTsdPuT1KzCK+T6BkPP5qTnWt/ptqZAxiioYX6OkKJIMTTCUzaRS
+ QVbim5UngZVpoKj5hn14uyusFpLvmI1vC6y4SuSGOevljTSWEtWTFRSawmtqHNn7MNN4
+ ifzGZb8dH2Us17joT6Mgz/rjWVR+/V0A+Dm6xYvLbzi12/v5wS+a95wlKhVGsjtExHff OQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9yq1h396-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 01:15:50 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29J1FnAd008915
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 01:15:49 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 18 Oct
+ 2022 18:15:49 -0700
+Date:   Tue, 18 Oct 2022 18:15:48 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Trilok Soni" <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Elliot Berman" <quic_eberman@quicinc.com>
+Subject: Re: [PATCH v1 1/1] drivers: remoteproc: Add bus scaling capability
+ during bootup
+Message-ID: <20221019011547.GA2489@quicinc.com>
+References: <35eb4ce2bb8f3bb78a616c071a012f1f49d8b593.1666127246.git.quic_gokukris@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <Y07LCnJN5q8ueV7X@infradead.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAXCzKETU9jlvBPAA--.9090S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF13ArW7XFy7CFyrKF15Arb_yoWxCFXE9a
-        4jqF12kr45WF1vyF1DG3s7Wr93JF9rX3Wqgrs5J3WfCwn5WrWDAr18Wana93yIqr1DtFyx
-        G3sxAF9Fqw1jgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
-        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <35eb4ce2bb8f3bb78a616c071a012f1f49d8b593.1666127246.git.quic_gokukris@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1mamFUoPZKOJFxen8ygRM8opkcZsTibB
+X-Proofpoint-GUID: 1mamFUoPZKOJFxen8ygRM8opkcZsTibB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-18_10,2022-10-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 malwarescore=0 impostorscore=0 phishscore=0 spamscore=0
+ mlxlogscore=590 bulkscore=0 adultscore=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190005
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-ÔÚ 2022/10/18 23:49, Christoph Hellwig Ð´µÀ:
->>   static ssize_t queue_wb_lat_show(struct request_queue *q, char *page)
->>   {
->> +	u64 lat;
->> +
->>   	if (!wbt_rq_qos(q))
->>   		return -EINVAL;
->>   
->> -	return sprintf(page, "%llu\n", div_u64(wbt_get_min_lat(q), 1000));
->> +	lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
->> +
->> +	return sprintf(page, "%llu\n", lat);
+On Oct 18 2022 14:10, Gokul krishna Krishnakumar wrote:
+> During bootup since remote processors cannot request for
+> additional bus bandwidth from the interconect framework,
+> platform driver should provide the proxy resources. Make
+> a proxy vote for maximizing the bus bandwidth during bootup
+> for a remote processor and remove it once processor is up.
 > 
-> 	if (wbt_disabled(q))
-> 		return sprintf(page, "0\n");
-> 	return sprintf(page, "%llu\n", div_u64(wbt_get_min_lat(q), 1000));
-> 
-> but otherwise the patch looks fine:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> .
-> 
+> Change-Id: I798b3b000aef4761a7ff8cb6390b7ecd98f925b7
 
-Thanks for the review, I'll send a new version.
+Please remove Change-Ids - they are not for upstream.
 
-Kuai
+Thank you.
 
+Guru Das.
