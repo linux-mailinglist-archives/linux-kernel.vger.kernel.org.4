@@ -2,134 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5967460500D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48EA60501A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiJSS7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 14:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S230232AbiJSTFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJSS7o (ORCPT
+        with ESMTP id S229756AbiJSTFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:59:44 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917B551A23
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:59:42 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c24so18164522plo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pWmvzKfHVAOxOnLIrYEKBPXUMKXlq9qEMIO0NCFRxkI=;
-        b=QLaoWEYkGaAgeIQwtOoss3XAqd1k59ZWE/oLLsBJ/3a82SgQ5MoQVMUj0a5uyCEWZf
-         X4fGaHETTYvnIum0FmsTLMahn28WLXY4g6PQRhZMSoHTiY0jOZFciwCd5nRqX7OLBMc7
-         +lNliP4eTBDGYe6ABQO9g0EDpcT5S2zSal1bk=
+        Wed, 19 Oct 2022 15:05:44 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF648170DC2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:05:39 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so854007pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:05:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pWmvzKfHVAOxOnLIrYEKBPXUMKXlq9qEMIO0NCFRxkI=;
-        b=Yako0RMABnfu4qkebuPq5EQGRiucqQNaIjGjo+sSWVNe/M/oCVTQj/FsPSx/mLTbSW
-         v4lg9sDmG9bL38AZTNx5OsHqejZQlDb+1+OLy9lchEL6U8h4LTvjva/QZBg2PvcZRDj1
-         RO0ir3pHhhrLoTYWaTqDiSBTm28cYpgcJG0UcnF+ZgomdG3Tz/pC9ac/HCYoJYdA/L3U
-         k4Ghg5y/HR4KinTvXiz9eX2djCGsM2UY4wTc5S5BslXhKnRZQX531yN1au0wcUuBbu3g
-         Ubkl/MB7Nv2w+eOL/5F859+EmzIkUHYnDHcuwHqiPrI+anDqWVURV889/UT7oFUiZp2n
-         B6ww==
-X-Gm-Message-State: ACrzQf0MhaW0IlNp4NBEJVPLFGUFWFOR10NOWRnhPTkHK9uvf/yy/f50
-        zVu6iv47dbk9xdKGAWC6mFM3Eg==
-X-Google-Smtp-Source: AMsMyM7VzEMxU5MMIeL1ESdgDm+if1bk/bWR5FyzU9DzA/x9PAPJO633dishwFybXXe26EQS/5PpnQ==
-X-Received: by 2002:a17:902:6542:b0:172:95d8:a777 with SMTP id d2-20020a170902654200b0017295d8a777mr10050515pln.61.1666205981925;
-        Wed, 19 Oct 2022 11:59:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p7-20020a17090a284700b00200461cfa99sm255190pjf.11.2022.10.19.11.59.41
+        bh=8kG5EvpHdHM0iSYnlLwXpTJZuwX3mygkDwBW2OAorH0=;
+        b=DH9wDXgr9Dv5QZiySC7aqkaYua1OmqQI4UrEt56K2skc8avmTLFW9aKxh0Wjpxm7QD
+         tvLCc4NGFp+P6GGB2kH1DoKPDkXJvLnst77hTcw6S0W28QHsnYlOU5p2icS7n89OYdfq
+         hW3Y2bvBFYvWU9qMWwL862ZykOKcoBGXFXUK2rwCdbDKudQlrTaUYu0GB+wlNYsAZ+hp
+         KHSpPdrHNMxTT8LTzlE2Xq4GzsfkZrLDvZtmoOS8A6SXV8QmQrtgA6pGBPrDxWSpRRPd
+         TpSzEZCSKxn4tKpfbj0yLnrt9A53bn1GXFKcy/R9O3DTzxgQO3s7LndeQKs5xbLqSDZ7
+         6Drw==
+X-Gm-Message-State: ACrzQf0G1fPNr9nwcDTMT9kA2ymczPwxz6tYDk+ypq6j9Q16Q0HgBVBL
+        klXGRMbpCmXeIz7ENmo818A=
+X-Google-Smtp-Source: AMsMyM6Y9lBLr2cALOtxodtksCh7r0lVmvlVAAZsXwkQQ4k9KxfE6GJbNgXOWeWRCnGCuD2w6nhliw==
+X-Received: by 2002:a17:90b:3b92:b0:20d:4fae:1261 with SMTP id pc18-20020a17090b3b9200b0020d4fae1261mr11701057pjb.32.1666206339068;
+        Wed, 19 Oct 2022 12:05:39 -0700 (PDT)
+Received: from sultan-box.localdomain ([142.147.89.230])
+        by smtp.gmail.com with ESMTPSA id r27-20020a63205b000000b00412a708f38asm10123555pgm.35.2022.10.19.12.05.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 11:59:41 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 11:59:40 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Petr Vorel <pvorel@suse.cz>, Borislav Petkov <bp@suse.de>,
-        Takashi Iwai <tiwai@suse.de>,
-        Jonathan McDowell <noodles@fb.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/9] security: Move trivial IMA hooks into LSM
-Message-ID: <202210191134.FC646AFC71@keescook>
-References: <20221013222702.never.990-kees@kernel.org>
- <20221013223654.659758-2-keescook@chromium.org>
- <16e008b3709f3c85dbad1accb9fce8ddad552205.camel@linux.ibm.com>
+        Wed, 19 Oct 2022 12:05:38 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 12:05:35 -0700
+From:   Sultan Alsawaf <sultan@kerneltoast.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org,
+        "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>
+Subject: Re: signal: break out of wait loops on kthread_stop()
+Message-ID: <Y1BKf4ol3YtKvLiG@sultan-box.localdomain>
+References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
+ <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
+ <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com>
+ <Y1A+9kN6bwfXeqVt@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <16e008b3709f3c85dbad1accb9fce8ddad552205.camel@linux.ibm.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y1A+9kN6bwfXeqVt@zx2c4.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:34:48AM -0400, Mimi Zohar wrote:
-> On Thu, 2022-10-13 at 15:36 -0700, Kees Cook wrote:
-> > This moves the trivial hard-coded stacking of IMA LSM hooks into the
-> > existing LSM infrastructure.
+On Wed, Oct 19, 2022 at 12:16:22PM -0600, Jason A. Donenfeld wrote:
+> On Wed, Oct 19, 2022 at 06:57:38PM +0100, Tvrtko Ursulin wrote:
+> > 
+> > On 19/10/2022 17:00, Jason A. Donenfeld wrote:
+> > > On Wed, Oct 19, 2022 at 7:31 AM Tvrtko Ursulin
+> > > <tvrtko.ursulin@linux.intel.com> wrote:
+> > >>
+> > >>
+> > >> Hi,
+> > >>
+> > >> A question regarding a7c01fa93aeb ("signal: break out of wait loops on
+> > >> kthread_stop()") if I may.
+> > >>
+> > >> We have a bunch code in i915, possibly limited to self tests (ie debug
+> > >> builds) but still important for our flows, which spawn kernel threads
+> > >> and exercises parts of the driver.
+> > >>
+> > >> Problem we are hitting with this patch is that code did not really need
+> > >> to be signal aware until now. Well to say that more accurately - we were
+> > >> able to test the code which is normally executed from userspace, so is
+> > >> signal aware, but not worry about -ERESTARTSYS or -EINTR within the test
+> > >> cases itself.
+> > >>
+> > >> For example threads which exercise an internal API for a while until the
+> > >> parent calls kthread_stop. Now those tests can hit unexpected errors.
+> > >>
+> > >> Question is how to best approach working around this change. It is of
+> > >> course technically possible to rework our code in more than one way,
+> > >> although with some cost and impact already felt due reduced pass rates
+> > >> in our automated test suites.
+> > >>
+> > >> Maybe an opt out kthread flag from this new behavior? Would that be
+> > >> acceptable as a quick fix? Or any other comments?
+> > > 
+> > > You can opt out by running `clear_tsk_thread_flag(current,
+> > > TIF_NOTIFY_SIGNAL);` at the top of your kthread. But you should really
+> > > fix your code instead. Were I your reviewer, I wouldn't merge code
+> > > that took the lazy path like that. However, that should work, if you
+> > > do opt for the quick fix.
+> >
+> > Also, are you confident that the change will not catch anyone else by 
+> > surprise? In the original thread I did not spot any concerns about the 
+> > kthreads being generally unprepared to start receiving EINTR/ERESTARTSYS 
+> > from random call chains.
 > 
-> The only thing trivial about making IMA and EVM LSMs is moving them to
-> LSM hooks.  Although static files may be signed and the signatures
-> distributed with the file data through the normal distribution
-> mechanisms (e.g. RPM), other files cannot be signed remotely (e.g.
-> configuration files).  For these files, both IMA and EVM may be
-> configured to maintain persistent file state stored as security xattrs
-> in the form of security.ima file hashes or security.evm HMACs.  The LSM
-> flexibility of enabling/disabling IMA or EVM on a per boot basis breaks
-> this usage, potentially preventing subsequent boots.
+> Pretty sure, yea. i915 is unique in its abuse of the API. Keep in mind
+> that kthread_stop() also sets KTHREAD_SHOULD_STOP and such. Your code is
+> abusing the API by calling kthread_run() followed by kthread_stop().
+> 
+> As evidence of how broken your code actually is, the kthread_stop()
+> function has a comment that makes it clear, "This can also be called
+> after kthread_create() instead of calling wake_up_process(): the thread
+> will exit without calling threadfn()," yet i915 has attempted to hack
+> around it with ridiculous yields and msleeps. For example:
+> 
+>                 threads[n] = kthread_run(__igt_breadcrumbs_smoketest,
+>                                          &t, "igt/%d", n);
+> ...
+> 
+>         yield(); /* start all threads before we begin */
+>         msleep(jiffies_to_msecs(i915_selftest.timeout_jiffies));
+> ...
+>                 err = kthread_stop(threads[n]);
+> 
+> 
+> Or here's another one:
+> 
+>                 tsk = kthread_run(fn, &thread[i], "igt-%d", i);
+> ...
+>         msleep(10); /* start all threads before we kthread_stop() */
+> ...
+>                 status = kthread_stop(tsk);
+> 
+> I mean come on.
+> 
+> This is brittle and bad and kind of ridiculous that it shipped this way.
+> Now you're asking to extend your brittleness, so that you can avoid the
+> work of cleaning up 5 call sites. Just clean up those 5 call sites. It's
+> only 5, as far as I can tell.
+> 
+> 
+> > Right, but our hand is a bit forced at the moment. Since 6.1-rc1 has 
+> > propagated to our development tree on Monday, our automated testing 
+> > started failing significantly, which prevents us merging new work until 
+> > resolved. So a quick fix trumps the ideal road in the short term. Just 
+> > because it is quick.
+> 
+> "Short term" -- somehow I can imagine the short term hack will turn into
+> a long term one.
+> 
+> Anyway, what I suspect you might actually want as a bandaid is a
+> "kthread_wait()"-like function, that doesn't try to stop the thread with
+> KTHREAD_SHOULD_STOP and such, but just waits for the completion:
+> 
+> diff --git a/include/linux/kthread.h b/include/linux/kthread.h
+> index 30e5bec81d2b..2699cc45ad15 100644
+> --- a/include/linux/kthread.h
+> +++ b/include/linux/kthread.h
+> @@ -86,6 +86,7 @@ void free_kthread_struct(struct task_struct *k);
+>  void kthread_bind(struct task_struct *k, unsigned int cpu);
+>  void kthread_bind_mask(struct task_struct *k, const struct cpumask *mask);
+>  int kthread_stop(struct task_struct *k);
+> +int kthread_wait(struct task_struct *k);
+>  bool kthread_should_stop(void);
+>  bool kthread_should_park(void);
+>  bool __kthread_should_park(struct task_struct *k);
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index f97fd01a2932..d581d78a3a26 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -715,6 +715,22 @@ int kthread_stop(struct task_struct *k)
+>  }
+>  EXPORT_SYMBOL(kthread_stop);
+> 
+> +int kthread_wait(struct task_struct *k)
+> +{
+> +	struct kthread *kthread;
+> +	int ret;
+> +
+> +	get_task_struct(k);
+> +	kthread = to_kthread(k);
+> +	wake_up_process(k);
+> +	wait_for_completion(&kthread->exited);
+> +	ret = kthread->result;
+> +	put_task_struct(k);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(kthread_stop);
+> +
+>  int kthreadd(void *unused)
+>  {
+>  	struct task_struct *tsk = current;
+> 
 
-I'm not suggesting IMA and EVM don't have specific behaviors that need to
-be correctly integrated into the LSM infrastructure. In fact, I spent a
-lot of time designing that infrastructure to be flexible enough to deal
-with these kinds of things. (e.g. plumbing "enablement", etc.) As I
-mentioned, this was more of trying to provide a head-start on the
-conversion. I don't intend to drive this -- please take whatever is
-useful from this example and use it. :) I'm happy to help construct any
-missing infrastructure needed (e.g. LSM_ORDER_LAST, etc).
+Hi,
 
-As for preventing subsequent boots, this is already true with other LSMs
-that save state that affects system behavior (like SELinux tags, AppArmor
-policy). IMA and EVM are not special in that regard conceptually.
+Given the need to ensure the kthreads are started and then synchronously
+flushed, this seems like a good fit for the kthread_work API, which provides all
+of the necessary plumbing for this usecase. No need for the eldritch kthread API
+abuse and flimsy yield+msleep.
 
-Besides, it also looks like it's already possible to boot with IMA or EVM
-disabled ("ima_appraise=off", or "evm=fix"), so there's no regression
-conceptually for having "integrity" get dropped from the lsm= list at
-boot. And if you want it not to be silent disabling, that's fine --
-just panic during initialization if "integrity" is disabled, as is
-already happening.
-
-Note that, generally speaking, LSMs have three initialization points:
-LSM init, fs_initcall, and late_initcall:
-
-$ grep -R _initcall security/*/ | wc -l
-31
-
-This, again, isn't different for IMA or EVM. The LSM infrastructure is
-about gathering and standardizing the requirements needed to run security
-hooks in a common way. The goal isn't to break IMA/EVM -- anything
-needed can be created for it. The goal is to remove _exceptions_ to the
-common hook mechanism.
-
-BTW, are there examples of how to test an IMA/EVM system? I couldn't
-find any pre-existing test images one can boot in QEMU, or instructions
-on how to create such an image, but I could have missed it.
-
--- 
-Kees Cook
+Sultan
