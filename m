@@ -2,173 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37F4604069
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E26C603D7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiJSJyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
+        id S232282AbiJSJC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234462AbiJSJyF (ORCPT
+        with ESMTP id S232077AbiJSJAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:54:05 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0351F2A260;
-        Wed, 19 Oct 2022 02:29:44 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8CxKdjwuk9jm7AAAA--.1747S3;
-        Wed, 19 Oct 2022 16:53:04 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxn+Dtuk9jWjcBAA--.5047S2;
-        Wed, 19 Oct 2022 16:53:03 +0800 (CST)
-Subject: Re: [PATCH v7 2/2] dt-bindings: thermal: add loongson2k thermal
- binding
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        zhuyinbo@loongson.cn
-References: <20220930021054.22387-1-zhuyinbo@loongson.cn>
- <20220930021054.22387-2-zhuyinbo@loongson.cn>
- <21717466-63f9-09b0-e666-61b98ab808f4@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <48b246c7-2af0-9d0d-3252-274b369af703@loongson.cn>
-Date:   Wed, 19 Oct 2022 16:53:01 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 19 Oct 2022 05:00:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE17F6A48F;
+        Wed, 19 Oct 2022 01:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666169728; x=1697705728;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=tluH/Cm9rHuVo1oqk9kZY3xo8Ij2/appO2LxOuExjnw=;
+  b=TjxMdgtpg7Kof2qdPkLIEEIc9Fp+Z0IV+xyoa/V89FuDRT/7WcaldT4H
+   YtxY5y1gdXvpWMTx9IYwJcWd3ZuTPSlR4rDa3gZ7tfAwXI3E+MBk7LGWv
+   +agUWxx0UmKjC+USuDEj/hqVLLFQhH7iHMc+4HPR4f7aWDlWmLJTdCXzS
+   joTGmQH96vncOv/45RIcKfqJzQnxYru1x2kxgghYUsqOFowicnsaGWrLc
+   cIWWgymNTh9dI95EEJ89oOXac00DPryirAnVnz9Nb2200eIJKZgglXyNg
+   BCCHN+8gkP/i/8fulVYZrFCkmn5PFo8xQK2ZoIbuLk8Gqbxzt5FBEGqww
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="392651196"
+X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
+   d="scan'208";a="392651196"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 01:54:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="629154024"
+X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
+   d="scan'208";a="629154024"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga002.jf.intel.com with SMTP; 19 Oct 2022 01:54:43 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Wed, 19 Oct 2022 11:54:42 +0300
+Date:   Wed, 19 Oct 2022 11:54:42 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH] ACPI: PCI: Fix device reference counting in
+ acpi_get_pci_dev()
+Message-ID: <Y0+7Ug9Yh6J6uHVr@intel.com>
+References: <12097002.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <21717466-63f9-09b0-e666-61b98ab808f4@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxn+Dtuk9jWjcBAA--.5047S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZrW7Kr4xKFWUZrWDCF4Durg_yoW5CrW3pF
-        4xCFyDAFyvkF1fAw4akFyUCFZ0yr18tasrAr4xW3W5tr9xJa4aqr4jgr1q9395Wr48WFW7
-        Zr17ur4Uur1DJrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7
-        AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jjjgxUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <12097002.O9o76ZdvQC@kreacher>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/10/14 上午11:47, Yinbo Zhu 写道:
-> Hi thermal maintainer
+On Tue, Oct 18, 2022 at 07:34:03PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Are there any other suggestions about this patch? If not, please help
-> merge this patch to upstream.
+> Commit 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()") failed
+> to reference count the device returned by acpi_get_pci_dev() as
+> expected by its callers which in some cases may cause device objects
+> to be dropped prematurely.
 > 
-> RRs
-> Yinbo
-
-Any updates?
-
-> 在 2022/9/30 上午10:10, Yinbo Zhu 写道:
->> Add the loongson2k thermal binding with DT schema format using
->> json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->> Change in v7:
->>         1. Split the modification of patch 3 and merge it into this 
->> patch.
->>
->>   .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
->>   MAINTAINERS                                   |  1 +
->>   2 files changed, 44 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml 
->> b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->> new file mode 100644
->> index 000000000000..12f54076bdd1
->> --- /dev/null
->> +++ 
->> b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->> @@ -0,0 +1,43 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Thermal sensors on loongson2k SoCs
->> +
->> +maintainers:
->> +  - zhanghongchen <zhanghongchen@loongson.cn>
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    const: loongson,ls2k-thermal
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  '#thermal-sensor-cells':
->> +    const: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - '#thermal-sensor-cells'
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    thermal: thermal-sensor@1fe01500 {
->> +        compatible = "loongson,ls2k-thermal";
->> +        reg = <0x1fe01500 0x30>;
->> +        interrupt-parent = <&liointc0>;
->> +        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
->> +        #thermal-sensor-cells = <1>;
->> +    };
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 2efbd5b158b9..0be0f520c032 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11904,6 +11904,7 @@ M:    zhanghongchen <zhanghongchen@loongson.cn>
->>   M:    Yinbo Zhu <zhuyinbo@loongson.cn>
->>   L:    linux-pm@vger.kernel.org
->>   S:    Maintained
->> +F:    
->> Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->>   F:    drivers/thermal/loongson2_thermal.c
->>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SP
+> Add the missing get_device() to acpi_get_pci_dev().
 > 
->>
+> Fixes: 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()")
 
+FYI this (and the rtc-cmos regression discussed in
+https://lore.kernel.org/linux-acpi/5887691.lOV4Wx5bFT@kreacher/)
+took down the entire Intel gfx CI. I've applied both fixes
+into our fixup branch and things are looking much healthier
+now.
+
+This one caused i915 selftests to eat a lot of POISON_FREE
+in the CI. While bisecting it locally I didn't have
+poisoning enabled so I got refcount_t undeflows instead.
+
+https://intel-gfx-ci.01.org/tree/drm-tip/index.html has a lot
+of colorful boxes to click if you're interested in any of the
+logs. The fixes are included in the CI_DRM_12259 build. Earlier
+builds were broken.
+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/acpi/pci_root.c |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> Index: linux-pm/drivers/acpi/pci_root.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/pci_root.c
+> +++ linux-pm/drivers/acpi/pci_root.c
+> @@ -323,6 +323,7 @@ struct pci_dev *acpi_get_pci_dev(acpi_ha
+>  
+>  	list_for_each_entry(pn, &adev->physical_node_list, node) {
+>  		if (dev_is_pci(pn->dev)) {
+> +			get_device(pn->dev);
+>  			pci_dev = to_pci_dev(pn->dev);
+>  			break;
+>  		}
+> 
+> 
+> 
+
+-- 
+Ville Syrj�l�
+Intel
