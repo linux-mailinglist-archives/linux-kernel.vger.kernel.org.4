@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDA6603888
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 05:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958FE60388B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 05:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJSDRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 23:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S229657AbiJSDS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 23:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJSDR1 (ORCPT
+        with ESMTP id S229484AbiJSDSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 23:17:27 -0400
-Received: from out199-8.us.a.mail.aliyun.com (out199-8.us.a.mail.aliyun.com [47.90.199.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E046E1941;
-        Tue, 18 Oct 2022 20:17:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VSYahCs_1666149436;
-Received: from 30.221.97.167(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VSYahCs_1666149436)
-          by smtp.aliyun-inc.com;
-          Wed, 19 Oct 2022 11:17:18 +0800
-Message-ID: <811bdf09-be38-ce2a-a1d3-ada9f7c85b97@linux.alibaba.com>
-Date:   Wed, 19 Oct 2022 11:17:16 +0800
+        Tue, 18 Oct 2022 23:18:52 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101C3E8AB5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 20:18:52 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-12c8312131fso19183658fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 20:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GAeyZnwzzfhGFESECQVoU1J4Mcn3Vns5Z1CRpRFhKJ0=;
+        b=K33RaYRgNppDWt/10xzhwd1v4B26clXQn+9iNAMke6fpUUlY+ZvG3M7UC9+DN5ZlMN
+         zBoltdhn9vtmhEj1dWpB6mpxm2ExFrfqcH/0BHF4Yr/69k/Pp11/7iJmvbbwHvAId5cC
+         RZ8PAN4fWaorWkQHvNJFZi5E8lr1HVCpFyp2yPiF4ZY1RsDGlBhpu38Foor+F+GaOpii
+         izUeSQbPHKsKUW6zAQbAm06q2ZcINLwY+Rqc3EeIlzfdtgTDzhkFNsTt2ML/RWZODdfI
+         +OCDuso4CR3Z2o1VoOOzQnHO3pyrfXz1+XQ75mTALt2W+1tA5NFpA8fih1YTfXXdxO3M
+         okyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GAeyZnwzzfhGFESECQVoU1J4Mcn3Vns5Z1CRpRFhKJ0=;
+        b=VhCEu4YAxoYdsqEa5aB1PzjmGeHypEF938Rf403HrrkJ+FkYOH601G0eXLLE46skXx
+         nRUDvhh2idRPHmcUmVcdUbk9qDuRIhJdiLI9rTMRPrgkwQallqgJ1QCSxRW1SYvguks2
+         pWKztVCO67piuiXWrsTj25gARbrK/erh9XWjIfKjBbQxBLqJuioft8kyfa2VYotNRXrV
+         hee5t2k5+45ebpjXyqFTINIjfeKPbsYzK7HZE8EyLSxPOR5EL/nTf3oGkfxBLmKQRwHZ
+         R5hT1iIbZsL162aWD7Vn8w2yirzvsqFpKCR1dIjDcD3CExPyhrdm/ugj10rwue3HK+xK
+         Nf6g==
+X-Gm-Message-State: ACrzQf1plpMg4N/ru5swUb42sUr2toHP4k/1JS4Ov1vY6meMiJvIoz4R
+        4NtsW4l92+e/mElyzt5dOkgyCQ==
+X-Google-Smtp-Source: AMsMyM7OMl9zIUyR6LciyHrft8KITcPb5cfldifc8PFJicTj4YSK5oMyxRs0eC5+B+Rb5hQAFPGsRA==
+X-Received: by 2002:a05:6870:a553:b0:11e:5231:4eec with SMTP id p19-20020a056870a55300b0011e52314eecmr3613843oal.143.1666149529319;
+        Tue, 18 Oct 2022 20:18:49 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w192-20020acaadc9000000b00353f41440dasm6184323oie.56.2022.10.18.20.18.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 20:18:49 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 20:18:38 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm: /proc/pid/smaps_rollup: fix maple tree search
+Message-ID: <3011bee7-182-97a2-1083-d5f5b688e54b@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
-To:     =?UTF-8?B?SEFHSU8gS0FaVUhJVE8o6JCp5bC+IOS4gOS7gSk=?= 
-        <k-hagio-ab@nec.com>, Baoquan He <bhe@redhat.com>,
-        lijiang <lijiang@redhat.com>
-Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "mick@ics.forth.gr" <mick@ics.forth.gr>,
-        "alexandre.ghiti@canonical.com" <alexandre.ghiti@canonical.com>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Conor.Dooley@microchip.com" <Conor.Dooley@microchip.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "crash-utility@redhat.com" <crash-utility@redhat.com>,
-        "heinrich.schuchardt@canonical.com" 
-        <heinrich.schuchardt@canonical.com>,
-        "hschauhan@nulltrace.org" <hschauhan@nulltrace.org>,
-        "yixun.lan@gmail.com" <yixun.lan@gmail.com>
-References: <20221018081755.6214-1-xianting.tian@linux.alibaba.com>
- <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
- <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
- <049ec19e-60c3-2854-5f5e-9850231108b4@linux.alibaba.com>
- <Y05540td7lLz+0BY@MiWiFi-R3L-srv>
- <a66a5b16-5f1f-3d80-3cdc-4b82d38d604f@linux.alibaba.com>
- <0f0a77a9-c824-8aa4-77de-a75c2139d791@nec.com>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-In-Reply-To: <0f0a77a9-c824-8aa4-77de-a75c2139d791@nec.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,126 +73,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+/proc/pid/smaps_rollup showed 0 kB for everything: now find first vma.
 
-在 2022/10/19 上午10:50, HAGIO KAZUHITO(萩尾 一仁) 写道:
-> On 2022/10/19 10:50, Xianting Tian wrote:
->> 在 2022/10/18 下午6:03, Baoquan He 写道:
->>> On 10/18/22 at 05:25pm, Xianting Tian wrote:
->>>> 在 2022/10/18 下午5:10, Baoquan He 写道:
->>>>> On 10/18/22 at 04:17pm, Xianting Tian wrote:
->>>>>> Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
->>>>>> VMEMMAP and KERNEL_LINK_ADDR ranges), va bits and ram base for vmcore.
->>>>>>
->>>>>> Default pagetable levels and PAGE_OFFSET aren't same for different kernel
->>>>>> version as below. For pagetable levels, it sets sv57 by default and falls
->>>>>> back to setting sv48 at boot time if sv57 is not supported by the hardware.
->>>>>>
->>>>>> For ram base, the default value is 0x80200000 for qemu riscv64 env and,
->>>>>> for example, is 0x200000 on the XuanTie 910 CPU.
->>>>>>
->>>>>>     * Linux Kernel 5.18 ~
->>>>>>     *      PGTABLE_LEVELS = 5
->>>>>>     *      PAGE_OFFSET = 0xff60000000000000
->>>>>>     * Linux Kernel 5.17 ~
->>>>>>     *      PGTABLE_LEVELS = 4
->>>>>>     *      PAGE_OFFSET = 0xffffaf8000000000
->>>>>>     * Linux Kernel 4.19 ~
->>>>>>     *      PGTABLE_LEVELS = 3
->>>>>>     *      PAGE_OFFSET = 0xffffffe000000000
->>>>>>
->>>>>> Since these configurations change from time to time and version to version,
->>>>>> it is preferable to export them via vmcoreinfo than to change the crash's
->>>>>> code frequently, it can simplify the development of crash tool.
->>>>>>
->>>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
->>>>>> ---
->>>>>>     arch/riscv/kernel/Makefile     |  1 +
->>>>>>     arch/riscv/kernel/crash_core.c | 29 +++++++++++++++++++++++++++++
->>>>>>     2 files changed, 30 insertions(+)
->>>>>>     create mode 100644 arch/riscv/kernel/crash_core.c
->>>>>>
->>>>>> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
->>>>>> index db6e4b1294ba..4cf303a779ab 100644
->>>>>> --- a/arch/riscv/kernel/Makefile
->>>>>> +++ b/arch/riscv/kernel/Makefile
->>>>>> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)        += kgdb.o
->>>>>>     obj-$(CONFIG_KEXEC_CORE)    += kexec_relocate.o crash_save_regs.o machine_kexec.o
->>>>>>     obj-$(CONFIG_KEXEC_FILE)    += elf_kexec.o machine_kexec_file.o
->>>>>>     obj-$(CONFIG_CRASH_DUMP)    += crash_dump.o
->>>>>> +obj-$(CONFIG_CRASH_CORE)    += crash_core.o
->>>>>>     obj-$(CONFIG_JUMP_LABEL)    += jump_label.o
->>>>>> diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
->>>>>> new file mode 100644
->>>>>> index 000000000000..8d7f5ff108da
->>>>>> --- /dev/null
->>>>>> +++ b/arch/riscv/kernel/crash_core.c
->>>>>> @@ -0,0 +1,29 @@
->>>>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>>>> +
->>>>>> +#include <linux/crash_core.h>
->>>>>> +#include <linux/pagemap.h>
->>>>>> +
->>>>>> +void arch_crash_save_vmcoreinfo(void)
->>>>>> +{
->>>>>> +    VMCOREINFO_NUMBER(VA_BITS);
->>>>>> +    VMCOREINFO_NUMBER(phys_ram_base);
->>>>>> +
->>>>>> +    vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
->>>>>> +    vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
->>>>>> +    vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
->>>>>> +    vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
->>>>>> +    vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
->>>>>> +#ifdef CONFIG_64BIT
->>>>>> +    vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
->>>>>> +    vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
->>>>>> +#endif
->>>>>> +
->>>>>> +    if (IS_ENABLED(CONFIG_64BIT)) {
->>>>>> +#ifdef CONFIG_KASAN
->>>>>> +        vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
->>>>>> +        vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
->>>>>> +#endif
->>>>>> +        vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
->>>>>> +        vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
->>>>> Seems this is the firsr ARCH where kasan and kernel link/bpf space are
->>>>> added to dump and analyze. Just curious, have you got code change to
->>>>> make use of them to do dumping and analyze?
->>>> KASAN_SHADOW_START is not used, KERNEL_LINK_ADDR is used in the crash patch set:
->>>> https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
->>> Oh, I would say please no. Sometime we got tons of objection when adding an
->>> necessary one, we definitely should not add one for possible future
->>> use.
->>>
->>> For this kind of newly added one, we need get ack from
->>> makedumpfile/crash utility maintainer so that we know they are necessary
->>> to have. At least they don't oppose.
->> Hi Kazu, Li Jiang
->>
->> Could you help comment whether we need KASAN_SHADOW_START and KERNEL_LINK_ADDR area export for vmcore from crash point of view？
->>
->> In my crash patch set, I don't use KASAN_SHADOW_START,
->> And only get the value of KERNEL_LINK_ADDR, not realy use it.
->> https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
-> In your crash patch set, KERNEL_LINK_ADDR is used in VTOP() and looks
-> necessary to me.
->
-> The others (KASAN_SHADOW_START, KASAN_SHADOW_END and ADDRESS_SPACE_END)
-> are not currently used.  It may be better to add them when they are
-> really used.
+Fixes: c4c84f06285e ("fs/proc/task_mmu: stop using linked list and highest_vm_end")
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
 
-I am very sorry, I missed it , KERNEL_LINK_ADDR is used indeed.
+ fs/proc/task_mmu.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-KASAN_SHADOW_START is not used, so I don't need to send crash patch set 
-again. only need to remove KASAN_SHADOW_END in kernel patch set.
-
->
-> Thanks,
-> Kazu
->
->> If we need to remove the two areas, I will resend the crash patch set and kernel patch set.
->> thanks
->>
->>>> I add it in case of using in furture.
->>>>
->>>>> Thanks
->>>>> Baoquan
+--- 6.1-rc1/fs/proc/task_mmu.c
++++ linux/fs/proc/task_mmu.c
+@@ -902,7 +902,7 @@ static int show_smaps_rollup(struct seq_
+ 		goto out_put_mm;
+ 
+ 	hold_task_mempolicy(priv);
+-	vma = mas_find(&mas, 0);
++	vma = mas_find(&mas, ULONG_MAX);
+ 
+ 	if (unlikely(!vma))
+ 		goto empty_set;
