@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038C9604694
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B486046B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiJSNP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
+        id S232208AbiJSNSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiJSNPD (ORCPT
+        with ESMTP id S231793AbiJSNRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:15:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D46E1D377A;
-        Wed, 19 Oct 2022 06:00:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Oct 2022 09:17:41 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F3EFFFB0;
+        Wed, 19 Oct 2022 06:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1666184603; x=1697720603;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OpHeyrfs5g5Rgp1Z7VMRy13RBDkqqg8QwJgqAbh3w0E=;
+  b=NjOTsM/5IP1DgSK7sxkeLYiDNN9jEAxbJAbcjBAmcZ9Kb06pRjEpnwOP
+   48nrauicTeY6fd3U8Ax2aDTvU8I3m/jNySnDU9dyTKG248uWU+7Eq/QsX
+   YM/Qtu12fC3Gqf8YXaIkjXGEC8dHHvHxEo1duCPy11sP8aplhLE7DEdra
+   wjuzULClSkLHXmEFMJfX3Ip2SbDKIB2umhIk4+MwCIaCsOBL3MANfH+ip
+   JEGtb4FD+fFv81CcNaSg2PNKn+wWbv4zagLM0P945o4uVKj4IK46sbA6V
+   qDKTFSAuklMeXvYpPtx7lgsek8g6L4eINN08ahLSZOentHnfwO5cGmUew
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,196,1661810400"; 
+   d="scan'208";a="26846560"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 19 Oct 2022 15:00:42 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 19 Oct 2022 15:00:42 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 19 Oct 2022 15:00:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1666184442; x=1697720442;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OpHeyrfs5g5Rgp1Z7VMRy13RBDkqqg8QwJgqAbh3w0E=;
+  b=VwgAES2gYLWF6vpZ+a6pbo7fM/qmhoQ9cdUxEw0Ia0ZphGOmko/jSADj
+   FO1U3JgYNy3g6Iw6J1vfH/Aq6AvYzAqo7EM0ye+qqJTdh4j5UIrj1YSnV
+   K9MABzo7UH89+Lp4rLxToKvjifabR2wAmBhiSBTKO3XyDeIJDSu7FRM6f
+   zDe6dpH7IPIzN0/roIKybmn1Vb04UIi0g3i/eP4qGuRODhNYe4XMwMcAI
+   F+t835MZaez8GhjyAYRPsqKf2JxlGtzCXyn/2bJrEZc4V+dOMrjTSbpk/
+   h0gYiyUSNygjubKEm7PWICNdF9yh0n4aJtv+d7HxbGuNOuXzcAjUOBtO6
+   A==;
+X-IronPort-AV: E=Sophos;i="5.95,196,1661810400"; 
+   d="scan'208";a="26846559"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 19 Oct 2022 15:00:42 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CD5F6188A;
-        Wed, 19 Oct 2022 13:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A61A8C433D7;
-        Wed, 19 Oct 2022 13:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666184424;
-        bh=sYs7tDX+/LNkMgLYx2SFrU5ZqAAiUe1u6NpBIZxmgrA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=poOYIUimxoKAmJAgsBUrhpiP/NzlVYYeRGDTPK8ggZsj9LRNGNiCuJlYFPvxO8/fC
-         Mg6hsYEg+iXKWZwmm8j90hzjODWS++oZUF0/8/XmwPtiZgLPrXmVQo2/N9s2loPjud
-         grxDChulJlWlsxShboOFNdt2XTZTt3DAgXb0yO7rtWyAJZtHDJH4p+KscfmDkLpIZ2
-         3guHtdRtSf1R/BTWVaBGr9kx88OZJRXB4HUOWDyh35JuDgfxQ/UgP91jFEgfI4t8hw
-         UVxtW129jgWDc7ouMXLK4rz5NIUJLJtBlden3kMpI114g1B7Al2BpsfDdBCkuCiIiU
-         bPC0Nef4202MA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F425E29F37;
-        Wed, 19 Oct 2022 13:00:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D5F49280056;
+        Wed, 19 Oct 2022 15:00:41 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, festevam@gmail.com, kernel@pengutronix.de,
+        s.hauer@pengutronix.de, wim@linux-watchdog.org, robh+dt@kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: watchdog: fsl-imx: document suspend in wait mode
+Date:   Wed, 19 Oct 2022 15:00:39 +0200
+Message-ID: <7508670.GXAFRqVoOG@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20221019111714.1953262-3-andrej.picej@norik.com>
+References: <20221019111714.1953262-1-andrej.picej@norik.com> <20221019111714.1953262-3-andrej.picej@norik.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7 00/10] net: dpaa: Convert to phylink
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166618442458.15395.17847684706172912226.git-patchwork-notify@kernel.org>
-Date:   Wed, 19 Oct 2022 13:00:24 +0000
-References: <20221017202241.1741671-1-sean.anderson@seco.com>
-In-Reply-To: <20221017202241.1741671-1-sean.anderson@seco.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, madalin.bucur@nxp.com,
-        camelia.groza@nxp.com, netdev@vger.kernel.org, edumazet@google.com,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, pabeni@redhat.com, benh@kernel.crashing.org,
-        ioana.ciornei@nxp.com, krzysztof.kozlowski+dt@linaro.org,
-        leoyang.li@nxp.com, mpe@ellerman.id.au, paulus@samba.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, devicetree@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello Andrej,
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 17 Oct 2022 16:22:31 -0400 you wrote:
-> This series converts the DPAA driver to phylink.
+Am Mittwoch, 19. Oktober 2022, 13:17:13 CEST schrieb Andrej Picej:
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> I have tried to maintain backwards compatibility with existing device
-> trees whereever possible. However, one area where I was unable to
-> achieve this was with QSGMII. Please refer to patch 2 for details.
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml index
+> fb7695515be1..01b3e04e7e65 100644
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> @@ -55,6 +55,11 @@ properties:
+>        If present, the watchdog device is configured to assert its
+>        external reset (WDOG_B) instead of issuing a software reset.
 > 
-> All mac drivers have now been converted. I would greatly appreciate if
-> anyone has T-series or P-series boards they can test/debug this series
-> on. I only have an LS1046ARDB. Everything but QSGMII should work without
-> breakage; QSGMII needs patches 7 and 8. For this reason, the last 4
-> patches in this series should be applied together (and should not go
-> through separate trees).
-> 
-> [...]
+> +  fsl,suspend-in-wait:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+> +      If present, the watchdog device is suspended in WAIT mode.
+> +
+>  required:
+>    - compatible
+>    - interrupts
 
-Here is the summary with links:
-  - [net-next,v7,01/10] dt-bindings: net: Expand pcs-handle to an array
-    https://git.kernel.org/netdev/net-next/c/76025ee53b7d
-  - [net-next,v7,02/10] dt-bindings: net: Add Lynx PCS binding
-    https://git.kernel.org/netdev/net-next/c/00af103d06b3
-  - [net-next,v7,03/10] dt-bindings: net: fman: Add additional interface properties
-    https://git.kernel.org/netdev/net-next/c/045d05018a2d
-  - [net-next,v7,04/10] net: phylink: provide phylink_validate_mask_caps() helper
-    (no matching commit)
-  - [net-next,v7,05/10] net: fman: memac: Add serdes support
-    https://git.kernel.org/netdev/net-next/c/0fc83bd79589
-  - [net-next,v7,06/10] net: fman: memac: Use lynx pcs driver
-    https://git.kernel.org/netdev/net-next/c/a7c2a32e7f22
-  - [net-next,v7,07/10] net: dpaa: Convert to phylink
-    (no matching commit)
-  - [net-next,v7,08/10] powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G
-    https://git.kernel.org/netdev/net-next/c/36926a7d70c2
-  - [net-next,v7,09/10] powerpc: dts: qoriq: Add nodes for QSGMII PCSs
-    https://git.kernel.org/netdev/net-next/c/4e31b808fad1
-  - [net-next,v7,10/10] arm64: dts: layerscape: Add nodes for QSGMII PCSs
-    https://git.kernel.org/netdev/net-next/c/4e748b1bd7c0
+What is the condition the watchdog is suspended in WAIT mode? Is this specific 
+to SoC or platform or something else?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Best regards,
+Alexander
+
 
 
