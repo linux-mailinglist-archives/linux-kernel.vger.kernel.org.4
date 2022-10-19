@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B974F603FF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD1F603FFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234219AbiJSJjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
+        id S234274AbiJSJjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiJSJeP (ORCPT
+        with ESMTP id S234028AbiJSJe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:34:15 -0400
+        Wed, 19 Oct 2022 05:34:27 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938363DF1C;
-        Wed, 19 Oct 2022 02:15:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F252513CFC;
+        Wed, 19 Oct 2022 02:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666170907; x=1697706907;
+  t=1666170912; x=1697706912;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TCKozR5BIs68DvWZSZOm+IJxNijydgnxhkgkhHpUBtI=;
-  b=jcKLl2OFRlRvgVwK8Pc+H+sxcJ/Wc64aw/PtIjN3KsIHevWtL62bpzO5
-   7hzgrtFgRXasUB4oYIuecke8znM0lNzLiLMO0lA7C5N4IqnGvdw11GvwH
-   bhho9EyB/A2WbUxEgFpRLzJQuU/MKR6borzTTBkbuBnLyA1YuAcCWe703
-   OtkHMtEXPmkk+SOq0WmAUzrACUflly4S8jCBzyn2uSMnrH8Sli5JX7hH6
-   c6NsdmCzr1x3grKBCBl8IiVNfS+8BzgLY1awZOztWr4XXKMYIEFe/8efY
-   W+TYLEzjg/sNOlWVOPkrNzb2dBQSboyVmp5sXc8AmOErmbnbKf8mQE//Y
+  bh=VdtdsxsRvs8JMRXdzAFU0lT7qdRtckYO+MxQniqr59g=;
+  b=c9OQZPNf/ysw7PXeS0O7HkqQAD4kYus0CzRhyPxU8GfLvYmVWkZGOBdo
+   C7QtjshH9QAjF81901SXbQS+NFkwPPC2klpCEzNqqX7QV1Q6r14nVtzOm
+   ezDGe4FFoAmMkGut+AyZI5Wx+dK2dmVBYyGDsAN3wa3GUlf2cZyob4bt/
+   +Sqh3xqyK2QNnuL1EPXFZH5hlt+YkIC1Ss5ZBEY+fB7X+1g0ECP0k5Ejw
+   IYCmfDiy/jCFNah0lDpEwzJqnpRxzYbEldeLtZ8L27WPvFChEd8MfMLdT
+   +QA9l31qhi7NorTNZZse0z9vqYTJ7EGrK2A7SJ5ygHgxxqViT0cLhuwGm
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332911267"
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332911273"
 X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="332911267"
+   d="scan'208";a="332911273"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:09 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734119177"
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:13 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734119193"
 X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="734119177"
+   d="scan'208";a="734119193"
 Received: from sponnura-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.35])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:07 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:10 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+        Jiri Slaby <jirislaby@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-kernel@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 32/44] serial: sh-sci: Use uart_xmit_advance()
-Date:   Wed, 19 Oct 2022 12:11:39 +0300
-Message-Id: <20221019091151.6692-33-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 33/44] serial: sprd: Use uart_xmit_advance()
+Date:   Wed, 19 Oct 2022 12:11:40 +0300
+Message-Id: <20221019091151.6692-34-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
 References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
@@ -66,22 +70,38 @@ Take advantage of the new uart_xmit_advance() helper.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/sh-sci.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/tty/serial/sprd_serial.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 62f773286d44..a92a89780357 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -1181,10 +1181,7 @@ static void sci_dma_tx_complete(void *arg)
+diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
+index 342a87967631..eae700809342 100644
+--- a/drivers/tty/serial/sprd_serial.c
++++ b/drivers/tty/serial/sprd_serial.c
+@@ -206,7 +206,6 @@ static void sprd_stop_tx_dma(struct uart_port *port)
+ {
+ 	struct sprd_uart_port *sp =
+ 		container_of(port, struct sprd_uart_port, port);
+-	struct circ_buf *xmit = &port->state->xmit;
+ 	struct dma_tx_state state;
+ 	u32 trans_len;
  
- 	spin_lock_irqsave(&port->lock, flags);
+@@ -215,8 +214,7 @@ static void sprd_stop_tx_dma(struct uart_port *port)
+ 	dmaengine_tx_status(sp->tx_dma.chn, sp->tx_dma.cookie, &state);
+ 	if (state.residue) {
+ 		trans_len = state.residue - sp->tx_dma.phys_addr;
+-		xmit->tail = (xmit->tail + trans_len) & (UART_XMIT_SIZE - 1);
+-		port->icount.tx += trans_len;
++		uart_xmit_advance(port, trans_len);
+ 		dma_unmap_single(port->dev, sp->tx_dma.phys_addr,
+ 				 sp->tx_dma.trans_len, DMA_TO_DEVICE);
+ 	}
+@@ -253,8 +251,7 @@ static void sprd_complete_tx_dma(void *data)
+ 	dma_unmap_single(port->dev, sp->tx_dma.phys_addr,
+ 			 sp->tx_dma.trans_len, DMA_TO_DEVICE);
  
--	xmit->tail += s->tx_dma_len;
--	xmit->tail &= UART_XMIT_SIZE - 1;
--
--	port->icount.tx += s->tx_dma_len;
-+	uart_xmit_advance(port, s->tx_dma_len);
+-	xmit->tail = (xmit->tail + sp->tx_dma.trans_len) & (UART_XMIT_SIZE - 1);
+-	port->icount.tx += sp->tx_dma.trans_len;
++	uart_xmit_advance(port, sp->tx_dma.trans_len);
  
  	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
  		uart_write_wakeup(port);
