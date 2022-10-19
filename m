@@ -2,398 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7FF6051D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CA16051DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiJSVQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S231124AbiJSVVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiJSVQu (ORCPT
+        with ESMTP id S230049AbiJSVVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:16:50 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CC91E72E;
-        Wed, 19 Oct 2022 14:16:47 -0700 (PDT)
+        Wed, 19 Oct 2022 17:21:22 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2C216D553
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:21:21 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y8so18393123pfp.13
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1666214207; x=1697750207;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HQXjUjwNMAtwDtQJV+XF+GQEJrSX2ZGkBjnn2MFBYH0=;
-  b=Z9qA/Vi/CRicRS1EsS2ThIchNviaK3kTinHUpD6vjtz4BJ2ZSVcZvrky
-   EVTXxOv7ep+gfzgFrRb4556Npp8kJMoFaywp6uFy6RljQAEABI+FYN35w
-   1ZiovBnDSAfl5IayjI1/g+cNarArwrpxFlLh0zKMrdJIs5aLYHFxpnDwl
-   g=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Oct 2022 14:16:47 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 14:16:47 -0700
-Received: from [10.134.66.255] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 19 Oct
- 2022 14:16:46 -0700
-Message-ID: <65f95226-f464-2e14-1f89-930ed26e0f38@quicinc.com>
-Date:   Wed, 19 Oct 2022 14:16:46 -0700
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dj0xZ1Dkg4xYll0gq3dc/cKHh3HAtgA0/5nqHUBQtNA=;
+        b=Hliu61acZJ5HS4cjpboBws44ZSH4NbJfPBzbR5C2Jyf6bYa8tegpNLN/MJnT7pVL4l
+         JyxwH4qetwBIKpST1TAPslBdR/2DauEy7zdrAs7puFkvrNh6Lg2Xk0wBb1b/R6rUszpC
+         CDxg9b8vnGsq/PyWXafF2KcTw3esz5kziO5nnyi65cnomf5mioODYMgLt+JD/lUvjZQY
+         HWA22vFGVFQfnb38i2e+XPXOWoQiaKrHJEatTnItqiKMPJbKczEsP4XS70OrsbFEXOeA
+         ptMGawxpiRTu3X44UcHkuyDPbXDOgWbOup2ZYURruTblOOYK0q+FbpJVCV0BO01zL+UP
+         5f4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dj0xZ1Dkg4xYll0gq3dc/cKHh3HAtgA0/5nqHUBQtNA=;
+        b=AgyedufbFHS9vsKrujHy3ZqPoc0si6FIO3HpyDgktkAggc5pcw6+ddLPv8U4h76Mgx
+         r1qxPkimHhtElixl97VZyTJOvSxKoa7uaqyrQuiQQD9pf4rT76Oa7LmdnhcJOfu+pB2l
+         JVT6it75mQT3scqmsY5LPM3Os8iYbCnqUIfJSHNGG7oQJgJQDKRw/LtM7TDksvBRfWXr
+         RPDJHlgpEv2r7UZKKH2gxKbAE2TvBnvUkLvkbe/pjgvWT54H8awkFGwyd0tN6ElfPuCc
+         4PogDskWVoFaZnImRhe+uGaACf9DNyOzT28xdZr4Ig+bZzfR6EoVM8QS03fScU+LlNsU
+         cncQ==
+X-Gm-Message-State: ACrzQf1ZzdK65k3ioUD/CsDrsiamSeeTVUVJhEpVqXuiPI4xZK1PWcig
+        pfdmAX8XD39b7CYyr6yoZ/s=
+X-Google-Smtp-Source: AMsMyM4QCgngN5J3mBKq1il/R1K8zc8Lu+96JmS1FxYMoTH/71wsDnzjPmkAzoo2EZvpzHxcoFoz8w==
+X-Received: by 2002:a65:6bc1:0:b0:462:4a88:4fef with SMTP id e1-20020a656bc1000000b004624a884fefmr8804552pgw.282.1666214480796;
+        Wed, 19 Oct 2022 14:21:20 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id ix6-20020a170902f80600b00176cdd80148sm11169206plb.305.2022.10.19.14.21.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 14:21:20 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 19 Oct 2022 11:21:19 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Chuyi Zhou <zhouchuyi@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+        htejun@gmail.com, lizefan.x@bytedance.com, vschneid@redhat.com,
+        bsegall@google.com, Abel Wu <wuyun.abel@bytedance.com>
+Subject: Re: [RESEND] sched/fair: Add min_ratio for cfs bandwidth_control
+Message-ID: <Y1BqT59ovFitahJa@slm.duckdns.org>
+References: <20221019031551.24312-1-zhouchuyi@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221014221138.7552-1-quic_molvera@quicinc.com>
- <20221014221138.7552-4-quic_molvera@quicinc.com>
- <e94d9029-e0aa-574f-62d2-632e2c5d70d2@linaro.org>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <e94d9029-e0aa-574f-62d2-632e2c5d70d2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019031551.24312-1-zhouchuyi@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+On Wed, Oct 19, 2022 at 11:15:51AM +0800, Chuyi Zhou wrote:
+> Tasks may be throttled when holding locks for a long time by current
+> cfs bandwidth control mechanism once users set a too small quota/period
+> ratio, which can result whole system get stuck[1].
+> 
+> In order to prevent the above situation from happening, this patch adds
+> sysctl_sched_cfs_bandwidth_min_ratio in /proc/sys/kernel, which indicates
+> the minimum percentage of quota/period users can set. The default value is
+> zero and users can set quota and period without triggering this constraint.
+> 
+> Link[1]:https://lore.kernel.org/lkml/5987be34-b527-4ff5-a17d-5f6f0dc94d6d@huawei.com/T/
+> Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
+> Suggested-by: Abel Wu <wuyun.abel@bytedance.com>
 
-On 10/15/2022 6:29 AM, Krzysztof Kozlowski wrote:
-> On 14/10/2022 18:11, Melody Olvera wrote:
->> Add DTs for Qualcomm IDP platforms using the QDU1000 and QRU1000
->> SoCs.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  arch/arm64/boot/dts/qcom/Makefile        |   2 +
->>  arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 230 +++++++++++++++++++++++
->>  arch/arm64/boot/dts/qcom/qru1000-idp.dts | 230 +++++++++++++++++++++++
->>  3 files changed, 462 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->>  create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
->>
->> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->> index d7669a7cee9f..8417295adfeb 100644
->> --- a/arch/arm64/boot/dts/qcom/Makefile
->> +++ b/arch/arm64/boot/dts/qcom/Makefile
->> @@ -51,7 +51,9 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-maple.dtb
->>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-poplar.dtb
->>  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
->>  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
->> +dtb-$(CONFIG_ARCH_QCOM)	+= qdu1000-idp.dtb
->>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
->> +dtb-$(CONFIG_ARCH_QCOM)	+= qru1000-idp.dtb
->>  dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
->>  dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
->>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
->> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> new file mode 100644
->> index 000000000000..47a8eaf4fda2
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> @@ -0,0 +1,230 @@
->> +// SPDX-License-Identifier: BSD-3-Clause
->> +/*
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->> +#include "qdu1000.dtsi"
->> +#include "pm8150.dtsi"
->> +
->> +/ {
->> +	model = "Qualcomm Technologies, Inc. QDU1000 IDP";
->> +	compatible = "qcom,qdu1000-idp", "qcom,qdu1000";
->> +
->> +	aliases {
->> +		serial0 = &uart7;
->> +	};
->> +
->> +	chosen {
->> +		stdout-path = "serial0:115200n8";
->> +	};
->> +
->> +	ppvar_sys: ppvar-sys-regulator {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "ppvar_sys";
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +	};
->> +
->> +	vph_pwr: vph-pwr-regulator {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "vph_pwr";
->> +		regulator-min-microvolt = <3700000>;
->> +		regulator-max-microvolt = <3700000>;
->> +
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +
->> +		vin-supply = <&ppvar_sys>;
->> +	};
->> +};
->> +
->> +&apps_rsc {
->> +	pm8150-regulators {
-> regulators
-Just 'regulators' as the node name isn't compliant with the bindings for rpmh-rsc devices.
-Do the bindings need to be updated or should I leave this as is?
->
->> +		compatible = "qcom,pm8150-rpmh-regulators";
->> +		qcom,pmic-id = "a";
->> +
->> +		vdd-s1-supply = <&vph_pwr>;
->> +		vdd-s2-supply = <&vph_pwr>;
->> +		vdd-s3-supply = <&vph_pwr>;
->> +		vdd-s4-supply = <&vph_pwr>;
->> +		vdd-s5-supply = <&vph_pwr>;
->> +		vdd-s6-supply = <&vph_pwr>;
->> +		vdd-s7-supply = <&vph_pwr>;
->> +		vdd-s8-supply = <&vph_pwr>;
->> +		vdd-s9-supply = <&vph_pwr>;
->> +		vdd-s10-supply = <&vph_pwr>;
->> +
->> +		vdd-l1-l8-l11-supply = <&vreg_s6a_0p9>;
->> +		vdd-l2-l10-supply = <&vph_pwr>;
->> +		vdd-l3-l4-l5-l18-supply = <&vreg_s5a_2p0>;
->> +		vdd-l6-l9-supply = <&vreg_s6a_0p9>;
->> +		vdd-l7-l12-l14-l15-supply = <&vreg_s4a_1p8>;
->> +		vdd-l13-l16-l17-supply = <&vph_pwr>;
->> +
->> +		vreg_s2a_0p5: smps2 {
->> +			regulator-name = "vreg_s2a_0p5";
->> +			regulator-min-microvolt = <320000>;
->> +			regulator-max-microvolt = <570000>;
->> +		};
->> +
->> +		vreg_s3a_1p05: smps3 {
->> +			regulator-name = "vreg_s3a_1p05";
->> +			regulator-min-microvolt = <950000>;
->> +			regulator-max-microvolt = <1170000>;
->> +		};
->> +
->> +		vreg_s4a_1p8: smps4 {
->> +			regulator-name = "vreg_s4a_1p8";
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +		};
->> +
->> +		vreg_s5a_2p0: smps5 {
->> +			regulator-name = "vreg_s5a_2p0";
->> +			regulator-min-microvolt = <1904000>;
->> +			regulator-max-microvolt = <2000000>;
->> +		};
->> +
->> +		vreg_s6a_0p9: smps6 {
->> +			regulator-name = "vreg_s6a_0p9";
->> +			regulator-min-microvolt = <920000>;
->> +			regulator-max-microvolt = <1128000>;
->> +		};
->> +
->> +		vreg_s7a_1p2: smps7 {
->> +			regulator-name = "vreg_s7a_1p2";
->> +			regulator-min-microvolt = <1200000>;
->> +			regulator-max-microvolt = <1200000>;
->> +		};
->> +
->> +		vreg_s8a_1p3: smps8 {
->> +			regulator-name = "vreg_s8a_1p3";
->> +			regulator-min-microvolt = <1352000>;
->> +			regulator-max-microvolt = <1352000>;
->> +		};
->> +
->> +		vreg_l1a_0p91: ldo1 {
->> +			regulator-name = "vreg_l1a_0p91";
->> +			regulator-min-microvolt = <312000>;
->> +			regulator-max-microvolt = <1304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l2a_2p3: ldo2 {
->> +			regulator-name = "vreg_l2a_2p3";
->> +			regulator-min-microvolt = <2970000>;
->> +			regulator-max-microvolt = <3300000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l3a_1p2: ldo3 {
->> +			regulator-name = "vreg_l3a_1p2";
->> +			regulator-min-microvolt = <920000>;
->> +			regulator-max-microvolt = <1260000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l5a_0p8: ldo5 {
->> +			regulator-name = "vreg_l5a_0p8";
->> +			regulator-min-microvolt = <312000>;
->> +			regulator-max-microvolt = <1304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l6a_0p91: ldo6 {
->> +			regulator-name = "vreg_l6a_0p91";
->> +			regulator-min-microvolt = <880000>;
->> +			regulator-max-microvolt = <950000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l7a_1p8: ldo7 {
->> +			regulator-name = "vreg_l7a_1p8";
->> +			regulator-min-microvolt = <1650000>;
->> +			regulator-max-microvolt = <2000000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +
->> +		};
->> +
->> +		vreg_l8a_0p91: ldo8 {
->> +			regulator-name = "vreg_l8a_0p91";
->> +			regulator-min-microvolt = <888000>;
->> +			regulator-max-microvolt = <925000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l9a_0p91: ldo9 {
->> +			regulator-name = "vreg_l8a_0p91";
->> +			regulator-min-microvolt = <312000>;
->> +			regulator-max-microvolt = <1304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l10a_2p95: ldo10 {
->> +			regulator-name = "vreg_l10a_2p95";
->> +			regulator-min-microvolt = <2700000>;
->> +			regulator-max-microvolt = <3544000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l11a_0p91: ldo11 {
->> +			regulator-name = "vreg_l11a_0p91";
->> +			regulator-min-microvolt = <800000>;
->> +			regulator-max-microvolt = <1000000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l12a_1p8: ldo12 {
->> +			regulator-name = "vreg_l12a_1p8";
->> +			regulator-min-microvolt = <1504000>;
->> +			regulator-max-microvolt = <1504000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l14a_1p8: ldo14 {
->> +			regulator-name = "vreg_l14a_1p8";
->> +			regulator-min-microvolt = <1650000>;
->> +			regulator-max-microvolt = <1950000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l15a_1p8: ldo15 {
->> +			regulator-name = "vreg_l15a_1p8";
->> +			regulator-min-microvolt = <1504000>;
->> +			regulator-max-microvolt = <2000000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l16a_1p8: ldo16 {
->> +			regulator-name = "vreg_l16a_1p8";
->> +			regulator-min-microvolt = <1710000>;
->> +			regulator-max-microvolt = <1890000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l17a_3p3: ldo17 {
->> +			regulator-name = "vreg_l17a_3p3";
->> +			regulator-min-microvolt = <3000000>;
->> +			regulator-max-microvolt = <3544000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l18a_1p2: ldo18 {
->> +			regulator-name = "vreg_l18a_1p2";
->> +			regulator-min-microvolt = <312000>;
->> +			regulator-max-microvolt = <1304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +	};
->> +};
->> +
->> +&qupv3_id_0 {
->> +	status = "okay";
->> +};
->> +
->> +&uart7 {
->> +	status = "okay";
->> +};
->> diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> new file mode 100644
->> index 000000000000..54770c697db8
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> @@ -0,0 +1,230 @@
->> +// SPDX-License-Identifier: BSD-3-Clause
->> +/*
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->> +#include "qru1000.dtsi"
->> +#include "pm8150.dtsi"
->> +
->> +/ {
->> +	model = "Qualcomm Technologies, Inc. QRU1000 IDP";
->> +	compatible = "qcom,qru1000-idp", "qcom,qru1000";
->> +
->> +	aliases {
->> +		serial0 = &uart7;
->> +	};
->> +
->> +	chosen {
->> +		stdout-path = "serial0:115200n8";
->> +	};
->> +
->> +	ppvar_sys: ppvar-sys-regulator {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "ppvar_sys";
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +	};
->> +
->> +	vph_pwr: vph-pwr-regulator {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "vph_pwr";
->> +		regulator-min-microvolt = <3700000>;
->> +		regulator-max-microvolt = <3700000>;
->> +
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +
->> +		vin-supply = <&ppvar_sys>;
->> +	};
->> +};
->> +
->> +&apps_rsc {
->> +	pm8150-regulators {
-> regulators
-Same as above.
->
->
-> Best regards,
-> Krzysztof
->
-Thanks,
-Melody
+This is a bit of a bandaid. I think what we really need to do is only
+throttling when running in userspace. In kernel space, it should just keep
+accumulating used cycles as debt which should be paid back before userspace
+code can run again so that we don't throttle at random places in the kernel.
+
+Thanks.
+
+-- 
+tejun
