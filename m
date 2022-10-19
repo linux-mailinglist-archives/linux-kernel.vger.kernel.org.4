@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D863C603A98
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF76603A9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJSHZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S229973AbiJSH0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiJSHZR (ORCPT
+        with ESMTP id S229687AbiJSH0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:25:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023963ECD2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:25:16 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mshw52NV0zVhvr;
-        Wed, 19 Oct 2022 15:20:37 +0800 (CST)
-Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 15:24:46 +0800
-Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
- 2022 15:24:46 +0800
-Message-ID: <a584e92d-61cb-6b9c-456b-6cbe40db6518@huawei.com>
-Date:   Wed, 19 Oct 2022 15:24:46 +0800
+        Wed, 19 Oct 2022 03:26:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617665AC74
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:26:50 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ol3T6-00049x-J2; Wed, 19 Oct 2022 09:26:24 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ol3T4-0003wz-E9; Wed, 19 Oct 2022 09:26:22 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ol3T3-00916N-M6; Wed, 19 Oct 2022 09:26:21 +0200
+Date:   Wed, 19 Oct 2022 09:26:21 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de,
+        thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com,
+        wxt@rock-chips.com, kever.yang@rock-chips.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 2/2] ARM: dts: rk3288: add the interrupts property
+ for PWM
+Message-ID: <20221019072621.lh5hcznggbcscihf@pengutronix.de>
+References: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
+ <7ae39c9c-8424-8b65-ac09-c0e87f3b0f01@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH -next] drivers: soc: ti: mark knav_acc_firmwares as static
-To:     Nishanth Menon <nm@ti.com>
-CC:     <ssantosh@kernel.org>, <m-karicheri2@ti.com>, <arnd@arndb.de>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220927061951.103450-1-chenjiahao16@huawei.com>
- <20221017221909.ds24hrbivwap5cek@countable>
-From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
-In-Reply-To: <20221017221909.ds24hrbivwap5cek@countable>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.26]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="egf4vu67dggq4mpk"
+Content-Disposition: inline
+In-Reply-To: <7ae39c9c-8424-8b65-ac09-c0e87f3b0f01@arm.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,45 +61,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/10/18 6:19, Nishanth Menon 写道:
-> On 14:19-20220927, Chen Jiahao wrote:
->> There is a sparse warning shown below:
->>
->> drivers/soc/ti/knav_qmss_queue.c:70:12: warning: symbol
->> 'knav_acc_firmwares' was not declared. Should it be static?
->>
->> Since 'knav_acc_firmwares' is only called within knav_qmss_queue.c,
->> mark it as static to fix the warning.
->>
->> Fixes: 96ee19becc3b ("soc: ti: add firmware file name as part of the driver")
->> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
->> ---
->>   drivers/soc/ti/knav_qmss_queue.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/soc/ti/knav_qmss_queue.c b/drivers/soc/ti/knav_qmss_queue.c
->> index 92af7d1b6f5b..c466b98a0293 100644
->> --- a/drivers/soc/ti/knav_qmss_queue.c
->> +++ b/drivers/soc/ti/knav_qmss_queue.c
->> @@ -67,7 +67,7 @@ static DEFINE_MUTEX(knav_dev_lock);
->>    * Newest followed by older ones. Search is done from start of the array
->>    * until a firmware file is found.
->>    */
->> -const char *knav_acc_firmwares[] = {"ks2_qmss_pdsp_acc48.bin"};
->> +static const char *knav_acc_firmwares[] = {"ks2_qmss_pdsp_acc48.bin"};
-> next-20221017 checkpatch suggests:
->
-> static const char * array should probably be static const char * const
->
-> Could you check to ensure we are clear here?
+--egf4vu67dggq4mpk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure, it is safe to mark 'knav_acc_firmwares' as static const char * const.
+On Thu, Sep 29, 2022 at 04:50:43PM +0100, Robin Murphy wrote:
+> On 2022-09-29 15:04, Johan Jonker wrote:
+> > The Rockchip rk3288 SoC has 4-built-in PWM channels.
+> >=20
+> > Configurable to operate in capture mode.
+> > Measures the high/low polarity effective cycles of this input waveform
+> > Generates a single interrupt at the transition of input waveform polari=
+ty
+> >=20
+> > Configurable to operate in continuous mode or one-shot mode.
+> > One-shot operation will produce N + 1 periods of the waveform,
+> > where N is the repeat counter value, and generates a single interrupt at
+> > the end of operation.
+> > Continuous mode generates the waveform continuously and
+> > do not generates any interrupts.
+> >=20
+> > Add interrupts property to rk3288 PWM nodes.
+>=20
+> As far as I can make out from the TRM, these are only valid when
+> GRF_SOC_CON2[0] =3D 0, otherwise it's in "new" RK_PWM mode using SPI 78 f=
+or
+> all channels. Which apparently will be the case for anyone using upstream
+> U-Boot:
+>=20
+> https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/mach-rockchip=
+/rk3288/rk3288.c#L83
 
-Thanks for your reminder
+Huh, so it depends on a (software) setting which irqs are in use? So the
+patch isn't correct as is, but I have no idea how to make it right.
+Should we rely on the bootloader to fixup the dtb correctly?
 
->>   
->>   static bool device_ready;
->>   bool knav_qmss_device_ready(void)
->> -- 
->> 2.31.1
->>
+Anyhow, I'm marking the patch as 'changes-requested' in our patchwork
+instance.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--egf4vu67dggq4mpk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNPppoACgkQwfwUeK3K
+7Akn2wf9E1mkjcU/X67/FHOeTDj1DxRQnT2HY0ff5ncZoX/knkINO0zn2zGjIGF0
+UDiwKP5KkEFkWGPkn1PZ7vnTRTeZelBL8O1TIqlpWHC9peH2gOEMSdUCcbE2e3aA
+MaErc+U4m9roSDtFnYkLFHudpANRgB545KscxYZaKR82ONFONQ57PaIiZuFnS2Fy
+uqMhDbgZc5OhHiKRwAvSumOPXoJ1XuJ85lZmmAmZd5mSp/2QAvk+H1zHxisjqw/b
+rQisgoJR1FVllkL6atrCQ1+Yml/9TtPZ05/y/pxbCVVdq69YgMpq0goABsX06Qx9
+W9a9eJvn0vfzsQ6TZBDIShGvmiRiFw==
+=DSeO
+-----END PGP SIGNATURE-----
+
+--egf4vu67dggq4mpk--
