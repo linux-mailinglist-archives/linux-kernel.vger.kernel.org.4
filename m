@@ -2,131 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9007E6050E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613BB6050EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJST4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S230469AbiJST6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiJST4l (ORCPT
+        with ESMTP id S231292AbiJST6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:56:41 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2054.outbound.protection.outlook.com [40.107.223.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A901D8180;
-        Wed, 19 Oct 2022 12:56:28 -0700 (PDT)
+        Wed, 19 Oct 2022 15:58:31 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76791D8189
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:58:28 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JIP6Hj011661;
+        Wed, 19 Oct 2022 19:58:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=uG8wIJJM6/NQY3pnnmA5k7cgSc4DGPUpbUr8Fu9iavA=;
+ b=UZtGM77/AbeD+eF/wpa7NE/ANEAyxDFn0hdwIN1CapzFG9z8SGOLAhxmkfXHxj00nUn0
+ N24oC9SJhnmORWGr7EIAYp7W5dy2/6ZSS0cXi7NgWpLXvTu6rME2ONkye2oC8NDYWisb
+ 2pLtDhL7VNlb4vCnALrrTgOyhFlO5I7ShVDyeHLx14CM/Ns7WjX4jlDA2puAlA2s9bH3
+ 3u8wn9S1wGowsQXawnysBxDYGWQw+dTCuK5AS7NpLvsRDjdoWI7ujYQYNkEY+ZavrdJt
+ 9/7ICu9X7Pyj3rj1rS2uXeD4OWkXwUAGzhE9Nd7WJ0jGXj/528Spo7ld1E9+iV6PU7c0 zg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7ndtkq7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Oct 2022 19:58:05 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29JHo6ZQ002765;
+        Wed, 19 Oct 2022 19:58:04 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k8hthw041-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Oct 2022 19:58:04 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WzDh8yxj0kIPSEStalr9l11SB8WZhSmMuXB52uV6zC2OOSPPC93n/0/+f05hFeXb6OzMCsdsD44szJ4+DpT1Nb/xUN2bggWA/lMUbnySABHfdGoBVTMlSTdzWHNlq2Ezrz7VqgFRBuNTDaja0od8NsnxJo6n0WyAAMTpwg35boScP/6q/QcbQfM5/fc73QX1wP+7fFydPFK23yreUTU/oWSunxJMavDtbqtveMxLdykDQ4v3bWWEZiPqmglueJ6aDLRI0twW3gEItRfVORViN/isdlsZYfCRwGNqgQTAoWEaWw050OhQZkbsqxN5fAAe17UP5c09bq8RgmBIL5C9eA==
+ b=DF5AIIuRSAH8b738dzA0BdpaHOqjxrV2HRnNr6OJceoGpr1kur+bygye8M/9jwwMo5cqttrwAqBYXdf/4tB7IADhO5wE9nr4nXdC7NmgKJmu8sFxrhR+fnQVvf9vkIyFm5zO9Pvo71Tywnf2bXvmuAEyljvS19nKdXpWB5hPhs2xb6VbV0kLudeeu3th30MuJXi6aKBXQlhffHODdpJdEfFvGR6DVQa+wAnvvCWCWOqRxWpgiT1Up4GUh1VZzB+DuqpMOveRG/Ii7BVkcD5cOrBbOPNQxVA1zLHz2VZ7m9Gi0+UtOnJ+uboixOMD1J3M8TzNNHh0kLIn3TVvl8MW3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bgaCfYnW+m/sZ0/p8Fu/sK5jd/i7wWlslDkYDpmDhlg=;
- b=UicFdUA+hhzBkh7xtWhWTYcEXcGWKCmncqa1RTp8GqLVxEVY5v6MsMvhPryae6zjayfgOY0AIhc8ZzALBncEazVqhgeeEU+lRsbSJ/dQsY8mKq+vwl81BdAp62vKr+BxfZHhcSrRYo4ZJGqIArPEwTdaBvsvMNNYCqagQWnrXYJaLbO0ihcFJ/FgoYIR+J11bgb3wrOYfDC+UUa+z4yzUUiSu3t5wkzZGGAwhhnxR+2MHhWK2kBQ6nAgwn+tm4mjk7ukUJDcLpOumdIH9afEQfYi658tgZ2/4THgAeYuOYnOkTK9r9kCNQTjFeIe8vf5iin63e0Mx6EMAvaUtduVzg==
+ bh=uG8wIJJM6/NQY3pnnmA5k7cgSc4DGPUpbUr8Fu9iavA=;
+ b=aRw4clxyCQtWq5VbbO7qcm6oeKMw2n+OEXE+2RQNv8CbkWWsGzJaTVgxPgJscJjsGnqppUbSrw6j6Ip/X2tst0ByUcVHI/gS5ssvy/dVPlAkmBJXdk3d0VoLUrMH6wvQ/RzPGRuy7fhAX/liNTZ8fzOmV96uRNDw9jlij4D+l4Xp5vlh/LLVuEsTiUwTcSMZT2ybiDP5nlBfrco23j8J+8JH6x+YGhjYhvBtbzm+6wsKFD2+icoUyQaBM6Q01Z5sSCDcD7zmc3Z68IJSiYk7d2yJTWKxb/1NYUAknQ2WiOSAKcHbiDPJHNPBG6g6Xva8c76Z9pdiRw7HBCXw+LrqgQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bgaCfYnW+m/sZ0/p8Fu/sK5jd/i7wWlslDkYDpmDhlg=;
- b=UoUhHOHn5AMIst3436EQkmb5H6Sm3wDdwuLi45aL2BvifjV4urMDWBkruH0o19+3mjOPr+8gjhjwTbYk8reYg70x9nzim1lHM3QNeBgJ0z66nLhxp98kZg1utMJYcSrMdV/UbBGDFI/C4DjZNz98Yqrbi2S9OiDIMb9I43jjq50=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by MW4PR12MB7285.namprd12.prod.outlook.com (2603:10b6:303:22e::11) with
+ bh=uG8wIJJM6/NQY3pnnmA5k7cgSc4DGPUpbUr8Fu9iavA=;
+ b=KXCEO7qhRq98zM9W2oHvxddTyYgroP6z9Jzrt1MmVvSAupIrCWbPoRxIQwcxdTwQxICVv7H1oZ7W5lhaNjsjlkqJkt/gOar67woNKeP0AXyw4gYMz4RuAaUxyYUqysMYJ5pSd2AFpcjv1+nZscpB5ZHcd628ybqiCS8S2qih9us=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BY5PR10MB4306.namprd10.prod.outlook.com (2603:10b6:a03:211::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Wed, 19 Oct
- 2022 19:56:25 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00%2]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
- 19:56:25 +0000
-Message-ID: <5621c2b6-a5eb-c786-afee-020e97c0e4c8@amd.com>
-Date:   Wed, 19 Oct 2022 14:56:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] virt: Prevent AES-GCM IV reuse in SNP guest driver
-Content-Language: en-US
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20221019150333.1047423-1-pgonda@google.com>
- <528937ab-8046-d5d1-26ff-50ef35f5635f@amd.com>
- <CAMkAt6ritG1zmOreh9WYLYAGww0EJQy+m-Y0nfxD5+gpTkpJ1w@mail.gmail.com>
- <821e750b-26c9-3331-7577-5cb832a35afa@amd.com>
- <CAAH4kHYhLkiN7H03GKgMU+3h9rhp2a03gNFGLbrNtjp=PYYHQw@mail.gmail.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <CAAH4kHYhLkiN7H03GKgMU+3h9rhp2a03gNFGLbrNtjp=PYYHQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0094.namprd03.prod.outlook.com
- (2603:10b6:208:32a::9) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+ 2022 19:58:01 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e41f:b75b:3246:c1c7]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e41f:b75b:3246:c1c7%4]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
+ 19:58:01 +0000
+Date:   Wed, 19 Oct 2022 12:57:58 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] hugetlb: fix memory leak associated with vma_lock
+ structure
+Message-ID: <Y1BWxqEntgajs5Dx@monkey>
+References: <20221018233601.282381-1-mike.kravetz@oracle.com>
+ <15890189-c3ba-4249-3c2f-674f6763415b@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15890189-c3ba-4249-3c2f-674f6763415b@huawei.com>
+X-ClientProxiedBy: MW4PR03CA0269.namprd03.prod.outlook.com
+ (2603:10b6:303:b4::34) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|MW4PR12MB7285:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0403f370-574e-4381-b4c4-08dab20c0110
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BY5PR10MB4306:EE_
+X-MS-Office365-Filtering-Correlation-Id: d43be1d8-7cde-454e-a753-08dab20c3a3e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8Xz7IJEzghCqowYy8YlQHuz6xaSWg5ZbZ+iT3riURn2j5p/W94zsJsFl4c0zcPHCFfZaOkZCTD+yVn+1LphiqlYMeQnBt35F/EBgdW2X3sdsU/cHLzvmQVrSuMMlJeJbY1C8GDu/Ls/AO+oYGei3bHWUyoe5qGZ8Nfhoft6mC0pvPlYBwgSDj2qTK642IQ5VcrmZ/mCThMO+t+xOEpegDgP7haC9Q1PulcczMbJVxE2bWaz3SlJb14GADJYDqUM2K2w4zIsxUbjRvJBJty5IZKTqLaXUWTVsK298z0O5tgm4Wh5ZVcYC+tgjtgiaB9WCEvvmBODIjcGOdiWMFG3iba+my2aY5k3njw/CI2XjYqEsmX9h182a/M72SdmuRoFerVYDhINjW/JtR/DmjndP2a3ix/8Jj9P6GN22iK4kA04KUj9jAxVXRJeXw8OhTVPsGdI2X+lGuU0yfRWA9iRcCwpDvX+myHA7auGjROhomhxQNecNG2kczDMZLQt3QkyRtwUozHvLfLd4AZkOc7jG9gp48TZERYkFx3DxFa+DO9X0WLnS0abh/DdHeTMp5yTPVX7OiFVaRUvgw9pKAIdO4kYz3ALkE5ry+CMKoCTgmPGmxT5ksRZd9MAyLOnihr0YEVHTebKUAQJKK/WsCYuDyRqiE3e/tyF8fEY2FgMV04oyY+vgBuK11msCPG324TDPyPjnDl/uOFSngHPKvu6dL2nbqX4KNGfq6qDFy+2eqkzdf3uRGgh8U1p5X/qtWVH9cWTa1o2w/Xse35LdufbnuWVSY0wvjoC56WCLFtXGNDWzJO6FNIR7/BeW/tO++1HCXBCiIqiAeK4eyDF/Di68FWokGpUU1+JCYWfmSOneB9qvp/ZMF20YCqRkq/TTz3gY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(376002)(136003)(396003)(39860400002)(451199015)(31686004)(478600001)(6486002)(83380400001)(966005)(36756003)(6666004)(86362001)(38100700002)(6916009)(54906003)(2906002)(186003)(316002)(2616005)(8936002)(41300700001)(6512007)(31696002)(5660300002)(8676002)(4326008)(6506007)(26005)(66476007)(66946007)(66556008)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: UDKaKfveeD0C0oQiAefLJtzfxPV6awW0mXjK+hCpxP6zCuDtuvL4BZsKQomoeY0SzyOT25kn6nKG1Asb6xNJhqzctm59CSJyTYmauSsvWXqwCgLReptEh9HNIYjIV65+QQBGijDVzjE9g+8W8MK2yUHmPP6ySr1mUXJLFjC9sDvAkiXn9xd4QmRaMgdeXJzAsmtUU/4oGZcbZwEMKOTvbOkEiLxjbJ+3XZ8CHkcKdIN5EabvAtz90Pm0vYjlQUVQ0z0Z5h6Q5LeGZKuKmSROHiVRr2cDqN6t5lJYssY4gKE5XOM/8EbNbmFBQD74vaZLa/142pYE1mlslPxHwZtBJlG9dpepjhY91LjErZNS826e5WKtCU94ya1W8gyeqSwqbNuAliUvoB74v/wgOnPzXUqgwIXEriqJ36L5Ob6kIVzFH4H85tkTYq+q1+gleQH1NKzntxgNCSG4XHMu86u3cvzmX8XuPx5vGX+ylvxsBRDAizQzrSF2AedNtqSZ9LGxJSYbhagggXAgLf3/o4xFcklPJS+kwBHY4Zj6WOolinsfeldL5opPziTSrK5gdoIDp5/9yDwZILgetbEGmZSXx3KP/tz0kPhYaejVBudEo31qfko2QJFlllCsVqKPP/dii09lVxJtXZSjan+wsYzu2XmuA2XIauU0cuKCOSAR0MmQM68rXvtrgoq/CG5KiW5uQT9BJdcaI/Fa5z5z/b+FJRPkhzOT3dv1vepS6OomiBo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(396003)(376002)(39860400002)(346002)(366004)(451199015)(478600001)(66899015)(83380400001)(86362001)(6486002)(966005)(66476007)(66556008)(53546011)(6666004)(8676002)(6506007)(316002)(41300700001)(26005)(9686003)(6512007)(8936002)(44832011)(6916009)(4326008)(7416002)(54906003)(5660300002)(2906002)(186003)(66946007)(33716001)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3g1S3MzU3ptc3ZxdncxNVpDeVZvKzd0L3VpZUwvMmZJemFkM2YwVkgzWVQ3?=
- =?utf-8?B?eGpGeUtLek5wSEhsRmpUQU1Na1dzNjdNZitVY2lucjQ2MDJQVXAwM0Z4TzY5?=
- =?utf-8?B?aGpNNFNIdlYwU0hVRmJJQjRsZGhJWjFlN1g1QXpLUDFDK2lSUTlLZmdBdUNv?=
- =?utf-8?B?MlNNWkp4RDJTTVhSUEdybnRvMEUvOHZyRDJpVGlJYnJDNFV2RHREMHF6RVUr?=
- =?utf-8?B?ZkZlOURKOXhyUU1wNmZyWTJ4MEdaRDdUUXMyaXkvR2E2L0lkMVk3RWZBckNZ?=
- =?utf-8?B?YmFpcUVzdFpGMURBV1QxNnFrTGtWTWtuNmhobk5yMi9idmlUeW0ydmJFVE8r?=
- =?utf-8?B?cXlmcVFab1JrVVVEaURoeGxoYU8rTnJEUmtKemYrVVZGSmx2ZzZHeVRsS0tk?=
- =?utf-8?B?VUhxbXI5M3BMdkd1aEZKY20xZ3F3ODVFNmdNUHFrTXVUTkhsZ3JmMUtZdjRw?=
- =?utf-8?B?YmRkYW9BUXM2N0NUeitOK2xiREZ1dFk0T09oU3YrcnVGNldkbXUyM3pUclBN?=
- =?utf-8?B?US9sV3QrT2hzU2htZXJGV1o4WUpMNDErQ3Z6RHNiR3RWNHkvc1M5cmljWnFs?=
- =?utf-8?B?dnhLNy9tR0lqaGMxYVlVVjFHTVFzSTc0NG5oUktYTERnMlowR3R3MUFJQXB6?=
- =?utf-8?B?WW4wWUp0eVZ6cHMva2hDQXptQWlsY2d5ampodnp6cG44TE1NRFJrdDdvd2pR?=
- =?utf-8?B?c1M5RE1rclh3N0lwODRzblh1SU9kUjVYUktjWnlhVWxTOWhVbzlxYVV6OEhH?=
- =?utf-8?B?VDdiS2xBT1ppRVZQdVVZdTIvS2FmK2NkSTVmanoyd2F5Vk9JSEhwZUFXL1c0?=
- =?utf-8?B?S0R6amlCeTFKRUt4Q0RLdGI0R0JUWldSck1iaUVQdTN3ckdNRW1iaEpZZjZv?=
- =?utf-8?B?NWJ6UkF4ZXg0SE5VWEZLMFdFUXErTWdLYXZocENvWDNyYm9QVE9iKzJsNVZB?=
- =?utf-8?B?TVNEbHFRL2Ezd1RVa2RsenlHM1A4bGlYMXdYVTRYNW9acDVKNWhsM3Y5eE85?=
- =?utf-8?B?L1pkU3hLeVVSa1pEcVcvUkpjQTdCNVFkMWZlZXdPSXlZVXFmTEJQQXUyYmtw?=
- =?utf-8?B?YlNDNlNDSXVqWHM2Y0tQd2tnR2thNFBrUWhMRU0vdlhGUlNNaVNKRVd0bjZT?=
- =?utf-8?B?bXpYTU5sWFZ2b3ZSNGErcmRPME9UQzFFQ3hhazZpRjRsMXJEbUIrNk4zOU1U?=
- =?utf-8?B?TDdJbXJheTljZmtpZkdkWjExUmsyMm9IVm82ZW1VSzJpL1VkRjZ1Si83U3Rt?=
- =?utf-8?B?VURDQi91RktZaUdjSmV2cTBITXJyR1BHSmtvSmFhbXpKTk5sWmRIWTFzOUlm?=
- =?utf-8?B?V0dsREx1dWNpWVprZ2xmRzdCdU1qWDBNNHpOamI5b0ljSzJxWERsOUxRK0VT?=
- =?utf-8?B?TlV3eDFERFNiUmtmMzBPUHFqWUFQNUI4MzMrVXEzNThHdHR3allodGQwOFZu?=
- =?utf-8?B?VkFieGw4cWRWMnAxM1RsRWVqaUJJZUdMVy9jYmJ1USt5VEFnbnptTEdDMEpF?=
- =?utf-8?B?SVZEbDAyNHF1aFkxclJ3Y0QrcXRNTDhmWkdXOXdobmpPN3kvYXZXS3N4am9n?=
- =?utf-8?B?VjA4TGdkYk5GNHVQTmtQSmwzeGdtR1BWbkFGOUkwS1Fmb0N3bHd3Z1JwMjFN?=
- =?utf-8?B?eTB2QnJDamxWU3ZVaERLNUY0UndncnNxZnArNFU1M1kwVmMvc1l1MjQ1dmFp?=
- =?utf-8?B?cXhYTENiaExMQkN0emkvRGpOcGNPZG94SnFLZ2tDcHdKMEdEQ3hpOVpnVFNp?=
- =?utf-8?B?bGxFYXBRVGQxYmh3RVhJTjMxaWJ3Mk5xRGVCK0FGU0VqM1pFcjN1OFNaMHN4?=
- =?utf-8?B?U0ZHdUxVb09UOStSa2ROWVN0Z1NoemRFekRTekNQVHVVa0Uya3dqbmVoUUM4?=
- =?utf-8?B?eFZSb255UG1yeXRYL25oTXBVNVB2UWN3cDZUY0J6VWRuc3E4ZThBWDBqcUUz?=
- =?utf-8?B?VnI5TlY5RDFwVDZ3Z25XNmFzUDd1b0sxZjNjcHZ4Sk9nb210UnNVanRqY1N6?=
- =?utf-8?B?a0Jaa2plQVZES21lMG5VN25RWUxZajZnTisxMUloVTVJZDZOQmN4ZnVqN2R3?=
- =?utf-8?B?UUZjQ3dHc2NPWVJjeDQwTU1WYjFTQWRmUXE3a05BbDdzazAvWStWc2JJM0Vw?=
- =?utf-8?Q?aH9q2954veF9mI+V4v0pRMtZA?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0403f370-574e-4381-b4c4-08dab20c0110
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?09jaNeoXrEOhjQHzM2IcrIRd5FL7oWZ1KVqb3Ykzc8dEn4I9svdsT0eQfpwR?=
+ =?us-ascii?Q?faSlQkmAmPXwNJDBT/eJ7RW/fi+RuTIEBV79ZBrB/pu4KHANb1FmNpSjLSwZ?=
+ =?us-ascii?Q?DvDLxJFJ47aI8bW953CvQZJiV/cYeZY05SBIsbYLZ5d6HudZHA20avMi6wDh?=
+ =?us-ascii?Q?0XffXVnIfAqMpQBvGcGm+JaYaYlmgw8qNMakKFKjYgwnv7amerHMwNGtfUDc?=
+ =?us-ascii?Q?wZAGNooqruYCpaSja0CLSeLi6Q185NYT8dqtkYLvzkP4fjMLl4oSGp6Aca+R?=
+ =?us-ascii?Q?W4yibziP3shULb9gP0SRBjEuKuHy4yXhsp0kiOU9KURFVxTKOAeU9rKjHMIK?=
+ =?us-ascii?Q?saR/QqYC3XCr0Zyt3GyFf2lqcT0Fv61glllaMbdCsmdj+y2frIN/uhRWrZK7?=
+ =?us-ascii?Q?hBwGYuWTK11MitDydI8eWwjgMq0fFGWQ7ITwTpus3QLH/jZw6Zf3F9noVuc8?=
+ =?us-ascii?Q?ihm3vc3C115qv0OrkdmVDZNpwiClW9cAZ0M7da5EXHanXePGzzTEg8aVhgpI?=
+ =?us-ascii?Q?2Dpi1xXrGdNejn5ylPWVsa4BjpVB5cqL4IivNjunLv4b1J9wfgwhTMxtg2OA?=
+ =?us-ascii?Q?yjomqWB1+VnFgaXmKAdGupGSIpl94eVZKdIwPCQN3vWw4Rr/peB6Aq8RarxM?=
+ =?us-ascii?Q?/uIDHsEIVf3CdR16iqOEdmCbvKlKNjAYvllgkZcFSTqVxVGIEC1d1EuEJCfN?=
+ =?us-ascii?Q?YARcKoBwlvP8iPxr/ZPugcUppb/oXHGdGPHbAHo88SMPyRswR7LUNOBsKijN?=
+ =?us-ascii?Q?KJt79Xid6JfbDOwnoNM7oOX4x5apVlFS8D08pSx/20Nub5gl9dLhDQvCwBKC?=
+ =?us-ascii?Q?Sv5AgftBwG6fmcMhLXkGF+gDXvAoGEhGZSFRUWi0B2J0/s0I0ONz7xVVUYvy?=
+ =?us-ascii?Q?/R+Cb5f5VEHrL+rJ1PTfIVn2Q4vwM5hnyu5WAPRxTnB2VXt5HseWqWbkTxMX?=
+ =?us-ascii?Q?WDxwmGNlr9vRxQhFGOrowYYjtwobrEbSefllODPux+1mEbUXXNpWhW0t51Dn?=
+ =?us-ascii?Q?TAOvexLNMkLTTWV6tEp2DBRDzq+hIjP2XOSOXGA1yqNE7eUEhwNll7zPvEz6?=
+ =?us-ascii?Q?xtM/9teKvXfLG/d8S9BFS1TTEfkfIYaDe+1LYZvTJAS6jhEEHztqWr2cDw/N?=
+ =?us-ascii?Q?SMnvYVTFeTX60FqmgyTajoLqf/93Uein1unDR3YsrpcubOg4PByUzkyJUQou?=
+ =?us-ascii?Q?u6kr25b0dgYlw1g8soRwquAV0tzTHfr3yr8raNbOw57L/InTME8EekzON6qu?=
+ =?us-ascii?Q?EnbMKs9EfNCkrTBWC4zWhsu6lLdCWrz+Ou4h1HEINGfmY9ZTcm9pOE3SAr6V?=
+ =?us-ascii?Q?HkBlBcZA6XezID18Dln34q6LitNo7/CzZpO+woDlQHtcZC0Ty7D/SwrvbMUS?=
+ =?us-ascii?Q?w82kljH1FM3yi5mN8o24MD4CWUjiu8MtA1Jjb2GbBgPFA0FhHvd8SOs/jMKg?=
+ =?us-ascii?Q?Q5arAHYStzcoSdP13xGMSf0uppnxvfQz/FuEKmXFZir9eL41JQpHPbnkUtzE?=
+ =?us-ascii?Q?c4kwqWJazMeVnlDWwFlpjO4eZR4PD9Bslmb/8khl9YaGJ3LvNco1jJwqPMjB?=
+ =?us-ascii?Q?ducyXRwGRSBg89kgY4Za4w5DeFvJiTWX+GKC7cspdCFodnfZJOJ5VVwulZh5?=
+ =?us-ascii?Q?XA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d43be1d8-7cde-454e-a753-08dab20c3a3e
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 19:56:25.4508
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 19:58:01.5226
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bWQD7FbVRUs5M+cxke+DKUDtZUebUAVgDvVFpStAaYo/Sap/G8z/m6Rq8lqFpB9kDXKrhGngz8UKWMHvuClIqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7285
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: X8O3rpE32DlHFKRn9wSP4VQ87CR8ApKPVaralRQi/+l333scMS8W1J2cn7GsF/bfRPdtXxeNDXpv4dulYNubWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4306
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_11,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190111
+X-Proofpoint-ORIG-GUID: GbkfN2U4uy-TeWEOwgthSi60rF5rZe9S
+X-Proofpoint-GUID: GbkfN2U4uy-TeWEOwgthSi60rF5rZe9S
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,152 +161,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 14:17, Dionna Amalie Glaze wrote:
-> On Wed, Oct 19, 2022 at 11:44 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
->>
->> On 10/19/22 12:40, Peter Gonda wrote:
->>> On Wed, Oct 19, 2022 at 11:03 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
->>>>
->>>> On 10/19/22 10:03, Peter Gonda wrote:
->>>>> The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
->>>>> communicate securely with each other. The IV to this scheme is a
->>>>> sequence number that both the ASP and the guest track. Currently this
->>>>> sequence number in a guest request must exactly match the sequence
->>>>> number tracked by the ASP. This means that if the guest sees an error
->>>>> from the host during a request it can only retry that exact request or
->>>>> disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
->>>>> reuse see:
->>>>> https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
->>>>
->>
->> I think I've wrapped my head around this now. Any non-zero return code
->> from the hypervisor for an SNP Guest Request is either a hypervisor error
->> or an sev-guest driver error, and so the VMPCK should be disabled. The
->> sev-guest driver is really doing everything (message headers, performing
->> the encryption, etc.) and is only using userspace data that will be part
->> of the response message and can't result in a non-zero hypervisor return code.
->>
->> For the SNP Extended Guest Request, we only need to special case a return
->> code of SNP_GUEST_REQ_INVALID_LEN. See below for my responses on that.
->>
->>
->>>> I wonder if we can at least still support the extended report length query
->>>> by having the kernel allocate the required pages when the error is
->>>> SNP_GUEST_REQ_INVALID_LEN and retry the exact request again. If there are
->>>> no errors on the second request, the sequence numbers can be safely
->>>> updated, but the kernel returns the original error (which will provide the
->>>> caller with the number of pages required).
->>>
->>> I think we can but I thought fixing the security bug could come first,
->>> then the usability fix after. Dionna was planning on working on that
->>> fix.
->>>
->>> In that flow how does userspace get the data? Its called the ioctl
->>> with not enough output buffer space. What if the userspace calls the
->>> ioctl with no buffers space allocated, so its trying to query the
->>> length. We just send the host the request without any encrypted data.
->>
->> In the case of SNP_GUEST_REQ_INVALID_LEN, userspace wouldn't get the data
->> if it hasn't supplied enough buffer space. But, the sev-guest driver can
->> supply enough buffer space and invoke the SNP Extended Guest Request again
->> in order to successfully complete the call and update the sequence
->> numbers. The sev-guest driver would just discard the data in this case,
->> but pass back the original "not enough buffer space" error to the caller,
->> who could now allocate space and retry. This then allows the sequence
->> numbers to be bumped properly.
->>
+On 10/19/22 16:16, Miaohe Lin wrote:
+> On 2022/10/19 7:36, Mike Kravetz wrote:
+> > The hugetlb vma_lock structure hangs off the vm_private_data pointer
+> > of sharable hugetlb vmas.  The structure is vma specific and can not
+> > be shared between vmas.  At fork and various other times, vmas are
+> > duplicated via vm_area_dup().  When this happens, the pointer in the
+> > newly created vma must be cleared and the structure reallocated.  Two
+> > hugetlb specific routines deal with this hugetlb_dup_vma_private and
+> > hugetlb_vm_op_open.  Both routines are called for newly created vmas.
+> > hugetlb_dup_vma_private would always clear the pointer and
+> > hugetlb_vm_op_open would allocate the new vms_lock structure.  This did
+> > not work in the case of this calling sequence pointed out in [1].
+> >   move_vma
+> >     copy_vma
+> >       new_vma = vm_area_dup(vma);
+> >       new_vma->vm_ops->open(new_vma); --> new_vma has its own vma lock.
+> >     is_vm_hugetlb_page(vma)
+> >       clear_vma_resv_huge_pages
+> >         hugetlb_dup_vma_private --> vma->vm_private_data is set to NULL
+> > When clearing hugetlb_dup_vma_private we actually leak the associated
+> > vma_lock structure.
+> > 
+> > The vma_lock structure contains a pointer to the associated vma.  This
+> > information can be used in hugetlb_dup_vma_private and hugetlb_vm_op_open
+> > to ensure we only clear the vm_private_data of newly created (copied)
+> > vmas.  In such cases, the vma->vma_lock->vma field will not point to the
+> > vma.
+> > 
+> > Update hugetlb_dup_vma_private and hugetlb_vm_op_open to not clear
+> > vm_private_data if vma->vma_lock->vma == vma.  Also, log a warning if
+> > hugetlb_vm_op_open ever encounters the case where vma_lock has already
+> > been correctly allocated for the vma.
+> > 
+> > [1] https://lore.kernel.org/linux-mm/5154292a-4c55-28cd-0935-82441e512fc3@huawei.com/
+> > 
+> > Fixes: 131a79b474e9 ("hugetlb: fix vma lock handling during split vma and range unmapping")
+> > Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> > ---
+> >  mm/hugetlb.c | 31 ++++++++++++++++++++++++-------
+> >  1 file changed, 24 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index 02f781624fce..7f74cbff6619 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -1014,15 +1014,23 @@ void hugetlb_dup_vma_private(struct vm_area_struct *vma)
+> >  	VM_BUG_ON_VMA(!is_vm_hugetlb_page(vma), vma);
+> >  	/*
+> >  	 * Clear vm_private_data
+> > +	 * - For shared mappings this is a per-vma semaphore that may be
+> > +	 *   allocated in a subsequent call to hugetlb_vm_op_open.
+> > +	 *   Before clearing, make sure pointer is not associated with vma
+> > +	 *   as this will leak the structure.  This is the case when called
+> > +	 *   via clear_vma_resv_huge_pages() and hugetlb_vm_op_open has already
+> > +	 *   been called to allocate a new structure.
+> >  	 * - For MAP_PRIVATE mappings, this is the reserve map which does
+> >  	 *   not apply to children.  Faults generated by the children are
+> >  	 *   not guaranteed to succeed, even if read-only.
+> > -	 * - For shared mappings this is a per-vma semaphore that may be
+> > -	 *   allocated in a subsequent call to hugetlb_vm_op_open.
+> >  	 */
+> > -	vma->vm_private_data = (void *)0;
+> > -	if (!(vma->vm_flags & VM_MAYSHARE))
+> > -		return;
+> > +	if (vma->vm_flags & VM_MAYSHARE) {
+> > +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+> > +
+> > +		if (vma_lock && vma_lock->vma != vma)
+> > +			vma->vm_private_data = NULL;
+> > +	} else
+> > +		vma->vm_private_data = NULL;
+> >  }
+> >  
+> >  /*
+> > @@ -4601,6 +4609,7 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
+> >  	struct resv_map *resv = vma_resv_map(vma);
+> >  
+> >  	/*
+> > +	 * HPAGE_RESV_OWNER indicates a private mapping.
+> >  	 * This new VMA should share its siblings reservation map if present.
+> >  	 * The VMA will only ever have a valid reservation map pointer where
+> >  	 * it is being copied for another still existing VMA.  As that VMA
+> > @@ -4616,10 +4625,18 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
+> >  	/*
+> >  	 * vma_lock structure for sharable mappings is vma specific.
+> >  	 * Clear old pointer (if copied via vm_area_dup) and create new.
+> > +	 * Before clearing, make sure vma_lock is not for this vma.
+> >  	 */
+> >  	if (vma->vm_flags & VM_MAYSHARE) {
+> > -		vma->vm_private_data = NULL;
+> > -		hugetlb_vma_lock_alloc(vma);
+> > +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+> > +
+> > +		if (vma_lock) {
 > 
-> The way I thought to solve this was to make certificate length
-> querying a part of the specified protocol.
-> 
-> The first ext_guest_request command /must/ query the certificate
-> buffer length with req.certs_len == 0.
+> Thanks Mike. It seems the case of "vma_lock == NULL" is missed, i.e. if vma->vm_private_data == NULL,
+> hugetlb_vm_op_open won't allocate a new vma lock?
 
-This becomes an incompatible change to the GHCB specification.
+Thank you so much!  Yes, you are correct.
 
-> By making this part of the protocol, the sev-guest driver can check if
-> the certificate length has been requested before.
-> If so, emulate the host's VMM error code for invalid length without
-> sending an encrypted message.
+Your review comments have prevented numerous bugs and led to better code.
 
-On the hypervisor side, the certificate blob can be replaced at any time 
-with a new blob that is larger. So you may still have to handle the case 
-where you get a SNP_GUEST_REQ_INVALID_LEN even if you previously asked before.
-
-> If not, then send an all zeroes request buffer with the req.certs_len
-> = 0 values to the VMM.
-> 
-> The VMM will respond with the size if indeed the expected_pages are >
-> 0. In the case that the host has not set the certificate buffer yet,
-> then the host will inspect the header of the request page for a zero
-> sequence number. If so, then we know that we don't have a valid
-> request. We treat this also as the INVALID_LEN case but still return
-> the size of 0. The driver will have the expected pages value stored as
-> 0 at this point, so subsequent calls will not have this behavior.
-> 
-> The way /dev/sev-guest user code has been written, I don't think this
-> will break any existing software package.
-
-I think having the sev-guest driver re-issue the request with the internal 
-buffer when it receives SNP_GUEST_REQ_INVALID_LEN is the better way to go. 
-You could still cache the size request and always return that to 
-user-space when a request is received with a 0 length. The user-space 
-program must be able to handle receiving multiple 
-SNP_GUEST_REQ_INVALID_LEN in succession anyway, because of the fact that 
-the hypervisor can be updating the certs asynchronously. And if you get a 
-request that is not 0 length, then you issue it as such and re-use the 
-logic of the first 0 length request that was received if you get an 
-SNP_GUEST_REQ_INVALID_LEN with the user-space supplied value.
-
-Peter, is this something you could change the patch to do?
-
-> 
->>>
->>>>
->>>> For the rate-limiting patch series [1], the rate-limiting will have to be
->>>> performed within the kernel, while the mutex is held, and then retry the
->>>> exact request again. Otherwise, that error will require disabling the
->>>> VMPCK. Either that, or the hypervisor must provide the rate limiting.
->>>>
->>>> Thoughts?
->>>>
->>>> [1] https://lore.kernel.org/lkml/20221013160040.2858732-1-dionnaglaze@google.com/
->>>
->>> Yes I think if the host rate limits the guest. The guest kernel should
->>> retry the exact message. Which mutex are you referring too?
->>
->> Or the host waits and then submits the request and the guest kernel
->> doesn't have to do anything. The mutex I'm referring to is the
->> snp_cmd_mutex that is taken in snp_guest_ioctl().
-> 
-> I think that either the host kernel or guest kernel waiting can lead
-> to unacceptable delays.
-> I would recommend that we add a zero argument ioctl to /dev/sev-guest
-> specifically for retrying the last request.
-> 
-> We can know what the last request is due to the sev_cmd_mutex serialization.
-> The driver will just keep a scratch buffer for this. Any other request
-> that comes in without resolving the retry will get an -EBUSY error
-> code.
-
-And the first caller will have received an -EAGAIN in order to 
-differentiate between the two situations?
-
-> 
-> Calling the retry ioctl without a pending command will result in -EINVAL.
-> 
-> Let me know what you think.
-
-I think that sounds reasonable, but there are some catches. You will need 
-to ensure that the caller that is supposed to retry does actually retry 
-and that a caller that does retry is the same caller that was told to retry.
-
-Thanks,
-Tom
-
->>
->> Thanks,
->> Tom
-> 
-> 
-> 
+I will send v2 shortly.
+-- 
+Mike Kravetz
