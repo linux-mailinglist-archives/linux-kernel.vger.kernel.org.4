@@ -2,95 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0936048B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0718F6048D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiJSOGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S231623AbiJSOJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJSOGK (ORCPT
+        with ESMTP id S229770AbiJSOJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442FA18F0C0;
-        Wed, 19 Oct 2022 06:47:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Oct 2022 10:09:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C2897D6F;
+        Wed, 19 Oct 2022 06:51:37 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A015F618D9;
-        Wed, 19 Oct 2022 13:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 827EAC433C1;
-        Wed, 19 Oct 2022 13:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666187171;
-        bh=1/q8N0Fw/4Mp5qWBCxTYfIZcq7XxY4Dqr4WN1uWHwsA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rtuuDjra0KqaJkgWdHlRjdiKQ5XBsBzgajyatrGjgGk5ZRAfIsqynqMCRBF4ifqzr
-         SJvhScuhESNc2JAy74qvY9Ilfi0F6QnR67Imv68SvHldOLbXT++PKPu4W5EuuIlMeP
-         /tRhuLzh3po9/JwqNL2bTEPOsyfvBsrLlCqTI06IGmveQ745vwznJqi/uPSdmMQ8UY
-         w44glkfBMRSG5io4V6cdgWYX5lLtvdRdWmfxDPeH0Lpj4oCW2O98pb5N9W3Q/PbZYk
-         O2d2FA0aiXs7lKwWl+C7nFMOdy88u2B2u+pXX2y0j3ran9NPvRn3FKt6m0vGcAYn5a
-         ol9QItAOpGRsQ==
-Date:   Wed, 19 Oct 2022 19:16:07 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     peter.ujfalusi@gmail.com, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] dmaengine: ti: edma: Remove the unused function
- edma_and()
-Message-ID: <Y0//nxmB2CEjFvMp@matsya>
-References: <20221018083820.25297-1-jiapeng.chong@linux.alibaba.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C1607660238F;
+        Wed, 19 Oct 2022 14:48:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666187291;
+        bh=JRFBIEM/o3vlqulr1q6kOtGadUUgU5fFs6PkyTMxPoM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UCmD794vdXoT52u4B6OT78/64SmEehyANCMurAXV+o/M6BESNlUbHQOjv3jkxrL3K
+         9BHh5/+85ySWzuLpP7nrVjysxQQG7CSGjLuo/NzoPd9x/rv1kKajohe3gYwOmMUAKQ
+         VZ3Y7RSFJYmJRoqWW+Guri4l1q1fr2KAJSCn0OBVhTPBohP1KiapOQGFTw5tbiBD+l
+         LgC3Db3v/ivXnLilPWVuqrwBSxZ9YPhBB1c/VAinDz1eeUhf2Ha2DZfJ0kCg6LaeHl
+         gPpqH+TTY9yAIc9ni4o+ZaG0n2zBsfLoj2KLMROl8HFiNwYlX+ExHYApUr7XZtuTaJ
+         u9ZL2m9yX1X6A==
+Message-ID: <56042926-4921-3e77-ae0f-3bc6c462bb5e@collabora.com>
+Date:   Wed, 19 Oct 2022 15:48:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018083820.25297-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v4] pwm: mtk-disp: Fix the parameters calculated by the
+ enabled flag of disp_pwm
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
+        jitao.shi@mediatek.com
+Cc:     linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <1666172538-11652-1-git-send-email-xinlei.lee@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1666172538-11652-1-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-10-22, 16:38, Jiapeng Chong wrote:
-> The function edma_and() is defined in the edma.c file, but not called
-> elsewhere, so remove this unused function.
+Il 19/10/22 11:42, xinlei.lee@mediatek.com ha scritto:
+> From: xinlei lee <xinlei.lee@mediatek.com>
 > 
-> drivers/dma/ti/edma.c:321:20: warning: unused function 'edma_and'.
+> In the original mtk_disp_pwm_get_state() function wrongly uses bit 0 of
+> CON0 to judge if the PWM is enabled.
+> However that is indicated by a bit (at a machine dependent position) in
+> the DISP_PWM_EN register. Fix this accordingly.
 > 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2430
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
+> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+> Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Where is this report?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/dma/ti/edma.c | 8 --------
->  1 file changed, 8 deletions(-)
-> 
-> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-> index fa06d7e6d8e3..9ea91c640c32 100644
-> --- a/drivers/dma/ti/edma.c
-> +++ b/drivers/dma/ti/edma.c
-> @@ -318,14 +318,6 @@ static inline void edma_modify(struct edma_cc *ecc, int offset, unsigned and,
->  	edma_write(ecc, offset, val);
->  }
->  
-> -static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
-> -{
-> -	unsigned val = edma_read(ecc, offset);
-> -
-> -	val &= and;
-> -	edma_write(ecc, offset, val);
-> -}
-> -
->  static inline void edma_or(struct edma_cc *ecc, int offset, unsigned or)
->  {
->  	unsigned val = edma_read(ecc, offset);
-> -- 
-> 2.20.1.7.g153144c
 
--- 
-~Vinod
+
