@@ -2,124 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF76603A9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAFE603AA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiJSH0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S229994AbiJSH14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiJSH0v (ORCPT
+        with ESMTP id S229554AbiJSH1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:26:51 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617665AC74
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:26:50 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol3T6-00049x-J2; Wed, 19 Oct 2022 09:26:24 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol3T4-0003wz-E9; Wed, 19 Oct 2022 09:26:22 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol3T3-00916N-M6; Wed, 19 Oct 2022 09:26:21 +0200
-Date:   Wed, 19 Oct 2022 09:26:21 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de,
-        thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com,
-        wxt@rock-chips.com, kever.yang@rock-chips.com,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 2/2] ARM: dts: rk3288: add the interrupts property
- for PWM
-Message-ID: <20221019072621.lh5hcznggbcscihf@pengutronix.de>
-References: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
- <7ae39c9c-8424-8b65-ac09-c0e87f3b0f01@arm.com>
+        Wed, 19 Oct 2022 03:27:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301C378234;
+        Wed, 19 Oct 2022 00:27:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0C076178F;
+        Wed, 19 Oct 2022 07:27:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22947C43144;
+        Wed, 19 Oct 2022 07:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666164471;
+        bh=pGPI1VonJk44Iy0khkI0QWgWbFngP2/rYrSQDZouHMw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MR6h4QEvzaJwW0kqjEKjavjVzDswWIzcYEixctncuY5rxHNKkh4iIeTFGDobKK8Zp
+         qkcBxUumVaG5+XkMSkbgl4hyPX6IbaPP0BTK7kZ+THgDlEQ9+864fphh1pRcR2n9CQ
+         Fyp/hpvQvjy4pRGLZbAAkxwSWfBqlVOmx9v5gySFS4/KVMVvt6dkpEn/bze4viCkUb
+         /50p/2KFeujBwUJj0qfm0mNYa4YmBJeha89xfcsE1mPMemVPTe8lF842SSRTcIo5/7
+         /Tag73V0Sz4GFY4FDhWI2wgxwa/P647zGHIbO1YWGwrZw3Q4qqbldtb4K1hJy5BJKU
+         5iQ3BO5w4OrLg==
+Received: by mail-lj1-f180.google.com with SMTP id i17so20047948lja.3;
+        Wed, 19 Oct 2022 00:27:50 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3Cbfu/fjW/R3JoulNua2CZl1VhEaPOZbmXNPnz/M+FWhraWlFn
+        OndzXlztVioiY4Cb4w9soUpDuoVXbwK/HxF3HOg=
+X-Google-Smtp-Source: AMsMyM5KqMZZalLdv8eWflzr5XlT3SelnofHVaCYNtXESG1d/cKpOmBMnXbiBf0tPM9FNdOjNpJFploGY9RLgaF22lg=
+X-Received: by 2002:a05:651c:4d0:b0:26f:cd9b:419f with SMTP id
+ e16-20020a05651c04d000b0026fcd9b419fmr2262920lji.415.1666164469004; Wed, 19
+ Oct 2022 00:27:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="egf4vu67dggq4mpk"
-Content-Disposition: inline
-In-Reply-To: <7ae39c9c-8424-8b65-ac09-c0e87f3b0f01@arm.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.1662459668.git.baskov@ispras.ru> <8e9f2d7b0645e17efaa9eec0423f6d2c4a55fc16.1662459668.git.baskov@ispras.ru>
+In-Reply-To: <8e9f2d7b0645e17efaa9eec0423f6d2c4a55fc16.1662459668.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Oct 2022 09:27:37 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFNhayBgXSaHxKpdnWbmQsoG5WpT9U6FhOXqJ0dsHHp4w@mail.gmail.com>
+Message-ID: <CAMj1kXFNhayBgXSaHxKpdnWbmQsoG5WpT9U6FhOXqJ0dsHHp4w@mail.gmail.com>
+Subject: Re: [PATCH 12/16] x86/boot: Add EFI kernel extraction interface
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 6 Sept 2022 at 12:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>
+> To enable extraction of kernel image from EFI stub code directly
+> extraction code needs to have separate interface that avoid part
+> of low level initialization logic, i.e. serial port setup.
+>
+> Add kernel extraction function callable from libstub as a part
+> of preparation for extracting the kernel directly from EFI environment.
+>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> ---
+>  arch/x86/boot/compressed/head_32.S |  3 +-
+>  arch/x86/boot/compressed/head_64.S |  2 +-
+>  arch/x86/boot/compressed/misc.c    | 85 +++++++++++++++++++++---------
+>  arch/x86/boot/compressed/misc.h    |  2 +
+>  arch/x86/boot/compressed/putstr.c  |  9 ++++
+>  5 files changed, 73 insertions(+), 28 deletions(-)
+>
+> diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
+> index 3b354eb9516d..b46a1c4109cf 100644
+> --- a/arch/x86/boot/compressed/head_32.S
+> +++ b/arch/x86/boot/compressed/head_32.S
+> @@ -217,8 +217,7 @@ SYM_DATA(image_offset, .long 0)
+>   */
+>         .bss
+>         .balign 4
+> -boot_heap:
+> -       .fill BOOT_HEAP_SIZE, 1, 0
+> +SYM_DATA(boot_heap,    .fill BOOT_HEAP_SIZE, 1, 0)
+>  boot_stack:
+>         .fill BOOT_STACK_SIZE, 1, 0
+>  boot_stack_end:
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index 889ca7176aa7..37ce094571b5 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -1007,7 +1007,7 @@ SYM_FUNC_END(startup32_check_sev_cbit)
+>   */
+>         .bss
+>         .balign 4
+> -SYM_DATA_LOCAL(boot_heap,      .fill BOOT_HEAP_SIZE, 1, 0)
+> +SYM_DATA(boot_heap,    .fill BOOT_HEAP_SIZE, 1, 0)
+>
+>  SYM_DATA_START_LOCAL(boot_stack)
+>         .fill BOOT_STACK_SIZE, 1, 0
+> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> index e2c0d05ac293..8016cc5c300e 100644
+> --- a/arch/x86/boot/compressed/misc.c
+> +++ b/arch/x86/boot/compressed/misc.c
+> @@ -293,11 +293,11 @@ static void parse_elf(void *output, unsigned long output_len,
+>   *             |-------uncompressed kernel image---------|
+>   *
+>   */
+> -asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+> -                                 unsigned char *input_data,
+> -                                 unsigned long input_len,
+> -                                 unsigned char *output,
+> -                                 unsigned long output_len)
+> +static void *do_extract_kernel(void *rmode,
+> +                              unsigned char *input_data,
+> +                              unsigned long input_len,
+> +                              unsigned char *output,
+> +                              unsigned long output_len)
+>  {
+>         const unsigned long kernel_total_size = VO__end - VO__text;
+>         unsigned long virt_addr = LOAD_PHYSICAL_ADDR;
+> @@ -311,18 +311,6 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>
+>         sanitize_boot_params(boot_params);
+>
+> -       init_default_io_ops();
+> -
+> -       /*
+> -        * Detect TDX guest environment.
+> -        *
+> -        * It has to be done before console_init() in order to use
+> -        * paravirtualized port I/O operations if needed.
+> -        */
+> -       early_tdx_detect();
+> -
+> -       init_bare_console();
+> -
+>         /*
+>          * Save RSDP address for later use. Have this after console_init()
+>          * so that early debugging output from the RSDP parsing code can be
+> @@ -330,11 +318,6 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>          */
+>         boot_params->acpi_rsdp_addr = get_rsdp_addr();
+>
+> -       debug_putstr("early console in extract_kernel\n");
+> -
+> -       free_mem_ptr     = heap;        /* Heap */
+> -       free_mem_end_ptr = heap + BOOT_HEAP_SIZE;
+> -
+>         /*
+>          * The memory hole needed for the kernel is the larger of either
+>          * the entire decompressed kernel plus relocation table, or the
+> @@ -387,12 +370,12 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>         if (virt_addr & (MIN_KERNEL_ALIGN - 1))
+>                 error("Destination virtual address inappropriately aligned");
+>  #ifdef CONFIG_X86_64
+> -       if (heap > 0x3fffffffffffUL)
+> +       if (phys_addr > 0x3fffffffffffUL)
+>                 error("Destination address too large");
+>         if (virt_addr + max(output_len, kernel_total_size) > KERNEL_IMAGE_SIZE)
+>                 error("Destination virtual address is beyond the kernel mapping area");
+>  #else
+> -       if (heap > ((-__PAGE_OFFSET-(128<<20)-1) & 0x7fffffff))
+> +       if (phys_addr > ((-__PAGE_OFFSET-(128<<20)-1) & 0x7fffffff))
+>                 error("Destination address too large");
+>  #endif
+>  #ifndef CONFIG_RELOCATABLE
+> @@ -406,12 +389,64 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>         parse_elf(output, output_len, virt_addr);
+>         debug_putstr("done.\nBooting the kernel.\n");
+>
+> +       return output;
+> +}
+> +
+> +asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+> +                                 unsigned char *input_data,
+> +                                 unsigned long input_len,
+> +                                 unsigned char *output,
+> +                                 unsigned long output_len)
+> +{
+> +       void *entry;
+> +
+> +       init_default_io_ops();
+> +
+> +       /*
+> +        * Detect TDX guest environment.
+> +        *
+> +        * It has to be done before console_init() in order to use
+> +        * paravirtualized port I/O operations if needed.
+> +        */
+> +       early_tdx_detect();
+> +
+> +       init_bare_console();
+> +
+> +       debug_putstr("early console in extract_kernel\n");
+> +
+> +       free_mem_ptr     = heap;        /* Heap */
+> +       free_mem_end_ptr = heap + BOOT_HEAP_SIZE;
+> +
+> +       entry = do_extract_kernel(rmode, input_data,
+> +                                 input_len, output, output_len);
+> +
+>         /* Disable exception handling before booting the kernel */
+>         cleanup_exception_handling();
+>
+> -       return output;
+> +       return entry;
+>  }
+>
+> +void *efi_extract_kernel(struct boot_params *rmode,
+> +                        struct efi_iofunc *iofunc,
+> +                        unsigned char *input_data,
+> +                        unsigned long input_len,
+> +                        unsigned char *output,
+> +                        unsigned long output_len)
+> +{
+> +       extern char boot_heap[BOOT_HEAP_SIZE];
+> +
+> +       free_mem_ptr     = (unsigned long)boot_heap;    /* Heap */
+> +       free_mem_end_ptr = (unsigned long)boot_heap + BOOT_HEAP_SIZE;
+> +
+> +       init_efi_console(iofunc);
+> +
+> +       return do_extract_kernel(rmode, input_data,
+> +                                input_len, output, output_len);
+> +}
+> +
+> +
+> +
+> +
+>  void fortify_panic(const char *name)
+>  {
+>         error("detected buffer overflow");
+> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+> index 39dc3de50268..b5aa0af6c59e 100644
+> --- a/arch/x86/boot/compressed/misc.h
+> +++ b/arch/x86/boot/compressed/misc.h
+> @@ -26,6 +26,7 @@
+>  #include <asm/boot.h>
+>  #include <asm/bootparam.h>
+>  #include <asm/desc_defs.h>
+> +#include <asm/shared/extract.h>
+>
+>  #include "tdx.h"
+>
+> @@ -126,6 +127,7 @@ static inline void console_init(void)
+>
+>  /* putstr.c */
+>  void init_bare_console(void);
+> +void init_efi_console(struct efi_iofunc *iofunc);
+>
+>  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>  void sev_enable(struct boot_params *bp);
+> diff --git a/arch/x86/boot/compressed/putstr.c b/arch/x86/boot/compressed/putstr.c
+> index accba0de8be9..238d9677df61 100644
+> --- a/arch/x86/boot/compressed/putstr.c
+> +++ b/arch/x86/boot/compressed/putstr.c
+> @@ -32,6 +32,15 @@ void init_bare_console(void)
+>         console_init();
+>  }
+>
+> +void init_efi_console(struct efi_iofunc *iofunc)
 
---egf4vu67dggq4mpk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+struct efi_iofunc does not exist yet
 
-On Thu, Sep 29, 2022 at 04:50:43PM +0100, Robin Murphy wrote:
-> On 2022-09-29 15:04, Johan Jonker wrote:
-> > The Rockchip rk3288 SoC has 4-built-in PWM channels.
-> >=20
-> > Configurable to operate in capture mode.
-> > Measures the high/low polarity effective cycles of this input waveform
-> > Generates a single interrupt at the transition of input waveform polari=
-ty
-> >=20
-> > Configurable to operate in continuous mode or one-shot mode.
-> > One-shot operation will produce N + 1 periods of the waveform,
-> > where N is the repeat counter value, and generates a single interrupt at
-> > the end of operation.
-> > Continuous mode generates the waveform continuously and
-> > do not generates any interrupts.
-> >=20
-> > Add interrupts property to rk3288 PWM nodes.
->=20
-> As far as I can make out from the TRM, these are only valid when
-> GRF_SOC_CON2[0] =3D 0, otherwise it's in "new" RK_PWM mode using SPI 78 f=
-or
-> all channels. Which apparently will be the case for anyone using upstream
-> U-Boot:
->=20
-> https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/mach-rockchip=
-/rk3288/rk3288.c#L83
-
-Huh, so it depends on a (software) setting which irqs are in use? So the
-patch isn't correct as is, but I have no idea how to make it right.
-Should we rely on the bootloader to fixup the dtb correctly?
-
-Anyhow, I'm marking the patch as 'changes-requested' in our patchwork
-instance.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---egf4vu67dggq4mpk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNPppoACgkQwfwUeK3K
-7Akn2wf9E1mkjcU/X67/FHOeTDj1DxRQnT2HY0ff5ncZoX/knkINO0zn2zGjIGF0
-UDiwKP5KkEFkWGPkn1PZ7vnTRTeZelBL8O1TIqlpWHC9peH2gOEMSdUCcbE2e3aA
-MaErc+U4m9roSDtFnYkLFHudpANRgB545KscxYZaKR82ONFONQ57PaIiZuFnS2Fy
-uqMhDbgZc5OhHiKRwAvSumOPXoJ1XuJ85lZmmAmZd5mSp/2QAvk+H1zHxisjqw/b
-rQisgoJR1FVllkL6atrCQ1+Yml/9TtPZ05/y/pxbCVVdq69YgMpq0goABsX06Qx9
-W9a9eJvn0vfzsQ6TZBDIShGvmiRiFw==
-=DSeO
------END PGP SIGNATURE-----
-
---egf4vu67dggq4mpk--
+> +{
+> +       __putstr = iofunc->putstr;
+> +       __puthex = iofunc->puthex;
+> +#ifdef CONFIG_X86_64
+> +       kernel_add_identity_map = iofunc->map_range;
+> +#endif
+> +}
+> +
+>  static void scroll(void)
+>  {
+>         int i;
+> --
+> 2.35.1
+>
