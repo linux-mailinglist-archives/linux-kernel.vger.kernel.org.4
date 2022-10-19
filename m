@@ -2,99 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545CE603B3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A654603B61
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJSIQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S229592AbiJSIX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJSIQP (ORCPT
+        with ESMTP id S230142AbiJSIXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:16:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C3496110E;
-        Wed, 19 Oct 2022 01:16:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DFDB20E3;
-        Wed, 19 Oct 2022 01:16:20 -0700 (PDT)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0DBA3F7D8;
-        Wed, 19 Oct 2022 01:16:12 -0700 (PDT)
-Message-ID: <46328b62-d948-a5c2-25c6-f5caec123412@foss.arm.com>
-Date:   Wed, 19 Oct 2022 09:16:03 +0100
+        Wed, 19 Oct 2022 04:23:10 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613E57CE27
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:22:50 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id de14so10913184qvb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jCJsXsDD/iNK9yC84Ot8gXJYydwvdgJYruOO+RMKvrI=;
+        b=BFSR4WVhAXfB1vlb0cUgghmsCkWBRhqgD6lVihreVgg0Ur6b0TysDdmKzJ/V3RZItP
+         2VGwR/gxZPw5eLhG8UVwdrJPN6JvFW2EWGOOWUQwOOt69EkBSKMg/n+eTYeb/Xaftcpx
+         0MRaeDjikhPvT4P85syFkT0PMsbBDuZLIsslwR9vIKR4pV3R266ZjiVeWWuCwDgrs1TY
+         4fz6nx1kqNJL7lUmzZQzpfyxZ8gnv+qKMZxQyNMeqp02ONzGdf0nrvrzyyeSCnSzq5th
+         njgOftXzyJ3pTWAFyAn364PX+ZVbZ/jg9uM7kvCsABV/zdARBWrjAbQUN/V6lHZpCCBO
+         Tkcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jCJsXsDD/iNK9yC84Ot8gXJYydwvdgJYruOO+RMKvrI=;
+        b=OqVRd8ICjwkzPVByuxpd18mmPqrYaZ7CQ//M3DcefsmmTa9r9pQL5d5wxJ4mYn8s6R
+         bYBTNGSzJwKuvoFvA5YK0LjUi6U9nmhx5VXHlKLsDfve9rOV3JvKrp8ilm2xRJp+UjIX
+         jryl557d8hNGhAIpSieP+s6/yItL0nZehLu3ss7P3b43nUej+7txHqZJRUr1Uye3TqM/
+         rqRQXppq19cao1dUp1zJhcZ8VW43vMC65C/07lCtC1n2sC/SWq8vXlfyfBZRYW+1I3Ke
+         j35PYjimPzQG0TU2+6BkXelXOKbysvdexCpoh/l8y97t6zRn5aNMMHqgTHuuCJlaS0BO
+         xoFQ==
+X-Gm-Message-State: ACrzQf0mrPJqXQyhQIB6fo+F77oJZ2kTkyucudLQyYyk48TTSk08bJC1
+        /0tQcuYBtLWxC0jiCX6sGjUDZGPQ3hLOuKDplTX9zMVsD6pSRw==
+X-Google-Smtp-Source: AMsMyM4lpOr7xF2OuedJ06jrmINiWWb6Iolu3B6EalrgIgAhqCKEx0lTHc5iycAzzdfgxucK3mfdcaeahaKaDKVmug4=
+X-Received: by 2002:a17:902:7b95:b0:178:ab50:76b5 with SMTP id
+ w21-20020a1709027b9500b00178ab5076b5mr7288103pll.161.1666167400757; Wed, 19
+ Oct 2022 01:16:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v9 13/13] perf test: Add relevant documentation about
- CoreSight testing
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org
-References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
- <20220909152803.2317006-14-carsten.haitzler@foss.arm.com>
- <yt9dr0zex1j4.fsf@linux.ibm.com>
-Content-Language: en-US
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <yt9dr0zex1j4.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Received: by 2002:a17:902:d2cc:b0:185:457a:9333 with HTTP; Wed, 19 Oct 2022
+ 01:16:40 -0700 (PDT)
+Reply-To: abdwabbom447@gmail.com
+From:   Maddah Hussain <aloyikechukwu03@gmail.com>
+Date:   Wed, 19 Oct 2022 09:16:40 +0100
+Message-ID: <CAJLuiHSMgW28O7MG91mcZnZdzMzbkJKGna5G_xdHGbYkJx4tKw@mail.gmail.com>
+Subject: Get Back to me (URGENT)
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f2f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [abdwabbom447[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aloyikechukwu03[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [aloyikechukwu03[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is weird. This shouldn't be making its way into any man page at 
-all. It's just a file pointing people at other parts of the kernel tree 
-for docs (because when I looked for docs - i found nothing for any kind 
-of getting started guide - I put something here as this was the obvious 
-place for perf related docs for testing - but was told to put the docs 
-elsewhere in core kernel documentation, but I put a reference here for 
-those who follow after to be able to more easily find it).
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
 
-There is some rule somewhere it seems that makes anything perf-*.txt 
-into a man page. I need to rename this file it seems.
-
-On 10/11/22 08:27, Sven Schnelle wrote:
-> Hi Carsten,
-> 
-> carsten.haitzler@foss.arm.com writes:
-> 
->> From: Carsten Haitzler <carsten.haitzler@arm.com>
->>
->> Add/improve documentation helping people get started with CoreSight and
->> perf as well as describe the testing and how it works.
->>
->> Cc: linux-doc@vger.kernel.org
->> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
->> ---
->>   .../trace/coresight/coresight-perf.rst        | 158 ++++++++++++++++++
->>   .../perf/Documentation/perf-arm-coresight.txt |   5 +
->>   2 files changed, 163 insertions(+)
->>   create mode 100644 Documentation/trace/coresight/coresight-perf.rst
->>   create mode 100644 tools/perf/Documentation/perf-arm-coresight.txt
->>
-> 
-> Investigating a rpm build failure i see the following error with next-20221011:
-> 
-> % cd tools/perf/Documentation
-> % make O=/home/svens/linux-build/ man V=1
-> rm -f /home/svens/linux-build/perf-arm-coresight.xml+ /home/svens/linux-build/perf-arm-coresight.xml && \
-> asciidoc -b docbook -d manpage \
->          --unsafe -f asciidoc.conf -aperf_version= \
->          -aperf_date=2022-10-06 \
->          -o /home/svens/linux-build/perf-arm-coresight.xml+ perf-arm-coresight.txt && \
-> mv /home/svens/linux-build/perf-arm-coresight.xml+ /home/svens/linux-build/perf-arm-coresight.xml
-> asciidoc: FAILED: manpage document title is mandatory
-> make: *** [Makefile:266: /home/svens/linux-build/perf-arm-coresight.xml] Error 1
-> 
-> Can you please fix this?
-> 
-> Thanks!
+Maddah Hussain
