@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6698960457A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B3460457E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbiJSMiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
+        id S233245AbiJSMik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiJSMiA (ORCPT
+        with ESMTP id S231818AbiJSMiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:38:00 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC791C2F27
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:18:33 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id f140so17055450pfa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:18:33 -0700 (PDT)
+        Wed, 19 Oct 2022 08:38:07 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BA11D0D46;
+        Wed, 19 Oct 2022 05:18:38 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id cl1so16634322pjb.1;
+        Wed, 19 Oct 2022 05:18:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5TnLW0RVC/l/l6ZpSJGiQ9RS55Sh7Bww2u/zF6eZ2bY=;
-        b=VmIxWBCxoy1QBqErke7QvouhcYXidpSrec5Syh14pJIJHPU4IBaHxcbo5EwewVpxfL
-         +UHb3B6tURYxJ+OMRzyrlcY+MIaMEqksi7YojEEuFTcgkBk003zRHkht+tWuAJp4V6ZY
-         QCSIAyp30+aUccx4FNMCqs+VHPBROZrN7lIbY+1aPL4xUDoMqH9mIfMhPgJU4MnEXfnZ
-         L0HgoJGg4fg6k9uq8klAOIWdCgvuyJc6V7vpS0Ks0TbusDQpzC21nr3ul8W93mlkXKVk
-         br0cf1zSv6un/eSvSABH4wPAVlQRXdptBqGmfovPgMB3oj6Eug03qiKrnUlOk/Tl54Jl
-         VVkw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4UfKB24CuAxAVPOItr5Q5TcZjPxYaIsgbWsletLKpPk=;
+        b=Glc3hntbf7+X4oSfg4Kt2hXTpwzHboRzXWIRZLJwz4UZOJFiv4lIYoTZGv1xIvZZvY
+         vh0Uk4oXT88oCeBoN1bX6kcHeJ0o8SEPL89G/C0AdufsHZMkrWCybXu55IsjadpH7PHF
+         8TpiG3HEun4eTaZu3OUvfy+1+ur0oiCCttNcZmtTRIKZ7hruHJPbeOs0oEBn6YhKiaiO
+         P6rXlGULIid+5i8S/NUo/wg21QOA9URUvlqfLbPm56opXGxgkEX5tm0iDNcFJSgetw6q
+         puRVpsliBuPPrc05ECqf3no2BfTIycsDovb8w5KAs6JR60t7z8xihzpgZiAfl4w6ixFw
+         gJ4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5TnLW0RVC/l/l6ZpSJGiQ9RS55Sh7Bww2u/zF6eZ2bY=;
-        b=0sugAB0PheqqAh5eBci0MPM3wSqze1dsmmQhT35zsUdM/tnnvodjNrRFVGdi23qbK1
-         pS5ElBAlqec+A+Rc7UHWQv7gVukPi0BtJ3pqZRqcWAq6TwbyaQAdskpdHmaYlENcnwE/
-         ofCcsz7Crmt7ACsz9WISxTn5BOycXDXjpC3Qgz8jKTc1RJ9z+YRgYYuUbjCuShlI4drd
-         LK/RoBt02pJ1JFD0amLNyRuTLuiNPmx0LtlyYudcv+BxJqRhlbdQNO6KEBqXB2NRnC0r
-         LP//HD4PJmH5cXOf7RgW9yi3b1OZgQx9z01U2dQdm2Bq8Pm1xQgTNwuIzi+hLbhpePgE
-         vxYw==
-X-Gm-Message-State: ACrzQf2La3G5q1vkUePiEOZCcLeJapELBJNZYuGkd3XDItb+y07yKeNm
-        lE+XRAY/bAHgoXn90rv+M8lxEA==
-X-Google-Smtp-Source: AMsMyM4wiTY98cvros59bvbWZy1Au2cyR34sxy+r9pEvM1Gd9ScZS4SNsiJ/t0LAvGT2I169S3b7hQ==
-X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:6302 with SMTP id b12-20020a056a00114c00b005282c7a6302mr8415575pfm.37.1666181821492;
-        Wed, 19 Oct 2022 05:17:01 -0700 (PDT)
-Received: from anup-ubuntu64-vm.. ([171.76.82.102])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902a38700b0017e93c158d7sm10529824pla.214.2022.10.19.05.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 05:17:00 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v3 4/4] RISC-V: Enable PMEM drivers
-Date:   Wed, 19 Oct 2022 17:46:22 +0530
-Message-Id: <20221019121622.179024-5-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221019121622.179024-1-apatel@ventanamicro.com>
-References: <20221019121622.179024-1-apatel@ventanamicro.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4UfKB24CuAxAVPOItr5Q5TcZjPxYaIsgbWsletLKpPk=;
+        b=kHhGeQQI2k/RqOFcUOYqSzGNvTBskGk8bVuuLbaPipNvqpdZeIb2mxCPgL5EjGVcD4
+         +Ezs/SVNXMSq+yRY6aJReNnkmbYF+EWiwnEXe8XA2NFm5Rs2Q6axFmjnAd11+5Yc1eLx
+         /5KEET05mOXp19S3t28udTiHZ56J7MRBJRr2KWlrmiXKzYg0Zitb5yJSmtbS50qmcDEA
+         8G2XkPRU0qE/XTaTGHNHr56Er2tjYi/SC6ZozhowG7ffkg6gwnORxKFnJCZLOlRuDCpy
+         D/ntde0y/8qkPc9PUdnPZJpVPRgWl010MOfYireUIm2ffnmg7kgz21JNngDcWbRwAOqP
+         vLcg==
+X-Gm-Message-State: ACrzQf1g8nkAkfS59RAHjb0Kx1BDs8Y5kCcROvSwQNpvDqysuuWmbrIl
+        4jNBeHEnn6bfJDlQnHTic7g/X7vHBWj9XCU4xhc=
+X-Google-Smtp-Source: AMsMyM6TKCzZvl3GD8vsawCX4Gt1qWFWL9hwNUxw9F0URCBmpYuIu/BTt25IwHFdfqFKzFZiI76GmTJ5ocEI69dvzFk=
+X-Received: by 2002:a17:902:d2cf:b0:17f:7b65:862f with SMTP id
+ n15-20020a170902d2cf00b0017f7b65862fmr8131289plc.168.1666181791980; Wed, 19
+ Oct 2022 05:16:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221019111714.1953262-1-andrej.picej@norik.com>
+In-Reply-To: <20221019111714.1953262-1-andrej.picej@norik.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 19 Oct 2022 09:16:23 -0300
+Message-ID: <CAOMZO5Detga+MSrzb4ZjkPsaoat-rD9bv9235V9A+OG1Fy+L8g@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Suspending i.MX watchdog in WAIT mode
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org, shawnguo@kernel.org,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, robh+dt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We now have PMEM arch support available in RISC-V kernel so let us
-enable relevant drivers in defconfig.
+Hi Andrej,
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Oct 19, 2022 at 8:17 AM Andrej Picej <andrej.picej@norik.com> wrote:
+>
+> The i.MX6 watchdog can't be stopped once started. This means that
+> special hardware suspend needs to be configured when the device enters
+> low-power modes.
+> Usually i.MX devices have two bits which deal with this:
+> - WDZST bit disables the timer in "deeper" low power modes and
+> - WDW bit disables the timer in "WAIT" mode which corresponds with
+> Linux's "freeze" low-power mode.
+>
+> WDZST bit support is already in place since 1a9c5efa576e ("watchdog: imx2_wdt: disable watchdog timer during low power mode").
+> WDW bit is not common for all imx2-wdt supported devices, therefore use
+> a new device-tree property "fsl,suspend-in-wait" which suspends the
+> watchdog in "WAIT" mode.
+>
+> Andrej Picej (3):
+>   watchdog: imx2_wdg: suspend watchdog in WAIT mode
+>   dt-bindings: watchdog: fsl-imx: document suspend in wait mode
+>   ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 05fd5fcf24f9..462da9f7410d 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -159,6 +159,7 @@ CONFIG_VIRTIO_MMIO=y
- CONFIG_RPMSG_CHAR=y
- CONFIG_RPMSG_CTRL=y
- CONFIG_RPMSG_VIRTIO=y
-+CONFIG_LIBNVDIMM=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
- CONFIG_EXT4_FS_SECURITY=y
--- 
-2.34.1
+For the series:
 
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
