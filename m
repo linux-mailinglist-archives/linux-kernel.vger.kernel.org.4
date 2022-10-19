@@ -2,87 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DF9604768
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BDA604777
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiJSNiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        id S232675AbiJSNj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiJSNhD (ORCPT
+        with ESMTP id S230198AbiJSNig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:37:03 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CFB1C73DF;
-        Wed, 19 Oct 2022 06:25:35 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id de14so11331484qvb.5;
-        Wed, 19 Oct 2022 06:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7iighK5Vy8gk68F3waxRSbAxA6Pg0MUIOL+FTDyriE=;
-        b=lbc9f9Wr+MxLszujk7YIHVD2gIxmji8gDF55GhCbPXbTOpfzYHEsnDjvr1XFtAAzxV
-         Y230q/KlHHmUXvK3oExUPFGpbAg9HHpMkx6OH9mPYsMXi13fzWhYiOFM+IMR4B8yEP1D
-         9JJY6OahJHSBXLuTKl/GUtPET1uHHnkJDZq10D/aoA36LYCUq+fZNoyhTB9tqdn+VAhN
-         v+iHvX6jec4+IbEEz5fCtwuBYlErlW3ND0SAcqBCBzZiY92ScZhMcmvBzKSPw8JUjg+t
-         McRoVrIA8cfeZjo4gzebr/jfJ4eYJjz1YtGoIJY0Eq+y+sgbcy4tMfWClGQIgk7QAZtS
-         dvQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o7iighK5Vy8gk68F3waxRSbAxA6Pg0MUIOL+FTDyriE=;
-        b=e2mgUax02FZKM1Ta2e9juNyssL73wbo52PZt2OxVXnWHcXN1VVE9yZ7hWTVg3typo2
-         C5hygdefyFo+/92gQdlMtCnVXeex+IWrAomiIimffh8xByes0SJ1mLcFW4Xre4Iqm2p3
-         rHzQwnCjl4r2Gh9MK7dytMuLnUUwHpvqNR3iDGNpm7egiAXpeDLkvIOoNLlIkKVgQCFs
-         PFQl6Bl3YFt4Wl1zDe70wYetuVh1rX3s0U2LcRadl3KWu/ljQxpdHP4XeFpReCPtba/n
-         q81kvrnw67pwsL0AjDhgu06p0oLViQkL/sRVd3i29ElZ7+xNf4XneWVGh+o5H2Xd2J6Y
-         PMjA==
-X-Gm-Message-State: ACrzQf0VF3nBxKVRlJRb5qGt+Gog4RunxT464J0QUk2ODxRV2QpTMpzS
-        AsZDs8Tq2Fs/iIEWo8Zkq3s7bhNPa8pJv5n3qHLgnuu3kro=
-X-Google-Smtp-Source: AMsMyM5FowDKe50QjwKrcEleklOnkrieNhZVyIYLQkfP/nWqKKKYRKt4DD88fda3BWm31Sggvpw7FDP/DgFU3SFuKGs=
-X-Received: by 2002:a05:6214:300c:b0:4b3:cefd:fae0 with SMTP id
- ke12-20020a056214300c00b004b3cefdfae0mr6498909qvb.48.1666185897084; Wed, 19
- Oct 2022 06:24:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221019125254.952588-1-mitja@lxnav.com>
-In-Reply-To: <20221019125254.952588-1-mitja@lxnav.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 19 Oct 2022 16:24:21 +0300
-Message-ID: <CAHp75Vd5p5tT52JA9HXaJ5opspXJJS2JECQUAUs9bqQVzc_+2Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] iio: pressure: ms5611: fixed value compensation bug
-To:     Mitja Spes <mitja@lxnav.com>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Wed, 19 Oct 2022 09:38:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CFEFF8E3;
+        Wed, 19 Oct 2022 06:26:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73857B823B2;
+        Wed, 19 Oct 2022 13:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16197C433C1;
+        Wed, 19 Oct 2022 13:26:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666185961;
+        bh=A5t4CXm5J1KUg+zlPQFV5lxTl6j5CK+3GZRfiu9Ujqk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U4Uq19l5+cJ0WdPmSnhzmdK47Q0oxS06zMDRehgCsk9Vl2btsZ9fgLxXyBD8xkDET
+         KrYYUPaM2H90Jwaxh6euwEnnqQ3sTThI7BAw+amUyBNMS0L/tO/yxHXoiADfss5o10
+         E30f1kKn6s4sn1ucRIqBDdXC/rDUGqwJEplUbdwFoE5+izBqKzTq6QBY+m9MZF1Edm
+         dlKbDAQFTwPMAaTd08shIl+KjWmILIt1CS84ZIdDWPUZ7gtMZJ6h1H4DrWWffCC2nf
+         igH1hYaHF6OK4zqnQ9oDbVlpwFStdjduhhDD5wq0muwmF714bJkZv/VnlKt7bk0lAX
+         t6WilUs1ndNFw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ol94v-0005wG-3Y; Wed, 19 Oct 2022 15:25:49 +0200
+Date:   Wed, 19 Oct 2022 15:25:49 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 08/15] phy: qcom-qmp-pcie: add register init helper
+Message-ID: <Y0/63eH82t2zXFi5@hovoldconsulting.com>
+References: <20221019113552.22353-1-johan+linaro@kernel.org>
+ <20221019113552.22353-9-johan+linaro@kernel.org>
+ <0f1fff20-772f-c4d1-f803-f1824ef23780@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0f1fff20-772f-c4d1-f803-f1824ef23780@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 3:55 PM Mitja Spes <mitja@lxnav.com> wrote:
->
-> When using multiple instances of this driver the compensation PROM was
-> overwritten by the last initialized sensor. Now each sensor has own PROM
+On Wed, Oct 19, 2022 at 04:12:02PM +0300, Dmitry Baryshkov wrote:
+> On 19/10/2022 14:35, Johan Hovold wrote:
+> > Generalise the serdes initialisation helper so that it can be used to
+> > initialise all the PHY registers (e.g. serdes, tx, rx, pcs).
+> > 
+> > Note that this defers the ungating of the PIPE clock somewhat, which is
+> > fine as it isn't needed until starting the PHY.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 51 +++++++-----------------
+> >   1 file changed, 15 insertions(+), 36 deletions(-)
+> > 
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > index dd7e72424fc0..f57d10f20277 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > @@ -1820,46 +1820,32 @@ static void qmp_pcie_configure(void __iomem *base,
+> >   	qmp_pcie_configure_lane(base, tbl, num, 0xff);
+> >   }
+> >   
+> > -static void qmp_pcie_serdes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tables)
+> > -{
+> > -	void __iomem *serdes = qmp->serdes;
+> > -
+> > -	if (!tables)
+> > -		return;
+> > -
+> > -	qmp_pcie_configure(serdes, tables->serdes, tables->serdes_num);
+> > -}
+> > -
+> > -static void qmp_pcie_lanes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tables)
+> > +static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
+> >   {
+> >   	const struct qmp_phy_cfg *cfg = qmp->cfg;
+> > +	void __iomem *serdes = qmp->serdes;
+> >   	void __iomem *tx = qmp->tx;
+> >   	void __iomem *rx = qmp->rx;
+> >   	void __iomem *tx2 = qmp->tx2;
+> >   	void __iomem *rx2 = qmp->rx2;
+> > +	void __iomem *pcs = qmp->pcs;
+> > +	void __iomem *pcs_misc = qmp->pcs_misc;
+> >   
+> > -	if (!tables)
+> > +	if (!tbls)
+> >   		return;
+> >   
+> > -	qmp_pcie_configure_lane(tx, tables->tx, tables->tx_num, 1);
+> > -	qmp_pcie_configure_lane(rx, tables->rx, tables->rx_num, 1);
+> > +	qmp_pcie_configure(serdes, tbls->serdes, tbls->serdes_num);
+> > +
+> > +	qmp_pcie_configure_lane(tx, tbls->tx, tbls->tx_num, 1);
+> > +	qmp_pcie_configure_lane(rx, tbls->rx, tbls->rx_num, 1);
+> >   
+> >   	if (cfg->lanes >= 2) {
+> > -		qmp_pcie_configure_lane(tx2, tables->tx, tables->tx_num, 2);
+> > -		qmp_pcie_configure_lane(rx2, tables->rx, tables->rx_num, 2);
+> > +		qmp_pcie_configure_lane(tx2, tbls->tx, tbls->tx_num, 2);
+> > +		qmp_pcie_configure_lane(rx2, tbls->rx, tbls->rx_num, 2);
+> >   	}
+> > -}
+> > -
+> > -static void qmp_pcie_pcs_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tables)
+> > -{
+> > -	void __iomem *pcs = qmp->pcs;
+> > -	void __iomem *pcs_misc = qmp->pcs_misc;
+> > -
+> > -	if (!tables)
+> > -		return;
+> >   
+> > -	qmp_pcie_configure(pcs, tables->pcs, tables->pcs_num);
+> > -	qmp_pcie_configure(pcs_misc, tables->pcs_misc, tables->pcs_misc_num);
+> > +	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
+> > +	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
+> 
+> Nit: could we please keep it as `tables'?
 
-its own
+I considered that but found that the longer identifier hurt
+readability so I prefer to use "tbls" here.
 
-> storage.
+Compare
 
-This change is just a good example why the chip_info should always be
-static const, so the volatile data should come through the different
-sources.
+	qmp_pcie_configure(serdes, tbls->serdes, tbls->serdes_num);
 
--- 
-With Best Regards,
-Andy Shevchenko
+	qmp_pcie_configure_lane(tx, tbls->tx, tbls->tx_num, 1);
+	qmp_pcie_configure_lane(rx, tbls->rx, tbls->rx_num, 1);
+
+	if (cfg->lanes >= 2) {
+		qmp_pcie_configure_lane(tx2, tbls->tx, tbls->tx_num, 2);
+		qmp_pcie_configure_lane(rx2, tbls->rx, tbls->rx_num, 2);
+	}
+
+	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
+	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
+
+with
+
+	qmp_pcie_configure(serdes, tables->serdes, tables->serdes_num);
+
+	qmp_pcie_configure_lane(tx, tables->tx, tables->tx_num, 1);
+	qmp_pcie_configure_lane(rx, tables->rx, tables->rx_num, 1);
+
+	if (cfg->lanes >= 2) {
+		qmp_pcie_configure_lane(tx2, tables->tx, tables->tx_num, 2);
+		qmp_pcie_configure_lane(rx2, tables->rx, tables->rx_num, 2);
+	}
+
+	qmp_pcie_configure(pcs, tables->pcs, tables->pcs_num);
+	qmp_pcie_configure(pcs_misc, tables->pcs_misc, tables->pcs_misc_num);
+
+Johan
