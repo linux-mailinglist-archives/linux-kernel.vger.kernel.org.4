@@ -2,90 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D5D605112
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC987605115
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiJSULY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
+        id S230475AbiJSULh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiJSULU (ORCPT
+        with ESMTP id S230388AbiJSULe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:11:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF901ACAA9;
-        Wed, 19 Oct 2022 13:11:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B77F3B82236;
-        Wed, 19 Oct 2022 20:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D40C433C1;
-        Wed, 19 Oct 2022 20:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666210276;
-        bh=cxINFjC4l26JMWQCDS6yOnnhsiWltfRN4i3cz4+b7vk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I1ZMR3K24nseRo15MOP5rfNigW+Z7xZT29yurBVj0i8XMgxeJujD+PIICzNZIm6bN
-         gyK4dHYnL1woYBdPMdyEToXjqNHDrW2LDxd3wWYhGDXgu42WH98mSb6PNGE0biVwoI
-         NmL/FHqhwiOGE1mM2xnC6PMrXYmWjtf1ioNz6JDLPE8Y5e73BbnB6NW23Hrt0MK1e/
-         +nKHkSBV5CS1gPpnn/eBnJUp5fsum7rA+C1TehSt0R/pHMPXztTW0k12Hfu1L95GIv
-         +3fg3d6ThtT2fif5tCNG/VOG/010vzdu0WdMFtWVtPpP1GUcqnAcVjxl7mbvJEmMkE
-         xq4VgOFK32PwA==
-Date:   Wed, 19 Oct 2022 21:11:07 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Minghuan Lian <minghuan.Lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Joyce Ooi <joyce.ooi@intel.com>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>,
-        Michal Simek <michal.simek@amd.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-omap@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI: Remove unnecessary of_irq.h includes
-Message-ID: <Y1BZ26pv9A0VFS/j@spud>
-References: <20221019195452.37606-1-helgaas@kernel.org>
+        Wed, 19 Oct 2022 16:11:34 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AF01B76E7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=jP23/8oNXZDtmh00ufdfE7zkPkL/
+        ikPEzUVgX0EP4hU=; b=a8a161dB1G12z3w3RCsuDs9SiOc5nZsIoFMIBZqJcx0q
+        /4wWw0OViHWEhkTL6psCGGIoFkkG8IPWEPB9S7J1UszIvaViRsKKA5oUgA+hQglc
+        VzNNsDaHf5ZgEGrNCGEMek4aIMNkGZxI5patPQq0yR0olzW0MeaLSPNyPlOg7a0=
+Received: (qmail 804148 invoked from network); 19 Oct 2022 22:11:29 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Oct 2022 22:11:29 +0200
+X-UD-Smtp-Session: l3s3148p1@KwRf0GjrluQgAwDtxwGnANC4y/SuZCIq
+Date:   Wed, 19 Oct 2022 22:11:28 +0200
+From:   Wolfram Sang <wsa-dev@sang-engineering.com>
+To:     Jason Gerecke <killertofu@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+Subject: Re: [PATCH v2] i2c: Use u8 type in i2c transfer calls
+Message-ID: <Y1BZ8CjSnrKi+Yos@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+References: <20220718153448.173652-1-jason.gerecke@wacom.com>
+ <20220803145937.698603-1-jason.gerecke@wacom.com>
+ <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
+ <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BGtONydHGv42/zAu"
 Content-Disposition: inline
-In-Reply-To: <20221019195452.37606-1-helgaas@kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 02:54:51PM -0500, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Many host controller drivers #include <linux/of_irq.h> even though they
-> don't need it.  Remove the unnecessary #includes.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
->  drivers/pci/controller/pcie-microchip-host.c | 1 -
+--BGtONydHGv42/zAu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-LGTM...
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+> > I believe you need to create a coccinelle script and run it over the
+> > kernel source tree and then create a patch out of it.
+>=20
+> This would definitely be necessary to unify all callers to using
+> unsigned variables rather than just swapping which callers generate
+> the pointer-sign warnings.
+
+I am all for using u8 because this is the proper type.
+
+Yet, if we touch this function argument, I'd also like to remove all
+inconsistencies once and for all. Removing some warnings here and add
+some there is not a good choice IMO. However, how to do this switch of
+types cleanly without too much churn, I sadly have no good idea yet.
+
+
+--BGtONydHGv42/zAu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQWewACgkQFA3kzBSg
+KbZ3Gw//crNGkl16EK/1GS4zVfBem5hUueVH2xbQhi5++pK1z+ykw7ap2dqC5WC6
+kOJjK8nXpGaQJS4wPatM8jYP0uosEd9fpoZG3ULYnnzH6BYdzk/BPgpPQ/0nUaXp
+I63fhBeafHComQkTzfqTZo//qWQkp3DVtyBrA6rfiQyVz8afJOer/n2T772pA3SP
+kYTGL+A6KZQSztTkezKOJYWGPoUXupCLzVgPzonALtiZivgkiGS+OT40JHmPk6GA
+IkvuqE6DlUw5qMx3rTz+oYBO7mijCVms4eBjlzh88vEjmq/UdLh+3RQl3gaps6fh
+iNa2F+BJCQwMJt9NDvvLYeDa68VXNbcSvLkDIJXXP4WzBgkaW3wMJ++sl+f7Q+hB
+/jjkiSOLf4HkJl4ocbWkZwRrqJzuqQWJezkdyleK7rREQ14uSEDoyT66znrmQapF
+maiyP+cv1903PnVdKCq2fwg3q8gS827DI2zmXWFKdPAfT4e0Uvggb4Wa7icJqR1B
+18As6Aews6zo3Dr9cJXgQE7oXz2r0NHQok1+pmXPaMmhGBlFvAoxEO0Ir72uK898
+C6dC1qdBtD9ET9JIL16R5N0oaIWfksXlosPp323Y5J5k1dBKAk6emsNKnNYpdJCw
+bH/876TSZ98j2PHNJUY4MJzneKEs3zNAAw6ZBQRFoNRf93n4rrM=
+=gNnd
+-----END PGP SIGNATURE-----
+
+--BGtONydHGv42/zAu--
