@@ -2,154 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B758360408C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E5D60432E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiJSKDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S231917AbiJSL3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiJSKDU (ORCPT
+        with ESMTP id S230419AbiJSL32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:03:20 -0400
-Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C4F127433;
-        Wed, 19 Oct 2022 02:41:39 -0700 (PDT)
-Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-1321a1e94b3so19976430fac.1;
-        Wed, 19 Oct 2022 02:41:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSYuiPbkFUQeSRCBwAGkhrUEWgqROb3Ooc8NIPZekZ4=;
-        b=TyUNqg/50MJ9OJRoSjAXEV1x6JiHz6zn+lFYaZLqwmF/AcaVuWGSlsqieXsUL/P5p7
-         LKXoZbEftpjDwpg/rFJnLSw25IGNH1z0U/brbIkOwVGFo2yXGO4JVH/KhzaZHvBQNzx5
-         NHV+DmejBxAaf9Ec1FEYOUEss/kT7COJgHsCqYIJEUHoCBLtg9VnVBWgchPy0JXy6oHK
-         RWwBSMfV5s86FVzEG3zT9DjtfyG7alI+JjdnOz5db2r5+99L1T4jX74ugtMKlsj31IiQ
-         9fJXZ69rXz5JbO5X+vFkWbpABnH8hNZRPNtO9ZVmoNBPFrbaMX/bhf9Cjz7LwbzzrlOD
-         4QSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lSYuiPbkFUQeSRCBwAGkhrUEWgqROb3Ooc8NIPZekZ4=;
-        b=tm3YhPlX0uPGVVc06qBB6nbnXmM13eM2piug+7M74KhD9lpFoR0geFZL0WCoFald25
-         VsYVdUXbsrN/PyHbjqyLJj3JKLIRYWFrZTDB7J+od9x0vIYeFLq7gv1yWoR5jv6+tvWF
-         UiX/wRT9dGNyrokkn7ICC4DzLYAqk0l6EJIIzpKWvBg/bCHI508mIJSZS/MTPpIDlsDl
-         lkglnYbXqR3xfr8ATxVsSlel4xt5h4FBtSHtT7dX8nYSQP65Mx35aAO0oCb9PVOcvUHP
-         qdDlL+64TSvnr89qzgO8FtjBWa4rk+SxeSuGRJQ7+cyiL6mglnCUk+oy05vBvz8Z0lBS
-         6ntQ==
-X-Gm-Message-State: ACrzQf3HZFZHwMzqADzK3OP4sz0lcnOloN4E9/CWfCD3yRriwEMBmUaD
-        ehsNvqP+7p7dbhXbOgvDmJ7Wkupnbo4=
-X-Google-Smtp-Source: AMsMyM6sNhUUbHepQ4pUeAreQF+GrD26ZlU/AHpZrRgWL41afoXIlbaY12mmWBCiT7yWzzxx5a0LOw==
-X-Received: by 2002:a17:90b:3850:b0:20d:54f2:a780 with SMTP id nl16-20020a17090b385000b0020d54f2a780mr44237090pjb.115.1666171826686;
-        Wed, 19 Oct 2022 02:30:26 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709027fcd00b0016d8d277c02sm10296420plb.25.2022.10.19.02.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 02:30:25 -0700 (PDT)
-From:   xu.xin.sc@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     edumazet@google.com, pabeni@redhat.com, dsahern@kernel.org,
-        martin.lau@kernel.org, ast@kernel.org, kuniyu@amazon.com,
-        asml.silence@gmail.com, xu xin <xu.xin16@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Zhang Yunkai <zhang.yunkai@zte.com.cn>
-Subject: [PATCH linux-next] net: remove useless parameter of __sock_cmsg_send The
-Date:   Wed, 19 Oct 2022 09:30:14 +0000
-Message-Id: <20221019093014.389738-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 07:29:28 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945E11B6CAF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:03:39 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 02DCA5C009F;
+        Wed, 19 Oct 2022 05:32:46 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 19 Oct 2022 05:32:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666171965; x=1666258365; bh=qV9lZ2aH+8
+        Gf4ZXXwoIECQyW0k3j1ZOHMSQvMpw3uCo=; b=nZbj7uURlyDhe3KWlMJ5vMfoxQ
+        uRCFfIv449lE1p4BjiPmc522K9BkPE3Yex4799UjZT8lExnBRgcC1NtfL8UcioUg
+        lzTJFfF9BRi+H4H9XOfwiTYlPPf3U+IZgCbcwi3Bl4TqFU8Da7SVcp73S4Km1c0M
+        5VL7kCIk3ljMKIuvmG52LX87UZpah8dwqGFjCU/LGZmf1MaLo5Bn9ccPCs3iYvs2
+        CGdCGoAU2rJ8wDo8hVdvOB0W5gQKIidEo++n7AISmBty6r0theqd8TZzzuTXFq/G
+        2IREZfG0KasmmLlDm0BIS+Raj6Oeq8SJcQR7FEd9HJGFrIDm3vRx8azL5F0Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666171965; x=1666258365; bh=qV9lZ2aH+8Gf4ZXXwoIECQyW0k3j
+        1ZOHMSQvMpw3uCo=; b=duAtabXo4h3js24n9SWPyq0sEeMTmApDQxpCPfZq01YG
+        W7XSLR979i5uVt5uNatW+h3hYKerIjta1Efztr5AcoY+tTUGcscLj5mvPEkAEm4N
+        98xzj1aTOqndrWBSSITzhcgh0VIgowy/6nn+y0b4ajPh1f28Q1KW9lU6I22EbJ4c
+        y5yPEIYM2Uh5iWEDJ7Ri9TG4tIEqMRyJPfXGXm6GDlXAJh49ms60Cx3qudRSU6J8
+        MQx2g7bGttdama+fk0kOB6uaAQJrhoPtkZRac4VvVqM70N/XlKZbGWAAJbLQfRER
+        0pfBEuf+sTr0ckPDOHFS77X5L080BHeN9DRsO2pPjQ==
+X-ME-Sender: <xms:PcRPY9ZEgqeMs3HKpvaQhciJKb9wEhmmxyxZ_DD2eYQUVOm9VvgRbw>
+    <xme:PcRPY0avja1xtv3lC3hbxrHyZ4_bbk2OByOwMpA6bPAc1bNcZ5NZsPSmLiMi4edMS
+    deTCaBWg60OAXMBNuE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgedgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:PcRPY__ctHBqnxXXxrfIiUnuII_VatI8AWL0oHii-1TAtlw4yiQyZw>
+    <xmx:PcRPY7qehp0zH-JwsD2UAckZHRdh8PoLFKq-TPDBge-_sO-v5LvNwA>
+    <xmx:PcRPY4p1qOBTnx-yGC9N22Ffstdj1daJQjARYN14M0M4nSsJuwnyNw>
+    <xmx:PcRPY9DyAuq09GrC4OF2YS1m3SyRqppcyMQeC2dwB2KM1WwwUhPhXQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 364FBB60086; Wed, 19 Oct 2022 05:32:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <6d454246-578f-4a25-bddf-2f68f32d2213@app.fastmail.com>
+In-Reply-To: <Y0++52o7QSaDvqpM@shell.armlinux.org.uk>
+References: <20221017233700.84918-1-giulio.benetti@benettiengineering.com>
+ <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
+ <Y0++52o7QSaDvqpM@shell.armlinux.org.uk>
+Date:   Wed, 19 Oct 2022 11:32:25 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Russell King" <linux@armlinux.org.uk>
+Cc:     "Giulio Benetti" <giulio.benetti@benettiengineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Will Deacon" <will@kernel.org>
+Subject: Re: [PATCH] ARM: mm: fix no-MMU ZERO_PAGE() implementation
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On Wed, Oct 19, 2022, at 11:09, Russell King (Oracle) wrote:
 
-parameter 'msg' has never been used by __sock_cmsg_send, so we can remove it
-safely.
+> When the only users in the kernel _were_ ZERO_PAGE() for this, which
+> is defined to return a struct page pointer, there was no need to make
+> "empty_zero_page" anything but a struct page pointer, rather than a
+> runtime translation from an address to a struct page.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-Reviewed-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
----
- include/net/sock.h     | 2 +-
- net/core/sock.c        | 4 ++--
- net/ipv4/ip_sockglue.c | 2 +-
- net/ipv6/datagram.c    | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Fair enough.
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 9e464f6409a7..b1dacc4d68c9 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1901,7 +1901,7 @@ static inline void sockcm_init(struct sockcm_cookie *sockc,
- 	*sockc = (struct sockcm_cookie) { .tsflags = sk->sk_tsflags };
- }
- 
--int __sock_cmsg_send(struct sock *sk, struct msghdr *msg, struct cmsghdr *cmsg,
-+int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
- 		     struct sockcm_cookie *sockc);
- int sock_cmsg_send(struct sock *sk, struct msghdr *msg,
- 		   struct sockcm_cookie *sockc);
-diff --git a/net/core/sock.c b/net/core/sock.c
-index a3ba0358c77c..944a9ea75f65 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2730,7 +2730,7 @@ struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long header_len,
- }
- EXPORT_SYMBOL(sock_alloc_send_pskb);
- 
--int __sock_cmsg_send(struct sock *sk, struct msghdr *msg, struct cmsghdr *cmsg,
-+int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
- 		     struct sockcm_cookie *sockc)
- {
- 	u32 tsflags;
-@@ -2784,7 +2784,7 @@ int sock_cmsg_send(struct sock *sk, struct msghdr *msg,
- 			return -EINVAL;
- 		if (cmsg->cmsg_level != SOL_SOCKET)
- 			continue;
--		ret = __sock_cmsg_send(sk, msg, cmsg, sockc);
-+		ret = __sock_cmsg_send(sk, cmsg, sockc);
- 		if (ret)
- 			return ret;
- 	}
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index 6e19cad154f5..5f16807d3235 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -267,7 +267,7 @@ int ip_cmsg_send(struct sock *sk, struct msghdr *msg, struct ipcm_cookie *ipc,
- 		}
- #endif
- 		if (cmsg->cmsg_level == SOL_SOCKET) {
--			err = __sock_cmsg_send(sk, msg, cmsg, &ipc->sockc);
-+			err = __sock_cmsg_send(sk, cmsg, &ipc->sockc);
- 			if (err)
- 				return err;
- 			continue;
-diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
-index 5ecb56522f9d..df7e032ce87d 100644
---- a/net/ipv6/datagram.c
-+++ b/net/ipv6/datagram.c
-@@ -771,7 +771,7 @@ int ip6_datagram_send_ctl(struct net *net, struct sock *sk,
- 		}
- 
- 		if (cmsg->cmsg_level == SOL_SOCKET) {
--			err = __sock_cmsg_send(sk, msg, cmsg, &ipc6->sockc);
-+			err = __sock_cmsg_send(sk, cmsg, &ipc6->sockc);
- 			if (err)
- 				return err;
- 			continue;
--- 
-2.25.1
+> IMHO, we should _not_ be exposing empty_zero_page to devices - we
+> certainly do not want the DMA API performing cache maintenance on
+> this page since the primary purpose of this page is to fill in
+> userspace BSS pages that have not been written.
 
+It should be easy enough to not expose it by renaming the
+symbol to something other than empty_zero_page. That way,
+any incorrect users that may come up in the future would
+at least result in a build failure instead of runtime
+data corruption.
+
+> So, the only one that needs fixing is the SPI usage, which IMHO
+> is wrong. ARM being different finds what I consider a driver bug.
+> Good for 32-bit ARM. :)
+
+The SPI driver is powerpc specific, so it's also not going to
+get hit. 
+
+    Arnd
