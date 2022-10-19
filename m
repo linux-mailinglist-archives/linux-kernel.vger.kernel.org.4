@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10BC603B2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4176F603B28
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJSIMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S229800AbiJSILc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJSIMK (ORCPT
+        with ESMTP id S229769AbiJSILZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:12:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7813D564FF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:12:09 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MsjyB6cDdzVhy4;
-        Wed, 19 Oct 2022 16:07:30 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 16:12:07 +0800
-Received: from huawei.com (10.67.164.66) by kwepemm600005.china.huawei.com
- (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
- 2022 16:12:07 +0800
-From:   Longfang Liu <liulongfang@huawei.com>
-To:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <john.garry@huawei.com>
-CC:     <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <liulongfang@huawei.com>
-Subject: [PATCH v2 2/2] Documentation: Add debugfs for hisi_acc_vfio_pci
-Date:   Wed, 19 Oct 2022 16:10:33 +0800
-Message-ID: <20221019081033.3169-3-liulongfang@huawei.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20221019081033.3169-1-liulongfang@huawei.com>
-References: <20221019081033.3169-1-liulongfang@huawei.com>
+        Wed, 19 Oct 2022 04:11:25 -0400
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989D25466D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:11:22 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id E5E80227E0; Wed, 19 Oct 2022 08:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1666167079; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=iVRFL4XNlp3jZ55+d09y6jEWOGb6WZ04jAEGFD+GQ4zS2hEYxFr5aq9zfYfYpERFx
+         47Sjp+C5c6YEI7c6EX3PN+BvnwxEcdkI6e+QBWwJzJNFyVa94G7TxVhF5qwobIIFZK
+         86Qq9Gnf3NeOGom0JzjJHceHokSWAAv0+/jTcdAyNKDWGfns3E3jrnApWbTQMc/KRy
+         dUryVcZMmFHR39RhbPxZ0ayB7QVM0W77bG7uGPBg1+dNHZqB1ALnExkWnMaVKR/nIU
+         u241uWMroWD5bA0WjlZAytVclUozHgHcShWR1wHF+SeZ0binX5zs0/czzY8o64WVuE
+         DxyzhmiRDaGtA==
+Received: by mail.fadrush.pl for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:11:07 GMT
+Message-ID: <20221019064500-0.1.2b.na5b.0.gfcayrwuf0@fadrush.pl>
+Date:   Wed, 19 Oct 2022 08:11:07 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a debugfs document description file to help users understand
-how to use the accelerator live migration driver's debugfs.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Longfang Liu <liulongfang@huawei.com>
----
- Documentation/ABI/testing/debugfs-hisi-migration | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 Documentation/ABI/testing/debugfs-hisi-migration
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-diff --git a/Documentation/ABI/testing/debugfs-hisi-migration b/Documentation/ABI/testing/debugfs-hisi-migration
-new file mode 100644
-index 000000000000..36f0882c3a52
---- /dev/null
-+++ b/Documentation/ABI/testing/debugfs-hisi-migration
-@@ -0,0 +1,16 @@
-+What:		/sys/kernel/debug/hisi_vfio_acc/<bdf>/state
-+Date:		Sep 2022
-+Contact:	linux-kernel@vger.kernel.org
-+Description:	Cat the status of the live migration of the current VF device.
-+		The status of these live migrations includes:
-+		Error, RUNNING, STOP, STOP and COPYING, RESUMING.
-+
-+What:		/sys/kernel/debug/hisi_vfio_acc/<bdf>/debug
-+Date:		Sep 2022
-+Contact:	linux-kernel@vger.kernel.org
-+Description:	This debug file supports "cat" read operations and "echo"
-+		write operations. The read debug file operation will return the
-+		command description of the write operation. By writing different
-+		commands, different test functions can be performed.
-+		The specific operation method can be obtained through the
-+		"cat debug" command.
--- 
-2.24.0
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
