@@ -2,177 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4426052C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2518A6052C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiJSWFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        id S231370AbiJSWJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiJSWFn (ORCPT
+        with ESMTP id S230126AbiJSWJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 18:05:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECA61B867F;
-        Wed, 19 Oct 2022 15:05:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A55D619D6;
-        Wed, 19 Oct 2022 22:05:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33257C433C1;
-        Wed, 19 Oct 2022 22:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666217140;
-        bh=Omeg1HpwNO+X+XC4uP/4POEJ2ek2cEOSyvh3ZfVtNTI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MwYZyAXV7xZ9e7cbvdnblnVSrKqR6K0g9WfISXn6RdJr1HF2PMtZCFCXnmoTR/OC+
-         KRvQ8zO3BBmPB2AaF8B2f10GVdShpOKHR2derwohvJdHmXzurfrnf4ZQPIoInYtd7I
-         vr9bGILmANI3xtR55zbvzZdJkEGkkoOfASfCewtmv0TPenYahNO16a37hSQA2BBCrR
-         c3w/aWGqCY0Ks3eo79iBbmLXpM2u3Vn35p0losQedy9ZdhMAVyQfGaAtF+mNHr3keQ
-         dJt6/tvaEF94FeC8iUfDh+fhkiVpf03CdHi9h0fosyHXjoAwgqN9CqYFi45sDmpMxY
-         u8sL4OvuqHCxQ==
-Date:   Thu, 20 Oct 2022 00:05:37 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     John Ogness <john.ogness@linutronix.de>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, tglx@linutronix.de, pmladek@suse.com
-Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
-Message-ID: <20221019220537.GA1234896@lothringen>
-References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
- <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <87k04x4e0r.fsf@jogness.linutronix.de>
- <20221018152418.GR5600@paulmck-ThinkPad-P17-Gen-1>
- <87ilkh0y52.fsf@jogness.linutronix.de>
- <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
- <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
- <87pmeoawwe.fsf@jogness.linutronix.de>
- <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 19 Oct 2022 18:09:01 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD6F1C25E5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:09:00 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id h14so1543241pjv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ElnUUXLD7t/51ihXU8IsUAN/zVEivTS6JYTitIEyOjk=;
+        b=Zwbbn1ALBaH8g0LFCDFEU+0Xb3r7aRtuvTSgJDCP1F5krs+qZRdOl1/DbmW9RjhbsE
+         C0X2Rsta0l3koyI/99a/yLhdRh5Oe5/T4wkk3UcZwTo95hB1grzCMp2vzxCwzZI8PrK/
+         Hm5tYF51pkZGpD7QeJwvAeWJDY2b2D0fAfWweSKrORIb5qNcaVwivTadhVUJG8F5Dyfu
+         cK5J75CBlf1g7xpNo5ivcdga6M+atmEda2YBx6IGQcdXMX9xncBVfuokrym1UOxdppUg
+         aB4o82i/Sx4k2uCL7m6IPvzuCCloJflRraOEFKQntlqtD+SblJ0l8Ggs4IuEv0P+mR9K
+         P3Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ElnUUXLD7t/51ihXU8IsUAN/zVEivTS6JYTitIEyOjk=;
+        b=Xf8w2ZtB7gBM7gvlfJgptWJcRbuPx7YxI8brgoCFdgvsn40NEV2p0KBlWyVYIDztfh
+         KKQn497ywlMA+DTWBlXgDytRWnAkNj8iNnWRwU4vNP6WhE9KcQCtxvpOhKzgQl8AjY8+
+         yuiR5p3PKayCsCqOv7Q0SRFhlMAMBhEfyPYMdlOXCi2oL1j8yG1/b70J1paw5tbb+rts
+         0gveQpGyWnF5WBpe3A/WYaibXkTx6T0bPbhUpFov5THEUdwq9LWkZKVidt5a6NbTHhr1
+         SBbGx7/Bw6STkMskzU2CvvNQy6FvZ+bVUIC7cqKblA6GOwd1m/oCWffstkksclkV3txi
+         D5kQ==
+X-Gm-Message-State: ACrzQf3Pu2/lbezyM/u+oVnFOQjMaUfyNrBneT/6JHqE7OQSi4wrVbzD
+        amFUqNVIvdRfSnSb3efvx/34Uw==
+X-Google-Smtp-Source: AMsMyM5IvBgcgrLUf0leSbCJbFKi5aXDuC2hatOqA2x7byARrqJhXe66mX0ymcPoWoH6zce92GxabQ==
+X-Received: by 2002:a17:902:8549:b0:178:6399:3e0f with SMTP id d9-20020a170902854900b0017863993e0fmr10754786plo.35.1666217340071;
+        Wed, 19 Oct 2022 15:09:00 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170903124500b00174c0dd29f0sm11316735plh.144.2022.10.19.15.08.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 15:08:59 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 22:08:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 33/46] KVM: selftests: Hyper-V PV IPI selftest
+Message-ID: <Y1B1eBIL9WhB4dwc@google.com>
+References: <20221004123956.188909-1-vkuznets@redhat.com>
+ <20221004123956.188909-34-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221004123956.188909-34-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:14:18PM -0700, Paul E. McKenney wrote:
-> On Wed, Oct 19, 2022 at 01:19:53PM +0206, John Ogness wrote:
-> > On 2022-10-18, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > And the v6.1-rc1 stack is now at srcunmisafe.2022.10.18b.
-> > 
-> > Thanks!
-> > 
-> > I guess the kernel test robot will catch this, but if you checkout
-> > commit 79c95dc428ad ("arch/x86: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
-> > Kconfig option") and build for x86_64, you will get:
-> > 
-> > x86_64-linux-gnu-ld: kernel/rcu/srcutree.o: in function `srcu_gp_start_if_needed':
-> > srcutree.c:(.text+0x133a): undefined reference to `__srcu_read_lock_nmisafe'
-> > x86_64-linux-gnu-ld: srcutree.c:(.text+0x1490): undefined reference to `__srcu_read_unlock_nmisafe'
-> > x86_64-linux-gnu-ld: kernel/rcu/srcutree.o: in function `srcu_barrier':
-> > srcutree.c:(.text+0x1b03): undefined reference to `__srcu_read_lock_nmisafe'
-> > x86_64-linux-gnu-ld: srcutree.c:(.text+0x1b38): undefined reference to `__srcu_read_unlock_nmisafe'
-> > 
-> > Note that this error is fixed with a later commit:
-> > 
-> > commit c2d158a284ab ("srcu: Debug NMI safety even on archs that don't
-> > require it").
-> > 
-> > This does not affect what I am working on, so feel free to take care of
-> > it whenever it fits your schedule.
-> 
-> Good catch, thank you!
-> 
-> It looks like the first two hunks in include/linux/srcu.h from that
-> later commit need to be in that earlier commit.
-> 
-> Frederic, does this make sense, or am I off in the weeds?
+On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
+> +static void *vcpu_thread(void *arg)
+> +{
+> +	struct kvm_vcpu *vcpu = (struct kvm_vcpu *)arg;
+> +	struct ucall uc;
+> +	int old;
+> +	int r;
+> +	unsigned int exit_reason;
+> +
+> +	r = pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &old);
+> +	TEST_ASSERT(r == 0,
+> +		    "pthread_setcanceltype failed on vcpu_id=%u with errno=%d",
+> +		    vcpu->id, r);
+> +
+> +	vcpu_run(vcpu);
+> +	exit_reason = vcpu->run->exit_reason;
+> +
+> +	TEST_ASSERT(exit_reason == KVM_EXIT_IO,
+> +		    "vCPU %u exited with unexpected exit reason %u-%s, expected KVM_EXIT_IO",
+> +		    vcpu->id, exit_reason, exit_reason_str(exit_reason));
+> +
+> +	if (get_ucall(vcpu, &uc) == UCALL_ABORT) {
+> +		TEST_ASSERT(false,
+> +			    "vCPU %u exited with error: %s.\n",
+> +			    vcpu->id, (const char *)uc.args[0]);
 
-Actually you need to do that earlier, in
-6584822b1be1 ("srcu: Create an srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe()")
+REPORT_GUEST_ASSERT_N()?
 
-This way you don't only fix x86 bisectability but also the one of all the other safe archs.
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static void cancel_join_vcpu_thread(pthread_t thread, struct kvm_vcpu *vcpu)
+> +{
+> +	void *retval;
+> +	int r;
+> +
+> +	r = pthread_cancel(thread);
+> +	TEST_ASSERT(r == 0,
 
-And it's not just the first two hunks, you also need to include
-the removal of the srcutiny.h/srcutree.h definitions.
+!r is generally preferred over "r == 0"
 
-So namely you need to apply the following to 6584822b1be1. You might
-meet some minor retro-conflicts (the chknmisafe parameter didn't exist yet),
-but that's pretty much it:
+> +		    "pthread_cancel on vcpu_id=%d failed with errno=%d",
+> +		    vcpu->id, r);
 
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 565f60d57484..f0814ffca34b 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -52,8 +52,6 @@ int init_srcu_struct(struct srcu_struct *ssp);
- #else
- /* Dummy definition for things like notifiers.  Actual use gets link error. */
- struct srcu_struct { };
--int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe) __acquires(ssp);
--void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe) __releases(ssp);
- #endif
- 
- void call_srcu(struct srcu_struct *ssp, struct rcu_head *head,
-@@ -66,6 +64,20 @@ unsigned long get_state_synchronize_srcu(struct srcu_struct *ssp);
- unsigned long start_poll_synchronize_srcu(struct srcu_struct *ssp);
- bool poll_state_synchronize_srcu(struct srcu_struct *ssp, unsigned long cookie);
- 
-+#ifdef CONFIG_NEED_SRCU_NMI_SAFE
-+int __srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp);
-+void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx) __releases(ssp);
-+#else
-+static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp)
-+{
-+	return __srcu_read_lock(ssp);
-+}
-+static inline void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
-+{
-+	__srcu_read_unlock(ssp, idx);
-+}
-+#endif /* CONFIG_NEED_SRCU_NMI_SAFE */
-+
- #ifdef CONFIG_SRCU
- void srcu_init(void);
- #else /* #ifdef CONFIG_SRCU */
-diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
-index f890301f123d..f3a4d65b91ef 100644
---- a/include/linux/srcutiny.h
-+++ b/include/linux/srcutiny.h
-@@ -89,16 +89,4 @@ static inline void srcu_torture_stats_print(struct srcu_struct *ssp,
- 		 data_race(READ_ONCE(ssp->srcu_idx)),
- 		 data_race(READ_ONCE(ssp->srcu_idx_max)));
- }
--
--static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe)
--{
--	BUG();
--	return 0;
--}
--
--static inline void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe)
--{
--	BUG();
--}
--
- #endif
-diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-index 35ffdedf86cc..c689a81752c9 100644
---- a/include/linux/srcutree.h
-+++ b/include/linux/srcutree.h
-@@ -159,7 +155,4 @@ void synchronize_srcu_expedited(struct srcu_struct *ssp);
- void srcu_barrier(struct srcu_struct *ssp);
- void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
- 
--int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe) __acquires(ssp);
--void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe) __releases(ssp);
--
- #endif
+Do you happen to know if errno is preserved?  I.e. if TEST_ASSERT()'s print of
+errno will capture the right errno?  If so, this and the pthread_join() assert
+can be:
 
+	TEST_ASSERT(!r, pthread_cancel() failed on vcpu_id=%d, vcpu->id);
 
+> +
+> +	r = pthread_join(thread, &retval);
+> +	TEST_ASSERT(r == 0,
+> +		    "pthread_join on vcpu_id=%d failed with errno=%d",
+> +		    vcpu->id, r);
+
+...
+
+> +	r = pthread_create(&threads[0], NULL, vcpu_thread, vcpu[1]);
+> +	TEST_ASSERT(r == 0,
+> +		    "pthread_create halter failed errno=%d", errno);
+> +
+> +	r = pthread_create(&threads[1], NULL, vcpu_thread, vcpu[2]);
+> +	TEST_ASSERT(r == 0,
+> +		    "pthread_create halter failed errno=%d", errno);
+
+Similar comments as above.
+
+> +
+> +	while (true) {
+> +		r = _vcpu_run(vcpu[0]);
+> +		exit_reason = vcpu[0]->run->exit_reason;
+> +
+> +		TEST_ASSERT(!r, "vcpu_run failed: %d\n", r);
+
+Why use _vcpu_run() with a manual assert?  Won't the vanilla vcpu_run() do what
+you want?
