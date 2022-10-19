@@ -2,116 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADAF604FB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04DC604FB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJSSdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 14:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S229870AbiJSSfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 14:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiJSSds (ORCPT
+        with ESMTP id S229494AbiJSSfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:33:48 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128151D20C5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:33:41 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id c24so18060445pls.9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:33:41 -0700 (PDT)
+        Wed, 19 Oct 2022 14:35:06 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE9A1290AD
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:35:02 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id r19so12265184qtx.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:35:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+PluJNC/fw1ja+vSikAWciLlJudd2H9uq25K8L6bfLo=;
-        b=JVbVN/M0Fs2iSpMzO8pxTylybZgs1ftEadUEBTex5hgbM9JU/8s8n6n2JYgjHxZ3oJ
-         CyZ+U29uY9g2I1wwPJfmTspcn/u/rqgqHXljyZElyrahCuij5ApCn7rfqXasJyESsA0J
-         PiCQvnJswac6hiC6Qyy3/NHr8MO8pFq3aIMIw=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3m/4y2MR8gwHAVKXn6zWeuE8EVdOtK5C6kZLltneEHw=;
+        b=O8Wcj3siSaLUiNoAxNd7BSOg8sMUmChv4yD97G66TuQCFi1qqHnZOHyI+nNCFyjP4i
+         GRNt2RuZwgV9JKMfqFAzEsLeUjymGFqIT+8RDtKlzQFpFAWkEKTGZm6Cce9TW/58S+lu
+         RafzkGJ7dI0FtIE2qvCFWAXdGGDa+YAIru4m4Wz+VCdC4+OwCS/xq1jmqe6ZkC+1OGOu
+         ydzeo/BuwDy6cyqI2ocdR3N06cpGcSGGRJrbW8CYxRNo2SbOtIf31mbiDPNuR/UorXiY
+         66JpMoZ0cWDzTQoi6TmhRfbOVwmlEsoPhP4itaN4RSNqyVruts8FilGD8HvVZTb+33Cy
+         efmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+PluJNC/fw1ja+vSikAWciLlJudd2H9uq25K8L6bfLo=;
-        b=mPkKJKJUjfOzSAh1/Ip/YE7iUEwmTLADw28YJcV6p4pCavwhoZ4tBmFxyKK9HU15rp
-         GHIHDWlkTVfGCRDdfXCFujq0An3HDLwD7d2FB2CJZL+7A0NWMI43bYcMzzIkgV5/tr/g
-         RXrpkbyY/T7A4XJ6eY/3XFHce4bgti7DqbWgBVf30wCvDj8KkpvoUnyfkAhVeRiP1+Td
-         cZRJowunnaRo4i+/KcueyU+qgjkcw2uxjHQn9AQxak5pqo5uPWcV1JsRoGauYp5Ub1cs
-         0fqf+VwRMVztTAtoSwh33o0yPiBNsQKJSpeSPPUTS9H4wP0GdqpbKTLcDXB41mSwJysB
-         Iqkg==
-X-Gm-Message-State: ACrzQf31Hd+ybLS4gTFDjzVGPjHrrHKdgrvwUHjeWVW0eg9joMCvQRLb
-        s30s8li8geXOK8dHmHdRlE2nlw==
-X-Google-Smtp-Source: AMsMyM67W2Yn8Am1Y+VGKJgWqTslcaqvPI3VRf0IkD4gH2fvYM9IwcHId/YBYl3dAfMBGHuS9YMnDA==
-X-Received: by 2002:a17:902:e545:b0:184:2f27:b34 with SMTP id n5-20020a170902e54500b001842f270b34mr9543201plf.15.1666204420516;
-        Wed, 19 Oct 2022 11:33:40 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k33-20020a635621000000b00460a5c6304dsm1967827pgb.67.2022.10.19.11.33.39
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3m/4y2MR8gwHAVKXn6zWeuE8EVdOtK5C6kZLltneEHw=;
+        b=IgEbvNZoIP8bOk4JcGZbJ6/kVmQ18gx+8ZmlJeXKOn8QX0S8nP8cm16WOB4CTw+RG6
+         UXp1FbmSAPckrYjSvZiUS8NxP/RkyCP3wm4HotrVwGC/isZkP4zTuPQyh2bM1pC5j0l6
+         N6N42dAuFutH8yS7KCiFUIehZfu5AXatp5iDYYOeAs3XgkBHypd7B8XGwGjJVprrzap0
+         hp4h5mzdThRfT+dEDwW7dXK91vBWqsxxoeRVnd3yLTxze7f2wiOE6CXrCJGZ5U5YZm69
+         49vKw6RvOZKq78BZ5okCZUbntMEwSAjvqb6T11vYMOATFjkZ24U8PDHlljGtrvmLJygD
+         Qobw==
+X-Gm-Message-State: ACrzQf0oTfzY3msioZu7LEuEdQzR2ai7D4s44/RPfh9nDxh7MgrcPjqD
+        4LIw/1IgT94Kigf2wZEzGiT09GCb/DPTFw==
+X-Google-Smtp-Source: AMsMyM4mrUchVtySA1ZdmfnOuXHuUFsPnkVD1l6m3s7KCDUvatE8rSo+LBemxh2dP4CD2tlD622A5Q==
+X-Received: by 2002:a05:622a:48c:b0:39c:f2c5:41eb with SMTP id p12-20020a05622a048c00b0039cf2c541ebmr7780649qtx.212.1666204501638;
+        Wed, 19 Oct 2022 11:35:01 -0700 (PDT)
+Received: from sophie ([143.244.47.100])
+        by smtp.gmail.com with ESMTPSA id r28-20020ae9d61c000000b006ed30a8fb21sm5377417qkk.76.2022.10.19.11.35.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 11:33:39 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 11:33:38 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/9] integrity: Prepare for having "ima" and "evm"
- available in "integrity" LSM
-Message-ID: <202210191129.BFBF8035@keescook>
-References: <20221013222702.never.990-kees@kernel.org>
- <20221013223654.659758-1-keescook@chromium.org>
- <08a8b202-69b4-e154-28f5-337a898acf61@digikod.net>
- <202210141050.A8DF7D10@keescook>
- <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
+        Wed, 19 Oct 2022 11:35:00 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH v3 0/5] memblock tests: add tests for memblock_alloc_exact_nid_raw
+Date:   Wed, 19 Oct 2022 13:34:07 -0500
+Message-Id: <cover.1666203642.git.remckee0@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:26:44AM +0200, Mickaël Salaün wrote:
-> 
-> On 14/10/2022 19:59, Kees Cook wrote:
-> > On Fri, Oct 14, 2022 at 04:40:01PM +0200, Mickaël Salaün wrote:
-> > > This is not backward compatible
-> > 
-> > Why? Nothing will be running LSM hooks until init finishes, at which
-> > point the integrity inode cache will be allocated. And ima and evm don't
-> > start up until lateinit.
-> > 
-> > > , but can easily be fixed thanks to
-> > > DEFINE_LSM().order
-> > 
-> > That forces the LSM to be enabled, which may not be desired?
-> 
-> This is not backward compatible because currently IMA is enabled
-> independently of the "lsm=" cmdline, which means that for all installed
-> systems using IMA and also with a custom "lsm=" cmdline, updating the kernel
-> with this patch will (silently) disable IMA. Using ".order =
-> LSM_ORDER_FIRST," should keep this behavior.
+These patches add tests for memblock_alloc_exact_nid_raw(). There are two
+sets of tests: range tests and NUMA tests. The range tests use a normal
+(i.e., UMA) simulated physical memory and set the nid to NUMA_NO_NODE. The
+NUMA tests use a simulated physical memory that is set up with multiple
+NUMA nodes. Additionally, most of the NUMA tests set nid != NUMA_NO_NODE.
 
-This isn't true. If "integrity" is removed from the lsm= line today, IMA
-will immediately panic:
+For the range tests, the TEST_F_EXACT flag is used to run the same set of
+range tests used for memblock_alloc_try_nid_raw(). The NUMA tests have the
+same setup as the corresponding test for memblock_alloc_try_nid_raw(), but
+several of the memblock_alloc_exact_nid_raw() tests fail to allocate
+memory in setups where the memblock_alloc_try_nid_raw() test would
+allocate memory. Also, some memblock_alloc_exact_nid_raw() tests drop the
+lower limit of the requested range in order to allocate within the
+requested node, but the same setup in a memblock_alloc_try_nid_raw() test
+allocates within the requested range.
 
-process_measurement():
-  integrity_inode_get():
-        if (!iint_cache)
-                panic("%s: lsm=integrity required.\n", __func__);
+---
+Changelog
 
-and before v5.12 (where the panic was added), it would immediately NULL
-deref. (And it took 3 years to even notice.)
+v1 -> v2
+PATCH 0:
+- Add missing memblock_alloc_exact_nid_raw to subject line
+
+v2 -> v3
+Based on feedback from David Hildenbrand:
+PATCH 1:
+- alloc_nid_api.c, alloc_nid_api.h, common.h:
+    + Add TEST_F_EXACT flag so that tests in alloc_nid_api.c can be run
+      with that flag to test memblock_alloc_exact_nid_raw()
+- alloc_exact_nid_api.c:
+    + Update to run range tests in alloc_nid_api.c with TEST_F_EXACT flag
+      instead of using a separate set of tests
+- alloc_nid_api.c:
+    + Rename tests and other functions by removing "_try" so that the
+      function names are general enough to refer to any of the
+      memblock_alloc_*nid*() functions of the memblock API
+---
+
+Rebecca Mckeever (5):
+  memblock tests: introduce range tests for memblock_alloc_exact_nid_raw
+  memblock tests: add top-down NUMA tests for
+    memblock_alloc_exact_nid_raw
+  memblock tests: add bottom-up NUMA tests for
+    memblock_alloc_exact_nid_raw
+  memblock tests: add generic NUMA tests for
+    memblock_alloc_exact_nid_raw
+  memblock tests: remove completed TODO item
+
+ tools/testing/memblock/Makefile               |    2 +-
+ tools/testing/memblock/TODO                   |    7 +-
+ tools/testing/memblock/main.c                 |    2 +
+ .../memblock/tests/alloc_exact_nid_api.c      | 1113 +++++++++++++++++
+ .../memblock/tests/alloc_exact_nid_api.h      |   25 +
+ tools/testing/memblock/tests/alloc_nid_api.c  |  542 ++++----
+ tools/testing/memblock/tests/alloc_nid_api.h  |    1 +
+ tools/testing/memblock/tests/common.h         |    2 +
+ 8 files changed, 1425 insertions(+), 269 deletions(-)
+ create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.c
+ create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.h
 
 -- 
-Kees Cook
+2.25.1
+
