@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6865604E52
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4090A604E4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiJSRPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S230219AbiJSROu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiJSRPJ (ORCPT
+        with ESMTP id S230127AbiJSROn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:15:09 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403A5127928;
-        Wed, 19 Oct 2022 10:14:55 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29JHEPUt113785;
-        Wed, 19 Oct 2022 12:14:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666199665;
-        bh=6Yk4ZgWU7L/RHOKUFCxLZUy3p8/nm2inHJmRmMRVoC8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=vF6pJI+afFZ5TlfIqj3eJKDQ7QkQfYU8+MckbmeKpKyJMUjEoWVdYGNGyFvlWRKjl
-         87vsXNEEBSMkd5rZyAywHvuU1LY0b46KFNuVWs7qqdfXDvb6VK/ji7AGaR702q28Mw
-         FwQioz4T0Ix1wWv9vCiRlEGFCFPgQvjhcvXdgDm0=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29JHEPVV003107
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Oct 2022 12:14:25 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 19
- Oct 2022 12:14:24 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 19 Oct 2022 12:14:24 -0500
-Received: from [10.250.234.73] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29JHEJRe017688;
-        Wed, 19 Oct 2022 12:14:20 -0500
-Message-ID: <837bcf1d-e59f-5990-29e2-2b64d3dfaaa1@ti.com>
-Date:   Wed, 19 Oct 2022 22:44:19 +0530
+        Wed, 19 Oct 2022 13:14:43 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A673DBFA
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:14:40 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-131dda37dddso21507194fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KQxzROgST2+8KIjtVZdr5+s36xe/ZTzSg3ETS6Z3ulQ=;
+        b=LHMjzMXASHQR480KuNviD0xWrYZLfPGTCqeVvQUzo3gve/gy/NSntm2Y3IkOnCwj1p
+         +2IyuKYK8OWw/x9y83GLy2MuG6uqB0UvRc95PvRt9RDfj9DT+fECM5grlCAHIYJa4yIC
+         pJNjoJ+eCxvdc3VlvJicxtqeqtYoTOSjDGAh0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KQxzROgST2+8KIjtVZdr5+s36xe/ZTzSg3ETS6Z3ulQ=;
+        b=2cL3bTdnV27htx78reTvbs9ebppH98eARPYohZZi5us588xme1gzGBAw5n32R30uiK
+         ZX4ww3AC8WS1Nf6hCOxL2j+rY9Wkg0MpDSB2RRm4LExLr6+4kGgoBVvEJqwFfN2JEGQK
+         jCzMMfNu3kQqaLNuuUiOGVIRu91SXdLVQ9ETUeAbl1TunI2DbKrxbIwxzxWgjY3YGZvi
+         fQNHekOQRSdtn54ycEJxG0MAXaMiH6ZI66Ge4mnZxupahlcYpeqaR9eSRKbocXNZr3p2
+         8rPthdcsUMMTXoY5h+ILX/4KDu+Rve0U6jkdNBet+5mfxc+8zJJo1WLCgo3tm+WQW9Gk
+         /cWg==
+X-Gm-Message-State: ACrzQf2DVrSdOTj5xvVFQp557otWzoG0nSWEREykV3dWywFgfrhf6V6s
+        fLS7BPQBLLxHBQ3qpoU+CTYiV/d5o7ancg==
+X-Google-Smtp-Source: AMsMyM4JVyganvPK94CCqFcWi5V1bHNknPpJeqVvRIZ4RWdw7pAKp7X6UozwP9lF6ir3TcMVDj0NGw==
+X-Received: by 2002:a05:6870:70a8:b0:131:9591:3eec with SMTP id v40-20020a05687070a800b0013195913eecmr22562934oae.100.1666199679453;
+        Wed, 19 Oct 2022 10:14:39 -0700 (PDT)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com. [209.85.167.181])
+        by smtp.gmail.com with ESMTPSA id 94-20020a9d0de7000000b006619295af60sm7217235ots.70.2022.10.19.10.14.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 10:14:37 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id x188so20011674oig.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:14:36 -0700 (PDT)
+X-Received: by 2002:a05:6808:23c3:b0:351:4ecf:477d with SMTP id
+ bq3-20020a05680823c300b003514ecf477dmr5072747oib.126.1666199676600; Wed, 19
+ Oct 2022 10:14:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC PATCH v5 5/6] drm/tidss: Add IO CTRL and Power support for
- OLDI TX in am625
-Content-Language: en-US
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>
-References: <20220928175223.15225-1-a-bhatia1@ti.com>
- <20220928175223.15225-6-a-bhatia1@ti.com>
- <708ae70e-dc1b-1079-8442-06cbea228e99@ideasonboard.com>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <708ae70e-dc1b-1079-8442-06cbea228e99@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
+In-Reply-To: <20221019165455.GL25951@gate.crashing.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 19 Oct 2022 10:14:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+Message-ID: <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,136 +80,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi
+On Wed, Oct 19, 2022 at 9:57 AM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+>
+> This is an ABI change.  It is also hugely detrimental to generated
+> code quality on architectures that make the saner choice (that is, have
+> most instructions zero-extend byte quantities).
 
-On 12-Oct-22 17:59, Tomi Valkeinen wrote:
-> On 28/09/2022 20:52, Aradhya Bhatia wrote:
->> The ctrl mmr module of the AM625 is different from the AM65X SoC. Thus
->> the ctrl mmr registers that supported the OLDI TX power have become
->> different in AM625 SoC.
->>
->> Add IO CTRL support and control the OLDI TX power for AM625.
->>
->> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->> ---
->>   drivers/gpu/drm/tidss/tidss_dispc.c      | 55 ++++++++++++++++++------
->>   drivers/gpu/drm/tidss/tidss_dispc_regs.h |  6 +++
->>   2 files changed, 49 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c 
->> b/drivers/gpu/drm/tidss/tidss_dispc.c
->> index 88008ad39b55..68444e0cd8d7 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
->> @@ -921,21 +921,52 @@ int dispc_vp_bus_check(struct dispc_device 
->> *dispc, u32 hw_videoport,
->>   static void dispc_oldi_tx_power(struct dispc_device *dispc, bool power)
->>   {
->> -    u32 val = power ? 0 : OLDI_PWRDN_TX;
->> +    u32 val;
->>       if (WARN_ON(!dispc->oldi_io_ctrl))
->>           return;
->> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT0_IO_CTRL,
->> -               OLDI_PWRDN_TX, val);
->> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT1_IO_CTRL,
->> -               OLDI_PWRDN_TX, val);
->> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT2_IO_CTRL,
->> -               OLDI_PWRDN_TX, val);
->> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT3_IO_CTRL,
->> -               OLDI_PWRDN_TX, val);
->> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_CLK_IO_CTRL,
->> -               OLDI_PWRDN_TX, val);
->> +    if (dispc->feat->subrev == DISPC_AM65X) {
->> +        val = power ? 0 : OLDI_PWRDN_TX;
->> +
->> +        regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT0_IO_CTRL,
->> +                   OLDI_PWRDN_TX, val);
->> +        regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT1_IO_CTRL,
->> +                   OLDI_PWRDN_TX, val);
->> +        regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT2_IO_CTRL,
->> +                   OLDI_PWRDN_TX, val);
->> +        regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT3_IO_CTRL,
->> +                   OLDI_PWRDN_TX, val);
->> +        regmap_update_bits(dispc->oldi_io_ctrl, OLDI_CLK_IO_CTRL,
->> +                   OLDI_PWRDN_TX, val);
->> +
->> +    } else if (dispc->feat->subrev == DISPC_AM625) {
->> +        if (power) {
->> +            switch (dispc->oldi_mode) {
->> +            case OLDI_SINGLE_LINK_SINGLE_MODE:
->> +                /* Power down OLDI TX 1 */
->> +                val = OLDI1_PWRDN_TX;
->> +                break;
->> +
->> +            case OLDI_SINGLE_LINK_CLONE_MODE:
->> +            case OLDI_DUAL_LINK_MODE:
->> +                /* No Power down */
->> +                val = 0;
->> +                break;
->> +
->> +            default:
->> +                /* Power down both the OLDI TXes */
->> +                val = OLDI0_PWRDN_TX | OLDI1_PWRDN_TX;
->> +                break;
->> +            }
->> +        } else {
->> +            /* Power down both the OLDI TXes */
->> +            val = OLDI0_PWRDN_TX | OLDI1_PWRDN_TX;
->> +        }
-> 
-> Ugh, I hate power-down bits. So you "enable" it to disable it =). What's 
-> the default value or the register here? Or will this always be called? 
-> I.e. if we only use DPI, do we power down the OLDIs somewhere (or does 
-> it matter)?
-> 
+Yeah, I agree. We should just accept the standard wording, and be
+aware that 'char' has indeterminate signedness.
 
-The power bits are defaulted to keep the OLDI TXes powered off, and they
-have to be turned ON.
+But:
 
-This function is also called to power off the OLDI TXes, from
-dispc_vp_unprepare. And that happens with "power" variable as false. So
-the else condition above is indeed required.
+> Instead, don't actively disable the compiler warnings that catch such
+> cases?  So start with removing footguns like
+>
+>   # disable pointer signed / unsigned warnings in gcc 4.0
+>   KBUILD_CFLAGS += -Wno-pointer-sign
 
-You are right about the other scenario though. If DPI is only used, the
-mode will be set to OLDI_MODE_OFF and in that case, the dispc_vp_prepare
-function will NOT be called for the OLDI VP thereby rendering the
-"default" clause of the switch statement, for powering down the OLDIs,
-essentially useless. I just put it there because of convention.
+Nope, that won't fly.
 
->> +
->> +        regmap_update_bits(dispc->oldi_io_ctrl, OLDI_PD_CTRL,
->> +                   OLDI0_PWRDN_TX | OLDI1_PWRDN_TX, val);
->> +    }
->>   }
->>   static void dispc_set_num_datalines(struct dispc_device *dispc,
->> @@ -2831,7 +2862,7 @@ int dispc_init(struct tidss_device *tidss)
->>           dispc->vp_data[i].gamma_table = gamma_table;
->>       }
->> -    if (feat->subrev == DISPC_AM65X) {
->> +    if (feat->subrev == DISPC_AM65X || feat->subrev == DISPC_AM625) {
->>           r = dispc_init_am65x_oldi_io_ctrl(dev, dispc);
->>           if (r)
->>               return r;
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc_regs.h 
->> b/drivers/gpu/drm/tidss/tidss_dispc_regs.h
->> index 13feedfe5d6d..510bee70b3b8 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc_regs.h
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc_regs.h
->> @@ -238,6 +238,12 @@ enum dispc_common_regs {
->>   #define OLDI_DAT3_IO_CTRL            0x0C
->>   #define OLDI_CLK_IO_CTRL            0x10
->> +/* Only for AM625 OLDI TX */
->> +#define OLDI_PD_CTRL                0x100
->> +#define OLDI_LB_CTRL                0x104
->> +
->>   #define OLDI_PWRDN_TX                BIT(8)
->> +#define OLDI0_PWRDN_TX                BIT(0)
->> +#define OLDI1_PWRDN_TX                BIT(1)
-> 
-> Maybe these (the new and old ones) should be platform-prefixed. And 
-> organized so that the register and its bits are together.
-Okay, will do.
+The pointer-sign thing doesn't actually help (ie it won't find places
+where you actually compare a char), and it causes untold damage in
+doing completely insane things.
 
+For example, it suddenly starts warning if  you *are* being careful,
+and explicitly use 'unsigned char array[]' things to avoid any sign
+issues, and then want to do simple and straightforward things with
+said array (like doing a 'strcmp()' on it).
 
-Regards
-Aradhya
+Seriously, -Wpointer-sign is not just useless, it's actively _evil_.
+The fact that you suggest that clearly means that you've never used
+it.
+
+                      Linus
