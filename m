@@ -2,175 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E966B60518C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4711460518F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiJSUrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S231529AbiJSUsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiJSUrY (ORCPT
+        with ESMTP id S231343AbiJSUsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:47:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0963F1BE1FA
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:47:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42DD41424;
-        Wed, 19 Oct 2022 13:47:12 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18C933F792;
-        Wed, 19 Oct 2022 13:47:03 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
-        tarek.el-sherbiny@arm.com, quic_kshivnan@quicinc.com,
-        cristian.marussi@arm.com
-Subject: [PATCH v4 11/11] firmware: arm_scmi: Call Raw mode hooks from the core stack
-Date:   Wed, 19 Oct 2022 21:46:26 +0100
-Message-Id: <20221019204626.3813043-12-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221019204626.3813043-1-cristian.marussi@arm.com>
-References: <20221019204626.3813043-1-cristian.marussi@arm.com>
+        Wed, 19 Oct 2022 16:48:53 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795DA1D73E8;
+        Wed, 19 Oct 2022 13:48:40 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id d18-20020a05683025d200b00661c6f1b6a4so10219266otu.1;
+        Wed, 19 Oct 2022 13:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V2ny2FO1w+h5elXA/iimjCsCpEt6/e0h9fUeOA8PjnM=;
+        b=ZRdgOQFPwAadGoJwO1DifSEOn8dKAXDT6QkB1gX73/6jJSYUJ4G5rT5mmji8gzVeOj
+         ZJhR23t06a1HauIYMAv2lGXA5EkuHP6lSqP4jcXAvX75QH5q6ywUZ67pf++EZfnwKcbU
+         wMRA+5ATISaQ0chrRbm6Tj2utRsiZNNU0GSmgbltPPoeFESus/PP65u17cS2MjMoY4p4
+         0PGQvO6/LZE/74tbIb3GWCpMuAFEoVUErSlK5nV3tNGd5i/yyaszlUylcn/lSFDs6IUE
+         nZLYTrcjtv6EOVGLVS3NCZb9YCrjEQlhtsZNlVpzZTi9l0DidewKnuiX3JVrYz5s1OTe
+         zXqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V2ny2FO1w+h5elXA/iimjCsCpEt6/e0h9fUeOA8PjnM=;
+        b=FxEoev19FoT0IrUDdBJZQjWQlueyfXkmQeJKd2x+dFGOBP5Wph7IkyYqSenLbbbLnP
+         FkP9IjErwRNGeatzRJ9kt4ElvfknUW8s9A+Kjhdq/CDSbNZDav/LoGFtHU2JEkyCrDrx
+         z74FqS7JlJ+Er0H1KxLnyN+XBtydhtKuTah9ZUQK4DPfOcqdZOon1YHx4gOTh3/l9OlQ
+         y/iJt3J0zCBDIo7XG4WWfsz397IJ4CgJyzfT2bQOUCZJ0t0fQMhP4P+wTKGZh4gpt6Fz
+         YpeuurgQWqUhC9cq1kMaUUWPtlsGIxGAcYcVVerGs1AGisoP0oYhVTWPAJsbp5WwI00w
+         XUAA==
+X-Gm-Message-State: ACrzQf1yA54CFai4mJa43w+hkzBTg0OC2Hbi2k5TrLSEXkt9YJa0RIng
+        F2/HyzYAcx0qC0x3rSnO2sKtjGcO52IVQ6VkW7wzrfVBbDI=
+X-Google-Smtp-Source: AMsMyM6LSJLygfOcFCuntn9V5AmHOfvkWLvzfLTcYp3XGpUH9B2nl0q5BMLvyYBbAdD9TQonVqExBbfrIIpmGfgWfzA=
+X-Received: by 2002:a9d:1b65:0:b0:661:b90c:6475 with SMTP id
+ l92-20020a9d1b65000000b00661b90c6475mr5042825otl.110.1666212507436; Wed, 19
+ Oct 2022 13:48:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220718153448.173652-1-jason.gerecke@wacom.com>
+ <20220803145937.698603-1-jason.gerecke@wacom.com> <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
+ <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com> <Y1BZ8CjSnrKi+Yos@shikoro>
+In-Reply-To: <Y1BZ8CjSnrKi+Yos@shikoro>
+From:   Jason Gerecke <killertofu@gmail.com>
+Date:   Wed, 19 Oct 2022 13:48:14 -0700
+Message-ID: <CANRwn3SmrGX2-cqMK=dDTJR=OaxoVM9C+fsaa8jz96ADtH02DA@mail.gmail.com>
+Subject: Re: [PATCH v2] i2c: Use u8 type in i2c transfer calls
+To:     Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a few call sites where, if SCMI Raw mode access had been enabled in
-Kconfig, the needed SCMI Raw initialization and hooks are called.
+On Wed, Oct 19, 2022 at 1:11 PM Wolfram Sang
+<wsa-dev@sang-engineering.com> wrote:
+>
+>
+> > > I believe you need to create a coccinelle script and run it over the
+> > > kernel source tree and then create a patch out of it.
+> >
+> > This would definitely be necessary to unify all callers to using
+> > unsigned variables rather than just swapping which callers generate
+> > the pointer-sign warnings.
+>
+> I am all for using u8 because this is the proper type.
+>
+> Yet, if we touch this function argument, I'd also like to remove all
+> inconsistencies once and for all. Removing some warnings here and add
+> some there is not a good choice IMO. However, how to do this switch of
+> types cleanly without too much churn, I sadly have no good idea yet.
+>
 
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-v3 --> v4
-- add call hooks to support polled transports
-v1 --> v2
-- fixes need to use multiple cinfo if available
----
- drivers/firmware/arm_scmi/driver.c | 45 ++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 3e5539987443..e28104e1b961 100644
---- a/drivers/firmware/arm_scmi/driver.c
-+++ b/drivers/firmware/arm_scmi/driver.c
-@@ -34,6 +34,8 @@
- #include "common.h"
- #include "notify.h"
- 
-+#include "raw_mode.h"
-+
- #define CREATE_TRACE_POINTS
- #include <trace/events/scmi.h>
- 
-@@ -133,6 +135,7 @@ struct scmi_protocol_instance {
-  * @notify_priv: Pointer to private data structure specific to notifications.
-  * @node: List head
-  * @users: Number of users of this instance
-+ * @raw: An opaque reference handle used by SCMI Raw mode.
-  */
- struct scmi_info {
- 	struct device *dev;
-@@ -152,6 +155,7 @@ struct scmi_info {
- 	void *notify_priv;
- 	struct list_head node;
- 	int users;
-+	void *raw;
- };
- 
- #define handle_to_scmi_info(h)	container_of(h, struct scmi_info, handle)
-@@ -761,6 +765,11 @@ static void scmi_handle_notification(struct scmi_chan_info *cinfo,
- 			   xfer->hdr.protocol_id, xfer->hdr.seq,
- 			   MSG_TYPE_NOTIFICATION);
- 
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
-+		xfer->hdr.seq = MSG_XTRACT_TOKEN(msg_hdr);
-+		scmi_raw_message_report(info->raw, xfer, SCMI_RAW_NOTIF_QUEUE);
-+	}
-+
- 	__scmi_xfer_put(minfo, xfer);
- 
- 	scmi_clear_channel(info, cinfo);
-@@ -774,6 +783,9 @@ static void scmi_handle_response(struct scmi_chan_info *cinfo,
- 
- 	xfer = scmi_xfer_command_acquire(cinfo, msg_hdr);
- 	if (IS_ERR(xfer)) {
-+		if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
-+			scmi_raw_error_report(info->raw, cinfo, msg_hdr, priv);
-+
- 		if (MSG_XTRACT_TYPE(msg_hdr) == MSG_TYPE_DELAYED_RESP)
- 			scmi_clear_channel(info, cinfo);
- 		return;
-@@ -805,6 +817,16 @@ static void scmi_handle_response(struct scmi_chan_info *cinfo,
- 		complete(&xfer->done);
- 	}
- 
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
-+		/*
-+		 * When in polling mode avoid to queue the Raw xfer on the IRQ
-+		 * RX path since it will be already queued at the end of the TX
-+		 * poll loop.
-+		 */
-+		if (!xfer->hdr.poll_completion)
-+			scmi_raw_message_report(info->raw, xfer, SCMI_RAW_REPLY_QUEUE);
-+	}
-+
- 	scmi_xfer_command_release(info, xfer);
- }
- 
-@@ -915,6 +937,14 @@ static int scmi_wait_for_reply(struct device *dev, const struct scmi_desc *desc,
- 					    "RESP",
- 					    xfer->hdr.seq, xfer->hdr.status,
- 					    xfer->rx.buf, xfer->rx.len);
-+
-+			if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
-+				struct scmi_info *info =
-+					handle_to_scmi_info(cinfo->handle);
-+
-+				scmi_raw_message_report(info->raw, xfer,
-+							SCMI_RAW_REPLY_QUEUE);
-+			}
- 		}
- 	} else {
- 		/* And we wait for the response. */
-@@ -2587,6 +2617,18 @@ static int scmi_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto clear_txrx_setup;
- 
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
-+		info->raw = scmi_raw_mode_init(handle, info->desc,
-+					       info->tx_minfo.max_msg);
-+		if (!IS_ERR(info->raw)) {
-+			dev_info(dev, "SCMI RAW Mode initialized.\n");
-+			return 0;
-+		}
-+
-+		dev_err(dev, "Failed to initialize SCMI RAW Mode !\n");
-+		info->raw = NULL;
-+	}
-+
- 	if (scmi_notification_init(handle))
- 		dev_err(dev, "SCMI Notifications NOT available.\n");
- 
-@@ -2661,6 +2703,9 @@ static int scmi_remove(struct platform_device *pdev)
- 	struct scmi_info *info = platform_get_drvdata(pdev);
- 	struct device_node *child;
- 
-+	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
-+		scmi_raw_mode_cleanup(info->raw);
-+
- 	mutex_lock(&scmi_list_mutex);
- 	if (info->users)
- 		ret = -EBUSY;
--- 
-2.34.1
-
+I spent a little time trying to put together a Coccinelle script to
+take care of everything but I eventually realized the size of the task
+was larger than I was comfortable with. In particular, even though I
+might be able to put together a script, I worry I don't have a good
+way to test the resulting treewide changes to avoid regression.
