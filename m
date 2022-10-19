@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E843603FFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B974F603FF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234204AbiJSJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S234219AbiJSJjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiJSJeP (ORCPT
+        with ESMTP id S233971AbiJSJeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Oct 2022 05:34:15 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82783BC6B;
-        Wed, 19 Oct 2022 02:15:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938363DF1C;
+        Wed, 19 Oct 2022 02:15:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1666170907; x=1697706907;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GyL/mkBnWw9BwSgBpj4b43K3+WPQ3jqn+0KpOYzRE0M=;
-  b=XP0UX+Ei2CkvB4C19RJtrduq8F6tE3lCoiIxOIltmADxJtlLFqyc2hES
-   TZVazlw41PYIbg0n+ZURc8zPClk3j9czRoC3e8W5Mk+BPX/163AMNKgwc
-   1SwXp0Z3sEPZ8htQmcyn6gZjukzSWbyeeESZE2RQOnEn7edEhhF+HlZJK
-   iNt8ZgtrxI/icsOUuNGAhAY+rcr0cq1GwN7WllK55uE9O+7eIgw0fD9Zy
-   q3WMjn8XYG08wJdPpVUzEiZkgj07kJTzrXKTAii+y3Uu3J2wonu31P9Mn
-   If2orn0Tz1aFrV49oGP+js0ncasVhSuHBwqvutkHfe0wK7tAxdkWF5oNB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332911244"
+  bh=TCKozR5BIs68DvWZSZOm+IJxNijydgnxhkgkhHpUBtI=;
+  b=jcKLl2OFRlRvgVwK8Pc+H+sxcJ/Wc64aw/PtIjN3KsIHevWtL62bpzO5
+   7hzgrtFgRXasUB4oYIuecke8znM0lNzLiLMO0lA7C5N4IqnGvdw11GvwH
+   bhho9EyB/A2WbUxEgFpRLzJQuU/MKR6borzTTBkbuBnLyA1YuAcCWe703
+   OtkHMtEXPmkk+SOq0WmAUzrACUflly4S8jCBzyn2uSMnrH8Sli5JX7hH6
+   c6NsdmCzr1x3grKBCBl8IiVNfS+8BzgLY1awZOztWr4XXKMYIEFe/8efY
+   W+TYLEzjg/sNOlWVOPkrNzb2dBQSboyVmp5sXc8AmOErmbnbKf8mQE//Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332911267"
 X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="332911244"
+   d="scan'208";a="332911267"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:06 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734119160"
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:09 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734119177"
 X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="734119160"
+   d="scan'208";a="734119177"
 Received: from sponnura-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.35])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:03 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:14:07 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 31/44] serial: tegra: Use uart_xmit_advance()
-Date:   Wed, 19 Oct 2022 12:11:38 +0300
-Message-Id: <20221019091151.6692-32-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 32/44] serial: sh-sci: Use uart_xmit_advance()
+Date:   Wed, 19 Oct 2022 12:11:39 +0300
+Message-Id: <20221019091151.6692-33-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
 References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
@@ -70,23 +66,25 @@ Take advantage of the new uart_xmit_advance() helper.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/serial-tegra.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/tty/serial/sh-sci.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index b7170cb9a544..4304e3f9307d 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -496,8 +496,7 @@ static void tegra_uart_fill_tx_fifo(struct tegra_uart_port *tup, int max_bytes)
- 				break;
- 		}
- 		tegra_uart_write(tup, xmit->buf[xmit->tail], UART_TX);
--		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
--		tup->uport.icount.tx++;
-+		uart_xmit_advance(&tup->uport, 1);
- 	}
- }
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 62f773286d44..a92a89780357 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -1181,10 +1181,7 @@ static void sci_dma_tx_complete(void *arg)
  
+ 	spin_lock_irqsave(&port->lock, flags);
+ 
+-	xmit->tail += s->tx_dma_len;
+-	xmit->tail &= UART_XMIT_SIZE - 1;
+-
+-	port->icount.tx += s->tx_dma_len;
++	uart_xmit_advance(port, s->tx_dma_len);
+ 
+ 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+ 		uart_write_wakeup(port);
 -- 
 2.30.2
 
