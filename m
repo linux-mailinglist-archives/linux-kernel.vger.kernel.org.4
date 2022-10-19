@@ -2,204 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F807604D72
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D0D604D78
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiJSQbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S230078AbiJSQcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJSQbQ (ORCPT
+        with ESMTP id S230187AbiJSQcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:31:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A943127BE8;
-        Wed, 19 Oct 2022 09:31:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A1861940;
-        Wed, 19 Oct 2022 16:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965E3C433D6;
-        Wed, 19 Oct 2022 16:31:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666197074;
-        bh=RKLFk6GGzypOwZ0Xth2rQW+zmvLO6gk5B04J6dQE6pQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WLU1KwyaVZ9CFyzpnEedpUa7sxn/IPOqL5Ifs3mwZUtSVR1/Mv+c3oPO8K4UW3EC9
-         ktdGDvXJcHB/l5jBkvyxgNIMQq4u1BV84WeNb+h6kSjqGRVmw0dw1z72Pv14WkTn2S
-         lPt/ybsNvsm5Ho0Fg0QJhPi61Fj1xw0buzGtsckVZfTjxSeQbnboKVHzqz2gTDXVPX
-         aIJosgpJN9EQZZeC+x/fX0WwBtjNbbEMI9wSWKxTAX5kWDkzzo4y1V1RykQ9wano/T
-         mRFMX/Qa7Ma05AjmjDMVuOlwFZuPfUiaJzd2cVQsMs5yiifwYuXz9zdOHqZVjDG5KI
-         UKFOMAQn+/IuQ==
-Date:   Wed, 19 Oct 2022 22:01:09 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Ben Walker <benjamin.walker@intel.com>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/7] dmaengine: Add dmaengine_async_is_tx_complete
-Message-ID: <Y1AmTaT4oFDAWLLm@matsya>
-References: <20220622193753.3044206-1-benjamin.walker@intel.com>
- <20220829203537.30676-1-benjamin.walker@intel.com>
- <20220829203537.30676-4-benjamin.walker@intel.com>
+        Wed, 19 Oct 2022 12:32:07 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877D91AD82;
+        Wed, 19 Oct 2022 09:32:03 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JGLrXP001457;
+        Wed, 19 Oct 2022 16:31:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0FemrlkL2zjvgkEKYy/s8nxfAGJ9llFtOVrJjesBs4c=;
+ b=FI+kgbyjJfybtZOpTF5kniMetTPjZBM/CB7at9lRxhHB4Nd6CL0L4+rkHRmeNgZ811OB
+ 7ug6rtecywvfnfmvxvGjpwto7ZFWC8e7/2bl+wmmSNs1HLwO4IQAm2HqmUiUzmgRm9m3
+ tUQtCqLlClkl6bK2lrdnc57P2ZwG5THImsF1ldqDN4R2zNMIYqehS0XamDVEM9HnP3Cw
+ 5GWAUxdpjpZi7NkAvCrqR9tfYEAe2HvsJ3/oCeylsuQZEihu8KlzuNhkYyZmMjw9yDv7
+ /9RRT1PJSII+3JKV7Xa3Nlt5QrxW+UHA+Ib6gMctHEMuNoTC6kQatPAdpswfK5c0/gKo Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqraq3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 16:31:54 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JGM6kd002140;
+        Wed, 19 Oct 2022 16:31:53 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqrapt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 16:31:53 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JGKpse028105;
+        Wed, 19 Oct 2022 16:31:52 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma01dal.us.ibm.com with ESMTP id 3k7mg9bjrh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 16:31:52 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JGVpWr43254254
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Oct 2022 16:31:51 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 698FB58055;
+        Wed, 19 Oct 2022 16:31:50 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47C0258056;
+        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
+Received: from sig-9-65-252-68.ibm.com (unknown [9.65.252.68])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
+Message-ID: <230c9c42995e52174b8503b05f0c51225ad0aeca.camel@linux.ibm.com>
+Subject: Re: [PATCH v5] KEYS: encrypted: fix key instantiation with
+ user-provided data
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Nikolaus Voss <nv@vosn.de>, David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
+        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 19 Oct 2022 12:31:47 -0400
+In-Reply-To: <20221019141031.E605D1B3B@mail.steuer-voss.de>
+References: <20221019141031.E605D1B3B@mail.steuer-voss.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7UGECKheJno6Xp8SpPP1z9gKWj1k9Ng6
+X-Proofpoint-ORIG-GUID: ao8WAIor37KsT8KpDy2Wbdnn4z8tH1EV
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829203537.30676-4-benjamin.walker@intel.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_09,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190091
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-08-22, 13:35, Ben Walker wrote:
-> This is the replacement for dma_async_is_tx_complete with two changes:
-> 1) The name prefix is 'dmaengine' as per convention
-> 2) It no longer reports the 'last' or 'used' cookie
+Hi Nikolaus,
 
-Thanks for this cleanup. This is good :)
-
-But, why should we retain async is API here. I think lets cleanup
-properly and rename it dmaengine_is_tx_complete()
-
-we _really_ need to drop async and have everything dmaengine_*
-
+On Wed, 2022-10-19 at 16:07 +0200, Nikolaus Voss wrote:
+> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+> decrypted data") added key instantiation with user provided decrypted data.
+> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+> Fix this to use hex2bin instead.
 > 
-> Drivers should convert to using dmaengine_async_is_tx_complete.
+> Old keys created from user provided decrypted data saved with "keyctl pipe"
+> are still valid, however if the key is recreated from decrypted data the
+> old key must be converted to the correct format. This can be done with a
+> small shell script, e.g.:
 > 
-> Signed-off-by: Ben Walker <benjamin.walker@intel.com>
-> ---
->  Documentation/driver-api/dmaengine/client.rst | 19 ++++---------------
->  .../driver-api/dmaengine/provider.rst         |  6 +++---
->  drivers/dma/dmaengine.c                       |  2 +-
->  drivers/dma/dmatest.c                         |  3 +--
->  include/linux/dmaengine.h                     | 16 ++++++++++++++++
->  5 files changed, 25 insertions(+), 21 deletions(-)
+> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
+> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
+> keyctl add user masterkey "$(cat masterkey.bin)" @u
+> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
 > 
-> diff --git a/Documentation/driver-api/dmaengine/client.rst b/Documentation/driver-api/dmaengine/client.rst
-> index 85ecec2c40005..9ae489a4ca97f 100644
-> --- a/Documentation/driver-api/dmaengine/client.rst
-> +++ b/Documentation/driver-api/dmaengine/client.rst
-> @@ -259,8 +259,8 @@ The details of these operations are:
->  
->        dma_cookie_t dmaengine_submit(struct dma_async_tx_descriptor *desc)
->  
-> -   This returns a cookie can be used to check the progress of DMA engine
-> -   activity via other DMA engine calls not covered in this document.
-> +   This returns a cookie that can be used to check the progress of a transaction
-> +   via dmaengine_async_is_tx_complete().
->  
->     dmaengine_submit() will not start the DMA operation, it merely adds
->     it to the pending queue. For this, see step 5, dma_async_issue_pending.
-> @@ -339,23 +339,12 @@ Further APIs
->  
->     .. code-block:: c
->  
-> -      enum dma_status dma_async_is_tx_complete(struct dma_chan *chan,
-> -		dma_cookie_t cookie, dma_cookie_t *last, dma_cookie_t *used)
-> -
-> -   This can be used to check the status of the channel. Please see
-> -   the documentation in include/linux/dmaengine.h for a more complete
-> -   description of this API.
-> +      enum dma_status dmaengine_async_is_tx_complete(struct dma_chan *chan,
-> +		dma_cookie_t cookie)
->  
->     This can be used with the cookie returned from dmaengine_submit()
->     to check for completion of a specific DMA transaction.
->  
-> -   .. note::
-> -
-> -      Not all DMA engine drivers can return reliable information for
-> -      a running DMA channel. It is recommended that DMA engine users
-> -      pause or stop (via dmaengine_terminate_all()) the channel before
-> -      using this API.
-> -
->  5. Synchronize termination API
->  
->     .. code-block:: c
-> diff --git a/Documentation/driver-api/dmaengine/provider.rst b/Documentation/driver-api/dmaengine/provider.rst
-> index ceac2a300e328..1d0da2777921d 100644
-> --- a/Documentation/driver-api/dmaengine/provider.rst
-> +++ b/Documentation/driver-api/dmaengine/provider.rst
-> @@ -539,10 +539,10 @@ where to put them)
->  
->  dma_cookie_t
->  
-> -- it's a DMA transaction ID that will increment over time.
-> +- it's a DMA transaction ID.
->  
-> -- Not really relevant any more since the introduction of ``virt-dma``
-> -  that abstracts it away.
-> +- The value can be chosen by the provider, or use the helper APIs
-> +  such as dma_cookie_assign() and dma_cookie_complete().
->  
->  DMA_CTRL_ACK
->  
-> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
-> index c741b6431958c..2816b8f492dab 100644
-> --- a/drivers/dma/dmaengine.c
-> +++ b/drivers/dma/dmaengine.c
-> @@ -523,7 +523,7 @@ enum dma_status dma_sync_wait(struct dma_chan *chan, dma_cookie_t cookie)
->  
->  	dma_async_issue_pending(chan);
->  	do {
-> -		status = dma_async_is_tx_complete(chan, cookie, NULL, NULL);
-> +		status = dmaengine_async_is_tx_complete(chan, cookie);
->  		if (time_after_eq(jiffies, dma_sync_wait_timeout)) {
->  			dev_err(chan->device->dev, "%s: timeout!\n", __func__);
->  			return DMA_ERROR;
-> diff --git a/drivers/dma/dmatest.c b/drivers/dma/dmatest.c
-> index 9fe2ae7943169..dde7b9b626336 100644
-> --- a/drivers/dma/dmatest.c
-> +++ b/drivers/dma/dmatest.c
-> @@ -831,8 +831,7 @@ static int dmatest_func(void *data)
->  					done->done,
->  					msecs_to_jiffies(params->timeout));
->  
-> -			status = dma_async_is_tx_complete(chan, cookie, NULL,
-> -							  NULL);
-> +			status = dmaengine_async_is_tx_complete(chan, cookie);
->  		}
->  
->  		if (!done->done) {
-> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-> index 5ae881729b620..0ee21887b3924 100644
-> --- a/include/linux/dmaengine.h
-> +++ b/include/linux/dmaengine.h
-> @@ -1426,6 +1426,8 @@ static inline void dma_async_issue_pending(struct dma_chan *chan)
->   * @last: returns last completed cookie, can be NULL
->   * @used: returns last issued cookie, can be NULL
->   *
-> + * Note: This is deprecated. Use dmaengine_async_is_tx_complete instead.
-> + *
->   * If @last and @used are passed in, upon return they reflect the most
->   * recently submitted (used) cookie and the most recently completed
->   * cookie.
-> @@ -1444,6 +1446,20 @@ static inline enum dma_status dma_async_is_tx_complete(struct dma_chan *chan,
->  	return status;
->  }
->  
-> +/**
-> + * dmaengine_async_is_tx_complete - poll for transaction completion
-> + * @chan: DMA channel
-> + * @cookie: transaction identifier to check status of
-> + *
-> + */
-> +static inline enum dma_status dmaengine_async_is_tx_complete(struct dma_chan *chan,
-> +	dma_cookie_t cookie)
-> +{
-> +	struct dma_tx_state state;
-> +
-> +	return chan->device->device_tx_status(chan, cookie, &state);
-> +}
-> +
->  #ifdef CONFIG_DMA_ENGINE
->  struct dma_chan *dma_find_channel(enum dma_transaction_type tx_type);
->  enum dma_status dma_sync_wait(struct dma_chan *chan, dma_cookie_t cookie);
-> -- 
-> 2.37.1
+> However, NEWKEY is still broken: If for BROKENKEY 32 bytes were specified, a
+> brute force attacker knowing the key properties would only need to try at most
+> 2^(16*8) keys, as if the key was only 16 bytes long.
+> 
+> The security issue is a result of the combination of limiting the input range
+> to hex-ascii and using memcpy() instead of hex2bin(). It could have been fixed
+> either by allowing binary input or using hex2bin() (and doubling the ascii
+> input key length). This patch implements the latter.
+> 
+> The corresponding test for the Linux Test Project ltp has also been
+> fixed (see link below).
+> 
+> Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
+> Cc: stable <stable@kernel.org>
+> Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
 
+While preparing to queue this patch, I noticed scripts/checkpatch.pl
+returns a couple of warnings, including that the sender email address
+and your tag here don't match.  Wish I had caught them earlier.
 -- 
-~Vinod
+thanks,
+
+Mimi
+
