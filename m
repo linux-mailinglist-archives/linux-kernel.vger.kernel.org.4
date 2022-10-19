@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D510604597
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F817604545
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbiJSMmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
+        id S230299AbiJSM3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbiJSMmC (ORCPT
+        with ESMTP id S232885AbiJSM2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:42:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE828E26;
-        Wed, 19 Oct 2022 05:24:34 -0700 (PDT)
+        Wed, 19 Oct 2022 08:28:54 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC1511A975;
+        Wed, 19 Oct 2022 05:05:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jwcgtkLkQiYMzUrJg+SlENzlyrsokEnI9G+nAnfhqaI=; b=INrCud5ry7N46NrgwulMwX+RO8
-        xFy8PwVoYLCmGzxfB76R29fdn+OR80+OD3sjqToaNvrqxtMmIdDxVwe3dUZlrYEeVsSeL1H0nCFYT
-        aIWdIQ/k8v7ZyvTJFDdymr86f2TJKY6glp3FH+zD/raymjZbOQi7N1P2JAbU1WPa6IOsn2OaMcWxI
-        hYePDGaPHVUVqmI+iB4BnD//gODZ8wCFm37fXq0CTNXYOMrslb/8HecTlKiVE64Ul5bl7l6c7PTfV
-        +lPyOvWpemkec4PzrA/xKmruYuNsFmMxkyJTE/fiOxbeBHMWc9yOzCzgsxTQIoyKNADY0ASsvPMbz
-        XprsNabw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ol7lC-0019IU-72; Wed, 19 Oct 2022 12:01:22 +0000
-Date:   Wed, 19 Oct 2022 05:01:22 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-modules@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
- symbols
-Message-ID: <Y0/nEngJF6bbINEx@bombadil.infradead.org>
-References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=vGBsCUqFwWa+5hhW0zeEah/ZUEjsYfdXFEhqLjTbsNA=; b=BlLx6D56pzr5wjMcKu3HON//TV
+        vfdQxAJ+JZLnPNKTt4sAUEBpDVQw8rOxaANkDlyM4m1EijklbdUR06/pBCX3I9sRhwfabIsHiTbzN
+        VMstuVifqL7rbwnMC83dtXsjDpK+JAy6gINl6Fmn7oHFZ55vLg1kdEv/eYC4FZQrcYbGWmNFW2GlM
+        J41OsYnW4a3NBRCJIIHPvtX/Uh29mi28rgUgtUL3drKaxIcCuZXNjujJNbQmMYChTR05drz1raQYu
+        GS8YQvLkf/3iCSc97x6KWQeBz2RSpIEqV5ihrJP684qIKyx3BNRM5/G3gzPjq+FNk/aqqjPnLd+vv
+        CEr+xVCw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34800)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ol7lX-0005cV-UB; Wed, 19 Oct 2022 13:01:43 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ol7lX-00028O-Aq; Wed, 19 Oct 2022 13:01:43 +0100
+Date:   Wed, 19 Oct 2022 13:01:43 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, f.fainelli@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: macb: Specify PHY PM management done by MAC
+Message-ID: <Y0/nJ+gtYoPQ5WNH@shell.armlinux.org.uk>
+References: <20221019095548.57650-1-sergiu.moga@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221017064950.2038-1-thunder.leizhen@huawei.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221019095548.57650-1-sergiu.moga@microchip.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 02:49:39PM +0800, Zhen Lei wrote:
-> Currently, to search for a symbol, we need to expand the symbols in
-> 'kallsyms_names' one by one, and then use the expanded string for
-> comparison. This is very slow.
+On Wed, Oct 19, 2022 at 12:55:50PM +0300, Sergiu Moga wrote:
+> The `macb_resume`/`macb_suspend` methods already call the
+> `phylink_start`/`phylink_stop` methods during their execution so
+> explicitly say that the PM of the PHY is done by MAC by using the
+> `mac_managed_pm` flag of the `struct phylink_config`.
 > 
-> In fact, we can first compress the name being looked up and then use
-> it for comparison when traversing 'kallsyms_names'.
+> This also fixes the warning message issued during resume:
+> WARNING: CPU: 0 PID: 237 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0x144/0x148
 > 
-> This patch series optimizes the performance of function kallsyms_lookup_name(),
-> and function klp_find_object_symbol() in the livepatch module. Based on the
-> test results, the performance overhead is reduced to 5%. That is, the
-> performance of these functions is improved by 20 times.
+> Fixes: 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume() state")
 
-Stupid question, is a hash table in order?
+Hi,
 
-  Luis
+You also need to mention that this commit depends on 96de900ae78e
+in the net tree, which introduced the mac_managed_pm member to
+phylink_config.
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
