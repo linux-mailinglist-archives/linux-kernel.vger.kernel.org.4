@@ -2,229 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12393604982
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8AF604978
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJSOlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S230514AbiJSOkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiJSOla (ORCPT
+        with ESMTP id S230367AbiJSOkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:41:30 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::623])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C2718499B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:26:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G6PAAvmbtYJbqQaxOZGZXKM+mAhsTb1A3rPVM58UVhW4qxbA392EYwYJ3XRyr5yoA0AAIdTkupkAJZ2xFevImr2djJAXofjO/uETJBM7AL7E/n1GVKn2Ar0j1ryb8lW/OgB5qRvQibXoVYBx0EFDuy/99LzYDZUMqr+NAejs2askzJqCeb0U9tPjVGeINxgkxnDMZl5bC2l09XmK/DAaLS2MnRnlGQiQ5bUmSHpTOgE5/cXCebIO6Y0Ue/RO13uxx0J7IC4mQV+xpw6KfcGU09VcM4xQV1n3FLVJ09Po3WY9hSO6tzm7nOWWMJJgJdDUnc5qA0lEvtCIaTUVravsaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dq+OHzDKgYd9oOc/R+QGhDBg6tfe8dcWkrJdUUd/CB8=;
- b=bUxbOU6FxbhI3xAOqtJHxV7k24XMwoz+wsPILjUyHLQwDs7pjWH2vKf818M7xduq4AT2Lcyd4/p7xfn2En+p+XI97Zz+T988yCqPRuhxsU3UHuYdkxy4xXGycD/KcTCo9AOh+DwX561k7+rWWa+xwv2dmAkd+gpwav08aWvwVEStD9CLKWPDbEpQ5KKYLcjXOkhMrFkPTIseOFYtezQrjsCOj6w6fRfrkY0SRW+QJiAFviA78Ux5xwcD/kZgTNuurpp/qulgSsHXrF8pCrpuNgUeq2dpLWK3SU3PnFGnSbolY2X/y+JrWHlM6FYWZEhU4jgGGDlGiQ1y0QD7aUNx8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dq+OHzDKgYd9oOc/R+QGhDBg6tfe8dcWkrJdUUd/CB8=;
- b=MY/PyxXxCwJiBqST7blk2KPDNea6u7gGrKZMOi28OzL9YjHtHPHAEttD/9rLazJeUAB6Wc3wH/lc874nCCuUuS6FnpnmHuSQVY5ZLQMSEbBv4Fv8V6z4+LYsUj+/ADLdUx2YVuUKoF4FD66T0Nx4HgetY6H5I9t3eKucx/O9SFE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by SJ0PR12MB5454.namprd12.prod.outlook.com (2603:10b6:a03:304::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Wed, 19 Oct
- 2022 14:21:16 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::f9a4:8620:8238:20e8]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::f9a4:8620:8238:20e8%6]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
- 14:21:16 +0000
-Message-ID: <4e6cc4e5-3654-8234-603f-0913cbe31f74@amd.com>
-Date:   Wed, 19 Oct 2022 10:21:13 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIXSBkcm0vYW1ka2ZkOiB1c2Ugdm1hX2xv?=
- =?UTF-8?Q?okup=28=29_instead_of_find=5fvma=28=29?=
-Content-Language: en-US
-To:     =?UTF-8?B?dG9tb3Jyb3cgV2FuZyAo546L5b635piOKQ==?= 
-        <wangdeming@inspur.com>
-Cc:     "airlied@gmail.com" <airlied@gmail.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221007024818.4921-1-wangdeming@inspur.com>
- <a1d36d76-396a-0bf0-26b7-c009fbae5dd0@amd.com>
- <2dc397050eed4d11ade7b9020fe2e298@inspur.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <2dc397050eed4d11ade7b9020fe2e298@inspur.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR0101CA0267.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:68::27) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Wed, 19 Oct 2022 10:40:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D253A157F68;
+        Wed, 19 Oct 2022 07:25:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 676B6617FE;
+        Wed, 19 Oct 2022 14:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14770C433C1;
+        Wed, 19 Oct 2022 14:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666189498;
+        bh=qtELXB0QXhax+1b+LBzDwFls1i+mOZ2KCsyxiqtBldA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hz4WzVCzq0HUqkpNEIz4SATXi8H7jRUA/q0jjKTZSNSf3iGHlzc7S4ymDR01VHVM+
+         9RVuqmt3yIEAMUWKvJ7EDyByyLq4+vcJW21YEB7V3J+bk+TNbKSYkOMu7d9Kgdm8Sz
+         E79IGfVSzPy0Z+JZd0vK7K6D9RYRECJlA0WImxF/fLyBjw3qEwCt+8bMi8/dU0NRQd
+         Pm5ZgLTP3XOnJsQvZ8biHGY52G0jSHy3mAF31Vq68BsQBm9zoJr2BtViW7SFyKZ2r1
+         jsiDt/25i8Agj9wB+OpzUlfpjYHh2XBXyLYw6GH3WogoDjNE5wtxt29FNRID0Hqmzg
+         Ew7rrNsL9esbw==
+Date:   Wed, 19 Oct 2022 19:54:53 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Joy Zou <joy.zou@nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, shengjiu.wang@nxp.com, martink@posteo.de,
+        dev@lynxeye.de, alexander.stein@ew.tq-group.com, peng.fan@nxp.com,
+        david@ixit.cz, aford173@gmail.com, hongxing.zhu@nxp.com,
+        linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/4] dmaengine: imx-sdma: support hdmi audio
+Message-ID: <Y1AIte+S1sHw2qju@matsya>
+References: <20220906094256.3787384-1-joy.zou@nxp.com>
+ <20220906094256.3787384-3-joy.zou@nxp.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|SJ0PR12MB5454:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09c414b7-22bb-4ea7-d91f-08dab1dd2edf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iOnzIt6NX0rfOA39HCMgvsK6+mKJUY0kADl0IhbHiGkQNfYtg+CfR8QlDl66hgxbxm4XpGp2+rOdwvXY2jyUG2FpDlRt6YRALH6DR6horf43GytPSVx+k5UniF02o2d8nsKLsWpvr/tvPHkweM+fHJHFDzd5IVk0inTwlqhqQqA9XbLzToIU4UK8vkRXQ6uEr8j2QSkQdzXlTaNPnv5owEo1d/6gZQWo/A2e/ynFW54vuUT4P7g2ozCYbvg7NxdsC5IGBPNRlqWgBqFm8he1zPUDaZQIuV6U/HP9LqA3Cil8l3j3im9UJYkkrE6NIpld3V2djgMzr2NL3yelFKLUpnStPr1or5Uime+em4LQNhlnUXX/7uTzwh5wCb9U4P8SIfk5N7/PybSnGUtFNomyPcsRafTbTKmbXBFWcwtOZn7q7QpupCKoYSBH5DxXsjKg2112lj01wcdTGH1JSzpLGe13ISFmzotOSTieFarI/jm9+hyHUDGKrkVsKy87LWT4l4XH5wzA7Q7s+kjIrdTRF6nTqUhUQLtXXsfL5iUCQd/lCWTYCtBoIFcDLgnKiA0gyZDnx+I1DKdRgy81Mc8DQnuF1WiVLguKDj9owiKkvr5MjjHcnVnACH9qUb6pmNI9c5aK+lDaPM5jCavvihs5vpI0Uf3qkDVyqX8POaHaMjo2alKGJiJ80YgsC5BvJnXS4Jw9zCA7HliOyc9CaFkZ2PM25PZJrSfn5ZRReTRpO+359mA7Bjh4DZ3TD6m9HoMrOm+7nOsaeajGJ5wR7NuLUKAGtv8cvZNYLHlEZztBiyo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(39860400002)(396003)(376002)(346002)(451199015)(4326008)(5660300002)(4001150100001)(8936002)(2906002)(66946007)(44832011)(66476007)(66556008)(54906003)(6916009)(41300700001)(316002)(83380400001)(38100700002)(6666004)(6506007)(53546011)(478600001)(31696002)(86362001)(6486002)(26005)(186003)(6512007)(2616005)(31686004)(36756003)(224303003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WlI0NWhqcUdPMVBja2Jjc3p6SVF5dUFjRkJIWGxWMHZib0hQUHkyTlAycExJ?=
- =?utf-8?B?NVJNdGNhSlo2ZGh0UldKRC81dGUwTTZQa28wU3JLMGdhMmlUVXRtc1FIVEtE?=
- =?utf-8?B?UTZNRU8vRHN0T2FPeStXOCtMYjdGSHlDTXhMc2E1aGtuc3FJSERLT1MvZEp6?=
- =?utf-8?B?SWJhTW9XZGJmZTlLNzhUaDFnZ3EvaEtYV2lvNDhzeG9rRTRnR0Q0dmwxdjRW?=
- =?utf-8?B?bzFDSjUyM0ZwZ3ZqSUtoSHFheDF0dDBBQkN4NkJnWUlXbSttY0ozMlFRQ1Fj?=
- =?utf-8?B?UzFIMjdjWCs4YlcyUXJwWjNBRE5Md3gvMG5OVVMzODdaRHVUZjlnUmJhN3JV?=
- =?utf-8?B?cXZzV29aUnNEdWV1ZWlnOTR6T1NsNndURkxqKy9IOWI1andqZ1YvT2pUYURu?=
- =?utf-8?B?M2Rha2JFNllKY2E5WWh4ZHE2cXN1b255TEdTRVNhY0ZMVFJGUElvVUgxRGNx?=
- =?utf-8?B?UHFTUG1iZjhXYVErVlFWYUdyaHI2d092ZkdVbmVhKy9uai9teFZjektJeHVa?=
- =?utf-8?B?bEwyeWhJZmYxMDV3UTRMQXVFTlhJUzN0Rm1jODJiT1hRczYwWjdha0lHSzBC?=
- =?utf-8?B?L1JNOW93RWJCOGxmSDA1aWtMMHllcDk2T2MzNVFmZ0pwWEFzcnNwZmVId2x5?=
- =?utf-8?B?MkF2RVVPUHVKT1FvZXBDQ2tITmhGdC84WUVHRDhQL3ZFRjJyOUl6UTRtd2hC?=
- =?utf-8?B?WmNpRXhFR2grK3pvTXJJUDlRME1TT0ozWS8vbEVVT1pwUllUWldxR3ZCMjZD?=
- =?utf-8?B?aTloTzdZVVNIZHc0SkhLOXZHeGxCRDNSQVRyZHdpYUNNZGhHZTR6U0ZQUzQ5?=
- =?utf-8?B?cFZVUkVsZExHeFo5dVlRQVBWQlRxb0dwYUNYZXJSOVBCNXUyYTVuWldIUmRE?=
- =?utf-8?B?cmZ5MmQvbzc2NUhVVDU3UExZK2NOWThuNkpsL1hDQnRibzF2c2dEMEw3YnJp?=
- =?utf-8?B?YmZpMXA0cGl0UDA5K3YyNGtobDQrb1NaaUJCL2h5RDNkOWZHeGdrNFRkWlZP?=
- =?utf-8?B?NGpvUjZvckR4dnZEai96dFp3cXdOWU1lNjBMd2hBT1p6N0JYRjBZai9PZm5s?=
- =?utf-8?B?SC9Oc3FGeUpxVExQYXhValluTmZxTnZtZkJ0T2UvZ2UrOXM1Z2dCWEdxYnVa?=
- =?utf-8?B?ZWZjOHdLTTlVOHNWb1liV0pqeHkvUC81Vy9iR0UvVHc4dWFWeVhQUElXV3Vm?=
- =?utf-8?B?ZzJCN1B2Rnl3cWZkZ1ZqZy9WR2ZOcTI0RUJxL1UyMWhRK2EvZW0zSFdNenI5?=
- =?utf-8?B?dS9iZDdvUVh0Q1MwSE9GdGZwTFRiVEhBWmhXeGNoMmVLTy9CcUpvZEZuVDIw?=
- =?utf-8?B?K0duTEd6RjNyZk9zOUNIbHZ6dkFHVVJzZ3Q0eFNKMDhFdUZ5TnZDZms4dFdi?=
- =?utf-8?B?dUZMb1p5aWc1V2RGYXVtajROa1BiTVdDWDAwTm5leXgwT0hhaDI5aU8wNmF4?=
- =?utf-8?B?OXYxK25VNTNGSDBWckZRdm5SbW1mcmtiQ2UxdmR3aUQzczdVWEhoeFA2RzNG?=
- =?utf-8?B?R2p0TkJaSFBSVXdXTWd3Wmc4WWd0aEgrQVVGck11dTRVVC9tYnowRkpVMDFp?=
- =?utf-8?B?a0pnWjZFcFBJNkV3SmRjQ29vWlFqZERERTNqY2d4ZDlsaTZnSlR1c3NCUEJR?=
- =?utf-8?B?RU8vT09VZlZQVDZieG1WUEZBd082QTlYU0pTdHlpaG9uREcramJsRm12M0Yr?=
- =?utf-8?B?cS9YWnY2SS9CUFVhdXRPdWllNHF6OWhIb0pHMVdMVGhWajZxSkZJYzgyaWhB?=
- =?utf-8?B?S0o1ZDJJZXNBU0N3d09tVUVJemhoajNvYkJ3NXUvWSt1ajhuN0ZpdUUwSWE2?=
- =?utf-8?B?aStLMXYweXFGb0Z4OWswZ1ZvNTYrSEZuK21vTnlXVGZ6T0IxU0UvWXZBeXdU?=
- =?utf-8?B?ell5YXRMeEVFOUpTYldWOWJ6b1Q2d1p3b1NNSDVMOFRMSEFuQmtKNThkUFVL?=
- =?utf-8?B?UFc5aHl2NURuMWdVY3RHV1FzWEt0TUZxcU81NExuZTg3M2NUdy9CbTFzd1FC?=
- =?utf-8?B?THZJTFVneXRybWtNTWxtOFBvUDM3VFl2Zk9peXFwZHZlelFSOUwrdjNJMFlD?=
- =?utf-8?B?Si96WnpPTXRZbFZMWUNNWHp6UHJPNERlUVc3QlpwcGxmeXRWVmF2NitWM2VW?=
- =?utf-8?Q?a00CJXbQrwCQh5t3wv7IRKr4T?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09c414b7-22bb-4ea7-d91f-08dab1dd2edf
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 14:21:16.0063
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t4JiHycKBC953zwrsABLHmpErFSZhUf93t+yc9dKnZUmW56BKJngbJwnsWvUEAMq0+HKJC4CGTqhlCmzG6aVMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5454
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906094256.3787384-3-joy.zou@nxp.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06-09-22, 17:42, Joy Zou wrote:
+> Add hdmi audio support in sdma.
 
-Am 2022-10-17 um 20:47 schrieb tomorrow Wang (王德明):
-> Hi,
-> The function vma_lookup show below.  Vma valid check is included in it. Or, What other questions do you have?
+Pls add description in changelog about what it takes to enabled hdmi
+(cyclic support etc)
 
-My question is, why did you leave the find_vma call in 
-svm_range_is_valid unchanged? I don't see a technical reason, but maybe 
-I'm missing something. If there is a reason, please explain. If there is 
-no reason, please fix that place as well for consistency.
+> 
+> Signed-off-by: Joy Zou <joy.zou@nxp.com>
+> ---
+>  drivers/dma/imx-sdma.c      | 38 +++++++++++++++++++++++++++++--------
+>  include/linux/dma/imx-dma.h |  1 +
+>  2 files changed, 31 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+> index fbea5f62dd98..ab877ceeac3f 100644
+> --- a/drivers/dma/imx-sdma.c
+> +++ b/drivers/dma/imx-sdma.c
+> @@ -954,7 +954,10 @@ static irqreturn_t sdma_int_handler(int irq, void *dev_id)
+>  		desc = sdmac->desc;
+>  		if (desc) {
+>  			if (sdmac->flags & IMX_DMA_SG_LOOP) {
+> -				sdma_update_channel_loop(sdmac);
+> +				if (sdmac->peripheral_type != IMX_DMATYPE_HDMI)
+> +					sdma_update_channel_loop(sdmac);
+> +				else
+> +					vchan_cyclic_callback(&desc->vd);
+>  			} else {
+>  				mxc_sdma_handle_channel_normal(sdmac);
+>  				vchan_cookie_complete(&desc->vd);
+> @@ -1074,6 +1077,10 @@ static int sdma_get_pc(struct sdma_channel *sdmac,
+>  		per_2_emi = sdma->script_addrs->sai_2_mcu_addr;
+>  		emi_2_per = sdma->script_addrs->mcu_2_sai_addr;
+>  		break;
+> +	case IMX_DMATYPE_HDMI:
+> +		emi_2_per = sdma->script_addrs->hdmi_dma_addr;
+> +		sdmac->is_ram_script = true;
+> +		break;
+>  	default:
+>  		dev_err(sdma->dev, "Unsupported transfer type %d\n",
+>  			peripheral_type);
+> @@ -1125,11 +1132,16 @@ static int sdma_load_context(struct sdma_channel *sdmac)
+>  	/* Send by context the event mask,base address for peripheral
+>  	 * and watermark level
+>  	 */
+> -	context->gReg[0] = sdmac->event_mask[1];
+> -	context->gReg[1] = sdmac->event_mask[0];
+> -	context->gReg[2] = sdmac->per_addr;
+> -	context->gReg[6] = sdmac->shp_addr;
+> -	context->gReg[7] = sdmac->watermark_level;
+> +	if (sdmac->peripheral_type == IMX_DMATYPE_HDMI) {
+> +		context->gReg[4] = sdmac->per_addr;
+> +		context->gReg[6] = sdmac->shp_addr;
+> +	} else {
+> +		context->gReg[0] = sdmac->event_mask[1];
+> +		context->gReg[1] = sdmac->event_mask[0];
+> +		context->gReg[2] = sdmac->per_addr;
+> +		context->gReg[6] = sdmac->shp_addr;
+> +		context->gReg[7] = sdmac->watermark_level;
+> +	}
+>  
+>  	bd0->mode.command = C0_SETDM;
+>  	bd0->mode.status = BD_DONE | BD_WRAP | BD_EXTD;
+> @@ -1513,7 +1525,7 @@ static struct sdma_desc *sdma_transfer_init(struct sdma_channel *sdmac,
+>  	desc->sdmac = sdmac;
+>  	desc->num_bd = bds;
+>  
+> -	if (sdma_alloc_bd(desc))
+> +	if (bds && sdma_alloc_bd(desc))
+>  		goto err_desc_out;
+>  
+>  	/* No slave_config called in MEMCPY case, so do here */
+> @@ -1678,13 +1690,16 @@ static struct dma_async_tx_descriptor *sdma_prep_dma_cyclic(
+>  {
+>  	struct sdma_channel *sdmac = to_sdma_chan(chan);
+>  	struct sdma_engine *sdma = sdmac->sdma;
+> -	int num_periods = buf_len / period_len;
+> +	int num_periods = 0;
+>  	int channel = sdmac->channel;
+>  	int i = 0, buf = 0;
+>  	struct sdma_desc *desc;
+>  
+>  	dev_dbg(sdma->dev, "%s channel: %d\n", __func__, channel);
+>  
+> +	if (sdmac->peripheral_type != IMX_DMATYPE_HDMI)
+> +		num_periods = buf_len / period_len;
+> +
+>  	sdma_config_write(chan, &sdmac->slave_config, direction);
+>  
+>  	desc = sdma_transfer_init(sdmac, direction, num_periods);
+> @@ -1701,6 +1716,9 @@ static struct dma_async_tx_descriptor *sdma_prep_dma_cyclic(
+>  		goto err_bd_out;
+>  	}
+>  
+> +	if (sdmac->peripheral_type == IMX_DMATYPE_HDMI)
+> +		return vchan_tx_prep(&sdmac->vc, &desc->vd, flags);
+> +
+>  	while (buf < buf_len) {
+>  		struct sdma_buffer_descriptor *bd = &desc->bd[i];
+>  		int param;
+> @@ -1761,6 +1779,10 @@ static int sdma_config_write(struct dma_chan *chan,
+>  		sdmac->watermark_level |= (dmaengine_cfg->dst_maxburst << 16) &
+>  			SDMA_WATERMARK_LEVEL_HWML;
+>  		sdmac->word_size = dmaengine_cfg->dst_addr_width;
+> +	} else if (sdmac->peripheral_type == IMX_DMATYPE_HDMI) {
+> +		sdmac->per_address = dmaengine_cfg->dst_addr;
+> +		sdmac->per_address2 = dmaengine_cfg->src_addr;
+> +		sdmac->watermark_level = 0;
+>  	} else {
+>  		sdmac->per_address = dmaengine_cfg->dst_addr;
+>  		sdmac->watermark_level = dmaengine_cfg->dst_maxburst *
+> diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
+> index f487a4fa103a..cfec5f946e23 100644
+> --- a/include/linux/dma/imx-dma.h
+> +++ b/include/linux/dma/imx-dma.h
+> @@ -40,6 +40,7 @@ enum sdma_peripheral_type {
+>  	IMX_DMATYPE_ASRC_SP,	/* Shared ASRC */
+>  	IMX_DMATYPE_SAI,	/* SAI */
+>  	IMX_DMATYPE_MULTI_SAI,	/* MULTI FIFOs For Audio */
+> +	IMX_DMATYPE_HDMI,       /* HDMI Audio */
+>  };
+>  
+>  enum imx_dma_prio {
+> -- 
+> 2.37.1
 
-Thanks,
-   Felix
-
-
->
-> static inline
-> struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long addr)
->   {
->           struct vm_area_struct *vma = find_vma(mm, addr);
->
->           if (vma && addr < vma->vm_start)
->                   vma = NULL;
->
->           return vma;
->   }
->
->
->> from: Felix Kuehling <felix.kuehling@amd.com>
->> time: 2022年10月18日 3:35
->> to: tomorrow Wang (王德明) <wangdeming@inspur.com>;
->> airlied@gmail.com; daniel@ffwll.ch; alexander.deucher@amd.com;
->> christian.koenig@amd.com; Xinhui.Pan@amd.com
->> linux-kernel@vger.kernel.org
->> sub: Re: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
->>
->>
->> On 2022-10-06 22:48, Deming Wang wrote:
->>> Using vma_lookup() verifies the start address is contained in the
->>> found vma.  This results in easier to read the code.
->> Thank you for the patches. This and your other patch look good to me.
->> However, you missed one use of find_vma in svm_range_is_valid. Is that an
->> oversight or is there a reason why we need to use find_vma there?
->>
->> If you're going to respin it, you may also squash the two patches into one.
->>
->> Thanks,
->>     Felix
->>
->>
->>> Signed-off-by: Deming Wang <wangdeming@inspur.com>
->>> ---
->>>    drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 12 ++++++------
->>>    1 file changed, 6 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->>> b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->>> index 64fdf63093a0..cabcc2ca3c23 100644
->>> --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->>> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->>> @@ -1586,8 +1586,8 @@ static int svm_range_validate_and_map(struct
->> mm_struct *mm,
->>>    		unsigned long npages;
->>>    		bool readonly;
->>>
->>> -		vma = find_vma(mm, addr);
->>> -		if (!vma || addr < vma->vm_start) {
->>> +		vma = vma_lookup(mm, addr);
->>> +		if (!vma) {
->>>    			r = -EFAULT;
->>>    			goto unreserve_out;
->>>    		}
->>> @@ -2542,8 +2542,8 @@ svm_range_get_range_boundaries(struct
->> kfd_process *p, int64_t addr,
->>>    	struct interval_tree_node *node;
->>>    	unsigned long start_limit, end_limit;
->>>
->>> -	vma = find_vma(p->mm, addr << PAGE_SHIFT);
->>> -	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
->>> +	vma = vma_lookup(p->mm, addr << PAGE_SHIFT);
->>> +	if (!vma) {
->>>    		pr_debug("VMA does not exist in address [0x%llx]\n", addr);
->>>    		return -EFAULT;
->>>    	}
->>> @@ -2871,8 +2871,8 @@ svm_range_restore_pages(struct amdgpu_device
->> *adev, unsigned int pasid,
->>>    	/* __do_munmap removed VMA, return success as we are handling stale
->>>    	 * retry fault.
->>>    	 */
->>> -	vma = find_vma(mm, addr << PAGE_SHIFT);
->>> -	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
->>> +	vma = vma_lookup(mm, addr << PAGE_SHIFT);
->>> +	if (!vma) {
->>>    		pr_debug("address 0x%llx VMA is removed\n", addr);
->>>    		r = 0;
->>>    		goto out_unlock_range;
+-- 
+~Vinod
