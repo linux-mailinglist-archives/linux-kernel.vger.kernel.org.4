@@ -2,126 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBE06051AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ADE6051AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiJSU7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S231602AbiJSVAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiJSU7u (ORCPT
+        with ESMTP id S231594AbiJSVAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:59:50 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BAE36BF3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:59:47 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 187so15568537iov.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:59:47 -0700 (PDT)
+        Wed, 19 Oct 2022 17:00:15 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C2CF53E2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:00:12 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id d26so42827563ejc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=rasmusvillemoes.dk; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eZne8BsABy34ud9c/ptUC1xGSRXkefE9UK68qBCg884=;
-        b=YSIz1NzBFUypmr5uuivAs5Fi6j4P91APPKbbtuMmvwUNQ/oVJ7yxKqW4swjLxE3+rg
-         c3VE9Kuf/hE9l9R/rYhgJ2H8VrX/HOQerHVkkUW6UB0xN0acGfEq+SaNpPPcUElZ+al0
-         gpr7vjJ11eu9aeGTS5wVa+L4ku3/tfNkvE7MQ=
+        bh=7B3HRHjNpnBpaI5qlpPSiOMumjOcoFKJt56DP4KqPMM=;
+        b=SxUE8X9QkZ7Zt+v4Dx0Ua8t+BN4j3eNoHXuWMSi3TqQLAfk13oyom7hzkYIqYf8d2D
+         I6meVt2PG9LN4tHmlZDCcwn38wd4rRg6/fzhz57Bsg4vlzLpZBKqrZVQLl0pCEFZDJgZ
+         WalsGmHT+9X7UhJdUpyM9o0SfCGgfyRsxKusc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eZne8BsABy34ud9c/ptUC1xGSRXkefE9UK68qBCg884=;
-        b=b7Bq6mUTkwUK+hpjPGA/wpFbwcNrEaI8JNDyhNd9mAi5IyCNUxxJy/CxQCmvxAOBf4
-         hPYMGVqwrPesjpzbpaVS+hCsLmsjXvxn1wQs//UWX3TMbj/0RcKa9XNBXmjgsxTWvM7w
-         NnTm8DhLnun0tMXllWe4xzj28u+w3G0N2vB0K0YgkgDkDTFleCsRMJwFPRFcc8jufsW2
-         YACOymjQo3r5DGFjqNrKpFpwVxgLAKC1Ml+ptPEDyuPWomLhvxOXtW1dd0gBVpfKemrQ
-         RzSXXynE0KOzF4LBsbRHfsBDVz6Wzf4rZhg5LL7VnXKmd49w6TfWF/xr7U607KJ+FsQW
-         lMSA==
-X-Gm-Message-State: ACrzQf1pqRwcU7n5X7yKTL641q7iyFDmxtLLpNTvkaFQFdXuVOHD+hIW
-        LogbVGJowyc8L2txKGU8Hq3itjZ3QXS6kg==
-X-Google-Smtp-Source: AMsMyM6yD5WRIbympNkKtlKUVzOIxuZtA1ZlKUunOUfvz8Mf/lLqMPBIFS1A82X+SftUrCfn+3tczg==
-X-Received: by 2002:a05:6638:24cf:b0:363:b397:dce5 with SMTP id y15-20020a05663824cf00b00363b397dce5mr8287149jat.26.1666213187251;
-        Wed, 19 Oct 2022 13:59:47 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r28-20020a02aa1c000000b0036384f898a0sm2452438jam.133.2022.10.19.13.59.45
+        bh=7B3HRHjNpnBpaI5qlpPSiOMumjOcoFKJt56DP4KqPMM=;
+        b=PE816aQ0ELRS+AEXwvq03z8rQqNrsElGqsI8BK/6sZQVGFYvLcAT+7SANEMBitTZgn
+         glhm5DOAPcnCId8NLo7YX1ihtmry8ifX9a5EjS+cZD+mJc5N2aK2feIBS+QBTaWvf4dM
+         bGGXltZ1PZh6XeIRakMZybCVCDhiXSF90gQOmO4maCL/NDdl5SAWUmgGk/Xc3oI6aq1G
+         Pa2m1hdjyckE2nsnpI0wQsp+TnZLpTSfJO53b2wQLJleCNS8vs6Sioj6DsjgPaBHnpds
+         qzTTrHDXWyek1fURf+0rRLSqC2GzN9G1qDQ/jh/zcCJEHAQLVo+i5yjosaUEl1ESH0ja
+         MfIw==
+X-Gm-Message-State: ACrzQf0H+lw3tv2z5FdNULAgi6IB0scaaNHkkXpe2CZQ+UwH3gYmMWNT
+        4Q96w1q3D3l4H2EFQslP/UkcJg==
+X-Google-Smtp-Source: AMsMyM7j83A8j2fgwHRwYEHy6dycWlOPv4NGP8/RSv4ZJ682CTNJ+GtTySsLCbknc8ARf6bOFr0SNg==
+X-Received: by 2002:a17:907:162a:b0:78e:2859:76be with SMTP id hb42-20020a170907162a00b0078e285976bemr8268481ejc.768.1666213210993;
+        Wed, 19 Oct 2022 14:00:10 -0700 (PDT)
+Received: from [192.168.1.149] ([80.208.71.65])
+        by smtp.gmail.com with ESMTPSA id k13-20020a17090627cd00b0077826b92d99sm9448022ejc.12.2022.10.19.14.00.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 13:59:46 -0700 (PDT)
-Message-ID: <07c574f3-f523-a677-3597-aad4d5546869@linuxfoundation.org>
-Date:   Wed, 19 Oct 2022 14:59:45 -0600
+        Wed, 19 Oct 2022 14:00:10 -0700 (PDT)
+Message-ID: <cc38380a-de69-d8f6-44b5-8ae4d073d916@rasmusvillemoes.dk>
+Date:   Wed, 19 Oct 2022 23:00:09 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: Linux 6.1-rc1 drm/amdgpu regression
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/1] vsprintf: protect kernel from panic due to
+ non-canonical pointer dereference
 Content-Language: en-US
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <efe5a0a4-775e-bc6b-27c2-aa506f5613fa@linuxfoundation.org>
- <BL1PR12MB514408C626FE2D056C293693F72B9@BL1PR12MB5144.namprd12.prod.outlook.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <BL1PR12MB514408C626FE2D056C293693F72B9@BL1PR12MB5144.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jane Chu <jane.chu@oracle.com>, pmladek@suse.com,
+        rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     wangkefeng.wang@huawei.com, konrad.wilk@oracle.com,
+        haakon.bugge@oracle.com, john.haxby@oracle.com
+References: <20221019194159.2923873-1-jane.chu@oracle.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20221019194159.2923873-1-jane.chu@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 14:27, Deucher, Alexander wrote:
-> [AMD Official Use Only - General]
-> 
->> -----Original Message-----
->> From: Shuah Khan <skhan@linuxfoundation.org>
->> Sent: Wednesday, October 19, 2022 4:00 PM
->> To: Deucher, Alexander <Alexander.Deucher@amd.com>
->> Cc: Linus Torvalds <torvalds@linux-foundation.org>; Shuah Khan
->> <skhan@linuxfoundation.org>; linux-kernel@vger.kernel.org
->> Subject: Linux 6.1-rc1 drm/amdgpu regression
->>
->> Hi Alex,
->>
->> I am seeing the same problem I sent reverts for on 5.10.147 on Linux 6.1-rc1
->> on my laptop with AMD Ryzen 7 PRO 5850U with Radeon Graphics.
->>
->> commit e3163bc8ffdfdb405e10530b140135b2ee487f89
->> Author: Alex Deucher <alexander.deucher@amd.com>
->> Date:   Fri Sep 9 11:53:27 2022 -0400
->>
->>       drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for vega
->>
->> I see that the following has been reverted in Linux 6.1-rc1
->>
->> commit 66f99628eb24409cb8feb5061f78283c8b65f820
->> Author: Hamza Mahfooz <hamza.mahfooz@amd.com>
->> Date:   Tue Sep 6 15:01:49 2022 -0400
->>
->>       drm/amdgpu: use dirty framebuffer helper
->>
->> However I still see the following filling dmesg and system is unusable.
->> For now I switched back to Linux 6.0 as this is my primary system.
->>
->> [drm] Fence fallback timer expired on ring sdma0 [drm] Fence fallback timer
->> expired on ring gfx [drm] Fence fallback timer expired on ring sdma0 [drm]
->> Fence fallback timer expired on ring gfx [drm] Fence fallback timer expired
->> on ring sdma0 [drm] Fence fallback timer expired on ring sdma0 [drm] Fence
->> fallback timer expired on ring sdma0 [drm] Fence fallback timer expired on
->> ring gfx
->>
->> Please let me know if I should send revert for this for the mainline as well.
->>
-> 
-> Can you file a bug report (https://gitlab.freedesktop.org/drm/amd/-/issues) and attach your dmesg output?  I'd like to try and repro the issue if I can and provide some patches to test.  I'd like to avoid reverting the patch as that will break the driver for users using vega dGPUs.
+On 19/10/2022 21.41, Jane Chu wrote:
+> Having stepped on a local kernel bug where reading sysfs has led to
+> out-of-bound pointer dereference by vsprintf() which led to GPF panic.
 
-Makes sense. I will file the bug and aattach dmesg. Since this is my
-primary system, there will be some delay in getting this info. to you
-and testing any patches you provide for testing.
+Just to be completely clear, the out-of-bounds dereference did not
+happen in vsprintf if I understand your description right. Essentially
+you have an array of char* pointers, and you accessed beyond that array,
+where of course some random memory contents then turned out not to be a
+real pointer, and that bogus pointer value was passed into vsprintf() as
+a %s argument.
 
-thanks,
--- Shuah
+> And the reason for GPF is that the OOB pointer was turned to a
+> non-canonical address such as 0x7665645f63616465.
+
+That's ved_cade , or more properly edac_dev ...
+
+> 
+> vsprintf() already has this line of defense
+> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
+>                 return "(efault)";
+> Since a non-canonical pointer can be detected by kern_addr_valid()
+> on architectures that present VM holes as well as meaningful
+> implementation of kern_addr_valid() that detects the non-canonical
+> addresses, this patch adds a check on non-canonical string pointer by
+> kern_addr_valid() and "(efault)" to alert user that something
+> is wrong instead of unecessarily panic the server.
+> 
+> On the other hand, if the non-canonical string pointer is dereferenced
+> else where in the kernel, by virtue of being non-canonical, a crash
+> is expected to be immediate.
+
+I'm with Andy on this one, we don't add random checks like this in the
+kernel, not in vsprintf or elsewhere.
+
+check_pointer_msg is/was actually more about checking the various
+%p<foo> extensions, where it is (more) expected that somebody does
+
+  struct foo *f = get_a_foo();
+  pr_debug("got %pfoo\n", f);
+  if (IS_ERR(f)) { ... }
+
+[possibly in a not so obvious path], and the PAGE_SIZE check is
+similarly for cases where the "base" pointer is actually NULL but what
+is passed is &f->member.
+
+Rasmus
