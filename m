@@ -2,163 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C63A603B76
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85920603E40
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJSI3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S232859AbiJSJLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJSI3E (ORCPT
+        with ESMTP id S232779AbiJSJJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:29:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB30D7CAA7;
-        Wed, 19 Oct 2022 01:29:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 19 Oct 2022 05:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8DF4A813;
+        Wed, 19 Oct 2022 02:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D3D016602388;
-        Wed, 19 Oct 2022 09:29:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666168142;
-        bh=ocWrVQMR3Z9kZzLMg8BVFlJNcN/HGEjR1aguO3cp0bc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JslCHyyIYsNdzm6vEIetBjO8qkDZ/ptAL3uvjqbctSrFPeXp6ycqYEeYvuQ/rk3SE
-         m1vLNqJp0WOvN/qqMhIHUHGe+HO0NmOI7OcLVf0Mwm3li8sTr+h3xLZwiBdqYKBeuA
-         MytITpObucpWuclzLgmsf4eLGlxzpm1WgINdmBIo/uWbiGbokxPQ8kbvMRsHP+Hdwx
-         aJ1Bc+cN5c54wCsVIVhlnHsOXqmF+musNmIUniJQdOWyNX8H9CabdT5fh2VoDOD64X
-         6SoMfuVAF5hsoAfjGpHpsVsobEHrAmv/M1uLd0Hr4kn2O63JeTFY+Vac8yMRxaFyBW
-         tiL5rtbl75dQA==
-Message-ID: <97916360-a24b-0e7d-cc86-9b801fadf869@collabora.com>
-Date:   Wed, 19 Oct 2022 10:28:59 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DF30617F7;
+        Wed, 19 Oct 2022 08:59:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5A8C433D7;
+        Wed, 19 Oct 2022 08:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666169990;
+        bh=a0L7keHdvAWF9HVxePOwqz6MqpGe3xrOsmsrwS+8eyE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C9dNHCIP8sdesRKJd69UGShImCCdBClztz6NPZychWkL4O5jb8CDac4hPhBAfkrda
+         rLMwKvZ/jLGDNbIZSuJewsxef1n5XCEg2S49n9XIQ20Y+LBeUU8vSeKtaS7MD6NAYb
+         eTKuevTv5S7SKF9hPMphuJqlxPIaIy5EeG5otKZ0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.0 453/862] iomap: iomap: fix memory corruption when recording errors during writeback
+Date:   Wed, 19 Oct 2022 10:29:00 +0200
+Message-Id: <20221019083309.986921531@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+References: <20221019083249.951566199@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC v1 02/12] dt-bindings: PCI: mediatek-gen3: add support for
- mt7986
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20221017104141.7338-1-linux@fw-web.de>
- <20221017104141.7338-3-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221017104141.7338-3-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/10/22 12:41, Frank Wunderlich ha scritto:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add compatible string for mt7986.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> mt7986a.dtsi misses clock-names which are now required since support of
-> MT8192/MT8188/MT8195. This change also introduces a 6th clock which is
-> now needed for all pcie-gen3 dts.
-> 
-> i do not know how to map the clocks to the names...
-> 
-> mediatek-pcie-gen3.yaml:
-> 
->    clock-names:
->      items:
->        - const: pl_250m
->        - const: tl_26m
->        - const: tl_96m
->        - const: tl_32k
->        - const: peri_26m
->        - enum:
->            - top_133m        # for MT8192
->            - peri_mem        # for MT8188/MT8195
-> 
-> mt7986a.dtsi:
-> 
-> 	clocks = <&infracfg CLK_INFRA_PCIE_SEL>,
-> 		 <&infracfg CLK_INFRA_IPCIE_CK>,
-> 		 <&infracfg CLK_INFRA_IPCIE_PIPE_CK>,
-> 		 <&infracfg CLK_INFRA_IPCIER_CK>,
-> 		 <&infracfg CLK_INFRA_IPCIEB_CK>;
+From: Darrick J. Wong <djwong@kernel.org>
 
-If this SoC has a different clock tree... then you should add bindings for this
-kind of clock tree.
+[ Upstream commit 3d5f3ba1ac28059bdf7000cae2403e4e984308d2 ]
 
-CLK_INFRA_IPCIER_CK is *not* a peri clock: "peri" means PERICFG, which does not
-seem to be present in this SoC... so no, you can't assign it to "peri_26m", nor
-you can assign it to tl_32k, as that's not a 32KHz clock.
+Every now and then I see this crash on arm64:
 
-CLK_INFRA_PCIEB_CK can be a "top_133m" clock... as it is gating "sysaxi_sel",
-which is a topckgen clock.
+Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+Buffer I/O error on dev dm-0, logical block 8733687, async page read
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 64k pages, 42-bit VAs, pgdp=0000000139750000
+[00000000000000f8] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000, pmd=0000000000000000
+Internal error: Oops: 96000006 [#1] PREEMPT SMP
+Buffer I/O error on dev dm-0, logical block 8733688, async page read
+Dumping ftrace buffer:
+Buffer I/O error on dev dm-0, logical block 8733689, async page read
+   (ftrace buffer empty)
+XFS (dm-0): log I/O error -5
+Modules linked in: dm_thin_pool dm_persistent_data
+XFS (dm-0): Metadata I/O Error (0x1) detected at xfs_trans_read_buf_map+0x1ec/0x590 [xfs] (fs/xfs/xfs_trans_buf.c:296).
+ dm_bio_prison
+XFS (dm-0): Please unmount the filesystem and rectify the problem(s)
+XFS (dm-0): xfs_imap_lookup: xfs_ialloc_read_agi() returned error -5, agno 0
+ dm_bufio dm_log_writes xfs nft_chain_nat xt_REDIRECT nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip6t_REJECT
+potentially unexpected fatal signal 6.
+ nf_reject_ipv6
+potentially unexpected fatal signal 6.
+ ipt_REJECT nf_reject_ipv4
+CPU: 1 PID: 122166 Comm: fsstress Tainted: G        W          6.0.0-rc5-djwa #rc5 3004c9f1de887ebae86015f2677638ce51ee7
+ rpcsec_gss_krb5 auth_rpcgss xt_tcpudp ip_set_hash_ip ip_set_hash_net xt_set nft_compat ip_set_hash_mac ip_set nf_tables
+Hardware name: QEMU KVM Virtual Machine, BIOS 1.5.1 06/16/2021
+pstate: 60001000 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=--)
+ ip_tables
+pc : 000003fd6d7df200
+ x_tables
+lr : 000003fd6d7df1ec
+ overlay nfsv4
+CPU: 0 PID: 54031 Comm: u4:3 Tainted: G        W          6.0.0-rc5-djwa #rc5 3004c9f1de887ebae86015f2677638ce51ee7405
+Hardware name: QEMU KVM Virtual Machine, BIOS 1.5.1 06/16/2021
+Workqueue: writeback wb_workfn
+sp : 000003ffd9522fd0
+ (flush-253:0)
+pstate: 60401005 (nZCv daif +PAN -UAO -TCO -DIT +SSBS BTYPE=--)
+pc : errseq_set+0x1c/0x100
+x29: 000003ffd9522fd0 x28: 0000000000000023 x27: 000002acefeb6780
+x26: 0000000000000005 x25: 0000000000000001 x24: 0000000000000000
+x23: 00000000ffffffff x22: 0000000000000005
+lr : __filemap_set_wb_err+0x24/0xe0
+ x21: 0000000000000006
+sp : fffffe000f80f760
+x29: fffffe000f80f760 x28: 0000000000000003 x27: fffffe000f80f9f8
+x26: 0000000002523000 x25: 00000000fffffffb x24: fffffe000f80f868
+x23: fffffe000f80fbb0 x22: fffffc0180c26a78 x21: 0000000002530000
+x20: 0000000000000000 x19: 0000000000000000 x18: 0000000000000000
 
-CLK_INFRA_IPCIE_CK is your "tl_(something)" clock, as that's effectively gating
-"pextp_tl_ck_sel" (which is the PCIe Transaction Layer clock mux).
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000001 x13: 0000000000470af3 x12: fffffc0058f70000
+x11: 0000000000000040 x10: 0000000000001b20 x9 : fffffe000836b288
+x8 : fffffc00eb9fd480 x7 : 0000000000f83659 x6 : 0000000000000000
+x5 : 0000000000000869 x4 : 0000000000000005 x3 : 00000000000000f8
+x20: 000003fd6d740020 x19: 000000000001dd36 x18: 0000000000000001
+x17: 000003fd6d78704c x16: 0000000000000001 x15: 000002acfac87668
+x2 : 0000000000000ffa x1 : 00000000fffffffb x0 : 00000000000000f8
+Call trace:
+ errseq_set+0x1c/0x100
+ __filemap_set_wb_err+0x24/0xe0
+ iomap_do_writepage+0x5e4/0xd5c
+ write_cache_pages+0x208/0x674
+ iomap_writepages+0x34/0x60
+ xfs_vm_writepages+0x8c/0xcc [xfs 7a861f39c43631f15d3a5884246ba5035d4ca78b]
+x14: 0000000000000000 x13: 2064656e72757465 x12: 0000000000002180
+x11: 000003fd6d8a82d0 x10: 0000000000000000 x9 : 000003fd6d8ae288
+x8 : 0000000000000083 x7 : 00000000ffffffff x6 : 00000000ffffffee
+x5 : 00000000fbad2887 x4 : 000003fd6d9abb58 x3 : 000003fd6d740020
+x2 : 0000000000000006 x1 : 000000000001dd36 x0 : 0000000000000000
+CPU: 1 PID: 122167 Comm: fsstress Tainted: G        W          6.0.0-rc5-djwa #rc5 3004c9f1de887ebae86015f2677638ce51ee7
+ do_writepages+0x90/0x1c4
+ __writeback_single_inode+0x4c/0x4ac
+Hardware name: QEMU KVM Virtual Machine, BIOS 1.5.1 06/16/2021
+ writeback_sb_inodes+0x214/0x4ac
+ wb_writeback+0xf4/0x3b0
+pstate: 60001000 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=--)
+ wb_workfn+0xfc/0x580
+ process_one_work+0x1e8/0x480
+pc : 000003fd6d7df200
+ worker_thread+0x78/0x430
 
-CLK_INFRA_IPCIE_PIPE_CK seems to be parented to "top_xtal", frequency = 40MHz,
-so I don't see how can this be a pl_250m? Looks like being a 40m clock and I
-wish we didn't have clock frequencies specified in the names, as "pl" would fit,
-but "pl_250m" does not.
-I wonder if we can change the clock names and reflect the changes to the mt8192
-devicetree (mt8195 does not have any pcie node yet), and if that would be a good
-idea right now.
+This crash is a result of iomap_writepage_map encountering some sort of
+error during writeback and wanting to set that error code in the file
+mapping so that fsync will report it.  Unfortunately, the code
+dereferences folio->mapping after unlocking the folio, which means that
+another thread could have removed the page from the page cache
+(writeback doesn't hold the invalidation lock) and give it to somebody
+else.
 
-...and I've left the first for last, because...
+At best we crash the system like above; at worst, we corrupt memory or
+set an error on some other unsuspecting file while failing to record the
+problems with *this* file.  Regardless, fix the problem by reporting the
+error to the inode mapping.
 
-CLK_INFRA_PCIE_SEL: I have no datasheet for this SoC, but if you're sure that
-this clock is selecting the source clock to CLK_INFRA_IPCIE_CK, then the clock
-driver is wrong...
+NOTE: Commit 598ecfbaa742 lifted the XFS writeback code to iomap, so
+this fix should be backported to XFS in the 4.6-5.4 kernels in addition
+to iomap in the 5.5-5.19 kernels.
 
-Right now, I see the following:
+Fixes: e735c0079465 ("iomap: Convert iomap_add_to_ioend() to take a folio") # 5.17 onward
+Fixes: 598ecfbaa742 ("iomap: lift the xfs writeback code to iomap") # 5.5-5.16, needs backporting
+Fixes: 150d5be09ce4 ("xfs: remove xfs_cancel_ioend") # 4.6-5.4, needs backporting
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/iomap/buffered-io.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-static const char *const infra_pcie_parents[] __initconst = {
-	"top_rtc_32p7k", "csw_f26m_sel", "top_xtal", "pextp_tl_ck_sel"
-};
+diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
+index ca5c62901541..77d59c159248 100644
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@ -1421,7 +1421,7 @@ iomap_writepage_map(struct iomap_writepage_ctx *wpc,
+ 	if (!count)
+ 		folio_end_writeback(folio);
+ done:
+-	mapping_set_error(folio->mapping, error);
++	mapping_set_error(inode->i_mapping, error);
+ 	return error;
+ }
+ 
+-- 
+2.35.1
 
-GATE_INFRA2(CLK_INFRA_IPCIE_CK, "infra_ipcie", "pextp_tl_ck_sel", 12),
 
-MUX_GATE_CLR_SET_UPD(CLK_INFRA_PCIE_SEL, "infra_pcie_sel",
-		     infra_pcie_parents, 0x0028, 0x0020, 0x0024, 0, 2,
-		     -1, -1, -1),
-
-....so if you're right, we should instead have:
-
-GATE_INFRA2(CLK_INFRA_IPCIE_CK, "infra_ipcie", "infra_pcie_sel", 12),
-
-....with this meaning that adding CLK_INFRA_PCIE_SEL in devicetree is useless.
-
-This clock tree looks a bit unclear (because again, there's no datasheet around),
-but that's what I understand with a rather fast look in the clock drivers and
-with some experience on other MTK SoCs.
-
-Then again, if this tree is effectively incompatible with the one from MT8192 and
-MT8195, you should have different clock names... and just as a fast idea:
-
-clock-names = "axi", "tl", "pl", "top";
-
-with clocks, in order:
-CLK_INFRA_PCIEB_CK, CLK_INFRA_IPCIE_CK,
-CLK_INFRA_IPCIE_PIPE_CK, CLK_INFRA_IPCIER_CK.
-
-...but feel free to reiterate that :-)
-Hope that was helpful.
-
-Cheers,
-Angelo
 
