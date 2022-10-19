@@ -2,84 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26A6604821
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F510604829
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiJSNuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S233715AbiJSNuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbiJSNs6 (ORCPT
+        with ESMTP id S233760AbiJSNtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:48:58 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EDF19E90B;
-        Wed, 19 Oct 2022 06:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666186386; x=1697722386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uMSS2UGALuEpzvvAM47D5sxAZNzAFsz3tkvccmabASw=;
-  b=jS3uZQIfZTGBP4YKRFEKP46zzLs2PGAsvGfPVC9R4QA9wizh5V/FyHMK
-   1GolAJIy5jlsZklxwFPv7UKBQNBLMPxCIC3BIdXuzfXw5Vz9qQI0+P+fp
-   loGhT1LFXVWmQunB+F+mByxdWhcW1tCzHVxmc/ayF5WhJoC0obli7ypgw
-   3UTLqvj1ocDM1aUSy88UoWoK9Ycj5lgeoZ4RUeahGmp4MocIDxa5BcOVC
-   kEcbTgmxwPEnoP+JJj/yEsmcp59hQBv+k5qI2rdVa08K2j48QZeurBdxD
-   IRvSsof26qgsLIcrkskwwxYpOHgCITATAkB1svygDeEKUwLnMjTWA2FW5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="307517393"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="307517393"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 06:32:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="631670176"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="631670176"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Oct 2022 06:32:41 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ol9BX-009sV1-2C;
-        Wed, 19 Oct 2022 16:32:39 +0300
-Date:   Wed, 19 Oct 2022 16:32:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     chengwei <foxfly.lai.tw@gmail.com>
-Cc:     lee@kernel.org, broonie@kernel.org, rafael@kernel.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        GaryWang@aaeon.com.tw, musa.lin@yunjingtech.com,
-        jack.chang@yunjingtech.com, chengwei <larry.lai@yunjingtech.com>
-Subject: Re: [PATCH 3/5] ACPI: acpi_node_add_pin_mapping added to header file
-Message-ID: <Y0/8d66G3HndiRJF@smile.fi.intel.com>
-References: <20221019022450.16851-1-larry.lai@yunjingtech.com>
- <20221019022450.16851-4-larry.lai@yunjingtech.com>
+        Wed, 19 Oct 2022 09:49:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1420012277C;
+        Wed, 19 Oct 2022 06:33:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F246C618C8;
+        Wed, 19 Oct 2022 13:33:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6053C433B5;
+        Wed, 19 Oct 2022 13:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666186384;
+        bh=jihN27LWxHz/KYbIprPHBbgILCESSPj6Y+IsdOz+MXg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qk3GUPcGbD3CBpedVsV2w5kJ5kUjFIjKOqVSQrDtSJjBHr7jR/7s88ueSUSdf+E57
+         QWWBn1NP61O20JV9CmKRBbhey7kWf59Yqh1atTMTkAeIs5rLZ0X00IvMhA11uD+2f5
+         KoZ/he2a1m9qg/McaeWBgdGGvqBZdhQtH+ZTuT5dW+2Qk+8b+VwDckwzKDmiVxCCE0
+         vkQy0Tj3QOig3BfFUv9DcZi5sZdOyM8MS/bbAKTXwtoidwkxsfr7NLOuUtVhTWh3QS
+         7OQd88cFz0O0slKW7lHd/UxQTyNkz+8u/+2ICFhdiVcuL01k6o7VCpw15m7n9lrK6K
+         36rbwqgkhMMzA==
+Date:   Wed, 19 Oct 2022 19:03:00 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     ldewangan@nvidia.com, jonathanh@nvidia.com,
+        thierry.reding@gmail.com, p.zabel@pengutronix.de,
+        dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 1/3] dt-bindings: dmaengine: Add
+ dma-channel-mask to Tegra GPCDMA
+Message-ID: <Y0/8jF++NeUGtPGM@matsya>
+References: <20221018162812.69673-1-akhilrajeev@nvidia.com>
+ <20221018162812.69673-2-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221019022450.16851-4-larry.lai@yunjingtech.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221018162812.69673-2-akhilrajeev@nvidia.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:24:48AM +0800, chengwei wrote:
-> Declare acpi_node_add_pin_mapping added for pinctrl-upboard
-> reference.
+On 18-10-22, 21:58, Akhil R wrote:
+> Add dma-channel-mask property in Tegra GPCDMA document.
+> 
+> The property would help to specify the channels to be used in
+> kernel and reserve few for the firmware. This was previously
+> achieved by limiting the channel number to 31 in the driver.
+> Now since we can list all 32 channels, update the interrupts
+> property as well to list all 32 interrupts.
 
-This should be a part of the next change.
+Pls cc dt folks and ML on DT patches!
+
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml   | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> index c8894476b6ab..851bd50ee67f 100644
+> --- a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+> @@ -39,7 +39,7 @@ properties:
+>        Should contain all of the per-channel DMA interrupts in
+>        ascending order with respect to the DMA channel index.
+>      minItems: 1
+> -    maxItems: 31
+> +    maxItems: 32
+>  
+>    resets:
+>      maxItems: 1
+> @@ -52,6 +52,9 @@ properties:
+>  
+>    dma-coherent: true
+>  
+> +  dma-channel-mask:
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -60,6 +63,7 @@ required:
+>    - reset-names
+>    - "#dma-cells"
+>    - iommus
+> +  - dma-channel-mask
+>  
+>  additionalProperties: false
+>  
+> @@ -108,5 +112,6 @@ examples:
+>          #dma-cells = <1>;
+>          iommus = <&smmu TEGRA186_SID_GPCDMA_0>;
+>          dma-coherent;
+> +        dma-channel-mask = <0xfffffffe>;
+>      };
+>  ...
+> -- 
+> 2.17.1
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+~Vinod
