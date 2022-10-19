@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809CB604A95
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0E5604AA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiJSPG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S231584AbiJSPIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiJSPFn (ORCPT
+        with ESMTP id S232066AbiJSPGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:05:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C3D2DC6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:59:21 -0700 (PDT)
+        Wed, 19 Oct 2022 11:06:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A69479620;
+        Wed, 19 Oct 2022 07:59:31 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666191381;
+        s=2020; t=1666191382;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ERAmScBWw3AWOQd/N8KPYvjMNho4M2d8wqoVxvpkojg=;
-        b=p7EHFUdVULSPTa08I7V4W4rGuOGZwbKXMbpmy7FQ/hM/Akq2VHbWOybQyOPaIOQrMynit4
-        ej7WV/9P69E8eZBOhLDiLJlrtilFtFK9XGJgoWlTrZNjwAdU/JWjcQgAlEaOPb4G1nWl5b
-        TReEvqMia7ozppHpRIsh6OEWPdoTOkcPeJH4N8SEI0A/MzxlshaDMF13LQKP1TnMI+ubx9
-        Xl4NboHNjl6nuEPXtwS+kozYdOGmAF+ePdeob47Ak0wL6PRzU1obyGe39bWtW3Iy7oJVyD
-        Vkv8yDL44DmJ8w3tppP5p/BE8zRaOFrxQ6dZE4JLY+ict0Hs+OTjbOcit2hpwA==
+        bh=aXcesGHiS9CJwBLB5AtQkJ+SjPh3MNkbA2I4bHFlwT4=;
+        b=vyVdNsmDCOtZ1td7FZJE2kL0NFcmHJkDeb8tBWR6iDUAHMNtB/gaxUaCu7IOuYDjCtdTGf
+        7JMy3AFlQHUwJVxxWRF61DKsEUyqZRkxV7auxPl3IWWrfKeqXCbTFP1XCjq4+t36WbX9n3
+        Lk0u97wao4rNY5seMwaeTD9hMMmwwZAO7FNkBian35LLG7JI5kr+LIiauXac/JHyFLh0oS
+        0bab60tCRUjG95HHblokpeEUA2qyzG6Wp6FwAKRehYx7odX+BRLntV+unpa7brXAp90riX
+        g0saBHF8isP/h2pPYkiVRR0qX2oN2XOyv2ogU5splu0VZKufFuAm+1ETP7yO7Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666191381;
+        s=2020e; t=1666191382;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ERAmScBWw3AWOQd/N8KPYvjMNho4M2d8wqoVxvpkojg=;
-        b=XSBfRYfXfVmjl1gxZkSLwF2XwQJDPNi9TKXi2UryMFR1GEHWj2Cu4NTSvRskEHY/1hTm0t
-        8ZS0wYOq2I7A30BQ==
+        bh=aXcesGHiS9CJwBLB5AtQkJ+SjPh3MNkbA2I4bHFlwT4=;
+        b=3KenGGEQ+2eWZ5r+4AzHNAE//1dUZSpARbtG8UMeJGjl8XQGUV1nPPSymknxmfh1mJh3sK
+        E+W71aY0Z0vk/3Bg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH printk v2 37/38] printk: relieve console_lock of list synchronization duties
-Date:   Wed, 19 Oct 2022 17:01:59 +0206
-Message-Id: <20221019145600.1282823-38-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH printk v2 38/38] printk, xen: fbfront: create/use safe function for forcing preferred
+Date:   Wed, 19 Oct 2022 17:02:00 +0206
+Message-Id: <20221019145600.1282823-39-john.ogness@linutronix.de>
 In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
 References: <20221019145600.1282823-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,116 +66,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The console_list_lock provides synchronization for console list and
-console->flags updates. All call sites that were using the console_lock
-for this synchronization have either switched to use the
-console_list_lock or the SRCU list iterator.
+With commit 9e124fe16ff2("xen: Enable console tty by default in domU
+if it's not a dummy") a hack was implemented to make sure that the
+tty console remains the console behind the /dev/console device. The
+main problem with the hack is that, after getting the console pointer
+to the tty console, it is assumed the pointer is still valid after
+releasing the console_sem. This assumption is incorrect and unsafe.
 
-Remove console_lock usage for console list updates and console->flags
-updates.
+Make the hack safe by introducing a new function
+console_force_preferred() to perform the full operation under
+the console_list_lock.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- kernel/printk/printk.c | 21 +++++----------------
- 1 file changed, 5 insertions(+), 16 deletions(-)
+ drivers/video/fbdev/xen-fbfront.c |  8 +---
+ include/linux/console.h           |  1 +
+ kernel/printk/printk.c            | 69 +++++++++++++++++++------------
+ 3 files changed, 46 insertions(+), 32 deletions(-)
 
+diff --git a/drivers/video/fbdev/xen-fbfront.c b/drivers/video/fbdev/xen-fbfront.c
+index 2552c853c6c2..aa362b25a60f 100644
+--- a/drivers/video/fbdev/xen-fbfront.c
++++ b/drivers/video/fbdev/xen-fbfront.c
+@@ -512,12 +512,8 @@ static void xenfb_make_preferred_console(void)
+ 	}
+ 	console_srcu_read_unlock(cookie);
+ 
+-	if (c) {
+-		unregister_console(c);
+-		c->flags |= CON_CONSDEV;
+-		c->flags &= ~CON_PRINTBUFFER; /* don't print again */
+-		register_console(c);
+-	}
++	if (c)
++		console_force_preferred(c);
+ }
+ 
+ static int xenfb_resume(struct xenbus_device *dev)
+diff --git a/include/linux/console.h b/include/linux/console.h
+index bf1e8136424a..41378b00bbdd 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -235,6 +235,7 @@ enum con_flush_mode {
+ };
+ 
+ extern int add_preferred_console(char *name, int idx, char *options);
++extern void console_force_preferred(struct console *c);
+ extern void register_console(struct console *);
+ extern int unregister_console(struct console *);
+ extern void console_lock(void);
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 3615ee6d68fd..840d581c4b23 100644
+index 840d581c4b23..9a056a42b8d8 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -82,8 +82,8 @@ EXPORT_SYMBOL(oops_in_progress);
- static DEFINE_MUTEX(console_mutex);
+@@ -3207,38 +3207,17 @@ static void try_enable_default_console(struct console *newcon)
  
- /*
-- * console_sem protects console_list and console->flags updates, and also
-- * provides serialization for access to the entire console driver system.
-+ * console_sem protects updates to console->seq and console_suspended,
-+ * and also provides serialization for console printing.
-  */
- static DEFINE_SEMAPHORE(console_sem);
- HLIST_HEAD(console_list);
-@@ -2635,7 +2635,7 @@ static int console_cpu_notify(unsigned int cpu)
-  * console_lock - lock the console system for exclusive use.
-  *
-  * Acquires a lock which guarantees that the caller has
-- * exclusive access to the console system and console_list.
-+ * exclusive access to the console system.
-  *
-  * Can sleep, returns nothing.
-  */
-@@ -2655,7 +2655,7 @@ EXPORT_SYMBOL(console_lock);
-  * console_trylock - try to lock the console system for exclusive use.
-  *
-  * Try to acquire a lock which guarantees that the caller has exclusive
-- * access to the console system and console_list.
-+ * access to the console system.
-  *
-  * returns 1 on success, and 0 on failure to acquire the lock.
-  */
-@@ -2911,8 +2911,7 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
- /**
-  * console_unlock - unlock the console system
-  *
-- * Releases the console_lock which the caller holds on the console system
-- * and the console driver list.
-+ * Releases the console_lock which the caller holds on the console system.
-  *
-  * While the console_lock was held, console output may have been buffered
-  * by printk().  If this is the case, console_unlock(); emits
-@@ -3098,9 +3097,7 @@ void console_stop(struct console *console)
- {
- 	__pr_flush(console, 1000, true);
- 	console_list_lock();
--	console_lock();
- 	console->flags &= ~CON_ENABLED;
--	console_unlock();
- 	console_list_unlock();
+ static int unregister_console_locked(struct console *console);
  
- 	/* Ensure that all SRCU list walks have completed */
-@@ -3111,9 +3108,7 @@ EXPORT_SYMBOL(console_stop);
- void console_start(struct console *console)
+-/*
+- * The console driver calls this routine during kernel initialization
+- * to register the console printing procedure with printk() and to
+- * print any messages that were printed by the kernel before the
+- * console driver was initialized.
+- *
+- * This can happen pretty early during the boot process (because of
+- * early_printk) - sometimes before setup_arch() completes - be careful
+- * of what kernel features are used - they may not be initialised yet.
+- *
+- * There are two types of consoles - bootconsoles (early_printk) and
+- * "real" consoles (everything which is not a bootconsole) which are
+- * handled differently.
+- *  - Any number of bootconsoles can be registered at any time.
+- *  - As soon as a "real" console is registered, all bootconsoles
+- *    will be unregistered automatically.
+- *  - Once a "real" console is registered, any attempt to register a
+- *    bootconsoles will be rejected
+- */
+-void register_console(struct console *newcon)
++static void register_console_locked(struct console *newcon)
  {
- 	console_list_lock();
--	console_lock();
- 	console->flags |= CON_ENABLED;
--	console_unlock();
- 	console_list_unlock();
- 	__pr_flush(console, 1000, true);
- }
-@@ -3315,7 +3310,6 @@ void register_console(struct console *newcon)
- 	 * Put this console in the list - keep the
- 	 * preferred driver at the head of the list.
- 	 */
--	console_lock();
- 	if (hlist_empty(&console_list)) {
- 		/* Ensure CON_CONSDEV is always set for the head. */
- 		newcon->flags |= CON_CONSDEV;
-@@ -3329,7 +3323,6 @@ void register_console(struct console *newcon)
- 	} else {
- 		hlist_add_behind_rcu(&newcon->node, console_list.first);
+ 	struct console *con;
+ 	bool bootcon_enabled = false;
+ 	bool realcon_enabled = false;
+ 	int err;
+ 
+-	console_list_lock();
+-
+ 	for_each_console(con) {
+ 		if (WARN(con == newcon, "console '%s%d' already registered\n",
+ 					 con->name, con->index)) {
+-			goto unlock;
++			return;
+ 		}
+ 
+ 		if (con->flags & CON_BOOT)
+@@ -3251,7 +3230,7 @@ void register_console(struct console *newcon)
+ 	if (newcon->flags & CON_BOOT && realcon_enabled) {
+ 		pr_info("Too late to register bootconsole %s%d\n",
+ 			newcon->name, newcon->index);
+-		goto unlock;
++		return;
  	}
--	console_unlock();
  
- 	/* No need to synchronize SRCU here! */
+ 	/*
+@@ -3282,7 +3261,7 @@ void register_console(struct console *newcon)
  
-@@ -3370,8 +3363,6 @@ static int unregister_console_locked(struct console *console)
- 	if (res > 0)
- 		return 0;
+ 	/* printk() messages are not printed to the Braille console. */
+ 	if (err || newcon->flags & CON_BRL)
+-		goto unlock;
++		return;
  
--	console_lock();
--
- 	/* Disable it unconditionally */
- 	console->flags &= ~CON_ENABLED;
+ 	/*
+ 	 * If we have a bootconsole, and are switching to a real console,
+@@ -3346,7 +3325,31 @@ void register_console(struct console *newcon)
+ 				unregister_console_locked(con);
+ 		}
+ 	}
+-unlock:
++}
++
++/*
++ * The console driver calls this routine during kernel initialization
++ * to register the console printing procedure with printk() and to
++ * print any messages that were printed by the kernel before the
++ * console driver was initialized.
++ *
++ * This can happen pretty early during the boot process (because of
++ * early_printk) - sometimes before setup_arch() completes - be careful
++ * of what kernel features are used - they may not be initialised yet.
++ *
++ * There are two types of consoles - bootconsoles (early_printk) and
++ * "real" consoles (everything which is not a bootconsole) which are
++ * handled differently.
++ *  - Any number of bootconsoles can be registered at any time.
++ *  - As soon as a "real" console is registered, all bootconsoles
++ *    will be unregistered automatically.
++ *  - Once a "real" console is registered, any attempt to register a
++ *    bootconsoles will be rejected
++ */
++void register_console(struct console *newcon)
++{
++	console_list_lock();
++	register_console_locked(newcon);
+ 	console_list_unlock();
+ }
+ EXPORT_SYMBOL(register_console);
+@@ -3411,6 +3414,20 @@ int unregister_console(struct console *console)
+ }
+ EXPORT_SYMBOL(unregister_console);
  
-@@ -3394,8 +3385,6 @@ static int unregister_console_locked(struct console *console)
- 	if (!hlist_empty(&console_list) && console->flags & CON_CONSDEV)
- 		console_first()->flags |= CON_CONSDEV;
- 
--	console_unlock();
--
- 	/* Ensure that all SRCU list walks have completed */
- 	synchronize_srcu(&console_srcu);
- 
++void console_force_preferred(struct console *c)
++{
++	console_list_lock();
++
++	if (unregister_console_locked(c) == 0) {
++		c->flags |= CON_CONSDEV;
++		c->flags &= ~CON_PRINTBUFFER; /* don't print again */
++		register_console_locked(c);
++	}
++
++	console_list_unlock();
++}
++EXPORT_SYMBOL(console_force_preferred);
++
+ /*
+  * Initialize the console device. This is called *early*, so
+  * we can't necessarily depend on lots of kernel help here.
 -- 
 2.30.2
 
