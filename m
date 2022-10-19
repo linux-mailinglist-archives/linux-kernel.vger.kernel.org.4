@@ -2,152 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D1D6040DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A855E6041FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiJSKZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S234561AbiJSKvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiJSKYk (ORCPT
+        with ESMTP id S234547AbiJSKt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:24:40 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20631.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EF9E0AB;
-        Wed, 19 Oct 2022 03:04:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IOUvqCCJHh1kPPvJ7soZmOjFpP0O8VOJ1pSqoT9H/tN0P0rKOZWEn0ZawaLXaVSWLA467aH8iN1C8arRCi6w5J9rasEPsYCM5r6qIV0cEVxap/zvxxIhIOIlotJCxQBpILJ2ix3tZ408+UrlCBdj2xKhcMEnCAW127s4Wbg0WLATHxqEvoW5xNURiftrQfqJufLtFYndMxvBP5S0vNaSPu0Rkj98w8H2QwUL+TYIJ1xLj2JV6iVE8rPZ4WiawxAS9eeUd4w2DIly/U1CGoiiKpYHhs7NM4gR8QtwGecB7APAG13hszC3vFG4YwCmO9SSRDC5u7PpItH4FNXODSR6tQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YdivRuOW9khFBjerESPfO8a4yj+HYn4B5q+Zr77i/As=;
- b=Dfppw33yLleT6tBeP2uIUuH/RNPeURtOQlOXyYN5VkQoWaZ14vn47aK1h1Ik+I1FWdqTzMMWeWYlXwaBl4xTMpyTCrkGZ632ZBJXzyXoo4tRi5IEc7GZEJcGtHac7gbCtPkVLdcBd3qTGAfsUO/b5L2rk1GiUAoZh47jo2SzfztS7nemqSLCJOJUwudTclsg7F0c50fMirol2x4VRq51UnvN1zA99jVjEVf6aamYS1CEsU61zS3nDPM8llPxybbbeNIdgSKsw0QUZTSgGJlEzOSCpgeqf1FTMMPqP7C/uf6rWTgPyFDtbfIiGaPOD707ORkdpsVB9JlB84K6jhUWjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YdivRuOW9khFBjerESPfO8a4yj+HYn4B5q+Zr77i/As=;
- b=kHh7aHzoiZEaqEG21/sis+9tz3zp/OKkvn6Szgskx3r34Z17kW4jNremo62JXo2LjFpo9MjnPQ2MajoVfMuSLVfhc3PdIktv3q8s+Wvv4YJeycGOcH6lApC2ZUYRLmsmEOGOD3Hg24Mlsl4meOGtM9LoXpWaK9vrUvGnvgZ8taLdHd4g7yqFi+qeCmSXAnHc7agFAhLrOzR5TNzzf6HpLqtYkI8tQAr/1fDRPDsY127Bsea5ayzUKilOwgfqBwUdt26fSgslVpH2m7J2d42G5OiqAQyr/EEUv4qSx/4LdLu+RS7wqXLrjzjNM+ZlIsC3UGiXpwVmbS0MxIWT0+6PQg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8)
- by SJ1PR12MB6052.namprd12.prod.outlook.com (2603:10b6:a03:489::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Wed, 19 Oct
- 2022 09:12:05 +0000
-Received: from MN2PR12MB4373.namprd12.prod.outlook.com
- ([fe80::6c65:8f78:f54e:3c93]) by MN2PR12MB4373.namprd12.prod.outlook.com
- ([fe80::6c65:8f78:f54e:3c93%4]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
- 09:12:05 +0000
-From:   Benjamin Poirier <bpoirier@nvidia.com>
-To:     netdev@vger.kernel.org
-Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jonathan Toppins <jtoppins@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net 2/2] selftests: net: Fix netdev name mismatch in cleanup
-Date:   Wed, 19 Oct 2022 18:10:42 +0900
-Message-Id: <20221019091042.783786-3-bpoirier@nvidia.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221019091042.783786-1-bpoirier@nvidia.com>
-References: <20221019091042.783786-1-bpoirier@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYWPR01CA0008.jpnprd01.prod.outlook.com
- (2603:1096:400:a9::13) To MN2PR12MB4373.namprd12.prod.outlook.com
- (2603:10b6:208:261::8)
+        Wed, 19 Oct 2022 06:49:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9558615B115
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 03:22:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52B29B824C4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:11:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14814C433D6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666170679;
+        bh=qBDK8q9sMyVco39xeVSA4ZqVXTJBQ82bpATEHApwii8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Lis+X6+xGbkrSyj6N8R6x6QeUwj0MGdasQvxhzjKA79+ysF5GykvVfBWK0+1WdYLY
+         FQVsC4gP6RMMgkKn1R73SpLAt9s7BhlZr9nJDcjAA8U85MCLYFVM3Bv+0COPAQOl0L
+         bDYSOr+fkNpj2e61EKjzpiLDjjrbDJkGk3rmmQrVE9hnckiJkhYVgcP7XuhKPiFCXm
+         ZJjRGE9t4Nn+MB+8tmb/o93asvNa/JFcpJVdtyc2eXCqm8kGnYYF4bgp8ry98tOb+F
+         yzH14uM1ZgGVFgvLxicK8C5iM7kjnxOegx4Eq0wA2IcjjbPuZ9vIHnINmNAAmhwf0F
+         Fx4nHewuINe6g==
+Received: by mail-lf1-f48.google.com with SMTP id bp15so27031375lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:11:18 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3HhtFwX0Qw5S/lV69Rd9NBxstJPp3zbJLJ6VcpaexEKOF3XnQc
+        phLHvh06+mEYoL17sPKUiSEK+m/fjJQhdXbaaUk=
+X-Google-Smtp-Source: AMsMyM4ZWXW/XsG8t8NwKKPDUmu4iw8/FTD94SMO7Cl9fRh+IaYWRF8bYmvUHBd8UztnBxrBsu8GIu0nZZuRIzCqbzs=
+X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id
+ bq14-20020a056512150e00b00492d9fd9bdfmr2372375lfb.583.1666170677074; Wed, 19
+ Oct 2022 02:11:17 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4373:EE_|SJ1PR12MB6052:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12c082b5-be0e-4f72-6aee-08dab1b1fdf4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VhGQMeomv6h0Lg672U/6ucyHG2vKGkw5Lo1Zup5Ip0vPwuinJkSZuRFXDGA1xtpognN8nTukgG+RmLxaG4Q0pbsh7udCaM8Ax1L4M/ZgSd1gkd2Ztfk5PGIqc1QFUYcv9fJyiWn8fC28b4rOUNwHXQRII7sr770QLyuU1jcPmkGMS6ufGowgN9G3gw/9XnSkM+Yo4WL2lwC6X4fDuD/0zwplTRV1XShX+ja5/RfiI4+C/I8ZELTveNu9RS8QF3/xs6ql5rVpqqfKW1/MbZfi+RA/C/C4Kg+Y2punlOUTk0Gz2d5ADwO9Qw113scQb9FJfEPNfrs8sxsSl7h85LT0zixi/uFnjyXTlQ03Tlwu8RcEzGtcGoMpBez3gyzTKHVKLl7ZQt7bAZjxnjktXMpy/aFlx3m8T6nIUGQ/Njehtri6qFPiDTch1GKOyAIwubYTLpQB83hf65QWcvGSkH35t2ohVBXimuxKyR8mP1Kou9/S0Y2w6gtq0oxz6rKd8w6D4VDaln8UNk94/N5mDr92x3oDwd8hPyq18RZ8Dgoa8K2kPIL5U2KcmGW9C+AzazGEz30GT4KCNcW9AoVkf9kz45reOdpPx2JJgGu0KIMPZ8dt7jbZ8OuFa2N4BPHqq48yZXLMiMG4QRcu1rjSKAu5HiKBV+40sVyppdBhDQt0bQtRxDZBWDs7y202+YuAIx6mVvOwjiev08/Z8Y3tXQH8NQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(366004)(346002)(136003)(451199015)(316002)(38100700002)(7416002)(2616005)(26005)(8936002)(4326008)(4744005)(6512007)(8676002)(36756003)(5660300002)(66476007)(66556008)(66946007)(6666004)(41300700001)(186003)(6506007)(86362001)(2906002)(1076003)(6486002)(6916009)(83380400001)(54906003)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AwclQmPMq7hD4YuCkk/eJsFNsW0L0pkEi154V5ejG4ws5ipSZcoOdEFSZNma?=
- =?us-ascii?Q?c5frxewFMp/uoFezSL2kNVW3Be4vZEpxIT7pdU/HLhzk8i2bjhztAvhfE0Un?=
- =?us-ascii?Q?MlwHepgmzf9ySuTpv65I4Tbr36Gsiq0patBireXwA1TODQyBN/jihxc/umNr?=
- =?us-ascii?Q?5JYph4qbjG6Tmb9SkZFjRDmXili3UEDObOcgItR8EMwSBjpa1GmoUYuhQzvw?=
- =?us-ascii?Q?DOD4dU/VtBxdIgmtY8kNBgIvDRak8SnlHoRRrCILfRMD4vCTmPNPHnjj4/hz?=
- =?us-ascii?Q?mpZwA7QS1XvS5vrp8vKo/8Xo22tWTWQmNu0tTNfcPpaCrUE3GfgYPl14J+Fj?=
- =?us-ascii?Q?fs2GxlVNeOue1zi+E8VUKIEDyBqpKj357yQUmK22zDokkUHvCK0sIdz9Rqx6?=
- =?us-ascii?Q?rWXgdItDJi4bKKZcQZZ5O/xqyFKb7X28/m8botiSHD3yeFuO5sVNM+dlWedn?=
- =?us-ascii?Q?lMBRGmKEMMkqUjDEu6Iaf43G5EmT1p7oSlFSNGp9GhFFyBo6uwR6smGRBwS8?=
- =?us-ascii?Q?cHb1uFqd57lX8A1lQKq7BD0DFrr2/TDrHhAJSotaQzemwyOFS6QCDELtag5k?=
- =?us-ascii?Q?LE0HNU4K8dmzRHkpgCPkd1EyIl00XFnuIX6u2kd8ZgTwd2hkZaH5/D5ukP0U?=
- =?us-ascii?Q?T+TwAE305/p2iTtwC9hS//fvvE7I5vFhxfx3z9gIXxo9JP+4zQEoOQgdeord?=
- =?us-ascii?Q?GV3bL7fvHmJ7jTvz8gOl5Im1k2BP+ytq9zoDnQd1S2Kzpid8699eVJ2GW4NE?=
- =?us-ascii?Q?RPnOxINOR/egU2iiV5Il81i9XLkeUrU/S5grKAfkpsiOuw1Ov1cVN64l+kkS?=
- =?us-ascii?Q?Ur6ZW5B98UjvtFNI7AJk6shgFniwIWY1ocZ4JUuzfTMLILVu9Qydk0Rz2M5F?=
- =?us-ascii?Q?TkewncL+T7h7VLc84d0Up2cuKnP7Md3lqrSsTw4lLpgUghfJx6oVcZuCFabf?=
- =?us-ascii?Q?qRbW9lfti2/4kuzoBwDORoPboZ5bCrZ3n1TB7bmE8A8rO4FKGHWZtkoF5Mqw?=
- =?us-ascii?Q?UMNiWyZozYLT9P3Sc1atSHgw8zBMbloEq7F+rFR2Tpgt4bHIu1OY2bNfQa7Z?=
- =?us-ascii?Q?att5r1rIR8lS4o61zHqgD9zORh2Sq7mTP39f+7SQnwjYBtldG6dA283aDl6q?=
- =?us-ascii?Q?xoYFy/Uk0dIBrtsih7iPV0GPZorqkKT4Z9Xe5q2X/7xGoULVh908CM9dKNAu?=
- =?us-ascii?Q?UUHERJHejPH5JUUFz605ahUjGq+8u+SxhBYOVhtwHgkmAL+Tg6FACjKkKJjs?=
- =?us-ascii?Q?0Kaz+5/8Lxsl1c3HPkhNvBe5CFAN+a+UoXQPCZpAu503/1BQOOFZuuS1Y2CX?=
- =?us-ascii?Q?KzTy8Ldn56VahmIcakIgug6OQbVIbH18RZeWFqI3GdETJjoGsjugShXxXveL?=
- =?us-ascii?Q?JlM1FCkQYoN4M6N1YotlHIf75iUPosnc/J3Kow0/qD8kNarBxB57fD/VjTto?=
- =?us-ascii?Q?/NAiktBp4DJNrKxUXbiIWeZR1LkJwe0O+FRjvIRlaZ9dFmSdpZmexq9Pks2q?=
- =?us-ascii?Q?OtqPwVseFSFBpNRiWgH4Wpdfqh7Bi7ZutdGgBwtVGcPfVUeFT24qD9x4kSin?=
- =?us-ascii?Q?S0PXlv06qohLzx8czMqLJoAF1odE4hBKIs5sQJwl?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12c082b5-be0e-4f72-6aee-08dab1b1fdf4
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 09:12:05.7140
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B5LVvHsdtgBF6iYlhJsKPSLCZateniLV1xpVW7MZT4LE1LlMF+/hm9ik+aSk6v44Gpl2cPSNCysr/nQ1rtLi7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6052
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <202210190351.b33PaxC4-lkp@intel.com> <CAMj1kXEUs-CTpM2LJ_9+yH3Gy+N+dm51M7VvNpKNAsRBTDCRaw@mail.gmail.com>
+ <def83285-af62-f0c4-dcaa-f9e54aaba768@intel.com>
+In-Reply-To: <def83285-af62-f0c4-dcaa-f9e54aaba768@intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Oct 2022 11:11:05 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFG243S0awWUHD4xWidG8nsRamVBk9CC8QYz2hbkgBWxQ@mail.gmail.com>
+Message-ID: <CAMj1kXFG243S0awWUHD4xWidG8nsRamVBk9CC8QYz2hbkgBWxQ@mail.gmail.com>
+Subject: Re: [kbuild-all] Re: drivers/firmware/efi/libstub/zboot.c:163:1:
+ sparse: sparse: symbol 'efi_zboot_entry' was not declared. Should it be static?
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lag_lib.sh creates the interfaces dummy1 and dummy2 whereas
-dev_addr_lists.sh:destroy() deletes the interfaces dummy0 and dummy1. Fix
-the mismatch in names.
+On Wed, 19 Oct 2022 at 11:10, Chen, Rong A <rong.a.chen@intel.com> wrote:
+>
+>
+>
+> On 10/19/2022 3:50 AM, Ard Biesheuvel wrote:
+> > This is another spurious report of an asmlinkage symbol.
+>
+> Hi Ard,
+>
+> Thanks for your reply, we'll add this warning to the ignore list.
+>
 
-Fixes: bbb774d921e2 ("net: Add tests for bonding and team address list management")
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
----
- tools/testing/selftests/drivers/net/team/dev_addr_lists.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you Rong.
 
-diff --git a/tools/testing/selftests/drivers/net/team/dev_addr_lists.sh b/tools/testing/selftests/drivers/net/team/dev_addr_lists.sh
-index 9684163949f0..33913112d5ca 100755
---- a/tools/testing/selftests/drivers/net/team/dev_addr_lists.sh
-+++ b/tools/testing/selftests/drivers/net/team/dev_addr_lists.sh
-@@ -18,7 +18,7 @@ source "$lib_dir"/lag_lib.sh
- 
- destroy()
- {
--	local ifnames=(dummy0 dummy1 team0 mv0)
-+	local ifnames=(dummy1 dummy2 team0 mv0)
- 	local ifname
- 
- 	for ifname in "${ifnames[@]}"; do
--- 
-2.37.2
+Wouldn't it be easier to detect the asmlinkage and never warn on it?
+Maybe this should be sparse's job instead ...
 
+
+>
+> >
+> > On Tue, 18 Oct 2022 at 21:49, kernel test robot <lkp@intel.com> wrote:
+> >>
+> >> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> >> head:   bb1a1146467ad812bb65440696df0782e2bc63c8
+> >> commit: a050910972bb25152b42ad2e544652117c5ad915 efi/libstub: implement generic EFI zboot
+> >> date:   4 weeks ago
+> >> config: riscv-randconfig-s043-20221018
+> >> compiler: riscv64-linux-gcc (GCC) 12.1.0
+> >> reproduce:
+> >>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >>          chmod +x ~/bin/make.cross
+> >>          # apt-get install sparse
+> >>          # sparse version: v0.6.4-39-gce1a6720-dirty
+> >>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a050910972bb25152b42ad2e544652117c5ad915
+> >>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >>          git fetch --no-tags linus master
+> >>          git checkout a050910972bb25152b42ad2e544652117c5ad915
+> >>          # save the config file
+> >>          mkdir build_dir && cp config build_dir/.config
+> >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/ lib/xz/
+> >>
+> >> If you fix the issue, kindly add following tag where applicable
+> >> | Reported-by: kernel test robot <lkp@intel.com>
+> >>
+> >> sparse warnings: (new ones prefixed by >>)
+> >>     WARNING: invalid argument to '-march': '_zihintpause'
+> >>     drivers/firmware/efi/libstub/zboot.c: note: in included file (through drivers/firmware/efi/libstub/../../../../lib/decompress_unxz.c):
+> >>>> drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:393:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     expected restricted __le32 const [usertype] *p
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     got unsigned int const [usertype] *
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:427:48: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     expected restricted __le32 const [usertype] *p
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     got unsigned int const [usertype] *
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:435:37: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     expected restricted __le32 const [usertype] *p
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     got unsigned int const [usertype] *
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:459:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     expected restricted __le32 const [usertype] *p
+> >>     drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     got unsigned int const [usertype] *
+> >>>> drivers/firmware/efi/libstub/zboot.c:163:1: sparse: sparse: symbol 'efi_zboot_entry' was not declared. Should it be static?
+> >>
+> >> vim +/efi_zboot_entry +163 drivers/firmware/efi/libstub/zboot.c
+> >>
+> >>     161
+> >>     162  asmlinkage efi_status_t __efiapi
+> >>   > 163  efi_zboot_entry(efi_handle_t handle, efi_system_table_t *systab)
+> >>
+> >> --
+> >> 0-DAY CI Kernel Test Service
+> >> https://01.org/lkp
+> > _______________________________________________
+> > kbuild-all mailing list -- kbuild-all@lists.01.org
+> > To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> >
