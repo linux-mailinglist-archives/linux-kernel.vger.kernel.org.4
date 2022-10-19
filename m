@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A73604A77
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2AD604A67
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbiJSPFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S231588AbiJSPEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbiJSPEF (ORCPT
+        with ESMTP id S232013AbiJSPEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:04:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACCBACF55;
-        Wed, 19 Oct 2022 07:58:34 -0700 (PDT)
+        Wed, 19 Oct 2022 11:04:00 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1AF189C3E;
+        Wed, 19 Oct 2022 07:58:32 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1666191366;
@@ -22,30 +22,33 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ANsy39dTo+95E1TXTBS5kbs28UVGSNMF6vh3Au875fs=;
-        b=wBedELtUaj0zJeFDpwmo+Eyrsj3vhnslVQMMnOkfh/q28nnuprj+u3It6GYfDmuHkyH1Z0
-        jNvgvw0kZdalO6FFSXJu2mqO47j5IZHrSszNINkfYz08dHv/g24BIipbzVvvkCUtwUEd6c
-        /G5ZUEi7k1R4vBBcPi0q5lAPBZi73IxF0DRlGFYb+7B7MuBL8SZrA8ne0tSMtqkeo+Yjiz
-        U1qZfnDQPMOveo2W5xC7mJmp6jwh2VhohUHK7OWYalPnB+MT+EKUDwMWLhHz3pybmY9YEy
-        vCFG/SnEVbJb9yxV5uYCeNZTI0ekEncYcgbhvVRO+iKofY2lSZVNpoCyiHCTQw==
+        bh=6uEJOM0caPrcvNJcHiErtW6cO4rX4lvkgAL5ZPoAngE=;
+        b=CapeSp4lIuUCMT3A2F+Nh1MiAgJLkP2QvT6kPUMQDmJJFQsukbmY9zgoaeE4Mq6UuBqXXb
+        FrZc++ZOPgsuLs9l7PcPyG4j8PgQByAcFR2QTb5ZOiIdmXyyFYqlRtydfmDmoK5yA3OP78
+        U0XmnXaelSW/V/NwDwJUqlWqX2IcrI2b9QoB5wTOni/8eC59uwoJspmELM/0AK/+2z5J0G
+        bd1oHF0zuZVLDhAFAcJJT5y3CPqV4fXZIaKcBDHjVUzgpVkWqsTRUcD5J9GUYo05fhBIDg
+        fYj1DxyE3Wu0F0Ede8aUNYGFTPayP73PEUKd+FQ5qnHfrV5Nu/mSQTYm2wS3RQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1666191366;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ANsy39dTo+95E1TXTBS5kbs28UVGSNMF6vh3Au875fs=;
-        b=H1yntJDtD/aMwcZTAmUYG8IvP4HBmdfAyCl/OBYwZYBB8EKsYSv3K4Ea8bOP1qKbt6ZJ1i
-        mxTyv7pllOslw7AQ==
+        bh=6uEJOM0caPrcvNJcHiErtW6cO4rX4lvkgAL5ZPoAngE=;
+        b=ZQecdyT7PQky3Pel/Hzc+4qBo3aS7NXlfHW9v7oMg/iE63aGG0BcneUC9VkDNd/cxE1gob
+        fBX8kx6iiefyiNCg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi@vger.kernel.org
-Subject: [PATCH printk v2 08/38] efi: earlycon: use console_is_enabled()
-Date:   Wed, 19 Oct 2022 17:01:30 +0206
-Message-Id: <20221019145600.1282823-9-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: [PATCH printk v2 09/38] netconsole: use console_is_enabled()
+Date:   Wed, 19 Oct 2022 17:01:31 +0206
+Message-Id: <20221019145600.1282823-10-john.ogness@linutronix.de>
 In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
 References: <20221019145600.1282823-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -64,31 +67,31 @@ Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- drivers/firmware/efi/earlycon.c | 4 ++--
+ drivers/net/netconsole.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/efi/earlycon.c b/drivers/firmware/efi/earlycon.c
-index a52236e11e5f..8c27eb941d8e 100644
---- a/drivers/firmware/efi/earlycon.c
-+++ b/drivers/firmware/efi/earlycon.c
-@@ -30,7 +30,7 @@ static void *efi_fb;
- static int __init efi_earlycon_remap_fb(void)
- {
- 	/* bail if there is no bootconsole or it has been disabled already */
--	if (!earlycon_console || !(earlycon_console->flags & CON_ENABLED))
-+	if (!earlycon_console || !console_is_enabled(earlycon_console))
- 		return 0;
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index bdff9ac5056d..073e59a06f21 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -332,7 +332,7 @@ static ssize_t enabled_store(struct config_item *item,
+ 	}
  
- 	efi_fb = memremap(fb_base, screen_info.lfb_size,
-@@ -43,7 +43,7 @@ early_initcall(efi_earlycon_remap_fb);
- static int __init efi_earlycon_unmap_fb(void)
- {
- 	/* unmap the bootconsole fb unless keep_bootcon has left it enabled */
--	if (efi_fb && !(earlycon_console->flags & CON_ENABLED))
-+	if (efi_fb && !console_is_enabled(earlycon_console))
- 		memunmap(efi_fb);
- 	return 0;
- }
+ 	if (enabled) {	/* true */
+-		if (nt->extended && !(netconsole_ext.flags & CON_ENABLED)) {
++		if (nt->extended && !console_is_enabled(&netconsole_ext)) {
+ 			netconsole_ext.flags |= CON_ENABLED;
+ 			register_console(&netconsole_ext);
+ 		}
+@@ -915,7 +915,7 @@ static int __init init_netconsole(void)
+ 	if (err)
+ 		goto undonotifier;
+ 
+-	if (netconsole_ext.flags & CON_ENABLED)
++	if (console_is_enabled(&netconsole_ext))
+ 		register_console(&netconsole_ext);
+ 	register_console(&netconsole);
+ 	pr_info("network logging started\n");
 -- 
 2.30.2
 
