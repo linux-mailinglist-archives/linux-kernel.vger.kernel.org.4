@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AC9605352
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6927605351
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbiJSWp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
+        id S230326AbiJSWpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiJSWpo (ORCPT
+        with ESMTP id S230071AbiJSWpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Oct 2022 18:45:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4E31781E7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA8D175376;
         Wed, 19 Oct 2022 15:45:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B404B825C9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7A05B8261A;
         Wed, 19 Oct 2022 22:45:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E224C433D6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A66CC433B5;
         Wed, 19 Oct 2022 22:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666219537;
-        bh=MrvrWT2HzqZCFa6XSPNVmNYFbGDY/ORhal9YkrY4b6w=;
+        bh=paVOmpF7XtyU/d5w17H73/3RmaPLsYbv0OxL0LchCgQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EcFW+asz6TGnQraAJ7OgZU2QhXDkv+09Q4WCbzOBz5unqrjiD83JqK05hg75Y/PCc
-         uj9XxI+0SO+J3hDpAu0pOObQ8llz/Dsacrg65f8x8YVwI9R+A44UEr+bQl0DnzcUUM
-         QR2JWhU4M7EA2LZns00k8bbtPzwKIl8fcfBXhMrNxgJ7wYGXrBA5Jz+yMZliGRGEhd
-         2lE/EkvYJxZ5MXcs1QvWr9GrqUfnBdGXHJDDvQb9DhZJ6WJqmZLO6aQyLFzkb6EmB8
-         bmdmzk5PV4HOYYOMt/RmIuC4KfEC8lIBX2owTAHPC+sRseuREvfiVuFiWeDX0iNap9
-         /kFR7Zo+H8Wdg==
+        b=Uryazwlc4qC5FFFqM4OhdLriEYNr4o0DQAMfNf4Ektg+QnpczBAYjeEKIw43TiO5X
+         2yKB8ZusByznpIc6xVEvXv3H5gMFBBWn1w3c1YZckp7jh64cY/OzqcUuKhpECzZaIR
+         FYIhV0CPxe16oivToF1OWDqqwtiuPTRKvjZje+T75kiJ/K705YYaVVNPquHnO1Ch1M
+         wCOvPdT/2P0xOJnaLAMbzuZ5wMTSHvbI9WugshQ5XH1PitFJ4Kb1s8RnZ3z3teX8BG
+         ZP25yMhv/kzIdzTDqD0RYxjBUuYH1CcX4/lM7uuuk4PdzKxu87x24QNF9K5W0IC3S8
+         yHea0RQvByy8g==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DC7795C0879; Wed, 19 Oct 2022 15:45:36 -0700 (PDT)
+        id DEBFA5C0890; Wed, 19 Oct 2022 15:45:36 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 2/4] doc: Update checklist.txt
-Date:   Wed, 19 Oct 2022 15:45:33 -0700
-Message-Id: <20221019224535.2499245-2-paulmck@kernel.org>
+Subject: [PATCH rcu 3/4] doc: Update listRCU.rst
+Date:   Wed, 19 Oct 2022 15:45:34 -0700
+Message-Id: <20221019224535.2499245-3-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20221019224528.GA2499145@paulmck-ThinkPad-P17-Gen-1>
 References: <20221019224528.GA2499145@paulmck-ThinkPad-P17-Gen-1>
@@ -55,386 +55,360 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit updates checklist.txt to reflect RCU additions and changes
+This commit updates listRCU.txt to reflect RCU additions and changes
 over the past few years.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- Documentation/RCU/checklist.rst | 244 +++++++++++++++++++-------------
- 1 file changed, 143 insertions(+), 101 deletions(-)
+ Documentation/RCU/listRCU.rst | 174 ++++++++++++++++++++--------------
+ 1 file changed, 103 insertions(+), 71 deletions(-)
 
-diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
-index 048c5bc1f813e..cc361fb01ed4e 100644
---- a/Documentation/RCU/checklist.rst
-+++ b/Documentation/RCU/checklist.rst
-@@ -32,8 +32,8 @@ over a rather long period of time, but improvements are always welcome!
- 	for lockless updates.  This does result in the mildly
- 	counter-intuitive situation where rcu_read_lock() and
- 	rcu_read_unlock() are used to protect updates, however, this
--	approach provides the same potential simplifications that garbage
--	collectors do.
-+	approach can provide the same simplifications to certain types
-+	of lockless algorithms that garbage collectors do.
+diff --git a/Documentation/RCU/listRCU.rst b/Documentation/RCU/listRCU.rst
+index 2a643e293fb41..fa5493c1e28f2 100644
+--- a/Documentation/RCU/listRCU.rst
++++ b/Documentation/RCU/listRCU.rst
+@@ -3,11 +3,10 @@
+ Using RCU to Protect Read-Mostly Linked Lists
+ =============================================
  
- 1.	Does the update code have proper mutual exclusion?
+-One of the best applications of RCU is to protect read-mostly linked lists
+-(``struct list_head`` in list.h).  One big advantage of this approach
+-is that all of the required memory barriers are included for you in
+-the list macros.  This document describes several applications of RCU,
+-with the best fits first.
++One of the most common uses of RCU is protecting read-mostly linked lists
++(``struct list_head`` in list.h).  One big advantage of this approach is
++that all of the required memory ordering is provided by the list macros.
++This document describes several list-based RCU use cases.
  
-@@ -49,12 +49,12 @@ over a rather long period of time, but improvements are always welcome!
- 	them -- even x86 allows later loads to be reordered to precede
- 	earlier stores), and be prepared to explain why this added
- 	complexity is worthwhile.  If you choose #c, be prepared to
--	explain how this single task does not become a major bottleneck on
--	big multiprocessor machines (for example, if the task is updating
--	information relating to itself that other tasks can read, there
--	by definition can be no bottleneck).  Note that the definition
--	of "large" has changed significantly:  Eight CPUs was "large"
--	in the year 2000, but a hundred CPUs was unremarkable in 2017.
-+	explain how this single task does not become a major bottleneck
-+	on large systems (for example, if the task is updating information
-+	relating to itself that other tasks can read, there by definition
-+	can be no bottleneck).	Note that the definition of "large" has
-+	changed significantly:	Eight CPUs was "large" in the year 2000,
-+	but a hundred CPUs was unremarkable in 2017.
  
- 2.	Do the RCU read-side critical sections make proper use of
- 	rcu_read_lock() and friends?  These primitives are needed
-@@ -97,33 +97,38 @@ over a rather long period of time, but improvements are always welcome!
+ Example 1: Read-mostly list: Deferred Destruction
+@@ -35,7 +34,8 @@ The code traversing the list of all processes typically looks like::
+ 	}
+ 	rcu_read_unlock();
  
- 	b.	Proceed as in (a) above, but also maintain per-element
- 		locks (that are acquired by both readers and writers)
--		that guard per-element state.  Of course, fields that
--		the readers refrain from accessing can be guarded by
--		some other lock acquired only by updaters, if desired.
-+		that guard per-element state.  Fields that the readers
-+		refrain from accessing can be guarded by some other lock
-+		acquired only by updaters, if desired.
+-The simplified code for removing a process from a task list is::
++The simplified and heavily inlined code for removing a process from a
++task list is::
  
--		This works quite well, also.
-+		This also works quite well.
+ 	void release_task(struct task_struct *p)
+ 	{
+@@ -45,39 +45,48 @@ The simplified code for removing a process from a task list is::
+ 		call_rcu(&p->rcu, delayed_put_task_struct);
+ 	}
  
- 	c.	Make updates appear atomic to readers.	For example,
- 		pointer updates to properly aligned fields will
- 		appear atomic, as will individual atomic primitives.
- 		Sequences of operations performed under a lock will *not*
- 		appear to be atomic to RCU readers, nor will sequences
--		of multiple atomic primitives.
-+		of multiple atomic primitives.	One alternative is to
-+		move multiple individual fields to a separate structure,
-+		thus solving the multiple-field problem by imposing an
-+		additional level of indirection.
+-When a process exits, ``release_task()`` calls ``list_del_rcu(&p->tasks)`` under
+-``tasklist_lock`` writer lock protection, to remove the task from the list of
+-all tasks. The ``tasklist_lock`` prevents concurrent list additions/removals
+-from corrupting the list. Readers using ``for_each_process()`` are not protected
+-with the ``tasklist_lock``. To prevent readers from noticing changes in the list
+-pointers, the ``task_struct`` object is freed only after one or more grace
+-periods elapse (with the help of call_rcu()). This deferring of destruction
+-ensures that any readers traversing the list will see valid ``p->tasks.next``
+-pointers and deletion/freeing can happen in parallel with traversal of the list.
+-This pattern is also called an **existence lock**, since RCU pins the object in
+-memory until all existing readers finish.
++When a process exits, ``release_task()`` calls ``list_del_rcu(&p->tasks)``
++via __exit_signal() and __unhash_process() under ``tasklist_lock``
++writer lock protection.  The list_del_rcu() invocation removes
++the task from the list of all tasks. The ``tasklist_lock``
++prevents concurrent list additions/removals from corrupting the
++list. Readers using ``for_each_process()`` are not protected with the
++``tasklist_lock``. To prevent readers from noticing changes in the list
++pointers, the ``task_struct`` object is freed only after one or more
++grace periods elapse, with the help of call_rcu(), which is invoked via
++put_task_struct_rcu_user(). This deferring of destruction ensures that
++any readers traversing the list will see valid ``p->tasks.next`` pointers
++and deletion/freeing can happen in parallel with traversal of the list.
++This pattern is also called an **existence lock**, since RCU refrains
++from invoking the delayed_put_task_struct() callback function until until
++all existing readers finish, which guarantees that the ``task_struct``
++object in question will remain in existence until after the completion
++of all RCU readers that might possibly have a reference to that object.
  
- 		This can work, but is starting to get a bit tricky.
  
--	d.	Carefully order the updates and the reads so that
--		readers see valid data at all phases of the update.
--		This is often more difficult than it sounds, especially
--		given modern CPUs' tendency to reorder memory references.
--		One must usually liberally sprinkle memory barriers
--		(smp_wmb(), smp_rmb(), smp_mb()) through the code,
--		making it difficult to understand and to test.
+ Example 2: Read-Side Action Taken Outside of Lock: No In-Place Updates
+ ----------------------------------------------------------------------
+ 
+-The best applications are cases where, if reader-writer locking were
+-used, the read-side lock would be dropped before taking any action
+-based on the results of the search.  The most celebrated example is
+-the routing table.  Because the routing table is tracking the state of
+-equipment outside of the computer, it will at times contain stale data.
+-Therefore, once the route has been computed, there is no need to hold
+-the routing table static during transmission of the packet.  After all,
+-you can hold the routing table static all you want, but that won't keep
+-the external Internet from changing, and it is the state of the external
+-Internet that really matters.  In addition, routing entries are typically
+-added or deleted, rather than being modified in place.
 -
--		It is usually better to group the changing data into
--		a separate structure, so that the change may be made
--		to appear atomic by updating a pointer to reference
--		a new structure containing updated values.
-+	d.	Carefully order the updates and the reads so that readers
-+		see valid data at all phases of the update.  This is often
-+		more difficult than it sounds, especially given modern
-+		CPUs' tendency to reorder memory references.  One must
-+		usually liberally sprinkle memory-ordering operations
-+		through the code, making it difficult to understand and
-+		to test.  Where it works, it is better to use things
-+		like smp_store_release() and smp_load_acquire(), but in
-+		some cases the smp_mb() full memory barrier is required.
+-A straightforward example of this use of RCU may be found in the
+-system-call auditing support.  For example, a reader-writer locked
++Some reader-writer locking use cases compute a value while holding
++the read-side lock, but continue to use that value after that lock is
++released.  These use cases are often good candidates for conversion
++to RCU.  One prominent example involves network packet routing.
++Because the packet-routing data tracks the state of equipment outside
++of the computer, it will at times contain stale data.  Therefore, once
++the route has been computed, there is no need to hold the routing table
++static during transmission of the packet.  After all, you can hold the
++routing table static all you want, but that won't keep the external
++Internet from changing, and it is the state of the external Internet
++that really matters.  In addition, routing entries are typically added
++or deleted, rather than being modified in place.  This is a rare example
++of the finite speed of light and the non-zero size of atoms actually
++helping make synchronization be lighter weight.
 +
-+		As noted earlier, it is usually better to group the
-+		changing data into a separate structure, so that the
-+		change may be made to appear atomic by updating a pointer
-+		to reference a new structure containing updated values.
++A straightforward example of this type of RCU use case may be found in
++the system-call auditing support.  For example, a reader-writer locked
+ implementation of ``audit_filter_task()`` might be as follows::
  
- 4.	Weakly ordered CPUs pose special challenges.  Almost all CPUs
- 	are weakly ordered -- even x86 CPUs allow later loads to be
-@@ -188,26 +193,29 @@ over a rather long period of time, but improvements are always welcome!
- 		when publicizing a pointer to a structure that can
- 		be traversed by an RCU read-side critical section.
+-	static enum audit_state audit_filter_task(struct task_struct *tsk)
++	static enum audit_state audit_filter_task(struct task_struct *tsk, char **key)
+ 	{
+ 		struct audit_entry *e;
+ 		enum audit_state   state;
+@@ -86,6 +95,8 @@ implementation of ``audit_filter_task()`` might be as follows::
+ 		/* Note: audit_filter_mutex held by caller. */
+ 		list_for_each_entry(e, &audit_tsklist, list) {
+ 			if (audit_filter_rules(tsk, &e->rule, NULL, &state)) {
++				if (state == AUDIT_STATE_RECORD)
++					*key = kstrdup(e->rule.filterkey, GFP_ATOMIC);
+ 				read_unlock(&auditsc_lock);
+ 				return state;
+ 			}
+@@ -101,7 +112,7 @@ you are turning auditing off, it is OK to audit a few extra system calls.
  
--5.	If call_rcu() or call_srcu() is used, the callback function will
--	be called from softirq context.  In particular, it cannot block.
--	If you need the callback to block, run that code in a workqueue
--	handler scheduled from the callback.  The queue_rcu_work()
--	function does this for you in the case of call_rcu().
-+5.	If any of call_rcu(), call_srcu(), call_rcu_tasks(),
-+	call_rcu_tasks_rude(), or call_rcu_tasks_trace() is used,
-+	the callback function may be invoked from softirq context,
-+	and in any case with bottom halves disabled.  In particular,
-+	this callback function cannot block.  If you need the callback
-+	to block, run that code in a workqueue handler scheduled from
-+	the callback.  The queue_rcu_work() function does this for you
-+	in the case of call_rcu().
+ This means that RCU can be easily applied to the read side, as follows::
  
- 6.	Since synchronize_rcu() can block, it cannot be called
- 	from any sort of irq context.  The same rule applies
--	for synchronize_srcu(), synchronize_rcu_expedited(), and
--	synchronize_srcu_expedited().
-+	for synchronize_srcu(), synchronize_rcu_expedited(),
-+	synchronize_srcu_expedited(), synchronize_rcu_tasks(),
-+	synchronize_rcu_tasks_rude(), and synchronize_rcu_tasks_trace().
+-	static enum audit_state audit_filter_task(struct task_struct *tsk)
++	static enum audit_state audit_filter_task(struct task_struct *tsk, char **key)
+ 	{
+ 		struct audit_entry *e;
+ 		enum audit_state   state;
+@@ -110,6 +121,8 @@ This means that RCU can be easily applied to the read side, as follows::
+ 		/* Note: audit_filter_mutex held by caller. */
+ 		list_for_each_entry_rcu(e, &audit_tsklist, list) {
+ 			if (audit_filter_rules(tsk, &e->rule, NULL, &state)) {
++				if (state == AUDIT_STATE_RECORD)
++					*key = kstrdup(e->rule.filterkey, GFP_ATOMIC);
+ 				rcu_read_unlock();
+ 				return state;
+ 			}
+@@ -118,13 +131,15 @@ This means that RCU can be easily applied to the read side, as follows::
+ 		return AUDIT_BUILD_CONTEXT;
+ 	}
  
- 	The expedited forms of these primitives have the same semantics
--	as the non-expedited forms, but expediting is both expensive and
--	(with the exception of synchronize_srcu_expedited()) unfriendly
--	to real-time workloads.  Use of the expedited primitives should
--	be restricted to rare configuration-change operations that would
--	not normally be undertaken while a real-time workload is running.
--	However, real-time workloads can use rcupdate.rcu_normal kernel
--	boot parameter to completely disable expedited grace periods,
--	though this might have performance implications.
-+	as the non-expedited forms, but expediting is more CPU intensive.
-+	Use of the expedited primitives should be restricted to rare
-+	configuration-change operations that would not normally be
-+	undertaken while a real-time workload is running.  Note that
-+	IPI-sensitive real-time workloads can use the rcupdate.rcu_normal
-+	kernel boot parameter to completely disable expedited grace
-+	periods, though this might have performance implications.
+-The ``read_lock()`` and ``read_unlock()`` calls have become rcu_read_lock()
+-and rcu_read_unlock(), respectively, and the list_for_each_entry() has
+-become list_for_each_entry_rcu().  The **_rcu()** list-traversal primitives
+-insert the read-side memory barriers that are required on DEC Alpha CPUs.
++The read_lock() and read_unlock() calls have become rcu_read_lock()
++and rcu_read_unlock(), respectively, and the list_for_each_entry()
++has become list_for_each_entry_rcu().  The **_rcu()** list-traversal
++primitives add READ_ONCE() and diagnostic checks for incorrect use
++outside of an RCU read-side critical section.
  
- 	In particular, if you find yourself invoking one of the expedited
- 	primitives repeatedly in a loop, please do everyone a favor:
-@@ -215,8 +223,9 @@ over a rather long period of time, but improvements are always welcome!
- 	a single non-expedited primitive to cover the entire batch.
- 	This will very likely be faster than the loop containing the
- 	expedited primitive, and will be much much easier on the rest
--	of the system, especially to real-time workloads running on
--	the rest of the system.
-+	of the system, especially to real-time workloads running on the
-+	rest of the system.  Alternatively, instead use asynchronous
-+	primitives such as call_rcu().
+ The changes to the update side are also straightforward. A reader-writer lock
+-might be used as follows for deletion and insertion::
++might be used as follows for deletion and insertion in these simplified
++versions of audit_del_rule() and audit_add_rule()::
  
- 7.	As of v4.20, a given kernel implements only one RCU flavor, which
- 	is RCU-sched for PREEMPTION=n and RCU-preempt for PREEMPTION=y.
-@@ -239,7 +248,8 @@ over a rather long period of time, but improvements are always welcome!
- 	the corresponding readers must use rcu_read_lock_trace() and
- 	rcu_read_unlock_trace().  If an updater uses call_rcu_tasks_rude()
- 	or synchronize_rcu_tasks_rude(), then the corresponding readers
--	must use anything that disables interrupts.
-+	must use anything that disables preemption, for example,
-+	preempt_disable() and preempt_enable().
+ 	static inline int audit_del_rule(struct audit_rule *rule,
+ 					 struct list_head *list)
+@@ -188,16 +203,16 @@ Following are the RCU equivalents for these two functions::
+ 		return 0;
+ 	}
  
- 	Mixing things up will result in confusion and broken kernels, and
- 	has even resulted in an exploitable security issue.  Therefore,
-@@ -253,15 +263,16 @@ over a rather long period of time, but improvements are always welcome!
- 	that this usage is safe is that readers can use anything that
- 	disables BH when updaters use call_rcu() or synchronize_rcu().
+-Normally, the ``write_lock()`` and ``write_unlock()`` would be replaced by a
++Normally, the write_lock() and write_unlock() would be replaced by a
+ spin_lock() and a spin_unlock(). But in this case, all callers hold
+ ``audit_filter_mutex``, so no additional locking is required. The
+-``auditsc_lock`` can therefore be eliminated, since use of RCU eliminates the
++auditsc_lock can therefore be eliminated, since use of RCU eliminates the
+ need for writers to exclude readers.
  
--8.	Although synchronize_rcu() is slower than is call_rcu(), it
--	usually results in simpler code.  So, unless update performance is
--	critically important, the updaters cannot block, or the latency of
--	synchronize_rcu() is visible from userspace, synchronize_rcu()
--	should be used in preference to call_rcu().  Furthermore,
--	kfree_rcu() usually results in even simpler code than does
--	synchronize_rcu() without synchronize_rcu()'s multi-millisecond
--	latency.  So please take advantage of kfree_rcu()'s "fire and
--	forget" memory-freeing capabilities where it applies.
-+8.	Although synchronize_rcu() is slower than is call_rcu(),
-+	it usually results in simpler code.  So, unless update
-+	performance is critically important, the updaters cannot block,
-+	or the latency of synchronize_rcu() is visible from userspace,
-+	synchronize_rcu() should be used in preference to call_rcu().
-+	Furthermore, kfree_rcu() and kvfree_rcu() usually result
-+	in even simpler code than does synchronize_rcu() without
-+	synchronize_rcu()'s multi-millisecond latency.	So please take
-+	advantage of kfree_rcu()'s and kvfree_rcu()'s "fire and forget"
-+	memory-freeing capabilities where it applies.
+ The list_del(), list_add(), and list_add_tail() primitives have been
+ replaced by list_del_rcu(), list_add_rcu(), and list_add_tail_rcu().
+-The **_rcu()** list-manipulation primitives add memory barriers that are needed on
+-weakly ordered CPUs (most of them!).  The list_del_rcu() primitive omits the
++The **_rcu()** list-manipulation primitives add memory barriers that are
++needed on weakly ordered CPUs.  The list_del_rcu() primitive omits the
+ pointer poisoning debug-assist code that would otherwise cause concurrent
+ readers to fail spectacularly.
  
- 	An especially important property of the synchronize_rcu()
- 	primitive is that it automatically self-limits: if grace periods
-@@ -271,8 +282,8 @@ over a rather long period of time, but improvements are always welcome!
- 	cases where grace periods are delayed, as failing to do so can
- 	result in excessive realtime latencies or even OOM conditions.
- 
--	Ways of gaining this self-limiting property when using call_rcu()
--	include:
-+	Ways of gaining this self-limiting property when using call_rcu(),
-+	kfree_rcu(), or kvfree_rcu() include:
- 
- 	a.	Keeping a count of the number of data-structure elements
- 		used by the RCU-protected data structure, including
-@@ -304,18 +315,21 @@ over a rather long period of time, but improvements are always welcome!
- 		here is that superuser already has lots of ways to crash
- 		the machine.
- 
--	d.	Periodically invoke synchronize_rcu(), permitting a limited
--		number of updates per grace period.  Better yet, periodically
--		invoke rcu_barrier() to wait for all outstanding callbacks.
-+	d.	Periodically invoke rcu_barrier(), permitting a limited
-+		number of updates per grace period.
- 
--	The same cautions apply to call_srcu() and kfree_rcu().
-+	The same cautions apply to call_srcu(), call_rcu_tasks(),
-+	call_rcu_tasks_rude(), and call_rcu_tasks_trace().  This is
-+	why there is an srcu_barrier(), rcu_barrier_tasks(),
-+	rcu_barrier_tasks_rude(), and rcu_barrier_tasks_rude(),
-+	respectively.
- 
--	Note that although these primitives do take action to avoid memory
--	exhaustion when any given CPU has too many callbacks, a determined
--	user could still exhaust memory.  This is especially the case
--	if a system with a large number of CPUs has been configured to
--	offload all of its RCU callbacks onto a single CPU, or if the
--	system has relatively little free memory.
-+	Note that although these primitives do take action to avoid
-+	memory exhaustion when any given CPU has too many callbacks,
-+	a determined user or administrator can still exhaust memory.
-+	This is especially the case if a system with a large number of
-+	CPUs has been configured to offload all of its RCU callbacks onto
-+	a single CPU, or if the system has relatively little free memory.
- 
- 9.	All RCU list-traversal primitives, which include
- 	rcu_dereference(), list_for_each_entry_rcu(), and
-@@ -344,14 +358,14 @@ over a rather long period of time, but improvements are always welcome!
- 	and you don't hold the appropriate update-side lock, you *must*
- 	use the "_rcu()" variants of the list macros.  Failing to do so
- 	will break Alpha, cause aggressive compilers to generate bad code,
--	and confuse people trying to read your code.
-+	and confuse people trying to understand your code.
- 
- 11.	Any lock acquired by an RCU callback must be acquired elsewhere
--	with softirq disabled, e.g., via spin_lock_irqsave(),
--	spin_lock_bh(), etc.  Failing to disable softirq on a given
--	acquisition of that lock will result in deadlock as soon as
--	the RCU softirq handler happens to run your RCU callback while
--	interrupting that acquisition's critical section.
-+	with softirq disabled, e.g., via spin_lock_bh().  Failing to
-+	disable softirq on a given acquisition of that lock will result
-+	in deadlock as soon as the RCU softirq handler happens to run
-+	your RCU callback while interrupting that acquisition's critical
-+	section.
- 
- 12.	RCU callbacks can be and are executed in parallel.  In many cases,
- 	the callback code simply wrappers around kfree(), so that this
-@@ -372,7 +386,17 @@ over a rather long period of time, but improvements are always welcome!
- 	for some  real-time workloads, this is the whole point of using
- 	the rcu_nocbs= kernel boot parameter.
- 
--13.	Unlike other forms of RCU, it *is* permissible to block in an
-+	In addition, do not assume that callbacks queued in a given order
-+	will be invoked in that order, even if they all are queued on the
-+	same CPU.  Furthermore, do not assume that same-CPU callbacks will
-+	be invoked serially.  For example, in recent kernels, CPUs can be
-+	switched between offloaded and de-offloaded callback invocation,
-+	and while a given CPU is undergoing such a switch, its callbacks
-+	might be concurrently invoked by that CPU's softirq handler and
-+	that CPU's rcuo kthread.  At such times, that CPU's callbacks
-+	might be executed both concurrently and out of order.
+@@ -238,7 +253,9 @@ need to be filled in)::
+ The RCU version creates a copy, updates the copy, then replaces the old
+ entry with the newly updated entry.  This sequence of actions, allowing
+ concurrent reads while making a copy to perform an update, is what gives
+-RCU (*read-copy update*) its name.  The RCU code is as follows::
++RCU (*read-copy update*) its name.
 +
-+13.	Unlike most flavors of RCU, it *is* permissible to block in an
- 	SRCU read-side critical section (demarked by srcu_read_lock()
- 	and srcu_read_unlock()), hence the "SRCU": "sleepable RCU".
- 	Please note that if you don't need to sleep in read-side critical
-@@ -412,6 +436,12 @@ over a rather long period of time, but improvements are always welcome!
- 	never sends IPIs to other CPUs, so it is easier on
- 	real-time workloads than is synchronize_rcu_expedited().
++The RCU version of audit_upd_rule() is as follows::
  
-+	It is also permissible to sleep in RCU Tasks Trace read-side
-+	critical, which are delimited by rcu_read_lock_trace() and
-+	rcu_read_unlock_trace().  However, this is a specialized flavor
-+	of RCU, and you should not use it without first checking with
-+	its current users.  In most cases, you should instead use SRCU.
+ 	static inline int audit_upd_rule(struct audit_rule *rule,
+ 					 struct list_head *list,
+@@ -267,6 +284,9 @@ RCU (*read-copy update*) its name.  The RCU code is as follows::
+ Again, this assumes that the caller holds ``audit_filter_mutex``.  Normally, the
+ writer lock would become a spinlock in this sort of code.
+ 
++The update_lsm_rule() does something very similar, for those who would
++prefer to look at real Linux-kernel code.
 +
- 	Note that rcu_assign_pointer() relates to SRCU just as it does to
- 	other forms of RCU, but instead of rcu_dereference() you should
- 	use srcu_dereference() in order to avoid lockdep splats.
-@@ -442,50 +472,62 @@ over a rather long period of time, but improvements are always welcome!
- 	find problems as follows:
+ Another use of this pattern can be found in the openswitch driver's *connection
+ tracking table* code in ``ct_limit_set()``.  The table holds connection tracking
+ entries and has a limit on the maximum entries.  There is one such table
+@@ -281,9 +301,10 @@ Example 4: Eliminating Stale Data
+ ---------------------------------
  
- 	CONFIG_PROVE_LOCKING:
--		check that accesses to RCU-protected data
--		structures are carried out under the proper RCU
--		read-side critical section, while holding the right
--		combination of locks, or whatever other conditions
--		are appropriate.
-+		check that accesses to RCU-protected data structures
-+		are carried out under the proper RCU read-side critical
-+		section, while holding the right combination of locks,
-+		or whatever other conditions are appropriate.
+ The auditing example above tolerates stale data, as do most algorithms
+-that are tracking external state.  Because there is a delay from the
+-time the external state changes before Linux becomes aware of the change,
+-additional RCU-induced staleness is generally not a problem.
++that are tracking external state.  After all, given there is a delay
++from the time the external state changes before Linux becomes aware
++of the change, and so as noted earlier, a small quantity of additional
++RCU-induced staleness is generally not a problem.
  
- 	CONFIG_DEBUG_OBJECTS_RCU_HEAD:
--		check that you don't pass the
--		same object to call_rcu() (or friends) before an RCU
--		grace period has elapsed since the last time that you
--		passed that same object to call_rcu() (or friends).
-+		check that you don't pass the same object to call_rcu()
-+		(or friends) before an RCU grace period has elapsed
-+		since the last time that you passed that same object to
-+		call_rcu() (or friends).
+ However, there are many examples where stale data cannot be tolerated.
+ One example in the Linux kernel is the System V IPC (see the shm_lock()
+@@ -302,7 +323,7 @@ Quick Quiz:
  
- 	__rcu sparse checks:
--		tag the pointer to the RCU-protected data
--		structure with __rcu, and sparse will warn you if you
--		access that pointer without the services of one of the
--		variants of rcu_dereference().
-+		tag the pointer to the RCU-protected data structure
-+		with __rcu, and sparse will warn you if you access that
-+		pointer without the services of one of the variants
-+		of rcu_dereference().
+ If the system-call audit module were to ever need to reject stale data, one way
+ to accomplish this would be to add a ``deleted`` flag and a ``lock`` spinlock to the
+-audit_entry structure, and modify ``audit_filter_task()`` as follows::
++``audit_entry`` structure, and modify audit_filter_task() as follows::
  
- 	These debugging aids can help you find problems that are
- 	otherwise extremely difficult to spot.
+ 	static enum audit_state audit_filter_task(struct task_struct *tsk)
+ 	{
+@@ -319,6 +340,8 @@ audit_entry structure, and modify ``audit_filter_task()`` as follows::
+ 					return AUDIT_BUILD_CONTEXT;
+ 				}
+ 				rcu_read_unlock();
++				if (state == AUDIT_STATE_RECORD)
++					*key = kstrdup(e->rule.filterkey, GFP_ATOMIC);
+ 				return state;
+ 			}
+ 		}
+@@ -326,12 +349,6 @@ audit_entry structure, and modify ``audit_filter_task()`` as follows::
+ 		return AUDIT_BUILD_CONTEXT;
+ 	}
  
--17.	If you register a callback using call_rcu() or call_srcu(), and
--	pass in a function defined within a loadable module, then it in
--	necessary to wait for all pending callbacks to be invoked after
--	the last invocation and before unloading that module.  Note that
--	it is absolutely *not* sufficient to wait for a grace period!
--	The current (say) synchronize_rcu() implementation is *not*
--	guaranteed to wait for callbacks registered on other CPUs.
--	Or even on the current CPU if that CPU recently went offline
--	and came back online.
-+17.	If you pass a callback function defined within a module to one of
-+	call_rcu(), call_srcu(), call_rcu_tasks(), call_rcu_tasks_rude(),
-+	or call_rcu_tasks_trace(), then it is necessary to wait for all
-+	pending callbacks to be invoked before unloading that module.
-+	Note that it is absolutely *not* sufficient to wait for a grace
-+	period!  For example, synchronize_rcu() implementation is *not*
-+	guaranteed to wait for callbacks registered on other CPUs via
-+	call_rcu().  Or even on the current CPU if that CPU recently
-+	went offline and came back online.
- 
- 	You instead need to use one of the barrier functions:
- 
- 	-	call_rcu() -> rcu_barrier()
- 	-	call_srcu() -> srcu_barrier()
-+	-	call_rcu_tasks() -> rcu_barrier_tasks()
-+	-	call_rcu_tasks_rude() -> rcu_barrier_tasks_rude()
-+	-	call_rcu_tasks_trace() -> rcu_barrier_tasks_trace()
- 
- 	However, these barrier functions are absolutely *not* guaranteed
--	to wait for a grace period.  In fact, if there are no call_rcu()
--	callbacks waiting anywhere in the system, rcu_barrier() is within
--	its rights to return immediately.
+-Note that this example assumes that entries are only added and deleted.
+-Additional mechanism is required to deal correctly with the update-in-place
+-performed by ``audit_upd_rule()``.  For one thing, ``audit_upd_rule()`` would
+-need additional memory barriers to ensure that the list_add_rcu() was really
+-executed before the list_del_rcu().
 -
--	So if you need to wait for both an RCU grace period and for
--	all pre-existing call_rcu() callbacks, you will need to execute
--	both rcu_barrier() and synchronize_rcu(), if necessary, using
--	something like workqueues to execute them concurrently.
-+	to wait for a grace period.  For example, if there are no
-+	call_rcu() callbacks queued anywhere in the system, rcu_barrier()
-+	can and will return immediately.
-+
-+	So if you need to wait for both a grace period and for all
-+	pre-existing callbacks, you will need to invoke both functions,
-+	with the pair depending on the flavor of RCU:
-+
-+	-	Either synchronize_rcu() or synchronize_rcu_expedited(),
-+		together with rcu_barrier()
-+	-	Either synchronize_srcu() or synchronize_srcu_expedited(),
-+		together with and srcu_barrier()
-+	-	synchronize_rcu_tasks() and rcu_barrier_tasks()
-+	-	synchronize_tasks_rude() and rcu_barrier_tasks_rude()
-+	-	synchronize_tasks_trace() and rcu_barrier_tasks_trace()
-+
-+	If necessary, you can use something like workqueues to execute
-+	the requisite pair of functions concurrently.
+ The ``audit_del_rule()`` function would need to set the ``deleted`` flag under the
+ spinlock as follows::
  
- 	See rcubarrier.rst for more information.
+@@ -357,24 +374,32 @@ spinlock as follows::
+ 
+ This too assumes that the caller holds ``audit_filter_mutex``.
+ 
++Note that this example assumes that entries are only added and deleted.
++Additional mechanism is required to deal correctly with the update-in-place
++performed by audit_upd_rule().  For one thing, audit_upd_rule() would
++need to hold the locks of both the old ``audit_entry`` and its replacement
++while executing the list_replace_rcu().
++
+ 
+ Example 5: Skipping Stale Objects
+ ---------------------------------
+ 
+-For some usecases, reader performance can be improved by skipping stale objects
+-during read-side list traversal if the object in concern is pending destruction
+-after one or more grace periods. One such example can be found in the timerfd
+-subsystem. When a ``CLOCK_REALTIME`` clock is reprogrammed - for example due to
+-setting of the system time, then all programmed timerfds that depend on this
+-clock get triggered and processes waiting on them to expire are woken up in
+-advance of their scheduled expiry. To facilitate this, all such timers are added
+-to an RCU-managed ``cancel_list`` when they are setup in
++For some use cases, reader performance can be improved by skipping
++stale objects during read-side list traversal, where stale objects
++are those that will be removed and destroyed after one or more grace
++periods. One such example can be found in the timerfd subsystem. When a
++``CLOCK_REALTIME`` clock is reprogrammed (for example due to setting
++of the system time) then all programmed ``timerfds`` that depend on
++this clock get triggered and processes waiting on them are awakened in
++advance of their scheduled expiry. To facilitate this, all such timers
++are added to an RCU-managed ``cancel_list`` when they are setup in
+ ``timerfd_setup_cancel()``::
+ 
+ 	static void timerfd_setup_cancel(struct timerfd_ctx *ctx, int flags)
+ 	{
+ 		spin_lock(&ctx->cancel_lock);
+-		if ((ctx->clockid == CLOCK_REALTIME &&
++		if ((ctx->clockid == CLOCK_REALTIME ||
++		     ctx->clockid == CLOCK_REALTIME_ALARM) &&
+ 		    (flags & TFD_TIMER_ABSTIME) && (flags & TFD_TIMER_CANCEL_ON_SET)) {
+ 			if (!ctx->might_cancel) {
+ 				ctx->might_cancel = true;
+@@ -382,13 +407,16 @@ to an RCU-managed ``cancel_list`` when they are setup in
+ 				list_add_rcu(&ctx->clist, &cancel_list);
+ 				spin_unlock(&cancel_lock);
+ 			}
++		} else {
++			__timerfd_remove_cancel(ctx);
+ 		}
+ 		spin_unlock(&ctx->cancel_lock);
+ 	}
+ 
+-When a timerfd is freed (fd is closed), then the ``might_cancel`` flag of the
+-timerfd object is cleared, the object removed from the ``cancel_list`` and
+-destroyed::
++When a timerfd is freed (fd is closed), then the ``might_cancel``
++flag of the timerfd object is cleared, the object removed from the
++``cancel_list`` and destroyed, as shown in this simplified and inlined
++version of timerfd_release()::
+ 
+ 	int timerfd_release(struct inode *inode, struct file *file)
+ 	{
+@@ -403,7 +431,10 @@ destroyed::
+ 		}
+ 		spin_unlock(&ctx->cancel_lock);
+ 
+-		hrtimer_cancel(&ctx->t.tmr);
++		if (isalarm(ctx))
++			alarm_cancel(&ctx->t.alarm);
++		else
++			hrtimer_cancel(&ctx->t.tmr);
+ 		kfree_rcu(ctx, rcu);
+ 		return 0;
+ 	}
+@@ -416,6 +447,7 @@ objects::
+ 
+ 	void timerfd_clock_was_set(void)
+ 	{
++		ktime_t moffs = ktime_mono_to_real(0);
+ 		struct timerfd_ctx *ctx;
+ 		unsigned long flags;
+ 
+@@ -424,7 +456,7 @@ objects::
+ 			if (!ctx->might_cancel)
+ 				continue;
+ 			spin_lock_irqsave(&ctx->wqh.lock, flags);
+-			if (ctx->moffs != ktime_mono_to_real(0)) {
++			if (ctx->moffs != moffs) {
+ 				ctx->moffs = KTIME_MAX;
+ 				ctx->ticks++;
+ 				wake_up_locked_poll(&ctx->wqh, EPOLLIN);
+@@ -434,10 +466,10 @@ objects::
+ 		rcu_read_unlock();
+ 	}
+ 
+-The key point here is, because RCU-traversal of the ``cancel_list`` happens
+-while objects are being added and removed to the list, sometimes the traversal
+-can step on an object that has been removed from the list. In this example, it
+-is seen that it is better to skip such objects using a flag.
++The key point is that because RCU-protected traversal of the
++``cancel_list`` happens concurrently with object addition and removal,
++sometimes the traversal can access an object that has been removed from
++the list. In this example, a flag is used to skip such objects.
+ 
+ 
+ Summary
 -- 
 2.31.1.189.g2e36527f23
 
