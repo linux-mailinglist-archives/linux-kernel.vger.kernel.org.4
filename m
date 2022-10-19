@@ -2,68 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4D26050EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B828A6050F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiJST6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S230474AbiJSUAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiJST6U (ORCPT
+        with ESMTP id S230338AbiJSUAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:58:20 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849CB1D79A6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:58:19 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id c10-20020a170902d48a00b001825736b382so12545485plg.15
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:58:19 -0700 (PDT)
+        Wed, 19 Oct 2022 16:00:13 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0954210690C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:00:12 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id e18so13609629wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:00:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Dkeuj2JEjMdaDkWKpIRh1Qeplaf/0fGmD/fPQgm8zGI=;
-        b=IJhpJfOhoGUoA0QwTgEDY7rZLC0hLsmivrkcFmq+vhvGf09EWyL9ERoeZzdYgo5og3
-         iY9YUk/drwmMfkXKEEbUXZPGHhCnIWPg0DXL7B5h/7WuQqBkZfnQ9TH6oVSXnvXHXL5E
-         LEgLcO4iEKV5JFYuuVIuXynU0yvSZPUUB5eFGoPe+inStlQWSDZDMgO0YonTrctYj+Ba
-         lVQK1PE2W2CAUZ9VYzshQheg26HOLysqgnQfeaPiA2dtOLsM1BD3ZTvFyZ3ITYUr0CId
-         N1MpHMUMceby9zovEGJSjFudluwWIYKs3akXDDcB9/VWJumjFy5oOjaH/8lkFtixjQmH
-         5LvA==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y2N+V1uC9FDjbZcJb9aKbA76091h0TpDZZKWHaAmAek=;
+        b=Lw4jVYTIUktL0VD/hUyxuK2pdB+TLLlMZirRYUqhs2U98/w8T/30PXKiSQ70UgVAq6
+         +grAdpBFztsHMbqs06MBtqGFYggBuQ8eB5hLxlopjVREuCd6GoyGxs5nbQQMkDUAsspT
+         YhQ9IztsM9nZHCvOhL03IV/fnoWIqaxZ0utZhXJVoblGjV2OUVXW5EiT9sjDw6u7+lUt
+         9ZQvxCuqtpyMDdIxf6qk3fgrd6wCkkmmNjf4LKAopOmbVPc/vI+MkblfYwX6EnXL/YVt
+         U5YgOhvlpQ8y6+A+Fx25TgNIreQUA+4XldEr3KiLCwcLqj9JsYgRtuPqCqw88ukO8vGV
+         0fMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dkeuj2JEjMdaDkWKpIRh1Qeplaf/0fGmD/fPQgm8zGI=;
-        b=B3iydu+TOlYYA1zNpXVCsDNgMchLSxN9r17a1wWjN4Ugio9n4dtbdE+mfaqvgQlHNW
-         OgZ59sSCznugTAUdrwqOmoOn58+5pBcaOjh7dFA8Xvy4BRjlUeU7Gbz9efnrPCHojILw
-         FsNVZblcD/fGS2oc6U0G4Iuj2DAz95JnKVo2RCG6HVqJwd9zTs7ug8dUiW8CzIXGMQ4q
-         QZPjAFI8VN0VCHayGShweBIxdsolEeVsAnoIQXLrn8D+gJsdOtGfk+qS7ZPlsOLQ+1H1
-         zsACs84vC5KLck0ASzuqLkdrkT72JHssi3nMFES5SYbX4J5Ncg87ZnG7ikVFvicaozts
-         AtAA==
-X-Gm-Message-State: ACrzQf1fw0xqbCGuwbET/V/HKtce2tgGmt2S5d/gK33GlnmmIU81iPkU
-        p2es0EQpSzlyA1rtHd136F4VpaDIl+kiHGorQA==
-X-Google-Smtp-Source: AMsMyM4N+OlC1AYRnyBX6XJONm6qWUHbYHHjHt6Boqz4PSPHJLPd4X1VFNUvsSCXxpdVLGWvze3tEEmlvsUY0edlkQ==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a05:6a00:13a1:b0:563:4c5:c3dd with
- SMTP id t33-20020a056a0013a100b0056304c5c3ddmr10413871pfg.5.1666209499042;
- Wed, 19 Oct 2022 12:58:19 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 19:58:15 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221019195815.1298915-1-dionnaglaze@google.com>
-Subject: [PATCH v2] virt/coco/sev-guest: Remove err in handle_guest_request
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y2N+V1uC9FDjbZcJb9aKbA76091h0TpDZZKWHaAmAek=;
+        b=JfzRO1ePPMMJrgUZ5Jogggv3WX47pPKD7Go0Hwqk8CSZt4ZOxOwbnmX6U55mPSZTNZ
+         /TxrDFn3UIr5tsaoklvN9It9xjlxYUVm/yPg0rH/Hpwby82H/wJBXuGQYXrmFGUSre4w
+         t2qRQT+GC49+IVTE0SJv/DgDdmNxg8YnVp4+xTCg+UiOGGh5nILIS1t2stxMmE+Wyy5z
+         GhncwLXhyaXqNJKgACIKESKJtczE7Jx4DTyQf0+w5KJWmIwm/DJqFzFpiVxWIn/kYqJr
+         YvnVjyJnNUT/ffmRw9w+gdNRSV6pBSDf9lekQZyooXd0e3JP4nNLbQgO8x5xBfyIlWia
+         W+yQ==
+X-Gm-Message-State: ACrzQf1XiVv3SqYlNyxh3F04r+qpmVoxqpepwOVgYEOt+EWvruFj2vgS
+        k9cifskB9diV2LXafTnedpgTKQ==
+X-Google-Smtp-Source: AMsMyM6B3pwfghBShw4QCFh8wsWBS8bi/WgiLJm5OdtkiIadPOi40t5IpnUu2dUWkrkhhaqvsZnpVw==
+X-Received: by 2002:a05:600c:a45:b0:3bc:c676:a573 with SMTP id c5-20020a05600c0a4500b003bcc676a573mr28289654wmq.118.1666209610271;
+        Wed, 19 Oct 2022 13:00:10 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:b751:df72:2e0f:684c])
+        by smtp.gmail.com with ESMTPSA id ay18-20020a5d6f12000000b0022e62529888sm945871wrb.67.2022.10.19.13.00.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 13:00:09 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 22:00:02 +0200
+From:   Marco Elver <elver@google.com>
+To:     youling 257 <youling257@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+Message-ID: <Y1BXQlu+JOoJi6Yk@elver.google.com>
+References: <20220915150417.722975-19-glider@google.com>
+ <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,49 +108,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The err variable may not be set in the call to snp_issue_guest_request,
-yet it is unconditionally written back to fw_err if fw_err is non-null.
-This is undefined behavior, and currently returns uninitialized kernel
-stack memory to user space.
+On Thu, Oct 20, 2022 at 03:29AM +0800, youling 257 wrote:
+[...]
+> > What arch?
+> > If x86, can you try to revert only the change to
+> > instrument_get_user()? (I wonder if the u64 conversion is causing
+> > issues.)
+> >
+> arch x86, this's my revert,
+> https://github.com/youling257/android-mainline/commit/401cbfa61cbfc20c87a5be8e2dda68ac5702389f
+> i tried different revert, have to remove kmsan_copy_to_user.
 
-The fw_err argument is better to just pass through to
-snp_issue_guest_request, so we do that.
+There you reverted only instrument_put_user() - does it fix the issue?
 
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
+If not, can you try only something like this (only revert
+instrument_get_user()):
 
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- drivers/virt/coco/sev-guest/sev-guest.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index f422f9c58ba7..00708b4491e0 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -305,7 +305,6 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
- 				u32 resp_sz, __u64 *fw_err)
- {
--	unsigned long err;
- 	u64 seqno;
- 	int rc;
+diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+index 501fa8486749..dbe3ec38d0e6 100644
+--- a/include/linux/instrumented.h
++++ b/include/linux/instrumented.h
+@@ -167,9 +167,6 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
+  */
+ #define instrument_get_user(to)				\
+ ({							\
+-	u64 __tmp = (u64)(to);				\
+-	kmsan_unpoison_memory(&__tmp, sizeof(__tmp));	\
+-	to = __tmp;					\
+ })
  
-@@ -322,9 +321,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 		return rc;
- 
- 	/* Call firmware to process the request */
--	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
--	if (fw_err)
--		*fw_err = err;
-+	rc = snp_issue_guest_request(exit_code, &snp_dev->input, fw_err);
- 
- 	if (rc)
- 		return rc;
--- 
-2.38.0.413.g74048e4d9e-goog
 
+Once we know which one of these is the issue, we can figure out a proper
+fix.
+
+Thanks,
+
+-- Marco
