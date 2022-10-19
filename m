@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7796D605063
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C642B605066
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiJST3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S230426AbiJSTaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiJST3F (ORCPT
+        with ESMTP id S229932AbiJSTaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:29:05 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA611960A3;
-        Wed, 19 Oct 2022 12:29:04 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a6so23493634ljq.5;
-        Wed, 19 Oct 2022 12:29:03 -0700 (PDT)
+        Wed, 19 Oct 2022 15:30:04 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F869DD99;
+        Wed, 19 Oct 2022 12:30:03 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h185so17158279pgc.10;
+        Wed, 19 Oct 2022 12:30:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1J+LkGJJsG58CkJ3Qd9XTdOjWMcQXIZDNg+2efZ9DT8=;
-        b=Zs3D8ie/O78VXdUFRbswnnVyMUFKQTi+weY/1rbfp0bq2vH4HC+4WLyeQVMXHPYCAi
-         2ECkR/KLht8Hyqa3u2Z0PQC1zsqs1nr5elWU/6lftN85gXuL4+vQ+fwZns1FtCnp5Jxw
-         qSopG89Arj3LY54xjxvkbBdgMT/cgvL2QvQjYNBrWIDlqcHiJZ8wVIUNe5/p2yafobMH
-         DnICUEblvNYeI69wK3h6gx1Kzy8oiKELAPgzmBmz7GTs97IH9q6ahlbKctexF3JZYQuW
-         rwtwT7TvHoAVzG1+nXmvdN5ZyW5yDdOt/Y0LeejRX9gtyUXq0FHVQIDXv5ysgrta+ri0
-         1nag==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=idjMQbP7XA0AQq1z/Q9pWMw/xMrVrlKLJiJJiIS914I=;
+        b=ivAkRY8Ll5ShyEPBxQMVhJvQIPwlI8NHDLUVM2eWwslSMlyHEMvmkWO6h8BrSRa/Ip
+         HeE3M1hCP839+YbNgBK37Ah+TWa5V9QikiY1VtMnno3daSz/Ia5tWqULekT02bQG5HTm
+         7pDf1N84l4kOA5huh3rqdo3NYaFjdEJ/lNwJsfwryBIXOWAeQ4AGi976poWTO2tUtoB4
+         GtbrnEiyjVP9WW8r5H61nbj/WJPTQT5LfWldizZxX6g8xzJDLL7K9hG0vsU75Di4LlfU
+         PiYnuPBaVHb7qJG9sO+cKG4bXU7VtpKBJm/OonzW995Tauj9YI19SmiNQ3XGyV5jSkf1
+         QLSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1J+LkGJJsG58CkJ3Qd9XTdOjWMcQXIZDNg+2efZ9DT8=;
-        b=6zWQSWgwRVFlroCS9neZlVrn446RpV3NSJfRwwUvWPr8R8s/4K/vRhh4980qGzTenG
-         U077zQE8XbYzHVvxQsggbFikZuIGi49EdFZ4BnhQ5QpGvCjUKCP/pQS3CuxQOLza4PSq
-         SFgBnyTptyZ1IXIDTbvkQHOSZWLsuB4lemrF07cLW1hEFabKQV5lWldRfrsbtSlgvZ/M
-         YDYFPZapsBHDf0ckNj2zJ3q+/IvLt6J184Mgg8O4AsfxWph87bJeda3eL6+WYcIpRCAv
-         YFx1Enhj8b8mBTPSBDHLIT3ytKELTwKfLnwtPQu+gpdW0ItEwBSrlI8w5P6qWljuKD1e
-         teJg==
-X-Gm-Message-State: ACrzQf11WoNgN8SdrcVNBLc+yF223TL5a1XW6nlclJxIbGuYbPnBTUwq
-        73DWg8wVPkzQSNV/MqDj44AfBfQb+J4XIwk8jE0=
-X-Google-Smtp-Source: AMsMyM4/a8mro7O35SGkjXAGwMZz8FGjEXZwFrLyoLo7XaOhAeR+5e35yobKB5fffcFn7Qi0JTM+jG1hgh5hA0qfPsg=
-X-Received: by 2002:a2e:8796:0:b0:26e:8b13:a29c with SMTP id
- n22-20020a2e8796000000b0026e8b13a29cmr3457109lji.210.1666207742198; Wed, 19
- Oct 2022 12:29:02 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=idjMQbP7XA0AQq1z/Q9pWMw/xMrVrlKLJiJJiIS914I=;
+        b=PCOjX4NXyvZAQ+UK9wOjg8ZVlOKMTCpRNZkEcZvQKMTFIrgop/bk05ZwlNW52AiEuW
+         gYaYllBQ/4KksaVPK8c8AKlG7irIzNuDFP8fMpvB0nOv51H96xHojN7NHAWSxfk/VjNE
+         SXirqHy3y0tOG8dWUL2jnj5hL5nO2i3nNHcoTCNXwQfw85LbeOFZV2s/97HAsMMWvMra
+         LKS5auakXbxicfi/MzAsTmYBL0t3tzALsesMRXRE+AfJnAxHRuXnRNUYs3vyQ6UtmcPu
+         tbV9EHukuRtBFchCz8w2uejutMPe/kpdT25yHL/OmJbZ7VSvNtm79Lidm9VqRPniXHeT
+         SOWg==
+X-Gm-Message-State: ACrzQf2uIeizamegBqZcRqejk/FwKptk16L2R2mx0iLMLv9JbZ2BsInO
+        FC6RK/N0q85sjs0XgTsXNxtjHr+xjjmw9euonqU=
+X-Google-Smtp-Source: AMsMyM75pXTEiCBk/YM2sm3Nc/NOPU1Svm1rWZWimAEVAY+WgLB34YE+Vc9b2h5jH00sbZt/T3Dh5qYtrcjDjHfiXWI=
+X-Received: by 2002:a63:26c3:0:b0:46b:1dab:fd88 with SMTP id
+ m186-20020a6326c3000000b0046b1dabfd88mr8592667pgm.251.1666207802523; Wed, 19
+ Oct 2022 12:30:02 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Wed, 19 Oct 2022
- 12:29:01 -0700 (PDT)
-In-Reply-To: <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
-References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
- <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com> <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
-From:   youling 257 <youling257@gmail.com>
-Date:   Thu, 20 Oct 2022 03:29:01 +0800
-Message-ID: <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
-Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221019083249.951566199@linuxfoundation.org>
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Wed, 19 Oct 2022 12:29:51 -0700
+Message-ID: <CAJq+SaDFOZyz8ua_5SCUvAO0yXGGKZ8qqK5TTC09zotVy8oOtA@mail.gmail.com>
+Subject: Re: [PATCH 6.0 000/862] 6.0.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,38 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch x86, this's my revert,
-https://github.com/youling257/android-mainline/commit/401cbfa61cbfc20c87a5b=
-e8e2dda68ac5702389f
-i tried different revert, have to remove kmsan_copy_to_user.
+> This is the start of the stable review cycle for the 6.0.3 release.
+> There are 862 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 21 Oct 2022 08:30:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.3-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-2022-10-20 1:58 GMT+08:00, Marco Elver <elver@google.com>:
-> On Wed, 19 Oct 2022 at 10:37, youling 257 <youling257@gmail.com> wrote:
->>
->>
->>
->> ---------- Forwarded message ---------
->> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9A youling257 <youling257@gmail.com>
->> Date: 2022=E5=B9=B410=E6=9C=8820=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=
-=8D=881:36
->> Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
->> To: <glider@google.com>
->> Cc: <youling257@gmail.com>
->>
->>
->> i using linux kernel 6.1rc1 on android, i use gcc12 build kernel 6.1 for
->> android, CONFIG_KMSAN is not set.
->> "instrumented.h: add KMSAN support" cause android bluetooth high CPU
->> usage.
->> git bisect linux kernel 6.1rc1, "instrumented.h: add KMSAN support" is a
->> bad commit for my android.
->>
->> this is my kernel 6.1,  revert include/linux/instrumented.h fix high cpu
->> usage problem.
->> https://github.com/youling257/android-mainline/commits/6.1
->
-> What arch?
-> If x86, can you try to revert only the change to
-> instrument_get_user()? (I wonder if the u64 conversion is causing
-> issues.)
->
+Hi Greg,
+
+Boot tested on both x86 and ARM64 test systems, no regressions found
+
+Tested-by: Allen Pais <apais@linux.microsoft.com>
+
+Thanks.
