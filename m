@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7E0604368
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107CF6043AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJSLhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S231735AbiJSLqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiJSLhM (ORCPT
+        with ESMTP id S231661AbiJSLqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:37:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F21108273;
-        Wed, 19 Oct 2022 04:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666178121; x=1697714121;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=IM/miqYiKsUKovYDNaQ0wtYbr7tjTO2nvi5P+UfcMOA=;
-  b=gynb6KYtZQiEjGcaaJ5vMLqVPuAm7bB5tayluvB5ejyQDlX9sMli+bT8
-   W9fQbIOei4OYqHNfNRZeNBTwd02NGtz5Jii+o7fk5ULYi2RIbyzYKei5n
-   5r3IJ+brDETCq+FlW2grk39pA3CNj0Vpwk1BZhlJ+2sTGTiSeC4otVZ96
-   SbRm5onEvO9ZWe8eY6NOX0c+KbL8/FZILeNFPQltBdIpRNowgZfFMMe3t
-   Gff8Md2nGF6fsjHW4pqFAQGarY7RFTEQdmmcjWJ4DtUrK3eV9VD0SMk79
-   XE1tBhZSf8+gmorUTfDXxYWLsC1jlOB1YBL70o2FqfRisx11S/7fBwxx2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="303996254"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="303996254"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 04:11:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="580289133"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="580289133"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 19 Oct 2022 04:11:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ol6yz-009pAZ-2E;
-        Wed, 19 Oct 2022 14:11:33 +0300
-Date:   Wed, 19 Oct 2022 14:11:33 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/44] serial: sc16is7xx: Use uart_xmit_advance()
-Message-ID: <Y0/bZV/fdrqVcWqt@smile.fi.intel.com>
-References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
- <20221019091151.6692-6-ilpo.jarvinen@linux.intel.com>
+        Wed, 19 Oct 2022 07:46:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE5319C079;
+        Wed, 19 Oct 2022 04:26:03 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666178034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9//IKOu9ewVBs2/Obw0rBK1SP6wrE+NMqEzAlqdIk0E=;
+        b=ScLWj7YaNe++ZhkWz9LgyX3UVuU4Q/2sddgtgCmihQNZ/YgpzOFtGX0J2NUbD9dZfc3ASX
+        cvXj/zuFtu/uOcgye1B4Nn2O1myXjAdCYMVIIFaPOuUFHBsZbn8IB9OYvbIhWmYfUT5i6t
+        MZVjgOZ/jNkY+O9C+pPkjhompmbA8OZpIf3ZBkrYjKzonqlNt4avwXz5/QT1xlwI+v2v/9
+        d1yRaqR8z9K10tQtafPGswC36YxpKmTMyWFxHPYNuC14+GynN0bUa2NwhuN9G0CeI9gcNo
+        J7HIFHvGvbZ3c4tYkAgZ6Ns29naxA5A0S0IOZxBt9FsXYQeVx3M5hd2ul12pjA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666178034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9//IKOu9ewVBs2/Obw0rBK1SP6wrE+NMqEzAlqdIk0E=;
+        b=Cgq+LsU88Xix1l7OMljpqQ5LmkwRCzO+lLXgpUKGeAWSLPags9fFQQMJeFUuPxauNuMPQZ
+        H3QXSAmADgVZ0/AQ==
+To:     paulmck@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org, tglx@linutronix.de,
+        pmladek@suse.com, Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
+In-Reply-To: <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
+References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <87k04x4e0r.fsf@jogness.linutronix.de>
+ <20221018152418.GR5600@paulmck-ThinkPad-P17-Gen-1>
+ <87ilkh0y52.fsf@jogness.linutronix.de>
+ <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
+Date:   Wed, 19 Oct 2022 13:19:53 +0206
+Message-ID: <87pmeoawwe.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019091151.6692-6-ilpo.jarvinen@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:11:12PM +0300, Ilpo Järvinen wrote:
-> Take advantage of the new uart_xmit_advance() helper.
+On 2022-10-18, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> And the v6.1-rc1 stack is now at srcunmisafe.2022.10.18b.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Thanks!
 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/tty/serial/sc16is7xx.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-> index 524921360ca7..39f92eb1e698 100644
-> --- a/drivers/tty/serial/sc16is7xx.c
-> +++ b/drivers/tty/serial/sc16is7xx.c
-> @@ -686,13 +686,10 @@ static void sc16is7xx_handle_tx(struct uart_port *port)
->  		}
->  		to_send = (to_send > txlen) ? txlen : to_send;
->  
-> -		/* Add data to send */
-> -		port->icount.tx += to_send;
-> -
->  		/* Convert to linear buffer */
->  		for (i = 0; i < to_send; ++i) {
->  			s->buf[i] = xmit->buf[xmit->tail];
-> -			xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
-> +			uart_xmit_advance(port, 1);
->  		}
->  
->  		sc16is7xx_fifo_write(port, to_send);
-> -- 
-> 2.30.2
-> 
+I guess the kernel test robot will catch this, but if you checkout
+commit 79c95dc428ad ("arch/x86: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+Kconfig option") and build for x86_64, you will get:
 
--- 
-With Best Regards,
-Andy Shevchenko
+x86_64-linux-gnu-ld: kernel/rcu/srcutree.o: in function `srcu_gp_start_if_needed':
+srcutree.c:(.text+0x133a): undefined reference to `__srcu_read_lock_nmisafe'
+x86_64-linux-gnu-ld: srcutree.c:(.text+0x1490): undefined reference to `__srcu_read_unlock_nmisafe'
+x86_64-linux-gnu-ld: kernel/rcu/srcutree.o: in function `srcu_barrier':
+srcutree.c:(.text+0x1b03): undefined reference to `__srcu_read_lock_nmisafe'
+x86_64-linux-gnu-ld: srcutree.c:(.text+0x1b38): undefined reference to `__srcu_read_unlock_nmisafe'
 
+Note that this error is fixed with a later commit:
 
+commit c2d158a284ab ("srcu: Debug NMI safety even on archs that don't
+require it").
+
+This does not affect what I am working on, so feel free to take care of
+it whenever it fits your schedule.
+
+John Ogness
