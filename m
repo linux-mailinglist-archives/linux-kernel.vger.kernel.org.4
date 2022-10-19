@@ -2,192 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57955604708
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6279C604715
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiJSN1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S231781AbiJSN2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbiJSN04 (ORCPT
+        with ESMTP id S231501AbiJSN2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:26:56 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637E51793B4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:13:14 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id g1so28003827lfu.12
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rqDvk7+exoNL3wVC4+UCNH0Gcht0+8dPb7k0aCCIA4U=;
-        b=l2wqik9MZ7MgeaQq4PYtPyC/ESK8vjtBxpP3yMZwEc2/jwyY2UQpAsKSvnrAe3wT1c
-         ajPfNOuKHkroxGyXUbIPSULj5Nj+ZJky1/fvRxnt/k29EykkAxrq7XkQ0J5W+2eE1Oab
-         1hv6lY0g2Vb4kkEyI6G1xleX61MJIyVqgtG2ZVZ5gEFol3tKGsT0BPaNcP9hAK6Wa07w
-         7S+n5WQIt0xXKNDkj8L+Owp5SlS5DDvSGbMr9nN+9S/9DoG4EbUr7c9m+EVbRovMwvmr
-         l9zN3vSidTNMAf60dnHj5FJkdoy/kYQGlWktoNkgGY+u955mnz1W+jFjc0Mo9i6RnOEv
-         QlNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rqDvk7+exoNL3wVC4+UCNH0Gcht0+8dPb7k0aCCIA4U=;
-        b=vue7aYhaBSag2VS02SL/nMXBfFPH2RDkg3xZz8SSuBN+hETjub3kuVUV8LOAJFEvGs
-         aJg7GZMkL0wE42AD13QdS2CeSYpXLRRRao42Mbv96bATGz0NpX8UkxE7iszGH3ySeHS/
-         rPhV7Y3lzywxn8OqENYOeb0B6XPJvfNRqZfoIRqa2UZvxOQ3VqHpf8YH0cpYYAORd/8c
-         VnY79SElpYfzhsPNoXxvZNYhGE+jU8d12ozBxIJyAETWxkNwpUxXMUQoMhDfSihaphdt
-         22UBJVynYqpamVzEFxKAv7mIzt9rR7mcswx+cznPYl2pzELuCZyj+e4V0a9xj1e2g3w8
-         uiNA==
-X-Gm-Message-State: ACrzQf2bQQ2QOx8gSQEYu7eC+cMTrqM0B7s0bTmjvtrMaKr1VSt5X/Q9
-        GQBEue/y8LiRk1CYfjHFRw7zfg==
-X-Google-Smtp-Source: AMsMyM5tGKH8k0FM95AqUc7ouKnl7Osrbk4TyjvB28KHNdYabY8SPKqjwcZD/vcUv8DowyQeSBW4vA==
-X-Received: by 2002:a05:6512:3053:b0:4a2:6b9c:a853 with SMTP id b19-20020a056512305300b004a26b9ca853mr2700368lfb.666.1666185123437;
-        Wed, 19 Oct 2022 06:12:03 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id k14-20020ac2456e000000b004948378080csm2274704lfm.290.2022.10.19.06.12.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 06:12:03 -0700 (PDT)
-Message-ID: <0f1fff20-772f-c4d1-f803-f1824ef23780@linaro.org>
-Date:   Wed, 19 Oct 2022 16:12:02 +0300
+        Wed, 19 Oct 2022 09:28:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E2845F5D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XYcog8ocgROVcCPLoEEuCjc+/RbhDrn1MjAOaQsxUMQ=; b=Gx0C3ws/uzyETcYVQsF1zDuOVD
+        LzolMU87iYcl9ByTKX/LtTd51rC/4W6tTJ5EAq7zlYOvFxRcBrR0RgGTiVH8tYV6mGPWBBgQLY1Rw
+        AkDmfFKZNadjEpPKWbX00RapQQHUp3BIV82OJYvnzEpPvLdHyf6OZsRZhwIisT7DO1xOF3z+PYtHW
+        o3+HyT90gdo7m1P8iuwOJ+Otfl2lffLG87WMlAuKWMKMCw9zvkQkD/yPMkPa5di8bRRy2PvCOae0+
+        Q//DQ2BZs0AqybtkjtkhGiLLBC0GkaWJgw5/qeu/Yyulr43XFeydnqF+02t8mSI2f8GFHJNiiVd/j
+        UCDcnlWw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ol8st-00BZHZ-Oi; Wed, 19 Oct 2022 13:13:23 +0000
+Date:   Wed, 19 Oct 2022 14:13:23 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Tuo Cao <91tuocao@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: folio-compat: fix bug for pagecache_get_page
+Message-ID: <Y0/38zsvEgShWjLw@casper.infradead.org>
+References: <20221018143639.5099-1-91tuocao@gmail.com>
+ <Y066q/QNrBSRjPux@casper.infradead.org>
+ <20221018134834.97e685f9a9445c4553ce158b@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 08/15] phy: qcom-qmp-pcie: add register init helper
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221019113552.22353-1-johan+linaro@kernel.org>
- <20221019113552.22353-9-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221019113552.22353-9-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018134834.97e685f9a9445c4553ce158b@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 14:35, Johan Hovold wrote:
-> Generalise the serdes initialisation helper so that it can be used to
-> initialise all the PHY registers (e.g. serdes, tx, rx, pcs).
+On Tue, Oct 18, 2022 at 01:48:34PM -0700, Andrew Morton wrote:
+> On Tue, 18 Oct 2022 15:39:39 +0100 Matthew Wilcox <willy@infradead.org> wrote:
 > 
-> Note that this defers the ungating of the PIPE clock somewhat, which is
-> fine as it isn't needed until starting the PHY.
+> > On Tue, Oct 18, 2022 at 10:36:39PM +0800, Tuo Cao wrote:
+> > > The folio returned from __filemap_get_folio may be a NULL, it will
+> > > causes the kernel crash when access folio->page.
+> > 
+> > This is not a bug.  &folio->page does not dereference folio but performs
+> > pointer arithmetic.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 51 +++++++-----------------
->   1 file changed, 15 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index dd7e72424fc0..f57d10f20277 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -1820,46 +1820,32 @@ static void qmp_pcie_configure(void __iomem *base,
->   	qmp_pcie_configure_lane(base, tbl, num, 0xff);
->   }
->   
-> -static void qmp_pcie_serdes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tables)
-> -{
-> -	void __iomem *serdes = qmp->serdes;
-> -
-> -	if (!tables)
-> -		return;
-> -
-> -	qmp_pcie_configure(serdes, tables->serdes, tables->serdes_num);
-> -}
-> -
-> -static void qmp_pcie_lanes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tables)
-> +static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
->   {
->   	const struct qmp_phy_cfg *cfg = qmp->cfg;
-> +	void __iomem *serdes = qmp->serdes;
->   	void __iomem *tx = qmp->tx;
->   	void __iomem *rx = qmp->rx;
->   	void __iomem *tx2 = qmp->tx2;
->   	void __iomem *rx2 = qmp->rx2;
-> +	void __iomem *pcs = qmp->pcs;
-> +	void __iomem *pcs_misc = qmp->pcs_misc;
->   
-> -	if (!tables)
-> +	if (!tbls)
->   		return;
->   
-> -	qmp_pcie_configure_lane(tx, tables->tx, tables->tx_num, 1);
-> -	qmp_pcie_configure_lane(rx, tables->rx, tables->rx_num, 1);
-> +	qmp_pcie_configure(serdes, tbls->serdes, tbls->serdes_num);
-> +
-> +	qmp_pcie_configure_lane(tx, tbls->tx, tbls->tx_num, 1);
-> +	qmp_pcie_configure_lane(rx, tbls->rx, tbls->rx_num, 1);
->   
->   	if (cfg->lanes >= 2) {
-> -		qmp_pcie_configure_lane(tx2, tables->tx, tables->tx_num, 2);
-> -		qmp_pcie_configure_lane(rx2, tables->rx, tables->rx_num, 2);
-> +		qmp_pcie_configure_lane(tx2, tbls->tx, tbls->tx_num, 2);
-> +		qmp_pcie_configure_lane(rx2, tbls->rx, tbls->rx_num, 2);
->   	}
-> -}
-> -
-> -static void qmp_pcie_pcs_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tables)
-> -{
-> -	void __iomem *pcs = qmp->pcs;
-> -	void __iomem *pcs_misc = qmp->pcs_misc;
-> -
-> -	if (!tables)
-> -		return;
->   
-> -	qmp_pcie_configure(pcs, tables->pcs, tables->pcs_num);
-> -	qmp_pcie_configure(pcs_misc, tables->pcs_misc, tables->pcs_misc_num);
-> +	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
-> +	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
+> This is the third attempt to "fix" this.  So far.  I think we should
+> take the hint and make the check for a null pointer more explicit.
 
-Nit: could we please keep it as `tables'?
+I think it's doing a great job of pointing out how many alleged
+kernel programmers don't actually understand C and aren't capable of
+searching mailing lists to see if somebody else already sent a patch.
+Hopefully somebody's keeping track and is feeding this information into
+their hiring algorithms.
 
->   }
->   
->   static int qmp_pcie_init(struct phy *phy)
-> @@ -1932,8 +1918,8 @@ static int qmp_pcie_power_on(struct phy *phy)
->   	else
->   		mode_tables = cfg->tables_ep;
->   
-> -	qmp_pcie_serdes_init(qmp, &cfg->tables);
-> -	qmp_pcie_serdes_init(qmp, mode_tables);
-> +	qmp_pcie_init_registers(qmp, &cfg->tables);
-> +	qmp_pcie_init_registers(qmp, mode_tables);
->   
->   	ret = clk_prepare_enable(qmp->pipe_clk);
->   	if (ret) {
-> @@ -1941,13 +1927,6 @@ static int qmp_pcie_power_on(struct phy *phy)
->   		return ret;
->   	}
->   
-> -	/* Tx, Rx, and PCS configurations */
-> -	qmp_pcie_lanes_init(qmp, &cfg->tables);
-> -	qmp_pcie_lanes_init(qmp, mode_tables);
-> -
-> -	qmp_pcie_pcs_init(qmp, &cfg->tables);
-> -	qmp_pcie_pcs_init(qmp, mode_tables);
-> -
->   	/* Pull PHY out of reset state */
->   	qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
->   
-
--- 
-With best wishes
-Dmitry
-
+The real solution is to convert all the callers of pagecache_get_page()
+to use folios, and then we can delete this code.  I have a small series
+in progress.  The amount of text savings is immense; half a kilobyte
+from one conversion alone.  Our compound_head() has got very bloated.
