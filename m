@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA106050B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9563F6050BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiJSTtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S230034AbiJSTvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiJSTtW (ORCPT
+        with ESMTP id S229714AbiJSTva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:49:22 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9E81003
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:49:20 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o21so15854919ple.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:49:20 -0700 (PDT)
+        Wed, 19 Oct 2022 15:51:30 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C4A13E10;
+        Wed, 19 Oct 2022 12:51:29 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id t25so11462387qkm.2;
+        Wed, 19 Oct 2022 12:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DE+pC1xoa6jKzJgz9ssD3qXjzyl5nNC8ht+oyc3rAWU=;
-        b=yUHzem6sIADgl8VuoSM7oJkVqb+B5GHyJmRtSkk0r+NAk9gYc798fS+bCXMzJ0sPqz
-         gvhK1tXz6VWvJO1Aut71+PSwDju5EPluhhqCTyB9zoRDkmzWhYIiZJNVrEjApe8DORn8
-         KcevE4cLtP5SHAZpXPXIFh4xUNN7j9hoL5P4wBDwwUNG4OFARL04b8gmHZGE5jbZZ/Ph
-         AtWzdmd0UHVDDpgIdbRXMTQwQmEG7tr4dm2DJk2KynNJ1xzwv826mP1LceJ3JBfgdFYx
-         PAvM2DUd4lH0lArT6GV6RokgNsDgwR1/9x8oR9ELO347v6rLm6YNmMTkiseODRtqZ+/3
-         0WgQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mRh3sUpm3qMdhWacBjA4h5l3rneIrGVTLqXNu/AUJr4=;
+        b=Rg+ntIVOLxAkDGhqQd5FG8t4yU6n4MkPeuluKs9/C9kkkSNuF8yLlKfN/UpCMkyevt
+         P/OoTCCfyTTPLmLT7g1cw9P1fbn8d+zK9o+JzsWf1W5Rk2Ln1bUDrHX5iTTQA54Dt1oq
+         2bj8rbgdNpUfuq8/1QzUhJU3KCLMywnTS8q+3xy6kzXVgp3pyDcliCDITn+ckezYKgBU
+         PD/+bVa8q3jIN2uYPMd3GV6kRfTXez4fGy5nhAZgXwvc3iZ1x1CSeDJ+aSYBxqxRjdyT
+         IYoF9mlxJYs8nnQ4jNO08NOZ7azl9oJugY0jPdFXwexQPG2ZzK2KxlgOlBBZAeM1iOrv
+         s5cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DE+pC1xoa6jKzJgz9ssD3qXjzyl5nNC8ht+oyc3rAWU=;
-        b=n32eOhGyU24la3HOTrM/ag4w4zHE1gYqTLTLNB+bc9HJWt7r5eAKMk5V9afvTa2rbB
-         m8gRTCHDwjeD3yX+otH+rCKGluKQY95+EDjvHvbztBfKeNJwBzAaZ7ASgh/WPh3qi8+6
-         YhPh/WOXROTTsuMHDcZUFqpwDE3A/6eS1SMlWGaanh69xtY0uJ5MStjH4wiQ7nS2SeWl
-         QpnpmoO/iB/vaOmRCatA5piQlYqYJ2ZQ3ltGle/9jd3kB5iENAgK/HuES4r4Z6Rihz7t
-         /8Qm/KDt/3h4pyvvTGTmnzZkVyKtJYILgrkcDtTGqWWuubgtlOg8+IPm8jevxPt3hRhU
-         UpRQ==
-X-Gm-Message-State: ACrzQf3SUa/kVVRjK5knn0VpzRJk4hsoYZnwAUH2mV9DykgnnV9TI4fD
-        b27dnrYoXFyOb+YcZz8Om2qhMye1cRMvxUii
-X-Google-Smtp-Source: AMsMyM7m5RpbE9FxNm/vTBWuqHTRCXyAoU5oSnqjcB5Qa4UB1SAgXCrRAktuhVVRZXJoQ6L3/ANkCw==
-X-Received: by 2002:a17:90a:a088:b0:20d:67b7:546d with SMTP id r8-20020a17090aa08800b0020d67b7546dmr12127533pjp.6.1666208959487;
-        Wed, 19 Oct 2022 12:49:19 -0700 (PDT)
-Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id 72-20020a62194b000000b00562362dbbc1sm11531811pfz.157.2022.10.19.12.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 12:49:19 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org, vegard.nossum@oracle.com,
-        io-uring@vger.kernel.org, harshit.m.mogalapalli@gmail.com,
-        syzkaller <syzkaller@googlegroups.com>
-In-Reply-To: <20221019171218.1337614-1-harshit.m.mogalapalli@oracle.com>
-References: <20221019171218.1337614-1-harshit.m.mogalapalli@oracle.com>
-Subject: Re: [PATCH] io_uring/msg_ring: Fix NULL pointer dereference in io_msg_send_fd()
-Message-Id: <166620895849.131373.4257100476341517725.b4-ty@kernel.dk>
-Date:   Wed, 19 Oct 2022 12:49:18 -0700
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mRh3sUpm3qMdhWacBjA4h5l3rneIrGVTLqXNu/AUJr4=;
+        b=vMBd1iS83VJbGmK0VbZjoXPFkjKawRb3h8wXEGvcR572ATUpi6lnINO/M9ciOBIXt1
+         i6+IXiuSZoz+3uJMUaMue8O57Tng2Rzs2iBMX7ptlfrkv+gvKj8E7Eut8i3q5VP9EVQP
+         6EDKvjkCvhGgVK/kB0OAe+jfnheVN0ItzQXNSSd3vgPO1BaHo9dHqYeJyPSK5F8xUYGL
+         nOCOmDsmyK/8yMNIMf5oGlxBp4jccxOVRimycxspn8MsVLOoPI+XJBMCVlyp9dm00JBQ
+         SbDaBRzNhOgEPzl5gVhkXK3sFy4FBUKKUQFTpCtpL/7Qxmzdr81fendosSKa/83mEffX
+         Lytg==
+X-Gm-Message-State: ACrzQf23WETsFJ4Zi5k/WNeoGGTS5hr0Qm5Ru/hvjFQJWvjujuwqSDve
+        ggsI1WDyjUQjuuQ2KCBj+H0=
+X-Google-Smtp-Source: AMsMyM5ihVCT41/+OLFOn8RNmsZGmhDpIWY8fN89HXo05NpdzS2/WGaSmqG4l6asThPQdEla9S695w==
+X-Received: by 2002:a37:a49:0:b0:6ee:6816:41e9 with SMTP id 70-20020a370a49000000b006ee681641e9mr6700054qkk.173.1666209088926;
+        Wed, 19 Oct 2022 12:51:28 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ch8-20020a05622a40c800b0039cc82a319asm4566667qtb.76.2022.10.19.12.51.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 12:51:28 -0700 (PDT)
+Message-ID: <51257525-25e9-68cc-bc84-12ac886de56b@gmail.com>
+Date:   Wed, 19 Oct 2022 12:51:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 6.0 000/862] 6.0.3-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221019083249.951566199@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 10:12:18 -0700, Harshit Mogalapalli wrote:
-> Syzkaller produced the below call trace:
+On 10/19/22 01:21, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.3 release.
+> There are 862 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
->  BUG: KASAN: null-ptr-deref in io_msg_ring+0x3cb/0x9f0
->  Write of size 8 at addr 0000000000000070 by task repro/16399
+> Responses should be made by Fri, 21 Oct 2022 08:30:19 +0000.
+> Anything received after that time might be too late.
 > 
->  CPU: 0 PID: 16399 Comm: repro Not tainted 6.1.0-rc1 #28
->  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7
->  Call Trace:
->   <TASK>
->   dump_stack_lvl+0xcd/0x134
->   ? io_msg_ring+0x3cb/0x9f0
->   kasan_report+0xbc/0xf0
->   ? io_msg_ring+0x3cb/0x9f0
->   kasan_check_range+0x140/0x190
->   io_msg_ring+0x3cb/0x9f0
->   ? io_msg_ring_prep+0x300/0x300
->   io_issue_sqe+0x698/0xca0
->   io_submit_sqes+0x92f/0x1c30
->   __do_sys_io_uring_enter+0xae4/0x24b0
-> ....
->  RIP: 0033:0x7f2eaf8f8289
->  RSP: 002b:00007fff40939718 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
->  RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f2eaf8f8289
->  RDX: 0000000000000000 RSI: 0000000000006f71 RDI: 0000000000000004
->  RBP: 00007fff409397a0 R08: 0000000000000000 R09: 0000000000000039
->  R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004006d0
->  R13: 00007fff40939880 R14: 0000000000000000 R15: 0000000000000000
->   </TASK>
->  Kernel panic - not syncing: panic_on_warn set ...
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
 > 
-> [...]
+> thanks,
+> 
+> greg k-h
 
-Applied, thanks!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-[1/1] io_uring/msg_ring: Fix NULL pointer dereference in io_msg_send_fd()
-      (no commit info)
-
-Best regards,
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Jens Axboe
-
+Florian
 
