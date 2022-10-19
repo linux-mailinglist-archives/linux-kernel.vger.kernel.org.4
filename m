@@ -2,64 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05569604DDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23B6604DDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiJSQyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S230302AbiJSQzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiJSQy3 (ORCPT
+        with ESMTP id S230226AbiJSQy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:54:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B0B13CF8;
-        Wed, 19 Oct 2022 09:54:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D171F61807;
-        Wed, 19 Oct 2022 16:54:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF26C433C1;
-        Wed, 19 Oct 2022 16:54:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666198467;
-        bh=d4/4ZD6s1YFUuLMYMvCceYt3Rwz2SkopjdmOR9YOlt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oTCBjnY1yHKx7YZ4HVoRFrp8dQEWhpeuBS0LhH4MSRWvIqNTlMXaIBkx9vzQOjt5W
-         JbrePAs2l0hoCcyO/5usfM4i65HQwsLKfnc50MJiUKQ3gM9W9xHTG4lOM9XoMC+9Wd
-         BJv2UDTcI6qvg+8mEbJBW3/SEpbjtugB6JhUrAQCOvn7XAnXticnER9yIkWjd5RVvs
-         ufNY5D3brnw1vI6+TcLYlPI6TJMUefOEzPXbP6EvyNplNoftFNj1tJOGPvr1PbywYC
-         A05Gsz9397SKSIReEPYKDs4ZvMvn5Yx5pgaytJPU8JnUjF3owx/rgFVsd5XSGpxkLI
-         sj5/0dQ1LUYUA==
-Date:   Wed, 19 Oct 2022 22:24:23 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     asahi@lists.linux.dev, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dmaengine: apple-admac: Fix grabbing of channels
- in of_xlate
-Message-ID: <Y1Arv9uJnKgyqA41@matsya>
-References: <20221019132324.8585-1-povik+lin@cutebit.org>
+        Wed, 19 Oct 2022 12:54:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F34110DE77
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:54:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666198493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2hiPI5awSy8xIZ6rd///AMOSFCvHDWkmA5jXxoG5u5Y=;
+        b=Ddl6WPpdFWr/HXtJKQu59MD4gbvkWsR96YsWrWZqs1LFElhMU++BM3VEgoTnv0AxQRq6gP
+        uHNHMahhcZVQl+6JlNd0eTwKMGI4DFSWjtpC8NAfNiuy9EsdQ0teSnxi5dCXExiT9GWp+a
+        i4ZviJxwEGpl14/zh+api6hlifztMsM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-19-YGX5VwfUMqWRaQCBzW5IPg-1; Wed, 19 Oct 2022 12:54:51 -0400
+X-MC-Unique: YGX5VwfUMqWRaQCBzW5IPg-1
+Received: by mail-qt1-f200.google.com with SMTP id e24-20020ac84918000000b0039878b3c676so13133212qtq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:54:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2hiPI5awSy8xIZ6rd///AMOSFCvHDWkmA5jXxoG5u5Y=;
+        b=CxOHhguNv+34EJtF99fQaqqdu0Pn/PxYIUa59hqhSRLxpHvyBV5GEy+A5A+m0haKdN
+         nCY4l+oAaFLFVAJ2o9SNXy6NyKl9E3Vm6S1mVWdhuVodiYszjx7rKO5p8VoigELsP/eD
+         H5E5h9wlLuYsuifmpDaRA2eUD7VhVwd3TqfADnRzaulunvbe55eKsAE4GWCvQimU/kVk
+         cnsWyiEnZfxAL/BO3GcmvJvMsK2REs0+bbuVinzQ4fBCra0Or2hdcou8YbF7bCWaabir
+         JiAEOmCbYRHM5CYaDV5K13zXiIEeh74O6W6Hy5ZH3DDE7HIDf7zGDpr6wyOJaoTABhVM
+         ScVg==
+X-Gm-Message-State: ACrzQf2tCS5UoiRrbo2V5KTbLwCkfy7U3JBJUrdB2ahQqGwtyaPkQO9E
+        pJrM/yCgG5Yqwy44Rm5nDwblLfv0n/OySmRaQTDcO2oqCsC3wq5jIDbCanuA63TyDEf7ryjFkci
+        ryPwgJAfME2PxSRAQiCBATJXV
+X-Received: by 2002:a05:620a:318d:b0:6ee:9097:ccc8 with SMTP id bi13-20020a05620a318d00b006ee9097ccc8mr6271605qkb.2.1666198491290;
+        Wed, 19 Oct 2022 09:54:51 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5yPY5GjrBg7zzGzzsuXqv15YVK1iNlk3P31uBXzRWweLiVkPbaqTidA9uvyqr4xTxrqcWPgw==
+X-Received: by 2002:a05:620a:318d:b0:6ee:9097:ccc8 with SMTP id bi13-20020a05620a318d00b006ee9097ccc8mr6271593qkb.2.1666198491061;
+        Wed, 19 Oct 2022 09:54:51 -0700 (PDT)
+Received: from [192.168.98.18] ([107.12.98.143])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05620a450e00b006ce580c2663sm5357718qkp.35.2022.10.19.09.54.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 09:54:50 -0700 (PDT)
+Message-ID: <b0e4d82f-f36b-1e18-76b9-a32b73da9fb8@redhat.com>
+Date:   Wed, 19 Oct 2022 12:54:49 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019132324.8585-1-povik+lin@cutebit.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH net 0/2] selftests: net: Fix problems in some drivers/net
+ tests
+Content-Language: en-US
+To:     Benjamin Poirier <bpoirier@nvidia.com>, netdev@vger.kernel.org
+Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <20221019091042.783786-1-bpoirier@nvidia.com>
+From:   Jonathan Toppins <jtoppins@redhat.com>
+In-Reply-To: <20221019091042.783786-1-bpoirier@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19-10-22, 15:23, Martin Povišer wrote:
-> The of_xlate callback is supposed to return the channel after already
-> having 'grabbed' it for private use, so fill that in.
+On 10/19/22 05:10, Benjamin Poirier wrote:
+> From: Benjamin Poirier <benjamin.poirier@gmail.com>
+> 
+> Fix two problems mostly introduced in commit bbb774d921e2 ("net: Add tests
+> for bonding and team address list management").
+> 
+> Benjamin Poirier (2):
+>    selftests: net: Fix cross-tree inclusion of scripts
+>    selftests: net: Fix netdev name mismatch in cleanup
+> 
+>   tools/testing/selftests/drivers/net/bonding/Makefile        | 4 +++-
+>   .../testing/selftests/drivers/net/bonding/dev_addr_lists.sh | 2 +-
+>   .../selftests/drivers/net/bonding/net_forwarding_lib.sh     | 1 +
+>   .../selftests/drivers/net/dsa/test_bridge_fdb_stress.sh     | 4 ++--
+>   tools/testing/selftests/drivers/net/team/Makefile           | 4 ++++
+>   tools/testing/selftests/drivers/net/team/dev_addr_lists.sh  | 6 +++---
+>   tools/testing/selftests/drivers/net/team/lag_lib.sh         | 1 +
+>   .../selftests/drivers/net/team/net_forwarding_lib.sh        | 1 +
+>   tools/testing/selftests/lib.mk                              | 4 ++--
+>   9 files changed, 18 insertions(+), 9 deletions(-)
+>   create mode 120000 tools/testing/selftests/drivers/net/bonding/net_forwarding_lib.sh
+>   create mode 120000 tools/testing/selftests/drivers/net/team/lag_lib.sh
+>   create mode 120000 tools/testing/selftests/drivers/net/team/net_forwarding_lib.sh
+> 
 
-Applied both, thanks
+Looks good, thanks.
 
--- 
-~Vinod
+For the series
+Reviewed-by: Jonathan Toppins <jtoppins@redhat.com>
+
