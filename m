@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75659604DBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4662B604D83
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJSQsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S229902AbiJSQiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJSQsi (ORCPT
+        with ESMTP id S229649AbiJSQiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:48:38 -0400
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30E41C5A5F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oRIooemmvL5rYb82UnBnVi3B/Pn+CODMXib3Ofvbw0U=; b=jRhB5LwA1I56IRGjW6uu22Bp1i
-        O/Lm7vrEPFNpa8/r3SIbI37uekZMZj2TPWN9zyBEr2QVhpXRUfAMrqT0uMwmi+BbsqEnJ3SQVjchF
-        kqKr+WA5TqRc+KNACOgb2ny2HEsDLb6gNytY7btRtz+AvQOQyWbp+x1VxRQuCO+qufxgPnds0qPg2
-        V9Wr+5s1UHneAP9G84UQnwaI/BfI4QODs2BIw5BvZNL8Z6PX4GCeaJrcr3CJm81zunwbDOaLFiBw7
-        Nm2srGa/YdGiBvP88sCDzNkNuXHgdOjkp+/4n4FpaDNWcEbZu1+HS7p+BI2D4FUwOKnmInKRAmTfl
-        85RziXeA==;
-Received: from [2600:1700:4830:1658::fb2] (port=55226)
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1olC4I-00031J-GZ;
-        Wed, 19 Oct 2022 12:37:31 -0400
-Message-ID: <e723900c-41ae-6e01-4415-7a859ab071fd@lechnology.com>
-Date:   Wed, 19 Oct 2022 11:37:28 -0500
+        Wed, 19 Oct 2022 12:38:02 -0400
+Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2600E1C5E18
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:38:00 -0700 (PDT)
+Received: from [192.168.50.220] ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id lC4to6TxSsjaWlC4toQVdx; Wed, 19 Oct 2022 18:38:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666197480; bh=PjzBW01Pfqx6vSWcAzYHsfr9+pt/IXr4Y/Ech4/ISQg=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=JLEWXlPblFGyGYiLUfs4TrJ+S/U4td8MhFZV8Mza9YOq9cvcbcusXK6y5DB1Vw4Jx
+         yjL9fDJPrwTnJag/oNJvfBiBaBPds+xd5VK002ii+2qqK/wEp1HhOOFTOxB5FqErv3
+         rftr/blMr9FtXzszKSFYfnUdm6mBk9OqdIBihfNZ8r+9lEVtzApt78qh3EiR22esx8
+         t89o9o1TCQSyKGxCU0Stqw0yDBy7H4XPFc3NX9vuT1UVf3gYkhmlsWnGsOzDDPJMRT
+         M6a7rswgLLUQXPhy8EmppbetNkF3z6RJ5OJeHeP6087YRR8e0VzIUWsnlCuXN+Wsq3
+         OX4frmjv6Dpvw==
+Message-ID: <a84e2199-a2b9-e489-f75d-ea57d227a6b5@benettiengineering.com>
+Date:   Wed, 19 Oct 2022 18:37:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 02/14] ARM: davinci: drop DAVINCI_DMxxx references
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] ARM: mm: fix no-MMU ZERO_PAGE() implementation
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-clk@vger.kernel.org
-References: <20221019152947.3857217-1-arnd@kernel.org>
- <20221019152947.3857217-3-arnd@kernel.org>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20221019152947.3857217-3-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>
+References: <20221017233700.84918-1-giulio.benetti@benettiengineering.com>
+ <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
+ <972a3be7-4522-b4f0-adfa-6b42be56c52f@benettiengineering.com>
+ <dc5a5c40-8e96-4f91-a3c6-5a1fc8b26ad1@app.fastmail.com>
+ <3fc711c8-4981-26f7-689c-549bdafa40ac@benettiengineering.com>
+ <e98b0727-5a5b-4f1d-bbf6-1194e6df299a@app.fastmail.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <e98b0727-5a5b-4f1d-bbf6-1194e6df299a@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4xfBkyHrlHAhQzoqTkhc9cScYJzGi1YJvc5lWIkW6xo9b2lf7R3QuaRUQJBNGdEji+GU6IxpKvra27/vcydNFqhVGZmYritvrURqZ/A3LljyLpISpJkXZI
+ rJ5PJSuZ5YMrkZY14ycPtWt/07afiyRgeVuhOtiHmJdMuCkF5ZhJlCu0VGO0z+HUOOAFeOa6/+LCudDMbdJnwH0IwfLHmjEOdVQ09zn0t2akagckOuI7L2Ox
+ eRzsKVDSls3QoO3nRuiEQ+WCnj1GZXfAegQRpzFjKK7eK4zBinXJMXr/Cb6dg4iJ+IUsgXScQmTO21f51obT0B2Wj3rzozhFygGbM4bdyDEX6EzvcTXLeEvA
+ QbslCDrVdgOLDZLHDqngTj2sMNwDwzJGBAmzFX3jzXTTu+Ap5Wa4Mmzs9K6EcUELux7oLw11mC7WkMqSFq5xcVP+6BPX+DHd1D9V3cKK6ENxsP5xPQpu50dr
+ xSdWwah9LOvsai8Mgzrond1meaoW/Kswz+AaPNoN3w256wfdub1zPofr0Pk=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 10:29 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 19/10/22 09:00, Arnd Bergmann wrote:
+> On Wed, Oct 19, 2022, at 00:32, Giulio Benetti wrote:
+>> On 18/10/22 20:35, Arnd Bergmann wrote:
+>>> On Tue, Oct 18, 2022, at 19:44, Giulio Benetti wrote:
+>>>> On 18/10/22 09:03, Arnd Bergmann wrote:
+>>>>> In addition to your fix, I see that arm is the only architecture
+>>>>> that defines 'empty_zero_page' as a pointer to the page, when
+>>>>> everything else just makes it a pointer to the data itself,
+>>>>> or an 'extern char empty_zero_page[]' array, which we may want
+>>>>> to change for consistency.
+>>>>
+>>>> I was about doing it, but then I tought to move one piece at a time.
+>>>
+>>> Right, it would definitely be a separate patch, but it
+>>> can be a series of two patches. We probably wouldn't need to
+>>> backport the second patch that turns it into a static allocation.
+>>
+>> I've sent the patchset of 2:
+>> https://lore.kernel.org/all/20221018222503.90118-1-giulio.benetti@benettiengineering.com/T/#t
+>>
+>> I'm wondering if it makes sense to send a patchset for all those
+>> architectures that have only one zero page. I've seen that for example
+>> loongarch has more than one. But for the others I find the array
+>> approach more linear, with less code all around and a bit faster in term
+>> of code execution(of course really few, but better than nothing) since
+>> that array is in .bss, so it will be zeroed earlier during a long
+>> "memset" where assembly instructions for zeroing 8 bytes at a time are
+>> used. What about this?
 > 
-> Support for all the dm3xx/dm64xx SoCs is no longer
-> available, so drop all other references to those.
+> The initial zeroing should not matter at all in terms of performance,
+> I think the only question is whether one wants a single zero page
+> to be used everywhere or one per NUMA node to give better locality
+> for a cache miss.
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+> My guess is that for a system with 4KB pages, all the data
+> in the zero page are typically available in a CPU cache already,
+> so it doesn't matter, but it's possible that some machines benefit
+> from having per-node pages when the page size isn't tiny compared
+> to the typical cache sizes.
+> 
+> We should probably not touch this for any of the other architectures.
 
->   int __init davinci_serial_init(struct platform_device *serial_dev)
-> diff --git a/arch/arm/mach-davinci/usb.c b/arch/arm/mach-davinci/usb.c
-> index a9e5c6e91e5d..9dc14c7977b3 100644
-> --- a/arch/arm/mach-davinci/usb.c
-> +++ b/arch/arm/mach-davinci/usb.c
-> @@ -41,11 +41,6 @@ static struct resource usb_resources[] = {
->   		.flags          = IORESOURCE_IRQ,
->   		.name		= "mc"
->   	},
-> -	{
-> -		/* placeholder for the dedicated CPPI IRQ */
-> -		.flags          = IORESOURCE_IRQ,
-> -		.name		= "dma"
-> -	},
->   };
->   
->   static u64 usb_dmamask = DMA_BIT_MASK(32);
-> @@ -67,14 +62,6 @@ void __init davinci_setup_usb(unsigned mA, unsigned potpgt_ms)
->   	usb_data.power = mA > 510 ? 255 : mA / 2;
->   	usb_data.potpgt = (potpgt_ms + 1) / 2;
->   
-> -	if (cpu_is_davinci_dm646x()) {
-> -		/* Override the defaults as DM6467 uses different IRQs. */
-> -		usb_dev.resource[1].start = DAVINCI_INTC_IRQ(IRQ_DM646X_USBINT);
-> -		usb_dev.resource[2].start = DAVINCI_INTC_IRQ(
-> -							IRQ_DM646X_USBDMAINT);
-> -	} else	/* other devices don't have dedicated CPPI IRQ */
-> -		usb_dev.num_resources = 2;
-> -
->   	platform_device_register(&usb_dev);
->   }
->   
+Ok, thanks for the explanation!
 
-Shouldn't the else case be kept since it applies to *all* "other devices"?
-(and therfore the usb_resources shouldn't be modified either?)
-
+Best regards
+-- 
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
