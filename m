@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55126043D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3466043EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiJSLtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S229939AbiJSLxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiJSLs1 (ORCPT
+        with ESMTP id S230430AbiJSLxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:48:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F0F65246;
-        Wed, 19 Oct 2022 04:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666178859; x=1697714859;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XMFggGUT5rB2EsYur5TAIr34+vLXDytXkSJIKAo1bvg=;
-  b=DxSXXWH4LM/YFHBvb92HeFFZi9Rx+tAQB8SzL0aApKUbM+mpn+OQEgT2
-   xfTWv1YEon3Oe8xHa/98C1hxlWyn5axdeJfohS/G9PgnXZjXyO2jfPQr4
-   AVbMdKgNgaY0o4hIosY5SVHfHFkS/4pm4jDS0bquz8jP93OLkvUz9VAr2
-   2QRmKmveLPHZIvrBezeY+Kqiku2dwfcUjs0L4z3y7Sgh/7meEfbvoDyr7
-   txKBmhhG2cWGS7wAZb1XE0MnhjM8NV2lw5qmf5g7ZDzUy3pZOtUCqsniY
-   lZ4tTvnMZifatltrXUf1lfm1o5QxHm1esC+GP2NNjnMn8Sv4RVlXFNhsj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="392677104"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="392677104"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 03:55:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="580282738"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="580282738"
-Received: from sponnura-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.35])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 03:55:16 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 2/2] tty: Cleanup tty buffer align mask
-Date:   Wed, 19 Oct 2022 13:55:04 +0300
-Message-Id: <20221019105504.16800-2-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221019105504.16800-1-ilpo.jarvinen@linux.intel.com>
-References: <20221019105504.16800-1-ilpo.jarvinen@linux.intel.com>
+        Wed, 19 Oct 2022 07:53:14 -0400
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6102B185424;
+        Wed, 19 Oct 2022 04:31:48 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id bv10so28542009wrb.4;
+        Wed, 19 Oct 2022 04:31:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+C4/MEmPs6jjzJFhCgwSQZ9Bhv6OsstKQBIugIvO+Hw=;
+        b=Q7MsmlMZULcAQQpRWR2KUHzwGMbOEt6ookbLhEsT5VxqIj8gGI/XnlFOv+mgHXnt1x
+         7nwUuJJEO3IIONd7Ii0Zk4Eot7HXBz1cxhl1gZVUEopzuHpEVqniBJa6P5KyLh1/xCqi
+         sTvthIYyU9i9RbszdKfHVwVqC1q2reVoZz6aLRdDcdWmSbqUFL+ILbxxYyhY+Nx0LM8R
+         kAvqCtKwJpjOPEaU5Cre7a6buvIoCtiYH1MV/QhpRcnvC6dDrAuGbS8L4OK0aw28Ch96
+         aK9usAelUVzakRO/a/qCVh0ys4m1iOnUVjdmgq5rIZ7MPw3yGLQB/81Wnsr91GqTgqW6
+         mZhA==
+X-Gm-Message-State: ACrzQf0+UXOAOYmS1RDI9nCzauEI5/DqAjr0TszUaCdrhuCYhZiGCj11
+        TBTwGvYa6WCzsXH8TU0mLmg1Dv4nyS2QDg==
+X-Google-Smtp-Source: AMsMyM5eOm/kk0xoS7rbKDQ7Op+l6IBKQUmMJaS9A02c4eqJwLEKEdJy4cerww606ujYl19fXuBwBA==
+X-Received: by 2002:a05:6402:350d:b0:45c:f5a2:348e with SMTP id b13-20020a056402350d00b0045cf5a2348emr6802451edd.398.1666176917245;
+        Wed, 19 Oct 2022 03:55:17 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id x9-20020a170906710900b0073a20469f31sm8795985ejj.41.2022.10.19.03.55.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 03:55:16 -0700 (PDT)
+Message-ID: <c7e5c112-e53f-b3ab-6b85-f47fadef7ce9@kernel.org>
+Date:   Wed, 19 Oct 2022 12:55:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 00/44] serial: Convert drivers to use uart_xmit_advance()
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't use decimal for mask. Don't use literal for aligning.
+On 19. 10. 22, 11:11, Ilpo Järvinen wrote:
+> I've tried to pick the drivers such that these shouldn't collide with
+> the ones Jiri's tx loop rewrite series is touching (unless he has
+> something hidden beyond what has been on the list).
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/tty_buffer.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+No, nothing more here.
 
-diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-index b408d830fcbc..2df86ed90574 100644
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -21,7 +21,7 @@
- #include "tty.h"
- 
- #define MIN_TTYB_SIZE	256
--#define TTYB_ALIGN_MASK	255
-+#define TTYB_ALIGN_MASK	0xff
- 
- /*
-  * Byte threshold to limit memory consumption for flip buffers.
-@@ -37,7 +37,7 @@
-  * logic this must match.
-  */
- 
--#define TTY_BUFFER_PAGE	(((PAGE_SIZE - sizeof(struct tty_buffer)) / 2) & ~0xFF)
-+#define TTY_BUFFER_PAGE	(((PAGE_SIZE - sizeof(struct tty_buffer)) / 2) & ~TTYB_ALIGN_MASK)
- 
- /**
-  * tty_buffer_lock_exclusive	-	gain exclusive access to buffer
+thanks,
 -- 
-2.30.2
+js
 
