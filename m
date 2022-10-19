@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E7D6046FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3636045F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiJSNZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S233112AbiJSMwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiJSNZJ (ORCPT
+        with ESMTP id S233424AbiJSMv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:25:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA628129085;
-        Wed, 19 Oct 2022 06:11:50 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JC4Awm024288;
-        Wed, 19 Oct 2022 12:16:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=PwpSNDQOdPBrNDCSnG37C6FJq+QMd2H/QH1abN8bGVs=;
- b=OCdSW32Y7zShllTmH+Td/iyANBYHXIZlVfxFAcdzori5cq8cUSSEg/p6U3bBMDZky/ag
- crorhfhzq0LvXQuwuCxGpTuyo2WaZCYZ1NdeIeu2bDfyD2oB9+x3vCnHBLTrothf+/0b
- ouDrdgHqyIBTowJK9jyDdWQGYmYswXy8/X6SuoKhseX3WQt9RVKPSMecDYd2+qByerj4
- 92XaRRDiEzW7yNhgPQvN5tJAVNxEw668xHC/E8Tcxu26E4HqT0PdjYaePiy9LeF2lCR/
- rYzwLKWkMketNEBFgR7Iwio1+8FBmHxaKwE0CU708KxXGqGWhrcM9iW/iitBdzjAtYJU ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kagwt8jqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 12:16:51 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JCDt3P029429;
-        Wed, 19 Oct 2022 12:16:50 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kagwt8jpa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 12:16:50 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JC7b92002567;
-        Wed, 19 Oct 2022 12:16:47 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3k7mg95ac3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 12:16:47 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JCGiZs42271092
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Oct 2022 12:16:44 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 583AC42045;
-        Wed, 19 Oct 2022 12:16:44 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41A5D42042;
-        Wed, 19 Oct 2022 12:16:44 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 19 Oct 2022 12:16:44 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 25651)
-        id E0AB8E023C; Wed, 19 Oct 2022 14:16:43 +0200 (CEST)
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-To:     yury.norov@gmail.com
-Cc:     agordeev@linux.ibm.com, ajones@ventanamicro.com,
-        amritha.nambiar@intel.com, andriy.shevchenko@linux.intel.com,
-        bigeasy@linutronix.de, bp@alien8.de, caraitto@google.com,
-        davem@davemloft.net, edumazet@google.com, guoren@linux.alibaba.com,
-        imagedong@tencent.com, jonolson@google.com, kuba@kernel.org,
-        kuniyu@amazon.com, linux-kernel@vger.kernel.org,
-        linux@rasmusvillemoes.dk, mst@redhat.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, petrm@nvidia.com, torvalds@linux-foundation.org,
-        willemb@google.com, borntraeger@linux.ibm.com
-Subject: Re: [PATCH] Revert "net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}"
-Date:   Wed, 19 Oct 2022 14:16:43 +0200
-Message-Id: <20221019121643.2866464-1-borntraeger@linux.ibm.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221017030947.1295426-1-yury.norov@gmail.com>
-References: <20221017030947.1295426-1-yury.norov@gmail.com>
+        Wed, 19 Oct 2022 08:51:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2515A18B770;
+        Wed, 19 Oct 2022 05:33:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E80D61856;
+        Wed, 19 Oct 2022 12:18:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0384CC433C1;
+        Wed, 19 Oct 2022 12:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666181899;
+        bh=NFx7T5AV9TikRajerIi5olcWAo+wSsuF+tytHODHH38=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=nOo1Jz+UyXwVHHtW++IKcWZBt19vd6ZBVFIaSn8D07FUWrQEve3Bf++KiBzlELiSt
+         Q8S+ehdSo69noRSLSnbT4trkoSrnL8euyTk3Wr2nrYrEQ5SvCg3QJ2llYolCkH2hTx
+         lGns8jIcYH7eMaRVK78MIsvy0Pgbolv+g3nHIL3d281e+0qtfI43S+mTE2EMhRL0DG
+         JhD6qd6L2dnklpO27Dbf3UjVLfOgKMoL8yTX1HJ/xjgIAilk+QbpvBjGA9FGiUPCyJ
+         5u1Rq8HsOG7WWUWGvPVxIVIJUj5AdHiiGWfRRKPrP2rAB5iAXA8F3dUhnC7jNV/MY2
+         MOwKXym29YQwg==
+Message-ID: <2b167dd9bda17f1324e9c526d868cc0d995dc660.camel@kernel.org>
+Subject: Re: [PATCH v7 0/9] fs: clean up handling of i_version counter
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Date:   Wed, 19 Oct 2022 08:18:15 -0400
+In-Reply-To: <20221019111315.hpilifogyvf3bixh@wittgenstein>
+References: <20221017105709.10830-1-jlayton@kernel.org>
+         <20221019111315.hpilifogyvf3bixh@wittgenstein>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0SPNsqdcHHjo6zUiPdWA6Sa45tpEQptl
-X-Proofpoint-ORIG-GUID: llzVULK_HBOmK1ltN1KQfhKP1jh3D7KO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_06,2022-10-19_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- bulkscore=0 clxscore=1011 priorityscore=1501 malwarescore=0 spamscore=0
- lowpriorityscore=0 mlxlogscore=859 adultscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210190067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-for virtio on s390x.
+On Wed, 2022-10-19 at 13:13 +0200, Christian Brauner wrote:
+> On Mon, Oct 17, 2022 at 06:57:00AM -0400, Jeff Layton wrote:
+> > This patchset is intended to clean up the handling of the i_version
+> > counter by nfsd. Most of the changes are to internal interfaces.
+> >=20
+> > This set is not intended to address crash resilience, or the fact that
+> > the counter is bumped before a change and not after. I intend to tackle
+> > those in follow-on patchsets.
+> >=20
+> > My intention is to get this series included into linux-next soon, with
+> > an eye toward merging most of it during the v6.2 merge window. The last
+> > patch in the series is probably not suitable for merge as-is, at least
+> > until we sort out the semantics we want to present to userland for it.
+>=20
+> Over the course of the series I struggled a bit - and sorry for losing
+> focus - with what i_version is supposed to represent for userspace. So I
+> would support not exposing it to userspace before that. But that
+> shouldn't affect your other changes iiuc.
 
-Tested-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Thanks Christian,
+
+It has been a real struggle to nail this down, and yeah I too am not
+planning to expose this to userland until we have this much better
+defined.=A0Patch #9 is just to give you an idea of what this would
+ultimately look like. I intend to re-post the first 8 patches with an
+eye toward merge in v6.2, once we've settled on the naming. On that
+note...
+
+I believe you had mentioned that you didn't like STATX_CHANGE_ATTR for
+the name, and suggested STATX_I_VERSION (or something similar), which I
+later shortened to STATX_VERSION.
+
+Dave C. objected to STATX_VERSION, as "version" fields in a struct
+usually refer to the version of the struct itself rather than the
+version of the thing it describes. It also sort of implies a monotonic
+counter, and I'm not ready to require that just yet.
+
+What about STATX_CHANGE for the name (with corresponding names for the
+field and other flags)? That drops the redundant "_ATTR" postfix, while
+being sufficiently vague to allow for alternative implementations in the
+future.
+
+Do you (or anyone else) have other suggestions for a name?
+--=20
+Jeff Layton <jlayton@kernel.org>
