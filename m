@@ -2,57 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5FE605142
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C91605148
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiJSUYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S231360AbiJSU1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiJSUYH (ORCPT
+        with ESMTP id S229674AbiJSU12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:24:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA801C25FF;
-        Wed, 19 Oct 2022 13:24:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E7FCB825E4;
-        Wed, 19 Oct 2022 20:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88748C433D6;
-        Wed, 19 Oct 2022 20:24:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666211044;
-        bh=cCILwvDcwIgTYkwNHwES8Ev68kTYaFfHYaLNe158ib4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WMnsLSrsZtYj0BS6fy7F2r7AeJJsG0EY+x4g2B3ZxvFABxNmeDXYMk2NIHno5odJM
-         85qPOzpUef011xb/ept6SDNpII5Wlv4FnGvAdPSJKcQE04K9QUPDIb7XVbmLS9D4VX
-         gHRgKKvQYUXyG5WDSA3i9w4r+8ya/ruzDajHaFi/rFuwd+EiIudSP2nlDfx/Kvl8dW
-         nfma2XdwQOAEK8Iuf4NNd9Sp1rI+9eZQp/F7DZYQ7MkVUmY0Q9BpwdE2scU2+VjI05
-         4Cf6NswUegMUhYSYds5/TVBjkPOsrqatnL41233vHCcjdB9P/1fAyRSvDKxh3tY5bH
-         Ghp7ut5JQ3vNA==
-Date:   Wed, 19 Oct 2022 22:24:00 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     kernel@axis.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] i2c: core: support no-detect property
-Message-ID: <Y1Bc4AjlZPs512Ao@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>, kernel@axis.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429130749.3032462-1-vincent.whitchurch@axis.com>
- <20220429130749.3032462-2-vincent.whitchurch@axis.com>
+        Wed, 19 Oct 2022 16:27:28 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80082.outbound.protection.outlook.com [40.107.8.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C057186D7B;
+        Wed, 19 Oct 2022 13:27:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aMlgZuWAInP1eYszaPNznXuwq3PdzS+TWKXS3SutU+9SDxAW1ABD1ojdvrqErLEYZCkCxpnNd6pIlJkd5xekIVmRNGFrD5vG3qX1deNfRbRXh3cYuP+2IaTjXsS3H/vPf9us1LCCxunu8Dq26kvE04+JKuNDRA91u5hxy4tfNMzOO8JXHx5ByxCoJcGTOG1XYtN6/m1Pa7MSlZV0eA5AOTqZwVwrjerdlDrYfWbQ8SZg+gDBhwssdiTyfr07c0aPOKnYA37zSGihGvnlI9BnaPQQ0nDqzt3s8+FwYXHFTisHHIIgklPLUHlfcHvtHpKTjrc8XnkHXRqqVzbOkTz1tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z/0GShhTzRFbp7hApO03BA3OE11D8F29EATFdo8N9Q0=;
+ b=dCndPOUlCIaW5nw8/zLcFqGcBcDO9cP9nr2P3u0Y+3P+1k1bYlSYJ/J1W7JnYyP0mSshYCfU9G2wdgI0yHY7xjntf7f9J3+/Z8V89hlxZmG1mC92i8egfiZaJerTdcMyfQcmZyd0xnvDsoOdy+b1hovJdcN+iF/K7gju3s9HYM8O+GZC/thjV4jFBtQkpXyEFXg+nxmNTs8aJjg2GmaNoTOdPGXqmwV5gio45BM9UjdC9iE6JWxwyiPQFeHOfZ9TNYQwdNtzSgvPgSMDaOaGpy1+DwOy7HTAyshleuxzrcA0jv7cBjavU119m6gzgPc6aNZoSJICUCA0QJGqgzcEsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z/0GShhTzRFbp7hApO03BA3OE11D8F29EATFdo8N9Q0=;
+ b=ODjIs5U5xsQGZc3FbLiyz7LXRSPm9IqzXlZV8liJbixD7PKbf+mK1/C/Y6kAE5mKhVj8U/WbprWfoe9aj+Y9e+OB8bXwJX1llv34i5FI1muZZzL0J4timR/DCUgaMKKAJr+wqXrLWlgoopLqbbM2RI7tNsqTuHbnlxpqKoOLYW8=
+Received: from VI1PR04MB5967.eurprd04.prod.outlook.com (2603:10a6:803:cc::27)
+ by AS8PR04MB7878.eurprd04.prod.outlook.com (2603:10a6:20b:2af::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Wed, 19 Oct
+ 2022 20:27:22 +0000
+Received: from VI1PR04MB5967.eurprd04.prod.outlook.com
+ ([fe80::dc5:6898:8bbe:6c96]) by VI1PR04MB5967.eurprd04.prod.outlook.com
+ ([fe80::dc5:6898:8bbe:6c96%7]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
+ 20:27:22 +0000
+From:   Roy Zang <roy.zang@nxp.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+CC:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Tom Joseph <tjoseph@cadence.com>,
+        Rob Herring <robh@kernel.org>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        "M.H. Lian" <minghuan.lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Joyce Ooi <joyce.ooi@intel.com>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>,
+        Michal Simek <michal.simek@amd.com>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: RE: [PATCH] PCI: Remove unnecessary of_irq.h includes
+Thread-Topic: [PATCH] PCI: Remove unnecessary of_irq.h includes
+Thread-Index: AQHY4/SvM0jo3Ln+e0ejWxU6QJYCNK4WKf5g
+Date:   Wed, 19 Oct 2022 20:27:21 +0000
+Message-ID: <VI1PR04MB5967D09FD70531A221F1BAF48B2B9@VI1PR04MB5967.eurprd04.prod.outlook.com>
+References: <20221019195452.37606-1-helgaas@kernel.org>
+In-Reply-To: <20221019195452.37606-1-helgaas@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5967:EE_|AS8PR04MB7878:EE_
+x-ms-office365-filtering-correlation-id: 7cec4a4c-29b1-4e0b-5d9f-08dab21053b2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: M3LTZcwiMCgrALPtNwoJ5ZCIGnQLs+Y9sfvrg9dDfmhIQVJ27eE/Lm7Swie2ug4PgpPoUW3C4Ry+BVzIZadxCqo037sHcQzGEWl+bJTrr7xu+3XnitO5IMsoeEZZdG+IDvZCCh/pyMgysU4xAsP/+hKlIswATnhBsCO5hb6SO3A60gfwnLUKgX0pZ33TesV90W1NEZxsIDxSoJd7Q2mGmSm37++y/fXxKxAtUMoZgxCTBeJ83sGBL8zVS904rdPfv9CioowfAvb+f1w7AjDsZLuj+eJ69fKH/wb9UkFTV4IZW8cjm/lddVb4a+dRhq3SkOSy20Pp+NO+CUTx0qtKhimpTb2otuvAmBQla3ByY0FAT9m7QWQSCD7qZfErshfN1MBf0umEIzbodsj5Iw/7Q6vqtjiIsVoMbx+BfEmAxwHSWipNYfvdpt95++VpE5TiuBlZg3Ed5oxyYnbJ368eOUrYkn5tq/F8QO+Hiac3jhuf5JBLqQlDlRPAYjqAr2PRJiQEfidr4PN7zsP42eXw1VDziIvfwbZKypX4OH05DHOLtype8Omlp+cyaGZgMZpyjZTTSdvD+9m3Y4pVbF+cD95hHAU93rxNtpGulKERNIqGdP737MQxBZbRPToXsucrFVcQ4oWZ+lpRf1fN7mJByGI+gogjH76S7U5BxD9EAAwACN1LCF0VfnMLapVZ5m+uQLZ8z03FvaSKhnMUadwQ9jNY0mIk5SJtMeWSJufId2sUNIyZxGyrTAuR7C/S4KHI+tiYRV7MweLFkDlzwb760Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5967.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(346002)(366004)(376002)(451199015)(33656002)(7416002)(86362001)(44832011)(122000001)(2906002)(4744005)(5660300002)(38100700002)(7406005)(71200400001)(54906003)(186003)(83380400001)(38070700005)(316002)(7696005)(66946007)(66556008)(66476007)(478600001)(9686003)(6506007)(8676002)(26005)(66446008)(76116006)(110136005)(55016003)(4326008)(52536014)(55236004)(8936002)(41300700001)(64756008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?QwU2HjGWpIbdL9ehOIwHWbxbGXDlaXnjTTg6ziq7KvthBo8s9n/fvmW9xo?=
+ =?iso-8859-2?Q?oAijN9ydD1JLqXwbQeYYqmEKYNgJzrLO7wJu57bGpuk5XvOer5YLMl5sUF?=
+ =?iso-8859-2?Q?Ey0fojX5AfLFP+ZxxZCGLDvnoMZg9YkbJHqGiVmS6VSSFxy6XpkJ4f8y+c?=
+ =?iso-8859-2?Q?mAkNqGnjD/LgBa7ehZdr3jNybLqVamVUrniXwDVizThoFD3u1m3oFM/pJY?=
+ =?iso-8859-2?Q?woGZX3zww08EQK/hzXLE0FKgAc3lFumQ6niS+qzKDnGLorKRq8btC8G5gw?=
+ =?iso-8859-2?Q?hVE5p/UFYHbz9u7Rw5TuTF5+QkdDyepbJ8I3jmGu04Ete9Pq6ERegpNVh1?=
+ =?iso-8859-2?Q?vjC4oiq9vz9ByQd1yhB7ehgjyiSBVhqsEomlBZp2GDaTI5gHnOPAIXOxv/?=
+ =?iso-8859-2?Q?SmTvdRl2GQ6MDP43ZoDSqdtYmvpVLKXCpT8tcExBpE1Mt019JfRZ3wkJE9?=
+ =?iso-8859-2?Q?z3+Hs+Xmqf9dWaSa8jt2ttfUZ7gLeBge7FblNltfEmTGMIN1iNrEL2NQ4r?=
+ =?iso-8859-2?Q?pKNQP6CymSh7AX5JjH3fJGByDLtnvYjapwdVA6MiwqyW9Y/8VztzRphe/q?=
+ =?iso-8859-2?Q?d/Cl/cF3OzdGn342JzrjhtzE6Igtn4UZtGkPIopKlkg5PW96AB6ZWvgF1Q?=
+ =?iso-8859-2?Q?xt5Rt52liLdKHUb7pYyyJJ7YB6/fRXTwJva6js0z4JW2OdbasXZkYW/uSh?=
+ =?iso-8859-2?Q?wUa3l7mseCPQwdS7z5IOH9QoBBVWBIJv4E/Qry9Wd1B7va+o/wBynjNro+?=
+ =?iso-8859-2?Q?DgOraOH1vEbq/NoH644CgrevZ2OOxcZfk8sw0Om3YqueH4EyX6wO/Nhap3?=
+ =?iso-8859-2?Q?thV1MZHsv/ZpRQqcV8z1lvczxckmy6zVNK8f4Pj9AE25u8eTbi9QIMCLND?=
+ =?iso-8859-2?Q?Cg7gVWCDSE5rPhI871H5w1enbofGimakMAnvQ4O7BPdSfM+gWgPURI6TNb?=
+ =?iso-8859-2?Q?2xe2eoX90vWtjPBsut+HgeAuoLxAQRcQQR4IeAhIEiC8VXnQDWp0BTY5Gn?=
+ =?iso-8859-2?Q?ICK9SGRcptdt9sIPePHF7R7bf6N8zxvmZWIl0UNLGw06gcqQcW6LTdtXNH?=
+ =?iso-8859-2?Q?SaOQEviOMCiTIwmF3ZEdXj4/GgPe1tYNDJvA0tCPAmiZpnTVJru+QDJOxb?=
+ =?iso-8859-2?Q?9Lh/G4xz+9Goqg/uD+/0PQI5MlmSZfk8XiSX+I3LjqA53FWhV7KP0N2D2D?=
+ =?iso-8859-2?Q?3XKYegiLExinIGSjR7dFhRWjmCRYAvh88M5nEq/KW9BmY664wqSew6RoDu?=
+ =?iso-8859-2?Q?2NLA5JyV+j3XH4MWoIQzLLQh3wJysTzjlfnEdkcjZXU7FHB+Odcc/2WRH0?=
+ =?iso-8859-2?Q?yfBSf2JfgeD3S9HnXRJydIcdWVKt/FucFvna0NFMtyvg+PiZS4cWb164Bz?=
+ =?iso-8859-2?Q?ymqbpDkUGeYnqbGlaTOm331Lj45sMirerdH9ihX7WV9rNOXRfBxkzpN57B?=
+ =?iso-8859-2?Q?/AMDQJXc/48YGossX+xDwLkcIKXCpPsfvjWlSfrSL05P8S7EVQUtumUzYR?=
+ =?iso-8859-2?Q?pHf2GAkkXw6N9/fYzma6muSb7ppYAfNxVl+1DbPZEhdkI6X1L3/5blwYDq?=
+ =?iso-8859-2?Q?Gx6ZxzThCR7fcYsFX9P54OwDUlWfebkC+5FUetfZwaUcnLgj89FcD/TNeY?=
+ =?iso-8859-2?Q?Fy9myxH9jrHzzj1e2uxyx4u39Wm3EGrVfC?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jGRgju90hTLJOk0F"
-Content-Disposition: inline
-In-Reply-To: <20220429130749.3032462-2-vincent.whitchurch@axis.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5967.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7cec4a4c-29b1-4e0b-5d9f-08dab21053b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2022 20:27:21.9453
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EqKTVUT6wYTagIaCgGfEu2KS4vbvdS7FMmJx0UetgNcogEPqw4PdSYj5XKWLOHNtqbpox8/kZqu1XdNEVRhKog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7878
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,40 +148,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---jGRgju90hTLJOk0F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> -----Original Message-----
+> From: Bjorn Helgaas <helgaas@kernel.org>
+>=20
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>=20
+> Many host controller drivers #include <linux/of_irq.h> even though they
+> don't need it.  Remove the unnecessary #includes.
+>=20
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/controller/cadence/pci-j721e.c   | 1 -
+>  drivers/pci/controller/dwc/pci-layerscape.c  | 1 -
+>  drivers/pci/controller/dwc/pcie-armada8k.c   | 1 -
+>  drivers/pci/controller/dwc/pcie-tegra194.c   | 1 -
+>  drivers/pci/controller/pci-v3-semi.c         | 1 -
+>  drivers/pci/controller/pci-xgene-msi.c       | 1 -
+>  drivers/pci/controller/pci-xgene.c           | 1 -
+>  drivers/pci/controller/pcie-altera-msi.c     | 1 -
+>  drivers/pci/controller/pcie-iproc-platform.c | 1 -
+>  drivers/pci/controller/pcie-iproc.c          | 1 -
+>  drivers/pci/controller/pcie-microchip-host.c | 1 -  drivers/pci/controll=
+er/pcie-
+> rockchip-host.c  | 1 -
+>  drivers/pci/controller/pcie-xilinx-cpm.c     | 1 -
+>  drivers/pci/controller/pcie-xilinx-nwl.c     | 1 -
+>  14 files changed, 14 deletions(-)
 
-On Fri, Apr 29, 2022 at 03:07:49PM +0200, Vincent Whitchurch wrote:
-> If the devicetree specifies the no-detect property (documented in
-> dt-schema [0]) for the I2C bus, we know that there are no other devices
-> on the bus other than the ones listed in the devicetree, so avoid
-> calling drivers' detect callbacks and wasting time looking for devices
-> which do not exist.
-
-Setting 'classes' in the adapter struct to 0 (actually to
-'I2C_CLASS_DEPRECATED' for a while) is not good enough? Or do you need
-class based instantiation on some busses?
-
-
---jGRgju90hTLJOk0F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQXOAACgkQFA3kzBSg
-KbYcjA/+POKwJXKclHSpoOvafCd+yQvQU3RAwBHUJmcLftsHxdkub0FOH/g/bECi
-J3jr1SkKGA3Fgt9lNkfmuZbO5Z3DFIwevneGWL1ftWomspQGhFvzlcCvScSJCQkO
-TJzB2+bHIoQrwTG/IJuPNrKRTlA5JgkXZVqIcMtp0Al3KatT2vi4yeays8jTQPU5
-RWfb19E2SvVOEBkUxWzd9Y76yrtQIuFxLhyLXT3FEa1Q5Gd5/HC51vcGZoM6uzL4
-erGgaSZ7Hm1IcOC+MMKu5dLePpIflbOghMwTGfxtlpJR5SNtKF1RTxJk2u9dIPCt
-3Ycoc9Wpk1TOM9VNN386GvCVg8CL2Mzen3nveCHs+32IX0N1Ab1JrnaP6V4gq52t
-7fnAdAbhv/fvtmckc6DS0KdhSDMtaCA6fQ+tzRs6HlQ70RG3ml+Y+ffhYny40RLI
-Njpz8rrCPw6dbkGpekZFgB3J34iNO4twHKr2imvBPw+hqGrRHIMwZXzwihHAiSoS
-NgYcYqxWCj9oPLuP7iWZHj59a1J++3LWsueoiV+kIPhRsoFE2mqijGkUNGFOda0j
-1ZydqXUCJ+PPceGY28ABuBhmtIUmkRbgCfD6cp0LqJyCDthez4vsOA7bEPQm8kPW
-SlGGY1Tc/FacQ+Yzf1jeHeVfqxe2tzybSFQzEc8l4Bm2jSSVIR8=
-=401U
------END PGP SIGNATURE-----
-
---jGRgju90hTLJOk0F--
+Acked-by: Roy Zang <roy.zang@nxp.com>
+Roy
