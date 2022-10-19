@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E806050AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C366050B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJSTpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S231248AbiJSTs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiJSTp2 (ORCPT
+        with ESMTP id S230437AbiJSTsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:45:28 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30A518196E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:45:25 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id a13so26854371edj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:45:25 -0700 (PDT)
+        Wed, 19 Oct 2022 15:48:55 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14241D3A5B;
+        Wed, 19 Oct 2022 12:48:53 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id o2so11434959qkk.10;
+        Wed, 19 Oct 2022 12:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lHVzxAW0Myx4BvpZDl6lwvfbUP44PRXuCP7MMtuAiVI=;
-        b=UtBMIKtwURlu+AIhyKa0dRDfGrjTTRQUQjLQKZCSg+a4HRzP/xDzkNpttdD8LnaDkW
-         33j5eV/qvBBYvkNvpjDxxrmkEo8zkm4/VFYuqD0EI9nCEVBXNkusFpVLRCtwgy23C5yZ
-         ByUO0wq4znTjSoWjpz4060BWXA3+GRvrn1rKmeUn0emIF0PScyM6YvoQCDt/JNrTJO5M
-         jGY+Y2+tascVx31Y2rIXMWlCJSga/JTnDtdfUCZYmTfKSgN3bWj6Tv0cnzLwjKgFjkZY
-         XQxWCB3XfZMgBJnox325SSMNrusKjcssd2nVlRel9N31D2te9vTUFJiuv35HgBnO8TFj
-         G+MQ==
+        bh=cXqWYGSUyr7OrNHL1T/x/7EkjfHttBM4QCa4eRu5CdE=;
+        b=ox4rhvjtu73vL7Eoxb3ELsaih0GlyG+yB5zAmkNS2KiGxZogVp8NBKoF6fDJ9BzkmB
+         g5m7neSOBU7hxoeYpgeJhyW82i4iUuH+nAkA1889hB4gGWH4W84vgK2aEjqfKIUmw9e2
+         6KQeu2jyaZbGrHtlleYWE765geA3KCNVdXzxzwVlSMf01m+k+kOLAS12he6YgxdoOX82
+         rXVagiCyq1Cr/b1T2PqecVmN8w/Y2jDApucHSTERZlg+zPKUq8lW7N0qfzAdtRJFAukt
+         UcCZNp5iz9eOTx0EkWGUMtkEpjXHNVJLVNrndqpioDkYpW6THJL9HVRtB1vn9S37Go8D
+         hl0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lHVzxAW0Myx4BvpZDl6lwvfbUP44PRXuCP7MMtuAiVI=;
-        b=MsOvER/jtGAONIiHzDI00nVimCZjaZAmXVaIwivJIgSHLYrgKqegGEOYbGsc7P3kO2
-         miaFgt2rEHoP7CgIlzl6Q7DqQB5qqMvsTjRdKFdVRcM52cIu3JN3gM8TT9PSzBqYJxMU
-         XZqIvdXTpqIMu5vEgAazVWQfBSIfQi9XRtc8rq/NzRkevLusUsPI44AwEKma2Wsxpn+H
-         0f3b5TRlyPJ0phefEQvVh3QRdhR/Weyi3JwvIQrEJX5M0lgEn/OLmTum4Z6R+mpI+pMa
-         GuZqStQ96POXwkA2VFFnVQqgb95leaZIcLtBCz1RPA5GsPSFz1lmm/+RMjAi8slDTbpO
-         7vFg==
-X-Gm-Message-State: ACrzQf3hMQU20X/sI3Rgf4OZma3dm54P4MbY5VG3L3yTVz/JyIdc4S1Z
-        uu8xRNImc2CGsnU6l/5wh8oN8cgnqktF4O9+iAWXlQ==
-X-Google-Smtp-Source: AMsMyM4ZhycjOj/WBZK4NwF4b9M8cJ/tdMrZ7Nt1IHTmsjtVRIWgxrNd69fXQz1KvqaPafsm+3d24iWaVqaNRdrTgXk=
-X-Received: by 2002:aa7:c98d:0:b0:45c:6451:320e with SMTP id
- c13-20020aa7c98d000000b0045c6451320emr9030375edt.172.1666208724418; Wed, 19
- Oct 2022 12:45:24 -0700 (PDT)
+        bh=cXqWYGSUyr7OrNHL1T/x/7EkjfHttBM4QCa4eRu5CdE=;
+        b=FXLA2xf6CdAGhzY4bmALR2AwuCgobBh62urC+rE92sV41FHBkSv4gM5xz2qGsN8e4x
+         rt1C25T3wjOH6lVWZHKE/yG5RrIyg/g+bimR0akT4a4JrmJk/IHsQ1j4uPSH2Gp7CnLD
+         Wzen4PrFPJMeTEZmCfyhQG/I8ea1Qrln6BxwFM4JNcuBWsbv44n1WSYznyZqzRznnJqi
+         kWdvx8yy0Ur8EPI9LnNHvEirS7S7gz4cdmgutvgmzfr2FanYU7klth70G6yBSL/4in2T
+         xVckRsINL9HSO4Ptv5mFNv27yUaW7zL2i5zO56akr6lm/PpKgK0FmrzvApuOMGyJbjX3
+         Sekw==
+X-Gm-Message-State: ACrzQf1r0tdH4Hc0Bv/JePCYuGiougGO9/kHAi99w44TPPcxpm/7vdP/
+        OXrmYZ7ZVB14jLPZYIXO92FKgCppYHQ9uyhl4Qo=
+X-Google-Smtp-Source: AMsMyM67C5+6trm/g0kHA0nfVIVp7N/QTSeM9dZkG/qfb9srEg8RMwNlyV/8r8K+waGxTBLgd71QtUJMHNv6t+Se0ks=
+X-Received: by 2002:a05:620a:d94:b0:6bc:5a8c:3168 with SMTP id
+ q20-20020a05620a0d9400b006bc5a8c3168mr6743224qkl.56.1666208933104; Wed, 19
+ Oct 2022 12:48:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019144119.3848027-1-arnd@kernel.org> <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-12-arnd@kernel.org>
-In-Reply-To: <20221019150410.3851944-12-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 19 Oct 2022 21:45:13 +0200
-Message-ID: <CACRpkdYA=Yev7NkCTZt7hUMTd1aXe-=HJE_VB=dTG9piR8HkXg@mail.gmail.com>
-Subject: Re: [PATCH 12/17] ARM: footbridge: remove CATS
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-watchdog@vger.kernel.org
+References: <20221019085747.3810920-1-davidgow@google.com> <CA+fCnZdPwjThjY7fd7vBkMzS1eFXySR2AKrDK8weJ3p25fzS3g@mail.gmail.com>
+ <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com>
+In-Reply-To: <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 19 Oct 2022 21:48:42 +0200
+Message-ID: <CA+fCnZcea7UrA11HyRB80WgrUXMtEkK0AjdxEN=H-pMuWBhQyQ@mail.gmail.com>
+Subject: Re: [PATCH] kasan: Enable KUnit integration whenever CONFIG_KUNIT is enabled
+To:     David Gow <davidgow@google.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
-
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Oct 19, 2022 at 5:06 PM David Gow <davidgow@google.com> wrote:
 >
-> Nobody seems to have a CATS machine any more, so remove
-> it now, leaving only NetWinder and EBSA285.
+> > How does KUnit detect a KASAN failure for other tests than the KASAN
+> > ones? I thought this was only implemented for KASAN tests. At least, I
+> > don't see any code querying kunit_kasan_status outside of KASAN tests.
 >
-> Cc: Russell King <linux@armlinux.org.uk>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Yeah, there aren't any other tests which set up a "kasan_status"
+> resource to expect specific failures, but we still want the fallback
+> call to kunit_set_failure() so that any test which causes a KASAN
+> report will fail:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/kasan/report.c#n130
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Ah, right. Thanks for the explanation!
 
-(IIRC the EBSA285 was the machine that David Rusling distributed
-to a few Arm developers when he initiated OSS activities at Digital.)
+> > I'm currently switching KASAN tests from using KUnit resources to
+> > console tracepoints [1], and those patches will be in conflict with
+> > yours.
+>
+> Ah, sorry -- I'd seen these go past, and totally forgot about them! I
+> think all we really want to keep is the ability to fail tests if a
+> KASAN report occurs. The tricky bit is then disabling that for the
+> KASAN tests, so that they can have "expected" failures.
 
-Yours,
-Linus Walleij
+I wonder what's the best solution to support this, assuming KASAN
+tests are switched to using tracepoints... I guess we could still keep
+the per-task KUnit flag, and only use it for non-KASAN tests. However,
+they will still suffer from the same issue tracepoints solve for KASAN
+tests: if a bug is triggered in a context other than the current task,
+the test will succeed.
