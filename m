@@ -2,210 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D17A604FD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13958604FE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJSSpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 14:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
+        id S230186AbiJSSsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 14:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiJSSpi (ORCPT
+        with ESMTP id S230159AbiJSSsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:45:38 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020711CBAB3;
-        Wed, 19 Oct 2022 11:45:37 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id u71so17073126pgd.2;
-        Wed, 19 Oct 2022 11:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Shq/ANspULQpM+jmY/ItEvxo0c4euo/Y2Hzyv6LpqQk=;
-        b=QvkbNwKv3uL21y9WnQdugb7J5FuBi/nHAZSSHsWuLdEs990fEmSOh9O7zHz869V4k1
-         GgKjtfsLhykxTdurNKEH+B2NN1L+qDnACPis99Ozn25iJ48GhoREMe+Rbcj4fXl7OX9O
-         R3RUwj2vdPpv61gmRM2FB3ybZpgIn5O+dkdkGidKGn9H9GT2E8L+Dy8JmlRAIVo0gOfx
-         JcDhz7+KK+mfo/esXs3dUOBbXyWUWGMU3iDSh4od4UzwFbezsC4+fryQe+ja9oqktBpM
-         uJpVpzkWjZcbJWdniEVbFoVGicnafqLSfP0xrD/prDhO0duXJmrdD3uDWYUlsmetI1AW
-         0zzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Shq/ANspULQpM+jmY/ItEvxo0c4euo/Y2Hzyv6LpqQk=;
-        b=l90QHFQa9Gotg6W1zD+dq4fyCJkrP3tkKYTRas4b/Cr2czm4nTs6Pa68E2XcOLLF0U
-         OVBIc8rTXqbyM621iO5MgNiE30vk/wW7w9ddjILYgK0TEjKLcHu4gFpPHgN0VptHeNOP
-         arDoGMn/48iD5zQBcpCzQL+QtHQtYYUdWOHFB6QQSYurjBWYQ6mTDJ+CLb8LE5VpRslY
-         7J8x1Ml9n0/1QQRqKLtQm57MyXjQTKteaTo/YbYNvMYczRuDNY/q+uv+fnNIfHRG/zin
-         86EeBCFb9BlrjRFEagFWpCuEhEsT44TqeFf6tN7LDTwOm5lBnevd9pjG558wyFsz+sI0
-         5kbw==
-X-Gm-Message-State: ACrzQf3tdgIxGsTiZHXVJkiLyrhoyiuuzOlKUbSIL7aK6ENpq7+YEuLC
-        SHmFEh+eFJ1RPCGmPb9fSf4=
-X-Google-Smtp-Source: AMsMyM726GVVscJ6aTLpr7k+YQ2cOomN1frlnHpAi5DC1hViUYKke2LdyyKq/Mjnc/hzRtxcekXmNQ==
-X-Received: by 2002:a05:6a00:1905:b0:566:2a02:e1a1 with SMTP id y5-20020a056a00190500b005662a02e1a1mr10173939pfi.1.1666205136204;
-        Wed, 19 Oct 2022 11:45:36 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id ij19-20020a170902ab5300b0017f7628cbddsm11089309plb.30.2022.10.19.11.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 11:45:35 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 19 Oct 2022 08:45:34 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Intel-gfx@lists.freedesktop.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
-        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Brian Welty <brian.welty@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: Re: [RFC 00/17] DRM scheduling cgroup controller
-Message-ID: <Y1BFziiJdBzsIJWH@slm.duckdns.org>
-References: <20221019173254.3361334-1-tvrtko.ursulin@linux.intel.com>
+        Wed, 19 Oct 2022 14:48:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E6F1D4DCE;
+        Wed, 19 Oct 2022 11:47:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9884DB82367;
+        Wed, 19 Oct 2022 18:47:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E55C433C1;
+        Wed, 19 Oct 2022 18:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666205272;
+        bh=GPpbTre2g5cDF/zcnvgO/KJyQaXL+MdmczIdSGdHW44=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=IxsCIq6dqKs0z7CWbFKSMyEjQyIdK+3CpQuAUFMdxyxr21fHUipX9XkCNUiG0TprJ
+         8T7QdyaHYaSYy+w3ZvpvjP6NS7//ZSCmaWFuR0I3H9lFRXKRxFZSqRN+n72kuEOdD3
+         KFQvybYDT1y9IUAi47FyACp5A1RJoVC0PCAuH2ivSMsOZRgouGp1lmNt2X/Pu9Ea4P
+         zGbsalh5ijNnx/m0vS9Hpl5CA6GJ+3lQbMibyXto2HYeoR9xzd76jU9Qf9ScpHifW7
+         /bD75CCbg5uKxcykrVVKZ6rwttQ3CBhirxOXJszp7O+E65L7JFWvr93pROCfvJsK7L
+         cRDyLVvRnhGZg==
+Message-ID: <f9bf8cf8b3270cbaa9ab1b2240aecaf6aad61ce9.camel@kernel.org>
+Subject: Re: [RFC PATCH v7 9/9] vfs: expose STATX_VERSION to userland
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Dave Chinner <david@fromorbit.com>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, bfields@fieldses.org, brauner@kernel.org,
+        fweimer@redhat.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Date:   Wed, 19 Oct 2022 14:47:48 -0400
+In-Reply-To: <20221019172339.f5dxek5yjposst5g@quack3>
+References: <20221017105709.10830-1-jlayton@kernel.org>
+         <20221017105709.10830-10-jlayton@kernel.org>
+         <20221017221433.GT3600936@dread.disaster.area>
+         <1e01f88bcde1b7963e504e0fd9cfb27495eb03ca.camel@kernel.org>
+         <20221018134910.v4jim6jyjllykcaf@quack3>
+         <28a3d6b9978cf0280961385e28ae52f278d65d92.camel@kernel.org>
+         <20221018151721.cl6dbupqjkkivxyf@quack3>
+         <fcd35c14353ae859d778a23f80249047819bc4b0.camel@kernel.org>
+         <20221019172339.f5dxek5yjposst5g@quack3>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019173254.3361334-1-tvrtko.ursulin@linux.intel.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 2022-10-19 at 19:23 +0200, Jan Kara wrote:
+> On Tue 18-10-22 13:04:34, Jeff Layton wrote:
+> > On Tue, 2022-10-18 at 17:17 +0200, Jan Kara wrote:
+> > > On Tue 18-10-22 10:21:08, Jeff Layton wrote:
+> > > > On Tue, 2022-10-18 at 15:49 +0200, Jan Kara wrote:
+> > > > > On Tue 18-10-22 06:35:14, Jeff Layton wrote:
+> > > > > > On Tue, 2022-10-18 at 09:14 +1100, Dave Chinner wrote:
+> > > > > > > On Mon, Oct 17, 2022 at 06:57:09AM -0400, Jeff Layton wrote:
+> > > > > > > > Trond is of the opinion that monotonicity is a hard require=
+ment, and
+> > > > > > > > that we should not allow filesystems that can't provide tha=
+t quality to
+> > > > > > > > report STATX_VERSION at all.  His rationale is that one of =
+the main uses
+> > > > > > > > for this is for backup applications, and for those a counte=
+r that could
+> > > > > > > > go backward is worse than useless.
+> > > > > > >=20
+> > > > > > > From the perspective of a backup program doing incremental ba=
+ckups,
+> > > > > > > an inode with a change counter that has a different value to =
+the
+> > > > > > > current backup inventory means the file contains different
+> > > > > > > information than what the current backup inventory holds. Aga=
+in,
+> > > > > > > snapshots, rollbacks, etc.
+> > > > > > >=20
+> > > > > > > Therefore, regardless of whether the change counter has gone
+> > > > > > > forwards or backwards, the backup program needs to back up th=
+is
+> > > > > > > current version of the file in this backup because it is diff=
+erent
+> > > > > > > to the inventory copy.  Hence if the backup program fails to =
+back it
+> > > > > > > up, it will not be creating an exact backup of the user's dat=
+a at
+> > > > > > > the point in time the backup is run...
+> > > > > > >=20
+> > > > > > > Hence I don't see that MONOTONIC is a requirement for backup
+> > > > > > > programs - they really do have to be able to handle filesyste=
+ms that
+> > > > > > > have modifications that move backwards in time as well as for=
+wards...
+> > > > > >=20
+> > > > > > Rolling backward is not a problem in and of itself. The big iss=
+ue is
+> > > > > > that after a crash, we can end up with a change attr seen befor=
+e the
+> > > > > > crash that is now associated with a completely different inode =
+state.
+> > > > > >=20
+> > > > > > The scenario is something like:
+> > > > > >=20
+> > > > > > - Change attr for an empty file starts at 1
+> > > > > >=20
+> > > > > > - Write "A" to file, change attr goes to 2
+> > > > > >=20
+> > > > > > - Read and statx happens (client sees "A" with change attr 2)
+> > > > > >=20
+> > > > > > - Crash (before last change is logged to disk)
+> > > > > >=20
+> > > > > > - Machine reboots, inode is empty, change attr back to 1
+> > > > > >=20
+> > > > > > - Write "B" to file, change attr goes to 2
+> > > > > >=20
+> > > > > > - Client stat's file, sees change attr 2 and assumes its cache =
+is
+> > > > > > correct when it isn't (should be "B" not "A" now).
+> > > > > >=20
+> > > > > > The real danger comes not from the thing going backward, but th=
+e fact
+> > > > > > that it can march forward again after going backward, and then =
+the
+> > > > > > client can see two different inode states associated with the s=
+ame
+> > > > > > change attr value. Jumping all the change attributes forward by=
+ a
+> > > > > > significant amount after a crash should avoid this issue.
+> > > > >=20
+> > > > > As Dave pointed out, the problem with change attr having the same=
+ value for
+> > > > > a different inode state (after going backwards) holds not only fo=
+r the
+> > > > > crashes but also for restore from backups, fs snapshots, device s=
+napshots
+> > > > > etc. So relying on change attr only looks a bit fragile. It works=
+ for the
+> > > > > common case but the edge cases are awkward and there's no easy wa=
+y to
+> > > > > detect you are in the edge case.
+> > > > >=20
+> > > >=20
+> > > > This is true. In fact in the snapshot case you can't even rely on d=
+oing
+> > > > anything at reboot since you won't necessarily need to reboot to ma=
+ke it
+> > > > roll backward.
+> > > >=20
+> > > > Whether that obviates the use of this value altogether, I'm not sur=
+e.
+> > > >=20
+> > > > > So I think any implementation caring about data integrity would h=
+ave to
+> > > > > include something like ctime into the picture anyway. Or we could=
+ just
+> > > > > completely give up any idea of monotonicity and on each mount sel=
+ect random
+> > > > > prime P < 2^64 and instead of doing inc when advancing the change
+> > > > > attribute, we'd advance it by P. That makes collisions after rest=
+ore /
+> > > > > crash fairly unlikely.
+> > > >=20
+> > > > Part of the goal (at least for NFS) is to avoid unnecessary cache
+> > > > invalidations.
+> > > >=20
+> > > > If we just increment it by a particular offset on every reboot, the=
+n
+> > > > every time the server reboots, the clients will invalidate all of t=
+heir
+> > > > cached inodes, and proceed to hammer the server with READ calls jus=
+t as
+> > > > it's having to populate its own caches from disk.
+> > >=20
+> > > Note that I didn't propose to increment by offset on every reboot or =
+mount.
+> > > I have proposed that inode_maybe_inc_iversion() would not increment
+> > > i_version by 1 (in fact 1 << I_VERSION_QUERIED_SHIFT) but rather by P=
+ (or P
+> > > << I_VERSION_QUERIED_SHIFT) where P is a suitable number randomly sel=
+ected
+> > > on filesystem mount.
+> > >=20
+> > > This will not cause cache invalidation after a clean unmount + remoun=
+t. It
+> > > will cause cache invalidation after a crash, snapshot rollback etc., =
+only for
+> > > inodes where i_version changed. If P is suitably selected (e.g. as be=
+ing a
+> > > prime), then the chances of collisions (even after a snapshot rollbac=
+k) are
+> > > very low (on the order of 2^(-50) if my piece of envelope calculation=
+s are
+> > > right).
+> > >=20
+> > > So this should nicely deal with all the problems we've spotted so far=
+. But
+> > > I may be missing something...
+> >=20
+> >=20
+> > Got it! That makes a lot more sense. Thinking about this some more...
+> >=20
+> > What sort of range for P would be suitable?
+> >=20
+> > Every increment would need to be by (shifted) P, so we can't choose too
+> > large a number. Queries are pretty rare vs. writes though, so that
+> > mitigates the issue somewhat.
+>=20
+> Well, I agree that for large P the counter would wrap earlier. But is tha=
+t
+> a problem? Note that if P is a prime (indivisible by 2 is enough), then t=
+he
+> counter would get to already used value still only after 2^63 steps. Thus=
+ if
+> we give up monotonicity and just treat the counter as an opaque cookie, w=
+e
+> do not have to care about wrapping.
+>=20
+> Sure given different P is selected for each mount the wrapping argument
+> does not hold 100% but here comes the advantage of primes - if you have t=
+wo
+> different primes P and Q, then a collision means that k*P mod 2^63 =3D l*=
+Q
+> mod 2^63 and that holds for exactly one pair k,l from 1..2^63 range. So t=
+he
+> chances of early collision even after selecting a different prime on each
+> mount are *very* low.
+>=20
 
-On Wed, Oct 19, 2022 at 06:32:37PM +0100, Tvrtko Ursulin wrote:
-...
-> DRM static priority interface files
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
->   drm.priority_levels
-> 	One of:
-> 	 1) And integer representing the minimum number of discrete priority
-> 	    levels for the whole group.
-> 	    Optionally followed by an asterisk ('*') indicating some DRM clients
-> 	    in the group support more than the minimum number.
-> 	 2) '0'- indicating one or more DRM clients in the group has no support
-> 	    for static priority control.
-> 	 3) 'n/a' - when there are no DRM clients in the configured group.
-> 
->   drm.priority
-> 	A read-write integer between -10000 and 10000 (inclusive) representing
-> 	an abstract static priority level.
-> 
->   drm.effective_priority
-> 	Read only integer showing the current effective priority level for the
-> 	group. Effective meaning taking into account the chain of inherited
+I think we'll have to start avoiding 1 as a value for P if we do this,
+but the rest makes sense.  I like this idea, Jan!
+=20
+> So I think we should select from a relatively large set of primes so that
+> the chance of randomly selecting the same prime (and thus reissuing the
+> same change attr for different inode state sometime later) are small.
+>=20
 
-From interface POV, this is a lot worse than the second proposal and I'd
-really like to avoid this. Even if we go with mapping user priority
-configuration to per-driver priorities, I'd much prefer if the interface
-presented to user is weight based and let each driver try to match the
-resulting hierarchical weight (ie. the absolute proportion a given cgroup
-should have at the point in time) as best as they can rather than exposing
-opaque priority numbers to userspace whose meaning isn't defined at all.
+Monotonicity allows you to discard "old" attr updates. For instance,
+sometimes a NFS GETATTR response may be delayed for various reasons. If
+the client sees a change attr that is provably older than one it has
+already seen, it can discard the update. So, there is value in servers
+advertising that property, and NFSv4.2 has a way to do that.
 
-> DRM scheduling soft limits interface files
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
->   drm.weight
-> 	Standard cgroup weight based control [1, 10000] used to configure the
-> 	relative distributing of GPU time between the sibling groups.
+The Linux NFS client (at least) uses the same trick we do with jiffies
+to handle wrapping for MONOTONIC values. We should be able to advertise
+MONOTONIC as long as the client isn't comparing values that are more
+than ~2^62 apart.=20
 
-Please take a look at io.weight. This can follow the same convention to
-express both global and per-device weights.
+Once we start talking about applications storing these values for
+incremental backups, then the time between checks could be very long.
 
->   drm.period_us
-> 	An integer representing the period with which the controller should look
-> 	at the GPU usage by the group and potentially send the over/under budget
-> 	signal.
-> 	Value of zero (defaul) disables the soft limit checking.
+So, I think we don't want _too_ large a value for P. The big question is
+how many individual change attr increments do we need to account for?
 
-Can we not do period_us or at least make it a per-driver tuning parameter
-exposed as module param? Weight, users can easily understand and configure.
-period_us is a lot more an implementation detail. If we want to express the
-trade-off between latency and bandwidth at the interface, we prolly should
-encode the latency requirement in a more canonical way but let's leave that
-for the future.
+We have 64 bits total (it's an atomic64_t). We consume the lowest bit
+for the QUERIED flag. That leaves us 63 bits of counter (currently).
+When we increment by a larger value, we're effectively decreasing the
+size of the counter.
 
->   drm.budget_supported
-> 	One of:
-> 	 1) 'yes' - when all DRM clients in the group support the functionality.
-> 	 2) 'no' - when at least one of the DRM clients does not support the
-> 		   functionality.
-> 	 3) 'n/a' - when there are no DRM clients in the group.
+Let's assume a worst case of one increment per microsecond, interleaved
+by queries (so that they have to be real increments). 2^48 microseconds
+is close to 9 years.
 
-Yeah, I'm not sure about this. This isn't a per-cgroup property to begin
-with and I'm not sure 'no' meaning at least one device not supporting is
-intuitive. The distinction between 'no' and 'n/a' is kinda weird too. Please
-drop this.
+That leaves 15 bits for the P, which is primes from 3..32749. Is that a
+large enough pool of prime numbers?
 
-Another basic interface question. Is everyone happy with the drm prefix or
-should it be something like gpu? Also, in the future, if there's a consensus
-around how to control gpu memory, what prefix would that take?
-
-> The second proposal is a little bit more advanced in concept and also a little
-> bit less finished. Interesting thing is that it builds upon the per client GPU
-> utilisation work which landed recently for a few drivers. So my thinking is that
-> in principle, an intersect of drivers which support both that and some sort of
-> priority scheduling control, could also in theory support this.
-> 
-> Another really interesting angle for this controller is that it mimics the same
-> control menthod used by the CPU scheduler. That is the proportional/weight based
-> GPU time budgeting. Which makes it easy to configure and does not need a new
-> mental model.
-> 
-> However, as the introduction mentions, GPUs are much more heterogenous and
-> therefore the controller uses very "soft" wording as to what it promises. The
-> general statement is that it can define budgets, notify clients when they are
-> over them, and let individual drivers implement best effort handling of those
-> conditions.
-> 
-> Delegation of duties in the implementation goes likes this:
-> 
->  * DRM cgroup controller implements the control files and the scanning loop.
->  * DRM core is required to track all DRM clients belonging to processes so it
->    can answer when asked how much GPU time is a process using.
->  * DRM core also provides a call back which the controller will call when a
->    certain process is over budget.
->  * Individual drivers need to implement two similar hooks, but which work for
->    a single DRM client. Over budget callback and GPU utilisation query.
-> 
-> What I have demonstrated in practice is that when wired to i915, in a really
-> primitive way where the over-budget condition simply lowers the scheduling
-> priority, the concept can be almost equally effective as the static priority
-> control. I say almost because the design where budget control depends on the
-> periodic usage scanning has a fundamental delay, so responsiveness will depend
-> on the scanning period, which may or may not be a problem for a particular use
-> case.
-> 
-> The unfinished part is the GPU budgeting split which currently does not
-> propagate unused bandwith to children, neither can share it with siblings. But
-> this is not due fundamental reasons, just to avoid spending too much time on it
-> too early.
-
-Rather than doing it hierarchically on the spot, it's usually a lot cheaper
-and easier to calculate the flattened hierarchical weight per leaf cgroup
-and divide the bandwidth according to the eventual portions. For an example,
-please take a look at block/blk-iocost.c.
-
-I don't know much about the drm driver side, so can't comment much on it but
-I do really like the idea of having the core implementation determining who
-should get how much and then letting each driver enforce the target. That
-seems a lot more robust and generic than trying to somehow coax and expose
-per-driver priority implementations directly.
-
-Thanks.
-
--- 
-tejun
+It looks like the kernel already has some infrastructure for handling
+primes in lib/math/prime_numbers.c. We could just select a global P
+value to use on every reboot, or just have filesystems set their own
+(maybe in a new field in the superblock?)
+--=20
+Jeff Layton <jlayton@kernel.org>
