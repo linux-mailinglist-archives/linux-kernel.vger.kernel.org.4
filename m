@@ -2,152 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0936047A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F24604796
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiJSNmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S232183AbiJSNmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiJSNls (ORCPT
+        with ESMTP id S232165AbiJSNlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:41:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C142A24F1C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666186150; x=1697722150;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yZj4UEN+B3a8Kk2/d9hYXrDFIOMBCx70PYm2jCFaBRc=;
-  b=WulgZ8xHUtDdj/GVgZ53Cqvc4oa2tJVFOUcSx3dYVDoseoCLIw24kaXR
-   oEpXjim1jn9HW74cakHm0BqKNf3Wlynb2mLF4D17BlyPHYuc5Qd7e8zqd
-   pOIyBGOx4iKUZKBoI/fVDNlGpDnQj18I8gyd7Df4tw1cpJYqat40LYUMy
-   7Ymc4wPEJFanHhuGva5VjWGUSj7Zfvts6SBqn5CE3/byeeC5yfqvv+OsB
-   30A8wsBFMmzl24ibJbGdf3jkH+Xl6vB5t+7HPvfYAtXz+HSsrQZ4e3IJS
-   qu7yTXZWmlQkkk3StE8nTdTZad9HOnvcYpp083zNvdjsl1ExVDRkHoEq1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="370626276"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="370626276"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 06:27:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="580339685"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="580339685"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 19 Oct 2022 06:27:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ol96q-009sMy-0G;
-        Wed, 19 Oct 2022 16:27:48 +0300
-Date:   Wed, 19 Oct 2022 16:27:47 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Shuo Liu <shuo.a.liu@intel.com>, linux-kernel@vger.kernel.org
-Cc:     Fei Li <fei1.li@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3 1/1] virt: acrn: Mark the uuid field as unused
-Message-ID: <Y0/7U6yCuoIlKWyQ@smile.fi.intel.com>
-References: <20220831122356.65544-1-andriy.shevchenko@linux.intel.com>
+        Wed, 19 Oct 2022 09:41:25 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20616.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::616])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF5213332B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:29:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J+nMhJLOyXw+PeG4NOOAS5mpYloYIg0xSBN1Ealyx7P4nIQm6Fn9B3gVOzTh89vreXeNr7g2ntS8eFpUYRb/jmkSmUj213qkpZRj8S4+FzPauZTKb0ijzCrxaGPZFnNDKFPXhjNds8szgImiVcLwDjJ2OJ2rh2+cXnaolIEAEKhn1+bpEXv1e+e5D0ZZXk8joNby9a+VFShqQSWO6fU1l+HILA4sp5I66AS0mjr8FzzmvCEZ9zMJgoYXhUtaPJntQhwD2xy6GogGSSQKLpcQIk2udzfIoNLnpuIlsFJZ2qAozvb2G926xsiXAYrwE8xkX7u7ZcP7/dHMQcJ4Mem5Pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OUVUlj1khZS4qOwz9HlfbfG8/dDiXQ3NpNi692JTr8A=;
+ b=gWxAYoGTiNZ76yx1xTWmKyX+J7bvWlSlBxRdjLIfbEiKTVWcqnXnGgJJ0wScQ2wFdI+78B4a4uk/qKz7LwucVe/qi2vFFuX9dbNdFGLKFygaJUgXcbX/wNYRY7S7sm1fKtzE3cPmtNkDWThRAo3cf2kYrVkPXRCmYxewWY3So+6JG9GmwonVO9h8n4LV0sg54EuNw63aYs+TguJsjnr7+gAghJX3FvInQjqlAIDhAdBY3loaXt9DXflTEMKrmflrVWM62aLVTV72fiEZkch8LWaJNX1BrXXLdTa8+rXisq5DsDM/oliG4FpF7ESWHFBjqC9YzQo2yQ97FObWn2OcXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OUVUlj1khZS4qOwz9HlfbfG8/dDiXQ3NpNi692JTr8A=;
+ b=dgzWU+TPw1WuVgQp9uBgFjWgrDC8Fhh8NB65kIuyCpY1yaedOJo6xppb5EdNtjJSIyhP72baUlcl+OPehlfvLwLTbSjFjcg2sgReHBbEEvJoYr9LNlOeK4rKMd3etKdEAtsJ1I06l7WrpBE+7FPXkQtXtVbLF5+SXXurQIf4OLQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by CH2PR12MB4262.namprd12.prod.outlook.com (2603:10b6:610:af::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Wed, 19 Oct
+ 2022 13:28:07 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395%7]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
+ 13:28:07 +0000
+Message-ID: <8eb93fb6-a1c4-5ef4-f549-8649bb36e59a@amd.com>
+Date:   Wed, 19 Oct 2022 09:28:03 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH -next] drm/amd/display: make dcn32_mpc_funcs static
+Content-Language: en-US
+To:     ruanjinjie <ruanjinjie@huawei.com>, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, jiapeng.chong@linux.alibaba.com,
+        hanyihao@vivo.com, aurabindo.pillai@amd.com, Martin.Leung@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221019062347.3756071-1-ruanjinjie@huawei.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20221019062347.3756071-1-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0069.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2d::8) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831122356.65544-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|CH2PR12MB4262:EE_
+X-MS-Office365-Filtering-Correlation-Id: fd7279e2-6f39-476d-1c2a-08dab1d5c23b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C6WvJtMeBm6IvEr33+x/xYrcj/LxfMTuDkiNeYOn9Ob02bvy/UF6ueJNT+FCImwDOCpykRQzhANdhak+tBY2aNQmr1qmlRisHnxof4Z2E3caSGsT2r3qxfhTJRaK418MPq6XnSR0QYNtBbn5QK4cV7UfDlklmgQhQl4L5rEnK/YhQq7DO69LqtSTfF8dOZ53QQUbsCSDXUN4hSsavwsrEjfl0G6nmQNNRJqINID0xcJEd6xflOOxSm8QmF5P+yuvOW4dkrDtVEEJlshdcW3KhzQ0sodJziUgdElYElENdiBDw+l5wcpm7V9jHz/c9jAObT8hL1EprXV62aNmn1yPwL4uA4fQ5v03u2dcNlJJug9hMqdPgOW/4YViyCXOyJ6jcaVUJzRlnkKcgaEIhR2I9FEIfGOlfArWDUzG450XaSwjPl0oVabq/Kewk5UOBkXiJc+jrgwgSZM6stp+VO2O0AxfG4v8Su5iWL5jD8Px5oXFx6F+q6UJh/O8Dq9qW48Vdjp3B63+PwcxBpyGvYCM/HdpyK+7FrP83z7b6JC2w/ehuiAScCRjERFFo5Pc4H6SC2oXmTUdfNThXqyRnuhqzF/JlssCrVA+u/LRVutWqrwZ43yc6i58Tottn2eilgQ7yRyKZM3DRFLJo02iigZlbmUueZ2t4KfdRdtlhiR+eqytD5M9Nj6i7k1F6+QtdhT0Ivmc+rMVmLYCkSyENovpGyKRQlBSYqI2Z9tYaHgNqIYPsOa7XaLevuM1nq6bj0DZ3DMLAwbQZB+QBk0gUMvZOremYyXK78SJWbPkFe/c8mVZKPzdz61uYPG4OoxknzaG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199015)(2616005)(478600001)(26005)(8936002)(5660300002)(6486002)(6512007)(66556008)(66476007)(316002)(66946007)(8676002)(6666004)(186003)(41300700001)(53546011)(4001150100001)(2906002)(6506007)(86362001)(31696002)(36756003)(44832011)(83380400001)(38100700002)(31686004)(921005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3pFV0JBZStXay9EaXF3M3pnd2o5Tkp2ejZVQmZlazlUMzVpTzdRV1Z4MHkw?=
+ =?utf-8?B?d2NWVXo1UGJBekVHT0VIZndqcGZjMFRSc1VlalpaUmswMWowci85Nlp3RnQr?=
+ =?utf-8?B?S2ZReWxDeHg3TGg2NlUvVmFMVmlLNmxuRGY3aHcwVWRVZ0NjQ1pzZFJhYkQ0?=
+ =?utf-8?B?Vy9jMXFXTUd2TEd6aHFzZkMrNGN4ZnNCSHArT2c3N0U4K2MwL0hQUzF5TEZP?=
+ =?utf-8?B?NW9KeS9DNHpFeWYyUjNGTHNad054eG1hODJOTy82Vk9Sdzd3OVNZTHVhQmhp?=
+ =?utf-8?B?QTdOVGdlY2pscTMvTGp3MWh6cCt2U0VLOVdTTmhrV2RETlE4ZDh6NlhqRWZh?=
+ =?utf-8?B?cVQwYVNXT3Bib1AwSVBHbHp2L0Y3YXR2OWg4SEszdDNpaDV1blRTSEVpMXBw?=
+ =?utf-8?B?TlRpSSsyWnN4MlhxYjFOMkpUQ3VWQms3T3dWS0Y3c3M3S003ZG5lanA0cktN?=
+ =?utf-8?B?aHBvdVQzcmhJem1mZkdFNVdOUDVFU3Z5d01kS05DczZDNzRKN2prNG5ZTDZx?=
+ =?utf-8?B?QkV3dmZKT1BLKzdoZUlGQU1wcFZoazNJYmhrS25Xemd0ZGdvSUVVNmgxZy92?=
+ =?utf-8?B?K1VLWHg0RjJ3T2hUY0czanVONFU3SXRJZUVFalFYTG1OazNtQm9JaU0zZEMx?=
+ =?utf-8?B?TUxSYXNZckJZQzNxZUdRTUNtdWJWVnQ3bDBFTHIwYis5VlF0Q3FJUElJdXlB?=
+ =?utf-8?B?Uk5tUXFzbVJsRzg5cmUrZkpJcmlibGl3YlhVV3p6aUtKUldieW83V3FFRDND?=
+ =?utf-8?B?NlFoQlM0Z25qMk1ueWNGRFNYZFFuNXdPQ0RpV3N6TlF3ZUdRSitzNkVyRGY4?=
+ =?utf-8?B?UHN4UGVocVp0d1N0N1RjaEFVS011aDJxbGl4MjVISVFtWWVhaDJ0S3o2OEZ0?=
+ =?utf-8?B?WVdLWGRlenZMREdwZStya3RQczJhSmYwVVgyTU1kMVBUc2FkNzJnV2Z5ZFRT?=
+ =?utf-8?B?cDdkaGhLS0Z3bDQ3QnFuQzVhRlBQbEU5YmFMT0FINWtoZzc3SHRodW9zYkRT?=
+ =?utf-8?B?aXRMa0VYeW9MTU5saGRNTytBcWtTZFdxUEVuNGI4NVowODYybWxlSjhpejdF?=
+ =?utf-8?B?Ry9NNFZVb0pUaXE4NFlsQUpTZ01oVEhpWHlYVUtXWExwNlk5M2JKMUNlZGZ3?=
+ =?utf-8?B?bGJyb2F1N1RhcEpmWmdCa3V4RUR5K1ZNd01RL3lISmhGRkV2TmxWcVl2SVc0?=
+ =?utf-8?B?WldkaEtLWVZMTW95RUQvdHgweW0vQm5yWDdGWnQ2RHhJUHBNWk1VQWdxZjlF?=
+ =?utf-8?B?bjVaZlhlajh6QktCMlMxNm5QTS8rNGI3cjN1eXYwaEZWOUE2V2F6Ukw4Nm90?=
+ =?utf-8?B?c2hwUU9pZHo3WWdocFRGb29xd0I2UkJvaGgrMTljNG5KTk9kRjFaVzFFTzdZ?=
+ =?utf-8?B?MHlzNjNaZ3BQSlhKaGpiakJIcEdVMmY1ME16S1JMQ2N5eUh3djZZSDVPMUNz?=
+ =?utf-8?B?djBYS0hKT24zdCtSWms1aDhVeDNGWUorL1VVUzZFQ3JOUWpjQXZUVFRuVkww?=
+ =?utf-8?B?dUY4NTZNb2JaS29IUllYV3RvR2h6TlpVcityOWloallBdU9IenREOFB2aFlQ?=
+ =?utf-8?B?eXpUc0wvUGcvVG5DM0hyemZQMjBSMnc3VkZNSGZGalhmNjRMRTJ2NytpTXc5?=
+ =?utf-8?B?aC9sRmNSN1Rqa01PRE8xdkZacEI1UThwZ3pDYzI2Q1VKakZVM1NlY012SXhE?=
+ =?utf-8?B?a3ZqZWdHOXdOTzRVc0RNWDY3WXViZ1lZKzhFdEpyZnpBUUxkZFlxNjZjSWcv?=
+ =?utf-8?B?d3RyVnZMbDUwNVVuTFNlS0ozSjl0WDBWa0R3bzV4R0lZUWNNbXNDam94bkJK?=
+ =?utf-8?B?RGh0OG9EamR6RHFWM1ZQZ1FNRjZzNWV4b1hIUE9iSGY5NjBJR1ZOMWhSOElk?=
+ =?utf-8?B?elVINkVZdzZLeXFZZnYzWEwwcDRlUk9Ud0F1bDJlMjZQL20zc01mMGc1WUdz?=
+ =?utf-8?B?SitZYjJrNS8xSzBxU2l6L1FZVlhDVHBmb3NHeXlRYmZxdVp3cmNXZGxxS3hH?=
+ =?utf-8?B?UndUNFlJUjJhZjlGN2lsY0ZRY1ZVUmJEYXA0dVNXdXY5VWJaMStzYlVCM1Fy?=
+ =?utf-8?B?MHcwOTVzdTNEWXR4ZGlneEpJem00RlpxeWZaeUozK3Y2clBYKy9CWlpHOGdS?=
+ =?utf-8?Q?nLe7Lxw6TlQ/WMu3tVSNxFHDx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd7279e2-6f39-476d-1c2a-08dab1d5c23b
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 13:28:07.3507
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qomeJE+pJjzPHvDh87J1OcMku8icgg3oHsKrqkv9xnMA2yOqzM09ye5TNDtyel3Tv0JrqcwZg8r1I1cEsc5dPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4262
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 03:23:56PM +0300, Andy Shevchenko wrote:
-> After the commits for userspace (see Link tags below) the uuid field is
-> not being used in the ACRN code. Update kernel to reflect these changes.
-> I.e. we do the following:
-> - adding a comment explaining that it's not used anymore
-> - replacing the specific type by a raw buffer
-> - updating the example code accordingly
+On 2022-10-19 02:23, ruanjinjie wrote:
+> The symbol is not used outside of the file, so mark it static.
 > 
-> The advertised field confused users and actually never been used. So
-> the wrong part here is that kernel puts something which userspace never
-> used and hence this may confuse a reader of this code.
+> Fixes the following warning:
+> 
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_mpc.c:985:24: warning:
+> symbol 'dcn32_mpc_funcs' was not declared. Should it be static?
+> 
+> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 
-Rafael, I think I have addressed all your concerns.
-Anything else should I do?
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-> Link: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
-> Link: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
-> Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
-> Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Harry
+
 > ---
-> v3: converted to Link tags (Rafael), explained what was wrong (Rafael)
-> v2: added tag (Fei)
->  include/uapi/linux/acrn.h | 5 ++---
->  samples/acrn/vm-sample.c  | 3 ---
->  2 files changed, 2 insertions(+), 6 deletions(-)
+>  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/uapi/linux/acrn.h b/include/uapi/linux/acrn.h
-> index ccf47ed92500..04fa83647ae5 100644
-> --- a/include/uapi/linux/acrn.h
-> +++ b/include/uapi/linux/acrn.h
-> @@ -12,7 +12,6 @@
->  #define _UAPI_ACRN_H
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c
+> index 4edd0655965b..206a5ddbaf6d 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mpc.c
+> @@ -982,7 +982,7 @@ static bool mpc32_program_3dlut(
+>  	return true;
+>  }
 >  
->  #include <linux/types.h>
-> -#include <linux/uuid.h>
->  
->  #define ACRN_IO_REQUEST_MAX		16
->  
-> @@ -186,7 +185,7 @@ struct acrn_ioreq_notify {
->   * @reserved0:		Reserved and must be 0
->   * @vcpu_num:		Number of vCPU in the VM. Return from hypervisor.
->   * @reserved1:		Reserved and must be 0
-> - * @uuid:		UUID of the VM. Pass to hypervisor directly.
-> + * @uuid:		Reserved (used to be UUID of the VM)
->   * @vm_flag:		Flag of the VM creating. Pass to hypervisor directly.
->   * @ioreq_buf:		Service VM GPA of I/O request buffer. Pass to
->   *			hypervisor directly.
-> @@ -198,7 +197,7 @@ struct acrn_vm_creation {
->  	__u16	reserved0;
->  	__u16	vcpu_num;
->  	__u16	reserved1;
-> -	guid_t	uuid;
-> +	__u8	uuid[16];
->  	__u64	vm_flag;
->  	__u64	ioreq_buf;
->  	__u64	cpu_affinity;
-> diff --git a/samples/acrn/vm-sample.c b/samples/acrn/vm-sample.c
-> index b2dad47a77a0..7abd68b20153 100644
-> --- a/samples/acrn/vm-sample.c
-> +++ b/samples/acrn/vm-sample.c
-> @@ -29,8 +29,6 @@ static struct acrn_io_request *io_req_buf = (struct acrn_io_request *)io_request
->  
->  __u16 vcpu_num;
->  __u16 vmid;
-> -/* POST_STANDARD_VM_UUID1, refer to https://github.com/projectacrn/acrn-hypervisor/blob/master/hypervisor/include/common/vm_uuids.h */
-> -guid_t vm_uuid = GUID_INIT(0x385479d2, 0xd625, 0xe811, 0x86, 0x4e, 0xcb, 0x7a, 0x18, 0xb3, 0x46, 0x43);
->  
->  int hsm_fd;
->  int is_running = 1;
-> @@ -63,7 +61,6 @@ int main(int argc, char **argv)
->  	}
->  	hsm_fd = open("/dev/acrn_hsm", O_RDWR|O_CLOEXEC);
->  
-> -	memcpy(&create_vm.uuid, &vm_uuid, 16);
->  	create_vm.ioreq_buf = (__u64)io_req_buf;
->  	ret = ioctl(hsm_fd, ACRN_IOCTL_CREATE_VM, &create_vm);
->  	printf("Created VM! [%d]\n", ret);
-> -- 
-> 2.35.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> -const struct mpc_funcs dcn32_mpc_funcs = {
+> +static const struct mpc_funcs dcn32_mpc_funcs = {
+>  	.read_mpcc_state = mpc1_read_mpcc_state,
+>  	.insert_plane = mpc1_insert_plane,
+>  	.remove_mpcc = mpc1_remove_mpcc,
 
