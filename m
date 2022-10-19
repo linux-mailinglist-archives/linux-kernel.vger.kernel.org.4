@@ -2,183 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF96603A00
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A88D603A0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiJSGq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 02:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        id S230074AbiJSGrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 02:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJSGq0 (ORCPT
+        with ESMTP id S229584AbiJSGrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:46:26 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748A06E8BE;
-        Tue, 18 Oct 2022 23:46:25 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id g11so11136345qts.1;
-        Tue, 18 Oct 2022 23:46:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Yc/gLv7VbOxzOOe3FhYvFca+lsfjiloEeWONHysiSM=;
-        b=sW1rdrLXpKq4ktS6lQm7jowd8sbv0jZd6wtOWCpVw1DcB54soZDxzkQJ52SURhoTtQ
-         MdJAEgnPjaOMYlQUlBSpyXFZVAxpTb5ePzVIhSxJsCEgNnql1VLb99BfuFktLU+NgUdt
-         0XVnZBlIf4MjMXt2dspJLAZAMSeKhssgTUPLP0HbG1mQTqkCpsqvoVDwVKrydIFITDEr
-         WW2z+4f1HzatMavR4xdl/Osa54yp5oeUhb6ikRlgv3RVxCB5TVo5s6sRErQyTGrW2Kke
-         Le7e6UqqGD40wJVImdifWES8FkMRMXdg5SGPuw4DlMi/IcXTGis82TjePDmqdWT9M3Yh
-         axuQ==
-X-Gm-Message-State: ACrzQf1v0KAIXbRncpuZD38Q9m7MkaVE/7o0tYUM6wxhJG3fXmeL9hbl
-        oPhQKkBU0hP4XLlVfOQ9qBMinegTFObFRS+d
-X-Google-Smtp-Source: AMsMyM4sFN/c5xk4crwFE7dx9WRdHD125FRExDC/A3KDWxCf6nPfD3xldHVtajNK6X/33GpJrRSeHQ==
-X-Received: by 2002:ac8:5850:0:b0:39a:8ebf:5474 with SMTP id h16-20020ac85850000000b0039a8ebf5474mr5268626qth.466.1666161984386;
-        Tue, 18 Oct 2022 23:46:24 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id q28-20020a05620a2a5c00b006eed14045f4sm4535987qkp.48.2022.10.18.23.46.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 23:46:24 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 63so19693882ybq.4;
-        Tue, 18 Oct 2022 23:46:23 -0700 (PDT)
-X-Received: by 2002:a25:cd01:0:b0:6c2:6f0d:f4ce with SMTP id
- d1-20020a25cd01000000b006c26f0df4cemr5188600ybf.365.1666161983732; Tue, 18
- Oct 2022 23:46:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221017162807.1692691-1-sean.anderson@seco.com>
- <Y07guYuGySM6F/us@lunn.ch> <c409789a-68cb-7aba-af31-31488b16f918@seco.com>
- <97aae18e-a96c-a81b-74b7-03e32131a58f@ti.com> <Y08dECNbfMc3VUcG@lunn.ch>
- <595b7903-610f-b76a-5230-f2d8ad5400b4@seco.com> <AM0PR04MB39729CFDBB20C133C269275AEC2B9@AM0PR04MB3972.eurprd04.prod.outlook.com>
-In-Reply-To: <AM0PR04MB39729CFDBB20C133C269275AEC2B9@AM0PR04MB3972.eurprd04.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 19 Oct 2022 08:46:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUZKQFWV8QAKmwxuhWz0ZbFmcsUuf4OUzS_C31maP5+Yg@mail.gmail.com>
-Message-ID: <CAMuHMdUZKQFWV8QAKmwxuhWz0ZbFmcsUuf4OUzS_C31maP5+Yg@mail.gmail.com>
-Subject: Re: [PATCH net] net: fman: Use physical address for userspace interfaces
-To:     Madalin Bucur <madalin.bucur@nxp.com>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Andrew Lunn <andrew@lunn.ch>, Andrew Davis <afd@ti.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Wed, 19 Oct 2022 02:47:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5B06D549
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:47:05 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ol2qo-0007bV-U5; Wed, 19 Oct 2022 08:46:50 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ol2qm-0006qh-Pw; Wed, 19 Oct 2022 08:46:48 +0200
+Date:   Wed, 19 Oct 2022 08:46:48 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Dan Vacura <w36195@motorola.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Jeff Vanhoof <qjv001@motorola.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Paul Elder <paul.elder@ideasonboard.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v3 2/6] usb: dwc3: gadget: cancel requests instead of
+ release after missed isoc
+Message-ID: <20221019064648.GC9097@pengutronix.de>
+References: <20221017205446.523796-1-w36195@motorola.com>
+ <20221017205446.523796-3-w36195@motorola.com>
+ <20221017213031.tqb575hdzli7jlbh@synopsys.com>
+ <Y04K/HoUigF5FYBA@p1g3>
+ <20221018184535.3g3sm35picdeuajs@synopsys.com>
+ <20221018191318.GB9097@pengutronix.de>
+ <20221018224506.g7qv632fznfbprhz@synopsys.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Fig2xvG2VGoz8o/s"
+Content-Disposition: inline
+In-Reply-To: <20221018224506.g7qv632fznfbprhz@synopsys.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Madalin,
 
-On Wed, Oct 19, 2022 at 7:20 AM Madalin Bucur <madalin.bucur@nxp.com> wrote:
-> > -----Original Message-----
-> > From: Sean Anderson <sean.anderson@seco.com>
-> > Sent: 19 October 2022 00:47
-> > To: Andrew Lunn <andrew@lunn.ch>; Andrew Davis <afd@ti.com>
-> > Cc: David S . Miller <davem@davemloft.net>; netdev@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; Madalin Bucur <madalin.bucur@nxp.com>;
-> > Jakub Kicinski <kuba@kernel.org>; Eric Dumazet <edumazet@google.com>;
-> > Paolo Abeni <pabeni@redhat.com>; Camelia Alexandra Groza
-> > <camelia.groza@nxp.com>; Geert Uytterhoeven <geert@linux-m68k.org>
-> > Subject: Re: [PATCH net] net: fman: Use physical address for userspace
-> > interfaces
-> >
-> >
-> >
-> > On 10/18/22 5:39 PM, Andrew Lunn wrote:
-> > > On Tue, Oct 18, 2022 at 01:33:55PM -0500, Andrew Davis wrote:
-> > >> On 10/18/22 12:37 PM, Sean Anderson wrote:
-> > >> > Hi Andrew,
-> > >> >
-> > >> > On 10/18/22 1:22 PM, Andrew Lunn wrote:
-> > >> > > On Mon, Oct 17, 2022 at 12:28:06PM -0400, Sean Anderson wrote:
-> > >> > > > For whatever reason, the address of the MAC is exposed to
-> > userspace in
-> > >> > > > several places. We need to use the physical address for this
-> > purpose to
-> > >> > > > avoid leaking information about the kernel's memory layout, and
-> > to keep
-> > >> > > > backwards compatibility.
-> > >> > >
-> > >> > > How does this keep backwards compatibility? Whatever is in user
-> > space
-> > >> > > using this virtual address expects a virtual address. If it now
-> > gets a
-> > >> > > physical address it will probably do the wrong thing. Unless there
-> > is
-> > >> > > a one to one mapping, and you are exposing virtual addresses
-> > anyway.
-> > >> > >
-> > >> > > If you are going to break backwards compatibility Maybe it would
-> > be
-> > >> > > better to return 0xdeadbeef? Or 0?
-> > >> > >
-> > >> > >         Andrew
-> > >> > >
-> > >> >
-> > >> > The fixed commit was added in v6.1-rc1 and switched from physical to
-> > >> > virtual. So this is effectively a partial revert to the previous
-> > >> > behavior (but keeping the other changes). See [1] for discussion.
-> > >
-> > > Please don't assume a reviewer has seen the previous
-> > > discussion. Include the background in the commit message to help such
-> > > reviewers.
+--Fig2xvG2VGoz8o/s
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > >> I see it asked in that thread, but not answered. Why are you exposing
-> > >> "physical" addresses to userspace? There should be no reason for that.
-> > >
-> > > I don't see anything about needing physical or virtual address in the
-> > > discussion, or i've missed it.
-> >
-> > Well, Madalin originally added this, so perhaps she has some insight.
-> >
-> > I have no idea why we set the IFMAP stuff, since that seems like it's for
-> > PCMCIA. Not sure about sysfs either.
-> >
-> > > If nobody knows why it is needed, either use an obfusticated value, or
-> > > remove it all together. If somebody/something does need it, they will
-> > > report the regression.
-> >
-> > I'd rather apply this (or v2 of this) and then remove the "feature" in
-> > follow-up.
-> >
-> > --Sean
+Hi Thinh,
+
+On Tue, Oct 18, 2022 at 10:45:16PM +0000, Thinh Nguyen wrote:
+>On Tue, Oct 18, 2022, Michael Grzeschik wrote:
+>> On Tue, Oct 18, 2022 at 06:45:40PM +0000, Thinh Nguyen wrote:
+>> > On Mon, Oct 17, 2022, Dan Vacura wrote:
+>> > > On Mon, Oct 17, 2022 at 09:30:38PM +0000, Thinh Nguyen wrote:
+>> > > > On Mon, Oct 17, 2022, Dan Vacura wrote:
+>> > > > > From: Jeff Vanhoof <qjv001@motorola.com>
+>> > > > >
+>> > > > > arm-smmu related crashes seen after a Missed ISOC interrupt when
+>> > > > > no_interrupt=3D1 is used. This can happen if the hardware is sti=
+ll using
+>> > > > > the data associated with a TRB after the usb_request's ->complet=
+e call
+>> > > > > has been made.  Instead of immediately releasing a request when =
+a Missed
+>> > > > > ISOC interrupt has occurred, this change will add logic to cance=
+l the
+>> > > > > request instead where it will eventually be released when the
+>> > > > > END_TRANSFER command has completed. This logic is similar to som=
+e of the
+>> > > > > cleanup done in dwc3_gadget_ep_dequeue.
+>> > > >
+>> > > > This doesn't sound right. How did you determine that the hardware =
+is
+>> > > > still using the data associated with the TRB? Did you check the TR=
+B's
+>> > > > HWO bit?
+>> > >
+>> > > The problem we're seeing was mentioned in the summary of this patch
+>> > > series, issue #1. Basically, with the following patch
+>> > > https://urldefense.com/v3/__https://patchwork.kernel.org/project/lin=
+ux-usb/patch/20210628155311.16762-6-m.grzeschik@pengutronix.de/__;!!A4F2R9G=
+_pg!aSNZ-IjMcPgL47A4NR5qp9qhVlP91UGTuCxej5NRTv8-FmTrMkKK7CjNToQQVEgtpqbKzLU=
+2HXET9O226AEN$
+>> > > integrated a smmu panic is occurring on our Android device with the =
+5.15
+>> > > kernel which is:
+>> > >
+>> > >     <3>[  718.314900][  T803] arm-smmu 15000000.apps-smmu: Unhandled=
+ arm-smmu context fault from a600000.dwc3!
+>> > >
+>> > > The uvc gadget driver appears to be the first (and only) gadget that
+>> > > uses the no_interrupt=3D1 logic, so this seems to be a new condition=
+ for
+>> > > the dwc3 driver. In our configuration, we have up to 64 requests and=
+ the
+>> > > no_interrupt=3D1 for up to 15 requests. The list size of dep->starte=
+d_list
+>> > > would get up to that amount when looping through to cleanup the
+>> > > completed requests. From testing and debugging the smmu panic occurs
+>> > > when a -EXDEV status shows up and right after
+>> > > dwc3_gadget_ep_cleanup_completed_request() was visited. The conclusi=
+on
+>> > > we had was the requests were getting returned to the gadget too earl=
+y.
+>> >
+>> > As I mentioned, if the status is updated to missed isoc, that means th=
+at
+>> > the controller returned ownership of the TRB to the driver. At least f=
+or
+>> > the particular request with -EXDEV, its TRBs are completed. I'm not
+>> > clear on your conclusion.
+>> >
+>> > Do we know where did the crash occur? Is it from dwc3 driver or from u=
+vc
+>> > driver, and at what line? It'd great if we can see the driver log.
+>> >
+>> > >
+>> > > >
+>> > > > The dwc3 driver would only give back the requests if the TRBs of t=
+he
+>> > > > associated requests are completed or when the device is disconnect=
+ed.
+>> > > > If the TRB indicated missed isoc, that means that the TRB is compl=
+eted
+>> > > > and its status was updated.
+>> > >
+>> > > Interesting, the device is not disconnected as we don't get the
+>> > > -ESHUTDOWN status back and with this patch in place things continue
+>> > > after a -EXDEV status is received.
+>> > >
+>> >
+>> > Actually, minor correction here: a recent change
+>> > b44c0e7fef51 ("usb: dwc3: gadget: conditionally remove requests")
+>> > changed -ESHUTDOWN request status to -ECONNRESET when disable endpoint.
+>> > This doesn't look right.
+>> >
+>> > While disabling endpoint may also apply for other cases such as
+>> > switching alternate interface in addition to disconnect, -ESHUTDOWN
+>> > seems more fitting there.
+>> >
+>> > Hi Michael,
+>> >
+>> > Can you help clarify for the change above? This changed the usage of
+>> > requests. Now requests returned by disconnection won't be returned as
+>> > -ESHUTDOWN.
+>>
+>> When writing the patch, I was looking into
+>> Documentation/driver-api/usb/error-codes.rst.
+>>
+>> After looking into it today, I see that ESHUTDOWN should be send on
+>> ep_disable (device disable) and ECONNRESET on stop_active_transfer.
+>> So I probably just mixed them up, while writing the patch. :/
+>>
 >
+>I think you mean ECONNRESET for ep_dequeue()?
+>dwc3_stop_active_transfer() is called for both scenarios.
+
+No, I meant dwc3_stop_active_transfer*s*.
+On ep_dequeue the request status is already ECONNRESET.
+
+>> The followup patch would then just be to swap the status results of
+>> __dwc3_gadget_ep_disable and dwc3_stop_active_transfers on the
+>> dwc3_remove_requests call.
+>>
+>> Michael
 >
-> root@localhost:~# grep 1ae /etc/udev/rules.d/72-fsl-dpaa-persistent-networking.rules
-> SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae0000", NAME="fm1-mac1"
-> SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae2000", NAME="fm1-mac2"
-> SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae4000", NAME="fm1-mac3"
-> SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae6000", NAME="fm1-mac4"
-> SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae8000", NAME="fm1-mac5"
-> SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1aea000", NAME="fm1-mac6"
+>Can you help make a fix?
 
-So you rely on the physical address.
-It's a pity this uses a custom sysfs file.
-Can't you obtain this information some other way?
-Anyway, as this is in use, it became part of the ABI.
+Sure, I will write a patch.
 
-> root@localhost:~# grep 1ae  /sys/devices/platform/soc/soc:fsl,dpaa/soc:fsl,dpaa:ethernet@*/net/fm1-mac*/device_addr
-> /sys/devices/platform/soc/soc:fsl,dpaa/soc:fsl,dpaa:ethernet@2/net/fm1-mac3/device_addr:1ae4000
-> /sys/devices/platform/soc/soc:fsl,dpaa/soc:fsl,dpaa:ethernet@3/net/fm1-mac4/device_addr:1ae6000
-> /sys/devices/platform/soc/soc:fsl,dpaa/soc:fsl,dpaa:ethernet@4/net/fm1-mac5/device_addr:1ae8000
-> /sys/devices/platform/soc/soc:fsl,dpaa/soc:fsl,dpaa:ethernet@5/net/fm1-mac6/device_addr:1aea000
+Thanks,
+Michael
 
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-Gr{oetje,eeting}s,
+--Fig2xvG2VGoz8o/s
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                        Geert
+-----BEGIN PGP SIGNATURE-----
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNPnVUACgkQC+njFXoe
+LGQkqRAAu2iyKbF8RymKARg3wnUIl8Ow90HwXa7iCjwDRDG17qrO0We7kgao/OMH
+ujPosvtWywssQhmiyfYEhQuT1A1pDSu5xLPLw7wDFrBXCL8DlJx5R+x6vHBhXzuT
+F99vnjgcYYDHKclu5sGAbKI5K25/+pxaqTN6qrN6DIdEoUKQ+cJBtOZdi2TD80jT
+1gVTpWG9pmk22ecqy+b19HQs01ZwQ/gD0L1U/+7rEMeyJDYvK8SrfkYvljz0a8lr
+q/9MpbhgkaofpdDfMO+1m2T682FbZGLHTDuLbgVZuq3fARhh1xDLWzeRDVD8+EjQ
+Nnl9Y+BSS9VofukR0JNYPVWAY7wjR3kuVGGaj5L/Kxw8n1unkBzu19Wu/DkrOL7b
+WIuPaJ78/B7+K8GHnx3vnpX2vbqJ9Z/Nn7/SideEYIjqf6gOp/gdVtvTgRP4FkK6
+FcF5lxri08hcR374b5vf4d52fVPoC695xz5pdo1C8CT6gtXn4+zOA4RWLtifqQw3
+aXLq3MMGWt0A5Gol8HINuKq+R5CaNlkoeZOF0FS+zzfhOE8uBzfQkzApu+hNZg1j
+0QRqaGZBUPiTuSl26a76nenpgpPZXSHdLXSXpOXNfIexxyPVKM+W7Cf89hck1Sf2
+6LPVgQesVcJh7An+8Z9U9YNvtnFg0Mm1sEWFTMdzrhRhF1NYsyQ=
+=4NAm
+-----END PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--Fig2xvG2VGoz8o/s--
