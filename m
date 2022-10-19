@@ -2,65 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD02603997
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A9A603980
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiJSGJ0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 02:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S229785AbiJSGDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 02:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJSGJW (ORCPT
+        with ESMTP id S229957AbiJSGDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:09:22 -0400
-Received: from sd108198.server.idn.vn (sd108198.server.idn.vn [103.45.230.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96F367049
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:08:10 -0700 (PDT)
-Received: from [192.168.0.111] ([185.248.12.38])
-        by sd108198.server.idn.vn (IceWarp 10.3.1) with ASMTP (SSL) id NQX19713;
-        Wed, 19 Oct 2022 13:04:13 +0700
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 19 Oct 2022 02:03:39 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD365C954
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:03:34 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-345528ceb87so157963437b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s5DB7EnWinUCVvHnFkWiifLYJ7ZYVSrywNKSXQZJdFI=;
+        b=zVYtNmW6565ZCEXxTkDChTvQvHXVZBJgGadsGALKU3QKMGV7PrXldFeksaQiPFFwos
+         gOa5LHUXC9ENeji5ixZomlslrjXs7gRNn5sa4/rC/7oX9vcohhS7XlO8sDMJLXWscr+q
+         bF06XsYuYWzUbcYRDjzfQO7njw5hC0lUkvvqRBtzHG+VCf+kO0dojSk2HwepiWXgSYBP
+         78G6I41n+j4b5oQ86dSQb0agTuBmkZQLAXpLW2ShZuHRDidswcSNmuHVA4Q/JlRHChj1
+         CVLKFFo1MbwWbp2VHMZdc2bMjhHGPyCYYpL8L1H7itzUSN66IyZ5++j9CAcdb550Y7AK
+         nt/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s5DB7EnWinUCVvHnFkWiifLYJ7ZYVSrywNKSXQZJdFI=;
+        b=k1hH1SXcy6EGCEGAiVJo+JzIdP6SerPwwMhNPU3cMgIlWpr23oDV2WXZRu+FZToPIc
+         7ERAYztnoSo3yZ4vJDcKa0fJKZxLm0f/CF4g9OsH6363ZUXQuB3W6PilbTFOJgszzvdQ
+         XhLK4bqJpncfQCBvlP0l8MO/Ct2UI+VkNIo6Ecif+G5bUsISMcP85RVm01PXgE0s8FcY
+         UjBqnUeW0ApNKCvQu6K/OKqmtXjPd9Fg5Ppwa1G20dfydd86ahiLStDeNW7poOQ2BWWq
+         s7Bo59Imctta0EGNu9quq9OBuU9gdIel9n8bxJZnthN3DL83Jr4aKcHnw1f8Apliqub4
+         1Nxg==
+X-Gm-Message-State: ACrzQf3JqA5923ZxbNd1dlhFgGVEiSbFHXa1f05026VN1H93TkBE5F26
+        3P5c33WfqUx7937L1n18hUkpC7iAm7RVfJbzt0ZzNQ==
+X-Google-Smtp-Source: AMsMyM6pJW+QkixNplXOsyqax6puLF7anBgDILMTra0UqNAILCFqM+RlWPnUCA7ntqHj/xXFKBs5j8LsVWWer2PZbHY=
+X-Received: by 2002:a81:4881:0:b0:361:5080:91fe with SMTP id
+ v123-20020a814881000000b00361508091femr5409889ywa.485.1666159413839; Tue, 18
+ Oct 2022 23:03:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Re: Awaiting Your Response.
-To:     Recipients <toanbui@benhvienranghammat.vn>
-From:   "Mr. Andrew Kyle" <toanbui@benhvienranghammat.vn>
-Date:   Wed, 19 Oct 2022 09:00:29 +0300
-Reply-To: andrewkyle69@hotmail.com
-Message-ID: <eec6a7295a792427aedf501414936b99@benhvienranghammat.vn>
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_60,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6044]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [103.45.230.198 listed in bl.score.senderscore.com]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [103.45.230.198 listed in wl.mailspike.net]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [andrewkyle69[at]hotmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+References: <20211006035407.1147909-1-dmitry.baryshkov@linaro.org> <Y0hr9XTGAg8Q6K6y@google.com>
+In-Reply-To: <Y0hr9XTGAg8Q6K6y@google.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 19 Oct 2022 09:03:22 +0300
+Message-ID: <CAA8EJppuGbDGb1D-yf2WL77U1bqx1QQStQeDArWmGFCUiOtnww@mail.gmail.com>
+Subject: Re: [PATCH v1 00/15] create power sequencing subsystem
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
+Ho,
 
-How are you doing today, I hope this email finds you in good health. You have not responded to my previous mail to you regarding our late client Mr. Fredrick.
+On Thu, 13 Oct 2022 at 22:50, Matthias Kaehlcke <mka@chromium.org> wrote:
+> Do you still plan to refresh this series?
+>
+> I know there have been multiple attempts to get something similar
+> landed in the past 10 year or so. Your series didn't seem to get
+> much pushback from maintainers, might be worth sending a refresh :)
 
-Kindly acknowledge my proposition and let me know what your decisions are, if you are taking the offer.
+Yes, I hope to return to it eventually. I just had no time for it lately.
 
-Get back to me as soon as you can for further details.
+> On Wed, Oct 06, 2021 at 06:53:52AM +0300, Dmitry Baryshkov wrote:
+> > This is a proposed power sequencer subsystem. This is a
+> > generification of the MMC pwrseq code. The subsystem tries to abstract
+> > the idea of complex power-up/power-down/reset of the devices.
+> >
+> > The primary set of devices that promted me to create this patchset is
+> > the Qualcomm BT+WiFi family of chips. They reside on serial+platform
+> > or serial + SDIO interfaces (older generations) or on serial+PCIe (newer
+> > generations).  They require a set of external voltage regulators to be
+> > powered on and (some of them) have separate WiFi and Bluetooth enable
+> > GPIOs.
+> >
+> > The major drawback for now is the lack of proper PCIe integration
+> > At this moment support for PCIe is hacked up to be able to test the
+> > PCIe part of qca6390. Proper PCIe support would require automatically
+> > powering up the devices before the scan basing on the proper device
+> > structure in the device tree. This two last patches are noted as WIP and
+> > are included into the patchset for the purpose of testing WiFi on newer
+> > chips (like qca6390/qca6391).
+> >
+> > Changes since RFC v2:
+> >  - Add documentation for the pwrseq code. Document data structures,
+> >    macros and exported functions.
+> >  - Export of_pwrseq_xlate_onecell()
+> >  - Add separate pwrseq_set_drvdata() function to follow the typical API
+> >    design
+> >  - Remove pwrseq_get_optional()/devm_pwrseq_get_optional()
+> >  - Moved code to handle old mmc-pwrseq binding to the MMC patch
+> >  - Split of_pwrseq_xlate_onecell() support to a separate patch
+> >
+> > Changes since RFC v1:
+> >  - Provider pwrseq fallback support
+> >  - Implement fallback support in pwrseq_qca.
+> >  - Mmove susclk handling to pwrseq_qca.
+> >  - Significantly simplify hci_qca.c changes, by dropping all legacy
+> >    code. Now hci_qca uses only pwrseq calls to power up/down bluetooth
+> >    parts of the chip.
+> >
+> >
+> >
+> >
+> > _______________________________________________
+> > ath10k mailing list
+> > ath10k@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/ath10k
 
-Regards,
 
-Andrew Kyle
+
+-- 
+With best wishes
+Dmitry
