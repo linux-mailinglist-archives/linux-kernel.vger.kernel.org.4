@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2EB604B45
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17429604B62
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJSP0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
+        id S232357AbiJSP2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbiJSPZo (ORCPT
+        with ESMTP id S231783AbiJSP1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:25:44 -0400
+        Wed, 19 Oct 2022 11:27:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021FABE2E0;
-        Wed, 19 Oct 2022 08:19:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68DC1D6385;
+        Wed, 19 Oct 2022 08:20:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E5136192B;
-        Wed, 19 Oct 2022 15:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AD1C433C1;
-        Wed, 19 Oct 2022 15:17:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16C2A6183B;
+        Wed, 19 Oct 2022 15:19:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FFBC433D6;
+        Wed, 19 Oct 2022 15:19:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666192672;
-        bh=licWBwVE0eGPVvitf8FzsPC1yn1FBuWaeRY3ctqDXRc=;
+        s=k20201202; t=1666192776;
+        bh=kXSlIp1TRH3h6jAEF0j9o6n7BaKsFbpIUtKAlEcb1So=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PVamlZCYs5h57CAE3v4SUNyqz8WLnzZ2dC1Bsz5tMHSxGmOVFmsa929A5maezujHt
-         /xAWz6h1cZMjFam6cOMk/bX1jc+Qy8kXcPZeid8uCd1Re0DOwSIW9hy5BNpmspVaZu
-         YTabKvqUQj+V+r3QkE+aMxCNF7QjYe89b9ZspXHSQetNB7sNhWOlGDo8sWi44XpxgJ
-         vthdDJkcHAjHnrt/1vyw1tAYIJIEFF2z4zzY3ariZac3UdGtvDAGNRxlVoEXG6pV6k
-         FmviP19P69uXw/WeJy6/kmEwQHJaweZnTyc1ZUmk8XD1ZBwQNS8g5vFYXJRUx419Lc
-         tcF6pXnN29uTg==
+        b=SvNmNUCGiRPhVogaJFJ4r8oO5FhCUIfiygaAe/pkhPkwPQOW70xtyWntGpBCFUYSE
+         sFP9YGrB9VEatMDlF7G9rZ40W7xKNedXYWB/+4D4TB6ITrA5q2B/GcgqSpUiy64prh
+         zdfMXV2Yy1b31YE1sat/y0uKNC0j6jJ6awvs4ky8G5oQwcqVZ1u6RGm9kBkX6dpdqk
+         tKqWqMJys5cwegg1NEZz0K6ueAiacfkRnJpeIPEIX/lrqUxu3Z+hpe/gKOZ88OWopT
+         hrrUBpAaZyQchSanGdYKXZCP5KsVy3sNHxQoUjdEEJu98R6b1ZebXLwiuSiGtX6DGN
+         2hER1HnRXCD+Q==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
+        Paul Walmsley <paul@pwsan.com>,
         Aaro Koskinen <aaro.koskinen@iki.fi>,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>,
         Tony Lindgren <tony@atomide.com>
 Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-omap@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 13/17] ARM: omap1: remove unused board files
-Date:   Wed, 19 Oct 2022 17:03:35 +0200
-Message-Id: <20221019150410.3851944-13-arnd@kernel.org>
+        Alan Stern <stern@rowland.harvard.edu>, Bin Liu <b-liu@ti.com>,
+        Helge Deller <deller@gmx.de>, linux-usb@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH 14/17] ARM: omap1: remove dead code
+Date:   Wed, 19 Oct 2022 17:03:36 +0200
+Message-Id: <20221019150410.3851944-14-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221019150410.3851944-1-arnd@kernel.org>
 References: <20221019144119.3848027-1-arnd@kernel.org>
@@ -64,10 +67,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-All board support that was marked as 'unused' earlier can
-now be removed, leaving the five machines that that still
-had someone using them in 2022, or that are supported in
-qemu.
+After the removal of the unused board files, I went through the
+omap1 code to look for code that no longer has any callers
+and remove that.
+
+In particular, support for the omap7xx/omap8xx family is now
+completely unused, so I'm only leaving omap15xx/omap16xx/omap59xx.
 
 Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
 Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
@@ -75,4610 +80,1461 @@ Cc: Tony Lindgren <tony@atomide.com>
 Cc: linux-omap@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                             |   2 -
- arch/arm/Kconfig.debug                  |  36 +-
- arch/arm/configs/omap1_defconfig        |   2 -
- arch/arm/mach-omap1/Kconfig             |  93 +---
- arch/arm/mach-omap1/Makefile            |  18 -
- arch/arm/mach-omap1/board-fsample.c     | 366 ---------------
- arch/arm/mach-omap1/board-generic.c     |  85 ----
- arch/arm/mach-omap1/board-h2-mmc.c      |  74 ---
- arch/arm/mach-omap1/board-h2.c          | 448 ------------------
- arch/arm/mach-omap1/board-h2.h          |  38 --
- arch/arm/mach-omap1/board-h3-mmc.c      |  64 ---
- arch/arm/mach-omap1/board-h3.c          | 455 ------------------
- arch/arm/mach-omap1/board-h3.h          |  35 --
- arch/arm/mach-omap1/board-htcherald.c   | 585 ------------------------
- arch/arm/mach-omap1/board-innovator.c   | 481 -------------------
- arch/arm/mach-omap1/board-nand.c        |  33 --
- arch/arm/mach-omap1/board-palmtt.c      | 285 ------------
- arch/arm/mach-omap1/board-palmz71.c     | 300 ------------
- arch/arm/mach-omap1/board-perseus2.c    | 333 --------------
- arch/arm/mach-omap1/fpga.c              | 186 --------
- arch/arm/mach-omap1/fpga.h              |  49 --
- arch/arm/mach-omap1/gpio7xx.c           | 272 -----------
- drivers/i2c/busses/Kconfig              |   2 +-
- drivers/mfd/Kconfig                     |   2 +-
- drivers/mmc/host/Kconfig                |   2 +-
- drivers/usb/gadget/udc/Kconfig          |   2 +-
- drivers/usb/host/Kconfig                |   2 +-
- include/linux/platform_data/leds-omap.h |  19 -
- 28 files changed, 12 insertions(+), 4257 deletions(-)
- delete mode 100644 arch/arm/mach-omap1/board-fsample.c
- delete mode 100644 arch/arm/mach-omap1/board-generic.c
- delete mode 100644 arch/arm/mach-omap1/board-h2-mmc.c
- delete mode 100644 arch/arm/mach-omap1/board-h2.c
- delete mode 100644 arch/arm/mach-omap1/board-h2.h
- delete mode 100644 arch/arm/mach-omap1/board-h3-mmc.c
- delete mode 100644 arch/arm/mach-omap1/board-h3.c
- delete mode 100644 arch/arm/mach-omap1/board-h3.h
- delete mode 100644 arch/arm/mach-omap1/board-htcherald.c
- delete mode 100644 arch/arm/mach-omap1/board-innovator.c
- delete mode 100644 arch/arm/mach-omap1/board-nand.c
- delete mode 100644 arch/arm/mach-omap1/board-palmtt.c
- delete mode 100644 arch/arm/mach-omap1/board-palmz71.c
- delete mode 100644 arch/arm/mach-omap1/board-perseus2.c
- delete mode 100644 arch/arm/mach-omap1/fpga.c
- delete mode 100644 arch/arm/mach-omap1/fpga.h
- delete mode 100644 arch/arm/mach-omap1/gpio7xx.c
- delete mode 100644 include/linux/platform_data/leds-omap.h
+ arch/arm/mach-omap1/clock_data.c   | 17 +-----
+ arch/arm/mach-omap1/common.h       |  8 ---
+ arch/arm/mach-omap1/devices.c      | 58 ++-----------------
+ arch/arm/mach-omap1/dma.c          | 25 +-------
+ arch/arm/mach-omap1/i2c.c          | 14 +----
+ arch/arm/mach-omap1/io.c           | 24 --------
+ arch/arm/mach-omap1/irq.c          | 20 +------
+ arch/arm/mach-omap1/irqs.h         |  9 ---
+ arch/arm/mach-omap1/mcbsp.c        | 83 ---------------------------
+ arch/arm/mach-omap1/mtd-xip.h      |  4 --
+ arch/arm/mach-omap1/mux.c          | 52 -----------------
+ arch/arm/mach-omap1/pm.c           | 76 ++++---------------------
+ arch/arm/mach-omap1/pm.h           | 39 +------------
+ arch/arm/mach-omap1/serial.c       | 15 -----
+ arch/arm/mach-omap1/sleep.S        | 80 --------------------------
+ arch/arm/mach-omap1/sram-init.c    |  7 +--
+ arch/arm/mach-omap1/usb.c          | 34 +++--------
+ drivers/spi/spi-omap-uwire.c       | 16 +-----
+ drivers/usb/gadget/udc/omap_udc.c  | 24 +-------
+ drivers/usb/host/ohci-omap.c       |  6 +-
+ drivers/usb/musb/musb_dma.h        | 11 +---
+ drivers/usb/phy/phy-isp1301-omap.c | 91 +-----------------------------
+ drivers/video/fbdev/omap/lcdc.c    |  2 -
+ include/linux/soc/ti/omap1-soc.h   | 35 ------------
+ 24 files changed, 39 insertions(+), 711 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index da1ff468e27d..bb3e20381128 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15031,7 +15031,6 @@ Q:	http://patchwork.kernel.org/project/linux-omap/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
- F:	arch/arm/configs/omap1_defconfig
- F:	arch/arm/mach-omap1/
--F:	arch/arm/plat-omap/
- F:	drivers/i2c/busses/i2c-omap.c
- F:	include/linux/platform_data/ams-delta-fiq.h
- F:	include/linux/platform_data/i2c-omap.h
-@@ -15046,7 +15045,6 @@ Q:	http://patchwork.kernel.org/project/linux-omap/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
- F:	arch/arm/configs/omap2plus_defconfig
- F:	arch/arm/mach-omap2/
--F:	arch/arm/plat-omap/
- F:	drivers/bus/ti-sysc.c
- F:	drivers/i2c/busses/i2c-omap.c
- F:	drivers/irqchip/irq-omap-intc.c
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 320c93fabb21..c03fd448c59e 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -760,30 +760,6 @@ choice
- 		depends on ARCH_OMAP2PLUS
- 		select DEBUG_UART_8250
+diff --git a/arch/arm/mach-omap1/clock_data.c b/arch/arm/mach-omap1/clock_data.c
+index 96d846c37c43..c58d200e4816 100644
+--- a/arch/arm/mach-omap1/clock_data.c
++++ b/arch/arm/mach-omap1/clock_data.c
+@@ -720,8 +720,6 @@ int __init omap1_clk_init(void)
+ 		cpu_mask |= CK_16XX;
+ 	if (cpu_is_omap1510())
+ 		cpu_mask |= CK_1510;
+-	if (cpu_is_omap7xx())
+-		cpu_mask |= CK_7XX;
+ 	if (cpu_is_omap310())
+ 		cpu_mask |= CK_310;
  
--	config DEBUG_OMAP7XXUART1
--		bool "Kernel low-level debugging via OMAP730 UART1"
--		depends on ARCH_OMAP730
--		select DEBUG_UART_8250
--		help
--		  Say Y here if you want kernel low-level debugging support
--		  on OMAP730 based platforms on the UART1.
--
--	config DEBUG_OMAP7XXUART2
--		bool "Kernel low-level debugging via OMAP730 UART2"
--		depends on ARCH_OMAP730
--		select DEBUG_UART_8250
--		help
--		  Say Y here if you want kernel low-level debugging support
--		  on OMAP730 based platforms on the UART2.
--
--	config DEBUG_OMAP7XXUART3
--		bool "Kernel low-level debugging via OMAP730 UART3"
--		depends on ARCH_OMAP730
--		select DEBUG_UART_8250
--		help
--		  Say Y here if you want kernel low-level debugging support
--		  on OMAP730 based platforms on the UART3.
--
- 	config DEBUG_TI81XXUART1
- 		bool "Kernel low-level debugging messages via TI81XX UART1 (ti8148evm)"
- 		depends on ARCH_OMAP2PLUS
-@@ -1728,9 +1704,9 @@ config DEBUG_UART_PHYS
- 	default 0xffe40000 if DEBUG_RCAR_GEN1_SCIF0
- 	default 0xffe42000 if DEBUG_RCAR_GEN1_SCIF2
- 	default 0xfff36000 if DEBUG_HIGHBANK_UART
--	default 0xfffb0000 if DEBUG_OMAP1UART1 || DEBUG_OMAP7XXUART1
--	default 0xfffb0800 if DEBUG_OMAP1UART2 || DEBUG_OMAP7XXUART2
--	default 0xfffb9800 if DEBUG_OMAP1UART3 || DEBUG_OMAP7XXUART3
-+	default 0xfffb0000 if DEBUG_OMAP1UART1
-+	default 0xfffb0800 if DEBUG_OMAP1UART2
-+	default 0xfffb9800 if DEBUG_OMAP1UART3
- 	default 0xfffe8600 if DEBUG_BCM63XX_UART
- 	default 0xffffee00 if DEBUG_AT91_SAM9263_DBGU
- 	default 0xfffff200 if DEBUG_AT91_RM9200_DBGU
-@@ -1847,9 +1823,9 @@ config DEBUG_UART_VIRT
- 	default 0xfec00000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
- 	default 0xfec00003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
- 	default 0xfef36000 if DEBUG_HIGHBANK_UART
--	default 0xff0b0000 if DEBUG_OMAP1UART1 || DEBUG_OMAP7XXUART1
--	default 0xff0b0800 if DEBUG_OMAP1UART2 || DEBUG_OMAP7XXUART2
--	default 0xff0b9800 if DEBUG_OMAP1UART3 || DEBUG_OMAP7XXUART3
-+	default 0xff0b0000 if DEBUG_OMAP1UART1
-+	default 0xff0b0800 if DEBUG_OMAP1UART2
-+	default 0xff0b9800 if DEBUG_OMAP1UART3
- 	default 0xffd01000 if DEBUG_HIP01_UART
- 	default DEBUG_UART_PHYS if !MMU
- 	depends on DEBUG_LL_UART_8250 || DEBUG_LL_UART_PL01X || \
-diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-index 70511fe4b3ec..28d29bc2a20c 100644
---- a/arch/arm/configs/omap1_defconfig
-+++ b/arch/arm/configs/omap1_defconfig
-@@ -20,8 +20,6 @@ CONFIG_ARCH_OMAP=y
- CONFIG_ARCH_OMAP1=y
- CONFIG_OMAP_32K_TIMER=y
- CONFIG_OMAP_DM_TIMER=y
--CONFIG_ARCH_OMAP730=y
--CONFIG_ARCH_OMAP850=y
- CONFIG_ARCH_OMAP16XX=y
- # CONFIG_OMAP_MUX is not set
- CONFIG_OMAP_RESET_CLOCKS=y
-diff --git a/arch/arm/mach-omap1/Kconfig b/arch/arm/mach-omap1/Kconfig
-index 538a960257cc..21968f5a12a7 100644
---- a/arch/arm/mach-omap1/Kconfig
-+++ b/arch/arm/mach-omap1/Kconfig
-@@ -18,19 +18,6 @@ menu "TI OMAP1 specific features"
+@@ -730,9 +728,6 @@ int __init omap1_clk_init(void)
+ 	ck_dpll1_p = &ck_dpll1;
+ 	ck_ref_p = &ck_ref;
  
- comment "OMAP Core Type"
+-	if (cpu_is_omap7xx())
+-		ck_ref.rate = 13000000;
+-
+ 	pr_info("Clocks: ARM_SYSST: 0x%04x DPLL_CTL: 0x%04x ARM_CKCTL: 0x%04x\n",
+ 		omap_readw(ARM_SYSST), omap_readw(DPLL_CTL),
+ 		omap_readw(ARM_CKCTL));
+@@ -771,12 +766,6 @@ int __init omap1_clk_init(void)
+ 		}
+ 	}
  
--config ARCH_OMAP730
--	depends on ARCH_MULTI_V5
--	bool "OMAP730 Based System"
--	select ARCH_OMAP_OTG
--	select CPU_ARM926T
--	select OMAP_MPU_TIMER
--
--config ARCH_OMAP850
--	depends on ARCH_MULTI_V5
--	bool "OMAP850 Based System"
--	select ARCH_OMAP_OTG
--	select CPU_ARM926T
--
- config ARCH_OMAP15XX
- 	depends on ARCH_MULTI_V4T
- 	default y
-@@ -47,7 +34,7 @@ config ARCH_OMAP16XX
- 
- config ARCH_OMAP1_ANY
- 	select ARCH_OMAP
--	def_bool ARCH_OMAP730 || ARCH_OMAP850 || ARCH_OMAP15XX || ARCH_OMAP16XX
-+	def_bool ARCH_OMAP15XX || ARCH_OMAP16XX
- 
- config ARCH_OMAP
- 	bool
-@@ -129,37 +116,6 @@ config ARCH_OMAP_OTG
- 
- comment "OMAP Board Type"
- 
--config MACH_OMAP_INNOVATOR
--	bool "TI Innovator"
--	depends on ARCH_OMAP15XX || ARCH_OMAP16XX
--	depends on UNUSED_BOARD_FILES
--	help
--          TI OMAP 1510 or 1610 Innovator board support. Say Y here if you
--          have such a board.
--
--config MACH_OMAP_H2
--	bool "TI H2 Support"
--	depends on ARCH_OMAP16XX
--	depends on UNUSED_BOARD_FILES
--	help
--	  TI OMAP 1610/1611B H2 board support. Say Y here if you have such
--	  a board.
--
--config MACH_OMAP_H3
--	bool "TI H3 Support"
--	depends on ARCH_OMAP16XX
--	depends on UNUSED_BOARD_FILES
--	help
--	  TI OMAP 1710 H3 board support. Say Y here if you have such
--	  a board.
--
--config MACH_HERALD
--	bool "HTC Herald"
--	depends on ARCH_OMAP850
--	depends on UNUSED_BOARD_FILES
--	help
--	  HTC Herald smartphone support (AKA T-Mobile Wing, ...)
--
- config MACH_OMAP_OSK
- 	bool "TI OSK Support"
- 	depends on ARCH_OMAP16XX
-@@ -170,28 +126,11 @@ config MACH_OMAP_OSK
- config OMAP_OSK_MISTRAL
- 	bool "Mistral QVGA board Support"
- 	depends on MACH_OMAP_OSK
--	depends on UNUSED_BOARD_FILES
- 	help
- 	  The OSK supports an optional add-on board with a Quarter-VGA
- 	  touchscreen, PDA-ish buttons, a resume button, bicolor LED,
- 	  and camera connector.  Say Y here if you have this board.
- 
--config MACH_OMAP_PERSEUS2
--	bool "TI Perseus2"
--	depends on ARCH_OMAP730
--	depends on UNUSED_BOARD_FILES
--	help
--	  Support for TI OMAP 730 Perseus2 board. Say Y here if you have such
--	  a board.
--
--config MACH_OMAP_FSAMPLE
--	bool "TI F-Sample"
--	depends on ARCH_OMAP730
--	depends on UNUSED_BOARD_FILES
--	help
--	  Support for TI OMAP 850 F-Sample board. Say Y here if you have such
--	  a board.
--
- config MACH_OMAP_PALMTE
- 	bool "Palm Tungsten E"
- 	depends on ARCH_OMAP15XX
-@@ -201,26 +140,6 @@ config MACH_OMAP_PALMTE
- 	  http://palmtelinux.sourceforge.net/ for more information.
- 	  Say Y here if you have this PDA model, say N otherwise.
- 
--config MACH_OMAP_PALMZ71
--	bool "Palm Zire71"
--	depends on ARCH_OMAP15XX
--	depends on UNUSED_BOARD_FILES
--	help
--	 Support for the Palm Zire71 PDA. To boot the kernel,
--	 you'll need a PalmOS compatible bootloader; check out
--	 http://hackndev.com/palm/z71 for more information.
--	 Say Y here if you have such a PDA, say N otherwise.
--
--config MACH_OMAP_PALMTT
--	bool "Palm Tungsten|T"
--	depends on ARCH_OMAP15XX
--	depends on UNUSED_BOARD_FILES
--	help
--	  Support for the Palm Tungsten|T PDA. To boot the kernel, you'll
--	  need a PalmOS compatible bootloader (Garux); check out
--	  http://garux.sourceforge.net/ for more information.
--	  Say Y here if you have this PDA model, say N otherwise.
--
- config MACH_SX1
- 	bool "Siemens SX1"
- 	depends on ARCH_OMAP15XX
-@@ -252,16 +171,6 @@ config MACH_AMS_DELTA
- 	  Support for the Amstrad E3 (codename Delta) videophone. Say Y here
- 	  if you have such a device.
- 
--config MACH_OMAP_GENERIC
--	bool "Generic OMAP board"
--	depends on ARCH_OMAP15XX || ARCH_OMAP16XX
--	depends on UNUSED_BOARD_FILES
--	help
--          Support for generic OMAP-1510, 1610 or 1710 board with
--          no FPGA. Can be used as template for porting Linux to
--          custom OMAP boards. Say Y here if you have a custom
--          board.
--
- endmenu
- 
- endif
-diff --git a/arch/arm/mach-omap1/Makefile b/arch/arm/mach-omap1/Makefile
-index 506074b86333..73722f260a1d 100644
---- a/arch/arm/mach-omap1/Makefile
-+++ b/arch/arm/mach-omap1/Makefile
-@@ -31,32 +31,14 @@ usb-fs-$(CONFIG_USB_SUPPORT)		:= usb.o
- obj-y					+= $(usb-fs-m) $(usb-fs-y)
- 
- # Specific board support
--obj-$(CONFIG_MACH_OMAP_H2)		+= board-h2.o board-h2-mmc.o \
--					   board-nand.o
--obj-$(CONFIG_MACH_OMAP_INNOVATOR)	+= board-innovator.o
--obj-$(CONFIG_MACH_OMAP_GENERIC)		+= board-generic.o
--obj-$(CONFIG_MACH_OMAP_PERSEUS2)	+= board-perseus2.o board-nand.o
--obj-$(CONFIG_MACH_OMAP_FSAMPLE)		+= board-fsample.o board-nand.o
- obj-$(CONFIG_MACH_OMAP_OSK)		+= board-osk.o
--obj-$(CONFIG_MACH_OMAP_H3)		+= board-h3.o board-h3-mmc.o \
--					   board-nand.o
- obj-$(CONFIG_MACH_OMAP_PALMTE)		+= board-palmte.o
--obj-$(CONFIG_MACH_OMAP_PALMZ71)		+= board-palmz71.o
--obj-$(CONFIG_MACH_OMAP_PALMTT)		+= board-palmtt.o
- obj-$(CONFIG_MACH_NOKIA770)		+= board-nokia770.o
- obj-$(CONFIG_MACH_AMS_DELTA)		+= board-ams-delta.o ams-delta-fiq.o \
- 					   ams-delta-fiq-handler.o
- obj-$(CONFIG_MACH_SX1)			+= board-sx1.o board-sx1-mmc.o
--obj-$(CONFIG_MACH_HERALD)		+= board-htcherald.o
--
--ifeq ($(CONFIG_ARCH_OMAP15XX),y)
--# Innovator-1510 FPGA
--obj-$(CONFIG_MACH_OMAP_INNOVATOR)	+= fpga.o
--endif
- 
- # GPIO
--obj-$(CONFIG_ARCH_OMAP730)		+= gpio7xx.o
--obj-$(CONFIG_ARCH_OMAP850)		+= gpio7xx.o
- obj-$(CONFIG_ARCH_OMAP15XX)		+= gpio15xx.o
- obj-$(CONFIG_ARCH_OMAP16XX)		+= gpio16xx.o
- 
-diff --git a/arch/arm/mach-omap1/board-fsample.c b/arch/arm/mach-omap1/board-fsample.c
-deleted file mode 100644
-index f21e15c7b973..000000000000
---- a/arch/arm/mach-omap1/board-fsample.c
-+++ /dev/null
-@@ -1,366 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-fsample.c
-- *
-- * Modified from board-perseus2.c
-- *
-- * Original OMAP730 support by Jean Pihet <j-pihet@ti.com>
-- * Updated for 2.6 by Kevin Hilman <kjh@hilman.org>
-- */
--#include <linux/gpio.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/delay.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/platnand.h>
--#include <linux/mtd/physmap.h>
--#include <linux/input.h>
--#include <linux/smc91x.h>
--#include <linux/omapfb.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include <linux/soc/ti/omap1-io.h>
--#include <linux/platform_data/keypad-omap.h>
--#include "tc.h"
--
--#include "mux.h"
--#include "flash.h"
--#include "hardware.h"
--#include "iomap.h"
--#include "common.h"
--#include "fpga.h"
--
--/* fsample is pretty close to p2-sample */
--
--#define fsample_cpld_read(reg) __raw_readb(reg)
--#define fsample_cpld_write(val, reg) __raw_writeb(val, reg)
--
--#define FSAMPLE_CPLD_BASE    0xE8100000
--#define FSAMPLE_CPLD_SIZE    SZ_4K
--#define FSAMPLE_CPLD_START   0x05080000
--
--#define FSAMPLE_CPLD_REG_A   (FSAMPLE_CPLD_BASE + 0x00)
--#define FSAMPLE_CPLD_SWITCH  (FSAMPLE_CPLD_BASE + 0x02)
--#define FSAMPLE_CPLD_UART    (FSAMPLE_CPLD_BASE + 0x02)
--#define FSAMPLE_CPLD_REG_B   (FSAMPLE_CPLD_BASE + 0x04)
--#define FSAMPLE_CPLD_VERSION (FSAMPLE_CPLD_BASE + 0x06)
--#define FSAMPLE_CPLD_SET_CLR (FSAMPLE_CPLD_BASE + 0x06)
--
--#define FSAMPLE_CPLD_BIT_BT_RESET         0
--#define FSAMPLE_CPLD_BIT_LCD_RESET        1
--#define FSAMPLE_CPLD_BIT_CAM_PWDN         2
--#define FSAMPLE_CPLD_BIT_CHARGER_ENABLE   3
--#define FSAMPLE_CPLD_BIT_SD_MMC_EN        4
--#define FSAMPLE_CPLD_BIT_aGPS_PWREN       5
--#define FSAMPLE_CPLD_BIT_BACKLIGHT        6
--#define FSAMPLE_CPLD_BIT_aGPS_EN_RESET    7
--#define FSAMPLE_CPLD_BIT_aGPS_SLEEPx_N    8
--#define FSAMPLE_CPLD_BIT_OTG_RESET        9
--
--#define fsample_cpld_set(bit) \
--    fsample_cpld_write((((bit) & 15) << 4) | 0x0f, FSAMPLE_CPLD_SET_CLR)
--
--#define fsample_cpld_clear(bit) \
--    fsample_cpld_write(0xf0 | ((bit) & 15), FSAMPLE_CPLD_SET_CLR)
--
--static const unsigned int fsample_keymap[] = {
--	KEY(0, 0, KEY_UP),
--	KEY(1, 0, KEY_RIGHT),
--	KEY(2, 0, KEY_LEFT),
--	KEY(3, 0, KEY_DOWN),
--	KEY(4, 0, KEY_ENTER),
--	KEY(0, 1, KEY_F10),
--	KEY(1, 1, KEY_SEND),
--	KEY(2, 1, KEY_END),
--	KEY(3, 1, KEY_VOLUMEDOWN),
--	KEY(4, 1, KEY_VOLUMEUP),
--	KEY(5, 1, KEY_RECORD),
--	KEY(0, 2, KEY_F9),
--	KEY(1, 2, KEY_3),
--	KEY(2, 2, KEY_6),
--	KEY(3, 2, KEY_9),
--	KEY(4, 2, KEY_KPDOT),
--	KEY(0, 3, KEY_BACK),
--	KEY(1, 3, KEY_2),
--	KEY(2, 3, KEY_5),
--	KEY(3, 3, KEY_8),
--	KEY(4, 3, KEY_0),
--	KEY(5, 3, KEY_KPSLASH),
--	KEY(0, 4, KEY_HOME),
--	KEY(1, 4, KEY_1),
--	KEY(2, 4, KEY_4),
--	KEY(3, 4, KEY_7),
--	KEY(4, 4, KEY_KPASTERISK),
--	KEY(5, 4, KEY_POWER),
--};
--
--static struct smc91x_platdata smc91x_info = {
--	.flags	= SMC91X_USE_16BIT | SMC91X_NOWAIT,
--	.leda	= RPC_LED_100_10,
--	.ledb	= RPC_LED_TX_RX,
--};
--
--static struct resource smc91x_resources[] = {
--	[0] = {
--		.start	= H2P2_DBG_FPGA_ETHR_START,	/* Physical */
--		.end	= H2P2_DBG_FPGA_ETHR_START + 0xf,
--		.flags	= IORESOURCE_MEM,
--	},
--	[1] = {
--		.start	= INT_7XX_MPU_EXT_NIRQ,
--		.end	= 0,
--		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_HIGHEDGE,
--	},
--};
--
--static void __init fsample_init_smc91x(void)
--{
--	__raw_writeb(1, H2P2_DBG_FPGA_LAN_RESET);
--	mdelay(50);
--	__raw_writeb(__raw_readb(H2P2_DBG_FPGA_LAN_RESET) & ~1,
--		   H2P2_DBG_FPGA_LAN_RESET);
--	mdelay(50);
--}
--
--static struct mtd_partition nor_partitions[] = {
--	/* bootloader (U-Boot, etc) in first sector */
--	{
--	      .name		= "bootloader",
--	      .offset		= 0,
--	      .size		= SZ_128K,
--	      .mask_flags	= MTD_WRITEABLE, /* force read-only */
--	},
--	/* bootloader params in the next sector */
--	{
--	      .name		= "params",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_128K,
--	      .mask_flags	= 0,
--	},
--	/* kernel */
--	{
--	      .name		= "kernel",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_2M,
--	      .mask_flags	= 0
--	},
--	/* rest of flash is a file system */
--	{
--	      .name		= "rootfs",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= MTDPART_SIZ_FULL,
--	      .mask_flags	= 0
--	},
--};
--
--static struct physmap_flash_data nor_data = {
--	.width		= 2,
--	.set_vpp	= omap1_set_vpp,
--	.parts		= nor_partitions,
--	.nr_parts	= ARRAY_SIZE(nor_partitions),
--};
--
--static struct resource nor_resource = {
--	.start		= OMAP_CS0_PHYS,
--	.end		= OMAP_CS0_PHYS + SZ_32M - 1,
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device nor_device = {
--	.name		= "physmap-flash",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &nor_data,
--	},
--	.num_resources	= 1,
--	.resource	= &nor_resource,
--};
--
--#define FSAMPLE_NAND_RB_GPIO_PIN	62
--
--static int nand_dev_ready(struct nand_chip *chip)
--{
--	return gpio_get_value(FSAMPLE_NAND_RB_GPIO_PIN);
--}
--
--static struct platform_nand_data nand_data = {
--	.chip	= {
--		.nr_chips		= 1,
--		.chip_offset		= 0,
--		.options		= NAND_SAMSUNG_LP_OPTIONS,
--	},
--	.ctrl	= {
--		.cmd_ctrl	= omap1_nand_cmd_ctl,
--		.dev_ready	= nand_dev_ready,
--	},
--};
--
--static struct resource nand_resource = {
--	.start		= OMAP_CS3_PHYS,
--	.end		= OMAP_CS3_PHYS + SZ_4K - 1,
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device nand_device = {
--	.name		= "gen_nand",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &nand_data,
--	},
--	.num_resources	= 1,
--	.resource	= &nand_resource,
--};
--
--static struct platform_device smc91x_device = {
--	.name		= "smc91x",
--	.id		= 0,
--	.dev	= {
--		.platform_data	= &smc91x_info,
--	},
--	.num_resources	= ARRAY_SIZE(smc91x_resources),
--	.resource	= smc91x_resources,
--};
--
--static struct resource kp_resources[] = {
--	[0] = {
--		.start	= INT_7XX_MPUIO_KEYPAD,
--		.end	= INT_7XX_MPUIO_KEYPAD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static const struct matrix_keymap_data fsample_keymap_data = {
--	.keymap		= fsample_keymap,
--	.keymap_size	= ARRAY_SIZE(fsample_keymap),
--};
--
--static struct omap_kp_platform_data kp_data = {
--	.rows		= 8,
--	.cols		= 8,
--	.keymap_data	= &fsample_keymap_data,
--	.delay		= 4,
--};
--
--static struct platform_device kp_device = {
--	.name		= "omap-keypad",
--	.id		= -1,
--	.dev		= {
--		.platform_data = &kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(kp_resources),
--	.resource	= kp_resources,
--};
--
--static struct platform_device *devices[] __initdata = {
--	&nor_device,
--	&nand_device,
--	&smc91x_device,
--	&kp_device,
--};
--
--static const struct omap_lcd_config fsample_lcd_config = {
--	.ctrl_name	= "internal",
--};
--
--static void __init omap_fsample_init(void)
--{
--	/* Early, board-dependent init */
--
--	/*
--	 * Hold GSM Reset until needed
--	 */
--	omap_writew(omap_readw(OMAP7XX_DSP_M_CTL) & ~1, OMAP7XX_DSP_M_CTL);
--
--	/*
--	 * UARTs -> done automagically by 8250 driver
--	 */
--
--	/*
--	 * CSx timings, GPIO Mux ... setup
--	 */
--
--	/* Flash: CS0 timings setup */
--	omap_writel(0x0000fff3, OMAP7XX_FLASH_CFG_0);
--	omap_writel(0x00000088, OMAP7XX_FLASH_ACFG_0);
--
--	/*
--	 * Ethernet support through the debug board
--	 * CS1 timings setup
--	 */
--	omap_writel(0x0000fff3, OMAP7XX_FLASH_CFG_1);
--	omap_writel(0x00000000, OMAP7XX_FLASH_ACFG_1);
--
--	/*
--	 * Configure MPU_EXT_NIRQ IO in IO_CONF9 register,
--	 * It is used as the Ethernet controller interrupt
--	 */
--	omap_writel(omap_readl(OMAP7XX_IO_CONF_9) & 0x1FFFFFFF,
--			OMAP7XX_IO_CONF_9);
--
--	fsample_init_smc91x();
--
--	BUG_ON(gpio_request(FSAMPLE_NAND_RB_GPIO_PIN, "NAND ready") < 0);
--	gpio_direction_input(FSAMPLE_NAND_RB_GPIO_PIN);
--
--	omap_cfg_reg(L3_1610_FLASH_CS2B_OE);
--	omap_cfg_reg(M8_1610_FLASH_CS2B_WE);
--
--	/* Mux pins for keypad */
--	omap_cfg_reg(E2_7XX_KBR0);
--	omap_cfg_reg(J7_7XX_KBR1);
--	omap_cfg_reg(E1_7XX_KBR2);
--	omap_cfg_reg(F3_7XX_KBR3);
--	omap_cfg_reg(D2_7XX_KBR4);
--	omap_cfg_reg(C2_7XX_KBC0);
--	omap_cfg_reg(D3_7XX_KBC1);
--	omap_cfg_reg(E4_7XX_KBC2);
--	omap_cfg_reg(F4_7XX_KBC3);
--	omap_cfg_reg(E3_7XX_KBC4);
--
--	platform_add_devices(devices, ARRAY_SIZE(devices));
--
--	omap_serial_init();
--	omap_register_i2c_bus(1, 100, NULL, 0);
--
--	omapfb_set_lcd_config(&fsample_lcd_config);
--}
--
--/* Only FPGA needs to be mapped here. All others are done with ioremap */
--static struct map_desc omap_fsample_io_desc[] __initdata = {
--	{
--		.virtual	= H2P2_DBG_FPGA_BASE,
--		.pfn		= __phys_to_pfn(H2P2_DBG_FPGA_START),
--		.length		= H2P2_DBG_FPGA_SIZE,
--		.type		= MT_DEVICE
--	},
--	{
--		.virtual	= FSAMPLE_CPLD_BASE,
--		.pfn		= __phys_to_pfn(FSAMPLE_CPLD_START),
--		.length		= FSAMPLE_CPLD_SIZE,
--		.type		= MT_DEVICE
+-	if (machine_is_omap_perseus2() || machine_is_omap_fsample()) {
+-		/* Select slicer output as OMAP input clock */
+-		omap_writew(omap_readw(OMAP7XX_PCC_UPLD_CTRL) & ~0x1,
+-				OMAP7XX_PCC_UPLD_CTRL);
 -	}
--};
 -
--static void __init omap_fsample_map_io(void)
--{
--	omap15xx_map_io();
--	iotable_init(omap_fsample_io_desc,
--		     ARRAY_SIZE(omap_fsample_io_desc));
--}
--
--MACHINE_START(OMAP_FSAMPLE, "OMAP730 F-Sample")
--/* Maintainer: Brian Swetland <swetland@google.com> */
--	.atag_offset	= 0x100,
--	.map_io		= omap_fsample_map_io,
--	.init_early	= omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= omap_fsample_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-generic.c b/arch/arm/mach-omap1/board-generic.c
-deleted file mode 100644
-index 3b2bcaf4bb01..000000000000
---- a/arch/arm/mach-omap1/board-generic.c
-+++ /dev/null
-@@ -1,85 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-generic.c
-- *
-- * Modified from board-innovator1510.c
-- *
-- * Code for generic OMAP board. Should work on many OMAP systems where
-- * the device drivers take care of all the necessary hardware initialization.
-- * Do not put any board specific code to this file; create a new machine
-- * type if you need custom low-level initializations.
-- */
--#include <linux/gpio.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include "hardware.h"
--#include "mux.h"
--#include "usb.h"
--#include "common.h"
--
--/* assume no Mini-AB port */
--
--#ifdef CONFIG_ARCH_OMAP15XX
--static struct omap_usb_config generic1510_usb_config __initdata = {
--	.register_host	= 1,
--	.register_dev	= 1,
--	.hmc_mode	= 16,
--	.pins[0]	= 3,
--};
--#endif
--
--#if defined(CONFIG_ARCH_OMAP16XX)
--static struct omap_usb_config generic1610_usb_config __initdata = {
--#ifdef CONFIG_USB_OTG
--	.otg		= 1,
--#endif
--	.register_host	= 1,
--	.register_dev	= 1,
--	.hmc_mode	= 16,
--	.pins[0]	= 6,
--};
--#endif
--
--static void __init omap_generic_init(void)
--{
--#ifdef CONFIG_ARCH_OMAP15XX
--	if (cpu_is_omap15xx()) {
--		/* mux pins for uarts */
--		omap_cfg_reg(UART1_TX);
--		omap_cfg_reg(UART1_RTS);
--		omap_cfg_reg(UART2_TX);
--		omap_cfg_reg(UART2_RTS);
--		omap_cfg_reg(UART3_TX);
--		omap_cfg_reg(UART3_RX);
--
--		omap1_usb_init(&generic1510_usb_config);
--	}
--#endif
--#if defined(CONFIG_ARCH_OMAP16XX)
--	if (!cpu_is_omap1510()) {
--		omap1_usb_init(&generic1610_usb_config);
--	}
--#endif
--
--	omap_serial_init();
--	omap_register_i2c_bus(1, 100, NULL, 0);
--}
--
--MACHINE_START(OMAP_GENERIC, "Generic OMAP1510/1610/1710")
--	/* Maintainer: Tony Lindgren <tony@atomide.com> */
--	.atag_offset	= 0x100,
--	.map_io		= omap16xx_map_io,
--	.init_early	= omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= omap_generic_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-h2-mmc.c b/arch/arm/mach-omap1/board-h2-mmc.c
-deleted file mode 100644
-index 06c5404078aa..000000000000
---- a/arch/arm/mach-omap1/board-h2-mmc.c
-+++ /dev/null
-@@ -1,74 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-h2-mmc.c
-- *
-- * Copyright (C) 2007 Instituto Nokia de Tecnologia - INdT
-- * Author: Felipe Balbi <felipe.lima@indt.org.br>
-- *
-- * This code is based on linux/arch/arm/mach-omap2/board-n800-mmc.c, which is:
-- * Copyright (C) 2006 Nokia Corporation
-- */
--#include <linux/gpio.h>
--#include <linux/platform_device.h>
--#include <linux/platform_data/gpio-omap.h>
--#include <linux/mfd/tps65010.h>
--
--#include "board-h2.h"
--#include "mmc.h"
--
--#if IS_ENABLED(CONFIG_MMC_OMAP)
--
--static int mmc_set_power(struct device *dev, int slot, int power_on,
--				int vdd)
--{
--	gpio_set_value(H2_TPS_GPIO_MMC_PWR_EN, power_on);
--	return 0;
--}
--
--static int mmc_late_init(struct device *dev)
--{
--	int ret = gpio_request(H2_TPS_GPIO_MMC_PWR_EN, "MMC power");
--	if (ret < 0)
--		return ret;
--
--	gpio_direction_output(H2_TPS_GPIO_MMC_PWR_EN, 0);
--
--	return ret;
--}
--
--static void mmc_cleanup(struct device *dev)
--{
--	gpio_free(H2_TPS_GPIO_MMC_PWR_EN);
--}
--
--/*
-- * H2 could use the following functions tested:
-- * - mmc_get_cover_state that uses OMAP_MPUIO(1)
-- * - mmc_get_wp that uses OMAP_MPUIO(3)
-- */
--static struct omap_mmc_platform_data mmc1_data = {
--	.nr_slots                       = 1,
--	.init				= mmc_late_init,
--	.cleanup			= mmc_cleanup,
--	.slots[0]       = {
--		.set_power              = mmc_set_power,
--		.ocr_mask               = MMC_VDD_32_33 | MMC_VDD_33_34,
--		.name                   = "mmcblk",
--	},
--};
--
--static struct omap_mmc_platform_data *mmc_data[OMAP16XX_NR_MMC];
--
--void __init h2_mmc_init(void)
--{
--	mmc_data[0] = &mmc1_data;
--	omap1_init_mmc(mmc_data, OMAP16XX_NR_MMC);
--}
--
+ 	/* Amstrad Delta wants BCLK high when inactive */
+ 	if (machine_is_ams_delta())
+ 		omap_writel(omap_readl(ULPD_CLOCK_CTRL) |
+@@ -784,11 +773,7 @@ int __init omap1_clk_init(void)
+ 				ULPD_CLOCK_CTRL);
+ 
+ 	/* Turn off DSP and ARM_TIMXO. Make sure ARM_INTHCK is not divided */
+-	/* (on 730, bit 13 must not be cleared) */
+-	if (cpu_is_omap7xx())
+-		omap_writew(omap_readw(ARM_CKCTL) & 0x2fff, ARM_CKCTL);
+-	else
+-		omap_writew(omap_readw(ARM_CKCTL) & 0x0fff, ARM_CKCTL);
++	omap_writew(omap_readw(ARM_CKCTL) & 0x0fff, ARM_CKCTL);
+ 
+ 	/* Put DSP/MPUI into reset until needed */
+ 	omap_writew(0, ARM_RSTCT1);
+diff --git a/arch/arm/mach-omap1/common.h b/arch/arm/mach-omap1/common.h
+index 5ceff05e15c0..3fd9ed9efb12 100644
+--- a/arch/arm/mach-omap1/common.h
++++ b/arch/arm/mach-omap1/common.h
+@@ -35,14 +35,6 @@
+ #include "soc.h"
+ #include "i2c.h"
+ 
+-#if defined(CONFIG_ARCH_OMAP730) || defined(CONFIG_ARCH_OMAP850)
+-void omap7xx_map_io(void);
 -#else
--
--void __init h2_mmc_init(void)
+-static inline void omap7xx_map_io(void)
 -{
 -}
--
--#endif
-diff --git a/arch/arm/mach-omap1/board-h2.c b/arch/arm/mach-omap1/board-h2.c
-deleted file mode 100644
-index f28a4c3ea501..000000000000
---- a/arch/arm/mach-omap1/board-h2.c
-+++ /dev/null
-@@ -1,448 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-h2.c
-- *
-- * Board specific inits for OMAP-1610 H2
-- *
-- * Copyright (C) 2001 RidgeRun, Inc.
-- * Author: Greg Lonnon <glonnon@ridgerun.com>
-- *
-- * Copyright (C) 2002 MontaVista Software, Inc.
-- *
-- * Separated FPGA interrupts from innovator1510.c and cleaned up for 2.6
-- * Copyright (C) 2004 Nokia Corporation by Tony Lindrgen <tony@atomide.com>
-- *
-- * H2 specific changes and cleanup
-- * Copyright (C) 2004 Nokia Corporation by Imre Deak <imre.deak@nokia.com>
-- */
--#include <linux/gpio.h>
--#include <linux/gpio/machine.h>
--#include <linux/kernel.h>
--#include <linux/platform_device.h>
--#include <linux/delay.h>
--#include <linux/i2c.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/platnand.h>
--#include <linux/mtd/physmap.h>
--#include <linux/input.h>
--#include <linux/mfd/tps65010.h>
--#include <linux/smc91x.h>
--#include <linux/omapfb.h>
--#include <linux/omap-dma.h>
--#include <linux/platform_data/gpio-omap.h>
--#include <linux/platform_data/keypad-omap.h>
--#include <linux/leds.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include "tc.h"
--#include "mux.h"
--#include "flash.h"
--#include "hardware.h"
--#include "usb.h"
--#include "common.h"
--#include "board-h2.h"
--
--/* The first 16 SoC GPIO lines are on this GPIO chip */
--#define OMAP_GPIO_LABEL			"gpio-0-15"
--
--/* At OMAP1610 Innovator the Ethernet is directly connected to CS1 */
--#define OMAP1610_ETHR_START		0x04000300
--
--static const unsigned int h2_keymap[] = {
--	KEY(0, 0, KEY_LEFT),
--	KEY(1, 0, KEY_RIGHT),
--	KEY(2, 0, KEY_3),
--	KEY(3, 0, KEY_F10),
--	KEY(4, 0, KEY_F5),
--	KEY(5, 0, KEY_9),
--	KEY(0, 1, KEY_DOWN),
--	KEY(1, 1, KEY_UP),
--	KEY(2, 1, KEY_2),
--	KEY(3, 1, KEY_F9),
--	KEY(4, 1, KEY_F7),
--	KEY(5, 1, KEY_0),
--	KEY(0, 2, KEY_ENTER),
--	KEY(1, 2, KEY_6),
--	KEY(2, 2, KEY_1),
--	KEY(3, 2, KEY_F2),
--	KEY(4, 2, KEY_F6),
--	KEY(5, 2, KEY_HOME),
--	KEY(0, 3, KEY_8),
--	KEY(1, 3, KEY_5),
--	KEY(2, 3, KEY_F12),
--	KEY(3, 3, KEY_F3),
--	KEY(4, 3, KEY_F8),
--	KEY(5, 3, KEY_END),
--	KEY(0, 4, KEY_7),
--	KEY(1, 4, KEY_4),
--	KEY(2, 4, KEY_F11),
--	KEY(3, 4, KEY_F1),
--	KEY(4, 4, KEY_F4),
--	KEY(5, 4, KEY_ESC),
--	KEY(0, 5, KEY_F13),
--	KEY(1, 5, KEY_F14),
--	KEY(2, 5, KEY_F15),
--	KEY(3, 5, KEY_F16),
--	KEY(4, 5, KEY_SLEEP),
--};
--
--static struct mtd_partition h2_nor_partitions[] = {
--	/* bootloader (U-Boot, etc) in first sector */
--	{
--	      .name		= "bootloader",
--	      .offset		= 0,
--	      .size		= SZ_128K,
--	      .mask_flags	= MTD_WRITEABLE, /* force read-only */
--	},
--	/* bootloader params in the next sector */
--	{
--	      .name		= "params",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_128K,
--	      .mask_flags	= 0,
--	},
--	/* kernel */
--	{
--	      .name		= "kernel",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_2M,
--	      .mask_flags	= 0
--	},
--	/* file system */
--	{
--	      .name		= "filesystem",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= MTDPART_SIZ_FULL,
--	      .mask_flags	= 0
--	}
--};
--
--static struct physmap_flash_data h2_nor_data = {
--	.width		= 2,
--	.set_vpp	= omap1_set_vpp,
--	.parts		= h2_nor_partitions,
--	.nr_parts	= ARRAY_SIZE(h2_nor_partitions),
--};
--
--static struct resource h2_nor_resource = {
--	/* This is on CS3, wherever it's mapped */
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device h2_nor_device = {
--	.name		= "physmap-flash",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &h2_nor_data,
--	},
--	.num_resources	= 1,
--	.resource	= &h2_nor_resource,
--};
--
--static struct mtd_partition h2_nand_partitions[] = {
--#if 0
--	/* REVISIT:  enable these partitions if you make NAND BOOT
--	 * work on your H2 (rev C or newer); published versions of
--	 * x-load only support P2 and H3.
--	 */
--	{
--		.name		= "xloader",
--		.offset		= 0,
--		.size		= 64 * 1024,
--		.mask_flags	= MTD_WRITEABLE,	/* force read-only */
--	},
--	{
--		.name		= "bootloader",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 256 * 1024,
--		.mask_flags	= MTD_WRITEABLE,	/* force read-only */
--	},
--	{
--		.name		= "params",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 192 * 1024,
--	},
--	{
--		.name		= "kernel",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 2 * SZ_1M,
--	},
--#endif
--	{
--		.name		= "filesystem",
--		.size		= MTDPART_SIZ_FULL,
--		.offset		= MTDPART_OFS_APPEND,
--	},
--};
--
--#define H2_NAND_RB_GPIO_PIN	62
--
--static int h2_nand_dev_ready(struct nand_chip *chip)
--{
--	return gpio_get_value(H2_NAND_RB_GPIO_PIN);
--}
--
--static struct platform_nand_data h2_nand_platdata = {
--	.chip	= {
--		.nr_chips		= 1,
--		.chip_offset		= 0,
--		.nr_partitions		= ARRAY_SIZE(h2_nand_partitions),
--		.partitions		= h2_nand_partitions,
--		.options		= NAND_SAMSUNG_LP_OPTIONS,
--	},
--	.ctrl	= {
--		.cmd_ctrl	= omap1_nand_cmd_ctl,
--		.dev_ready	= h2_nand_dev_ready,
--	},
--};
--
--static struct resource h2_nand_resource = {
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device h2_nand_device = {
--	.name		= "gen_nand",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &h2_nand_platdata,
--	},
--	.num_resources	= 1,
--	.resource	= &h2_nand_resource,
--};
--
--static struct smc91x_platdata h2_smc91x_info = {
--	.flags	= SMC91X_USE_16BIT | SMC91X_NOWAIT,
--	.leda	= RPC_LED_100_10,
--	.ledb	= RPC_LED_TX_RX,
--};
--
--static struct resource h2_smc91x_resources[] = {
--	[0] = {
--		.start	= OMAP1610_ETHR_START,		/* Physical */
--		.end	= OMAP1610_ETHR_START + 0xf,
--		.flags	= IORESOURCE_MEM,
--	},
--	[1] = {
--		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_LOWEDGE,
--	},
--};
--
--static struct platform_device h2_smc91x_device = {
--	.name		= "smc91x",
--	.id		= 0,
--	.dev	= {
--		.platform_data	= &h2_smc91x_info,
--	},
--	.num_resources	= ARRAY_SIZE(h2_smc91x_resources),
--	.resource	= h2_smc91x_resources,
--};
--
--static struct resource h2_kp_resources[] = {
--	[0] = {
--		.start	= INT_KEYBOARD,
--		.end	= INT_KEYBOARD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static const struct matrix_keymap_data h2_keymap_data = {
--	.keymap		= h2_keymap,
--	.keymap_size	= ARRAY_SIZE(h2_keymap),
--};
--
--static struct omap_kp_platform_data h2_kp_data = {
--	.rows		= 8,
--	.cols		= 8,
--	.keymap_data	= &h2_keymap_data,
--	.rep		= true,
--	.delay		= 9,
--	.dbounce	= true,
--};
--
--static struct platform_device h2_kp_device = {
--	.name		= "omap-keypad",
--	.id		= -1,
--	.dev		= {
--		.platform_data = &h2_kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(h2_kp_resources),
--	.resource	= h2_kp_resources,
--};
--
--static const struct gpio_led h2_gpio_led_pins[] = {
--	{
--		.name		= "h2:red",
--		.default_trigger = "heartbeat",
--		.gpio		= 3,
--	},
--	{
--		.name		= "h2:green",
--		.default_trigger = "cpu0",
--		.gpio		= OMAP_MPUIO(4),
--	},
--};
--
--static struct gpio_led_platform_data h2_gpio_led_data = {
--	.leds		= h2_gpio_led_pins,
--	.num_leds	= ARRAY_SIZE(h2_gpio_led_pins),
--};
--
--static struct platform_device h2_gpio_leds = {
--	.name	= "leds-gpio",
--	.id	= -1,
--	.dev	= {
--		.platform_data = &h2_gpio_led_data,
--	},
--};
--
--static struct platform_device *h2_devices[] __initdata = {
--	&h2_nor_device,
--	&h2_nand_device,
--	&h2_smc91x_device,
--	&h2_kp_device,
--	&h2_gpio_leds,
--};
--
--static void __init h2_init_smc91x(void)
--{
--	if (gpio_request(0, "SMC91x irq") < 0) {
--		printk("Error requesting gpio 0 for smc91x irq\n");
--		return;
--	}
--}
--
--static int tps_setup(struct i2c_client *client, void *context)
--{
--	if (!IS_BUILTIN(CONFIG_TPS65010))
--		return -ENOSYS;
--
--	tps65010_config_vregs1(TPS_LDO2_ENABLE | TPS_VLDO2_3_0V |
--				TPS_LDO1_ENABLE | TPS_VLDO1_3_0V);
--
--	return 0;
--}
--
--static struct tps65010_board tps_board = {
--	.base		= H2_TPS_GPIO_BASE,
--	.outmask	= 0x0f,
--	.setup		= tps_setup,
--};
--
--static struct i2c_board_info __initdata h2_i2c_board_info[] = {
--	{
--		I2C_BOARD_INFO("tps65010", 0x48),
--		.platform_data	= &tps_board,
--	}, {
--		.type = "isp1301_omap",
--		.addr = 0x2d,
--		.dev_name = "isp1301",
--	},
--};
--
--static struct gpiod_lookup_table isp1301_gpiod_table = {
--	.dev_id = "isp1301",
--	.table = {
--		/* Active low since the irq triggers on falling edge */
--		GPIO_LOOKUP(OMAP_GPIO_LABEL, 2,
--			    NULL, GPIO_ACTIVE_LOW),
--		{ },
--	},
--};
--
--static struct omap_usb_config h2_usb_config __initdata = {
--	/* usb1 has a Mini-AB port and external isp1301 transceiver */
--	.otg		= 2,
--
--#if IS_ENABLED(CONFIG_USB_OMAP)
--	.hmc_mode	= 19,	/* 0:host(off) 1:dev|otg 2:disabled */
--	/* .hmc_mode	= 21,*/	/* 0:host(off) 1:dev(loopback) 2:host(loopback) */
--#elif	IS_ENABLED(CONFIG_USB_OHCI_HCD)
--	/* needs OTG cable, or NONSTANDARD (B-to-MiniB) */
--	.hmc_mode	= 20,	/* 1:dev|otg(off) 1:host 2:disabled */
 -#endif
 -
--	.pins[1]	= 3,
--};
--
--static const struct omap_lcd_config h2_lcd_config __initconst = {
--	.ctrl_name	= "internal",
--};
--
--static void __init h2_init(void)
--{
--	h2_init_smc91x();
--
--	/* Here we assume the NOR boot config:  NOR on CS3 (possibly swapped
--	 * to address 0 by a dip switch), NAND on CS2B.  The NAND driver will
--	 * notice whether a NAND chip is enabled at probe time.
--	 *
--	 * FIXME revC boards (and H3) support NAND-boot, with a dip switch to
--	 * put NOR on CS2B and NAND (which on H2 may be 16bit) on CS3.  Try
--	 * detecting that in code here, to avoid probing every possible flash
--	 * configuration...
--	 */
--	h2_nor_resource.end = h2_nor_resource.start = omap_cs3_phys();
--	h2_nor_resource.end += SZ_32M - 1;
--
--	h2_nand_resource.end = h2_nand_resource.start = OMAP_CS2B_PHYS;
--	h2_nand_resource.end += SZ_4K - 1;
--	BUG_ON(gpio_request(H2_NAND_RB_GPIO_PIN, "NAND ready") < 0);
--	gpio_direction_input(H2_NAND_RB_GPIO_PIN);
--
--	gpiod_add_lookup_table(&isp1301_gpiod_table);
--
--	omap_cfg_reg(L3_1610_FLASH_CS2B_OE);
--	omap_cfg_reg(M8_1610_FLASH_CS2B_WE);
--
--	/* MMC:  card detect and WP */
--	/* omap_cfg_reg(U19_ARMIO1); */		/* CD */
--	omap_cfg_reg(BALLOUT_V8_ARMIO3);	/* WP */
--
--	/* Mux pins for keypad */
--	omap_cfg_reg(F18_1610_KBC0);
--	omap_cfg_reg(D20_1610_KBC1);
--	omap_cfg_reg(D19_1610_KBC2);
--	omap_cfg_reg(E18_1610_KBC3);
--	omap_cfg_reg(C21_1610_KBC4);
--	omap_cfg_reg(G18_1610_KBR0);
--	omap_cfg_reg(F19_1610_KBR1);
--	omap_cfg_reg(H14_1610_KBR2);
--	omap_cfg_reg(E20_1610_KBR3);
--	omap_cfg_reg(E19_1610_KBR4);
--	omap_cfg_reg(N19_1610_KBR5);
--
--	/* GPIO based LEDs */
--	omap_cfg_reg(P18_1610_GPIO3);
--	omap_cfg_reg(MPUIO4);
--
--	h2_smc91x_resources[1].start = gpio_to_irq(0);
--	h2_smc91x_resources[1].end = gpio_to_irq(0);
--	platform_add_devices(h2_devices, ARRAY_SIZE(h2_devices));
--	omap_serial_init();
--
--	/* ISP1301 IRQ wired at M14 */
--	omap_cfg_reg(M14_1510_GPIO2);
--	h2_i2c_board_info[0].irq = gpio_to_irq(58);
--	omap_register_i2c_bus(1, 100, h2_i2c_board_info,
--			      ARRAY_SIZE(h2_i2c_board_info));
--	omap1_usb_init(&h2_usb_config);
--	h2_mmc_init();
--
--	omapfb_set_lcd_config(&h2_lcd_config);
--}
--
--MACHINE_START(OMAP_H2, "TI-H2")
--	/* Maintainer: Imre Deak <imre.deak@nokia.com> */
--	.atag_offset	= 0x100,
--	.map_io		= omap16xx_map_io,
--	.init_early     = omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= h2_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-h2.h b/arch/arm/mach-omap1/board-h2.h
-deleted file mode 100644
-index 315e2662547e..000000000000
---- a/arch/arm/mach-omap1/board-h2.h
-+++ /dev/null
-@@ -1,38 +0,0 @@
--/*
-- * arch/arm/mach-omap1/board-h2.h
-- *
-- * Hardware definitions for TI OMAP1610 H2 board.
-- *
-- * Cleanup for Linux-2.6 by Dirk Behme <dirk.behme@de.bosch.com>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the
-- * Free Software Foundation; either version 2 of the License, or (at your
-- * option) any later version.
-- *
-- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
-- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
-- * NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- *
-- * You should have received a copy of the GNU General Public License along
-- * with this program; if not, write to the Free Software Foundation, Inc.,
-- * 675 Mass Ave, Cambridge, MA 02139, USA.
-- */
--
--#ifndef __ASM_ARCH_OMAP_H2_H
--#define __ASM_ARCH_OMAP_H2_H
--
--#define H2_TPS_GPIO_BASE		(OMAP_MAX_GPIO_LINES + 16 /* MPUIO */)
--#	define H2_TPS_GPIO_MMC_PWR_EN	(H2_TPS_GPIO_BASE + 3)
--
--extern void h2_mmc_init(void);
--
--#endif /*  __ASM_ARCH_OMAP_H2_H */
--
-diff --git a/arch/arm/mach-omap1/board-h3-mmc.c b/arch/arm/mach-omap1/board-h3-mmc.c
-deleted file mode 100644
-index f595bd4f5024..000000000000
---- a/arch/arm/mach-omap1/board-h3-mmc.c
-+++ /dev/null
-@@ -1,64 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-h3-mmc.c
-- *
-- * Copyright (C) 2007 Instituto Nokia de Tecnologia - INdT
-- * Author: Felipe Balbi <felipe.lima@indt.org.br>
-- *
-- * This code is based on linux/arch/arm/mach-omap2/board-n800-mmc.c, which is:
-- * Copyright (C) 2006 Nokia Corporation
-- */
--#include <linux/gpio.h>
--#include <linux/platform_device.h>
--
--#include <linux/mfd/tps65010.h>
--
--#include "common.h"
--#include "board-h3.h"
--#include "mmc.h"
--
--#if IS_ENABLED(CONFIG_MMC_OMAP)
--
--static int mmc_set_power(struct device *dev, int slot, int power_on,
--				int vdd)
--{
--	gpio_set_value(H3_TPS_GPIO_MMC_PWR_EN, power_on);
--	return 0;
--}
--
--/*
-- * H3 could use the following functions tested:
-- * - mmc_get_cover_state that uses OMAP_MPUIO(1)
-- * - mmc_get_wp that maybe uses OMAP_MPUIO(3)
-- */
--static struct omap_mmc_platform_data mmc1_data = {
--	.nr_slots                       = 1,
--	.slots[0]       = {
--		.set_power              = mmc_set_power,
--		.ocr_mask               = MMC_VDD_32_33 | MMC_VDD_33_34,
--		.name                   = "mmcblk",
--	},
--};
--
--static struct omap_mmc_platform_data *mmc_data[OMAP16XX_NR_MMC];
--
--void __init h3_mmc_init(void)
--{
--	int ret;
--
--	ret = gpio_request(H3_TPS_GPIO_MMC_PWR_EN, "MMC power");
--	if (ret < 0)
--		return;
--	gpio_direction_output(H3_TPS_GPIO_MMC_PWR_EN, 0);
--
--	mmc_data[0] = &mmc1_data;
--	omap1_init_mmc(mmc_data, OMAP16XX_NR_MMC);
--}
--
--#else
--
--void __init h3_mmc_init(void)
--{
--}
--
--#endif
-diff --git a/arch/arm/mach-omap1/board-h3.c b/arch/arm/mach-omap1/board-h3.c
-deleted file mode 100644
-index 1e4c57710fcc..000000000000
---- a/arch/arm/mach-omap1/board-h3.c
-+++ /dev/null
-@@ -1,455 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-h3.c
-- *
-- * This file contains OMAP1710 H3 specific code.
-- *
-- * Copyright (C) 2004 Texas Instruments, Inc.
-- * Copyright (C) 2002 MontaVista Software, Inc.
-- * Copyright (C) 2001 RidgeRun, Inc.
-- * Author: RidgeRun, Inc.
-- *         Greg Lonnon (glonnon@ridgerun.com) or info@ridgerun.com
-- */
--#include <linux/gpio.h>
--#include <linux/types.h>
--#include <linux/init.h>
--#include <linux/major.h>
--#include <linux/kernel.h>
--#include <linux/platform_device.h>
--#include <linux/errno.h>
--#include <linux/workqueue.h>
--#include <linux/i2c.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/platnand.h>
--#include <linux/mtd/partitions.h>
--#include <linux/mtd/physmap.h>
--#include <linux/input.h>
--#include <linux/spi/spi.h>
--#include <linux/mfd/tps65010.h>
--#include <linux/smc91x.h>
--#include <linux/omapfb.h>
--#include <linux/platform_data/gpio-omap.h>
--#include <linux/platform_data/keypad-omap.h>
--#include <linux/omap-dma.h>
--#include <linux/leds.h>
--
--#include <asm/setup.h>
--#include <asm/page.h>
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include "tc.h"
--#include "mux.h"
--#include "flash.h"
--#include "hardware.h"
--#include "irqs.h"
--#include "usb.h"
--#include "common.h"
--#include "board-h3.h"
--
--/* In OMAP1710 H3 the Ethernet is directly connected to CS1 */
--#define OMAP1710_ETHR_START		0x04000300
--
--#define H3_TS_GPIO	48
--
--static const unsigned int h3_keymap[] = {
--	KEY(0, 0, KEY_LEFT),
--	KEY(1, 0, KEY_RIGHT),
--	KEY(2, 0, KEY_3),
--	KEY(3, 0, KEY_F10),
--	KEY(4, 0, KEY_F5),
--	KEY(5, 0, KEY_9),
--	KEY(0, 1, KEY_DOWN),
--	KEY(1, 1, KEY_UP),
--	KEY(2, 1, KEY_2),
--	KEY(3, 1, KEY_F9),
--	KEY(4, 1, KEY_F7),
--	KEY(5, 1, KEY_0),
--	KEY(0, 2, KEY_ENTER),
--	KEY(1, 2, KEY_6),
--	KEY(2, 2, KEY_1),
--	KEY(3, 2, KEY_F2),
--	KEY(4, 2, KEY_F6),
--	KEY(5, 2, KEY_HOME),
--	KEY(0, 3, KEY_8),
--	KEY(1, 3, KEY_5),
--	KEY(2, 3, KEY_F12),
--	KEY(3, 3, KEY_F3),
--	KEY(4, 3, KEY_F8),
--	KEY(5, 3, KEY_END),
--	KEY(0, 4, KEY_7),
--	KEY(1, 4, KEY_4),
--	KEY(2, 4, KEY_F11),
--	KEY(3, 4, KEY_F1),
--	KEY(4, 4, KEY_F4),
--	KEY(5, 4, KEY_ESC),
--	KEY(0, 5, KEY_F13),
--	KEY(1, 5, KEY_F14),
--	KEY(2, 5, KEY_F15),
--	KEY(3, 5, KEY_F16),
--	KEY(4, 5, KEY_SLEEP),
--};
--
--
--static struct mtd_partition nor_partitions[] = {
--	/* bootloader (U-Boot, etc) in first sector */
--	{
--	      .name		= "bootloader",
--	      .offset		= 0,
--	      .size		= SZ_128K,
--	      .mask_flags	= MTD_WRITEABLE, /* force read-only */
--	},
--	/* bootloader params in the next sector */
--	{
--	      .name		= "params",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_128K,
--	      .mask_flags	= 0,
--	},
--	/* kernel */
--	{
--	      .name		= "kernel",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_2M,
--	      .mask_flags	= 0
--	},
--	/* file system */
--	{
--	      .name		= "filesystem",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= MTDPART_SIZ_FULL,
--	      .mask_flags	= 0
--	}
--};
--
--static struct physmap_flash_data nor_data = {
--	.width		= 2,
--	.set_vpp	= omap1_set_vpp,
--	.parts		= nor_partitions,
--	.nr_parts	= ARRAY_SIZE(nor_partitions),
--};
--
--static struct resource nor_resource = {
--	/* This is on CS3, wherever it's mapped */
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device nor_device = {
--	.name		= "physmap-flash",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &nor_data,
--	},
--	.num_resources	= 1,
--	.resource	= &nor_resource,
--};
--
--static struct mtd_partition nand_partitions[] = {
--#if 0
--	/* REVISIT: enable these partitions if you make NAND BOOT work */
--	{
--		.name		= "xloader",
--		.offset		= 0,
--		.size		= 64 * 1024,
--		.mask_flags	= MTD_WRITEABLE,	/* force read-only */
--	},
--	{
--		.name		= "bootloader",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 256 * 1024,
--		.mask_flags	= MTD_WRITEABLE,	/* force read-only */
--	},
--	{
--		.name		= "params",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 192 * 1024,
--	},
--	{
--		.name		= "kernel",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 2 * SZ_1M,
--	},
--#endif
--	{
--		.name		= "filesystem",
--		.size		= MTDPART_SIZ_FULL,
--		.offset		= MTDPART_OFS_APPEND,
--	},
--};
--
--#define H3_NAND_RB_GPIO_PIN	10
--
--static int nand_dev_ready(struct nand_chip *chip)
--{
--	return gpio_get_value(H3_NAND_RB_GPIO_PIN);
--}
--
--static struct platform_nand_data nand_platdata = {
--	.chip	= {
--		.nr_chips		= 1,
--		.chip_offset		= 0,
--		.nr_partitions		= ARRAY_SIZE(nand_partitions),
--		.partitions		= nand_partitions,
--		.options		= NAND_SAMSUNG_LP_OPTIONS,
--	},
--	.ctrl	= {
--		.cmd_ctrl	= omap1_nand_cmd_ctl,
--		.dev_ready	= nand_dev_ready,
--
--	},
--};
--
--static struct resource nand_resource = {
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device nand_device = {
--	.name		= "gen_nand",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &nand_platdata,
--	},
--	.num_resources	= 1,
--	.resource	= &nand_resource,
--};
--
--static struct smc91x_platdata smc91x_info = {
--	.flags	= SMC91X_USE_16BIT | SMC91X_NOWAIT,
--	.leda	= RPC_LED_100_10,
--	.ledb	= RPC_LED_TX_RX,
--};
--
--static struct resource smc91x_resources[] = {
--	[0] = {
--		.start	= OMAP1710_ETHR_START,		/* Physical */
--		.end	= OMAP1710_ETHR_START + 0xf,
--		.flags	= IORESOURCE_MEM,
--	},
--	[1] = {
--		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_LOWEDGE,
--	},
--};
--
--static struct platform_device smc91x_device = {
--	.name		= "smc91x",
--	.id		= 0,
--	.dev	= {
--		.platform_data	= &smc91x_info,
--	},
--	.num_resources	= ARRAY_SIZE(smc91x_resources),
--	.resource	= smc91x_resources,
--};
--
--static void __init h3_init_smc91x(void)
--{
--	omap_cfg_reg(W15_1710_GPIO40);
--	if (gpio_request(40, "SMC91x irq") < 0) {
--		printk("Error requesting gpio 40 for smc91x irq\n");
--		return;
--	}
--}
--
--#define GPTIMER_BASE		0xFFFB1400
--#define GPTIMER_REGS(x)	(0xFFFB1400 + (x * 0x800))
--#define GPTIMER_REGS_SIZE	0x46
--
--static struct resource intlat_resources[] = {
--	[0] = {
--		.start  = GPTIMER_REGS(0),	      /* Physical */
--		.end    = GPTIMER_REGS(0) + GPTIMER_REGS_SIZE,
--		.flags  = IORESOURCE_MEM,
--	},
--	[1] = {
--		.start  = INT_1610_GPTIMER1,
--		.end    = INT_1610_GPTIMER1,
--		.flags  = IORESOURCE_IRQ,
--	},
--};
--
--static struct platform_device intlat_device = {
--	.name	   = "omap_intlat",
--	.id	     = 0,
--	.num_resources  = ARRAY_SIZE(intlat_resources),
--	.resource       = intlat_resources,
--};
--
--static struct resource h3_kp_resources[] = {
--	[0] = {
--		.start	= INT_KEYBOARD,
--		.end	= INT_KEYBOARD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static const struct matrix_keymap_data h3_keymap_data = {
--	.keymap		= h3_keymap,
--	.keymap_size	= ARRAY_SIZE(h3_keymap),
--};
--
--static struct omap_kp_platform_data h3_kp_data = {
--	.rows		= 8,
--	.cols		= 8,
--	.keymap_data	= &h3_keymap_data,
--	.rep		= true,
--	.delay		= 9,
--	.dbounce	= true,
--};
--
--static struct platform_device h3_kp_device = {
--	.name		= "omap-keypad",
--	.id		= -1,
--	.dev		= {
--		.platform_data = &h3_kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(h3_kp_resources),
--	.resource	= h3_kp_resources,
--};
--
--static struct platform_device h3_lcd_device = {
--	.name		= "lcd_h3",
--	.id		= -1,
--};
--
--static struct spi_board_info h3_spi_board_info[] __initdata = {
--	[0] = {
--		.modalias	= "tsc2101",
--		.bus_num	= 2,
--		.chip_select	= 0,
--		.max_speed_hz	= 16000000,
--		/* .platform_data	= &tsc_platform_data, */
--	},
--};
--
--static const struct gpio_led h3_gpio_led_pins[] = {
--	{
--		.name		= "h3:red",
--		.default_trigger = "heartbeat",
--		.gpio		= 3,
--	},
--	{
--		.name		= "h3:green",
--		.default_trigger = "cpu0",
--		.gpio		= OMAP_MPUIO(4),
--	},
--};
--
--static struct gpio_led_platform_data h3_gpio_led_data = {
--	.leds		= h3_gpio_led_pins,
--	.num_leds	= ARRAY_SIZE(h3_gpio_led_pins),
--};
--
--static struct platform_device h3_gpio_leds = {
--	.name	= "leds-gpio",
--	.id	= -1,
--	.dev	= {
--		.platform_data = &h3_gpio_led_data,
--	},
--};
--
--static struct platform_device *devices[] __initdata = {
--	&nor_device,
--	&nand_device,
--        &smc91x_device,
--	&intlat_device,
--	&h3_kp_device,
--	&h3_lcd_device,
--	&h3_gpio_leds,
--};
--
--static struct omap_usb_config h3_usb_config __initdata = {
--	/* usb1 has a Mini-AB port and external isp1301 transceiver */
--	.otg	    = 2,
--
--#if IS_ENABLED(CONFIG_USB_OMAP)
--	.hmc_mode       = 19,   /* 0:host(off) 1:dev|otg 2:disabled */
--#elif IS_ENABLED(CONFIG_USB_OHCI_HCD)
--	/* NONSTANDARD CABLE NEEDED (B-to-Mini-B) */
--	.hmc_mode       = 20,   /* 1:dev|otg(off) 1:host 2:disabled */
--#endif
--
--	.pins[1]	= 3,
--};
--
--static const struct omap_lcd_config h3_lcd_config __initconst = {
--	.ctrl_name	= "internal",
--};
--
--static struct i2c_board_info __initdata h3_i2c_board_info[] = {
--       {
--		I2C_BOARD_INFO("tps65013", 0x48),
--       },
--	{
--		I2C_BOARD_INFO("isp1301_omap", 0x2d),
--	},
--};
--
--static void __init h3_init(void)
--{
--	h3_init_smc91x();
--
--	/* Here we assume the NOR boot config:  NOR on CS3 (possibly swapped
--	 * to address 0 by a dip switch), NAND on CS2B.  The NAND driver will
--	 * notice whether a NAND chip is enabled at probe time.
--	 *
--	 * H3 support NAND-boot, with a dip switch to put NOR on CS2B and NAND
--	 * (which on H2 may be 16bit) on CS3.  Try detecting that in code here,
--	 * to avoid probing every possible flash configuration...
--	 */
--	nor_resource.end = nor_resource.start = omap_cs3_phys();
--	nor_resource.end += SZ_32M - 1;
--
--	nand_resource.end = nand_resource.start = OMAP_CS2B_PHYS;
--	nand_resource.end += SZ_4K - 1;
--	BUG_ON(gpio_request(H3_NAND_RB_GPIO_PIN, "NAND ready") < 0);
--	gpio_direction_input(H3_NAND_RB_GPIO_PIN);
--
--	/* GPIO10 Func_MUX_CTRL reg bit 29:27, Configure V2 to mode1 as GPIO */
--	/* GPIO10 pullup/down register, Enable pullup on GPIO10 */
--	omap_cfg_reg(V2_1710_GPIO10);
--
--	/* Mux pins for keypad */
--	omap_cfg_reg(F18_1610_KBC0);
--	omap_cfg_reg(D20_1610_KBC1);
--	omap_cfg_reg(D19_1610_KBC2);
--	omap_cfg_reg(E18_1610_KBC3);
--	omap_cfg_reg(C21_1610_KBC4);
--	omap_cfg_reg(G18_1610_KBR0);
--	omap_cfg_reg(F19_1610_KBR1);
--	omap_cfg_reg(H14_1610_KBR2);
--	omap_cfg_reg(E20_1610_KBR3);
--	omap_cfg_reg(E19_1610_KBR4);
--	omap_cfg_reg(N19_1610_KBR5);
--
--	/* GPIO based LEDs */
--	omap_cfg_reg(P18_1610_GPIO3);
--	omap_cfg_reg(MPUIO4);
--
--	smc91x_resources[1].start = gpio_to_irq(40);
--	smc91x_resources[1].end = gpio_to_irq(40);
--	platform_add_devices(devices, ARRAY_SIZE(devices));
--	h3_spi_board_info[0].irq = gpio_to_irq(H3_TS_GPIO);
--	spi_register_board_info(h3_spi_board_info,
--				ARRAY_SIZE(h3_spi_board_info));
--	omap_serial_init();
--	h3_i2c_board_info[1].irq = gpio_to_irq(14);
--	omap_register_i2c_bus(1, 100, h3_i2c_board_info,
--			      ARRAY_SIZE(h3_i2c_board_info));
--	omap1_usb_init(&h3_usb_config);
--	h3_mmc_init();
--
--	omapfb_set_lcd_config(&h3_lcd_config);
--}
--
--MACHINE_START(OMAP_H3, "TI OMAP1710 H3 board")
--	/* Maintainer: Texas Instruments, Inc. */
--	.atag_offset	= 0x100,
--	.map_io		= omap16xx_map_io,
--	.init_early     = omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= h3_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-h3.h b/arch/arm/mach-omap1/board-h3.h
-deleted file mode 100644
-index 78de535be3c5..000000000000
---- a/arch/arm/mach-omap1/board-h3.h
-+++ /dev/null
-@@ -1,35 +0,0 @@
--/*
-- * arch/arm/mach-omap1/board-h3.h
-- *
-- * Copyright (C) 2001 RidgeRun, Inc.
-- * Copyright (C) 2004 Texas Instruments, Inc.
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the
-- * Free Software Foundation; either version 2 of the License, or (at your
-- * option) any later version.
-- *
-- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
-- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
-- * NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- *
-- * You should have received a copy of the  GNU General Public License along
-- * with this program; if not, write  to the Free Software Foundation, Inc.,
-- * 675 Mass Ave, Cambridge, MA 02139, USA.
-- */
--#ifndef __ASM_ARCH_OMAP_H3_H
--#define __ASM_ARCH_OMAP_H3_H
--
--#define H3_TPS_GPIO_BASE		(OMAP_MAX_GPIO_LINES + 16 /* MPUIO */)
--#	define H3_TPS_GPIO_MMC_PWR_EN	(H3_TPS_GPIO_BASE + 4)
--
--extern void h3_mmc_init(void);
--
--#endif /*  __ASM_ARCH_OMAP_H3_H */
-diff --git a/arch/arm/mach-omap1/board-htcherald.c b/arch/arm/mach-omap1/board-htcherald.c
-deleted file mode 100644
-index 291d294b5824..000000000000
---- a/arch/arm/mach-omap1/board-htcherald.c
-+++ /dev/null
-@@ -1,585 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * HTC Herald board configuration
-- * Copyright (C) 2009 Cory Maccarrone <darkstar6262@gmail.com>
-- * Copyright (C) 2009 Wing Linux
-- *
-- * Based on the board-htcwizard.c file from the linwizard project:
-- * Copyright (C) 2006 Unai Uribarri
-- * Copyright (C) 2008 linwizard.sourceforge.net
-- */
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/input.h>
--#include <linux/delay.h>
--#include <linux/gpio.h>
--#include <linux/gpio_keys.h>
--#include <linux/i2c.h>
--#include <linux/platform_data/i2c-gpio.h>
--#include <linux/htcpld.h>
--#include <linux/leds.h>
--#include <linux/spi/spi.h>
--#include <linux/spi/ads7846.h>
--#include <linux/omapfb.h>
--#include <linux/platform_data/keypad-omap.h>
--#include <linux/soc/ti/omap1-io.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--
--#include "hardware.h"
--#include "omap7xx.h"
--#include "mmc.h"
--#include "irqs.h"
--#include "usb.h"
--#include "common.h"
--
--/* LCD register definition */
--#define       OMAP_LCDC_CONTROL               (0xfffec000 + 0x00)
--#define       OMAP_LCDC_STATUS                (0xfffec000 + 0x10)
--#define       OMAP_DMA_LCD_CCR                (0xfffee300 + 0xc2)
--#define       OMAP_DMA_LCD_CTRL               (0xfffee300 + 0xc4)
--#define       OMAP_LCDC_CTRL_LCD_EN           (1 << 0)
--#define       OMAP_LCDC_STAT_DONE             (1 << 0)
--
--/* GPIO definitions for the power button and keyboard slide switch */
--#define HTCHERALD_GPIO_POWER 139
--#define HTCHERALD_GPIO_SLIDE 174
--#define HTCHERALD_GIRQ_BTNS 141
--
--/* GPIO definitions for the touchscreen */
--#define HTCHERALD_GPIO_TS 76
--
--/* HTCPLD definitions */
--
--/*
-- * CPLD Logic
-- *
-- * Chip 3 - 0x03
-- *
-- * Function            7 6 5 4  3 2 1 0
-- * ------------------------------------
-- * DPAD light          x x x x  x x x 1
-- * SoundDev            x x x x  1 x x x
-- * Screen white        1 x x x  x x x x
-- * MMC power on        x x x x  x 1 x x
-- * Happy times (n)     0 x x x  x 1 x x
-- *
-- * Chip 4 - 0x04
-- *
-- * Function            7 6 5 4  3 2 1 0
-- * ------------------------------------
-- * Keyboard light      x x x x  x x x 1
-- * LCD Bright (4)      x x x x  x 1 1 x
-- * LCD Bright (3)      x x x x  x 0 1 x
-- * LCD Bright (2)      x x x x  x 1 0 x
-- * LCD Bright (1)      x x x x  x 0 0 x
-- * LCD Off             x x x x  0 x x x
-- * LCD image (fb)      1 x x x  x x x x
-- * LCD image (white)   0 x x x  x x x x
-- * Caps lock LED       x x 1 x  x x x x
-- *
-- * Chip 5 - 0x05
-- *
-- * Function            7 6 5 4  3 2 1 0
-- * ------------------------------------
-- * Red (solid)         x x x x  x 1 x x
-- * Red (flash)         x x x x  x x 1 x
-- * Green (GSM flash)   x x x x  1 x x x
-- * Green (GSM solid)   x x x 1  x x x x
-- * Green (wifi flash)  x x 1 x  x x x x
-- * Blue (bt flash)     x 1 x x  x x x x
-- * DPAD Int Enable     1 x x x  x x x 0
-- *
-- * (Combinations of the above can be made for different colors.)
-- * The direction pad interrupt enable must be set each time the
-- * interrupt is handled.
-- *
-- * Chip 6 - 0x06
-- *
-- * Function            7 6 5 4  3 2 1 0
-- * ------------------------------------
-- * Vibrator            x x x x  1 x x x
-- * Alt LED             x x x 1  x x x x
-- * Screen white        1 x x x  x x x x
-- * Screen white        x x 1 x  x x x x
-- * Screen white        x 0 x x  x x x x
-- * Enable kbd dpad     x x x x  x x 0 x
-- * Happy Times         0 1 0 x  x x 0 x
-- */
--
--/*
-- * HTCPLD GPIO lines start 16 after OMAP_MAX_GPIO_LINES to account
-- * for the 16 MPUIO lines.
-- */
--#define HTCPLD_GPIO_START_OFFSET	(OMAP_MAX_GPIO_LINES + 16)
--#define HTCPLD_IRQ(chip, offset)	(OMAP_IRQ_END + 8 * (chip) + (offset))
--#define HTCPLD_BASE(chip, offset)	\
--	(HTCPLD_GPIO_START_OFFSET + 8 * (chip) + (offset))
--
--#define HTCPLD_GPIO_LED_DPAD		HTCPLD_BASE(0, 0)
--#define HTCPLD_GPIO_LED_KBD		HTCPLD_BASE(1, 0)
--#define HTCPLD_GPIO_LED_CAPS		HTCPLD_BASE(1, 5)
--#define HTCPLD_GPIO_LED_RED_FLASH	HTCPLD_BASE(2, 1)
--#define HTCPLD_GPIO_LED_RED_SOLID	HTCPLD_BASE(2, 2)
--#define HTCPLD_GPIO_LED_GREEN_FLASH	HTCPLD_BASE(2, 3)
--#define HTCPLD_GPIO_LED_GREEN_SOLID	HTCPLD_BASE(2, 4)
--#define HTCPLD_GPIO_LED_WIFI		HTCPLD_BASE(2, 5)
--#define HTCPLD_GPIO_LED_BT		HTCPLD_BASE(2, 6)
--#define HTCPLD_GPIO_LED_VIBRATE		HTCPLD_BASE(3, 3)
--#define HTCPLD_GPIO_LED_ALT		HTCPLD_BASE(3, 4)
--
--#define HTCPLD_GPIO_RIGHT_KBD		HTCPLD_BASE(6, 7)
--#define HTCPLD_GPIO_UP_KBD		HTCPLD_BASE(6, 6)
--#define HTCPLD_GPIO_LEFT_KBD		HTCPLD_BASE(6, 5)
--#define HTCPLD_GPIO_DOWN_KBD		HTCPLD_BASE(6, 4)
--
--#define HTCPLD_GPIO_RIGHT_DPAD		HTCPLD_BASE(7, 7)
--#define HTCPLD_GPIO_UP_DPAD		HTCPLD_BASE(7, 6)
--#define HTCPLD_GPIO_LEFT_DPAD		HTCPLD_BASE(7, 5)
--#define HTCPLD_GPIO_DOWN_DPAD		HTCPLD_BASE(7, 4)
--#define HTCPLD_GPIO_ENTER_DPAD		HTCPLD_BASE(7, 3)
--
--/* Chip 5 */
--#define HTCPLD_IRQ_RIGHT_KBD		HTCPLD_IRQ(0, 7)
--#define HTCPLD_IRQ_UP_KBD		HTCPLD_IRQ(0, 6)
--#define HTCPLD_IRQ_LEFT_KBD		HTCPLD_IRQ(0, 5)
--#define HTCPLD_IRQ_DOWN_KBD		HTCPLD_IRQ(0, 4)
--
--/* Chip 6 */
--#define HTCPLD_IRQ_RIGHT_DPAD		HTCPLD_IRQ(1, 7)
--#define HTCPLD_IRQ_UP_DPAD		HTCPLD_IRQ(1, 6)
--#define HTCPLD_IRQ_LEFT_DPAD		HTCPLD_IRQ(1, 5)
--#define HTCPLD_IRQ_DOWN_DPAD		HTCPLD_IRQ(1, 4)
--#define HTCPLD_IRQ_ENTER_DPAD		HTCPLD_IRQ(1, 3)
--
--/* Keyboard definition */
--
--static const unsigned int htc_herald_keymap[] = {
--	KEY(0, 0, KEY_RECORD), /* Mail button */
--	KEY(1, 0, KEY_CAMERA), /* Camera */
--	KEY(2, 0, KEY_PHONE), /* Send key */
--	KEY(3, 0, KEY_VOLUMEUP), /* Volume up */
--	KEY(4, 0, KEY_F2),  /* Right bar (landscape) */
--	KEY(5, 0, KEY_MAIL), /* Win key (portrait) */
--	KEY(6, 0, KEY_DIRECTORY), /* Right bar (portrait) */
--	KEY(0, 1, KEY_LEFTCTRL), /* Windows key */
--	KEY(1, 1, KEY_COMMA),
--	KEY(2, 1, KEY_M),
--	KEY(3, 1, KEY_K),
--	KEY(4, 1, KEY_SLASH), /* OK key */
--	KEY(5, 1, KEY_I),
--	KEY(6, 1, KEY_U),
--	KEY(0, 2, KEY_LEFTALT),
--	KEY(1, 2, KEY_TAB),
--	KEY(2, 2, KEY_N),
--	KEY(3, 2, KEY_J),
--	KEY(4, 2, KEY_ENTER),
--	KEY(5, 2, KEY_H),
--	KEY(6, 2, KEY_Y),
--	KEY(0, 3, KEY_SPACE),
--	KEY(1, 3, KEY_L),
--	KEY(2, 3, KEY_B),
--	KEY(3, 3, KEY_V),
--	KEY(4, 3, KEY_BACKSPACE),
--	KEY(5, 3, KEY_G),
--	KEY(6, 3, KEY_T),
--	KEY(0, 4, KEY_CAPSLOCK), /* Shift */
--	KEY(1, 4, KEY_C),
--	KEY(2, 4, KEY_F),
--	KEY(3, 4, KEY_R),
--	KEY(4, 4, KEY_O),
--	KEY(5, 4, KEY_E),
--	KEY(6, 4, KEY_D),
--	KEY(0, 5, KEY_X),
--	KEY(1, 5, KEY_Z),
--	KEY(2, 5, KEY_S),
--	KEY(3, 5, KEY_W),
--	KEY(4, 5, KEY_P),
--	KEY(5, 5, KEY_Q),
--	KEY(6, 5, KEY_A),
--	KEY(0, 6, KEY_CONNECT), /* Voice button */
--	KEY(2, 6, KEY_CANCEL), /* End key */
--	KEY(3, 6, KEY_VOLUMEDOWN), /* Volume down */
--	KEY(4, 6, KEY_F1), /* Left bar (landscape) */
--	KEY(5, 6, KEY_WWW), /* OK button (portrait) */
--	KEY(6, 6, KEY_CALENDAR), /* Left bar (portrait) */
--};
--
--static const struct matrix_keymap_data htc_herald_keymap_data = {
--	.keymap		= htc_herald_keymap,
--	.keymap_size	= ARRAY_SIZE(htc_herald_keymap),
--};
--
--static struct omap_kp_platform_data htcherald_kp_data = {
--	.rows	= 7,
--	.cols	= 7,
--	.delay = 20,
--	.rep = true,
--	.keymap_data = &htc_herald_keymap_data,
--};
--
--static struct resource kp_resources[] = {
--	[0] = {
--		.start	= INT_7XX_MPUIO_KEYPAD,
--		.end	= INT_7XX_MPUIO_KEYPAD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static struct platform_device kp_device = {
--	.name		= "omap-keypad",
--	.id		= -1,
--	.dev		= {
--		.platform_data = &htcherald_kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(kp_resources),
--	.resource	= kp_resources,
--};
--
--/* GPIO buttons for keyboard slide and power button */
--static struct gpio_keys_button herald_gpio_keys_table[] = {
--	{BTN_0,  HTCHERALD_GPIO_POWER, 1, "POWER", EV_KEY, 1, 20},
--	{SW_LID, HTCHERALD_GPIO_SLIDE, 0, "SLIDE", EV_SW,  1, 20},
--
--	{KEY_LEFT,  HTCPLD_GPIO_LEFT_KBD,  1, "LEFT",  EV_KEY, 1, 20},
--	{KEY_RIGHT, HTCPLD_GPIO_RIGHT_KBD, 1, "RIGHT", EV_KEY, 1, 20},
--	{KEY_UP,    HTCPLD_GPIO_UP_KBD,    1, "UP",    EV_KEY, 1, 20},
--	{KEY_DOWN,  HTCPLD_GPIO_DOWN_KBD,  1, "DOWN",  EV_KEY, 1, 20},
--
--	{KEY_LEFT,  HTCPLD_GPIO_LEFT_DPAD,   1, "DLEFT",  EV_KEY, 1, 20},
--	{KEY_RIGHT, HTCPLD_GPIO_RIGHT_DPAD,  1, "DRIGHT", EV_KEY, 1, 20},
--	{KEY_UP,    HTCPLD_GPIO_UP_DPAD,     1, "DUP",    EV_KEY, 1, 20},
--	{KEY_DOWN,  HTCPLD_GPIO_DOWN_DPAD,   1, "DDOWN",  EV_KEY, 1, 20},
--	{KEY_ENTER, HTCPLD_GPIO_ENTER_DPAD,  1, "DENTER", EV_KEY, 1, 20},
--};
--
--static struct gpio_keys_platform_data herald_gpio_keys_data = {
--	.buttons	= herald_gpio_keys_table,
--	.nbuttons	= ARRAY_SIZE(herald_gpio_keys_table),
--	.rep		= true,
--};
--
--static struct platform_device herald_gpiokeys_device = {
--	.name      = "gpio-keys",
--	.id		= -1,
--	.dev = {
--		.platform_data = &herald_gpio_keys_data,
--	},
--};
--
--/* LEDs for the Herald.  These connect to the HTCPLD GPIO device. */
--static const struct gpio_led gpio_leds[] = {
--	{"dpad",        NULL, HTCPLD_GPIO_LED_DPAD,        0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"kbd",         NULL, HTCPLD_GPIO_LED_KBD,         0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"vibrate",     NULL, HTCPLD_GPIO_LED_VIBRATE,     0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"green_solid", NULL, HTCPLD_GPIO_LED_GREEN_SOLID, 0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"green_flash", NULL, HTCPLD_GPIO_LED_GREEN_FLASH, 0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"red_solid",   "mmc0", HTCPLD_GPIO_LED_RED_SOLID, 0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"red_flash",   NULL, HTCPLD_GPIO_LED_RED_FLASH,   0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"wifi",        NULL, HTCPLD_GPIO_LED_WIFI,        0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"bt",          NULL, HTCPLD_GPIO_LED_BT,          0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"caps",        NULL, HTCPLD_GPIO_LED_CAPS,        0, 0, LEDS_GPIO_DEFSTATE_OFF},
--	{"alt",         NULL, HTCPLD_GPIO_LED_ALT,         0, 0, LEDS_GPIO_DEFSTATE_OFF},
--};
--
--static struct gpio_led_platform_data gpio_leds_data = {
--	.leds		= gpio_leds,
--	.num_leds	= ARRAY_SIZE(gpio_leds),
--};
--
--static struct platform_device gpio_leds_device = {
--	.name		= "leds-gpio",
--	.id		= 0,
--	.dev	= {
--		.platform_data	= &gpio_leds_data,
--	},
--};
--
--/* HTC PLD chips */
--
--static struct resource htcpld_resources[] = {
--	[0] = {
--		.flags  = IORESOURCE_IRQ,
--	},
--};
--
--static struct htcpld_chip_platform_data htcpld_chips[] = {
--	[0] = {
--		.addr		= 0x03,
--		.reset		= 0x04,
--		.num_gpios	= 8,
--		.gpio_out_base	= HTCPLD_BASE(0, 0),
--		.gpio_in_base	= HTCPLD_BASE(4, 0),
--	},
--	[1] = {
--		.addr		= 0x04,
--		.reset		= 0x8e,
--		.num_gpios	= 8,
--		.gpio_out_base	= HTCPLD_BASE(1, 0),
--		.gpio_in_base	= HTCPLD_BASE(5, 0),
--	},
--	[2] = {
--		.addr		= 0x05,
--		.reset		= 0x80,
--		.num_gpios	= 8,
--		.gpio_out_base	= HTCPLD_BASE(2, 0),
--		.gpio_in_base	= HTCPLD_BASE(6, 0),
--		.irq_base	= HTCPLD_IRQ(0, 0),
--		.num_irqs	= 8,
--	},
--	[3] = {
--		.addr		= 0x06,
--		.reset		= 0x40,
--		.num_gpios	= 8,
--		.gpio_out_base	= HTCPLD_BASE(3, 0),
--		.gpio_in_base	= HTCPLD_BASE(7, 0),
--		.irq_base	= HTCPLD_IRQ(1, 0),
--		.num_irqs	= 8,
--	},
--};
--
--static struct htcpld_core_platform_data htcpld_pfdata = {
--	.i2c_adapter_id	   = 1,
--
--	.chip		   = htcpld_chips,
--	.num_chip	   = ARRAY_SIZE(htcpld_chips),
--};
--
--static struct platform_device htcpld_device = {
--	.name		= "i2c-htcpld",
--	.id		= -1,
--	.resource	= htcpld_resources,
--	.num_resources	= ARRAY_SIZE(htcpld_resources),
--	.dev	= {
--		.platform_data	= &htcpld_pfdata,
--	},
--};
--
--/* USB Device */
--static struct omap_usb_config htcherald_usb_config __initdata = {
--	.otg = 0,
--	.register_host = 0,
--	.register_dev  = 1,
--	.hmc_mode = 4,
--	.pins[0] = 2,
--};
--
--/* LCD Device resources */
--static const struct omap_lcd_config htcherald_lcd_config __initconst = {
--	.ctrl_name	= "internal",
--};
--
--static struct platform_device lcd_device = {
--	.name           = "lcd_htcherald",
--	.id             = -1,
--};
--
--/* MMC Card */
--#if IS_ENABLED(CONFIG_MMC_OMAP)
--static struct omap_mmc_platform_data htc_mmc1_data = {
--	.nr_slots                       = 1,
--	.switch_slot                    = NULL,
--	.slots[0]       = {
--		.ocr_mask               = MMC_VDD_32_33 | MMC_VDD_33_34,
--		.name                   = "mmcblk",
--		.nomux                  = 1,
--		.wires                  = 4,
--		.switch_pin             = -1,
--	},
--};
--
--static struct omap_mmc_platform_data *htc_mmc_data[1];
--#endif
--
--
--/* Platform devices for the Herald */
--static struct platform_device *devices[] __initdata = {
--	&kp_device,
--	&lcd_device,
--	&htcpld_device,
--	&gpio_leds_device,
--	&herald_gpiokeys_device,
--};
--
--/*
-- * Touchscreen
-- */
--static const struct ads7846_platform_data htcherald_ts_platform_data = {
--	.model			= 7846,
--	.keep_vref_on		= 1,
--	.x_plate_ohms		= 496,
--	.gpio_pendown		= HTCHERALD_GPIO_TS,
--	.pressure_max		= 10000,
--	.pressure_min		= 5000,
--	.x_min			= 528,
--	.x_max			= 3760,
--	.y_min			= 624,
--	.y_max			= 3760,
--};
--
--static struct spi_board_info __initdata htcherald_spi_board_info[] = {
--	{
--		.modalias		= "ads7846",
--		.platform_data		= &htcherald_ts_platform_data,
--		.max_speed_hz		= 2500000,
--		.bus_num		= 2,
--		.chip_select		= 1,
--	}
--};
--
--/*
-- * Init functions from here on
-- */
--
--static void __init htcherald_lcd_init(void)
--{
--	u32 reg;
--	unsigned int tries = 200;
--
--	/* disable controller if active */
--	reg = omap_readl(OMAP_LCDC_CONTROL);
--	if (reg & OMAP_LCDC_CTRL_LCD_EN) {
--		reg &= ~OMAP_LCDC_CTRL_LCD_EN;
--		omap_writel(reg, OMAP_LCDC_CONTROL);
--
--		/* wait for end of frame */
--		while (!(omap_readl(OMAP_LCDC_STATUS) & OMAP_LCDC_STAT_DONE)) {
--			tries--;
--			if (!tries)
--				break;
+ #ifdef CONFIG_ARCH_OMAP15XX
+ void omap1510_fpga_init_irq(void);
+ void omap15xx_map_io(void);
+diff --git a/arch/arm/mach-omap1/devices.c b/arch/arm/mach-omap1/devices.c
+index 80e94770582a..42d1631cecc0 100644
+--- a/arch/arm/mach-omap1/devices.c
++++ b/arch/arm/mach-omap1/devices.c
+@@ -63,8 +63,6 @@ static void omap_init_rtc(void)
+ static inline void omap_init_rtc(void) {}
+ #endif
+ 
+-static inline void omap_init_mbox(void) { }
+-
+ /*-------------------------------------------------------------------------*/
+ 
+ #if IS_ENABLED(CONFIG_MMC_OMAP)
+@@ -73,22 +71,16 @@ static inline void omap1_mmc_mux(struct omap_mmc_platform_data *mmc_controller,
+ 			int controller_nr)
+ {
+ 	if (controller_nr == 0) {
+-		if (cpu_is_omap7xx()) {
+-			omap_cfg_reg(MMC_7XX_CMD);
+-			omap_cfg_reg(MMC_7XX_CLK);
+-			omap_cfg_reg(MMC_7XX_DAT0);
+-		} else {
+-			omap_cfg_reg(MMC_CMD);
+-			omap_cfg_reg(MMC_CLK);
+-			omap_cfg_reg(MMC_DAT0);
 -		}
--		if (!tries)
--			pr_err("Timeout waiting for end of frame -- LCD may not be available\n");
--
--		/* turn off DMA */
--		reg = omap_readw(OMAP_DMA_LCD_CCR);
--		reg &= ~(1 << 7);
--		omap_writew(reg, OMAP_DMA_LCD_CCR);
--
--		reg = omap_readw(OMAP_DMA_LCD_CTRL);
--		reg &= ~(1 << 8);
--		omap_writew(reg, OMAP_DMA_LCD_CTRL);
--	}
--}
--
--static void __init htcherald_map_io(void)
--{
--	omap7xx_map_io();
--
--	/*
--	 * The LCD panel must be disabled and DMA turned off here, as doing
--	 * it later causes the LCD never to reinitialize.
--	 */
--	htcherald_lcd_init();
--
--	printk(KERN_INFO "htcherald_map_io done.\n");
--}
--
--static void __init htcherald_disable_watchdog(void)
--{
--	/* Disable watchdog if running */
--	if (omap_readl(OMAP_WDT_TIMER_MODE) & 0x8000) {
--		/*
--		 * disable a potentially running watchdog timer before
--		 * it kills us.
--		 */
--		printk(KERN_WARNING "OMAP850 Watchdog seems to be activated, disabling it for now.\n");
--		omap_writel(0xF5, OMAP_WDT_TIMER_MODE);
--		omap_writel(0xA0, OMAP_WDT_TIMER_MODE);
--	}
--}
--
--#define HTCHERALD_GPIO_USB_EN1 33
--#define HTCHERALD_GPIO_USB_EN2 73
--#define HTCHERALD_GPIO_USB_DM  35
--#define HTCHERALD_GPIO_USB_DP  36
--
--static void __init htcherald_usb_enable(void)
--{
--	unsigned int tries = 20;
--	unsigned int value = 0;
--
--	/* Request the GPIOs we need to control here */
--	if (gpio_request(HTCHERALD_GPIO_USB_EN1, "herald_usb") < 0)
--		goto err1;
--
--	if (gpio_request(HTCHERALD_GPIO_USB_EN2, "herald_usb") < 0)
--		goto err2;
--
--	if (gpio_request(HTCHERALD_GPIO_USB_DM, "herald_usb") < 0)
--		goto err3;
--
--	if (gpio_request(HTCHERALD_GPIO_USB_DP, "herald_usb") < 0)
--		goto err4;
--
--	/* force USB_EN GPIO to 0 */
--	do {
--		/* output low */
--		gpio_direction_output(HTCHERALD_GPIO_USB_EN1, 0);
--	} while ((value = gpio_get_value(HTCHERALD_GPIO_USB_EN1)) == 1 &&
--			--tries);
--
--	if (value == 1)
--		printk(KERN_WARNING "Unable to reset USB, trying to continue\n");
--
--	gpio_direction_output(HTCHERALD_GPIO_USB_EN2, 0); /* output low */
--	gpio_direction_input(HTCHERALD_GPIO_USB_DM); /* input */
--	gpio_direction_input(HTCHERALD_GPIO_USB_DP); /* input */
--
--	goto done;
--
--err4:
--	gpio_free(HTCHERALD_GPIO_USB_DM);
--err3:
--	gpio_free(HTCHERALD_GPIO_USB_EN2);
--err2:
--	gpio_free(HTCHERALD_GPIO_USB_EN1);
--err1:
--	printk(KERN_ERR "Unabled to request GPIO for USB\n");
--done:
--	printk(KERN_INFO "USB setup complete.\n");
--}
--
--static void __init htcherald_init(void)
--{
--	printk(KERN_INFO "HTC Herald init.\n");
--
--	/* Do board initialization before we register all the devices */
--	htcpld_resources[0].start = gpio_to_irq(HTCHERALD_GIRQ_BTNS);
--	htcpld_resources[0].end = gpio_to_irq(HTCHERALD_GIRQ_BTNS);
--	platform_add_devices(devices, ARRAY_SIZE(devices));
--
--	htcherald_disable_watchdog();
--
--	htcherald_usb_enable();
--	omap1_usb_init(&htcherald_usb_config);
--
--	htcherald_spi_board_info[0].irq = gpio_to_irq(HTCHERALD_GPIO_TS);
--	spi_register_board_info(htcherald_spi_board_info,
--		ARRAY_SIZE(htcherald_spi_board_info));
--
--	omap_register_i2c_bus(1, 100, NULL, 0);
--
--#if IS_ENABLED(CONFIG_MMC_OMAP)
--	htc_mmc_data[0] = &htc_mmc1_data;
--	omap1_init_mmc(htc_mmc_data, 1);
--#endif
--
--	omapfb_set_lcd_config(&htcherald_lcd_config);
--}
--
--MACHINE_START(HERALD, "HTC Herald")
--	/* Maintainer: Cory Maccarrone <darkstar6262@gmail.com> */
--	/* Maintainer: wing-linux.sourceforge.net */
--	.atag_offset    = 0x100,
--	.map_io         = htcherald_map_io,
--	.init_early     = omap1_init_early,
--	.init_irq       = omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine   = htcherald_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-innovator.c b/arch/arm/mach-omap1/board-innovator.c
-deleted file mode 100644
-index 6deb4ca079e9..000000000000
---- a/arch/arm/mach-omap1/board-innovator.c
-+++ /dev/null
-@@ -1,481 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-innovator.c
-- *
-- * Board specific inits for OMAP-1510 and OMAP-1610 Innovator
-- *
-- * Copyright (C) 2001 RidgeRun, Inc.
-- * Author: Greg Lonnon <glonnon@ridgerun.com>
-- *
-- * Copyright (C) 2002 MontaVista Software, Inc.
-- *
-- * Separated FPGA interrupts from innovator1510.c and cleaned up for 2.6
-- * Copyright (C) 2004 Nokia Corporation by Tony Lindrgen <tony@atomide.com>
-- */
--#include <linux/gpio.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/delay.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/partitions.h>
--#include <linux/mtd/physmap.h>
--#include <linux/input.h>
--#include <linux/smc91x.h>
--#include <linux/omapfb.h>
--#include <linux/platform_data/keypad-omap.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include "tc.h"
--#include "mux.h"
--#include "flash.h"
--#include "hardware.h"
--#include "usb.h"
--#include "iomap.h"
--#include "common.h"
--#include "mmc.h"
--
--/* At OMAP1610 Innovator the Ethernet is directly connected to CS1 */
--#define INNOVATOR1610_ETHR_START	0x04000300
--
--static const unsigned int innovator_keymap[] = {
--	KEY(0, 0, KEY_F1),
--	KEY(3, 0, KEY_DOWN),
--	KEY(1, 1, KEY_F2),
--	KEY(2, 1, KEY_RIGHT),
--	KEY(0, 2, KEY_F3),
--	KEY(1, 2, KEY_F4),
--	KEY(2, 2, KEY_UP),
--	KEY(2, 3, KEY_ENTER),
--	KEY(3, 3, KEY_LEFT),
--};
--
--static struct mtd_partition innovator_partitions[] = {
--	/* bootloader (U-Boot, etc) in first sector */
--	{
--	      .name		= "bootloader",
--	      .offset		= 0,
--	      .size		= SZ_128K,
--	      .mask_flags	= MTD_WRITEABLE, /* force read-only */
--	},
--	/* bootloader params in the next sector */
--	{
--	      .name		= "params",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_128K,
--	      .mask_flags	= 0,
--	},
--	/* kernel */
--	{
--	      .name		= "kernel",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_2M,
--	      .mask_flags	= 0
--	},
--	/* rest of flash1 is a file system */
--	{
--	      .name		= "rootfs",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_16M - SZ_2M - 2 * SZ_128K,
--	      .mask_flags	= 0
--	},
--	/* file system */
--	{
--	      .name		= "filesystem",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= MTDPART_SIZ_FULL,
--	      .mask_flags	= 0
--	}
--};
--
--static struct physmap_flash_data innovator_flash_data = {
--	.width		= 2,
--	.set_vpp	= omap1_set_vpp,
--	.parts		= innovator_partitions,
--	.nr_parts	= ARRAY_SIZE(innovator_partitions),
--};
--
--static struct resource innovator_flash_resource = {
--	.start		= OMAP_CS0_PHYS,
--	.end		= OMAP_CS0_PHYS + SZ_32M - 1,
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device innovator_flash_device = {
--	.name		= "physmap-flash",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &innovator_flash_data,
--	},
--	.num_resources	= 1,
--	.resource	= &innovator_flash_resource,
--};
--
--static struct resource innovator_kp_resources[] = {
--	[0] = {
--		.start	= INT_KEYBOARD,
--		.end	= INT_KEYBOARD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static const struct matrix_keymap_data innovator_keymap_data = {
--	.keymap		= innovator_keymap,
--	.keymap_size	= ARRAY_SIZE(innovator_keymap),
--};
--
--static struct omap_kp_platform_data innovator_kp_data = {
--	.rows		= 8,
--	.cols		= 8,
--	.keymap_data	= &innovator_keymap_data,
--	.delay		= 4,
--};
--
--static struct platform_device innovator_kp_device = {
--	.name		= "omap-keypad",
--	.id		= -1,
--	.dev		= {
--		.platform_data = &innovator_kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(innovator_kp_resources),
--	.resource	= innovator_kp_resources,
--};
--
--static struct smc91x_platdata innovator_smc91x_info = {
--	.flags	= SMC91X_USE_16BIT | SMC91X_NOWAIT,
--	.leda	= RPC_LED_100_10,
--	.ledb	= RPC_LED_TX_RX,
--};
--
--#ifdef CONFIG_ARCH_OMAP15XX
--
--#include <linux/spi/spi.h>
--#include <linux/spi/ads7846.h>
--
--
--/* Only FPGA needs to be mapped here. All others are done with ioremap */
--static struct map_desc innovator1510_io_desc[] __initdata = {
--	{
--		.virtual	= OMAP1510_FPGA_BASE,
--		.pfn		= __phys_to_pfn(OMAP1510_FPGA_START),
--		.length		= OMAP1510_FPGA_SIZE,
--		.type		= MT_DEVICE
--	}
--};
--
--static struct resource innovator1510_smc91x_resources[] = {
--	[0] = {
--		.start	= OMAP1510_FPGA_ETHR_START,	/* Physical */
--		.end	= OMAP1510_FPGA_ETHR_START + 0xf,
--		.flags	= IORESOURCE_MEM,
--	},
--	[1] = {
--		.start	= OMAP1510_INT_ETHER,
--		.end	= OMAP1510_INT_ETHER,
--		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_HIGHEDGE,
--	},
--};
--
--static struct platform_device innovator1510_smc91x_device = {
--	.name		= "smc91x",
--	.id		= 0,
--	.dev	= {
--		.platform_data	= &innovator_smc91x_info,
--	},
--	.num_resources	= ARRAY_SIZE(innovator1510_smc91x_resources),
--	.resource	= innovator1510_smc91x_resources,
--};
--
--static struct platform_device innovator1510_lcd_device = {
--	.name		= "lcd_inn1510",
--	.id		= -1,
--	.dev	= {
--		.platform_data = (void __force *)OMAP1510_FPGA_LCD_PANEL_CONTROL,
--	}
--};
--
--static struct platform_device innovator1510_spi_device = {
--	.name		= "spi_inn1510",
--	.id		= -1,
--};
--
--static struct platform_device *innovator1510_devices[] __initdata = {
--	&innovator_flash_device,
--	&innovator1510_smc91x_device,
--	&innovator_kp_device,
--	&innovator1510_lcd_device,
--	&innovator1510_spi_device,
--};
--
--static int innovator_get_pendown_state(void)
--{
--	return !(__raw_readb(OMAP1510_FPGA_TOUCHSCREEN) & (1 << 5));
--}
--
--static const struct ads7846_platform_data innovator1510_ts_info = {
--	.model			= 7846,
--	.vref_delay_usecs	= 100,	/* internal, no capacitor */
--	.x_plate_ohms		= 419,
--	.y_plate_ohms		= 486,
--	.get_pendown_state	= innovator_get_pendown_state,
--};
--
--static struct spi_board_info __initdata innovator1510_boardinfo[] = { {
--	/* FPGA (bus "10") CS0 has an ads7846e */
--	.modalias		= "ads7846",
--	.platform_data		= &innovator1510_ts_info,
--	.irq			= OMAP1510_INT_FPGA_TS,
--	.max_speed_hz		= 120000 /* max sample rate at 3V */
--					* 26 /* command + data + overhead */,
--	.bus_num		= 10,
--	.chip_select		= 0,
--} };
--
--#endif /* CONFIG_ARCH_OMAP15XX */
--
--#ifdef CONFIG_ARCH_OMAP16XX
--
--static struct resource innovator1610_smc91x_resources[] = {
--	[0] = {
--		.start	= INNOVATOR1610_ETHR_START,		/* Physical */
--		.end	= INNOVATOR1610_ETHR_START + 0xf,
--		.flags	= IORESOURCE_MEM,
--	},
--	[1] = {
--		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_LOWEDGE,
--	},
--};
--
--static struct platform_device innovator1610_smc91x_device = {
--	.name		= "smc91x",
--	.id		= 0,
--	.dev	= {
--		.platform_data	= &innovator_smc91x_info,
--	},
--	.num_resources	= ARRAY_SIZE(innovator1610_smc91x_resources),
--	.resource	= innovator1610_smc91x_resources,
--};
--
--static struct platform_device innovator1610_lcd_device = {
--	.name		= "inn1610_lcd",
--	.id		= -1,
--};
--
--static struct platform_device *innovator1610_devices[] __initdata = {
--	&innovator_flash_device,
--	&innovator1610_smc91x_device,
--	&innovator_kp_device,
--	&innovator1610_lcd_device,
--};
--
--#endif /* CONFIG_ARCH_OMAP16XX */
--
--static void __init innovator_init_smc91x(void)
--{
--	if (cpu_is_omap1510()) {
--		__raw_writeb(__raw_readb(OMAP1510_FPGA_RST) & ~1,
--			   OMAP1510_FPGA_RST);
--		udelay(750);
--	} else {
--		if (gpio_request(0, "SMC91x irq") < 0) {
--			printk("Error requesting gpio 0 for smc91x irq\n");
--			return;
--		}
--	}
--}
--
--#ifdef CONFIG_ARCH_OMAP15XX
--/*
-- * Board specific gang-switched transceiver power on/off.
-- */
--static int innovator_omap_ohci_transceiver_power(int on)
--{
--	if (on)
--		__raw_writeb(__raw_readb(INNOVATOR_FPGA_CAM_USB_CONTROL)
--				| ((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
--			       INNOVATOR_FPGA_CAM_USB_CONTROL);
--	else
--		__raw_writeb(__raw_readb(INNOVATOR_FPGA_CAM_USB_CONTROL)
--				& ~((1 << 5/*usb1*/) | (1 << 3/*usb2*/)),
--			       INNOVATOR_FPGA_CAM_USB_CONTROL);
--
--	return 0;
--}
--
--static struct omap_usb_config innovator1510_usb_config __initdata = {
--	/* for bundled non-standard host and peripheral cables */
--	.hmc_mode	= 4,
--
--	.register_host	= 1,
--	.pins[1]	= 6,
--	.pins[2]	= 6,		/* Conflicts with UART2 */
--
--	.register_dev	= 1,
--	.pins[0]	= 2,
--
--	.transceiver_power = innovator_omap_ohci_transceiver_power,
--};
--
--static const struct omap_lcd_config innovator1510_lcd_config __initconst = {
--	.ctrl_name	= "internal",
--};
--#endif
--
--#ifdef CONFIG_ARCH_OMAP16XX
--static struct omap_usb_config h2_usb_config __initdata = {
--	/* usb1 has a Mini-AB port and external isp1301 transceiver */
--	.otg		= 2,
--
--#if IS_ENABLED(CONFIG_USB_OMAP)
--	.hmc_mode	= 19,	/* 0:host(off) 1:dev|otg 2:disabled */
--	/* .hmc_mode	= 21,*/	/* 0:host(off) 1:dev(loopback) 2:host(loopback) */
--#elif	IS_ENABLED(CONFIG_USB_OHCI_HCD)
--	/* NONSTANDARD CABLE NEEDED (B-to-Mini-B) */
--	.hmc_mode	= 20,	/* 1:dev|otg(off) 1:host 2:disabled */
--#endif
--
--	.pins[1]	= 3,
--};
--
--static const struct omap_lcd_config innovator1610_lcd_config __initconst = {
--	.ctrl_name	= "internal",
--};
--#endif
--
--#if IS_ENABLED(CONFIG_MMC_OMAP)
--
--static int mmc_set_power(struct device *dev, int slot, int power_on,
--				int vdd)
--{
--	if (power_on)
--		__raw_writeb(__raw_readb(OMAP1510_FPGA_POWER) | (1 << 3),
--				OMAP1510_FPGA_POWER);
--	else
--		__raw_writeb(__raw_readb(OMAP1510_FPGA_POWER) & ~(1 << 3),
--				OMAP1510_FPGA_POWER);
--
--	return 0;
--}
--
--/*
-- * Innovator could use the following functions tested:
-- * - mmc_get_wp that uses OMAP_MPUIO(3)
-- * - mmc_get_cover_state that uses FPGA F4 UIO43
-- */
--static struct omap_mmc_platform_data mmc1_data = {
--	.nr_slots                       = 1,
--	.slots[0]       = {
--		.set_power		= mmc_set_power,
--		.wires			= 4,
--		.name                   = "mmcblk",
--	},
--};
--
--static struct omap_mmc_platform_data *mmc_data[OMAP16XX_NR_MMC];
--
--static void __init innovator_mmc_init(void)
--{
--	mmc_data[0] = &mmc1_data;
--	omap1_init_mmc(mmc_data, OMAP15XX_NR_MMC);
--}
--
--#else
--static inline void innovator_mmc_init(void)
--{
--}
--#endif
--
--static void __init innovator_init(void)
--{
--	if (cpu_is_omap1510())
--		omap1510_fpga_init_irq();
--	innovator_init_smc91x();
--
--#ifdef CONFIG_ARCH_OMAP15XX
--	if (cpu_is_omap1510()) {
--		unsigned char reg;
--
--		/* mux pins for uarts */
--		omap_cfg_reg(UART1_TX);
--		omap_cfg_reg(UART1_RTS);
--		omap_cfg_reg(UART2_TX);
--		omap_cfg_reg(UART2_RTS);
--		omap_cfg_reg(UART3_TX);
--		omap_cfg_reg(UART3_RX);
--
--		reg = __raw_readb(OMAP1510_FPGA_POWER);
--		reg |= OMAP1510_FPGA_PCR_COM1_EN;
--		__raw_writeb(reg, OMAP1510_FPGA_POWER);
--		udelay(10);
--
--		reg = __raw_readb(OMAP1510_FPGA_POWER);
--		reg |= OMAP1510_FPGA_PCR_COM2_EN;
--		__raw_writeb(reg, OMAP1510_FPGA_POWER);
--		udelay(10);
--
--		platform_add_devices(innovator1510_devices, ARRAY_SIZE(innovator1510_devices));
--		spi_register_board_info(innovator1510_boardinfo,
--				ARRAY_SIZE(innovator1510_boardinfo));
--	}
--#endif
--#ifdef CONFIG_ARCH_OMAP16XX
--	if (!cpu_is_omap1510()) {
--		innovator1610_smc91x_resources[1].start = gpio_to_irq(0);
--		innovator1610_smc91x_resources[1].end = gpio_to_irq(0);
--		platform_add_devices(innovator1610_devices, ARRAY_SIZE(innovator1610_devices));
--	}
--#endif
--
--#ifdef CONFIG_ARCH_OMAP15XX
--	if (cpu_is_omap1510()) {
--		omap1_usb_init(&innovator1510_usb_config);
--		omapfb_set_lcd_config(&innovator1510_lcd_config);
--	}
--#endif
--#ifdef CONFIG_ARCH_OMAP16XX
--	if (cpu_is_omap1610()) {
--		omap1_usb_init(&h2_usb_config);
--		omapfb_set_lcd_config(&innovator1610_lcd_config);
--	}
--#endif
--	omap_serial_init();
--	omap_register_i2c_bus(1, 100, NULL, 0);
--	innovator_mmc_init();
--}
--
--/*
-- * REVISIT: Assume 15xx for now, we don't want to do revision check
-- * until later on. The right way to fix this is to set up a different
-- * machine_id for 16xx Innovator, or use device tree.
-- */
--static void __init innovator_map_io(void)
--{
--#ifdef CONFIG_ARCH_OMAP15XX
--	omap15xx_map_io();
--
--	iotable_init(innovator1510_io_desc, ARRAY_SIZE(innovator1510_io_desc));
--	udelay(10);	/* Delay needed for FPGA */
--
--	/* Dump the Innovator FPGA rev early - useful info for support. */
--	pr_debug("Innovator FPGA Rev %d.%d Board Rev %d\n",
--			__raw_readb(OMAP1510_FPGA_REV_HIGH),
--			__raw_readb(OMAP1510_FPGA_REV_LOW),
--			__raw_readb(OMAP1510_FPGA_BOARD_REV));
--#endif
--}
--
--MACHINE_START(OMAP_INNOVATOR, "TI-Innovator")
--	/* Maintainer: MontaVista Software, Inc. */
--	.atag_offset	= 0x100,
--	.map_io		= innovator_map_io,
--	.init_early     = omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= innovator_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-nand.c b/arch/arm/mach-omap1/board-nand.c
-deleted file mode 100644
-index 479ab9be784d..000000000000
---- a/arch/arm/mach-omap1/board-nand.c
-+++ /dev/null
-@@ -1,33 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-nand.c
-- *
-- * Common OMAP1 board NAND code
-- *
-- * Copyright (C) 2004, 2012 Texas Instruments, Inc.
-- * Copyright (C) 2002 MontaVista Software, Inc.
-- * Copyright (C) 2001 RidgeRun, Inc.
-- * Author: RidgeRun, Inc.
-- *         Greg Lonnon (glonnon@ridgerun.com) or info@ridgerun.com
-- */
--#include <linux/kernel.h>
--#include <linux/io.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/rawnand.h>
--
--#include "common.h"
--
--void omap1_nand_cmd_ctl(struct nand_chip *this, int cmd, unsigned int ctrl)
--{
--	unsigned long mask;
--
--	if (cmd == NAND_CMD_NONE)
--		return;
--
--	mask = (ctrl & NAND_CLE) ? 0x02 : 0;
--	if (ctrl & NAND_ALE)
--		mask |= 0x04;
--
--	writeb(cmd, this->legacy.IO_ADDR_W + mask);
--}
--
-diff --git a/arch/arm/mach-omap1/board-palmtt.c b/arch/arm/mach-omap1/board-palmtt.c
-deleted file mode 100644
-index 537f0e6a2ff7..000000000000
---- a/arch/arm/mach-omap1/board-palmtt.c
-+++ /dev/null
-@@ -1,285 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-palmtt.c
-- *
-- * Modified from board-palmtt2.c
-- *
-- * Modified and amended for Palm Tungsten|T
-- * by Marek Vasut <marek.vasut@gmail.com>
-- */
--
--#include <linux/delay.h>
--#include <linux/gpio.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/notifier.h>
--#include <linux/clk.h>
--#include <linux/input.h>
--#include <linux/interrupt.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/partitions.h>
--#include <linux/mtd/physmap.h>
--#include <linux/leds.h>
--#include <linux/omapfb.h>
--#include <linux/spi/spi.h>
--#include <linux/spi/ads7846.h>
--#include <linux/omap-dma.h>
--#include <linux/platform_data/omap1_bl.h>
--#include <linux/platform_data/leds-omap.h>
--#include <linux/platform_data/keypad-omap.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include "tc.h"
--#include "flash.h"
--#include "mux.h"
--#include "hardware.h"
--#include "usb.h"
--#include "common.h"
--
--#define PALMTT_USBDETECT_GPIO	0
--#define PALMTT_CABLE_GPIO	1
--#define PALMTT_LED_GPIO		3
--#define PALMTT_PENIRQ_GPIO	6
--#define PALMTT_MMC_WP_GPIO	8
--#define PALMTT_HDQ_GPIO		11
--
--static const unsigned int palmtt_keymap[] = {
--	KEY(0, 0, KEY_ESC),
--	KEY(1, 0, KEY_SPACE),
--	KEY(2, 0, KEY_LEFTCTRL),
--	KEY(3, 0, KEY_TAB),
--	KEY(4, 0, KEY_ENTER),
--	KEY(0, 1, KEY_LEFT),
--	KEY(1, 1, KEY_DOWN),
--	KEY(2, 1, KEY_UP),
--	KEY(3, 1, KEY_RIGHT),
--	KEY(0, 2, KEY_SLEEP),
--	KEY(4, 2, KEY_Y),
--};
--
--static struct mtd_partition palmtt_partitions[] = {
--	{
--		.name		= "write8k",
--		.offset		= 0,
--		.size		= SZ_8K,
--		.mask_flags	= 0,
--	},
--	{
--		.name		= "PalmOS-BootLoader(ro)",
--		.offset		= SZ_8K,
--		.size		= 7 * SZ_8K,
--		.mask_flags	= MTD_WRITEABLE,
--	},
--	{
--		.name		= "u-boot",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 8 * SZ_8K,
--		.mask_flags	= 0,
--	},
--	{
--		.name		= "PalmOS-FS(ro)",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= 7 * SZ_1M + 4 * SZ_64K - 16 * SZ_8K,
--		.mask_flags	= MTD_WRITEABLE,
--	},
--	{
--		.name		= "u-boot(rez)",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= SZ_128K,
--		.mask_flags	= 0
--	},
--	{
--		.name		= "empty",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= MTDPART_SIZ_FULL,
--		.mask_flags	= 0
--	}
--};
--
--static struct physmap_flash_data palmtt_flash_data = {
--	.width		= 2,
--	.set_vpp	= omap1_set_vpp,
--	.parts		= palmtt_partitions,
--	.nr_parts	= ARRAY_SIZE(palmtt_partitions),
--};
--
--static struct resource palmtt_flash_resource = {
--	.start		= OMAP_CS0_PHYS,
--	.end		= OMAP_CS0_PHYS + SZ_8M - 1,
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device palmtt_flash_device = {
--	.name		= "physmap-flash",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &palmtt_flash_data,
--	},
--	.num_resources	= 1,
--	.resource	= &palmtt_flash_resource,
--};
--
--static struct resource palmtt_kp_resources[] = {
--	[0] = {
--		.start	= INT_KEYBOARD,
--		.end	= INT_KEYBOARD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static const struct matrix_keymap_data palmtt_keymap_data = {
--	.keymap		= palmtt_keymap,
--	.keymap_size	= ARRAY_SIZE(palmtt_keymap),
--};
--
--static struct omap_kp_platform_data palmtt_kp_data = {
--	.rows	= 6,
--	.cols	= 3,
--	.keymap_data = &palmtt_keymap_data,
--};
--
--static struct platform_device palmtt_kp_device = {
--	.name		= "omap-keypad",
--	.id		= -1,
--	.dev		= {
--		.platform_data = &palmtt_kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(palmtt_kp_resources),
--	.resource	= palmtt_kp_resources,
--};
--
--static struct platform_device palmtt_lcd_device = {
--	.name		= "lcd_palmtt",
--	.id		= -1,
--};
--
--static struct platform_device palmtt_spi_device = {
--	.name		= "spi_palmtt",
--	.id		= -1,
--};
--
--static struct omap_backlight_config palmtt_backlight_config = {
--	.default_intensity	= 0xa0,
--};
--
--static struct platform_device palmtt_backlight_device = {
--	.name		= "omap-bl",
--	.id		= -1,
--	.dev		= {
--		.platform_data= &palmtt_backlight_config,
--	},
--};
--
--static struct omap_led_config palmtt_led_config[] = {
--	{
--		.cdev	= {
--			.name	= "palmtt:led0",
--		},
--		.gpio	= PALMTT_LED_GPIO,
--	},
--};
--
--static struct omap_led_platform_data palmtt_led_data = {
--	.nr_leds	= ARRAY_SIZE(palmtt_led_config),
--	.leds		= palmtt_led_config,
--};
--
--static struct platform_device palmtt_led_device = {
--	.name	= "omap-led",
--	.id	= -1,
--	.dev	= {
--		.platform_data	= &palmtt_led_data,
--	},
--};
--
--static struct platform_device *palmtt_devices[] __initdata = {
--	&palmtt_flash_device,
--	&palmtt_kp_device,
--	&palmtt_lcd_device,
--	&palmtt_spi_device,
--	&palmtt_backlight_device,
--	&palmtt_led_device,
--};
--
--static int palmtt_get_pendown_state(void)
--{
--	return !gpio_get_value(6);
--}
--
--static const struct ads7846_platform_data palmtt_ts_info = {
--	.model			= 7846,
--	.vref_delay_usecs	= 100,	/* internal, no capacitor */
--	.x_plate_ohms		= 419,
--	.y_plate_ohms		= 486,
--	.get_pendown_state	= palmtt_get_pendown_state,
--};
--
--static struct spi_board_info __initdata palmtt_boardinfo[] = {
--	{
--		/* MicroWire (bus 2) CS0 has an ads7846e */
--		.modalias	= "ads7846",
--		.platform_data	= &palmtt_ts_info,
--		.max_speed_hz	= 120000	/* max sample rate at 3V */
--					* 26	/* command + data + overhead */,
--		.bus_num	= 2,
--		.chip_select	= 0,
--	}
--};
--
--static struct omap_usb_config palmtt_usb_config __initdata = {
--	.register_dev	= 1,
--	.hmc_mode	= 0,
--	.pins[0]	= 2,
--};
--
--static const struct omap_lcd_config palmtt_lcd_config __initconst = {
--	.ctrl_name	= "internal",
--};
--
--static void __init omap_mpu_wdt_mode(int mode) {
--	if (mode)
--		omap_writew(0x8000, OMAP_WDT_TIMER_MODE);
--	else {
--		omap_writew(0x00f5, OMAP_WDT_TIMER_MODE);
--		omap_writew(0x00a0, OMAP_WDT_TIMER_MODE);
--	}
--}
--
--static void __init omap_palmtt_init(void)
--{
--	/* mux pins for uarts */
--	omap_cfg_reg(UART1_TX);
--	omap_cfg_reg(UART1_RTS);
--	omap_cfg_reg(UART2_TX);
--	omap_cfg_reg(UART2_RTS);
--	omap_cfg_reg(UART3_TX);
--	omap_cfg_reg(UART3_RX);
--
--	omap_mpu_wdt_mode(0);
--
--	platform_add_devices(palmtt_devices, ARRAY_SIZE(palmtt_devices));
--
--	palmtt_boardinfo[0].irq = gpio_to_irq(6);
--	spi_register_board_info(palmtt_boardinfo,ARRAY_SIZE(palmtt_boardinfo));
--	omap_serial_init();
--	omap1_usb_init(&palmtt_usb_config);
--	omap_register_i2c_bus(1, 100, NULL, 0);
--
--	omapfb_set_lcd_config(&palmtt_lcd_config);
--}
--
--MACHINE_START(OMAP_PALMTT, "OMAP1510 based Palm Tungsten|T")
--	.atag_offset	= 0x100,
--	.map_io		= omap15xx_map_io,
--	.init_early     = omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= omap_palmtt_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-palmz71.c b/arch/arm/mach-omap1/board-palmz71.c
-deleted file mode 100644
-index 47f08ae5a2f3..000000000000
---- a/arch/arm/mach-omap1/board-palmz71.c
-+++ /dev/null
-@@ -1,300 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-palmz71.c
-- *
-- * Modified from board-generic.c
-- *
-- * Support for the Palm Zire71 PDA.
-- *
-- * Original version : Laurent Gonzalez
-- *
-- * Modified for zire71 : Marek Vasut
-- */
--
--#include <linux/delay.h>
--#include <linux/gpio.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/notifier.h>
--#include <linux/clk.h>
--#include <linux/irq.h>
--#include <linux/input.h>
--#include <linux/interrupt.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/partitions.h>
--#include <linux/mtd/physmap.h>
--#include <linux/omapfb.h>
--#include <linux/spi/spi.h>
--#include <linux/spi/ads7846.h>
--#include <linux/platform_data/omap1_bl.h>
--#include <linux/platform_data/keypad-omap.h>
--#include <linux/omap-dma.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include "tc.h"
--#include "flash.h"
--#include "mux.h"
--#include "hardware.h"
--#include "usb.h"
--#include "common.h"
--
--#define PALMZ71_USBDETECT_GPIO	0
--#define PALMZ71_PENIRQ_GPIO	6
--#define PALMZ71_MMC_WP_GPIO	8
--#define PALMZ71_HDQ_GPIO 	11
--
--#define PALMZ71_HOTSYNC_GPIO	OMAP_MPUIO(1)
--#define PALMZ71_CABLE_GPIO	OMAP_MPUIO(2)
--#define PALMZ71_SLIDER_GPIO	OMAP_MPUIO(3)
--#define PALMZ71_MMC_IN_GPIO	OMAP_MPUIO(4)
--
--static const unsigned int palmz71_keymap[] = {
--	KEY(0, 0, KEY_F1),
--	KEY(1, 0, KEY_F2),
--	KEY(2, 0, KEY_F3),
--	KEY(3, 0, KEY_F4),
--	KEY(4, 0, KEY_POWER),
--	KEY(0, 1, KEY_LEFT),
--	KEY(1, 1, KEY_DOWN),
--	KEY(2, 1, KEY_UP),
--	KEY(3, 1, KEY_RIGHT),
--	KEY(4, 1, KEY_ENTER),
--	KEY(0, 2, KEY_CAMERA),
--};
--
--static const struct matrix_keymap_data palmz71_keymap_data = {
--	.keymap		= palmz71_keymap,
--	.keymap_size	= ARRAY_SIZE(palmz71_keymap),
--};
--
--static struct omap_kp_platform_data palmz71_kp_data = {
--	.rows	= 8,
--	.cols	= 8,
--	.keymap_data	= &palmz71_keymap_data,
--	.rep	= true,
--	.delay	= 80,
--};
--
--static struct resource palmz71_kp_resources[] = {
--	[0] = {
--		.start	= INT_KEYBOARD,
--		.end	= INT_KEYBOARD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static struct platform_device palmz71_kp_device = {
--	.name	= "omap-keypad",
--	.id	= -1,
--	.dev	= {
--		.platform_data = &palmz71_kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(palmz71_kp_resources),
--	.resource	= palmz71_kp_resources,
--};
--
--static struct mtd_partition palmz71_rom_partitions[] = {
--	/* PalmOS "Small ROM", contains the bootloader and the debugger */
--	{
--		.name		= "smallrom",
--		.offset		= 0,
--		.size		= 0xa000,
--		.mask_flags	= MTD_WRITEABLE,
--	},
--	/* PalmOS "Big ROM", a filesystem with all the OS code and data */
--	{
--		.name	= "bigrom",
--		.offset	= SZ_128K,
--		/*
--		 * 0x5f0000 bytes big in the multi-language ("EFIGS") version,
--		 * 0x7b0000 bytes in the English-only ("enUS") version.
--		 */
--		.size		= 0x7b0000,
--		.mask_flags	= MTD_WRITEABLE,
--	},
--};
--
--static struct physmap_flash_data palmz71_rom_data = {
--	.width		= 2,
--	.set_vpp	= omap1_set_vpp,
--	.parts		= palmz71_rom_partitions,
--	.nr_parts	= ARRAY_SIZE(palmz71_rom_partitions),
--};
--
--static struct resource palmz71_rom_resource = {
--	.start	= OMAP_CS0_PHYS,
--	.end	= OMAP_CS0_PHYS + SZ_8M - 1,
--	.flags	= IORESOURCE_MEM,
--};
--
--static struct platform_device palmz71_rom_device = {
--	.name	= "physmap-flash",
--	.id	= -1,
--	.dev = {
--		.platform_data = &palmz71_rom_data,
--	},
--	.num_resources	= 1,
--	.resource	= &palmz71_rom_resource,
--};
--
--static struct platform_device palmz71_lcd_device = {
--	.name	= "lcd_palmz71",
--	.id	= -1,
--};
--
--static struct platform_device palmz71_spi_device = {
--	.name	= "spi_palmz71",
--	.id	= -1,
--};
--
--static struct omap_backlight_config palmz71_backlight_config = {
--	.default_intensity	= 0xa0,
--};
--
--static struct platform_device palmz71_backlight_device = {
--	.name	= "omap-bl",
--	.id	= -1,
--	.dev	= {
--		.platform_data = &palmz71_backlight_config,
--	},
--};
--
--static struct platform_device *devices[] __initdata = {
--	&palmz71_rom_device,
--	&palmz71_kp_device,
--	&palmz71_lcd_device,
--	&palmz71_spi_device,
--	&palmz71_backlight_device,
--};
--
--static int
--palmz71_get_pendown_state(void)
--{
--	return !gpio_get_value(PALMZ71_PENIRQ_GPIO);
--}
--
--static const struct ads7846_platform_data palmz71_ts_info = {
--	.model			= 7846,
--	.vref_delay_usecs	= 100,	/* internal, no capacitor */
--	.x_plate_ohms		= 419,
--	.y_plate_ohms		= 486,
--	.get_pendown_state	= palmz71_get_pendown_state,
--};
--
--static struct spi_board_info __initdata palmz71_boardinfo[] = { {
--	/* MicroWire (bus 2) CS0 has an ads7846e */
--	.modalias	= "ads7846",
--	.platform_data	= &palmz71_ts_info,
--	.max_speed_hz	= 120000	/* max sample rate at 3V */
--				* 26	/* command + data + overhead */,
--	.bus_num	= 2,
--	.chip_select	= 0,
--} };
--
--static struct omap_usb_config palmz71_usb_config __initdata = {
--	.register_dev	= 1,	/* Mini-B only receptacle */
--	.hmc_mode	= 0,
--	.pins[0]	= 2,
--};
--
--static const struct omap_lcd_config palmz71_lcd_config __initconst = {
--	.ctrl_name = "internal",
--};
--
--static irqreturn_t
--palmz71_powercable(int irq, void *dev_id)
--{
--	if (gpio_get_value(PALMZ71_USBDETECT_GPIO)) {
--		printk(KERN_INFO "PM: Power cable connected\n");
--		irq_set_irq_type(gpio_to_irq(PALMZ71_USBDETECT_GPIO),
--				 IRQ_TYPE_EDGE_FALLING);
--	} else {
--		printk(KERN_INFO "PM: Power cable disconnected\n");
--		irq_set_irq_type(gpio_to_irq(PALMZ71_USBDETECT_GPIO),
--				 IRQ_TYPE_EDGE_RISING);
--	}
--	return IRQ_HANDLED;
--}
--
--static void __init
--omap_mpu_wdt_mode(int mode)
--{
--	if (mode)
--		omap_writew(0x8000, OMAP_WDT_TIMER_MODE);
--	else {
--		omap_writew(0x00f5, OMAP_WDT_TIMER_MODE);
--		omap_writew(0x00a0, OMAP_WDT_TIMER_MODE);
--	}
--}
--
--static void __init
--palmz71_gpio_setup(int early)
--{
--	if (early) {
--		/* Only set GPIO1 so we have a working serial */
--		gpio_direction_output(1, 1);
--	} else {
--		/* Set MMC/SD host WP pin as input */
--		if (gpio_request(PALMZ71_MMC_WP_GPIO, "MMC WP") < 0) {
--			printk(KERN_ERR "Could not reserve WP GPIO!\n");
--			return;
--		}
--		gpio_direction_input(PALMZ71_MMC_WP_GPIO);
--
--		/* Monitor the Power-cable-connected signal */
--		if (gpio_request(PALMZ71_USBDETECT_GPIO, "USB detect") < 0) {
--			printk(KERN_ERR
--				"Could not reserve cable signal GPIO!\n");
--			return;
--		}
--		gpio_direction_input(PALMZ71_USBDETECT_GPIO);
--		if (request_irq(gpio_to_irq(PALMZ71_USBDETECT_GPIO),
--				palmz71_powercable, 0, "palmz71-cable", NULL))
--			printk(KERN_ERR
--					"IRQ request for power cable failed!\n");
--		palmz71_powercable(gpio_to_irq(PALMZ71_USBDETECT_GPIO), NULL);
--	}
--}
--
--static void __init
--omap_palmz71_init(void)
--{
--	/* mux pins for uarts */
--	omap_cfg_reg(UART1_TX);
--	omap_cfg_reg(UART1_RTS);
--	omap_cfg_reg(UART2_TX);
--	omap_cfg_reg(UART2_RTS);
--	omap_cfg_reg(UART3_TX);
--	omap_cfg_reg(UART3_RX);
--
--	palmz71_gpio_setup(1);
--	omap_mpu_wdt_mode(0);
--
--	platform_add_devices(devices, ARRAY_SIZE(devices));
--
--	palmz71_boardinfo[0].irq = gpio_to_irq(PALMZ71_PENIRQ_GPIO);
--	spi_register_board_info(palmz71_boardinfo,
--				ARRAY_SIZE(palmz71_boardinfo));
--	omap1_usb_init(&palmz71_usb_config);
--	omap_serial_init();
--	omap_register_i2c_bus(1, 100, NULL, 0);
--	palmz71_gpio_setup(0);
--
--	omapfb_set_lcd_config(&palmz71_lcd_config);
--}
--
--MACHINE_START(OMAP_PALMZ71, "OMAP310 based Palm Zire71")
--	.atag_offset	= 0x100,
--	.map_io		= omap15xx_map_io,
--	.init_early     = omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= omap_palmz71_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/board-perseus2.c b/arch/arm/mach-omap1/board-perseus2.c
-deleted file mode 100644
-index b041e6f6e9cf..000000000000
---- a/arch/arm/mach-omap1/board-perseus2.c
-+++ /dev/null
-@@ -1,333 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/board-perseus2.c
-- *
-- * Modified from board-generic.c
-- *
-- * Original OMAP730 support by Jean Pihet <j-pihet@ti.com>
-- * Updated for 2.6 by Kevin Hilman <kjh@hilman.org>
-- */
--#include <linux/gpio.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/delay.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/platnand.h>
--#include <linux/mtd/physmap.h>
--#include <linux/input.h>
--#include <linux/smc91x.h>
--#include <linux/omapfb.h>
--#include <linux/platform_data/keypad-omap.h>
--#include <linux/soc/ti/omap1-io.h>
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#include "tc.h"
--#include "mux.h"
--#include "flash.h"
--#include "hardware.h"
--#include "iomap.h"
--#include "common.h"
--#include "fpga.h"
--
--static const unsigned int p2_keymap[] = {
--	KEY(0, 0, KEY_UP),
--	KEY(1, 0, KEY_RIGHT),
--	KEY(2, 0, KEY_LEFT),
--	KEY(3, 0, KEY_DOWN),
--	KEY(4, 0, KEY_ENTER),
--	KEY(0, 1, KEY_F10),
--	KEY(1, 1, KEY_SEND),
--	KEY(2, 1, KEY_END),
--	KEY(3, 1, KEY_VOLUMEDOWN),
--	KEY(4, 1, KEY_VOLUMEUP),
--	KEY(5, 1, KEY_RECORD),
--	KEY(0, 2, KEY_F9),
--	KEY(1, 2, KEY_3),
--	KEY(2, 2, KEY_6),
--	KEY(3, 2, KEY_9),
--	KEY(4, 2, KEY_KPDOT),
--	KEY(0, 3, KEY_BACK),
--	KEY(1, 3, KEY_2),
--	KEY(2, 3, KEY_5),
--	KEY(3, 3, KEY_8),
--	KEY(4, 3, KEY_0),
--	KEY(5, 3, KEY_KPSLASH),
--	KEY(0, 4, KEY_HOME),
--	KEY(1, 4, KEY_1),
--	KEY(2, 4, KEY_4),
--	KEY(3, 4, KEY_7),
--	KEY(4, 4, KEY_KPASTERISK),
--	KEY(5, 4, KEY_POWER),
--};
--
--static struct smc91x_platdata smc91x_info = {
--	.flags	= SMC91X_USE_16BIT | SMC91X_NOWAIT,
--	.leda	= RPC_LED_100_10,
--	.ledb	= RPC_LED_TX_RX,
--};
--
--static struct resource smc91x_resources[] = {
--	[0] = {
--		.start	= H2P2_DBG_FPGA_ETHR_START,	/* Physical */
--		.end	= H2P2_DBG_FPGA_ETHR_START + 0xf,
--		.flags	= IORESOURCE_MEM,
--	},
--	[1] = {
--		.start	= INT_7XX_MPU_EXT_NIRQ,
--		.end	= 0,
--		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_HIGHEDGE,
--	},
--};
--
--static struct mtd_partition nor_partitions[] = {
--	/* bootloader (U-Boot, etc) in first sector */
--	{
--	      .name		= "bootloader",
--	      .offset		= 0,
--	      .size		= SZ_128K,
--	      .mask_flags	= MTD_WRITEABLE, /* force read-only */
--	},
--	/* bootloader params in the next sector */
--	{
--	      .name		= "params",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_128K,
--	      .mask_flags	= 0,
--	},
--	/* kernel */
--	{
--	      .name		= "kernel",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= SZ_2M,
--	      .mask_flags	= 0
--	},
--	/* rest of flash is a file system */
--	{
--	      .name		= "rootfs",
--	      .offset		= MTDPART_OFS_APPEND,
--	      .size		= MTDPART_SIZ_FULL,
--	      .mask_flags	= 0
--	},
--};
--
--static struct physmap_flash_data nor_data = {
--	.width		= 2,
--	.set_vpp	= omap1_set_vpp,
--	.parts		= nor_partitions,
--	.nr_parts	= ARRAY_SIZE(nor_partitions),
--};
--
--static struct resource nor_resource = {
--	.start		= OMAP_CS0_PHYS,
--	.end		= OMAP_CS0_PHYS + SZ_32M - 1,
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device nor_device = {
--	.name		= "physmap-flash",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &nor_data,
--	},
--	.num_resources	= 1,
--	.resource	= &nor_resource,
--};
--
--#define P2_NAND_RB_GPIO_PIN	62
--
--static int nand_dev_ready(struct nand_chip *chip)
--{
--	return gpio_get_value(P2_NAND_RB_GPIO_PIN);
--}
--
--static struct platform_nand_data nand_data = {
--	.chip	= {
--		.nr_chips		= 1,
--		.chip_offset		= 0,
--		.options		= NAND_SAMSUNG_LP_OPTIONS,
--	},
--	.ctrl	= {
--		.cmd_ctrl	= omap1_nand_cmd_ctl,
--		.dev_ready	= nand_dev_ready,
--	},
--};
--
--static struct resource nand_resource = {
--	.start		= OMAP_CS3_PHYS,
--	.end		= OMAP_CS3_PHYS + SZ_4K - 1,
--	.flags		= IORESOURCE_MEM,
--};
--
--static struct platform_device nand_device = {
--	.name		= "gen_nand",
--	.id		= 0,
--	.dev		= {
--		.platform_data	= &nand_data,
--	},
--	.num_resources	= 1,
--	.resource	= &nand_resource,
--};
--
--static struct platform_device smc91x_device = {
--	.name		= "smc91x",
--	.id		= 0,
--	.dev	= {
--		.platform_data	= &smc91x_info,
--	},
--	.num_resources	= ARRAY_SIZE(smc91x_resources),
--	.resource	= smc91x_resources,
--};
--
--static struct resource kp_resources[] = {
--	[0] = {
--		.start	= INT_7XX_MPUIO_KEYPAD,
--		.end	= INT_7XX_MPUIO_KEYPAD,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static const struct matrix_keymap_data p2_keymap_data = {
--	.keymap		= p2_keymap,
--	.keymap_size	= ARRAY_SIZE(p2_keymap),
--};
--
--static struct omap_kp_platform_data kp_data = {
--	.rows		= 8,
--	.cols		= 8,
--	.keymap_data	= &p2_keymap_data,
--	.delay		= 4,
--	.dbounce	= true,
--};
--
--static struct platform_device kp_device = {
--	.name		= "omap-keypad",
--	.id		= -1,
--	.dev		= {
--		.platform_data = &kp_data,
--	},
--	.num_resources	= ARRAY_SIZE(kp_resources),
--	.resource	= kp_resources,
--};
--
--static struct platform_device *devices[] __initdata = {
--	&nor_device,
--	&nand_device,
--	&smc91x_device,
--	&kp_device,
--};
--
--static const struct omap_lcd_config perseus2_lcd_config __initconst = {
--	.ctrl_name	= "internal",
--};
--
--static void __init perseus2_init_smc91x(void)
--{
--	__raw_writeb(1, H2P2_DBG_FPGA_LAN_RESET);
--	mdelay(50);
--	__raw_writeb(__raw_readb(H2P2_DBG_FPGA_LAN_RESET) & ~1,
--		   H2P2_DBG_FPGA_LAN_RESET);
--	mdelay(50);
--}
--
--static void __init omap_perseus2_init(void)
--{
--	/* Early, board-dependent init */
--
--	/*
--	 * Hold GSM Reset until needed
--	 */
--	omap_writew(omap_readw(OMAP7XX_DSP_M_CTL) & ~1, OMAP7XX_DSP_M_CTL);
--
--	/*
--	 * UARTs -> done automagically by 8250 driver
--	 */
--
--	/*
--	 * CSx timings, GPIO Mux ... setup
--	 */
--
--	/* Flash: CS0 timings setup */
--	omap_writel(0x0000fff3, OMAP7XX_FLASH_CFG_0);
--	omap_writel(0x00000088, OMAP7XX_FLASH_ACFG_0);
--
--	/*
--	 * Ethernet support through the debug board
--	 * CS1 timings setup
--	 */
--	omap_writel(0x0000fff3, OMAP7XX_FLASH_CFG_1);
--	omap_writel(0x00000000, OMAP7XX_FLASH_ACFG_1);
--
--	/*
--	 * Configure MPU_EXT_NIRQ IO in IO_CONF9 register,
--	 * It is used as the Ethernet controller interrupt
--	 */
--	omap_writel(omap_readl(OMAP7XX_IO_CONF_9) & 0x1FFFFFFF,
--				OMAP7XX_IO_CONF_9);
--
--	perseus2_init_smc91x();
--
--	BUG_ON(gpio_request(P2_NAND_RB_GPIO_PIN, "NAND ready") < 0);
--	gpio_direction_input(P2_NAND_RB_GPIO_PIN);
--
--	omap_cfg_reg(L3_1610_FLASH_CS2B_OE);
--	omap_cfg_reg(M8_1610_FLASH_CS2B_WE);
--
--	/* Mux pins for keypad */
--	omap_cfg_reg(E2_7XX_KBR0);
--	omap_cfg_reg(J7_7XX_KBR1);
--	omap_cfg_reg(E1_7XX_KBR2);
--	omap_cfg_reg(F3_7XX_KBR3);
--	omap_cfg_reg(D2_7XX_KBR4);
--	omap_cfg_reg(C2_7XX_KBC0);
--	omap_cfg_reg(D3_7XX_KBC1);
--	omap_cfg_reg(E4_7XX_KBC2);
--	omap_cfg_reg(F4_7XX_KBC3);
--	omap_cfg_reg(E3_7XX_KBC4);
--
--	if (IS_ENABLED(CONFIG_SPI_OMAP_UWIRE)) {
--		/* configure pins: MPU_UW_nSCS1, MPU_UW_SDO, MPU_UW_SCLK */
--		int val = omap_readl(OMAP7XX_IO_CONF_9) & ~0x00EEE000;
--		omap_writel(val | 0x00AAA000, OMAP7XX_IO_CONF_9);
--	}
--
--	platform_add_devices(devices, ARRAY_SIZE(devices));
--
--	omap_serial_init();
--	omap_register_i2c_bus(1, 100, NULL, 0);
--
--	omapfb_set_lcd_config(&perseus2_lcd_config);
--}
--
--/* Only FPGA needs to be mapped here. All others are done with ioremap */
--static struct map_desc omap_perseus2_io_desc[] __initdata = {
--	{
--		.virtual	= H2P2_DBG_FPGA_BASE,
--		.pfn		= __phys_to_pfn(H2P2_DBG_FPGA_START),
--		.length		= H2P2_DBG_FPGA_SIZE,
--		.type		= MT_DEVICE
--	}
--};
--
--static void __init omap_perseus2_map_io(void)
--{
--	omap7xx_map_io();
--	iotable_init(omap_perseus2_io_desc,
--		     ARRAY_SIZE(omap_perseus2_io_desc));
--}
--
--MACHINE_START(OMAP_PERSEUS2, "OMAP730 Perseus2")
--	/* Maintainer: Kevin Hilman <kjh@hilman.org> */
--	.atag_offset	= 0x100,
--	.map_io		= omap_perseus2_map_io,
--	.init_early     = omap1_init_early,
--	.init_irq	= omap1_init_irq,
--	.handle_irq	= omap1_handle_irq,
--	.init_machine	= omap_perseus2_init,
--	.init_late	= omap1_init_late,
--	.init_time	= omap1_timer_init,
--	.restart	= omap1_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-omap1/fpga.c b/arch/arm/mach-omap1/fpga.c
-deleted file mode 100644
-index 4c71a195969f..000000000000
---- a/arch/arm/mach-omap1/fpga.c
-+++ /dev/null
-@@ -1,186 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * linux/arch/arm/mach-omap1/fpga.c
-- *
-- * Interrupt handler for OMAP-1510 Innovator FPGA
-- *
-- * Copyright (C) 2001 RidgeRun, Inc.
-- * Author: Greg Lonnon <glonnon@ridgerun.com>
-- *
-- * Copyright (C) 2002 MontaVista Software, Inc.
-- *
-- * Separated FPGA interrupts from innovator1510.c and cleaned up for 2.6
-- * Copyright (C) 2004 Nokia Corporation by Tony Lindrgen <tony@atomide.com>
-- */
--
--#include <linux/types.h>
--#include <linux/gpio.h>
--#include <linux/init.h>
--#include <linux/kernel.h>
--#include <linux/device.h>
--#include <linux/errno.h>
--#include <linux/io.h>
--
--#include <asm/irq.h>
--#include <asm/mach/irq.h>
--
--#include "hardware.h"
--#include "iomap.h"
--#include "common.h"
--#include "fpga.h"
--
--static void fpga_mask_irq(struct irq_data *d)
--{
--	unsigned int irq = d->irq - OMAP_FPGA_IRQ_BASE;
--
--	if (irq < 8)
--		__raw_writeb((__raw_readb(OMAP1510_FPGA_IMR_LO)
--			      & ~(1 << irq)), OMAP1510_FPGA_IMR_LO);
--	else if (irq < 16)
--		__raw_writeb((__raw_readb(OMAP1510_FPGA_IMR_HI)
--			      & ~(1 << (irq - 8))), OMAP1510_FPGA_IMR_HI);
--	else
--		__raw_writeb((__raw_readb(INNOVATOR_FPGA_IMR2)
--			      & ~(1 << (irq - 16))), INNOVATOR_FPGA_IMR2);
--}
--
--
--static inline u32 get_fpga_unmasked_irqs(void)
--{
--	return
--		((__raw_readb(OMAP1510_FPGA_ISR_LO) &
--		  __raw_readb(OMAP1510_FPGA_IMR_LO))) |
--		((__raw_readb(OMAP1510_FPGA_ISR_HI) &
--		  __raw_readb(OMAP1510_FPGA_IMR_HI)) << 8) |
--		((__raw_readb(INNOVATOR_FPGA_ISR2) &
--		  __raw_readb(INNOVATOR_FPGA_IMR2)) << 16);
--}
--
--
--static void fpga_ack_irq(struct irq_data *d)
--{
--	/* Don't need to explicitly ACK FPGA interrupts */
--}
--
--static void fpga_unmask_irq(struct irq_data *d)
--{
--	unsigned int irq = d->irq - OMAP_FPGA_IRQ_BASE;
--
--	if (irq < 8)
--		__raw_writeb((__raw_readb(OMAP1510_FPGA_IMR_LO) | (1 << irq)),
--		     OMAP1510_FPGA_IMR_LO);
--	else if (irq < 16)
--		__raw_writeb((__raw_readb(OMAP1510_FPGA_IMR_HI)
--			      | (1 << (irq - 8))), OMAP1510_FPGA_IMR_HI);
--	else
--		__raw_writeb((__raw_readb(INNOVATOR_FPGA_IMR2)
--			      | (1 << (irq - 16))), INNOVATOR_FPGA_IMR2);
--}
--
--static void fpga_mask_ack_irq(struct irq_data *d)
--{
--	fpga_mask_irq(d);
--	fpga_ack_irq(d);
--}
--
--static void innovator_fpga_IRQ_demux(struct irq_desc *desc)
--{
--	u32 stat;
--	int fpga_irq;
--
--	stat = get_fpga_unmasked_irqs();
--
--	if (!stat)
--		return;
--
--	for (fpga_irq = OMAP_FPGA_IRQ_BASE;
--	     (fpga_irq < OMAP_FPGA_IRQ_END) && stat;
--	     fpga_irq++, stat >>= 1) {
--		if (stat & 1) {
--			generic_handle_irq(fpga_irq);
--		}
--	}
--}
--
--static struct irq_chip omap_fpga_irq_ack = {
--	.name		= "FPGA-ack",
--	.irq_ack	= fpga_mask_ack_irq,
--	.irq_mask	= fpga_mask_irq,
--	.irq_unmask	= fpga_unmask_irq,
--};
--
--
--static struct irq_chip omap_fpga_irq = {
--	.name		= "FPGA",
--	.irq_ack	= fpga_ack_irq,
--	.irq_mask	= fpga_mask_irq,
--	.irq_unmask	= fpga_unmask_irq,
--};
--
--/*
-- * All of the FPGA interrupt request inputs except for the touchscreen are
-- * edge-sensitive; the touchscreen is level-sensitive.  The edge-sensitive
-- * interrupts are acknowledged as a side-effect of reading the interrupt
-- * status register from the FPGA.  The edge-sensitive interrupt inputs
-- * cause a problem with level interrupt requests, such as Ethernet.  The
-- * problem occurs when a level interrupt request is asserted while its
-- * interrupt input is masked in the FPGA, which results in a missed
-- * interrupt.
-- *
-- * In an attempt to workaround the problem with missed interrupts, the
-- * mask_ack routine for all of the FPGA interrupts has been changed from
-- * fpga_mask_ack_irq() to fpga_ack_irq() so that the specific FPGA interrupt
-- * being serviced is left unmasked.  We can do this because the FPGA cascade
-- * interrupt is run with all interrupts masked.
-- *
-- * Limited testing indicates that this workaround appears to be effective
-- * for the smc9194 Ethernet driver used on the Innovator.  It should work
-- * on other FPGA interrupts as well, but any drivers that explicitly mask
-- * interrupts at the interrupt controller via disable_irq/enable_irq
-- * could pose a problem.
-- */
--void omap1510_fpga_init_irq(void)
--{
--	int i, res;
--
--	__raw_writeb(0, OMAP1510_FPGA_IMR_LO);
--	__raw_writeb(0, OMAP1510_FPGA_IMR_HI);
--	__raw_writeb(0, INNOVATOR_FPGA_IMR2);
--
--	for (i = OMAP_FPGA_IRQ_BASE; i < OMAP_FPGA_IRQ_END; i++) {
--
--		if (i == OMAP1510_INT_FPGA_TS) {
--			/*
--			 * The touchscreen interrupt is level-sensitive, so
--			 * we'll use the regular mask_ack routine for it.
--			 */
--			irq_set_chip(i, &omap_fpga_irq_ack);
--		}
--		else {
--			/*
--			 * All FPGA interrupts except the touchscreen are
--			 * edge-sensitive, so we won't mask them.
--			 */
--			irq_set_chip(i, &omap_fpga_irq);
--		}
--
--		irq_set_handler(i, handle_edge_irq);
--		irq_clear_status_flags(i, IRQ_NOREQUEST);
--	}
--
--	/*
--	 * The FPGA interrupt line is connected to GPIO13. Claim this pin for
--	 * the ARM.
--	 *
--	 * NOTE: For general GPIO/MPUIO access and interrupts, please see
--	 * gpio.[ch]
--	 */
--	res = gpio_request(13, "FPGA irq");
--	if (res) {
--		pr_err("%s failed to get gpio\n", __func__);
--		return;
--	}
--	gpio_direction_input(13);
--	irq_set_irq_type(gpio_to_irq(13), IRQ_TYPE_EDGE_RISING);
--	irq_set_chained_handler(OMAP1510_INT_FPGA, innovator_fpga_IRQ_demux);
--}
-diff --git a/arch/arm/mach-omap1/fpga.h b/arch/arm/mach-omap1/fpga.h
-deleted file mode 100644
-index 7e7450edacc1..000000000000
---- a/arch/arm/mach-omap1/fpga.h
-+++ /dev/null
-@@ -1,49 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Interrupt handler for OMAP-1510 FPGA
-- *
-- * Copyright (C) 2001 RidgeRun, Inc.
-- * Author: Greg Lonnon <glonnon@ridgerun.com>
-- *
-- * Copyright (C) 2002 MontaVista Software, Inc.
-- *
-- * Separated FPGA interrupts from innovator1510.c and cleaned up for 2.6
-- * Copyright (C) 2004 Nokia Corporation by Tony Lindrgen <tony@atomide.com>
-- */
--
--#ifndef __ASM_ARCH_OMAP_FPGA_H
--#define __ASM_ARCH_OMAP_FPGA_H
--
--/*
-- * ---------------------------------------------------------------------------
-- *  H2/P2 Debug board FPGA
-- * ---------------------------------------------------------------------------
-- */
--/* maps in the FPGA registers and the ETHR registers */
--#define H2P2_DBG_FPGA_BASE		0xE8000000		/* VA */
--#define H2P2_DBG_FPGA_SIZE		SZ_4K			/* SIZE */
--#define H2P2_DBG_FPGA_START		0x04000000		/* PA */
--
--#define H2P2_DBG_FPGA_ETHR_START	(H2P2_DBG_FPGA_START + 0x300)
--#define H2P2_DBG_FPGA_FPGA_REV		IOMEM(H2P2_DBG_FPGA_BASE + 0x10)	/* FPGA Revision */
--#define H2P2_DBG_FPGA_BOARD_REV		IOMEM(H2P2_DBG_FPGA_BASE + 0x12)	/* Board Revision */
--#define H2P2_DBG_FPGA_GPIO		IOMEM(H2P2_DBG_FPGA_BASE + 0x14)	/* GPIO outputs */
--#define H2P2_DBG_FPGA_LEDS		IOMEM(H2P2_DBG_FPGA_BASE + 0x16)	/* LEDs outputs */
--#define H2P2_DBG_FPGA_MISC_INPUTS	IOMEM(H2P2_DBG_FPGA_BASE + 0x18)	/* Misc inputs */
--#define H2P2_DBG_FPGA_LAN_STATUS	IOMEM(H2P2_DBG_FPGA_BASE + 0x1A)	/* LAN Status line */
--#define H2P2_DBG_FPGA_LAN_RESET		IOMEM(H2P2_DBG_FPGA_BASE + 0x1C)	/* LAN Reset line */
--
--/* LEDs definition on debug board (16 LEDs, all physically green) */
--#define H2P2_DBG_FPGA_LED_GREEN		(1 << 15)
--#define H2P2_DBG_FPGA_LED_AMBER		(1 << 14)
--#define H2P2_DBG_FPGA_LED_RED		(1 << 13)
--#define H2P2_DBG_FPGA_LED_BLUE		(1 << 12)
--/*  cpu0 load-meter LEDs */
--#define H2P2_DBG_FPGA_LOAD_METER	(1 << 0)	// A bit of fun on our board ...
--#define H2P2_DBG_FPGA_LOAD_METER_SIZE	11
--#define H2P2_DBG_FPGA_LOAD_METER_MASK	((1 << H2P2_DBG_FPGA_LOAD_METER_SIZE) - 1)
--
--#define H2P2_DBG_FPGA_P2_LED_TIMER		(1 << 0)
--#define H2P2_DBG_FPGA_P2_LED_IDLE		(1 << 1)
--
--#endif
-diff --git a/arch/arm/mach-omap1/gpio7xx.c b/arch/arm/mach-omap1/gpio7xx.c
-deleted file mode 100644
-index c372b357eab4..000000000000
---- a/arch/arm/mach-omap1/gpio7xx.c
-+++ /dev/null
-@@ -1,272 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * OMAP7xx specific gpio init
-- *
-- * Copyright (C) 2010 Texas Instruments Incorporated - https://www.ti.com/
-- *
-- * Author:
-- *	Charulatha V <charu@ti.com>
-- */
--
--#include <linux/gpio.h>
--#include <linux/platform_data/gpio-omap.h>
--
--#include "irqs.h"
--#include "soc.h"
--
--#define OMAP7XX_GPIO1_BASE		0xfffbc000
--#define OMAP7XX_GPIO2_BASE		0xfffbc800
--#define OMAP7XX_GPIO3_BASE		0xfffbd000
--#define OMAP7XX_GPIO4_BASE		0xfffbd800
--#define OMAP7XX_GPIO5_BASE		0xfffbe000
--#define OMAP7XX_GPIO6_BASE		0xfffbe800
--#define OMAP1_MPUIO_VBASE		OMAP1_MPUIO_BASE
--
--/* mpu gpio */
--static struct resource omap7xx_mpu_gpio_resources[] = {
--	{
--		.start	= OMAP1_MPUIO_VBASE,
--		.end	= OMAP1_MPUIO_VBASE + SZ_2K - 1,
--		.flags	= IORESOURCE_MEM,
--	},
--	{
--		.start	= INT_7XX_MPUIO,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static struct omap_gpio_reg_offs omap7xx_mpuio_regs = {
--	.revision	= USHRT_MAX,
--	.direction	= OMAP_MPUIO_IO_CNTL / 2,
--	.datain		= OMAP_MPUIO_INPUT_LATCH / 2,
--	.dataout	= OMAP_MPUIO_OUTPUT / 2,
--	.irqstatus	= OMAP_MPUIO_GPIO_INT / 2,
--	.irqenable	= OMAP_MPUIO_GPIO_MASKIT / 2,
--	.irqenable_inv	= true,
--	.irqctrl	= OMAP_MPUIO_GPIO_INT_EDGE >> 1,
--};
--
--static struct omap_gpio_platform_data omap7xx_mpu_gpio_config = {
--	.is_mpuio		= true,
--	.bank_width		= 16,
--	.bank_stride		= 2,
--	.regs                   = &omap7xx_mpuio_regs,
--};
--
--static struct platform_device omap7xx_mpu_gpio = {
--	.name           = "omap_gpio",
--	.id             = 0,
--	.dev            = {
--		.platform_data = &omap7xx_mpu_gpio_config,
--	},
--	.num_resources = ARRAY_SIZE(omap7xx_mpu_gpio_resources),
--	.resource = omap7xx_mpu_gpio_resources,
--};
--
--/* gpio1 */
--static struct resource omap7xx_gpio1_resources[] = {
--	{
--		.start	= OMAP7XX_GPIO1_BASE,
--		.end	= OMAP7XX_GPIO1_BASE + SZ_2K - 1,
--		.flags	= IORESOURCE_MEM,
--	},
--	{
--		.start	= INT_7XX_GPIO_BANK1,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static struct omap_gpio_reg_offs omap7xx_gpio_regs = {
--	.revision	= USHRT_MAX,
--	.direction	= OMAP7XX_GPIO_DIR_CONTROL,
--	.datain		= OMAP7XX_GPIO_DATA_INPUT,
--	.dataout	= OMAP7XX_GPIO_DATA_OUTPUT,
--	.irqstatus	= OMAP7XX_GPIO_INT_STATUS,
--	.irqenable	= OMAP7XX_GPIO_INT_MASK,
--	.irqenable_inv	= true,
--	.irqctrl	= OMAP7XX_GPIO_INT_CONTROL,
--};
--
--static struct omap_gpio_platform_data omap7xx_gpio1_config = {
--	.bank_width		= 32,
--	.regs			= &omap7xx_gpio_regs,
--};
--
--static struct platform_device omap7xx_gpio1 = {
--	.name           = "omap_gpio",
++		omap_cfg_reg(MMC_CMD);
++		omap_cfg_reg(MMC_CLK);
++		omap_cfg_reg(MMC_DAT0);
+ 
+ 		if (cpu_is_omap1710()) {
+ 			omap_cfg_reg(M15_1710_MMC_CLKI);
+ 			omap_cfg_reg(P19_1710_MMC_CMDDIR);
+ 			omap_cfg_reg(P20_1710_MMC_DATDIR0);
+ 		}
+-		if (mmc_controller->slots[0].wires == 4 && !cpu_is_omap7xx()) {
++		if (mmc_controller->slots[0].wires == 4) {
+ 			omap_cfg_reg(MMC_DAT1);
+ 			/* NOTE: DAT2 can be on W10 (here) or M15 */
+ 			if (!mmc_controller->slots[0].nomux)
+@@ -154,8 +146,6 @@ static int __init omap_mmc_add(const char *name, int id, unsigned long base,
+ 	res[3].name = "tx";
+ 	res[3].flags = IORESOURCE_DMA;
+ 
+-	if (cpu_is_omap7xx())
+-		data->slots[0].features = MMC_OMAP7XX;
+ 	if (cpu_is_omap15xx())
+ 		data->slots[0].features = MMC_OMAP15XX;
+ 	if (cpu_is_omap16xx())
+@@ -224,43 +214,6 @@ void __init omap1_init_mmc(struct omap_mmc_platform_data **mmc_data,
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-/* OMAP7xx SPI support */
+-#if IS_ENABLED(CONFIG_SPI_OMAP_100K)
+-
+-struct platform_device omap_spi1 = {
+-	.name           = "omap1_spi100k",
 -	.id             = 1,
--	.dev            = {
--		.platform_data = &omap7xx_gpio1_config,
--	},
--	.num_resources = ARRAY_SIZE(omap7xx_gpio1_resources),
--	.resource = omap7xx_gpio1_resources,
 -};
 -
--/* gpio2 */
--static struct resource omap7xx_gpio2_resources[] = {
--	{
--		.start	= OMAP7XX_GPIO2_BASE,
--		.end	= OMAP7XX_GPIO2_BASE + SZ_2K - 1,
--		.flags	= IORESOURCE_MEM,
--	},
--	{
--		.start	= INT_7XX_GPIO_BANK2,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static struct omap_gpio_platform_data omap7xx_gpio2_config = {
--	.bank_width		= 32,
--	.regs			= &omap7xx_gpio_regs,
--};
--
--static struct platform_device omap7xx_gpio2 = {
--	.name           = "omap_gpio",
+-struct platform_device omap_spi2 = {
+-	.name           = "omap1_spi100k",
 -	.id             = 2,
--	.dev            = {
--		.platform_data = &omap7xx_gpio2_config,
--	},
--	.num_resources = ARRAY_SIZE(omap7xx_gpio2_resources),
--	.resource = omap7xx_gpio2_resources,
 -};
 -
--/* gpio3 */
--static struct resource omap7xx_gpio3_resources[] = {
+-static void omap_init_spi100k(void)
+-{
+-	if (!cpu_is_omap7xx())
+-		return;
+-
+-	omap_spi1.dev.platform_data = ioremap(OMAP7XX_SPI1_BASE, 0x7ff);
+-	if (omap_spi1.dev.platform_data)
+-		platform_device_register(&omap_spi1);
+-
+-	omap_spi2.dev.platform_data = ioremap(OMAP7XX_SPI2_BASE, 0x7ff);
+-	if (omap_spi2.dev.platform_data)
+-		platform_device_register(&omap_spi2);
+-}
+-
+-#else
+-static inline void omap_init_spi100k(void)
+-{
+-}
+-#endif
+-
+-/*-------------------------------------------------------------------------*/
+-
+-static inline void omap_init_sti(void) {}
+-
+ /* Numbering for the SPI-capable controllers when used for SPI:
+  * spi		= 1
+  * uwire	= 2
+@@ -363,10 +316,7 @@ static int __init omap1_init_devices(void)
+ 	 * in alphabetical order so they're easier to sort through.
+ 	 */
+ 
+-	omap_init_mbox();
+ 	omap_init_rtc();
+-	omap_init_spi100k();
+-	omap_init_sti();
+ 	omap_init_uwire();
+ 	omap1_init_rng();
+ 
+diff --git a/arch/arm/mach-omap1/dma.c b/arch/arm/mach-omap1/dma.c
+index c3f280c3c5d7..756966cb715f 100644
+--- a/arch/arm/mach-omap1/dma.c
++++ b/arch/arm/mach-omap1/dma.c
+@@ -261,22 +261,6 @@ static const struct platform_device_info omap_dma_dev_info = {
+ 	.num_res = 1,
+ };
+ 
+-/* OMAP730, OMAP850 */
+-static const struct dma_slave_map omap7xx_sdma_map[] = {
+-	{ "omap-mcbsp.1", "tx", SDMA_FILTER_PARAM(8) },
+-	{ "omap-mcbsp.1", "rx", SDMA_FILTER_PARAM(9) },
+-	{ "omap-mcbsp.2", "tx", SDMA_FILTER_PARAM(10) },
+-	{ "omap-mcbsp.2", "rx", SDMA_FILTER_PARAM(11) },
+-	{ "mmci-omap.0", "tx", SDMA_FILTER_PARAM(21) },
+-	{ "mmci-omap.0", "rx", SDMA_FILTER_PARAM(22) },
+-	{ "omap_udc", "rx0", SDMA_FILTER_PARAM(26) },
+-	{ "omap_udc", "rx1", SDMA_FILTER_PARAM(27) },
+-	{ "omap_udc", "rx2", SDMA_FILTER_PARAM(28) },
+-	{ "omap_udc", "tx0", SDMA_FILTER_PARAM(29) },
+-	{ "omap_udc", "tx1", SDMA_FILTER_PARAM(30) },
+-	{ "omap_udc", "tx2", SDMA_FILTER_PARAM(31) },
+-};
+-
+ /* OMAP1510, OMAP1610*/
+ static const struct dma_slave_map omap1xxx_sdma_map[] = {
+ 	{ "omap-mcbsp.1", "tx", SDMA_FILTER_PARAM(8) },
+@@ -371,13 +355,8 @@ static int __init omap1_system_dma_init(void)
+ 	p.dma_attr = d;
+ 	p.errata = configure_dma_errata();
+ 
+-	if (cpu_is_omap7xx()) {
+-		p.slave_map = omap7xx_sdma_map;
+-		p.slavecnt = ARRAY_SIZE(omap7xx_sdma_map);
+-	} else {
+-		p.slave_map = omap1xxx_sdma_map;
+-		p.slavecnt = ARRAY_SIZE(omap1xxx_sdma_map);
+-	}
++	p.slave_map = omap1xxx_sdma_map;
++	p.slavecnt = ARRAY_SIZE(omap1xxx_sdma_map);
+ 
+ 	ret = platform_device_add_data(pdev, &p, sizeof(p));
+ 	if (ret) {
+diff --git a/arch/arm/mach-omap1/i2c.c b/arch/arm/mach-omap1/i2c.c
+index 22f945360599..94d3e7883e02 100644
+--- a/arch/arm/mach-omap1/i2c.c
++++ b/arch/arm/mach-omap1/i2c.c
+@@ -25,13 +25,8 @@ static struct platform_device omap_i2c_devices[1] = {
+ 
+ static void __init omap1_i2c_mux_pins(int bus_id)
+ {
+-	if (cpu_is_omap7xx()) {
+-		omap_cfg_reg(I2C_7XX_SDA);
+-		omap_cfg_reg(I2C_7XX_SCL);
+-	} else {
+-		omap_cfg_reg(I2C_SDA);
+-		omap_cfg_reg(I2C_SCL);
+-	}
++	omap_cfg_reg(I2C_SDA);
++	omap_cfg_reg(I2C_SCL);
+ }
+ 
+ int __init omap_i2c_add_bus(struct omap_i2c_bus_platform_data *pdata,
+@@ -68,10 +63,7 @@ int __init omap_i2c_add_bus(struct omap_i2c_bus_platform_data *pdata,
+ 
+ 	/* how the cpu bus is wired up differs for 7xx only */
+ 
+-	if (cpu_is_omap7xx())
+-		pdata->flags |= OMAP_I2C_FLAG_BUS_SHIFT_1;
+-	else
+-		pdata->flags |= OMAP_I2C_FLAG_BUS_SHIFT_2;
++	pdata->flags |= OMAP_I2C_FLAG_BUS_SHIFT_2;
+ 
+ 	pdev->dev.platform_data = pdata;
+ 
+diff --git a/arch/arm/mach-omap1/io.c b/arch/arm/mach-omap1/io.c
+index d2db9b8aed3f..72657413795f 100644
+--- a/arch/arm/mach-omap1/io.c
++++ b/arch/arm/mach-omap1/io.c
+@@ -31,22 +31,6 @@ static struct map_desc omap_io_desc[] __initdata = {
+ 	}
+ };
+ 
+-#if defined (CONFIG_ARCH_OMAP730) || defined (CONFIG_ARCH_OMAP850)
+-static struct map_desc omap7xx_io_desc[] __initdata = {
 -	{
--		.start	= OMAP7XX_GPIO3_BASE,
--		.end	= OMAP7XX_GPIO3_BASE + SZ_2K - 1,
--		.flags	= IORESOURCE_MEM,
+-		.virtual	= OMAP7XX_DSP_BASE,
+-		.pfn		= __phys_to_pfn(OMAP7XX_DSP_START),
+-		.length		= OMAP7XX_DSP_SIZE,
+-		.type		= MT_DEVICE
+-	}, {
+-		.virtual	= OMAP7XX_DSPREG_BASE,
+-		.pfn		= __phys_to_pfn(OMAP7XX_DSPREG_START),
+-		.length		= OMAP7XX_DSPREG_SIZE,
+-		.type		= MT_DEVICE
+-	}
+-};
+-#endif
+-
+ #ifdef CONFIG_ARCH_OMAP15XX
+ static struct map_desc omap1510_io_desc[] __initdata = {
+ 	{
+@@ -87,14 +71,6 @@ static void __init omap1_map_common_io(void)
+ 	iotable_init(omap_io_desc, ARRAY_SIZE(omap_io_desc));
+ }
+ 
+-#if defined (CONFIG_ARCH_OMAP730) || defined (CONFIG_ARCH_OMAP850)
+-void __init omap7xx_map_io(void)
+-{
+-	omap1_map_common_io();
+-	iotable_init(omap7xx_io_desc, ARRAY_SIZE(omap7xx_io_desc));
+-}
+-#endif
+-
+ #ifdef CONFIG_ARCH_OMAP15XX
+ void __init omap15xx_map_io(void)
+ {
+diff --git a/arch/arm/mach-omap1/irq.c b/arch/arm/mach-omap1/irq.c
+index 70868e9f19ac..9ccc784fd614 100644
+--- a/arch/arm/mach-omap1/irq.c
++++ b/arch/arm/mach-omap1/irq.c
+@@ -110,14 +110,6 @@ static void omap_irq_set_cfg(int irq, int fiq, int priority, int trigger)
+ 	irq_bank_writel(val, bank, offset);
+ }
+ 
+-#if defined (CONFIG_ARCH_OMAP730) || defined (CONFIG_ARCH_OMAP850)
+-static struct omap_irq_bank omap7xx_irq_banks[] = {
+-	{ .base_reg = OMAP_IH1_BASE,		.trigger_map = 0xb3f8e22f },
+-	{ .base_reg = OMAP_IH2_BASE,		.trigger_map = 0xfdb9c1f2 },
+-	{ .base_reg = OMAP_IH2_BASE + 0x100,	.trigger_map = 0x800040f3 },
+-};
+-#endif
+-
+ #ifdef CONFIG_ARCH_OMAP15XX
+ static struct omap_irq_bank omap1510_irq_banks[] = {
+ 	{ .base_reg = OMAP_IH1_BASE,		.trigger_map = 0xb3febfff },
+@@ -194,12 +186,6 @@ void __init omap1_init_irq(void)
+ 	int i, j, irq_base;
+ 	unsigned long nr_irqs;
+ 
+-#if defined(CONFIG_ARCH_OMAP730) || defined(CONFIG_ARCH_OMAP850)
+-	if (cpu_is_omap7xx()) {
+-		irq_banks = omap7xx_irq_banks;
+-		irq_bank_count = ARRAY_SIZE(omap7xx_irq_banks);
+-	}
+-#endif
+ #ifdef CONFIG_ARCH_OMAP15XX
+ 	if (cpu_is_omap1510()) {
+ 		irq_banks = omap1510_irq_banks;
+@@ -230,7 +216,7 @@ void __init omap1_init_irq(void)
+ 		pr_warn("Couldn't allocate IRQ numbers\n");
+ 		irq_base = 0;
+ 	}
+-	omap_l2_irq = cpu_is_omap7xx() ? irq_base + 1 : irq_base;
++	omap_l2_irq = irq_base;
+ 	omap_l2_irq -= NR_IRQS_LEGACY;
+ 
+ 	domain = irq_domain_add_legacy(NULL, nr_irqs, irq_base, 0,
+@@ -249,10 +235,6 @@ void __init omap1_init_irq(void)
+ 	irq_bank_writel(0x03, 0, IRQ_CONTROL_REG_OFFSET);
+ 	irq_bank_writel(0x03, 1, IRQ_CONTROL_REG_OFFSET);
+ 
+-	/* Enable interrupts in global mask */
+-	if (cpu_is_omap7xx())
+-		irq_bank_writel(0x0, 0, IRQ_GMR_REG_OFFSET);
+-
+ 	/* Install the interrupt handlers for each bank */
+ 	for (i = 0; i < irq_bank_count; i++) {
+ 		for (j = i * 32; j < (i + 1) * 32; j++) {
+diff --git a/arch/arm/mach-omap1/irqs.h b/arch/arm/mach-omap1/irqs.h
+index 2851acfe5ff3..3ab7050b1b6b 100644
+--- a/arch/arm/mach-omap1/irqs.h
++++ b/arch/arm/mach-omap1/irqs.h
+@@ -231,15 +231,6 @@
+ #define IH_MPUIO_BASE		(OMAP_MAX_GPIO_LINES + IH_GPIO_BASE)
+ #define OMAP_IRQ_END		(IH_MPUIO_BASE + 16)
+ 
+-/* External FPGA handles interrupts on Innovator boards */
+-#define	OMAP_FPGA_IRQ_BASE	(OMAP_IRQ_END)
+-#ifdef	CONFIG_MACH_OMAP_INNOVATOR
+-#define OMAP_FPGA_NR_IRQS	24
+-#else
+-#define OMAP_FPGA_NR_IRQS	0
+-#endif
+-#define OMAP_FPGA_IRQ_END	(OMAP_FPGA_IRQ_BASE + OMAP_FPGA_NR_IRQS)
+-
+ #define OMAP_IRQ_BIT(irq)	(1 << ((irq - NR_IRQS_LEGACY) % 32))
+ 
+ #ifdef CONFIG_FIQ
+diff --git a/arch/arm/mach-omap1/mcbsp.c b/arch/arm/mach-omap1/mcbsp.c
+index 05c25c432449..72e399ec5ed9 100644
+--- a/arch/arm/mach-omap1/mcbsp.c
++++ b/arch/arm/mach-omap1/mcbsp.c
+@@ -89,83 +89,6 @@ static struct omap_mcbsp_ops omap1_mcbsp_ops = {
+ #define OMAP1610_MCBSP2_BASE	0xfffb1000
+ #define OMAP1610_MCBSP3_BASE	0xe1017000
+ 
+-#if defined(CONFIG_ARCH_OMAP730) || defined(CONFIG_ARCH_OMAP850)
+-struct resource omap7xx_mcbsp_res[][6] = {
+-	{
+-		{
+-			.start = OMAP7XX_MCBSP1_BASE,
+-			.end   = OMAP7XX_MCBSP1_BASE + SZ_256,
+-			.flags = IORESOURCE_MEM,
+-		},
+-		{
+-			.name  = "rx",
+-			.start = INT_7XX_McBSP1RX,
+-			.flags = IORESOURCE_IRQ,
+-		},
+-		{
+-			.name  = "tx",
+-			.start = INT_7XX_McBSP1TX,
+-			.flags = IORESOURCE_IRQ,
+-		},
+-		{
+-			.name  = "rx",
+-			.start = 9,
+-			.flags = IORESOURCE_DMA,
+-		},
+-		{
+-			.name  = "tx",
+-			.start = 8,
+-			.flags = IORESOURCE_DMA,
+-		},
 -	},
 -	{
--		.start	= INT_7XX_GPIO_BANK3,
--		.flags	= IORESOURCE_IRQ,
+-		{
+-			.start = OMAP7XX_MCBSP2_BASE,
+-			.end   = OMAP7XX_MCBSP2_BASE + SZ_256,
+-			.flags = IORESOURCE_MEM,
+-		},
+-		{
+-			.name  = "rx",
+-			.start = INT_7XX_McBSP2RX,
+-			.flags = IORESOURCE_IRQ,
+-		},
+-		{
+-			.name  = "tx",
+-			.start = INT_7XX_McBSP2TX,
+-			.flags = IORESOURCE_IRQ,
+-		},
+-		{
+-			.name  = "rx",
+-			.start = 11,
+-			.flags = IORESOURCE_DMA,
+-		},
+-		{
+-			.name  = "tx",
+-			.start = 10,
+-			.flags = IORESOURCE_DMA,
+-		},
 -	},
 -};
 -
--static struct omap_gpio_platform_data omap7xx_gpio3_config = {
--	.bank_width		= 32,
--	.regs			= &omap7xx_gpio_regs,
--};
+-#define omap7xx_mcbsp_res_0		omap7xx_mcbsp_res[0]
 -
--static struct platform_device omap7xx_gpio3 = {
--	.name           = "omap_gpio",
--	.id             = 3,
--	.dev            = {
--		.platform_data = &omap7xx_gpio3_config,
--	},
--	.num_resources = ARRAY_SIZE(omap7xx_gpio3_resources),
--	.resource = omap7xx_gpio3_resources,
--};
--
--/* gpio4 */
--static struct resource omap7xx_gpio4_resources[] = {
+-static struct omap_mcbsp_platform_data omap7xx_mcbsp_pdata[] = {
 -	{
--		.start	= OMAP7XX_GPIO4_BASE,
--		.end	= OMAP7XX_GPIO4_BASE + SZ_2K - 1,
--		.flags	= IORESOURCE_MEM,
--	},
--	{
--		.start	= INT_7XX_GPIO_BANK4,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
--
--static struct omap_gpio_platform_data omap7xx_gpio4_config = {
--	.bank_width		= 32,
--	.regs			= &omap7xx_gpio_regs,
--};
--
--static struct platform_device omap7xx_gpio4 = {
--	.name           = "omap_gpio",
--	.id             = 4,
--	.dev            = {
--		.platform_data = &omap7xx_gpio4_config,
--	},
--	.num_resources = ARRAY_SIZE(omap7xx_gpio4_resources),
--	.resource = omap7xx_gpio4_resources,
--};
--
--/* gpio5 */
--static struct resource omap7xx_gpio5_resources[] = {
--	{
--		.start	= OMAP7XX_GPIO5_BASE,
--		.end	= OMAP7XX_GPIO5_BASE + SZ_2K - 1,
--		.flags	= IORESOURCE_MEM,
+-		.ops		= &omap1_mcbsp_ops,
 -	},
 -	{
--		.start	= INT_7XX_GPIO_BANK5,
--		.flags	= IORESOURCE_IRQ,
+-		.ops		= &omap1_mcbsp_ops,
 -	},
 -};
+-#define OMAP7XX_MCBSP_RES_SZ		ARRAY_SIZE(omap7xx_mcbsp_res[1])
+-#define OMAP7XX_MCBSP_COUNT		ARRAY_SIZE(omap7xx_mcbsp_res)
+-#else
+-#define omap7xx_mcbsp_res_0		NULL
+-#define omap7xx_mcbsp_pdata		NULL
+-#define OMAP7XX_MCBSP_RES_SZ		0
+-#define OMAP7XX_MCBSP_COUNT		0
+-#endif
 -
--static struct omap_gpio_platform_data omap7xx_gpio5_config = {
--	.bank_width		= 32,
--	.regs			= &omap7xx_gpio_regs,
+ #ifdef CONFIG_ARCH_OMAP15XX
+ struct resource omap15xx_mcbsp_res[][6] = {
+ 	{
+@@ -418,12 +341,6 @@ static int __init omap1_mcbsp_init(void)
+ 	if (!cpu_class_is_omap1())
+ 		return -ENODEV;
+ 
+-	if (cpu_is_omap7xx())
+-		omap_mcbsp_register_board_cfg(omap7xx_mcbsp_res_0,
+-					OMAP7XX_MCBSP_RES_SZ,
+-					omap7xx_mcbsp_pdata,
+-					OMAP7XX_MCBSP_COUNT);
+-
+ 	if (cpu_is_omap15xx())
+ 		omap_mcbsp_register_board_cfg(omap15xx_mcbsp_res_0,
+ 					OMAP15XX_MCBSP_RES_SZ,
+diff --git a/arch/arm/mach-omap1/mtd-xip.h b/arch/arm/mach-omap1/mtd-xip.h
+index 5ae312ff08a1..cbeda46dd526 100644
+--- a/arch/arm/mach-omap1/mtd-xip.h
++++ b/arch/arm/mach-omap1/mtd-xip.h
+@@ -42,11 +42,7 @@ static inline unsigned long xip_omap_mpu_timer_read(int nr)
+  * (see linux/mtd/xip.h)
+  */
+ 
+-#ifdef CONFIG_MACH_OMAP_PERSEUS2
+-#define xip_elapsed_since(x)	(signed)((~xip_omap_mpu_timer_read(0) - (x)) / 7)
+-#else
+ #define xip_elapsed_since(x)	(signed)((~xip_omap_mpu_timer_read(0) - (x)) / 6)
+-#endif
+ 
+ /*
+  * xip_cpu_idle() is used when waiting for a delay equal or larger than
+diff --git a/arch/arm/mach-omap1/mux.c b/arch/arm/mach-omap1/mux.c
+index 2d9458ff1d29..4456fbc8aa3d 100644
+--- a/arch/arm/mach-omap1/mux.c
++++ b/arch/arm/mach-omap1/mux.c
+@@ -21,52 +21,6 @@
+ 
+ static struct omap_mux_cfg arch_mux_cfg;
+ 
+-#if defined(CONFIG_ARCH_OMAP730) || defined(CONFIG_ARCH_OMAP850)
+-static struct pin_config omap7xx_pins[] = {
+-MUX_CFG_7XX("E2_7XX_KBR0",        12,   21,    0,   20,   1, 0)
+-MUX_CFG_7XX("J7_7XX_KBR1",        12,   25,    0,   24,   1, 0)
+-MUX_CFG_7XX("E1_7XX_KBR2",        12,   29,    0,   28,   1, 0)
+-MUX_CFG_7XX("F3_7XX_KBR3",        13,    1,    0,    0,   1, 0)
+-MUX_CFG_7XX("D2_7XX_KBR4",        13,    5,    0,    4,   1, 0)
+-MUX_CFG_7XX("C2_7XX_KBC0",        13,    9,    0,    8,   1, 0)
+-MUX_CFG_7XX("D3_7XX_KBC1",        13,   13,    0,   12,   1, 0)
+-MUX_CFG_7XX("E4_7XX_KBC2",        13,   17,    0,   16,   1, 0)
+-MUX_CFG_7XX("F4_7XX_KBC3",        13,   21,    0,   20,   1, 0)
+-MUX_CFG_7XX("E3_7XX_KBC4",        13,   25,    0,   24,   1, 0)
+-
+-MUX_CFG_7XX("AA17_7XX_USB_DM",     2,   21,    0,   20,   0, 0)
+-MUX_CFG_7XX("W16_7XX_USB_PU_EN",   2,   25,    0,   24,   0, 0)
+-MUX_CFG_7XX("W17_7XX_USB_VBUSI",   2,   29,    6,   28,   1, 0)
+-MUX_CFG_7XX("W18_7XX_USB_DMCK_OUT",3,    3,    1,    2,   0, 0)
+-MUX_CFG_7XX("W19_7XX_USB_DCRST",   3,    7,    1,    6,   0, 0)
+-
+-/* MMC Pins */
+-MUX_CFG_7XX("MMC_7XX_CMD",         2,    9,    0,    8,   1, 0)
+-MUX_CFG_7XX("MMC_7XX_CLK",         2,   13,    0,   12,   1, 0)
+-MUX_CFG_7XX("MMC_7XX_DAT0",        2,   17,    0,   16,   1, 0)
+-
+-/* I2C interface */
+-MUX_CFG_7XX("I2C_7XX_SCL",         5,    1,    0,    0,   1, 0)
+-MUX_CFG_7XX("I2C_7XX_SDA",         5,    5,    0,    0,   1, 0)
+-
+-/* SPI pins */
+-MUX_CFG_7XX("SPI_7XX_1",           6,    5,    4,    4,   1, 0)
+-MUX_CFG_7XX("SPI_7XX_2",           6,    9,    4,    8,   1, 0)
+-MUX_CFG_7XX("SPI_7XX_3",           6,   13,    4,   12,   1, 0)
+-MUX_CFG_7XX("SPI_7XX_4",           6,   17,    4,   16,   1, 0)
+-MUX_CFG_7XX("SPI_7XX_5",           8,   25,    0,   24,   0, 0)
+-MUX_CFG_7XX("SPI_7XX_6",           9,    5,    0,    4,   0, 0)
+-
+-/* UART pins */
+-MUX_CFG_7XX("UART_7XX_1",          3,   21,    0,   20,   0, 0)
+-MUX_CFG_7XX("UART_7XX_2",          8,    1,    6,    0,   0, 0)
+-};
+-#define OMAP7XX_PINS_SZ		ARRAY_SIZE(omap7xx_pins)
+-#else
+-#define omap7xx_pins		NULL
+-#define OMAP7XX_PINS_SZ		0
+-#endif	/* CONFIG_ARCH_OMAP730 || CONFIG_ARCH_OMAP850 */
+-
+ #if defined(CONFIG_ARCH_OMAP15XX) || defined(CONFIG_ARCH_OMAP16XX)
+ static struct pin_config omap1xxx_pins[] = {
+ /*
+@@ -489,12 +443,6 @@ EXPORT_SYMBOL(omap_cfg_reg);
+ 
+ int __init omap1_mux_init(void)
+ {
+-	if (cpu_is_omap7xx()) {
+-		arch_mux_cfg.pins	= omap7xx_pins;
+-		arch_mux_cfg.size	= OMAP7XX_PINS_SZ;
+-		arch_mux_cfg.cfg_reg	= omap1_cfg_reg;
+-	}
+-
+ 	if (cpu_is_omap15xx() || cpu_is_omap16xx()) {
+ 		arch_mux_cfg.pins	= omap1xxx_pins;
+ 		arch_mux_cfg.size	= OMAP1XXX_PINS_SZ;
+diff --git a/arch/arm/mach-omap1/pm.c b/arch/arm/mach-omap1/pm.c
+index fce7d2b572bf..9761d8404949 100644
+--- a/arch/arm/mach-omap1/pm.c
++++ b/arch/arm/mach-omap1/pm.c
+@@ -69,7 +69,6 @@
+ static unsigned int arm_sleep_save[ARM_SLEEP_SAVE_SIZE];
+ static unsigned short dsp_sleep_save[DSP_SLEEP_SAVE_SIZE];
+ static unsigned short ulpd_sleep_save[ULPD_SLEEP_SAVE_SIZE];
+-static unsigned int mpui7xx_sleep_save[MPUI7XX_SLEEP_SAVE_SIZE];
+ static unsigned int mpui1510_sleep_save[MPUI1510_SLEEP_SAVE_SIZE];
+ static unsigned int mpui1610_sleep_save[MPUI1610_SLEEP_SAVE_SIZE];
+ 
+@@ -166,10 +165,7 @@ static void omap_pm_wakeup_setup(void)
+ 	 * drivers must still separately call omap_set_gpio_wakeup() to
+ 	 * wake up to a GPIO interrupt.
+ 	 */
+-	if (cpu_is_omap7xx())
+-		level1_wake = OMAP_IRQ_BIT(INT_7XX_GPIO_BANK1) |
+-			OMAP_IRQ_BIT(INT_7XX_IH2_IRQ);
+-	else if (cpu_is_omap15xx())
++	if (cpu_is_omap15xx())
+ 		level1_wake = OMAP_IRQ_BIT(INT_GPIO_BANK1) |
+ 			OMAP_IRQ_BIT(INT_1510_IH2_IRQ);
+ 	else if (cpu_is_omap16xx())
+@@ -178,12 +174,7 @@ static void omap_pm_wakeup_setup(void)
+ 
+ 	omap_writel(~level1_wake, OMAP_IH1_MIR);
+ 
+-	if (cpu_is_omap7xx()) {
+-		omap_writel(~level2_wake, OMAP_IH2_0_MIR);
+-		omap_writel(~(OMAP_IRQ_BIT(INT_7XX_WAKE_UP_REQ) |
+-				OMAP_IRQ_BIT(INT_7XX_MPUIO_KEYPAD)),
+-				OMAP_IH2_1_MIR);
+-	} else if (cpu_is_omap15xx()) {
++	if (cpu_is_omap15xx()) {
+ 		level2_wake |= OMAP_IRQ_BIT(INT_KEYBOARD);
+ 		omap_writel(~level2_wake,  OMAP_IH2_MIR);
+ 	} else if (cpu_is_omap16xx()) {
+@@ -236,17 +227,7 @@ void omap1_pm_suspend(void)
+ 	 * Save interrupt, MPUI, ARM and UPLD control registers.
+ 	 */
+ 
+-	if (cpu_is_omap7xx()) {
+-		MPUI7XX_SAVE(OMAP_IH1_MIR);
+-		MPUI7XX_SAVE(OMAP_IH2_0_MIR);
+-		MPUI7XX_SAVE(OMAP_IH2_1_MIR);
+-		MPUI7XX_SAVE(MPUI_CTRL);
+-		MPUI7XX_SAVE(MPUI_DSP_BOOT_CONFIG);
+-		MPUI7XX_SAVE(MPUI_DSP_API_CONFIG);
+-		MPUI7XX_SAVE(EMIFS_CONFIG);
+-		MPUI7XX_SAVE(EMIFF_SDRAM_CONFIG);
+-
+-	} else if (cpu_is_omap15xx()) {
++	if (cpu_is_omap15xx()) {
+ 		MPUI1510_SAVE(OMAP_IH1_MIR);
+ 		MPUI1510_SAVE(OMAP_IH2_MIR);
+ 		MPUI1510_SAVE(MPUI_CTRL);
+@@ -288,9 +269,8 @@ void omap1_pm_suspend(void)
+ 	/* stop DSP */
+ 	omap_writew(omap_readw(ARM_RSTCT1) & ~(1 << DSP_EN), ARM_RSTCT1);
+ 
+-		/* shut down dsp_ck */
+-	if (!cpu_is_omap7xx())
+-		omap_writew(omap_readw(ARM_CKCTL) & ~(1 << EN_DSPCK), ARM_CKCTL);
++	/* shut down dsp_ck */
++	omap_writew(omap_readw(ARM_CKCTL) & ~(1 << EN_DSPCK), ARM_CKCTL);
+ 
+ 	/* temporarily enabling api_ck to access DSP registers */
+ 	omap_writew(omap_readw(ARM_IDLECT2) | 1 << EN_APICK, ARM_IDLECT2);
+@@ -366,13 +346,7 @@ void omap1_pm_suspend(void)
+ 	ULPD_RESTORE(ULPD_CLOCK_CTRL);
+ 	ULPD_RESTORE(ULPD_STATUS_REQ);
+ 
+-	if (cpu_is_omap7xx()) {
+-		MPUI7XX_RESTORE(EMIFS_CONFIG);
+-		MPUI7XX_RESTORE(EMIFF_SDRAM_CONFIG);
+-		MPUI7XX_RESTORE(OMAP_IH1_MIR);
+-		MPUI7XX_RESTORE(OMAP_IH2_0_MIR);
+-		MPUI7XX_RESTORE(OMAP_IH2_1_MIR);
+-	} else if (cpu_is_omap15xx()) {
++	if (cpu_is_omap15xx()) {
+ 		MPUI1510_RESTORE(MPUI_CTRL);
+ 		MPUI1510_RESTORE(MPUI_DSP_BOOT_CONFIG);
+ 		MPUI1510_RESTORE(MPUI_DSP_API_CONFIG);
+@@ -433,14 +407,7 @@ static int omap_pm_debug_show(struct seq_file *m, void *v)
+ 	ULPD_SAVE(ULPD_DPLL_CTRL);
+ 	ULPD_SAVE(ULPD_POWER_CTRL);
+ 
+-	if (cpu_is_omap7xx()) {
+-		MPUI7XX_SAVE(MPUI_CTRL);
+-		MPUI7XX_SAVE(MPUI_DSP_STATUS);
+-		MPUI7XX_SAVE(MPUI_DSP_BOOT_CONFIG);
+-		MPUI7XX_SAVE(MPUI_DSP_API_CONFIG);
+-		MPUI7XX_SAVE(EMIFF_SDRAM_CONFIG);
+-		MPUI7XX_SAVE(EMIFS_CONFIG);
+-	} else if (cpu_is_omap15xx()) {
++	if (cpu_is_omap15xx()) {
+ 		MPUI1510_SAVE(MPUI_CTRL);
+ 		MPUI1510_SAVE(MPUI_DSP_STATUS);
+ 		MPUI1510_SAVE(MPUI_DSP_BOOT_CONFIG);
+@@ -486,21 +453,7 @@ static int omap_pm_debug_show(struct seq_file *m, void *v)
+ 		   ULPD_SHOW(ULPD_STATUS_REQ),
+ 		   ULPD_SHOW(ULPD_POWER_CTRL));
+ 
+-	if (cpu_is_omap7xx()) {
+-		seq_printf(m,
+-			   "MPUI7XX_CTRL_REG	     0x%-8x \n"
+-			   "MPUI7XX_DSP_STATUS_REG:      0x%-8x \n"
+-			   "MPUI7XX_DSP_BOOT_CONFIG_REG: 0x%-8x \n"
+-			   "MPUI7XX_DSP_API_CONFIG_REG:  0x%-8x \n"
+-			   "MPUI7XX_SDRAM_CONFIG_REG:    0x%-8x \n"
+-			   "MPUI7XX_EMIFS_CONFIG_REG:    0x%-8x \n",
+-			   MPUI7XX_SHOW(MPUI_CTRL),
+-			   MPUI7XX_SHOW(MPUI_DSP_STATUS),
+-			   MPUI7XX_SHOW(MPUI_DSP_BOOT_CONFIG),
+-			   MPUI7XX_SHOW(MPUI_DSP_API_CONFIG),
+-			   MPUI7XX_SHOW(EMIFF_SDRAM_CONFIG),
+-			   MPUI7XX_SHOW(EMIFS_CONFIG));
+-	} else if (cpu_is_omap15xx()) {
++	if (cpu_is_omap15xx()) {
+ 		seq_printf(m,
+ 			   "MPUI1510_CTRL_REG             0x%-8x \n"
+ 			   "MPUI1510_DSP_STATUS_REG:      0x%-8x \n"
+@@ -634,10 +587,7 @@ static int __init omap_pm_init(void)
+ 	 * These routines need to be in SRAM as that's the only
+ 	 * memory the MPU can see when it wakes up.
+ 	 */
+-	if (cpu_is_omap7xx()) {
+-		omap_sram_suspend = omap_sram_push(omap7xx_cpu_suspend,
+-						   omap7xx_cpu_suspend_sz);
+-	} else if (cpu_is_omap15xx()) {
++	if (cpu_is_omap15xx()) {
+ 		omap_sram_suspend = omap_sram_push(omap1510_cpu_suspend,
+ 						   omap1510_cpu_suspend_sz);
+ 	} else if (cpu_is_omap16xx()) {
+@@ -652,9 +602,7 @@ static int __init omap_pm_init(void)
+ 
+ 	arm_pm_idle = omap1_pm_idle;
+ 
+-	if (cpu_is_omap7xx())
+-		irq = INT_7XX_WAKE_UP_REQ;
+-	else if (cpu_is_omap16xx())
++	if (cpu_is_omap16xx())
+ 		irq = INT_1610_WAKE_UP_REQ;
+ 	else
+ 		irq = -1;
+@@ -673,9 +621,7 @@ static int __init omap_pm_init(void)
+ 	omap_writew(ULPD_POWER_CTRL_REG_VAL, ULPD_POWER_CTRL);
+ 
+ 	/* Configure IDLECT3 */
+-	if (cpu_is_omap7xx())
+-		omap_writel(OMAP7XX_IDLECT3_VAL, OMAP7XX_IDLECT3);
+-	else if (cpu_is_omap16xx())
++	if (cpu_is_omap16xx())
+ 		omap_writel(OMAP1610_IDLECT3_VAL, OMAP1610_IDLECT3);
+ 
+ 	suspend_set_ops(&omap_pm_ops);
+diff --git a/arch/arm/mach-omap1/pm.h b/arch/arm/mach-omap1/pm.h
+index d9165709c532..146dbfd90ba1 100644
+--- a/arch/arm/mach-omap1/pm.h
++++ b/arch/arm/mach-omap1/pm.h
+@@ -100,15 +100,7 @@
+ #define OMAP1610_IDLECT3		0xfffece24
+ #define OMAP1610_IDLE_LOOP_REQUEST	0x0400
+ 
+-#define OMAP7XX_IDLECT1_SLEEP_VAL	0x16c7
+-#define OMAP7XX_IDLECT2_SLEEP_VAL	0x09c7
+-#define OMAP7XX_IDLECT3_VAL		0x3f
+-#define OMAP7XX_IDLECT3		0xfffece24
+-#define OMAP7XX_IDLE_LOOP_REQUEST	0x0C00
+-
+-#if     !defined(CONFIG_ARCH_OMAP730) && \
+-	!defined(CONFIG_ARCH_OMAP850) && \
+-	!defined(CONFIG_ARCH_OMAP15XX) && \
++#if     !defined(CONFIG_ARCH_OMAP15XX) && \
+ 	!defined(CONFIG_ARCH_OMAP16XX)
+ #warning "Power management for this processor not implemented yet"
+ #endif
+@@ -125,17 +117,13 @@ extern void allow_idle_sleep(void);
+ extern void omap1_pm_idle(void);
+ extern void omap1_pm_suspend(void);
+ 
+-extern void omap7xx_cpu_suspend(unsigned long, unsigned long);
+ extern void omap1510_cpu_suspend(unsigned long, unsigned long);
+ extern void omap1610_cpu_suspend(unsigned long, unsigned long);
+-extern void omap7xx_idle_loop_suspend(void);
+ extern void omap1510_idle_loop_suspend(void);
+ extern void omap1610_idle_loop_suspend(void);
+ 
+-extern unsigned int omap7xx_cpu_suspend_sz;
+ extern unsigned int omap1510_cpu_suspend_sz;
+ extern unsigned int omap1610_cpu_suspend_sz;
+-extern unsigned int omap7xx_idle_loop_suspend_sz;
+ extern unsigned int omap1510_idle_loop_suspend_sz;
+ extern unsigned int omap1610_idle_loop_suspend_sz;
+ 
+@@ -158,10 +146,6 @@ extern void omap_serial_wake_trigger(int enable);
+ #define ULPD_RESTORE(x) omap_writew((ulpd_sleep_save[ULPD_SLEEP_SAVE_##x]), (x))
+ #define ULPD_SHOW(x) ulpd_sleep_save[ULPD_SLEEP_SAVE_##x]
+ 
+-#define MPUI7XX_SAVE(x) mpui7xx_sleep_save[MPUI7XX_SLEEP_SAVE_##x] = omap_readl(x)
+-#define MPUI7XX_RESTORE(x) omap_writel((mpui7xx_sleep_save[MPUI7XX_SLEEP_SAVE_##x]), (x))
+-#define MPUI7XX_SHOW(x) mpui7xx_sleep_save[MPUI7XX_SLEEP_SAVE_##x]
+-
+ #define MPUI1510_SAVE(x) mpui1510_sleep_save[MPUI1510_SLEEP_SAVE_##x] = omap_readl(x)
+ #define MPUI1510_RESTORE(x) omap_writel((mpui1510_sleep_save[MPUI1510_SLEEP_SAVE_##x]), (x))
+ #define MPUI1510_SHOW(x) mpui1510_sleep_save[MPUI1510_SLEEP_SAVE_##x]
+@@ -235,27 +219,6 @@ enum mpui1510_save_state {
+ #endif
+ };
+ 
+-enum mpui7xx_save_state {
+-	MPUI7XX_SLEEP_SAVE_START = 0,
+-	/*
+-	 * MPUI registers 32 bits
+-	 */
+-	MPUI7XX_SLEEP_SAVE_MPUI_CTRL,
+-	MPUI7XX_SLEEP_SAVE_MPUI_DSP_BOOT_CONFIG,
+-	MPUI7XX_SLEEP_SAVE_MPUI_DSP_API_CONFIG,
+-	MPUI7XX_SLEEP_SAVE_MPUI_DSP_STATUS,
+-	MPUI7XX_SLEEP_SAVE_EMIFF_SDRAM_CONFIG,
+-	MPUI7XX_SLEEP_SAVE_EMIFS_CONFIG,
+-	MPUI7XX_SLEEP_SAVE_OMAP_IH1_MIR,
+-	MPUI7XX_SLEEP_SAVE_OMAP_IH2_0_MIR,
+-	MPUI7XX_SLEEP_SAVE_OMAP_IH2_1_MIR,
+-#if defined(CONFIG_ARCH_OMAP730) || defined(CONFIG_ARCH_OMAP850)
+-	MPUI7XX_SLEEP_SAVE_SIZE
+-#else
+-	MPUI7XX_SLEEP_SAVE_SIZE = 0
+-#endif
 -};
 -
--static struct platform_device omap7xx_gpio5 = {
--	.name           = "omap_gpio",
--	.id             = 5,
--	.dev            = {
--		.platform_data = &omap7xx_gpio5_config,
--	},
--	.num_resources = ARRAY_SIZE(omap7xx_gpio5_resources),
--	.resource = omap7xx_gpio5_resources,
--};
+ enum mpui1610_save_state {
+ 	MPUI1610_SLEEP_SAVE_START = 0,
+ 	/*
+diff --git a/arch/arm/mach-omap1/serial.c b/arch/arm/mach-omap1/serial.c
+index 88928fc33b2e..c7f590645774 100644
+--- a/arch/arm/mach-omap1/serial.c
++++ b/arch/arm/mach-omap1/serial.c
+@@ -106,13 +106,6 @@ void __init omap_serial_init(void)
+ {
+ 	int i;
+ 
+-	if (cpu_is_omap7xx()) {
+-		serial_platform_data[0].regshift = 0;
+-		serial_platform_data[1].regshift = 0;
+-		serial_platform_data[0].irq = INT_7XX_UART_MODEM_1;
+-		serial_platform_data[1].irq = INT_7XX_UART_MODEM_IRDA_2;
+-	}
 -
--/* gpio6 */
--static struct resource omap7xx_gpio6_resources[] = {
--	{
--		.start	= OMAP7XX_GPIO6_BASE,
--		.end	= OMAP7XX_GPIO6_BASE + SZ_2K - 1,
--		.flags	= IORESOURCE_MEM,
--	},
--	{
--		.start	= INT_7XX_GPIO_BANK6,
--		.flags	= IORESOURCE_IRQ,
--	},
--};
+ 	if (cpu_is_omap15xx()) {
+ 		serial_platform_data[0].uartclk = OMAP1510_BASE_BAUD * 16;
+ 		serial_platform_data[1].uartclk = OMAP1510_BASE_BAUD * 16;
+@@ -120,14 +113,6 @@ void __init omap_serial_init(void)
+ 	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(serial_platform_data) - 1; i++) {
 -
--static struct omap_gpio_platform_data omap7xx_gpio6_config = {
--	.bank_width		= 32,
--	.regs			= &omap7xx_gpio_regs,
--};
+-		/* Don't look at UARTs higher than 2 for omap7xx */
+-		if (cpu_is_omap7xx() && i > 1) {
+-			serial_platform_data[i].membase = NULL;
+-			serial_platform_data[i].mapbase = 0;
+-			continue;
+-		}
 -
--static struct platform_device omap7xx_gpio6 = {
--	.name           = "omap_gpio",
--	.id             = 6,
--	.dev            = {
--		.platform_data = &omap7xx_gpio6_config,
--	},
--	.num_resources = ARRAY_SIZE(omap7xx_gpio6_resources),
--	.resource = omap7xx_gpio6_resources,
--};
+ 		/* Static mapping, never released */
+ 		serial_platform_data[i].membase =
+ 			ioremap(serial_platform_data[i].mapbase, SZ_2K);
+diff --git a/arch/arm/mach-omap1/sleep.S b/arch/arm/mach-omap1/sleep.S
+index f111b79512ce..6192f52d531a 100644
+--- a/arch/arm/mach-omap1/sleep.S
++++ b/arch/arm/mach-omap1/sleep.S
+@@ -61,86 +61,6 @@
+  *
+  */
+ 
+-#if defined(CONFIG_ARCH_OMAP730) || defined(CONFIG_ARCH_OMAP850)
+-	.align	3
+-ENTRY(omap7xx_cpu_suspend)
 -
--static struct platform_device *omap7xx_gpio_dev[] __initdata = {
--	&omap7xx_mpu_gpio,
--	&omap7xx_gpio1,
--	&omap7xx_gpio2,
--	&omap7xx_gpio3,
--	&omap7xx_gpio4,
--	&omap7xx_gpio5,
--	&omap7xx_gpio6,
--};
+-	@ save registers on stack
+-	stmfd	sp!, {r0 - r12, lr}
+-
+-	@ Drain write cache
+-	mov	r4, #0
+-	mcr	p15, 0, r0, c7, c10, 4
+-	nop
+-
+-	@ load base address of Traffic Controller
+-	mov	r6, #TCMIF_ASM_BASE & 0xff000000
+-	orr	r6, r6, #TCMIF_ASM_BASE & 0x00ff0000
+-	orr	r6, r6, #TCMIF_ASM_BASE & 0x0000ff00
+-
+-	@ prepare to put SDRAM into self-refresh manually
+-	ldr	r7, [r6, #EMIFF_SDRAM_CONFIG_ASM_OFFSET & 0xff]
+-	orr	r9, r7, #SELF_REFRESH_MODE & 0xff000000
+-	orr	r9, r9, #SELF_REFRESH_MODE & 0x000000ff
+-	str	r9, [r6, #EMIFF_SDRAM_CONFIG_ASM_OFFSET & 0xff]
+-
+-	@ prepare to put EMIFS to Sleep
+-	ldr	r8, [r6, #EMIFS_CONFIG_ASM_OFFSET & 0xff]
+-	orr	r9, r8, #IDLE_EMIFS_REQUEST & 0xff
+-	str	r9, [r6, #EMIFS_CONFIG_ASM_OFFSET & 0xff]
+-
+-	@ load base address of ARM_IDLECT1 and ARM_IDLECT2
+-	mov	r4, #CLKGEN_REG_ASM_BASE & 0xff000000
+-	orr	r4, r4, #CLKGEN_REG_ASM_BASE & 0x00ff0000
+-	orr	r4, r4, #CLKGEN_REG_ASM_BASE & 0x0000ff00
+-
+-	@ turn off clock domains
+-	@ do not disable PERCK (0x04)
+-	mov	r5, #OMAP7XX_IDLECT2_SLEEP_VAL & 0xff
+-	orr	r5, r5, #OMAP7XX_IDLECT2_SLEEP_VAL & 0xff00
+-	strh	r5, [r4, #ARM_IDLECT2_ASM_OFFSET & 0xff]
+-
+-	@ request ARM idle
+-	mov	r3, #OMAP7XX_IDLECT1_SLEEP_VAL & 0xff
+-	orr	r3, r3, #OMAP7XX_IDLECT1_SLEEP_VAL & 0xff00
+-	strh	r3, [r4, #ARM_IDLECT1_ASM_OFFSET & 0xff]
+-
+-	@ disable instruction cache
+-	mrc	p15, 0, r9, c1, c0, 0
+-	bic	r2, r9, #0x1000
+-	mcr	p15, 0, r2, c1, c0, 0
+-	nop
 -
 -/*
-- * omap7xx_gpio_init needs to be done before
-- * machine_init functions access gpio APIs.
-- * Hence omap7xx_gpio_init is a postcore_initcall.
+- * Let's wait for the next wake up event to wake us up. r0 can't be
+- * used here because r0 holds ARM_IDLECT1
 - */
--static int __init omap7xx_gpio_init(void)
+-	mov	r2, #0
+-	mcr	p15, 0, r2, c7, c0, 4		@ wait for interrupt
+-/*
+- * omap7xx_cpu_suspend()'s resume point.
+- *
+- * It will just start executing here, so we'll restore stuff from the
+- * stack.
+- */
+-	@ re-enable Icache
+-	mcr	p15, 0, r9, c1, c0, 0
+-
+-	@ reset the ARM_IDLECT1 and ARM_IDLECT2.
+-	strh	r1, [r4, #ARM_IDLECT2_ASM_OFFSET & 0xff]
+-	strh	r0, [r4, #ARM_IDLECT1_ASM_OFFSET & 0xff]
+-
+-	@ Restore EMIFF controls
+-	str	r7, [r6, #EMIFF_SDRAM_CONFIG_ASM_OFFSET & 0xff]
+-	str	r8, [r6, #EMIFS_CONFIG_ASM_OFFSET & 0xff]
+-
+-	@ restore regs and return
+-	ldmfd	sp!, {r0 - r12, pc}
+-
+-ENTRY(omap7xx_cpu_suspend_sz)
+-	.word	. - omap7xx_cpu_suspend
+-#endif /* CONFIG_ARCH_OMAP730 || CONFIG_ARCH_OMAP850 */
+-
+ #ifdef CONFIG_ARCH_OMAP15XX
+ 	.align	3
+ ENTRY(omap1510_cpu_suspend)
+diff --git a/arch/arm/mach-omap1/sram-init.c b/arch/arm/mach-omap1/sram-init.c
+index 27c42e2a21cc..79b5a24420f6 100644
+--- a/arch/arm/mach-omap1/sram-init.c
++++ b/arch/arm/mach-omap1/sram-init.c
+@@ -95,9 +95,7 @@ static void __init omap_detect_and_map_sram(void)
+ 	omap_sram_skip = SRAM_BOOTLOADER_SZ;
+ 	omap_sram_start = OMAP1_SRAM_PA;
+ 
+-	if (cpu_is_omap7xx())
+-		omap_sram_size = 0x32000;	/* 200K */
+-	else if (cpu_is_omap15xx())
++	if (cpu_is_omap15xx())
+ 		omap_sram_size = 0x30000;	/* 192K */
+ 	else if (cpu_is_omap1610() || cpu_is_omap1611() ||
+ 			cpu_is_omap1621() || cpu_is_omap1710())
+@@ -135,9 +133,6 @@ static void (*_omap_sram_reprogram_clock)(u32 dpllctl, u32 ckctl);
+ void omap_sram_reprogram_clock(u32 dpllctl, u32 ckctl)
+ {
+ 	BUG_ON(!_omap_sram_reprogram_clock);
+-	/* On 730, bit 13 must always be 1 */
+-	if (cpu_is_omap7xx())
+-		ckctl |= 0x2000;
+ 	_omap_sram_reprogram_clock(dpllctl, ckctl);
+ }
+ 
+diff --git a/arch/arm/mach-omap1/usb.c b/arch/arm/mach-omap1/usb.c
+index 0119f3ddb7a6..08d42abc4a0f 100644
+--- a/arch/arm/mach-omap1/usb.c
++++ b/arch/arm/mach-omap1/usb.c
+@@ -190,12 +190,6 @@ static struct platform_device udc_device = {
+ 
+ static inline void udc_device_init(struct omap_usb_config *pdata)
+ {
+-	/* IRQ numbers for omap7xx */
+-	if(cpu_is_omap7xx()) {
+-		udc_resources[1].start = INT_7XX_USB_GENI;
+-		udc_resources[2].start = INT_7XX_USB_NON_ISO;
+-		udc_resources[3].start = INT_7XX_USB_ISO;
+-	}
+ 	pdata->udc_device = &udc_device;
+ }
+ 
+@@ -238,8 +232,6 @@ static inline void ohci_device_init(struct omap_usb_config *pdata)
+ 	if (!IS_ENABLED(CONFIG_USB_OHCI_HCD))
+ 		return;
+ 
+-	if (cpu_is_omap7xx())
+-		ohci_resources[1].start = INT_7XX_USB_HHC_1;
+ 	pdata->ohci_device = &ohci_device;
+ 	pdata->ocpi_enable = &ocpi_enable;
+ }
+@@ -267,8 +259,6 @@ static struct platform_device otg_device = {
+ 
+ static inline void otg_device_init(struct omap_usb_config *pdata)
+ {
+-	if (cpu_is_omap7xx())
+-		otg_resources[1].start = INT_7XX_USB_OTG;
+ 	pdata->otg_device = &otg_device;
+ }
+ 
+@@ -297,14 +287,7 @@ static u32 __init omap1_usb0_init(unsigned nwires, unsigned is_device)
+ 	}
+ 
+ 	if (is_device) {
+-		if (cpu_is_omap7xx()) {
+-			omap_cfg_reg(AA17_7XX_USB_DM);
+-			omap_cfg_reg(W16_7XX_USB_PU_EN);
+-			omap_cfg_reg(W17_7XX_USB_VBUSI);
+-			omap_cfg_reg(W18_7XX_USB_DMCK_OUT);
+-			omap_cfg_reg(W19_7XX_USB_DCRST);
+-		} else
+-			omap_cfg_reg(W4_USB_PUEN);
++		omap_cfg_reg(W4_USB_PUEN);
+ 	}
+ 
+ 	if (nwires == 2) {
+@@ -324,14 +307,11 @@ static u32 __init omap1_usb0_init(unsigned nwires, unsigned is_device)
+ 		 *  - OTG support on this port not yet written
+ 		 */
+ 
+-		/* Don't do this for omap7xx -- it causes USB to not work correctly */
+-		if (!cpu_is_omap7xx()) {
+-			l = omap_readl(USB_TRANSCEIVER_CTRL);
+-			l &= ~(7 << 4);
+-			if (!is_device)
+-				l |= (3 << 1);
+-			omap_writel(l, USB_TRANSCEIVER_CTRL);
+-		}
++		l = omap_readl(USB_TRANSCEIVER_CTRL);
++		l &= ~(7 << 4);
++		if (!is_device)
++			l |= (3 << 1);
++		omap_writel(l, USB_TRANSCEIVER_CTRL);
+ 
+ 		return 3 << 16;
+ 	}
+@@ -698,7 +678,7 @@ void __init omap1_usb_init(struct omap_usb_config *_pdata)
+ 	ohci_device_init(pdata);
+ 	otg_device_init(pdata);
+ 
+-	if (cpu_is_omap7xx() || cpu_is_omap16xx())
++	if (cpu_is_omap16xx())
+ 		omap_otg_init(pdata);
+ 	else if (cpu_is_omap15xx())
+ 		omap_1510_usb_init(pdata);
+diff --git a/drivers/spi/spi-omap-uwire.c b/drivers/spi/spi-omap-uwire.c
+index 29198e6815b2..20c87163d612 100644
+--- a/drivers/spi/spi-omap-uwire.c
++++ b/drivers/spi/spi-omap-uwire.c
+@@ -99,7 +99,7 @@ struct uwire_state {
+  * Or, put it in a structure which is used throughout the driver;
+  * that avoids having to issue two loads for each bit of static data.
+  */
+-static unsigned int uwire_idx_shift;
++static unsigned int uwire_idx_shift = 2;
+ static void __iomem *uwire_base;
+ 
+ static inline void uwire_write_reg(int idx, u16 val)
+@@ -481,11 +481,6 @@ static int uwire_probe(struct platform_device *pdev)
+ 	}
+ 	clk_prepare_enable(uwire->ck);
+ 
+-	if (cpu_is_omap7xx())
+-		uwire_idx_shift = 1;
+-	else
+-		uwire_idx_shift = 2;
+-
+ 	uwire_write_reg(UWIRE_SR3, 1);
+ 
+ 	/* the spi->mode bits understood by this driver: */
+@@ -536,15 +531,6 @@ static struct platform_driver uwire_driver = {
+ 
+ static int __init omap_uwire_init(void)
+ {
+-	/* FIXME move these into the relevant board init code. also, include
+-	 * H3 support; it uses tsc2101 like H2 (on a different chipselect).
+-	 */
+-
+-	if (machine_is_omap_h2()) {
+-		/* defaults: W21 SDO, U18 SDI, V19 SCL */
+-		omap_cfg_reg(N14_1610_UWIRE_CS0);
+-		omap_cfg_reg(N15_1610_UWIRE_CS1);
+-	}
+ 	return platform_driver_register(&uwire_driver);
+ }
+ 
+diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
+index bea346e362b2..1be8c19f2a04 100644
+--- a/drivers/usb/gadget/udc/omap_udc.c
++++ b/drivers/usb/gadget/udc/omap_udc.c
+@@ -2036,12 +2036,7 @@ static irqreturn_t omap_udc_iso_irq(int irq, void *_dev)
+ 
+ static inline int machine_without_vbus_sense(void)
+ {
+-	return machine_is_omap_innovator()
+-		|| machine_is_omap_osk()
+-		|| machine_is_omap_palmte()
+-		|| machine_is_sx1()
+-		/* No known omap7xx boards with vbus sense */
+-		|| cpu_is_omap7xx();
++	return  machine_is_omap_osk() || machine_is_sx1();
+ }
+ 
+ static int omap_udc_start(struct usb_gadget *g,
+@@ -2759,9 +2754,6 @@ static int omap_udc_probe(struct platform_device *pdev)
+ 	struct clk		*dc_clk = NULL;
+ 	struct clk		*hhc_clk = NULL;
+ 
+-	if (cpu_is_omap7xx())
+-		use_dma = 0;
+-
+ 	/* NOTE:  "knows" the order of the resources! */
+ 	if (!request_mem_region(pdev->resource[0].start,
+ 			resource_size(&pdev->resource[0]),
+@@ -2780,16 +2772,6 @@ static int omap_udc_probe(struct platform_device *pdev)
+ 		udelay(100);
+ 	}
+ 
+-	if (cpu_is_omap7xx()) {
+-		dc_clk = clk_get(&pdev->dev, "usb_dc_ck");
+-		hhc_clk = clk_get(&pdev->dev, "l3_ocpi_ck");
+-		BUG_ON(IS_ERR(dc_clk) || IS_ERR(hhc_clk));
+-		/* can't use omap_udc_enable_clock yet */
+-		clk_prepare_enable(dc_clk);
+-		clk_prepare_enable(hhc_clk);
+-		udelay(100);
+-	}
+-
+ 	INFO("OMAP UDC rev %d.%d%s\n",
+ 		omap_readw(UDC_REV) >> 4, omap_readw(UDC_REV) & 0xf,
+ 		config->otg ? ", Mini-AB" : "");
+@@ -2914,7 +2896,7 @@ static int omap_udc_probe(struct platform_device *pdev)
+ 		goto cleanup1;
+ 	}
+ #endif
+-	if (cpu_is_omap16xx() || cpu_is_omap7xx()) {
++	if (cpu_is_omap16xx()) {
+ 		udc->dc_clk = dc_clk;
+ 		udc->hhc_clk = hhc_clk;
+ 		clk_disable(hhc_clk);
+@@ -2933,7 +2915,7 @@ static int omap_udc_probe(struct platform_device *pdev)
+ 	if (!IS_ERR_OR_NULL(xceiv))
+ 		usb_put_phy(xceiv);
+ 
+-	if (cpu_is_omap16xx() || cpu_is_omap7xx()) {
++	if (cpu_is_omap16xx()) {
+ 		clk_disable_unprepare(hhc_clk);
+ 		clk_disable_unprepare(dc_clk);
+ 		clk_put(hhc_clk);
+diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+index cb29701df911..d7f594db56c6 100644
+--- a/drivers/usb/host/ohci-omap.c
++++ b/drivers/usb/host/ohci-omap.c
+@@ -107,10 +107,6 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+ 		hcd->power_budget = 8;
+ 	}
+ 
+-	/* boards can use OTG transceivers in non-OTG modes */
+-	need_transceiver = need_transceiver
+-			|| machine_is_omap_h2() || machine_is_omap_h3();
+-
+ 	/* XXX OMAP16xx only */
+ 	if (config->ocpi_enable)
+ 		config->ocpi_enable();
+@@ -150,7 +146,7 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+ 	}
+ 
+ 	/* board-specific power switching and overcurrent support */
+-	if (machine_is_omap_osk() || machine_is_omap_innovator()) {
++	if (machine_is_omap_osk()) {
+ 		u32	rh = roothub_a (ohci);
+ 
+ 		/* power switching (ganged by default) */
+diff --git a/drivers/usb/musb/musb_dma.h b/drivers/usb/musb/musb_dma.h
+index 7d67b69df0a0..be32c6f90848 100644
+--- a/drivers/usb/musb/musb_dma.h
++++ b/drivers/usb/musb/musb_dma.h
+@@ -61,12 +61,6 @@ struct musb_hw_ep;
+ #define musb_dma_cppi41(musb)		0
+ #endif
+ 
+-#ifdef CONFIG_USB_TI_CPPI_DMA
+-#define musb_dma_cppi(musb)		(musb->ops->quirks & MUSB_DMA_CPPI)
+-#else
+-#define musb_dma_cppi(musb)		0
+-#endif
+-
+ #ifdef CONFIG_USB_TUSB_OMAP_DMA
+ #define tusb_dma_omap(musb)		(musb->ops->quirks & MUSB_DMA_TUSB_OMAP)
+ #else
+@@ -79,9 +73,8 @@ struct musb_hw_ep;
+ #define musb_dma_inventra(musb)		0
+ #endif
+ 
+-#if defined(CONFIG_USB_TI_CPPI_DMA) || defined(CONFIG_USB_TI_CPPI41_DMA)
+-#define	is_cppi_enabled(musb)		\
+-	(musb_dma_cppi(musb) || musb_dma_cppi41(musb))
++#if defined(CONFIG_USB_TI_CPPI41_DMA)
++#define	is_cppi_enabled(musb)		musb_dma_cppi41(musb)
+ #else
+ #define	is_cppi_enabled(musb)	0
+ #endif
+diff --git a/drivers/usb/phy/phy-isp1301-omap.c b/drivers/usb/phy/phy-isp1301-omap.c
+index e5d3f206097c..394386a4bef8 100644
+--- a/drivers/usb/phy/phy-isp1301-omap.c
++++ b/drivers/usb/phy/phy-isp1301-omap.c
+@@ -77,51 +77,6 @@ struct isp1301 {
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-/* board-specific PM hooks */
+-
+-#if defined(CONFIG_MACH_OMAP_H2) || defined(CONFIG_MACH_OMAP_H3)
+-
+-#if IS_REACHABLE(CONFIG_TPS65010)
+-
+-#include <linux/mfd/tps65010.h>
+-
+-#else
+-
+-static inline int tps65010_set_vbus_draw(unsigned mA)
 -{
--	int i;
--
--	if (!cpu_is_omap7xx())
--		return -EINVAL;
--
--	for (i = 0; i < ARRAY_SIZE(omap7xx_gpio_dev); i++)
--		platform_device_register(omap7xx_gpio_dev[i]);
--
+-	pr_debug("tps65010: draw %d mA (STUB)\n", mA);
 -	return 0;
 -}
--postcore_initcall(omap7xx_gpio_init);
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index e488e1b8e803..f427c8ea5c7b 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -873,7 +873,7 @@ config I2C_OCORES
- config I2C_OMAP
- 	tristate "OMAP I2C adapter"
- 	depends on ARCH_OMAP || ARCH_K3 || COMPILE_TEST
--	default y if MACH_OMAP_H3 || MACH_OMAP_OSK
-+	default MACH_OMAP_OSK
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  I2C interface on the Texas Instruments OMAP1/2 family of processors.
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 8b93856de432..c87aab27455f 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1524,7 +1524,7 @@ config TPS6105X
- config TPS65010
- 	tristate "TI TPS6501x Power Management chips"
- 	depends on I2C && GPIOLIB
--	default y if MACH_OMAP_H2 || MACH_OMAP_H3 || MACH_OMAP_OSK
-+	default MACH_OMAP_OSK
- 	help
- 	  If you say yes here you get support for the TPS6501x series of
- 	  Power Management chips.  These include voltage regulators,
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index 1c5b1c48a230..1dc88347525a 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -480,7 +480,7 @@ config MMC_SDHCI_ST
- config MMC_OMAP
- 	tristate "TI OMAP Multimedia Card Interface support"
- 	depends on ARCH_OMAP
--	depends on TPS65010 || !MACH_OMAP_H2
-+	depends on TPS65010
- 	help
- 	  This selects the TI OMAP Multimedia card Interface.
- 	  If you have an OMAP board with a Multimedia Card slot,
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index 5756acb07b8d..82fe0c72b496 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -129,7 +129,7 @@ config USB_GR_UDC
- config USB_OMAP
- 	tristate "OMAP USB Device Controller"
- 	depends on ARCH_OMAP1
--	depends on ISP1301_OMAP || !(MACH_OMAP_H2 || MACH_OMAP_H3)
-+	depends on ISP1301_OMAP
- 	help
- 	   Many Texas Instruments OMAP processors have flexible full
- 	   speed USB device controllers, with support for up to 30
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 75b8a3eeb23a..fb7b603dddf8 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -420,7 +420,7 @@ if USB_OHCI_HCD
- config USB_OHCI_HCD_OMAP1
- 	tristate "OHCI support for OMAP1/2 chips"
- 	depends on ARCH_OMAP1
--	depends on ISP1301_OMAP || !(MACH_OMAP_H2 || MACH_OMAP_H3)
-+	depends on ISP1301_OMAP
- 	default y
- 	help
- 	  Enables support for the OHCI controller on OMAP1/2 chips.
-diff --git a/include/linux/platform_data/leds-omap.h b/include/linux/platform_data/leds-omap.h
-deleted file mode 100644
-index dd1a3ec86fe4..000000000000
---- a/include/linux/platform_data/leds-omap.h
-+++ /dev/null
-@@ -1,19 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- *  Copyright (C) 2006 Samsung Electronics
-- *  Kyungmin Park <kyungmin.park@samsung.com>
-- */
--#ifndef ASMARM_ARCH_LED_H
--#define ASMARM_ARCH_LED_H
--
--struct omap_led_config {
--	struct led_classdev	cdev;
--	s16			gpio;
--};
--
--struct omap_led_platform_data {
--	s16			nr_leds;
--	struct omap_led_config	*leds;
--};
 -
 -#endif
+-
+-static void enable_vbus_draw(struct isp1301 *isp, unsigned mA)
+-{
+-	int status = tps65010_set_vbus_draw(mA);
+-	if (status < 0)
+-		pr_debug("  VBUS %d mA error %d\n", mA, status);
+-}
+-
+-#else
+-
+-static void enable_vbus_draw(struct isp1301 *isp, unsigned mA)
+-{
+-	/* H4 controls this by DIP switch S2.4; no soft control.
+-	 * ON means the charger is always enabled.  Leave it OFF
+-	 * unless the OTG port is used only in B-peripheral mode.
+-	 */
+-}
+-
+-#endif
+-
+-static void enable_vbus_source(struct isp1301 *isp)
+-{
+-	/* this board won't supply more than 8mA vbus power.
+-	 * some boards can switch a 100ma "unit load" (or more).
+-	 */
+-}
+-
+-
+ /* products will deliver OTG messages with LEDs, GUI, etc */
+ static inline void notresponding(struct isp1301 *isp)
+ {
+@@ -916,10 +871,8 @@ static void b_peripheral(struct isp1301 *isp)
+ 	usb_gadget_vbus_connect(isp->phy.otg->gadget);
+ 
+ #ifdef	CONFIG_USB_OTG
+-	enable_vbus_draw(isp, 8);
+ 	otg_update_isp(isp);
+ #else
+-	enable_vbus_draw(isp, 100);
+ 	/* UDC driver just set OTG_BSESSVLD */
+ 	isp1301_set_bits(isp, ISP1301_OTG_CONTROL_1, OTG1_DP_PULLUP);
+ 	isp1301_clear_bits(isp, ISP1301_OTG_CONTROL_1, OTG1_DP_PULLDOWN);
+@@ -947,7 +900,6 @@ static void isp_update_otg(struct isp1301 *isp, u8 stat)
+ 				a_idle(isp, "idle");
+ 				fallthrough;
+ 			case OTG_STATE_A_IDLE:
+-				enable_vbus_source(isp);
+ 				fallthrough;
+ 			case OTG_STATE_A_WAIT_VRISE:
+ 				/* we skip over OTG_STATE_A_WAIT_BCON, since
+@@ -1023,7 +975,6 @@ static void isp_update_otg(struct isp1301 *isp, u8 stat)
+ 		case OTG_STATE_B_HOST:
+ 			if (likely(isp_bstat & OTG_B_SESS_VLD))
+ 				break;
+-			enable_vbus_draw(isp, 0);
+ #ifndef	CONFIG_USB_OTG
+ 			/* UDC driver will clear OTG_BSESSVLD */
+ 			isp1301_set_bits(isp, ISP1301_OTG_CONTROL_1,
+@@ -1283,9 +1234,6 @@ isp1301_set_host(struct usb_otg *otg, struct usb_bus *host)
+ 
+ 	power_up(isp);
+ 
+-	if (machine_is_omap_h2())
+-		isp1301_set_bits(isp, ISP1301_MODE_CONTROL_1, MC1_DAT_SE0);
+-
+ 	dev_info(&isp->client->dev, "A-Host sessions ok\n");
+ 	isp1301_set_bits(isp, ISP1301_INTERRUPT_RISING,
+ 		INTR_ID_GND);
+@@ -1320,8 +1268,6 @@ isp1301_set_peripheral(struct usb_otg *otg, struct usb_gadget *gadget)
+ 
+ 	if (!gadget) {
+ 		omap_writew(0, OTG_IRQ_EN);
+-		if (!otg->default_a)
+-			enable_vbus_draw(isp, 0);
+ 		usb_gadget_vbus_disconnect(otg->gadget);
+ 		otg->gadget = NULL;
+ 		power_down(isp);
+@@ -1352,9 +1298,6 @@ isp1301_set_peripheral(struct usb_otg *otg, struct usb_gadget *gadget)
+ 	power_up(isp);
+ 	isp->phy.otg->state = OTG_STATE_B_IDLE;
+ 
+-	if (machine_is_omap_h2() || machine_is_omap_h3())
+-		isp1301_set_bits(isp, ISP1301_MODE_CONTROL_1, MC1_DAT_SE0);
+-
+ 	isp1301_set_bits(isp, ISP1301_INTERRUPT_RISING,
+ 		INTR_SESS_VLD);
+ 	isp1301_set_bits(isp, ISP1301_INTERRUPT_FALLING,
+@@ -1380,16 +1323,6 @@ isp1301_set_peripheral(struct usb_otg *otg, struct usb_gadget *gadget)
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-static int
+-isp1301_set_power(struct usb_phy *dev, unsigned mA)
+-{
+-	if (!the_transceiver)
+-		return -ENODEV;
+-	if (dev->otg->state == OTG_STATE_B_PERIPHERAL)
+-		enable_vbus_draw(the_transceiver, mA);
+-	return 0;
+-}
+-
+ static int
+ isp1301_start_srp(struct usb_otg *otg)
+ {
+@@ -1538,26 +1471,7 @@ isp1301_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+ 	}
+ #endif
+ 
+-	if (machine_is_omap_h2()) {
+-		struct gpio_desc *gpiod;
+-
+-		/* full speed signaling by default */
+-		isp1301_set_bits(isp, ISP1301_MODE_CONTROL_1,
+-			MC1_SPEED);
+-		isp1301_set_bits(isp, ISP1301_MODE_CONTROL_2,
+-			MC2_SPD_SUSP_CTRL);
+-
+-		gpiod = devm_gpiod_get(&i2c->dev, NULL, GPIOD_IN);
+-		if (IS_ERR(gpiod)) {
+-			dev_err(&i2c->dev, "cannot obtain H2 GPIO\n");
+-			goto fail;
+-		}
+-		gpiod_set_consumer_name(gpiod, "isp1301");
+-		irq = gpiod_to_irq(gpiod);
+-		isp->irq_type = IRQF_TRIGGER_FALLING;
+-	} else {
+-		irq = i2c->irq;
+-	}
++	irq = i2c->irq;
+ 
+ 	status = request_irq(irq, isp1301_irq,
+ 			isp->irq_type, DRIVER_NAME, isp);
+@@ -1569,15 +1483,12 @@ isp1301_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+ 
+ 	isp->phy.dev = &i2c->dev;
+ 	isp->phy.label = DRIVER_NAME;
+-	isp->phy.set_power = isp1301_set_power;
+-
+ 	isp->phy.otg->usb_phy = &isp->phy;
+ 	isp->phy.otg->set_host = isp1301_set_host;
+ 	isp->phy.otg->set_peripheral = isp1301_set_peripheral;
+ 	isp->phy.otg->start_srp = isp1301_start_srp;
+ 	isp->phy.otg->start_hnp = isp1301_start_hnp;
+ 
+-	enable_vbus_draw(isp, 0);
+ 	power_down(isp);
+ 	the_transceiver = isp;
+ 
+diff --git a/drivers/video/fbdev/omap/lcdc.c b/drivers/video/fbdev/omap/lcdc.c
+index e7ce783e5215..abb8b11464e8 100644
+--- a/drivers/video/fbdev/omap/lcdc.c
++++ b/drivers/video/fbdev/omap/lcdc.c
+@@ -706,8 +706,6 @@ static int omap_lcdc_init(struct omapfb_device *fbdev, int ext_mode,
+ 
+ 	if (machine_is_ams_delta())
+ 		rate /= 4;
+-	if (machine_is_omap_h3())
+-		rate /= 3;
+ 	r = clk_set_rate(lcdc.lcd_ck, rate);
+ 	if (r) {
+ 		dev_err(fbdev->dev, "failed to adjust LCD rate\n");
+diff --git a/include/linux/soc/ti/omap1-soc.h b/include/linux/soc/ti/omap1-soc.h
+index 81008d400bb6..a42d9aa68648 100644
+--- a/include/linux/soc/ti/omap1-soc.h
++++ b/include/linux/soc/ti/omap1-soc.h
+@@ -20,22 +20,6 @@
+ #undef MULTI_OMAP1
+ #undef OMAP_NAME
+ 
+-#ifdef CONFIG_ARCH_OMAP730
+-# ifdef OMAP_NAME
+-#  undef  MULTI_OMAP1
+-#  define MULTI_OMAP1
+-# else
+-#  define OMAP_NAME omap730
+-# endif
+-#endif
+-#ifdef CONFIG_ARCH_OMAP850
+-# ifdef OMAP_NAME
+-#  undef  MULTI_OMAP1
+-#  define MULTI_OMAP1
+-# else
+-#  define OMAP_NAME omap850
+-# endif
+-#endif
+ #ifdef CONFIG_ARCH_OMAP15XX
+ # ifdef OMAP_NAME
+ #  undef  MULTI_OMAP1
+@@ -69,7 +53,6 @@ unsigned int omap_rev(void);
+ /*
+  * Macros to group OMAP into cpu classes.
+  * These can be used in most places.
+- * cpu_is_omap7xx():	True for OMAP730, OMAP850
+  * cpu_is_omap15xx():	True for OMAP1510, OMAP5910 and OMAP310
+  * cpu_is_omap16xx():	True for OMAP1610, OMAP5912 and OMAP1710
+  */
+@@ -89,23 +72,13 @@ static inline int is_omap ##subclass (void)		\
+ 	return (GET_OMAP_SUBCLASS == (id)) ? 1 : 0;	\
+ }
+ 
+-IS_OMAP_CLASS(7xx, 0x07)
+ IS_OMAP_CLASS(15xx, 0x15)
+ IS_OMAP_CLASS(16xx, 0x16)
+ 
+-#define cpu_is_omap7xx()		0
+ #define cpu_is_omap15xx()		0
+ #define cpu_is_omap16xx()		0
+ 
+ #if defined(MULTI_OMAP1)
+-# if defined(CONFIG_ARCH_OMAP730)
+-#  undef  cpu_is_omap7xx
+-#  define cpu_is_omap7xx()		is_omap7xx()
+-# endif
+-# if defined(CONFIG_ARCH_OMAP850)
+-#  undef  cpu_is_omap7xx
+-#  define cpu_is_omap7xx()		is_omap7xx()
+-# endif
+ # if defined(CONFIG_ARCH_OMAP15XX)
+ #  undef  cpu_is_omap15xx
+ #  define cpu_is_omap15xx()		is_omap15xx()
+@@ -115,14 +88,6 @@ IS_OMAP_CLASS(16xx, 0x16)
+ #  define cpu_is_omap16xx()		is_omap16xx()
+ # endif
+ #else
+-# if defined(CONFIG_ARCH_OMAP730)
+-#  undef  cpu_is_omap7xx
+-#  define cpu_is_omap7xx()		1
+-# endif
+-# if defined(CONFIG_ARCH_OMAP850)
+-#  undef  cpu_is_omap7xx
+-#  define cpu_is_omap7xx()		1
+-# endif
+ # if defined(CONFIG_ARCH_OMAP15XX)
+ #  undef  cpu_is_omap15xx
+ #  define cpu_is_omap15xx()		1
 -- 
 2.29.2
 
