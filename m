@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759AB6045BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8320B6045B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbiJSMsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S231816AbiJSMs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiJSMr6 (ORCPT
+        with ESMTP id S233226AbiJSMrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:47:58 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970C77677
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:30:47 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id l1so17068667pld.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:30:47 -0700 (PDT)
+        Wed, 19 Oct 2022 08:47:43 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD8B2D753
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:30:49 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id b5so16113262pgb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b833A5Qsan0f1SmZzQdaOcnrkCwR8FuKT3y3L+uSymQ=;
-        b=WElDJ3m+gbu/8yW1wMY5/NQQpGk5O6qWPJ7IXza5ac6pMQSh+lfcyWuSS1azUMNNbI
-         iEEA9LVKPTDZbtNMQQjhKqwSngFIk5ZFmvU6YnyAoPyTqkL6hbac1H/XY4u7SFKxNS3d
-         8dGtuILcsMW4ONrvg6ZrQVWBh+GEeeM/ZdsZfy7DuEulns/ueDeN4u946vhXxU+APxMQ
-         H9ryMcesDUP56D7vwavxgTzr7tsXKCjLI9YUxEoHZ3JUdPGMJEfQX7+6o5JbWd+5wQeG
-         3jZoTU/xMDseD+DmCaUSv7ikidruz6TuJ2ncwfpzk/AiLUkRI0j66vgqAKp89l7FUalE
-         QNow==
+        bh=bZgcfNdayfFXkcge4kHlidh3EZUZ+6CNq8c/La+Qf7c=;
+        b=EN2G7ythNaQoql5lJ6kdcazc6m+WelLAL7ze6ZExNo9PAdeoHo6G9r7AGUNMf/TKoz
+         yy1LhFnh2OJ+NSjy3CbBdG9LhQoFybqSCj8IDBQ2svmkqof1AaCCFtKHdBlEos2KI1cn
+         ylLga1qosHEmiJQK1ErdOD3SzOPBmFbTHYZJT8s4wV8ay7HaEapkKF7NQHT+gwcVW47U
+         +iDL5aQEqY1OJpuvU3MSpZVR+heP46DOzmPQtvpsynXkB82BIR1+bR3NUs6ar35O+4AE
+         qpoN8lX86nLDlbu1MjEY+gDIR9AfASAAbZ/OzfqGvlDfydPSpbLfzrUqJN6oL5D+dsxG
+         kEhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b833A5Qsan0f1SmZzQdaOcnrkCwR8FuKT3y3L+uSymQ=;
-        b=4w+33OJHqMNPTc8ySslCXc44n26iBUxlmpkVlBUdRznNRqulCejeXdH0Ts0YWWT0ft
-         TvTg5S9J4+7shAvHmuJSdNYnAdBi+WOdt5oiLCmERRVCJxuRxnhsg9yTO05/aIrRN5We
-         P5JRFYI3pNczWp9kH5dt7ieVExq3kP3NnaOVPgS5T68D417GZTHhX6fsDDzB31ftMjTE
-         8csMSAFOb+HHYXvKu+jd3jSEYWitfkTAAhNgoh1OC5Mm/xmc3tv8AoLGUkYx0jfsl6FM
-         eezK8SPYVkwyzavBFSifDQRj2Snp2JYhAq+TCCAinDELaAyTrVp/27MlQ0kQDQsoVyZN
-         ZLEQ==
-X-Gm-Message-State: ACrzQf20rA/eYLrI/gQJ4FH/CmmHedbcaBfMV+szP7782M5GsWqQsPYr
-        9V2OW3xqqiKoiYQsG7cKiKGBiw==
-X-Google-Smtp-Source: AMsMyM7dWsRnybs0mUt0ACL1XY4OGyxjSgp5UlXHTSgoO5MKtycbnzcRNidCuJTnqyQl4W3V5BizVg==
-X-Received: by 2002:a17:902:e848:b0:180:c732:1e52 with SMTP id t8-20020a170902e84800b00180c7321e52mr8378443plg.83.1666182589286;
-        Wed, 19 Oct 2022 05:29:49 -0700 (PDT)
+        bh=bZgcfNdayfFXkcge4kHlidh3EZUZ+6CNq8c/La+Qf7c=;
+        b=gPH/EJGA/rWwEDzGiSRMkn6Ijup+eU8+rPIXh/h+5AC9ImBzOTMfLxNceUjy0+ckco
+         NDBjQJ/C40AOQsCXwaS9544R0v6OsjWsAJhovLQVhOABEz1SM6wNcc9b1lonUNQmjtdK
+         N+DjIjkAKojWsmWi1VcrTk6iQqjKS6fwQxSrANEP61r1MUupHhAJf+XjJ2GkdbkVKUdC
+         lPvGbYBylxP8oFR3myChoUa4GUeN42BmrXO2aLkwMbYNPjzPIDo8TI4uqYApbhnEjQIA
+         AXd0rYwswqEcalG9i/Tozt6W5IdjVWWLR1a3U72nvRTcNnDir8jFEbGL1gVR+puHv/Ad
+         2oQw==
+X-Gm-Message-State: ACrzQf2xLsWyq1e/8L5VVb+CYutFw3fWuMM9tmna0VAzzysFC9Kj/WVD
+        BkaZLQozZmwAlEwRRC6l42x+1Q==
+X-Google-Smtp-Source: AMsMyM4r0Iti8WBTjfp7ajEKsL6hS8vgg1wyYrDnUA6bN/atrWL4ZOio5TtH3D+EAU19As7GsY6+gQ==
+X-Received: by 2002:a63:da4f:0:b0:43f:6af:74ed with SMTP id l15-20020a63da4f000000b0043f06af74edmr7142827pgj.290.1666182595892;
+        Wed, 19 Oct 2022 05:29:55 -0700 (PDT)
 Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.237])
-        by smtp.gmail.com with ESMTPSA id c21-20020a63da15000000b00439c6a4e1ccsm9881825pgh.62.2022.10.19.05.29.43
+        by smtp.gmail.com with ESMTPSA id c21-20020a63da15000000b00439c6a4e1ccsm9881825pgh.62.2022.10.19.05.29.49
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Oct 2022 05:29:49 -0700 (PDT)
+        Wed, 19 Oct 2022 05:29:55 -0700 (PDT)
 From:   Abel Wu <wuyun.abel@bytedance.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>, Mel Gorman <mgorman@suse.de>,
@@ -67,9 +67,9 @@ Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
         Yicong Yang <yangyicong@huawei.com>,
         Barry Song <21cnbao@gmail.com>, linux-kernel@vger.kernel.org,
         Abel Wu <wuyun.abel@bytedance.com>
-Subject: [PATCH v6 3/4] sched/fair: Introduce SIS_CORE
-Date:   Wed, 19 Oct 2022 20:28:58 +0800
-Message-Id: <20221019122859.18399-4-wuyun.abel@bytedance.com>
+Subject: [PATCH v6 4/4] sched/fair: Deal with SIS scan failures
+Date:   Wed, 19 Oct 2022 20:28:59 +0800
+Message-Id: <20221019122859.18399-5-wuyun.abel@bytedance.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221019122859.18399-1-wuyun.abel@bytedance.com>
 References: <20221019122859.18399-1-wuyun.abel@bytedance.com>
@@ -84,244 +84,381 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wakeup fastpath for fair tasks, select_idle_sibling() aka SIS,
-plays an important role in maximizing the usage of cpu resources and
-can greatly affect overall performance of the system.
+When SIS_CORE is active, idle cpus are recorded into a cpumask at
+CORE granule, and the SIS domain scan tries to locate an idle cpu
+in this cpumask. So the quality of the cpumask matters. There are
+generally two types of cpus that need to be dealt with:
 
-The SIS tries to find an idle cpu inside the targeting LLC to place
-the woken-up task. The cache hot cpus are preferred, but if none of
-them is idle, a domain scan is fired to check the other cpus of that
-LLC. It currently scans in linear fashion, and it works well under
-light pressure due to lots of idle cpus can be available.
+ - False positive: the cpus that are present in the idle cpumask
+   but is actually busy. This can be caused by task enqueuing to
+   these cpus without removing from the cpumask immediately. To
+   solve this, the cpumask needs to be shrinked if poor quality
+   of the mask is observed.
 
-But things change. The LLC is getting bigger in modern and future
-machines, and players like cloud service providers are continuously
-trying to use all kinds of resources more efficiently to reduce TCO.
-In either case, locating an idle cpu is no longer as easy as before.
-So the linear scan doesn't fit well in such cases.
+ - True negative: the cpus that are idle but not show up in the
+   idle cpumask. This is due to the rule of CORE granule update
+   that these idle cpus will be ignored when their SMT siblings
+   are already present in the idle cpumask.
 
-There are already features like SIS_{UTIL,PROP} exist to deal with
-the scalability issue by limiting the scan depth, and it would be
-better if we can improve the way how it scans as well. And this is
-exactly what the SIS_CORE is born for.
+According to the nature of the two type cpus and some heuristics,
+the strategies against SIS scan failures are as follows:
 
-When SIS_CORE is enabled, a cpumask containing idle cpus for each
-LLC is maintained and stored in each LLC shared domain. The idle
-cpus are recorded at CORE granule, so in theory only one idle cpu
-of a CORE can be set to the mask. The ideas behind this:
+ - It can be predicted that if a scan fails, the next scan from the
+   same cpu will probably fail too. So mark these cpus fail-prone.
+   A scan from fail-prone cpu is the time to shrink the cpumask.
 
- - Recording idle cpus is to narrow down the SIS scan, so we can
-   avoid touching the runqueues that must be in a busy state, as
-   we all know that the runqueues are one of the most hot data in
-   the system. And because all the possibly idle cpus are in the
-   mask, the hint of has_idle_core still works.
+ - All true negative cpus are the SMT siblings of the false positive
+   cpus, and are taken for granted to be treated as the fallbacks of
+   the false positive cpus. So a fail-prone scan should also check
+   the SMT siblings to see if any true negative cpu exists.
 
- - The rule of CORE granule update helps spreading load out to
-   different cores trying to make better use of cpu capacity.
+The number of false positive cpus being removed during one scan is
+not constrained, but it will be implicitly constrained by the load
+of the LLC. If LLC is under heavy pressure, both the weight of idle
+cpumask and the scan depth are reduced, so does the number of cpus
+removed.
 
-A major concern is the accuracy of the idle cpumask. A cpu present
-in the mask might not be idle any more, which is called the false
-positive cpu. Such cpus will negate lots of benefit this feature
-brings. The strategy against the false positives will be introduced
-in next patch.
+To sum up, this patch marks the cpus fail-prone if scans from them
+failed last time, so next time scanning from them will also check
+their SMT siblings to see if any true negative cpus available. The
+false positive cpus will be removed during fail-prone scans if its
+belonging core is fully busy.
 
-Another concern is the overhead of accessing the LLC-shared cpumask,
-which can be more severe in large LLCs. But a perf stat on cache
-miss rate during hackbench doesn't show obvious difference.
+Benchmark
+=========
 
-This patch records idle cpus when they goes idle at CORE granule for
-each LLC, and the cpumask is in LLC shared domain. The false positive
-cpus are cleared when SIS domain scan fails.
+All of the benchmarks are done inside a normal cpu cgroup in a clean
+environment with cpu turbo disabled, and test machines are:
+
+A) A dual socket machine modeled Intel Xeon(R) Platinum 8260 with SNC
+disabled, so there are 2 NUMA nodes each of which has 24C/48T. Each
+NUMA shares an LLC.
+
+B) A dual socket machine modeled AMD EPYC 7Y83 64-Core Processor with
+NPS1 enabled, so there are 2 NUMA nodes each of which has 64C/128T.
+Each NUMA node contains several LLCs sized of 16 cpus.
+
+The 'baseline' is based on tip sched/core fb04563d1cae (v5.19.0) with
+the first 2 patches of this series applied. While 'sis_core' includes
+the whole patchset.
+
+Results
+=======
+
+hackbench-process-pipes
+ (A)			baseline		sis_core
+Amean     1        0.2540 (   0.00%)      0.2533 (   0.26%)
+Amean     4        0.6220 (   0.00%)      0.5993 (   3.64%)
+Amean     7        0.8020 (   0.00%)      0.7663 *   4.45%*
+Amean     12       1.1823 (   0.00%)      1.1037 *   6.65%*
+Amean     21       2.7717 (   0.00%)      2.2203 *  19.89%*
+Amean     30       5.1200 (   0.00%)      3.7133 *  27.47%*
+Amean     48       8.5890 (   0.00%)      7.0863 *  17.50%*
+Amean     79      11.2580 (   0.00%)     10.3717 *   7.87%*
+Amean     110     13.1283 (   0.00%)     12.4133 *   5.45%*
+Amean     141     15.5967 (   0.00%)     14.4883 *   7.11%*
+Amean     172     18.1153 (   0.00%)     17.2557 *   4.75%*
+Amean     203     21.1340 (   0.00%)     20.2807 (   4.04%)
+Amean     234     23.8227 (   0.00%)     22.8510 (   4.08%)
+Amean     265     26.8293 (   0.00%)     25.7367 *   4.07%*
+Amean     296     29.5800 (   0.00%)     28.7847 (   2.69%)
+ (B)
+Amean     1        0.3650 (   0.00%)      0.3510 (   3.84%)
+Amean     4        0.4837 (   0.00%)      0.4753 (   1.72%)
+Amean     7        0.4997 (   0.00%)      0.5073 (  -1.53%)
+Amean     12       0.5863 (   0.00%)      0.5807 (   0.97%)
+Amean     21       0.8930 (   0.00%)      0.8953 (  -0.26%)
+Amean     30       1.2530 (   0.00%)      1.2633 (  -0.82%)
+Amean     48       1.9743 (   0.00%)      1.9023 (   3.65%)
+Amean     79       3.4933 (   0.00%)      3.2820 (   6.05%)
+Amean     110      5.5963 (   0.00%)      5.3923 (   3.65%)
+Amean     141      7.6550 (   0.00%)      6.8633 (  10.34%)
+Amean     172      8.8323 (   0.00%)      8.2973 *   6.06%*
+Amean     203     10.8683 (   0.00%)      9.5170 *  12.43%*
+Amean     234     11.8683 (   0.00%)     10.6217 (  10.50%)
+Amean     265     13.4717 (   0.00%)     11.9357 *  11.40%*
+Amean     296     13.8130 (   0.00%)     12.7430 *   7.75%*
+
+The results on machine A can approximately divided into 3 sections:
+ - busy, e.g. <21 groups
+ - overloaded, e.g. 21~48 groups
+ - saturated, the rest part
+
+The two cases of 296 groups in B and 110 groups in A have same amount
+of tasks per cpu. So does 30 groups in B and 12 groups in A. So the
+sections on A also apply to B, except that B only has the first two.
+This implies that this feature seems to have consistant behaviour on
+LLCs with different sizes.
+
+For the busy part the result is neutral with slight wins or loss.
+It's not hard to find an idle cpu in such case, so SIS_CORE doesn't
+outperform the linear scanner, considering the cpumask is maintained
+at a cost which will negate the slight benefit.
+
+Once load increases, SIS_CORE helps improving the throughput quite a
+lot by squeezing out the hidden capacity of the cpus. And even under
+extreme load pressure when the cpu capacity is almost fully utilized,
+there is still some can be exploited.
+
+Although it is unlikely to be such loaded in the real world, the long
+running workloads like training jobs can also keep cpus busy and can
+benefit from this feature a lot.
+
+netperf
+ (A-udp)		    baseline		   sis_core
+Hmean     send-64         214.34 (   0.00%)      210.79 *  -1.65%*
+Hmean     send-128        427.90 (   0.00%)      417.96 *  -2.32%*
+Hmean     send-256        839.65 (   0.00%)      823.78 *  -1.89%*
+Hmean     send-1024      3207.45 (   0.00%)     3167.96 *  -1.23%*
+Hmean     send-2048      6097.24 (   0.00%)     6089.01 (  -0.13%)
+Hmean     send-3312      9350.83 (   0.00%)     9299.09 (  -0.55%)
+Hmean     send-4096     11368.25 (   0.00%)    11186.44 *  -1.60%*
+Hmean     send-8192     18273.21 (   0.00%)    18103.81 (  -0.93%)
+Hmean     send-16384    28207.81 (   0.00%)    28259.82 (   0.18%)
+ (B-udp)
+Hmean     send-64         249.97 (   0.00%)      256.99 *   2.81%*
+Hmean     send-128        500.68 (   0.00%)      514.44 *   2.75%*
+Hmean     send-256        991.59 (   0.00%)     1017.38 *   2.60%*
+Hmean     send-1024      3913.02 (   0.00%)     3982.68 *   1.78%*
+Hmean     send-2048      7627.99 (   0.00%)     7590.30 (  -0.49%)
+Hmean     send-3312     11907.07 (   0.00%)    12114.03 *   1.74%*
+Hmean     send-4096     14300.09 (   0.00%)    14753.34 *   3.17%*
+Hmean     send-8192     24576.21 (   0.00%)    25431.42 *   3.48%*
+Hmean     send-16384    42105.89 (   0.00%)    41813.30 (  -0.69%)
+ (A-tcp)
+Hmean     64        1191.91 (   0.00%)     1220.47 *   2.40%*
+Hmean     128       2318.60 (   0.00%)     2354.56 (   1.55%)
+Hmean     256       4267.41 (   0.00%)     4226.72 (  -0.95%)
+Hmean     1024     13190.66 (   0.00%)    13065.91 (  -0.95%)
+Hmean     2048     20466.22 (   0.00%)    20704.66 (   1.17%)
+Hmean     3312     24363.57 (   0.00%)    24613.99 *   1.03%*
+Hmean     4096     26144.44 (   0.00%)    26204.24 (   0.23%)
+Hmean     8192     30387.77 (   0.00%)    30703.65 *   1.04%*
+Hmean     16384    34942.71 (   0.00%)    34205.44 *  -2.11%*
+ (B-tcp)
+Hmean     64        1971.18 (   0.00%)     2120.61 *   7.58%*
+Hmean     128       3752.96 (   0.00%)     3995.68 *   6.47%*
+Hmean     256       6861.58 (   0.00%)     7342.93 *   7.02%*
+Hmean     1024     21966.06 (   0.00%)    23725.30 *   8.01%*
+Hmean     2048     33949.66 (   0.00%)    35620.67 *   4.92%*
+Hmean     3312     40681.75 (   0.00%)    41543.26 *   2.12%*
+Hmean     4096     44309.70 (   0.00%)    45390.03 *   2.44%*
+Hmean     8192     50909.35 (   0.00%)    52157.16 *   2.45%*
+Hmean     16384    57198.37 (   0.00%)    57686.96 (   0.85%)
+
+The netperf has an almost 100% success rate on used target, prev or
+recent cpus, so the domain scan is generally not performed. This test
+is to see how much overhead of maintaining the idle cpumask and the
+result is neutral, which sounds like the overhead is acceptable.
+
+tbench4 Throughput
+ (A)			baseline		sis_core
+Hmean     1        280.53 (   0.00%)      289.44 *   3.17%*
+Hmean     2        561.94 (   0.00%)      571.46 *   1.69%*
+Hmean     4       1109.14 (   0.00%)     1129.88 *   1.87%*
+Hmean     8       2229.39 (   0.00%)     2266.52 *   1.67%*
+Hmean     16      4383.06 (   0.00%)     4473.48 *   2.06%*
+Hmean     32      7124.14 (   0.00%)     7223.83 *   1.40%*
+Hmean     64      8815.41 (   0.00%)     8770.21 *  -0.51%*
+Hmean     128    19519.35 (   0.00%)    20337.24 *   4.19%*
+Hmean     256    19392.24 (   0.00%)    20052.98 *   3.41%*
+Hmean     384    19201.07 (   0.00%)    19563.63 *   1.89%*
+ (B)
+Hmean     1         515.98 (   0.00%)      499.91 *  -3.12%*
+Hmean     2        1031.54 (   0.00%)     1044.38 *   1.24%*
+Hmean     4        1953.44 (   0.00%)     1959.30 *   0.30%*
+Hmean     8        3622.52 (   0.00%)     3773.08 *   4.16%*
+Hmean     16       6545.82 (   0.00%)     6814.46 *   4.10%*
+Hmean     32      13697.73 (   0.00%)    13078.74 *  -4.52%*
+Hmean     64      25589.59 (   0.00%)    24576.52 *  -3.96%*
+Hmean     128     35667.64 (   0.00%)    37590.20 *   5.39%*
+Hmean     256     65215.85 (   0.00%)    64921.74 *  -0.45%*
+Hmean     512     66035.57 (   0.00%)    63812.48 *  -3.37%*
+Hmean     1024    53391.64 (   0.00%)    62356.50 *  16.79%*
+
+Like netperf, tbench4 benchmark also has a high success rate ~39% on
+the cache hot cpus, and the SIS overall success rate is ~45%. This
+benchmark runs a fast idling workload and makes the SIS idle cpumask
+quite unstable, which is a disaster to this feature. Even so, not
+much but still some improvement can be seen from the result.
+
+Conclusion
+==========
+
+The overhead of maintaining the idle cpumasks seems acceptable, and
+this cost can trade for considerable throughput improvement once LLC
+becomes busier in which case less idle cpus are available.
 
 Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
 ---
- include/linux/sched/topology.h | 15 ++++++++++
- kernel/sched/fair.c            | 51 +++++++++++++++++++++++++++++++---
- kernel/sched/features.h        |  7 +++++
- kernel/sched/topology.c        |  8 +++++-
- 4 files changed, 76 insertions(+), 5 deletions(-)
+ kernel/sched/fair.c  | 74 +++++++++++++++++++++++++++++++++++++-------
+ kernel/sched/sched.h |  3 ++
+ 2 files changed, 65 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index 816df6cc444e..ac2162f33ada 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -82,6 +82,16 @@ struct sched_domain_shared {
- 	atomic_t	nr_busy_cpus;
- 	int		has_idle_cores;
- 	int		nr_idle_scan;
-+
-+	/*
-+	 * Used by sched feature SIS_CORE to record idle cpus at core
-+	 * granule to improve efficiency of SIS domain scan.
-+	 *
-+	 * NOTE: this field is variable length. (Allocated dynamically
-+	 * by attaching extra space to the end of the structure,
-+	 * depending on how many CPUs the kernel has booted up with)
-+	 */
-+	unsigned long	icpus[];
- };
- 
- struct sched_domain {
-@@ -167,6 +177,11 @@ static inline struct cpumask *sched_domain_span(struct sched_domain *sd)
- 	return to_cpumask(sd->span);
- }
- 
-+static inline struct cpumask *sched_domain_icpus(struct sched_domain *sd)
-+{
-+	return to_cpumask(sd->shared->icpus);
-+}
-+
- extern void partition_sched_domains_locked(int ndoms_new,
- 					   cpumask_var_t doms_new[],
- 					   struct sched_domain_attr *dattr_new);
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7b668e16812e..3aa699e9d4af 100644
+index 3aa699e9d4af..d06d59ac2f05 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -6282,6 +6282,33 @@ static inline bool test_idle_cores(int cpu)
- 	return false;
+@@ -6309,6 +6309,16 @@ static void update_idle_cpu(int cpu)
+ 	}
  }
  
-+/*
-+ * To honor the rule of CORE granule update, set this cpu to the LLC idle
-+ * cpumask only if there is no cpu of this core showed up in the cpumask.
-+ */
-+static void update_idle_cpu(int cpu)
++static inline bool should_scan_sibling(int cpu)
 +{
-+	struct sched_domain_shared *sds;
++	return cmpxchg(&cpu_rq(cpu)->sis_scan_sibling, 1, 0);
++}
 +
-+	if (!sched_feat(SIS_CORE))
-+		return;
-+
-+	sds = rcu_dereference(per_cpu(sd_llc_shared, cpu));
-+	if (sds) {
-+		struct cpumask *icpus = to_cpumask(sds->icpus);
-+
-+		/*
-+		 * This is racy against clearing in select_idle_cpu(),
-+		 * and can lead to idle cpus miss the chance to be set to
-+		 * the idle cpumask, thus the idle cpus are temporarily
-+		 * out of reach in SIS domain scan. But it should be rare
-+		 * and we still have ILB to kick them working.
-+		 */
-+		if (!cpumask_intersects(cpu_smt_mask(cpu), icpus))
-+			cpumask_set_cpu(cpu, icpus);
-+	}
++static inline void set_scan_sibling(int cpu)
++{
++	WRITE_ONCE(cpu_rq(cpu)->sis_scan_sibling, 1);
 +}
 +
  /*
   * Scans the local SMT mask to see if the entire core is idle, and records this
   * information in sd_llc_shared->has_idle_cores.
-@@ -6298,6 +6325,7 @@ void __update_idle_core(struct rq *rq)
- 		return;
+@@ -6384,17 +6394,20 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
+ /*
+  * Scan the local SMT mask for idle CPUs.
+  */
+-static int select_idle_smt(struct task_struct *p, int target)
++static int select_idle_smt(struct task_struct *p, int core, struct cpumask *cpus, int exclude)
+ {
+ 	int cpu;
  
- 	rcu_read_lock();
-+	update_idle_cpu(core);
- 	if (test_idle_cores(core))
- 		goto unlock;
+-	for_each_cpu_and(cpu, cpu_smt_mask(target), p->cpus_ptr) {
+-		if (cpu == target)
++	for_each_cpu_and(cpu, cpu_smt_mask(core), p->cpus_ptr) {
++		if (exclude && cpu == core)
+ 			continue;
+ 		if (available_idle_cpu(cpu) || sched_idle_cpu(cpu))
+ 			return cpu;
+ 	}
  
-@@ -6343,7 +6371,13 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
- 	if (idle)
- 		return core;
- 
--	cpumask_andnot(cpus, cpus, cpu_smt_mask(core));
-+	/*
-+	 * It is unlikely that more than one cpu of a core show up
-+	 * in the @cpus if SIS_CORE enabled.
-+	 */
-+	if (!sched_feat(SIS_CORE))
-+		cpumask_andnot(cpus, cpus, cpu_smt_mask(core));
++	if (cpus)
++		cpumask_clear_cpu(core, cpus);
 +
  	return -1;
  }
  
-@@ -6394,7 +6428,7 @@ static inline int select_idle_smt(struct task_struct *p, int target)
-  */
- static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
+@@ -6409,12 +6422,21 @@ static inline bool test_idle_cores(int cpu)
+ 	return false;
+ }
+ 
++static inline bool should_scan_sibling(int cpu)
++{
++	return false;
++}
++
++static inline void set_scan_sibling(int cpu)
++{
++}
++
+ static inline int select_idle_core(struct task_struct *p, int core, struct cpumask *cpus, int *idle_cpu)
  {
--	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
-+	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask), *icpus = NULL;
- 	int i, cpu, idle_cpu = -1, nr = INT_MAX;
- 	struct sched_domain_shared *sd_share;
+ 	return __select_idle_cpu(core, p);
+ }
+ 
+-static inline int select_idle_smt(struct task_struct *p, int target)
++static inline int select_idle_smt(struct task_struct *p, int core, struct cpumask *cpus, int exclude)
+ {
+ 	return -1;
+ }
+@@ -6434,6 +6456,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
  	struct rq *this_rq = this_rq();
-@@ -6402,8 +6436,6 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+ 	int this = smp_processor_id();
  	struct sched_domain *this_sd = NULL;
++	bool scan_sibling = false;
  	u64 time = 0;
  
--	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
--
  	if (sched_feat(SIS_PROP) && !has_idle_core) {
- 		u64 avg_cost, avg_idle, span_avg;
- 		unsigned long now = jiffies;
-@@ -6447,6 +6479,11 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+@@ -6479,20 +6502,31 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
  		}
  	}
  
-+	if (sched_feat(SIS_CORE) && sched_smt_active())
-+		icpus = sched_domain_icpus(sd);
-+
-+	cpumask_and(cpus, icpus ? icpus : sched_domain_span(sd), p->cpus_ptr);
-+
+-	if (sched_feat(SIS_CORE) && sched_smt_active())
++	if (sched_feat(SIS_CORE) && sched_smt_active()) {
++		/*
++		 * Due to the nature of idle core scanning, has_idle_core
++		 * hint should also consume the scan_sibling flag even
++		 * though it doesn't use the flag when scanning.
++		 */
++		scan_sibling = should_scan_sibling(target);
+ 		icpus = sched_domain_icpus(sd);
++	}
+ 
+ 	cpumask_and(cpus, icpus ? icpus : sched_domain_span(sd), p->cpus_ptr);
+ 
  	for_each_cpu_wrap(cpu, cpus, target + 1) {
++		if (!--nr)
++			break;
++
  		if (has_idle_core) {
  			i = select_idle_core(p, cpu, cpus, &idle_cpu);
-@@ -6465,6 +6502,12 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 	if (has_idle_core)
+ 			if ((unsigned int)i < nr_cpumask_bits)
+ 				return i;
+-
++		} else if (scan_sibling) {
++			idle_cpu = select_idle_smt(p, cpu, icpus, 0);
++			if ((unsigned int)idle_cpu < nr_cpumask_bits)
++				break;
+ 		} else {
+-			if (!--nr)
+-				return -1;
+ 			idle_cpu = __select_idle_cpu(cpu, p);
+ 			if ((unsigned int)idle_cpu < nr_cpumask_bits)
+ 				break;
+@@ -6503,9 +6537,25 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
  		set_idle_cores(target, false);
  
-+	if (icpus && idle_cpu == -1) {
-+		/* Reset the idle cpu mask if a full scan fails */
-+		if (nr > 0)
-+			cpumask_clear(icpus);
-+	}
-+
- 	if (sched_feat(SIS_PROP) && this_sd && !has_idle_core) {
- 		time = cpu_clock(this) - time;
- 
-diff --git a/kernel/sched/features.h b/kernel/sched/features.h
-index ee7f23c76bd3..bf3cae94caa6 100644
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -63,6 +63,13 @@ SCHED_FEAT(TTWU_QUEUE, true)
- SCHED_FEAT(SIS_PROP, false)
- SCHED_FEAT(SIS_UTIL, true)
- 
-+/*
-+ * Record idle cpus at core granule for each LLC to improve efficiency of
-+ * SIS domain scan. Combine with the above features of limiting scan depth
-+ * to better deal with the scalability issue.
-+ */
-+SCHED_FEAT(SIS_CORE, true)
-+
- /*
-  * Issue a WARN when we do multiple update_rq_clock() calls
-  * in a single rq->lock section. Default disabled because the
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 8739c2a5a54e..a2bb0091c10d 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1641,6 +1641,12 @@ sd_init(struct sched_domain_topology_level *tl,
- 		sd->shared = *per_cpu_ptr(sdd->sds, sd_id);
- 		atomic_inc(&sd->shared->ref);
- 		atomic_set(&sd->shared->nr_busy_cpus, sd_weight);
-+
-+		/*
-+		 * This will temporarily break the rule of CORE granule,
-+		 * but will be fixed after SIS scan failures.
-+		 */
-+		cpumask_copy(sched_domain_icpus(sd), sd_span);
+ 	if (icpus && idle_cpu == -1) {
+-		/* Reset the idle cpu mask if a full scan fails */
+-		if (nr > 0)
+-			cpumask_clear(icpus);
++		if (nr > 0 && (has_idle_core || scan_sibling)) {
++			/*
++			 * Reset the idle cpu mask if a full scan fails,
++			 * but ignore the !has_idle_core case which should
++			 * have already been fixed during scan.
++			 */
++			if (has_idle_core)
++				cpumask_clear(icpus);
++		} else {
++			/*
++			 * As for partial scan failures, it will probably
++			 * fail again next time scanning from the same cpu.
++			 * Due to the SIS_CORE rule of CORE granule update,
++			 * some idle cpus can be missed in the mask. So it
++			 * would be reasonable to scan SMT siblings as well
++			 * if the scan is fail-prone.
++			 */
++			set_scan_sibling(target);
++		}
  	}
  
- 	sd->private = sdd;
-@@ -2106,7 +2112,7 @@ static int __sdt_alloc(const struct cpumask *cpu_map)
+ 	if (sched_feat(SIS_PROP) && this_sd && !has_idle_core) {
+@@ -6657,7 +6707,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 		has_idle_core = test_idle_cores(target);
  
- 			*per_cpu_ptr(sdd->sd, j) = sd;
+ 		if (!has_idle_core && cpus_share_cache(prev, target)) {
+-			i = select_idle_smt(p, prev);
++			i = select_idle_smt(p, prev, NULL, 1);
+ 			if ((unsigned int)i < nr_cpumask_bits)
+ 				return i;
+ 		}
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 1fc198be1ffd..c7f8ed5021e6 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -971,6 +971,9 @@ struct rq {
  
--			sds = kzalloc_node(sizeof(struct sched_domain_shared),
-+			sds = kzalloc_node(sizeof(struct sched_domain_shared) + cpumask_size(),
- 					GFP_KERNEL, cpu_to_node(j));
- 			if (!sds)
- 				return -ENOMEM;
+ #ifdef CONFIG_SMP
+ 	unsigned int		ttwu_pending;
++#ifdef CONFIG_SCHED_SMT
++	int			sis_scan_sibling;
++#endif
+ #endif
+ 	u64			nr_switches;
+ 
 -- 
 2.37.3
 
