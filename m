@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A697D604B56
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F5E604B52
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiJSP2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        id S232227AbiJSP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiJSP1W (ORCPT
+        with ESMTP id S232171AbiJSP1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:27:22 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A911D4404;
-        Wed, 19 Oct 2022 08:20:22 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29JFJ62p062988;
-        Wed, 19 Oct 2022 10:19:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666192746;
-        bh=hgvKuMYRReQ/YIGdZqCMAWOo31oN4NukuCC1/NHydnY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=OQgNCM5zIxRKuM7Hy0vzdGZ1eW7BUYfoaaCK9euxAR8Gyij6OovVqOeZ3vGywYI6F
-         ShwLPAe4sD/0aQ4PSC14vZ/eCWYA0zUFuFi74NqeqzpUm+iMnT1hA6a2OyLHdm26Yq
-         pDltpneCd7hLLPNufZ4z4FYmQqFlyoXD/4DuovOE=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29JFJ6fw105079
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Oct 2022 10:19:06 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 19
- Oct 2022 10:19:05 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 19 Oct 2022 10:19:05 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29JFJ5h8010414;
-        Wed, 19 Oct 2022 10:19:05 -0500
-Date:   Wed, 19 Oct 2022 10:19:05 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Andrew Davis <afd@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/10] AM62x Disable Incomplete DT Nodes
-Message-ID: <20221019151905.5w3cudpjfn42f5jm@bryanbrattlof.com>
-References: <20221018211533.21335-1-afd@ti.com>
+        Wed, 19 Oct 2022 11:27:03 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C75A14C527;
+        Wed, 19 Oct 2022 08:19:53 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id i65so14770074ioa.0;
+        Wed, 19 Oct 2022 08:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KiAtnv3O8MX8nL+R91UDkC4RH0kfqHF5HE/wVPNVO9E=;
+        b=j/plf1bJ20J4G8S6RNOuUW/ahXCuyTBOVehUugkYj9HW+bWZp3E288RhnrDTBBLtg5
+         9XHeMaz5bL09MTVZ66Foxxkam2kIGyuF05IHkTbommDvOd2M/KS3nrfyZWnE9ynFfd9l
+         ZDorP9vGnGy/hXRENdDoE27Wi4rpKfO7FnX3k3Ezx5FtwrN/MlaUUrA8jpkV5+kzfRbT
+         nFsTfArSDT1wk8d1GqtiX1lVqrWg/uC0P5JaJ66VouWgEihLxjW5jUNdd/wc9uOaYByT
+         sENKdwS5+l6L4gkskVqUlxLN4ZcQetjAGTlbgMYexcyKNLPPNSF2ZyFpf1DJpYWs5Z+D
+         +WGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KiAtnv3O8MX8nL+R91UDkC4RH0kfqHF5HE/wVPNVO9E=;
+        b=jbjZqL5FXDm/Q3q57sjj+mkK0QCEN7ACC9rmMt4k0v4mjIuhebRYvRLV4pTkBG/jMP
+         1pUwGPMGvbj7O5yXofieqyu9t0tyNOcBwfH/8FSELRNe2kHdp8BZpezZEv+Ad9PGTtFG
+         L0dsOpNCZDp5tPnrmKNdl85lnyOujZLQu7kyzuWsy+IDOvomj01Ly8TkA2+ZYtLMRwfB
+         +vA+RYdnYUj9tsLkfZIBL7QSyFEsFOBNQF9Hg030iUOd9iTu2HW6InIix8lYznVJ74kA
+         7gCxlhlhxv/jGtT4qsZ/fOCHOMEk0jB1dNSYbRilYg7eA8D2g4ecVlEtcyAnkMGVWys7
+         sR/g==
+X-Gm-Message-State: ACrzQf1QYd0C4uHAmM0ynySBTHgLJ7XBuxu/iKWkRIMskRoqhHY0nrCz
+        eN+vEx3NtJ/WL4DGvQRm+Ez1AYwgtiGutolCLyU=
+X-Google-Smtp-Source: AMsMyM5qPsQtuBvKyPQMnBZjaxeLYE52tYSFcHWWnB70BrncG/Hn51NZd/lN2AWIwQJCxd/unWoBGJKg26X7wKRspXA=
+X-Received: by 2002:a05:6638:3452:b0:363:69f8:549f with SMTP id
+ q18-20020a056638345200b0036369f8549fmr6938721jav.190.1666192765289; Wed, 19
+ Oct 2022 08:19:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20221018211533.21335-1-afd@ti.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221009181338.2896660-8-lis8215@gmail.com> <202210100607.YdxoR0tD-lkp@intel.com>
+ <CAKNVLfaFvge4A8-QUzeq-JManpuYMGvyHXCJi-ew==CWN8-M=A@mail.gmail.com>
+ <bb9f79d4-82a9-4790-b849-d517333ea2d4@app.fastmail.com> <GSPOJR.M4XZ4D03G60F@crapouillou.net>
+ <CAKNVLfZukazKx2yDBrLZc7J9=3cCvMgZbdghtt1YO7WivdPjvw@mail.gmail.com>
+ <CAKNVLfbePJQN07GfhqAs-opm23poWsL0o-DkV=n-f9+H7Y7rpg@mail.gmail.com> <555WJR.ESJD0KDHOG3S@crapouillou.net>
+In-Reply-To: <555WJR.ESJD0KDHOG3S@crapouillou.net>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Wed, 19 Oct 2022 18:19:13 +0300
+Message-ID: <CAKNVLfZ0ndwGUUq0VX3vdvxfDK6Shf61WS_dC5WocChKeYSWJg@mail.gmail.com>
+Subject: Re: [PATCH 7/8] serial: 8250/ingenic: Add support for the
+ JZ4750/JZ4755 SoCs
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        kbuild-all@lists.01.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        GPIO SUBSYSTEM <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 18, 2022 thus sayeth Andrew Davis:
-> Hello all,
-> 
-> Same story as for AM64x[0], this time for AM62x. If there
-> are no objections here then the J7x platforms are next.
-> 
-> Thanks,
-> Andrew
-> 
-> [0] https://www.spinics.net/lists/arm-kernel/msg1018532.html
-
-Not a lore fan is see ;)
-
+=D0=BF=D0=BD, 17 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:32, Paul Cercue=
+il <paul@crapouillou.net>:
+> > I checked that approach: serial seems to be working as expected,
+> > but not all the time: there's a time period when the CGU driver
+> > started but serial console driver is still early one.
+> > In my case UART produces garbage at that period since CGU
+> > needs to enable clock divider back: ext is 24MHz but 12MHz
+> > required for audio codec and USB to function properly.
 >
-> Andrew Davis (10):
->   arm64: dts: ti: k3-am62: Enable UART nodes at the board level
->   arm64: dts: ti: k3-am62: Enable I2C nodes at the board level
->   arm64: dts: ti: k3-am62: Enable SPI nodes at the board level
->   arm64: dts: ti: k3-am62: Enable EPWM nodes at the board level
->   arm64: dts: ti: k3-am62: Enable ECAP nodes at the board level
->   arm64: dts: ti: k3-am62: MDIO pinmux should belong to the MDIO node
->   arm64: dts: ti: k3-am62: Enable MDIO nodes at the board level
->   arm64: dts: ti: k3-am62: Enable MCAN nodes at the board level
->   arm64: dts: ti: k3-am62: Enable SDHCI nodes at the board level
->   arm64: dts: ti: k3-am62: Enable OSPI nodes at the board level
-> 
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi   | 26 +++++++
->  arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi    |  4 ++
->  arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi |  2 +
->  arch/arm64/boot/dts/ti/k3-am625-sk.dts     | 81 +++-------------------
->  4 files changed, 43 insertions(+), 70 deletions(-)
-> 
+> What I'd do, is just force-enable it to 12 MHz in ingenic_fixup_fdt(),
+> since the programming manual basically says that 24 MHz does not work
+> properly.
+>
+> Then in the earlycon setup code hardcode the /2 divider with a big fat
+> comment about why it's there.
 
-LGTM!
+Agree, the vendor's kernel does that as well.
 
-Reviewed-by: Bryan Brattlof <bb@ti.com>
-
-~Bryan
+Also I found that:
+1. Many other drivers compile the early console only when
+CONFIG_SERIAL_8250_CONSOLE is set.
+2. All the early ingenic_ functions can be labeled as __init.
+Shall I fix that while I'm already here?
