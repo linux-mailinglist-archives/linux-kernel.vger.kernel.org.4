@@ -2,184 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93006045B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D096360446A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiJSMsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
+        id S232471AbiJSMDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiJSMrj (ORCPT
+        with ESMTP id S229509AbiJSMDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:47:39 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB1A19423E;
-        Wed, 19 Oct 2022 05:30:43 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J8JMtQ005418;
-        Wed, 19 Oct 2022 10:19:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0uBWXpcUu6GK+gkxHOG4A7UL9k/FeUaumNYxBXEQc/g=;
- b=ECP6KN2otQEPTB0Jtlq05chC73cZX4mprzcc8r/SuaQVPeLDr5eBJqlCeTFnEGmExc6+
- FOzxpYMPv37YCvtbHdIp+0May1ZYE84gT+U/3zowW99NYokX4yjuLzYDeAqhp79ciLLL
- D5QhwHQiuGqsLSX2+p4DKoo2HB2eCMZDlsEvXUR/Cvc03gD6Vti3qCVhcTEAdAQpE7VL
- LF6y3lMQBfQ3qrrO6d7fpVDY1YeR3jI/SD83dUs/TeRc5pWx6MKW/ySYHXUU2ALbjLWF
- YHpdGPT84KBQmYkZHeVSBiUuCm6cIvulfKrPDkxHbtc209ma/fj6PoU/1VFZz+iMAoCK aw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9n2p4pje-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 10:19:14 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29JAJErM023371
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 10:19:14 GMT
-Received: from [10.239.155.106] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 19 Oct
- 2022 03:19:11 -0700
-Message-ID: <a0b96001-175a-7c25-8e9c-a2075e3be178@quicinc.com>
-Date:   Wed, 19 Oct 2022 18:19:08 +0800
+        Wed, 19 Oct 2022 08:03:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBD62182B;
+        Wed, 19 Oct 2022 04:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666179573; x=1697715573;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=F4/v5xFdGeutzQlY/uK0xk51209qAd1LVCKjl8ZCvfY=;
+  b=jIDiz0RF/ktVNTvvBBLdrzAOJ4D51jzob7uTrW4thUniVSTp8yerbyrD
+   0RUrfXpAkjIn2q4wMUbYxNshACydiasZFd3jDY3k03DGkSqF+50d8kgVg
+   ijJYHnsS+BTbvNZMfP10U3+LzuUfHu+KqlLTGbwxw5IqFHU36is5zPr4C
+   J9fxHFAAi4rMQG79cn9JPXxdj0iX6/A6rDy8r0ONFH1wFbW+DQx421IvX
+   pn64/1tNlUirdZqf4f2GL/kN/vmaVMt5r/9/JmyiYWHIG3RYUa5GX01Mx
+   1P+c4hCMBVoMsMQTvClrSDH1fLAmUMywGzHfNFuRgIPGi9BTbCAvbTu6L
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="308057632"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="308057632"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 03:31:00 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="804236884"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="804236884"
+Received: from sponnura-mobl1.amr.corp.intel.com ([10.251.214.35])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 03:30:58 -0700
+Date:   Wed, 19 Oct 2022 13:30:55 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] tty: Convert tty_buffer flags to bool
+In-Reply-To: <Y0/QhJBW1TapqrjC@kroah.com>
+Message-ID: <7536939f-d46-a4fc-b987-53421849ce5a@linux.intel.com>
+References: <20221019094241.10870-1-ilpo.jarvinen@linux.intel.com> <Y0/QhJBW1TapqrjC@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 0/2] Add LED driver for flash module in QCOM PMICs
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski@linaro.org>
-CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>
-References: <20221018014024.948731-1-quic_fenglinw@quicinc.com>
- <CNPPXFMBHOPK.2XSBJT5M1TNVP@otso>
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-In-Reply-To: <CNPPXFMBHOPK.2XSBJT5M1TNVP@otso>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: H1oI4Txv4WqgWVAuACxtTQ7rUZBuFcWl
-X-Proofpoint-GUID: H1oI4Txv4WqgWVAuACxtTQ7rUZBuFcWl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_06,2022-10-19_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- mlxscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210190057
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-861702288-1666175459=:1619"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+--8323329-861702288-1666175459=:1619
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-On 2022/10/19 15:23, Luca Weiss wrote:
-> Hi Fenglin,
-> 
-> On Tue Oct 18, 2022 at 3:40 AM CEST, Fenglin Wu wrote:
->> Initial driver and binding document changes for supporting flash LED
->> module in Qualcomm Technologies, Inc. PMICs.
->>
-> 
-> Thanks for these patches, it's really nice to see drivers like this
-> being sent upstream!
-> 
-> I've just tried these patches on pm6150l which also is compatible with
-> this driver (and used on sm7225-fairphone-fp4).
-> 
-> The two different flash LEDs on the device I could adjust as expected
-> using sysfs:
-> 
-> $ echo 255 > /sys/class/leds/yellow:flash-0/brightness
-> $ echo 255 > /sys/class/leds/white:flash-0/brightness
-> 
-> Also lower brightness values resulted in lower brightness on the LED, so
-> all is good here!
-> 
-> But for flash usage, I couldn't figure out how to use it, doing the
-> following resulted in no change on the LED.
-> 
-> $ cat /sys/class/leds/white:flash-0/max_flash_brightness
-> 1000000
-> $ echo 1000000 > /sys/class/leds/white:flash-0/flash_brightness
-> 
-> Here's my LED definition:
-> 
->    led-0 {
->      function = LED_FUNCTION_FLASH;
->      color = <LED_COLOR_ID_YELLOW>;
->      led-sources = <1>;
->      led-max-microamp = <180000>;
->      flash-max-microamp = <1000000>;
->      flash-max-timeout-us = <1280000>;
->    };
-> 
->  From values are from msm-4.19 kernel:
-> 
->    qcom,flash_0 {
->      qcom,current-ma = <1000>; // => flash-max-microamp
->      qcom,duration-ms = <1280>; // => flash-max-timeout-us
->      qcom,id = <0>; // => led-sources?
->    };
-> 
->    qcom,torch_0 {
->      qcom,current-ma = <180>; // => led-max-microamp
->      qcom,id = <0>; // => led-sources?
->    };
-> 
-> Could you please let me know how flash is supposed to work or if I
-> maybe have messed up some setting here?
-> 
-> Regards
-> Luca
+On Wed, 19 Oct 2022, Greg KH wrote:
 
-Hi Luca,
-
-Thanks for testing the driver at your end.
-The "brightness" node is for enabling/disable/adjusting brightness when 
-the LED is working in torch mode, the nodes for enabling/adjusting the 
-LED behavior in flash mode are "flash_brightness" "flash_timeout" 
-"flash_strobe".
-You can strobe the flash by "echo 1 > flash_strobe" directly and the 
-default brightness/timeout value will be used, or you can update the 
-settings with "echo xxx > flash_brightness; echo xxx > flash_timeout" 
-then strobe the LED with "echo 1 > flash_strobe". Please remember you 
-always need to "echo 0 > flash_strobe" 1st if you want to enable it again.
-Thanks
-
-Fenglin
+> On Wed, Oct 19, 2022 at 12:42:39PM +0300, Ilpo Järvinen wrote:
+> > The struct tty_buffer has flags which is only used for storing TTYB_NORMAL.
+> > There is also a few quite confusing operations for checking the presense
+> > of TTYB_NORMAL. Simplify things by converting flags to bool.
+> > 
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/tty/tty_buffer.c   | 28 ++++++++++++++--------------
+> >  include/linux/tty_buffer.h |  5 +----
+> >  include/linux/tty_flip.h   |  4 ++--
+> >  3 files changed, 17 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+> > index 5e287dedce01..be3431575a19 100644
+> > --- a/drivers/tty/tty_buffer.c
+> > +++ b/drivers/tty/tty_buffer.c
+> > @@ -107,7 +107,7 @@ static void tty_buffer_reset(struct tty_buffer *p, size_t size)
+> >  	p->commit = 0;
+> >  	p->lookahead = 0;
+> >  	p->read = 0;
+> > -	p->flags = 0;
+> > +	p->flags = true;
+> >  }
+> >  
+> >  /**
+> > @@ -249,7 +249,7 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
+> >   * __tty_buffer_request_room	-	grow tty buffer if needed
+> >   * @port: tty port
+> >   * @size: size desired
+> > - * @flags: buffer flags if new buffer allocated (default = 0)
+> > + * @flags: buffer flags if new buffer allocated
 > 
->> Changes in V3:
->>    1. Updated the driver to use regmap_field for register access.
->>    2. Adressed the review comments in binding document change.
->>
->> Changes in V2:
->>    1. Addressed review comments in binding change, thanks Krzysztof!
->>    2. Updated driver to address the compilation issue reported by
->>       kernel test robot.
->>
->>
->> Fenglin Wu (2):
->>    leds: flash: add driver to support flash LED module in QCOM PMICs
->>    dt-bindings: add bindings for QCOM flash LED
->>
->>   .../bindings/leds/qcom,spmi-flash-led.yaml    | 116 +++
->>   drivers/leds/flash/Kconfig                    |  15 +
->>   drivers/leds/flash/Makefile                   |   1 +
->>   drivers/leds/flash/leds-qcom-flash.c          | 700 ++++++++++++++++++
->>   4 files changed, 832 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/leds/qcom,spmi-flash-led.yaml
->>   create mode 100644 drivers/leds/flash/leds-qcom-flash.c
->>
->> -- 
->> 2.25.1
-> 
+> If all this does is store TTYB_NORMAL, why not name it "ttyb_normal"?
+> Leaving it at "flags" and having that be a boolean is just confusing.
+
+No, it's intentional.
+
+"Flags" (as boolean) here refer to whether the buffer stores flag array 
+along with the character data array. Previously it perhaps could be 
+interpreted differently meaning that the member variable itself stored 
+flags such as TTYB_NORMAL.
+
+Flags is much better name than ttyb_normal, IMHO.
+
+-- 
+ i.
+
+--8323329-861702288-1666175459=:1619--
