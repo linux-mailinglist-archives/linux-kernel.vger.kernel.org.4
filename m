@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6D4605361
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4470605363
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiJSWr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S231432AbiJSWrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiJSWrE (ORCPT
+        with ESMTP id S230371AbiJSWrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 18:47:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B463E186D70;
-        Wed, 19 Oct 2022 15:47:03 -0700 (PDT)
+        Wed, 19 Oct 2022 18:47:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B056188AAD;
+        Wed, 19 Oct 2022 15:47:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64496B825E1;
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA989B8260A;
         Wed, 19 Oct 2022 22:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0562DC4347C;
-        Wed, 19 Oct 2022 22:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506FBC4314A;
+        Wed, 19 Oct 2022 22:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666219621;
-        bh=U+1luf3mbgyTSKOMl8vtX4dFmH8rl+GKNY2TDjN1IyY=;
+        bh=fFc3hA0ZPr//nb0oSgszXsNmNDNbjld6HNvW7I07HJ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XMSKFGEu/uzR3N52gimUSRvlUY77ksX6bwSP5MEEbrhoYubbKoJVO455NMN69R4xj
-         x9GRwiRrinWyIWvqcLaI+JhV5ZHw0Ow+vjol3spPlLV+EDFsRspfhySJYB1hNYEyDD
-         aSGLKC8qpWBT4nbxwHNQOo7RmG1Z0Y+5PDZjmaBTcnkG3j3YRGb2Ycr+/iXr0GVAM8
-         f3R8P+eO4JCLRSgp7mHQtfS9keccHmF/hGloP0UzUPKujvCNZbkgV3dyp0o5SzcWdJ
-         GLdFjAAokYxUviKsgseded/9rmE6dJI2yUYwAvyjELLvaU6fXnXMYEQiD9ItgNieST
-         uSvkQeYinB1kw==
+        b=Oy/1fcvMSiFHp/xKwJ9CqwfRJHoqRkZcrv5jCD4aB/NXbeEvG+CAwUn+1laykl7t5
+         MMmXgTMbAhBmVfvWRKyYlC5jUxmRPZ6dEJEz0m9ZwTUj4tfcDKHGlv9zWZk+A+WIg0
+         EqUOn0Qr+yCnEZl+/MBE/objul/fDbsW25LyJ9tkZ7Pq6SRXK/2/7uPjOk/JmrDBtJ
+         mVGDhL9L+jbomtlachTuFWKndhB7zvpLpYgWGxho7hvOURaDR6/s/GPVo+BLtxO4uV
+         B56yRqi+MUbeTK0SrMpyjd1/6lJenX52g0gLYrHty/L61W6B5paQBeYXfdxCgTivgS
+         7jlhUKv59foUw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AD5D05C0A04; Wed, 19 Oct 2022 15:47:00 -0700 (PDT)
+        id AF2425C0A40; Wed, 19 Oct 2022 15:47:00 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
-Subject: [PATCH rcu 5/8] slab: Explain why SLAB_DESTROY_BY_RCU reference before locking
-Date:   Wed, 19 Oct 2022 15:46:56 -0700
-Message-Id: <20221019224659.2499511-5-paulmck@kernel.org>
+        rostedt@goodmis.org, Yipeng Zou <zouyipeng@huawei.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 6/8] rcu: Remove rcu_is_idle_cpu()
+Date:   Wed, 19 Oct 2022 15:46:57 -0700
+Message-Id: <20221019224659.2499511-6-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
 References: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
@@ -63,41 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not obvious to the casual user why it is absolutely necessary to
-acquire a reference to a SLAB_DESTROY_BY_RCU structure before acquiring
-a lock in that structure.  Therefore, add a comment explaining this point.
+From: Yipeng Zou <zouyipeng@huawei.com>
 
+The commit 3fcd6a230fa7 ("x86/cpu: Avoid cpuinfo-induced IPIing of
+idle CPUs") introduced rcu_is_idle_cpu() in order to identify the
+current CPU idle state.  But commit f3eca381bd49 ("x86/aperfmperf:
+Replace arch_freq_get_on_cpu()") switched to using MAX_SAMPLE_AGE,
+so rcu_is_idle_cpu() is no longer used.  This commit therefore removes it.
+
+Fixes: f3eca381bd49 ("x86/aperfmperf: Replace arch_freq_get_on_cpu()")
+Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: <linux-mm@kvack.org>
 ---
- include/linux/slab.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/linux/rcutiny.h | 2 --
+ include/linux/rcutree.h | 2 --
+ kernel/rcu/tree.c       | 6 ------
+ 3 files changed, 10 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 90877fcde70bd..446303e385265 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -76,6 +76,12 @@
-  * rcu_read_lock before reading the address, then rcu_read_unlock after
-  * taking the spinlock within the structure expected at that address.
-  *
-+ * Note that it is not possible to acquire a lock within a structure
-+ * allocated with SLAB_DESTROY_BY_RCU without first acquiring a reference
-+ * as described above.  The reason is that SLAB_DESTROY_BY_RCU pages are
-+ * not zeroed before being given to the slab, which means that any locks
-+ * must be initialized after each and every kmem_struct_alloc().
-+ *
-  * Note that SLAB_TYPESAFE_BY_RCU was originally named SLAB_DESTROY_BY_RCU.
-  */
- /* Defer freeing slabs to RCU */
+diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+index 9bc025aa79a30..5c271bf3a1e7e 100644
+--- a/include/linux/rcutiny.h
++++ b/include/linux/rcutiny.h
+@@ -146,8 +146,6 @@ static inline void rcu_virt_note_context_switch(void) { }
+ static inline void rcu_cpu_stall_reset(void) { }
+ static inline int rcu_jiffies_till_stall_check(void) { return 21 * HZ; }
+ static inline void rcu_irq_exit_check_preempt(void) { }
+-#define rcu_is_idle_cpu(cpu) \
+-	(is_idle_task(current) && !in_nmi() && !in_hardirq() && !in_serving_softirq())
+ static inline void exit_rcu(void) { }
+ static inline bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+ {
+diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
+index 70795386b9ffa..4003bf6cfa1c2 100644
+--- a/include/linux/rcutree.h
++++ b/include/linux/rcutree.h
+@@ -87,8 +87,6 @@ bool poll_state_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp);
+ void cond_synchronize_rcu(unsigned long oldstate);
+ void cond_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp);
+ 
+-bool rcu_is_idle_cpu(int cpu);
+-
+ #ifdef CONFIG_PROVE_RCU
+ void rcu_irq_exit_check_preempt(void);
+ #else
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 5ec97e3f7468f..f6561aa401c04 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -301,12 +301,6 @@ static bool rcu_dynticks_in_eqs(int snap)
+ 	return !(snap & RCU_DYNTICKS_IDX);
+ }
+ 
+-/* Return true if the specified CPU is currently idle from an RCU viewpoint.  */
+-bool rcu_is_idle_cpu(int cpu)
+-{
+-	return rcu_dynticks_in_eqs(rcu_dynticks_snap(cpu));
+-}
+-
+ /*
+  * Return true if the CPU corresponding to the specified rcu_data
+  * structure has spent some time in an extended quiescent state since
 -- 
 2.31.1.189.g2e36527f23
 
