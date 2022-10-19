@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBD0604960
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCF7604962
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiJSOgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S231270AbiJSOhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiJSOgY (ORCPT
+        with ESMTP id S232032AbiJSOhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:36:24 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE252CC89
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:20:41 -0700 (PDT)
-Received: from p508fdae2.dip0.t-ipconnect.de ([80.143.218.226] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ol9ux-0006Hx-9G; Wed, 19 Oct 2022 16:19:35 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: Re: [PATCH v4 2/4] RISC-V: Fix ioremap_cache() and ioremap_wc() for systems with Svpbmt
-Date:   Wed, 19 Oct 2022 16:19:34 +0200
-Message-ID: <13122510.uLZWGnKmhe@phil>
-In-Reply-To: <20221019131128.237026-3-apatel@ventanamicro.com>
-References: <20221019131128.237026-1-apatel@ventanamicro.com> <20221019131128.237026-3-apatel@ventanamicro.com>
+        Wed, 19 Oct 2022 10:37:18 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC35192B99
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:21:22 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id p7so17838232vsr.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V8Xl1MAOKM4xcc4bVxr28fUMdxQmcz7hUdzLkpuaWdE=;
+        b=qnhn/64DOYlX1MUVxnToRuu87RlY1M9oyXB7zBK43hP8cc9jxGxvB8c9CXxMtBK5CG
+         QBxwEupMdBk3hixwwqtETqDWbeEURwuTTGnn+rFIW12RuvIXCQ2EiXSWDYh24BmZJ6De
+         2WSAFTyYjnA9eXcqxz3BqO1Y+75Szb813/flxb1u+IOD3AulCmHjWw36XD7Zfj6AEcEI
+         icuLkiZcTQNNktC15KRyeb9OhaEMdjplqDVeV+MJwSAYaePJWAn1YzSCkmaKzYJW/a0d
+         SD0l7aSVxY4G0sy+Z5JSEaG2JPc8MxIWXUjb2ZUM2ZUAxRyCDc9WYkB32KZI7PJnY9+1
+         Fzsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V8Xl1MAOKM4xcc4bVxr28fUMdxQmcz7hUdzLkpuaWdE=;
+        b=mDtZLzhIS9GKuM9VPFu2EdUOuCv7ltlTrtcBoRDCxsROkL6r9PB5uTn93PamAu6iQU
+         glF6+HkBB0whXlZWEe0h6UL/1VHRKCw+nF9XVC93la1rRQpKbRUIns+fuSeA0s5OKq/p
+         qVQQkGllCWQUJmACZ5VyUjEEzvA6vQ3ggFKCiuDBsyz3RnXN0/em9ItNJnpCpvN0q7lh
+         eXqeYvGw/yiJGfZTxizJ1Cw/p3M734BQ9nUfxjgdddp/JHjmyuoI3m+jlgpx34C9iBR4
+         aFcE9CDjRub6lSsVFry1z0EcvRQKW/EBN+sYV6eNf7KiM2vMLbj8mDn2l+XOYpA3d/tP
+         KkiQ==
+X-Gm-Message-State: ACrzQf0KBI2ZJBg3k849OUQFOAMHhJ3Nx4kNys8SqbN3cek0gxfSo8+J
+        q0aVcpafgwwb+Hn158bAJZDXwk+aJw18trWG0js=
+X-Google-Smtp-Source: AMsMyM5WQkBxDruObCaDPx7rtiP8WzO9yD3wyJZ7sQYWmDWtCmHUq4NFvKBsuyhkQkXbC9WBboQLvXTsvz+BLfjp/pM=
+X-Received: by 2002:a67:b303:0:b0:3a9:61e4:2769 with SMTP id
+ a3-20020a67b303000000b003a961e42769mr3845827vsm.0.1666189241497; Wed, 19 Oct
+ 2022 07:20:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019094015.832398-1-tegongkang@gmail.com> <e2ec77060cc84a33b49d5fd11d7867f6@AcuMS.aculab.com>
+In-Reply-To: <e2ec77060cc84a33b49d5fd11d7867f6@AcuMS.aculab.com>
+From:   Kang Minchul <tegongkang@gmail.com>
+Date:   Wed, 19 Oct 2022 23:20:30 +0900
+Message-ID: <CA+uqrQDM6sQkVz8jQyv0VEoQK3Ucmx5i4CX5PxMEiA5Lsu28Vw@mail.gmail.com>
+Subject: Re: [PATCH] staging: pi433: Use div64_u64 instead of do_div
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Sidong Yang <realwakka@gmail.com>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 19. Oktober 2022, 15:11:26 CEST schrieb Anup Patel:
-> Currently, all flavors of ioremap_xyz() function maps to the generic
-> ioremap() which means any ioremap_xyz() call will always map the
-> target memory as IO using _PAGE_IOREMAP page attributes. This breaks
-> ioremap_cache() and ioremap_wc() on systems with Svpbmt because memory
-> remapped using ioremap_cache() and ioremap_wc() will use _PAGE_IOREMAP
-> page attributes.
-> 
-> To address above (just like other architectures), we implement RISC-V
-> specific ioremap_cache() and ioremap_wc() which maps memory using page
-> attributes as defined by the Svpbmt specification.
-> 
-> Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
-> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+2022=EB=85=84 10=EC=9B=94 19=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 7:31, =
+David Laight <David.Laight@aculab.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1=
+:
+>
+> From: Kang Minchul
+> > Sent: 19 October 2022 10:40
+> >
+> > This commit removes warning generated by cocci as follows:
+> >
+> > do_div() does a 64-by-32 division, please consider using div64_u64 inst=
+ead.
+> >
+> > Using div64_u64 instead of do_div can avoid potential truncation.
+>
+> Cocci is lying to you.
+>
+> do_div() exists because a 64 by 32 bit divide is significantly
+> faster than a 64 by 64 divide.
+> This is particularly true on 32bit cpu, but is also true on
+> Intel x86_64 bit cpu.
+I guess I have missed that point,
+Thanks for your feedback!
 
-Wasn't there discussion around those functions in general in v2?
-
-In any case, the patch doesn't break anything on qemu and d1, so
-
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-
-> ---
->  arch/riscv/include/asm/io.h      | 10 ++++++++++
->  arch/riscv/include/asm/pgtable.h |  2 ++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
-> index 92080a227937..92a31e543388 100644
-> --- a/arch/riscv/include/asm/io.h
-> +++ b/arch/riscv/include/asm/io.h
-> @@ -133,6 +133,16 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
->  #define outsq(addr, buffer, count) __outsq(PCI_IOBASE + (addr), buffer, count)
->  #endif
->  
-> +#ifdef CONFIG_MMU
-> +#define ioremap_wc(addr, size)		\
-> +	ioremap_prot((addr), (size), _PAGE_IOREMAP_WC)
-> +#endif
-> +
->  #include <asm-generic/io.h>
->  
-> +#ifdef CONFIG_MMU
-> +#define ioremap_cache(addr, size)	\
-> +	ioremap_prot((addr), (size), _PAGE_KERNEL)
-> +#endif
-> +
->  #endif /* _ASM_RISCV_IO_H */
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 7ec936910a96..346b7c1a3eeb 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -182,6 +182,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
->  #define PAGE_TABLE		__pgprot(_PAGE_TABLE)
->  
->  #define _PAGE_IOREMAP	((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-> +#define _PAGE_IOREMAP_WC	((_PAGE_KERNEL & ~_PAGE_MTMASK) | \
-> +				 _PAGE_NOCACHE)
->  #define PAGE_KERNEL_IO		__pgprot(_PAGE_IOREMAP)
->  
->  extern pgd_t swapper_pg_dir[];
-> 
-
-
-
-
+Kang Minchul
