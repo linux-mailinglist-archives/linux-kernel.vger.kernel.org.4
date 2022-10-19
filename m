@@ -2,131 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1917F60384A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453E460384B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJSCys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 22:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S229697AbiJSCz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 22:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJSCyo (ORCPT
+        with ESMTP id S229543AbiJSCz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 22:54:44 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2E43EA44
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:54:43 -0700 (PDT)
-X-UUID: c40f0c2c4c9d474bbd785da69ebdb6f6-20221019
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=cZEO+e77VsgRhmatF/YbgQRz+vdFCefQ7R/Rivk44C8=;
-        b=XcsjvCgEjd4VcCeWlusDMOT+l4tBSR8mZHsCjHa3miS7HvhnvOClgDT7hiidwy6AIyITA9Jpec+less1T2Tk5GzhcDLqV6bMRUedzlmHWEli2MI7wGvHojmvmWoI5xyftgi7dWYDfEDbWRX4YhLJwGJs0PHh8AxnZMU6lwpPPaU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:3b02aba7-f5e1-411b-bf6e-5450356087bf,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:39a5ff1,CLOUDID:25cd3ba3-73e4-48dd-a911-57b5d5484f14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c40f0c2c4c9d474bbd785da69ebdb6f6-20221019
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1658625720; Wed, 19 Oct 2022 10:54:34 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 19 Oct 2022 10:54:33 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 19 Oct 2022 10:54:32 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>,
-        <jitao.shi@mediatek.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH v2] drm: mediatek: Modify dpi power on/off sequence.
-Date:   Wed, 19 Oct 2022 10:54:30 +0800
-Message-ID: <1666148070-30209-1-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
+        Tue, 18 Oct 2022 22:55:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5408E5ECF
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:55:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66DA0B821EB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:55:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6F9C43142
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:55:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666148123;
+        bh=5kYqembv+YpjeHp7+ryb4q5hAFpoO+zim4SanD/yA2c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lg5nneR05pA7Uyp/6yDHLQ0lv/FvSCJgKB9zgsPhYW97lwtHHW0sCoNOxth3WHcqn
+         LIffbmGZD9n3wYxVIkeFA9JGT376Q0vySQRT+iUihgiq4Sd/Rv4D6uIriY41E3TjAi
+         gNjbHLPrz7jwQLM8hVo6pF3wWrOCQKj+/foh3wo/Qu9OKdeoKMgPr5lhUNZL93Z5b3
+         8TnR1QQZ2PfHpt7GF8jKRqR7bIZdouX2tq6HjcxC+Ag0fNhkEsSACG+yebLs79DZbC
+         /ECaOjoyOL8Ej3mbchEVWDoI7hMajnEn85fSQgnnaechD2ZiopfRde+NBkdD5fcGZA
+         vXEwdW2bcH8Rg==
+Received: by mail-ot1-f41.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so8748124otb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:55:23 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1taT9YoGICX7FnDBIlvl3r1UAkZKrfAtxmGc6aAgVyO+pV2X3e
+        0aaWWL5b8cIXJXe2UMbYpCy7m7SEjhlVCZdi6ts=
+X-Google-Smtp-Source: AMsMyM5C2i3Ly90Zfv1TFQiVbzhvl/qqipUlQgQ5lvq37RcRpl/8aSWNrQoateRH2fQeJuj+TJ+GtxnpltGYrkmr3Ko=
+X-Received: by 2002:a9d:60dd:0:b0:661:b6ae:aa7a with SMTP id
+ b29-20020a9d60dd000000b00661b6aeaa7amr2779172otk.140.1666148122239; Tue, 18
+ Oct 2022 19:55:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220928162007.3791-1-jszhang@kernel.org> <20220928162007.3791-5-jszhang@kernel.org>
+ <CAJF2gTTADq-JpUtitSr0nw1aDPZrsB6f1jA-04WmOVcrxYeakw@mail.gmail.com> <YzXBZnGXQdEGR1LW@xhacker>
+In-Reply-To: <YzXBZnGXQdEGR1LW@xhacker>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 19 Oct 2022 10:55:09 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTonVbTAJGw3qHdfK5vKkHRX64hJB757zsiNgWq4y0Xmw@mail.gmail.com>
+Message-ID: <CAJF2gTTonVbTAJGw3qHdfK5vKkHRX64hJB757zsiNgWq4y0Xmw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] riscv: entry: consolidate general regs saving into save_gp
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinlei Lee <xinlei.lee@mediatek.com>
+On Fri, Sep 30, 2022 at 12:11 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Thu, Sep 29, 2022 at 11:59:00AM +0800, Guo Ren wrote:
+> > On Thu, Sep 29, 2022 at 12:29 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> > >
+> > > Consolidate the saving/restoring GPs(except ra, sp and tp) into
+> > > save_gp/restore_gp macro.
+> > >
+> > > No functional change intended.
+> > >
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > ---
+> > >  arch/riscv/include/asm/asm.h   | 65 +++++++++++++++++++++++++
+> > >  arch/riscv/kernel/entry.S      | 87 ++--------------------------------
+> > >  arch/riscv/kernel/mcount-dyn.S | 58 +----------------------
+> > >  3 files changed, 70 insertions(+), 140 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+> > > index 1b471ff73178..2f3b49536e9d 100644
+> > > --- a/arch/riscv/include/asm/asm.h
+> > > +++ b/arch/riscv/include/asm/asm.h
+> > > @@ -68,6 +68,7 @@
+> > >  #endif
+> > >
+> > >  #ifdef __ASSEMBLY__
+> > > +#include <asm/asm-offsets.h>
+> > >
+> > >  /* Common assembly source macros */
+> > >
+> > > @@ -80,6 +81,70 @@
+> > >         .endr
+> > >  .endm
+> > >
+> > > +       /* save all GPs except ra, sp and tp */
+> > > +       .macro save_gp
+> > How about leave x3(gp) out of the macro, and define:
+> > .marco save_from_x5_to_x31
+> > .marco restore_from_x5_to_x31
+>
+> Good idea, will do in next version.
 
-Modify dpi power on/off sequence so that the first gpio operation will take effect.
+Where is the next version?
 
-Fixes: 6bd4763fd532 ("drm/mediatek: set dpi pin mode to gpio low to avoid leakage current")
+I want to involve the patch in my generic entry series, it would help
+in the coding convention of the entry code.
 
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
----
-change note:
-v1: Rebase on linus/master v6.1-rc1. Change nothing.
+>
+> Thanks
 
-Because dpi power_on/off is protected by dpi->refcount, the first time
-it cannot be powered on and off successfully, it will cause leakage.
----
----
- drivers/gpu/drm/mediatek/mtk_dpi.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 508a6d994e83..f83cf64c2828 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -461,9 +461,6 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
- 	if (--dpi->refcount != 0)
- 		return;
- 
--	if (dpi->pinctrl && dpi->pins_gpio)
--		pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
--
- 	mtk_dpi_disable(dpi);
- 	clk_disable_unprepare(dpi->pixel_clk);
- 	clk_disable_unprepare(dpi->engine_clk);
-@@ -488,9 +485,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
- 		goto err_pixel;
- 	}
- 
--	if (dpi->pinctrl && dpi->pins_dpi)
--		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
--
- 	return 0;
- 
- err_pixel:
-@@ -720,6 +714,9 @@ static void mtk_dpi_bridge_disable(struct drm_bridge *bridge)
- {
- 	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
- 
-+	if (dpi->pinctrl && dpi->pins_gpio)
-+		pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
-+
- 	mtk_dpi_power_off(dpi);
- }
- 
-@@ -727,6 +724,9 @@ static void mtk_dpi_bridge_enable(struct drm_bridge *bridge)
- {
- 	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
- 
-+	if (dpi->pinctrl && dpi->pins_dpi)
-+		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
-+
- 	mtk_dpi_power_on(dpi);
- 	mtk_dpi_set_display_mode(dpi, &dpi->mode);
- 	mtk_dpi_enable(dpi);
+
 -- 
-2.18.0
-
+Best Regards
+ Guo Ren
