@@ -2,158 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A9A604E85
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F3F604E8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiJSRXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S229944AbiJSRYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiJSRXc (ORCPT
+        with ESMTP id S231513AbiJSRYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:23:32 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6834118DD5F;
-        Wed, 19 Oct 2022 10:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666200211; x=1697736211;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NqEfRLIEqpNvt19+pyCqi9Pu8gzTCcHAInBn9m1EzFI=;
-  b=i4LXfHGl/Glc2aI379sL7YHbfRC9sgS486bI+Jo3JF3D3+Okm5qcl62C
-   wlNywZN4bVqk0PiRWJgh/riSjGcO4mKXbd6LC1JrgP4j9oslC6E+IM35t
-   0XJD2PkcaJ3BAUHQn/oXeeygO5Hz+sKB93iPrsmIg6dAJ2KxxFuaFBhSR
-   I=;
-X-IronPort-AV: E=Sophos;i="5.95,196,1661817600"; 
-   d="scan'208";a="234388839"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 17:23:24 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com (Postfix) with ESMTPS id B74AE81B92;
-        Wed, 19 Oct 2022 17:23:22 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 19 Oct 2022 17:23:21 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.43.161.69) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
- Wed, 19 Oct 2022 17:23:18 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <xu.xin.sc@gmail.com>
-CC:     <asml.silence@gmail.com>, <ast@kernel.org>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <martin.lau@kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <xu.xin16@zte.com.cn>,
-        <yoshfuji@linux-ipv6.org>, <zealci@zte.com.cn>,
-        <zhang.yunkai@zte.com.cn>
-Subject: [PATCH linux-next] net: remove useless parameter of __sock_cmsg_send The
-Date:   Wed, 19 Oct 2022 10:22:52 -0700
-Message-ID: <20221019172252.72890-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221019093014.389738-1-xu.xin16@zte.com.cn>
-References: <20221019093014.389738-1-xu.xin16@zte.com.cn>
+        Wed, 19 Oct 2022 13:24:07 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE2F18DD79;
+        Wed, 19 Oct 2022 10:24:05 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JFwhdS021524;
+        Wed, 19 Oct 2022 19:23:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=z4NuzLYnlhuUAveYIXaA0i15wFwqK0u8Xd/CIKAqiIg=;
+ b=NFKujf5ixQszUEjatken2l9ciMY1ctnAjSp39seTO4kzacyeyBb5qNecgBiM/58D0R47
+ 9WIbKrgJVojkLDymJtHpglLYhbJzOczg38pBY2OBAvmf5rAvFk0HO2IeAOCUAnDhbcwq
+ puWuwJuj+cDvwI9PA21fc7tAOL9Xbmg5DyhVFCPO/dUrzXsh54LBn+p0ZwGwT8Vs5f07
+ YMDarjzE61A8Gx2afrSFzWAGLlhgIv3TSuZ59rSTaoxT6gkrl2J/4p7pylDW/Tr0Iidu
+ zsTfNnJ0fzNybSLgec1ko/T+fTlZR9EWKJBFa4npcUJGaLF1ZGCZtr+Bp0APxRan2ino aA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k7j9n4n32-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 19:23:44 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 67874100034;
+        Wed, 19 Oct 2022 19:23:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 61E4623D3F0;
+        Wed, 19 Oct 2022 19:23:38 +0200 (CEST)
+Received: from [10.48.0.213] (10.48.0.213) by SHFDAG1NODE3.st.com
+ (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
+ 2022 19:23:35 +0200
+Message-ID: <4d113cfd-4c22-780e-2a13-48ca0e2b28ab@foss.st.com>
+Date:   Wed, 19 Oct 2022 19:23:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for
+ stm32-romem
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
+ <7ada410d-8d13-b29a-869c-3f5d032528bf@linaro.org>
+Content-Language: en-US
+From:   Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+In-Reply-To: <7ada410d-8d13-b29a-869c-3f5d032528bf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.69]
-X-ClientProxiedBy: EX13D47UWA004.ant.amazon.com (10.43.163.47) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.48.0.213]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_10,2022-10-19_04,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   xu.xin.sc@gmail.com
-Date:   Wed, 19 Oct 2022 09:30:14 +0000
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> parameter 'msg' has never been used by __sock_cmsg_send, so we can remove it
-> safely.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> Reviewed-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+Hi,
 
-The tail 'The' in the subject should be the head of the body.
-Otherwise, looks good.
+On 10/18/22 03:56, Krzysztof Kozlowski wrote:
+> On 14/10/2022 11:23, Patrick Delaunay wrote:
+>> Add a new compatible for stm32mp13 support.
+>>
+>> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+>> ---
+>>
+>>   Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+>> index 448a2678dc62..16f4cad2fa55 100644
+>> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+>> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+>> @@ -22,6 +22,7 @@ properties:
+>>     compatible:
+>>       enum:
+>>         - st,stm32f4-otp
+>> +      - st,stm32mp13-bsec
+>>         - st,stm32mp15-bsec
+> According to usage in DTS (separate patch for some reason), the devices
+> are compatible, so please describe them like that.
 
-Acked-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+
+I push the separate patch "ARM: dts: stm32mp13: fix compatible for BSEC"
+
+It is a advice of my colleagues: send an update of device tree
+
+only when the binding modification is acked.
 
 
-> ---
->  include/net/sock.h     | 2 +-
->  net/core/sock.c        | 4 ++--
->  net/ipv4/ip_sockglue.c | 2 +-
->  net/ipv6/datagram.c    | 2 +-
->  4 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index 9e464f6409a7..b1dacc4d68c9 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1901,7 +1901,7 @@ static inline void sockcm_init(struct sockcm_cookie *sockc,
->  	*sockc = (struct sockcm_cookie) { .tsflags = sk->sk_tsflags };
->  }
->  
-> -int __sock_cmsg_send(struct sock *sk, struct msghdr *msg, struct cmsghdr *cmsg,
-> +int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
->  		     struct sockcm_cookie *sockc);
->  int sock_cmsg_send(struct sock *sk, struct msghdr *msg,
->  		   struct sockcm_cookie *sockc);
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index a3ba0358c77c..944a9ea75f65 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -2730,7 +2730,7 @@ struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long header_len,
->  }
->  EXPORT_SYMBOL(sock_alloc_send_pskb);
->  
-> -int __sock_cmsg_send(struct sock *sk, struct msghdr *msg, struct cmsghdr *cmsg,
-> +int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
->  		     struct sockcm_cookie *sockc)
->  {
->  	u32 tsflags;
-> @@ -2784,7 +2784,7 @@ int sock_cmsg_send(struct sock *sk, struct msghdr *msg,
->  			return -EINVAL;
->  		if (cmsg->cmsg_level != SOL_SOCKET)
->  			continue;
-> -		ret = __sock_cmsg_send(sk, msg, cmsg, sockc);
-> +		ret = __sock_cmsg_send(sk, cmsg, sockc);
->  		if (ret)
->  			return ret;
->  	}
-> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-> index 6e19cad154f5..5f16807d3235 100644
-> --- a/net/ipv4/ip_sockglue.c
-> +++ b/net/ipv4/ip_sockglue.c
-> @@ -267,7 +267,7 @@ int ip_cmsg_send(struct sock *sk, struct msghdr *msg, struct ipcm_cookie *ipc,
->  		}
->  #endif
->  		if (cmsg->cmsg_level == SOL_SOCKET) {
-> -			err = __sock_cmsg_send(sk, msg, cmsg, &ipc->sockc);
-> +			err = __sock_cmsg_send(sk, cmsg, &ipc->sockc);
->  			if (err)
->  				return err;
->  			continue;
-> diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
-> index 5ecb56522f9d..df7e032ce87d 100644
-> --- a/net/ipv6/datagram.c
-> +++ b/net/ipv6/datagram.c
-> @@ -771,7 +771,7 @@ int ip6_datagram_send_ctl(struct net *net, struct sock *sk,
->  		}
->  
->  		if (cmsg->cmsg_level == SOL_SOCKET) {
-> -			err = __sock_cmsg_send(sk, msg, cmsg, &ipc6->sockc);
-> +			err = __sock_cmsg_send(sk, cmsg, &ipc6->sockc);
->  			if (err)
->  				return err;
->  			continue;
-> -- 
-> 2.25.1
+Sorry for disturbance, I can sent a V2 with the 2 patches.
+
+
+The STM32MP15 and STM32MP13 don't use the same version of the BSEC device,
+
+and the driver need to handle it.
+
+
+In these 2 patches:
+
+- [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem
+
+- [PATCH] ARM: dts: stm32mp13: fix compatible for BSEC
+
+
+I fix a error for BSEC node in the initial patch to support STM32MP13x,
+
+the DTS "stm32mp131.dtsi" should not used/accepted with the a BSEC node 
+using
+
+the compatible "st,stm32mp15-bsec" in commit 1da8779c0029 ("ARM: dts: 
+stm32: add STM32MP13 SoCs support")
+
+
+It is a preliminary step to add support of STM32MP13x in STM32 ROMEM driver.
+
+
+I don't indicate these patches as "Fixes:" to avoid a dts check issue
+
+if only the DTS patch was backported.
+
+
+Today it not blocking for STM32MP13x users because this SoC is not yet 
+available for customers
+
+and it is only used internally on the ST Microelectronics board 
+STM32MP135F-DK.
+
+
+Nobody (except STMicroelectronics) use this SoC  STM32MP13x with the 
+current DTS / Linux version.
+
+
+Moreover, by default, the STM32 ROMEM driver in not activated in any 
+defconfig,
+
+I prepare a other patch to activated it by default in arm_multiv7_defconfig.
+
+but I am waiting this DTS correction to avoid to probe the stm32 romen 
+driver with STM32MP15
+
+configuration on STM32MP13x SoC.
+
+
+I think is a good time to update this DTS error before the SoC availability,
+
+agreed with SoC Maintainer, Alexandre Torgue, even if this patch breaks 
+surrent users
+
+of STM32MP13x DTS (but it is only internals user STMicroelectronics 
+until now).
+
+
+but perhaps you prefer a other solution ?
+
+
+add Fixes in the DTS patch ?
+
++ Fixes: 1da8779c0029 ("ARM: dts: stm32: add STM32MP13 SoCs support")
+
+or
+
+
+         bsec: efuse@5c005000 {
+             compatible = "st,stm32mp13-bsec", "st,stm32mp15-bsec";
+
+
+sorry, I misses to share this context.
+
+
+>
+> Best regards,
+> Krzysztof
+
+
+Regards
+
+Patrick
+
