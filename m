@@ -2,99 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DC3604989
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3068860498D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJSOmn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 10:42:43 -0400
+        id S231350AbiJSOnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:43:21 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiJSOmV (ORCPT
+        with ESMTP id S230012AbiJSOm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:42:21 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510C0192D87;
-        Wed, 19 Oct 2022 07:27:54 -0700 (PDT)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6AECBFF805;
-        Wed, 19 Oct 2022 14:27:50 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-To:     foss+kernel@0leil.net,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: lower rk3399-puma-haikou SD controller clock frequency
-Date:   Wed, 19 Oct 2022 16:27:27 +0200
-Message-Id: <20221019-upstream-puma-sd-40mhz-v1-0-754a76421518@theobroma-systems.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 19 Oct 2022 10:42:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DFB6C117;
+        Wed, 19 Oct 2022 07:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666189718; x=1697725718;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oPd1b2RsFB8U0bOOTZPBrhSFDVyoHn3BOYgBQmWBVSY=;
+  b=fpO6aG8lN/uHpowz8FSkAkr141oOoNXlQqYobyqkl9sqpQ1m8ZPvVska
+   l65Xgxdbn1iLBfhQJWewyxoSvWh1YX0ox5RIBLPWI5TydCL9eb2VKAtrj
+   WwY/B1FG53QhPkOGhcuISYaIFhpUsK6TO+3+YARMjhqjqK5eVw3Idj47p
+   WJAbQKqGyRRnzn400AblO5xyPCIvg6MsnyihTBWYjz12oF8uISaOHik8v
+   0EPoUbtRq3dro9E4PxS4CQQ3XJEnMrhvAeGMnzY6iAn9ORvYDbLtryQwm
+   Crck394TyPyOTCvGxY+v//lIV9FI4hs04p4d3WdCc2mmlWddhgikf8imi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="304040483"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="304040483"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 07:28:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="771810982"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="771810982"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Oct 2022 07:28:32 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] thunderbolt: ACPI: Use the helper fwnode_find_reference()
+Date:   Wed, 19 Oct 2022 17:28:54 +0300
+Message-Id: <20221019142854.27364-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.10.1
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Replacing the direct fwnode_property_get_reference_args()
+call will this wrapper function.
 
-From: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
+No functional changes intended.
 
-CRC errors (code -84 EILSEQ) have been observed for some SanDisk
-Ultra A1 cards when running at 50MHz.
-
-Waveform analysis suggest that the level shifters that are used on the
-RK3399-Q7 module for voltage translation between 3.0 and 3.3V don't
-handle clock rates at or above 48MHz properly. Back off to 40MHz for
-some safety margin.
-
-Cc: stable@vger.kernel.org
-Fixes: 60fd9f72ce8a ("arm64: dts: rockchip: add Haikou baseboard with RK3399-Q7 SoM")
-Signed-off-by: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
-We've been carrying this patch downstream for years and completely forgot to
-upstream it. This is now done.
+ drivers/thunderbolt/acpi.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-rockchip@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
----
- arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts b/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts
-index 04c752f49be9..115c14c0a3c6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts
-@@ -207,7 +207,7 @@ &sdmmc {
- 	cap-sd-highspeed;
- 	cd-gpios = <&gpio0 RK_PA7 GPIO_ACTIVE_LOW>;
- 	disable-wp;
--	max-frequency = <150000000>;
-+	max-frequency = <40000000>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_cd &sdmmc_bus4>;
- 	vmmc-supply = <&vcc3v3_baseboard>;
-
----
-base-commit: aae703b02f92bde9264366c545e87cec451de471
-change-id: 20221019-upstream-puma-sd-40mhz-b5aef1c351e6
-
-Best regards,
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index 7a8adf5ad5a09..48ac227e6d8a0 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -15,24 +15,17 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 				    void **return_value)
+ {
+ 	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+-	struct fwnode_reference_args args;
+ 	struct fwnode_handle *fwnode;
+ 	struct tb_nhi *nhi = data;
+ 	struct pci_dev *pdev;
+ 	struct device *dev;
+-	int ret;
+-
+-	if (!adev)
+-		return AE_OK;
+ 
+-	fwnode = acpi_fwnode_handle(adev);
+-	ret = fwnode_property_get_reference_args(fwnode, "usb4-host-interface",
+-						 NULL, 0, 0, &args);
+-	if (ret)
++	fwnode = fwnode_find_reference(acpi_fwnode_handle(adev), "usb4-host-interface", 0);
++	if (IS_ERR(fwnode))
+ 		return AE_OK;
+ 
+ 	/* It needs to reference this NHI */
+-	if (dev_fwnode(&nhi->pdev->dev) != args.fwnode)
++	if (dev_fwnode(&nhi->pdev->dev) != fwnode)
+ 		goto out_put;
+ 
+ 	/*
+@@ -100,7 +93,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 	}
+ 
+ out_put:
+-	fwnode_handle_put(args.fwnode);
++	fwnode_handle_put(fwnode);
+ 	return AE_OK;
+ }
+ 
 -- 
-Quentin Schulz <quentin.schulz@theobroma-systems.com>
+2.35.1
+
