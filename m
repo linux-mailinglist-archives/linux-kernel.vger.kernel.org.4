@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC4660461D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848DF604627
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbiJSM62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S231127AbiJSNAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbiJSM6O (ORCPT
+        with ESMTP id S232674AbiJSM6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:58:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE358A7E2;
-        Wed, 19 Oct 2022 05:41:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5E8C6186D;
-        Wed, 19 Oct 2022 12:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 247A9C433D6;
-        Wed, 19 Oct 2022 12:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666183206;
-        bh=8d6CdrccoT97cECfxO7g6a1f4262AbKj4LgQxlbZkwU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SK8O4ky0fQMSolFb3X8ZM7WVIicmqRC7UhjbaecIOdbxO+xNDylUl3MU1PJ/Di9K+
-         kcE5wyJk1zQlNK9EV98lwe9t+ZYnJCxPo5ff8moOPMCaIjhiDE+Na+XeYLfMbyvGK+
-         Gqi9JoEV1JBL7hjIMIQsTjX532US5gfOGtf4EIMfIrQj00cBxsLuAHY1D0/524sg2i
-         0xEWu1eyNZjxkU21pnwACWTN9jk+5dii9c/af14bIjb3YO2hnsDTU9Q06M0Q/I1etB
-         2d3svVuKFbybaONqrM/zas28bHssLFMgP2+kKkV3JLPeJe6LuhG1Q5s0QnVFLbRwst
-         E/MhU1I/LumDQ==
-Date:   Wed, 19 Oct 2022 13:40:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next][V2] ASoC: codecs: jz4725b: Fix spelling mistake
- "Sourc" -> "Source", "Routee" -> "Route"
-Message-ID: <Y0/wIPFAWH3cLQzx@sirena.org.uk>
-References: <20221019071639.1003730-1-colin.i.king@gmail.com>
- <Y0/pSVbueZYXBsmA@sirena.org.uk>
- <S820KR.GPNPWZ8QG3PG3@crapouillou.net>
+        Wed, 19 Oct 2022 08:58:50 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6B2A953
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:42:18 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id b25so10547378qkk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=APY6XkBoiH+8MYx94R2gCE5tsyBBjocoJUqhpNcG1uo=;
+        b=t0jva4wVew3s5XSwsmG9/vKT92stEy73Mz1sWf3wiZStx2UYRLlL+2Ue1tYnQID5Qm
+         FB272FCC/NGWhCI7C4XfeKTRYdFEaVGCI7MtWoYoacYNprbMXX0MTZNpbzEAn2j2Nha0
+         jCz+tqfS6oNV1e1ELhtj/YUlwJ03+DjRsJakr2AirJJHw93lXnKErJh0nQodWQwP0kB9
+         gVH4UJsXrMmeAVaX89fRORuta/K3zrt+niaVSaDqY7KOl9wH9CJADKSNSU78yNRzsk9t
+         sg9gG2NNMfC4oCxff1qbWIGj1imxFQf129rR5HfMwuhlb3wBihKWdrIGbDSa6d++OrvO
+         c/tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=APY6XkBoiH+8MYx94R2gCE5tsyBBjocoJUqhpNcG1uo=;
+        b=hx2elPTkfZm4IQjBcs9KpDEgo4O11eRXa20nK8aAMX72W1GwobNBTroLJmTN9xXSKZ
+         xZbcxhf8HXB47bGbMFwP91+Al9J0cPEVwDwJzB8/BSR605tQzgGVIacqNv5MAHnWRPiU
+         QA5/85UQumxEKUCQZrN8AOaLu64ZP59+UTYyXweSB65N4Tru0Q60S4qECEpg3H01vlxH
+         56dYDosfNdAVyZ80A/e4hzkdf3xyRRVadRFR/MVtOefKYEi9XCoTF3r4vIPE+9vbh4bT
+         rNf2jtvCtgA8Y3QJvUCuH05WR7/NeGWrhayCSfWSMlV7QeYLmi37zNH3EQtMnY3qHje5
+         b1dA==
+X-Gm-Message-State: ACrzQf1aGnyv5dCCgrOlwh1qNWW/Xd2YUDM4VY7oA4wUM0b3O9D78jR6
+        eZAtuTl2MWkQyKeKzA0IlP7X8w==
+X-Google-Smtp-Source: AMsMyM4mg+k/dzvcqomBH9qc5f5xm21maADpMizbJY1M4DfSbN0jD6paa3IvF7n7dlHO8kOeeH6YfA==
+X-Received: by 2002:a05:620a:2809:b0:6bc:5e0d:d7b1 with SMTP id f9-20020a05620a280900b006bc5e0dd7b1mr5230359qkp.545.1666183277044;
+        Wed, 19 Oct 2022 05:41:17 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id y2-20020a05620a0e0200b006ee8874f5d8sm4708919qkm.28.2022.10.19.05.41.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 05:41:16 -0700 (PDT)
+Message-ID: <1847fa0b-7b1b-13f2-6667-0b9003ae58ac@linaro.org>
+Date:   Wed, 19 Oct 2022 08:41:13 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BarSh9pR8ITjJrt2"
-Content-Disposition: inline
-In-Reply-To: <S820KR.GPNPWZ8QG3PG3@crapouillou.net>
-X-Cookie: I like your SNOOPY POSTER!!
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 10/15] dt-bindings: phy: qcom,qmp-pcie: add sc8280xp
+ bindings
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221019113552.22353-1-johan+linaro@kernel.org>
+ <20221019113552.22353-11-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221019113552.22353-11-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19/10/2022 07:35, Johan Hovold wrote:
+> Add bindings for the PCIe QMP PHYs found on SC8280XP.
+> 
+> The PCIe2 and PCIe3 controllers and PHYs on SC8280XP can be used in
+> 4-lane mode or as separate controllers and PHYs in 2-lane mode (e.g. as
+> PCIe2A and PCIe2B).
+> 
+> The configuration for a specific system can be read from a TCSR register.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
---BarSh9pR8ITjJrt2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Wed, Oct 19, 2022 at 01:19:40PM +0100, Paul Cercueil wrote:
-> Le mer., oct. 19 2022 at 13:10:49 +0100, Mark Brown <broonie@kernel.org> a
-> > On Wed, Oct 19, 2022 at 08:16:39AM +0100, Colin Ian King wrote:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > >  There are two spelling mistakes in codec routing description. Fix
-> > > it.
+But please wait with applying this patch for Rob's bot:
+https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221019113552.22353-11-johan+linaro@kernel.org/
 
-> > Bit disappionting that people didn't notice the errors during boot
-> > there...
+Best regards,
+Krzysztof
 
-> Well that's on you. You merged the patchset before anybody could review.
-
-That includes whoever wrote the code in the first place, and I do note
-that I applied version 3 of the series.
-
---BarSh9pR8ITjJrt2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNP8CAACgkQJNaLcl1U
-h9Dvzgf/UwmdmQxOamn+37JPevW80uGyuE3ITBXUK9gT2Rb2ow1M8Bdm1QmlUjTx
-OImxIOYNNXJ+DZ4Tec4ybjtwlB0EaUvXRiw8TWePLZKwRDDrYoVSSyBfagTYSchD
-OUOIGJgifR/ECR15TApRJX2CyGCeoe0V31Vz0IkQD12a7xbVvdg8+3AbTp8+yQvD
-IJJTM0S/HUn07KktLl2xDFNvtSdPOekZE1Ju6sBd6i8ByNUcvOqGCp0pXUZnbTXy
-2LuOq+9qdh5PngUcDjlQ90B2sh5fIYJEu2hM+xRuLPbW0ENzS7pm9DNuvuIvTGYL
-BiboNnUF477UdJpVstIMKfqk6YIT5g==
-=fKUT
------END PGP SIGNATURE-----
-
---BarSh9pR8ITjJrt2--
