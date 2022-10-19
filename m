@@ -2,299 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B2A603725
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE4A603734
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJSAeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S229635AbiJSAkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 20:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJSAei (ORCPT
+        with ESMTP id S229456AbiJSAkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:34:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E5313F26
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:34:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 18 Oct 2022 20:40:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ECD79601
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666140004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gY/VgOxfOsWffefEvgH/BM/CBbaD7YH3XeA+F0aNkuc=;
+        b=GiFbi+n3GuwqnKh0G4Me/Qf11V4MKj8kFj3wy5xPqJypdNAFGqwF5JdRCUN5ILzL+vkivd
+        A57CCPbPlsO8SlkHdgH/+7jrPsQMLm3IOI/3zrWYfR9fykK3g2RQjPCKen5xkfCoe2oDmw
+        IM4giMDiO4Zr1NpTRS8K4NqL+eFh0bM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-177-DpWTDBcnPBmVOZDK55B5pw-1; Tue, 18 Oct 2022 20:40:01 -0400
+X-MC-Unique: DpWTDBcnPBmVOZDK55B5pw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E916B8218A
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:34:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F13BC433D7;
-        Wed, 19 Oct 2022 00:34:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666139672;
-        bh=wb4kkINtcV5qtL4S9StL2IH6A9wLl3t5eYlT5FECAAk=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Nhi2sRc1LiOIKzFUazGNnHfqXWePQFUH4/3cwnRA4bgDYyidr/SqRG6RKA4Hoo7hK
-         XmkKVpNmgsMdlxw9AESSwZBAzN1u8pRkRH/rq8m0G2EszkAlyXEQT6dmCLBtAQOdyG
-         scHe0UF5/HmtJowriInsBTtOpKeOUZGoGcVlcyDLOn52x7JDQEyjr6oR/mHRSg739j
-         NrMejya8vue3wfOFcaLx5wG8FmGs7rkKuejUmrMVWvjUkGJKeqMfwVMReDkXLYCnEi
-         yiIrcb0uDvhg8uGunsSLzOIrcCU70Md2OEp8oPmicxwFrj4YK+2McUgR3APjFad32n
-         Trq/eA+8Vefvg==
-Date:   Tue, 18 Oct 2022 17:34:29 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
-cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
-Subject: Re: [PATCH V2] xen/virtio: Handle PCI devices which Host controller
- is described in DT
-In-Reply-To: <531d3fe0-de24-4aac-f58a-091edbe25a98@epam.com>
-Message-ID: <alpine.DEB.2.22.394.2210181732350.4587@ubuntu-linux-20-04-desktop>
-References: <20221015153409.918775-1-olekstysh@gmail.com> <alpine.DEB.2.22.394.2210171731110.4587@ubuntu-linux-20-04-desktop> <531d3fe0-de24-4aac-f58a-091edbe25a98@epam.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90EE4380451F;
+        Wed, 19 Oct 2022 00:40:00 +0000 (UTC)
+Received: from [10.22.8.39] (unknown [10.22.8.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 262F11121315;
+        Wed, 19 Oct 2022 00:39:59 +0000 (UTC)
+Message-ID: <03113528-65ad-96b6-3580-d88613a246c9@redhat.com>
+Date:   Tue, 18 Oct 2022 20:39:59 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 4/5] locking/rwsem: Enable direct rwsem lock handoff
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221017211356.333862-1-longman@redhat.com>
+ <20221018111424.1007-1-hdanton@sina.com>
+ <9b63611e-8d9a-529b-dcdc-05b10a8a712a@quicinc.com>
+ <20221018235138.1088-1-hdanton@sina.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221018235138.1088-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022, Oleksandr Tyshchenko wrote:
-> On 18.10.22 03:33, Stefano Stabellini wrote:
-> > On Sat, 15 Oct 2022, Oleksandr Tyshchenko wrote:
-> >> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> >>
-> >> Use the same "xen-grant-dma" device concept for the PCI devices
-> >> behind device-tree based PCI Host controller, but with one modification.
-> >> Unlike for platform devices, we cannot use generic IOMMU bindings
-> >> (iommus property), as we need to support more flexible configuration.
-> >> The problem is that PCI devices under the single PCI Host controller
-> >> may have the backends running in different Xen domains and thus have
-> >> different endpoints ID (backend domains ID).
-> > Hi Oleksandr,
-> >
-> >  From another email I understood that you successfully managed to
-> > describe in device tree all the individual virtio pci devices so that
-> > you can have iommu-map/iommu-map-mask properties under each virtio
-> > device node. Is that right?
-> 
-> No. Here [1] I mentioned that I had experimented with PCI-IOMMU bindings 
-> (iommu-map/iommu-map-mask properties) as IOMMU bindings (iommu property) 
-> is insufficient for us and got it worked.
-> Also I provided a link to the current patch. Sorry, if I was unclear.
-> 
-> Just to be clear:
-> 
-> We do not describe in device-tree all the individual virtio-pci devices 
-> (and we do not have to), we only describe generic PCI host bridge node.
-> So we have only a *single* iommu-map property under that PCI host bridge 
-> node.
-> The iommu-map property in turn describes the IOMMU connections for the 
-> endpoints within that PCI Host bridge according to:
-> https://www.kernel.org/doc/Documentation/devicetree/bindings/pci/pci-iommu.txt
-> 
-> For the instance, the following iommu-map property under that PCI host 
-> bridge node describes the relationship between IOMMU and two PCI devices 
-> (0000:00:01.0 and 0000:00:02.0):
-> iommu-map = <0x08 0xfde9 0x01 0x08 0x10 0xfde9 0x02 0x08>;
-> For 0000:00:01.0 we pass the endpoint ID 1 (backend domid 1)
-> For 0000:00:02.0 we pass the endpoint ID 2 (backend domid 2)
-> Other PCI devices (i.e 0000:00:03.0) are untranslated (are not required 
-> to use grants for the virtio).
+On 10/18/22 19:51, Hillf Danton wrote:
+> On 18 Oct 2022 13:37:20 -0400 Waiman Long <longman@redhat.com>
+>> On 10/18/22 10:13, Mukesh Ojha wrote:
+>>> On 10/18/2022 4:44 PM, Hillf Danton wrote:
+>>>> On 17 Oct 2022 17:13:55 -0400 Waiman Long <longman@redhat.com>
+>>>>> @@ -1067,13 +1119,33 @@ rwsem_down_read_slowpath(struct rw_semaphore
+>>>>>                return sem;
+>>>>>            }
+>>>>>            adjustment += RWSEM_FLAG_WAITERS;
+>>>>> +    } else if ((count & RWSEM_FLAG_HANDOFF) &&
+>>>>> +          ((count & RWSEM_LOCK_MASK) == RWSEM_READER_BIAS)) {
+>>>> Could a couple of CPUs go read slow path in parallel?
+>>>>
+>> This is under wait_lock protection. So no parallel execution is possible.
+> They individually add RWSEM_READER_BIAS to count before taking wait_lock,
+> and the check for BIAS here does not cover the case of readers in parallel.
+> Is this intended?
+>
+> Hillf
 
-That's great! I misunderstood. Actually I wonder if iommu-map might be
-suitable also for hotplug devices (as long as the backend domid is known
-beforehand). I think that should work? It should be possible to specify
-PCI device IDs even if those device IDs are not present yet?
+As I said in the patch description, the lock handoff can only be done if 
+we can be sure that there is no other active locks outstanding with the 
+handoff bit set. If at the time of the check, another reader come in and 
+adds its RWSEM_READER_BIAS, the check fail and the cpu will proceed to 
+put its waiter in the queue and begin sleeping. Hopefully, the last one 
+left will find that count has only its RWSEM_READER_BIAS and it can 
+start the handoff process.
 
-If this work, it could be the best solution actually.
- 
+Cheers,
+Longman
 
-> > If that is the case, then I would rather jump straight to that approach
-> > because I think it is far better than this one.
-> 
-> Please see above, I don't have any other approach except the one 
-> implemented in current patch.
-> 
-> [1] 
-> https://lore.kernel.org/xen-devel/16485bc9-0e2a-788a-93b8-453cc9ef0d3c@epam.com/
-> 
-> 
-> >
-> > Cheers,
-> >
-> > Stefano
-> >
-> >
-> >
-> >> So use generic PCI-IOMMU bindings instead (iommu-map/iommu-map-mask
-> >> properties) which allows us to describe relationship between PCI
-> >> devices and backend domains ID properly.
-> >>
-> >> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> >> ---
-> >> Slightly RFC. This is needed to support Xen grant mappings for virtio-pci devices
-> >> on Arm at some point in the future. The Xen toolstack side is not completely ready yet.
-> >> Here, for PCI devices we use more flexible way to pass backend domid to the guest
-> >> than for platform devices.
-> >>
-> >> Changes V1 -> V2:
-> >>     - update commit description
-> >>     - rebase
-> >>     - rework to use generic PCI-IOMMU bindings instead of generic IOMMU bindings
-> >>
-> >> Previous discussion is at:
-> >> https://urldefense.com/v3/__https://lore.kernel.org/xen-devel/20221006174804.2003029-1-olekstysh@gmail.com/__;!!GF_29dbcQIUBPA!1mSETxg8CRohlL5OpYo0VaLBXtbWRLZlam9QABMP_YUzsYcrn8no1FxBPvhQnNRCSzp3pkC1dXIgmhdaZmJ3oyV6yWUy3w$  [lore[.]kernel[.]org]
-> >>
-> >> Based on:
-> >> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/log/?h=for-linus-6.1__;!!GF_29dbcQIUBPA!1mSETxg8CRohlL5OpYo0VaLBXtbWRLZlam9QABMP_YUzsYcrn8no1FxBPvhQnNRCSzp3pkC1dXIgmhdaZmJ3oyWa-6yyug$  [git[.]kernel[.]org]
-> >> ---
-> >>   drivers/xen/grant-dma-ops.c | 87 ++++++++++++++++++++++++++++++++-----
-> >>   1 file changed, 76 insertions(+), 11 deletions(-)
-> >>
-> >> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> >> index daa525df7bdc..b79d9d6ce154 100644
-> >> --- a/drivers/xen/grant-dma-ops.c
-> >> +++ b/drivers/xen/grant-dma-ops.c
-> >> @@ -10,6 +10,7 @@
-> >>   #include <linux/module.h>
-> >>   #include <linux/dma-map-ops.h>
-> >>   #include <linux/of.h>
-> >> +#include <linux/pci.h>
-> >>   #include <linux/pfn.h>
-> >>   #include <linux/xarray.h>
-> >>   #include <linux/virtio_anchor.h>
-> >> @@ -292,12 +293,55 @@ static const struct dma_map_ops xen_grant_dma_ops = {
-> >>   	.dma_supported = xen_grant_dma_supported,
-> >>   };
-> >>   
-> >> +static struct device_node *xen_dt_get_pci_host_node(struct device *dev)
-> >> +{
-> >> +	struct pci_dev *pdev = to_pci_dev(dev);
-> >> +	struct pci_bus *bus = pdev->bus;
-> >> +
-> >> +	/* Walk up to the root bus to look for PCI Host controller */
-> >> +	while (!pci_is_root_bus(bus))
-> >> +		bus = bus->parent;
-> >> +
-> >> +	return of_node_get(bus->bridge->parent->of_node);
-> >> +}
-> >> +
-> >> +static struct device_node *xen_dt_get_node(struct device *dev)
-> >> +{
-> >> +	if (dev_is_pci(dev))
-> >> +		return xen_dt_get_pci_host_node(dev);
-> >> +
-> >> +	return of_node_get(dev->of_node);
-> >> +}
-> >> +
-> >> +static int xen_dt_map_id(struct device *dev, struct device_node **iommu_np,
-> >> +			 u32 *sid)
-> >> +{
-> >> +	struct pci_dev *pdev = to_pci_dev(dev);
-> >> +	u32 rid = PCI_DEVID(pdev->bus->number, pdev->devfn);
-> >> +	struct device_node *host_np;
-> >> +	int ret;
-> >> +
-> >> +	host_np = xen_dt_get_pci_host_node(dev);
-> >> +	if (!host_np)
-> >> +		return -ENODEV;
-> >> +
-> >> +	ret = of_map_id(host_np, rid, "iommu-map", "iommu-map-mask", iommu_np, sid);
-> >> +	of_node_put(host_np);
-> >> +
-> >> +	return ret;
-> >> +}
-> >> +
-> >>   static bool xen_is_dt_grant_dma_device(struct device *dev)
-> >>   {
-> >> -	struct device_node *iommu_np;
-> >> +	struct device_node *iommu_np = NULL;
-> >>   	bool has_iommu;
-> >>   
-> >> -	iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
-> >> +	if (dev_is_pci(dev)) {
-> >> +		if (xen_dt_map_id(dev, &iommu_np, NULL))
-> >> +			return false;
-> >> +	} else
-> >> +		iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
-> >> +
-> >>   	has_iommu = iommu_np &&
-> >>   		    of_device_is_compatible(iommu_np, "xen,grant-dma");
-> >>   	of_node_put(iommu_np);
-> >> @@ -307,9 +351,17 @@ static bool xen_is_dt_grant_dma_device(struct device *dev)
-> >>   
-> >>   bool xen_is_grant_dma_device(struct device *dev)
-> >>   {
-> >> +	struct device_node *np;
-> >> +
-> >>   	/* XXX Handle only DT devices for now */
-> >> -	if (dev->of_node)
-> >> -		return xen_is_dt_grant_dma_device(dev);
-> >> +	np = xen_dt_get_node(dev);
-> >> +	if (np) {
-> >> +		bool ret;
-> >> +
-> >> +		ret = xen_is_dt_grant_dma_device(dev);
-> >> +		of_node_put(np);
-> >> +		return ret;
-> >> +	}
-> >>   
-> >>   	return false;
-> >>   }
-> >> @@ -325,12 +377,19 @@ bool xen_virtio_mem_acc(struct virtio_device *dev)
-> >>   static int xen_dt_grant_init_backend_domid(struct device *dev,
-> >>   					   struct xen_grant_dma_data *data)
-> >>   {
-> >> -	struct of_phandle_args iommu_spec;
-> >> +	struct of_phandle_args iommu_spec = { .args_count = 1 };
-> >>   
-> >> -	if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
-> >> -			0, &iommu_spec)) {
-> >> -		dev_err(dev, "Cannot parse iommus property\n");
-> >> -		return -ESRCH;
-> >> +	if (dev_is_pci(dev)) {
-> >> +		if (xen_dt_map_id(dev, &iommu_spec.np, iommu_spec.args)) {
-> >> +			dev_err(dev, "Cannot translate ID\n");
-> >> +			return -ESRCH;
-> >> +		}
-> >> +	} else {
-> >> +		if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
-> >> +				0, &iommu_spec)) {
-> >> +			dev_err(dev, "Cannot parse iommus property\n");
-> >> +			return -ESRCH;
-> >> +		}
-> >>   	}
-> >>   
-> >>   	if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
-> >> @@ -354,6 +413,7 @@ static int xen_dt_grant_init_backend_domid(struct device *dev,
-> >>   void xen_grant_setup_dma_ops(struct device *dev)
-> >>   {
-> >>   	struct xen_grant_dma_data *data;
-> >> +	struct device_node *np;
-> >>   
-> >>   	data = find_xen_grant_dma_data(dev);
-> >>   	if (data) {
-> >> @@ -365,8 +425,13 @@ void xen_grant_setup_dma_ops(struct device *dev)
-> >>   	if (!data)
-> >>   		goto err;
-> >>   
-> >> -	if (dev->of_node) {
-> >> -		if (xen_dt_grant_init_backend_domid(dev, data))
-> >> +	np = xen_dt_get_node(dev);
-> >> +	if (np) {
-> >> +		int ret;
-> >> +
-> >> +		ret = xen_dt_grant_init_backend_domid(dev, data);
-> >> +		of_node_put(np);
-> >> +		if (ret)
-> >>   			goto err;
-> >>   	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT)) {
-> >>   		dev_info(dev, "Using dom0 as backend\n");
-> >> -- 
-> >> 2.25.1
-> >>
-> -- 
-> Regards,
-> 
-> Oleksandr Tyshchenko
-> 
