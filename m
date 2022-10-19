@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A200605197
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE93B60519D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiJSUuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S231560AbiJSUwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiJSUun (ORCPT
+        with ESMTP id S230266AbiJSUwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:50:43 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D1763E5;
-        Wed, 19 Oct 2022 13:50:42 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id t16so7781163edd.2;
-        Wed, 19 Oct 2022 13:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k9Jb/D65Nwg00CddvhyNz1Pxcixmx0unsPQe8+d9sp4=;
-        b=fa63IEr9jQKvbBnkDN5zidLJtLtuwez4NKCLptx6HoEnO1qmslQdNwePVxo+j8j6gJ
-         CSOAWaJkDuvnh1wfFKZ99frANkEA4eD1QIC/zwJxwGUssFUqpMJR2HPKaBwqI5i35EO0
-         33JTLh0XzNYoxV8mHYhujKZezsqZDSbXNYWhQyo2Z1fz//3JYSzQqcRHukFoVylsufnt
-         qwNI57GTs468vVKMRDx42UutK9QiLwmfypca+jdxntZCzOHCua633n7YZsx6lil/LCbQ
-         B5XOP0ltuncOShhY9+AjxVbSq7c00WUHlTPhpIukN92c1R6mTfW/2P/fzarRKmQgPvO6
-         60nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k9Jb/D65Nwg00CddvhyNz1Pxcixmx0unsPQe8+d9sp4=;
-        b=Re/XOZDSU4mjKt/vtYY/u7PY/O2XTA4ykiXkzR4NiICfz3Ygf9YDnx5jz9glE7+Y+d
-         895wHI3jX2FES0GBQhv2gEeklJzCabqlEVHmx6oyxsyavCv1VV2saf2mF9y1ZXomQdsD
-         kGvGtOAtBRSXH2MT3JwGU+u8prnFv7kR9LqhYhWdd0qmmJe4SExe5gtGLkXHR5whwFvf
-         pkbL2neFlIfUKEWDG3q1T0uA8IqnfX9qdQ1oYOz7uQE5fhOkhHWY655j2CPJz6Zu2gR5
-         aht6690oJ6r09VfIPBagcQXIrpbCjAU55mg+5Z+5hGYnnWt/e2+T0OLblvuvuJEYBG+l
-         benw==
-X-Gm-Message-State: ACrzQf2JWIBZcgGoUpwp/jEvHypgIdIhLn0WLw8TfbJGmyhxOb8t4PsY
-        C4R/HOenRp+sy5jFrjJHxkX3Z576pkJBG3g8Dk4=
-X-Google-Smtp-Source: AMsMyM5WSDH4F3/5sQv3/kCfh6o4ZgGBFVx1bvDggwII+Ekb/WVPf3ARd86uFycXR7ZHWTK4GNRjOWYhMn+7yLUmzC4=
-X-Received: by 2002:a05:6402:190e:b0:45c:d10a:4c1a with SMTP id
- e14-20020a056402190e00b0045cd10a4c1amr9266859edz.345.1666212640531; Wed, 19
- Oct 2022 13:50:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com> <20221004-up-aml-fix-spi-v3-2-89de126fd163@baylibre.com>
-In-Reply-To: <20221004-up-aml-fix-spi-v3-2-89de126fd163@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 19 Oct 2022 22:50:29 +0200
-Message-ID: <CAFBinCAsCg6QQRH3VPY1OKuyfkxY0oCXLhAuMwO6=00gXKqQrQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] spi: meson-spicc: Use pinctrl to drive CLK line
- when idle
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Da Xue <da@libre.computer>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org,
+        Wed, 19 Oct 2022 16:52:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291F48B2EC;
+        Wed, 19 Oct 2022 13:52:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8AD3619A9;
+        Wed, 19 Oct 2022 20:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEA9C433D7;
+        Wed, 19 Oct 2022 20:52:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666212763;
+        bh=vUMA+KIEyk/mYPhfmyufPAgBG9tekFxdVUbAeXTernc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p172OvXvWm/p6RKTQNulUGe+kEr9zh/MoX+B0PaLbFGYaCtEweB95zPuTVG2Dib1l
+         3eFX65O9mcEtg8K+ZGAP095XFU0sXw8WRMWUB1ahMLe9bQd30eACPNLy1SGojiJ6bx
+         2StzfEOxWFj/VapNszY8oJR1iiJPt3PHwx2aWbocpq77QdoMKxwwEFwaP8jdMHxKFW
+         BLIMJ0d2sj7YrHYnxwofGtxSkWk12SozvzcJoSBDOoKNbhjPQ+Fn4L2r5tOLk3vRor
+         wJzNnjI+xMcY8a4H4hUgt1TzUcJMmSSPrjaYmE/uZPclQaORMCIQ6T1/DwThLhI9xM
+         QLVU4ggVcN+MQ==
+Received: by pali.im (Postfix)
+        id 07FC13AC; Wed, 19 Oct 2022 22:52:39 +0200 (CEST)
+Date:   Wed, 19 Oct 2022 22:52:39 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+Message-ID: <20221019205239.6n5sfqejtljlpyci@pali>
+References: <20221006145440.10281-1-namcaov@gmail.com>
+ <20221018193951.40787445@endymion.delvare>
+ <20221018180051.236tz4yxsdzrgguq@pali>
+ <20221019203403.GA149239@nam-dell>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221019203403.GA149239@nam-dell>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Amjad,
+On Wednesday 19 October 2022 22:34:03 Nam Cao wrote:
+> On Tue, Oct 18, 2022 at 08:00:51PM +0200, Pali Rohár wrote:
+> > On Tuesday 18 October 2022 19:39:51 Jean Delvare wrote:
+> > > On Thu, 06 Oct 2022 16:54:40 +0200, Nam Cao wrote:
+> > > > Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
+> > > > to the kernel. Add this address.
+> > > > 
+> > > > Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
+> > > > 5568 laptop:
+> > > >     - Horizontal: (-18,0,1044)
+> > > >     - Front elevated: (522,-18,1080)
+> > > >     - Left elevated: (-18,-360,1080)
+> > > >     - Upside down: (36,108,-1134)
+> > > > 
+> > > > Signed-off-by: Nam Cao <namcaov@gmail.com>
+> > > > ---
+> > > >  drivers/i2c/busses/i2c-i801.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > > 
+> > > > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > > > index a176296f4fff..e46561e095c6 100644
+> > > > --- a/drivers/i2c/busses/i2c-i801.c
+> > > > +++ b/drivers/i2c/busses/i2c-i801.c
+> > > > @@ -1243,6 +1243,7 @@ static const struct {
+> > > >  	 */
+> > > >  	{ "Latitude 5480",      0x29 },
+> > > >  	{ "Vostro V131",        0x1d },
+> > > > +	{ "Vostro 5568",        0x29 },
+> > > >  };
+> > > >  
+> > > >  static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
+> > > 
+> > > Fine with me.
+> > > 
+> > > Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> > > 
+> > > Pali, OK with you?
+> > 
+> > Yes, nice to see that other people discovered another hidden hardware
+> > devices in their own laptops :-)
+> > 
+> > Reviewed-by: Pali Rohár <pali@kernel.org>
+> > 
+> > 
+> > Nam Cao, could you check your ACPI DSDT table if there is not specified
+> > this smbus/i2c address 0x29? Autodiscovery would be better than
+> > hardcoding. At least for E6440 I was told that BIOS does not provide it.
+> 
+> My reply got rejected by mailing list because the attachment was too big.
+> So I re-send this without the attachment, so that everyone can see.
+> 
+> I searched the DSDT table for "29", but none of them looks like an i2c
+> address.
+> 
+> But this is the first time I hear about ACPI DSDT table, so I may did
+> something incorrectly. I did:
+>         - cp /sys/firmware/acpi/tables/DSDT table
+>         - iasl -d table
+>         - Search through table.dsl
+> 
+> Best regards,
+> Nam
 
-On Wed, Oct 19, 2022 at 4:03 PM Amjad Ouled-Ameur
-<aouledameur@baylibre.com> wrote:
-[...]
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-> index c3ac531c4f84..04e9d0f1bde0 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
-> @@ -429,6 +429,20 @@ mux {
->                         };
->                 };
->
-> +               spi_idle_high_pins: spi-idle-high-pins {
-> +                       mux {
-> +                               groups = "spi_sclk";
-> +                               bias-pull-up;
-> +                       };
-> +               };
-> +
-> +               spi_idle_low_pins: spi-idle-low-pins {
-> +                       mux {
-> +                               groups = "spi_sclk";
-> +                               bias-pull-down;
-> +                       };
-> +               };
-> +
-We typically have the .dts{,i} changes in a separate patch. I suggest
-doing the same here.
-I also have two questions about this part:
-- why are these not referenced by the SPICC controller node?
-- is there a particular reason why meson-gxl.dtsi is updated but
-meson-gxbb.dtsi is not? (my understanding is that GXBB is also lacking
-hardware OEN support)
+You did it correctly. I'm not surprised that you have not found
+anything. When I did experiments in the past, I was not able too...
+That is why there is that harcoded table...
 
-
-Best regards,
-Martin
+It just means that Dell did not fixed it or they perfectly hidden it.
