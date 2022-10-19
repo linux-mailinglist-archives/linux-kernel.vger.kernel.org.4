@@ -2,73 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DEC6044C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89D7604460
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbiJSMPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S232480AbiJSMCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbiJSMNz (ORCPT
+        with ESMTP id S231621AbiJSMBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:13:55 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07031A0C30;
-        Wed, 19 Oct 2022 04:50:20 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so16527784pjl.3;
-        Wed, 19 Oct 2022 04:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hp/+yCvVUPRrLnNJP4JKYGt/kPeg4is14PpEMljoEWo=;
-        b=P5yDRWACm5fU8HW7fh92YoPwbsW9dL5E8NpXH1TDAiKCc/9RS54yvdRvZvFGGbDdVL
-         7xEqxxl0UolM4XaOY4+p9NYD0a536PE0fWCJfIvWk6qMfbL8vYOwPS8vTn4vCE23kkeU
-         6JmC0gmoF+AQwgZcIFZfh6jNagiKTfeq4xKO1Q/GxPKctOVt7ZenwEHm05FZ1vEZA0EY
-         rnYuu6mZT6pgx7wFJF3FfnPTf1DCPkMzGlkScu+I8nI49DBhVh1d2lsP+AgekUlsY1xU
-         rN2Rw8W2rUKxmUp0dtxbjDve24fuJ4OD8FNFTzaxdrYStsWS+mr2pog3qvz6lVfZ5Rna
-         qakg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hp/+yCvVUPRrLnNJP4JKYGt/kPeg4is14PpEMljoEWo=;
-        b=B1BABiOmpErlQm92KuI5fx+GVhVKFM5FqA4WTu7npMzj2fe0xCjz3NGdMDuGIjS5ax
-         Ulaz7d32XEoUxRkTNdFddfpWrY2Ja3tscKFm2VpbNOm8Ca1RplkoAeAsDZW6Bb0osznW
-         qv2e7/IrhvlwJACXlc2m0qGjg3tbZ3pJjq9qISaHguG4fO2M1Sq1o+ieUSMcUJkV8j8s
-         GXR6W2ONvaO2NURugVvt+jFvIofi2x24bl+ne+a4aZPfZeNdvL2S0hFZh33knnu3QsWy
-         9eIzm3hwl6INuFX82OeUE8Ak7vsJU4f3tigcT/SOk7fj1+P3ddJC8nka+OpjCnUevZHz
-         +pAg==
-X-Gm-Message-State: ACrzQf1cWb8K+eoITgfP5RzPrjwmPFnAzRQmG6MrJvcP4qY9uiBvUjk2
-        hPVm434N7T1c0aOAvQWrnQ3D3sgIGzE=
-X-Google-Smtp-Source: AMsMyM4Djr61eKl+P5C/U9vMW3hPKiwIgulYYkUb9fCJbtqar+YlLYxn4BCyEKFaCVnf37Tj/cjzSQ==
-X-Received: by 2002:a05:6a00:4214:b0:562:67d0:77e7 with SMTP id cd20-20020a056a00421400b0056267d077e7mr8292098pfb.62.1666177666561;
-        Wed, 19 Oct 2022 04:07:46 -0700 (PDT)
-Received: from localhost.localdomain (2001-b400-e258-8c34-821b-9613-557f-bd8d.emome-ip6.hinet.net. [2001:b400:e258:8c34:821b:9613:557f:bd8d])
-        by smtp.gmail.com with ESMTPSA id cc11-20020a17090af10b00b0020dc318a43esm8696225pjb.25.2022.10.19.04.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 04:07:46 -0700 (PDT)
-From:   Victor Shih <victorshihgli@gmail.com>
-X-Google-Original-From: Victor Shih <victor.shih@genesyslogic.com.tw>
-To:     ulf.hansson@linaro.org, adrian.hunter@intel.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
-        Greg.tu@genesyslogic.com.tw, takahiro.akashi@linaro.org,
-        dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
-        Ben Chuang <ben.chuang@genesyslogic.com.tw>
-Subject: [PATCH V5 16/26] mmc: sdhci-uhs2: add detect_init() to detect the interface
-Date:   Wed, 19 Oct 2022 19:06:37 +0800
-Message-Id: <20221019110647.11076-17-victor.shih@genesyslogic.com.tw>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221019110647.11076-1-victor.shih@genesyslogic.com.tw>
-References: <20221019110647.11076-1-victor.shih@genesyslogic.com.tw>
+        Wed, 19 Oct 2022 08:01:52 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2061.outbound.protection.outlook.com [40.107.22.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9A313D45;
+        Wed, 19 Oct 2022 04:38:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LfM1ZDrxl7M7Ow+J08KrHgbiXwFC27AIvxt24ofVulrCZO0MJnv23reuzVMwhbKy0CKVMybf4+8NbbEeYU1U4iaW+zD7JiACpTyxXg+nk+7yattWnqF6h3jCSxDo+wH6QLIde4S56N/fN+E8+ZRapYDrJHrq4L+8dgQg7mtbw8rpYkeG7G99ZS83VK2t3Jhg97ap38eHmQlWTLil6CQbYYe0kOoCL9URXd5/UnKaSAl2L2XnxrolBNF2wMX3Un26k/jY5q76pzCw6RVdHoPJxNYHjJXi6I5Ldon0TqOClK543a04o7jGRRqSa9+nNssfnwuwP6m0e0QUz11oZB4NjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w0MHtjuLOB0x6YIhxA9jVBY4QB9MitIGbu0U4g813ZI=;
+ b=NTJZWfCF6zKdzi9JZvcQXkyGBvxh87FH+gETsBNjvse+cOSWS113SzRp2wtbMLNavsBq/x312n/a9vuDT6wcj4T9xd9n2/0lTpgQiJS29AkvKsMrpFVBWqQjq7xMYEAkjYKV+666NkX2Y4IXFySzghDGfCRZSMHTOhOBq1pdf4CgnWHchrx45RUtLAQDLYKjixKYgCOCrX8QReeCYgMALA9IKyEpv86UjhCeJJHb9aNipLU9BNB9lekRJCS1/KTwJLhI8DliINZw5la8IGIEi93kRF+uo8CLPhVcSyfWbnnz8Ns6wUPWupIeB5yI76UvRnwo8gQ8U4XDDpYDjTQd1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w0MHtjuLOB0x6YIhxA9jVBY4QB9MitIGbu0U4g813ZI=;
+ b=lUpFg15cQDvYg/dmkLvMb2qEWcppEpMcLhEPuqcPZoDnHcLZIgPmxRwgW7F4dTXOXx5tIbJ8dbeVIsS/2YF/AzcnuB3Ic3vQIYP+LJOkw6S/35nHyung4JNUlqeQyqF/eC2FVOYWcRDfwRodY3KqKnyUkJ2QEkZPhqj8dRo1rok=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by VI1PR04MB6848.eurprd04.prod.outlook.com (2603:10a6:803:13c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Wed, 19 Oct
+ 2022 11:09:51 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::84cf:df3f:2012:79ea]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::84cf:df3f:2012:79ea%5]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
+ 11:09:51 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org, lukas@wunner.de,
+        ilpo.jarvinen@linux.intel.com
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: [PATCH V2] tty: serial: fsl_lpuart: don't break the on-going transfer when global reset
+Date:   Wed, 19 Oct 2022 19:07:20 +0800
+Message-Id: <20221019110720.31722-1-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0047.apcprd02.prod.outlook.com
+ (2603:1096:4:196::14) To AS8PR04MB8404.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|VI1PR04MB6848:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9418579-eefc-4e12-2bff-08dab1c2712a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RNwIfle0EQqlK0hsV6Tzr5lpRbfTBl2oOQQbx0Mj0Qbv12rPInxV/peQABmN0Yp1h9zcgkKWxTOH2110aQa8pvtcdaZivZ3Y4LazzvAChpaMEN2noOqDNAMkfkKt1AlctEgzMx4gtzMXN8WRh3rMpPvn2m4T0dNkl3hZW+Zf3Mz5ItqK8Mir/WL2Ay9nopZKPwEtgpMLd7ggKsYPs92kq623gdtTDNinRzuCfp/mC0qKg4GkEpavg+j+PNSvFIYUncbwe2+LMrUBV5mk4O2iGlAG2hXxAJB06H06RDwHYXG25IoIaSFvK6omdCdhY5uIe4MkGhWGxcu10+vDwh3zyU9CuArA40TqUeXR8rpCMPKiu/IlSpx2S/8S8F3MLhxG2IgLmAiKwqj2rbjp7rxDNNkbpNNxFN45QLQUDT5j1Uc0C/tPli8Ng+sGUTBLiiUr3eupv62pZluEjRqlKF2RCy1HSbhK30q9YR0j4rILQB4vpadH3MfVSUAkOfLJGxnB+GQH/olrG6MPvrJapJ+s9SkSWhU2CT6030iSE/rY/gyc8gs9r+VqRHOyWBL7uCVS3/RBtxFvlGMb9XaRR30fmdrnwKAfo6hdKBqVYQaaXAROwIDlZCH7S7r0LFf/+iR7gjLdI21v6nsqd3R6SX8PElOOItFR1g4ZfLgLtk4evRVHJv+/BMddTZFuZ0D/QsWAl0Y4aY9Nr03RXgPlRns6iWs+X8UuMpzshXZmewaGgyo03uPxZnk7I6YQYqCj6NkjpFGsWRkN3cqwWt7JgVTirg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39860400002)(376002)(346002)(366004)(451199015)(8936002)(38350700002)(38100700002)(83380400001)(44832011)(5660300002)(41300700001)(4326008)(316002)(478600001)(1076003)(36756003)(66476007)(66946007)(66556008)(6666004)(52116002)(6512007)(2616005)(8676002)(26005)(6486002)(6506007)(186003)(2906002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rwiR7mdf/RTajtFdwskQ3xWXmbW4P/Nt9gsgjSp0nchk80R4xjJZsYNYwUDw?=
+ =?us-ascii?Q?fwccKrutMCVKhE1fINVtpwXGNjCdtrl5xUwAmfkOGgNipMM2ONXptNI978Xz?=
+ =?us-ascii?Q?N3ViqJdu8abb9IOaYayjrJdEgu8XHab+w1L2AMptZW0FbWRss917y36zUlRq?=
+ =?us-ascii?Q?r9rSo8UDo8ya+16K25CwmEB5VnzKl4MsiEMDdD4zkTEiJXYq1xmVuwFGt5DB?=
+ =?us-ascii?Q?7au2wvFXN+gkszMAzmIqxps8OJ+dOsgs1kmpo2URQF028FS3EHpw42NtuHZP?=
+ =?us-ascii?Q?E1MeVepWNFkF2D2grBJ+akIFpYVWhk5tVh+Y/Py3o69Iylc5qz+QxZIxAzkf?=
+ =?us-ascii?Q?dOJZ3FpooxWedjdOJReaNvMoD0+yaqTYA5aBEeAWlIEnsNRKxO9TTDATvvme?=
+ =?us-ascii?Q?mcGvwLQeFFy31kBEORrOoOycL0mXx/6abK1UcXGC3HzfhAOIOnV8NJQKaSMn?=
+ =?us-ascii?Q?PjCE8Js3RB87SuBeycGeVJoG7VKbJ52v/pm8WWRRXedhM40uJUlUG/bVFuc8?=
+ =?us-ascii?Q?wuXVEhxfu/AsaQn0In3b3Vc+zbaH8EH0ZII15Cy4yvZUcYPm/4FKIc46pjuP?=
+ =?us-ascii?Q?FQRXopQ/lLpqbGzx/9u3d8l7b4xTv9JnS14WpWyd9s6uNEf7nbJbyIES4tRj?=
+ =?us-ascii?Q?02SBoM9/KeYHqg1GrGY9IZpRkocJ0WLGW5uPXpcHRrMUxseou3oArnyqHSMc?=
+ =?us-ascii?Q?M1eHPolmwd7Q1XV7r1q/L9MCr69rjTHnbXAA/wD73xCkHkepVbESp1CFJ5A/?=
+ =?us-ascii?Q?rfIK5HciMbD9H8Z7QODZ3zv8qwbOzVTIef9yV/O8I+le0WL/BGi/lqPZByqP?=
+ =?us-ascii?Q?3IUnu0ozNQtssaZ+bIPpIIiGgruDiEFKZrQh+mNaEfRXafYRUUFzfvEOZYu3?=
+ =?us-ascii?Q?74dOPBOMx1hht/KoPitxzxrYSsY7YoZkLDnVeQ+FPICP4w//pqpBS7mdxTUW?=
+ =?us-ascii?Q?AJaprc6MaxdweksT6L3YlO9nGDVaTUjGX2rGuTrN4TGZgdJvHb2Yh2BM/wmq?=
+ =?us-ascii?Q?CK95bfLHUkMAd4SQYVyiuzQe2eI2xWBKnBA0z0CC30Rsl0QAPlqcu5CkbwFp?=
+ =?us-ascii?Q?ZxBmNMXgoiRXjQjVfUMqPsl8Pk0UOAmF2LWZU5qGjPeMxA1qWRBtKQBbiMK8?=
+ =?us-ascii?Q?rM+fC7R0Eh8pIO5FX45eQNR/UpElg1JFVJo0iC7m/BEEOyTSf47TGkSTTA2S?=
+ =?us-ascii?Q?dcS5G7a6ry+ImhjXOrt6xx0rX5Rvb/1DTN9vf7ZFh4FfXSH1oNzP8tXMcfG5?=
+ =?us-ascii?Q?oH3qfusbyDf8mGmlGCwKHrv+arEHBVXgIMPchDYe1JczcpDlEWmS+kj6MeZz?=
+ =?us-ascii?Q?IsOeeCQaz8CVaavQSp6AvcDwTOaOchrWdtj3Z6jIaK8AGnJZxyLUxEEmzMuG?=
+ =?us-ascii?Q?lE9/0EXk3XbiJLY1TRhH1YWnaiMlQiQCXaOHMGUKfI0eYUFDMGyQQvzA0+Ih?=
+ =?us-ascii?Q?iXm0jZjPpab/DANeMaekOLXngBQW5nnGxAy23DOObM+wGPDqeKVK+x90nIK4?=
+ =?us-ascii?Q?40gSyZE54NVRJpJ+WXcbEOYO9MDRKbMgLiLGbz3c88scHUO5iO5u5UpHkoX2?=
+ =?us-ascii?Q?91FloDfUPgqIXOnuxCHb09XrC9E/DUrayCVlEMXT?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9418579-eefc-4e12-2bff-08dab1c2712a
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 11:09:50.9676
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3SZ5hMFjQYoGsEAVOWKxRA0a8GlLaE8vc02Pmt7YoFeFndTDJ8udd4qzNojubjUVESxoTvHhMtppOSeT2BhMYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6848
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,180 +111,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sdhci_uhs2_do_detect_init() is a sdhci version of mmc's uhs2_detect_init
-operation. After detected, the host's UHS-II capabilities will be set up
-here and interrupts will also be enabled.
+lpuart_global_reset() shouldn't break the on-going transmit engin, need
+to recover the on-going data transfer after reset.
 
-Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
-Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+This can help earlycon here, since commit 60f361722ad2 ("serial:
+fsl_lpuart: Reset prior to registration") moved lpuart_global_reset()
+before uart_add_one_port(), earlycon is writing during global reset,
+as global reset will disable the TX and clear the baud rate register,
+which caused the earlycon cannot work any more after reset, needs to
+restore the baud rate and re-enable the transmitter to recover the
+earlycon write.
+
+Fixes: bd5305dcabbc ("tty: serial: fsl_lpuart: do software reset for imx7ulp and imx8qxp")
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
 ---
- drivers/mmc/host/sdhci-uhs2.c | 146 ++++++++++++++++++++++++++++++++++
- 1 file changed, 146 insertions(+)
+Changes in V2:
+1. The while loop may never exit as the stat and sfifo are not re-read inside
+the loop, fix that.
+---
+ drivers/tty/serial/fsl_lpuart.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
-index b535a47dc55a..9ceae552c323 100644
---- a/drivers/mmc/host/sdhci-uhs2.c
-+++ b/drivers/mmc/host/sdhci-uhs2.c
-@@ -409,12 +409,158 @@ int sdhci_uhs2_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
-  *                                                                           *
- \*****************************************************************************/
- 
-+static int sdhci_uhs2_interface_detect(struct sdhci_host *host)
-+{
-+	/* 100ms */
-+	int timeout = 100000;
-+	u32 val;
-+
-+	udelay(200); /* wait for 200us before check */
-+
-+	if (read_poll_timeout_atomic(sdhci_readl, val, (val & SDHCI_UHS2_IF_DETECT),
-+				     100, timeout, true, host, SDHCI_PRESENT_STATE)) {
-+		pr_warn("%s: not detect UHS2 interface in 200us.\n", mmc_hostname(host->mmc));
-+		sdhci_dumpregs(host);
-+		return -EIO;
-+	}
-+
-+	/* Enable UHS2 error interrupts */
-+	sdhci_uhs2_clear_set_irqs(host, SDHCI_INT_ALL_MASK,
-+				  SDHCI_UHS2_ERR_INT_STATUS_MASK);
-+
-+	/* 150ms */
-+	timeout = 150000;
-+	if (read_poll_timeout_atomic(sdhci_readl, val, (val & SDHCI_UHS2_LANE_SYNC),
-+				     100, timeout, true, host, SDHCI_PRESENT_STATE)) {
-+		pr_warn("%s: UHS2 Lane sync fail in 150ms.\n", mmc_hostname(host->mmc));
-+		sdhci_dumpregs(host);
-+		return -EIO;
-+	}
-+
-+	DBG("%s: UHS2 Lane synchronized in UHS2 mode, PHY is initialized.\n",
-+	    mmc_hostname(host->mmc));
-+	return 0;
-+}
-+
-+static int sdhci_uhs2_init(struct sdhci_host *host)
-+{
-+	u16 caps_ptr = 0;
-+	u32 caps_gen = 0;
-+	u32 caps_phy = 0;
-+	u32 caps_tran[2] = {0, 0};
-+	struct mmc_host *mmc = host->mmc;
-+
-+	caps_ptr = sdhci_readw(host, SDHCI_UHS2_HOST_CAPS_PTR);
-+	if (caps_ptr < 0x100 || caps_ptr > 0x1FF) {
-+		pr_err("%s: SDHCI_UHS2_HOST_CAPS_PTR(%d) is wrong.\n",
-+		       mmc_hostname(mmc), caps_ptr);
-+		return -ENODEV;
-+	}
-+	caps_gen = sdhci_readl(host,
-+			       caps_ptr + SDHCI_UHS2_HOST_CAPS_GEN_OFFSET);
-+	caps_phy = sdhci_readl(host,
-+			       caps_ptr + SDHCI_UHS2_HOST_CAPS_PHY_OFFSET);
-+	caps_tran[0] = sdhci_readl(host,
-+				   caps_ptr + SDHCI_UHS2_HOST_CAPS_TRAN_OFFSET);
-+	caps_tran[1] = sdhci_readl(host,
-+				   caps_ptr
-+					+ SDHCI_UHS2_HOST_CAPS_TRAN_1_OFFSET);
-+
-+	/* General Caps */
-+	mmc->uhs2_caps.dap = caps_gen & SDHCI_UHS2_HOST_CAPS_GEN_DAP_MASK;
-+	mmc->uhs2_caps.gap = (caps_gen & SDHCI_UHS2_HOST_CAPS_GEN_GAP_MASK) >>
-+			     SDHCI_UHS2_HOST_CAPS_GEN_GAP_SHIFT;
-+	mmc->uhs2_caps.n_lanes = (caps_gen & SDHCI_UHS2_HOST_CAPS_GEN_LANE_MASK)
-+			>> SDHCI_UHS2_HOST_CAPS_GEN_LANE_SHIFT;
-+	mmc->uhs2_caps.addr64 =
-+		(caps_gen & SDHCI_UHS2_HOST_CAPS_GEN_ADDR_64) ? 1 : 0;
-+	mmc->uhs2_caps.card_type =
-+		(caps_gen & SDHCI_UHS2_HOST_CAPS_GEN_DEV_TYPE_MASK) >>
-+		SDHCI_UHS2_HOST_CAPS_GEN_DEV_TYPE_SHIFT;
-+
-+	/* PHY Caps */
-+	mmc->uhs2_caps.phy_rev = caps_phy & SDHCI_UHS2_HOST_CAPS_PHY_REV_MASK;
-+	mmc->uhs2_caps.speed_range =
-+		(caps_phy & SDHCI_UHS2_HOST_CAPS_PHY_RANGE_MASK)
-+		>> SDHCI_UHS2_HOST_CAPS_PHY_RANGE_SHIFT;
-+	mmc->uhs2_caps.n_lss_sync =
-+		(caps_phy & SDHCI_UHS2_HOST_CAPS_PHY_N_LSS_SYN_MASK)
-+		>> SDHCI_UHS2_HOST_CAPS_PHY_N_LSS_SYN_SHIFT;
-+	mmc->uhs2_caps.n_lss_dir =
-+		(caps_phy & SDHCI_UHS2_HOST_CAPS_PHY_N_LSS_DIR_MASK)
-+		>> SDHCI_UHS2_HOST_CAPS_PHY_N_LSS_DIR_SHIFT;
-+	if (mmc->uhs2_caps.n_lss_sync == 0)
-+		mmc->uhs2_caps.n_lss_sync = 16 << 2;
-+	else
-+		mmc->uhs2_caps.n_lss_sync <<= 2;
-+	if (mmc->uhs2_caps.n_lss_dir == 0)
-+		mmc->uhs2_caps.n_lss_dir = 16 << 3;
-+	else
-+		mmc->uhs2_caps.n_lss_dir <<= 3;
-+
-+	/* LINK/TRAN Caps */
-+	mmc->uhs2_caps.link_rev =
-+		caps_tran[0] & SDHCI_UHS2_HOST_CAPS_TRAN_LINK_REV_MASK;
-+	mmc->uhs2_caps.n_fcu =
-+		(caps_tran[0] & SDHCI_UHS2_HOST_CAPS_TRAN_N_FCU_MASK)
-+		>> SDHCI_UHS2_HOST_CAPS_TRAN_N_FCU_SHIFT;
-+	if (mmc->uhs2_caps.n_fcu == 0)
-+		mmc->uhs2_caps.n_fcu = 256;
-+	mmc->uhs2_caps.host_type =
-+		(caps_tran[0] & SDHCI_UHS2_HOST_CAPS_TRAN_HOST_TYPE_MASK)
-+		>> SDHCI_UHS2_HOST_CAPS_TRAN_HOST_TYPE_SHIFT;
-+	mmc->uhs2_caps.maxblk_len =
-+		(caps_tran[0] & SDHCI_UHS2_HOST_CAPS_TRAN_BLK_LEN_MASK)
-+		>> SDHCI_UHS2_HOST_CAPS_TRAN_BLK_LEN_SHIFT;
-+	mmc->uhs2_caps.n_data_gap =
-+		caps_tran[1] & SDHCI_UHS2_HOST_CAPS_TRAN_1_N_DATA_GAP_MASK;
-+
-+	return 0;
-+}
-+
-+static int sdhci_uhs2_do_detect_init(struct mmc_host *mmc)
-+{
-+	struct sdhci_host *host = mmc_priv(mmc);
-+	int ret = -EIO;
-+
-+	DBG("%s: begin UHS2 init.\n", __func__);
-+
-+	if (sdhci_uhs2_interface_detect(host)) {
-+		pr_warn("%s: cannot detect UHS2 interface.\n",
-+			mmc_hostname(host->mmc));
-+		goto out;
-+	}
-+
-+	if (sdhci_uhs2_init(host)) {
-+		pr_warn("%s: UHS2 init fail.\n", mmc_hostname(host->mmc));
-+		goto out;
-+	}
-+
-+	/* Init complete, do soft reset and enable UHS2 error irqs. */
-+	host->ops->uhs2_reset(host, SDHCI_UHS2_SW_RESET_SD);
-+	sdhci_uhs2_clear_set_irqs(host, SDHCI_INT_ALL_MASK,
-+				  SDHCI_UHS2_ERR_INT_STATUS_MASK);
-+	/*
-+	 * !!! SDHCI_INT_ENABLE and SDHCI_SIGNAL_ENABLE was cleared
-+	 * by SDHCI_UHS2_SW_RESET_SD
-+	 */
-+	sdhci_writel(host, host->ier, SDHCI_INT_ENABLE);
-+	sdhci_writel(host, host->ier, SDHCI_SIGNAL_ENABLE);
-+
-+	ret = 0;
-+out:
-+	return ret;
-+}
-+
- static int sdhci_uhs2_host_ops_init(struct sdhci_host *host)
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 67fa113f77d4..9a0781395b1f 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -408,11 +408,9 @@ static int lpuart_global_reset(struct lpuart_port *sport)
  {
- 	host->mmc_host_ops.start_signal_voltage_switch =
- 		sdhci_uhs2_start_signal_voltage_switch;
- 	host->mmc_host_ops.uhs2_set_ios = sdhci_uhs2_set_ios;
+ 	struct uart_port *port = &sport->port;
+ 	void __iomem *global_addr;
++	unsigned long tx_enable, bd;
+ 	int ret;
  
-+	if (!host->mmc_host_ops.uhs2_detect_init)
-+		host->mmc_host_ops.uhs2_detect_init = sdhci_uhs2_do_detect_init;
+-	if (uart_console(port))
+-		return 0;
+-
+ 	ret = clk_prepare_enable(sport->ipg_clk);
+ 	if (ret) {
+ 		dev_err(sport->port.dev, "failed to enable uart ipg clk: %d\n", ret);
+@@ -420,11 +418,29 @@ static int lpuart_global_reset(struct lpuart_port *sport)
+ 	}
+ 
+ 	if (is_imx7ulp_lpuart(sport) || is_imx8qxp_lpuart(sport)) {
++		/*
++		 * If the transmitter is used by earlycon, wait transmit engin complete
++		 * and then reset
++		 */
++		tx_enable = lpuart32_read(port, UARTCTRL) & UARTCTRL_TE;
++		if (tx_enable) {
++			bd = lpuart32_read(&sport->port, UARTBAUD);
++			while (!(lpuart32_read(port, UARTSTAT) & UARTSTAT_TC &&
++				 lpuart32_read(port, UARTFIFO) & UARTFIFO_TXEMPT))
++				cpu_relax();
++		}
 +
- 	return 0;
- }
+ 		global_addr = port->membase + UART_GLOBAL - IMX_REG_OFF;
+ 		writel(UART_GLOBAL_RST, global_addr);
+ 		usleep_range(GLOBAL_RST_MIN_US, GLOBAL_RST_MAX_US);
+ 		writel(0, global_addr);
+ 		usleep_range(GLOBAL_RST_MIN_US, GLOBAL_RST_MAX_US);
++
++		/* Recover the transmitter for earlycon */
++		if (tx_enable) {
++			lpuart32_write(port, bd, UARTBAUD);
++			lpuart32_write(port, UARTCTRL_TE, UARTCTRL);
++		}
+ 	}
  
+ 	clk_disable_unprepare(sport->ipg_clk);
 -- 
-2.25.1
+2.17.1
 
