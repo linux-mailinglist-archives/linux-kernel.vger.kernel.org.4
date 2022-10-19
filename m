@@ -2,98 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AB960471B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF0560471F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiJSN3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S230110AbiJSNai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiJSN26 (ORCPT
+        with ESMTP id S231183AbiJSNaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:28:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A108E19B649
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:15:38 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol8u1-0005fK-0B; Wed, 19 Oct 2022 15:14:33 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol8tz-0008AM-K3; Wed, 19 Oct 2022 15:14:31 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ol8ty-00958M-Nf; Wed, 19 Oct 2022 15:14:30 +0200
-Date:   Wed, 19 Oct 2022 15:14:30 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 17/44] serial: imx: Use uart_xmit_advance()
-Message-ID: <20221019131430.r336etgdzvocuzsx@pengutronix.de>
-References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
- <20221019091151.6692-18-ilpo.jarvinen@linux.intel.com>
+        Wed, 19 Oct 2022 09:30:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540091FF8D;
+        Wed, 19 Oct 2022 06:17:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C03E861889;
+        Wed, 19 Oct 2022 13:15:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8CB8C433C1;
+        Wed, 19 Oct 2022 13:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666185359;
+        bh=pY5TUB/6IlNSwyBWrO9lqOljFr0jiKToNLZXhibz+C4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=a16lRnhE4AxisAaExKttajlfHCwytQPBcg9Bhyyi/cED8dcdLVtowwbiNXUcijgNC
+         +YlMyFSbSYZXhvsLuIhl/J0fmqCBahLxAooQEJ8DAlfb9vbOK9Dp/nzmoGFtXCWZiS
+         A7S0s8OE1TW3DllaqG7XAjrNaHtNIPkZzReN2pujwtm2YQ+EEU9WYkaL9D+w8xzh6s
+         TTrxW3kE8Bf1aqDN5P2s47AEdGItFUvqezuU2gu9jmoPGRAyd1zsR5YunbWrVEEfhN
+         vR/ICkY0bsM3by0dqwY90nmaXE2OC33/Mc4d9v63Ln896lVmgc3QL3menVAtLzATvx
+         VHV/puX0EQu3A==
+Message-ID: <73cbfbaf-9397-00ab-4844-e5dd96958912@kernel.org>
+Date:   Wed, 19 Oct 2022 15:15:54 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p3rbgh55ahrvus27"
-Content-Disposition: inline
-In-Reply-To: <20221019091151.6692-18-ilpo.jarvinen@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 1/2] rv/dot2c: Make automaton definition static
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <ffbb92010f643307766c9307fd42f416e5b85fa0.1661266564.git.bristot@kernel.org>
+ <20221018182553.06f13a50@gandalf.local.home>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20221018182553.06f13a50@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/19/22 00:25, Steven Rostedt wrote:
+> On Tue, 23 Aug 2022 17:20:28 +0200
+> Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+> 
+>> Monitor's automata definition is only used locally, so make dot2c generate
+>> a static definition.
+>>
+>> Link: https://lore.kernel.org/all/202208210332.gtHXje45-lkp@intel.com
+>> Link: https://lore.kernel.org/all/202208210358.6HH3OrVs-lkp@intel.com
+>>
+> Somehow this fell through the cracks.
+> 
+> Daniel, is there any reason I shouldn't pull this in now?
 
---p3rbgh55ahrvus27
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oops... yes, it can be pulled.
 
-On Wed, Oct 19, 2022 at 12:11:24PM +0300, Ilpo J=E4rvinen wrote:
-> Take advantage of the new uart_xmit_advance() helper.
->=20
-> Signed-off-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards and thanks for adapting the imx driver
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---p3rbgh55ahrvus27
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNP+DMACgkQwfwUeK3K
-7AkyiwgAnkTyG3dwTGHFIhxGVuqA0lkV/b1W0WiCAgIgqzW3uHNEz+a12AzplRXI
-Mdzm9NVPSwrotIG8TfB3o0a7tLqrpAANHiXt05sgwVWazN1y6DQ2djtSOsxqxxaa
-lyKvjoHdPLVVVuVGnoE+wQ18HESKtKxDd2cJz1850qQUoZFIFq5u1tMYh6p3tCiT
-CSU2mlHicwaNAklW6flHFPFH8Ox7tKkXnWapbUCQVlm1ijACM2UyVk4oJ9h9/N/U
-7czHK9HZnX0yU9ZLrA09ro7KcPO1kFZyuJQVIATReHdjb6e4f14oKO8bWxlpOEy7
-eIv6/Ahz46eA4WA3UhBEamBKXth34A==
-=U5KG
------END PGP SIGNATURE-----
-
---p3rbgh55ahrvus27--
+-- Daniel
