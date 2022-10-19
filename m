@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFEB603BA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B53603BA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiJSIhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S230170AbiJSIhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiJSIh0 (ORCPT
+        with ESMTP id S230071AbiJSIh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:37:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5274F677;
-        Wed, 19 Oct 2022 01:37:24 -0700 (PDT)
+        Wed, 19 Oct 2022 04:37:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C077D7BB;
+        Wed, 19 Oct 2022 01:37:26 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 131EF339ED;
-        Wed, 19 Oct 2022 08:37:22 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5F99F20382;
+        Wed, 19 Oct 2022 08:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666168642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1666168645; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D7VyTjcX7VW48TVL80NmZysRhyGrdRwOMNYwKQUMavo=;
-        b=edqx8wbz4Mm+r4zK7xBid02cl0Hen8mMeleU9d9POi505+eX92W7XmE4mbJgKSjnux9OrX
-        HR0EtpTnR6+nINT+Qn75I5xYJIG1kMX2dUK4ki6v3695x5G2bDM9W8FeHutx/GCeg7enWV
-        HDBk4lpFsOm0lqEFWM8mD4qWqD+NibI=
+        bh=nDl7gQ8N7tn2RB1Gh66JslmBkmAIPalxnvJSrXhYvqQ=;
+        b=pgqxuoXE0xR8Djlfp+UWAPSVNOMcy8HcaYtM8psOj4cHlq7SEG9CFhupuWyAQ1AiXcXKq9
+        Cih0uYHHzco9Ksw++jgPUG9a8zTD/Kq/QQlh6fZJKGqXKOCbCLkHsAG8CN163f+NNJQCHq
+        e1YD0AW1OJUan0dCOj8wBcFvR0YaneU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666168642;
+        s=susede2_ed25519; t=1666168645;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D7VyTjcX7VW48TVL80NmZysRhyGrdRwOMNYwKQUMavo=;
-        b=dZPyjF1y8YbtDITpU29vZ91BAv8tTFw6T4i8RK/1levpSBAkUq5I+PahlYVT0y72721d2d
-        GSIjW/09iXZBXYAQ==
+        bh=nDl7gQ8N7tn2RB1Gh66JslmBkmAIPalxnvJSrXhYvqQ=;
+        b=xDK9iTx0RlIKR7s5AblRCrV1tEdBD4Z89I2aHzDYTpLHjuz2wLAP1vfMEFQbQUmo7K1CLi
+        gVyC5su9vtvv7sBg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0354F13345;
-        Wed, 19 Oct 2022 08:37:22 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F83C13345;
+        Wed, 19 Oct 2022 08:37:25 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id RHk4AEK3T2NLZQAAMHmgww
-        (envelope-from <nstange@suse.de>); Wed, 19 Oct 2022 08:37:22 +0000
+        id 7b/7EkW3T2NVZQAAMHmgww
+        (envelope-from <nstange@suse.de>); Wed, 19 Oct 2022 08:37:25 +0000
 From:   Nicolai Stange <nstange@suse.de>
 To:     Steffen Klassert <steffen.klassert@secunet.com>,
         Daniel Jordan <daniel.m.jordan@oracle.com>
 Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
         Martin Doucha <mdoucha@suse.cz>, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org, Nicolai Stange <nstange@suse.de>
-Subject: [PATCH 2/5] padata: make padata_free_shell() to respect pd's ->refcnt
-Date:   Wed, 19 Oct 2022 10:37:05 +0200
-Message-Id: <20221019083708.27138-3-nstange@suse.de>
+Subject: [PATCH 3/5] padata: grab parallel_data refcnt for reorder
+Date:   Wed, 19 Oct 2022 10:37:06 +0200
+Message-Id: <20221019083708.27138-4-nstange@suse.de>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221019083708.27138-1-nstange@suse.de>
 References: <20221019083708.27138-1-nstange@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,68 +72,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On a PREEMPT kernel, the following has been observed while running
-pcrypt_aead01 from LTP:
+On entry of padata_do_serial(), the in-flight padata_priv owns a reference
+to the associated parallel_data instance.
 
-  [ ] general protection fault: 0000 [#1] PREEMPT_RT SMP PTI
-  <...>
-  [ ] Workqueue: pdecrypt_parallel padata_parallel_worker
-  [ ] RIP: 0010:padata_reorder+0x19/0x120
-  <...>
-  [ ] Call Trace:
-  [ ]  padata_parallel_worker+0xa3/0xf0
-  [ ]  process_one_work+0x1db/0x4a0
-  [ ]  worker_thread+0x2d/0x3c0
-  [ ]  ? process_one_work+0x4a0/0x4a0
-  [ ]  kthread+0x159/0x180
-  [ ]  ? kthread_park+0xb0/0xb0
-  [ ]  ret_from_fork+0x35/0x40
+However, as soon as the padata_priv got enqueued on the reorder list, it
+can be completed from a different context, causing the reference to get
+released in the course.
 
-The pcrypt_aead01 testcase basically runs a NEWALG/DELALG sequence for some
-fixed pcrypt instance in a loop, back to back.
+This would potentially cause UAFs from the subsequent padata_reorder()
+operations invoked from the enqueueing padata_do_serial() or from the
+reorder work.
 
-The problem is that once the last ->serial() in padata_serial_worker() is
-getting invoked, the pcrypt requests from the selftests would signal
-completion, and pcrypt_aead01 can move on and subsequently issue a DELALG.
-Upon pcrypt instance deregistration, the associated padata_shell would get
-destroyed, which in turn would unconditionally free the associated
-parallel_data instance.
+Note that this is a purely theroretical concern, the problem has never been
+actually observed -- it would require multiple pcrypt request submissions
+racing against each other, ultimately a pcrypt instance destruction
+(DELALG) short after request completions as well as unfortunate timing.
 
-If padata_serial_worker() now resumes operation after e.g. having
-previously been preempted upon the return from the last of those ->serial()
-callbacks, its subsequent accesses to pd for managing the ->refcnt will
-all be UAFs. In particular, if the memory backing pd has meanwhile been
-reused for some new parallel_data allocation, e.g in the course of
-processing another subsequent NEWALG request, the padata_serial_worker()
-might find the initial ->refcnt of one and free pd from under that NEWALG
-or the associated selftests respectively, leading to "secondary" UAFs such
-as in the Oops above.
+However, for the sake of correctness, it is still worth fixing.
 
-Note that as it currently stands, a padata_shell owns a reference on its
-associated parallel_data already. So fix the UAF in padata_serial_worker()
-by making padata_free_shell() to not unconditionally free the shell's
-associated parallel_data, but to properly drop that reference via
-padata_put_pd() instead.
+Make padata_do_serial() grab a reference count on the parallel_data for
+the subsequent reorder operation(s). As long as the padata_priv has not
+been enqueued, this is safe, because as mentioned above, in-flight
+pdata_privs own a reference already.
 
-Fixes: 07928d9bfc81 ("padata: Remove broken queue flushing")
+Note that padata_reorder() might schedule another padata_reorder() work
+and thus, care must be taken to not prematurely release that "reorder
+refcount" from padata_do_serial() again in case that has happened.
+Make padata_reorder() return a bool for indicating whether or not a
+reorder work has been scheduled. Let padata_do_serial() drop its refcount
+only if this is not the case. Accordingly, make the reorder work handler,
+invoke_padata_reorder(), drop it then as appropriate.
+
+A remark on the commit chosen for the Fixes tag reference below: before
+commit bbefa1dd6a6d ("crypto: pcrypt - Avoid deadlock by using per-instance
+padata queues"), the padata_parallel lifetime had been tied to the
+padata_instance. The padata_free() resp. padata_stop() issued a
+synchronize_rcu() before padata_free_pd() from the instance destruction
+path, rendering UAFs from the padata_do_serial()=>padata_reorder()
+invocations with BHs disabled impossible AFAICS. With that, the
+padata_reorder() work remains to be considered. Before
+commit b128a3040935 ("padata: allocate workqueue internally"), the
+workqueue got destroyed (from pcrypt), hence drained, before the padata
+instance destruction, but this change moved that to after the
+padata_free_pd() invocation from __padata_free(). So, while the Fixes
+reference from below is most likely technically correct, I would still like
+to reiterate that this problem is probably hard to trigger in practice,
+even more so before commit bbefa1dd6a6d ("crypto: pcrypt - Avoid deadlock
+by using per-instance padata queues").
+
+Fixes: b128a3040935 ("padata: allocate workqueue internally")
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- kernel/padata.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/padata.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/padata.c b/kernel/padata.c
-index 3bd1e23f089b..0bf8c80dad5a 100644
+index 0bf8c80dad5a..b79226727ef7 100644
 --- a/kernel/padata.c
 +++ b/kernel/padata.c
-@@ -1112,7 +1112,7 @@ void padata_free_shell(struct padata_shell *ps)
+@@ -275,7 +275,7 @@ static struct padata_priv *padata_find_next(struct parallel_data *pd,
+ 	return padata;
+ }
  
- 	mutex_lock(&ps->pinst->lock);
- 	list_del(&ps->list);
--	padata_free_pd(rcu_dereference_protected(ps->pd, 1));
-+	padata_put_pd(rcu_dereference_protected(ps->pd, 1));
- 	mutex_unlock(&ps->pinst->lock);
+-static void padata_reorder(struct parallel_data *pd)
++static bool padata_reorder(struct parallel_data *pd)
+ {
+ 	struct padata_instance *pinst = pd->ps->pinst;
+ 	int cb_cpu;
+@@ -294,7 +294,7 @@ static void padata_reorder(struct parallel_data *pd)
+ 	 * care for all the objects enqueued during the holdtime of the lock.
+ 	 */
+ 	if (!spin_trylock_bh(&pd->lock))
+-		return;
++		return false;
  
- 	kfree(ps);
+ 	while (1) {
+ 		padata = padata_find_next(pd, true);
+@@ -331,17 +331,23 @@ static void padata_reorder(struct parallel_data *pd)
+ 
+ 	reorder = per_cpu_ptr(pd->reorder_list, pd->cpu);
+ 	if (!list_empty(&reorder->list) && padata_find_next(pd, false))
+-		queue_work(pinst->serial_wq, &pd->reorder_work);
++		return queue_work(pinst->serial_wq, &pd->reorder_work);
++
++	return false;
+ }
+ 
+ static void invoke_padata_reorder(struct work_struct *work)
+ {
+ 	struct parallel_data *pd;
++	bool keep_refcnt;
+ 
+ 	local_bh_disable();
+ 	pd = container_of(work, struct parallel_data, reorder_work);
+-	padata_reorder(pd);
++	keep_refcnt = padata_reorder(pd);
+ 	local_bh_enable();
++
++	if (!keep_refcnt)
++		padata_put_pd(pd);
+ }
+ 
+ static void padata_serial_worker(struct work_struct *serial_work)
+@@ -392,6 +398,15 @@ void padata_do_serial(struct padata_priv *padata)
+ 	struct padata_list *reorder = per_cpu_ptr(pd->reorder_list, hashed_cpu);
+ 	struct padata_priv *cur;
+ 
++	/*
++	 * The in-flight padata owns a reference on pd. However, as
++	 * soon as it's been enqueued on the reorder list, another
++	 * task can dequeue and complete it, thereby dropping the
++	 * reference. Grab another reference here, it will eventually
++	 * be released from a reorder work, if any, or below.
++	 */
++	padata_get_pd(pd);
++
+ 	spin_lock(&reorder->lock);
+ 	/* Sort in ascending order of sequence number. */
+ 	list_for_each_entry_reverse(cur, &reorder->list, list)
+@@ -407,7 +422,8 @@ void padata_do_serial(struct padata_priv *padata)
+ 	 */
+ 	smp_mb();
+ 
+-	padata_reorder(pd);
++	if (!padata_reorder(pd))
++		padata_put_pd(pd);
+ }
+ EXPORT_SYMBOL(padata_do_serial);
+ 
 -- 
 2.37.3
 
