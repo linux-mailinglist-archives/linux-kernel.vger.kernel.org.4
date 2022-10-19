@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C4A604AAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BF9604AB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiJSPJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
+        id S231313AbiJSPKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbiJSPIr (ORCPT
+        with ESMTP id S232509AbiJSPJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:08:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4508E0D9;
-        Wed, 19 Oct 2022 08:00:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Oct 2022 11:09:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F02D13F1B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666191747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PuGHfrLsMCWGVahZJWXTgYQa14ARBbhcsNOf6vopbCQ=;
+        b=bukGPRteUO5/IoMjs7p4qVtTch3El2uPHDuGXmOJVFNGRvC4SdGy66H3Yug5juy4Y8kE3g
+        tbqnK9AtCGIAC1BhYF2MPF0UgRm4pVVZAtfFGqFX/dVnVKdsVT/JVOE6G0FJOZe3ilQfnA
+        uYvUIzZ7eIB0ZyhdNwTWgXY+QBJoKQo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-645-tE1eHk-AO7i8LxfgR7FYyw-1; Wed, 19 Oct 2022 11:02:23 -0400
+X-MC-Unique: tE1eHk-AO7i8LxfgR7FYyw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75E1B61929;
-        Wed, 19 Oct 2022 15:00:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5613EC433C1;
-        Wed, 19 Oct 2022 15:00:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666191655;
-        bh=7I7sjR3Gz/WEhc33eidz6uHor5l2/Hm/OLxObdG7yG8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sog1tByziDJHCwjc4iNK++1OQnMnVOsC2tejISrPvGOhBEjRrdAKDbuex/sqNU+HN
-         6elLnkGOLlGv1O1aIfaJ6lcGouACd/05Y6BEIffQG4aIf1+rehV7ZRaE1C6sG7RGRb
-         znSR961sDjRUk3FRLo8+Jokm8Z8lYyfk+P510w/Y=
-Date:   Wed, 19 Oct 2022 17:00:52 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     tglx@linutronix.de, akpm@linux-foundation.org, shuah@kernel.org,
-        keescook@chromium.org, joe@perches.com, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 0/2] SPDX: add copyleft-next-0.3.1
-Message-ID: <Y1ARJIhR9oldlXr5@kroah.com>
-References: <20221003165849.1658170-1-mcgrof@kernel.org>
- <Y0/7FZCk7D+ygf2o@bombadil.infradead.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BDFB18ABFB3;
+        Wed, 19 Oct 2022 15:02:06 +0000 (UTC)
+Received: from [10.22.33.65] (unknown [10.22.33.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3955D9D464;
+        Wed, 19 Oct 2022 15:02:03 +0000 (UTC)
+Message-ID: <28264558-5f3f-9521-ced2-2c94a27002ec@redhat.com>
+Date:   Wed, 19 Oct 2022 11:02:00 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0/7FZCk7D+ygf2o@bombadil.infradead.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 4/5] locking/rwsem: Enable direct rwsem lock handoff
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221017211356.333862-1-longman@redhat.com>
+ <20221018111424.1007-1-hdanton@sina.com>
+ <9b63611e-8d9a-529b-dcdc-05b10a8a712a@quicinc.com>
+ <20221018235138.1088-1-hdanton@sina.com>
+ <20221019022934.1166-1-hdanton@sina.com>
+ <20221019070559.1220-1-hdanton@sina.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221019070559.1220-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 06:26:45AM -0700, Luis Chamberlain wrote:
-> On Mon, Oct 03, 2022 at 09:58:47AM -0700, Luis Chamberlain wrote:
-> > As suggested by Thomas Gleixner, I'm following up to move on with
-> > the SPDX tag needed for copyleft-next-0.3.1. I've split this out
-> > from the test_sysfs selftest so to separate review from that.
-> > 
-> > Changes on this v11:
-> >   o Fixed a minor typo on patch #2 as noted by Kees Cook
-> >   o Added Reviewed-by tags by Kees Cook
-> > 
-> > Changes on this v10:
-> >   o embraced paragraph from Thomas Gleixner which helps explain why             
-> >     the OR operator in the SPDX license name
-> >   o dropped the GPL-2.0 and GPL-2.0+ tags as suggested by Thomas Gleixner
-> >     as these are outdated (still valid) in the SPDX spec
-> >   o trimmed the Cc list to remove the test_sysfs / block layer / fs folks as
-> >     the test_sysfs stuff is now dropped from consideration in this series
-> > 
-> > Prior to this the series was at v9 but it also had the test_sysfs and its
-> > changes, its history can be found here:
-> > 
-> > https://lore.kernel.org/all/20211029184500.2821444-1-mcgrof@kernel.org/
-> > 
-> > Luis Chamberlain (2):
-> >   LICENSES: Add the copyleft-next-0.3.1 license
-> >   testing: use the copyleft-next-0.3.1 SPDX tag
-> > 
-> >  LICENSES/dual/copyleft-next-0.3.1        | 236 +++++++++++++++++++++++
-> >  lib/test_kmod.c                          |  12 +-
-> >  lib/test_sysctl.c                        |  12 +-
-> >  tools/testing/selftests/kmod/kmod.sh     |  13 +-
-> >  tools/testing/selftests/sysctl/sysctl.sh |  12 +-
-> >  5 files changed, 240 insertions(+), 45 deletions(-)
-> >  create mode 100644 LICENSES/dual/copyleft-next-0.3.1
-> 
-> *poke*
+On 10/19/22 03:05, Hillf Danton wrote:
+> On 18 Oct 2022 22:49:02 -0400 Waiman Long <longman@redhat.com>
+>> On 10/18/22 22:29, Hillf Danton wrote:
+>>> If handoff grants rwsem to a read waiter then the read fast path may revive.
+>> I don't quite understand what you mean by "read fast path may revive".
+> Subsequent readers may take rwsem without going the slow path after a
+> read waiter is granted.
+That may not be true. As long as there are still waiters in the wait 
+queue, a reader has to go into the slow path and queued up in the wait 
+queue. This is is to prevent a continuous stream of readers from 
+starving writers in the wait queue.
+>
+> OTOH even after the check for single BIAS, another reader may come in
+> and add its BIAS to count, which builds the same count as multiple
+> readers came in before the check.
 
-It's been 2 days since the merge window ended.  And my todo queue is:
+That is true, but hopefully we will eventually run out reader trying to 
+get a read lock on a given rwsem.
 
-	$ mdfrm -c todo/
-	1410 messages in todo/
+Cheers,
+Longman
 
-Please give me a chance to catch up...
 
-thanks,
-
-greg k-h
