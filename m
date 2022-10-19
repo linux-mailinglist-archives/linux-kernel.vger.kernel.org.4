@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41C3604B6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B44604B6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiJSP3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S232178AbiJSPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbiJSP3N (ORCPT
+        with ESMTP id S232797AbiJSP3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:29:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197722EF0E;
-        Wed, 19 Oct 2022 08:21:31 -0700 (PDT)
+        Wed, 19 Oct 2022 11:29:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE38E106E16
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:21:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0112C6183B;
-        Wed, 19 Oct 2022 15:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14141C433D6;
-        Wed, 19 Oct 2022 15:21:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5310D6184B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FACC433D7;
+        Wed, 19 Oct 2022 15:21:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666192864;
-        bh=yWpP5rcBA/V4zM+3Kf0SHoYs8NLhaoSKrOLcnNumx0U=;
+        s=k20201202; t=1666192901;
+        bh=eR60voGgjZ0JfRrxHEMJQ06aOT1Y9tisHlHTWeTdtWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T0ACXHiaI0xSYoHeg+S7sBaOQxPRtEET+I/nq8S1ezrUd673bqnwW1by0S6xIrMIV
-         H9gDsPGfuGmTFQxDoISfFprnOo3nNljHFz7Cdzr9kZcQEFUEwQ+0SqfFk6cggqxq0b
-         Y/Iz8gioR1ELb4f1YbT+QaZ5gpNRdhGy8aPd+O3PALJSiD8GEZUe21LvPIGNBjdqpB
-         R7Mct+diTuhDEVdZYsZI659jTIq+S6Nq81p5xCxicY89GqNXhM7B8jz0XG4pbf1+2U
-         JIFYnTPgFXnmJCSU6xIsEOHCeBZIgy3LJt8IyL6xbKN6qGoVbumE1DIvPRvXVtiD56
-         uhr00kvUiZc3Q==
+        b=cosxhlVJ3e1PjbvYh25SF7dLBjNOmA5czQCsC0BlfYfBczyi/5/yjSCnok+ax33+b
+         7LVcIvgDR98FWQzWi4Agdkb6YUKfSmwB+4YhGTcuU97zPzMxpozbK7HQY/z4p2OyFa
+         e+AE0sPHrQF+b3USOTv9GYc6IzQ9B6ftlwiwOIBQrLQcBZs0CoamLxf6WJ/adZgJqw
+         S77x+yd+BcPEKASdZiZkRvoDto8/mqspBKl7NYzmI8e1hLCm7BYvKUqOhs82IGkjvB
+         C05c2nls5DBNU+6C4vXDYlWP+S+x9bXBa4ZfZULyrpyPMzsiqyOgoTVQ+X7iCtXUUj
+         3j6XeRNcCWsLg==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
-        Cory Maccarrone <darkstar6262@gmail.com>,
-        Fabrice Crohas <fcrohas@gmail.com>, linux-spi@vger.kernel.org
-Subject: [PATCH 16/17] spi: remove omap 100K driver
-Date:   Wed, 19 Oct 2022 17:03:38 +0200
-Message-Id: <20221019150410.3851944-16-arnd@kernel.org>
+        Cory Maccarrone <darkstar6262@gmail.com>
+Subject: [PATCH 17/17] mfd: remove htc-i2cpld driver
+Date:   Wed, 19 Oct 2022 17:03:39 +0200
+Message-Id: <20221019150410.3851944-17-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221019150410.3851944-1-arnd@kernel.org>
 References: <20221019144119.3848027-1-arnd@kernel.org>
@@ -61,548 +56,714 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The OMAP7xx/OMAP8xx support was removed since all of its boards
-have no remaining users. Remove its spi driver as well.
+The HTC Herald machine was removed, so this driver is no
+longer used anywhere.
 
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Cc: Tony Lindgren <tony@atomide.com>
-Cc: linux-omap@vger.kernel.org
 Cc: Cory Maccarrone <darkstar6262@gmail.com>
-Cc: Fabrice Crohas <fcrohas@gmail.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/spi/Kconfig         |   6 -
- drivers/spi/Makefile        |   1 -
- drivers/spi/spi-omap-100k.c | 490 ------------------------------------
- 3 files changed, 497 deletions(-)
- delete mode 100644 drivers/spi/spi-omap-100k.c
+ drivers/mfd/Kconfig      |   9 -
+ drivers/mfd/Makefile     |   1 -
+ drivers/mfd/htc-i2cpld.c | 627 ---------------------------------------
+ include/linux/htcpld.h   |  23 --
+ 4 files changed, 660 deletions(-)
+ delete mode 100644 drivers/mfd/htc-i2cpld.c
+ delete mode 100644 include/linux/htcpld.h
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index d1bb62f7368b..bf0dc704abbe 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -697,12 +697,6 @@ config SPI_TI_QSPI
- 	  This device supports single, dual and quad read support, while
- 	  it only supports single write mode.
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index c87aab27455f..11c3bd0bd669 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -547,15 +547,6 @@ config HTC_PASIC3
+ 	  HTC Magician devices, respectively. Actual functionality is
+ 	  handled by the leds-pasic3 and ds1wm drivers.
  
--config SPI_OMAP_100K
--	tristate "OMAP SPI 100K"
--	depends on ARCH_OMAP850 || ARCH_OMAP730 || COMPILE_TEST
+-config HTC_I2CPLD
+-	bool "HTC I2C PLD chip support"
+-	depends on I2C=y && GPIOLIB
 -	help
--	  OMAP SPI 100K master controller for omap7xx boards.
+-	  If you say yes here you get support for the supposed CPLD
+-	  found on omap850 HTC devices like the HTC Wizard and HTC Herald.
+-	  This device provides input and output GPIOs through an I2C
+-	  interface to one or more sub-chips.
 -
- config SPI_ORION
- 	tristate "Orion SPI master"
- 	depends on PLAT_ORION || ARCH_MVEBU || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 4b34e855c841..ae5ba0109d4b 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -90,7 +90,6 @@ obj-$(CONFIG_SPI_OC_TINY)		+= spi-oc-tiny.o
- spi-octeon-objs				:= spi-cavium.o spi-cavium-octeon.o
- obj-$(CONFIG_SPI_OCTEON)		+= spi-octeon.o
- obj-$(CONFIG_SPI_OMAP_UWIRE)		+= spi-omap-uwire.o
--obj-$(CONFIG_SPI_OMAP_100K)		+= spi-omap-100k.o
- obj-$(CONFIG_SPI_OMAP24XX)		+= spi-omap2-mcspi.o
- obj-$(CONFIG_SPI_TI_QSPI)		+= spi-ti-qspi.o
- obj-$(CONFIG_SPI_ORION)			+= spi-orion.o
-diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
+ config MFD_INTEL_QUARK_I2C_GPIO
+ 	tristate "Intel Quark MFD I2C GPIO"
+ 	depends on PCI
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 7ed3ef4a698c..d74bf111f88e 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -19,7 +19,6 @@ obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
+ obj-$(CONFIG_MFD_GATEWORKS_GSC)	+= gateworks-gsc.o
+ 
+ obj-$(CONFIG_HTC_PASIC3)	+= htc-pasic3.o
+-obj-$(CONFIG_HTC_I2CPLD)	+= htc-i2cpld.o
+ 
+ obj-$(CONFIG_MFD_TI_LP873X)	+= lp873x.o
+ obj-$(CONFIG_MFD_TI_LP87565)	+= lp87565.o
+diff --git a/drivers/mfd/htc-i2cpld.c b/drivers/mfd/htc-i2cpld.c
 deleted file mode 100644
-index 061f7394e5b9..000000000000
---- a/drivers/spi/spi-omap-100k.c
+index b45b1346ab54..000000000000
+--- a/drivers/mfd/htc-i2cpld.c
 +++ /dev/null
-@@ -1,490 +0,0 @@
+@@ -1,627 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * OMAP7xx SPI 100k controller driver
-- * Author: Fabrice Crohas <fcrohas@gmail.com>
-- * from original omap1_mcspi driver
+- *  htc-i2cpld.c
+- *  Chip driver for an unknown CPLD chip found on omap850 HTC devices like
+- *  the HTC Wizard and HTC Herald.
+- *  The cpld is located on the i2c bus and acts as an input/output GPIO
+- *  extender.
 - *
-- * Copyright (C) 2005, 2006 Nokia Corporation
-- * Author:      Samuel Ortiz <samuel.ortiz@nokia.com> and
-- *              Juha Yrjola <juha.yrjola@nokia.com>
+- *  Copyright (C) 2009 Cory Maccarrone <darkstar6262@gmail.com>
+- *
+- *  Based on work done in the linwizard project
+- *  Copyright (C) 2008-2009 Angelo Arrifano <miknix@gmail.com>
 - */
+-
 -#include <linux/kernel.h>
 -#include <linux/init.h>
 -#include <linux/interrupt.h>
--#include <linux/module.h>
--#include <linux/device.h>
--#include <linux/delay.h>
 -#include <linux/platform_device.h>
--#include <linux/pm_runtime.h>
--#include <linux/err.h>
--#include <linux/clk.h>
--#include <linux/io.h>
+-#include <linux/i2c.h>
+-#include <linux/irq.h>
+-#include <linux/spinlock.h>
+-#include <linux/htcpld.h>
+-#include <linux/gpio/driver.h>
+-#include <linux/gpio/machine.h>
+-#include <linux/gpio/consumer.h>
 -#include <linux/slab.h>
 -
--#include <linux/spi/spi.h>
+-struct htcpld_chip {
+-	spinlock_t              lock;
 -
--#define OMAP1_SPI100K_MAX_FREQ          48000000
+-	/* chip info */
+-	u8                      reset;
+-	u8                      addr;
+-	struct device           *dev;
+-	struct i2c_client	*client;
 -
--#define ICR_SPITAS      (OMAP7XX_ICR_BASE + 0x12)
+-	/* Output details */
+-	u8                      cache_out;
+-	struct gpio_chip        chip_out;
 -
--#define SPI_SETUP1      0x00
--#define SPI_SETUP2      0x02
--#define SPI_CTRL        0x04
--#define SPI_STATUS      0x06
--#define SPI_TX_LSB      0x08
--#define SPI_TX_MSB      0x0a
--#define SPI_RX_LSB      0x0c
--#define SPI_RX_MSB      0x0e
+-	/* Input details */
+-	u8                      cache_in;
+-	struct gpio_chip        chip_in;
 -
--#define SPI_SETUP1_INT_READ_ENABLE      (1UL << 5)
--#define SPI_SETUP1_INT_WRITE_ENABLE     (1UL << 4)
--#define SPI_SETUP1_CLOCK_DIVISOR(x)     ((x) << 1)
--#define SPI_SETUP1_CLOCK_ENABLE         (1UL << 0)
+-	u16                     irqs_enabled;
+-	uint                    irq_start;
+-	int                     nirqs;
 -
--#define SPI_SETUP2_ACTIVE_EDGE_FALLING  (0UL << 0)
--#define SPI_SETUP2_ACTIVE_EDGE_RISING   (1UL << 0)
--#define SPI_SETUP2_NEGATIVE_LEVEL       (0UL << 5)
--#define SPI_SETUP2_POSITIVE_LEVEL       (1UL << 5)
--#define SPI_SETUP2_LEVEL_TRIGGER        (0UL << 10)
--#define SPI_SETUP2_EDGE_TRIGGER         (1UL << 10)
--
--#define SPI_CTRL_SEN(x)                 ((x) << 7)
--#define SPI_CTRL_WORD_SIZE(x)           (((x) - 1) << 2)
--#define SPI_CTRL_WR                     (1UL << 1)
--#define SPI_CTRL_RD                     (1UL << 0)
--
--#define SPI_STATUS_WE                   (1UL << 1)
--#define SPI_STATUS_RD                   (1UL << 0)
--
--/* use PIO for small transfers, avoiding DMA setup/teardown overhead and
-- * cache operations; better heuristics consider wordsize and bitrate.
-- */
--#define DMA_MIN_BYTES                   8
--
--#define SPI_RUNNING	0
--#define SPI_SHUTDOWN	1
--
--struct omap1_spi100k {
--	struct clk              *ick;
--	struct clk              *fck;
--
--	/* Virtual base address of the controller */
--	void __iomem            *base;
+-	unsigned int		flow_type;
+-	/*
+-	 * Work structure to allow for setting values outside of any
+-	 * possible interrupt context
+-	 */
+-	struct work_struct set_val_work;
 -};
 -
--struct omap1_spi100k_cs {
--	void __iomem            *base;
--	int                     word_len;
+-struct htcpld_data {
+-	/* irq info */
+-	u16                irqs_enabled;
+-	uint               irq_start;
+-	int                nirqs;
+-	uint               chained_irq;
+-	struct gpio_desc   *int_reset_gpio_hi;
+-	struct gpio_desc   *int_reset_gpio_lo;
+-
+-	/* htcpld info */
+-	struct htcpld_chip *chip;
+-	unsigned int       nchips;
 -};
 -
--static void spi100k_enable_clock(struct spi_master *master)
+-/* There does not appear to be a way to proactively mask interrupts
+- * on the htcpld chip itself.  So, we simply ignore interrupts that
+- * aren't desired. */
+-static void htcpld_mask(struct irq_data *data)
 -{
--	unsigned int val;
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
--
--	/* enable SPI */
--	val = readw(spi100k->base + SPI_SETUP1);
--	val |= SPI_SETUP1_CLOCK_ENABLE;
--	writew(val, spi100k->base + SPI_SETUP1);
+-	struct htcpld_chip *chip = irq_data_get_irq_chip_data(data);
+-	chip->irqs_enabled &= ~(1 << (data->irq - chip->irq_start));
+-	pr_debug("HTCPLD mask %d %04x\n", data->irq, chip->irqs_enabled);
+-}
+-static void htcpld_unmask(struct irq_data *data)
+-{
+-	struct htcpld_chip *chip = irq_data_get_irq_chip_data(data);
+-	chip->irqs_enabled |= 1 << (data->irq - chip->irq_start);
+-	pr_debug("HTCPLD unmask %d %04x\n", data->irq, chip->irqs_enabled);
 -}
 -
--static void spi100k_disable_clock(struct spi_master *master)
+-static int htcpld_set_type(struct irq_data *data, unsigned int flags)
 -{
--	unsigned int val;
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-	struct htcpld_chip *chip = irq_data_get_irq_chip_data(data);
 -
--	/* disable SPI */
--	val = readw(spi100k->base + SPI_SETUP1);
--	val &= ~SPI_SETUP1_CLOCK_ENABLE;
--	writew(val, spi100k->base + SPI_SETUP1);
--}
--
--static void spi100k_write_data(struct spi_master *master, int len, int data)
--{
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
--
--	/* write 16-bit word, shifting 8-bit data if necessary */
--	if (len <= 8) {
--		data <<= 8;
--		len = 16;
--	}
--
--	spi100k_enable_clock(master);
--	writew(data, spi100k->base + SPI_TX_MSB);
--
--	writew(SPI_CTRL_SEN(0) |
--	       SPI_CTRL_WORD_SIZE(len) |
--	       SPI_CTRL_WR,
--	       spi100k->base + SPI_CTRL);
--
--	/* Wait for bit ack send change */
--	while ((readw(spi100k->base + SPI_STATUS) & SPI_STATUS_WE) != SPI_STATUS_WE)
--		;
--	udelay(1000);
--
--	spi100k_disable_clock(master);
--}
--
--static int spi100k_read_data(struct spi_master *master, int len)
--{
--	int dataL;
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
--
--	/* Always do at least 16 bits */
--	if (len <= 8)
--		len = 16;
--
--	spi100k_enable_clock(master);
--	writew(SPI_CTRL_SEN(0) |
--	       SPI_CTRL_WORD_SIZE(len) |
--	       SPI_CTRL_RD,
--	       spi100k->base + SPI_CTRL);
--
--	while ((readw(spi100k->base + SPI_STATUS) & SPI_STATUS_RD) != SPI_STATUS_RD)
--		;
--	udelay(1000);
--
--	dataL = readw(spi100k->base + SPI_RX_LSB);
--	readw(spi100k->base + SPI_RX_MSB);
--	spi100k_disable_clock(master);
--
--	return dataL;
--}
--
--static void spi100k_open(struct spi_master *master)
--{
--	/* get control of SPI */
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
--
--	writew(SPI_SETUP1_INT_READ_ENABLE |
--	       SPI_SETUP1_INT_WRITE_ENABLE |
--	       SPI_SETUP1_CLOCK_DIVISOR(0), spi100k->base + SPI_SETUP1);
--
--	/* configure clock and interrupts */
--	writew(SPI_SETUP2_ACTIVE_EDGE_FALLING |
--	       SPI_SETUP2_NEGATIVE_LEVEL |
--	       SPI_SETUP2_LEVEL_TRIGGER, spi100k->base + SPI_SETUP2);
--}
--
--static void omap1_spi100k_force_cs(struct omap1_spi100k *spi100k, int enable)
--{
--	if (enable)
--		writew(0x05fc, spi100k->base + SPI_CTRL);
--	else
--		writew(0x05fd, spi100k->base + SPI_CTRL);
--}
--
--static unsigned
--omap1_spi100k_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
--{
--	struct omap1_spi100k_cs *cs = spi->controller_state;
--	unsigned int            count, c;
--	int                     word_len;
--
--	count = xfer->len;
--	c = count;
--	word_len = cs->word_len;
--
--	if (word_len <= 8) {
--		u8              *rx;
--		const u8        *tx;
--
--		rx = xfer->rx_buf;
--		tx = xfer->tx_buf;
--		do {
--			c -= 1;
--			if (xfer->tx_buf != NULL)
--				spi100k_write_data(spi->master, word_len, *tx++);
--			if (xfer->rx_buf != NULL)
--				*rx++ = spi100k_read_data(spi->master, word_len);
--		} while (c);
--	} else if (word_len <= 16) {
--		u16             *rx;
--		const u16       *tx;
--
--		rx = xfer->rx_buf;
--		tx = xfer->tx_buf;
--		do {
--			c -= 2;
--			if (xfer->tx_buf != NULL)
--				spi100k_write_data(spi->master, word_len, *tx++);
--			if (xfer->rx_buf != NULL)
--				*rx++ = spi100k_read_data(spi->master, word_len);
--		} while (c);
--	} else if (word_len <= 32) {
--		u32             *rx;
--		const u32       *tx;
--
--		rx = xfer->rx_buf;
--		tx = xfer->tx_buf;
--		do {
--			c -= 4;
--			if (xfer->tx_buf != NULL)
--				spi100k_write_data(spi->master, word_len, *tx);
--			if (xfer->rx_buf != NULL)
--				*rx = spi100k_read_data(spi->master, word_len);
--		} while (c);
--	}
--	return count - c;
--}
--
--/* called only when no transfer is active to this device */
--static int omap1_spi100k_setup_transfer(struct spi_device *spi,
--		struct spi_transfer *t)
--{
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(spi->master);
--	struct omap1_spi100k_cs *cs = spi->controller_state;
--	u8 word_len;
--
--	if (t != NULL)
--		word_len = t->bits_per_word;
--	else
--		word_len = spi->bits_per_word;
--
--	if (word_len > 32)
+-	if (flags & ~IRQ_TYPE_SENSE_MASK)
 -		return -EINVAL;
--	cs->word_len = word_len;
 -
--	/* SPI init before transfer */
--	writew(0x3e, spi100k->base + SPI_SETUP1);
--	writew(0x00, spi100k->base + SPI_STATUS);
--	writew(0x3e, spi100k->base + SPI_CTRL);
+-	/* We only allow edge triggering */
+-	if (flags & (IRQ_TYPE_LEVEL_LOW|IRQ_TYPE_LEVEL_HIGH))
+-		return -EINVAL;
 -
+-	chip->flow_type = flags;
 -	return 0;
 -}
 -
--/* the spi->mode bits understood by this driver: */
--#define MODEBITS (SPI_CPOL | SPI_CPHA | SPI_CS_HIGH)
+-static struct irq_chip htcpld_muxed_chip = {
+-	.name         = "htcpld",
+-	.irq_mask     = htcpld_mask,
+-	.irq_unmask   = htcpld_unmask,
+-	.irq_set_type = htcpld_set_type,
+-};
 -
--static int omap1_spi100k_setup(struct spi_device *spi)
+-/* To properly dispatch IRQ events, we need to read from the
+- * chip.  This is an I2C action that could possibly sleep
+- * (which is bad in interrupt context) -- so we use a threaded
+- * interrupt handler to get around that.
+- */
+-static irqreturn_t htcpld_handler(int irq, void *dev)
 -{
--	int                     ret;
--	struct omap1_spi100k    *spi100k;
--	struct omap1_spi100k_cs *cs = spi->controller_state;
+-	struct htcpld_data *htcpld = dev;
+-	unsigned int i;
+-	unsigned long flags;
+-	int irqpin;
 -
--	spi100k = spi_master_get_devdata(spi->master);
--
--	if (!cs) {
--		cs = devm_kzalloc(&spi->dev, sizeof(*cs), GFP_KERNEL);
--		if (!cs)
--			return -ENOMEM;
--		cs->base = spi100k->base + spi->chip_select * 0x14;
--		spi->controller_state = cs;
+-	if (!htcpld) {
+-		pr_debug("htcpld is null in ISR\n");
+-		return IRQ_HANDLED;
 -	}
--
--	spi100k_open(spi->master);
--
--	clk_prepare_enable(spi100k->ick);
--	clk_prepare_enable(spi100k->fck);
--
--	ret = omap1_spi100k_setup_transfer(spi, NULL);
--
--	clk_disable_unprepare(spi100k->ick);
--	clk_disable_unprepare(spi100k->fck);
--
--	return ret;
--}
--
--static int omap1_spi100k_transfer_one_message(struct spi_master *master,
--					      struct spi_message *m)
--{
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
--	struct spi_device *spi = m->spi;
--	struct spi_transfer *t = NULL;
--	int cs_active = 0;
--	int status = 0;
--
--	list_for_each_entry(t, &m->transfers, transfer_list) {
--		if (t->tx_buf == NULL && t->rx_buf == NULL && t->len) {
--			break;
--		}
--		status = omap1_spi100k_setup_transfer(spi, t);
--		if (status < 0)
--			break;
--
--		if (!cs_active) {
--			omap1_spi100k_force_cs(spi100k, 1);
--			cs_active = 1;
--		}
--
--		if (t->len) {
--			unsigned count;
--
--			count = omap1_spi100k_txrx_pio(spi, t);
--			m->actual_length += count;
--
--			if (count != t->len) {
--				break;
--			}
--		}
--
--		spi_transfer_delay_exec(t);
--
--		/* ignore the "leave it on after last xfer" hint */
--
--		if (t->cs_change) {
--			omap1_spi100k_force_cs(spi100k, 0);
--			cs_active = 0;
--		}
--	}
--
--	status = omap1_spi100k_setup_transfer(spi, NULL);
--
--	if (cs_active)
--		omap1_spi100k_force_cs(spi100k, 0);
--
--	m->status = status;
--
--	spi_finalize_current_message(master);
--
--	return status;
--}
--
--static int omap1_spi100k_probe(struct platform_device *pdev)
--{
--	struct spi_master       *master;
--	struct omap1_spi100k    *spi100k;
--	int                     status = 0;
--
--	if (!pdev->id)
--		return -EINVAL;
--
--	master = spi_alloc_master(&pdev->dev, sizeof(*spi100k));
--	if (master == NULL) {
--		dev_dbg(&pdev->dev, "master allocation failed\n");
--		return -ENOMEM;
--	}
--
--	if (pdev->id != -1)
--		master->bus_num = pdev->id;
--
--	master->setup = omap1_spi100k_setup;
--	master->transfer_one_message = omap1_spi100k_transfer_one_message;
--	master->num_chipselect = 2;
--	master->mode_bits = MODEBITS;
--	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
--	master->min_speed_hz = OMAP1_SPI100K_MAX_FREQ/(1<<16);
--	master->max_speed_hz = OMAP1_SPI100K_MAX_FREQ;
--	master->auto_runtime_pm = true;
--
--	spi100k = spi_master_get_devdata(master);
 -
 -	/*
--	 * The memory region base address is taken as the platform_data.
--	 * You should allocate this with ioremap() before initializing
--	 * the SPI.
+-	 * For each chip, do a read of the chip and trigger any interrupts
+-	 * desired.  The interrupts will be triggered from LSB to MSB (i.e.
+-	 * bit 0 first, then bit 1, etc.)
+-	 *
+-	 * For chips that have no interrupt range specified, just skip 'em.
 -	 */
--	spi100k->base = (void __iomem *)dev_get_platdata(&pdev->dev);
+-	for (i = 0; i < htcpld->nchips; i++) {
+-		struct htcpld_chip *chip = &htcpld->chip[i];
+-		struct i2c_client *client;
+-		int val;
+-		unsigned long uval, old_val;
 -
--	spi100k->ick = devm_clk_get(&pdev->dev, "ick");
--	if (IS_ERR(spi100k->ick)) {
--		dev_dbg(&pdev->dev, "can't get spi100k_ick\n");
--		status = PTR_ERR(spi100k->ick);
--		goto err;
+-		if (!chip) {
+-			pr_debug("chip %d is null in ISR\n", i);
+-			continue;
+-		}
+-
+-		if (chip->nirqs == 0)
+-			continue;
+-
+-		client = chip->client;
+-		if (!client) {
+-			pr_debug("client %d is null in ISR\n", i);
+-			continue;
+-		}
+-
+-		/* Scan the chip */
+-		val = i2c_smbus_read_byte_data(client, chip->cache_out);
+-		if (val < 0) {
+-			/* Throw a warning and skip this chip */
+-			dev_warn(chip->dev, "Unable to read from chip: %d\n",
+-				 val);
+-			continue;
+-		}
+-
+-		uval = (unsigned long)val;
+-
+-		spin_lock_irqsave(&chip->lock, flags);
+-
+-		/* Save away the old value so we can compare it */
+-		old_val = chip->cache_in;
+-
+-		/* Write the new value */
+-		chip->cache_in = uval;
+-
+-		spin_unlock_irqrestore(&chip->lock, flags);
+-
+-		/*
+-		 * For each bit in the data (starting at bit 0), trigger
+-		 * associated interrupts.
+-		 */
+-		for (irqpin = 0; irqpin < chip->nirqs; irqpin++) {
+-			unsigned oldb, newb, type = chip->flow_type;
+-
+-			irq = chip->irq_start + irqpin;
+-
+-			/* Run the IRQ handler, but only if the bit value
+-			 * changed, and the proper flags are set */
+-			oldb = (old_val >> irqpin) & 1;
+-			newb = (uval >> irqpin) & 1;
+-
+-			if ((!oldb && newb && (type & IRQ_TYPE_EDGE_RISING)) ||
+-			    (oldb && !newb && (type & IRQ_TYPE_EDGE_FALLING))) {
+-				pr_debug("fire IRQ %d\n", irqpin);
+-				generic_handle_irq(irq);
+-			}
+-		}
 -	}
 -
--	spi100k->fck = devm_clk_get(&pdev->dev, "fck");
--	if (IS_ERR(spi100k->fck)) {
--		dev_dbg(&pdev->dev, "can't get spi100k_fck\n");
--		status = PTR_ERR(spi100k->fck);
--		goto err;
--	}
+-	/*
+-	 * In order to continue receiving interrupts, the int_reset_gpio must
+-	 * be asserted.
+-	 */
+-	if (htcpld->int_reset_gpio_hi)
+-		gpiod_set_value(htcpld->int_reset_gpio_hi, 1);
+-	if (htcpld->int_reset_gpio_lo)
+-		gpiod_set_value(htcpld->int_reset_gpio_lo, 0);
 -
--	status = clk_prepare_enable(spi100k->ick);
--	if (status != 0) {
--		dev_err(&pdev->dev, "failed to enable ick: %d\n", status);
--		goto err;
--	}
--
--	status = clk_prepare_enable(spi100k->fck);
--	if (status != 0) {
--		dev_err(&pdev->dev, "failed to enable fck: %d\n", status);
--		goto err_ick;
--	}
--
--	pm_runtime_enable(&pdev->dev);
--	pm_runtime_set_active(&pdev->dev);
--
--	status = devm_spi_register_master(&pdev->dev, master);
--	if (status < 0)
--		goto err_fck;
--
--	return status;
--
--err_fck:
--	pm_runtime_disable(&pdev->dev);
--	clk_disable_unprepare(spi100k->fck);
--err_ick:
--	clk_disable_unprepare(spi100k->ick);
--err:
--	spi_master_put(master);
--	return status;
+-	return IRQ_HANDLED;
 -}
 -
--static int omap1_spi100k_remove(struct platform_device *pdev)
+-/*
+- * The GPIO set routines can be called from interrupt context, especially if,
+- * for example they're attached to the led-gpio framework and a trigger is
+- * enabled.  As such, we declared work above in the htcpld_chip structure,
+- * and that work is scheduled in the set routine.  The kernel can then run
+- * the I2C functions, which will sleep, in process context.
+- */
+-static void htcpld_chip_set(struct gpio_chip *chip, unsigned offset, int val)
 -{
--	struct spi_master *master = platform_get_drvdata(pdev);
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-	struct i2c_client *client;
+-	struct htcpld_chip *chip_data = gpiochip_get_data(chip);
+-	unsigned long flags;
 -
--	pm_runtime_disable(&pdev->dev);
+-	client = chip_data->client;
+-	if (!client)
+-		return;
 -
--	clk_disable_unprepare(spi100k->fck);
--	clk_disable_unprepare(spi100k->ick);
+-	spin_lock_irqsave(&chip_data->lock, flags);
+-	if (val)
+-		chip_data->cache_out |= (1 << offset);
+-	else
+-		chip_data->cache_out &= ~(1 << offset);
+-	spin_unlock_irqrestore(&chip_data->lock, flags);
+-
+-	schedule_work(&(chip_data->set_val_work));
+-}
+-
+-static void htcpld_chip_set_ni(struct work_struct *work)
+-{
+-	struct htcpld_chip *chip_data;
+-	struct i2c_client *client;
+-
+-	chip_data = container_of(work, struct htcpld_chip, set_val_work);
+-	client = chip_data->client;
+-	i2c_smbus_read_byte_data(client, chip_data->cache_out);
+-}
+-
+-static int htcpld_chip_get(struct gpio_chip *chip, unsigned offset)
+-{
+-	struct htcpld_chip *chip_data = gpiochip_get_data(chip);
+-	u8 cache;
+-
+-	if (!strncmp(chip->label, "htcpld-out", 10)) {
+-		cache = chip_data->cache_out;
+-	} else if (!strncmp(chip->label, "htcpld-in", 9)) {
+-		cache = chip_data->cache_in;
+-	} else
+-		return -EINVAL;
+-
+-	return (cache >> offset) & 1;
+-}
+-
+-static int htcpld_direction_output(struct gpio_chip *chip,
+-					unsigned offset, int value)
+-{
+-	htcpld_chip_set(chip, offset, value);
+-	return 0;
+-}
+-
+-static int htcpld_direction_input(struct gpio_chip *chip,
+-					unsigned offset)
+-{
+-	/*
+-	 * No-op: this function can only be called on the input chip.
+-	 * We do however make sure the offset is within range.
+-	 */
+-	return (offset < chip->ngpio) ? 0 : -EINVAL;
+-}
+-
+-static int htcpld_chip_to_irq(struct gpio_chip *chip, unsigned offset)
+-{
+-	struct htcpld_chip *chip_data = gpiochip_get_data(chip);
+-
+-	if (offset < chip_data->nirqs)
+-		return chip_data->irq_start + offset;
+-	else
+-		return -EINVAL;
+-}
+-
+-static void htcpld_chip_reset(struct i2c_client *client)
+-{
+-	struct htcpld_chip *chip_data = i2c_get_clientdata(client);
+-	if (!chip_data)
+-		return;
+-
+-	i2c_smbus_read_byte_data(
+-		client, (chip_data->cache_out = chip_data->reset));
+-}
+-
+-static int htcpld_setup_chip_irq(
+-		struct platform_device *pdev,
+-		int chip_index)
+-{
+-	struct htcpld_data *htcpld;
+-	struct htcpld_chip *chip;
+-	unsigned int irq, irq_end;
+-
+-	/* Get the platform and driver data */
+-	htcpld = platform_get_drvdata(pdev);
+-	chip = &htcpld->chip[chip_index];
+-
+-	/* Setup irq handlers */
+-	irq_end = chip->irq_start + chip->nirqs;
+-	for (irq = chip->irq_start; irq < irq_end; irq++) {
+-		irq_set_chip_and_handler(irq, &htcpld_muxed_chip,
+-					 handle_simple_irq);
+-		irq_set_chip_data(irq, chip);
+-		irq_clear_status_flags(irq, IRQ_NOREQUEST | IRQ_NOPROBE);
+-	}
 -
 -	return 0;
 -}
 -
--#ifdef CONFIG_PM
--static int omap1_spi100k_runtime_suspend(struct device *dev)
+-static int htcpld_register_chip_i2c(
+-		struct platform_device *pdev,
+-		int chip_index)
 -{
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-	struct htcpld_data *htcpld;
+-	struct device *dev = &pdev->dev;
+-	struct htcpld_core_platform_data *pdata;
+-	struct htcpld_chip *chip;
+-	struct htcpld_chip_platform_data *plat_chip_data;
+-	struct i2c_adapter *adapter;
+-	struct i2c_client *client;
+-	struct i2c_board_info info;
 -
--	clk_disable_unprepare(spi100k->ick);
--	clk_disable_unprepare(spi100k->fck);
+-	/* Get the platform and driver data */
+-	pdata = dev_get_platdata(dev);
+-	htcpld = platform_get_drvdata(pdev);
+-	chip = &htcpld->chip[chip_index];
+-	plat_chip_data = &pdata->chip[chip_index];
+-
+-	adapter = i2c_get_adapter(pdata->i2c_adapter_id);
+-	if (!adapter) {
+-		/* Eek, no such I2C adapter!  Bail out. */
+-		dev_warn(dev, "Chip at i2c address 0x%x: Invalid i2c adapter %d\n",
+-			 plat_chip_data->addr, pdata->i2c_adapter_id);
+-		return -ENODEV;
+-	}
+-
+-	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_READ_BYTE_DATA)) {
+-		dev_warn(dev, "i2c adapter %d non-functional\n",
+-			 pdata->i2c_adapter_id);
+-		i2c_put_adapter(adapter);
+-		return -EINVAL;
+-	}
+-
+-	memset(&info, 0, sizeof(struct i2c_board_info));
+-	info.addr = plat_chip_data->addr;
+-	strscpy(info.type, "htcpld-chip", I2C_NAME_SIZE);
+-	info.platform_data = chip;
+-
+-	/* Add the I2C device.  This calls the probe() function. */
+-	client = i2c_new_client_device(adapter, &info);
+-	if (IS_ERR(client)) {
+-		/* I2C device registration failed, contineu with the next */
+-		dev_warn(dev, "Unable to add I2C device for 0x%x\n",
+-			 plat_chip_data->addr);
+-		i2c_put_adapter(adapter);
+-		return PTR_ERR(client);
+-	}
+-
+-	i2c_set_clientdata(client, chip);
+-	snprintf(client->name, I2C_NAME_SIZE, "Chip_0x%x", client->addr);
+-	chip->client = client;
+-
+-	/* Reset the chip */
+-	htcpld_chip_reset(client);
+-	chip->cache_in = i2c_smbus_read_byte_data(client, chip->cache_out);
 -
 -	return 0;
 -}
 -
--static int omap1_spi100k_runtime_resume(struct device *dev)
+-static void htcpld_unregister_chip_i2c(
+-		struct platform_device *pdev,
+-		int chip_index)
 -{
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-	struct htcpld_data *htcpld;
+-	struct htcpld_chip *chip;
+-
+-	/* Get the platform and driver data */
+-	htcpld = platform_get_drvdata(pdev);
+-	chip = &htcpld->chip[chip_index];
+-
+-	i2c_unregister_device(chip->client);
+-}
+-
+-static int htcpld_register_chip_gpio(
+-		struct platform_device *pdev,
+-		int chip_index)
+-{
+-	struct htcpld_data *htcpld;
+-	struct device *dev = &pdev->dev;
+-	struct htcpld_core_platform_data *pdata;
+-	struct htcpld_chip *chip;
+-	struct htcpld_chip_platform_data *plat_chip_data;
+-	struct gpio_chip *gpio_chip;
+-	int ret = 0;
+-
+-	/* Get the platform and driver data */
+-	pdata = dev_get_platdata(dev);
+-	htcpld = platform_get_drvdata(pdev);
+-	chip = &htcpld->chip[chip_index];
+-	plat_chip_data = &pdata->chip[chip_index];
+-
+-	/* Setup the GPIO chips */
+-	gpio_chip = &(chip->chip_out);
+-	gpio_chip->label           = "htcpld-out";
+-	gpio_chip->parent             = dev;
+-	gpio_chip->owner           = THIS_MODULE;
+-	gpio_chip->get             = htcpld_chip_get;
+-	gpio_chip->set             = htcpld_chip_set;
+-	gpio_chip->direction_input = NULL;
+-	gpio_chip->direction_output = htcpld_direction_output;
+-	gpio_chip->base            = plat_chip_data->gpio_out_base;
+-	gpio_chip->ngpio           = plat_chip_data->num_gpios;
+-
+-	gpio_chip = &(chip->chip_in);
+-	gpio_chip->label           = "htcpld-in";
+-	gpio_chip->parent             = dev;
+-	gpio_chip->owner           = THIS_MODULE;
+-	gpio_chip->get             = htcpld_chip_get;
+-	gpio_chip->set             = NULL;
+-	gpio_chip->direction_input = htcpld_direction_input;
+-	gpio_chip->direction_output = NULL;
+-	gpio_chip->to_irq          = htcpld_chip_to_irq;
+-	gpio_chip->base            = plat_chip_data->gpio_in_base;
+-	gpio_chip->ngpio           = plat_chip_data->num_gpios;
+-
+-	/* Add the GPIO chips */
+-	ret = gpiochip_add_data(&(chip->chip_out), chip);
+-	if (ret) {
+-		dev_warn(dev, "Unable to register output GPIOs for 0x%x: %d\n",
+-			 plat_chip_data->addr, ret);
+-		return ret;
+-	}
+-
+-	ret = gpiochip_add_data(&(chip->chip_in), chip);
+-	if (ret) {
+-		dev_warn(dev, "Unable to register input GPIOs for 0x%x: %d\n",
+-			 plat_chip_data->addr, ret);
+-		gpiochip_remove(&(chip->chip_out));
+-		return ret;
+-	}
+-
+-	return 0;
+-}
+-
+-static int htcpld_setup_chips(struct platform_device *pdev)
+-{
+-	struct htcpld_data *htcpld;
+-	struct device *dev = &pdev->dev;
+-	struct htcpld_core_platform_data *pdata;
+-	int i;
+-
+-	/* Get the platform and driver data */
+-	pdata = dev_get_platdata(dev);
+-	htcpld = platform_get_drvdata(pdev);
+-
+-	/* Setup each chip's output GPIOs */
+-	htcpld->nchips = pdata->num_chip;
+-	htcpld->chip = devm_kcalloc(dev,
+-				    htcpld->nchips,
+-				    sizeof(struct htcpld_chip),
+-				    GFP_KERNEL);
+-	if (!htcpld->chip)
+-		return -ENOMEM;
+-
+-	/* Add the chips as best we can */
+-	for (i = 0; i < htcpld->nchips; i++) {
+-		int ret;
+-
+-		/* Setup the HTCPLD chips */
+-		htcpld->chip[i].reset = pdata->chip[i].reset;
+-		htcpld->chip[i].cache_out = pdata->chip[i].reset;
+-		htcpld->chip[i].cache_in = 0;
+-		htcpld->chip[i].dev = dev;
+-		htcpld->chip[i].irq_start = pdata->chip[i].irq_base;
+-		htcpld->chip[i].nirqs = pdata->chip[i].num_irqs;
+-
+-		INIT_WORK(&(htcpld->chip[i].set_val_work), &htcpld_chip_set_ni);
+-		spin_lock_init(&(htcpld->chip[i].lock));
+-
+-		/* Setup the interrupts for the chip */
+-		if (htcpld->chained_irq) {
+-			ret = htcpld_setup_chip_irq(pdev, i);
+-			if (ret)
+-				continue;
+-		}
+-
+-		/* Register the chip with I2C */
+-		ret = htcpld_register_chip_i2c(pdev, i);
+-		if (ret)
+-			continue;
+-
+-
+-		/* Register the chips with the GPIO subsystem */
+-		ret = htcpld_register_chip_gpio(pdev, i);
+-		if (ret) {
+-			/* Unregister the chip from i2c and continue */
+-			htcpld_unregister_chip_i2c(pdev, i);
+-			continue;
+-		}
+-
+-		dev_info(dev, "Registered chip at 0x%x\n", pdata->chip[i].addr);
+-	}
+-
+-	return 0;
+-}
+-
+-static int htcpld_core_probe(struct platform_device *pdev)
+-{
+-	struct htcpld_data *htcpld;
+-	struct device *dev = &pdev->dev;
+-	struct htcpld_core_platform_data *pdata;
+-	struct resource *res;
+-	int ret = 0;
+-
+-	if (!dev)
+-		return -ENODEV;
+-
+-	pdata = dev_get_platdata(dev);
+-	if (!pdata) {
+-		dev_warn(dev, "Platform data not found for htcpld core!\n");
+-		return -ENXIO;
+-	}
+-
+-	htcpld = devm_kzalloc(dev, sizeof(struct htcpld_data), GFP_KERNEL);
+-	if (!htcpld)
+-		return -ENOMEM;
+-
+-	/* Find chained irq */
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (res) {
+-		int flags;
+-		htcpld->chained_irq = res->start;
+-
+-		/* Setup the chained interrupt handler */
+-		flags = IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING |
+-			IRQF_ONESHOT;
+-		ret = request_threaded_irq(htcpld->chained_irq,
+-					   NULL, htcpld_handler,
+-					   flags, pdev->name, htcpld);
+-		if (ret) {
+-			dev_warn(dev, "Unable to setup chained irq handler: %d\n", ret);
+-			return ret;
+-		} else
+-			device_init_wakeup(dev, 0);
+-	}
+-
+-	/* Set the driver data */
+-	platform_set_drvdata(pdev, htcpld);
+-
+-	/* Setup the htcpld chips */
+-	ret = htcpld_setup_chips(pdev);
+-	if (ret)
+-		return ret;
+-
+-	/* Request the GPIO(s) for the int reset and set them up */
+-	htcpld->int_reset_gpio_hi = gpiochip_request_own_desc(&htcpld->chip[2].chip_out,
+-							      7, "htcpld-core", GPIO_ACTIVE_HIGH,
+-							      GPIOD_OUT_HIGH);
+-	if (IS_ERR(htcpld->int_reset_gpio_hi)) {
+-		/*
+-		 * If it failed, that sucks, but we can probably
+-		 * continue on without it.
+-		 */
+-		htcpld->int_reset_gpio_hi = NULL;
+-		dev_warn(dev, "Unable to request int_reset_gpio_hi -- interrupts may not work\n");
+-	}
+-
+-	htcpld->int_reset_gpio_lo = gpiochip_request_own_desc(&htcpld->chip[2].chip_out,
+-							      0, "htcpld-core", GPIO_ACTIVE_HIGH,
+-							      GPIOD_OUT_LOW);
+-	if (IS_ERR(htcpld->int_reset_gpio_lo)) {
+-		/*
+-		 * If it failed, that sucks, but we can probably
+-		 * continue on without it.
+-		 */
+-		htcpld->int_reset_gpio_lo = NULL;
+-		dev_warn(dev, "Unable to request int_reset_gpio_lo -- interrupts may not work\n");
+-	}
+-
+-	dev_info(dev, "Initialized successfully\n");
+-	return 0;
+-}
+-
+-/* The I2C Driver -- used internally */
+-static const struct i2c_device_id htcpld_chip_id[] = {
+-	{ "htcpld-chip", 0 },
+-	{ }
+-};
+-
+-static struct i2c_driver htcpld_chip_driver = {
+-	.driver = {
+-		.name	= "htcpld-chip",
+-	},
+-	.id_table = htcpld_chip_id,
+-};
+-
+-/* The Core Driver */
+-static struct platform_driver htcpld_core_driver = {
+-	.driver = {
+-		.name = "i2c-htcpld",
+-	},
+-};
+-
+-static int __init htcpld_core_init(void)
+-{
 -	int ret;
 -
--	ret = clk_prepare_enable(spi100k->ick);
--	if (ret != 0) {
--		dev_err(dev, "Failed to enable ick: %d\n", ret);
+-	/* Register the I2C Chip driver */
+-	ret = i2c_add_driver(&htcpld_chip_driver);
+-	if (ret)
 -		return ret;
--	}
 -
--	ret = clk_prepare_enable(spi100k->fck);
--	if (ret != 0) {
--		dev_err(dev, "Failed to enable fck: %d\n", ret);
--		clk_disable_unprepare(spi100k->ick);
--		return ret;
--	}
--
--	return 0;
+-	/* Probe for our chips */
+-	return platform_driver_probe(&htcpld_core_driver, htcpld_core_probe);
 -}
--#endif
+-device_initcall(htcpld_core_init);
+diff --git a/include/linux/htcpld.h b/include/linux/htcpld.h
+deleted file mode 100644
+index 5f8ac9b1d724..000000000000
+--- a/include/linux/htcpld.h
++++ /dev/null
+@@ -1,23 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __LINUX_HTCPLD_H
+-#define __LINUX_HTCPLD_H
 -
--static const struct dev_pm_ops omap1_spi100k_pm = {
--	SET_RUNTIME_PM_OPS(omap1_spi100k_runtime_suspend,
--			   omap1_spi100k_runtime_resume, NULL)
+-struct htcpld_chip_platform_data {
+-	unsigned int addr;
+-	unsigned int reset;
+-	unsigned int num_gpios;
+-	unsigned int gpio_out_base;
+-	unsigned int gpio_in_base;
+-	unsigned int irq_base;
+-	unsigned int num_irqs;
 -};
 -
--static struct platform_driver omap1_spi100k_driver = {
--	.driver = {
--		.name		= "omap1_spi100k",
--		.pm		= &omap1_spi100k_pm,
--	},
--	.probe		= omap1_spi100k_probe,
--	.remove		= omap1_spi100k_remove,
+-struct htcpld_core_platform_data {
+-	unsigned int                      i2c_adapter_id;
+-
+-	struct htcpld_chip_platform_data  *chip;
+-	unsigned int                      num_chip;
 -};
 -
--module_platform_driver(omap1_spi100k_driver);
+-#endif /* __LINUX_HTCPLD_H */
 -
--MODULE_DESCRIPTION("OMAP7xx SPI 100k controller driver");
--MODULE_AUTHOR("Fabrice Crohas <fcrohas@gmail.com>");
--MODULE_LICENSE("GPL");
 -- 
 2.29.2
 
