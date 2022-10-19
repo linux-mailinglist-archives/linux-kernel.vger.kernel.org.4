@@ -2,247 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3301E60482B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BA9604763
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbiJSNuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
+        id S232646AbiJSNhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233575AbiJSNt6 (ORCPT
+        with ESMTP id S229552AbiJSNg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:49:58 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57EE1D4DC3;
-        Wed, 19 Oct 2022 06:34:07 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1666185808; bh=MzctQr9qZv9WWpuIx6Po0Lx1bRPSxyuGpqrsSw2Aa2g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=T0rg3eYTePFllJTlCl7xRrk8Ov5UVjgswieO3K5pxTrtjLl0bJe0diwD/d3LP3Dhl
-         TOfFPysneaHVI61NwKb92OjItsWOJi08NlvZ0bcLDW0vNPDOJj0xqkwVKze6/lqLdZ
-         bWi/9bZBa70dbEUpSNvKbByInX0Z5j/l7vo7apwI=
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        asahi@lists.linux.dev, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dmaengine: apple-admac: Allocate cache SRAM to channels
-Date:   Wed, 19 Oct 2022 15:23:24 +0200
-Message-Id: <20221019132324.8585-2-povik+lin@cutebit.org>
-In-Reply-To: <20221019132324.8585-1-povik+lin@cutebit.org>
-References: <20221019132324.8585-1-povik+lin@cutebit.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 09:36:58 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BBF12D813;
+        Wed, 19 Oct 2022 06:25:26 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JDFgGV002967;
+        Wed, 19 Oct 2022 13:24:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=DVW03iTiTRTyayeqLUvLgu638TsI5iFPDEtu5YBUGdY=;
+ b=LR2a5igEdy+qgsweIHBHmRr+SHmak/XXDMlFKTePwJIjo2knWnb4bvSowhVkzi28O+xr
+ 74kMGbDVXjlBomtcJsksgo+XnhOY2Po3JBLra0Hi7yN3QZoy6+uwG1uLiLxqi08l3WUU
+ RZT8PpxmsiofZ4zNt5SJK2Fi2OaUo+RWoD0z5RBcCjpxJNw3//9XoNIaRMOYL7czwsvF
+ qZBlgk2Rbzp3j0l9lrg4gjWaL7djHvL9/6asdRRtNfW12VvAbaO9tW8eJS3rttoaV0Qe
+ baKTAcChWdOKP77Y6c0E9MQArG4FzD7l3NIumTtxSh5Gnap0Bb49Tn9LHxJZ/2IWS7oj oA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kahyb0e48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 13:24:09 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JDGL51006539;
+        Wed, 19 Oct 2022 13:24:09 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kahyb0e3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 13:24:08 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JDNoe1021140;
+        Wed, 19 Oct 2022 13:24:08 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma03wdc.us.ibm.com with ESMTP id 3k7mg9ny5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 13:24:08 +0000
+Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JDOAA461669648
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Oct 2022 13:24:10 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E90C758061;
+        Wed, 19 Oct 2022 13:24:06 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC12158057;
+        Wed, 19 Oct 2022 13:24:05 +0000 (GMT)
+Received: from sig-9-65-252-68.ibm.com (unknown [9.65.252.68])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Oct 2022 13:24:05 +0000 (GMT)
+Message-ID: <7b6f01c201ce82f58c19a1e22df9333f30eedda5.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/9] ima: Move xattr hooks into LSM
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Borislav Petkov <bp@suse.de>,
+        Jonathan McDowell <noodles@fb.com>,
+        Takashi Iwai <tiwai@suse.de>, Petr Vorel <pvorel@suse.cz>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Wed, 19 Oct 2022 09:24:05 -0400
+In-Reply-To: <20221018150751.3qsbehcnli4c4g4o@wittgenstein>
+References: <20221013222702.never.990-kees@kernel.org>
+         <20221013223654.659758-3-keescook@chromium.org>
+         <20221018150751.3qsbehcnli4c4g4o@wittgenstein>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qAO7TduTXm7UKdzpxb-rqCPH3_RjdJHr
+X-Proofpoint-ORIG-GUID: xUE2GvXWPHkkknVG_aXO0rT3CK50EAdq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_08,2022-10-19_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ clxscore=1011 mlxscore=0 bulkscore=0 spamscore=0 mlxlogscore=659
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a previously unknown part of the controller interface: We have
-to assign SRAM carveouts to channels to store their in-flight samples
-in. So, obtain the size of the SRAM from a read-only register and divide
-it into 2K blocks for allocation to channels. The FIFO depths we
-configure will always fit into 2K.
+On Tue, 2022-10-18 at 17:07 +0200, Christian Brauner wrote:
+> On Thu, Oct 13, 2022 at 03:36:48PM -0700, Kees Cook wrote:
+> > Move the xattr IMA hooks into normal LSM layer. As with SELinux and
+> > Smack, handle calling cap_inode_setxattr() internally.
+> > 
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: Borislav Petkov <bp@suse.de>
+> > Cc: Jonathan McDowell <noodles@fb.com>
+> > Cc: Takashi Iwai <tiwai@suse.de>
+> > Cc: Petr Vorel <pvorel@suse.cz>
+> > Cc: linux-integrity@vger.kernel.org
+> > Cc: linux-security-module@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> 
+> I like that changes obviously but in general, does IMA depend on being
+> called _after_ all other LSMs or is this just a historical artifact?
 
-(This fixes audio artifacts during simultaneous playback/capture on
-multiple channels -- which looking back is fully accounted for by having
-had the caches in the DMA controller overlap in memory.)
+Calculating the EVM HMAC must be last, after the other security xattrs
+have been updated.
 
-Fixes: b127315d9a78 ("dmaengine: apple-admac: Add Apple ADMAC driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
- drivers/dma/apple-admac.c | 102 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 101 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/dma/apple-admac.c b/drivers/dma/apple-admac.c
-index a2cc520225d3..90f28bda29c8 100644
---- a/drivers/dma/apple-admac.c
-+++ b/drivers/dma/apple-admac.c
-@@ -21,6 +21,12 @@
- #define NCHANNELS_MAX	64
- #define IRQ_NOUTPUTS	4
- 
-+/*
-+ * For allocation purposes we split the cache
-+ * memory into blocks of fixed size (given in bytes).
-+ */
-+#define SRAM_BLOCK	2048
-+
- #define RING_WRITE_SLOT		GENMASK(1, 0)
- #define RING_READ_SLOT		GENMASK(5, 4)
- #define RING_FULL		BIT(9)
-@@ -36,6 +42,9 @@
- #define REG_TX_STOP		0x0004
- #define REG_RX_START		0x0008
- #define REG_RX_STOP		0x000c
-+#define REG_IMPRINT		0x0090
-+#define REG_TX_SRAM_SIZE	0x0094
-+#define REG_RX_SRAM_SIZE	0x0098
- 
- #define REG_CHAN_CTL(ch)	(0x8000 + (ch) * 0x200)
- #define REG_CHAN_CTL_RST_RINGS	BIT(0)
-@@ -53,7 +62,9 @@
- #define BUS_WIDTH_FRAME_2_WORDS	0x10
- #define BUS_WIDTH_FRAME_4_WORDS	0x20
- 
--#define CHAN_BUFSIZE		0x8000
-+#define REG_CHAN_SRAM_CARVEOUT(ch)	(0x8050 + (ch) * 0x200)
-+#define CHAN_SRAM_CARVEOUT_SIZE		GENMASK(31, 16)
-+#define CHAN_SRAM_CARVEOUT_BASE		GENMASK(15, 0)
- 
- #define REG_CHAN_FIFOCTL(ch)	(0x8054 + (ch) * 0x200)
- #define CHAN_FIFOCTL_LIMIT	GENMASK(31, 16)
-@@ -76,6 +87,8 @@ struct admac_chan {
- 	struct dma_chan chan;
- 	struct tasklet_struct tasklet;
- 
-+	u32 carveout;
-+
- 	spinlock_t lock;
- 	struct admac_tx *current_tx;
- 	int nperiod_acks;
-@@ -92,12 +105,24 @@ struct admac_chan {
- 	struct list_head to_free;
- };
- 
-+struct admac_sram {
-+	u32 size;
-+	/*
-+	 * SRAM_CARVEOUT has 16-bit fields, so the SRAM cannot be larger than
-+	 * 64K and a 32-bit bitfield over 2K blocks covers it.
-+	 */
-+	u32 allocated;
-+};
-+
- struct admac_data {
- 	struct dma_device dma;
- 	struct device *dev;
- 	__iomem void *base;
- 	struct reset_control *rstc;
- 
-+	struct mutex cache_alloc_lock;
-+	struct admac_sram txcache, rxcache;
-+
- 	int irq;
- 	int irq_index;
- 	int nchannels;
-@@ -118,6 +143,60 @@ struct admac_tx {
- 	struct list_head node;
- };
- 
-+static int admac_alloc_sram_carveout(struct admac_data *ad,
-+				     enum dma_transfer_direction dir,
-+				     u32 *out)
-+{
-+	struct admac_sram *sram;
-+	int i, ret = 0, nblocks;
-+
-+	if (dir == DMA_MEM_TO_DEV)
-+		sram = &ad->txcache;
-+	else
-+		sram = &ad->rxcache;
-+
-+	mutex_lock(&ad->cache_alloc_lock);
-+
-+	nblocks = sram->size / SRAM_BLOCK;
-+	for (i = 0; i < nblocks; i++)
-+		if (!(sram->allocated & BIT(i)))
-+			break;
-+
-+	if (i < nblocks) {
-+		*out = FIELD_PREP(CHAN_SRAM_CARVEOUT_BASE, i * SRAM_BLOCK) |
-+			FIELD_PREP(CHAN_SRAM_CARVEOUT_SIZE, SRAM_BLOCK);
-+		sram->allocated |= BIT(i);
-+	} else {
-+		ret = -EBUSY;
-+	}
-+
-+	mutex_unlock(&ad->cache_alloc_lock);
-+
-+	return ret;
-+}
-+
-+static void admac_free_sram_carveout(struct admac_data *ad,
-+				     enum dma_transfer_direction dir,
-+				     u32 carveout)
-+{
-+	struct admac_sram *sram;
-+	u32 base = FIELD_GET(CHAN_SRAM_CARVEOUT_BASE, carveout);
-+	int i;
-+
-+	if (dir == DMA_MEM_TO_DEV)
-+		sram = &ad->txcache;
-+	else
-+		sram = &ad->rxcache;
-+
-+	if (WARN_ON(base >= sram->size))
-+		return;
-+
-+	mutex_lock(&ad->cache_alloc_lock);
-+	i = base / SRAM_BLOCK;
-+	sram->allocated &= ~BIT(i);
-+	mutex_unlock(&ad->cache_alloc_lock);
-+}
-+
- static void admac_modify(struct admac_data *ad, int reg, u32 mask, u32 val)
- {
- 	void __iomem *addr = ad->base + reg;
-@@ -466,15 +545,28 @@ static void admac_synchronize(struct dma_chan *chan)
- static int admac_alloc_chan_resources(struct dma_chan *chan)
- {
- 	struct admac_chan *adchan = to_admac_chan(chan);
-+	struct admac_data *ad = adchan->host;
-+	int ret;
- 
- 	dma_cookie_init(&adchan->chan);
-+	ret = admac_alloc_sram_carveout(ad, admac_chan_direction(adchan->no),
-+					&adchan->carveout);
-+	if (ret < 0)
-+		return ret;
-+
-+	writel_relaxed(adchan->carveout,
-+		       ad->base + REG_CHAN_SRAM_CARVEOUT(adchan->no));
- 	return 0;
- }
- 
- static void admac_free_chan_resources(struct dma_chan *chan)
- {
-+	struct admac_chan *adchan = to_admac_chan(chan);
-+
- 	admac_terminate_all(chan);
- 	admac_synchronize(chan);
-+	admac_free_sram_carveout(adchan->host, admac_chan_direction(adchan->no),
-+				 adchan->carveout);
- }
- 
- static struct dma_chan *admac_dma_of_xlate(struct of_phandle_args *dma_spec,
-@@ -712,6 +804,7 @@ static int admac_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, ad);
- 	ad->dev = &pdev->dev;
- 	ad->nchannels = nchannels;
-+	mutex_init(&ad->cache_alloc_lock);
- 
- 	/*
- 	 * The controller has 4 IRQ outputs. Try them all until
-@@ -801,6 +894,13 @@ static int admac_probe(struct platform_device *pdev)
- 		goto free_irq;
- 	}
- 
-+	ad->txcache.size = readl_relaxed(ad->base + REG_TX_SRAM_SIZE);
-+	ad->rxcache.size = readl_relaxed(ad->base + REG_RX_SRAM_SIZE);
-+
-+	dev_info(&pdev->dev, "Audio DMA Controller\n");
-+	dev_info(&pdev->dev, "imprint %x TX cache %u RX cache %u\n",
-+		 readl_relaxed(ad->base + REG_IMPRINT), ad->txcache.size, ad->rxcache.size);
-+
- 	return 0;
- 
- free_irq:
 -- 
-2.33.0
+thanks,
+
+Mimi
+
 
