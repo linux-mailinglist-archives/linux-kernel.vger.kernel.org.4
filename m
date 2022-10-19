@@ -2,133 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1C8604C64
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E157604C05
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiJSPzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S231941AbiJSPr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiJSPyX (ORCPT
+        with ESMTP id S231137AbiJSPqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:54:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E20188A9C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666194687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MAsS6j5/KUgYwehdScWVOm+WWLh2WflTE+nFerqwEQQ=;
-        b=e9zhi2NCRsULAP/DzXjfaTOwHzXcGNg+JomyMtYVFOIhWJnyWT2XopbVEDSfINND3oLsZg
-        ayXKL9A8C4mPTHYYpI+KNFKvtujpENCVirLd/fPKkA/bhpox2p34wenSq/mB1CnimDuffT
-        5qRIMwzZXYk1QDL1fJlY8vx94+GOsGI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-iFkQkA9NOhC-My5HscVccQ-1; Wed, 19 Oct 2022 11:41:09 -0400
-X-MC-Unique: iFkQkA9NOhC-My5HscVccQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 19 Oct 2022 11:46:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F37626ADB;
+        Wed, 19 Oct 2022 08:41:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B272A2932493;
-        Wed, 19 Oct 2022 15:41:08 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.34.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4CF1686D78;
-        Wed, 19 Oct 2022 15:41:08 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     linux-kbuild@vger.kernel.org
-Cc:     dzickus@redhat.com, kheib@redhat.com, jtornosm@redhat.com,
-        ihuguet@redhat.com, Ivan Vecera <ivecera@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] kbuild: add ability to make source rpm buildable using koji
-Date:   Wed, 19 Oct 2022 11:40:12 -0400
-Message-Id: <5b59fdb7db34f5292b1d138939c6b70b2b2039dd.1666194012.git.jtoppins@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC9B4B823AC;
+        Wed, 19 Oct 2022 15:40:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 231F2C433B5;
+        Wed, 19 Oct 2022 15:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666194026;
+        bh=5iL5zOpkFfjWVF0xfuYrHBqn0ovN+HVmFEHrIY1+Wl8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=02MH5jdIwEu9jZlrBnb9IEubpyL+4rkAPj+goELaXuhqBpqlbUb0XT8fW2GW539EN
+         aDfQWFIPrnsbvNcVJag6xj5IPqUUbeU39XtcaKAXblPuWysKx3w+FbvotLdUvJ7hCU
+         m9oElNSlUB2ykenxHo/vyp4unN7CLI0LzidBo8mM=
+Date:   Wed, 19 Oct 2022 17:40:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 6.0 438/862] arm64: dts: qcom: sc8280xp-pmics: Remove reg
+ entry & use correct node name for pmc8280c_lpg node
+Message-ID: <Y1AaZzpgDEG+idWg@kroah.com>
+References: <20221019083249.951566199@linuxfoundation.org>
+ <20221019083309.338035619@linuxfoundation.org>
+ <Y1AYtZVc5b7L+9Pj@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1AYtZVc5b7L+9Pj@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ivan Vecera <ivecera@redhat.com>
+On Wed, Oct 19, 2022 at 05:33:09PM +0200, Johan Hovold wrote:
+> On Wed, Oct 19, 2022 at 10:28:45AM +0200, Greg Kroah-Hartman wrote:
+> > From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > 
+> > [ Upstream commit 7dac7991408f77b0b33ee5e6b729baa683889277 ]
+> > 
+> > Commit eeca7d46217c ("arm64: dts: qcom: pm8350c: Drop PWM reg declaration")
+> > dropped PWM reg declaration for pm8350c pwm(s), but there is a leftover
+> > 'reg' entry inside the lpg/pwm node in sc8280xp dts file. Remove the same.
+> > 
+> > While at it, also remove the unused unit address in the node
+> > label.
+> > 
+> > Also, since dt-bindings expect LPG/PWM node name to be "pwm",
+> > use correct node name as well, to fix the following
+> > error reported by 'make dtbs_check':
+> > 
+> >   'lpg' does not match any of the regexes
+> > 
+> > Fixes: eeca7d46217c ("arm64: dts: qcom: pm8350c: Drop PWM reg declaration")
+> 
+> Despite the Fixes tag, this is not a bug a fix but rather a cleanup for
+> compliance with the DT schema (for which there are thousands of similar
+> warnings).
+> 
+> Please drop.
 
-Changes:
-- added new target 'srcrpm-pkg' to generate source rpm
-- added required build tools to spec file
-- removed locally compiled host tools to force their re-compile
+Now dropped, thanks.
 
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
- scripts/Makefile.package | 10 ++++++++++
- scripts/package/mkspec   |  7 +++++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index 8bbcced67c22..e0830a870394 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -62,6 +62,16 @@ rpm-pkg:
- 	+rpmbuild $(RPMOPTS) --target $(UTS_MACHINE)-linux -ta $(KERNELPATH).tar.gz \
- 	--define='_smp_mflags %{nil}'
- 
-+# srcrpm-pkg
-+# ---------------------------------------------------------------------------
-+PHONY += srcrpm-pkg
-+srcrpm-pkg:
-+	$(MAKE) clean
-+	$(CONFIG_SHELL) $(MKSPEC) >$(objtree)/kernel.spec
-+	$(call cmd,src_tar,$(KERNELPATH),kernel.spec)
-+	+rpmbuild $(RPMOPTS) --target $(UTS_MACHINE) -ts $(KERNELPATH).tar.gz \
-+	--define='_smp_mflags %{nil}' --define='_srcrpmdir $(srctree)'
-+
- # binrpm-pkg
- # ---------------------------------------------------------------------------
- PHONY += binrpm-pkg
-diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-index 70392fd2fd29..dda00a948a01 100755
---- a/scripts/package/mkspec
-+++ b/scripts/package/mkspec
-@@ -33,6 +33,8 @@ EXCLUDES="$RCS_TAR_IGNORE --exclude=*vmlinux* --exclude=*.mod \
- --exclude=*.o --exclude=*.ko --exclude=*.cmd --exclude=Documentation \
- --exclude=.config.old --exclude=.missing-syscalls.d --exclude=*.s"
- 
-+test -n "$LOCALVERSION" && MAKE="$MAKE LOCALVERSION=$LOCALVERSION"
-+
- # We can label the here-doc lines for conditional output to the spec file
- #
- # Labels:
-@@ -49,6 +51,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
- 	URL: https://www.kernel.org
- $S	Source: kernel-$__KERNELRELEASE.tar.gz
- 	Provides: $PROVIDES
-+$S	BuildRequires: bc binutils bison dwarves elfutils-libelf-devel flex
-+$S	BuildRequires: gcc make openssl openssl-devel perl python3 rsync
-+
- 	# $UTS_MACHINE as a fallback of _arch in case
- 	# /usr/lib/rpm/platform/*/macros was not included.
- 	%define _arch %{?_arch:$UTS_MACHINE}
-@@ -80,6 +85,8 @@ $S$M	against the $__KERNELRELEASE kernel package.
- $S$M
- $S	%prep
- $S	%setup -q
-+$S	rm -f scripts/basic/fixdep scripts/kconfig/conf
-+$S	rm -f tools/objtool/{fixdep,objtool}
- $S
- $S	%build
- $S	$MAKE %{?_smp_mflags} KBUILD_BUILD_VERSION=%{release}
--- 
-2.31.1
-
+greg k-h
