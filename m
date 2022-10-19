@@ -2,103 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C204604067
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E16C60404A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiJSJyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S234252AbiJSJp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234578AbiJSJyP (ORCPT
+        with ESMTP id S235029AbiJSJmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:54:15 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171DD50BB7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tuja8sxdSJc2s7Rbhaz+suXxEoyZ2/4Lneuoa4MQOho=; b=MRvaOEJlGziNZuKp2TUVbGcQeV
-        Gc4jU0lBHSjp7RQy5tES7IZkXtDiaW9nacHkwRfS5SzdyapUCKclUIRarpQUMKU/GavcqILZ0EuX5
-        jml7cFn/YHcmowgk5QZ2+7zZy1sfeyTZaYqjZveqMPI43jxbESiPg5MXK0rt8TH3rxK8q3z8PbRNy
-        mBYl1Z+vtv+pWOAzWGjzKMjn9sgyhzXbQYiouZtpGSNxSbptQ6ocM+1c4m4Ql1Eo5r07ir8DUABpd
-        2a/J6pVhXJrDbRDXjnHhuPf99St/XybvHx5oB8PZS9DCLjoEJReWeRHLqJzWhme7EnKegXl3qDX92
-        GrnEzhEA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34788)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ol55N-0005PB-Br; Wed, 19 Oct 2022 10:10:01 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ol55L-0001yT-Le; Wed, 19 Oct 2022 10:09:59 +0100
-Date:   Wed, 19 Oct 2022 10:09:59 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] ARM: mm: fix no-MMU ZERO_PAGE() implementation
-Message-ID: <Y0++52o7QSaDvqpM@shell.armlinux.org.uk>
-References: <20221017233700.84918-1-giulio.benetti@benettiengineering.com>
- <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
+        Wed, 19 Oct 2022 05:42:05 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E81D4A37;
+        Wed, 19 Oct 2022 02:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666171133; x=1697707133;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mzl34Bq4RG8LrlBbNXgNetnn2C5D+8GwmBwKX8FGa28=;
+  b=eBTPRh4AuVbWV3b2ng7gs0LmLMrkii0dhMLE3tm1dFZdwxzFXKLNn1j7
+   oV+hJuJOi1aTAWyLSqRpsRBlEnPT4HF8BRV+tvKirkyDIkEj7hGkbchzQ
+   N0IHubNcOIbMCrdSqcn79VTFD8t9kQuOdA+R/8A3+4xZMjZLNkdABuuC8
+   eOglnlE21jAMTO8eZLHjPdir4ZhHYbq7PXjHbPvQqC41VrZOzU8CHjrMw
+   1ND+xixtrZSGGkx8vYLb0jTanRXuzWll4y7x6CFX/ZaBClXD6efIw6eEw
+   +mSK3w/2RLc30YmEWD6BWoccehtUejazxHBJl45+6xzE6MFPUOV3P883o
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="286072356"
+X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
+   d="scan'208";a="286072356"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:12:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734118374"
+X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
+   d="scan'208";a="734118374"
+Received: from sponnura-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.35])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:12:16 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 00/44] serial: Convert drivers to use uart_xmit_advance()
+Date:   Wed, 19 Oct 2022 12:11:07 +0300
+Message-Id: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3fb4afd1-2eea-4a71-a914-f8208b11f9f4@app.fastmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 09:03:01AM +0200, Arnd Bergmann wrote:
-> In addition to your fix, I see that arm is the only architecture
-> that defines 'empty_zero_page' as a pointer to the page, when
-> everything else just makes it a pointer to the data itself,
-> or an 'extern char empty_zero_page[]' array, which we may want
-> to change for consistency.
+The uart_xmit_advance() helper was created for managing the xmit tail
+index and accounting. It simplifies one the most common operation in
+almost every serial driver. Convert most of the drivers to use the new
+helper.
 
-ARM's implementation is the utterly sensible implementation IMHO.
+I've tried to pick the drivers such that these shouldn't collide with
+the ones Jiri's tx loop rewrite series is touching (unless he has
+something hidden beyond what has been on the list).
 
-When the only users in the kernel _were_ ZERO_PAGE() for this, which
-is defined to return a struct page pointer, there was no need to make
-"empty_zero_page" anything but a struct page pointer, rather than a
-runtime translation from an address to a struct page.
+Ilpo Järvinen (44):
+  serial: dz: Use uart_xmit_advance()
+  serial: men_z135_uart: Use uart_xmit_advance()
+  serial: msm: Use uart_xmit_advance()
+  serial: pch_uart: Use uart_xmit_advance()
+  serial: sc16is7xx: Use uart_xmit_advance()
+  serial: 8250_bcm7271: Use uart_xmit_advance()
+  serial: 8250: Use uart_xmit_advance()
+  serial: pl011: Use uart_xmit_advance()
+  serial: ar933x: Use uart_xmit_advance()
+  serial: arc: Use uart_xmit_advance()
+  serial: atmel: Use uart_xmit_advance()
+  serial: clps711x: Use uart_xmit_advance()
+  serial: cpm_uart: Use uart_xmit_advance()
+  serial: digicolor: Use uart_xmit_advance()
+  serial: linflexuart: Use uart_xmit_advance()
+  serial: fsl_lpuart: Use uart_xmit_advance()
+  serial: imx: Use uart_xmit_advance()
+  serial: ip22zilog: Use uart_xmit_advance()
+  serial: liteuart: Use uart_xmit_advance()
+  serial: max3100: Use uart_xmit_advance()
+  serial: max310x: Use uart_xmit_advance()
+  serial: meson: Use uart_xmit_advance()
+  serial: milbeaut_usio: Use uart_xmit_advance()
+  serial: mvebu-uart: Use uart_xmit_advance()
+  serial: pic32: Use uart_xmit_advance()
+  serial: pmac_zilog: Use uart_xmit_advance()
+  serial: rda: Use uart_xmit_advance()
+  serial: samsung_tty: Use uart_xmit_advance()
+  serial: sb1250-duart: Use uart_xmit_advance()
+  serial: sccnxp: Use uart_xmit_advance()
+  serial: tegra: Use uart_xmit_advance()
+  serial: sh-sci: Use uart_xmit_advance()
+  serial: sprd: Use uart_xmit_advance()
+  serial: stm32: Use uart_xmit_advance()
+  serial: sunhv: Use uart_xmit_advance()
+  serial: sunplus-uart: Use uart_xmit_advance()
+  serial: sunsab: Use uart_xmit_advance()
+  serial: sunsu: Use uart_xmit_advance()
+  serial: sunzilog: Use uart_xmit_advance()
+  serial: timbuart: Use uart_xmit_advance()
+  serial: uartlite: Use uart_xmit_advance()
+  serial: ucc_uart: Use uart_xmit_advance()
+  serial: xuartps: Use uart_xmit_advance()
+  serial: zs: Use uart_xmit_advance()
 
-IMHO, we should _not_ be exposing empty_zero_page to devices - we
-certainly do not want the DMA API performing cache maintenance on
-this page since the primary purpose of this page is to fill in
-userspace BSS pages that have not been written.
-
-ACPI's use is just to have a cookie for invalid handles, and using
-the struct page pointer is good enough.
-
-The only problem one is the RAID6 code, but that is disabled:
-
-/* Set to 1 to use kernel-wide empty_zero_page */
-#define RAID6_USE_EMPTY_ZERO_PAGE 0
-
-#if RAID6_USE_EMPTY_ZERO_PAGE
-# define raid6_empty_zero_page empty_zero_page
-#else
-extern const char raid6_empty_zero_page[PAGE_SIZE];
-#endif
-
-So, the only one that needs fixing is the SPI usage, which IMHO
-is wrong. ARM being different finds what I consider a driver bug.
-Good for 32-bit ARM. :)
+ drivers/tty/serial/8250/8250_bcm7271.c      |  4 +---
+ drivers/tty/serial/8250/8250_port.c         |  3 +--
+ drivers/tty/serial/amba-pl011.c             |  3 +--
+ drivers/tty/serial/ar933x_uart.c            |  3 +--
+ drivers/tty/serial/arc_uart.c               |  3 +--
+ drivers/tty/serial/atmel_serial.c           | 11 ++---------
+ drivers/tty/serial/clps711x.c               |  3 +--
+ drivers/tty/serial/cpm_uart/cpm_uart_core.c |  3 +--
+ drivers/tty/serial/digicolor-usart.c        |  3 +--
+ drivers/tty/serial/dz.c                     |  3 +--
+ drivers/tty/serial/fsl_linflexuart.c        |  3 +--
+ drivers/tty/serial/fsl_lpuart.c             |  7 ++-----
+ drivers/tty/serial/imx.c                    |  7 ++-----
+ drivers/tty/serial/ip22zilog.c              |  6 ++----
+ drivers/tty/serial/liteuart.c               |  3 +--
+ drivers/tty/serial/max3100.c                |  4 +---
+ drivers/tty/serial/max310x.c                |  5 +----
+ drivers/tty/serial/men_z135_uart.c          |  5 +----
+ drivers/tty/serial/meson_uart.c             |  3 +--
+ drivers/tty/serial/milbeaut_usio.c          |  3 +--
+ drivers/tty/serial/msm_serial.c             | 11 +++--------
+ drivers/tty/serial/mvebu-uart.c             |  3 +--
+ drivers/tty/serial/pch_uart.c               | 12 ++++--------
+ drivers/tty/serial/pic32_uart.c             |  3 +--
+ drivers/tty/serial/pmac_zilog.c             |  6 ++----
+ drivers/tty/serial/rda-uart.c               |  3 +--
+ drivers/tty/serial/samsung_tty.c            | 10 +++-------
+ drivers/tty/serial/sb1250-duart.c           |  3 +--
+ drivers/tty/serial/sc16is7xx.c              |  5 +----
+ drivers/tty/serial/sccnxp.c                 |  3 +--
+ drivers/tty/serial/serial-tegra.c           |  3 +--
+ drivers/tty/serial/sh-sci.c                 |  5 +----
+ drivers/tty/serial/sprd_serial.c            |  7 ++-----
+ drivers/tty/serial/stm32-usart.c            |  7 +++----
+ drivers/tty/serial/sunhv.c                  |  6 ++----
+ drivers/tty/serial/sunplus-uart.c           |  4 +---
+ drivers/tty/serial/sunsab.c                 |  6 ++----
+ drivers/tty/serial/sunsu.c                  |  3 +--
+ drivers/tty/serial/sunzilog.c               |  6 ++----
+ drivers/tty/serial/timbuart.c               |  3 +--
+ drivers/tty/serial/uartlite.c               |  3 +--
+ drivers/tty/serial/ucc_uart.c               |  3 +--
+ drivers/tty/serial/xilinx_uartps.c          |  4 +---
+ drivers/tty/serial/zs.c                     |  3 +--
+ 44 files changed, 62 insertions(+), 145 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.30.2
+
