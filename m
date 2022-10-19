@@ -2,157 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327F06039BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876D86039C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiJSGZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 02:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S230077AbiJSG3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 02:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiJSGZs (ORCPT
+        with ESMTP id S229787AbiJSG31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:25:48 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3975C9DA
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:25:46 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so16095140pjl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0YvuV0EJzgx/CzKHyzjlvPWkSLLbFliwl9A6z1/O4hM=;
-        b=Z7PHOUxVbmdPt6GSMk5/jEhKoitcqAZUH6zUw3AIgXq9hVqibAj5b9PWxv3q2sp+tV
-         ZpN8E/OYeZgwVo0fPvdwjebOeM7XnFsqB9znTtGuv5N2MyM5/NH03ktlIs7MVks2/8/u
-         YvU7qaxh5xUkyLtOSQv+vX++vSPJiRWYx9JtY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0YvuV0EJzgx/CzKHyzjlvPWkSLLbFliwl9A6z1/O4hM=;
-        b=bcaByj/8CaOkAfTeEo8H0+bTNKWZQaT2FH/JBvEiQEWXAGltVBdHkPlua7QGtyKYOB
-         EcDjYhj3E4jDohrdlb/Y732GsDAW4WTxMrkRCXNK+fYqbtW5N9H1pOEBs5Uz6IycjAsh
-         JaG7IPRsaHkUpH0mh1QulHWzFBCZFmOJHt8V1Mh+ps2RIdh3bppCaNkqT/nC13u+Qfb5
-         303CDvwBhJbUrzo0UqCuYAvnPpqD4qL4AzTfCA9l4YCgY1tdt8fD6wzfaIfWEy+0Radu
-         3uNCXJ/KVDKvgHLZ4I2Mt7q+FJTb/F9+sLVwTuqgrPp3e6AbrlCG8GB9DgruaFfruAOk
-         Vizw==
-X-Gm-Message-State: ACrzQf3IXguBBCHOFKQlhXbBFPqkDzF+0mXfAjT2VQqZ09VhWdh5UrJc
-        sKpKHQATnUhIQSmRq3fCovwpQbhPngCBhAGzY6A9mw==
-X-Google-Smtp-Source: AMsMyM66bYdplNyAXUIbc8nQgt/ursH7ZfCQxsQJMwBPV3sgOhHoXsgNF5pcCI5Xpcet9Zb7lIUBkLeWZYoRPoO/lTo=
-X-Received: by 2002:a17:90b:4f4a:b0:20c:64e2:2bf1 with SMTP id
- pj10-20020a17090b4f4a00b0020c64e22bf1mr8263564pjb.30.1666160745922; Tue, 18
- Oct 2022 23:25:45 -0700 (PDT)
+        Wed, 19 Oct 2022 02:29:27 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 157E4112C;
+        Tue, 18 Oct 2022 23:29:24 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8CxjdpDmU9jdagAAA--.3583S3;
+        Wed, 19 Oct 2022 14:29:23 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuA9mU9jHicBAA--.4688S2;
+        Wed, 19 Oct 2022 14:29:23 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v2 1/3] dt-bindings: clock: add loongson2 clock include file
+Date:   Wed, 19 Oct 2022 14:29:10 +0800
+Message-Id: <20221019062912.3463-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20221012042030.573466-1-hsinyi@chromium.org> <CAJMQK-i1GFP_5NsH7MLYS17xacrYZf1u6bjVYBkW-qHMbuh2_w@mail.gmail.com>
- <CAOw6vbLPUkwoaSHyWARZnkcsacf9rsmB6M=97z1-98kgM7BNEQ@mail.gmail.com>
-In-Reply-To: <CAOw6vbLPUkwoaSHyWARZnkcsacf9rsmB6M=97z1-98kgM7BNEQ@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 19 Oct 2022 14:25:19 +0800
-Message-ID: <CAJMQK-joM-bZvYydDKAYs7o6KBd+74mZrNBHWybdibWXv3okLg@mail.gmail.com>
-Subject: Re: [PATCH v2] drm_bridge: register content protect property
-To:     Sean Paul <seanpaul@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXuA9mU9jHicBAA--.4688S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7AF4UWr4xtrykArWxtw4ruFg_yoW8KF43pr
+        4kCFWfKry7tF42kwsYgF17Kr13ur4xC3W7AF47uF1UAFnrJw18JrnF9F1fAFZrXr4kCFWx
+        Z3Z7Cw409FZrXw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x
+        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
+        Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUc9mRUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 2:26 AM Sean Paul <seanpaul@chromium.org> wrote:
->
-> On Mon, Oct 17, 2022 at 9:49 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> >
-> > On Wed, Oct 12, 2022 at 12:20 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> > >
-> > > Some bridges are able to update HDCP status from userspace request if
-> > > they support HDCP.
-> > >
-> > > HDCP property is the same as other connector properties that need to be
-> > > created after the connecter is initialized and before the connector is
-> > > registered.
-> > >
-> > anx7625 is a user for this.
->
-> I feel like we should not unconditionally attach this property for
-> bridges, this should be done in the driver which supports it IMO.
->
-I sent another version to register the property in drm driver:
-https://lore.kernel.org/lkml/20221019061936.3599965-1-hsinyi@chromium.org/T/#u
+This file defines all loongson2 soc clock indexes, it should be
+included in the device tree in which there's device using the
+clocks.
 
-Ideally it should be registered by the bridge driver. But some bridge
-drivers have already changed to DRM_BRIDGE_ATTACH_NO_CONNECTOR, so
-they can't get a connector during the attach stage (or any time before
-the connector is registered). Is it acceptable that drm driver help
-register the property if CONFIG_DRM_DISPLAY_HDCP_HELPER is defined?
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v2:
+		1. Make filename matching the compatible.
+		2. Drop weird indentation after define.
+		3. Add dual license.
+		4. Use subject prefixes matching the subsystem.
 
-Thanks
+ MAINTAINERS                                   |  6 ++++
+ include/dt-bindings/clock/loongson,ls2k-clk.h | 29 +++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+ create mode 100644 include/dt-bindings/clock/loongson,ls2k-clk.h
 
-> Sean
->
-> >
-> >
-> > > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > ---
-> > > v2: Fix compile error when config is not set.
-> > > ---
-> > >  drivers/gpu/drm/drm_bridge_connector.c | 3 +++
-> > >  include/drm/display/drm_hdcp_helper.h  | 8 ++++++++
-> > >  2 files changed, 11 insertions(+)
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
-> > > index 1c7d936523df5..a3b9ef8dc3f0b 100644
-> > > --- a/drivers/gpu/drm/drm_bridge_connector.c
-> > > +++ b/drivers/gpu/drm/drm_bridge_connector.c
-> > > @@ -7,6 +7,7 @@
-> > >  #include <linux/module.h>
-> > >  #include <linux/slab.h>
-> > >
-> > > +#include <drm/display/drm_hdcp_helper.h>
-> > >  #include <drm/drm_atomic_state_helper.h>
-> > >  #include <drm/drm_bridge.h>
-> > >  #include <drm/drm_bridge_connector.h>
-> > > @@ -398,6 +399,8 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
-> > >         if (panel_bridge)
-> > >                 drm_panel_bridge_set_orientation(connector, panel_bridge);
-> > >
-> > > +       drm_connector_attach_content_protection_property(connector, true);
-> > > +
-> > >         return connector;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(drm_bridge_connector_init);
-> > > diff --git a/include/drm/display/drm_hdcp_helper.h b/include/drm/display/drm_hdcp_helper.h
-> > > index 8aaf87bf27351..c65d9f06a2532 100644
-> > > --- a/include/drm/display/drm_hdcp_helper.h
-> > > +++ b/include/drm/display/drm_hdcp_helper.h
-> > > @@ -15,8 +15,16 @@ struct drm_device;
-> > >  struct drm_connector;
-> > >
-> > >  int drm_hdcp_check_ksvs_revoked(struct drm_device *dev, u8 *ksvs, u32 ksv_count);
-> > > +#if defined(CONFIG_DRM_DISPLAY_HDCP_HELPER)
-> > >  int drm_connector_attach_content_protection_property(struct drm_connector *connector,
-> > >                                                      bool hdcp_content_type);
-> > > +#else
-> > > +static inline int drm_connector_attach_content_protection_property(struct drm_connector *connector,
-> > > +                                                                  bool hdcp_content_type)
-> > > +{
-> > > +       return 0;
-> > > +}
-> > > +#endif
-> > >  void drm_hdcp_update_content_protection(struct drm_connector *connector, u64 val);
-> > >
-> > >  #endif
-> > > --
-> > > 2.38.0.rc1.362.ged0d419d3c-goog
-> > >
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a162b6fba6fe..401176784853 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11914,6 +11914,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+ F:	drivers/clocksource/loongson2_hpet.c
+ 
++LOONGSON2 SOC SERIES CLOCK DRIVER
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-clk@vger.kernel.org
++S:	Maintained
++F:	include/dt-bindings/clock/loongson,ls2k-clk.h
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/include/dt-bindings/clock/loongson,ls2k-clk.h b/include/dt-bindings/clock/loongson,ls2k-clk.h
+new file mode 100644
+index 000000000000..db1e27e792ff
+--- /dev/null
++++ b/include/dt-bindings/clock/loongson,ls2k-clk.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#ifndef __DT_BINDINGS_CLOCK_LOONGSON2_H
++#define __DT_BINDINGS_CLOCK_LOONGSON2_H
++
++#define LOONGSON2_REF_100M				0
++#define LOONGSON2_NODE_PLL				1
++#define LOONGSON2_DDR_PLL				2
++#define LOONGSON2_DC_PLL				3
++#define LOONGSON2_PIX0_PLL				4
++#define LOONGSON2_PIX1_PLL				5
++#define LOONGSON2_NODE_CLK				6
++#define LOONGSON2_HDA_CLK				7
++#define LOONGSON2_GPU_CLK				8
++#define LOONGSON2_DDR_CLK				9
++#define LOONGSON2_GMAC_CLK				10
++#define LOONGSON2_DC_CLK				11
++#define LOONGSON2_APB_CLK				12
++#define LOONGSON2_USB_CLK				13
++#define LOONGSON2_SATA_CLK				14
++#define LOONGSON2_PIX0_CLK				15
++#define LOONGSON2_PIX1_CLK				16
++#define LOONGSON2_CLK_END				17
++
++#endif
+-- 
+2.31.1
+
