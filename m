@@ -2,71 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124BE604CB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21AFE604CB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbiJSQD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
+        id S230020AbiJSQGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiJSQDO (ORCPT
+        with ESMTP id S229795AbiJSQFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:03:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52C2183DA8;
-        Wed, 19 Oct 2022 09:02:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Oct 2022 12:05:31 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2854826D7;
+        Wed, 19 Oct 2022 09:04:24 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 72dc682b41a07469; Wed, 19 Oct 2022 18:03:35 +0200
+Received: from kreacher.localnet (unknown [213.134.188.148])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 678C96195D;
-        Wed, 19 Oct 2022 16:02:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9CDC433C1;
-        Wed, 19 Oct 2022 16:02:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666195331;
-        bh=rIpWDkl37seriRaOAoZSEwt53xN5YgwQ+fbKKjiUjN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H+g2ZklmxdhK0aI4gr+kxidwZWM9KLP34p0ap0NFHKEMya9ssbRVQdOHRCHqyj/tb
-         QhtxwliyxcQyJGR6lZ5sBYAeOu8b1aL32qh+/JAO0gHAeKUW83FUyraHIAAfAtQHtx
-         OgNk8mnv/GcQBpS55csUn4BYtgvWV1flX/qRvIgY=
-Date:   Wed, 19 Oct 2022 18:02:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH printk v2 21/38] serial: kgdboc: use srcu console list
- iterator
-Message-ID: <Y1AfgdmKpX1ePNST@kroah.com>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-22-john.ogness@linutronix.de>
+        by v370.home.net.pl (Postfix) with ESMTPSA id 902B06669D5;
+        Wed, 19 Oct 2022 18:03:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: [PATCH] rtc: rtc-cmos: Fix compilation with CONFIG_ACPI unset
+Date:   Wed, 19 Oct 2022 18:03:33 +0200
+Message-ID: <2677035.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019145600.1282823-22-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.188.148
+X-CLIENT-HOSTNAME: 213.134.188.148
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgedgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddukeekrddugeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepuddupdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
+ thhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmghhorhhmrghnsehtvggthhhsihhnghhulhgrrhhithihrdhnvghtpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehtohguugdrvgdrsghrrghnughtsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 05:01:43PM +0206, John Ogness wrote:
-> Use srcu console list iteration for safe console list traversal.
-> 
-> Note that configure_kgdboc() still requires the console_lock in
-> order to ensure that no console is in its write() callback when
-> its direct() callback is called. Add comments to clarify this.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+After commit 0782b66ed2fb ("rtc: rtc-cmos: Fix wake alarm breakage")
+the driver won't build with CONFIG_ACPI unset due to a missing stub
+definition of rtc_wake_setup(), so fix that.
+
+Fixes: 0782b66ed2fb ("rtc: rtc-cmos: Fix wake alarm breakage")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/rtc/rtc-cmos.c |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+Index: linux-pm/drivers/rtc/rtc-cmos.c
+===================================================================
+--- linux-pm.orig/drivers/rtc/rtc-cmos.c
++++ linux-pm/drivers/rtc/rtc-cmos.c
+@@ -1337,6 +1337,10 @@ static void cmos_check_acpi_rtc_status(s
+ 
+ #else
+ 
++static inline void rtc_wake_setup(struct device *dev)
++{
++}
++
+ static void cmos_wake_setup(struct device *dev)
+ {
+ }
+
+
+
