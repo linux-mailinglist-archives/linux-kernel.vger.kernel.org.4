@@ -2,240 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33B060490B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F75604915
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiJSOT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S233442AbiJSOV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiJSOTX (ORCPT
+        with ESMTP id S232634AbiJSOVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:19:23 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5452011702A
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:02:48 -0700 (PDT)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JDWDC9021218;
-        Wed, 19 Oct 2022 14:00:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pps0720; bh=IoPDvBRIJspiL5VXnRfID6LEYNIpLUXxfJ62lVwmdL8=;
- b=Aa3KlIgEBybBYPpWSaw/9KTZOLlDEMMKY5TTCyVSMfL8WvyHp/RI1ILK9UtMjJ0KDTIe
- 3/9cJs3aCWYJPZI2E20B8dY+XRgaDl01Tp+Bt+ZkxsI9ts8woYUUPEepeQJF6HOVMMwY
- /phouhVJtvoAt0Fh3Mg0EPa+pjxA3l1n8xazAyh1k/7im/H4H4cgEIugST7VHMRKiVpV
- 9G1dDU0QDC7XeuScVQfz8agRU+z+vyjwQ28dMRgPMEsrsMGR0bNewRPCvnuSL4x1TtHr
- 2cHWH8VdDILsxCVsrAMMfWhQzpcSW3+8Cvz0QpulnDAbN85VDw02Y5PG/sqz/aeMM4Qx dA== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kah2sruhs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 14:00:49 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id B0F5680471E;
-        Wed, 19 Oct 2022 14:00:48 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 228F3802BA4;
-        Wed, 19 Oct 2022 14:00:45 +0000 (UTC)
-Date:   Wed, 19 Oct 2022 09:00:43 -0500
-From:   Dimitri Sivanich <sivanich@hpe.com>
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     gregkh@linuxfoundation.org, zhengyejian1@huawei.com,
-        dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org
-Subject: Re: [PATCH v4] misc: sgi-gru: fix use-after-free error in
-  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Message-ID: <20221019140043.GD18792@hpe.com>
-References: <20221019031445.901570-1-zyytlz.wz@163.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019031445.901570-1-zyytlz.wz@163.com>
-X-Proofpoint-GUID: rXkQs5R-GlMN_SV7xQZNuuq2LnEmJygG
-X-Proofpoint-ORIG-GUID: rXkQs5R-GlMN_SV7xQZNuuq2LnEmJygG
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 19 Oct 2022 10:21:09 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC4543E65
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:04:37 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id e18so13005453wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=PVj2DAdfLIU/pX3XZE26BCq9oqHkdH2P1yACg55ATYc=;
+        b=QlA9FYPVLD1k0zfaUSwjLI8Q83sBFeoAzC7eQuA8Vn4Dp8rjm78gQg6ZSYljWFaYI7
+         +EDL8mVklujMsDG8GH9sEfGXq2u99dWf+2LcmapexNQMysE0Gk9TzJ7RJR9XciOpt60T
+         v2f7F0XsTAOUDv9oH+0tpL/amAfarJmdENSkKa5Fmhky74UWZjAH3KB+l6inFESY5V1f
+         aNjyQ0JZwMql16HhSJGSg149q426+rWzciTmWU7Ja794brJrFd4gv8Mq63R3zu2Skj0B
+         bJKMfYLkoBFcz8AsXb9NzPVITJMOIhiV15K+OlEVdt/gbPnIOGmsPEGVwyHC61oOIOBn
+         bN5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PVj2DAdfLIU/pX3XZE26BCq9oqHkdH2P1yACg55ATYc=;
+        b=Llirvecp6VzT4jao3jRTfwE7/61OAiO7KngygPraj6d1HBqbCssyFQQRFiPDwD0DU6
+         UZFCZvg+0toDtodmTBFoxwWw2XPX/vqZfhp0gkhp3Jv7Kcl2M+zTPezhctClX9GmDMcG
+         yoI8sy1V19C/HdDarbFHXlEFTvU7cpvk0RWwMesfTLgt4C8TBa7aaS3969eHSGXsLnV3
+         26Ks2xrE2JaDI4iPbF1TOUx5K+HaXsGg9+Nlm1ac8IcKOgFQc8DHG9Sn+kRsQNWycCYA
+         RspqUBiYUcld5ymdIe5TPS2lB6u0JIKUc0SYhLkcfuT4X9t5K6o9eH4AscaV/RjADcmt
+         kEYA==
+X-Gm-Message-State: ACrzQf2HViVeewlq/OGZlWTpdOZyiCESZdQD5RLKFNiY/cjzSyV5RLl1
+        Z4eXHwB7S+U7Ubr7h3bqNEmTJA==
+X-Google-Smtp-Source: AMsMyM5VncASy5bf6AEIZVI0iOwpTrGuyy+Dcp8M8CChiqgXYaA84TGEqw0ITPNidhlKL1DMQ9mdMg==
+X-Received: by 2002:a05:600c:468f:b0:3c6:f85c:25a1 with SMTP id p15-20020a05600c468f00b003c6f85c25a1mr5696138wmo.60.1666188197604;
+        Wed, 19 Oct 2022 07:03:17 -0700 (PDT)
+Received: from [127.0.1.1] (rtr.23.90.200.126.unyc.it. [23.90.200.126])
+        by smtp.googlemail.com with ESMTPSA id o5-20020a5d62c5000000b00228cbac7a25sm13998628wrv.64.2022.10.19.07.03.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 07:03:17 -0700 (PDT)
+Subject: [PATCH v3 0/2] spi: amlogic: meson-spicc: Use pinctrl to drive CLK line when idle
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_08,2022-10-19_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 clxscore=1011 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210190078
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAB4DUGMC/3WNzQrCMBCEX6Xs2ZV0q/bn5HuIh01c7UKalsQWS+m7G7x7Gr6Bb2aDJFElQVdsEG
+ XRpGPIUB0KcD2Hl6A+MgMZotKYE84T8uDxqR9Mk6Ija2upG7mYCrJkOQnayMH1WQuz97nsNb3HuP5O
+ Fspx+7u3EBqspGFpSy5bOl8tr15tlKMbB7jv+/4FlmtKQLQAAAA=
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Date:   Wed, 19 Oct 2022 16:01:02 +0200
+Message-Id: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Da Xue <da@libre.computer>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1666188196; l=1508;
+ i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
+ bh=/olsUtwOJnRswdLM6doMxbVMNoGB8qZCnkiNegDbh1w=;
+ b=aFPV+HsjpwaTDlj7ngssvgjXRK+U0pQ5Yu0g/7m9QFR2MBhDYQYr2iRBsvSx6x+PD6M/5IKDkRss
+ MTCh+avjCw3BKpkSwtHHwbLoGKJbXu2qDxoOXZfjOz5/8jYPCtQC
+X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
+ pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:14:45AM +0800, Zheng Wang wrote:
-> Gts may be freed in gru_check_chiplet_assignment.
-> The caller still use it after that, UAF happens.
-> 
-> Fix it by introducing a return value to see if it's in error path or not.
-> Free the gts in caller if gru_check_chiplet_assignment check failed.
-> 
-> Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-> Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
-> v4:
-> - use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
-> 
-> v3:
-> - add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
-> 
-> v2:
-> - commit message changes suggested by Greg
-> 
-> v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
-> ---
->  drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
->  drivers/misc/sgi-gru/grumain.c   | 18 ++++++++++++++----
->  drivers/misc/sgi-gru/grutables.h |  2 +-
->  3 files changed, 27 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-> index d7ef61e602ed..2b5b049fbd38 100644
-> --- a/drivers/misc/sgi-gru/grufault.c
-> +++ b/drivers/misc/sgi-gru/grufault.c
-> @@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
->  	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
->  		goto exit;
->  
-> -	gru_check_context_placement(gts);
-> +	ret = gru_check_context_placement(gts);
-> +	if (ret)
-> +		goto err;
->  
->  	/*
->  	 * CCH may contain stale data if ts_force_cch_reload is set.
-> @@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
->  exit:
->  	gru_unlock_gts(gts);
->  	return ret;
-> +err:
-> +	gru_unlock_gts(gts);
-> +	gru_unload_context(gts, 1);
-> +	return -EINVAL;
->  }
->  
->  /*
-> @@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
->  		} else {
->  			gts->ts_user_blade_id = req.val1;
->  			gts->ts_user_chiplet_id = req.val0;
-> -			gru_check_context_placement(gts);
-> +			ret = gru_check_context_placement(gts);
+Between SPI transactions, all SPI pins are in HiZ state. When using the SS
+signal from the SPICC controller it's not an issue because when the
+transaction resumes all pins come back to the right state at the same time
+as SS.
 
-In gru_set_context_option(), you are calling gru_unload_context() for all
-non-zero 'ret' values, but there are other instances where non-zero 'ret'
-values are being set that should not call gru_unload_context().  Maybe do
-this instead:
-			if (gru_check_context_placement(gts)) {
-				gru_unlock_gts(gts);
-				gru_unload_context(gts, 1);
-				return -EINVAL;
-			}
+The problem is when we use CS as a GPIO. In fact, between the GPIO CS
+state change and SPI pins state change from idle, you can have a missing or
+spurious clock transition.
 
->  		}
->  		break;
->  	case sco_gseg_owner:
-> @@ -889,6 +895,10 @@ int gru_set_context_option(unsigned long arg)
->  		ret = -EINVAL;
->  	}
->  	gru_unlock_gts(gts);
-> +	if (ret) {
-> +		gru_unload_context(gts, 1);
-> +		ret = -EINVAL;
-> +	}
->  
->  	return ret;
->  }
-> diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-> index 9afda47efbf2..77becb52f550 100644
-> --- a/drivers/misc/sgi-gru/grumain.c
-> +++ b/drivers/misc/sgi-gru/grumain.c
-> @@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
->   * chiplet. Misassignment can occur if the process migrates to a different
->   * blade or if the user changes the selected blade/chiplet.
->   */
-> -void gru_check_context_placement(struct gru_thread_state *gts)
-> +int gru_check_context_placement(struct gru_thread_state *gts)
->  {
->  	struct gru_state *gru;
-> +	int ret = 0;
->  
->  	/*
->  	 * If the current task is the context owner, verify that the
-> @@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
->  	 */
->  	gru = gts->ts_gru;
->  	if (!gru || gts->ts_tgid_owner != current->tgid)
-> -		return;
-> +		return ret;
->  
->  	if (!gru_check_chiplet_assignment(gru, gts)) {
->  		STAT(check_context_unload);
-> -		gru_unload_context(gts, 1);
-> +		ret = -EINVAL;
->  	} else if (gru_retarget_intr(gts)) {
->  		STAT(check_context_retarget_intr);
->  	}
-> +
-> +	return ret;
->  }
->  
->  
-> @@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
->  	struct gru_thread_state *gts;
->  	unsigned long paddr, vaddr;
->  	unsigned long expires;
-> +	int ret;
->  
->  	vaddr = vmf->address;
->  	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
-> @@ -934,7 +938,13 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
->  	mutex_lock(&gts->ts_ctxlock);
->  	preempt_disable();
->  
-> -	gru_check_context_placement(gts);
-> +	ret = gru_check_context_placement(gts);
-> +	if (ret) {
+Set a bias on the clock depending on the clock polarity requested before CS
+goes active, by passing a special "idle-low" and "idle-high" pinctrl state
+and setting the right state at a start of a message.
 
-One suggestion, there is now no need to declare 'ret'.  Do this instead:
-        if (gru_check_context_placement(gts)) {
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+---
+Changes in v3:
+- Fixed documentation by removing pinctrl states as they are not mandatory.
+- Link to v2: https://lore.kernel.org/r/20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com
 
-> +		preempt_enable();
-> +		mutex_unlock(&gts->ts_ctxlock);
-> +		gru_unload_context(gts, 1);
-> +		return VM_FAULT_NOPAGE;
-> +	}
->  
->  	if (!gts->ts_gru) {
->  		STAT(load_user_context);
-> diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-> index 5efc869fe59a..f4a5a787685f 100644
-> --- a/drivers/misc/sgi-gru/grutables.h
-> +++ b/drivers/misc/sgi-gru/grutables.h
-> @@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
->  extern int gru_user_unload_context(unsigned long arg);
->  extern int gru_get_exception_detail(unsigned long arg);
->  extern int gru_set_context_option(unsigned long address);
-> -extern void gru_check_context_placement(struct gru_thread_state *gts);
-> +extern int gru_check_context_placement(struct gru_thread_state *gts);
->  extern int gru_cpu_fault_map_id(void);
->  extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
->  extern void gru_flush_all_tlb(struct gru_state *gru);
-> -- 
-> 2.25.1
+---
+Amjad Ouled-Ameur (2):
+      spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI signal states
+      spi: meson-spicc: Use pinctrl to drive CLK line when idle
+
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml       | 67 ++++++++++++++--------
+ arch/arm64/boot/dts/amlogic/meson-gxl.dtsi         | 14 +++++
+ drivers/spi/spi-meson-spicc.c                      | 39 ++++++++++++-
+ 3 files changed, 94 insertions(+), 26 deletions(-)
+---
+base-commit: aae703b02f92bde9264366c545e87cec451de471
+change-id: 20221004-up-aml-fix-spi-c2bb7e78e603
+
+Best regards,
+-- 
+Amjad Ouled-Ameur <aouledameur@baylibre.com>
