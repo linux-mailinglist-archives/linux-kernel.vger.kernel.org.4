@@ -2,122 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0DD6048DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351A56048FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbiJSOMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
+        id S231356AbiJSOSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbiJSOMR (ORCPT
+        with ESMTP id S233414AbiJSOSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:12:17 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A19659E1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:54:43 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9C9955C00DC;
-        Wed, 19 Oct 2022 09:52:35 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 19 Oct 2022 09:52:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1666187555; x=
-        1666273955; bh=NzYAg/YlSEKvKIBTWEWnRqnuWfSpTU9MM+bFuYxuKV4=; b=N
-        z86J5hVmXo3Afd0cMjWHeEsLXu83D0C8GzkmyraQ9Ichekq8bXIrxJSUXSHn206Y
-        kf2zeyqfqsAQHz47dD7rvjCuP6pWIni6GFKcSuhTHQ9ecrhwh9ImavgZ+hqA4fvb
-        UglkJp/jZNZGsDIlmWa/Gt6YJwhJCnXYazw1m544uQ1msooxW/LJv/Tqj1zpRYrl
-        pxNJBBoeYlYyjjWhD6OOT2PK7Yap6UQ+pCAhdnA8VK06KTShfE9t703XIHFBeBQs
-        Td95Kisa0HyP4pa/crhP0AfRCHfPn6+SnPP/pND0qWiAmtzbK9dmzMDEK7uBQFko
-        3aP8XAKFahuYY3BmU2anQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666187555; x=
-        1666273955; bh=NzYAg/YlSEKvKIBTWEWnRqnuWfSpTU9MM+bFuYxuKV4=; b=O
-        JzccL+5FEzugRDp+RC6WsV6ob+38epOo66avPJgiPE6fQGsLOgacoILlgKsU+f4m
-        peIazUdLKQOH1vtPFrsCR5YenyqlJyQw5ab6+YNr9AyPKLznkKBdOovx7bP/Lnzp
-        CjSSDTgnB9pYxdZhUJf0fkDrJIAFnoWG4XxBvTD1IndPDNJIEEPXqa6x5ed1wc3R
-        ANwP13SJyP/2/Sbspqinxpbk7vU1FnAcPx7d+cw7CZKcOXKWHkmeIZjSeUXqaLQ4
-        u3torVAtXVuy7Y159TgDxe/MWu7NqnCm4XgYxyJa2KTZnZigz9AeGAr6ks+EhFw/
-        O7f7czNe4AbCjeeaIr2QA==
-X-ME-Sender: <xms:IgFQY9jTihMyeWvXHBN259hdwseytY98_P3yUMJWra0BV9AhKJHJmA>
-    <xme:IgFQYyBfhu9sbuCydaO5nxh8NaMblCWTJiut2ip2YbseL3jDh7ZCnIv9aYjNktXAF
-    tagEzSFbqpfJKmAbVA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgedgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:IgFQY9GYjR7RBNEuXXUIaukB6FozyhgzvD0j9z8wJvyIRfk-1WD9kw>
-    <xmx:IgFQYyRDJZ38NGG9Aerh3McB9ABGt1iYyjyUsAFPij3twc0k39Eqww>
-    <xmx:IgFQY6yyo7xQOyZT_RjoPjtreCs9VZa-mFzMeNfLwvLCxe9E-j6GkQ>
-    <xmx:IwFQYxnfNLU8-K2FFfAwsKgOl_DCNbxHkeqqA9ZV1bgSND7G7uTAXw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4D9C3B60089; Wed, 19 Oct 2022 09:52:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <7d97c52d-9917-4b3b-8ad2-7243566ae582@app.fastmail.com>
-In-Reply-To: <20221019154841.1cb2a15a@kmaincent-XPS-13-7390>
-References: <20221019133208.319626-1-kory.maincent@bootlin.com>
- <20221019133208.319626-4-kory.maincent@bootlin.com>
- <5e6858b7-231a-187c-acaf-f82b82a956bf@linaro.org>
- <20221019154841.1cb2a15a@kmaincent-XPS-13-7390>
-Date:   Wed, 19 Oct 2022 15:52:12 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     =?UTF-8?Q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
-        "Alexandre Ghiti" <alexandre.ghiti@canonical.com>
-Subject: Re: [PATCH 3/6] arm: configs: spear6xx: Enable PL110 display controller
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 10:18:02 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB6D141397
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:01:02 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id b1so28249405lfs.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RknYa2NABgYYHyJknMjUhYiHTu2aqnADkUkC2x00Z/k=;
+        b=yVyYhg2zBMm+7w3lS+wQf7QQB6OxkvKhhDBuAPYoaZ7jD0KpwgQm287TcPFHMwTTkE
+         jryok8brz3+crpof1k38RGlYAy8EknTf68wgzwJcnn3FBydmHK77NIq8gst0QpljcDnr
+         lEQvShh77tEZtVCe8fl0GZnP2mCH81by5zLhTlqbuLfUx0UpnWcovEmz96yWNOv810Mr
+         lQfdoKcRbsxklj6SU8zBtJVkDk9ttPpnKVB3WgOpCeAy6PAWmY19KZnVd68/6dOt51tZ
+         ZrVbOIMPqosRKsDK0eA3b5vgFTfilJ2lUvoaaulDneOt2wSZ4l6ggS6O4BHZOrnDLQIo
+         1jyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RknYa2NABgYYHyJknMjUhYiHTu2aqnADkUkC2x00Z/k=;
+        b=MghPRKMtRcRlnrMOpSShH5+L06U9uXvkKBkXMXr++vVPK/XYoKaZoWoMZGVgTE6vQN
+         7Uu4lBeEEZ0ie/ECYOavaXoltTm1FlZSLADTQ7ajiHZZYGIU8cFe5qMj7pJLOgsY+d1n
+         p2nrA0Ecv5FNb2QRm4adc6DslFu90ar82LS9yh8C8mcwnkqFUg2K39enqOu/8mB0b6l1
+         S9Fa0EhqmB7mhfpS+d0icf327I8YbbJYYWqiUhPwzxlvb+/CCcWcl/d1pDWEAaLyfboU
+         imU1TMuJRo8hIVyeoMqGX9pZtBbGHoi1aaSD01dUKYGgqOSj1G72pOHOiJq/y5Ef6GFu
+         D1Ig==
+X-Gm-Message-State: ACrzQf2/JyKN063PId1aj1Di0Qoq9RlDOEyKb3s/w82WqEvc6U9jlAjC
+        w3/9hthOqVhw1GQPncx7b5OIr/VN83jeAQ==
+X-Google-Smtp-Source: AMsMyM7XIZU0I24cerZGyqqlXQ/1nBl3l4sFmHTpzgGVDmR0GJjUQ91snFjYNIxrUZWHEFwuHqEW5w==
+X-Received: by 2002:a2e:bc0f:0:b0:26e:15f:51dd with SMTP id b15-20020a2ebc0f000000b0026e015f51ddmr3021059ljf.118.1666187550011;
+        Wed, 19 Oct 2022 06:52:30 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id t17-20020a056512209100b004996fbfd75esm2298842lfr.71.2022.10.19.06.52.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 06:52:29 -0700 (PDT)
+Message-ID: <02a879d4-cc7a-ca8e-7334-755873baa3e7@linaro.org>
+Date:   Wed, 19 Oct 2022 16:52:29 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 12/15] phy: qcom-qmp-pcie: fix initialisation reset
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221019113552.22353-1-johan+linaro@kernel.org>
+ <20221019113552.22353-13-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221019113552.22353-13-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022, at 15:48, K=C3=B6ry Maincent wrote:
-> Hello Krzysztof,
->
-> On Wed, 19 Oct 2022 09:38:45 -0400
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->
->> On 19/10/2022 09:32, K=C3=B6ry Maincent wrote:
->> > From: Kory Maincent <kory.maincent@bootlin.com>
->> >=20
->> > Enable the PL110 DRM driver, used by the spear600.
->> >=20
->> > CONFIG_I2C is dropped from the defconfig as it is selected by CONFI=
-G_DRM. =20
->>=20
->> I2C as a user-selectable option should stay. Don't remove such
->> (user-selectable) top-level options just because something else selec=
-ted it.
->
-> As the CONFIG_DRM selects it, the "make savedefconfig" removes it by d=
-efault.
-> Why keeping something that is already automatically enabled by CONFIG_=
-DRM?
+On 19/10/2022 14:35, Johan Hovold wrote:
+> Add the missing delay after asserting reset. This is specifically needed
+> for the reset to have any effect on SC8280XP.
+> 
+> The vendor driver uses a 1 ms delay, but that seems a bit excessive.
+> Instead use a 200 us delay which appears to be more than enough and also
+> matches the UFS reset delay added by commit 870b1279c7a0 ("scsi:
+> ufs-qcom: Add reset control support for host controller").
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> index 2f4bdef73395..9c8e009033f1 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> @@ -1866,6 +1866,8 @@ static int qmp_pcie_init(struct phy *phy)
+>   		goto err_disable_regulators;
+>   	}
+>   
+> +	usleep_range(200, 300);
+> +
 
-It's something that DRM probably should not select, so if this
-ever gets fixed in DRM, you get a broken build. Just leaving
-the line in there is harmless.
+If there is a v3, I'd kindly ask to add a comment about vendor using 1ms 
+here.
 
-      Arnd
+>   	ret = reset_control_bulk_deassert(cfg->num_resets, qmp->resets);
+>   	if (ret) {
+>   		dev_err(qmp->dev, "reset deassert failed\n");
+
+-- 
+With best wishes
+Dmitry
+
