@@ -2,33 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF1B6044A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C026044A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbiJSMKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S232584AbiJSMKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbiJSMJh (ORCPT
+        with ESMTP id S233219AbiJSMJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:09:37 -0400
+        Wed, 19 Oct 2022 08:09:35 -0400
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4F93C16D;
-        Wed, 19 Oct 2022 04:45:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF74645F6D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:45:31 -0700 (PDT)
 Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
         by relay.virtuozzo.com with esmtp (Exim 4.95)
         (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1ol5lb-00B8K8-Cj;
-        Wed, 19 Oct 2022 11:56:29 +0200
+        id 1ol5lf-00B8K8-EO;
+        Wed, 19 Oct 2022 11:56:33 +0200
 From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     Jonathan Corbet <corbet@lwn.net>
+To:     Nadav Amit <namit@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     kernel@openvz.org,
         Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [RFC PATCH v5 3/8] mm: Display inflated memory to users
-Date:   Wed, 19 Oct 2022 12:56:15 +0300
-Message-Id: <20221019095620.124909-4-alexander.atanasov@virtuozzo.com>
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v5 6/8] drivers: vmware: balloon - report inflated memory
+Date:   Wed, 19 Oct 2022 12:56:18 +0300
+Message-Id: <20221019095620.124909-7-alexander.atanasov@virtuozzo.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
 References: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
@@ -42,66 +44,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add InflatedTotal and InflatedFree to /proc/meminfo
+Update the inflated memory in the mm core on change.
 
 Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- Documentation/filesystems/proc.rst |  6 ++++++
- fs/proc/meminfo.c                  | 10 ++++++++++
- 2 files changed, 16 insertions(+)
+ drivers/misc/vmw_balloon.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 898c99eae8e4..d88828a27383 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -992,6 +992,8 @@ Example output. You may not have all of these fields.
-     VmallocUsed:       40444 kB
-     VmallocChunk:          0 kB
-     Percpu:            29312 kB
-+    InflatedTotal:   2097152 kB
-+    InflatedFree:          0 kB
-     HardwareCorrupted:     0 kB
-     AnonHugePages:   4149248 kB
-     ShmemHugePages:        0 kB
-@@ -1142,6 +1144,10 @@ VmallocChunk
- Percpu
-               Memory allocated to the percpu allocator used to back percpu
-               allocations. This stat excludes the cost of metadata.
-+InflatedTotal and InflatedFree
-+               Amount of memory that is inflated by the balloon driver.
-+               Due to differences among the drivers inflated memory
-+               is subtracted from TotalRam or from MemFree.
- HardwareCorrupted
-               The amount of RAM/memory in KB, the kernel identifies as
-               corrupted.
-diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-index 5101131e6047..d9e059b0b25d 100644
---- a/fs/proc/meminfo.c
-+++ b/fs/proc/meminfo.c
-@@ -16,6 +16,9 @@
- #ifdef CONFIG_CMA
- #include <linux/cma.h>
- #endif
-+#ifdef CONFIG_MEMORY_BALLOON
-+#include <linux/balloon.h>
-+#endif
- #include <asm/page.h>
- #include "internal.h"
+diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
+index 91d4d2a285c5..3bfd845898f5 100644
+--- a/drivers/misc/vmw_balloon.c
++++ b/drivers/misc/vmw_balloon.c
+@@ -1507,6 +1507,7 @@ static void vmballoon_work(struct work_struct *work)
+ 	queue_delayed_work(system_freezable_wq,
+ 			   dwork, round_jiffies_relative(HZ));
  
-@@ -155,6 +158,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
- 		    global_zone_page_state(NR_FREE_CMA_PAGES));
- #endif
++	balloon_set_inflated_free(atomic64_read(&b->size) << 2);
+ }
  
-+#ifdef CONFIG_MEMORY_BALLOON
-+	seq_printf(m,  "InflatedTotal:  %8ld kB\n",
-+		atomic_long_read(&mem_balloon_inflated_total_kb));
-+	seq_printf(m,  "InflatedFree:   %8ld kB\n",
-+		atomic_long_read(&mem_balloon_inflated_free_kb));
-+#endif
-+
- 	hugetlb_report_meminfo(m);
- 
- 	arch_report_meminfo(m);
+ /**
 -- 
 2.31.1
 
