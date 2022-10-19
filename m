@@ -2,95 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084B4605038
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59ED60503B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiJSTM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S229756AbiJSTOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiJSTLp (ORCPT
+        with ESMTP id S229491AbiJSTOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:11:45 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C2D1C73F1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:11:43 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id f9-20020a17090a654900b00210928389f8so1055499pjs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yhu8V94jGdFAJfWlKuQJBLxMXBDTgqOAY04Z9XkILB0=;
-        b=WI+E6mdE7KikoyYbx1G5v3rb1cKskrFPEPpUcFSezZZHvmjimQNtiqHHiCfc4pM22J
-         AymUmLfO5HWh/AVsMrYSl5w3Q0rrVH5CxgWqe6ZQxBmHLQykRxTrpcQ0o1fUiTWSrSH0
-         rlUAd65tlLGEfN/PG8A2OCHLDa9Y8zuGOoBRk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yhu8V94jGdFAJfWlKuQJBLxMXBDTgqOAY04Z9XkILB0=;
-        b=T63qtrXgUxhZcA11hns+xmvXW3FSfw495uUSmmDXLSs3bn1ZAzdqFMG69BvqecG1Tf
-         3BaPwuRz3Qks4ve+QcBmRakcye4VIajjL+tjivY4vRjubpqIoa6In3HYcGrINSv4KdqP
-         /62e5YUiYpP4+Zlpr4Ubpux2lh/KTeHt1hHWyqCIMiNzN92bVNDjy2QaeM0yWnoXVyt9
-         dHKdF9/Fet0xq55BB6ccMwnW5+XE2S84xB+pHRPu2h+upqCiyUkAqyYXDfo3Vvl0pi4p
-         kdx+M7MIFwt+BnddSmbn5DWceswOO1NNpMAwztoML7AdbVCrTY6GBlWAMxcAegU+xuFB
-         pRmw==
-X-Gm-Message-State: ACrzQf0XIFUyuPmxgVgsIQHNTZPsDb8n8wIPOOg4aXa/D3HoZG+ci0Va
-        nMUfHx8cBxbgT9DhRG8uDeLbjQ==
-X-Google-Smtp-Source: AMsMyM4zLj3pDGeqBxExWHkpvRO0zSZiZQezSqyo+Hqz1J5Sd+WMFDOQKLR6oMdA/dpI4i+RVsiYBg==
-X-Received: by 2002:a17:90b:4b46:b0:20a:e906:426d with SMTP id mi6-20020a17090b4b4600b0020ae906426dmr11831505pjb.48.1666206703114;
-        Wed, 19 Oct 2022 12:11:43 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902bd4400b0016d72804664sm11019006plx.205.2022.10.19.12.11.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 12:11:42 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 12:11:41 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-Message-ID: <202210191209.919149F4@keescook>
-References: <20221019162648.3557490-1-Jason@zx2c4.com>
- <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <20221019174345.GM25951@gate.crashing.org>
- <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
- <CAKwvOdn4iocWHY_-sXMqE7F1XrV669QsyQDzh7vPFg6+7368Cg@mail.gmail.com>
- <CAHk-=wiD90ZphsbTzSetHsK3_kQzhgyiYYS0msboVsJ3jbNALQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiD90ZphsbTzSetHsK3_kQzhgyiYYS0msboVsJ3jbNALQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 15:14:05 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ADC1C712E;
+        Wed, 19 Oct 2022 12:14:01 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JJCZds022459;
+        Wed, 19 Oct 2022 19:13:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=FdGEPsY/c5x5Vm6zpKCKuQb55uNoKuhuitqyQySnmYQ=;
+ b=jDAJRM+0b5wc43wW9L6O3XOIWpLGE37+RJ8YQwUmz727skb23zbITAmUzn5rM8dV1vmc
+ W1P2t/f5xHY83KZk8UjZpiMsQPHqen7aZX+YmsavqgZDL2FKVhoXsW5N4xLXhIRRkOx4
+ 3yEozFzCAtiT1k0TIZoAiqI0kHiVOHmpOtE7czfxkgezauGechtv4gFXw6WLVM5fVYOZ
+ bIoQ+yhJn9yYj/+QGStYmt0O38TZr9t2y6GXT1y0fBfijLKjD+Bzc9YTepP6J5FOtluS
+ i5VoOyjrTfwitqq6pTkCK6a3/Xt3UMNpYvS9lK6Hz3ZcIEI4Xb03MUeHvEmu1nRLSAWP QQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kannsb0cr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 19:13:39 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JIdsXK029467;
+        Wed, 19 Oct 2022 19:13:38 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kannsb0c3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 19:13:38 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JJ4rSQ024012;
+        Wed, 19 Oct 2022 19:13:37 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01dal.us.ibm.com with ESMTP id 3k7mg9bvjb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 19:13:37 +0000
+Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JJDYDY20513446
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Oct 2022 19:13:35 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30E3858060;
+        Wed, 19 Oct 2022 19:13:36 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A19E58061;
+        Wed, 19 Oct 2022 19:13:35 +0000 (GMT)
+Received: from sig-9-65-252-68.ibm.com (unknown [9.65.252.68])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Oct 2022 19:13:35 +0000 (GMT)
+Message-ID: <2ce5e63dc4f15b8015fd7499120ff4256ad1f619.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/9] integrity: Prepare for having "ima" and "evm"
+ available in "integrity" LSM
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Kees Cook <keescook@chromium.org>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Wed, 19 Oct 2022 15:13:34 -0400
+In-Reply-To: <202210191129.BFBF8035@keescook>
+References: <20221013222702.never.990-kees@kernel.org>
+         <20221013223654.659758-1-keescook@chromium.org>
+         <08a8b202-69b4-e154-28f5-337a898acf61@digikod.net>
+         <202210141050.A8DF7D10@keescook>
+         <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
+         <202210191129.BFBF8035@keescook>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 87XUx_d22OJZqr9i-tgbHtzejQSVKtyW
+X-Proofpoint-GUID: JvaW5FGu2b_1AZFKepq4V-BJhSd3s-OK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_11,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 mlxscore=0 phishscore=0 mlxlogscore=657
+ malwarescore=0 clxscore=1015 adultscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210190108
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:56:00AM -0700, Linus Torvalds wrote:
-> Hundreds and hundreds of that atomic_try_cmpxchg_acquire(), for
-> example. And they might be trivial to fix (it might be similar to the
-> fortify-string.h one where it's just a header file that generates most
-> of them in one single place), but with all the ones that are just
-> clearly the compiler being silly, they aren't really even worth
-> looking at.
+On Wed, 2022-10-19 at 11:33 -0700, Kees Cook wrote:
+> On Mon, Oct 17, 2022 at 11:26:44AM +0200, Mickaël Salaün wrote:
+> > 
+> > On 14/10/2022 19:59, Kees Cook wrote:
+> > > On Fri, Oct 14, 2022 at 04:40:01PM +0200, Mickaël Salaün wrote:
+> > > > This is not backward compatible
+> > > 
+> > > Why? Nothing will be running LSM hooks until init finishes, at which
+> > > point the integrity inode cache will be allocated. And ima and evm don't
+> > > start up until lateinit.
+> > > 
+> > > > , but can easily be fixed thanks to
+> > > > DEFINE_LSM().order
+> > > 
+> > > That forces the LSM to be enabled, which may not be desired?
+> > 
+> > This is not backward compatible because currently IMA is enabled
+> > independently of the "lsm=" cmdline, which means that for all installed
+> > systems using IMA and also with a custom "lsm=" cmdline, updating the kernel
+> > with this patch will (silently) disable IMA. Using ".order =
+> > LSM_ORDER_FIRST," should keep this behavior.
+> 
+> This isn't true. If "integrity" is removed from the lsm= line today, IMA
+> will immediately panic:
+> 
+> process_measurement():
+>   integrity_inode_get():
+>         if (!iint_cache)
+>                 panic("%s: lsm=integrity required.\n", __func__);
+> 
+> and before v5.12 (where the panic was added), it would immediately NULL
+> deref. (And it took 3 years to even notice.)
 
-Yeah, I've had to fight these casts in fortify-string.h from time to
-time. I'd love to see the patch you used -- I bet it would keep future
-problems at bay.
+Most people were/are still using the "security=" boot command line
+option, not "lsm=".  This previously wasn't a problem with "security=",
+but became a problem with "lsm=".  I should have been aware of the
+change from "security=" to "lsm=", but unfortunately wasn't.  It took
+me totally by surprise.   All of sudden "integrity" went from being a
+common IMA/EVM resource to an LSM.  The correct solution would have
+been to move it a different initcall.  (It's not too late to fix it.)
 
 -- 
-Kees Cook
+thanks,
+
+Mimi
+
