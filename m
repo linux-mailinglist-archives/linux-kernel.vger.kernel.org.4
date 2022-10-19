@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF15D604B59
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41C3604B6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiJSP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S230217AbiJSP3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbiJSP1Y (ORCPT
+        with ESMTP id S232596AbiJSP3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:27:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABFF1D4DDA;
-        Wed, 19 Oct 2022 08:20:28 -0700 (PDT)
+        Wed, 19 Oct 2022 11:29:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197722EF0E;
+        Wed, 19 Oct 2022 08:21:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ED4B6184B;
-        Wed, 19 Oct 2022 15:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B55BC433D6;
-        Wed, 19 Oct 2022 15:20:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0112C6183B;
+        Wed, 19 Oct 2022 15:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14141C433D6;
+        Wed, 19 Oct 2022 15:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666192815;
-        bh=OHnFw0JhLweZiz1MQUA1JZLc1dJxeCgP07D/rnW6zd4=;
+        s=k20201202; t=1666192864;
+        bh=yWpP5rcBA/V4zM+3Kf0SHoYs8NLhaoSKrOLcnNumx0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=untci+/VB0LLnWeB2Wvp55+ab4w9tkXF5NfFqbqB30zosPvay2h+oJay8MLP3rydj
-         a/qZwLJs2h0S0ByUbglJxnwgFXtaX2FYdKoJRlwBNpIj0WrLjEOLxWf3rCTv47y9Vq
-         cQNtXpZl//qFXnAHdZ91AZ0HfQhr/oyn+dZByNUw0XDn/mIBxzZayg9uJPi3+7T/2l
-         kfp83tfGL3qbD6cRbwDG8Gd0+Ldir5WazJRgFIEq2plXg85e6OzzqaXdUa5d/pGM3v
-         AyZiAwIN1dWJbR1eOYDCCWXwt9zvphICi/0tagJJbvTbcRN8aCeMGRXjjxGkncboWW
-         MjSz6wbmso7cQ==
+        b=T0ACXHiaI0xSYoHeg+S7sBaOQxPRtEET+I/nq8S1ezrUd673bqnwW1by0S6xIrMIV
+         H9gDsPGfuGmTFQxDoISfFprnOo3nNljHFz7Cdzr9kZcQEFUEwQ+0SqfFk6cggqxq0b
+         Y/Iz8gioR1ELb4f1YbT+QaZ5gpNRdhGy8aPd+O3PALJSiD8GEZUe21LvPIGNBjdqpB
+         R7Mct+diTuhDEVdZYsZI659jTIq+S6Nq81p5xCxicY89GqNXhM7B8jz0XG4pbf1+2U
+         JIFYnTPgFXnmJCSU6xIsEOHCeBZIgy3LJt8IyL6xbKN6qGoVbumE1DIvPRvXVtiD56
+         uhr00kvUiZc3Q==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org, Helge Deller <deller@gmx.de>
+To:     linux-arm-kernel@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Aaro Koskinen <aaro.koskinen@iki.fi>,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>,
         Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Angelo Arrifano <miknix@gmail.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH 15/17] fbdev: omapfb: remove unused board support
-Date:   Wed, 19 Oct 2022 17:03:37 +0200
-Message-Id: <20221019150410.3851944-15-arnd@kernel.org>
+        Cory Maccarrone <darkstar6262@gmail.com>,
+        Fabrice Crohas <fcrohas@gmail.com>, linux-spi@vger.kernel.org
+Subject: [PATCH 16/17] spi: remove omap 100K driver
+Date:   Wed, 19 Oct 2022 17:03:38 +0200
+Message-Id: <20221019150410.3851944-16-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221019150410.3851944-1-arnd@kernel.org>
 References: <20221019144119.3848027-1-arnd@kernel.org>
@@ -63,545 +61,548 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-A number of omap1 based board files got removed, so the corresponding
-framebuffer drivers are no longer used. The remaining ones are for
-ams_delta, osk and palmTE, which are still part of the mainline kernel.
+The OMAP7xx/OMAP8xx support was removed since all of its boards
+have no remaining users. Remove its spi driver as well.
 
 Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
 Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 Cc: Tony Lindgren <tony@atomide.com>
 Cc: linux-omap@vger.kernel.org
-Cc: Marek Vasut <marek.vasut@gmail.com>
-Cc: Angelo Arrifano <miknix@gmail.com>
-Cc: Imre Deak <imre.deak@intel.com>
+Cc: Cory Maccarrone <darkstar6262@gmail.com>
+Cc: Fabrice Crohas <fcrohas@gmail.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/video/fbdev/omap/Kconfig         |  9 ---
- drivers/video/fbdev/omap/Makefile        |  6 --
- drivers/video/fbdev/omap/lcd_h3.c        | 82 --------------------
- drivers/video/fbdev/omap/lcd_htcherald.c | 59 --------------
- drivers/video/fbdev/omap/lcd_inn1510.c   | 69 -----------------
- drivers/video/fbdev/omap/lcd_inn1610.c   | 99 ------------------------
- drivers/video/fbdev/omap/lcd_palmtt.c    | 65 ----------------
- drivers/video/fbdev/omap/lcd_palmz71.c   | 59 --------------
- 8 files changed, 448 deletions(-)
- delete mode 100644 drivers/video/fbdev/omap/lcd_h3.c
- delete mode 100644 drivers/video/fbdev/omap/lcd_htcherald.c
- delete mode 100644 drivers/video/fbdev/omap/lcd_inn1510.c
- delete mode 100644 drivers/video/fbdev/omap/lcd_inn1610.c
- delete mode 100644 drivers/video/fbdev/omap/lcd_palmtt.c
- delete mode 100644 drivers/video/fbdev/omap/lcd_palmz71.c
+ drivers/spi/Kconfig         |   6 -
+ drivers/spi/Makefile        |   1 -
+ drivers/spi/spi-omap-100k.c | 490 ------------------------------------
+ 3 files changed, 497 deletions(-)
+ delete mode 100644 drivers/spi/spi-omap-100k.c
 
-diff --git a/drivers/video/fbdev/omap/Kconfig b/drivers/video/fbdev/omap/Kconfig
-index b1786cf1b486..a6548283451f 100644
---- a/drivers/video/fbdev/omap/Kconfig
-+++ b/drivers/video/fbdev/omap/Kconfig
-@@ -40,15 +40,6 @@ config FB_OMAP_LCD_MIPID
- 	  the Mobile Industry Processor Interface DBI-C/DCS
- 	  specification. (Supported LCDs: Philips LPH8923, Sharp LS041Y3)
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index d1bb62f7368b..bf0dc704abbe 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -697,12 +697,6 @@ config SPI_TI_QSPI
+ 	  This device supports single, dual and quad read support, while
+ 	  it only supports single write mode.
  
--config FB_OMAP_LCD_H3
--	bool "TPS65010 LCD controller on OMAP-H3"
--	depends on MACH_OMAP_H3 || COMPILE_TEST
--	depends on TPS65010=y
--	default y
+-config SPI_OMAP_100K
+-	tristate "OMAP SPI 100K"
+-	depends on ARCH_OMAP850 || ARCH_OMAP730 || COMPILE_TEST
 -	help
--	  Say Y here if you want to have support for the LCD on the
--	  H3 board.
+-	  OMAP SPI 100K master controller for omap7xx boards.
 -
- config FB_OMAP_DMA_TUNE
- 	bool "Set DMA SDRAM access priority high"
- 	depends on FB_OMAP
-diff --git a/drivers/video/fbdev/omap/Makefile b/drivers/video/fbdev/omap/Makefile
-index b88e02f5cb1f..504edb9c09dd 100644
---- a/drivers/video/fbdev/omap/Makefile
-+++ b/drivers/video/fbdev/omap/Makefile
-@@ -17,16 +17,10 @@ objs-y$(CONFIG_FB_OMAP_LCDC_EXTERNAL) += sossi.o
- objs-y$(CONFIG_FB_OMAP_LCDC_HWA742) += hwa742.o
- 
- lcds-y$(CONFIG_MACH_AMS_DELTA) += lcd_ams_delta.o
--lcds-y$(CONFIG_FB_OMAP_LCD_H3) += lcd_h3.o
- lcds-y$(CONFIG_MACH_OMAP_PALMTE) += lcd_palmte.o
--lcds-y$(CONFIG_MACH_OMAP_PALMTT) += lcd_palmtt.o
--lcds-y$(CONFIG_MACH_OMAP_PALMZ71) += lcd_palmz71.o
--lcds-$(CONFIG_ARCH_OMAP16XX)$(CONFIG_MACH_OMAP_INNOVATOR) += lcd_inn1610.o
--lcds-$(CONFIG_ARCH_OMAP15XX)$(CONFIG_MACH_OMAP_INNOVATOR) += lcd_inn1510.o
- lcds-y$(CONFIG_MACH_OMAP_OSK) += lcd_osk.o
- 
- lcds-y$(CONFIG_FB_OMAP_LCD_MIPID) += lcd_mipid.o
--lcds-y$(CONFIG_MACH_HERALD) += lcd_htcherald.o
- 
- omapfb-objs := $(objs-yy)
- 
-diff --git a/drivers/video/fbdev/omap/lcd_h3.c b/drivers/video/fbdev/omap/lcd_h3.c
+ config SPI_ORION
+ 	tristate "Orion SPI master"
+ 	depends on PLAT_ORION || ARCH_MVEBU || COMPILE_TEST
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 4b34e855c841..ae5ba0109d4b 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -90,7 +90,6 @@ obj-$(CONFIG_SPI_OC_TINY)		+= spi-oc-tiny.o
+ spi-octeon-objs				:= spi-cavium.o spi-cavium-octeon.o
+ obj-$(CONFIG_SPI_OCTEON)		+= spi-octeon.o
+ obj-$(CONFIG_SPI_OMAP_UWIRE)		+= spi-omap-uwire.o
+-obj-$(CONFIG_SPI_OMAP_100K)		+= spi-omap-100k.o
+ obj-$(CONFIG_SPI_OMAP24XX)		+= spi-omap2-mcspi.o
+ obj-$(CONFIG_SPI_TI_QSPI)		+= spi-ti-qspi.o
+ obj-$(CONFIG_SPI_ORION)			+= spi-orion.o
+diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
 deleted file mode 100644
-index 1766dff767bb..000000000000
---- a/drivers/video/fbdev/omap/lcd_h3.c
+index 061f7394e5b9..000000000000
+--- a/drivers/spi/spi-omap-100k.c
 +++ /dev/null
-@@ -1,82 +0,0 @@
+@@ -1,490 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * LCD panel support for the TI OMAP H3 board
+- * OMAP7xx SPI 100k controller driver
+- * Author: Fabrice Crohas <fcrohas@gmail.com>
+- * from original omap1_mcspi driver
 - *
-- * Copyright (C) 2004 Nokia Corporation
-- * Author: Imre Deak <imre.deak@nokia.com>
+- * Copyright (C) 2005, 2006 Nokia Corporation
+- * Author:      Samuel Ortiz <samuel.ortiz@nokia.com> and
+- *              Juha Yrjola <juha.yrjola@nokia.com>
 - */
--
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/interrupt.h>
 -#include <linux/module.h>
+-#include <linux/device.h>
+-#include <linux/delay.h>
 -#include <linux/platform_device.h>
--#include <linux/mfd/tps65010.h>
--#include <linux/gpio.h>
--
--#include "omapfb.h"
--
--#define MODULE_NAME	"omapfb-lcd_h3"
--
--static int h3_panel_enable(struct lcd_panel *panel)
--{
--	int r = 0;
--
--	/* GPIO1 and GPIO2 of TPS65010 send LCD_ENBKL and LCD_ENVDD signals */
--	r = tps65010_set_gpio_out_value(GPIO1, HIGH);
--	if (!r)
--		r = tps65010_set_gpio_out_value(GPIO2, HIGH);
--	if (r)
--		pr_err(MODULE_NAME ": Unable to turn on LCD panel\n");
--
--	return r;
--}
--
--static void h3_panel_disable(struct lcd_panel *panel)
--{
--	int r = 0;
--
--	/* GPIO1 and GPIO2 of TPS65010 send LCD_ENBKL and LCD_ENVDD signals */
--	r = tps65010_set_gpio_out_value(GPIO1, LOW);
--	if (!r)
--		tps65010_set_gpio_out_value(GPIO2, LOW);
--	if (r)
--		pr_err(MODULE_NAME ": Unable to turn off LCD panel\n");
--}
--
--static struct lcd_panel h3_panel = {
--	.name		= "h3",
--	.config		= OMAP_LCDC_PANEL_TFT,
--
--	.data_lines	= 16,
--	.bpp		= 16,
--	.x_res		= 240,
--	.y_res		= 320,
--	.pixel_clock	= 12000,
--	.hsw		= 12,
--	.hfp		= 14,
--	.hbp		= 72 - 12,
--	.vsw		= 1,
--	.vfp		= 1,
--	.vbp		= 0,
--	.pcd		= 0,
--
--	.enable		= h3_panel_enable,
--	.disable	= h3_panel_disable,
--};
--
--static int h3_panel_probe(struct platform_device *pdev)
--{
--	omapfb_register_panel(&h3_panel);
--	return 0;
--}
--
--static struct platform_driver h3_panel_driver = {
--	.probe		= h3_panel_probe,
--	.driver		= {
--		.name	= "lcd_h3",
--	},
--};
--
--module_platform_driver(h3_panel_driver);
--
--MODULE_AUTHOR("Imre Deak");
--MODULE_DESCRIPTION("LCD panel support for the TI OMAP H3 board");
--MODULE_LICENSE("GPL");
-diff --git a/drivers/video/fbdev/omap/lcd_htcherald.c b/drivers/video/fbdev/omap/lcd_htcherald.c
-deleted file mode 100644
-index d1c615c516dd..000000000000
---- a/drivers/video/fbdev/omap/lcd_htcherald.c
-+++ /dev/null
-@@ -1,59 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * File: drivers/video/omap/lcd-htcherald.c
-- *
-- * LCD panel support for the HTC Herald
-- *
-- * Copyright (C) 2009 Cory Maccarrone <darkstar6262@gmail.com>
-- * Copyright (C) 2009 Wing Linux
-- *
-- * Based on the lcd_htcwizard.c file from the linwizard project:
-- * Copyright (C) linwizard.sourceforge.net
-- * Author: Angelo Arrifano <miknix@gmail.com>
-- * Based on lcd_h4 by Imre Deak <imre.deak@nokia.com>
-- */
--
--#include <linux/module.h>
--#include <linux/platform_device.h>
--
--#include "omapfb.h"
--
--/* Found on WIZ200 (miknix) and some HERA110 models (darkstar62) */
--static struct lcd_panel htcherald_panel_1 = {
--	.name		= "lcd_herald",
--	.config		= OMAP_LCDC_PANEL_TFT |
--			  OMAP_LCDC_INV_HSYNC |
--			  OMAP_LCDC_INV_VSYNC |
--			  OMAP_LCDC_INV_PIX_CLOCK,
--	.bpp		= 16,
--	.data_lines	= 16,
--	.x_res		= 240,
--	.y_res		= 320,
--	.pixel_clock	= 6093,
--	.pcd		= 0, /* 15 */
--	.hsw		= 10,
--	.hfp		= 10,
--	.hbp		= 20,
--	.vsw		= 3,
--	.vfp		= 2,
--	.vbp		= 2,
--};
--
--static int htcherald_panel_probe(struct platform_device *pdev)
--{
--	omapfb_register_panel(&htcherald_panel_1);
--	return 0;
--}
--
--static struct platform_driver htcherald_panel_driver = {
--	.probe		= htcherald_panel_probe,
--	.driver		= {
--		.name	= "lcd_htcherald",
--	},
--};
--
--module_platform_driver(htcherald_panel_driver);
--
--MODULE_AUTHOR("Cory Maccarrone");
--MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("LCD panel support for the HTC Herald");
-diff --git a/drivers/video/fbdev/omap/lcd_inn1510.c b/drivers/video/fbdev/omap/lcd_inn1510.c
-deleted file mode 100644
-index bb915637e9b6..000000000000
---- a/drivers/video/fbdev/omap/lcd_inn1510.c
-+++ /dev/null
-@@ -1,69 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * LCD panel support for the TI OMAP1510 Innovator board
-- *
-- * Copyright (C) 2004 Nokia Corporation
-- * Author: Imre Deak <imre.deak@nokia.com>
-- */
--
--#include <linux/module.h>
--#include <linux/platform_device.h>
+-#include <linux/pm_runtime.h>
+-#include <linux/err.h>
+-#include <linux/clk.h>
 -#include <linux/io.h>
+-#include <linux/slab.h>
 -
--#include <linux/soc/ti/omap1-soc.h>
+-#include <linux/spi/spi.h>
 -
--#include "omapfb.h"
+-#define OMAP1_SPI100K_MAX_FREQ          48000000
 -
--static void __iomem *omap1510_fpga_lcd_panel_control;
+-#define ICR_SPITAS      (OMAP7XX_ICR_BASE + 0x12)
 -
--static int innovator1510_panel_enable(struct lcd_panel *panel)
--{
--	__raw_writeb(0x7, omap1510_fpga_lcd_panel_control);
--	return 0;
--}
+-#define SPI_SETUP1      0x00
+-#define SPI_SETUP2      0x02
+-#define SPI_CTRL        0x04
+-#define SPI_STATUS      0x06
+-#define SPI_TX_LSB      0x08
+-#define SPI_TX_MSB      0x0a
+-#define SPI_RX_LSB      0x0c
+-#define SPI_RX_MSB      0x0e
 -
--static void innovator1510_panel_disable(struct lcd_panel *panel)
--{
--	__raw_writeb(0x0, omap1510_fpga_lcd_panel_control);
--}
+-#define SPI_SETUP1_INT_READ_ENABLE      (1UL << 5)
+-#define SPI_SETUP1_INT_WRITE_ENABLE     (1UL << 4)
+-#define SPI_SETUP1_CLOCK_DIVISOR(x)     ((x) << 1)
+-#define SPI_SETUP1_CLOCK_ENABLE         (1UL << 0)
 -
--static struct lcd_panel innovator1510_panel = {
--	.name		= "inn1510",
--	.config		= OMAP_LCDC_PANEL_TFT,
+-#define SPI_SETUP2_ACTIVE_EDGE_FALLING  (0UL << 0)
+-#define SPI_SETUP2_ACTIVE_EDGE_RISING   (1UL << 0)
+-#define SPI_SETUP2_NEGATIVE_LEVEL       (0UL << 5)
+-#define SPI_SETUP2_POSITIVE_LEVEL       (1UL << 5)
+-#define SPI_SETUP2_LEVEL_TRIGGER        (0UL << 10)
+-#define SPI_SETUP2_EDGE_TRIGGER         (1UL << 10)
 -
--	.bpp		= 16,
--	.data_lines	= 16,
--	.x_res		= 240,
--	.y_res		= 320,
--	.pixel_clock	= 12500,
--	.hsw		= 40,
--	.hfp		= 40,
--	.hbp		= 72,
--	.vsw		= 1,
--	.vfp		= 1,
--	.vbp		= 0,
--	.pcd		= 12,
+-#define SPI_CTRL_SEN(x)                 ((x) << 7)
+-#define SPI_CTRL_WORD_SIZE(x)           (((x) - 1) << 2)
+-#define SPI_CTRL_WR                     (1UL << 1)
+-#define SPI_CTRL_RD                     (1UL << 0)
 -
--	.enable		= innovator1510_panel_enable,
--	.disable	= innovator1510_panel_disable,
--};
+-#define SPI_STATUS_WE                   (1UL << 1)
+-#define SPI_STATUS_RD                   (1UL << 0)
 -
--static int innovator1510_panel_probe(struct platform_device *pdev)
--{
--	omap1510_fpga_lcd_panel_control = (void __iomem *)pdev->dev.platform_data;
--	omapfb_register_panel(&innovator1510_panel);
--	return 0;
--}
--
--static struct platform_driver innovator1510_panel_driver = {
--	.probe		= innovator1510_panel_probe,
--	.driver		= {
--		.name	= "lcd_inn1510",
--	},
--};
--
--module_platform_driver(innovator1510_panel_driver);
--
--MODULE_AUTHOR("Imre Deak");
--MODULE_DESCRIPTION("LCD panel support for the TI OMAP1510 Innovator board");
--MODULE_LICENSE("GPL");
-diff --git a/drivers/video/fbdev/omap/lcd_inn1610.c b/drivers/video/fbdev/omap/lcd_inn1610.c
-deleted file mode 100644
-index 901b28f35fab..000000000000
---- a/drivers/video/fbdev/omap/lcd_inn1610.c
-+++ /dev/null
-@@ -1,99 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * LCD panel support for the TI OMAP1610 Innovator board
-- *
-- * Copyright (C) 2004 Nokia Corporation
-- * Author: Imre Deak <imre.deak@nokia.com>
+-/* use PIO for small transfers, avoiding DMA setup/teardown overhead and
+- * cache operations; better heuristics consider wordsize and bitrate.
 - */
+-#define DMA_MIN_BYTES                   8
 -
--#include <linux/module.h>
--#include <linux/platform_device.h>
+-#define SPI_RUNNING	0
+-#define SPI_SHUTDOWN	1
 -
--#include <linux/gpio.h>
--#include "omapfb.h"
+-struct omap1_spi100k {
+-	struct clk              *ick;
+-	struct clk              *fck;
 -
--#define MODULE_NAME	"omapfb-lcd_h3"
+-	/* Virtual base address of the controller */
+-	void __iomem            *base;
+-};
 -
--static int innovator1610_panel_init(struct lcd_panel *panel,
--				    struct omapfb_device *fbdev)
+-struct omap1_spi100k_cs {
+-	void __iomem            *base;
+-	int                     word_len;
+-};
+-
+-static void spi100k_enable_clock(struct spi_master *master)
 -{
--	int r = 0;
+-	unsigned int val;
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
 -
--	/* configure GPIO(14, 15) as outputs */
--	if (gpio_request_one(14, GPIOF_OUT_INIT_LOW, "lcd_en0")) {
--		pr_err(MODULE_NAME ": can't request GPIO 14\n");
--		r = -1;
--		goto exit;
+-	/* enable SPI */
+-	val = readw(spi100k->base + SPI_SETUP1);
+-	val |= SPI_SETUP1_CLOCK_ENABLE;
+-	writew(val, spi100k->base + SPI_SETUP1);
+-}
+-
+-static void spi100k_disable_clock(struct spi_master *master)
+-{
+-	unsigned int val;
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-
+-	/* disable SPI */
+-	val = readw(spi100k->base + SPI_SETUP1);
+-	val &= ~SPI_SETUP1_CLOCK_ENABLE;
+-	writew(val, spi100k->base + SPI_SETUP1);
+-}
+-
+-static void spi100k_write_data(struct spi_master *master, int len, int data)
+-{
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-
+-	/* write 16-bit word, shifting 8-bit data if necessary */
+-	if (len <= 8) {
+-		data <<= 8;
+-		len = 16;
 -	}
--	if (gpio_request_one(15, GPIOF_OUT_INIT_LOW, "lcd_en1")) {
--		pr_err(MODULE_NAME ": can't request GPIO 15\n");
--		gpio_free(14);
--		r = -1;
--		goto exit;
+-
+-	spi100k_enable_clock(master);
+-	writew(data, spi100k->base + SPI_TX_MSB);
+-
+-	writew(SPI_CTRL_SEN(0) |
+-	       SPI_CTRL_WORD_SIZE(len) |
+-	       SPI_CTRL_WR,
+-	       spi100k->base + SPI_CTRL);
+-
+-	/* Wait for bit ack send change */
+-	while ((readw(spi100k->base + SPI_STATUS) & SPI_STATUS_WE) != SPI_STATUS_WE)
+-		;
+-	udelay(1000);
+-
+-	spi100k_disable_clock(master);
+-}
+-
+-static int spi100k_read_data(struct spi_master *master, int len)
+-{
+-	int dataL;
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-
+-	/* Always do at least 16 bits */
+-	if (len <= 8)
+-		len = 16;
+-
+-	spi100k_enable_clock(master);
+-	writew(SPI_CTRL_SEN(0) |
+-	       SPI_CTRL_WORD_SIZE(len) |
+-	       SPI_CTRL_RD,
+-	       spi100k->base + SPI_CTRL);
+-
+-	while ((readw(spi100k->base + SPI_STATUS) & SPI_STATUS_RD) != SPI_STATUS_RD)
+-		;
+-	udelay(1000);
+-
+-	dataL = readw(spi100k->base + SPI_RX_LSB);
+-	readw(spi100k->base + SPI_RX_MSB);
+-	spi100k_disable_clock(master);
+-
+-	return dataL;
+-}
+-
+-static void spi100k_open(struct spi_master *master)
+-{
+-	/* get control of SPI */
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-
+-	writew(SPI_SETUP1_INT_READ_ENABLE |
+-	       SPI_SETUP1_INT_WRITE_ENABLE |
+-	       SPI_SETUP1_CLOCK_DIVISOR(0), spi100k->base + SPI_SETUP1);
+-
+-	/* configure clock and interrupts */
+-	writew(SPI_SETUP2_ACTIVE_EDGE_FALLING |
+-	       SPI_SETUP2_NEGATIVE_LEVEL |
+-	       SPI_SETUP2_LEVEL_TRIGGER, spi100k->base + SPI_SETUP2);
+-}
+-
+-static void omap1_spi100k_force_cs(struct omap1_spi100k *spi100k, int enable)
+-{
+-	if (enable)
+-		writew(0x05fc, spi100k->base + SPI_CTRL);
+-	else
+-		writew(0x05fd, spi100k->base + SPI_CTRL);
+-}
+-
+-static unsigned
+-omap1_spi100k_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
+-{
+-	struct omap1_spi100k_cs *cs = spi->controller_state;
+-	unsigned int            count, c;
+-	int                     word_len;
+-
+-	count = xfer->len;
+-	c = count;
+-	word_len = cs->word_len;
+-
+-	if (word_len <= 8) {
+-		u8              *rx;
+-		const u8        *tx;
+-
+-		rx = xfer->rx_buf;
+-		tx = xfer->tx_buf;
+-		do {
+-			c -= 1;
+-			if (xfer->tx_buf != NULL)
+-				spi100k_write_data(spi->master, word_len, *tx++);
+-			if (xfer->rx_buf != NULL)
+-				*rx++ = spi100k_read_data(spi->master, word_len);
+-		} while (c);
+-	} else if (word_len <= 16) {
+-		u16             *rx;
+-		const u16       *tx;
+-
+-		rx = xfer->rx_buf;
+-		tx = xfer->tx_buf;
+-		do {
+-			c -= 2;
+-			if (xfer->tx_buf != NULL)
+-				spi100k_write_data(spi->master, word_len, *tx++);
+-			if (xfer->rx_buf != NULL)
+-				*rx++ = spi100k_read_data(spi->master, word_len);
+-		} while (c);
+-	} else if (word_len <= 32) {
+-		u32             *rx;
+-		const u32       *tx;
+-
+-		rx = xfer->rx_buf;
+-		tx = xfer->tx_buf;
+-		do {
+-			c -= 4;
+-			if (xfer->tx_buf != NULL)
+-				spi100k_write_data(spi->master, word_len, *tx);
+-			if (xfer->rx_buf != NULL)
+-				*rx = spi100k_read_data(spi->master, word_len);
+-		} while (c);
 -	}
--exit:
--	return r;
+-	return count - c;
 -}
 -
--static void innovator1610_panel_cleanup(struct lcd_panel *panel)
+-/* called only when no transfer is active to this device */
+-static int omap1_spi100k_setup_transfer(struct spi_device *spi,
+-		struct spi_transfer *t)
 -{
--	gpio_free(15);
--	gpio_free(14);
--}
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(spi->master);
+-	struct omap1_spi100k_cs *cs = spi->controller_state;
+-	u8 word_len;
 -
--static int innovator1610_panel_enable(struct lcd_panel *panel)
--{
--	/* set GPIO14 and GPIO15 high */
--	gpio_set_value(14, 1);
--	gpio_set_value(15, 1);
+-	if (t != NULL)
+-		word_len = t->bits_per_word;
+-	else
+-		word_len = spi->bits_per_word;
+-
+-	if (word_len > 32)
+-		return -EINVAL;
+-	cs->word_len = word_len;
+-
+-	/* SPI init before transfer */
+-	writew(0x3e, spi100k->base + SPI_SETUP1);
+-	writew(0x00, spi100k->base + SPI_STATUS);
+-	writew(0x3e, spi100k->base + SPI_CTRL);
+-
 -	return 0;
 -}
 -
--static void innovator1610_panel_disable(struct lcd_panel *panel)
+-/* the spi->mode bits understood by this driver: */
+-#define MODEBITS (SPI_CPOL | SPI_CPHA | SPI_CS_HIGH)
+-
+-static int omap1_spi100k_setup(struct spi_device *spi)
 -{
--	/* set GPIO13, GPIO14 and GPIO15 low */
--	gpio_set_value(14, 0);
--	gpio_set_value(15, 0);
+-	int                     ret;
+-	struct omap1_spi100k    *spi100k;
+-	struct omap1_spi100k_cs *cs = spi->controller_state;
+-
+-	spi100k = spi_master_get_devdata(spi->master);
+-
+-	if (!cs) {
+-		cs = devm_kzalloc(&spi->dev, sizeof(*cs), GFP_KERNEL);
+-		if (!cs)
+-			return -ENOMEM;
+-		cs->base = spi100k->base + spi->chip_select * 0x14;
+-		spi->controller_state = cs;
+-	}
+-
+-	spi100k_open(spi->master);
+-
+-	clk_prepare_enable(spi100k->ick);
+-	clk_prepare_enable(spi100k->fck);
+-
+-	ret = omap1_spi100k_setup_transfer(spi, NULL);
+-
+-	clk_disable_unprepare(spi100k->ick);
+-	clk_disable_unprepare(spi100k->fck);
+-
+-	return ret;
 -}
 -
--static struct lcd_panel innovator1610_panel = {
--	.name		= "inn1610",
--	.config		= OMAP_LCDC_PANEL_TFT,
+-static int omap1_spi100k_transfer_one_message(struct spi_master *master,
+-					      struct spi_message *m)
+-{
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-	struct spi_device *spi = m->spi;
+-	struct spi_transfer *t = NULL;
+-	int cs_active = 0;
+-	int status = 0;
 -
--	.bpp		= 16,
--	.data_lines	= 16,
--	.x_res		= 320,
--	.y_res		= 240,
--	.pixel_clock	= 12500,
--	.hsw		= 40,
--	.hfp		= 40,
--	.hbp		= 72,
--	.vsw		= 1,
--	.vfp		= 1,
--	.vbp		= 0,
--	.pcd		= 12,
+-	list_for_each_entry(t, &m->transfers, transfer_list) {
+-		if (t->tx_buf == NULL && t->rx_buf == NULL && t->len) {
+-			break;
+-		}
+-		status = omap1_spi100k_setup_transfer(spi, t);
+-		if (status < 0)
+-			break;
 -
--	.init		= innovator1610_panel_init,
--	.cleanup	= innovator1610_panel_cleanup,
--	.enable		= innovator1610_panel_enable,
--	.disable	= innovator1610_panel_disable,
+-		if (!cs_active) {
+-			omap1_spi100k_force_cs(spi100k, 1);
+-			cs_active = 1;
+-		}
+-
+-		if (t->len) {
+-			unsigned count;
+-
+-			count = omap1_spi100k_txrx_pio(spi, t);
+-			m->actual_length += count;
+-
+-			if (count != t->len) {
+-				break;
+-			}
+-		}
+-
+-		spi_transfer_delay_exec(t);
+-
+-		/* ignore the "leave it on after last xfer" hint */
+-
+-		if (t->cs_change) {
+-			omap1_spi100k_force_cs(spi100k, 0);
+-			cs_active = 0;
+-		}
+-	}
+-
+-	status = omap1_spi100k_setup_transfer(spi, NULL);
+-
+-	if (cs_active)
+-		omap1_spi100k_force_cs(spi100k, 0);
+-
+-	m->status = status;
+-
+-	spi_finalize_current_message(master);
+-
+-	return status;
+-}
+-
+-static int omap1_spi100k_probe(struct platform_device *pdev)
+-{
+-	struct spi_master       *master;
+-	struct omap1_spi100k    *spi100k;
+-	int                     status = 0;
+-
+-	if (!pdev->id)
+-		return -EINVAL;
+-
+-	master = spi_alloc_master(&pdev->dev, sizeof(*spi100k));
+-	if (master == NULL) {
+-		dev_dbg(&pdev->dev, "master allocation failed\n");
+-		return -ENOMEM;
+-	}
+-
+-	if (pdev->id != -1)
+-		master->bus_num = pdev->id;
+-
+-	master->setup = omap1_spi100k_setup;
+-	master->transfer_one_message = omap1_spi100k_transfer_one_message;
+-	master->num_chipselect = 2;
+-	master->mode_bits = MODEBITS;
+-	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
+-	master->min_speed_hz = OMAP1_SPI100K_MAX_FREQ/(1<<16);
+-	master->max_speed_hz = OMAP1_SPI100K_MAX_FREQ;
+-	master->auto_runtime_pm = true;
+-
+-	spi100k = spi_master_get_devdata(master);
+-
+-	/*
+-	 * The memory region base address is taken as the platform_data.
+-	 * You should allocate this with ioremap() before initializing
+-	 * the SPI.
+-	 */
+-	spi100k->base = (void __iomem *)dev_get_platdata(&pdev->dev);
+-
+-	spi100k->ick = devm_clk_get(&pdev->dev, "ick");
+-	if (IS_ERR(spi100k->ick)) {
+-		dev_dbg(&pdev->dev, "can't get spi100k_ick\n");
+-		status = PTR_ERR(spi100k->ick);
+-		goto err;
+-	}
+-
+-	spi100k->fck = devm_clk_get(&pdev->dev, "fck");
+-	if (IS_ERR(spi100k->fck)) {
+-		dev_dbg(&pdev->dev, "can't get spi100k_fck\n");
+-		status = PTR_ERR(spi100k->fck);
+-		goto err;
+-	}
+-
+-	status = clk_prepare_enable(spi100k->ick);
+-	if (status != 0) {
+-		dev_err(&pdev->dev, "failed to enable ick: %d\n", status);
+-		goto err;
+-	}
+-
+-	status = clk_prepare_enable(spi100k->fck);
+-	if (status != 0) {
+-		dev_err(&pdev->dev, "failed to enable fck: %d\n", status);
+-		goto err_ick;
+-	}
+-
+-	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_set_active(&pdev->dev);
+-
+-	status = devm_spi_register_master(&pdev->dev, master);
+-	if (status < 0)
+-		goto err_fck;
+-
+-	return status;
+-
+-err_fck:
+-	pm_runtime_disable(&pdev->dev);
+-	clk_disable_unprepare(spi100k->fck);
+-err_ick:
+-	clk_disable_unprepare(spi100k->ick);
+-err:
+-	spi_master_put(master);
+-	return status;
+-}
+-
+-static int omap1_spi100k_remove(struct platform_device *pdev)
+-{
+-	struct spi_master *master = platform_get_drvdata(pdev);
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-
+-	pm_runtime_disable(&pdev->dev);
+-
+-	clk_disable_unprepare(spi100k->fck);
+-	clk_disable_unprepare(spi100k->ick);
+-
+-	return 0;
+-}
+-
+-#ifdef CONFIG_PM
+-static int omap1_spi100k_runtime_suspend(struct device *dev)
+-{
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-
+-	clk_disable_unprepare(spi100k->ick);
+-	clk_disable_unprepare(spi100k->fck);
+-
+-	return 0;
+-}
+-
+-static int omap1_spi100k_runtime_resume(struct device *dev)
+-{
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct omap1_spi100k *spi100k = spi_master_get_devdata(master);
+-	int ret;
+-
+-	ret = clk_prepare_enable(spi100k->ick);
+-	if (ret != 0) {
+-		dev_err(dev, "Failed to enable ick: %d\n", ret);
+-		return ret;
+-	}
+-
+-	ret = clk_prepare_enable(spi100k->fck);
+-	if (ret != 0) {
+-		dev_err(dev, "Failed to enable fck: %d\n", ret);
+-		clk_disable_unprepare(spi100k->ick);
+-		return ret;
+-	}
+-
+-	return 0;
+-}
+-#endif
+-
+-static const struct dev_pm_ops omap1_spi100k_pm = {
+-	SET_RUNTIME_PM_OPS(omap1_spi100k_runtime_suspend,
+-			   omap1_spi100k_runtime_resume, NULL)
 -};
 -
--static int innovator1610_panel_probe(struct platform_device *pdev)
--{
--	omapfb_register_panel(&innovator1610_panel);
--	return 0;
--}
--
--static struct platform_driver innovator1610_panel_driver = {
--	.probe		= innovator1610_panel_probe,
--	.driver		= {
--		.name	= "lcd_inn1610",
+-static struct platform_driver omap1_spi100k_driver = {
+-	.driver = {
+-		.name		= "omap1_spi100k",
+-		.pm		= &omap1_spi100k_pm,
 -	},
+-	.probe		= omap1_spi100k_probe,
+-	.remove		= omap1_spi100k_remove,
 -};
 -
--module_platform_driver(innovator1610_panel_driver);
+-module_platform_driver(omap1_spi100k_driver);
 -
--MODULE_AUTHOR("Imre Deak");
--MODULE_DESCRIPTION("LCD panel support for the TI OMAP1610 Innovator board");
+-MODULE_DESCRIPTION("OMAP7xx SPI 100k controller driver");
+-MODULE_AUTHOR("Fabrice Crohas <fcrohas@gmail.com>");
 -MODULE_LICENSE("GPL");
-diff --git a/drivers/video/fbdev/omap/lcd_palmtt.c b/drivers/video/fbdev/omap/lcd_palmtt.c
-deleted file mode 100644
-index 703af0bc5c92..000000000000
---- a/drivers/video/fbdev/omap/lcd_palmtt.c
-+++ /dev/null
-@@ -1,65 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * LCD panel support for Palm Tungsten|T
-- * Current version : Marek Vasut <marek.vasut@gmail.com>
-- *
-- * Modified from lcd_inn1510.c
-- */
--
--/*
--GPIO11 - backlight
--GPIO12 - screen blanking
--GPIO13 - screen blanking
--*/
--
--#include <linux/platform_device.h>
--#include <linux/module.h>
--#include <linux/io.h>
--#include <linux/gpio.h>
--
--#include "omapfb.h"
--
--static unsigned long palmtt_panel_get_caps(struct lcd_panel *panel)
--{
--	return OMAPFB_CAPS_SET_BACKLIGHT;
--}
--
--static struct lcd_panel palmtt_panel = {
--	.name		= "palmtt",
--	.config		= OMAP_LCDC_PANEL_TFT | OMAP_LCDC_INV_VSYNC |
--			OMAP_LCDC_INV_HSYNC | OMAP_LCDC_HSVS_RISING_EDGE |
--			OMAP_LCDC_HSVS_OPPOSITE,
--	.bpp		= 16,
--	.data_lines	= 16,
--	.x_res		= 320,
--	.y_res		= 320,
--	.pixel_clock	= 10000,
--	.hsw		= 4,
--	.hfp		= 8,
--	.hbp		= 28,
--	.vsw		= 1,
--	.vfp		= 8,
--	.vbp		= 7,
--	.pcd		= 0,
--
--	.get_caps	= palmtt_panel_get_caps,
--};
--
--static int palmtt_panel_probe(struct platform_device *pdev)
--{
--	omapfb_register_panel(&palmtt_panel);
--	return 0;
--}
--
--static struct platform_driver palmtt_panel_driver = {
--	.probe		= palmtt_panel_probe,
--	.driver		= {
--		.name	= "lcd_palmtt",
--	},
--};
--
--module_platform_driver(palmtt_panel_driver);
--
--MODULE_AUTHOR("Marek Vasut <marek.vasut@gmail.com>");
--MODULE_DESCRIPTION("LCD panel support for Palm Tungsten|T");
--MODULE_LICENSE("GPL");
-diff --git a/drivers/video/fbdev/omap/lcd_palmz71.c b/drivers/video/fbdev/omap/lcd_palmz71.c
-deleted file mode 100644
-index a955c908ab14..000000000000
---- a/drivers/video/fbdev/omap/lcd_palmz71.c
-+++ /dev/null
-@@ -1,59 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * LCD panel support for the Palm Zire71
-- *
-- * Original version : Romain Goyet
-- * Current version : Laurent Gonzalez
-- * Modified for zire71 : Marek Vasut
-- */
--
--#include <linux/module.h>
--#include <linux/platform_device.h>
--#include <linux/io.h>
--
--#include "omapfb.h"
--
--static unsigned long palmz71_panel_get_caps(struct lcd_panel *panel)
--{
--	return OMAPFB_CAPS_SET_BACKLIGHT;
--}
--
--static struct lcd_panel palmz71_panel = {
--	.name		= "palmz71",
--	.config		= OMAP_LCDC_PANEL_TFT | OMAP_LCDC_INV_VSYNC |
--			  OMAP_LCDC_INV_HSYNC | OMAP_LCDC_HSVS_RISING_EDGE |
--			  OMAP_LCDC_HSVS_OPPOSITE,
--	.data_lines	= 16,
--	.bpp		= 16,
--	.pixel_clock	= 24000,
--	.x_res		= 320,
--	.y_res		= 320,
--	.hsw		= 4,
--	.hfp		= 8,
--	.hbp		= 28,
--	.vsw		= 1,
--	.vfp		= 8,
--	.vbp		= 7,
--	.pcd		= 0,
--
--	.get_caps	= palmz71_panel_get_caps,
--};
--
--static int palmz71_panel_probe(struct platform_device *pdev)
--{
--	omapfb_register_panel(&palmz71_panel);
--	return 0;
--}
--
--static struct platform_driver palmz71_panel_driver = {
--	.probe		= palmz71_panel_probe,
--	.driver		= {
--		.name	= "lcd_palmz71",
--	},
--};
--
--module_platform_driver(palmz71_panel_driver);
--
--MODULE_AUTHOR("Romain Goyet, Laurent Gonzalez, Marek Vasut");
--MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("LCD panel support for the Palm Zire71");
 -- 
 2.29.2
 
