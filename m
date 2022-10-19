@@ -2,145 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB33604060
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B6F604072
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbiJSJwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S234395AbiJSJ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiJSJwH (ORCPT
+        with ESMTP id S234394AbiJSJ43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:52:07 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C06E31B1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:25:59 -0700 (PDT)
+        Wed, 19 Oct 2022 05:56:29 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8805810A7FE;
+        Wed, 19 Oct 2022 02:32:33 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id n12so27936920wrp.10;
+        Wed, 19 Oct 2022 02:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666171561; x=1697707561;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=66n6UWckGr9pYzJ89YQCqoPVrnClEd2k3PCNw2hP3jc=;
-  b=ieBVry3iTK1auZE2CNcFpZS7zlDukvq7FlSXEOTIxPmy0BmZ0/0h8CeJ
-   jWtOlKF5lsmeQIYNTkiji2H/twURFV7b3WPbkchs7H6pzT/3A/97SUvqI
-   mhuPGItJqqNwFTkoL3hOZDpKTrNEH+Wh2Xak46XCmfjZDWexqpNpZC3DZ
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.95,195,1661817600"; 
-   d="scan'208";a="253598703"
-Subject: Re: [PATCH v2 1/1] mtd: spi-nor: micron-st: Enable locking for
- n25q256ax1/mt25qu256a
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-fa5fe5fb.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 09:25:45 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-fa5fe5fb.us-west-2.amazon.com (Postfix) with ESMTPS id 9E2B6416A3;
-        Wed, 19 Oct 2022 09:25:43 +0000 (UTC)
-Received: from EX19D013UWB002.ant.amazon.com (10.13.138.21) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 19 Oct 2022 09:25:40 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D013UWB002.ant.amazon.com (10.13.138.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
- Wed, 19 Oct 2022 09:25:40 +0000
-Received: from [192.168.160.198] (10.85.143.176) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Wed, 19 Oct 2022 09:25:36 +0000
-Message-ID: <1ba2e7ff-cf6c-1292-72e0-14b5b5b9282c@amazon.com>
-Date:   Wed, 19 Oct 2022 12:25:36 +0300
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uRkokOnUGTB7YuuZ3HxvCL2EU7JYl74de/Mbu83cbuA=;
+        b=RDX8T5T0XtX3o+g5YTuJgc/k6wZqjY06wjnbWG8cfKToMu2DIl3ujkjBGAufkRIMRH
+         Hfsoocd9Ll60B8Lozu3PEVlzVVKSsIJ8WmLi228cYopOrpF9rfCJH9O/LuWrGuars7d9
+         m4moV7UzxQ7GNjJZfvn7Et6EBW4MKtB2aQ+PaNos7BQR53D5MswBZj6iSK9AZc5FRBHK
+         HKn+7JAlAfJG3mjgCV8Avjhrf0hTOhoU6WUkCQSBE1YfCYMm707DetMhBYvl1XRkPQ+B
+         PXQRdYMRWb387QTMTHYtPFhFtvWobbE8wJqE7ZPkDMPZTFR7dWAF2CQZIgwf7YZvYtWx
+         6a+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uRkokOnUGTB7YuuZ3HxvCL2EU7JYl74de/Mbu83cbuA=;
+        b=45832iBD20GI5ionXDhlbjniSDA8NQplSI6BFnj+Tr1FW6yaINnub+IpILTgSXtOuL
+         SX3r0mCmOSa/I6YsWH24HW6xAb6q/UiJXzuMMudEthzUEhv9BmF5Oda3BPkIsMZCvGxK
+         XXaW5FBj0VXf42VY3DVkPMRZngtkk+2ts/o5P+zGUe63Mhv3R2ZGPqPiFzYVxeBfTrmA
+         5bx3PRGKGzXjbUL6aBC+pSRU0zgPLj1r/11bN4iAxYKhjHYEBdTBFfJd0+fBGw06Tfbm
+         dNOPpnCHkd659xos+B2WVQ9mANcza6CqCZu3veujexeLvxrDfeZZ7n7V78KCqUHU0qmL
+         BjpQ==
+X-Gm-Message-State: ACrzQf2gWYsdTUATVeLE2JD8OdgRGoYJpY2CRPtfdsQjWgApBvwe1s4x
+        6zKOYOfUtcD2xHe96T9OD54=
+X-Google-Smtp-Source: AMsMyM6hY/mR6nXmoP38MIbO0/nm/YOio2x+b9h9je3MNNv/Dhv0OhDQqND0rZdCpyg+KQBiimsSdg==
+X-Received: by 2002:a5d:54ce:0:b0:22e:2ecf:7c2a with SMTP id x14-20020a5d54ce000000b0022e2ecf7c2amr4371465wrv.181.1666171814580;
+        Wed, 19 Oct 2022 02:30:14 -0700 (PDT)
+Received: from krava ([83.240.63.167])
+        by smtp.gmail.com with ESMTPSA id u7-20020a7bc047000000b003b5054c6f87sm15647813wmc.21.2022.10.19.02.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 02:30:13 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 19 Oct 2022 11:30:11 +0200
+To:     sdf@google.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Akihiro HARAI <jharai0815@gmail.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Hao Luo <haoluo@google.com>
+Subject: Re: [PATCH] x86: Include asm/ptrace.h in syscall_wrapper header
+Message-ID: <Y0/Do4l0bALGrD0p@krava>
+References: <20221018122708.823792-1-jolsa@kernel.org>
+ <Y07vGVPIf913gND8@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-To:     Michael Walle <michael@walle.cc>
-CC:     <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hhhawa@amazon.com>,
-        <hanochu@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <amitlavi@amazon.com>, <dkl@amazon.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20221019071631.15191-1-farbere@amazon.com>
- <73bfa5ae90e2269387540019806c2839@walle.cc>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <73bfa5ae90e2269387540019806c2839@walle.cc>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y07vGVPIf913gND8@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/2022 11:21 AM, Michael Walle wrote:
-> Hi,
->
-> Am 2022-10-19 09:16, schrieb Eliav Farber:
->> n25q256ax1 [1] and mt25qu256a [2] (both have same jedec_id - 0x20bb19)
->> use the 4 bit Block Protection scheme and support Top/Bottom protection
->> via the BP and TB bits of the Status Register.
->> BP3 is located in bit 6 of the Status Register.
->> Tested on both n25q256ax1 and mt25qu256a.
->>
->> [1]
->> https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/n25q/n25q_256mb_3v.pdf 
->>
->> [2]
->> https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25q/die-rev-a/mt25q_qljs_u_256_aba_0.pdf 
->>
->
-> If you respin, you can use a "Link:" tag for the URL above.
+On Tue, Oct 18, 2022 at 11:23:21AM -0700, sdf@google.com wrote:
+> On 10/18, Jiri Olsa wrote:
+> > From: Jiri Olsa <olsajiri@gmail.com>
+> 
+> > With just the forward declaration of the 'struct pt_regs' in
+> > syscall_wrapper.h, the syscall stub functions:
+> 
+> >    __[x64|ia32]_sys_*(struct pt_regs *regs)
+> 
+> > will have different definition of 'regs' argument in BTF data
+> > based on which object file they are defined in.
+> 
+> > If the syscall's object includes 'struct pt_regs' definition,
+> > the BTF argument data will point to 'struct pt_regs' record,
+> > like:
+> 
+> >    [226] STRUCT 'pt_regs' size=168 vlen=21
+> >           'r15' type_id=1 bits_offset=0
+> >           'r14' type_id=1 bits_offset=64
+> >           'r13' type_id=1 bits_offset=128
+> >    ...
+> 
+> > If not, it will point to fwd declaration record:
+> 
+> >    [15439] FWD 'pt_regs' fwd_kind=struct
+> 
+> > and make bpf tracing program hooking on those functions unable
+> > to access fields from 'struct pt_regs'.
+> 
+> Is the core issue here is that we can't / don't resolve FWD declarations
+> at load time (or dedup time)? I'm assuming 'struct pt_regs' is still
+> exposed somewhere in BTF via some other obj file, it's just those
+> syscall definitions that have FWD decl?
 
-Ack.
+yes, BTF is generated from dwarf debug info, so it's object based,
+and in some objects the regs argument will point to full struct
+definition and in some just to forward declaration
 
->> Signed-off-by: Eliav Farber <farbere@amazon.com>
->> ---
->> xxd -p
->> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>
->> 53464450060101ff00060110300000ff84000102800000ffffffffffffff
->> ffffffffffffffffffffffffffffffffffffe520fbffffffff0f29eb276b
->> 273b27bbffffffffffff27bbffff29eb0c2010d80f520000244a99008b8e
->> 03d4ac0127387a757a75fbbdd55c4a0f82ff81bd3d36ffffffffffffffff
->> ffffffffffffffffffe7ffff21dcffff
->>
->> md5sum
->> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>
->> 5ea738216f68c9f98987bb3725699a32
->> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>
->>
->> cat
->> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/jedec_id 
->>
->> 20bb19104400
->>
->> cat
->> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/partname 
->>
->> mt25qu256a
->>
->> cat
->> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/manufacturer 
->>
->> st
->
-> That's the mt25qu256a SFDP. What about the n25q256ax1? 
+> 
+> Applying this patch seems fine for now, but also seems fragile. Should
+> we instead/also teach verifier/dedup/whatever to resolve those FWD
+> declarations?
 
-On the same card, with same NOR flash memory I'm running two different
-kernel versions.
-First version is quite old - 4.19.239 which does not support mt25qu256a
-and therefore device is detected as n25q256ax1.
-Second version is 6.1.0-rc1 and it detects the same device as mt25qu256a.
-So I was able to dump SFDP when running version 6.1.0-rc1, but not when
-running 4.19.239 which does not support the sysfs to dump the SFPD
-information.
-I checked that locking works with my changes when running on both kernel
-versions.
+I'm not sure how hard it'd be to connect forward declarations
+to definitions.. it'd need to be probably in dedup or verifier
+as you suggest
 
---
-Regards, Eliav
+and I think it'd need to be done just based on struct name search,
+so I expect all sort of unexpected problems ;-) other than to be
+sure you connect to proper struct
+
+Andrii will have probably better idea if and where this is possible
+
+jirka
+
+> 
+> > Including asm/ptrace.h directly in syscall_wrapper.h to make
+> > sure all syscalls see 'struct pt_regs' definition and resulted
+> > BTF for '__*_sys_*(struct pt_regs *regs)' functions point to
+> > actual struct, not just forward declaration.
+> 
+> > Reported-by: Akihiro HARAI <jharai0815@gmail.com>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >   arch/x86/include/asm/syscall_wrapper.h | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> > diff --git a/arch/x86/include/asm/syscall_wrapper.h
+> > b/arch/x86/include/asm/syscall_wrapper.h
+> > index 59358d1bf880..fd2669b1cb2d 100644
+> > --- a/arch/x86/include/asm/syscall_wrapper.h
+> > +++ b/arch/x86/include/asm/syscall_wrapper.h
+> > @@ -6,7 +6,7 @@
+> >   #ifndef _ASM_X86_SYSCALL_WRAPPER_H
+> >   #define _ASM_X86_SYSCALL_WRAPPER_H
+> 
+> > -struct pt_regs;
+> > +#include <asm/ptrace.h>
+> 
+> >   extern long __x64_sys_ni_syscall(const struct pt_regs *regs);
+> >   extern long __ia32_sys_ni_syscall(const struct pt_regs *regs);
+> > --
+> > 2.37.3
+> 
