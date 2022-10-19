@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE36604F5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46206604F5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiJSSKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 14:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S230443AbiJSSLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 14:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiJSSKs (ORCPT
+        with ESMTP id S229886AbiJSSLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:10:48 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815FA167263
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:10:47 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso843500pja.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:10:47 -0700 (PDT)
+        Wed, 19 Oct 2022 14:11:36 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00505169CDF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:11:35 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id z8so12222913qtv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZGR0rDpTW7xgTFS4grRDMvtr/PpXo8umrs2yrJ3UML4=;
-        b=f3558QuEtp4oWAGxzHD+nDzX3s6SI6mqk07d4unwH/uZPll67kvPzY5AlfzYZxg+X6
-         zTvnWZUR0E1tCYrtFi8p6tx/eQUaR2VTkJl/mvo2YuQvLCirD1YWJB+uMQf8JMGXKP2W
-         aSE+S294zj9djVP4FNih8XJ1S1uIJi++YZ+5HcWgOVKJgWDE5yCARXTCgtR/KOlGbhbw
-         1NhjRBzW2Z973G/YIF7Bkxhfyd1R4ltMyZk1UPVJ7daouoWbA5/MQhDb0MSgOwsymsd1
-         Mpqg/WMXHG8MhM6u6vKyBivd8kgGCyhxnJD2YGfEq4797fki4azwmj016iMI484UoGo2
-         cPcg==
+        bh=oUCCyUWxse3Ihxvp+Qy73UCcxKzJGUZipUhThJxcdKU=;
+        b=WuiA/6yKGF2cchs6SyRubR0sUiAOrR7hnAR9NdZ2x0xwinAtix2ztOnRoTlNt1SXaI
+         roMCjEKH9M6eg3c9U2UbtL3mBN4LsaBH4jFFCPzxkXbbkYzXm6jYktZtwMV7kprSpq30
+         K1C/H0DmKvpgKPvqRJv3DcVzYXeY9oOLsD3Jc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZGR0rDpTW7xgTFS4grRDMvtr/PpXo8umrs2yrJ3UML4=;
-        b=htFO2JD5L01IyS7iGukc68CIx/4ym9qylDi7m1oAo+OXJPvq/N2Ex5I+vUUOhEbw6g
-         2AYm/XyOFCvaMxyE/mknyH2b0Xm+0oWfjFOXUD0cUYpZbXnNiSrRo3NhBz+Vx4juQ2rl
-         IBdAm5/UN0x3oCoUE2JaQKZS6DDYKNKnpOUMsJ/6AZ7+/e7OBvs52ebiMTvPCy2giMxC
-         nNuwRRPZrpr+dGs+FeX0piVAueCKonb5bG92YiotKf0483gvQU5j4GPTKmFDZP1FtLqZ
-         hKmRHvvBTgCtpJw7Ma9aSvNsNjdCEr8l74h5fJEwsIObINdkq7nZRgSctvPf7sCvYe6X
-         V8Mg==
-X-Gm-Message-State: ACrzQf2K37NHLFlisJQinjPjdkR7BFnNRuKiAZO7WZhwVDxUYrFX2fiY
-        wEWjUdkaXm5NBJCNAHPOcSxeQfOnWhLw+kh1e6DbN4gzEs7B8w==
-X-Google-Smtp-Source: AMsMyM7MuUj4C35EpdRK3az+tECYwbYHlpD6xn0OX0sCzW4tLI+w8FIXQovOYVJg+ChLDWtMvTKNoWMI0kE/hHHzMJY=
-X-Received: by 2002:a17:90b:1a8d:b0:20d:be0b:a320 with SMTP id
- ng13-20020a17090b1a8d00b0020dbe0ba320mr32474975pjb.107.1666203046751; Wed, 19
- Oct 2022 11:10:46 -0700 (PDT)
+        bh=oUCCyUWxse3Ihxvp+Qy73UCcxKzJGUZipUhThJxcdKU=;
+        b=bUEHi5Vz/UPFKJsvDMqx5H4w6KFolfAFLcofooopPs8btVOmLe1C8DeLOmZ9Byyrw5
+         C87L/I/bDcQv6oJCse/UCVsgR6YUofN/QgX6j6a2DS/no+RAPktFr5TgcatHNtLcszke
+         aghv3NVhwXdnW7oR+2mpTZus+q3V0Iw1JaUnk5GkANtWNLoaPiIKJtaR8Msd7Q95Psqv
+         t25v6EvenEnHGuxZHteUTlMDuWWoLxr18ZYz2Zp9XDHWN2qA/M6auNMly6SPAUcV1nuR
+         jCnNDnLjQ5I/eCJUB8ZxrCc2CXVDaDYfDrr9F2Lh8jzCiTfJHBu5KGyhv85oWb5bjHEh
+         U/Rg==
+X-Gm-Message-State: ACrzQf2S+7H3Kzuf8iom2lK9juyw76eqTQw0s2rMOWVsc2BTf9excjDF
+        THk9THA+KMU8NjMQZ8OpiGgUshgwfP2BiA==
+X-Google-Smtp-Source: AMsMyM7TJT++f0nI/nkx4BJIZESfI/bTmYhoFWKAaK+VIt9w/7VEbrvn9BFZE1dG4A8kGABELaEE5A==
+X-Received: by 2002:ac8:7d0d:0:b0:39c:c5e0:37c0 with SMTP id g13-20020ac87d0d000000b0039cc5e037c0mr7408772qtb.537.1666203094830;
+        Wed, 19 Oct 2022 11:11:34 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id r19-20020a05620a299300b006eea4b5abcesm5841432qkp.89.2022.10.19.11.11.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 11:11:34 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-360871745b0so176259237b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:11:33 -0700 (PDT)
+X-Received: by 2002:a81:1007:0:b0:357:45e3:304c with SMTP id
+ 7-20020a811007000000b0035745e3304cmr7943725ywq.340.1666203093522; Wed, 19 Oct
+ 2022 11:11:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com> <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
-In-Reply-To: <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 19 Oct 2022 11:10:34 -0700
-Message-ID: <CAKwvOdmDz2VfU1JJkAEnPLTcx4PHH48KfZQfW6gvO6we_QbrRQ@mail.gmail.com>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com> <20221019174345.GM25951@gate.crashing.org>
+In-Reply-To: <20221019174345.GM25951@gate.crashing.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 19 Oct 2022 11:11:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
+Message-ID: <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
 Subject: Re: [PATCH] kbuild: treat char as always signed
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
@@ -65,10 +71,9 @@ Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,66 +81,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:26 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Wed, Oct 19, 2022 at 10:45 AM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
 >
-> On Wed, Oct 19, 2022 at 10:14 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > The pointer-sign thing doesn't actually help (ie it won't find places
-> > where you actually compare a char), and it causes untold damage in
-> > doing completely insane things.
->
-> Side note: several years ago I tried to make up some sane rules to
-> have 'sparse' actually be able to warn when a 'char' was used in a
-> context where the sign mattered.
+> When I did this more than a decade ago there indeed was a LOT of noise,
+> mostly caused by dubious code.
 
-Do you have examples? Maybe we could turn this into a compiler feature
-request.  Having prior art on the problem would be a boon.
+It really happens with explicitly *not* dubious code.
 
->
-> I failed miserably.
->
-> You actually can see some signs (heh) of that in the sparse sources,
-> in that the type system actually has a bit for explicitly signed types
-> ("MOD_EXPLICITLY_SIGNED"), but it ends up being almost entirely
-> unused.
->
-> That bit does still have one particular use: the "bitfield is
-> dubiously signed" thing where sparse will complain about bitfields
-> that are implicitly (but not explicitly) signed. Because people really
-> expect 'int a:1' to have values 0/1, not 0/-1.
+Using 'unsigned char[]' is very common in code that actually does
+anything where you care about the actual byte values. Things like
+utf-8 handling, things like compression, lots and lots of cases.
 
-Clang's -Wbitfield-constant-conversion can catch that.
-commit 5c5c2baad2b5 ("ASoC: mchp-spdiftx: Fix clang
--Wbitfield-constant-conversion")
-commit eab9100d9898 ("ASoC: mchp-spdiftx: Fix clang
--Wbitfield-constant-conversion")
-commit 37209783c73a ("thunderbolt: Make priority unsigned in struct tb_path")
+But a number of those cases are still dealing with *strings*. UTF-8 is
+still a perfectly valid C string format, and using 'strlen()' on a
+buffer that contains UTF-8 is neither unusual nor wrong. It is still
+the proper way to get the byte length of the thing. It's how UTF-8 is
+literally designed.
 
->
-> But the original intent was to find code where people used a 'char'
-> that wasn't explicitly signed, and that then had architecture-defined
-> behavior.
->
-> I just could not come up with any even remotely sane warning
-> heuristics that didn't have a metric buttload of false positives.
->
-> I still have this feeling that it *should* be possible to warn about
-> the situation where you end up doing an implicit type widening (ie the
-> normal C "arithmetic is always done in at least 'int'") that then does
-> not get narrowed down again without the upper bits ever mattering.
->
-> But it needs somebody smarter than me, I'm afraid.
->
-> And the fact that I don't think any other compiler has that warning
-> either makes me just wonder if my feeling that it should be possible
-> is just wrong.
->
->                    Linus
+And -Wpointer-sign will complain about that, unless you start doing
+explicit casting, which is just a worse fix than the disease.
 
+Explicit casts are bad (unless, of course, you are explicitly trying
+to violate the type system, when they are both required, and a great
+way to say "look, I'm doing something dangerous").
 
+So people who say "just cast it", don't understand that casts *should*
+be seen as "this code is doing something special, tread carefully". If
+you just randomly add casts to shut up a warning, the casts become
+normalized and don't raise the kind of warning signs that they
+*should* raise.
 
--- 
-Thanks,
-~Nick Desaulniers
+And it's really annoying, because the code ends up using 'unsigned
+char' exactly _because_ it's trying to be careful and explicit about
+signs, and then the warning makes that carefully written code worse.
+
+> Then suggest something better?  Or suggest improvements to the existing
+> warning?
+
+As I mentioned in the next email, I tried to come up with something
+better in sparse, which wasn't based on the pointer type comparison,
+but on the actual 'char' itself.
+
+My (admittedly only ever half-implemented) thing actually worked fine
+for the simple cases (where simplification would end up just undoing
+all the "expand char to int" because the end use was just assigned to
+another char, or it was masked for other reasons).
+
+But while sparse does a lot of basic optimizations, it still left
+enough "look, you're doing sign-extensions on a 'char'" on the table
+that it warned about perfectly valid stuff.
+
+And maybe that's fundamentally hard.
+
+The "-Wpointer-sign" thing could probably be fairly easily improved,
+by just recognizing that things like 'strlen()' and friends do not
+care about the sign of 'char', and neither does a 'strcmp()' that only
+checks for equality (but if you check the *sign* of strcmp, it does
+matter).
+
+It's been some time since I last tried it, but at least from memory,
+it really was mostly the standard C string functions that caused
+almost all problems.  Your *own* functions you can just make sure the
+signedness is right, but it's really really annoying when you try to
+be careful about the byte signs, and the compiler starts complaining
+just because you want to use the bog-standard 'strlen()' function.
+
+And no, something like 'ustrlen()' with a hidden cast is just noise
+for a warning that really shouldn't exist.
+
+So some way to say 'this function really doesn't care about the sign
+of this pointer' (and having the compiler know that for the string
+functions it already knows about anyway) would probably make almost
+all problems with -Wsign-warning go away.
+
+Put another way: 'char *' is so fundamental and inherent in C, that
+you can't just warn when people use it in contexts where sign really
+doesn't matter.
+
+                 Linus
