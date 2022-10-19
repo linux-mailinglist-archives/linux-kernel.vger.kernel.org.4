@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC896046D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93006045B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbiJSNVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S231626AbiJSMsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbiJSNVM (ORCPT
+        with ESMTP id S232830AbiJSMrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:21:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDF818DAA7;
-        Wed, 19 Oct 2022 06:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666184770;
-        bh=zFDApoDas0uJkB2pTqthBHi/bLKJFfQsKy3mBsM559Y=;
-        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
-        b=YIH2twBdOjm2WL9TU5DvIGnatP0k9AjTVZWLz9cVCJ5CZc3165WZl+ZziysaxQG+k
-         Uz1cwaZF0on+OfvDSf9KuGXSnnEghzDkbFu4RLzdJRSiF6noTPVS/uDcHmDOTR/4E6
-         FViShCK1DLUtF3PVdxfvyUGa8S5KEgRYDXm9zxCQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.33.106]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McY8T-1pGZT63b4P-00cxv1; Wed, 19
- Oct 2022 12:17:09 +0200
-Message-ID: <7b06560d-1271-fa17-fef8-f3b5da6a3f8a@gmx.de>
-Date:   Wed, 19 Oct 2022 12:17:09 +0200
+        Wed, 19 Oct 2022 08:47:39 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB1A19423E;
+        Wed, 19 Oct 2022 05:30:43 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J8JMtQ005418;
+        Wed, 19 Oct 2022 10:19:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0uBWXpcUu6GK+gkxHOG4A7UL9k/FeUaumNYxBXEQc/g=;
+ b=ECP6KN2otQEPTB0Jtlq05chC73cZX4mprzcc8r/SuaQVPeLDr5eBJqlCeTFnEGmExc6+
+ FOzxpYMPv37YCvtbHdIp+0May1ZYE84gT+U/3zowW99NYokX4yjuLzYDeAqhp79ciLLL
+ D5QhwHQiuGqsLSX2+p4DKoo2HB2eCMZDlsEvXUR/Cvc03gD6Vti3qCVhcTEAdAQpE7VL
+ LF6y3lMQBfQ3qrrO6d7fpVDY1YeR3jI/SD83dUs/TeRc5pWx6MKW/ySYHXUU2ALbjLWF
+ YHpdGPT84KBQmYkZHeVSBiUuCm6cIvulfKrPDkxHbtc209ma/fj6PoU/1VFZz+iMAoCK aw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k9n2p4pje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 10:19:14 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29JAJErM023371
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 10:19:14 GMT
+Received: from [10.239.155.106] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 19 Oct
+ 2022 03:19:11 -0700
+Message-ID: <a0b96001-175a-7c25-8e9c-a2075e3be178@quicinc.com>
+Date:   Wed, 19 Oct 2022 18:19:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.0 000/862] 6.0.3-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 0/2] Add LED driver for flash module in QCOM PMICs
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>
+CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>
+References: <20221018014024.948731-1-quic_fenglinw@quicinc.com>
+ <CNPPXFMBHOPK.2XSBJT5M1TNVP@otso>
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+In-Reply-To: <CNPPXFMBHOPK.2XSBJT5M1TNVP@otso>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:x/1Yky7vo0jNz9N4s9Sk3unjF8U50f8x1i1VQHUooN8MtrDBLnG
- yxXW9P1fHI4OEUQdlY4Yx0iTAEzqbH3Nj53M/sBZ2dhP6OXemSeExtHlv5XPIqyJG+860fq
- Zl/dC7gPU+51GkKBIOZ+EaS2oRi2yXbYUdbX9yCN3bFKhm8H7zEbh1PLoHwMcTovA78AIgQ
- jKNpEiTuRg5TnObMA25OA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JV77/7SUk6s=:ff8Poi6gMMhNwNxRThCjpZ
- sOA4hmebKLux5DUxjUGk5jNYpz5UWWLjdcukUVAvjgtjjI5DtE09Ac2UHycf/Rx1lExYO4Dv+
- FMR+ukXJRmEUT6JBWEz4UBsXDUD36c0oi9Ko409H9ZPMoJuWCXo3gXOVg8yv47TAvp8j7scbR
- BVBCDi55Tua99bpVM3nHAWh6fNcDadKByMMwvlKrcaekC4Eg3snmA/0wOUEW8jGt2hYkNebH9
- K+aoQi4ELx/akR3mfcCi6qYbYWlULdXV6L/J6Sy3e0C3VuuDZGcmukjFTfaPP1+2hjhpgdlFc
- WE9GBaA4VZhTf0O+jfddvJOYPyqn9N+gpI51gBj5Vhpugvk1Vkmw5OXqMj0KVdNYq+nGVePyI
- JFEV9efgbifOE72xfJ52KMoYPGUDK6vFcDTQjce1B9EOdE9eFSnx4lmoK33p7tVZ0dkO2Kp/D
- uwmgUKwdjvX1xjtj+TSyhlGGS8YayO3m6QTvsvu2DRwoUVfcAHGTrkDmcQ761gG926xWY8oNQ
- +Fiju/TjxINbs/zlMq4gJMM++xidOH39fGknpVhgpIzH/WNgxizeoGUUTsvT9BBVzjvM2TrxK
- oPqd6iH6RxPafPLnxaAALA4NqRcrDzc+Q8/QgUd2MfHC2JvaKo48SQftQ/jSN3jNf9l9bzdmX
- 7JjXRNLon9snVslRfGlTafiM/NR7QxxL6HCo/z7D70861H6bB2Hlrz6bkDKY51grcYxLsrJ0H
- BaXEddn2vFQaUHXLPKTaHHpLIq9fowC6E+8Es7CYVvGNd0D1FP7Xg38t+9UpMOX9P6/+tzRGC
- qAKtvgZJ7jb+uWYt0zx29NFYaXX9gk3C9Ra0Ovs5VOHC1DFYXlxlb/jk8DlYIIzmkNmRyccYk
- oJ7cjqeOF7rTGZGSwIuoaO0mhMl6VeOIOtNgkUOv0/8gzASvf14UDmxfO90PuRiPqbAEKWxCW
- NhSrPKrWyecmMNhI7F9o1njeDeSO9w1Lcoc0xi7VPCv8ZrFG/XpkBoBqgqbsONAXikqMS2Xfu
- W9JlAlG4BHqKWllQg/rTATwuscat6cAqFWUgI+hDFr4KNMITfeBy1QS3AGoSXVCscOQu2E0yc
- ec4l9UHQF25guufQi0ywiBXyycd+bthdBjXh9GqvB16DYWRWkTaYqtatYeH0IpQI2L5FTCuqm
- Y6FhQND/56vtCnAlZ04pJWM/c2ZmhGMf/PY5QuFR+e2ZlDcI5OXLxXl9I4FxTLhaMT2qMIIx7
- gIKZirdp+sediTomApcyu510ED4HPUGZ+gHazXhcbIT34NL5N8W3SqZIdYrj+zUf4JW5ZPFPf
- gLPHAoHthYEuTlG4wbFql1qTNT1pNEkwrUDhJ2XrDnldG4/jDyZDk2Joep2gHI+YgWiqnlaUi
- zritnxBYslX+LWEVy0m/Bbcvrl2roraOiGIXL/RGvzs5C0xnC2+g+5M9BKk2f/U7wcH4b6Hxa
- DX4vLeNyZ+6h/MCWkpweBcI/MDEK+106e8L67KyqbIep+TntDsh7WsVgJxyE9Vj0p3Gjw6kN0
- fGtrJ9m5TOaXsrJAhrt9/p8o9jS49f+At1Ow/KJ9YmY+p
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: H1oI4Txv4WqgWVAuACxtTQ7rUZBuFcWl
+X-Proofpoint-GUID: H1oI4Txv4WqgWVAuACxtTQ7rUZBuFcWl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_06,2022-10-19_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210190057
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,14 +80,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
 
-6.0.3-rc1
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37 Beta)
+On 2022/10/19 15:23, Luca Weiss wrote:
+> Hi Fenglin,
+> 
+> On Tue Oct 18, 2022 at 3:40 AM CEST, Fenglin Wu wrote:
+>> Initial driver and binding document changes for supporting flash LED
+>> module in Qualcomm Technologies, Inc. PMICs.
+>>
+> 
+> Thanks for these patches, it's really nice to see drivers like this
+> being sent upstream!
+> 
+> I've just tried these patches on pm6150l which also is compatible with
+> this driver (and used on sm7225-fairphone-fp4).
+> 
+> The two different flash LEDs on the device I could adjust as expected
+> using sysfs:
+> 
+> $ echo 255 > /sys/class/leds/yellow:flash-0/brightness
+> $ echo 255 > /sys/class/leds/white:flash-0/brightness
+> 
+> Also lower brightness values resulted in lower brightness on the LED, so
+> all is good here!
+> 
+> But for flash usage, I couldn't figure out how to use it, doing the
+> following resulted in no change on the LED.
+> 
+> $ cat /sys/class/leds/white:flash-0/max_flash_brightness
+> 1000000
+> $ echo 1000000 > /sys/class/leds/white:flash-0/flash_brightness
+> 
+> Here's my LED definition:
+> 
+>    led-0 {
+>      function = LED_FUNCTION_FLASH;
+>      color = <LED_COLOR_ID_YELLOW>;
+>      led-sources = <1>;
+>      led-max-microamp = <180000>;
+>      flash-max-microamp = <1000000>;
+>      flash-max-timeout-us = <1280000>;
+>    };
+> 
+>  From values are from msm-4.19 kernel:
+> 
+>    qcom,flash_0 {
+>      qcom,current-ma = <1000>; // => flash-max-microamp
+>      qcom,duration-ms = <1280>; // => flash-max-timeout-us
+>      qcom,id = <0>; // => led-sources?
+>    };
+> 
+>    qcom,torch_0 {
+>      qcom,current-ma = <180>; // => led-max-microamp
+>      qcom,id = <0>; // => led-sources?
+>    };
+> 
+> Could you please let me know how flash is supposed to work or if I
+> maybe have messed up some setting here?
+> 
+> Regards
+> Luca
 
+Hi Luca,
+
+Thanks for testing the driver at your end.
+The "brightness" node is for enabling/disable/adjusting brightness when 
+the LED is working in torch mode, the nodes for enabling/adjusting the 
+LED behavior in flash mode are "flash_brightness" "flash_timeout" 
+"flash_strobe".
+You can strobe the flash by "echo 1 > flash_strobe" directly and the 
+default brightness/timeout value will be used, or you can update the 
+settings with "echo xxx > flash_brightness; echo xxx > flash_timeout" 
+then strobe the LED with "echo 1 > flash_strobe". Please remember you 
+always need to "echo 0 > flash_strobe" 1st if you want to enable it again.
 Thanks
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+Fenglin
+> 
+>> Changes in V3:
+>>    1. Updated the driver to use regmap_field for register access.
+>>    2. Adressed the review comments in binding document change.
+>>
+>> Changes in V2:
+>>    1. Addressed review comments in binding change, thanks Krzysztof!
+>>    2. Updated driver to address the compilation issue reported by
+>>       kernel test robot.
+>>
+>>
+>> Fenglin Wu (2):
+>>    leds: flash: add driver to support flash LED module in QCOM PMICs
+>>    dt-bindings: add bindings for QCOM flash LED
+>>
+>>   .../bindings/leds/qcom,spmi-flash-led.yaml    | 116 +++
+>>   drivers/leds/flash/Kconfig                    |  15 +
+>>   drivers/leds/flash/Makefile                   |   1 +
+>>   drivers/leds/flash/leds-qcom-flash.c          | 700 ++++++++++++++++++
+>>   4 files changed, 832 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/leds/qcom,spmi-flash-led.yaml
+>>   create mode 100644 drivers/leds/flash/leds-qcom-flash.c
+>>
+>> -- 
+>> 2.25.1
+> 
