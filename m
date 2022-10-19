@@ -2,180 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DF16043D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB08604415
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiJSLuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S231452AbiJSL5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiJSLu3 (ORCPT
+        with ESMTP id S231923AbiJSL4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:50:29 -0400
-Received: from mail-io1-xd48.google.com (mail-io1-xd48.google.com [IPv6:2607:f8b0:4864:20::d48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C550360AF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:28:53 -0700 (PDT)
-Received: by mail-io1-xd48.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so12666906ioa.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:28:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rlPxNuuYrpPZWnslaVb+CMvOIVvWoGav/3pchzdetwY=;
-        b=TCtGRr8OULj9hKf4lN4n5QCmVXbhQ/ymMkSK0w84+sO2o4S54pUik5OUQTZjjUYrSd
-         7tqLcwtKIveFYRUcgbaoFdPQ2VhiHEsd6oXA3au/oNWtWHYzAmbsFGXxmMDusnxfBdVB
-         0Ljv31WvtFjxGepRTVyrD2UmXNAj/6sik0Kqp6M2GQbPXL470CkrYs9Pq7i6j8dHRW/F
-         P0oYL8rMFGf324oORreXL/CkpulhYtpb443yeUfk6lXWXD+KsMb5kWFnA19Zv/JeQwbE
-         cDHCyNmXE8hLZAj31itOsR+JBYdlkUkAPzskevrNyL9aRFuwcOLd+5dSYvZRa8UCOgd2
-         zb6Q==
-X-Gm-Message-State: ACrzQf2S4K1gBRSRf0wMoIGi5qT6GgZVKW5zR+Br67fq1crDvanq8rim
-        L32ZqLbPGYr/Ed6FSAamzFgPSDazgjdtLpfYX0PoYrgLqgzp
-X-Google-Smtp-Source: AMsMyM48v5ESSXiOHn4pTAgns/tV8/e2jlh8+xvkSAmEpwbo21H7WT2Ua58BN9mAiJKRim5Z4dIz7RUSGN8GOXGTvldRSr8H0dYh
+        Wed, 19 Oct 2022 07:56:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B619127439;
+        Wed, 19 Oct 2022 04:35:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07140B8239D;
+        Wed, 19 Oct 2022 11:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD4F3C433D7;
+        Wed, 19 Oct 2022 11:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666178921;
+        bh=P6rc2HU9YMwHkiSlraPiM2AXBDJ6FbsuiwOqlH0piBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Plu4m8flQDUSFIFmUq4Jrvv2eR1X4O1XFnfswnpKLStlXciMBe/zTrYVQLXvoRw3w
+         Yyc/rc5Td5iNEWcN1vPYJK5MUV7O5V+c8bUzO+1cHtuEDR/UYz0rXCG9h9WgQGvck8
+         GJF1zq8+bvHU7nVofQm5dyXFgOobPmoZ+W226rNQJwJqxNIPkU7NzoONpDBiJI9pfO
+         8Iz5tpUwcSgG9chBCtoy3vwjGfN6uNKfwHumrqpIkC/WxYbYFm/FdNN/Ay5obIpTai
+         n5Bufq62jhGmtbvV5nbgGbANXQACMbMBv7WTwFBAwy3zJ0bpDAmtyUN4BLsz3tXeER
+         CU7mvQxxUzFPQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ol7FM-0005jQ-Uw; Wed, 19 Oct 2022 13:28:29 +0200
+Date:   Wed, 19 Oct 2022 13:28:28 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 6.0 523/862] phy: qcom-qmp-pcie: add pcs_misc sanity check
+Message-ID: <Y0/fXL0IHCtgj+mn@hovoldconsulting.com>
+References: <20221019083249.951566199@linuxfoundation.org>
+ <20221019083313.087411998@linuxfoundation.org>
+ <Y0/AM9F1CmAykhGI@hovoldconsulting.com>
+ <Y0/UW4QzVmg+zyPY@kroah.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:7409:0:b0:363:bb5c:2d7 with SMTP id
- o9-20020a027409000000b00363bb5c02d7mr6064260jac.260.1666178795965; Wed, 19
- Oct 2022 04:26:35 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 04:26:35 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000044139d05eb617b1c@google.com>
-Subject: [syzbot] general protection fault in pse_prepare_data
-From:   syzbot <syzbot+81c4b4bbba6eea2cfcae@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, bagasdotme@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, lkp@intel.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0/UW4QzVmg+zyPY@kroah.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Oct 19, 2022 at 12:41:31PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Oct 19, 2022 at 11:15:31AM +0200, Johan Hovold wrote:
+> > On Wed, Oct 19, 2022 at 10:30:10AM +0200, Greg Kroah-Hartman wrote:
+> > > From: Johan Hovold <johan+linaro@kernel.org>
+> > > 
+> > > [ Upstream commit ecd5507e72ea03659dc2cc3e4393fbf8f4e2e02a ]
+> > > 
+> > > Make sure that the (otherwise) optional pcs_misc IO region has been
+> > > provided in case the configuration specifies a corresponding
+> > > initialisation table to avoid crashing with malformed device trees.
+> > > 
+> > > Note that the related debug message is now superfluous as the region is
+> > > only used when the configuration has a pcs_misc table.
+> > > 
+> > > Fixes: 421c9a0e9731 ("phy: qcom: qmp: Add SDM845 PCIe QMP PHY support")
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > Link: https://lore.kernel.org/r/20220916102340.11520-2-johan+linaro@kernel.org
+> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > 
+> > This was added to prevent future bugs when adding support for new
+> > platforms and did not have a stable tag. Please drop.
+> 
+> Ok, that wasn't obvious at all from the changelog :(
 
-syzbot found the following issue on:
+Ah, sorry, I misread my own patch. This one does indeed prevent a crash
+with malformed devicetrees as the commit message says.
 
-HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=140d5a2c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
-dashboard link: https://syzkaller.appspot.com/bug?extid=81c4b4bbba6eea2cfcae
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13470244880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=146e88b4880000
+But whether that needs backporting or nor is a separate question. I'd
+say either way is fine.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9d967e5d91fa/disk-55be6084.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9a8cffcbc089/vmlinux-55be6084.xz
+> I'll go drop this, and the others you marked as "should not be there"
+> from the queue, thanks.
 
-Bisection is inconclusive: the first bad commit could be any of:
+Thanks.
 
-331834898f2b Merge branch 'add-generic-pse-support'
-66741b4e94ca net: pse-pd: add regulator based PSE driver
-2a4187f4406e once: rename _SLOW to _SLEEPABLE
-f05dfdaf567a dt-bindings: net: pse-dt: add bindings for regulator based PoDL PSE controller
-18ff0bcda6d1 ethtool: add interface to interact with Ethernet Power Equipment
-e52f7c1ddf3e Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-681bf011b9b5 eth: pse: add missing static inlines
+> Maybe next time, don't use a Fixes: tag if the commit really doesn't
+> "fix" anything in the current kernel...
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11fc42b4880000
+Sorry about the confusion. The Fixes tag is correct in this case.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+81c4b4bbba6eea2cfcae@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000008: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
-CPU: 1 PID: 3609 Comm: syz-executor227 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:pse_prepare_data+0x66/0x1e0 net/ethtool/pse-pd.c:67
-Code: 89 c6 e8 dd f4 e0 f9 45 85 e4 0f 88 b3 00 00 00 e8 0f f8 e0 f9 48 8d 7d 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 36 01 00 00 49 8d bd 98 0b 00 00 4c 8b 65 40 48
-RSP: 0018:ffffc90003cff398 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff888020324600 RCX: 0000000000000000
-RDX: 0000000000000008 RSI: ffffffff879a5231 RDI: 0000000000000040
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff8880788f2000 R14: ffff8880712e0598 R15: ffffffff879a51e0
-FS:  000055555594f300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000080 CR3: 0000000025df8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ethnl_default_dump_one net/ethtool/netlink.c:442 [inline]
- ethnl_default_dumpit+0x4a4/0xe80 net/ethtool/netlink.c:494
- netlink_dump+0x541/0xc20 net/netlink/af_netlink.c:2275
- __netlink_dump_start+0x647/0x900 net/netlink/af_netlink.c:2380
- genl_family_rcv_msg_dumpit+0x1c9/0x310 net/netlink/genetlink.c:689
- genl_family_rcv_msg net/netlink/genetlink.c:805 [inline]
- genl_rcv_msg+0x55d/0x780 net/netlink/genetlink.c:825
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2540
- genl_rcv+0x24/0x40 net/netlink/genetlink.c:836
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
- __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f626f3dd579
-Code: 28 c3 e8 4a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffddc5fcbc8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007ffddc5fcbd8 RCX: 00007f626f3dd579
-RDX: 0000000000000000 RSI: 0000000020000240 RDI: 0000000000000003
-RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffddc5fcbe0
-R13: 00007ffddc5fcc00 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:pse_prepare_data+0x66/0x1e0 net/ethtool/pse-pd.c:67
-Code: 89 c6 e8 dd f4 e0 f9 45 85 e4 0f 88 b3 00 00 00 e8 0f f8 e0 f9 48 8d 7d 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 36 01 00 00 49 8d bd 98 0b 00 00 4c 8b 65 40 48
-RSP: 0018:ffffc90003cff398 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff888020324600 RCX: 0000000000000000
-RDX: 0000000000000008 RSI: ffffffff879a5231 RDI: 0000000000000040
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff8880788f2000 R14: ffff8880712e0598 R15: ffffffff879a51e0
-FS:  000055555594f300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000080 CR3: 0000000025df8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	89 c6                	mov    %eax,%esi
-   2:	e8 dd f4 e0 f9       	callq  0xf9e0f4e4
-   7:	45 85 e4             	test   %r12d,%r12d
-   a:	0f 88 b3 00 00 00    	js     0xc3
-  10:	e8 0f f8 e0 f9       	callq  0xf9e0f824
-  15:	48 8d 7d 40          	lea    0x40(%rbp),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 36 01 00 00    	jne    0x16a
-  34:	49 8d bd 98 0b 00 00 	lea    0xb98(%r13),%rdi
-  3b:	4c 8b 65 40          	mov    0x40(%rbp),%r12
-  3f:	48                   	rex.W
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Johan
