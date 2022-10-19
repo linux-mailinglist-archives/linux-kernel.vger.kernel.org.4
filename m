@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA31605238
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B3A60523C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiJSVrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S230218AbiJSVvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiJSVrt (ORCPT
+        with ESMTP id S229904AbiJSVvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:47:49 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC979191D49
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:47:47 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id m23so23889073lji.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:47:47 -0700 (PDT)
+        Wed, 19 Oct 2022 17:51:08 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D592E161FC3;
+        Wed, 19 Oct 2022 14:51:07 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id m81so20818457oia.1;
+        Wed, 19 Oct 2022 14:51:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQP9NNXRKqU39bqhIf70VKPrL4R5GSuKkFr6xF4ANdM=;
-        b=gR1lcENN0fDNHLQiKcN1npAu5r1Kfc7SqnDjstou+CBGd0LOz8eq46/hnCrGphZH9x
-         /JsX10F9PNhYjIcMBCHP1yX/hYR9/jvPCjycDAfl92kx7DL6K7E2zJuaqMiorKbgXZGR
-         8olLKlaqEYFuCs5DGpC2VNBrC+B5LPUs+ilUOjh2kwUOaXFkpBPXCfHGFPSBc0MBfDp4
-         WWEyENVvn2gPL+kZbVD3x64dJAKEfWoV4imc/EmU3CQiVv7QSFLsW0OmP8OOBaNyTf/V
-         8bXoCX2/n7dXRetqkGyKm5h7Hq/djOdNbNQGywUNXK9Dn9NX8gkt/DKNCLLTTOOI8IVi
-         bDVg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ABNNnqtZNxuF6VlncFXZkkBSAIWL/7Dr/Oxp8PF+xog=;
+        b=BXyNIQpkIfqU55IqfFJRSa6S+VqAsbrgMAt8/UXHYvUk03TLj7Kze6Y5tt+VxCnw6Q
+         f8FfzO2XKnZ2o+2VWK3+r+QDVeKYkMUX/dHM4qMFmsqlbryzY/WIRje3KN+ihzBgOWHc
+         wIHIYDhdohbQYDtpSFzVx3uSSKIcnAB8KkmfwakhJPLxyq8KXm2c2gethIsRhpUhvgOX
+         p88V7wyS4LPGZj0unWUoouCkExh2JYyTuripcH1I+RYS/Cl6eX/ialQ1CkKiwriKLHII
+         6Ip+dQsqyNo8pFT69fJ6Pw/41+SsJ/wERll6Ij3vXKpYDXXSxdpCqdrqkIordj30FDY0
+         fPrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yQP9NNXRKqU39bqhIf70VKPrL4R5GSuKkFr6xF4ANdM=;
-        b=yLfsmOBaX/pbC1ikcwVP+os6oRemxKhMsQCH811ZrtaWbGBnalRN4S+1Jcq2Y89Nvz
-         +diWbqGpFmwI317X2Jmv3Zwc72PJrbz4tpUEgfzM/0L1vBY+8+QIVyzui6Zu4NGBCww6
-         3abHNvzVhE4Acm0TC2fm1l+qRSYavaR28LInNRyD3KJ6kFdTh1XbQFweNBD2fgK+AaBb
-         L+kuz1c2etoc9hSrPZIxVdJxVmfAC5VPe2g8sW10+7DlxTC1RHJXhy1BO2HksseolvUx
-         KEjaise577phVZXM08KEcQbPT6/ulQO+NPt6nGGM74/ZYWP4OjLqGPk6zwjCxTMKPZ/f
-         cjHQ==
-X-Gm-Message-State: ACrzQf3RO+TP6BK3nMDTdVopb0r4TJnfYC6eIUkyVT23BupInmiLFpns
-        w8XGKMKxw/OL/xJtQGBRmL8eES2nW3keRinPXUO5dw==
-X-Google-Smtp-Source: AMsMyM4GdDqKh+7dI8jHyflcaArvn8B2DE5+KoCG8n042l0aw8ASEbqBE3f8rBOWIa7nZf+gAEsUbEMaE3hnY6W38tE=
-X-Received: by 2002:a2e:7c17:0:b0:26e:4f7:3c95 with SMTP id
- x23-20020a2e7c17000000b0026e04f73c95mr3817812ljc.455.1666216065809; Wed, 19
- Oct 2022 14:47:45 -0700 (PDT)
+        bh=ABNNnqtZNxuF6VlncFXZkkBSAIWL/7Dr/Oxp8PF+xog=;
+        b=BQEcQG60lGugjTiAm8QRThPhRE2En1Ice9hG52zU3FQsxGDeKo1nGTkjwrpLUtPnvn
+         rmWCQiSaTQ8reu2njaC/D1035kHP+S9ddnu0CqOlpEeMfoLKCmMoLxkBK8SXOZZx8/g9
+         /dXmgaAlUrBFHt/4wIwFOER8yWGC71ejnmml37jL2B8t79aHFGACMKYdxwiYX2ovduqF
+         Vp/E/HlIbH2euh8WeSjjhoDORly8+MthGHEqPFS5bcVLi7z38d4Q88isytOFjEjwcDdP
+         U2dCYutTBVDgXVfhtMwG+WSqnp3qUmGLqYaullynsg10MjKQpksMlxDsL52L3jMgotUL
+         a12g==
+X-Gm-Message-State: ACrzQf1DGvuZlDHXaLuBnNJrw65ilJ84vTYtx6COnuXgjzjhagy8RUqX
+        e/Jh0OtyAyUTCz8MKkVw8JE=
+X-Google-Smtp-Source: AMsMyM5NeQWFcsgWUWIo67Wa773CwI18mDjG9WjNaKa8VGao2IY7nb/wNeUHTjGm2s1LEBlqgaKrVw==
+X-Received: by 2002:a05:6808:a8b:b0:355:385d:e51e with SMTP id q11-20020a0568080a8b00b00355385de51emr5002668oij.117.1666216267169;
+        Wed, 19 Oct 2022 14:51:07 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i20-20020a9d6254000000b00661d4e012d6sm7692676otk.20.2022.10.19.14.51.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 14:51:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0d1b4fed-7ded-88fc-3c37-4f859fc505c1@roeck-us.net>
+Date:   Wed, 19 Oct 2022 14:51:05 -0700
 MIME-Version: 1.0
-References: <20221019150333.1047423-1-pgonda@google.com> <528937ab-8046-d5d1-26ff-50ef35f5635f@amd.com>
- <CAMkAt6ritG1zmOreh9WYLYAGww0EJQy+m-Y0nfxD5+gpTkpJ1w@mail.gmail.com>
- <821e750b-26c9-3331-7577-5cb832a35afa@amd.com> <CAAH4kHYhLkiN7H03GKgMU+3h9rhp2a03gNFGLbrNtjp=PYYHQw@mail.gmail.com>
- <5621c2b6-a5eb-c786-afee-020e97c0e4c8@amd.com> <CAMkAt6pCPmf++Dg=x5bSN4-gR-s7BuYiryOGvGezLupFN9aEKw@mail.gmail.com>
- <948704a4-2348-041f-4f46-bbf42d985549@amd.com>
-In-Reply-To: <948704a4-2348-041f-4f46-bbf42d985549@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Wed, 19 Oct 2022 15:47:33 -0600
-Message-ID: <CAMkAt6rb-f3qCb7Np-SdHd7u87-zShFpYkWcA910uYXUafqtPQ@mail.gmail.com>
-Subject: Re: [PATCH] virt: Prevent AES-GCM IV reuse in SNP guest driver
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] hwmon: (jc42) Restore the min/max/critical temperatures
+ on resume
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org
+References: <20221019214108.220319-1-martin.blumenstingl@googlemail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221019214108.220319-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,202 +79,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 2:58 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 10/19/22 15:39, Peter Gonda wrote:
-> > On Wed, Oct 19, 2022 at 1:56 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >>
-> >> On 10/19/22 14:17, Dionna Amalie Glaze wrote:
-> >>> On Wed, Oct 19, 2022 at 11:44 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >>>>
-> >>>> On 10/19/22 12:40, Peter Gonda wrote:
-> >>>>> On Wed, Oct 19, 2022 at 11:03 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >>>>>>
-> >>>>>> On 10/19/22 10:03, Peter Gonda wrote:
-> >>>>>>> The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
-> >>>>>>> communicate securely with each other. The IV to this scheme is a
-> >>>>>>> sequence number that both the ASP and the guest track. Currently this
-> >>>>>>> sequence number in a guest request must exactly match the sequence
-> >>>>>>> number tracked by the ASP. This means that if the guest sees an error
-> >>>>>>> from the host during a request it can only retry that exact request or
-> >>>>>>> disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
-> >>>>>>> reuse see:
-> >>>>>>> https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
-> >>>>>>
-> >>>>
-> >>>> I think I've wrapped my head around this now. Any non-zero return code
-> >>>> from the hypervisor for an SNP Guest Request is either a hypervisor error
-> >>>> or an sev-guest driver error, and so the VMPCK should be disabled. The
-> >>>> sev-guest driver is really doing everything (message headers, performing
-> >>>> the encryption, etc.) and is only using userspace data that will be part
-> >>>> of the response message and can't result in a non-zero hypervisor return code.
-> >>>>
-> >>>> For the SNP Extended Guest Request, we only need to special case a return
-> >>>> code of SNP_GUEST_REQ_INVALID_LEN. See below for my responses on that.
-> >>>>
-> >>>>
-> >>>>>> I wonder if we can at least still support the extended report length query
-> >>>>>> by having the kernel allocate the required pages when the error is
-> >>>>>> SNP_GUEST_REQ_INVALID_LEN and retry the exact request again. If there are
-> >>>>>> no errors on the second request, the sequence numbers can be safely
-> >>>>>> updated, but the kernel returns the original error (which will provide the
-> >>>>>> caller with the number of pages required).
-> >>>>>
-> >>>>> I think we can but I thought fixing the security bug could come first,
-> >>>>> then the usability fix after. Dionna was planning on working on that
-> >>>>> fix.
-> >>>>>
-> >>>>> In that flow how does userspace get the data? Its called the ioctl
-> >>>>> with not enough output buffer space. What if the userspace calls the
-> >>>>> ioctl with no buffers space allocated, so its trying to query the
-> >>>>> length. We just send the host the request without any encrypted data.
-> >>>>
-> >>>> In the case of SNP_GUEST_REQ_INVALID_LEN, userspace wouldn't get the data
-> >>>> if it hasn't supplied enough buffer space. But, the sev-guest driver can
-> >>>> supply enough buffer space and invoke the SNP Extended Guest Request again
-> >>>> in order to successfully complete the call and update the sequence
-> >>>> numbers. The sev-guest driver would just discard the data in this case,
-> >>>> but pass back the original "not enough buffer space" error to the caller,
-> >>>> who could now allocate space and retry. This then allows the sequence
-> >>>> numbers to be bumped properly.
-> >>>>
-> >>>
-> >>> The way I thought to solve this was to make certificate length
-> >>> querying a part of the specified protocol.
-> >>>
-> >>> The first ext_guest_request command /must/ query the certificate
-> >>> buffer length with req.certs_len == 0.
-> >>
-> >> This becomes an incompatible change to the GHCB specification.
-> >>
-> >>> By making this part of the protocol, the sev-guest driver can check if
-> >>> the certificate length has been requested before.
-> >>> If so, emulate the host's VMM error code for invalid length without
-> >>> sending an encrypted message.
-> >>
-> >> On the hypervisor side, the certificate blob can be replaced at any time
-> >> with a new blob that is larger. So you may still have to handle the case
-> >> where you get a SNP_GUEST_REQ_INVALID_LEN even if you previously asked before.
-> >
-> > Ah, I forgot the host could keep changing the size of this data.
-> >
-> >>
-> >>> If not, then send an all zeroes request buffer with the req.certs_len
-> >>> = 0 values to the VMM.
-> >>>
-> >>> The VMM will respond with the size if indeed the expected_pages are >
-> >>> 0. In the case that the host has not set the certificate buffer yet,
-> >>> then the host will inspect the header of the request page for a zero
-> >>> sequence number. If so, then we know that we don't have a valid
-> >>> request. We treat this also as the INVALID_LEN case but still return
-> >>> the size of 0. The driver will have the expected pages value stored as
-> >>> 0 at this point, so subsequent calls will not have this behavior.
-> >>>
-> >>> The way /dev/sev-guest user code has been written, I don't think this
-> >>> will break any existing software package.
-> >>
-> >> I think having the sev-guest driver re-issue the request with the internal
-> >> buffer when it receives SNP_GUEST_REQ_INVALID_LEN is the better way to go.
-> >> You could still cache the size request and always return that to
-> >> user-space when a request is received with a 0 length. The user-space
-> >> program must be able to handle receiving multiple
-> >> SNP_GUEST_REQ_INVALID_LEN in succession anyway, because of the fact that
-> >> the hypervisor can be updating the certs asynchronously. And if you get a
-> >> request that is not 0 length, then you issue it as such and re-use the
-> >> logic of the first 0 length request that was received if you get an
-> >> SNP_GUEST_REQ_INVALID_LEN with the user-space supplied value.
-> >>
-> >> Peter, is this something you could change the patch to do?
-> >
-> > OK so the guest retires with the same request when it gets an
-> > SNP_GUEST_REQ_INVALID_LEN error. It expands its internal buffer to
->
-> It would just use the pre-allocated snp_dev->certs_data buffer with npages
-> set to the full size of that buffer.
+On 10/19/22 14:41, Martin Blumenstingl wrote:
+> The JC42 compatible thermal sensor on Kingston KSM32ES8/16ME DIMMs
+> (using Micron E-Die) is an ST Microelectronics STTS2004 (manufacturer
+> 0x104a, device 0x2201). It does not keep the previously programmed
+> minimum, maximum and critical temperatures after system suspend and
+> resume (which is a shutdown / startup cycle for the JC42 temperature
+> sensor). This results in an alarm on system resume because the hardware
+> default for these values is 0°C (so any environment temperature greater
+> than 0°C will trigger the alarm).
+> 
+> Example before system suspend:
+>    jc42-i2c-0-1a
+>    Adapter: SMBus PIIX4 adapter port 0 at 0b00
+>    temp1:        +34.8°C  (low  =  +0.0°C)
+>                           (high = +85.0°C, hyst = +85.0°C)
+>                           (crit = +95.0°C, hyst = +95.0°C)
+> 
+> Example after system resume (without this change):
+>    jc42-i2c-0-1a
+>    Adapter: SMBus PIIX4 adapter port 0 at 0b00
+>    temp1:        +34.8°C  (low  =  +0.0°C)             ALARM (HIGH, CRIT)
+>                           (high =  +0.0°C, hyst =  +0.0°C)
+>                           (crit =  +0.0°C, hyst =  +0.0°C)
+> 
+> Apply the previously read or previously programmed temperature limits on
+> system resume. This fixes the alarm due to the hardware defaults of 0°C
+> because the previously applied limits (from a userspace setting) are
+> re-applied on system resume.
+> 
+> Fixes: 175c490c9e7f ("hwmon: (jc42) Add support for STTS2004 and AT30TSE004")
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+> This is my first change to jc42. I tried to be defensive with applying
+> the previous values by only configuring them if they are known valid. I
+> only have this one set of JC42 compatible sensors but I can adapt the
+> code here based on your suggestions.
+> 
+> 
+>   drivers/hwmon/jc42.c | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+> index 30888feaf589..f98b28ff10ad 100644
+> --- a/drivers/hwmon/jc42.c
+> +++ b/drivers/hwmon/jc42.c
+> @@ -558,6 +558,19 @@ static int jc42_resume(struct device *dev)
+>   	data->config &= ~JC42_CFG_SHUTDOWN;
+>   	i2c_smbus_write_word_swapped(data->client, JC42_REG_CONFIG,
+>   				     data->config);
+> +
+> +	if (data->valid || data->temp[t_min])
 
-Actually we allocate that buffer with size SEV_FW_BLOB_MAX_SIZE. Maybe
-we want to just allocate this buffer which we think is sufficient and
-never increase the allocation?
+This contradicts "with applying the previous values by only configuring
+them if they are known valid". It explicitly applies the values if they
+are marked as not valid, and it also applies the values if they are 0
+(I don't really see the value of doing that).
 
-I see the size of
-https://developer.amd.com/wp-content/resources/ask_ark_milan.cert is
-3200 bytes. Assuming the VCEK cert is the same size (which it should
-be since this .cert is 2 certificates). 16K seems to leave enough room
-even for some vendor certificates?
+Sorry, I don't understand the logic. Did you mean to use "&&" instead
+of "||" ?
 
->
-> > hold the certificates. When it finally gets a successful request w/
-> > certs. Do we want to return the attestation bits to userspace, but
-> > leave out the certificate data. Or just error out the ioctl
-> > completely?
->
-> We need to be able to return the attestation bits that came back with the
-> extra certs. So just error out of the ioctl with the length error and let
-> user-space retry with the recommended number of pages.
+Thanks,
+Guenter
 
-That sounded simpler to me. Will do.
+> +		i2c_smbus_write_word_swapped(data->client, temp_regs[t_min],
+> +					     data->temp[t_min]);
+> +
+> +	if (data->valid || data->temp[t_max])
+> +		i2c_smbus_write_word_swapped(data->client, temp_regs[t_max],
+> +					     data->temp[t_max]);
+> +
+> +	if (data->valid || data->temp[t_crit])
+> +		i2c_smbus_write_word_swapped(data->client, temp_regs[t_crit],
+> +					     data->temp[t_crit]);
+> +
+>   	return 0;
+>   }
+>   
 
->
-> >
-> > I can do that in this series.
->
-> Thanks!
->
-> >
-> >>
-> >>>
-> >>>>>
-> >>>>>>
-> >>>>>> For the rate-limiting patch series [1], the rate-limiting will have to be
-> >>>>>> performed within the kernel, while the mutex is held, and then retry the
-> >>>>>> exact request again. Otherwise, that error will require disabling the
-> >>>>>> VMPCK. Either that, or the hypervisor must provide the rate limiting.
-> >>>>>>
-> >>>>>> Thoughts?
-> >>>>>>
-> >>>>>> [1] https://lore.kernel.org/lkml/20221013160040.2858732-1-dionnaglaze@google.com/
-> >>>>>
-> >>>>> Yes I think if the host rate limits the guest. The guest kernel should
-> >>>>> retry the exact message. Which mutex are you referring too?
-> >>>>
-> >>>> Or the host waits and then submits the request and the guest kernel
-> >>>> doesn't have to do anything. The mutex I'm referring to is the
-> >>>> snp_cmd_mutex that is taken in snp_guest_ioctl().
-> >>>
-> >>> I think that either the host kernel or guest kernel waiting can lead
-> >>> to unacceptable delays.
-> >>> I would recommend that we add a zero argument ioctl to /dev/sev-guest
-> >>> specifically for retrying the last request.
-> >>>
-> >>> We can know what the last request is due to the sev_cmd_mutex serialization.
-> >>> The driver will just keep a scratch buffer for this. Any other request
-> >>> that comes in without resolving the retry will get an -EBUSY error
-> >>> code.
-> >>
-> >> And the first caller will have received an -EAGAIN in order to
-> >> differentiate between the two situations?
-> >>
-> >>>
-> >>> Calling the retry ioctl without a pending command will result in -EINVAL.
-> >>>
-> >>> Let me know what you think.
-> >>
-> >> I think that sounds reasonable, but there are some catches. You will need
-> >> to ensure that the caller that is supposed to retry does actually retry
-> >> and that a caller that does retry is the same caller that was told to retry.
-> >
-> > Whats the issue with the guest driver taking some time?
-> >
-> > This sounds complex because there may be many users of the driver. How
-> > do multiple users coordinate when they need to use the retry ioctl?
-> >
-> >>
-> >> Thanks,
-> >> Tom
-> >>
-> >>>>
-> >>>> Thanks,
-> >>>> Tom
-> >>>
-> >>>
-> >>>
