@@ -2,102 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A654603B61
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AFE603B40
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJSIX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S230114AbiJSIQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiJSIXK (ORCPT
+        with ESMTP id S229726AbiJSIQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:23:10 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613E57CE27
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:22:50 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id de14so10913184qvb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jCJsXsDD/iNK9yC84Ot8gXJYydwvdgJYruOO+RMKvrI=;
-        b=BFSR4WVhAXfB1vlb0cUgghmsCkWBRhqgD6lVihreVgg0Ur6b0TysDdmKzJ/V3RZItP
-         2VGwR/gxZPw5eLhG8UVwdrJPN6JvFW2EWGOOWUQwOOt69EkBSKMg/n+eTYeb/Xaftcpx
-         0MRaeDjikhPvT4P85syFkT0PMsbBDuZLIsslwR9vIKR4pV3R266ZjiVeWWuCwDgrs1TY
-         4fz6nx1kqNJL7lUmzZQzpfyxZ8gnv+qKMZxQyNMeqp02ONzGdf0nrvrzyyeSCnSzq5th
-         njgOftXzyJ3pTWAFyAn364PX+ZVbZ/jg9uM7kvCsABV/zdARBWrjAbQUN/V6lHZpCCBO
-         Tkcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jCJsXsDD/iNK9yC84Ot8gXJYydwvdgJYruOO+RMKvrI=;
-        b=OqVRd8ICjwkzPVByuxpd18mmPqrYaZ7CQ//M3DcefsmmTa9r9pQL5d5wxJ4mYn8s6R
-         bYBTNGSzJwKuvoFvA5YK0LjUi6U9nmhx5VXHlKLsDfve9rOV3JvKrp8ilm2xRJp+UjIX
-         jryl557d8hNGhAIpSieP+s6/yItL0nZehLu3ss7P3b43nUej+7txHqZJRUr1Uye3TqM/
-         rqRQXppq19cao1dUp1zJhcZ8VW43vMC65C/07lCtC1n2sC/SWq8vXlfyfBZRYW+1I3Ke
-         j35PYjimPzQG0TU2+6BkXelXOKbysvdexCpoh/l8y97t6zRn5aNMMHqgTHuuCJlaS0BO
-         xoFQ==
-X-Gm-Message-State: ACrzQf0mrPJqXQyhQIB6fo+F77oJZ2kTkyucudLQyYyk48TTSk08bJC1
-        /0tQcuYBtLWxC0jiCX6sGjUDZGPQ3hLOuKDplTX9zMVsD6pSRw==
-X-Google-Smtp-Source: AMsMyM4lpOr7xF2OuedJ06jrmINiWWb6Iolu3B6EalrgIgAhqCKEx0lTHc5iycAzzdfgxucK3mfdcaeahaKaDKVmug4=
-X-Received: by 2002:a17:902:7b95:b0:178:ab50:76b5 with SMTP id
- w21-20020a1709027b9500b00178ab5076b5mr7288103pll.161.1666167400757; Wed, 19
- Oct 2022 01:16:40 -0700 (PDT)
+        Wed, 19 Oct 2022 04:16:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796E631E8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:16:49 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Msk3R1K8dzmV8q;
+        Wed, 19 Oct 2022 16:12:03 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 16:16:46 +0800
+Subject: Re: [PATCH] hugetlb: fix memory leak associated with vma_lock
+ structure
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20221018233601.282381-1-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <15890189-c3ba-4249-3c2f-674f6763415b@huawei.com>
+Date:   Wed, 19 Oct 2022 16:16:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Received: by 2002:a17:902:d2cc:b0:185:457a:9333 with HTTP; Wed, 19 Oct 2022
- 01:16:40 -0700 (PDT)
-Reply-To: abdwabbom447@gmail.com
-From:   Maddah Hussain <aloyikechukwu03@gmail.com>
-Date:   Wed, 19 Oct 2022 09:16:40 +0100
-Message-ID: <CAJLuiHSMgW28O7MG91mcZnZdzMzbkJKGna5G_xdHGbYkJx4tKw@mail.gmail.com>
-Subject: Get Back to me (URGENT)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+In-Reply-To: <20221018233601.282381-1-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f2f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [abdwabbom447[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aloyikechukwu03[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [aloyikechukwu03[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
+On 2022/10/19 7:36, Mike Kravetz wrote:
+> The hugetlb vma_lock structure hangs off the vm_private_data pointer
+> of sharable hugetlb vmas.  The structure is vma specific and can not
+> be shared between vmas.  At fork and various other times, vmas are
+> duplicated via vm_area_dup().  When this happens, the pointer in the
+> newly created vma must be cleared and the structure reallocated.  Two
+> hugetlb specific routines deal with this hugetlb_dup_vma_private and
+> hugetlb_vm_op_open.  Both routines are called for newly created vmas.
+> hugetlb_dup_vma_private would always clear the pointer and
+> hugetlb_vm_op_open would allocate the new vms_lock structure.  This did
+> not work in the case of this calling sequence pointed out in [1].
+>   move_vma
+>     copy_vma
+>       new_vma = vm_area_dup(vma);
+>       new_vma->vm_ops->open(new_vma); --> new_vma has its own vma lock.
+>     is_vm_hugetlb_page(vma)
+>       clear_vma_resv_huge_pages
+>         hugetlb_dup_vma_private --> vma->vm_private_data is set to NULL
+> When clearing hugetlb_dup_vma_private we actually leak the associated
+> vma_lock structure.
+> 
+> The vma_lock structure contains a pointer to the associated vma.  This
+> information can be used in hugetlb_dup_vma_private and hugetlb_vm_op_open
+> to ensure we only clear the vm_private_data of newly created (copied)
+> vmas.  In such cases, the vma->vma_lock->vma field will not point to the
+> vma.
+> 
+> Update hugetlb_dup_vma_private and hugetlb_vm_op_open to not clear
+> vm_private_data if vma->vma_lock->vma == vma.  Also, log a warning if
+> hugetlb_vm_op_open ever encounters the case where vma_lock has already
+> been correctly allocated for the vma.
+> 
+> [1] https://lore.kernel.org/linux-mm/5154292a-4c55-28cd-0935-82441e512fc3@huawei.com/
+> 
+> Fixes: 131a79b474e9 ("hugetlb: fix vma lock handling during split vma and range unmapping")
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  mm/hugetlb.c | 31 ++++++++++++++++++++++++-------
+>  1 file changed, 24 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 02f781624fce..7f74cbff6619 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1014,15 +1014,23 @@ void hugetlb_dup_vma_private(struct vm_area_struct *vma)
+>  	VM_BUG_ON_VMA(!is_vm_hugetlb_page(vma), vma);
+>  	/*
+>  	 * Clear vm_private_data
+> +	 * - For shared mappings this is a per-vma semaphore that may be
+> +	 *   allocated in a subsequent call to hugetlb_vm_op_open.
+> +	 *   Before clearing, make sure pointer is not associated with vma
+> +	 *   as this will leak the structure.  This is the case when called
+> +	 *   via clear_vma_resv_huge_pages() and hugetlb_vm_op_open has already
+> +	 *   been called to allocate a new structure.
+>  	 * - For MAP_PRIVATE mappings, this is the reserve map which does
+>  	 *   not apply to children.  Faults generated by the children are
+>  	 *   not guaranteed to succeed, even if read-only.
+> -	 * - For shared mappings this is a per-vma semaphore that may be
+> -	 *   allocated in a subsequent call to hugetlb_vm_op_open.
+>  	 */
+> -	vma->vm_private_data = (void *)0;
+> -	if (!(vma->vm_flags & VM_MAYSHARE))
+> -		return;
+> +	if (vma->vm_flags & VM_MAYSHARE) {
+> +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+> +
+> +		if (vma_lock && vma_lock->vma != vma)
+> +			vma->vm_private_data = NULL;
+> +	} else
+> +		vma->vm_private_data = NULL;
+>  }
+>  
+>  /*
+> @@ -4601,6 +4609,7 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
+>  	struct resv_map *resv = vma_resv_map(vma);
+>  
+>  	/*
+> +	 * HPAGE_RESV_OWNER indicates a private mapping.
+>  	 * This new VMA should share its siblings reservation map if present.
+>  	 * The VMA will only ever have a valid reservation map pointer where
+>  	 * it is being copied for another still existing VMA.  As that VMA
+> @@ -4616,10 +4625,18 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
+>  	/*
+>  	 * vma_lock structure for sharable mappings is vma specific.
+>  	 * Clear old pointer (if copied via vm_area_dup) and create new.
+> +	 * Before clearing, make sure vma_lock is not for this vma.
+>  	 */
+>  	if (vma->vm_flags & VM_MAYSHARE) {
+> -		vma->vm_private_data = NULL;
+> -		hugetlb_vma_lock_alloc(vma);
+> +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+> +
+> +		if (vma_lock) {
 
-Maddah Hussain
+Thanks Mike. It seems the case of "vma_lock == NULL" is missed, i.e. if vma->vm_private_data == NULL,
+hugetlb_vm_op_open won't allocate a new vma lock?
+
+Others look good to me.
+
+Thanks,
+Miaohe Lin
+
+> +			if (vma_lock->vma != vma) {
+> +				vma->vm_private_data = NULL;
+> +				hugetlb_vma_lock_alloc(vma);
+> +			} else
+> +				pr_warn("HugeTLB: vma_lock already exists in %s.\n", __func__);
+> +		}
+>  	}
+>  }
+>  
+> 
+
