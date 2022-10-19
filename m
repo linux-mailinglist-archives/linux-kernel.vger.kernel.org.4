@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A8A6042EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CFD604088
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbiJSLMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S234221AbiJSKD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbiJSLK6 (ORCPT
+        with ESMTP id S231145AbiJSKDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:10:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC01152C62;
-        Wed, 19 Oct 2022 03:38:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 688B9617F1;
-        Wed, 19 Oct 2022 09:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F373C433C1;
-        Wed, 19 Oct 2022 09:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666170974;
-        bh=HqzInSWqetlXOUQs1l/ij7Z47hWlE+PPV581CXDV+lw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aVHHN6V7wZLEKnWFQfIU2iqN42SqlcZNpNedQss6IGOK0oydAC1Rycndf8uHJ/Kwk
-         uGaMuZY7ogtmrKpK6Pexo+EMldqGsDZoED8klwGc4/TaDq0bftO8uLcG3v3hGmZp4q
-         SByE/ct21GEKNI3VUoWo+hkwMnRXuAG+xdKSz/bc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 6.0 850/862] ALSA: usb-audio: Fix last interface check for registration
-Date:   Wed, 19 Oct 2022 10:35:37 +0200
-Message-Id: <20221019083327.413061636@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
-References: <20221019083249.951566199@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Wed, 19 Oct 2022 06:03:12 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400EDF4186;
+        Wed, 19 Oct 2022 02:41:20 -0700 (PDT)
+Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 51A7BC899A;
+        Wed, 19 Oct 2022 08:47:41 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7920E240004;
+        Wed, 19 Oct 2022 08:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666169221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yHd14eyO9S7G2ilSa3qdTym8TxwadiwTy0QqUCJBV/I=;
+        b=DTgQRNrnscX6K3pU2U5UQQzepwSB916+cYk3PtilU6VMpEE3pZ0B9eVhvmHeQinntXOKSE
+        yVW58xUkYAHyUHea6rKKHI+iRdwGi1+kJzouUe8phKkR23STURgE0GsRziRvYGbSMy7lY7
+        KFWDRQoXXt64KLOqfxsPZWqzFlZ0S+eN3q+gDKoNZsTJAuhi55boZ8v5m58+WdyKt2ukWr
+        kU7+l4SuGRTMFo0qYn26X+ep6n42n/iILUA6LA/Zk4fYwOw3NOgU6TlUWT4IsV375TcWSe
+        o9Oi8K2l+j1keCquOfaE+seab3m99G1zX4fxMPxQ50UupULqm2b6+TkdlMC1zQ==
+Date:   Wed, 19 Oct 2022 10:46:54 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Aviram Dali <aviramd@marvell.com>
+Subject: Re: [PATCH 2/3] dt-bindings: mtd: Add AC5 specific binding
+Message-ID: <20221019104654.7ee35744@xps-13>
+In-Reply-To: <20221019082046.30160-3-vadym.kochan@plvision.eu>
+References: <20221019082046.30160-1-vadym.kochan@plvision.eu>
+        <20221019082046.30160-3-vadym.kochan@plvision.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+Hi Vadym,
 
-commit 39efc9c8a973ddff5918191525d1679d0fb368ea upstream.
+vadym.kochan@plvision.eu wrote on Wed, 19 Oct 2022 11:20:39 +0300:
 
-The recent fix in commit 6392dcd1d0c7 ("ALSA: usb-audio: Register card
-at the last interface") tried to delay the card registration until the
-last found interface is probed.  It assumed that the probe callback
-gets called for those later interfaces, but it's not always true; as
-the driver loops over the descriptor and probes the matching ones,
-it's not separately called via multiple probe calls.  This results in
-the missing card registration, i.e. no sound device.
+> From: Aviram Dali <aviramd@marvell.com>
+>=20
+> Add binding for AC5 SoC which have its special way of handing
+> NAND layout.
+>=20
+> Signed-off-by: Aviram Dali <aviramd@marvell.com>
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> ---
+>  Documentation/devicetree/bindings/mtd/marvell-nand.txt | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/mtd/marvell-nand.txt b/Doc=
+umentation/devicetree/bindings/mtd/marvell-nand.txt
+> index a2d9a0f2b683..293551ec7350 100644
+> --- a/Documentation/devicetree/bindings/mtd/marvell-nand.txt
+> +++ b/Documentation/devicetree/bindings/mtd/marvell-nand.txt
+> @@ -2,6 +2,7 @@ Marvell NAND Flash Controller (NFC)
+> =20
+>  Required properties:
+>  - compatible: can be one of the following:
+> +    * "marvell,ac5-nand-controller"
+>      * "marvell,armada-8k-nand-controller"
+>      * "marvell,armada370-nand-controller"
+>      * "marvell,pxa3xx-nand-controller"
 
-For addressing this problem, replace the check whether the last
-interface is processed with usb_interface_claimed() instead of the
-comparison with the probe interface number.
+Could you please do the yaml conversion first?
 
-Fixes: 6392dcd1d0c7 ("ALSA: usb-audio: Register card at the last interface")
-Link: https://lore.kernel.org/r/20220915085947.7922-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- sound/usb/card.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/sound/usb/card.c
-+++ b/sound/usb/card.c
-@@ -884,7 +884,7 @@ static int usb_audio_probe(struct usb_in
- 	 * one given via option
- 	 */
- 	if (check_delayed_register_option(chip) == ifnum ||
--	    chip->last_iface == ifnum) {
-+	    usb_interface_claimed(usb_ifnum_to_if(dev, chip->last_iface))) {
- 		err = snd_card_register(chip->card);
- 		if (err < 0)
- 			goto __error;
-
-
+Thanks,
+Miqu=C3=A8l
