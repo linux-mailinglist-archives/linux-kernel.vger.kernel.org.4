@@ -2,80 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CF360376E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 03:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665B4603773
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 03:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiJSBQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 21:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S229890AbiJSBRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 21:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiJSBQv (ORCPT
+        with ESMTP id S229846AbiJSBRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 21:16:51 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C400D68886
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 18:16:50 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso115822pjq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 18:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M++Ivb11u0st7Bn1wCddmgCz9h2EQ4tgIX5+e878ohI=;
-        b=g+3WED34ktkLOM+MRmUh+g/MSWglySA1V1WXHzi9R3lfT7hotb0sPuVbS52iIjHR1M
-         Fqy+KFnSaa9jHZtU0Cky+2lYVk5jsBKotShID/5PjYjE1/uEAYmDEbApVx3Jx2X0snnt
-         paJCmHYy7sGmGz6c3eJOTbTeBXn/5HeJxsu0Mt42DaGsqVg13H4k57CsMWcn3Dd1rHk0
-         m92/HIoQDK13Pd8+l9UHC1WXEdfG6Y0nXtUbTB29ApJOkJHR8eb3PbJ/BEykpo3DscJ+
-         1YLeUeGy3PZrYspKj5EQ2SwnuM3KXoxrTN1aweYoPuCtnKp/Jj7TWoBHyPcWe41FdxQt
-         s2jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M++Ivb11u0st7Bn1wCddmgCz9h2EQ4tgIX5+e878ohI=;
-        b=qQIJR9TSTNyVtH6x/KvzElaMSv/uVyKBbvYBLlvEPVB4dyN5GS3tLMXpb9HoQfvXy9
-         vh9MpAy8vtnqIZY6BR/reXVgCHXhhHYfP/pEAsgMuk72Xl2Cr0ymhwPnySuU3uM8wIKP
-         o+zSGJAAWBvHgJakI7Z3HoTFziHPMQZsoTPvlLgwvEC7e0qDcPrwOQEjXQeFmnrtHSVM
-         MpcaTju44GBPG2is3CYZsJACbqlj5azH9ZO5hFQU26D8HZ6th1k/EwTbfZgzRAca/dLC
-         hJV5a7pCIoy5KRi6KwU/NbhxQygt5JtqTZkVTp4b3WJ1R7yu7RoTqm2qqq6w2yPzJQP8
-         5ZLQ==
-X-Gm-Message-State: ACrzQf2Lw/RU5L46/JQxzVPI1JGG8ZQ/kV/sycokT8OPL+J/ljzxEH1J
-        8hlURGHxnYCDlPz+G/xz9LI4LHX53ZOwfYqX
-X-Google-Smtp-Source: AMsMyM7ErKcQDb1XVV6IwNSsaGy14Aw7/3cvVP0dy4+YVMedCXsYPtQByHXhidP7yjkS7OnlcX2oTg==
-X-Received: by 2002:a17:902:ef51:b0:180:7922:ce40 with SMTP id e17-20020a170902ef5100b001807922ce40mr5676548plx.8.1666142199708;
-        Tue, 18 Oct 2022 18:16:39 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
-        by smtp.gmail.com with ESMTPSA id p2-20020a634202000000b0043ae1797e2bsm8590841pga.63.2022.10.18.18.16.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 18:16:39 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1okxhE-003fe5-13; Wed, 19 Oct 2022 12:16:36 +1100
-Date:   Wed, 19 Oct 2022 12:16:36 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, baocong.liu@unisoc.com,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
-Message-ID: <20221019011636.GM2703033@dread.disaster.area>
-References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y0lSChlclGPkwTeA@casper.infradead.org>
- <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
- <Y017BeC64GDb3Kg7@casper.infradead.org>
- <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
- <Y04Y3RNq6D2T9rVw@casper.infradead.org>
- <20221018223042.GJ2703033@dread.disaster.area>
+        Tue, 18 Oct 2022 21:17:12 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3DBDFC12;
+        Tue, 18 Oct 2022 18:17:10 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MsXrY47kCzHv60;
+        Wed, 19 Oct 2022 09:17:01 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 09:17:08 +0800
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
+ 2022 09:17:07 +0800
+Subject: Re: [Patch v7 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
+ Network Adapter
+To:     <longli@microsoft.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
+        "Haiyang Zhang" <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, <edumazet@google.com>,
+        <shiraz.saleem@intel.com>, "Ajay Sharma" <sharmaajay@microsoft.com>
+CC:     <linux-hyperv@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>
+References: <1666034441-15424-1-git-send-email-longli@linuxonhyperv.com>
+ <1666034441-15424-13-git-send-email-longli@linuxonhyperv.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <8fccf9fc-d0e6-2321-e49c-d9fa028a2bdd@huawei.com>
+Date:   Wed, 19 Oct 2022 09:17:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018223042.GJ2703033@dread.disaster.area>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <1666034441-15424-13-git-send-email-longli@linuxonhyperv.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,126 +65,397 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 09:30:42AM +1100, Dave Chinner wrote:
-> On Tue, Oct 18, 2022 at 04:09:17AM +0100, Matthew Wilcox wrote:
-> > On Tue, Oct 18, 2022 at 10:52:19AM +0800, Zhaoyang Huang wrote:
-> > > On Mon, Oct 17, 2022 at 11:55 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Mon, Oct 17, 2022 at 01:34:13PM +0800, Zhaoyang Huang wrote:
-> > > > > On Fri, Oct 14, 2022 at 8:12 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > >
-> > > > > > On Fri, Oct 14, 2022 at 01:30:48PM +0800, zhaoyang.huang wrote:
-> > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > > >
-> > > > > > > Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
-> > > > > > > superblock's inode list. The direct reason is zombie page keeps staying on the
-> > > > > > > xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
-> > > > > > > and supposed could be an xa update without synchronize_rcu etc. I would like to
-> > > > > > > suggest skip this page to break the live lock as a workaround.
-> > > > > >
-> > > > > > No, the underlying bug should be fixed.
-> > > >
-> > > >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > Understand. IMHO, find_get_entry actruely works as an open API dealing
-> > > with different kinds of address_spaces page cache, which requires high
-> > > robustness to deal with any corner cases. Take the current problem as
-> > > example, the inode with fault page(refcount=0) could remain on the
-> > > sb's list without live lock problem.
-> > 
-> > But it's a corner case that shouldn't happen!  What else is going on
-> > at the time?  Can you reproduce this problem easily?  If so, how?
+On 2022/10/18 3:20, longli@linuxonhyperv.com wrote:
+> From: Long Li <longli@microsoft.com>
 > 
-> I've been seeing this livelock, too. The reproducer is,
-> unfortunately, something I can't share - it's a massive program that
-> triggers a data corruption I'm working on solving.
+> Add a RDMA VF driver for Microsoft Azure Network Adapter (MANA).
 > 
-> Now that I've
-> mostly fixed the data corruption, long duration test runs end up
-> livelocking in page cache lookup after several hours.
+> Co-developed-by: Ajay Sharma <sharmaajay@microsoft.com>
+> Signed-off-by: Ajay Sharma <sharmaajay@microsoft.com>
+> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Long Li <longli@microsoft.com>
+> ---
+> Change log:
+> v2:
+> Changed coding sytles/formats
+> Checked undersize for udata length
+> Changed all logging to use ibdev_xxx()
+> Avoided page array copy when doing MR
+> Sorted driver ops
+> Fixed warnings reported by kernel test robot <lkp@intel.com>
 > 
-> The test is effectively writing a 100MB file with multiple threads
-> doing reverse adjacent racing 1MB unaligned writes. Once the file is
-> written, it is then mmap()d and read back from the filesystem for
-> verification.
+> v3:
+> More coding sytle/format changes
 > 
-> THis is then run with tens of processes concurrently, and then under
-> a massively confined memcg (e.g. 32 processes/files are run in a
-> memcg with only 200MB of memory allowed). This causes writeback,
-> readahead and memory reclaim to race with incoming mmap read faults
-> and writes.  The livelock occurs on file verification and it appears
-> to be an interaction with readahead thrashing.
+> v4:
+> Process error on hardware vport configuration
 > 
-> On my test rig, the physical read to write ratio is at least 20:1 -
-> with 32 processes running, the 5s IO rates are:
+> v5:
+> Change licenses to GPL-2.0-only
+> Fix error handling in mana_ib_gd_create_dma_region()
 > 
-> Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
-> dm-0          52187.20      3677.42      1345.92         0.00      18387       6729          0
-> dm-0          62865.60      5947.29         0.08         0.00      29736          0          0
-> dm-0          62972.80      5911.20         0.00         0.00      29556          0          0
-> dm-0          59803.00      5516.72       133.47         0.00      27583        667          0
-> dm-0          63068.20      5292.34       511.52         0.00      26461       2557          0
-> dm-0          56775.60      4184.52      1248.38         0.00      20922       6241          0
-> dm-0          63087.40      5901.26        43.77         0.00      29506        218          0
-> dm-0          62769.00      5833.97        60.54         0.00      29169        302          0
-> dm-0          64810.20      5636.13       305.63         0.00      28180       1528          0
-> dm-0          65222.60      5598.99       349.48         0.00      27994       1747          0
-> dm-0          62444.00      4887.05       926.67         0.00      24435       4633          0
-> dm-0          63812.00      5622.68       294.66         0.00      28113       1473          0
-> dm-0          63482.00      5728.43       195.74         0.00      28642        978          0
+> v6:
+> rebased to rdma-next
+> removed redundant initialization to return value in mana_ib_probe()
+> added missing tabs at the end of mana_ib_gd_create_dma_region()
 > 
-> This is reading and writing the same amount of file data at the
-> application level, but once the data has been written and kicked out
-> of the page cache it seems to require an awful lot more read IO to
-> get it back to the application. i.e. this looks like mmap() is
-> readahead thrashing severely, and eventually it livelocks with this
-> sort of report:
+> v7:
+> move mana_gd_destroy_doorbell_page() and mana_gd_allocate_doorbell_page() from GDMA to this driver
+> use ib_umem_find_best_pgsz() for finding page size for registering dma regions with hardware
+> fix a bug that may double free mana_ind_table in mana_ib_create_qp_rss()
+> add Ajay Sharma <sharmaajay@microsoft.com> to maintainer list
+> add details to description in drivers/infiniband/hw/mana/Kconfig
+> change multiple lines comments to use RDMA style from NETDEV style
+> change mana_ib_dev_ops to static
+> use module_auxiliary_driver() in place of module_init and module_exit
+> move all user-triggerable error messages to debug messages
+> check for ind_tbl_size overflow in mana_ib_create_qp_rss()
 > 
-> [175901.982484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> [175901.985095] rcu:    Tasks blocked on level-1 rcu_node (CPUs 0-15): P25728
-> [175901.987996]         (detected by 0, t=97399871 jiffies, g=15891025, q=1972622 ncpus=32)
-> [175901.991698] task:test_write      state:R  running task     stack:12784 pid:25728 ppid: 25696 flags:0x00004002
-> [175901.995614] Call Trace:
-> [175901.996090]  <TASK>
-> [175901.996594]  ? __schedule+0x301/0xa30
-> [175901.997411]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> [175901.998513]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> [175901.999578]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-> [175902.000714]  ? xas_start+0x53/0xc0
-> [175902.001484]  ? xas_load+0x24/0xa0
-> [175902.002208]  ? xas_load+0x5/0xa0
-> [175902.002878]  ? __filemap_get_folio+0x87/0x340
-> [175902.003823]  ? filemap_fault+0x139/0x8d0
-> [175902.004693]  ? __do_fault+0x31/0x1d0
-> [175902.005372]  ? __handle_mm_fault+0xda9/0x17d0
-> [175902.006213]  ? handle_mm_fault+0xd0/0x2a0
-> [175902.006998]  ? exc_page_fault+0x1d9/0x810
-> [175902.007789]  ? asm_exc_page_fault+0x22/0x30
-> [175902.008613]  </TASK>
+>  MAINTAINERS                             |   9 +
+>  drivers/infiniband/Kconfig              |   1 +
+>  drivers/infiniband/hw/Makefile          |   1 +
+>  drivers/infiniband/hw/mana/Kconfig      |  10 +
+>  drivers/infiniband/hw/mana/Makefile     |   4 +
+>  drivers/infiniband/hw/mana/cq.c         |  79 ++++
+>  drivers/infiniband/hw/mana/device.c     | 117 ++++++
+>  drivers/infiniband/hw/mana/main.c       | 508 ++++++++++++++++++++++++
+>  drivers/infiniband/hw/mana/mana_ib.h    | 156 ++++++++
+>  drivers/infiniband/hw/mana/mr.c         | 200 ++++++++++
+>  drivers/infiniband/hw/mana/qp.c         | 505 +++++++++++++++++++++++
+>  drivers/infiniband/hw/mana/wq.c         | 115 ++++++
+>  include/net/mana/mana.h                 |   3 +
+>  include/uapi/rdma/ib_user_ioctl_verbs.h |   1 +
+>  include/uapi/rdma/mana-abi.h            |  66 +++
+>  15 files changed, 1775 insertions(+)
+>  create mode 100644 drivers/infiniband/hw/mana/Kconfig
+>  create mode 100644 drivers/infiniband/hw/mana/Makefile
+>  create mode 100644 drivers/infiniband/hw/mana/cq.c
+>  create mode 100644 drivers/infiniband/hw/mana/device.c
+>  create mode 100644 drivers/infiniband/hw/mana/main.c
+>  create mode 100644 drivers/infiniband/hw/mana/mana_ib.h
+>  create mode 100644 drivers/infiniband/hw/mana/mr.c
+>  create mode 100644 drivers/infiniband/hw/mana/qp.c
+>  create mode 100644 drivers/infiniband/hw/mana/wq.c
+>  create mode 100644 include/uapi/rdma/mana-abi.h
 > 
-> Given that filemap_fault on XFS is probably trying to map large
-> folios, I do wonder if this is a result of some kind of race with
-> teardown of a large folio...
-> 
-> There is a very simple corruption reproducer script that has been
-> written, but I haven't been using it. I don't know if long term
-> running of the script here:
-> 
-> https://lore.kernel.org/linux-xfs/d00aff43-2bdc-0724-1996-4e58e061ecfd@redhat.com/
-> 
-> will trigger the livelock as the verification step is
-> significantly different, but it will give you insight into the
-> setup of the environment that leads to the livelock. Maybe you could
-> replace the md5sum verification with a mmap read with xfs_io to
-> simulate the fault load that seems to lead to this issue...
 
-FWIW, just tested this on a current Linus kernel. While there is
-massive read-ahead thrashing on v6.0, the thrashing is largely gone
-in v6.1-rc1+ and the iteration rate of the test is much, much
-better. The livelock remains, however.
+[...]
 
-Cheers,
+> +
+> +int mana_ib_cfg_vport(struct mana_ib_dev *dev, u32 port, struct mana_ib_pd *pd,
+> +		      u32 doorbell_id)
+> +{
+> +	struct gdma_dev *mdev = dev->gdma_dev;
+> +	struct mana_port_context *mpc;
+> +	struct mana_context *mc;
+> +	struct net_device *ndev;
+> +	int err;
+> +
+> +	mc = mdev->driver_data;
+> +	ndev = mc->ports[port];
+> +	mpc = netdev_priv(ndev);
+> +
+> +	mutex_lock(&pd->vport_mutex);
+> +
+> +	pd->vport_use_count++;
+> +	if (pd->vport_use_count > 1) {
+> +		ibdev_dbg(&dev->ib_dev,
+> +			  "Skip as this PD is already configured vport\n");
+> +		mutex_unlock(&pd->vport_mutex);
+> +		return 0;
+> +	}
+> +	mutex_unlock(&pd->vport_mutex);
+> +
+> +	err = mana_cfg_vport(mpc, pd->pdn, doorbell_id);
+> +	if (err) {
+> +		mutex_lock(&pd->vport_mutex);
+> +		pd->vport_use_count--;
+> +		mutex_unlock(&pd->vport_mutex);
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+It seems there might be a race between the "pd->vport_use_count > 1"
+checking above and the error handling here, it may cause other user using a
+unconfigured vport if other user is checking the "pd->vport_use_count > 1)"
+while mana_cfg_vport() fails before doing "pd->vport_use_count--".
+
+> +
+> +		ibdev_dbg(&dev->ib_dev, "Failed to configure vPort %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	pd->tx_shortform_allowed = mpc->tx_shortform_allowed;
+> +	pd->tx_vp_offset = mpc->tx_vp_offset;
+> +
+> +	ibdev_dbg(&dev->ib_dev, "vport handle %llx pdid %x doorbell_id %x\n",
+> +		  mpc->port_handle, pd->pdn, doorbell_id);
+> +
+> +	return 0;
+> +}
+> +
+
+[...]
+
+> +
+> +static int mana_gd_allocate_doorbell_page(struct gdma_context *gc,
+> +					  int *doorbell_page)
+> +{
+> +	struct gdma_allocate_resource_range_req req = {};
+> +	struct gdma_allocate_resource_range_resp resp = {};
+> +	int err;
+> +
+> +	mana_gd_init_req_hdr(&req.hdr, GDMA_ALLOCATE_RESOURCE_RANGE,
+> +			     sizeof(req), sizeof(resp));
+> +
+> +	req.resource_type = GDMA_RESOURCE_DOORBELL_PAGE;
+> +	req.num_resources = 1;
+> +	req.alignment = 1;
+> +
+> +	/* Have GDMA start searching from 0 */
+> +	req.allocated_resources = 0;
+> +
+> +	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
+> +	if (err || resp.hdr.status) {
+> +		dev_err(gc->dev,
+> +			"Failed to allocate doorbell page: ret %d, 0x%x\n",
+> +			err, resp.hdr.status);
+> +		return err ? err : -EPROTO;
+> +	}
+> +
+> +	*doorbell_page = resp.allocated_resources;
+> +
+> +	return 0;
+> +}
+> +
+> +int mana_ib_alloc_ucontext(struct ib_ucontext *ibcontext,
+> +			   struct ib_udata *udata)
+> +{
+> +	struct mana_ib_ucontext *ucontext =
+> +		container_of(ibcontext, struct mana_ib_ucontext, ibucontext);
+> +	struct ib_device *ibdev = ibcontext->device;
+> +	struct mana_ib_dev *mdev;
+> +	struct gdma_context *gc;
+> +	struct gdma_dev *dev;
+> +	int doorbell_page;
+> +	int ret;
+> +
+> +	mdev = container_of(ibdev, struct mana_ib_dev, ib_dev);
+> +	dev = mdev->gdma_dev;
+> +	gc = dev->gdma_context;
+> +
+> +	/* Allocate a doorbell page index */
+> +	ret = mana_gd_allocate_doorbell_page(gc, &doorbell_page);
+> +	if (ret) {
+> +		ibdev_dbg(ibdev, "Failed to allocate doorbell page %d\n", ret);
+> +		return -ENOMEM;
+
+It does not make much sense to do "err ? err : -EPROTO" in
+mana_gd_allocate_doorbell_page() if -ENOMEM is returned unconditionally
+here.
+
+> +	}
+> +
+> +	ibdev_dbg(ibdev, "Doorbell page allocated %d\n", doorbell_page);
+> +
+> +	ucontext->doorbell = doorbell_page;
+> +
+> +	return 0;
+> +}
+> +
+
+[...]
+
+> diff --git a/drivers/infiniband/hw/mana/mana_ib.h b/drivers/infiniband/hw/mana/mana_ib.h
+> new file mode 100644
+> index 000000000000..2225a6d6f8e1
+> --- /dev/null
+> +++ b/drivers/infiniband/hw/mana/mana_ib.h
+> @@ -0,0 +1,156 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022 Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#ifndef _MANA_IB_H_
+> +#define _MANA_IB_H_
+> +
+> +#include <rdma/ib_verbs.h>
+> +#include <rdma/ib_mad.h>
+> +#include <rdma/ib_umem.h>
+> +#include <rdma/mana-abi.h>
+> +#include <rdma/uverbs_ioctl.h>
+> +
+> +#include <net/mana/mana.h>
+> +
+> +#define PAGE_SZ_BM                                                             \
+> +	(SZ_4K | SZ_8K | SZ_16K | SZ_32K | SZ_64K | SZ_128K | SZ_256K |        \
+> +	 SZ_512K | SZ_1M | SZ_2M)
+> +
+> +/* MANA doesn't have any limit for MR size */
+> +#define MANA_IB_MAX_MR_SIZE ((u64)(~(0ULL)))
+
+Use U64_MAX?
+
+> +
+> +struct mana_ib_dev {
+> +	struct ib_device ib_dev;
+> +	struct gdma_dev *gdma_dev;
+> +};
+> +
+
+[...]
+
+> diff --git a/drivers/infiniband/hw/mana/mr.c b/drivers/infiniband/hw/mana/mr.c
+> new file mode 100644
+> index 000000000000..09124dd1792d
+> --- /dev/null
+> +++ b/drivers/infiniband/hw/mana/mr.c
+> @@ -0,0 +1,200 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022, Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#include "mana_ib.h"
+> +
+> +#define VALID_MR_FLAGS                                                         \
+> +	(IB_ACCESS_LOCAL_WRITE | IB_ACCESS_REMOTE_WRITE | IB_ACCESS_REMOTE_READ)
+> +
+> +static enum gdma_mr_access_flags
+> +mana_ib_verbs_to_gdma_access_flags(int access_flags)
+> +{
+> +	enum gdma_mr_access_flags flags = GDMA_ACCESS_FLAG_LOCAL_READ;
+> +
+> +	if (access_flags & IB_ACCESS_LOCAL_WRITE)
+> +		flags |= GDMA_ACCESS_FLAG_LOCAL_WRITE;
+> +
+> +	if (access_flags & IB_ACCESS_REMOTE_WRITE)
+> +		flags |= GDMA_ACCESS_FLAG_REMOTE_WRITE;
+> +
+> +	if (access_flags & IB_ACCESS_REMOTE_READ)
+> +		flags |= GDMA_ACCESS_FLAG_REMOTE_READ;
+> +
+> +	return flags;
+> +}
+> +
+> +static int mana_ib_gd_create_mr(struct mana_ib_dev *dev, struct mana_ib_mr *mr,
+> +				struct gdma_create_mr_params *mr_params)
+> +{
+> +	struct gdma_create_mr_response resp = {};
+> +	struct gdma_create_mr_request req = {};
+> +	struct gdma_dev *mdev = dev->gdma_dev;
+> +	struct gdma_context *gc;
+> +	int err;
+> +
+> +	gc = mdev->gdma_context;
+> +
+> +	mana_gd_init_req_hdr(&req.hdr, GDMA_CREATE_MR, sizeof(req),
+> +			     sizeof(resp));
+> +	req.pd_handle = mr_params->pd_handle;
+> +	req.mr_type = mr_params->mr_type;
+> +
+> +	switch (mr_params->mr_type) {
+> +	case GDMA_MR_TYPE_GVA:
+> +		req.gva.dma_region_handle = mr_params->gva.dma_region_handle;
+> +		req.gva.virtual_address = mr_params->gva.virtual_address;
+> +		req.gva.access_flags = mr_params->gva.access_flags;
+> +		break;
+> +
+> +	default:
+> +		ibdev_dbg(&dev->ib_dev,
+> +			  "invalid param (GDMA_MR_TYPE) passed, type %d\n",
+> +			  req.mr_type);
+> +		err = -EINVAL;
+> +		goto error;
+> +	}
+> +
+> +	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
+> +
+> +	if (err || resp.hdr.status) {
+> +		ibdev_dbg(&dev->ib_dev, "Failed to create mr %d, %u", err,
+> +			  resp.hdr.status);
+> +		if (!err)
+> +			err = -EPROTO;
+> +
+> +		goto error;
+> +	}
+> +
+> +	mr->ibmr.lkey = resp.lkey;
+> +	mr->ibmr.rkey = resp.rkey;
+> +	mr->mr_handle = resp.mr_handle;
+> +
+> +	return 0;
+> +error:
+> +	return err;
+
+There is no error handling here, maybe just return error directly instead of
+a goto.
+
+> +}
+> +
+> +static int mana_ib_gd_destroy_mr(struct mana_ib_dev *dev, gdma_obj_handle_t mr_handle)
+> +{
+> +	struct gdma_destroy_mr_response resp = {};
+> +	struct gdma_destroy_mr_request req = {};
+> +	struct gdma_dev *mdev = dev->gdma_dev;
+> +	struct gdma_context *gc;
+> +	int err;
+> +
+> +	gc = mdev->gdma_context;
+> +
+> +	mana_gd_init_req_hdr(&req.hdr, GDMA_DESTROY_MR, sizeof(req),
+> +			     sizeof(resp));
+> +
+> +	req.mr_handle = mr_handle;
+> +
+> +	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
+> +	if (err || resp.hdr.status) {
+> +		dev_err(gc->dev, "Failed to destroy MR: %d, 0x%x\n", err,
+> +			resp.hdr.status);
+> +		if (!err)
+> +			err = -EPROTO;
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+[...]
+
+> +
+> +static int mana_ib_create_qp_rss(struct ib_qp *ibqp, struct ib_pd *pd,
+> +				 struct ib_qp_init_attr *attr,
+> +				 struct ib_udata *udata)
+> +{
+> +	struct mana_ib_qp *qp = container_of(ibqp, struct mana_ib_qp, ibqp);
+> +	struct mana_ib_dev *mdev =
+> +		container_of(pd->device, struct mana_ib_dev, ib_dev);
+> +	struct ib_rwq_ind_table *ind_tbl = attr->rwq_ind_tbl;
+> +	struct mana_ib_create_qp_rss_resp resp = {};
+> +	struct mana_ib_create_qp_rss ucmd = {};
+> +	struct gdma_dev *gd = mdev->gdma_dev;
+> +	mana_handle_t *mana_ind_table;
+> +	struct mana_port_context *mpc;
+> +	struct mana_context *mc;
+> +	struct net_device *ndev;
+> +	struct mana_ib_cq *cq;
+> +	struct mana_ib_wq *wq;
+> +	unsigned int ind_tbl_size;
+> +	struct ib_cq *ibcq;
+> +	struct ib_wq *ibwq;
+> +	u32 port;
+> +	int ret;
+> +	int i;
+> +
+> +	mc = gd->driver_data;
+> +
+> +	if (!udata || udata->inlen < sizeof(ucmd))
+> +		return -EINVAL;
+> +
+> +	ret = ib_copy_from_udata(&ucmd, udata, min(sizeof(ucmd), udata->inlen));
+> +	if (ret) {
+> +		ibdev_dbg(&mdev->ib_dev,
+> +			  "Failed copy from udata for create rss-qp, err %d\n",
+> +			  ret);
+> +		return -EFAULT;
+
+Why not just return 'ret' directly?
