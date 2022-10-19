@@ -2,122 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722FF603716
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3F0603719
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJSA0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S229719AbiJSA0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 20:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiJSAZz (ORCPT
+        with ESMTP id S229871AbiJSA0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:25:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0AEBC468
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:25:54 -0700 (PDT)
+        Tue, 18 Oct 2022 20:26:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD06D25B1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:26:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666139153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        s=mimecast20190719; t=1666139193;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OeOa45B93JvYwgR1hDKpdl7iPLUwP3auE5S9Nrg+8/s=;
-        b=goxk4O0ywAouGcPCh2vx7two0VfoAA19EfyOwSD/cKnyQUPcSI7k/FN/L8sjDVu+z0RnUe
-        cO74Lg9y6euxkEt/t3MtC8C//2dz+ONoiaapUxcups6sua/lamn2sLGb0rV3mhzH4+G4ra
-        Ve/cdg+CypVqaCTv0T++LMJSgK2xRyU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=2iRn13iSXiKN1tasBVGZtH8JeAlfEonkeX/dLbbng1k=;
+        b=KRpaPPX0jxbn86ksUFwXzfBvEDMke4dxMzMG4haeaGSojarOK1X5yTn2cvvIufszw+zNd/
+        uDf2Pg1bAlks1v/tIVpw5rb/nGTegaaosb+1tBh0cS5zDTB2wgR6CTBk2tIo9cqPZOrOk9
+        WrY3AgV9y+dD40NtoJozgDufSMWoQSE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-520-OqOberSEOZ2v8-pjdQdPsw-1; Tue, 18 Oct 2022 20:25:50 -0400
-X-MC-Unique: OqOberSEOZ2v8-pjdQdPsw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-141-y8oaFLu7N5emg5q9o1-lYw-1; Tue, 18 Oct 2022 20:26:28 -0400
+X-MC-Unique: y8oaFLu7N5emg5q9o1-lYw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6830980280D;
-        Wed, 19 Oct 2022 00:25:49 +0000 (UTC)
-Received: from localhost (ovpn-12-35.pek2.redhat.com [10.72.12.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE99C84426;
-        Wed, 19 Oct 2022 00:25:47 +0000 (UTC)
-Date:   Wed, 19 Oct 2022 08:25:42 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
-        "David.Laight@aculab.com" <David.Laight@aculab.com>,
-        "shorne@gmail.com" <shorne@gmail.com>
-Subject: Re: [RFC PATCH 0/8] mm: ioremap: Convert architectures to take
- GENERIC_IOREMAP way (Alternative)
-Message-ID: <Y09EBgoqPGy2A5WL@MiWiFi-R3L-srv>
-References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
- <Y0yj0IDBVOFwCFuv@MiWiFi-R3L-srv>
- <fd7aa861-a85a-cc6d-df62-6e5e9a1b3149@csgroup.eu>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8A1F3C01E0A;
+        Wed, 19 Oct 2022 00:26:27 +0000 (UTC)
+Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 506502028DC1;
+        Wed, 19 Oct 2022 00:26:22 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
+ guest page size
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
+        zhenyzha@redhat.com, shan.gavin@gmail.com, kvmarm@lists.linux.dev,
+        pbonzini@redhat.com, shuah@kernel.org,
+        kvmarm@lists.cs.columbia.edu, ajones@ventanamicro.com
+References: <20221014071914.227134-1-gshan@redhat.com>
+ <20221014071914.227134-5-gshan@redhat.com>
+ <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
+ <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
+ <da2b7db0-509a-c9e0-c36b-6487a265a779@redhat.com>
+ <a1a8664c-4d06-89e7-8cfa-b730969bb841@maciej.szmigiero.name>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <5bfbe050-a654-8400-e1f1-dcfa4dba13e6@redhat.com>
+Date:   Wed, 19 Oct 2022 08:26:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <a1a8664c-4d06-89e7-8cfa-b730969bb841@maciej.szmigiero.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fd7aa861-a85a-cc6d-df62-6e5e9a1b3149@csgroup.eu>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/22 at 05:06pm, Christophe Leroy wrote:
-> Hi Baoquan,
+On 10/18/22 11:56 PM, Maciej S. Szmigiero wrote:
+> On 18.10.2022 02:51, Gavin Shan wrote:
+>> On 10/18/22 8:46 AM, Gavin Shan wrote:
+>>> On 10/18/22 5:31 AM, Maciej S. Szmigiero wrote:
+>>>> On 14.10.2022 09:19, Gavin Shan wrote:
+>>>>> The test case is obviously broken on aarch64 because non-4KB guest
+>>>>> page size is supported. The guest page size on aarch64 could be 4KB,
+>>>>> 16KB or 64KB.
+>>>>>
+>>>>> This supports variable guest page size, mostly for aarch64.
+>>>>>
+>>>>>    - The host determines the guest page size when virtual machine is
+>>>>>      created. The value is also passed to guest through the synchronization
+>>>>>      area.
+>>>>>
+>>>>>    - The number of guest pages are unknown until the virtual machine
+>>>>>      is to be created. So all the related macros are dropped. Instead,
+>>>>>      their values are dynamically calculated based on the guest page
+>>>>>      size.
+>>>>>
+>>>>>    - The static checks on memory sizes and pages becomes dependent
+>>>>>      on guest page size, which is unknown until the virtual machine
+>>>>>      is about to be created. So all the static checks are converted
+>>>>>      to dynamic checks, done in check_memory_sizes().
+>>>>>
+>>>>>    - As the address passed to madvise() should be aligned to host page,
+>>>>>      the size of page chunk is automatically selected, other than one
+>>>>>      page.
+>>>>>
+>>>>>    - All other changes included in this patch are almost mechanical
+>>>>>      replacing '4096' with 'guest_page_size'.
+>>>>>
+>>>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>>>>> ---
+>>>>>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
+>>>>>   1 file changed, 115 insertions(+), 76 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+>>>>> index d5aa9148f96f..d587bd952ff9 100644
+>>>>> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
+>>>>> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+> (...)
+>>>>> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+>>>>>    * for the total size of 25 pages.
+>>>>>    * Hence, the maximum size here is 50 pages.
+>>>>>    */
+>>>>> -#define MEM_TEST_MOVE_SIZE_PAGES    (50)
+>>>>> -#define MEM_TEST_MOVE_SIZE        (MEM_TEST_MOVE_SIZE_PAGES * 4096)
+>>>>> +#define MEM_TEST_MOVE_SIZE        0x32000
+>>>>
+>>>> The above number seems less readable than an explicit value of 50 pages.
+>>>>
+>>>> In addition to that, it's 50 pages only with 4k page size, so at least
+>>>> the comment above needs to be updated to reflect this fact.
+>>>>
+>>>
+>>> Yeah, I will change the comments like below in next revision.
+>>>
+>>>   /*
+>>>    * When running this test with 32k memslots, actually 32763 excluding
+>>>    * the reserved memory slot 0, the memory for each slot is 0x4000 bytes.
+>>>    * The last slot contains 0x19000 bytes memory. Hence, the maximum size
+>>>    * here is 0x32000 bytes.
+>>>    */
+>>>
+>>
+>> I will replace those numbers with readable ones like below :)
+>>
+>> /*
+>>   * When running this test with 32k memslots, actually 32763 excluding
+>>   * the reserved memory slot 0, the memory for each slot is 16KB. The
+>>   * last slot contains 100KB memory with the remaining 84KB. Hence,
+>>   * the maximum size is double of that (200KB)
+>>   */
 > 
-> Le 17/10/2022 � 02:37, Baoquan He a �crit�:
-> > Hi Christophe,
-> > 
-> > On 10/12/22 at 12:09pm, Christophe Leroy wrote:
-> >> From:
-> >>
-> >> As proposed in the discussion related to your series, here comes an
-> >> exemple of how it could be.
-> >>
-> >> I have taken it into ARC and IA64 architectures as an exemple. This is
-> >> untested, even not compiled, it is just to illustrated my meaning in the
-> >> discussion.
-> >>
-> >> I also added a patch for powerpc architecture, that one in tested with
-> >> both pmac32_defconfig and ppc64_le_defconfig.
-> >>
-> >>  From my point of view, this different approach provide less churn and
-> >> less intellectual disturbance than the way you do it.
-> > 
-> > Yes, I agree, and admire your insistence on the thing you think right or
-> > better. Learn from you.
-> > 
-> > When you suggested this in my v2 post, I made a draft patch at below link
-> > according to your suggestion to request people to review. What worried
-> > me is that I am not sure it's ignored or disliked after one week of
-> > waiting.
-> > 
-> > https://lore.kernel.org/all/YwtND%2FL8xD+ViN3r@MiWiFi-R3L-srv/#related
-> > 
-> > Up to now, seems people don't oppose this generic_ioremap_prot() way, we
-> > can take it. So what's your plan? You want me to continue with your
-> > patches wrapped in, or I can leave it to you if you want to take over?
+> Still, these numbers are for x86, which has KVM_INTERNAL_MEM_SLOTS
+> defined as 3.
 > 
-> I don't plan to steal your work. If you feel confortable with my 
-> proposal, feel free to continue with it and amplify it. You have done 
-> most of the job, you have a clear view of all subtilities in the 
-> different architectures, so please continue, I don't plan to take over 
-> the good work you've done until now.
+> As far as I can see aarch64 has KVM_INTERNAL_MEM_SLOTS equal to 0, so
+> this arch has 32766 slot available for the test memory.
 > 
-> The only purpose of my series was to illustrate my comments and convince 
-> myself it was a possible way, nothing more.
+> Quick calculations show that this will result in 112 KiB of memory in
+> the last slot for 4 KiB page size (while for 64 KiB page size the
+> maximum slot count for this test is 8192 anyway - not counting slot 0).
+> 
 
-Thanks a lot for all these you have done, I will post another version with
-the introducing generic_ioremap_prot() way you suggesed.
+It seems your calculation had (512MB+64KB), instead of (512MB+4KB).
+In this particular patch, we still have (512MB+4KB). How about to change
+like below in this patch. In next patch, it's adjusted accordingly after
+we have (512MB+64KB).
+
+(1) In this patch, the comment is changed to as below
+
+     /*
+      * We have different number of memory slots, excluding the reserved
+      * memory slot 0, on various architectures and configurations. The
+      * memory size in this test is calculated by doubling the maximal
+      * memory size in last memory slot, with alignment to the largest
+      * supported page size (64KB).
+      *
+      * architecture   slots    memory-per-slot    memory-on-last-slot
+      * --------------------------------------------------------------
+      * x86-4KB        32763    16KB               100KB
+      * arm64-4KB      32766    16KB               52KB
+      * arm64-64KB     8192     64KB               64KB
+      */
+     #define MEM_TEST_MOVE_SIZE	0x40000           /* 256KB */
+
+(2) In the next patch, where we have (512MB+64KB) after the various
+     memory sizes are consolidated, It is adjusted accordingly as below.
+
+     /*
+      * We have different number of memory slots, excluding the reserved
+      * memory slot 0, on various architectures and configurations. The
+      * memory size in this test is calculated by doubling the maximal
+      * memory size in last memory slot, with alignment to the largest
+      * supported page size (64KB).
+      *
+      * architecture   slots    memory-per-slot    memory-on-last-slot
+      * --------------------------------------------------------------
+      * x86-4KB        32763    16KB               160KB
+      * arm64-4KB      32766    16KB               112KB
+      * arm64-64KB     8192     64KB               128KB
+      */
+     #define MEM_TEST_MOVE_SIZE	0x50000           /* 320KB */
+
+Thanks,
+Gavin
 
