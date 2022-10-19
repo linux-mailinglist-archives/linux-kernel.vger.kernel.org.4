@@ -2,119 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F510604829
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE5860482D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiJSNuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S233586AbiJSNvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbiJSNtG (ORCPT
+        with ESMTP id S233387AbiJSNuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:49:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1420012277C;
-        Wed, 19 Oct 2022 06:33:14 -0700 (PDT)
+        Wed, 19 Oct 2022 09:50:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2334510B4A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:34:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F246C618C8;
-        Wed, 19 Oct 2022 13:33:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6053C433B5;
-        Wed, 19 Oct 2022 13:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666186384;
-        bh=jihN27LWxHz/KYbIprPHBbgILCESSPj6Y+IsdOz+MXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qk3GUPcGbD3CBpedVsV2w5kJ5kUjFIjKOqVSQrDtSJjBHr7jR/7s88ueSUSdf+E57
-         QWWBn1NP61O20JV9CmKRBbhey7kWf59Yqh1atTMTkAeIs5rLZ0X00IvMhA11uD+2f5
-         KoZ/he2a1m9qg/McaeWBgdGGvqBZdhQtH+ZTuT5dW+2Qk+8b+VwDckwzKDmiVxCCE0
-         vkQy0Tj3QOig3BfFUv9DcZi5sZdOyM8MS/bbAKTXwtoidwkxsfr7NLOuUtVhTWh3QS
-         7OQd88cFz0O0slKW7lHd/UxQTyNkz+8u/+2ICFhdiVcuL01k6o7VCpw15m7n9lrK6K
-         36rbwqgkhMMzA==
-Date:   Wed, 19 Oct 2022 19:03:00 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     ldewangan@nvidia.com, jonathanh@nvidia.com,
-        thierry.reding@gmail.com, p.zabel@pengutronix.de,
-        dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 1/3] dt-bindings: dmaengine: Add
- dma-channel-mask to Tegra GPCDMA
-Message-ID: <Y0/8jF++NeUGtPGM@matsya>
-References: <20221018162812.69673-1-akhilrajeev@nvidia.com>
- <20221018162812.69673-2-akhilrajeev@nvidia.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EB84B82318
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:34:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E258C433C1;
+        Wed, 19 Oct 2022 13:34:14 +0000 (UTC)
+Date:   Wed, 19 Oct 2022 09:34:16 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: kernel/trace/trace_events_synth.c:436:68: sparse: sparse:
+ incorrect type in argument 2 (different address spaces)
+Message-ID: <20221019093416.1155d790@gandalf.local.home>
+In-Reply-To: <202210191111.XTgMRb3E-lkp@intel.com>
+References: <202210191111.XTgMRb3E-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018162812.69673-2-akhilrajeev@nvidia.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-10-22, 21:58, Akhil R wrote:
-> Add dma-channel-mask property in Tegra GPCDMA document.
-> 
-> The property would help to specify the channels to be used in
-> kernel and reserve few for the firmware. This was previously
-> achieved by limiting the channel number to 31 in the driver.
-> Now since we can list all 32 channels, update the interrupts
-> property as well to list all 32 interrupts.
+On Wed, 19 Oct 2022 11:43:54 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-Pls cc dt folks and ML on DT patches!
-
+> sparse warnings: (new ones prefixed by >>)
+> >> kernel/trace/trace_events_synth.c:436:68: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *unsafe_addr @@     got char *str_val @@  
+>    kernel/trace/trace_events_synth.c:436:68: sparse:     expected void const [noderef] __user *unsafe_addr
+>    kernel/trace/trace_events_synth.c:436:68: sparse:     got char *str_val
 > 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> ---
->  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml   | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+> vim +436 kernel/trace/trace_events_synth.c
 > 
-> diff --git a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> index c8894476b6ab..851bd50ee67f 100644
-> --- a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> @@ -39,7 +39,7 @@ properties:
->        Should contain all of the per-channel DMA interrupts in
->        ascending order with respect to the DMA channel index.
->      minItems: 1
-> -    maxItems: 31
-> +    maxItems: 32
->  
->    resets:
->      maxItems: 1
-> @@ -52,6 +52,9 @@ properties:
->  
->    dma-coherent: true
->  
-> +  dma-channel-mask:
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> @@ -60,6 +63,7 @@ required:
->    - reset-names
->    - "#dma-cells"
->    - iommus
-> +  - dma-channel-mask
->  
->  additionalProperties: false
->  
-> @@ -108,5 +112,6 @@ examples:
->          #dma-cells = <1>;
->          iommus = <&smmu TEGRA186_SID_GPCDMA_0>;
->          dma-coherent;
-> +        dma-channel-mask = <0xfffffffe>;
->      };
->  ...
-> -- 
-> 2.17.1
+>    404	
+>    405	static unsigned int trace_string(struct synth_trace_event *entry,
+>    406					 struct synth_event *event,
+>    407					 char *str_val,
+>    408					 bool is_dynamic,
+>    409					 unsigned int data_size,
+>    410					 unsigned int *n_u64)
+>    411	{
+>    412		unsigned int len = 0;
+>    413		char *str_field;
+>    414		int ret;
+>    415	
+>    416		if (is_dynamic) {
+>    417			u32 data_offset;
+>    418	
+>    419			data_offset = offsetof(typeof(*entry), fields);
+>    420			data_offset += event->n_u64 * sizeof(u64);
+>    421			data_offset += data_size;
+>    422	
+>    423			len = kern_fetch_store_strlen((unsigned long)str_val);
+>    424	
+>    425			data_offset |= len << 16;
+>    426			*(u32 *)&entry->fields[*n_u64] = data_offset;
+>    427	
+>    428			ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
+>    429	
+>    430			(*n_u64)++;
+>    431		} else {
+>    432			str_field = (char *)&entry->fields[*n_u64];
+>    433	
+>    434	#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>    435			if ((unsigned long)str_val < TASK_SIZE)
+>  > 436				ret = strncpy_from_user_nofault(str_field, str_val, STR_VAR_LEN_MAX);  
+>    437			else
+>    438	#endif
+>    439				ret = strncpy_from_kernel_nofault(str_field, str_val, STR_VAR_LEN_MAX);
+>    440	
 
--- 
-~Vinod
+
+Does this fix it?
+
+-- Steve
+
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index e310052dc83c..2562d7522999 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -433,7 +433,8 @@ static unsigned int trace_string(struct synth_trace_event *entry,
+ 
+ #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 		if ((unsigned long)str_val < TASK_SIZE)
+-			ret = strncpy_from_user_nofault(str_field, str_val, STR_VAR_LEN_MAX);
++			ret = strncpy_from_user_nofault(str_field,
++				(__force const void __user *)str_val, STR_VAR_LEN_MAX);
+ 		else
+ #endif
+ 			ret = strncpy_from_kernel_nofault(str_field, str_val, STR_VAR_LEN_MAX);
