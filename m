@@ -2,141 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B14F603A81
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E59603A84
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiJSHSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S229633AbiJSHUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJSHSs (ORCPT
+        with ESMTP id S229870AbiJSHU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:18:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D21374E1B;
-        Wed, 19 Oct 2022 00:18:47 -0700 (PDT)
-Received: from [192.168.10.9] (unknown [39.45.244.84])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 80F14660226D;
-        Wed, 19 Oct 2022 08:18:39 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666163924;
-        bh=VkDI5i/Pl22E2KtCN0nS9Ker+LE1+QgT4B4a/b4pNiU=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=KpMUYZnkeOXjo9ePOz2KK7EL4Sd7Hkj5/HJRtjKwS6a74QNNvjRd1AsbUnnAN+Ywe
-         kq9jMcrfo9ib19uyd99/GVyzVcwKh2csKeNN6z+/JgCYp3jQkZ8OTrBosbXFjX1z/F
-         o2AL9hhyJ3aB6wisCTdvcmlhRdp4ZFAQ/B5nKwNr+owmBUZNXfMHQZwbDfAvLUmPge
-         ut6xmas4kVfGXADhb6ofOMpf21Wf9O35VFgIHt0wjO6UMFB0wdJuVdS/Ytf1uddomQ
-         zr4FoJ4jLp1HsJetxT/Nxt/NsJqoc3TnJavlt2cZASXfPLPd2/IZniD0rZ5u6COQhF
-         rteXrp2M7KDPQ==
-Message-ID: <5725c4e2-e0b3-7573-5198-da6bb9637f3b@collabora.com>
-Date:   Wed, 19 Oct 2022 12:18:35 +0500
+        Wed, 19 Oct 2022 03:20:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3046276954
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:20:20 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ol3Ms-0003Jb-10; Wed, 19 Oct 2022 09:19:58 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ol3Mp-0003wC-Hu; Wed, 19 Oct 2022 09:19:55 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ol3Mo-00915M-S1; Wed, 19 Oct 2022 09:19:54 +0200
+Date:   Wed, 19 Oct 2022 09:19:54 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     xinlei.lee@mediatek.com
+Cc:     thierry.reding@gmail.com, matthias.bgg@gmail.com,
+        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v3] pwm: mtk-disp: Fix the parameters calculated by the
+ enabled flag of disp_pwm
+Message-ID: <20221019071954.qv67h3brj6vnhxpw@pengutronix.de>
+References: <1664447209-19417-1-git-send-email-xinlei.lee@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        gregkh@linuxfoundation.org, corbet@lwn.net, david@redhat.com,
-        kernel@collabora.com, krisman@collabora.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        peter.enderborg@sony.com, shuah@kernel.org,
-        viro@zeniv.linux.org.uk, willy@infradead.org, figiel@google.com,
-        kyurtsever@google.com, Paul Gofman <pgofman@codeweavers.com>,
-        surenb@google.com
-Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <Y0T2l3HaH2MU8M9m@gmail.com>
- <20221014134802.1361436-1-mdanylo@google.com>
- <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
- <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
- <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
- <CABb0KFFGRgy9D212skxxFMsHV5n3qjqUP9d-bQaWLUmtH46H3A@mail.gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFFGRgy9D212skxxFMsHV5n3qjqUP9d-bQaWLUmtH46H3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jj2msqu4zaqgjq6h"
+Content-Disposition: inline
+In-Reply-To: <1664447209-19417-1-git-send-email-xinlei.lee@mediatek.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/18/22 10:17 PM, Michał Mirosław wrote:
-> On Tue, 18 Oct 2022 at 15:23, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->>
->> On 10/18/22 4:11 PM, Michał Mirosław wrote:
->>> On Tue, 18 Oct 2022 at 12:36, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
-> [...]
->>>>     * @start:             Starting address
->>>>     * @len:               Length of the region
->>>>     * @vec:               Output page_region struct array
->>>>     * @vec_len:           Length of the page_region struct array
->>>>     * @max_out_page:      Optional max output pages (It must be less than
->>>> vec_len if specified)
->>>
->>> Why is it required to be less than vec_len? vec_len effectively
->>> specifies max number of ranges to find, and this new additional field
->>> counts pages, I suppose?
->>> BTW, if we count pages, then what size of them? Maybe using bytes
->>> (matching start/len fields) would be more consistent?
->> Yes, it if for counting pages. As the regions can have multiple pages,
->> user cannot specify through the number of regions that how many pages
->> does he need. Page size is used here as well like the start and len.
->> This is optional argument as this is only needed to emulate the Windows
->> syscall getWriteWatch.
-> 
-> I'm wondering about the condition that max_out_page < vec_len. Since
-> both count different things (pages vs ranges) I would expect there is
-> no strict relation between them and information returned is as much as
-> fits both (IOW: at most vec_len ranges spanning not more than
-> max_out_page pages). The field's name and description I'd suggest
-> improving: maybe 'max_pages' with a comment that 0 = unlimited?
-Correct, max_pages with this comment is what I want. I'll update. 
-vec_len represents the total number of the page_range array elements. If 
-the pages which we want to return are sparse or the consective pages 
-have different flags, we'll only return one page in one page_range 
-struct. In this case if someone has specified max_pages to be 10, 
-vec_len must be at least 10 to keep store the 10 pages. So max_pages <= 
-vec_len.
 
-> 
-> [...]
->>>> /* Special flags */
->>>> #define PAGEMAP_NO_REUSED_REGIONS       0x1
->>>
->>> What does this flag do?
->> Some non-dirty pages get marked as dirty because of the kernel's
->> internal activity. The dirty bit of the pages is stored in the VMA flags
->> and in the per page flags. If any of these two bits are set, the page is
->> considered to be dirty. Suppose you have cleared the dirty bit of half
->> of VMA which will be done by splitting the VMA and clearing dirty flag
->> in the half VMA and the pages in it. Now kernel may decide to merge the
->> VMAs again as dirty bit of VMAs isn't considered if the VMAs should be
->> merged. So the half VMA becomes dirty again. This splitting/merging
->> costs performance. The application receives a lot of pages which aren't
->> dirty in reality but marked as dirty. Performance is lost again here.
->>
->> This PAGEMAP_NO_REUSED_REGIONS flag is used to don't depend on the dirty
->> flag in the VMA flags. It only depends on the individual page dirty bit.
->> With doing this, the new memory regions which are just created, doesn't
->> look like dirty when seen with the IOCTL, but look dirty when seen from
->> pagemap. This seems okay as the user of this flag know the implication
->> of using it.
-> 
-> Thanks for explaining! Could you include this as a comment in the patch?
-Will do.
+--jj2msqu4zaqgjq6h
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Best Regards
-> Michał Mirosław
+Hello,
+
+On Thu, Sep 29, 2022 at 06:26:49PM +0800, xinlei.lee@mediatek.com wrote:
+> From: xinlei lee <xinlei.lee@mediatek.com>
+>=20
+> In the original mtk_disp_pwm_get_state() function, the result of reading
+> con0 & BIT(0) is enabled as disp_pwm.
+> In order to conform to the register table, we should use the disp_pwm
+> base address as the enabled judgment.
+
+I assume the change is fine. However I don't understand the commit log.
+My guess is you mean:
+
+	mtk_disp_pwm_get_state() wrongly uses bit 0 of CON0 to judge if the
+	PWM is enabled. However that is indicated by a bit (at a machine
+	dependent position) in the DISP_PWM_EN register. Fix this
+	accordingly.
+
+> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
+>=20
+> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+
+Nitpick: There is no empty line between Fixes: and S-o-b.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--jj2msqu4zaqgjq6h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNPpRcACgkQwfwUeK3K
+7Amduwf7BvhwtNcAt4vuj9gzQ+s/NYxV/0QuR4vGcO6h4hfcHNuWqbVpQGG9pqCW
+VnfbrDK2FJOvBAJaQt9n0sqOIkaYpml4m5MiTlFNIgg1fsPaNn1MmQ020iGaFl00
+rbHXRjP/bzv95awJ0zBSircbNOJnKJMugspqSA5b6CRPv8vMm/yvJdMfqd6RSwTY
+YJltkzqvoTip8ri837u8CQGQVNkPdChwScJQidAXkZeX3p53NQIUkcmhi4MoR6hr
+dFe7FGm9v0YuEayovq5fsQjw7DVq4FCuEUhb6yiInlLG9cfK5/Rnsswb3tBa2Yof
+RjLCMovkK7mZnvZz3AezADVH0/Kh4Q==
+=aM7U
+-----END PGP SIGNATURE-----
+
+--jj2msqu4zaqgjq6h--
