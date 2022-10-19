@@ -2,120 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6602604F31
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22738604F3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiJSR5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
+        id S230185AbiJSR7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiJSR5m (ORCPT
+        with ESMTP id S230137AbiJSR7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:57:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B18F1CC3F6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666202262; x=1697738262;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EM1i9zRc6r7e4/BjI4bv8O4Xf6LqXiAGUyd+IGnrqlk=;
-  b=aRD1QQBo5L9yBZOQPLzCpMlRrthgNMQfnK1tJ1f3DSqBbpBBOJIQGYEr
-   7NWf5aPVyXz1syFEh4D4W0zYrbiy5wih3FytCehdMYeXiNI6k+eHYdh7J
-   VyY4JIy0SXelNuPIhulZE1HsmDOP9G/le/b8RDrwVawAS/wMM3kfS0nwX
-   pA3Dq/Vb52I0TQ7uNJpiqplM8/bG42FiCUXxt922KpgiJzgzItpKqhtvn
-   4VN8mpKeeXa92L1Qi7c0Ue5V45fpwzLSw3xvknqDrBh4ndBTkf9OkB3hV
-   9/o41UrdB7pHe10JskOzDshlAEvzA8UqvHKVZc0OSE3v8mDilMV1HPiWQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="293883471"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="293883471"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 10:57:41 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="698196915"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="698196915"
-Received: from mjmcener-mobl1.amr.corp.intel.com (HELO [10.213.233.40]) ([10.213.233.40])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 10:57:40 -0700
-Message-ID: <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com>
-Date:   Wed, 19 Oct 2022 18:57:38 +0100
+        Wed, 19 Oct 2022 13:59:00 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3273C1CC744;
+        Wed, 19 Oct 2022 10:58:59 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JHK4BW028697;
+        Wed, 19 Oct 2022 17:57:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=wZzMm1jtxHr+WaUIZ4Y63cRmn37N5D0/4CBTCQveU6w=;
+ b=JQ0O+II8QvaXO/4UtzqTF9r2/eJEwZi3jPXrE0+cM1KIUMAEfri6XVkVJz3CV8iRP4y8
+ UALFzbQKJnMvm9c6XjWgoOFC6M2xc1ko7LZwRJrxL0ZfQpC316Pl40lL4wyNaFKjye6p
+ FqX/jXIlsGlUzyC1l7xvHuty2oWEnfQuBgjh1B5m2P1au9wXxv3X9ttkdEn/wc8pDjib
+ PGpvRRICt6dp2NyNMhWmIabXJqtAtj1CD8VD0LRyP7rKIsgk3v4mDl/bAOykROAfgH7T
+ MwOAQwsroTrLYFsUQVSUrivlCTFSn6MWJ1KpHbU67MqQ0BRyCPZCL9KP2B3naNGD8XpB qA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kan7e1gqy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 17:57:50 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JHf5U1015979;
+        Wed, 19 Oct 2022 17:57:49 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kan7e1gqa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 17:57:49 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JHtl61002643;
+        Wed, 19 Oct 2022 17:57:48 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02wdc.us.ibm.com with ESMTP id 3k7mga7v7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 17:57:48 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JHvlT46619706
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Oct 2022 17:57:47 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 67B6158063;
+        Wed, 19 Oct 2022 17:57:46 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 389EB58052;
+        Wed, 19 Oct 2022 17:57:42 +0000 (GMT)
+Received: from li-479af74c-31f9-11b2-a85c-e4ddee11713b.ibm.com (unknown [9.160.41.243])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Oct 2022 17:57:42 +0000 (GMT)
+Message-ID: <44b6c9d164b1ba02483ed23a89ec843f18f1cd63.camel@linux.ibm.com>
+Subject: Re: [PATCH v1 6/7] vfio/ccw: replace vfio_init_device with _alloc_
+From:   Eric Farman <farman@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Date:   Wed, 19 Oct 2022 13:57:41 -0400
+In-Reply-To: <Y1Awsh56Ur/cDrHh@nvidia.com>
+References: <20221019162135.798901-1-farman@linux.ibm.com>
+         <20221019162135.798901-7-farman@linux.ibm.com>
+         <Y1Awsh56Ur/cDrHh@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: signal: break out of wait loops on kthread_stop()
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org,
-        "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
- <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: q2mvKpVcdgQlwFBaW1mfglcq_AZETqcy
+X-Proofpoint-ORIG-GUID: g1ueXzvxe0ge2ZRClxxJJQOvrPAfn-Qw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_10,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 adultscore=0 clxscore=1015 mlxlogscore=999
+ mlxscore=0 suspectscore=0 impostorscore=0 spamscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190099
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2022-10-19 at 14:15 -0300, Jason Gunthorpe wrote:
+> On Wed, Oct 19, 2022 at 06:21:34PM +0200, Eric Farman wrote:
+>=20
+> > =C2=A0/*
+> > =C2=A0 * Initialize a vfio_device so it can be registered to vfio core.
+> > - *
+> > - * Only vfio-ccw driver should call this interface.
+> > =C2=A0 */
+> > =C2=A0int vfio_init_device(struct vfio_device *device, struct device
+> > *dev,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct vfio_devic=
+e_ops *ops)
+> > @@ -422,7 +420,6 @@ int vfio_init_device(struct vfio_device
+> > *device, struct device *dev,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ida_free(&vfio.device_i=
+da, device->index);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
+> > =C2=A0}
+> > -EXPORT_SYMBOL_GPL(vfio_init_device);
+>=20
+> Should be made static as well
 
-On 19/10/2022 17:00, Jason A. Donenfeld wrote:
-> On Wed, Oct 19, 2022 at 7:31 AM Tvrtko Ursulin
-> <tvrtko.ursulin@linux.intel.com> wrote:
->>
->>
->> Hi,
->>
->> A question regarding a7c01fa93aeb ("signal: break out of wait loops on
->> kthread_stop()") if I may.
->>
->> We have a bunch code in i915, possibly limited to self tests (ie debug
->> builds) but still important for our flows, which spawn kernel threads
->> and exercises parts of the driver.
->>
->> Problem we are hitting with this patch is that code did not really need
->> to be signal aware until now. Well to say that more accurately - we were
->> able to test the code which is normally executed from userspace, so is
->> signal aware, but not worry about -ERESTARTSYS or -EINTR within the test
->> cases itself.
->>
->> For example threads which exercise an internal API for a while until the
->> parent calls kthread_stop. Now those tests can hit unexpected errors.
->>
->> Question is how to best approach working around this change. It is of
->> course technically possible to rework our code in more than one way,
->> although with some cost and impact already felt due reduced pass rates
->> in our automated test suites.
->>
->> Maybe an opt out kthread flag from this new behavior? Would that be
->> acceptable as a quick fix? Or any other comments?
-> 
-> You can opt out by running `clear_tsk_thread_flag(current,
-> TIF_NOTIFY_SIGNAL);` at the top of your kthread. But you should really
-> fix your code instead. Were I your reviewer, I wouldn't merge code
-> that took the lazy path like that. However, that should work, if you
-> do opt for the quick fix.
+Agreed. Only reason I didn't was there's a prototype in
+include/linux/vfio.h to satisfy the call to vfio_init_device from
+_vfio_alloc_device, and I didn't want to get into moving things around
+if I didn't need to. I can do that on top, if you'd like.
 
-Right, but our hand is a bit forced at the moment. Since 6.1-rc1 has 
-propagated to our development tree on Monday, our automated testing 
-started failing significantly, which prevents us merging new work until 
-resolved. So a quick fix trumps the ideal road in the short term. Just 
-because it is quick.
-
-Also, are you confident that the change will not catch anyone else by 
-surprise? In the original thread I did not spot any concerns about the 
-kthreads being generally unprepared to start receiving EINTR/ERESTARTSYS 
-from random call chains.
-
-Regards,
-
-Tvrtko
+Eric
