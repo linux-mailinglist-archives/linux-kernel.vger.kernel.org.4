@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F176049ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103816049F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiJSOxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S231570AbiJSOys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiJSOxD (ORCPT
+        with ESMTP id S231872AbiJSOyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:53:03 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E02782875
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5mYsxjFeGKpcm5KRoXtnujxHXSvElTxW7YBXE+XahDo=; b=GYpzJ4IZIEfobfw2od09Tue2PV
-        4elW8HRHpOe79w1JijJ0TPTMFxGt3XDEFxytqo1o4IEXBn0Jl6GG1UAN5ndNpIdibD+jcICdO8hi1
-        itO01Z3AXa1DzUKuW6CQUdmH0SvB+9jnoZL3lqzkbXW3+VJGaXLkPzaEw0o7KN8qJdm2NzTHuBhfS
-        BYnmWChb87rwU/Hn2dZilJdNHidtz4w9EcQudXpnm+nxGNe+/QS4TVsuFq9LRSfdlzyzO5mY/ExNK
-        wcmVKKRtjnBBWonp0yslD/t5D6O0ynqDxw0n05xcJkhUpvATyFzFnczZmeY/95wkr6ilgN9jh8VqL
-        13yPXzsg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34806)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1olAJL-0005qQ-Aa; Wed, 19 Oct 2022 15:44:47 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1olAJH-0002Ea-5V; Wed, 19 Oct 2022 15:44:43 +0100
-Date:   Wed, 19 Oct 2022 15:44:43 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 2/2] ARM: mm: convert empty_zero_page to array for
- consistency
-Message-ID: <Y1ANW9ZRRPDJxlmc@shell.armlinux.org.uk>
-References: <20221018222503.90118-1-giulio.benetti@benettiengineering.com>
- <20221018222503.90118-2-giulio.benetti@benettiengineering.com>
+        Wed, 19 Oct 2022 10:54:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548EC14BB65;
+        Wed, 19 Oct 2022 07:45:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77A19B824AF;
+        Wed, 19 Oct 2022 14:45:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3DDC433B5;
+        Wed, 19 Oct 2022 14:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666190721;
+        bh=cyo3xHL7zh2O3ezCkRHW2ElVMHL4kgPd1Sf8hBtNTNI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MukjbEopHqhKSb50i8g2SiVr+xXzwqrl6puA0y151Z7M7Wal7oTYoiWP1RHunNDJw
+         x/a9vPKIut2WhBoq7hdDYJylaTf7F/rJlspEor39+sXFsxAO2ii03y7wS4bI9keBY6
+         82/PVeBTuSg1251LZTgYhAXcOiq0eP6ZqOxrdk1DEPVcPKuptOPTgKXgxZPxNiiq1R
+         DgsCmc8CDV7lfGPhMfOXJMA9ZrcjcsRLQEDI/cFccmtuqvW0ju8hDJX2GvAxuG6gr2
+         U3a4J4typiFcO74P4u4NozprtCNMqzGxrMoaFXT3Oj/as80G0hbbWmD9bSvBNvUATX
+         9axo/hj0bj4Lw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1olAJh-0003H9-4i; Wed, 19 Oct 2022 16:45:09 +0200
+Date:   Wed, 19 Oct 2022 16:45:09 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        quic_vbadigan@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI: qcom: Add basic interconnect support
+Message-ID: <Y1ANdVT+arvotzzX@hovoldconsulting.com>
+References: <20221017112449.2146-1-johan+linaro@kernel.org>
+ <20221017112449.2146-3-johan+linaro@kernel.org>
+ <Y1AKiTkLa23idaf2@x1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221018222503.90118-2-giulio.benetti@benettiengineering.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1AKiTkLa23idaf2@x1>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:25:03AM +0200, Giulio Benetti wrote:
-> ARM architecture is the only one to have empty_zero_page to be a
-> struct page pointer, while in all other implementations empty_zero_page is
-> a data pointer or directly an array(the zero page itself). So let's convert
-> empty_zero_page to an array for consistency and to avoid an early
-> allocation+dcache flush. Being the array in .bss it will be cleared earlier
-> in a more linear way(and a bit faster) way.
+On Wed, Oct 19, 2022 at 10:32:41AM -0400, Brian Masney wrote:
+> On Mon, Oct 17, 2022 at 01:24:49PM +0200, Johan Hovold wrote:
+> > +	/*
+> > +	 * Some Qualcomm platforms require interconnect bandwidth constraints
+> > +	 * to be set before enabling interconnect clocks.
+> > +	 *
+> > +	 * Set an initial peak bandwidth corresponding to single-lane Gen 1
+> > +	 * for the pcie-mem path.
+> > +	 */
+> > +	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
 > 
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> [snip]
+> 
+> > +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
+> > +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
+> > +
+> > +	switch (speed) {
+> > +	case 1:
+> > +		bw = MBps_to_icc(250);
+> > +		break;
+> > +	case 2:
+> > +		bw = MBps_to_icc(500);
+> > +		break;
+> > +	default:
+> > +	case 3:
+> > +		bw = MBps_to_icc(985);
+> > +		break;
+> > +	}
+> 
+> Just curious: These platforms have a 4 lane PCIe bus. Why use 985
+> instead of 1000 for the maximum?
 
-I'm completely against this approach. It introduces inefficiencies in
-paths we don't need, and also means that the zero page is at a fixed
-location relative to the kernel, neither of which I like in the
-slightest.
+This is the per-lane bandwidth that depends on encoding. The four-lane
+peak throughput would be about 3.94 GB/s.
 
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Johan
