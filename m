@@ -2,164 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F34060471C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A313A604676
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiJSN3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S232777AbiJSNK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232864AbiJSN3P (ORCPT
+        with ESMTP id S232404AbiJSNJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:29:15 -0400
-Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A508F1DEC30;
-        Wed, 19 Oct 2022 06:16:25 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout3.routing.net (Postfix) with ESMTP id 52353604B1;
-        Wed, 19 Oct 2022 09:36:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1666172173;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVNYk8Vdw4aAhhCQKszm0+c9Pkl9JnTakpEnR19atF8=;
-        b=JXVqYusBRIyNB+wKF2YAh7PaC83HGvBJkSUpOLsltS11pvKdYAc8mDtWi03eVHaqM5F5mc
-        XvQ5dxvKBHbJOAjFuZjrBi7YhD1ELw7RKRU23AGdldqn4Izq/dIgHm24PMgWY+WuC5b0MJ
-        3tdDOMqeuhmcRZsiD2Xb1XNGDT+5jjI=
-Received: from [127.0.0.1] (tmo-105-196.customers.d1-online.com [80.187.105.196])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 42E10100352;
-        Wed, 19 Oct 2022 09:36:12 +0000 (UTC)
-Date:   Wed, 19 Oct 2022 11:36:07 +0200
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org
-CC:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_v1_02/12=5D_dt-bindings=3A_PCI=3A_?= =?US-ASCII?Q?mediatek-gen3=3A_add_support_for_mt7986?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <97916360-a24b-0e7d-cc86-9b801fadf869@collabora.com>
-References: <20221017104141.7338-1-linux@fw-web.de> <20221017104141.7338-3-linux@fw-web.de> <97916360-a24b-0e7d-cc86-9b801fadf869@collabora.com>
-Message-ID: <C1FA3856-F874-4A13-A0E3-922B745958D6@fw-web.de>
+        Wed, 19 Oct 2022 09:09:39 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0514B0F9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:54:48 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id y72so19115028oia.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f59RIjGEwqOu67ef5ZU0jIO2IA5PQ6Gm9Ueoact0TG8=;
+        b=bqRSRL8HLb+wNogKF5itSZhUrrM00dqcwkhn9W8gNWQ5In1LjWHJBmXjih9KVRyhmc
+         Z5rm6JOPGNPHS9abKoxzZbhqKkuG1dS8MNCtVnKd/GoVhGxSifgIesc4J/egfw2wJKVu
+         1mInCg2QGiFfYqSLu9eNlLFGztmcL+GWQi+Zw9ggWl39E0SVLgyYmtqrWGu15DOdgvae
+         YMTOq0uPIgVyWINb7OzW+Y6Js13TiFMH5UBzO4NDLfJ2XjBsXkkdQnS2eVNhWpXICBrb
+         V7MEOJ7ufOxgmuw6GDfnW86xizprbpGa/FHGBBp2FGuRZjGl55kambcgx1aVQTRrAAGb
+         K5+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f59RIjGEwqOu67ef5ZU0jIO2IA5PQ6Gm9Ueoact0TG8=;
+        b=cEl5i0WU+1vIadmRu61jYCtV6JzFNVEjuJyT7NKp7UIYXlEQ3F/6VWPS+ibkCpTwnr
+         KWtYwazP1r3/h+Woo0WssB1EfJtzXuYMt1il2jLAua7Hhg1Ngv7umArNHZsw+MIbsfN9
+         7aDpWjraDuHK9XDqvtGJFp/mMrNn01uE49B44rp8Ib9x38+STlj9EMes5gqb7V7C1NbR
+         ntPab8QnS2IJezFEIDHvtgXmTBs8mbI2YriTlDsG+wMflhYPhzki/isHwnGbIZF849Bf
+         nUIc9rCGVV7kx0xSGLw4axNjDQDyxLzHpewEhds5SQ+sPeQJMR4RTdPdXfWeTZ4bVPBv
+         VZAg==
+X-Gm-Message-State: ACrzQf0DdHhIRLAttG03U42mTstYaKdVQxoeincAz7hELrbEDD7Pxr7b
+        vKWk77nHrGoey8pGCs8X6wLgiA0xkrQ=
+X-Google-Smtp-Source: AMsMyM5fQzzkn024/Xnp1HA6FMegw/A0XgS4TW8OSF1d6zoVF7Ykv1c1HdodUSgSMsHjk8G40tcTXA==
+X-Received: by 2002:a17:90b:1c0e:b0:20d:8cc5:23e5 with SMTP id oc14-20020a17090b1c0e00b0020d8cc523e5mr8888517pjb.111.1666172387052;
+        Wed, 19 Oct 2022 02:39:47 -0700 (PDT)
+Received: from localhost.localdomain (124244014158.ctinets.com. [124.244.14.158])
+        by smtp.gmail.com with ESMTPSA id y184-20020a6232c1000000b00562cfc80864sm10895192pfy.36.2022.10.19.02.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 02:39:46 -0700 (PDT)
+From:   Hoi Pok Wu <wuhoipok@gmail.com>
+To:     shaggy@kernel.org
+Cc:     Hoi Pok Wu <wuhoipok@gmail.com>,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: [PATCH] fs: jfs: fix shift-out-of-bounds in dbDiscardAG
+Date:   Wed, 19 Oct 2022 17:38:25 +0800
+Message-Id: <20221019093825.339991-1-wuhoipok@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mail-ID: 8bc0a8f8-5856-4d54-aa98-5d53cb6e65c2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 19=2E Oktober 2022 10:28:59 MESZ schrieb AngeloGioacchino Del Regno <ang=
-elogioacchino=2Edelregno@collabora=2Ecom>:
->Il 17/10/22 12:41, Frank Wunderlich ha scritto:
+Bug reported by syzbot, UBSAN: array-index-out-of-bounds in dbDiscardAG.
+Fixed by simply rearranging agno_end smaller than MAXAG. However, I wonder if it
+is a better idea to return -EINVAL, rejecting user input. Thank you.
 
->If this SoC has a different clock tree=2E=2E=2E then you should add bindi=
-ngs for this
->kind of clock tree=2E
->
->CLK_INFRA_IPCIER_CK is *not* a peri clock: "peri" means PERICFG, which do=
-es not
->seem to be present in this SoC=2E=2E=2E so no, you can't assign it to "pe=
-ri_26m", nor
->you can assign it to tl_32k, as that's not a 32KHz clock=2E
->
->CLK_INFRA_PCIEB_CK can be a "top_133m" clock=2E=2E=2E as it is gating "sy=
-saxi_sel",
->which is a topckgen clock=2E
->
->CLK_INFRA_IPCIE_CK is your "tl_(something)" clock, as that's effectively =
-gating
->"pextp_tl_ck_sel" (which is the PCIe Transaction Layer clock mux)=2E
->
->CLK_INFRA_IPCIE_PIPE_CK seems to be parented to "top_xtal", frequency =3D=
- 40MHz,
->so I don't see how can this be a pl_250m? Looks like being a 40m clock an=
-d I
->wish we didn't have clock frequencies specified in the names, as "pl" wou=
-ld fit,
->but "pl_250m" does not=2E
->I wonder if we can change the clock names and reflect the changes to the =
-mt8192
->devicetree (mt8195 does not have any pcie node yet), and if that would be=
- a good
->idea right now=2E
->
->=2E=2E=2Eand I've left the first for last, because=2E=2E=2E
->
->CLK_INFRA_PCIE_SEL: I have no datasheet for this SoC, but if you're sure =
-that
->this clock is selecting the source clock to CLK_INFRA_IPCIE_CK, then the =
-clock
->driver is wrong=2E=2E=2E
->
->Right now, I see the following:
->
->static const char *const infra_pcie_parents[] __initconst =3D {
->	"top_rtc_32p7k", "csw_f26m_sel", "top_xtal", "pextp_tl_ck_sel"
->};
->
->GATE_INFRA2(CLK_INFRA_IPCIE_CK, "infra_ipcie", "pextp_tl_ck_sel", 12),
->
->MUX_GATE_CLR_SET_UPD(CLK_INFRA_PCIE_SEL, "infra_pcie_sel",
->		     infra_pcie_parents, 0x0028, 0x0020, 0x0024, 0, 2,
->		     -1, -1, -1),
->
->=2E=2E=2E=2Eso if you're right, we should instead have:
->
->GATE_INFRA2(CLK_INFRA_IPCIE_CK, "infra_ipcie", "infra_pcie_sel", 12),
->
->=2E=2E=2E=2Ewith this meaning that adding CLK_INFRA_PCIE_SEL in devicetre=
-e is useless=2E
->
->This clock tree looks a bit unclear (because again, there's no datasheet =
-around),
->but that's what I understand with a rather fast look in the clock drivers=
- and
->with some experience on other MTK SoCs=2E
->
->Then again, if this tree is effectively incompatible with the one from MT=
-8192 and
->MT8195, you should have different clock names=2E=2E=2E and just as a fast=
- idea:
->
->clock-names =3D "axi", "tl", "pl", "top";
->
->with clocks, in order:
->CLK_INFRA_PCIEB_CK, CLK_INFRA_IPCIE_CK,
->CLK_INFRA_IPCIE_PIPE_CK, CLK_INFRA_IPCIER_CK=2E
->
->=2E=2E=2Ebut feel free to reiterate that :-)
->Hope that was helpful=2E
->
->Cheers,
->Angelo
+Reported-by: syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com
+Signed-off-by: Hoi Pok Wu <wuhoipok@gmail.com>
+---
+ fs/jfs/jfs_discard.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Hi, thanks for digging into the clock-driver=2E Currently i have mapped it=
- like this (see comment to  part7)
+diff --git a/fs/jfs/jfs_discard.c b/fs/jfs/jfs_discard.c
+index 575cb2ba74fc..3101eaf3098a 100644
+--- a/fs/jfs/jfs_discard.c
++++ b/fs/jfs/jfs_discard.c
+@@ -96,6 +96,10 @@ int jfs_ioc_trim(struct inode *ip, struct fstrim_range *range)
+ 	 */
+ 	agno = BLKTOAG(start, JFS_SBI(ip->i_sb));
+ 	agno_end = BLKTOAG(end, JFS_SBI(ip->i_sb));
++
++	if (agno_end >= MAXAG)
++		agno_end = MAXAG - 1;
++
+ 	while (agno <= agno_end) {
+ 		trimmed += dbDiscardAG(ip, agno, minlen);
+ 		agno++;
+-- 
+2.38.0
 
-clocks =3D <&infracfg CLK_INFRA_IPCIE_PIPE_CK>,
-				 <&infracfg CLK_INFRA_IPCIE_CK>,
-				 <&clk40m>,
-				 <&clk40m>,
-				 <&infracfg CLK_INFRA_IPCIER_CK>,
-				 <&infracfg CLK_INFRA_IPCIEB_CK>;
-			clock-names =3D "pl_250m", "tl_26m", "tl_96m",
-				 "tl_32k", "peri_26m", "top_133m";
-
-Mtk says it has same IP block and except missing clocks it is compatible w=
-ith mt8xxx gen3 pcie driver/binding=2E Pcie driver only enables the clocks =
-in bulk without names,but binding requires the names property so mapping ne=
-eds to be correct=2E
-
-regards Frank
