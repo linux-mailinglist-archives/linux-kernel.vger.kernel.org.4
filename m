@@ -2,140 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DB0604EA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4E4604EA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiJSRaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S230237AbiJSR35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiJSR3b (ORCPT
+        with ESMTP id S230151AbiJSR3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:29:31 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340BEBF77
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:29:29 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v11so3367959wmd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:29:29 -0700 (PDT)
+        Wed, 19 Oct 2022 13:29:49 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6BE6C117
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:29:45 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id k9so17475583pll.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SjI4Z5co0jP+dS3DaFSz22T5OkUEoxSjseAK5lz7j2I=;
-        b=qEGEnfPvhrallYxSGId63ucJ5syeGHO24jd/sGBVIAk6xnp+BnJOvWTmTCX7cPCAxU
-         o0L4YvNOiNrB2/+bmgnUN/KgJUcNgtxplL+1DDLsCFz/HhExm6XZW3PI49Gs68WQDafj
-         wMosHixYsk5oEoE3wqikKipk5XDHBE1MtZs/hp8TDaNCq5wt0mQBLNMOgtcMb12x3HVs
-         Pi0IQ/ykdGBKI91ntCHbdYvrSZBl7qWF8lnz1xvULeo9lvFMpj+OYalKZnYLjIDb536h
-         SXnpDppeR2BivNvRfI3D+NlRBpkWmMRvQLqafn/5N9sdnnJ6+srWH92eX1Oa/xHJ+g59
-         YFfA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GKQx/U9Oi8K1uuimUXOQCwOAtdhTQa9BCE+heeFHVSk=;
+        b=llqmXm0CMlRdNxGJQhZzu79UZsKVDaHayVNH4B/+FR4a9XyRxvDx+sElvKdhad4pNv
+         mdLaT0+TyxGeqlA5slg0RvPDNxFyAi+/JB2MjN8PttYL66+BXuR2g8J0hhUwFniWn/aF
+         BHuDOF4poTYwjD4PiI/xZLXK5T6ND5/qAuzDI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SjI4Z5co0jP+dS3DaFSz22T5OkUEoxSjseAK5lz7j2I=;
-        b=RMBfDiEAxM9E9QmH+57fQY1vPT5rBiRUBXb1ZV0ZTGeCy0BwUID6Ow8Y/RKIJkGB6c
-         G8/ymNWkI4pQXgI1WEf6e8uY9mJ8VFCtuwBvZIVNaOijeCR5JOePwkRjtUZCTQy61My+
-         BIIhUcVUXy8gPYCNTQGIi6M2IpEdPtLcnyUhmPn32425UgFleeVXsjOJlYYC9qoq96iT
-         SbelMiXjb9UNCkZTje1hG4XtKZUl3oj8wETIsgl4NFF2lk22bKtG/DQT2diS4AEsdhRC
-         3wS9c/fkST222zAFLKQk9r5dSrDYmQazxjC+pO+JP7PNxoH8r1f0oSDLRAHSuBZ6raWK
-         NGKQ==
-X-Gm-Message-State: ACrzQf1QAIuH6ib2/a1zRHrHHZJtDAjolJ6onNNsUR5HjFP4Q1mdaXmo
-        RzpJhcp5P+r4rQaBq5Zliz8=
-X-Google-Smtp-Source: AMsMyM7ZQa2DiMhpN26ZGtW7L/xi7tJf2RX90DMZQvdqVwq0bPLH7ZNTlZ150wdhkXoNgXWjcPoMjA==
-X-Received: by 2002:a7b:cbc4:0:b0:3b4:fd67:d70d with SMTP id n4-20020a7bcbc4000000b003b4fd67d70dmr27546343wmi.98.1666200568163;
-        Wed, 19 Oct 2022 10:29:28 -0700 (PDT)
-Received: from elementary ([94.73.35.102])
-        by smtp.gmail.com with ESMTPSA id m1-20020a1c2601000000b003c452678025sm603453wmm.4.2022.10.19.10.29.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GKQx/U9Oi8K1uuimUXOQCwOAtdhTQa9BCE+heeFHVSk=;
+        b=LolPJAS3uvK3rdZZK3XhevIjMp/ttG6/QPpF3hNuUrk+U+2NVoEuqrI2PwA+KrLxH/
+         FaUbCjWm6TeEx9dL/zjbTVqfjzh/2L65FkWaH7T/03VvKAa2GzdaAASU3OXEL31lYxK2
+         a5HTd8RVMxObdUQIKuS2pvdAGhchW1AtnhmFR4CgRgS7VSLwx3iEU0Dn50AiAYu2dY93
+         IsgQcN3G4u07Gq/OHxvHtatJWirdeLbS6zOYhXWhV8OC0ONw8iaBCYtnfZsMGTbawGIs
+         oqQf9ggKkTLCu5l3/V5/8lWy7Wwj3TsTYaj4XzCaw7fl8gXDSbHkB5B6rYAytFKsVtkW
+         2Dfg==
+X-Gm-Message-State: ACrzQf2Vj4WWz91JrM00cLzBg0347dLPw8RutwngvPblL5+5e1Rcflcb
+        TlyFUA3ccdrFmfjONIaw34fqmA==
+X-Google-Smtp-Source: AMsMyM75Ysi1bNtlIMQFZXd7UXOoVE+FnIFfAU6AD/yNPktRVFZZYOFMxR3rHB2s2wdxINdFWWXNZw==
+X-Received: by 2002:a17:903:2312:b0:185:43a2:3d0e with SMTP id d18-20020a170903231200b0018543a23d0emr9702582plh.118.1666200584506;
+        Wed, 19 Oct 2022 10:29:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y8-20020a17090a16c800b00205d85cfb30sm234077pje.20.2022.10.19.10.29.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 10:29:27 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 19:29:19 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     David Gow <davidgow@google.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        javierm@redhat.com
-Subject: Re: [PATCH] drm: tests: Fix a buffer overflow in format_helper_test
-Message-ID: <20221019172919.GA5336@elementary>
-References: <20221019073239.3779180-1-davidgow@google.com>
+        Wed, 19 Oct 2022 10:29:43 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 10:29:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org
+Subject: Re: -Wmacro-redefined in include/linux/fortify-string.h
+Message-ID: <202210190930.26BF0CE2@keescook>
+References: <Y1AZr01X1wvg5Klu@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019073239.3779180-1-davidgow@google.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y1AZr01X1wvg5Klu@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 03:32:40PM +0800, David Gow wrote:
-> The xrgb2101010 format conversion test (unlike for other formats) does
-> an endianness conversion on the results. However, it always converts
-> TEST_BUF_SIZE 32-bit integers, which results in reading from (and
-> writing to) more memory than in present in the result buffer. Instead,
-> use the buffer size, divided by sizeof(u32).
+On Wed, Oct 19, 2022 at 08:37:19AM -0700, Nathan Chancellor wrote:
+> I am seeing the following set of warnings when building an x86_64
+> configuration that has CONFIG_FORTIFY_SOURCE=y and CONFIG_KMSAN=y:
 > 
-> The issue could be reproduced with KASAN:
-> ./tools/testing/kunit/kunit.py run --kunitconfig drivers/gpu/drm/tests \
-> 	--kconfig_add CONFIG_KASAN=y --kconfig_add CONFIG_KASAN_VMALLOC=y \
-> 	--kconfig_add CONFIG_KASAN_KUNIT_TEST=y \
-> 	drm_format_helper_test.*xrgb2101010
+>   In file included from scripts/mod/devicetable-offsets.c:3:
+>   In file included from ./include/linux/mod_devicetable.h:13:
+>   In file included from ./include/linux/uuid.h:12:
+>   In file included from ./include/linux/string.h:253:
+>   ./include/linux/fortify-string.h:496:9: error: 'memcpy' macro redefined [-Werror,-Wmacro-redefined]
+>   #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+>           ^
+>   ./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+>   #define memcpy __msan_memcpy
+>           ^
+>   In file included from scripts/mod/devicetable-offsets.c:3:
+>   In file included from ./include/linux/mod_devicetable.h:13:
+>   In file included from ./include/linux/uuid.h:12:
+>   In file included from ./include/linux/string.h:253:
+>   ./include/linux/fortify-string.h:500:9: error: 'memmove' macro redefined [-Werror,-Wmacro-redefined]
+>   #define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+>           ^
+>   ./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+>   #define memmove __msan_memmove
+>           ^
+>   2 errors generated.
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Fixes: 453114319699 ("drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_xrgb2101010()")
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
+> I can see that commit ff901d80fff6 ("x86: kmsan: use __msan_ string
+> functions where possible.") appears to include a fix up for this warning
+> with memset() but not memcpy() or memmove(). If I apply a similar fix up
+> like so:
 > 
-> This is a fix for the issue reported here:
-> https://lore.kernel.org/dri-devel/CA+G9fYsuc9G+RO81E=vHMqxYStsmLURLdOB0NF26kJ1=K8pRZA@mail.gmail.com/
-> 
-> Note that it may conflict with the KUNIT_EXPECT_MEMEQ() series here:
-> https://lore.kernel.org/linux-kselftest/20221018190541.189780-1-mairacanal@riseup.net/
-> 
-> Cheers,
-> -- David
-> 
-> ---
->  drivers/gpu/drm/tests/drm_format_helper_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-> index 8d86c250c2ec..2191e57f2297 100644
-> --- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-> @@ -438,7 +438,7 @@ static void drm_test_fb_xrgb8888_to_xrgb2101010(struct kunit *test)
->  	iosys_map_set_vaddr(&src, xrgb8888);
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index 4029fe368a4f..718ee17b31e3 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -493,6 +493,7 @@ __FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
+>   * __struct_size() vs __member_size() must be captured here to avoid
+>   * evaluating argument side-effects further into the macro layers.
+>   */
+> +#ifndef CONFIG_KMSAN
+>  #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,			\
+>  		__struct_size(p), __struct_size(q),			\
+>  		__member_size(p), __member_size(q),			\
+> @@ -501,6 +502,7 @@ __FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
+>  		__struct_size(p), __struct_size(q),			\
+>  		__member_size(p), __member_size(q),			\
+>  		memmove)
+> +#endif
 >  
->  	drm_fb_xrgb8888_to_xrgb2101010(&dst, &result->dst_pitch, &src, &fb, &params->clip);
-> -	buf = le32buf_to_cpu(test, buf, TEST_BUF_SIZE);
-> +	buf = le32buf_to_cpu(test, buf, dst_size / sizeof(u32));
->  	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
->  }
-
-Thanks a lot for fixing this bug David, I just tested it and
-worked as expected.
-
-Do you think that we should update the other calls to
-le32buf_to_cpu() to follow a similar approach?
-
-Regardless of a possible follow up patch:
-Reviewed-by: José Expósito <jose.exposito89@gmail.com>
-
-Jose
-
->  
-> -- 
-> 2.38.0.413.g74048e4d9e-goog
+>  extern void *__real_memscan(void *, int, __kernel_size_t) __RENAME(memscan);
+>  __FORTIFY_INLINE void *memscan(void * const POS0 p, int c, __kernel_size_t size)
 > 
+> Then the instances of -Wmacro-redefined disappear but the fortify tests
+> no longer pass for somewhat obvious reasons:
+> 
+>   warning: unsafe memcpy() usage lacked '__read_overflow2' symbol in lib/test_fortify/read_overflow2-memcpy.c
+>   warning: unsafe memmove() usage lacked '__read_overflow2' symbol in lib/test_fortify/read_overflow2-memmove.c
+>   warning: unsafe memcpy() usage lacked '__read_overflow2_field' symbol in lib/test_fortify/read_overflow2_field-memcpy.c
+>   warning: unsafe memmove() usage lacked '__read_overflow2_field' symbol in lib/test_fortify/read_overflow2_field-memmove.c
+>   warning: unsafe memcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-memcpy.c
+>   warning: unsafe memmove() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-memmove.c
+>   warning: unsafe memset() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-memset.c
+>   warning: unsafe memcpy() usage lacked '__write_overflow_field' symbol in lib/test_fortify/write_overflow_field-memcpy.c
+>   warning: unsafe memmove() usage lacked '__write_overflow_field' symbol in lib/test_fortify/write_overflow_field-memmove.c
+>   warning: unsafe memset() usage lacked '__write_overflow_field' symbol in lib/test_fortify/write_overflow_field-memset.c
+> 
+> Should CONFIG_KMSAN depend on CONFIG_FORTIFY_SOURCE=n like so? It seems
+> like the two features are incompatible if I am reading ff901d80fff6
+> correctly.
+> 
+> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+> index b2489dd6503f..6a681621e3c5 100644
+> --- a/lib/Kconfig.kmsan
+> +++ b/lib/Kconfig.kmsan
+> @@ -11,7 +11,7 @@ config HAVE_KMSAN_COMPILER
+>  config KMSAN
+>  	bool "KMSAN: detector of uninitialized values use"
+>  	depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
+> -	depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
+> +	depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN && !FORTIFY_SOURCE
+>  	select STACKDEPOT
+>  	select STACKDEPOT_ALWAYS_INIT
+>  	help
+> 
+> or is there a different obvious fix that I am missing?
+
+Hm, why can't KMSAN use the same thing KASAN does, and compose correctly
+with FORTIFY? (i.e. redefine the "__underlaying_mem*" macros?)
+
+-- 
+Kees Cook
