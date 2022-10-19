@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2D46046A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AB860472B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiJSNQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S231862AbiJSNct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiJSNPv (ORCPT
+        with ESMTP id S231197AbiJSNc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:15:51 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CBA4F1B5;
-        Wed, 19 Oct 2022 06:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=TJFQZgcHpAiXq2u8GBJkx2Euz9+WpBppU5rX5bk9CRU=; b=XqDopoVMKKJiR8wg4YN3nnIuR/
-        DwCjGGBWV6S7v5G+kwDtPF9JdatpRfL4i+zUoOwo7eULGHkag2jD6xQRQ0vYbVveK/Wilv8rXHUQv
-        noQh5gTU86qJDujKAma4JC3K64c9dprWVnKw69ZbA6hlvc1oTVJ1PHlqqLhwmjUZryUVCeP9vxDtB
-        K1qZHL9GM7m5RwYJ8ZFieQZeyU+eTXNIH28oSQJQbqJu3kgGWJ9nGWWPy4kYJ5sOcQHGAPabOhCgU
-        7vac2jLi6ij7wnFY5yEi0Twr43G7TcycuqAuicwJiVZN/3t6b8E/oNzvDLdVnj2U3tw4jvgRZ/K2M
-        zUic0KpQ==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:45936 helo=localhost.localdomain)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1ol74W-007ZXa-H1;
-        Wed, 19 Oct 2022 13:17:16 +0200
-From:   Andrej Picej <andrej.picej@norik.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     shawnguo@kernel.org, linux@roeck-us.net,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
-        kernel@pengutronix.de, s.hauer@pengutronix.de,
-        wim@linux-watchdog.org, robh+dt@kernel.org
-Subject: [PATCH 3/3] ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
-Date:   Wed, 19 Oct 2022 13:17:14 +0200
-Message-Id: <20221019111714.1953262-4-andrej.picej@norik.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221019111714.1953262-1-andrej.picej@norik.com>
-References: <20221019111714.1953262-1-andrej.picej@norik.com>
+        Wed, 19 Oct 2022 09:32:29 -0400
+X-Greylist: delayed 3278 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 06:20:13 PDT
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30BC169CE9;
+        Wed, 19 Oct 2022 06:20:11 -0700 (PDT)
+Received: from tarshish (unknown [10.0.8.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.tkos.co.il (Postfix) with ESMTPS id 2C3DF4405F3;
+        Wed, 19 Oct 2022 14:33:29 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+        s=default; t=1666179209;
+        bh=ooaBlWbe5BcZsvcnQ+dv/mblh3tcKd5KddrxqCXz3KU=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=JZ9JJhnUc4iGBEbErU9+6FWc8In32oTPsUWUiL6K8VCaeboHtYJCVy/zFeGe0dZKo
+         xtOBZACMqlXoeSc7aofFlgrePrxrjQSDup04FdpPxx5wuc8rPfSS0RqbhLpDYCOu+7
+         IR6QfRm6Ttq+cfXPiAK+yHjw4WH9QmSDqFEQOvDrpbwEm3LD/3EZVPNVNfS6GqELqp
+         FzqaTS+q1q8GaMGD77v5jN0yq/N9Ln76ffcSHSAYiwZZEkDdVovZ4RS4Oh79/V8ouZ
+         urJDMHZeRR59SBMN2/tI4Iw8veCDtljJqT9xE/3CAxssMIQE7PtTcXhUUJT1DSzd8l
+         hNFpkzPfswIKg==
+References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
+ <20221019091151.6692-15-ilpo.jarvinen@linux.intel.com>
+User-agent: mu4e 1.8.10; emacs 27.1
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Ilpo =?utf-8?Q?J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 14/44] serial: digicolor: Use uart_xmit_advance()
+Date:   Wed, 19 Oct 2022 14:30:51 +0300
+In-reply-to: <20221019091151.6692-15-ilpo.jarvinen@linux.intel.com>
+Message-ID: <87ilkgdp17.fsf@tarshish>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,30 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was discovered that the watchdog triggers when the device is put into
-"Suspend-To-Idle"/"freeze" low-power mode. Setting WDW bit disables
-watchdog when the device is put into WAIT mode.
+Hi Ilpo,
 
-Signed-off-by: Andrej Picej <andrej.picej@norik.com>
----
- arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+On Wed, Oct 19 2022, Ilpo J=C3=A4rvinen wrote:
+> Take advantage of the new uart_xmit_advance() helper.
+>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
-diff --git a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-index 3cddc68917a0..5168ed0ffec3 100644
---- a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-+++ b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-@@ -102,6 +102,10 @@ &usdhc2 {
- 	status = "disabled";
- };
- 
-+&wdog1 {
-+	fsl,suspend-in-wait;
-+};
-+
- &iomuxc {
- 	pinctrl_enet1: enet1grp {
- 		fsl,pins = <
--- 
-2.25.1
+Acked-by: Baruch Siach <baruch@tkos.co.il>
 
+Thanks,
+baruch
+
+> ---
+>  drivers/tty/serial/digicolor-usart.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/di=
+gicolor-usart.c
+> index 0c0a62346f23..ed197705f7ee 100644
+> --- a/drivers/tty/serial/digicolor-usart.c
+> +++ b/drivers/tty/serial/digicolor-usart.c
+> @@ -202,8 +202,7 @@ static void digicolor_uart_tx(struct uart_port *port)
+>=20=20
+>  	while (!uart_circ_empty(xmit)) {
+>  		writeb(xmit->buf[xmit->tail], port->membase + UA_EMI_REC);
+> -		xmit->tail =3D (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> -		port->icount.tx++;
+> +		uart_xmit_advance(port, 1);
+>=20=20
+>  		if (digicolor_uart_tx_full(port))
+>  			break;
+
+--=20
+                                                     ~. .~   Tk Open Systems
+=3D}------------------------------------------------ooO--U--Ooo------------=
+{=3D
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
