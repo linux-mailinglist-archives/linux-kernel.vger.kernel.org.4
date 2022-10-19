@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0F660509A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D4960509B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiJSTiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S231218AbiJSTiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbiJSTiC (ORCPT
+        with ESMTP id S231277AbiJSTiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:38:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F19D1CBAAE;
-        Wed, 19 Oct 2022 12:38:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 19 Oct 2022 15:38:11 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369181D5844
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:38:09 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7c5329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7c5:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB5666199B;
-        Wed, 19 Oct 2022 19:37:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0B15C433C1;
-        Wed, 19 Oct 2022 19:37:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666208279;
-        bh=pYGwlKtIvtEUPHvL5dQFOXwsod/jU89jA0iPylkzLh4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I82iLEraoMvA5Gns4bG9X+tOTAqmXWBm5PV6TB/HPICGZ7vnOirozDPxUXgvZuzOP
-         VZU7QeW7QVLxjMWuADjoR4BWRb4Ey6dOIAXjy/tyLK6FGVcG918YlRoEZqpR85wXTr
-         546A9NIG7habHoBfb1X0nlDD4DWYe5Gd0BLjy+uy4JXwXD+SfvMCC5aZUXGg/eN430
-         m/b+Iyhf9SKjGu2nW+OLg8jSYDfm2E0prOSnbFqSh1jWE4JgXcQ+c3XgNIMO40nLgJ
-         N+UmkihJ2t2RTIiYPVXTb7YOxThh7eYBI5PqIBe8gKonBnoaerHqbUMtQYi14yzyJh
-         kvhqqVL9spPKg==
-Date:   Wed, 19 Oct 2022 21:37:56 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     loic.poulain@linaro.org, robert.foss@linaro.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vladimir.zapolskiy@linaro.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] i2c: qcom-cci: Fix ordering of pm_runtime_xx and
- i2c_add_adapter
-Message-ID: <Y1BSFBshaMjt6ECG@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        loic.poulain@linaro.org, robert.foss@linaro.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vladimir.zapolskiy@linaro.org,
-        stable@vger.kernel.org
-References: <20221018021920.3747344-1-bryan.odonoghue@linaro.org>
- <20221018021920.3747344-2-bryan.odonoghue@linaro.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 24CCE1EC0430;
+        Wed, 19 Oct 2022 21:38:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666208283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=xy1IJYITPFqWdIU7Z8zG7fxEBE0qmG6Rs3mn9nqT8q4=;
+        b=eCghdLZ0czvgyMrkQyWM7SdrBwYT3UcCfsQ85Tf5RygbWxYJWzKT6Rjlx29btUc0T221/e
+        U5Q4lEhF8ql9xjZ8st9CkdgfYXhkjs/VAlLhZtD3rLM60FNWWNBqIdG5puAglNnh5CGlgF
+        YAjK19mjhkxW0ps16NO0IvqzW6EIhDo=
+Date:   Wed, 19 Oct 2022 21:37:59 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Jacob Jun Pan <jacob.jun.pan@intel.com>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/5] x86/microcode: Simplify init path even more
+Message-ID: <Y1BSF8ck0RD9UpLd@zn.tnic>
+References: <Y1A5YHzmzab8LrYD@zn.tnic>
+ <20221019175426.31025-1-bp@alien8.de>
+ <20221019175426.31025-2-bp@alien8.de>
+ <Y1BOkbXsQxCZK3U7@a4bf019067fa.jf.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VISfz4IeabZvLQ+p"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221018021920.3747344-2-bryan.odonoghue@linaro.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1BOkbXsQxCZK3U7@a4bf019067fa.jf.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 19, 2022 at 12:22:57PM -0700, Ashok Raj wrote:
+> Good cleanup overall!.. Trying to apply them and do a quick test.
 
---VISfz4IeabZvLQ+p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thx. Use 6.1-rc1 as base.
 
-On Tue, Oct 18, 2022 at 03:19:20AM +0100, Bryan O'Donoghue wrote:
-> When we compile-in the CCI along with the imx412 driver and run on the RB5
-> we see that i2c_add_adapter() causes the probe of the imx412 driver to
-> happen.
->=20
-> This probe tries to perform an i2c xfer() and the xfer() in i2c-qcom-cci.c
-> fails on pm_runtime_get() because the i2c-qcom-cci.c::probe() function has
-> not completed to pm_runtime_enable(dev).
->=20
-> Fix this sequence by ensuring pm_runtime_xxx() calls happen prior to addi=
-ng
-> the i2c adapter.
->=20
-> Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
-> Reported-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Tested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> You need to call a microcode_ops->apply_microcode() too if you want to
+> apply.
 
-Applied to for-current, thanks!
+That's done ...
 
+> But you also want to pay attention to the return code too and call it
+> appropriately.
 
---VISfz4IeabZvLQ+p
-Content-Type: application/pgp-signature; name="signature.asc"
+Ah ok, yes, I need to check ->request_microcode_fw's retval.
 
------BEGIN PGP SIGNATURE-----
+> >  	/* Do per-CPU setup */
+> >  	cpus_read_lock();
+> >  	on_each_cpu(setup_online_cpu, NULL, 0);
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQUhQACgkQFA3kzBSg
-KbYWZBAAky1ib17XA9gxloboUy3qGaybcaYZsd1mzt6PWKSNYwVBtKkZZ+wiZYi4
-2YxEU+0us6M8aLRSrscKgDcKiZI43r0PwMLOY79dOMIRDlhET5s2uBW9Tp/vIwCR
-j7pFLBGR6+++llARQZoyUyjddH3Pd5XyzXaJxQNHrIYe6DQAo/CGScaIEN68hZov
-u+9BGEwn1ZfAppbikhmj3kqAVq5XFQrn2bll3yL0PLfGJo8+g/R/lN53ukyIk3RN
-U/0ng2tOi775qhTBdYUhYUNOgKp67aO6T06a51uMLZfQHlm0KokI32+0xjuBg9pi
-LVHQlXx1ybXKrMaiCH8IOU8UDjIdVEvLSoqDXyAfaVMxdU729iwCjIoEwk35k/Iw
-OtowtXucRtffEx4c7mQlBawTGTGMych9riqSr9Plilw20hsGCshW5ar+lkM55OtD
-nhVyq8miNXGQbU5UcPgp4yQq9psFrUUlC/HHukwSfr11YqMPAW1WvUPMVxMOUtjK
-f9GUHHYBx5dK3YTl4N3j9/Sq82/CyWzhzQbxexRCe1Ed/I2jrDATevOJRIYX+PVu
-KqMkukAhimmuZD1cforPmM3sApFZAWNtZzKyKdHd1iK82vX9t9cpG86QRqXLoRqf
-eh4j9NUEZdD704p3F0B8TE6iUfZ+HVXgFGF7PNIVP9kOz352l3w=
-=KhQP
------END PGP SIGNATURE-----
+... in here.
 
---VISfz4IeabZvLQ+p--
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
