@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A66A60539D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E6B60539E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiJSXCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 19:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S231374AbiJSXCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 19:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiJSXCW (ORCPT
+        with ESMTP id S231548AbiJSXCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 19:02:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2021D79B1;
-        Wed, 19 Oct 2022 16:02:11 -0700 (PDT)
+        Wed, 19 Oct 2022 19:02:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085941D639B;
+        Wed, 19 Oct 2022 16:02:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D44619DA;
-        Wed, 19 Oct 2022 23:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467C7C43470;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F58619D6;
+        Wed, 19 Oct 2022 23:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D912C43145;
         Wed, 19 Oct 2022 23:02:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666220528;
-        bh=NECyAiA/pg8kY8mVrs9nuK9e2kelW/ljznF/KmY6HlY=;
+        bh=OglLR7CZcvCfPWNgseELmu/1oNbrB+8cqkekoCOt4F4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWhR0Lqd2mxFc9XgnYi5vFn+458E53pCha0l023bS/m9fnvTSP3xwKxCcjOvHVqk9
-         6/f+cnilDYiL32Ly9N4GK3gQPJe/bOXTP0YxmQS3k6xpqKyueViAtVepOISQ/do/VL
-         27b0bVgwABiB2JFi7uLvrKq/ZTR7Pz0XTTjd95kY2Wes5Zy65gDAifhVXnKRqGnAZ0
-         t4CUK83Erktp30aKqFTvQoR59faL1E5wC932S3lNH8Kj14YxTK12MvTHuhtf/lXk21
-         Zwj+OnB6oFhmcXFx4IQHGp7dePPNG5tWBdOp9Z98516YqTa1LThSGDK574ya6o+guM
-         q8ltpYJ3JZEKg==
+        b=ibrSr6c4FC2mMxQFw7N6h/dFgGz3kIq6/3mTpg7Vf2U7mshQzOk5GfSxP7hopjndL
+         y249yAkSzrvC8zHrqhw7y2YOSk2GlKJvsbxZVqtj1zDKvutfdxEwcE2FQ4R8IXbHGr
+         PqsbURueYbqkI31nZk1Z/G3zUWa+jMjQRsDQxUzPxSvz60KCa2qhBOk0NSjAr8GOIU
+         REcMpHYka7opn9TPC+MPVWuWW6L5BwE+Jjx1wNrbg7BAA3bmntWCWr0FzPZjjg8ftR
+         VQW2rLvZrcRS51aycaPJOngd/5pUM87e2KSlCCEyDX3ZyTbnWcg1wrL69XeeIgAF8M
+         Sj4breg03QPLw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F05425C0A04; Wed, 19 Oct 2022 16:02:07 -0700 (PDT)
+        id F24C15C0A40; Wed, 19 Oct 2022 16:02:07 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH v3 rcu 5/8] rcutorture: Add --datestamp parameter to kvm-again.sh
-Date:   Wed, 19 Oct 2022 16:02:03 -0700
-Message-Id: <20221019230206.2501794-5-paulmck@kernel.org>
+Subject: [PATCH v3 rcu 6/8] rcutorture: Avoid redundant builds for rcuscale and refscale in torture.sh
+Date:   Wed, 19 Oct 2022 16:02:04 -0700
+Message-Id: <20221019230206.2501794-6-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20221019230203.GA2501612@paulmck-ThinkPad-P17-Gen-1>
 References: <20221019230203.GA2501612@paulmck-ThinkPad-P17-Gen-1>
@@ -55,97 +55,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds a --datestamp parameter to kvm-again.sh, which, in
-contrast to the existing --rundir argument, specifies only the last
-segments of the pathname.  This addition enables torture.sh to use
-kvm-again.sh in order to avoid redundant kernel builds.
+This commit causes torture.sh to use the new --bootargs and --datestamp
+parameters to kvm-again.sh in order to avoid redundant kernel builds
+during rcuscale and refscale testing.  This trims the better part of an
+hour off of torture.sh runs that use --do-kasan.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- .../selftests/rcutorture/bin/kvm-again.sh     | 37 +++++++++++++++++--
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ .../selftests/rcutorture/bin/torture.sh       | 87 ++++++++++++++++++-
+ 1 file changed, 83 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-again.sh b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-index 20941c1051087..8a968fbda02c9 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-@@ -54,7 +54,10 @@ bootargs=
- dryrun=
- dur=
- default_link="cp -R"
--rundir="`pwd`/tools/testing/selftests/rcutorture/res/`date +%Y.%m.%d-%H.%M.%S-again`"
-+resdir="`pwd`/tools/testing/selftests/rcutorture/res"
-+rundir="$resdir/`date +%Y.%m.%d-%H.%M.%S-again`"
-+got_datestamp=
-+got_rundir=
- 
- startdate="`date`"
- starttime="`get_starttime`"
-@@ -62,11 +65,13 @@ starttime="`get_starttime`"
- usage () {
- 	echo "Usage: $scriptname $oldrun [ arguments ]:"
- 	echo "       --bootargs kernel-boot-arguments"
-+	echo "       --datestamp string"
- 	echo "       --dryrun"
- 	echo "       --duration minutes | <seconds>s | <hours>h | <days>d"
- 	echo "       --link hard|soft|copy"
- 	echo "       --remote"
- 	echo "       --rundir /new/res/path"
-+	echo "Command line: $scriptname $args"
- 	exit 1
+diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
+index 4d285db2fbbdd..b376688fe280a 100755
+--- a/tools/testing/selftests/rcutorture/bin/torture.sh
++++ b/tools/testing/selftests/rcutorture/bin/torture.sh
+@@ -277,6 +277,8 @@ function torture_one {
+ 	then
+ 		cat $T/$curflavor.out | tee -a $T/log
+ 		echo retcode=$retcode | tee -a $T/log
++	else
++		echo $resdir > $T/last-resdir
+ 	fi
+ 	if test "$retcode" == 0
+ 	then
+@@ -302,10 +304,12 @@ function torture_set {
+ 	shift
+ 	curflavor=$flavor
+ 	torture_one "$@"
++	mv $T/last-resdir $T/last-resdir-nodebug || :
+ 	if test "$do_kasan" = "yes"
+ 	then
+ 		curflavor=${flavor}-kasan
+ 		torture_one "$@" --kasan
++		mv $T/last-resdir $T/last-resdir-kasan || :
+ 	fi
+ 	if test "$do_kcsan" = "yes"
+ 	then
+@@ -316,6 +320,7 @@ function torture_set {
+ 			cur_kcsan_kmake_args="$kcsan_kmake_args"
+ 		fi
+ 		torture_one "$@" --kconfig "CONFIG_DEBUG_LOCK_ALLOC=y CONFIG_PROVE_LOCKING=y" $kcsan_kmake_tag $cur_kcsan_kmake_args --kcsan
++		mv $T/last-resdir $T/last-resdir-kcsan || :
+ 	fi
  }
  
-@@ -78,6 +83,23 @@ do
- 		bootargs="$bootargs $2"
- 		shift
- 		;;
-+	--datestamp)
-+		checkarg --datestamp "(relative pathname)" "$#" "$2" '^[a-zA-Z0-9._/-]*$' '^--'
-+		if test -n "$got_rundir" || test -n "$got_datestamp"
+@@ -378,11 +383,48 @@ then
+ else
+ 	primlist=
+ fi
++firsttime=1
++do_kasan_save="$do_kasan"
++do_kcsan_save="$do_kcsan"
+ for prim in $primlist
+ do
+-	torture_bootargs="refscale.scale_type="$prim" refscale.nreaders=$HALF_ALLOTED_CPUS refscale.loops=10000 refscale.holdoff=20 torture.disable_onoff_at_boot"
+-	torture_set "refscale-$prim" tools/testing/selftests/rcutorture/bin/kvm.sh --torture refscale --allcpus --duration 5 --kconfig "CONFIG_TASKS_TRACE_RCU=y CONFIG_NR_CPUS=$HALF_ALLOTED_CPUS" --bootargs "verbose_batched=$VERBOSE_BATCH_CPUS torture.verbose_sleep_frequency=8 torture.verbose_sleep_duration=$VERBOSE_BATCH_CPUS" --trust-make
++	if test -n "$firsttime"
++	then
++		torture_bootargs="refscale.scale_type="$prim" refscale.nreaders=$HALF_ALLOTED_CPUS refscale.loops=10000 refscale.holdoff=20 torture.disable_onoff_at_boot"
++		torture_set "refscale-$prim" tools/testing/selftests/rcutorture/bin/kvm.sh --torture refscale --allcpus --duration 5 --kconfig "CONFIG_TASKS_TRACE_RCU=y CONFIG_NR_CPUS=$HALF_ALLOTED_CPUS" --bootargs "verbose_batched=$VERBOSE_BATCH_CPUS torture.verbose_sleep_frequency=8 torture.verbose_sleep_duration=$VERBOSE_BATCH_CPUS" --trust-make
++		mv $T/last-resdir-nodebug $T/first-resdir-nodebug || :
++		if test -f "$T/last-resdir-kasan"
 +		then
-+			echo Only one of --datestamp or --rundir may be specified
-+			usage
++			mv $T/last-resdir-kasan $T/first-resdir-kasan || :
 +		fi
-+		got_datestamp=y
-+		ds=$2
-+		rundir="$resdir/$ds"
-+		if test -e "$rundir"
++		if test -f "$T/last-resdir-kcsan"
 +		then
-+			echo "--datestamp $2: Already exists."
-+			usage
++			mv $T/last-resdir-kcsan $T/first-resdir-kcsan || :
 +		fi
-+		shift
-+		;;
- 	--dryrun)
- 		dryrun=1
- 		;;
-@@ -119,6 +141,12 @@ do
- 		;;
- 	--rundir)
- 		checkarg --rundir "(absolute pathname)" "$#" "$2" '^/' '^error'
-+		if test -n "$got_rundir" || test -n "$got_datestamp"
++		firsttime=
++		do_kasan=
++		do_kcsan=
++	else
++		torture_bootargs=
++		for i in $T/first-resdir-*
++		do
++			case "$i" in
++			*-nodebug)
++				torture_suffix=
++				;;
++			*-kasan)
++				torture_suffix="-kasan"
++				;;
++			*-kcsan)
++				torture_suffix="-kcsan"
++				;;
++			esac
++			torture_set "refscale-$prim$torture_suffix" tools/testing/selftests/rcutorture/bin/kvm-again.sh "`cat "$i"`" --duration 5 --bootargs "refscale.scale_type=$prim"
++		done
++	fi
+ done
++do_kasan="$do_kasan_save"
++do_kcsan="$do_kcsan_save"
+ 
+ if test "$do_rcuscale" = yes
+ then
+@@ -390,11 +432,48 @@ then
+ else
+ 	primlist=
+ fi
++firsttime=1
++do_kasan_save="$do_kasan"
++do_kcsan_save="$do_kcsan"
+ for prim in $primlist
+ do
+-	torture_bootargs="rcuscale.scale_type="$prim" rcuscale.nwriters=$HALF_ALLOTED_CPUS rcuscale.holdoff=20 torture.disable_onoff_at_boot"
+-	torture_set "rcuscale-$prim" tools/testing/selftests/rcutorture/bin/kvm.sh --torture rcuscale --allcpus --duration 5 --kconfig "CONFIG_TASKS_TRACE_RCU=y CONFIG_NR_CPUS=$HALF_ALLOTED_CPUS" --trust-make
++	if test -n "$firsttime"
++	then
++		torture_bootargs="rcuscale.scale_type="$prim" rcuscale.nwriters=$HALF_ALLOTED_CPUS rcuscale.holdoff=20 torture.disable_onoff_at_boot"
++		torture_set "rcuscale-$prim" tools/testing/selftests/rcutorture/bin/kvm.sh --torture rcuscale --allcpus --duration 5 --kconfig "CONFIG_TASKS_TRACE_RCU=y CONFIG_NR_CPUS=$HALF_ALLOTED_CPUS" --trust-make
++		mv $T/last-resdir-nodebug $T/first-resdir-nodebug || :
++		if test -f "$T/last-resdir-kasan"
 +		then
-+			echo Only one of --datestamp or --rundir may be specified
-+			usage
++			mv $T/last-resdir-kasan $T/first-resdir-kasan || :
 +		fi
-+		got_rundir=y
- 		rundir=$2
- 		if test -e "$rundir"
- 		then
-@@ -128,8 +156,11 @@ do
- 		shift
- 		;;
- 	*)
--		echo Unknown argument $1
--		usage
-+		if test -n "$1"
++		if test -f "$T/last-resdir-kcsan"
 +		then
-+			echo Unknown argument $1
-+			usage
++			mv $T/last-resdir-kcsan $T/first-resdir-kcsan || :
 +		fi
- 		;;
- 	esac
- 	shift
++		firsttime=
++		do_kasan=
++		do_kcsan=
++	else
++		torture_bootargs=
++		for i in $T/first-resdir-*
++		do
++			case "$i" in
++			*-nodebug)
++				torture_suffix=
++				;;
++			*-kasan)
++				torture_suffix="-kasan"
++				;;
++			*-kcsan)
++				torture_suffix="-kcsan"
++				;;
++			esac
++			torture_set "rcuscale-$prim$torture_suffix" tools/testing/selftests/rcutorture/bin/kvm-again.sh "`cat "$i"`" --duration 5 --bootargs "rcuscale.scale_type=$prim"
++		done
++	fi
+ done
++do_kasan="$do_kasan_save"
++do_kcsan="$do_kcsan_save"
+ 
+ if test "$do_kvfree" = "yes"
+ then
 -- 
 2.31.1.189.g2e36527f23
 
