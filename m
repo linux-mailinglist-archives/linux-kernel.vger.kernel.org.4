@@ -2,75 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04726603ADD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC7B603AE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiJSHnH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 03:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S230132AbiJSHo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiJSHnE (ORCPT
+        with ESMTP id S230119AbiJSHoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:43:04 -0400
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D499C786DB;
-        Wed, 19 Oct 2022 00:43:03 -0700 (PDT)
-Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Oct 2022 03:44:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D0A1B7AF;
+        Wed, 19 Oct 2022 00:44:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 69C9C5FB28;
-        Wed, 19 Oct 2022 09:43:02 +0200 (CEST)
-From:   Rolf Eike Beer <eb@emlix.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] binfmt_elf: fix documented return value for load_elf_phdrs()
-Date:   Wed, 19 Oct 2022 09:43:01 +0200
-Message-ID: <2359389.EDbqzprbEW@mobilepool36.emlix.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B82B617AE;
+        Wed, 19 Oct 2022 07:44:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D2B5C4347C;
+        Wed, 19 Oct 2022 07:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666165482;
+        bh=laG/TTZVBCYei5vgJF8Jt781WtjG/5mOgjJGDq5vj9s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IvFIt59F4JPs8pDaudSOGDGD6BbPXM3aQSEnS52ErG4ns+YhkHzaEFeqpGSr3tOK6
+         l9plR1wO9ypq1PS0S7h41C3JAQ47DchFJY4nrO9snJS77g5OXT1Pq8hVD1pJQfoPoM
+         2+yk2U+ZfgG6KTaZi/pgblZbvNQ+2AN10QL1V2Wwld51U/sQHx+aKSVt4x80lI8EU7
+         4rYYASMMz8LOTazY7BMf0czj6g1YLi6G6i+7qBsJMdje9hN6GoG/gwHps8L38k8z8s
+         USVDaaVJHavvzi9qFchZT/s4nLdywAPSr+5Phu5ynaVol2aJGBWntgiMjsmgvCC+HT
+         22J2BwhPQzRuA==
+Received: by mail-lf1-f51.google.com with SMTP id be13so11076665lfb.4;
+        Wed, 19 Oct 2022 00:44:42 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0diQIvI7A4VO1ga13nVg1ciciGgL2+9eowiTr7KcDMh46R6GvV
+        uPqW6n+jeg7Cnix6vtu3bxKIgHp+MG2xNvkH5K0=
+X-Google-Smtp-Source: AMsMyM78xPUZLp3fGfd8WqNSEwjoyE7ePjMOVGDkDRzzI7GRGqK0ncCGcWapq067zvspx0wwA09NQD7xq+995Hjw/z8=
+X-Received: by 2002:a05:6512:3119:b0:4a2:d749:ff82 with SMTP id
+ n25-20020a056512311900b004a2d749ff82mr2499071lfb.637.1666165480606; Wed, 19
+ Oct 2022 00:44:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+References: <5de2d80398986b81b6cfcdd35436bba8bf62c0e7.1662459668.git.baskov@ispras.ru>
+ <20221018205118.3756594-1-pjones@redhat.com>
+In-Reply-To: <20221018205118.3756594-1-pjones@redhat.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Oct 2022 09:44:29 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEbY5C_UjK3O=BodGaDRMW4OYgO=SOoNwc7XA+j2L1wVg@mail.gmail.com>
+Message-ID: <CAMj1kXEbY5C_UjK3O=BodGaDRMW4OYgO=SOoNwc7XA+j2L1wVg@mail.gmail.com>
+Subject: Re: [PATCH] efi/libstub: make memory protection warnings include newlines.
+To:     Peter Jones <pjones@redhat.com>
+Cc:     Evgeniy Baskov <baskov@ispras.ru>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This function has never returned anything but a plain NULL.
+On Tue, 18 Oct 2022 at 22:51, Peter Jones <pjones@redhat.com> wrote:
+>
+> efi_warn() doesn't put newlines on messages, and that makes reading
+> warnings without newlines hard to do.
+>
+> Signed-off-by: Peter Jones <pjones@redhat.com>
 
-Fixes: 6a8d38945cf4 ("binfmt_elf: Hoist ELF program header loading to a function")
-Signed-off-by: Rolf Eike Beer <eb@emlix.com>
----
- fs/binfmt_elf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+OK, so this applies on top of Evgeniy's series, right? Do we need a
+version for 6.1-rc1 ?
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 63c7ebb0da89..cfd5f7ad019d 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -456,7 +456,7 @@ static unsigned long maximum_alignment(struct elf_phdr *cmds, int nr)
-  *
-  * Loads ELF program headers from the binary file elf_file, which has the ELF
-  * header pointed to by elf_ex, into a newly allocated array. The caller is
-- * responsible for freeing the allocated data. Returns an ERR_PTR upon failure.
-+ * responsible for freeing the allocated data. Returns NULL upon failure.
-  */
- static struct elf_phdr *load_elf_phdrs(const struct elfhdr *elf_ex,
- 				       struct file *elf_file)
--- 
-2.37.3
-
--- 
-Rolf Eike Beer, emlix GmbH, https://www.emlix.com
-Fon +49 551 30664-0, Fax +49 551 30664-11
-Gothaer Platz 3, 37083 Göttingen, Germany
-Sitz der Gesellschaft: Göttingen, Amtsgericht Göttingen HR B 3160
-Geschäftsführung: Heike Jordan, Dr. Uwe Kracke – Ust-IdNr.: DE 205 198 055
-
-emlix - smart embedded open source
-
-
+> ---
+>  drivers/firmware/efi/libstub/mem.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/mem.c b/drivers/firmware/efi/libstub/mem.c
+> index 4d6c7f4fb7e..1b874096109 100644
+> --- a/drivers/firmware/efi/libstub/mem.c
+> +++ b/drivers/firmware/efi/libstub/mem.c
+> @@ -293,7 +293,7 @@ efi_status_t efi_adjust_memory_range_protection(unsigned long start,
+>                                 rounded_end - rounded_start,
+>                                 attr_clear);
+>         if (status != EFI_SUCCESS) {
+> -               efi_warn("Failed to clear memory attributes at [%08lx,%08lx]: %lx",
+> +               efi_warn("Failed to clear memory attributes at [%08lx,%08lx]: %lx\n",
+>                          (unsigned long)rounded_start,
+>                          (unsigned long)rounded_end,
+>                          status);
+> @@ -306,7 +306,7 @@ efi_status_t efi_adjust_memory_range_protection(unsigned long start,
+>                                 rounded_end - rounded_start,
+>                                 attributes);
+>         if (status != EFI_SUCCESS) {
+> -               efi_warn("Failed to set memory attributes at [%08lx,%08lx]: %lx",
+> +               efi_warn("Failed to set memory attributes at [%08lx,%08lx]: %lx\n",
+>                          (unsigned long)rounded_start,
+>                          (unsigned long)rounded_end,
+>                          status);
+> --
+> 2.37.1
+>
