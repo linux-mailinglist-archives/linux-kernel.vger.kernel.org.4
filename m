@@ -2,119 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351A56048FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E92C604919
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiJSOSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S233336AbiJSOVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbiJSOSC (ORCPT
+        with ESMTP id S231352AbiJSOVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:18:02 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB6D141397
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:01:02 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id b1so28249405lfs.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:01:02 -0700 (PDT)
+        Wed, 19 Oct 2022 10:21:11 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9D63DBCC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:04:36 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id pb15so91748pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:04:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RknYa2NABgYYHyJknMjUhYiHTu2aqnADkUkC2x00Z/k=;
-        b=yVyYhg2zBMm+7w3lS+wQf7QQB6OxkvKhhDBuAPYoaZ7jD0KpwgQm287TcPFHMwTTkE
-         jryok8brz3+crpof1k38RGlYAy8EknTf68wgzwJcnn3FBydmHK77NIq8gst0QpljcDnr
-         lEQvShh77tEZtVCe8fl0GZnP2mCH81by5zLhTlqbuLfUx0UpnWcovEmz96yWNOv810Mr
-         lQfdoKcRbsxklj6SU8zBtJVkDk9ttPpnKVB3WgOpCeAy6PAWmY19KZnVd68/6dOt51tZ
-         ZrVbOIMPqosRKsDK0eA3b5vgFTfilJ2lUvoaaulDneOt2wSZ4l6ggS6O4BHZOrnDLQIo
-         1jyQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kSywqTaeBFCSrBJK62YFMOGjIue9VCaMx6UeNmePcMs=;
+        b=iiK3FLvRmHJDioEVPTP2ct13V9hY9l1zdExtFWQ8tA5yt5Qxz3Vt+VfkjDC9nO6iKY
+         lko+MNepEkYQIFubXygNugFfKEhpLiAeevEwIfOkselLWX0YPWSY954Jh6TTQK35eWE1
+         dAl2/YMF6OtbLup00Di4lADkEQoGHT7tD0GgCTHrS6n5NfWoIFJ7BZ8QcTNkPBLf7Rhv
+         kUAycgP1QX10GolpBvvntWIbaXd0YqAWLqMiqBwY4lS8Dlq1I2nAj2LhJlyF0L/8KE40
+         OgVOC5zRx73y24R0Y9wvQqy7KxLNXVwi59w5X1WgwXItcuI9t1+j1ZBlKyL7229TciQ3
+         iFLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RknYa2NABgYYHyJknMjUhYiHTu2aqnADkUkC2x00Z/k=;
-        b=MghPRKMtRcRlnrMOpSShH5+L06U9uXvkKBkXMXr++vVPK/XYoKaZoWoMZGVgTE6vQN
-         7Uu4lBeEEZ0ie/ECYOavaXoltTm1FlZSLADTQ7ajiHZZYGIU8cFe5qMj7pJLOgsY+d1n
-         p2nrA0Ecv5FNb2QRm4adc6DslFu90ar82LS9yh8C8mcwnkqFUg2K39enqOu/8mB0b6l1
-         S9Fa0EhqmB7mhfpS+d0icf327I8YbbJYYWqiUhPwzxlvb+/CCcWcl/d1pDWEAaLyfboU
-         imU1TMuJRo8hIVyeoMqGX9pZtBbGHoi1aaSD01dUKYGgqOSj1G72pOHOiJq/y5Ef6GFu
-         D1Ig==
-X-Gm-Message-State: ACrzQf2/JyKN063PId1aj1Di0Qoq9RlDOEyKb3s/w82WqEvc6U9jlAjC
-        w3/9hthOqVhw1GQPncx7b5OIr/VN83jeAQ==
-X-Google-Smtp-Source: AMsMyM7XIZU0I24cerZGyqqlXQ/1nBl3l4sFmHTpzgGVDmR0GJjUQ91snFjYNIxrUZWHEFwuHqEW5w==
-X-Received: by 2002:a2e:bc0f:0:b0:26e:15f:51dd with SMTP id b15-20020a2ebc0f000000b0026e015f51ddmr3021059ljf.118.1666187550011;
-        Wed, 19 Oct 2022 06:52:30 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id t17-20020a056512209100b004996fbfd75esm2298842lfr.71.2022.10.19.06.52.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 06:52:29 -0700 (PDT)
-Message-ID: <02a879d4-cc7a-ca8e-7334-755873baa3e7@linaro.org>
-Date:   Wed, 19 Oct 2022 16:52:29 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kSywqTaeBFCSrBJK62YFMOGjIue9VCaMx6UeNmePcMs=;
+        b=7top7rwq3B6xR0Yy1gja0O6AxXuh+EnLSGg/S9CBqAP7NWMf/Lz7qkuiX8Ww8TtJeo
+         JSh/fSpQdfWIRZVg1Y3ZimwwsVAJ8SEwM64Q2Kf5FZUTxxU9M6KgVP2Z2TUIT4/BaSn6
+         p8qe97+80+Ez3t570y+tIoB9IZDy64l2S6bAmME0tHHNs1KpujPO9DrOeQIkimPc+Ed9
+         yWZmaCU00PkJuytUAe3/ixQBz8R0mxo+8Ut2RFgB75qodLulOjv/Ji7zynr2U0NDMJ8Q
+         MW4AIGdkgHV5xx2kwfpjRUtXNTr+JTez0e9Ebp260a2/UGkEm93GU0E93OZE4/7Y4qh6
+         eYIQ==
+X-Gm-Message-State: ACrzQf28yUvLof78vBveU0Lq7OyOMUFIQanUDPbgO/lFe9ISsWw3++lG
+        8z18qxQWkKYR/zxMaEhv7+aVBmB+LGYQKrTl+XQobNKQaBw=
+X-Google-Smtp-Source: AMsMyM7a/mDmv4BOUIEZLatbl1VVl+gK5ZFYsovOjC5vrCr3NKiTjFqBrylJVD6Dvv9B3G49ek2Ho+1Hmr34ftYZ5S8=
+X-Received: by 2002:a17:903:2449:b0:186:1269:929c with SMTP id
+ l9-20020a170903244900b001861269929cmr8778448pls.37.1666187618901; Wed, 19 Oct
+ 2022 06:53:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 12/15] phy: qcom-qmp-pcie: fix initialisation reset
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221019113552.22353-1-johan+linaro@kernel.org>
- <20221019113552.22353-13-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221019113552.22353-13-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221005131452.1506328-1-james.clark@arm.com>
+In-Reply-To: <20221005131452.1506328-1-james.clark@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 19 Oct 2022 14:53:27 +0100
+Message-ID: <CAJ9a7VjQb2MLpTLPuFRTqqkpg-xC6T66DbsMzq_vQNiAcQ9FDA@mail.gmail.com>
+Subject: Re: [PATCH] coresight: cti: Fix hang in cti_disable_hw()
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, leo.yan@linaro.org,
+        Sudeep.Holla@arm.com, Aishwarya TCV <Aishwarya.TCV@arm.com>,
+        Cristian Marussi <Cristian.Marussi@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 14:35, Johan Hovold wrote:
-> Add the missing delay after asserting reset. This is specifically needed
-> for the reset to have any effect on SC8280XP.
-> 
-> The vendor driver uses a 1 ms delay, but that seems a bit excessive.
-> Instead use a 200 us delay which appears to be more than enough and also
-> matches the UFS reset delay added by commit 870b1279c7a0 ("scsi:
-> ufs-qcom: Add reset control support for host controller").
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Tested on DB410c + kernel 6.0.0
+
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
+Tested-by: Mike Leach <mike.leach@linaro.org>
+
+On Wed, 5 Oct 2022 at 14:16, James Clark <james.clark@arm.com> wrote:
+>
+> cti_enable_hw() and cti_disable_hw() are called from an atomic context
+> so shouldn't use runtime PM because it can result in a sleep when
+> communicating with firmware.
+>
+> Since commit 3c6656337852 ("Revert "firmware: arm_scmi: Add clock
+> management to the SCMI power domain""), this causes a hang on Juno when
+> running the Perf Coresight tests or running this command:
+>
+>   perf record -e cs_etm//u -- ls
+>
+> This was also missed until the revert commit because pm_runtime_put()
+> was called with the wrong device until commit 692c9a499b28 ("coresight:
+> cti: Correct the parameter for pm_runtime_put")
+>
+> With lock and scheduler debugging enabled the following is output:
+>
+>    coresight cti_sys0: cti_enable_hw -- dev:cti_sys0  parent: 20020000.cti
+>    BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1151
+>    in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 330, name: perf-exec
+>    preempt_count: 2, expected: 0
+>    RCU nest depth: 0, expected: 0
+>    INFO: lockdep is turned off.
+>    irq event stamp: 0
+>    hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+>    hardirqs last disabled at (0): [<ffff80000822b394>] copy_process+0xa0c/0x1948
+>    softirqs last  enabled at (0): [<ffff80000822b394>] copy_process+0xa0c/0x1948
+>    softirqs last disabled at (0): [<0000000000000000>] 0x0
+>    CPU: 3 PID: 330 Comm: perf-exec Not tainted 6.0.0-00053-g042116d99298 #7
+>    Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Sep 13 2022
+>    Call trace:
+>     dump_backtrace+0x134/0x140
+>     show_stack+0x20/0x58
+>     dump_stack_lvl+0x8c/0xb8
+>     dump_stack+0x18/0x34
+>     __might_resched+0x180/0x228
+>     __might_sleep+0x50/0x88
+>     __pm_runtime_resume+0xac/0xb0
+>     cti_enable+0x44/0x120
+>     coresight_control_assoc_ectdev+0xc0/0x150
+>     coresight_enable_path+0xb4/0x288
+>     etm_event_start+0x138/0x170
+>     etm_event_add+0x48/0x70
+>     event_sched_in.isra.122+0xb4/0x280
+>     merge_sched_in+0x1fc/0x3d0
+>     visit_groups_merge.constprop.137+0x16c/0x4b0
+>     ctx_sched_in+0x114/0x1f0
+>     perf_event_sched_in+0x60/0x90
+>     ctx_resched+0x68/0xb0
+>     perf_event_exec+0x138/0x508
+>     begin_new_exec+0x52c/0xd40
+>     load_elf_binary+0x6b8/0x17d0
+>     bprm_execve+0x360/0x7f8
+>     do_execveat_common.isra.47+0x218/0x238
+>     __arm64_sys_execve+0x48/0x60
+>     invoke_syscall+0x4c/0x110
+>     el0_svc_common.constprop.4+0xfc/0x120
+>     do_el0_svc+0x34/0xc0
+>     el0_svc+0x40/0x98
+>     el0t_64_sync_handler+0x98/0xc0
+>     el0t_64_sync+0x170/0x174
+>
+> Fix the issue by removing the runtime PM calls completely. They are not
+> needed here because it must have already been done when building the
+> path for a trace.
+>
+> Fixes: 835d722ba10a ("coresight: cti: Initial CoreSight CTI Driver")
+> Reported-by: Aishwarya TCV <Aishwarya.TCV@arm.com>
+> Reported-by: Cristian Marussi <Cristian.Marussi@arm.com>
+> Signed-off-by: Suzuki Poulose <Suzuki.Poulose@arm.com>
+> Signed-off-by: James Clark <james.clark@arm.com>
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index 2f4bdef73395..9c8e009033f1 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -1866,6 +1866,8 @@ static int qmp_pcie_init(struct phy *phy)
->   		goto err_disable_regulators;
->   	}
->   
-> +	usleep_range(200, 300);
-> +
+>  drivers/hwtracing/coresight/coresight-cti-core.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c b/drivers/hwtracing/coresight/coresight-cti-core.c
+> index 8988b2ed2ea6..c5f7fc4e2552 100644
+> --- a/drivers/hwtracing/coresight/coresight-cti-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-cti-core.c
+> @@ -94,7 +94,6 @@ static int cti_enable_hw(struct cti_drvdata *drvdata)
+>         unsigned long flags;
+>         int rc = 0;
+>
+> -       pm_runtime_get_sync(dev->parent);
+>         spin_lock_irqsave(&drvdata->spinlock, flags);
+>
+>         /* no need to do anything if enabled or unpowered*/
+> @@ -119,7 +118,6 @@ static int cti_enable_hw(struct cti_drvdata *drvdata)
+>         /* cannot enable due to error */
+>  cti_err_not_enabled:
+>         spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> -       pm_runtime_put(dev->parent);
+>         return rc;
+>  }
+>
+> @@ -175,7 +173,6 @@ static int cti_disable_hw(struct cti_drvdata *drvdata)
+>         coresight_disclaim_device_unlocked(csdev);
+>         CS_LOCK(drvdata->base);
+>         spin_unlock(&drvdata->spinlock);
+> -       pm_runtime_put(dev->parent);
+>         return 0;
+>
+>         /* not disabled this call */
+> --
+> 2.28.0
+>
 
-If there is a v3, I'd kindly ask to add a comment about vendor using 1ms 
-here.
-
->   	ret = reset_control_bulk_deassert(cfg->num_resets, qmp->resets);
->   	if (ret) {
->   		dev_err(qmp->dev, "reset deassert failed\n");
 
 -- 
-With best wishes
-Dmitry
-
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
