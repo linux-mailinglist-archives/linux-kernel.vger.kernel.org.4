@@ -2,150 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D2060454A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7A260454B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbiJSMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S232773AbiJSMaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiJSMaI (ORCPT
+        with ESMTP id S232402AbiJSMaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:30:08 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49CD18C438
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:07:42 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666181081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9Zp0rsOwaZAudeS2Yn3cYhCuuXMlRO2UwNZgHWLJ9K8=;
-        b=Q9+90QS7LNNNm7kvUFJq+pkQ4l+2WZSD6FZFg0q7ZB5/5f5Xs5+3GMbwNjkTuCj7iJOrW5
-        YUKLmIry915vUhFojJ/KmG4rSx+AD/GffFSwQ4Qra4DtOzTkjNXNHx6VsCv+TPUnXe8fUU
-        tKcSlGnMJLvICa4C26YADM1IV2yUjmQ=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     rppt@kernel.org, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] memblock: remove repeat round
-Date:   Wed, 19 Oct 2022 20:03:37 +0800
-Message-Id: <20221019120337.2098298-1-yajun.deng@linux.dev>
+        Wed, 19 Oct 2022 08:30:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B569215CB3E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OqNRc2QzK30r4Y1uzmTIGLZT0+0EEZ1eq+jMiyZwVl0=; b=TrvgM40E+jfFoZv0NxzChvCn7m
+        TkYQjkjPYXG9L2gYc1KcXKigFjDW3orVQ2KVNPHQ/+SGg1mt4kEZ0uZLV+OwA0RsSd/7cXGaWSJXz
+        Yi2tZfrhw3ahBgAD4CQp1Luv2EBOqYHyymKttIwx/ottlzgpWaCdCuuDJm+JwUpz1ZX5KNcdP+ixe
+        RV1f6fGpQNtbDf2l3GXZ8d1kNaFR2+f+HPlGv5qQyzouqX+iQou6BgiSKEbBnWnUc4a/ditsRB1OR
+        zYQm2avaHW9d9PmBq0zfUwmM4DIlGjPw4ye7wSdPFHzzo/04NxM74O/ANpob10a1Eyo5ErmRVZPEi
+        +MnNp7FQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ol7ni-00BWWX-Jp; Wed, 19 Oct 2022 12:03:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1028F30049E;
+        Wed, 19 Oct 2022 14:03:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C22682C1EF55F; Wed, 19 Oct 2022 14:03:51 +0200 (CEST)
+Date:   Wed, 19 Oct 2022 14:03:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <Y0/npwZ3UO9+ZSS4@hirez.programming.kicks-ass.net>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+ <202210181020.79AF7F7@keescook>
+ <Y08FhjK3fKsfRAaw@hirez.programming.kicks-ass.net>
+ <202210182200.50680AE@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210182200.50680AE@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need round twice in memblock_add_range().
+On Tue, Oct 18, 2022 at 10:05:26PM -0700, Kees Cook wrote:
 
-We can call memblock_double_array() to extand the size if type->cnt no
-less than type->max before memblock_insert_region(), otherwise we can
-insert the new region directly.
+> > +static int cfi_rand_preamble(s32 *start, s32 *end)
+> > +{
+> > +	s32 *s;
+> > +
+> > +	for (s = start; s < end; s++) {
+> > +		void *addr = (void *)s + *s;
+> > +		u32 hash;
+> > +
+> > +		hash = decode_preamble_hash(addr);
+> > +		if (WARN(!hash, "no CFI hash found at: %pS %px %*ph\n",
+> > +			 addr, addr, 5, addr))
+> > +			return -EINVAL;
+> > +
+> > +		hash ^= cfi_seed;
+> > +		text_poke_early(addr + 1, &hash, 4);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> 
+> The one glitch here is that the resulting hash needs to not contain
+> an endbr...
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- mm/memblock.c | 54 +++++++++++++++------------------------------------
- 1 file changed, 16 insertions(+), 38 deletions(-)
+Oh right,.. duh. How about something like:
 
-diff --git a/mm/memblock.c b/mm/memblock.c
-index 511d4783dcf1..1679244b4a1a 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -578,7 +578,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- 				phys_addr_t base, phys_addr_t size,
- 				int nid, enum memblock_flags flags)
- {
--	bool insert = false;
- 	phys_addr_t obase = base;
- 	phys_addr_t end = base + memblock_cap_size(base, &size);
- 	int idx, nr_new;
-@@ -598,22 +597,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- 		return 0;
- 	}
- 
--	/*
--	 * The worst case is when new range overlaps all existing regions,
--	 * then we'll need type->cnt + 1 empty regions in @type. So if
--	 * type->cnt * 2 + 1 is less than type->max, we know
--	 * that there is enough empty regions in @type, and we can insert
--	 * regions directly.
--	 */
--	if (type->cnt * 2 + 1 < type->max)
--		insert = true;
--
--repeat:
--	/*
--	 * The following is executed twice.  Once with %false @insert and
--	 * then with %true.  The first counts the number of regions needed
--	 * to accommodate the new area.  The second actually inserts them.
--	 */
- 	base = obase;
- 	nr_new = 0;
- 
-@@ -635,10 +618,14 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- #endif
- 			WARN_ON(flags != rgn->flags);
- 			nr_new++;
--			if (insert)
--				memblock_insert_region(type, idx++, base,
--						       rbase - base, nid,
--						       flags);
-+
-+			if ((type->cnt >= type->max) &&
-+			    (memblock_double_array(type, obase, size) < 0))
-+				return -ENOMEM;
-+
-+			memblock_insert_region(type, idx++, base,
-+					       rbase - base, nid,
-+					       flags);
- 		}
- 		/* area below @rend is dealt with, forget about it */
- 		base = min(rend, end);
-@@ -647,28 +634,19 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- 	/* insert the remaining portion */
- 	if (base < end) {
- 		nr_new++;
--		if (insert)
--			memblock_insert_region(type, idx, base, end - base,
--					       nid, flags);
-+		if ((type->cnt >= type->max) &&
-+		    (memblock_double_array(type, obase, size) < 0))
-+			return -ENOMEM;
-+
-+		memblock_insert_region(type, idx, base, end - base,
-+				       nid, flags);
- 	}
- 
- 	if (!nr_new)
- 		return 0;
- 
--	/*
--	 * If this was the first round, resize array and repeat for actual
--	 * insertions; otherwise, merge and return.
--	 */
--	if (!insert) {
--		while (type->cnt + nr_new > type->max)
--			if (memblock_double_array(type, obase, size) < 0)
--				return -ENOMEM;
--		insert = true;
--		goto repeat;
--	} else {
--		memblock_merge_regions(type);
--		return 0;
--	}
-+	memblock_merge_regions(type);
-+	return 0;
- }
- 
- /**
--- 
-2.25.1
+static u32 cfi_rehash(u32 hash)
+{
+	hash ^= cfi_hash;
+	while (unlikely(is_endbr(hash))) {
+		bool lsb = hash & 1;
+		hash >>= 1;
+		if (lsb)
+			hash ^= 0x80200003;
+	}
+	return hash;
+}
 
+Which seems properly over-engineered :-)
