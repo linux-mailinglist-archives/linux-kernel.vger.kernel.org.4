@@ -2,234 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2302604184
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5B660441E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiJSKpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S232159AbiJSL6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbiJSKnk (ORCPT
+        with ESMTP id S232226AbiJSL5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:43:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421D4B5FF7;
-        Wed, 19 Oct 2022 03:20:49 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 08:55:48 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666169750;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qcApPFNPof4JyRnCxYWKlA1/9FtTi7A5R8T88Sz/KLc=;
-        b=fm+fWlnYpS7XS+myDdk1J06EbQ5NFU78ocjHzR/Sf50xLUhw7uzmXMl/lkme9aGWaDfBHP
-        UwmOIHBjKGOS9y5SB3m/O3/BPzTtwI0RkU6541Mc3aSym7ZJ/VBwWo6NwrlOS13ijDvn7n
-        pAcVdVuRPCGrVw82yCh9FzCIusNlQzrcc4EHc5iex5apFZ4uCKN7cBfMqRrcd6d5pteLgJ
-        loTxAFA3ppoOg+3nrWBghib+FKQiTvIXFSMW5uhe5MIn73BPoGKd4CgLIvA1ChD/E3N/eV
-        AtbrTdePG3ymzbo37SohPjMOjGn4Rj1TWwhZzUTBx0uJjU/t/2jEIYNEEDlLBg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666169750;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qcApPFNPof4JyRnCxYWKlA1/9FtTi7A5R8T88Sz/KLc=;
-        b=807mWOIPQNGJTjP4/aId+83y8F1dZziizxaxwtVe5N/e32vUO1npNYqStr516U3AkEsAF4
-        LxdpJjT8YGj0LMBw==
-From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] x86/signal: Remove sigset_t parameter from frame
- setup functions
-Cc:     Brian Gerst <brgerst@gmail.com>, Borislav Petkov <bp@suse.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220606203802.158958-3-brgerst@gmail.com>
-References: <20220606203802.158958-3-brgerst@gmail.com>
+        Wed, 19 Oct 2022 07:57:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A90BE37;
+        Wed, 19 Oct 2022 04:35:44 -0700 (PDT)
+X-UUID: 34acd60cc80d4990bce2455bf390b3c9-20221019
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cSeJUyFSeok6ngFkYCaH8KpME5/ESKjKnL4imI8pLTw=;
+        b=PDKa1XaV8UieJrHHR+UTXbQfm/hVyCdohgzFGftdl4QG0iB/Y+peIH+ElM7++SmmjGgqaa2bjTvii+OiGLmDKspaOy2zeu//65yP/sNEhMvotYiVzEjrM6BVXnFakiFjQueBqRm+go/nQPtHXo/j0WFDkpv1aFFmRm5EiICoFEU=;
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:6ebdbc00-af9e-4b5b-a14d-21d30de43647,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+        N:release,TS:82
+X-CID-INFO: VERSION:1.1.12,REQID:6ebdbc00-af9e-4b5b-a14d-21d30de43647,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:28,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:82
+X-CID-META: VersionHash:62cd327,CLOUDID:846449a4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:22101906415932MWZJGX,BulkQuantity:83,Recheck:0,SF:38|28|16|19|48|102
+        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40|20,QS:nil,BEC:ni
+        l,COL:0
+X-UUID: 34acd60cc80d4990bce2455bf390b3c9-20221019
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1757139302; Wed, 19 Oct 2022 16:56:52 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 19 Oct 2022 16:56:50 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 19 Oct 2022 16:56:49 +0800
+Message-ID: <e710546052b93ee2e77b1aeae3f7e4631e884f9f.camel@mediatek.com>
+Subject: Re: [PATCH v1 3/3] arm64: dts: mt8195: Add venc node
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 19 Oct 2022 16:56:49 +0800
+In-Reply-To: <01ef8a2d-091f-5428-2cb8-41ba3e137a06@collabora.com>
+References: <20221017070858.13902-1-tinghan.shen@mediatek.com>
+         <20221017070858.13902-4-tinghan.shen@mediatek.com>
+         <01ef8a2d-091f-5428-2cb8-41ba3e137a06@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Message-ID: <166616974818.401.5661686003687651870.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+On Wed, 2022-10-19 at 10:51 +0200, AngeloGioacchino Del Regno wrote:
+> Il 17/10/22 09:08, Tinghan Shen ha scritto:
+> > Add venc node for mt8195 SoC.
+> > 
+> > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 24
+> > ++++++++++++++++++++++++
+> >   1 file changed, 24 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > index 903e92d6156f..7cf2f7ef4ec6 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -2163,6 +2163,30 @@
+> >   			power-domains = <&spm
+> > MT8195_POWER_DOMAIN_VENC>;
+> >   		};
+> >   
+> > +		venc: venc@1a020000 {
+> 
+> As Krzysztof also said, this is video-codec@1a020000.
+> 
+> Also, there's one more thing... MT8195 has two video encoder cores,
+> but this
+> node is only for the first one. There's a second instance at
+> 0x1b020000: please
+> add it.
+Dear Angelo,
 
-Commit-ID:     f544822ea587ce08932640d5ba3978261148cbc7
-Gitweb:        https://git.kernel.org/tip/f544822ea587ce08932640d5ba3978261148cbc7
-Author:        Brian Gerst <brgerst@gmail.com>
-AuthorDate:    Mon, 06 Jun 2022 16:37:56 -04:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 19 Oct 2022 09:58:48 +02:00
+The second video encoder core 0x1b020000 is not ready in driver, there
+is only one core 0x1a020000 used, so we don't need add it in current
+patch now.
 
-x86/signal: Remove sigset_t parameter from frame setup functions
+Thanks
+Best Regards
+> 
+> Regards,
+> Angelo
+> 
 
-Push down the call to sigmask_to_save() into the frame setup functions.
-Thus, remove the use of compat_sigset_t outside of the compat code.
-
-Signed-off-by: Brian Gerst <brgerst@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Link: https://lore.kernel.org/r/20220606203802.158958-3-brgerst@gmail.com
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/ia32/ia32_signal.c       |  8 ++++----
- arch/x86/include/asm/fpu/signal.h |  6 ++----
- arch/x86/include/asm/signal.h     |  5 -----
- arch/x86/kernel/signal.c          | 28 ++++++++++++----------------
- 4 files changed, 18 insertions(+), 29 deletions(-)
-
-diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
-index 390347a..b67e276 100644
---- a/arch/x86/ia32/ia32_signal.c
-+++ b/arch/x86/ia32/ia32_signal.c
-@@ -230,9 +230,9 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
- 	return (void __user *) sp;
- }
- 
--int ia32_setup_frame(struct ksignal *ksig,
--		     compat_sigset_t *set, struct pt_regs *regs)
-+int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs)
- {
-+	compat_sigset_t *set = (compat_sigset_t *) sigmask_to_save();
- 	struct sigframe_ia32 __user *frame;
- 	void __user *restorer;
- 	void __user *fp = NULL;
-@@ -296,9 +296,9 @@ Efault:
- 	return -EFAULT;
- }
- 
--int ia32_setup_rt_frame(struct ksignal *ksig,
--			compat_sigset_t *set, struct pt_regs *regs)
-+int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
- {
-+	compat_sigset_t *set = (compat_sigset_t *) sigmask_to_save();
- 	struct rt_sigframe_ia32 __user *frame;
- 	void __user *restorer;
- 	void __user *fp = NULL;
-diff --git a/arch/x86/include/asm/fpu/signal.h b/arch/x86/include/asm/fpu/signal.h
-index 08826ad..2f255ac 100644
---- a/arch/x86/include/asm/fpu/signal.h
-+++ b/arch/x86/include/asm/fpu/signal.h
-@@ -14,10 +14,8 @@
- # include <uapi/asm/sigcontext.h>
- # include <asm/user32.h>
- struct ksignal;
--int ia32_setup_rt_frame(struct ksignal *ksig,
--			compat_sigset_t *set, struct pt_regs *regs);
--int ia32_setup_frame(struct ksignal *ksig,
--		     compat_sigset_t *set, struct pt_regs *regs);
-+int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs);
-+int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs);
- #else
- # define user_i387_ia32_struct	user_i387_struct
- # define user32_fxsr_struct	user_fxsr_struct
-diff --git a/arch/x86/include/asm/signal.h b/arch/x86/include/asm/signal.h
-index 2dfb5fe..4a4043c 100644
---- a/arch/x86/include/asm/signal.h
-+++ b/arch/x86/include/asm/signal.h
-@@ -28,11 +28,6 @@ typedef struct {
- #define SA_IA32_ABI	0x02000000u
- #define SA_X32_ABI	0x01000000u
- 
--#ifndef CONFIG_COMPAT
--#define compat_sigset_t compat_sigset_t
--typedef sigset_t compat_sigset_t;
--#endif
--
- #endif /* __ASSEMBLY__ */
- #include <uapi/asm/signal.h>
- #ifndef __ASSEMBLY__
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index 40b1373..489a085 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -324,9 +324,9 @@ static const struct {
- };
- 
- static int
--__setup_frame(struct ksignal *ksig, sigset_t *set,
--	      struct pt_regs *regs)
-+__setup_frame(struct ksignal *ksig, struct pt_regs *regs)
- {
-+	sigset_t *set = sigmask_to_save();
- 	struct sigframe __user *frame;
- 	void __user *restorer;
- 	void __user *fp = NULL;
-@@ -379,9 +379,9 @@ Efault:
- 	return -EFAULT;
- }
- 
--static int __setup_rt_frame(struct ksignal *ksig,
--			    sigset_t *set, struct pt_regs *regs)
-+static int __setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
- {
-+	sigset_t *set = sigmask_to_save();
- 	struct rt_sigframe __user *frame;
- 	void __user *restorer;
- 	void __user *fp = NULL;
-@@ -458,9 +458,9 @@ static unsigned long frame_uc_flags(struct pt_regs *regs)
- 	return flags;
- }
- 
--static int __setup_rt_frame(struct ksignal *ksig,
--			    sigset_t *set, struct pt_regs *regs)
-+static int __setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
- {
-+	sigset_t *set = sigmask_to_save();
- 	struct rt_sigframe __user *frame;
- 	void __user *fp = NULL;
- 	unsigned long uc_flags;
-@@ -560,11 +560,10 @@ int copy_siginfo_to_user32(struct compat_siginfo __user *to,
- }
- #endif /* CONFIG_X86_X32_ABI */
- 
--static int x32_setup_rt_frame(struct ksignal *ksig,
--			      compat_sigset_t *set,
--			      struct pt_regs *regs)
-+static int x32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
- {
- #ifdef CONFIG_X86_X32_ABI
-+	compat_sigset_t *set = (compat_sigset_t *) sigmask_to_save();
- 	struct rt_sigframe_x32 __user *frame;
- 	unsigned long uc_flags;
- 	void __user *restorer;
-@@ -763,22 +762,19 @@ static inline int is_x32_frame(struct ksignal *ksig)
- static int
- setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
- {
--	sigset_t *set = sigmask_to_save();
--	compat_sigset_t *cset = (compat_sigset_t *) set;
--
- 	/* Perform fixup for the pre-signal frame. */
- 	rseq_signal_deliver(ksig, regs);
- 
- 	/* Set up the stack frame */
- 	if (is_ia32_frame(ksig)) {
- 		if (ksig->ka.sa.sa_flags & SA_SIGINFO)
--			return ia32_setup_rt_frame(ksig, cset, regs);
-+			return ia32_setup_rt_frame(ksig, regs);
- 		else
--			return ia32_setup_frame(ksig, cset, regs);
-+			return ia32_setup_frame(ksig, regs);
- 	} else if (is_x32_frame(ksig)) {
--		return x32_setup_rt_frame(ksig, cset, regs);
-+		return x32_setup_rt_frame(ksig, regs);
- 	} else {
--		return __setup_rt_frame(ksig, set, regs);
-+		return __setup_rt_frame(ksig, regs);
- 	}
- }
- 
