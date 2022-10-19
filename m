@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7A1605362
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B1160535E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiJSWrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S231187AbiJSWrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiJSWrF (ORCPT
+        with ESMTP id S230234AbiJSWrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 18:47:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1E6188107;
-        Wed, 19 Oct 2022 15:47:04 -0700 (PDT)
+        Wed, 19 Oct 2022 18:47:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8820717FD5C;
+        Wed, 19 Oct 2022 15:47:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8D70B8261B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22755619D6;
         Wed, 19 Oct 2022 22:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505A7C43148;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5060CC43149;
         Wed, 19 Oct 2022 22:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666219621;
-        bh=IeaAKnXCrTJxEtb/hM2Q5kn1ssJ75eQ9FsOhFMTira4=;
+        bh=CDl8H2MGOjWvC458fdEn7dT11YxGntP9ARrgviEeMhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s2eRhzIvlTeDSe1B8OI9k7XhSR+HrCnEujCmMR1fA0ltBZ3oeJzvsdkc2x8DaEYo6
-         vip4yyk3uBScrCJ2kpln3iH9pg39A/8gA4spvtnSP5RsmBB6WdCboK04Lo+doYVmeF
-         sfAVQs7GcyBG7/mXI324vwx0aN7ztx59oUdwFoYECI7und9aTWpjb+OvBu6aLg3jsE
-         kbe+8LCQ6WxrFfgnMEdnfL4tH3furhSuBLAWGjrb50IEm/wOYENRcCYoJkwr+qaFYl
-         0VWesc45R5xRXk47xsq/OWFN/sqiKo2xtO0cwWgpzeW77txeSnyUIr0DJZexx8qx4z
-         jss+1AKGZ7jvg==
+        b=tuC9VoJUsxYY/4c+0Pc8LrQ1NGvAKs1dMjfH9r+iKyPsUll5AXr+M8mzGLDsSgWsc
+         wNZkFN8/urxwPLqOoviVRke4/rJGfytC7VoI/4ExKL6ikIH8zSDpmSs7VGFH1rf/bT
+         AE9DZl2rrmOoaHRLKi9uSR2a6dK851gFDFHp3a04uSuhov9GeK36VtvC5mCmne1dpU
+         PAn+ouBxcTUFL9Civ4mINIPu8vnvSSs6P5heivUd6ApQ9BEkJmoKY9dvA6huIWeH/+
+         Ew+TTrGXjp4GD/qunPYACNRTIUTSMSBEAwcN98aCDMgs1y03E41YnNyklrkA2rCEXJ
+         dZAatlp2GWijA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B11CC5C0AC5; Wed, 19 Oct 2022 15:47:00 -0700 (PDT)
+        id B2E8E5C0B8F; Wed, 19 Oct 2022 15:47:00 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH rcu 7/8] rcu-tasks: Make grace-period-age message human-readable
-Date:   Wed, 19 Oct 2022 15:46:58 -0700
-Message-Id: <20221019224659.2499511-7-paulmck@kernel.org>
+        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 8/8] rcu: Fix __this_cpu_read() lockdep warning in rcu_force_quiescent_state()
+Date:   Wed, 19 Oct 2022 15:46:59 -0700
+Message-Id: <20221019224659.2499511-8-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
 References: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
@@ -56,36 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds a few words to the informative message that appears
-every ten seconds in RCU Tasks and RCU Tasks Trace grace periods.
-This message currently reads as follows:
+From: Zqiang <qiang1.zhang@intel.com>
 
-rcu_tasks_wait_gp: rcu_tasks grace period 1046 is 10088 jiffies old.
+Running rcutorture with non-zero fqs_duration module parameter in a
+kernel built with CONFIG_PREEMPTION=y results in the following splat:
 
-After this change, it provides additional context, instead reading
-as follows:
+BUG: using __this_cpu_read() in preemptible [00000000]
+code: rcu_torture_fqs/398
+caller is __this_cpu_preempt_check+0x13/0x20
+CPU: 3 PID: 398 Comm: rcu_torture_fqs Not tainted 6.0.0-rc1-yoctodev-standard+
+Call Trace:
+<TASK>
+dump_stack_lvl+0x5b/0x86
+dump_stack+0x10/0x16
+check_preemption_disabled+0xe5/0xf0
+__this_cpu_preempt_check+0x13/0x20
+rcu_force_quiescent_state.part.0+0x1c/0x170
+rcu_force_quiescent_state+0x1e/0x30
+rcu_torture_fqs+0xca/0x160
+? rcu_torture_boost+0x430/0x430
+kthread+0x192/0x1d0
+? kthread_complete_and_exit+0x30/0x30
+ret_from_fork+0x22/0x30
+</TASK>
 
-rcu_tasks_wait_gp: rcu_tasks grace period number 1046 (since boot) is 10088 jiffies old.
+The problem is that rcu_force_quiescent_state() uses __this_cpu_read()
+in preemptible code instead of the proper raw_cpu_read().  This commit
+therefore changes __this_cpu_read() to raw_cpu_read().
 
-Reported-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tasks.h | 2 +-
+ kernel/rcu/tree.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index f5bf6fb430dab..b0b885e071fa8 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -728,7 +728,7 @@ static void rcu_tasks_wait_gp(struct rcu_tasks *rtp)
- 		if (rtsi > 0 && !reported && time_after(j, lastinfo + rtsi)) {
- 			lastinfo = j;
- 			rtsi = rtsi * rcu_task_stall_info_mult;
--			pr_info("%s: %s grace period %lu is %lu jiffies old.\n",
-+			pr_info("%s: %s grace period number %lu (since boot) is %lu jiffies old.\n",
- 				__func__, rtp->kname, rtp->tasks_gp_seq, j - rtp->gp_start);
- 		}
- 	}
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index f6561aa401c04..1e1d333d07ffe 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2410,7 +2410,7 @@ void rcu_force_quiescent_state(void)
+ 	struct rcu_node *rnp_old = NULL;
+ 
+ 	/* Funnel through hierarchy to reduce memory contention. */
+-	rnp = __this_cpu_read(rcu_data.mynode);
++	rnp = raw_cpu_read(rcu_data.mynode);
+ 	for (; rnp != NULL; rnp = rnp->parent) {
+ 		ret = (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) ||
+ 		       !raw_spin_trylock(&rnp->fqslock);
 -- 
 2.31.1.189.g2e36527f23
 
