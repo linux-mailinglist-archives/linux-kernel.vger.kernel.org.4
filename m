@@ -2,225 +2,396 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58073604BE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD3E604BE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiJSPnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
+        id S232375AbiJSPm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbiJSPm4 (ORCPT
+        with ESMTP id S229891AbiJSPmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:42:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B4DD0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666193920; x=1697729920;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=nfUitZriNjIpuBH2mg/ariMUUNHy1bXY+WrWJoNmMHY=;
-  b=faNpWKlq1dBGQSfkg8RjzIbnNlL8Su2qjC9kohfcboMAVocW/bKF4Evz
-   7rsvUX1hF0NdXjCE5pg2xYHjz7xGjZB9pp7LPrGWvjAdyA/v8EJXGvhqf
-   /uKgEPWwpXlPTXg1xZ/NAmHF6alu3xOdQ5hsadkeJH8dTw6hnezTMX35b
-   7H4yaA+kIMGaUtcsi9akKtXswx993PK5COfLyYNsG88IZ40TtHinnq8Z6
-   Ns79zzs4WioEzQjrgcI8SvxS+4TFZCZjFtMJ0FLWWQWGRURONuGP5dRWr
-   i+gYMu4m+WPCiuBzucaTMk4PxqEOsGkV+A0qWAceYnUxefxWkgXHYmGAV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="305180760"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="305180760"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 08:37:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="874487556"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="874487556"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Oct 2022 08:37:08 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 08:37:08 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 08:37:07 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 19 Oct 2022 08:37:07 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 19 Oct 2022 08:37:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pcg/P1uGeurlPdr0+iZ26r1M/1Iar0tFezL088mZsqaoe5mr5Fr/fKldGO2pBz8ITvT7M/GY9wBtB4mgzPYV1qQ8fJk1WF03gqd4V/VFzRbbCXo0G4aYz6j/NTNsZqTwATWO0WWngZzxiuLQuaBjolZYpwqgR+nczLrORh7rE8efXdFJ9r0A/4pYdljRtB8EIxlJhDWAi+M1Qlgqnj1ock0aFVCZqLbrA9zMrbQl+6ux6rRJzQaNEQAljpsdtK3+RXtUISKZdeMCVkq8gUJPiktB6+x2G1ngdzhoq6mPYau3E6lZ/qM916QsfrOzdX/TMznZXeKdAPUnCoV21I4ffA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uCVYnpVp84Nua2Z6VU6/9AVmfGBtRYbT4WIIVSxXPt4=;
- b=lQy+zPAp3GFI+oP6W4cBoclhrV7O1PbEodxhNDM9RE6nRirktxzmA8rYKYXP2r9WwPOSyJ/3g+/+BXhfkKGO74Nae3QTIn7otZZufivgliBYnZ7Hj6Q26P+TIMyfzwsA5AcjITdLob2vm4W7zxBA0Zp+lMPP6hdXKhOT6+dUweMpB3xlYO4jauZ0KsVBJu60GIVCfkGJN7hQ2c7jeT76RVEv1Q+aKwQsMnzlqpMtNwJ97BP0MfVkP0AcdK3CqEJhMP8SKk8oganHJfaL7INeohSWyxtYwx11AM38RRc5T720fEgjRRF1aoJ0UQVO86JhO1K2IgsKz0FwWYyTBssqAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by CO1PR11MB4786.namprd11.prod.outlook.com (2603:10b6:303:94::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Wed, 19 Oct
- 2022 15:37:05 +0000
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::effa:dd0:aa9e:2ae6]) by SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::effa:dd0:aa9e:2ae6%3]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
- 15:37:05 +0000
-Date:   Wed, 19 Oct 2022 08:36:33 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-CC:     Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Arjan van de Ven <arjan.van.de.ven@intel.com>,
-        Jacob Jun Pan <jacob.jun.pan@intel.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH 04/13] x86/x2apic: Support x2apic self IPI with NMI_VECTOR
-Message-ID: <Y1AZgWn5V/bTMAg7@a4bf019067fa.jf.intel.com>
-References: <20221014200913.14644-1-ashok.raj@intel.com>
- <20221014200913.14644-5-ashok.raj@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221014200913.14644-5-ashok.raj@intel.com>
-X-ClientProxiedBy: SJ0PR13CA0010.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::15) To SJ1PR11MB6201.namprd11.prod.outlook.com
- (2603:10b6:a03:45c::14)
+        Wed, 19 Oct 2022 11:42:19 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D3263D7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:38:16 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id b2so40924612eja.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XAm6L0DMrBfvhKiS0CKSKcNGjrlznN+VXy5BMzHTKe0=;
+        b=ev+AGbYnswADLymKG7gZAE9DQ3YiyUdpUAFrnC552vr0dcbNjCuWEGXg1VCLbr4LlQ
+         5f9K6su2qRHna7DfpL8luBpDcNhJJ9eYAQ8zjRKHFX9uqv9y8EPsvUrHH0c4l9fsVkp+
+         YDgeVxRsBuTS4iBCqsL5+sq+EHpfTqtb/FUeMOeThsDAp1e16gvJIr4tTCTXedBU7mhV
+         t/haTsdGGott89kcLAdrbrDMkhVAWrmQAkTlsNmH9uZ8v/4H37QFJJrd6ZFiFMXFXFUu
+         rkSyonQqwFRyGJ8Kn0wQ3z/xLRcTxdcQCKw0oEyVhohNsWFjALddTu5JZ5zbfSQQj2r7
+         aAOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XAm6L0DMrBfvhKiS0CKSKcNGjrlznN+VXy5BMzHTKe0=;
+        b=7uoMVaHRNW0GaKzw2TJUrdfLxEw/dLOyLTHLKvxmp0BJoPRpf0wlQzmcdE0RnXYN9u
+         TgquML14Z6dEZDn6I5W/naGPn89S25Vte2xNmanHfnNGXo1PQ8vg0uBE1+2Hf5TLMxHI
+         tTgw3ok6kMiv3+Gq74VuMdvBODuR62OZ5oFuiB/otth76keqdBR+drRWSRwXf+bvCJl9
+         oJsgGOH3z6eK19Tww8s6gJxtXVUoQ/Rw3m91EJ/MDYqlpz5StnwNoHue5DaqIoZ7KQiF
+         H0nkIEbDzO6/vyA1Zq1hZlpLGD3QlSbtz2ae3yfOYK9LCJbNJHgxhmPhWueUqq+eT5k4
+         PtDA==
+X-Gm-Message-State: ACrzQf1bgJwptfGWJ1ndG9RvyhEBpuR9m1pLlYMY54i72HqHoyL6IhS8
+        i8Mj1iLgv+0bDsUjogHDOMtGtFpqjnwCdFpyYOtnUQ==
+X-Google-Smtp-Source: AMsMyM41v7jE3Y52qXzK/nxnAxDyMdWUhttq5QKgPvsdrPJCXW9qEX5Nf0Cj6iVf1dsgxPOH9pF+fDwp550sGkB1byQ=
+X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id
+ wv11-20020a170907080b00b0077a86a1db52mr7584669ejb.294.1666193843591; Wed, 19
+ Oct 2022 08:37:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|CO1PR11MB4786:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50679aa7-4f69-4654-fddb-08dab1e7c65c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9aUOKMMFpnSuiMCe/IbpvT0hP54GyOiLdyxVgP/vcZ9PToEvXIKDTPWe6ZO+xQP+59s4zL2lIvj07Zasxkjiye7FrxDDwE6pW/EG7q9Hhfh9Un3wwy3Ra5olQmnXbcXxVcGqxwyaTBalszB+iTSDXGPhz4P/nu+WflM8JDZsXsjtODe5QQMr9UWWSHsNnsJz6d/ooryiDmOTRFs82GD/xCMsrazn0yPEAZ+ep462R6EXubNTabS+1bQ8mhjp4KfzfU5mZzRvjTkgoXiCEJGCNTmJPznfQXV1FQWHciDwRa/chfvp6261GUZfIJ2iMr5NLHrvYG6tAA4uITZ0RRgAOWERdV/lxNZSUKmJUTfzu4kYMCQPBTIQgVA9W3BQdRFd8BPUyOCbW5wiDj5L9JRjVDYzw19X6oc3HJWDZAOH+vtD4+K9WeYFdrfWuFlNtBQJHQnqLOtheb5XuL1bk1LmdJG78Kmw3IcG86XcQkr/us+NEv6V26pZ1lD7/fT3aw68RlHcUIxFCJ6CldlGezrs0DEUPp29c1Ovl/5IJajxj1S9+wRC0qMH0dC6/5C8O4Ur1yvFTTWPGlMz/4dfW5Sfsvq1ZF6MBW+Zwco3kHaRVfkD3QfpW6X10Th0cN//81iBIOoP00sKTvJmh1FEcb9rokJhCIpb490rl9+J7JB2uAim5ElfW/ZaKR0VfSLnwDpsCrK38jPzRQdxMoX2k9JfWw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(396003)(136003)(366004)(346002)(451199015)(26005)(6512007)(6506007)(41300700001)(44832011)(86362001)(83380400001)(54906003)(110136005)(8676002)(66476007)(4326008)(66946007)(66556008)(8936002)(5660300002)(6666004)(316002)(82960400001)(6486002)(38100700002)(2906002)(186003)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?u+cmuhTiWWtD4fCS6f7Sc9aJq2fqnv/AgDcqwOowxG101m8YEcxkzqMEUEVj?=
- =?us-ascii?Q?AO5eNTYaNOjyt6CHp7mgoTwEhuQEaL3ORGd6SuZa7Q7PAQZqmBa8/Ke+2WRp?=
- =?us-ascii?Q?udgANAV9MSA8i1XScvEhBQgJ8r/hFhggPeg11L8IKWKQz46hfID2aZl5Aks8?=
- =?us-ascii?Q?3qHNpS3fNgeC31JKNfushFPnDTjbRRejhocYxAtgcTQPrAbulG0CTns5HC1d?=
- =?us-ascii?Q?/jX/tP1Sugs0Njf/PQg/XhXZ1PNyHeYEkfkJmrhhyeT3b/fJ9dDLB8i20LMs?=
- =?us-ascii?Q?voKmufepL3A7Y1zMGm6CAC4aFt4Ge3eD+nIBXxQQzSxD8QfXMVYO6YIvcGwL?=
- =?us-ascii?Q?HN429DdMJDBkbhuBBXeBT/TbCSXerW1isVu9eoSBxVlzI+LvgV+eYE+KKO8I?=
- =?us-ascii?Q?mnr903xE7/8XRmJ+tS0oOpNHrAvEUEM542vCAkG5/SChdeXw6NPoLIhebFuF?=
- =?us-ascii?Q?IfO0wh0gbWVosoqvW0k7xfMaBIQVYvb2YZQnfW5imp5G2FlsWrlgCzXvy+oU?=
- =?us-ascii?Q?yRi6d1x71lC/Q0vUYOmm9RJiqChCpvc/KTpkZblYkmwrVBmZH5Rc6mq2sJ+i?=
- =?us-ascii?Q?FjWOFa4r1wsz/sIgX9AbIs2iImqnRvfiBx6nc0N8aQ4+MZ68npXq6UCuGsoq?=
- =?us-ascii?Q?BQwYdPS/qD0dhaoW9Vl3IxnlGYJbrg5TyZiiLTFpkLbOlOvNVHhEIi7dpvos?=
- =?us-ascii?Q?YfVp177oW9Rmy/BXEGHpPaPJQE4Ohw+gGsm1ty00bmYHvyEtfpvY/L910e/m?=
- =?us-ascii?Q?g9Xt5u9pO+kwamUx2sqrnwD5YzSax47ppaSo5+Z0HKwY37B6KNiB3sIlEgZx?=
- =?us-ascii?Q?saXc8YZm6VidTzmRd99d53MfbNGjfBX5mQQCXPqOid6OJEj6qnMXphQSK7An?=
- =?us-ascii?Q?dgr5O134xWKbZ7/8HO0t6oAkrw+Z9GqStTo3V17beHVqY/RfkJbn+1fU0Twe?=
- =?us-ascii?Q?MIf0qFxVypaq1PPhjdN5KZXKyazANRtoXD4IY8VjdjCblz0FFjRZ5t7kWxCs?=
- =?us-ascii?Q?9norbtX5jo3scuKVopxDhEdG7nu/OcSWGYCSObPbDAYXjsIMWhfrOMlmxHKO?=
- =?us-ascii?Q?Jlelf2dygSnqJcPBImxu5JaSeZrtVG0DB/u5+tsDs9hd7hystLnrNfxFOX6q?=
- =?us-ascii?Q?zR3Wm5Qs6btwJtIYbx0QmjaUSE9ueP8k7pSom/DozCB4ObG2Y8tQpiGY2NEn?=
- =?us-ascii?Q?k+IBXgtWsjnXPQJRuZOwhhTWPc7onTGTgO1NonHIAs4bR+nIOQZxH0TnhM0n?=
- =?us-ascii?Q?/y33iT81o98AhyGhRzVKkFM8mVq4KAMoEii7tvWlKChIAQcF5dRIZKy4CEVy?=
- =?us-ascii?Q?xkvSCmoVTfnJvaQKHnoFAGM/jFkVC7ds5VoDRgw1dgC1i2OWtPZo7dVMbuyA?=
- =?us-ascii?Q?6Z6aFzbtR7EUyAyvP24u7Hdc5rSCaOW7CJsqlPnY3ad3eLgkVWjk9WSdCIa7?=
- =?us-ascii?Q?WbH4vqllPPvsPcO7SnimzSYJb+Vr79xSSxsKju49eNOp1FKKwIpPigYI0AhI?=
- =?us-ascii?Q?YdTSGdcjFXxNpkDH745SrT4OtxC4PWX1ugE/JW1mwcRbab5ktfnoNrfQ2QOY?=
- =?us-ascii?Q?SjcEq+mw1DdjATytzbOKEy1bDuow5/0PUDBhY+Cpp89dPXsX8wojN5X4kn7l?=
- =?us-ascii?Q?2A=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50679aa7-4f69-4654-fddb-08dab1e7c65c
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 15:37:05.1141
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o8OQj6SqOLH0ELexMVrMqPTojFDjXCQuPwqYpNafYUOXzn9C61WZzPaicmZPLJeVQV/GdpQ8hWWUBbUw/JHpmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4786
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220628181838.2031-1-max.oss.09@gmail.com> <20220628181838.2031-3-max.oss.09@gmail.com>
+ <Y0gLdQleE64FQgn9@gaggiata.pivistrello.it> <CAPY8ntAszGzcp4XC=XKMHJvzCC9LHHf24pt=nZAUFKcK5=JM_Q@mail.gmail.com>
+ <Y0tfRhn/f1FiGDi4@pendragon.ideasonboard.com>
+In-Reply-To: <Y0tfRhn/f1FiGDi4@pendragon.ideasonboard.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Wed, 19 Oct 2022 16:37:08 +0100
+Message-ID: <CAPY8ntDwAJ3e5sdqD2up=12G1kMW7pczNhDZnWKzg1Yt8FqCrg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] dt-bindings: display: add new bus-format property
+ for panel-dpi
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     francesco.dolcini@toradex.com,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Marek Vasut <marex@denx.de>, max.krummenacher@toradex.com,
+        Rob Herring <robh@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 01:09:04PM -0700, Ashok Raj wrote:
-> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> 
-> X2APIC architecture introduced a dedicated register for sending self-IPI.
-> Though highly optimized for performance, its semantics limit the delivery
-> mode to fixed mode.  NMI vector is not supported, this created an
-> inconsistent behavior between X2APIC and others.
-> 
-> This patch adds support for X2APIC NMI_VECTOR by fall back to the slower
-> ICR method.
-> 
-> Suggested-by: Ashok Raj <ashok.raj@intel.com>
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Hi Laurent
 
-Forgot to add my sob here.. I;ll fix it in the resend.
-> ---
->  arch/x86/kernel/apic/x2apic_phys.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/apic/x2apic_phys.c b/arch/x86/kernel/apic/x2apic_phys.c
-> index 6bde05a86b4e..5f533b76adf6 100644
-> --- a/arch/x86/kernel/apic/x2apic_phys.c
-> +++ b/arch/x86/kernel/apic/x2apic_phys.c
-> @@ -149,7 +149,11 @@ int x2apic_phys_pkg_id(int initial_apicid, int index_msb)
->  
->  void x2apic_send_IPI_self(int vector)
->  {
-> -	apic_write(APIC_SELF_IPI, vector);
-> +	if (vector == NMI_VECTOR)
-> +		apic->send_IPI_mask(cpumask_of(smp_processor_id()),
-> +				    NMI_VECTOR);
-> +	else
-> +		apic_write(APIC_SELF_IPI, vector);
->  }
+On Sun, 16 Oct 2022 at 02:33, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hello,
+>
+> On Fri, Oct 14, 2022 at 03:08:49PM +0100, Dave Stevenson wrote:
+> > On Thu, 13 Oct 2022 at 13:58, Francesco Dolcini wrote:
+> > > On Tue, Jun 28, 2022 at 08:18:36PM +0200, Max Krummenacher wrote:
+> > > > From: Max Krummenacher <max.krummenacher@toradex.com>
+> > > >
+> > > > The property is used to set the enum bus_format and infer the bpc
+> > > > for a panel defined by 'panel-dpi'.
+> > > > This specifies how the panel is connected to the display interface.
+> > > >
+> > > > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> > > >
+> > >
+> > > <snip>
+> > >
+> > > > diff --git a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
+> > > > index dae0676b5c6e..52f5db03b6a8 100644
+> > > > --- a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
+> > > > +++ b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
+> > > > @@ -26,7 +26,28 @@ properties:
+> > > >    height-mm: true
+> > > >    label: true
+> > > >    panel-timing: true
+> > > > -  port: true
+> > > > +
+> > > > +  port:
+> > > > +    $ref: /schemas/graph.yaml#/$defs/port-base
+> > > > +    description:
+> > > > +      Input port node, receives the panel data.
+> > > > +
+> > > > +    properties:
+> > > > +      endpoint:
+> > > > +        $ref: /schemas/graph.yaml#/$defs/endpoint-base
+> > > > +
+> > > > +        properties:
+> > > > +          bus-format:
+> > > > +            $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +            minimum: 0x1001
+> > > > +            maximum: 0x1fff
+> > > > +            description: |
+> > > > +              Describes how the display panel is connected to the display interface.
+> > > > +              Valid values are defined in <dt-bindings/display/dt-media-bus-format.h>.
+> > > > +              The mapping between the color/significance of the panel lines to the
+> > > > +              parallel data lines are defined in:
+> > > > +              https://www.kernel.org/doc/html/v5.17/userspace-api/media/v4l/subdev-formats.html#packed-rgb-formats
+> > > > +
+> > >
+> > > Last month I had the chance to talk in person about this topic with
+> > > Dave, Marek and Max in Dublin.
+> > >
+> > > My understanding is that this change is addressing a general need, Dave
+> > > confirmed me they have a downstream patch for raspberrypi [1].
+> > >
+> > > From what I could tell the only concern is about the actual encoding of
+> > > this `bus-format` property.
+> > >
+> > > I am personally convinced that a simple enum is the way to go, I think
+> > > that Marek proposal is adding complexity and not flexibility (from my
+> > > understanding Dave is on the same page, just correct me if I
+> > > misunderstood you).
+> >
+> > Yes I agree with you here.
+> >
+> > This binding is for the panel, and currently the only path to pass the
+> > panel mode to the DPI transmitter is one or more MEDIA_BUS_FMT_* enums
+> > in struct drm_display_info *bus_formats.
+> >
+> > Looking at Marek's comment over DSI and data-lanes, yes both source
+> > and sink could advertise a data-lanes property to cover the condition
+> > where they aren't wired up in a 1:1 fashion. Reality is that most
+> > drivers don't support reordering the lanes - looking at the bindings,
+> > only one (msm) documents the use of data-lanes on the host side.
+> > rcar_mipi_dsi looks at the number of lanes specified only, and then
+> > checks that the number requested by the device is <= the number
+> > configured.
+> >
+> > As I see it, the comparison here is that this "bus-format" property is
+> > the equivalent of the data-lanes on the sink, and is the desired
+> > number of lanes value passed from sink to source (one integer, not a
+> > mapping).
+> > If the source can reorder the lanes, then that is a property of the
+> > source. This binding is for the sink, and so isn't a reasonable
+> > comparison. It also doesn't have to be called "bus-format" on the
+> > source, and can take a totally different form.
+> > I'll admit that I know data-lane configuration more from CSI2, but
+> > within V4L2 it is the node that can support reordering that should
+> > have the lanes in a non-incrementing order, and that is normally the
+> > SoC rather than the sensor. The same would seem to apply here - it's
+> > the SoC that can remap the signals, not the panel.
+> >
+> > It could be argued that for DPI the panel should only advertise the
+> > panel's bit depth for each channel, not the padding. The panel is
+> > generic and could handle any wiring/padding options, and it isn't
+> > necessarily a simple 16/18/24/32 bit bus representation, just a
+> > collection of N wires.
+> > Padding and wiring is a function of the DPI transmitter / SoC, or
+> > potentially an interconnect node between the two.
+>
+> Sooo... I'm not sure where to start :-)
+>
+> I think the trouble when describing the connection between a source and
+> a sink in DT is that none of the source or sink is an ideal place to
+> describe properties of the connection.
+>
+> For DSI we have it relatively easy, as we only have to describe the
+> number of lanes that are routed on the board and possibly how the lanes
+> are rearranged. The former is a value that is common between the source
+> and the sink, that's the easiest case, it can be specified in both DT
+> nodes. The latter is a bit more complicated, and was solved by allowing
+> specifying lane reordering on both the source and the sink. As there is
+> typically only one of the two components that will support lane
+> reordering (if any), DTs will usually specify a 1:1 mapping on one side,
+> and possibly reorder on the other side. If both the source and the sink
+> support reordering, setting data-lanes = <1 2> on both sides would lead
+> to a different configuration than data-lanes = <2 1>, but both would
+> work the same (I'm not sure why anyone would want the latter though).
+> There may thus be multiple ways to describe a working setup, but that's
+> fine, the complexity is manageable, and any hardware configuration can
+> be described.
+>
+> The nice thing with DSI is that the actual data format doesn't depend on
+> the board configuration (provided of course that enough lanes are
+> available to sustain the required bandwidth). For DPI, things can be
+> more difficult. In the test below, "format" refers to how data bits are
+> mapped to hardware lines, similarly in concept to the media bus codes.
+>
+> I see three different cases at the hardware level:
+>
+> - Either or both the sink or the source support a single format. This
+>   means that the side that supports multiple formats will always use the
+>   same format. If data lines are rearranged, the format output by the
+>   source may not match the format received by the sink, but the hardware
+>   configuration of both the sink and the source is effectively fixed to
+>   system-specific values.
+>
+> - Both the sink and the source support multiple formats, but only one
+>   combination of formats is possible with how the data lines are routed.
+>   This case is very similar to the previous one at the hardware level,
+>   only one configuration is possible.
+>
+> - Both the sink and the source support multiple formats, and multiple
+>   format combinations can lead to working configurations. This isn't an
+>   uncommon case, there are DPI panels with 24 data lines that can
+>   support both RGB666 and RGB888.
+>
+> At the software level, there are also multiple options:
+>
+> - Both sides could specify the device configuration in DT, using media
+>   bus codes or any other set of standard or device-specific properties.
+>   As this would specify a single configuration, it would map quite fine
+>   to the first two hardware cases. Each driver would read its own
+>   properties and configure the device accordingly. There would be no
+>   need for communication between the drivers at runtime in this case.
+>
+>   This could also support the third hardware case, but would limit it to
+>   one of the supported configurations, without allowing the other ones
+>   to be selected at runtime.
+>
+>   This scheme is similar to data-lanes, in the sense that each side
+>   reads its own hardcoded configuration from DT. It does however differ
+>   in that the data format gets hardcoded as well, unlike DSI where the
+>   data formats needs to be communicated at runtime between the drivers.
+>   As, like DSI, it requires both sides to specify their hardware
+>   configuration in DT, interoperability between sources and sinks would
+>   require all DT bindings for all DPI devices to adhere to this. They
+>   may not have to specify their configuration using the same set of
+>   properties, but they would all need to specify it in DT. This would
+>   thus, I think, lead to a dead end for the third hardware case.
+>
+> - The two sides could communicate at runtime to dynamically negotiate
+>   their configuration. Some form of runtime configuration is required to
+>   fully support the third hardware case, and it could also support the
+>   other two cases.
+>
+>   The trouble here, beside how to express the required data in DT, is
+>   how that communication would be handled. Let's consider a case where
+>   data lines are "remapped":
+>
+>   - The display controller that has a D[23:0] output bus
+>   - The panel that has a D[17:0] bus
+>   - The data lines connections from the display controller to the panel
+>     are D[23:18] -> D[17:12], D[15:10] -> D[11:6], D[7:2] -> D[5:0],
+>     with the display controller's D[17:16], D[9:8] and D[1:0] outputs
+>     unconnected
+>   - The panel only supports RGB666
+>   - The display controller supports both RGB888 and RGB666, and outputs
+>     RGB666 as 00RRRRRR00GGGGGG00BBBBBB
 
-Wanted to send this early if people are planning to test
+Note that you're also effectively advocating for dropping all BGRxxx
+variants from panel definitions, as well as the CPAD variants. All of
+those would be handled in the wiring description. Not an issue, just
+worth flagging.
 
-Similar helper is required for legacy xapic as well. The lack of it helped
-test the timeout path's :-).. I'll integrated it when i send the next round
-with feedback once i have enough. I'll also send this in the next update.
+>   This means that the only possibly configuration is the display
+>   controller outputting RGB888 and the panel receiving RGB666. If we
+>   expressed that as media bus codes in DT, the panel would would
+>   communicate its RGB666 input format to the display controller, which
+>   wouldn't know that it would have to output RGB888.
+>
+>   Of course, in this particular example, only one hardware configuration
+>   is possible, so we could support it by specifying the media bus code
+>   in both DT nodes, but that won't scale to cases where multiple
+>   configurations are possible.
 
-diff --git a/arch/x86/kernel/apic/ipi.c b/arch/x86/kernel/apic/ipi.c
-index 2a6509e8c840..e967c49609ef 100644
---- a/arch/x86/kernel/apic/ipi.c
-+++ b/arch/x86/kernel/apic/ipi.c
-@@ -239,7 +239,11 @@ void default_send_IPI_all(int vector)
+I'll agree that the existing framework is broken in many cases, but
+it's broken for ALL panel drivers, not just panel-dpi.
+Any of the current drivers with specific compatible strings that
+provide two or more bus formats have no mechanism for negotiating or
+being told which has been chosen.
+Any mapping that isn't 1:1 can't be represented.
 
- void default_send_IPI_self(int vector)
- {
--       __default_send_IPI_shortcut(APIC_DEST_SELF, vector);
-+       if (unlikely(vector == NMI_VECTOR))
-+               apic->send_IPI_mask(cpumask_of(smp_processor_id()),
-+                                   NMI_VECTOR);
-+       else
-+               __default_send_IPI_shortcut(APIC_DEST_SELF, vector);
- }
+This binding change for dpi-panel is just to bring it up to the same
+level of brokenness as all other panels.
+Yes it's DT ABI, but almost all the issues raised are about other brokenness.
 
- #ifdef CONFIG_X86_32
+> The easy optin is to consider that most use cases are in the first two
+> hardware categories, specify the media bus code in DT on both sides, and
+> consider that support for the third category can be added later. I'm
+> worried that we would then corner ourselves, as explained above, because
+> this scheme requires all devices involved to specify their hardcoded
+> configuration in DT.
+>
+> Will there then be a path forward that wouldn't
+> break the DT ABI ? Even if there was, it would mean that all driver
+> would then need to support two sets of DT properties, leading to a
+> painful transition period on the driver side.
+
+Very few displays need to read their format from DT - dpi-panel is the
+only one as it allows a level of configuration from DT.
+If the panel driver has a defined compatible string, then the
+format(s) is/are in the code and not DT.
+
+Once you get beyond the one entry in DT, it's an internal kernel API
+and therefore can be reworked at a later date.
 
 
+If and when someone needs to extend DPI transmitters to read DT for
+simple mappings, then create and use a helper function to do the
+parsing. Currently the helper would return a MEDIA_BUS_FMT_ code, but
+internally it can have gone through the correct sets of hoops to
+either read DT, follow the bridge chain with
+atomic_get_input_bus_fmts, or otherwise find the panel to get a
+format. (This assumes that there is one true and correct method for
+getting the format which is implemented by all drivers).
 
->  
->  static struct apic apic_x2apic_phys __ro_after_init = {
-> -- 
-> 2.34.1
-> 
+Should there be a situation further down the road where there is a
+need to extend that further, then a new helper function needs to be
+added that is able to read either DT API and convert between them. The
+existing helper will also need updating to support conversion from the
+new DT API.
+Converting from a "bus-format" to a more complete description for a
+new driver should be trivial with a lookup table. Converting from a
+new DT API to a single mbus format should be possible (reverse the
+previous lookup table), but you have to accept that there are new DT
+configurations that can not be expressed by mbus format, and therefore
+that the helper function can return an error.
+
+DPI transmitter drivers can be converted to the new helper as
+required, or potentially if they can't support arbitrary routing then
+they stay on the old helper forever as it will work both new and old
+bindings.
+
+
+Does this one patch for one driver really back ourselves into a corner
+that can't be handled?
+
+The one case I can think of as potentially an issue is if *bus_formats
+is removed totally from struct drm_display_info to be replaced by
+something else more generic. Under that situation you may need to
+match up an existing DT file using bus-format for a padded or BGR
+format with a brave new world where the panel advertises a DPI
+descriptor that is normally 1:1 and the DPI transmitter has the
+mapping. Even then I think is is possible as the DPI transmitter won't
+have a mapping in the old DT. It will then be looking at the
+configuration provided by the panel which will be one of the standard
+table lookups for an MEDIA_BUS_FMT_xxx_, and that gets us back to the
+same configuration as before.
+
+Thanks.
+  Dave
+
+> > > The current proposal is already encoding the exact bit placing as
+> > > described in Documentation/userspace-api/media/v4l/subdev-formats.rst [2],
+> > > this enumeration can be extended to address any future needs
+> > > and I would not invent a new one to define the exact same
+> > > things (and using the same enum was also suggested by Rob).
+> > >
+> > > Marek: you told me that you had some concern about some valid use case
+> > > not covered by this solution, would you mind explaining why that would
+> > > not be covered with an addition on this enumeration?
+> >
+> > All the MEDIA_BUS_FMT_* enums are explicitly defined with regard to
+> > the colour component bit positions. Should someone be in the position
+> > of needing to implement a YUV or similar DPI display, converting these
+> > enums into the relevant new structure will be straightforward, so
+> > backwards compatibility can be achieved easily.
+> >
+> > > Any other opinion on this topic? How can we move this forward?
+> > >
+> > > Francesco
+> > >
+> > > [1] https://github.com/raspberrypi/linux/commit/8e43f1898191b43aa7ed6e6ca3a4cd28709af86d
+> > > [2] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/subdev-formats.html
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
