@@ -2,166 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1026047CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA41B604841
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbiJSNqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
+        id S230040AbiJSNxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbiJSNpA (ORCPT
+        with ESMTP id S233595AbiJSNwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:45:00 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D910E11C38;
-        Wed, 19 Oct 2022 06:31:48 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
-        t=1666186272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kLONnTrgE41xLuoR7aINxfaHvykieYVHakm2mQu46pE=;
-        b=KCZ3cXrxe+PB+8Vud62pouWmnw8EOrEex984T5Iqz55u/3CuMNV+j9NEpU0qmBBqMQwwno
-        2kiDr8xHqGnAVtyDZjovRWv0xynLRDYgI2msDGiegwnTNuKz536SnCuyoLj24hxnyyAr2D
-        /qnxY+I1brSoE4oqkqUtTBupqe+KRGPadrgYw+VEbMOQNWJZvtZr58lna8z8kSk38Cswmo
-        Y+XyVQ3WoFbyprmYvjEfITuVJMZZfXmZslH86lkUfJfuxtzmwu1SLSIvwDoySbhb0+epnS
-        BqCzGWNHZiEkOdizwMN6OBUqVj9xtYCxqOTZfMsuOqaTv/7kOdGXP7y9LVO9/A==
-From:   Rui Li <me@lirui.org>
-To:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Wu XiangCheng <wu.xiangcheng@linux.dev>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rui Li <me@lirui.org>
-Subject: [PATCH v3 2/2] docs/zh_CN: Add userspace-api/ebpf Chinese translation
-Date:   Wed, 19 Oct 2022 21:30:22 +0800
-Message-Id: <cdd100d92752f76827fa7abfcd9903b857d71044.1666185911.git.me@lirui.org>
-In-Reply-To: <cover.1666185911.git.me@lirui.org>
-References: <cover.1666185911.git.me@lirui.org>
+        Wed, 19 Oct 2022 09:52:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBC2185422;
+        Wed, 19 Oct 2022 06:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666186557; x=1697722557;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=4xcGc4T12PBypY/VcZfHNkEly5yZ/s7CT5KUy36zg78=;
+  b=jjhzCoBCsLf8VUs0R+QfGydIe7QYMFm556unX6I3R1DhSqiZ6WdqdGVa
+   b58y8RqAbpOUVWcVU80uo6UdKSAEaP58z78cTXYknf8jnPI1EPw1Ko8CS
+   9P4GSLacFbYoEP5y0IdzcamCNPNMyiKLNICDGy3Sb384VgKaZcR10bNVB
+   RA8w2ffKnvwlH2hIji1lwf7aova5NGJGlNbXdroBiWEj3jQJb4F+KSwx+
+   P8m2wZLALph4TDFXT2aZIqb6t4vHFkYos0euU2OjLo9a0tQGtZztObxhN
+   m5uvSoc3lGKdeFUgCz0ogBy9KOvVgmRg9BL0ZqEQxRM9EEY9rXf4luzXk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="286801355"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="286801355"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 06:35:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="624137726"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="624137726"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 19 Oct 2022 06:35:14 -0700
+Date:   Wed, 19 Oct 2022 21:30:43 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Message-ID: <20221019133043.GB3496045@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <Yyi+l3+p9lbBAC4M@google.com>
+ <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
+ <20220926142330.GC2658254@chaop.bj.intel.com>
+ <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
+ <YzN9gYn1uwHopthW@google.com>
+ <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
+ <20221013133457.GA3263142@chaop.bj.intel.com>
+ <CA+EHjTzZ2zsm7Ru_OKCZg9FCYESgZsmB=7ScKRh6ZN4=4OZ3gw@mail.gmail.com>
+ <20221017145856.GB3417432@chaop.bj.intel.com>
+ <CA+EHjTyiU230am0cuWc7xBBirGocPWGmyqCskhTytA10xpigYQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTyiU230am0cuWc7xBBirGocPWGmyqCskhTytA10xpigYQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Translate the following documents into Chinese:
+On Mon, Oct 17, 2022 at 08:05:10PM +0100, Fuad Tabba wrote:
+> Hi,
+> 
+> > > > Using both private_fd and userspace_addr is only needed in TDX and other
+> > > > confidential computing scenarios, pKVM may only use private_fd if the fd
+> > > > can also be mmaped as a whole to userspace as Sean suggested.
+> > >
+> > > That does work in practice, for now at least, and is what I do in my
+> > > current port. However, the naming and how the API is defined as
+> > > implied by the name and the documentation. By calling the field
+> > > private_fd, it does imply that it should not be mapped, which is also
+> > > what api.rst says in PATCH v8 5/8. My worry is that in that case pKVM
+> > > would be mis/ab-using this interface, and that future changes could
+> > > cause unforeseen issues for pKVM.
+> >
+> > That is fairly enough. We can change the naming and the documents.
+> >
+> > >
+> > > Maybe renaming this to something like "guest_fp", and specifying in
+> > > the documentation that it can be restricted, e.g., instead of "the
+> > > content of the private memory is invisible to userspace" something
+> > > along the lines of  "the content of the guest memory may be restricted
+> > > to userspace".
+> >
+> > Some other candidates in my mind:
+> > - restricted_fd: to pair with the mm side restricted_memfd
+> > - protected_fd: as Sean suggested before
+> > - fd: how it's explained relies on the memslot.flag.
+> 
+> All these sound good, since they all capture the potential use cases.
+> Restricted might be the most logical choice if that's going to also
+> become the name for the mem_fd.
 
-- userspace-api/ebpf/index.rst
-- userspace-api/ebpf/syscall.rst
+Thanks, I will use 'restricted' for them. e.g.:
+- memfd_restricted() syscall
+- restricted_fd
+- restricted_offset
 
-Signed-off-by: Rui Li <me@lirui.org>
----
-Changes since v2:
-- Remove long English reference
-- Remove ebpf from TODO
+The memslot flags will still be KVM_MEM_PRIVATE, since I think pKVM will
+create its own one?
 
-Changes since v1:
-- Translate bpf subcommand title
-- Align title
-- Add space after doc path
----
- .../zh_CN/userspace-api/ebpf/index.rst        | 22 ++++++++++++++
- .../zh_CN/userspace-api/ebpf/syscall.rst      | 29 +++++++++++++++++++
- .../zh_CN/userspace-api/index.rst             |  6 +++-
- 3 files changed, 56 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
- create mode 100644 Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
-
-diff --git a/Documentation/translations/zh_CN/userspace-api/ebpf/index.rst b/Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
-new file mode 100644
-index 000000000000..d52c7052f101
---- /dev/null
-+++ b/Documentation/translations/zh_CN/userspace-api/ebpf/index.rst
-@@ -0,0 +1,22 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/userspace-api/ebpf/index.rst
-+
-+:翻译:
-+
-+ 李睿 Rui Li <me@lirui.org>
-+
-+eBPF 用户空间API
-+================
-+
-+eBPF是一种在Linux内核中提供沙箱化运行环境的机制，它可以在不改变内核源码或加载
-+内核模块的情况下扩展运行时和编写工具。eBPF程序能够被附加到各种内核子系统中，包
-+括网络，跟踪和Linux安全模块(LSM)等。
-+
-+关于eBPF的内部内核文档，请查看 Documentation/bpf/index.rst 。
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+   syscall
-diff --git a/Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst b/Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
-new file mode 100644
-index 000000000000..47e2a59ae45d
---- /dev/null
-+++ b/Documentation/translations/zh_CN/userspace-api/ebpf/syscall.rst
-@@ -0,0 +1,29 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/userspace-api/ebpf/syscall.rst
-+
-+:翻译:
-+
-+ 李睿 Rui Li <me@lirui.org>
-+
-+eBPF Syscall
-+------------
-+
-+:作者:
-+    - Alexei Starovoitov <ast@kernel.org>
-+    - Joe Stringer <joe@wand.net.nz>
-+    - Michael Kerrisk <mtk.manpages@gmail.com>
-+
-+bpf syscall的主要信息可以在 `man-pages`_ 中的 `bpf(2)`_ 找到。
-+
-+bpf() 子命令参考
-+~~~~~~~~~~~~~~~~
-+
-+子命令在以下内核代码中：
-+
-+include/uapi/linux/bpf.h
-+
-+.. Links:
-+.. _man-pages: https://www.kernel.org/doc/man-pages/
-+.. _bpf(2): https://man7.org/linux/man-pages/man2/bpf.2.html
-diff --git a/Documentation/translations/zh_CN/userspace-api/index.rst b/Documentation/translations/zh_CN/userspace-api/index.rst
-index 3b834fe7e33b..12c63d81c663 100644
---- a/Documentation/translations/zh_CN/userspace-api/index.rst
-+++ b/Documentation/translations/zh_CN/userspace-api/index.rst
-@@ -21,6 +21,11 @@ Linux 内核用户空间API指南
- 
- 	   目录
- 
-+.. toctree::
-+   :maxdepth: 2
-+
-+   ebpf/index
-+
- TODOList:
- 
- * no_new_privs
-@@ -29,7 +34,6 @@ TODOList:
- * unshare
- * spec_ctrl
- * accelerators/ocxl
--* ebpf/index
- * ioctl/index
- * iommu
- * media/index
--- 
-2.30.2
-
+Chao
+> 
+> Thanks,
+> /fuad
+> 
+> > Thanks,
+> > Chao
+> > >
+> > > What do you think?
+> > >
+> > > Cheers,
+> > > /fuad
+> > >
+> > > >
+> > > > Thanks,
+> > > > Chao
+> > > > >
+> > > > > Cheers,
+> > > > > /fuad
