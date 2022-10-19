@@ -2,144 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA6560511E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F8960511F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiJSUOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S230388AbiJSUOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiJSUOM (ORCPT
+        with ESMTP id S230244AbiJSUOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:14:12 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3671C73ED
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:14:12 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id n130so20533512oia.6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kqJOFlfwNgCDzAUg+3GKgd5GjZJIWzZ3Ope902HuuIc=;
-        b=aamPcz5cH2f8vrWESZ8tn5FtLYZ0e2DUYmpGuRUSftaqxaK1qlNpUlih4yCfZesLbY
-         k0GC/vrRRBwmINiUlgmBYLEoi54Rw1e61DBNjVJ3m1zIZqV5DlC0sj43HJPpaprwDQFF
-         gtom64pXNAd5XfaKkKu8OfnRqwFcsGO59fopaEzxI+Ap7brT85i96IbVXUMNhS/1fYf3
-         HQlTdAojQumAEuhFodP9w5LLXb7y33T4FKd9OcDEjDPXwPXKJ44Jpz94UUXC3PwQVjMl
-         QA9RGuLFUuKtd1T2IrpyBNFCweBnL8MQXxLPcdSKwTw76yFEOuexU0IjNjvN+I5dIKJ0
-         Skcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kqJOFlfwNgCDzAUg+3GKgd5GjZJIWzZ3Ope902HuuIc=;
-        b=TmDj6ooXERcfa1SmMriJHfoECpJY6e7kNbMZCFYtnn592+qIeh+gU5y1hTOKKY284K
-         W+pG0AD4Zc2PD/aUIZGntGAc9Y4NRcNgIj9iKFTgWTOLTa6GCoenx2qJbYn4yQsyzkpY
-         yq1V8nejuCd2nljD5uhcjtUxM+Sou67lFByAuH5Htxrv0rL/WxOoylizIqDAoYBAeeUn
-         8gprpQY1ygXLCckwa0fK+0zhim6qpD3++U3xMqohj879AaMHm1tr9tZXwhELUH4m7NP8
-         TERbsW5nQe5nrWB3vXSeO529L1gAZQQjsOkh0gltii52A+ey00K3rFYVQqnRLDOLCwWh
-         xbyA==
-X-Gm-Message-State: ACrzQf3M3IEjmG7ayH38Po1J03DHwDMtQxoypmBEgSOjoiYAk0IAySQ1
-        UaRKf6bsENh4Kr/lu4T0G7vyUznL8gYV4w==
-X-Google-Smtp-Source: AMsMyM6ZjthZ89X/AzB9A91vqAp+Yy+SUd6tr8hw1WsJG+8UbSs3dNoWv5Uxjsb5wSL4CoQUU7urSw==
-X-Received: by 2002:a17:90b:278c:b0:20a:e1e6:5340 with SMTP id pw12-20020a17090b278c00b0020ae1e65340mr47245894pjb.239.1666210440194;
-        Wed, 19 Oct 2022 13:14:00 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902dac600b0018542a1b553sm10954895plx.127.2022.10.19.13.13.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 13:13:59 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 20:13:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 16/46] KVM: x86: hyper-v: Don't use
- sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
-Message-ID: <Y1BahCzO4jxFC9Ey@google.com>
-References: <20221004123956.188909-1-vkuznets@redhat.com>
- <20221004123956.188909-17-vkuznets@redhat.com>
+        Wed, 19 Oct 2022 16:14:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F621B867E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:14:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C060B825E2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:14:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D1CC433C1;
+        Wed, 19 Oct 2022 20:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666210452;
+        bh=FF9KbNdQHNh5m0gRXO+KOo0OL+lC7nTVEehSa0aIgP8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=SRl92ku75ud54oQvG8QH8BzfmVKYxQYsk+dzgPMOj0s+FUkIoFBmtl2p6aI/i1Vnw
+         VJLWRDlYIGUMfie9r2qSSh3u99HN5fM+tLMo3S6ZdwlnUXR+6Or3hIr+y7KTZRUVWy
+         LpWhuVgdg0iV/YrS7ySBJcgTUbnQrEgnPR6oJBorUCtwTqOMHgEmRBKJTMal59osZv
+         21K41MB9XgMD1uzxwAzO5ShGfrHfQTlY0Iq6vlyhsMX+zKSZVT5Qn/pnjPCUh2SRJO
+         clK5e1+MHMSwiPeBHcv3QjXeecWSLUamp+7RY3N9nsiiVomlolBnTivGON9yjPlovl
+         tUmsYBorV9soQ==
+Date:   Wed, 19 Oct 2022 13:14:10 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+Subject: Re: [PATCH V2] xen/virtio: Handle PCI devices which Host controller
+ is described in DT
+In-Reply-To: <af1a47f4-be0a-141d-8e53-0be303486a1a@epam.com>
+Message-ID: <alpine.DEB.2.22.394.2210191313070.3873@ubuntu-linux-20-04-desktop>
+References: <20221015153409.918775-1-olekstysh@gmail.com> <alpine.DEB.2.22.394.2210181734440.4587@ubuntu-linux-20-04-desktop> <af1a47f4-be0a-141d-8e53-0be303486a1a@epam.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004123956.188909-17-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1494198937-1666210452=:3873"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
-> @@ -2034,7 +2056,10 @@ static void kvm_send_ipi_to_many(struct kvm *kvm, u32 vector,
->  	unsigned long i;
->  
->  	kvm_for_each_vcpu(i, vcpu, kvm) {
-> -		if (vcpu_bitmap && !test_bit(i, vcpu_bitmap))
-> +		if (sparse_banks &&
-> +		    !hv_is_vp_in_sparse_set(kvm_hv_get_vpindex(vcpu),
-> +					    valid_bank_mask,
-> +					    sparse_banks))
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Nit, this fits on two lines and IMO is slightly easier on the eyes:
+--8323329-1494198937-1666210452=:3873
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-		if (sparse_banks &&
-		    !hv_is_vp_in_sparse_set(kvm_hv_get_vpindex(vcpu),
-					    valid_bank_mask, sparse_banks))
-			continue;
+On Wed, 19 Oct 2022, Oleksandr Tyshchenko wrote:
+> On 19.10.22 03:58, Stefano Stabellini wrote:
+> > On Sat, 15 Oct 2022, Oleksandr Tyshchenko wrote:
+> >> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> >>
+> >> Use the same "xen-grant-dma" device concept for the PCI devices
+> >> behind device-tree based PCI Host controller, but with one modification.
+> >> Unlike for platform devices, we cannot use generic IOMMU bindings
+> >> (iommus property), as we need to support more flexible configuration.
+> >> The problem is that PCI devices under the single PCI Host controller
+> >> may have the backends running in different Xen domains and thus have
+> >> different endpoints ID (backend domains ID).
+> >>
+> >> So use generic PCI-IOMMU bindings instead (iommu-map/iommu-map-mask
+> >> properties) which allows us to describe relationship between PCI
+> >> devices and backend domains ID properly.
+> >>
+> >> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> > Now that I understood the approach and the reasons for it, I can review
+> > the patch :-)
+> 
+> perfect, thanks.
+> 
+> 
+> >
+> > Please add an example of the bindings in the commit message.
+> 
+> ok, will do
+> 
+> 
+> >
+> >
+> >> ---
+> >> Slightly RFC. This is needed to support Xen grant mappings for virtio-pci devices
+> >> on Arm at some point in the future. The Xen toolstack side is not completely ready yet.
+> >> Here, for PCI devices we use more flexible way to pass backend domid to the guest
+> >> than for platform devices.
+> >>
+> >> Changes V1 -> V2:
+> >>     - update commit description
+> >>     - rebase
+> >>     - rework to use generic PCI-IOMMU bindings instead of generic IOMMU bindings
+> >>
+> >> Previous discussion is at:
+> >> https://urldefense.com/v3/__https://lore.kernel.org/xen-devel/20221006174804.2003029-1-olekstysh@gmail.com/__;!!GF_29dbcQIUBPA!xJPdZO3-3Wmgo_79HuDsD53RkH_eAN96NmwuwFE7dArt_xNYGdD6LeLsq4B_QPrrvX-x23tJl6jQlNqgyNjgzT2NE3Pqjg$  [lore[.]kernel[.]org]
+> >>
+> >> Based on:
+> >> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/log/?h=for-linus-6.1__;!!GF_29dbcQIUBPA!xJPdZO3-3Wmgo_79HuDsD53RkH_eAN96NmwuwFE7dArt_xNYGdD6LeLsq4B_QPrrvX-x23tJl6jQlNqgyNjgzT2J40LOxg$  [git[.]kernel[.]org]
+> >> ---
+> >>   drivers/xen/grant-dma-ops.c | 87 ++++++++++++++++++++++++++++++++-----
+> >>   1 file changed, 76 insertions(+), 11 deletions(-)
+> >>
+> >> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> >> index daa525df7bdc..b79d9d6ce154 100644
+> >> --- a/drivers/xen/grant-dma-ops.c
+> >> +++ b/drivers/xen/grant-dma-ops.c
+> >> @@ -10,6 +10,7 @@
+> >>   #include <linux/module.h>
+> >>   #include <linux/dma-map-ops.h>
+> >>   #include <linux/of.h>
+> >> +#include <linux/pci.h>
+> >>   #include <linux/pfn.h>
+> >>   #include <linux/xarray.h>
+> >>   #include <linux/virtio_anchor.h>
+> >> @@ -292,12 +293,55 @@ static const struct dma_map_ops xen_grant_dma_ops = {
+> >>   	.dma_supported = xen_grant_dma_supported,
+> >>   };
+> >>   
+> >> +static struct device_node *xen_dt_get_pci_host_node(struct device *dev)
+> >> +{
+> >> +	struct pci_dev *pdev = to_pci_dev(dev);
+> >> +	struct pci_bus *bus = pdev->bus;
+> >> +
+> >> +	/* Walk up to the root bus to look for PCI Host controller */
+> >> +	while (!pci_is_root_bus(bus))
+> >> +		bus = bus->parent;
+> >> +
+> >> +	return of_node_get(bus->bridge->parent->of_node);
+> >> +}
+> > It seems silly that we need to walk the hierachy that way, but I
+> > couldn't find another way to do it
+> 
+> I also couldn't, but is it a really problem? This code is only gets 
+> called during initialization.
+> 
+> 
+> >
+> >
+> >> +static struct device_node *xen_dt_get_node(struct device *dev)
+> >> +{
+> >> +	if (dev_is_pci(dev))
+> >> +		return xen_dt_get_pci_host_node(dev);
+> >> +
+> >> +	return of_node_get(dev->of_node);
+> >> +}
+> >> +
+> >> +static int xen_dt_map_id(struct device *dev, struct device_node **iommu_np,
+> >> +			 u32 *sid)
+> >> +{
+> >> +	struct pci_dev *pdev = to_pci_dev(dev);
+> >> +	u32 rid = PCI_DEVID(pdev->bus->number, pdev->devfn);
+> >> +	struct device_node *host_np;
+> >> +	int ret;
+> >> +
+> >> +	host_np = xen_dt_get_pci_host_node(dev);
+> >> +	if (!host_np)
+> >> +		return -ENODEV;
+> >> +
+> >> +	ret = of_map_id(host_np, rid, "iommu-map", "iommu-map-mask", iommu_np, sid);
+> >> +	of_node_put(host_np);
+> >> +	return ret;
+> >> +}
+> >> +
+> >>   static bool xen_is_dt_grant_dma_device(struct device *dev)
+> >>   {
+> >> -	struct device_node *iommu_np;
+> >> +	struct device_node *iommu_np = NULL;
+> >>   	bool has_iommu;
+> >>   
+> >> -	iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
+> >> +	if (dev_is_pci(dev)) {
+> >> +		if (xen_dt_map_id(dev, &iommu_np, NULL))
+> >> +			return false;
+> >> +	} else
+> >> +		iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
+> >> +
+> >>   	has_iommu = iommu_np &&
+> >>   		    of_device_is_compatible(iommu_np, "xen,grant-dma");
+> >>   	of_node_put(iommu_np);
+> >> @@ -307,9 +351,17 @@ static bool xen_is_dt_grant_dma_device(struct device *dev)
+> >>   
+> >>   bool xen_is_grant_dma_device(struct device *dev)
+> >>   {
+> >> +	struct device_node *np;
+> >> +
+> >>   	/* XXX Handle only DT devices for now */
+> >> -	if (dev->of_node)
+> >> -		return xen_is_dt_grant_dma_device(dev);
+> >> +	np = xen_dt_get_node(dev);
+> >> +	if (np) {
+> >> +		bool ret;
+> >> +
+> >> +		ret = xen_is_dt_grant_dma_device(dev);
+> >> +		of_node_put(np);
+> >> +		return ret;
+> >> +	}
+> > We don't need to walk the PCI hierachy twice. Maybe we can add the
+> > of_node check directly to xen_is_dt_grant_dma_device?
+> 
+> 
+> Good point. I was thinking that we would likely need the following 
+> construct is the future:
+> 
+> 
+> if (np) /* DT device */
+>     return xen_is_dt_grant_dma_device(dev);
+> else /* ACPI device */
+>     return xen_is_acpi_grant_dma_device(dev);
+> 
+> 
+> So, if we use the check directly in xen_is_dt_grant_dma_device() and it 
+> returns false we won't be able to recognize a reason then
+> (whether dev is not related to DT, or it is related to DT but it is not 
+> a "xen,grant-dma" device).
 
->  			continue;
->  
->  		/* We fail only when APIC is disabled */
-> @@ -2047,7 +2072,6 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  	struct kvm *kvm = vcpu->kvm;
->  	struct hv_send_ipi_ex send_ipi_ex;
->  	struct hv_send_ipi send_ipi;
-> -	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
->  	u64 valid_bank_mask;
->  	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
->  	u32 vector;
-> @@ -2109,13 +2133,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
->  		return HV_STATUS_INVALID_HYPERCALL_INPUT;
->  
-> -	if (all_cpus) {
-> -		kvm_send_ipi_to_many(kvm, vector, NULL);
-> -	} else {
-> -		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
-> -
-> -		kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
-> -	}
-> +	kvm_hv_send_ipi_to_many(kvm, vector, all_cpus ? NULL : sparse_banks, valid_bank_mask);
+That problem can easily be solved by having xen_is_dt_grant_dma_device
+return more than 2 possible values. It could return an int for example,
+with 3 valid values.
 
-Any objection to not using a ternary operator?
 
-	if (all_cpus)
-		kvm_hv_send_ipi_to_many(kvm, vector, NULL, 0);
-	else
-		kvm_hv_send_ipi_to_many(kvm, vector, sparse_banks, valid_bank_mask);
+> But, I am ok to eliminate one walk right now, then we will see.
+> 
+> xen_is_grant_dma_device() will became the following:
+> 
+> bool xen_is_grant_dma_device(struct device *dev)
+> {
+>      return xen_is_dt_grant_dma_device(dev);
+> }
+> 
+> xen_is_dt_grant_dma_device() will need to gain a check that dev->of_node 
+> is not a NULL.
+> 
+> 
+> Shall I?
 
-Mostly because it's somewhat arbitrary that earlier code ensures valid_bank_mask
-is set in the all_cpus=true case, e.g. arguably KVM doesn't need to do the var_cnt
-sanity check in the all_cpus case:
-
-		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
-		if (all_cpus)
-			goto check_and_send_ipi;
-
-		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
-		if (hc->var_cnt != hweight64(valid_bank_mask))
-			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-
-		if (!hc->var_cnt)
-			goto ret_success;
+--8323329-1494198937-1666210452=:3873--
