@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D2A604F0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08CB604F12
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiJSRlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S231351AbiJSRl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiJSRkz (ORCPT
+        with ESMTP id S231218AbiJSRlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:40:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9548C19DDAF;
-        Wed, 19 Oct 2022 10:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666201254; x=1697737254;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=MCt32TjPlGarJR5rG8qyjVG72iAEmUkFwrBifFx18wc=;
-  b=UlLMWMY7gRuNmjFvFYFI5u5cley/oziF9LgVRCDQGbqpPTK7SRFPfc/5
-   RjQpJFTIJ9HtssRA0PLw8iTO0pfE92+FEie7xbtxiNs6Xo6TBjALSNDMH
-   2yawwZWvYgOxT5pP5MPLuaxB4tHbWYorZuxZnZn/vRyg4q98OVzl8sG/i
-   2Rv6vAoWt6Ozew4vDFZX9MJc19Ewsm3IPIKvmB/LlqoJtlPg3MdmplKlE
-   kLhQKeFPIb8+p7KeMv7m1CVhUG87SU3x8Dd0gcWWKNaKvjQRR6rRBL64F
-   EIENeK0mx0CwMCWYnj0odOxgIB7Vif4yY5V6IKlIUa0fRd5xqhJl+yJvc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="306476583"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="306476583"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 10:40:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="607207072"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="607207072"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga006.jf.intel.com with SMTP; 19 Oct 2022 10:40:50 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Wed, 19 Oct 2022 20:40:49 +0300
-Date:   Wed, 19 Oct 2022 20:40:49 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] ACPI: PCI: Fix device reference counting in
- acpi_get_pci_dev()
-Message-ID: <Y1A2oR02JjXqMOiQ@intel.com>
-References: <Y0+7Ug9Yh6J6uHVr@intel.com>
- <20221019165326.GA23726@bhelgaas>
+        Wed, 19 Oct 2022 13:41:23 -0400
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4179190469;
+        Wed, 19 Oct 2022 10:41:22 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id pb15so634651pjb.5;
+        Wed, 19 Oct 2022 10:41:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ibazVU8VEWiKjzH5tdP3qJYeOezJN/1hV2XwUlu7gXQ=;
+        b=ruK9PbxcCpCfLDahmXQss+5aP1CNhgBTBXb38XLXG7eZzQna9gvIvBVXoj/b4xx6x1
+         ZoiursHj9+udLBP+8mzt2zmsf36TenfxfpsQ9gHacPrGQi+I3F2SOo0ep2RDFJK79VKr
+         vY7irfw7yhbw3FJOAmllfxqQEOp4klJGcpaAuJV4HMal5bFeTdJCGD+pMfPJPvGDobDi
+         IA60wGPUN86afUE1SlCcsO0mGTvrvCzwdU/UtWbZghtaJwgFCwuqbXY0KXg1EqJCO3tj
+         i4oKlYUQtNOed6GDAYHEGiO6s6mBnyOC7WWlITklo0lIep+DLrqi+zKhYeavJB5YaHFT
+         xtUA==
+X-Gm-Message-State: ACrzQf3hYivM5dVv9j61OtJofwi15aB+nda1MffX7Di03trkHepkNfqT
+        nSdRVixcBDBVtUSfx7TBQTE=
+X-Google-Smtp-Source: AMsMyM5RiypiDpnGljhlkl0RiKjvcXhr7OYC9m9blVZ36DsY8NWaD1KWWSvz+ZwSfdwtcZyWqtaNcw==
+X-Received: by 2002:a17:90b:1808:b0:20d:4e7f:5f53 with SMTP id lw8-20020a17090b180800b0020d4e7f5f53mr45790427pjb.170.1666201282060;
+        Wed, 19 Oct 2022 10:41:22 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:8280:2606:af57:d34? ([2620:15c:211:201:8280:2606:af57:d34])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170903124500b00174c0dd29f0sm11128116plh.144.2022.10.19.10.41.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 10:41:21 -0700 (PDT)
+Message-ID: <b49d7e9b-fdee-915a-436a-bb624addf9a2@acm.org>
+Date:   Wed, 19 Oct 2022 10:41:18 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019165326.GA23726@bhelgaas>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] null_blk: allow teardown on request timeout
+Content-Language: en-US
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "shinichiro.kawasaki@wdc.com" <shinichiro.kawasaki@wdc.com>,
+        "vincent.fu@samsung.com" <vincent.fu@samsung.com>,
+        "yukuai3@huawei.com" <yukuai3@huawei.com>
+References: <20221016052006.11126-1-kch@nvidia.com>
+ <f2baa3b4-81c9-a6d8-0c26-3e695dad5d10@acm.org>
+ <d3e05b4e-466b-844c-b815-79233856e527@nvidia.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <d3e05b4e-466b-844c-b815-79233856e527@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:53:26AM -0500, Bjorn Helgaas wrote:
-> On Wed, Oct 19, 2022 at 11:54:42AM +0300, Ville Syrjälä wrote:
-> > On Tue, Oct 18, 2022 at 07:34:03PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > 
-> > > Commit 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()") failed
-> > > to reference count the device returned by acpi_get_pci_dev() as
-> > > expected by its callers which in some cases may cause device objects
-> > > to be dropped prematurely.
-> > > 
-> > > Add the missing get_device() to acpi_get_pci_dev().
-> > > 
-> > > Fixes: 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()")
-> > 
-> > FYI this (and the rtc-cmos regression discussed in
-> > https://lore.kernel.org/linux-acpi/5887691.lOV4Wx5bFT@kreacher/)
-> > took down the entire Intel gfx CI.
-> 
-> >From 1000 miles away and zero background with the gfx CI, this sounds
-> like "our CI system, whose purpose is to find bugs, found one", which
-> is a good thing.
+On 10/18/22 21:19, Chaitanya Kulkarni wrote:
+> Also, I've listed the problem that I've seen first hand for keeping the
+> device in the system that is non-responsive due to request timeouts, in
+> that case we should let user decide whether user wants to remove or keep
+> the device in the system instead of forcing user to keep the device in
+> the system bringing down whole system, and these problems are really
+> hard to debug even with Teledyne LeCroy [1]. This patch follows the same
+> philosophy where user can decide to opt in for removal with module
+> parameter. Once opt-in user knows what he is getting into.
 
-Mostly. It's certainly better than it going entirely undetected.
+Hi Chaitanya,
 
-Sadly we found it after rc1 because no one was really looking at
-linux-next results. Something we need to improve.
+ From commit f2298c0403b0 ("null_blk: multi queue aware block test 
+driver"): "Written to facilitate testing of the blk-mq code". I'm not 
+sure of this but adding a mechanism like the one in this patch may fall 
+outside the original scope of the null_blk driver.
 
-But ideally it would have been found by some other CI system
-whose primary job is to prevent bugs in those subsystems, rather
-than the one whose primary job is to prevent bugs in gfx drivers.
-Also ideally it wouldn't have been me bisecting this :P
+Thanks,
 
-The biggest downside of bugs reaching our CI via rc1/etc. is that
-it pretty much stops everyone from getting premerge results for
-their graphics driver patches since the CI keeps tripping over
-the already existing bugs. But I guess you can call this one a
-somewhat self inflicted wound and we should just try harder to
-keep new code out of our tree until it's known to be healthy.
-
--- 
-Ville Syrjälä
-Intel
+Bart.
