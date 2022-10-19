@@ -2,158 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3C060571C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD08605752
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiJTGCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 02:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S230141AbiJTG3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 02:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiJTGCN (ORCPT
+        with ESMTP id S230089AbiJTG3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 02:02:13 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF2E578A2;
-        Wed, 19 Oct 2022 23:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc
-        :To:Subject:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=R+qHwRyTxbQVbHY+8ZiLC+qOo5BYT31McH63U1LpObU=; b=cqxIjwpsX1snYmamwyOgmJsoeo
-        utFe/l24N8PwvPMVivljvhyccTzu16i0TmnD6qu6bBRM5dx5x1GiNdc84TXLa46GxadI24g1nMAQw
-        HURC6Vi78gs2nAWg/oXB6Kbt8dOdM3G0KHroY66wBXkC6nZnml4Hyo/fX+9+gnOD4sjIWXf2spikq
-        n7aqmKxyBHcvtJIdwvTdQQ5VFnh0Ri2ZpBqErwg4UOl8fg40xEY7SWvV7E0lYLoaLW4eBc3HdGEk1
-        kPC1bqyq3XmsRH2KMo57iGRAI4jcbyG7PGwDMA6nKv2j7QSJkdiNrrDiZzh/T536iA2teKW/aOYYx
-        6yeMtt8w==;
-Received: from [89.212.21.243] (port=55322 helo=[192.168.69.85])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1olOcy-00Cf1X-1W;
-        Thu, 20 Oct 2022 08:02:07 +0200
-Message-ID: <027af706-dc9f-3f8a-a6d4-44294ab846bb@norik.com>
-Date:   Thu, 20 Oct 2022 08:02:09 +0200
+        Thu, 20 Oct 2022 02:29:49 -0400
+X-Greylist: delayed 14403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 23:29:43 PDT
+Received: from bais.com.tw (60-249-164-131.hinet-ip.hinet.net [60.249.164.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0735211176;
+        Wed, 19 Oct 2022 23:29:40 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by bais.com.tw (Postfix) with ESMTP id 61D5858E80;
+        Thu, 20 Oct 2022 05:21:31 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at mailsrv.ebais.com.tw
+Received: from bais.com.tw ([127.0.0.1])
+        by localhost (bais.com.tw [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7fT85z9o3UgP; Thu, 20 Oct 2022 05:21:22 +0800 (CST)
+Content-Type: text/plain; charset="iso-8859-1"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=bais.com.tw; s=mail;
+        t=1666150140; bh=UhCgquW4/pX67F69E87DKagCwwUEweIbb7MPTZSfOwI=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=xysIVeLU0z5Nv8Pz8Xr7s469D2ucggvC2kcKQ26C/APagO067aYfVJR0ly2Sw9dhh
+         grr5mZFjFhYYwLUFJq5ETgOq2c9Bkkr0xCtridPoVs+lCBSe5vLbjdYJ8nWaZVH/m+
+         NwY+GosMKBtpdA/NN5IshTjdD0mZmkIVXbMhwnM0=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Andrej Picej <andrej.picej@norik.com>
-Subject: Re: [PATCH 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, shawnguo@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
-        kernel@pengutronix.de, s.hauer@pengutronix.de,
-        wim@linux-watchdog.org, robh+dt@kernel.org
-References: <20221019111714.1953262-1-andrej.picej@norik.com>
- <20221019111714.1953262-2-andrej.picej@norik.com>
- <20221019153306.GC4602@roeck-us.net>
-Content-Language: en-GB
-In-Reply-To: <20221019153306.GC4602@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Attn:Please Read
+To:     Recipients <marsach@bais.com.tw>
+From:   "Money Help Finance Loan" <marsach@bais.com.tw>
+Date:   Tue, 18 Oct 2022 20:28:44 -0700
+Reply-To: nikkifenton770@gmail.com
+Message-Id: <20221019212131.61D5858E80@bais.com.tw>
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,PDS_RDNS_DYNAMIC_FP,
+        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Good Day To You
 
+I've viewed your profile on Linkedin regarding a proposal that has somethin=
+g in common with you, kindly reply back for more details on my private emai=
+l: nikkifenton770@gmail.com
 
-On 19. 10. 22 17:33, Guenter Roeck wrote:
-> On Wed, Oct 19, 2022 at 01:17:12PM +0200, Andrej Picej wrote:
->> Putting device into the "Suspend-To-Idle" mode causes watchdog to
->> trigger and reset the board after set watchdog timeout period elapses.
->>
->> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
->> watchdog in WAIT mode. This is done by setting WDW bit in WCR
->> (Watchdog Control Register) Watchdog operation is restored after exiting
->> WAIT mode as expected. WAIT mode coresponds with Linux's
->> "Suspend-To-Idle".
->>
-> 
-> Does that have any impact on suspend/resume handling in the driver,
-> specifically with the "no_ping" variable used for fsl,imx7d-wdt ?
-
-I assumed that it has the same impact as WDZST bit, which is also set 
-for imx7d. So probably no impact. But I'm not really sure (unfortunately 
-I don't have access to imx7d to test). If I understand correctly the 
-"no-ping" variable is used because there is no support for low-power 
-modes for imx7d. So imx7d devices never enter any of the low-power modes 
-so WDZST and WDW bit shouldn't have effect on that.
-
-What I wanted to do with this "fsl,suspend-in-wait" is that if people 
-run into the problems where device resets undesirably during WAIT mode, 
-they can set this property and the watchdog will be suspended in WAIT 
-mode. Default behaviour of the driver stays the same if the flag is not set.
-
-This was tested with imx6ul devices.
-
-Best regards,
-Andrej
-
-> 
-> Thanks,
-> Guenter
-> 
->> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
->> ---
->>   drivers/watchdog/imx2_wdt.c | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
->> index d0c5d47ddede..150ba83ce176 100644
->> --- a/drivers/watchdog/imx2_wdt.c
->> +++ b/drivers/watchdog/imx2_wdt.c
->> @@ -35,6 +35,7 @@
->>   
->>   #define IMX2_WDT_WCR		0x00		/* Control Register */
->>   #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
->> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable for WAIT */
->>   #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset WDOG_B */
->>   #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset Signal */
->>   #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable */
->> @@ -67,6 +68,7 @@ struct imx2_wdt_device {
->>   	bool ext_reset;
->>   	bool clk_is_on;
->>   	bool no_ping;
->> +	bool sleep_wait;
->>   };
->>   
->>   static bool nowayout = WATCHDOG_NOWAYOUT;
->> @@ -129,6 +131,9 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
->>   
->>   	/* Suspend timer in low power mode, write once-only */
->>   	val |= IMX2_WDT_WCR_WDZST;
->> +	/* Suspend timer in low power WAIT mode, write once-only */
->> +	if (wdev->sleep_wait)
->> +		val |= IMX2_WDT_WCR_WDW;
->>   	/* Strip the old watchdog Time-Out value */
->>   	val &= ~IMX2_WDT_WCR_WT;
->>   	/* Generate internal chip-level reset if WDOG times out */
->> @@ -313,6 +318,8 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
->>   
->>   	wdev->ext_reset = of_property_read_bool(dev->of_node,
->>   						"fsl,ext-reset-output");
->> +	wdev->sleep_wait = of_property_read_bool(dev->of_node,
->> +						"fsl,suspend-in-wait");
->>   	/*
->>   	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
->>   	 * during suspend.
->> -- 
->> 2.25.1
->>
+Thanks,
+Nikki Fenton,
+nikkifenton770@gmail.com
