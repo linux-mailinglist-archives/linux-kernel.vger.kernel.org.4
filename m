@@ -2,140 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D9D604CC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C23604CC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiJSQGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
+        id S230256AbiJSQG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbiJSQGb (ORCPT
+        with ESMTP id S232122AbiJSQGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:06:31 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084E5150F8C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:05:09 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id r22so22767851ljn.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2YCDHsYWcIY96mUtSqodHKe31qpMLaWDuKz478pSr00=;
-        b=KHhsVmAmNGZintp/YIDAd4pSn0E5e4hSFuGvoY3fG+1VV7PhE59oWENJD8FG30TEEr
-         0ilGqC28Ik/psjVonwjvg6NUDSasG8ZN0rYkQepcXQrRdA1IfXqweE6Oc9Z7ZlD2s4WS
-         XNZUohjsBfohMb9ulzAdIq+6ukXKwPMby4m5bpGY43zRnf7RSCvK3lrX4U3Gcj+2I2bw
-         V+heCQ3Huv6aFh6iRdVogsawozkdU0dKgJh9KhUgVsoLAr5P0oO7CzHtUiMS8aT7NDmR
-         5GSfkUadveG1N/RNPalqsJPUwO9rI4cetSRu7q+suD6YvwYLCPSRdlxEjkmEda/Tl2ZG
-         IRBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YCDHsYWcIY96mUtSqodHKe31qpMLaWDuKz478pSr00=;
-        b=yFPMT4AoPw04EW1NX6VY8K3Yn+uzHHBaJivms9TVjJ4CTQL6HfeyK2BULtcJihnrUQ
-         k81hQL1ofdUxbD+WSGmEogHSRSPMVXi1yweU2g7pbGsmq6I/CoY7GjWwVx+dfVuSSSmH
-         lQyZ8I1jdnDd0shF5VPJ8pGrXSJDBFgw92Kmct7rV8Lf6WnOvlP1l9QOoAZTiUgxQN+W
-         48wKgqk5VJXbEBueeQdynXjuT84ETMNQPR/7YfstE8FLPNi9SUFCaisOClfWGIdkYeu/
-         0ET3o1dhOCsMHXR2Pl9kWjmlLHPtDQGSYriCUu+xM3TQiuSb2hdVZ+GLZpUWct4doYzU
-         D2+w==
-X-Gm-Message-State: ACrzQf3R3wsGcW0lYMwN/ODiNP3osSp2yiMUoJBIAWYz/3soIptwwkdC
-        UIMPs+t3+hO/0ujLSnoyCqSyq0YRNnJhug==
-X-Google-Smtp-Source: AMsMyM6fO5UYQBYujCKvc6CqltqY94UNh41cSyMFXrGhpAbyftVmOEivr9+vv8IHfUrxjlCqIyuwKA==
-X-Received: by 2002:a05:651c:88e:b0:26d:dd92:73e7 with SMTP id d14-20020a05651c088e00b0026ddd9273e7mr3094859ljq.503.1666195507195;
-        Wed, 19 Oct 2022 09:05:07 -0700 (PDT)
-Received: from elroy-temp-vm ([20.240.130.248])
-        by smtp.gmail.com with ESMTPSA id g3-20020a056512118300b0049876c1bb24sm2337411lfr.225.2022.10.19.09.05.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 09:05:06 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 16:05:06 +0000
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     greg@kroah.com, forest@alittletooquiet.net,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: [PATCH] staging: vt6655: Fix Lines should not end with a '('
-Message-ID: <Y1AgMjTsmy3C5qcK@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        Wed, 19 Oct 2022 12:06:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C3F182C6F;
+        Wed, 19 Oct 2022 09:05:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0769AB824C4;
+        Wed, 19 Oct 2022 16:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F133C433D6;
+        Wed, 19 Oct 2022 16:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666195531;
+        bh=DIW+v8xkiPis7AGg4MAy9kjNE+tuDnmqL4alFuqnN0E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=boUh9bXBug5QWmLoVGC89zpgd81p6NwxyoNVdcXYhM3QtRmBo1DKrEG9H+z9s7UyN
+         +u1QGHlZan8ofhlkJ4/jVvFcSMeLfZX0iffS5ZSpGY4vkeWjaSlsqE3wP2m7TfTORq
+         WWTOClc2lI+IZWVubi2PaVqDuHDhAA8XHO7gfgaivsj8PeU6l+Y0UWqyE/PPmef96i
+         O/Gr+qDR8nO0XT5t6Zp7I/7pUz39kSkFmSQtmuu5DPPk0uOMolzmdXSg2cKQ08JXas
+         1mWhpDm4YqUTI05r/g6byFjDwQz1Z6FYzyTC9Z9O4oAt12Hqjd9xkNbOOaajlSbqfh
+         iiR4w75JJ3pLQ==
+Date:   Wed, 19 Oct 2022 11:05:29 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <lenb@kernel.org>, rafael@kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH V3 1/4] ACPI / PCI: fix LPIC irq model default PCI IRQ
+ polarity
+Message-ID: <20221019160529.GA18372@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221009064431.18839-2-lvjianmin@loongson.cn>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code style warnings reported by checkpatch.
-Improve the layout of a function header:
-Put the first parameter immediately after the '(' and align the other
-parameters underneath it.
+In the subject and the commit log below, figure out whether you want
+to use "irq" or "IRQ" and do it consistently.  I vote for "IRQ".  Also
+consider subject lines for the other patches.  Stuff like this is
+trivial, but it's an excuse for whoever will handle this (not me in
+this case) to put it off.  I also add "()" after function names for
+clarity.
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
----
- drivers/staging/vt6655/rxtx.c | 44 ++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 24 deletions(-)
+On Sun, Oct 09, 2022 at 02:44:28PM +0800, Jianmin Lv wrote:
+> On LoongArch ACPI based systems, the irq trigger type of PCI devices
+> is high level, so high level triggered type is required to pass
+> to acpi_register_gsi when create irq mapping for PCI devices.
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 5bdb5176772c..ff855def0bd5 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -87,33 +87,29 @@ static const unsigned short wFB_Opt1[2][5] = {
- /*---------------------  Static Functions  --------------------------*/
- static
- void
--s_vFillRTSHead(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	void *pvRTS,
--	unsigned int	cbFrameLength,
--	bool bNeedAck,
--	bool bDisCRC,
--	struct ieee80211_hdr *hdr,
--	unsigned short wCurrentRate,
--	unsigned char byFBOption
--);
-+s_vFillRTSHead(struct vnt_private *pDevice,
-+		unsigned char byPktType,
-+		void *pvRTS,
-+		unsigned int	cbFrameLength,
-+		bool bNeedAck,
-+		bool bDisCRC,
-+		struct ieee80211_hdr *hdr,
-+		unsigned short wCurrentRate,
-+		unsigned char byFBOption);
- 
- static
- void
--s_vGenerateTxParameter(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	struct vnt_tx_fifo_head *,
--	void *pvRrvTime,
--	void *pvRTS,
--	void *pvCTS,
--	unsigned int	cbFrameSize,
--	bool bNeedACK,
--	unsigned int	uDMAIdx,
--	void *psEthHeader,
--	unsigned short wCurrentRate
--);
-+s_vGenerateTxParameter(struct vnt_private *pDevice,
-+		unsigned char byPktType,
-+		struct vnt_tx_fifo_head *,
-+		void *pvRrvTime,
-+		void *pvRTS,
-+		void *pvCTS,
-+		unsigned int	cbFrameSize,
-+		bool bNeedACK,
-+		unsigned int	uDMAIdx,
-+		void *psEthHeader,
-+		unsigned short wCurrentRate);
- 
- static unsigned int
- s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
--- 
-2.34.1
+This isn't worded quite right.  The trigger type of PCI devices
+doesn't change just because you plug them into a LoongArch system
+instead of an x86 system.  The comment in the code reads better: The
+IRQs are active low from the perspective of PCI, but are inverted
+before the interrupt controller.
 
+Including a reference here to the spec that mentions this inversion
+would help a lot.
+
+s/when create mapping/when creating mappings/
+
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/acpi/pci_irq.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+> index 08e15774fb9f..ff30ceca2203 100644
+> --- a/drivers/acpi/pci_irq.c
+> +++ b/drivers/acpi/pci_irq.c
+> @@ -387,13 +387,15 @@ int acpi_pci_irq_enable(struct pci_dev *dev)
+>  	u8 pin;
+>  	int triggering = ACPI_LEVEL_SENSITIVE;
+>  	/*
+> -	 * On ARM systems with the GIC interrupt model, level interrupts
+> +	 * On ARM systems with the GIC interrupt model, or LoongArch
+> +	 * systems with the LPIC interrupt model, level interrupts
+>  	 * are always polarity high by specification; PCI legacy
+>  	 * IRQs lines are inverted before reaching the interrupt
+>  	 * controller and must therefore be considered active high
+>  	 * as default.
+>  	 */
+> -	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ?
+> +	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ||
+> +		       acpi_irq_model == ACPI_IRQ_MODEL_LPIC ?
+>  				      ACPI_ACTIVE_HIGH : ACPI_ACTIVE_LOW;
+>  	char *link = NULL;
+>  	char link_desc[16];
+> -- 
+> 2.31.1
+> 
