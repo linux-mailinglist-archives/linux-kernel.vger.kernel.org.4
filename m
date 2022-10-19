@@ -2,81 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84F4604084
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865E86042E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbiJSKBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S229632AbiJSLLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiJSKBU (ORCPT
+        with ESMTP id S232922AbiJSLKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:01:20 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756C112277E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:39:07 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id u10so28171660wrq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAFlOUOSDNnpuoT+qdniJV4n8MjtoOiXZ0ZGelulaWU=;
-        b=mxBYSXH83a8R2gqazBpTtCz7VO9xqsgjj2vXwj9nr1M6ylxMyqTveNpscOoPWCYCsA
-         eEzTpwgls/8waiWeVGKE1584hYuc3sHvIlMuh2rMc6NtmsDkFxefJBunGnAM739QREkw
-         vXDCNujfYlxtUAxITdcNpDx8WcahP+aq6jxtMM/QxXVOmZIJlcj0n/dQfH9gndSAliMu
-         vjOeW/8L13HSd457fpcbjtjfs9kPcBAT0NorhP0seOW5+RFoxm0L/GlCHESgl+4gpjmz
-         wt7sXgWS/b+c4gxd7/oc+uBTTE5IAjaxt1yE6VrtceXlFZizLGuPFtrtVyfJHf1mBMEE
-         wtdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CAFlOUOSDNnpuoT+qdniJV4n8MjtoOiXZ0ZGelulaWU=;
-        b=JYzEbbAOiHcE5WCAVdGwusQwxg0J5UB7+Q55CMuTovVhVPtvsemNXFfdHvgt/PkHzz
-         zvSjYzcOgu4aPGb5SjMVoPxa3NPI3GYP0c3/gFnZKQrnQR0bpC7X/UxKi0Alo0yDspWt
-         Sk1HJ9bDiTfdo6202eG9B8SPFc+VfJ4mpRyqMaL8P1No5Bj5FuNVeg43JiPH+Qg1Zc5C
-         xDdVUE/TiQvI2VB7tSjpR3RJPM4IHE4ZHAOeh9QJ2Dx1Ugfnd8jdVeowKutSbddQgJx2
-         htgEhaPgdWYLbe7Q20hhQV51r97iqGHWD6ukI9b5+pHBDCcrAPqs+/x1IfImw/a2JwqW
-         SbdQ==
-X-Gm-Message-State: ACrzQf3NPds5aHQEkS7fG80VFt/a0Sa/cnvPS9ElBbQwVuc4MoKqGM4W
-        eyiQTOL6mh3THLjgV3lxqqloOA==
-X-Google-Smtp-Source: AMsMyM50f/3OOKH1f22KJUuMMnPFOXKp4tez4aGFwbvdlYy/HHNOVo7/VLqR1PmpIjtixY1NE1R44g==
-X-Received: by 2002:a05:6000:12ca:b0:22e:6529:a764 with SMTP id l10-20020a05600012ca00b0022e6529a764mr4484971wrx.153.1666172206880;
-        Wed, 19 Oct 2022 02:36:46 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b15b:4b56:592a:c397? ([2a01:e0a:982:cbb0:b15b:4b56:592a:c397])
-        by smtp.gmail.com with ESMTPSA id k16-20020a5d6290000000b0022ae4f8395dsm12834601wru.96.2022.10.19.02.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 02:36:46 -0700 (PDT)
-Message-ID: <010ea9e1-4a66-61d4-94c5-2bec20ef928d@linaro.org>
-Date:   Wed, 19 Oct 2022 11:36:45 +0200
+        Wed, 19 Oct 2022 07:10:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D9210A7F5;
+        Wed, 19 Oct 2022 03:38:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BB71B822E3;
+        Wed, 19 Oct 2022 08:42:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D6AEC433D7;
+        Wed, 19 Oct 2022 08:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666168955;
+        bh=DuBg9+YDwGfVhiIKCEuJSBEIpdJSRSK0lHMA2+ye9Qk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PwnBkhXTuDQtJW3DpFhHttJU1ykUo7soO7SMyYCAUp/v6rQsHJFFJBkZuiIdQV96m
+         7bWYVTSgVY2L9LGN8CUWPv5+yg2EI9/A2jlWo9zZRb9ek+xWZ3u2Fw+gzSd4Z/K8FH
+         UaLeAuVNTPPk6oDkII08rMM6lxDwiiTZ24AqJ2T8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 6.0 072/862] dmaengine: qcom-adm: fix wrong sizeof config in slave_config
+Date:   Wed, 19 Oct 2022 10:22:39 +0200
+Message-Id: <20221019083253.109400728@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+References: <20221019083249.951566199@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 22/44] serial: meson: Use uart_xmit_advance()
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
- <20221019091151.6692-23-ilpo.jarvinen@linux.intel.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221019091151.6692-23-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,28 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 11:11, Ilpo Järvinen wrote:
-> Take advantage of the new uart_xmit_advance() helper.
-> 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->   drivers/tty/serial/meson_uart.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 056243c12836..74110017988a 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -162,8 +162,7 @@ static void meson_uart_start_tx(struct uart_port *port)
->   
->   		ch = xmit->buf[xmit->tail];
->   		writel(ch, port->membase + AML_UART_WFIFO);
-> -		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
-> -		port->icount.tx++;
-> +		uart_xmit_advance(port, 1);
->   	}
->   
->   	if (!uart_circ_empty(xmit)) {
+From: Christian Marangi <ansuelsmth@gmail.com>
+
+commit 7c8765308371be30f50c1b5b97618b731514b207 upstream.
+
+Fix broken slave_config function that uncorrectly compare the
+peripheral_size with the size of the config pointer instead of the size
+of the config struct. This cause the crci value to be ignored and cause
+a kernel panic on any slave that use adm driver.
+
+To fix this, compare to the size of the struct and NOT the size of the
+pointer.
+
+Fixes: 03de6b273805 ("dmaengine: qcom-adm: stop abusing slave_id config")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Cc: stable@vger.kernel.org # v5.17+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220915204844.3838-1-ansuelsmth@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/dma/qcom/qcom_adm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/dma/qcom/qcom_adm.c
++++ b/drivers/dma/qcom/qcom_adm.c
+@@ -494,7 +494,7 @@ static int adm_slave_config(struct dma_c
+ 
+ 	spin_lock_irqsave(&achan->vc.lock, flag);
+ 	memcpy(&achan->slave, cfg, sizeof(struct dma_slave_config));
+-	if (cfg->peripheral_size == sizeof(config))
++	if (cfg->peripheral_size == sizeof(*config))
+ 		achan->crci = config->crci;
+ 	spin_unlock_irqrestore(&achan->vc.lock, flag);
+ 
 
 
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
