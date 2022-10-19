@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7611D60481C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1338C604817
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiJSNuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S233008AbiJSNuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbiJSNs5 (ORCPT
+        with ESMTP id S233645AbiJSNsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:48:57 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32711BBEE2;
-        Wed, 19 Oct 2022 06:32:53 -0700 (PDT)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 86302E0018;
-        Wed, 19 Oct 2022 13:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1666186345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B4WZT0ijc4vr+yQWHuy8C2QHY5BLhRbeTNROpcFndPc=;
-        b=o3EnyrFn/BZ9wLYgskdr/Yz5E2HEnUC5VDVvCSe8kK/Cb+eCeTeiAOXfBVDsZsyN2MVyQP
-        aqWJDiXVy3b5y0ur4ojErVDDM0D3m8bfwbjaCEHHBJ8VV9y/DX627pFzvk9FWqgcKtkQWT
-        OcfkX6R5VEinSeWGSkfxXjIOUq7MKK9saWMOiVwa5i7TPWWfLWn90phJNE8Q89LlqYW9Yi
-        MgzEjUAObg+mIs6a31IHZljlVNygBUTGZXfjUwiDCjG1prvKn+jBd6ePiwCgyDTmPZNlWj
-        q0/18vCqFMUhdMyinLWf0/IoM3/pVCqOAKiulwoxmp264zzK09+50pSJoQOpkg==
-From:   =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     thomas.petazzoni@bootlin.com,
-        Kory Maincent <kory.maincent@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 6/6] clk: spear: Fix SSP clock definition on SPEAr600
-Date:   Wed, 19 Oct 2022 15:32:08 +0200
-Message-Id: <20221019133208.319626-7-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221019133208.319626-1-kory.maincent@bootlin.com>
-References: <20221019133208.319626-1-kory.maincent@bootlin.com>
+        Wed, 19 Oct 2022 09:48:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B21C8D5D;
+        Wed, 19 Oct 2022 06:32:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5BBD6CE20F0;
+        Wed, 19 Oct 2022 13:32:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0EA2C433D7;
+        Wed, 19 Oct 2022 13:32:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666186343;
+        bh=wgaCgIIQv6GL6KJIOFePc+gBrTKmB+z9ZIHuM3k0ifI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gnOGPipMSWDY3/Gk4UFGA+GUjpCTWJ/wH3w6Nl8iTKLPjDVt3LS5JAi07fYcmKU+f
+         DHJto78dkbY66u2AUdGwY7al5P+g+YORjXOArsNAAAXIs5d8qZ7w/HthI7m+kWwNKJ
+         Kjlcm4o3YKS3vCvahN3koioZqTeahxHJRo0xECgBHGivwXJXSbjl90EWWqWsGPLWY/
+         0sUpGvSml0a6UPyufDNyed9/90YMTsMqSdFGelX1azZJPSTelGFwTfmSpFpt+kpWwL
+         QrQ1pJiikXCH9Cw2ma6xqe3jSdZ2sqjz10GyUiiRfZUb3RBwsRB2mjtpoJWfqC7+0w
+         9UDB/9rw8trEw==
+Date:   Wed, 19 Oct 2022 19:02:19 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        dmaengine@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] dmaengine: idxd: Do not enable user type Work Queue
+ without Shared Virtual Addressing
+Message-ID: <Y0/8Y0xUuUoi3KvL@matsya>
+References: <20221014222541.3912195-1-fenghua.yu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014222541.3912195-1-fenghua.yu@intel.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+On 14-10-22, 15:25, Fenghua Yu wrote:
+> When the idxd_user_drv driver is bound to a Work Queue (WQ) device
+> without IOMMU or with IOMMU Passthrough without Shared Virtual
+> Addressing (SVA), the application gains direct access to physical
+> memory via the device by programming physical address to a submitted
+> descriptor. This allows direct userspace read and write access to
+> arbitrary physical memory. This is inconsistent with the security
+> goals of a good kernel API.
+> 
+> Unlike vfio_pci driver, the IDXD char device driver does not provide any
+> ways to pin user pages and translate the address from user VA to IOVA or
+> PA without IOMMU SVA. Therefore the application has no way to instruct the
+> device to perform DMA function. This makes the char device not usable for
+> normal application usage.
+> 
+> Since user type WQ without SVA cannot be used for normal application usage
+> and presents the security issue, bind idxd_user_drv driver and enable user
+> type WQ only when SVA is enabled (i.e. user PASID is enabled).
 
-There is no SPEAr600 device named "ssp-pl022.x". Instead, the description
-of the SSP (Synchronous Serial Port) was recently added to the Device Tree,
-and the device name is "xxx.spi", so we should associate the SSP gateable
-clock to these device names.
+Applied, thanks
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
- drivers/clk/spear/spear6xx_clock.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/clk/spear/spear6xx_clock.c b/drivers/clk/spear/spear6xx_clock.c
-index ee0ed89f2954..adfa118520c3 100644
---- a/drivers/clk/spear/spear6xx_clock.c
-+++ b/drivers/clk/spear/spear6xx_clock.c
-@@ -326,13 +326,13 @@ void __init spear6xx_clk_init(void __iomem *misc_base)
- 
- 	clk = clk_register_gate(NULL, "ssp0_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP0_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.0");
-+	clk_register_clkdev(clk, NULL, "d0100000.spi");
- 
- 	clk = clk_register_gate(NULL, "ssp1_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP1_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.1");
-+	clk_register_clkdev(clk, NULL, "d0180000.spi");
- 
- 	clk = clk_register_gate(NULL, "ssp2_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP2_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.2");
-+	clk_register_clkdev(clk, NULL, "d8180000.spi");
- }
 -- 
-2.25.1
-
+~Vinod
