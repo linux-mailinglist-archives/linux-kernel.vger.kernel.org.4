@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A83C605220
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D06605222
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiJSVlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S231165AbiJSVnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJSVll (ORCPT
+        with ESMTP id S230041AbiJSVnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:41:41 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECB3181498;
-        Wed, 19 Oct 2022 14:41:40 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id w18so43028029ejq.11;
-        Wed, 19 Oct 2022 14:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o8WVbpsQWkZ+HYgVPlUU83g3wBT8qpV9f8aRYDw+xB4=;
-        b=cEAJKA5nEfBougL3fXUAt9mX80pl9ItCrTyQf0NNeiA7ezTU4GxFRZhw3G2SvBllro
-         Bwh6LwOd9C51XI1+yp2pp0mmMxqPev6FXLM4ZATgURgBT3LnX4Ch4Nhg2Z4j4Jdw9J2E
-         rhCM7G8dtYsuo4LyLYthS6h58fWXytnw1Zg6UcnQZSYkq56+grvg3ypRn2K+wMaqpQPv
-         y6ZhJs7/RmVQ1VxJsegCpyCWBQSbCFG9IF050uEqfxtTi76OD70aueVwkqBXzwkaplDZ
-         yy0EyP93EuAOyjRZEHT1njcmqE6aJktkWlfro0bKb2K9seTlPe/OieJksKObkyxhDdhq
-         gO4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o8WVbpsQWkZ+HYgVPlUU83g3wBT8qpV9f8aRYDw+xB4=;
-        b=IanfUWSp2hoVyDb23ppnW8mjmfft3GREeyjlA7CYhM/F/D4vPT3PJYB0w1s6Rs7/e4
-         SCu2vgfW2wA0zhbfQIhgvkcjhJzSd3leZ4yTnrp0hVJoqdYcSCrAl06YZdM1JNoMJ4EL
-         LOZ8pMQvNS8AkUF79m/3wWzjDILPIW8kBFohR0mzv4deHITsTwalWLO6h+aK7eNK+rMn
-         t65/iVMR9a//sTYd/BIuDeFaEVepiNcoMG+NAjWVxeSie3WdLAfHcfsEpW5fTlogTH4S
-         k1v9KL8Yy7CqloRPgPKxvAcwC9xdj8BMFU2JJ3l5/UeMDM2YFHEYhE6UUFPQKGMhLus+
-         E5Sw==
-X-Gm-Message-State: ACrzQf00gZOl/5nb2055jPoesp1ONH1U2hXmfsdoCKrQr2PdBppd4Cq+
-        s+R4LHxtrfOX34rul/3tbTQ=
-X-Google-Smtp-Source: AMsMyM521Kei8HIdzVZzd3OEThiCKzGL8MBEhWFCpwxvMSm87WT2KiZ2UT2HH2Fsr0/aQsS+t1M7/A==
-X-Received: by 2002:a17:906:ee88:b0:78d:1a9a:b2db with SMTP id wt8-20020a170906ee8800b0078d1a9ab2dbmr8237604ejb.225.1666215698897;
-        Wed, 19 Oct 2022 14:41:38 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c23-c17e-7100-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c17e:7100::e63])
-        by smtp.googlemail.com with ESMTPSA id g2-20020a1709064e4200b0077016f4c6d4sm9457735ejw.55.2022.10.19.14.41.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 14:41:38 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH] hwmon: (jc42) Restore the min/max/critical temperatures on resume
-Date:   Wed, 19 Oct 2022 23:41:08 +0200
-Message-Id: <20221019214108.220319-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 19 Oct 2022 17:43:08 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50FD189811;
+        Wed, 19 Oct 2022 14:43:06 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id C5E325C01BD;
+        Wed, 19 Oct 2022 17:43:03 -0400 (EDT)
+Received: from imap42 ([10.202.2.92])
+  by compute2.internal (MEProxy); Wed, 19 Oct 2022 17:43:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666215783; x=1666302183; bh=aQhzaNxgmP
+        CyXkjqZukBXqR9C223jX01tp+/o3aRhkA=; b=BfPDdlcS9/mNcIKtN34nyQS6Sq
+        sUtCbJxWRckqV+agxcQMFjkJ6+Bmry+MSV96NMT4jyzk8wA5rw11PP/OQFtHV+hY
+        htybgCd3ycGUN2CTDmmO1gwSoQsiQmI3LIncYWSD5F9htDzL0mmRqAKEm4wiwqUi
+        I+h1sjiVM4EPx/KcmNWObAs+9FIlP1C1cbVxzFf52QDnwFCL462kGl/Hjt1Pmub9
+        /NtcZt+RjRGyySnFT3yluvoBsX2PDx9CT5wgcWGhxJKKKYEdu3771mWHEheLtc8O
+        D2VBY+yK+qT3KSFGcC8R840zGpTZ2yuimNWnZgFhwXX58u6qFsR70PNW5QRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666215783; x=1666302183; bh=aQhzaNxgmPCyXkjqZukBXqR9C223
+        jX01tp+/o3aRhkA=; b=rAFvv0nkZG7jG3ShrELqOF0m6svhEGCwSiPVQ0flBynd
+        xUXZMuFfpTE7x2oEwbcg8YOtlDXlzI5+iziNYUGovLQAAXgF0/1zDoqnuUO8U10p
+        JUBaMS9uYvk1rD54K0mqH28luaDz2erxf4CU8KBKmMM6sJrgtYEVoQy8ch0NqR9v
+        Zu1GPMwwz2iO6NNOObv569mFGGGHEUc5Vo+cJVo1zYrk3pDmJt2Okq3PZWsc4HjF
+        rwUZPitUQkR0Q7+pgoN3WCRlKLi9Q6NqD/vKvutemJ6aVCkpN+pkpdSyfIcW1+pR
+        /ONz6mvnkFywRqw60Y3tKz/YlKO5I0dSGOdQMlqyrQ==
+X-ME-Sender: <xms:Z29QY3PcYe6jd-m18QguZDsBnTodAw6oaKJQbwDPgLLDQ9kepn7ZfA>
+    <xme:Z29QYx9LtKdPCgNuC25lb0wUS2JEotEWlPGx6u90-KffanIwkQ2Jg59nGLRTm56sU
+    DlT7s8CIKFWSjSrkw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelhedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpefofgggkfgjfhffhffvvefutgesthdtredt
+    reertdenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurdighi
+    iiqeenucggtffrrghtthgvrhhnpedtudehudfhveduieeikeejudeljeffuddtieffieel
+    jedtudehhfekheehuedvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:Z29QY2QuNn3FDJtJlIVlBXNBCHdiqXzAsPzNGP2kRxNUUfgnLAeezQ>
+    <xmx:Z29QY7sE074oTYVpJacOXEO-w4FrNQxn4LWWDlyHtBmEPDaA6P9c1Q>
+    <xmx:Z29QY_fJwJjZvImL_pRJ47mwQd1H9dz1GJhwNhu7D4wLwnkCJyZBrw>
+    <xmx:Z29QY3HMgZhD1AIIEZ5QkR-EJdrqBO-Ja3oD2mbQvyA8YkW2AmECUw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6CD65BC0078; Wed, 19 Oct 2022 17:43:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <6ddd00bd-87d9-484e-8f2a-06f15a75a4df@app.fastmail.com>
+In-Reply-To: <20221019132201.kd35firo6ks6ph4j@wittgenstein>
+References: <f1e63e54-d88d-4b69-86f1-c0b4a0fd8035@app.fastmail.com>
+ <20221019132201.kd35firo6ks6ph4j@wittgenstein>
+Date:   Wed, 19 Oct 2022 15:42:42 -0600
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "Christian Brauner" <brauner@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Odd interaction with file capabilities and procfs files
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,70 +85,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The JC42 compatible thermal sensor on Kingston KSM32ES8/16ME DIMMs
-(using Micron E-Die) is an ST Microelectronics STTS2004 (manufacturer
-0x104a, device 0x2201). It does not keep the previously programmed
-minimum, maximum and critical temperatures after system suspend and
-resume (which is a shutdown / startup cycle for the JC42 temperature
-sensor). This results in an alarm on system resume because the hardware
-default for these values is 0°C (so any environment temperature greater
-than 0°C will trigger the alarm).
+Hi Christian,
 
-Example before system suspend:
-  jc42-i2c-0-1a
-  Adapter: SMBus PIIX4 adapter port 0 at 0b00
-  temp1:        +34.8°C  (low  =  +0.0°C)
-                         (high = +85.0°C, hyst = +85.0°C)
-                         (crit = +95.0°C, hyst = +95.0°C)
+On Wed, Oct 19, 2022, at 7:22 AM, Christian Brauner wrote:
+> On Tue, Oct 18, 2022 at 06:42:04PM -0600, Daniel Xu wrote:
+>> Hi,
+>> 
+>> (Going off get_maintainers.pl for fs/namei.c here)
+>> 
+>> I'm seeing some weird interactions with file capabilities and S_IRUSR
+>> procfs files. Best I can tell it doesn't occur with real files on my btrfs
+>> home partition.
+>> 
+>> Test program:
+>> 
+>>         #include <fcntl.h>
+>>         #include <stdio.h>
+>>         
+>>         int main()
+>>         {
+>>                 int fd = open("/proc/self/auxv", O_RDONLY);
+>>                 if (fd < 0) {
+>>                         perror("open");
+>>                         return 1;
+>>                 }
+>>        
+>>                 printf("ok\n");
+>>                 return 0;
+>>         }
+>> 
+>> Steps to reproduce:
+>> 
+>>         $ gcc main.c
+>>         $ ./a.out
+>>         ok
+>>         $ sudo setcap "cap_net_admin,cap_sys_admin+p" a.out
+>>         $ ./a.out
+>>         open: Permission denied
+>> 
+>> It's not obvious why this happens, even after spending a few hours
+>> going through the standard documentation and kernel code. It's
+>> intuitively odd b/c you'd think adding capabilities to the permitted
+>> set wouldn't affect functionality.
+>> 
+>> Best I could tell the -EACCES error occurs in the fallthrough codepath
+>> inside generic_permission().
+>> 
+>> Sorry if this is something dumb or obvious.
+>
+> Hey Daniel,
+>
+> No, this is neither dumb nor obvious. :)
+>
+> Basically, if you set fscaps then /proc/self/auxv will be owned by
+> root:root. You can verify this:
+>
+> #include <fcntl.h>
+> #include <sys/types.h>
+> #include <sys/stat.h>
+> #include <stdio.h>
+> #include <errno.h>
+> #include <unistd.h>
+>
+> int main()
+> {
+>         struct stat st;
+>         printf("%d | %d\n", getuid(), geteuid());
+>
+>         if (stat("/proc/self/auxv", &st)) {
+>                 fprintf(stderr, "stat: %d - %m\n", errno);
+>                 return 1;
+>         }
+>         printf("stat: %d | %d\n", st.st_uid, st.st_gid);
+>
+>         int fd = open("/proc/self/auxv", O_RDONLY);
+>         if (fd < 0) {
+>                 fprintf(stderr, "open: %d - %m\n", errno);
+>                 return 1;
+>         }
+>
+>         printf("ok\n");
+>         return 0;
+> }
+>
+> $ ./a.out
+> 1000 | 1000
+> stat: 1000 | 1000
+> ok
+> $ sudo setcap "cap_net_admin,cap_sys_admin+p" a.out
+> $ ./a.out
+> 1000 | 1000
+> stat: 0 | 0
+> open: 13 - Permission denied
+>
+> So acl_permission_check() fails and returns -EACCESS which will cause
+> generic_permission() to rely on capable_wrt_inode_uidgid() which checks
+> for CAP_DAC_READ_SEARCH which you don't have as an unprivileged user.
 
-Example after system resume (without this change):
-  jc42-i2c-0-1a
-  Adapter: SMBus PIIX4 adapter port 0 at 0b00
-  temp1:        +34.8°C  (low  =  +0.0°C)             ALARM (HIGH, CRIT)
-                         (high =  +0.0°C, hyst =  +0.0°C)
-                         (crit =  +0.0°C, hyst =  +0.0°C)
+Thanks for checking on this.
 
-Apply the previously read or previously programmed temperature limits on
-system resume. This fixes the alarm due to the hardware defaults of 0°C
-because the previously applied limits (from a userspace setting) are
-re-applied on system resume.
+That does explain explain the weirdness but at the expense of another
+question: why do fscaps cause /proc/self/auxv to be owned by root?
+Is that the correct semantics? This also seems rather unexpected.
 
-Fixes: 175c490c9e7f ("hwmon: (jc42) Add support for STTS2004 and AT30TSE004")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
-This is my first change to jc42. I tried to be defensive with applying
-the previous values by only configuring them if they are known valid. I
-only have this one set of JC42 compatible sensors but I can adapt the
-code here based on your suggestions.
+I'll take a look tonight and see if I can come up with any answers.
 
-
- drivers/hwmon/jc42.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index 30888feaf589..f98b28ff10ad 100644
---- a/drivers/hwmon/jc42.c
-+++ b/drivers/hwmon/jc42.c
-@@ -558,6 +558,19 @@ static int jc42_resume(struct device *dev)
- 	data->config &= ~JC42_CFG_SHUTDOWN;
- 	i2c_smbus_write_word_swapped(data->client, JC42_REG_CONFIG,
- 				     data->config);
-+
-+	if (data->valid || data->temp[t_min])
-+		i2c_smbus_write_word_swapped(data->client, temp_regs[t_min],
-+					     data->temp[t_min]);
-+
-+	if (data->valid || data->temp[t_max])
-+		i2c_smbus_write_word_swapped(data->client, temp_regs[t_max],
-+					     data->temp[t_max]);
-+
-+	if (data->valid || data->temp[t_crit])
-+		i2c_smbus_write_word_swapped(data->client, temp_regs[t_crit],
-+					     data->temp[t_crit]);
-+
- 	return 0;
- }
- 
--- 
-2.38.1
-
+Thanks,
+Daniel
