@@ -2,288 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFCB604E42
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249C3604E63
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJSRMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
+        id S230404AbiJSRQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJSRMX (ORCPT
+        with ESMTP id S230372AbiJSRQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:12:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927E51C115C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:12:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5CF1B82220
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 17:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D282C433D6;
-        Wed, 19 Oct 2022 17:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666199539;
-        bh=wnv5ROWjSHU+g288i5muVFwBtOJIZofhOehXf60m8Lc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=tzMm8zgLnMT34HSfPpkOdbjVtsR4+lPJWtSz1BlE0XjrNQqv54gMQIZFRQsMKEgrW
-         ssKWf8hb7kJk7dz3e78VPAL18Q39jQRTqo0b9JLBgmpJRCyD9Rc9JLmIRiz7iH+zgY
-         2zys+L4krZhPMUdUrc4zKZVSjaNYtcSi+X26azg4WtfpH8E7XcX4ycLoK3fkeX0/Q7
-         LPOwLES7aMDyWKtY8rTZhAbw4wvLEKDCE+AWPDG3ggB+nv4uiqu+yo+LlfPREDPLR1
-         OWM0dCX/FNgNFySXnKZKUN0HaEBtdndY2ToKyJJh2mk3Unapy+maawyHbopH2Q35/U
-         4AU3Yq9A5Vehg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4240F5C06B4; Wed, 19 Oct 2022 10:12:19 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 10:12:19 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v2 03/38] printk: Prepare for SRCU console list
- protection
-Message-ID: <20221019171219.GB5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-4-john.ogness@linutronix.de>
+        Wed, 19 Oct 2022 13:16:10 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD87183E1C;
+        Wed, 19 Oct 2022 10:16:07 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JGSdNK006987;
+        Wed, 19 Oct 2022 13:13:50 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3k7ss6gsgv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 13:13:49 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 29JHDbvD029363
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Oct 2022 13:13:37 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 19 Oct 2022 13:13:36 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 19 Oct 2022 13:13:36 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 19 Oct 2022 13:13:36 -0400
+Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.157])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 29JHDISI014873;
+        Wed, 19 Oct 2022 13:13:20 -0400
+From:   Alexandru Tachici <alexandru.tachici@analog.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>
+Subject: [net-next 1/2] net: ethernet: adi: adin1110: add reset GPIO
+Date:   Wed, 19 Oct 2022 20:13:13 +0300
+Message-ID: <20221019171314.86325-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019145600.1282823-4-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: VqMy5pJ_8tI3mKl5EaW37fYiwCZvlZNw
+X-Proofpoint-GUID: VqMy5pJ_8tI3mKl5EaW37fYiwCZvlZNw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_10,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 spamscore=0 phishscore=0
+ suspectscore=0 clxscore=1011 malwarescore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190098
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 05:01:25PM +0206, John Ogness wrote:
-> Provide an NMI-safe SRCU protected variant to walk the console list.
-> 
-> Note that all console fields are now set before adding the console
-> to the list to avoid the console becoming visible by SCRU readers
-> before being fully initialized.
-> 
-> This is a preparatory change for a new console infrastructure which
-> operates independent of the console BKL.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Add an optional GPIO to be used for a hardware reset of the IC.
 
-From an RCU viewpoint:
+Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+---
+ drivers/net/ethernet/adi/adin1110.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+diff --git a/drivers/net/ethernet/adi/adin1110.c b/drivers/net/ethernet/adi/adin1110.c
+index 78ded19dd8c1..3e090ff9b966 100644
+--- a/drivers/net/ethernet/adi/adin1110.c
++++ b/drivers/net/ethernet/adi/adin1110.c
+@@ -1082,9 +1082,30 @@ static void adin1110_adjust_link(struct net_device *dev)
+  */
+ static int adin1110_check_spi(struct adin1110_priv *priv)
+ {
++	struct gpio_desc *reset_gpio;
+ 	int ret;
+ 	u32 val;
+ 
++	reset_gpio = devm_gpiod_get_optional(&priv->spidev->dev, "reset",
++					     GPIOD_OUT_LOW);
++	if (reset_gpio) {
++		/* MISO pin is used for internal configuration, can't have
++		 * anyone else disturbing the SDO line.
++		 */
++		spi_bus_lock(priv->spidev->controller);
++
++		gpiod_set_value(reset_gpio, 1);
++		fsleep(10000);
++		gpiod_set_value(reset_gpio, 0);
++
++		/* Need to wait 90 ms before interacting with
++		 * the MAC after a HW reset.
++		 */
++		fsleep(90000);
++
++		spi_bus_unlock(priv->spidev->controller);
++	}
++
+ 	ret = adin1110_read_reg(priv, ADIN1110_PHY_ID, &val);
+ 	if (ret < 0)
+ 		return ret;
+-- 
+2.34.1
 
-> ---
->  .clang-format           |  1 +
->  include/linux/console.h | 28 +++++++++++++++-
->  kernel/printk/printk.c  | 72 ++++++++++++++++++++++++++++++++---------
->  3 files changed, 85 insertions(+), 16 deletions(-)
-> 
-> diff --git a/.clang-format b/.clang-format
-> index 1247d54f9e49..04a675b56b57 100644
-> --- a/.clang-format
-> +++ b/.clang-format
-> @@ -222,6 +222,7 @@ ForEachMacros:
->    - 'for_each_component_dais'
->    - 'for_each_component_dais_safe'
->    - 'for_each_console'
-> +  - 'for_each_console_srcu'
->    - 'for_each_cpu'
->    - 'for_each_cpu_and'
->    - 'for_each_cpu_not'
-> diff --git a/include/linux/console.h b/include/linux/console.h
-> index 7b5f21f9e469..cff86cc615f8 100644
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -15,7 +15,7 @@
->  #define _LINUX_CONSOLE_H_ 1
->  
->  #include <linux/atomic.h>
-> -#include <linux/list.h>
-> +#include <linux/rculist.h>
->  #include <linux/types.h>
->  
->  struct vc_data;
-> @@ -158,8 +158,34 @@ struct console {
->  	struct hlist_node node;
->  };
->  
-> +#ifdef CONFIG_LOCKDEP
-> +extern bool console_srcu_read_lock_is_held(void);
-> +#else
-> +static inline bool console_srcu_read_lock_is_held(void)
-> +{
-> +	return 1;
-> +}
-> +#endif
-> +
-> +extern int console_srcu_read_lock(void);
-> +extern void console_srcu_read_unlock(int cookie);
-> +
->  extern struct hlist_head console_list;
->  
-> +/**
-> + * for_each_console_srcu() - Iterator over registered consoles
-> + * @con:	struct console pointer used as loop cursor
-> + *
-> + * Although SRCU guarantees the console list will be consistent, the
-> + * struct console fields may be updated by other CPUs while iterating.
-> + *
-> + * Requires console_srcu_read_lock to be held. Can be invoked from
-> + * any context.
-> + */
-> +#define for_each_console_srcu(con)					\
-> +	hlist_for_each_entry_srcu(con, &console_list, node,		\
-> +				  console_srcu_read_lock_is_held())
-> +
->  /*
->   * for_each_console() allows you to iterate on each console
->   */
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 867becc40021..e8a56056cd50 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -85,6 +85,7 @@ EXPORT_SYMBOL(oops_in_progress);
->  static DEFINE_SEMAPHORE(console_sem);
->  HLIST_HEAD(console_list);
->  EXPORT_SYMBOL_GPL(console_list);
-> +DEFINE_STATIC_SRCU(console_srcu);
->  
->  /*
->   * System may need to suppress printk message under certain
-> @@ -102,6 +103,11 @@ static int __read_mostly suppress_panic_printk;
->  static struct lockdep_map console_lock_dep_map = {
->  	.name = "console_lock"
->  };
-> +
-> +bool console_srcu_read_lock_is_held(void)
-> +{
-> +	return srcu_read_lock_held(&console_srcu);
-> +}
->  #endif
->  
->  enum devkmsg_log_bits {
-> @@ -219,6 +225,32 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
->  }
->  #endif /* CONFIG_PRINTK && CONFIG_SYSCTL */
->  
-> +/**
-> + * console_srcu_read_lock - Register a new reader for the
-> + *	SRCU-protected console list
-> + *
-> + * Use for_each_console_srcu() to iterate the console list
-> + *
-> + * Context: Any context.
-> + */
-> +int console_srcu_read_lock(void)
-> +{
-> +	return srcu_read_lock_nmisafe(&console_srcu);
-> +}
-> +EXPORT_SYMBOL(console_srcu_read_lock);
-> +
-> +/**
-> + * console_srcu_read_unlock - Unregister an old reader from
-> + *	the SRCU-protected console list
-> + *
-> + * Counterpart to console_srcu_read_lock()
-> + */
-> +void console_srcu_read_unlock(int cookie)
-> +{
-> +	srcu_read_unlock_nmisafe(&console_srcu, cookie);
-> +}
-> +EXPORT_SYMBOL(console_srcu_read_unlock);
-> +
->  /*
->   * Helper macros to handle lockdep when locking/unlocking console_sem. We use
->   * macros instead of functions so that _RET_IP_ contains useful information.
-> @@ -2989,6 +3021,9 @@ void console_stop(struct console *console)
->  	console_lock();
->  	console->flags &= ~CON_ENABLED;
->  	console_unlock();
-> +
-> +	/* Ensure that all SRCU list walks have completed */
-> +	synchronize_srcu(&console_srcu);
->  }
->  EXPORT_SYMBOL(console_stop);
->  
-> @@ -3179,6 +3214,17 @@ void register_console(struct console *newcon)
->  		newcon->flags &= ~CON_PRINTBUFFER;
->  	}
->  
-> +	newcon->dropped = 0;
-> +	if (newcon->flags & CON_PRINTBUFFER) {
-> +		/* Get a consistent copy of @syslog_seq. */
-> +		mutex_lock(&syslog_lock);
-> +		newcon->seq = syslog_seq;
-> +		mutex_unlock(&syslog_lock);
-> +	} else {
-> +		/* Begin with next message. */
-> +		newcon->seq = prb_next_seq(prb);
-> +	}
-> +
->  	/*
->  	 * Put this console in the list - keep the
->  	 * preferred driver at the head of the list.
-> @@ -3187,28 +3233,20 @@ void register_console(struct console *newcon)
->  	if (hlist_empty(&console_list)) {
->  		/* Ensure CON_CONSDEV is always set for the head. */
->  		newcon->flags |= CON_CONSDEV;
-> -		hlist_add_head(&newcon->node, &console_list);
-> +		hlist_add_head_rcu(&newcon->node, &console_list);
->  
->  	} else if (newcon->flags & CON_CONSDEV) {
->  		/* Only the new head can have CON_CONSDEV set. */
->  		console_first()->flags &= ~CON_CONSDEV;
-> -		hlist_add_head(&newcon->node, &console_list);
-> +		hlist_add_head_rcu(&newcon->node, &console_list);
->  
->  	} else {
-> -		hlist_add_behind(&newcon->node, console_list.first);
-> -	}
-> -
-> -	newcon->dropped = 0;
-> -	if (newcon->flags & CON_PRINTBUFFER) {
-> -		/* Get a consistent copy of @syslog_seq. */
-> -		mutex_lock(&syslog_lock);
-> -		newcon->seq = syslog_seq;
-> -		mutex_unlock(&syslog_lock);
-> -	} else {
-> -		/* Begin with next message. */
-> -		newcon->seq = prb_next_seq(prb);
-> +		hlist_add_behind_rcu(&newcon->node, console_list.first);
->  	}
->  	console_unlock();
-> +
-> +	/* No need to synchronize SRCU here! */
-> +
->  	console_sysfs_notify();
->  
->  	/*
-> @@ -3254,7 +3292,7 @@ int unregister_console(struct console *console)
->  		goto out_unlock;
->  	}
->  
-> -	hlist_del_init(&console->node);
-> +	hlist_del_init_rcu(&console->node);
->  
->  	/*
->  	 * <HISTORICAL>
-> @@ -3269,6 +3307,10 @@ int unregister_console(struct console *console)
->  		console_first()->flags |= CON_CONSDEV;
->  
->  	console_unlock();
-> +
-> +	/* Ensure that all SRCU list walks have completed */
-> +	synchronize_srcu(&console_srcu);
-> +
->  	console_sysfs_notify();
->  
->  	if (console->exit)
-> -- 
-> 2.30.2
-> 
