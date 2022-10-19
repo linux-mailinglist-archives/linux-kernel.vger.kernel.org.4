@@ -2,180 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AFE603B40
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50524603B68
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiJSIQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S229554AbiJSIYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJSIQy (ORCPT
+        with ESMTP id S229508AbiJSIYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:16:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796E631E8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 01:16:49 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Msk3R1K8dzmV8q;
-        Wed, 19 Oct 2022 16:12:03 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Wed, 19 Oct 2022 04:24:14 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF3C7C75D;
+        Wed, 19 Oct 2022 01:24:08 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MskGG6qDwzJn1g;
+        Wed, 19 Oct 2022 16:21:26 +0800 (CST)
+Received: from dggpemm500012.china.huawei.com (7.185.36.89) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 16:16:46 +0800
-Subject: Re: [PATCH] hugetlb: fix memory leak associated with vma_lock
- structure
-To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221018233601.282381-1-mike.kravetz@oracle.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <15890189-c3ba-4249-3c2f-674f6763415b@huawei.com>
-Date:   Wed, 19 Oct 2022 16:16:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2375.31; Wed, 19 Oct 2022 16:24:06 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 16:24:05 +0800
+From:   Xingui Yang <yangxingui@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
+        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>,
+        <john.garry@huawei.com>
+Subject: [PATCH] scsi: sd: Update dix config everytime sd_revalidate_disk is called
+Date:   Wed, 19 Oct 2022 08:18:25 +0000
+Message-ID: <20221019081825.20794-1-yangxingui@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20221018233601.282381-1-mike.kravetz@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/19 7:36, Mike Kravetz wrote:
-> The hugetlb vma_lock structure hangs off the vm_private_data pointer
-> of sharable hugetlb vmas.  The structure is vma specific and can not
-> be shared between vmas.  At fork and various other times, vmas are
-> duplicated via vm_area_dup().  When this happens, the pointer in the
-> newly created vma must be cleared and the structure reallocated.  Two
-> hugetlb specific routines deal with this hugetlb_dup_vma_private and
-> hugetlb_vm_op_open.  Both routines are called for newly created vmas.
-> hugetlb_dup_vma_private would always clear the pointer and
-> hugetlb_vm_op_open would allocate the new vms_lock structure.  This did
-> not work in the case of this calling sequence pointed out in [1].
->   move_vma
->     copy_vma
->       new_vma = vm_area_dup(vma);
->       new_vma->vm_ops->open(new_vma); --> new_vma has its own vma lock.
->     is_vm_hugetlb_page(vma)
->       clear_vma_resv_huge_pages
->         hugetlb_dup_vma_private --> vma->vm_private_data is set to NULL
-> When clearing hugetlb_dup_vma_private we actually leak the associated
-> vma_lock structure.
-> 
-> The vma_lock structure contains a pointer to the associated vma.  This
-> information can be used in hugetlb_dup_vma_private and hugetlb_vm_op_open
-> to ensure we only clear the vm_private_data of newly created (copied)
-> vmas.  In such cases, the vma->vma_lock->vma field will not point to the
-> vma.
-> 
-> Update hugetlb_dup_vma_private and hugetlb_vm_op_open to not clear
-> vm_private_data if vma->vma_lock->vma == vma.  Also, log a warning if
-> hugetlb_vm_op_open ever encounters the case where vma_lock has already
-> been correctly allocated for the vma.
-> 
-> [1] https://lore.kernel.org/linux-mm/5154292a-4c55-28cd-0935-82441e512fc3@huawei.com/
-> 
-> Fixes: 131a79b474e9 ("hugetlb: fix vma lock handling during split vma and range unmapping")
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> ---
->  mm/hugetlb.c | 31 ++++++++++++++++++++++++-------
->  1 file changed, 24 insertions(+), 7 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 02f781624fce..7f74cbff6619 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -1014,15 +1014,23 @@ void hugetlb_dup_vma_private(struct vm_area_struct *vma)
->  	VM_BUG_ON_VMA(!is_vm_hugetlb_page(vma), vma);
->  	/*
->  	 * Clear vm_private_data
-> +	 * - For shared mappings this is a per-vma semaphore that may be
-> +	 *   allocated in a subsequent call to hugetlb_vm_op_open.
-> +	 *   Before clearing, make sure pointer is not associated with vma
-> +	 *   as this will leak the structure.  This is the case when called
-> +	 *   via clear_vma_resv_huge_pages() and hugetlb_vm_op_open has already
-> +	 *   been called to allocate a new structure.
->  	 * - For MAP_PRIVATE mappings, this is the reserve map which does
->  	 *   not apply to children.  Faults generated by the children are
->  	 *   not guaranteed to succeed, even if read-only.
-> -	 * - For shared mappings this is a per-vma semaphore that may be
-> -	 *   allocated in a subsequent call to hugetlb_vm_op_open.
->  	 */
-> -	vma->vm_private_data = (void *)0;
-> -	if (!(vma->vm_flags & VM_MAYSHARE))
-> -		return;
-> +	if (vma->vm_flags & VM_MAYSHARE) {
-> +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
-> +
-> +		if (vma_lock && vma_lock->vma != vma)
-> +			vma->vm_private_data = NULL;
-> +	} else
-> +		vma->vm_private_data = NULL;
->  }
->  
->  /*
-> @@ -4601,6 +4609,7 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
->  	struct resv_map *resv = vma_resv_map(vma);
->  
->  	/*
-> +	 * HPAGE_RESV_OWNER indicates a private mapping.
->  	 * This new VMA should share its siblings reservation map if present.
->  	 * The VMA will only ever have a valid reservation map pointer where
->  	 * it is being copied for another still existing VMA.  As that VMA
-> @@ -4616,10 +4625,18 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
->  	/*
->  	 * vma_lock structure for sharable mappings is vma specific.
->  	 * Clear old pointer (if copied via vm_area_dup) and create new.
-> +	 * Before clearing, make sure vma_lock is not for this vma.
->  	 */
->  	if (vma->vm_flags & VM_MAYSHARE) {
-> -		vma->vm_private_data = NULL;
-> -		hugetlb_vma_lock_alloc(vma);
-> +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
-> +
-> +		if (vma_lock) {
+When the host protection capabilities are 0x77 and a DIF disk is connected,
+the DIX and DIF of the disk are default enabled. Then if that DIF disk is
+reformatted as a non-DIF format, per the currently flow, the DIX is kept
+enabled which is not correct, which will cause the following errors when
+accessing the non-DIF disk:
+[root@localhost ~]# lsscsi -p
+[7:0:5:0]    disk    xxx    /dev/sdc   DIF/Type3  T10-DIF-TYPE3-CRC
+[root@localhost ~]# sg_format -F -s 512 /dev/sdc
+[root@localhost ~]# lsscsi -p
+[7:0:5:0]    disk    xxx    /dev/sdc   -          T10-DIF-TYPE3-CRC
 
-Thanks Mike. It seems the case of "vma_lock == NULL" is missed, i.e. if vma->vm_private_data == NULL,
-hugetlb_vm_op_open won't allocate a new vma lock?
+[142829.032340] hisi_sas_v3_hw 0000:b4:04.0: erroneous completion iptt=2375 task=00000000bea0970c dev id=5 direct-attached phy4 addr=51c20dbaf642a000 CQ hdr: 0x1023 0x50947 0x0 0x20000 Error info: 0x0 0x0 0x4 0x0
+[142829.073883] sas: Enter sas_scsi_recover_host busy: 1 failed: 1
+[142829.079783] sas: sas_scsi_find_task: aborting task 0x00000000bea0970c
+[142829.102342] sas: Internal abort: task to dev 51c20dbaf642a000 response: 0x0 status 0x5
+[142829.110319] sas: sas_eh_handle_sas_errors: task 0x00000000bea0970c is done
+[142829.117275] sd 7:0:5:0: [sdc] tag#2375 UNKNOWN(0x2003) Result: hostbyte=0x05 driverbyte=DRIVER_OK cmd_age=0s
+[142829.127171] sd 7:0:5:0: [sdc] tag#2375 CDB: opcode=0x2a 2a 00 00 00 00 00 00 00 08 00
+[142829.135059] I/O error, dev sdc, sector 0 op 0x1:(WRITE) flags 0x18800 phys_seg 1 prio class 2
 
-Others look good to me.
+On the contrary, when a non-DIF disk is connected and formatted as a DIF
+disk, it is found that DIX is not enabled. Operation logs as follows:
 
-Thanks,
-Miaohe Lin
+[root@localhost ~]# lsscsi -p
+[7:0:2:0]    disk    xxx    /dev/sdc   -          none
+[root@localhost ~]# sg_format --format --fmtpinfo=3 --pfu=1 /dev/sdc
+[root@localhost ~]# lsscsi -p
+[7:0:2:0]    disk    xxx    /dev/sdc   DIF/Type3  none
 
-> +			if (vma_lock->vma != vma) {
-> +				vma->vm_private_data = NULL;
-> +				hugetlb_vma_lock_alloc(vma);
-> +			} else
-> +				pr_warn("HugeTLB: vma_lock already exists in %s.\n", __func__);
-> +		}
->  	}
->  }
->  
-> 
+This is because dix config is only updated when the first time a disk
+is added, in this patch, we fix the issue by with changes:
+1. Remove check first_scan when call sd_config_protection().
+2. Unregister block integrity profile after DIX becomes to 0.
+
+Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+---
+ drivers/scsi/sd.c     | 3 ---
+ drivers/scsi/sd_dif.c | 4 +++-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index eb76ba055021..3844f469b6be 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -2199,9 +2199,6 @@ static void sd_config_protection(struct scsi_disk *sdkp)
+ {
+ 	struct scsi_device *sdp = sdkp->device;
+ 
+-	if (!sdkp->first_scan)
+-		return;
+-
+ 	sd_dif_config_host(sdkp);
+ 
+ 	if (!sdkp->protection_type)
+diff --git a/drivers/scsi/sd_dif.c b/drivers/scsi/sd_dif.c
+index 968993ee6d5d..78db8d85f97e 100644
+--- a/drivers/scsi/sd_dif.c
++++ b/drivers/scsi/sd_dif.c
+@@ -39,8 +39,10 @@ void sd_dif_config_host(struct scsi_disk *sdkp)
+ 		dif = 0; dix = 1;
+ 	}
+ 
+-	if (!dix)
++	if (!dix) {
++		blk_integrity_unregister(disk);
+ 		return;
++	}
+ 
+ 	memset(&bi, 0, sizeof(bi));
+ 
+-- 
+2.17.1
 
