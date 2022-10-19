@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ABC604F24
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4152604F19
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiJSRqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
+        id S229645AbiJSRpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbiJSRqZ (ORCPT
+        with ESMTP id S231218AbiJSRpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:46:25 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A17531C843D;
-        Wed, 19 Oct 2022 10:46:22 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 29JHhjS0005682;
-        Wed, 19 Oct 2022 12:43:46 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 29JHhjxm005681;
-        Wed, 19 Oct 2022 12:43:45 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 19 Oct 2022 12:43:45 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-Message-ID: <20221019174345.GM25951@gate.crashing.org>
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org> <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Wed, 19 Oct 2022 13:45:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7ED103D87;
+        Wed, 19 Oct 2022 10:44:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26C6761984;
+        Wed, 19 Oct 2022 17:44:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F993C433D6;
+        Wed, 19 Oct 2022 17:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666201498;
+        bh=TY3Uw+0Ns5PZLGxTpKA9rqUhndKRKfptNAqFbQfXUpc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=a4ZQTiFg/oYQVKEJ/ttMK/JDMU7KOH8Z7LBMi26f0WRT4dbVpddTWKAAPuUckOaUk
+         o6fYr3kFy0aCet7spC289fis8xKS0vwyTi3/9eHhTdi4oK4OIAArmn6oSO/R2xYrWj
+         OvyxhZ5CLcBJW5vuggFe/0oYHyvWyOqTXahTEBCKEux5lgXmsdqzcMrGV5t1fLFz+h
+         9RPHfKvx6eRbZGfAIGIIuNLEhOIFCY9Pds0VUJDvcT9KM6OzulYQ3tl82CUo6zIWXP
+         JiX7gm2XLtGIaEAYXQwLmjmjSTmYQbNcRfeBVSLPMssKZdufeitysOPMgv6TpGWtHD
+         Z4gd0lVdYPZ0g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1D1F55C06B4; Wed, 19 Oct 2022 10:44:58 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 10:44:58 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Make call_rcu() lazy only when CONFIG_RCU_LAZY is
+ enabled
+Message-ID: <20221019174458.GD5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <B3E5FB1F-3184-4C56-8B11-6F422DBF1B53@joelfernandes.org>
+ <F24713AB-9AC8-494F-A677-D52C9CE591CF@joelfernandes.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F24713AB-9AC8-494F-A677-D52C9CE591CF@joelfernandes.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Wed, Oct 19, 2022 at 08:12:30AM -0400, Joel Fernandes wrote:
+> > On Oct 19, 2022, at 8:10 AM, Joel Fernandes <joel@joelfernandes.org> wrote:
+> >> On Oct 19, 2022, at 6:34 AM, Zqiang <qiang1.zhang@intel.com> wrote:
+> >> 
+> >> ﻿Currently, regardless of whether the CONFIG_RCU_LAZY is enabled,
+> >> invoke the call_rcu() is always lazy, it also means that when
+> >> CONFIG_RCU_LAZY is disabled, invoke the call_rcu_flush() is also
+> >> lazy. therefore, this commit make call_rcu() lazy only when
+> >> CONFIG_RCU_LAZY is enabled.
 
-On Wed, Oct 19, 2022 at 10:14:20AM -0700, Linus Torvalds wrote:
-> On Wed, Oct 19, 2022 at 9:57 AM Segher Boessenkool
-> <segher@kernel.crashing.org> wrote:
-> >
-> > This is an ABI change.  It is also hugely detrimental to generated
-> > code quality on architectures that make the saner choice (that is, have
-> > most instructions zero-extend byte quantities).
+First, good eyes!  Thank you for spotting this!!!
+
+> >> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> >> ---
+> >> kernel/rcu/tree.c | 8 +++++++-
+> >> 1 file changed, 7 insertions(+), 1 deletion(-)
+> >> 
+> >> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> >> index abc615808b6e..97ef602da3d5 100644
+> >> --- a/kernel/rcu/tree.c
+> >> +++ b/kernel/rcu/tree.c
+> >> @@ -2839,7 +2839,6 @@ void call_rcu_flush(struct rcu_head *head, rcu_callback_t func)
+> >>   return __call_rcu_common(head, func, false);
+> >> }
+> >> EXPORT_SYMBOL_GPL(call_rcu_flush);
+> >> -#endif
+> >> 
+> >> /**
+> >> * call_rcu() - Queue an RCU callback for invocation after a grace period.
+> >> @@ -2890,6 +2889,13 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> >>   return __call_rcu_common(head, func, true);
+> >> }
+> >> EXPORT_SYMBOL_GPL(call_rcu);
+> >> +#else
+> >> +void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> >> +{
+> >> +    return __call_rcu_common(head, func, false);
+> > 
+> > Thanks. Instead of adding new function, you can also pass IS_ENABLED(CONFIG…) to the existing function of the same name.
+
+I do like this approach better -- less code, more obvious what is going on.
+
+> > Looks like though I made every one test the patch without having to enable the config option ;-). Hey, I’m a half glass full kind of guy, why do you ask?
+> > 
+> > Paul, I’ll take a closer look once I’m at the desk, but would you prefer to squash a diff into the existing patch, or want a new patch altogether?
 > 
-> Yeah, I agree. We should just accept the standard wording, and be
-> aware that 'char' has indeterminate signedness.
+> On the other hand, what I’d want is to nuke the config option altogether or make it default y, we want to catch issues sooner than later.
 
-And plain "char" is a separate type from "signed char" and "unsigned
-char" both.
+That might be what we do at some point, but one thing at a time.  Let's
+not penalize innocent bystanders, at least not just yet.
 
-> But:
+I do very strongly encourage the ChromeOS and Android folks to test this
+very severely, however.
+
+							Thanx, Paul
+
+> Thanks.
 > 
-> > Instead, don't actively disable the compiler warnings that catch such
-> > cases?  So start with removing footguns like
-> >
-> >   # disable pointer signed / unsigned warnings in gcc 4.0
-> >   KBUILD_CFLAGS += -Wno-pointer-sign
-> 
-> Nope, that won't fly.
-> 
-> The pointer-sign thing doesn't actually help (ie it won't find places
-> where you actually compare a char), and it causes untold damage in
-> doing completely insane things.
-
-When I did this more than a decade ago there indeed was a LOT of noise,
-mostly caused by dubious code.  I do agree many cases detected are not
-very important, but it also revealed cases where a filesystem's disk
-format changed (atarifs or amigafs or such iirc) -- many cases it is
-annoying to be reminded of sloppy code, but in some cases it detects
-crucial problems.
-
-> Seriously, -Wpointer-sign is not just useless, it's actively _evil_.
-
-Then suggest something better?  Or suggest improvements to the existing
-warning?
-
-This warning is part of -Wall, most people must not have problems with
-it (or people are so apathetic about this that they have not complained
-about it).
-
-It is easy to improve your code when the compiler detects problems like
-this.  Of course after such a long time of lax code sanity enforcement
-you get all warnings at once :-/
-
-> The fact that you suggest that clearly means that you've never used
-> it.
-
-Ah, ad hominems.  Great.
-
-
-Segher
+> > 
+> > Thanks.
+> > 
+> > - Joel
+> > 
+> > 
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(call_rcu);
+> >> +#endif
+> >> 
+> >> /* Maximum number of jiffies to wait before draining a batch. */
+> >> #define KFREE_DRAIN_JIFFIES (5 * HZ)
+> >> -- 
+> >> 2.25.1
+> >> 
