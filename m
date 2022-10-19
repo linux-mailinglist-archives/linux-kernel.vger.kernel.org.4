@@ -2,155 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45497604CD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B807D604CD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiJSQLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
+        id S231225AbiJSQMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiJSQLN (ORCPT
+        with ESMTP id S230250AbiJSQM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:11:13 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90FE18DA85
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:11:11 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bs14so22815201ljb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cTLtxH/9tdJ3MnfIXYFHnaBNfFAm0kUtsej9gwtGuyE=;
-        b=F2oQw+wag08kfGzWVJaKgb49QMe1rpOTgK6Nol5ulhaVyYhJcvpCcNT4350XIn6DSj
-         Bs6uM73Q+TxoED54v7UguROyJYkRGSZGM2VGzU1aSFAoezfkG1AnrtxClx7DQ35G1h5d
-         caB5E9v1wOG/SGm1vAerSS1b5BEDgho6tBqs2V5DQF/1dOOnXeIHVcLIJUMMPLlj2AIi
-         vedFbUqxu4uIM/IWy9qY4ADJvQRiHxAxOtLU0AUKVcXOYReDU1RWerQH/OkyzAipl6Az
-         v+Qkq8HfJdx/NT9YbEuxU894EYsRjee4FcSy1HGilzbrBIlIgMKQK99b0jwSb90iSjSj
-         SwhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cTLtxH/9tdJ3MnfIXYFHnaBNfFAm0kUtsej9gwtGuyE=;
-        b=FkTxvhKdDehBYz7cTeiVgyJlu5GYz0C5QDXQcOArnpTlLbpoen8ddCn6y6rEmIq1IJ
-         UvNAJX/egC/MEauQKE4pfNawOvqJNmownGjVgebh4Ddowy1qh+QY+owrrUtGYFKCHGM0
-         vv8HsTcAWfyWlxNYXeT16LzskSxu9bDyrH7tD5qaOQ7ygiLXnSmnZkY5seKEZtcmTfsY
-         5rpb3Ry2LPwusvoefDqqygKzpjy8/MmBPm8ur6pKq5F56SCrZGI8YM/t5IlNPgXBWgB4
-         qw4+YaugEiD8WU4opL23mhzDUeesCr/kB8weoG2K5+LxHasyZsqhNp9nyI4X1yWhC51c
-         FKvg==
-X-Gm-Message-State: ACrzQf3b9DbnqKcbmbk4XCHdxGpsvf4niE3tO3yf+X2WjdoeVfdsx+oF
-        OtDd/Sx4/f3mj/3QRNhwsIJ9tPAA+qmN/TV8p4OolQ==
-X-Google-Smtp-Source: AMsMyM6N32QgZOyAH5TjUIjT2Lt4GP4WkBfbS6QjelNxdiiyxMTZ4TmiyTvPurhIkBzVUc7k17LE6fMazS3tXsald9U=
-X-Received: by 2002:a2e:7808:0:b0:26f:c0c2:8a3e with SMTP id
- t8-20020a2e7808000000b0026fc0c28a3emr2976131ljc.260.1666195867358; Wed, 19
- Oct 2022 09:11:07 -0700 (PDT)
+        Wed, 19 Oct 2022 12:12:26 -0400
+Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACF4018C960
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:12:20 -0700 (PDT)
+Received: from [192.168.50.220] ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id lBg2o697isjaWlBg3oQLXQ; Wed, 19 Oct 2022 18:12:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666195939; bh=H11y0JOWCVcRqUZSCbershaEEzVxspy74vpoOyQgK1g=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=F6xpCnw6VQfbPVuxQh6SJFXhBf4zWoODRgCm7gx0E/hTYTAQIOo67I2TZ64CJbJB5
+         kz6apcQw0yt4oUyg8MJfzg2gWdXROWmL4iOAWFB/HMzWO0F7v4pdOqSaksdkYLEZ8I
+         elbH1I0KrccNDjpcOTUD0yrVQpCbarNxuaMUKeBOMjjB9qZ4g/JjjibjiNPDcrq0FB
+         JFvo7SaAmYKxy9RG+dErk8ee8XoB+K15PS2bTYW7DT3RM4AnW+JM0rUMvs39Pg2S5C
+         Z5QxsV6wwgcvXA+JKQDPG9m7Udgl9xqIfs9y1CZH6AVHIHfuo+YJl0u+feFMFmogT5
+         htSRUM2de3LEw==
+Message-ID: <fa21b2b9-50cc-48a5-eec1-e3360be9d296@benettiengineering.com>
+Date:   Wed, 19 Oct 2022 18:12:18 +0200
 MIME-Version: 1.0
-References: <20221019131128.237026-1-apatel@ventanamicro.com>
- <20221019131128.237026-3-apatel@ventanamicro.com> <13122510.uLZWGnKmhe@phil>
-In-Reply-To: <13122510.uLZWGnKmhe@phil>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 19 Oct 2022 21:40:56 +0530
-Message-ID: <CAK9=C2WaoqAaVa2fo9E7cGXMy-MKpj-xLN6LoMHyq_g1psGLUQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] RISC-V: Fix ioremap_cache() and ioremap_wc() for
- systems with Svpbmt
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 3/3] raid: substitute empty_zero_page with helper
+ ZERO_PAGE(0)
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-raid@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Song Liu <song@kernel.org>
+References: <20221018215755.33566-1-giulio.benetti@benettiengineering.com>
+ <20221018215755.33566-3-giulio.benetti@benettiengineering.com>
+ <Y0/Yt4uJWg4knNoc@infradead.org>
+Content-Language: en-US
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <Y0/Yt4uJWg4knNoc@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfIhqBZ6chw9faEg1o6elx0uoZAGxbuv8fzCjCxxumRpa3oxOvtrKNIjF5tfVszhlZcfDvQLXWeyefke0ZBwV0dQ9t40Ax/xBSP++kTOUQHdqWYuZ1+19
+ vmIwZjrtJSJrtw+3Y+GESPSr5VqBU04jPvhToni1hxwy6MHjNe7fbDCYUXmDN0N2ml6tkqiHFN33yMEE5K19C0PiuInchED2meQFP9rsxJZkjlYjkWhdktja
+ nc7+KirBREDtVOpBtYfxaO2OPtdwafXt4R3pKS+tA+TwCGdpyGDfP7Y1J5Xw7eA02HL4NcVSI1YeC9xvV9HQ96Sf7ELAJXgq2y9Zc1xHCP7fDKOnJqbajqOT
+ XtfAExf6UcmZT49Dyb21pTjm0wnz0H8iQCX2UX1v1EnHJSYDSLRKCwuNRKrX/cVkzwMY43i76qbXu6CoOuk4PLynx9RZCHUFrXWcfgN693tru5f/rigqfOvi
+ DVKXH26DQCjQvdpgDxxMQ7jrRSiH/Y2hBrEnEw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 7:49 PM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Am Mittwoch, 19. Oktober 2022, 15:11:26 CEST schrieb Anup Patel:
-> > Currently, all flavors of ioremap_xyz() function maps to the generic
-> > ioremap() which means any ioremap_xyz() call will always map the
-> > target memory as IO using _PAGE_IOREMAP page attributes. This breaks
-> > ioremap_cache() and ioremap_wc() on systems with Svpbmt because memory
-> > remapped using ioremap_cache() and ioremap_wc() will use _PAGE_IOREMAP
-> > page attributes.
-> >
-> > To address above (just like other architectures), we implement RISC-V
-> > specific ioremap_cache() and ioremap_wc() which maps memory using page
-> > attributes as defined by the Svpbmt specification.
-> >
-> > Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
-> > Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> > Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
->
-> Wasn't there discussion around those functions in general in v2?
+Hi Christoph, All,
 
-Yes, there was discussion about a few drivers using ioremap_xyz()
-which is discouraged and drivers should use memremap().
+On 19/10/22 13:00, Christoph Hellwig wrote:
+> On Tue, Oct 18, 2022 at 11:57:55PM +0200, Giulio Benetti wrote:
+>>   #if RAID6_USE_EMPTY_ZERO_PAGE
+>> -# define raid6_empty_zero_page empty_zero_page
+>> +# define raid6_empty_zero_page ZERO_PAGE(0)
+>>   #else
+>>   extern const char raid6_empty_zero_page[PAGE_SIZE];
+> 
+> RAID6_USE_EMPTY_ZERO_PAGE is never set to a non-zero value.  So this
+> is dead code and we can just remove all code related to the
+> RAID6_USE_EMPTY_ZERO_PAGE case.
 
-We still need the arch specific ioremap_xyz() functions/macros
-added by this patch because these are required by the generic
-kernel memremap() implementation (refer, kernel/iomem.c).
+Here is a patch that removes that unused code:
+https://lore.kernel.org/all/20221019160407.7550-1-giulio.benetti@benettiengineering.com/T/#u
 
->
-> In any case, the patch doesn't break anything on qemu and d1, so
->
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
+and then makes this one useless so I ask to drop it please.
 
-Regards,
-Anup
+Thank you!
 
->
->
-> > ---
-> >  arch/riscv/include/asm/io.h      | 10 ++++++++++
-> >  arch/riscv/include/asm/pgtable.h |  2 ++
-> >  2 files changed, 12 insertions(+)
-> >
-> > diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
-> > index 92080a227937..92a31e543388 100644
-> > --- a/arch/riscv/include/asm/io.h
-> > +++ b/arch/riscv/include/asm/io.h
-> > @@ -133,6 +133,16 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
-> >  #define outsq(addr, buffer, count) __outsq(PCI_IOBASE + (addr), buffer, count)
-> >  #endif
-> >
-> > +#ifdef CONFIG_MMU
-> > +#define ioremap_wc(addr, size)               \
-> > +     ioremap_prot((addr), (size), _PAGE_IOREMAP_WC)
-> > +#endif
-> > +
-> >  #include <asm-generic/io.h>
-> >
-> > +#ifdef CONFIG_MMU
-> > +#define ioremap_cache(addr, size)    \
-> > +     ioremap_prot((addr), (size), _PAGE_KERNEL)
-> > +#endif
-> > +
-> >  #endif /* _ASM_RISCV_IO_H */
-> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> > index 7ec936910a96..346b7c1a3eeb 100644
-> > --- a/arch/riscv/include/asm/pgtable.h
-> > +++ b/arch/riscv/include/asm/pgtable.h
-> > @@ -182,6 +182,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
-> >  #define PAGE_TABLE           __pgprot(_PAGE_TABLE)
-> >
-> >  #define _PAGE_IOREMAP        ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-> > +#define _PAGE_IOREMAP_WC     ((_PAGE_KERNEL & ~_PAGE_MTMASK) | \
-> > +                              _PAGE_NOCACHE)
-> >  #define PAGE_KERNEL_IO               __pgprot(_PAGE_IOREMAP)
-> >
-> >  extern pgd_t swapper_pg_dir[];
-> >
->
->
->
->
+Best regards
+-- 
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
