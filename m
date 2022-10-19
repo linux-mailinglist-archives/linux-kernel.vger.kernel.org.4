@@ -2,132 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB12E604F10
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D2A604F0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiJSRlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S231310AbiJSRlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiJSRlL (ORCPT
+        with ESMTP id S231218AbiJSRkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:41:11 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97861B94CB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:41:10 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-132fb4fd495so21503308fac.12
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7oESz5tomQbWcoWEgo0/iqd576fd8JG2PTmQCWKHUY=;
-        b=LhnaCxQkYe9bL+uXUquBP284q0FFjCfp0v3tEE3Ew7ycTxf8ce+iI79qb3MGCCRuuU
-         zjTJ8I9g99kNf5YqHMJEIgBBUDmx8TSibPKQcCCydysOcjqO4Oy0SigG4t1dTfmwSk9p
-         Q8Xw+hnWgAzZpeoedADsV2vwGfcmjwBSuWbS8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o7oESz5tomQbWcoWEgo0/iqd576fd8JG2PTmQCWKHUY=;
-        b=4WACj2NMiFklvx5MQ2/mT6K0eFxOh3QQeas3GOetKJ/BAsY+7BkwpEnnYRgWDw/CU+
-         YwfIBKKAUz+g910afD1CNCoGjDoAxhrM/9blj6oQkI3XzORP3kIpieti9uO36zqDebsM
-         DXT8cN8r7HCee7twBkP/pYJ9H4+gbiMqPGMGFZ1hP5zXl3j3mEkyIFig8Z9IWAkLXPrW
-         Xh5oFp/QSkvepjSH84C5ZbgaSRgcEf5kiYA5afgjhner44efC+c9NS4MAkczBajHjGse
-         FDJI2Dqi/lcdWY6ha7jk9qoI3qiVtMy5KHgsWiOWqk0diT4zq+OLwDITUXCHT9uq2WQX
-         K9cQ==
-X-Gm-Message-State: ACrzQf3tXoS96i3GhQGyj7kbybaYXCgPJcVxmHzYNG5VqohZpkfWxyGk
-        Of37vOPPKThAIaYaPLw9ohRHTmGmm5TBHg==
-X-Google-Smtp-Source: AMsMyM5T7cDGSIo0V+9GPVoGjJiStdmYSZc+dsYVTwNG2H99512/hegyxrZZ+PSHdbRnYQzvHya7mg==
-X-Received: by 2002:a05:6870:e30e:b0:132:e934:5c0a with SMTP id z14-20020a056870e30e00b00132e9345c0amr5872143oad.202.1666201269297;
-        Wed, 19 Oct 2022 10:41:09 -0700 (PDT)
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com. [209.85.160.45])
-        by smtp.gmail.com with ESMTPSA id a130-20020acab188000000b00354978180d8sm6926715oif.22.2022.10.19.10.41.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 10:41:08 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1364357a691so21524275fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:41:07 -0700 (PDT)
-X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
- e9-20020a056870c0c900b00127c4df5b50mr6076270oad.126.1666201256175; Wed, 19
- Oct 2022 10:40:56 -0700 (PDT)
+        Wed, 19 Oct 2022 13:40:55 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9548C19DDAF;
+        Wed, 19 Oct 2022 10:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666201254; x=1697737254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=MCt32TjPlGarJR5rG8qyjVG72iAEmUkFwrBifFx18wc=;
+  b=UlLMWMY7gRuNmjFvFYFI5u5cley/oziF9LgVRCDQGbqpPTK7SRFPfc/5
+   RjQpJFTIJ9HtssRA0PLw8iTO0pfE92+FEie7xbtxiNs6Xo6TBjALSNDMH
+   2yawwZWvYgOxT5pP5MPLuaxB4tHbWYorZuxZnZn/vRyg4q98OVzl8sG/i
+   2Rv6vAoWt6Ozew4vDFZX9MJc19Ewsm3IPIKvmB/LlqoJtlPg3MdmplKlE
+   kLhQKeFPIb8+p7KeMv7m1CVhUG87SU3x8Dd0gcWWKNaKvjQRR6rRBL64F
+   EIENeK0mx0CwMCWYnj0odOxgIB7Vif4yY5V6IKlIUa0fRd5xqhJl+yJvc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="306476583"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="306476583"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 10:40:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="607207072"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="607207072"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga006.jf.intel.com with SMTP; 19 Oct 2022 10:40:50 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Wed, 19 Oct 2022 20:40:49 +0300
+Date:   Wed, 19 Oct 2022 20:40:49 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] ACPI: PCI: Fix device reference counting in
+ acpi_get_pci_dev()
+Message-ID: <Y1A2oR02JjXqMOiQ@intel.com>
+References: <Y0+7Ug9Yh6J6uHVr@intel.com>
+ <20221019165326.GA23726@bhelgaas>
 MIME-Version: 1.0
-References: <20220815071332.627393-1-yuzhao@google.com> <20220815071332.627393-9-yuzhao@google.com>
- <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net> <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
-In-Reply-To: <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 19 Oct 2022 10:40:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
-Message-ID: <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
-Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221019165326.GA23726@bhelgaas>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 10:51 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> pmd_read_atomic() should have a built-in READ_ONCE() in the first
-> place.
+On Wed, Oct 19, 2022 at 11:53:26AM -0500, Bjorn Helgaas wrote:
+> On Wed, Oct 19, 2022 at 11:54:42AM +0300, Ville Syrjälä wrote:
+> > On Tue, Oct 18, 2022 at 07:34:03PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > 
+> > > Commit 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()") failed
+> > > to reference count the device returned by acpi_get_pci_dev() as
+> > > expected by its callers which in some cases may cause device objects
+> > > to be dropped prematurely.
+> > > 
+> > > Add the missing get_device() to acpi_get_pci_dev().
+> > > 
+> > > Fixes: 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()")
+> > 
+> > FYI this (and the rtc-cmos regression discussed in
+> > https://lore.kernel.org/linux-acpi/5887691.lOV4Wx5bFT@kreacher/)
+> > took down the entire Intel gfx CI.
+> 
+> >From 1000 miles away and zero background with the gfx CI, this sounds
+> like "our CI system, whose purpose is to find bugs, found one", which
+> is a good thing.
 
-I really think that is the right thing to do. Let's just move the
-barrier in *there* instead.
+Mostly. It's certainly better than it going entirely undetected.
 
-It really should use 'READ_ONCE()', but it sadly cannot do that
-portably, because 'pmd_t' may be a multi-word structure.
+Sadly we found it after rc1 because no one was really looking at
+linux-next results. Something we need to improve.
 
-Of course, the x86-32 code does this all *almost* right, and
-implements its own version of pmd_read_atomic(), but then sadly does
-it _without_ actually using READ_ONCE() there.
+But ideally it would have been found by some other CI system
+whose primary job is to prevent bugs in those subsystems, rather
+than the one whose primary job is to prevent bugs in gfx drivers.
+Also ideally it wouldn't have been me bisecting this :P
 
-So even when we could do it right, we don't.
+The biggest downside of bugs reaching our CI via rc1/etc. is that
+it pretty much stops everyone from getting premerge results for
+their graphics driver patches since the CI keeps tripping over
+the already existing bugs. But I guess you can call this one a
+somewhat self inflicted wound and we should just try harder to
+keep new code out of our tree until it's known to be healthy.
 
-But the x86-32 implementation of pmd_read_atomic() would be trivial to
-fix to just use READ_ATOMIC, and the generic implementation should
-just have a "barrier()" in it so that we wouldn't need crazy barriers
-in the users.
-
-Because as you say, the function is already called "read_atomic", and
-it should damn well *act* that way then.
-
-Hmm?
-
-                 Linus
+-- 
+Ville Syrjälä
+Intel
