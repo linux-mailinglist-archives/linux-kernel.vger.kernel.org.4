@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9E46040AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605246040B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiJSKKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S232329AbiJSKLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiJSKJq (ORCPT
+        with ESMTP id S230340AbiJSKL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:09:46 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD8EF987E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:48:40 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 6C00B1D42;
-        Wed, 19 Oct 2022 11:38:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1666172328;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1vUP7EaiupmjLjnWhpFPdqHFtResgU15SEluT122fdQ=;
-        b=XRsHA19icJnAD9cmqkJsdQVJOed46ZkF21bvfDwgEPPMH05HVIMfqCkCGzbDaIIBo7ZMwF
-        08UusgwppYT2PyZtagSxCGP5U7AXgPDlVrEr9z8dzK9FMjMeSk6IpSUxghN81sQvLMVg2x
-        nr55yiulbLgztR7p++2zfaaVEcxvGxxwiU7Y5G/USMiJSEM8z2Sf9bNVH7XdpGhIN2VCIa
-        jiPmkuY3Bp9EEMLRC59kWRrdsagY9vz8NhAzApbnwEUoQbjZydTxBKWERvju5Lb1Lu/gwQ
-        zsV4Tq+uTFtqiqUUsjVPld/HmUiqukYnDF9wHiQkMbEF5KPWaAT/L6hslMXtpQ==
+        Wed, 19 Oct 2022 06:11:26 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA9BFE928
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:50:54 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id v81so8078576vkv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SF1fl++U+j/mY88q9ogCinNcnaen6ZIX+6+t5RwhoIM=;
+        b=DlCGggHWY+p58GuPoeTXjD2I5F1u7nPQNxrYEXmmluzk6DVlmKUPG1HgCJf41PBdxA
+         XTlinPyNOlWg5/90VLRbwMyA02x8kiJlwLAM/BUKfzvZ6sIkopvKo9BwkKtCbthlcYoH
+         ykoF1P8mElDRzc8CLuqAkABevEBMNTm3FC/53xiZC609OkYpYoSeaukXBcLtykvXBrHx
+         kH+Xqu5+5v/Fq9H+iZfDwsP1smGZwjrPMhgnLskaZuqaYMWgUMxvfD4L5GYv9w6vfzxL
+         ZqcwnG+bMRs1gpEqNIj2sRhaPX4wrOEAhIIKG9wJQ2spQPIjGeXntfu6llgvkNgY1K3O
+         +aXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SF1fl++U+j/mY88q9ogCinNcnaen6ZIX+6+t5RwhoIM=;
+        b=SRUCFTlm0mK6QpvUfbs8R1wvLNsezk1r7ByznajIGck7Bc1qinvimQIUaJL0dvzFEc
+         ugm+AWCSfcpSysyimh5RefBMyl0XawnyfaBX/t9asZjbBPpAJle1h1avd0AYJNygUiGj
+         OeFVgt60Wj4cVm7cnJh/6jYK62bwA30dbzS0wBZRDy20Ny05zrVidXMG2QDIlxjMBHk6
+         Q+dtnxTcQGuhkshoyha+n0sp8ce0lpDEuWZOxodVlNPk2+rG9wxpLUKBBfRrSGkfbMyU
+         ZUBqqwAU48sL79cpoIXXudap+ZHSOh9Am0ixn6coSLq7wlbmqqZyhkhFqfnyo4hq5/DQ
+         Gs8w==
+X-Gm-Message-State: ACrzQf2bGvmau7XgLwIId4ohDgOKirLgPpbW7+xE6o6ZfBTpLi2Db5GK
+        29Y4ywC+ByUDIIbWwiFQuhKK4RzE1SUjKf7o
+X-Google-Smtp-Source: AMsMyM6drZ9IFo8GAjkczH7bNco+FjLEg4ZDrS5fRndom63HpFPRQOHcff0ToUp6Zdto3gNFqQ2sbQ==
+X-Received: by 2002:a17:902:e806:b0:181:ebae:3ec3 with SMTP id u6-20020a170902e80600b00181ebae3ec3mr7399989plg.26.1666172420914;
+        Wed, 19 Oct 2022 02:40:20 -0700 (PDT)
+Received: from uftrace.. ([14.5.161.231])
+        by smtp.gmail.com with ESMTPSA id q59-20020a17090a1b4100b001efa9e83927sm12739970pjq.51.2022.10.19.02.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 02:40:20 -0700 (PDT)
+From:   Kang Minchul <tegongkang@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Dan Carpenter <error27@gmail.com>,
+        Sidong Yang <realwakka@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kang Minchul <tegongkang@gmail.com>
+Subject: [PATCH] staging: pi433: Use div64_u64 instead of do_div
+Date:   Wed, 19 Oct 2022 18:40:15 +0900
+Message-Id: <20221019094015.832398-1-tegongkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Wed, 19 Oct 2022 11:38:48 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     tudor.ambarus@microchip.com, pratyush@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        talel@amazon.com, jonnyc@amazon.com, hhhawa@amazon.com,
-        hanochu@amazon.com, itamark@amazon.com, shellykz@amazon.com,
-        amitlavi@amazon.com, dkl@amazon.com
-Subject: Re: [PATCH v2 1/1] mtd: spi-nor: micron-st: Enable locking for
- n25q256ax1/mt25qu256a
-In-Reply-To: <1ba2e7ff-cf6c-1292-72e0-14b5b5b9282c@amazon.com>
-References: <20221019071631.15191-1-farbere@amazon.com>
- <73bfa5ae90e2269387540019806c2839@walle.cc>
- <1ba2e7ff-cf6c-1292-72e0-14b5b5b9282c@amazon.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <f489048bd1fa65db1a050f1321c640de@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-10-19 11:25, schrieb Farber, Eliav:
-> On 10/19/2022 11:21 AM, Michael Walle wrote:
->> Hi,
->> 
->> Am 2022-10-19 09:16, schrieb Eliav Farber:
->>> n25q256ax1 [1] and mt25qu256a [2] (both have same jedec_id - 
->>> 0x20bb19)
->>> use the 4 bit Block Protection scheme and support Top/Bottom 
->>> protection
->>> via the BP and TB bits of the Status Register.
->>> BP3 is located in bit 6 of the Status Register.
->>> Tested on both n25q256ax1 and mt25qu256a.
->>> 
->>> [1]
->>> https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/n25q/n25q_256mb_3v.pdf 
->>> [2]
->>> https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25q/die-rev-a/mt25q_qljs_u_256_aba_0.pdf
->> 
->> If you respin, you can use a "Link:" tag for the URL above.
-> 
-> Ack.
-> 
->>> Signed-off-by: Eliav Farber <farbere@amazon.com>
->>> ---
->>> xxd -p
->>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>> 53464450060101ff00060110300000ff84000102800000ffffffffffffff
->>> ffffffffffffffffffffffffffffffffffffe520fbffffffff0f29eb276b
->>> 273b27bbffffffffffff27bbffff29eb0c2010d80f520000244a99008b8e
->>> 03d4ac0127387a757a75fbbdd55c4a0f82ff81bd3d36ffffffffffffffff
->>> ffffffffffffffffffe7ffff21dcffff
->>> 
->>> md5sum
->>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>> 5ea738216f68c9f98987bb3725699a32
->>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>> cat
->>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/jedec_id 
->>> 20bb19104400
->>> 
->>> cat
->>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/partname 
->>> mt25qu256a
->>> 
->>> cat
->>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/manufacturer 
->>> st
->> 
->> That's the mt25qu256a SFDP. What about the n25q256ax1?
-> 
-> On the same card, with same NOR flash memory I'm running two different
-> kernel versions.
-> First version is quite old - 4.19.239 which does not support mt25qu256a
-> and therefore device is detected as n25q256ax1.
-> Second version is 6.1.0-rc1 and it detects the same device as 
-> mt25qu256a.
-> So I was able to dump SFDP when running version 6.1.0-rc1, but not when
-> running 4.19.239 which does not support the sysfs to dump the SFPD
-> information.
-> I checked that locking works with my changes when running on both 
-> kernel
-> versions.
+This commit removes warning generated by cocci as follows:
 
-So you've only tested on an mt25qu256a, correct? Then you should only
-add the locking to this flash device. (and maybe backport the mt25qu256a
-to your older kernel).
+do_div() does a 64-by-32 division, please consider using div64_u64 instead.
 
--michael
+Using div64_u64 instead of do_div can avoid potential truncation.
+
+Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+---
+ drivers/staging/pi433/rf69.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index 8c7fab6a46bb..683dd94489f9 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -252,11 +252,11 @@ int rf69_set_deviation(struct spi_device *spi, u32 deviation)
+ 
+ 	// calculat f step
+ 	f_step = F_OSC * factor;
+-	do_div(f_step, 524288); //  524288 = 2^19
++	div64_u64(f_step, 524288); //  524288 = 2^19
+ 
+ 	// calculate register settings
+ 	f_reg = deviation * factor;
+-	do_div(f_reg, f_step);
++	div64_u64(f_reg, f_step);
+ 
+ 	msb = (f_reg & 0xff00) >> 8;
+ 	lsb = (f_reg & 0xff);
+@@ -291,7 +291,7 @@ int rf69_set_frequency(struct spi_device *spi, u32 frequency)
+ 
+ 	// calculat f step
+ 	f_step = F_OSC * factor;
+-	do_div(f_step, 524288); //  524288 = 2^19
++	div64_u64(f_step, 524288); //  524288 = 2^19
+ 
+ 	// check input value
+ 	f_max = div_u64(f_step * 8388608, factor);
+@@ -302,7 +302,7 @@ int rf69_set_frequency(struct spi_device *spi, u32 frequency)
+ 
+ 	// calculate reg settings
+ 	f_reg = frequency * factor;
+-	do_div(f_reg, f_step);
++	div64_u64(f_reg, f_step);
+ 
+ 	msb = (f_reg & 0xff0000) >> 16;
+ 	mid = (f_reg & 0xff00)   >>  8;
+-- 
+2.34.1
+
