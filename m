@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184336044D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56FB6044D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232887AbiJSMQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S229828AbiJSMQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiJSMPk (ORCPT
+        with ESMTP id S232842AbiJSMPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:15:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F2816C22B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666180196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tliq0jGQlQ6WUkypc+pPeMdK0ENXv8yHCBdRCPsUe7o=;
-        b=UmoV46MRR4qIHODgQ3goutOcWUuDgBYUOuDuUhWofUNNHPL9Y2o51itJZHJuwiP7P2d/ao
-        6f/eOL7A0jqA/EN5qCVBiSflUl2GRWwcufFU3c7HnZkDnZjmfCeKS/AIlvSGNAre6NYG4j
-        dL5FQURft//Nvgffk9fjU8SQD0IjVB0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-120-jlNrQSK4NLuYMjNaJ2OMjg-1; Wed, 19 Oct 2022 07:49:55 -0400
-X-MC-Unique: jlNrQSK4NLuYMjNaJ2OMjg-1
-Received: by mail-qk1-f200.google.com with SMTP id o13-20020a05620a2a0d00b006cf9085682dso14474346qkp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:49:55 -0700 (PDT)
+        Wed, 19 Oct 2022 08:15:55 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C73B22B0E;
+        Wed, 19 Oct 2022 04:51:56 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id m15so24819436edb.13;
+        Wed, 19 Oct 2022 04:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yTGwtjY7Qx3UHK834yfCMHLL0TaAs+yVt4csz4H7rFw=;
+        b=OtokJ3G5ZiLF/OC4iEJMusA6NeuqVEVdAZ9v0gKZ8M5SVAINXZqwJnLLxNhUZUgn8R
+         Q7gUdiErZk0QhUbU84FHgDdN+NzKzliyYGENPzQm0dU8dRuZrN4SxXvFchaXy4nCYdz+
+         9m8rfs2Wr8KKCpoURG3k9LjtOE1djHUFfUWmOGsjHt90WSAMwlXlepZVemcfXbkZV882
+         j1JEIpQJk7vhe8E/4jkP7JzjmN5G4sHQ+WWbRkhH6rjTLvP+rBW440/lpRqjboaxwzsm
+         78L82AZScEuO4G8Pu7+oje4nyPKYFi1KhoQQibGXkee3QvlrxpWsuo1+dkPwB0MXStJt
+         3blA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tliq0jGQlQ6WUkypc+pPeMdK0ENXv8yHCBdRCPsUe7o=;
-        b=Wpw+c2sK2LMPgQTDGF5rh8o3HiSskzkBDmnIlxOC/OtX1sfW3tdBIUo6FNFEZJE8ko
-         XXU1olG45UhjiGfpgEZHiXDUxHXfbGAXCO5wI3y0ZNMImKJ1voTe92GIJ3KN4wkEspcX
-         uqERU6BoJCIAzpXL8LGXlLXH75z7FovCHeXJc7lWTyEgEcoBELt82nV4F1tpD+tzJWfM
-         1teF/r0Euzq4iU+GlsaITPEdH1QOKkrbC4U8vhu/0UtGqCGkZxPDuwhZzQQmGvkz+Pff
-         OsJbbCM1PwyALc7esVCg8ePXj8ooPYB5f6KR1S0nCYcAnQfQg+XExvrLwpKA5FGVQ/gy
-         FCog==
-X-Gm-Message-State: ACrzQf3WvVbPPBeiLFq7bsG12rlCHPdix02ZfqhbqMiZE6XkioJa5hrs
-        D7r73pc280bry0LoNMcITsssAyLEEpL/ZbTYvPFS5wO5psmetBUlS6YbJm8oVZGUGPyjTP5/F5x
-        SCF/Uj3n+VcOuJyMNEZg6Bb7v
-X-Received: by 2002:a05:6214:5185:b0:472:f9b0:cbc6 with SMTP id kl5-20020a056214518500b00472f9b0cbc6mr5924605qvb.92.1666180194192;
-        Wed, 19 Oct 2022 04:49:54 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM67Vxg6Aq6b0c0Q7sb8e01/USP6g3yAGI8BuFe9P250JYUbRQC8W9CSSfaZ2F+ZdOZfoDyIzg==
-X-Received: by 2002:a05:6214:5185:b0:472:f9b0:cbc6 with SMTP id kl5-20020a056214518500b00472f9b0cbc6mr5924586qvb.92.1666180193943;
-        Wed, 19 Oct 2022 04:49:53 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id a10-20020ac85b8a000000b00397b1c60780sm3980873qta.61.2022.10.19.04.49.52
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yTGwtjY7Qx3UHK834yfCMHLL0TaAs+yVt4csz4H7rFw=;
+        b=mR05cQJSKmBYtbYk/RCBD8IXOBoXa7qBk3SJU7OUNTA+3jvvLS+RxweIiulI52k/KL
+         02QDNe5oHalHaQMDbXzKEbA+TlIrv6ZZaOZdo0wOjhtH+64szR5THzR1gBkCZv28bLXo
+         7TfBYB1hSMM+NRntN9mUmIEP+t7Nn79Ld+T+DSB0wgeb1Fg/7cM5bPIf9xLjiSnO63Oi
+         h+61yxQTDzYThRygXq2wrsCL5qG7nu1azqZt6IirVx8JbjJm8Ut1AmpjdI/t0DkhQEGy
+         tH/9zJaeXEb/nyKv4PHN3fa1uokRgF/KnvCtgIXMVpp9505RAVFt3xYu03TxGvD2YCMp
+         zpGQ==
+X-Gm-Message-State: ACrzQf1FoPZ47+InYEoI+sihES/XmvxDvwCH4VMG3cG6d1CfcF+4mOox
+        juj6j6q7jVYPZCP0w73WXPk=
+X-Google-Smtp-Source: AMsMyM5hxDnxb0AZmFD6fuLcsa3sjqXIPikwrHU3jQN0KPwiAZQ1Myq20sNxembhfYBGhptsB46FRw==
+X-Received: by 2002:a05:6402:3709:b0:459:279e:fdc6 with SMTP id ek9-20020a056402370900b00459279efdc6mr7180563edb.338.1666180247042;
+        Wed, 19 Oct 2022 04:50:47 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id dk24-20020a0564021d9800b0045b910b0542sm10377884edb.15.2022.10.19.04.50.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 04:49:53 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 07:49:57 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, baocong.liu@unisoc.com,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
-Message-ID: <Y0/kZbIvMgkNhWpM@bfoster>
-References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y0lSChlclGPkwTeA@casper.infradead.org>
- <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
- <Y017BeC64GDb3Kg7@casper.infradead.org>
- <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
- <Y04Y3RNq6D2T9rVw@casper.infradead.org>
- <20221018223042.GJ2703033@dread.disaster.area>
+        Wed, 19 Oct 2022 04:50:46 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 2/2] mtd: core: set ROOT_DEV for partitions marked as root devices in DT
+Date:   Wed, 19 Oct 2022 13:50:41 +0200
+Message-Id: <20221019115041.31805-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221019114855.31639-1-zajec5@gmail.com>
+References: <20221019114855.31639-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018223042.GJ2703033@dread.disaster.area>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,136 +85,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 09:30:42AM +1100, Dave Chinner wrote:
-> On Tue, Oct 18, 2022 at 04:09:17AM +0100, Matthew Wilcox wrote:
-> > On Tue, Oct 18, 2022 at 10:52:19AM +0800, Zhaoyang Huang wrote:
-> > > On Mon, Oct 17, 2022 at 11:55 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Mon, Oct 17, 2022 at 01:34:13PM +0800, Zhaoyang Huang wrote:
-> > > > > On Fri, Oct 14, 2022 at 8:12 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > >
-> > > > > > On Fri, Oct 14, 2022 at 01:30:48PM +0800, zhaoyang.huang wrote:
-> > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > > >
-> > > > > > > Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
-> > > > > > > superblock's inode list. The direct reason is zombie page keeps staying on the
-> > > > > > > xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
-> > > > > > > and supposed could be an xa update without synchronize_rcu etc. I would like to
-> > > > > > > suggest skip this page to break the live lock as a workaround.
-> > > > > >
-> > > > > > No, the underlying bug should be fixed.
-> > > >
-> > > >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > Understand. IMHO, find_get_entry actruely works as an open API dealing
-> > > with different kinds of address_spaces page cache, which requires high
-> > > robustness to deal with any corner cases. Take the current problem as
-> > > example, the inode with fault page(refcount=0) could remain on the
-> > > sb's list without live lock problem.
-> > 
-> > But it's a corner case that shouldn't happen!  What else is going on
-> > at the time?  Can you reproduce this problem easily?  If so, how?
-> 
-> I've been seeing this livelock, too. The reproducer is,
-> unfortunately, something I can't share - it's a massive program that
-> triggers a data corruption I'm working on solving.
-> 
-> Now that I've
-> mostly fixed the data corruption, long duration test runs end up
-> livelocking in page cache lookup after several hours.
-> 
-> The test is effectively writing a 100MB file with multiple threads
-> doing reverse adjacent racing 1MB unaligned writes. Once the file is
-> written, it is then mmap()d and read back from the filesystem for
-> verification.
-> 
-> THis is then run with tens of processes concurrently, and then under
-> a massively confined memcg (e.g. 32 processes/files are run in a
-> memcg with only 200MB of memory allowed). This causes writeback,
-> readahead and memory reclaim to race with incoming mmap read faults
-> and writes.  The livelock occurs on file verification and it appears
-> to be an interaction with readahead thrashing.
-> 
-> On my test rig, the physical read to write ratio is at least 20:1 -
-> with 32 processes running, the 5s IO rates are:
-> 
-> Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
-> dm-0          52187.20      3677.42      1345.92         0.00      18387       6729          0
-> dm-0          62865.60      5947.29         0.08         0.00      29736          0          0
-> dm-0          62972.80      5911.20         0.00         0.00      29556          0          0
-> dm-0          59803.00      5516.72       133.47         0.00      27583        667          0
-> dm-0          63068.20      5292.34       511.52         0.00      26461       2557          0
-> dm-0          56775.60      4184.52      1248.38         0.00      20922       6241          0
-> dm-0          63087.40      5901.26        43.77         0.00      29506        218          0
-> dm-0          62769.00      5833.97        60.54         0.00      29169        302          0
-> dm-0          64810.20      5636.13       305.63         0.00      28180       1528          0
-> dm-0          65222.60      5598.99       349.48         0.00      27994       1747          0
-> dm-0          62444.00      4887.05       926.67         0.00      24435       4633          0
-> dm-0          63812.00      5622.68       294.66         0.00      28113       1473          0
-> dm-0          63482.00      5728.43       195.74         0.00      28642        978          0
-> 
-> This is reading and writing the same amount of file data at the
-> application level, but once the data has been written and kicked out
-> of the page cache it seems to require an awful lot more read IO to
-> get it back to the application. i.e. this looks like mmap() is
-> readahead thrashing severely, and eventually it livelocks with this
-> sort of report:
-> 
-> [175901.982484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> [175901.985095] rcu:    Tasks blocked on level-1 rcu_node (CPUs 0-15): P25728
-> [175901.987996]         (detected by 0, t=97399871 jiffies, g=15891025, q=1972622 ncpus=32)
-> [175901.991698] task:test_write      state:R  running task     stack:12784 pid:25728 ppid: 25696 flags:0x00004002
-> [175901.995614] Call Trace:
-> [175901.996090]  <TASK>
-> [175901.996594]  ? __schedule+0x301/0xa30
-> [175901.997411]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> [175901.998513]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> [175901.999578]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-> [175902.000714]  ? xas_start+0x53/0xc0
-> [175902.001484]  ? xas_load+0x24/0xa0
-> [175902.002208]  ? xas_load+0x5/0xa0
-> [175902.002878]  ? __filemap_get_folio+0x87/0x340
-> [175902.003823]  ? filemap_fault+0x139/0x8d0
-> [175902.004693]  ? __do_fault+0x31/0x1d0
-> [175902.005372]  ? __handle_mm_fault+0xda9/0x17d0
-> [175902.006213]  ? handle_mm_fault+0xd0/0x2a0
-> [175902.006998]  ? exc_page_fault+0x1d9/0x810
-> [175902.007789]  ? asm_exc_page_fault+0x22/0x30
-> [175902.008613]  </TASK>
-> 
-> Given that filemap_fault on XFS is probably trying to map large
-> folios, I do wonder if this is a result of some kind of race with
-> teardown of a large folio...
-> 
+From: Rafał Miłecki <rafal@milecki.pl>
 
-I somewhat recently tracked down a hugepage/swap problem that could
-manifest as a softlockup in the folio lookup path (due to indefinite
-folio_try_get_rcu() failure):
+This adds support for "linux,root-device" binding that is used to mark
+root device MTD partition. It's useful for devices using device tree
+that don't have bootloader passing root info in cmdline.
 
-https://lore.kernel.org/linux-mm/20220906190602.1626037-1-bfoster@redhat.com/
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ drivers/mtd/mtdcore.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-It could easily be something different leading to the same side effect,
-particularly since I believe the issue I saw was introduced in v5.19,
-but might be worth a test if you have a reliable reproducer.
-
-Brian
-
-> There is a very simple corruption reproducer script that has been
-> written, but I haven't been using it. I don't know if long term
-> running of the script here:
-> 
-> https://lore.kernel.org/linux-xfs/d00aff43-2bdc-0724-1996-4e58e061ecfd@redhat.com/
-> 
-> will trigger the livelock as the verification step is
-> significantly different, but it will give you insight into the
-> setup of the environment that leads to the livelock. Maybe you could
-> replace the md5sum verification with a mmap read with xfs_io to
-> simulate the fault load that seems to lead to this issue...
-> 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
-> 
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index 07249af4f890..034b06aff660 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -28,6 +28,7 @@
+ #include <linux/leds.h>
+ #include <linux/debugfs.h>
+ #include <linux/nvmem-provider.h>
++#include <linux/root_dev.h>
+ 
+ #include <linux/mtd/mtd.h>
+ #include <linux/mtd/partitions.h>
+@@ -735,6 +736,12 @@ int add_mtd_device(struct mtd_info *mtd)
+ 		not->add(mtd);
+ 
+ 	mutex_unlock(&mtd_table_mutex);
++
++	if (of_find_property(mtd_get_of_node(mtd), "linux,rootfs", NULL)) {
++		pr_info("mtd: setting mtd%d (%s) as root device\n", mtd->index, mtd->name);
++		ROOT_DEV = MKDEV(MTD_BLOCK_MAJOR, mtd->index);
++	}
++
+ 	/* We _know_ we aren't being removed, because
+ 	   our caller is still holding us here. So none
+ 	   of this try_ nonsense, and no bitching about it
+-- 
+2.34.1
 
