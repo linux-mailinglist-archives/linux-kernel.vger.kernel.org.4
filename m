@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0718F6048D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE0A60497C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbiJSOJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S229961AbiJSOlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJSOJb (ORCPT
+        with ESMTP id S230139AbiJSOk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:09:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C2897D6F;
-        Wed, 19 Oct 2022 06:51:37 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C1607660238F;
-        Wed, 19 Oct 2022 14:48:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666187291;
-        bh=JRFBIEM/o3vlqulr1q6kOtGadUUgU5fFs6PkyTMxPoM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UCmD794vdXoT52u4B6OT78/64SmEehyANCMurAXV+o/M6BESNlUbHQOjv3jkxrL3K
-         9BHh5/+85ySWzuLpP7nrVjysxQQG7CSGjLuo/NzoPd9x/rv1kKajohe3gYwOmMUAKQ
-         VZ3Y7RSFJYmJRoqWW+Guri4l1q1fr2KAJSCn0OBVhTPBohP1KiapOQGFTw5tbiBD+l
-         LgC3Db3v/ivXnLilPWVuqrwBSxZ9YPhBB1c/VAinDz1eeUhf2Ha2DZfJ0kCg6LaeHl
-         gPpqH+TTY9yAIc9ni4o+ZaG0n2zBsfLoj2KLMROl8HFiNwYlX+ExHYApUr7XZtuTaJ
-         u9ZL2m9yX1X6A==
-Message-ID: <56042926-4921-3e77-ae0f-3bc6c462bb5e@collabora.com>
-Date:   Wed, 19 Oct 2022 15:48:08 +0200
+        Wed, 19 Oct 2022 10:40:26 -0400
+X-Greylist: delayed 466 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 07:25:45 PDT
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A3418D44F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:25:45 -0700 (PDT)
+Received: from relay3-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::223])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4AAADCF0FE
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:50:05 +0000 (UTC)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7409860007;
+        Wed, 19 Oct 2022 13:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666187324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jWLdxN+97ap53jrpUC9GjBMEcJ1tDM3CYAcf8zsyORM=;
+        b=YiJml/9fVs+YJuiGX4rQXxGEs+coQsQs1xBrSD8b1tUWYrd40E0B12k/jRtGGcIMzvFq2d
+        u7NHnO44mmuuxi/AqLPQZDUEX1x2RDr4h6F+fAknfzn3939l1TEBHqwJCxvCg4u1cV321G
+        HmAvz87vCCSh67C7UBcfAqxeRmIXdp9NwPEcJn3zecAAG4GBK2e8T187Ilg29aHM9iRxHQ
+        VMIlNnSrL+wgHK9kT9f/6UNZ4p0Wre0Qwbq7z7VaVJY2pq0F5dOqYU/WJeLNYMuGj04PNO
+        8SnsD6O7X4t43ubUK0O+v52aHDg3OBQZfj+9vp5F6Bym9Zu7LGrMXuEwSbgH8w==
+Date:   Wed, 19 Oct 2022 15:48:41 +0200
+From:   =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Subject: Re: [PATCH 3/6] arm: configs: spear6xx: Enable PL110 display
+ controller
+Message-ID: <20221019154841.1cb2a15a@kmaincent-XPS-13-7390>
+In-Reply-To: <5e6858b7-231a-187c-acaf-f82b82a956bf@linaro.org>
+References: <20221019133208.319626-1-kory.maincent@bootlin.com>
+        <20221019133208.319626-4-kory.maincent@bootlin.com>
+        <5e6858b7-231a-187c-acaf-f82b82a956bf@linaro.org>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4] pwm: mtk-disp: Fix the parameters calculated by the
- enabled flag of disp_pwm
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
-        jitao.shi@mediatek.com
-Cc:     linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1666172538-11652-1-git-send-email-xinlei.lee@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1666172538-11652-1-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,19 +64,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/10/22 11:42, xinlei.lee@mediatek.com ha scritto:
-> From: xinlei lee <xinlei.lee@mediatek.com>
-> 
-> In the original mtk_disp_pwm_get_state() function wrongly uses bit 0 of
-> CON0 to judge if the PWM is enabled.
-> However that is indicated by a bit (at a machine dependent position) in
-> the DISP_PWM_EN register. Fix this accordingly.
-> 
-> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
-> Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Hello Krzysztof,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Wed, 19 Oct 2022 09:38:45 -0400
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
+> On 19/10/2022 09:32, K=C3=B6ry Maincent wrote:
+> > From: Kory Maincent <kory.maincent@bootlin.com>
+> >=20
+> > Enable the PL110 DRM driver, used by the spear600.
+> >=20
+> > CONFIG_I2C is dropped from the defconfig as it is selected by CONFIG_DR=
+M. =20
+>=20
+> I2C as a user-selectable option should stay. Don't remove such
+> (user-selectable) top-level options just because something else selected =
+it.
 
-
+As the CONFIG_DRM selects it, the "make savedefconfig" removes it by defaul=
+t.
+Why keeping something that is already automatically enabled by CONFIG_DRM?
