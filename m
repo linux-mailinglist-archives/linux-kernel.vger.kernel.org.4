@@ -2,72 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6CE60395B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4CF60395D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiJSFtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 01:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S229921AbiJSFtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 01:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJSFtJ (ORCPT
+        with ESMTP id S229675AbiJSFtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 01:49:09 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98D94E1BB;
-        Tue, 18 Oct 2022 22:49:07 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id b1so26330410lfs.7;
-        Tue, 18 Oct 2022 22:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vNPqK162kgqaPz6V+s7e/jdWmhKxKvv/hKpuPFVppac=;
-        b=B6qjDyGBm/aKVQr0poidauzQKsHGvfnmXQDokXWtIQVgrZHQ1T3Erw4Nygpkmefjed
-         ubXpeYboLUlxAKFwLC5v02JInWbMBlk/zbnwnjoihioJ4KbXdNpi6de3Fb9r1SrK8E/O
-         8A/jb/5bg0g+rm5VRuvenW44FRx30uvRGAHpsoOTYWpA3G/gswQyqkxpkTE8X7DKo+j8
-         0TvYDB0DpGz3ZBEgazvIQWYK/bFdwWcxif6CVDEFWO+1oQ3m4om2PgLkPlYaDIgg3FQP
-         WvcFBPv5sjkZxlhvN7HAWXFkQTPvNuDgWNUYY3XXHF/SY2e08BYqTTdq84VW7Z1ukVJf
-         sudw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vNPqK162kgqaPz6V+s7e/jdWmhKxKvv/hKpuPFVppac=;
-        b=PfObBUNg/NB8QmNJgpYsPhPsspFvU++Jzq8MGTU5c1CExvbD9Xg43QbUmod4owXArS
-         xf/Dbp/f+LeXcb1PXyKBzDgyJwzL9/zB1Vw4/bgTRJtEcNS2F/S6WQyPGHOvRfRPNkYX
-         jLlEcbUryq4qkRsbfFiQJFrnxBgY30XgE/ue33DShnDVW9wstTGpgi+EGUr75QJR92U0
-         zHpPpIzrBgqBdh+UplQtsp5ciFu21dAZH5q/emsYu90Ih8VPp3CoB4LCzXpOxsobpU+/
-         44E7pJ5lsRSUzx7D/A16rCnTQ+agbU/2iWHi5wRZkPTM/xDjqwQ0Kmz/wQ4Y2XmIbC8A
-         ua9A==
-X-Gm-Message-State: ACrzQf0rTf/ORHK51zmvkGE6nh51c1Hr8OyNV1U4+mRmW5yJnpofPyGB
-        wDG0fMFlCiiaWt/pVN6EV6DkmLwplgLfsfDv3JQ=
-X-Google-Smtp-Source: AMsMyM6ZrZsopl5vtDdZTrR2QjxvZjDBdP1lnO5DmjKSqIRkFTS5xmOUv5Wwo/XD9eSEZio7Ytcv+uSheZX03RYSchw=
-X-Received: by 2002:ac2:5f51:0:b0:4a4:5e1f:fce1 with SMTP id
- 17-20020ac25f51000000b004a45e1ffce1mr2405597lfz.130.1666158545890; Tue, 18
- Oct 2022 22:49:05 -0700 (PDT)
+        Wed, 19 Oct 2022 01:49:41 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF8513DCE;
+        Tue, 18 Oct 2022 22:49:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SjJH6CrmSSca/kv54AIlGCwmi6TWNVvARpu2fZqFSrhG/sXcOeOuHkm6wZHkWDJYqs54GEAtirAgOerepbRxeYwQ3tyk68abLSgXKal1LjA/FFIDZZbhzxb13+uvff3N2vlCUwAKxziTW1pVjfhcyW5KGMiJl9wkYRHv3bABjtsQzdaAviZPoNdcXfm9kvr5fL4eNo1ygeD7uUCe0ct327TDbLHJ0Co5GjpqT0W+pdQV6PbHwVMp2kdiBbthz7RkeOOz7tMKes/KSVmQkhEWBgjQTfpboRVkDuc2a8wG15DRQiUkcz4gYS5SdCXpewiZq/UDzcKAJDPAHp8RLYX6Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EsA2i1YT/luMW4/sKxuSUBATmaSk4o0SamoL/Mft28s=;
+ b=U4yCEOticWzRrxTDMsoH4hLkfToU8rvyGGCqr3sGKmPWR8i1fv7SAZWuMhv2sZpJ95F2IdZUvVakAqHDIhWx42XmLIJf+Y7xFJWdRO+ADXAQf0isvSSOE3DtNKyAMH4iFQcOFwu87ZYS7hHxSirgmWDiMnz0rf34MSTe12By/unEaZku+k+RCvahlJcKHvv9TZ9ae/euYE42Y3a//Henva4rbgVSESrxgng6bsIRuYD/GDV0oGCgiJyVF+hqXsDhcWkl3a/yYEDLRgtOaQZd3b61DPdTHatELwPJLHsH++tSeGy+Dygp1q/6ieCj/fvAtNORXoUKRKDZ0zJr7Qn78A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EsA2i1YT/luMW4/sKxuSUBATmaSk4o0SamoL/Mft28s=;
+ b=rbrcKdOzXkh/agO3hByL3OJZ3Ke5EVAmlxALA8rh9HaWdNzp5HYb68cEN8q+77Y1HySKzcqqLr8/T4LBs8MnSj5I8HzIR56y4KUcvhYeZSKredKZWVbXZFceeFOG0GGSj0CxjmGreuyxxjs+Xwp9BcKRnBaPj4KCRyLDLqHEU98=
+Received: from BN9P222CA0025.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::30)
+ by CO6PR12MB5410.namprd12.prod.outlook.com (2603:10b6:5:35b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32; Wed, 19 Oct
+ 2022 05:49:37 +0000
+Received: from BN8NAM11FT084.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10c:cafe::ca) by BN9P222CA0025.outlook.office365.com
+ (2603:10b6:408:10c::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34 via Frontend
+ Transport; Wed, 19 Oct 2022 05:49:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT084.mail.protection.outlook.com (10.13.176.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5746.16 via Frontend Transport; Wed, 19 Oct 2022 05:49:36 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
+ 2022 00:49:35 -0500
+Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
+ Transport; Wed, 19 Oct 2022 00:49:32 -0500
+From:   Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>
+CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <saikrishna12468@gmail.com>, <git@amd.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: [PATCH] mmc: sdhci-of-arasan: Add support for dynamic configuration
+Date:   Wed, 19 Oct 2022 11:18:57 +0530
+Message-ID: <20221019054857.8286-1-sai.krishna.potthuri@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y0lSChlclGPkwTeA@casper.infradead.org> <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
- <Y017BeC64GDb3Kg7@casper.infradead.org> <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
- <Y04Y3RNq6D2T9rVw@casper.infradead.org> <20221018223042.GJ2703033@dread.disaster.area>
- <20221019011636.GM2703033@dread.disaster.area> <20221019044734.GN2703033@dread.disaster.area>
-In-Reply-To: <20221019044734.GN2703033@dread.disaster.area>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Wed, 19 Oct 2022 13:48:37 +0800
-Message-ID: <CAGWkznEGMg293S7jOmZ7G-UhEBg6rQZhTd6ffhjoDgoFGvhFNw@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, baocong.liu@unisoc.com,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT084:EE_|CO6PR12MB5410:EE_
+X-MS-Office365-Filtering-Correlation-Id: cac1699b-ed77-4495-38ec-08dab195b4cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dQm27aG3ky3zFVWsiuMQ/2aTfxSICUSHCMgIYY3UMOv1rxLuU357XUiXR6TpqCeIGQ6wlFC4hfnaCwmnAsOsxb+h5CAArxh33OyO9qvM2J+ozIr7EodyWKhlEx3A6bMJkmnEsMkNUhfMBb4lPAGc26cEZ4WTPT4oDF8LNAiY3QZ7aNYLH4mL0CDu/U8N7sTf8bMGxpM9vtH2VwNdl/+H3Q4cdTdalJcbelC0gdmSnH+kSIKaY5uy0SDlYZAEGFUgZldSSMg0wxu8FHebrgzOIGq+mQFFIMeKJbZih/BiWsWzbtijfUeYKKobJ0xISm6CdQJtSW4qw3rWuXbAvVr5dZ9y059vCRfs61dXHm+uERb9f9Um5JmcItLoAT0ZV5OWM9AygBGNNEV1OyH+p5J+qq9GBGV5BHP4bbrM1WiXTKEOIzOYmt7t2/+MOHVjEWu6sqAD8GWvGhMDlA2PZN+JuNEyDTxcVqvV/F2S1FQxrWd6PPZbOFE0wqT6/b72JZri8XMHUanluOFdKfVgJI1w2nLwNknDU6Rrh18RSpcD4PS/ENxLNiAAi8DUrF51ZC8/4nphBVkFfQPj9shCrKKS/kEsds8ua2BVjoWFsq/0nnQYNliJ/FhceOF8t/w+9wWbHjL5q1KOc8dBXVbu80dCm5gTApeKj6S87vzc8gIb4Q+2Ec0+rgo6CWaAvVszesswYWtVZkR6dUTBOyFhkA7ZdNFK7jMYjuR0fEnpYwOx3ILvxAzxUNEr+69jvinaD8B0nn4XHvadUhSsKWEklsU/gxvqlFitNhuT9Wo/trms79Kh+B2yybeePxqgfD8upPoF
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199015)(46966006)(36840700001)(40470700004)(103116003)(2906002)(36756003)(82310400005)(5660300002)(86362001)(8936002)(4326008)(6666004)(186003)(41300700001)(40460700003)(478600001)(2616005)(1076003)(336012)(26005)(8676002)(47076005)(356005)(70586007)(83380400001)(70206006)(81166007)(426003)(40480700001)(82740400003)(54906003)(316002)(110136005)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 05:49:36.7469
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cac1699b-ed77-4495-38ec-08dab195b4cd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT084.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5410
+X-Spam-Status: No, score=0.7 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,140 +101,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:47 PM Dave Chinner <david@fromorbit.com> wrote:
->
-> On Wed, Oct 19, 2022 at 12:16:36PM +1100, Dave Chinner wrote:
-> > On Wed, Oct 19, 2022 at 09:30:42AM +1100, Dave Chinner wrote:
-> > > On Tue, Oct 18, 2022 at 04:09:17AM +0100, Matthew Wilcox wrote:
-> > > > On Tue, Oct 18, 2022 at 10:52:19AM +0800, Zhaoyang Huang wrote:
-> > > > > On Mon, Oct 17, 2022 at 11:55 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > >
-> > > > > > On Mon, Oct 17, 2022 at 01:34:13PM +0800, Zhaoyang Huang wrote:
-> > > > > > > On Fri, Oct 14, 2022 at 8:12 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > > > >
-> > > > > > > > On Fri, Oct 14, 2022 at 01:30:48PM +0800, zhaoyang.huang wrote:
-> > > > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > > > > >
-> > > > > > > > > Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
-> > > > > > > > > superblock's inode list. The direct reason is zombie page keeps staying on the
-> > > > > > > > > xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
-> > > > > > > > > and supposed could be an xa update without synchronize_rcu etc. I would like to
-> > > > > > > > > suggest skip this page to break the live lock as a workaround.
-> > > > > > > >
-> > > > > > > > No, the underlying bug should be fixed.
-> > > > > >
-> > > > > >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > > > Understand. IMHO, find_get_entry actruely works as an open API dealing
-> > > > > with different kinds of address_spaces page cache, which requires high
-> > > > > robustness to deal with any corner cases. Take the current problem as
-> > > > > example, the inode with fault page(refcount=0) could remain on the
-> > > > > sb's list without live lock problem.
-> > > >
-> > > > But it's a corner case that shouldn't happen!  What else is going on
-> > > > at the time?  Can you reproduce this problem easily?  If so, how?
-> > >
-> > > I've been seeing this livelock, too. The reproducer is,
-> > > unfortunately, something I can't share - it's a massive program that
-> > > triggers a data corruption I'm working on solving.
-> > >
-> > > Now that I've
-> > > mostly fixed the data corruption, long duration test runs end up
-> > > livelocking in page cache lookup after several hours.
-> > >
-> > > The test is effectively writing a 100MB file with multiple threads
-> > > doing reverse adjacent racing 1MB unaligned writes. Once the file is
-> > > written, it is then mmap()d and read back from the filesystem for
-> > > verification.
-> > >
-> > > THis is then run with tens of processes concurrently, and then under
-> > > a massively confined memcg (e.g. 32 processes/files are run in a
-> > > memcg with only 200MB of memory allowed). This causes writeback,
-> > > readahead and memory reclaim to race with incoming mmap read faults
-> > > and writes.  The livelock occurs on file verification and it appears
-> > > to be an interaction with readahead thrashing.
-> > >
-> > > On my test rig, the physical read to write ratio is at least 20:1 -
-> > > with 32 processes running, the 5s IO rates are:
-> > >
-> > > Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
-> > > dm-0          52187.20      3677.42      1345.92         0.00      18387       6729          0
-> > > dm-0          62865.60      5947.29         0.08         0.00      29736          0          0
-> > > dm-0          62972.80      5911.20         0.00         0.00      29556          0          0
-> > > dm-0          59803.00      5516.72       133.47         0.00      27583        667          0
-> > > dm-0          63068.20      5292.34       511.52         0.00      26461       2557          0
-> > > dm-0          56775.60      4184.52      1248.38         0.00      20922       6241          0
-> > > dm-0          63087.40      5901.26        43.77         0.00      29506        218          0
-> > > dm-0          62769.00      5833.97        60.54         0.00      29169        302          0
-> > > dm-0          64810.20      5636.13       305.63         0.00      28180       1528          0
-> > > dm-0          65222.60      5598.99       349.48         0.00      27994       1747          0
-> > > dm-0          62444.00      4887.05       926.67         0.00      24435       4633          0
-> > > dm-0          63812.00      5622.68       294.66         0.00      28113       1473          0
-> > > dm-0          63482.00      5728.43       195.74         0.00      28642        978          0
-> > >
-> > > This is reading and writing the same amount of file data at the
-> > > application level, but once the data has been written and kicked out
-> > > of the page cache it seems to require an awful lot more read IO to
-> > > get it back to the application. i.e. this looks like mmap() is
-> > > readahead thrashing severely, and eventually it livelocks with this
-> > > sort of report:
-> > >
-> > > [175901.982484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > > [175901.985095] rcu:    Tasks blocked on level-1 rcu_node (CPUs 0-15): P25728
-> > > [175901.987996]         (detected by 0, t=97399871 jiffies, g=15891025, q=1972622 ncpus=32)
-> > > [175901.991698] task:test_write      state:R  running task     stack:12784 pid:25728 ppid: 25696 flags:0x00004002
-> > > [175901.995614] Call Trace:
-> > > [175901.996090]  <TASK>
-> > > [175901.996594]  ? __schedule+0x301/0xa30
-> > > [175901.997411]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> > > [175901.998513]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> > > [175901.999578]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-> > > [175902.000714]  ? xas_start+0x53/0xc0
-> > > [175902.001484]  ? xas_load+0x24/0xa0
-> > > [175902.002208]  ? xas_load+0x5/0xa0
-> > > [175902.002878]  ? __filemap_get_folio+0x87/0x340
-> > > [175902.003823]  ? filemap_fault+0x139/0x8d0
-> > > [175902.004693]  ? __do_fault+0x31/0x1d0
-> > > [175902.005372]  ? __handle_mm_fault+0xda9/0x17d0
-> > > [175902.006213]  ? handle_mm_fault+0xd0/0x2a0
-> > > [175902.006998]  ? exc_page_fault+0x1d9/0x810
-> > > [175902.007789]  ? asm_exc_page_fault+0x22/0x30
-> > > [175902.008613]  </TASK>
-> > >
-> > > Given that filemap_fault on XFS is probably trying to map large
-> > > folios, I do wonder if this is a result of some kind of race with
-> > > teardown of a large folio...
-> > >
-> > > There is a very simple corruption reproducer script that has been
-> > > written, but I haven't been using it. I don't know if long term
-> > > running of the script here:
-> > >
-> > > https://lore.kernel.org/linux-xfs/d00aff43-2bdc-0724-1996-4e58e061ecfd@redhat.com/
-> > >
-> > > will trigger the livelock as the verification step is
-> > > significantly different, but it will give you insight into the
-> > > setup of the environment that leads to the livelock. Maybe you could
-> > > replace the md5sum verification with a mmap read with xfs_io to
-> > > simulate the fault load that seems to lead to this issue...
-> >
-> > FWIW, just tested this on a current Linus kernel. While there is
-> > massive read-ahead thrashing on v6.0, the thrashing is largely gone
-> > in v6.1-rc1+ and the iteration rate of the test is much, much
-> > better. The livelock remains, however.
->
-> Evidence is starting to point to an interaction with the multi-page
-> folio support in the page cache.
->
-> I removed the mapping_set_large_folios() calls in the XFS inode
-> instantiation and the test code has now run over 55,000 iterations
-> without failing.  The most iterations I'd seen with large folios
-> enabled was about 7,000 - typically it would fail within 2-3,000
-> iterations.
-hint from my side. The original problem I raised is under v5.15 where
-there is no folio yet.
->
-> Cheers,
->
-> Dave.
-> --
-> Dave Chinner
-> david@fromorbit.com
+Add dynamic configuration support for Xilinx ZynqMP which takes care of
+configuring the SD secure space configuration registers using EEMI APIs,
+performing SD reset assert and deassert.
+High level sequence:
+- Check for the PM dynamic configuration support, if no error proceed with
+SD dynamic configurations(next steps) otherwise skip the dynamic
+configuration.
+- Put the SD Controller in reset.
+- Configure SD Fixed configurations.
+- Configure the SD Slot Type.
+- Configure the BASE_CLOCK.
+- Configure the 8-bit support.
+- Bring the SD Controller out of reset.
+- Wait for 1msec delay.
+
+Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+---
+ drivers/mmc/host/sdhci-of-arasan.c | 69 ++++++++++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+
+diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+index 3997cad1f793..f051f3802aff 100644
+--- a/drivers/mmc/host/sdhci-of-arasan.c
++++ b/drivers/mmc/host/sdhci-of-arasan.c
+@@ -21,6 +21,7 @@
+ #include <linux/of_device.h>
+ #include <linux/phy/phy.h>
+ #include <linux/regmap.h>
++#include <linux/reset.h>
+ #include <linux/of.h>
+ #include <linux/firmware/xlnx-zynqmp.h>
+ 
+@@ -1521,6 +1522,65 @@ static int sdhci_arasan_register_sdclk(struct sdhci_arasan_data *sdhci_arasan,
+ 	return 0;
+ }
+ 
++static int sdhci_zynqmp_set_dynamic_config(struct device *dev,
++					   struct sdhci_arasan_data *sdhci_arasan)
++{
++	struct sdhci_host *host = sdhci_arasan->host;
++	struct clk_hw *hw = &sdhci_arasan->clk_data.sdcardclk_hw;
++	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
++	const char *clk_name = clk_hw_get_name(hw);
++	u32 mhz, node_id = !strcmp(clk_name, "clk_out_sd0") ? NODE_SD_0 : NODE_SD_1;
++	struct reset_control *rstc;
++	int ret;
++
++	/* Obtain SDHC reset control */
++	rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
++	if (IS_ERR(rstc)) {
++		dev_err(dev, "Cannot get SDHC reset.\n");
++		return PTR_ERR(rstc);
++	}
++
++	ret = reset_control_assert(rstc);
++	if (ret)
++		return ret;
++
++	ret = zynqmp_pm_set_sd_config(node_id, SD_CONFIG_FIXED, 0);
++	if (ret)
++		return ret;
++
++	ret = zynqmp_pm_set_sd_config(node_id, SD_CONFIG_EMMC_SEL,
++				      !!(host->mmc->caps & MMC_CAP_NONREMOVABLE));
++	if (ret)
++		return ret;
++
++	mhz = DIV_ROUND_CLOSEST_ULL(clk_get_rate(pltfm_host->clk), 1000000);
++	if (mhz > 100 && mhz <= 200)
++		mhz = 200;
++	else if (mhz > 50 && mhz <= 100)
++		mhz = 100;
++	else if (mhz > 25 && mhz <= 50)
++		mhz = 50;
++	else
++		mhz = 25;
++
++	ret = zynqmp_pm_set_sd_config(node_id, SD_CONFIG_BASECLK, mhz);
++	if (ret)
++		return ret;
++
++	ret = zynqmp_pm_set_sd_config(node_id, SD_CONFIG_8BIT,
++				      !!(host->mmc->caps & MMC_CAP_8_BIT_DATA));
++	if (ret)
++		return ret;
++
++	ret = reset_control_deassert(rstc);
++	if (ret)
++		return ret;
++
++	usleep_range(1000, 1500);
++
++	return 0;
++}
++
+ static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan)
+ {
+ 	struct sdhci_host *host = sdhci_arasan->host;
+@@ -1685,6 +1745,15 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
+ 		goto unreg_clk;
+ 	}
+ 
++	if (of_device_is_compatible(np, "xlnx,zynqmp-8.9a")) {
++		ret = zynqmp_pm_is_function_supported(PM_IOCTL, IOCTL_SET_SD_CONFIG);
++		if (!ret) {
++			ret = sdhci_zynqmp_set_dynamic_config(dev, sdhci_arasan);
++			if (ret)
++				goto unreg_clk;
++		}
++	}
++
+ 	sdhci_arasan->phy = ERR_PTR(-ENODEV);
+ 	if (of_device_is_compatible(np, "arasan,sdhci-5.1")) {
+ 		sdhci_arasan->phy = devm_phy_get(dev, "phy_arasan");
+-- 
+2.17.1
+
