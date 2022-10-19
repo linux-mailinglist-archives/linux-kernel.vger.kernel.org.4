@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09B6604BF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B40604C02
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbiJSPpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        id S230077AbiJSPqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbiJSPoH (ORCPT
+        with ESMTP id S231857AbiJSPqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:44:07 -0400
+        Wed, 19 Oct 2022 11:46:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE5015A328
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:39:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B9B1DED7F;
+        Wed, 19 Oct 2022 08:40:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61D9661934
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0433AC433C1;
-        Wed, 19 Oct 2022 15:38:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E038861844;
+        Wed, 19 Oct 2022 15:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53BB6C433C1;
+        Wed, 19 Oct 2022 15:40:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666193915;
-        bh=joYAV9jX5SsD5BU7n7AFcu/9JNz4Iim9bnJVf1UY9WA=;
+        s=k20201202; t=1666194023;
+        bh=NZg0qx4t5Tk5wFhDnMc5LFn6+3oYBwr9JSXtiUFpl3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TnabXx6O68DCjGPEdvxcqKmhe65McaKBXGvin6ZExjUWChHcz6bMg+Vhm4K4o1Whf
-         0xJjSYaudxuCF+fkS6STGLDDxVOVhsjsE/NzJ8HBG+RZs9cAQ5DPY+uMkBq2co/tzK
-         HX1fcwZQrYVZ/eGNlVE9yGtV3gYu7G+fpT917ORfq7atOKaLNpTUdw0NK9JsswgjXL
-         Y23PWjSSUcr7leVskx3n3mZdLQZ/wswlgRRBIQh8x4bpzvyfpk52uaPDQaC1ZGAaHu
-         CavOvrh61EwXwDgyQ8gPDaezI4Dd3tVzlud2NS+iw3h632823Wf+AxjG/TwOnBxDKg
-         UsbvaJ0pY5htA==
+        b=qOG5ElYouUvjm/kpFHS03r2CfV9xdBDsi7iOeZR27zxOz9e3uwYDC6LvNUOGsp6xo
+         V4BXEr/sV9lvTcYSfcvJJlx4BJXHvL1PpZUR05ZFMlHx7y9w7qUYA2dsAQCgG3ycPA
+         kej75i/HUWgz3H9k86E2zFNcTpuECH+F3tlEZiFdtIdz/18BKOhjWNbu8D0Qae21Rw
+         GqQDZmPl+tHqw5ZrotqQviZjzHE3DleiLKmr3jHlSHN1hYVn9zRcQ6r9UDZ/Ih/9f+
+         5RrqxXNI7nsMK1ygM3rxYh2P3L8doyTvF7sM1iOSVm3UqiFESk6hHqXfPr6jXr76ZG
+         Xy0an5OR1TpGQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
         linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 12/14] irqchip: remove davinci aintc driver
-Date:   Wed, 19 Oct 2022 17:29:38 +0200
-Message-Id: <20221019152947.3857217-13-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH 13/14] staging: media: remove davinci vpfe_capture driver
+Date:   Wed, 19 Oct 2022 17:29:39 +0200
+Message-Id: <20221019152947.3857217-14-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
 References: <20221019152947.3857217-1-arnd@kernel.org>
@@ -58,214 +60,7028 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The aintc driver was used on Davinci DM3xx and DM64xx SoCs, all of
-which got dropped from Linux, so this driver is orphaned as well.
+This driver was for the davinci dm644x and dm3xx platforms that are
+now removed from the kernel, so there are no more users.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/irqchip/Kconfig             |   5 -
- drivers/irqchip/Makefile            |   1 -
- drivers/irqchip/irq-davinci-aintc.c | 163 ----------------------------
- 3 files changed, 169 deletions(-)
- delete mode 100644 drivers/irqchip/irq-davinci-aintc.c
+ MAINTAINERS                                   |    1 -
+ drivers/staging/media/Kconfig                 |    1 -
+ drivers/staging/media/Makefile                |    1 -
+ .../media/deprecated/vpfe_capture/Kconfig     |   58 -
+ .../media/deprecated/vpfe_capture/Makefile    |    4 -
+ .../media/deprecated/vpfe_capture/TODO        |    7 -
+ .../deprecated/vpfe_capture/ccdc_hw_device.h  |   80 -
+ .../deprecated/vpfe_capture/dm355_ccdc.c      |  934 --------
+ .../deprecated/vpfe_capture/dm355_ccdc.h      |  308 ---
+ .../deprecated/vpfe_capture/dm355_ccdc_regs.h |  297 ---
+ .../deprecated/vpfe_capture/dm644x_ccdc.c     |  879 --------
+ .../deprecated/vpfe_capture/dm644x_ccdc.h     |  171 --
+ .../vpfe_capture/dm644x_ccdc_regs.h           |  140 --
+ .../media/deprecated/vpfe_capture/isif.c      | 1127 ----------
+ .../media/deprecated/vpfe_capture/isif.h      |  518 -----
+ .../media/deprecated/vpfe_capture/isif_regs.h |  256 ---
+ .../deprecated/vpfe_capture/vpfe_capture.c    | 1902 -----------------
+ include/media/davinci/vpfe_capture.h          |  177 --
+ 18 files changed, 6861 deletions(-)
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.c
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
+ delete mode 100644 include/media/davinci/vpfe_capture.h
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 7ef9f5e696d3..c9bb2ccf4044 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -136,11 +136,6 @@ config BRCMSTB_L2_IRQ
- 	select GENERIC_IRQ_CHIP
- 	select IRQ_DOMAIN
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bb3e20381128..5f18c0264e98 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20491,7 +20491,6 @@ W:	https://linuxtv.org
+ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ T:	git git://linuxtv.org/mhadli/v4l-dvb-davinci_devices.git
+ F:	drivers/media/platform/ti/davinci/
+-F:	drivers/staging/media/deprecated/vpfe_capture/
+ F:	include/media/davinci/
  
--config DAVINCI_AINTC
--	bool
--	select GENERIC_IRQ_CHIP
--	select IRQ_DOMAIN
--
- config DAVINCI_CP_INTC
- 	bool
- 	select GENERIC_IRQ_CHIP
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index 87b49a10962c..ffd945fe71aa 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -8,7 +8,6 @@ obj-$(CONFIG_ATH79)			+= irq-ath79-misc.o
- obj-$(CONFIG_ARCH_BCM2835)		+= irq-bcm2835.o
- obj-$(CONFIG_ARCH_BCM2835)		+= irq-bcm2836.o
- obj-$(CONFIG_ARCH_ACTIONS)		+= irq-owl-sirq.o
--obj-$(CONFIG_DAVINCI_AINTC)		+= irq-davinci-aintc.o
- obj-$(CONFIG_DAVINCI_CP_INTC)		+= irq-davinci-cp-intc.o
- obj-$(CONFIG_EXYNOS_IRQ_COMBINER)	+= exynos-combiner.o
- obj-$(CONFIG_FARADAY_FTINTC010)		+= irq-ftintc010.o
-diff --git a/drivers/irqchip/irq-davinci-aintc.c b/drivers/irqchip/irq-davinci-aintc.c
+ TI ENHANCED CAPTURE (eCAP) DRIVER
+diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
+index d4f03b203ae5..ddab8e0a0809 100644
+--- a/drivers/staging/media/Kconfig
++++ b/drivers/staging/media/Kconfig
+@@ -57,7 +57,6 @@ source "drivers/staging/media/deprecated/meye/Kconfig"
+ source "drivers/staging/media/deprecated/saa7146/Kconfig"
+ source "drivers/staging/media/deprecated/stkwebcam/Kconfig"
+ source "drivers/staging/media/deprecated/tm6000/Kconfig"
+-source "drivers/staging/media/deprecated/vpfe_capture/Kconfig"
+ source "drivers/staging/media/deprecated/zr364xx/Kconfig"
+ endif
+ 
+diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
+index a387692b84f2..38e6cdfea29c 100644
+--- a/drivers/staging/media/Makefile
++++ b/drivers/staging/media/Makefile
+@@ -14,5 +14,4 @@ obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
+ obj-$(CONFIG_VIDEO_TM6000)	+= deprecated/tm6000/
+ obj-$(CONFIG_VIDEO_VIU)		+= deprecated/fsl-viu/
+ obj-$(CONFIG_USB_ZR364XX)	+= deprecated/zr364xx/
+-obj-y += deprecated/vpfe_capture/
+ obj-y += deprecated/saa7146/
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/Kconfig b/drivers/staging/media/deprecated/vpfe_capture/Kconfig
 deleted file mode 100644
-index 123eb7bfc117..000000000000
---- a/drivers/irqchip/irq-davinci-aintc.c
+index 10250e7e566b..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/Kconfig
 +++ /dev/null
-@@ -1,163 +0,0 @@
+@@ -1,58 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-config VIDEO_DM6446_CCDC
+-	tristate "TI DM6446 CCDC video capture driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_DAVINCI || COMPILE_TEST
+-	depends on I2C
+-	select VIDEOBUF_DMA_CONTIG
+-	help
+-	  Enables DaVinci CCD hw module. DaVinci CCDC hw interfaces
+-	  with decoder modules such as TVP5146 over BT656 or
+-	  sensor module such as MT9T001 over a raw interface. This
+-	  module configures the interface and CCDC/ISIF to do
+-	  video frame capture from slave decoders.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here. There will
+-	  be two modules called vpfe_capture.ko and dm644x_ccdc.ko
+-
+-config VIDEO_DM355_CCDC
+-	tristate "TI DM355 CCDC video capture driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_DAVINCI || COMPILE_TEST
+-	depends on I2C
+-	select VIDEOBUF_DMA_CONTIG
+-	help
+-	  Enables DM355 CCD hw module. DM355 CCDC hw interfaces
+-	  with decoder modules such as TVP5146 over BT656 or
+-	  sensor module such as MT9T001 over a raw interface. This
+-	  module configures the interface and CCDC/ISIF to do
+-	  video frame capture from a slave decoders
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here. There will
+-	  be two modules called vpfe_capture.ko and dm355_ccdc.ko
+-
+-config VIDEO_DM365_ISIF
+-	tristate "TI DM365 ISIF video capture driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_DAVINCI || COMPILE_TEST
+-	depends on I2C
+-	select VIDEOBUF_DMA_CONTIG
+-	help
+-	  Enables ISIF hw module. This is the hardware module for
+-	  configuring ISIF in VPFE to capture Raw Bayer RGB data from
+-	  a image sensor or YUV data from a YUV source.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here. There will
+-	  be two modules called vpfe_capture.ko and isif.ko
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/Makefile b/drivers/staging/media/deprecated/vpfe_capture/Makefile
+deleted file mode 100644
+index 609e8dc09ce7..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/Makefile
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_VIDEO_DM6446_CCDC) += vpfe_capture.o dm644x_ccdc.o
+-obj-$(CONFIG_VIDEO_DM355_CCDC) += vpfe_capture.o dm355_ccdc.o
+-obj-$(CONFIG_VIDEO_DM365_ISIF) += vpfe_capture.o isif.o
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/TODO b/drivers/staging/media/deprecated/vpfe_capture/TODO
+deleted file mode 100644
+index ce654d7337af..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/TODO
++++ /dev/null
+@@ -1,7 +0,0 @@
+-These are one of the few drivers still not using the vb2
+-framework, so these drivers are now deprecated with the intent of
+-removing them altogether by the beginning of 2023.
+-
+-In order to keep these drivers they have to be converted to vb2.
+-If someone is interested in doing this work, then contact the
+-linux-media mailinglist (https://linuxtv.org/lists.php).
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h b/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
+deleted file mode 100644
+index a545052a95a9..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
++++ /dev/null
+@@ -1,80 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * ccdc device API
+- */
+-#ifndef _CCDC_HW_DEVICE_H
+-#define _CCDC_HW_DEVICE_H
+-
+-#ifdef __KERNEL__
+-#include <linux/videodev2.h>
+-#include <linux/device.h>
+-#include <media/davinci/vpfe_types.h>
+-#include <media/davinci/ccdc_types.h>
+-
+-/*
+- * ccdc hw operations
+- */
+-struct ccdc_hw_ops {
+-	/* Pointer to initialize function to initialize ccdc device */
+-	int (*open) (struct device *dev);
+-	/* Pointer to deinitialize function */
+-	int (*close) (struct device *dev);
+-	/* set ccdc base address */
+-	void (*set_ccdc_base)(void *base, int size);
+-	/* Pointer to function to enable or disable ccdc */
+-	void (*enable) (int en);
+-	/* reset sbl. only for 6446 */
+-	void (*reset) (void);
+-	/* enable output to sdram */
+-	void (*enable_out_to_sdram) (int en);
+-	/* Pointer to function to set hw parameters */
+-	int (*set_hw_if_params) (struct vpfe_hw_if_param *param);
+-	/* get interface parameters */
+-	int (*get_hw_if_params) (struct vpfe_hw_if_param *param);
+-	/* Pointer to function to configure ccdc */
+-	int (*configure) (void);
+-
+-	/* Pointer to function to set buffer type */
+-	int (*set_buftype) (enum ccdc_buftype buf_type);
+-	/* Pointer to function to get buffer type */
+-	enum ccdc_buftype (*get_buftype) (void);
+-	/* Pointer to function to set frame format */
+-	int (*set_frame_format) (enum ccdc_frmfmt frm_fmt);
+-	/* Pointer to function to get frame format */
+-	enum ccdc_frmfmt (*get_frame_format) (void);
+-	/* enumerate hw pix formats */
+-	int (*enum_pix)(u32 *hw_pix, int i);
+-	/* Pointer to function to set buffer type */
+-	u32 (*get_pixel_format) (void);
+-	/* Pointer to function to get pixel format. */
+-	int (*set_pixel_format) (u32 pixfmt);
+-	/* Pointer to function to set image window */
+-	int (*set_image_window) (struct v4l2_rect *win);
+-	/* Pointer to function to set image window */
+-	void (*get_image_window) (struct v4l2_rect *win);
+-	/* Pointer to function to get line length */
+-	unsigned int (*get_line_length) (void);
+-
+-	/* Pointer to function to set frame buffer address */
+-	void (*setfbaddr) (unsigned long addr);
+-	/* Pointer to function to get field id */
+-	int (*getfid) (void);
+-};
+-
+-struct ccdc_hw_device {
+-	/* ccdc device name */
+-	char name[32];
+-	/* module owner */
+-	struct module *owner;
+-	/* hw ops */
+-	struct ccdc_hw_ops hw_ops;
+-};
+-
+-/* Used by CCDC module to register & unregister with vpfe capture driver */
+-int vpfe_register_ccdc_device(const struct ccdc_hw_device *dev);
+-void vpfe_unregister_ccdc_device(const struct ccdc_hw_device *dev);
+-
+-#endif
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
+deleted file mode 100644
+index da8db53e9498..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
++++ /dev/null
+@@ -1,934 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
--//
--// Copyright (C) 2006, 2019 Texas Instruments.
--//
--// Interrupt handler for DaVinci boards.
+-/*
+- * Copyright (C) 2005-2009 Texas Instruments Inc
+- *
+- * CCDC hardware module for DM355
+- * ------------------------------
+- *
+- * This module is for configuring DM355 CCD controller of VPFE to capture
+- * Raw yuv or Bayer RGB data from a decoder. CCDC has several modules
+- * such as Defect Pixel Correction, Color Space Conversion etc to
+- * pre-process the Bayer RGB data, before writing it to SDRAM.
+- *
+- * TODO: 1) Raw bayer parameter settings and bayer capture
+- *	 2) Split module parameter structure to module specific ioctl structs
+- *	 3) add support for lense shading correction
+- *	 4) investigate if enum used for user space type definition
+- *	    to be replaced by #defines or integer
+- */
+-#include <linux/platform_device.h>
+-#include <linux/uaccess.h>
+-#include <linux/videodev2.h>
+-#include <linux/err.h>
+-#include <linux/module.h>
 -
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/interrupt.h>
--#include <linux/irq.h>
--#include <linux/irqchip/irq-davinci-aintc.h>
--#include <linux/io.h>
--#include <linux/irqdomain.h>
+-#include "dm355_ccdc.h"
+-#include <media/davinci/vpss.h>
 -
--#include <asm/exception.h>
+-#include "dm355_ccdc_regs.h"
+-#include "ccdc_hw_device.h"
 -
--#define DAVINCI_AINTC_FIQ_REG0		0x00
--#define DAVINCI_AINTC_FIQ_REG1		0x04
--#define DAVINCI_AINTC_IRQ_REG0		0x08
--#define DAVINCI_AINTC_IRQ_REG1		0x0c
--#define DAVINCI_AINTC_IRQ_IRQENTRY	0x14
--#define DAVINCI_AINTC_IRQ_ENT_REG0	0x18
--#define DAVINCI_AINTC_IRQ_ENT_REG1	0x1c
--#define DAVINCI_AINTC_IRQ_INCTL_REG	0x20
--#define DAVINCI_AINTC_IRQ_EABASE_REG	0x24
--#define DAVINCI_AINTC_IRQ_INTPRI0_REG	0x30
--#define DAVINCI_AINTC_IRQ_INTPRI7_REG	0x4c
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("CCDC Driver for DM355");
+-MODULE_AUTHOR("Texas Instruments");
 -
--static void __iomem *davinci_aintc_base;
--static struct irq_domain *davinci_aintc_irq_domain;
+-static struct ccdc_oper_config {
+-	struct device *dev;
+-	/* CCDC interface type */
+-	enum vpfe_hw_if_type if_type;
+-	/* Raw Bayer configuration */
+-	struct ccdc_params_raw bayer;
+-	/* YCbCr configuration */
+-	struct ccdc_params_ycbcr ycbcr;
+-	/* ccdc base address */
+-	void __iomem *base_addr;
+-} ccdc_cfg = {
+-	/* Raw configurations */
+-	.bayer = {
+-		.pix_fmt = CCDC_PIXFMT_RAW,
+-		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
+-		.win = CCDC_WIN_VGA,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.gain = {
+-			.r_ye = 256,
+-			.gb_g = 256,
+-			.gr_cy = 256,
+-			.b_mg = 256
+-		},
+-		.config_params = {
+-			.datasft = 2,
+-			.mfilt1 = CCDC_NO_MEDIAN_FILTER1,
+-			.mfilt2 = CCDC_NO_MEDIAN_FILTER2,
+-			.alaw = {
+-				.gamma_wd = 2,
+-			},
+-			.blk_clamp = {
+-				.sample_pixel = 1,
+-				.dc_sub = 25
+-			},
+-			.col_pat_field0 = {
+-				.olop = CCDC_GREEN_BLUE,
+-				.olep = CCDC_BLUE,
+-				.elop = CCDC_RED,
+-				.elep = CCDC_GREEN_RED
+-			},
+-			.col_pat_field1 = {
+-				.olop = CCDC_GREEN_BLUE,
+-				.olep = CCDC_BLUE,
+-				.elop = CCDC_RED,
+-				.elep = CCDC_GREEN_RED
+-			},
+-		},
+-	},
+-	/* YCbCr configuration */
+-	.ycbcr = {
+-		.win = CCDC_WIN_PAL,
+-		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
+-		.frm_fmt = CCDC_FRMFMT_INTERLACED,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.bt656_enable = 1,
+-		.pix_order = CCDC_PIXORDER_CBYCRY,
+-		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED
+-	},
+-};
 -
--static inline void davinci_aintc_writel(unsigned long value, int offset)
+-
+-/* Raw Bayer formats */
+-static u32 ccdc_raw_bayer_pix_formats[] =
+-		{V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
+-
+-/* Raw YUV formats */
+-static u32 ccdc_raw_yuv_pix_formats[] =
+-		{V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
+-
+-/* register access routines */
+-static inline u32 regr(u32 offset)
 -{
--	writel_relaxed(value, davinci_aintc_base + offset);
+-	return __raw_readl(ccdc_cfg.base_addr + offset);
 -}
 -
--static inline unsigned long davinci_aintc_readl(int offset)
+-static inline void regw(u32 val, u32 offset)
 -{
--	return readl_relaxed(davinci_aintc_base + offset);
+-	__raw_writel(val, ccdc_cfg.base_addr + offset);
 -}
 -
--static __init void
--davinci_aintc_setup_gc(void __iomem *base,
--		       unsigned int irq_start, unsigned int num)
+-static void ccdc_enable(int en)
 -{
--	struct irq_chip_generic *gc;
--	struct irq_chip_type *ct;
--
--	gc = irq_get_domain_generic_chip(davinci_aintc_irq_domain, irq_start);
--	gc->reg_base = base;
--	gc->irq_base = irq_start;
--
--	ct = gc->chip_types;
--	ct->chip.irq_ack = irq_gc_ack_set_bit;
--	ct->chip.irq_mask = irq_gc_mask_clr_bit;
--	ct->chip.irq_unmask = irq_gc_mask_set_bit;
--
--	ct->regs.ack = DAVINCI_AINTC_IRQ_REG0;
--	ct->regs.mask = DAVINCI_AINTC_IRQ_ENT_REG0;
--	irq_setup_generic_chip(gc, IRQ_MSK(num), IRQ_GC_INIT_MASK_CACHE,
--			       IRQ_NOREQUEST | IRQ_NOPROBE, 0);
+-	unsigned int temp;
+-	temp = regr(SYNCEN);
+-	temp &= (~CCDC_SYNCEN_VDHDEN_MASK);
+-	temp |= (en & CCDC_SYNCEN_VDHDEN_MASK);
+-	regw(temp, SYNCEN);
 -}
 -
--static asmlinkage void __exception_irq_entry
--davinci_aintc_handle_irq(struct pt_regs *regs)
+-static void ccdc_enable_output_to_sdram(int en)
 -{
--	int irqnr = davinci_aintc_readl(DAVINCI_AINTC_IRQ_IRQENTRY);
+-	unsigned int temp;
+-	temp = regr(SYNCEN);
+-	temp &= (~(CCDC_SYNCEN_WEN_MASK));
+-	temp |= ((en << CCDC_SYNCEN_WEN_SHIFT) & CCDC_SYNCEN_WEN_MASK);
+-	regw(temp, SYNCEN);
+-}
+-
+-static void ccdc_config_gain_offset(void)
+-{
+-	/* configure gain */
+-	regw(ccdc_cfg.bayer.gain.r_ye, RYEGAIN);
+-	regw(ccdc_cfg.bayer.gain.gr_cy, GRCYGAIN);
+-	regw(ccdc_cfg.bayer.gain.gb_g, GBGGAIN);
+-	regw(ccdc_cfg.bayer.gain.b_mg, BMGGAIN);
+-	/* configure offset */
+-	regw(ccdc_cfg.bayer.ccdc_offset, OFFSET);
+-}
+-
+-/*
+- * ccdc_restore_defaults()
+- * This function restore power on defaults in the ccdc registers
+- */
+-static int ccdc_restore_defaults(void)
+-{
+-	int i;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nstarting ccdc_restore_defaults...");
+-	/* set all registers to zero */
+-	for (i = 0; i <= CCDC_REG_LAST; i += 4)
+-		regw(0, i);
+-
+-	/* now override the values with power on defaults in registers */
+-	regw(MODESET_DEFAULT, MODESET);
+-	/* no culling support */
+-	regw(CULH_DEFAULT, CULH);
+-	regw(CULV_DEFAULT, CULV);
+-	/* Set default Gain and Offset */
+-	ccdc_cfg.bayer.gain.r_ye = GAIN_DEFAULT;
+-	ccdc_cfg.bayer.gain.gb_g = GAIN_DEFAULT;
+-	ccdc_cfg.bayer.gain.gr_cy = GAIN_DEFAULT;
+-	ccdc_cfg.bayer.gain.b_mg = GAIN_DEFAULT;
+-	ccdc_config_gain_offset();
+-	regw(OUTCLIP_DEFAULT, OUTCLIP);
+-	regw(LSCCFG2_DEFAULT, LSCCFG2);
+-	/* select ccdc input */
+-	if (vpss_select_ccdc_source(VPSS_CCDCIN)) {
+-		dev_dbg(ccdc_cfg.dev, "\ncouldn't select ccdc input source");
+-		return -EFAULT;
+-	}
+-	/* select ccdc clock */
+-	if (vpss_enable_clock(VPSS_CCDC_CLOCK, 1) < 0) {
+-		dev_dbg(ccdc_cfg.dev, "\ncouldn't enable ccdc clock");
+-		return -EFAULT;
+-	}
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_restore_defaults...");
+-	return 0;
+-}
+-
+-static int ccdc_open(struct device *device)
+-{
+-	return ccdc_restore_defaults();
+-}
+-
+-static int ccdc_close(struct device *device)
+-{
+-	/* disable clock */
+-	vpss_enable_clock(VPSS_CCDC_CLOCK, 0);
+-	/* do nothing for now */
+-	return 0;
+-}
+-/*
+- * ccdc_setwin()
+- * This function will configure the window size to
+- * be capture in CCDC reg.
+- */
+-static void ccdc_setwin(struct v4l2_rect *image_win,
+-			enum ccdc_frmfmt frm_fmt, int ppc)
+-{
+-	int horz_start, horz_nr_pixels;
+-	int vert_start, vert_nr_lines;
+-	int mid_img = 0;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_setwin...");
 -
 -	/*
--	 * Use the formula for entry vector index generation from section
--	 * 8.3.3 of the manual.
+-	 * ppc - per pixel count. indicates how many pixels per cell
+-	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
+-	 * raw capture this is 1
 -	 */
--	irqnr >>= 2;
--	irqnr -= 1;
+-	horz_start = image_win->left << (ppc - 1);
+-	horz_nr_pixels = ((image_win->width) << (ppc - 1)) - 1;
 -
--	generic_handle_domain_irq(davinci_aintc_irq_domain, irqnr);
+-	/* Writing the horizontal info into the registers */
+-	regw(horz_start, SPH);
+-	regw(horz_nr_pixels, NPH);
+-	vert_start = image_win->top;
+-
+-	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		vert_nr_lines = (image_win->height >> 1) - 1;
+-		vert_start >>= 1;
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		/* configure VDINT0 and VDINT1 */
+-		regw(vert_start, VDINT0);
+-	} else {
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		vert_nr_lines = image_win->height - 1;
+-		/* configure VDINT0 and VDINT1 */
+-		mid_img = vert_start + (image_win->height / 2);
+-		regw(vert_start, VDINT0);
+-		regw(mid_img, VDINT1);
+-	}
+-	regw(vert_start & CCDC_START_VER_ONE_MASK, SLV0);
+-	regw(vert_start & CCDC_START_VER_TWO_MASK, SLV1);
+-	regw(vert_nr_lines & CCDC_NUM_LINES_VER, NLV);
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_setwin...");
 -}
 -
--/* ARM Interrupt Controller Initialization */
--void __init davinci_aintc_init(const struct davinci_aintc_config *config)
+-/* This function will configure CCDC for YCbCr video capture */
+-static void ccdc_config_ycbcr(void)
 -{
--	unsigned int irq_off, reg_off, prio, shift;
--	void __iomem *req;
--	int ret, irq_base;
--	const u8 *prios;
+-	struct ccdc_params_ycbcr *params = &ccdc_cfg.ycbcr;
+-	u32 temp;
 -
--	req = request_mem_region(config->reg.start,
--				 resource_size(&config->reg),
--				 "davinci-cp-intc");
--	if (!req) {
--		pr_err("%s: register range busy\n", __func__);
--		return;
+-	/* first set the CCDC power on defaults values in all registers */
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_ycbcr...");
+-	ccdc_restore_defaults();
+-
+-	/* configure pixel format & video frame format */
+-	temp = (((params->pix_fmt & CCDC_INPUT_MODE_MASK) <<
+-		CCDC_INPUT_MODE_SHIFT) |
+-		((params->frm_fmt & CCDC_FRM_FMT_MASK) <<
+-		CCDC_FRM_FMT_SHIFT));
+-
+-	/* setup BT.656 sync mode */
+-	if (params->bt656_enable) {
+-		regw(CCDC_REC656IF_BT656_EN, REC656IF);
+-		/*
+-		 * configure the FID, VD, HD pin polarity fld,hd pol positive,
+-		 * vd negative, 8-bit pack mode
+-		 */
+-		temp |= CCDC_VD_POL_NEGATIVE;
+-	} else {		/* y/c external sync mode */
+-		temp |= (((params->fid_pol & CCDC_FID_POL_MASK) <<
+-			CCDC_FID_POL_SHIFT) |
+-			((params->hd_pol & CCDC_HD_POL_MASK) <<
+-			CCDC_HD_POL_SHIFT) |
+-			((params->vd_pol & CCDC_VD_POL_MASK) <<
+-			CCDC_VD_POL_SHIFT));
 -	}
 -
--	davinci_aintc_base = ioremap(config->reg.start,
--				     resource_size(&config->reg));
--	if (!davinci_aintc_base) {
--		pr_err("%s: unable to ioremap register range\n", __func__);
--		return;
+-	/* pack the data to 8-bit */
+-	temp |= CCDC_DATA_PACK_ENABLE;
+-
+-	regw(temp, MODESET);
+-
+-	/* configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, 2);
+-
+-	/* configure the order of y cb cr in SD-RAM */
+-	temp = (params->pix_order << CCDC_Y8POS_SHIFT);
+-	temp |= CCDC_LATCH_ON_VSYNC_DISABLE | CCDC_CCDCFG_FIDMD_NO_LATCH_VSYNC;
+-	regw(temp, CCDCFG);
+-
+-	/*
+-	 * configure the horizontal line offset. This is done by rounding up
+-	 * width to a multiple of 16 pixels and multiply by two to account for
+-	 * y:cb:cr 4:2:2 data
+-	 */
+-	regw(((params->win.width * 2 + 31) >> 5), HSIZE);
+-
+-	/* configure the memory line offset */
+-	if (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED) {
+-		/* two fields are interleaved in memory */
+-		regw(CCDC_SDOFST_FIELD_INTERLEAVED, SDOFST);
 -	}
 -
--	/* Clear all interrupt requests */
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_FIQ_REG0);
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_FIQ_REG1);
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_IRQ_REG0);
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_IRQ_REG1);
--
--	/* Disable all interrupts */
--	davinci_aintc_writel(0x0, DAVINCI_AINTC_IRQ_ENT_REG0);
--	davinci_aintc_writel(0x0, DAVINCI_AINTC_IRQ_ENT_REG1);
--
--	/* Interrupts disabled immediately, IRQ entry reflects all */
--	davinci_aintc_writel(0x0, DAVINCI_AINTC_IRQ_INCTL_REG);
--
--	/* we don't use the hardware vector table, just its entry addresses */
--	davinci_aintc_writel(0, DAVINCI_AINTC_IRQ_EABASE_REG);
--
--	/* Clear all interrupt requests */
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_FIQ_REG0);
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_FIQ_REG1);
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_IRQ_REG0);
--	davinci_aintc_writel(~0x0, DAVINCI_AINTC_IRQ_REG1);
--
--	prios = config->prios;
--	for (reg_off = DAVINCI_AINTC_IRQ_INTPRI0_REG;
--	     reg_off <= DAVINCI_AINTC_IRQ_INTPRI7_REG; reg_off += 4) {
--		for (shift = 0, prio = 0; shift < 32; shift += 4, prios++)
--			prio |= (*prios & 0x07) << shift;
--		davinci_aintc_writel(prio, reg_off);
--	}
--
--	irq_base = irq_alloc_descs(-1, 0, config->num_irqs, 0);
--	if (irq_base < 0) {
--		pr_err("%s: unable to allocate interrupt descriptors: %d\n",
--		       __func__, irq_base);
--		return;
--	}
--
--	davinci_aintc_irq_domain = irq_domain_add_legacy(NULL,
--						config->num_irqs, irq_base, 0,
--						&irq_domain_simple_ops, NULL);
--	if (!davinci_aintc_irq_domain) {
--		pr_err("%s: unable to create interrupt domain\n", __func__);
--		return;
--	}
--
--	ret = irq_alloc_domain_generic_chips(davinci_aintc_irq_domain, 32, 1,
--					     "AINTC", handle_edge_irq,
--					     IRQ_NOREQUEST | IRQ_NOPROBE, 0, 0);
--	if (ret) {
--		pr_err("%s: unable to allocate generic irq chips for domain\n",
--		       __func__);
--		return;
--	}
--
--	for (irq_off = 0, reg_off = 0;
--	     irq_off < config->num_irqs;
--	     irq_off += 32, reg_off += 0x04)
--		davinci_aintc_setup_gc(davinci_aintc_base + reg_off,
--				       irq_base + irq_off, 32);
--
--	set_handle_irq(davinci_aintc_handle_irq);
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_config_ycbcr...\n");
 -}
+-
+-/*
+- * ccdc_config_black_clamp()
+- * configure parameters for Optical Black Clamp
+- */
+-static void ccdc_config_black_clamp(struct ccdc_black_clamp *bclamp)
+-{
+-	u32 val;
+-
+-	if (!bclamp->b_clamp_enable) {
+-		/* configure DCSub */
+-		regw(bclamp->dc_sub & CCDC_BLK_DC_SUB_MASK, DCSUB);
+-		regw(0x0000, CLAMP);
+-		return;
+-	}
+-	/* Enable the Black clamping, set sample lines and pixels */
+-	val = (bclamp->start_pixel & CCDC_BLK_ST_PXL_MASK) |
+-	      ((bclamp->sample_pixel & CCDC_BLK_SAMPLE_LN_MASK) <<
+-		CCDC_BLK_SAMPLE_LN_SHIFT) | CCDC_BLK_CLAMP_ENABLE;
+-	regw(val, CLAMP);
+-
+-	/* If Black clamping is enable then make dcsub 0 */
+-	val = (bclamp->sample_ln & CCDC_NUM_LINE_CALC_MASK)
+-			<< CCDC_NUM_LINE_CALC_SHIFT;
+-	regw(val, DCSUB);
+-}
+-
+-/*
+- * ccdc_config_black_compense()
+- * configure parameters for Black Compensation
+- */
+-static void ccdc_config_black_compense(struct ccdc_black_compensation *bcomp)
+-{
+-	u32 val;
+-
+-	val = (bcomp->b & CCDC_BLK_COMP_MASK) |
+-		((bcomp->gb & CCDC_BLK_COMP_MASK) <<
+-		CCDC_BLK_COMP_GB_COMP_SHIFT);
+-	regw(val, BLKCMP1);
+-
+-	val = ((bcomp->gr & CCDC_BLK_COMP_MASK) <<
+-		CCDC_BLK_COMP_GR_COMP_SHIFT) |
+-		((bcomp->r & CCDC_BLK_COMP_MASK) <<
+-		CCDC_BLK_COMP_R_COMP_SHIFT);
+-	regw(val, BLKCMP0);
+-}
+-
+-/*
+- * ccdc_write_dfc_entry()
+- * write an entry in the dfc table.
+- */
+-static int ccdc_write_dfc_entry(int index, struct ccdc_vertical_dft *dfc)
+-{
+-/* TODO This is to be re-visited and adjusted */
+-#define DFC_WRITE_WAIT_COUNT	1000
+-	u32 val, count = DFC_WRITE_WAIT_COUNT;
+-
+-	regw(dfc->dft_corr_vert[index], DFCMEM0);
+-	regw(dfc->dft_corr_horz[index], DFCMEM1);
+-	regw(dfc->dft_corr_sub1[index], DFCMEM2);
+-	regw(dfc->dft_corr_sub2[index], DFCMEM3);
+-	regw(dfc->dft_corr_sub3[index], DFCMEM4);
+-	/* set WR bit to write */
+-	val = regr(DFCMEMCTL) | CCDC_DFCMEMCTL_DFCMWR_MASK;
+-	regw(val, DFCMEMCTL);
+-
+-	/*
+-	 * Assume, it is very short. If we get an error, we need to
+-	 * adjust this value
+-	 */
+-	while (regr(DFCMEMCTL) & CCDC_DFCMEMCTL_DFCMWR_MASK)
+-		count--;
+-	/*
+-	 * TODO We expect the count to be non-zero to be successful. Adjust
+-	 * the count if write requires more time
+-	 */
+-
+-	if (count) {
+-		dev_err(ccdc_cfg.dev, "defect table write timeout !!!\n");
+-		return -1;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * ccdc_config_vdfc()
+- * configure parameters for Vertical Defect Correction
+- */
+-static int ccdc_config_vdfc(struct ccdc_vertical_dft *dfc)
+-{
+-	u32 val;
+-	int i;
+-
+-	/* Configure General Defect Correction. The table used is from IPIPE */
+-	val = dfc->gen_dft_en & CCDC_DFCCTL_GDFCEN_MASK;
+-
+-	/* Configure Vertical Defect Correction if needed */
+-	if (!dfc->ver_dft_en) {
+-		/* Enable only General Defect Correction */
+-		regw(val, DFCCTL);
+-		return 0;
+-	}
+-
+-	if (dfc->table_size > CCDC_DFT_TABLE_SIZE)
+-		return -EINVAL;
+-
+-	val |= CCDC_DFCCTL_VDFC_DISABLE;
+-	val |= (dfc->dft_corr_ctl.vdfcsl & CCDC_DFCCTL_VDFCSL_MASK) <<
+-		CCDC_DFCCTL_VDFCSL_SHIFT;
+-	val |= (dfc->dft_corr_ctl.vdfcuda & CCDC_DFCCTL_VDFCUDA_MASK) <<
+-		CCDC_DFCCTL_VDFCUDA_SHIFT;
+-	val |= (dfc->dft_corr_ctl.vdflsft & CCDC_DFCCTL_VDFLSFT_MASK) <<
+-		CCDC_DFCCTL_VDFLSFT_SHIFT;
+-	regw(val , DFCCTL);
+-
+-	/* clear address ptr to offset 0 */
+-	val = CCDC_DFCMEMCTL_DFCMARST_MASK << CCDC_DFCMEMCTL_DFCMARST_SHIFT;
+-
+-	/* write defect table entries */
+-	for (i = 0; i < dfc->table_size; i++) {
+-		/* increment address for non zero index */
+-		if (i != 0)
+-			val = CCDC_DFCMEMCTL_INC_ADDR;
+-		regw(val, DFCMEMCTL);
+-		if (ccdc_write_dfc_entry(i, dfc) < 0)
+-			return -EFAULT;
+-	}
+-
+-	/* update saturation level and enable dfc */
+-	regw(dfc->saturation_ctl & CCDC_VDC_DFCVSAT_MASK, DFCVSAT);
+-	val = regr(DFCCTL) | (CCDC_DFCCTL_VDFCEN_MASK <<
+-			CCDC_DFCCTL_VDFCEN_SHIFT);
+-	regw(val, DFCCTL);
+-	return 0;
+-}
+-
+-/*
+- * ccdc_config_csc()
+- * configure parameters for color space conversion
+- * Each register CSCM0-7 has two values in S8Q5 format.
+- */
+-static void ccdc_config_csc(struct ccdc_csc *csc)
+-{
+-	u32 val1 = 0, val2;
+-	int i;
+-
+-	if (!csc->enable)
+-		return;
+-
+-	/* Enable the CSC sub-module */
+-	regw(CCDC_CSC_ENABLE, CSCCTL);
+-
+-	/* Converting the co-eff as per the format of the register */
+-	for (i = 0; i < CCDC_CSC_COEFF_TABLE_SIZE; i++) {
+-		if ((i % 2) == 0) {
+-			/* CSCM - LSB */
+-			val1 = (csc->coeff[i].integer &
+-				CCDC_CSC_COEF_INTEG_MASK)
+-				<< CCDC_CSC_COEF_INTEG_SHIFT;
+-			/*
+-			 * convert decimal part to binary. Use 2 decimal
+-			 * precision, user values range from .00 - 0.99
+-			 */
+-			val1 |= (((csc->coeff[i].decimal &
+-				CCDC_CSC_COEF_DECIMAL_MASK) *
+-				CCDC_CSC_DEC_MAX) / 100);
+-		} else {
+-
+-			/* CSCM - MSB */
+-			val2 = (csc->coeff[i].integer &
+-				CCDC_CSC_COEF_INTEG_MASK)
+-				<< CCDC_CSC_COEF_INTEG_SHIFT;
+-			val2 |= (((csc->coeff[i].decimal &
+-				 CCDC_CSC_COEF_DECIMAL_MASK) *
+-				 CCDC_CSC_DEC_MAX) / 100);
+-			val2 <<= CCDC_CSCM_MSB_SHIFT;
+-			val2 |= val1;
+-			regw(val2, (CSCM0 + ((i - 1) << 1)));
+-		}
+-	}
+-}
+-
+-/*
+- * ccdc_config_color_patterns()
+- * configure parameters for color patterns
+- */
+-static void ccdc_config_color_patterns(struct ccdc_col_pat *pat0,
+-				       struct ccdc_col_pat *pat1)
+-{
+-	u32 val;
+-
+-	val = (pat0->olop | (pat0->olep << 2) | (pat0->elop << 4) |
+-		(pat0->elep << 6) | (pat1->olop << 8) | (pat1->olep << 10) |
+-		(pat1->elop << 12) | (pat1->elep << 14));
+-	regw(val, COLPTN);
+-}
+-
+-/* This function will configure CCDC for Raw mode image capture */
+-static int ccdc_config_raw(void)
+-{
+-	struct ccdc_params_raw *params = &ccdc_cfg.bayer;
+-	struct ccdc_config_params_raw *config_params =
+-					&ccdc_cfg.bayer.config_params;
+-	unsigned int val;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_raw...");
+-
+-	/* restore power on defaults to register */
+-	ccdc_restore_defaults();
+-
+-	/* CCDCFG register:
+-	 * set CCD Not to swap input since input is RAW data
+-	 * set FID detection function to Latch at V-Sync
+-	 * set WENLOG - ccdc valid area to AND
+-	 * set TRGSEL to WENBIT
+-	 * set EXTRG to DISABLE
+-	 * disable latching function on VSYNC - shadowed registers
+-	 */
+-	regw(CCDC_YCINSWP_RAW | CCDC_CCDCFG_FIDMD_LATCH_VSYNC |
+-	     CCDC_CCDCFG_WENLOG_AND | CCDC_CCDCFG_TRGSEL_WEN |
+-	     CCDC_CCDCFG_EXTRG_DISABLE | CCDC_LATCH_ON_VSYNC_DISABLE, CCDCFG);
+-
+-	/*
+-	 * Set VDHD direction to input,  input type to raw input
+-	 * normal data polarity, do not use external WEN
+-	 */
+-	val = (CCDC_VDHDOUT_INPUT | CCDC_RAW_IP_MODE | CCDC_DATAPOL_NORMAL |
+-		CCDC_EXWEN_DISABLE);
+-
+-	/*
+-	 * Configure the vertical sync polarity (MODESET.VDPOL), horizontal
+-	 * sync polarity (MODESET.HDPOL), field id polarity (MODESET.FLDPOL),
+-	 * frame format(progressive or interlace), & pixel format (Input mode)
+-	 */
+-	val |= (((params->vd_pol & CCDC_VD_POL_MASK) << CCDC_VD_POL_SHIFT) |
+-		((params->hd_pol & CCDC_HD_POL_MASK) << CCDC_HD_POL_SHIFT) |
+-		((params->fid_pol & CCDC_FID_POL_MASK) << CCDC_FID_POL_SHIFT) |
+-		((params->frm_fmt & CCDC_FRM_FMT_MASK) << CCDC_FRM_FMT_SHIFT) |
+-		((params->pix_fmt & CCDC_PIX_FMT_MASK) << CCDC_PIX_FMT_SHIFT));
+-
+-	/* set pack for alaw compression */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	     config_params->alaw.enable)
+-		val |= CCDC_DATA_PACK_ENABLE;
+-
+-	/* Configure for LPF */
+-	if (config_params->lpf_enable)
+-		val |= (config_params->lpf_enable & CCDC_LPF_MASK) <<
+-			CCDC_LPF_SHIFT;
+-
+-	/* Configure the data shift */
+-	val |= (config_params->datasft & CCDC_DATASFT_MASK) <<
+-		CCDC_DATASFT_SHIFT;
+-	regw(val , MODESET);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to MODESET...\n", val);
+-
+-	/* Configure the Median Filter threshold */
+-	regw((config_params->med_filt_thres) & CCDC_MED_FILT_THRESH, MEDFILT);
+-
+-	/* Configure GAMMAWD register. defaur 11-2, and Mosaic cfa pattern */
+-	val = CCDC_GAMMA_BITS_11_2 << CCDC_GAMMAWD_INPUT_SHIFT |
+-		CCDC_CFA_MOSAIC;
+-
+-	/* Enable and configure aLaw register if needed */
+-	if (config_params->alaw.enable) {
+-		val |= (CCDC_ALAW_ENABLE |
+-			((config_params->alaw.gamma_wd &
+-			CCDC_ALAW_GAMMA_WD_MASK) <<
+-			CCDC_GAMMAWD_INPUT_SHIFT));
+-	}
+-
+-	/* Configure Median filter1 & filter2 */
+-	val |= ((config_params->mfilt1 << CCDC_MFILT1_SHIFT) |
+-		(config_params->mfilt2 << CCDC_MFILT2_SHIFT));
+-
+-	regw(val, GAMMAWD);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to GAMMAWD...\n", val);
+-
+-	/* configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, 1);
+-
+-	/* Optical Clamp Averaging */
+-	ccdc_config_black_clamp(&config_params->blk_clamp);
+-
+-	/* Black level compensation */
+-	ccdc_config_black_compense(&config_params->blk_comp);
+-
+-	/* Vertical Defect Correction if needed */
+-	if (ccdc_config_vdfc(&config_params->vertical_dft) < 0)
+-		return -EFAULT;
+-
+-	/* color space conversion */
+-	ccdc_config_csc(&config_params->csc);
+-
+-	/* color pattern */
+-	ccdc_config_color_patterns(&config_params->col_pat_field0,
+-				   &config_params->col_pat_field1);
+-
+-	/* Configure the Gain  & offset control */
+-	ccdc_config_gain_offset();
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting %x to COLPTN...\n", val);
+-
+-	/* Configure DATAOFST  register */
+-	val = (config_params->data_offset.horz_offset & CCDC_DATAOFST_MASK) <<
+-		CCDC_DATAOFST_H_SHIFT;
+-	val |= (config_params->data_offset.vert_offset & CCDC_DATAOFST_MASK) <<
+-		CCDC_DATAOFST_V_SHIFT;
+-	regw(val, DATAOFST);
+-
+-	/* configuring HSIZE register */
+-	val = (params->horz_flip_enable & CCDC_HSIZE_FLIP_MASK) <<
+-		CCDC_HSIZE_FLIP_SHIFT;
+-
+-	/* If pack 8 is enable then 1 pixel will take 1 byte */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	     config_params->alaw.enable) {
+-		val |= (((params->win.width) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK;
+-
+-		/* adjust to multiple of 32 */
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to HSIZE...\n",
+-		       (((params->win.width) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK);
+-	} else {
+-		/* else one pixel will take 2 byte */
+-		val |= (((params->win.width * 2) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK;
+-
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to HSIZE...\n",
+-		       (((params->win.width * 2) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK);
+-	}
+-	regw(val, HSIZE);
+-
+-	/* Configure SDOFST register */
+-	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		if (params->image_invert_enable) {
+-			/* For interlace inverse mode */
+-			regw(CCDC_SDOFST_INTERLACE_INVERSE, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_INTERLACE_INVERSE);
+-		} else {
+-			/* For interlace non inverse mode */
+-			regw(CCDC_SDOFST_INTERLACE_NORMAL, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_INTERLACE_NORMAL);
+-		}
+-	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
+-		if (params->image_invert_enable) {
+-			/* For progessive inverse mode */
+-			regw(CCDC_SDOFST_PROGRESSIVE_INVERSE, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_PROGRESSIVE_INVERSE);
+-		} else {
+-			/* For progessive non inverse mode */
+-			regw(CCDC_SDOFST_PROGRESSIVE_NORMAL, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_PROGRESSIVE_NORMAL);
+-		}
+-	}
+-	dev_dbg(ccdc_cfg.dev, "\nend of ccdc_config_raw...");
+-	return 0;
+-}
+-
+-static int ccdc_configure(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_config_raw();
+-	else
+-		ccdc_config_ycbcr();
+-	return 0;
+-}
+-
+-static int ccdc_set_buftype(enum ccdc_buftype buf_type)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.buf_type = buf_type;
+-	else
+-		ccdc_cfg.ycbcr.buf_type = buf_type;
+-	return 0;
+-}
+-static enum ccdc_buftype ccdc_get_buftype(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.buf_type;
+-	return ccdc_cfg.ycbcr.buf_type;
+-}
+-
+-static int ccdc_enum_pix(u32 *pix, int i)
+-{
+-	int ret = -EINVAL;
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (i < ARRAY_SIZE(ccdc_raw_bayer_pix_formats)) {
+-			*pix = ccdc_raw_bayer_pix_formats[i];
+-			ret = 0;
+-		}
+-	} else {
+-		if (i < ARRAY_SIZE(ccdc_raw_yuv_pix_formats)) {
+-			*pix = ccdc_raw_yuv_pix_formats[i];
+-			ret = 0;
+-		}
+-	}
+-	return ret;
+-}
+-
+-static int ccdc_set_pixel_format(u32 pixfmt)
+-{
+-	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		ccdc_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-		if (pixfmt == V4L2_PIX_FMT_SBGGR8)
+-			alaw->enable = 1;
+-		else if (pixfmt != V4L2_PIX_FMT_SBGGR16)
+-			return -EINVAL;
+-	} else {
+-		if (pixfmt == V4L2_PIX_FMT_YUYV)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
+-		else if (pixfmt == V4L2_PIX_FMT_UYVY)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		else
+-			return -EINVAL;
+-	}
+-	return 0;
+-}
+-static u32 ccdc_get_pixel_format(void)
+-{
+-	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
+-	u32 pixfmt;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		if (alaw->enable)
+-			pixfmt = V4L2_PIX_FMT_SBGGR8;
+-		else
+-			pixfmt = V4L2_PIX_FMT_SBGGR16;
+-	else {
+-		if (ccdc_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
+-			pixfmt = V4L2_PIX_FMT_YUYV;
+-		else
+-			pixfmt = V4L2_PIX_FMT_UYVY;
+-	}
+-	return pixfmt;
+-}
+-static int ccdc_set_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.win = *win;
+-	else
+-		ccdc_cfg.ycbcr.win = *win;
+-	return 0;
+-}
+-
+-static void ccdc_get_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		*win = ccdc_cfg.bayer.win;
+-	else
+-		*win = ccdc_cfg.ycbcr.win;
+-}
+-
+-static unsigned int ccdc_get_line_length(void)
+-{
+-	struct ccdc_config_params_raw *config_params =
+-				&ccdc_cfg.bayer.config_params;
+-	unsigned int len;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if ((config_params->alaw.enable) ||
+-		    (config_params->data_sz == CCDC_DATA_8BITS))
+-			len = ccdc_cfg.bayer.win.width;
+-		else
+-			len = ccdc_cfg.bayer.win.width * 2;
+-	} else
+-		len = ccdc_cfg.ycbcr.win.width * 2;
+-	return ALIGN(len, 32);
+-}
+-
+-static int ccdc_set_frame_format(enum ccdc_frmfmt frm_fmt)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.frm_fmt = frm_fmt;
+-	else
+-		ccdc_cfg.ycbcr.frm_fmt = frm_fmt;
+-	return 0;
+-}
+-
+-static enum ccdc_frmfmt ccdc_get_frame_format(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.frm_fmt;
+-	else
+-		return ccdc_cfg.ycbcr.frm_fmt;
+-}
+-
+-static int ccdc_getfid(void)
+-{
+-	return  (regr(MODESET) >> 15) & 1;
+-}
+-
+-/* misc operations */
+-static inline void ccdc_setfbaddr(unsigned long addr)
+-{
+-	regw((addr >> 21) & 0x007f, STADRH);
+-	regw((addr >> 5) & 0x0ffff, STADRL);
+-}
+-
+-static int ccdc_set_hw_if_params(struct vpfe_hw_if_param *params)
+-{
+-	ccdc_cfg.if_type = params->if_type;
+-
+-	switch (params->if_type) {
+-	case VPFE_BT656:
+-	case VPFE_YCBCR_SYNC_16:
+-	case VPFE_YCBCR_SYNC_8:
+-		ccdc_cfg.ycbcr.vd_pol = params->vdpol;
+-		ccdc_cfg.ycbcr.hd_pol = params->hdpol;
+-		break;
+-	default:
+-		/* TODO add support for raw bayer here */
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static const struct ccdc_hw_device ccdc_hw_dev = {
+-	.name = "DM355 CCDC",
+-	.owner = THIS_MODULE,
+-	.hw_ops = {
+-		.open = ccdc_open,
+-		.close = ccdc_close,
+-		.enable = ccdc_enable,
+-		.enable_out_to_sdram = ccdc_enable_output_to_sdram,
+-		.set_hw_if_params = ccdc_set_hw_if_params,
+-		.configure = ccdc_configure,
+-		.set_buftype = ccdc_set_buftype,
+-		.get_buftype = ccdc_get_buftype,
+-		.enum_pix = ccdc_enum_pix,
+-		.set_pixel_format = ccdc_set_pixel_format,
+-		.get_pixel_format = ccdc_get_pixel_format,
+-		.set_frame_format = ccdc_set_frame_format,
+-		.get_frame_format = ccdc_get_frame_format,
+-		.set_image_window = ccdc_set_image_window,
+-		.get_image_window = ccdc_get_image_window,
+-		.get_line_length = ccdc_get_line_length,
+-		.setfbaddr = ccdc_setfbaddr,
+-		.getfid = ccdc_getfid,
+-	},
+-};
+-
+-static int dm355_ccdc_probe(struct platform_device *pdev)
+-{
+-	void (*setup_pinmux)(void);
+-	struct resource	*res;
+-	int status = 0;
+-
+-	/*
+-	 * first try to register with vpfe. If not correct platform, then we
+-	 * don't have to iomap
+-	 */
+-	status = vpfe_register_ccdc_device(&ccdc_hw_dev);
+-	if (status < 0)
+-		return status;
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		status = -ENODEV;
+-		goto fail_nores;
+-	}
+-
+-	res = request_mem_region(res->start, resource_size(res), res->name);
+-	if (!res) {
+-		status = -EBUSY;
+-		goto fail_nores;
+-	}
+-
+-	ccdc_cfg.base_addr = ioremap(res->start, resource_size(res));
+-	if (!ccdc_cfg.base_addr) {
+-		status = -ENOMEM;
+-		goto fail_nomem;
+-	}
+-
+-	/* Platform data holds setup_pinmux function ptr */
+-	if (NULL == pdev->dev.platform_data) {
+-		status = -ENODEV;
+-		goto fail_nomap;
+-	}
+-	setup_pinmux = pdev->dev.platform_data;
+-	/*
+-	 * setup Mux configuration for ccdc which may be different for
+-	 * different SoCs using this CCDC
+-	 */
+-	setup_pinmux();
+-	ccdc_cfg.dev = &pdev->dev;
+-	printk(KERN_NOTICE "%s is registered with vpfe.\n", ccdc_hw_dev.name);
+-	return 0;
+-fail_nomap:
+-	iounmap(ccdc_cfg.base_addr);
+-fail_nomem:
+-	release_mem_region(res->start, resource_size(res));
+-fail_nores:
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return status;
+-}
+-
+-static int dm355_ccdc_remove(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-
+-	iounmap(ccdc_cfg.base_addr);
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, resource_size(res));
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return 0;
+-}
+-
+-static struct platform_driver dm355_ccdc_driver = {
+-	.driver = {
+-		.name	= "dm355_ccdc",
+-	},
+-	.remove = dm355_ccdc_remove,
+-	.probe = dm355_ccdc_probe,
+-};
+-
+-module_platform_driver(dm355_ccdc_driver);
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
+deleted file mode 100644
+index 1f3d00aa46d1..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
++++ /dev/null
+@@ -1,308 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2005-2009 Texas Instruments Inc
+- */
+-#ifndef _DM355_CCDC_H
+-#define _DM355_CCDC_H
+-#include <media/davinci/ccdc_types.h>
+-#include <media/davinci/vpfe_types.h>
+-
+-/* enum for No of pixel per line to be avg. in Black Clamping */
+-enum ccdc_sample_length {
+-	CCDC_SAMPLE_1PIXELS,
+-	CCDC_SAMPLE_2PIXELS,
+-	CCDC_SAMPLE_4PIXELS,
+-	CCDC_SAMPLE_8PIXELS,
+-	CCDC_SAMPLE_16PIXELS
+-};
+-
+-/* enum for No of lines in Black Clamping */
+-enum ccdc_sample_line {
+-	CCDC_SAMPLE_1LINES,
+-	CCDC_SAMPLE_2LINES,
+-	CCDC_SAMPLE_4LINES,
+-	CCDC_SAMPLE_8LINES,
+-	CCDC_SAMPLE_16LINES
+-};
+-
+-/* enum for Alaw gamma width */
+-enum ccdc_gamma_width {
+-	CCDC_GAMMA_BITS_13_4,
+-	CCDC_GAMMA_BITS_12_3,
+-	CCDC_GAMMA_BITS_11_2,
+-	CCDC_GAMMA_BITS_10_1,
+-	CCDC_GAMMA_BITS_09_0
+-};
+-
+-enum ccdc_colpats {
+-	CCDC_RED,
+-	CCDC_GREEN_RED,
+-	CCDC_GREEN_BLUE,
+-	CCDC_BLUE
+-};
+-
+-struct ccdc_col_pat {
+-	enum ccdc_colpats olop;
+-	enum ccdc_colpats olep;
+-	enum ccdc_colpats elop;
+-	enum ccdc_colpats elep;
+-};
+-
+-enum ccdc_datasft {
+-	CCDC_DATA_NO_SHIFT,
+-	CCDC_DATA_SHIFT_1BIT,
+-	CCDC_DATA_SHIFT_2BIT,
+-	CCDC_DATA_SHIFT_3BIT,
+-	CCDC_DATA_SHIFT_4BIT,
+-	CCDC_DATA_SHIFT_5BIT,
+-	CCDC_DATA_SHIFT_6BIT
+-};
+-
+-enum ccdc_data_size {
+-	CCDC_DATA_16BITS,
+-	CCDC_DATA_15BITS,
+-	CCDC_DATA_14BITS,
+-	CCDC_DATA_13BITS,
+-	CCDC_DATA_12BITS,
+-	CCDC_DATA_11BITS,
+-	CCDC_DATA_10BITS,
+-	CCDC_DATA_8BITS
+-};
+-enum ccdc_mfilt1 {
+-	CCDC_NO_MEDIAN_FILTER1,
+-	CCDC_AVERAGE_FILTER1,
+-	CCDC_MEDIAN_FILTER1
+-};
+-
+-enum ccdc_mfilt2 {
+-	CCDC_NO_MEDIAN_FILTER2,
+-	CCDC_AVERAGE_FILTER2,
+-	CCDC_MEDIAN_FILTER2
+-};
+-
+-/* structure for ALaw */
+-struct ccdc_a_law {
+-	/* Enable/disable A-Law */
+-	unsigned char enable;
+-	/* Gamma Width Input */
+-	enum ccdc_gamma_width gamma_wd;
+-};
+-
+-/* structure for Black Clamping */
+-struct ccdc_black_clamp {
+-	/* only if bClampEnable is TRUE */
+-	unsigned char b_clamp_enable;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_length sample_pixel;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_line sample_ln;
+-	/* only if bClampEnable is TRUE */
+-	unsigned short start_pixel;
+-	/* only if bClampEnable is FALSE */
+-	unsigned short sgain;
+-	unsigned short dc_sub;
+-};
+-
+-/* structure for Black Level Compensation */
+-struct ccdc_black_compensation {
+-	/* Constant value to subtract from Red component */
+-	unsigned char r;
+-	/* Constant value to subtract from Gr component */
+-	unsigned char gr;
+-	/* Constant value to subtract from Blue component */
+-	unsigned char b;
+-	/* Constant value to subtract from Gb component */
+-	unsigned char gb;
+-};
+-
+-struct ccdc_float {
+-	int integer;
+-	unsigned int decimal;
+-};
+-
+-#define CCDC_CSC_COEFF_TABLE_SIZE	16
+-/* structure for color space converter */
+-struct ccdc_csc {
+-	unsigned char enable;
+-	/*
+-	 * S8Q5. Use 2 decimal precision, user values range from -3.00 to 3.99.
+-	 * example - to use 1.03, set integer part as 1, and decimal part as 3
+-	 * to use -1.03, set integer part as -1 and decimal part as 3
+-	 */
+-	struct ccdc_float coeff[CCDC_CSC_COEFF_TABLE_SIZE];
+-};
+-
+-/* Structures for Vertical Defect Correction*/
+-enum ccdc_vdf_csl {
+-	CCDC_VDF_NORMAL,
+-	CCDC_VDF_HORZ_INTERPOL_SAT,
+-	CCDC_VDF_HORZ_INTERPOL
+-};
+-
+-enum ccdc_vdf_cuda {
+-	CCDC_VDF_WHOLE_LINE_CORRECT,
+-	CCDC_VDF_UPPER_DISABLE
+-};
+-
+-enum ccdc_dfc_mwr {
+-	CCDC_DFC_MWR_WRITE_COMPLETE,
+-	CCDC_DFC_WRITE_REG
+-};
+-
+-enum ccdc_dfc_mrd {
+-	CCDC_DFC_READ_COMPLETE,
+-	CCDC_DFC_READ_REG
+-};
+-
+-enum ccdc_dfc_ma_rst {
+-	CCDC_DFC_INCR_ADDR,
+-	CCDC_DFC_CLR_ADDR
+-};
+-
+-enum ccdc_dfc_mclr {
+-	CCDC_DFC_CLEAR_COMPLETE,
+-	CCDC_DFC_CLEAR
+-};
+-
+-struct ccdc_dft_corr_ctl {
+-	enum ccdc_vdf_csl vdfcsl;
+-	enum ccdc_vdf_cuda vdfcuda;
+-	unsigned int vdflsft;
+-};
+-
+-struct ccdc_dft_corr_mem_ctl {
+-	enum ccdc_dfc_mwr dfcmwr;
+-	enum ccdc_dfc_mrd dfcmrd;
+-	enum ccdc_dfc_ma_rst dfcmarst;
+-	enum ccdc_dfc_mclr dfcmclr;
+-};
+-
+-#define CCDC_DFT_TABLE_SIZE	16
+-/*
+- * Main Structure for vertical defect correction. Vertical defect
+- * correction can correct up to 16 defects if defects less than 16
+- * then pad the rest with 0
+- */
+-struct ccdc_vertical_dft {
+-	unsigned char ver_dft_en;
+-	unsigned char gen_dft_en;
+-	unsigned int saturation_ctl;
+-	struct ccdc_dft_corr_ctl dft_corr_ctl;
+-	struct ccdc_dft_corr_mem_ctl dft_corr_mem_ctl;
+-	int table_size;
+-	unsigned int dft_corr_horz[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_vert[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_sub1[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_sub2[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_sub3[CCDC_DFT_TABLE_SIZE];
+-};
+-
+-struct ccdc_data_offset {
+-	unsigned char horz_offset;
+-	unsigned char vert_offset;
+-};
+-
+-/*
+- * Structure for CCDC configuration parameters for raw capture mode passed
+- * by application
+- */
+-struct ccdc_config_params_raw {
+-	/* data shift to be applied before storing */
+-	enum ccdc_datasft datasft;
+-	/* data size value from 8 to 16 bits */
+-	enum ccdc_data_size data_sz;
+-	/* median filter for sdram */
+-	enum ccdc_mfilt1 mfilt1;
+-	enum ccdc_mfilt2 mfilt2;
+-	/* low pass filter enable/disable */
+-	unsigned char lpf_enable;
+-	/* Threshold of median filter */
+-	int med_filt_thres;
+-	/*
+-	 * horz and vertical data offset. Applicable for defect correction
+-	 * and lsc
+-	 */
+-	struct ccdc_data_offset data_offset;
+-	/* Structure for Optional A-Law */
+-	struct ccdc_a_law alaw;
+-	/* Structure for Optical Black Clamp */
+-	struct ccdc_black_clamp blk_clamp;
+-	/* Structure for Black Compensation */
+-	struct ccdc_black_compensation blk_comp;
+-	/* structure for vertical Defect Correction Module Configuration */
+-	struct ccdc_vertical_dft vertical_dft;
+-	/* structure for color space converter Module Configuration */
+-	struct ccdc_csc csc;
+-	/* color patters for bayer capture */
+-	struct ccdc_col_pat col_pat_field0;
+-	struct ccdc_col_pat col_pat_field1;
+-};
+-
+-#ifdef __KERNEL__
+-#include <linux/io.h>
+-
+-#define CCDC_WIN_PAL	{0, 0, 720, 576}
+-#define CCDC_WIN_VGA	{0, 0, 640, 480}
+-
+-struct ccdc_params_ycbcr {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* enable BT.656 embedded sync mode */
+-	int bt656_enable;
+-	/* cb:y:cr:y or y:cb:y:cr in memory */
+-	enum ccdc_pixorder pix_order;
+-	/* interleaved or separated fields  */
+-	enum ccdc_buftype buf_type;
+-};
+-
+-/* Gain applied to Raw Bayer data */
+-struct ccdc_gain {
+-	unsigned short r_ye;
+-	unsigned short gr_cy;
+-	unsigned short gb_g;
+-	unsigned short b_mg;
+-};
+-
+-/* Structure for CCDC configuration parameters for raw capture mode */
+-struct ccdc_params_raw {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* interleaved or separated fields */
+-	enum ccdc_buftype buf_type;
+-	/* Gain values */
+-	struct ccdc_gain gain;
+-	/* offset */
+-	unsigned int ccdc_offset;
+-	/* horizontal flip enable */
+-	unsigned char horz_flip_enable;
+-	/*
+-	 * enable to store the image in inverse order in memory
+-	 * (bottom to top)
+-	 */
+-	unsigned char image_invert_enable;
+-	/* Configurable part of raw data */
+-	struct ccdc_config_params_raw config_params;
+-};
+-
+-#endif
+-#endif				/* DM355_CCDC_H */
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
+deleted file mode 100644
+index eb381f075245..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
++++ /dev/null
+@@ -1,297 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2005-2009 Texas Instruments Inc
+- */
+-#ifndef _DM355_CCDC_REGS_H
+-#define _DM355_CCDC_REGS_H
+-
+-/**************************************************************************\
+-* Register OFFSET Definitions
+-\**************************************************************************/
+-#define SYNCEN				0x00
+-#define MODESET				0x04
+-#define HDWIDTH				0x08
+-#define VDWIDTH				0x0c
+-#define PPLN				0x10
+-#define LPFR				0x14
+-#define SPH				0x18
+-#define NPH				0x1c
+-#define SLV0				0x20
+-#define SLV1				0x24
+-#define NLV				0x28
+-#define CULH				0x2c
+-#define CULV				0x30
+-#define HSIZE				0x34
+-#define SDOFST				0x38
+-#define STADRH				0x3c
+-#define STADRL				0x40
+-#define CLAMP				0x44
+-#define DCSUB				0x48
+-#define COLPTN				0x4c
+-#define BLKCMP0				0x50
+-#define BLKCMP1				0x54
+-#define MEDFILT				0x58
+-#define RYEGAIN				0x5c
+-#define GRCYGAIN			0x60
+-#define GBGGAIN				0x64
+-#define BMGGAIN				0x68
+-#define OFFSET				0x6c
+-#define OUTCLIP				0x70
+-#define VDINT0				0x74
+-#define VDINT1				0x78
+-#define RSV0				0x7c
+-#define GAMMAWD				0x80
+-#define REC656IF			0x84
+-#define CCDCFG				0x88
+-#define FMTCFG				0x8c
+-#define FMTPLEN				0x90
+-#define FMTSPH				0x94
+-#define FMTLNH				0x98
+-#define FMTSLV				0x9c
+-#define FMTLNV				0xa0
+-#define FMTRLEN				0xa4
+-#define FMTHCNT				0xa8
+-#define FMT_ADDR_PTR_B			0xac
+-#define FMT_ADDR_PTR(i)			(FMT_ADDR_PTR_B + (i * 4))
+-#define FMTPGM_VF0			0xcc
+-#define FMTPGM_VF1			0xd0
+-#define FMTPGM_AP0			0xd4
+-#define FMTPGM_AP1			0xd8
+-#define FMTPGM_AP2			0xdc
+-#define FMTPGM_AP3                      0xe0
+-#define FMTPGM_AP4                      0xe4
+-#define FMTPGM_AP5                      0xe8
+-#define FMTPGM_AP6                      0xec
+-#define FMTPGM_AP7                      0xf0
+-#define LSCCFG1                         0xf4
+-#define LSCCFG2                         0xf8
+-#define LSCH0                           0xfc
+-#define LSCV0                           0x100
+-#define LSCKH                           0x104
+-#define LSCKV                           0x108
+-#define LSCMEMCTL                       0x10c
+-#define LSCMEMD                         0x110
+-#define LSCMEMQ                         0x114
+-#define DFCCTL                          0x118
+-#define DFCVSAT                         0x11c
+-#define DFCMEMCTL                       0x120
+-#define DFCMEM0                         0x124
+-#define DFCMEM1                         0x128
+-#define DFCMEM2                         0x12c
+-#define DFCMEM3                         0x130
+-#define DFCMEM4                         0x134
+-#define CSCCTL                          0x138
+-#define CSCM0                           0x13c
+-#define CSCM1                           0x140
+-#define CSCM2                           0x144
+-#define CSCM3                           0x148
+-#define CSCM4                           0x14c
+-#define CSCM5                           0x150
+-#define CSCM6                           0x154
+-#define CSCM7                           0x158
+-#define DATAOFST			0x15c
+-#define CCDC_REG_LAST			DATAOFST
+-/**************************************************************
+-*	Define for various register bit mask and shifts for CCDC
+-*
+-**************************************************************/
+-#define CCDC_RAW_IP_MODE			0
+-#define CCDC_VDHDOUT_INPUT			0
+-#define CCDC_YCINSWP_RAW			(0 << 4)
+-#define CCDC_EXWEN_DISABLE			0
+-#define CCDC_DATAPOL_NORMAL			0
+-#define CCDC_CCDCFG_FIDMD_LATCH_VSYNC		0
+-#define CCDC_CCDCFG_FIDMD_NO_LATCH_VSYNC	(1 << 6)
+-#define CCDC_CCDCFG_WENLOG_AND			0
+-#define CCDC_CCDCFG_TRGSEL_WEN			0
+-#define CCDC_CCDCFG_EXTRG_DISABLE		0
+-#define CCDC_CFA_MOSAIC				0
+-#define CCDC_Y8POS_SHIFT			11
+-
+-#define CCDC_VDC_DFCVSAT_MASK			0x3fff
+-#define CCDC_DATAOFST_MASK			0x0ff
+-#define CCDC_DATAOFST_H_SHIFT			0
+-#define CCDC_DATAOFST_V_SHIFT			8
+-#define CCDC_GAMMAWD_CFA_MASK			1
+-#define CCDC_GAMMAWD_CFA_SHIFT			5
+-#define CCDC_GAMMAWD_INPUT_SHIFT		2
+-#define CCDC_FID_POL_MASK			1
+-#define CCDC_FID_POL_SHIFT			4
+-#define CCDC_HD_POL_MASK			1
+-#define CCDC_HD_POL_SHIFT			3
+-#define CCDC_VD_POL_MASK			1
+-#define CCDC_VD_POL_SHIFT			2
+-#define CCDC_VD_POL_NEGATIVE			(1 << 2)
+-#define CCDC_FRM_FMT_MASK			1
+-#define CCDC_FRM_FMT_SHIFT			7
+-#define CCDC_DATA_SZ_MASK			7
+-#define CCDC_DATA_SZ_SHIFT			8
+-#define CCDC_VDHDOUT_MASK			1
+-#define CCDC_VDHDOUT_SHIFT			0
+-#define CCDC_EXWEN_MASK				1
+-#define CCDC_EXWEN_SHIFT			5
+-#define CCDC_INPUT_MODE_MASK			3
+-#define CCDC_INPUT_MODE_SHIFT			12
+-#define CCDC_PIX_FMT_MASK			3
+-#define CCDC_PIX_FMT_SHIFT			12
+-#define CCDC_DATAPOL_MASK			1
+-#define CCDC_DATAPOL_SHIFT			6
+-#define CCDC_WEN_ENABLE				(1 << 1)
+-#define CCDC_VDHDEN_ENABLE			(1 << 16)
+-#define CCDC_LPF_ENABLE				(1 << 14)
+-#define CCDC_ALAW_ENABLE			1
+-#define CCDC_ALAW_GAMMA_WD_MASK			7
+-#define CCDC_REC656IF_BT656_EN			3
+-
+-#define CCDC_FMTCFG_FMTMODE_MASK		3
+-#define CCDC_FMTCFG_FMTMODE_SHIFT		1
+-#define CCDC_FMTCFG_LNUM_MASK			3
+-#define CCDC_FMTCFG_LNUM_SHIFT			4
+-#define CCDC_FMTCFG_ADDRINC_MASK		7
+-#define CCDC_FMTCFG_ADDRINC_SHIFT		8
+-
+-#define CCDC_CCDCFG_FIDMD_SHIFT			6
+-#define	CCDC_CCDCFG_WENLOG_SHIFT		8
+-#define CCDC_CCDCFG_TRGSEL_SHIFT		9
+-#define CCDC_CCDCFG_EXTRG_SHIFT			10
+-#define CCDC_CCDCFG_MSBINVI_SHIFT		13
+-
+-#define CCDC_HSIZE_FLIP_SHIFT			12
+-#define CCDC_HSIZE_FLIP_MASK			1
+-#define CCDC_HSIZE_VAL_MASK			0xFFF
+-#define CCDC_SDOFST_FIELD_INTERLEAVED		0x249
+-#define CCDC_SDOFST_INTERLACE_INVERSE		0x4B6D
+-#define CCDC_SDOFST_INTERLACE_NORMAL		0x0B6D
+-#define CCDC_SDOFST_PROGRESSIVE_INVERSE		0x4000
+-#define CCDC_SDOFST_PROGRESSIVE_NORMAL		0
+-#define CCDC_START_PX_HOR_MASK			0x7FFF
+-#define CCDC_NUM_PX_HOR_MASK			0x7FFF
+-#define CCDC_START_VER_ONE_MASK			0x7FFF
+-#define CCDC_START_VER_TWO_MASK			0x7FFF
+-#define CCDC_NUM_LINES_VER			0x7FFF
+-
+-#define CCDC_BLK_CLAMP_ENABLE			(1 << 15)
+-#define CCDC_BLK_SGAIN_MASK			0x1F
+-#define CCDC_BLK_ST_PXL_MASK			0x1FFF
+-#define CCDC_BLK_SAMPLE_LN_MASK			3
+-#define CCDC_BLK_SAMPLE_LN_SHIFT		13
+-
+-#define CCDC_NUM_LINE_CALC_MASK			3
+-#define CCDC_NUM_LINE_CALC_SHIFT		14
+-
+-#define CCDC_BLK_DC_SUB_MASK			0x3FFF
+-#define CCDC_BLK_COMP_MASK			0xFF
+-#define CCDC_BLK_COMP_GB_COMP_SHIFT		8
+-#define CCDC_BLK_COMP_GR_COMP_SHIFT		0
+-#define CCDC_BLK_COMP_R_COMP_SHIFT		8
+-#define CCDC_LATCH_ON_VSYNC_DISABLE		(1 << 15)
+-#define CCDC_LATCH_ON_VSYNC_ENABLE		(0 << 15)
+-#define CCDC_FPC_ENABLE				(1 << 15)
+-#define CCDC_FPC_FPC_NUM_MASK			0x7FFF
+-#define CCDC_DATA_PACK_ENABLE			(1 << 11)
+-#define CCDC_FMT_HORZ_FMTLNH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_SHIFT		16
+-#define CCDC_FMT_VERT_FMTLNV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_SHIFT		16
+-#define CCDC_VP_OUT_VERT_NUM_MASK		0x3FFF
+-#define CCDC_VP_OUT_VERT_NUM_SHIFT		17
+-#define CCDC_VP_OUT_HORZ_NUM_MASK		0x1FFF
+-#define CCDC_VP_OUT_HORZ_NUM_SHIFT		4
+-#define CCDC_VP_OUT_HORZ_ST_MASK		0xF
+-
+-#define CCDC_CSC_COEF_INTEG_MASK		7
+-#define CCDC_CSC_COEF_DECIMAL_MASK		0x1f
+-#define CCDC_CSC_COEF_INTEG_SHIFT		5
+-#define CCDC_CSCM_MSB_SHIFT			8
+-#define CCDC_CSC_ENABLE				1
+-#define CCDC_CSC_DEC_MAX			32
+-
+-#define CCDC_MFILT1_SHIFT			10
+-#define CCDC_MFILT2_SHIFT			8
+-#define CCDC_MED_FILT_THRESH			0x3FFF
+-#define CCDC_LPF_MASK				1
+-#define CCDC_LPF_SHIFT				14
+-#define CCDC_OFFSET_MASK			0x3FF
+-#define CCDC_DATASFT_MASK			7
+-#define CCDC_DATASFT_SHIFT			8
+-
+-#define CCDC_DF_ENABLE				1
+-
+-#define CCDC_FMTPLEN_P0_MASK			0xF
+-#define CCDC_FMTPLEN_P1_MASK			0xF
+-#define CCDC_FMTPLEN_P2_MASK			7
+-#define CCDC_FMTPLEN_P3_MASK			7
+-#define CCDC_FMTPLEN_P0_SHIFT			0
+-#define CCDC_FMTPLEN_P1_SHIFT			4
+-#define CCDC_FMTPLEN_P2_SHIFT			8
+-#define CCDC_FMTPLEN_P3_SHIFT			12
+-
+-#define CCDC_FMTSPH_MASK			0x1FFF
+-#define CCDC_FMTLNH_MASK			0x1FFF
+-#define CCDC_FMTSLV_MASK			0x1FFF
+-#define CCDC_FMTLNV_MASK			0x7FFF
+-#define CCDC_FMTRLEN_MASK			0x1FFF
+-#define CCDC_FMTHCNT_MASK			0x1FFF
+-
+-#define CCDC_ADP_INIT_MASK			0x1FFF
+-#define CCDC_ADP_LINE_SHIFT			13
+-#define CCDC_ADP_LINE_MASK			3
+-#define CCDC_FMTPGN_APTR_MASK			7
+-
+-#define CCDC_DFCCTL_GDFCEN_MASK			1
+-#define CCDC_DFCCTL_VDFCEN_MASK			1
+-#define CCDC_DFCCTL_VDFC_DISABLE		(0 << 4)
+-#define CCDC_DFCCTL_VDFCEN_SHIFT		4
+-#define CCDC_DFCCTL_VDFCSL_MASK			3
+-#define CCDC_DFCCTL_VDFCSL_SHIFT		5
+-#define CCDC_DFCCTL_VDFCUDA_MASK		1
+-#define CCDC_DFCCTL_VDFCUDA_SHIFT		7
+-#define CCDC_DFCCTL_VDFLSFT_MASK		3
+-#define CCDC_DFCCTL_VDFLSFT_SHIFT		8
+-#define CCDC_DFCMEMCTL_DFCMARST_MASK		1
+-#define CCDC_DFCMEMCTL_DFCMARST_SHIFT		2
+-#define CCDC_DFCMEMCTL_DFCMWR_MASK		1
+-#define CCDC_DFCMEMCTL_DFCMWR_SHIFT		0
+-#define CCDC_DFCMEMCTL_INC_ADDR			(0 << 2)
+-
+-#define CCDC_LSCCFG_GFTSF_MASK			7
+-#define CCDC_LSCCFG_GFTSF_SHIFT			1
+-#define CCDC_LSCCFG_GFTINV_MASK			0xf
+-#define CCDC_LSCCFG_GFTINV_SHIFT		4
+-#define CCDC_LSC_GFTABLE_SEL_MASK		3
+-#define CCDC_LSC_GFTABLE_EPEL_SHIFT		8
+-#define CCDC_LSC_GFTABLE_OPEL_SHIFT		10
+-#define CCDC_LSC_GFTABLE_EPOL_SHIFT		12
+-#define CCDC_LSC_GFTABLE_OPOL_SHIFT		14
+-#define CCDC_LSC_GFMODE_MASK			3
+-#define CCDC_LSC_GFMODE_SHIFT			4
+-#define CCDC_LSC_DISABLE			0
+-#define CCDC_LSC_ENABLE				1
+-#define CCDC_LSC_TABLE1_SLC			0
+-#define CCDC_LSC_TABLE2_SLC			1
+-#define CCDC_LSC_TABLE3_SLC			2
+-#define CCDC_LSC_MEMADDR_RESET			(1 << 2)
+-#define CCDC_LSC_MEMADDR_INCR			(0 << 2)
+-#define CCDC_LSC_FRAC_MASK_T1			0xFF
+-#define CCDC_LSC_INT_MASK			3
+-#define CCDC_LSC_FRAC_MASK			0x3FFF
+-#define CCDC_LSC_CENTRE_MASK			0x3FFF
+-#define CCDC_LSC_COEF_MASK			0xff
+-#define CCDC_LSC_COEFL_SHIFT			0
+-#define CCDC_LSC_COEFU_SHIFT			8
+-#define CCDC_GAIN_MASK				0x7FF
+-#define CCDC_SYNCEN_VDHDEN_MASK			(1 << 0)
+-#define CCDC_SYNCEN_WEN_MASK			(1 << 1)
+-#define CCDC_SYNCEN_WEN_SHIFT			1
+-
+-/* Power on Defaults in hardware */
+-#define MODESET_DEFAULT				0x200
+-#define CULH_DEFAULT				0xFFFF
+-#define CULV_DEFAULT				0xFF
+-#define GAIN_DEFAULT				256
+-#define OUTCLIP_DEFAULT				0x3FFF
+-#define LSCCFG2_DEFAULT				0xE
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
+deleted file mode 100644
+index 4a93e5ad6415..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
++++ /dev/null
+@@ -1,879 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2006-2009 Texas Instruments Inc
+- *
+- * CCDC hardware module for DM6446
+- * ------------------------------
+- *
+- * This module is for configuring CCD controller of DM6446 VPFE to capture
+- * Raw yuv or Bayer RGB data from a decoder. CCDC has several modules
+- * such as Defect Pixel Correction, Color Space Conversion etc to
+- * pre-process the Raw Bayer RGB data, before writing it to SDRAM.
+- * This file is named DM644x so that other variants such DM6443
+- * may be supported using the same module.
+- *
+- * TODO: Test Raw bayer parameter settings and bayer capture
+- *	 Split module parameter structure to module specific ioctl structs
+- *	 investigate if enum used for user space type definition
+- *	 to be replaced by #defines or integer
+- */
+-#include <linux/platform_device.h>
+-#include <linux/uaccess.h>
+-#include <linux/videodev2.h>
+-#include <linux/gfp.h>
+-#include <linux/err.h>
+-#include <linux/module.h>
+-
+-#include "dm644x_ccdc.h"
+-#include <media/davinci/vpss.h>
+-
+-#include "dm644x_ccdc_regs.h"
+-#include "ccdc_hw_device.h"
+-
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("CCDC Driver for DM6446");
+-MODULE_AUTHOR("Texas Instruments");
+-
+-static struct ccdc_oper_config {
+-	struct device *dev;
+-	/* CCDC interface type */
+-	enum vpfe_hw_if_type if_type;
+-	/* Raw Bayer configuration */
+-	struct ccdc_params_raw bayer;
+-	/* YCbCr configuration */
+-	struct ccdc_params_ycbcr ycbcr;
+-	/* ccdc base address */
+-	void __iomem *base_addr;
+-} ccdc_cfg = {
+-	/* Raw configurations */
+-	.bayer = {
+-		.pix_fmt = CCDC_PIXFMT_RAW,
+-		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
+-		.win = CCDC_WIN_VGA,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.config_params = {
+-			.data_sz = CCDC_DATA_10BITS,
+-		},
+-	},
+-	.ycbcr = {
+-		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
+-		.frm_fmt = CCDC_FRMFMT_INTERLACED,
+-		.win = CCDC_WIN_PAL,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.bt656_enable = 1,
+-		.pix_order = CCDC_PIXORDER_CBYCRY,
+-		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED
+-	},
+-};
+-
+-#define CCDC_MAX_RAW_YUV_FORMATS	2
+-
+-/* Raw Bayer formats */
+-static u32 ccdc_raw_bayer_pix_formats[] =
+-	{V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
+-
+-/* Raw YUV formats */
+-static u32 ccdc_raw_yuv_pix_formats[] =
+-	{V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
+-
+-/* CCDC Save/Restore context */
+-static u32 ccdc_ctx[CCDC_REG_END / sizeof(u32)];
+-
+-/* register access routines */
+-static inline u32 regr(u32 offset)
+-{
+-	return __raw_readl(ccdc_cfg.base_addr + offset);
+-}
+-
+-static inline void regw(u32 val, u32 offset)
+-{
+-	__raw_writel(val, ccdc_cfg.base_addr + offset);
+-}
+-
+-static void ccdc_enable(int flag)
+-{
+-	regw(flag, CCDC_PCR);
+-}
+-
+-static void ccdc_enable_vport(int flag)
+-{
+-	if (flag)
+-		/* enable video port */
+-		regw(CCDC_ENABLE_VIDEO_PORT, CCDC_FMTCFG);
+-	else
+-		regw(CCDC_DISABLE_VIDEO_PORT, CCDC_FMTCFG);
+-}
+-
+-/*
+- * ccdc_setwin()
+- * This function will configure the window size
+- * to be capture in CCDC reg
+- */
+-static void ccdc_setwin(struct v4l2_rect *image_win,
+-			enum ccdc_frmfmt frm_fmt,
+-			int ppc)
+-{
+-	int horz_start, horz_nr_pixels;
+-	int vert_start, vert_nr_lines;
+-	int val = 0, mid_img = 0;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_setwin...");
+-	/*
+-	 * ppc - per pixel count. indicates how many pixels per cell
+-	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
+-	 * raw capture this is 1
+-	 */
+-	horz_start = image_win->left << (ppc - 1);
+-	horz_nr_pixels = (image_win->width << (ppc - 1)) - 1;
+-	regw((horz_start << CCDC_HORZ_INFO_SPH_SHIFT) | horz_nr_pixels,
+-	     CCDC_HORZ_INFO);
+-
+-	vert_start = image_win->top;
+-
+-	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		vert_nr_lines = (image_win->height >> 1) - 1;
+-		vert_start >>= 1;
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		/* configure VDINT0 */
+-		val = (vert_start << CCDC_VDINT_VDINT0_SHIFT);
+-		regw(val, CCDC_VDINT);
+-
+-	} else {
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		vert_nr_lines = image_win->height - 1;
+-		/*
+-		 * configure VDINT0 and VDINT1. VDINT1 will be at half
+-		 * of image height
+-		 */
+-		mid_img = vert_start + (image_win->height / 2);
+-		val = (vert_start << CCDC_VDINT_VDINT0_SHIFT) |
+-		    (mid_img & CCDC_VDINT_VDINT1_MASK);
+-		regw(val, CCDC_VDINT);
+-
+-	}
+-	regw((vert_start << CCDC_VERT_START_SLV0_SHIFT) | vert_start,
+-	     CCDC_VERT_START);
+-	regw(vert_nr_lines, CCDC_VERT_LINES);
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_setwin...");
+-}
+-
+-static void ccdc_readregs(void)
+-{
+-	unsigned int val = 0;
+-
+-	val = regr(CCDC_ALAW);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to ALAW...\n", val);
+-	val = regr(CCDC_CLAMP);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to CLAMP...\n", val);
+-	val = regr(CCDC_DCSUB);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to DCSUB...\n", val);
+-	val = regr(CCDC_BLKCMP);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to BLKCMP...\n", val);
+-	val = regr(CCDC_FPC_ADDR);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC_ADDR...\n", val);
+-	val = regr(CCDC_FPC);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC...\n", val);
+-	val = regr(CCDC_FMTCFG);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMTCFG...\n", val);
+-	val = regr(CCDC_COLPTN);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to COLPTN...\n", val);
+-	val = regr(CCDC_FMT_HORZ);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_HORZ...\n", val);
+-	val = regr(CCDC_FMT_VERT);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_VERT...\n", val);
+-	val = regr(CCDC_HSIZE_OFF);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HSIZE_OFF...\n", val);
+-	val = regr(CCDC_SDOFST);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SDOFST...\n", val);
+-	val = regr(CCDC_VP_OUT);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VP_OUT...\n", val);
+-	val = regr(CCDC_SYN_MODE);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SYN_MODE...\n", val);
+-	val = regr(CCDC_HORZ_INFO);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HORZ_INFO...\n", val);
+-	val = regr(CCDC_VERT_START);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_START...\n", val);
+-	val = regr(CCDC_VERT_LINES);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_LINES...\n", val);
+-}
+-
+-static int ccdc_close(struct device *dev)
+-{
+-	return 0;
+-}
+-
+-/*
+- * ccdc_restore_defaults()
+- * This function will write defaults to all CCDC registers
+- */
+-static void ccdc_restore_defaults(void)
+-{
+-	int i;
+-
+-	/* disable CCDC */
+-	ccdc_enable(0);
+-	/* set all registers to default value */
+-	for (i = 4; i <= 0x94; i += 4)
+-		regw(0,  i);
+-	regw(CCDC_NO_CULLING, CCDC_CULLING);
+-	regw(CCDC_GAMMA_BITS_11_2, CCDC_ALAW);
+-}
+-
+-static int ccdc_open(struct device *device)
+-{
+-	ccdc_restore_defaults();
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_enable_vport(1);
+-	return 0;
+-}
+-
+-static void ccdc_sbl_reset(void)
+-{
+-	vpss_clear_wbl_overflow(VPSS_PCR_CCDC_WBL_O);
+-}
+-
+-/*
+- * ccdc_config_ycbcr()
+- * This function will configure CCDC for YCbCr video capture
+- */
+-static void ccdc_config_ycbcr(void)
+-{
+-	struct ccdc_params_ycbcr *params = &ccdc_cfg.ycbcr;
+-	u32 syn_mode;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_ycbcr...");
+-	/*
+-	 * first restore the CCDC registers to default values
+-	 * This is important since we assume default values to be set in
+-	 * a lot of registers that we didn't touch
+-	 */
+-	ccdc_restore_defaults();
+-
+-	/*
+-	 * configure pixel format, frame format, configure video frame
+-	 * format, enable output to SDRAM, enable internal timing generator
+-	 * and 8bit pack mode
+-	 */
+-	syn_mode = (((params->pix_fmt & CCDC_SYN_MODE_INPMOD_MASK) <<
+-		    CCDC_SYN_MODE_INPMOD_SHIFT) |
+-		    ((params->frm_fmt & CCDC_SYN_FLDMODE_MASK) <<
+-		    CCDC_SYN_FLDMODE_SHIFT) | CCDC_VDHDEN_ENABLE |
+-		    CCDC_WEN_ENABLE | CCDC_DATA_PACK_ENABLE);
+-
+-	/* setup BT.656 sync mode */
+-	if (params->bt656_enable) {
+-		regw(CCDC_REC656IF_BT656_EN, CCDC_REC656IF);
+-
+-		/*
+-		 * configure the FID, VD, HD pin polarity,
+-		 * fld,hd pol positive, vd negative, 8-bit data
+-		 */
+-		syn_mode |= CCDC_SYN_MODE_VD_POL_NEGATIVE;
+-		if (ccdc_cfg.if_type == VPFE_BT656_10BIT)
+-			syn_mode |= CCDC_SYN_MODE_10BITS;
+-		else
+-			syn_mode |= CCDC_SYN_MODE_8BITS;
+-	} else {
+-		/* y/c external sync mode */
+-		syn_mode |= (((params->fid_pol & CCDC_FID_POL_MASK) <<
+-			     CCDC_FID_POL_SHIFT) |
+-			     ((params->hd_pol & CCDC_HD_POL_MASK) <<
+-			     CCDC_HD_POL_SHIFT) |
+-			     ((params->vd_pol & CCDC_VD_POL_MASK) <<
+-			     CCDC_VD_POL_SHIFT));
+-	}
+-	regw(syn_mode, CCDC_SYN_MODE);
+-
+-	/* configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, 2);
+-
+-	/*
+-	 * configure the order of y cb cr in SDRAM, and disable latch
+-	 * internal register on vsync
+-	 */
+-	if (ccdc_cfg.if_type == VPFE_BT656_10BIT)
+-		regw((params->pix_order << CCDC_CCDCFG_Y8POS_SHIFT) |
+-			CCDC_LATCH_ON_VSYNC_DISABLE | CCDC_CCDCFG_BW656_10BIT,
+-			CCDC_CCDCFG);
+-	else
+-		regw((params->pix_order << CCDC_CCDCFG_Y8POS_SHIFT) |
+-			CCDC_LATCH_ON_VSYNC_DISABLE, CCDC_CCDCFG);
+-
+-	/*
+-	 * configure the horizontal line offset. This should be a
+-	 * on 32 byte boundary. So clear LSB 5 bits
+-	 */
+-	regw(((params->win.width * 2  + 31) & ~0x1f), CCDC_HSIZE_OFF);
+-
+-	/* configure the memory line offset */
+-	if (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED)
+-		/* two fields are interleaved in memory */
+-		regw(CCDC_SDOFST_FIELD_INTERLEAVED, CCDC_SDOFST);
+-
+-	ccdc_sbl_reset();
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_config_ycbcr...\n");
+-}
+-
+-static void ccdc_config_black_clamp(struct ccdc_black_clamp *bclamp)
+-{
+-	u32 val;
+-
+-	if (!bclamp->enable) {
+-		/* configure DCSub */
+-		val = (bclamp->dc_sub) & CCDC_BLK_DC_SUB_MASK;
+-		regw(val, CCDC_DCSUB);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to DCSUB...\n", val);
+-		regw(CCDC_CLAMP_DEFAULT_VAL, CCDC_CLAMP);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x0000 to CLAMP...\n");
+-		return;
+-	}
+-	/*
+-	 * Configure gain,  Start pixel, No of line to be avg,
+-	 * No of pixel/line to be avg, & Enable the Black clamping
+-	 */
+-	val = ((bclamp->sgain & CCDC_BLK_SGAIN_MASK) |
+-	       ((bclamp->start_pixel & CCDC_BLK_ST_PXL_MASK) <<
+-		CCDC_BLK_ST_PXL_SHIFT) |
+-	       ((bclamp->sample_ln & CCDC_BLK_SAMPLE_LINE_MASK) <<
+-		CCDC_BLK_SAMPLE_LINE_SHIFT) |
+-	       ((bclamp->sample_pixel & CCDC_BLK_SAMPLE_LN_MASK) <<
+-		CCDC_BLK_SAMPLE_LN_SHIFT) | CCDC_BLK_CLAMP_ENABLE);
+-	regw(val, CCDC_CLAMP);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to CLAMP...\n", val);
+-	/* If Black clamping is enable then make dcsub 0 */
+-	regw(CCDC_DCSUB_DEFAULT_VAL, CCDC_DCSUB);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x00000000 to DCSUB...\n");
+-}
+-
+-static void ccdc_config_black_compense(struct ccdc_black_compensation *bcomp)
+-{
+-	u32 val;
+-
+-	val = ((bcomp->b & CCDC_BLK_COMP_MASK) |
+-	      ((bcomp->gb & CCDC_BLK_COMP_MASK) <<
+-	       CCDC_BLK_COMP_GB_COMP_SHIFT) |
+-	      ((bcomp->gr & CCDC_BLK_COMP_MASK) <<
+-	       CCDC_BLK_COMP_GR_COMP_SHIFT) |
+-	      ((bcomp->r & CCDC_BLK_COMP_MASK) <<
+-	       CCDC_BLK_COMP_R_COMP_SHIFT));
+-	regw(val, CCDC_BLKCMP);
+-}
+-
+-/*
+- * ccdc_config_raw()
+- * This function will configure CCDC for Raw capture mode
+- */
+-static void ccdc_config_raw(void)
+-{
+-	struct ccdc_params_raw *params = &ccdc_cfg.bayer;
+-	struct ccdc_config_params_raw *config_params =
+-				&ccdc_cfg.bayer.config_params;
+-	unsigned int syn_mode = 0;
+-	unsigned int val;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_raw...");
+-
+-	/*      Reset CCDC */
+-	ccdc_restore_defaults();
+-
+-	/* Disable latching function registers on VSYNC  */
+-	regw(CCDC_LATCH_ON_VSYNC_DISABLE, CCDC_CCDCFG);
+-
+-	/*
+-	 * Configure the vertical sync polarity(SYN_MODE.VDPOL),
+-	 * horizontal sync polarity (SYN_MODE.HDPOL), frame id polarity
+-	 * (SYN_MODE.FLDPOL), frame format(progressive or interlace),
+-	 * data size(SYNMODE.DATSIZ), &pixel format (Input mode), output
+-	 * SDRAM, enable internal timing generator
+-	 */
+-	syn_mode =
+-		(((params->vd_pol & CCDC_VD_POL_MASK) << CCDC_VD_POL_SHIFT) |
+-		((params->hd_pol & CCDC_HD_POL_MASK) << CCDC_HD_POL_SHIFT) |
+-		((params->fid_pol & CCDC_FID_POL_MASK) << CCDC_FID_POL_SHIFT) |
+-		((params->frm_fmt & CCDC_FRM_FMT_MASK) << CCDC_FRM_FMT_SHIFT) |
+-		((config_params->data_sz & CCDC_DATA_SZ_MASK) <<
+-		CCDC_DATA_SZ_SHIFT) |
+-		((params->pix_fmt & CCDC_PIX_FMT_MASK) << CCDC_PIX_FMT_SHIFT) |
+-		CCDC_WEN_ENABLE | CCDC_VDHDEN_ENABLE);
+-
+-	/* Enable and configure aLaw register if needed */
+-	if (config_params->alaw.enable) {
+-		val = ((config_params->alaw.gamma_wd &
+-		      CCDC_ALAW_GAMMA_WD_MASK) | CCDC_ALAW_ENABLE);
+-		regw(val, CCDC_ALAW);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to ALAW...\n", val);
+-	}
+-
+-	/* Configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, CCDC_PPC_RAW);
+-
+-	/* Configure Black Clamp */
+-	ccdc_config_black_clamp(&config_params->blk_clamp);
+-
+-	/* Configure Black level compensation */
+-	ccdc_config_black_compense(&config_params->blk_comp);
+-
+-	/* If data size is 8 bit then pack the data */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	     config_params->alaw.enable)
+-		syn_mode |= CCDC_DATA_PACK_ENABLE;
+-
+-	/* disable video port */
+-	val = CCDC_DISABLE_VIDEO_PORT;
+-
+-	if (config_params->data_sz == CCDC_DATA_8BITS)
+-		val |= (CCDC_DATA_10BITS & CCDC_FMTCFG_VPIN_MASK)
+-		    << CCDC_FMTCFG_VPIN_SHIFT;
+-	else
+-		val |= (config_params->data_sz & CCDC_FMTCFG_VPIN_MASK)
+-		    << CCDC_FMTCFG_VPIN_SHIFT;
+-	/* Write value in FMTCFG */
+-	regw(val, CCDC_FMTCFG);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMTCFG...\n", val);
+-	/* Configure the color pattern according to mt9t001 sensor */
+-	regw(CCDC_COLPTN_VAL, CCDC_COLPTN);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0xBB11BB11 to COLPTN...\n");
+-	/*
+-	 * Configure Data formatter(Video port) pixel selection
+-	 * (FMT_HORZ, FMT_VERT)
+-	 */
+-	val = ((params->win.left & CCDC_FMT_HORZ_FMTSPH_MASK) <<
+-	      CCDC_FMT_HORZ_FMTSPH_SHIFT) |
+-	      (params->win.width & CCDC_FMT_HORZ_FMTLNH_MASK);
+-	regw(val, CCDC_FMT_HORZ);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMT_HORZ...\n", val);
+-	val = (params->win.top & CCDC_FMT_VERT_FMTSLV_MASK)
+-	    << CCDC_FMT_VERT_FMTSLV_SHIFT;
+-	if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE)
+-		val |= (params->win.height) & CCDC_FMT_VERT_FMTLNV_MASK;
+-	else
+-		val |= (params->win.height >> 1) & CCDC_FMT_VERT_FMTLNV_MASK;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nparams->win.height  0x%x ...\n",
+-	       params->win.height);
+-	regw(val, CCDC_FMT_VERT);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMT_VERT...\n", val);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nbelow regw(val, FMT_VERT)...");
+-
+-	/*
+-	 * Configure Horizontal offset register. If pack 8 is enabled then
+-	 * 1 pixel will take 1 byte
+-	 */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	    config_params->alaw.enable)
+-		regw((params->win.width + CCDC_32BYTE_ALIGN_VAL) &
+-		    CCDC_HSIZE_OFF_MASK, CCDC_HSIZE_OFF);
+-	else
+-		/* else one pixel will take 2 byte */
+-		regw(((params->win.width * CCDC_TWO_BYTES_PER_PIXEL) +
+-		    CCDC_32BYTE_ALIGN_VAL) & CCDC_HSIZE_OFF_MASK,
+-		    CCDC_HSIZE_OFF);
+-
+-	/* Set value for SDOFST */
+-	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		if (params->image_invert_enable) {
+-			/* For intelace inverse mode */
+-			regw(CCDC_INTERLACED_IMAGE_INVERT, CCDC_SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting 0x4B6D to SDOFST..\n");
+-		}
+-
+-		else {
+-			/* For intelace non inverse mode */
+-			regw(CCDC_INTERLACED_NO_IMAGE_INVERT, CCDC_SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting 0x0249 to SDOFST..\n");
+-		}
+-	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
+-		regw(CCDC_PROGRESSIVE_NO_IMAGE_INVERT, CCDC_SDOFST);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x0000 to SDOFST...\n");
+-	}
+-
+-	/*
+-	 * Configure video port pixel selection (VPOUT)
+-	 * Here -1 is to make the height value less than FMT_VERT.FMTLNV
+-	 */
+-	if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE)
+-		val = (((params->win.height - 1) & CCDC_VP_OUT_VERT_NUM_MASK))
+-		    << CCDC_VP_OUT_VERT_NUM_SHIFT;
+-	else
+-		val =
+-		    ((((params->win.height >> CCDC_INTERLACED_HEIGHT_SHIFT) -
+-		     1) & CCDC_VP_OUT_VERT_NUM_MASK)) <<
+-		    CCDC_VP_OUT_VERT_NUM_SHIFT;
+-
+-	val |= ((((params->win.width))) & CCDC_VP_OUT_HORZ_NUM_MASK)
+-	    << CCDC_VP_OUT_HORZ_NUM_SHIFT;
+-	val |= (params->win.left) & CCDC_VP_OUT_HORZ_ST_MASK;
+-	regw(val, CCDC_VP_OUT);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to VP_OUT...\n", val);
+-	regw(syn_mode, CCDC_SYN_MODE);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to SYN_MODE...\n", syn_mode);
+-
+-	ccdc_sbl_reset();
+-	dev_dbg(ccdc_cfg.dev, "\nend of ccdc_config_raw...");
+-	ccdc_readregs();
+-}
+-
+-static int ccdc_configure(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_config_raw();
+-	else
+-		ccdc_config_ycbcr();
+-	return 0;
+-}
+-
+-static int ccdc_set_buftype(enum ccdc_buftype buf_type)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.buf_type = buf_type;
+-	else
+-		ccdc_cfg.ycbcr.buf_type = buf_type;
+-	return 0;
+-}
+-
+-static enum ccdc_buftype ccdc_get_buftype(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.buf_type;
+-	return ccdc_cfg.ycbcr.buf_type;
+-}
+-
+-static int ccdc_enum_pix(u32 *pix, int i)
+-{
+-	int ret = -EINVAL;
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (i < ARRAY_SIZE(ccdc_raw_bayer_pix_formats)) {
+-			*pix = ccdc_raw_bayer_pix_formats[i];
+-			ret = 0;
+-		}
+-	} else {
+-		if (i < ARRAY_SIZE(ccdc_raw_yuv_pix_formats)) {
+-			*pix = ccdc_raw_yuv_pix_formats[i];
+-			ret = 0;
+-		}
+-	}
+-	return ret;
+-}
+-
+-static int ccdc_set_pixel_format(u32 pixfmt)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		ccdc_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-		if (pixfmt == V4L2_PIX_FMT_SBGGR8)
+-			ccdc_cfg.bayer.config_params.alaw.enable = 1;
+-		else if (pixfmt != V4L2_PIX_FMT_SBGGR16)
+-			return -EINVAL;
+-	} else {
+-		if (pixfmt == V4L2_PIX_FMT_YUYV)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
+-		else if (pixfmt == V4L2_PIX_FMT_UYVY)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		else
+-			return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static u32 ccdc_get_pixel_format(void)
+-{
+-	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
+-	u32 pixfmt;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		if (alaw->enable)
+-			pixfmt = V4L2_PIX_FMT_SBGGR8;
+-		else
+-			pixfmt = V4L2_PIX_FMT_SBGGR16;
+-	else {
+-		if (ccdc_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
+-			pixfmt = V4L2_PIX_FMT_YUYV;
+-		else
+-			pixfmt = V4L2_PIX_FMT_UYVY;
+-	}
+-	return pixfmt;
+-}
+-
+-static int ccdc_set_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.win = *win;
+-	else
+-		ccdc_cfg.ycbcr.win = *win;
+-	return 0;
+-}
+-
+-static void ccdc_get_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		*win = ccdc_cfg.bayer.win;
+-	else
+-		*win = ccdc_cfg.ycbcr.win;
+-}
+-
+-static unsigned int ccdc_get_line_length(void)
+-{
+-	struct ccdc_config_params_raw *config_params =
+-				&ccdc_cfg.bayer.config_params;
+-	unsigned int len;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if ((config_params->alaw.enable) ||
+-		    (config_params->data_sz == CCDC_DATA_8BITS))
+-			len = ccdc_cfg.bayer.win.width;
+-		else
+-			len = ccdc_cfg.bayer.win.width * 2;
+-	} else
+-		len = ccdc_cfg.ycbcr.win.width * 2;
+-	return ALIGN(len, 32);
+-}
+-
+-static int ccdc_set_frame_format(enum ccdc_frmfmt frm_fmt)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.frm_fmt = frm_fmt;
+-	else
+-		ccdc_cfg.ycbcr.frm_fmt = frm_fmt;
+-	return 0;
+-}
+-
+-static enum ccdc_frmfmt ccdc_get_frame_format(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.frm_fmt;
+-	else
+-		return ccdc_cfg.ycbcr.frm_fmt;
+-}
+-
+-static int ccdc_getfid(void)
+-{
+-	return (regr(CCDC_SYN_MODE) >> 15) & 1;
+-}
+-
+-/* misc operations */
+-static inline void ccdc_setfbaddr(unsigned long addr)
+-{
+-	regw(addr & 0xffffffe0, CCDC_SDR_ADDR);
+-}
+-
+-static int ccdc_set_hw_if_params(struct vpfe_hw_if_param *params)
+-{
+-	ccdc_cfg.if_type = params->if_type;
+-
+-	switch (params->if_type) {
+-	case VPFE_BT656:
+-	case VPFE_YCBCR_SYNC_16:
+-	case VPFE_YCBCR_SYNC_8:
+-	case VPFE_BT656_10BIT:
+-		ccdc_cfg.ycbcr.vd_pol = params->vdpol;
+-		ccdc_cfg.ycbcr.hd_pol = params->hdpol;
+-		break;
+-	default:
+-		/* TODO add support for raw bayer here */
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static void ccdc_save_context(void)
+-{
+-	ccdc_ctx[CCDC_PCR >> 2] = regr(CCDC_PCR);
+-	ccdc_ctx[CCDC_SYN_MODE >> 2] = regr(CCDC_SYN_MODE);
+-	ccdc_ctx[CCDC_HD_VD_WID >> 2] = regr(CCDC_HD_VD_WID);
+-	ccdc_ctx[CCDC_PIX_LINES >> 2] = regr(CCDC_PIX_LINES);
+-	ccdc_ctx[CCDC_HORZ_INFO >> 2] = regr(CCDC_HORZ_INFO);
+-	ccdc_ctx[CCDC_VERT_START >> 2] = regr(CCDC_VERT_START);
+-	ccdc_ctx[CCDC_VERT_LINES >> 2] = regr(CCDC_VERT_LINES);
+-	ccdc_ctx[CCDC_CULLING >> 2] = regr(CCDC_CULLING);
+-	ccdc_ctx[CCDC_HSIZE_OFF >> 2] = regr(CCDC_HSIZE_OFF);
+-	ccdc_ctx[CCDC_SDOFST >> 2] = regr(CCDC_SDOFST);
+-	ccdc_ctx[CCDC_SDR_ADDR >> 2] = regr(CCDC_SDR_ADDR);
+-	ccdc_ctx[CCDC_CLAMP >> 2] = regr(CCDC_CLAMP);
+-	ccdc_ctx[CCDC_DCSUB >> 2] = regr(CCDC_DCSUB);
+-	ccdc_ctx[CCDC_COLPTN >> 2] = regr(CCDC_COLPTN);
+-	ccdc_ctx[CCDC_BLKCMP >> 2] = regr(CCDC_BLKCMP);
+-	ccdc_ctx[CCDC_FPC >> 2] = regr(CCDC_FPC);
+-	ccdc_ctx[CCDC_FPC_ADDR >> 2] = regr(CCDC_FPC_ADDR);
+-	ccdc_ctx[CCDC_VDINT >> 2] = regr(CCDC_VDINT);
+-	ccdc_ctx[CCDC_ALAW >> 2] = regr(CCDC_ALAW);
+-	ccdc_ctx[CCDC_REC656IF >> 2] = regr(CCDC_REC656IF);
+-	ccdc_ctx[CCDC_CCDCFG >> 2] = regr(CCDC_CCDCFG);
+-	ccdc_ctx[CCDC_FMTCFG >> 2] = regr(CCDC_FMTCFG);
+-	ccdc_ctx[CCDC_FMT_HORZ >> 2] = regr(CCDC_FMT_HORZ);
+-	ccdc_ctx[CCDC_FMT_VERT >> 2] = regr(CCDC_FMT_VERT);
+-	ccdc_ctx[CCDC_FMT_ADDR0 >> 2] = regr(CCDC_FMT_ADDR0);
+-	ccdc_ctx[CCDC_FMT_ADDR1 >> 2] = regr(CCDC_FMT_ADDR1);
+-	ccdc_ctx[CCDC_FMT_ADDR2 >> 2] = regr(CCDC_FMT_ADDR2);
+-	ccdc_ctx[CCDC_FMT_ADDR3 >> 2] = regr(CCDC_FMT_ADDR3);
+-	ccdc_ctx[CCDC_FMT_ADDR4 >> 2] = regr(CCDC_FMT_ADDR4);
+-	ccdc_ctx[CCDC_FMT_ADDR5 >> 2] = regr(CCDC_FMT_ADDR5);
+-	ccdc_ctx[CCDC_FMT_ADDR6 >> 2] = regr(CCDC_FMT_ADDR6);
+-	ccdc_ctx[CCDC_FMT_ADDR7 >> 2] = regr(CCDC_FMT_ADDR7);
+-	ccdc_ctx[CCDC_PRGEVEN_0 >> 2] = regr(CCDC_PRGEVEN_0);
+-	ccdc_ctx[CCDC_PRGEVEN_1 >> 2] = regr(CCDC_PRGEVEN_1);
+-	ccdc_ctx[CCDC_PRGODD_0 >> 2] = regr(CCDC_PRGODD_0);
+-	ccdc_ctx[CCDC_PRGODD_1 >> 2] = regr(CCDC_PRGODD_1);
+-	ccdc_ctx[CCDC_VP_OUT >> 2] = regr(CCDC_VP_OUT);
+-}
+-
+-static void ccdc_restore_context(void)
+-{
+-	regw(ccdc_ctx[CCDC_SYN_MODE >> 2], CCDC_SYN_MODE);
+-	regw(ccdc_ctx[CCDC_HD_VD_WID >> 2], CCDC_HD_VD_WID);
+-	regw(ccdc_ctx[CCDC_PIX_LINES >> 2], CCDC_PIX_LINES);
+-	regw(ccdc_ctx[CCDC_HORZ_INFO >> 2], CCDC_HORZ_INFO);
+-	regw(ccdc_ctx[CCDC_VERT_START >> 2], CCDC_VERT_START);
+-	regw(ccdc_ctx[CCDC_VERT_LINES >> 2], CCDC_VERT_LINES);
+-	regw(ccdc_ctx[CCDC_CULLING >> 2], CCDC_CULLING);
+-	regw(ccdc_ctx[CCDC_HSIZE_OFF >> 2], CCDC_HSIZE_OFF);
+-	regw(ccdc_ctx[CCDC_SDOFST >> 2], CCDC_SDOFST);
+-	regw(ccdc_ctx[CCDC_SDR_ADDR >> 2], CCDC_SDR_ADDR);
+-	regw(ccdc_ctx[CCDC_CLAMP >> 2], CCDC_CLAMP);
+-	regw(ccdc_ctx[CCDC_DCSUB >> 2], CCDC_DCSUB);
+-	regw(ccdc_ctx[CCDC_COLPTN >> 2], CCDC_COLPTN);
+-	regw(ccdc_ctx[CCDC_BLKCMP >> 2], CCDC_BLKCMP);
+-	regw(ccdc_ctx[CCDC_FPC >> 2], CCDC_FPC);
+-	regw(ccdc_ctx[CCDC_FPC_ADDR >> 2], CCDC_FPC_ADDR);
+-	regw(ccdc_ctx[CCDC_VDINT >> 2], CCDC_VDINT);
+-	regw(ccdc_ctx[CCDC_ALAW >> 2], CCDC_ALAW);
+-	regw(ccdc_ctx[CCDC_REC656IF >> 2], CCDC_REC656IF);
+-	regw(ccdc_ctx[CCDC_CCDCFG >> 2], CCDC_CCDCFG);
+-	regw(ccdc_ctx[CCDC_FMTCFG >> 2], CCDC_FMTCFG);
+-	regw(ccdc_ctx[CCDC_FMT_HORZ >> 2], CCDC_FMT_HORZ);
+-	regw(ccdc_ctx[CCDC_FMT_VERT >> 2], CCDC_FMT_VERT);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR0 >> 2], CCDC_FMT_ADDR0);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR1 >> 2], CCDC_FMT_ADDR1);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR2 >> 2], CCDC_FMT_ADDR2);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR3 >> 2], CCDC_FMT_ADDR3);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR4 >> 2], CCDC_FMT_ADDR4);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR5 >> 2], CCDC_FMT_ADDR5);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR6 >> 2], CCDC_FMT_ADDR6);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR7 >> 2], CCDC_FMT_ADDR7);
+-	regw(ccdc_ctx[CCDC_PRGEVEN_0 >> 2], CCDC_PRGEVEN_0);
+-	regw(ccdc_ctx[CCDC_PRGEVEN_1 >> 2], CCDC_PRGEVEN_1);
+-	regw(ccdc_ctx[CCDC_PRGODD_0 >> 2], CCDC_PRGODD_0);
+-	regw(ccdc_ctx[CCDC_PRGODD_1 >> 2], CCDC_PRGODD_1);
+-	regw(ccdc_ctx[CCDC_VP_OUT >> 2], CCDC_VP_OUT);
+-	regw(ccdc_ctx[CCDC_PCR >> 2], CCDC_PCR);
+-}
+-static const struct ccdc_hw_device ccdc_hw_dev = {
+-	.name = "DM6446 CCDC",
+-	.owner = THIS_MODULE,
+-	.hw_ops = {
+-		.open = ccdc_open,
+-		.close = ccdc_close,
+-		.reset = ccdc_sbl_reset,
+-		.enable = ccdc_enable,
+-		.set_hw_if_params = ccdc_set_hw_if_params,
+-		.configure = ccdc_configure,
+-		.set_buftype = ccdc_set_buftype,
+-		.get_buftype = ccdc_get_buftype,
+-		.enum_pix = ccdc_enum_pix,
+-		.set_pixel_format = ccdc_set_pixel_format,
+-		.get_pixel_format = ccdc_get_pixel_format,
+-		.set_frame_format = ccdc_set_frame_format,
+-		.get_frame_format = ccdc_get_frame_format,
+-		.set_image_window = ccdc_set_image_window,
+-		.get_image_window = ccdc_get_image_window,
+-		.get_line_length = ccdc_get_line_length,
+-		.setfbaddr = ccdc_setfbaddr,
+-		.getfid = ccdc_getfid,
+-	},
+-};
+-
+-static int dm644x_ccdc_probe(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-	int status = 0;
+-
+-	/*
+-	 * first try to register with vpfe. If not correct platform, then we
+-	 * don't have to iomap
+-	 */
+-	status = vpfe_register_ccdc_device(&ccdc_hw_dev);
+-	if (status < 0)
+-		return status;
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		status = -ENODEV;
+-		goto fail_nores;
+-	}
+-
+-	res = request_mem_region(res->start, resource_size(res), res->name);
+-	if (!res) {
+-		status = -EBUSY;
+-		goto fail_nores;
+-	}
+-
+-	ccdc_cfg.base_addr = ioremap(res->start, resource_size(res));
+-	if (!ccdc_cfg.base_addr) {
+-		status = -ENOMEM;
+-		goto fail_nomem;
+-	}
+-
+-	ccdc_cfg.dev = &pdev->dev;
+-	printk(KERN_NOTICE "%s is registered with vpfe.\n", ccdc_hw_dev.name);
+-	return 0;
+-fail_nomem:
+-	release_mem_region(res->start, resource_size(res));
+-fail_nores:
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return status;
+-}
+-
+-static int dm644x_ccdc_remove(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-
+-	iounmap(ccdc_cfg.base_addr);
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, resource_size(res));
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return 0;
+-}
+-
+-static int dm644x_ccdc_suspend(struct device *dev)
+-{
+-	/* Save CCDC context */
+-	ccdc_save_context();
+-	/* Disable CCDC */
+-	ccdc_enable(0);
+-
+-	return 0;
+-}
+-
+-static int dm644x_ccdc_resume(struct device *dev)
+-{
+-	/* Restore CCDC context */
+-	ccdc_restore_context();
+-
+-	return 0;
+-}
+-
+-static const struct dev_pm_ops dm644x_ccdc_pm_ops = {
+-	.suspend = dm644x_ccdc_suspend,
+-	.resume = dm644x_ccdc_resume,
+-};
+-
+-static struct platform_driver dm644x_ccdc_driver = {
+-	.driver = {
+-		.name	= "dm644x_ccdc",
+-		.pm = &dm644x_ccdc_pm_ops,
+-	},
+-	.remove = dm644x_ccdc_remove,
+-	.probe = dm644x_ccdc_probe,
+-};
+-
+-module_platform_driver(dm644x_ccdc_driver);
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
+deleted file mode 100644
+index c20dba3d76d6..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
++++ /dev/null
+@@ -1,171 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2006-2009 Texas Instruments Inc
+- */
+-#ifndef _DM644X_CCDC_H
+-#define _DM644X_CCDC_H
+-#include <media/davinci/ccdc_types.h>
+-#include <media/davinci/vpfe_types.h>
+-
+-/* enum for No of pixel per line to be avg. in Black Clamping*/
+-enum ccdc_sample_length {
+-	CCDC_SAMPLE_1PIXELS,
+-	CCDC_SAMPLE_2PIXELS,
+-	CCDC_SAMPLE_4PIXELS,
+-	CCDC_SAMPLE_8PIXELS,
+-	CCDC_SAMPLE_16PIXELS
+-};
+-
+-/* enum for No of lines in Black Clamping */
+-enum ccdc_sample_line {
+-	CCDC_SAMPLE_1LINES,
+-	CCDC_SAMPLE_2LINES,
+-	CCDC_SAMPLE_4LINES,
+-	CCDC_SAMPLE_8LINES,
+-	CCDC_SAMPLE_16LINES
+-};
+-
+-/* enum for Alaw gamma width */
+-enum ccdc_gamma_width {
+-	CCDC_GAMMA_BITS_15_6,	/* use bits 15-6 for gamma */
+-	CCDC_GAMMA_BITS_14_5,
+-	CCDC_GAMMA_BITS_13_4,
+-	CCDC_GAMMA_BITS_12_3,
+-	CCDC_GAMMA_BITS_11_2,
+-	CCDC_GAMMA_BITS_10_1,
+-	CCDC_GAMMA_BITS_09_0	/* use bits 9-0 for gamma */
+-};
+-
+-/* returns the highest bit used for the gamma */
+-static inline u8 ccdc_gamma_width_max_bit(enum ccdc_gamma_width width)
+-{
+-	return 15 - width;
+-}
+-
+-enum ccdc_data_size {
+-	CCDC_DATA_16BITS,
+-	CCDC_DATA_15BITS,
+-	CCDC_DATA_14BITS,
+-	CCDC_DATA_13BITS,
+-	CCDC_DATA_12BITS,
+-	CCDC_DATA_11BITS,
+-	CCDC_DATA_10BITS,
+-	CCDC_DATA_8BITS
+-};
+-
+-/* returns the highest bit used for this data size */
+-static inline u8 ccdc_data_size_max_bit(enum ccdc_data_size sz)
+-{
+-	return sz == CCDC_DATA_8BITS ? 7 : 15 - sz;
+-}
+-
+-/* structure for ALaw */
+-struct ccdc_a_law {
+-	/* Enable/disable A-Law */
+-	unsigned char enable;
+-	/* Gamma Width Input */
+-	enum ccdc_gamma_width gamma_wd;
+-};
+-
+-/* structure for Black Clamping */
+-struct ccdc_black_clamp {
+-	unsigned char enable;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_length sample_pixel;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_line sample_ln;
+-	/* only if bClampEnable is TRUE */
+-	unsigned short start_pixel;
+-	/* only if bClampEnable is TRUE */
+-	unsigned short sgain;
+-	/* only if bClampEnable is FALSE */
+-	unsigned short dc_sub;
+-};
+-
+-/* structure for Black Level Compensation */
+-struct ccdc_black_compensation {
+-	/* Constant value to subtract from Red component */
+-	char r;
+-	/* Constant value to subtract from Gr component */
+-	char gr;
+-	/* Constant value to subtract from Blue component */
+-	char b;
+-	/* Constant value to subtract from Gb component */
+-	char gb;
+-};
+-
+-/* Structure for CCDC configuration parameters for raw capture mode passed
+- * by application
+- */
+-struct ccdc_config_params_raw {
+-	/* data size value from 8 to 16 bits */
+-	enum ccdc_data_size data_sz;
+-	/* Structure for Optional A-Law */
+-	struct ccdc_a_law alaw;
+-	/* Structure for Optical Black Clamp */
+-	struct ccdc_black_clamp blk_clamp;
+-	/* Structure for Black Compensation */
+-	struct ccdc_black_compensation blk_comp;
+-};
+-
+-
+-#ifdef __KERNEL__
+-#include <linux/io.h>
+-/* Define to enable/disable video port */
+-#define FP_NUM_BYTES		4
+-/* Define for extra pixel/line and extra lines/frame */
+-#define NUM_EXTRAPIXELS		8
+-#define NUM_EXTRALINES		8
+-
+-/* settings for commonly used video formats */
+-#define CCDC_WIN_PAL     {0, 0, 720, 576}
+-/* ntsc square pixel */
+-#define CCDC_WIN_VGA	{0, 0, (640 + NUM_EXTRAPIXELS), (480 + NUM_EXTRALINES)}
+-
+-/* Structure for CCDC configuration parameters for raw capture mode */
+-struct ccdc_params_raw {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* interleaved or separated fields */
+-	enum ccdc_buftype buf_type;
+-	/*
+-	 * enable to store the image in inverse
+-	 * order in memory(bottom to top)
+-	 */
+-	unsigned char image_invert_enable;
+-	/* configurable parameters */
+-	struct ccdc_config_params_raw config_params;
+-};
+-
+-struct ccdc_params_ycbcr {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* enable BT.656 embedded sync mode */
+-	int bt656_enable;
+-	/* cb:y:cr:y or y:cb:y:cr in memory */
+-	enum ccdc_pixorder pix_order;
+-	/* interleaved or separated fields  */
+-	enum ccdc_buftype buf_type;
+-};
+-#endif
+-#endif				/* _DM644X_CCDC_H */
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
+deleted file mode 100644
+index c4894f6a254e..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
++++ /dev/null
+@@ -1,140 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2006-2009 Texas Instruments Inc
+- */
+-#ifndef _DM644X_CCDC_REGS_H
+-#define _DM644X_CCDC_REGS_H
+-
+-/**************************************************************************\
+-* Register OFFSET Definitions
+-\**************************************************************************/
+-#define CCDC_PID				0x0
+-#define CCDC_PCR				0x4
+-#define CCDC_SYN_MODE				0x8
+-#define CCDC_HD_VD_WID				0xc
+-#define CCDC_PIX_LINES				0x10
+-#define CCDC_HORZ_INFO				0x14
+-#define CCDC_VERT_START				0x18
+-#define CCDC_VERT_LINES				0x1c
+-#define CCDC_CULLING				0x20
+-#define CCDC_HSIZE_OFF				0x24
+-#define CCDC_SDOFST				0x28
+-#define CCDC_SDR_ADDR				0x2c
+-#define CCDC_CLAMP				0x30
+-#define CCDC_DCSUB				0x34
+-#define CCDC_COLPTN				0x38
+-#define CCDC_BLKCMP				0x3c
+-#define CCDC_FPC				0x40
+-#define CCDC_FPC_ADDR				0x44
+-#define CCDC_VDINT				0x48
+-#define CCDC_ALAW				0x4c
+-#define CCDC_REC656IF				0x50
+-#define CCDC_CCDCFG				0x54
+-#define CCDC_FMTCFG				0x58
+-#define CCDC_FMT_HORZ				0x5c
+-#define CCDC_FMT_VERT				0x60
+-#define CCDC_FMT_ADDR0				0x64
+-#define CCDC_FMT_ADDR1				0x68
+-#define CCDC_FMT_ADDR2				0x6c
+-#define CCDC_FMT_ADDR3				0x70
+-#define CCDC_FMT_ADDR4				0x74
+-#define CCDC_FMT_ADDR5				0x78
+-#define CCDC_FMT_ADDR6				0x7c
+-#define CCDC_FMT_ADDR7				0x80
+-#define CCDC_PRGEVEN_0				0x84
+-#define CCDC_PRGEVEN_1				0x88
+-#define CCDC_PRGODD_0				0x8c
+-#define CCDC_PRGODD_1				0x90
+-#define CCDC_VP_OUT				0x94
+-#define CCDC_REG_END				0x98
+-
+-/***************************************************************
+-*	Define for various register bit mask and shifts for CCDC
+-****************************************************************/
+-#define CCDC_FID_POL_MASK			1
+-#define CCDC_FID_POL_SHIFT			4
+-#define CCDC_HD_POL_MASK			1
+-#define CCDC_HD_POL_SHIFT			3
+-#define CCDC_VD_POL_MASK			1
+-#define CCDC_VD_POL_SHIFT			2
+-#define CCDC_HSIZE_OFF_MASK			0xffffffe0
+-#define CCDC_32BYTE_ALIGN_VAL			31
+-#define CCDC_FRM_FMT_MASK			0x1
+-#define CCDC_FRM_FMT_SHIFT			7
+-#define CCDC_DATA_SZ_MASK			7
+-#define CCDC_DATA_SZ_SHIFT			8
+-#define CCDC_PIX_FMT_MASK			3
+-#define CCDC_PIX_FMT_SHIFT			12
+-#define CCDC_VP2SDR_DISABLE			0xFFFBFFFF
+-#define CCDC_WEN_ENABLE				BIT(17)
+-#define CCDC_SDR2RSZ_DISABLE			0xFFF7FFFF
+-#define CCDC_VDHDEN_ENABLE			BIT(16)
+-#define CCDC_LPF_ENABLE				BIT(14)
+-#define CCDC_ALAW_ENABLE			BIT(3)
+-#define CCDC_ALAW_GAMMA_WD_MASK			7
+-#define CCDC_BLK_CLAMP_ENABLE			BIT(31)
+-#define CCDC_BLK_SGAIN_MASK			0x1F
+-#define CCDC_BLK_ST_PXL_MASK			0x7FFF
+-#define CCDC_BLK_ST_PXL_SHIFT			10
+-#define CCDC_BLK_SAMPLE_LN_MASK			7
+-#define CCDC_BLK_SAMPLE_LN_SHIFT		28
+-#define CCDC_BLK_SAMPLE_LINE_MASK		7
+-#define CCDC_BLK_SAMPLE_LINE_SHIFT		25
+-#define CCDC_BLK_DC_SUB_MASK			0x03FFF
+-#define CCDC_BLK_COMP_MASK			0xFF
+-#define CCDC_BLK_COMP_GB_COMP_SHIFT		8
+-#define CCDC_BLK_COMP_GR_COMP_SHIFT		16
+-#define CCDC_BLK_COMP_R_COMP_SHIFT		24
+-#define CCDC_LATCH_ON_VSYNC_DISABLE		BIT(15)
+-#define CCDC_FPC_ENABLE				BIT(15)
+-#define CCDC_FPC_DISABLE			0
+-#define CCDC_FPC_FPC_NUM_MASK			0x7FFF
+-#define CCDC_DATA_PACK_ENABLE			BIT(11)
+-#define CCDC_FMTCFG_VPIN_MASK			7
+-#define CCDC_FMTCFG_VPIN_SHIFT			12
+-#define CCDC_FMT_HORZ_FMTLNH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_SHIFT		16
+-#define CCDC_FMT_VERT_FMTLNV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_SHIFT		16
+-#define CCDC_VP_OUT_VERT_NUM_MASK		0x3FFF
+-#define CCDC_VP_OUT_VERT_NUM_SHIFT		17
+-#define CCDC_VP_OUT_HORZ_NUM_MASK		0x1FFF
+-#define CCDC_VP_OUT_HORZ_NUM_SHIFT		4
+-#define CCDC_VP_OUT_HORZ_ST_MASK		0xF
+-#define CCDC_HORZ_INFO_SPH_SHIFT		16
+-#define CCDC_VERT_START_SLV0_SHIFT		16
+-#define CCDC_VDINT_VDINT0_SHIFT			16
+-#define CCDC_VDINT_VDINT1_MASK			0xFFFF
+-#define CCDC_PPC_RAW				1
+-#define CCDC_DCSUB_DEFAULT_VAL			0
+-#define CCDC_CLAMP_DEFAULT_VAL			0
+-#define CCDC_ENABLE_VIDEO_PORT			0x8000
+-#define CCDC_DISABLE_VIDEO_PORT			0
+-#define CCDC_COLPTN_VAL				0xBB11BB11
+-#define CCDC_TWO_BYTES_PER_PIXEL		2
+-#define CCDC_INTERLACED_IMAGE_INVERT		0x4B6D
+-#define CCDC_INTERLACED_NO_IMAGE_INVERT		0x0249
+-#define CCDC_PROGRESSIVE_IMAGE_INVERT		0x4000
+-#define CCDC_PROGRESSIVE_NO_IMAGE_INVERT	0
+-#define CCDC_INTERLACED_HEIGHT_SHIFT		1
+-#define CCDC_SYN_MODE_INPMOD_SHIFT		12
+-#define CCDC_SYN_MODE_INPMOD_MASK		3
+-#define CCDC_SYN_MODE_8BITS			(7 << 8)
+-#define CCDC_SYN_MODE_10BITS			(6 << 8)
+-#define CCDC_SYN_MODE_11BITS			(5 << 8)
+-#define CCDC_SYN_MODE_12BITS			(4 << 8)
+-#define CCDC_SYN_MODE_13BITS			(3 << 8)
+-#define CCDC_SYN_MODE_14BITS			(2 << 8)
+-#define CCDC_SYN_MODE_15BITS			(1 << 8)
+-#define CCDC_SYN_MODE_16BITS			(0 << 8)
+-#define CCDC_SYN_FLDMODE_MASK			1
+-#define CCDC_SYN_FLDMODE_SHIFT			7
+-#define CCDC_REC656IF_BT656_EN			3
+-#define CCDC_SYN_MODE_VD_POL_NEGATIVE		BIT(2)
+-#define CCDC_CCDCFG_Y8POS_SHIFT			11
+-#define CCDC_CCDCFG_BW656_10BIT			BIT(5)
+-#define CCDC_SDOFST_FIELD_INTERLEAVED		0x249
+-#define CCDC_NO_CULLING				0xffff00ff
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif.c b/drivers/staging/media/deprecated/vpfe_capture/isif.c
+deleted file mode 100644
+index 4059891c2824..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/isif.c
++++ /dev/null
+@@ -1,1127 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * Image Sensor Interface (ISIF) driver
+- *
+- * This driver is for configuring the ISIF IP available on DM365 or any other
+- * TI SoCs. This is used for capturing yuv or bayer video or image data
+- * from a decoder or sensor. This IP is similar to the CCDC IP on DM355
+- * and DM6446, but with enhanced or additional ip blocks. The driver
+- * configures the ISIF upon commands from the vpfe bridge driver through
+- * ccdc_hw_device interface.
+- *
+- * TODO: 1) Raw bayer parameter settings and bayer capture
+- *	 2) Add support for control ioctl
+- */
+-#include <linux/delay.h>
+-#include <linux/platform_device.h>
+-#include <linux/uaccess.h>
+-#include <linux/io.h>
+-#include <linux/videodev2.h>
+-#include <linux/err.h>
+-#include <linux/module.h>
+-
+-#include "isif.h"
+-#include <media/davinci/vpss.h>
+-
+-#include "isif_regs.h"
+-#include "ccdc_hw_device.h"
+-
+-/* Defaults for module configuration parameters */
+-static const struct isif_config_params_raw isif_config_defaults = {
+-	.linearize = {
+-		.en = 0,
+-		.corr_shft = ISIF_NO_SHIFT,
+-		.scale_fact = {1, 0},
+-	},
+-	.df_csc = {
+-		.df_or_csc = 0,
+-		.csc = {
+-			.en = 0,
+-		},
+-	},
+-	.dfc = {
+-		.en = 0,
+-	},
+-	.bclamp = {
+-		.en = 0,
+-	},
+-	.gain_offset = {
+-		.gain = {
+-			.r_ye = {1, 0},
+-			.gr_cy = {1, 0},
+-			.gb_g = {1, 0},
+-			.b_mg = {1, 0},
+-		},
+-	},
+-	.culling = {
+-		.hcpat_odd = 0xff,
+-		.hcpat_even = 0xff,
+-		.vcpat = 0xff,
+-	},
+-	.compress = {
+-		.alg = ISIF_ALAW,
+-	},
+-};
+-
+-/* ISIF operation configuration */
+-static struct isif_oper_config {
+-	struct device *dev;
+-	enum vpfe_hw_if_type if_type;
+-	struct isif_ycbcr_config ycbcr;
+-	struct isif_params_raw bayer;
+-	enum isif_data_pack data_pack;
+-	/* ISIF base address */
+-	void __iomem *base_addr;
+-	/* ISIF Linear Table 0 */
+-	void __iomem *linear_tbl0_addr;
+-	/* ISIF Linear Table 1 */
+-	void __iomem *linear_tbl1_addr;
+-} isif_cfg = {
+-	.ycbcr = {
+-		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
+-		.frm_fmt = CCDC_FRMFMT_INTERLACED,
+-		.win = ISIF_WIN_NTSC,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.pix_order = CCDC_PIXORDER_CBYCRY,
+-		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED,
+-	},
+-	.bayer = {
+-		.pix_fmt = CCDC_PIXFMT_RAW,
+-		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
+-		.win = ISIF_WIN_VGA,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.gain = {
+-			.r_ye = {1, 0},
+-			.gr_cy = {1, 0},
+-			.gb_g = {1, 0},
+-			.b_mg = {1, 0},
+-		},
+-		.cfa_pat = ISIF_CFA_PAT_MOSAIC,
+-		.data_msb = ISIF_BIT_MSB_11,
+-		.config_params = {
+-			.data_shift = ISIF_NO_SHIFT,
+-			.col_pat_field0 = {
+-				.olop = ISIF_GREEN_BLUE,
+-				.olep = ISIF_BLUE,
+-				.elop = ISIF_RED,
+-				.elep = ISIF_GREEN_RED,
+-			},
+-			.col_pat_field1 = {
+-				.olop = ISIF_GREEN_BLUE,
+-				.olep = ISIF_BLUE,
+-				.elop = ISIF_RED,
+-				.elep = ISIF_GREEN_RED,
+-			},
+-			.test_pat_gen = 0,
+-		},
+-	},
+-	.data_pack = ISIF_DATA_PACK8,
+-};
+-
+-/* Raw Bayer formats */
+-static const u32 isif_raw_bayer_pix_formats[] = {
+-	V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
+-
+-/* Raw YUV formats */
+-static const u32 isif_raw_yuv_pix_formats[] = {
+-	V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
+-
+-/* register access routines */
+-static inline u32 regr(u32 offset)
+-{
+-	return __raw_readl(isif_cfg.base_addr + offset);
+-}
+-
+-static inline void regw(u32 val, u32 offset)
+-{
+-	__raw_writel(val, isif_cfg.base_addr + offset);
+-}
+-
+-/* reg_modify() - read, modify and write register */
+-static inline u32 reg_modify(u32 mask, u32 val, u32 offset)
+-{
+-	u32 new_val = (regr(offset) & ~mask) | (val & mask);
+-
+-	regw(new_val, offset);
+-	return new_val;
+-}
+-
+-static inline void regw_lin_tbl(u32 val, u32 offset, int i)
+-{
+-	if (!i)
+-		__raw_writel(val, isif_cfg.linear_tbl0_addr + offset);
+-	else
+-		__raw_writel(val, isif_cfg.linear_tbl1_addr + offset);
+-}
+-
+-static void isif_disable_all_modules(void)
+-{
+-	/* disable BC */
+-	regw(0, CLAMPCFG);
+-	/* disable vdfc */
+-	regw(0, DFCCTL);
+-	/* disable CSC */
+-	regw(0, CSCCTL);
+-	/* disable linearization */
+-	regw(0, LINCFG0);
+-	/* disable other modules here as they are supported */
+-}
+-
+-static void isif_enable(int en)
+-{
+-	if (!en) {
+-		/* Before disable isif, disable all ISIF modules */
+-		isif_disable_all_modules();
+-		/*
+-		 * wait for next VD. Assume lowest scan rate is 12 Hz. So
+-		 * 100 msec delay is good enough
+-		 */
+-		msleep(100);
+-	}
+-	reg_modify(ISIF_SYNCEN_VDHDEN_MASK, en, SYNCEN);
+-}
+-
+-static void isif_enable_output_to_sdram(int en)
+-{
+-	reg_modify(ISIF_SYNCEN_WEN_MASK, en << ISIF_SYNCEN_WEN_SHIFT, SYNCEN);
+-}
+-
+-static void isif_config_culling(struct isif_cul *cul)
+-{
+-	u32 val;
+-
+-	/* Horizontal pattern */
+-	val = (cul->hcpat_even << CULL_PAT_EVEN_LINE_SHIFT) | cul->hcpat_odd;
+-	regw(val, CULH);
+-
+-	/* vertical pattern */
+-	regw(cul->vcpat, CULV);
+-
+-	/* LPF */
+-	reg_modify(ISIF_LPF_MASK << ISIF_LPF_SHIFT,
+-		  cul->en_lpf << ISIF_LPF_SHIFT, MODESET);
+-}
+-
+-static void isif_config_gain_offset(void)
+-{
+-	struct isif_gain_offsets_adj *gain_off_p =
+-		&isif_cfg.bayer.config_params.gain_offset;
+-	u32 val;
+-
+-	val = (!!gain_off_p->gain_sdram_en << GAIN_SDRAM_EN_SHIFT) |
+-	      (!!gain_off_p->gain_ipipe_en << GAIN_IPIPE_EN_SHIFT) |
+-	      (!!gain_off_p->gain_h3a_en << GAIN_H3A_EN_SHIFT) |
+-	      (!!gain_off_p->offset_sdram_en << OFST_SDRAM_EN_SHIFT) |
+-	      (!!gain_off_p->offset_ipipe_en << OFST_IPIPE_EN_SHIFT) |
+-	      (!!gain_off_p->offset_h3a_en << OFST_H3A_EN_SHIFT);
+-
+-	reg_modify(GAIN_OFFSET_EN_MASK, val, CGAMMAWD);
+-
+-	val = (gain_off_p->gain.r_ye.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.r_ye.decimal;
+-	regw(val, CRGAIN);
+-
+-	val = (gain_off_p->gain.gr_cy.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.gr_cy.decimal;
+-	regw(val, CGRGAIN);
+-
+-	val = (gain_off_p->gain.gb_g.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.gb_g.decimal;
+-	regw(val, CGBGAIN);
+-
+-	val = (gain_off_p->gain.b_mg.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.b_mg.decimal;
+-	regw(val, CBGAIN);
+-
+-	regw(gain_off_p->offset, COFSTA);
+-}
+-
+-static void isif_restore_defaults(void)
+-{
+-	enum vpss_ccdc_source_sel source = VPSS_CCDCIN;
+-
+-	dev_dbg(isif_cfg.dev, "\nstarting isif_restore_defaults...");
+-	isif_cfg.bayer.config_params = isif_config_defaults;
+-	/* Enable clock to ISIF, IPIPEIF and BL */
+-	vpss_enable_clock(VPSS_CCDC_CLOCK, 1);
+-	vpss_enable_clock(VPSS_IPIPEIF_CLOCK, 1);
+-	vpss_enable_clock(VPSS_BL_CLOCK, 1);
+-	/* Set default offset and gain */
+-	isif_config_gain_offset();
+-	vpss_select_ccdc_source(source);
+-	dev_dbg(isif_cfg.dev, "\nEnd of isif_restore_defaults...");
+-}
+-
+-static int isif_open(struct device *device)
+-{
+-	isif_restore_defaults();
+-	return 0;
+-}
+-
+-/* This function will configure the window size to be capture in ISIF reg */
+-static void isif_setwin(struct v4l2_rect *image_win,
+-			enum ccdc_frmfmt frm_fmt, int ppc)
+-{
+-	int horz_start, horz_nr_pixels;
+-	int vert_start, vert_nr_lines;
+-	int mid_img = 0;
+-
+-	dev_dbg(isif_cfg.dev, "\nStarting isif_setwin...");
+-	/*
+-	 * ppc - per pixel count. indicates how many pixels per cell
+-	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
+-	 * raw capture this is 1
+-	 */
+-	horz_start = image_win->left << (ppc - 1);
+-	horz_nr_pixels = ((image_win->width) << (ppc - 1)) - 1;
+-
+-	/* Writing the horizontal info into the registers */
+-	regw(horz_start & START_PX_HOR_MASK, SPH);
+-	regw(horz_nr_pixels & NUM_PX_HOR_MASK, LNH);
+-	vert_start = image_win->top;
+-
+-	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		vert_nr_lines = (image_win->height >> 1) - 1;
+-		vert_start >>= 1;
+-		/* To account for VD since line 0 doesn't have any data */
+-		vert_start += 1;
+-	} else {
+-		/* To account for VD since line 0 doesn't have any data */
+-		vert_start += 1;
+-		vert_nr_lines = image_win->height - 1;
+-		/* configure VDINT0 and VDINT1 */
+-		mid_img = vert_start + (image_win->height / 2);
+-		regw(mid_img, VDINT1);
+-	}
+-
+-	regw(0, VDINT0);
+-	regw(vert_start & START_VER_ONE_MASK, SLV0);
+-	regw(vert_start & START_VER_TWO_MASK, SLV1);
+-	regw(vert_nr_lines & NUM_LINES_VER, LNV);
+-}
+-
+-static void isif_config_bclamp(struct isif_black_clamp *bc)
+-{
+-	u32 val;
+-
+-	/*
+-	 * DC Offset is always added to image data irrespective of bc enable
+-	 * status
+-	 */
+-	regw(bc->dc_offset, CLDCOFST);
+-
+-	if (bc->en) {
+-		val = bc->bc_mode_color << ISIF_BC_MODE_COLOR_SHIFT;
+-
+-		/* Enable BC and horizontal clamp calculation parameters */
+-		val = val | 1 | (bc->horz.mode << ISIF_HORZ_BC_MODE_SHIFT);
+-
+-		regw(val, CLAMPCFG);
+-
+-		if (bc->horz.mode != ISIF_HORZ_BC_DISABLE) {
+-			/*
+-			 * Window count for calculation
+-			 * Base window selection
+-			 * pixel limit
+-			 * Horizontal size of window
+-			 * vertical size of the window
+-			 * Horizontal start position of the window
+-			 * Vertical start position of the window
+-			 */
+-			val = bc->horz.win_count_calc |
+-			      ((!!bc->horz.base_win_sel_calc) <<
+-				ISIF_HORZ_BC_WIN_SEL_SHIFT) |
+-			      ((!!bc->horz.clamp_pix_limit) <<
+-				ISIF_HORZ_BC_PIX_LIMIT_SHIFT) |
+-			      (bc->horz.win_h_sz_calc <<
+-				ISIF_HORZ_BC_WIN_H_SIZE_SHIFT) |
+-			      (bc->horz.win_v_sz_calc <<
+-				ISIF_HORZ_BC_WIN_V_SIZE_SHIFT);
+-			regw(val, CLHWIN0);
+-
+-			regw(bc->horz.win_start_h_calc, CLHWIN1);
+-			regw(bc->horz.win_start_v_calc, CLHWIN2);
+-		}
+-
+-		/* vertical clamp calculation parameters */
+-
+-		/* Reset clamp value sel for previous line */
+-		val |=
+-		(bc->vert.reset_val_sel << ISIF_VERT_BC_RST_VAL_SEL_SHIFT) |
+-		(bc->vert.line_ave_coef << ISIF_VERT_BC_LINE_AVE_COEF_SHIFT);
+-		regw(val, CLVWIN0);
+-
+-		/* Optical Black horizontal start position */
+-		regw(bc->vert.ob_start_h, CLVWIN1);
+-		/* Optical Black vertical start position */
+-		regw(bc->vert.ob_start_v, CLVWIN2);
+-		/* Optical Black vertical size for calculation */
+-		regw(bc->vert.ob_v_sz_calc, CLVWIN3);
+-		/* Vertical start position for BC subtraction */
+-		regw(bc->vert_start_sub, CLSV);
+-	}
+-}
+-
+-static void isif_config_linearization(struct isif_linearize *linearize)
+-{
+-	u32 val, i;
+-
+-	if (!linearize->en) {
+-		regw(0, LINCFG0);
+-		return;
+-	}
+-
+-	/* shift value for correction & enable linearization (set lsb) */
+-	val = (linearize->corr_shft << ISIF_LIN_CORRSFT_SHIFT) | 1;
+-	regw(val, LINCFG0);
+-
+-	/* Scale factor */
+-	val = ((!!linearize->scale_fact.integer) <<
+-	       ISIF_LIN_SCALE_FACT_INTEG_SHIFT) |
+-	       linearize->scale_fact.decimal;
+-	regw(val, LINCFG1);
+-
+-	for (i = 0; i < ISIF_LINEAR_TAB_SIZE; i++) {
+-		if (i % 2)
+-			regw_lin_tbl(linearize->table[i], ((i >> 1) << 2), 1);
+-		else
+-			regw_lin_tbl(linearize->table[i], ((i >> 1) << 2), 0);
+-	}
+-}
+-
+-static int isif_config_dfc(struct isif_dfc *vdfc)
+-{
+-	/* initialize retries to loop for max ~ 250 usec */
+-	u32 val, count, retries = loops_per_jiffy / (4000/HZ);
+-	int i;
+-
+-	if (!vdfc->en)
+-		return 0;
+-
+-	/* Correction mode */
+-	val = (vdfc->corr_mode << ISIF_VDFC_CORR_MOD_SHIFT);
+-
+-	/* Correct whole line or partial */
+-	if (vdfc->corr_whole_line)
+-		val |= 1 << ISIF_VDFC_CORR_WHOLE_LN_SHIFT;
+-
+-	/* level shift value */
+-	val |= vdfc->def_level_shift << ISIF_VDFC_LEVEL_SHFT_SHIFT;
+-
+-	regw(val, DFCCTL);
+-
+-	/* Defect saturation level */
+-	regw(vdfc->def_sat_level, VDFSATLV);
+-
+-	regw(vdfc->table[0].pos_vert, DFCMEM0);
+-	regw(vdfc->table[0].pos_horz, DFCMEM1);
+-	if (vdfc->corr_mode == ISIF_VDFC_NORMAL ||
+-	    vdfc->corr_mode == ISIF_VDFC_HORZ_INTERPOL_IF_SAT) {
+-		regw(vdfc->table[0].level_at_pos, DFCMEM2);
+-		regw(vdfc->table[0].level_up_pixels, DFCMEM3);
+-		regw(vdfc->table[0].level_low_pixels, DFCMEM4);
+-	}
+-
+-	/* set DFCMARST and set DFCMWR */
+-	val = regr(DFCMEMCTL) | (1 << ISIF_DFCMEMCTL_DFCMARST_SHIFT) | 1;
+-	regw(val, DFCMEMCTL);
+-
+-	count = retries;
+-	while (count && (regr(DFCMEMCTL) & 0x1))
+-		count--;
+-
+-	if (!count) {
+-		dev_dbg(isif_cfg.dev, "defect table write timeout !!!\n");
+-		return -1;
+-	}
+-
+-	for (i = 1; i < vdfc->num_vdefects; i++) {
+-		regw(vdfc->table[i].pos_vert, DFCMEM0);
+-		regw(vdfc->table[i].pos_horz, DFCMEM1);
+-		if (vdfc->corr_mode == ISIF_VDFC_NORMAL ||
+-		    vdfc->corr_mode == ISIF_VDFC_HORZ_INTERPOL_IF_SAT) {
+-			regw(vdfc->table[i].level_at_pos, DFCMEM2);
+-			regw(vdfc->table[i].level_up_pixels, DFCMEM3);
+-			regw(vdfc->table[i].level_low_pixels, DFCMEM4);
+-		}
+-		val = regr(DFCMEMCTL);
+-		/* clear DFCMARST and set DFCMWR */
+-		val &= ~BIT(ISIF_DFCMEMCTL_DFCMARST_SHIFT);
+-		val |= 1;
+-		regw(val, DFCMEMCTL);
+-
+-		count = retries;
+-		while (count && (regr(DFCMEMCTL) & 0x1))
+-			count--;
+-
+-		if (!count) {
+-			dev_err(isif_cfg.dev,
+-				"defect table write timeout !!!\n");
+-			return -1;
+-		}
+-	}
+-	if (vdfc->num_vdefects < ISIF_VDFC_TABLE_SIZE) {
+-		/* Extra cycle needed */
+-		regw(0, DFCMEM0);
+-		regw(0x1FFF, DFCMEM1);
+-		regw(1, DFCMEMCTL);
+-	}
+-
+-	/* enable VDFC */
+-	reg_modify((1 << ISIF_VDFC_EN_SHIFT), (1 << ISIF_VDFC_EN_SHIFT),
+-		   DFCCTL);
+-	return 0;
+-}
+-
+-static void isif_config_csc(struct isif_df_csc *df_csc)
+-{
+-	u32 val1 = 0, val2 = 0, i;
+-
+-	if (!df_csc->csc.en) {
+-		regw(0, CSCCTL);
+-		return;
+-	}
+-	for (i = 0; i < ISIF_CSC_NUM_COEFF; i++) {
+-		if ((i % 2) == 0) {
+-			/* CSCM - LSB */
+-			val1 = (df_csc->csc.coeff[i].integer <<
+-				ISIF_CSC_COEF_INTEG_SHIFT) |
+-				df_csc->csc.coeff[i].decimal;
+-		} else {
+-
+-			/* CSCM - MSB */
+-			val2 = (df_csc->csc.coeff[i].integer <<
+-				ISIF_CSC_COEF_INTEG_SHIFT) |
+-				df_csc->csc.coeff[i].decimal;
+-			val2 <<= ISIF_CSCM_MSB_SHIFT;
+-			val2 |= val1;
+-			regw(val2, (CSCM0 + ((i - 1) << 1)));
+-		}
+-	}
+-
+-	/* program the active area */
+-	regw(df_csc->start_pix, FMTSPH);
+-	/*
+-	 * one extra pixel as required for CSC. Actually number of
+-	 * pixel - 1 should be configured in this register. So we
+-	 * need to subtract 1 before writing to FMTSPH, but we will
+-	 * not do this since csc requires one extra pixel
+-	 */
+-	regw(df_csc->num_pixels, FMTLNH);
+-	regw(df_csc->start_line, FMTSLV);
+-	/*
+-	 * one extra line as required for CSC. See reason documented for
+-	 * num_pixels
+-	 */
+-	regw(df_csc->num_lines, FMTLNV);
+-
+-	/* Enable CSC */
+-	regw(1, CSCCTL);
+-}
+-
+-static int isif_config_raw(void)
+-{
+-	struct isif_params_raw *params = &isif_cfg.bayer;
+-	struct isif_config_params_raw *module_params =
+-		&isif_cfg.bayer.config_params;
+-	struct vpss_pg_frame_size frame_size;
+-	struct vpss_sync_pol sync;
+-	u32 val;
+-
+-	dev_dbg(isif_cfg.dev, "\nStarting isif_config_raw..\n");
+-
+-	/*
+-	 * Configure CCDCFG register:-
+-	 * Set CCD Not to swap input since input is RAW data
+-	 * Set FID detection function to Latch at V-Sync
+-	 * Set WENLOG - isif valid area
+-	 * Set TRGSEL
+-	 * Set EXTRG
+-	 * Packed to 8 or 16 bits
+-	 */
+-
+-	val = ISIF_YCINSWP_RAW | ISIF_CCDCFG_FIDMD_LATCH_VSYNC |
+-		ISIF_CCDCFG_WENLOG_AND | ISIF_CCDCFG_TRGSEL_WEN |
+-		ISIF_CCDCFG_EXTRG_DISABLE | isif_cfg.data_pack;
+-
+-	dev_dbg(isif_cfg.dev, "Writing 0x%x to ...CCDCFG \n", val);
+-	regw(val, CCDCFG);
+-
+-	/*
+-	 * Configure the vertical sync polarity(MODESET.VDPOL)
+-	 * Configure the horizontal sync polarity (MODESET.HDPOL)
+-	 * Configure frame id polarity (MODESET.FLDPOL)
+-	 * Configure data polarity
+-	 * Configure External WEN Selection
+-	 * Configure frame format(progressive or interlace)
+-	 * Configure pixel format (Input mode)
+-	 * Configure the data shift
+-	 */
+-
+-	val = ISIF_VDHDOUT_INPUT | (params->vd_pol << ISIF_VD_POL_SHIFT) |
+-		(params->hd_pol << ISIF_HD_POL_SHIFT) |
+-		(params->fid_pol << ISIF_FID_POL_SHIFT) |
+-		(ISIF_DATAPOL_NORMAL << ISIF_DATAPOL_SHIFT) |
+-		(ISIF_EXWEN_DISABLE << ISIF_EXWEN_SHIFT) |
+-		(params->frm_fmt << ISIF_FRM_FMT_SHIFT) |
+-		(params->pix_fmt << ISIF_INPUT_SHIFT) |
+-		(params->config_params.data_shift << ISIF_DATASFT_SHIFT);
+-
+-	regw(val, MODESET);
+-	dev_dbg(isif_cfg.dev, "Writing 0x%x to MODESET...\n", val);
+-
+-	/*
+-	 * Configure GAMMAWD register
+-	 * CFA pattern setting
+-	 */
+-	val = params->cfa_pat << ISIF_GAMMAWD_CFA_SHIFT;
+-
+-	/* Gamma msb */
+-	if (module_params->compress.alg == ISIF_ALAW)
+-		val |= ISIF_ALAW_ENABLE;
+-
+-	val |= (params->data_msb << ISIF_ALAW_GAMMA_WD_SHIFT);
+-	regw(val, CGAMMAWD);
+-
+-	/* Configure DPCM compression settings */
+-	if (module_params->compress.alg == ISIF_DPCM) {
+-		val =  BIT(ISIF_DPCM_EN_SHIFT) |
+-		       (module_params->compress.pred <<
+-		       ISIF_DPCM_PREDICTOR_SHIFT);
+-	}
+-
+-	regw(val, MISC);
+-
+-	/* Configure Gain & Offset */
+-	isif_config_gain_offset();
+-
+-	/* Configure Color pattern */
+-	val = (params->config_params.col_pat_field0.olop) |
+-	      (params->config_params.col_pat_field0.olep << 2) |
+-	      (params->config_params.col_pat_field0.elop << 4) |
+-	      (params->config_params.col_pat_field0.elep << 6) |
+-	      (params->config_params.col_pat_field1.olop << 8) |
+-	      (params->config_params.col_pat_field1.olep << 10) |
+-	      (params->config_params.col_pat_field1.elop << 12) |
+-	      (params->config_params.col_pat_field1.elep << 14);
+-	regw(val, CCOLP);
+-	dev_dbg(isif_cfg.dev, "Writing %x to CCOLP ...\n", val);
+-
+-	/* Configure HSIZE register  */
+-	val = (!!params->horz_flip_en) << ISIF_HSIZE_FLIP_SHIFT;
+-
+-	/* calculate line offset in 32 bytes based on pack value */
+-	if (isif_cfg.data_pack == ISIF_PACK_8BIT)
+-		val |= ((params->win.width + 31) >> 5);
+-	else if (isif_cfg.data_pack == ISIF_PACK_12BIT)
+-		val |= (((params->win.width +
+-		       (params->win.width >> 2)) + 31) >> 5);
+-	else
+-		val |= (((params->win.width * 2) + 31) >> 5);
+-	regw(val, HSIZE);
+-
+-	/* Configure SDOFST register  */
+-	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		if (params->image_invert_en) {
+-			/* For interlace inverse mode */
+-			regw(0x4B6D, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x4B6D to SDOFST...\n");
+-		} else {
+-			/* For interlace non inverse mode */
+-			regw(0x0B6D, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x0B6D to SDOFST...\n");
+-		}
+-	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
+-		if (params->image_invert_en) {
+-			/* For progressive inverse mode */
+-			regw(0x4000, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x4000 to SDOFST...\n");
+-		} else {
+-			/* For progressive non inverse mode */
+-			regw(0x0000, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x0000 to SDOFST...\n");
+-		}
+-	}
+-
+-	/* Configure video window */
+-	isif_setwin(&params->win, params->frm_fmt, 1);
+-
+-	/* Configure Black Clamp */
+-	isif_config_bclamp(&module_params->bclamp);
+-
+-	/* Configure Vertical Defection Pixel Correction */
+-	if (isif_config_dfc(&module_params->dfc) < 0)
+-		return -EFAULT;
+-
+-	if (!module_params->df_csc.df_or_csc)
+-		/* Configure Color Space Conversion */
+-		isif_config_csc(&module_params->df_csc);
+-
+-	isif_config_linearization(&module_params->linearize);
+-
+-	/* Configure Culling */
+-	isif_config_culling(&module_params->culling);
+-
+-	/* Configure horizontal and vertical offsets(DFC,LSC,Gain) */
+-	regw(module_params->horz_offset, DATAHOFST);
+-	regw(module_params->vert_offset, DATAVOFST);
+-
+-	/* Setup test pattern if enabled */
+-	if (params->config_params.test_pat_gen) {
+-		/* Use the HD/VD pol settings from user */
+-		sync.ccdpg_hdpol = params->hd_pol;
+-		sync.ccdpg_vdpol = params->vd_pol;
+-		dm365_vpss_set_sync_pol(sync);
+-		frame_size.hlpfr = isif_cfg.bayer.win.width;
+-		frame_size.pplen = isif_cfg.bayer.win.height;
+-		dm365_vpss_set_pg_frame_size(frame_size);
+-		vpss_select_ccdc_source(VPSS_PGLPBK);
+-	}
+-
+-	dev_dbg(isif_cfg.dev, "\nEnd of isif_config_ycbcr...\n");
+-	return 0;
+-}
+-
+-static int isif_set_buftype(enum ccdc_buftype buf_type)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		isif_cfg.bayer.buf_type = buf_type;
+-	else
+-		isif_cfg.ycbcr.buf_type = buf_type;
+-
+-	return 0;
+-
+-}
+-static enum ccdc_buftype isif_get_buftype(void)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		return isif_cfg.bayer.buf_type;
+-
+-	return isif_cfg.ycbcr.buf_type;
+-}
+-
+-static int isif_enum_pix(u32 *pix, int i)
+-{
+-	int ret = -EINVAL;
+-
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (i < ARRAY_SIZE(isif_raw_bayer_pix_formats)) {
+-			*pix = isif_raw_bayer_pix_formats[i];
+-			ret = 0;
+-		}
+-	} else {
+-		if (i < ARRAY_SIZE(isif_raw_yuv_pix_formats)) {
+-			*pix = isif_raw_yuv_pix_formats[i];
+-			ret = 0;
+-		}
+-	}
+-
+-	return ret;
+-}
+-
+-static int isif_set_pixel_format(unsigned int pixfmt)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (pixfmt == V4L2_PIX_FMT_SBGGR8) {
+-			if ((isif_cfg.bayer.config_params.compress.alg !=
+-			     ISIF_ALAW) &&
+-			    (isif_cfg.bayer.config_params.compress.alg !=
+-			     ISIF_DPCM)) {
+-				dev_dbg(isif_cfg.dev,
+-					"Either configure A-Law or DPCM\n");
+-				return -EINVAL;
+-			}
+-			isif_cfg.data_pack = ISIF_PACK_8BIT;
+-		} else if (pixfmt == V4L2_PIX_FMT_SBGGR16) {
+-			isif_cfg.bayer.config_params.compress.alg =
+-					ISIF_NO_COMPRESSION;
+-			isif_cfg.data_pack = ISIF_PACK_16BIT;
+-		} else
+-			return -EINVAL;
+-		isif_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-	} else {
+-		if (pixfmt == V4L2_PIX_FMT_YUYV)
+-			isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
+-		else if (pixfmt == V4L2_PIX_FMT_UYVY)
+-			isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		else
+-			return -EINVAL;
+-		isif_cfg.data_pack = ISIF_PACK_8BIT;
+-	}
+-	return 0;
+-}
+-
+-static u32 isif_get_pixel_format(void)
+-{
+-	u32 pixfmt;
+-
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		if (isif_cfg.bayer.config_params.compress.alg == ISIF_ALAW ||
+-		    isif_cfg.bayer.config_params.compress.alg == ISIF_DPCM)
+-			pixfmt = V4L2_PIX_FMT_SBGGR8;
+-		else
+-			pixfmt = V4L2_PIX_FMT_SBGGR16;
+-	else {
+-		if (isif_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
+-			pixfmt = V4L2_PIX_FMT_YUYV;
+-		else
+-			pixfmt = V4L2_PIX_FMT_UYVY;
+-	}
+-	return pixfmt;
+-}
+-
+-static int isif_set_image_window(struct v4l2_rect *win)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		isif_cfg.bayer.win.top = win->top;
+-		isif_cfg.bayer.win.left = win->left;
+-		isif_cfg.bayer.win.width = win->width;
+-		isif_cfg.bayer.win.height = win->height;
+-	} else {
+-		isif_cfg.ycbcr.win.top = win->top;
+-		isif_cfg.ycbcr.win.left = win->left;
+-		isif_cfg.ycbcr.win.width = win->width;
+-		isif_cfg.ycbcr.win.height = win->height;
+-	}
+-	return 0;
+-}
+-
+-static void isif_get_image_window(struct v4l2_rect *win)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		*win = isif_cfg.bayer.win;
+-	else
+-		*win = isif_cfg.ycbcr.win;
+-}
+-
+-static unsigned int isif_get_line_length(void)
+-{
+-	unsigned int len;
+-
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (isif_cfg.data_pack == ISIF_PACK_8BIT)
+-			len = ((isif_cfg.bayer.win.width));
+-		else if (isif_cfg.data_pack == ISIF_PACK_12BIT)
+-			len = (((isif_cfg.bayer.win.width * 2) +
+-				 (isif_cfg.bayer.win.width >> 2)));
+-		else
+-			len = (((isif_cfg.bayer.win.width * 2)));
+-	} else
+-		len = (((isif_cfg.ycbcr.win.width * 2)));
+-	return ALIGN(len, 32);
+-}
+-
+-static int isif_set_frame_format(enum ccdc_frmfmt frm_fmt)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		isif_cfg.bayer.frm_fmt = frm_fmt;
+-	else
+-		isif_cfg.ycbcr.frm_fmt = frm_fmt;
+-	return 0;
+-}
+-static enum ccdc_frmfmt isif_get_frame_format(void)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		return isif_cfg.bayer.frm_fmt;
+-	return isif_cfg.ycbcr.frm_fmt;
+-}
+-
+-static int isif_getfid(void)
+-{
+-	return (regr(MODESET) >> 15) & 0x1;
+-}
+-
+-/* misc operations */
+-static void isif_setfbaddr(unsigned long addr)
+-{
+-	regw((addr >> 21) & 0x07ff, CADU);
+-	regw((addr >> 5) & 0x0ffff, CADL);
+-}
+-
+-static int isif_set_hw_if_params(struct vpfe_hw_if_param *params)
+-{
+-	isif_cfg.if_type = params->if_type;
+-
+-	switch (params->if_type) {
+-	case VPFE_BT656:
+-	case VPFE_BT656_10BIT:
+-	case VPFE_YCBCR_SYNC_8:
+-		isif_cfg.ycbcr.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT;
+-		isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		break;
+-	case VPFE_BT1120:
+-	case VPFE_YCBCR_SYNC_16:
+-		isif_cfg.ycbcr.pix_fmt = CCDC_PIXFMT_YCBCR_16BIT;
+-		isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		break;
+-	case VPFE_RAW_BAYER:
+-		isif_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-		break;
+-	default:
+-		dev_dbg(isif_cfg.dev, "Invalid interface type\n");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-/* This function will configure ISIF for YCbCr parameters. */
+-static int isif_config_ycbcr(void)
+-{
+-	struct isif_ycbcr_config *params = &isif_cfg.ycbcr;
+-	u32 modeset = 0, ccdcfg = 0;
+-
+-	dev_dbg(isif_cfg.dev, "\nStarting isif_config_ycbcr...");
+-
+-	/* configure pixel format or input mode */
+-	modeset = modeset | (params->pix_fmt << ISIF_INPUT_SHIFT) |
+-		  (params->frm_fmt << ISIF_FRM_FMT_SHIFT) |
+-		  (params->fid_pol << ISIF_FID_POL_SHIFT) |
+-		  (params->hd_pol << ISIF_HD_POL_SHIFT) |
+-		  (params->vd_pol << ISIF_VD_POL_SHIFT);
+-
+-	/* pack the data to 8-bit ISIFCFG */
+-	switch (isif_cfg.if_type) {
+-	case VPFE_BT656:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		modeset |= (VPFE_PINPOL_NEGATIVE << ISIF_VD_POL_SHIFT);
+-		regw(3, REC656IF);
+-		ccdcfg = ccdcfg | ISIF_DATA_PACK8 | ISIF_YCINSWP_YCBCR;
+-		break;
+-	case VPFE_BT656_10BIT:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		/* setup BT.656, embedded sync  */
+-		regw(3, REC656IF);
+-		/* enable 10 bit mode in ccdcfg */
+-		ccdcfg = ccdcfg | ISIF_DATA_PACK8 | ISIF_YCINSWP_YCBCR |
+-			ISIF_BW656_ENABLE;
+-		break;
+-	case VPFE_BT1120:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_16BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		regw(3, REC656IF);
+-		break;
+-
+-	case VPFE_YCBCR_SYNC_8:
+-		ccdcfg |= ISIF_DATA_PACK8;
+-		ccdcfg |= ISIF_YCINSWP_YCBCR;
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		break;
+-	case VPFE_YCBCR_SYNC_16:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_16BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		break;
+-	default:
+-		/* should never come here */
+-		dev_dbg(isif_cfg.dev, "Invalid interface type\n");
+-		return -EINVAL;
+-	}
+-
+-	regw(modeset, MODESET);
+-
+-	/* Set up pix order */
+-	ccdcfg |= params->pix_order << ISIF_PIX_ORDER_SHIFT;
+-
+-	regw(ccdcfg, CCDCFG);
+-
+-	/* configure video window */
+-	if ((isif_cfg.if_type == VPFE_BT1120) ||
+-	    (isif_cfg.if_type == VPFE_YCBCR_SYNC_16))
+-		isif_setwin(&params->win, params->frm_fmt, 1);
+-	else
+-		isif_setwin(&params->win, params->frm_fmt, 2);
+-
+-	/*
+-	 * configure the horizontal line offset
+-	 * this is done by rounding up width to a multiple of 16 pixels
+-	 * and multiply by two to account for y:cb:cr 4:2:2 data
+-	 */
+-	regw(((((params->win.width * 2) + 31) & 0xffffffe0) >> 5), HSIZE);
+-
+-	/* configure the memory line offset */
+-	if ((params->frm_fmt == CCDC_FRMFMT_INTERLACED) &&
+-	    (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED))
+-		/* two fields are interleaved in memory */
+-		regw(0x00000249, SDOFST);
+-
+-	return 0;
+-}
+-
+-static int isif_configure(void)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		return isif_config_raw();
+-	return isif_config_ycbcr();
+-}
+-
+-static int isif_close(struct device *device)
+-{
+-	/* copy defaults to module params */
+-	isif_cfg.bayer.config_params = isif_config_defaults;
+-	return 0;
+-}
+-
+-static const struct ccdc_hw_device isif_hw_dev = {
+-	.name = "ISIF",
+-	.owner = THIS_MODULE,
+-	.hw_ops = {
+-		.open = isif_open,
+-		.close = isif_close,
+-		.enable = isif_enable,
+-		.enable_out_to_sdram = isif_enable_output_to_sdram,
+-		.set_hw_if_params = isif_set_hw_if_params,
+-		.configure = isif_configure,
+-		.set_buftype = isif_set_buftype,
+-		.get_buftype = isif_get_buftype,
+-		.enum_pix = isif_enum_pix,
+-		.set_pixel_format = isif_set_pixel_format,
+-		.get_pixel_format = isif_get_pixel_format,
+-		.set_frame_format = isif_set_frame_format,
+-		.get_frame_format = isif_get_frame_format,
+-		.set_image_window = isif_set_image_window,
+-		.get_image_window = isif_get_image_window,
+-		.get_line_length = isif_get_line_length,
+-		.setfbaddr = isif_setfbaddr,
+-		.getfid = isif_getfid,
+-	},
+-};
+-
+-static int isif_probe(struct platform_device *pdev)
+-{
+-	void (*setup_pinmux)(void);
+-	struct resource	*res;
+-	void __iomem *addr;
+-	int status = 0, i;
+-
+-	/* Platform data holds setup_pinmux function ptr */
+-	if (!pdev->dev.platform_data)
+-		return -ENODEV;
+-
+-	/*
+-	 * first try to register with vpfe. If not correct platform, then we
+-	 * don't have to iomap
+-	 */
+-	status = vpfe_register_ccdc_device(&isif_hw_dev);
+-	if (status < 0)
+-		return status;
+-
+-	setup_pinmux = pdev->dev.platform_data;
+-	/*
+-	 * setup Mux configuration for ccdc which may be different for
+-	 * different SoCs using this CCDC
+-	 */
+-	setup_pinmux();
+-
+-	i = 0;
+-	/* Get the ISIF base address, linearization table0 and table1 addr. */
+-	while (i < 3) {
+-		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+-		if (!res) {
+-			status = -ENODEV;
+-			goto fail_nobase_res;
+-		}
+-		res = request_mem_region(res->start, resource_size(res),
+-					 res->name);
+-		if (!res) {
+-			status = -EBUSY;
+-			goto fail_nobase_res;
+-		}
+-		addr = ioremap(res->start, resource_size(res));
+-		if (!addr) {
+-			status = -ENOMEM;
+-			goto fail_base_iomap;
+-		}
+-		switch (i) {
+-		case 0:
+-			/* ISIF base address */
+-			isif_cfg.base_addr = addr;
+-			break;
+-		case 1:
+-			/* ISIF linear tbl0 address */
+-			isif_cfg.linear_tbl0_addr = addr;
+-			break;
+-		default:
+-			/* ISIF linear tbl0 address */
+-			isif_cfg.linear_tbl1_addr = addr;
+-			break;
+-		}
+-		i++;
+-	}
+-	isif_cfg.dev = &pdev->dev;
+-
+-	printk(KERN_NOTICE "%s is registered with vpfe.\n",
+-		isif_hw_dev.name);
+-	return 0;
+-fail_base_iomap:
+-	release_mem_region(res->start, resource_size(res));
+-	i--;
+-fail_nobase_res:
+-	if (isif_cfg.base_addr) {
+-		iounmap(isif_cfg.base_addr);
+-		isif_cfg.base_addr = NULL;
+-	}
+-	if (isif_cfg.linear_tbl0_addr) {
+-		iounmap(isif_cfg.linear_tbl0_addr);
+-		isif_cfg.linear_tbl0_addr = NULL;
+-	}
+-
+-	while (i >= 0) {
+-		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+-		if (res)
+-			release_mem_region(res->start, resource_size(res));
+-		i--;
+-	}
+-	vpfe_unregister_ccdc_device(&isif_hw_dev);
+-	return status;
+-}
+-
+-static int isif_remove(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-	int i = 0;
+-
+-	iounmap(isif_cfg.base_addr);
+-	isif_cfg.base_addr = NULL;
+-	iounmap(isif_cfg.linear_tbl0_addr);
+-	isif_cfg.linear_tbl0_addr = NULL;
+-	iounmap(isif_cfg.linear_tbl1_addr);
+-	isif_cfg.linear_tbl1_addr = NULL;
+-	while (i < 3) {
+-		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+-		release_mem_region(res->start, resource_size(res));
+-		i++;
+-	}
+-	vpfe_unregister_ccdc_device(&isif_hw_dev);
+-	return 0;
+-}
+-
+-static struct platform_driver isif_driver = {
+-	.driver = {
+-		.name	= "isif",
+-	},
+-	.remove = isif_remove,
+-	.probe = isif_probe,
+-};
+-
+-module_platform_driver(isif_driver);
+-
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif.h b/drivers/staging/media/deprecated/vpfe_capture/isif.h
+deleted file mode 100644
+index 8369acd26e7e..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/isif.h
++++ /dev/null
+@@ -1,518 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * isif header file
+- */
+-#ifndef _ISIF_H
+-#define _ISIF_H
+-
+-#include <media/davinci/ccdc_types.h>
+-#include <media/davinci/vpfe_types.h>
+-
+-/* isif float type S8Q8/U8Q8 */
+-struct isif_float_8 {
+-	/* 8 bit integer part */
+-	__u8 integer;
+-	/* 8 bit decimal part */
+-	__u8 decimal;
+-};
+-
+-/* isif float type U16Q16/S16Q16 */
+-struct isif_float_16 {
+-	/* 16 bit integer part */
+-	__u16 integer;
+-	/* 16 bit decimal part */
+-	__u16 decimal;
+-};
+-
+-/************************************************************************
+- *   Vertical Defect Correction parameters
+- ***********************************************************************/
+-/* Defect Correction (DFC) table entry */
+-struct isif_vdfc_entry {
+-	/* vertical position of defect */
+-	__u16 pos_vert;
+-	/* horizontal position of defect */
+-	__u16 pos_horz;
+-	/*
+-	 * Defect level of Vertical line defect position. This is subtracted
+-	 * from the data at the defect position
+-	 */
+-	__u8 level_at_pos;
+-	/*
+-	 * Defect level of the pixels upper than the vertical line defect.
+-	 * This is subtracted from the data
+-	 */
+-	__u8 level_up_pixels;
+-	/*
+-	 * Defect level of the pixels lower than the vertical line defect.
+-	 * This is subtracted from the data
+-	 */
+-	__u8 level_low_pixels;
+-};
+-
+-#define ISIF_VDFC_TABLE_SIZE		8
+-struct isif_dfc {
+-	/* enable vertical defect correction */
+-	__u8 en;
+-	/* Defect level subtraction. Just fed through if saturating */
+-#define	ISIF_VDFC_NORMAL		0
+-	/*
+-	 * Defect level subtraction. Horizontal interpolation ((i-2)+(i+2))/2
+-	 * if data saturating
+-	 */
+-#define ISIF_VDFC_HORZ_INTERPOL_IF_SAT	1
+-	/* Horizontal interpolation (((i-2)+(i+2))/2) */
+-#define	ISIF_VDFC_HORZ_INTERPOL		2
+-	/* one of the vertical defect correction modes above */
+-	__u8 corr_mode;
+-	/* 0 - whole line corrected, 1 - not pixels upper than the defect */
+-	__u8 corr_whole_line;
+-#define ISIF_VDFC_NO_SHIFT		0
+-#define ISIF_VDFC_SHIFT_1		1
+-#define ISIF_VDFC_SHIFT_2		2
+-#define ISIF_VDFC_SHIFT_3		3
+-#define ISIF_VDFC_SHIFT_4		4
+-	/*
+-	 * defect level shift value. level_at_pos, level_upper_pos,
+-	 * and level_lower_pos can be shifted up by this value. Choose
+-	 * one of the values above
+-	 */
+-	__u8 def_level_shift;
+-	/* defect saturation level */
+-	__u16 def_sat_level;
+-	/* number of vertical defects. Max is ISIF_VDFC_TABLE_SIZE */
+-	__u16 num_vdefects;
+-	/* VDFC table ptr */
+-	struct isif_vdfc_entry table[ISIF_VDFC_TABLE_SIZE];
+-};
+-
+-struct isif_horz_bclamp {
+-
+-	/* Horizontal clamp disabled. Only vertical clamp value is subtracted */
+-#define	ISIF_HORZ_BC_DISABLE		0
+-	/*
+-	 * Horizontal clamp value is calculated and subtracted from image data
+-	 * along with vertical clamp value
+-	 */
+-#define ISIF_HORZ_BC_CLAMP_CALC_ENABLED	1
+-	/*
+-	 * Horizontal clamp value calculated from previous image is subtracted
+-	 * from image data along with vertical clamp value.
+-	 */
+-#define ISIF_HORZ_BC_CLAMP_NOT_UPDATED	2
+-	/* horizontal clamp mode. One of the values above */
+-	__u8 mode;
+-	/*
+-	 * pixel value limit enable.
+-	 *  0 - limit disabled
+-	 *  1 - pixel value limited to 1023
+-	 */
+-	__u8 clamp_pix_limit;
+-	/* Select Most left window for bc calculation */
+-#define	ISIF_SEL_MOST_LEFT_WIN		0
+-	/* Select Most right window for bc calculation */
+-#define ISIF_SEL_MOST_RIGHT_WIN		1
+-	/* Select most left or right window for clamp val calculation */
+-	__u8 base_win_sel_calc;
+-	/* Window count per color for calculation. range 1-32 */
+-	__u8 win_count_calc;
+-	/* Window start position - horizontal for calculation. 0 - 8191 */
+-	__u16 win_start_h_calc;
+-	/* Window start position - vertical for calculation 0 - 8191 */
+-	__u16 win_start_v_calc;
+-#define ISIF_HORZ_BC_SZ_H_2PIXELS	0
+-#define ISIF_HORZ_BC_SZ_H_4PIXELS	1
+-#define ISIF_HORZ_BC_SZ_H_8PIXELS	2
+-#define ISIF_HORZ_BC_SZ_H_16PIXELS	3
+-	/* Width of the sample window in pixels for calculation */
+-	__u8 win_h_sz_calc;
+-#define ISIF_HORZ_BC_SZ_V_32PIXELS	0
+-#define ISIF_HORZ_BC_SZ_V_64PIXELS	1
+-#define	ISIF_HORZ_BC_SZ_V_128PIXELS	2
+-#define ISIF_HORZ_BC_SZ_V_256PIXELS	3
+-	/* Height of the sample window in pixels for calculation */
+-	__u8 win_v_sz_calc;
+-};
+-
+-/************************************************************************
+- *  Black Clamp parameters
+- ***********************************************************************/
+-struct isif_vert_bclamp {
+-	/* Reset value used is the clamp value calculated */
+-#define	ISIF_VERT_BC_USE_HORZ_CLAMP_VAL		0
+-	/* Reset value used is reset_clamp_val configured */
+-#define	ISIF_VERT_BC_USE_CONFIG_CLAMP_VAL	1
+-	/* No update, previous image value is used */
+-#define	ISIF_VERT_BC_NO_UPDATE			2
+-	/*
+-	 * Reset value selector for vertical clamp calculation. Use one of
+-	 * the above values
+-	 */
+-	__u8 reset_val_sel;
+-	/* U8Q8. Line average coefficient used in vertical clamp calculation */
+-	__u8 line_ave_coef;
+-	/* Height of the optical black region for calculation */
+-	__u16 ob_v_sz_calc;
+-	/* Optical black region start position - horizontal. 0 - 8191 */
+-	__u16 ob_start_h;
+-	/* Optical black region start position - vertical 0 - 8191 */
+-	__u16 ob_start_v;
+-};
+-
+-struct isif_black_clamp {
+-	/*
+-	 * This offset value is added irrespective of the clamp enable status.
+-	 * S13
+-	 */
+-	__u16 dc_offset;
+-	/*
+-	 * Enable black/digital clamp value to be subtracted from the image data
+-	 */
+-	__u8 en;
+-	/*
+-	 * black clamp mode. same/separate clamp for 4 colors
+-	 * 0 - disable - same clamp value for all colors
+-	 * 1 - clamp value calculated separately for all colors
+-	 */
+-	__u8 bc_mode_color;
+-	/* Vertical start position for bc subtraction */
+-	__u16 vert_start_sub;
+-	/* Black clamp for horizontal direction */
+-	struct isif_horz_bclamp horz;
+-	/* Black clamp for vertical direction */
+-	struct isif_vert_bclamp vert;
+-};
+-
+-/*************************************************************************
+-** Color Space Conversion (CSC)
+-*************************************************************************/
+-#define ISIF_CSC_NUM_COEFF	16
+-struct isif_color_space_conv {
+-	/* Enable color space conversion */
+-	__u8 en;
+-	/*
+-	 * csc coefficient table. S8Q5, M00 at index 0, M01 at index 1, and
+-	 * so forth
+-	 */
+-	struct isif_float_8 coeff[ISIF_CSC_NUM_COEFF];
+-};
+-
+-
+-/*************************************************************************
+-**  Black  Compensation parameters
+-*************************************************************************/
+-struct isif_black_comp {
+-	/* Comp for Red */
+-	__s8 r_comp;
+-	/* Comp for Gr */
+-	__s8 gr_comp;
+-	/* Comp for Blue */
+-	__s8 b_comp;
+-	/* Comp for Gb */
+-	__s8 gb_comp;
+-};
+-
+-/*************************************************************************
+-**  Gain parameters
+-*************************************************************************/
+-struct isif_gain {
+-	/* Gain for Red or ye */
+-	struct isif_float_16 r_ye;
+-	/* Gain for Gr or cy */
+-	struct isif_float_16 gr_cy;
+-	/* Gain for Gb or g */
+-	struct isif_float_16 gb_g;
+-	/* Gain for Blue or mg */
+-	struct isif_float_16 b_mg;
+-};
+-
+-#define ISIF_LINEAR_TAB_SIZE	192
+-/*************************************************************************
+-**  Linearization parameters
+-*************************************************************************/
+-struct isif_linearize {
+-	/* Enable or Disable linearization of data */
+-	__u8 en;
+-	/* Shift value applied */
+-	__u8 corr_shft;
+-	/* scale factor applied U11Q10 */
+-	struct isif_float_16 scale_fact;
+-	/* Size of the linear table */
+-	__u16 table[ISIF_LINEAR_TAB_SIZE];
+-};
+-
+-/* Color patterns */
+-#define ISIF_RED	0
+-#define	ISIF_GREEN_RED	1
+-#define ISIF_GREEN_BLUE	2
+-#define ISIF_BLUE	3
+-struct isif_col_pat {
+-	__u8 olop;
+-	__u8 olep;
+-	__u8 elop;
+-	__u8 elep;
+-};
+-
+-/*************************************************************************
+-**  Data formatter parameters
+-*************************************************************************/
+-struct isif_fmtplen {
+-	/*
+-	 * number of program entries for SET0, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen0;
+-	/*
+-	 * number of program entries for SET1, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen1;
+-	/**
+-	 * number of program entries for SET2, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen2;
+-	/**
+-	 * number of program entries for SET3, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen3;
+-};
+-
+-struct isif_fmt_cfg {
+-#define ISIF_SPLIT		0
+-#define ISIF_COMBINE		1
+-	/* Split or combine or line alternate */
+-	__u8 fmtmode;
+-	/* enable or disable line alternating mode */
+-	__u8 ln_alter_en;
+-#define ISIF_1LINE		0
+-#define	ISIF_2LINES		1
+-#define	ISIF_3LINES		2
+-#define	ISIF_4LINES		3
+-	/* Split/combine line number */
+-	__u8 lnum;
+-	/* Address increment Range 1 - 16 */
+-	__u8 addrinc;
+-};
+-
+-struct isif_fmt_addr_ptr {
+-	/* Initial address */
+-	__u32 init_addr;
+-	/* output line number */
+-#define ISIF_1STLINE		0
+-#define	ISIF_2NDLINE		1
+-#define	ISIF_3RDLINE		2
+-#define	ISIF_4THLINE		3
+-	__u8 out_line;
+-};
+-
+-struct isif_fmtpgm_ap {
+-	/* program address pointer */
+-	__u8 pgm_aptr;
+-	/* program address increment or decrement */
+-	__u8 pgmupdt;
+-};
+-
+-struct isif_data_formatter {
+-	/* Enable/Disable data formatter */
+-	__u8 en;
+-	/* data formatter configuration */
+-	struct isif_fmt_cfg cfg;
+-	/* Formatter program entries length */
+-	struct isif_fmtplen plen;
+-	/* first pixel in a line fed to formatter */
+-	__u16 fmtrlen;
+-	/* HD interval for output line. Only valid when split line */
+-	__u16 fmthcnt;
+-	/* formatter address pointers */
+-	struct isif_fmt_addr_ptr fmtaddr_ptr[16];
+-	/* program enable/disable */
+-	__u8 pgm_en[32];
+-	/* program address pointers */
+-	struct isif_fmtpgm_ap fmtpgm_ap[32];
+-};
+-
+-struct isif_df_csc {
+-	/* Color Space Conversion configuration, 0 - csc, 1 - df */
+-	__u8 df_or_csc;
+-	/* csc configuration valid if df_or_csc is 0 */
+-	struct isif_color_space_conv csc;
+-	/* data formatter configuration valid if df_or_csc is 1 */
+-	struct isif_data_formatter df;
+-	/* start pixel in a line at the input */
+-	__u32 start_pix;
+-	/* number of pixels in input line */
+-	__u32 num_pixels;
+-	/* start line at the input */
+-	__u32 start_line;
+-	/* number of lines at the input */
+-	__u32 num_lines;
+-};
+-
+-struct isif_gain_offsets_adj {
+-	/* Gain adjustment per color */
+-	struct isif_gain gain;
+-	/* Offset adjustment */
+-	__u16 offset;
+-	/* Enable or Disable Gain adjustment for SDRAM data */
+-	__u8 gain_sdram_en;
+-	/* Enable or Disable Gain adjustment for IPIPE data */
+-	__u8 gain_ipipe_en;
+-	/* Enable or Disable Gain adjustment for H3A data */
+-	__u8 gain_h3a_en;
+-	/* Enable or Disable Gain adjustment for SDRAM data */
+-	__u8 offset_sdram_en;
+-	/* Enable or Disable Gain adjustment for IPIPE data */
+-	__u8 offset_ipipe_en;
+-	/* Enable or Disable Gain adjustment for H3A data */
+-	__u8 offset_h3a_en;
+-};
+-
+-struct isif_cul {
+-	/* Horizontal Cull pattern for odd lines */
+-	__u8 hcpat_odd;
+-	/* Horizontal Cull pattern for even lines */
+-	__u8 hcpat_even;
+-	/* Vertical Cull pattern */
+-	__u8 vcpat;
+-	/* Enable or disable lpf. Apply when cull is enabled */
+-	__u8 en_lpf;
+-};
+-
+-struct isif_compress {
+-#define ISIF_ALAW		0
+-#define ISIF_DPCM		1
+-#define ISIF_NO_COMPRESSION	2
+-	/* Compression Algorithm used */
+-	__u8 alg;
+-	/* Choose Predictor1 for DPCM compression */
+-#define ISIF_DPCM_PRED1		0
+-	/* Choose Predictor2 for DPCM compression */
+-#define ISIF_DPCM_PRED2		1
+-	/* Predictor for DPCM compression */
+-	__u8 pred;
+-};
+-
+-/* all the stuff in this struct will be provided by userland */
+-struct isif_config_params_raw {
+-	/* Linearization parameters for image sensor data input */
+-	struct isif_linearize linearize;
+-	/* Data formatter or CSC */
+-	struct isif_df_csc df_csc;
+-	/* Defect Pixel Correction (DFC) configuration */
+-	struct isif_dfc dfc;
+-	/* Black/Digital Clamp configuration */
+-	struct isif_black_clamp bclamp;
+-	/* Gain, offset adjustments */
+-	struct isif_gain_offsets_adj gain_offset;
+-	/* Culling */
+-	struct isif_cul culling;
+-	/* A-Law and DPCM compression options */
+-	struct isif_compress compress;
+-	/* horizontal offset for Gain/LSC/DFC */
+-	__u16 horz_offset;
+-	/* vertical offset for Gain/LSC/DFC */
+-	__u16 vert_offset;
+-	/* color pattern for field 0 */
+-	struct isif_col_pat col_pat_field0;
+-	/* color pattern for field 1 */
+-	struct isif_col_pat col_pat_field1;
+-#define ISIF_NO_SHIFT		0
+-#define	ISIF_1BIT_SHIFT		1
+-#define	ISIF_2BIT_SHIFT		2
+-#define	ISIF_3BIT_SHIFT		3
+-#define	ISIF_4BIT_SHIFT		4
+-#define ISIF_5BIT_SHIFT		5
+-#define ISIF_6BIT_SHIFT		6
+-	/* Data shift applied before storing to SDRAM */
+-	__u8 data_shift;
+-	/* enable input test pattern generation */
+-	__u8 test_pat_gen;
+-};
+-
+-#ifdef __KERNEL__
+-struct isif_ycbcr_config {
+-	/* isif pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* isif frame format */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* ISIF crop window */
+-	struct v4l2_rect win;
+-	/* field polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* interface VD polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* interface HD polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* isif pix order. Only used for ycbcr capture */
+-	enum ccdc_pixorder pix_order;
+-	/* isif buffer type. Only used for ycbcr capture */
+-	enum ccdc_buftype buf_type;
+-};
+-
+-/* MSB of image data connected to sensor port */
+-enum isif_data_msb {
+-	ISIF_BIT_MSB_15,
+-	ISIF_BIT_MSB_14,
+-	ISIF_BIT_MSB_13,
+-	ISIF_BIT_MSB_12,
+-	ISIF_BIT_MSB_11,
+-	ISIF_BIT_MSB_10,
+-	ISIF_BIT_MSB_9,
+-	ISIF_BIT_MSB_8,
+-	ISIF_BIT_MSB_7
+-};
+-
+-enum isif_cfa_pattern {
+-	ISIF_CFA_PAT_MOSAIC,
+-	ISIF_CFA_PAT_STRIPE
+-};
+-
+-struct isif_params_raw {
+-	/* isif pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* isif frame format */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* interface VD polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* interface HD polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* buffer type. Applicable for interlaced mode */
+-	enum ccdc_buftype buf_type;
+-	/* Gain values */
+-	struct isif_gain gain;
+-	/* cfa pattern */
+-	enum isif_cfa_pattern cfa_pat;
+-	/* Data MSB position */
+-	enum isif_data_msb data_msb;
+-	/* Enable horizontal flip */
+-	unsigned char horz_flip_en;
+-	/* Enable image invert vertically */
+-	unsigned char image_invert_en;
+-
+-	/* all the userland defined stuff*/
+-	struct isif_config_params_raw config_params;
+-};
+-
+-enum isif_data_pack {
+-	ISIF_PACK_16BIT,
+-	ISIF_PACK_12BIT,
+-	ISIF_PACK_8BIT
+-};
+-
+-#define ISIF_WIN_NTSC				{0, 0, 720, 480}
+-#define ISIF_WIN_VGA				{0, 0, 640, 480}
+-
+-#endif
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h b/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
+deleted file mode 100644
+index d68d38841ae7..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
++++ /dev/null
+@@ -1,256 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- */
+-#ifndef _ISIF_REGS_H
+-#define _ISIF_REGS_H
+-
+-/* ISIF registers relative offsets */
+-#define SYNCEN					0x00
+-#define MODESET					0x04
+-#define HDW					0x08
+-#define VDW					0x0c
+-#define PPLN					0x10
+-#define LPFR					0x14
+-#define SPH					0x18
+-#define LNH					0x1c
+-#define SLV0					0x20
+-#define SLV1					0x24
+-#define LNV					0x28
+-#define CULH					0x2c
+-#define CULV					0x30
+-#define HSIZE					0x34
+-#define SDOFST					0x38
+-#define CADU					0x3c
+-#define CADL					0x40
+-#define LINCFG0					0x44
+-#define LINCFG1					0x48
+-#define CCOLP					0x4c
+-#define CRGAIN					0x50
+-#define CGRGAIN					0x54
+-#define CGBGAIN					0x58
+-#define CBGAIN					0x5c
+-#define COFSTA					0x60
+-#define FLSHCFG0				0x64
+-#define FLSHCFG1				0x68
+-#define FLSHCFG2				0x6c
+-#define VDINT0					0x70
+-#define VDINT1					0x74
+-#define VDINT2					0x78
+-#define MISC					0x7c
+-#define CGAMMAWD				0x80
+-#define REC656IF				0x84
+-#define CCDCFG					0x88
+-/*****************************************************
+-* Defect Correction registers
+-*****************************************************/
+-#define DFCCTL					0x8c
+-#define VDFSATLV				0x90
+-#define DFCMEMCTL				0x94
+-#define DFCMEM0					0x98
+-#define DFCMEM1					0x9c
+-#define DFCMEM2					0xa0
+-#define DFCMEM3					0xa4
+-#define DFCMEM4					0xa8
+-/****************************************************
+-* Black Clamp registers
+-****************************************************/
+-#define CLAMPCFG				0xac
+-#define CLDCOFST				0xb0
+-#define CLSV					0xb4
+-#define CLHWIN0					0xb8
+-#define CLHWIN1					0xbc
+-#define CLHWIN2					0xc0
+-#define CLVRV					0xc4
+-#define CLVWIN0					0xc8
+-#define CLVWIN1					0xcc
+-#define CLVWIN2					0xd0
+-#define CLVWIN3					0xd4
+-/****************************************************
+-* Lense Shading Correction
+-****************************************************/
+-#define DATAHOFST				0xd8
+-#define DATAVOFST				0xdc
+-#define LSCHVAL					0xe0
+-#define LSCVVAL					0xe4
+-#define TWODLSCCFG				0xe8
+-#define TWODLSCOFST				0xec
+-#define TWODLSCINI				0xf0
+-#define TWODLSCGRBU				0xf4
+-#define TWODLSCGRBL				0xf8
+-#define TWODLSCGROF				0xfc
+-#define TWODLSCORBU				0x100
+-#define TWODLSCORBL				0x104
+-#define TWODLSCOROF				0x108
+-#define TWODLSCIRQEN				0x10c
+-#define TWODLSCIRQST				0x110
+-/****************************************************
+-* Data formatter
+-****************************************************/
+-#define FMTCFG					0x114
+-#define FMTPLEN					0x118
+-#define FMTSPH					0x11c
+-#define FMTLNH					0x120
+-#define FMTSLV					0x124
+-#define FMTLNV					0x128
+-#define FMTRLEN					0x12c
+-#define FMTHCNT					0x130
+-#define FMTAPTR_BASE				0x134
+-/* Below macro for addresses FMTAPTR0 - FMTAPTR15 */
+-#define FMTAPTR(i)			(FMTAPTR_BASE + (i * 4))
+-#define FMTPGMVF0				0x174
+-#define FMTPGMVF1				0x178
+-#define FMTPGMAPU0				0x17c
+-#define FMTPGMAPU1				0x180
+-#define FMTPGMAPS0				0x184
+-#define FMTPGMAPS1				0x188
+-#define FMTPGMAPS2				0x18c
+-#define FMTPGMAPS3				0x190
+-#define FMTPGMAPS4				0x194
+-#define FMTPGMAPS5				0x198
+-#define FMTPGMAPS6				0x19c
+-#define FMTPGMAPS7				0x1a0
+-/************************************************
+-* Color Space Converter
+-************************************************/
+-#define CSCCTL					0x1a4
+-#define CSCM0					0x1a8
+-#define CSCM1					0x1ac
+-#define CSCM2					0x1b0
+-#define CSCM3					0x1b4
+-#define CSCM4					0x1b8
+-#define CSCM5					0x1bc
+-#define CSCM6					0x1c0
+-#define CSCM7					0x1c4
+-#define OBWIN0					0x1c8
+-#define OBWIN1					0x1cc
+-#define OBWIN2					0x1d0
+-#define OBWIN3					0x1d4
+-#define OBVAL0					0x1d8
+-#define OBVAL1					0x1dc
+-#define OBVAL2					0x1e0
+-#define OBVAL3					0x1e4
+-#define OBVAL4					0x1e8
+-#define OBVAL5					0x1ec
+-#define OBVAL6					0x1f0
+-#define OBVAL7					0x1f4
+-#define CLKCTL					0x1f8
+-
+-/* Masks & Shifts below */
+-#define START_PX_HOR_MASK			0x7FFF
+-#define NUM_PX_HOR_MASK				0x7FFF
+-#define START_VER_ONE_MASK			0x7FFF
+-#define START_VER_TWO_MASK			0x7FFF
+-#define NUM_LINES_VER				0x7FFF
+-
+-/* gain - offset masks */
+-#define GAIN_INTEGER_SHIFT			9
+-#define OFFSET_MASK				0xFFF
+-#define GAIN_SDRAM_EN_SHIFT			12
+-#define GAIN_IPIPE_EN_SHIFT			13
+-#define GAIN_H3A_EN_SHIFT			14
+-#define OFST_SDRAM_EN_SHIFT			8
+-#define OFST_IPIPE_EN_SHIFT			9
+-#define OFST_H3A_EN_SHIFT			10
+-#define GAIN_OFFSET_EN_MASK			0x7700
+-
+-/* Culling */
+-#define CULL_PAT_EVEN_LINE_SHIFT		8
+-
+-/* CCDCFG register */
+-#define ISIF_YCINSWP_RAW			(0x00 << 4)
+-#define ISIF_YCINSWP_YCBCR			(0x01 << 4)
+-#define ISIF_CCDCFG_FIDMD_LATCH_VSYNC		(0x00 << 6)
+-#define ISIF_CCDCFG_WENLOG_AND			(0x00 << 8)
+-#define ISIF_CCDCFG_TRGSEL_WEN			(0x00 << 9)
+-#define ISIF_CCDCFG_EXTRG_DISABLE		(0x00 << 10)
+-#define ISIF_LATCH_ON_VSYNC_DISABLE		(0x01 << 15)
+-#define ISIF_LATCH_ON_VSYNC_ENABLE		(0x00 << 15)
+-#define ISIF_DATA_PACK_MASK			3
+-#define ISIF_DATA_PACK16			0
+-#define ISIF_DATA_PACK12			1
+-#define ISIF_DATA_PACK8				2
+-#define ISIF_PIX_ORDER_SHIFT			11
+-#define ISIF_BW656_ENABLE			(0x01 << 5)
+-
+-/* MODESET registers */
+-#define ISIF_VDHDOUT_INPUT			(0x00 << 0)
+-#define ISIF_INPUT_SHIFT			12
+-#define ISIF_RAW_INPUT_MODE			0
+-#define ISIF_FID_POL_SHIFT			4
+-#define ISIF_HD_POL_SHIFT			3
+-#define ISIF_VD_POL_SHIFT			2
+-#define ISIF_DATAPOL_NORMAL			0
+-#define ISIF_DATAPOL_SHIFT			6
+-#define ISIF_EXWEN_DISABLE			0
+-#define ISIF_EXWEN_SHIFT			5
+-#define ISIF_FRM_FMT_SHIFT			7
+-#define ISIF_DATASFT_SHIFT			8
+-#define ISIF_LPF_SHIFT				14
+-#define ISIF_LPF_MASK				1
+-
+-/* GAMMAWD registers */
+-#define ISIF_ALAW_GAMMA_WD_MASK			0xF
+-#define ISIF_ALAW_GAMMA_WD_SHIFT		1
+-#define ISIF_ALAW_ENABLE			1
+-#define ISIF_GAMMAWD_CFA_SHIFT			5
+-
+-/* HSIZE registers */
+-#define ISIF_HSIZE_FLIP_MASK			1
+-#define ISIF_HSIZE_FLIP_SHIFT			12
+-
+-/* MISC registers */
+-#define ISIF_DPCM_EN_SHIFT			12
+-#define ISIF_DPCM_PREDICTOR_SHIFT		13
+-
+-/* Black clamp related */
+-#define ISIF_BC_MODE_COLOR_SHIFT		4
+-#define ISIF_HORZ_BC_MODE_SHIFT			1
+-#define ISIF_HORZ_BC_WIN_SEL_SHIFT		5
+-#define ISIF_HORZ_BC_PIX_LIMIT_SHIFT		6
+-#define ISIF_HORZ_BC_WIN_H_SIZE_SHIFT		8
+-#define ISIF_HORZ_BC_WIN_V_SIZE_SHIFT		12
+-#define	ISIF_VERT_BC_RST_VAL_SEL_SHIFT		4
+-#define ISIF_VERT_BC_LINE_AVE_COEF_SHIFT	8
+-
+-/* VDFC registers */
+-#define ISIF_VDFC_EN_SHIFT			4
+-#define ISIF_VDFC_CORR_MOD_SHIFT		5
+-#define ISIF_VDFC_CORR_WHOLE_LN_SHIFT		7
+-#define ISIF_VDFC_LEVEL_SHFT_SHIFT		8
+-#define ISIF_VDFC_POS_MASK			0x1FFF
+-#define ISIF_DFCMEMCTL_DFCMARST_SHIFT		2
+-
+-/* CSC registers */
+-#define ISIF_CSC_COEF_INTEG_MASK		7
+-#define ISIF_CSC_COEF_DECIMAL_MASK		0x1f
+-#define ISIF_CSC_COEF_INTEG_SHIFT		5
+-#define ISIF_CSCM_MSB_SHIFT			8
+-#define ISIF_DF_CSC_SPH_MASK			0x1FFF
+-#define ISIF_DF_CSC_LNH_MASK			0x1FFF
+-#define ISIF_DF_CSC_SLV_MASK			0x1FFF
+-#define ISIF_DF_CSC_LNV_MASK			0x1FFF
+-#define ISIF_DF_NUMLINES			0x7FFF
+-#define ISIF_DF_NUMPIX				0x1FFF
+-
+-/* Offsets for LSC/DFC/Gain */
+-#define ISIF_DATA_H_OFFSET_MASK			0x1FFF
+-#define ISIF_DATA_V_OFFSET_MASK			0x1FFF
+-
+-/* Linearization */
+-#define ISIF_LIN_CORRSFT_SHIFT			4
+-#define ISIF_LIN_SCALE_FACT_INTEG_SHIFT		10
+-
+-
+-/* Pattern registers */
+-#define ISIF_PG_EN				(1 << 3)
+-#define ISIF_SEL_PG_SRC				(3 << 4)
+-#define ISIF_PG_VD_POL_SHIFT			0
+-#define ISIF_PG_HD_POL_SHIFT			1
+-
+-/*random other junk*/
+-#define ISIF_SYNCEN_VDHDEN_MASK			(1 << 0)
+-#define ISIF_SYNCEN_WEN_MASK			(1 << 1)
+-#define ISIF_SYNCEN_WEN_SHIFT			1
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c b/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
+deleted file mode 100644
+index 0a2226b321d7..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
++++ /dev/null
+@@ -1,1902 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * Driver name : VPFE Capture driver
+- *    VPFE Capture driver allows applications to capture and stream video
+- *    frames on DaVinci SoCs (DM6446, DM355 etc) from a YUV source such as
+- *    TVP5146 or  Raw Bayer RGB image data from an image sensor
+- *    such as Microns' MT9T001, MT9T031 etc.
+- *
+- *    These SoCs have, in common, a Video Processing Subsystem (VPSS) that
+- *    consists of a Video Processing Front End (VPFE) for capturing
+- *    video/raw image data and Video Processing Back End (VPBE) for displaying
+- *    YUV data through an in-built analog encoder or Digital LCD port. This
+- *    driver is for capture through VPFE. A typical EVM using these SoCs have
+- *    following high level configuration.
+- *
+- *    decoder(TVP5146/		YUV/
+- *	     MT9T001)   -->  Raw Bayer RGB ---> MUX -> VPFE (CCDC/ISIF)
+- *				data input              |      |
+- *							V      |
+- *						      SDRAM    |
+- *							       V
+- *							   Image Processor
+- *							       |
+- *							       V
+- *							     SDRAM
+- *    The data flow happens from a decoder connected to the VPFE over a
+- *    YUV embedded (BT.656/BT.1120) or separate sync or raw bayer rgb interface
+- *    and to the input of VPFE through an optional MUX (if more inputs are
+- *    to be interfaced on the EVM). The input data is first passed through
+- *    CCDC (CCD Controller, a.k.a Image Sensor Interface, ISIF). The CCDC
+- *    does very little or no processing on YUV data and does pre-process Raw
+- *    Bayer RGB data through modules such as Defect Pixel Correction (DFC)
+- *    Color Space Conversion (CSC), data gain/offset etc. After this, data
+- *    can be written to SDRAM or can be connected to the image processing
+- *    block such as IPIPE (on DM355 only).
+- *
+- *    Features supported
+- *		- MMAP IO
+- *		- Capture using TVP5146 over BT.656
+- *		- support for interfacing decoders using sub device model
+- *		- Work with DM355 or DM6446 CCDC to do Raw Bayer RGB/YUV
+- *		  data capture to SDRAM.
+- *    TODO list
+- *		- Support multiple REQBUF after open
+- *		- Support for de-allocating buffers through REQBUF
+- *		- Support for Raw Bayer RGB capture
+- *		- Support for chaining Image Processor
+- *		- Support for static allocation of buffers
+- *		- Support for USERPTR IO
+- *		- Support for STREAMON before QBUF
+- *		- Support for control ioctls
+- */
+-#include <linux/module.h>
+-#include <linux/slab.h>
+-#include <linux/init.h>
+-#include <linux/platform_device.h>
+-#include <linux/interrupt.h>
+-#include <media/v4l2-common.h>
+-#include <linux/io.h>
+-#include <media/davinci/vpfe_capture.h>
+-#include "ccdc_hw_device.h"
+-
+-static int debug;
+-static u32 numbuffers = 3;
+-static u32 bufsize = (720 * 576 * 2);
+-
+-module_param(numbuffers, uint, S_IRUGO);
+-module_param(bufsize, uint, S_IRUGO);
+-module_param(debug, int, 0644);
+-
+-MODULE_PARM_DESC(numbuffers, "buffer count (default:3)");
+-MODULE_PARM_DESC(bufsize, "buffer size in bytes (default:720 x 576 x 2)");
+-MODULE_PARM_DESC(debug, "Debug level 0-1");
+-
+-MODULE_DESCRIPTION("VPFE Video for Linux Capture Driver");
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Texas Instruments");
+-
+-/* standard information */
+-struct vpfe_standard {
+-	v4l2_std_id std_id;
+-	unsigned int width;
+-	unsigned int height;
+-	struct v4l2_fract pixelaspect;
+-	/* 0 - progressive, 1 - interlaced */
+-	int frame_format;
+-};
+-
+-/* ccdc configuration */
+-struct ccdc_config {
+-	/* This make sure vpfe is probed and ready to go */
+-	int vpfe_probed;
+-	/* name of ccdc device */
+-	char name[32];
+-};
+-
+-/* data structures */
+-static struct vpfe_config_params config_params = {
+-	.min_numbuffers = 3,
+-	.numbuffers = 3,
+-	.min_bufsize = 720 * 480 * 2,
+-	.device_bufsize = 720 * 576 * 2,
+-};
+-
+-/* ccdc device registered */
+-static const struct ccdc_hw_device *ccdc_dev;
+-/* lock for accessing ccdc information */
+-static DEFINE_MUTEX(ccdc_lock);
+-/* ccdc configuration */
+-static struct ccdc_config *ccdc_cfg;
+-
+-static const struct vpfe_standard vpfe_standards[] = {
+-	{V4L2_STD_525_60, 720, 480, {11, 10}, 1},
+-	{V4L2_STD_625_50, 720, 576, {54, 59}, 1},
+-};
+-
+-/* Used when raw Bayer image from ccdc is directly captured to SDRAM */
+-static const struct vpfe_pixel_format vpfe_pix_fmts[] = {
+-	{
+-		.pixelformat = V4L2_PIX_FMT_SBGGR8,
+-		.bpp = 1,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_SBGGR16,
+-		.bpp = 2,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_SGRBG10DPCM8,
+-		.bpp = 1,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_UYVY,
+-		.bpp = 2,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_YUYV,
+-		.bpp = 2,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_NV12,
+-		.bpp = 1,
+-	},
+-};
+-
+-/*
+- * vpfe_lookup_pix_format()
+- * lookup an entry in the vpfe pix format table based on pix_format
+- */
+-static const struct vpfe_pixel_format *vpfe_lookup_pix_format(u32 pix_format)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(vpfe_pix_fmts); i++) {
+-		if (pix_format == vpfe_pix_fmts[i].pixelformat)
+-			return &vpfe_pix_fmts[i];
+-	}
+-	return NULL;
+-}
+-
+-/*
+- * vpfe_register_ccdc_device. CCDC module calls this to
+- * register with vpfe capture
+- */
+-int vpfe_register_ccdc_device(const struct ccdc_hw_device *dev)
+-{
+-	int ret = 0;
+-	printk(KERN_NOTICE "vpfe_register_ccdc_device: %s\n", dev->name);
+-
+-	if (!dev->hw_ops.open ||
+-	    !dev->hw_ops.enable ||
+-	    !dev->hw_ops.set_hw_if_params ||
+-	    !dev->hw_ops.configure ||
+-	    !dev->hw_ops.set_buftype ||
+-	    !dev->hw_ops.get_buftype ||
+-	    !dev->hw_ops.enum_pix ||
+-	    !dev->hw_ops.set_frame_format ||
+-	    !dev->hw_ops.get_frame_format ||
+-	    !dev->hw_ops.get_pixel_format ||
+-	    !dev->hw_ops.set_pixel_format ||
+-	    !dev->hw_ops.set_image_window ||
+-	    !dev->hw_ops.get_image_window ||
+-	    !dev->hw_ops.get_line_length ||
+-	    !dev->hw_ops.getfid)
+-		return -EINVAL;
+-
+-	mutex_lock(&ccdc_lock);
+-	if (!ccdc_cfg) {
+-		/*
+-		 * TODO. Will this ever happen? if so, we need to fix it.
+-		 * Probably we need to add the request to a linked list and
+-		 * walk through it during vpfe probe
+-		 */
+-		printk(KERN_ERR "vpfe capture not initialized\n");
+-		ret = -EFAULT;
+-		goto unlock;
+-	}
+-
+-	if (strcmp(dev->name, ccdc_cfg->name)) {
+-		/* ignore this ccdc */
+-		ret = -EINVAL;
+-		goto unlock;
+-	}
+-
+-	if (ccdc_dev) {
+-		printk(KERN_ERR "ccdc already registered\n");
+-		ret = -EINVAL;
+-		goto unlock;
+-	}
+-
+-	ccdc_dev = dev;
+-unlock:
+-	mutex_unlock(&ccdc_lock);
+-	return ret;
+-}
+-EXPORT_SYMBOL(vpfe_register_ccdc_device);
+-
+-/*
+- * vpfe_unregister_ccdc_device. CCDC module calls this to
+- * unregister with vpfe capture
+- */
+-void vpfe_unregister_ccdc_device(const struct ccdc_hw_device *dev)
+-{
+-	if (!dev) {
+-		printk(KERN_ERR "invalid ccdc device ptr\n");
+-		return;
+-	}
+-
+-	printk(KERN_NOTICE "vpfe_unregister_ccdc_device, dev->name = %s\n",
+-		dev->name);
+-
+-	if (strcmp(dev->name, ccdc_cfg->name)) {
+-		/* ignore this ccdc */
+-		return;
+-	}
+-
+-	mutex_lock(&ccdc_lock);
+-	ccdc_dev = NULL;
+-	mutex_unlock(&ccdc_lock);
+-}
+-EXPORT_SYMBOL(vpfe_unregister_ccdc_device);
+-
+-/*
+- * vpfe_config_ccdc_image_format()
+- * For a pix format, configure ccdc to setup the capture
+- */
+-static int vpfe_config_ccdc_image_format(struct vpfe_device *vpfe_dev)
+-{
+-	enum ccdc_frmfmt frm_fmt = CCDC_FRMFMT_INTERLACED;
+-	int ret = 0;
+-
+-	if (ccdc_dev->hw_ops.set_pixel_format(
+-			vpfe_dev->fmt.fmt.pix.pixelformat) < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"couldn't set pix format in ccdc\n");
+-		return -EINVAL;
+-	}
+-	/* configure the image window */
+-	ccdc_dev->hw_ops.set_image_window(&vpfe_dev->crop);
+-
+-	switch (vpfe_dev->fmt.fmt.pix.field) {
+-	case V4L2_FIELD_INTERLACED:
+-		/* do nothing, since it is default */
+-		ret = ccdc_dev->hw_ops.set_buftype(
+-				CCDC_BUFTYPE_FLD_INTERLEAVED);
+-		break;
+-	case V4L2_FIELD_NONE:
+-		frm_fmt = CCDC_FRMFMT_PROGRESSIVE;
+-		/* buffer type only applicable for interlaced scan */
+-		break;
+-	case V4L2_FIELD_SEQ_TB:
+-		ret = ccdc_dev->hw_ops.set_buftype(
+-				CCDC_BUFTYPE_FLD_SEPARATED);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	/* set the frame format */
+-	if (!ret)
+-		ret = ccdc_dev->hw_ops.set_frame_format(frm_fmt);
+-	return ret;
+-}
+-/*
+- * vpfe_config_image_format()
+- * For a given standard, this functions sets up the default
+- * pix format & crop values in the vpfe device and ccdc.  It first
+- * starts with defaults based values from the standard table.
+- * It then checks if sub device supports get_fmt and then override the
+- * values based on that.Sets crop values to match with scan resolution
+- * starting at 0,0. It calls vpfe_config_ccdc_image_format() set the
+- * values in ccdc
+- */
+-static int vpfe_config_image_format(struct vpfe_device *vpfe_dev,
+-				    v4l2_std_id std_id)
+-{
+-	struct vpfe_subdev_info *sdinfo = vpfe_dev->current_subdev;
+-	struct v4l2_subdev_format fmt = {
+-		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+-	};
+-	struct v4l2_mbus_framefmt *mbus_fmt = &fmt.format;
+-	struct v4l2_pix_format *pix = &vpfe_dev->fmt.fmt.pix;
+-	int i, ret;
+-
+-	for (i = 0; i < ARRAY_SIZE(vpfe_standards); i++) {
+-		if (vpfe_standards[i].std_id & std_id) {
+-			vpfe_dev->std_info.active_pixels =
+-					vpfe_standards[i].width;
+-			vpfe_dev->std_info.active_lines =
+-					vpfe_standards[i].height;
+-			vpfe_dev->std_info.frame_format =
+-					vpfe_standards[i].frame_format;
+-			vpfe_dev->std_index = i;
+-			break;
+-		}
+-	}
+-
+-	if (i ==  ARRAY_SIZE(vpfe_standards)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "standard not supported\n");
+-		return -EINVAL;
+-	}
+-
+-	vpfe_dev->crop.top = 0;
+-	vpfe_dev->crop.left = 0;
+-	vpfe_dev->crop.width = vpfe_dev->std_info.active_pixels;
+-	vpfe_dev->crop.height = vpfe_dev->std_info.active_lines;
+-	pix->width = vpfe_dev->crop.width;
+-	pix->height = vpfe_dev->crop.height;
+-
+-	/* first field and frame format based on standard frame format */
+-	if (vpfe_dev->std_info.frame_format) {
+-		pix->field = V4L2_FIELD_INTERLACED;
+-		/* assume V4L2_PIX_FMT_UYVY as default */
+-		pix->pixelformat = V4L2_PIX_FMT_UYVY;
+-		v4l2_fill_mbus_format(mbus_fmt, pix,
+-				MEDIA_BUS_FMT_YUYV10_2X10);
+-	} else {
+-		pix->field = V4L2_FIELD_NONE;
+-		/* assume V4L2_PIX_FMT_SBGGR8 */
+-		pix->pixelformat = V4L2_PIX_FMT_SBGGR8;
+-		v4l2_fill_mbus_format(mbus_fmt, pix,
+-				MEDIA_BUS_FMT_SBGGR8_1X8);
+-	}
+-
+-	/* if sub device supports get_fmt, override the defaults */
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev,
+-			sdinfo->grp_id, pad, get_fmt, NULL, &fmt);
+-
+-	if (ret && ret != -ENOIOCTLCMD) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"error in getting get_fmt from sub device\n");
+-		return ret;
+-	}
+-	v4l2_fill_pix_format(pix, mbus_fmt);
+-	pix->bytesperline = pix->width * 2;
+-	pix->sizeimage = pix->bytesperline * pix->height;
+-
+-	/* Sets the values in CCDC */
+-	ret = vpfe_config_ccdc_image_format(vpfe_dev);
+-	if (ret)
+-		return ret;
+-
+-	/* Update the values of sizeimage and bytesperline */
+-	pix->bytesperline = ccdc_dev->hw_ops.get_line_length();
+-	pix->sizeimage = pix->bytesperline * pix->height;
+-
+-	return 0;
+-}
+-
+-static int vpfe_initialize_device(struct vpfe_device *vpfe_dev)
+-{
+-	int ret;
+-
+-	/* set first input of current subdevice as the current input */
+-	vpfe_dev->current_input = 0;
+-
+-	/* set default standard */
+-	vpfe_dev->std_index = 0;
+-
+-	/* Configure the default format information */
+-	ret = vpfe_config_image_format(vpfe_dev,
+-				vpfe_standards[vpfe_dev->std_index].std_id);
+-	if (ret)
+-		return ret;
+-
+-	/* now open the ccdc device to initialize it */
+-	mutex_lock(&ccdc_lock);
+-	if (!ccdc_dev) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "ccdc device not registered\n");
+-		ret = -ENODEV;
+-		goto unlock;
+-	}
+-
+-	if (!try_module_get(ccdc_dev->owner)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Couldn't lock ccdc module\n");
+-		ret = -ENODEV;
+-		goto unlock;
+-	}
+-	ret = ccdc_dev->hw_ops.open(vpfe_dev->pdev);
+-	if (!ret)
+-		vpfe_dev->initialized = 1;
+-
+-	/* Clear all VPFE/CCDC interrupts */
+-	if (vpfe_dev->cfg->clr_intr)
+-		vpfe_dev->cfg->clr_intr(-1);
+-
+-unlock:
+-	mutex_unlock(&ccdc_lock);
+-	return ret;
+-}
+-
+-/*
+- * vpfe_open : It creates object of file handle structure and
+- * stores it in private_data  member of filepointer
+- */
+-static int vpfe_open(struct file *file)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct video_device *vdev = video_devdata(file);
+-	struct vpfe_fh *fh;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_open\n");
+-
+-	if (!vpfe_dev->cfg->num_subdevs) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "No decoder registered\n");
+-		return -ENODEV;
+-	}
+-
+-	/* Allocate memory for the file handle object */
+-	fh = kmalloc(sizeof(*fh), GFP_KERNEL);
+-	if (!fh)
+-		return -ENOMEM;
+-
+-	/* store pointer to fh in private_data member of file */
+-	file->private_data = fh;
+-	fh->vpfe_dev = vpfe_dev;
+-	v4l2_fh_init(&fh->fh, vdev);
+-	mutex_lock(&vpfe_dev->lock);
+-	/* If decoder is not initialized. initialize it */
+-	if (!vpfe_dev->initialized) {
+-		if (vpfe_initialize_device(vpfe_dev)) {
+-			mutex_unlock(&vpfe_dev->lock);
+-			v4l2_fh_exit(&fh->fh);
+-			kfree(fh);
+-			return -ENODEV;
+-		}
+-	}
+-	/* Increment device usrs counter */
+-	vpfe_dev->usrs++;
+-	/* Set io_allowed member to false */
+-	fh->io_allowed = 0;
+-	v4l2_fh_add(&fh->fh);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return 0;
+-}
+-
+-static void vpfe_schedule_next_buffer(struct vpfe_device *vpfe_dev)
+-{
+-	unsigned long addr;
+-
+-	vpfe_dev->next_frm = list_entry(vpfe_dev->dma_queue.next,
+-					struct videobuf_buffer, queue);
+-	list_del(&vpfe_dev->next_frm->queue);
+-	vpfe_dev->next_frm->state = VIDEOBUF_ACTIVE;
+-	addr = videobuf_to_dma_contig(vpfe_dev->next_frm);
+-
+-	ccdc_dev->hw_ops.setfbaddr(addr);
+-}
+-
+-static void vpfe_schedule_bottom_field(struct vpfe_device *vpfe_dev)
+-{
+-	unsigned long addr;
+-
+-	addr = videobuf_to_dma_contig(vpfe_dev->cur_frm);
+-	addr += vpfe_dev->field_off;
+-	ccdc_dev->hw_ops.setfbaddr(addr);
+-}
+-
+-static void vpfe_process_buffer_complete(struct vpfe_device *vpfe_dev)
+-{
+-	vpfe_dev->cur_frm->ts = ktime_get_ns();
+-	vpfe_dev->cur_frm->state = VIDEOBUF_DONE;
+-	vpfe_dev->cur_frm->size = vpfe_dev->fmt.fmt.pix.sizeimage;
+-	wake_up_interruptible(&vpfe_dev->cur_frm->done);
+-	vpfe_dev->cur_frm = vpfe_dev->next_frm;
+-}
+-
+-/* ISR for VINT0*/
+-static irqreturn_t vpfe_isr(int irq, void *dev_id)
+-{
+-	struct vpfe_device *vpfe_dev = dev_id;
+-	enum v4l2_field field;
+-	int fid;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "\nStarting vpfe_isr...\n");
+-	field = vpfe_dev->fmt.fmt.pix.field;
+-
+-	/* if streaming not started, don't do anything */
+-	if (!vpfe_dev->started)
+-		goto clear_intr;
+-
+-	/* only for 6446 this will be applicable */
+-	if (ccdc_dev->hw_ops.reset)
+-		ccdc_dev->hw_ops.reset();
+-
+-	if (field == V4L2_FIELD_NONE) {
+-		/* handle progressive frame capture */
+-		v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-			"frame format is progressive...\n");
+-		if (vpfe_dev->cur_frm != vpfe_dev->next_frm)
+-			vpfe_process_buffer_complete(vpfe_dev);
+-		goto clear_intr;
+-	}
+-
+-	/* interlaced or TB capture check which field we are in hardware */
+-	fid = ccdc_dev->hw_ops.getfid();
+-
+-	/* switch the software maintained field id */
+-	vpfe_dev->field_id ^= 1;
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "field id = %x:%x.\n",
+-		fid, vpfe_dev->field_id);
+-	if (fid == vpfe_dev->field_id) {
+-		/* we are in-sync here,continue */
+-		if (fid == 0) {
+-			/*
+-			 * One frame is just being captured. If the next frame
+-			 * is available, release the current frame and move on
+-			 */
+-			if (vpfe_dev->cur_frm != vpfe_dev->next_frm)
+-				vpfe_process_buffer_complete(vpfe_dev);
+-			/*
+-			 * based on whether the two fields are stored
+-			 * interleavely or separately in memory, reconfigure
+-			 * the CCDC memory address
+-			 */
+-			if (field == V4L2_FIELD_SEQ_TB)
+-				vpfe_schedule_bottom_field(vpfe_dev);
+-			goto clear_intr;
+-		}
+-		/*
+-		 * if one field is just being captured configure
+-		 * the next frame get the next frame from the empty
+-		 * queue if no frame is available hold on to the
+-		 * current buffer
+-		 */
+-		spin_lock(&vpfe_dev->dma_queue_lock);
+-		if (!list_empty(&vpfe_dev->dma_queue) &&
+-		    vpfe_dev->cur_frm == vpfe_dev->next_frm)
+-			vpfe_schedule_next_buffer(vpfe_dev);
+-		spin_unlock(&vpfe_dev->dma_queue_lock);
+-	} else if (fid == 0) {
+-		/*
+-		 * out of sync. Recover from any hardware out-of-sync.
+-		 * May loose one frame
+-		 */
+-		vpfe_dev->field_id = fid;
+-	}
+-clear_intr:
+-	if (vpfe_dev->cfg->clr_intr)
+-		vpfe_dev->cfg->clr_intr(irq);
+-
+-	return IRQ_HANDLED;
+-}
+-
+-/* vdint1_isr - isr handler for VINT1 interrupt */
+-static irqreturn_t vdint1_isr(int irq, void *dev_id)
+-{
+-	struct vpfe_device *vpfe_dev = dev_id;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "\nInside vdint1_isr...\n");
+-
+-	/* if streaming not started, don't do anything */
+-	if (!vpfe_dev->started) {
+-		if (vpfe_dev->cfg->clr_intr)
+-			vpfe_dev->cfg->clr_intr(irq);
+-		return IRQ_HANDLED;
+-	}
+-
+-	spin_lock(&vpfe_dev->dma_queue_lock);
+-	if ((vpfe_dev->fmt.fmt.pix.field == V4L2_FIELD_NONE) &&
+-	    !list_empty(&vpfe_dev->dma_queue) &&
+-	    vpfe_dev->cur_frm == vpfe_dev->next_frm)
+-		vpfe_schedule_next_buffer(vpfe_dev);
+-	spin_unlock(&vpfe_dev->dma_queue_lock);
+-
+-	if (vpfe_dev->cfg->clr_intr)
+-		vpfe_dev->cfg->clr_intr(irq);
+-
+-	return IRQ_HANDLED;
+-}
+-
+-static void vpfe_detach_irq(struct vpfe_device *vpfe_dev)
+-{
+-	enum ccdc_frmfmt frame_format;
+-
+-	frame_format = ccdc_dev->hw_ops.get_frame_format();
+-	if (frame_format == CCDC_FRMFMT_PROGRESSIVE)
+-		free_irq(vpfe_dev->ccdc_irq1, vpfe_dev);
+-}
+-
+-static int vpfe_attach_irq(struct vpfe_device *vpfe_dev)
+-{
+-	enum ccdc_frmfmt frame_format;
+-
+-	frame_format = ccdc_dev->hw_ops.get_frame_format();
+-	if (frame_format == CCDC_FRMFMT_PROGRESSIVE) {
+-		return request_irq(vpfe_dev->ccdc_irq1, vdint1_isr,
+-				    0, "vpfe_capture1",
+-				    vpfe_dev);
+-	}
+-	return 0;
+-}
+-
+-/* vpfe_stop_ccdc_capture: stop streaming in ccdc/isif */
+-static void vpfe_stop_ccdc_capture(struct vpfe_device *vpfe_dev)
+-{
+-	vpfe_dev->started = 0;
+-	ccdc_dev->hw_ops.enable(0);
+-	if (ccdc_dev->hw_ops.enable_out_to_sdram)
+-		ccdc_dev->hw_ops.enable_out_to_sdram(0);
+-}
+-
+-/*
+- * vpfe_release : This function deletes buffer queue, frees the
+- * buffers and the vpfe file  handle
+- */
+-static int vpfe_release(struct file *file)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_release\n");
+-
+-	/* Get the device lock */
+-	mutex_lock(&vpfe_dev->lock);
+-	/* if this instance is doing IO */
+-	if (fh->io_allowed) {
+-		if (vpfe_dev->started) {
+-			sdinfo = vpfe_dev->current_subdev;
+-			ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev,
+-							 sdinfo->grp_id,
+-							 video, s_stream, 0);
+-			if (ret && (ret != -ENOIOCTLCMD))
+-				v4l2_err(&vpfe_dev->v4l2_dev,
+-				"stream off failed in subdev\n");
+-			vpfe_stop_ccdc_capture(vpfe_dev);
+-			vpfe_detach_irq(vpfe_dev);
+-			videobuf_streamoff(&vpfe_dev->buffer_queue);
+-		}
+-		vpfe_dev->io_usrs = 0;
+-		vpfe_dev->numbuffers = config_params.numbuffers;
+-		videobuf_stop(&vpfe_dev->buffer_queue);
+-		videobuf_mmap_free(&vpfe_dev->buffer_queue);
+-	}
+-
+-	/* Decrement device usrs counter */
+-	vpfe_dev->usrs--;
+-	v4l2_fh_del(&fh->fh);
+-	v4l2_fh_exit(&fh->fh);
+-	/* If this is the last file handle */
+-	if (!vpfe_dev->usrs) {
+-		vpfe_dev->initialized = 0;
+-		if (ccdc_dev->hw_ops.close)
+-			ccdc_dev->hw_ops.close(vpfe_dev->pdev);
+-		module_put(ccdc_dev->owner);
+-	}
+-	mutex_unlock(&vpfe_dev->lock);
+-	file->private_data = NULL;
+-	/* Free memory allocated to file handle object */
+-	kfree(fh);
+-	return 0;
+-}
+-
+-/*
+- * vpfe_mmap : It is used to map kernel space buffers
+- * into user spaces
+- */
+-static int vpfe_mmap(struct file *file, struct vm_area_struct *vma)
+-{
+-	/* Get the device object and file handle object */
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_mmap\n");
+-
+-	return videobuf_mmap_mapper(&vpfe_dev->buffer_queue, vma);
+-}
+-
+-/*
+- * vpfe_poll: It is used for select/poll system call
+- */
+-static __poll_t vpfe_poll(struct file *file, poll_table *wait)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_poll\n");
+-
+-	if (vpfe_dev->started)
+-		return videobuf_poll_stream(file,
+-					    &vpfe_dev->buffer_queue, wait);
+-	return 0;
+-}
+-
+-/* vpfe capture driver file operations */
+-static const struct v4l2_file_operations vpfe_fops = {
+-	.owner = THIS_MODULE,
+-	.open = vpfe_open,
+-	.release = vpfe_release,
+-	.unlocked_ioctl = video_ioctl2,
+-	.mmap = vpfe_mmap,
+-	.poll = vpfe_poll
+-};
+-
+-/*
+- * vpfe_check_format()
+- * This function adjust the input pixel format as per hardware
+- * capabilities and update the same in pixfmt.
+- * Following algorithm used :-
+- *
+- *	If given pixformat is not in the vpfe list of pix formats or not
+- *	supported by the hardware, current value of pixformat in the device
+- *	is used
+- *	If given field is not supported, then current field is used. If field
+- *	is different from current, then it is matched with that from sub device.
+- *	Minimum height is 2 lines for interlaced or tb field and 1 line for
+- *	progressive. Maximum height is clamped to active active lines of scan
+- *	Minimum width is 32 bytes in memory and width is clamped to active
+- *	pixels of scan.
+- *	bytesperline is a multiple of 32.
+- */
+-static const struct vpfe_pixel_format *
+-	vpfe_check_format(struct vpfe_device *vpfe_dev,
+-			  struct v4l2_pix_format *pixfmt)
+-{
+-	u32 min_height = 1, min_width = 32, max_width, max_height;
+-	const struct vpfe_pixel_format *vpfe_pix_fmt;
+-	u32 pix;
+-	int temp, found;
+-
+-	vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
+-	if (!vpfe_pix_fmt) {
+-		/*
+-		 * use current pixel format in the vpfe device. We
+-		 * will find this pix format in the table
+-		 */
+-		pixfmt->pixelformat = vpfe_dev->fmt.fmt.pix.pixelformat;
+-		vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
+-	}
+-
+-	/* check if hw supports it */
+-	temp = 0;
+-	found = 0;
+-	while (ccdc_dev->hw_ops.enum_pix(&pix, temp) >= 0) {
+-		if (vpfe_pix_fmt->pixelformat == pix) {
+-			found = 1;
+-			break;
+-		}
+-		temp++;
+-	}
+-
+-	if (!found) {
+-		/* use current pixel format */
+-		pixfmt->pixelformat = vpfe_dev->fmt.fmt.pix.pixelformat;
+-		/*
+-		 * Since this is currently used in the vpfe device, we
+-		 * will find this pix format in the table
+-		 */
+-		vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
+-	}
+-
+-	/* check what field format is supported */
+-	if (pixfmt->field == V4L2_FIELD_ANY) {
+-		/* if field is any, use current value as default */
+-		pixfmt->field = vpfe_dev->fmt.fmt.pix.field;
+-	}
+-
+-	/*
+-	 * if field is not same as current field in the vpfe device
+-	 * try matching the field with the sub device field
+-	 */
+-	if (vpfe_dev->fmt.fmt.pix.field != pixfmt->field) {
+-		/*
+-		 * If field value is not in the supported fields, use current
+-		 * field used in the device as default
+-		 */
+-		switch (pixfmt->field) {
+-		case V4L2_FIELD_INTERLACED:
+-		case V4L2_FIELD_SEQ_TB:
+-			/* if sub device is supporting progressive, use that */
+-			if (!vpfe_dev->std_info.frame_format)
+-				pixfmt->field = V4L2_FIELD_NONE;
+-			break;
+-		case V4L2_FIELD_NONE:
+-			if (vpfe_dev->std_info.frame_format)
+-				pixfmt->field = V4L2_FIELD_INTERLACED;
+-			break;
+-
+-		default:
+-			/* use current field as default */
+-			pixfmt->field = vpfe_dev->fmt.fmt.pix.field;
+-			break;
+-		}
+-	}
+-
+-	/* Now adjust image resolutions supported */
+-	if (pixfmt->field == V4L2_FIELD_INTERLACED ||
+-	    pixfmt->field == V4L2_FIELD_SEQ_TB)
+-		min_height = 2;
+-
+-	max_width = vpfe_dev->std_info.active_pixels;
+-	max_height = vpfe_dev->std_info.active_lines;
+-	min_width /= vpfe_pix_fmt->bpp;
+-
+-	v4l2_info(&vpfe_dev->v4l2_dev, "width = %d, height = %d, bpp = %d\n",
+-		  pixfmt->width, pixfmt->height, vpfe_pix_fmt->bpp);
+-
+-	pixfmt->width = clamp((pixfmt->width), min_width, max_width);
+-	pixfmt->height = clamp((pixfmt->height), min_height, max_height);
+-
+-	/* If interlaced, adjust height to be a multiple of 2 */
+-	if (pixfmt->field == V4L2_FIELD_INTERLACED)
+-		pixfmt->height &= (~1);
+-	/*
+-	 * recalculate bytesperline and sizeimage since width
+-	 * and height might have changed
+-	 */
+-	pixfmt->bytesperline = (((pixfmt->width * vpfe_pix_fmt->bpp) + 31)
+-				& ~31);
+-	if (pixfmt->pixelformat == V4L2_PIX_FMT_NV12)
+-		pixfmt->sizeimage =
+-			pixfmt->bytesperline * pixfmt->height +
+-			((pixfmt->bytesperline * pixfmt->height) >> 1);
+-	else
+-		pixfmt->sizeimage = pixfmt->bytesperline * pixfmt->height;
+-
+-	v4l2_info(&vpfe_dev->v4l2_dev, "adjusted width = %d, height = %d, bpp = %d, bytesperline = %d, sizeimage = %d\n",
+-		 pixfmt->width, pixfmt->height, vpfe_pix_fmt->bpp,
+-		 pixfmt->bytesperline, pixfmt->sizeimage);
+-	return vpfe_pix_fmt;
+-}
+-
+-static int vpfe_querycap(struct file *file, void  *priv,
+-			       struct v4l2_capability *cap)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querycap\n");
+-
+-	strscpy(cap->driver, CAPTURE_DRV_NAME, sizeof(cap->driver));
+-	strscpy(cap->bus_info, "VPFE", sizeof(cap->bus_info));
+-	strscpy(cap->card, vpfe_dev->cfg->card_name, sizeof(cap->card));
+-	return 0;
+-}
+-
+-static int vpfe_g_fmt_vid_cap(struct file *file, void *priv,
+-				struct v4l2_format *fmt)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_fmt_vid_cap\n");
+-	/* Fill in the information about format */
+-	*fmt = vpfe_dev->fmt;
+-	return 0;
+-}
+-
+-static int vpfe_enum_fmt_vid_cap(struct file *file, void  *priv,
+-				   struct v4l2_fmtdesc *fmt)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	const struct vpfe_pixel_format *pix_fmt;
+-	u32 pix;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_enum_fmt_vid_cap\n");
+-
+-	if (ccdc_dev->hw_ops.enum_pix(&pix, fmt->index) < 0)
+-		return -EINVAL;
+-
+-	/* Fill in the information about format */
+-	pix_fmt = vpfe_lookup_pix_format(pix);
+-	if (pix_fmt) {
+-		fmt->pixelformat = pix_fmt->pixelformat;
+-		return 0;
+-	}
+-	return -EINVAL;
+-}
+-
+-static int vpfe_s_fmt_vid_cap(struct file *file, void *priv,
+-				struct v4l2_format *fmt)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	const struct vpfe_pixel_format *pix_fmts;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_fmt_vid_cap\n");
+-
+-	/* If streaming is started, return error */
+-	if (vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Streaming is started\n");
+-		return -EBUSY;
+-	}
+-
+-	/* Check for valid frame format */
+-	pix_fmts = vpfe_check_format(vpfe_dev, &fmt->fmt.pix);
+-	if (!pix_fmts)
+-		return -EINVAL;
+-
+-	/* store the pixel format in the device  object */
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	/* First detach any IRQ if currently attached */
+-	vpfe_detach_irq(vpfe_dev);
+-	vpfe_dev->fmt = *fmt;
+-	/* set image capture parameters in the ccdc */
+-	ret = vpfe_config_ccdc_image_format(vpfe_dev);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_try_fmt_vid_cap(struct file *file, void *priv,
+-				  struct v4l2_format *f)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	const struct vpfe_pixel_format *pix_fmts;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_try_fmt_vid_cap\n");
+-
+-	pix_fmts = vpfe_check_format(vpfe_dev, &f->fmt.pix);
+-	if (!pix_fmts)
+-		return -EINVAL;
+-	return 0;
+-}
+-
+-/*
+- * vpfe_get_subdev_input_index - Get subdev index and subdev input index for a
+- * given app input index
+- */
+-static int vpfe_get_subdev_input_index(struct vpfe_device *vpfe_dev,
+-					int *subdev_index,
+-					int *subdev_input_index,
+-					int app_input_index)
+-{
+-	struct vpfe_config *cfg = vpfe_dev->cfg;
+-	struct vpfe_subdev_info *sdinfo;
+-	int i, j = 0;
+-
+-	for (i = 0; i < cfg->num_subdevs; i++) {
+-		sdinfo = &cfg->sub_devs[i];
+-		if (app_input_index < (j + sdinfo->num_inputs)) {
+-			*subdev_index = i;
+-			*subdev_input_index = app_input_index - j;
+-			return 0;
+-		}
+-		j += sdinfo->num_inputs;
+-	}
+-	return -EINVAL;
+-}
+-
+-/*
+- * vpfe_get_app_input - Get app input index for a given subdev input index
+- * driver stores the input index of the current sub device and translate it
+- * when application request the current input
+- */
+-static int vpfe_get_app_input_index(struct vpfe_device *vpfe_dev,
+-				    int *app_input_index)
+-{
+-	struct vpfe_config *cfg = vpfe_dev->cfg;
+-	struct vpfe_subdev_info *sdinfo;
+-	int i, j = 0;
+-
+-	for (i = 0; i < cfg->num_subdevs; i++) {
+-		sdinfo = &cfg->sub_devs[i];
+-		if (!strcmp(sdinfo->name, vpfe_dev->current_subdev->name)) {
+-			if (vpfe_dev->current_input >= sdinfo->num_inputs)
+-				return -1;
+-			*app_input_index = j + vpfe_dev->current_input;
+-			return 0;
+-		}
+-		j += sdinfo->num_inputs;
+-	}
+-	return -EINVAL;
+-}
+-
+-static int vpfe_enum_input(struct file *file, void *priv,
+-				 struct v4l2_input *inp)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_subdev_info *sdinfo;
+-	int subdev, index ;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_enum_input\n");
+-
+-	if (vpfe_get_subdev_input_index(vpfe_dev,
+-					&subdev,
+-					&index,
+-					inp->index) < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "input information not found for the subdev\n");
+-		return -EINVAL;
+-	}
+-	sdinfo = &vpfe_dev->cfg->sub_devs[subdev];
+-	*inp = sdinfo->inputs[index];
+-	return 0;
+-}
+-
+-static int vpfe_g_input(struct file *file, void *priv, unsigned int *index)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_input\n");
+-
+-	return vpfe_get_app_input_index(vpfe_dev, index);
+-}
+-
+-
+-static int vpfe_s_input(struct file *file, void *priv, unsigned int index)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct v4l2_subdev *sd;
+-	struct vpfe_subdev_info *sdinfo;
+-	int subdev_index, inp_index;
+-	struct vpfe_route *route;
+-	u32 input, output;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_input\n");
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	/*
+-	 * If streaming is started return device busy
+-	 * error
+-	 */
+-	if (vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Streaming is on\n");
+-		ret = -EBUSY;
+-		goto unlock_out;
+-	}
+-	ret = vpfe_get_subdev_input_index(vpfe_dev,
+-					  &subdev_index,
+-					  &inp_index,
+-					  index);
+-	if (ret < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "invalid input index\n");
+-		goto unlock_out;
+-	}
+-
+-	sdinfo = &vpfe_dev->cfg->sub_devs[subdev_index];
+-	sd = vpfe_dev->sd[subdev_index];
+-	route = &sdinfo->routes[inp_index];
+-	if (route && sdinfo->can_route) {
+-		input = route->input;
+-		output = route->output;
+-	} else {
+-		input = 0;
+-		output = 0;
+-	}
+-
+-	if (sd)
+-		ret = v4l2_subdev_call(sd, video, s_routing, input, output, 0);
+-
+-	if (ret) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"vpfe_doioctl:error in setting input in decoder\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-	vpfe_dev->current_subdev = sdinfo;
+-	if (sd)
+-		vpfe_dev->v4l2_dev.ctrl_handler = sd->ctrl_handler;
+-	vpfe_dev->current_input = index;
+-	vpfe_dev->std_index = 0;
+-
+-	/* set the bus/interface parameter for the sub device in ccdc */
+-	ret = ccdc_dev->hw_ops.set_hw_if_params(&sdinfo->ccdc_if_params);
+-	if (ret)
+-		goto unlock_out;
+-
+-	/* set the default image parameters in the device */
+-	ret = vpfe_config_image_format(vpfe_dev,
+-				vpfe_standards[vpfe_dev->std_index].std_id);
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_querystd(struct file *file, void *priv, v4l2_std_id *std_id)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querystd\n");
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	sdinfo = vpfe_dev->current_subdev;
+-	if (ret)
+-		return ret;
+-	/* Call querystd function of decoder device */
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					 video, querystd, std_id);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_std\n");
+-
+-	/* Call decoder driver function to set the standard */
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	sdinfo = vpfe_dev->current_subdev;
+-	/* If streaming is started, return device busy error */
+-	if (vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "streaming is started\n");
+-		ret = -EBUSY;
+-		goto unlock_out;
+-	}
+-
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					 video, s_std, std_id);
+-	if (ret < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Failed to set standard\n");
+-		goto unlock_out;
+-	}
+-	ret = vpfe_config_image_format(vpfe_dev, std_id);
+-
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_g_std(struct file *file, void *priv, v4l2_std_id *std_id)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_std\n");
+-
+-	*std_id = vpfe_standards[vpfe_dev->std_index].std_id;
+-	return 0;
+-}
+-/*
+- *  Videobuf operations
+- */
+-static int vpfe_videobuf_setup(struct videobuf_queue *vq,
+-				unsigned int *count,
+-				unsigned int *size)
+-{
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_setup\n");
+-	*size = vpfe_dev->fmt.fmt.pix.sizeimage;
+-	if (vpfe_dev->memory == V4L2_MEMORY_MMAP &&
+-		vpfe_dev->fmt.fmt.pix.sizeimage > config_params.device_bufsize)
+-		*size = config_params.device_bufsize;
+-
+-	if (*count < config_params.min_numbuffers)
+-		*count = config_params.min_numbuffers;
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-		"count=%d, size=%d\n", *count, *size);
+-	return 0;
+-}
+-
+-static int vpfe_videobuf_prepare(struct videobuf_queue *vq,
+-				struct videobuf_buffer *vb,
+-				enum v4l2_field field)
+-{
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-	unsigned long addr;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_prepare\n");
+-
+-	/* If buffer is not initialized, initialize it */
+-	if (VIDEOBUF_NEEDS_INIT == vb->state) {
+-		vb->width = vpfe_dev->fmt.fmt.pix.width;
+-		vb->height = vpfe_dev->fmt.fmt.pix.height;
+-		vb->size = vpfe_dev->fmt.fmt.pix.sizeimage;
+-		vb->field = field;
+-
+-		ret = videobuf_iolock(vq, vb, NULL);
+-		if (ret < 0)
+-			return ret;
+-
+-		addr = videobuf_to_dma_contig(vb);
+-		/* Make sure user addresses are aligned to 32 bytes */
+-		if (!ALIGN(addr, 32))
+-			return -EINVAL;
+-
+-		vb->state = VIDEOBUF_PREPARED;
+-	}
+-	return 0;
+-}
+-
+-static void vpfe_videobuf_queue(struct videobuf_queue *vq,
+-				struct videobuf_buffer *vb)
+-{
+-	/* Get the file handle object and device object */
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-	unsigned long flags;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_queue\n");
+-
+-	/* add the buffer to the DMA queue */
+-	spin_lock_irqsave(&vpfe_dev->dma_queue_lock, flags);
+-	list_add_tail(&vb->queue, &vpfe_dev->dma_queue);
+-	spin_unlock_irqrestore(&vpfe_dev->dma_queue_lock, flags);
+-
+-	/* Change state of the buffer */
+-	vb->state = VIDEOBUF_QUEUED;
+-}
+-
+-static void vpfe_videobuf_release(struct videobuf_queue *vq,
+-				  struct videobuf_buffer *vb)
+-{
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-	unsigned long flags;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_videobuf_release\n");
+-
+-	/*
+-	 * We need to flush the buffer from the dma queue since
+-	 * they are de-allocated
+-	 */
+-	spin_lock_irqsave(&vpfe_dev->dma_queue_lock, flags);
+-	INIT_LIST_HEAD(&vpfe_dev->dma_queue);
+-	spin_unlock_irqrestore(&vpfe_dev->dma_queue_lock, flags);
+-	videobuf_dma_contig_free(vq, vb);
+-	vb->state = VIDEOBUF_NEEDS_INIT;
+-}
+-
+-static const struct videobuf_queue_ops vpfe_videobuf_qops = {
+-	.buf_setup      = vpfe_videobuf_setup,
+-	.buf_prepare    = vpfe_videobuf_prepare,
+-	.buf_queue      = vpfe_videobuf_queue,
+-	.buf_release    = vpfe_videobuf_release,
+-};
+-
+-/*
+- * vpfe_reqbufs. currently support REQBUF only once opening
+- * the device.
+- */
+-static int vpfe_reqbufs(struct file *file, void *priv,
+-			struct v4l2_requestbuffers *req_buf)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_reqbufs\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != req_buf->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buffer type\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	if (vpfe_dev->io_usrs != 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Only one IO user allowed\n");
+-		ret = -EBUSY;
+-		goto unlock_out;
+-	}
+-
+-	vpfe_dev->memory = req_buf->memory;
+-	videobuf_queue_dma_contig_init(&vpfe_dev->buffer_queue,
+-				&vpfe_videobuf_qops,
+-				vpfe_dev->pdev,
+-				&vpfe_dev->irqlock,
+-				req_buf->type,
+-				vpfe_dev->fmt.fmt.pix.field,
+-				sizeof(struct videobuf_buffer),
+-				fh, NULL);
+-
+-	fh->io_allowed = 1;
+-	vpfe_dev->io_usrs = 1;
+-	INIT_LIST_HEAD(&vpfe_dev->dma_queue);
+-	ret = videobuf_reqbufs(&vpfe_dev->buffer_queue, req_buf);
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_querybuf(struct file *file, void *priv,
+-			 struct v4l2_buffer *buf)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querybuf\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return  -EINVAL;
+-	}
+-
+-	if (vpfe_dev->memory != V4L2_MEMORY_MMAP) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid memory\n");
+-		return -EINVAL;
+-	}
+-	/* Call videobuf_querybuf to get information */
+-	return videobuf_querybuf(&vpfe_dev->buffer_queue, buf);
+-}
+-
+-static int vpfe_qbuf(struct file *file, void *priv,
+-		     struct v4l2_buffer *p)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_qbuf\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != p->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-
+-	/*
+-	 * If this file handle is not allowed to do IO,
+-	 * return error
+-	 */
+-	if (!fh->io_allowed) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
+-		return -EACCES;
+-	}
+-	return videobuf_qbuf(&vpfe_dev->buffer_queue, p);
+-}
+-
+-static int vpfe_dqbuf(struct file *file, void *priv,
+-		      struct v4l2_buffer *buf)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_dqbuf\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-	return videobuf_dqbuf(&vpfe_dev->buffer_queue,
+-				      buf, file->f_flags & O_NONBLOCK);
+-}
+-
+-/*
+- * vpfe_calculate_offsets : This function calculates buffers offset
+- * for top and bottom field
+- */
+-static void vpfe_calculate_offsets(struct vpfe_device *vpfe_dev)
+-{
+-	struct v4l2_rect image_win;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_calculate_offsets\n");
+-
+-	ccdc_dev->hw_ops.get_image_window(&image_win);
+-	vpfe_dev->field_off = image_win.height * image_win.width;
+-}
+-
+-/* vpfe_start_ccdc_capture: start streaming in ccdc/isif */
+-static void vpfe_start_ccdc_capture(struct vpfe_device *vpfe_dev)
+-{
+-	ccdc_dev->hw_ops.enable(1);
+-	if (ccdc_dev->hw_ops.enable_out_to_sdram)
+-		ccdc_dev->hw_ops.enable_out_to_sdram(1);
+-	vpfe_dev->started = 1;
+-}
+-
+-/*
+- * vpfe_streamon. Assume the DMA queue is not empty.
+- * application is expected to call QBUF before calling
+- * this ioctl. If not, driver returns error
+- */
+-static int vpfe_streamon(struct file *file, void *priv,
+-			 enum v4l2_buf_type buf_type)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	struct vpfe_subdev_info *sdinfo;
+-	unsigned long addr;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_streamon\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf_type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-
+-	/* If file handle is not allowed IO, return error */
+-	if (!fh->io_allowed) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
+-		return -EACCES;
+-	}
+-
+-	sdinfo = vpfe_dev->current_subdev;
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					video, s_stream, 1);
+-
+-	if (ret && (ret != -ENOIOCTLCMD)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "stream on failed in subdev\n");
+-		return -EINVAL;
+-	}
+-
+-	/* If buffer queue is empty, return error */
+-	if (list_empty(&vpfe_dev->buffer_queue.stream)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "buffer queue is empty\n");
+-		return -EIO;
+-	}
+-
+-	/* Call videobuf_streamon to start streaming * in videobuf */
+-	ret = videobuf_streamon(&vpfe_dev->buffer_queue);
+-	if (ret)
+-		return ret;
+-
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		goto streamoff;
+-	/* Get the next frame from the buffer queue */
+-	vpfe_dev->next_frm = list_entry(vpfe_dev->dma_queue.next,
+-					struct videobuf_buffer, queue);
+-	vpfe_dev->cur_frm = vpfe_dev->next_frm;
+-	/* Remove buffer from the buffer queue */
+-	list_del(&vpfe_dev->cur_frm->queue);
+-	/* Mark state of the current frame to active */
+-	vpfe_dev->cur_frm->state = VIDEOBUF_ACTIVE;
+-	/* Initialize field_id and started member */
+-	vpfe_dev->field_id = 0;
+-	addr = videobuf_to_dma_contig(vpfe_dev->cur_frm);
+-
+-	/* Calculate field offset */
+-	vpfe_calculate_offsets(vpfe_dev);
+-
+-	if (vpfe_attach_irq(vpfe_dev) < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			 "Error in attaching interrupt handle\n");
+-		ret = -EFAULT;
+-		goto unlock_out;
+-	}
+-	if (ccdc_dev->hw_ops.configure() < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			 "Error in configuring ccdc\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-	ccdc_dev->hw_ops.setfbaddr((unsigned long)(addr));
+-	vpfe_start_ccdc_capture(vpfe_dev);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-streamoff:
+-	videobuf_streamoff(&vpfe_dev->buffer_queue);
+-	return ret;
+-}
+-
+-static int vpfe_streamoff(struct file *file, void *priv,
+-			  enum v4l2_buf_type buf_type)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_streamoff\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf_type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-
+-	/* If io is allowed for this file handle, return error */
+-	if (!fh->io_allowed) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
+-		return -EACCES;
+-	}
+-
+-	/* If streaming is not started, return error */
+-	if (!vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "device started\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	vpfe_stop_ccdc_capture(vpfe_dev);
+-	vpfe_detach_irq(vpfe_dev);
+-
+-	sdinfo = vpfe_dev->current_subdev;
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					video, s_stream, 0);
+-
+-	if (ret && (ret != -ENOIOCTLCMD))
+-		v4l2_err(&vpfe_dev->v4l2_dev, "stream off failed in subdev\n");
+-	ret = videobuf_streamoff(&vpfe_dev->buffer_queue);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_g_pixelaspect(struct file *file, void *priv,
+-			      int type, struct v4l2_fract *f)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_pixelaspect\n");
+-
+-	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-	/* If std_index is invalid, then just return (== 1:1 aspect) */
+-	if (vpfe_dev->std_index >= ARRAY_SIZE(vpfe_standards))
+-		return 0;
+-
+-	*f = vpfe_standards[vpfe_dev->std_index].pixelaspect;
+-	return 0;
+-}
+-
+-static int vpfe_g_selection(struct file *file, void *priv,
+-			    struct v4l2_selection *sel)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_selection\n");
+-
+-	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-
+-	switch (sel->target) {
+-	case V4L2_SEL_TGT_CROP:
+-		sel->r = vpfe_dev->crop;
+-		break;
+-	case V4L2_SEL_TGT_CROP_DEFAULT:
+-	case V4L2_SEL_TGT_CROP_BOUNDS:
+-		sel->r.width = vpfe_standards[vpfe_dev->std_index].width;
+-		sel->r.height = vpfe_standards[vpfe_dev->std_index].height;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static int vpfe_s_selection(struct file *file, void *priv,
+-			    struct v4l2_selection *sel)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct v4l2_rect rect = sel->r;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_selection\n");
+-
+-	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE ||
+-	    sel->target != V4L2_SEL_TGT_CROP)
+-		return -EINVAL;
+-
+-	if (vpfe_dev->started) {
+-		/* make sure streaming is not started */
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"Cannot change crop when streaming is ON\n");
+-		return -EBUSY;
+-	}
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	if (rect.top < 0 || rect.left < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"doesn't support negative values for top & left\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-
+-	/* adjust the width to 16 pixel boundary */
+-	rect.width = ((rect.width + 15) & ~0xf);
+-
+-	/* make sure parameters are valid */
+-	if ((rect.left + rect.width >
+-		vpfe_dev->std_info.active_pixels) ||
+-	    (rect.top + rect.height >
+-		vpfe_dev->std_info.active_lines)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Error in S_SELECTION params\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-	ccdc_dev->hw_ops.set_image_window(&rect);
+-	vpfe_dev->fmt.fmt.pix.width = rect.width;
+-	vpfe_dev->fmt.fmt.pix.height = rect.height;
+-	vpfe_dev->fmt.fmt.pix.bytesperline =
+-		ccdc_dev->hw_ops.get_line_length();
+-	vpfe_dev->fmt.fmt.pix.sizeimage =
+-		vpfe_dev->fmt.fmt.pix.bytesperline *
+-		vpfe_dev->fmt.fmt.pix.height;
+-	vpfe_dev->crop = rect;
+-	sel->r = rect;
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-/* vpfe capture ioctl operations */
+-static const struct v4l2_ioctl_ops vpfe_ioctl_ops = {
+-	.vidioc_querycap	 = vpfe_querycap,
+-	.vidioc_g_fmt_vid_cap    = vpfe_g_fmt_vid_cap,
+-	.vidioc_enum_fmt_vid_cap = vpfe_enum_fmt_vid_cap,
+-	.vidioc_s_fmt_vid_cap    = vpfe_s_fmt_vid_cap,
+-	.vidioc_try_fmt_vid_cap  = vpfe_try_fmt_vid_cap,
+-	.vidioc_enum_input	 = vpfe_enum_input,
+-	.vidioc_g_input		 = vpfe_g_input,
+-	.vidioc_s_input		 = vpfe_s_input,
+-	.vidioc_querystd	 = vpfe_querystd,
+-	.vidioc_s_std		 = vpfe_s_std,
+-	.vidioc_g_std		 = vpfe_g_std,
+-	.vidioc_reqbufs		 = vpfe_reqbufs,
+-	.vidioc_querybuf	 = vpfe_querybuf,
+-	.vidioc_qbuf		 = vpfe_qbuf,
+-	.vidioc_dqbuf		 = vpfe_dqbuf,
+-	.vidioc_streamon	 = vpfe_streamon,
+-	.vidioc_streamoff	 = vpfe_streamoff,
+-	.vidioc_g_pixelaspect	 = vpfe_g_pixelaspect,
+-	.vidioc_g_selection	 = vpfe_g_selection,
+-	.vidioc_s_selection	 = vpfe_s_selection,
+-};
+-
+-static struct vpfe_device *vpfe_initialize(void)
+-{
+-	struct vpfe_device *vpfe_dev;
+-
+-	/* Default number of buffers should be 3 */
+-	if ((numbuffers > 0) &&
+-	    (numbuffers < config_params.min_numbuffers))
+-		numbuffers = config_params.min_numbuffers;
+-
+-	/*
+-	 * Set buffer size to min buffers size if invalid buffer size is
+-	 * given
+-	 */
+-	if (bufsize < config_params.min_bufsize)
+-		bufsize = config_params.min_bufsize;
+-
+-	config_params.numbuffers = numbuffers;
+-
+-	if (numbuffers)
+-		config_params.device_bufsize = bufsize;
+-
+-	/* Allocate memory for device objects */
+-	vpfe_dev = kzalloc(sizeof(*vpfe_dev), GFP_KERNEL);
+-
+-	return vpfe_dev;
+-}
+-
+-/*
+- * vpfe_probe : This function creates device entries by register
+- * itself to the V4L2 driver and initializes fields of each
+- * device objects
+- */
+-static int vpfe_probe(struct platform_device *pdev)
+-{
+-	struct vpfe_subdev_info *sdinfo;
+-	struct vpfe_config *vpfe_cfg;
+-	struct resource *res1;
+-	struct vpfe_device *vpfe_dev;
+-	struct i2c_adapter *i2c_adap;
+-	struct video_device *vfd;
+-	int ret, i, j;
+-	int num_subdevs = 0;
+-
+-	/* Get the pointer to the device object */
+-	vpfe_dev = vpfe_initialize();
+-
+-	if (!vpfe_dev) {
+-		v4l2_err(pdev->dev.driver,
+-			"Failed to allocate memory for vpfe_dev\n");
+-		return -ENOMEM;
+-	}
+-
+-	vpfe_dev->pdev = &pdev->dev;
+-
+-	if (!pdev->dev.platform_data) {
+-		v4l2_err(pdev->dev.driver, "Unable to get vpfe config\n");
+-		ret = -ENODEV;
+-		goto probe_free_dev_mem;
+-	}
+-
+-	vpfe_cfg = pdev->dev.platform_data;
+-	vpfe_dev->cfg = vpfe_cfg;
+-	if (!vpfe_cfg->ccdc || !vpfe_cfg->card_name || !vpfe_cfg->sub_devs) {
+-		v4l2_err(pdev->dev.driver, "null ptr in vpfe_cfg\n");
+-		ret = -ENOENT;
+-		goto probe_free_dev_mem;
+-	}
+-
+-	/* Allocate memory for ccdc configuration */
+-	ccdc_cfg = kmalloc(sizeof(*ccdc_cfg), GFP_KERNEL);
+-	if (!ccdc_cfg) {
+-		ret = -ENOMEM;
+-		goto probe_free_dev_mem;
+-	}
+-
+-	mutex_lock(&ccdc_lock);
+-
+-	strscpy(ccdc_cfg->name, vpfe_cfg->ccdc, sizeof(ccdc_cfg->name));
+-	/* Get VINT0 irq resource */
+-	res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res1) {
+-		v4l2_err(pdev->dev.driver,
+-			 "Unable to get interrupt for VINT0\n");
+-		ret = -ENODEV;
+-		goto probe_free_ccdc_cfg_mem;
+-	}
+-	vpfe_dev->ccdc_irq0 = res1->start;
+-
+-	/* Get VINT1 irq resource */
+-	res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 1);
+-	if (!res1) {
+-		v4l2_err(pdev->dev.driver,
+-			 "Unable to get interrupt for VINT1\n");
+-		ret = -ENODEV;
+-		goto probe_free_ccdc_cfg_mem;
+-	}
+-	vpfe_dev->ccdc_irq1 = res1->start;
+-
+-	ret = request_irq(vpfe_dev->ccdc_irq0, vpfe_isr, 0,
+-			  "vpfe_capture0", vpfe_dev);
+-
+-	if (0 != ret) {
+-		v4l2_err(pdev->dev.driver, "Unable to request interrupt\n");
+-		goto probe_free_ccdc_cfg_mem;
+-	}
+-
+-	vfd = &vpfe_dev->video_dev;
+-	/* Initialize field of video device */
+-	vfd->release		= video_device_release_empty;
+-	vfd->fops		= &vpfe_fops;
+-	vfd->ioctl_ops		= &vpfe_ioctl_ops;
+-	vfd->tvnorms		= 0;
+-	vfd->v4l2_dev		= &vpfe_dev->v4l2_dev;
+-	vfd->device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+-	snprintf(vfd->name, sizeof(vfd->name),
+-		 "%s_V%d.%d.%d",
+-		 CAPTURE_DRV_NAME,
+-		 (VPFE_CAPTURE_VERSION_CODE >> 16) & 0xff,
+-		 (VPFE_CAPTURE_VERSION_CODE >> 8) & 0xff,
+-		 (VPFE_CAPTURE_VERSION_CODE) & 0xff);
+-
+-	ret = v4l2_device_register(&pdev->dev, &vpfe_dev->v4l2_dev);
+-	if (ret) {
+-		v4l2_err(pdev->dev.driver,
+-			"Unable to register v4l2 device.\n");
+-		goto probe_out_release_irq;
+-	}
+-	v4l2_info(&vpfe_dev->v4l2_dev, "v4l2 device registered\n");
+-	spin_lock_init(&vpfe_dev->irqlock);
+-	spin_lock_init(&vpfe_dev->dma_queue_lock);
+-	mutex_init(&vpfe_dev->lock);
+-
+-	/* Initialize field of the device objects */
+-	vpfe_dev->numbuffers = config_params.numbuffers;
+-
+-	/* register video device */
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-		"trying to register vpfe device.\n");
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-		"video_dev=%p\n", &vpfe_dev->video_dev);
+-	vpfe_dev->fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-	ret = video_register_device(&vpfe_dev->video_dev,
+-				    VFL_TYPE_VIDEO, -1);
+-
+-	if (ret) {
+-		v4l2_err(pdev->dev.driver,
+-			"Unable to register video device.\n");
+-		goto probe_out_v4l2_unregister;
+-	}
+-
+-	v4l2_info(&vpfe_dev->v4l2_dev, "video device registered\n");
+-	/* set the driver data in platform device */
+-	platform_set_drvdata(pdev, vpfe_dev);
+-	/* set driver private data */
+-	video_set_drvdata(&vpfe_dev->video_dev, vpfe_dev);
+-	i2c_adap = i2c_get_adapter(vpfe_cfg->i2c_adapter_id);
+-	num_subdevs = vpfe_cfg->num_subdevs;
+-	vpfe_dev->sd = kmalloc_array(num_subdevs,
+-				     sizeof(*vpfe_dev->sd),
+-				     GFP_KERNEL);
+-	if (!vpfe_dev->sd) {
+-		ret = -ENOMEM;
+-		goto probe_out_video_unregister;
+-	}
+-
+-	for (i = 0; i < num_subdevs; i++) {
+-		struct v4l2_input *inps;
+-
+-		sdinfo = &vpfe_cfg->sub_devs[i];
+-
+-		/* Load up the subdevice */
+-		vpfe_dev->sd[i] =
+-			v4l2_i2c_new_subdev_board(&vpfe_dev->v4l2_dev,
+-						  i2c_adap,
+-						  &sdinfo->board_info,
+-						  NULL);
+-		if (vpfe_dev->sd[i]) {
+-			v4l2_info(&vpfe_dev->v4l2_dev,
+-				  "v4l2 sub device %s registered\n",
+-				  sdinfo->name);
+-			vpfe_dev->sd[i]->grp_id = sdinfo->grp_id;
+-			/* update tvnorms from the sub devices */
+-			for (j = 0; j < sdinfo->num_inputs; j++) {
+-				inps = &sdinfo->inputs[j];
+-				vfd->tvnorms |= inps->std;
+-			}
+-		} else {
+-			v4l2_info(&vpfe_dev->v4l2_dev,
+-				  "v4l2 sub device %s register fails\n",
+-				  sdinfo->name);
+-			ret = -ENXIO;
+-			goto probe_sd_out;
+-		}
+-	}
+-
+-	/* set first sub device as current one */
+-	vpfe_dev->current_subdev = &vpfe_cfg->sub_devs[0];
+-	vpfe_dev->v4l2_dev.ctrl_handler = vpfe_dev->sd[0]->ctrl_handler;
+-
+-	/* We have at least one sub device to work with */
+-	mutex_unlock(&ccdc_lock);
+-	return 0;
+-
+-probe_sd_out:
+-	kfree(vpfe_dev->sd);
+-probe_out_video_unregister:
+-	video_unregister_device(&vpfe_dev->video_dev);
+-probe_out_v4l2_unregister:
+-	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
+-probe_out_release_irq:
+-	free_irq(vpfe_dev->ccdc_irq0, vpfe_dev);
+-probe_free_ccdc_cfg_mem:
+-	kfree(ccdc_cfg);
+-	mutex_unlock(&ccdc_lock);
+-probe_free_dev_mem:
+-	kfree(vpfe_dev);
+-	return ret;
+-}
+-
+-/*
+- * vpfe_remove : It un-register device from V4L2 driver
+- */
+-static int vpfe_remove(struct platform_device *pdev)
+-{
+-	struct vpfe_device *vpfe_dev = platform_get_drvdata(pdev);
+-
+-	v4l2_info(pdev->dev.driver, "vpfe_remove\n");
+-
+-	free_irq(vpfe_dev->ccdc_irq0, vpfe_dev);
+-	kfree(vpfe_dev->sd);
+-	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
+-	video_unregister_device(&vpfe_dev->video_dev);
+-	kfree(vpfe_dev);
+-	kfree(ccdc_cfg);
+-	return 0;
+-}
+-
+-static int vpfe_suspend(struct device *dev)
+-{
+-	return 0;
+-}
+-
+-static int vpfe_resume(struct device *dev)
+-{
+-	return 0;
+-}
+-
+-static const struct dev_pm_ops vpfe_dev_pm_ops = {
+-	.suspend = vpfe_suspend,
+-	.resume = vpfe_resume,
+-};
+-
+-static struct platform_driver vpfe_driver = {
+-	.driver = {
+-		.name = CAPTURE_DRV_NAME,
+-		.pm = &vpfe_dev_pm_ops,
+-	},
+-	.probe = vpfe_probe,
+-	.remove = vpfe_remove,
+-};
+-
+-module_platform_driver(vpfe_driver);
+diff --git a/include/media/davinci/vpfe_capture.h b/include/media/davinci/vpfe_capture.h
+deleted file mode 100644
+index 4ad53031e2f7..000000000000
+--- a/include/media/davinci/vpfe_capture.h
++++ /dev/null
+@@ -1,177 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- */
+-
+-#ifndef _VPFE_CAPTURE_H
+-#define _VPFE_CAPTURE_H
+-
+-#ifdef __KERNEL__
+-
+-/* Header files */
+-#include <media/v4l2-dev.h>
+-#include <linux/videodev2.h>
+-#include <linux/clk.h>
+-#include <linux/i2c.h>
+-#include <media/v4l2-fh.h>
+-#include <media/v4l2-ioctl.h>
+-#include <media/v4l2-device.h>
+-#include <media/videobuf-dma-contig.h>
+-#include <media/davinci/vpfe_types.h>
+-
+-#define VPFE_CAPTURE_NUM_DECODERS        5
+-
+-/* Macros */
+-#define VPFE_MAJOR_RELEASE              0
+-#define VPFE_MINOR_RELEASE              0
+-#define VPFE_BUILD                      1
+-#define VPFE_CAPTURE_VERSION_CODE       ((VPFE_MAJOR_RELEASE << 16) | \
+-					(VPFE_MINOR_RELEASE << 8)  | \
+-					VPFE_BUILD)
+-
+-#define CAPTURE_DRV_NAME		"vpfe-capture"
+-
+-struct vpfe_pixel_format {
+-	u32 pixelformat;
+-	/* bytes per pixel */
+-	int bpp;
+-};
+-
+-struct vpfe_std_info {
+-	int active_pixels;
+-	int active_lines;
+-	/* current frame format */
+-	int frame_format;
+-};
+-
+-struct vpfe_route {
+-	u32 input;
+-	u32 output;
+-};
+-
+-struct vpfe_subdev_info {
+-	/* Sub device name */
+-	char name[32];
+-	/* Sub device group id */
+-	int grp_id;
+-	/* Number of inputs supported */
+-	int num_inputs;
+-	/* inputs available at the sub device */
+-	struct v4l2_input *inputs;
+-	/* Sub dev routing information for each input */
+-	struct vpfe_route *routes;
+-	/* check if sub dev supports routing */
+-	int can_route;
+-	/* ccdc bus/interface configuration */
+-	struct vpfe_hw_if_param ccdc_if_params;
+-	/* i2c subdevice board info */
+-	struct i2c_board_info board_info;
+-};
+-
+-struct vpfe_config {
+-	/* Number of sub devices connected to vpfe */
+-	int num_subdevs;
+-	/* i2c bus adapter no */
+-	int i2c_adapter_id;
+-	/* information about each subdev */
+-	struct vpfe_subdev_info *sub_devs;
+-	/* evm card info */
+-	char *card_name;
+-	/* ccdc name */
+-	char *ccdc;
+-	/* vpfe clock */
+-	struct clk *vpssclk;
+-	struct clk *slaveclk;
+-	/* Function for Clearing the interrupt */
+-	void (*clr_intr)(int vdint);
+-};
+-
+-struct vpfe_device {
+-	/* V4l2 specific parameters */
+-	/* Identifies video device for this channel */
+-	struct video_device video_dev;
+-	/* sub devices */
+-	struct v4l2_subdev **sd;
+-	/* vpfe cfg */
+-	struct vpfe_config *cfg;
+-	/* V4l2 device */
+-	struct v4l2_device v4l2_dev;
+-	/* parent device */
+-	struct device *pdev;
+-	/* number of open instances of the channel */
+-	u32 usrs;
+-	/* Indicates id of the field which is being displayed */
+-	u32 field_id;
+-	/* flag to indicate whether decoder is initialized */
+-	u8 initialized;
+-	/* current interface type */
+-	struct vpfe_hw_if_param vpfe_if_params;
+-	/* ptr to currently selected sub device */
+-	struct vpfe_subdev_info *current_subdev;
+-	/* current input at the sub device */
+-	int current_input;
+-	/* Keeps track of the information about the standard */
+-	struct vpfe_std_info std_info;
+-	/* std index into std table */
+-	int std_index;
+-	/* CCDC IRQs used when CCDC/ISIF output to SDRAM */
+-	unsigned int ccdc_irq0;
+-	unsigned int ccdc_irq1;
+-	/* number of buffers in fbuffers */
+-	u32 numbuffers;
+-	/* List of buffer pointers for storing frames */
+-	u8 *fbuffers[VIDEO_MAX_FRAME];
+-	/* Pointer pointing to current v4l2_buffer */
+-	struct videobuf_buffer *cur_frm;
+-	/* Pointer pointing to next v4l2_buffer */
+-	struct videobuf_buffer *next_frm;
+-	/*
+-	 * This field keeps track of type of buffer exchange mechanism
+-	 * user has selected
+-	 */
+-	enum v4l2_memory memory;
+-	/* Used to store pixel format */
+-	struct v4l2_format fmt;
+-	/*
+-	 * used when IMP is chained to store the crop window which
+-	 * is different from the image window
+-	 */
+-	struct v4l2_rect crop;
+-	/* Buffer queue used in video-buf */
+-	struct videobuf_queue buffer_queue;
+-	/* Queue of filled frames */
+-	struct list_head dma_queue;
+-	/* Used in video-buf */
+-	spinlock_t irqlock;
+-	/* IRQ lock for DMA queue */
+-	spinlock_t dma_queue_lock;
+-	/* lock used to access this structure */
+-	struct mutex lock;
+-	/* number of users performing IO */
+-	u32 io_usrs;
+-	/* Indicates whether streaming started */
+-	u8 started;
+-	/*
+-	 * offset where second field starts from the starting of the
+-	 * buffer for field separated YCbCr formats
+-	 */
+-	u32 field_off;
+-};
+-
+-/* File handle structure */
+-struct vpfe_fh {
+-	struct v4l2_fh fh;
+-	struct vpfe_device *vpfe_dev;
+-	/* Indicates whether this file handle is doing IO */
+-	u8 io_allowed;
+-};
+-
+-struct vpfe_config_params {
+-	u8 min_numbuffers;
+-	u8 numbuffers;
+-	u32 min_bufsize;
+-	u32 device_bufsize;
+-};
+-
+-#endif				/* End of __KERNEL__ */
+-#endif				/* _DAVINCI_VPFE_H */
 -- 
 2.29.2
 
