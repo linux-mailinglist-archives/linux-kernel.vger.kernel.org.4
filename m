@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232EE6048D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6646048DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbiJSOLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S230241AbiJSOMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJSOLJ (ORCPT
+        with ESMTP id S231899AbiJSOLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:11:09 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75E319DDBB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:52:54 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id p16so14478279iod.6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wRKwNz88o4gj17VAi9OZQ8T/l8HaVBhEjUDiBHaMoMs=;
-        b=dBAF6WoqBmCqBBYsdLshsaD3yOQN2dbPfkWgywOqejojsaydEifEbTR/Q/DDDNEYAW
-         ukRlPtUHwZggrJdxjb4a3fR+a1r5kmldo99WEY6HwmQuafwSjj0LgtBHGhmftKZY7pvQ
-         SB+SlW5tJXrWW0tmiyet7d0Y42GypALv4NP6U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wRKwNz88o4gj17VAi9OZQ8T/l8HaVBhEjUDiBHaMoMs=;
-        b=2XFUhwZKR/y8PBtgFA20KX0in81gZTU0u85AhcG9UHjyVtUbvSzpgkL/51Y9yHcOJn
-         8avKMHM8LLYiOCgZZfjsSdSh6zbNSReOST6pBiigUcRPgaX3VVdth2VAQDEovzMkVpSq
-         KClhNYLjW6juRui1/lHM2yQFiAYLjWk6IOkSVqHxZG86our10R755HABIFvnNOyowe4J
-         kZTM5xTuTUyaqAPE1K+Ej+P0ezZY0lOJaI/Ji3kRmeJw4RUe2h2THrfyQ/TrEVJSYTh9
-         1/2Ip238EDk0Wisk0g9Of9JG6s9C7HFSpjeRxp9mu6kzwEuQNtZmxMGhVFM98G8XsNxQ
-         oNMw==
-X-Gm-Message-State: ACrzQf20Fnt/0dGWDZ31G4gUTtDct4kGvSleEh/GPTOU3WN8HzAaq0n+
-        U5qEjKcFEsW+Di+4WldDSou3NfB0jCyX4SOesjtcNQ==
-X-Google-Smtp-Source: AMsMyM7xo57sjg5CZYmJqt3nYLfznwmRrtPL6O20vHTB5kTxwlkEwufQtVzq7zAT4M7wnPlZSVV6wFh+LP9ZJKc8rnY=
-X-Received: by 2002:a05:6638:2393:b0:363:6c5d:9584 with SMTP id
- q19-20020a056638239300b003636c5d9584mr6333427jat.232.1666187494375; Wed, 19
- Oct 2022 06:51:34 -0700 (PDT)
+        Wed, 19 Oct 2022 10:11:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDA41AC1FB;
+        Wed, 19 Oct 2022 06:54:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0049DCE2241;
+        Wed, 19 Oct 2022 13:51:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F4FC433C1;
+        Wed, 19 Oct 2022 13:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666187501;
+        bh=jrTe3eMGW5ffNFtDxkHTlei5AgA/Ul8ndLjqKSldIso=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pyi9TrqIWBfDG8wOv1p0sfjY/8fUV82A51FEx8fgY7z1jjdXnqBj6gUtvN0ZeglC1
+         Gmjtp1uoz/bFzZweXV99Y/82hK0HWoxzY8nH2j2QZ6xThw160k1P2WGTJlTfe5By2R
+         WpQGE4MXa5UtcdWK7bU1jj7/ZX4a/gV3WchLmQvOpPVlnb0DWgRS+BEU5ZMpegHyRX
+         ti1vX4DKlOVGQucE20mVjMj2zf9/k8GSi05iWTkV5ce39r4A1COk5uCxq3HdUijNXC
+         tOAv6DLGnvy5s133JuuG4Qs1497XHlQqv8p09/hOCRjJ1I17DFsf9jcI0EJEbOPoSW
+         1r+nD/20LJUFw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ol9Tk-0006YN-GW; Wed, 19 Oct 2022 15:51:29 +0200
+Date:   Wed, 19 Oct 2022 15:51:28 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 08/15] phy: qcom-qmp-pcie: add register init helper
+Message-ID: <Y1AA4ISrWQbOoaju@hovoldconsulting.com>
+References: <20221019113552.22353-1-johan+linaro@kernel.org>
+ <20221019113552.22353-9-johan+linaro@kernel.org>
+ <0f1fff20-772f-c4d1-f803-f1824ef23780@linaro.org>
+ <Y0/63eH82t2zXFi5@hovoldconsulting.com>
+ <0b0c752c-1f3d-bf5a-ade7-e2f8acac92a4@linaro.org>
 MIME-Version: 1.0
-References: <20221019114357.yipijpetxz7ns5aq@airbuntu> <F9BCD313-15BA-429C-B50C-1391DDC1239B@joelfernandes.org>
- <Y0/+ieCymugrjheC@localhost.localdomain>
-In-Reply-To: <Y0/+ieCymugrjheC@localhost.localdomain>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 19 Oct 2022 09:51:24 -0400
-Message-ID: <CAEXW_YRAXUmc0zMTo8OowVk2ZNuYfBsvZDXMkVH35aWkpEUo2A@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/11] Reviving the Proxy Execution Series
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        "Connor O'Brien" <connoro@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b0c752c-1f3d-bf5a-ade7-e2f8acac92a4@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,102 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 9:41 AM Juri Lelli <juri.lelli@redhat.com> wrote:
->
-> On 19/10/22 08:23, Joel Fernandes wrote:
-> >
-> >
-> > > On Oct 19, 2022, at 7:43 AM, Qais Yousef <qyousef@layalina.io> wrote:
-> > >
-> > > =EF=BB=BFOn 10/17/22 02:23, Joel Fernandes wrote:
-> > >
-> > >> I ran a test to check CFS time sharing. The accounting on top is con=
-fusing,
-> > >> but ftrace confirms the proxying happening.
-> > >>
-> > >> Task A - pid 122
-> > >> Task B - pid 123
-> > >> Task C - pid 121
-> > >> Task D - pid 124
-> > >>
-> > >> Here D and B just spin all the time. C is lock owner (in-kernel mute=
-x) and
-> > >> spins all the time, while A blocks on the same in-kernel mutex and r=
-emains
-> > >> blocked.
-> > >>
-> > >> Then I did "top -H" while the test was running which gives below out=
-put.
-> > >> The first column is PID, and the third-last column is CPU percentage=
-.
-> > >>
-> > >> Without PE:
-> > >>  121 root      20   0   99496   4   0 R  33.6   0.0   0:02.76 t  (ta=
-sk C)
-> > >>  123 root      20   0   99496   4   0 R  33.2   0.0   0:02.75 t  (ta=
-sk B)
-> > >>  124 root      20   0   99496   4   0 R  33.2   0.0   0:02.75 t  (ta=
-sk D)
-> > >>
-> > >> With PE:
-> > >>  PID
-> > >>  122 root      20   0   99496   4   0 D  25.3   0.0   0:22.21 t  (ta=
-sk A)
-> > >>  121 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (ta=
-sk C)
-> > >>  123 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (ta=
-sk B)
-> > >>  124 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (ta=
-sk D)
-> > >>
-> > >> With PE, I was expecting 2 threads with 25% and 1 thread with 50%. I=
-nstead I
-> > >> get 4 threads with 25% in the top. Ftrace confirms that the D-state =
-task is
-> > >> in fact not running and proxying to the owner task so everything see=
-ms
-> > >> working correctly, but the accounting seems confusing, as in, it is =
-confusing
-> > >> to see the D-state task task taking 25% CPU when it is obviously "sl=
-eeping".
-> > >>
-> > >> Yeah, yeah, I know D is proxying for C (while being in the uninterru=
-ptible
-> > >> sleep state), so may be it is OK then, but I did want to bring this =
-up :-)
-> > >
-> > > I seem to remember Valentin raised similar issue about how userspace =
-view can
-> > > get confusing/misleading:
-> > >
-> > >    https://www.youtube.com/watch?v=3DUQNOT20aCEg&t=3D3h21m41s
-> >
-> > Thanks for the pointer! Glad to see the consensus was that this is not
-> > acceptable.
-> >
-> > I think we ought to write a patch to fix the accounting, for this
-> > series. I propose adding 2 new entries to proc/pid/stat which I think
-> > Juri was also sort of was alluding to:
-> >
-> > 1. Donated time.
-> > 2. Proxied time.
->
-> Sounds like a useful addition, at least from a debugging point of view.
->
-> > User space can then add or subtract this, to calculate things
-> > correctly. Or just display them in new columns. I think it will also
-> > actually show how much the proxying is happening for a use case.
->
-> Guess we'll however need to be backward compatible with old userspace?
-> Probably reporting the owner as running while proxied (as in the
-> comparison case vs. rtmutexes Valentin showed).
+On Wed, Oct 19, 2022 at 04:44:33PM +0300, Dmitry Baryshkov wrote:
+> On 19/10/2022 16:25, Johan Hovold wrote:
+> > On Wed, Oct 19, 2022 at 04:12:02PM +0300, Dmitry Baryshkov wrote:
+> >> On 19/10/2022 14:35, Johan Hovold wrote:
+> >>> Generalise the serdes initialisation helper so that it can be used to
+> >>> initialise all the PHY registers (e.g. serdes, tx, rx, pcs).
+> >>>
+> >>> Note that this defers the ungating of the PIPE clock somewhat, which is
+> >>> fine as it isn't needed until starting the PHY.
+> >>>
+> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> >>> ---
+> >>>    drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 51 +++++++-----------------
+> >>>    1 file changed, 15 insertions(+), 36 deletions(-)
+> >>>
 
-Hi Juri,
-Yes I was thinking of leaving the old metrics alone and just providing
-the new ones as additional fields in /proc/pid/stats . Then the tools
-adjust as needed with the new information. From kernel PoV we provide
-the maximum information.
+> >>> -static void qmp_pcie_pcs_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tables)
+> >>> -{
+> >>> -	void __iomem *pcs = qmp->pcs;
+> >>> -	void __iomem *pcs_misc = qmp->pcs_misc;
+> >>> -
+> >>> -	if (!tables)
+> >>> -		return;
+> >>>    
+> >>> -	qmp_pcie_configure(pcs, tables->pcs, tables->pcs_num);
+> >>> -	qmp_pcie_configure(pcs_misc, tables->pcs_misc, tables->pcs_misc_num);
+> >>> +	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
+> >>> +	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
+> >>
+> >> Nit: could we please keep it as `tables'?
+> > 
+> > I considered that but found that the longer identifier hurt
+> > readability so I prefer to use "tbls" here.
 
-Thanks,
+> I'd say, it's up to Vinod. I'd prefer the second version.
 
- - Joel
+Ultimately yes, but as the author of these patches I do have a say here.
+
+Johan
