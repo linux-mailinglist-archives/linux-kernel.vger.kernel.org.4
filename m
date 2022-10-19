@@ -2,108 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C2A605234
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2DC605236
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiJSVrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
+        id S230428AbiJSVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJSVq5 (ORCPT
+        with ESMTP id S230319AbiJSVrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:46:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D617917FD6B;
-        Wed, 19 Oct 2022 14:46:55 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666216013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/cyKDb3XuAnnMWhhd6eYOoPXNNHf1lClxqaTaQ49uDg=;
-        b=u7szAcElL4FD4zdTMsK9ly0/JK7AsxSQxYkmURiBrOAjAapP46G7OlrpWG3FE9YvmPwfTH
-        0t7VDO3hj0qCUfIfl8SvWL0m56X0XnWk3XkSt+iW34zthK1xu0vDYJ+ijqpg0Z1uOMJS5N
-        WEO2xeBOfASAJiIHV8Of78VvHhfNo58z1z89n87tZ3ztLZfZ2t2fYHpwmA5zqINAwPpi6Y
-        YFaMOpAqqg3FdsKqekNzAVfo8q7E3ylZYMSAAdZse1+GqKQ77w/1tUarXW3RJDnkZ3Dmyv
-        7jAvya+rBuxJOccUDj5vRsh1bZfhtPrWBFqhbshhDHHAGQJbq7GgFQMg4Mmvvg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666216013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/cyKDb3XuAnnMWhhd6eYOoPXNNHf1lClxqaTaQ49uDg=;
-        b=V8Q0tclyd6pF7o042cEzobv5Q4u/k+J2N2Phwo9Ih7K5/lA5mE3iK1J4+PjKtagT8wKssj
-        /ZDWVCTNtv9kqmCg==
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH printk v2 02/38] printk: Convert console_drivers list to
- hlist
-In-Reply-To: <Y1AbcjQP4TGPxpsv@kroah.com>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-3-john.ogness@linutronix.de>
- <Y1AbcjQP4TGPxpsv@kroah.com>
-Date:   Wed, 19 Oct 2022 23:52:53 +0206
-Message-ID: <87r0z332r6.fsf@jogness.linutronix.de>
+        Wed, 19 Oct 2022 17:47:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D79190461;
+        Wed, 19 Oct 2022 14:47:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96E72B825F6;
+        Wed, 19 Oct 2022 21:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360ADC433D6;
+        Wed, 19 Oct 2022 21:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666216033;
+        bh=2aXD5vrDRaBVh3BhQ2ePbMswz4yUwVdOZh4IViQZ+34=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=J/M69iWZC5lMDu/V51xBtX5mmmQdB3O8QpKcmA0O05y942ygU3VwNIQRmnhr5loHv
+         Beu93CRJqEQYuhb9lNtZIuvI56TJiSR7kYNBddnceg8iHr/ecprSrl9yJplihw2tM3
+         SzCYNk96GtarBQPNdKKHEkLUJ1CtRkqR8J7do4/lVv9D6cWaW5kX6pagADAt3Oxo7k
+         gf5qdzlIKFarZuoP1JSljljPk0iO5Df8bB8rTC9R1xCK9wT1ML3Z+kQHx8HcYdiR9o
+         oovZx/1L/RmbkcFhxWkPgmHnYQTAmLO4TTB8LJAgUDQVUJXX86JSqnbMp+usqHOjsF
+         Ne569u/0FFQhw==
+Date:   Wed, 19 Oct 2022 16:47:11 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the pci-current
+ tree
+Message-ID: <20221019214711.GA48619@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020012608.20a5f3dc@canb.auug.org.au>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
->> index e4f1e7478b52..867becc40021 100644
->> --- a/kernel/printk/printk.c
->> +++ b/kernel/printk/printk.c
->> @@ -3229,32 +3244,30 @@ int unregister_console(struct console *console)
->>  	if (res > 0)
->>  		return 0;
->>  
->> -	res = -ENODEV;
->>  	console_lock();
->> -	if (console_drivers == console) {
->> -		console_drivers=console->next;
->> -		res = 0;
->> -	} else {
->> -		for_each_console(con) {
->> -			if (con->next == console) {
->> -				con->next = console->next;
->> -				res = 0;
->> -				break;
->> -			}
->> -		}
->> +
->> +	/* Disable it unconditionally */
->> +	console->flags &= ~CON_ENABLED;
->> +
->> +	if (hlist_unhashed(&console->node)) {
->
-> How can this ever be hit?  The console lock is held, so it shouldn't
-> have gone away already.  Or am I missing something else here?
+On Thu, Oct 20, 2022 at 01:26:08AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   22286757d2f5 ("MAINTAINERS: Update Kishon's email address in PCI endpoint subsystem")
+> 
+> is missing a Signed-off-by from its committer.
 
-Mainline also has this check. I expect it is for the case that some code
-tries to call unregister_console() for a console that is not
-registered.
-
-Since register_console() does not return if it succeeded, I suppose some
-code somewhere my try to unregister without knowing that it never
-registered in the first place.
-
-> Other than that minor question, looks good to me!
->
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Thanks!
-
-John
+Sorry, fixed.
