@@ -2,83 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92450604752
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE9A604795
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbiJSNhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S232993AbiJSNls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbiJSNgS (ORCPT
+        with ESMTP id S231907AbiJSNlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:36:18 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C119D111B87;
-        Wed, 19 Oct 2022 06:25:01 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id h10so11322677qvq.7;
-        Wed, 19 Oct 2022 06:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mFfOKrSEeL0UXwzGyKKR42maVOfwYSJrO2jpz4ISm5g=;
-        b=oEb/9UFJVJ1DUie0yjY5fT10G5iGBi0uUTPP70ketsbo4umyLVGdnx3d/aZGpfvxcF
-         Ib2oM8O1Q2imo4lcvh1OkFbrYSJtb3p3bpigOqIsfAw6vN0VZG3z+0jSOA9S2R3yVPPZ
-         9PqT88//f3CB3MFe/9oQW0cbCmiOxhX4ihi5MLoZ1ZAxcmY3GSNVeuJ91b237Q9xYZbD
-         BjkZ9Rz7N9zJ/kqcoEUTpZ/PjTWOsv9LznK3wTGVnS0Rz0/2Jbc9h7pzuOiKIefLyd7m
-         sFQWyH/l6G9cNVyjudR0OQk75nMRAOmyl9yolOsSegJs7/Bziy1M2U6WdNtV/dChGFZm
-         JAtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mFfOKrSEeL0UXwzGyKKR42maVOfwYSJrO2jpz4ISm5g=;
-        b=QLj3he3ie8pR6yjDTg/mwPDcKoU9gVOw+QhQ+b5P+NTyDuPS+V2rQaEm6v+Km4fhaq
-         NbV9wENS6LGMOHJOY8mOHveZqzCBmU5BizzaPVTeOWLli4OylNZLa+PFBcCGAAWffU1H
-         bOWo+oR18sAFyS6v9+/v1YkhTyuX+KONgsjeWbrjq2ps8M9/MRza1HWQU37+r+WHdwZ/
-         Psh1YSDAMFM0y5XPa7/4xYw895yWVALnfzzgJvZZw0RtQV03iyTS2D6Z/mNSDbraSpnq
-         F/vqwor0OGuibUQuF4RxgNlzVWfSBwbYJHRhpovbDo+TfjtTIgTsQVZruKUkQpONUsdJ
-         6YIw==
-X-Gm-Message-State: ACrzQf1uzez4MvKBBS9Zz45jcsbVRSHa82iVIzLXSY2N3MVmPOH4Z007
-        7pwbq2qLLb7VvQNNM+Uu4uZ5baRDjt0XHshHEic=
-X-Google-Smtp-Source: AMsMyM7UQ1cRInwO7QzwiBVaRqvuznwLkROtbTi4bEX3MStqpQ7bM3v6mjbOepnYFYET36f9YLNkXOR8KwzQnvCkV78=
-X-Received: by 2002:a05:6214:29ee:b0:4b1:c1d2:6635 with SMTP id
- jv14-20020a05621429ee00b004b1c1d26635mr6490797qvb.82.1666185821613; Wed, 19
- Oct 2022 06:23:41 -0700 (PDT)
+        Wed, 19 Oct 2022 09:41:23 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE6155DA9;
+        Wed, 19 Oct 2022 06:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666186147; x=1697722147;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=maPvHabENdJbu0SifYloWSh+XeE9JeazxOD/pHHB/rU=;
+  b=ePpJqt9a4rYoKf3f12FBETQeEqSJKEclKShJ3msgjKvjAPf7WfCLI1pf
+   v/r7NAhjqY+sXAHXt5vodSFw96vWkPNKLGRhe0pahKlQlXpL++/LXbVpr
+   kNF5fTwmx4O6rTERYAPEXWBuIeLmNoYU6Tlpzm1LBIOP0KgEb9AtLbeRg
+   lXM3vlo4Mpb1lJJLLQrQOUqcZ58JEi7L+HUI+yhK30BgKRuvvCNoUeqa6
+   5FLxBsKLf7t2mkQ0630JT7P1FhtIjFThhPj7EVrXK7QHE0WXRcnU+wSfV
+   ZPYEcaJ0VotbFFJVd34yECs4DH8tU9SCPoxaizR7DvaQXGAc9rZe7bvqv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="293803646"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="293803646"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 06:27:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="624134706"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="624134706"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 19 Oct 2022 06:27:39 -0700
+Date:   Wed, 19 Oct 2022 21:23:08 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 5/8] KVM: Register/unregister the guest private memory
+ regions
+Message-ID: <20221019132308.GA3496045@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-6-chao.p.peng@linux.intel.com>
+ <CA+EHjTxukqBfaN6D+rPOiX83zkGknHEQ16J0k6GQSdL_-e9C6g@mail.gmail.com>
+ <20221012023516.GA3218049@chaop.bj.intel.com>
+ <CA+EHjTyGyGL+ox81=jdtoHERtHPV=P7wJub=3j7chdijyq-AgA@mail.gmail.com>
+ <Y03UiYYioV+FQIpx@google.com>
 MIME-Version: 1.0
-References: <20221019125254.952588-1-mitja@lxnav.com> <20221019125254.952588-3-mitja@lxnav.com>
-In-Reply-To: <20221019125254.952588-3-mitja@lxnav.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 19 Oct 2022 16:23:05 +0300
-Message-ID: <CAHp75VcCORhVefBoQgnbe+aRJfJHfJ7PTk=Xr1eQaEYFsdJvLQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] doc: iio: pressure: ms5611: added max SPI frequency
- setting to the example
-To:     Mitja Spes <mitja@lxnav.com>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y03UiYYioV+FQIpx@google.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 3:55 PM Mitja Spes <mitja@lxnav.com> wrote:
->
-> Added max SPI frequency setting to the example. It is now honored by the
-> driver.
+On Mon, Oct 17, 2022 at 10:17:45PM +0000, Sean Christopherson wrote:
+> On Mon, Oct 17, 2022, Fuad Tabba wrote:
+> > Hi,
+> > 
+> > > > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > > > > +#define KVM_MEM_ATTR_SHARED    0x0001
+> > > > > +static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+> > > > > +                                    bool is_private)
+> > > > > +{
+> > > >
+> > > > I wonder if this ioctl should be implemented as an arch-specific
+> > > > ioctl. In this patch it performs some actions that pKVM might not need
+> > > > or might want to do differently.
+> > >
+> > > I think it's doable. We can provide the mem_attr_array kind thing in
+> > > common code and let arch code decide to use it or not. Currently
+> > > mem_attr_array is defined in the struct kvm, if those bytes are
+> > > unnecessary for pKVM it can even be moved to arch definition, but that
+> > > also loses the potential code sharing for confidential usages in other
+> > > non-architectures, e.g. if ARM also supports such usage. Or it can be
+> > > provided through a different CONFIG_ instead of
+> > > CONFIG_HAVE_KVM_PRIVATE_MEM.
+> > 
+> > This sounds good. Thank you.
+> 
+> I like the idea of a separate Kconfig, e.g. CONFIG_KVM_GENERIC_PRIVATE_MEM or
+> something.  I highly doubt there will be any non-x86 users for multiple years,
+> if ever, but it would allow testing the private memory stuff on ARM (and any other
+> non-x86 arch) without needing full pKVM support and with only minor KVM
+> modifications, e.g. the x86 support[*] to test UPM without TDX is shaping up to be
+> trivial.
 
-Is it possible to add a constraint here? So the schema validator will
-issue the warning / error if the speed is too high.
+CONFIG_KVM_GENERIC_PRIVATE_MEM looks good to me.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Chao
+> 
+> [*] https://lore.kernel.org/all/Y0mu1FKugNQG5T8K@google.com
