@@ -2,148 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD1E6044E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9826045A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiJSMRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S233224AbiJSMpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiJSMRL (ORCPT
+        with ESMTP id S232619AbiJSMpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:17:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156084D270
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666180248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U0Ito9oBTwecyhoOGkvM7eQkEImsAA6dypnkM5tOFSU=;
-        b=K5NFgm4Ai7lDgasI13MrWWqMMEFe3nyexCGdp7dPscz3q6CKFC8T2wUOIhl0NDalo2ww4l
-        G4HJLdTaPxOqIrBI7FkyPb288By8BAVXnDsQJRsFyI8SUi0N/XmiUOM9kfC2arQHV9B/rv
-        J5kcp5JeGejtW6Os9aF4TBtcy1quE/k=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-518-jKuZSkAdNd611dMaYPMp5Q-1; Wed, 19 Oct 2022 07:50:47 -0400
-X-MC-Unique: jKuZSkAdNd611dMaYPMp5Q-1
-Received: by mail-wm1-f69.google.com with SMTP id q14-20020a7bce8e000000b003c6b7debf22so7814789wmj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:50:47 -0700 (PDT)
+        Wed, 19 Oct 2022 08:45:19 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D25B1119F2;
+        Wed, 19 Oct 2022 05:28:15 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id j4so27885056lfk.0;
+        Wed, 19 Oct 2022 05:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MEslt1RuSXUcyMvZuWV2zoIP99mcfhq4IT43n7JtoN8=;
+        b=CHDCVUQxhP5zedafe5Fy0AcTvPDy2APY6prls4+epl+l8eKvD/foanWlFtPyvPmIbk
+         vyETXKgyJh32IvytlFx2z1FOFTA4UYbxs3vA9Lbs2XOSO6Wh7aNK+rntsIz70A6k852r
+         j8Zs3AFWu4AFeAnu9RcvgtS5eaUHzubhG0BM7jVIFfYvdQpb+zYvZPysCvg4pJCUwCLc
+         5jXHEMa02Uuoz28IKa1Aorlg2n5MffTr4vz0Y2sJtheV/s7NmP4OZiqekpuvZpF3rKZE
+         31ePzg8TjiXRFMQRU1spjaDXC1LcHmJpxZuBH0BenmJ83v66XJxoSb8Pqq7JbglGgbz0
+         gg1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U0Ito9oBTwecyhoOGkvM7eQkEImsAA6dypnkM5tOFSU=;
-        b=7n8LkM/CDEoRjWLaYOkHyBk+uR5PUCBOOZZnC82R9sg1MUWc/IuXJAxAjGbSFBhPiO
-         Bim3ncp0HXYEANPMmyVpWizVRLHJKSzB8hnC0iJP6dsVlPdKEc8+4qLmBGdnQcafiYV4
-         FzAdakbRAzsNz7z0G5Q89RZNATMJCQkKmHpf0b0QyjkefwgRigr6Hu/SIfPiOP7TSMtF
-         NthOf8Rs2SiEIZt9MNnH6EUOxCws8EwEVc4UmhYLTLQj3R/8eKY1CuTkfyJnFOoJf17Q
-         gkQt0KyVUP3KLoBHWRcRG8GD2KMYEDCVvHbtGyu/eQY8r+oUv0CpJpS8z8R4/lLHNNqD
-         42ag==
-X-Gm-Message-State: ACrzQf3pEjtBQcCPDJDPJbC3ZExthG9X8WAXKrwDR3zHw9B/Bmnlng61
-        /DEgaF8jWFb9dPNV86/1zsOZXGr0KnG9/8ke4NAeLtcypPSZ9T2pKoSOZaNKuNesvr079v9RNMs
-        r02uAaePlPHinW8Qj//L5cT90
-X-Received: by 2002:adf:f40e:0:b0:22e:2ce4:e6a2 with SMTP id g14-20020adff40e000000b0022e2ce4e6a2mr5230960wro.30.1666180246163;
-        Wed, 19 Oct 2022 04:50:46 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM46+3jUTqcGiLRotFZdSsYsXxrsUcvAJFYWAwhfGL5+lnqYoZHaA3KZlDHoCCIDDoqAzIcPIw==
-X-Received: by 2002:adf:f40e:0:b0:22e:2ce4:e6a2 with SMTP id g14-20020adff40e000000b0022e2ce4e6a2mr5230933wro.30.1666180245888;
-        Wed, 19 Oct 2022 04:50:45 -0700 (PDT)
-Received: from redhat.com ([2.54.191.184])
-        by smtp.gmail.com with ESMTPSA id d20-20020a05600c34d400b003b4de550e34sm16769319wmq.40.2022.10.19.04.50.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 04:50:45 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 07:50:42 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kvm list <kvm@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Yury Norov <yury.norov@gmail.com>, netdev@vger.kernel.org
-Subject: Re: 6.1-rc1 regression: virtio-net cpumask and during reboot
-Message-ID: <20221019074308-mutt-send-email-mst@kernel.org>
-References: <ac72ff9d-4246-3631-6e31-8c3033a70bf0@linux.ibm.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MEslt1RuSXUcyMvZuWV2zoIP99mcfhq4IT43n7JtoN8=;
+        b=PzIo5ibXmqzh3VtOhcZ9M1R/Dde69Ebj2teHV+z0JtIv79zA+hn3vme0ec8/+GV1Il
+         XM9cDINfJ++9TEK/TRh/G5GMS9XZ4D9Wz2KvVtgE5eZpWMg7Fd48qHN5PZVqpyqvkY/n
+         0VgvBqoodlJMSHFdxwqnoaE00aabi320doX0I68/PWARx+TxRrLdE+U/78h1LyPocSH8
+         svCzzscphAX7fzxzrk4eQWN564QwATf3vUAHM48jnu92LiPwT8UF+1rCnJHqXM/96f1i
+         lqpYhGSCq0YhgjlXE+oGMk3g3IRvgUTJLt4aNxoyWF9tHPROQvrJQ6weIi0K7Q81PYnS
+         9+qA==
+X-Gm-Message-State: ACrzQf2wtYdwFE5LKlyrQn/6a/UE4znEtkAz65/xPw6wom3L9LWVTYV4
+        //UTWC1axBjESZ/UHw6usqe5Krn2srI=
+X-Google-Smtp-Source: AMsMyM4gLXcYIkULuHyL9C32E1bcJWwX7brePnpuiphaKMj+qGQE5gfjVZ/3+0hBVMaCfCSsbeCZPA==
+X-Received: by 2002:a17:907:6e0e:b0:78e:1385:c06 with SMTP id sd14-20020a1709076e0e00b0078e13850c06mr6518840ejc.485.1666180397196;
+        Wed, 19 Oct 2022 04:53:17 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id ey4-20020a0564022a0400b00459148fbb3csm10430043edb.86.2022.10.19.04.53.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 04:53:16 -0700 (PDT)
+Message-ID: <c8d12dd0-7504-0198-dacb-b3723d82fc60@gmail.com>
+Date:   Wed, 19 Oct 2022 13:53:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac72ff9d-4246-3631-6e31-8c3033a70bf0@linux.ibm.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH 2/2] mtd: core: set ROOT_DEV for partitions marked as root
+ devices in DT
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20221019114855.31639-1-zajec5@gmail.com>
+ <20221019115041.31805-1-zajec5@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20221019115041.31805-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:59:58PM +0200, Christian Borntraeger wrote:
-> Michael,
+On 19.10.2022 13:50, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> as a heads-up.
-> I have not looked into any details yet but we do get the following during reboot of a system on s390.
-> It seems to be new with 6.1-rc1 (over 6.0)
+> This adds support for "linux,root-device" binding that is used to mark
+> root device MTD partition. It's useful for devices using device tree
+> that don't have bootloader passing root info in cmdline.
 > 
->   [    8.532461] ------------[ cut here ]------------
->   [    8.532497] WARNING: CPU: 8 PID: 377 at include/linux/cpumask.h:110 __netif_set_xps_queue+0x3d8/0xca8
->   [    8.532507] Modules linked in: sha1_s390(+) sha_common virtio_net(+) net_failover failover pkey zcrypt rng_core autofs4
->   [    8.532528] CPU: 8 PID: 377 Comm: systemd-udevd Not tainted 6.1.0-20221018.rc1.git15.0fd5f2557625.300.fc36.s390x+debug #1
->   [    8.532533] Hardware name: IBM 8561 T01 701 (KVM/Linux)
->   [    8.532537] Krnl PSW : 0704e00180000000 00000000b05ec33c (__netif_set_xps_queue+0x3dc/0xca8)
->   [    8.532546]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
->   [    8.532552] Krnl GPRS: 00000000e7fb8b3f 0000000080000001 00000000b1870700 00000000b0ca1d3c
->   [    8.532557]            0000000000000100 0000000000000300 000000008b362500 00000000b133ba48
->   [    8.532561]            000000000000000c 0000038000000100 000000000000000c 0000000000000070
->   [    8.532566]            0000000084cd3200 0000000000000000 00000000b05ec0c2 00000380010b77c8
->   [    8.532575] Krnl Code: 00000000b05ec32e: c0e500187331      brasl   %r14,00000000b08fa990
->                             00000000b05ec334: a7f4ff0c          brc     15,00000000b05ec14c
->                            #00000000b05ec338: af000000          mc      0,0
->                            >00000000b05ec33c: ec76fed8007c      cgij    %r7,0,6,00000000b05ec0ec
->                             00000000b05ec342: e310f0b00004      lg      %r1,176(%r15)
->                             00000000b05ec348: ec16ffac007c      cgij    %r1,0,6,00000000b05ec2a0
->                             00000000b05ec34e: ec680388007c      cgij    %r6,0,8,00000000b05eca5e
->                             00000000b05ec354: e310f0b80004      lg      %r1,184(%r15)
->   [    8.532600] Call Trace:
->   [    8.532604]  [<00000000b05ec33c>] __netif_set_xps_queue+0x3dc/0xca8
->   [    8.532609] ([<00000000b05ec0c2>] __netif_set_xps_queue+0x162/0xca8)
->   [    8.532614]  [<000003ff7fbb81ce>] virtnet_set_affinity+0x1de/0x2a0 [virtio_net]
->   [    8.532622]  [<000003ff7fbbb674>] virtnet_probe+0x4d4/0xc08 [virtio_net]
->   [    8.532630]  [<00000000b04ec4e8>] virtio_dev_probe+0x1e8/0x418
->   [    8.532638]  [<00000000b05350ea>] really_probe+0xd2/0x480
->   [    8.532644]  [<00000000b0535648>] driver_probe_device+0x40/0xf0
->   [    8.532649]  [<00000000b0535fac>] __driver_attach+0x10c/0x208
->   [    8.532655]  [<00000000b0532542>] bus_for_each_dev+0x82/0xb8
->   [    8.532662]  [<00000000b053422e>] bus_add_driver+0x1d6/0x260
->   [    8.532667]  [<00000000b0536a70>] driver_register+0xa8/0x170
->   [    8.532672]  [<000003ff7fbc8088>] virtio_net_driver_init+0x88/0x1000 [virtio_net]
->   [    8.532680]  [<00000000afb50ab0>] do_one_initcall+0x78/0x388
->   [    8.532685]  [<00000000afc7b5b8>] do_init_module+0x60/0x248
->   [    8.532692]  [<00000000afc7ce96>] __do_sys_init_module+0xbe/0xd8
->   [    8.532698]  [<00000000b09123b2>] __do_syscall+0x1da/0x208
->   [    8.532704]  [<00000000b0925b12>] system_call+0x82/0xb0
->   [    8.532710] 3 locks held by systemd-udevd/377:
->   [    8.532715]  #0: 0000000089af5188 (&dev->mutex){....}-{3:3}, at: __driver_attach+0xfe/0x208
->   [    8.532728]  #1: 00000000b14668f0 (cpu_hotplug_lock){++++}-{0:0}, at: virtnet_probe+0x4ca/0xc08 [virtio_net]
->   [    8.532744]  #2: 00000000b1509d40 (xps_map_mutex){+.+.}-{3:3}, at: __netif_set_xps_queue+0x88/0xca8
->   [    8.532757] Last Breaking-Event-Address:
->   [    8.532760]  [<00000000b05ec0e0>] __netif_set_xps_queue+0x180/0xca8
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+>   drivers/mtd/mtdcore.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+> index 07249af4f890..034b06aff660 100644
+> --- a/drivers/mtd/mtdcore.c
+> +++ b/drivers/mtd/mtdcore.c
+> @@ -28,6 +28,7 @@
+>   #include <linux/leds.h>
+>   #include <linux/debugfs.h>
+>   #include <linux/nvmem-provider.h>
+> +#include <linux/root_dev.h>
+>   
+>   #include <linux/mtd/mtd.h>
+>   #include <linux/mtd/partitions.h>
+> @@ -735,6 +736,12 @@ int add_mtd_device(struct mtd_info *mtd)
+>   		not->add(mtd);
+>   
+>   	mutex_unlock(&mtd_table_mutex);
+> +
+> +	if (of_find_property(mtd_get_of_node(mtd), "linux,rootfs", NULL)) {
+
+I forgot to re-do "format-patch" after "commit --amend".
+s/linux,rootfs/linux,root-device/
+
+I'll fix that in V2 after giving this patchset some time to review.
 
 
-Does this fix it for you?
-
-https://lore.kernel.org/r/20221017030947.1295426-1-yury.norov%40gmail.com
-
-
-
-
-
-
-
-
--- 
-MST
+> +		pr_info("mtd: setting mtd%d (%s) as root device\n", mtd->index, mtd->name);
+> +		ROOT_DEV = MKDEV(MTD_BLOCK_MAJOR, mtd->index);
+> +	}
+> +
+>   	/* We _know_ we aren't being removed, because
+>   	   our caller is still holding us here. So none
+>   	   of this try_ nonsense, and no bitching about it
 
