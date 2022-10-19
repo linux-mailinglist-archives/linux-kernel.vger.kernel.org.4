@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D221B6050A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E806050AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiJSTod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S229910AbiJSTpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiJSToa (ORCPT
+        with ESMTP id S230456AbiJSTp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:44:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6A6B87A;
-        Wed, 19 Oct 2022 12:44:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B636619B2;
-        Wed, 19 Oct 2022 19:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7B4C433D6;
-        Wed, 19 Oct 2022 19:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666208664;
-        bh=9gUtndE8TXwdW+4qM9EPSTwtXGv7PgXPdWAIJ05D1Us=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G6xCxeXVuw1mbkWEuQUYMYvHX55sAZ8BlVmUcqix4vXV2aEhmi8Ewy42AcEIIo110
-         q8/xGHDrr5ksrAxHOA9jRPayjjwGUZHWFixo3sPYtmsSLcHH/eJuDB9NT1dWdY9MgM
-         xHQ/fgofd7VuaJkxgXCNN7ToHY7aDueMbIp/owNwrh9vjYawRVY7PpOmkRnaye4bMN
-         sUPWHGWTZgw5qplbggau1Go+4P5I/KGbumKyIfdxFAKDHiJRBO6dxNgboeaeyIOTfP
-         Lo1a8M/9z1ZXCEoik7Rls4w2KVISa6EDY2NAju20O0hhHPUs6Cxbd+E2G/mS7BmHNE
-         jyNIh9n9EdoOw==
-Date:   Wed, 19 Oct 2022 21:44:21 +0200
-From:   "wsa@kernel.org" <wsa@kernel.org>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     Ren Zhijie <renzhijie2@huawei.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] i2c: mlxbf: Fix unused-variable warning
-Message-ID: <Y1BTlflJKNS8JmI1@shikoro>
-Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, Ren Zhijie <renzhijie2@huawei.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221009133822.254122-1-renzhijie2@huawei.com>
- <CH2PR12MB3895C3FA56AE40EA043A0BCAD7209@CH2PR12MB3895.namprd12.prod.outlook.com>
+        Wed, 19 Oct 2022 15:45:28 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30A518196E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:45:25 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id a13so26854371edj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lHVzxAW0Myx4BvpZDl6lwvfbUP44PRXuCP7MMtuAiVI=;
+        b=UtBMIKtwURlu+AIhyKa0dRDfGrjTTRQUQjLQKZCSg+a4HRzP/xDzkNpttdD8LnaDkW
+         33j5eV/qvBBYvkNvpjDxxrmkEo8zkm4/VFYuqD0EI9nCEVBXNkusFpVLRCtwgy23C5yZ
+         ByUO0wq4znTjSoWjpz4060BWXA3+GRvrn1rKmeUn0emIF0PScyM6YvoQCDt/JNrTJO5M
+         jGY+Y2+tascVx31Y2rIXMWlCJSga/JTnDtdfUCZYmTfKSgN3bWj6Tv0cnzLwjKgFjkZY
+         XQxWCB3XfZMgBJnox325SSMNrusKjcssd2nVlRel9N31D2te9vTUFJiuv35HgBnO8TFj
+         G+MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lHVzxAW0Myx4BvpZDl6lwvfbUP44PRXuCP7MMtuAiVI=;
+        b=MsOvER/jtGAONIiHzDI00nVimCZjaZAmXVaIwivJIgSHLYrgKqegGEOYbGsc7P3kO2
+         miaFgt2rEHoP7CgIlzl6Q7DqQB5qqMvsTjRdKFdVRcM52cIu3JN3gM8TT9PSzBqYJxMU
+         XZqIvdXTpqIMu5vEgAazVWQfBSIfQi9XRtc8rq/NzRkevLusUsPI44AwEKma2Wsxpn+H
+         0f3b5TRlyPJ0phefEQvVh3QRdhR/Weyi3JwvIQrEJX5M0lgEn/OLmTum4Z6R+mpI+pMa
+         GuZqStQ96POXwkA2VFFnVQqgb95leaZIcLtBCz1RPA5GsPSFz1lmm/+RMjAi8slDTbpO
+         7vFg==
+X-Gm-Message-State: ACrzQf3hMQU20X/sI3Rgf4OZma3dm54P4MbY5VG3L3yTVz/JyIdc4S1Z
+        uu8xRNImc2CGsnU6l/5wh8oN8cgnqktF4O9+iAWXlQ==
+X-Google-Smtp-Source: AMsMyM4ZhycjOj/WBZK4NwF4b9M8cJ/tdMrZ7Nt1IHTmsjtVRIWgxrNd69fXQz1KvqaPafsm+3d24iWaVqaNRdrTgXk=
+X-Received: by 2002:aa7:c98d:0:b0:45c:6451:320e with SMTP id
+ c13-20020aa7c98d000000b0045c6451320emr9030375edt.172.1666208724418; Wed, 19
+ Oct 2022 12:45:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4ozRfCY8FRgb6UQE"
-Content-Disposition: inline
-In-Reply-To: <CH2PR12MB3895C3FA56AE40EA043A0BCAD7209@CH2PR12MB3895.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221019144119.3848027-1-arnd@kernel.org> <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-12-arnd@kernel.org>
+In-Reply-To: <20221019150410.3851944-12-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 19 Oct 2022 21:45:13 +0200
+Message-ID: <CACRpkdYA=Yev7NkCTZt7hUMTd1aXe-=HJE_VB=dTG9piR8HkXg@mail.gmail.com>
+Subject: Re: [PATCH 12/17] ARM: footbridge: remove CATS
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,40 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 19, 2022 at 5:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
---4ozRfCY8FRgb6UQE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Nobody seems to have a CATS machine any more, so remove
+> it now, leaving only NetWinder and EBSA285.
+>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, Oct 10, 2022 at 12:00:09PM +0000, Asmaa Mnebhi wrote:
-> Acked-by: Asmaa Mnebhi
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-You need to add your email address as well.
+(IIRC the EBSA285 was the machine that David Rusling distributed
+to a few Arm developers when he initiated OSS activities at Digital.)
 
-> If CONFIG_ACPI is not set,
-
-Since DT support is gone now, shouldn't the driver actually depend on
-ACPI now? Then, we could get rid of all the #ifdefs in the code?
-
-
---4ozRfCY8FRgb6UQE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQU5UACgkQFA3kzBSg
-KbZnEA/6A0K0O2J2tvM5gm79RQxyyWxBBgvA6hPvemhR6Msvh9SWCHKQAo9s+R+D
-l3OvrGquCaozjpN7hqF9IlF/G7RVc7K7ZLCGpjZqUXU+zPUl7m0HjCsmNadpBk+G
-vvvKLmF4GybLc98crdXT4lgCk1oGonwaveoIlYFoUypinGoHrHrIRfKY3Mp2ZYvn
-BHhl+jaSz0vnXrlqndotr/k6i9Iusgmb2I/ZbBkmOzjCTUDKn2U/DQgVA18K5ll9
-RjcNXe3ljQZ8HpbMjd24jcAFvfckxw5zeJKuvgZNPQdRbvnMbHi95jozcx2G6TyC
-IUnda9NyZHzv/bbmczLb7fIT187eD4jfJooXoCSmZzabp5yUPEEy4dU5BTVcmTa4
-HK/SWrvZj+70glO2z3VEmytK47sMliNiqKqjtoER83/s54+Vm2XE44ZNAh05RSEX
-e3MJlMeYSDUKX/GcRLEo9GzWQTVZfV2ep7/XoxiNTWjiWIfAziwGohGumiOVZg/i
-Ah7GvCiV+Vz/e9mrRBM1jpomHxCmknTM/dj3SYFVP7GOvwdX1otW5+8YxLcHEQU2
-uCp3ENL1iM2iad8DPzmHcBUtceEsxhiRVXiuEg5u4dBN+rHcxnBQClPgAMpvt51z
-PQoIaXb7ueNnYbJj7s7sP9dv47tLfpp82Kh8kE0fKA1txMR5QsQ=
-=10v/
------END PGP SIGNATURE-----
-
---4ozRfCY8FRgb6UQE--
+Yours,
+Linus Walleij
