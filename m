@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F03603711
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722FF603716
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiJSAXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
+        id S229866AbiJSA0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 20:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiJSAXY (ORCPT
+        with ESMTP id S229822AbiJSAZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:23:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BBED7E37;
-        Tue, 18 Oct 2022 17:23:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 18 Oct 2022 20:25:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0AEBC468
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666139153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OeOa45B93JvYwgR1hDKpdl7iPLUwP3auE5S9Nrg+8/s=;
+        b=goxk4O0ywAouGcPCh2vx7two0VfoAA19EfyOwSD/cKnyQUPcSI7k/FN/L8sjDVu+z0RnUe
+        cO74Lg9y6euxkEt/t3MtC8C//2dz+ONoiaapUxcups6sua/lamn2sLGb0rV3mhzH4+G4ra
+        Ve/cdg+CypVqaCTv0T++LMJSgK2xRyU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-520-OqOberSEOZ2v8-pjdQdPsw-1; Tue, 18 Oct 2022 20:25:50 -0400
+X-MC-Unique: OqOberSEOZ2v8-pjdQdPsw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CF2161737;
-        Wed, 19 Oct 2022 00:23:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDBFC433C1;
-        Wed, 19 Oct 2022 00:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666139001;
-        bh=oASso4BIYNm9JMmqjfxz8f0HQ79E5O2lTIOHLXPL0F0=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=PDHGHS97RFLJsZTpkxwvWWCTrsmWHx4z61HucmdeKqSlwVMSnwZOdd25TOvQ6SbGh
-         Bwd0Uy/rt+3/Juw8gVXfku90/lBsoxdZjrkLEVZ9LgoIJT/IM7wNYPexqa0nIDMRqx
-         QcC6n4jxWysUwYy5bdNhisjSS3ehTtue50p4PWn4j9gfRyljFYP+8xdmgKQ9E9/Wo/
-         up2bno5VVqfQBZ9SEXTLfbxgn6msorPshxoTpWFH5wWbtdhIYsKp8n0Rdaj+OUZOzR
-         JMUFi8Uo7/LEMEKvQGYyZ3TusYgzDQelkg/kKyP5+i1q5bgs+QjQm6Lmgvq1Y5kGNq
-         wSTybumv5qSUw==
-Message-ID: <7443664d-6be2-6b3c-e211-d23636d66dfc@kernel.org>
-Date:   Tue, 18 Oct 2022 17:23:20 -0700
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6830980280D;
+        Wed, 19 Oct 2022 00:25:49 +0000 (UTC)
+Received: from localhost (ovpn-12-35.pek2.redhat.com [10.72.12.35])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE99C84426;
+        Wed, 19 Oct 2022 00:25:47 +0000 (UTC)
+Date:   Wed, 19 Oct 2022 08:25:42 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
+        "David.Laight@aculab.com" <David.Laight@aculab.com>,
+        "shorne@gmail.com" <shorne@gmail.com>
+Subject: Re: [RFC PATCH 0/8] mm: ioremap: Convert architectures to take
+ GENERIC_IOREMAP way (Alternative)
+Message-ID: <Y09EBgoqPGy2A5WL@MiWiFi-R3L-srv>
+References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
+ <Y0yj0IDBVOFwCFuv@MiWiFi-R3L-srv>
+ <fd7aa861-a85a-cc6d-df62-6e5e9a1b3149@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] arc: update config files
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org
-References: <20220929101421.31590-1-lukas.bulwahn@gmail.com>
-Content-Language: en-US
-From:   Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <20220929101421.31590-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fd7aa861-a85a-cc6d-df62-6e5e9a1b3149@csgroup.eu>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,20 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/17/22 at 05:06pm, Christophe Leroy wrote:
+> Hi Baoquan,
+> 
+> Le 17/10/2022 à 02:37, Baoquan He a écrit :
+> > Hi Christophe,
+> > 
+> > On 10/12/22 at 12:09pm, Christophe Leroy wrote:
+> >> From:
+> >>
+> >> As proposed in the discussion related to your series, here comes an
+> >> exemple of how it could be.
+> >>
+> >> I have taken it into ARC and IA64 architectures as an exemple. This is
+> >> untested, even not compiled, it is just to illustrated my meaning in the
+> >> discussion.
+> >>
+> >> I also added a patch for powerpc architecture, that one in tested with
+> >> both pmac32_defconfig and ppc64_le_defconfig.
+> >>
+> >>  From my point of view, this different approach provide less churn and
+> >> less intellectual disturbance than the way you do it.
+> > 
+> > Yes, I agree, and admire your insistence on the thing you think right or
+> > better. Learn from you.
+> > 
+> > When you suggested this in my v2 post, I made a draft patch at below link
+> > according to your suggestion to request people to review. What worried
+> > me is that I am not sure it's ignored or disliked after one week of
+> > waiting.
+> > 
+> > https://lore.kernel.org/all/YwtND%2FL8xD+ViN3r@MiWiFi-R3L-srv/#related
+> > 
+> > Up to now, seems people don't oppose this generic_ioremap_prot() way, we
+> > can take it. So what's your plan? You want me to continue with your
+> > patches wrapped in, or I can leave it to you if you want to take over?
+> 
+> I don't plan to steal your work. If you feel confortable with my 
+> proposal, feel free to continue with it and amplify it. You have done 
+> most of the job, you have a clear view of all subtilities in the 
+> different architectures, so please continue, I don't plan to take over 
+> the good work you've done until now.
+> 
+> The only purpose of my series was to illustrate my comments and convince 
+> myself it was a possible way, nothing more.
 
+Thanks a lot for all these you have done, I will post another version with
+the introducing generic_ioremap_prot() way you suggesed.
 
-On 9/29/22 03:14, Lukas Bulwahn wrote:
-> Clean up config files by:
->    - removing configs that were deleted in the past
->    - removing configs not in tree and without recently pending patches
->    - adding new configs that are replacements for old configs in the file
->
-> For some detailed information, see Link.
->
-> Link:https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwahn@gmail.com/
->
-> Signed-off-by: Lukas Bulwahn<lukas.bulwahn@gmail.com>
-
-Thx for the fix. Added to for-curr.
-
--Vineet
