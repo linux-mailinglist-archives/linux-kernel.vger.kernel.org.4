@@ -2,80 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADA6604D53
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF3B604D5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJSQ0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S230221AbiJSQ1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiJSQ0A (ORCPT
+        with ESMTP id S230180AbiJSQ1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:26:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F76518F0C9;
-        Wed, 19 Oct 2022 09:25:59 -0700 (PDT)
+        Wed, 19 Oct 2022 12:27:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C945E43627;
+        Wed, 19 Oct 2022 09:27:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F41F06195C;
-        Wed, 19 Oct 2022 16:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F56C433D7;
-        Wed, 19 Oct 2022 16:25:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666196758;
-        bh=0bQZmrlbRpZ9ws+WGy2M+UgT6k1lZNfVBuaSFzLXw34=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bgKBhraCjC02RBHGDBxVDk0T2QrFrwdkGvIJjEwnDcjqAQ6L/IZOn0PGaEjhJ3De1
-         wEYu9+peZyhs/Z09c/sptBwGV4MpcwLBVNBJT6I5t448bc/nVSBeaxUDE43qViiceN
-         AhfTwm6u3aXJwn5e6S38/u48wVLaIQA6FisX0OrtI1eyI43l7t8ZGHaDwASHkLsXIK
-         PioWvdTw7YINsp72XRHIFfYSho3PqeEAFtGKvUCGICKA0hK9FN8WQq/CJpIKt9awGu
-         04Iro2lETydQt1dDAH4VLMsXzc1PbLxLd9w2wxiHgklGObhoQBcdNz5+9Y80KFl5no
-         1Qmv3U9ZdyYnA==
-Date:   Wed, 19 Oct 2022 11:25:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     imx@lists.linux.dev, Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:NTB DRIVER CORE" <ntb@lists.linux.dev>,
-        "open list:PCI ENDPOINT SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v13 1/6] PCI: endpoint: pci-epf-vntb: Clean up kernel_doc
- warning
-Message-ID: <20221019162556.GA20373@bhelgaas>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82681B8250F;
+        Wed, 19 Oct 2022 16:27:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFB4C433D7;
+        Wed, 19 Oct 2022 16:27:28 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="US7FiyUD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666196844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0lT+uEqlVaVxzDYYTi6dahuFCqqiYtCEv6lPMBO9aIk=;
+        b=US7FiyUDe8pnYz6rD3uwg9fXnSMZscFIYdtfIpv4nXWoaXgeagZoP4Aq3+1ycyM4jN6PAA
+        sT+vCEuPGTqjOb5tSTOdYoqhRAvMz/77p4eWWarEYDA2lmcA6GsdYvOM4SHdT534zEmMVR
+        WZGPFOwIokjYZRMKO5MEMdMo3HOL2z4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f51d3b10 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 19 Oct 2022 16:27:24 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] kbuild: treat char as always signed
+Date:   Wed, 19 Oct 2022 10:26:48 -0600
+Message-Id: <20221019162648.3557490-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221007191326.193079-3-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 03:13:21PM -0400, Frank Li wrote:
-> From: Frank Li <frank.li@nxp.com>
-> 
-> Cleanup warning found by scripts/kernel-doc
-> Consolidate term
->     host, host1 to HOST
->     vhost, vHost, Vhost, VHOST2 to VHOST
+Recently, some compile-time checking I added to the clamp_t family of
+functions triggered a build error when a poorly written driver was
+compiled on ARM, because the driver assumed that the naked `char` type
+is signed, but ARM treats it as unsigned, and the C standard says it's
+architecture-dependent.
 
-When you post a series of several patches, it's nice if you include a
-[0/n] cover letter to tie them all together.  Regrettably, this is not
-very well covered in the documentation, but here's a pointer:
+I doubt this particular driver is the only instance in which
+unsuspecting authors assume that `char` with no `signed` or `unsigned`
+designation is signed, because that's how the other types work. We were
+lucky enough this time that that driver used `clamp_t(char,
+negative_value, positive_value)`, so the new checking code found it, and
+I've sent a patch to fix it, but there are likely other places lurking
+that won't be so easily unearthed.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/5.Posting.rst?id=v6.0#n334
+So let's just eliminate this particular variety of heisensigned bugs
+entirely. Set `-fsigned-char` globally, so that gcc makes the type
+signed on all architectures.
 
-And if you look at the archives, you'll see lots of examples:
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/lkml/202210190108.ESC3pc3D-lkp@intel.com/
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  https://lore.kernel.org/linux-pci/
+diff --git a/Makefile b/Makefile
+index f41ec8c8426b..f1abcaf7110e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -562,7 +562,7 @@ KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
+ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
+ 		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
+ 		   -Werror=implicit-function-declaration -Werror=implicit-int \
+-		   -Werror=return-type -Wno-format-security \
++		   -Werror=return-type -Wno-format-security -fsigned-char \
+ 		   -std=gnu11
+ KBUILD_CPPFLAGS := -D__KERNEL__
+ KBUILD_RUSTFLAGS := $(rust_common_flags) \
+-- 
+2.38.1
+
