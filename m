@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF3E6053C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821066053CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiJSXJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 19:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S231713AbiJSXKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 19:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiJSXJJ (ORCPT
+        with ESMTP id S230273AbiJSXK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 19:09:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA0715D091
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 16:09:08 -0700 (PDT)
+        Wed, 19 Oct 2022 19:10:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4FB168E45;
+        Wed, 19 Oct 2022 16:10:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A605B8261A
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:09:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1ABC433C1;
-        Wed, 19 Oct 2022 23:09:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AC8A5CE24A3;
+        Wed, 19 Oct 2022 23:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E3054C433C1;
+        Wed, 19 Oct 2022 23:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666220945;
-        bh=BHGbq0AYz6Alv20BhnG96r7P6jl8a1dcx8eJdRaPpFs=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=FWTCdwBBZISvzlpQvULM3Q4iY7kUkhx6Gu97ErrtAwTj9q2+BUVdcoL+czET+2QqQ
-         0/cDPGEga5cyVoJwqG+3MTuf5smc1WFtLDEfmtZA3IWGoG0MnToe61Gzng4W88lRb7
-         BZyjIy1mQp9+wtsGollAO1TabRjxW7AR5yXBa1Gd+2/bW32sZyquo57VvmrAJ/weMU
-         lFmVjdKZXLt58NM1crCmJiObTJsu7qISU8fQ7t7JmgirLhwCDz0PVTsAAN7m5tH3r5
-         MejsphWUEuaeqmBmI+K6nG0apFtS46BrQBAxf7mFGKcUzAxqz3hb3WfpwXDabWU4GJ
-         VHqsYTifRq/QA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BC76E5C06B4; Wed, 19 Oct 2022 16:09:04 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 16:09:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     clm@meta.com, jstultz@google.com, tglx@linutronix.de,
-        sboyd@kernel.org, feng.tang@intel.com, longman@redhat.com
-Subject: [PATCH clocksource] Reject bogus watchdog clocksource measurements
-Message-ID: <20221019230904.GA2502730@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        s=k20201202; t=1666221020;
+        bh=DZTuuFU3EMXa7wsxN/PeDKX03VuVfFusIKbQRGXa9C0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=StNftmAA5ph7nUwOxlr6PcE/cGlQDbTbCEVzv2vs8fuKPsR/ss05FQNKdWJDdCZ4h
+         rRMRaAix8LeYCpA7lXpdKD4m1In/Wq2MRa7cpGO8nIGaQfa2LJ+ozOXPi7du3WARF9
+         0Zud2aI2P2ACqOA8rVkaG2Ovj9VLJTNTDy1gdmDEjpUTE+svvvZuXdHtQTrX+eLvdK
+         nSVx5T9l/lrmsamEpG6EZTgmK9umV9v2ivTc5qsR8aFVk493TEujsgjqn2FxIfpyo4
+         975+Io8cb6wqq0+1N4i2NlOze0cG9pH4s6AU0YeApTcGKBFi3IWRl9Up2igCMv0j2J
+         WlqUCJrB73DCw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC768E4D007;
+        Wed, 19 Oct 2022 23:10:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: bluetooth: Use kzalloc instead of kmalloc/memset
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <166622101976.13398.9806993237794232819.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Oct 2022 23:10:19 +0000
+References: <20221017030421.69108-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20221017030421.69108-1-jiapeng.chong@linux.alibaba.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        abaci@linux.alibaba.com
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,53 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One remaining clocksource-skew issue involves extreme CPU overcommit,
-which can cause the clocksource watchdog measurements to be delayed by
-tens of seconds.  This in turn means that a clock-skew criterion that
-is appropriate for a 500-millisecond interval will instead give lots of
-false positives.
+Hello:
 
-Therefore, check for the watchdog clocksource reporting much larger or
-much less than the time specified by WATCHDOG_INTERVAL.  In these cases,
-print a pr_warn() warning and refrain from marking the clocksource under
-test as being unstable.
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Reported-by: Chris Mason <clm@meta.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: John Stultz <jstultz@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Waiman Long <longman@redhat.com>
+On Mon, 17 Oct 2022 11:04:21 +0800 you wrote:
+> Use kzalloc rather than duplicating its implementation, which makes code
+> simple and easy to understand.
+> 
+> ./net/bluetooth/hci_conn.c:2038:6-13: WARNING: kzalloc should be used for cp, instead of kmalloc/memset.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2406
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> 
+> [...]
 
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 8058bec87acee..dcaf38c062161 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -386,7 +386,7 @@ EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
- 
- static void clocksource_watchdog(struct timer_list *unused)
- {
--	u64 csnow, wdnow, cslast, wdlast, delta;
-+	u64 csnow, wdnow, cslast, wdlast, delta, wdi;
- 	int next_cpu, reset_pending;
- 	int64_t wd_nsec, cs_nsec;
- 	struct clocksource *cs;
-@@ -440,6 +440,17 @@ static void clocksource_watchdog(struct timer_list *unused)
- 		if (atomic_read(&watchdog_reset_pending))
- 			continue;
- 
-+		/* Check for bogus measurements. */
-+		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
-+		if (wd_nsec < (wdi >> 2)) {
-+			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-+			continue;
-+		}
-+		if (wd_nsec > (wdi << 2)) {
-+			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-+			continue;
-+		}
-+
- 		/* Check the deviation from the watchdog clocksource. */
- 		md = cs->uncertainty_margin + watchdog->uncertainty_margin;
- 		if (abs(cs_nsec - wd_nsec) > md) {
+Here is the summary with links:
+  - net: bluetooth: Use kzalloc instead of kmalloc/memset
+    https://git.kernel.org/bluetooth/bluetooth-next/c/b0a19a2c4c53
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
