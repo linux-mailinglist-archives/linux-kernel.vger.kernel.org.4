@@ -2,103 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3AA6050CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0856F6050D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiJSTx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        id S229911AbiJSTyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiJSTxX (ORCPT
+        with ESMTP id S229976AbiJSTyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:53:23 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512141D5E17
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:53:22 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id p16so15441004iod.6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:53:22 -0700 (PDT)
+        Wed, 19 Oct 2022 15:54:04 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231A81D6A70
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:53:56 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id w18so30856226wro.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:53:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BCibXGM8BjaTX8h8C5G0AVWFfWXcZVSN1fPhuLtRFnQ=;
-        b=Ub9K2irnUDoE9mYoaAfxSNqMh3deb8WiYwMgR9KH7Gp+v1+QIlbVFyG8oJ9zNZHs2+
-         gtFw93jRWib6moWCejJJVug+ZTdwf/PixWdid5dnwB5hJXUMnui4rH35gXk0u7Os1hHi
-         KKPfcgWk6V2DlGtxWv6dDEjLoAGBngO4B2Rbo=
+        bh=sx1by9sS3WllgEDdiIvi4CitdudmqXXcs4v2OCLQoCI=;
+        b=Xz+VexDTooFBNPesSbWDIKwKu6HbGLIxZaGZkTvdxp/nxRec9+4GxacKHW8vq2LoYc
+         odf7jo0zXpK8cDVq/Ia2PJWuMO4eBuZweByYKMRRE2/V19TZGGBeFCPf4qiFwHgESFBJ
+         YqhiVtn/YzeHwQjJ6OMGBpdtf+n4WttzA+vkFaDMgDrBU8fueISFxLpdcAMychyEwIxl
+         k+3Cv3Q6sD/QU7D1VgsINpLhceh5g8NMPxXB3g93UAzYGjkZ/FMq9DVQXYmdvlM4vGsT
+         Kwf/Vb+K0b+jMcJEnNb86ZAmI1g3nKJZ63ke+elfmxsr14stGNMY4aVBS9zKd3Yh/vss
+         RlLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BCibXGM8BjaTX8h8C5G0AVWFfWXcZVSN1fPhuLtRFnQ=;
-        b=I9zFUUboH6JPPDdI4298F4T3aszTShiDC00f4wms/0xCWjGRJedu0Mk3PiLcMcD8WQ
-         9C/83LDic/RClWGZg1O4E8UDplSpGLvtyWFuN4AZmq2juYyiA4+mA9xnS5OFyPtIuqnH
-         /KuD8PDbmXz27KDsRcCEOOY9oC/TUy1mRnj4T0/eOxK/fuYoO7WV1Y5XaoWAxoBEBcPD
-         4yp8EdWWTkl+9EOkpeCg27sy+w1lBkfpPNmqpVWv5/96BjPPBixHjq/jcJSlrIgRWWca
-         LqeBB2mpH4DhwM8Zj3L2q2NygTWfzM7Qve7Qps6i7eyoB4xpkTyNLOvc4HkZPZd0FKQj
-         Bmkw==
-X-Gm-Message-State: ACrzQf2HhTEPRESoUMdA4BU3H0FK7itN1lLVw3xo+QOIOi7r1qlH0L+w
-        rO6o1GqvUvO4ee+jqMxFVpo+FI6bnjOt/Q==
-X-Google-Smtp-Source: AMsMyM5lY+OxrCuHoED1L6CgPdpvjcpOYENUeUfX39IOn/sFskzbklkYmaJrJRLUY0kbKtFhusZiTQ==
-X-Received: by 2002:a05:6602:3409:b0:6bc:698c:cfca with SMTP id n9-20020a056602340900b006bc698ccfcamr6162818ioz.98.1666209201548;
-        Wed, 19 Oct 2022 12:53:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m25-20020a026a59000000b0035a498d222asm2383475jaf.35.2022.10.19.12.53.20
+        bh=sx1by9sS3WllgEDdiIvi4CitdudmqXXcs4v2OCLQoCI=;
+        b=pWLb7X4Kr/eUKkEGtCdh7HRBsfDUzfkv+B2Ztk/bc0bK8qqL7pHDbqn6yRiYnJ7XGl
+         Xt80saIN1lIzo1QTfBGCPAAkCSP6w9X7DnlixdbVkmwAmOhJNyUVse6D+6AtbJWdJ++N
+         3d6xakIXdYL2HmbbNf0soYKJ8ocxvXBdc1MRcsg7aAV7iSsxL+IQyI/mb/smHXcDNy0X
+         WGKY24u61sECS+B3N9UY3DIZRzN2qvXVBNUehhQv6JgqnuUcnbzQHuG5gYqRjrcuDbAS
+         kU3YD++dVNoVieRolqqNmv0g+WyYV0seNli+zczR1SEAUzHSppLBgHmfMYNTenyvPzg8
+         cxBg==
+X-Gm-Message-State: ACrzQf2xzzDv0LuF4Yw9/3TrbMzDrgGudxLEN4Wx4gLfK17vsQ760MRs
+        0YPEfocAB2+YP3Xlb3lofQpJcg==
+X-Google-Smtp-Source: AMsMyM4jhaoT4cfJPLz3UMLk82gGa65407mNFt1eFbJo+oztzpIas6jFZp/VDlurB9//4GLmtAgl9g==
+X-Received: by 2002:a5d:64e9:0:b0:22e:7631:bcab with SMTP id g9-20020a5d64e9000000b0022e7631bcabmr6613472wri.36.1666209234173;
+        Wed, 19 Oct 2022 12:53:54 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:9368:960c:f98f:35b5? ([2a05:6e02:1041:c10:9368:960c:f98f:35b5])
+        by smtp.gmail.com with ESMTPSA id q11-20020a05600c46cb00b003c6f1732f65sm298418wmo.38.2022.10.19.12.53.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 12:53:20 -0700 (PDT)
-Message-ID: <7a429f62-c836-c657-3e1e-e76f81011598@linuxfoundation.org>
-Date:   Wed, 19 Oct 2022 13:53:20 -0600
+        Wed, 19 Oct 2022 12:53:53 -0700 (PDT)
+Message-ID: <6650b077-1900-a6e6-755e-a84282e5fd13@linexp.org>
+Date:   Wed, 19 Oct 2022 21:53:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 6.0 000/862] 6.0.3-rc1 review
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 01/33] thermal/of: Rework the thermal device tree
+ initialization
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221019083249.951566199@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
+        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
+        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
+        miquel.raynal@bootlin.com, shawnguo@kernel.org,
+        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
+        j-keerthy@ti.com, Amit Kucheria <amitk@kernel.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220804224349.1926752-2-daniel.lezcano@linexp.org>
+ <Y05/8JUU+3kLCZvb@shredder>
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+In-Reply-To: <Y05/8JUU+3kLCZvb@shredder>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 02:21, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.3 release.
-> There are 862 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 21 Oct 2022 08:30:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-Compiled and booted on my test system. No dmesg regressions.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Hi Ido,
 
-thanks,
--- Shuah
+On 18/10/2022 12:29, Ido Schimmel wrote:
+> On Fri, Aug 05, 2022 at 12:43:17AM +0200, Daniel Lezcano wrote:
+>> +struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
+>> +						     const struct thermal_zone_device_ops *ops)
+>> +{
+>> +	struct thermal_zone_device *tz;
+>> +	struct thermal_trip *trips;
+>> +	struct thermal_zone_params *tzp;
+>> +	struct thermal_zone_device_ops *of_ops;
+>> +	struct device_node *np;
+>> +	int delay, pdelay;
+>> +	int ntrips, mask;
+>> +	int ret;
+>> +
+>> +	of_ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
+>> +	if (!of_ops)
+>> +		return ERR_PTR(-ENOMEM);
+>> +	
+>> +	np = of_thermal_zone_find(sensor, id);
+>> +	if (IS_ERR(np)) {
+>> +		pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
+>> +		return ERR_CAST(np);
+>> +	}
+>> +
+>> +	trips = thermal_of_trips_init(np, &ntrips);
+>> +	if (IS_ERR(trips)) {
+>> +		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+>> +		return ERR_CAST(trips);
+>> +	}
+>> +
+>> +	ret = thermal_of_monitor_init(np, &delay, &pdelay);
+>> +	if (ret) {
+>> +		pr_err("Failed to initialize monitoring delays from %pOFn\n", np);
+>> +		goto out_kfree_trips;
+>> +	}
+>> +
+>> +	tzp = thermal_of_parameters_init(np);
+>> +	if (IS_ERR(tzp)) {
+>> +		ret = PTR_ERR(tzp);
+>> +		pr_err("Failed to initialize parameter from %pOFn: %d\n", np, ret);
+>> +		goto out_kfree_trips;
+>> +	}
+>> +
+>> +	of_ops->get_trip_type = of_ops->get_trip_type ? : of_thermal_get_trip_type;
+>> +	of_ops->get_trip_temp = of_ops->get_trip_temp ? : of_thermal_get_trip_temp;
+>> +	of_ops->get_trip_hyst = of_ops->get_trip_hyst ? : of_thermal_get_trip_hyst;
+>> +	of_ops->set_trip_hyst = of_ops->set_trip_hyst ? : of_thermal_set_trip_hyst;
+>> +	of_ops->get_crit_temp = of_ops->get_crit_temp ? : of_thermal_get_crit_temp;
+>> +	of_ops->bind = thermal_of_bind;
+>> +	of_ops->unbind = thermal_of_unbind;
+>> +
+>> +	mask = GENMASK_ULL((ntrips) - 1, 0);
+>> +
+>> +	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
+>> +						     mask, data, of_ops, tzp,
+>> +						     pdelay, delay);
+>> +	if (IS_ERR(tz)) {
+>> +		ret = PTR_ERR(tz);
+>> +		pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
+>> +		goto out_kfree_tzp;
+>> +	}
+>> +
+>> +	ret = thermal_zone_device_enable(tz);
+>> +	if (ret) {
+>> +		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
+>> +		       tz->type, tz->id, ret);
+>> +		thermal_of_zone_unregister(tz);
+>> +		return ERR_PTR(ret);
+>> +	}
+>> +
+>> +	return tz;
+>> +
+>> +out_kfree_tzp:
+>> +	kfree(tzp);
+>> +out_kfree_trips:
+>> +	kfree(trips);
+>> +
+>> +	return ERR_PTR(ret);
+>> +}
+>> +EXPORT_SYMBOL_GPL(thermal_of_zone_register);
+> 
+> Daniel, I started seeing these memory leaks [1] since commit
+> 613ed3f67609 ("hwmon: pm_bus: core: Switch to new of thermal API").
+> Seems to be fixed by the following patch [2].
+> 
+> Do you already have a patch for this issue or should I submit it?
+
+Thanks for reporting the issue. If you can submit it, that would be great
+
+
+
