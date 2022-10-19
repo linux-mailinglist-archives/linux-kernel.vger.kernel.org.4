@@ -2,98 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB20603B71
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3929E603EA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiJSI1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 04:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S232983AbiJSJQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJSI1K (ORCPT
+        with ESMTP id S233168AbiJSJOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 04:27:10 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97FD657F;
-        Wed, 19 Oct 2022 01:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666168030; x=1697704030;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MXelgcyJAvDzDyiQRCyTuEGTLOVMAItrzyFRkWJ6X4k=;
-  b=iJmgftERtcRAMzFhq2u+FlZLbTCBkI6wWztxMaY2OVP8+Uaeh7TQItOn
-   OgOYLxLfdRiZoq3i8NkueeDSepI0sn0zLrSKyjMJ45I1ru43xSbjE/0+e
-   u5lXuM1LLv0ozEh/6rSjhWIs1i3K/UeSyU5HLwQjAjLCXVrWt6pi8fAyA
-   mdt44iIoPq0WLkaNBk42EiknEwgpsZs3WCcaIw7sb5otL2wv8fAkR7r+q
-   epUdjWagPNOQlNXn1umO+VimhmAPEdRLLbCsR0E8VM56+WHPbtLrssNSh
-   aKqR+szs6asQFn26aXGxpXj9UmSZgWLrYkd2XjmuDxF8/XorB4oQEYtvx
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="179506375"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 01:27:09 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 19 Oct 2022 01:27:08 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 01:27:06 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net] net: lan966x: Fix the rx drop counter
+        Wed, 19 Oct 2022 05:14:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B8BA6C0E;
+        Wed, 19 Oct 2022 02:04:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1933B617DF;
+        Wed, 19 Oct 2022 09:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB46C433C1;
+        Wed, 19 Oct 2022 09:03:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666170209;
+        bh=ugBjsepRYvYP6ewZJtg3S2+9ioUPke2+iMbvqyO+qVE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RONCrz/LAVxsOjuTpGS62qyeRl27dTnlAqybtkPttgYPnTCQfZttu6I8I504wR3WU
+         INXYMjAEVAvCLUkrJCTDBr+bJ+9H88UoWeLEROCGo3N0d+zVQpWLDGYGKnUlAH2dnX
+         ECkOtKVXIkYFXHgTSEBjs2cxTRvwnB7VJzTQsOP4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Adam Skladowski <a_skl39@protonmail.com>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.0 569/862] clk: qcom: gcc-sm6115: Override default Alpha PLL regs
 Date:   Wed, 19 Oct 2022 10:30:56 +0200
-Message-ID: <20221019083056.2744282-1-horatiu.vultur@microchip.com>
+Message-Id: <20221019083315.123056749@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+References: <20221019083249.951566199@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the rx drop is calculated as the sum of multiple HW drop
-counters. The issue is that not all the HW drop counters were added for
-the rx drop counter. So if for example you have a police that drops
-frames, they were not see in the rx drop counter.
-Fix this by updating how the rx drop counter is calculated. It is
-required to add also RX_RED_PRIO_* HW counters.
+From: Adam Skladowski <a_skl39@protonmail.com>
 
-Fixes: 12c2d0a5b8e2 ("net: lan966x: add ethtool configuration and statistics")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+[ Upstream commit 068a0605ef5a6b430e7278c169bfcd25b680b28f ]
+
+The DEFAULT and BRAMMO PLL offsets are non-standard in downstream, but
+currently only BRAMMO ones are overridden. Override DEFAULT ones too.
+
+A very similar thing is happening in gcc-qcm2290 driver.
+
+Fixes: cbe63bfdc54f ("clk: qcom: Add Global Clock controller (GCC) driver for SM6115")
+Signed-off-by: Adam Skladowski <a_skl39@protonmail.com>
+Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+Signed-off-by: Bjorn Andersson <andersson@kernel.org>
+Link: https://lore.kernel.org/r/20220830075620.974009-2-iskren.chernev@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/microchip/lan966x/lan966x_ethtool.c   | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/gcc-sm6115.c | 46 +++++++++++++++++++++++------------
+ 1 file changed, 30 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c b/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c
-index e58a27fd8b508..fea42542be280 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c
-@@ -656,7 +656,15 @@ void lan966x_stats_get(struct net_device *dev,
- 	stats->rx_dropped = dev->stats.rx_dropped +
- 		lan966x->stats[idx + SYS_COUNT_RX_LONG] +
- 		lan966x->stats[idx + SYS_COUNT_DR_LOCAL] +
--		lan966x->stats[idx + SYS_COUNT_DR_TAIL];
-+		lan966x->stats[idx + SYS_COUNT_DR_TAIL] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_0] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_1] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_2] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_3] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_4] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_5] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_6] +
-+		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_7];
+diff --git a/drivers/clk/qcom/gcc-sm6115.c b/drivers/clk/qcom/gcc-sm6115.c
+index 68fe9f6f0d2f..e24a977c2580 100644
+--- a/drivers/clk/qcom/gcc-sm6115.c
++++ b/drivers/clk/qcom/gcc-sm6115.c
+@@ -53,11 +53,25 @@ static struct pll_vco gpll10_vco[] = {
+ 	{ 750000000, 1500000000, 1 },
+ };
  
- 	for (i = 0; i < LAN966X_NUM_TC; i++) {
- 		stats->rx_dropped +=
++static const u8 clk_alpha_pll_regs_offset[][PLL_OFF_MAX_REGS] = {
++	[CLK_ALPHA_PLL_TYPE_DEFAULT] =  {
++		[PLL_OFF_L_VAL] = 0x04,
++		[PLL_OFF_ALPHA_VAL] = 0x08,
++		[PLL_OFF_ALPHA_VAL_U] = 0x0c,
++		[PLL_OFF_TEST_CTL] = 0x10,
++		[PLL_OFF_TEST_CTL_U] = 0x14,
++		[PLL_OFF_USER_CTL] = 0x18,
++		[PLL_OFF_USER_CTL_U] = 0x1c,
++		[PLL_OFF_CONFIG_CTL] = 0x20,
++		[PLL_OFF_STATUS] = 0x24,
++	},
++};
++
+ static struct clk_alpha_pll gpll0 = {
+ 	.offset = 0x0,
+ 	.vco_table = default_vco,
+ 	.num_vco = ARRAY_SIZE(default_vco),
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+ 		.enable_mask = BIT(0),
+@@ -83,7 +97,7 @@ static struct clk_alpha_pll_postdiv gpll0_out_aux2 = {
+ 	.post_div_table = post_div_table_gpll0_out_aux2,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll0_out_aux2),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll0_out_aux2",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll0.clkr.hw },
+@@ -115,7 +129,7 @@ static struct clk_alpha_pll_postdiv gpll0_out_main = {
+ 	.post_div_table = post_div_table_gpll0_out_main,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll0_out_main),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll0_out_main",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll0.clkr.hw },
+@@ -137,7 +151,7 @@ static struct clk_alpha_pll gpll10 = {
+ 	.offset = 0xa000,
+ 	.vco_table = gpll10_vco,
+ 	.num_vco = ARRAY_SIZE(gpll10_vco),
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+ 		.enable_mask = BIT(10),
+@@ -163,7 +177,7 @@ static struct clk_alpha_pll_postdiv gpll10_out_main = {
+ 	.post_div_table = post_div_table_gpll10_out_main,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll10_out_main),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll10_out_main",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll10.clkr.hw },
+@@ -189,7 +203,7 @@ static struct clk_alpha_pll gpll11 = {
+ 	.vco_table = default_vco,
+ 	.num_vco = ARRAY_SIZE(default_vco),
+ 	.flags = SUPPORTS_DYNAMIC_UPDATE,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+ 		.enable_mask = BIT(11),
+@@ -215,7 +229,7 @@ static struct clk_alpha_pll_postdiv gpll11_out_main = {
+ 	.post_div_table = post_div_table_gpll11_out_main,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll11_out_main),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll11_out_main",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll11.clkr.hw },
+@@ -229,7 +243,7 @@ static struct clk_alpha_pll gpll3 = {
+ 	.offset = 0x3000,
+ 	.vco_table = default_vco,
+ 	.num_vco = ARRAY_SIZE(default_vco),
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+ 		.enable_mask = BIT(3),
+@@ -248,7 +262,7 @@ static struct clk_alpha_pll gpll4 = {
+ 	.offset = 0x4000,
+ 	.vco_table = default_vco,
+ 	.num_vco = ARRAY_SIZE(default_vco),
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+ 		.enable_mask = BIT(4),
+@@ -274,7 +288,7 @@ static struct clk_alpha_pll_postdiv gpll4_out_main = {
+ 	.post_div_table = post_div_table_gpll4_out_main,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll4_out_main),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll4_out_main",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll4.clkr.hw },
+@@ -287,7 +301,7 @@ static struct clk_alpha_pll gpll6 = {
+ 	.offset = 0x6000,
+ 	.vco_table = default_vco,
+ 	.num_vco = ARRAY_SIZE(default_vco),
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+ 		.enable_mask = BIT(6),
+@@ -313,7 +327,7 @@ static struct clk_alpha_pll_postdiv gpll6_out_main = {
+ 	.post_div_table = post_div_table_gpll6_out_main,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll6_out_main),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll6_out_main",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll6.clkr.hw },
+@@ -326,7 +340,7 @@ static struct clk_alpha_pll gpll7 = {
+ 	.offset = 0x7000,
+ 	.vco_table = default_vco,
+ 	.num_vco = ARRAY_SIZE(default_vco),
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+ 		.enable_mask = BIT(7),
+@@ -352,7 +366,7 @@ static struct clk_alpha_pll_postdiv gpll7_out_main = {
+ 	.post_div_table = post_div_table_gpll7_out_main,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll7_out_main),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll7_out_main",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll7.clkr.hw },
+@@ -380,7 +394,7 @@ static struct clk_alpha_pll gpll8 = {
+ 	.offset = 0x8000,
+ 	.vco_table = default_vco,
+ 	.num_vco = ARRAY_SIZE(default_vco),
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.flags = SUPPORTS_DYNAMIC_UPDATE,
+ 	.clkr = {
+ 		.enable_reg = 0x79000,
+@@ -407,7 +421,7 @@ static struct clk_alpha_pll_postdiv gpll8_out_main = {
+ 	.post_div_table = post_div_table_gpll8_out_main,
+ 	.num_post_div = ARRAY_SIZE(post_div_table_gpll8_out_main),
+ 	.width = 4,
+-	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gpll8_out_main",
+ 		.parent_hws = (const struct clk_hw *[]){ &gpll8.clkr.hw },
 -- 
-2.38.0
+2.35.1
+
+
 
