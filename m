@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FE2604EF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FC3604EF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiJSRgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S231388AbiJSRhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbiJSRfe (ORCPT
+        with ESMTP id S230114AbiJSRhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:35:34 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB83148F71;
-        Wed, 19 Oct 2022 10:34:47 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-8-144-nat.elisa-mobile.fi [85.76.8.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 6C68C205A6;
-        Wed, 19 Oct 2022 20:34:39 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1666200880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gIG98sURNpqYREMByDWj4WJbfZaVepdUxI0t705Dn24=;
-        b=woiIGA7CBhVDCbqWL3ENjdTY8ljs/hXL9GUXVqyjFDRzgEwnu3SVbMH5801mKj1q+zd+UP
-        N8rZe/AK3Sfp7582bAFaZBDbbHjgUGyyATnri0WDt2Xc+egBIbWWIKEjYKFdAGUncOPmQE
-        +nOwqfjDcO4y1VYws8vGoHQ+SA/A2to=
-Date:   Wed, 19 Oct 2022 20:34:37 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Paul Walmsley <paul@pwsan.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-omap@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>, Bin Liu <b-liu@ti.com>,
-        Helge Deller <deller@gmx.de>, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 14/17] ARM: omap1: remove dead code
-Message-ID: <20221019173437.GB41568@darkstar.musicnaut.iki.fi>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-14-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019150410.3851944-14-arnd@kernel.org>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1666200880; a=rsa-sha256; cv=none;
-        b=I/pBm0aTzCNCuLzHN+MVr6kleAVil0QyuIhK/c2YWJJr+BvybOpZ58a/l4FP0KbR0/NBPv
-        Ic8ehOpxamVv3kgysU1E9+j1nDAFiOiDoVrwmi6Rqr2BPo59v4GrJMCmgerqovuv5t8+8K
-        qwvvucjEMGPxjNOYrMLoyFq1Ebao1EM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1666200880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gIG98sURNpqYREMByDWj4WJbfZaVepdUxI0t705Dn24=;
-        b=Whocu0i/zmCyeCVGAmHY1hls48Sp7JYvAxZLb/yypsH236nuxpWrTHSMBrzQpgp30xSXZQ
-        fzjgRMTOc1KsGUITFPPPcjB4pzIqxl+ByucCf1NgsAuFJf+AA2aYX9LBBE/skOPLtfnFi7
-        iwPCUqDnzXGIFdpaXoN0ArUtBtc2QAY=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 13:37:13 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8E31C6BE4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:35:58 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id h186-20020a636cc3000000b0045a1966a975so9924142pgc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=x60Xt5Xqce3O74J5dTGuOeZ5YLoRzr8kJwmEklJwyWA=;
+        b=pbY3EbLRUD7kzFmh0GLfcywoKwPrz90q1uu0OqSeea1hMhExrSYADtQWKH8wh80+O/
+         GWgzmlx4NGXn+RqxSqaopoWlujpDhSvIvsq8z8HtUoH/o/nf5ZNH/2wkLcnWBXhLk2eN
+         jtdRZixvihfRVuuH8Uw3UgNcNgFoy19Tuv41t3VTUO7BjBiPXV0v9eBD0jYW4+dO6nIx
+         DvIIGjzYcNUP1GEjKYCipRlmgYwlYKPlnkVP5YJ7liaP7+wAqONwQRDV3BKbBJ4S9MVP
+         DfB74ARhp/sYR38Cd6pMa1xjr+gIIDGIkIkJgIVcnW5H3aFXyE3ERWAA6Z5HARGnYIWi
+         dcfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x60Xt5Xqce3O74J5dTGuOeZ5YLoRzr8kJwmEklJwyWA=;
+        b=0vK4DfnkODOmgIiZKhubi8yw/6LNT0PloYZPSv72+2S7DdsXLTupZtr0NSeb/maEV1
+         Qumhl9N24vsvbQXkIYcjiUoVLTG7eRsGR7hR6raSoBrchgJ5pDCJ9VW/FCxfCNCu7tk0
+         x3hVORMf58o6wgH8ZFI4OGyUQ7vdVd++W8M8fGbBXUwV3/PBwvZp81lZo4aDMc+zGpeu
+         /cpVPPVCpUNa5dhDE9wPlO2HV3/f8J8Rt1yn8nAOjRddHQw6msAvvBPq7UgCXKnT2ecc
+         vFbajTEzuZTN6ImZOlBocVSvMyzdGySf+fJy3K00rKUuR4wOmIu2v3bJRW2Se9PxT4iV
+         7kxA==
+X-Gm-Message-State: ACrzQf1Xj2Jg2+SRutX3EFTT/3q5r5z6Nv5ZTUVaaLUYonkUycMc6yC9
+        dWDXZ4qr0NZMqJhWS7sDmHtwu+zYlzoMkdY6gg==
+X-Google-Smtp-Source: AMsMyM7md+cfa720X3aPbTCrtERijE1CxwnBxLJf2ToN364fOemTbhV/5NGRCgl3M6lSfNQgA8oblL2dwOVeeuCrDA==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a17:902:edc3:b0:172:8ae3:9778 with
+ SMTP id q3-20020a170902edc300b001728ae39778mr9683589plk.72.1666200950191;
+ Wed, 19 Oct 2022 10:35:50 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 17:35:35 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Message-ID: <20221019173537.1238121-1-dionnaglaze@google.com>
+Subject: [PATCH v2 0/2] Add throttling detection to sev-guest
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The guest request synchronous API from SEV-SNP VMs to the host's security
+processor consumes a global resource. For this reason, AMD's docs
+recommend that the host implements a throttling mechanism. In order for
+the guest to know it's been throttled and should try its request again,
+we need some good-faith communication from the host that the request
+has been throttled.
 
-On Wed, Oct 19, 2022 at 05:03:36PM +0200, Arnd Bergmann wrote:
->  drivers/usb/phy/phy-isp1301-omap.c | 91 +-----------------------------
+These patches work with the existing /dev/sev-guest ABI to detect a
+throttling code.
 
-This driver and config option ISP1301_OMAP can be deleted altogether as
-there are no users after H2/H3 boards are gone.
+Changes from v1:
+  * Changed throttle error code to 2
 
-A.
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+
+Dionna Glaze (2):
+  x86/sev: Rename snp_guest_issue_request's fw_err
+  virt/coco/sev-guest: interpret VMM errors from guest request
+
+ arch/x86/include/asm/sev.h              |  4 +--
+ arch/x86/kernel/sev.c                   |  6 ++---
+ drivers/virt/coco/sev-guest/sev-guest.c | 34 +++++++++++++++++--------
+ include/uapi/linux/sev-guest.h          | 16 ++++++++++--
+ 4 files changed, 42 insertions(+), 18 deletions(-)
+
+-- 
+2.38.0.413.g74048e4d9e-goog
+
