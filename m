@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CE76045CE
+	by mail.lfdr.de (Postfix) with ESMTP id A5C916045CD
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiJSMt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S233378AbiJSMty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbiJSMs7 (ORCPT
+        with ESMTP id S232650AbiJSMsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:48:59 -0400
+        Wed, 19 Oct 2022 08:48:53 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE4015835;
-        Wed, 19 Oct 2022 05:31:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE4618356;
+        Wed, 19 Oct 2022 05:31:37 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MspwM2PQnzl9fD;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MspwM5vjszl9fN;
         Wed, 19 Oct 2022 19:51:15 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgCX0DAq5U9jgItmAA--.58124S5;
-        Wed, 19 Oct 2022 19:53:16 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgCX0DAq5U9jgItmAA--.58124S6;
+        Wed, 19 Oct 2022 19:53:17 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     hch@lst.de, ebiggers@google.com, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v5 1/6] elevator: remove redundant code in elv_unregister_queue()
-Date:   Wed, 19 Oct 2022 20:15:13 +0800
-Message-Id: <20221019121518.3865235-2-yukuai1@huaweicloud.com>
+Subject: [PATCH v5 2/6] blk-wbt: remove unnecessary check in wbt_enable_default()
+Date:   Wed, 19 Oct 2022 20:15:14 +0800
+Message-Id: <20221019121518.3865235-3-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221019121518.3865235-1-yukuai1@huaweicloud.com>
 References: <20221019121518.3865235-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCX0DAq5U9jgItmAA--.58124S5
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr43GF13Kr13AFWfXFyrWFg_yoW3ArbEya
-        y8Kw1kX398Gr1akr1YyF4avF1vvan3JFyfW34aqrn7Ja18XFyFyryxCr45CrsrGay7Ca90
-        ywn7urs3Zrn2gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-kFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
-        0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+X-CM-TRANSID: gCh0CgCX0DAq5U9jgItmAA--.58124S6
+X-Coremail-Antispam: 1UD129KBjvdXoWrKry8GF45Zr17CFy7ZF13Arb_yoWxurgEqF
+        yxGrs2vFn5Ga1fCF45Aa45XFyIkws5ZF4Uur4xJ3s0qFn3JFn2k393Xr43ArZxWa92krWa
+        qa1DWrW3Ar4IqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb-kFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
+        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
         wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
         8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
         xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
@@ -49,7 +49,7 @@ X-Coremail-Antispam: 1UD129KBjvdXoW7Wr43GF13Kr13AFWfXFyrWFg_yoW3ArbEya
         JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
         v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
         j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbec_DUUUUU==
+        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjYiiDUUUUU==
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -62,29 +62,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-"elevator_queue *e" is already declared and initialized in the beginning
-of elv_unregister_queue().
+If CONFIG_BLK_WBT_MQ is disabled, wbt_init() won't do anything.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
 ---
- block/elevator.c | 2 --
- 1 file changed, 2 deletions(-)
+ block/blk-wbt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/elevator.c b/block/elevator.c
-index bd71f0fc4e4b..20e70fd3f77f 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -524,8 +524,6 @@ void elv_unregister_queue(struct request_queue *q)
- 	lockdep_assert_held(&q->sysfs_lock);
+diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+index c293e08b301f..c5a8c10028a0 100644
+--- a/block/blk-wbt.c
++++ b/block/blk-wbt.c
+@@ -651,7 +651,7 @@ void wbt_enable_default(struct request_queue *q)
+ 	if (!blk_queue_registered(q))
+ 		return;
  
- 	if (e && e->registered) {
--		struct elevator_queue *e = q->elevator;
--
- 		kobject_uevent(&e->kobj, KOBJ_REMOVE);
- 		kobject_del(&e->kobj);
- 
+-	if (queue_is_mq(q) && IS_ENABLED(CONFIG_BLK_WBT_MQ))
++	if (queue_is_mq(q))
+ 		wbt_init(q);
+ }
+ EXPORT_SYMBOL_GPL(wbt_enable_default);
 -- 
 2.31.1
 
