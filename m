@@ -2,31 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB026043B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA659604336
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiJSLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
+        id S230520AbiJSLao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiJSLq2 (ORCPT
+        with ESMTP id S231474AbiJSLaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:46:28 -0400
+        Wed, 19 Oct 2022 07:30:19 -0400
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78455136401
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:25:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E28089958
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:04:53 -0700 (PDT)
 Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
         by relay.virtuozzo.com with esmtp (Exim 4.95)
         (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1ol5lc-00B8K8-Jy;
-        Wed, 19 Oct 2022 11:56:31 +0200
+        id 1ol5ld-00B8K8-RP;
+        Wed, 19 Oct 2022 11:56:32 +0200
 From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
 Cc:     kernel@openvz.org,
         Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v5 4/8] mm: Display inflated memory in logs
-Date:   Wed, 19 Oct 2022 12:56:16 +0300
-Message-Id: <20221019095620.124909-5-alexander.atanasov@virtuozzo.com>
+Subject: [RFC PATCH v5 5/8] drivers: virtio: balloon - report inflated memory
+Date:   Wed, 19 Oct 2022 12:56:17 +0300
+Message-Id: <20221019095620.124909-6-alexander.atanasov@virtuozzo.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
 References: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
@@ -36,43 +40,37 @@ X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add InflatedTotal and InflatedFree to show_mem(...) so
-it is visible in the logs.
+Update the inflated memory in the mm core when it changes.
 
 Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- lib/show_mem.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/virtio/virtio_balloon.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/lib/show_mem.c b/lib/show_mem.c
-index 0d7585cde2a6..20b5964d498e 100644
---- a/lib/show_mem.c
-+++ b/lib/show_mem.c
-@@ -7,6 +7,9 @@
- 
- #include <linux/mm.h>
- #include <linux/cma.h>
-+#ifdef CONFIG_MEMORY_BALLOON
-+#include <linux/balloon.h>
-+#endif
- 
- void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+index d0c27c680721..e9c3642eef17 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -450,10 +450,15 @@ static void virtballoon_changed(struct virtio_device *vdev)
+ static void update_balloon_size(struct virtio_balloon *vb)
  {
-@@ -41,4 +44,9 @@ void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
- #ifdef CONFIG_MEMORY_FAILURE
- 	printk("%lu pages hwpoisoned\n", atomic_long_read(&num_poisoned_pages));
- #endif
-+#ifdef CONFIG_MEMORY_BALLOON
-+	printk("Balloon InflatedTotal:%ldkB InflatedFree:%ldkB\n",
-+		atomic_long_read(&mem_balloon_inflated_total_kb),
-+		atomic_long_read(&mem_balloon_inflated_free_kb));
-+#endif
+ 	u32 actual = vb->num_pages;
++	long inflated_kb = actual << (VIRTIO_BALLOON_PFN_SHIFT - 10);
+ 
+ 	/* Legacy balloon config space is LE, unlike all other devices. */
+ 	virtio_cwrite_le(vb->vdev, struct virtio_balloon_config, actual,
+ 			 &actual);
++	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
++		balloon_set_inflated_free(inflated_kb);
++	else
++		balloon_set_inflated_total(inflated_kb);
  }
+ 
+ static void update_balloon_stats_func(struct work_struct *work)
 -- 
 2.31.1
 
