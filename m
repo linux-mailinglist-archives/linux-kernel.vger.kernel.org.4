@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886D960535B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0643C605360
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiJSWrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S231284AbiJSWrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiJSWq6 (ORCPT
+        with ESMTP id S230285AbiJSWrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 18:46:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4A5189C3A;
-        Wed, 19 Oct 2022 15:46:55 -0700 (PDT)
+        Wed, 19 Oct 2022 18:47:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966D01849BE;
+        Wed, 19 Oct 2022 15:47:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6773B82565;
-        Wed, 19 Oct 2022 22:46:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A66C433D6;
-        Wed, 19 Oct 2022 22:46:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD7BB82613;
+        Wed, 19 Oct 2022 22:47:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4999C433D6;
+        Wed, 19 Oct 2022 22:47:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666219612;
-        bh=ZG4aSPWT39VnE1RWNNPIrbbBQn09pN7NZIq4jagKU90=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=h1f+ch+h9OpSbbYc1ykW9MUsKtRnc6c/wrC6nCucP/IGLQ/ImLqGllecH4Na5f1Qw
-         PEaZTxJX/e/fur6OXD6jETgFPIGQ5prsPG4uuONZvfnyx1tKEAMnJvDL79vi90lsv3
-         KKDD0DYi2YRHERzEP0+YLjtke97lQWYBO5mNWmx3So0z1NdFXUU1DvuFyy6fo2HskC
-         hzsy4B7Vs65CxsLollVWB4ObuhU4jZ0BUc1vk6pHpcD/X/hFTECfqOluZ9QyfPgT8v
-         79Z4Of3jqQCWFbZJ3dPv2np4KNWD9PX7Rcm0t3u9QND9WZQ0JXzCvsl43HQgMumTaV
-         FByHHw0VPHV+Q==
+        s=k20201202; t=1666219621;
+        bh=zhI+nSG0LEQR2PAAAvwCyyYQdtfxOPlUmkdh0E4iu6E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ie/0CtZv4oEdoViQqjdmdwAOkuUbEniXSDznUSiM+fM8btdjJ+wZZM2Nh2vOHGJBK
+         kuQUWupa2Mqkf1yLJFOutIuIHllryTzfrPxQyLNBM4qdYDtaHkftNSP3NVz68HSGB0
+         IIUB+ijLG9OUCiSW8lCz5etbYQY3MHEHNmg0wwb/8d5S9ximif6nNJQpgMmBPNNZZP
+         tS8EnPBF1QFqoIJD96pTmSVl2edtkzBI6abWSzoYOroWhUZhPPIYAcKUWvpNyH43vD
+         9iuN2l8GfB7H79el4Pi63Mw0C+d6nAORSLbaPu0MJXOakr8ZDhujDXh/SPrsKFgKBH
+         YlnijjYTyPRSw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 234915C06B4; Wed, 19 Oct 2022 15:46:52 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 15:46:52 -0700
+        id A6FAF5C0879; Wed, 19 Oct 2022 15:47:00 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: [PATCH rcu 0/8] Miscellaneous fixes for v6.2
-Message-ID: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        rostedt@goodmis.org, Pingfan Liu <kernelfans@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 2/8] rcu: Synchronize ->qsmaskinitnext in rcu_boost_kthread_setaffinity()
+Date:   Wed, 19 Oct 2022 15:46:53 -0700
+Message-Id: <20221019224659.2499511-2-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
+References: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,43 +64,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: Pingfan Liu <kernelfans@gmail.com>
 
-This series contains miscellaneous fixes:
+Once either rcutree_online_cpu() or rcutree_dead_cpu() is invoked
+concurrently, the following rcu_boost_kthread_setaffinity() race can
+occur:
 
-1.	Remove duplicate RCU exp QS report from rcu_report_dead(),
-	courtesy of Zqiang.
+        CPU 1                               CPU2
+mask = rcu_rnp_online_cpus(rnp);
+...
 
-2.	Synchronize ->qsmaskinitnext in rcu_boost_kthread_setaffinity(),
-	courtesy of Pingfan Liu.
+                                   mask = rcu_rnp_online_cpus(rnp);
+                                   ...
+                                   set_cpus_allowed_ptr(t, cm);
 
-3.	Remove unused 'cpu' in rcu_virt_note_context_switch(), courtesy
-	of Zeng Heng.
+set_cpus_allowed_ptr(t, cm);
 
-4.	Use READ_ONCE() for lockless read of rnp->qsmask, courtesy of
-	"Joel Fernandes (Google)".
+This results in CPU2's update being overwritten by that of CPU1, and
+thus the possibility of ->boost_kthread_task continuing to run on a
+to-be-offlined CPU.
 
-5.	Explain why SLAB_DESTROY_BY_RCU reference before locking.
+This commit therefore eliminates this race by relying on the pre-existing
+acquisition of ->boost_kthread_mutex to serialize the full process of
+changing the affinity of ->boost_kthread_task.
 
-6.	Remove rcu_is_idle_cpu(), courtesy of Yipeng Zou.
+Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ kernel/rcu/tree_plugin.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-7.	rcu-tasks: Make grace-period-age message human-readable.
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index e3142ee35fc6a..7b0fe741a0886 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -1221,11 +1221,13 @@ static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)
+  * We don't include outgoingcpu in the affinity set, use -1 if there is
+  * no outgoing CPU.  If there are no CPUs left in the affinity set,
+  * this function allows the kthread to execute on any CPU.
++ *
++ * Any future concurrent calls are serialized via ->boost_kthread_mutex.
+  */
+ static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
+ {
+ 	struct task_struct *t = rnp->boost_kthread_task;
+-	unsigned long mask = rcu_rnp_online_cpus(rnp);
++	unsigned long mask;
+ 	cpumask_var_t cm;
+ 	int cpu;
+ 
+@@ -1234,6 +1236,7 @@ static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
+ 	if (!zalloc_cpumask_var(&cm, GFP_KERNEL))
+ 		return;
+ 	mutex_lock(&rnp->boost_kthread_mutex);
++	mask = rcu_rnp_online_cpus(rnp);
+ 	for_each_leaf_node_possible_cpu(rnp, cpu)
+ 		if ((mask & leaf_node_cpu_bit(rnp, cpu)) &&
+ 		    cpu != outgoingcpu)
+-- 
+2.31.1.189.g2e36527f23
 
-8.	Fix __this_cpu_read() lockdep warning in
-	rcu_force_quiescent_state(), courtesy of Zqiang.
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- b/include/linux/kvm_host.h |    2 +-
- b/include/linux/rcutiny.h  |    2 +-
- b/include/linux/rcutree.h  |    2 +-
- b/include/linux/slab.h     |    6 ++++++
- b/kernel/rcu/tasks.h       |    2 +-
- b/kernel/rcu/tree.c        |    2 --
- b/kernel/rcu/tree_plugin.h |    5 ++++-
- include/linux/rcutiny.h    |    2 --
- include/linux/rcutree.h    |    2 --
- kernel/rcu/tree.c          |   10 ++--------
- 10 files changed, 16 insertions(+), 19 deletions(-)
