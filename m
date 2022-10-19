@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714FC60523E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983DF605241
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiJSVvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S231167AbiJSVwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiJSVvh (ORCPT
+        with ESMTP id S229525AbiJSVwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:51:37 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845F18D448;
-        Wed, 19 Oct 2022 14:51:36 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id r19so12612470qtx.6;
-        Wed, 19 Oct 2022 14:51:36 -0700 (PDT)
+        Wed, 19 Oct 2022 17:52:15 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE51B317ED;
+        Wed, 19 Oct 2022 14:52:14 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id f11so31270858wrm.6;
+        Wed, 19 Oct 2022 14:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B9BS0OtCWn0ox+Cz86hvmvKcDCubEqsZ4yAMu9/GWbQ=;
-        b=Tagbyb82i5ua5ayPP/I9ftNAJ/fWiDjA6JSRz0b5lqGJa7INDFTZwESIQ4Oxcah9TL
-         fH79CdFBvvVMNG/SGRvm6PjRM9jz49KasQKPoctnHA7Qi3sjVzgE44GRxQyX+20X+A/n
-         3Y6Wor4W5p8cKvCJNA1YGp5rbSg391L0tvN2HE08AN36V6PefOUyAlpnj+JWoVZcHDkJ
-         U0J2+C9c3a7ZTyfww4BWZk2ZoRg2vLwyaJr0quvCdSJXqiSKCUZSaEdM3uZGe9m0SRAT
-         SqNVQ8i6uYB7r95qgUa5c4Y7f4GP2pvzDGNeZtkFpkoj89wLVlNT1qSdzZXNUi+suGvk
-         buew==
+        bh=eApXCcN6gbSeEBoZawynJhdcd3WZewwA9ECGhchf8gc=;
+        b=TJOqUaTZM1yxHvki48bMZ1o3xH5Cycg7ZoYpjkLoeg90ylQ61Z2xKLLRYQBRqRV8nC
+         lbt9H9cj8Q5PS+IxezJUgpsownODsx547LaWqwR8mlX9fAnTuJ3qhrcW9QUbhozcbD0A
+         Vn2nMR+U3EShmMbN8ip7gUX4Xo0eFoDCzaLXCvD9XSIU5nJAFvYgkEcznIsKcVsMeUyZ
+         cCXznc/UNUCFHxOPx5Gs+9GUJEiOxg6ucydsDphfjjtuUTSa6GZzPYZVzqVW4LiktPaT
+         +3UvEIIaLXS1JkeqPXRW9lHL8DMpE+bEggBQXeSBEKjQe4QzJcGBKiRd4otwV3RcHJKT
+         BOqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=B9BS0OtCWn0ox+Cz86hvmvKcDCubEqsZ4yAMu9/GWbQ=;
-        b=L4qljsklJkOe2t45WL2fZxZwe8+Gco+giDgzA+d+xIxrJ5fYOzy4lGtPw8kufUbqVh
-         kEqj4uB2GLcbvNMkeLRftN7fBJD13dtkL1j1vG1TjVO9zu0nHQ/LvX8A7gTl27QgD+fr
-         shAbsFUUX7WXz5g+D60iV8+VRIsDGxGX+N3jcq0K/sgh5wXoy6MvusjVrjjf/4ab+iwM
-         hScmXG+p3ETD34A9PI2LPtnpax7Tzt43SHlTjGXMaPny8CXbWS9m6X4XN1SyF2vPHs4x
-         iQ1P+bGObTWz34d9b//g1+hjea/5vj5QvioF+Ro8qoJHMU/Y2PMIi/PUkA0HVpJHOg8f
-         nmOQ==
-X-Gm-Message-State: ACrzQf2Mbm8re9sQqBYXtCHe0La9EIfBgcBfqCwFmSu9+mTOXbjGbpjL
-        O4t6rgKhFKduXSyR/rr3QmE=
-X-Google-Smtp-Source: AMsMyM7u/qQJdE95fyYzXHYPTT+EQLVO8+IRS48BANSvQTgTBUx7RfOGd307IninPDpResFdB0Icsw==
-X-Received: by 2002:a05:622a:1804:b0:39c:c7ba:4ac1 with SMTP id t4-20020a05622a180400b0039cc7ba4ac1mr8248134qtc.457.1666216295441;
-        Wed, 19 Oct 2022 14:51:35 -0700 (PDT)
-Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k2-20020a05620a414200b006bba46e5eeasm6225407qko.37.2022.10.19.14.51.33
+        bh=eApXCcN6gbSeEBoZawynJhdcd3WZewwA9ECGhchf8gc=;
+        b=AyxlmG4OenlhY7UjBMlXYEqxUlKe0XdNIZOjo2j8blo73sz5vUBhwBa/j5VUABnMry
+         E0W/lK4bOWvyjI1ECTGaqNkvNDyh+tjJ7S3KdPaLd5nuXBPwseLD5O2721AJoAatCYXw
+         lQCl4BcXIxS0C5vbQHEPbrt+t3HWyO4vzm8Lvm8D9WGidQ1KKJ86n2u3s0HnGfX847gv
+         PEIv/vGvHdwdiCGiwbb8ReN60JTIcFn4CgEQpKbYgvbr+k5Ba1dI6uwE4Klpr8Zg0uZ4
+         /ESDZiivPEZhLKxIJLOBbyWJcshNa/wl9pZdPurnpAQ/vgb7SwVHFwuuUXkroCbWTTMx
+         3bOQ==
+X-Gm-Message-State: ACrzQf3vDD1VvhJYG3grWG3dTCnx689ktSVOuj2RS05pem9Q16i/wcG8
+        13PVFejbljGeyMCB/prb6QMDCK3QxuV2+mln
+X-Google-Smtp-Source: AMsMyM57RpsQoDL6fsHYnO9NGHs0ib7Ga/t0MaIomoZ6IXPHYz4JSXpitGHlsS1wZsMj2/d9xGTHzQ==
+X-Received: by 2002:a5d:428c:0:b0:22e:5d4e:c71e with SMTP id k12-20020a5d428c000000b0022e5d4ec71emr6271418wrq.19.1666216333341;
+        Wed, 19 Oct 2022 14:52:13 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p26-20020a1c545a000000b003c6c5a5a651sm1046313wmi.28.2022.10.19.14.52.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 14:51:34 -0700 (PDT)
-From:   Doug Berger <opendmb@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH net-next v2] net: bcmgenet: add RX_CLS_LOC_ANY support
-Date:   Wed, 19 Oct 2022 14:51:23 -0700
-Message-Id: <20221019215123.316997-1-opendmb@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 19 Oct 2022 14:52:12 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: test_drivers: remove redundant assignment to variable checksum
+Date:   Wed, 19 Oct 2022 22:52:12 +0100
+Message-Id: <20221019215212.1434808-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -73,81 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a matching flow spec exists its current location is as good
-as ANY. If not add the new flow spec at the first available
-location.
+Variable checksum is assigned a value that is never read, it is assigned
+a new value in a following for-loop. The assignment is redundant and can
+be removed.
 
-Signed-off-by: Doug Berger <opendmb@gmail.com>
+Cleans up clang scan build warning:
+drivers/media/test-drivers/vivid/vivid-vbi-gen.c:197:2: warning: Value
+stored to 'checksum' is never read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
-changes since v1:
- - removed __u32 tmp variable. Thanks Jakub!
+ drivers/media/test-drivers/vivid/vivid-vbi-gen.c | 1 -
+ 1 file changed, 1 deletion(-)
 
- .../net/ethernet/broadcom/genet/bcmgenet.c    | 31 ++++++++++++++++---
- 1 file changed, 27 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 25c450606985..a8ce8d0cf9c4 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -1387,7 +1387,8 @@ static int bcmgenet_validate_flow(struct net_device *dev,
- 	struct ethtool_usrip4_spec *l4_mask;
- 	struct ethhdr *eth_mask;
- 
--	if (cmd->fs.location >= MAX_NUM_OF_FS_RULES) {
-+	if (cmd->fs.location >= MAX_NUM_OF_FS_RULES &&
-+	    cmd->fs.location != RX_CLS_LOC_ANY) {
- 		netdev_err(dev, "rxnfc: Invalid location (%d)\n",
- 			   cmd->fs.location);
- 		return -EINVAL;
-@@ -1452,7 +1453,7 @@ static int bcmgenet_insert_flow(struct net_device *dev,
- {
- 	struct bcmgenet_priv *priv = netdev_priv(dev);
- 	struct bcmgenet_rxnfc_rule *loc_rule;
--	int err;
-+	int err, i;
- 
- 	if (priv->hw_params->hfb_filter_size < 128) {
- 		netdev_err(dev, "rxnfc: Not supported by this device\n");
-@@ -1470,7 +1471,29 @@ static int bcmgenet_insert_flow(struct net_device *dev,
- 	if (err)
- 		return err;
- 
--	loc_rule = &priv->rxnfc_rules[cmd->fs.location];
-+	if (cmd->fs.location == RX_CLS_LOC_ANY) {
-+		list_for_each_entry(loc_rule, &priv->rxnfc_list, list) {
-+			cmd->fs.location = loc_rule->fs.location;
-+			err = memcmp(&loc_rule->fs, &cmd->fs,
-+				     sizeof(struct ethtool_rx_flow_spec));
-+			if (!err)
-+				/* rule exists so return current location */
-+				return 0;
-+		}
-+		for (i = 0; i < MAX_NUM_OF_FS_RULES; i++) {
-+			loc_rule = &priv->rxnfc_rules[i];
-+			if (loc_rule->state == BCMGENET_RXNFC_STATE_UNUSED) {
-+				cmd->fs.location = i;
-+				break;
-+			}
-+		}
-+		if (i == MAX_NUM_OF_FS_RULES) {
-+			cmd->fs.location = RX_CLS_LOC_ANY;
-+			return -ENOSPC;
-+		}
-+	} else {
-+		loc_rule = &priv->rxnfc_rules[cmd->fs.location];
-+	}
- 	if (loc_rule->state == BCMGENET_RXNFC_STATE_ENABLED)
- 		bcmgenet_hfb_disable_filter(priv, cmd->fs.location);
- 	if (loc_rule->state != BCMGENET_RXNFC_STATE_UNUSED) {
-@@ -1583,7 +1606,7 @@ static int bcmgenet_get_rxnfc(struct net_device *dev, struct ethtool_rxnfc *cmd,
- 		break;
- 	case ETHTOOL_GRXCLSRLCNT:
- 		cmd->rule_cnt = bcmgenet_get_num_flows(priv);
--		cmd->data = MAX_NUM_OF_FS_RULES;
-+		cmd->data = MAX_NUM_OF_FS_RULES | RX_CLS_LOC_SPECIAL;
- 		break;
- 	case ETHTOOL_GRXCLSRULE:
- 		err = bcmgenet_get_flow(dev, cmd, cmd->fs.location);
+diff --git a/drivers/media/test-drivers/vivid/vivid-vbi-gen.c b/drivers/media/test-drivers/vivid/vivid-vbi-gen.c
+index a141369a7a63..70a4024d461e 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vbi-gen.c
++++ b/drivers/media/test-drivers/vivid/vivid-vbi-gen.c
+@@ -194,7 +194,6 @@ static void vivid_vbi_gen_set_time_of_day(u8 *packet)
+ 	for (checksum = i = 0; i <= 8; i++)
+ 		checksum += packet[i] & 0x7f;
+ 	packet[9] = calc_parity(0x100 - checksum);
+-	checksum = 0;
+ 	packet[10] = calc_parity(0x07);
+ 	packet[11] = calc_parity(0x04);
+ 	if (sys_tz.tz_minuteswest >= 0)
 -- 
-2.25.1
+2.37.3
 
