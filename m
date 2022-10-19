@@ -2,111 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E23603A5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877BC603A59
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiJSHIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S229741AbiJSHIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiJSHIi (ORCPT
+        with ESMTP id S229651AbiJSHIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:08:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E8675CF7;
-        Wed, 19 Oct 2022 00:08:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 19 Oct 2022 03:08:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE9E75CD2;
+        Wed, 19 Oct 2022 00:08:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mshf91X2Kz4xFy;
-        Wed, 19 Oct 2022 18:08:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666163314;
-        bh=n25CEvRMNJkl4mDH2lWKsRxa6pWT3sbqAZJPl0HaR3M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Nse+/gMcIVXhvkj+nw23JSEeP0t/zlnBUXT+8M2s+IbFGI4929qxwP0k0u17ueXUs
-         t6S97fo0g7rweW1R0B93QgvhG+6M+x1GrtliRG5C1/9GmAuDnkFhvl3eHpL8WQ7dQg
-         r9d94d8UnIXLSbfkkf1BHVmpAFFCiYHeKcmJVyiQEFMG4EaWi/ThYbWoxG+O41jyeM
-         IpsZEcDzbiWyKJ8CoOV5u6lO03dWNiuUUgaG7Kvpul9q9jQtqcnMW0PThgPVdl/l8p
-         40l5cp+o/zTVpAH50z2TyuSkyZMuzr4f0D8KmA4flfzG3/1pPk3l+jk08J+1Sp/2NK
-         6zeg6fyy/TfHA==
-Date:   Wed, 19 Oct 2022 18:08:07 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Richard Weinberger <richard.weinberger@gmail.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: linux-next: manual merge of the mtd tree with the mtd-fixes
- tree
-Message-ID: <20221019180807.6dac24a0@canb.auug.org.au>
-In-Reply-To: <23d311953ef13608be2283a05b2e853d@milecki.pl>
-References: <20221019092812.7d370b06@canb.auug.org.au>
-        <23d311953ef13608be2283a05b2e853d@milecki.pl>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5745AB82267;
+        Wed, 19 Oct 2022 07:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05496C433B5;
+        Wed, 19 Oct 2022 07:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666163309;
+        bh=qnqYtRTEaT7BfLqpb871BWOJ4dTkR7Ct7nJSNxl+0wI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JDrygyiLVkGQ4sHp6T8YjofcTl/4KscKDiQznkabIqFSRQ0zaKCuLla9rmTes9HYh
+         +3fktzFSujjLp3B+E+/QDyn9N9fwaf5P34olGCjUNji8cEoo4ccVHsATJ1RfJHt33C
+         ZFKG+ug4RfVbOLJElz3ecrjUg2lsZqLx/cha5ZakUnZ9sQnCygYTShlQC79Ju2XwEm
+         oTP9sxBDpSEB6nk35V3sv8QNgUIKoryyRXfWAhqAR96oyCIiDK7gKlI6Sbyvb8ZbZJ
+         Lrw432wYWcq0g8lYnJRtFtQ79EUbL/sMOssuUowaa4e+deh+RNLQiQrPfQJFrZlY6P
+         TjZ/af+H54o4w==
+Received: by mail-lf1-f52.google.com with SMTP id g7so21502526lfv.5;
+        Wed, 19 Oct 2022 00:08:28 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0tuSpu3z7XNU8M3FgAorLAUljUCrc9dByGPO1FqhLNBVEXxcAv
+        en1QHLLAn3ygAi//qC5kFJDPkZ4NLP3Ne314Vb0=
+X-Google-Smtp-Source: AMsMyM4TgHgkrqxf6VHibb4rSlNYQ97UQSTc/g2ynnHpxA4YNITxShcgWNlfNsIymaKZ2UOqUPYpaJ4q2wZhfMLwM0M=
+X-Received: by 2002:a05:6512:104a:b0:4a2:9c7b:c9c with SMTP id
+ c10-20020a056512104a00b004a29c7b0c9cmr2219342lfb.122.1666163307042; Wed, 19
+ Oct 2022 00:08:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/acxa4UYAYwanTHlWK5gyvXR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1662459668.git.baskov@ispras.ru> <e4dd6f83a49551d72682ad399dba8feeea955fb4.1662459668.git.baskov@ispras.ru>
+In-Reply-To: <e4dd6f83a49551d72682ad399dba8feeea955fb4.1662459668.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Oct 2022 09:08:15 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXG6wZ2UK7cPeym8M4WioCUABa5qAo48LyGKHNA=QZ8YCw@mail.gmail.com>
+Message-ID: <CAMj1kXG6wZ2UK7cPeym8M4WioCUABa5qAo48LyGKHNA=QZ8YCw@mail.gmail.com>
+Subject: Re: [PATCH 04/16] x86/boot: Increase boot page table size
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/acxa4UYAYwanTHlWK5gyvXR
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Rafa=C5=82,
-
-On Wed, 19 Oct 2022 07:31:57 +0200 Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.p=
-l> wrote:
+On Tue, 6 Sept 2022 at 12:41, Evgeniy Baskov <baskov@ispras.ru> wrote:
 >
-> this isn't exactly the correct fix, of_node_get() is still needed.
->=20
-> I'll make sure we let Linus know about this conflict (and solution) when
-> sending 6.2 pull request.
->=20
->=20
-> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-> index 07249af4f890..20fcedc3021e 100644
-> --- a/drivers/mtd/mtdcore.c
-> +++ b/drivers/mtd/mtdcore.c
-> @@ -559,7 +559,7 @@ static void mtd_check_of_node(struct mtd_info *mtd)
->   	if (!mtd_is_partition(mtd))
->   		return;
->=20
-> -	parent_dn =3D mtd_get_of_node(mtd->parent);
-> +	parent_dn =3D of_node_get(mtd_get_of_node(mtd->parent));
->   	if (!parent_dn)
->   		return;
->=20
+> Previous calculations ignored pages implicitly mapped by ACPI code,
 
+I'm not sure I understand what this means. Which ACPI code and which
+pages does it map?
 
-Thanks for checking.  I have added that to my resolution for tomorrow
-onward.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/acxa4UYAYwanTHlWK5gyvXR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNPolcACgkQAVBC80lX
-0GwjOgf/SohKt6ThX8qtlr+cShV31thykLnj7Tz9Gz8EDxs2c7gOkoOLAt5I3ofG
-2qy5uthAsavJ6hQX/AhnOSqCrzvUGC8Z6cu2zVcUtETNlJI8wrGd3fciWTjNDGWW
-IGbqquYnp+aiZNSbRkDCH8VmAactJOfi82Y56ljfg94guEG8ZaTFEp+UM5ZziI0P
-s0lMgoB2hDuvAXJDNoLc82jHkLRIz4JsY9aTwvplXRqDcK4n13thPB+WTNFOiHZI
-1C9SuEEDRjAb9lAA9M2/fxLg1mZAe39dvIKpzIFnpFkMwsQZiIW+KxSn9jnJIqGU
-FccNZuVIxUuuTlp0hPFwTtt2ydwM+g==
-=tL7r
------END PGP SIGNATURE-----
-
---Sig_/acxa4UYAYwanTHlWK5gyvXR--
+> so theoretical upper limit is higher than was set.
+>
+> Using 4KB pages is desirable for better memory protection granularity.
+> Approximately twice as much memory is required for those.
+>
+> Increase initial page table size to 64 4KB page tables.
+>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> ---
+>  arch/x86/include/asm/boot.h | 26 ++++++++++++++------------
+>  1 file changed, 14 insertions(+), 12 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/boot.h b/arch/x86/include/asm/boot.h
+> index 9191280d9ea3..024d972c248e 100644
+> --- a/arch/x86/include/asm/boot.h
+> +++ b/arch/x86/include/asm/boot.h
+> @@ -41,22 +41,24 @@
+>  # define BOOT_STACK_SIZE       0x4000
+>
+>  # define BOOT_INIT_PGT_SIZE    (6*4096)
+> -# ifdef CONFIG_RANDOMIZE_BASE
+>  /*
+>   * Assuming all cross the 512GB boundary:
+>   * 1 page for level4
+> - * (2+2)*4 pages for kernel, param, cmd_line, and randomized kernel
+> - * 2 pages for first 2M (video RAM: CONFIG_X86_VERBOSE_BOOTUP).
+> - * Total is 19 pages.
+> + * (3+3)*2 pages for param and cmd_line
+> + * (2+2+S)*2 pages for kernel and randomized kernel, where S is total number
+> + *     of sections of kernel. Explanation: 2+2 are upper level page tables.
+> + *     We can have only S unaligned parts of section: 1 at the end of the kernel
+> + *     and (S-1) at the section borders. The start address of the kernel is
+> + *     aligned, so an extra page table. There are at most S=6 sections in
+> + *     vmlinux ELF image.
+> + * 3 pages for first 2M (video RAM: CONFIG_X86_VERBOSE_BOOTUP).
+> + * Total is 36 pages.
+> + *
+> + * Some pages are also required for UEFI memory map and
+> + * ACPI table mappings, so we need to add extra space.
+> + * FIXME: Figure out exact amount of pages.
+>   */
+> -#  ifdef CONFIG_X86_VERBOSE_BOOTUP
+> -#   define BOOT_PGT_SIZE       (19*4096)
+> -#  else /* !CONFIG_X86_VERBOSE_BOOTUP */
+> -#   define BOOT_PGT_SIZE       (17*4096)
+> -#  endif
+> -# else /* !CONFIG_RANDOMIZE_BASE */
+> -#  define BOOT_PGT_SIZE                BOOT_INIT_PGT_SIZE
+> -# endif
+> +# define BOOT_PGT_SIZE         (64*4096)
+>
+>  #else /* !CONFIG_X86_64 */
+>  # define BOOT_STACK_SIZE       0x1000
+> --
+> 2.35.1
+>
