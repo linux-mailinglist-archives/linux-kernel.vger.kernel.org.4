@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C05C604EAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B308604EB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiJSRbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S229913AbiJSRcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiJSRbe (ORCPT
+        with ESMTP id S229489AbiJSRcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:31:34 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7960D33439;
-        Wed, 19 Oct 2022 10:31:32 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29JHVFpE107875;
-        Wed, 19 Oct 2022 12:31:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666200675;
-        bh=LU/xml6B+SilhfgMsgyN/uDYo0am3I8H+8qk72Ahj3o=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=KGtVveP3mcgaO4KMw9X0a9crfn1WhJflzZ6ZF5jFpIVqidWW9DQvIQW+nANhBYMTx
-         pNqVo5SFv8UQEoaMDfLt7pnVP3w5fMUIJuVbdW0omE9U+gstgoHsTyn5PYStMfDkIA
-         PVNXeu1FIB2lsY0q2q9lLLXvD5puxbpLTg3RkvNw=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29JHVFHi013478
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Oct 2022 12:31:15 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 19
- Oct 2022 12:31:15 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 19 Oct 2022 12:31:15 -0500
-Received: from [10.250.33.68] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29JHVESZ086400;
-        Wed, 19 Oct 2022 12:31:14 -0500
-Message-ID: <cd5dbbb0-2d9f-8d7d-b051-f8d01d710c62@ti.com>
-Date:   Wed, 19 Oct 2022 12:31:14 -0500
+        Wed, 19 Oct 2022 13:32:17 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4711C208A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:32:07 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-367c4846275so10524877b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Us5mvL9wlJ8ZsvYHuPVkt2Lu8S8whYP0vpSElqpTpJQ=;
+        b=NrsOQn6xYFkLIRLGjV+vXtY/BG/Rmp00VWQ3YQ3eMYVuKNVcWVPB0Op6WBIKGdsx+O
+         WhOcWPXkbe3gtHcWlzSr9cK0GpMxfuGeWvRvlsxos1czt2W25C8i9vIaCpNEbh820BrS
+         Kdq32JkTv+LRxh4I7Htq6zx7RXTuii3Q9j51LOKj2IQcq/k8Ym0Ja/ChLZHADO2wtacy
+         w2Ej/NYnHmomZOR3B8hYUNy5Rp1DkFIhjTMcbmpJlHf3DvqKs10e7esB4GKNh82ugqEw
+         BQoFcE3h+yThRO8DHciZFoe+L5OnJWAq/NPO1Zx0x9m5OBzlywNmOJmp+UPlwSoHno+N
+         BxJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Us5mvL9wlJ8ZsvYHuPVkt2Lu8S8whYP0vpSElqpTpJQ=;
+        b=gFLlp+BciwaYy10sSzC9xxPmDLVrDMzZOu+e0PCu+oUZRTYXXFLPQm2BJQoEyMOjOm
+         uYzu97vIbRNmm4jbvbF2xowhdcXI8qt5mg5TX60U5NDlGijZWlkW5cjxfAG1fNV3eWI6
+         anuSPHJF8ioPNDm50qL4Phwkx84P3Ar7rTGz17tub+FRT9CrHrNQU1d3SLUtzcyEe3hW
+         LyWD9eE+30vlSWkZXLqosOeyLTg6bB6zf/59wmJmqvS9q2k7AKJarlMtJcckuCzbsAfT
+         gQ9f/IS1pnl0H29+c3b6i64n+YNIrnTV9As6hr+7JEE6YDq0dX7CdRqdS2DbIjarvY4p
+         1Waw==
+X-Gm-Message-State: ACrzQf3rIce0g2vwrH0GpBVSfx4h1lq2uOXDCTuwqtavhd9ib1A/Sbe3
+        8v0UufX622zY/pIXPyEi4B87xxB1BAlMMY7r2XoJzg==
+X-Google-Smtp-Source: AMsMyM7nI9Ov6Q3MUA7r/UWgoM3LIUkF8/NjVSPGq9y5ZcXpRkuJyIWIVOVnlSv3B1cshOB97Gz7N3B5eSJGX584ys4=
+X-Received: by 2002:a81:9204:0:b0:358:89e9:cff9 with SMTP id
+ j4-20020a819204000000b0035889e9cff9mr7591053ywg.168.1666200726684; Wed, 19
+ Oct 2022 10:32:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Content-Language: en-US
-To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Hari Nagalla <hnagalla@ti.com>
-References: <20221014082314.118361-1-a-nandan@ti.com>
- <20221014082314.118361-5-a-nandan@ti.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221014082314.118361-5-a-nandan@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221017162448.257173-1-wei.w.wang@intel.com> <Y1Az6y1X4reOp2n6@google.com>
+In-Reply-To: <Y1Az6y1X4reOp2n6@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Wed, 19 Oct 2022 10:31:40 -0700
+Message-ID: <CALzav=f71jq9Sar-C5skzeDU0iGv=v0pQXq++L=ee6a6+AUbCw@mail.gmail.com>
+Subject: Re: [PATCH v1] KVM: selftests: name the threads
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, vipinsh@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,272 +68,596 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 3:23 AM, Apurva Nandan wrote:
-> J784S4 EVM board is designed for TI J784S4 SoC. It supports the following
-> interfaces:
-> * 32 GB DDR4 RAM
-> * x2 Gigabit Ethernet interfaces capable of working in Switch and MAC mode
-> * x1 Input Audio Jack, x1 Output Audio Jack
-> * x1 USB2.0 Hub with two Type A host and x1 USB 3.1 Type-C Port
-> * x2 4L PCIe connector
-> * x1 UHS-1 capable micro-SD card slot
-> * 512 Mbit OSPI flash, 1 Gbit Octal NAND flash, 512 Mbit QSPI flash,
->    UFS flash.
-> * x6 UART through UART-USB bridge
-> * XDS110 for onboard JTAG debug using USB
-> * Temperature sensors, user push buttons and LEDs
-> * 40-pin User Expansion Connector
-> * x2 ENET Expansion Connector, x1 GESI expander, x2 Display connector
-> * x1 15-pin CSI header
-> * x6 MCAN instances
-> 
-> Add basic support for J784S4-EVM.
-> 
-> Schematics: https://www.ti.com/lit/zip/sprr458
-> 
-> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
->   arch/arm64/boot/dts/ti/Makefile          |   2 +
->   arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 199 +++++++++++++++++++++++
->   2 files changed, 201 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index 02e5d80344d0..6381c458738a 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
->   
->   dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
->   
-> +dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
-> +
->   dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
->   dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
->   
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> new file mode 100644
-> index 000000000000..bf2f2dfb7658
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> @@ -0,0 +1,199 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + *
-> + * Common Processor Board: https://www.ti.com/tool/J721EXCPXEVM
+On Wed, Oct 19, 2022 at 10:29 AM David Matlack <dmatlack@google.com> wrote:
+>
+> On Tue, Oct 18, 2022 at 12:24:48AM +0800, Wei Wang wrote:
+> > Name the threads to facilitate debugging, performance tuning,
+> > runtime pining etc. pthread_create_with_name is used to create
+> > general threads with user specified name, and kvm_vcpu_thread_create
+> > is used to create vcpu threads with name in "vcpu##id" format.
+> >
+> > An example is shown below reported from "top". With naming the
+> > vcpu threads, the per-vcpu info becomes more noticeable.
+> >
+> > PID  USER PR  NI VIRT    RES  SHR  S  %CPU  %MEM TIME+   COMMAND
+> > 4464 root 20  0  4248684 4.0g 1628 R  99.9  26.2 0:50.97 dirty_log_perf_
+> > 4467 root 20  0  4248684 4.0g 1628 R  99.9  26.2 0:50.93 vcpu0
+> > 4469 root 20  0  4248684 4.0g 1628 R  99.9  26.2 0:50.93 vcpu2
+> > 4470 root 20  0  4248684 4.0g 1628 R  99.9  26.2 0:50.94 vcpu3
+> > 4468 root 20  0  4248684 4.0g 1628 R  99.7  26.2 0:50.93 vcpu1
+> >
+> > pthread.h is included in kvm_util.h, so remove it from the files
+> > that have already included kvm_util.h.
+> >
+> > Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+> > ---
+> >  .../selftests/kvm/aarch64/arch_timer.c        | 16 ++-----
+> >  .../selftests/kvm/access_tracking_perf_test.c |  1 -
+> >  .../selftests/kvm/demand_paging_test.c        |  5 +-
+> >  .../selftests/kvm/dirty_log_perf_test.c       |  1 -
+> >  tools/testing/selftests/kvm/dirty_log_test.c  |  2 +-
+> >  .../selftests/kvm/hardware_disable_test.c     | 17 ++-----
+> >  .../testing/selftests/kvm/include/kvm_util.h  |  8 ++++
+> >  .../selftests/kvm/include/perf_test_util.h    |  2 -
+> >  .../selftests/kvm/kvm_page_table_test.c       |  5 +-
+> >  tools/testing/selftests/kvm/lib/kvm_util.c    | 47 +++++++++++++++++++
+> >  .../selftests/kvm/lib/perf_test_util.c        |  3 +-
+> >  .../selftests/kvm/max_guest_memory_test.c     |  4 +-
+> >  .../kvm/memslot_modification_stress_test.c    |  1 -
+> >  .../testing/selftests/kvm/memslot_perf_test.c |  3 +-
+> >  tools/testing/selftests/kvm/rseq_test.c       |  5 +-
+> >  .../selftests/kvm/set_memory_region_test.c    |  3 +-
+> >  tools/testing/selftests/kvm/steal_time.c      |  4 +-
+> >  .../selftests/kvm/x86_64/mmio_warning_test.c  |  3 +-
+> >  .../selftests/kvm/x86_64/sev_migrate_tests.c  |  1 -
+> >  .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  4 +-
+> >  .../kvm/x86_64/ucna_injection_test.c          |  1 -
+> >  .../selftests/kvm/x86_64/xapic_ipi_test.c     | 10 ++--
+> >  22 files changed, 85 insertions(+), 61 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> > index 574eb73f0e90..14f56327ca28 100644
+> > --- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> > +++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> > @@ -23,7 +23,6 @@
+> >  #define _GNU_SOURCE
+> >
+> >  #include <stdlib.h>
+> > -#include <pthread.h>
+> >  #include <linux/kvm.h>
+> >  #include <linux/sizes.h>
+> >  #include <linux/bitmap.h>
+> > @@ -314,28 +313,23 @@ static void test_run(struct kvm_vm *vm)
+> >  {
+> >       pthread_t pt_vcpu_migration;
+> >       unsigned int i;
+> > -     int ret;
+> >
+> >       pthread_mutex_init(&vcpu_done_map_lock, NULL);
+> >       vcpu_done_map = bitmap_zalloc(test_args.nr_vcpus);
+> >       TEST_ASSERT(vcpu_done_map, "Failed to allocate vcpu done bitmap\n");
+> >
+> > -     for (i = 0; i < (unsigned long)test_args.nr_vcpus; i++) {
+> > -             ret = pthread_create(&pt_vcpu_run[i], NULL, test_vcpu_run,
+> > -                                  (void *)(unsigned long)i);
+> > -             TEST_ASSERT(!ret, "Failed to create vCPU-%d pthread\n", i);
+> > -     }
+> > +     for (i = 0; i < (unsigned long)test_args.nr_vcpus; i++)
+> > +             kvm_create_vcpu_thread(&pt_vcpu_run[i], NULL,
+> > +                             test_vcpu_run, (void *)(unsigned long)i, i);
+> >
+> >       /* Spawn a thread to control the vCPU migrations */
+> >       if (test_args.migration_freq_ms) {
+> >               srand(time(NULL));
+> >
+> > -             ret = pthread_create(&pt_vcpu_migration, NULL,
+> > -                                     test_vcpu_migration, NULL);
+> > -             TEST_ASSERT(!ret, "Failed to create the migration pthread\n");
+> > +             pthread_create_with_name(&pt_vcpu_migration, NULL,
+> > +                             test_vcpu_migration, NULL, "control-thread");
+> >       }
+> >
+> > -
+> >       for (i = 0; i < test_args.nr_vcpus; i++)
+> >               pthread_join(pt_vcpu_run[i], NULL);
+> >
+> > diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+> > index 76c583a07ea2..b61ecc907d61 100644
+> > --- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
+> > +++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+> > @@ -37,7 +37,6 @@
+> >   */
+> >  #include <inttypes.h>
+> >  #include <limits.h>
+> > -#include <pthread.h>
+> >  #include <sys/mman.h>
+> >  #include <sys/types.h>
+> >  #include <sys/stat.h>
+> > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> > index 779ae54f89c4..f75d531008e8 100644
+> > --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> > @@ -14,7 +14,6 @@
+> >  #include <stdlib.h>
+> >  #include <time.h>
+> >  #include <poll.h>
+> > -#include <pthread.h>
+> >  #include <linux/userfaultfd.h>
+> >  #include <sys/syscall.h>
+> >
+> > @@ -260,8 +259,8 @@ static void setup_demand_paging(struct kvm_vm *vm,
+> >       uffd_args->uffd = uffd;
+> >       uffd_args->pipefd = pipefd;
+> >       uffd_args->delay = uffd_delay;
+> > -     pthread_create(uffd_handler_thread, NULL, uffd_handler_thread_fn,
+> > -                    uffd_args);
+> > +     pthread_create_with_name(uffd_handler_thread, NULL,
+> > +             uffd_handler_thread_fn, uffd_args, "uffd-handler-thread");
+> >
+> >       PER_VCPU_DEBUG("Created uffd thread for HVA range [%p, %p)\n",
+> >                      hva, hva + len);
+> > diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > index f99e39a672d3..5cf9080b3864 100644
+> > --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > @@ -11,7 +11,6 @@
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> >  #include <time.h>
+> > -#include <pthread.h>
+> >  #include <linux/bitmap.h>
+> >
+> >  #include "kvm_util.h"
+> > diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+> > index b5234d6efbe1..c7a30b4dd33a 100644
+> > --- a/tools/testing/selftests/kvm/dirty_log_test.c
+> > +++ b/tools/testing/selftests/kvm/dirty_log_test.c
+> > @@ -772,7 +772,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >       host_clear_count = 0;
+> >       host_track_next_count = 0;
+> >
+> > -     pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);
+> > +     kvm_create_vcpu_thread(&vcpu_thread, NULL, vcpu_worker, vcpu, 0);
+> >
+> >       while (iteration < p->iterations) {
+> >               /* Give the vcpu thread some time to dirty some pages */
+> > diff --git a/tools/testing/selftests/kvm/hardware_disable_test.c b/tools/testing/selftests/kvm/hardware_disable_test.c
+> > index f5d59b9934f1..c22b8445a809 100644
+> > --- a/tools/testing/selftests/kvm/hardware_disable_test.c
+> > +++ b/tools/testing/selftests/kvm/hardware_disable_test.c
+> > @@ -8,7 +8,6 @@
+> >  #define _GNU_SOURCE
+> >
+> >  #include <fcntl.h>
+> > -#include <pthread.h>
+> >  #include <semaphore.h>
+> >  #include <stdint.h>
+> >  #include <stdlib.h>
+> > @@ -59,15 +58,6 @@ static void *sleeping_thread(void *arg)
+> >       pthread_exit(NULL);
+> >  }
+> >
+> > -static inline void check_create_thread(pthread_t *thread, pthread_attr_t *attr,
+> > -                                    void *(*f)(void *), void *arg)
+> > -{
+> > -     int r;
+> > -
+> > -     r = pthread_create(thread, attr, f, arg);
+> > -     TEST_ASSERT(r == 0, "%s: failed to create thread", __func__);
+> > -}
+> > -
+> >  static inline void check_set_affinity(pthread_t thread, cpu_set_t *cpu_set)
+> >  {
+> >       int r;
+> > @@ -104,12 +94,13 @@ static void run_test(uint32_t run)
+> >       for (i = 0; i < VCPU_NUM; ++i) {
+> >               vcpu = vm_vcpu_add(vm, i, guest_code);
+> >
+> > -             check_create_thread(&threads[i], NULL, run_vcpu, vcpu);
+> > +             kvm_create_vcpu_thread(&threads[i], NULL, run_vcpu, vcpu, i);
+> >               check_set_affinity(threads[i], &cpu_set);
+> >
+> >               for (j = 0; j < SLEEPING_THREAD_NUM; ++j) {
+> > -                     check_create_thread(&throw_away, NULL, sleeping_thread,
+> > -                                         (void *)NULL);
+> > +                     pthread_create_with_name(&throw_away, NULL,
+> > +                                              sleeping_thread, (void *)NULL,
+> > +                                              "sleeping-thread");
+> >                       check_set_affinity(throw_away, &cpu_set);
+> >               }
+> >       }
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> > index c9286811a4cb..b7f0295d928e 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> > @@ -7,7 +7,15 @@
+> >  #ifndef SELFTEST_KVM_UTIL_H
+> >  #define SELFTEST_KVM_UTIL_H
+> >
+> > +#include <pthread.h>
+> > +
+> >  #include "kvm_util_base.h"
+> >  #include "ucall_common.h"
+> >
+> > +void pthread_create_with_name(pthread_t *thread, const pthread_attr_t *attr,
+> > +                     void *(*start_routine)(void *), void *arg, char *name);
+> > +
+> > +void kvm_create_vcpu_thread(pthread_t *thread, const pthread_attr_t *attr,
+> > +             void *(*start_routine)(void *), void *arg, int vcpu_id);
+> > +
+> >  #endif /* SELFTEST_KVM_UTIL_H */
+> > diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
+> > index eaa88df0555a..cb6971c8740f 100644
+> > --- a/tools/testing/selftests/kvm/include/perf_test_util.h
+> > +++ b/tools/testing/selftests/kvm/include/perf_test_util.h
+> > @@ -8,8 +8,6 @@
+> >  #ifndef SELFTEST_KVM_PERF_TEST_UTIL_H
+> >  #define SELFTEST_KVM_PERF_TEST_UTIL_H
+> >
+> > -#include <pthread.h>
+> > -
+> >  #include "kvm_util.h"
+> >
+> >  /* Default guest test virtual memory offset */
+> > diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> > index f42c6ac6d71d..1e41dca7f67d 100644
+> > --- a/tools/testing/selftests/kvm/kvm_page_table_test.c
+> > +++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> > @@ -14,7 +14,6 @@
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> >  #include <time.h>
+> > -#include <pthread.h>
+> >  #include <semaphore.h>
+> >
+> >  #include "test_util.h"
+> > @@ -359,8 +358,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+> >       *current_stage = KVM_BEFORE_MAPPINGS;
+> >
+> >       for (i = 0; i < nr_vcpus; i++)
+> > -             pthread_create(&vcpu_threads[i], NULL, vcpu_worker,
+> > -                            test_args.vcpus[i]);
+> > +             kvm_create_vcpu_thread(&vcpu_threads[i], NULL,
+> > +                                    vcpu_worker, test_args.vcpus[i], i);
+> >
+> >       vcpus_complete_new_stage(*current_stage);
+> >       pr_info("Started all vCPUs successfully\n");
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > index f1cb1627161f..c252c912f1ba 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -2021,3 +2021,50 @@ void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
+> >               break;
+> >       }
+> >  }
+> > +
+> > +/*
+> > + * Create a named thread
+> > + *
+> > + * Input Args:
+>
+> thread is missing here
+>
+> > + *   attr - the attributes for the new thread
+> > + *   start_routine - the routine to run in the thread context
+> > + *   arg - the argument passed to start_routine
+> > + *   name - the name of the thread
+> > + *
+> > + * Output Args:
+> > + *   thread - the thread to be created
+> > + *
+> > + * Create a thread with user specified name.
+> > + */
+> > +void pthread_create_with_name(pthread_t *thread, const pthread_attr_t *attr,
+> > +                     void *(*start_routine)(void *), void *arg, char *name)
+> > +{
+> > +     int r;
+> > +
+> > +     r = pthread_create(thread, attr, start_routine, arg);
+> > +     TEST_ASSERT(!r, "thread(%s) creation failed, r = %d", name, r);
+> > +     pthread_setname_np(*thread, name);
+> > +}
+> > +
+> > +/*
+> > + * Create a vcpu thread
+> > + *
+> > + * Input Args:
+>
+> thread is missing here
+>
+> > + *   attr - the attributes for the new thread
+> > + *   start_routine - the routine to run in the thread context
+> > + *   arg - the argument passed to start_routine
+> > + *   vcpu_id - the id of the vcpu
+> > + *
+> > + * Output Args:
+> > + *   thread - the thread to be created
+> > + *
+> > + * Create a vcpu thread with the name in "vcpu##id" format.
+> > + */
+> > +void kvm_create_vcpu_thread(pthread_t *thread, const pthread_attr_t *attr,
+>
+> If I'm reading the patch correctly, attr is always NULL for vCPU
+> threads, so just drop it until we need it?
+>
+> > +                     void *(*start_routine)(void *), void *arg, int vcpu_id)
+>
+> I think it would be helpful to tie the vcpu_id to something real, rather
+> than leaving it up to the caller. How about passing in the struct
+> kvm_vcpu here and using vcpu->id in the thread name?
+>
+> Another cleanup we could do on top of this series would be to stash the
+> vCPU pthread_t into struct kvm_vcpu, which would eliminate another
+> parameter here and make this API super clean:
+>
+> void vcpu_create_thread(struct kvm_vcpu *vcpu, void *(*fn)(void *), void *arg)
+> {
+>         ...
+> }
+>
+> > +{
+> > +     char vcpu_name[6];
+> > +
+> > +     sprintf(vcpu_name, "%s%d", "vcpu", vcpu_id);
+>
+> There's no need to dynamically insert "vcpu". Also, could we include a
+> dash to make the name slightly easier to parse? Putting it together...
+>
+>         char vcpu_name[16];
+>
+>         sprintf(vcpu_name, "vcpu-%d", vcpu_id);
 
-This doesn't seem to be the right EVM, I'd just drop this link.
+Oh and I forgot to mention, vcpu_name[6] is too small of a buffer
+since there can be more than 10 vCPUs (honestly, even more than 100 is
+quite normal).
 
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/net/ti-dp83867.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include "k3-j784s4.dtsi"
-> +
-> +/ {
-> +	compatible = "ti,j784s4-evm", "ti,j784s4";
-> +	model = "Texas Instruments J784S4 EVM";
-> +
-> +	chosen {
-> +		stdout-path = "serial2:115200n8";
-> +	};
-> +
-> +	aliases {
-> +		serial2 = &main_uart8;
-> +		mmc1 = &main_sdhci1;
-> +		i2c0 = &main_i2c0;
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		/* 32G RAM */
-> +		reg = <0x00 0x80000000 0x00 0x80000000>,
-> +		      <0x08 0x80000000 0x07 0x80000000>;
-> +	};
-> +
-> +	/* Reserving memory regions still pending */
-
-Comment not needed.
-
-> +	reserved_memory: reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		secure_ddr: optee@9e800000 {
-> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
-> +			alignment = <0x1000>;
-
-Is alignment needed here?
-
-> +			no-map;
-> +		};
-> +	};
-> +
-> +	evm_12v0: regulator-evm12v0 {
-> +		/* main supply */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "evm_12v0";
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vsys_3v3: regulator-vsys3v3 {
-> +		/* Output of LM5140 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vsys_3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&evm_12v0>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vsys_5v0: regulator-vsys5v0 {
-> +		/* Output of LM5140 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vsys_5v0";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&evm_12v0>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vdd_mmc1: regulator-sd {
-> +		/* Output of TPS22918 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd_mmc1";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		enable-active-high;
-> +		vin-supply = <&vsys_3v3>;
-> +		gpio = <&exp2 2 GPIO_ACTIVE_HIGH>;
-> +	};
-> +
-> +	vdd_sd_dv: regulator-TLV71033 {
-> +		/* Output of TLV71033 */
-> +		compatible = "regulator-gpio";
-> +		regulator-name = "tlv71033";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vdd_sd_dv_pins_default>;
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		vin-supply = <&vsys_5v0>;
-> +		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
-> +		states = <1800000 0x0>,
-> +			 <3300000 0x1>;
-> +	};
-> +};
-> +
-> +&main_pmx0 {
-> +	main_uart8_pins_default: main-uart8-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x040, PIN_INPUT, 14) /* (AF37) MCASP0_AXR0.UART8_CTSn */
-> +			J784S4_IOPAD(0x044, PIN_OUTPUT, 14) /* (AG37) MCASP0_AXR1.UART8_RTSn */
-> +			J784S4_IOPAD(0x0d0, PIN_INPUT, 11) /* (AP38) SPI0_CS1.UART8_RXD */
-> +			J784S4_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AN38) SPI0_CLK.UART8_TXD */
-> +		>;
-> +	};
-> +
-> +	main_i2c0_pins_default: main-i2c0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x0e0, PIN_INPUT_PULLUP, 0) /* (AN36) I2C0_SCL */
-> +			J784S4_IOPAD(0x0e4, PIN_INPUT_PULLUP, 0) /* (AP37) I2C0_SDA */
-> +		>;
-> +	};
-> +
-> +	main_mmc1_pins_default: main-mmc1-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x104, PIN_INPUT, 0) /* (AB38) MMC1_CLK */
-> +			J784S4_IOPAD(0x108, PIN_INPUT, 0) /* (AB36) MMC1_CMD */
-> +			J784S4_IOPAD(0x100, PIN_INPUT, 0) /* (###) MMC1_CLKLB */
-
-Pin ###?
-
-Andrew
-
-> +			J784S4_IOPAD(0x0fc, PIN_INPUT, 0) /* (AA33) MMC1_DAT0 */
-> +			J784S4_IOPAD(0x0f8, PIN_INPUT, 0) /* (AB34) MMC1_DAT1 */
-> +			J784S4_IOPAD(0x0f4, PIN_INPUT, 0) /* (AA32) MMC1_DAT2 */
-> +			J784S4_IOPAD(0x0f0, PIN_INPUT, 0) /* (AC38) MMC1_DAT3 */
-> +			J784S4_IOPAD(0x0e8, PIN_INPUT, 8) /* (AR38) TIMER_IO0.MMC1_SDCD */
-> +		>;
-> +	};
-> +
-> +	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
-> +		>;
-> +	};
-> +};
-> +
-> +&main_uart8 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_uart8_pins_default>;
-> +};
-> +
-> +&main_i2c0 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_i2c0_pins_default>;
-> +
-> +	clock-frequency = <400000>;
-> +
-> +	exp1: gpio@20 {
-> +		compatible = "ti,tca6416";
-> +		reg = <0x20>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names = "PCIE1_2L_MODE_SEL", "PCIE1_4L_PERSTZ", "PCIE1_2L_RC_RSTZ",
-> +				  "PCIE1_2L_EP_RST_EN", "PCIE0_4L_MODE_SEL", "PCIE0_4L_PERSTZ",
-> +				  "PCIE0_4L_RC_RSTZ", "PCIE0_4L_EP_RST_EN", "PCIE1_4L_PRSNT#",
-> +				  "PCIE0_4L_PRSNT#", "CDCI1_OE1/OE4", "CDCI1_OE2/OE3",
-> +				  "AUDIO_MUX_SEL", "EXP_MUX2", "EXP_MUX3", "GESI_EXP_PHY_RSTZ";
-> +	};
-> +
-> +	exp2: gpio@22 {
-> +		compatible = "ti,tca6424";
-> +		reg = <0x22>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names = "R_GPIO_RGMII1_RST", "ENET2_I2CMUX_SEL", "GPIO_USD_PWR_EN",
-> +				  "USBC_PWR_EN", "USBC_MODE_SEL1", "USBC_MODE_SEL0",
-> +				  "GPIO_LIN_EN", "R_CAN_STB", "CTRL_PM_I2C_OE#",
-> +				  "ENET2_EXP_PWRDN", "ENET2_EXP_SPARE2", "CDCI2_RSTZ",
-> +				  "USB2.0_MUX_SEL", "CANUART_MUX_SEL0", "CANUART_MUX2_SEL1",
-> +				  "CANUART_MUX1_SEL1", "ENET1_EXP_PWRDN", "ENET1_EXP_RESETZ",
-> +				  "ENET1_I2CMUX_SEL", "ENET1_EXP_SPARE2", "ENET2_EXP_RESETZ",
-> +				  "USER_INPUT1", "USER_LED1", "USER_LED2";
-> +	};
-> +};
-> +
-> +&main_sdhci1 {
-> +	/* SD card */
-> +	status = "okay";
-> +	pinctrl-0 = <&main_mmc1_pins_default>;
-> +	pinctrl-names = "default";
-> +	disable-wp;
-> +	vmmc-supply = <&vdd_mmc1>;
-> +	vqmmc-supply = <&vdd_sd_dv>;
-> +};
-> +
-> +&main_gpio0 {
-> +	status = "okay";
-> +};
-> +
+>
+> > +     pthread_create_with_name(thread, attr, start_routine, arg, vcpu_name);
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
+> > index 9618b37c66f7..4e57181daffc 100644
+> > --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
+> > @@ -274,7 +274,8 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
+> >               vcpu->vcpu_idx = i;
+> >               WRITE_ONCE(vcpu->running, false);
+> >
+> > -             pthread_create(&vcpu->thread, NULL, vcpu_thread_main, vcpu);
+> > +             kvm_create_vcpu_thread(&vcpu->thread, NULL,
+> > +                                    vcpu_thread_main, vcpu, i);
+> >       }
+> >
+> >       for (i = 0; i < nr_vcpus; i++) {
+> > diff --git a/tools/testing/selftests/kvm/max_guest_memory_test.c b/tools/testing/selftests/kvm/max_guest_memory_test.c
+> > index 9a6e4f3ad6b5..04524694e2b6 100644
+> > --- a/tools/testing/selftests/kvm/max_guest_memory_test.c
+> > +++ b/tools/testing/selftests/kvm/max_guest_memory_test.c
+> > @@ -3,7 +3,6 @@
+> >
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> > -#include <pthread.h>
+> >  #include <semaphore.h>
+> >  #include <sys/types.h>
+> >  #include <signal.h>
+> > @@ -110,7 +109,8 @@ static pthread_t *spawn_workers(struct kvm_vm *vm, struct kvm_vcpu **vcpus,
+> >               info[i].vcpu = vcpus[i];
+> >               info[i].start_gpa = gpa;
+> >               info[i].end_gpa = gpa + nr_bytes;
+> > -             pthread_create(&threads[i], NULL, vcpu_worker, &info[i]);
+> > +             kvm_create_vcpu_thread(&threads[i], NULL,
+> > +                                    vcpu_worker, &info[i], i);
+> >       }
+> >       return threads;
+> >  }
+> > diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> > index 6ee7e1dde404..769300181597 100644
+> > --- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> > +++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> > @@ -16,7 +16,6 @@
+> >  #include <asm/unistd.h>
+> >  #include <time.h>
+> >  #include <poll.h>
+> > -#include <pthread.h>
+> >  #include <linux/bitmap.h>
+> >  #include <linux/bitops.h>
+> >  #include <linux/userfaultfd.h>
+> > diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+> > index 44995446d942..041a07acba3d 100644
+> > --- a/tools/testing/selftests/kvm/memslot_perf_test.c
+> > +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+> > @@ -6,7 +6,6 @@
+> >   *
+> >   * Basic guest setup / host vCPU thread code lifted from set_memory_region_test.
+> >   */
+> > -#include <pthread.h>
+> >  #include <sched.h>
+> >  #include <semaphore.h>
+> >  #include <stdatomic.h>
+> > @@ -332,7 +331,7 @@ static void launch_vm(struct vm_data *data)
+> >  {
+> >       pr_info_v("Launching the test VM\n");
+> >
+> > -     pthread_create(&data->vcpu_thread, NULL, vcpu_worker, data);
+> > +     kvm_create_vcpu_thread(&data->vcpu_thread, NULL, vcpu_worker, data, 0);
+> >
+> >       /* Ensure the guest thread is spun up. */
+> >       wait_for_vcpu();
+> > diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+> > index 6f88da7e60be..11e0b1b7abb1 100644
+> > --- a/tools/testing/selftests/kvm/rseq_test.c
+> > +++ b/tools/testing/selftests/kvm/rseq_test.c
+> > @@ -2,7 +2,6 @@
+> >  #define _GNU_SOURCE /* for program_invocation_short_name */
+> >  #include <errno.h>
+> >  #include <fcntl.h>
+> > -#include <pthread.h>
+> >  #include <sched.h>
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> > @@ -226,8 +225,8 @@ int main(int argc, char *argv[])
+> >       vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+> >       ucall_init(vm, NULL);
+> >
+> > -     pthread_create(&migration_thread, NULL, migration_worker,
+> > -                    (void *)(unsigned long)syscall(SYS_gettid));
+> > +     pthread_create_with_name(&migration_thread, NULL, migration_worker,
+> > +            (void *)(unsigned long)syscall(SYS_gettid), "migration-thread");
+> >
+> >       for (i = 0; !done; i++) {
+> >               vcpu_run(vcpu);
+> > diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+> > index 0d55f508d595..4c9ab5595a22 100644
+> > --- a/tools/testing/selftests/kvm/set_memory_region_test.c
+> > +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+> > @@ -1,7 +1,6 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >  #define _GNU_SOURCE /* for program_invocation_short_name */
+> >  #include <fcntl.h>
+> > -#include <pthread.h>
+> >  #include <sched.h>
+> >  #include <semaphore.h>
+> >  #include <signal.h>
+> > @@ -134,7 +133,7 @@ static struct kvm_vm *spawn_vm(struct kvm_vcpu **vcpu, pthread_t *vcpu_thread,
+> >       hva = addr_gpa2hva(vm, MEM_REGION_GPA);
+> >       memset(hva, 0, 2 * 4096);
+> >
+> > -     pthread_create(vcpu_thread, NULL, vcpu_worker, *vcpu);
+> > +     kvm_create_vcpu_thread(vcpu_thread, NULL, vcpu_worker, *vcpu, 0);
+> >
+> >       /* Ensure the guest thread is spun up. */
+> >       wait_for_vcpu();
+> > diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+> > index db8967f1a17b..be93a333ce04 100644
+> > --- a/tools/testing/selftests/kvm/steal_time.c
+> > +++ b/tools/testing/selftests/kvm/steal_time.c
+> > @@ -8,7 +8,6 @@
+> >  #include <stdio.h>
+> >  #include <time.h>
+> >  #include <sched.h>
+> > -#include <pthread.h>
+> >  #include <linux/kernel.h>
+> >  #include <asm/kvm.h>
+> >  #include <asm/kvm_para.h>
+> > @@ -290,7 +289,8 @@ int main(int ac, char **av)
+> >
+> >               /* Steal time from the VCPU. The steal time thread has the same CPU affinity as the VCPUs. */
+> >               run_delay = get_run_delay();
+> > -             pthread_create(&thread, &attr, do_steal_time, NULL);
+> > +             pthread_create_with_name(&thread, &attr, do_steal_time,
+> > +                                      NULL, "steal-time-thread");
+> >               do
+> >                       sched_yield();
+> >               while (get_run_delay() - run_delay < MIN_RUN_DELAY_NS);
+> > diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> > index fb02581953a3..abbd5a4f2828 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> > @@ -16,7 +16,6 @@
+> >  #include <kvm_util.h>
+> >  #include <linux/kvm.h>
+> >  #include <processor.h>
+> > -#include <pthread.h>
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> >  #include <string.h>
+> > @@ -69,7 +68,7 @@ void test(void)
+> >       tc.run = run;
+> >       srand(getpid());
+> >       for (i = 0; i < NTHREAD; i++) {
+> > -             pthread_create(&th[i], NULL, thr, (void *)(uintptr_t)&tc);
+> > +             kvm_create_vcpu_thread(&th[i], NULL, thr, (void *)(uintptr_t)&tc, i);
+> >               usleep(rand() % 10000);
+> >       }
+> >       for (i = 0; i < NTHREAD; i++)
+> > diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> > index c7ef97561038..b00ba08a19eb 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+> > @@ -5,7 +5,6 @@
+> >  #include <sys/ioctl.h>
+> >  #include <stdlib.h>
+> >  #include <errno.h>
+> > -#include <pthread.h>
+> >
+> >  #include "test_util.h"
+> >  #include "kvm_util.h"
+> > diff --git a/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c b/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
+> > index 47139aab7408..a6511c399173 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/tsc_scaling_sync.c
+> > @@ -15,7 +15,6 @@
+> >  #include <time.h>
+> >  #include <sched.h>
+> >  #include <signal.h>
+> > -#include <pthread.h>
+> >
+> >  #define NR_TEST_VCPUS 20
+> >
+> > @@ -102,7 +101,8 @@ int main(int argc, char *argv[])
+> >       pthread_t cpu_threads[NR_TEST_VCPUS];
+> >       unsigned long cpu;
+> >       for (cpu = 0; cpu < NR_TEST_VCPUS; cpu++)
+> > -             pthread_create(&cpu_threads[cpu], NULL, run_vcpu, (void *)cpu);
+> > +             kvm_create_vcpu_thread(&cpu_threads[cpu], NULL,
+> > +                                    run_vcpu, (void *)cpu, cpu);
+> >
+> >       unsigned long failures = 0;
+> >       for (cpu = 0; cpu < NR_TEST_VCPUS; cpu++) {
+> > diff --git a/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c b/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c
+> > index a897c7fd8abe..24a89a3a11db 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c
+> > @@ -19,7 +19,6 @@
+> >   */
+> >
+> >  #define _GNU_SOURCE /* for program_invocation_short_name */
+> > -#include <pthread.h>
+> >  #include <inttypes.h>
+> >  #include <string.h>
+> >  #include <time.h>
+> > diff --git a/tools/testing/selftests/kvm/x86_64/xapic_ipi_test.c b/tools/testing/selftests/kvm/x86_64/xapic_ipi_test.c
+> > index 3d272d7f961e..8bdef8e0f2b0 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/xapic_ipi_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/xapic_ipi_test.c
+> > @@ -22,7 +22,6 @@
+> >
+> >  #define _GNU_SOURCE /* for program_invocation_short_name */
+> >  #include <getopt.h>
+> > -#include <pthread.h>
+> >  #include <inttypes.h>
+> >  #include <string.h>
+> >  #include <time.h>
+> > @@ -393,7 +392,6 @@ void get_cmdline_args(int argc, char *argv[], int *run_secs,
+> >
+> >  int main(int argc, char *argv[])
+> >  {
+> > -     int r;
+> >       int wait_secs;
+> >       const int max_halter_wait = 10;
+> >       int run_secs = 0;
+> > @@ -436,9 +434,8 @@ int main(int argc, char *argv[])
+> >       params[1].pipis_rcvd = pipis_rcvd;
+> >
+> >       /* Start halter vCPU thread and wait for it to execute first HLT. */
+> > -     r = pthread_create(&threads[0], NULL, vcpu_thread, &params[0]);
+> > -     TEST_ASSERT(r == 0,
+> > -                 "pthread_create halter failed errno=%d", errno);
+> > +     kvm_create_vcpu_thread(&threads[0], NULL,
+> > +                            vcpu_thread, &params[0], 0);
+> >       fprintf(stderr, "Halter vCPU thread started\n");
+> >
+> >       wait_secs = 0;
+> > @@ -455,8 +452,7 @@ int main(int argc, char *argv[])
+> >               "Halter vCPU thread reported its APIC ID: %u after %d seconds.\n",
+> >               data->halter_apic_id, wait_secs);
+> >
+> > -     r = pthread_create(&threads[1], NULL, vcpu_thread, &params[1]);
+> > -     TEST_ASSERT(r == 0, "pthread_create sender failed errno=%d", errno);
+> > +     kvm_create_vcpu_thread(&threads[1], NULL, vcpu_thread, &params[1], 1);
+> >
+> >       fprintf(stderr,
+> >               "IPI sender vCPU thread started. Letting vCPUs run for %d seconds.\n",
+> > --
+> > 2.27.0
+> >
