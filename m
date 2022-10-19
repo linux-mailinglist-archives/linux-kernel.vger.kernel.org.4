@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E25603FE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B40D603FDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233765AbiJSJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
+        id S233966AbiJSJhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 05:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234022AbiJSJaU (ORCPT
+        with ESMTP id S233978AbiJSJaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:30:20 -0400
+        Wed, 19 Oct 2022 05:30:09 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D8FE8A8D;
-        Wed, 19 Oct 2022 02:13:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36965EB741;
+        Wed, 19 Oct 2022 02:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666170806; x=1697706806;
+  t=1666170835; x=1697706835;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5I9HyraSdKGUZglDvEgDU9ebX52QiQY0RZqeQd7tP2A=;
-  b=StcFlOUUto3njMkZHaVX0cJ8bv9A/wQr76yk9nd5nc4DRteQg3eDjLL+
-   OTKnPDbfvlWIjbvKv9ovJB60lulnquUW3AfT1oQDoWDm+2Wi4wKDgu5AF
-   +qBkIuYNzXEkN9Je+mYRtyu5zDxM++/nYmkIqyJgUPE6NFs26dhZlVkZ8
-   hidjSJkGMGR2wkQLOKAB49l5h6nKBLhKikcZRemHpLcNRvdBpfmhDp8TK
-   vt1ZfIRVRHgjs7tmhi76jxSIRwoDFlJBn/Ag+kG55CSmCehXu9V3aFp4y
-   ep45KH/L97/QuTm42bMEgjtahD4diwQnFUv2dErOEkg0exZ+4rMTDcMrH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332910858"
+  bh=KzHpkJi/AhxX/r86weD1fWZDNb+69gyw0uBMHSqrM2Q=;
+  b=CtM1G1Z2z4ab6UTLf7iQkERUd2s9lgcEzYyZlIbxaAc6l6OhGlsbAEgM
+   tJlNK35Q4xliyjyCF3ji+XLFjoB6CIlh0pGH36DkThbODBjRAqbLlznz/
+   2gXhD1g/nloFMgtBqq4NNj3bYJGPlAlsRyoPlpL0SBpIoVcunZiBNF5MW
+   yZr95XaK3D0JDl0MLzLO7oLG13jQoNtp1zsu8ZRVdlFYCASP5P0jjz7sC
+   1aY3TyVY5j1XOgHCGLTKVrzM2swBI1wBgO9VvWcTNTmNkTlT+aIh+mvFg
+   8ZBKnLZqQs7HbpMAQyvjTe2IbLvdzYn0KF4Goor9LF4EJwZYllIyFV7xi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="332910875"
 X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="332910858"
+   d="scan'208";a="332910875"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:12:44 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734118571"
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:12:47 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734118587"
 X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="734118571"
+   d="scan'208";a="734118587"
 Received: from sponnura-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.35])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:12:41 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:12:44 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+        Jiri Slaby <jirislaby@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 07/44] serial: 8250: Use uart_xmit_advance()
-Date:   Wed, 19 Oct 2022 12:11:14 +0300
-Message-Id: <20221019091151.6692-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 08/44] serial: pl011: Use uart_xmit_advance()
+Date:   Wed, 19 Oct 2022 12:11:15 +0300
+Message-Id: <20221019091151.6692-9-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
 References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
@@ -66,23 +68,23 @@ Take advantage of the new uart_xmit_advance() helper.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250_port.c | 3 +--
+ drivers/tty/serial/amba-pl011.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index fe8662cd9402..b94e60e75326 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1842,8 +1842,7 @@ void serial8250_tx_chars(struct uart_8250_port *up)
- 			 */
- 			serial_in(up, UART_SCR);
- 		}
--		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
--		port->icount.tx++;
-+		uart_xmit_advance(port, 1);
- 		if (uart_circ_empty(xmit))
- 			break;
- 		if ((up->capabilities & UART_CAP_HFIFO) &&
+diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+index 5cdced39eafd..6d8552506091 100644
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -677,8 +677,7 @@ static int pl011_dma_tx_refill(struct uart_amba_port *uap)
+ 	 * Now we know that DMA will fire, so advance the ring buffer
+ 	 * with the stuff we just dispatched.
+ 	 */
+-	xmit->tail = (xmit->tail + count) & (UART_XMIT_SIZE - 1);
+-	uap->port.icount.tx += count;
++	uart_xmit_advance(&uap->port, count);
+ 
+ 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+ 		uart_write_wakeup(&uap->port);
 -- 
 2.30.2
 
