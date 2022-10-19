@@ -2,160 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DA86043DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA40D604377
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbiJSLu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S230456AbiJSLju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbiJSLue (ORCPT
+        with ESMTP id S229610AbiJSLio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:50:34 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-am5eur02on070d.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe07::70d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A740A237FF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:29:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P8UJRFnS7Z5r8JRXAUjyTfHhynsXmOEX399WTzdheDtxmt55hBj4WxG0yIqaYwF/ofU4VLMYmmzOcQ1tjirs74DXaurs3LIicQxe3q7XODI2qn1iF2Gab34XbVDNbxPDyuvn4DIeCMthpNF1TyNHyEmVZiyn1Iknpb8r3qagKE/RvaOcFjxAq8R04+iz1UXADH384XbHKp1282uyJ3/4gr99F8dL/zru/cFiWFGnny5wPFxLktWza9ZLDhKiBQSizsEibFlyaqZbxY0bhxQq144dWDQNJtyOMyYnpp3gvPVqak+IhVLnAV40wynHdzjBOwNKVyIjkaLvokzC2JnnJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=psdjsyPrSBn+LZyeBSfAVpKlYTRBr/W6oqtMy7RKKMI=;
- b=NGZrnN9nn+Q6PdcmTxj1deudFWwmFyRyAwp2wP20o09C3jNsCDnADdIZ16XPJ7o+Zp8wDkEzE8LpV5AE7f++rTOpWEG+L9I17QaWcKv9mcPPEW8U87m+MCdUDXCzHG4QdsXGJV6inhbdNiwAWQsF+ADy7cNqyQU3D6kVJhmP1TCrqPAkzMvcwi4eY+XQvjrTBW72t/V+QJfRsWr4YY6yV383C9KdWEoPXzj6ZUo00ksn6+qELwVypsPVbPTElfXA/gCVjHD4AibjoF74a1BceWA/KPMi44a3VH4AGMPCL/BFMy6D/hlvNyhe8AbjJQBMRHSQKdPygWlzXPJD7OyEQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=psdjsyPrSBn+LZyeBSfAVpKlYTRBr/W6oqtMy7RKKMI=;
- b=RF87XqOn5/EtNe7/TxjeKFvQDUu3WI5afRMlC+aXc46WjSLju2PRz1CV8U3VgYv+i0oCF2012KnKcELjP1RHvuFdqO21WF41T1S3MzvKqEtAq/Bvq0UP/FK4ygZr2xh4STpN0m6yaaM6YyUfewXRV5J+oiwxdShg4OAStbDdb98DkNdmGzNiD2grLx3pnU+Hd6m0faEn7aTqWuWPMigO9jz5LdOJWbJ9uY8tQ0jXb/3KbqluFoLLrpd/21SxGfT8ynwx0aPByZA2nUuMzcUB//6sggnblGp++0VKhwXCh0UhOPmxiiHBLuOitYKOPnfTXfYU+c0MAbtuixdO54hoUg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from VE1PR08MB4765.eurprd08.prod.outlook.com (2603:10a6:802:a5::16)
- by DB9PR08MB6651.eurprd08.prod.outlook.com (2603:10a6:10:26e::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Wed, 19 Oct
- 2022 11:06:16 +0000
-Received: from VE1PR08MB4765.eurprd08.prod.outlook.com
- ([fe80::6809:fef7:a205:b08a]) by VE1PR08MB4765.eurprd08.prod.outlook.com
- ([fe80::6809:fef7:a205:b08a%7]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
- 11:06:16 +0000
-Message-ID: <edba66e3-89bd-e7b2-6ebb-3f868c9aec67@virtuozzo.com>
-Date:   Wed, 19 Oct 2022 14:06:14 +0300
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.3
-Subject: Re: [RFC PATCH v5 6/8] drivers: vmware: balloon - report inflated
- memory
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nadav Amit <namit@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org
-References: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
- <20221019095620.124909-7-alexander.atanasov@virtuozzo.com>
- <Y0/Qu0eSYFqtuC/v@kroah.com>
- <2ae8251a-456d-abdd-ed1a-1bfc04356741@virtuozzo.com>
- <Y0/WUdUIJ6O7EzQg@kroah.com>
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-In-Reply-To: <Y0/WUdUIJ6O7EzQg@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR07CA0311.eurprd07.prod.outlook.com
- (2603:10a6:800:130::39) To VE1PR08MB4765.eurprd08.prod.outlook.com
- (2603:10a6:802:a5::16)
+        Wed, 19 Oct 2022 07:38:44 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88649F749;
+        Wed, 19 Oct 2022 04:16:48 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id r142so14109645iod.11;
+        Wed, 19 Oct 2022 04:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8AND4+UwOiiTfpXt/kuzlp6pdFdbxlDzaHUrbbnoQZk=;
+        b=GYSFu+xqgB4oiFsP/A+PBrYd3zX0QljQ9VOU0/UQ2kJM9IHdOqrxm2R/qUpskDt/Gm
+         VEwihIUa6X/8bCUGJOUoT0DkCYFKfXGdd+X/CQHO6kOSvuGlJNvcMIaFC719o7V7LFaI
+         N5ggPGdktsl32KknzZgdOxxGYK01D/Z1Q8ZXQImcpJa1gc8d+GcOllZWvtwQfIoDkIE7
+         vPgNZtaPOdKYWHfJg54gkKIgcUo5y349MUNTrrehg988syeyhgy5cx2xGCQsLnSFATTk
+         TRQoOTvx0Y0fwCofPKL4EmeJIiFdZBKCuIvL9vLBMA4RVDOOibQqBT8bh7X+rt2lbjbh
+         OwNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8AND4+UwOiiTfpXt/kuzlp6pdFdbxlDzaHUrbbnoQZk=;
+        b=RDbCGXDABWSOeU/DXgIoE/5kY5d5r4NmzF8G3NCaD1fDgyA88zhip0oy4AdHrJmiVt
+         TAtU3sxrfxHNZCFnkV+No/adFGnriDo0f+RR2fYpyAFGPTkqXw2W3m4rZcc6I/VZ9PXo
+         dDZei8yhGr8d6tGr36EZfBcqtEEhNsCEjqbAAf7PLOBLdlooOM8s89VEAXTUXXsGbYPZ
+         pgM/SeJKn9jwMXV/Z2x69EBrsgktNSJX9EC+ycaBvtJFzr/XwrgApLPAIRRBBGNLEZ4H
+         50xg80cECQxGENSsNNQDzYG4zDbOmnMELNEKqvC177auP2h0JqrbTYFGgmqvAb7PuVfE
+         BTWw==
+X-Gm-Message-State: ACrzQf3u1IvXLJvd6NZovgEdm4wRZlg4mTWTQ8w/b3S0xWq5Cp7lvJYZ
+        Qjj1iXYcbbaSMbnE780qU7p38jPI5J0=
+X-Google-Smtp-Source: AMsMyM73Sd3n3S0wXTxjmXKrCZ2GPyBE7KqeY7+lr5U1v6ghSPOXax6qMG0fMr6qDzyCYTkLA/QuFA==
+X-Received: by 2002:a63:5643:0:b0:44d:b691:1da1 with SMTP id g3-20020a635643000000b0044db6911da1mr6905069pgm.450.1666177616026;
+        Wed, 19 Oct 2022 04:06:56 -0700 (PDT)
+Received: from localhost.localdomain (2001-b400-e258-8c34-821b-9613-557f-bd8d.emome-ip6.hinet.net. [2001:b400:e258:8c34:821b:9613:557f:bd8d])
+        by smtp.gmail.com with ESMTPSA id cc11-20020a17090af10b00b0020dc318a43esm8696225pjb.25.2022.10.19.04.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 04:06:55 -0700 (PDT)
+From:   Victor Shih <victorshihgli@gmail.com>
+X-Google-Original-From: Victor Shih <victor.shih@genesyslogic.com.tw>
+To:     ulf.hansson@linaro.org, adrian.hunter@intel.com
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
+        Greg.tu@genesyslogic.com.tw, takahiro.akashi@linaro.org,
+        dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>
+Subject: [PATCH V5 00/26] Add support UHS-II for GL9755
+Date:   Wed, 19 Oct 2022 19:06:21 +0800
+Message-Id: <20221019110647.11076-1-victor.shih@genesyslogic.com.tw>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4765:EE_|DB9PR08MB6651:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7670e697-d649-4de0-fed9-08dab1c1f12f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: i4mT3Bvomz1kVQlnu1r4HSE6xYFcF20H1sCPpE/+FrUSFKuBNPoxyKMdSGz2NxKgeFHFSUkEk3iVWVvc1ZgvHYf5RQ4K9Q4yZY8lJpBu3lEiMyXX0Jx+WqrLp/paGjIvevDTgrSLyssFiu0Vf65P9fphgBULFhEqgcbL5DHpbhbBtGkLTLoeKqSrNTZqxD4j8nCTnVrCPY+FeXW0BwRR5N0Ow4zoiOmX+Hwvf1kf8xKgIeJ9XLkZLPfFageibl6CHpFtbzouZ3NcchiLhyut9iC0aITjbcR/KmUu/dyXD5iR7bN3378b5OLy0bdiK//1IhHpdpx9jlNd7lTZqhsU/yJLOGjIxBy2H34SeVcCKWiRginScX24IicohniwbHs3v3mVCTyUoRRMu0GTj1Dn/+hhYNBIa3e7JhrOuuynSY71Ng0MdYXTWLstY3mm06naeEMafWqn4LqbiMxpuaXcTgLDoEXdZN1qr5Ekqzj+Vzv43JEV+sTKBON5/qzvoq4fkdAP96yhnJGcCKFSsZSELgQOtR9kDB/VgltdkuH463YLLsHsTiGTqrp50blWzDC7M/LkGZ9oA8Nh1T/quCHjZLI33NdMrlpIy698ude2hdN675cooROjV2RgQTOLoYzqkR8aT5jGDVXBRh2oZZQIWGfYjGd5Pf3DVC99QC6zFK99POmJZNVNrgzbH7RZvIkiz2QKjXbEkl9+pRXiZB2nNi3OHIb7GDqTL6Xtg+BP3Ix4QcX80RbyqlIBpOA9TkCvcakhnLR7mBkpTcJjSca1kTDilzn0ceKMtUboMb/lm24=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4765.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(346002)(366004)(136003)(376002)(396003)(451199015)(5660300002)(31696002)(6486002)(478600001)(38100700002)(4326008)(86362001)(8676002)(66946007)(66556008)(4744005)(44832011)(54906003)(316002)(6916009)(66476007)(2906002)(8936002)(2616005)(83380400001)(186003)(41300700001)(6506007)(6512007)(26005)(53546011)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MjNjZjQrcU53Y1ZrcUc3SGRBR1JHV2kxTmJ6b2ZLU21wOVZDQkZvRXo4eld1?=
- =?utf-8?B?ZkxZaXBDamZqdHV5d25DcXAyUDZidzU0SzE2bVc5a0xCTmlFUW1XZVZnbXhI?=
- =?utf-8?B?UXV1SjFqaVc5SnFZMXlLUk1DcW5MRURORUlINHFzNDBiS3NzZGNXZ1Vvd1dI?=
- =?utf-8?B?OERORFhGbC9qeUNUS1ZXajFWaUlmRjNIeHZndkFaOUN4R1RsZ2MyZDB3cHEr?=
- =?utf-8?B?Qlg1SkFWUmlicXJzT1Q1N2dCVW8vRDFOWlZ4UGxFZjJMb1ZiUzFiN1NvRTF4?=
- =?utf-8?B?dTVLWCthUDVHM3JvaXJCL1N3ckVRNm9xMktlalFxWUEweEtZbXFNcUcrOG03?=
- =?utf-8?B?Sk45ZVZLZHByN2RRM0VkT2xIZWJ5TG0zbjhSWGl2SXV0bExXSDhIdlNHVzl6?=
- =?utf-8?B?RUlVYjEzYjI3SFdQK2ZpQVZEZHBHTnVtMDZNNXk5Rjh4Q1FXZDY4LzFsWHF4?=
- =?utf-8?B?T1hDc2huR1VGWkR4c0FnSEY5dUFGWjZvQ2tDamV6MGJwelh2WmZwTElMVFRo?=
- =?utf-8?B?bHErSWJZM3o1WFZ4RFhhb3hHelRzaGMxU0FmVU1WVVlyUTRPdkg3cklqZFJF?=
- =?utf-8?B?d0RURU42RFF1azBoUHFQWFRQYjNQMktiNUdsN2M2WlZaZVB5TjJWSjlUZ3BX?=
- =?utf-8?B?dG1ud1p1M2I1RkFjV1JPRUQ0K1JDTXcvZkhMVzI3OTJ2M3JNV2l6WTRlN3Q4?=
- =?utf-8?B?MzFvcGV3KytsM1VaMDk5MzU0Q3BhalVVN1ViZmhQM0RJMXVLczBVNWxQT0tJ?=
- =?utf-8?B?d2UwcEUzNGsxQ1NuQTVLWkZqeTJ6ZHRReEl5OVlyQzBJd1pjdE9TRVMrZjlF?=
- =?utf-8?B?NU02RW5ib1lLV1dGTWRSV2lTMS9YU04zcGJFaXYwcXhCZC8yaFRJOUFOMjkx?=
- =?utf-8?B?ZFhjd1I4aXBKRTVsY2p2d3FteE5xMVEyUVZQelZhOWREb0g0bFhaaGFTaXYy?=
- =?utf-8?B?cnZLWkZyVWhGNjJmR0dqbm1UUWJGbmFpeXFwYk5SenVWKy90VE1JTENlL1ow?=
- =?utf-8?B?U2REWVhPZ0wyS2g3UDVsTzM2V2l1VW5uWEZWREdqOGdNM29iTWZZMkRUUVd1?=
- =?utf-8?B?MVgwSWIwaDV4Q0VvejB1QVJXcE1nR1IrNFAyMFJGUUFsNldzZ1oyalBPNW4x?=
- =?utf-8?B?Q01YYktpUXhUc3RNdmVnME1lNmhMOVdmRDBGd3RHc1BJRjkzQ1k0RGRXU1Y0?=
- =?utf-8?B?a3R1VGxTdzhNemM1d0F0Y1VJRFYybFUyVUkrRXVFaTdocGNVTk5rVTVVUGhq?=
- =?utf-8?B?T0FjSGZrVmtoOEJmbFFBU1BKbUh0YTBLdm1aK1FlNzBwaTUxaU01UFRVSUo1?=
- =?utf-8?B?bTZBeThUaXRtVVlzbEtxb25yeC9sbmZyVkVVVTlGenFWOU5CODNzcXpvRXZp?=
- =?utf-8?B?N0VLZ2cwWG1BMERBOUcvaUNLTjc1ZFZjeklFRXR3STc4RmhXT2hwdlBGNEtS?=
- =?utf-8?B?bFE0RUp0Y0t3QWRZcHgrT2d4Wm9oL0RwZkhCMHZyZnAxZW93VVpCWDU5VXh3?=
- =?utf-8?B?bERrQ01rSDl1S1ByK1hlZTByZHlXRTNvWExHUTVrQmw0Y09mYTBQckcrNjM4?=
- =?utf-8?B?d3N2VXZwM2VhKzNsZThIODV6QXVENGhHcDd3TmoyWERwWE1EbEtWeE1MbkxK?=
- =?utf-8?B?ZFhGdk5NcUhTdk01Uzl5VzlpWGNYN2RidnY2aEc3SzhGTnNGSkRuQVYvZ3pJ?=
- =?utf-8?B?dXVabUNnSUN3S0Q2Y0hCMVBWUW9oKzlPZmFEUEd1MWNrY1RiSG9NdWFCMWEv?=
- =?utf-8?B?NitueGZhU2dpeUUrS1IrbjRzUmVxTzJ1Vm1GWmkxcFllWC9rQmtHNlNWSHo4?=
- =?utf-8?B?T2NSVGRFNDFtbFpNZzgxMnRNYzd5d2RjcjRiYXRZWmUvSnNzejdkMHhVNVlU?=
- =?utf-8?B?ZjJNaDJraFRRVW5sZ2xoRmtDZ2YwK21SRzdDd1FvWktzOXFma1dGZzV3N0J0?=
- =?utf-8?B?Qm5lR204RGZjUERPQ2FHK245WFlmK2pnbUVRODBzVkRGMGcyRHhlRmRjS2ZU?=
- =?utf-8?B?MUNSNTE0b3JJZVZLVFBkL25nYUU4SFBlM015b2pvODlSU3BZUVgrQlRnU2tj?=
- =?utf-8?B?TjkwekY4cXdMY01oNm1vTDJNK3cyWElGN2FDZzBWY3Raa0VPcWdFcEovU3Mx?=
- =?utf-8?B?VEw3cTdtaW0wdk0rVHh6N1ZYclhRZ2YzYXdaclNvNUhYRThVUlc1anhpbWND?=
- =?utf-8?B?L2c9PQ==?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7670e697-d649-4de0-fed9-08dab1c1f12f
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4765.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 11:06:16.0386
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Nh8Q3JltbzV6mAYvX45eFjnVuq5QYr7qCY8C9IOl5WR5T+MuvQ1xi/S6i6ZfdR2BcoWAiSbtkk2ImGTgviq/yhjvKjwNBVZHWOu4MjBz17pA/Cpv2xDLRcg9w2UODBmM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB6651
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.10.22 13:49, Greg Kroah-Hartman wrote:
-> On Wed, Oct 19, 2022 at 01:38:13PM +0300, Alexander Atanasov wrote:
->> On 19.10.22 13:26, Greg Kroah-Hartman wrote:
->>> On Wed, Oct 19, 2022 at 12:56:18PM +0300, Alexander Atanasov wrote:
->>>> Update the inflated memory in the mm core on change.
->>>
->>> That says what this does, but not why it is needed.
->>>
->>> Please expand on this.
->>>
->>> Also, is this actually fixing a bug?  Is it a new feature?  Something
->>> else?
->>
->> The whole series is about adding a new feature - providing access to the
->> balloon inflated memory amount - it's in the cover letter. Should I repeat
->> it for every driver that implements it?
-> 
-> Each commit needs to justify why it is needed on its own.  You do not
-> provide the needed information here at all to be able to review and
-> understand if this commit is even correct or needed.
+Summary
+=======
+These patches[1] support UHS-II and fix GL9755 UHS-II compatibility.
 
-Ok, understood. I will keep that in mind. Thanks.
+About UHS-II, roughly deal with the following three parts:
+1) A UHS-II detection and initialization:
+- Host setup to support UHS-II (Section 3.13.1 Host Controller Setup Sequence
+  [2]).
+- Detect a UHS-II I/F (Section 3.13.2 Card Interface Detection Sequence[2]).
+- In step(9) of Section 3.13.2 in [2], UHS-II initialization is include Section
+  3.13.3 UHS-II Card Initialization and Section 3.13.4 UHS-II Setting Register
+  Setup Sequence.
 
+2) Send Legacy SD command through SD-TRAN
+- Encapsulated SD packets are defined in SD-TRAN in order to ensure Legacy SD
+  compatibility and preserve Legacy SD infrastructures (Section 7.1.1 Packet
+  Types and Format Overview[3]).
+- Host issue a UHS-II CCMD packet or a UHS-II DCMD (Section 3.13.5 UHS-II
+  CCMD Packet issuing and Section 3.13.6 UHS-II DCMD Packet issuing[2]).
+
+3) UHS-II Interrupt
+- Except for UHS-II error interrupts, most interrupts share the original
+  interrupt registers.
+
+Patch structure
+===============
+patch#1-#6:  for core
+patch#7-#25: for sdhci
+patch#26:    for GL9755
+
+Changes in v5 (Oct. 19, 2022)
+* rebased to the linux-kernel-v6.1-rc1 in Ulf Hansson next branch.
+* according to the guidance and overall architecture provided 
+  by Ulf Hansson, Ben Chuang and Jason Lai to implement the
+  UHS-2 Core function based on the patches of the [V4,0/6] 
+  Preparations to support SD UHS-II cards[5].
+* according to the guidance and comments provided by 
+  Adrian Hunter, Ben Chuang and AKASHI Takahiro to implement 
+  the UHS-2 Host function based on the patches of the 
+  [RFC,v3.1,00/27] Add support UHS-II for GL9755[4].
+* implement the necessary function to let the UHS-2 Core/Host
+  work properly.
+* fix most of checkpatch warnings/errors
+
+Reference
+=========
+[1] https://gitlab.com/ben.chuang/linux-uhs2-gl9755.git
+[2] SD Host Controller Simplified Specification 4.20
+[3] UHS-II Simplified Addendum 1.02
+[4] https://patchwork.kernel.org/project/linux-mmc/cover/20201106022726.19831-1-takahiro.akashi@linaro.org/
+[5] https://patchwork.kernel.org/project/linux-mmc/cover/20220418115833.10738-1-jasonlai.genesyslogic@gmail.com/
+ 
+----------------- original cover letter from v3.1 -----------------
+This is an interim snapshot of our next version, v4, for enabling
+UHS-II on MMC/SD.
+
+It is focused on 'sdhci' side to address Adrian's comments regarding
+"modularising" sdhci-uhs2.c.
+The whole aim of this version is to get early feedback from Adrian (and
+others) on this issue. Without any consensus about the code structure,
+it would make little sense to go further ahead on sdhci side.
+(Actually, Adrian has made no comments other than "modularising" so far.)
+
+I heavily reworked/refactored sdhci-uhs2.c and re-organised the patch
+set to meet what I believe Adrian expects; no UHS-II related code in
+Legacy (UHS-I) code or sdhci.c.
+
+Nevertheless, almost of all changes I made are trivial and straightforward
+in this direction, and I believe that there is no logic changed since v3
+except sdhci_uhs2_irq(), as ops->irq hook, where we must deal with UHS-II
+command sequences in addition to UHS-II errors. So I added extra handlings.
+
+I admit that there is plenty of room for improvements (for example,
+handling host->flags), but again the focal point here is how sdhci-uhs2.c
+should be built as a module.
+
+Please review this series (particularly Patch#8-#26 and #27) from this
+viewpoint in the first place.
+(Ben is working on 'host' side but there is no change on 'host' side
+in this submission except a minor tweak.)
+
+Thanks,
+-Takahiro Akashi
+
+------ original cover letter from v3 ------
+Summary
+=======
+These patches[1] support UHS-II and fix GL9755 UHS-II compatibility.
+
+About UHS-II, roughly deal with the following three parts:
+1) A UHS-II detection and initialization:
+- Host setup to support UHS-II (Section 3.13.1 Host Controller Setup Sequence
+  [2]).
+- Detect a UHS-II I/F (Section 3.13.2 Card Interface Detection Sequence[2]).
+- In step(9) of Section 3.13.2 in [2], UHS-II initialization is include Section
+  3.13.3 UHS-II Card Initialization and Section 3.13.4 UHS-II Setting Register
+  Setup Sequence.
+
+2) Send Legacy SD command through SD-TRAN
+- Encapsulated SD packets are defined in SD-TRAN in order to ensure Legacy SD
+  compatibility and preserve Legacy SD infrastructures (Section 7.1.1 Packet
+  Types and Format Overview[3]).
+- Host issue a UHS-II CCMD packet or a UHS-II DCMD (Section 3.13.5 UHS-II
+  CCMD Packet issuing and Section 3.13.6 UHS-II DCMD Packet issuing[2]).
+
+3) UHS-II Interrupt
+- Except for UHS-II error interrupts, most interrupts share the original
+  interrupt registers.
+
+Patch structure
+===============
+patch#1-#7: for core
+patch#8-#17: for sdhci
+patch#18-#21: for GL9755
+
+Tests
+=====
+Ran 'dd' command to evaluate the performance:
+(SanDisk UHS-II card on GL9755 controller)
+                             Read    Write
+UHS-II disabled (UHS-I): 88.3MB/s 60.7MB/s
+UHS-II enabled         :  206MB/s   80MB/s
+
+TODO
+====
+- replace some define with BIT macro
+
+Reference
+=========
+[1] https://gitlab.com/ben.chuang/linux-uhs2-gl9755.git
+[2] SD Host Controller Simplified Specification 4.20
+[3] UHS-II Simplified Addendum 1.02
+
+Changes in v3 (Jul. 10, 2020)
+* rebased to v5.8-rc4
+* add copyright notice
+* reorganize the patch set and split some commits into smaller ones
+* separate uhs-2 headers from others
+* correct wrong spellings
+* fix most of checkpatch warnings/errors
+* remove all k[cz]alloc() from the code
+* guard sdhci-uhs2 specific code with
+      'if (IS_ENABLED(CONFIG_MMC_SDHCI_UHS2))'
+* make sdhci-uhs2.c as a module
+* trivial changes, including
+  - rename back sdhci-core.c to sdhci.c
+  - allow vendor code to disable uhs2 if v4_mode == 0
+      in __sdhci_add_host()
+  - merge uhs2_power_up() into mmc_power_up()
+  - remove flag_uhs2 from mmc_attach_sd()
+  - add function descriptions to EXPORT'ed functions
+  - other minor code optimization
+
+Changes in v2 (Jan. 9, 2020)
+* rebased to v5.5-rc5
+
+AKASHI Takahiro (5):
+  mmc: sdhci: add a kernel configuration for enabling UHS-II support
+  mmc: sdhci: add UHS-II module
+  mmc: sdhci-uhs2: dump UHS-II registers
+  mmc: sdhci-uhs2: add set_timeout()
+  mmc: sdhci-pci: add UHS-II support framework
+
+Ben Chuang (1):
+  mmc: sdhci-uhs2: add post-mmc_attach_sd hook
+
+Ulf Hansson (4):
+  mmc: core: Cleanup printing of speed mode at card insertion
+  mmc: core: Prepare to support SD UHS-II cards
+  mmc: core: Announce successful insertion of an SD UHS-II card
+  mmc: core: Extend support for mmc regulators with a vqmmc2
+
+Victor Shih (16):
+  mmc: core: Add definitions for SD UHS-II cards
+  mmc: core: Support UHS-II card control and access
+  mmc: sdhci: add UHS-II related definitions in headers
+  mmc: sdhci-uhs2: add reset function and uhs2_mode function
+  mmc: sdhci-uhs2: add set_power() to support vdd2
+  mmc: sdhci-uhs2: skip signal_voltage_switch()
+  mmc: sdhci-uhs2: add set_ios()
+  mmc: sdhci-uhs2: add detect_init() to detect the interface
+  mmc: sdhci-uhs2: add clock operations
+  mmc: sdhci-uhs2: add uhs2_control() to initialise the interface
+  mmc: sdhci-uhs2: add request() and others
+  mmc: sdhci-uhs2: add irq() and others
+  mmc: sdhci-uhs2: add add_host() and others to set up the driver
+  mmc: sdhci-uhs2: add pre-detect_init hook
+  mmc: core: add post-mmc_attach_sd hook
+  mmc: sdhci-pci-gli: enable UHS-II mode for GL9755
+
+ drivers/mmc/core/Makefile         |    2 +-
+ drivers/mmc/core/block.c          |    6 +-
+ drivers/mmc/core/bus.c            |   38 +-
+ drivers/mmc/core/core.c           |   49 +-
+ drivers/mmc/core/core.h           |    1 +
+ drivers/mmc/core/host.h           |    4 +
+ drivers/mmc/core/mmc_ops.c        |   25 +-
+ drivers/mmc/core/mmc_ops.h        |    1 +
+ drivers/mmc/core/regulator.c      |   34 +
+ drivers/mmc/core/sd.c             |   16 +-
+ drivers/mmc/core/sd.h             |    3 +
+ drivers/mmc/core/sd_ops.c         |   18 +
+ drivers/mmc/core/sd_ops.h         |    3 +
+ drivers/mmc/core/sd_uhs2.c        | 1394 +++++++++++++++++++++++++
+ drivers/mmc/host/Kconfig          |   10 +
+ drivers/mmc/host/Makefile         |    1 +
+ drivers/mmc/host/sdhci-pci-core.c |   17 +-
+ drivers/mmc/host/sdhci-pci-gli.c  |  310 +++++-
+ drivers/mmc/host/sdhci-pci.h      |    3 +
+ drivers/mmc/host/sdhci-uhs2.c     | 1606 +++++++++++++++++++++++++++++
+ drivers/mmc/host/sdhci-uhs2.h     |  226 ++++
+ drivers/mmc/host/sdhci.c          |  342 +++---
+ drivers/mmc/host/sdhci.h          |  125 ++-
+ include/linux/mmc/card.h          |   47 +
+ include/linux/mmc/core.h          |   13 +
+ include/linux/mmc/host.h          |   99 ++
+ include/linux/mmc/sd_uhs2.h       |  263 +++++
+ 27 files changed, 4486 insertions(+), 170 deletions(-)
+ create mode 100644 drivers/mmc/core/sd_uhs2.c
+ create mode 100644 drivers/mmc/host/sdhci-uhs2.c
+ create mode 100644 drivers/mmc/host/sdhci-uhs2.h
+ create mode 100644 include/linux/mmc/sd_uhs2.h
 
 -- 
-Regards,
-Alexander Atanasov
+2.25.1
 
