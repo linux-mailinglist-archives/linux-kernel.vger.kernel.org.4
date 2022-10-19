@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4116B6048F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A11D604997
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 16:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbiJSOSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 10:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
+        id S230009AbiJSOoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 10:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbiJSORp (ORCPT
+        with ESMTP id S229784AbiJSOnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:17:45 -0400
-X-Greylist: delayed 2124 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 07:00:53 PDT
-Received: from dhl.lxnav.com (dhl.lxnav.com [IPv6:2a01:4f8:c010:2f07::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9126EC09AD;
-        Wed, 19 Oct 2022 07:00:52 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E7D5E40760;
-        Wed, 19 Oct 2022 14:55:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lxnav.com; s=dhl;
-        t=1666184110; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding:in-reply-to:references;
-        bh=URJvSDdj3A8sCZTu24AcBhZBWiNAekT3eymuvA4CTvQ=;
-        b=nk5pD0nBky1Ni3TLvDrlFvI6m6eWQGc6nEoWEDZdiTKwoJmeJfKGBk2EjaojXTPaDgb3Jj
-        xVXTiL6+DVMOh/YH2zjkuiS80pqpW5hKPZwmWAr7OubLfLzo9YqHa6Ym1Ytd1RKM+V7gmA
-        Elr0EfpItibsuX0WgFeVlqXw/Wq/kFivh7TqvACLES4SND+3Ph0fWzM8X3Gc/ZlVzIxKEM
-        VNn9Lt4139dmnJyd1IGOjDHTrdfqZ5lvg8FolIcVEBXlnLp5nN9iP0RZ1SEZWWjPXxPwFA
-        1I4kD0uVVLY3IF9sOIc9gPoUW87g7rKZI0TChJQgApFNuPcQUo9Sye6fHOr5bQ==
-From:   Mitja Spes <mitja@lxnav.com>
-To:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-Cc:     Mitja Spes <mitja@lxnav.com>, Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] doc: iio: pressure: ms5611: added max SPI frequency setting to the example
-Date:   Wed, 19 Oct 2022 14:52:52 +0200
-Message-Id: <20221019125254.952588-3-mitja@lxnav.com>
-In-Reply-To: <20221019125254.952588-1-mitja@lxnav.com>
-References: <20221019125254.952588-1-mitja@lxnav.com>
+        Wed, 19 Oct 2022 10:43:52 -0400
+X-Greylist: delayed 3557 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 07:30:02 PDT
+Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F3E7FE935
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:30:00 -0700 (PDT)
+Received: from [192.168.50.220] ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id l8yLom6VCSmRKl8yLoC5TK; Wed, 19 Oct 2022 15:19:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666185545; bh=WDOGMpV390CNEKOYi9e07ywYx+WEmXUEkJzv9gxWxDQ=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=VesLSrQjcCVgIuoR09xn8ccWOncxgNJcFM6I7wVwjsfV2pUdgYZ8hpjBNGvD2SOOt
+         QZl+pQzHBrIw3NwIm2x6BYUm2MQhMb1dmqChCu3e7NqoHzI9dvaYYet6vnVAv5rI9o
+         SdOyhMh3w2+81l3DjVSwJQap/i1CpzVudzmaK2wUd3yDKd96kZQk1P9LSiWNC2v4yX
+         u+5TrkE30+LIE3aanSyzL+2Px9i1UtgsA8F6DI6ZrjwJaKqLOwpAo5QSUSMC0v0ubX
+         TrNBJrNH3/l3GixjjJK78GYOS3iMGd4VnCk5Ur8SjrAGLk0J5B1/uodHhTEN7e4kSf
+         0sV/SxXC5mXGA==
+Message-ID: <e08af145-59eb-1a36-01d1-3ddb9eef5e7c@benettiengineering.com>
+Date:   Wed, 19 Oct 2022 15:19:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 3/3] raid: substitute empty_zero_page with helper
+ ZERO_PAGE(0)
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-raid@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Song Liu <song@kernel.org>
+References: <20221018215755.33566-1-giulio.benetti@benettiengineering.com>
+ <20221018215755.33566-3-giulio.benetti@benettiengineering.com>
+ <Y0/Yt4uJWg4knNoc@infradead.org>
+Content-Language: en-US
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <Y0/Yt4uJWg4knNoc@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfB+NDAsiJxnR3l50nzexIf2Nm5qf9kozjDLXjBsMXnWsJq1kS6Prga/nWQyUoWheKfTCL6zoU+IRJI1sdAmagXZVMkd/FUYgd79e2NLN0969HIPurf4s
+ 7FMqqGZHdB7dUwJp3GTb41IUsxfziJIyLnvZ2LjBS9yn5u/m8d4V+f0W95lHOCCGo8cqAJjRnoimvLFwFjpDbOaqnPBQADhxPA1Bpsw7xVtBnLVPAsqmdeAA
+ hfVULjRA0+GBTwTI1NvhAMDIC2d/0nQl/Xb/svdU7BuHgAPVDgZ/rwbC4Xc+zmXCjZs9ATUNqmLhxECSEYGZmCCatC2GMc1CbjslIrBo+kmqc8HZKABoxeuz
+ RaeT95Md9rzbiu3lgAtg3o/IqI0jmCKESRC5IiByX7ymiZH7J9EI94Tu767HTqsyTJCcYC18KkUPqUFcM9knS1Ut77Tiwd5WGx/a+hlWM+/Og0ZqY74KtyxQ
+ LYFfX/FiHIR++SiEBaZlD2erzaOmk7J8BBA7GQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added max SPI frequency setting to the example. It is now honored by the
-driver.
+Hi Cristoph,
 
-Signed-off-by: Mitja Spes <mitja@lxnav.com>
----
- Documentation/devicetree/bindings/iio/pressure/meas,ms5611.yaml | 1 +
- 1 file changed, 1 insertion(+)
+On 19/10/22 13:00, Christoph Hellwig wrote:
+> On Tue, Oct 18, 2022 at 11:57:55PM +0200, Giulio Benetti wrote:
+>>   #if RAID6_USE_EMPTY_ZERO_PAGE
+>> -# define raid6_empty_zero_page empty_zero_page
+>> +# define raid6_empty_zero_page ZERO_PAGE(0)
+>>   #else
+>>   extern const char raid6_empty_zero_page[PAGE_SIZE];
+> 
+> RAID6_USE_EMPTY_ZERO_PAGE is never set to a non-zero value.  So this
+> is dead code and we can just remove all code related to the
+> RAID6_USE_EMPTY_ZERO_PAGE case.
 
-diff --git a/Documentation/devicetree/bindings/iio/pressure/meas,ms5611.yaml b/Documentation/devicetree/bindings/iio/pressure/meas,ms5611.yaml
-index 4f06707450bf..08bd06e6dabe 100644
---- a/Documentation/devicetree/bindings/iio/pressure/meas,ms5611.yaml
-+++ b/Documentation/devicetree/bindings/iio/pressure/meas,ms5611.yaml
-@@ -52,6 +52,7 @@ examples:
-             compatible = "meas,ms5611";
-             reg = <0>;
-             vdd-supply = <&ldo_3v3_gnss>;
-+            spi-max-frequency = <20000000>;
-         };
-     };
- ...
+thank you for taking a look.
+Should I send a patch for removing the code in this v2 patchset?
+
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
