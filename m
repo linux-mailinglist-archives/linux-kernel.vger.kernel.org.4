@@ -2,170 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385136039C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E88C6039C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiJSG3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 02:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        id S229870AbiJSGaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 02:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiJSG31 (ORCPT
+        with ESMTP id S229787AbiJSGaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:29:27 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38972617C;
-        Tue, 18 Oct 2022 23:29:26 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8BxfdpFmU9jh6gAAA--.3697S3;
-        Wed, 19 Oct 2022 14:29:25 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuA9mU9jHicBAA--.4688S4;
-        Wed, 19 Oct 2022 14:29:23 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v2 3/3] dt-bindings: clock: add loongson2 clock binding
-Date:   Wed, 19 Oct 2022 14:29:12 +0800
-Message-Id: <20221019062912.3463-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221019062912.3463-1-zhuyinbo@loongson.cn>
-References: <20221019062912.3463-1-zhuyinbo@loongson.cn>
+        Wed, 19 Oct 2022 02:30:01 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E93E371AC
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:29:57 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id f4so6641194uav.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WO7BsK5DpnSO6Nm64A8lJ13hOjutvEHo3IbSt82zwn0=;
+        b=tGHkSey3h0Jb5vKl8QhAURPHbmfN0cT9oKbxT09ZRoggnfPU9gaM4iREOSDl+plFn1
+         Jy5btsxvZHzaw/glJ7X4tSSYEsf+/zRvw76S04N5IBwtpuwhY97+mLLHcQSTu/JLJTA+
+         Pc//9ugQLUAW0XvXy/u4f81p0JwZe6vMMP6GZWTTmg2CdyPDUIzHlGEn+qdFfJffcrei
+         xHTq3dUkZs6oJvb6jJlvECtAf2krQM4uvD3RNSosCJjcbxJeekHJQMh0nWttUnQ0n50b
+         GQAWIrn5x2bwHIJ1zPKqEhGc0mIYeY1BlmpX+MUXZgDfYN2SXGSkdT8ghSEsEVpKFmNO
+         d6rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WO7BsK5DpnSO6Nm64A8lJ13hOjutvEHo3IbSt82zwn0=;
+        b=J+RYzZzXzX4vunbQacPW/T4z0mzWZPsS/vrKx3vuTzMPraPwHcyq57B7mZ2wo2uUNR
+         zyFBn++axIqtwFfVxezga3TpmKW7spz9BQSzFuthTxDTtM7Jc1mZIzZgCkm/cCYBh/e0
+         qB7VtPpoSe1fOzlMJqL2SZFf4YurY/agqu/oSikJd2rPAxo8yY1TpM0NmWkRSI9p+0qU
+         CMhXiNWqAL3R5U2mC/HtljDxWCiQfLNCqfpZ4DDh7TMGv4BvlSPKqodGMdXvgK87/Oyn
+         xomax8s0Qwilto1P0QX0kUpsq2DRv1uxeMmP16vyYToAzdA3O80vZPppgWxY51KMHUle
+         +1Mg==
+X-Gm-Message-State: ACrzQf3cf8bL9B3lfVEjCgisON7G7n+COD8gEefWoz7LbSuekU7zcE7p
+        Nv7km7YaYCuK/wIjniQRLStrFh0pCxji21KtKVsIRg==
+X-Google-Smtp-Source: AMsMyM57OjNPrBzasL7MvBgHPVlgDs7vzVuYRSl/mLXTqX46aCt3RAsB53y6ehEESCc5sckcA4XquEE3Wz88cyvcgGc=
+X-Received: by 2002:ab0:5a98:0:b0:3e6:5e47:3702 with SMTP id
+ w24-20020ab05a98000000b003e65e473702mr3503114uae.104.1666160996231; Tue, 18
+ Oct 2022 23:29:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxXuA9mU9jHicBAA--.4688S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4kJw4fuF43JFWDJwb_yoW5Xr1rpF
-        nxC345GrW09F17uws5KFyxA3Z5Z3WkAFnrZanrAa4jyF98W3W5XF47K34DZa9rAFyxZ39F
-        vFWfur4UC3W8Cw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkE
-        cVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F4
-        0Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCa
-        FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28Icx
-        kI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5
-        JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxUzGYpUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018082559.never.406-kees@kernel.org> <CABVgOSneaxVgAQH=bN0pxOkN3irtpYVwFhPhNJRoyTcRfEoWhQ@mail.gmail.com>
+ <202210182237.C65BCCE2@keescook>
+In-Reply-To: <202210182237.C65BCCE2@keescook>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 19 Oct 2022 14:29:44 +0800
+Message-ID: <CABVgOSn359J8W4DFBO4n8SW=L=-PaVKi9G4R9u67jSBs1zGoGQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit/fortify: Validate __alloc_size attribute results
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the loongson2 clock binding with DT schema format using
-json-schema.
+On Wed, Oct 19, 2022 at 1:45 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Oct 19, 2022 at 11:35:40AM +0800, David Gow wrote:
+> > On Tue, Oct 18, 2022 at 4:27 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Validate the effect of the __alloc_size attribute on allocators. If the
+> > > compiler doesn't support __builtin_dynamic_object_size(), skip the test.
+> > >
+> > > Cc: linux-hardening@vger.kernel.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > > To pass this depends on the following patches:
+> > > https://lore.kernel.org/lkml/20221018073430.never.551-kees@kernel.org/
+> > > https://lore.kernel.org/lkml/20221018082232.never.213-kees@kernel.org/
+> > > To not be skipped, either GCC 12 or Clang is needed.
+> > > ---
+> >
+> > While this _looks_ good, I can't actually get the tests to pass on my
+> > machine, with the following all having a
+> > __builtin_dynamic_object_size() of -1:
+> > - kmalloc_node(size++, gfp, NUMA_NO_NODE)
+> > - kzalloc(size++, gfp)
+> > - kzalloc_node(size++, gfp, NUMA_NO_NODE)
+> > - kcalloc(1, size++, gfp)
+> > - kcalloc_node(1, size++, gfp, NUMA_NO_NODE)
+> > - kmalloc_array(1, size++, gfp)
+> > - kmalloc_array_node(1, size++, gfp, NUMA_NO_NODE)
+> >
+> > I've been using the following command to run the tests:
+> > ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_FORTIFY_SOURCE=y
+> >
+> > And I've also tried it on x86_64 and arm64 under qemu, with both gcc
+> > 12.2.0 and clang 14.0.6-2, with the same failures.
+> >
+> > Is there a dependency somewhere I've missed? (I've tried it on the
+> > ksefltest/kunit branch, with the mentioned dependencies applied, and
+> > also on your for-next/hardening branch, with the missing patches
+> > applied.)
+>
+> I would expect this to pass with v6.1-rc1 when used with the above two
+> patches added, but it seems those _did_ pass, but not the k*alloc()
+> helpers for you? That is curious. Here's my testing:
+>
+> $ ./tools/testing/kunit/kunit.py run --arch x86_64 \
+>         --kconfig_add CONFIG_FORTIFY_SOURCE=y --make_options LLVM=1 fortify
+> ...
+> [22:43:32] =================== fortify (3 subtests) ===================
+> [22:43:32] [PASSED] known_sizes_test
+> [22:43:32] [PASSED] control_flow_split_test
+> [22:43:32] [PASSED] alloc_size_test
+> [22:43:32] ===================== [PASSED] fortify =====================
+> [22:43:32] ============================================================
+> [22:43:32] Testing complete. Ran 3 tests: passed: 3
+> [22:43:32] Elapsed time: 33.210s total, 3.369s configuring, 28.367s
+> building, 0.799s running
+>
+> $ clang --version
+> ClangBuiltLinux clang version 16.0.0 (https://github.com/llvm/llvm-project.git 3291eac12340f465084f347720d99352241f621c)
+>
+>
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v2:
-		1. Drop "Binding" string in the title.
-		2. Drop entire allOf and move the contents to top level.
-		3. Change string "refclk_100m" to "ref_100m". 
+Running the exact same command here gives the following output (spam incoming):
+[13:55:34] Configuring KUnit Kernel ...
+[13:55:34] Building KUnit Kernel ...
+Populating config with:
+$ make ARCH=x86_64 O=.kunit olddefconfig LLVM=1
+Building with:
+$ make ARCH=x86_64 O=.kunit --jobs=48 LLVM=1
+[13:55:43] Starting KUnit Kernel (1/1)...
+[13:55:43] ============================================================
+Running tests with:
+$ qemu-system-x86_64 -nodefaults -m 1024 -kernel
+.kunit/arch/x86/boot/bzImage -append 'kunit.filter_glob=fortify
+kunit.enable=1 console=ttyS0 kunit_shutdown=reboot' -no-reboot
+-nographic -serial stdio
+[13:55:44] =================== fortify (3 subtests) ===================
+[13:55:44] [PASSED] known_sizes_test
+[13:55:44] [PASSED] control_flow_split_test
+[13:55:44] # alloc_size_test: EXPECTATION FAILED at lib/fortify_kunit.c:91
+[13:55:44] Expected __builtin_dynamic_object_size(p, 1) == expected, but
+[13:55:44] __builtin_dynamic_object_size(p, 1) == -1
+[13:55:44] expected == 51
+[13:55:44] __alloc_size() not working with kmalloc_node(size++, gfp,
+NUMA_NO_NODE)
+[13:55:44] # alloc_size_test: EXPECTATION FAILED at lib/fortify_kunit.c:92
+[13:55:44] Expected __builtin_dynamic_object_size(p, 1) == expected, but
+[13:55:44] __builtin_dynamic_object_size(p, 1) == -1
+[13:55:44] expected == 52
+[13:55:44] __alloc_size() not working with kzalloc(size++, gfp)
+[13:55:44] # alloc_size_test: EXPECTATION FAILED at lib/fortify_kunit.c:93
+[13:55:44] Expected __builtin_dynamic_object_size(p, 1) == expected, but
+[13:55:44] __builtin_dynamic_object_size(p, 1) == -1
+[13:55:44] expected == 53
+[13:55:44] __alloc_size() not working with kzalloc_node(size++, gfp,
+NUMA_NO_NODE)
+[13:55:44] # alloc_size_test: EXPECTATION FAILED at lib/fortify_kunit.c:94
+[13:55:44] Expected __builtin_dynamic_object_size(p, 1) == expected, but
+[13:55:44] __builtin_dynamic_object_size(p, 1) == -1
+[13:55:44] expected == 54
+[13:55:44] __alloc_size() not working with kcalloc(1, size++, gfp)
+[13:55:44] # alloc_size_test: EXPECTATION FAILED at lib/fortify_kunit.c:95
+[13:55:44] Expected __builtin_dynamic_object_size(p, 1) == expected, but
+[13:55:44] __builtin_dynamic_object_size(p, 1) == -1
+[13:55:44] expected == 55
+[13:55:44] __alloc_size() not working with kcalloc_node(1, size++,
+gfp, NUMA_NO_NODE)
+[13:55:44] # alloc_size_test: EXPECTATION FAILED at lib/fortify_kunit.c:96
+[13:55:44] Expected __builtin_dynamic_object_size(p, 1) == expected, but
+[13:55:44] __builtin_dynamic_object_size(p, 1) == -1
+[13:55:44] expected == 56
+[13:55:44] __alloc_size() not working with kmalloc_array(1, size++, gfp)
+[13:55:44] # alloc_size_test: EXPECTATION FAILED at lib/fortify_kunit.c:97
+[13:55:44] Expected __builtin_dynamic_object_size(p, 1) == expected, but
+[13:55:44] __builtin_dynamic_object_size(p, 1) == -1
+[13:55:44] expected == 57
+[13:55:44] __alloc_size() not working with kmalloc_array_node(1,
+size++, gfp, NUMA_NO_NODE)
+[13:55:44] not ok 3 - alloc_size_test
+[13:55:44] [FAILED] alloc_size_test
+[13:55:44] # Subtest: fortify
+[13:55:44] 1..3
+[13:55:44] # fortify: pass:2 fail:1 skip:0 total:3
+[13:55:44] # Totals: pass:2 fail:1 skip:0 total:3
+[13:55:44] not ok 1 - fortify
+[13:55:44] ===================== [FAILED] fortify =====================
+[13:55:44] ============================================================
+[13:55:44] Testing complete. Ran 3 tests: passed: 2, failed: 1
+[13:55:45] Elapsed time: 10.424s total, 0.002s configuring, 8.950s
+building, 0.835s running
 
- .../bindings/clock/loongson,ls2k-clk.yaml     | 64 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 65 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+With:
+clang --version
+Debian clang version 14.0.6-2
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
 
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..104e38a618e2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of loongson2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+  - |
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a4de8f1b81f0..7b7ba73ccb99 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11918,6 +11918,7 @@ LOONGSON2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
--- 
-2.31.1
+Same thing with gcc:
+gcc (Debian 12.2.0-1) 12.2.0
+Copyright (C) 2022 Free Software Foundation, Inc.
 
+I can also reproduce it on a different machine, running openSUSE
+Tumbleweed's gcc 12.2 and clang 15.0.2.
+
+It also fails the same way with just the mentioned patches, applied to
+torvalds/master at aae803b02f92.
+
+Do you have a specific working tree somewhere public I should try?
+
+-- David
