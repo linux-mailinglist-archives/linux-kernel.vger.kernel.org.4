@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5EA60471D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820AB6044CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiJSNaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S232778AbiJSMOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiJSN3H (ORCPT
+        with ESMTP id S232868AbiJSMN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:29:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E43B9AC28;
-        Wed, 19 Oct 2022 06:16:02 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37E5C66023AA;
-        Wed, 19 Oct 2022 09:51:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666169469;
-        bh=JRrtscYJcgnvP6zoQUoIszeWzHvqEHR17uOuuaKa6uA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MfG6R1OFvTDzIsvmQwazrsJnhSLRTyrtSrgynYi08JlaDlOxOKCPip8RY8pvSiRgN
-         KHb2pqiMn8wrmvIEDU4mM/ucE8/nyn+dbJgdN0muZb0dQ9rgRNqt+jaWTa3riM+zYc
-         wDPK6pXdn/LhiAnQa1pF37+eoFm26xSj+Skk3fR4nVOhtpBldwVO0A3+5i+hhu717Q
-         jj+iXCHioBkax2EtGx12ed0P2XL9JPxMT9+fiu5dPi0El57ERZ/oxru4OxfRB5GGye
-         pf9NGLGTrQ2mEC4wZ3z+qtqmv8BIXMwAtSdLEcv3RrzeHiDI4J0ogl2iIy3WR+CEkN
-         xyzf96mibVOwg==
-Message-ID: <01ef8a2d-091f-5428-2cb8-41ba3e137a06@collabora.com>
-Date:   Wed, 19 Oct 2022 10:51:07 +0200
+        Wed, 19 Oct 2022 08:13:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11251A2084;
+        Wed, 19 Oct 2022 04:50:20 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 08:55:43 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666169745;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G29mZsSDnyfBqk1YPL3lpVmXOQW96znUnkfWA0ulVBA=;
+        b=a99hvSKbPbToV0TEAnN282NvIkLRIoDzGIkBg8Lw5iaj8Y7KZPPfojmRuv0C659E1jLqbV
+        t8Jg1dWV5/VoWcJ9jWlAGAnBOhukU/VqX236igj2/C1dAu3kZazgvn+A5ZXngco/QG26dy
+        yyA6nMGdiIsHu+MS8QUhetUdFis+QagaWrEpALoseDobqVbk8Ejz1CUDESBG/JVYBGOvDb
+        VdB4xtj4styz2p4wjeqb7HfPOBFLXk5ecOTMPOMaSajPsxeVacJILcyd2p1gz+9q4ta6a7
+        SkDTE6eDLXTpkxZBzZCfUjwunpk9Oo9swdC9vBK9U+BGfJd8dMswXT538u8+lg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666169745;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G29mZsSDnyfBqk1YPL3lpVmXOQW96znUnkfWA0ulVBA=;
+        b=yKsSlVt1rRBLmA3pby+nYpMRBjsFgEeXqy6T/FJLDvq/WOV/8j1zuk4N0+yxZJvZqrD8uH
+        o0tMml/a6Wrk3UAA==
+From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/misc] x86/signal: Add ABI prefixes to frame setup functions
+Cc:     Brian Gerst <brgerst@gmail.com>, Borislav Petkov <bp@suse.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220606203802.158958-7-brgerst@gmail.com>
+References: <20220606203802.158958-7-brgerst@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v1 3/3] arm64: dts: mt8195: Add venc node
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Irui Wang <irui.wang@mediatek.com>
-References: <20221017070858.13902-1-tinghan.shen@mediatek.com>
- <20221017070858.13902-4-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221017070858.13902-4-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <166616974303.401.3021440066033788592.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,31 +64,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/10/22 09:08, Tinghan Shen ha scritto:
-> Add venc node for mt8195 SoC.
-> 
-> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 24 ++++++++++++++++++++++++
->   1 file changed, 24 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 903e92d6156f..7cf2f7ef4ec6 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -2163,6 +2163,30 @@
->   			power-domains = <&spm MT8195_POWER_DOMAIN_VENC>;
->   		};
->   
-> +		venc: venc@1a020000 {
+The following commit has been merged into the x86/misc branch of tip:
 
-As Krzysztof also said, this is video-codec@1a020000.
+Commit-ID:     c461ae39373a1ae21952dbb6e2668a693d9f761d
+Gitweb:        https://git.kernel.org/tip/c461ae39373a1ae21952dbb6e2668a693d9f761d
+Author:        Brian Gerst <brgerst@gmail.com>
+AuthorDate:    Mon, 06 Jun 2022 16:38:00 -04:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 19 Oct 2022 09:58:49 +02:00
 
-Also, there's one more thing... MT8195 has two video encoder cores, but this
-node is only for the first one. There's a second instance at 0x1b020000: please
-add it.
+x86/signal: Add ABI prefixes to frame setup functions
 
-Regards,
-Angelo
+Add ABI prefixes to the frame setup functions that didn't already have
+them.  To avoid compiler warnings and prepare for moving these functions
+to separate files, make them non-static.
 
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Link: https://lore.kernel.org/r/20220606203802.158958-7-brgerst@gmail.com
+Signed-off-by: Borislav Petkov <bp@suse.de>
+---
+ arch/x86/include/asm/fpu/signal.h  |  5 -----
+ arch/x86/include/asm/sighandling.h |  5 +++++
+ arch/x86/kernel/signal.c           | 18 +++++++-----------
+ 3 files changed, 12 insertions(+), 16 deletions(-)
+
+diff --git a/arch/x86/include/asm/fpu/signal.h b/arch/x86/include/asm/fpu/signal.h
+index 2f255ac..611fa41 100644
+--- a/arch/x86/include/asm/fpu/signal.h
++++ b/arch/x86/include/asm/fpu/signal.h
+@@ -13,14 +13,9 @@
+ #ifdef CONFIG_X86_64
+ # include <uapi/asm/sigcontext.h>
+ # include <asm/user32.h>
+-struct ksignal;
+-int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs);
+-int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs);
+ #else
+ # define user_i387_ia32_struct	user_i387_struct
+ # define user32_fxsr_struct	user_fxsr_struct
+-# define ia32_setup_frame	__setup_frame
+-# define ia32_setup_rt_frame	__setup_rt_frame
+ #endif
+ 
+ extern void convert_from_fxsr(struct user_i387_ia32_struct *env,
+diff --git a/arch/x86/include/asm/sighandling.h b/arch/x86/include/asm/sighandling.h
+index c9e9784..e770c4f 100644
+--- a/arch/x86/include/asm/sighandling.h
++++ b/arch/x86/include/asm/sighandling.h
+@@ -19,4 +19,9 @@ void __user *
+ get_sigframe(struct ksignal *ksig, struct pt_regs *regs, size_t frame_size,
+ 	     void __user **fpstate);
+ 
++int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs);
++int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs);
++int x64_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs);
++int x32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs);
++
+ #endif /* _ASM_X86_SIGHANDLING_H */
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 890ca05..0511e05 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -336,8 +336,7 @@ static const struct {
+ 	0
+ };
+ 
+-static int
+-__setup_frame(struct ksignal *ksig, struct pt_regs *regs)
++int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs)
+ {
+ 	sigset_t *set = sigmask_to_save();
+ 	struct sigframe __user *frame;
+@@ -392,7 +391,7 @@ Efault:
+ 	return -EFAULT;
+ }
+ 
+-static int __setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
++int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ {
+ 	sigset_t *set = sigmask_to_save();
+ 	struct rt_sigframe __user *frame;
+@@ -471,7 +470,7 @@ static unsigned long frame_uc_flags(struct pt_regs *regs)
+ 	return flags;
+ }
+ 
+-static int __setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
++int x64_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ {
+ 	sigset_t *set = sigmask_to_save();
+ 	struct rt_sigframe __user *frame;
+@@ -571,11 +570,9 @@ int copy_siginfo_to_user32(struct compat_siginfo __user *to,
+ 		return x32_copy_siginfo_to_user(to, from);
+ 	return __copy_siginfo_to_user32(to, from);
+ }
+-#endif /* CONFIG_X86_X32_ABI */
+ 
+-static int x32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
++int x32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ {
+-#ifdef CONFIG_X86_X32_ABI
+ 	compat_sigset_t *set = (compat_sigset_t *) sigmask_to_save();
+ 	struct rt_sigframe_x32 __user *frame;
+ 	unsigned long uc_flags;
+@@ -622,15 +619,14 @@ static int x32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ 
+ 	regs->cs = __USER_CS;
+ 	regs->ss = __USER_DS;
+-#endif	/* CONFIG_X86_X32_ABI */
+ 
+ 	return 0;
+-#ifdef CONFIG_X86_X32_ABI
++
+ Efault:
+ 	user_access_end();
+ 	return -EFAULT;
+-#endif
+ }
++#endif /* CONFIG_X86_X32_ABI */
+ 
+ /*
+  * Do a signal return; undo the signal stack.
+@@ -770,7 +766,7 @@ setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ 	} else if (is_x32_frame(ksig)) {
+ 		return x32_setup_rt_frame(ksig, regs);
+ 	} else {
+-		return __setup_rt_frame(ksig, regs);
++		return x64_setup_rt_frame(ksig, regs);
+ 	}
+ }
+ 
