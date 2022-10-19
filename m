@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D7B604C5D
+	by mail.lfdr.de (Postfix) with ESMTP id 97C68604C5B
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJSPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S229783AbiJSPyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiJSPxr (ORCPT
+        with ESMTP id S229931AbiJSPxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:53:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A3E18F25B;
-        Wed, 19 Oct 2022 08:51:13 -0700 (PDT)
+        Wed, 19 Oct 2022 11:53:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47165153E37
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:51:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B399B61943;
-        Wed, 19 Oct 2022 15:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62EB3C433D7;
-        Wed, 19 Oct 2022 15:50:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E27E8CE228E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFBAC433D6;
+        Wed, 19 Oct 2022 15:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666194615;
-        bh=wScyHxczwHL75RmoXOfql5d13NwOHcmOL0uKxW2svyU=;
+        s=k20201202; t=1666194623;
+        bh=oMxztditmQbZR7+DrctklPnyl2cHfutQghmyLJRjwCQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=D/ZLocZFqh2oVDNt4qIJijuw6psZZCGYbZq/vMqTpVdAHmJab5OKwDkNJa9FZhS+R
-         6U9yEV97Zoz/IEcwhoeRgpoyVELIlzUiofWUpEDoeO/xfuI2W+6opBwCt/2eiA8TLG
-         J1a9DdqVaTC1bmqmtJ0hkDgvAe6LBA79wEeuPfrl0em6jFFkI/z+cmjhPouDLSSs/R
-         htcs8QqrN7D7r8PspZR8YmDpa+M/VWwrBoaqVICPdvAOs1sLzRPmLKOBMWkTlCZKex
-         C+kvGspb0YsLZxErffHZPmGRcPApRb7YMk7FD6zo8S59GfxMd6L9lo8sWLVpu0kL37
-         uJEHAzB105RvQ==
+        b=juhzztDPhSvnkTsGVI0KuTg9czWwFcxaBCk6Be6q69WSasQQcNsKWND43EUif1OQh
+         I0CjGRRGUysZP9Kzc80OOse3wvOM/oQ0H1d0PwCXmdal7C6QGgeM5Xq6jEXUSZDBlh
+         k+KDVlNm9FQH/EPllNLLKvd/2eA00fCnG3Q5J61fZHxjhEHMqAQKW0KgBgKqIjx/Ui
+         2RCgmUsCtDkLelZOXJZzWHM9uk1RjVi2u0cWbiLMjG9gG9xDg4hNjppPDhaVflRFs2
+         pnTimfgXPMnWEAZSeQcpusoWTWxgV/rCEIOqtH9mZPNcs93PXNEDLSwpdIj6qErC6e
+         O87zSXsWkx3Xg==
 From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, Paul Cercueil <paul@crapouillou.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
+To:     Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+        alsa-devel@alsa-project.org
+Cc:     Sunil-kumar.Dommati@amd.com, Jaroslav Kysela <perex@perex.cz>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>,
+        vsujithkumar.reddy@amd.com, Vijendar.Mukunda@amd.com,
+        ssabakar@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
         Liam Girdwood <lgirdwood@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-In-Reply-To: <20221019071639.1003730-1-colin.i.king@gmail.com>
-References: <20221019071639.1003730-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH][next][V2] ASoC: codecs: jz4725b: Fix spelling mistake "Sourc" -> "Source", "Routee" -> "Route"
-Message-Id: <166619461311.884966.9257209469691313865.b4-ty@kernel.org>
-Date:   Wed, 19 Oct 2022 16:50:13 +0100
+In-Reply-To: <20220921090750.3833256-1-venkataprasad.potturu@amd.com>
+References: <20220921090750.3833256-1-venkataprasad.potturu@amd.com>
+Subject: Re: [PATCH] ASoC: amd: acp: Add setbias level for rt5682s codec in machine driver
+Message-Id: <166619462028.884966.16711536183815156169.b4-ty@kernel.org>
+Date:   Wed, 19 Oct 2022 16:50:20 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,8 +63,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 08:16:39 +0100, Colin Ian King wrote:
-> There are two spelling mistakes in codec routing description. Fix it.
+On Wed, 21 Sep 2022 14:37:44 +0530, Venkata Prasad Potturu wrote:
+> Add set_bais_level function for rt5682s codec to enable bclk and lrclk
+> before codec widgets power on and disable bclk and lrclk after widgets
+> power down, to avoid pop noise
 > 
 > 
 
@@ -68,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: codecs: jz4725b: Fix spelling mistake "Sourc" -> "Source", "Routee" -> "Route"
-      commit: df496157a5afa1b6d1f4c46ad6549c2c346d1e59
+[1/1] ASoC: amd: acp: Add setbias level for rt5682s codec in machine driver
+      commit: 9e693e81745f03845788ef409f03a39e92f8dd48
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
