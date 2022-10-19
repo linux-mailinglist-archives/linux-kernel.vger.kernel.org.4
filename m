@@ -2,122 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ADE6051AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697516051B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbiJSVAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
+        id S231616AbiJSVBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 17:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiJSVAP (ORCPT
+        with ESMTP id S229494AbiJSVBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:00:15 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C2CF53E2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:00:12 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id d26so42827563ejc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:00:12 -0700 (PDT)
+        Wed, 19 Oct 2022 17:01:18 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E6A8E7AF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:01:17 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id z20so18393822plb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7B3HRHjNpnBpaI5qlpPSiOMumjOcoFKJt56DP4KqPMM=;
-        b=SxUE8X9QkZ7Zt+v4Dx0Ua8t+BN4j3eNoHXuWMSi3TqQLAfk13oyom7hzkYIqYf8d2D
-         I6meVt2PG9LN4tHmlZDCcwn38wd4rRg6/fzhz57Bsg4vlzLpZBKqrZVQLl0pCEFZDJgZ
-         WalsGmHT+9X7UhJdUpyM9o0SfCGgfyRsxKusc=
+        d=google.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LrjhlLcaH7ZC8kApu56hA/bgG8Tw6ykXI1LeIwNELlo=;
+        b=c5WpMqc40BgydFsnh9z8jS6foed/iuJcI5U0DswjwBuaVJTAFfIOGcivhesM0Hfplu
+         khKtKZT2ttUY2cQZP4Iz3tPCqjelNvprzyp+IJxyP05eQZqtxSzP54LSuURX2JtEFOxj
+         fpZKONKTvlfC1aHDdz7nTIcdhvF2Yz2sel1Lza9r3aX5wZcz8j9oiob71D/KZ6+cH3Jo
+         HvGAlubrsUb3bYzpIse+/dIdDOuitYf3I6sJVNw5LfgKPcNBfRZJogBm8QUIIVQjkJSq
+         3h5O0WcGMHobWsmLWjVheV3BBb40/vCoNyWq9wZ0R89IX5uM4ichlzycbq2OYwgmVK5n
+         nBjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7B3HRHjNpnBpaI5qlpPSiOMumjOcoFKJt56DP4KqPMM=;
-        b=PE816aQ0ELRS+AEXwvq03z8rQqNrsElGqsI8BK/6sZQVGFYvLcAT+7SANEMBitTZgn
-         glhm5DOAPcnCId8NLo7YX1ihtmry8ifX9a5EjS+cZD+mJc5N2aK2feIBS+QBTaWvf4dM
-         bGGXltZ1PZh6XeIRakMZybCVCDhiXSF90gQOmO4maCL/NDdl5SAWUmgGk/Xc3oI6aq1G
-         Pa2m1hdjyckE2nsnpI0wQsp+TnZLpTSfJO53b2wQLJleCNS8vs6Sioj6DsjgPaBHnpds
-         qzTTrHDXWyek1fURf+0rRLSqC2GzN9G1qDQ/jh/zcCJEHAQLVo+i5yjosaUEl1ESH0ja
-         MfIw==
-X-Gm-Message-State: ACrzQf0H+lw3tv2z5FdNULAgi6IB0scaaNHkkXpe2CZQ+UwH3gYmMWNT
-        4Q96w1q3D3l4H2EFQslP/UkcJg==
-X-Google-Smtp-Source: AMsMyM7j83A8j2fgwHRwYEHy6dycWlOPv4NGP8/RSv4ZJ682CTNJ+GtTySsLCbknc8ARf6bOFr0SNg==
-X-Received: by 2002:a17:907:162a:b0:78e:2859:76be with SMTP id hb42-20020a170907162a00b0078e285976bemr8268481ejc.768.1666213210993;
-        Wed, 19 Oct 2022 14:00:10 -0700 (PDT)
-Received: from [192.168.1.149] ([80.208.71.65])
-        by smtp.gmail.com with ESMTPSA id k13-20020a17090627cd00b0077826b92d99sm9448022ejc.12.2022.10.19.14.00.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 14:00:10 -0700 (PDT)
-Message-ID: <cc38380a-de69-d8f6-44b5-8ae4d073d916@rasmusvillemoes.dk>
-Date:   Wed, 19 Oct 2022 23:00:09 +0200
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LrjhlLcaH7ZC8kApu56hA/bgG8Tw6ykXI1LeIwNELlo=;
+        b=l0K6wl+tYWRpYoKOf9NuU3LK0gE6e6nbLoJbOIPkrQ0Kf8i8r68ifYKQQdEZ/DqXk6
+         dzcbmZI90loMRsXgqCFcuVP+2eHqvcsN9EaX37KeOgc5iVO/3+1k8P5rGOGXar8r1doC
+         W4gAKPH6Inbi/U9Xnrmf8zIbx9d75tzaEpEXK2khQc6IE2LhofmwUOmYkbRqMgndOcgr
+         WhwkWC3rPUqTtKd/igmpmJ0uH0hr/F0ICtYo+HAO0x+M6/DcYdPINLgt/7nbDsioWJvt
+         RZ5avTy/+bcF/LYKw9tvvSOcSoZGNvA76QxO7yjYawZ/KwyOHQwA0N/iH5f4tpsdHPnv
+         wmkQ==
+X-Gm-Message-State: ACrzQf2hO+3XuLuwP19V1XuasN8rMNvW+uWzB+jxDc7Vxvvo4707rAaX
+        FuxcWUgBeRGYp/xAFjftg2Up31rCVYYbUg==
+X-Google-Smtp-Source: AMsMyM71sLO/qRXdDLL+v7+daDzdSBVPck9mqvDe4rkbyIr95Y0PGwedq+SYt5jNU8GtvcOQLikKag==
+X-Received: by 2002:a17:90b:1c88:b0:203:8400:13a9 with SMTP id oo8-20020a17090b1c8800b00203840013a9mr12140650pjb.46.1666213276656;
+        Wed, 19 Oct 2022 14:01:16 -0700 (PDT)
+Received: from bsegall-glaptop.localhost (c-67-188-112-16.hsd1.ca.comcast.net. [67.188.112.16])
+        by smtp.gmail.com with ESMTPSA id n5-20020a170903110500b00179c99eb815sm11368127plh.33.2022.10.19.14.01.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 14:01:15 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Chuyi Zhou <zhouchuyi@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+        htejun@gmail.com, lizefan.x@bytedance.com, vschneid@redhat.com,
+        Abel Wu <wuyun.abel@bytedance.com>
+Subject: Re: [RESEND] sched/fair: Add min_ratio for cfs bandwidth_control
+References: <20221019031551.24312-1-zhouchuyi@bytedance.com>
+Date:   Wed, 19 Oct 2022 14:01:12 -0700
+In-Reply-To: <20221019031551.24312-1-zhouchuyi@bytedance.com> (Chuyi Zhou's
+        message of "Wed, 19 Oct 2022 11:15:51 +0800")
+Message-ID: <xm26mt9rle93.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/1] vsprintf: protect kernel from panic due to
- non-canonical pointer dereference
-Content-Language: en-US
-To:     Jane Chu <jane.chu@oracle.com>, pmladek@suse.com,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     wangkefeng.wang@huawei.com, konrad.wilk@oracle.com,
-        haakon.bugge@oracle.com, john.haxby@oracle.com
-References: <20221019194159.2923873-1-jane.chu@oracle.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221019194159.2923873-1-jane.chu@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 21.41, Jane Chu wrote:
-> Having stepped on a local kernel bug where reading sysfs has led to
-> out-of-bound pointer dereference by vsprintf() which led to GPF panic.
+Chuyi Zhou <zhouchuyi@bytedance.com> writes:
 
-Just to be completely clear, the out-of-bounds dereference did not
-happen in vsprintf if I understand your description right. Essentially
-you have an array of char* pointers, and you accessed beyond that array,
-where of course some random memory contents then turned out not to be a
-real pointer, and that bogus pointer value was passed into vsprintf() as
-a %s argument.
+> Tasks may be throttled when holding locks for a long time by current
+> cfs bandwidth control mechanism once users set a too small quota/period
+> ratio, which can result whole system get stuck[1].
+>
+> In order to prevent the above situation from happening, this patch adds
+> sysctl_sched_cfs_bandwidth_min_ratio in /proc/sys/kernel, which indicates
+> the minimum percentage of quota/period users can set. The default value is
+> zero and users can set quota and period without triggering this
+> constraint.
 
-> And the reason for GPF is that the OOB pointer was turned to a
-> non-canonical address such as 0x7665645f63616465.
 
-That's ved_cade , or more properly edac_dev ...
+There's so many other sorts of bad inputs that can get you stuck here
+that I'm not sure it's ever safe against lockups to provide direct write
+access to an untrusted user. I'm not totally opposed but it seems like
+an incomplete fix to a broken (non-default) configuration.
 
-> 
-> vsprintf() already has this line of defense
-> 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
->                 return "(efault)";
-> Since a non-canonical pointer can be detected by kern_addr_valid()
-> on architectures that present VM holes as well as meaningful
-> implementation of kern_addr_valid() that detects the non-canonical
-> addresses, this patch adds a check on non-canonical string pointer by
-> kern_addr_valid() and "(efault)" to alert user that something
-> is wrong instead of unecessarily panic the server.
-> 
-> On the other hand, if the non-canonical string pointer is dereferenced
-> else where in the kernel, by virtue of being non-canonical, a crash
-> is expected to be immediate.
 
-I'm with Andy on this one, we don't add random checks like this in the
-kernel, not in vsprintf or elsewhere.
-
-check_pointer_msg is/was actually more about checking the various
-%p<foo> extensions, where it is (more) expected that somebody does
-
-  struct foo *f = get_a_foo();
-  pr_debug("got %pfoo\n", f);
-  if (IS_ERR(f)) { ... }
-
-[possibly in a not so obvious path], and the PAGE_SIZE check is
-similarly for cases where the "base" pointer is actually NULL but what
-is passed is &f->member.
-
-Rasmus
+>
+> Link[1]:https://lore.kernel.org/lkml/5987be34-b527-4ff5-a17d-5f6f0dc94d6d@huawei.com/T/
+> Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
+> Suggested-by: Abel Wu <wuyun.abel@bytedance.com>
+> ---
+>  include/linux/sched/sysctl.h |  4 ++++
+>  kernel/sched/core.c          | 23 +++++++++++++++++++++++
+>  kernel/sysctl.c              | 10 ++++++++++
+>  3 files changed, 37 insertions(+)
+>
+> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+> index 303ee7dd0c7e..dedb18648f0e 100644
+> --- a/include/linux/sched/sysctl.h
+> +++ b/include/linux/sched/sysctl.h
+> @@ -21,6 +21,10 @@ enum sched_tunable_scaling {
+>  	SCHED_TUNABLESCALING_END,
+>  };
+>  
+> +#ifdef CONFIG_CFS_BANDWIDTH
+> +extern unsigned int sysctl_sched_cfs_bandwidth_min_ratio;
+> +#endif
+> +
+>  #define NUMA_BALANCING_DISABLED		0x0
+>  #define NUMA_BALANCING_NORMAL		0x1
+>  #define NUMA_BALANCING_MEMORY_TIERING	0x2
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 5800b0623ff3..8f6cfd889e37 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -10504,6 +10504,12 @@ static u64 cpu_shares_read_u64(struct cgroup_subsys_state *css,
+>  }
+>  
+>  #ifdef CONFIG_CFS_BANDWIDTH
+> +/*
+> + * The minimum of quota/period ratio users can set, default is zero and users can set
+> + * quota and period without triggering this constraint.
+> + */
+> +unsigned int sysctl_sched_cfs_bandwidth_min_ratio;
+> +
+>  static DEFINE_MUTEX(cfs_constraints_mutex);
+>  
+>  const u64 max_cfs_quota_period = 1 * NSEC_PER_SEC; /* 1s */
+> @@ -10513,6 +10519,20 @@ static const u64 max_cfs_runtime = MAX_BW * NSEC_PER_USEC;
+>  
+>  static int __cfs_schedulable(struct task_group *tg, u64 period, u64 runtime);
+>  
+> +static int check_cfs_bandwidth_min_ratio(u64 period, u64 quota)
+> +{
+> +	u64 ratio;
+> +
+> +	if (!sysctl_sched_cfs_bandwidth_min_ratio)
+> +		return 0;
+> +
+> +	ratio = div64_u64(quota * 100, period);
+> +	if (ratio < sysctl_sched_cfs_bandwidth_min_ratio)
+> +		return -1;
+> +
+> +	return 0;
+> +}
+> +
+>  static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota,
+>  				u64 burst)
+>  {
+> @@ -10548,6 +10568,9 @@ static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota,
+>  				     burst + quota > max_cfs_runtime))
+>  		return -EINVAL;
+>  
+> +	if (quota != RUNTIME_INF && check_cfs_bandwidth_min_ratio(period, quota))
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * Prevent race between setting of cfs_rq->runtime_enabled and
+>  	 * unthrottle_offline_cfs_rqs().
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index 188c305aeb8b..7d9743e8e514 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -1652,6 +1652,16 @@ static struct ctl_table kern_table[] = {
+>  		.extra1		= SYSCTL_ZERO,
+>  	},
+>  #endif /* CONFIG_NUMA_BALANCING */
+> +#ifdef CONFIG_CFS_BANDWIDTH
+> +	{
+> +		.procname	= "sched_cfs_bandwidth_min_ratio",
+> +		.data		= &sysctl_sched_cfs_bandwidth_min_ratio,
+> +		.maxlen		= sizeof(unsigned int),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dointvec_minmax,
+> +		.extra1		= SYSCTL_ZERO,
+> +	},
+> +#endif /* CONFIG_CFS_BANDWIDTH */
+>  	{
+>  		.procname	= "panic",
+>  		.data		= &panic_timeout,
