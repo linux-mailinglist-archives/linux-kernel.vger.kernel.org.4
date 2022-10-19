@@ -2,213 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA546045D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261DA6045CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiJSMuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S233390AbiJSMuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233620AbiJSMtN (ORCPT
+        with ESMTP id S233587AbiJSMtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:49:13 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BE15E657
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:31:54 -0700 (PDT)
-Received: from p508fdae2.dip0.t-ipconnect.de ([80.143.218.226] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ol8Dj-0005cC-Eg; Wed, 19 Oct 2022 14:30:51 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        kernel test robot <lkp@intel.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v3 1/4] RISC-V: Fix compilation without RISCV_ISA_ZICBOM
-Date:   Wed, 19 Oct 2022 14:30:50 +0200
-Message-ID: <5869751.lOV4Wx5bFT@phil>
-In-Reply-To: <20221019121622.179024-2-apatel@ventanamicro.com>
-References: <20221019121622.179024-1-apatel@ventanamicro.com> <20221019121622.179024-2-apatel@ventanamicro.com>
+        Wed, 19 Oct 2022 08:49:10 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548A127BD2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:32:11 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id w3so11500240qtv.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=whlykbQsNRDmBUFhZqH43vmu3PG1yI/9OA5fIpYLMqI=;
+        b=qNV4e3eA/V25xQDFfA53+l3QpBYZ4hKhtUdH4C2TCUXYtZUJv1WoLDiQtRweDm9KwA
+         GDuxKtKUYvRSWkZmN+Qv1Hjx2cRuHBRZJDkmJiySsa43OQBtwlznBctHWmzUeulQ0I43
+         hfQDS21yFxMeZWGtCGpsjLPh1BADnewcVXX7uhtEOomWZpPsZVjcTZXoykB9OcxdeGp/
+         zZHRvksJn5SYp++R+TLj1PrPd52JoulzvzNxxyvKJk2Lt+eqTA6pNH0mZzy5c4FnzYy8
+         t3n5IB4dXC6cauJXazobwnH2cenhVPsKfnpLPU1TSUTkGF2pYf6/v+I84sQqiGYRxPZl
+         InCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=whlykbQsNRDmBUFhZqH43vmu3PG1yI/9OA5fIpYLMqI=;
+        b=tA6zvJyPWvpkMbkJ3H9fn4fjrfPFRjlMgZuclJjkuqFB/61gHpqkNfRBRVqQpFTkm1
+         mI6HJlpz9mMGMa7wgL6SBH/BsIkXKDZ8bkVjmESE/v4MBDl7+WRV5wKiewyAcWwnVlXh
+         +qEq6h+bidZKip0lN86R90eRki8c32GTI9dKy+XsXwp+9QGu2ervyVkqw4x3JDwlPAJk
+         XxEzMtJAv2whB4T1WiLdFOC9sq4dWJ2jOp6yz3ZivFpwCKnKh2Qt0hHNQ6ojHQ4zNGoJ
+         W+VBaU2xtpm+zkSIgicHxjXZOZXj+hiHKZ3dGjc9ZcRsAWQgRs0tAxhvLFHtQNW2C/8p
+         yHGQ==
+X-Gm-Message-State: ACrzQf3E7mdCekNIpxSG6KAihyYpMX28xBhK3wLZbK8hBF7XczzM6Erc
+        hWtmu/0aiaLv4ESvRdhdVzIZeQ==
+X-Google-Smtp-Source: AMsMyM7bUSOzzZ6K0iuspDrCqy2b1YagSH5wAqYiNXw/7EInOLjCDS1oLVxV6rMmh9ZpGER8tXYtrg==
+X-Received: by 2002:a05:622a:15d1:b0:39c:f1da:fe0e with SMTP id d17-20020a05622a15d100b0039cf1dafe0emr6113062qty.662.1666182672542;
+        Wed, 19 Oct 2022 05:31:12 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id h3-20020ac87763000000b0035d5e5660cbsm3899065qtu.59.2022.10.19.05.31.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 05:31:11 -0700 (PDT)
+Message-ID: <9e3fb6b4-c929-66b9-a1de-d39f2893c37d@linaro.org>
+Date:   Wed, 19 Oct 2022 08:31:10 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 3/3] dt-bindings: clock: add loongson2 clock binding
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+References: <20221019062912.3463-1-zhuyinbo@loongson.cn>
+ <20221019062912.3463-3-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221019062912.3463-3-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
-
-Am Mittwoch, 19. Oktober 2022, 14:16:19 CEST schrieb Anup Patel:
-> From: Andrew Jones <ajones@ventanamicro.com>
+On 19/10/2022 02:29, Yinbo Zhu wrote:
+> Add the loongson2 clock binding with DT schema format using
+> json-schema.
 > 
-> riscv_cbom_block_size and riscv_init_cbom_blocksize() should always
-> be available and riscv_init_cbom_blocksize() should always be
-> invoked, even when compiling without RISCV_ISA_ZICBOM enabled. This
-> is because disabling RISCV_ISA_ZICBOM means "don't use zicbom
-> instructions in the kernel" not "pretend there isn't zicbom, even
-> when there is". When zicbom is available, whether the kernel enables
-> its use with RISCV_ISA_ZICBOM or not, KVM will offer it to guests.
-> Ensure we can build KVM and that the block size is initialized even
-> when compiling without RISCV_ISA_ZICBOM.
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 
-either I'm way very low on coffee or something is strange here :-) .
-
-I can fully grasp the need to init the cbom blocksize for guests, even when
-the main kernel isn't using it, but below in the patch itself it is still:
-
-+#ifdef CONFIG_RISCV_ISA_ZICBOM
-+void riscv_init_cbom_blocksize(void)
-+{
-[...]
-
-so the init_cbom_blocksize function is still inside a RISCV_ISA_ZICBOM
-ifdef?
+Drop redundant (last) binding from the title.
 
 
-Heiko
-
-
-> 
-> Fixes: 8f7e001e0325 ("RISC-V: Clean up the Zicbom block size probing")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  arch/riscv/mm/cacheflush.c      | 41 +++++++++++++++++++++++++++++++++
->  arch/riscv/mm/dma-noncoherent.c | 41 ---------------------------------
->  2 files changed, 41 insertions(+), 41 deletions(-)
+> Change in v2:
+> 		1. Drop "Binding" string in the title.
+> 		2. Drop entire allOf and move the contents to top level.
+> 		3. Change string "refclk_100m" to "ref_100m". 
 > 
-> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> index 6cb7d96ad9c7..f318b2553612 100644
-> --- a/arch/riscv/mm/cacheflush.c
-> +++ b/arch/riscv/mm/cacheflush.c
-> @@ -3,6 +3,8 @@
->   * Copyright (C) 2017 SiFive
->   */
->  
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <asm/cacheflush.h>
->  
->  #ifdef CONFIG_SMP
-> @@ -86,3 +88,42 @@ void flush_icache_pte(pte_t pte)
->  		flush_icache_all();
->  }
->  #endif /* CONFIG_MMU */
-> +
-> +unsigned int riscv_cbom_block_size;
-> +EXPORT_SYMBOL_GPL(riscv_cbom_block_size);
-> +
-> +#ifdef CONFIG_RISCV_ISA_ZICBOM
-> +void riscv_init_cbom_blocksize(void)
-> +{
-> +	struct device_node *node;
-> +	unsigned long cbom_hartid;
-> +	u32 val, probed_block_size;
-> +	int ret;
-> +
-> +	probed_block_size = 0;
-> +	for_each_of_cpu_node(node) {
-> +		unsigned long hartid;
-> +
-> +		ret = riscv_of_processor_hartid(node, &hartid);
-> +		if (ret)
-> +			continue;
-> +
-> +		/* set block-size for cbom extension if available */
-> +		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> +		if (ret)
-> +			continue;
-> +
-> +		if (!probed_block_size) {
-> +			probed_block_size = val;
-> +			cbom_hartid = hartid;
-> +		} else {
-> +			if (probed_block_size != val)
-> +				pr_warn("cbom-block-size mismatched between harts %lu and %lu\n",
-> +					cbom_hartid, hartid);
-> +		}
-> +	}
-> +
-> +	if (probed_block_size)
-> +		riscv_cbom_block_size = probed_block_size;
-> +}
-> +#endif
-> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-> index b0add983530a..d919efab6eba 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -8,13 +8,8 @@
->  #include <linux/dma-direct.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/mm.h>
-> -#include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <asm/cacheflush.h>
->  
-> -unsigned int riscv_cbom_block_size;
-> -EXPORT_SYMBOL_GPL(riscv_cbom_block_size);
-> -
->  static bool noncoherent_supported;
->  
->  void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-> @@ -77,42 +72,6 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
->  	dev->dma_coherent = coherent;
->  }
->  
-> -#ifdef CONFIG_RISCV_ISA_ZICBOM
-> -void riscv_init_cbom_blocksize(void)
-> -{
-> -	struct device_node *node;
-> -	unsigned long cbom_hartid;
-> -	u32 val, probed_block_size;
-> -	int ret;
-> -
-> -	probed_block_size = 0;
-> -	for_each_of_cpu_node(node) {
-> -		unsigned long hartid;
-> -
-> -		ret = riscv_of_processor_hartid(node, &hartid);
-> -		if (ret)
-> -			continue;
-> -
-> -		/* set block-size for cbom extension if available */
-> -		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> -		if (ret)
-> -			continue;
-> -
-> -		if (!probed_block_size) {
-> -			probed_block_size = val;
-> -			cbom_hartid = hartid;
-> -		} else {
-> -			if (probed_block_size != val)
-> -				pr_warn("cbom-block-size mismatched between harts %lu and %lu\n",
-> -					cbom_hartid, hartid);
-> -		}
-> -	}
-> -
-> -	if (probed_block_size)
-> -		riscv_cbom_block_size = probed_block_size;
-> -}
-> -#endif
-> -
->  void riscv_noncoherent_supported(void)
->  {
->  	WARN(!riscv_cbom_block_size,
+>  .../bindings/clock/loongson,ls2k-clk.yaml     | 64 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+> new file mode 100644
+> index 000000000000..104e38a618e2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson2 SoC Clock Control Module
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +description: |
+> +  Loongson2 SoC clock control module is an integrated clock controller, which
+> +  generates and supplies to all modules.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: 100m ref
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref_100m
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +    description:
+> +      The clock consumer should specify the desired clock by having the clock
+> +      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
+> +      for the full list of loongson2 SoC clock IDs.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ref_100m: clock-ref-100m {
+> +        compatible = "fixed-clock";
+> +        #clock-cells = <0>;
+> +        clock-frequency = <100000000>;
+> +        clock-output-names = "ref_100m";
+> +    };
+> +
+> +  - |
 
+Drop this. This splits examples into two separate ones, but you have
+here only one example.
 
+> +    clk: clock-controller@1fe00480 {
+> +        compatible = "loongson,ls2k-clk";
+> +        reg = <0x1fe00480 0x58>;
+> +        #clock-cells = <1>;
+> +        clocks = <&ref_100m>;
+> +        clock-names = "ref_100m";
+> +    };
 
+Best regards,
+Krzysztof
 
