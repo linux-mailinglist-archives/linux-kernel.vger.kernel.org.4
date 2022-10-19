@@ -2,228 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9198160399F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7A86039A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiJSGMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 02:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        id S230036AbiJSGO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 02:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJSGM2 (ORCPT
+        with ESMTP id S229785AbiJSGOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:12:28 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECC55A151;
-        Tue, 18 Oct 2022 23:12:27 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so26474009lfk.0;
-        Tue, 18 Oct 2022 23:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mpK20zsezkDQNzA/UZDbDMoeaUNCRWx83K2c4ESF9EY=;
-        b=cChDDAMB/Hd/4zEk5dkjeR7Zz6d82d2volCoQYn2EbMSSlrg3f4tMCswcjL8Bg9E7V
-         CPCiX8+tjZvowcYIk+QSF/oQOwedc0Pz8uY3dg5E3j6pKVmS9aqpHNA+n7nBSz+Va2p1
-         U2Qg2w3Kuy/upan7B0+2W9GdCXLdKd6v1sBDDfxSOUMLg3NehKchUuGczSUFSm1gYaDx
-         uLkNTeg1YCQQekFYVb8NVvacdp/G83o3JCs47gKmc2trY/7E7V1+DFv2XIyqVKyljM8V
-         kHSKpiqZ/3jrU2QzGsbw7QDOrYgm4A5XQW6I01XvjtnpPAlVrpIL9vTgLjH6CMdCsFzA
-         kxQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mpK20zsezkDQNzA/UZDbDMoeaUNCRWx83K2c4ESF9EY=;
-        b=KnLCvd3nGdATCrXhDFmX7D+JlfMZTrBElBjYBP/k7WwAD7DmMSz0Wn7ZN2Xw5fHQ8K
-         eZarzyv9YNxootvzdLExxgFnmZ9T1YuQs1yuTJ49t00eyogVsdSHwm78m+LnFiZfuTLn
-         bs//AWOT/zMXTOWAC25hbJPIuftXYjQrqA/cIosQNnahTIgUfk+E7L46LMaWug+63+Rj
-         OglmQLkKK3iXADB7CAq9w2KovjT7GSDCgHQKtGpBRvVUzIMP+/qfMsF5pY424kfZurKT
-         FA4YhEFwXSFX0wH2RlTGIXFsZHkzVw6pIQLqjPGbKx3MB7fEKP4AOcFDvRGOxE4fSDyE
-         BRow==
-X-Gm-Message-State: ACrzQf2AI6j9mlxr3GoRuVx3jRvazfQxHD1ew12vDXBlj1FJRwciNYKX
-        Zopba5+6Bs9Tx5Fn+ehj5u9EmUhEfnG69w==
-X-Google-Smtp-Source: AMsMyM7TP3/4iVX/plZhfR5lkNUuOPO2w7x+NEhqLTVzN+DVu/El/xedkuhXcmlKEDX6xp5m5KYAnA==
-X-Received: by 2002:a19:5052:0:b0:4a2:caa1:e2f6 with SMTP id z18-20020a195052000000b004a2caa1e2f6mr2150019lfj.65.1666159945333;
-        Tue, 18 Oct 2022 23:12:25 -0700 (PDT)
-Received: from localhost.localdomain ([188.163.112.49])
-        by smtp.gmail.com with ESMTPSA id o21-20020a2e9b55000000b0026c46788fa3sm2221759ljj.104.2022.10.18.23.12.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 23:12:24 -0700 (PDT)
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/1] gpio: tegra: Convert to immutable irq chip
-Date:   Wed, 19 Oct 2022 09:12:01 +0300
-Message-Id: <20221019061201.5194-2-clamor95@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221019061201.5194-1-clamor95@gmail.com>
-References: <20221019061201.5194-1-clamor95@gmail.com>
+        Wed, 19 Oct 2022 02:14:52 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E242AC4C;
+        Tue, 18 Oct 2022 23:14:48 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J3ZQvu013169;
+        Wed, 19 Oct 2022 06:14:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=HZGCd51g7jqRcgVQSQP5FkQhvHWeGjO8TyvdKeQhDAc=;
+ b=lbGYMPYBMG1Q3cBigXQxmsZk7nywvS32hhlVbsRZ2kW7Vn8eQky1OBLdpB+tIkrh2Lv6
+ 0/pmoBzc7oQRXsIMRwSX9O7fXskNMz49c7T5EBmvnTxZm79PoyyWZQSWhezmx/LpK8o9
+ TptfiFZIgbMkDG4g3UAbhhGjjb9j+q4Q2LJRf2xxaVxnNXL4itArZqCQFxyNxjw/zreo
+ 91CnRYHO/FjNtOpUN5LQUTFBVf/ZIJYKrWW20b7HT61K+KQSBL7JsZuNr1++JDj54VJA
+ E9F9QQNMfkO9wa5wefXC/MWqzXfYWaOGIF+AmRzGZ87Y+CoaiKnXsRg4ktxiywVMjIaW rw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ka5emgtjf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 06:14:39 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29J6EXHY019572
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 06:14:38 GMT
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 18 Oct
+ 2022 23:14:30 -0700
+Subject: Re: [PATCH V3 1/2] dt-bindings: firmware: qcom-scm: Add optional
+ interrupt
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>
+CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <konrad.dybcio@somainline.org>, <robimarko@gmail.com>,
+        <quic_gurus@quicinc.com>, <quic_rjendra@quicinc.com>
+References: <1666086406-5452-1-git-send-email-quic_sibis@quicinc.com>
+ <1666086406-5452-2-git-send-email-quic_sibis@quicinc.com>
+ <12d79669-6e8c-6cf8-2e32-d4e0e2e42f3d@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <2464d90f-64e9-5e3c-404b-10394c3bc302@quicinc.com>
+Date:   Wed, 19 Oct 2022 11:44:23 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <12d79669-6e8c-6cf8-2e32-d4e0e2e42f3d@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dPXnPkqHIYutBVpFKx656VxTrZ69Niiq
+X-Proofpoint-GUID: dPXnPkqHIYutBVpFKx656VxTrZ69Niiq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_02,2022-10-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 mlxscore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210190034
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the driver to use an immutable IRQ chip to fix this warning:
+Hey Krzysztof,
+Thanks for taking time to review the series.
 
-    "not an immutable chip, please consider fixing it!"
+On 10/18/22 10:41 PM, Krzysztof Kozlowski wrote:
+> On 18/10/2022 05:46, Sibi Sankar wrote:
+>> From: Guru Das Srinagesh <quic_gurus@quicinc.com>
+>>
+>> Add an interrupt specification to the bindings to support the wait-queue
+>> feature.
+>>
+>> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>> ---
+>>
+>> The interrupt property for scm firmware from a binding perspective is
+>> completely optional i.e. not all tz fw running in the wild on sm8450
+>> devices support this feature. The bootloader does the interrupt property
+>> addition on sm8450 devices with wait-queue support.
+>>
+>>   Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> index c5b76c9f7ad0..6483d76b2371 100644
+>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> @@ -71,6 +71,11 @@ properties:
+>>     '#reset-cells':
+>>       const: 1
+>>   
+>> +  interrupts:
+>> +    description:
+>> +      The wait-queue interrupt that firmware raises as part of handshake
+>> +      protocol to handle sleeping SCM calls.
+> 
+> You still miss here constraints... nothing improved. Just look at other
+> properties in this file.
+> 
+> maxItems:1
+> 
 
-Preserve per-chip labels by adding an ->irq_print_chip() callback.
+Ack. Missed adding it in the re-spin.
 
-Tested-by: Svyatoslav Ryhel <clamor95@gmail.com> # TF201 T30
-Tested-by: Robert Eckelmann <longnoserob@gmail.com> # TF101 T20
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
----
-Changes since V3:
-- dropped Switch to new *_PM_OPS macros
+-Sibi
 
-Changes since V2:
-- use CONFIG_PM_SLEEP ifdefs
-
-Changes since V1:
-- Added tested-by info from testers
-- Patch itself is same, it had no review for 3 weeks
-- Test robot is triggering for pm_sleep_ptr, should not it be used to omit CONFIG_PM_SLEEP ifdefs?
-
- drivers/gpio/gpio-tegra.c | 60 ++++++++++++++++++++++++++++-----------
- 1 file changed, 44 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/gpio/gpio-tegra.c b/drivers/gpio/gpio-tegra.c
-index e4fb4cb38a0f..5b265a6fd3c1 100644
---- a/drivers/gpio/gpio-tegra.c
-+++ b/drivers/gpio/gpio-tegra.c
-@@ -18,6 +18,7 @@
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/module.h>
-+#include <linux/seq_file.h>
- #include <linux/irqdomain.h>
- #include <linux/irqchip/chained_irq.h>
- #include <linux/pinctrl/consumer.h>
-@@ -94,7 +95,6 @@ struct tegra_gpio_info {
- 	struct tegra_gpio_bank			*bank_info;
- 	const struct tegra_gpio_soc_config	*soc;
- 	struct gpio_chip			gc;
--	struct irq_chip				ic;
- 	u32					bank_count;
- 	unsigned int				*irqs;
- };
-@@ -288,6 +288,7 @@ static void tegra_gpio_irq_mask(struct irq_data *d)
- 	unsigned int gpio = d->hwirq;
- 
- 	tegra_gpio_mask_write(tgi, GPIO_MSK_INT_ENB(tgi, gpio), gpio, 0);
-+	gpiochip_disable_irq(chip, gpio);
- }
- 
- static void tegra_gpio_irq_unmask(struct irq_data *d)
-@@ -296,6 +297,7 @@ static void tegra_gpio_irq_unmask(struct irq_data *d)
- 	struct tegra_gpio_info *tgi = gpiochip_get_data(chip);
- 	unsigned int gpio = d->hwirq;
- 
-+	gpiochip_enable_irq(chip, gpio);
- 	tegra_gpio_mask_write(tgi, GPIO_MSK_INT_ENB(tgi, gpio), gpio, 1);
- }
- 
-@@ -598,10 +600,47 @@ static void tegra_gpio_irq_release_resources(struct irq_data *d)
- 	tegra_gpio_enable(tgi, d->hwirq);
- }
- 
-+static void tegra_gpio_irq_print_chip(struct irq_data *d, struct seq_file *s)
-+{
-+	struct gpio_chip *chip = irq_data_get_irq_chip_data(d);
-+
-+	seq_printf(s, dev_name(chip->parent));
-+}
-+
-+static const struct irq_chip tegra_gpio_irq_chip = {
-+	.irq_shutdown		= tegra_gpio_irq_shutdown,
-+	.irq_ack		= tegra_gpio_irq_ack,
-+	.irq_mask		= tegra_gpio_irq_mask,
-+	.irq_unmask		= tegra_gpio_irq_unmask,
-+	.irq_set_type		= tegra_gpio_irq_set_type,
-+#ifdef CONFIG_PM_SLEEP
-+	.irq_set_wake		= tegra_gpio_irq_set_wake,
-+#endif
-+	.irq_print_chip		= tegra_gpio_irq_print_chip,
-+	.irq_request_resources	= tegra_gpio_irq_request_resources,
-+	.irq_release_resources	= tegra_gpio_irq_release_resources,
-+	.flags			= IRQCHIP_IMMUTABLE,
-+};
-+
-+static const struct irq_chip tegra210_gpio_irq_chip = {
-+	.irq_shutdown		= tegra_gpio_irq_shutdown,
-+	.irq_ack		= tegra_gpio_irq_ack,
-+	.irq_mask		= tegra_gpio_irq_mask,
-+	.irq_unmask		= tegra_gpio_irq_unmask,
-+	.irq_set_affinity	= tegra_gpio_irq_set_affinity,
-+	.irq_set_type		= tegra_gpio_irq_set_type,
-+#ifdef CONFIG_PM_SLEEP
-+	.irq_set_wake		= tegra_gpio_irq_set_wake,
-+#endif
-+	.irq_print_chip		= tegra_gpio_irq_print_chip,
-+	.irq_request_resources	= tegra_gpio_irq_request_resources,
-+	.irq_release_resources	= tegra_gpio_irq_release_resources,
-+	.flags			= IRQCHIP_IMMUTABLE,
-+};
-+
- #ifdef	CONFIG_DEBUG_FS
- 
- #include <linux/debugfs.h>
--#include <linux/seq_file.h>
- 
- static int tegra_dbg_gpio_show(struct seq_file *s, void *unused)
- {
-@@ -689,18 +728,6 @@ static int tegra_gpio_probe(struct platform_device *pdev)
- 	tgi->gc.ngpio			= tgi->bank_count * 32;
- 	tgi->gc.parent			= &pdev->dev;
- 
--	tgi->ic.name			= "GPIO";
--	tgi->ic.irq_ack			= tegra_gpio_irq_ack;
--	tgi->ic.irq_mask		= tegra_gpio_irq_mask;
--	tgi->ic.irq_unmask		= tegra_gpio_irq_unmask;
--	tgi->ic.irq_set_type		= tegra_gpio_irq_set_type;
--	tgi->ic.irq_shutdown		= tegra_gpio_irq_shutdown;
--#ifdef CONFIG_PM_SLEEP
--	tgi->ic.irq_set_wake		= tegra_gpio_irq_set_wake;
--#endif
--	tgi->ic.irq_request_resources	= tegra_gpio_irq_request_resources;
--	tgi->ic.irq_release_resources	= tegra_gpio_irq_release_resources;
--
- 	platform_set_drvdata(pdev, tgi);
- 
- 	if (tgi->soc->debounce_supported)
-@@ -733,7 +760,6 @@ static int tegra_gpio_probe(struct platform_device *pdev)
- 	}
- 
- 	irq = &tgi->gc.irq;
--	irq->chip = &tgi->ic;
- 	irq->fwnode = of_node_to_fwnode(pdev->dev.of_node);
- 	irq->child_to_parent_hwirq = tegra_gpio_child_to_parent_hwirq;
- 	irq->populate_parent_alloc_arg = tegra_gpio_populate_parent_fwspec;
-@@ -752,7 +778,9 @@ static int tegra_gpio_probe(struct platform_device *pdev)
- 		if (!irq->parent_domain)
- 			return -EPROBE_DEFER;
- 
--		tgi->ic.irq_set_affinity = tegra_gpio_irq_set_affinity;
-+		gpio_irq_chip_set_chip(irq, &tegra210_gpio_irq_chip);
-+	} else {
-+		gpio_irq_chip_set_chip(irq, &tegra_gpio_irq_chip);
- 	}
- 
- 	tgi->regs = devm_platform_ioremap_resource(pdev, 0);
--- 
-2.34.1
-
+> Best regards,
+> Krzysztof
+> 
