@@ -2,156 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699A9604F01
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4744604F07
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiJSRj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        id S230406AbiJSRko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbiJSRjM (ORCPT
+        with ESMTP id S230148AbiJSRkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:39:12 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5CF18DA81;
-        Wed, 19 Oct 2022 10:39:07 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id c23so12157475qtw.8;
-        Wed, 19 Oct 2022 10:39:07 -0700 (PDT)
+        Wed, 19 Oct 2022 13:40:40 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B499D19045B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:40:34 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id o12so20896260lfq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Afowyyon5euI9PhaibGARBLnjdO0Eh8339cH1CRlAG4=;
+        b=oN5WzzhF2z026vxDeU3ravyd7cp56GNv6K4OlSAMpfrlWRMw2m0fPV2wVMpeV5UKaV
+         +0OvWqZcLSTARVGN7SEtsOnWNk54doU/b7NF/vnK47uMwOBpOUCvkx4gW66j05fldwch
+         5Ht2SmtpsBrDZcX5oC6Qc+/vT5S52k9674loddh1y+h91B5X8Rj+EHmCBaU/ueH6GZeg
+         n8u9n/sE6sxaaz5BCUDyjHtmrILpugKGn51vrV2/Y2onvHPAy7lDcFHpRfl4bg6Itsb5
+         j/K/1/0XTpyyLrP04yPqP+UT5+/Zjo10XfMaA4n7ZgZKw0x8dVbXgulldmfgJFK5duDq
+         6K8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P5pvAQgJ96dxeHj5+uJpoX/J6WK/eduY3+8IqtGRW+c=;
-        b=065YCMGvoTQheRPeakGi2YFd3Uk0V45xjn+RBqG3xky2b3OJSB8BA8/CKEz/1a5kGy
-         G5BzAjsHx5+tDom8+AGqf77M4LUzW+5GDuNooWURoGJ8SkB+98WVAnMGq9Pxkj78k7Ka
-         6eMXtMJvbUJu6JKzBxiwUiPjxqTw1W2UCKx0bFvV6mbpEtNalxQqNjunxM7xzNgdzJkj
-         EhrnL/DdSkjqJNFc9Md2K/GB48k/wHlxXKQvJzkuW40eCXJGrqd3ia4Crz4ojaT/pmHH
-         Qpll/tjAs8lg2rM9aT7XFHPnLtl9VSH6PZxMeLwW7/awwjyhQ8/4jUxqMk05VYRqk0bL
-         aR+Q==
-X-Gm-Message-State: ACrzQf2rESmsEVsyMCsr45bxTZ4hW1bGtrL05RQeKd+FYJs0M1jA6T53
-        UCEG34+bDYrzO4sbzNcpNkkYhst7lKvDgw==
-X-Google-Smtp-Source: AMsMyM72bIsgp1R/MWzE/YWqOF0QDPL2BhXM0DCVPQqk5z1Pj4WOdsohuvyenu1mnQ3Ju3wKLOTv0Q==
-X-Received: by 2002:ac8:7f83:0:b0:39c:ee3e:c6d3 with SMTP id z3-20020ac87f83000000b0039cee3ec6d3mr7314062qtj.444.1666201144826;
-        Wed, 19 Oct 2022 10:39:04 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::e12b])
-        by smtp.gmail.com with ESMTPSA id h10-20020ac8744a000000b0039953dcc480sm4303094qtr.88.2022.10.19.10.39.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 10:39:03 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 12:39:05 -0500
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, tj@kernel.org, memxor@gmail.com
-Subject: Re: [PATCH v5 3/3] bpf/selftests: Add selftests for new task kfuncs
-Message-ID: <Y1A2OUuUn4z/Du+j@maniforge.dhcp.thefacebook.com>
-References: <20221014212133.2520531-1-void@manifault.com>
- <20221014212133.2520531-4-void@manifault.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Afowyyon5euI9PhaibGARBLnjdO0Eh8339cH1CRlAG4=;
+        b=4AuN1k7dTgDUZcdq3fV5KUig9eLzaLpmr6O3Hl5aca9SxKW5lFd/j46mFI3ihu8r3l
+         N6Ydxi3Z9d+3cEK+3sNKez4gcBNgRAHBArfQd7a4WzOt0DCG0UcNdjDoVK3wwtpYYs9j
+         gRh2/k56wRWgkuSGW4lzGKA7kihI91XymZiL+i+1DCvlPEg0bg7ClTd6AJqX7/t2P+qg
+         lMRefNxW4VEQoTm+mPAK8jKPYjTYL4zX0hres+vgoHt9iqPW0S6cYiwVs1o4ywQkKFYe
+         BjWlZFBmJK4H5KyNe3p7zrvRQ/f7eebdhFL94o0BbwVH16I/csOjUeWSFF5T1H+m4GhD
+         zygQ==
+X-Gm-Message-State: ACrzQf3Td0eSC3IRSQw6ZEODQjq3+0n1/D8fx5hv2TyD4uHMO88GOTxq
+        IvSBQGQJLrl+FZJLDUT70knCwv3ov1FW3hwwnPcRbcu2FrWxZw==
+X-Google-Smtp-Source: AMsMyM5OM0rkP4xd7qFD7X+W9BDiy0UNKNnDjY/WWqLGY78WJGku/tyVodwij2Sz0kBzFDfICmNvPAAhyWIOG7+B0NQ=
+X-Received: by 2002:a19:5f52:0:b0:4a2:2429:c6d5 with SMTP id
+ a18-20020a195f52000000b004a22429c6d5mr3690244lfj.291.1666201231457; Wed, 19
+ Oct 2022 10:40:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014212133.2520531-4-void@manifault.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221019150333.1047423-1-pgonda@google.com> <528937ab-8046-d5d1-26ff-50ef35f5635f@amd.com>
+In-Reply-To: <528937ab-8046-d5d1-26ff-50ef35f5635f@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Wed, 19 Oct 2022 11:40:18 -0600
+Message-ID: <CAMkAt6ritG1zmOreh9WYLYAGww0EJQy+m-Y0nfxD5+gpTkpJ1w@mail.gmail.com>
+Subject: Re: [PATCH] virt: Prevent AES-GCM IV reuse in SNP guest driver
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Borislav Petkov <bp@suse.de>, Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Dionna Glaze <dionnaglaze@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 07:23:23AM +0530, Kumar Kartikeya Dwivedi wrote:
-
-Note: I'm responding to Kumar's email from v3 [0] here on v5 instead,
-per his request on [1].
-
-[0]: https://lore.kernel.org/all/CAP01T77PTK+bD2mBrxJShKNPhEypT2+nSHcr3=uuJbrghv_wFg@mail.gmail.com/
-[1]: https://lore.kernel.org/all/CAP01T747PKC2jySOZCWu_gauHbBfaj4JE=hbtm4Z4C-Y8b3ZHg@mail.gmail.com/
-
-My apologies again for the silly mistakes and having to send multiple
-versions of the patch set.
-
-> On Sat, 15 Oct 2022 at 01:45, David Vernet <void@manifault.com> wrote:
-> >
-> > A previous change added a series of kfuncs for storing struct
-> > task_struct objects as referenced kptrs. This patch adds a new
-> > task_kfunc test suite for validating their expected behavior.
-> >
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> > [...]
-> > +
-> > +SEC("tp_btf/task_newtask")
-> > +int BPF_PROG(task_kfunc_acquire_trusted_nested, struct task_struct *task, u64 clone_flags)
-> > +{
-> > +       struct task_struct *acquired;
-> > +
-> > +       if (!is_test_kfunc_task())
-> > +               return 0;
-> > +
-> > +       /* Can't invoke bpf_task_acquire() on a trusted pointer at a nonzero offset. */
-> > +       acquired = bpf_task_acquire(task->last_wakee);
+On Wed, Oct 19, 2022 at 11:03 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
 >
-> The comment is incorrect, that would be &task->last_wakee instead,
-> this is PTR_TO_BTF_ID | PTR_NESTED.
-
-Well, it's a nonzero offset from task. But yes, to your point, it's a
-misleading comment because the offset is 0 in the verifier. I'll
-rephrase this to reflect that it's a nested pointer (or a walked
-pointer, whatever nomenclature we end up going with).
-
-> > +       if (!acquired)
-> > +               return 0;
-> > +       bpf_task_release(acquired);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > [...]
-> > +
-> > +static int test_acquire_release(struct task_struct *task)
-> > +{
-> > +       struct task_struct *acquired;
-> > +
-> > +       acquired = bpf_task_acquire(task);
+> On 10/19/22 10:03, Peter Gonda wrote:
+> > The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
+> > communicate securely with each other. The IV to this scheme is a
+> > sequence number that both the ASP and the guest track. Currently this
+> > sequence number in a guest request must exactly match the sequence
+> > number tracked by the ASP. This means that if the guest sees an error
+> > from the host during a request it can only retry that exact request or
+> > disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
+> > reuse see:
+> > https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
 >
-> Unfortunately a side effect of this change is that now since
-> PTR_TO_BTF_ID without ref_obj_id is considered trusted, the bpf_ct_*
-> functions would begin working with tp_btf args. That probably needs 
-> be fixed so that they reject them (ideally with a failing test case to
-> make sure it doesn't resurface), probably with a new suffix __ref/or
-> __owned as added here [0].
+> I wonder if we can at least still support the extended report length query
+> by having the kernel allocate the required pages when the error is
+> SNP_GUEST_REQ_INVALID_LEN and retry the exact request again. If there are
+> no errors on the second request, the sequence numbers can be safely
+> updated, but the kernel returns the original error (which will provide the
+> caller with the number of pages required).
+
+I think we can but I thought fixing the security bug could come first,
+then the usability fix after. Dionna was planning on working on that
+fix.
+
+In that flow how does userspace get the data? Its called the ioctl
+with not enough output buffer space. What if the userspace calls the
+ioctl with no buffers space allocated, so its trying to query the
+length. We just send the host the request without any encrypted data.
+
 >
-> Alexei, since you've suggested avoiding adding that suffix, do you see
-> any other way out here?
-> It's questionable whether bpf_ct_set_timeout/status should work for CT
-> not owned by the BPF program.
+> For the rate-limiting patch series [1], the rate-limiting will have to be
+> performed within the kernel, while the mutex is held, and then retry the
+> exact request again. Otherwise, that error will require disabling the
+> VMPCK. Either that, or the hypervisor must provide the rate limiting.
 >
->   [0]: https://lore.kernel.org/bpf/dfb859a6b76a9234baa194e795ae89cb7ca5694b.1662383493.git.lorenzo@kerne
+> Thoughts?
+>
+> [1] https://lore.kernel.org/lkml/20221013160040.2858732-1-dionnaglaze@google.com/
 
-Ah, yeah, it makes sense that some kfuncs really should only ever be
-passed an object if the program owns a reference on it. Specifically for
-e.g. bpf_ct_set_timeout/status() as you point out, which should only be
-passed a struct nf_conn__init that was allocated by bpf_skb_ct_alloc().
-
-It'd be nice if we could just add another flag like KF_REFERENCED_ARGS
-or KF_OWNED_ARGS, which would allow a subset of arguments affored by
-KF_TRUSTED_ARGS, only those with ref_obj_id > 0. That approach wouldn't
-allow the flexibility of having per-argument specifications as your
-proposal to use __ref or __owned suffixes on the names, but that already
-applies to KF_TRUSTED_ARGS as well.
-
-Personally I'm in agreement with Alexei that it's not a user friendly
-API to use suffixes in the name like this. If we want to allow kfunc
-authors to have per-argument specifiers, using compiler attributes
-and/or some kind of tagging is probably the way to do it?
-
-My proposal for now is to add a new KF_OWNED_ARGS flag, and to very
-clearly document exactly what that and KF_TRUSTED_ARGS implies for
-kfuncs. Later on, we could explore solutions for having per-arg
-specifiers. What do you and Alexei think?
+Yes I think if the host rate limits the guest. The guest kernel should
+retry the exact message. Which mutex are you referring too?
