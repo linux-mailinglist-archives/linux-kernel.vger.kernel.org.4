@@ -2,122 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08552604ABA
+	by mail.lfdr.de (Postfix) with ESMTP id 545A5604ABB
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiJSPKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S232077AbiJSPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiJSPJc (ORCPT
+        with ESMTP id S232667AbiJSPJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:09:32 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B6838A1F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:03:01 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id be13so12952856lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8uws4B5WgtxEQQPonRBN7dDm57mj+TMYZwg9NWMF6uE=;
-        b=GNoRQIq9JKVsi3NBMOHtxRxaA+HyiSRxEbQwKROCIdQN7YeQVvkeCL/tBfTJ0rFShS
-         wLv+OMed6GKtlzQERAvDIH0fS9RwWNLH1iDzg8iIFUBsQUCTCUR56HEIdBHp5w6KeZ+i
-         ed0p1SeRI6LjurmDyBxbuv8clbnocReb3YyBgtI/ebogw01dMtsK7A/KD1lbcyPsqtH5
-         TaWyyc8eNama/1dRhNwUMQO8P85tBb+QCcPLfYt81cuF60S21NuSTt9ENjFqtPiqHbYW
-         QbAZcIWW265YqQ7fQmjB0etPPuYGAVxyYuBBwAInvDjayuW/S/xhDX/aqG8lWy7/HjYu
-         bNlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8uws4B5WgtxEQQPonRBN7dDm57mj+TMYZwg9NWMF6uE=;
-        b=vroUB/Kw8rF/rwtz85w67d+rNKDFHc+wAoY2Pni3Ac3LJ8t23bFpZewSavR4bo2TCw
-         6FcVFESxnSVs7F9gr5a9gy8qkxBQ0lT2ApzbWU8L08MIb3Uj8EdJxEKNuOVuQ9hk9tBb
-         yIe0G3K9LuXpycmvaowPHg/FF9NkfcLKU34EfT4mXYvg0zb5jf5qyjpKedDGyJCZXU2e
-         P8FBuWTNECYSqczYUws/PK4XzOYezcizkRUgLVcoWkAg4qMO2Olee7AIZbF63AxaF4UY
-         fTqHW/N6WNbOzI16PpHs8iV0Pbl9vJkuh0Jit7oqIuDHc2aWiPr1VSiS4yR5+Ynd11Y8
-         FBcQ==
-X-Gm-Message-State: ACrzQf1j3fDaV53ckaSakPV8nzvW0P8YZOPr4W5WfxBfalpcLNilkOTz
-        il5hjjw2e34ti21I2/I0coFvua7MPedevt4RqTEPpw==
-X-Google-Smtp-Source: AMsMyM73/Iz2UA6hD6VnKREmVWKox8T+CDDwCUSlKn0rjft7dc92r9M4EXDXMPFumhxI7Ld+a4+gjwQViVOGvFn4W+A=
-X-Received: by 2002:a05:6512:4cb:b0:4a2:25b6:9e73 with SMTP id
- w11-20020a05651204cb00b004a225b69e73mr3205357lfq.30.1666191778897; Wed, 19
- Oct 2022 08:02:58 -0700 (PDT)
+        Wed, 19 Oct 2022 11:09:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D72041981;
+        Wed, 19 Oct 2022 08:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666191784; x=1697727784;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M5avbZVzN3hkB86Ed3UZwrL75aggqypPsv/GEymhqa0=;
+  b=BMRGLnU3DFO3j9EEawe3vJecObozbMcIOlK2ZNLPGhmBrgHku4Kw8UdE
+   rV4FH5oMVXkrTS4Q/RkuLFNoihUs20pqenvQ6ErB+FWM6j58qbHQr/ZiJ
+   1MQrLapNPtJIWNAgeYBvOfJeMGEoGg5tGq5WQgp17DrX7nTwjHBOxnotW
+   8pCvleKDigHqi9H+SvC7dxMvFSU56HJXLtNRhbDk7ZjFXrREa7zqIoKWN
+   SOhPaHywuANWEaJSpjpiUTHKShKT/hUrIaEsG5aBtCxIrjHv9wjSpXNZ1
+   n8SoPmtx0E8lJ96jVGiHAMkfuax6eV0u+04YKuCal2L48jtlGKTsg8gB+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="286826908"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="286826908"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 08:02:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="771825861"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="771825861"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 19 Oct 2022 08:02:45 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 Oct 2022 18:02:44 +0300
+Date:   Wed, 19 Oct 2022 18:02:44 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: ACPI: Use the helper fwnode_find_reference()
+Message-ID: <Y1ARlOfUYW7OpczT@kuha.fi.intel.com>
+References: <20221019142854.27364-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-6-chao.p.peng@linux.intel.com> <CA+EHjTxukqBfaN6D+rPOiX83zkGknHEQ16J0k6GQSdL_-e9C6g@mail.gmail.com>
- <20221012023516.GA3218049@chaop.bj.intel.com> <CA+EHjTyGyGL+ox81=jdtoHERtHPV=P7wJub=3j7chdijyq-AgA@mail.gmail.com>
- <Y03UiYYioV+FQIpx@google.com> <20221019132308.GA3496045@chaop.bj.intel.com>
-In-Reply-To: <20221019132308.GA3496045@chaop.bj.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Wed, 19 Oct 2022 16:02:22 +0100
-Message-ID: <CA+EHjTytCEup0m-nhnVHsuQ1xjaCxXNHO_Oxe+QbpwqaewpfKQ@mail.gmail.com>
-Subject: Re: [PATCH v8 5/8] KVM: Register/unregister the guest private memory regions
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019142854.27364-1-heikki.krogerus@linux.intel.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > This sounds good. Thank you.
-> >
-> > I like the idea of a separate Kconfig, e.g. CONFIG_KVM_GENERIC_PRIVATE_MEM or
-> > something.  I highly doubt there will be any non-x86 users for multiple years,
-> > if ever, but it would allow testing the private memory stuff on ARM (and any other
-> > non-x86 arch) without needing full pKVM support and with only minor KVM
-> > modifications, e.g. the x86 support[*] to test UPM without TDX is shaping up to be
-> > trivial.
->
-> CONFIG_KVM_GENERIC_PRIVATE_MEM looks good to me.
+On Wed, Oct 19, 2022 at 05:28:54PM +0300, Heikki Krogerus wrote:
+> Replacing the direct fwnode_property_get_reference_args()
+> call will this wrapper function.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/thunderbolt/acpi.c | 15 ++++-----------
+>  1 file changed, 4 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+> index 7a8adf5ad5a09..48ac227e6d8a0 100644
+> --- a/drivers/thunderbolt/acpi.c
+> +++ b/drivers/thunderbolt/acpi.c
+> @@ -15,24 +15,17 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+>  				    void **return_value)
+>  {
+>  	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+> -	struct fwnode_reference_args args;
+>  	struct fwnode_handle *fwnode;
+>  	struct tb_nhi *nhi = data;
+>  	struct pci_dev *pdev;
+>  	struct device *dev;
+> -	int ret;
+> -
+> -	if (!adev)
+> -		return AE_OK;
 
-That sounds good to me, and just keeping the xarray isn't really an
-issue for pKVM. We could end up using it instead of some of the other
-structures we use for tracking.
+Oh, I'm sorry, I did not mean to remove that check. I'll resend.
 
-Cheers,
-/fuad
+> -	fwnode = acpi_fwnode_handle(adev);
+> -	ret = fwnode_property_get_reference_args(fwnode, "usb4-host-interface",
+> -						 NULL, 0, 0, &args);
+> -	if (ret)
+> +	fwnode = fwnode_find_reference(acpi_fwnode_handle(adev), "usb4-host-interface", 0);
+> +	if (IS_ERR(fwnode))
+>  		return AE_OK;
+>  
+>  	/* It needs to reference this NHI */
+> -	if (dev_fwnode(&nhi->pdev->dev) != args.fwnode)
+> +	if (dev_fwnode(&nhi->pdev->dev) != fwnode)
+>  		goto out_put;
+>  
+>  	/*
+> @@ -100,7 +93,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+>  	}
+>  
+>  out_put:
+> -	fwnode_handle_put(args.fwnode);
+> +	fwnode_handle_put(fwnode);
+>  	return AE_OK;
+>  }
+>  
 
-> Thanks,
-> Chao
-> >
-> > [*] https://lore.kernel.org/all/Y0mu1FKugNQG5T8K@google.com
+thanks,
+
+-- 
+heikki
