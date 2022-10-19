@@ -2,253 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47914604606
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF2660460A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiJSMyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
+        id S232672AbiJSMzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233700AbiJSMyR (ORCPT
+        with ESMTP id S233290AbiJSMz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:54:17 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7496981126
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:37:22 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id be13so12222470lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oYN264dQZ8nr4oIPkUkzpYJVPgC0y1gnv/lMRuwW2jE=;
-        b=Zs+cwTqRv3wsVXoxiS5bQeSD4Ce0xvVSTIvcUm9QZfLJ6SO7YHqwWqJl7Wa3DL8RSS
-         n0dr67t6CBQYCtayX/KqWHUsphREEIFbvqVBOPVOR4NDt38eP9kFQl2HZfpracREfht7
-         /5vDDtMutFZkiduO0IzNJiyoYc6EUb0kbUUljaBE1PGsub9WyyTmHlhANP2BLCa+PYfN
-         X7tiAi1wEKlI2BAGfTyr9lk9fwPNjV3NyDvs3Xc0nl0EoygfBEK5w3+kyFUvNgg5GjLU
-         xlJj6sSfYx0BEzmbcv+Iy1pK/dM6NjzNGqlRxOZCNXlTAbVhvf+ax5j6XljeAiCMYxKP
-         17Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oYN264dQZ8nr4oIPkUkzpYJVPgC0y1gnv/lMRuwW2jE=;
-        b=t0nd04X9d0uEW0Y3NceoncamvHz73rR96tb30xbwcPAmYQOq7XAGQzIXITDvXVFQlg
-         sKijGqT/jgi838rJg7kYuZxC9Puo8od32JKH6Bhpjwf/rcKgC4U2TOFw5k6zKdXwstHJ
-         3UXYh7+/FWykA5808gUNDZnwmGx4HEyz7abU/Vw1+sLkFP/ohEg1UpITmjSKbeFpUO3W
-         /rzOK74MRPH1Fwttk9t678KdOr0OgmtqTdsTpxvVCuB7EDc3q7XEIdMTQsM3q6BXZ96Q
-         3XiJOkODT9E/4ZDjdIhqLkjMLENBVjEHQVVaM0xAoQsfxR3ZynyFRucQKGS/I/W80fVs
-         AV3w==
-X-Gm-Message-State: ACrzQf0jrdREm90pXlmhesgn0kYeO1gkRyU0w9kIY4TH+SoHT8f/9QuZ
-        ZQ3CQbN8Cc1atdsjfOzwrt2DrDzLh/vbZsuRf7es2g==
-X-Google-Smtp-Source: AMsMyM7UvBrzfcI2OROYmcF46yFodZk+wafe/oMoaM36W8zJIRnc+d014b4NTSf4EGFljsmbsmPxXQuSk5WiM266SlU=
-X-Received: by 2002:a05:6512:31c9:b0:4a2:5349:7103 with SMTP id
- j9-20020a05651231c900b004a253497103mr2734896lfe.497.1666182975312; Wed, 19
- Oct 2022 05:36:15 -0700 (PDT)
+        Wed, 19 Oct 2022 08:55:28 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on0613.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0c::613])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB6AFE91F;
+        Wed, 19 Oct 2022 05:38:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lPxHIoryL3FTlEpoi+3HqRhmEVJ2CiYIH3mCEgVei2qgoaZy9KQGxhKWB7XF7M19ZKBfmKYPXXELbNWuIhl2lSszGvZkQoUR9yzjreWConZtcgREIC5KHyI3mBnYyBLYVxdXBOEbEb5dT/0uDvZgATilUbL7cL0iSkYL5ojuzBXjBRo9IJvCSOw5fZhqcqqx7EEcM7BIPJlwIkwq+dQp+eOJ7tMx8il8CRTDsSWZsn7piEuU89+MdukQIgX0ZJ03541+66XEub9oCix3g5cZ0gHVtFoTlM4T8K2KWFBvEhn11G2yleS8PQc+q5NF2/glj97iwwsFNfFr/FfY4Ugp5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lM0ygeiEGam8Rt1aKmv4rqJtqfGRJlCd4+fCBAvcrC0=;
+ b=LhxOS19bRW8ntwl3yINFTjobhlBoIAvuC8CvGMCEBYrG0ZNXayO1lWPEnspJkZfcvnRONqHdzzhK9IiGFCv+8tO7eKSQiEFVCKZ90HAYlBeH6LNg0N9v0eHQHGPkOYGYRXK7aTKgkvshmqffRB0C7DJ4zZ/SNSWjJdEjO9IHipDRoODUivccwIeI2NNu3AxwcnXlOmEbOdqUemPjMjJVz4IpMlUPGdQdEfbS+X0mpWN2KGCGXahXh0DWY6qisq8BgO37MyU2OfkhfkMzSOxqRDFRYk1Kxe8fvKFyACN5J5o7NrsDWTLul3Ufb9s0OJKYLIjd4nbtW9e0MDD/TlVE5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lM0ygeiEGam8Rt1aKmv4rqJtqfGRJlCd4+fCBAvcrC0=;
+ b=aVWoGOsNV+1mLaijF8SW6GINsXs01ZUWEkcU4K67PpvsHbL0Scdye+W4urBGIxVMdgNWk/PnJ4dZ1CcCXI+NWyib6D3OHXV2Ke7s5qMoZDzZchEqgSG9HIEHh7alvspfyFoLITBPubq2y7ADW3Z5AFzdJcnRE1Ya3c7VMOtHKPk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com (2603:10a6:3:db::18)
+ by AM0PR04MB6819.eurprd04.prod.outlook.com (2603:10a6:208:17f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Wed, 19 Oct
+ 2022 12:36:58 +0000
+Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com
+ ([fe80::d8b1:a777:e29:7a5a]) by HE1PR0402MB2939.eurprd04.prod.outlook.com
+ ([fe80::d8b1:a777:e29:7a5a%10]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
+ 12:36:58 +0000
+From:   Clark Wang <xiaoning.wang@nxp.com>
+To:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: [PATCH] net: stmmac: linkup phy after enabled mac when system resume
+Date:   Wed, 19 Oct 2022 20:36:43 +0800
+Message-Id: <20221019123643.1937889-1-xiaoning.wang@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0041.apcprd02.prod.outlook.com
+ (2603:1096:4:196::20) To HE1PR0402MB2939.eurprd04.prod.outlook.com
+ (2603:10a6:3:db::18)
 MIME-Version: 1.0
-References: <20221019121622.179024-1-apatel@ventanamicro.com>
- <20221019121622.179024-2-apatel@ventanamicro.com> <5869751.lOV4Wx5bFT@phil>
-In-Reply-To: <5869751.lOV4Wx5bFT@phil>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 19 Oct 2022 18:06:04 +0530
-Message-ID: <CAK9=C2WZ4m=6JOeP6t+7FK-Jr5bp7+cjKLCApa9nuHFBFZwOTw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] RISC-V: Fix compilation without RISCV_ISA_ZICBOM
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        kernel test robot <lkp@intel.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HE1PR0402MB2939:EE_|AM0PR04MB6819:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49527828-924d-4810-d575-08dab1ce9d34
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9szagNAqYm1JYs5/tjNwbOwQB6BRNhfiKvIGkO0alAtsXoxUfUqFX5v6Ach8p+V2QrR0CvRy5Gi8VkLnwqm9H7SVmMdd9yanMPcW7dUlNpHMFQpQn282bCGbSKNQyHC2F9+dkufSa0xd608pWE27HBDwfuf15uQ5bykq0pwjmNHlZotcFw6SDNMO86jauo24p+s743ChfBKqgxjxj+AeyUrJyDQ1/PACE6TXHRd9s35y2UIe0Y3XNySLqTUHboxqGuJw9sgG5oqyoOJQiQdrOgjdck2gQTWGcMzY0yFGYiaHi0zPZkepU7shBDjO2vz4QGh/cup0XTkFQOTD0hyzofQoKfcjeZ70oW5S5yMOMcw9WRo/TB/LRF79lY1cKfQ4U1an9XQY7sCnggZH5S+wbWec4iXVU3FgTvNrnLKghOmDNa6w/vTp5FWd1+MyVyLpVp5W5gcnKq0zyG/QCA1fE0CbRJKnT8LLaijmZzA2qqzCgI93QrSMPWLfEJVPq5s6I+PQ0m4NUjxSvgZm3wthviiGt2GDY19JcSSrK1pnkwCp3+1kfK3248Rr2knZ3CZWoljxqDJA0zsuSoPRt3UGjdb/wUh4V+c4DV3rNpwAEixoGo/RjeY9oeHgkKTRDOtwN2f6kmay98qZQqtGoGRFRAenTFtzrYH6Hy3zH7KPpWzbUvnSxOnDbHjFtOmsupu9AFnVAC0oggp5UWxQtgZm+r1dvBvQgmz6280XW6ZuG/4EgTo/8Edaums3TunhW40h4N/SE9HMqrOuxIADJIW+5A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB2939.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199015)(36756003)(7416002)(86362001)(2906002)(38350700002)(5660300002)(38100700002)(2616005)(6486002)(186003)(1076003)(83380400001)(316002)(66946007)(52116002)(66556008)(6512007)(66476007)(6506007)(478600001)(8676002)(26005)(4326008)(41300700001)(8936002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ghS86wO7Wn9N13jEjSSLhefuCCMS7Q64HFD4hEkTbw18HCy9Dvz9RTsiSqAY?=
+ =?us-ascii?Q?KSBFfH43FxX5H+cIDA2bFGgcUJrRcSuy+S7X0I+GrwjkWqMX2fz7n20IGS7r?=
+ =?us-ascii?Q?vkJatsCKE7C8Mj4lc28e60+LfhFQdg5Un8rkupbzEp3InxIHGvEj1XqPOi6/?=
+ =?us-ascii?Q?sKpqQfWZl4Mm9RnddTbbAWI6KbyLsuXdaIPIbvjvTJzkii2vi8vaMf/p2uGN?=
+ =?us-ascii?Q?nel/ON3x6t1Ec8O2MKUD51wSsvw469cxZQuH+5sbakpLdVgP2niYREw42aOT?=
+ =?us-ascii?Q?JxgRoYvzr/1b8HBYWIkKqah9bm0qSpjaciMso5Yp5LD5xmo6tQfjl1ahoHgb?=
+ =?us-ascii?Q?G1HxYDmhjpZMhjkLqQtfobezU4m2dW6WMM6Rf4nJsRjFJwlTJg05E9rsB2F0?=
+ =?us-ascii?Q?Icr8RNHH6sGPrf2DILYeVTHOSvpXPbpQ2DcDaHWjCHGJnRtAa7sCthP4HSQu?=
+ =?us-ascii?Q?hpXWxTew5MKMuKqewf7PsjZeSD7g3vY5zYEhtYvurQduJ33Ce2FRxzPOslpZ?=
+ =?us-ascii?Q?MxRmKoOQMoWS2GQk40BFjDL3H2XJ8BlkTOuv/g+gMiN0IgUyq/GiM2UiiVkW?=
+ =?us-ascii?Q?E6Id4SrX+sEE8E9IiB0ReeN8gqu8AqnDyDcd1q4eoLhOaeZ9jkeS/SJWWg4j?=
+ =?us-ascii?Q?14uIJsqEtvv/WtAZJ4IvMraIhc97k5cgM7mwIrgtjgw4Tg1kFIwIz9GRqlz8?=
+ =?us-ascii?Q?PmjF8BgNuDFyKfUK07y08tt2O80imVaLD/tGMj/bgBHwjU5J82xJqyO0c8fl?=
+ =?us-ascii?Q?HPy8K58vMVLAzESPbegcEyTbooKse7tngbk9z7KZH55WJW5kpUzLr30FsP7B?=
+ =?us-ascii?Q?gkDrCSc28UINbj4FsSpPXjeae+Ec3pdW2EH5QoLFhB8qm+1N7iVPbwelTaPS?=
+ =?us-ascii?Q?YLD/Az0K0c+FicmZu+twh0AUr+tEHhkj/q7qjTAfP/u0OjhC3A8+UtkfawJJ?=
+ =?us-ascii?Q?ehHob4fvhdmQsDKjxju0IWovjZ1l4mn0y88IaZqYH4r6iv30MVvCj7yUD7YB?=
+ =?us-ascii?Q?h/0mJDqA6aMkguCkG2N4QBAsrLmff8UsJ/GDRqR7ty7WfNX8QqlAxKHGMAxo?=
+ =?us-ascii?Q?FUu4G/op9/MMjuDe2wxkQoHXWGyKKg61UBhkYv9WAKTFLmYzxwZSknRxsoS4?=
+ =?us-ascii?Q?3S0nlM6lc5jkHeixGLR5tImlYBtv6h1k0xdPAj8ViqtX7/PFHEJOcJDRTDie?=
+ =?us-ascii?Q?ElvWfWytKsMAXfvAzOM6zqPVDOTQoU5m577xwU5zfos75wuu3yMoXesQcQR/?=
+ =?us-ascii?Q?QeQoeH0IOmBERn4CLSkHWlBG1hvSB2V5/oW6GiUWYy2dSxVwHKeSnoLnd4vU?=
+ =?us-ascii?Q?U8uvYutr76t9Wi9vsgYp96Fjh5uBHVrhzXlZcO+5VcSXB1GwSTwqhG5/X77i?=
+ =?us-ascii?Q?etI/8Nlvl073hSQ3kXk3uJTFxkIl9RLtur+AqXTO2vw2n3+TL+Ow68YApx61?=
+ =?us-ascii?Q?FqpDvgc8I1EoMK0bo6cHNZu/OE2QwSQ3/i/cUka6mS72dVoBSqsoVDsDs9TW?=
+ =?us-ascii?Q?aLIuzdS4F5sBK6gDqgkjAyiKL7+IinYk7DbyxsFDBD4ackoaNFyE9lf7YfYZ?=
+ =?us-ascii?Q?Ck9iX3HbwdHdPGxZdCBeaaVU+mitBSyreZrolpEHndg0iXN9nt2nfZ7BoZrJ?=
+ =?us-ascii?Q?FQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49527828-924d-4810-d575-08dab1ce9d34
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB2939.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 12:36:58.7711
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8L632FfXNSLvaydnFtvsL5+xnlBACVNBdPeJHg1ShQDIf15m6ef/S17S0eBmPeBcYiyrUZMH0J19UQl4258iEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6819
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 6:01 PM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Hi Anup,
->
-> Am Mittwoch, 19. Oktober 2022, 14:16:19 CEST schrieb Anup Patel:
-> > From: Andrew Jones <ajones@ventanamicro.com>
-> >
-> > riscv_cbom_block_size and riscv_init_cbom_blocksize() should always
-> > be available and riscv_init_cbom_blocksize() should always be
-> > invoked, even when compiling without RISCV_ISA_ZICBOM enabled. This
-> > is because disabling RISCV_ISA_ZICBOM means "don't use zicbom
-> > instructions in the kernel" not "pretend there isn't zicbom, even
-> > when there is". When zicbom is available, whether the kernel enables
-> > its use with RISCV_ISA_ZICBOM or not, KVM will offer it to guests.
-> > Ensure we can build KVM and that the block size is initialized even
-> > when compiling without RISCV_ISA_ZICBOM.
->
-> either I'm way very low on coffee or something is strange here :-) .
->
-> I can fully grasp the need to init the cbom blocksize for guests, even when
-> the main kernel isn't using it, but below in the patch itself it is still:
+Here is an issue: after enabled the WoL function, EQoS cannot send and
+receive data after resumed because of the wrong setting of
+MAC_CONFIGURATION register.
 
-The Guest might have pass-through access to a device which is not
-cache-coherent whereas Host might have all devices cache-coherent.
+When enable the WoL function, stmmac_resume will call stmmac_hw_setup
+and phylink_resume.
+ - When do stmmac_hw_setup, it will reset the stmmac, and re-config the
+   register GMAC_CONFIG with a fixed default value GMAC_CORE_INIT.
+ - When do phylink_resume in stmmac_resume, it will call stmmac_mac_link_up in
+   a workqueue. stmmac_mac_link_up will set the correct speed/duplex states
+   provided by phy to the CONFIG register.
 
->
-> +#ifdef CONFIG_RISCV_ISA_ZICBOM
-> +void riscv_init_cbom_blocksize(void)
-> +{
-> [...]
->
-> so the init_cbom_blocksize function is still inside a RISCV_ISA_ZICBOM
-> ifdef?
+So when resume the stmmac, the workqueue of phylink_resume must be run after
+the stmmac_hw_setup to ensure that the configuration of the CONFIG register
+is correct.
+In order to ensure this, put the place of phylink_resume consistent with
+stmmac_open.
+Make sure that stmmac_mac_link_up is called after stmmac_hw_setup even the
+workqueue of phylink_resume is run immediately.
 
-Argh, I mixed changes from my previous patch and Drew's patch.
+Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+---
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-I will quickly send v4. Thanks for catching.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 65c96773c6d2..79c9ea451a81 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7515,16 +7515,6 @@ int stmmac_resume(struct device *dev)
+ 			return ret;
+ 	}
+ 
+-	rtnl_lock();
+-	if (device_may_wakeup(priv->device) && priv->plat->pmt) {
+-		phylink_resume(priv->phylink);
+-	} else {
+-		phylink_resume(priv->phylink);
+-		if (device_may_wakeup(priv->device))
+-			phylink_speed_up(priv->phylink);
+-	}
+-	rtnl_unlock();
+-
+ 	rtnl_lock();
+ 	mutex_lock(&priv->lock);
+ 
+@@ -7539,6 +7529,16 @@ int stmmac_resume(struct device *dev)
+ 
+ 	stmmac_restore_hw_vlan_rx_fltr(priv, ndev, priv->hw);
+ 
++	mutex_unlock(&priv->lock);
++	if (device_may_wakeup(priv->device) && priv->plat->pmt) {
++		phylink_resume(priv->phylink);
++	} else {
++		phylink_resume(priv->phylink);
++		if (device_may_wakeup(priv->device))
++			phylink_speed_up(priv->phylink);
++	}
++	mutex_lock(&priv->lock);
++
+ 	stmmac_enable_all_queues(priv);
+ 	stmmac_enable_all_dma_irq(priv);
+ 
+-- 
+2.34.1
 
-Regards,
-Anup
-
->
->
-> Heiko
->
->
-> >
-> > Fixes: 8f7e001e0325 ("RISC-V: Clean up the Zicbom block size probing")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  arch/riscv/mm/cacheflush.c      | 41 +++++++++++++++++++++++++++++++++
-> >  arch/riscv/mm/dma-noncoherent.c | 41 ---------------------------------
-> >  2 files changed, 41 insertions(+), 41 deletions(-)
-> >
-> > diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> > index 6cb7d96ad9c7..f318b2553612 100644
-> > --- a/arch/riscv/mm/cacheflush.c
-> > +++ b/arch/riscv/mm/cacheflush.c
-> > @@ -3,6 +3,8 @@
-> >   * Copyright (C) 2017 SiFive
-> >   */
-> >
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >  #include <asm/cacheflush.h>
-> >
-> >  #ifdef CONFIG_SMP
-> > @@ -86,3 +88,42 @@ void flush_icache_pte(pte_t pte)
-> >               flush_icache_all();
-> >  }
-> >  #endif /* CONFIG_MMU */
-> > +
-> > +unsigned int riscv_cbom_block_size;
-> > +EXPORT_SYMBOL_GPL(riscv_cbom_block_size);
-> > +
-> > +#ifdef CONFIG_RISCV_ISA_ZICBOM
-> > +void riscv_init_cbom_blocksize(void)
-> > +{
-> > +     struct device_node *node;
-> > +     unsigned long cbom_hartid;
-> > +     u32 val, probed_block_size;
-> > +     int ret;
-> > +
-> > +     probed_block_size = 0;
-> > +     for_each_of_cpu_node(node) {
-> > +             unsigned long hartid;
-> > +
-> > +             ret = riscv_of_processor_hartid(node, &hartid);
-> > +             if (ret)
-> > +                     continue;
-> > +
-> > +             /* set block-size for cbom extension if available */
-> > +             ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> > +             if (ret)
-> > +                     continue;
-> > +
-> > +             if (!probed_block_size) {
-> > +                     probed_block_size = val;
-> > +                     cbom_hartid = hartid;
-> > +             } else {
-> > +                     if (probed_block_size != val)
-> > +                             pr_warn("cbom-block-size mismatched between harts %lu and %lu\n",
-> > +                                     cbom_hartid, hartid);
-> > +             }
-> > +     }
-> > +
-> > +     if (probed_block_size)
-> > +             riscv_cbom_block_size = probed_block_size;
-> > +}
-> > +#endif
-> > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-> > index b0add983530a..d919efab6eba 100644
-> > --- a/arch/riscv/mm/dma-noncoherent.c
-> > +++ b/arch/riscv/mm/dma-noncoherent.c
-> > @@ -8,13 +8,8 @@
-> >  #include <linux/dma-direct.h>
-> >  #include <linux/dma-map-ops.h>
-> >  #include <linux/mm.h>
-> > -#include <linux/of.h>
-> > -#include <linux/of_device.h>
-> >  #include <asm/cacheflush.h>
-> >
-> > -unsigned int riscv_cbom_block_size;
-> > -EXPORT_SYMBOL_GPL(riscv_cbom_block_size);
-> > -
-> >  static bool noncoherent_supported;
-> >
-> >  void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-> > @@ -77,42 +72,6 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
-> >       dev->dma_coherent = coherent;
-> >  }
-> >
-> > -#ifdef CONFIG_RISCV_ISA_ZICBOM
-> > -void riscv_init_cbom_blocksize(void)
-> > -{
-> > -     struct device_node *node;
-> > -     unsigned long cbom_hartid;
-> > -     u32 val, probed_block_size;
-> > -     int ret;
-> > -
-> > -     probed_block_size = 0;
-> > -     for_each_of_cpu_node(node) {
-> > -             unsigned long hartid;
-> > -
-> > -             ret = riscv_of_processor_hartid(node, &hartid);
-> > -             if (ret)
-> > -                     continue;
-> > -
-> > -             /* set block-size for cbom extension if available */
-> > -             ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> > -             if (ret)
-> > -                     continue;
-> > -
-> > -             if (!probed_block_size) {
-> > -                     probed_block_size = val;
-> > -                     cbom_hartid = hartid;
-> > -             } else {
-> > -                     if (probed_block_size != val)
-> > -                             pr_warn("cbom-block-size mismatched between harts %lu and %lu\n",
-> > -                                     cbom_hartid, hartid);
-> > -             }
-> > -     }
-> > -
-> > -     if (probed_block_size)
-> > -             riscv_cbom_block_size = probed_block_size;
-> > -}
-> > -#endif
-> > -
-> >  void riscv_noncoherent_supported(void)
-> >  {
-> >       WARN(!riscv_cbom_block_size,
-> >
->
->
->
->
