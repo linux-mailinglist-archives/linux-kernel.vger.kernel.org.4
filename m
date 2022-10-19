@@ -2,101 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B3D605100
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0577B605108
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiJSUHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S231129AbiJSUJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiJSUHO (ORCPT
+        with ESMTP id S229525AbiJSUI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:07:14 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2737E190E68;
-        Wed, 19 Oct 2022 13:07:13 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id c20so23606822ljj.7;
-        Wed, 19 Oct 2022 13:07:13 -0700 (PDT)
+        Wed, 19 Oct 2022 16:08:57 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1707A193462
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:08:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b7CNOQx77jxJkr8fo3A8KqRmFLYVGew+7knPtLNO80g=;
-        b=awEFpEhcqOyuVVRGI60VVcsY5M+7n3ldfd1Do6gZB1LMVB3KIviAIQVoo0kYWTOHT8
-         XM1MHj97CJzRipIruN5JqNCyKjUeAGAXbhnVmtZadyZlm7K0obdKSz1nbZdSRur3DoiH
-         WpM0+oRZ17FZSFdsb0BHFWIRMTSgulfz/o0MFuuo3sKFZvdXVpgc1Z4QW6TK+DhHBE9/
-         8VNXsPpSviKl/qU0YqAEakVFHyvMzyztSAOEde/r0NLVMzhuD+Ni1F2qG/zPZruDeEFL
-         m5TGE/5ApV7g8brCcqclP/YXzChpw8AOm4ewYdXBFs/i/pe8Uw/3y84IWfdoPmZ3poQ0
-         480Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b7CNOQx77jxJkr8fo3A8KqRmFLYVGew+7knPtLNO80g=;
-        b=PayZpNq2ycENY9bUxVfSVAwasNJQt0K4LjohFgKzsZjim0lFoEeQN1sKiZ8ZodkdRR
-         UNlxzEK+W9Mp/ZFiiJ5b/RNnBASaD/TvM3+dhp0F4/zY5GkuHkvk215/tEYAJ8LvojuA
-         CHuofo5ZuT1PJv8Eeq2wdOglOYz6NrLjM+v+0IjiZZhtHDLRMeI6+vCYxqg+2VNlz/uT
-         wzAUSqvL7rNMVUwuk6/3W2Af2ZFgJwFQbUWhz9eASsI8ozfDVRghI9Yy5acns+ivjjx9
-         pkSg0gFib5ETT2bWCISqVYElm4ZSnjK5TnKXpdxOr4KXo9GkymwH07bI7YndEWr1uB30
-         Q15g==
-X-Gm-Message-State: ACrzQf0AiqgujliC3byscTf3l7TSQvx/KVPSApIli4r/9OC6mo05mlyv
-        7kcj6eMcwOA92dSvNp4kqDsDIz6DlDA6uCkAa9w=
-X-Google-Smtp-Source: AMsMyM6sYCtQ57vM1AQbbV3fxrVxnMWB0NyC+Rv9m+1OQN0e2gDL0yS2/jvhhkzrg5lQMHkx2CWA73bYz/FN+wz9pwU=
-X-Received: by 2002:a2e:2a03:0:b0:26d:ff37:f731 with SMTP id
- q3-20020a2e2a03000000b0026dff37f731mr3316534ljq.25.1666210031367; Wed, 19 Oct
- 2022 13:07:11 -0700 (PDT)
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=xLUOFYSzTwcdJD1bSDpGV62OSIArCZrsREk8+4s+Uec=;
+  b=ETfFsSnSDw1qGno5kvmuyV/L8zLQmEPEcks43pQSSS7rE4PmxtXT6lrB
+   CdBFamHn890jRyrqDvoJ+x9lXf6nKYTnoI223vgDSvOT/iE00zYnG1L/j
+   y//Vsbim6f+8y1s+C5YGS7ZJOn/O8v/+JJBgmHzv2iaO/vmprmVCtEqLh
+   U=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,196,1661810400"; 
+   d="scan'208";a="66044576"
+Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 22:08:54 +0200
+Date:   Wed, 19 Oct 2022 22:08:53 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Deepak R Varma <drv@mailo.com>
+cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
+ type name
+In-Reply-To: <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com>
+Message-ID: <alpine.DEB.2.22.394.2210192208290.3068@hadrien>
+References: <cover.1666208065.git.drv@mailo.com> <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Wed, 19 Oct 2022
- 13:07:10 -0700 (PDT)
-In-Reply-To: <Y1BXQlu+JOoJi6Yk@elver.google.com>
-References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
- <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
- <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
- <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com> <Y1BXQlu+JOoJi6Yk@elver.google.com>
-From:   youling 257 <youling257@gmail.com>
-Date:   Thu, 20 Oct 2022 04:07:10 +0800
-Message-ID: <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
-Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,47 +54,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-That is i did,i already test, remove "u64 __tmp=E2=80=A6kmsan_unpoison_memo=
-ry", no help.
-i only remove kmsan_copy_to_user, fix my issue.
 
-2022-10-20 4:00 GMT+08:00, Marco Elver <elver@google.com>:
-> On Thu, Oct 20, 2022 at 03:29AM +0800, youling 257 wrote:
-> [...]
->> > What arch?
->> > If x86, can you try to revert only the change to
->> > instrument_get_user()? (I wonder if the u64 conversion is causing
->> > issues.)
->> >
->> arch x86, this's my revert,
->> https://github.com/youling257/android-mainline/commit/401cbfa61cbfc20c87=
-a5be8e2dda68ac5702389f
->> i tried different revert, have to remove kmsan_copy_to_user.
+
+On Thu, 20 Oct 2022, Deepak R Varma wrote:
+
+> Correct misleading struct type name dim_ch_state_t to dim_ch_state
+> since this not a typedef but a normal structure declaration.
 >
-> There you reverted only instrument_put_user() - does it fix the issue?
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
 >
-> If not, can you try only something like this (only revert
-> instrument_get_user()):
+> Changes in v4:
+>    1. Correct patch subject and log message. Use struct type name instead of
+>       variable name for the change description. Feedback from julia.lawall@inria.fr
 >
-> diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-> index 501fa8486749..dbe3ec38d0e6 100644
-> --- a/include/linux/instrumented.h
-> +++ b/include/linux/instrumented.h
-> @@ -167,9 +167,6 @@ instrument_copy_from_user_after(const void *to, const
-> void __user *from,
->   */
->  #define instrument_get_user(to)				\
->  ({							\
-> -	u64 __tmp =3D (u64)(to);				\
-> -	kmsan_unpoison_memory(&__tmp, sizeof(__tmp));	\
-> -	to =3D __tmp;					\
->  })
+> Changes in v3:
+>    1. Patch introduced in the patch set
+>
+>  drivers/staging/most/dim2/dim2.c | 2 +-
+>  drivers/staging/most/dim2/hal.c  | 4 ++--
+>  drivers/staging/most/dim2/hal.h  | 6 +++---
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
+> index 4c1f27898a29..a69a61a69283 100644
+> --- a/drivers/staging/most/dim2/dim2.c
+> +++ b/drivers/staging/most/dim2/dim2.c
+> @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
+>  	struct list_head *head = &hdm_ch->pending_list;
+>  	struct mbo *mbo;
+>  	unsigned long flags;
+> -	struct dim_ch_state_t st;
+> +	struct dim_ch_state st;
+
+Is there another use in service_done_flag?
+
+julia
+
+>
+>  	BUG_ON(!hdm_ch);
+>  	BUG_ON(!hdm_ch->is_initialized);
+> diff --git a/drivers/staging/most/dim2/hal.c b/drivers/staging/most/dim2/hal.c
+> index 65282c276862..a5d40b5b138a 100644
+> --- a/drivers/staging/most/dim2/hal.c
+> +++ b/drivers/staging/most/dim2/hal.c
+> @@ -943,8 +943,8 @@ u8 dim_service_channel(struct dim_channel *ch)
+>  	return channel_service(ch);
+>  }
+>
+> -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+> -					     struct dim_ch_state_t *state_ptr)
+> +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
+> +					   struct dim_ch_state *state_ptr)
+>  {
+>  	if (!ch || !state_ptr)
+>  		return NULL;
+> diff --git a/drivers/staging/most/dim2/hal.h b/drivers/staging/most/dim2/hal.h
+> index 20531449acab..ef10a8741c10 100644
+> --- a/drivers/staging/most/dim2/hal.h
+> +++ b/drivers/staging/most/dim2/hal.h
+> @@ -27,7 +27,7 @@ enum mlb_clk_speed {
+>  	CLK_8192FS = 7,
+>  };
+>
+> -struct dim_ch_state_t {
+> +struct dim_ch_state {
+>  	bool ready; /* Shows readiness to enqueue next buffer */
+>  	u16 done_buffers; /* Number of completed buffers */
+>  };
+> @@ -87,8 +87,8 @@ void dim_service_ahb_int_irq(struct dim_channel *const *channels);
+>
+>  u8 dim_service_channel(struct dim_channel *ch);
+>
+> -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+> -					     struct dim_ch_state_t *state_ptr);
+> +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
+> +					   struct dim_ch_state *state_ptr);
+>
+>  u16 dim_dbr_space(struct dim_channel *ch);
+>
+> --
+> 2.30.2
 >
 >
-> Once we know which one of these is the issue, we can figure out a proper
-> fix.
 >
-> Thanks,
 >
-> -- Marco
 >
