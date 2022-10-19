@@ -2,142 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D0D604D78
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680D1604D7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiJSQcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S230187AbiJSQeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiJSQcH (ORCPT
+        with ESMTP id S229872AbiJSQeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:32:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877D91AD82;
-        Wed, 19 Oct 2022 09:32:03 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JGLrXP001457;
-        Wed, 19 Oct 2022 16:31:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0FemrlkL2zjvgkEKYy/s8nxfAGJ9llFtOVrJjesBs4c=;
- b=FI+kgbyjJfybtZOpTF5kniMetTPjZBM/CB7at9lRxhHB4Nd6CL0L4+rkHRmeNgZ811OB
- 7ug6rtecywvfnfmvxvGjpwto7ZFWC8e7/2bl+wmmSNs1HLwO4IQAm2HqmUiUzmgRm9m3
- tUQtCqLlClkl6bK2lrdnc57P2ZwG5THImsF1ldqDN4R2zNMIYqehS0XamDVEM9HnP3Cw
- 5GWAUxdpjpZi7NkAvCrqR9tfYEAe2HvsJ3/oCeylsuQZEihu8KlzuNhkYyZmMjw9yDv7
- /9RRT1PJSII+3JKV7Xa3Nlt5QrxW+UHA+Ib6gMctHEMuNoTC6kQatPAdpswfK5c0/gKo Aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqraq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 16:31:54 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JGM6kd002140;
-        Wed, 19 Oct 2022 16:31:53 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqrapt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 16:31:53 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JGKpse028105;
-        Wed, 19 Oct 2022 16:31:52 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma01dal.us.ibm.com with ESMTP id 3k7mg9bjrh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 16:31:52 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JGVpWr43254254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Oct 2022 16:31:51 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 698FB58055;
-        Wed, 19 Oct 2022 16:31:50 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47C0258056;
-        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
-Received: from sig-9-65-252-68.ibm.com (unknown [9.65.252.68])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
-Message-ID: <230c9c42995e52174b8503b05f0c51225ad0aeca.camel@linux.ibm.com>
-Subject: Re: [PATCH v5] KEYS: encrypted: fix key instantiation with
- user-provided data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nikolaus Voss <nv@vosn.de>, David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 19 Oct 2022 12:31:47 -0400
-In-Reply-To: <20221019141031.E605D1B3B@mail.steuer-voss.de>
-References: <20221019141031.E605D1B3B@mail.steuer-voss.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7UGECKheJno6Xp8SpPP1z9gKWj1k9Ng6
-X-Proofpoint-ORIG-GUID: ao8WAIor37KsT8KpDy2Wbdnn4z8tH1EV
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 19 Oct 2022 12:34:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8110D1C5A67;
+        Wed, 19 Oct 2022 09:34:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CF3061939;
+        Wed, 19 Oct 2022 16:34:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A25C433C1;
+        Wed, 19 Oct 2022 16:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666197249;
+        bh=OQwM+ReWswGV6gQguSXGQnAQ5pETyCKMpBbDzat8faE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XhCj0hmuqdrIvwN5ItwJNX36Cfz7minRFTUglywYdHfLllkUsJ9vqd1eGT7nrIwl9
+         7ViqBcsZkW8aCs5PIIYE+BfHzRS/NnIIjbptibHWffavzQQXaCuv6d4ppp9jTHqZUb
+         vYIOOJ0D/GMziZPGZcLKy+JU/zYuGk4ZGY9UI/ADBwY+CWQmZ1RQhPQhN6+Luu2fYf
+         O7wLi3CDU+c6HiLAD/O63Sli0pTpvVxbhmijESaMHYWjx3dqht8xQA6gdKln9XqNHx
+         AIF8mZpAtGr37HEEHRk5mlZ0pqqQRcWdI/4IAT3LIG1iWE/IrgMirnkYlzBSzPprzo
+         fzsSFaxDwgpyg==
+Date:   Wed, 19 Oct 2022 22:04:05 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Ben Walker <benjamin.walker@intel.com>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/7] dmaengine: Add provider documentation on cookie
+ assignment
+Message-ID: <Y1Am/RpgWv3PAVaU@matsya>
+References: <20220622193753.3044206-1-benjamin.walker@intel.com>
+ <20220829203537.30676-1-benjamin.walker@intel.com>
+ <20220829203537.30676-5-benjamin.walker@intel.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_09,2022-10-19_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 adultscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210190091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829203537.30676-5-benjamin.walker@intel.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikolaus,
+On 29-08-22, 13:35, Ben Walker wrote:
+> Clarify the rules on assigning cookies to DMA transactions.
+> 
+> Signed-off-by: Ben Walker <benjamin.walker@intel.com>
+> ---
+>  .../driver-api/dmaengine/provider.rst         | 45 +++++++++++++++----
+>  1 file changed, 37 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/dmaengine/provider.rst b/Documentation/driver-api/dmaengine/provider.rst
+> index 1d0da2777921d..a5539f816d125 100644
+> --- a/Documentation/driver-api/dmaengine/provider.rst
+> +++ b/Documentation/driver-api/dmaengine/provider.rst
+> @@ -417,7 +417,9 @@ supported.
+>  
+>      - tx_submit: A pointer to a function you have to implement,
+>        that is supposed to push the current transaction descriptor to a
+> -      pending queue, waiting for issue_pending to be called.
+> +      pending queue, waiting for issue_pending to be called. Each
+> +      descriptor is given a cookie to identify it. See the section
+> +      "Cookie Management" below.
+>  
+>    - In this structure the function pointer callback_result can be
+>      initialized in order for the submitter to be notified that a
+> @@ -522,6 +524,40 @@ supported.
+>  
+>    - May sleep.
+>  
+> +Cookie Management
+> +------------------
+> +
+> +When a transaction is queued for submission via tx_submit(), the provider
+> +must assign that transaction a cookie (dma_cookie_t) to uniquely identify it.
+> +The provider is allowed to perform this assignment however it wants, but for
 
-On Wed, 2022-10-19 at 16:07 +0200, Nikolaus Voss wrote:
-> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> decrypted data") added key instantiation with user provided decrypted data.
-> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> Fix this to use hex2bin instead.
-> 
-> Old keys created from user provided decrypted data saved with "keyctl pipe"
-> are still valid, however if the key is recreated from decrypted data the
-> old key must be converted to the correct format. This can be done with a
-> small shell script, e.g.:
-> 
-> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
-> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
-> keyctl add user masterkey "$(cat masterkey.bin)" @u
-> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
-> 
-> However, NEWKEY is still broken: If for BROKENKEY 32 bytes were specified, a
-> brute force attacker knowing the key properties would only need to try at most
-> 2^(16*8) keys, as if the key was only 16 bytes long.
-> 
-> The security issue is a result of the combination of limiting the input range
-> to hex-ascii and using memcpy() instead of hex2bin(). It could have been fixed
-> either by allowing binary input or using hex2bin() (and doubling the ascii
-> input key length). This patch implements the latter.
-> 
-> The corresponding test for the Linux Test Project ltp has also been
-> fixed (see link below).
-> 
-> Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
-> Cc: stable <stable@kernel.org>
-> Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
+We assumes that we have monotonically increasing cookie and
+if cookie 10 is marked complete cookie 8 is assumed complete too...
 
-While preparing to queue this patch, I noticed scripts/checkpatch.pl
-returns a couple of warnings, including that the sender email address
-and your tag here don't match.  Wish I had caught them earlier.
+Completion is always in order unless we specify DMA_COMPLETION_NO_ORDER
+
+> +convenience the following utility functions are available to create
+> +monotonically increasing cookies
+> +
+> +  .. code-block:: c
+> +
+> +    void dma_cookie_init(struct dma_chan *chan);
+> +
+> +  Called once at channel creation
+> +
+> +  .. code-block:: c
+> +
+> +    dma_cookie_t dma_cookie_assign(struct dma_async_tx_descriptor *tx);
+> +
+> +  Assign a cookie to the given descriptor
+> +
+> +  .. code-block:: c
+> +
+> +    void dma_cookie_complete(struct dma_async_tx_descriptor *tx);
+> +
+> +  Mark the descriptor as complete and invalidate the cookie
+> +
+> +  .. code-block:: c
+> +
+> +    enum dma_status dma_cookie_status(struct dma_chan *chan,
+> +      dma_cookie_t cookie, struct dma_tx_state *state);
+> +
+> +  Report the status of the cookie and filling in state, if not NULL.
+> +
+>  
+>  Misc notes
+>  ==========
+> @@ -537,13 +573,6 @@ where to put them)
+>  - Makes sure that dependent operations are run before marking it
+>    as complete.
+>  
+> -dma_cookie_t
+> -
+> -- it's a DMA transaction ID.
+> -
+> -- The value can be chosen by the provider, or use the helper APIs
+> -  such as dma_cookie_assign() and dma_cookie_complete().
+> -
+>  DMA_CTRL_ACK
+>  
+>  - If clear, the descriptor cannot be reused by provider until the
+> -- 
+> 2.37.1
+
 -- 
-thanks,
-
-Mimi
-
+~Vinod
