@@ -2,154 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B472605150
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2378605153
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiJSUa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S231397AbiJSUbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiJSUat (ORCPT
+        with ESMTP id S231394AbiJSUa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:30:49 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646F616E28E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666211438; bh=h8gdnH6TPHLdniyPH77+5IDXlOgSi66+RQdogy7SIdQ=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=UkSzLgrrSByqn7txD0Or9TFzu4+Wif1KxCEGmoif6RZKzHfRHQv8nBJeT7PHTvKY3
-         OjIxNHlt4OZg3fDpTb8dUriq2yS+ozcaRvjQyYEQ9iwbgr+NGl9oRn8AmNjIFFc1zV
-         s/ODtWmUluV+wRw5+IFPdgPqrMAnMBAzDTjY3IGY=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via [213.182.55.206]
-        Wed, 19 Oct 2022 22:30:33 +0200 (CEST)
-X-EA-Auth: +gJ+6Oke9gLWy6n0iIracjMcGst4KO//gsNkwZYnjitJm1FdFKecL77h26BcCB7pt15OKXSlUmk8HbGnqUPRzDCGOc7WGQWD
-Date:   Thu, 20 Oct 2022 02:00:29 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
- type name
-Message-ID: <Y1BeZYBf/xsW8F4O@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1666208065.git.drv@mailo.com>
- <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com>
- <alpine.DEB.2.22.394.2210192208290.3068@hadrien>
+        Wed, 19 Oct 2022 16:30:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FFD16E292;
+        Wed, 19 Oct 2022 13:30:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCB97B825E4;
+        Wed, 19 Oct 2022 20:30:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C92CBC433C1;
+        Wed, 19 Oct 2022 20:30:50 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="m3pCQfIb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666211448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D096jznuqlRQwJxMQwcMaa14sQx4bVWfoMm54xn0QwQ=;
+        b=m3pCQfIbed7QAmhdX5Jk66SkwkOn91IQAhAZCloMrDcuwuFU7hOeOzneYWAUG5sSS6MVh9
+        CpjbVwJu51bpOf06LYjFWzNjorxwsYs+Gh4OelaonRbAP4tuih3CtfS2Bz8UE4icXCx4/N
+        YZsg/nNHc64iJoQTjaZiMFXW5qE/yN4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8a12f077 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 19 Oct 2022 20:30:47 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2] kbuild: treat char as always unsigned
+Date:   Wed, 19 Oct 2022 14:30:34 -0600
+Message-Id: <20221019203034.3795710-1-Jason@zx2c4.com>
+In-Reply-To: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2210192208290.3068@hadrien>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:08:53PM +0200, Julia Lawall wrote:
->
->
-> On Thu, 20 Oct 2022, Deepak R Varma wrote:
->
-> > Correct misleading struct type name dim_ch_state_t to dim_ch_state
-> > since this not a typedef but a normal structure declaration.
-> >
-> > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >
-> > Changes in v4:
-> >    1. Correct patch subject and log message. Use struct type name instead of
-> >       variable name for the change description. Feedback from julia.lawall@inria.fr
-> >
-> > Changes in v3:
-> >    1. Patch introduced in the patch set
-> >
-> >  drivers/staging/most/dim2/dim2.c | 2 +-
-> >  drivers/staging/most/dim2/hal.c  | 4 ++--
-> >  drivers/staging/most/dim2/hal.h  | 6 +++---
-> >  3 files changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-> > index 4c1f27898a29..a69a61a69283 100644
-> > --- a/drivers/staging/most/dim2/dim2.c
-> > +++ b/drivers/staging/most/dim2/dim2.c
-> > @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
-> >  	struct list_head *head = &hdm_ch->pending_list;
-> >  	struct mbo *mbo;
-> >  	unsigned long flags;
-> > -	struct dim_ch_state_t st;
-> > +	struct dim_ch_state st;
->
-> Is there another use in service_done_flag?
+Recently, some compile-time checking I added to the clamp_t family of
+functions triggered a build error when a poorly written driver was
+compiled on ARM, because the driver assumed that the naked `char` type
+is signed, but ARM treats it as unsigned, and the C standard says it's
+architecture-dependent.
 
-Hi,
-I did not understand your question fully. This is from a different function
-try_start_dim_transfer where the variable st is used down the line in the
-execution. This time the channel state is retrieved by calling
-dim_get_channel_state function. The state is simply computed and set. Should I
-improve this as well?
+I doubt this particular driver is the only instance in which
+unsuspecting authors make assumptions about `char` with no `signed` or
+`unsigned` specifier. We were lucky enough this time that that driver
+used `clamp_t(char, negative_value, positive_value)`, so the new
+checking code found it, and I've sent a patch to fix it, but there are
+likely other places lurking that won't be so easily unearthed.
 
-If you are asking something different, could you please elaborate?
+So let's just eliminate this particular variety of heisensign bugs
+entirely. Set `-funsigned-char` globally, so that gcc makes the type
+unsigned on all architectures.
 
-./drv
+This will break things in some places and fix things in others, so this
+will likely cause a bit of churn while reconciling the type misuse.
 
->
-> julia
->
-> >
-> >  	BUG_ON(!hdm_ch);
-> >  	BUG_ON(!hdm_ch->is_initialized);
-> > diff --git a/drivers/staging/most/dim2/hal.c b/drivers/staging/most/dim2/hal.c
-> > index 65282c276862..a5d40b5b138a 100644
-> > --- a/drivers/staging/most/dim2/hal.c
-> > +++ b/drivers/staging/most/dim2/hal.c
-> > @@ -943,8 +943,8 @@ u8 dim_service_channel(struct dim_channel *ch)
-> >  	return channel_service(ch);
-> >  }
-> >
-> > -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> > -					     struct dim_ch_state_t *state_ptr)
-> > +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
-> > +					   struct dim_ch_state *state_ptr)
-> >  {
-> >  	if (!ch || !state_ptr)
-> >  		return NULL;
-> > diff --git a/drivers/staging/most/dim2/hal.h b/drivers/staging/most/dim2/hal.h
-> > index 20531449acab..ef10a8741c10 100644
-> > --- a/drivers/staging/most/dim2/hal.h
-> > +++ b/drivers/staging/most/dim2/hal.h
-> > @@ -27,7 +27,7 @@ enum mlb_clk_speed {
-> >  	CLK_8192FS = 7,
-> >  };
-> >
-> > -struct dim_ch_state_t {
-> > +struct dim_ch_state {
-> >  	bool ready; /* Shows readiness to enqueue next buffer */
-> >  	u16 done_buffers; /* Number of completed buffers */
-> >  };
-> > @@ -87,8 +87,8 @@ void dim_service_ahb_int_irq(struct dim_channel *const *channels);
-> >
-> >  u8 dim_service_channel(struct dim_channel *ch);
-> >
-> > -struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> > -					     struct dim_ch_state_t *state_ptr);
-> > +struct dim_ch_state *dim_get_channel_state(struct dim_channel *ch,
-> > +					   struct dim_ch_state *state_ptr);
-> >
-> >  u16 dim_dbr_space(struct dim_channel *ch);
-> >
-> > --
-> > 2.30.2
-> >
-> >
-> >
-> >
-> >
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/lkml/202210190108.ESC3pc3D-lkp@intel.com/
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/Makefile b/Makefile
+index f41ec8c8426b..bbf376931899 100644
+--- a/Makefile
++++ b/Makefile
+@@ -562,7 +562,7 @@ KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
+ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
+ 		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
+ 		   -Werror=implicit-function-declaration -Werror=implicit-int \
+-		   -Werror=return-type -Wno-format-security \
++		   -Werror=return-type -Wno-format-security -funsigned-char \
+ 		   -std=gnu11
+ KBUILD_CPPFLAGS := -D__KERNEL__
+ KBUILD_RUSTFLAGS := $(rust_common_flags) \
+-- 
+2.38.1
 
