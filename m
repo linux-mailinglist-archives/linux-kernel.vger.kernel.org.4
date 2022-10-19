@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D885604438
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BD260442C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiJSMAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S232186AbiJSL7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbiJSL7N (ORCPT
+        with ESMTP id S232482AbiJSL7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:59:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBDCF53FB;
-        Wed, 19 Oct 2022 04:37:36 -0700 (PDT)
+        Wed, 19 Oct 2022 07:59:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA582E0731;
+        Wed, 19 Oct 2022 04:37:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A70C060B39;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43DF060A66;
+        Wed, 19 Oct 2022 11:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D665C4314D;
         Wed, 19 Oct 2022 11:36:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048BCC433B5;
-        Wed, 19 Oct 2022 11:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666179379;
-        bh=RKmmV23bkSpDlRLmTokv3qcqyk7TcLCeC4BhtbLpLVQ=;
+        bh=X8dGKcEatEcWeJmdLOuulVQ9QOL8lBrkv9IoBNpoAeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u8UdKjvXbDaLOjwHYOPAbV4OTBuVTBhLJJBkYGVKL0eFoTFN9Dd/Nx1Kx8AvWJi+/
-         p++bpKpUKpkR4dcJuS5ZGII83hO6PUGnpXyJ1DvWba3YjB1w7xq/Faibs+X7gzSILr
-         Lxw/gg1i/37I86cx35XVIeZMu28fcPkgXF8fpP66SNwel8H/TB1/oCew8p5O17Lhwf
-         iD+gG43cqUoN2CaGuOh9ulleFd74iqgzY1r27YdU9bDjAsYkVDgphsUJxmugWXn0yu
-         zN4n+qUgRzbrlXMEMLv289TtFrmyVgG2wbI2cWPanBb8P1SklIUru0IGvUVNkbhgj8
-         jqOZsSXibKFqQ==
+        b=QV/242UqsWtXytsiPh0Qaz6UpnmMGjWlDm92Jt0omW20KUDqXAEMOpY7AtTbshfXw
+         ll+w0PfLnp3P8DU4bq9FHAu2ugwfUPRWTjypgANgkllpDGlObMz0zWpqvqCz5c9xC/
+         HarUHUF1PzcxwqNJnskXtu1if1lx+vwXGpkx5u7ppLkW4/kf2tCCjrCjpUrZGIlBo+
+         MMvx1e8CrgN86YnPm2umgRgRCw/Afo8rN35+lvN34sVNqEgkKpkbRLb7HR8nF28h4F
+         vfqJoRVTRFzhBcqm6F/ufDne7n8cPVVr+sOhz4OjcWjQO1TCsRidcp/zaJ8V2wh/vJ
+         azaEjUGbKSU5Q==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ol7Ml-0005pI-D2; Wed, 19 Oct 2022 13:36:07 +0200
+        id 1ol7Ml-0005pQ-Lx; Wed, 19 Oct 2022 13:36:07 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 02/15] phy: qcom-qmp-pcie: move device-id table
-Date:   Wed, 19 Oct 2022 13:35:39 +0200
-Message-Id: <20221019113552.22353-3-johan+linaro@kernel.org>
+Subject: [PATCH v2 05/15] phy: qcom-qmp-pcie: clean up probe initialisation
+Date:   Wed, 19 Oct 2022 13:35:42 +0200
+Message-Id: <20221019113552.22353-6-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221019113552.22353-1-johan+linaro@kernel.org>
 References: <20221019113552.22353-1-johan+linaro@kernel.org>
@@ -63,122 +63,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the device-id table below probe() and next to the driver structure
-to keep the driver callback functions grouped together.
+Stop abusing the driver data pointer and instead pass the driver state
+structure directly to the initialisation helpers during probe.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 90 ++++++++++++------------
- 1 file changed, 45 insertions(+), 45 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 49 +++++++++++-------------
+ 1 file changed, 23 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index 4e5111d19692..e66f6adc404b 100644
+index bc96518ad6b0..e30cbc94cbf6 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -2280,51 +2280,6 @@ static int qmp_pcie_create(struct device *dev, struct device_node *np, int id,
+@@ -2037,9 +2037,10 @@ static int qmp_pcie_set_mode(struct phy *phy, enum phy_mode mode, int submode)
  	return 0;
  }
  
--static const struct of_device_id qmp_pcie_of_match_table[] = {
--	{
--		.compatible = "qcom,ipq6018-qmp-pcie-phy",
--		.data = &ipq6018_pciephy_cfg,
--	}, {
--		.compatible = "qcom,ipq8074-qmp-gen3-pcie-phy",
--		.data = &ipq8074_pciephy_gen3_cfg,
--	}, {
--		.compatible = "qcom,ipq8074-qmp-pcie-phy",
--		.data = &ipq8074_pciephy_cfg,
--	}, {
--		.compatible = "qcom,msm8998-qmp-pcie-phy",
--		.data = &msm8998_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sc8180x-qmp-pcie-phy",
--		.data = &sc8180x_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sdm845-qhp-pcie-phy",
--		.data = &sdm845_qhp_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sdm845-qmp-pcie-phy",
--		.data = &sdm845_qmp_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sdx55-qmp-pcie-phy",
--		.data = &sdx55_qmp_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sm8250-qmp-gen3x1-pcie-phy",
--		.data = &sm8250_qmp_gen3x1_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sm8250-qmp-gen3x2-pcie-phy",
--		.data = &sm8250_qmp_gen3x2_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sm8250-qmp-modem-pcie-phy",
--		.data = &sm8250_qmp_gen3x2_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sm8450-qmp-gen3x1-pcie-phy",
--		.data = &sm8450_qmp_gen3x1_pciephy_cfg,
--	}, {
--		.compatible = "qcom,sm8450-qmp-gen4x2-pcie-phy",
--		.data = &sm8450_qmp_gen4x2_pciephy_cfg,
--	},
--	{ },
--};
--MODULE_DEVICE_TABLE(of, qmp_pcie_of_match_table);
--
- static int qmp_pcie_probe(struct platform_device *pdev)
+-static int qmp_pcie_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
++static int qmp_pcie_vreg_init(struct qmp_pcie *qmp)
  {
- 	struct qcom_qmp *qmp;
-@@ -2408,6 +2363,51 @@ static int qmp_pcie_probe(struct platform_device *pdev)
- 	return ret;
+-	struct qmp_pcie *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	int num = cfg->num_vregs;
+ 	int i;
+ 
+@@ -2053,9 +2054,10 @@ static int qmp_pcie_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
+ 	return devm_regulator_bulk_get(dev, num, qmp->vregs);
  }
  
-+static const struct of_device_id qmp_pcie_of_match_table[] = {
-+	{
-+		.compatible = "qcom,ipq6018-qmp-pcie-phy",
-+		.data = &ipq6018_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,ipq8074-qmp-gen3-pcie-phy",
-+		.data = &ipq8074_pciephy_gen3_cfg,
-+	}, {
-+		.compatible = "qcom,ipq8074-qmp-pcie-phy",
-+		.data = &ipq8074_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,msm8998-qmp-pcie-phy",
-+		.data = &msm8998_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sc8180x-qmp-pcie-phy",
-+		.data = &sc8180x_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sdm845-qhp-pcie-phy",
-+		.data = &sdm845_qhp_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sdm845-qmp-pcie-phy",
-+		.data = &sdm845_qmp_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sdx55-qmp-pcie-phy",
-+		.data = &sdx55_qmp_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8250-qmp-gen3x1-pcie-phy",
-+		.data = &sm8250_qmp_gen3x1_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8250-qmp-gen3x2-pcie-phy",
-+		.data = &sm8250_qmp_gen3x2_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8250-qmp-modem-pcie-phy",
-+		.data = &sm8250_qmp_gen3x2_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8450-qmp-gen3x1-pcie-phy",
-+		.data = &sm8450_qmp_gen3x1_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8450-qmp-gen4x2-pcie-phy",
-+		.data = &sm8450_qmp_gen4x2_pciephy_cfg,
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, qmp_pcie_of_match_table);
-+
- static struct platform_driver qmp_pcie_driver = {
- 	.probe		= qmp_pcie_probe,
- 	.driver = {
+-static int qmp_pcie_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg)
++static int qmp_pcie_reset_init(struct qmp_pcie *qmp)
+ {
+-	struct qmp_pcie *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	int i;
+ 	int ret;
+ 
+@@ -2074,9 +2076,10 @@ static int qmp_pcie_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg
+ 	return 0;
+ }
+ 
+-static int qmp_pcie_clk_init(struct device *dev, const struct qmp_phy_cfg *cfg)
++static int qmp_pcie_clk_init(struct qmp_pcie *qmp)
+ {
+-	struct qmp_pcie *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	int num = cfg->num_clks;
+ 	int i;
+ 
+@@ -2164,18 +2167,15 @@ static const struct phy_ops qmp_pcie_ops = {
+ 	.owner		= THIS_MODULE,
+ };
+ 
+-static int qmp_pcie_create(struct device *dev, struct device_node *np,
+-			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
++static int qmp_pcie_create(struct qmp_pcie *qmp, struct device_node *np)
+ {
+-	struct qmp_pcie *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	struct phy *generic_phy;
+ 	int ret;
+ 
+ 	qmp->mode = PHY_MODE_PCIE_RC;
+ 
+-	qmp->cfg = cfg;
+-	qmp->serdes = serdes;
+-
+ 	/*
+ 	 * Get memory resources for the PHY:
+ 	 * Resources are indexed as: tx -> 0; rx -> 1; pcs -> 2.
+@@ -2247,8 +2247,6 @@ static int qmp_pcie_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *child;
+ 	struct phy_provider *phy_provider;
+-	void __iomem *serdes;
+-	const struct qmp_phy_cfg *cfg = NULL;
+ 	struct qmp_pcie *qmp;
+ 	int ret;
+ 
+@@ -2257,28 +2255,27 @@ static int qmp_pcie_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	qmp->dev = dev;
+-	dev_set_drvdata(dev, qmp);
+ 
+-	cfg = of_device_get_match_data(dev);
+-	if (!cfg)
++	qmp->cfg = of_device_get_match_data(dev);
++	if (!qmp->cfg)
+ 		return -EINVAL;
+ 
+-	WARN_ON_ONCE(!cfg->pwrdn_ctrl);
+-	WARN_ON_ONCE(!cfg->phy_status);
++	WARN_ON_ONCE(!qmp->cfg->pwrdn_ctrl);
++	WARN_ON_ONCE(!qmp->cfg->phy_status);
+ 
+-	serdes = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(serdes))
+-		return PTR_ERR(serdes);
++	qmp->serdes = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(qmp->serdes))
++		return PTR_ERR(qmp->serdes);
+ 
+-	ret = qmp_pcie_clk_init(dev, cfg);
++	ret = qmp_pcie_clk_init(qmp);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = qmp_pcie_reset_init(dev, cfg);
++	ret = qmp_pcie_reset_init(qmp);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = qmp_pcie_vreg_init(dev, cfg);
++	ret = qmp_pcie_vreg_init(qmp);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -2286,7 +2283,7 @@ static int qmp_pcie_probe(struct platform_device *pdev)
+ 	if (!child)
+ 		return -EINVAL;
+ 
+-	ret = qmp_pcie_create(dev, child, serdes, cfg);
++	ret = qmp_pcie_create(qmp, child);
+ 	if (ret)
+ 		goto err_node_put;
+ 
 -- 
 2.37.3
 
