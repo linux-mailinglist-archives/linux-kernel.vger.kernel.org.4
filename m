@@ -2,102 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43591603A35
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B487F603A31
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJSG4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 02:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S229606AbiJSG4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 02:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJSG4h (ORCPT
+        with ESMTP id S229490AbiJSGz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:56:37 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACBB74E00;
-        Tue, 18 Oct 2022 23:56:36 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MshF607dCz9xrq3;
-        Wed, 19 Oct 2022 14:50:18 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAnrgR5n09jwF4JAA--.26227S2;
-        Wed, 19 Oct 2022 07:56:04 +0100 (CET)
-Message-ID: <00bf4f189e4ec3b98130451f40e77ead8f28179e.camel@huaweicloud.com>
-Subject: Re: [PATCH 4/9] ima: Move ima_file_free() into LSM
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Petr Vorel <pvorel@suse.cz>,
-        Jonathan McDowell <noodles@fb.com>,
-        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Wed, 19 Oct 2022 08:55:49 +0200
-In-Reply-To: <202210181126.E58AB4A0F@keescook>
-References: <20221013222702.never.990-kees@kernel.org>
-         <20221013223654.659758-4-keescook@chromium.org>
-         <20221018150213.7n4sv7rtsh6lshd5@wittgenstein>
-         <1b41c633bbd31b82b02fdbae718f2f11ac862181.camel@huaweicloud.com>
-         <202210181126.E58AB4A0F@keescook>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 19 Oct 2022 02:55:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E27774CD8;
+        Tue, 18 Oct 2022 23:55:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12F9261770;
+        Wed, 19 Oct 2022 06:55:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FAFC433D6;
+        Wed, 19 Oct 2022 06:55:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666162558;
+        bh=60gEc3RgEwOlMqkL2MQmnLX+69yH4/JmuY0w5uGeb2s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IHnFJTia4HWiYFoYeyMCXsdfR9ZTil/XnvHMZR6opKb/xENge1mcrLXB+BW+8I5zY
+         ucZZh5k4lgS5kwFVPKasvtGjUB0EUioQ6Ew/zoMeXyt0YEhlsi7J2TkNzt1x6tTqbS
+         to0lakJx/A3cacNQz1ZYy8bEIsBJ0caGCH83Y2Xc=
+Date:   Wed, 19 Oct 2022 08:55:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     stable@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        ville.syrjala@linux.intel.com
+Subject: Re: v5.19 & v6.0 stable backport request
+Message-ID: <Y0+fex0i0vmBL6QX@kroah.com>
+References: <87k04xiedr.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAnrgR5n09jwF4JAA--.26227S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr4ktw48CFyDGr13Aw1DWrg_yoWfXFb_GF
-        WjyrZ2yFn8JF1kKanavFW3Gr4DWrWUXr4Yvw4fJrnxZw4Svw47XFs7CF93C3WrJw4av3Zx
-        Ja4avayxta17tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4RlmgAAsF
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k04xiedr.fsf@intel.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-18 at 11:29 -0700, Kees Cook wrote:
-> On Tue, Oct 18, 2022 at 05:32:40PM +0200, Roberto Sassu wrote:
-> > I also did this work before. In my implementation, I created a new
-> > security hook called security_file_pre_free().
-> > 
-> > https://github.com/robertosassu/linux/commit/692c9d36fff865435b23b3cb765d31f3584f6263
-> > 
-> > If useful, the whole patch set is available at:
-> > 
-> > https://github.com/robertosassu/linux/commits/ima-evm-lsm-v1-devel-v3
+On Tue, Oct 18, 2022 at 02:02:08PM +0300, Jani Nikula wrote:
 > 
-> Ah, lovely! Can you pick this back up and run with it? I mainly did
-> these a proof-of-concept, but it looks like you got further.
+> Hello stable team, please backport these two commits to stable kernels
+> v5.19 and v6.0:
+> 
+> 4e78d6023c15 ("drm/i915/bios: Validate fp_timing terminator presence")
 
-It was some time ago. If I remember correctly, I got to the point of
-running IMA/EVM and passing basic tests.
+Does not apply to 5.19.y, can you provide a working backport?
 
-Will take a look at your patches and comments, and integrate in mines
-if something is missing.
+> d3a7051841f0 ("drm/i915/bios: Use hardcoded fp_timing size for generating LFP data pointers")
 
-Will also send again the prerequisite patch set.
+Queued up to both trees now, thanks.
 
-Roberto
-
+greg k-h
