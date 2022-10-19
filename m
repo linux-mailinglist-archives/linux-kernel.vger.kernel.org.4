@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A183F6052B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE646052BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiJSWC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S231277AbiJSWDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiJSWCz (ORCPT
+        with ESMTP id S230407AbiJSWC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 18:02:55 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C761BFBBA;
-        Wed, 19 Oct 2022 15:02:54 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id f11so31305207wrm.6;
-        Wed, 19 Oct 2022 15:02:54 -0700 (PDT)
+        Wed, 19 Oct 2022 18:02:56 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25811C070C;
+        Wed, 19 Oct 2022 15:02:55 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id a10so31238383wrm.12;
+        Wed, 19 Oct 2022 15:02:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+tnzQJseoXg0993O/jYRru0Ddht5bYo8gE2zFXRgP2o=;
-        b=ePupxn0zNCvRCwps62nYVtsb1ZuBj23fKYYGb68vZHgB3Rh99LYV4+IAj6cfZWtnmb
-         Nhr8l3KQ1qj/nzsP/yU4yLNY8NK6KJztGk+XJ/Y0jAB9n1xDfWvC6rT4Ii4cUomKsdBg
-         fl7NUQl/PiRLnCSmbmDp+URxNESLdS1c+WtKz6toPomXjGN21RUfJ79durQiClsZqVih
-         7EoENcTji7lEVPZHYQYGVvFGsRY46psYoTaq0kSkiv0oL88TM+vKVJ5IuYLOUUVLiHda
-         EEH1Z3uaK8RM89b0qe/36Ddgk+f6RhhlJYlObN8sjrUqCw1Hmn2CwghMaVVhhJqAw3Vf
-         lF2Q==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B4ByX62YZWChJEBHwNEyVc7wloAEex/KgboUXCgns/4=;
+        b=fcGJm0SlCv/zmDdoORjXR/SjVNJg+QqIt2rjQRI36J3QIcsVn3zmcFPVQG9vIwJKOo
+         5n9H/NmLOIjP+NQT7B1A7jsETZUHQGKWM97GWjEkdQCScel6QpS734kDfFz6eIIr0oQT
+         nwni3s7WtSzlNrAXDLCG6CPg3Jllu6c3weRZgfD7ueWR3nmEm7/1YAelvBSZn7NEF60J
+         EWc7BbcjgwW0CEQUs8GhDULskcBCdqYrDfGCeisqDagQuWY6JWrC7YLM+fKR7sIyw+/t
+         t/aDj2Oe9ZHTbPNvrujLWP69Ty7/xDrbIV2vu5wmvNzCeyuZGneTr77Z2TFFyEbfjIRa
+         sk0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+tnzQJseoXg0993O/jYRru0Ddht5bYo8gE2zFXRgP2o=;
-        b=fdsvQdCUyfATyv5WtJSmIYFl4kQpuokScNYMLffUHnjGAUj7FW2X8GFQoZqx4RmmL0
-         ymgsXexPqhPsOA9kEbPbkqNlJNYm6OunzQtObORytiN8ztvB3lBmGmldywYe/ZHtNQjr
-         j3yWnjgaXmhougSOPKUvsHqlzO2wGTbDk2WFitteCd8YxQxAXMwikDZ0PzicjAWTTGWj
-         gkoXtOgFmGb9CNhu+abRqj5KzIiIBoPOQw62T6jNVaGcoKOlUy/Gm1iFZJS3XWNbztk/
-         qPJDQvN36gks3gqDxVXZ4D10LFE/lyR6C1IF3H0xQ4FSX2L8J0/X4bO8ro7Y00E3fydh
-         Hwvw==
-X-Gm-Message-State: ACrzQf2Z8l6q7H3vOKZCgJJSkKQdm8IPMrQ09uLOpwHtwK9FkYrq9GAR
-        V6TT6D43rLmXn8bewizhewY=
-X-Google-Smtp-Source: AMsMyM5b3L8ebsxgMLETpnWx2040/FzLzVBU782drufE0IhUyvBoI3BIcRp4Zcp8QIlNWRRAUCzSKw==
-X-Received: by 2002:a5d:4c44:0:b0:22e:3503:41bf with SMTP id n4-20020a5d4c44000000b0022e350341bfmr6690210wrt.0.1666216972763;
-        Wed, 19 Oct 2022 15:02:52 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B4ByX62YZWChJEBHwNEyVc7wloAEex/KgboUXCgns/4=;
+        b=K4lIxXy05I31OtvDfk/vZbTTX+e+K1qqlnYtUFsm2iAIZ8VZ3HMwoxwj+fHgoUskKb
+         Oab2jUfMKaDpMEHz2pAzVs9ioG4Ndek1IDi5aQXAIdd31Qz5OJ8NARyYRVsR7ovGsECp
+         pM511WgQUyRYeoPbY723POEjxeHqZjd8TvmKXbWtWwoStOFCcZH8e5fUsUUHSS89wngi
+         wI/DlFy/3zmaxoyYPqZhxTBRvr+n6cUAnw0e2kaTIfag0XdDMM1LqiuuwzdaqiqTHDFe
+         JzPX9HK4/xbatZ4CrGJCPZY7qpHWtja4KMYLQ3rP4dgOwFaa/K0vjMkwQ/mANl8MVxfA
+         iXzw==
+X-Gm-Message-State: ACrzQf14trV/qPD/3jJ12dumaycCSByc1NkG66MbB6kn4CNYFDqU9Wki
+        r9dRvs2We+uClZfTZC9ke8A=
+X-Google-Smtp-Source: AMsMyM7H0xfupJjA0rDClRUKorcCcZKuv9n3UFUL1z0/NcheMBZL2O7vxPnISPlH8V2JaSUxZwfemQ==
+X-Received: by 2002:a5d:530b:0:b0:22e:3e8c:45aa with SMTP id e11-20020a5d530b000000b0022e3e8c45aamr6834926wrv.321.1666216974149;
+        Wed, 19 Oct 2022 15:02:54 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:d8c7:b527:b960:aa04])
-        by smtp.gmail.com with ESMTPSA id m7-20020a5d6247000000b0022c906ffedasm14807824wrv.70.2022.10.19.15.02.51
+        by smtp.gmail.com with ESMTPSA id m7-20020a5d6247000000b0022c906ffedasm14807824wrv.70.2022.10.19.15.02.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 15:02:52 -0700 (PDT)
+        Wed, 19 Oct 2022 15:02:53 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
@@ -71,10 +72,12 @@ Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [RFC PATCH v3 0/2] AX45MP: Add support to non-coherent DMA
-Date:   Wed, 19 Oct 2022 23:02:40 +0100
-Message-Id: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [RFC PATCH v3 1/2] dt-bindings: cache: r9a07g043f-l2-cache: Add DT binding documentation for L2 cache controller
+Date:   Wed, 19 Oct 2022 23:02:41 +0100
+Message-Id: <20221019220242.4746-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,138 +92,195 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Hi All,
+Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
 
-On the Andes AX45MP core, cache coherency is a specification option so it
-may not be supported. In this case DMA will fail. To get around with this
-issue this patch series does the below:
+The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+describes the L2 cache block.
 
-1] Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
-block that allows dynamic adjustment of memory attributes in the runtime.
-It contains a configurable amount of PMA entries implemented as CSR
-registers to control the attributes of memory locations in interest. PMA
-regions are passed from the l2 node which are configured as
-non-cacheable + bufferable with the SBI call.
-
-        l2cache: cache-controller@13400000 {
-                ....
-                andestech,pma-regions = <0x0 0x58000000 0x0 0x08000000 0x0
-                                         (AX45MP_PMACFG_ETYP_NAPOT |
-                                          AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF)>;
-                ....
-        };
-
-2] We provide callbacks to synchronize specific content between memory and
-cache.
-
-        - arch_sync_dma_for_device()
-        - arch_sync_dma_for_cpu()
-
-Below are the configs that are enabled:
-
-        - DMA_GLOBAL_POOL
-        - RISCV_DMA_NONCOHERENT
-
-3] We reserve the shared DMA pool, so the DMA memory requests go through
-   this pool:
-
-        reserved-memory {
-                #address-cells = <2>;
-                #size-cells = <2>;
-                ranges;
-
-                reserved: linux,cma@58000000 {
-                        compatible = "shared-dma-pool";
-                        no-map;
-                        linux,dma-default;
-                        reg = <0x0 0x58000000 0x0 0x08000000>;
-                };
-        };
-
-
-Below is the L2 cache DT node:
-
-        l2cache: cache-controller@13400000 {
-                compatible = "andestech,ax45mp-cache", "cache";
-                cache-size = <0x40000>;
-                cache-line-size = <64>;
-                cache-sets = <1024>;
-                cache-unified;
-                reg = <0x0 0x13400000 0x0 0x100000>;
-                andestech,pma-regions = <0x0 0x58000000 0x0 0x08000000 0x0
-                                         (AX45MP_PMACFG_ETYP_NAPOT |
-                                          AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF)>;
-                andestech,inst-prefetch = <0x3>;
-                andestech,data-prefetch = <0x3>;
-                andestech,tag-ram-ctl = /bits/ 8 <0x1 0x0>;
-                andestech,data-ram-ctl = /bits/ 8 <0x1 0x0>;
-                interrupts = <SOC_PERIPHERAL_IRQ(476, IRQ_TYPE_LEVEL_HIGH)>;
-        };
-
-Due to the above approach custom SBI calls have been implemented. The
-above implementation is in preparation for adding support for Renesas
-RZ/Five SoC which uses the AX45MP core. As with the above approach the
-kernel image might not be generic so that it can be used on other
-platforms, so sending it as an RFC (without DT binding patches).
-
-OpenSBI implementation isn't upstreamed yet, public repo for access is
-available at [0].
-
-[0] https://github.com/renesas-rz/rz_opensbi/tree/work/OpenSBI-PMA
-
-RFC v2-> RFC v3
-* Fixed review comments pointed by Conor
-* Move DT binding into cache folder
-* Fixed DT binding check issue
-* Added andestech,ax45mp-cache.h header file
-* Now passing the flags for the PMA setup as part of andestech,pma-regions
-  property.
-* Added andestech,inst/data-prefetch and andestech,tag/data-ram-ctl
-  properties to configure the L2 cache.
-* Registered the cache driver as platform driver
-
-RFC v1-> RFC v2
-* Moved out the code from arc/riscv to drivers/soc/renesas
-* Now handling the PMA setup as part of the L2 cache
-* Now making use of dma-noncoherent.c instead SoC specific implementation.
-* Dropped arch_dma_alloc() and arch_dma_free()
-* Switched to RISCV_DMA_NONCOHERENT
-* Included DT binding doc
-
-RFC v2: https://patchwork.kernel.org/project/linux-renesas-soc/cover/20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-RFC v1: https://patchwork.kernel.org/project/linux-renesas-soc/cover/20220906102154.32526-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-Sending this as an RFC as CONFIG_ERRATA_THEAD_CMO/CONFIG_AX45MP_L2_CACHE
-is used for determining the CMO to call it would better if we could do
-this runtime instead.
-
-Cheers,
-Prabhakar
-
-Lad Prabhakar (2):
-  dt-bindings: cache: r9a07g043f-l2-cache: Add DT binding documentation
-    for L2 cache controller
-  soc: renesas: Add L2 cache management for RZ/Five SoC
-
- .../cache/andestech,ax45mp-cache.yaml         | 125 +++++
- arch/riscv/include/asm/cacheflush.h           |   8 +
- arch/riscv/include/asm/errata_list.h          |   2 +
- arch/riscv/mm/dma-noncoherent.c               |  20 +
- drivers/soc/renesas/Kconfig                   |   5 +
- drivers/soc/renesas/Makefile                  |   4 +
- drivers/soc/renesas/rzf/Kconfig               |   6 +
- drivers/soc/renesas/rzf/Makefile              |   3 +
- drivers/soc/renesas/rzf/ax45mp_cache.c        | 431 ++++++++++++++++++
- drivers/soc/renesas/rzf/ax45mp_sbi.h          |  29 ++
- .../cache/andestech,ax45mp-cache.h            |  38 ++
- 11 files changed, 671 insertions(+)
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ .../cache/andestech,ax45mp-cache.yaml         | 125 ++++++++++++++++++
+ .../cache/andestech,ax45mp-cache.h            |  38 ++++++
+ 2 files changed, 163 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
- create mode 100644 drivers/soc/renesas/rzf/Kconfig
- create mode 100644 drivers/soc/renesas/rzf/Makefile
- create mode 100644 drivers/soc/renesas/rzf/ax45mp_cache.c
- create mode 100644 drivers/soc/renesas/rzf/ax45mp_sbi.h
  create mode 100644 include/dt-bindings/cache/andestech,ax45mp-cache.h
 
+diff --git a/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+new file mode 100644
+index 000000000000..4c86a15bda5f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+@@ -0,0 +1,125 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) 2022 Renesas Electronics Corp.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/cache/andestech,ax45mp-cache.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Andestech AX45MP L2 Cache Controller
++
++maintainers:
++  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
++
++description:
++  A level-2 cache (L2C) is used to improve the system performance by providing
++  a larger amount of cache line entries and reasonable access delays. The L2C
++  is shared between cores, and a non-inclusive non-exclusive policy is used.
++
++select:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - andestech,ax45mp-cache
++
++  required:
++    - compatible
++
++properties:
++  compatible:
++    items:
++      - const: andestech,ax45mp-cache
++      - const: cache
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  cache-line-size:
++    const: 64
++
++  cache-level:
++    const: 2
++
++  cache-sets:
++    const: 1024
++
++  cache-size:
++    enum: [131072, 262144, 524288, 1048576, 2097152]
++
++  cache-unified: true
++
++  next-level-cache: true
++
++  andestech,pma-regions:
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    minItems: 1
++    maxItems: 16
++    description: Optional array of memory regions to be set as non-cacheable
++                 bufferable regions which will be setup in the PMA.
++
++  andestech,inst-prefetch:
++    description: Instruction prefetch depth
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [ 0, 1, 2, 3 ]
++
++  andestech,data-prefetch:
++    description: Data prefetch depth
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [ 0, 1, 2, 3 ]
++
++  andestech,tag-ram-ctl:
++    description: Tag RAM output cycle. First tuple indicates output cycle and the
++      second tuple indicates setup cycle.
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    items:
++      - minimum: 0
++        maximum: 2
++      - minimum: 0
++        maximum: 2
++
++  andestech,data-ram-ctl:
++    description: Data RAM output cycle. First tuple indicates output cycle and the
++      second tuple indicates setup cycle.
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    items:
++      - minimum: 0
++        maximum: 2
++      - minimum: 0
++        maximum: 2
++
++additionalProperties: false
++
++required:
++  - compatible
++  - cache-line-size
++  - cache-level
++  - cache-sets
++  - cache-size
++  - cache-unified
++  - interrupts
++  - reg
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/cache/andestech,ax45mp-cache.h>
++
++    cache-controller@2010000 {
++        reg = <0x13400000 0x100000>;
++        compatible = "andestech,ax45mp-cache", "cache";
++        interrupts = <508 IRQ_TYPE_LEVEL_HIGH>;
++        cache-line-size = <64>;
++        cache-level = <2>;
++        cache-sets = <1024>;
++        cache-size = <262144>;
++        cache-unified;
++        andestech,pma-regions = <0x58000000 0x08000000
++                                 (AX45MP_PMACFG_ETYP_NAPOT | AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF)>;
++        andestech,inst-prefetch = <0x3>;
++        andestech,data-prefetch = <0x3>;
++        andestech,tag-ram-ctl = /bits/ 8 <0x1 0x0>;
++        andestech,data-ram-ctl = /bits/ 8 <0x1 0x0>;
++    };
+diff --git a/include/dt-bindings/cache/andestech,ax45mp-cache.h b/include/dt-bindings/cache/andestech,ax45mp-cache.h
+new file mode 100644
+index 000000000000..aa1cad24075d
+--- /dev/null
++++ b/include/dt-bindings/cache/andestech,ax45mp-cache.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * This header provides constants for Andes AX45MP PMA configuration
++ *
++ * Copyright (C) 2022 Renesas Electronics Corp.
++ */
++
++#ifndef __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
++#define __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
++
++/* OFF: PMA entry is disabled */
++#define AX45MP_PMACFG_ETYP_DISABLED			0
++/* Naturally aligned power of 2 region */
++#define AX45MP_PMACFG_ETYP_NAPOT			3
++
++/* Device, Non-bufferable */
++#define AX45MP_PMACFG_MTYP_DEV_NON_BUF			(0 << 2)
++/* Device, bufferable */
++#define AX45MP_PMACFG_MTYP_DEV_BUF			(1 << 2)
++/* Memory, Non-cacheable, Non-bufferable */
++#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_NON_BUF	(2 << 2)
++/* Memory, Non-cacheable, Bufferable */
++#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF		(3 << 2)
++/* Memory, Write-back, No-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_NA			(8 << 2)
++/* Memory, Write-back, Read-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_RA			(9 << 2)
++/* Memory, Write-back, Write-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_WA			(10 << 2)
++/* Memory, Write-back, Read and Write-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_R_WA			(11 << 2)
++
++/* AMO instructions are supported */
++#define AX45MP_PMACFG_NAMO_AMO_SUPPORT			(0 << 6)
++/* AMO instructions are not supported */
++#define AX45MP_PMACFG_NAMO_AMO_NO_SUPPORT		(1 << 6)
++
++#endif /* __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H */
 -- 
 2.25.1
 
