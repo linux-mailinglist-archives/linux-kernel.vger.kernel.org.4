@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7921A604CBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D9D604CC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJSQG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S232211AbiJSQGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiJSQFv (ORCPT
+        with ESMTP id S231994AbiJSQGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:05:51 -0400
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 495CBC2CA1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:04:40 -0700 (PDT)
-Received: from localhost.localdomain ([146.241.87.206])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id lBYBoox5FSmRKlBYCoDstr; Wed, 19 Oct 2022 18:04:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1666195453; bh=GOiiI3+8vXjlQ7VXBWeCNN1srDCedk1v4RecNZAv7pg=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=jTRQ/WLvghaA9QEMvIRdKd+hiS4Qa6RO6qs8uiyvxaGqYZxRtJkUZex89uzrTdBK5
-         hMIMwjMtj6C0TMIgeOFvx0oB8nE5OgaiOfqW/8vmtMiOIue9sf5E6aczbWtkiYPLfP
-         gfG7CmUVm/3pJqwsGxjeQMr3Wla7HXTPqRAMV1E7WbKGIZVzDhtqj0tEK4NrbuSljr
-         F5+rHChwbe6lfsDoZCFwawO3Wbcj2ExS7b5QY2iQAvZXw5KBM6Se0Rl2bGfzRmNTk1
-         5lrpiSgdAk0ITe6oDBZhdb3qNqj8JG9CPaRYX7U5MYHrbGFuJSPKTa4rRYN1D2QgLm
-         U6YGyGJACGTIA==
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-To:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Song Liu <song@kernel.org>,
-        =?UTF-8?q?Dirk=20M=C3=BCller?= <dmueller@suse.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH] lib/raid6: drop RAID6_USE_EMPTY_ZERO_PAGE
-Date:   Wed, 19 Oct 2022 18:04:07 +0200
-Message-Id: <20221019160407.7550-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y0/Yt4uJWg4knNoc@infradead.org>
-References: <Y0/Yt4uJWg4knNoc@infradead.org>
+        Wed, 19 Oct 2022 12:06:31 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084E5150F8C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:05:09 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id r22so22767851ljn.10
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2YCDHsYWcIY96mUtSqodHKe31qpMLaWDuKz478pSr00=;
+        b=KHhsVmAmNGZintp/YIDAd4pSn0E5e4hSFuGvoY3fG+1VV7PhE59oWENJD8FG30TEEr
+         0ilGqC28Ik/psjVonwjvg6NUDSasG8ZN0rYkQepcXQrRdA1IfXqweE6Oc9Z7ZlD2s4WS
+         XNZUohjsBfohMb9ulzAdIq+6ukXKwPMby4m5bpGY43zRnf7RSCvK3lrX4U3Gcj+2I2bw
+         V+heCQ3Huv6aFh6iRdVogsawozkdU0dKgJh9KhUgVsoLAr5P0oO7CzHtUiMS8aT7NDmR
+         5GSfkUadveG1N/RNPalqsJPUwO9rI4cetSRu7q+suD6YvwYLCPSRdlxEjkmEda/Tl2ZG
+         IRBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2YCDHsYWcIY96mUtSqodHKe31qpMLaWDuKz478pSr00=;
+        b=yFPMT4AoPw04EW1NX6VY8K3Yn+uzHHBaJivms9TVjJ4CTQL6HfeyK2BULtcJihnrUQ
+         k81hQL1ofdUxbD+WSGmEogHSRSPMVXi1yweU2g7pbGsmq6I/CoY7GjWwVx+dfVuSSSmH
+         lQyZ8I1jdnDd0shF5VPJ8pGrXSJDBFgw92Kmct7rV8Lf6WnOvlP1l9QOoAZTiUgxQN+W
+         48wKgqk5VJXbEBueeQdynXjuT84ETMNQPR/7YfstE8FLPNi9SUFCaisOClfWGIdkYeu/
+         0ET3o1dhOCsMHXR2Pl9kWjmlLHPtDQGSYriCUu+xM3TQiuSb2hdVZ+GLZpUWct4doYzU
+         D2+w==
+X-Gm-Message-State: ACrzQf3R3wsGcW0lYMwN/ODiNP3osSp2yiMUoJBIAWYz/3soIptwwkdC
+        UIMPs+t3+hO/0ujLSnoyCqSyq0YRNnJhug==
+X-Google-Smtp-Source: AMsMyM6fO5UYQBYujCKvc6CqltqY94UNh41cSyMFXrGhpAbyftVmOEivr9+vv8IHfUrxjlCqIyuwKA==
+X-Received: by 2002:a05:651c:88e:b0:26d:dd92:73e7 with SMTP id d14-20020a05651c088e00b0026ddd9273e7mr3094859ljq.503.1666195507195;
+        Wed, 19 Oct 2022 09:05:07 -0700 (PDT)
+Received: from elroy-temp-vm ([20.240.130.248])
+        by smtp.gmail.com with ESMTPSA id g3-20020a056512118300b0049876c1bb24sm2337411lfr.225.2022.10.19.09.05.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 09:05:06 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 16:05:06 +0000
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     greg@kroah.com, forest@alittletooquiet.net,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: [PATCH] staging: vt6655: Fix Lines should not end with a '('
+Message-ID: <Y1AgMjTsmy3C5qcK@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfAG43ZSehpx2rzMtQ4WywAEY4w2w7pXjnboijBNvBg2L2b5faGjDfm7J/rWud9TgVdySsulvWquaGuvW9ztb2o5BitM3DsE/uaGn+77CpdMIhUgLmgbm
- wG878r2326b18l0Ht3VRVev/Tod4w+s3XZhcx8Sb6ChaoD5KVTaKzTO635Jz2xFiGXDMwdTAyB3zcYrDs5OZ9nVMYmfA5R8abLEE0NUMvzzKWLvy3luA/gLu
- 1NqtznKBoeA0lDf50Vd/8Fx6aZdOs+g9EzwTMW6HFUr92PwAuMrSryqt8aiguWvufsVo9+nfxyqJsE6KxLcfT244CWi3ewNHIPfNF14iLTjbb5JiRZ09PRtX
- NXiInngJqqehS9OizZGFF1nXpSy8xSvD6GqTfU9JzsDdZPttRGxYjiBsHz6cMR5S8iFYEtp4+bhneaz0I2s0zZ4J4Wkaow==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RAID6_USE_EMPTY_ZERO_PAGE is unused and hardcoded to 0, so let's drop it.
+Code style warnings reported by checkpatch.
+Improve the layout of a function header:
+Put the first parameter immediately after the '(' and align the other
+parameters underneath it.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 ---
- include/linux/raid/pq.h | 8 --------
- lib/raid6/algos.c       | 2 --
- 2 files changed, 10 deletions(-)
+ drivers/staging/vt6655/rxtx.c | 44 ++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 24 deletions(-)
 
-diff --git a/include/linux/raid/pq.h b/include/linux/raid/pq.h
-index d6e5a1feb947..f29aaaf2eb21 100644
---- a/include/linux/raid/pq.h
-+++ b/include/linux/raid/pq.h
-@@ -10,17 +10,9 @@
+diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+index 5bdb5176772c..ff855def0bd5 100644
+--- a/drivers/staging/vt6655/rxtx.c
++++ b/drivers/staging/vt6655/rxtx.c
+@@ -87,33 +87,29 @@ static const unsigned short wFB_Opt1[2][5] = {
+ /*---------------------  Static Functions  --------------------------*/
+ static
+ void
+-s_vFillRTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pvRTS,
+-	unsigned int	cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	struct ieee80211_hdr *hdr,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-);
++s_vFillRTSHead(struct vnt_private *pDevice,
++		unsigned char byPktType,
++		void *pvRTS,
++		unsigned int	cbFrameLength,
++		bool bNeedAck,
++		bool bDisCRC,
++		struct ieee80211_hdr *hdr,
++		unsigned short wCurrentRate,
++		unsigned char byFBOption);
  
- #ifdef __KERNEL__
+ static
+ void
+-s_vGenerateTxParameter(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	struct vnt_tx_fifo_head *,
+-	void *pvRrvTime,
+-	void *pvRTS,
+-	void *pvCTS,
+-	unsigned int	cbFrameSize,
+-	bool bNeedACK,
+-	unsigned int	uDMAIdx,
+-	void *psEthHeader,
+-	unsigned short wCurrentRate
+-);
++s_vGenerateTxParameter(struct vnt_private *pDevice,
++		unsigned char byPktType,
++		struct vnt_tx_fifo_head *,
++		void *pvRrvTime,
++		void *pvRTS,
++		void *pvCTS,
++		unsigned int	cbFrameSize,
++		bool bNeedACK,
++		unsigned int	uDMAIdx,
++		void *psEthHeader,
++		unsigned short wCurrentRate);
  
--/* Set to 1 to use kernel-wide empty_zero_page */
--#define RAID6_USE_EMPTY_ZERO_PAGE 0
- #include <linux/blkdev.h>
- 
--/* We need a pre-zeroed page... if we don't want to use the kernel-provided
--   one define it here */
--#if RAID6_USE_EMPTY_ZERO_PAGE
--# define raid6_empty_zero_page empty_zero_page
--#else
- extern const char raid6_empty_zero_page[PAGE_SIZE];
--#endif
- 
- #else /* ! __KERNEL__ */
- /* Used for testing in user space */
-diff --git a/lib/raid6/algos.c b/lib/raid6/algos.c
-index 39b74221f4a7..a22a05c9af8a 100644
---- a/lib/raid6/algos.c
-+++ b/lib/raid6/algos.c
-@@ -18,12 +18,10 @@
- #else
- #include <linux/module.h>
- #include <linux/gfp.h>
--#if !RAID6_USE_EMPTY_ZERO_PAGE
- /* In .bss so it's zeroed */
- const char raid6_empty_zero_page[PAGE_SIZE] __attribute__((aligned(256)));
- EXPORT_SYMBOL(raid6_empty_zero_page);
- #endif
--#endif
- 
- struct raid6_calls raid6_call;
- EXPORT_SYMBOL_GPL(raid6_call);
+ static unsigned int
+ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
 -- 
 2.34.1
 
