@@ -2,95 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FBF604AF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41524604AF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiJSPNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        id S232222AbiJSPPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiJSPNL (ORCPT
+        with ESMTP id S233050AbiJSPO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:13:11 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFD1BC1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:05:40 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id r22so22537750ljn.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:05:40 -0700 (PDT)
+        Wed, 19 Oct 2022 11:14:57 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C711C812C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:07:54 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id y20so7371630uao.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:07:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GQN3xPWEz80R9HLK7JV5q12hLSAfmmt3AkrUC4EVJho=;
-        b=ZtzKb9bf0kl/pILB/MreCGWs3HY3xz/J5znIIt+ih1I+DS9Baz4ZCKTyXqVnYQOAS+
-         V6QVBNa/A5tGi+XgQ3wQ/nMzWhSb4oPpDy5DVP/oTOR1D99/6mXkdRjTjPGkgyFCVd/k
-         MeCz2GQlahKw0B4SPorBsy6aaMo1Y8vetsa5D14CxosC/gFGr1U7i/O2pf1WWTzAYw+t
-         ISKJm3BRcC3fYJeGm6J60yWx9ZOpYS1Z+ehehirudx28YZ914nLWPcDEakMmtkEMsxra
-         1zFnLTP6AZbcwQ6m5YMxlfTE2slt6esDIpPTrJAG7863klJALjIVm0v020eIkoRGYSkV
-         O4Ew==
+        bh=EA/X3XCsPZogje4ZqteiRzB/2MJTap3610f/+jO3p0Y=;
+        b=la/8UQgxE0wKVVZ7S3BDbi4Y5FkVWJW5LyRO2wstPIuLC42hwDf/wOK9EgRPpEpbWn
+         OwNrwB/zaSpHfi2NAWY9Ru5yrpbSKGyGwgLXvN4IXvSlriw8YRF5mZsWbXDFg1UnaNod
+         jbM97olMcuGgayYiZDhIxf2J47em63cbNQJPdHzVhdPKbrz/QcLbUYgr9WTwuCrFpru3
+         Y43f2+9qkL4pdQlNZ10g1vIWSIop9usmknc2/CtBYMgGeZSqzkzkD65sYhP8noYm/g+h
+         kdLIxLzEYQeUx7Ma1ZGO2heoEfOZ1MJYvBh+0Bi2+3yaoasEQ6ihNXq9KUUx1xzG5dPU
+         /SSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GQN3xPWEz80R9HLK7JV5q12hLSAfmmt3AkrUC4EVJho=;
-        b=XoDBXM6UL2JQdgbKt6fj8peZVo0qbTHJ9xnXHmkFQY7APksqaQIO8JVZSthoAdvtzJ
-         yCu9VIO02FY4EQALQMVHneyTrR8GCgmBi5UjqQEa9goIn3e1e6GlN0X30A6LoAhA+Q4L
-         rXKVu3oZR+VcqSMWzQcLCL3xoWmWu6mqb7DtJEnZih50/zzNyg3fPZ/lHv9oFOFLjJ4r
-         TkYhiFF1Z8SqXA2dbaxwR2XYx2FXWaIjuYZB3FF+mF7OlucYjSHWtFR0k15kie9gxSC6
-         fMzzJXRWaKEOjhx6EvgCK7ZUuVf44yWmeuR8kpHbSuIol5hZ4rOvZ0cMQZAX5/SwuVR7
-         FbUw==
-X-Gm-Message-State: ACrzQf1ATVjHfb4Z/W8ExutaL4qSDZIufoaDXwVYtCqQ7LZaj/zTzulF
-        UhAgmw8vJ0jwLyl5DJloIpCmDF7h3vbAernMvyzM0Q==
-X-Google-Smtp-Source: AMsMyM7zEJ7a72P/c6HXyJCsWM2MpEG2w4gRuPgsLcWOhRdb89OcuooXjcuMFVvo+b/FWTUfd+LFgMAfBmxdQhZD75M=
-X-Received: by 2002:a2e:bd12:0:b0:264:7373:3668 with SMTP id
- n18-20020a2ebd12000000b0026473733668mr2834642ljq.18.1666191934004; Wed, 19
- Oct 2022 08:05:34 -0700 (PDT)
+        bh=EA/X3XCsPZogje4ZqteiRzB/2MJTap3610f/+jO3p0Y=;
+        b=eHTH2ZonhN1LgS7sP5wv/Nb8mkRapH0Nul1ignrCPxu4nlnRGuTFTqe19UaOynBDaE
+         B2up/a67TRrEVziEvBry/LyVLmiOGNaH8WHJxwf++Y5YyksHUXiwBKjv9tWex3bMknfq
+         Fif3NJSQaVt/qKyCvqF9lc9P9w63AOxhx/khGl6fAcHaBvw+wnGO2B04WQa7dx2NC94e
+         fm7/5O/xS4lL2GNl00UEZYuEDP5zwX7xTJHYO5WKDx/lYXbYEtDe2JgNhSUJTLi4hGz/
+         q7nix3pG8IQbis6ZUeeRN3uWn/Gm2G9SioH4Ai8A+5tma/waTQarmndmxis0Gi4SZ8YH
+         LMHw==
+X-Gm-Message-State: ACrzQf085hooGw54zwBSD0ZtGs6l45Wnq7O4MvLlxBd8/GvjZqUHSguA
+        v7v+CIETEdH4bjJagW3fDxLoA/k4ymLQ4i9719h4xg==
+X-Google-Smtp-Source: AMsMyM76OQe3S8cwnAvt4Cbdk32ddxVZeEtldri65X72U1svVcdayCy1VfgBBMiUs3nSs8jJKVF6gHmB38/HSAoXq2U=
+X-Received: by 2002:ab0:7412:0:b0:3d1:c2f7:3250 with SMTP id
+ r18-20020ab07412000000b003d1c2f73250mr4374614uap.21.1666191975065; Wed, 19
+ Oct 2022 08:06:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
- <Yyi+l3+p9lbBAC4M@google.com> <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
- <20220926142330.GC2658254@chaop.bj.intel.com> <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
- <YzN9gYn1uwHopthW@google.com> <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
- <Y030bGhh0mvGS6E1@google.com>
-In-Reply-To: <Y030bGhh0mvGS6E1@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Wed, 19 Oct 2022 16:04:57 +0100
-Message-ID: <CA+EHjTwrTe1-ryt0sYx7360qeYmifEQqUa-_T=25eb4s6F0JPw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
+References: <20221019085747.3810920-1-davidgow@google.com> <CA+fCnZdPwjThjY7fd7vBkMzS1eFXySR2AKrDK8weJ3p25fzS3g@mail.gmail.com>
+In-Reply-To: <CA+fCnZdPwjThjY7fd7vBkMzS1eFXySR2AKrDK8weJ3p25fzS3g@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 19 Oct 2022 23:06:03 +0800
+Message-ID: <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com>
+Subject: Re: [PATCH] kasan: Enable KUnit integration whenever CONFIG_KUNIT is enabled
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d2078a05eb648cd3"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -102,95 +77,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--000000000000d2078a05eb648cd3
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 18, 2022 at 1:34 AM Sean Christopherson <seanjc@google.com> wrote:
+On Wed, Oct 19, 2022 at 10:18 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
 >
-> On Fri, Sep 30, 2022, Fuad Tabba wrote:
-> > > > > > pKVM would also need a way to make an fd accessible again
-> > > > > > when shared back, which I think isn't possible with this patch.
-> > > > >
-> > > > > But does pKVM really want to mmap/munmap a new region at the page-level,
-> > > > > that can cause VMA fragmentation if the conversion is frequent as I see.
-> > > > > Even with a KVM ioctl for mapping as mentioned below, I think there will
-> > > > > be the same issue.
-> > > >
-> > > > pKVM doesn't really need to unmap the memory. What is really important
-> > > > is that the memory is not GUP'able.
-> > >
-> > > Well, not entirely unguppable, just unguppable without a magic FOLL_* flag,
-> > > otherwise KVM wouldn't be able to get the PFN to map into guest memory.
-> > >
-> > > The problem is that gup() and "mapped" are tied together.  So yes, pKVM doesn't
-> > > strictly need to unmap memory _in the untrusted host_, but since mapped==guppable,
-> > > the end result is the same.
-> > >
-> > > Emphasis above because pKVM still needs unmap the memory _somehwere_.  IIUC, the
-> > > current approach is to do that only in the stage-2 page tables, i.e. only in the
-> > > context of the hypervisor.  Which is also the source of the gup() problems; the
-> > > untrusted kernel is blissfully unaware that the memory is inaccessible.
-> > >
-> > > Any approach that moves some of that information into the untrusted kernel so that
-> > > the kernel can protect itself will incur fragmentation in the VMAs.  Well, unless
-> > > all of guest memory becomes unguppable, but that's likely not a viable option.
+> On Wed, Oct 19, 2022 at 10:58 AM 'David Gow' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
 > >
-> > Actually, for pKVM, there is no need for the guest memory to be GUP'able at
-> > all if we use the new inaccessible_get_pfn().
+> > Enable the KASAN/KUnit integration even when the KASAN tests are
+> > disabled, as it's useful for testing other things under KASAN.
+> > Essentially, this reverts commit 49d9977ac909 ("kasan: check CONFIG_KASAN_KUNIT_TEST instead of CONFIG_KUNIT").
+> >
+> > To mitigate the performance impact slightly, add a likely() to the check
+> > for a currently running test.
+> >
+> > There's more we can do for performance if/when it becomes more of a
+> > problem, such as only enabling the "expect a KASAN failure" support wif
+> > the KASAN tests are enabled, or putting the whole thing behind a "kunit
+> > tests are running" static branch (which I do plan to do eventually).
+> >
+> > Fixes: 49d9977ac909 ("kasan: check CONFIG_KASAN_KUNIT_TEST instead of CONFIG_KUNIT")
+> > Signed-off-by: David Gow <davidgow@google.com>
+> > ---
+> >
+> > Basically, hiding the KASAN/KUnit integration broke being able to just
+> > pass --kconfig_add CONFIG_KASAN=y to kunit_tool to enable KASAN
+> > integration. We didn't notice this, because usually
+> > CONFIG_KUNIT_ALL_TESTS is enabled, which in turn enables
+> > CONFIG_KASAN_KUNIT_TEST. However, using a separate .kunitconfig might
+> > result in failures being missed.
+> >
+> > Take, for example:
+> > ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y \
+> >         --kunitconfig drivers/gpu/drm/tests
+> >
+> > This should run the drm tests with KASAN enabled, but even if there's a
+> > KASAN failure (such as the one fixed by [1]), kunit_tool will report
+> > success.
 >
-> Ya, I was referring to pKVM without UPM / inaccessible memory.
+> Hi David,
 >
-> Jumping back to blocking gup(), what about using the same tricks as secretmem to
-> block gup()?  E.g. compare vm_ops to block regular gup() and a_ops to block fast
-> gup() on struct page?  With a Kconfig that's selected by pKVM (which would also
-> need its own Kconfig), e.g. CONFIG_INACCESSIBLE_MAPPABLE_MEM, there would be zero
-> performance overhead for non-pKVM kernels, i.e. hooking gup() shouldn't be
-> controversial.
->
-> I suspect the fast gup() path could even be optimized to avoid the page_mapping()
-> lookup by adding a PG_inaccessible flag that's defined iff the TBD Kconfig is
-> selected.  I'm guessing pKVM isn't expected to be deployed on massivve NUMA systems
-> anytime soon, so there should be plenty of page flags to go around.
->
-> Blocking gup() instead of trying to play refcount games when converting back to
-> private would eliminate the need to put heavy restrictions on mapping, as the goal
-> of those were purely to simplify the KVM implementation, e.g. the "one mapping per
-> memslot" thing would go away entirely.
+> How does KUnit detect a KASAN failure for other tests than the KASAN
+> ones? I thought this was only implemented for KASAN tests. At least, I
+> don't see any code querying kunit_kasan_status outside of KASAN tests.
 
-My implementation of mmap for inaccessible_fops was setting VM_PFNMAP.
-That said, I realized that that might be adding an unnecessary
-restriction, and now have changed it to do it the secretmem way.
-That's straightforward and works well.
+Yeah, there aren't any other tests which set up a "kasan_status"
+resource to expect specific failures, but we still want the fallback
+call to kunit_set_failure() so that any test which causes a KASAN
+report will fail:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/kasan/report.c#n130
 
-> > This of course goes back to what I'd mentioned before in v7; it seems that
-> > representing the memslot memory as a file descriptor should be orthogonal to
-> > whether the memory is shared or private, rather than a private_fd for private
-> > memory and the userspace_addr for shared memory.
->
-> I also explored the idea of backing any guest memory with an fd, but came to
-> the conclusion that private memory needs a separate handle[1], at least on x86.
->
-> For SNP and TDX, even though the GPA is the same (ignoring the fact that SNP and
-> TDX steal GPA bits to differentiate private vs. shared), the two types need to be
-> treated as separate mappings[2].  Post-boot, converting is lossy in both directions,
-> so even conceptually they are two disctint pages that just happen to share (some)
-> GPA bits.
->
-> To allow conversions, i.e. changing which mapping to use, without memslot updates,
-> KVM needs to let userspace provide both mappings in a single memslot.  So while
-> fd-based memory is an orthogonal concept, e.g. we could add fd-based shared memory,
-> KVM would still need a dedicated private handle.
->
-> For pKVM, the fd doesn't strictly need to be mutually exclusive with the existing
-> userspace_addr, but since the private_fd is going to be added for x86, I think it
-> makes sense to use that instead of adding generic fd-based memory for pKVM's use
-> case (which is arguably still "private" memory but with special semantics).
->
-> [1] https://lore.kernel.org/all/YulTH7bL4MwT5v5K@google.com
-> [2] https://lore.kernel.org/all/869622df-5bf6-0fbb-cac4-34c6ae7df119@kernel.org
+> I'm currently switching KASAN tests from using KUnit resources to
+> console tracepoints [1], and those patches will be in conflict with
+> yours.
 
-As long as the API does not impose this limit, which would imply pKVM
-is misusing it, then I agree. I think that's why renaming it to
-something like "restricted" might be clearer.
+Ah, sorry -- I'd seen these go past, and totally forgot about them! I
+think all we really want to keep is the ability to fail tests if a
+KASAN report occurs. The tricky bit is then disabling that for the
+KASAN tests, so that they can have "expected" failures.
 
-Thanks,
-/fuad
+-- David
+
+--000000000000d2078a05eb648cd3
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAx
+P3UYKjpLkVFR1w2fhFjJSDECimirl3RIC4Ton/PbojAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjEwMTkxNTA2MTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAI7d5VhZPkeOj+nVmZAgt
+JhYzppd/+bwOeuXrU6fmr/P5oL1rH74x+YLhqOQzbpEh4Y92oc9DXlAvWTTL0HnWMxyzIs/EM3l7
+uNgtvzQAmxhBsIMKWBlkDxrBhfW+6b8OVsBiB9coM+SxLcebcErOHQCEuzT+OaenYHaWge6+xVOc
+Jm+faszP0EU4UZinG0HKK3G7fC0FwzqGwfjT8J21qrnmuaE8jiSXv+H74zo5Qbnp8uZX7QX43PVM
+wQsSn8eN+T6tqDD5bN0mJmQut/dt3gLqZJPMaoyz8ik5RCc9Sm9t4fbN0HSsPy8gbmLecKWCNxZR
+sntQX9fgWKb/DV6avQ==
+--000000000000d2078a05eb648cd3--
