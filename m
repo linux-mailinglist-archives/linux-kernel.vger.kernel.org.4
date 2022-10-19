@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1338C604817
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26A6604821
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbiJSNuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S233691AbiJSNuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbiJSNsm (ORCPT
+        with ESMTP id S233697AbiJSNs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:48:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B21C8D5D;
-        Wed, 19 Oct 2022 06:32:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5BBD6CE20F0;
-        Wed, 19 Oct 2022 13:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0EA2C433D7;
-        Wed, 19 Oct 2022 13:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666186343;
-        bh=wgaCgIIQv6GL6KJIOFePc+gBrTKmB+z9ZIHuM3k0ifI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gnOGPipMSWDY3/Gk4UFGA+GUjpCTWJ/wH3w6Nl8iTKLPjDVt3LS5JAi07fYcmKU+f
-         DHJto78dkbY66u2AUdGwY7al5P+g+YORjXOArsNAAAXIs5d8qZ7w/HthI7m+kWwNKJ
-         Kjlcm4o3YKS3vCvahN3koioZqTeahxHJRo0xECgBHGivwXJXSbjl90EWWqWsGPLWY/
-         0sUpGvSml0a6UPyufDNyed9/90YMTsMqSdFGelX1azZJPSTelGFwTfmSpFpt+kpWwL
-         QrQ1pJiikXCH9Cw2ma6xqe3jSdZ2sqjz10GyUiiRfZUb3RBwsRB2mjtpoJWfqC7+0w
-         9UDB/9rw8trEw==
-Date:   Wed, 19 Oct 2022 19:02:19 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        dmaengine@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] dmaengine: idxd: Do not enable user type Work Queue
- without Shared Virtual Addressing
-Message-ID: <Y0/8Y0xUuUoi3KvL@matsya>
-References: <20221014222541.3912195-1-fenghua.yu@intel.com>
+        Wed, 19 Oct 2022 09:48:58 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EDF19E90B;
+        Wed, 19 Oct 2022 06:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666186386; x=1697722386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uMSS2UGALuEpzvvAM47D5sxAZNzAFsz3tkvccmabASw=;
+  b=jS3uZQIfZTGBP4YKRFEKP46zzLs2PGAsvGfPVC9R4QA9wizh5V/FyHMK
+   1GolAJIy5jlsZklxwFPv7UKBQNBLMPxCIC3BIdXuzfXw5Vz9qQI0+P+fp
+   loGhT1LFXVWmQunB+F+mByxdWhcW1tCzHVxmc/ayF5WhJoC0obli7ypgw
+   3UTLqvj1ocDM1aUSy88UoWoK9Ycj5lgeoZ4RUeahGmp4MocIDxa5BcOVC
+   kEcbTgmxwPEnoP+JJj/yEsmcp59hQBv+k5qI2rdVa08K2j48QZeurBdxD
+   IRvSsof26qgsLIcrkskwwxYpOHgCITATAkB1svygDeEKUwLnMjTWA2FW5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="307517393"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="307517393"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 06:32:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="631670176"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="631670176"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 19 Oct 2022 06:32:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ol9BX-009sV1-2C;
+        Wed, 19 Oct 2022 16:32:39 +0300
+Date:   Wed, 19 Oct 2022 16:32:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     chengwei <foxfly.lai.tw@gmail.com>
+Cc:     lee@kernel.org, broonie@kernel.org, rafael@kernel.org,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        GaryWang@aaeon.com.tw, musa.lin@yunjingtech.com,
+        jack.chang@yunjingtech.com, chengwei <larry.lai@yunjingtech.com>
+Subject: Re: [PATCH 3/5] ACPI: acpi_node_add_pin_mapping added to header file
+Message-ID: <Y0/8d66G3HndiRJF@smile.fi.intel.com>
+References: <20221019022450.16851-1-larry.lai@yunjingtech.com>
+ <20221019022450.16851-4-larry.lai@yunjingtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221014222541.3912195-1-fenghua.yu@intel.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221019022450.16851-4-larry.lai@yunjingtech.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-10-22, 15:25, Fenghua Yu wrote:
-> When the idxd_user_drv driver is bound to a Work Queue (WQ) device
-> without IOMMU or with IOMMU Passthrough without Shared Virtual
-> Addressing (SVA), the application gains direct access to physical
-> memory via the device by programming physical address to a submitted
-> descriptor. This allows direct userspace read and write access to
-> arbitrary physical memory. This is inconsistent with the security
-> goals of a good kernel API.
-> 
-> Unlike vfio_pci driver, the IDXD char device driver does not provide any
-> ways to pin user pages and translate the address from user VA to IOVA or
-> PA without IOMMU SVA. Therefore the application has no way to instruct the
-> device to perform DMA function. This makes the char device not usable for
-> normal application usage.
-> 
-> Since user type WQ without SVA cannot be used for normal application usage
-> and presents the security issue, bind idxd_user_drv driver and enable user
-> type WQ only when SVA is enabled (i.e. user PASID is enabled).
+On Wed, Oct 19, 2022 at 10:24:48AM +0800, chengwei wrote:
+> Declare acpi_node_add_pin_mapping added for pinctrl-upboard
+> reference.
 
-Applied, thanks
+This should be a part of the next change.
 
 -- 
-~Vinod
+With Best Regards,
+Andy Shevchenko
+
+
