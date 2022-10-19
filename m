@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20C760543C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62FC60543B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiJSXxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 19:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S229832AbiJSXxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 19:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiJSXxB (ORCPT
+        with ESMTP id S229736AbiJSXxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Oct 2022 19:53:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C93176504;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FF017534F;
         Wed, 19 Oct 2022 16:53:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A553FB82638;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FE4061342;
+        Wed, 19 Oct 2022 23:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69912C433C1;
         Wed, 19 Oct 2022 23:52:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55723C433D6;
-        Wed, 19 Oct 2022 23:52:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666223578;
-        bh=CzV1cLAhDDOFkB0KlXANuTK1iu8q0KT3QWKb3iYWOmg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=jjmcy6A+3AvCsqGGEv4dekZoDw9xHCUs7yJMvfD24gT+APjGNj0yAz5Rvc1PgdHOM
-         LKL7m25ugiyfzIVh0IZHHrJBQLJU2TtU7FMe+rkFBatDcAxyd5lk7SvOYPmBmfXzG8
-         ASO8RZKiT0hkNZBZphJXcz/wvgcEN9MqrSdrV77+tQHrU3uepZKNMkeoQWAX+4zy4x
-         NFLnH+CCSXBBbvstqGFMsNpirNTHsmE/NGm6drHtpju7ZKLLtkf6wMYerezvw0i5xB
-         rbWKgQAyeMq7Cvr1dfqA9kaXT6IfqyGYLbMkVksF6hyRcSl3Qb0UnidnatrgIeP+C1
-         MfhHwvm7XeIcQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EA5155C06B4; Wed, 19 Oct 2022 16:52:57 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 16:52:57 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu: Make call_rcu() lazy only when CONFIG_RCU_LAZY
- is enabled
-Message-ID: <20221019235257.GJ5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221019233835.395474-1-qiang1.zhang@intel.com>
+        s=k20201202; t=1666223579;
+        bh=6kyUB5tKFDB5XUjFi6QCd6MkTS2oO8t5uING/AE0Fjw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qBPIclqEN6ga3sptd0OAkLER6swsxHPJec6x1ajyDUojN8Haz1Rs8MFew5rbT+TbE
+         ltLtcAX3exTMIe6KMxj88RYDRQxNEsIom2ddEXEDrkMvGfYVJCgkZX1vovlYfjk1XW
+         oV9cUMpG7TlfoXkZ3c9JxpZ9Y17cWj3utqWNtWBPRI2ZSN+oF+JhDHSjWO9T00KJgi
+         Jhk/WgOEnpqEGBAMDGWCcHzz1RhSCK5c1uz8WvyeBPuudQa+cJIO9tSpuCGvAWefNd
+         /hXaiwj+PspiN+PGUVbe1pCODmjhL1veuwgeqOUOe/RXab4vpP5n0eAbCo8xkkMkYo
+         p7YRLTpM5O3CA==
+Date:   Wed, 19 Oct 2022 16:52:58 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Ilan Peer <ilan.peer@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the wireless-next tree with Linus'
+ tree
+Message-ID: <20221019165258.1ea6daa6@kernel.org>
+In-Reply-To: <20221020041440.3f6c1e46@canb.auug.org.au>
+References: <20221020032340.5cf101c0@canb.auug.org.au>
+        <20221019162324.2baaa7e8@kernel.org>
+        <20221020041440.3f6c1e46@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019233835.395474-1-qiang1.zhang@intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,44 +62,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:38:35AM +0800, Zqiang wrote:
-> Currently, regardless of whether the CONFIG_RCU_LAZY is enabled,
-> invoke the call_rcu() is always lazy, it also means that when
-> CONFIG_RCU_LAZY is disabled, invoke the call_rcu_flush() is also
-> lazy. therefore, this commit make call_rcu() lazy only when
-> CONFIG_RCU_LAZY is enabled.
+On Thu, 20 Oct 2022 04:14:40 +1100 Stephen Rothwell wrote:
+> > Dunno if this is a glitch or real problem. But it reminds me - I see
+> > there is direct wireless -> wireless-next merge without going via
+> > Linus's tree. I think you may have mentioned it to us, but not sure
+> > if I said this clearly - let's try to avoid such merges. Linus certainly
+> > doesn't like when we do net -> net-next merges without sending net to
+> > him first and forwarding. I'm not 100% sure why (maybe Steven knows)
+> > - whether it's an aesthetic thing or avoiding real issues thing, but
+> > either way it's _a_ thing :S  
 > 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  v1->v2: 
->  Use IS_ENABLED(CONFIG_RCU_LAZY) to the existing function of the same name.
-> 
->  kernel/rcu/tree.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index abc615808b6e..ecf42b0d3726 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2887,7 +2887,10 @@ EXPORT_SYMBOL_GPL(call_rcu_flush);
->   */
->  void call_rcu(struct rcu_head *head, rcu_callback_t func)
->  {
-> -	return __call_rcu_common(head, func, true);
-> +	if (IS_ENABLED(CONFIG_RCU_LAZY))
-> +		return __call_rcu_common(head, func, true);
-> +	else
-> +		return __call_rcu_common(head, func, false);
+> Has Linus really complained about you merging the net tree into the
+> net-next tree?
 
-This is much better, but why not something like this?
-
-	return __call_rcu_common(head, func, IS_ENABLED(CONFIG_RCU_LAZY));
-
-							Thanx, Paul
-
->  }
->  EXPORT_SYMBOL_GPL(call_rcu);
->  
-> -- 
-> 2.25.1
-> 
+I can't find that exchange right now. Maybe it was about merging
+back his tree into ours without submitting a PR. Hm.
