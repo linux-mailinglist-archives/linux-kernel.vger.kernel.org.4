@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3BD604654
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C8C60464E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbiJSNGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S232770AbiJSNGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiJSNGQ (ORCPT
+        with ESMTP id S232727AbiJSNGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:06:16 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A83D1DB263;
-        Wed, 19 Oct 2022 05:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=LvgRD4iN2m8G6ZpNS+5FlDAbPJRUbn+oLpBhRnPeWvY=; b=duZrPGPMQ809pOr+sYnrVIU7D7
-        4Q7+nJJyxlO0d3zDQIBMXBFwC6V4p/UyXv+9X5DrmuexhHhGW+vhmVj3nkGAyrc1FpPs2R+/gRKOH
-        t3z+KLmr3IZyATGwJU4xB0l7Xu3vSz4JIIWL8RXo1vPoj7Rjc/xGd7edZeXZ03svN7Pk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ol8VO-002Rsz-BE; Wed, 19 Oct 2022 14:49:06 +0200
-Date:   Wed, 19 Oct 2022 14:49:06 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Andrew Davis <afd@ti.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>
-Subject: Re: [PATCH net] net: fman: Use physical address for userspace
- interfaces
-Message-ID: <Y0/yQhRtH2iWfozx@lunn.ch>
-References: <20221017162807.1692691-1-sean.anderson@seco.com>
- <Y07guYuGySM6F/us@lunn.ch>
- <c409789a-68cb-7aba-af31-31488b16f918@seco.com>
- <97aae18e-a96c-a81b-74b7-03e32131a58f@ti.com>
- <Y08dECNbfMc3VUcG@lunn.ch>
- <595b7903-610f-b76a-5230-f2d8ad5400b4@seco.com>
- <AM0PR04MB39729CFDBB20C133C269275AEC2B9@AM0PR04MB3972.eurprd04.prod.outlook.com>
- <CAMuHMdUZKQFWV8QAKmwxuhWz0ZbFmcsUuf4OUzS_C31maP5+Yg@mail.gmail.com>
+        Wed, 19 Oct 2022 09:06:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EEA18B766;
+        Wed, 19 Oct 2022 05:50:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A970CB823CD;
+        Wed, 19 Oct 2022 12:49:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79DC3C433B5;
+        Wed, 19 Oct 2022 12:49:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666183769;
+        bh=YE9JgLLLQcGSzyeupSVS0hxeagJWUUGzlvzc9Jis9Xs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LRsWHDZJ/RB9cFDgaAseVj4gLmNkQZ5gYS6DeY2NtGmY+a8ZYhKlOTnUv8WaW3ZZW
+         g6W/2FIn7gk2S2OLuuSI6wyOqUVNfVsJsz+SD2/A5lMJktNlRiBAzOQ80JWY+SLkUv
+         4/gBOVThe1C1Ff+dllDOcM5ATYc0F5U/BOQMylB1vLhRPHT3ngh1ClHeaolEb2ezGU
+         cQWyg2DsVds2htjMN52E7o8LF6pYP00YjfjNu06fyDrDWydTXyb0GtrsUJhNG1/f8K
+         4uW1iWMiIWPA0Cs6PRrf9lYqmk2kUf4PjuCRoSGPggGWrtsTptW7lzmIbDtZxocZVv
+         QM+R/3sBTYO9A==
+Date:   Wed, 19 Oct 2022 18:19:25 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] dma/arm64: qcom: use one compatible also for
+ 0x10000 offset
+Message-ID: <Y0/yVdVaZ0PNSRPN@matsya>
+References: <20221018230352.1238479-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdUZKQFWV8QAKmwxuhWz0ZbFmcsUuf4OUzS_C31maP5+Yg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221018230352.1238479-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > root@localhost:~# grep 1ae /etc/udev/rules.d/72-fsl-dpaa-persistent-networking.rules
-> > SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae0000", NAME="fm1-mac1"
-> > SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae2000", NAME="fm1-mac2"
-> > SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae4000", NAME="fm1-mac3"
-> > SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae6000", NAME="fm1-mac4"
-> > SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1ae8000", NAME="fm1-mac5"
-> > SUBSYSTEM=="net", DRIVERS=="fsl_dpa*", ATTR{device_addr}=="1aea000", NAME="fm1-mac6"
+On 18-10-22, 19:03, Krzysztof Kozlowski wrote:
+> Hi,
 > 
-> So you rely on the physical address.
-> It's a pity this uses a custom sysfs file.
-> Can't you obtain this information some other way?
-> Anyway, as this is in use, it became part of the ABI.
+> Dependencies
+> ============
+> 1. DT bindings and DMA driver change depends contextually on:
+>    https://lore.kernel.org/all/20221018005740.23952-1-mailingradian@gmail.com/
+> 
+> 2. DTS patches are independent, although they will spark some dtbs_check
+>    warnings (due to change in bindings).
 
-I agree about the ABI thing. Please add this to the commit messages as
-a justification.
+Applied 1-2, thanks
 
-It would also be good to move user space away from this. You should be
-able to use the port id in the place of the physical address. That is
-what is used by Ethernet switches etc, in the udev rules for giving
-switch ports names.
-
-       Andrew
+-- 
+~Vinod
