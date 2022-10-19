@@ -2,124 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F4460374F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1926036E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 02:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJSA4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 20:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S229846AbiJSANd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 20:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJSA4R (ORCPT
+        with ESMTP id S229680AbiJSAN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 20:56:17 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DB9CA8B3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 17:56:16 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29INiAZs005578;
-        Wed, 19 Oct 2022 00:56:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
- bh=9ktHFLbxiHPNJk8/uwRXopWzYH45YEFFBA2qhx+h77s=;
- b=lxHjyJGcLn6xDsyFIThSUcKj7O+7uYmeG1W20ghtS7E2KBdpdLCMKNGMT1HJ5RLMJ2dy
- e39egAsrMWR8IstBllcsQLbxlfnyu3bErI+A0zGDSsjNDXGagXwlHp+rac9OL0I7WXje
- pH9/OESzFRQOwAt9MnKdZv1wDzXz2hHUH/VwqIe4Zxsl6EYD+VtUaDseouEfSEm7hioc
- i7A/GreVM2y1XHZo3w7z5dbsJEkDThl57eM7a9ybWQYBfLyFT/QOGEQBaW7WDX8gIRNx
- CnyxtJNezCSdYYKlXjma61DfsMDUtPFKw+rJy/LCyJqyS4YRyWdB5vvANfxjiHmZMXT9 2g== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7mu00ka5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Oct 2022 00:56:13 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29ILnUhK016678;
-        Wed, 19 Oct 2022 00:56:12 GMT
-Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3k8htgrhfm-5;
-        Wed, 19 Oct 2022 00:56:12 +0000
-From:   Si-Wei Liu <si-wei.liu@oracle.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] vdpa: fix improper error message when adding vdpa dev
-Date:   Tue, 18 Oct 2022 16:50:32 -0700
-Message-Id: <1666137032-28192-5-git-send-email-si-wei.liu@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com>
-References: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-18_10,2022-10-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210190003
-X-Proofpoint-ORIG-GUID: vPljvJ3jKbXm8D5VYQgw19smUI1U2Xz5
-X-Proofpoint-GUID: vPljvJ3jKbXm8D5VYQgw19smUI1U2Xz5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 18 Oct 2022 20:13:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46620D0CF8;
+        Tue, 18 Oct 2022 17:13:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8C96B821A0;
+        Wed, 19 Oct 2022 00:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0B0C433C1;
+        Wed, 19 Oct 2022 00:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666138402;
+        bh=dpOBk5cVjdXzz1IhM8jwMTCjeK/vMf8lWOrAu4uF1nI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AMx1r4qTE/UyPgLZgfR5w8EvSMa0cCZcRacr+T37GLPlvpDnrsV5EV9anW1tduwEz
+         E6qFwNNegxjwQfGq52tzTQEUHmCJmMXqBgslB+xe2jyWfYYx3alV7HZOhemXyeDxxe
+         mWa9vG4ErR4W5SQunrbc/Dv3iz7DUuoqAbErw+08cKG3Bzmt/Ni3FRsH47s4pNBxnH
+         pvthyGj5RJV4PpHP3r3fSx/0rOZKHXYNUmdIfGoJRg+haHcBvQNzpLj9Esi4wQXLer
+         zT1o6Sp/8DsxgnftipgRl55GRnS6LFt2QkVAvSmDPGrszWcGiuz5e9TlxgEExCzrVf
+         DGpbnHIXrQ4ug==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, SeongJae Park <sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 00/18] efficiently expose damos action tried regions information
+Date:   Wed, 19 Oct 2022 00:12:59 +0000
+Message-Id: <20221019001317.104270-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In below example, before the fix, mtu attribute is supported
-by the parent mgmtdev, but the error message showing "All
-provided are not supported" is just misleading.
+DAMON users can retrieve the monitoring results via 'after_aggregation'
+callbacks if the user is using the kernel API, or 'damon_aggregated'
+tracepoint if the user is in the user space.  Those are useful if full
+monitoring results are necessary.  However, if the user has interest in
+only some regions having specific access pattern, the interfaces could
+be inefficient.  For example, some DAMOS users might want to know
+exactly what regions were identified as fulfilling the access pattern of
+the scheme, for a debugging or a tuning.
 
-$ vdpa mgmtdev show
-vdpasim_net:
-  supported_classes net
-  max_supported_vqs 3
-  dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS_PLATFORM
+This patchset implements DAMON kernel API callbacks and sysfs directory
+for efficient exposure of the information.  The new callback will be
+called for each region before specific DAMOS action is gonna tried to be
+applied.  The sysfs directory will be called 'tried_regions' and placed
+under each scheme sysfs directory.  User can write a special keyworkd,
+'update_schemes_regions' to the 'state' file of a kdamond sysfs
+directory.  Then, DAMON sysfs interface will fill the directory with the
+information of regions that corresponding scheme action was tried to be
+applied for one aggregation interval.
 
-$ vdpa dev add mgmtdev vdpasim_net name vdpasim0 mtu 5000 max_vqp 2
-Error: vdpa: All provided attributes are not supported.
-kernel answers: Operation not supported
+Patches Sequence
+----------------
 
-After fix, the relevant error message will be like:
+First five patches (1-5) clean up and refactor code that following patch
+will touch, and the following one (patch 6) implements the DAMON
+callback for DAMON kernel API users.
 
-$ vdpa dev add mgmtdev vdpasim_net name vdpasim0 mtu 5000 max_vqp 2
-Error: vdpa: Some provided attributes are not supported.
-kernel answers: Operation not supported
+Following six patches (7-12) clean up and refactor the sysfs interface
+before the new sysfs directory introduction.  Following two patches (13
+and 14) implement the sysfs directories, and successing two patches (15
+and 16) implement the special keyword for 'state' to fill and clean up
+the directories.
 
-$ vdpa dev add mgmtdev vdpasim_net name vdpasim0 max_vqp 2
-Error: vdpa: All provided attributes are not supported.
-kernel answers: Operation not supported
+Finally, two more patches (17 and 18) for the documentation of the usage
+and ABI follow.
 
-Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
----
- drivers/vdpa/vdpa.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Assembled Tree
+--------------
 
-diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-index 91eca6d..ff15e0a 100644
---- a/drivers/vdpa/vdpa.c
-+++ b/drivers/vdpa/vdpa.c
-@@ -629,13 +629,20 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
- 		err = PTR_ERR(mdev);
- 		goto err;
- 	}
--	if ((config.mask & mdev->config_attr_mask) != config.mask) {
-+	if (config.mask && (config.mask & mdev->config_attr_mask) == 0) {
- 		NL_SET_ERR_MSG_MOD(info->extack,
- 				   "All provided attributes are not supported");
- 		err = -EOPNOTSUPP;
- 		goto err;
- 	}
- 
-+	if ((config.mask & mdev->config_attr_mask) != config.mask) {
-+		NL_SET_ERR_MSG_MOD(info->extack,
-+				   "Some provided attributes are not supported");
-+		err = -EOPNOTSUPP;
-+		goto err;
-+	}
-+
- 	err = mdev->ops->dev_add(mdev, name, &config);
- err:
- 	up_write(&vdpa_dev_lock);
+This patchset is based on the latest mm-unstable tree[1].  Assembled
+tree is also available at the damon/next tree[2].
+
+[1] https://git.kernel.org/akpm/mm/h/mm-unstable
+[2] https://git.kernel.org/sj/h/damon/next
+
+SeongJae Park (18):
+  mm/damon/modules: deduplicate init steps for DAMON context setup
+  mm/damon/core: split out DAMOS-charged region skip logic into a new
+    function
+  mm/damon/core: split damos application logic into a new function
+  mm/damon/core: split out scheme stat update logic into a new function
+  mm/damon/core: split out scheme quota adjustment logic into a new
+    function
+  mm/damon/core: add a DAMON callback for scheme target regions check
+  mm/damon/sysfs: Use damon_addr_range for regions' start and end values
+  mm/damon/sysfs: remove parameters of damon_sysfs_region_alloc()
+  mm/damon/sysfs: move sysfs_lock to common module
+  mm/damon/sysfs: move unsigned long range directory to common module
+  mm/damon/sysfs: split out kdamond-independent schemes stats update
+    logic into a new function
+  mm/damon/sysfs: move schemes directory implementation to separate
+    module
+  mm/damon/sysfs-schemes: implement schemes/tried_regions directory
+  mm/damon/sysfs-schemes: implement scheme region directory
+  mm/damon/sysfs: implement DAMOS-tried regions update command
+  mm/damon/sysfs-schemes: implement DAMOS tried regions clear command
+  Docs/admin-guide/mm/damon/usage: document schemes/<s>/tried_regions
+    directory
+  Docs/ABI/damon: document 'schemes/<s>/tried_regions' directory
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |   32 +
+ Documentation/admin-guide/mm/damon/usage.rst  |   44 +-
+ include/linux/damon.h                         |    5 +
+ mm/damon/Makefile                             |    6 +-
+ mm/damon/core.c                               |  259 ++--
+ mm/damon/lru_sort.c                           |   17 +-
+ mm/damon/modules-common.c                     |   42 +
+ mm/damon/modules-common.h                     |    3 +
+ mm/damon/reclaim.c                            |   17 +-
+ mm/damon/sysfs-common.c                       |  107 ++
+ mm/damon/sysfs-common.h                       |   56 +
+ mm/damon/sysfs-schemes.c                      | 1281 +++++++++++++++++
+ mm/damon/sysfs.c                              | 1224 ++--------------
+ 13 files changed, 1813 insertions(+), 1280 deletions(-)
+ create mode 100644 mm/damon/modules-common.c
+ create mode 100644 mm/damon/sysfs-common.c
+ create mode 100644 mm/damon/sysfs-common.h
+ create mode 100644 mm/damon/sysfs-schemes.c
+
 -- 
-1.8.3.1
+2.25.1
 
