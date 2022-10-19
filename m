@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0968604A6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A73604A77
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbiJSPEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S231673AbiJSPFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbiJSPEB (ORCPT
+        with ESMTP id S232112AbiJSPEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:04:01 -0400
+        Wed, 19 Oct 2022 11:04:05 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0088332AB8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:58:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACCBACF55;
+        Wed, 19 Oct 2022 07:58:34 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1666191366;
@@ -22,32 +22,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zWMphmFfDq8OlVxrrPCchY88v/O4bwRw57cpKirymSQ=;
-        b=v9YrdXBBO/q6meOVsORl10DT9g8/uzZ23xImHaforLllPZJe1CnX//gDt3Ecm5guuqQ/so
-        MACoct9zfApolTJ+v1FVD1h0RLDBoFkoLZNYKGiJ0DsuUqHcw+0rDpb9ZIPgagNu7Zgs+O
-        gkRSYUFmeL4JqdZ1XKjm0OXKoaL+fnuYiiqcJ5sO4+rKUKDp2WLocmXDuVBuX2NTl2a3rl
-        siY+No+tFyVN4CEiREVMo2jTwrxQd9bAZzkxg/EMqT9C3vVARDmTRLPn53t0VEHW9z18bu
-        LhmZykhol1iWGLRrhrVr7+PEuWsHDTLrcyEQ2JthQ9gAU5biH4l812fGFSJhAg==
+        bh=ANsy39dTo+95E1TXTBS5kbs28UVGSNMF6vh3Au875fs=;
+        b=wBedELtUaj0zJeFDpwmo+Eyrsj3vhnslVQMMnOkfh/q28nnuprj+u3It6GYfDmuHkyH1Z0
+        jNvgvw0kZdalO6FFSXJu2mqO47j5IZHrSszNINkfYz08dHv/g24BIipbzVvvkCUtwUEd6c
+        /G5ZUEi7k1R4vBBcPi0q5lAPBZi73IxF0DRlGFYb+7B7MuBL8SZrA8ne0tSMtqkeo+Yjiz
+        U1qZfnDQPMOveo2W5xC7mJmp6jwh2VhohUHK7OWYalPnB+MT+EKUDwMWLhHz3pybmY9YEy
+        vCFG/SnEVbJb9yxV5uYCeNZTI0ekEncYcgbhvVRO+iKofY2lSZVNpoCyiHCTQw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1666191366;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zWMphmFfDq8OlVxrrPCchY88v/O4bwRw57cpKirymSQ=;
-        b=Gq8pSMFow1Bxe2k6NvWVnYMVnjoP0hDNZGICKaqxJBt6kO5QnCEPHVFaH8KueqPAfoWClB
-        v8NwqRojtfnaGHCQ==
+        bh=ANsy39dTo+95E1TXTBS5kbs28UVGSNMF6vh3Au875fs=;
+        b=H1yntJDtD/aMwcZTAmUYG8IvP4HBmdfAyCl/OBYwZYBB8EKsYSv3K4Ea8bOP1qKbt6ZJ1i
+        mxTyv7pllOslw7AQ==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org
-Subject: [PATCH printk v2 07/38] um: kmsg_dump: use console_is_enabled()
-Date:   Wed, 19 Oct 2022 17:01:29 +0206
-Message-Id: <20221019145600.1282823-8-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org
+Subject: [PATCH printk v2 08/38] efi: earlycon: use console_is_enabled()
+Date:   Wed, 19 Oct 2022 17:01:30 +0206
+Message-Id: <20221019145600.1282823-9-john.ogness@linutronix.de>
 In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
 References: <20221019145600.1282823-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -66,24 +64,31 @@ Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- arch/um/kernel/kmsg_dump.c | 4 ++--
+ drivers/firmware/efi/earlycon.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/um/kernel/kmsg_dump.c b/arch/um/kernel/kmsg_dump.c
-index 0224fcb36e22..3a3bbbb22090 100644
---- a/arch/um/kernel/kmsg_dump.c
-+++ b/arch/um/kernel/kmsg_dump.c
-@@ -22,8 +22,8 @@ static void kmsg_dumper_stdout(struct kmsg_dumper *dumper,
- 		return;
+diff --git a/drivers/firmware/efi/earlycon.c b/drivers/firmware/efi/earlycon.c
+index a52236e11e5f..8c27eb941d8e 100644
+--- a/drivers/firmware/efi/earlycon.c
++++ b/drivers/firmware/efi/earlycon.c
+@@ -30,7 +30,7 @@ static void *efi_fb;
+ static int __init efi_earlycon_remap_fb(void)
+ {
+ 	/* bail if there is no bootconsole or it has been disabled already */
+-	if (!earlycon_console || !(earlycon_console->flags & CON_ENABLED))
++	if (!earlycon_console || !console_is_enabled(earlycon_console))
+ 		return 0;
  
- 	for_each_console(con) {
--		if(strcmp(con->name, "tty") == 0 &&
--		   (con->flags & (CON_ENABLED | CON_CONSDEV)) != 0) {
-+		if (strcmp(con->name, "tty") == 0 &&
-+		    (console_is_enabled(con) || (con->flags & CON_CONSDEV))) {
- 			break;
- 		}
- 	}
+ 	efi_fb = memremap(fb_base, screen_info.lfb_size,
+@@ -43,7 +43,7 @@ early_initcall(efi_earlycon_remap_fb);
+ static int __init efi_earlycon_unmap_fb(void)
+ {
+ 	/* unmap the bootconsole fb unless keep_bootcon has left it enabled */
+-	if (efi_fb && !(earlycon_console->flags & CON_ENABLED))
++	if (efi_fb && !console_is_enabled(earlycon_console))
+ 		memunmap(efi_fb);
+ 	return 0;
+ }
 -- 
 2.30.2
 
