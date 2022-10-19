@@ -2,191 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE6E604081
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84F4604084
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiJSJ7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S233850AbiJSKBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234202AbiJSJ6p (ORCPT
+        with ESMTP id S232277AbiJSKBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:58:45 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45328115434;
-        Wed, 19 Oct 2022 02:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666172181; x=1697708181;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RHuEA+7prTVcDhDjwV60mJA3TaTL03v6GsnXTKX2krI=;
-  b=GzqPCj0FdnC2k4WjUJPz02F4FN+wO48TyVW5FdAfn7+RvRX11I97K7uU
-   w4xRVrQGtkGssKKqhIz65Zu1u9C5NyZFKU28vgVmlr9Nw3pyUphat4nvm
-   ke3Q3HiRlh18l+46BXpcVg43yL/qSWcWLtcUPYJTpNiej3/QyvXRNPQUs
-   W1HU6V7+lp7F/2Zmr5O3FtojW06yT3WRqP3YAQ72RdaPxQerjav+MDXk3
-   2RzPrLtET46fGJ4/y2JBTnPFXRlLD2hMu6yxwOFCX8LYw22i5fSWbvPeY
-   ttftqyLz8rZNUjaM09vP6hFJ/MfH+w2NRytXUa7FG6fPYP7HV2QnATmXo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="305095395"
-X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="305095395"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:34:01 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="734127869"
-X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="734127869"
-Received: from sponnura-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.35])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:33:58 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v5 1/5] serial: Convert serial_rs485 to kernel doc
-Date:   Wed, 19 Oct 2022 12:33:39 +0300
-Message-Id: <20221019093343.9546-2-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221019093343.9546-1-ilpo.jarvinen@linux.intel.com>
-References: <20221019093343.9546-1-ilpo.jarvinen@linux.intel.com>
+        Wed, 19 Oct 2022 06:01:20 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756C112277E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:39:07 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u10so28171660wrq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAFlOUOSDNnpuoT+qdniJV4n8MjtoOiXZ0ZGelulaWU=;
+        b=mxBYSXH83a8R2gqazBpTtCz7VO9xqsgjj2vXwj9nr1M6ylxMyqTveNpscOoPWCYCsA
+         eEzTpwgls/8waiWeVGKE1584hYuc3sHvIlMuh2rMc6NtmsDkFxefJBunGnAM739QREkw
+         vXDCNujfYlxtUAxITdcNpDx8WcahP+aq6jxtMM/QxXVOmZIJlcj0n/dQfH9gndSAliMu
+         vjOeW/8L13HSd457fpcbjtjfs9kPcBAT0NorhP0seOW5+RFoxm0L/GlCHESgl+4gpjmz
+         wt7sXgWS/b+c4gxd7/oc+uBTTE5IAjaxt1yE6VrtceXlFZizLGuPFtrtVyfJHf1mBMEE
+         wtdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CAFlOUOSDNnpuoT+qdniJV4n8MjtoOiXZ0ZGelulaWU=;
+        b=JYzEbbAOiHcE5WCAVdGwusQwxg0J5UB7+Q55CMuTovVhVPtvsemNXFfdHvgt/PkHzz
+         zvSjYzcOgu4aPGb5SjMVoPxa3NPI3GYP0c3/gFnZKQrnQR0bpC7X/UxKi0Alo0yDspWt
+         Sk1HJ9bDiTfdo6202eG9B8SPFc+VfJ4mpRyqMaL8P1No5Bj5FuNVeg43JiPH+Qg1Zc5C
+         xDdVUE/TiQvI2VB7tSjpR3RJPM4IHE4ZHAOeh9QJ2Dx1Ugfnd8jdVeowKutSbddQgJx2
+         htgEhaPgdWYLbe7Q20hhQV51r97iqGHWD6ukI9b5+pHBDCcrAPqs+/x1IfImw/a2JwqW
+         SbdQ==
+X-Gm-Message-State: ACrzQf3NPds5aHQEkS7fG80VFt/a0Sa/cnvPS9ElBbQwVuc4MoKqGM4W
+        eyiQTOL6mh3THLjgV3lxqqloOA==
+X-Google-Smtp-Source: AMsMyM50f/3OOKH1f22KJUuMMnPFOXKp4tez4aGFwbvdlYy/HHNOVo7/VLqR1PmpIjtixY1NE1R44g==
+X-Received: by 2002:a05:6000:12ca:b0:22e:6529:a764 with SMTP id l10-20020a05600012ca00b0022e6529a764mr4484971wrx.153.1666172206880;
+        Wed, 19 Oct 2022 02:36:46 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:b15b:4b56:592a:c397? ([2a01:e0a:982:cbb0:b15b:4b56:592a:c397])
+        by smtp.gmail.com with ESMTPSA id k16-20020a5d6290000000b0022ae4f8395dsm12834601wru.96.2022.10.19.02.36.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 02:36:46 -0700 (PDT)
+Message-ID: <010ea9e1-4a66-61d4-94c5-2bec20ef928d@linaro.org>
+Date:   Wed, 19 Oct 2022 11:36:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 22/44] serial: meson: Use uart_xmit_advance()
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
+ <20221019091151.6692-23-ilpo.jarvinen@linux.intel.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20221019091151.6692-23-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert struct serial_rs485 comments to kernel doc format and include
-it into documentation.
+On 19/10/2022 11:11, Ilpo Järvinen wrote:
+> Take advantage of the new uart_xmit_advance() helper.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>   drivers/tty/serial/meson_uart.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> index 056243c12836..74110017988a 100644
+> --- a/drivers/tty/serial/meson_uart.c
+> +++ b/drivers/tty/serial/meson_uart.c
+> @@ -162,8 +162,7 @@ static void meson_uart_start_tx(struct uart_port *port)
+>   
+>   		ch = xmit->buf[xmit->tail];
+>   		writel(ch, port->membase + AML_UART_WFIFO);
+> -		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> -		port->icount.tx++;
+> +		uart_xmit_advance(port, 1);
+>   	}
+>   
+>   	if (!uart_circ_empty(xmit)) {
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- .../driver-api/serial/serial-rs485.rst        | 13 +++--
- include/uapi/linux/serial.h                   | 55 ++++++++++++-------
- 2 files changed, 43 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/driver-api/serial/serial-rs485.rst b/Documentation/driver-api/serial/serial-rs485.rst
-index 6ebad75c74ed..264e4b753713 100644
---- a/Documentation/driver-api/serial/serial-rs485.rst
-+++ b/Documentation/driver-api/serial/serial-rs485.rst
-@@ -29,11 +29,11 @@ RS485 Serial Communications
- 3. Data Structures Already Available in the Kernel
- ==================================================
- 
--   The Linux kernel provides the serial_rs485 structure (see [1]) to handle
--   RS485 communications. This data structure is used to set and configure RS485
-+   The Linux kernel provides the serial_rs485 structure to handle RS485
-+   communications. This data structure is used to set and configure RS485
-    parameters in the platform data and in ioctls.
- 
--   The device tree can also provide RS485 boot time parameters (see [2]
-+   The device tree can also provide RS485 boot time parameters (see [1]
-    for bindings). The driver is in charge of filling this data structure from
-    the values given by the device tree.
- 
-@@ -47,6 +47,9 @@ RS485 Serial Communications
-    for the uart_port. TIOCGRS485 ioctl can be used to read back the
-    serial_rs485 structure matching to the current configuration.
- 
-+.. kernel-doc:: include/uapi/linux/serial.h
-+   :identifiers: serial_rs485
-+
- 4. Usage from user-level
- ========================
- 
-@@ -126,6 +129,4 @@ RS485 Serial Communications
- 6. References
- =============
- 
-- [1]	include/uapi/linux/serial.h
--
-- [2]	Documentation/devicetree/bindings/serial/rs485.txt
-+ [1]	Documentation/devicetree/bindings/serial/rs485.txt
-diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
-index cea06924b295..53bc1af67a41 100644
---- a/include/uapi/linux/serial.h
-+++ b/include/uapi/linux/serial.h
-@@ -107,33 +107,50 @@ struct serial_icounter_struct {
- 	int reserved[9];
- };
- 
--/*
-+/**
-+ * struct serial_rs485 - serial interface for controlling RS485 settings.
-+ * @flags:			RS485 feature flags.
-+ * @delay_rts_before_send:	Delay before send (milliseconds).
-+ * @delay_rts_after_send:	Delay after send (milliseconds).
-+ * @addr_recv:			Receive filter for RS485 addressing mode
-+ *				(used only when %SER_RS485_ADDR_RECV is set).
-+ * @addr_dest:			Destination address for RS485 addressing mode
-+ *				(used only when %SER_RS485_ADDR_DEST is set).
-+ * @padding0:			Padding (set to zero).
-+ * @padding1:			Padding (set to zero).
-+ * @padding:			Deprecated, use @padding0 and @padding1 instead.
-+ *				Do not use with @addr_recv and @addr_dest (due to
-+ *				overlap).
-+ *
-  * Serial interface for controlling RS485 settings on chips with suitable
-  * support. Set with TIOCSRS485 and get with TIOCGRS485 if supported by your
-  * platform. The set function returns the new state, with any unsupported bits
-  * reverted appropriately.
-+ *
-+ * The flag bits are:
-+ *
-+ * * %SER_RS485_ENABLED		- RS485 enabled.
-+ * * %SER_RS485_RTS_ON_SEND	- Logical level for RTS pin when sending.
-+ * * %SER_RS485_RTS_AFTER_SEND	- Logical level for RTS pin after sent.
-+ * * %SER_RS485_RX_DURING_TX	- Full-duplex RS485 line.
-+ * * %SER_RS485_TERMINATE_BUS	- Enable bus termination (if supported).
-+ * * %SER_RS485_ADDRB		- Enable RS485 addressing mode.
-+ * * %SER_RS485_ADDR_RECV - Receive address filter (enables @addr_recv). Requires %SER_RS485_ADDRB.
-+ * * %SER_RS485_ADDR_DEST - Destination address (enables @addr_dest). Requires %SER_RS485_ADDRB.
-  */
--
- struct serial_rs485 {
--	__u32	flags;			/* RS485 feature flags */
--#define SER_RS485_ENABLED		(1 << 0)	/* If enabled */
--#define SER_RS485_RTS_ON_SEND		(1 << 1)	/* Logical level for
--							   RTS pin when
--							   sending */
--#define SER_RS485_RTS_AFTER_SEND	(1 << 2)	/* Logical level for
--							   RTS pin after sent*/
-+	__u32	flags;
-+#define SER_RS485_ENABLED		(1 << 0)
-+#define SER_RS485_RTS_ON_SEND		(1 << 1)
-+#define SER_RS485_RTS_AFTER_SEND	(1 << 2)
- #define SER_RS485_RX_DURING_TX		(1 << 4)
--#define SER_RS485_TERMINATE_BUS		(1 << 5)	/* Enable bus
--							   termination
--							   (if supported) */
--
--/* RS-485 addressing mode */
--#define SER_RS485_ADDRB			(1 << 6)	/* Enable addressing mode */
--#define SER_RS485_ADDR_RECV		(1 << 7)	/* Receive address filter */
--#define SER_RS485_ADDR_DEST		(1 << 8)	/* Destination address */
-+#define SER_RS485_TERMINATE_BUS		(1 << 5)
-+#define SER_RS485_ADDRB			(1 << 6)
-+#define SER_RS485_ADDR_RECV		(1 << 7)
-+#define SER_RS485_ADDR_DEST		(1 << 8)
- 
--	__u32	delay_rts_before_send;	/* Delay before send (milliseconds) */
--	__u32	delay_rts_after_send;	/* Delay after send (milliseconds) */
-+	__u32	delay_rts_before_send;
-+	__u32	delay_rts_after_send;
- 
- 	/* The fields below are defined by flags */
- 	union {
--- 
-2.30.2
-
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
