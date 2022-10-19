@@ -2,131 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399E8604E95
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBCC604E98
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJSRZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
+        id S229787AbiJSR0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiJSRZi (ORCPT
+        with ESMTP id S229648AbiJSR0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:25:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFFA1ABEEB;
-        Wed, 19 Oct 2022 10:25:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0D7BB8224C;
-        Wed, 19 Oct 2022 17:25:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B8EC433C1;
-        Wed, 19 Oct 2022 17:25:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666200333;
-        bh=KpXGLm+LpDTu1Ci0etA6NTQ4Elo0IFUKhppE4uYn7F0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DRJtd5yWLZn5yTGSTlJscsLl2D5gw5li+GQEUxw4YfHEabHzdt+s+94q5++O2UP8J
-         Uwamw2+bW/jnDGwIIvPC3NnfBa/zhCxQhefriPrA4+3FXuzoa/Tg3OyiNJTNsgQgJw
-         ShSpw2H83ZPAY/QStkmABaToh4k61i1YKO/vHUIU=
-Date:   Wed, 19 Oct 2022 19:25:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Yu Kuai <yukuai3@huawei.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH 6.0 479/862] sbitmap: fix possible io hung due to lost
- wakeup
-Message-ID: <Y1AzCuwWxEPoYGRr@kroah.com>
-References: <20221019083249.951566199@linuxfoundation.org>
- <20221019083311.114449669@linuxfoundation.org>
- <174a196-5473-4e93-a52a-5e26eb37949@google.com>
+        Wed, 19 Oct 2022 13:26:31 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B581C0708
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:26:28 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so9899229otq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cupPL1neXJFDi/CczZUnnSksrOf8QPniSG3CPoyTvwk=;
+        b=Gac78J9i90UOUBCVrylc5ZrTgnCY15Gnsk7zaNO8hbQdMniRSpKeWxkTTG5TuRyEZB
+         UDik7FL9jFr1ZdlcLkLkZx9hlXsSPXv05eXESmVQoWZJDrDoiml8TtqDCjSsxyMM3DcH
+         ByvbBAe5KO9N+pJ+tA8JESSDV1WDzdBhegWb0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cupPL1neXJFDi/CczZUnnSksrOf8QPniSG3CPoyTvwk=;
+        b=PoS+eHVLG0N2KcXtZ4Cc1iqhiTc2p1cIFFH8Ry7/6N+eB4m6UMLrRHWX/1qcNBYjL+
+         b+aeXKas4qtHgHyK1UH+xM+2odz9jQjf3PCQGEyJExDk8+w8AssGSY8aENT6cb4AKhQJ
+         9Zm0Mo+g2Km5rsnmbsAZgn0DiXcfJ3MUcySf8CSpA0a2PmFW+TidgNAbqMoCqMsyMQt6
+         oIbGx2Xuz8se5Y/LEuD7ajenOQZ+h0Q3ICc9NrB7foI1hSEltCyIsZXXWabkVpmqLMxE
+         VXWwd3XqAjWd6CHZ2aWvB9KTCPBBH/8GJnlaXxPeT0pRTOleA4UvIeFdI0hpraplnvtt
+         +uRQ==
+X-Gm-Message-State: ACrzQf29VDraUqIy2lglshZj4a3GaGNftZ/6hLRVZSVr5AO+8fZJ1qRN
+        lfwPwQ37o4lbm435c8LvsWqlJz5y6A8slQ==
+X-Google-Smtp-Source: AMsMyM7SZShIs9O9NceAa+k82KLulh/2dc6thv5XBNgFzZFVn3whu9j7h35HxiQ1+2gCEmi9YAu9pQ==
+X-Received: by 2002:a9d:74c6:0:b0:661:c309:f0cf with SMTP id a6-20020a9d74c6000000b00661c309f0cfmr4407337otl.55.1666200387204;
+        Wed, 19 Oct 2022 10:26:27 -0700 (PDT)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
+        by smtp.gmail.com with ESMTPSA id e9-20020a9d2a89000000b006618b96bcd4sm7221081otb.52.2022.10.19.10.26.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 10:26:25 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id g10so20015631oif.10
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:26:25 -0700 (PDT)
+X-Received: by 2002:a54:4899:0:b0:354:add8:52ab with SMTP id
+ r25-20020a544899000000b00354add852abmr5135777oic.229.1666200385369; Wed, 19
+ Oct 2022 10:26:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <174a196-5473-4e93-a52a-5e26eb37949@google.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 19 Oct 2022 10:26:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
+Message-ID: <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 08:06:26AM -0700, Hugh Dickins wrote:
-> On Wed, 19 Oct 2022, Greg Kroah-Hartman wrote:
-> 
-> > From: Yu Kuai <yukuai3@huawei.com>
-> > 
-> > [ Upstream commit 040b83fcecfb86f3225d3a5de7fd9b3fbccf83b4 ]
-> > 
-> > There are two problems can lead to lost wakeup:
-> > 
-> > 1) invalid wakeup on the wrong waitqueue:
-> > 
-> > For example, 2 * wake_batch tags are put, while only wake_batch threads
-> > are woken:
-> > 
-> > __sbq_wake_up
-> >  atomic_cmpxchg -> reset wait_cnt
-> > 			__sbq_wake_up -> decrease wait_cnt
-> > 			...
-> > 			__sbq_wake_up -> wait_cnt is decreased to 0 again
-> > 			 atomic_cmpxchg
-> > 			 sbq_index_atomic_inc -> increase wake_index
-> > 			 wake_up_nr -> wake up and waitqueue might be empty
-> >  sbq_index_atomic_inc -> increase again, one waitqueue is skipped
-> >  wake_up_nr -> invalid wake up because old wakequeue might be empty
-> > 
-> > To fix the problem, increasing 'wake_index' before resetting 'wait_cnt'.
-> > 
-> > 2) 'wait_cnt' can be decreased while waitqueue is empty
-> > 
-> > As pointed out by Jan Kara, following race is possible:
-> > 
-> > CPU1				CPU2
-> > __sbq_wake_up			 __sbq_wake_up
-> >  sbq_wake_ptr()			 sbq_wake_ptr() -> the same
-> >  wait_cnt = atomic_dec_return()
-> >  /* decreased to 0 */
-> >  sbq_index_atomic_inc()
-> >  /* move to next waitqueue */
-> >  atomic_set()
-> >  /* reset wait_cnt */
-> >  wake_up_nr()
-> >  /* wake up on the old waitqueue */
-> > 				 wait_cnt = atomic_dec_return()
-> > 				 /*
-> > 				  * decrease wait_cnt in the old
-> > 				  * waitqueue, while it can be
-> > 				  * empty.
-> > 				  */
-> > 
-> > Fix the problem by waking up before updating 'wake_index' and
-> > 'wait_cnt'.
-> > 
-> > With this patch, noted that 'wait_cnt' is still decreased in the old
-> > empty waitqueue, however, the wakeup is redirected to a active waitqueue,
-> > and the extra decrement on the old empty waitqueue is not handled.
-> > 
-> > Fixes: 88459642cba4 ("blk-mq: abstract tag allocation out into sbitmap library")
-> > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> > Reviewed-by: Jan Kara <jack@suse.cz>
-> > Link: https://lore.kernel.org/r/20220803121504.212071-1-yukuai1@huaweicloud.com
-> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> 
-> I have no authority on linux-block, but I'll say NAK to this one
-> (and 517/862), and let Jens and Jan overrule me if they disagree.
-> 
-> This was the first of several 6.1-rc1 commits which had given me lost
-> wakeups never suffered before; was not tagged Cc stable; and (unless I've
-> missed it on lore) never had AUTOSEL posted to linux-block or linux-kernel.
+On Wed, Oct 19, 2022 at 10:14 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> The pointer-sign thing doesn't actually help (ie it won't find places
+> where you actually compare a char), and it causes untold damage in
+> doing completely insane things.
 
-Ok, thanks for the review.  I'll drop both of the sbitmap.c changes and
-if people report issues and want them back, I'll be glad to revisit them
-then.
+Side note: several years ago I tried to make up some sane rules to
+have 'sparse' actually be able to warn when a 'char' was used in a
+context where the sign mattered.
 
-greg k-h
+I failed miserably.
+
+You actually can see some signs (heh) of that in the sparse sources,
+in that the type system actually has a bit for explicitly signed types
+("MOD_EXPLICITLY_SIGNED"), but it ends up being almost entirely
+unused.
+
+That bit does still have one particular use: the "bitfield is
+dubiously signed" thing where sparse will complain about bitfields
+that are implicitly (but not explicitly) signed. Because people really
+expect 'int a:1' to have values 0/1, not 0/-1.
+
+But the original intent was to find code where people used a 'char'
+that wasn't explicitly signed, and that then had architecture-defined
+behavior.
+
+I just could not come up with any even remotely sane warning
+heuristics that didn't have a metric buttload of false positives.
+
+I still have this feeling that it *should* be possible to warn about
+the situation where you end up doing an implicit type widening (ie the
+normal C "arithmetic is always done in at least 'int'") that then does
+not get narrowed down again without the upper bits ever mattering.
+
+But it needs somebody smarter than me, I'm afraid.
+
+And the fact that I don't think any other compiler has that warning
+either makes me just wonder if my feeling that it should be possible
+is just wrong.
+
+                   Linus
